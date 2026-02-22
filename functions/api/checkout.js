@@ -198,7 +198,7 @@ const PRICING = {
     form.set("line_items[0][price_data][currency]", "cad");
     form.set("line_items[0][price_data][unit_amount]", String(depositCents));
     form.set("line_items[0][price_data][product_data][name]", "Rosie Dazzlers Booking Deposit");
-    form.set("line_items[0][description]", `${body.package_code} (${body.vehicle_size}) - ${body.service_date} ${body.start_slot}`);
+    form.set("line_items[0][price_data][product_data][description]", `${body.package_code} (${body.vehicle_size}) - ${body.service_date} ${body.start_slot}`);
 
     // Helpful metadata
     form.set("metadata[booking_id]", booking.id);
