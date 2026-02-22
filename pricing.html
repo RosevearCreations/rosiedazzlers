@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pricing | Rosie Dazzlers</title>
+  <meta name="description" content="Transparent pricing by vehicle size." />
+  <link rel="stylesheet" href="/assets/site.css" />
+</head>
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers</strong>
+      </a>
+      <div class="nav-links">
+        <a href="/services.html">Services</a>
+        <a href="/pricing.html">Pricing</a>
+        <a href="/book.html">Book</a>
+      </div>
+      <a class="btn primary" href="/book.html">Book now</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="panel">
+      <h1 style="margin:0 0 6px">Pricing</h1>
+      <p class="help">Select your vehicle size to see package pricing. Deposits are applied toward the final service total.</p>
+
+      <div class="hr"></div>
+
+      <div class="row">
+        <div>
+          <label for="size">Vehicle size</label>
+          <select id="size">
+            <option value="small">Small</option>
+            <option value="mid">Mid-sized</option>
+            <option value="oversize">Oversize/Exotics</option>
+          </select>
+          <div class="kicker">Not sure? Use the size chart on the booking page.</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:end;justify-content:flex-end">
+          <a class="btn primary" href="/book.html">Book now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Packages</h2>
+      <div id="pricingCards" class="grid cards"></div>
+    </div>
+
+    <div class="footer" data-footer></div>
+  </div>
+
+  <script type="module">
+    import { setBrandImages, setFooter, renderPricingCards } from "/assets/site.js";
+    setBrandImages();
+    setFooter();
+
+    const sizeSel = document.querySelector("#size");
+    const render = () => renderPricingCards("#pricingCards", sizeSel.value);
+    sizeSel.addEventListener("change", render);
+    render();
+  </script>
+</body>
+</html>
