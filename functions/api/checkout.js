@@ -51,13 +51,13 @@ export async function onRequestPost({ request, env }) {
     // ---- 3) Pricing (EDIT THESE to match your chart) ----
     // IMPORTANT: Put your real numbers here from your CarPrice chart.
     // Values are in cents (CAD).
-    const PRICING = {
-      premium_wash:   { small:  9000, mid: 11000, oversize: 13000 },
-      basic_detail:   { small: 14000, mid: 16000, oversize: 18000 },
-      complete_detail:{ small: 24000, mid: 28000, oversize: 32000 },
-      interior_detail:{ small: 17000, mid: 20000, oversize: 23000 },
-      exterior_detail:{ small: 17000, mid: 20000, oversize: 23000 },
-    };
+const PRICING = {
+  premium_wash:    { small:  8500, mid: 10500, oversize: 12500 },
+  basic_detail:    { small: 11500, mid: 13500, oversize: 17000 },
+  complete_detail: { small: 31900, mid: 36900, oversize: 41900 },
+  interior_detail: { small: 19500, mid: 22000, oversize: 24500 },
+  exterior_detail: { small: 19500, mid: 22000, oversize: 24500 },
+};
 
     // Add-ons (optional). Set to your real add-on prices.
     const ADDONS = {
