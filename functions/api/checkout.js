@@ -39,7 +39,8 @@ export async function onRequestPost({ request, env }) {
     // ---- 2) Server config ----
     const SUPABASE_URL = env.SUPABASE_URL;
     const SERVICE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
-    const STRIPE_KEY = env.STRIPE_SECRET_KEY;
+    // remove TEST from the key name
+    const STRIPE_KEY = env.STRIPE_SECRET_KEY_TEST;
 
     if (!SUPABASE_URL || !SERVICE_KEY) {
       return json({ error: "Server not configured (Supabase env vars missing)" }, 500);
