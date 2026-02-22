@@ -2,45 +2,84 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Rosie Dazzlers | Mobile Auto Detailing</title>
-  <meta name="description" content="Mobile auto detailing serving Norfolk & Oxford Counties. Online booking, deposits, and add-ons." />
-  <style>
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0b0f14;color:#eaf2ff}
-    .wrap{max-width:1100px;margin:0 auto;padding:40px 18px}
-    .hero{border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:26px;background:linear-gradient(135deg,rgba(77,119,255,.16),rgba(0,0,0,.2))}
-    h1{margin:0 0 10px;font-size:34px;letter-spacing:.2px}
-    p{margin:0 0 16px;color:rgba(234,242,255,.8);line-height:1.55}
-    .btn{display:inline-block;padding:12px 16px;border-radius:12px;background:#4d77ff;color:#fff;text-decoration:none;font-weight:700}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:16px}
-    .card{border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;background:rgba(255,255,255,.03)}
-    .small{font-size:13px;color:rgba(234,242,255,.65)}
-    code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:8px}
-  </style>
+  <meta name="description" content="Mobile auto detailing serving Norfolk & Oxford Counties. Online booking with deposit." />
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body>
-  <div class="wrap">
-    <div class="hero">
-      <h1>Rosie Dazzlers</h1>
-      <p>Mobile auto detailing for <strong>Norfolk</strong> & <strong>Oxford</strong> Counties.</p>
-      <p class="small">Next: we’ll wire booking + deposits + waiver + your R2 galleries.</p>
-      <a class="btn" href="/api/health">Test API Health</a>
-    </div>
-
-    <div class="grid">
-      <div class="card">
-        <strong>Worksite Requirements</strong>
-        <p class="small">Driveway required. Customer supplies power + water (or additional charges apply).</p>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers</strong>
+      </a>
+      <div class="nav-links">
+        <a href="/services.html">Services</a>
+        <a href="/pricing.html">Pricing</a>
+        <a href="/book.html">Book</a>
       </div>
-      <div class="card">
-        <strong>Scheduling Rule</strong>
-        <p class="small">We book max 1 vehicle/day unless it’s a half-day service.</p>
-      </div>
-      <div class="card">
-        <strong>Deposits + Cancellation</strong>
-        <p class="small">Deposit required. Late cancellations and no-shows have fees (we’ll implement next).</p>
-      </div>
+      <a class="btn primary" href="/book.html">Book now</a>
     </div>
   </div>
+
+  <div class="container">
+    <div class="hero">
+      <div>
+        <img data-banner alt="Rosie Dazzlers banner" style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)" />
+        <h1>Mobile Auto Detailing</h1>
+        <p>We come to you across <strong>Norfolk</strong> & <strong>Oxford</strong> Counties. Clear pricing, one vehicle per day, and a deposit to lock your spot.</p>
+        <div class="badges">
+          <span class="badge">Driveway required</span>
+          <span class="badge">Customer provides power + water</span>
+          <span class="badge">Online booking + deposit</span>
+        </div>
+
+        <div class="section">
+          <div data-checkout-status class="notice" style="display:block"></div>
+        </div>
+
+        <div class="section" style="display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn primary" href="/book.html">Book now</a>
+          <a class="btn ghost" href="/pricing.html">View pricing</a>
+          <a class="btn ghost" href="/services.html">What’s included</a>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 style="margin:0 0 10px">Reviews</h2>
+        <p class="help">Real results, real shine. We’ll keep adding before/after galleries next.</p>
+        <div class="hr"></div>
+        <img data-reviews alt="Rosie Dazzlers reviews" style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)" />
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>How it works</h2>
+      <div class="grid cards">
+        <div class="card">
+          <h3>1) Choose package + size</h3>
+          <p>Pick your service, vehicle size, and optional add-ons.</p>
+        </div>
+        <div class="card">
+          <h3>2) Confirm requirements</h3>
+          <p>Driveway + power + water are required (or additional fees may apply).</p>
+        </div>
+        <div class="card">
+          <h3>3) Pay deposit</h3>
+          <p>Deposit secures your date. Webhook confirms automatically.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer" data-footer></div>
+  </div>
+
+  <script type="module">
+    import { setBrandImages, setFooter, handleCheckoutReturn } from "/assets/site.js";
+    setBrandImages();
+    setFooter();
+    handleCheckoutReturn();
+  </script>
 </body>
 </html>
