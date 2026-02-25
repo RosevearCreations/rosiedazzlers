@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Consumables | Rosie Dazzlers</title>
+  <meta name="description" content="Consumables we use (with Amazon links)." />
+  <link rel="stylesheet" href="/assets/site.css" />
+</head>
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a>
+      <div class="nav-links">
+        <a href="/services">Services</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/gear">Gear</a>
+        <a href="/consumables">Consumables</a>
+        <a href="/book">Book</a>
+      </div>
+      <a class="btn primary" href="/book">Book now</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="panel">
+      <h1 style="margin:0 0 6px">Consumables</h1>
+      <p class="help">Auto-built from your catalog. Amazon buttons are search links (replace with direct product URLs later if you want).</p>
+
+      <div class="hr"></div>
+
+      <div class="row">
+        <div>
+          <label>Category</label>
+          <select id="invCategory"></select>
+        </div>
+        <div>
+          <label>Search</label>
+          <input id="invSearch" placeholder="wax, ceramic, towels, glass..." />
+        </div>
+      </div>
+
+      <div id="invStatus" class="notice"></div>
+    </div>
+
+    <div class="section">
+      <div id="invList" class="grid cards"></div>
+    </div>
+
+    <div class="footer" data-footer></div>
+  </div>
+
+  <script type="module">
+    import { setBrandImages, setFooter, initInventoryPage } from "/assets/site.js";
+    setBrandImages(); setFooter(); initInventoryPage("consumables");
+  </script>
+</body>
+</html>
