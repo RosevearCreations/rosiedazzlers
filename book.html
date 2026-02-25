@@ -15,11 +15,13 @@
         <strong>Rosie Dazzlers</strong>
       </a>
       <div class="nav-links">
-        <a href="/services.html">Services</a>
-        <a href="/pricing.html">Pricing</a>
-        <a href="/book.html">Book</a>
+        <a href="/services">Services</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/gear">Gear</a>
+        <a href="/consumables">Consumables</a>
+        <a href="/book">Book</a>
       </div>
-      <a class="btn primary" href="/book.html">Book now</a>
+      <a class="btn primary" href="/book">Book now</a>
     </div>
   </div>
 
@@ -33,6 +35,12 @@
       <div class="notice warn">
         <strong>Mobile requirements:</strong> You must provide a driveway/work area, plus power + water.
         If power/water aren’t available on arrival, additional charges may apply or the booking may be treated as a late cancellation.
+      </div>
+
+      <div class="section" style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn ghost" type="button" data-open-size>View size chart</button>
+        <button class="btn ghost" type="button" data-open-price>View price chart</button>
+        <button class="btn ghost" type="button" data-open-includes>View includes</button>
       </div>
     </div>
 
@@ -87,15 +95,14 @@
               <select name="vehicle_size">
                 <option value="small">Small</option>
                 <option value="mid">Mid-sized</option>
-                <option value="oversize">Oversize/Exotics</option>
+                <option value="oversize">Oversize / Exotics</option>
               </select>
-              <div class="kicker">Not sure? Use your size chart image in R2 (we can add it here next).</div>
             </div>
           </div>
 
           <div class="card">
             <strong>Add-ons</strong>
-            <div class="kicker">Optional upgrades. (We can expand this list as you finalize add-ons.)</div>
+            <div class="kicker">Optional upgrades (we can expand this list anytime).</div>
             <div class="hr"></div>
             <label style="display:flex;gap:10px;align-items:center">
               <input type="checkbox" name="addon_codes" value="engine_bay" />
@@ -184,7 +191,7 @@
         <div id="priceBox" class="notice">Select options to see estimate.</div>
         <div class="hr"></div>
         <div class="help">
-          <strong>Note:</strong> Online deposit reserves your date. A confirmation is automatic once payment completes.
+          <strong>Note:</strong> Online deposit reserves your date. Confirmation is automatic once payment completes.
         </div>
       </div>
     </div>
@@ -194,9 +201,7 @@
 
   <script type="module">
     import { setBrandImages, setFooter, initBookingForm } from "/assets/site.js";
-    setBrandImages();
-    setFooter();
-    initBookingForm();
+    setBrandImages(); setFooter(); initBookingForm();
   </script>
 </body>
 </html>
