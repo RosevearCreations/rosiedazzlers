@@ -15,18 +15,20 @@
         <strong>Rosie Dazzlers</strong>
       </a>
       <div class="nav-links">
-        <a href="/services.html">Services</a>
-        <a href="/pricing.html">Pricing</a>
-        <a href="/book.html">Book</a>
+        <a href="/services">Services</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/gear">Gear</a>
+        <a href="/consumables">Consumables</a>
+        <a href="/book">Book</a>
       </div>
-      <a class="btn primary" href="/book.html">Book now</a>
+      <a class="btn primary" href="/book">Book now</a>
     </div>
   </div>
 
   <div class="container">
     <div class="panel">
       <h1 style="margin:0 0 6px">Pricing</h1>
-      <p class="help">Select your vehicle size to see package pricing. Deposits are applied toward the final service total.</p>
+      <p class="help">This page uses your exact chart prices (Small / Mid / Oversize).</p>
 
       <div class="hr"></div>
 
@@ -36,12 +38,13 @@
           <select id="size">
             <option value="small">Small</option>
             <option value="mid">Mid-sized</option>
-            <option value="oversize">Oversize/Exotics</option>
+            <option value="oversize">Oversize / Exotics</option>
           </select>
-          <div class="kicker">Not sure? Use the size chart on the booking page.</div>
         </div>
         <div style="display:flex;gap:10px;align-items:end;justify-content:flex-end">
-          <a class="btn primary" href="/book.html">Book now</a>
+          <button class="btn ghost" type="button" id="openSize">Size chart</button>
+          <button class="btn ghost" type="button" id="openIncludes">Includes</button>
+          <button class="btn ghost" type="button" id="openPrice">Price chart</button>
         </div>
       </div>
     </div>
@@ -55,14 +58,25 @@
   </div>
 
   <script type="module">
-    import { setBrandImages, setFooter, renderPricingCards } from "/assets/site.js";
-    setBrandImages();
-    setFooter();
+    import { setBrandImages, setFooter, renderPackageCards, openLightbox } from "/assets/site.js";
+    import { PATHS, CHARTS, assetUrl } from "/assets/config.js";
+
+    setBrandImages(); setFooter();
 
     const sizeSel = document.querySelector("#size");
-    const render = () => renderPricingCards("#pricingCards", sizeSel.value);
+    const render = () => renderPackageCards("#pricingCards", sizeSel.value);
     sizeSel.addEventListener("change", render);
     render();
+
+    document.querySelector("#openSize").addEventListener("click", () => {
+      openLightbox("Vehicle Size Chart", assetUrl(PATHS.packages, CHARTS.size));
+    });
+    document.querySelector("#openIncludes").addEventListener("click", () => {
+      openLightbox("What’s Included", assetUrl(PATHS.packages, CHARTS.includes));
+    });
+    document.querySelector("#openPrice").addEventListener("click", () => {
+      openLightbox("Price Chart", assetUrl(PATHS.packages, CHARTS.price));
+    });
   </script>
 </body>
 </html>
