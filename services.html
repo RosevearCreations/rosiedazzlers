@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Services | Rosie Dazzlers</title>
-  <meta name="description" content="Package options and what’s included." />
+  <meta name="description" content="Service packages and what’s included." />
   <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body>
@@ -15,34 +15,52 @@
         <strong>Rosie Dazzlers</strong>
       </a>
       <div class="nav-links">
-        <a href="/services.html">Services</a>
-        <a href="/pricing.html">Pricing</a>
-        <a href="/book.html">Book</a>
+        <a href="/services">Services</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/gear">Gear</a>
+        <a href="/consumables">Consumables</a>
+        <a href="/book">Book</a>
       </div>
-      <a class="btn primary" href="/book.html">Book now</a>
+      <a class="btn primary" href="/book">Book now</a>
     </div>
   </div>
 
   <div class="container">
     <div class="panel">
       <h1 style="margin:0 0 6px">Services</h1>
-      <p class="help">Choose a package, select your vehicle size, and add extras if needed.</p>
+      <p class="help">Pick your vehicle size to see the correct pricing and service card.</p>
+
       <div class="hr"></div>
-      <p class="help">
-        <strong>Mobile requirements:</strong> driveway required; customer supplies power + water (or additional charges apply).
-        <br/><strong>Service area:</strong> Norfolk & Oxford Counties.
-      </p>
-      <div class="section">
-        <a class="btn primary" href="/pricing.html">See pricing</a>
-        <a class="btn ghost" href="/book.html">Book</a>
+
+      <div class="row">
+        <div>
+          <label for="size">Vehicle size</label>
+          <select id="size">
+            <option value="small">Small</option>
+            <option value="mid">Mid-sized</option>
+            <option value="oversize">Oversize / Exotics</option>
+          </select>
+          <div class="kicker">Not sure? Use the size chart on the booking page.</div>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:end;justify-content:flex-end">
+          <a class="btn ghost" href="/pricing">View charts</a>
+          <a class="btn primary" href="/book">Book now</a>
+        </div>
       </div>
     </div>
 
     <div class="section">
+      <h2>Packages</h2>
+      <div id="packageCards" class="grid cards"></div>
+    </div>
+
+    <div class="section">
       <h2>What’s included</h2>
-      <p class="help">We’ll add the full “includes” comparison table next. For now, pricing + booking are live.</p>
-      <div class="notice warn">
-        Want the full includes grid on this page? Say “Add includes table” and I’ll generate the exact HTML from your image.
+      <p class="help">We’re showing your exact “includes” table as an image for now.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn ghost" type="button" id="openIncludes">View includes table</button>
+        <button class="btn ghost" type="button" id="openPriceChart">View price chart</button>
       </div>
     </div>
 
@@ -50,9 +68,22 @@
   </div>
 
   <script type="module">
-    import { setBrandImages, setFooter } from "/assets/site.js";
-    setBrandImages();
-    setFooter();
+    import { setBrandImages, setFooter, renderPackageCards, openLightbox } from "/assets/site.js";
+    import { PATHS, CHARTS, assetUrl } from "/assets/config.js";
+
+    setBrandImages(); setFooter();
+
+    const sizeSel = document.querySelector("#size");
+    const render = () => renderPackageCards("#packageCards", sizeSel.value);
+    sizeSel.addEventListener("change", render);
+    render();
+
+    document.querySelector("#openIncludes").addEventListener("click", () => {
+      openLightbox("What’s Included", assetUrl(PATHS.packages, CHARTS.includes));
+    });
+    document.querySelector("#openPriceChart").addEventListener("click", () => {
+      openLightbox("Price Chart", assetUrl(PATHS.packages, CHARTS.price));
+    });
   </script>
 </body>
 </html>
