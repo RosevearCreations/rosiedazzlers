@@ -1,0 +1,769 @@
+{
+  "generated_at_utc": "2026-02-25T01:58:15Z",
+  "source_files": [
+    "Rosie Costings - Car Costing.csv",
+    "Rosie Costings - Car details.csv"
+  ],
+  "currency": "CAD",
+  "packages": [
+    {
+      "code": "premium_wash",
+      "name": "Premium Wash",
+      "prices_cad": {
+        "small": 85.0,
+        "mid": 105.0,
+        "oversize": 125.0
+      },
+      "duration": "half-day",
+      "duration_slots": 1,
+      "deposit_cad": 50,
+      "included_services": [
+        {
+          "name": "AIR AND TOWEL DRY",
+          "optional_condition_note": null
+        },
+        {
+          "name": "WINDOWS CLEANED (EXTERIOR)",
+          "optional_condition_note": null
+        },
+        {
+          "name": "TIRES DRESSED",
+          "optional_condition_note": null
+        },
+        {
+          "name": "WHEELS CLEAN",
+          "optional_condition_note": null
+        },
+        {
+          "name": "DOOR JAMS CLEANED",
+          "optional_condition_note": null
+        }
+      ],
+      "notes": [
+        "Quick exterior clean."
+      ],
+      "image": {
+        "filename": "Premium External.jpeg",
+        "r2_url": "https://assets.rosiedazzlers.ca/packages/Premium External.jpeg"
+      }
+    },
+    {
+      "code": "basic_detail",
+      "name": "Basic Detail",
+      "prices_cad": {
+        "small": 115.0,
+        "mid": 135.0,
+        "oversize": 170.0
+      },
+      "duration": "half-day",
+      "duration_slots": 1,
+      "deposit_cad": 50,
+      "included_services": [
+        {
+          "name": "FULL INTERIOR VACUUM",
+          "optional_condition_note": "Vehicle condition dependent"
+        },
+        {
+          "name": "WIPE DOWN OF ALL MAJOR COMPARTMENTS",
+          "optional_condition_note": "Vehicle condition dependent"
+        },
+        {
+          "name": "WINDOWS CLEANED (INTERIOR)",
+          "optional_condition_note": null
+        },
+        {
+          "name": "DOOR JAMS CLEANED",
+          "optional_condition_note": null
+        },
+        {
+          "name": "CARGO/TRUNK AREA VACUUM",
+          "optional_condition_note": "Vehicle condition dependent"
+        },
+        {
+          "name": "STEAM/SHAMPOO OF FLOOR MATS ONLY",
+          "optional_condition_note": null
+        }
+      ],
+      "notes": [
+        "Quick interior clean."
+      ],
+      "image": {
+        "filename": "Basic Interior.jpeg",
+        "r2_url": "https://assets.rosiedazzlers.ca/packages/Basic Interior.jpeg"
+      }
+    },
+    {
+      "code": "complete_detail",
+      "name": "Complete Detail",
+      "prices_cad": {
+        "small": 319.0,
+        "mid": 369.0,
+        "oversize": 419.0
+      },
+      "duration": "full-day",
+      "duration_slots": 2,
+      "deposit_cad": 100,
+      "included_services": [
+        {
+          "name": "AIR AND TOWEL DRY",
+          "optional_condition_note": null
+        },
+        {
+          "name": "WINDOWS CLEANED (EXTERIOR)",
+          "optional_condition_note": null
+        },
+        {
+          "name": "TIRES DRESSED",
+          "optional_condition_note": null
+        },
+        {
+          "name": "WHEELS CLEAN",
+          "optional_condition_note": null
+        },
+        {
+          "name": "WAX APPLICATION",
+          "optional_condition_note": null
+        },
+        {
+          "name": "FULL INTERIOR VACUUM",
+          "optional_condition_note": "Vehicle condition dependent"
+        },
+        {
+          "name": "WIPE DOWN OF ALL MAJOR COMPARTMENTS",
+          "optional_condition_note": "Vehicle condition dependent"
+        },
+        {
+          "name": "WINDOWS CLEANED (INTERIOR)",
+          "optional_condition_note": null
+        },
+        {
+          "name": "DOOR JAMS CLEANED",
+          "optional_condition_note": null
+        },
+        {
+          "name": "CARGO/TRUNK AREA VACUUM",
+          "optional_condition_note": "Vehicle condition dependent"
+        },
+        {
+          "name": "STEAM/SHAMPOO OF FLOOR MATS ONLY",
+          "optional_condition_note": null
+        },
+        {
+          "name": "SPOT CLAY TREATMENT",
+          "optional_condition_note": null
+        },
+        {
+          "name": "SINGLE STAGE POLISH",
+          "optional_condition_note": null
+        },
+        {
+          "name": "WHEEL WELLS CLEANED AND DRESSED",
+          "optional_condition_note": null
+        },
+        {
+          "name": "FULL STEAM/SHAMPOO TREATMENT",
+          "optional_condition_note": null
+        },
+        {
+          "name": "PH BALANCED LEATHER CLEAN/CONDITION",
+          "optional_condition_note": "Vehicle condition dependent"
+        },
+        {
+          "name": "DASH/VENTS/CONSOLE CLEANED",
+          "optional_condition_note": null
+        }
+      ],
+      "notes": [
+        "Our #1 choice. Includes both interior and exterior detail services."
+      ],
+      "image": {
+        "filename": "CompleteDetailSmallCars.png",
+        "r2_url": "https://assets.rosiedazzlers.ca/packages/CompleteDetailSmallCars.png"
+      }
+    },
+    {
+      "code": "interior_detail",
+      "name": "Interior Detail",
+      "prices_cad": {
+        "small": 195.0,
+        "mid": 220.0,
+        "oversize": 245.0
+      },
+      "duration": "full-day",
+      "duration_slots": 2,
+      "deposit_cad": 100,
+      "included_services": [
+        {
+          "name": "FULL INTERIOR VACUUM",
+          "optional_condition_note": "Vehicle condition dependent"
+        },
+        {
+          "name": "WIPE DOWN OF ALL MAJOR COMPARTMENTS",
+          "optional_condition_note": "Vehicle condition dependent"
+        },
+        {
+          "name": "WINDOWS CLEANED (INTERIOR)",
+          "optional_condition_note": null
+        },
+        {
+          "name": "DOOR JAMS CLEANED",
+          "optional_condition_note": null
+        },
+        {
+          "name": "CARGO/TRUNK AREA VACUUM",
+          "optional_condition_note": "Vehicle condition dependent"
+        },
+        {
+          "name": "STEAM/SHAMPOO OF FLOOR MATS ONLY",
+          "optional_condition_note": null
+        },
+        {
+          "name": "FULL STEAM/SHAMPOO TREATMENT",
+          "optional_condition_note": null
+        },
+        {
+          "name": "PH BALANCED LEATHER CLEAN/CONDITION",
+          "optional_condition_note": "Vehicle condition dependent"
+        },
+        {
+          "name": "DASH/VENTS/CONSOLE CLEANED",
+          "optional_condition_note": null
+        }
+      ],
+      "notes": [
+        "Full interior detailing package."
+      ],
+      "image": {
+        "filename": "Interior Detail.jpeg",
+        "r2_url": "https://assets.rosiedazzlers.ca/packages/Interior Detail.jpeg"
+      }
+    },
+    {
+      "code": "exterior_detail",
+      "name": "Exterior Detail",
+      "prices_cad": {
+        "small": 195.0,
+        "mid": 220.0,
+        "oversize": 245.0
+      },
+      "duration": "full-day",
+      "duration_slots": 2,
+      "deposit_cad": 100,
+      "included_services": [
+        {
+          "name": "AIR AND TOWEL DRY",
+          "optional_condition_note": null
+        },
+        {
+          "name": "WINDOWS CLEANED (EXTERIOR)",
+          "optional_condition_note": null
+        },
+        {
+          "name": "TIRES DRESSED",
+          "optional_condition_note": null
+        },
+        {
+          "name": "WHEELS CLEAN",
+          "optional_condition_note": null
+        },
+        {
+          "name": "SPOT CLAY TREATMENT",
+          "optional_condition_note": null
+        },
+        {
+          "name": "SINGLE STAGE POLISH",
+          "optional_condition_note": null
+        },
+        {
+          "name": "WHEEL WELLS CLEANED AND DRESSED",
+          "optional_condition_note": null
+        }
+      ],
+      "notes": [
+        "Full exterior detailing package."
+      ],
+      "image": {
+        "filename": "ExteriorDetailSmallCars.png",
+        "r2_url": "https://assets.rosiedazzlers.ca/packages/ExteriorDetailSmallCars.png"
+      }
+    }
+  ],
+  "service_matrix": [
+    {
+      "service": "AIR AND TOWEL DRY",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "WINDOWS CLEANED (EXTERIOR)",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "TIRES DRESSED",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "WHEELS CLEAN",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "WAX APPLICATION",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "FULL INTERIOR VACUUM",
+      "conditional_note": "Vehicle condition dependent",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "WIPE DOWN OF ALL MAJOR COMPARTMENTS",
+      "conditional_note": "Vehicle condition dependent",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "WINDOWS CLEANED (INTERIOR)",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "DOOR JAMS CLEANED",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "CARGO/TRUNK AREA VACUUM",
+      "conditional_note": "Vehicle condition dependent",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "STEAM/SHAMPOO OF FLOOR MATS ONLY",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "SPOT CLAY TREATMENT",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "SINGLE STAGE POLISH",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "WHEEL WELLS CLEANED AND DRESSED",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "FULL CLAY TREATMENT",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": false,
+        "interior_detail": false,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "TWO STAGE POLISH",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": false,
+        "interior_detail": false,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "HIGH GRADE PAINT SEALANT",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": false,
+        "interior_detail": false,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "FULL STEAM/SHAMPOO TREATMENT",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "PH BALANCED LEATHER CLEAN/CONDITION",
+      "conditional_note": "Vehicle condition dependent",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "UV PROTECTANT APPLIED ON INTERIOR PANELS",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": false,
+        "interior_detail": false,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "DASH/VENTS/CONSOLE CLEANED",
+      "conditional_note": null,
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    }
+  ],
+  "addons": [
+    {
+      "code": "full_clay_treatment",
+      "name": "Full Clay Treatment",
+      "source": "details_matrix_unassigned",
+      "pricing_type": "tiered_estimate",
+      "prices_cad": {
+        "small": 79.0,
+        "mid": 99.0,
+        "oversize": 129.0
+      },
+      "quote_required": false,
+      "notes": [
+        "Estimated add-on pricing; replace with exact price card values when finalized."
+      ],
+      "image": {
+        "filename": null,
+        "r2_url": null
+      }
+    },
+    {
+      "code": "two_stage_polish",
+      "name": "Two Stage Polish",
+      "source": "details_matrix_unassigned",
+      "pricing_type": "tiered_estimate",
+      "prices_cad": {
+        "small": 199.0,
+        "mid": 279.0,
+        "oversize": 359.0
+      },
+      "quote_required": true,
+      "notes": [
+        "Estimated add-on pricing; replace with exact price card values when finalized."
+      ],
+      "image": {
+        "filename": null,
+        "r2_url": null
+      }
+    },
+    {
+      "code": "high_grade_paint_sealant",
+      "name": "High Grade Paint Sealant",
+      "source": "details_matrix_unassigned",
+      "pricing_type": "tiered_estimate",
+      "prices_cad": {
+        "small": 59.0,
+        "mid": 79.0,
+        "oversize": 99.0
+      },
+      "quote_required": false,
+      "notes": [
+        "Estimated add-on pricing; replace with exact price card values when finalized."
+      ],
+      "image": {
+        "filename": null,
+        "r2_url": null
+      }
+    },
+    {
+      "code": "uv_protectant_applied_on_interior_panels",
+      "name": "Uv Protectant Applied On Interior Panels",
+      "source": "details_matrix_unassigned",
+      "pricing_type": "tiered_estimate",
+      "prices_cad": {
+        "small": 25.0,
+        "mid": 35.0,
+        "oversize": 45.0
+      },
+      "quote_required": false,
+      "notes": [
+        "Estimated add-on pricing; replace with exact price card values when finalized."
+      ],
+      "image": {
+        "filename": null,
+        "r2_url": null
+      }
+    },
+    {
+      "code": "de_ionizing_treatment",
+      "name": "De-Ionizing Treatment",
+      "source": "packages_image_only",
+      "pricing_type": "quote",
+      "quote_required": true,
+      "notes": [
+        "Price not in provided CSVs. Set as quote/estimate until you finalize exact pricing."
+      ],
+      "image": {
+        "filename": "De-Ionizing Vehicle Add on service.png",
+        "r2_url": "https://assets.rosiedazzlers.ca/packages/De-Ionizing Vehicle Add on service.png"
+      }
+    },
+    {
+      "code": "de_badging",
+      "name": "De-Badging",
+      "source": "packages_image_only",
+      "pricing_type": "quote",
+      "quote_required": true,
+      "notes": [
+        "Price not in provided CSVs. Set as quote/estimate until you finalize exact pricing."
+      ],
+      "image": {
+        "filename": "DeBadgingAddonService.png",
+        "r2_url": "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png"
+      }
+    },
+    {
+      "code": "engine_cleaning",
+      "name": "Engine Cleaning",
+      "source": "packages_image_only",
+      "pricing_type": "flat_estimate",
+      "quote_required": false,
+      "notes": [
+        "Price not in provided CSVs. Set as quote/estimate until you finalize exact pricing."
+      ],
+      "price_cad": 59.0,
+      "image": {
+        "filename": "Engine Cleaning add on service.png",
+        "r2_url": "https://assets.rosiedazzlers.ca/packages/Engine Cleaning add on service.png"
+      }
+    },
+    {
+      "code": "external_ceramic_coating",
+      "name": "External Ceramic Coating",
+      "source": "packages_image_only",
+      "pricing_type": "quote",
+      "quote_required": true,
+      "notes": [
+        "Price not in provided CSVs. Set as quote/estimate until you finalize exact pricing."
+      ],
+      "image": {
+        "filename": "External Ceramic coating add on service.png",
+        "r2_url": "https://assets.rosiedazzlers.ca/packages/External Ceramic coating add on service.png"
+      }
+    },
+    {
+      "code": "external_graphene_fine_finish",
+      "name": "External Graphene Fine Finish",
+      "source": "packages_image_only",
+      "pricing_type": "quote",
+      "quote_required": true,
+      "notes": [
+        "Price not in provided CSVs. Set as quote/estimate until you finalize exact pricing."
+      ],
+      "image": {
+        "filename": "External Graphene Fine finish add on service.png",
+        "r2_url": "https://assets.rosiedazzlers.ca/packages/External Graphene Fine finish add on service.png"
+      }
+    },
+    {
+      "code": "external_wax",
+      "name": "External Wax",
+      "source": "packages_image_only",
+      "pricing_type": "tiered_estimate",
+      "quote_required": false,
+      "notes": [
+        "Price not in provided CSVs. Set as quote/estimate until you finalize exact pricing."
+      ],
+      "prices_cad": {
+        "small": 49.0,
+        "mid": 59.0,
+        "oversize": 69.0
+      },
+      "image": {
+        "filename": "External Wax add on service.png",
+        "r2_url": "https://assets.rosiedazzlers.ca/packages/External Wax add on service.png"
+      }
+    },
+    {
+      "code": "vinyl_wrapping",
+      "name": "Vinyl Wrapping",
+      "source": "packages_image_only",
+      "pricing_type": "quote",
+      "quote_required": true,
+      "notes": [
+        "Price not in provided CSVs. Set as quote/estimate until you finalize exact pricing."
+      ],
+      "image": {
+        "filename": "Vinyl Wrapping add on service.png",
+        "r2_url": "https://assets.rosiedazzlers.ca/packages/Vinyl Wrapping add on service.png"
+      }
+    },
+    {
+      "code": "window_tinting",
+      "name": "Window Tinting",
+      "source": "packages_image_only",
+      "pricing_type": "quote",
+      "quote_required": true,
+      "notes": [
+        "Price not in provided CSVs. Set as quote/estimate until you finalize exact pricing."
+      ],
+      "image": {
+        "filename": "Window Tinting add on service.png",
+        "r2_url": "https://assets.rosiedazzlers.ca/packages/Window Tinting add on service.png"
+      }
+    }
+  ],
+  "charts": [
+    {
+      "name": "Vehicle Price Chart 2025",
+      "filename": "CarPrice2025.PNG",
+      "r2_url": "https://assets.rosiedazzlers.ca/brand/CarPrice2025.PNG"
+    },
+    {
+      "name": "Package Service Details Chart",
+      "filename": "CarPriceDetails2025.PNG",
+      "r2_url": "https://assets.rosiedazzlers.ca/brand/CarPriceDetails2025.PNG"
+    },
+    {
+      "name": "Vehicle Size Chart",
+      "filename": "CarSizeChart.PNG",
+      "r2_url": "https://assets.rosiedazzlers.ca/brand/CarSizeChart.PNG"
+    }
+  ],
+  "checkout_pricing_cents_patch": {
+    "premium_wash": {
+      "small": 8500,
+      "mid": 10500,
+      "oversize": 12500
+    },
+    "basic_detail": {
+      "small": 11500,
+      "mid": 13500,
+      "oversize": 17000
+    },
+    "complete_detail": {
+      "small": 31900,
+      "mid": 36900,
+      "oversize": 41900
+    },
+    "interior_detail": {
+      "small": 19500,
+      "mid": 22000,
+      "oversize": 24500
+    },
+    "exterior_detail": {
+      "small": 19500,
+      "mid": 22000,
+      "oversize": 24500
+    }
+  },
+  "notes": [
+    "Complete Detail pricing uses the higher values from the provided Car Costing CSV.",
+    "Services not included in any package were added to add-ons.",
+    "Estimated/quote add-on prices should be replaced with your final approved numbers."
+  ]
+}
