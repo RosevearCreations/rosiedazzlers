@@ -1,51 +1,73 @@
-// assets/site.js
-import {
-  ASSETS_BASE, PATHS, CONTACT,
-  PRICING, PACKAGE_MEDIA, CHARTS,
-  ADDONS, money, calcDepositCents, assetUrl
-} from "./config.js";
+const DATA_URL = "/data/rosie_services_pricing_and_packages.json";
 
-/* ---------- basics ---------- */
+const BRAND = {
+  logo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
+  banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
+  reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png",
+};
 
-export function setBrandImages() {
-  const logo = document.querySelector("[data-logo]");
-  if (logo) logo.src = assetUrl(PATHS.brand, "RosieDazzlerLogoOriginal3D.png");
+const CONTACT = {
+  phone: "226-752-7613",
+  email: "info@rosiedazzlers.ca",
+  serviceArea: "Norfolk & Oxford Counties",
+};
 
-  const banner = document.querySelector("[data-banner]");
-  if (banner) banner.src = assetUrl(PATHS.brand, "RosieDazzlersBanner.png");
+let _servicesData = null;
 
-  const reviews = document.querySelector("[data-reviews]");
-  if (reviews) reviews.src = assetUrl(PATHS.brand, "RosieReviews.png");
+async function loadServicesData() {
+  if (_servicesData) return _servicesData;
+
+  const res = await fetch(DATA_URL, { cache: "no-store" });
+  if (!res.ok) throw new Error(`Could not load ${DATA_URL}`);
+  _servicesData = await res.json();
+  return _servicesData;
 }
 
-export function setFooter() {
-  const el = document.querySelector("[data-footer]");
-  if (!el) return;
-  el.innerHTML = `
-    <div><strong>Rosie Dazzlers Mobile Auto Detailing</strong> — ${CONTACT.serviceArea}</div>
-    <div>Phone: <a href="tel:${CONTACT.phone}">${CONTACT.phone}</a> · Email: <a href="mailto:${CONTACT.email}">${CONTACT.email}</a></div>
-    <div class="kicker">Mobile service: customer provides driveway + power + water (or additional charges apply).</div>
-  `;
+function money(value) {
+  return new Intl.NumberFormat("en-CA", {
+    style: "currency",
+    currency: "CAD",
+  }).format(Number(value || 0));
 }
 
-export function handleCheckoutReturn() {
-  const params = new URLSearchParams(location.search);
-  const state = params.get("checkout");
-  const bid = params.get("bid");
+function centsToMoney(cents) {
+  return money((Number(cents || 0) / 100));
+}
 
-  const box = document.querySelector("[data-checkout-status]");
-  if (!box || !state) return;
+function getPackageByCode(data, code) {
+  return (data.packages || []).find((p) => p.code === code) || null;
+}
 
-  if (state === "success") {
-    box.className = "notice ok";
-    box.innerHTML = `<strong>Deposit received.</strong> Booking ID: <code>${bid || ""}</code><br/>We’ll confirm details by email.`;
-  } else if (state === "cancel") {
-    box.className = "notice warn";
-    box.innerHTML = `<strong>Checkout cancelled.</strong> Booking ID: <code>${bid || ""}</code><br/>No deposit was taken. You can try again.`;
+function packagePrice(pkg, size) {
+  return Number(pkg?.prices_cad?.[size] || 0);
+}
+
+function addonDisplay(addon, size) {
+  if (addon.quote_required === true) {
+    if (addon.prices_cad?.[size] != null) {
+      return `From ${money(addon.prices_cad[size])} · Quote required`;
+    }
+    if (addon.price_cad != null) {
+      return `From ${money(addon.price_cad)} · Quote required`;
+    }
+    return "Quote required";
   }
+
+  if (addon.prices_cad?.[size] != null) return money(addon.prices_cad[size]);
+  if (addon.price_cad != null) return money(addon.price_cad);
+  return "Quote required";
 }
 
-/* ---------- lightbox (charts, size guide, etc) ---------- */
+function addonCharge(addon, size) {
+  if (!addon || addon.quote_required === true) return 0;
+  if (addon.prices_cad?.[size] != null) return Number(addon.prices_cad[size]);
+  if (addon.price_cad != null) return Number(addon.price_cad);
+  return 0;
+}
+
+function calcDeposit(pkg) {
+  return Number(pkg?.deposit_cad || 0);
+}
 
 function ensureLightbox() {
   let lb = document.querySelector("#lightbox");
@@ -61,7 +83,7 @@ function ensureLightbox() {
         <button class="btn small ghost" id="lbClose" type="button">Close</button>
       </div>
       <img id="lbImg" alt="" />
-      <div class="kicker" id="lbHint">Tip: right-click → open image in new tab</div>
+      <div class="kicker">Tip: right-click → open image in new tab</div>
     </div>
   `;
   document.body.appendChild(lb);
@@ -83,128 +105,412 @@ export function openLightbox(title, src) {
   lb.classList.add("open");
 }
 
-/* ---------- package cards (pricing + images) ---------- */
+export function setBrandImages() {
+  const logo = document.querySelector("[data-logo]");
+  if (logo) logo.src = BRAND.logo;
 
-export function renderPackageCards(containerSelector, sizeKey) {
-  const wrap = document.querySelector(containerSelector);
-  if (!wrap) return;
+  const banner = document.querySelector("[data-banner]");
+  if (banner) banner.src = BRAND.banner;
 
-  const size = sizeKey || "small";
-  wrap.innerHTML = "";
+  const reviews = document.querySelector("[data-reviews]");
+  if (reviews) reviews.src = BRAND.reviews;
+}
 
-  for (const [code, p] of Object.entries(PRICING)) {
-    const cents = p[size];
-    const imgFile = PACKAGE_MEDIA?.[code]?.[size];
-    const imgUrl = imgFile ? assetUrl(PATHS.packages, imgFile) : "";
+export function setFooter() {
+  const el = document.querySelector("[data-footer]");
+  if (!el) return;
+  el.innerHTML = `
+    <div><strong>Rosie Dazzlers Mobile Auto Detailing</strong> — ${CONTACT.serviceArea}</div>
+    <div>Phone: <a href="tel:${CONTACT.phone}">${CONTACT.phone}</a> · Email: <a href="mailto:${CONTACT.email}">${CONTACT.email}</a></div>
+    <div class="kicker">Driveway required · customer provides power + water (or additional charges may apply).</div>
+  `;
+}
+
+export function handleCheckoutReturn() {
+  const params = new URLSearchParams(location.search);
+  const state = params.get("checkout");
+  const bid = params.get("bid");
+
+  const box = document.querySelector("[data-checkout-status]");
+  if (!box || !state) return;
+
+  if (state === "success") {
+    box.className = "notice ok";
+    box.innerHTML = `<strong>Deposit received.</strong> Booking ID: <code>${bid || ""}</code><br>We’ll confirm details by email.`;
+  } else if (state === "cancel") {
+    box.className = "notice warn";
+    box.innerHTML = `<strong>Checkout cancelled.</strong> Booking ID: <code>${bid || ""}</code><br>No deposit was taken. You can try again.`;
+  }
+}
+
+function chartButtons(data, selectorMap) {
+  const charts = data.charts || [];
+  const byName = Object.fromEntries(charts.map((c) => [c.filename, c]));
+
+  if (selectorMap.price) {
+    const el = document.querySelector(selectorMap.price);
+    if (el && byName["CarPrice2025.PNG"]) {
+      el.addEventListener("click", () =>
+        openLightbox("Vehicle Price Chart 2025", byName["CarPrice2025.PNG"].r2_url)
+      );
+    }
+  }
+
+  if (selectorMap.details) {
+    const el = document.querySelector(selectorMap.details);
+    if (el && byName["CarPriceDetails2025.PNG"]) {
+      el.addEventListener("click", () =>
+        openLightbox("Package Service Details Chart", byName["CarPriceDetails2025.PNG"].r2_url)
+      );
+    }
+  }
+
+  if (selectorMap.size) {
+    const el = document.querySelector(selectorMap.size);
+    if (el && byName["CarSizeChart.PNG"]) {
+      el.addEventListener("click", () =>
+        openLightbox("Vehicle Size Chart", byName["CarSizeChart.PNG"].r2_url)
+      );
+    }
+  }
+}
+
+function renderPackages(cardsEl, data, size) {
+  if (!cardsEl) return;
+  cardsEl.innerHTML = "";
+
+  for (const pkg of data.packages || []) {
+    const price = packagePrice(pkg, size);
+    const deposit = calcDeposit(pkg);
+    const img = pkg.image?.r2_url || "";
+
+    const included = (pkg.included_services || [])
+      .map((s) => {
+        const note = s.optional_condition_note ? ` <span class="note">${s.optional_condition_note}</span>` : "";
+        return `<li>${s.name}${note}</li>`;
+      })
+      .join("");
+
+    const notes = (pkg.notes || []).map((n) => `<div class="tag">${n}</div>`).join("");
 
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `
-      ${imgUrl ? `<img class="img" loading="lazy" src="${imgUrl}" alt="${p.label} (${size})" onerror="this.style.display='none'">` : ""}
-      <h3>${p.label}</h3>
-      <p>${p.subtitle}</p>
-      <div class="price">${money(cents)} <span class="kicker">(${size.toUpperCase()})</span></div>
-      <div class="kicker">Deposit: ${money(calcDepositCents(code))}</div>
+      ${img ? `<img class="img" loading="lazy" src="${img}" alt="${pkg.name}" onerror="this.style.display='none'">` : ""}
+      <h3>${pkg.name}</h3>
+      <div class="price">${money(price)} <span class="kicker">(${size.toUpperCase()})</span></div>
+      <div class="kicker">Deposit: ${money(deposit)}</div>
       <div class="hr"></div>
-      <a class="btn primary" href="/book?package=${encodeURIComponent(code)}&size=${encodeURIComponent(size)}">Book this</a>
+      <ul class="list">${included}</ul>
+      <div class="hr"></div>
+      ${notes}
+      <div class="hr"></div>
+      <a class="btn primary" href="/book?package=${encodeURIComponent(pkg.code)}&size=${encodeURIComponent(size)}">Book this</a>
     `;
-    wrap.appendChild(div);
+    cardsEl.appendChild(div);
   }
 }
 
-/* ---------- booking page ---------- */
+function renderCompareTable(container, data) {
+  if (!container) return;
+  const packages = data.packages || [];
+  const matrix = data.service_matrix || [];
 
-export function initBookingForm() {
+  const head = packages.map((p) => `<th>${p.name}</th>`).join("");
+
+  const rows = matrix.map((row) => {
+    const tds = packages.map((p) => {
+      const has = row.included_in?.[p.code] === true;
+      return `<td>${has ? '<span class="check">✓</span>' : '<span class="nope">—</span>'}</td>`;
+    }).join("");
+
+    return `
+      <tr>
+        <td>
+          <strong>${row.service}</strong>
+          ${row.conditional_note ? `<span class="note">${row.conditional_note}</span>` : ""}
+        </td>
+        ${tds}
+      </tr>
+    `;
+  }).join("");
+
+  container.innerHTML = `
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Included service</th>
+            ${head}
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderAddons(container, data, size) {
+  if (!container) return;
+  container.innerHTML = "";
+
+  for (const addon of data.addons || []) {
+    const img = addon.image?.r2_url || "";
+    const pricing = addonDisplay(addon, size);
+    const tags = [
+      addon.quote_required ? `<span class="tag quote">Quote required</span>` : `<span class="tag flat">Priced online</span>`,
+      addon.source ? `<span class="tag">${addon.source.replaceAll("_", " ")}</span>` : "",
+    ].join("");
+
+    const notes = (addon.notes || []).map((n) => `<div class="kicker">${n}</div>`).join("");
+
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      ${img ? `<img class="img" loading="lazy" src="${img}" alt="${addon.name}" onerror="this.style.display='none'">` : ""}
+      <h3>${addon.name}</h3>
+      <div class="price">${pricing}</div>
+      <div class="hr"></div>
+      ${tags}
+      ${notes ? `<div class="hr"></div>${notes}` : ""}
+      <div class="hr"></div>
+      <a class="btn ghost" href="/book?size=${encodeURIComponent(size)}">Add to booking</a>
+    `;
+    container.appendChild(div);
+  }
+}
+
+function renderPackageSummary(target, pkg) {
+  if (!target || !pkg) return;
+  const items = (pkg.included_services || [])
+    .map((s) => `<li>${s.name}${s.optional_condition_note ? ` <span class="note">${s.optional_condition_note}</span>` : ""}</li>`)
+    .join("");
+
+  target.innerHTML = `
+    <strong>${pkg.name} includes</strong>
+    <div class="hr"></div>
+    <ul class="list">${items}</ul>
+  `;
+}
+
+function renderAddonPicker(target, data, size) {
+  if (!target) return;
+  target.innerHTML = "";
+
+  for (const addon of data.addons || []) {
+    const id = `addon_${addon.code}`;
+    const priceText = addonDisplay(addon, size);
+
+    const row = document.createElement("label");
+    row.style.display = "grid";
+    row.style.gridTemplateColumns = "24px 1fr";
+    row.style.gap = "10px";
+    row.style.alignItems = "start";
+    row.style.marginBottom = "10px";
+
+    row.innerHTML = `
+      <input id="${id}" type="checkbox" name="addon_codes" value="${addon.code}">
+      <span>
+        <strong>${addon.name}</strong><br>
+        <span class="kicker">${priceText}</span>
+      </span>
+    `;
+
+    target.appendChild(row);
+  }
+}
+
+function selectedAddonCodes(form) {
+  return [...form.querySelectorAll("input[name='addon_codes']:checked")].map((x) => x.value);
+}
+
+function currentSize(form) {
+  return form.vehicle_size?.value || "small";
+}
+
+function currentPackageCode(form) {
+  return form.package_code?.value || "";
+}
+
+function calcBookingTotals(form, data) {
+  const size = currentSize(form);
+  const pkgCode = currentPackageCode(form);
+  const pkg = getPackageByCode(data, pkgCode);
+
+  const base = packagePrice(pkg, size);
+  const deposit = calcDeposit(pkg);
+
+  const selectedCodes = selectedAddonCodes(form);
+  const selectedAddons = (data.addons || []).filter((a) => selectedCodes.includes(a.code));
+
+  let pricedAddons = 0;
+  const quoteAddons = [];
+
+  for (const addon of selectedAddons) {
+    if (addon.quote_required === true) {
+      quoteAddons.push(addon.name);
+      continue;
+    }
+    pricedAddons += addonCharge(addon, size);
+  }
+
+  return {
+    pkg,
+    base,
+    deposit,
+    pricedAddons,
+    quoteAddons,
+    total: base + pricedAddons,
+    selectedCodes,
+  };
+}
+
+async function checkAvailability(date) {
+  if (!date) return null;
+  const r = await fetch(`/api/availability?date=${encodeURIComponent(date)}`);
+  return await r.json();
+}
+
+export async function initServicesPage() {
+  const data = await loadServicesData();
+
+  const sizeSel = document.querySelector("#size");
+  const cardsEl = document.querySelector("#packageCards");
+  const compareEl = document.querySelector("#compareTable");
+  const addonsEl = document.querySelector("#addonCards");
+
+  const render = () => {
+    const size = sizeSel?.value || "small";
+    renderPackages(cardsEl, data, size);
+    renderCompareTable(compareEl, data);
+    renderAddons(addonsEl, data, size);
+  };
+
+  sizeSel?.addEventListener("change", render);
+  render();
+
+  chartButtons(data, {
+    price: "#openPrice",
+    details: "#openDetails",
+    size: "#openSize",
+  });
+}
+
+export async function initPricingPage() {
+  const data = await loadServicesData();
+
+  const sizeSel = document.querySelector("#size");
+  const cardsEl = document.querySelector("#pricingCards");
+  const addonsEl = document.querySelector("#pricingAddons");
+
+  const render = () => {
+    const size = sizeSel?.value || "small";
+    renderPackages(cardsEl, data, size);
+    renderAddons(addonsEl, data, size);
+  };
+
+  sizeSel?.addEventListener("change", render);
+  render();
+
+  chartButtons(data, {
+    price: "#openPrice",
+    details: "#openDetails",
+    size: "#openSize",
+  });
+}
+
+export async function initBookingPage() {
+  const data = await loadServicesData();
+
   const form = document.querySelector("#bookingForm");
   if (!form) return;
 
-  // Pre-fill from clean URLs query
+  const packageSummary = document.querySelector("#packageSummary");
+  const addonPicker = document.querySelector("#addonPicker");
+  const availBox = document.querySelector("#availBox");
+  const priceBox = document.querySelector("#priceBox");
+  const submitBtn = document.querySelector("#submitBtn");
+
   const params = new URLSearchParams(location.search);
   const qpPackage = params.get("package");
   const qpSize = params.get("size");
+
+  // Populate package select
+  if (form.package_code && !form.package_code.dataset.built) {
+    form.package_code.innerHTML = (data.packages || [])
+      .map((p) => `<option value="${p.code}">${p.name}</option>`)
+      .join("");
+    form.package_code.dataset.built = "1";
+  }
+
   if (qpPackage && form.package_code) form.package_code.value = qpPackage;
   if (qpSize && form.vehicle_size) form.vehicle_size.value = qpSize;
 
-  const priceBox = document.querySelector("#priceBox");
-  const availBox = document.querySelector("#availBox");
-  const submitBtn = document.querySelector("#submitBtn");
+  const redraw = async (checkDate = false) => {
+    const size = currentSize(form);
+    const pkg = getPackageByCode(data, currentPackageCode(form));
 
-  const chartBtns = {
-    price: document.querySelector("[data-open-price]"),
-    includes: document.querySelector("[data-open-includes]"),
-    size: document.querySelector("[data-open-size]"),
+    renderPackageSummary(packageSummary, pkg);
+    renderAddonPicker(addonPicker, data, size);
+
+    // restore selections if possible after rebuild
+    const selected = new Set(selectedAddonCodes(form));
+    addonPicker.querySelectorAll("input[name='addon_codes']").forEach((cb) => {
+      if (selected.has(cb.value)) cb.checked = true;
+    });
+
+    const totals = calcBookingTotals(form, data);
+
+    priceBox.className = "notice";
+    priceBox.innerHTML = `
+      <div><strong>Estimate</strong></div>
+      <div>Base: ${money(totals.base)} · Priced add-ons: ${money(totals.pricedAddons)} · <strong>Total: ${money(totals.total)}</strong></div>
+      <div class="kicker">Deposit due now: <strong>${money(totals.deposit)}</strong></div>
+      ${totals.quoteAddons.length ? `<div class="kicker">Quote add-ons selected: ${totals.quoteAddons.join(", ")} (not included in online total)</div>` : ""}
+    `;
+
+    if (checkDate && form.service_date?.value) {
+      const avail = await checkAvailability(form.service_date.value);
+      if (avail?.blocked) {
+        availBox.className = "notice bad";
+        availBox.innerHTML = `This date is blocked: ${avail.reason || "Blocked"}`;
+      } else if (avail) {
+        availBox.className = "notice ok";
+        availBox.innerHTML = `
+          <strong>Availability for ${avail.date}</strong><br>
+          AM: ${avail.AM ? "✅ Available" : "❌ Not available"} ·
+          PM: ${avail.PM ? "✅ Available" : "❌ Not available"}
+          <div class="kicker">Pending holds expire after ~${avail.hold_minutes || 30} minutes.</div>
+        `;
+      }
+    }
   };
 
-  if (chartBtns.price) chartBtns.price.addEventListener("click", () =>
-    openLightbox("Price Chart", assetUrl(PATHS.packages, CHARTS.price))
-  );
-  if (chartBtns.includes) chartBtns.includes.addEventListener("click", () =>
-    openLightbox("What’s Included", assetUrl(PATHS.packages, CHARTS.includes))
-  );
-  if (chartBtns.size) chartBtns.size.addEventListener("click", () =>
-    openLightbox("Vehicle Size Chart", assetUrl(PATHS.packages, CHARTS.size))
-  );
+  // initial build
+  renderAddonPicker(addonPicker, data, currentSize(form));
+  await redraw(false);
 
-  function calcTotals() {
-    const packageCode = form.package_code.value;
-    const size = form.vehicle_size.value;
+  form.package_code?.addEventListener("change", () => redraw(false));
+  form.vehicle_size?.addEventListener("change", () => redraw(false));
 
-    const base = PRICING?.[packageCode]?.[size] || 0;
-    let addons = 0;
-    const selected = [...form.querySelectorAll("input[name='addon_codes']:checked")].map(x => x.value);
-    selected.forEach(code => { if (ADDONS[code]) addons += ADDONS[code].cents; });
+  addonPicker.addEventListener("change", () => redraw(false));
+  form.service_date?.addEventListener("change", () => redraw(true));
 
-    const total = base + addons;
-    const deposit = calcDepositCents(packageCode);
-
-    if (priceBox) {
-      priceBox.className = "notice";
-      priceBox.innerHTML = `
-        <div><strong>Estimate</strong></div>
-        <div>Base: ${money(base)} · Add-ons: ${money(addons)} · <strong>Total: ${money(total)}</strong></div>
-        <div class="kicker">Deposit due now: <strong>${money(deposit)}</strong> (applied to your service)</div>
-      `;
-    }
-    return { total, deposit, selected };
-  }
-
-  async function checkAvailability() {
-    const date = form.service_date.value;
-    if (!date) return null;
-
-    const r = await fetch(`/api/availability?date=${encodeURIComponent(date)}`);
-    const j = await r.json();
-
-    if (!availBox) return j;
-
-    if (j.blocked) {
-      availBox.className = "notice bad";
-      availBox.innerHTML = `This date is blocked: ${j.reason || "Blocked"}`;
-      return j;
-    }
-
-    availBox.className = "notice ok";
-    availBox.innerHTML = `
-      <strong>Availability for ${j.date}</strong><br/>
-      AM: ${j.AM ? "✅ Available" : "❌ Not available"} ·
-      PM: ${j.PM ? "✅ Available" : "❌ Not available"}
-      <div class="kicker">Pending holds expire after ~${j.hold_minutes || 30} minutes.</div>
-    `;
-    return j;
-  }
-
-  form.addEventListener("change", () => { calcTotals(); });
-  form.service_date.addEventListener("change", () => { checkAvailability(); });
-
-  calcTotals();
+  chartButtons(data, {
+    price: "[data-open-price]",
+    details: "[data-open-details]",
+    size: "[data-open-size]",
+  });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
     submitBtn.disabled = true;
     submitBtn.textContent = "Creating checkout…";
 
     try {
-      const totals = calcTotals();
+      const totals = calcBookingTotals(form, data);
+
       const payload = {
         service_date: form.service_date.value,
         start_slot: form.start_slot.value,
@@ -222,7 +528,7 @@ export function initBookingForm() {
         city: form.city.value,
         postal_code: form.postal_code.value,
 
-        addon_codes: totals.selected,
+        addon_codes: totals.selectedCodes,
 
         ack_driveway: form.ack_driveway.checked,
         ack_power_water: form.ack_power_water.checked,
@@ -234,14 +540,17 @@ export function initBookingForm() {
         throw new Error("Please confirm all required acknowledgements.");
       }
 
-      const avail = await checkAvailability();
-      if (avail) {
-        const needFull = payload.duration_slots === 2;
-        const wantsAM = payload.start_slot === "AM";
-        const wantsPM = payload.start_slot === "PM";
-        if (needFull && (!avail.AM || !avail.PM)) throw new Error("Full day not available. Choose another date.");
-        if (wantsAM && !avail.AM) throw new Error("AM not available. Choose another date.");
-        if (wantsPM && !avail.PM) throw new Error("PM not available. Choose another date.");
+      const avail = await checkAvailability(payload.service_date);
+      if (avail?.blocked) throw new Error(avail.reason || "This date is blocked.");
+
+      if (payload.duration_slots === 2 && (!avail?.AM || !avail?.PM)) {
+        throw new Error("Full day not available. Please choose another date.");
+      }
+      if (payload.duration_slots === 1 && payload.start_slot === "AM" && !avail?.AM) {
+        throw new Error("AM not available. Please choose another date.");
+      }
+      if (payload.duration_slots === 1 && payload.start_slot === "PM" && !avail?.PM) {
+        throw new Error("PM not available. Please choose another date.");
       }
 
       const res = await fetch("/api/checkout", {
@@ -255,151 +564,15 @@ export function initBookingForm() {
 
       window.location.href = json.checkout_url;
     } catch (err) {
-      if (priceBox) {
-        priceBox.className = "notice bad";
-        priceBox.innerHTML = `<strong>Error:</strong> ${String(err.message || err)}`;
-      }
+      priceBox.className = "notice bad";
+      priceBox.innerHTML = `<strong>Error:</strong> ${String(err.message || err)}`;
       submitBtn.disabled = false;
       submitBtn.textContent = "Pay deposit & book";
     }
   });
 }
 
-/* ---------- gear/consumables pages ---------- */
-
-function titleFromPath(path) {
-  const base = (path || "").split("/").pop() || "";
-  return base
-    .replace(/\.[a-z0-9]+$/i, "")
-    .replace(/[_-]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function amazonSearchUrl(query) {
-  return `https://www.amazon.ca/s?k=${encodeURIComponent(query)}`;
-}
-
-async function fetchJsonSafe(url) {
-  try {
-    const r = await fetch(url, { cache: "no-store" });
-    if (!r.ok) return null;
-    return await r.json();
-  } catch {
-    return null;
-  }
-}
-
-export async function initInventoryPage(mode /* 'gear' | 'consumables' */) {
-  const listEl = document.querySelector("#invList");
-  const statusEl = document.querySelector("#invStatus");
-  const catEl = document.querySelector("#invCategory");
-  const qEl = document.querySelector("#invSearch");
-
-  if (!listEl || !statusEl || !catEl || !qEl) return;
-
-  statusEl.textContent = "Loading…";
-
-  // These two JSON files must exist in your repo:
-  // /data/rosie_products_catalog.json  (from earlier)
-  // /data/systems_catalog.json         (from Systems.zip)
-  //
-  // If they don’t exist yet, the page will show an instruction.
-  const products = await fetchJsonSafe("/data/rosie_products_catalog.json");
-  const systems = await fetchJsonSafe("/data/systems_catalog.json");
-
-  if (!products && !systems) {
-    statusEl.className = "notice bad";
-    statusEl.innerHTML = `
-      <strong>Missing data files.</strong><br/>
-      Add these to your repo:
-      <ul>
-        <li><code>data/rosie_products_catalog.json</code></li>
-        <li><code>data/systems_catalog.json</code></li>
-      </ul>
-    `;
-    return;
-  }
-
-  let items = [];
-
-  if (Array.isArray(products)) {
-    for (const p of products) {
-      const type = p.type; // 'gear' or 'consumable'
-      if (mode === "gear" && type !== "gear") continue;
-      if (mode === "consumables" && type !== "consumable") continue;
-
-      const img = assetUrl(PATHS.products, p.sanitized);
-      const title = titleFromPath(p.original || p.sanitized);
-      const category = p.category || "other";
-      const query = [p.brand, title].filter(Boolean).join(" ");
-      items.push({
-        source: "products",
-        title,
-        category,
-        img,
-        amazon: amazonSearchUrl(query || title),
-      });
-    }
-  }
-
-  // Systems are always gear
-  if (mode === "gear" && Array.isArray(systems)) {
-    for (const s of systems) {
-      const img = assetUrl(PATHS.systems, s.path);
-      const title = titleFromPath(s.path);
-      const category = s.category || "systems_other";
-      items.push({
-        source: "systems",
-        title,
-        category,
-        img,
-        amazon: amazonSearchUrl(title),
-      });
-    }
-  }
-
-  // Build category dropdown
-  const categories = Array.from(new Set(items.map(i => i.category))).sort();
-  catEl.innerHTML = `<option value="all">All categories</option>` + categories.map(c => `<option value="${c}">${c}</option>`).join("");
-
-  statusEl.className = "notice ok";
-  statusEl.innerHTML = `<strong>Loaded:</strong> ${items.length} items · Amazon links are search links (you can replace with direct product URLs later).`;
-
-  function render() {
-    const cat = catEl.value;
-    const q = qEl.value.trim().toLowerCase();
-
-    const filtered = items.filter(i => {
-      if (cat !== "all" && i.category !== cat) return false;
-      if (q && !i.title.toLowerCase().includes(q) && !i.category.toLowerCase().includes(q)) return false;
-      return true;
-    });
-
-    listEl.innerHTML = "";
-
-    for (const i of filtered) {
-      const div = document.createElement("div");
-      div.className = "card";
-      div.innerHTML = `
-        <img class="img" loading="lazy" src="${i.img}" alt="${i.title}" onerror="this.style.display='none'">
-        <h3>${i.title}</h3>
-        <p class="kicker">${i.category}</p>
-        <div class="hr"></div>
-        <a class="btn primary" href="${i.amazon}" target="_blank" rel="noopener">Amazon link</a>
-      `;
-      listEl.appendChild(div);
-    }
-
-    if (filtered.length === 0) {
-      const empty = document.createElement("div");
-      empty.className = "notice warn";
-      empty.textContent = "No matches. Try a different category or search term.";
-      listEl.appendChild(empty);
-    }
-  }
-
-  catEl.addEventListener("change", render);
-  qEl.addEventListener("input", render);
-  render();
+// old aliases so existing pages do not break
+export async function initBookingForm() {
+  return initBookingPage();
 }
