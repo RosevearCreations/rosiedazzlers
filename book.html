@@ -1,17 +1,17 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Book | Rosie Dazzlers</title>
-  <meta name="description" content="Book your mobile detailing service and pay a deposit." />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <meta name="description" content="Book your detailing package and choose add-ons.">
+  <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
   <div class="nav">
     <div class="nav-inner">
       <a class="brand" href="/">
-        <img data-logo alt="Rosie Dazzlers logo" />
+        <img data-logo alt="Rosie Dazzlers logo">
         <strong>Rosie Dazzlers</strong>
       </a>
       <div class="nav-links">
@@ -27,20 +27,19 @@
 
   <div class="container">
     <div class="panel">
-      <h1 style="margin:0 0 6px">Book a detailing</h1>
-      <p class="help">Choose your package, confirm requirements, and pay a deposit to reserve your date.</p>
+      <h1 style="margin:0 0 8px">Book a Detail</h1>
+      <p class="kicker">Select your package, review what’s included, choose add-ons, then pay your deposit online.</p>
 
       <div class="hr"></div>
 
       <div class="notice warn">
-        <strong>Mobile requirements:</strong> You must provide a driveway/work area, plus power + water.
-        If power/water aren’t available on arrival, additional charges may apply or the booking may be treated as a late cancellation.
+        <strong>Mobile requirements:</strong> driveway/work area required. Customer supplies power + water or accepts additional charges. Deposits secure your date. Cancellation fees may apply.
       </div>
 
       <div class="section" style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn ghost" type="button" data-open-size>View size chart</button>
         <button class="btn ghost" type="button" data-open-price>View price chart</button>
-        <button class="btn ghost" type="button" data-open-includes>View includes</button>
+        <button class="btn ghost" type="button" data-open-details>View details chart</button>
+        <button class="btn ghost" type="button" data-open-size>View size chart</button>
       </div>
     </div>
 
@@ -50,7 +49,7 @@
           <div class="row">
             <div>
               <label>Date</label>
-              <input name="service_date" type="date" required />
+              <input name="service_date" type="date" required>
             </div>
             <div>
               <label>Time slot</label>
@@ -65,10 +64,9 @@
             <div>
               <label>Duration</label>
               <select name="duration_slots">
-                <option value="2">Full day (default)</option>
-                <option value="1">Half day (when applicable)</option>
+                <option value="2">Full day</option>
+                <option value="1">Half day</option>
               </select>
-              <div class="kicker">We generally book 1 vehicle/day unless it’s a half-day job.</div>
             </div>
             <div>
               <label>County</label>
@@ -82,13 +80,7 @@
           <div class="row">
             <div>
               <label>Package</label>
-              <select name="package_code">
-                <option value="premium_wash">Premium Wash</option>
-                <option value="basic_detail">Basic Detail</option>
-                <option value="complete_detail">Complete Detail</option>
-                <option value="interior_detail">Interior Detail</option>
-                <option value="exterior_detail">Exterior Detail</option>
-              </select>
+              <select name="package_code"></select>
             </div>
             <div>
               <label>Vehicle size</label>
@@ -101,21 +93,10 @@
           </div>
 
           <div class="card">
-            <strong>Add-ons</strong>
-            <div class="kicker">Optional upgrades (we can expand this list anytime).</div>
+            <strong>Add-ons & Specialty Services</strong>
+            <div class="kicker">Quote-required services are recorded on the booking but not charged in the online deposit flow.</div>
             <div class="hr"></div>
-            <label style="display:flex;gap:10px;align-items:center">
-              <input type="checkbox" name="addon_codes" value="engine_bay" />
-              Engine Bay Detail
-            </label>
-            <label style="display:flex;gap:10px;align-items:center">
-              <input type="checkbox" name="addon_codes" value="pet_hair" />
-              Pet Hair Removal
-            </label>
-            <label style="display:flex;gap:10px;align-items:center">
-              <input type="checkbox" name="addon_codes" value="odor_treatment" />
-              Odour Treatment
-            </label>
+            <div id="addonPicker"></div>
           </div>
 
           <div class="card">
@@ -123,17 +104,17 @@
             <div class="row">
               <div>
                 <label>Name</label>
-                <input name="customer_name" required />
+                <input name="customer_name" required>
               </div>
               <div>
                 <label>Email</label>
-                <input name="customer_email" type="email" required />
+                <input name="customer_email" type="email" required>
               </div>
             </div>
             <div class="row">
               <div>
                 <label>Phone</label>
-                <input name="customer_phone" />
+                <input name="customer_phone">
               </div>
               <div></div>
             </div>
@@ -142,41 +123,40 @@
           <div class="card">
             <strong>Service Address</strong>
             <label>Address</label>
-            <input name="address_line1" required />
+            <input name="address_line1" required>
             <div class="row">
               <div>
                 <label>City</label>
-                <input name="city" />
+                <input name="city">
               </div>
               <div>
                 <label>Postal Code</label>
-                <input name="postal_code" />
+                <input name="postal_code">
               </div>
             </div>
           </div>
 
           <div class="card">
             <strong>Required acknowledgements</strong>
-            <div class="kicker">These protect both of us and keep expectations clear.</div>
             <div class="hr"></div>
 
             <label style="display:flex;gap:10px;align-items:flex-start">
-              <input type="checkbox" name="ack_driveway" />
+              <input type="checkbox" name="ack_driveway">
               <span>I confirm a driveway/work area is available.</span>
             </label>
 
             <label style="display:flex;gap:10px;align-items:flex-start">
-              <input type="checkbox" name="ack_power_water" />
+              <input type="checkbox" name="ack_power_water">
               <span>I confirm power + water are available, or I accept additional charges.</span>
             </label>
 
             <label style="display:flex;gap:10px;align-items:flex-start">
-              <input type="checkbox" name="ack_bylaw" />
+              <input type="checkbox" name="ack_bylaw">
               <span>I accept responsibility for any local bylaw / runoff restrictions at my location.</span>
             </label>
 
             <label style="display:flex;gap:10px;align-items:flex-start">
-              <input type="checkbox" name="ack_cancellation" />
+              <input type="checkbox" name="ack_cancellation">
               <span>I understand deposits and late cancellations/no-shows may have fees.</span>
             </label>
           </div>
@@ -188,11 +168,9 @@
       <div class="panel">
         <div id="availBox" class="notice">Choose a date to see availability.</div>
         <div class="hr"></div>
-        <div id="priceBox" class="notice">Select options to see estimate.</div>
+        <div id="priceBox" class="notice">Choose a package and size to see estimate.</div>
         <div class="hr"></div>
-        <div class="help">
-          <strong>Note:</strong> Online deposit reserves your date. Confirmation is automatic once payment completes.
-        </div>
+        <div id="packageSummary" class="notice">Package details will appear here.</div>
       </div>
     </div>
 
@@ -200,8 +178,10 @@
   </div>
 
   <script type="module">
-    import { setBrandImages, setFooter, initBookingForm } from "/assets/site.js";
-    setBrandImages(); setFooter(); initBookingForm();
+    import { setBrandImages, setFooter, initBookingPage } from "/assets/site.js";
+    setBrandImages();
+    setFooter();
+    initBookingPage();
   </script>
 </body>
 </html>
