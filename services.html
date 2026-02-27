@@ -1,17 +1,17 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Services | Rosie Dazzlers</title>
-  <meta name="description" content="Service packages and what’s included." />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <meta name="description" content="Package pricing, included services, and add-ons.">
+  <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
   <div class="nav">
     <div class="nav-inner">
       <a class="brand" href="/">
-        <img data-logo alt="Rosie Dazzlers logo" />
+        <img data-logo alt="Rosie Dazzlers logo">
         <strong>Rosie Dazzlers</strong>
       </a>
       <div class="nav-links">
@@ -26,12 +26,34 @@
   </div>
 
   <div class="container">
-    <div class="panel">
-      <h1 style="margin:0 0 6px">Services</h1>
-      <p class="help">Pick your vehicle size to see the correct pricing and service card.</p>
+    <div class="hero">
+      <div>
+        <img data-banner alt="Rosie Dazzlers banner" style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)">
+        <h1>Services & Packages</h1>
+        <p>Choose your vehicle size to see the correct package pricing, compare what’s included, and review available add-ons.</p>
+        <div class="badges">
+          <span class="badge">Driveway required</span>
+          <span class="badge">Power + water required</span>
+          <span class="badge">One vehicle per day</span>
+          <span class="badge">Deposit required</span>
+        </div>
+      </div>
 
-      <div class="hr"></div>
+      <div class="panel">
+        <h2 style="margin:0 0 10px">Reference Charts</h2>
+        <p class="kicker">View the exact pricing, details, and vehicle size charts you uploaded.</p>
+        <div class="hr"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button id="openPrice" class="btn ghost" type="button">Open price chart</button>
+          <button id="openDetails" class="btn ghost" type="button">Open details chart</button>
+          <button id="openSize" class="btn ghost" type="button">Open size chart</button>
+        </div>
+        <div class="hr"></div>
+        <a class="btn primary" href="/book">Start booking</a>
+      </div>
+    </div>
 
+    <div class="section panel">
       <div class="row">
         <div>
           <label for="size">Vehicle size</label>
@@ -40,12 +62,12 @@
             <option value="mid">Mid-sized</option>
             <option value="oversize">Oversize / Exotics</option>
           </select>
-          <div class="kicker">Not sure? Use the size chart on the booking page.</div>
         </div>
-
-        <div style="display:flex;gap:10px;align-items:end;justify-content:flex-end">
-          <a class="btn ghost" href="/pricing">View charts</a>
-          <a class="btn primary" href="/book">Book now</a>
+        <div>
+          <label>&nbsp;</label>
+          <div class="notice">
+            Package images come from your R2 <strong>packages</strong> folder.
+          </div>
         </div>
       </div>
     </div>
@@ -56,34 +78,36 @@
     </div>
 
     <div class="section">
-      <h2>What’s included</h2>
-      <p class="help">We’re showing your exact “includes” table as an image for now.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn ghost" type="button" id="openIncludes">View includes table</button>
-        <button class="btn ghost" type="button" id="openPriceChart">View price chart</button>
-      </div>
+      <h2>Included Services Comparison</h2>
+      <div id="compareTable"></div>
+    </div>
+
+    <div class="section">
+      <h2>Add-ons & Specialty Services</h2>
+      <p class="kicker">Services not included in a package are treated as add-ons. Some are priced online, others are quote-based.</p>
+      <div id="addonCards" class="grid cards"></div>
+    </div>
+
+    <div class="section panel">
+      <h2 style="margin-top:0">Booking Rules</h2>
+      <ul class="list">
+        <li>Customer must provide a driveway/work area.</li>
+        <li>Customer must provide power + water, or accept additional charges.</li>
+        <li>One vehicle per day unless the service is a half-day booking.</li>
+        <li>Deposit is required to reserve the date.</li>
+        <li>Cancellation fees may apply.</li>
+        <li>Customer accepts responsibility for location-specific bylaw / runoff restrictions.</li>
+      </ul>
     </div>
 
     <div class="footer" data-footer></div>
   </div>
 
   <script type="module">
-    import { setBrandImages, setFooter, renderPackageCards, openLightbox } from "/assets/site.js";
-    import { PATHS, CHARTS, assetUrl } from "/assets/config.js";
-
-    setBrandImages(); setFooter();
-
-    const sizeSel = document.querySelector("#size");
-    const render = () => renderPackageCards("#packageCards", sizeSel.value);
-    sizeSel.addEventListener("change", render);
-    render();
-
-    document.querySelector("#openIncludes").addEventListener("click", () => {
-      openLightbox("What’s Included", assetUrl(PATHS.packages, CHARTS.includes));
-    });
-    document.querySelector("#openPriceChart").addEventListener("click", () => {
-      openLightbox("Price Chart", assetUrl(PATHS.packages, CHARTS.price));
-    });
+    import { setBrandImages, setFooter, initServicesPage } from "/assets/site.js";
+    setBrandImages();
+    setFooter();
+    initServicesPage();
   </script>
 </body>
 </html>
