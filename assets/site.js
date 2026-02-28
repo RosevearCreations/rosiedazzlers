@@ -12,11 +12,16 @@ const CONTACT = {
   serviceArea: "Norfolk & Oxford Counties",
 };
 
+const HOVER_MEDIA = {
+  exterior: "https://assets.rosiedazzlers.ca/packages/Exteriordetail.png",
+  interior: "https://assets.rosiedazzlers.ca/packages/Interiordetail.png",
+  size: "https://assets.rosiedazzlers.ca/packages/CarSizeChart.png",
+};
+
 let _servicesData = null;
 
 async function loadServicesData() {
   if (_servicesData) return _servicesData;
-
   const res = await fetch(DATA_URL, { cache: "no-store" });
   if (!res.ok) throw new Error(`Could not load ${DATA_URL}`);
   _servicesData = await res.json();
@@ -30,10 +35,6 @@ function money(value) {
   }).format(Number(value || 0));
 }
 
-function centsToMoney(cents) {
-  return money((Number(cents || 0) / 100));
-}
-
 function getPackageByCode(data, code) {
   return (data.packages || []).find((p) => p.code === code) || null;
 }
@@ -44,15 +45,10 @@ function packagePrice(pkg, size) {
 
 function addonDisplay(addon, size) {
   if (addon.quote_required === true) {
-    if (addon.prices_cad?.[size] != null) {
-      return `From ${money(addon.prices_cad[size])} · Quote required`;
-    }
-    if (addon.price_cad != null) {
-      return `From ${money(addon.price_cad)} · Quote required`;
-    }
+    if (addon.prices_cad?.[size] != null) return `From ${money(addon.prices_cad[size])} · Quote required`;
+    if (addon.price_cad != null) return `From ${money(addon.price_cad)} · Quote required`;
     return "Quote required";
   }
-
   if (addon.prices_cad?.[size] != null) return money(addon.prices_cad[size]);
   if (addon.price_cad != null) return money(addon.price_cad);
   return "Quote required";
@@ -147,42 +143,75 @@ function chartButtons(data, selectorMap) {
   const charts = data.charts || [];
   const byName = Object.fromEntries(charts.map((c) => [c.filename, c]));
 
-  if (selectorMap.price) {
-    const el = document.querySelector(selectorMap.price);
-    if (el && byName["CarPrice2025.PNG"]) {
-      el.addEventListener("click", () =>
-        openLightbox("Vehicle Price Chart 2025", byName["CarPrice2025.PNG"].r2_url)
-      );
+  const bind = (selector, name, title) => {
+    const el = document.querySelector(selector);
+    if (el && byName[name]) {
+      el.addEventListener("click", () => openLightbox(title, byName[name].r2_url));
     }
-  }
+  };
 
-  if (selectorMap.details) {
-    const el = document.querySelector(selectorMap.details);
-    if (el && byName["CarPriceDetails2025.PNG"]) {
-      el.addEventListener("click", () =>
-        openLightbox("Package Service Details Chart", byName["CarPriceDetails2025.PNG"].r2_url)
-      );
-    }
-  }
-
-  if (selectorMap.size) {
-    const el = document.querySelector(selectorMap.size);
-    if (el && byName["CarSizeChart.PNG"]) {
-      el.addEventListener("click", () =>
-        openLightbox("Vehicle Size Chart", byName["CarSizeChart.PNG"].r2_url)
-      );
-    }
-  }
+  if (selectorMap.price) bind(selectorMap.price, "CarPrice2025.PNG", "Vehicle Price Chart 2025");
+  if (selectorMap.details) bind(selectorMap.details, "CarPriceDetails2025.PNG", "Package Service Details Chart");
+  if (selectorMap.size) bind(selectorMap.size, "CarSizeChart.PNG", "Vehicle Size Chart");
 }
 
-function renderPackages(cardsEl, data, size) {
+function buildMainCardGallery(pkg) {
+  const gallery = [];
+  if (pkg?.image?.r2_url) gallery.push(pkg.image.r2_url);
+
+  const code = pkg?.code || "";
+
+  if (code === "interior_detail") {
+    gallery.push(HOVER_MEDIA.interior, HOVER_MEDIA.size);
+  } else if (code === "exterior_detail") {
+    gallery.push(HOVER_MEDIA.exterior, HOVER_MEDIA.size);
+  } else {
+    gallery.push(HOVER_MEDIA.exterior, HOVER_MEDIA.interior, HOVER_MEDIA.size);
+  }
+
+  return [...new Set(gallery.filter(Boolean))];
+}
+
+function attachHoverCarousel(root) {
+  const wraps = root.querySelectorAll("[data-carousel]");
+  wraps.forEach((wrap) => {
+    const imgs = [...wrap.querySelectorAll("img")];
+    if (imgs.length <= 1) return;
+
+    let current = 0;
+    let timer = null;
+
+    const show = (idx) => {
+      imgs.forEach((img, i) => img.classList.toggle("active", i === idx));
+    };
+
+    show(0);
+
+    wrap.addEventListener("mouseenter", () => {
+      if (timer) return;
+      timer = setInterval(() => {
+        current = (current + 1) % imgs.length;
+        show(current);
+      }, 1200);
+    });
+
+    wrap.addEventListener("mouseleave", () => {
+      clearInterval(timer);
+      timer = null;
+      current = 0;
+      show(0);
+    });
+  });
+}
+
+function renderMainPackages(cardsEl, data, size) {
   if (!cardsEl) return;
   cardsEl.innerHTML = "";
 
   for (const pkg of data.packages || []) {
     const price = packagePrice(pkg, size);
     const deposit = calcDeposit(pkg);
-    const img = pkg.image?.r2_url || "";
+    const gallery = buildMainCardGallery(pkg);
 
     const included = (pkg.included_services || [])
       .map((s) => {
@@ -193,13 +222,20 @@ function renderPackages(cardsEl, data, size) {
 
     const notes = (pkg.notes || []).map((n) => `<div class="tag">${n}</div>`).join("");
 
+    const mediaHtml = `
+      <div class="service-media" data-carousel>
+        ${gallery.map((src, i) => `<img loading="lazy" src="${src}" alt="${pkg.name}" class="${i === 0 ? "active" : ""}" onerror="this.style.display='none'">`).join("")}
+      </div>
+    `;
+
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `
-      ${img ? `<img class="img" loading="lazy" src="${img}" alt="${pkg.name}" onerror="this.style.display='none'">` : ""}
+      ${mediaHtml}
       <h3>${pkg.name}</h3>
       <div class="price">${money(price)} <span class="kicker">(${size.toUpperCase()})</span></div>
       <div class="kicker">Deposit: ${money(deposit)}</div>
+      <div class="kicker">Hover image to preview related exterior / interior / size visuals</div>
       <div class="hr"></div>
       <ul class="list">${included}</ul>
       <div class="hr"></div>
@@ -209,6 +245,8 @@ function renderPackages(cardsEl, data, size) {
     `;
     cardsEl.appendChild(div);
   }
+
+  attachHoverCarousel(cardsEl);
 }
 
 function renderCompareTable(container, data) {
@@ -293,7 +331,7 @@ function renderPackageSummary(target, pkg) {
   `;
 }
 
-function renderAddonPicker(target, data, size) {
+function renderAddonPicker(target, data, size, selectedCodes = []) {
   if (!target) return;
   target.innerHTML = "";
 
@@ -309,7 +347,7 @@ function renderAddonPicker(target, data, size) {
     row.style.marginBottom = "10px";
 
     row.innerHTML = `
-      <input id="${id}" type="checkbox" name="addon_codes" value="${addon.code}">
+      <input id="${id}" type="checkbox" name="addon_codes" value="${addon.code}" ${selectedCodes.includes(addon.code) ? "checked" : ""}>
       <span>
         <strong>${addon.name}</strong><br>
         <span class="kicker">${priceText}</span>
@@ -381,7 +419,7 @@ export async function initServicesPage() {
 
   const render = () => {
     const size = sizeSel?.value || "small";
-    renderPackages(cardsEl, data, size);
+    renderMainPackages(cardsEl, data, size);
     renderCompareTable(compareEl, data);
     renderAddons(addonsEl, data, size);
   };
@@ -405,7 +443,7 @@ export async function initPricingPage() {
 
   const render = () => {
     const size = sizeSel?.value || "small";
-    renderPackages(cardsEl, data, size);
+    renderMainPackages(cardsEl, data, size);
     renderAddons(addonsEl, data, size);
   };
 
@@ -435,7 +473,6 @@ export async function initBookingPage() {
   const qpPackage = params.get("package");
   const qpSize = params.get("size");
 
-  // Populate package select
   if (form.package_code && !form.package_code.dataset.built) {
     form.package_code.innerHTML = (data.packages || [])
       .map((p) => `<option value="${p.code}">${p.name}</option>`)
@@ -447,17 +484,12 @@ export async function initBookingPage() {
   if (qpSize && form.vehicle_size) form.vehicle_size.value = qpSize;
 
   const redraw = async (checkDate = false) => {
+    const previouslySelected = selectedAddonCodes(form);
     const size = currentSize(form);
     const pkg = getPackageByCode(data, currentPackageCode(form));
 
     renderPackageSummary(packageSummary, pkg);
-    renderAddonPicker(addonPicker, data, size);
-
-    // restore selections if possible after rebuild
-    const selected = new Set(selectedAddonCodes(form));
-    addonPicker.querySelectorAll("input[name='addon_codes']").forEach((cb) => {
-      if (selected.has(cb.value)) cb.checked = true;
-    });
+    renderAddonPicker(addonPicker, data, size, previouslySelected);
 
     const totals = calcBookingTotals(form, data);
 
@@ -486,13 +518,10 @@ export async function initBookingPage() {
     }
   };
 
-  // initial build
-  renderAddonPicker(addonPicker, data, currentSize(form));
   await redraw(false);
 
   form.package_code?.addEventListener("change", () => redraw(false));
   form.vehicle_size?.addEventListener("change", () => redraw(false));
-
   addonPicker.addEventListener("change", () => redraw(false));
   form.service_date?.addEventListener("change", () => redraw(true));
 
@@ -572,7 +601,6 @@ export async function initBookingPage() {
   });
 }
 
-// old aliases so existing pages do not break
 export async function initBookingForm() {
   return initBookingPage();
 }
