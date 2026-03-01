@@ -3,19 +3,19 @@ const DATA_URL = "/data/rosie_services_pricing_and_packages.json";
 const BRAND = {
   logo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
   banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
-  reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png",
+  reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png"
 };
 
 const CONTACT = {
   phone: "226-752-7613",
   email: "info@rosiedazzlers.ca",
-  serviceArea: "Norfolk & Oxford Counties",
+  serviceArea: "Norfolk & Oxford Counties"
 };
 
 const HOVER_MEDIA = {
   exterior: "https://assets.rosiedazzlers.ca/packages/Exteriordetail.png",
   interior: "https://assets.rosiedazzlers.ca/packages/Interiordetail.png",
-  size: "https://assets.rosiedazzlers.ca/packages/CarSizeChart.png",
+  size: "https://assets.rosiedazzlers.ca/packages/carsizechart.png"
 };
 
 let _servicesData = null;
@@ -31,7 +31,7 @@ async function loadServicesData() {
 function money(value) {
   return new Intl.NumberFormat("en-CA", {
     style: "currency",
-    currency: "CAD",
+    currency: "CAD"
   }).format(Number(value || 0));
 }
 
@@ -41,6 +41,10 @@ function getPackageByCode(data, code) {
 
 function packagePrice(pkg, size) {
   return Number(pkg?.prices_cad?.[size] || 0);
+}
+
+function packageImageForSize(pkg, size) {
+  return pkg?.images_by_size?.[size] || "";
 }
 
 function addonDisplay(addon, size) {
@@ -78,7 +82,7 @@ function ensureLightbox() {
         <div class="title" id="lbTitle"></div>
         <button class="btn small ghost" id="lbClose" type="button">Close</button>
       </div>
-      <img id="lbImg" alt="" />
+      <img id="lbImg" alt="">
       <div class="kicker">Tip: right-click → open image in new tab</div>
     </div>
   `;
@@ -155,19 +159,12 @@ function chartButtons(data, selectorMap) {
   if (selectorMap.size) bind(selectorMap.size, "CarSizeChart.PNG", "Vehicle Size Chart");
 }
 
-function buildMainCardGallery(pkg) {
+function buildMainCardGallery(pkg, size) {
   const gallery = [];
-  if (pkg?.image?.r2_url) gallery.push(pkg.image.r2_url);
+  const main = packageImageForSize(pkg, size);
+  if (main) gallery.push(main);
 
-  const code = pkg?.code || "";
-
-  if (code === "interior_detail") {
-    gallery.push(HOVER_MEDIA.interior, HOVER_MEDIA.size);
-  } else if (code === "exterior_detail") {
-    gallery.push(HOVER_MEDIA.exterior, HOVER_MEDIA.size);
-  } else {
-    gallery.push(HOVER_MEDIA.exterior, HOVER_MEDIA.interior, HOVER_MEDIA.size);
-  }
+  gallery.push(HOVER_MEDIA.exterior, HOVER_MEDIA.interior, HOVER_MEDIA.size);
 
   return [...new Set(gallery.filter(Boolean))];
 }
@@ -211,7 +208,7 @@ function renderMainPackages(cardsEl, data, size) {
   for (const pkg of data.packages || []) {
     const price = packagePrice(pkg, size);
     const deposit = calcDeposit(pkg);
-    const gallery = buildMainCardGallery(pkg);
+    const gallery = buildMainCardGallery(pkg, size);
 
     const included = (pkg.included_services || [])
       .map((s) => {
@@ -233,9 +230,10 @@ function renderMainPackages(cardsEl, data, size) {
     div.innerHTML = `
       ${mediaHtml}
       <h3>${pkg.name}</h3>
+      <p>${pkg.subtitle || ""}</p>
       <div class="price">${money(price)} <span class="kicker">(${size.toUpperCase()})</span></div>
       <div class="kicker">Deposit: ${money(deposit)}</div>
-      <div class="kicker">Hover image to preview related exterior / interior / size visuals</div>
+      <div class="kicker">Hover image to preview exterior, interior, and size visuals</div>
       <div class="hr"></div>
       <ul class="list">${included}</ul>
       <div class="hr"></div>
@@ -293,11 +291,10 @@ function renderAddons(container, data, size) {
   container.innerHTML = "";
 
   for (const addon of data.addons || []) {
-    const img = addon.image?.r2_url || "";
     const pricing = addonDisplay(addon, size);
     const tags = [
       addon.quote_required ? `<span class="tag quote">Quote required</span>` : `<span class="tag flat">Priced online</span>`,
-      addon.source ? `<span class="tag">${addon.source.replaceAll("_", " ")}</span>` : "",
+      addon.source ? `<span class="tag">${addon.source.replaceAll("_", " ")}</span>` : ""
     ].join("");
 
     const notes = (addon.notes || []).map((n) => `<div class="kicker">${n}</div>`).join("");
@@ -305,7 +302,6 @@ function renderAddons(container, data, size) {
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `
-      ${img ? `<img class="img" loading="lazy" src="${img}" alt="${addon.name}" onerror="this.style.display='none'">` : ""}
       <h3>${addon.name}</h3>
       <div class="price">${pricing}</div>
       <div class="hr"></div>
@@ -399,7 +395,7 @@ function calcBookingTotals(form, data) {
     pricedAddons,
     quoteAddons,
     total: base + pricedAddons,
-    selectedCodes,
+    selectedCodes
   };
 }
 
@@ -430,7 +426,7 @@ export async function initServicesPage() {
   chartButtons(data, {
     price: "#openPrice",
     details: "#openDetails",
-    size: "#openSize",
+    size: "#openSize"
   });
 }
 
@@ -453,7 +449,7 @@ export async function initPricingPage() {
   chartButtons(data, {
     price: "#openPrice",
     details: "#openDetails",
-    size: "#openSize",
+    size: "#openSize"
   });
 }
 
@@ -528,7 +524,7 @@ export async function initBookingPage() {
   chartButtons(data, {
     price: "[data-open-price]",
     details: "[data-open-details]",
-    size: "[data-open-size]",
+    size: "[data-open-size]"
   });
 
   form.addEventListener("submit", async (e) => {
@@ -562,7 +558,7 @@ export async function initBookingPage() {
         ack_driveway: form.ack_driveway.checked,
         ack_power_water: form.ack_power_water.checked,
         ack_bylaw: form.ack_bylaw.checked,
-        ack_cancellation: form.ack_cancellation.checked,
+        ack_cancellation: form.ack_cancellation.checked
       };
 
       if (!payload.ack_driveway || !payload.ack_power_water || !payload.ack_bylaw || !payload.ack_cancellation) {
@@ -585,7 +581,7 @@ export async function initBookingPage() {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload)
       });
 
       const json = await res.json();
