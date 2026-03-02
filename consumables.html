@@ -1,16 +1,19 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Consumables | Rosie Dazzlers</title>
-  <meta name="description" content="Consumables we use (with Amazon links)." />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <meta name="description" content="Consumables and products we use, with Amazon reference links.">
+  <link rel="stylesheet" href="/assets/site.css?v=20260301e">
 </head>
 <body>
   <div class="nav">
     <div class="nav-inner">
-      <a class="brand" href="/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a>
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo">
+        <strong>Rosie Dazzlers</strong>
+      </a>
       <div class="nav-links">
         <a href="/services">Services</a>
         <a href="/pricing">Pricing</a>
@@ -24,19 +27,19 @@
 
   <div class="container">
     <div class="panel">
-      <h1 style="margin:0 0 6px">Consumables</h1>
-      <p class="help">Auto-built from your catalog. Amazon buttons are search links (replace with direct product URLs later if you want).</p>
+      <h1 style="margin:0 0 8px">Consumables</h1>
+      <p class="kicker">Browse soaps, waxes, coatings, towels, cleaners, and other detailing supplies.</p>
 
       <div class="hr"></div>
 
       <div class="row">
         <div>
-          <label>Category</label>
+          <label for="invCategory">Category</label>
           <select id="invCategory"></select>
         </div>
         <div>
-          <label>Search</label>
-          <input id="invSearch" placeholder="wax, ceramic, towels, glass..." />
+          <label for="invSearch">Search</label>
+          <input id="invSearch" placeholder="soap, wax, ceramic, towels, glass cleaner…">
         </div>
       </div>
 
@@ -50,9 +53,12 @@
     <div class="footer" data-footer></div>
   </div>
 
+  <script type="module" src="/assets/site.js?v=20260301e"></script>
   <script type="module">
-    import { setBrandImages, setFooter, initInventoryPage } from "/assets/site.js";
-    setBrandImages(); setFooter(); initInventoryPage("consumables");
+    import { setBrandImages, setFooter, initInventoryPage } from "/assets/site.js?v=20260301e";
+    setBrandImages();
+    setFooter();
+    initInventoryPage("consumables");
   </script>
 </body>
 </html>
