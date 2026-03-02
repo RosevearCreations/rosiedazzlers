@@ -33,7 +33,7 @@ let _servicesData = null;
 
 async function loadServicesData() {
   if (_servicesData) return _servicesData;
-  const res = await fetch(`${DATA_URL}?v=20260301d`, { cache: "no-store" });
+  const res = await fetch(`${DATA_URL}?v=20260301e`, { cache: "no-store" });
   if (!res.ok) throw new Error(`Could not load ${DATA_URL}`);
   _servicesData = await res.json();
   return _servicesData;
@@ -610,6 +610,206 @@ export async function initBookingPage() {
       submitBtn.textContent = "Pay deposit & book";
     }
   });
+}
+
+function titleFromName(raw) {
+  if (!raw) return "";
+  return String(raw)
+    .replace(/\.[a-z0-9]+$/i, "")
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function amazonSearchUrl(query) {
+  return `https://www.amazon.ca/s?k=${encodeURIComponent(query)}`;
+}
+
+async function fetchJsonSafe(url) {
+  try {
+    const r = await fetch(`${url}?v=20260301e`, { cache: "no-store" });
+    if (!r.ok) return null;
+    return await r.json();
+  } catch {
+    return null;
+  }
+}
+
+function classifyProductType(item) {
+  const explicit = String(item?.type || "").toLowerCase();
+  if (explicit === "gear" || explicit === "consumable") return explicit;
+
+  const category = String(item?.category || "").toLowerCase();
+  const path = String(item?.path || item?.sanitized || item?.filename || item?.original || "").toLowerCase();
+
+  const consumableHints = [
+    "soap", "wax", "sealant", "ceramic", "graphene", "spray", "cleaner", "polish",
+    "compound", "degreaser", "dressing", "towel", "microfiber", "odor", "odour",
+    "shampoo", "detailer", "protectant", "chemical", "liquid"
+  ];
+
+  if (consumableHints.some((x) => category.includes(x) || path.includes(x))) {
+    return "consumable";
+  }
+
+  return "gear";
+}
+
+function buildInventoryImage(item, mode) {
+  const rawPath =
+    item?.path ||
+    item?.sanitized ||
+    item?.filename ||
+    item?.original ||
+    "";
+
+  if (!rawPath) return "";
+
+  const cleanPath = String(rawPath).replace(/^\/+/, "");
+
+  if (item?.r2_url) return item.r2_url;
+  if (mode === "gear" && item?.source_kind === "systems") {
+    return `https://assets.rosiedazzlers.ca/systems/${encodeURIComponent(cleanPath).replaceAll("%2F", "/")}`;
+  }
+  if (mode === "consumables") {
+    return `https://assets.rosiedazzlers.ca/consumables/${encodeURIComponent(cleanPath).replaceAll("%2F", "/")}`;
+  }
+
+  if (item?.source_kind === "products") {
+    return `https://assets.rosiedazzlers.ca/products/${encodeURIComponent(cleanPath).replaceAll("%2F", "/")}`;
+  }
+
+  return `https://assets.rosiedazzlers.ca/systems/${encodeURIComponent(cleanPath).replaceAll("%2F", "/")}`;
+}
+
+function buildInventoryTitle(item) {
+  return (
+    item?.title ||
+    item?.name ||
+    titleFromName(item?.original) ||
+    titleFromName(item?.filename) ||
+    titleFromName(item?.path) ||
+    titleFromName(item?.sanitized) ||
+    "Untitled Item"
+  );
+}
+
+function buildInventoryCategory(item) {
+  return item?.category || item?.group || item?.folder || "general";
+}
+
+function buildAmazonQuery(item, title) {
+  return [item?.brand, title].filter(Boolean).join(" ");
+}
+
+export async function initInventoryPage(mode) {
+  const listEl = document.querySelector("#invList");
+  const statusEl = document.querySelector("#invStatus");
+  const catEl = document.querySelector("#invCategory");
+  const qEl = document.querySelector("#invSearch");
+
+  if (!listEl || !statusEl || !catEl || !qEl) return;
+
+  statusEl.className = "notice";
+  statusEl.textContent = "Loading…";
+
+  const products = await fetchJsonSafe("/data/rosie_products_catalog.json");
+  const systems = await fetchJsonSafe("/data/systems_catalog.json");
+
+  if (!products && !systems) {
+    statusEl.className = "notice bad";
+    statusEl.innerHTML = `
+      <strong>Missing data files.</strong><br>
+      Expected:
+      <ul class="list">
+        <li><code>/data/rosie_products_catalog.json</code></li>
+        <li><code>/data/systems_catalog.json</code></li>
+      </ul>
+    `;
+    return;
+  }
+
+  const items = [];
+
+  if (Array.isArray(products)) {
+    for (const p of products) {
+      const type = classifyProductType(p);
+      if (mode === "gear" && type !== "gear") continue;
+      if (mode === "consumables" && type !== "consumable") continue;
+
+      const title = buildInventoryTitle(p);
+      const category = buildInventoryCategory(p);
+
+      items.push({
+        source_kind: "products",
+        title,
+        category,
+        img: buildInventoryImage({ ...p, source_kind: "products" }, mode),
+        amazon: amazonSearchUrl(buildAmazonQuery(p, title))
+      });
+    }
+  }
+
+  if (Array.isArray(systems) && mode === "gear") {
+    for (const s of systems) {
+      const title = buildInventoryTitle(s);
+      const category = buildInventoryCategory(s);
+
+      items.push({
+        source_kind: "systems",
+        title,
+        category,
+        img: buildInventoryImage({ ...s, source_kind: "systems" }, mode),
+        amazon: amazonSearchUrl(buildAmazonQuery(s, title))
+      });
+    }
+  }
+
+  const categories = Array.from(new Set(items.map((i) => i.category))).sort((a, b) => a.localeCompare(b));
+  catEl.innerHTML =
+    `<option value="all">All categories</option>` +
+    categories.map((c) => `<option value="${c}">${c}</option>`).join("");
+
+  statusEl.className = "notice ok";
+  statusEl.innerHTML = `<strong>Loaded:</strong> ${items.length} items`;
+
+  function render() {
+    const cat = catEl.value;
+    const q = qEl.value.trim().toLowerCase();
+
+    const filtered = items.filter((i) => {
+      if (cat !== "all" && i.category !== cat) return false;
+      if (q) {
+        const hay = `${i.title} ${i.category}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+
+    listEl.innerHTML = "";
+
+    if (filtered.length === 0) {
+      listEl.innerHTML = `<div class="notice warn">No matches found.</div>`;
+      return;
+    }
+
+    for (const i of filtered) {
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `
+        ${i.img ? `<img class="img" loading="lazy" src="${i.img}" alt="${i.title}" onerror="this.style.display='none'">` : ""}
+        <h3>${i.title}</h3>
+        <p class="kicker">${i.category}</p>
+        <div class="hr"></div>
+        <a class="btn primary" href="${i.amazon}" target="_blank" rel="noopener">View on Amazon</a>
+      `;
+      listEl.appendChild(div);
+    }
+  }
+
+  catEl.addEventListener("change", render);
+  qEl.addEventListener("input", render);
+  render();
 }
 
 export async function initBookingForm() {
