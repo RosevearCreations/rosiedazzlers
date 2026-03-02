@@ -18,11 +18,22 @@ const HOVER_MEDIA = {
   size: "https://assets.rosiedazzlers.ca/packages/carsizechart.png"
 };
 
+const ADDON_MEDIA = {
+  de_badging: "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
+  de_ionizing_treatment: "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png",
+  engine_cleaning: "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
+  external_ceramic_coating: "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
+  external_graphene_fine_finish: "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png",
+  external_wax: "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png",
+  vinyl_wrapping: "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
+  window_tinting: "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png"
+};
+
 let _servicesData = null;
 
 async function loadServicesData() {
   if (_servicesData) return _servicesData;
-  const res = await fetch(`${DATA_URL}?v=20260301c`, { cache: "no-store" });
+  const res = await fetch(`${DATA_URL}?v=20260301d`, { cache: "no-store" });
   if (!res.ok) throw new Error(`Could not load ${DATA_URL}`);
   _servicesData = await res.json();
   return _servicesData;
@@ -45,6 +56,10 @@ function packagePrice(pkg, size) {
 
 function packageImageForSize(pkg, size) {
   return pkg?.images_by_size?.[size] || "";
+}
+
+function addonImageForCode(code) {
+  return ADDON_MEDIA[code] || "";
 }
 
 function addonDisplay(addon, size) {
@@ -231,7 +246,6 @@ function renderMainPackages(cardsEl, data, size) {
       <p>${pkg.subtitle || ""}</p>
       <div class="price">${money(price)} <span class="kicker">(${size.toUpperCase()})</span></div>
       <div class="kicker">Deposit: ${money(deposit)}</div>
-      <div class="kicker">Package code: ${pkg.code}</div>
       <div class="hr"></div>
       <ul class="list">${included}</ul>
       <div class="hr"></div>
@@ -290,6 +304,8 @@ function renderAddons(container, data, size) {
 
   for (const addon of data.addons || []) {
     const pricing = addonDisplay(addon, size);
+    const image = addonImageForCode(addon.code);
+
     const tags = [
       addon.quote_required ? `<span class="tag quote">Quote required</span>` : `<span class="tag flat">Priced online</span>`,
       addon.source ? `<span class="tag">${addon.source.replaceAll("_", " ")}</span>` : ""
@@ -300,6 +316,7 @@ function renderAddons(container, data, size) {
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `
+      ${image ? `<img class="img" loading="lazy" src="${image}" alt="${addon.name}" onerror="this.style.display='none'">` : ""}
       <h3>${addon.name}</h3>
       <div class="price">${pricing}</div>
       <div class="hr"></div>
