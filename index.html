@@ -1,17 +1,94 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rosie Dazzlers | Mobile Auto Detailing</title>
-  <meta name="description" content="Mobile auto detailing serving Norfolk & Oxford Counties. Online booking with deposit." />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Rosie Dazzlers | Mobile Auto Detailing in Norfolk & Oxford Counties</title>
+  <meta name="description" content="Mobile auto detailing in Norfolk and Oxford Counties. Premium wash, interior detail, exterior detail, complete detail, add-ons, online booking, and deposit-secured appointments.">
+  <link rel="stylesheet" href="/assets/site.css?v=20260302a">
+  <style>
+    .home-grid{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:16px;
+      align-items:stretch;
+    }
+    .hero-stack{
+      display:grid;
+      gap:16px;
+    }
+    .hero-media{
+      width:100%;
+      height:100%;
+      min-height:340px;
+      object-fit:cover;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      background:rgba(255,255,255,.03);
+    }
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+    }
+    .stat{
+      padding:14px;
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      text-align:center;
+    }
+    .stat strong{
+      display:block;
+      font-size:22px;
+      margin-bottom:4px;
+    }
+    .feature-list{
+      display:grid;
+      gap:10px;
+    }
+    .feature-item{
+      padding:12px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:rgba(255,255,255,.03);
+    }
+    .split{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    .media-card img{
+      width:100%;
+      height:220px;
+      object-fit:cover;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      margin-bottom:10px;
+    }
+    .cta-band{
+      padding:20px;
+      border:1px solid var(--border);
+      border-radius:20px;
+      background:linear-gradient(135deg, rgba(77,119,255,.18), rgba(34,197,94,.10));
+      box-shadow:var(--shadow);
+    }
+    @media (max-width: 980px){
+      .home-grid,.split{grid-template-columns:1fr}
+      .stats{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width: 560px){
+      .stats{grid-template-columns:1fr}
+    }
+  </style>
 </head>
 <body>
   <div class="nav">
     <div class="nav-inner">
       <a class="brand" href="/">
-        <img data-logo alt="Rosie Dazzlers logo" />
+        <img data-logo alt="Rosie Dazzlers logo">
         <strong>Rosie Dazzlers</strong>
       </a>
       <div class="nav-links">
@@ -26,33 +103,137 @@
   </div>
 
   <div class="container">
-    <div class="hero">
-      <div>
-        <img data-banner alt="Rosie Dazzlers banner" style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)" />
-        <h1>Mobile Auto Detailing</h1>
-        <p>We come to you across <strong>Norfolk</strong> & <strong>Oxford</strong> Counties — clear pricing, one vehicle per day, and a deposit to lock your spot.</p>
-        <div class="badges">
-          <span class="badge">Driveway required</span>
-          <span class="badge">Customer provides power + water</span>
-          <span class="badge">Online booking + deposit</span>
-        </div>
+    <div class="home-grid">
+      <div class="hero hero-stack">
+        <div>
+          <div class="badges">
+            <span class="badge">Mobile detailing</span>
+            <span class="badge">Norfolk & Oxford Counties</span>
+            <span class="badge">Deposit-secured booking</span>
+            <span class="badge">Power + water required</span>
+          </div>
 
-        <div class="section">
-          <div data-checkout-status class="notice" style="display:block"></div>
-        </div>
+          <h1>Mobile auto detailing that comes to your driveway.</h1>
+          <p>
+            From quick exterior washes to full interior and exterior detailing, Rosie Dazzlers brings the clean to you.
+            Choose your package, review what’s included, add any extras you need, and reserve your date online.
+          </p>
 
-        <div class="section" style="display:flex;gap:10px;flex-wrap:wrap">
-          <a class="btn primary" href="/book">Book now</a>
-          <a class="btn ghost" href="/pricing">View pricing</a>
-          <a class="btn ghost" href="/services">What’s included</a>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+            <a class="btn primary" href="/book">Book now</a>
+            <a class="btn ghost" href="/pricing">See pricing</a>
+            <a class="btn ghost" href="/services">View packages</a>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="notice warn">
+            <strong>Before booking:</strong> customer must provide driveway/work area plus access to power and water, or accept additional charges. One vehicle per day unless the job is a half-day booking.
+          </div>
         </div>
       </div>
 
       <div class="panel">
-        <h2 style="margin:0 0 10px">Reviews</h2>
-        <p class="help">We’ll keep adding before/after galleries next.</p>
+        <img class="hero-media" data-banner alt="Rosie Dazzlers banner">
+      </div>
+    </div>
+
+    <div class="section stats">
+      <div class="stat">
+        <strong>5</strong>
+        Main Packages
+      </div>
+      <div class="stat">
+        <strong>12+</strong>
+        Add-ons & specialty services
+      </div>
+      <div class="stat">
+        <strong>2</strong>
+        Counties served
+      </div>
+      <div class="stat">
+        <strong>1</strong>
+        Vehicle per day max
+      </div>
+    </div>
+
+    <div class="section split">
+      <div class="panel">
+        <h2 style="margin-top:0">How booking works</h2>
+        <div class="feature-list">
+          <div class="feature-item">
+            <strong>1. Choose your package</strong>
+            <div class="kicker">Premium Wash, Basic Detail, Complete Detail, Interior Detail, or Exterior Detail.</div>
+          </div>
+          <div class="feature-item">
+            <strong>2. Pick your date and size</strong>
+            <div class="kicker">Choose your vehicle size, AM/PM or full-day slot, and any add-ons you want.</div>
+          </div>
+          <div class="feature-item">
+            <strong>3. Pay your deposit</strong>
+            <div class="kicker">Your booking is secured through online checkout and confirmed after payment.</div>
+          </div>
+          <div class="feature-item">
+            <strong>4. We come to you</strong>
+            <div class="kicker">Mobile service at your location in Norfolk or Oxford County.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel media-card">
+        <img data-reviews alt="Rosie Dazzlers reviews">
+        <h2 style="margin:0 0 8px">Why customers care about the details</h2>
+        <p>
+          Clear pricing, clear package inclusions, simple booking, and visible reviews make it easier for customers to trust a mobile detailing service before they ever book.
+        </p>
         <div class="hr"></div>
-        <img data-reviews alt="Rosie Dazzlers reviews" style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)" />
+        <a class="btn ghost" href="/services">Compare packages</a>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Popular packages</h2>
+      <p class="kicker">These cards pull from your live package data.</p>
+      <div id="homePackages" class="grid cards"></div>
+    </div>
+
+    <div class="section split">
+      <div class="panel">
+        <h2 style="margin-top:0">What we need from the customer</h2>
+        <ul class="list">
+          <li>Driveway or usable work area</li>
+          <li>Access to power and water</li>
+          <li>Vehicle available for the full booked time</li>
+          <li>Acceptance of deposit and cancellation terms</li>
+          <li>Acceptance of any location-specific bylaw/runoff responsibility</li>
+        </ul>
+        <div class="hr"></div>
+        <a class="btn ghost" href="/book">Check availability</a>
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-top:0">Need more than a basic clean?</h2>
+        <p>
+          Add-ons and specialty services include wax, ceramic or graphene options, engine cleaning, tinting, de-badging, and more.
+        </p>
+        <div class="hr"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn ghost" href="/pricing">Pricing & add-ons</a>
+          <a class="btn ghost" href="/gear">Our gear</a>
+          <a class="btn ghost" href="/consumables">Our products</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section cta-band">
+      <h2 style="margin-top:0">Ready to reserve your detail?</h2>
+      <p style="margin-bottom:14px">
+        Pick your package, choose your vehicle size, add extras if needed, and secure your appointment with your deposit.
+      </p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn primary" href="/book">Book now</a>
+        <a class="btn ghost" href="/pricing">View full pricing</a>
+        <a class="btn ghost" href="/services">See what’s included</a>
       </div>
     </div>
 
@@ -60,8 +241,69 @@
   </div>
 
   <script type="module">
-    import { setBrandImages, setFooter, handleCheckoutReturn } from "/assets/site.js";
-    setBrandImages(); setFooter(); handleCheckoutReturn();
+    import { setBrandImages, setFooter } from "/assets/site.js?v=20260302a";
+
+    setBrandImages();
+    setFooter();
+
+    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260302a";
+
+    function money(value) {
+      return new Intl.NumberFormat("en-CA", {
+        style: "currency",
+        currency: "CAD"
+      }).format(Number(value || 0));
+    }
+
+    function packageImageForSize(pkg, size) {
+      return pkg?.images_by_size?.[size] || "";
+    }
+
+    async function initHomePackages() {
+      const box = document.querySelector("#homePackages");
+      if (!box) return;
+
+      try {
+        const res = await fetch(DATA_URL, { cache: "no-store" });
+        if (!res.ok) throw new Error("Could not load package data");
+        const data = await res.json();
+
+        const featuredCodes = ["premium_wash", "complete_detail", "interior_detail"];
+        const size = "small";
+
+        const featured = (data.packages || []).filter((p) => featuredCodes.includes(p.code));
+
+        box.innerHTML = "";
+
+        for (const pkg of featured) {
+          const img = packageImageForSize(pkg, size);
+          const price = pkg?.prices_cad?.[size] ?? 0;
+          const included = (pkg.included_services || [])
+            .slice(0, 4)
+            .map((s) => `<li>${s.name}</li>`)
+            .join("");
+
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            ${img ? `<img class="img" loading="lazy" src="${img}" alt="${pkg.name}" onerror="this.style.display='none'">` : ""}
+            <h3>${pkg.name}</h3>
+            <p>${pkg.subtitle || ""}</p>
+            <div class="price">From ${money(price)}</div>
+            <div class="kicker">Small vehicle starting price</div>
+            <div class="hr"></div>
+            <ul class="list">${included}</ul>
+            <div class="hr"></div>
+            <a class="btn primary" href="/book?package=${encodeURIComponent(pkg.code)}&size=small">Book this</a>
+          `;
+          box.appendChild(card);
+        }
+      } catch (err) {
+        box.innerHTML = `<div class="notice bad">Could not load featured packages.</div>`;
+      }
+    }
+
+    initHomePackages();
   </script>
 </body>
 </html>
