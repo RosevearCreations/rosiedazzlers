@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Services | Rosie Dazzlers</title>
   <meta name="description" content="Package pricing, included services, and add-ons.">
-  <link rel="stylesheet" href="/assets/site.css">
+  <link rel="stylesheet" href="/assets/site.css?v=20260301c">
 </head>
 <body>
   <div class="nav">
@@ -30,12 +30,12 @@
       <div>
         <img data-banner alt="Rosie Dazzlers banner" style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)">
         <h1>Services & Packages</h1>
-        <p>Only the main detailing packages appear here as service cards. Hover a package image to rotate through the related service visuals.</p>
+        <p>Main service cards use the proper package name and the proper size-specific main image for the selected vehicle size.</p>
         <div class="badges">
-          <span class="badge">Main package cards only</span>
-          <span class="badge">Add-ons listed below</span>
+          <span class="badge">Proper service names</span>
+          <span class="badge">Size-specific package images</span>
           <span class="badge">Hover image carousel</span>
-          <span class="badge">Deposit required</span>
+          <span class="badge">Add-ons separate below</span>
         </div>
       </div>
 
@@ -88,23 +88,12 @@
       <div id="addonCards" class="grid cards"></div>
     </div>
 
-    <div class="section panel">
-      <h2 style="margin-top:0">Booking Rules</h2>
-      <ul class="list">
-        <li>Customer must provide a driveway/work area.</li>
-        <li>Customer must provide power + water, or accept additional charges.</li>
-        <li>One vehicle per day unless the service is a half-day booking.</li>
-        <li>Deposit is required to reserve the date.</li>
-        <li>Cancellation fees may apply.</li>
-        <li>Customer accepts responsibility for location-specific bylaw / runoff restrictions.</li>
-      </ul>
-    </div>
-
     <div class="footer" data-footer></div>
   </div>
 
+  <script type="module" src="/assets/site.js?v=20260301c"></script>
   <script type="module">
-    import { setBrandImages, setFooter, initServicesPage } from "/assets/site.js";
+    import { setBrandImages, setFooter, initServicesPage } from "/assets/site.js?v=20260301c";
     setBrandImages();
     setFooter();
     initServicesPage();
