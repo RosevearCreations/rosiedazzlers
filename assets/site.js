@@ -22,7 +22,7 @@ let _servicesData = null;
 
 async function loadServicesData() {
   if (_servicesData) return _servicesData;
-  const res = await fetch(DATA_URL, { cache: "no-store" });
+  const res = await fetch(`${DATA_URL}?v=20260301c`, { cache: "no-store" });
   if (!res.ok) throw new Error(`Could not load ${DATA_URL}`);
   _servicesData = await res.json();
   return _servicesData;
@@ -163,9 +163,7 @@ function buildMainCardGallery(pkg, size) {
   const gallery = [];
   const main = packageImageForSize(pkg, size);
   if (main) gallery.push(main);
-
   gallery.push(HOVER_MEDIA.exterior, HOVER_MEDIA.interior, HOVER_MEDIA.size);
-
   return [...new Set(gallery.filter(Boolean))];
 }
 
@@ -233,7 +231,7 @@ function renderMainPackages(cardsEl, data, size) {
       <p>${pkg.subtitle || ""}</p>
       <div class="price">${money(price)} <span class="kicker">(${size.toUpperCase()})</span></div>
       <div class="kicker">Deposit: ${money(deposit)}</div>
-      <div class="kicker">Hover image to preview exterior, interior, and size visuals</div>
+      <div class="kicker">Package code: ${pkg.code}</div>
       <div class="hr"></div>
       <ul class="list">${included}</ul>
       <div class="hr"></div>
