@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Rosie Dazzlers | Mobile Auto Detailing in Norfolk & Oxford Counties</title>
-  <meta name="description" content="Mobile auto detailing in Norfolk and Oxford Counties. Premium wash, interior detail, exterior detail, complete detail, add-ons, online booking, and deposit-secured appointments.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260302a">
+  <meta name="description" content="Mobile auto detailing in Norfolk and Oxford Counties. Premium wash, interior detail, exterior detail, complete detail, add-ons, online booking, and deposit-secured appointments." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260302b" />
   <style>
     .home-grid{
       display:grid;
@@ -88,7 +88,7 @@
   <div class="nav">
     <div class="nav-inner">
       <a class="brand" href="/">
-        <img data-logo alt="Rosie Dazzlers logo">
+        <img data-logo alt="Rosie Dazzlers logo" />
         <strong>Rosie Dazzlers</strong>
       </a>
       <div class="nav-links">
@@ -119,6 +119,10 @@
             Choose your package, review what’s included, add any extras you need, and reserve your date online.
           </p>
 
+          <div class="section">
+            <div data-checkout-status class="notice" style="display:block"></div>
+          </div>
+
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
             <a class="btn primary" href="/book">Book now</a>
             <a class="btn ghost" href="/pricing">See pricing</a>
@@ -134,7 +138,7 @@
       </div>
 
       <div class="panel">
-        <img class="hero-media" data-banner alt="Rosie Dazzlers banner">
+        <img class="hero-media" data-banner alt="Rosie Dazzlers banner" />
       </div>
     </div>
 
@@ -181,7 +185,7 @@
       </div>
 
       <div class="panel media-card">
-        <img data-reviews alt="Rosie Dazzlers reviews">
+        <img data-reviews alt="Rosie Dazzlers reviews" />
         <h2 style="margin:0 0 8px">Why customers care about the details</h2>
         <p>
           Clear pricing, clear package inclusions, simple booking, and visible reviews make it easier for customers to trust a mobile detailing service before they ever book.
@@ -241,12 +245,13 @@
   </div>
 
   <script type="module">
-    import { setBrandImages, setFooter } from "/assets/site.js?v=20260302a";
+    import { setBrandImages, setFooter, handleCheckoutReturn } from "/assets/site.js?v=20260302b";
 
     setBrandImages();
     setFooter();
+    handleCheckoutReturn();
 
-    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260302a";
+    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260302b";
 
     function money(value) {
       return new Intl.NumberFormat("en-CA", {
