@@ -304,3 +304,121 @@ input:focus,select:focus,textarea:focus{border-color:rgba(77,119,255,.65)}
   .row,.row3{grid-template-columns:1fr}
   .nav-links{display:none}
 }
+/* --- Nav active + mobile menu toggle --- */
+.nav-links a.active{
+  background:rgba(255,255,255,.08);
+  opacity:1;
+}
+
+.nav-toggle{
+  display:none;
+}
+
+@media (max-width: 880px){
+  .nav-toggle{
+    display:inline-flex;
+  }
+  .nav-links{
+    display:none;
+    width:100%;
+    flex-direction:column;
+    gap:6px;
+    padding:10px;
+    margin-top:8px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:14px;
+    background:rgba(7,11,16,.92);
+  }
+  .nav-links.open{
+    display:flex;
+  }
+  .nav-inner{
+    flex-wrap:wrap;
+  }
+}
+
+/* --- Footer layout --- */
+.footer-grid{
+  display:grid;
+  grid-template-columns: 1.2fr 1fr 1fr 1fr;
+  gap:14px;
+  padding:18px 0;
+  border-top:1px solid rgba(255,255,255,.10);
+  margin-top:22px;
+}
+
+.footer-col a{
+  display:block;
+  text-decoration:none;
+  opacity:.86;
+  padding:6px 0;
+}
+
+.footer-col a:hover{
+  opacity:1;
+  text-decoration:underline;
+}
+
+.footer-title{
+  font-weight:900;
+  margin-bottom:8px;
+}
+
+.footer-muted{
+  color:rgba(234,242,255,.68);
+  line-height:1.6;
+}
+
+.footer-note{
+  color:rgba(234,242,255,.58);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.footer-social{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 12px;
+}
+.footer-social a{
+  display:inline-flex;
+  padding:6px 10px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:999px;
+  background:rgba(255,255,255,.04);
+  text-decoration:none;
+}
+.footer-social a:hover{
+  background:rgba(255,255,255,.08);
+}
+
+.footer-bottom{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  padding:12px 0 6px;
+  border-top:1px solid rgba(255,255,255,.08);
+  color:rgba(234,242,255,.6);
+  font-size:13px;
+}
+.footer-bottom-links{
+  display:flex;
+  gap:12px;
+}
+.footer-bottom-links a{
+  text-decoration:none;
+  opacity:.86;
+}
+.footer-bottom-links a:hover{
+  opacity:1;
+  text-decoration:underline;
+}
+
+@media (max-width: 980px){
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width: 560px){
+  .footer-grid{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;align-items:flex-start}
+}
