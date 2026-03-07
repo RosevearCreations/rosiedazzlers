@@ -1,9 +1,10 @@
 // /functions/api/gifts/webhook.js
 // Stripe webhook -> Supabase fulfilment for Gift Certificate purchases
+// UPDATED: sets expires_at = purchase date + 1 year and stores vehicle intake in purchase_context JSON.
 
 export async function onRequestPost({ request, env }) {
   const STRIPE_WEBHOOK_SECRET = env.STRIPE_WEBHOOK_SECRET_GIFTS;
-  const STRIPE_KEY = env.STRIPE_SECRET_KEY; // not strictly needed here, but keep for future expansions
+  const STRIPE_KEY = env.STRIPE_SECRET_KEY; // kept for future use
   const SUPABASE_URL = env.SUPABASE_URL;
   const SERVICE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -45,9 +46,28 @@ export async function onRequestPost({ request, env }) {
   if (!cartStr) return json({ error: "Missing cart metadata" }, 400);
 
   const purchaser_email =
-    String(session?.metadata?.purchaser_email || session?.customer_details?.email || session?.customer_email || "").trim();
+    String(
+      session?.metadata?.purchaser_email ||
+        session?.customer_details?.email ||
+        session?.customer_email ||
+        ""
+    ).trim();
   const recipient_email = String(session?.metadata?.recipient_email || "").trim();
   const recipient_name = String(session?.metadata?.recipient_name || "").trim();
+
+  // Capture vehicle intake fields from metadata (present only for service gift purchases)
+  const purchase_context = {};
+  const vehicle = {
+    year: String(session?.metadata?.vehicle_year || "").trim(),
+    make: String(session?.metadata?.vehicle_make || "").trim(),
+    model: String(session?.metadata?.vehicle_model || "").trim(),
+    body_style: String(session?.metadata?.vehicle_body_style || "").trim(),
+    declared_size: String(session?.metadata?.vehicle_declared_size || "").trim(),
+    photo_url: String(session?.metadata?.vehicle_photo_url || "").trim(),
+  };
+  const hasVehicle =
+    vehicle.year || vehicle.make || vehicle.model || vehicle.body_style || vehicle.declared_size || vehicle.photo_url;
+  if (hasVehicle) purchase_context.vehicle = vehicle;
 
   const cartItems = parseCart(cartStr);
   if (!cartItems.length) return json({ error: "Cart metadata invalid/empty" }, 400);
@@ -55,6 +75,12 @@ export async function onRequestPost({ request, env }) {
   const skus = [...new Set(cartItems.map((x) => x.sku))];
   const products = await supaGetGiftProducts(SUPABASE_URL, SERVICE_KEY, skus);
   const bySku = new Map(products.map((p) => [p.sku, p]));
+
+  // Stripe session.created is unix seconds
+  const createdUnix = Number(session?.created);
+  const createdAt = Number.isFinite(createdUnix) ? new Date(createdUnix * 1000) : new Date();
+  const expiresAt = new Date(createdAt.getTime());
+  expiresAt.setFullYear(expiresAt.getFullYear() + 1); // + 1 year
 
   const certRows = [];
 
@@ -100,6 +126,12 @@ export async function onRequestPost({ request, env }) {
 
         stripe_session_id: session.id,
         stripe_payment_intent: session.payment_intent || null,
+
+        // enforce 1-year validity window
+        expires_at: expiresAt.toISOString(),
+
+        // store intake details
+        purchase_context: purchase_context,
       });
     }
   }
@@ -110,6 +142,7 @@ export async function onRequestPost({ request, env }) {
     ok: true,
     issued: certRows.length,
     session_id: session.id,
+    expires_at: expiresAt.toISOString(),
   });
 }
 
@@ -145,12 +178,6 @@ function generateGiftCode() {
 }
 
 /* ----------------- Stripe signature verification ----------------- */
-/*
-Stripe signature scheme v1:
-signed_payload = `${t}.${rawBody}`
-expected = HMAC_SHA256(secret, signed_payload)
-Compare expected with any v1 signatures in Stripe-Signature header.
-*/
 async function verifyStripeSignature(rawBody, sigHeader, secret, toleranceSeconds = 300) {
   try {
     const parts = sigHeader.split(",").map((x) => x.trim());
@@ -208,7 +235,9 @@ function timingSafeEqual(a, b) {
 
 /* ----------------- Supabase helpers ----------------- */
 async function supaExistsGiftForSession(SUPABASE_URL, SERVICE_KEY, sessionId) {
-  const url = `${SUPABASE_URL}/rest/v1/gift_certificates?select=id&stripe_session_id=eq.${encodeURIComponent(sessionId)}&limit=1`;
+  const url = `${SUPABASE_URL}/rest/v1/gift_certificates?select=id&stripe_session_id=eq.${encodeURIComponent(
+    sessionId
+  )}&limit=1`;
   const res = await fetch(url, {
     headers: {
       apikey: SERVICE_KEY,
@@ -223,7 +252,9 @@ async function supaExistsGiftForSession(SUPABASE_URL, SERVICE_KEY, sessionId) {
 
 async function supaGetGiftProducts(SUPABASE_URL, SERVICE_KEY, skus) {
   const inList = skus.map((s) => `"${String(s).replace(/"/g, "")}"`).join(",");
-  const url = `${SUPABASE_URL}/rest/v1/gift_products?select=sku,type,package_code,vehicle_size,face_value_cents,currency,is_active&sku=in.(${encodeURIComponent(inList)})`;
+  const url = `${SUPABASE_URL}/rest/v1/gift_products?select=sku,type,package_code,vehicle_size,face_value_cents,currency,is_active&sku=in.(${encodeURIComponent(
+    inList
+  )})`;
 
   const res = await fetch(url, {
     method: "GET",
