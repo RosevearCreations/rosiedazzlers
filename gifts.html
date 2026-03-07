@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gift Certificates | Rosie Dazzlers</title>
+  <meta name="description" content="Buy Rosie Dazzlers Gift Certificates — service vouchers or dollar-value certificates. Valid for 1 year. No refunds." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260307a" />
+  <style>
+    .gift-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .gift-card .img{width:100%;height:220px;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);margin-bottom:10px}
+    .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+    .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-size:13px;color:rgba(234,242,255,.75)}
+    .cart{position:sticky;top:86px}
+    .cart-line{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.10)}
+    .cart-line:last-child{border-bottom:none}
+    .qtyrow{display:flex;gap:8px;align-items:center}
+    .qtybtn{min-width:38px;justify-content:center}
+    .smallnote{color:rgba(234,242,255,.62);font-size:13px;line-height:1.5}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width: 980px){
+      .gift-grid{grid-template-columns:1fr}
+      .cart{position:static}
+      .split{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Standard Nav -->
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers</strong>
+      </a>
+
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">
+        Menu
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="/services">Services</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/gear">Gear</a>
+        <a href="/consumables">Consumables</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/book">Book</a>
+        <a href="/gifts">Gifts</a>
+      </div>
+
+      <a class="btn primary" href="/book">Book now</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="panel">
+      <div class="badges">
+        <span class="badge">Gift Certificates</span>
+        <span class="badge">Valid for 1 year</span>
+        <span class="badge">No refunds</span>
+      </div>
+
+      <h1 style="margin:12px 0 8px">Gift Certificates</h1>
+      <p class="kicker">
+        Buy a gift certificate for someone else (or yourself). Choose either a <strong>Service Gift</strong> (exact package + vehicle size)
+        or a <strong>Dollar Gift</strong> (amount deducted from any booking).
+      </p>
+
+      <div class="pillrow">
+        <span class="pill">Service Gifts = exact package + size</span>
+        <span class="pill">Dollar Gifts = apply amount at booking</span>
+        <span class="pill">Valid 12 months from purchase</span>
+        <span class="pill">No refunds</span>
+      </div>
+
+      <div class="notice warn">
+        <strong>Important:</strong> Gift Certificates are purchased here using Stripe Checkout.
+        They are redeemed later during booking using the Gift Code (RD-XXXXXX...).
+      </div>
+    </div>
+
+    <div class="section split">
+      <div class="panel">
+        <h2 style="margin-top:0">How Gift Certificates work</h2>
+        <ol class="list">
+          <li><strong>Buy</strong> a gift certificate here (add to cart → Stripe Checkout).</li>
+          <li><strong>Receive</strong> a Gift Code (RD-XXXXXX...).</li>
+          <li><strong>Redeem</strong> the code during booking to apply the service or dollar amount.</li>
+        </ol>
+
+        <div class="hr"></div>
+
+        <h3 style="margin:0 0 8px">Rules</h3>
+        <ul class="list">
+          <li><strong>Valid for 1 year</strong> (12 months) from purchase date.</li>
+          <li><strong>No refunds</strong> on gift certificate purchases.</li>
+          <li><strong>Service Gifts</strong> must match the package + vehicle size at booking.</li>
+          <li><strong>Dollar Gifts</strong> apply as a deduction during booking.</li>
+        </ul>
+      </div>
+
+      <div class="panel cart">
+        <h2 style="margin-top:0">Cart</h2>
+        <div id="cartLines"></div>
+
+        <div class="hr"></div>
+
+        <div class="row">
+          <div>
+            <label for="purchaser_email">Purchaser Email</label>
+            <input id="purchaser_email" type="email" placeholder="you@example.com" />
+          </div>
+          <div>
+            <label for="recipient_email">Recipient Email (optional)</label>
+            <input id="recipient_email" type="email" placeholder="recipient@example.com" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="recipient_name">Recipient Name (optional)</label>
+            <input id="recipient_name" type="text" placeholder="Recipient name" />
+          </div>
+          <div>
+            <label>&nbsp;</label>
+            <div class="notice">Recipient info is attached to the purchase for fulfilment.</div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="row">
+          <div class="notice" id="cartTotal"></div>
+          <button class="btn primary" id="checkoutBtn" type="button">Checkout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Dollar Gift Certificates</h2>
+      <div id="dollarGifts" class="grid cards"></div>
+    </div>
+
+    <div class="section">
+      <h2>Service Gift Certificates</h2>
+      <p class="kicker">These redeem for a specific service and vehicle size.</p>
+      <div id="serviceGifts" class="grid cards"></div>
+    </div>
+
+    <div class="footer" data-footer></div>
+  </div>
+
+  <script type="module">
+    import { setBrandImages } from "/assets/site.js?v=20260307a";
+    setBrandImages();
+
+    const money = (cents) =>
+      new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" }).format((Number(cents || 0) / 100));
+
+    const enc = (url) => {
+      try { return encodeURI(url); } catch { return url; }
+    };
+
+    const CATALOG = [
+      { kind:"dollar", sku:"GIFT-100", name:"Gift Certificate $100 (Bronze)", desc:"Redeem $100 toward any booking.", price_cents:10000, image:"https://assets.rosiedazzlers.ca/packages/GiftCertificate100Bronze.png" },
+      { kind:"dollar", sku:"GIFT-200", name:"Gift Certificate $200 (Silver)", desc:"Redeem $200 toward any booking.", price_cents:20000, image:"https://assets.rosiedazzlers.ca/packages/GiftCertificate200Silver.png" },
+      { kind:"dollar", sku:"GIFT-300", name:"Gift Certificate $300 (Gold)", desc:"Redeem $300 toward any booking.", price_cents:30000, image:"https://assets.rosiedazzlers.ca/packages/GiftCertificate300Gold.png" },
+      { kind:"dollar", sku:"GIFT-OPEN", name:"Open-Ended Gift Certificate", desc:"Choose a custom amount (valid for 12 months).", price_cents:null, image:"https://assets.rosiedazzlers.ca/packages/GiftsOpenEnded.png", open_value:true },
+
+      { kind:"service", sku:"SVC-premium_wash-small", name:"Premium Wash — Small", desc:"Service voucher (Small)", price_cents:8500, image:"https://assets.rosiedazzlers.ca/packages/PremiumExternalWashGiftCert.png" },
+      { kind:"service", sku:"SVC-premium_wash-mid", name:"Premium Wash — Mid", desc:"Service voucher (Mid)", price_cents:10500, image:"https://assets.rosiedazzlers.ca/packages/PremiumExternalWashMidSizeGiftCert.png" },
+      { kind:"service", sku:"SVC-premium_wash-oversize", name:"Premium Wash — Oversize/Exotic", desc:"Service voucher (Oversize)", price_cents:12500, image:"https://assets.rosiedazzlers.ca/packages/PremiumExternalWashLargeSizeExoticGiftCert.png" },
+
+      { kind:"service", sku:"SVC-basic_detail-small", name:"Basic Detail — Small", desc:"Service voucher (Small)", price_cents:11500, image:"https://assets.rosiedazzlers.ca/packages/BasicInteriorDetailSmallSizeGiftCert.png" },
+      { kind:"service", sku:"SVC-basic_detail-mid", name:"Basic Detail — Mid", desc:"Service voucher (Mid)", price_cents:13500, image:"https://assets.rosiedazzlers.ca/packages/BasicInteriorDetailMidSizeGiftCert.png" },
+      { kind:"service", sku:"SVC-basic_detail-oversize", name:"Basic Detail — Oversize/Exotic", desc:"Service voucher (Oversize)", price_cents:17000, image:"https://assets.rosiedazzlers.ca/packages/BasicInteriorDetailExoticsGiftCert.png" },
+
+      { kind:"service", sku:"SVC-interior_detail-small", name:"Interior Detail — Small", desc:"Service voucher (Small)", price_cents:19500, image:"https://assets.rosiedazzlers.ca/packages/FullInteriorDetailSmallCarsGiftCert.png" },
+      { kind:"service", sku:"SVC-interior_detail-mid", name:"Interior Detail — Mid", desc:"Service voucher (Mid)", price_cents:22000, image:"https://assets.rosiedazzlers.ca/packages/FullInteriorDetailMidSuvCarsGiftCert.png" },
+      { kind:"service", sku:"SVC-interior_detail-oversize", name:"Interior Detail — Oversize/Exotic", desc:"Service voucher (Oversize)", price_cents:24500, image:"https://assets.rosiedazzlers.ca/packages/FullInteriorDetailLargeExoticCarsGiftCert.png" },
+
+      { kind:"service", sku:"SVC-exterior_detail-small", name:"Exterior Detail — Small", desc:"Service voucher (Small)", price_cents:19500, image:"https://assets.rosiedazzlers.ca/packages/FullExteriorDetailSmallSizeCarsGiftCert.png" },
+      { kind:"service", sku:"SVC-exterior_detail-mid", name:"Exterior Detail — Mid", desc:"Service voucher (Mid)", price_cents:22000, image:"https://assets.rosiedazzlers.ca/packages/FullExteriorDetailMidSizeCarsGiftCert.png" },
+      { kind:"service", sku:"SVC-exterior_detail-oversize", name:"Exterior Detail — Oversize/Exotic", desc:"Service voucher (Oversize)", price_cents:24500, image:"https://assets.rosiedazzlers.ca/packages/FullExteriorDetailLargeExoticCarsGiftCert.png" },
+
+      { kind:"service", sku:"SVC-complete_detail-small", name:"Complete Detail — Small", desc:"Service voucher (Small)", price_cents:31900, image:"https://assets.rosiedazzlers.ca/packages/Gift CompleteSmallSizeGift.png" },
+      { kind:"service", sku:"SVC-complete_detail-mid", name:"Complete Detail — Mid", desc:"Service voucher (Mid)", price_cents:36900, image:"https://assets.rosiedazzlers.ca/packages/Gift CompleteMidSizeGift.png" },
+      { kind:"service", sku:"SVC-complete_detail-oversize", name:"Complete Detail — Oversize/Exotic", desc:"Service voucher (Oversize)", price_cents:41900, image:"https://assets.rosiedazzlers.ca/packages/Gift CompleteLargeExoticGift.png" },
+    ];
+
+    const cart = new Map();
+    const openAmounts = new Map();
+
+    function cardHtml(p) {
+      const priceLine = p.open_value
+        ? `<div class="price">Choose amount</div>`
+        : `<div class="price">${money(p.price_cents)}</div>`;
+
+      const openInput = p.open_value
+        ? `
+          <div class="row" style="margin-top:8px">
+            <div>
+              <label>Amount (CAD)</label>
+              <input data-open-amt="${p.sku}" type="number" min="25" max="2000" step="5" placeholder="100" />
+              <div class="kicker">Min $25 · Max $2000</div>
+            </div>
+          </div>
+        `
+        : "";
+
+      return `
+        <div class="card gift-card">
+          <img class="img" loading="lazy" src="${enc(p.image)}" alt="${p.name}" onerror="this.style.display='none'">
+          <h3>${p.name}</h3>
+          <p>${p.desc}</p>
+          ${priceLine}
+          ${openInput}
+          <div class="hr"></div>
+          <div class="qtyrow">
+            <button class="btn ghost qtybtn" data-sub="${p.sku}" type="button">-</button>
+            <div class="notice" style="min-width:52px;text-align:center" data-qty="${p.sku}">0</div>
+            <button class="btn ghost qtybtn" data-add="${p.sku}" type="button">+</button>
+            <div style="flex:1"></div>
+            <button class="btn primary" data-addone="${p.sku}" type="button">Add</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCatalog() {
+      document.querySelector("#dollarGifts").innerHTML =
+        CATALOG.filter(x => x.kind === "dollar").map(cardHtml).join("");
+      document.querySelector("#serviceGifts").innerHTML =
+        CATALOG.filter(x => x.kind === "service").map(cardHtml).join("");
+
+      document.querySelectorAll("[data-open-amt]").forEach((inp) => {
+        inp.addEventListener("input", () => {
+          const sku = inp.getAttribute("data-open-amt");
+          const dollars = Number(inp.value || 0);
+          const cents = Math.floor(dollars * 100);
+          if (Number.isFinite(cents) && cents > 0) openAmounts.set(sku, cents);
+          else openAmounts.delete(sku);
+          renderCart();
+        });
+      });
+
+      document.querySelectorAll("[data-add]").forEach((b) => b.addEventListener("click", () => inc(b.dataset.add, 1)));
+      document.querySelectorAll("[data-addone]").forEach((b) => b.addEventListener("click", () => inc(b.dataset.addone, 1)));
+      document.querySelectorAll("[data-sub]").forEach((b) => b.addEventListener("click", () => inc(b.dataset.sub, -1)));
+
+      renderCart();
+      updateQtyBadges();
+    }
+
+    function inc(sku, delta) {
+      const cur = cart.get(sku) || { sku, qty: 0 };
+      cur.qty = Math.max(0, cur.qty + delta);
+      if (cur.qty === 0) cart.delete(sku);
+      else cart.set(sku, cur);
+
+      renderCart();
+      updateQtyBadges();
+    }
+
+    function updateQtyBadges() {
+      CATALOG.forEach((p) => {
+        const el = document.querySelector(`[data-qty="${p.sku}"]`);
+        if (!el) return;
+        el.textContent = String(cart.get(p.sku)?.qty || 0);
+      });
+    }
+
+    function renderCart() {
+      const lines = document.querySelector("#cartLines");
+      const totalEl = document.querySelector("#cartTotal");
+
+      const items = [...cart.values()];
+      if (!items.length) {
+        lines.innerHTML = `<div class="notice">Cart is empty.</div>`;
+        totalEl.textContent = "Total: $0.00";
+        return;
+      }
+
+      let total = 0;
+
+      lines.innerHTML = items.map((it) => {
+        const p = CATALOG.find(x => x.sku === it.sku);
+        if (!p) return "";
+
+        let lineCents = 0;
+        if (p.open_value) {
+          const amt = openAmounts.get(p.sku) || 0;
+          lineCents = amt * it.qty;
+        } else {
+          lineCents = (p.price_cents || 0) * it.qty;
+        }
+
+        total += lineCents;
+
+        const extra = p.open_value
+          ? `<div class="smallnote">Amount: ${money(openAmounts.get(p.sku) || 0)} each</div>`
+          : "";
+
+        return `
+          <div class="cart-line">
+            <div>
+              <strong>${p.name}</strong>
+              <div class="smallnote">Qty: ${it.qty}</div>
+              ${extra}
+            </div>
+            <div style="text-align:right">${money(lineCents)}</div>
+          </div>
+        `;
+      }).join("");
+
+      totalEl.textContent = `Total: ${money(total)}`;
+    }
+
+    async function checkout() {
+      const items = [...cart.values()].map((it) => {
+        const p = CATALOG.find(x => x.sku === it.sku);
+        if (!p) return null;
+        if (p.open_value) {
+          return { sku: it.sku, qty: it.qty, amount_cents: openAmounts.get(p.sku) };
+        }
+        return { sku: it.sku, qty: it.qty };
+      }).filter(Boolean);
+
+      for (const it of items) {
+        if (it.sku === "GIFT-OPEN") {
+          if (!Number.isFinite(it.amount_cents) || it.amount_cents < 2500) {
+            alert("Please enter an open-ended amount of at least $25.");
+            return;
+          }
+        }
+      }
+
+      const purchaser_email = (document.querySelector("#purchaser_email")?.value || "").trim();
+      const recipient_email = (document.querySelector("#recipient_email")?.value || "").trim();
+      const recipient_name = (document.querySelector("#recipient_name")?.value || "").trim();
+
+      const res = await fetch("/api/gifts/checkout", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ items, purchaser_email, recipient_email, recipient_name }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        alert(data?.error ? `Checkout error: ${data.error}` : "Checkout error");
+        return;
+      }
+
+      if (!data?.checkout_url) {
+        alert("Checkout URL missing. Please try again.");
+        return;
+      }
+
+      location.href = data.checkout_url;
+    }
+
+    document.querySelector("#checkoutBtn").addEventListener("click", checkout);
+
+    renderCatalog();
+  </script>
+
+  <script type="module" src="/assets/chrome.js?v=20260307a"></script>
+</body>
+</html>
