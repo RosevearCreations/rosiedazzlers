@@ -1,4 +1,9 @@
 // /assets/chrome.js
+
+/* =========================
+   NAV + FOOTER (existing)
+   ========================= */
+
 const SOCIALS = [
   ["TikTok", "https://www.tiktok.com/@rosiedazzler"],
   ["Instagram", "https://www.instagram.com/rosiedazzlers/"],
@@ -105,47 +110,97 @@ function setFooter() {
 }
 
 /* =========================
-   Hover rotation (packages)
+   PACKAGE CARD HOVER ROTATION
+   (fixes blanks + uses your real filenames)
    ========================= */
 
 const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages/";
 
-// Your ACTUAL filenames (case + spaces matter)
-const HOVER_FILES = [
+// These exist in your /packages directory (exact names)
+const STATIC_HOVER_FILES = [
   "Exterior Detail.png",
   "Interior Detail.png",
   "CarSizeChart.PNG",
 ];
 
-let _resolvedHoverUrls = null;
+// Also use size-specific images you already have
+const SIZE_ICON_BY_VALUE = {
+  small: "SmallCar.png",
+  mid: "MidSizedCars.png",
+  oversize: "ExoticLargeSizedCars.png",
+};
 
-function preload(url, timeoutMs = 2200) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    const t = setTimeout(() => resolve(null), timeoutMs);
-    img.onload = () => { clearTimeout(t); resolve(url); };
-    img.onerror = () => { clearTimeout(t); resolve(null); };
-    img.src = url;
-  });
+const loadState = new Map(); // url -> "ok" | "fail" | "pending"
+
+function fileUrl(fileName) {
+  // filenames contain spaces, so encodeURI is required
+  return encodeURI(`${PACKAGES_BASE}${fileName}`);
 }
 
-async function getHoverUrls() {
-  if (_resolvedHoverUrls) return _resolvedHoverUrls;
+function preload(url) {
+  const s = loadState.get(url);
+  if (s === "ok" || s === "fail" || s === "pending") return;
 
-  // encodeURI is required because filenames contain spaces
-  const urls = [...new Set(HOVER_FILES.map((f) => encodeURI(`${PACKAGES_BASE}${f}`)))];
-  const results = await Promise.all(urls.map((u) => preload(u)));
-  _resolvedHoverUrls = results.filter(Boolean);
-  return _resolvedHoverUrls;
+  loadState.set(url, "pending");
+  const img = new Image();
+  img.onload = () => loadState.set(url, "ok");
+  img.onerror = () => loadState.set(url, "fail");
+  img.src = url;
 }
 
-function attachRotatorToContainer(containerSelector) {
+function isOk(url) {
+  return loadState.get(url) === "ok";
+}
+
+function currentSize() {
+  // services + pricing use #size for the viewer selector
+  const sel = document.querySelector("#size");
+  return sel && sel.value ? sel.value : null;
+}
+
+function guessGiftCertUrl(baseSrc) {
+  // If your card image is ...Something.png, try ...SomethingGiftCert.png
+  // Works for items like PremiumExternalWash.png, FullInteriorDetailSmallCars.png, etc.
+  try {
+    const u = new URL(baseSrc);
+    const file = u.pathname.split("/").pop() || "";
+    if (!/\.png$/i.test(file)) return null;
+
+    const giftFile = file.replace(/\.png$/i, "GiftCert.png");
+    const giftUrl = `${u.origin}/packages/${encodeURIComponent(giftFile)}`;
+    return giftUrl.replace(/%2F/g, "/");
+  } catch {
+    return null;
+  }
+}
+
+function buildPlaylist(baseSrc) {
+  const urls = [];
+
+  // 1) main image (size-specific package image)
+  urls.push(baseSrc);
+
+  // 2) static hover images (Exterior / Interior / Size chart)
+  for (const f of STATIC_HOVER_FILES) urls.push(fileUrl(f));
+
+  // 3) size icon that matches the size dropdown
+  const s = currentSize();
+  if (s && SIZE_ICON_BY_VALUE[s]) urls.push(fileUrl(SIZE_ICON_BY_VALUE[s]));
+
+  // 4) gift cert version of the current card image (if it exists)
+  const gift = guessGiftCertUrl(baseSrc);
+  if (gift) urls.push(gift);
+
+  // de-dupe
+  return urls.filter((u, i, arr) => arr.indexOf(u) === i);
+}
+
+function attachRotators(containerSelector) {
   const container = document.querySelector(containerSelector);
   if (!container) return;
 
-  const attachToCard = (card) => {
+  function attach(card) {
     if (!card || card.dataset.hoverInit === "1") return;
-
     const img = card.querySelector("img");
     if (!img) return;
 
@@ -153,52 +208,72 @@ function attachRotatorToContainer(containerSelector) {
 
     let timer = null;
     let playlist = [];
-    let idx = 0;
+    let base = "";
 
-    const stop = () => {
+    function stop() {
       if (timer) clearInterval(timer);
       timer = null;
-      if (playlist.length) img.src = playlist[0];
-    };
+      if (base) img.src = base;
+    }
 
-    card.addEventListener("mouseenter", async () => {
-      const baseSrc = img.currentSrc || img.src;
+    card.addEventListener("mouseenter", () => {
+      base = img.currentSrc || img.src;
 
-      // Override any inline onerror that hides the image
+      // ensure we never "blank" the card
       img.onerror = () => {
         img.style.display = "";
-        img.src = baseSrc;
+        img.src = base;
       };
 
-      const hoverUrls = await getHoverUrls();
-
-      playlist = [baseSrc, ...hoverUrls].filter((u, i, arr) => arr.indexOf(u) === i);
-      idx = 0;
-
-      if (playlist.length <= 1) return;
+      playlist = buildPlaylist(base);
+      playlist.forEach(preload);
 
       if (timer) clearInterval(timer);
+
+      // rotate ONLY to images that are confirmed loaded (no blanks)
       timer = setInterval(() => {
-        idx = (idx + 1) % playlist.length;
-        img.src = playlist[idx];
-      }, 1300);
+        if (!playlist.length) return;
+
+        // Try up to playlist length to find next loaded image
+        const currentIdx = playlist.indexOf(img.src);
+        let idx = currentIdx >= 0 ? currentIdx : 0;
+
+        for (let tries = 0; tries < playlist.length; tries++) {
+          idx = (idx + 1) % playlist.length;
+          const candidate = playlist[idx];
+
+          // base is always allowed
+          if (candidate === base) {
+            img.src = candidate;
+            return;
+          }
+          // only rotate to loaded hover images
+          if (isOk(candidate)) {
+            img.src = candidate;
+            return;
+          }
+        }
+        // none ready yet -> keep current image
+      }, 1200);
     });
 
     card.addEventListener("mouseleave", stop);
-  };
+  }
 
-  container.querySelectorAll(".card").forEach(attachToCard);
+  // Existing cards
+  container.querySelectorAll(".card").forEach(attach);
 
+  // Cards added later by page JS
   const mo = new MutationObserver(() => {
-    container.querySelectorAll(".card").forEach(attachToCard);
+    container.querySelectorAll(".card").forEach(attach);
   });
   mo.observe(container, { childList: true, subtree: true });
 }
 
 function initPackageHoverRotation() {
-  attachRotatorToContainer("#packageCards");  // services page
-  attachRotatorToContainer("#pricingCards");  // pricing page
-  // attachRotatorToContainer("#homePackages"); // optional
+  attachRotators("#packageCards");  // services page
+  attachRotators("#pricingCards");  // pricing page
+  // attachRotators("#homePackages"); // optional (homepage featured cards)
 }
 
 /* ========================= */
