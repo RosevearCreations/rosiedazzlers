@@ -4,38 +4,41 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Pricing | Rosie Dazzlers</title>
-  <meta name="description" content="Package pricing and add-ons by vehicle size.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260301c">
+  <meta name="description" content="Pricing by vehicle size plus add-ons for Rosie Dazzlers Mobile Auto Detailing.">
+  <link rel="stylesheet" href="/assets/site.css?v=20260306b">
 </head>
+
 <body>
-<div class="nav">
-  <div class="nav-inner">
-    <a class="brand" href="/">
-      <img data-logo alt="Rosie Dazzlers logo" />
-      <strong>Rosie Dazzlers</strong>
-    </a>
+  <!-- Standard Nav -->
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo">
+        <strong>Rosie Dazzlers</strong>
+      </a>
 
-    <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">
-      Menu
-    </button>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">
+        Menu
+      </button>
 
-    <div class="nav-links" id="navLinks">
-      <a href="/services">Services</a>
-      <a href="/pricing">Pricing</a>
-      <a href="/gear">Gear</a>
-      <a href="/consumables">Consumables</a>
-      <a href="/about">About</a>
-      <a href="/contact">Contact</a>
-      <a href="/book">Book</a>
+      <div class="nav-links" id="navLinks">
+        <a href="/services">Services</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/gear">Gear</a>
+        <a href="/consumables">Consumables</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/book">Book</a>
+      </div>
+
+      <a class="btn primary" href="/book">Book now</a>
     </div>
-
-    <a class="btn primary" href="/book">Book now</a>
   </div>
-</div>
+
   <div class="container">
     <div class="panel">
       <h1 style="margin:0 0 8px">Pricing</h1>
-      <p class="kicker">Package cards use the proper service names and matching size-specific main image.</p>
+      <p class="kicker">Select vehicle size to view package pricing and add-ons.</p>
 
       <div class="hr"></div>
 
@@ -48,7 +51,8 @@
             <option value="oversize">Oversize / Exotics</option>
           </select>
         </div>
-        <div style="display:flex;gap:10px;align-items:end;justify-content:flex-end">
+
+        <div style="display:flex;gap:10px;align-items:end;justify-content:flex-end;flex-wrap:wrap">
           <button id="openPrice" class="btn ghost" type="button">Price chart</button>
           <button id="openDetails" class="btn ghost" type="button">Details chart</button>
           <button id="openSize" class="btn ghost" type="button">Size chart</button>
@@ -66,15 +70,16 @@
       <div id="pricingAddons" class="grid cards"></div>
     </div>
 
+    <!-- Footer injected by chrome.js -->
     <div class="footer" data-footer></div>
   </div>
-<script type="module" src="/assets/chrome.js?v=20260302a"></script>
-  <script type="module" src="/assets/site.js?v=20260301c"></script>
+
   <script type="module">
-    import { setBrandImages, setFooter, initPricingPage } from "/assets/site.js?v=20260301c";
+    import { setBrandImages, initPricingPage } from "/assets/site.js?v=20260306b";
     setBrandImages();
-    setFooter();
     initPricingPage();
   </script>
+
+  <script type="module" src="/assets/chrome.js?v=20260306b"></script>
 </body>
 </html>
