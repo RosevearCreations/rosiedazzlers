@@ -5,38 +5,40 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Mobile Service Waiver | Rosie Dazzlers</title>
   <meta name="description" content="Mobile service waiver and customer acknowledgements for Rosie Dazzlers Mobile Auto Detailing." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260302d" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260306b" />
 </head>
+
 <body>
-<div class="nav">
-  <div class="nav-inner">
-    <a class="brand" href="/">
-      <img data-logo alt="Rosie Dazzlers logo" />
-      <strong>Rosie Dazzlers</strong>
-    </a>
+  <!-- Standard Nav -->
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers</strong>
+      </a>
 
-    <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">
-      Menu
-    </button>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">
+        Menu
+      </button>
 
-    <div class="nav-links" id="navLinks">
-      <a href="/services">Services</a>
-      <a href="/pricing">Pricing</a>
-      <a href="/gear">Gear</a>
-      <a href="/consumables">Consumables</a>
-      <a href="/about">About</a>
-      <a href="/contact">Contact</a>
-      <a href="/book">Book</a>
+      <div class="nav-links" id="navLinks">
+        <a href="/services">Services</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/gear">Gear</a>
+        <a href="/consumables">Consumables</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/book">Book</a>
+      </div>
+
+      <a class="btn primary" href="/book">Book now</a>
     </div>
-
-    <a class="btn primary" href="/book">Book now</a>
   </div>
-</div>
 
   <div class="container">
     <div class="panel">
       <h1 style="margin-top:0">Mobile Service Waiver</h1>
-      <p class="kicker">Last updated: March 2, 2026</p>
+      <p class="kicker">Last updated: March 6, 2026</p>
 
       <div class="hr"></div>
 
@@ -57,7 +59,8 @@
 
       <h2>3. Bylaws and property rules</h2>
       <p>
-        The customer accepts responsibility for ensuring that the service location allows detailing activity, including any rules relating to runoff, water use, chemical use, property management, landlord restrictions, condominium rules, or municipal bylaws.
+        The customer accepts responsibility for ensuring that the service location allows detailing activity, including any rules relating to runoff, water use, chemical use,
+        property management, landlord restrictions, condominium rules, or municipal bylaws.
       </p>
 
       <h2>4. Vehicle condition</h2>
@@ -93,13 +96,15 @@
       <a class="btn primary" href="/book">Return to booking</a>
     </div>
 
+    <!-- Footer injected by chrome.js -->
     <div class="footer" data-footer></div>
   </div>
-<script type="module" src="/assets/chrome.js?v=20260302a"></script>
+
   <script type="module">
-    import { setBrandImages, setFooter } from "/assets/site.js?v=20260302d";
+    import { setBrandImages } from "/assets/site.js?v=20260306b";
     setBrandImages();
-    setFooter();
   </script>
+
+  <script type="module" src="/assets/chrome.js?v=20260306b"></script>
 </body>
 </html>
