@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Gift Certificates | Rosie Dazzlers</title>
   <meta name="description" content="Buy Rosie Dazzlers Gift Certificates — service vouchers or dollar-value certificates. Valid for 1 year. No refunds." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260307a" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260307b" />
   <style>
-    .gift-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .gift-card .img{width:100%;height:220px;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);margin-bottom:10px}
     .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
     .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-size:13px;color:rgba(234,242,255,.75)}
     .cart{position:sticky;top:86px}
@@ -18,8 +16,9 @@
     .qtybtn{min-width:38px;justify-content:center}
     .smallnote{color:rgba(234,242,255,.62);font-size:13px;line-height:1.5}
     .split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .gift-card .img{width:100%;height:220px;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);margin-bottom:10px}
+    .req{color:rgba(239,68,68,.92);font-weight:800}
     @media (max-width: 980px){
-      .gift-grid{grid-template-columns:1fr}
       .cart{position:static}
       .split{grid-template-columns:1fr}
     }
@@ -63,31 +62,32 @@
       </div>
 
       <h1 style="margin:12px 0 8px">Gift Certificates</h1>
+
       <p class="kicker">
         Buy a gift certificate for someone else (or yourself). Choose either a <strong>Service Gift</strong> (exact package + vehicle size)
         or a <strong>Dollar Gift</strong> (amount deducted from any booking).
       </p>
 
       <div class="pillrow">
-        <span class="pill">Service Gifts = exact package + size</span>
-        <span class="pill">Dollar Gifts = apply amount at booking</span>
         <span class="pill">Valid 12 months from purchase</span>
         <span class="pill">No refunds</span>
+        <span class="pill">Service Gifts must match size</span>
+        <span class="pill">Dollar Gifts apply to any booking</span>
       </div>
 
       <div class="notice warn">
-        <strong>Important:</strong> Gift Certificates are purchased here using Stripe Checkout.
-        They are redeemed later during booking using the Gift Code (RD-XXXXXX...).
+        <strong>Important:</strong> Gift Certificates are a different system than booking deposits.
+        You purchase here (cart → Stripe Checkout). You redeem later during booking using the Gift Code (RD-XXXXXX...).
       </div>
     </div>
 
     <div class="section split">
       <div class="panel">
-        <h2 style="margin-top:0">How Gift Certificates work</h2>
+        <h2 style="margin-top:0">How it works</h2>
         <ol class="list">
-          <li><strong>Buy</strong> a gift certificate here (add to cart → Stripe Checkout).</li>
+          <li><strong>Buy</strong> a gift certificate here (Stripe Checkout).</li>
           <li><strong>Receive</strong> a Gift Code (RD-XXXXXX...).</li>
-          <li><strong>Redeem</strong> the code during booking to apply the service or dollar amount.</li>
+          <li><strong>Redeem</strong> the code during booking to apply the service or dollar value.</li>
         </ol>
 
         <div class="hr"></div>
@@ -96,9 +96,16 @@
         <ul class="list">
           <li><strong>Valid for 1 year</strong> (12 months) from purchase date.</li>
           <li><strong>No refunds</strong> on gift certificate purchases.</li>
-          <li><strong>Service Gifts</strong> must match the package + vehicle size at booking.</li>
-          <li><strong>Dollar Gifts</strong> apply as a deduction during booking.</li>
+          <li><strong>Service Gift</strong> vouchers must match the correct package + vehicle size.</li>
+          <li><strong>Dollar Gift</strong> vouchers deduct from the booking total.</li>
         </ul>
+
+        <div class="hr"></div>
+
+        <div class="smallnote">
+          If email delivery is not configured yet, keep your Stripe receipt email.
+          If you need help locating a Gift Code, contact us with the purchaser email and date.
+        </div>
       </div>
 
       <div class="panel cart">
@@ -107,14 +114,15 @@
 
         <div class="hr"></div>
 
+        <!-- Email fields (MANDATORY) -->
         <div class="row">
           <div>
-            <label for="purchaser_email">Purchaser Email</label>
-            <input id="purchaser_email" type="email" placeholder="you@example.com" />
+            <label for="purchaser_email">Purchaser Email <span class="req">*</span></label>
+            <input id="purchaser_email" type="email" placeholder="you@example.com" required />
           </div>
           <div>
-            <label for="recipient_email">Recipient Email (optional)</label>
-            <input id="recipient_email" type="email" placeholder="recipient@example.com" />
+            <label for="recipient_email">Recipient Email <span class="req">*</span></label>
+            <input id="recipient_email" type="email" placeholder="recipient@example.com" required />
           </div>
         </div>
 
@@ -125,8 +133,72 @@
           </div>
           <div>
             <label>&nbsp;</label>
-            <div class="notice">Recipient info is attached to the purchase for fulfilment.</div>
+            <div class="notice">If buying for yourself, put your email in both fields.</div>
           </div>
+        </div>
+
+        <!-- Vehicle intake (MANDATORY if cart includes ANY service gift) -->
+        <div id="vehicleIntake" style="display:none">
+          <div class="hr"></div>
+          <h3 style="margin:0 0 6px">Vehicle information (required for Service Gifts)</h3>
+          <div class="smallnote">
+            This helps confirm the correct vehicle size. Dollar-only gifts do not require vehicle details.
+          </div>
+
+          <div class="row3" style="margin-top:10px">
+            <div>
+              <label for="vehicle_year">Year <span class="req">*</span></label>
+              <input id="vehicle_year" type="number" min="1980" max="2030" placeholder="2020" />
+            </div>
+            <div>
+              <label for="vehicle_make">Make <span class="req">*</span></label>
+              <input id="vehicle_make" type="text" placeholder="Toyota" />
+            </div>
+            <div>
+              <label for="vehicle_model">Model <span class="req">*</span></label>
+              <input id="vehicle_model" type="text" placeholder="RAV4" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="body_style">Body style (used to validate size) <span class="req">*</span></label>
+              <select id="body_style">
+                <option value="">Select…</option>
+                <option value="small">Coupe / Sedan / Hatchback (usually Small)</option>
+                <option value="mid">Small SUV / Crossover (usually Mid)</option>
+                <option value="mid2">Mid SUV / 2-row SUV (usually Mid)</option>
+                <option value="oversize">Full-size SUV / Truck / Van / 3-row SUV (Oversize)</option>
+                <option value="exotic">Exotic / Supercar / Oversize (Oversize)</option>
+              </select>
+            </div>
+            <div>
+              <label for="declared_size">Declared vehicle size <span class="req">*</span></label>
+              <select id="declared_size">
+                <option value="">Select…</option>
+                <option value="small">Small</option>
+                <option value="mid">Mid-sized</option>
+                <option value="oversize">Over-size / Exotic</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="vehicle_photo_url">Vehicle photo URL <span class="req">*</span></label>
+              <input id="vehicle_photo_url" type="url" placeholder="https://..." />
+              <div class="kicker">Paste a link to a photo (Google Photos, iCloud link, etc.).</div>
+            </div>
+            <div>
+              <label>&nbsp;</label>
+              <div class="notice">
+                View size chart:
+                <a href="https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG" target="_blank" rel="noopener">Open Vehicle Size Chart</a>
+              </div>
+            </div>
+          </div>
+
+          <div id="sizeWarn" class="notice warn" style="display:none"></div>
         </div>
 
         <div class="hr"></div>
@@ -153,15 +225,13 @@
   </div>
 
   <script type="module">
-    import { setBrandImages } from "/assets/site.js?v=20260307a";
+    import { setBrandImages } from "/assets/site.js?v=20260307b";
     setBrandImages();
 
     const money = (cents) =>
       new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" }).format((Number(cents || 0) / 100));
 
-    const enc = (url) => {
-      try { return encodeURI(url); } catch { return url; }
-    };
+    const enc = (url) => { try { return encodeURI(url); } catch { return url; } };
 
     const CATALOG = [
       { kind:"dollar", sku:"GIFT-100", name:"Gift Certificate $100 (Bronze)", desc:"Redeem $100 toward any booking.", price_cents:10000, image:"https://assets.rosiedazzlers.ca/packages/GiftCertificate100Bronze.png" },
@@ -190,8 +260,54 @@
       { kind:"service", sku:"SVC-complete_detail-oversize", name:"Complete Detail — Oversize/Exotic", desc:"Service voucher (Oversize)", price_cents:41900, image:"https://assets.rosiedazzlers.ca/packages/Gift CompleteLargeExoticGift.png" },
     ];
 
-    const cart = new Map();
-    const openAmounts = new Map();
+    const cart = new Map();        // sku -> { sku, qty }
+    const openAmounts = new Map(); // sku -> cents
+
+    function hasServiceGiftInCart() {
+      for (const it of cart.values()) {
+        const p = CATALOG.find(x => x.sku === it.sku);
+        if (p && p.kind === "service" && it.qty > 0) return true;
+      }
+      return false;
+    }
+
+    function updateVehicleIntakeVisibility() {
+      const box = document.querySelector("#vehicleIntake");
+      box.style.display = hasServiceGiftInCart() ? "block" : "none";
+      validateSize();
+    }
+
+    function expectedSizeFromBodyStyle(bodyStyle) {
+      if (bodyStyle === "small") return "small";
+      if (bodyStyle === "mid" || bodyStyle === "mid2") return "mid";
+      if (bodyStyle === "oversize" || bodyStyle === "exotic") return "oversize";
+      return "";
+    }
+
+    function validateSize() {
+      const warn = document.querySelector("#sizeWarn");
+      warn.style.display = "none";
+      warn.textContent = "";
+
+      if (!hasServiceGiftInCart()) return true;
+
+      const bodyStyle = (document.querySelector("#body_style")?.value || "").trim();
+      const declared = (document.querySelector("#declared_size")?.value || "").trim();
+
+      if (!bodyStyle || !declared) return true;
+
+      const expected = expectedSizeFromBodyStyle(bodyStyle);
+      if (!expected) return true;
+
+      if (expected !== declared) {
+        warn.style.display = "block";
+        warn.textContent =
+          `Size mismatch: based on body style, we expect "${expected.toUpperCase()}". Please change your declared size to match the Car Size Chart.`;
+        return false;
+      }
+
+      return true;
+    }
 
     function cardHtml(p) {
       const priceLine = p.open_value
@@ -250,8 +366,12 @@
       document.querySelectorAll("[data-addone]").forEach((b) => b.addEventListener("click", () => inc(b.dataset.addone, 1)));
       document.querySelectorAll("[data-sub]").forEach((b) => b.addEventListener("click", () => inc(b.dataset.sub, -1)));
 
+      document.querySelector("#body_style")?.addEventListener("change", validateSize);
+      document.querySelector("#declared_size")?.addEventListener("change", validateSize);
+
       renderCart();
       updateQtyBadges();
+      updateVehicleIntakeVisibility();
     }
 
     function inc(sku, delta) {
@@ -262,6 +382,7 @@
 
       renderCart();
       updateQtyBadges();
+      updateVehicleIntakeVisibility();
     }
 
     function updateQtyBadges() {
@@ -318,10 +439,43 @@
       totalEl.textContent = `Total: ${money(total)}`;
     }
 
+    function getVal(id) { return (document.querySelector(id)?.value || "").trim(); }
+
+    function validateRequiredBeforeCheckout() {
+      const purchaser = getVal("#purchaser_email");
+      const recipient = getVal("#recipient_email");
+      if (!purchaser) return "Purchaser Email is required.";
+      if (!recipient) return "Recipient Email is required.";
+
+      if (hasServiceGiftInCart()) {
+        const year = getVal("#vehicle_year");
+        const make = getVal("#vehicle_make");
+        const model = getVal("#vehicle_model");
+        const body = getVal("#body_style");
+        const declared = getVal("#declared_size");
+        const photoUrl = getVal("#vehicle_photo_url");
+
+        if (!year) return "Vehicle Year is required for Service Gifts.";
+        if (!make) return "Vehicle Make is required for Service Gifts.";
+        if (!model) return "Vehicle Model is required for Service Gifts.";
+        if (!body) return "Body style is required for Service Gifts.";
+        if (!declared) return "Declared vehicle size is required for Service Gifts.";
+        if (!photoUrl) return "Vehicle photo URL is required for Service Gifts.";
+
+        if (!validateSize()) return "Vehicle size mismatch. Please adjust size to match the Car Size Chart.";
+      }
+
+      return "";
+    }
+
     async function checkout() {
+      const err = validateRequiredBeforeCheckout();
+      if (err) { alert(err); return; }
+
       const items = [...cart.values()].map((it) => {
         const p = CATALOG.find(x => x.sku === it.sku);
         if (!p) return null;
+
         if (p.open_value) {
           return { sku: it.sku, qty: it.qty, amount_cents: openAmounts.get(p.sku) };
         }
@@ -337,14 +491,25 @@
         }
       }
 
-      const purchaser_email = (document.querySelector("#purchaser_email")?.value || "").trim();
-      const recipient_email = (document.querySelector("#recipient_email")?.value || "").trim();
-      const recipient_name = (document.querySelector("#recipient_name")?.value || "").trim();
+      const payload = {
+        items,
+        purchaser_email: getVal("#purchaser_email"),
+        recipient_email: getVal("#recipient_email"),
+        recipient_name: getVal("#recipient_name"),
+        vehicle: hasServiceGiftInCart() ? {
+          year: getVal("#vehicle_year"),
+          make: getVal("#vehicle_make"),
+          model: getVal("#vehicle_model"),
+          body_style: getVal("#body_style"),
+          declared_size: getVal("#declared_size"),
+          photo_url: getVal("#vehicle_photo_url"),
+        } : null
+      };
 
       const res = await fetch("/api/gifts/checkout", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ items, purchaser_email, recipient_email, recipient_name }),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json().catch(() => ({}));
@@ -367,6 +532,6 @@
     renderCatalog();
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260307a"></script>
+  <script type="module" src="/assets/chrome.js?v=20260307b"></script>
 </body>
 </html>
