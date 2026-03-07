@@ -3,40 +3,42 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Gear & Systems | Rosie Dazzlers</title>
+  <title>Gear | Rosie Dazzlers</title>
   <meta name="description" content="Gear and systems we use, with Amazon reference links.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260301e">
+  <link rel="stylesheet" href="/assets/site.css?v=20260306b">
 </head>
+
 <body>
-<div class="nav">
-  <div class="nav-inner">
-    <a class="brand" href="/">
-      <img data-logo alt="Rosie Dazzlers logo" />
-      <strong>Rosie Dazzlers</strong>
-    </a>
+  <!-- Standard Nav -->
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo">
+        <strong>Rosie Dazzlers</strong>
+      </a>
 
-    <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">
-      Menu
-    </button>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">
+        Menu
+      </button>
 
-    <div class="nav-links" id="navLinks">
-      <a href="/services">Services</a>
-      <a href="/pricing">Pricing</a>
-      <a href="/gear">Gear</a>
-      <a href="/consumables">Consumables</a>
-      <a href="/about">About</a>
-      <a href="/contact">Contact</a>
-      <a href="/book">Book</a>
+      <div class="nav-links" id="navLinks">
+        <a href="/services">Services</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/gear">Gear</a>
+        <a href="/consumables">Consumables</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/book">Book</a>
+      </div>
+
+      <a class="btn primary" href="/book">Book now</a>
     </div>
-
-    <a class="btn primary" href="/book">Book now</a>
   </div>
-</div>
 
   <div class="container">
     <div class="panel">
       <h1 style="margin:0 0 8px">Gear & Systems</h1>
-      <p class="kicker">Browse the tools, systems, and hardware used in our detailing setup.</p>
+      <p class="kicker">Browse the tools and hardware used in our mobile detailing setup.</p>
 
       <div class="hr"></div>
 
@@ -45,6 +47,7 @@
           <label for="invCategory">Category</label>
           <select id="invCategory"></select>
         </div>
+
         <div>
           <label for="invSearch">Search</label>
           <input id="invSearch" placeholder="pressure washer, hose, sprayer, vacuum…">
@@ -58,15 +61,16 @@
       <div id="invList" class="grid cards"></div>
     </div>
 
+    <!-- Footer injected by chrome.js -->
     <div class="footer" data-footer></div>
   </div>
-<script type="module" src="/assets/chrome.js?v=20260302a"></script>
-  <script type="module" src="/assets/site.js?v=20260301e"></script>
+
   <script type="module">
-    import { setBrandImages, setFooter, initInventoryPage } from "/assets/site.js?v=20260301e";
+    import { setBrandImages, initInventoryPage } from "/assets/site.js?v=20260306b";
     setBrandImages();
-    setFooter();
     initInventoryPage("gear");
   </script>
+
+  <script type="module" src="/assets/chrome.js?v=20260306b"></script>
 </body>
 </html>
