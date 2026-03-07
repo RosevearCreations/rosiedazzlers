@@ -4,9 +4,9 @@ const SOCIALS = [
   ["Instagram", "https://www.instagram.com/rosiedazzlers/"],
   ["Facebook", "https://www.facebook.com/rosiedazzlers"],
   ["YouTube", "https://www.youtube.com/@rosiedazzlers"],
-  ["Twitch", "https://www.twitch.tv/rosiedazzlers"],
+  ["Twitch", "https://www.twitch.tv/rosiedazzlers/"],
   ["X", "https://x.com/RosieDazzlers"],
-  ["LinkedIn", "https://www.linkedin.com/in/rosiedazzlers/"]
+  ["LinkedIn", "https://www.linkedin.com/in/rosiedazzlers/"],
 ];
 
 function normalizePath(p) {
@@ -104,10 +104,110 @@ function setFooter() {
   `;
 }
 
+/* =========================
+   Hover rotation (packages)
+   ========================= */
+
+const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages/";
+
+// Your ACTUAL filenames (case + spaces matter)
+const HOVER_FILES = [
+  "Exterior Detail.png",
+  "Interior Detail.png",
+  "CarSizeChart.PNG",
+];
+
+let _resolvedHoverUrls = null;
+
+function preload(url, timeoutMs = 2200) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const t = setTimeout(() => resolve(null), timeoutMs);
+    img.onload = () => { clearTimeout(t); resolve(url); };
+    img.onerror = () => { clearTimeout(t); resolve(null); };
+    img.src = url;
+  });
+}
+
+async function getHoverUrls() {
+  if (_resolvedHoverUrls) return _resolvedHoverUrls;
+
+  // encodeURI is required because filenames contain spaces
+  const urls = [...new Set(HOVER_FILES.map((f) => encodeURI(`${PACKAGES_BASE}${f}`)))];
+  const results = await Promise.all(urls.map((u) => preload(u)));
+  _resolvedHoverUrls = results.filter(Boolean);
+  return _resolvedHoverUrls;
+}
+
+function attachRotatorToContainer(containerSelector) {
+  const container = document.querySelector(containerSelector);
+  if (!container) return;
+
+  const attachToCard = (card) => {
+    if (!card || card.dataset.hoverInit === "1") return;
+
+    const img = card.querySelector("img");
+    if (!img) return;
+
+    card.dataset.hoverInit = "1";
+
+    let timer = null;
+    let playlist = [];
+    let idx = 0;
+
+    const stop = () => {
+      if (timer) clearInterval(timer);
+      timer = null;
+      if (playlist.length) img.src = playlist[0];
+    };
+
+    card.addEventListener("mouseenter", async () => {
+      const baseSrc = img.currentSrc || img.src;
+
+      // Override any inline onerror that hides the image
+      img.onerror = () => {
+        img.style.display = "";
+        img.src = baseSrc;
+      };
+
+      const hoverUrls = await getHoverUrls();
+
+      playlist = [baseSrc, ...hoverUrls].filter((u, i, arr) => arr.indexOf(u) === i);
+      idx = 0;
+
+      if (playlist.length <= 1) return;
+
+      if (timer) clearInterval(timer);
+      timer = setInterval(() => {
+        idx = (idx + 1) % playlist.length;
+        img.src = playlist[idx];
+      }, 1300);
+    });
+
+    card.addEventListener("mouseleave", stop);
+  };
+
+  container.querySelectorAll(".card").forEach(attachToCard);
+
+  const mo = new MutationObserver(() => {
+    container.querySelectorAll(".card").forEach(attachToCard);
+  });
+  mo.observe(container, { childList: true, subtree: true });
+}
+
+function initPackageHoverRotation() {
+  attachRotatorToContainer("#packageCards");  // services page
+  attachRotatorToContainer("#pricingCards");  // pricing page
+  // attachRotatorToContainer("#homePackages"); // optional
+}
+
+/* ========================= */
+
 function applyChrome() {
   setActiveNavLink();
   initNavToggle();
   setFooter();
+  initPackageHoverRotation();
 }
 
 applyChrome();
