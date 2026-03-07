@@ -4,192 +4,209 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Book | Rosie Dazzlers</title>
-  <meta name="description" content="Book your detailing package and choose add-ons.">
-  <link rel="stylesheet" href="/assets/site.css">
+  <meta name="description" content="Book Rosie Dazzlers Mobile Auto Detailing. Choose package, vehicle size, date/time slot, add-ons, and pay deposit online.">
+  <link rel="stylesheet" href="/assets/site.css?v=20260306b">
 </head>
+
 <body>
-<div class="nav">
-  <div class="nav-inner">
-    <a class="brand" href="/">
-      <img data-logo alt="Rosie Dazzlers logo" />
-      <strong>Rosie Dazzlers</strong>
-    </a>
+  <!-- Standard Nav -->
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo">
+        <strong>Rosie Dazzlers</strong>
+      </a>
 
-    <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">
-      Menu
-    </button>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">
+        Menu
+      </button>
 
-    <div class="nav-links" id="navLinks">
-      <a href="/services">Services</a>
-      <a href="/pricing">Pricing</a>
-      <a href="/gear">Gear</a>
-      <a href="/consumables">Consumables</a>
-      <a href="/about">About</a>
-      <a href="/contact">Contact</a>
-      <a href="/book">Book</a>
+      <div class="nav-links" id="navLinks">
+        <a href="/services">Services</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/gear">Gear</a>
+        <a href="/consumables">Consumables</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/book">Book</a>
+      </div>
+
+      <a class="btn primary" href="/book">Book now</a>
     </div>
-
-    <a class="btn primary" href="/book">Book now</a>
   </div>
-</div>
 
   <div class="container">
     <div class="panel">
-      <h1 style="margin:0 0 8px">Book a Detail</h1>
-      <p class="kicker">Select your package, review what’s included, choose add-ons, then pay your deposit online.</p>
+      <h1 style="margin:0 0 8px">Book your detail</h1>
+      <p class="kicker">Choose your package, select a date and slot, then pay your deposit to secure the booking.</p>
 
       <div class="hr"></div>
 
-      <div class="notice warn">
-        <strong>Mobile requirements:</strong> driveway/work area required. Customer supplies power + water or accepts additional charges. Deposits secure your date. Cancellation fees may apply.
-      </div>
-
-      <div class="section" style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn ghost" type="button" data-open-price>View price chart</button>
-        <button class="btn ghost" type="button" data-open-details>View details chart</button>
-        <button class="btn ghost" type="button" data-open-size>View size chart</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn ghost" type="button" data-open-price>Price chart</button>
+        <button class="btn ghost" type="button" data-open-details>Details chart</button>
+        <button class="btn ghost" type="button" data-open-size>Size chart</button>
       </div>
     </div>
 
-    <div class="section grid" style="grid-template-columns:1.2fr .8fr;gap:12px">
-      <div class="panel">
-        <form id="bookingForm" class="form">
-          <div class="row">
-            <div>
-              <label>Date</label>
-              <input name="service_date" type="date" required>
-            </div>
-            <div>
-              <label>Time slot</label>
-              <select name="start_slot">
-                <option value="AM">AM</option>
-                <option value="PM">PM</option>
-              </select>
-            </div>
-          </div>
+    <div class="section">
+      <div class="grid" style="grid-template-columns:1fr 1fr;gap:12px">
+        <div class="panel">
+          <form id="bookingForm" class="form">
 
-          <div class="row">
-            <div>
-              <label>Duration</label>
-              <select name="duration_slots">
-                <option value="2">Full day</option>
-                <option value="1">Half day</option>
-              </select>
-            </div>
-            <div>
-              <label>County</label>
-              <select name="service_area">
-                <option value="Norfolk">Norfolk</option>
-                <option value="Oxford">Oxford</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row">
-            <div>
-              <label>Package</label>
-              <select name="package_code"></select>
-            </div>
-            <div>
-              <label>Vehicle size</label>
-              <select name="vehicle_size">
-                <option value="small">Small</option>
-                <option value="mid">Mid-sized</option>
-                <option value="oversize">Oversize / Exotics</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="card">
-            <strong>Add-ons & Specialty Services</strong>
-            <div class="kicker">Quote-required services are recorded on the booking but not charged in the online deposit flow.</div>
-            <div class="hr"></div>
-            <div id="addonPicker"></div>
-          </div>
-
-          <div class="card">
-            <strong>Customer</strong>
             <div class="row">
               <div>
-                <label>Name</label>
-                <input name="customer_name" required>
+                <label for="package_code">Package</label>
+                <select id="package_code" name="package_code"></select>
               </div>
+
               <div>
-                <label>Email</label>
-                <input name="customer_email" type="email" required>
+                <label for="vehicle_size">Vehicle size</label>
+                <select id="vehicle_size" name="vehicle_size">
+                  <option value="small">Small</option>
+                  <option value="mid">Mid-sized</option>
+                  <option value="oversize">Oversize / Exotics</option>
+                </select>
               </div>
             </div>
+
+            <div class="row3">
+              <div>
+                <label for="service_date">Service date</label>
+                <input id="service_date" name="service_date" type="date" required>
+              </div>
+
+              <div>
+                <label for="start_slot">Start slot</label>
+                <select id="start_slot" name="start_slot">
+                  <option value="AM">AM</option>
+                  <option value="PM">PM</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="duration_slots">Duration</label>
+                <select id="duration_slots" name="duration_slots">
+                  <option value="1">Half day</option>
+                  <option value="2">Full day</option>
+                </select>
+              </div>
+            </div>
+
             <div class="row">
               <div>
-                <label>Phone</label>
-                <input name="customer_phone">
+                <label for="service_area">Service area</label>
+                <select id="service_area" name="service_area">
+                  <option value="Norfolk">Norfolk</option>
+                  <option value="Oxford">Oxford</option>
+                </select>
               </div>
-              <div></div>
-            </div>
-          </div>
 
-          <div class="card">
-            <strong>Service Address</strong>
-            <label>Address</label>
-            <input name="address_line1" required>
+              <div>
+                <label for="customer_phone">Phone (optional)</label>
+                <input id="customer_phone" name="customer_phone" type="tel" placeholder="(###) ###-####">
+              </div>
+            </div>
+
             <div class="row">
               <div>
-                <label>City</label>
-                <input name="city">
+                <label for="customer_name">Name</label>
+                <input id="customer_name" name="customer_name" type="text" required>
               </div>
+
               <div>
-                <label>Postal Code</label>
-                <input name="postal_code">
+                <label for="customer_email">Email</label>
+                <input id="customer_email" name="customer_email" type="email" required>
               </div>
             </div>
-          </div>
 
-          <div class="card">
-            <strong>Required acknowledgements</strong>
+            <div>
+              <label for="address_line1">Service address</label>
+              <input id="address_line1" name="address_line1" type="text" required>
+            </div>
+
+            <div class="row">
+              <div>
+                <label for="city">City (optional)</label>
+                <input id="city" name="city" type="text">
+              </div>
+
+              <div>
+                <label for="postal_code">Postal code (optional)</label>
+                <input id="postal_code" name="postal_code" type="text">
+              </div>
+            </div>
+
             <div class="hr"></div>
 
+            <div class="panel" style="padding:12px">
+              <strong>Add-ons</strong>
+              <div class="kicker">“Quote required” items are not included in the online total.</div>
+              <div class="hr"></div>
+              <div id="addonPicker"></div>
+            </div>
+
+            <div class="hr"></div>
+
             <label style="display:flex;gap:10px;align-items:flex-start">
-              <input type="checkbox" name="ack_driveway">
-              <span>I confirm a driveway/work area is available.</span>
+              <input type="checkbox" name="ack_driveway" id="ack_driveway">
+              <span><strong>I confirm a driveway / suitable work area is available.</strong></span>
             </label>
 
             <label style="display:flex;gap:10px;align-items:flex-start">
-              <input type="checkbox" name="ack_power_water">
-              <span>I confirm power + water are available, or I accept additional charges.</span>
+              <input type="checkbox" name="ack_power_water" id="ack_power_water">
+              <span><strong>I confirm power + water are available</strong> (or I accept additional charges).</span>
             </label>
 
             <label style="display:flex;gap:10px;align-items:flex-start">
-              <input type="checkbox" name="ack_bylaw">
-              <span>I accept responsibility for any local bylaw / runoff restrictions at my location.</span>
+              <input type="checkbox" name="ack_bylaw" id="ack_bylaw">
+              <span><strong>I accept responsibility for any local bylaw/runoff restrictions</strong> at the service location.</span>
             </label>
 
             <label style="display:flex;gap:10px;align-items:flex-start">
-              <input type="checkbox" name="ack_cancellation">
-              <span>I understand deposits and late cancellations/no-shows may have fees.</span>
+              <input type="checkbox" name="ack_cancellation" id="ack_cancellation">
+              <span><strong>I understand deposits secure booking times</strong> and cancellation fees may apply.</span>
             </label>
-          </div>
 
-          <button id="submitBtn" class="btn primary" type="submit">Pay deposit &amp; book</button>
-        </form>
-      </div>
+            <div id="availBox" class="notice" style="margin-top:10px"></div>
+            <div id="priceBox" class="notice" style="margin-top:10px"></div>
 
-      <div class="panel">
-        <div id="availBox" class="notice">Choose a date to see availability.</div>
-        <div class="hr"></div>
-        <div id="priceBox" class="notice">Choose a package and size to see estimate.</div>
-        <div class="hr"></div>
-        <div id="packageSummary" class="notice">Package details will appear here.</div>
+            <button id="submitBtn" class="btn primary" type="submit">Pay deposit & book</button>
+          </form>
+        </div>
+
+        <div class="panel">
+          <h2 style="margin-top:0">What’s included</h2>
+          <div id="packageSummary" class="notice"></div>
+
+          <div class="hr"></div>
+
+          <h2 style="margin-top:0">Booking rules</h2>
+          <ul class="list">
+            <li>One vehicle per day unless the job is a half-day booking.</li>
+            <li>Driveway/work area required.</li>
+            <li>Customer provides power + water (or additional charges may apply).</li>
+            <li>Deposit required to secure appointment.</li>
+            <li>Cancellation fees may apply.</li>
+            <li>Customer accepts bylaw/runoff responsibility for the location.</li>
+          </ul>
+
+          <div class="hr"></div>
+          <a class="btn ghost" href="/services">See packages</a>
+        </div>
       </div>
     </div>
 
+    <!-- Footer injected by chrome.js -->
     <div class="footer" data-footer></div>
   </div>
-<script type="module" src="/assets/chrome.js?v=20260302a"></script>
+
   <script type="module">
-    import { setBrandImages, setFooter, initBookingPage } from "/assets/site.js";
+    import { setBrandImages, initBookingPage } from "/assets/site.js?v=20260306b";
     setBrandImages();
-    setFooter();
     initBookingPage();
   </script>
+
+  <script type="module" src="/assets/chrome.js?v=20260306b"></script>
 </body>
 </html>
