@@ -31,7 +31,7 @@
      Put a premium car image in brand/hero-bg.jpg and set:
      --hero-bg: url("https://assets.rosiedazzlers.ca/brand/hero-bg.jpg");
   */
-  --hero-bg: none;
+  --hero-bg: url("https://assets.rosiedazzlers.ca/brand/KatBlackCar.PNG");
 }
 
 /* Optional: global background using hero image (subtle + readable) */
@@ -44,6 +44,7 @@ body {
   background-attachment: fixed;
   background-position: center;
   color: var(--text);
+   background-repeat: no-repeat;
 }
 a{color:inherit}
 .container{max-width:1180px;margin:0 auto;padding:22px 16px}
