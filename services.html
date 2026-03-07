@@ -4,58 +4,67 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Services | Rosie Dazzlers</title>
-  <meta name="description" content="Package pricing, included services, and add-ons.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260301c">
+  <meta name="description" content="Packages, included services, and add-ons for Rosie Dazzlers Mobile Auto Detailing.">
+  <link rel="stylesheet" href="/assets/site.css?v=20260306b">
 </head>
+
 <body>
-<div class="nav">
-  <div class="nav-inner">
-    <a class="brand" href="/">
-      <img data-logo alt="Rosie Dazzlers logo" />
-      <strong>Rosie Dazzlers</strong>
-    </a>
+  <!-- Standard Nav -->
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo">
+        <strong>Rosie Dazzlers</strong>
+      </a>
 
-    <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">
-      Menu
-    </button>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">
+        Menu
+      </button>
 
-    <div class="nav-links" id="navLinks">
-      <a href="/services">Services</a>
-      <a href="/pricing">Pricing</a>
-      <a href="/gear">Gear</a>
-      <a href="/consumables">Consumables</a>
-      <a href="/about">About</a>
-      <a href="/contact">Contact</a>
-      <a href="/book">Book</a>
+      <div class="nav-links" id="navLinks">
+        <a href="/services">Services</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/gear">Gear</a>
+        <a href="/consumables">Consumables</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/book">Book</a>
+      </div>
+
+      <a class="btn primary" href="/book">Book now</a>
     </div>
-
-    <a class="btn primary" href="/book">Book now</a>
   </div>
-</div>
 
   <div class="container">
     <div class="hero">
       <div>
-        <img data-banner alt="Rosie Dazzlers banner" style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)">
+        <img
+          data-banner
+          alt="Rosie Dazzlers banner"
+          style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)"
+        >
         <h1>Services & Packages</h1>
-        <p>Main service cards use the proper package name and the proper size-specific main image for the selected vehicle size.</p>
+        <p>Main service cards show what’s included. Add-ons are listed separately below.</p>
+
         <div class="badges">
-          <span class="badge">Proper service names</span>
-          <span class="badge">Size-specific package images</span>
-          <span class="badge">Hover image carousel</span>
-          <span class="badge">Add-ons separate below</span>
+          <span class="badge">Norfolk & Oxford Counties</span>
+          <span class="badge">Deposit-secured booking</span>
+          <span class="badge">Power + water required</span>
         </div>
       </div>
 
       <div class="panel">
         <h2 style="margin:0 0 10px">Reference Charts</h2>
-        <p class="kicker">Open the uploaded charts for pricing, included services, and vehicle sizing.</p>
+        <p class="kicker">Open the charts for pricing, included services, and vehicle sizing.</p>
+
         <div class="hr"></div>
+
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button id="openPrice" class="btn ghost" type="button">Open price chart</button>
           <button id="openDetails" class="btn ghost" type="button">Open details chart</button>
           <button id="openSize" class="btn ghost" type="button">Open size chart</button>
         </div>
+
         <div class="hr"></div>
         <a class="btn primary" href="/book">Start booking</a>
       </div>
@@ -71,10 +80,11 @@
             <option value="oversize">Oversize / Exotics</option>
           </select>
         </div>
+
         <div>
           <label>&nbsp;</label>
           <div class="notice">
-            Hover the package image to preview exterior detail, interior detail, and size chart visuals.
+            Hover the package image to preview exterior, interior, and size visuals.
           </div>
         </div>
       </div>
@@ -92,19 +102,19 @@
 
     <div class="section">
       <h2>Add-ons & Specialty Services</h2>
-      <p class="kicker">Anything not included in a package is treated as an add-on or specialty service.</p>
       <div id="addonCards" class="grid cards"></div>
     </div>
 
+    <!-- Footer injected by chrome.js -->
     <div class="footer" data-footer></div>
   </div>
-<script type="module" src="/assets/chrome.js?v=20260302a"></script>
-  <script type="module" src="/assets/site.js?v=20260301c"></script>
+
   <script type="module">
-    import { setBrandImages, setFooter, initServicesPage } from "/assets/site.js?v=20260301c";
+    import { setBrandImages, initServicesPage } from "/assets/site.js?v=20260306b";
     setBrandImages();
-    setFooter();
     initServicesPage();
   </script>
+
+  <script type="module" src="/assets/chrome.js?v=20260306b"></script>
 </body>
 </html>
