@@ -1,7 +1,7 @@
 // /functions/api/gifts/checkout.js
 // Creates a Stripe Checkout Session for Gift Certificates (service vouchers OR dollar-value vouchers)
 // UPDATED: requires purchaser_email + recipient_email, and (if cart contains service gifts) requires vehicle info.
-// Also stores vehicle fields in Stripe Session metadata for fulfilment/reporting.
+// Also stores vehicle fields in Stripe Session metadata for fulfilment/reporting..
 
 export async function onRequestPost({ request, env }) {
   try {
