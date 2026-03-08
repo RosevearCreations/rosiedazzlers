@@ -1,17 +1,15 @@
 // /functions/api/gifts/checkout.js
-// Creates a Stripe Checkout Session for Gift Certificates (service vouchers OR dollar-value vouchers)
-// UPDATED: requires purchaser_email + recipient_email, and (if cart contains service gifts) requires vehicle info.
-// Also stores vehicle fields in Stripe Session metadata for fulfilment/reporting.
+// Creates Stripe Checkout Sessions for gift purchases.
+// FIX: redirect back to /gifts and use correct SITE_ORIGIN (or infer from request host).
 
 export async function onRequestPost({ request, env }) {
   try {
     const body = await safeJson(request);
 
-    // -------- 1) Validate input --------
+    // ---- 1) Validate input ----
     const items = Array.isArray(body?.items) ? body.items : [];
     if (!items.length) return json({ error: "Missing items[]" }, 400);
 
-    // Mandatory emails (requested)
     const purchaser_email = asString(body?.purchaser_email);
     const recipient_email = asString(body?.recipient_email);
     const recipient_name = asString(body?.recipient_name);
@@ -19,14 +17,12 @@ export async function onRequestPost({ request, env }) {
     if (!purchaser_email) return json({ error: "Missing purchaser_email" }, 400);
     if (!recipient_email) return json({ error: "Missing recipient_email" }, 400);
 
-    // Optional vehicle intake (required if any service gifts are in cart)
     const vehicle = body?.vehicle && typeof body.vehicle === "object" ? body.vehicle : null;
 
-    // -------- 2) Server config --------
+    // ---- 2) Server config ----
     const SUPABASE_URL = env.SUPABASE_URL;
     const SERVICE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
     const STRIPE_KEY = env.STRIPE_SECRET_KEY;
-    const ORIGIN = env.SITE_ORIGIN || "https://rosiedazzlers.ca";
 
     if (!SUPABASE_URL || !SERVICE_KEY) {
       return json({ error: "Server not configured (Supabase env vars missing)" }, 500);
@@ -35,7 +31,11 @@ export async function onRequestPost({ request, env }) {
       return json({ error: "Server not configured (Stripe secret missing)" }, 500);
     }
 
-    // -------- 3) Load gift_products from Supabase --------
+    // ORIGIN: prefer env.SITE_ORIGIN, otherwise infer from request host/scheme
+    const inferredOrigin = inferOrigin(request);
+    const ORIGIN = env.SITE_ORIGIN || inferredOrigin || "https://rosiedazzlers.ca";
+
+    // ---- 3) Load gift_products from Supabase ----
     const skus = [...new Set(items.map((i) => asString(i?.sku)).filter(Boolean))];
     if (!skus.length) return json({ error: "No valid SKUs in items[]" }, 400);
 
@@ -72,7 +72,7 @@ export async function onRequestPost({ request, env }) {
       }
     }
 
-    // -------- 4) Build Stripe line items --------
+    // ---- 4) Build Stripe line items ----
     const lineItems = [];
     const cartCompact = []; // sku:qty:amount(optional)
 
@@ -116,9 +116,10 @@ export async function onRequestPost({ request, env }) {
       cartCompact.push(`${sku}:${qty}:${p.type === "open_value" ? unitAmount : ""}`);
     }
 
-    // -------- 5) Create Stripe Checkout Session --------
-    const successUrl = `${ORIGIN}/?gift=success&session_id={CHECKOUT_SESSION_ID}`;
-    const cancelUrl = `${ORIGIN}/?gift=cancel`;
+    // ---- 5) Create Stripe Checkout Session ----
+    // FIX: return to /gifts so the receipt UI can show the codes
+    const successUrl = `${ORIGIN}/gifts?gift=success&session_id={CHECKOUT_SESSION_ID}`;
+    const cancelUrl = `${ORIGIN}/gifts?gift=cancel`;
 
     const form = new URLSearchParams();
     form.set("mode", "payment");
@@ -126,14 +127,14 @@ export async function onRequestPost({ request, env }) {
     form.set("cancel_url", cancelUrl);
     form.set("customer_email", purchaser_email);
 
-    // Session metadata (read in webhook fulfilment)
+    // Session metadata (used in webhook fulfilment)
     form.set("metadata[purpose]", "gift");
     form.set("metadata[cart]", cartCompact.join("|"));
     form.set("metadata[purchaser_email]", purchaser_email);
     form.set("metadata[recipient_email]", recipient_email);
     if (recipient_name) form.set("metadata[recipient_name]", recipient_name);
 
-    // NEW: include vehicle intake in metadata (keep short; Stripe metadata limits apply)
+    // Vehicle intake in metadata (short)
     if (hasServiceGift && vehicle) {
       form.set("metadata[vehicle_year]", asString(vehicle.year));
       form.set("metadata[vehicle_make]", asString(vehicle.make));
@@ -154,14 +155,12 @@ export async function onRequestPost({ request, env }) {
       if (li.image) form.set(`line_items[${idx}][price_data][product_data][images][0]`, li.image);
     });
 
-    const idempotencyKey = `gift_checkout_${crypto.randomUUID()}`;
-
     const stripeRes = await fetch("https://api.stripe.com/v1/checkout/sessions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${STRIPE_KEY}`,
         "Content-Type": "application/x-www-form-urlencoded",
-        "Idempotency-Key": idempotencyKey,
+        "Idempotency-Key": `gift_checkout_${crypto.randomUUID()}`,
       },
       body: form.toString(),
     });
@@ -177,6 +176,7 @@ export async function onRequestPost({ request, env }) {
       ok: true,
       checkout_url: stripe.url,
       session_id: stripe.id,
+      return_origin: ORIGIN,
     });
   } catch (e) {
     return json({ error: "Server error", details: String(e) }, 500);
@@ -185,22 +185,34 @@ export async function onRequestPost({ request, env }) {
 
 /* ---------------- Helpers ---------------- */
 
+function inferOrigin(request) {
+  // If called from browser fetch, Origin is usually present
+  const origin = request.headers.get("origin");
+  if (origin && origin.startsWith("http")) return origin;
+
+  // Otherwise infer from CF headers
+  const host = request.headers.get("host");
+  if (!host) return "";
+
+  let scheme = "https";
+  const cfVisitor = request.headers.get("cf-visitor");
+  if (cfVisitor) {
+    try {
+      const obj = JSON.parse(cfVisitor);
+      if (obj?.scheme) scheme = obj.scheme;
+    } catch {}
+  }
+  return `${scheme}://${host}`;
+}
+
 async function safeJson(request) {
   const t = await request.text();
   if (!t) return {};
-  try {
-    return JSON.parse(t);
-  } catch {
-    return {};
-  }
+  try { return JSON.parse(t); } catch { return {}; }
 }
 
 function safeJsonText(text) {
-  try {
-    return JSON.parse(text);
-  } catch {
-    return { raw: text };
-  }
+  try { return JSON.parse(text); } catch { return { raw: text }; }
 }
 
 function asString(v) {
@@ -227,9 +239,7 @@ function json(obj, status = 200) {
 
 async function supaGetGiftProducts(SUPABASE_URL, SERVICE_KEY, skus) {
   const inList = skus.map((s) => `"${s.replace(/"/g, "")}"`).join(",");
-  const url = `${SUPABASE_URL}/rest/v1/gift_products?select=sku,type,name,description,package_code,vehicle_size,face_value_cents,sale_price_cents,currency,image_url,is_active&sku=in.(${encodeURIComponent(
-    inList
-  )})`;
+  const url = `${SUPABASE_URL}/rest/v1/gift_products?select=sku,type,name,description,package_code,vehicle_size,face_value_cents,sale_price_cents,currency,image_url,is_active&sku=in.(${encodeURIComponent(inList)})`;
 
   const res = await fetch(url, {
     method: "GET",
