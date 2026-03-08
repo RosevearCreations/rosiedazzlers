@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Book | Rosie Dazzlers</title>
   <meta name="description" content="Book your mobile auto detailing service in Norfolk & Oxford Counties. Deposit required." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260308a" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260308b" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
@@ -166,20 +166,27 @@
 
         <div class="hr"></div>
 
-        <h3 style="margin:0 0 8px">Gift Code (optional)</h3>
+        <h3 style="margin:0 0 8px">Codes (optional)</h3>
+
         <div class="grid2">
           <div>
             <label for="gift_code">Gift code</label>
             <input id="gift_code" class="codebox" type="text" placeholder="RD-ABCDEF1234" />
-            <div class="muted">Service Gift codes must match package + size. Dollar Gift codes deduct from total.</div>
+            <div class="muted">Service Gifts must match package + size. Dollar Gifts deduct from total.</div>
           </div>
           <div>
-            <label>&nbsp;</label>
-            <button class="btn ghost" id="applyGiftBtn" type="button">Apply gift code</button>
+            <label for="promo_code">Promo code</label>
+            <input id="promo_code" class="codebox" type="text" placeholder="WELCOME10" />
+            <div class="muted">Promos can be % off or $ off (specials).</div>
           </div>
         </div>
 
-        <div id="giftResult" style="margin-top:10px"></div>
+        <div class="grid2" style="margin-top:10px">
+          <div>
+            <button class="btn ghost" id="applyCodesBtn" type="button">Apply codes</button>
+          </div>
+          <div id="codesResult"></div>
+        </div>
 
         <div class="hr"></div>
 
@@ -200,7 +207,7 @@
         </div>
 
         <div class="muted" style="margin-top:10px">
-          Deposit is charged now to reserve your slot. Remaining balance is due at service (or per your invoice/payment method).
+          Deposit is charged now to reserve your slot. Remaining balance is due at service (or per invoice/payment method).
         </div>
       </div>
     </div>
@@ -209,14 +216,7 @@
   </div>
 
   <script type="module">
-    import { setBrandImages } from "/assets/site.js?v=20260308a";
-    setBrandImages();
-
-    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260308a";
-
-    const money = (cents) =>
-      new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" })
-        .format((Number(cents || 0) / 100));
+    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260308b";
 
     function showDataError(msg) {
       const el = document.querySelector("#dataError");
@@ -228,14 +228,16 @@
     async function fetchJsonStrict(url) {
       const res = await fetch(url, { cache: "no-store" });
       const text = await res.text();
-
-      try {
-        return JSON.parse(text);
-      } catch (e) {
+      try { return JSON.parse(text); }
+      catch {
         const head = text.slice(0, 120).replace(/\s+/g, " ");
         throw new Error(`Expected JSON from ${url} but got: ${head}`);
       }
     }
+
+    const money = (cents) =>
+      new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" })
+        .format((Number(cents || 0) / 100));
 
     function val(id){ return (document.querySelector(id)?.value || "").trim(); }
     function checked(id){ return !!document.querySelector(id)?.checked; }
@@ -264,7 +266,7 @@
       for (const code of addonCodes()){
         const a = (servicesData?.addons || []).find(x => x.code === code);
         if (!a) continue;
-        if (a.quote_required) continue; // quote add-ons not included in online total
+        if (a.quote_required) continue;
         if (a.prices_cad && a.prices_cad[size] != null) total += Math.round(Number(a.prices_cad[size]) * 100);
         else if (a.price_cad != null) total += Math.round(Number(a.price_cad) * 100);
       }
@@ -281,9 +283,10 @@
 
       document.querySelector("#summary").innerHTML =
         `<strong>Estimate</strong><br>` +
-        `Total (before gift): ${money(total)}<br>` +
-        `Deposit due now: ${money(dep)}<br>` +
-        (val("#gift_code") ? `Gift code entered: <span class="codebox">${val("#gift_code").toUpperCase()}</span><br>` : "");
+        `Total (before codes): ${money(total)}<br>` +
+        `Deposit due now (before codes): ${money(dep)}<br>` +
+        (val("#gift_code") ? `Gift code entered: <span class="codebox">${val("#gift_code").toUpperCase()}</span><br>` : "") +
+        (val("#promo_code") ? `Promo code entered: <span class="codebox">${val("#promo_code").toUpperCase()}</span><br>` : "");
     }
 
     function renderPackages() {
@@ -293,7 +296,6 @@
         `<option value="${p.code}">${p.name} — ${p.subtitle || ""}</option>`
       ).join("");
 
-      // allow preselect via query params (?package=...&size=...)
       const qs = new URLSearchParams(location.search);
       const qpPackage = (qs.get("package") || "").trim();
       const qpSize = (qs.get("size") || "").trim();
@@ -322,17 +324,18 @@
       document.querySelectorAll("[data-addon]").forEach(chk => chk.addEventListener("change", recompute));
     }
 
-    function applyGift(){
-      const code = val("#gift_code").toUpperCase();
-      const out = document.querySelector("#giftResult");
-      out.innerHTML = "";
-      if (!code) { out.innerHTML = `<div class="notice warn">Enter a gift code first.</div>`; return; }
-      out.innerHTML = `<div class="notice">Gift code will be applied at checkout.</div>`;
-      document.querySelector("#gift_code").value = code;
+    function applyCodes(){
+      const gift = val("#gift_code").toUpperCase();
+      const promo = val("#promo_code").toUpperCase();
+      document.querySelector("#gift_code").value = gift;
+      document.querySelector("#promo_code").value = promo;
+
+      const out = document.querySelector("#codesResult");
+      out.innerHTML = `<div class="notice">Codes will be applied at checkout (server-validated).</div>`;
       recompute();
     }
 
-    document.querySelector("#applyGiftBtn")?.addEventListener("click", applyGift);
+    document.querySelector("#applyCodesBtn")?.addEventListener("click", applyCodes);
 
     async function checkout(){
       const required = [
@@ -388,6 +391,7 @@
         car_photo_url: val("#car_photo_url"),
 
         gift_code: (val("#gift_code") || "").toUpperCase() || null,
+        promo_code: (val("#promo_code") || "").toUpperCase() || null,
 
         ack_driveway: true,
         ack_power_water: true,
@@ -395,7 +399,7 @@
         ack_cancellation: true,
       };
 
-      const res = await fetch("/api/book/checkout", {
+      const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(payload),
@@ -416,7 +420,7 @@
       renderPackages();
       renderAddons();
 
-      ["#package_code","#vehicle_size","#start_slot","#service_date","#service_area"].forEach(sel=>{
+      ["#package_code","#vehicle_size","#start_slot","#service_date","#service_area","#gift_code","#promo_code"].forEach(sel=>{
         document.querySelector(sel)?.addEventListener("change", recompute);
       });
 
@@ -428,6 +432,6 @@
     }
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260308a"></script>
+  <script type="module" src="/assets/chrome.js?v=20260308b"></script>
 </body>
 </html>
