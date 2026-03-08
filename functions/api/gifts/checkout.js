@@ -1,7 +1,9 @@
 // /functions/api/gifts/checkout.js
 // Creates Stripe Checkout Sessions for gift purchases.
-// FIX: service gifts require vehicle year/make/model/body_style/declared_size
-//      but vehicle photo is OPTIONAL (recommended).
+// FIXES:
+// 1) Vehicle photo is OPTIONAL (recommended) for service gifts.
+// 2) Success/cancel always returns to /gifts (not home).
+// 3) Avoids double slashes by normalizing origin (removes trailing /).
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -32,9 +34,10 @@ export async function onRequestPost({ request, env }) {
       return json({ error: "Server not configured (Stripe secret missing)" }, 500);
     }
 
-    // ORIGIN: prefer env.SITE_ORIGIN, otherwise infer from request host/scheme
+    // ORIGIN: prefer env.SITE_ORIGIN, otherwise infer from request
     const inferredOrigin = inferOrigin(request);
-    const ORIGIN = env.SITE_ORIGIN || inferredOrigin || "https://rosiedazzlers.ca";
+    const originRaw = env.SITE_ORIGIN || inferredOrigin || "https://rosiedazzlers.ca";
+    const ORIGIN = stripTrailingSlashes(originRaw);
 
     // ---- 3) Load gift_products from Supabase ----
     const skus = [...new Set(items.map((i) => asString(i?.sku)).filter(Boolean))];
@@ -54,7 +57,7 @@ export async function onRequestPost({ request, env }) {
       vModel = asString(vehicle?.model);
       vBody = asString(vehicle?.body_style);
       vSize = asString(vehicle?.declared_size);
-      vPhoto = asString(vehicle?.photo_url); // optional
+      vPhoto = asString(vehicle?.photo_url); // OPTIONAL
 
       if (!vYear || !vMake || !vModel || !vBody || !vSize) {
         return json(
@@ -119,9 +122,9 @@ export async function onRequestPost({ request, env }) {
     }
 
     // ---- 5) Create Stripe Checkout Session ----
-    // Return to /gifts so the receipt UI can show the codes
+    // FIX: always return to /gifts so receipt UI can show codes
     const successUrl = `${ORIGIN}/gifts?gift=success&session_id={CHECKOUT_SESSION_ID}`;
-    const cancelUrl = `${ORIGIN}/gifts?gift=cancel`;
+    const cancelUrl  = `${ORIGIN}/gifts?gift=cancel`;
 
     const form = new URLSearchParams();
     form.set("mode", "payment");
@@ -129,14 +132,14 @@ export async function onRequestPost({ request, env }) {
     form.set("cancel_url", cancelUrl);
     form.set("customer_email", purchaser_email);
 
-    // Session metadata (used in webhook fulfilment)
+    // Session metadata (used by webhook fulfilment)
     form.set("metadata[purpose]", "gift");
     form.set("metadata[cart]", cartCompact.join("|"));
     form.set("metadata[purchaser_email]", purchaser_email);
     form.set("metadata[recipient_email]", recipient_email);
     if (recipient_name) form.set("metadata[recipient_name]", recipient_name);
 
-    // Vehicle metadata (photo optional)
+    // Vehicle metadata (photo OPTIONAL)
     if (hasServiceGift) {
       form.set("metadata[vehicle_year]", vYear);
       form.set("metadata[vehicle_make]", vMake);
@@ -176,9 +179,11 @@ export async function onRequestPost({ request, env }) {
 
     return json({
       ok: true,
+      version: "gifts_checkout_v4_photo_optional_and_return_fix",
       checkout_url: stripe.url,
       session_id: stripe.id,
       return_origin: ORIGIN,
+      return_success_url: successUrl
     });
   } catch (e) {
     return json({ error: "Server error", details: String(e) }, 500);
@@ -186,6 +191,10 @@ export async function onRequestPost({ request, env }) {
 }
 
 /* ---------------- Helpers ---------------- */
+
+function stripTrailingSlashes(origin) {
+  return String(origin || "").replace(/\/+$/, "");
+}
 
 function inferOrigin(request) {
   const origin = request.headers.get("origin");
