@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Gift Certificates | Rosie Dazzlers</title>
   <meta name="description" content="Buy Rosie Dazzlers Gift Certificates — service vouchers or dollar-value certificates. Valid for 1 year. No refunds." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260307c" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260307d" />
   <style>
     .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
     .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-size:13px;color:rgba(234,242,255,.75)}
@@ -19,9 +19,11 @@
     .gift-card .img{width:100%;height:220px;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);margin-bottom:10px}
     .req{color:rgba(239,68,68,.92);font-weight:800}
     .codebox{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .receipt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
     @media (max-width: 980px){
       .cart{position:static}
       .split{grid-template-columns:1fr}
+      .receipt-grid{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -239,7 +241,7 @@
   </div>
 
   <script type="module">
-    import { setBrandImages } from "/assets/site.js?v=20260307c";
+    import { setBrandImages } from "/assets/site.js?v=20260307d";
     setBrandImages();
 
     const money = (cents) =>
@@ -527,15 +529,22 @@
 
     document.querySelector("#checkoutBtn").addEventListener("click", checkout);
 
-    async function loadReceiptCodes() {
-      const email = (document.querySelector("#receipt_email")?.value || "").trim();
+    async function loadReceiptCodes(auto = false) {
       const out = document.querySelector("#receiptOut");
       out.innerHTML = "";
 
-      if (!email) {
-        out.innerHTML = `<div class="notice warn">Please enter the purchaser email used at checkout.</div>`;
+      if (!(giftStatus === "success" && sessionIdFromUrl.startsWith("cs_"))) {
+        if (!auto) out.innerHTML = `<div class="notice warn">No purchase session found in the URL.</div>`;
         return;
       }
+
+      const email = (document.querySelector("#receipt_email")?.value || "").trim();
+      if (!email) {
+        if (!auto) out.innerHTML = `<div class="notice warn">Please enter the purchaser email used at checkout.</div>`;
+        return;
+      }
+
+      out.innerHTML = `<div class="notice">Loading your gift codes…</div>`;
 
       const res = await fetch("/api/gifts/receipt", {
         method: "POST",
@@ -560,7 +569,7 @@
         <div class="notice">
           <strong>Success!</strong> Save these codes. You’ll enter them during booking to redeem.
         </div>
-        <div class="grid cards" style="margin-top:10px">
+        <div class="receipt-grid" style="margin-top:10px">
           ${gifts.map(g => `
             <div class="card">
               <div class="badge">${g.type === "service" ? "Service Gift" : "Dollar Gift"}</div>
@@ -573,11 +582,17 @@
       `;
     }
 
-    document.querySelector("#loadCodesBtn")?.addEventListener("click", loadReceiptCodes);
+    document.querySelector("#loadCodesBtn")?.addEventListener("click", () => loadReceiptCodes(false));
+
+    // Auto-open the receipt panel on success and focus email field
+    if (giftStatus === "success" && sessionIdFromUrl.startsWith("cs_")) {
+      const emailField = document.querySelector("#receipt_email");
+      setTimeout(() => emailField?.focus(), 50);
+    }
 
     renderCatalog();
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260307c"></script>
+  <script type="module" src="/assets/chrome.js?v=20260307d"></script>
 </body>
 </html>
