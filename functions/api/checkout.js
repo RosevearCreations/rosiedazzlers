@@ -1,15 +1,15 @@
 // functions/api/checkout.js
 // POST /api/checkout
 // Creates a pending booking in Supabase, applies optional promo_code + gift_code,
-// then creates a Stripe Checkout Session for the (possibly reduced) deposit.
-// If deposit due becomes $0, skips Stripe and confirms immediately.
+// stores vehicle + code/discount fields, then creates a Stripe Checkout Session
+// for the (possibly reduced) deposit. If deposit due becomes $0, skips Stripe and confirms.
 
 export async function onRequestOptions() {
   return corsResponse("", 204);
 }
 
 export async function onRequestPost({ request, env }) {
-  const VERSION = "checkout_v2_gift_and_promo_20260308";
+  const VERSION = "checkout_v3_store_vehicle_and_codes_20260308";
 
   try {
     const raw = await request.text();
@@ -33,6 +33,10 @@ export async function onRequestPost({ request, env }) {
       "customer_name",
       "customer_email",
       "address_line1",
+      // vehicle required fields
+      "car_year",
+      "car_make",
+      "car_model",
     ];
 
     for (const k of required) {
@@ -58,6 +62,16 @@ export async function onRequestPost({ request, env }) {
 
     if (!["small", "mid", "oversize"].includes(body.vehicle_size)) {
       return corsJson({ version: VERSION, error: "vehicle_size must be small, mid, or oversize" }, 400);
+    }
+
+    const year = Number(body.car_year);
+    if (!Number.isFinite(year) || year < 1980 || year > 2035) {
+      return corsJson({ version: VERSION, error: "car_year must be a valid year (1980–2035)" }, 400);
+    }
+
+    const email = String(body.customer_email || "").trim();
+    if (!email || !email.includes("@")) {
+      return corsJson({ version: VERSION, error: "customer_email must be a valid email" }, 400);
     }
 
     const acks = ["ack_driveway", "ack_power_water", "ack_bylaw", "ack_cancellation"];
@@ -190,6 +204,7 @@ export async function onRequestPost({ request, env }) {
     const HOLD_MINUTES = 30;
     const holdSince = new Date(Date.now() - HOLD_MINUTES * 60 * 1000).toISOString();
 
+    // expire old holds
     await supa(
       "PATCH",
       `/rest/v1/bookings?service_date=eq.${encodeURIComponent(body.service_date)}&status=eq.pending&created_at=lt.${encodeURIComponent(holdSince)}`,
@@ -314,7 +329,21 @@ export async function onRequestPost({ request, env }) {
     const giftToDeposit = Math.min(depositCapped, giftApplyCents);
     const depositDueNowCents = Math.max(0, depositCapped - giftToDeposit);
 
-    // ---- 12) Insert booking ----
+    // ---- 12) Build vehicle JSON ----
+    const vehicle = {
+      year: year,
+      make: String(body.car_make || "").trim(),
+      model: String(body.car_model || "").trim(),
+      plate: String(body.car_plate || "").trim() || null,
+      mileage: body.car_mileage != null ? String(body.car_mileage).trim() : null,
+      photo_url: String(body.car_photo_url || "").trim() || null,
+    };
+
+    if (!vehicle.make || !vehicle.model) {
+      return corsJson({ version: VERSION, error: "car_make and car_model must be provided" }, 400);
+    }
+
+    // ---- 13) Insert booking with new columns ----
     const notes = [];
     if (quoteAddonsChosen.length) notes.push(`Quote add-ons requested: ${quoteAddonsChosen.join(", ")}`);
     if (promoCode && promoDiscountCents > 0) notes.push(`Promo applied: ${promoCode}`);
@@ -322,28 +351,48 @@ export async function onRequestPost({ request, env }) {
 
     const bookingPayload = {
       status: depositDueNowCents === 0 ? "confirmed" : "pending",
+
       service_date: body.service_date,
       start_slot: body.start_slot,
       duration_slots: duration,
+
       service_area: body.service_area,
       package_code: body.package_code,
       vehicle_size: body.vehicle_size,
-      customer_name: body.customer_name,
-      customer_email: body.customer_email,
-      customer_phone: body.customer_phone ?? null,
-      address_line1: body.address_line1,
-      city: body.city ?? null,
-      postal_code: body.postal_code ?? null,
+
+      customer_name: String(body.customer_name || "").trim(),
+      customer_email: email,
+      customer_phone: body.customer_phone ? String(body.customer_phone).trim() : null,
+
+      address_line1: String(body.address_line1 || "").trim(),
+      city: body.city ? String(body.city).trim() : null,
+      postal_code: body.postal_code ? String(body.postal_code).trim() : null,
+
       addons: addonsChosen,
       currency: "CAD",
+
+      // totals
+      subtotal_cents: subtotalCents,
+      promo_code: promoCode || null,
+      gift_code: giftCode || null,
+      promo_discount_cents: promoDiscountCents || 0,
+      gift_applied_cents: giftApplyCents || 0,
+
+      // final payable + deposit due now
       price_total_cents: afterGiftCents,
       deposit_cents: depositDueNowCents,
+
+      // vehicle JSONB
+      vehicle,
+
       ack_driveway: true,
       ack_power_water: true,
       ack_bylaw: true,
       ack_cancellation: true,
+
       waiver_accepted_at: new Date().toISOString(),
       waiver_user_agent: request.headers.get("user-agent") || null,
+
       notes: notes.length ? notes.join(" | ") : null,
     };
 
@@ -353,7 +402,7 @@ export async function onRequestPost({ request, env }) {
     const booking = ins.data?.[0];
     if (!booking?.id) return corsJson({ version: VERSION, error: "Booking insert returned no id" }, 500);
 
-    // ---- 13) Redeem gift (if used) ----
+    // ---- 14) Redeem gift (if used) ----
     if (gift && giftApplyCents > 0) {
       const remaining = Number(gift.remaining_cents ?? 0);
       const newRemaining = Math.max(0, remaining - giftApplyCents);
@@ -384,7 +433,7 @@ export async function onRequestPost({ request, env }) {
       }
     }
 
-    // ---- 14) Increment promo usage (best-effort) ----
+    // ---- 15) Increment promo usage (best-effort) ----
     if (promoCode && promo && promoDiscountCents > 0) {
       const currentUses = Number(promo.uses ?? 0);
       await supa(
@@ -394,7 +443,7 @@ export async function onRequestPost({ request, env }) {
       );
     }
 
-    // ---- 15) Stripe deposit checkout (if needed) ----
+    // ---- 16) Stripe deposit checkout (if needed) ----
     const origin = new URL(request.url).origin;
 
     if (depositDueNowCents === 0) {
@@ -402,11 +451,11 @@ export async function onRequestPost({ request, env }) {
         ok: true,
         version: VERSION,
         booking_id: booking.id,
-        deposit_cents: 0,
         subtotal_cents: subtotalCents,
         promo_discount_cents: promoDiscountCents,
         gift_applied_cents: giftApplyCents,
         total_cents: afterGiftCents,
+        deposit_cents: 0,
         checkout_url: `${origin}/?checkout=success&bid=${booking.id}&session_id=NO_PAYMENT`,
         no_payment: true,
       });
@@ -419,7 +468,7 @@ export async function onRequestPost({ request, env }) {
     form.set("mode", "payment");
     form.set("success_url", successUrl);
     form.set("cancel_url", cancelUrl);
-    form.set("customer_email", body.customer_email);
+    form.set("customer_email", email);
 
     form.set("line_items[0][quantity]", "1");
     form.set("line_items[0][price_data][currency]", "cad");
@@ -464,11 +513,11 @@ export async function onRequestPost({ request, env }) {
       ok: true,
       version: VERSION,
       booking_id: booking.id,
-      deposit_cents: depositDueNowCents,
       subtotal_cents: subtotalCents,
       promo_discount_cents: promoDiscountCents,
       gift_applied_cents: giftApplyCents,
       total_cents: afterGiftCents,
+      deposit_cents: depositDueNowCents,
       checkout_url: stripe.url,
     });
   } catch (e) {
