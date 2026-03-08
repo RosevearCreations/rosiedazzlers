@@ -1,2 +1,2 @@
 # rosiedazzlers
-Rosie Dazzlers mobile auto detailing
+Rosie Dazzlers mobile detailing
