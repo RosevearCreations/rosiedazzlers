@@ -1,11 +1,7 @@
 // /assets/chrome.js
-// Standardizes navigation + footer across ALL pages (one place to edit).
-// - Rebuilds the top nav links in a consistent order
-// - Highlights the active page
-// - Wires the mobile "Menu" toggle (if present)
-// - Ensures footer + brand images are applied
-
-import { setBrandImages, setFooter } from "/assets/site.js?v=20260307g";
+// Standardizes nav + footer across ALL pages.
+// Fix: footer will always appear (creates [data-footer] if missing).
+// Also includes a fallback footer if /assets/site.js fails to import.
 
 const NAV_ITEMS = [
   { href: "/services",     label: "Services" },
@@ -18,8 +14,14 @@ const NAV_ITEMS = [
   { href: "/contact",      label: "Contact" },
 ];
 
-// If you ever want to hide gifts temporarily, set to false:
 const SHOW_GIFTS = true;
+
+// Fallback footer content (used only if site.js import fails)
+const FALLBACK_FOOTER_HTML = `
+  <div><strong>Rosie Dazzlers Mobile Auto Detailing</strong> — Norfolk & Oxford Counties</div>
+  <div>Email: <a href="mailto:info@rosiedazzlers.ca">info@rosiedazzlers.ca</a></div>
+  <div class="kicker">Driveway required · customer provides power + water (or additional charges may apply).</div>
+`;
 
 function normalizePath(p) {
   if (!p) return "/";
@@ -46,8 +48,7 @@ function applyNav() {
   if (linksEl) {
     linksEl.innerHTML = buildNavLinks();
 
-    const aTags = linksEl.querySelectorAll("a[href]");
-    aTags.forEach(a => {
+    linksEl.querySelectorAll("a[href]").forEach(a => {
       const href = a.getAttribute("href") || "";
       if (isActiveLink(path, href)) a.classList.add("active");
       else a.classList.remove("active");
@@ -87,11 +88,58 @@ function ensureBookNowButton() {
   navInner.appendChild(btn);
 }
 
-function init() {
-  setBrandImages();
-  setFooter();
+function ensureFooterContainer() {
+  let footer = document.querySelector("[data-footer]");
+  if (footer) return footer;
+
+  // Create it if missing
+  footer = document.createElement("div");
+  footer.className = "footer";
+  footer.setAttribute("data-footer", "");
+
+  // Prefer placing inside .container if present
+  const container = document.querySelector(".container");
+  if (container) container.appendChild(footer);
+  else document.body.appendChild(footer);
+
+  return footer;
+}
+
+async function tryImportSiteHelpers() {
+  // Try without cache-busting first, then with fallback.
+  try {
+    return await import("/assets/site.js");
+  } catch {
+    try {
+      return await import(`/assets/site.js?v=${Date.now()}`);
+    } catch {
+      return null;
+    }
+  }
+}
+
+async function init() {
+  // Always ensure the footer element exists (so it can be filled)
+  const footerEl = ensureFooterContainer();
+
   applyNav();
   ensureBookNowButton();
+
+  // Try to use site.js helpers if available
+  const mod = await tryImportSiteHelpers();
+
+  if (mod?.setBrandImages) {
+    try { mod.setBrandImages(); } catch {}
+  }
+
+  if (mod?.setFooter) {
+    try { mod.setFooter(); } catch {
+      footerEl.innerHTML = FALLBACK_FOOTER_HTML;
+    }
+  } else {
+    // If site.js can’t be loaded or doesn’t export setFooter
+    footerEl.innerHTML = FALLBACK_FOOTER_HTML;
+  }
 }
 
 if (document.readyState === "loading") {
