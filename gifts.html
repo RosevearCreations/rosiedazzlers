@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Gift Certificates | Rosie Dazzlers</title>
   <meta name="description" content="Buy Rosie Dazzlers Gift Certificates — service vouchers or dollar-value certificates. Valid for 1 year. No refunds." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260307b" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260307c" />
   <style>
     .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
     .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-size:13px;color:rgba(234,242,255,.75)}
@@ -18,6 +18,7 @@
     .split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .gift-card .img{width:100%;height:220px;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);margin-bottom:10px}
     .req{color:rgba(239,68,68,.92);font-weight:800}
+    .codebox{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
     @media (max-width: 980px){
       .cart{position:static}
       .split{grid-template-columns:1fr}
@@ -26,7 +27,6 @@
 </head>
 
 <body>
-  <!-- Standard Nav -->
   <div class="nav">
     <div class="nav-inner">
       <a class="brand" href="/">
@@ -34,9 +34,7 @@
         <strong>Rosie Dazzlers</strong>
       </a>
 
-      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">
-        Menu
-      </button>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
 
       <div class="nav-links" id="navLinks">
         <a href="/services">Services</a>
@@ -62,7 +60,6 @@
       </div>
 
       <h1 style="margin:12px 0 8px">Gift Certificates</h1>
-
       <p class="kicker">
         Buy a gift certificate for someone else (or yourself). Choose either a <strong>Service Gift</strong> (exact package + vehicle size)
         or a <strong>Dollar Gift</strong> (amount deducted from any booking).
@@ -76,8 +73,36 @@
       </div>
 
       <div class="notice warn">
-        <strong>Important:</strong> Gift Certificates are a different system than booking deposits.
-        You purchase here (cart → Stripe Checkout). You redeem later during booking using the Gift Code (RD-XXXXXX...).
+        <strong>Important:</strong> Gift Certificates are purchased here (cart → Stripe Checkout) and redeemed later during booking using the Gift Code (RD-XXXXXX...).
+      </div>
+    </div>
+
+    <!-- SUCCESS / RECEIPT PANEL -->
+    <div class="section" id="receiptSection" style="display:none">
+      <div class="panel">
+        <h2 style="margin-top:0">Purchase complete — Your Gift Code(s)</h2>
+        <p class="kicker">
+          Enter the purchaser email used during checkout to reveal your Gift Code(s).
+          Save these codes — they’re needed to redeem during booking.
+        </p>
+
+        <div class="row">
+          <div>
+            <label for="receipt_email">Purchaser Email <span class="req">*</span></label>
+            <input id="receipt_email" type="email" placeholder="you@example.com" />
+          </div>
+          <div>
+            <label>&nbsp;</label>
+            <button class="btn primary" id="loadCodesBtn" type="button">Show my codes</button>
+          </div>
+        </div>
+
+        <div id="receiptOut" style="margin-top:12px"></div>
+
+        <div class="hr"></div>
+        <div class="smallnote">
+          Note: Gift Certificates are valid for 12 months from purchase date and are non-refundable.
+        </div>
       </div>
     </div>
 
@@ -99,13 +124,6 @@
           <li><strong>Service Gift</strong> vouchers must match the correct package + vehicle size.</li>
           <li><strong>Dollar Gift</strong> vouchers deduct from the booking total.</li>
         </ul>
-
-        <div class="hr"></div>
-
-        <div class="smallnote">
-          If email delivery is not configured yet, keep your Stripe receipt email.
-          If you need help locating a Gift Code, contact us with the purchaser email and date.
-        </div>
       </div>
 
       <div class="panel cart">
@@ -114,7 +132,6 @@
 
         <div class="hr"></div>
 
-        <!-- Email fields (MANDATORY) -->
         <div class="row">
           <div>
             <label for="purchaser_email">Purchaser Email <span class="req">*</span></label>
@@ -137,13 +154,10 @@
           </div>
         </div>
 
-        <!-- Vehicle intake (MANDATORY if cart includes ANY service gift) -->
         <div id="vehicleIntake" style="display:none">
           <div class="hr"></div>
           <h3 style="margin:0 0 6px">Vehicle information (required for Service Gifts)</h3>
-          <div class="smallnote">
-            This helps confirm the correct vehicle size. Dollar-only gifts do not require vehicle details.
-          </div>
+          <div class="smallnote">Dollar-only gifts do not require vehicle details.</div>
 
           <div class="row3" style="margin-top:10px">
             <div>
@@ -225,13 +239,21 @@
   </div>
 
   <script type="module">
-    import { setBrandImages } from "/assets/site.js?v=20260307b";
+    import { setBrandImages } from "/assets/site.js?v=20260307c";
     setBrandImages();
 
     const money = (cents) =>
       new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" }).format((Number(cents || 0) / 100));
-
     const enc = (url) => { try { return encodeURI(url); } catch { return url; } };
+
+    const qs = new URLSearchParams(location.search);
+    const giftStatus = qs.get("gift");
+    const sessionIdFromUrl = qs.get("session_id") || "";
+
+    // Show receipt section on success return
+    if (giftStatus === "success" && sessionIdFromUrl.startsWith("cs_")) {
+      document.querySelector("#receiptSection").style.display = "block";
+    }
 
     const CATALOG = [
       { kind:"dollar", sku:"GIFT-100", name:"Gift Certificate $100 (Bronze)", desc:"Redeem $100 toward any booking.", price_cents:10000, image:"https://assets.rosiedazzlers.ca/packages/GiftCertificate100Bronze.png" },
@@ -260,8 +282,8 @@
       { kind:"service", sku:"SVC-complete_detail-oversize", name:"Complete Detail — Oversize/Exotic", desc:"Service voucher (Oversize)", price_cents:41900, image:"https://assets.rosiedazzlers.ca/packages/Gift CompleteLargeExoticGift.png" },
     ];
 
-    const cart = new Map();        // sku -> { sku, qty }
-    const openAmounts = new Map(); // sku -> cents
+    const cart = new Map();
+    const openAmounts = new Map();
 
     function hasServiceGiftInCart() {
       for (const it of cart.values()) {
@@ -301,30 +323,22 @@
 
       if (expected !== declared) {
         warn.style.display = "block";
-        warn.textContent =
-          `Size mismatch: based on body style, we expect "${expected.toUpperCase()}". Please change your declared size to match the Car Size Chart.`;
+        warn.textContent = `Size mismatch: based on body style, we expect "${expected.toUpperCase()}". Please change your declared size to match the Car Size Chart.`;
         return false;
       }
-
       return true;
     }
 
     function cardHtml(p) {
-      const priceLine = p.open_value
-        ? `<div class="price">Choose amount</div>`
-        : `<div class="price">${money(p.price_cents)}</div>`;
-
-      const openInput = p.open_value
-        ? `
-          <div class="row" style="margin-top:8px">
-            <div>
-              <label>Amount (CAD)</label>
-              <input data-open-amt="${p.sku}" type="number" min="25" max="2000" step="5" placeholder="100" />
-              <div class="kicker">Min $25 · Max $2000</div>
-            </div>
+      const priceLine = p.open_value ? `<div class="price">Choose amount</div>` : `<div class="price">${money(p.price_cents)}</div>`;
+      const openInput = p.open_value ? `
+        <div class="row" style="margin-top:8px">
+          <div>
+            <label>Amount (CAD)</label>
+            <input data-open-amt="${p.sku}" type="number" min="25" max="2000" step="5" placeholder="100" />
+            <div class="kicker">Min $25 · Max $2000</div>
           </div>
-        `
-        : "";
+        </div>` : "";
 
       return `
         <div class="card gift-card">
@@ -341,15 +355,12 @@
             <div style="flex:1"></div>
             <button class="btn primary" data-addone="${p.sku}" type="button">Add</button>
           </div>
-        </div>
-      `;
+        </div>`;
     }
 
     function renderCatalog() {
-      document.querySelector("#dollarGifts").innerHTML =
-        CATALOG.filter(x => x.kind === "dollar").map(cardHtml).join("");
-      document.querySelector("#serviceGifts").innerHTML =
-        CATALOG.filter(x => x.kind === "service").map(cardHtml).join("");
+      document.querySelector("#dollarGifts").innerHTML = CATALOG.filter(x => x.kind === "dollar").map(cardHtml).join("");
+      document.querySelector("#serviceGifts").innerHTML = CATALOG.filter(x => x.kind === "service").map(cardHtml).join("");
 
       document.querySelectorAll("[data-open-amt]").forEach((inp) => {
         inp.addEventListener("input", () => {
@@ -420,9 +431,7 @@
 
         total += lineCents;
 
-        const extra = p.open_value
-          ? `<div class="smallnote">Amount: ${money(openAmounts.get(p.sku) || 0)} each</div>`
-          : "";
+        const extra = p.open_value ? `<div class="smallnote">Amount: ${money(openAmounts.get(p.sku) || 0)} each</div>` : "";
 
         return `
           <div class="cart-line">
@@ -432,8 +441,7 @@
               ${extra}
             </div>
             <div style="text-align:right">${money(lineCents)}</div>
-          </div>
-        `;
+          </div>`;
       }).join("");
 
       totalEl.textContent = `Total: ${money(total)}`;
@@ -461,10 +469,8 @@
         if (!body) return "Body style is required for Service Gifts.";
         if (!declared) return "Declared vehicle size is required for Service Gifts.";
         if (!photoUrl) return "Vehicle photo URL is required for Service Gifts.";
-
         if (!validateSize()) return "Vehicle size mismatch. Please adjust size to match the Car Size Chart.";
       }
-
       return "";
     }
 
@@ -513,25 +519,65 @@
       });
 
       const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        alert(data?.error ? `Checkout error: ${data.error}` : "Checkout error");
-        return;
-      }
-
-      if (!data?.checkout_url) {
-        alert("Checkout URL missing. Please try again.");
-        return;
-      }
+      if (!res.ok) { alert(data?.error ? `Checkout error: ${data.error}` : "Checkout error"); return; }
+      if (!data?.checkout_url) { alert("Checkout URL missing. Please try again."); return; }
 
       location.href = data.checkout_url;
     }
 
     document.querySelector("#checkoutBtn").addEventListener("click", checkout);
 
+    async function loadReceiptCodes() {
+      const email = (document.querySelector("#receipt_email")?.value || "").trim();
+      const out = document.querySelector("#receiptOut");
+      out.innerHTML = "";
+
+      if (!email) {
+        out.innerHTML = `<div class="notice warn">Please enter the purchaser email used at checkout.</div>`;
+        return;
+      }
+
+      const res = await fetch("/api/gifts/receipt", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ session_id: sessionIdFromUrl, purchaser_email: email }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        out.innerHTML = `<div class="notice warn">${data?.error || "Could not load gift codes."}</div>`;
+        return;
+      }
+
+      const gifts = Array.isArray(data.gifts) ? data.gifts : [];
+      if (!gifts.length) {
+        out.innerHTML = `<div class="notice warn">No codes found.</div>`;
+        return;
+      }
+
+      out.innerHTML = `
+        <div class="notice">
+          <strong>Success!</strong> Save these codes. You’ll enter them during booking to redeem.
+        </div>
+        <div class="grid cards" style="margin-top:10px">
+          ${gifts.map(g => `
+            <div class="card">
+              <div class="badge">${g.type === "service" ? "Service Gift" : "Dollar Gift"}</div>
+              <h3 class="codebox" style="margin-top:8px">${g.code}</h3>
+              <p class="kicker" style="margin:6px 0 0">SKU: ${g.sku}</p>
+              <p class="kicker" style="margin:6px 0 0">Expires: ${g.expires_at ? new Date(g.expires_at).toLocaleDateString("en-CA") : "12 months from purchase"}</p>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    document.querySelector("#loadCodesBtn")?.addEventListener("click", loadReceiptCodes);
+
     renderCatalog();
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260307b"></script>
+  <script type="module" src="/assets/chrome.js?v=20260307c"></script>
 </body>
 </html>
