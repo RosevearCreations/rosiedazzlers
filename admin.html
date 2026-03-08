@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin | Rosie Dazzlers</title>
+  <meta name="description" content="Admin dashboard for Rosie Dazzlers bookings." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260308g" />
+  <style>
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px;border-bottom:1px solid rgba(255,255,255,.10);vertical-align:top}
+    th{color:rgba(234,242,255,.70);font-weight:700;text-align:left}
+    .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06)}
+    .ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
+    .warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
+    .bad{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.10)}
+    .small{font-size:.92rem;color:rgba(234,242,255,.62)}
+    @media (max-width:980px){
+      .grid2{grid-template-columns:1fr}
+      table{display:block;overflow:auto}
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers</strong>
+      </a>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
+      <div class="nav-links" id="navLinks"></div>
+      <a class="btn primary" href="/book">Book now</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="panel">
+      <h1 style="margin:0 0 6px">Admin</h1>
+      <p class="kicker" style="margin:0">
+        View bookings and verify stored vehicle/codes. This uses a simple password gate (not full login).
+      </p>
+      <div class="notice warn" style="margin-top:12px">
+        <strong>Tip:</strong> Do not share the admin password. We can upgrade this to Supabase Auth later.
+      </div>
+    </div>
+
+    <div class="section grid2">
+      <div class="panel">
+        <h2 style="margin-top:0">Access</h2>
+        <label for="pw">Admin password</label>
+        <input id="pw" type="password" placeholder="Enter admin password…" />
+        <div class="small" style="margin-top:6px">
+          Set this in Cloudflare Pages env vars as <span class="mono">ADMIN_PASSWORD</span>.
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary" id="loadBtn" type="button">Load next 30 days</button>
+          <button class="btn ghost" id="loadAllBtn" type="button">Load latest 100</button>
+        </div>
+
+        <div id="status" class="notice" style="margin-top:12px;display:none"></div>
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-top:0">Filters</h2>
+        <div class="grid2">
+          <div>
+            <label for="fromDate">From date</label>
+            <input id="fromDate" type="date" />
+          </div>
+          <div>
+            <label for="toDate">To date</label>
+            <input id="toDate" type="date" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn ghost" id="loadRangeBtn" type="button">Load date range</button>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="small">
+          Data is pulled from a server endpoint (service role) so it stays private.
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 style="margin-top:0">Bookings</h2>
+      <div id="tableWrap"></div>
+    </div>
+
+    <div class="footer" data-footer></div>
+  </div>
+
+  <script type="module">
+    const money = (cents) =>
+      new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" })
+        .format((Number(cents || 0) / 100));
+
+    const qs = (s) => document.querySelector(s);
+
+    function showStatus(msg, kind="") {
+      const el = qs("#status");
+      el.style.display = "block";
+      el.className = "notice " + (kind || "");
+      el.textContent = msg;
+    }
+
+    function pill(status){
+      const s = String(status || "").toLowerCase();
+      if (s === "confirmed") return `<span class="pill ok">confirmed</span>`;
+      if (s === "pending") return `<span class="pill warn">pending</span>`;
+      if (s === "cancelled" || s === "failed") return `<span class="pill bad">${escapeHtml(s)}</span>`;
+      return `<span class="pill">${escapeHtml(s || "unknown")}</span>`;
+    }
+
+    function escapeHtml(s){
+      return String(s || "")
+        .replaceAll("&","&amp;").replaceAll("<","&lt;")
+        .replaceAll(">","&gt;").replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
+    }
+
+    function rowHtml(b){
+      const v = b.vehicle || {};
+      const vehicleLine = [v.year, v.make, v.model].filter(Boolean).join(" ");
+      const codes = [
+        b.promo_code ? `Promo: ${b.promo_code}` : null,
+        b.gift_code ? `Gift: ${b.gift_code}` : null,
+      ].filter(Boolean).join(" · ");
+
+      const discounts = [
+        (b.promo_discount_cents ? `Promo -${money(b.promo_discount_cents)}` : null),
+        (b.gift_applied_cents ? `Gift -${money(b.gift_applied_cents)}` : null),
+      ].filter(Boolean).join(" · ");
+
+      return `
+        <tr>
+          <td>
+            ${pill(b.status)}
+            <div class="small">${escapeHtml(b.service_date)} ${escapeHtml(b.start_slot)} (${escapeHtml(b.duration_slots)} slot)</div>
+          </td>
+          <td>
+            <strong>${escapeHtml(b.customer_name)}</strong><br>
+            <span class="small">${escapeHtml(b.customer_email || "")}</span><br>
+            <span class="small">${escapeHtml(b.customer_phone || "")}</span>
+          </td>
+          <td class="small">
+            ${escapeHtml(b.address_line1 || "")}<br>
+            ${escapeHtml(b.city || "")} ${escapeHtml(b.postal_code || "")}
+          </td>
+          <td class="small">
+            <strong>${escapeHtml(vehicleLine || "(no vehicle)")}</strong><br>
+            plate: ${escapeHtml(v.plate || "-")}<br>
+            photo: ${v.photo_url ? `<a href="${escapeHtml(v.photo_url)}" target="_blank" rel="noopener">open</a>` : "-"}
+          </td>
+          <td class="small">
+            <div><strong>${escapeHtml(b.package_code)}</strong> (${escapeHtml(b.vehicle_size)})</div>
+            <div>Subtotal: ${money(b.subtotal_cents || 0)}</div>
+            <div>${discounts || ""}</div>
+            <div><strong>Total:</strong> ${money(b.price_total_cents || 0)}</div>
+            <div><strong>Deposit:</strong> ${money(b.deposit_cents || 0)}</div>
+            <div class="small">${codes}</div>
+          </td>
+        </tr>
+      `;
+    }
+
+    function renderTable(rows){
+      if (!Array.isArray(rows) || rows.length === 0) {
+        qs("#tableWrap").innerHTML = `<div class="notice warn">No bookings found.</div>`;
+        return;
+      }
+
+      qs("#tableWrap").innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>When</th>
+              <th>Customer</th>
+              <th>Address</th>
+              <th>Vehicle</th>
+              <th>Service</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(rowHtml).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    async function loadBookings(mode){
+      const pw = qs("#pw").value || "";
+      if (!pw) { alert("Enter admin password first."); return; }
+
+      let payload = { mode, admin_password: pw };
+
+      if (mode === "range") {
+        const from = qs("#fromDate").value;
+        const to = qs("#toDate").value;
+        if (!from || !to) { alert("Pick from and to dates."); return; }
+        payload.from_date = from;
+        payload.to_date = to;
+      }
+
+      showStatus("Loading…");
+
+      const res = await fetch("/api/admin/bookings", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json().catch(()=>null);
+      if (!res.ok || !data?.ok) {
+        showStatus(data?.error ? `Error: ${data.error}` : "Error loading bookings", "bad");
+        return;
+      }
+
+      showStatus(`Loaded ${data.rows.length} booking(s).`, "ok");
+      renderTable(data.rows);
+    }
+
+    qs("#loadBtn").addEventListener("click", () => loadBookings("next30"));
+    qs("#loadAllBtn").addEventListener("click", () => loadBookings("latest100"));
+    qs("#loadRangeBtn").addEventListener("click", () => loadBookings("range"));
+
+    // default date range in UI
+    const today = new Date();
+    const addDays = (d, n) => {
+      const x = new Date(d);
+      x.setDate(x.getDate() + n);
+      return x.toISOString().slice(0,10);
+    };
+    qs("#fromDate").value = today.toISOString().slice(0,10);
+    qs("#toDate").value = addDays(today, 30);
+  </script>
+
+  <script type="module" src="/assets/chrome.js?v=20260308g"></script>
+</body>
+</html>
