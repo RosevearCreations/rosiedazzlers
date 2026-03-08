@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Gift Certificates | Rosie Dazzlers</title>
   <meta name="description" content="Buy Rosie Dazzlers Gift Certificates — service vouchers or dollar-value certificates. Valid for 1 year. No refunds." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260307c" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260307e" />
   <style>
     .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
     .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-size:13px;color:rgba(234,242,255,.75)}
@@ -19,9 +19,11 @@
     .gift-card .img{width:100%;height:220px;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);margin-bottom:10px}
     .req{color:rgba(239,68,68,.92);font-weight:800}
     .codebox{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .receipt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
     @media (max-width: 980px){
       .cart{position:static}
       .split{grid-template-columns:1fr}
+      .receipt-grid{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -157,7 +159,7 @@
         <div id="vehicleIntake" style="display:none">
           <div class="hr"></div>
           <h3 style="margin:0 0 6px">Vehicle information (required for Service Gifts)</h3>
-          <div class="smallnote">Dollar-only gifts do not require vehicle details.</div>
+          <div class="smallnote">Photo is recommended (not required). Dollar-only gifts do not require vehicle details.</div>
 
           <div class="row3" style="margin-top:10px">
             <div>
@@ -199,9 +201,9 @@
 
           <div class="row">
             <div>
-              <label for="vehicle_photo_url">Vehicle photo URL <span class="req">*</span></label>
+              <label for="vehicle_photo_url">Vehicle photo URL (recommended)</label>
               <input id="vehicle_photo_url" type="url" placeholder="https://..." />
-              <div class="kicker">Paste a link to a photo (Google Photos, iCloud link, etc.).</div>
+              <div class="kicker">Optional: paste a link to a photo (Google Photos, iCloud link, etc.).</div>
             </div>
             <div>
               <label>&nbsp;</label>
@@ -239,7 +241,7 @@
   </div>
 
   <script type="module">
-    import { setBrandImages } from "/assets/site.js?v=20260307c";
+    import { setBrandImages } from "/assets/site.js?v=20260307e";
     setBrandImages();
 
     const money = (cents) =>
@@ -250,7 +252,6 @@
     const giftStatus = qs.get("gift");
     const sessionIdFromUrl = qs.get("session_id") || "";
 
-    // Show receipt section on success return
     if (giftStatus === "success" && sessionIdFromUrl.startsWith("cs_")) {
       document.querySelector("#receiptSection").style.display = "block";
     }
@@ -315,7 +316,6 @@
 
       const bodyStyle = (document.querySelector("#body_style")?.value || "").trim();
       const declared = (document.querySelector("#declared_size")?.value || "").trim();
-
       if (!bodyStyle || !declared) return true;
 
       const expected = expectedSizeFromBodyStyle(bodyStyle);
@@ -461,14 +461,12 @@
         const model = getVal("#vehicle_model");
         const body = getVal("#body_style");
         const declared = getVal("#declared_size");
-        const photoUrl = getVal("#vehicle_photo_url");
 
         if (!year) return "Vehicle Year is required for Service Gifts.";
         if (!make) return "Vehicle Make is required for Service Gifts.";
         if (!model) return "Vehicle Model is required for Service Gifts.";
         if (!body) return "Body style is required for Service Gifts.";
         if (!declared) return "Declared vehicle size is required for Service Gifts.";
-        if (!photoUrl) return "Vehicle photo URL is required for Service Gifts.";
         if (!validateSize()) return "Vehicle size mismatch. Please adjust size to match the Car Size Chart.";
       }
       return "";
@@ -508,7 +506,7 @@
           model: getVal("#vehicle_model"),
           body_style: getVal("#body_style"),
           declared_size: getVal("#declared_size"),
-          photo_url: getVal("#vehicle_photo_url"),
+          photo_url: getVal("#vehicle_photo_url"), // optional
         } : null
       };
 
@@ -528,14 +526,21 @@
     document.querySelector("#checkoutBtn").addEventListener("click", checkout);
 
     async function loadReceiptCodes() {
-      const email = (document.querySelector("#receipt_email")?.value || "").trim();
       const out = document.querySelector("#receiptOut");
       out.innerHTML = "";
 
+      if (!(giftStatus === "success" && sessionIdFromUrl.startsWith("cs_"))) {
+        out.innerHTML = `<div class="notice warn">No purchase session found in the URL.</div>`;
+        return;
+      }
+
+      const email = (document.querySelector("#receipt_email")?.value || "").trim();
       if (!email) {
         out.innerHTML = `<div class="notice warn">Please enter the purchaser email used at checkout.</div>`;
         return;
       }
+
+      out.innerHTML = `<div class="notice">Loading your gift codes…</div>`;
 
       const res = await fetch("/api/gifts/receipt", {
         method: "POST",
@@ -544,23 +549,14 @@
       });
 
       const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        out.innerHTML = `<div class="notice warn">${data?.error || "Could not load gift codes."}</div>`;
-        return;
-      }
+      if (!res.ok) { out.innerHTML = `<div class="notice warn">${data?.error || "Could not load gift codes."}</div>`; return; }
 
       const gifts = Array.isArray(data.gifts) ? data.gifts : [];
-      if (!gifts.length) {
-        out.innerHTML = `<div class="notice warn">No codes found.</div>`;
-        return;
-      }
+      if (!gifts.length) { out.innerHTML = `<div class="notice warn">No codes found.</div>`; return; }
 
       out.innerHTML = `
-        <div class="notice">
-          <strong>Success!</strong> Save these codes. You’ll enter them during booking to redeem.
-        </div>
-        <div class="grid cards" style="margin-top:10px">
+        <div class="notice"><strong>Success!</strong> Save these codes. You’ll enter them during booking to redeem.</div>
+        <div class="receipt-grid" style="margin-top:10px">
           ${gifts.map(g => `
             <div class="card">
               <div class="badge">${g.type === "service" ? "Service Gift" : "Dollar Gift"}</div>
@@ -575,9 +571,14 @@
 
     document.querySelector("#loadCodesBtn")?.addEventListener("click", loadReceiptCodes);
 
+    if (giftStatus === "success" && sessionIdFromUrl.startsWith("cs_")) {
+      const emailField = document.querySelector("#receipt_email");
+      setTimeout(() => emailField?.focus(), 50);
+    }
+
     renderCatalog();
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260307c"></script>
+  <script type="module" src="/assets/chrome.js?v=20260307e"></script>
 </body>
 </html>
