@@ -1,26 +1,31 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Book | Rosie Dazzlers</title>
-  <meta name="description" content="Book Rosie Dazzlers Mobile Auto Detailing. Choose package, vehicle size, date/time slot, add-ons, and pay deposit online.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260306b">
+  <meta name="description" content="Book your mobile auto detailing service in Norfolk & Oxford Counties. Deposit required." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260307f" />
+  <style>
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .muted{color:rgba(234,242,255,.62)}
+    .req{color:rgba(239,68,68,.92);font-weight:800}
+    .codebox{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    @media (max-width: 980px){
+      .grid2,.grid3{grid-template-columns:1fr}
+    }
+  </style>
 </head>
 
 <body>
-  <!-- Standard Nav -->
   <div class="nav">
     <div class="nav-inner">
       <a class="brand" href="/">
-        <img data-logo alt="Rosie Dazzlers logo">
+        <img data-logo alt="Rosie Dazzlers logo" />
         <strong>Rosie Dazzlers</strong>
       </a>
-
-      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">
-        Menu
-      </button>
-
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
       <div class="nav-links" id="navLinks">
         <a href="/services">Services</a>
         <a href="/pricing">Pricing</a>
@@ -28,185 +33,357 @@
         <a href="/consumables">Consumables</a>
         <a href="/about">About</a>
         <a href="/contact">Contact</a>
-        <a href="/book">Book</a>
+        <a href="/gifts">Gifts</a>
       </div>
-
       <a class="btn primary" href="/book">Book now</a>
     </div>
   </div>
 
   <div class="container">
     <div class="panel">
-      <h1 style="margin:0 0 8px">Book your detail</h1>
-      <p class="kicker">Choose your package, select a date and slot, then pay your deposit to secure the booking.</p>
+      <div class="badges">
+        <span class="badge">Online booking</span>
+        <span class="badge">Deposit required</span>
+        <span class="badge">Norfolk + Oxford</span>
+      </div>
+      <h1 style="margin:12px 0 8px">Book a Detail</h1>
+      <p class="kicker">Choose a date, package, and time slot. We do one vehicle per day unless two half-day jobs.</p>
+    </div>
 
-      <div class="hr"></div>
+    <div class="section grid2">
+      <div class="panel">
+        <h2 style="margin-top:0">1) Booking details</h2>
 
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn ghost" type="button" data-open-price>Price chart</button>
-        <button class="btn ghost" type="button" data-open-details>Details chart</button>
-        <button class="btn ghost" type="button" data-open-size>Size chart</button>
+        <div class="grid2">
+          <div>
+            <label for="service_date">Service date <span class="req">*</span></label>
+            <input id="service_date" type="date" />
+          </div>
+          <div>
+            <label for="start_slot">Time slot <span class="req">*</span></label>
+            <select id="start_slot">
+              <option value="">Select…</option>
+              <option value="AM">AM</option>
+              <option value="PM">PM</option>
+            </select>
+            <div class="muted">Full-day jobs use both slots (we’ll handle that automatically based on package/add-ons).</div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:10px">
+          <div>
+            <label for="service_area">Service area <span class="req">*</span></label>
+            <select id="service_area">
+              <option value="">Select…</option>
+              <option value="Norfolk">Norfolk</option>
+              <option value="Oxford">Oxford</option>
+            </select>
+          </div>
+          <div>
+            <label for="vehicle_size">Vehicle size <span class="req">*</span></label>
+            <select id="vehicle_size">
+              <option value="">Select…</option>
+              <option value="small">Small</option>
+              <option value="mid">Mid-sized</option>
+              <option value="oversize">Over-size / Exotic</option>
+            </select>
+            <div class="muted">
+              Use size chart:
+              <a href="https://assets.rosiedazzlers.ca/brand/CarSizeChart.PNG" target="_blank" rel="noopener">Open</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <label for="package_code">Package <span class="req">*</span></label>
+          <select id="package_code"></select>
+          <div class="muted">Prices update automatically based on size.</div>
+        </div>
+
+        <div class="hr"></div>
+
+        <h3 style="margin:0 0 8px">Vehicle info (required)</h3>
+        <div class="grid3">
+          <div>
+            <label for="car_year">Year <span class="req">*</span></label>
+            <input id="car_year" type="number" min="1980" max="2030" placeholder="2020" />
+          </div>
+          <div>
+            <label for="car_make">Make <span class="req">*</span></label>
+            <input id="car_make" type="text" placeholder="Toyota" />
+          </div>
+          <div>
+            <label for="car_model">Model <span class="req">*</span></label>
+            <input id="car_model" type="text" placeholder="RAV4" />
+          </div>
+        </div>
+        <div class="grid2" style="margin-top:10px">
+          <div>
+            <label for="car_plate">License plate (optional)</label>
+            <input id="car_plate" type="text" placeholder="ABC123" />
+          </div>
+          <div>
+            <label for="car_photo_url">Vehicle photo URL (recommended)</label>
+            <input id="car_photo_url" type="url" placeholder="https://..." />
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <h3 style="margin:0 0 8px">Add-ons</h3>
+        <div id="addonsList" class="list"></div>
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-top:0">2) Contact + address</h2>
+
+        <div class="grid2">
+          <div>
+            <label for="customer_name">Full name <span class="req">*</span></label>
+            <input id="customer_name" type="text" />
+          </div>
+          <div>
+            <label for="customer_email">Email <span class="req">*</span></label>
+            <input id="customer_email" type="email" />
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:10px">
+          <div>
+            <label for="customer_phone">Phone (optional)</label>
+            <input id="customer_phone" type="tel" />
+          </div>
+          <div>
+            <label for="address_line1">Address <span class="req">*</span></label>
+            <input id="address_line1" type="text" placeholder="123 Main St" />
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:10px">
+          <div>
+            <label for="city">City</label>
+            <input id="city" type="text" />
+          </div>
+          <div>
+            <label for="postal_code">Postal code</label>
+            <input id="postal_code" type="text" placeholder="N0J 1P0" />
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <h3 style="margin:0 0 8px">Gift Code (optional)</h3>
+        <div class="grid2">
+          <div>
+            <label for="gift_code">Gift code</label>
+            <input id="gift_code" class="codebox" type="text" placeholder="RD-ABCDEF1234" />
+            <div class="muted">Service Gift codes must match package + size. Dollar Gift codes deduct from total.</div>
+          </div>
+          <div>
+            <label>&nbsp;</label>
+            <button class="btn ghost" id="applyGiftBtn" type="button">Apply gift code</button>
+          </div>
+        </div>
+
+        <div id="giftResult" style="margin-top:10px"></div>
+
+        <div class="hr"></div>
+
+        <h3 style="margin:0 0 8px">Required acknowledgements</h3>
+        <div class="list">
+          <label class="checkbox"><input type="checkbox" id="ack_driveway" /> Driveway required</label>
+          <label class="checkbox"><input type="checkbox" id="ack_power_water" /> Customer provides power + water (extra charges may apply otherwise)</label>
+          <label class="checkbox"><input type="checkbox" id="ack_bylaw" /> Customer accepts responsibility for local bylaws related to washing/chemicals</label>
+          <label class="checkbox"><input type="checkbox" id="ack_cancellation" /> Cancellation policy accepted</label>
+        </div>
+
+        <div class="hr"></div>
+
+        <div id="summary" class="notice"></div>
+
+        <div class="row" style="margin-top:10px">
+          <button class="btn primary" id="checkoutBtn" type="button">Proceed to deposit checkout</button>
+        </div>
+
+        <div class="muted" style="margin-top:10px">
+          Deposit is charged now to reserve your slot. Remaining balance is due at service (or per your invoice/payment method).
+        </div>
       </div>
     </div>
 
-    <div class="section">
-      <div class="grid" style="grid-template-columns:1fr 1fr;gap:12px">
-        <div class="panel">
-          <form id="bookingForm" class="form">
-
-            <div class="row">
-              <div>
-                <label for="package_code">Package</label>
-                <select id="package_code" name="package_code"></select>
-              </div>
-
-              <div>
-                <label for="vehicle_size">Vehicle size</label>
-                <select id="vehicle_size" name="vehicle_size">
-                  <option value="small">Small</option>
-                  <option value="mid">Mid-sized</option>
-                  <option value="oversize">Oversize / Exotics</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="row3">
-              <div>
-                <label for="service_date">Service date</label>
-                <input id="service_date" name="service_date" type="date" required>
-              </div>
-
-              <div>
-                <label for="start_slot">Start slot</label>
-                <select id="start_slot" name="start_slot">
-                  <option value="AM">AM</option>
-                  <option value="PM">PM</option>
-                </select>
-              </div>
-
-              <div>
-                <label for="duration_slots">Duration</label>
-                <select id="duration_slots" name="duration_slots">
-                  <option value="1">Half day</option>
-                  <option value="2">Full day</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="row">
-              <div>
-                <label for="service_area">Service area</label>
-                <select id="service_area" name="service_area">
-                  <option value="Norfolk">Norfolk</option>
-                  <option value="Oxford">Oxford</option>
-                </select>
-              </div>
-
-              <div>
-                <label for="customer_phone">Phone (optional)</label>
-                <input id="customer_phone" name="customer_phone" type="tel" placeholder="(###) ###-####">
-              </div>
-            </div>
-
-            <div class="row">
-              <div>
-                <label for="customer_name">Name</label>
-                <input id="customer_name" name="customer_name" type="text" required>
-              </div>
-
-              <div>
-                <label for="customer_email">Email</label>
-                <input id="customer_email" name="customer_email" type="email" required>
-              </div>
-            </div>
-
-            <div>
-              <label for="address_line1">Service address</label>
-              <input id="address_line1" name="address_line1" type="text" required>
-            </div>
-
-            <div class="row">
-              <div>
-                <label for="city">City (optional)</label>
-                <input id="city" name="city" type="text">
-              </div>
-
-              <div>
-                <label for="postal_code">Postal code (optional)</label>
-                <input id="postal_code" name="postal_code" type="text">
-              </div>
-            </div>
-
-            <div class="hr"></div>
-
-            <div class="panel" style="padding:12px">
-              <strong>Add-ons</strong>
-              <div class="kicker">“Quote required” items are not included in the online total.</div>
-              <div class="hr"></div>
-              <div id="addonPicker"></div>
-            </div>
-
-            <div class="hr"></div>
-
-            <label style="display:flex;gap:10px;align-items:flex-start">
-              <input type="checkbox" name="ack_driveway" id="ack_driveway">
-              <span><strong>I confirm a driveway / suitable work area is available.</strong></span>
-            </label>
-
-            <label style="display:flex;gap:10px;align-items:flex-start">
-              <input type="checkbox" name="ack_power_water" id="ack_power_water">
-              <span><strong>I confirm power + water are available</strong> (or I accept additional charges).</span>
-            </label>
-
-            <label style="display:flex;gap:10px;align-items:flex-start">
-              <input type="checkbox" name="ack_bylaw" id="ack_bylaw">
-              <span><strong>I accept responsibility for any local bylaw/runoff restrictions</strong> at the service location.</span>
-            </label>
-
-            <label style="display:flex;gap:10px;align-items:flex-start">
-              <input type="checkbox" name="ack_cancellation" id="ack_cancellation">
-              <span><strong>I understand deposits secure booking times</strong> and cancellation fees may apply.</span>
-            </label>
-
-            <div id="availBox" class="notice" style="margin-top:10px"></div>
-            <div id="priceBox" class="notice" style="margin-top:10px"></div>
-
-            <button id="submitBtn" class="btn primary" type="submit">Pay deposit & book</button>
-          </form>
-        </div>
-
-        <div class="panel">
-          <h2 style="margin-top:0">What’s included</h2>
-          <div id="packageSummary" class="notice"></div>
-
-          <div class="hr"></div>
-
-          <h2 style="margin-top:0">Booking rules</h2>
-          <ul class="list">
-            <li>One vehicle per day unless the job is a half-day booking.</li>
-            <li>Driveway/work area required.</li>
-            <li>Customer provides power + water (or additional charges may apply).</li>
-            <li>Deposit required to secure appointment.</li>
-            <li>Cancellation fees may apply.</li>
-            <li>Customer accepts bylaw/runoff responsibility for the location.</li>
-          </ul>
-
-          <div class="hr"></div>
-          <a class="btn ghost" href="/services">See packages</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer injected by chrome.js -->
     <div class="footer" data-footer></div>
   </div>
 
   <script type="module">
-    import { setBrandImages, initBookingPage } from "/assets/site.js?v=20260306b";
+    import { setBrandImages } from "/assets/site.js?v=20260307f";
     setBrandImages();
-    initBookingPage();
+
+    const money = (cents) =>
+      new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" }).format((Number(cents || 0) / 100));
+
+    const data = await fetch("/assets/services_pricing.json?v=20260307f").then(r => r.json());
+
+    const packages = data.packages || [];
+    const addons = data.addons || [];
+
+    const pkgSel = document.querySelector("#package_code");
+    pkgSel.innerHTML = `<option value="">Select…</option>` + packages.map(p =>
+      `<option value="${p.code}">${p.name} — ${p.subtitle || ""}</option>`
+    ).join("");
+
+    const addonsList = document.querySelector("#addonsList");
+    addonsList.innerHTML = addons.map(a => `
+      <label class="checkbox">
+        <input type="checkbox" data-addon="${a.code}" />
+        ${a.name} ${a.quote_required ? "<span class='badge'>Quote</span>" : ""}
+      </label>
+    `).join("");
+
+    const state = { gift: null, computed: { total_cents: 0, deposit_cents: 0 } };
+
+    function val(id){ return (document.querySelector(id)?.value || "").trim(); }
+    function checked(id){ return !!document.querySelector(id)?.checked; }
+    function addonCodes(){
+      return Array.from(document.querySelectorAll("[data-addon]"))
+        .filter(x => x.checked)
+        .map(x => x.getAttribute("data-addon"));
+    }
+
+    function pkgPriceCents(pkgCode, size){
+      const p = packages.find(x => x.code === pkgCode);
+      if (!p) return 0;
+      const cad = p.prices_cad?.[size] ?? 0;
+      return Math.round(Number(cad) * 100);
+    }
+
+    function addonsTotalCents(size){
+      let total = 0;
+      for (const code of addonCodes()){
+        const a = addons.find(x => x.code === code);
+        if (!a) continue;
+        if (a.prices_cad && a.prices_cad[size] != null) total += Math.round(Number(a.prices_cad[size]) * 100);
+        else if (a.price_cad != null) total += Math.round(Number(a.price_cad) * 100);
+      }
+      return total;
+    }
+
+    function depositFor(pkgCode){
+      return (pkgCode === "premium_wash" || pkgCode === "basic_detail") ? 5000 : 10000;
+    }
+
+    function recompute(){
+      const pkgCode = val("#package_code");
+      const size = val("#vehicle_size");
+      const base = pkgPriceCents(pkgCode, size);
+      const add = addonsTotalCents(size);
+      const total = base + add;
+      const dep = pkgCode ? depositFor(pkgCode) : 0;
+
+      state.computed = { total_cents: total, deposit_cents: dep };
+
+      document.querySelector("#summary").innerHTML =
+        `<strong>Estimate</strong><br>` +
+        `Total (before gift): ${money(total)}<br>` +
+        `Deposit due now: ${money(dep)}<br>` +
+        (state.gift?.code ? `Gift code entered: <span class="codebox">${state.gift.code}</span><br>` : "");
+    }
+
+    ["#package_code","#vehicle_size","#start_slot","#service_date","#service_area"].forEach(sel=>{
+      document.querySelector(sel)?.addEventListener("change", recompute);
+    });
+    document.querySelectorAll("[data-addon]").forEach(chk => chk.addEventListener("change", recompute));
+
+    function applyGift(){
+      const code = val("#gift_code").toUpperCase();
+      const out = document.querySelector("#giftResult");
+      out.innerHTML = "";
+      if (!code) { out.innerHTML = `<div class="notice warn">Enter a gift code first.</div>`; return; }
+      out.innerHTML = `<div class="notice">Gift code will be applied at checkout.</div>`;
+      state.gift = { code };
+      recompute();
+    }
+
+    document.querySelector("#applyGiftBtn")?.addEventListener("click", applyGift);
+
+    async function checkout(){
+      const required = [
+        ["#service_date","Service date"],
+        ["#start_slot","Time slot"],
+        ["#service_area","Service area"],
+        ["#vehicle_size","Vehicle size"],
+        ["#package_code","Package"],
+        ["#customer_name","Full name"],
+        ["#customer_email","Email"],
+        ["#address_line1","Address"],
+        ["#car_year","Vehicle year"],
+        ["#car_make","Vehicle make"],
+        ["#car_model","Vehicle model"],
+      ];
+      for (const [id,label] of required){
+        if (!val(id)) { alert(`Missing: ${label}`); return; }
+      }
+
+      const acks = [
+        ["#ack_driveway","Driveway required acknowledgement"],
+        ["#ack_power_water","Power/water acknowledgement"],
+        ["#ack_bylaw","Bylaw acknowledgement"],
+        ["#ack_cancellation","Cancellation acknowledgement"]
+      ];
+      for (const [id,label] of acks){
+        if (!checked(id)) { alert(`Missing: ${label}`); return; }
+      }
+
+      const payload = {
+        service_date: val("#service_date"),
+        start_slot: val("#start_slot"),
+        duration_slots: 1,
+        service_area: val("#service_area"),
+        package_code: val("#package_code"),
+        vehicle_size: val("#vehicle_size"),
+        customer_name: val("#customer_name"),
+        customer_email: val("#customer_email"),
+        customer_phone: val("#customer_phone"),
+        address_line1: val("#address_line1"),
+        city: val("#city"),
+        postal_code: val("#postal_code"),
+        addon_codes: addonCodes(),
+        car_year: val("#car_year"),
+        car_make: val("#car_make"),
+        car_model: val("#car_model"),
+        car_plate: val("#car_plate"),
+        car_photo_url: val("#car_photo_url"),
+        gift_code: (val("#gift_code") || "").toUpperCase() || null,
+        ack_driveway: true,
+        ack_power_water: true,
+        ack_bylaw: true,
+        ack_cancellation: true,
+      };
+
+      const res = await fetch("/api/book/checkout", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(()=>({}));
+
+      if (!res.ok) {
+        alert(data?.error ? `Checkout error: ${data.error}` : "Checkout error");
+        return;
+      }
+
+      if (!data.checkout_url) {
+        alert("Checkout URL missing. Please try again.");
+        return;
+      }
+
+      location.href = data.checkout_url;
+    }
+
+    document.querySelector("#checkoutBtn")?.addEventListener("click", checkout);
+
+    recompute();
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260306b"></script>
+  <script type="module" src="/assets/chrome.js?v=20260307f"></script>
 </body>
 </html>
