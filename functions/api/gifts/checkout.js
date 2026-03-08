@@ -1,6 +1,7 @@
 // /functions/api/gifts/checkout.js
 // Creates Stripe Checkout Sessions for gift purchases.
-// FIX: redirect back to /gifts and use correct SITE_ORIGIN (or infer from request host).
+// FIX: service gifts require vehicle year/make/model/body_style/declared_size
+//      but vehicle photo is OPTIONAL (recommended).
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -45,16 +46,17 @@ export async function onRequestPost({ request, env }) {
     // Determine if cart contains ANY service gifts
     const hasServiceGift = products.some((p) => p.type === "service");
 
-    // If service gift exists, require vehicle object fields
+    // If service gift exists, require vehicle object fields (photo OPTIONAL)
+    let vYear = "", vMake = "", vModel = "", vBody = "", vSize = "", vPhoto = "";
     if (hasServiceGift) {
-      const vYear = asString(vehicle?.year);
-      const vMake = asString(vehicle?.make);
-      const vModel = asString(vehicle?.model);
-      const vBody = asString(vehicle?.body_style);
-      const vSize = asString(vehicle?.declared_size);
-      const vPhoto = asString(vehicle?.photo_url);
+      vYear = asString(vehicle?.year);
+      vMake = asString(vehicle?.make);
+      vModel = asString(vehicle?.model);
+      vBody = asString(vehicle?.body_style);
+      vSize = asString(vehicle?.declared_size);
+      vPhoto = asString(vehicle?.photo_url); // optional
 
-      if (!vYear || !vMake || !vModel || !vBody || !vSize || !vPhoto) {
+      if (!vYear || !vMake || !vModel || !vBody || !vSize) {
         return json(
           {
             error: "Missing vehicle info for service gift purchase",
@@ -63,9 +65,9 @@ export async function onRequestPost({ request, env }) {
               "vehicle.make",
               "vehicle.model",
               "vehicle.body_style",
-              "vehicle.declared_size",
-              "vehicle.photo_url",
+              "vehicle.declared_size"
             ],
+            optional: ["vehicle.photo_url"]
           },
           400
         );
@@ -117,7 +119,7 @@ export async function onRequestPost({ request, env }) {
     }
 
     // ---- 5) Create Stripe Checkout Session ----
-    // FIX: return to /gifts so the receipt UI can show the codes
+    // Return to /gifts so the receipt UI can show the codes
     const successUrl = `${ORIGIN}/gifts?gift=success&session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${ORIGIN}/gifts?gift=cancel`;
 
@@ -134,14 +136,14 @@ export async function onRequestPost({ request, env }) {
     form.set("metadata[recipient_email]", recipient_email);
     if (recipient_name) form.set("metadata[recipient_name]", recipient_name);
 
-    // Vehicle intake in metadata (short)
-    if (hasServiceGift && vehicle) {
-      form.set("metadata[vehicle_year]", asString(vehicle.year));
-      form.set("metadata[vehicle_make]", asString(vehicle.make));
-      form.set("metadata[vehicle_model]", asString(vehicle.model));
-      form.set("metadata[vehicle_body_style]", asString(vehicle.body_style));
-      form.set("metadata[vehicle_declared_size]", asString(vehicle.declared_size));
-      form.set("metadata[vehicle_photo_url]", asString(vehicle.photo_url).slice(0, 480));
+    // Vehicle metadata (photo optional)
+    if (hasServiceGift) {
+      form.set("metadata[vehicle_year]", vYear);
+      form.set("metadata[vehicle_make]", vMake);
+      form.set("metadata[vehicle_model]", vModel);
+      form.set("metadata[vehicle_body_style]", vBody);
+      form.set("metadata[vehicle_declared_size]", vSize);
+      if (vPhoto) form.set("metadata[vehicle_photo_url]", vPhoto.slice(0, 480));
     }
 
     form.set("client_reference_id", `gift_${crypto.randomUUID()}`.slice(0, 200));
@@ -186,11 +188,9 @@ export async function onRequestPost({ request, env }) {
 /* ---------------- Helpers ---------------- */
 
 function inferOrigin(request) {
-  // If called from browser fetch, Origin is usually present
   const origin = request.headers.get("origin");
   if (origin && origin.startsWith("http")) return origin;
 
-  // Otherwise infer from CF headers
   const host = request.headers.get("host");
   if (!host) return "";
 
