@@ -1,5 +1,7 @@
 // functions/api/availability.js
 // GET /api/availability?date=YYYY-MM-DD
+// - date_blocks blocks the whole day (AM+PM)
+// - slot_blocks blocks specific slots (AM and/or PM)
 // - confirmed bookings always block
 // - pending bookings block only if created within HOLD_MINUTES
 
@@ -49,10 +51,32 @@ export async function onRequestGet({ request, env }) {
       reason: blk.data[0]?.reason ?? "Blocked",
       AM: false,
       PM: false,
+      slot_blocks: [],
+      hold_minutes: 30,
     });
   }
 
-  // 2) Bookings that block
+  // 2) Slot blocks (AM/PM admin blocking)
+  let AM = true;
+  let PM = true;
+  const slotBlocks = [];
+
+  const sb = await supaGet(
+    `/rest/v1/slot_blocks?select=service_date,slot,reason&service_date=eq.${encodeURIComponent(date)}`
+  );
+  if (!sb.ok) return corsJson({ error: "Supabase error (slot_blocks)", details: sb }, 500);
+
+  for (const row of (sb.data || [])) {
+    const slot = String(row.slot || "").toUpperCase();
+    const reason = row.reason ?? null;
+    if (slot === "AM") AM = false;
+    if (slot === "PM") PM = false;
+    if (slot === "AM" || slot === "PM") {
+      slotBlocks.push({ slot, reason });
+    }
+  }
+
+  // 3) Bookings that block
   const HOLD_MINUTES = 30;
   const holdSince = new Date(Date.now() - HOLD_MINUTES * 60 * 1000).toISOString();
 
@@ -74,12 +98,9 @@ export async function onRequestGet({ request, env }) {
 
   const rows = [...(confirmed.data || []), ...(pending.data || [])];
 
-  let AM = true;
-  let PM = true;
-
   for (const b of rows) {
     const dur = Number(b.duration_slots);
-    const slot = b.start_slot;
+    const slot = String(b.start_slot || "").toUpperCase();
 
     // full-day blocks both
     if (dur === 2) {
@@ -93,7 +114,14 @@ export async function onRequestGet({ request, env }) {
     if (dur === 1 && slot === "PM") PM = false;
   }
 
-  return corsJson({ date, blocked: false, AM, PM, hold_minutes: HOLD_MINUTES });
+  return corsJson({
+    date,
+    blocked: false,
+    AM,
+    PM,
+    slot_blocks: slotBlocks,
+    hold_minutes: HOLD_MINUTES,
+  });
 }
 
 /* ---------------- helpers ---------------- */
