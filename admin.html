@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin | Rosie Dazzlers</title>
   <meta name="description" content="Admin dashboard for Rosie Dazzlers bookings." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260308g" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260308h" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
     table{width:100%;border-collapse:collapse}
@@ -18,8 +19,9 @@
     .warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
     .bad{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.10)}
     .small{font-size:.92rem;color:rgba(234,242,255,.62)}
+    .sep{height:1px;background:rgba(255,255,255,.10);margin:14px 0}
     @media (max-width:980px){
-      .grid2{grid-template-columns:1fr}
+      .grid2,.grid3{grid-template-columns:1fr}
       table{display:block;overflow:auto}
     }
   </style>
@@ -40,11 +42,9 @@
   <div class="container">
     <div class="panel">
       <h1 style="margin:0 0 6px">Admin</h1>
-      <p class="kicker" style="margin:0">
-        View bookings and verify stored vehicle/codes. This uses a simple password gate (not full login).
-      </p>
+      <p class="kicker" style="margin:0">Bookings + blocking calendar (full day or AM/PM slots).</p>
       <div class="notice warn" style="margin-top:12px">
-        <strong>Tip:</strong> Do not share the admin password. We can upgrade this to Supabase Auth later.
+        <strong>Security:</strong> This is a simple password gate. We can upgrade to staff login later.
       </div>
     </div>
 
@@ -54,7 +54,7 @@
         <label for="pw">Admin password</label>
         <input id="pw" type="password" placeholder="Enter admin password…" />
         <div class="small" style="margin-top:6px">
-          Set this in Cloudflare Pages env vars as <span class="mono">ADMIN_PASSWORD</span>.
+          Cloudflare env var: <span class="mono">ADMIN_PASSWORD</span>
         </div>
 
         <div class="row" style="margin-top:12px">
@@ -66,25 +66,46 @@
       </div>
 
       <div class="panel">
-        <h2 style="margin-top:0">Filters</h2>
+        <h2 style="margin-top:0">Blocking calendar</h2>
+
         <div class="grid2">
           <div>
-            <label for="fromDate">From date</label>
-            <input id="fromDate" type="date" />
+            <label for="blockDate">Date</label>
+            <input id="blockDate" type="date" />
           </div>
           <div>
-            <label for="toDate">To date</label>
-            <input id="toDate" type="date" />
+            <label for="blockReason">Reason (optional)</label>
+            <input id="blockReason" type="text" placeholder="Vacation / Admin day / etc" />
           </div>
         </div>
-        <div class="row" style="margin-top:12px">
-          <button class="btn ghost" id="loadRangeBtn" type="button">Load date range</button>
+
+        <div class="sep"></div>
+
+        <h3 style="margin:0 0 8px">Full day</h3>
+        <div class="row">
+          <button class="btn primary" id="addDateBlockBtn" type="button">Block Day</button>
+          <button class="btn ghost" id="removeDateBlockBtn" type="button">Unblock Day</button>
         </div>
 
-        <div class="hr"></div>
+        <div class="sep"></div>
 
-        <div class="small">
-          Data is pulled from a server endpoint (service role) so it stays private.
+        <h3 style="margin:0 0 8px">Time slot</h3>
+        <div class="grid2">
+          <div>
+            <label for="blockSlot">Slot</label>
+            <select id="blockSlot">
+              <option value="AM">AM</option>
+              <option value="PM">PM</option>
+            </select>
+          </div>
+          <div class="row" style="align-items:flex-end">
+            <button class="btn primary" id="addSlotBlockBtn" type="button">Block Slot</button>
+            <button class="btn ghost" id="removeSlotBlockBtn" type="button">Unblock Slot</button>
+          </div>
+        </div>
+
+        <div class="small" style="margin-top:10px">
+          Full-day blocks override slot blocks. Slot blocks override bookings availability.
         </div>
       </div>
     </div>
@@ -199,22 +220,12 @@
       const pw = qs("#pw").value || "";
       if (!pw) { alert("Enter admin password first."); return; }
 
-      let payload = { mode, admin_password: pw };
-
-      if (mode === "range") {
-        const from = qs("#fromDate").value;
-        const to = qs("#toDate").value;
-        if (!from || !to) { alert("Pick from and to dates."); return; }
-        payload.from_date = from;
-        payload.to_date = to;
-      }
-
-      showStatus("Loading…");
+      showStatus("Loading bookings…");
 
       const res = await fetch("/api/admin/bookings", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ mode, admin_password: pw }),
       });
 
       const data = await res.json().catch(()=>null);
@@ -227,21 +238,55 @@
       renderTable(data.rows);
     }
 
+    async function callBlocks(action){
+      const pw = qs("#pw").value || "";
+      if (!pw) { alert("Enter admin password first."); return; }
+
+      const date = qs("#blockDate").value;
+      if (!date) { alert("Pick a date first."); return; }
+
+      const reason = (qs("#blockReason").value || "").trim() || null;
+      const slot = qs("#blockSlot").value;
+
+      const payload = {
+        admin_password: pw,
+        action,
+        service_date: date,
+        reason,
+      };
+      if (action.includes("slot_")) payload.slot = slot;
+
+      showStatus("Saving block…");
+
+      const res = await fetch("/api/admin/blocks", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json().catch(()=>null);
+      if (!res.ok || !data?.ok) {
+        showStatus(data?.error ? `Error: ${data.error}` : "Error saving block", "bad");
+        return;
+      }
+
+      showStatus("Saved.", "ok");
+    }
+
+    // Wire buttons
     qs("#loadBtn").addEventListener("click", () => loadBookings("next30"));
     qs("#loadAllBtn").addEventListener("click", () => loadBookings("latest100"));
-    qs("#loadRangeBtn").addEventListener("click", () => loadBookings("range"));
 
-    // default date range in UI
-    const today = new Date();
-    const addDays = (d, n) => {
-      const x = new Date(d);
-      x.setDate(x.getDate() + n);
-      return x.toISOString().slice(0,10);
-    };
-    qs("#fromDate").value = today.toISOString().slice(0,10);
-    qs("#toDate").value = addDays(today, 30);
+    qs("#addDateBlockBtn").addEventListener("click", () => callBlocks("date_block_add"));
+    qs("#removeDateBlockBtn").addEventListener("click", () => callBlocks("date_block_remove"));
+    qs("#addSlotBlockBtn").addEventListener("click", () => callBlocks("slot_block_add"));
+    qs("#removeSlotBlockBtn").addEventListener("click", () => callBlocks("slot_block_remove"));
+
+    // default date in UI
+    const today = new Date().toISOString().slice(0,10);
+    qs("#blockDate").value = today;
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260308g"></script>
+  <script type="module" src="/assets/chrome.js?v=20260308h"></script>
 </body>
 </html>
