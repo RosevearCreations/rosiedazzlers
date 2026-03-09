@@ -5,13 +5,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Book | Rosie Dazzlers</title>
   <meta name="description" content="Book your mobile auto detailing service in Norfolk & Oxford Counties. Deposit required." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260308b" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260309a" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
     .muted{color:rgba(234,242,255,.62)}
     .req{color:rgba(239,68,68,.92);font-weight:800}
     .codebox{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .mini{font-size:.92rem;color:rgba(234,242,255,.62)}
+    .inline{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     @media (max-width: 980px){
       .grid2,.grid3{grid-template-columns:1fr}
     }
@@ -51,6 +53,7 @@
           <div>
             <label for="service_date">Service date <span class="req">*</span></label>
             <input id="service_date" type="date" />
+            <div id="availNote" class="mini" style="margin-top:6px"></div>
           </div>
           <div>
             <label for="start_slot">Time slot <span class="req">*</span></label>
@@ -126,6 +129,9 @@
 
         <h3 style="margin:0 0 8px">Add-ons</h3>
         <div id="addonsList" class="list"></div>
+        <div class="mini" style="margin-top:8px">
+          Quote add-ons are recorded but not charged online. We’ll confirm pricing by message.
+        </div>
       </div>
 
       <div class="panel">
@@ -182,10 +188,10 @@
         </div>
 
         <div class="grid2" style="margin-top:10px">
-          <div>
+          <div class="inline">
             <button class="btn ghost" id="applyCodesBtn" type="button">Apply codes</button>
+            <span id="codesResult" class="mini"></span>
           </div>
-          <div id="codesResult"></div>
         </div>
 
         <div class="hr"></div>
@@ -194,7 +200,7 @@
         <div class="list">
           <label class="checkbox"><input type="checkbox" id="ack_driveway" /> Driveway required</label>
           <label class="checkbox"><input type="checkbox" id="ack_power_water" /> Customer provides power + water (extra charges may apply otherwise)</label>
-          <label class="checkbox"><input type="checkbox" id="ack_bylaw" /> Customer accepts responsibility for local bylaws related to washing/chemicals</label>
+          <label class="checkbox"><input type="checkbox" id="ack_bylaw" /> Customer accepts responsibility for local bylaws related to washing/chemicals/runoff</label>
           <label class="checkbox"><input type="checkbox" id="ack_cancellation" /> Cancellation policy accepted</label>
         </div>
 
@@ -205,10 +211,6 @@
         <div class="row" style="margin-top:10px">
           <button class="btn primary" id="checkoutBtn" type="button">Proceed to deposit checkout</button>
         </div>
-
-        <div class="muted" style="margin-top:10px">
-          Deposit is charged now to reserve your slot. Remaining balance is due at service (or per invoice/payment method).
-        </div>
       </div>
     </div>
 
@@ -216,7 +218,11 @@
   </div>
 
   <script type="module">
-    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260308b";
+    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260309a";
+
+    const money = (cents) =>
+      new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" })
+        .format((Number(cents || 0) / 100));
 
     function showDataError(msg) {
       const el = document.querySelector("#dataError");
@@ -235,10 +241,6 @@
       }
     }
 
-    const money = (cents) =>
-      new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" })
-        .format((Number(cents || 0) / 100));
-
     function val(id){ return (document.querySelector(id)?.value || "").trim(); }
     function checked(id){ return !!document.querySelector(id)?.checked; }
 
@@ -253,6 +255,8 @@
     }
 
     let servicesData = null;
+    let lastPreview = null;
+    let lastAvail = null;
 
     function pkgPriceCents(pkgCode, size){
       const p = (servicesData?.packages || []).find(x => x.code === pkgCode);
@@ -273,20 +277,31 @@
       return total;
     }
 
-    function recompute(){
+    function computeSubtotalCents(){
       const pkgCode = val("#package_code");
       const size = val("#vehicle_size");
-      const base = pkgPriceCents(pkgCode, size);
-      const add = addonsTotalCents(size);
-      const total = base + add;
-      const dep = pkgCode ? depositFor(pkgCode) : 0;
+      return pkgPriceCents(pkgCode, size) + addonsTotalCents(size);
+    }
 
-      document.querySelector("#summary").innerHTML =
-        `<strong>Estimate</strong><br>` +
-        `Total (before codes): ${money(total)}<br>` +
-        `Deposit due now (before codes): ${money(dep)}<br>` +
-        (val("#gift_code") ? `Gift code entered: <span class="codebox">${val("#gift_code").toUpperCase()}</span><br>` : "") +
-        (val("#promo_code") ? `Promo code entered: <span class="codebox">${val("#promo_code").toUpperCase()}</span><br>` : "");
+    function recompute(){
+      const pkg = val("#package_code");
+      const subtotal = computeSubtotalCents();
+      const depBase = pkg ? depositFor(pkg) : 0;
+
+      if (lastPreview?.ok) {
+        document.querySelector("#summary").innerHTML =
+          `<strong>Estimate (with codes)</strong><br>` +
+          `Subtotal: ${money(lastPreview.subtotal_cents)}<br>` +
+          (lastPreview.promo_code ? `Promo discount: -${money(lastPreview.promo_discount_cents)}<br>` : "") +
+          (lastPreview.gift_code ? `Gift applied: -${money(lastPreview.gift_apply_cents)}<br>` : "") +
+          `<strong>Total after discounts:</strong> ${money(lastPreview.total_after_discounts_cents)}<br>` +
+          `<strong>Deposit due now:</strong> ${money(lastPreview.deposit_due_now_cents)}`;
+      } else {
+        document.querySelector("#summary").innerHTML =
+          `<strong>Estimate</strong><br>` +
+          `Total (before codes): ${money(subtotal)}<br>` +
+          `Deposit due now (before codes): ${money(depBase)}`;
+      }
     }
 
     function renderPackages() {
@@ -295,17 +310,6 @@
       pkgSel.innerHTML = `<option value="">Select…</option>` + pkgs.map(p =>
         `<option value="${p.code}">${p.name} — ${p.subtitle || ""}</option>`
       ).join("");
-
-      const qs = new URLSearchParams(location.search);
-      const qpPackage = (qs.get("package") || "").trim();
-      const qpSize = (qs.get("size") || "").trim();
-
-      if (qpSize && ["small","mid","oversize"].includes(qpSize)) {
-        document.querySelector("#vehicle_size").value = qpSize;
-      }
-      if (qpPackage) {
-        pkgSel.value = qpPackage;
-      }
     }
 
     function renderAddons() {
@@ -321,21 +325,96 @@
         `;
       }).join("");
 
-      document.querySelectorAll("[data-addon]").forEach(chk => chk.addEventListener("change", recompute));
+      document.querySelectorAll("[data-addon]").forEach(chk => chk.addEventListener("change", () => {
+        lastPreview = null;
+        document.querySelector("#codesResult").textContent = "";
+        recompute();
+      }));
     }
 
-    function applyCodes(){
+    function setSlotEnabled(slot, enabled){
+      const sel = document.querySelector("#start_slot");
+      const opt = sel.querySelector(`option[value="${slot}"]`);
+      if (!opt) return;
+      opt.disabled = !enabled;
+      // if currently selected slot became disabled, clear selection
+      if (!enabled && sel.value === slot) sel.value = "";
+    }
+
+    async function refreshAvailability(){
+      const date = val("#service_date");
+      if (!date) return;
+
+      const note = document.querySelector("#availNote");
+      note.textContent = "Checking availability…";
+
+      const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache: "no-store" });
+      const data = await res.json().catch(()=>null);
+
+      if (!res.ok || !data) {
+        note.textContent = "Could not check availability.";
+        return;
+      }
+
+      lastAvail = data;
+
+      if (data.blocked) {
+        setSlotEnabled("AM", false);
+        setSlotEnabled("PM", false);
+        note.textContent = `Blocked: ${data.reason || "Unavailable"}`;
+        return;
+      }
+
+      setSlotEnabled("AM", !!data.AM);
+      setSlotEnabled("PM", !!data.PM);
+
+      const blocks = (data.slot_blocks || [])
+        .map(b => `${b.slot}${b.reason ? ` (${b.reason})` : ""}`)
+        .join(", ");
+
+      note.textContent = `AM: ${data.AM ? "Available" : "Blocked"} · PM: ${data.PM ? "Available" : "Blocked"}${blocks ? ` · Blocks: ${blocks}` : ""}`;
+    }
+
+    async function applyCodes(){
       const gift = val("#gift_code").toUpperCase();
       const promo = val("#promo_code").toUpperCase();
       document.querySelector("#gift_code").value = gift;
       document.querySelector("#promo_code").value = promo;
 
-      const out = document.querySelector("#codesResult");
-      out.innerHTML = `<div class="notice">Codes will be applied at checkout (server-validated).</div>`;
+      const pkg = val("#package_code");
+      const size = val("#vehicle_size");
+      if (!pkg || !size) { document.querySelector("#codesResult").textContent = "Pick package + size first."; return; }
+
+      const payload = {
+        subtotal_cents: computeSubtotalCents(),
+        deposit_base_cents: depositFor(pkg),
+        package_code: pkg,
+        vehicle_size: size,
+        gift_code: gift || null,
+        promo_code: promo || null,
+      };
+
+      const res = await fetch("/api/codes/preview", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json().catch(()=>null);
+      if (!res.ok || !data?.ok) {
+        document.querySelector("#codesResult").textContent = "Could not validate codes.";
+        lastPreview = null;
+        recompute();
+        return;
+      }
+
+      lastPreview = data;
+      const bits = [];
+      if (data.promo_code) bits.push(data.promo_message || "Promo checked");
+      if (data.gift_code) bits.push(data.gift_message || "Gift checked");
+      document.querySelector("#codesResult").textContent = bits.join(" · ") || "Codes checked";
       recompute();
     }
-
-    document.querySelector("#applyCodesBtn")?.addEventListener("click", applyCodes);
 
     async function checkout(){
       const required = [
@@ -353,6 +432,14 @@
       ];
       for (const [id,label] of required){
         if (!val(id)) { alert(`Missing: ${label}`); return; }
+      }
+
+      // quick client-side block: if availability says slot unavailable
+      if (lastAvail && lastAvail.blocked) { alert("That date is blocked."); return; }
+      if (lastAvail && !lastAvail.blocked) {
+        const want = val("#start_slot");
+        if (want === "AM" && !lastAvail.AM) { alert("AM slot is blocked/unavailable for that date."); return; }
+        if (want === "PM" && !lastAvail.PM) { alert("PM slot is blocked/unavailable for that date."); return; }
       }
 
       const acks = [
@@ -412,26 +499,36 @@
       location.href = data.checkout_url;
     }
 
-    document.querySelector("#checkoutBtn")?.addEventListener("click", checkout);
+    // wiring
+    document.querySelector("#applyCodesBtn").addEventListener("click", applyCodes);
+    document.querySelector("#checkoutBtn").addEventListener("click", checkout);
 
-    // init
-    try {
-      servicesData = await fetchJsonStrict(DATA_URL);
-      renderPackages();
-      renderAddons();
+    document.querySelector("#service_date").addEventListener("change", () => {
+      refreshAvailability();
+    });
 
-      ["#package_code","#vehicle_size","#start_slot","#service_date","#service_area","#gift_code","#promo_code"].forEach(sel=>{
-        document.querySelector(sel)?.addEventListener("change", recompute);
+    ["#package_code","#vehicle_size","#start_slot","#service_area"].forEach(sel=>{
+      document.querySelector(sel).addEventListener("change", () => {
+        lastPreview = null;
+        document.querySelector("#codesResult").textContent = "";
+        recompute();
       });
+    });
 
-      recompute();
-    } catch (e) {
-      showDataError(String(e.message || e));
-      document.querySelector("#package_code").innerHTML = `<option value="">(Could not load packages)</option>`;
-      document.querySelector("#addonsList").innerHTML = `<div class="notice bad">Could not load add-ons.</div>`;
+    async function init(){
+      try {
+        servicesData = await fetchJsonStrict(DATA_URL);
+        renderPackages();
+        renderAddons();
+        recompute();
+      } catch (e) {
+        showDataError(String(e.message || e));
+      }
     }
+
+    await init();
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260308b"></script>
+  <script type="module" src="/assets/chrome.js?v=20260309a"></script>
 </body>
 </html>
