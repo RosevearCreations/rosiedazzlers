@@ -1,0 +1,154 @@
+<!-- /admin-assign.html
+     Admin helper page to assign staff + internal notes to a booking.
+     (Optional convenience UI; uses /api/admin/assign endpoint)
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Assign | Rosie Dazzlers</title>
+  <meta name="description" content="Assign staff to bookings." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260309c" />
+  <style>
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    @media (max-width:980px){ .grid2,.grid3{grid-template-columns:1fr} }
+    textarea{min-height:120px}
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers</strong>
+      </a>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
+      <div class="nav-links" id="navLinks"></div>
+      <a class="btn primary" href="/admin">Admin</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="panel">
+      <h1 style="margin:0 0 6px">Assign Staff</h1>
+      <p class="kicker" style="margin:0">
+        Use this to attach a staff member and internal notes to a booking.
+      </p>
+      <div class="notice warn" style="margin-top:12px">
+        Requires Cloudflare env var <span class="mono">ADMIN_PASSWORD</span> and the endpoint <span class="mono">/api/admin/assign</span>.
+      </div>
+    </div>
+
+    <div class="section grid2">
+      <div class="panel">
+        <h2 style="margin-top:0">Assignment</h2>
+
+        <label for="pw">Admin password</label>
+        <input id="pw" type="password" placeholder="Enter admin password…" />
+
+        <div class="grid2" style="margin-top:10px">
+          <div>
+            <label for="booking_id">Booking ID <span class="mono">(uuid)</span></label>
+            <input id="booking_id" class="mono" type="text" placeholder="d751e9f0-717d-4ab6-a2be-dba309006b76" />
+            <div class="small" style="margin-top:6px;color:rgba(234,242,255,.62)">
+              Tip: copy from Supabase bookings table or the Admin bookings list.
+            </div>
+          </div>
+          <div>
+            <label for="assigned_staff_name">Assigned staff name</label>
+            <input id="assigned_staff_name" type="text" placeholder="Jack" />
+            <label for="assigned_staff_email" style="margin-top:10px">Assigned staff email (optional)</label>
+            <input id="assigned_staff_email" type="email" placeholder="staff@example.com" />
+          </div>
+        </div>
+
+        <label for="internal_notes" style="margin-top:10px">Internal notes (optional)</label>
+        <textarea id="internal_notes" placeholder="Bring extra towels. Customer has dog hair."></textarea>
+
+        <div class="row" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn primary" id="saveBtn" type="button">Save assignment</button>
+          <button class="btn ghost" id="clearBtn" type="button">Clear</button>
+        </div>
+
+        <div id="status" class="notice" style="display:none;margin-top:12px"></div>
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-top:0">What this does</h2>
+        <ul>
+          <li>Writes <span class="mono">assigned_staff_name</span> and <span class="mono">assigned_staff_email</span> on the booking row.</li>
+          <li>Writes <span class="mono">internal_notes</span> (admin-only notes).</li>
+          <li>Uses server-side service role (not exposed in browser).</li>
+        </ul>
+        <div class="hr"></div>
+        <p class="small" style="color:rgba(234,242,255,.62)">
+          Next upgrade: show an assign form inline on <span class="mono">/admin.html</span> and load staff from <span class="mono">staff_directory</span>.
+        </p>
+      </div>
+    </div>
+
+    <div class="footer" data-footer></div>
+  </div>
+
+  <script type="module">
+    const qs = (s) => document.querySelector(s);
+
+    function show(msg, kind="") {
+      const el = qs("#status");
+      el.style.display = "block";
+      el.className = "notice " + (kind || "");
+      el.textContent = msg;
+    }
+
+    function val(id) { return (qs(id).value || "").trim(); }
+
+    qs("#saveBtn").addEventListener("click", async () => {
+      const admin_password = val("#pw");
+      const booking_id = val("#booking_id");
+      const assigned_staff_name = val("#assigned_staff_name");
+      const assigned_staff_email = val("#assigned_staff_email");
+      const internal_notes = (qs("#internal_notes").value || "").trim();
+
+      if (!admin_password) return show("Missing admin password.", "bad");
+      if (!booking_id) return show("Missing booking_id.", "bad");
+
+      show("Saving…");
+
+      const payload = {
+        admin_password,
+        booking_id,
+        assigned_staff_name,
+        assigned_staff_email,
+        internal_notes,
+      };
+
+      const res = await fetch("/api/admin/assign", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json().catch(()=>null);
+
+      if (!res.ok || !data?.ok) {
+        return show(data?.error ? `Error: ${data.error}` : "Error saving assignment.", "bad");
+      }
+
+      show("Saved assignment.", "ok");
+    });
+
+    qs("#clearBtn").addEventListener("click", () => {
+      qs("#booking_id").value = "";
+      qs("#assigned_staff_name").value = "";
+      qs("#assigned_staff_email").value = "";
+      qs("#internal_notes").value = "";
+      qs("#status").style.display = "none";
+    });
+  </script>
+
+  <script type="module" src="/assets/chrome.js?v=20260309c"></script>
+</body>
+</html>
