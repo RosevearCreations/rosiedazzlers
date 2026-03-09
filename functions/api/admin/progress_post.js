@@ -1,27 +1,14 @@
 // functions/api/admin/progress_post.js
+// REPLACE ENTIRE FILE with this version.
+//
 // POST /api/admin/progress_post
-// Admin-only: post a progress update and/or a photo URL to a booking.
-// This is the "upload while detailing" foundation (photo URL for now).
+// Admin-only: post a progress update and/or a photo reference to a booking.
 //
-// Env vars required:
-// - ADMIN_PASSWORD
-// - SUPABASE_URL
-// - SUPABASE_SERVICE_ROLE_KEY
-//
-// Request JSON (one or both: note and media_url):
-// {
-//   "admin_password":"...",
-//   "booking_id":"uuid",
-//   "created_by":"Jack",
-//   "visibility":"customer" | "internal",
-//   "note":"We started the vacuum + wipe down.",
-//
-//   "kind":"before"|"during"|"after"|"other",
-//   "media_url":"https://...",
-//   "caption":"Before - driver side floor"
-// }
-//
-// Response: { ok:true }
+// v2 CHANGE:
+// - media_url can now be:
+//    1) https://... (regular URL)
+//    2) sb://bucket/path  (Supabase Storage reference)
+// This matches /api/progress/view (which converts sb://... into signed URLs for customers).
 
 export async function onRequestOptions() {
   return corsResponse("", 204);
@@ -47,7 +34,7 @@ export async function onRequestPost({ request, env }) {
     const createdBy = body.created_by != null ? String(body.created_by).trim() : null;
 
     const visibility = (body.visibility ? String(body.visibility).toLowerCase() : "customer");
-    if (!["customer","internal"].includes(visibility)) {
+    if (!["customer", "internal"].includes(visibility)) {
       return corsJson({ ok: false, error: "visibility must be customer or internal" }, 400);
     }
 
@@ -56,7 +43,7 @@ export async function onRequestPost({ request, env }) {
     const caption = body.caption != null ? String(body.caption).trim() : null;
 
     const kind = body.kind != null ? String(body.kind).toLowerCase() : "during";
-    if (!["before","during","after","other"].includes(kind)) {
+    if (!["before", "during", "after", "other"].includes(kind)) {
       return corsJson({ ok: false, error: "kind must be before,during,after,other" }, 400);
     }
 
@@ -64,8 +51,18 @@ export async function onRequestPost({ request, env }) {
       return corsJson({ ok: false, error: "Provide note and/or media_url" }, 400);
     }
 
-    if (mediaUrl && !looksLikeUrl(mediaUrl)) {
-      return corsJson({ ok: false, error: "media_url must be a valid URL" }, 400);
+    // Allow sb://bucket/path OR https://...
+    if (mediaUrl) {
+      const ok =
+        mediaUrl.startsWith("sb://") ||
+        looksLikeUrl(mediaUrl);
+
+      if (!ok) {
+        return corsJson({
+          ok: false,
+          error: "media_url must be https://... or sb://bucket/path",
+        }, 400);
+      }
     }
 
     const supa = async (method, path, payload) => {
