@@ -1,0 +1,204 @@
+<!-- /admin-booking.html
+     Admin helper page to:
+      - set job_status (scheduled/in_progress/completed/cancelled)
+      - enable/disable progress
+      - regenerate progress token and copy customer links
+     Uses /api/admin/booking_update
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Booking | Rosie Dazzlers</title>
+  <meta name="description" content="Admin booking controls." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260309g" />
+  <style>
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .muted{color:rgba(234,242,255,.62)}
+    textarea{min-height:90px}
+    @media (max-width:980px){ .grid2,.grid3{grid-template-columns:1fr} }
+    .linkbox{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .copybtn{min-width:110px}
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers</strong>
+      </a>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
+      <div class="nav-links" id="navLinks"></div>
+      <a class="btn primary" href="/admin">Admin</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="panel">
+      <h1 style="margin:0 0 6px">Booking Controls</h1>
+      <p class="kicker" style="margin:0">Operational controls for a single booking.</p>
+    </div>
+
+    <div class="section grid2">
+      <div class="panel">
+        <h2 style="margin-top:0">Target booking</h2>
+
+        <label for="pw">Admin password</label>
+        <input id="pw" type="password" placeholder="Enter admin password…" />
+
+        <label for="booking_id" style="margin-top:10px">Booking ID (uuid)</label>
+        <input id="booking_id" class="mono" type="text" placeholder="d751e9f0-717d-4ab6-a2be-dba309006b76" />
+
+        <div class="hr"></div>
+
+        <h2 style="margin-top:0">Job status</h2>
+        <div class="grid2">
+          <div>
+            <label for="job_status">Set status</label>
+            <select id="job_status">
+              <option value="scheduled">scheduled</option>
+              <option value="in_progress">in_progress</option>
+              <option value="completed">completed</option>
+              <option value="cancelled">cancelled</option>
+            </select>
+          </div>
+          <div class="row" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+            <button class="btn primary" id="setStatusBtn" type="button">Save status</button>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <h2 style="margin-top:0">Progress visibility</h2>
+        <div class="grid2">
+          <div>
+            <label for="progress_enabled">Progress enabled?</label>
+            <select id="progress_enabled">
+              <option value="true">true</option>
+              <option value="false">false</option>
+            </select>
+          </div>
+          <div class="row" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+            <button class="btn primary" id="setProgressBtn" type="button">Save progress</button>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <h2 style="margin-top:0">Regenerate customer links</h2>
+        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn ghost" id="regenBtn" type="button">Generate new token</button>
+        </div>
+
+        <div id="status" class="notice" style="display:none;margin-top:12px"></div>
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-top:0">Customer links</h2>
+        <p class="muted">After saving status/progress or regenerating, links appear below.</p>
+
+        <div class="hr"></div>
+
+        <div id="linksBox" style="display:none">
+          <div class="notice">
+            <div class="muted">Progress link</div>
+            <div class="linkbox">
+              <input id="progress_url" class="mono" type="text" readonly />
+              <button class="btn ghost copybtn" id="copyProgress" type="button">Copy</button>
+            </div>
+          </div>
+
+          <div class="notice" style="margin-top:10px">
+            <div class="muted">Completion link</div>
+            <div class="linkbox">
+              <input id="complete_url" class="mono" type="text" readonly />
+              <button class="btn ghost copybtn" id="copyComplete" type="button">Copy</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="notice warn" style="margin-top:12px">
+          If you regenerate the token, the old link stops working.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer" data-footer></div>
+  </div>
+
+  <script type="module">
+    const qs = (s) => document.querySelector(s);
+    const val = (id) => (qs(id).value || "").trim();
+
+    function show(msg, kind="") {
+      const el = qs("#status");
+      el.style.display = "block";
+      el.className = "notice " + (kind || "");
+      el.textContent = msg;
+    }
+
+    function setLinks(links){
+      if (!links) return;
+      qs("#linksBox").style.display = "block";
+      qs("#progress_url").value = links.progress_url || "";
+      qs("#complete_url").value = links.complete_url || "";
+    }
+
+    async function post(action, extra = {}) {
+      const admin_password = val("#pw");
+      const booking_id = val("#booking_id");
+
+      if (!admin_password) { show("Missing admin password.", "bad"); return null; }
+      if (!booking_id) { show("Missing booking_id.", "bad"); return null; }
+
+      show("Saving…");
+
+      const payload = { admin_password, booking_id, action, ...extra };
+
+      const res = await fetch("/api/admin/booking_update", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json().catch(()=>null);
+      if (!res.ok || !data?.ok) {
+        show(data?.error ? `Error: ${data.error}` : "Error updating booking.", "bad");
+        return null;
+      }
+
+      show("Saved.", "ok");
+      if (data.links) setLinks(data.links);
+      return data;
+    }
+
+    qs("#setStatusBtn").addEventListener("click", async () => {
+      await post("set_job_status", { job_status: val("#job_status") });
+    });
+
+    qs("#setProgressBtn").addEventListener("click", async () => {
+      await post("set_progress_enabled", { progress_enabled: val("#progress_enabled") === "true" });
+    });
+
+    qs("#regenBtn").addEventListener("click", async () => {
+      await post("regen_progress_token");
+    });
+
+    async function copyFrom(id) {
+      const input = qs(id);
+      if (!input.value) return;
+      await navigator.clipboard.writeText(input.value);
+      show("Copied to clipboard.", "ok");
+    }
+
+    qs("#copyProgress").addEventListener("click", ()=>copyFrom("#progress_url"));
+    qs("#copyComplete").addEventListener("click", ()=>copyFrom("#complete_url"));
+  </script>
+
+  <script type="module" src="/assets/chrome.js?v=20260309g"></script>
+</body>
+</html>
