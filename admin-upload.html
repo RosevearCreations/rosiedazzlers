@@ -1,6 +1,10 @@
 <!-- /admin-upload.html
+     REPLACE ENTIRE FILE
      Admin helper to upload a photo to Supabase Storage (private),
-     then post it to the booking progress feed.
+     then attach it to the booking progress feed.
+
+     NEW: supports deep-linking from /admin.html via:
+       /admin-upload.html?bid=<booking_uuid>
 
      Flow:
        1) Request signed upload URL: POST /api/admin/progress_upload_url
@@ -14,7 +18,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Upload | Rosie Dazzlers</title>
   <meta name="description" content="Upload job photos to private storage and attach to progress feed." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260309h" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260309l" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
@@ -44,7 +48,7 @@
         Upload a photo privately (Supabase Storage), then attach it to the customer progress feed.
       </p>
       <div class="notice warn" style="margin-top:12px">
-        This uses <span class="mono">/api/admin/progress_upload_url</span> (signed upload) and stores media as <span class="mono">sb://bucket/path</span>.
+        Uses <span class="mono">/api/admin/progress_upload_url</span> (signed upload) and stores media as <span class="mono">sb://bucket/path</span>.
       </div>
     </div>
 
@@ -144,12 +148,11 @@
       return { ok: res.ok, status: res.status, out };
     }
 
-    async function putFile(uploadUrl, file, contentType) {
-      // NOTE: Signed upload endpoint accepts PUT
+    async function putFile(uploadUrl, file) {
       const res = await fetch(uploadUrl, {
         method: "PUT",
         headers: {
-          "content-type": contentType || file.type || "application/octet-stream",
+          "content-type": file.type || "application/octet-stream",
           "x-upsert": "true",
         },
         body: file,
@@ -196,7 +199,7 @@
       qs("#prog").value = 25;
       show("Uploading image…");
 
-      const up = await putFile(upload_url, file, file.type);
+      const up = await putFile(upload_url, file);
       if (!up.ok) {
         qs("#prog").value = 0;
         return show(`Upload failed (${up.status}).`, "bad");
@@ -225,8 +228,15 @@
       show("Uploaded + attached.", "ok");
       setTimeout(()=>{ qs("#prog").style.display = "none"; qs("#prog").value = 0; }, 1200);
     });
+
+    // NEW: prefill booking id from ?bid=
+    (function prefillFromQuery(){
+      const p = new URLSearchParams(location.search);
+      const bid = (p.get("bid") || "").trim();
+      if (bid) qs("#booking_id").value = bid;
+    })();
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260309h"></script>
+  <script type="module" src="/assets/chrome.js?v=20260309l"></script>
 </body>
 </html>
