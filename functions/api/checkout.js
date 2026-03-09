@@ -1,15 +1,16 @@
 // functions/api/checkout.js
 // POST /api/checkout
-// Creates a pending booking in Supabase, applies optional promo_code + gift_code,
-// stores vehicle + code/discount fields, then creates a Stripe Checkout Session
-// for the (possibly reduced) deposit. If deposit due becomes $0, skips Stripe and confirms.
+// v4: adds slot_blocks (AM/PM) admin blocking support.
+// Creates a booking in Supabase, applies optional promo_code + gift_code,
+// stores vehicle + code/discount fields, then creates Stripe Checkout Session
+// for deposit (or confirms if deposit due is 0).
 
 export async function onRequestOptions() {
   return corsResponse("", 204);
 }
 
 export async function onRequestPost({ request, env }) {
-  const VERSION = "checkout_v3_store_vehicle_and_codes_20260308";
+  const VERSION = "checkout_v4_slot_blocks_20260308";
 
   try {
     const raw = await request.text();
@@ -33,7 +34,6 @@ export async function onRequestPost({ request, env }) {
       "customer_name",
       "customer_email",
       "address_line1",
-      // vehicle required fields
       "car_year",
       "car_make",
       "car_model",
@@ -79,7 +79,6 @@ export async function onRequestPost({ request, env }) {
       if (body[a] !== true) return corsJson({ version: VERSION, error: `Missing acknowledgement: ${a}` }, 400);
     }
 
-    // Optional codes
     const giftCode = typeof body.gift_code === "string" ? body.gift_code.trim().toUpperCase() : "";
     const promoCode = typeof body.promo_code === "string" ? body.promo_code.trim().toUpperCase() : "";
 
@@ -95,8 +94,7 @@ export async function onRequestPost({ request, env }) {
       return corsJson({ version: VERSION, error: "Server not configured (Stripe secret missing)" }, 500);
     }
 
-    // ---- 3) Package pricing (your corrected chart) ----
-    // cents CAD
+    // ---- 3) Pricing ----
     const PRICING = {
       premium_wash:    { small:  8500, mid: 10500, oversize: 12500 },
       basic_detail:    { small: 11500, mid: 13500, oversize: 17000 },
@@ -105,7 +103,6 @@ export async function onRequestPost({ request, env }) {
       exterior_detail: { small: 19500, mid: 22000, oversize: 24500 },
     };
 
-    // ---- 4) Add-ons (quote_required=true recorded but not charged online) ----
     const ADDONS = {
       full_clay_treatment: {
         label: "Full Clay Treatment",
@@ -141,7 +138,6 @@ export async function onRequestPost({ request, env }) {
       window_tinting: { label: "Window Tinting", quote_required: true },
     };
 
-    // ---- 5) Base + add-ons ----
     const base = PRICING?.[body.package_code]?.[body.vehicle_size];
     if (!base) return corsJson({ version: VERSION, error: "Unknown package_code or vehicle_size" }, 400);
 
@@ -167,11 +163,10 @@ export async function onRequestPost({ request, env }) {
 
     const subtotalCents = base + addonsTotal;
 
-    // ---- 6) Deposit rule ----
     const depositBaseCents =
       ["premium_wash", "basic_detail"].includes(body.package_code) ? 5000 : 10000;
 
-    // ---- 7) Supabase helper ----
+    // ---- 4) Supabase helper ----
     const supa = async (method, path, payload) => {
       const res = await fetch(`${SUPABASE_URL}${path}`, {
         method,
@@ -190,7 +185,7 @@ export async function onRequestPost({ request, env }) {
       return { ok: res.ok, status: res.status, data, raw: text };
     };
 
-    // ---- 8) Date blocked? ----
+    // ---- 5) Date blocked? ----
     const blk = await supa(
       "GET",
       `/rest/v1/date_blocks?select=blocked_date,reason&blocked_date=eq.${encodeURIComponent(body.service_date)}`
@@ -200,11 +195,20 @@ export async function onRequestPost({ request, env }) {
       return corsJson({ version: VERSION, error: "Date is blocked", reason: blk.data[0]?.reason ?? "Blocked" }, 409);
     }
 
-    // ---- 9) Availability (confirmed + active holds) ----
+    // ---- 6) Slot blocked? (AM/PM admin blocks) ----
+    const slotBlock = await supa(
+      "GET",
+      `/rest/v1/slot_blocks?select=service_date,slot,reason&service_date=eq.${encodeURIComponent(body.service_date)}&slot=eq.${encodeURIComponent(body.start_slot)}&limit=1`
+    );
+    if (!slotBlock.ok) return corsJson({ version: VERSION, error: "Supabase error (slot_blocks)", details: slotBlock }, 500);
+    if (Array.isArray(slotBlock.data) && slotBlock.data.length > 0) {
+      return corsJson({ version: VERSION, error: "Selected slot is blocked", reason: slotBlock.data[0]?.reason ?? "Blocked" }, 409);
+    }
+
+    // ---- 7) Availability (confirmed + active holds) ----
     const HOLD_MINUTES = 30;
     const holdSince = new Date(Date.now() - HOLD_MINUTES * 60 * 1000).toISOString();
 
-    // expire old holds
     await supa(
       "PATCH",
       `/rest/v1/bookings?service_date=eq.${encodeURIComponent(body.service_date)}&status=eq.pending&created_at=lt.${encodeURIComponent(holdSince)}`,
@@ -233,6 +237,9 @@ export async function onRequestPost({ request, env }) {
       if (dur === 1 && b.start_slot === "PM") PM = false;
     }
 
+    if (body.start_slot === "AM") AM = AM && true;
+    if (body.start_slot === "PM") PM = PM && true;
+
     const okSlot = body.start_slot === "AM" ? AM : PM;
     const okFullDay = duration === 2 ? (AM && PM) : true;
 
@@ -240,7 +247,7 @@ export async function onRequestPost({ request, env }) {
       return corsJson({ version: VERSION, error: "Selected slot not available", availability: { AM, PM } }, 409);
     }
 
-    // ---- 10) Promo Code (optional) ----
+    // ---- 8) Promo ----
     let promo = null;
     let promoDiscountCents = 0;
 
@@ -249,9 +256,7 @@ export async function onRequestPost({ request, env }) {
         "GET",
         `/rest/v1/promo_codes?select=code,active,discount_type,discount_percent,discount_cents,starts_at,ends_at,max_uses,uses&code=eq.${encodeURIComponent(promoCode)}&limit=1`
       );
-      if (!promoRes.ok) {
-        return corsJson({ version: VERSION, error: "Promo codes not configured (promo_codes table missing?)", details: promoRes }, 500);
-      }
+      if (!promoRes.ok) return corsJson({ version: VERSION, error: "Supabase error (promo_codes)", details: promoRes }, 500);
 
       promo = Array.isArray(promoRes.data) ? promoRes.data[0] : null;
       if (!promo) return corsJson({ version: VERSION, error: "Invalid promo code" }, 400);
@@ -282,7 +287,7 @@ export async function onRequestPost({ request, env }) {
 
     const afterPromoCents = Math.max(0, subtotalCents - promoDiscountCents);
 
-    // ---- 11) Gift Code (optional) ----
+    // ---- 9) Gift ----
     let gift = null;
     let giftApplyCents = 0;
 
@@ -307,15 +312,7 @@ export async function onRequestPost({ request, env }) {
       const gType = String(gift.type || "").toLowerCase();
       if (gType === "service") {
         if (gift.package_code !== body.package_code || gift.vehicle_size !== body.vehicle_size) {
-          return corsJson(
-            {
-              version: VERSION,
-              error: "Service gift does not match selected package/size",
-              expected: { package_code: gift.package_code, vehicle_size: gift.vehicle_size },
-              selected: { package_code: body.package_code, vehicle_size: body.vehicle_size },
-            },
-            400
-          );
+          return corsJson({ version: VERSION, error: "Service gift does not match selected package/size" }, 400);
         }
       }
 
@@ -324,14 +321,13 @@ export async function onRequestPost({ request, env }) {
 
     const afterGiftCents = Math.max(0, afterPromoCents - giftApplyCents);
 
-    // Deposit reduced by promo + gift (gift can cover deposit)
     const depositCapped = Math.min(depositBaseCents, afterPromoCents);
     const giftToDeposit = Math.min(depositCapped, giftApplyCents);
     const depositDueNowCents = Math.max(0, depositCapped - giftToDeposit);
 
-    // ---- 12) Build vehicle JSON ----
+    // ---- 10) Vehicle JSON ----
     const vehicle = {
-      year: year,
+      year,
       make: String(body.car_make || "").trim(),
       model: String(body.car_model || "").trim(),
       plate: String(body.car_plate || "").trim() || null,
@@ -339,11 +335,7 @@ export async function onRequestPost({ request, env }) {
       photo_url: String(body.car_photo_url || "").trim() || null,
     };
 
-    if (!vehicle.make || !vehicle.model) {
-      return corsJson({ version: VERSION, error: "car_make and car_model must be provided" }, 400);
-    }
-
-    // ---- 13) Insert booking with new columns ----
+    // ---- 11) Insert booking ----
     const notes = [];
     if (quoteAddonsChosen.length) notes.push(`Quote add-ons requested: ${quoteAddonsChosen.join(", ")}`);
     if (promoCode && promoDiscountCents > 0) notes.push(`Promo applied: ${promoCode}`);
@@ -371,18 +363,15 @@ export async function onRequestPost({ request, env }) {
       addons: addonsChosen,
       currency: "CAD",
 
-      // totals
       subtotal_cents: subtotalCents,
       promo_code: promoCode || null,
       gift_code: giftCode || null,
       promo_discount_cents: promoDiscountCents || 0,
       gift_applied_cents: giftApplyCents || 0,
 
-      // final payable + deposit due now
       price_total_cents: afterGiftCents,
       deposit_cents: depositDueNowCents,
 
-      // vehicle JSONB
       vehicle,
 
       ack_driveway: true,
@@ -402,7 +391,7 @@ export async function onRequestPost({ request, env }) {
     const booking = ins.data?.[0];
     if (!booking?.id) return corsJson({ version: VERSION, error: "Booking insert returned no id" }, 500);
 
-    // ---- 14) Redeem gift (if used) ----
+    // ---- 12) Redeem gift ----
     if (gift && giftApplyCents > 0) {
       const remaining = Number(gift.remaining_cents ?? 0);
       const newRemaining = Math.max(0, remaining - giftApplyCents);
@@ -433,7 +422,7 @@ export async function onRequestPost({ request, env }) {
       }
     }
 
-    // ---- 15) Increment promo usage (best-effort) ----
+    // ---- 13) Increment promo usage (best-effort) ----
     if (promoCode && promo && promoDiscountCents > 0) {
       const currentUses = Number(promo.uses ?? 0);
       await supa(
@@ -443,7 +432,7 @@ export async function onRequestPost({ request, env }) {
       );
     }
 
-    // ---- 16) Stripe deposit checkout (if needed) ----
+    // ---- 14) Stripe checkout (deposit) ----
     const origin = new URL(request.url).origin;
 
     if (depositDueNowCents === 0) {
@@ -525,7 +514,7 @@ export async function onRequestPost({ request, env }) {
   }
 }
 
-/* ---------------- helpers ---------------- */
+/* helpers */
 
 function safeJson(text) {
   try { return JSON.parse(text); } catch { return { raw: text }; }
