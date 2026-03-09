@@ -1,6 +1,10 @@
 <!-- /admin-progress.html
-     Admin helper page to post progress updates + photo URLs to a booking.
-     Uses /api/admin/progress_post.
+     REPLACE ENTIRE FILE
+     Admin helper page to post a progress note and/or attach an existing URL/ref to a booking.
+     Uses /api/admin/progress_post
+
+     NEW: supports deep-linking from /admin.html via:
+       /admin-progress.html?bid=<booking_uuid>
 -->
 <!doctype html>
 <html lang="en">
@@ -9,7 +13,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Progress | Rosie Dazzlers</title>
   <meta name="description" content="Post job progress updates and photos." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260309e" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260309m" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
@@ -35,10 +39,10 @@
     <div class="panel">
       <h1 style="margin:0 0 6px">Post Progress</h1>
       <p class="kicker" style="margin:0">
-        Post notes and photo links while detailing. Customers can view on <span class="mono">/progress?token=...</span>.
+        Post notes and attach a photo URL/ref while detailing.
       </p>
       <div class="notice warn" style="margin-top:12px">
-        This version uses a <strong>photo URL</strong>. Next upgrade: direct uploads to Supabase Storage + signed URLs.
+        If uploading a new photo from your device, use <a href="/admin-upload.html">Upload photos</a>.
       </div>
     </div>
 
@@ -84,10 +88,10 @@
 
         <div class="grid2" style="margin-top:10px">
           <div>
-            <label for="media_url">Photo URL (optional)</label>
-            <input id="media_url" class="mono" type="url" placeholder="https://..." />
+            <label for="media_url">Photo URL or Storage ref (optional)</label>
+            <input id="media_url" class="mono" type="text" placeholder="https://... OR sb://job-media/jobs/..." />
             <div class="small" style="color:rgba(234,242,255,.62);margin-top:6px">
-              If you have a folder of photos, paste direct links here for now.
+              You usually won’t paste <span class="mono">sb://</span> manually—Upload page does it automatically.
             </div>
           </div>
           <div>
@@ -105,22 +109,19 @@
       </div>
 
       <div class="panel">
-        <h2 style="margin-top:0">What to send the customer</h2>
-        <p class="muted">
-          In Supabase bookings table, copy <span class="mono">progress_token</span> and send:
+        <h2 style="margin-top:0">Customer view link</h2>
+        <p class="small" style="color:rgba(234,242,255,.62)">
+          Use <a href="/admin-booking.html">Booking controls</a> to generate/copy progress links.
         </p>
-        <div class="notice">
-          <span class="mono">https://rosiedazzlers.ca/progress?token=&lt;progress_token&gt;</span>
-        </div>
 
         <div class="hr"></div>
 
-        <h2>Next upgrade</h2>
-        <ul>
-          <li>Direct photo uploads from phone → Supabase Storage (private) → signed URLs.</li>
-          <li>Customer login portal (vehicles + history + progress).</li>
-          <li>Completion signature + close-out checklist.</li>
-        </ul>
+        <h2>Quick actions</h2>
+        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn ghost" href="/admin-upload.html">Upload photos</a>
+          <a class="btn ghost" href="/admin-booking.html">Booking controls</a>
+          <a class="btn ghost" href="/admin">Back to Admin</a>
+        </div>
       </div>
     </div>
 
@@ -150,7 +151,7 @@
 
       if (!admin_password) return show("Missing admin password.", "bad");
       if (!booking_id) return show("Missing booking_id.", "bad");
-      if (!note && !media_url) return show("Enter a note and/or a media URL.", "bad");
+      if (!note && !media_url) return show("Enter a note and/or a media URL/ref.", "bad");
 
       show("Posting…");
 
@@ -185,8 +186,15 @@
       qs("#caption").value = "";
       qs("#status").style.display = "none";
     });
+
+    // NEW: prefill booking id from ?bid=
+    (function prefillFromQuery(){
+      const p = new URLSearchParams(location.search);
+      const bid = (p.get("bid") || "").trim();
+      if (bid) qs("#booking_id").value = bid;
+    })();
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260309e"></script>
+  <script type="module" src="/assets/chrome.js?v=20260309m"></script>
 </body>
 </html>
