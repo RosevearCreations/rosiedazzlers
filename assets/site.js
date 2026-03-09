@@ -13,10 +13,9 @@ const CONTACT = {
 };
 
 const HOVER_MEDIA = {
-  // These files exist in your /packages directory (case + spacing matters in R2)
-  exterior: "https://assets.rosiedazzlers.ca/packages/Exterior%20Detail.png",
-  interior: "https://assets.rosiedazzlers.ca/packages/Interior%20Detail.png",
-  size: "https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG"
+  exterior: "https://assets.rosiedazzlers.ca/packages/Exteriordetail.png",
+  interior: "https://assets.rosiedazzlers.ca/packages/Interiordetail.png",
+  size: "https://assets.rosiedazzlers.ca/packages/carsizechart.png"
 };
 
 const ADDON_MEDIA = {
@@ -40,37 +39,123 @@ async function loadServicesData() {
   return _servicesData;
 }
 
-function money(cad) {
-  const n = Number(cad || 0);
-  return new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" }).format(n);
+function money(value) {
+  return new Intl.NumberFormat("en-CA", {
+    style: "currency",
+    currency: "CAD"
+  }).format(Number(value || 0));
 }
 
-function openLightbox(title, src) {
-  const existing = document.querySelector("#lightbox");
-  if (existing) existing.remove();
+function getPackageByCode(data, code) {
+  return (data.packages || []).find((p) => p.code === code) || null;
+}
 
-  const overlay = document.createElement("div");
-  overlay.id = "lightbox";
-  overlay.className = "lightbox";
+function packagePrice(pkg, size) {
+  return Number(pkg?.prices_cad?.[size] || 0);
+}
 
-  overlay.innerHTML = `
+function packageImageForSize(pkg, size) {
+  return pkg?.images_by_size?.[size] || "";
+}
+
+function addonImageForCode(code) {
+  return ADDON_MEDIA[code] || "";
+}
+
+function addonDisplay(addon, size) {
+  if (addon.quote_required === true) {
+    if (addon.prices_cad?.[size] != null) return `From ${money(addon.prices_cad[size])} · Quote required`;
+    if (addon.price_cad != null) return `From ${money(addon.price_cad)} · Quote required`;
+    return "Quote required";
+  }
+  if (addon.prices_cad?.[size] != null) return money(addon.prices_cad[size]);
+  if (addon.price_cad != null) return money(addon.price_cad);
+  return "Quote required";
+}
+
+function addonCharge(addon, size) {
+  if (!addon || addon.quote_required === true) return 0;
+  if (addon.prices_cad?.[size] != null) return Number(addon.prices_cad[size]);
+  if (addon.price_cad != null) return Number(addon.price_cad);
+  return 0;
+}
+
+function calcDeposit(pkg) {
+  return Number(pkg?.deposit_cad || 0);
+}
+
+function ensureLightbox() {
+  let lb = document.querySelector("#lightbox");
+  if (lb) return lb;
+
+  lb = document.createElement("div");
+  lb.id = "lightbox";
+  lb.className = "lightbox";
+  lb.innerHTML = `
     <div class="lightbox-inner">
       <div class="lightbox-top">
-        <div class="lightbox-title">${title || ""}</div>
-        <button class="btn ghost" type="button" id="lbClose">Close</button>
+        <div class="title" id="lbTitle"></div>
+        <button class="btn small ghost" id="lbClose" type="button">Close</button>
       </div>
-      <div class="lightbox-body">
-        <img src="${src}" alt="${title || ""}" />
-      </div>
+      <img id="lbImg" alt="">
+      <div class="kicker">Tip: right-click → open image in new tab</div>
     </div>
   `;
+  document.body.appendChild(lb);
 
-  overlay.addEventListener("click", (e) => {
-    if (e.target === overlay) overlay.remove();
-  });
+  const close = () => lb.classList.remove("open");
+  lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+  lb.querySelector("#lbClose").addEventListener("click", close);
+  window.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
 
-  overlay.querySelector("#lbClose")?.addEventListener("click", () => overlay.remove());
-  document.body.appendChild(overlay);
+  return lb;
+}
+
+export function openLightbox(title, src) {
+  const lb = ensureLightbox();
+  lb.querySelector("#lbTitle").textContent = title || "";
+  const img = lb.querySelector("#lbImg");
+  img.src = src;
+  img.alt = title || "";
+  lb.classList.add("open");
+}
+
+export function setBrandImages() {
+  const logo = document.querySelector("[data-logo]");
+  if (logo) logo.src = BRAND.logo;
+
+  const banner = document.querySelector("[data-banner]");
+  if (banner) banner.src = BRAND.banner;
+
+  const reviews = document.querySelector("[data-reviews]");
+  if (reviews) reviews.src = BRAND.reviews;
+}
+
+export function setFooter() {
+  const el = document.querySelector("[data-footer]");
+  if (!el) return;
+  el.innerHTML = `
+    <div><strong>Rosie Dazzlers Mobile Auto Detailing</strong> — ${CONTACT.serviceArea}</div>
+    <div>Phone: <a href="tel:${CONTACT.phone}">${CONTACT.phone}</a> · Email: <a href="mailto:${CONTACT.email}">${CONTACT.email}</a></div>
+    <div class="kicker">Driveway required · customer provides power + water (or additional charges may apply).</div>
+  `;
+}
+
+export function handleCheckoutReturn() {
+  const params = new URLSearchParams(location.search);
+  const state = params.get("checkout");
+  const bid = params.get("bid");
+
+  const box = document.querySelector("[data-checkout-status]");
+  if (!box || !state) return;
+
+  if (state === "success") {
+    box.className = "notice ok";
+    box.innerHTML = `<strong>Deposit received.</strong> Booking ID: <code>${bid || ""}</code><br>We’ll confirm details by email.`;
+  } else if (state === "cancel") {
+    box.className = "notice warn";
+    box.innerHTML = `<strong>Checkout cancelled.</strong> Booking ID: <code>${bid || ""}</code><br>No deposit was taken. You can try again.`;
+  }
 }
 
 function chartButtons(data, selectorMap) {
@@ -89,22 +174,6 @@ function chartButtons(data, selectorMap) {
   if (selectorMap.size) bind(selectorMap.size, "CarSizeChart.PNG", "Vehicle Size Chart");
 }
 
-function packagePrice(pkg, size) {
-  const p = pkg?.prices_cad?.[size];
-  return Number(p || 0);
-}
-
-function calcDeposit(pkg) {
-  // Keep your rule: premium/basic = $50, others = $100
-  const code = String(pkg?.code || "");
-  return (code === "premium_wash" || code === "basic_detail") ? 50 : 100;
-}
-
-function packageImageForSize(pkg, size) {
-  const map = pkg?.images_by_size || {};
-  return map?.[size] || map?.small || null;
-}
-
 function buildMainCardGallery(pkg, size) {
   const gallery = [];
   const main = packageImageForSize(pkg, size);
@@ -119,38 +188,19 @@ function attachHoverCarousel(root) {
     const imgs = [...wrap.querySelectorAll("img")];
     if (imgs.length <= 1) return;
 
-    // If any image errors, hide that image but keep carousel functional
-    imgs.forEach((img) => {
-      img.addEventListener("error", () => {
-        img.style.display = "none";
-      }, { once: true });
-    });
-
-    // Rebuild list with only visible images when we start hover
     let current = 0;
     let timer = null;
 
-    const visibleImgs = () => imgs.filter((im) => im.style.display !== "none");
-
     const show = (idx) => {
-      const vis = visibleImgs();
-      if (!vis.length) return;
-      const safeIdx = ((idx % vis.length) + vis.length) % vis.length;
-      vis.forEach((img, i) => img.classList.toggle("active", i === safeIdx));
+      imgs.forEach((img, i) => img.classList.toggle("active", i === idx));
     };
 
     show(0);
 
     wrap.addEventListener("mouseenter", () => {
       if (timer) return;
-
-      const vis = visibleImgs();
-      if (vis.length <= 1) return;
-
       timer = setInterval(() => {
-        const v = visibleImgs();
-        if (!v.length) return;
-        current = (current + 1) % v.length;
+        current = (current + 1) % imgs.length;
         show(current);
       }, 1200);
     });
@@ -238,7 +288,7 @@ function renderCompareTable(container, data) {
       <table class="compare-table">
         <thead>
           <tr>
-            <th>Service</th>
+            <th>Included service</th>
             ${head}
           </tr>
         </thead>
@@ -248,69 +298,126 @@ function renderCompareTable(container, data) {
   `;
 }
 
-function addonPrice(addon, size) {
-  if (addon?.prices_cad && addon.prices_cad[size] != null) return Number(addon.prices_cad[size] || 0);
-  if (addon?.price_cad != null) return Number(addon.price_cad || 0);
-  return 0;
-}
+function renderAddons(container, data, size) {
+  if (!container) return;
+  container.innerHTML = "";
 
-function addonImage(addon) {
-  // Use explicit mapping when available, otherwise none (keeps UI clean)
-  return ADDON_MEDIA[addon.code] || null;
-}
-
-function renderAddons(cardsEl, data, size) {
-  if (!cardsEl) return;
-  cardsEl.innerHTML = "";
-
-  for (const a of data.addons || []) {
-    const img = addonImage(a);
-    const price = addonPrice(a, size);
+  for (const addon of data.addons || []) {
+    const pricing = addonDisplay(addon, size);
+    const image = addonImageForCode(addon.code);
 
     const tags = [
-      a.quote_required ? `<span class="badge">Quote</span>` : `<span class="badge">${money(price)}</span>`,
+      addon.quote_required ? `<span class="tag quote">Quote required</span>` : `<span class="tag flat">Priced online</span>`,
+      addon.source ? `<span class="tag">${addon.source.replaceAll("_", " ")}</span>` : ""
     ].join("");
 
-    const media = img
-      ? `<div class="service-media"><img loading="lazy" src="${img}" alt="${a.name}" onerror="this.style.display='none'"></div>`
-      : "";
+    const notes = (addon.notes || []).map((n) => `<div class="kicker">${n}</div>`).join("");
 
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `
-      ${media}
-      <h3>${a.name}</h3>
-      <p>${a.quote_required ? "Quote required (pricing depends on vehicle condition / scope)." : "Add-on service."}</p>
-      <div class="row" style="gap:10px;flex-wrap:wrap">${tags}</div>
+      ${image ? `<img class="img" loading="lazy" src="${image}" alt="${addon.name}" onerror="this.style.display='none'">` : ""}
+      <h3>${addon.name}</h3>
+      <div class="price">${pricing}</div>
+      <div class="hr"></div>
+      ${tags}
+      ${notes ? `<div class="hr"></div>${notes}` : ""}
+      <div class="hr"></div>
+      <a class="btn ghost" href="/book?size=${encodeURIComponent(size)}">Add to booking</a>
     `;
-    cardsEl.appendChild(div);
+    container.appendChild(div);
   }
 }
 
-export function setBrandImages() {
-  document.querySelectorAll("[data-logo]").forEach((img) => img.src = BRAND.logo);
-  document.querySelectorAll("[data-banner]").forEach((img) => img.src = BRAND.banner);
-  document.querySelectorAll("[data-reviews]").forEach((img) => img.src = BRAND.reviews);
+function renderPackageSummary(target, pkg) {
+  if (!target || !pkg) return;
+  const items = (pkg.included_services || [])
+    .map((s) => `<li>${s.name}${s.optional_condition_note ? ` <span class="note">${s.optional_condition_note}</span>` : ""}</li>`)
+    .join("");
+
+  target.innerHTML = `
+    <strong>${pkg.name} includes</strong>
+    <div class="hr"></div>
+    <ul class="list">${items}</ul>
+  `;
 }
 
-export function handleCheckoutReturn() {
-  const params = new URLSearchParams(location.search);
-  const statusBox = document.querySelector("[data-checkout-status]");
-  if (!statusBox) return;
+function renderAddonPicker(target, data, size, selectedCodes = []) {
+  if (!target) return;
+  target.innerHTML = "";
 
-  const checkout = params.get("checkout");
-  if (!checkout) return;
+  for (const addon of data.addons || []) {
+    const id = `addon_${addon.code}`;
+    const priceText = addonDisplay(addon, size);
 
-  if (checkout === "success") {
-    statusBox.className = "notice ok";
-    statusBox.innerHTML = `✅ Booking reserved. You will receive a confirmation email soon.`;
-  } else if (checkout === "cancel") {
-    statusBox.className = "notice warn";
-    statusBox.innerHTML = `Checkout cancelled. Your booking time is not reserved until the deposit is paid.`;
-  } else {
-    statusBox.className = "notice";
-    statusBox.innerHTML = `Status: ${checkout}`;
+    const row = document.createElement("label");
+    row.style.display = "grid";
+    row.style.gridTemplateColumns = "24px 1fr";
+    row.style.gap = "10px";
+    row.style.alignItems = "start";
+    row.style.marginBottom = "10px";
+
+    row.innerHTML = `
+      <input id="${id}" type="checkbox" name="addon_codes" value="${addon.code}" ${selectedCodes.includes(addon.code) ? "checked" : ""}>
+      <span>
+        <strong>${addon.name}</strong><br>
+        <span class="kicker">${priceText}</span>
+      </span>
+    `;
+
+    target.appendChild(row);
   }
+}
+
+function selectedAddonCodes(form) {
+  return [...form.querySelectorAll("input[name='addon_codes']:checked")].map((x) => x.value);
+}
+
+function currentSize(form) {
+  return form.vehicle_size?.value || "small";
+}
+
+function currentPackageCode(form) {
+  return form.package_code?.value || "";
+}
+
+function calcBookingTotals(form, data) {
+  const size = currentSize(form);
+  const pkgCode = currentPackageCode(form);
+  const pkg = getPackageByCode(data, pkgCode);
+
+  const base = packagePrice(pkg, size);
+  const deposit = calcDeposit(pkg);
+
+  const selectedCodes = selectedAddonCodes(form);
+  const selectedAddons = (data.addons || []).filter((a) => selectedCodes.includes(a.code));
+
+  let pricedAddons = 0;
+  const quoteAddons = [];
+
+  for (const addon of selectedAddons) {
+    if (addon.quote_required === true) {
+      quoteAddons.push(addon.name);
+      continue;
+    }
+    pricedAddons += addonCharge(addon, size);
+  }
+
+  return {
+    pkg,
+    base,
+    deposit,
+    pricedAddons,
+    quoteAddons,
+    total: base + pricedAddons,
+    selectedCodes
+  };
+}
+
+async function checkAvailability(date) {
+  if (!date) return null;
+  const r = await fetch(`/api/availability?date=${encodeURIComponent(date)}`);
+  return await r.json();
 }
 
 export async function initServicesPage() {
@@ -359,84 +466,6 @@ export async function initPricingPage() {
     details: "#openDetails",
     size: "#openSize"
   });
-}
-
-/* =======================
-   Booking helpers (existing)
-   ======================= */
-
-function currentPackageCode(form) {
-  return form?.package_code?.value || "";
-}
-function currentSize(form) {
-  return form?.vehicle_size?.value || "small";
-}
-function selectedAddonCodes(form) {
-  return [...(form?.querySelectorAll('input[name="addon_codes"]:checked') || [])].map((el) => el.value);
-}
-function getPackageByCode(data, code) {
-  return (data.packages || []).find((p) => p.code === code);
-}
-
-function calcBookingTotals(form, data) {
-  const pkg = getPackageByCode(data, currentPackageCode(form));
-  const size = currentSize(form);
-
-  const base = packagePrice(pkg, size);
-  const deposit = calcDeposit(pkg);
-
-  const addons = data.addons || [];
-  const selected = selectedAddonCodes(form);
-
-  const pricedAddons = selected.reduce((sum, code) => {
-    const a = addons.find((x) => x.code === code);
-    if (!a || a.quote_required) return sum;
-    return sum + addonPrice(a, size);
-  }, 0);
-
-  const quoteAddons = selected
-    .map((code) => addons.find((x) => x.code === code))
-    .filter((a) => a && a.quote_required)
-    .map((a) => a.name);
-
-  return {
-    base,
-    deposit,
-    pricedAddons,
-    total: base + pricedAddons,
-    quoteAddons
-  };
-}
-
-function renderPackageSummary(el, pkg) {
-  if (!el || !pkg) return;
-  el.innerHTML = `
-    <div class="kicker">Selected package</div>
-    <div style="font-size:1.2rem;font-weight:800">${pkg.name}</div>
-    <div class="kicker">${pkg.subtitle || ""}</div>
-  `;
-}
-
-function renderAddonPicker(el, data, size, selected = []) {
-  if (!el) return;
-  const addons = data.addons || [];
-
-  el.innerHTML = addons.map((a) => {
-    const checked = selected.includes(a.code) ? "checked" : "";
-    const badge = a.quote_required ? `<span class="badge">Quote</span>` : `<span class="badge">${money(addonPrice(a, size))}</span>`;
-    return `
-      <label class="checkbox">
-        <input type="checkbox" name="addon_codes" value="${a.code}" ${checked}>
-        ${a.name} ${badge}
-      </label>
-    `;
-  }).join("");
-}
-
-async function checkAvailability(date) {
-  const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache: "no-store" });
-  if (!res.ok) return null;
-  return res.json();
 }
 
 export async function initBookingPage() {
@@ -533,47 +562,256 @@ export async function initBookingPage() {
 
         customer_name: form.customer_name.value,
         customer_email: form.customer_email.value,
-        customer_phone: form.customer_phone.value || null,
+        customer_phone: form.customer_phone.value,
 
         address_line1: form.address_line1.value,
-        city: form.city.value || null,
-        postal_code: form.postal_code.value || null,
+        city: form.city.value,
+        postal_code: form.postal_code.value,
 
-        addon_codes: selectedAddonCodes(form),
+        addon_codes: totals.selectedCodes,
 
         ack_driveway: form.ack_driveway.checked,
         ack_power_water: form.ack_power_water.checked,
         ack_bylaw: form.ack_bylaw.checked,
-        ack_cancellation: form.ack_cancellation.checked,
-
-        // Optional codes (if present in your form)
-        gift_code: form.gift_code ? form.gift_code.value : null,
-        promo_code: form.promo_code ? form.promo_code.value : null,
-
-        // Optional vehicle fields (if present in your form)
-        car_year: form.car_year ? form.car_year.value : null,
-        car_make: form.car_make ? form.car_make.value : null,
-        car_model: form.car_model ? form.car_model.value : null,
-        car_plate: form.car_plate ? form.car_plate.value : null,
-        car_photo_url: form.car_photo_url ? form.car_photo_url.value : null,
+        ack_cancellation: form.ack_cancellation.checked
       };
+
+      if (!payload.ack_driveway || !payload.ack_power_water || !payload.ack_bylaw || !payload.ack_cancellation) {
+        throw new Error("Please confirm all required acknowledgements.");
+      }
+
+      const avail = await checkAvailability(payload.service_date);
+      if (avail?.blocked) throw new Error(avail.reason || "This date is blocked.");
+
+      if (payload.duration_slots === 2 && (!avail?.AM || !avail?.PM)) {
+        throw new Error("Full day not available. Please choose another date.");
+      }
+      if (payload.duration_slots === 1 && payload.start_slot === "AM" && !avail?.AM) {
+        throw new Error("AM not available. Please choose another date.");
+      }
+      if (payload.duration_slots === 1 && payload.start_slot === "PM" && !avail?.PM) {
+        throw new Error("PM not available. Please choose another date.");
+      }
 
       const res = await fetch("/api/checkout", {
         method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
       });
 
-      const out = await res.json().catch(() => null);
-      if (!res.ok || !out?.checkout_url) {
-        throw new Error(out?.error || "Checkout failed");
-      }
+      const json = await res.json();
+      if (!res.ok) throw new Error(json?.error || "Checkout failed.");
 
-      location.href = out.checkout_url;
+      window.location.href = json.checkout_url;
     } catch (err) {
-      alert(String(err?.message || err));
+      priceBox.className = "notice bad";
+      priceBox.innerHTML = `<strong>Error:</strong> ${String(err.message || err)}`;
       submitBtn.disabled = false;
-      submitBtn.textContent = "Proceed to deposit checkout";
+      submitBtn.textContent = "Pay deposit & book";
     }
   });
+}
+
+function titleFromName(raw) {
+  if (!raw) return "";
+  return String(raw)
+    .replace(/\.[a-z0-9]+$/i, "")
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function amazonSearchUrl(query) {
+  return `https://www.amazon.ca/s?k=${encodeURIComponent(query)}`;
+}
+
+async function fetchJsonSafe(url) {
+  try {
+    const r = await fetch(`${url}?v=20260301e`, { cache: "no-store" });
+    if (!r.ok) return null;
+    return await r.json();
+  } catch {
+    return null;
+  }
+}
+
+function classifyProductType(item) {
+  const explicit = String(item?.type || "").toLowerCase();
+  if (explicit === "gear" || explicit === "consumable") return explicit;
+
+  const category = String(item?.category || "").toLowerCase();
+  const path = String(item?.path || item?.sanitized || item?.filename || item?.original || "").toLowerCase();
+
+  const consumableHints = [
+    "soap", "wax", "sealant", "ceramic", "graphene", "spray", "cleaner", "polish",
+    "compound", "degreaser", "dressing", "towel", "microfiber", "odor", "odour",
+    "shampoo", "detailer", "protectant", "chemical", "liquid"
+  ];
+
+  if (consumableHints.some((x) => category.includes(x) || path.includes(x))) {
+    return "consumable";
+  }
+
+  return "gear";
+}
+
+function buildInventoryImage(item, mode) {
+  const rawPath =
+    item?.path ||
+    item?.sanitized ||
+    item?.filename ||
+    item?.original ||
+    "";
+
+  if (!rawPath) return "";
+
+  const cleanPath = String(rawPath).replace(/^\/+/, "");
+
+  if (item?.r2_url) return item.r2_url;
+  if (mode === "gear" && item?.source_kind === "systems") {
+    return `https://assets.rosiedazzlers.ca/systems/${encodeURIComponent(cleanPath).replaceAll("%2F", "/")}`;
+  }
+  if (mode === "consumables") {
+    return `https://assets.rosiedazzlers.ca/consumables/${encodeURIComponent(cleanPath).replaceAll("%2F", "/")}`;
+  }
+
+  if (item?.source_kind === "products") {
+    return `https://assets.rosiedazzlers.ca/products/${encodeURIComponent(cleanPath).replaceAll("%2F", "/")}`;
+  }
+
+  return `https://assets.rosiedazzlers.ca/systems/${encodeURIComponent(cleanPath).replaceAll("%2F", "/")}`;
+}
+
+function buildInventoryTitle(item) {
+  return (
+    item?.title ||
+    item?.name ||
+    titleFromName(item?.original) ||
+    titleFromName(item?.filename) ||
+    titleFromName(item?.path) ||
+    titleFromName(item?.sanitized) ||
+    "Untitled Item"
+  );
+}
+
+function buildInventoryCategory(item) {
+  return item?.category || item?.group || item?.folder || "general";
+}
+
+function buildAmazonQuery(item, title) {
+  return [item?.brand, title].filter(Boolean).join(" ");
+}
+
+export async function initInventoryPage(mode) {
+  const listEl = document.querySelector("#invList");
+  const statusEl = document.querySelector("#invStatus");
+  const catEl = document.querySelector("#invCategory");
+  const qEl = document.querySelector("#invSearch");
+
+  if (!listEl || !statusEl || !catEl || !qEl) return;
+
+  statusEl.className = "notice";
+  statusEl.textContent = "Loading…";
+
+  const products = await fetchJsonSafe("/data/rosie_products_catalog.json");
+  const systems = await fetchJsonSafe("/data/systems_catalog.json");
+
+  if (!products && !systems) {
+    statusEl.className = "notice bad";
+    statusEl.innerHTML = `
+      <strong>Missing data files.</strong><br>
+      Expected:
+      <ul class="list">
+        <li><code>/data/rosie_products_catalog.json</code></li>
+        <li><code>/data/systems_catalog.json</code></li>
+      </ul>
+    `;
+    return;
+  }
+
+  const items = [];
+
+  if (Array.isArray(products)) {
+    for (const p of products) {
+      const type = classifyProductType(p);
+      if (mode === "gear" && type !== "gear") continue;
+      if (mode === "consumables" && type !== "consumable") continue;
+
+      const title = buildInventoryTitle(p);
+      const category = buildInventoryCategory(p);
+
+      items.push({
+        source_kind: "products",
+        title,
+        category,
+        img: buildInventoryImage({ ...p, source_kind: "products" }, mode),
+        amazon: amazonSearchUrl(buildAmazonQuery(p, title))
+      });
+    }
+  }
+
+  if (Array.isArray(systems) && mode === "gear") {
+    for (const s of systems) {
+      const title = buildInventoryTitle(s);
+      const category = buildInventoryCategory(s);
+
+      items.push({
+        source_kind: "systems",
+        title,
+        category,
+        img: buildInventoryImage({ ...s, source_kind: "systems" }, mode),
+        amazon: amazonSearchUrl(buildAmazonQuery(s, title))
+      });
+    }
+  }
+
+  const categories = Array.from(new Set(items.map((i) => i.category))).sort((a, b) => a.localeCompare(b));
+  catEl.innerHTML =
+    `<option value="all">All categories</option>` +
+    categories.map((c) => `<option value="${c}">${c}</option>`).join("");
+
+  statusEl.className = "notice ok";
+  statusEl.innerHTML = `<strong>Loaded:</strong> ${items.length} items`;
+
+  function render() {
+    const cat = catEl.value;
+    const q = qEl.value.trim().toLowerCase();
+
+    const filtered = items.filter((i) => {
+      if (cat !== "all" && i.category !== cat) return false;
+      if (q) {
+        const hay = `${i.title} ${i.category}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+
+    listEl.innerHTML = "";
+
+    if (filtered.length === 0) {
+      listEl.innerHTML = `<div class="notice warn">No matches found.</div>`;
+      return;
+    }
+
+    for (const i of filtered) {
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `
+        ${i.img ? `<img class="img" loading="lazy" src="${i.img}" alt="${i.title}" onerror="this.style.display='none'">` : ""}
+        <h3>${i.title}</h3>
+        <p class="kicker">${i.category}</p>
+        <div class="hr"></div>
+        <a class="btn primary" href="${i.amazon}" target="_blank" rel="noopener">View on Amazon</a>
+      `;
+      listEl.appendChild(div);
+    }
+  }
+
+  catEl.addEventListener("change", render);
+  qEl.addEventListener("input", render);
+  render();
+}
+
+export async function initBookingForm() {
+  return initBookingPage();
 }
