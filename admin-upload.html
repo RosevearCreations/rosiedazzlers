@@ -1,0 +1,232 @@
+<!-- /admin-upload.html
+     Admin helper to upload a photo to Supabase Storage (private),
+     then post it to the booking progress feed.
+
+     Flow:
+       1) Request signed upload URL: POST /api/admin/progress_upload_url
+       2) PUT the file to upload_url
+       3) POST /api/admin/progress_post with media_url = sb://bucket/path
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Upload | Rosie Dazzlers</title>
+  <meta name="description" content="Upload job photos to private storage and attach to progress feed." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260309h" />
+  <style>
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .muted{color:rgba(234,242,255,.62)}
+    @media (max-width:980px){ .grid2,.grid3{grid-template-columns:1fr} }
+    progress{width:100%}
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers</strong>
+      </a>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
+      <div class="nav-links" id="navLinks"></div>
+      <a class="btn primary" href="/admin">Admin</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="panel">
+      <h1 style="margin:0 0 6px">Upload Progress Photo</h1>
+      <p class="kicker" style="margin:0">
+        Upload a photo privately (Supabase Storage), then attach it to the customer progress feed.
+      </p>
+      <div class="notice warn" style="margin-top:12px">
+        This uses <span class="mono">/api/admin/progress_upload_url</span> (signed upload) and stores media as <span class="mono">sb://bucket/path</span>.
+      </div>
+    </div>
+
+    <div class="section grid2">
+      <div class="panel">
+        <h2 style="margin-top:0">Upload</h2>
+
+        <label for="pw">Admin password</label>
+        <input id="pw" type="password" placeholder="Enter admin password…" />
+
+        <label for="booking_id" style="margin-top:10px">Booking ID (uuid)</label>
+        <input id="booking_id" class="mono" type="text" placeholder="d751e9f0-717d-4ab6-a2be-dba309006b76" />
+
+        <div class="grid3" style="margin-top:10px">
+          <div>
+            <label for="visibility">Visibility</label>
+            <select id="visibility">
+              <option value="customer">Customer</option>
+              <option value="internal">Internal</option>
+            </select>
+          </div>
+          <div>
+            <label for="kind">Kind</label>
+            <select id="kind">
+              <option value="before">Before</option>
+              <option value="during" selected>During</option>
+              <option value="after">After</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="created_by">Created by</label>
+            <input id="created_by" type="text" placeholder="Jack / Laurie" />
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <label for="file">Choose image</label>
+          <input id="file" type="file" accept="image/*" />
+          <div class="muted" style="margin-top:6px">Tip: take a photo on your phone and upload it here.</div>
+        </div>
+
+        <div class="grid2" style="margin-top:10px">
+          <div>
+            <label for="caption">Caption (optional)</label>
+            <input id="caption" type="text" placeholder="Before - driver side floor" />
+          </div>
+          <div>
+            <label for="note">Optional note</label>
+            <input id="note" type="text" placeholder="We started the interior vacuum." />
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <progress id="prog" value="0" max="100" style="display:none"></progress>
+        </div>
+
+        <div class="row" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn primary" id="uploadBtn" type="button">Upload & Attach</button>
+        </div>
+
+        <div id="status" class="notice" style="display:none;margin-top:12px"></div>
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-top:0">How it works</h2>
+        <ol class="muted">
+          <li>Request a signed upload URL (private upload, no public bucket).</li>
+          <li>Upload the file directly to Supabase Storage.</li>
+          <li>Save a progress photo row referencing <span class="mono">sb://bucket/path</span>.</li>
+          <li>Customer page signs a temporary view link automatically.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="footer" data-footer></div>
+  </div>
+
+  <script type="module">
+    const qs = (s) => document.querySelector(s);
+    const val = (id) => (qs(id).value || "").trim();
+
+    function show(msg, kind="") {
+      const el = qs("#status");
+      el.style.display = "block";
+      el.className = "notice " + (kind || "");
+      el.textContent = msg;
+    }
+
+    async function postJson(url, payload){
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "content-type":"application/json" },
+        body: JSON.stringify(payload),
+      });
+      const out = await res.json().catch(()=>null);
+      return { ok: res.ok, status: res.status, out };
+    }
+
+    async function putFile(uploadUrl, file, contentType) {
+      // NOTE: Signed upload endpoint accepts PUT
+      const res = await fetch(uploadUrl, {
+        method: "PUT",
+        headers: {
+          "content-type": contentType || file.type || "application/octet-stream",
+          "x-upsert": "true",
+        },
+        body: file,
+      });
+      const text = await res.text().catch(()=> "");
+      return { ok: res.ok, status: res.status, text };
+    }
+
+    qs("#uploadBtn").addEventListener("click", async () => {
+      const admin_password = val("#pw");
+      const booking_id = val("#booking_id");
+      const created_by = val("#created_by") || null;
+      const visibility = val("#visibility") || "customer";
+      const kind = val("#kind") || "during";
+      const caption = val("#caption") || null;
+      const note = val("#note") || null;
+
+      const file = qs("#file").files?.[0];
+
+      if (!admin_password) return show("Missing admin password.", "bad");
+      if (!booking_id) return show("Missing booking_id.", "bad");
+      if (!file) return show("Choose an image file.", "bad");
+
+      qs("#prog").style.display = "block";
+      qs("#prog").value = 5;
+
+      show("Requesting signed upload URL…");
+
+      const sign = await postJson("/api/admin/progress_upload_url", {
+        admin_password,
+        booking_id,
+        filename: file.name,
+        content_type: file.type || "image/jpeg",
+      });
+
+      if (!sign.ok || !sign.out?.ok) {
+        qs("#prog").value = 0;
+        return show(sign.out?.error ? `Error: ${sign.out.error}` : "Error requesting upload URL.", "bad");
+      }
+
+      const upload_url = sign.out.upload_url;
+      const media_ref = sign.out.media_ref;
+
+      qs("#prog").value = 25;
+      show("Uploading image…");
+
+      const up = await putFile(upload_url, file, file.type);
+      if (!up.ok) {
+        qs("#prog").value = 0;
+        return show(`Upload failed (${up.status}).`, "bad");
+      }
+
+      qs("#prog").value = 70;
+      show("Attaching to progress feed…");
+
+      const attach = await postJson("/api/admin/progress_post", {
+        admin_password,
+        booking_id,
+        created_by,
+        visibility,
+        kind,
+        caption,
+        note,
+        media_url: media_ref, // sb://bucket/path
+      });
+
+      if (!attach.ok || !attach.out?.ok) {
+        qs("#prog").value = 0;
+        return show(attach.out?.error ? `Attach error: ${attach.out.error}` : "Attach error.", "bad");
+      }
+
+      qs("#prog").value = 100;
+      show("Uploaded + attached.", "ok");
+      setTimeout(()=>{ qs("#prog").style.display = "none"; qs("#prog").value = 0; }, 1200);
+    });
+  </script>
+
+  <script type="module" src="/assets/chrome.js?v=20260309h"></script>
+</body>
+</html>
