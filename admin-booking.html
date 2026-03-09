@@ -1,9 +1,13 @@
 <!-- /admin-booking.html
+     REPLACE ENTIRE FILE
      Admin helper page to:
       - set job_status (scheduled/in_progress/completed/cancelled)
       - enable/disable progress
       - regenerate progress token and copy customer links
      Uses /api/admin/booking_update
+
+     NEW: supports deep-linking from /admin.html via:
+       /admin-booking.html?bid=<booking_uuid>
 -->
 <!doctype html>
 <html lang="en">
@@ -12,16 +16,16 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Booking | Rosie Dazzlers</title>
   <meta name="description" content="Admin booking controls." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260309g" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260309k" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
     .muted{color:rgba(234,242,255,.62)}
-    textarea{min-height:90px}
     @media (max-width:980px){ .grid2,.grid3{grid-template-columns:1fr} }
     .linkbox{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     .copybtn{min-width:110px}
+    input[readonly]{opacity:.95}
   </style>
 </head>
 <body>
@@ -40,7 +44,12 @@
   <div class="container">
     <div class="panel">
       <h1 style="margin:0 0 6px">Booking Controls</h1>
-      <p class="kicker" style="margin:0">Operational controls for a single booking.</p>
+      <p class="kicker" style="margin:0">
+        Operational controls for a single booking (status + progress links).
+      </p>
+      <div class="notice" style="margin-top:12px">
+        Tip: open from Admin bookings list → <strong>Controls</strong> to auto-fill booking ID.
+      </div>
     </div>
 
     <div class="section grid2">
@@ -89,7 +98,10 @@
 
         <div class="hr"></div>
 
-        <h2 style="margin-top:0">Regenerate customer links</h2>
+        <h2 style="margin-top:0">Customer links</h2>
+        <p class="muted" style="margin-top:0">
+          Use <strong>Generate new token</strong> to create links if you don’t have them yet.
+        </p>
         <div class="row" style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="btn ghost" id="regenBtn" type="button">Generate new token</button>
         </div>
@@ -98,8 +110,8 @@
       </div>
 
       <div class="panel">
-        <h2 style="margin-top:0">Customer links</h2>
-        <p class="muted">After saving status/progress or regenerating, links appear below.</p>
+        <h2 style="margin-top:0">Copy links</h2>
+        <p class="muted">After you save or regenerate, links appear here.</p>
 
         <div class="hr"></div>
 
@@ -109,6 +121,7 @@
             <div class="linkbox">
               <input id="progress_url" class="mono" type="text" readonly />
               <button class="btn ghost copybtn" id="copyProgress" type="button">Copy</button>
+              <a class="btn ghost copybtn" id="openProgress" target="_blank" rel="noopener">Open</a>
             </div>
           </div>
 
@@ -117,12 +130,13 @@
             <div class="linkbox">
               <input id="complete_url" class="mono" type="text" readonly />
               <button class="btn ghost copybtn" id="copyComplete" type="button">Copy</button>
+              <a class="btn ghost copybtn" id="openComplete" target="_blank" rel="noopener">Open</a>
             </div>
           </div>
         </div>
 
         <div class="notice warn" style="margin-top:12px">
-          If you regenerate the token, the old link stops working.
+          Regenerating the token makes the old customer link stop working.
         </div>
       </div>
     </div>
@@ -144,8 +158,12 @@
     function setLinks(links){
       if (!links) return;
       qs("#linksBox").style.display = "block";
+
       qs("#progress_url").value = links.progress_url || "";
       qs("#complete_url").value = links.complete_url || "";
+
+      qs("#openProgress").href = links.progress_url || "#";
+      qs("#openComplete").href = links.complete_url || "#";
     }
 
     async function post(action, extra = {}) {
@@ -197,8 +215,15 @@
 
     qs("#copyProgress").addEventListener("click", ()=>copyFrom("#progress_url"));
     qs("#copyComplete").addEventListener("click", ()=>copyFrom("#complete_url"));
+
+    // NEW: prefill booking id from ?bid=
+    (function prefillFromQuery(){
+      const p = new URLSearchParams(location.search);
+      const bid = (p.get("bid") || "").trim();
+      if (bid) qs("#booking_id").value = bid;
+    })();
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260309g"></script>
+  <script type="module" src="/assets/chrome.js?v=20260309k"></script>
 </body>
 </html>
