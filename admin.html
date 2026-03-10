@@ -1,10 +1,14 @@
 <!-- /admin.html
      REPLACE ENTIRE FILE
-     Admin Dashboard v2: includes blocking calendar + bookings list + quick links to:
-       /admin-booking.html  (status/progress token links)
-       /admin-upload.html   (upload photo -> progress)
-       /admin-progress.html (post note/url)
-       /admin-assign.html   (staff assignment)
+
+     Admin dashboard:
+      - Loads bookings (next 30 days or latest 100) via /api/admin/bookings
+      - Blocks/unblocks dates + AM/PM slots via /api/admin/blocks
+      - Deep-links to:
+          /admin-booking.html?bid=...
+          /admin-upload.html?bid=...
+          /admin-progress.html?bid=...
+          /admin-assign.html?bid=...
 -->
 <!doctype html>
 <html lang="en">
@@ -12,33 +16,28 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin | Rosie Dazzlers</title>
-  <meta name="description" content="Admin dashboard for Rosie Dazzlers bookings." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260309j" />
+  <meta name="description" content="Rosie Dazzlers admin dashboard." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260310a" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .muted{color:rgba(234,242,255,.62)}
     table{width:100%;border-collapse:collapse}
-    th,td{padding:10px;border-bottom:1px solid rgba(255,255,255,.10);vertical-align:top}
-    th{color:rgba(234,242,255,.70);font-weight:700;text-align:left;white-space:nowrap}
-    .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06)}
-    .ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
-    .warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
-    .bad{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.10)}
-    .small{font-size:.92rem;color:rgba(234,242,255,.62)}
-    .sep{height:1px;background:rgba(255,255,255,.10);margin:14px 0}
+    th,td{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.10);vertical-align:top}
+    th{color:rgba(234,242,255,.70);font-weight:600;text-align:left}
+    .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
+    .pill.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
+    .pill.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
+    .pill.bad{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.10)}
     .actions{display:flex;gap:8px;flex-wrap:wrap}
-    .actions a{white-space:nowrap}
-    .tools a{display:inline-flex;margin:4px 6px 0 0}
-    .sticky-actions{position:sticky;top:0;background:rgba(10,14,24,.88);backdrop-filter:blur(10px);z-index:2}
-    @media (max-width:980px){
-      .grid2,.grid3{grid-template-columns:1fr}
-      table{display:block;overflow:auto}
-      th,td{min-width:180px}
-    }
+    .smallBtn{padding:8px 10px;font-size:.92rem}
+    input[type="date"]{min-width:190px}
+    .stickyTop{position:sticky;top:0;background:rgba(10,14,24,.96);backdrop-filter:blur(10px);z-index:10;border-radius:16px}
   </style>
 </head>
+
 <body>
   <div class="nav">
     <div class="nav-inner">
@@ -48,100 +47,125 @@
       </a>
       <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
       <div class="nav-links" id="navLinks"></div>
-      <a class="btn primary" href="/book">Book now</a>
+      <a class="btn primary" href="/admin">Admin</a>
     </div>
   </div>
 
   <div class="container">
-    <div class="panel">
-      <h1 style="margin:0 0 6px">Admin</h1>
-      <p class="kicker" style="margin:0">Bookings + blocking calendar + staff/progress tools.</p>
-      <div class="notice warn" style="margin-top:12px">
-        <strong>Security:</strong> This is a simple password gate. We can upgrade to staff login later.
+
+    <div class="panel stickyTop">
+      <h1 style="margin:0 0 6px">Admin Dashboard</h1>
+      <p class="kicker" style="margin:0">Bookings, slot blocking, and quick tools.</p>
+
+      <div class="hr"></div>
+
+      <div class="row">
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:260px">
+          <span class="muted">Admin password</span>
+          <input id="pw" type="password" placeholder="Enter admin password…" />
+        </label>
+
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:220px">
+          <span class="muted">Booking list</span>
+          <select id="mode">
+            <option value="next30" selected>Next 30 days</option>
+            <option value="latest100">Latest 100</option>
+          </select>
+        </label>
+
+        <div class="row" style="align-items:flex-end">
+          <button class="btn primary" id="loadBtn" type="button">Load bookings</button>
+          <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
+        </div>
+
+        <div class="row" style="align-items:flex-end">
+          <a class="btn ghost" href="/admin-booking.html">Booking controls</a>
+          <a class="btn ghost" href="/admin-upload.html">Upload photos</a>
+          <a class="btn ghost" href="/admin-progress.html">Post progress</a>
+          <a class="btn ghost" href="/admin-assign.html">Assign staff</a>
+        </div>
       </div>
+
+      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
     </div>
 
     <div class="section grid2">
+      <!-- BLOCKS -->
       <div class="panel">
-        <h2 style="margin-top:0">Access</h2>
-        <label for="pw">Admin password</label>
-        <input id="pw" type="password" placeholder="Enter admin password…" />
-        <div class="small" style="margin-top:6px">
-          Cloudflare env var: <span class="mono">ADMIN_PASSWORD</span>
+        <h2 style="margin-top:0">Block time</h2>
+        <div class="muted">Blocks affect availability + prevent booking checkout.</div>
+
+        <div class="hr"></div>
+
+        <div class="row">
+          <label style="display:flex;flex-direction:column;gap:6px">
+            <span class="muted">Date</span>
+            <input id="blockDate" type="date" />
+          </label>
+
+          <label style="display:flex;flex-direction:column;gap:6px;flex:1;min-width:240px">
+            <span class="muted">Reason (optional)</span>
+            <input id="blockReason" type="text" placeholder="Vacation / Admin day / Weather…" />
+          </label>
         </div>
 
-        <div class="row" style="margin-top:12px">
-          <button class="btn primary" id="loadBtn" type="button">Load next 30 days</button>
-          <button class="btn ghost" id="loadAllBtn" type="button">Load latest 100</button>
+        <div class="row" style="margin-top:10px">
+          <button class="btn ghost smallBtn" id="blockDayBtn" type="button">Block day</button>
+          <button class="btn ghost smallBtn" id="unblockDayBtn" type="button">Unblock day</button>
+          <button class="btn ghost smallBtn" id="blockAmBtn" type="button">Block AM</button>
+          <button class="btn ghost smallBtn" id="unblockAmBtn" type="button">Unblock AM</button>
+          <button class="btn ghost smallBtn" id="blockPmBtn" type="button">Block PM</button>
+          <button class="btn ghost smallBtn" id="unblockPmBtn" type="button">Unblock PM</button>
+          <button class="btn primary smallBtn" id="checkAvailBtn" type="button">Check availability</button>
         </div>
 
-        <div class="sep"></div>
-
-        <h3 style="margin:0 0 8px">Admin tools</h3>
-        <div class="tools">
-          <a class="btn ghost" href="/admin-booking.html">Booking controls</a>
-          <a class="btn ghost" href="/admin-assign.html">Assign staff</a>
-          <a class="btn ghost" href="/admin-upload.html">Upload photos</a>
-          <a class="btn ghost" href="/admin-progress.html">Post update</a>
-        </div>
-
-        <div id="status" class="notice" style="margin-top:12px;display:none"></div>
+        <div id="blockOut" class="notice" style="display:none;margin-top:12px"></div>
       </div>
 
+      <!-- HELP -->
       <div class="panel">
-        <h2 style="margin-top:0">Blocking calendar</h2>
+        <h2 style="margin-top:0">How to use</h2>
+        <ol class="muted">
+          <li>Enter admin password, click <strong>Save password</strong>.</li>
+          <li>Click <strong>Load bookings</strong>.</li>
+          <li>Use actions to control each booking (status, progress, uploads).</li>
+          <li>Use blocks to keep days/slots unavailable.</li>
+        </ol>
 
-        <div class="grid2">
-          <div>
-            <label for="blockDate">Date</label>
-            <input id="blockDate" type="date" />
-          </div>
-          <div>
-            <label for="blockReason">Reason (optional)</label>
-            <input id="blockReason" type="text" placeholder="Vacation / Admin day / etc" />
-          </div>
-        </div>
-
-        <div class="sep"></div>
-
-        <h3 style="margin:0 0 8px">Full day</h3>
-        <div class="row">
-          <button class="btn primary" id="addDateBlockBtn" type="button">Block Day</button>
-          <button class="btn ghost" id="removeDateBlockBtn" type="button">Unblock Day</button>
-        </div>
-
-        <div class="sep"></div>
-
-        <h3 style="margin:0 0 8px">Time slot</h3>
-        <div class="grid2">
-          <div>
-            <label for="blockSlot">Slot</label>
-            <select id="blockSlot">
-              <option value="AM">AM</option>
-              <option value="PM">PM</option>
-            </select>
-          </div>
-          <div class="row" style="align-items:flex-end">
-            <button class="btn primary" id="addSlotBlockBtn" type="button">Block Slot</button>
-            <button class="btn ghost" id="removeSlotBlockBtn" type="button">Unblock Slot</button>
-          </div>
-        </div>
-
-        <div class="small" style="margin-top:10px">
-          Full-day blocks override slot blocks. Slot blocks override bookings availability.
+        <div class="notice warn">
+          Password is stored in your browser (localStorage) on this device only.
         </div>
       </div>
     </div>
 
-    <div class="panel">
-      <div class="row" style="justify-content:space-between">
-        <h2 style="margin:0">Bookings</h2>
-        <div class="row">
-          <input id="filterText" placeholder="Filter (name, email, package, date…)" style="min-width:280px" />
-          <button class="btn ghost" id="clearFilterBtn" type="button">Clear</button>
+    <!-- BOOKINGS -->
+    <div class="section">
+      <div class="panel">
+        <div class="row" style="justify-content:space-between">
+          <h2 style="margin:0">Bookings</h2>
+          <div class="muted">Tip: click “Controls” to generate/copy customer progress links.</div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div style="overflow:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Date / Slot</th>
+                <th>Customer</th>
+                <th>Package</th>
+                <th>Status</th>
+                <th>Staff</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="rows">
+              <tr><td colspan="6" class="muted">Load bookings to begin.</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <div id="tableWrap" style="margin-top:12px"></div>
     </div>
 
     <div class="footer" data-footer></div>
@@ -150,15 +174,23 @@
   <script type="module">
     const qs = (s) => document.querySelector(s);
 
-    const money = (cents) =>
-      new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" })
-        .format((Number(cents || 0) / 100));
-
-    function showStatus(msg, kind="") {
+    function showStatus(msg, kind=""){
       const el = qs("#status");
       el.style.display = "block";
       el.className = "notice " + (kind || "");
       el.textContent = msg;
+    }
+    function hideStatus(){ qs("#status").style.display = "none"; }
+
+    function showBlock(msg, kind=""){
+      const el = qs("#blockOut");
+      el.style.display = "block";
+      el.className = "notice " + (kind || "");
+      el.textContent = msg;
+    }
+
+    function pill(text, kind=""){
+      return `<span class="pill ${kind}">${escapeHtml(text)}</span>`;
     }
 
     function escapeHtml(s){
@@ -168,192 +200,197 @@
         .replaceAll("'","&#39;");
     }
 
-    function pill(status){
-      const s = String(status || "").toLowerCase();
-      if (s === "confirmed") return `<span class="pill ok">confirmed</span>`;
-      if (s === "pending") return `<span class="pill warn">pending</span>`;
-      if (s === "cancelled" || s === "failed") return `<span class="pill bad">${escapeHtml(s)}</span>`;
-      return `<span class="pill">${escapeHtml(s || "unknown")}</span>`;
+    function fmtDateSlot(b){
+      return `${escapeHtml(b.service_date || "")} • ${escapeHtml(b.start_slot || "")} (${escapeHtml(String(b.duration_slots || ""))})`;
     }
 
-    function rowHtml(b){
-      const v = b.vehicle || {};
-      const vehicleLine = [v.year, v.make, v.model].filter(Boolean).join(" ");
-      const codes = [
-        b.promo_code ? `Promo: ${b.promo_code}` : null,
-        b.gift_code ? `Gift: ${b.gift_code}` : null,
-      ].filter(Boolean).join(" · ");
-
-      const discounts = [
-        (b.promo_discount_cents ? `Promo -${money(b.promo_discount_cents)}` : null),
-        (b.gift_applied_cents ? `Gift -${money(b.gift_applied_cents)}` : null),
-      ].filter(Boolean).join(" · ");
-
-      const bid = b.id ? String(b.id) : "";
-
-      const links = `
-        <div class="actions">
-          <a class="btn small ghost" href="/admin-booking.html?bid=${encodeURIComponent(bid)}" title="Status + progress links">Controls</a>
-          <a class="btn small ghost" href="/admin-assign.html?bid=${encodeURIComponent(bid)}" title="Assign staff + internal notes">Assign</a>
-          <a class="btn small ghost" href="/admin-upload.html?bid=${encodeURIComponent(bid)}" title="Upload photo to progress">Upload</a>
-          <a class="btn small ghost" href="/admin-progress.html?bid=${encodeURIComponent(bid)}" title="Post note or URL">Update</a>
-        </div>
-      `;
-
-      return `
-        <tr>
-          <td>
-            ${pill(b.status)}
-            <div class="small">${escapeHtml(b.service_date)} ${escapeHtml(b.start_slot)} (${escapeHtml(b.duration_slots)} slot)</div>
-            <div class="small mono" title="Booking ID">${escapeHtml(bid.slice(0,8))}…</div>
-          </td>
-          <td>
-            <strong>${escapeHtml(b.customer_name)}</strong><br>
-            <span class="small">${escapeHtml(b.customer_email || "")}</span><br>
-            <span class="small">${escapeHtml(b.customer_phone || "")}</span>
-          </td>
-          <td class="small">
-            ${escapeHtml(b.address_line1 || "")}<br>
-            ${escapeHtml(b.city || "")} ${escapeHtml(b.postal_code || "")}
-          </td>
-          <td class="small">
-            <strong>${escapeHtml(vehicleLine || "(no vehicle)")}</strong><br>
-            plate: ${escapeHtml(v.plate || "-")}<br>
-            photo: ${v.photo_url ? `<a href="${escapeHtml(v.photo_url)}" target="_blank" rel="noopener">open</a>` : "-"}
-          </td>
-          <td class="small">
-            <div><strong>${escapeHtml(b.package_code)}</strong> (${escapeHtml(b.vehicle_size)})</div>
-            <div>Subtotal: ${money(b.subtotal_cents || 0)}</div>
-            <div>${discounts || ""}</div>
-            <div><strong>Total:</strong> ${money(b.price_total_cents || 0)}</div>
-            <div><strong>Deposit:</strong> ${money(b.deposit_cents || 0)}</div>
-            <div class="small">${codes}</div>
-          </td>
-          <td>${links}</td>
-        </tr>
-      `;
+    function prettyPkg(code){
+      const map = {
+        premium_wash: "Premium Wash",
+        basic_detail: "Basic Detail",
+        complete_detail: "Complete Detail",
+        interior_detail: "Interior Detail",
+        exterior_detail: "Exterior Detail",
+      };
+      return map[code] || code || "";
     }
 
-    let lastRows = [];
+    function statusPill(b){
+      const s = b.status || "";
+      const js = b.job_status || "";
+      const pieces = [];
+      if (s) pieces.push(s);
+      if (js) pieces.push(js);
 
-    function renderTable(rows){
-      lastRows = Array.isArray(rows) ? rows : [];
-      if (!lastRows.length) {
-        qs("#tableWrap").innerHTML = `<div class="notice warn">No bookings found.</div>`;
-        return;
+      const text = pieces.join(" / ") || "—";
+      let kind = "";
+      if (js === "completed") kind = "ok";
+      if (js === "cancelled") kind = "bad";
+      if (s === "pending") kind = "warn";
+      return pill(text, kind);
+    }
+
+    function getPw(){ return (qs("#pw").value || "").trim(); }
+    function setPw(v){ qs("#pw").value = v || ""; }
+
+    // load saved pw
+    try {
+      const saved = localStorage.getItem("rosie_admin_pw") || "";
+      if (saved) setPw(saved);
+    } catch {}
+
+    qs("#savePwBtn").addEventListener("click", () => {
+      const pw = getPw();
+      if (!pw) return showStatus("Enter password first.", "bad");
+      try {
+        localStorage.setItem("rosie_admin_pw", pw);
+        showStatus("Saved password on this device.", "ok");
+        setTimeout(hideStatus, 1200);
+      } catch {
+        showStatus("Could not save password (browser storage blocked).", "bad");
       }
+    });
 
-      qs("#tableWrap").innerHTML = `
-        <table>
-          <thead class="sticky-actions">
-            <tr>
-              <th>When</th>
-              <th>Customer</th>
-              <th>Address</th>
-              <th>Vehicle</th>
-              <th>Service</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${lastRows.map(rowHtml).join("")}
-          </tbody>
-        </table>
-      `;
-    }
-
-    function applyFilter(){
-      const t = (qs("#filterText").value || "").trim().toLowerCase();
-      if (!t) return renderTable(lastRows);
-
-      const filtered = lastRows.filter(b => {
-        const v = b.vehicle || {};
-        const hay = [
-          b.service_date, b.start_slot, b.package_code, b.vehicle_size,
-          b.customer_name, b.customer_email, b.customer_phone,
-          b.address_line1, b.city, b.postal_code,
-          v.year, v.make, v.model, v.plate,
-        ].filter(Boolean).join(" ").toLowerCase();
-        return hay.includes(t);
+    async function postJson(url, payload){
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "content-type":"application/json" },
+        body: JSON.stringify(payload),
       });
-
-      renderTable(filtered);
+      const out = await res.json().catch(()=>null);
+      return { ok: res.ok, status: res.status, out };
     }
 
-    async function loadBookings(mode){
-      const pw = qs("#pw").value || "";
-      if (!pw) { alert("Enter admin password first."); return; }
+    async function loadBookings(){
+      const pw = getPw();
+      if (!pw) return showStatus("Missing admin password.", "bad");
+
+      const mode = qs("#mode").value;
 
       showStatus("Loading bookings…");
+      const r = await postJson("/api/admin/bookings", { admin_password: pw, mode });
 
-      const res = await fetch("/api/admin/bookings", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ mode, admin_password: pw }),
-      });
+      if (!r.ok || !r.out?.ok) {
+        return showStatus(r.out?.error ? `Error: ${r.out.error}` : "Error loading bookings.", "bad");
+      }
 
-      const data = await res.json().catch(()=>null);
-      if (!res.ok || !data?.ok) {
-        showStatus(data?.error ? `Error: ${data.error}` : "Error loading bookings", "bad");
+      renderRows(r.out.rows || []);
+      showStatus(`Loaded ${r.out.rows?.length || 0} bookings.`, "ok");
+      setTimeout(hideStatus, 1200);
+    }
+
+    function renderRows(rows){
+      const tb = qs("#rows");
+      tb.innerHTML = "";
+
+      if (!rows.length) {
+        tb.innerHTML = `<tr><td colspan="6" class="muted">No bookings found.</td></tr>`;
         return;
       }
 
-      showStatus(`Loaded ${data.rows.length} booking(s).`, "ok");
-      renderTable(data.rows);
+      for (const b of rows) {
+        const bid = b.id;
+        const tr = document.createElement("tr");
+
+        const staff = (b.assigned_staff_name || "—");
+
+        tr.innerHTML = `
+          <td>
+            <div><strong>${fmtDateSlot(b)}</strong></div>
+            <div class="muted mono" style="margin-top:6px">${escapeHtml(b.id || "")}</div>
+          </td>
+
+          <td>
+            <div><strong>${escapeHtml(b.customer_name || "")}</strong></div>
+            <div class="muted">${escapeHtml(b.customer_email || "")}</div>
+            ${b.customer_phone ? `<div class="muted">${escapeHtml(b.customer_phone)}</div>` : ``}
+          </td>
+
+          <td>
+            <div><strong>${escapeHtml(prettyPkg(b.package_code))}</strong></div>
+            <div class="muted">Size: ${escapeHtml(b.vehicle_size || "")}</div>
+            ${b.vehicle?.year || b.vehicle?.make || b.vehicle?.model
+              ? `<div class="muted">${escapeHtml(`${b.vehicle?.year || ""} ${b.vehicle?.make || ""} ${b.vehicle?.model || ""}`.trim())}</div>`
+              : ``}
+          </td>
+
+          <td>${statusPill(b)}</td>
+
+          <td>${escapeHtml(staff)}</td>
+
+          <td>
+            <div class="actions">
+              <a class="btn ghost smallBtn" href="/admin-booking.html?bid=${encodeURIComponent(bid)}">Controls</a>
+              <a class="btn ghost smallBtn" href="/admin-upload.html?bid=${encodeURIComponent(bid)}">Upload</a>
+              <a class="btn ghost smallBtn" href="/admin-progress.html?bid=${encodeURIComponent(bid)}">Progress</a>
+              <a class="btn ghost smallBtn" href="/admin-assign.html?bid=${encodeURIComponent(bid)}">Assign</a>
+            </div>
+          </td>
+        `;
+
+        tb.appendChild(tr);
+      }
     }
 
-    async function callBlocks(action){
-      const pw = qs("#pw").value || "";
-      if (!pw) { alert("Enter admin password first."); return; }
+    qs("#loadBtn").addEventListener("click", loadBookings);
 
-      const date = qs("#blockDate").value;
-      if (!date) { alert("Pick a date first."); return; }
-
+    // Blocking actions
+    function blockPayload(){
+      const pw = getPw();
+      const d = (qs("#blockDate").value || "").trim();
       const reason = (qs("#blockReason").value || "").trim() || null;
-      const slot = qs("#blockSlot").value;
+      return { pw, d, reason };
+    }
 
+    async function doBlock(action, slot=null){
+      const { pw, d, reason } = blockPayload();
+      if (!pw) return showBlock("Missing admin password.", "bad");
+      if (!d) return showBlock("Pick a date first.", "bad");
+
+      showBlock("Saving…");
       const payload = {
         admin_password: pw,
         action,
-        service_date: date,
+        service_date: d,
         reason,
       };
-      if (action.includes("slot_")) payload.slot = slot;
+      if (slot) payload.slot = slot;
 
-      showStatus("Saving block…");
-
-      const res = await fetch("/api/admin/blocks", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json().catch(()=>null);
-      if (!res.ok || !data?.ok) {
-        showStatus(data?.error ? `Error: ${data.error}` : "Error saving block", "bad");
-        return;
+      const r = await postJson("/api/admin/blocks", payload);
+      if (!r.ok || !r.out?.ok) {
+        return showBlock(r.out?.error ? `Error: ${r.out.error}` : "Block update failed.", "bad");
       }
-
-      showStatus("Saved.", "ok");
+      showBlock("Saved.", "ok");
     }
 
-    // Wire buttons
-    qs("#loadBtn").addEventListener("click", () => loadBookings("next30"));
-    qs("#loadAllBtn").addEventListener("click", () => loadBookings("latest100"));
+    qs("#blockDayBtn").addEventListener("click", ()=>doBlock("date_block_add"));
+    qs("#unblockDayBtn").addEventListener("click", ()=>doBlock("date_block_remove"));
+    qs("#blockAmBtn").addEventListener("click", ()=>doBlock("slot_block_add","AM"));
+    qs("#unblockAmBtn").addEventListener("click", ()=>doBlock("slot_block_remove","AM"));
+    qs("#blockPmBtn").addEventListener("click", ()=>doBlock("slot_block_add","PM"));
+    qs("#unblockPmBtn").addEventListener("click", ()=>doBlock("slot_block_remove","PM"));
 
-    qs("#addDateBlockBtn").addEventListener("click", () => callBlocks("date_block_add"));
-    qs("#removeDateBlockBtn").addEventListener("click", () => callBlocks("date_block_remove"));
-    qs("#addSlotBlockBtn").addEventListener("click", () => callBlocks("slot_block_add"));
-    qs("#removeSlotBlockBtn").addEventListener("click", () => callBlocks("slot_block_remove"));
+    qs("#checkAvailBtn").addEventListener("click", async () => {
+      const d = (qs("#blockDate").value || "").trim();
+      if (!d) return showBlock("Pick a date first.", "bad");
+      showBlock("Checking…");
 
-    qs("#filterText").addEventListener("input", applyFilter);
-    qs("#clearFilterBtn").addEventListener("click", () => { qs("#filterText").value = ""; renderTable(lastRows); });
+      const res = await fetch(`/api/availability?date=${encodeURIComponent(d)}`, { cache:"no-store" });
+      const out = await res.json().catch(()=>null);
 
-    // default date in UI
-    const today = new Date().toISOString().slice(0,10);
-    qs("#blockDate").value = today;
+      if (!res.ok || !out?.ok) {
+        return showBlock(out?.error ? `Error: ${out.error}` : "Availability check failed.", "bad");
+      }
+
+      if (out.blocked) return showBlock(`Date blocked: ${out.reason || "Blocked"}`, "bad");
+
+      showBlock(`Availability — AM: ${out.AM ? "Open" : "Blocked/Booked"} • PM: ${out.PM ? "Open" : "Blocked/Booked"} • Blocked slots: ${(out.blocked_slots||[]).join(", ") || "none"}`, "ok");
+    });
+
+    // default date = today
+    qs("#blockDate").value = new Date().toISOString().slice(0,10);
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260309j"></script>
+  <script type="module" src="/assets/chrome.js?v=20260310a"></script>
 </body>
 </html>
