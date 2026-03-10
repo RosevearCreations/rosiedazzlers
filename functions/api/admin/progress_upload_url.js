@@ -1,36 +1,32 @@
-// functions/api/admin/progress_upload_url.js
+// /functions/api/admin/progress_upload_url.js
+// CREATE THIS FILE (or REPLACE if you already have one)
+//
 // POST /api/admin/progress_upload_url
-// Admin-only: returns a Supabase Storage SIGNED UPLOAD URL for a job photo.
-//
-// WHY: lets you upload photos from the browser/phone while detailing,
-// without exposing the Supabase service role key.
-//
-// Env vars required:
-// - ADMIN_PASSWORD
-// - SUPABASE_URL
-// - SUPABASE_SERVICE_ROLE_KEY
-// Optional:
-// - JOB_MEDIA_BUCKET   (default: "job-media")
+// Admin-only: returns a signed upload URL for Supabase Storage (private bucket).
 //
 // Request JSON:
 // {
-//   "admin_password":"...",
-//   "booking_id":"uuid",
-//   "filename":"before-driver-floor.jpg",
-//   "content_type":"image/jpeg"
+//   "admin_password": "...",
+//   "booking_id": "uuid",
+//   "filename": "photo.jpg",
+//   "content_type": "image/jpeg"   // optional
 // }
 //
-// Response JSON:
+// Response:
 // {
 //   "ok": true,
 //   "bucket": "job-media",
-//   "path": "jobs/<booking_id>/2026-03-09T...Z_before-driver-floor.jpg",
-//   "media_ref": "sb://job-media/jobs/<booking_id>/...jpg",
-//   "upload_url": "https://<SUPABASE_URL>/storage/v1/...."
+//   "path": "jobs/<booking_id>/<timestamp>_<safe_filename>",
+//   "media_ref": "sb://job-media/jobs/<booking_id>/<...>",
+//   "upload_url": "https://<supabase>/storage/v1/object/upload/sign/...."
 // }
 //
-// NOTE: After uploading, you will call /api/admin/progress_post and set:
-//   media_url = media_ref   (sb://bucket/path)  (we’ll make the view endpoint sign it next)
+// ENV VARS required:
+// - ADMIN_PASSWORD
+// - SUPABASE_URL
+// - SUPABASE_SERVICE_ROLE_KEY
+// Optional (defaults shown below):
+// - JOB_MEDIA_BUCKET   (default: "job-media")
 
 export async function onRequestOptions() {
   return corsResponse("", 204);
@@ -41,10 +37,13 @@ export async function onRequestPost({ request, env }) {
     const ADMIN_PASSWORD = env.ADMIN_PASSWORD || "";
     const SUPABASE_URL = env.SUPABASE_URL;
     const SERVICE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
+
     const BUCKET = env.JOB_MEDIA_BUCKET || "job-media";
 
     if (!ADMIN_PASSWORD) return corsJson({ ok: false, error: "Server missing ADMIN_PASSWORD" }, 500);
-    if (!SUPABASE_URL || !SERVICE_KEY) return corsJson({ ok: false, error: "Server missing Supabase env vars" }, 500);
+    if (!SUPABASE_URL || !SERVICE_KEY) {
+      return corsJson({ ok: false, error: "Server not configured (Supabase env vars missing)" }, 500);
+    }
 
     const body = await readJson(request);
 
@@ -54,62 +53,69 @@ export async function onRequestPost({ request, env }) {
     const bookingId = String(body.booking_id || "").trim();
     if (!isUuid(bookingId)) return corsJson({ ok: false, error: "booking_id must be a uuid" }, 400);
 
-    const filenameRaw = String(body.filename || "").trim();
-    if (!filenameRaw) return corsJson({ ok: false, error: "Missing filename" }, 400);
+    const filename = String(body.filename || "").trim();
+    if (!filename) return corsJson({ ok: false, error: "filename required" }, 400);
 
-    const contentType = String(body.content_type || "").trim() || "application/octet-stream";
+    const contentType = String(body.content_type || "image/jpeg").trim() || "image/jpeg";
 
-    const safeName = sanitizeFilename(filenameRaw);
-    const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+    // Build storage path
+    const safeName = sanitizeFilename(filename);
+    const stamp = new Date().toISOString().replaceAll(":", "").replaceAll(".", "");
     const path = `jobs/${bookingId}/${stamp}_${safeName}`;
 
-    // Supabase Storage signed upload URL endpoint
-    // POST {SUPABASE_URL}/storage/v1/object/upload/sign/{bucket}/{path}
-    const storageBase = `${SUPABASE_URL}/storage/v1`;
+    // Create signed upload URL (Supabase Storage signed upload)
+    // Endpoint:
+    // POST /storage/v1/object/upload/sign/<bucket>/<path>
     const signUrl =
-      `${storageBase}/object/upload/sign/${encodeURIComponent(BUCKET)}/${encodePath(path)}`;
+      `${SUPABASE_URL}/storage/v1/object/upload/sign/${encodeURIComponent(BUCKET)}/${encodePath(path)}`;
 
-    const res = await fetch(signUrl, {
+    const signRes = await fetch(signUrl, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${SERVICE_KEY}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ expiresIn: 60 * 60 }), // 1 hour
+      body: JSON.stringify({
+        // expiresIn: seconds
+        expiresIn: 60 * 10, // 10 minutes
+        // contentType is supported by some versions; harmless if ignored
+        contentType,
+      }),
     });
 
-    const text = await res.text();
-    const data = text ? safeJson(text) : null;
+    const signText = await signRes.text();
+    let sign = null;
+    try { sign = signText ? JSON.parse(signText) : null; } catch { sign = null; }
 
-    if (!res.ok) {
-      return corsJson({ ok: false, error: "Supabase Storage sign failed", details: { status: res.status, data } }, 502);
+    if (!signRes.ok) {
+      return corsJson({ ok: false, error: "Supabase Storage sign failed", details: { status: signRes.status, body: sign || signText } }, 502);
     }
 
-    // Supabase returns a relative URL in data.url (e.g. "/object/upload/sign/...?...").
-    // Turn it into a full upload URL.
-    const upload_url = data?.url ? `${storageBase}${data.url}` : null;
-    if (!upload_url) {
-      return corsJson({ ok: false, error: "Signed upload URL missing from response", details: data }, 502);
+    // Supabase returns: { signedURL: "..." } (sometimes relative)
+    const signedURL =
+      sign?.signedURL || sign?.signedUrl || sign?.signed_url || sign?.url;
+
+    if (!signedURL) {
+      return corsJson({ ok: false, error: "Supabase Storage sign returned no signedURL", details: sign }, 502);
     }
+
+    const upload_url = signedURL.startsWith("http")
+      ? signedURL
+      : `${SUPABASE_URL}/storage/v1${signedURL}`;
 
     return corsJson({
       ok: true,
       bucket: BUCKET,
       path,
-      content_type: contentType,
       media_ref: `sb://${BUCKET}/${path}`,
       upload_url,
-      upload_headers: {
-        "content-type": contentType,
-        "x-upsert": "true",
-      },
     });
   } catch (e) {
     return corsJson({ ok: false, error: "Server error", details: String(e) }, 500);
   }
 }
 
-/* helpers */
+/* ---------------- helpers ---------------- */
 
 async function readJson(request) {
   const t = await request.text();
@@ -117,12 +123,19 @@ async function readJson(request) {
   try { return JSON.parse(t); } catch { return {}; }
 }
 
-function safeJson(text) {
-  try { return JSON.parse(text); } catch { return { raw: text }; }
-}
-
 function isUuid(s) {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(s || ""));
+}
+
+function sanitizeFilename(name) {
+  // keep letters, numbers, dot, dash, underscore; replace others with "_"
+  const base = name.split(/[\\/]/).pop() || "file";
+  return base.replace(/[^a-zA-Z0-9._-]+/g, "_").slice(0, 120);
+}
+
+// encode path segments but keep slashes
+function encodePath(path) {
+  return encodeURIComponent(path).replace(/%2F/g, "/");
 }
 
 function timingSafeEqual(a, b) {
@@ -136,20 +149,6 @@ function timingSafeEqual(a, b) {
     out |= (ca ^ cb);
   }
   return out === 0;
-}
-
-function sanitizeFilename(name) {
-  // keep letters, numbers, dash, underscore, dot
-  return name
-    .replace(/[/\\?%*:|"<>]/g, "-")
-    .replace(/\s+/g, "_")
-    .replace(/[^a-zA-Z0-9._-]/g, "")
-    .slice(0, 120) || "upload.bin";
-}
-
-// encode path segments but keep slashes
-function encodePath(path) {
-  return encodeURIComponent(path).replace(/%2F/g, "/");
 }
 
 function corsHeaders() {
