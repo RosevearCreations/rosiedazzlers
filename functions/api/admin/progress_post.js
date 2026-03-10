@@ -1,14 +1,28 @@
-// functions/api/admin/progress_post.js
-// REPLACE ENTIRE FILE with this version.
+// /functions/api/admin/progress_post.js
+// CREATE THIS FILE (or REPLACE ENTIRE FILE)
 //
 // POST /api/admin/progress_post
-// Admin-only: post a progress update and/or a photo reference to a booking.
+// Admin-only: posts a progress note and/or media item to a booking.
+// Writes into:
+//   - job_updates (notes)
+//   - job_media   (photos/links)
 //
-// v2 CHANGE:
-// - media_url can now be:
-//    1) https://... (regular URL)
-//    2) sb://bucket/path  (Supabase Storage reference)
-// This matches /api/progress/view (which converts sb://... into signed URLs for customers).
+// Request JSON:
+// {
+//   "admin_password": "...",
+//   "booking_id": "uuid",
+//   "created_by": "Jack",               // optional
+//   "visibility": "customer"|"internal",// default "customer"
+//   "kind": "before"|"during"|"after"|"other", // default "during"
+//   "note": "optional note",
+//   "media_url": "optional URL or sb://bucket/path",
+//   "caption": "optional caption"
+// }
+//
+// Env vars required:
+// - ADMIN_PASSWORD
+// - SUPABASE_URL
+// - SUPABASE_SERVICE_ROLE_KEY
 
 export async function onRequestOptions() {
   return corsResponse("", 204);
@@ -21,51 +35,39 @@ export async function onRequestPost({ request, env }) {
     const SERVICE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!ADMIN_PASSWORD) return corsJson({ ok: false, error: "Server missing ADMIN_PASSWORD" }, 500);
-    if (!SUPABASE_URL || !SERVICE_KEY) return corsJson({ ok: false, error: "Server missing Supabase env vars" }, 500);
+    if (!SUPABASE_URL || !SERVICE_KEY) {
+      return corsJson({ ok: false, error: "Server not configured (Supabase env vars missing)" }, 500);
+    }
 
     const body = await readJson(request);
 
     const pw = String(body.admin_password || "");
     if (!timingSafeEqual(pw, ADMIN_PASSWORD)) return corsJson({ ok: false, error: "Unauthorized" }, 401);
 
-    const bookingId = String(body.booking_id || "").trim();
-    if (!isUuid(bookingId)) return corsJson({ ok: false, error: "booking_id must be a uuid" }, 400);
+    const booking_id = String(body.booking_id || "").trim();
+    if (!isUuid(booking_id)) return corsJson({ ok: false, error: "booking_id must be a uuid" }, 400);
 
-    const createdBy = body.created_by != null ? String(body.created_by).trim() : null;
+    const created_by = body.created_by != null ? String(body.created_by).trim() : null;
 
-    const visibility = (body.visibility ? String(body.visibility).toLowerCase() : "customer");
+    const visibility = String(body.visibility || "customer").toLowerCase();
     if (!["customer", "internal"].includes(visibility)) {
       return corsJson({ ok: false, error: "visibility must be customer or internal" }, 400);
     }
 
-    const note = body.note != null ? String(body.note).trim() : "";
-    const mediaUrl = body.media_url != null ? String(body.media_url).trim() : "";
-    const caption = body.caption != null ? String(body.caption).trim() : null;
-
-    const kind = body.kind != null ? String(body.kind).toLowerCase() : "during";
+    const kind = String(body.kind || "during").toLowerCase();
     if (!["before", "during", "after", "other"].includes(kind)) {
-      return corsJson({ ok: false, error: "kind must be before,during,after,other" }, 400);
+      return corsJson({ ok: false, error: "kind must be before/during/after/other" }, 400);
     }
 
-    if (!note && !mediaUrl) {
+    const note = body.note != null ? String(body.note).trim() : null;
+    const media_url = body.media_url != null ? String(body.media_url).trim() : null;
+    const caption = body.caption != null ? String(body.caption).trim() : null;
+
+    if (!note && !media_url) {
       return corsJson({ ok: false, error: "Provide note and/or media_url" }, 400);
     }
 
-    // Allow sb://bucket/path OR https://...
-    if (mediaUrl) {
-      const ok =
-        mediaUrl.startsWith("sb://") ||
-        looksLikeUrl(mediaUrl);
-
-      if (!ok) {
-        return corsJson({
-          ok: false,
-          error: "media_url must be https://... or sb://bucket/path",
-        }, 400);
-      }
-    }
-
-    const supa = async (method, path, payload) => {
+    const supa = async (method, path, payload, prefer = "return=representation") => {
       const res = await fetch(`${SUPABASE_URL}${path}`, {
         method,
         headers: {
@@ -73,49 +75,55 @@ export async function onRequestPost({ request, env }) {
           Authorization: `Bearer ${SERVICE_KEY}`,
           "Content-Type": "application/json",
           Accept: "application/json",
-          Prefer: "return=representation",
+          Prefer: prefer,
         },
         body: payload ? JSON.stringify(payload) : undefined,
       });
-
       const text = await res.text();
       const data = text ? safeJson(text) : null;
       return { ok: res.ok, status: res.status, data, raw: text };
     };
 
-    const results = {};
+    const now = new Date().toISOString();
 
+    let updateRow = null;
+    let mediaRow = null;
+
+    // Insert note -> job_updates
     if (note) {
-      const ins = await supa("POST", "/rest/v1/job_updates", {
-        booking_id: bookingId,
+      const insU = await supa("POST", "/rest/v1/job_updates", {
+        booking_id,
         visibility,
-        created_by: createdBy,
+        created_by: created_by || null,
         note,
+        created_at: now,
       });
-      if (!ins.ok) return corsJson({ ok: false, error: "Insert failed (job_updates)", details: ins }, 502);
-      results.update = ins.data?.[0] || null;
+      if (!insU.ok) return corsJson({ ok: false, error: "Supabase insert failed (job_updates)", details: insU }, 502);
+      updateRow = Array.isArray(insU.data) ? insU.data[0] : insU.data;
     }
 
-    if (mediaUrl) {
-      const ins = await supa("POST", "/rest/v1/job_media", {
-        booking_id: bookingId,
+    // Insert media -> job_media
+    if (media_url) {
+      const insM = await supa("POST", "/rest/v1/job_media", {
+        booking_id,
         visibility,
-        created_by: createdBy,
+        created_by: created_by || null,
         kind,
-        caption,
-        media_url: mediaUrl,
+        caption: caption || null,
+        media_url,
+        created_at: now,
       });
-      if (!ins.ok) return corsJson({ ok: false, error: "Insert failed (job_media)", details: ins }, 502);
-      results.media = ins.data?.[0] || null;
+      if (!insM.ok) return corsJson({ ok: false, error: "Supabase insert failed (job_media)", details: insM }, 502);
+      mediaRow = Array.isArray(insM.data) ? insM.data[0] : insM.data;
     }
 
-    return corsJson({ ok: true, results });
+    return corsJson({ ok: true, update: updateRow, media: mediaRow });
   } catch (e) {
     return corsJson({ ok: false, error: "Server error", details: String(e) }, 500);
   }
 }
 
-/* helpers */
+/* ---------------- helpers ---------------- */
 
 async function readJson(request) {
   const t = await request.text();
@@ -129,10 +137,6 @@ function safeJson(text) {
 
 function isUuid(s) {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(s || ""));
-}
-
-function looksLikeUrl(u) {
-  try { new URL(u); return true; } catch { return false; }
 }
 
 function timingSafeEqual(a, b) {
