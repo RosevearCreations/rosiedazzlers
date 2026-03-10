@@ -1,22 +1,38 @@
+<!-- /book.html
+     REPLACE ENTIRE FILE
+
+     Fixes:
+     - Package dropdown populates from /data/rosie_services_pricing_and_packages.json
+     - No more "Unexpected token '<'" JSON error (strict JSON fetch + clear error box)
+     - Email is mandatory (already) + adds mandatory Vehicle Year/Make/Model before Stripe
+     - Photo is recommended (optional)
+     - Availability updates AM/PM based on /api/availability?date=YYYY-MM-DD
+     - Shows live price + deposit estimate (matches /api/checkout rules)
+     - Size chart / price charts open in a modal (correct R2 URLs)
+-->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Book | Rosie Dazzlers</title>
-  <meta name="description" content="Book your mobile auto detailing service in Norfolk & Oxford Counties. Deposit required." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260309a" />
+  <meta name="description" content="Book Rosie Dazzlers Mobile Auto Detailing. Choose package, vehicle size, date/time slot, add-ons, and pay deposit online." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260309t" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
     .muted{color:rgba(234,242,255,.62)}
-    .req{color:rgba(239,68,68,.92);font-weight:800}
-    .codebox{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-    .mini{font-size:.92rem;color:rgba(234,242,255,.62)}
-    .inline{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    @media (max-width: 980px){
-      .grid2,.grid3{grid-template-columns:1fr}
-    }
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    @media (max-width:980px){ .grid2,.row3{grid-template-columns:1fr} }
+    .addonRow{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+    .addonRow:last-child{border-bottom:none}
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
+    .tag.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
+    .tag.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
+    .modalBack{position:fixed; inset:0; background:rgba(0,0,0,.70); display:none; align-items:center; justify-content:center; z-index:9999; padding:18px;}
+    .modal{max-width:1100px; width:100%; border:1px solid rgba(255,255,255,.12); background:rgba(10,14,24,.96); border-radius:18px; padding:14px;}
+    .modal img{width:100%; height:auto; border-radius:14px; border:1px solid rgba(255,255,255,.10)}
+    .modalHead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
   </style>
 </head>
 
@@ -35,500 +51,615 @@
 
   <div class="container">
     <div class="panel">
-      <div class="badges">
-        <span class="badge">Online booking</span>
-        <span class="badge">Deposit required</span>
-        <span class="badge">Norfolk + Oxford</span>
+      <h1 style="margin:0 0 8px">Book your detail</h1>
+      <p class="kicker" style="margin:0">
+        Choose your package, select a date and slot, then pay your deposit to secure the booking.
+      </p>
+
+      <div class="hr"></div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn ghost" type="button" id="openPrice">Price chart</button>
+        <button class="btn ghost" type="button" id="openDetails">Details chart</button>
+        <button class="btn ghost" type="button" id="openSize">Size chart</button>
       </div>
-      <h1 style="margin:12px 0 8px">Book a Detail</h1>
-      <p class="kicker">Choose a date, package, and time slot. We do one vehicle per day unless two half-day jobs.</p>
-      <div id="dataError" class="notice bad" style="display:none;margin-top:10px"></div>
+
+      <div id="dataError" class="notice bad" style="display:none;margin-top:12px"></div>
     </div>
 
     <div class="section grid2">
+      <!-- FORM -->
       <div class="panel">
-        <h2 style="margin-top:0">1) Booking details</h2>
+        <form id="bookingForm" class="form">
+          <div class="grid2">
+            <div>
+              <label for="package_code">Package</label>
+              <select id="package_code" name="package_code" required></select>
+            </div>
 
-        <div class="grid2">
-          <div>
-            <label for="service_date">Service date <span class="req">*</span></label>
-            <input id="service_date" type="date" />
-            <div id="availNote" class="mini" style="margin-top:6px"></div>
-          </div>
-          <div>
-            <label for="start_slot">Time slot <span class="req">*</span></label>
-            <select id="start_slot">
-              <option value="">Select…</option>
-              <option value="AM">AM</option>
-              <option value="PM">PM</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid2" style="margin-top:10px">
-          <div>
-            <label for="service_area">Service area <span class="req">*</span></label>
-            <select id="service_area">
-              <option value="">Select…</option>
-              <option value="Norfolk">Norfolk</option>
-              <option value="Oxford">Oxford</option>
-            </select>
-          </div>
-          <div>
-            <label for="vehicle_size">Vehicle size <span class="req">*</span></label>
-            <select id="vehicle_size">
-              <option value="">Select…</option>
-              <option value="small">Small</option>
-              <option value="mid">Mid-sized</option>
-              <option value="oversize">Over-size / Exotic</option>
-            </select>
-            <div class="muted">
-              Use size chart:
-              <a href="https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG" target="_blank" rel="noopener">Open</a>
+            <div>
+              <label for="vehicle_size">Vehicle size</label>
+              <select id="vehicle_size" name="vehicle_size" required>
+                <option value="small">Small</option>
+                <option value="mid">Mid-sized</option>
+                <option value="oversize">Over-size / Exotic</option>
+              </select>
+              <div class="muted" style="margin-top:6px">
+                Unsure? Open the <a href="#" id="openSizeInline">size chart</a>.
+              </div>
             </div>
           </div>
-        </div>
 
-        <div style="margin-top:10px">
-          <label for="package_code">Package <span class="req">*</span></label>
-          <select id="package_code">
-            <option value="">Loading packages…</option>
-          </select>
-          <div class="muted">Prices update automatically based on size.</div>
-        </div>
+          <div class="row3" style="margin-top:10px">
+            <div>
+              <label for="service_date">Service date</label>
+              <input id="service_date" name="service_date" type="date" required />
+            </div>
 
-        <div class="hr"></div>
+            <div>
+              <label for="start_slot">Start slot</label>
+              <select id="start_slot" name="start_slot" required>
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </div>
 
-        <h3 style="margin:0 0 8px">Vehicle info (required)</h3>
-        <div class="grid3">
-          <div>
-            <label for="car_year">Year <span class="req">*</span></label>
-            <input id="car_year" type="number" min="1980" max="2030" placeholder="2020" />
+            <div>
+              <label for="duration_slots">Duration</label>
+              <select id="duration_slots" name="duration_slots" required>
+                <option value="1">Half day</option>
+                <option value="2">Full day</option>
+              </select>
+            </div>
           </div>
-          <div>
-            <label for="car_make">Make <span class="req">*</span></label>
-            <input id="car_make" type="text" placeholder="Toyota" />
-          </div>
-          <div>
-            <label for="car_model">Model <span class="req">*</span></label>
-            <input id="car_model" type="text" placeholder="RAV4" />
-          </div>
-        </div>
-        <div class="grid2" style="margin-top:10px">
-          <div>
-            <label for="car_plate">License plate (optional)</label>
-            <input id="car_plate" type="text" placeholder="ABC123" />
-          </div>
-          <div>
-            <label for="car_photo_url">Vehicle photo URL (recommended)</label>
-            <input id="car_photo_url" type="url" placeholder="https://..." />
-          </div>
-        </div>
 
-        <div class="hr"></div>
+          <div class="grid2" style="margin-top:10px">
+            <div>
+              <label for="service_area">Service area</label>
+              <select id="service_area" name="service_area" required>
+                <option value="Norfolk">Norfolk</option>
+                <option value="Oxford">Oxford</option>
+              </select>
+            </div>
 
-        <h3 style="margin:0 0 8px">Add-ons</h3>
-        <div id="addonsList" class="list"></div>
-        <div class="mini" style="margin-top:8px">
-          Quote add-ons are recorded but not charged online. We’ll confirm pricing by message.
-        </div>
+            <div>
+              <label for="customer_phone">Phone (optional)</label>
+              <input id="customer_phone" name="customer_phone" type="tel" placeholder="(###) ###-####" />
+            </div>
+          </div>
+
+          <div class="grid2" style="margin-top:10px">
+            <div>
+              <label for="customer_name">Name</label>
+              <input id="customer_name" name="customer_name" type="text" required />
+            </div>
+
+            <div>
+              <label for="customer_email">Email</label>
+              <input id="customer_email" name="customer_email" type="email" required />
+            </div>
+          </div>
+
+          <div style="margin-top:10px">
+            <label for="address_line1">Service address</label>
+            <input id="address_line1" name="address_line1" type="text" required />
+          </div>
+
+          <div class="grid2" style="margin-top:10px">
+            <div>
+              <label for="city">City (optional)</label>
+              <input id="city" name="city" type="text" />
+            </div>
+
+            <div>
+              <label for="postal_code">Postal code (optional)</label>
+              <input id="postal_code" name="postal_code" type="text" />
+            </div>
+          </div>
+
+          <div class="hr"></div>
+
+          <!-- VEHICLE INFO (MANDATORY YEAR/MAKE/MODEL) -->
+          <div class="panel" style="padding:12px">
+            <strong>Vehicle info</strong>
+            <div class="kicker">Required before checkout so we can confirm the correct size/service.</div>
+            <div class="hr"></div>
+
+            <div class="row3">
+              <div>
+                <label for="vehicle_year">Year</label>
+                <input id="vehicle_year" name="vehicle_year" type="number" min="1980" max="2035" placeholder="2020" required />
+              </div>
+              <div>
+                <label for="vehicle_make">Make</label>
+                <input id="vehicle_make" name="vehicle_make" type="text" placeholder="Toyota" required />
+              </div>
+              <div>
+                <label for="vehicle_model">Model</label>
+                <input id="vehicle_model" name="vehicle_model" type="text" placeholder="RAV4" required />
+              </div>
+            </div>
+
+            <div class="grid2" style="margin-top:10px">
+              <div>
+                <label for="vehicle_plate">License plate (optional)</label>
+                <input id="vehicle_plate" name="vehicle_plate" type="text" placeholder="ABC123" />
+              </div>
+              <div>
+                <label for="vehicle_mileage">Mileage (optional)</label>
+                <input id="vehicle_mileage" name="vehicle_mileage" type="number" min="0" placeholder="123456" />
+              </div>
+            </div>
+
+            <div style="margin-top:10px">
+              <label for="vehicle_photo_url">Vehicle photo link (recommended, optional)</label>
+              <input id="vehicle_photo_url" name="vehicle_photo_url" type="url" placeholder="https://..." />
+              <div class="muted" style="margin-top:6px">
+                You can paste a link to a photo (Drive/Dropbox/etc). Upload support can be added later.
+              </div>
+            </div>
+
+            <label style="display:flex;gap:10px;align-items:flex-start;margin-top:10px">
+              <input type="checkbox" id="ack_size_match" />
+              <span><strong>I confirm the vehicle size I selected matches the size chart.</strong></span>
+            </label>
+          </div>
+
+          <div class="hr"></div>
+
+          <!-- ADDONS -->
+          <div class="panel" style="padding:12px">
+            <strong>Add-ons</strong>
+            <div class="kicker">“Quote required” items are recorded but not included in the online total.</div>
+            <div class="hr"></div>
+            <div id="addonPicker"></div>
+          </div>
+
+          <div class="hr"></div>
+
+          <!-- DISCOUNTS (future-ready) -->
+          <div class="grid2">
+            <div>
+              <label for="gift_code">Gift code (optional)</label>
+              <input id="gift_code" name="gift_code" type="text" placeholder="RD-GIFT-XXXX" />
+            </div>
+            <div>
+              <label for="promo_code">Promo code (optional)</label>
+              <input id="promo_code" name="promo_code" type="text" placeholder="SPRING10" />
+            </div>
+          </div>
+
+          <div class="hr"></div>
+
+          <!-- REQUIRED ACKS -->
+          <label style="display:flex;gap:10px;align-items:flex-start">
+            <input type="checkbox" id="ack_driveway" required />
+            <span><strong>I confirm a driveway / suitable work area is available.</strong></span>
+          </label>
+
+          <label style="display:flex;gap:10px;align-items:flex-start">
+            <input type="checkbox" id="ack_power_water" required />
+            <span><strong>I confirm power + water are available</strong> (or I accept additional charges).</span>
+          </label>
+
+          <label style="display:flex;gap:10px;align-items:flex-start">
+            <input type="checkbox" id="ack_bylaw" required />
+            <span><strong>I accept responsibility for any local bylaw/runoff restrictions</strong> at the service location.</span>
+          </label>
+
+          <label style="display:flex;gap:10px;align-items:flex-start">
+            <input type="checkbox" id="ack_cancellation" required />
+            <span><strong>I understand deposits secure booking times</strong> and cancellation fees may apply.</span>
+          </label>
+
+          <div id="availBox" class="notice" style="margin-top:10px;display:none"></div>
+          <div id="priceBox" class="notice" style="margin-top:10px;display:none"></div>
+          <div id="submitErr" class="notice bad" style="margin-top:10px;display:none"></div>
+
+          <button id="submitBtn" class="btn primary" type="submit">Pay deposit & book</button>
+        </form>
       </div>
 
+      <!-- SUMMARY -->
       <div class="panel">
-        <h2 style="margin-top:0">2) Contact + address</h2>
-
-        <div class="grid2">
-          <div>
-            <label for="customer_name">Full name <span class="req">*</span></label>
-            <input id="customer_name" type="text" />
-          </div>
-          <div>
-            <label for="customer_email">Email <span class="req">*</span></label>
-            <input id="customer_email" type="email" />
-          </div>
-        </div>
-
-        <div class="grid2" style="margin-top:10px">
-          <div>
-            <label for="customer_phone">Phone (optional)</label>
-            <input id="customer_phone" type="tel" />
-          </div>
-          <div>
-            <label for="address_line1">Address <span class="req">*</span></label>
-            <input id="address_line1" type="text" placeholder="123 Main St" />
-          </div>
-        </div>
-
-        <div class="grid2" style="margin-top:10px">
-          <div>
-            <label for="city">City</label>
-            <input id="city" type="text" />
-          </div>
-          <div>
-            <label for="postal_code">Postal code</label>
-            <input id="postal_code" type="text" placeholder="N0J 1P0" />
-          </div>
-        </div>
+        <h2 style="margin-top:0">What’s included</h2>
+        <div id="packageSummary" class="notice"></div>
 
         <div class="hr"></div>
 
-        <h3 style="margin:0 0 8px">Codes (optional)</h3>
-
-        <div class="grid2">
-          <div>
-            <label for="gift_code">Gift code</label>
-            <input id="gift_code" class="codebox" type="text" placeholder="RD-ABCDEF1234" />
-            <div class="muted">Service Gifts must match package + size. Dollar Gifts deduct from total.</div>
-          </div>
-          <div>
-            <label for="promo_code">Promo code</label>
-            <input id="promo_code" class="codebox" type="text" placeholder="WELCOME10" />
-            <div class="muted">Promos can be % off or $ off (specials).</div>
-          </div>
-        </div>
-
-        <div class="grid2" style="margin-top:10px">
-          <div class="inline">
-            <button class="btn ghost" id="applyCodesBtn" type="button">Apply codes</button>
-            <span id="codesResult" class="mini"></span>
-          </div>
-        </div>
+        <h2 style="margin-top:0">Booking rules</h2>
+        <ul class="list">
+          <li>One vehicle per day unless the job is a half-day booking.</li>
+          <li>Driveway/work area required.</li>
+          <li>Customer provides power + water (or additional charges may apply).</li>
+          <li>Deposit required to secure appointment.</li>
+          <li>Cancellation fees may apply.</li>
+          <li>Customer accepts bylaw/runoff responsibility for the location.</li>
+        </ul>
 
         <div class="hr"></div>
-
-        <h3 style="margin:0 0 8px">Required acknowledgements</h3>
-        <div class="list">
-          <label class="checkbox"><input type="checkbox" id="ack_driveway" /> Driveway required</label>
-          <label class="checkbox"><input type="checkbox" id="ack_power_water" /> Customer provides power + water (extra charges may apply otherwise)</label>
-          <label class="checkbox"><input type="checkbox" id="ack_bylaw" /> Customer accepts responsibility for local bylaws related to washing/chemicals/runoff</label>
-          <label class="checkbox"><input type="checkbox" id="ack_cancellation" /> Cancellation policy accepted</label>
-        </div>
-
-        <div class="hr"></div>
-
-        <div id="summary" class="notice"></div>
-
-        <div class="row" style="margin-top:10px">
-          <button class="btn primary" id="checkoutBtn" type="button">Proceed to deposit checkout</button>
-        </div>
+        <a class="btn ghost" href="/services">See packages</a>
+        <a class="btn ghost" href="/waiver" style="margin-left:6px">Waiver</a>
       </div>
     </div>
 
     <div class="footer" data-footer></div>
   </div>
 
+  <!-- MODAL -->
+  <div class="modalBack" id="modalBack" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modalHead">
+        <strong id="modalTitle">Preview</strong>
+        <button class="btn ghost" id="modalCloseBtn" type="button">Close</button>
+      </div>
+      <img id="modalImg" alt="Preview image" />
+    </div>
+  </div>
+
   <script type="module">
-    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260309a";
+    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260309t";
+    const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
+    const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages";
 
-    const money = (cents) =>
-      new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" })
-        .format((Number(cents || 0) / 100));
+    const qs = (s) => document.querySelector(s);
 
-    function showDataError(msg) {
-      const el = document.querySelector("#dataError");
-      if (!el) return;
-      el.style.display = "block";
-      el.textContent = msg;
+    function escapeHtml(s){
+      return String(s || "")
+        .replaceAll("&","&amp;").replaceAll("<","&lt;")
+        .replaceAll(">","&gt;").replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
     }
 
-    async function fetchJsonStrict(url) {
-      const res = await fetch(url, { cache: "no-store" });
+    function moneyCents(cents){
+      return new Intl.NumberFormat("en-CA", { style:"currency", currency:"CAD" })
+        .format((Number(cents || 0) / 100));
+    }
+    function moneyCad(cad){
+      return new Intl.NumberFormat("en-CA", { style:"currency", currency:"CAD" })
+        .format(Number(cad || 0));
+    }
+
+    async function fetchJsonStrict(url){
+      const res = await fetch(url, { cache:"no-store" });
       const text = await res.text();
       try { return JSON.parse(text); }
       catch {
-        const head = text.slice(0, 120).replace(/\s+/g, " ");
-        throw new Error(`Expected JSON from ${url} but got: ${head}`);
+        const head = text.slice(0,120).replace(/\s+/g," ");
+        throw new Error(`Expected JSON but got: ${head}`);
       }
     }
 
-    function val(id){ return (document.querySelector(id)?.value || "").trim(); }
-    function checked(id){ return !!document.querySelector(id)?.checked; }
+    // Modal
+    function openModal(title, imgUrl){
+      qs("#modalTitle").textContent = title;
+      qs("#modalImg").src = imgUrl;
+      qs("#modalBack").style.display = "flex";
+    }
+    function closeModal(){ qs("#modalBack").style.display = "none"; qs("#modalImg").src = ""; }
+    qs("#modalCloseBtn").addEventListener("click", closeModal);
+    qs("#modalBack").addEventListener("click",(e)=>{ if(e.target.id==="modalBack") closeModal(); });
 
-    function addonCodes(){
-      return Array.from(document.querySelectorAll("[data-addon]"))
-        .filter(x => x.checked)
-        .map(x => x.getAttribute("data-addon"));
+    // Chart buttons
+    qs("#openPrice").addEventListener("click", ()=>openModal("Vehicle Price Chart 2025", `${BRAND_BASE}/CarPrice2025.PNG`));
+    qs("#openDetails").addEventListener("click", ()=>openModal("Package Service Details Chart", `${BRAND_BASE}/CarPriceDetails2025.PNG`));
+    qs("#openSize").addEventListener("click", ()=>openModal("Vehicle Size Chart", `${PACKAGES_BASE}/CarSizeChart.PNG`));
+    qs("#openSizeInline").addEventListener("click", (e)=>{ e.preventDefault(); openModal("Vehicle Size Chart", `${PACKAGES_BASE}/CarSizeChart.PNG`); });
+
+    let data = null;
+
+    // Local pricing mirrors /api/checkout (so the estimate matches server)
+    const PRICING_CENTS = {
+      premium_wash:    { small:  8500, mid: 10500, oversize: 12500 },
+      basic_detail:    { small: 11500, mid: 13500, oversize: 17000 },
+      complete_detail: { small: 31900, mid: 36900, oversize: 41900 },
+      interior_detail: { small: 19500, mid: 22000, oversize: 24500 },
+      exterior_detail: { small: 19500, mid: 22000, oversize: 24500 },
+    };
+
+    // Add-ons mirrors /api/checkout (quote_required not charged online)
+    const ADDONS_DEF = {
+      full_clay_treatment: { prices_cents: { small: 7900, mid: 9900, oversize: 12900 }, quote_required:false },
+      two_stage_polish: { prices_cents: { small:19900, mid:27900, oversize:35900 }, quote_required:true },
+      high_grade_paint_sealant: { prices_cents: { small:5900, mid:7900, oversize:9900 }, quote_required:false },
+      uv_protectant_applied_on_interior_panels: { prices_cents: { small:2500, mid:3500, oversize:4500 }, quote_required:false },
+      de_ionizing_treatment: { quote_required:true },
+      de_badging: { quote_required:true },
+      engine_cleaning: { price_cents:5900, quote_required:false },
+      external_ceramic_coating: { quote_required:true },
+      external_graphene_fine_finish: { quote_required:true },
+      external_wax: { prices_cents: { small:4900, mid:5900, oversize:6900 }, quote_required:false },
+      vinyl_wrapping: { quote_required:true },
+      window_tinting: { quote_required:true },
+    };
+
+    function currentDepositCents(package_code){
+      return (["premium_wash","basic_detail"].includes(package_code)) ? 5000 : 10000;
     }
 
-    function depositFor(pkgCode){
-      return (pkgCode === "premium_wash" || pkgCode === "basic_detail") ? 5000 : 10000;
+    function showBox(id, msg, kind=""){
+      const el = qs("#"+id);
+      el.style.display = "block";
+      el.className = "notice " + (kind || "");
+      el.textContent = msg;
     }
-
-    let servicesData = null;
-    let lastPreview = null;
-    let lastAvail = null;
-
-    function pkgPriceCents(pkgCode, size){
-      const p = (servicesData?.packages || []).find(x => x.code === pkgCode);
-      if (!p) return 0;
-      const cad = p.prices_cad?.[size] ?? 0;
-      return Math.round(Number(cad) * 100);
-    }
-
-    function addonsTotalCents(size){
-      let total = 0;
-      for (const code of addonCodes()){
-        const a = (servicesData?.addons || []).find(x => x.code === code);
-        if (!a) continue;
-        if (a.quote_required) continue;
-        if (a.prices_cad && a.prices_cad[size] != null) total += Math.round(Number(a.prices_cad[size]) * 100);
-        else if (a.price_cad != null) total += Math.round(Number(a.price_cad) * 100);
-      }
-      return total;
-    }
-
-    function computeSubtotalCents(){
-      const pkgCode = val("#package_code");
-      const size = val("#vehicle_size");
-      return pkgPriceCents(pkgCode, size) + addonsTotalCents(size);
-    }
-
-    function recompute(){
-      const pkg = val("#package_code");
-      const subtotal = computeSubtotalCents();
-      const depBase = pkg ? depositFor(pkg) : 0;
-
-      if (lastPreview?.ok) {
-        document.querySelector("#summary").innerHTML =
-          `<strong>Estimate (with codes)</strong><br>` +
-          `Subtotal: ${money(lastPreview.subtotal_cents)}<br>` +
-          (lastPreview.promo_code ? `Promo discount: -${money(lastPreview.promo_discount_cents)}<br>` : "") +
-          (lastPreview.gift_code ? `Gift applied: -${money(lastPreview.gift_apply_cents)}<br>` : "") +
-          `<strong>Total after discounts:</strong> ${money(lastPreview.total_after_discounts_cents)}<br>` +
-          `<strong>Deposit due now:</strong> ${money(lastPreview.deposit_due_now_cents)}`;
-      } else {
-        document.querySelector("#summary").innerHTML =
-          `<strong>Estimate</strong><br>` +
-          `Total (before codes): ${money(subtotal)}<br>` +
-          `Deposit due now (before codes): ${money(depBase)}`;
-      }
-    }
-
-    function renderPackages() {
-      const pkgSel = document.querySelector("#package_code");
-      const pkgs = servicesData?.packages || [];
-      pkgSel.innerHTML = `<option value="">Select…</option>` + pkgs.map(p =>
-        `<option value="${p.code}">${p.name} — ${p.subtitle || ""}</option>`
-      ).join("");
-    }
-
-    function renderAddons() {
-      const list = document.querySelector("#addonsList");
-      const ads = servicesData?.addons || [];
-      list.innerHTML = ads.map(a => {
-        const tag = a.quote_required ? `<span class="badge">Quote</span>` : "";
-        return `
-          <label class="checkbox">
-            <input type="checkbox" data-addon="${a.code}" />
-            ${a.name} ${tag}
-          </label>
-        `;
-      }).join("");
-
-      document.querySelectorAll("[data-addon]").forEach(chk => chk.addEventListener("change", () => {
-        lastPreview = null;
-        document.querySelector("#codesResult").textContent = "";
-        recompute();
-      }));
-    }
-
-    function setSlotEnabled(slot, enabled){
-      const sel = document.querySelector("#start_slot");
-      const opt = sel.querySelector(`option[value="${slot}"]`);
-      if (!opt) return;
-      opt.disabled = !enabled;
-      // if currently selected slot became disabled, clear selection
-      if (!enabled && sel.value === slot) sel.value = "";
-    }
+    function hideBox(id){ qs("#"+id).style.display="none"; }
 
     async function refreshAvailability(){
-      const date = val("#service_date");
+      const date = qs("#service_date").value;
       if (!date) return;
 
-      const note = document.querySelector("#availNote");
-      note.textContent = "Checking availability…";
+      hideBox("availBox");
 
-      const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache: "no-store" });
-      const data = await res.json().catch(()=>null);
+      const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache:"no-store" });
+      const j = await res.json().catch(()=>null);
 
-      if (!res.ok || !data) {
-        note.textContent = "Could not check availability.";
-        return;
+      if (!res.ok || !j) {
+        return showBox("availBox", "Could not load availability.", "bad");
       }
 
-      lastAvail = data;
-
-      if (data.blocked) {
-        setSlotEnabled("AM", false);
-        setSlotEnabled("PM", false);
-        note.textContent = `Blocked: ${data.reason || "Unavailable"}`;
-        return;
+      if (j.blocked) {
+        qs("#start_slot").value = "AM";
+        qs("#start_slot").querySelector('option[value="AM"]').disabled = true;
+        qs("#start_slot").querySelector('option[value="PM"]').disabled = true;
+        return showBox("availBox", `Date blocked: ${j.reason || "Blocked"}`, "bad");
       }
 
-      setSlotEnabled("AM", !!data.AM);
-      setSlotEnabled("PM", !!data.PM);
+      const amOpt = qs("#start_slot").querySelector('option[value="AM"]');
+      const pmOpt = qs("#start_slot").querySelector('option[value="PM"]');
 
-      const blocks = (data.slot_blocks || [])
-        .map(b => `${b.slot}${b.reason ? ` (${b.reason})` : ""}`)
-        .join(", ");
+      amOpt.disabled = !j.AM;
+      pmOpt.disabled = !j.PM;
 
-      note.textContent = `AM: ${data.AM ? "Available" : "Blocked"} · PM: ${data.PM ? "Available" : "Blocked"}${blocks ? ` · Blocks: ${blocks}` : ""}`;
+      // auto-fix selected slot if unavailable
+      if (qs("#start_slot").value === "AM" && !j.AM && j.PM) qs("#start_slot").value = "PM";
+      if (qs("#start_slot").value === "PM" && !j.PM && j.AM) qs("#start_slot").value = "AM";
+
+      const duration = Number(qs("#duration_slots").value || "1");
+      if (duration === 2 && (!j.AM || !j.PM)) {
+        showBox("availBox", "Full-day requires both AM + PM available. Please pick another date.", "warn");
+      } else {
+        showBox("availBox", `Availability — AM: ${j.AM ? "Open" : "Booked"} • PM: ${j.PM ? "Open" : "Booked"} (holds ${j.hold_minutes || 30} min)`, "ok");
+      }
     }
 
-    async function applyCodes(){
-      const gift = val("#gift_code").toUpperCase();
-      const promo = val("#promo_code").toUpperCase();
-      document.querySelector("#gift_code").value = gift;
-      document.querySelector("#promo_code").value = promo;
+    function buildPackageSummary(){
+      if (!data) return;
 
-      const pkg = val("#package_code");
-      const size = val("#vehicle_size");
-      if (!pkg || !size) { document.querySelector("#codesResult").textContent = "Pick package + size first."; return; }
+      const code = qs("#package_code").value;
+      const size = qs("#vehicle_size").value;
+
+      const pkg = (data.packages || []).find(p => p.code === code);
+      if (!pkg) return;
+
+      const items = (pkg.included_services || []).map(s => `<li>${escapeHtml(s.name)}</li>`).join("");
+
+      qs("#packageSummary").innerHTML = `
+        <div><strong>${escapeHtml(pkg.name)}</strong> — ${escapeHtml(pkg.subtitle || "")}</div>
+        <div class="muted" style="margin-top:6px">
+          Price (${escapeHtml(size)}): <strong>${moneyCad(pkg.prices_cad?.[size] || 0)}</strong>
+          • Deposit: <strong>${moneyCents(currentDepositCents(code))}</strong>
+        </div>
+        <div class="hr"></div>
+        <ul>${items || "<li>(No items listed)</li>"}</ul>
+      `;
+    }
+
+    function buildAddonPicker(){
+      const holder = qs("#addonPicker");
+      holder.innerHTML = "";
+
+      (data.addons || []).forEach(a => {
+        const def = ADDONS_DEF[a.code] || {};
+        const quote = (a.quote_required === true) || (def.quote_required === true);
+
+        const row = document.createElement("label");
+        row.style.display = "block";
+        row.style.cursor = "pointer";
+        row.innerHTML = `
+          <div class="addonRow">
+            <div style="display:flex;gap:10px;align-items:flex-start">
+              <input type="checkbox" value="${escapeHtml(a.code)}" data-addon />
+              <div>
+                <strong>${escapeHtml(a.name)}</strong><br>
+                <span class="muted">${escapeHtml(a.code)}</span>
+              </div>
+            </div>
+            <div>
+              ${quote ? `<span class="tag warn">Quote</span>` : `<span class="tag ok" data-addon-price="${escapeHtml(a.code)}"></span>`}
+            </div>
+          </div>
+        `;
+        holder.appendChild(row);
+      });
+
+      refreshAddonPrices();
+    }
+
+    function refreshAddonPrices(){
+      const size = qs("#vehicle_size").value;
+
+      // Update displayed add-on prices
+      document.querySelectorAll("[data-addon-price]").forEach(el => {
+        const code = el.getAttribute("data-addon-price");
+        const def = ADDONS_DEF[code] || {};
+        let cents = null;
+
+        if (typeof def.price_cents === "number") cents = def.price_cents;
+        else if (def.prices_cents && typeof def.prices_cents[size] === "number") cents = def.prices_cents[size];
+
+        el.textContent = cents != null ? moneyCents(cents) : "—";
+      });
+
+      refreshTotals();
+    }
+
+    function selectedAddonCodes(){
+      return Array.from(document.querySelectorAll("input[data-addon]:checked")).map(i => i.value);
+    }
+
+    function refreshTotals(){
+      hideBox("priceBox");
+      hideBox("submitErr");
+
+      if (!data) return;
+
+      const code = qs("#package_code").value;
+      const size = qs("#vehicle_size").value;
+
+      const base = PRICING_CENTS?.[code]?.[size];
+      if (typeof base !== "number") return;
+
+      const chosen = selectedAddonCodes();
+
+      let addonsTotal = 0;
+      const quote = [];
+
+      for (const c of chosen) {
+        const def = ADDONS_DEF[c] || {};
+        if (def.quote_required) { quote.push(c); continue; }
+
+        let cents = null;
+        if (typeof def.price_cents === "number") cents = def.price_cents;
+        else if (def.prices_cents && typeof def.prices_cents[size] === "number") cents = def.prices_cents[size];
+
+        if (typeof cents === "number") addonsTotal += cents;
+      }
+
+      const total = base + addonsTotal;
+      const deposit = currentDepositCents(code);
+
+      const pkgName = (data.packages || []).find(p => p.code === code)?.name || code;
+
+      const quoteLine = quote.length ? `Quote add-ons recorded (not charged online): ${quote.join(", ")}` : "No quote add-ons selected.";
+
+      showBox(
+        "priceBox",
+        `Estimate — ${pkgName} (${size}): Total ${moneyCents(total)} • Deposit ${moneyCents(deposit)}. ${quoteLine}`,
+        "ok"
+      );
+    }
+
+    // Form submit -> /api/checkout -> redirect to stripe
+    qs("#bookingForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      hideBox("submitErr");
+
+      if (!data) return showBox("submitErr", "Service data not loaded.", "bad");
+
+      if (!qs("#ack_size_match").checked) {
+        return showBox("submitErr", "Please confirm the vehicle size matches the size chart.", "bad");
+      }
 
       const payload = {
-        subtotal_cents: computeSubtotalCents(),
-        deposit_base_cents: depositFor(pkg),
-        package_code: pkg,
-        vehicle_size: size,
-        gift_code: gift || null,
-        promo_code: promo || null,
+        // required by /api/checkout
+        service_date: qs("#service_date").value,
+        start_slot: qs("#start_slot").value,
+        duration_slots: Number(qs("#duration_slots").value),
+        service_area: qs("#service_area").value,
+        package_code: qs("#package_code").value,
+        vehicle_size: qs("#vehicle_size").value,
+        customer_name: qs("#customer_name").value.trim(),
+        customer_email: qs("#customer_email").value.trim(),
+        customer_phone: qs("#customer_phone").value.trim() || null,
+        address_line1: qs("#address_line1").value.trim(),
+        city: qs("#city").value.trim() || null,
+        postal_code: qs("#postal_code").value.trim() || null,
+        addon_codes: selectedAddonCodes(),
+
+        // required acknowledgements
+        ack_driveway: qs("#ack_driveway").checked,
+        ack_power_water: qs("#ack_power_water").checked,
+        ack_bylaw: qs("#ack_bylaw").checked,
+        ack_cancellation: qs("#ack_cancellation").checked,
+
+        // future-ready (server may ignore until we store them)
+        gift_code: qs("#gift_code").value.trim() || null,
+        promo_code: qs("#promo_code").value.trim() || null,
+        vehicle: {
+          year: Number(qs("#vehicle_year").value),
+          make: qs("#vehicle_make").value.trim(),
+          model: qs("#vehicle_model").value.trim(),
+          plate: qs("#vehicle_plate").value.trim() || null,
+          mileage: qs("#vehicle_mileage").value ? Number(qs("#vehicle_mileage").value) : null,
+          photo_url: qs("#vehicle_photo_url").value.trim() || null,
+        }
       };
 
-      const res = await fetch("/api/codes/preview", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json().catch(()=>null);
-      if (!res.ok || !data?.ok) {
-        document.querySelector("#codesResult").textContent = "Could not validate codes.";
-        lastPreview = null;
-        recompute();
-        return;
+      // Client-side required vehicle fields
+      if (!payload.vehicle.year || !payload.vehicle.make || !payload.vehicle.model) {
+        return showBox("submitErr", "Vehicle year, make, and model are required.", "bad");
       }
 
-      lastPreview = data;
-      const bits = [];
-      if (data.promo_code) bits.push(data.promo_message || "Promo checked");
-      if (data.gift_code) bits.push(data.gift_message || "Gift checked");
-      document.querySelector("#codesResult").textContent = bits.join(" · ") || "Codes checked";
-      recompute();
-    }
-
-    async function checkout(){
-      const required = [
-        ["#service_date","Service date"],
-        ["#start_slot","Time slot"],
-        ["#service_area","Service area"],
-        ["#vehicle_size","Vehicle size"],
-        ["#package_code","Package"],
-        ["#customer_name","Full name"],
-        ["#customer_email","Email"],
-        ["#address_line1","Address"],
-        ["#car_year","Vehicle year"],
-        ["#car_make","Vehicle make"],
-        ["#car_model","Vehicle model"],
-      ];
-      for (const [id,label] of required){
-        if (!val(id)) { alert(`Missing: ${label}`); return; }
+      // acks are required
+      const acks = ["ack_driveway","ack_power_water","ack_bylaw","ack_cancellation"];
+      for (const a of acks) {
+        if (payload[a] !== true) return showBox("submitErr", "Please check all required acknowledgements.", "bad");
       }
 
-      // quick client-side block: if availability says slot unavailable
-      if (lastAvail && lastAvail.blocked) { alert("That date is blocked."); return; }
-      if (lastAvail && !lastAvail.blocked) {
-        const want = val("#start_slot");
-        if (want === "AM" && !lastAvail.AM) { alert("AM slot is blocked/unavailable for that date."); return; }
-        if (want === "PM" && !lastAvail.PM) { alert("PM slot is blocked/unavailable for that date."); return; }
-      }
+      qs("#submitBtn").disabled = true;
+      qs("#submitBtn").textContent = "Creating checkout…";
 
-      const acks = [
-        ["#ack_driveway","Driveway required acknowledgement"],
-        ["#ack_power_water","Power/water acknowledgement"],
-        ["#ack_bylaw","Bylaw acknowledgement"],
-        ["#ack_cancellation","Cancellation acknowledgement"]
-      ];
-      for (const [id,label] of acks){
-        if (!checked(id)) { alert(`Missing: ${label}`); return; }
-      }
-
-      const payload = {
-        service_date: val("#service_date"),
-        start_slot: val("#start_slot"),
-        duration_slots: 1,
-
-        service_area: val("#service_area"),
-        package_code: val("#package_code"),
-        vehicle_size: val("#vehicle_size"),
-
-        customer_name: val("#customer_name"),
-        customer_email: val("#customer_email"),
-        customer_phone: val("#customer_phone"),
-
-        address_line1: val("#address_line1"),
-        city: val("#city"),
-        postal_code: val("#postal_code"),
-
-        addon_codes: addonCodes(),
-
-        car_year: val("#car_year"),
-        car_make: val("#car_make"),
-        car_model: val("#car_model"),
-        car_plate: val("#car_plate"),
-        car_photo_url: val("#car_photo_url"),
-
-        gift_code: (val("#gift_code") || "").toUpperCase() || null,
-        promo_code: (val("#promo_code") || "").toUpperCase() || null,
-
-        ack_driveway: true,
-        ack_power_water: true,
-        ack_bylaw: true,
-        ack_cancellation: true,
-      };
-
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json().catch(()=>({}));
-      if (!res.ok) { alert(data?.error ? `Checkout error: ${data.error}` : "Checkout error"); return; }
-      if (!data.checkout_url) { alert("Checkout URL missing. Please try again."); return; }
-
-      location.href = data.checkout_url;
-    }
-
-    // wiring
-    document.querySelector("#applyCodesBtn").addEventListener("click", applyCodes);
-    document.querySelector("#checkoutBtn").addEventListener("click", checkout);
-
-    document.querySelector("#service_date").addEventListener("change", () => {
-      refreshAvailability();
-    });
-
-    ["#package_code","#vehicle_size","#start_slot","#service_area"].forEach(sel=>{
-      document.querySelector(sel).addEventListener("change", () => {
-        lastPreview = null;
-        document.querySelector("#codesResult").textContent = "";
-        recompute();
-      });
-    });
-
-    async function init(){
       try {
-        servicesData = await fetchJsonStrict(DATA_URL);
-        renderPackages();
-        renderAddons();
-        recompute();
-      } catch (e) {
-        showDataError(String(e.message || e));
-      }
-    }
+        const res = await fetch("/api/checkout", {
+          method: "POST",
+          headers: { "content-type":"application/json" },
+          body: JSON.stringify(payload),
+        });
 
-    await init();
+        const out = await res.json().catch(()=>null);
+
+        if (!res.ok || !out?.checkout_url) {
+          const msg = out?.error ? out.error : "Checkout failed.";
+          qs("#submitBtn").disabled = false;
+          qs("#submitBtn").textContent = "Pay deposit & book";
+          return showBox("submitErr", msg, "bad");
+        }
+
+        // Go to Stripe
+        location.href = out.checkout_url;
+      } catch (err) {
+        qs("#submitBtn").disabled = false;
+        qs("#submitBtn").textContent = "Pay deposit & book";
+        return showBox("submitErr", String(err), "bad");
+      }
+    });
+
+    // Events
+    qs("#service_date").addEventListener("change", refreshAvailability);
+    qs("#start_slot").addEventListener("change", refreshTotals);
+    qs("#duration_slots").addEventListener("change", async ()=>{ await refreshAvailability(); refreshTotals(); });
+    qs("#package_code").addEventListener("change", ()=>{ buildPackageSummary(); refreshTotals(); });
+    qs("#vehicle_size").addEventListener("change", ()=>{ buildPackageSummary(); refreshAddonPrices(); });
+
+    document.addEventListener("change", (e)=>{
+      if (e.target && e.target.matches("input[data-addon]")) refreshTotals();
+    });
+
+    // Init
+    try {
+      data = await fetchJsonStrict(DATA_URL);
+
+      // Populate packages dropdown with proper display names
+      const sel = qs("#package_code");
+      sel.innerHTML = (data.packages || []).map(p =>
+        `<option value="${escapeHtml(p.code)}">${escapeHtml(p.name)} — ${escapeHtml(p.subtitle || "")}</option>`
+      ).join("");
+
+      buildAddonPicker();
+      buildPackageSummary();
+      refreshTotals();
+
+      // default date = tomorrow
+      const d = new Date(Date.now() + 24*60*60*1000);
+      qs("#service_date").value = d.toISOString().slice(0,10);
+      await refreshAvailability();
+    } catch (e) {
+      qs("#dataError").style.display = "block";
+      qs("#dataError").textContent = `Services data failed to load: ${e.message || e}`;
+    }
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260309a"></script>
+  <script type="module" src="/assets/chrome.js?v=20260309t"></script>
 </body>
 </html>
