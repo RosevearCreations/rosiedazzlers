@@ -1,23 +1,22 @@
-// functions/api/admin/assign.js
+// /functions/api/admin/assign.js
+// CREATE THIS FILE (or REPLACE ENTIRE FILE)
+//
 // POST /api/admin/assign
-// Admin-only: assign staff + internal notes to a booking.
+// Admin-only: assigns staff + internal notes to a booking.
+//
+// Request JSON:
+// {
+//   "admin_password": "...",
+//   "booking_id": "uuid",
+//   "assigned_staff_name": "Jack",
+//   "assigned_staff_email": "jack@example.com",   // optional
+//   "internal_notes": "optional notes"
+// }
 //
 // Env vars required:
 // - ADMIN_PASSWORD
 // - SUPABASE_URL
 // - SUPABASE_SERVICE_ROLE_KEY
-//
-// Request JSON:
-// {
-//   "admin_password":"...",
-//   "booking_id":"uuid",
-//   "assigned_staff_name":"Jack",
-//   "assigned_staff_email":"staff@example.com",
-//   "internal_notes":"Bring extra towels"
-// }
-//
-// Response:
-// { ok:true, booking_id, updated:true }
 
 export async function onRequestOptions() {
   return corsResponse("", 204);
@@ -30,52 +29,61 @@ export async function onRequestPost({ request, env }) {
     const SERVICE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!ADMIN_PASSWORD) return corsJson({ ok: false, error: "Server missing ADMIN_PASSWORD" }, 500);
-    if (!SUPABASE_URL || !SERVICE_KEY) return corsJson({ ok: false, error: "Server missing Supabase env vars" }, 500);
+    if (!SUPABASE_URL || !SERVICE_KEY) {
+      return corsJson({ ok: false, error: "Server not configured (Supabase env vars missing)" }, 500);
+    }
 
     const body = await readJson(request);
 
     const pw = String(body.admin_password || "");
     if (!timingSafeEqual(pw, ADMIN_PASSWORD)) return corsJson({ ok: false, error: "Unauthorized" }, 401);
 
-    const bookingId = String(body.booking_id || "").trim();
-    if (!isUuid(bookingId)) return corsJson({ ok: false, error: "booking_id must be a uuid" }, 400);
+    const booking_id = String(body.booking_id || "").trim();
+    if (!isUuid(booking_id)) return corsJson({ ok: false, error: "booking_id must be a uuid" }, 400);
 
-    const patch = {};
-    if (body.assigned_staff_name != null) patch.assigned_staff_name = String(body.assigned_staff_name || "").trim() || null;
-    if (body.assigned_staff_email != null) patch.assigned_staff_email = String(body.assigned_staff_email || "").trim() || null;
-    if (body.internal_notes != null) patch.internal_notes = String(body.internal_notes || "").trim() || null;
+    const assigned_staff_name = body.assigned_staff_name != null ? String(body.assigned_staff_name).trim() : "";
+    const assigned_staff_email = body.assigned_staff_email != null ? String(body.assigned_staff_email).trim() : "";
+    const internal_notes = body.internal_notes != null ? String(body.internal_notes).trim() : "";
 
-    if (Object.keys(patch).length === 0) {
-      return corsJson({ ok: false, error: "Nothing to update" }, 400);
+    const supaPatch = async (path, payload) => {
+      const res = await fetch(`${SUPABASE_URL}${path}`, {
+        method: "PATCH",
+        headers: {
+          apikey: SERVICE_KEY,
+          Authorization: `Bearer ${SERVICE_KEY}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Prefer: "return=representation",
+        },
+        body: JSON.stringify(payload),
+      });
+      const text = await res.text();
+      const data = text ? safeJson(text) : null;
+      return { ok: res.ok, status: res.status, data, raw: text };
+    };
+
+    const patch = await supaPatch(
+      `/rest/v1/bookings?id=eq.${encodeURIComponent(booking_id)}`,
+      {
+        assigned_staff_name: assigned_staff_name || null,
+        assigned_staff_email: assigned_staff_email || null,
+        internal_notes: internal_notes || null,
+        updated_at: new Date().toISOString(),
+      }
+    );
+
+    if (!patch.ok) {
+      return corsJson({ ok: false, error: "Supabase update failed (bookings)", details: patch }, 502);
     }
 
-    const url = `${SUPABASE_URL}/rest/v1/bookings?id=eq.${encodeURIComponent(bookingId)}`;
-
-    const res = await fetch(url, {
-      method: "PATCH",
-      headers: {
-        apikey: SERVICE_KEY,
-        Authorization: `Bearer ${SERVICE_KEY}`,
-        "Content-Type": "application/json",
-        Prefer: "return=representation",
-      },
-      body: JSON.stringify(patch),
-    });
-
-    const text = await res.text();
-    const data = text ? safeJson(text) : null;
-
-    if (!res.ok) {
-      return corsJson({ ok: false, error: "Supabase update failed", details: { status: res.status, data } }, 502);
-    }
-
-    return corsJson({ ok: true, booking_id: bookingId, updated: true, row: Array.isArray(data) ? data[0] : data });
+    const row = Array.isArray(patch.data) ? patch.data[0] : patch.data;
+    return corsJson({ ok: true, row });
   } catch (e) {
     return corsJson({ ok: false, error: "Server error", details: String(e) }, 500);
   }
 }
 
-/* helpers */
+/* ---------------- helpers ---------------- */
 
 async function readJson(request) {
   const t = await request.text();
