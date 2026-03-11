@@ -1,27 +1,30 @@
 <!-- /admin-assign.html
      REPLACE ENTIRE FILE
-     Admin helper page to assign staff + internal notes to a booking.
-     Uses /api/admin/assign
 
-     NEW: supports deep-linking from /admin.html via:
-       /admin-assign.html?bid=<booking_uuid>
+     Assign staff + internal notes to a booking.
+     Uses:
+       - /api/admin/assign (backend already created)
+       - /api/admin/bookings (to fetch booking info by id)
 -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin Assign | Rosie Dazzlers</title>
-  <meta name="description" content="Assign staff to bookings." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260309n" />
+  <title>Admin Assign Staff | Rosie Dazzlers</title>
+  <meta name="description" content="Assign staff to a booking." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260310e" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-    @media (max-width:980px){ .grid2,.grid3{grid-template-columns:1fr} }
-    textarea{min-height:120px}
+    .muted{color:rgba(234,242,255,.62)}
+    textarea{min-height:140px}
+    pre{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px}
   </style>
 </head>
+
 <body>
   <div class="nav">
     <div class="nav-inner">
@@ -38,60 +41,75 @@
   <div class="container">
     <div class="panel">
       <h1 style="margin:0 0 6px">Assign Staff</h1>
-      <p class="kicker" style="margin:0">
-        Attach a staff member and internal notes to a booking.
-      </p>
-      <div class="notice warn" style="margin-top:12px">
-        Uses endpoint <span class="mono">/api/admin/assign</span>.
+      <p class="kicker" style="margin:0">Set who is assigned to a booking and add internal notes.</p>
+
+      <div class="hr"></div>
+
+      <div class="row">
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:260px">
+          <span class="muted">Admin password</span>
+          <input id="pw" type="password" placeholder="Enter admin password…" />
+        </label>
+
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:420px;flex:1">
+          <span class="muted">Booking ID (uuid)</span>
+          <input id="bid" class="mono" type="text" placeholder="d751e9f0-717d-4ab6-a2be-dba309006b76" />
+        </label>
+
+        <div class="row" style="align-items:flex-end">
+          <button class="btn primary" id="loadBtn" type="button">Load booking</button>
+          <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
+          <a class="btn ghost" href="/admin">Back to Admin</a>
+        </div>
       </div>
+
+      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
     </div>
 
     <div class="section grid2">
       <div class="panel">
-        <h2 style="margin-top:0">Assignment</h2>
+        <h2 style="margin-top:0">Booking</h2>
+        <div id="details" class="notice warn">Load a booking to begin.</div>
 
-        <label for="pw">Admin password</label>
-        <input id="pw" type="password" placeholder="Enter admin password…" />
+        <div class="row" style="margin-top:12px">
+          <a id="controlsBtn" class="btn ghost" href="/admin-booking.html">Controls</a>
+          <a id="uploadBtn" class="btn ghost" href="/admin-upload.html">Upload</a>
+          <a id="progressBtn" class="btn ghost" href="/admin-progress.html">Progress</a>
+        </div>
+      </div>
 
-        <div class="grid2" style="margin-top:10px">
+      <div class="panel">
+        <h2 style="margin-top:0">Assign</h2>
+
+        <div class="grid2">
           <div>
-            <label for="booking_id">Booking ID <span class="mono">(uuid)</span></label>
-            <input id="booking_id" class="mono" type="text" placeholder="d751e9f0-717d-4ab6-a2be-dba309006b76" />
-            <div class="small" style="margin-top:6px;color:rgba(234,242,255,.62)">
-              Tip: open from Admin bookings list → <strong>Assign</strong> to auto-fill booking ID.
-            </div>
+            <label for="assigned_staff_name">Staff name</label>
+            <input id="assigned_staff_name" type="text" placeholder="Jack / Laurie / Helper name" />
           </div>
           <div>
-            <label for="assigned_staff_name">Assigned staff name</label>
-            <input id="assigned_staff_name" type="text" placeholder="Jack" />
-            <label for="assigned_staff_email" style="margin-top:10px">Assigned staff email (optional)</label>
+            <label for="assigned_staff_email">Staff email (optional)</label>
             <input id="assigned_staff_email" type="email" placeholder="staff@example.com" />
           </div>
         </div>
 
-        <label for="internal_notes" style="margin-top:10px">Internal notes (optional)</label>
-        <textarea id="internal_notes" placeholder="Bring extra towels. Customer has dog hair."></textarea>
+        <label for="internal_notes" style="margin-top:10px">Internal notes</label>
+        <textarea id="internal_notes" placeholder="Notes only staff should see…"></textarea>
 
-        <div class="row" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn primary" id="saveBtn" type="button">Save assignment</button>
-          <button class="btn ghost" id="clearBtn" type="button">Clear</button>
-          <a class="btn ghost" href="/admin">Back to Admin</a>
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary" id="saveBtn" type="button" disabled>Save assignment</button>
+          <button class="btn ghost" id="clearBtn" type="button" disabled>Clear</button>
         </div>
 
-        <div id="status" class="notice" style="display:none;margin-top:12px"></div>
+        <div class="muted" style="margin-top:10px">
+          Internal notes are not shown to customers.
+        </div>
       </div>
+    </div>
 
+    <div class="section">
       <div class="panel">
-        <h2 style="margin-top:0">What this does</h2>
-        <ul>
-          <li>Writes <span class="mono">assigned_staff_name</span> and <span class="mono">assigned_staff_email</span> on the booking row.</li>
-          <li>Writes <span class="mono">internal_notes</span> (admin-only notes).</li>
-          <li>Uses server-side service role (not exposed in browser).</li>
-        </ul>
-        <div class="hr"></div>
-        <p class="small" style="color:rgba(234,242,255,.62)">
-          Next upgrade: staff login + “my jobs” view.
-        </p>
+        <h2 style="margin-top:0">Last response</h2>
+        <pre id="raw" class="mono">{}</pre>
       </div>
     </div>
 
@@ -99,66 +117,196 @@
   </div>
 
   <script type="module">
-    const qs = (s) => document.querySelector(s);
-    const val = (id) => (qs(id).value || "").trim();
+    const qs = (s)=>document.querySelector(s);
 
-    function show(msg, kind="") {
+    function escapeHtml(s){
+      return String(s || "")
+        .replaceAll("&","&amp;").replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
+    }
+
+    function showStatus(msg, kind=""){
       const el = qs("#status");
       el.style.display = "block";
       el.className = "notice " + (kind || "");
       el.textContent = msg;
     }
+    function hideStatus(){ qs("#status").style.display = "none"; }
 
-    qs("#saveBtn").addEventListener("click", async () => {
-      const admin_password = val("#pw");
-      const booking_id = val("#booking_id");
-      const assigned_staff_name = val("#assigned_staff_name");
-      const assigned_staff_email = val("#assigned_staff_email");
-      const internal_notes = (qs("#internal_notes").value || "").trim();
+    function getPw(){ return (qs("#pw").value || "").trim(); }
+    function getBid(){ return (qs("#bid").value || "").trim(); }
 
-      if (!admin_password) return show("Missing admin password.", "bad");
-      if (!booking_id) return show("Missing booking_id.", "bad");
-
-      show("Saving…");
-
-      const payload = {
-        admin_password,
-        booking_id,
-        assigned_staff_name,
-        assigned_staff_email,
-        internal_notes,
-      };
-
-      const res = await fetch("/api/admin/assign", {
+    async function postJson(url, payload){
+      const res = await fetch(url, {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: { "content-type":"application/json" },
         body: JSON.stringify(payload),
       });
+      const out = await res.json().catch(()=>null);
+      return { ok: res.ok, status: res.status, out };
+    }
 
-      const data = await res.json().catch(()=>null);
+    // save PW
+    try {
+      const saved = localStorage.getItem("rosie_admin_pw") || "";
+      if (saved) qs("#pw").value = saved;
+    } catch {}
 
-      if (!res.ok || !data?.ok) {
-        return show(data?.error ? `Error: ${data.error}` : "Error saving assignment.", "bad");
+    qs("#savePwBtn").addEventListener("click", () => {
+      const pw = getPw();
+      if (!pw) return showStatus("Enter password first.", "bad");
+      try {
+        localStorage.setItem("rosie_admin_pw", pw);
+        showStatus("Saved password on this device.", "ok");
+        setTimeout(hideStatus, 1200);
+      } catch {
+        showStatus("Could not save password.", "bad");
       }
+    });
 
-      show("Saved assignment.", "ok");
+    // prefill bid
+    (function prefill(){
+      const p = new URLSearchParams(location.search);
+      const bid = (p.get("bid") || "").trim();
+      if (bid) qs("#bid").value = bid;
+      syncLinks();
+    })();
+
+    function syncLinks(){
+      const bid = getBid();
+      qs("#controlsBtn").href = bid ? `/admin-booking.html?bid=${encodeURIComponent(bid)}` : "/admin-booking.html";
+      qs("#uploadBtn").href = bid ? `/admin-upload.html?bid=${encodeURIComponent(bid)}` : "/admin-upload.html";
+      qs("#progressBtn").href = bid ? `/admin-progress.html?bid=${encodeURIComponent(bid)}` : "/admin-progress.html";
+    }
+    qs("#bid").addEventListener("input", syncLinks);
+
+    function enable(on){
+      qs("#saveBtn").disabled = !on;
+      qs("#clearBtn").disabled = !on;
+    }
+
+    function prettyPkg(code){
+      const map = {
+        premium_wash: "Premium Wash",
+        basic_detail: "Basic Detail",
+        complete_detail: "Complete Detail",
+        interior_detail: "Interior Detail",
+        exterior_detail: "Exterior Detail",
+      };
+      return map[code] || code || "";
+    }
+
+    function fmtMoneyCents(cents){
+      if (cents == null) return "—";
+      return new Intl.NumberFormat("en-CA", { style:"currency", currency:"CAD" }).format(Number(cents)/100);
+    }
+
+    async function findBookingById(pw, bid){
+      const r1 = await postJson("/api/admin/bookings", { admin_password: pw, mode: "next30" });
+      if (r1.ok && r1.out?.ok) {
+        const hit = (r1.out.rows || []).find(x => x.id === bid);
+        if (hit) return hit;
+      }
+      const r2 = await postJson("/api/admin/bookings", { admin_password: pw, mode: "latest100" });
+      if (r2.ok && r2.out?.ok) {
+        const hit = (r2.out.rows || []).find(x => x.id === bid);
+        if (hit) return hit;
+      }
+      return null;
+    }
+
+    let booking = null;
+
+    function renderBooking(b){
+      booking = b;
+      enable(true);
+
+      const vehicle = b.vehicle || null;
+      const vehicleLine = vehicle
+        ? `${vehicle.year || ""} ${vehicle.make || ""} ${vehicle.model || ""}`.trim()
+        : "";
+
+      qs("#details").className = "notice";
+      qs("#details").innerHTML = `
+        <div><strong>${escapeHtml(b.customer_name || "")}</strong> — ${escapeHtml(b.customer_email || "")}</div>
+        <div class="muted">${escapeHtml(prettyPkg(b.package_code))} (${escapeHtml(b.vehicle_size || "")})</div>
+        ${vehicleLine ? `<div class="muted">Vehicle: ${escapeHtml(vehicleLine)}</div>` : ``}
+        <div class="muted">Date: ${escapeHtml(b.service_date || "")} • Slot: ${escapeHtml(b.start_slot || "")}</div>
+        <div class="muted">Total: <strong>${fmtMoneyCents(b.price_total_cents)}</strong> • Deposit: <strong>${fmtMoneyCents(b.deposit_cents)}</strong></div>
+        <div class="muted">Assigned: <strong>${escapeHtml(b.assigned_staff_name || "—")}</strong></div>
+      `;
+
+      qs("#assigned_staff_name").value = b.assigned_staff_name || "";
+      qs("#assigned_staff_email").value = b.assigned_staff_email || "";
+      qs("#internal_notes").value = b.internal_notes || "";
+
+      syncLinks();
+    }
+
+    qs("#loadBtn").addEventListener("click", async () => {
+      const pw = getPw();
+      const bid = getBid();
+      if (!pw) return showStatus("Missing admin password.", "bad");
+      if (!bid) return showStatus("Missing booking id.", "bad");
+
+      showStatus("Loading booking…");
+      enable(false);
+
+      const b = await findBookingById(pw, bid);
+      if (!b) return showStatus("Booking not found. Open from /admin → Assign for that row.", "bad");
+
+      renderBooking(b);
+      showStatus("Loaded.", "ok");
+      setTimeout(hideStatus, 1200);
     });
 
     qs("#clearBtn").addEventListener("click", () => {
       qs("#assigned_staff_name").value = "";
       qs("#assigned_staff_email").value = "";
       qs("#internal_notes").value = "";
-      qs("#status").style.display = "none";
+      qs("#raw").textContent = "{}";
     });
 
-    // NEW: prefill booking id from ?bid=
-    (function prefillFromQuery(){
-      const p = new URLSearchParams(location.search);
-      const bid = (p.get("bid") || "").trim();
-      if (bid) qs("#booking_id").value = bid;
+    qs("#saveBtn").addEventListener("click", async () => {
+      const pw = getPw();
+      const bid = getBid();
+      if (!pw) return showStatus("Missing admin password.", "bad");
+      if (!bid) return showStatus("Missing booking id.", "bad");
+
+      const payload = {
+        admin_password: pw,
+        booking_id: bid,
+        assigned_staff_name: (qs("#assigned_staff_name").value || "").trim() || null,
+        assigned_staff_email: (qs("#assigned_staff_email").value || "").trim() || null,
+        internal_notes: (qs("#internal_notes").value || "").trim() || null,
+      };
+
+      showStatus("Saving…");
+      const r = await postJson("/api/admin/assign", payload);
+      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
+
+      if (!r.ok || !r.out?.ok) {
+        return showStatus(r.out?.error ? `Error: ${r.out.error}` : "Save failed.", "bad");
+      }
+
+      // patch the local booking so the page reflects changes
+      booking = { ...booking, ...r.out.row };
+      renderBooking(booking);
+
+      showStatus("Saved.", "ok");
+      setTimeout(hideStatus, 1200);
+    });
+
+    // auto-load if bid + pw present
+    (async function auto(){
+      const bid = getBid();
+      const pw = getPw();
+      if (bid && pw) qs("#loadBtn").click();
     })();
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260309n"></script>
+  <script type="module" src="/assets/chrome.js?v=20260310e"></script>
 </body>
 </html>
