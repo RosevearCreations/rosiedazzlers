@@ -1,12 +1,12 @@
 <!-- /pricing.html
      REPLACE ENTIRE FILE
 
-     What this page does:
-     - Shows your 5 core packages with correct names + size-based pricing
-     - Uses the correct package image for each size
-     - Hover carousel rotates: main package image → Interior Detail → Exterior Detail → Car Size Chart
-     - Shows Add-ons with prices / quote-required + pulls the right add-on images (encoded URLs)
-     - Includes buttons to open the 3 charts (price, details, size) in a modal
+     (Root-level pricing page — this matches what you already route to.)
+
+     What it does:
+     - Uses the same layout as /pricing/index.html
+     - Shows the chart images from the Brand bucket
+     - Loads /data/rosie_services_pricing_and_packages.json to build the table
 -->
 <!doctype html>
 <html lang="en">
@@ -14,50 +14,26 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Pricing | Rosie Dazzlers</title>
-  <meta name="description" content="Rosie Dazzlers mobile auto detailing pricing for Norfolk & Oxford Counties. Choose your vehicle size and package." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260309u" />
+  <meta name="description" content="Transparent pricing for mobile auto detailing across Norfolk & Oxford Counties." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260311d" />
   <style>
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-    @media (max-width:1100px){ .grid4{grid-template-columns:repeat(2,1fr)} }
-    @media (max-width:980px){ .grid2,.grid3,.grid4{grid-template-columns:1fr} }
-
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .muted{color:rgba(234,242,255,.62)}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-
-    .cardImg{
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.10);vertical-align:top}
+    th{color:rgba(234,242,255,.70);font-weight:600;text-align:left}
+    .img{
       width:100%;
-      aspect-ratio: 16 / 10;
-      object-fit: cover;
+      height:auto;
       border-radius:16px;
       border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
+      background:rgba(255,255,255,.04);
     }
-
-    .seg{display:flex;gap:8px;flex-wrap:wrap}
     .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
     .tag.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
-    .tag.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
-
-    details{border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.04)}
-    details summary{cursor:pointer}
-    ul{margin:8px 0 0 18px}
-    li{margin:6px 0}
-
-    .modalBack{
-      position:fixed; inset:0; background:rgba(0,0,0,.70);
-      display:none; align-items:center; justify-content:center;
-      z-index:9999; padding:18px;
-    }
-    .modal{
-      max-width:1100px; width:100%;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(10,14,24,.96);
-      border-radius:18px; padding:14px;
-    }
-    .modal img{width:100%; height:auto; border-radius:14px; border:1px solid rgba(255,255,255,.10)}
-    .modalHead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
+    .mini{font-size:.92rem}
   </style>
 </head>
 
@@ -76,303 +52,134 @@
 
   <div class="container">
     <div class="panel">
-      <div class="badges">
-        <span class="badge">Norfolk + Oxford</span>
-        <span class="badge">Deposit required</span>
-        <span class="badge">Driveway + power + water</span>
-      </div>
-
-      <h1 style="margin:12px 0 8px">Pricing</h1>
+      <h1 style="margin:0 0 6px">Pricing</h1>
       <p class="kicker" style="margin:0">
-        Select your vehicle size to see the correct package pricing. Hover a package card for quick previews.
+        Transparent pricing, deposit required to lock your appointment.
       </p>
 
-      <div class="section" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-        <a class="btn primary" href="/book">Book now</a>
-        <button class="btn ghost" id="openPriceChartBtn" type="button">Open price chart</button>
-        <button class="btn ghost" id="openDetailsChartBtn" type="button">Open details chart</button>
-        <button class="btn ghost" id="openSizeChartBtn" type="button">Open size chart</button>
-        <a class="btn ghost" href="/gifts">Gift certificates</a>
+      <div class="section row" style="margin-top:12px">
+        <span class="tag">Driveway required</span>
+        <span class="tag">Customer provides power + water (or additional fees)</span>
+        <span class="tag">One vehicle per day (unless half-day jobs)</span>
       </div>
 
-      <div class="notice warn" style="margin-top:12px">
-        <strong>Reminder:</strong> Driveway required • customer provides power + water • customer accepts local bylaw responsibility
-        (<a href="/waiver">details</a>)
+      <div id="loadErr" class="notice bad" style="display:none;margin-top:12px"></div>
+    </div>
+
+    <div class="section grid2">
+      <div class="panel">
+        <h2 style="margin-top:0">Vehicle Price Chart</h2>
+        <img class="img" alt="Vehicle Price Chart 2025" src="https://assets.rosiedazzlers.ca/brand/CarPrice2025.PNG" />
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-top:0">Package Service Details</h2>
+        <img class="img" alt="Package Service Details Chart" src="https://assets.rosiedazzlers.ca/brand/CarPriceDetails2025.PNG" />
       </div>
     </div>
 
-    <div class="panel">
-      <div class="row" style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
-        <h2 style="margin:0">Vehicle size</h2>
-        <div class="seg">
-          <button class="btn ghost" data-size="small" id="sizeSmallBtn">Small</button>
-          <button class="btn ghost" data-size="mid" id="sizeMidBtn">Mid-sized</button>
-          <button class="btn ghost" data-size="oversize" id="sizeOverBtn">Over-size / Exotic</button>
+    <div class="section">
+      <div class="panel">
+        <h2 style="margin-top:0">Vehicle Size Chart</h2>
+        <img class="img" alt="Vehicle Size Chart" src="https://assets.rosiedazzlers.ca/brand/CarSizeChart.PNG" />
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="panel">
+        <div class="row" style="justify-content:space-between">
+          <h2 style="margin:0">Packages</h2>
+          <div class="muted mini">Click “Book” to prefill package + size.</div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div style="overflow:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Package</th>
+                <th>Small</th>
+                <th>Mid</th>
+                <th>Over-size</th>
+                <th>Deposit</th>
+              </tr>
+            </thead>
+            <tbody id="rows">
+              <tr><td colspan="5" class="muted">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="row">
+          <a class="btn primary" href="/book">Book now</a>
+          <a class="btn ghost" href="/services">What’s included</a>
+          <a class="btn ghost" href="/gifts">Gift certificates</a>
         </div>
       </div>
-      <div class="muted" style="margin-top:8px">
-        Not sure? Use the size chart button above.
-      </div>
-    </div>
-
-    <!-- PACKAGES -->
-    <div class="section">
-      <h2 style="margin:0 0 10px">Packages</h2>
-      <div id="packagesGrid" class="grid3"></div>
-    </div>
-
-    <!-- ADDONS -->
-    <div class="section">
-      <h2 style="margin:0 0 10px">Add-ons</h2>
-      <div class="muted" style="margin-bottom:10px">
-        Quote-required add-ons are listed for selection during booking. They are not charged online until quoted.
-      </div>
-      <div id="addonsGrid" class="grid4"></div>
     </div>
 
     <div class="footer" data-footer></div>
   </div>
 
-  <!-- MODAL -->
-  <div class="modalBack" id="modalBack" role="dialog" aria-modal="true">
-    <div class="modal">
-      <div class="modalHead">
-        <strong id="modalTitle">Preview</strong>
-        <button class="btn ghost" id="modalCloseBtn" type="button">Close</button>
-      </div>
-      <img id="modalImg" alt="Preview image" />
-    </div>
-  </div>
-
   <script type="module">
-    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260309u";
-    const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
-    const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages";
+    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260311d";
+    const qs = (s)=>document.querySelector(s);
+    const money = (cad)=> new Intl.NumberFormat("en-CA",{style:"currency",currency:"CAD"}).format(Number(cad||0));
 
-    // hover carousel extras (as requested)
-    const EXTRA_CAROUSEL_FILES = [
-      "Interior Detail.png",
-      "Exterior Detail.png",
-      "CarSizeChart.PNG",
-    ];
-
-    // add-on images from your packages folder
-    const ADDON_IMAGE_FILES = {
-      vinyl_wrapping: "Vinyl Wrapping add on service.png",
-      window_tinting: "Window Tinting add on service.png",
-      de_ionizing_treatment: "De-Ionizing Vehicle Add on service.png",
-      engine_cleaning: "Engine Cleaning add on service.png",
-      external_ceramic_coating: "External Ceramic coating add on service.png",
-      external_graphene_fine_finish: "External Graphene Fine finish add on service.png",
-      external_wax: "External Wax add on service.png",
-      de_badging: "DeBadgingAddonService.png",
-    };
-
-    const qs = (s) => document.querySelector(s);
-
-    function safeFileUrl(base, filename){
-      return `${base}/${encodeURIComponent(filename)}`;
-    }
-
-    function escapeHtml(s){
-      return String(s || "")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#39;");
-    }
-
-    const moneyCad = (cad) =>
-      new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" }).format(Number(cad || 0));
-
-    async function fetchJsonStrict(url) {
-      const res = await fetch(url, { cache: "no-store" });
+    async function fetchJsonStrict(url){
+      const res = await fetch(url,{cache:"no-store"});
       const text = await res.text();
       try { return JSON.parse(text); }
       catch {
-        const head = text.slice(0, 120).replace(/\s+/g, " ");
+        const head = text.slice(0,120).replace(/\s+/g," ");
         throw new Error(`Expected JSON from ${url} but got: ${head}`);
       }
     }
 
-    // Modal helpers
-    function openModal(title, imgUrl){
-      qs("#modalTitle").textContent = title;
-      qs("#modalImg").src = imgUrl;
-      qs("#modalBack").style.display = "flex";
-    }
-    function closeModal(){ qs("#modalBack").style.display = "none"; qs("#modalImg").src = ""; }
-    qs("#modalCloseBtn").addEventListener("click", closeModal);
-    qs("#modalBack").addEventListener("click", (e)=>{ if(e.target.id==="modalBack") closeModal(); });
-
-    // Chart buttons
-    qs("#openPriceChartBtn").addEventListener("click", () => openModal("Vehicle Price Chart 2025", `${BRAND_BASE}/CarPrice2025.PNG`));
-    qs("#openDetailsChartBtn").addEventListener("click", () => openModal("Package Service Details Chart", `${BRAND_BASE}/CarPriceDetails2025.PNG`));
-    qs("#openSizeChartBtn").addEventListener("click", () => openModal("Vehicle Size Chart", safeFileUrl(PACKAGES_BASE, "CarSizeChart.PNG")));
-
-    // Hover carousel (prevents blank by using encoded URLs)
-    function attachHoverCarousel(cardEl, imgEl, urls) {
-      let i = 0;
-      let timer = null;
-      const valid = urls.filter(Boolean);
-
-      const tick = () => {
-        i = (i + 1) % valid.length;
-        imgEl.src = valid[i];
-      };
-
-      cardEl.addEventListener("mouseenter", () => {
-        if (valid.length <= 1) return;
-        i = 0;
-        timer = setInterval(tick, 950);
-      });
-
-      cardEl.addEventListener("mouseleave", () => {
-        if (timer) clearInterval(timer);
-        timer = null;
-        i = 0;
-        imgEl.src = valid[0];
-      });
+    function escapeHtml(s){
+      return String(s||"")
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#39;");
     }
 
-    let data = null;
-    let selectedSize = "small";
+    function renderRows(pkgs){
+      const tb = qs("#rows");
+      tb.innerHTML = "";
 
-    function setSizeButtons(){
-      const map = { small: "sizeSmallBtn", mid: "sizeMidBtn", oversize: "sizeOverBtn" };
-      Object.entries(map).forEach(([k,id]) => {
-        const b = qs("#"+id);
-        b.classList.toggle("primary", k === selectedSize);
-        b.classList.toggle("ghost", k !== selectedSize);
-      });
+      for (const p of pkgs){
+        const tr = document.createElement("tr");
+
+        const small = p.prices_cad?.small;
+        const mid = p.prices_cad?.mid;
+        const over = p.prices_cad?.oversize;
+
+        tr.innerHTML = `
+          <td>
+            <div><strong>${escapeHtml(p.name || p.code)}</strong></div>
+            <div class="muted mini">${escapeHtml(p.subtitle || "")}</div>
+          </td>
+          <td>${small!=null ? money(small) : "—"} <a class="btn small ghost" href="/book?pkg=${encodeURIComponent(p.code)}&size=small">Book</a></td>
+          <td>${mid!=null ? money(mid) : "—"} <a class="btn small ghost" href="/book?pkg=${encodeURIComponent(p.code)}&size=mid">Book</a></td>
+          <td>${over!=null ? money(over) : "—"} <a class="btn small ghost" href="/book?pkg=${encodeURIComponent(p.code)}&size=oversize">Book</a></td>
+          <td><span class="tag ok">${money(p.deposit_cad || 0)}</span></td>
+        `;
+        tb.appendChild(tr);
+      }
     }
 
-    function buildPackageCard(pkg){
-      const mainImg = pkg?.images_by_size?.[selectedSize] || "";
-      const extras = EXTRA_CAROUSEL_FILES.map(f => safeFileUrl(PACKAGES_BASE, f));
-      const carousel = [mainImg, ...extras].filter(Boolean);
-
-      const services = (pkg.included_services || []).map(s => `<li>${escapeHtml(s.name)}</li>`).join("");
-
-      const price = moneyCad(pkg?.prices_cad?.[selectedSize] ?? 0);
-      const dep = pkg.deposit_cad ? moneyCad(pkg.deposit_cad) : "—";
-
-      const el = document.createElement("div");
-      el.className = "panel";
-      el.innerHTML = `
-        <img class="cardImg" alt="${escapeHtml(pkg.name)} image" />
-        <div style="margin-top:10px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
-          <div>
-            <h3 style="margin:0">${escapeHtml(pkg.name)}</h3>
-            <div class="muted">${escapeHtml(pkg.subtitle || "")}</div>
-          </div>
-          <div style="text-align:right">
-            <span class="tag ok">${price}</span>
-          </div>
-        </div>
-
-        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-          <span class="tag">Size: ${escapeHtml(selectedSize)}</span>
-          <span class="tag ok">Deposit ${dep}</span>
-        </div>
-
-        <details style="margin-top:10px">
-          <summary><strong>What’s included</strong></summary>
-          <ul>${services || "<li>(No items listed)</li>"}</ul>
-        </details>
-
-        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-          <a class="btn primary" href="/book">Book this</a>
-          <button class="btn ghost" type="button" data-open-size>Size chart</button>
-        </div>
-      `;
-
-      const imgEl = el.querySelector("img");
-      imgEl.src = carousel[0] || safeFileUrl(PACKAGES_BASE, "Details.png");
-      imgEl.loading = "lazy";
-      imgEl.decoding = "async";
-      imgEl.onerror = () => { imgEl.src = safeFileUrl(PACKAGES_BASE, "Details.png"); };
-
-      attachHoverCarousel(el, imgEl, carousel);
-
-      el.querySelector("[data-open-size]").addEventListener("click", () => {
-        openModal("Vehicle Size Chart", safeFileUrl(PACKAGES_BASE, "CarSizeChart.PNG"));
-      });
-
-      return el;
-    }
-
-    function addonPrice(addon){
-      if (addon.quote_required) return "Quote required";
-      if (addon.prices_cad && addon.prices_cad[selectedSize] != null) return moneyCad(addon.prices_cad[selectedSize]);
-      if (addon.price_cad != null) return moneyCad(addon.price_cad);
-      return "—";
-    }
-
-    function buildAddonCard(addon){
-      const file = ADDON_IMAGE_FILES[addon.code] || null;
-      const imgUrl = file ? safeFileUrl(PACKAGES_BASE, file) : safeFileUrl(PACKAGES_BASE, "Details.png");
-
-      const priceTag = addon.quote_required
-        ? `<span class="tag warn">Quote</span>`
-        : `<span class="tag ok">${escapeHtml(addonPrice(addon))}</span>`;
-
-      const el = document.createElement("div");
-      el.className = "panel";
-      el.innerHTML = `
-        <img class="cardImg" alt="${escapeHtml(addon.name)} image" />
-        <div style="margin-top:10px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
-          <div>
-            <h3 style="margin:0">${escapeHtml(addon.name)}</h3>
-            <div class="muted">${escapeHtml(addon.code)}</div>
-          </div>
-          <div style="text-align:right">${priceTag}</div>
-        </div>
-        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-          <a class="btn ghost" href="/book">Select in booking</a>
-          <button class="btn ghost" type="button" data-open-img>Preview</button>
-        </div>
-      `;
-
-      const imgEl = el.querySelector("img");
-      imgEl.src = imgUrl;
-      imgEl.loading = "lazy";
-      imgEl.decoding = "async";
-      imgEl.onerror = () => { imgEl.src = safeFileUrl(PACKAGES_BASE, "Details.png"); };
-
-      el.querySelector("[data-open-img]").addEventListener("click", () => openModal(addon.name, imgUrl));
-      return el;
-    }
-
-    function renderAll(){
-      setSizeButtons();
-
-      const pkgGrid = qs("#packagesGrid");
-      pkgGrid.innerHTML = "";
-      (data.packages || []).forEach(pkg => pkgGrid.appendChild(buildPackageCard(pkg)));
-
-      const addonGrid = qs("#addonsGrid");
-      addonGrid.innerHTML = "";
-      (data.addons || []).forEach(a => addonGrid.appendChild(buildAddonCard(a)));
-    }
-
-    // Size selector wiring
-    ["sizeSmallBtn","sizeMidBtn","sizeOverBtn"].forEach(id => {
-      qs("#"+id).addEventListener("click", () => {
-        selectedSize = qs("#"+id).getAttribute("data-size");
-        renderAll();
-      });
-    });
-
-    // Load data
     try {
-      data = await fetchJsonStrict(DATA_URL);
-      renderAll();
+      const data = await fetchJsonStrict(DATA_URL);
+      renderRows(Array.isArray(data?.packages) ? data.packages : []);
     } catch (e) {
-      qs("#packagesGrid").innerHTML = `<div class="notice bad">Error loading pricing data: ${escapeHtml(e.message || e)}</div>`;
+      qs("#loadErr").style.display = "block";
+      qs("#loadErr").textContent = `Failed to load pricing data: ${e.message || e}`;
+      qs("#rows").innerHTML = `<tr><td colspan="5" class="muted">Error loading packages.</td></tr>`;
     }
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260309u"></script>
+  <script type="module" src="/assets/chrome.js?v=20260311d"></script>
 </body>
 </html>
