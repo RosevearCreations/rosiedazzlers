@@ -1,20 +1,16 @@
-// /assets/chrome.js
-// Standard navigation + footer + brand image wiring for all pages.
-// Drop-in module: include with <script type="module" src="/assets/chrome.js"></script>
+/* /assets/chrome.js
+   REPLACE ENTIRE FILE
+
+   What this does:
+   - Builds a clean, consistent nav across ALL pages (including Gifts + About + Contact)
+   - Sets logo/banner/reviews images anywhere you used data-logo / data-banner / data-reviews
+   - Renders the footer into any element with [data-footer]
+   - Handles “return from Stripe” messages on the home page (or any page that has [data-checkout-status])
+*/
 
 const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
 const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages";
 
-// Update these if you swap assets later
-const BRAND = {
-  logo: `${BRAND_BASE}/RosieDazzlerLogoOriginal3D.png`,
-  banner: `${BRAND_BASE}/RosieDazzlersBanner.png`,
-  reviews: `${BRAND_BASE}/RosieReviews.png`,
-  heroBg1: `${BRAND_BASE}/KatBlackCar.PNG`,
-  heroBg2: `${BRAND_BASE}/KateCar.PNG`,
-};
-
-// Socials
 const SOCIALS = [
   { label: "TikTok", href: "https://www.tiktok.com/@rosiedazzler" },
   { label: "Twitch", href: "https://www.twitch.tv/rosiedazzlers" },
@@ -25,171 +21,171 @@ const SOCIALS = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/rosiedazzlers/" },
 ];
 
-const NAV = [
-  { label: "Services", href: "/services" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Gear", href: "/gear" },
-  { label: "Consumables", href: "/consumables" },
-  { label: "Gifts", href: "/gifts" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
-  { label: "Book", href: "/book", isPrimary: true },
+const NAV_PUBLIC = [
+  { href: "/", label: "Home" },
+  { href: "/services", label: "Services" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/gear", label: "Gear" },
+  { href: "/consumables", label: "Consumables" },
+  { href: "/book", label: "Book" },
+  { href: "/gifts", label: "Gifts" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ];
 
-// --- Init ---
-setBrandImages();
-setNav();
-setFooter();
+const NAV_ADMIN = [
+  { href: "/admin", label: "Admin" },
+  { href: "/admin-booking.html", label: "Controls" },
+  { href: "/admin-upload.html", label: "Upload" },
+  { href: "/admin-progress.html", label: "Progress" },
+  { href: "/admin-assign.html", label: "Assign" },
+];
 
-// --- Brand images (logo/banner/reviews placeholders) ---
-function setBrandImages() {
-  const logo = document.querySelector("[data-logo]");
-  if (logo) {
-    logo.src = BRAND.logo;
-    logo.decoding = "async";
-    logo.loading = "eager";
-  }
-
-  const banner = document.querySelector("[data-banner]");
-  if (banner) {
-    banner.src = BRAND.banner;
-    banner.decoding = "async";
-    banner.loading = "lazy";
-  }
-
-  const reviews = document.querySelector("[data-reviews]");
-  if (reviews) {
-    reviews.src = BRAND.reviews;
-    reviews.decoding = "async";
-    reviews.loading = "lazy";
-  }
-
-  // Optional: apply a subtle background image if a page wants it
-  // Add: <div data-hero-bg></div> and we set a rotating background.
-  const heroBg = document.querySelector("[data-hero-bg]");
-  if (heroBg) {
-    const pick = (Math.random() < 0.5) ? BRAND.heroBg1 : BRAND.heroBg2;
-    heroBg.style.backgroundImage = `url("${pick}")`;
-    heroBg.style.backgroundSize = "cover";
-    heroBg.style.backgroundPosition = "center";
-    heroBg.style.borderRadius = "18px";
-    heroBg.style.border = "1px solid rgba(255,255,255,.10)";
-    heroBg.style.minHeight = "220px";
-  }
+function qs(sel) {
+  return document.querySelector(sel);
 }
 
-// --- Navigation ---
-function setNav() {
-  const navLinks = document.getElementById("navLinks");
+function setImgIfEmpty(selector, url) {
+  const el = qs(selector);
+  if (!el) return;
+  const current = (el.getAttribute("src") || "").trim();
+  if (!current) el.setAttribute("src", url);
+}
+
+function buildNav() {
+  const navLinks = qs("#navLinks");
   if (!navLinks) return;
 
-  const path = normalizePath(location.pathname);
+  const path = location.pathname || "/";
+  const isAdmin = path.startsWith("/admin");
 
-  const html = NAV.map((item) => {
-    const active = isActive(path, item.href);
-    const cls = ["nav-link"];
-    if (active) cls.push("active");
-    if (item.isPrimary) cls.push("primary-link");
+  const links = isAdmin ? NAV_ADMIN : NAV_PUBLIC;
 
-    return `<a class="${cls.join(" ")}" href="${item.href}">${escapeHtml(item.label)}</a>`;
-  }).join("");
+  navLinks.innerHTML = links
+    .map((l) => {
+      const active = normalizePath(path) === normalizePath(l.href);
+      const cls = active ? "active" : "";
+      const aria = active ? 'aria-current="page"' : "";
+      return `<a class="${cls}" ${aria} href="${l.href}">${escapeHtml(l.label)}</a>`;
+    })
+    .join("");
 
-  navLinks.innerHTML = html;
-
-  // Mobile toggle support if button exists
-  const toggle = document.getElementById("navToggle");
+  // Mobile toggle
+  const toggle = qs("#navToggle");
   if (toggle) {
     toggle.addEventListener("click", () => {
       const expanded = toggle.getAttribute("aria-expanded") === "true";
       toggle.setAttribute("aria-expanded", expanded ? "false" : "true");
-      navLinks.classList.toggle("open", !expanded);
+      navLinks.style.display = expanded ? "" : "flex";
+      navLinks.style.flexDirection = "column";
+      navLinks.style.gap = "10px";
+      navLinks.style.padding = "10px 0";
     });
   }
 }
 
-function normalizePath(p) {
-  // Treat /about.html and /about as same
-  if (!p) return "/";
-  if (p === "/index.html") return "/";
-  if (p.endsWith(".html")) return p.replace(/\.html$/i, "");
-  // Strip trailing slash (except root)
-  if (p.length > 1 && p.endsWith("/")) return p.slice(0, -1);
-  return p;
+function setBrandImages() {
+  // Prefer your crisp 3D logo + big banner + reviews
+  setImgIfEmpty("[data-logo]", `${BRAND_BASE}/RosieDazzlerLogoOriginal3D.png`);
+  setImgIfEmpty("[data-banner]", `${BRAND_BASE}/RosieDazzlersBanner.png`);
+  setImgIfEmpty("[data-reviews]", `${BRAND_BASE}/RosieReviews.png`);
+
+  // If you later add a main background hero image, you can set it here too.
 }
 
-function isActive(currentPath, href) {
-  const target = normalizePath(href);
-  if (target === "/") return currentPath === "/";
-  // match exact or subpaths (e.g. /gifts? or /gifts/receipt)
-  return currentPath === target || currentPath.startsWith(target + "/");
-}
-
-// --- Footer ---
 function setFooter() {
-  const foot = document.querySelector("[data-footer]");
+  const foot = qs("[data-footer]");
   if (!foot) return;
 
-  const year = new Date().getFullYear();
-
   foot.innerHTML = `
-    <div class="footer-inner" style="display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:14px">
-      <div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <img src="${BRAND.logo}" alt="Rosie Dazzlers logo" style="width:40px;height:auto;border-radius:10px" />
-          <div>
-            <strong>Rosie Dazzlers</strong><br>
-            <span style="color:rgba(234,242,255,.62);font-size:.92rem">Mobile Auto Detailing</span>
+    <div class="panel" style="margin-top:22px">
+      <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px">
+        <div>
+          <strong>Rosie Dazzlers Mobile Auto Detailing</strong>
+          <div style="margin-top:8px;opacity:.85">
+            Serving <strong>Norfolk</strong> & <strong>Oxford</strong> Counties (Ontario)
+          </div>
+          <div style="margin-top:8px;opacity:.85">
+            Email: <a href="mailto:info@rosiedazzlers.ca">info@rosiedazzlers.ca</a>
+          </div>
+          <div style="margin-top:8px;opacity:.75;font-size:.95rem">
+            Driveway required • customer provides power + water (or additional charges) • customer accepts local bylaw responsibility for runoff/chemicals
           </div>
         </div>
-        <div style="margin-top:10px;color:rgba(234,242,255,.62);font-size:.95rem">
-          Serving <strong>Norfolk</strong> & <strong>Oxford</strong> Counties (Ontario).<br>
-          Driveway required • Customer provides water + power • Deposit required
+
+        <div>
+          <strong>Quick links</strong>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
+            ${NAV_PUBLIC.slice(0, 6).map(l => `<a href="${l.href}">${escapeHtml(l.label)}</a>`).join("")}
+          </div>
         </div>
 
-        <div style="margin-top:10px">
-          <a class="btn ghost small" href="/waiver">Service Requirements / Waiver</a>
-        </div>
-      </div>
-
-      <div>
-        <strong>Pages</strong>
-        <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
-          ${NAV.filter(x => !x.isPrimary).slice(0,7).map(x => (
-            `<a href="${x.href}" style="color:rgba(234,242,255,.82)">${escapeHtml(x.label)}</a>`
-          )).join("")}
-          <a href="/book" style="color:rgba(234,242,255,.82)"><strong>Book</strong></a>
+        <div>
+          <strong>Socials</strong>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
+            ${SOCIALS.map(s => `<a target="_blank" rel="noopener" href="${s.href}">${escapeHtml(s.label)}</a>`).join("")}
+          </div>
         </div>
       </div>
 
-      <div>
-        <strong>Contact & Social</strong>
-        <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
-          <a href="mailto:info@rosiedazzlers.ca" style="color:rgba(234,242,255,.82)">info@rosiedazzlers.ca</a>
-          <a href="mailto:rosiedazzlers@gmail.com" style="color:rgba(234,242,255,.82)">rosiedazzlers@gmail.com</a>
+      <div class="hr"></div>
+
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;opacity:.75">
+        <div>© ${new Date().getFullYear()} Rosie Dazzlers</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="/waiver">Waiver</a>
+          <a href="/privacy">Privacy</a>
         </div>
-
-        <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
-          ${SOCIALS.map(s => (
-            `<a class="badge" href="${s.href}" target="_blank" rel="noopener">${escapeHtml(s.label)}</a>`
-          )).join("")}
-        </div>
-      </div>
-    </div>
-
-    <div style="margin-top:14px;height:1px;background:rgba(255,255,255,.10)"></div>
-
-    <div style="margin-top:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:rgba(234,242,255,.55);font-size:.9rem">
-      <div>© ${year} Rosie Dazzlers</div>
-      <div>
-        <a href="/privacy" style="color:rgba(234,242,255,.65)">Privacy</a>
-        <span style="opacity:.6"> • </span>
-        <a href="/terms" style="color:rgba(234,242,255,.65)">Terms</a>
       </div>
     </div>
   `;
 }
 
-// --- Utils ---
+function handleCheckoutReturn() {
+  const box = qs("[data-checkout-status]");
+  if (!box) return;
+
+  const p = new URLSearchParams(location.search);
+
+  // Booking deposit return
+  if (p.get("checkout") === "success") {
+    box.style.display = "block";
+    box.className = "notice ok";
+    box.textContent = "Booking deposit received. We’ll contact you shortly to confirm details.";
+    return;
+  }
+  if (p.get("checkout") === "cancel") {
+    box.style.display = "block";
+    box.className = "notice warn";
+    box.textContent = "Checkout was cancelled. Your booking was not confirmed.";
+    return;
+  }
+
+  // Gift purchase return
+  if (p.get("gift") === "success") {
+    box.style.display = "block";
+    box.className = "notice ok";
+    box.textContent = "Gift purchase received. We’re generating your certificate now.";
+    return;
+  }
+  if (p.get("gift") === "cancel") {
+    box.style.display = "block";
+    box.className = "notice warn";
+    box.textContent = "Gift checkout was cancelled.";
+    return;
+  }
+
+  box.style.display = "none";
+}
+
+function normalizePath(p) {
+  // Normalize “/index.html” to “/” and remove trailing slash (except root)
+  if (!p) return "/";
+  if (p === "/index.html") return "/";
+  if (p.endsWith("/") && p !== "/") return p.slice(0, -1);
+  return p;
+}
+
 function escapeHtml(s) {
   return String(s || "")
     .replaceAll("&", "&amp;")
@@ -199,5 +195,11 @@ function escapeHtml(s) {
     .replaceAll("'", "&#39;");
 }
 
-// Optional exports (if you want to call from other scripts)
-export { setBrandImages, setNav, setFooter, BRAND_BASE, PACKAGES_BASE };
+// Run on load
+buildNav();
+setBrandImages();
+setFooter();
+handleCheckoutReturn();
+
+// Export (optional)
+export { buildNav, setBrandImages, setFooter, handleCheckoutReturn };
