@@ -1,10 +1,15 @@
 <!-- /admin-progress.html
      REPLACE ENTIRE FILE
-     Admin helper page to post a progress note and/or attach an existing URL/ref to a booking.
-     Uses /api/admin/progress_post
 
-     NEW: supports deep-linking from /admin.html via:
-       /admin-progress.html?bid=<booking_uuid>
+     Admin: post progress notes + media to a booking.
+     Uses:
+       - /api/admin/progress_post  (note + media link)
+       - /api/admin/booking_update (optional: enable progress + regen token)
+       - /api/admin/bookings       (to fetch booking info by id)
+
+     NOTE:
+       This page does NOT upload files directly.
+       For uploading photos, use /admin-upload.html (next file).
 -->
 <!doctype html>
 <html lang="en">
@@ -12,16 +17,23 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Progress | Rosie Dazzlers</title>
-  <meta name="description" content="Post job progress updates and photos." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260309m" />
+  <meta name="description" content="Admin progress posting for Rosie Dazzlers." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260310c" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-    textarea{min-height:120px}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
     @media (max-width:980px){ .grid2,.grid3{grid-template-columns:1fr} }
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .muted{color:rgba(234,242,255,.62)}
+    textarea{min-height:120px}
+    .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
+    .pill.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
+    .pill.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
+    pre{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px}
   </style>
 </head>
+
 <body>
   <div class="nav">
     <div class="nav-inner">
@@ -38,90 +50,103 @@
   <div class="container">
     <div class="panel">
       <h1 style="margin:0 0 6px">Post Progress</h1>
-      <p class="kicker" style="margin:0">
-        Post notes and attach a photo URL/ref while detailing.
-      </p>
-      <div class="notice warn" style="margin-top:12px">
-        If uploading a new photo from your device, use <a href="/admin-upload.html">Upload photos</a>.
+      <p class="kicker" style="margin:0">Add customer-visible notes and photo links to a booking.</p>
+
+      <div class="hr"></div>
+
+      <div class="row">
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:260px">
+          <span class="muted">Admin password</span>
+          <input id="pw" type="password" placeholder="Enter admin password…" />
+        </label>
+
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:420px;flex:1">
+          <span class="muted">Booking ID (uuid)</span>
+          <input id="bid" class="mono" type="text" placeholder="d751e9f0-717d-4ab6-a2be-dba309006b76" />
+        </label>
+
+        <div class="row" style="align-items:flex-end">
+          <button class="btn primary" id="loadBtn" type="button">Load booking</button>
+          <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
+          <a class="btn ghost" href="/admin">Back to Admin</a>
+        </div>
       </div>
+
+      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
     </div>
 
     <div class="section grid2">
       <div class="panel">
-        <h2 style="margin-top:0">Post update</h2>
+        <h2 style="margin-top:0">Booking</h2>
+        <div id="details" class="notice warn">Load a booking to begin.</div>
 
-        <label for="pw">Admin password</label>
-        <input id="pw" type="password" placeholder="Enter admin password…" />
-
-        <div class="grid2" style="margin-top:10px">
-          <div>
-            <label for="booking_id">Booking ID <span class="mono">(uuid)</span></label>
-            <input id="booking_id" class="mono" type="text" placeholder="d751e9f0-717d-4ab6-a2be-dba309006b76" />
-          </div>
-          <div>
-            <label for="created_by">Created by (optional)</label>
-            <input id="created_by" type="text" placeholder="Jack / Laurie / Admin" />
-          </div>
+        <div class="row" style="margin-top:12px">
+          <a id="controlsBtn" class="btn ghost" href="/admin-booking.html">Controls</a>
+          <a id="uploadBtn" class="btn ghost" href="/admin-upload.html">Upload photos</a>
         </div>
 
-        <div class="grid2" style="margin-top:10px">
+        <div class="hr"></div>
+
+        <h2 style="margin-top:0">Customer links</h2>
+        <div id="links" class="notice warn">Enable progress in Controls to generate links.</div>
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-top:0">New update</h2>
+
+        <div class="grid2">
+          <div>
+            <label for="created_by">Posted by (optional)</label>
+            <input id="created_by" type="text" placeholder="Laurie / Jack" />
+          </div>
+
           <div>
             <label for="visibility">Visibility</label>
             <select id="visibility">
-              <option value="customer">Customer</option>
-              <option value="internal">Internal</option>
+              <option value="customer" selected>customer</option>
+              <option value="internal">internal</option>
             </select>
           </div>
+        </div>
+
+        <div class="grid3" style="margin-top:10px">
           <div>
-            <label for="kind">Photo kind</label>
+            <label for="kind">Media kind</label>
             <select id="kind">
-              <option value="before">Before</option>
-              <option value="during" selected>During</option>
-              <option value="after">After</option>
-              <option value="other">Other</option>
+              <option value="before">before</option>
+              <option value="during" selected>during</option>
+              <option value="after">after</option>
+              <option value="other">other</option>
             </select>
+          </div>
+
+          <div style="grid-column:span 2">
+            <label for="caption">Caption (optional)</label>
+            <input id="caption" type="text" placeholder="Before – driver seat / After – trunk mats…" />
           </div>
         </div>
 
         <label for="note" style="margin-top:10px">Note (optional)</label>
-        <textarea id="note" placeholder="We started vacuuming + wiping down interior panels."></textarea>
+        <textarea id="note" placeholder="Example: 'Started interior vacuum and pre-treatment. Pet hair heavy in rear.'"></textarea>
 
-        <div class="grid2" style="margin-top:10px">
-          <div>
-            <label for="media_url">Photo URL or Storage ref (optional)</label>
-            <input id="media_url" class="mono" type="text" placeholder="https://... OR sb://job-media/jobs/..." />
-            <div class="small" style="color:rgba(234,242,255,.62);margin-top:6px">
-              You usually won’t paste <span class="mono">sb://</span> manually—Upload page does it automatically.
-            </div>
-          </div>
-          <div>
-            <label for="caption">Caption (optional)</label>
-            <input id="caption" type="text" placeholder="Before - driver side floor" />
-          </div>
+        <label for="media_url" style="margin-top:10px">Media URL (optional)</label>
+        <input id="media_url" class="mono" type="text" placeholder="https://... OR sb://job-media/jobs/<booking_id>/photo.jpg" />
+
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary" id="postBtn" type="button" disabled>Post update</button>
+          <button class="btn ghost" id="clearBtn" type="button" disabled>Clear</button>
         </div>
 
-        <div class="row" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn primary" id="postBtn" type="button">Post</button>
-          <button class="btn ghost" id="clearBtn" type="button">Clear</button>
+        <div class="muted" style="margin-top:10px">
+          Tip: If you upload via <strong>Upload photos</strong>, you’ll get an <span class="mono">sb://…</span> reference to paste here.
         </div>
-
-        <div id="status" class="notice" style="display:none;margin-top:12px"></div>
       </div>
+    </div>
 
+    <div class="section">
       <div class="panel">
-        <h2 style="margin-top:0">Customer view link</h2>
-        <p class="small" style="color:rgba(234,242,255,.62)">
-          Use <a href="/admin-booking.html">Booking controls</a> to generate/copy progress links.
-        </p>
-
-        <div class="hr"></div>
-
-        <h2>Quick actions</h2>
-        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap">
-          <a class="btn ghost" href="/admin-upload.html">Upload photos</a>
-          <a class="btn ghost" href="/admin-booking.html">Booking controls</a>
-          <a class="btn ghost" href="/admin">Back to Admin</a>
-        </div>
+        <h2 style="margin-top:0">Last response</h2>
+        <pre id="raw" class="mono">{}</pre>
       </div>
     </div>
 
@@ -129,72 +154,210 @@
   </div>
 
   <script type="module">
-    const qs = (s) => document.querySelector(s);
-    const val = (id) => (qs(id).value || "").trim();
+    const qs = (s)=>document.querySelector(s);
 
-    function show(msg, kind="") {
+    function escapeHtml(s){
+      return String(s || "")
+        .replaceAll("&","&amp;").replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
+    }
+
+    function showStatus(msg, kind=""){
       const el = qs("#status");
       el.style.display = "block";
       el.className = "notice " + (kind || "");
       el.textContent = msg;
     }
+    function hideStatus(){ qs("#status").style.display = "none"; }
 
-    qs("#postBtn").addEventListener("click", async () => {
-      const admin_password = val("#pw");
-      const booking_id = val("#booking_id");
-      const created_by = val("#created_by");
-      const visibility = val("#visibility") || "customer";
-      const kind = val("#kind") || "during";
-      const note = (qs("#note").value || "").trim();
-      const media_url = val("#media_url");
-      const caption = val("#caption");
+    function getPw(){ return (qs("#pw").value || "").trim(); }
+    function getBid(){ return (qs("#bid").value || "").trim(); }
 
-      if (!admin_password) return show("Missing admin password.", "bad");
-      if (!booking_id) return show("Missing booking_id.", "bad");
-      if (!note && !media_url) return show("Enter a note and/or a media URL/ref.", "bad");
-
-      show("Posting…");
-
-      const payload = {
-        admin_password,
-        booking_id,
-        created_by: created_by || null,
-        visibility,
-        kind,
-        note: note || null,
-        media_url: media_url || null,
-        caption: caption || null,
-      };
-
-      const res = await fetch("/api/admin/progress_post", {
+    async function postJson(url, payload){
+      const res = await fetch(url, {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: { "content-type":"application/json" },
         body: JSON.stringify(payload),
       });
+      const out = await res.json().catch(()=>null);
+      return { ok: res.ok, status: res.status, out };
+    }
 
-      const data = await res.json().catch(()=>null);
-      if (!res.ok || !data?.ok) {
-        return show(data?.error ? `Error: ${data.error}` : "Error posting update.", "bad");
+    // Save PW
+    try {
+      const saved = localStorage.getItem("rosie_admin_pw") || "";
+      if (saved) qs("#pw").value = saved;
+    } catch {}
+
+    qs("#savePwBtn").addEventListener("click", () => {
+      const pw = getPw();
+      if (!pw) return showStatus("Enter password first.", "bad");
+      try {
+        localStorage.setItem("rosie_admin_pw", pw);
+        showStatus("Saved password on this device.", "ok");
+        setTimeout(hideStatus, 1200);
+      } catch {
+        showStatus("Could not save password.", "bad");
       }
+    });
 
-      show("Posted.", "ok");
+    // Prefill bid from query
+    (function prefill(){
+      const p = new URLSearchParams(location.search);
+      const bid = (p.get("bid") || "").trim();
+      if (bid) qs("#bid").value = bid;
+    })();
+
+    function fmtMoneyCents(cents){
+      if (cents == null) return "—";
+      return new Intl.NumberFormat("en-CA", { style:"currency", currency:"CAD" }).format(Number(cents)/100);
+    }
+
+    function prettyPkg(code){
+      const map = {
+        premium_wash: "Premium Wash",
+        basic_detail: "Basic Detail",
+        complete_detail: "Complete Detail",
+        interior_detail: "Interior Detail",
+        exterior_detail: "Exterior Detail",
+      };
+      return map[code] || code || "";
+    }
+
+    let booking = null;
+
+    function enableActions(on){
+      qs("#postBtn").disabled = !on;
+      qs("#clearBtn").disabled = !on;
+    }
+
+    function renderBooking(b){
+      booking = b;
+      enableActions(true);
+
+      const vehicle = b.vehicle || null;
+      const vehicleLine = vehicle
+        ? `${vehicle.year || ""} ${vehicle.make || ""} ${vehicle.model || ""}`.trim()
+        : "";
+
+      qs("#details").className = "notice";
+      qs("#details").innerHTML = `
+        <div><strong>${escapeHtml(b.customer_name || "")}</strong> — ${escapeHtml(b.customer_email || "")}</div>
+        <div class="muted">${escapeHtml(prettyPkg(b.package_code))} (${escapeHtml(b.vehicle_size || "")})</div>
+        ${vehicleLine ? `<div class="muted">Vehicle: ${escapeHtml(vehicleLine)}</div>` : ``}
+        <div class="muted">Date: ${escapeHtml(b.service_date || "")} • Slot: ${escapeHtml(b.start_slot || "")} • Duration: ${escapeHtml(String(b.duration_slots || ""))}</div>
+        <div class="muted">Subtotal: <strong>${fmtMoneyCents(b.subtotal_cents)}</strong> • Total: <strong>${fmtMoneyCents(b.price_total_cents)}</strong></div>
+        <div class="muted">Progress: <span class="pill ${b.progress_enabled ? "ok":"warn"}">${b.progress_enabled ? "enabled":"disabled"}</span></div>
+      `;
+
+      qs("#controlsBtn").href = `/admin-booking.html?bid=${encodeURIComponent(b.id)}`;
+      qs("#uploadBtn").href = `/admin-upload.html?bid=${encodeURIComponent(b.id)}`;
+
+      // links (only if enabled + token)
+      if (b.progress_enabled === true && b.progress_token) {
+        const origin = location.origin;
+        const progress = `${origin}/progress?token=${encodeURIComponent(b.progress_token)}`;
+        const complete = `${origin}/complete?token=${encodeURIComponent(b.progress_token)}`;
+        qs("#links").className = "notice ok";
+        qs("#links").innerHTML = `
+          <div><strong>Progress:</strong> <a class="mono" target="_blank" rel="noopener" href="${escapeHtml(progress)}">${escapeHtml(progress)}</a></div>
+          <div style="margin-top:8px"><strong>Completion:</strong> <a class="mono" target="_blank" rel="noopener" href="${escapeHtml(complete)}">${escapeHtml(complete)}</a></div>
+        `;
+      } else {
+        qs("#links").className = "notice warn";
+        qs("#links").textContent = "Progress is disabled. Enable it in Booking Controls to generate customer links.";
+      }
+    }
+
+    async function findBookingById(pw, bid){
+      // Try next30 then latest100 (cheap + simple)
+      const r1 = await postJson("/api/admin/bookings", { admin_password: pw, mode: "next30" });
+      if (r1.ok && r1.out?.ok) {
+        const hit = (r1.out.rows || []).find(x => x.id === bid);
+        if (hit) return hit;
+      }
+      const r2 = await postJson("/api/admin/bookings", { admin_password: pw, mode: "latest100" });
+      if (r2.ok && r2.out?.ok) {
+        const hit = (r2.out.rows || []).find(x => x.id === bid);
+        if (hit) return hit;
+      }
+      return null;
+    }
+
+    qs("#loadBtn").addEventListener("click", async () => {
+      const pw = getPw();
+      const bid = getBid();
+      if (!pw) return showStatus("Missing admin password.", "bad");
+      if (!bid) return showStatus("Missing booking id.", "bad");
+
+      showStatus("Loading booking…");
+      enableActions(false);
+
+      const b = await findBookingById(pw, bid);
+      if (!b) return showStatus("Booking not found. Open from /admin → Progress for that row.", "bad");
+
+      renderBooking(b);
+      showStatus("Loaded.", "ok");
+      setTimeout(hideStatus, 1200);
     });
 
     qs("#clearBtn").addEventListener("click", () => {
       qs("#note").value = "";
       qs("#media_url").value = "";
       qs("#caption").value = "";
-      qs("#status").style.display = "none";
+      qs("#kind").value = "during";
+      qs("#visibility").value = "customer";
+      qs("#created_by").value = "";
+      qs("#raw").textContent = "{}";
     });
 
-    // NEW: prefill booking id from ?bid=
-    (function prefillFromQuery(){
-      const p = new URLSearchParams(location.search);
-      const bid = (p.get("bid") || "").trim();
-      if (bid) qs("#booking_id").value = bid;
+    qs("#postBtn").addEventListener("click", async () => {
+      const pw = getPw();
+      const bid = getBid();
+      if (!pw) return showStatus("Missing admin password.", "bad");
+      if (!bid) return showStatus("Missing booking id.", "bad");
+
+      const note = (qs("#note").value || "").trim() || null;
+      const media_url = (qs("#media_url").value || "").trim() || null;
+
+      if (!note && !media_url) return showStatus("Add a note and/or a media URL.", "bad");
+
+      const payload = {
+        admin_password: pw,
+        booking_id: bid,
+        created_by: (qs("#created_by").value || "").trim() || null,
+        visibility: qs("#visibility").value,
+        kind: qs("#kind").value,
+        caption: (qs("#caption").value || "").trim() || null,
+        note,
+        media_url,
+      };
+
+      showStatus("Posting…");
+      const r = await postJson("/api/admin/progress_post", payload);
+
+      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
+
+      if (!r.ok || !r.out?.ok) {
+        return showStatus(r.out?.error ? `Error: ${r.out.error}` : "Post failed.", "bad");
+      }
+
+      showStatus("Posted.", "ok");
+      setTimeout(hideStatus, 1200);
+    });
+
+    // Auto-load if bid + pw present
+    (async function auto(){
+      const bid = getBid();
+      const pw = getPw();
+      if (bid && pw) {
+        qs("#loadBtn").click();
+      }
     })();
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260309m"></script>
+  <script type="module" src="/assets/chrome.js?v=20260310c"></script>
 </body>
 </html>
