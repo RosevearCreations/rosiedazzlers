@@ -1,3 +1,15 @@
+<!-- /index.html
+     REPLACE ENTIRE FILE
+
+     Restores:
+     - Hero banner image (RosieDazzlersBanner.png)
+     - Reviews image (RosieReviews.png)
+     - Uses standardized nav/footer via /assets/chrome.js
+     - Optional background image switch (KatBlackCar.PNG or KateCar.PNG)
+
+     Note:
+     - data-banner and data-reviews are auto-filled by chrome.js if src is blank.
+-->
 <!doctype html>
 <html lang="en">
 <head>
@@ -5,23 +17,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Rosie Dazzlers | Mobile Auto Detailing</title>
   <meta name="description" content="Mobile auto detailing serving Norfolk & Oxford Counties. Online booking with deposit." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260309r" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260311i" />
+
+  <!-- OPTIONAL: Use a high-end car as a subtle background -->
   <style>
-    .grid2{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
-    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    .muted{color:rgba(234,242,255,.62)}
-    .heroBgWrap{position:relative;overflow:hidden;border-radius:18px;border:1px solid rgba(255,255,255,.10)}
-    .heroBgWrap:before{
-      content:"";
-      position:absolute;inset:0;
-      background:linear-gradient(90deg, rgba(10,14,24,.92), rgba(10,14,24,.45));
-      z-index:1;
+    :root{
+      --bg-image: url("https://assets.rosiedazzlers.ca/brand/KatBlackCar.PNG");
+      --bg-image-opacity: .12;
     }
-    .heroBgInner{position:relative;z-index:2;padding:16px}
-    .cards a{display:block}
-    @media (max-width:980px){ .grid2,.grid3{grid-template-columns:1fr} }
   </style>
 </head>
+
 <body>
   <div class="nav">
     <div class="nav-inner">
@@ -36,95 +42,62 @@
   </div>
 
   <div class="container">
-    <div class="section grid2">
-      <!-- HERO -->
-      <div class="panel heroBgWrap" data-hero-bg>
-        <div class="heroBgInner">
-          <div class="badges">
-            <span class="badge">Norfolk + Oxford</span>
-            <span class="badge">Deposit to reserve</span>
-            <span class="badge">One vehicle/day (usually)</span>
-          </div>
+    <div class="hero">
+      <div>
+        <img data-banner alt="Rosie Dazzlers banner"
+             style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)" />
 
-          <h1 style="margin:10px 0 8px">Mobile Auto Detailing</h1>
-          <p class="kicker" style="margin:0">
-            We come to you across <strong>Norfolk</strong> & <strong>Oxford</strong> Counties —
-            clear pricing, one vehicle per day, and a deposit to lock your spot.
-          </p>
+        <h1 style="margin:14px 0 6px">Mobile Auto Detailing</h1>
+        <p class="kicker" style="margin:0 0 10px">
+          We come to you across <strong>Norfolk</strong> & <strong>Oxford</strong> Counties — clear pricing,
+          one vehicle per day, and a deposit to lock your spot.
+        </p>
 
-          <div class="section" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-            <a class="btn primary" href="/book">Book now</a>
-            <a class="btn ghost" href="/pricing">View pricing</a>
-            <a class="btn ghost" href="/services">What’s included</a>
-            <a class="btn ghost" href="https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG" target="_blank" rel="noopener">Vehicle size chart</a>
-          </div>
+        <div class="badges" style="margin-top:10px">
+          <span class="badge">Driveway required</span>
+          <span class="badge">Customer provides power + water</span>
+          <span class="badge">Online booking + deposit</span>
+        </div>
 
-          <div class="section" style="margin-top:12px">
-            <div data-checkout-status class="notice" style="display:none"></div>
-          </div>
+        <div class="section">
+          <div data-checkout-status class="notice" style="display:none"></div>
+        </div>
 
-          <div class="section" style="margin-top:12px">
-            <div class="small muted">
-              <strong>Requirements:</strong> driveway required • customer provides power + water • bylaw responsibility acknowledged
-              (<a href="/waiver">details</a>)
-            </div>
+        <div class="section" style="display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn primary" href="/book">Book now</a>
+          <a class="btn ghost" href="/pricing">View pricing</a>
+          <a class="btn ghost" href="/services">What’s included</a>
+          <a class="btn ghost" href="/gifts">Gift certificates</a>
+        </div>
+
+        <div class="section panel" style="margin-top:14px">
+          <h2 style="margin:0 0 8px">How it works</h2>
+          <ol class="muted" style="margin:0 0 0 18px">
+            <li>Choose a package + vehicle size.</li>
+            <li>Pick a date + AM/PM slot.</li>
+            <li>Pay the deposit to reserve your spot.</li>
+            <li>We arrive and detail your vehicle on-site.</li>
+          </ol>
+          <div class="hr"></div>
+          <div class="muted">
+            <strong>Note:</strong> If power/water are not available, additional charges may apply.
+            Customer accepts responsibility for local bylaw considerations regarding runoff/chemicals.
           </div>
         </div>
       </div>
 
-      <!-- REVIEWS -->
       <div class="panel">
         <h2 style="margin:0 0 10px">Reviews</h2>
-        <p class="muted" style="margin-top:0">We’ll keep adding before/after galleries next.</p>
+        <p class="help">We’ll keep adding before/after galleries next.</p>
         <div class="hr"></div>
         <img data-reviews alt="Rosie Dazzlers reviews"
              style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)" />
       </div>
     </div>
 
-    <!-- QUICK LINKS -->
-    <div class="section grid3 cards">
-      <a class="panel" href="/services" style="text-decoration:none">
-        <h3 style="margin:0 0 6px">Packages</h3>
-        <p class="muted" style="margin:0">See what’s included in each service and add-ons.</p>
-      </a>
-      <a class="panel" href="/gifts" style="text-decoration:none">
-        <h3 style="margin:0 0 6px">Gift Certificates</h3>
-        <p class="muted" style="margin:0">Dollar gifts or service gifts. Valid 1 year. No refunds.</p>
-      </a>
-      <a class="panel" href="/gear" style="text-decoration:none">
-        <h3 style="margin:0 0 6px">Gear & Consumables</h3>
-        <p class="muted" style="margin:0">A look at the systems and products we use.</p>
-      </a>
-    </div>
-
     <div class="footer" data-footer></div>
   </div>
 
-  <script type="module">
-    // Home page: show message after returning from Stripe (booking or gift)
-    const el = document.querySelector("[data-checkout-status]");
-    const p = new URLSearchParams(location.search);
-
-    function show(msg, kind="ok"){
-      if (!el) return;
-      el.style.display = "block";
-      el.className = "notice " + (kind || "");
-      el.textContent = msg;
-    }
-
-    // Booking checkout return
-    const checkout = p.get("checkout");
-    if (checkout === "success") show("Booking deposit received. We’ll email you shortly to confirm details.", "ok");
-    if (checkout === "cancel") show("Checkout cancelled. Your time slot was not reserved.", "warn");
-
-    // Gift checkout return
-    const gift = p.get("gift");
-    const sid = p.get("session_id");
-    if (gift === "success" && sid) show("Gift purchase complete. Go to Gifts → Lookup to reveal the gift code.", "ok");
-    if (gift === "cancel") show("Gift checkout cancelled.", "warn");
-  </script>
-
-  <script type="module" src="/assets/chrome.js?v=20260309r"></script>
+  <script type="module" src="/assets/chrome.js?v=20260311i"></script>
 </body>
 </html>
