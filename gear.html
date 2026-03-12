@@ -1,11 +1,8 @@
 <!-- /gear.html
      REPLACE ENTIRE FILE
 
-     Fixes:
-     - Gear list renders cards again (not just a search box)
-     - Loads your locally generated JSON:
-         /data/systems_catalog_r2_corrected.json
-       If your deployed filename differs, update DATA_URL below.
+     Uses the JSON that actually exists in /data:
+       /data/systems_catalog.json
 -->
 <!doctype html>
 <html lang="en">
@@ -14,7 +11,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Gear | Rosie Dazzlers</title>
   <meta name="description" content="The tools, machines, and gear we use for mobile auto detailing." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260311e" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260311g" />
   <style>
     .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
     @media (max-width:1100px){ .grid3{grid-template-columns:repeat(2,1fr)} }
@@ -73,8 +70,8 @@
   </div>
 
   <script type="module">
-    // If your deployed file name is different, change it here:
-    const DATA_URL = "/data/systems_catalog_r2_corrected.json?v=20260311e";
+    // Correct deployed filename:
+    const DATA_URL = "/data/systems_catalog.json?v=20260311g";
 
     const qs = (s)=>document.querySelector(s);
 
@@ -152,6 +149,8 @@
 
     try {
       const raw = await fetchJsonStrict(DATA_URL);
+
+      // Accept either {items:[...]} or [...]
       const arr = Array.isArray(raw) ? raw : (Array.isArray(raw.items) ? raw.items : []);
       list = arr.map(normalizeItem);
 
@@ -169,6 +168,6 @@
     }
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260311e"></script>
+  <script type="module" src="/assets/chrome.js?v=20260311g"></script>
 </body>
 </html>
