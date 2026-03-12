@@ -1,12 +1,11 @@
 <!-- /gear.html
      REPLACE ENTIRE FILE
 
-     Purpose:
-     - Shows your "Systems / Gear" list from JSON (images + categories + Amazon search links)
-     - Fixes the “only search bar shows” problem by:
-       1) Loading from multiple possible JSON paths (fallbacks)
-       2) Validating each item has an image URL and title
-     - Includes category filter + search + modal image preview
+     Fixes:
+     - Gear list renders cards again (not just a search box)
+     - Loads your locally generated JSON:
+         /data/systems_catalog_r2_corrected.json
+       If your deployed filename differs, update DATA_URL below.
 -->
 <!doctype html>
 <html lang="en">
@@ -14,35 +13,23 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Gear | Rosie Dazzlers</title>
-  <meta name="description" content="Rosie Dazzlers gear and systems used for mobile auto detailing." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260309v" />
+  <meta name="description" content="The tools, machines, and gear we use for mobile auto detailing." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260311e" />
   <style>
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
     @media (max-width:1100px){ .grid3{grid-template-columns:repeat(2,1fr)} }
     @media (max-width:980px){ .grid3{grid-template-columns:1fr} }
-
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .muted{color:rgba(234,242,255,.62)}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-
     .cardImg{
       width:100%;
-      aspect-ratio: 16 / 10;
-      object-fit: cover;
+      aspect-ratio:16/10;
+      object-fit:cover;
       border-radius:16px;
       border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
+      background:rgba(255,255,255,.04);
     }
-    .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
-    .tag.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
-    .tag.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
-
-    .modalBack{position:fixed; inset:0; background:rgba(0,0,0,.70); display:none; align-items:center; justify-content:center; z-index:9999; padding:18px;}
-    .modal{max-width:1100px; width:100%; border:1px solid rgba(255,255,255,.12); background:rgba(10,14,24,.96); border-radius:18px; padding:14px;}
-    .modal img{width:100%; height:auto; border-radius:14px; border:1px solid rgba(255,255,255,.10)}
-    .modalHead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
-
-    .inputs input,.inputs select{min-width:220px}
+    .mini{font-size:.92rem}
   </style>
 </head>
 
@@ -61,285 +48,127 @@
 
   <div class="container">
     <div class="panel">
-      <h1 style="margin:0 0 6px">Gear & Systems</h1>
-      <p class="kicker" style="margin:0">
-        A look at the tools/systems we use on mobile detailing jobs. (Amazon links are search links for convenience.)
-      </p>
+      <h1 style="margin:0 0 6px">Gear</h1>
+      <p class="kicker" style="margin:0">The equipment we use to do the job right.</p>
 
       <div class="hr"></div>
 
-      <div class="row inputs">
-        <input id="q" type="search" placeholder="Search gear (name/category)..." />
-        <select id="cat"></select>
-        <select id="sort">
-          <option value="title_asc">Sort: Title (A→Z)</option>
-          <option value="title_desc">Sort: Title (Z→A)</option>
-          <option value="category_asc">Sort: Category</option>
-          <option value="size_desc">Sort: File size (largest)</option>
-          <option value="size_asc">Sort: File size (smallest)</option>
-        </select>
+      <div class="row">
+        <label style="flex:1;min-width:260px">
+          <span class="muted mini">Search</span>
+          <input id="q" type="text" placeholder="Search gear…" />
+        </label>
         <button class="btn ghost" id="clearBtn" type="button">Clear</button>
       </div>
 
-      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
+      <div id="loadErr" class="notice bad" style="display:none;margin-top:12px"></div>
+      <div class="muted mini" id="count" style="margin-top:10px"></div>
     </div>
 
     <div class="section">
-      <div id="grid" class="grid3"></div>
+      <div class="grid3" id="grid"></div>
     </div>
 
     <div class="footer" data-footer></div>
   </div>
 
-  <!-- MODAL -->
-  <div class="modalBack" id="modalBack" role="dialog" aria-modal="true">
-    <div class="modal">
-      <div class="modalHead">
-        <strong id="modalTitle">Preview</strong>
-        <button class="btn ghost" id="modalCloseBtn" type="button">Close</button>
-      </div>
-      <img id="modalImg" alt="Preview image" />
-    </div>
-  </div>
-
   <script type="module">
-    // Try multiple JSON paths (so you can name it however you want)
-    const CANDIDATE_JSON = [
-      "/data/systems_catalog_r2_corrected.json",
-      "/data/systems_catalog_rebuilt.json",
-      "/data/systems_catalog.json",
-    ];
+    // If your deployed file name is different, change it here:
+    const DATA_URL = "/data/systems_catalog_r2_corrected.json?v=20260311e";
 
-    // If an item lacks r2_url, we can rebuild from this base + path.
-    const R2_PUBLIC_DEV_BASE = "https://pub-3293bca3c49a49a7bd30ea4469874d80.r2.dev";
-
-    const qs = (s) => document.querySelector(s);
+    const qs = (s)=>document.querySelector(s);
 
     function escapeHtml(s){
-      return String(s || "")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;")
-        .replaceAll(">","&gt;").replaceAll('"',"&quot;")
-        .replaceAll("'","&#39;");
-    }
-
-    function prettyCategory(cat){
-      return String(cat || "other")
-        .replaceAll("_"," ")
-        .replace(/\b\w/g, (m)=>m.toUpperCase());
-    }
-
-    function amazonSearchUrl(query){
-      const q = (query || "").trim();
-      if (!q) return "";
-      return `https://www.amazon.ca/s?k=${encodeURIComponent(q)}`;
+      return String(s||"")
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#39;");
     }
 
     async function fetchJsonStrict(url){
-      const res = await fetch(url, { cache:"no-store" });
+      const res = await fetch(url,{cache:"no-store"});
       const text = await res.text();
       try { return JSON.parse(text); }
       catch {
-        const head = text.slice(0, 120).replace(/\s+/g, " ");
-        throw new Error(`Expected JSON but got: ${head}`);
+        const head = text.slice(0,120).replace(/\s+/g," ");
+        throw new Error(`Expected JSON from ${url} but got: ${head}`);
       }
     }
 
-    async function loadFirstWorkingJson(urls){
-      let lastErr = null;
-      for (const u of urls) {
-        try {
-          const data = await fetchJsonStrict(`${u}?v=${Date.now()}`);
-          if (Array.isArray(data)) return { url: u, data };
-          throw new Error("JSON loaded but is not an array.");
-        } catch (e) {
-          lastErr = e;
-        }
-      }
-      throw lastErr || new Error("No JSON source worked.");
-    }
-
-    function normalizeItem(it){
-      const title = it.title || it.filename || it.original || it.sanitized || "(untitled)";
-      const category = it.category || "other";
-      const bytes = Number(it.bytes || 0);
-
-      let img = it.r2_url || "";
-      if (!img && it.path) {
-        // path like: systems/... (already includes folder)
-        img = `${R2_PUBLIC_DEV_BASE}/${encodeURI(it.path).replaceAll("#","%23")}`;
-      }
-
-      const amazonQuery = it.amazon_query || title;
-      const amazon = amazonSearchUrl(amazonQuery);
-
+    function normalizeItem(x){
       return {
-        title,
-        category,
-        bytes,
-        img,
-        amazon,
-        amazonQuery,
-        path: it.path || "",
-        filename: it.filename || "",
+        name: x.name || x.title || x.item || x.filename || "Item",
+        image_url: x.image_url || x.image || x.r2_url || x.url || null,
+        amazon_url: x.amazon_url || x.amazon || x.link || null,
+        notes: x.notes || x.description || x.caption || "",
       };
     }
 
-    // Modal
-    function openModal(title, imgUrl){
-      qs("#modalTitle").textContent = title;
-      qs("#modalImg").src = imgUrl;
-      qs("#modalBack").style.display = "flex";
-    }
-    function closeModal(){ qs("#modalBack").style.display = "none"; qs("#modalImg").src = ""; }
-    qs("#modalCloseBtn").addEventListener("click", closeModal);
-    qs("#modalBack").addEventListener("click", (e)=>{ if(e.target.id==="modalBack") closeModal(); });
-
-    function showStatus(msg, kind=""){
-      const el = qs("#status");
-      el.style.display = "block";
-      el.className = "notice " + (kind || "");
-      el.textContent = msg;
+    function matches(item, q){
+      if (!q) return true;
+      const hay = `${item.name} ${item.notes} ${item.amazon_url||""}`.toLowerCase();
+      return hay.includes(q.toLowerCase());
     }
 
-    function hideStatus(){ qs("#status").style.display = "none"; }
-
-    let all = [];
-    let filtered = [];
-
-    function buildCategoryOptions(items){
-      const sel = qs("#cat");
-      const counts = new Map();
-      for (const it of items) {
-        counts.set(it.category, (counts.get(it.category) || 0) + 1);
-      }
-      const cats = Array.from(counts.keys()).sort((a,b)=>a.localeCompare(b));
-
-      sel.innerHTML = [
-        `<option value="">All categories (${items.length})</option>`,
-        ...cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(prettyCategory(c))} (${counts.get(c)})</option>`)
-      ].join("");
-    }
-
-    function applySort(items){
-      const mode = qs("#sort").value;
-      const arr = [...items];
-
-      const byTitle = (a,b)=>String(a.title).localeCompare(String(b.title));
-      const byCat = (a,b)=>String(a.category).localeCompare(String(b.category)) || byTitle(a,b);
-
-      if (mode === "title_asc") arr.sort(byTitle);
-      if (mode === "title_desc") arr.sort((a,b)=>byTitle(b,a));
-      if (mode === "category_asc") arr.sort(byCat);
-      if (mode === "size_desc") arr.sort((a,b)=>(b.bytes||0)-(a.bytes||0));
-      if (mode === "size_asc") arr.sort((a,b)=>(a.bytes||0)-(b.bytes||0));
-
-      return arr;
-    }
-
-    function applyFilters(){
-      const q = (qs("#q").value || "").trim().toLowerCase();
-      const cat = (qs("#cat").value || "").trim();
-
-      let out = all;
-
-      if (cat) out = out.filter(i => i.category === cat);
-
-      if (q) {
-        out = out.filter(i => {
-          const hay = `${i.title} ${i.category} ${i.filename} ${i.path}`.toLowerCase();
-          return hay.includes(q);
-        });
-      }
-
-      filtered = applySort(out);
-      renderGrid(filtered);
-    }
-
-    function renderGrid(items){
+    function render(list){
       const grid = qs("#grid");
       grid.innerHTML = "";
 
-      if (!items.length) {
-        grid.innerHTML = `<div class="notice warn">No gear matches the current filters.</div>`;
-        return;
-      }
+      const q = (qs("#q").value || "").trim();
+      const filtered = list.filter(it => matches(it, q));
 
-      for (const it of items) {
-        const el = document.createElement("div");
-        el.className = "panel";
+      qs("#count").textContent = `${filtered.length} items`;
 
-        const img = it.img || "";
-        const cat = prettyCategory(it.category);
-        const amazon = it.amazon || "";
+      for (const it of filtered){
+        const card = document.createElement("div");
+        card.className = "panel";
 
-        el.innerHTML = `
-          <img class="cardImg" alt="${escapeHtml(it.title)}" />
-          <div style="margin-top:10px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
-            <div>
-              <h3 style="margin:0">${escapeHtml(it.title)}</h3>
-              <div class="muted">${escapeHtml(cat)}</div>
+        const img = it.image_url
+          ? `<img class="cardImg" alt="${escapeHtml(it.name)}" src="${escapeHtml(it.image_url)}" loading="lazy" decoding="async" />`
+          : "";
+
+        const linkBtn = it.amazon_url
+          ? `<a class="btn primary" target="_blank" rel="noopener" href="${escapeHtml(it.amazon_url)}">Amazon link</a>`
+          : "";
+
+        card.innerHTML = `
+          ${img}
+          <div style="margin-top:${img ? "10px":"0"}">
+            <h3 style="margin:0">${escapeHtml(it.name)}</h3>
+            ${it.notes ? `<div class="muted mini" style="margin-top:6px">${escapeHtml(it.notes)}</div>` : ``}
+            <div class="row" style="margin-top:12px">
+              ${linkBtn}
             </div>
-            <div style="text-align:right">
-              <span class="tag">${escapeHtml(it.category)}</span>
-            </div>
-          </div>
-
-          <div class="row" style="margin-top:12px">
-            <button class="btn ghost" type="button" data-preview>Preview</button>
-            ${amazon ? `<a class="btn primary" href="${escapeHtml(amazon)}" target="_blank" rel="noopener">Amazon search</a>` : ``}
-          </div>
-
-          <div class="muted" style="margin-top:10px;font-size:.92rem">
-            ${it.bytes ? `${Math.round(it.bytes/1024)} KB` : ""} ${it.path ? `• <span class="mono">${escapeHtml(it.path)}</span>` : ""}
           </div>
         `;
 
-        const imgEl = el.querySelector("img");
-        imgEl.src = img || "";
-        imgEl.loading = "lazy";
-        imgEl.decoding = "async";
-        imgEl.onerror = () => {
-          imgEl.style.display = "none";
-        };
+        const imgEl = card.querySelector("img");
+        if (imgEl) imgEl.onerror = ()=>{ imgEl.style.display = "none"; };
 
-        el.querySelector("[data-preview]").addEventListener("click", () => {
-          if (img) openModal(it.title, img);
-        });
-
-        grid.appendChild(el);
+        grid.appendChild(card);
       }
     }
 
-    // Wire inputs
-    qs("#q").addEventListener("input", applyFilters);
-    qs("#cat").addEventListener("change", applyFilters);
-    qs("#sort").addEventListener("change", applyFilters);
-    qs("#clearBtn").addEventListener("click", () => {
-      qs("#q").value = "";
-      qs("#cat").value = "";
-      qs("#sort").value = "title_asc";
-      applyFilters();
-    });
+    let list = [];
 
-    // Load JSON
     try {
-      showStatus("Loading gear catalog…");
-      const { url, data } = await loadFirstWorkingJson(CANDIDATE_JSON);
+      const raw = await fetchJsonStrict(DATA_URL);
+      const arr = Array.isArray(raw) ? raw : (Array.isArray(raw.items) ? raw.items : []);
+      list = arr.map(normalizeItem);
 
-      all = data.map(normalizeItem).filter(x => x.img && x.title);
-      buildCategoryOptions(all);
+      render(list);
 
-      hideStatus();
-      applyFilters();
+      qs("#q").addEventListener("input", ()=>render(list));
+      qs("#clearBtn").addEventListener("click", ()=>{
+        qs("#q").value = "";
+        render(list);
+      });
 
-      showStatus(`Loaded ${all.length} items from ${url}.`, "ok");
-      setTimeout(hideStatus, 1500);
     } catch (e) {
-      showStatus(`Gear catalog failed to load: ${e.message || e}`, "bad");
-      qs("#grid").innerHTML = `<div class="notice bad">Upload a valid systems catalog JSON to <span class="mono">/data/systems_catalog_r2_corrected.json</span> (or /data/systems_catalog.json).</div>`;
+      qs("#loadErr").style.display = "block";
+      qs("#loadErr").textContent = `Failed to load gear JSON: ${e.message || e}`;
     }
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260309v"></script>
+  <script type="module" src="/assets/chrome.js?v=20260311e"></script>
 </body>
 </html>
