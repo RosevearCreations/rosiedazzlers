@@ -1,14 +1,14 @@
 <!-- /admin.html
      REPLACE ENTIRE FILE
 
-     Admin dashboard:
-      - Loads bookings (next 30 days or latest 100) via /api/admin/bookings
-      - Blocks/unblocks dates + AM/PM slots via /api/admin/blocks
-      - Deep-links to:
-          /admin-booking.html?bid=...
-          /admin-upload.html?bid=...
-          /admin-progress.html?bid=...
-          /admin-assign.html?bid=...
+     Purpose:
+     - Modern Admin landing page
+     - Links to: bookings list, blocks, gift admin, progress, upload, assign
+     - Uses shared nav/footer via /assets/chrome.js
+
+     Notes:
+     - You already have most API endpoints built.
+     - This page is just a clean "hub" so you stop hunting URLs.
 -->
 <!doctype html>
 <html lang="en">
@@ -16,25 +16,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin | Rosie Dazzlers</title>
-  <meta name="description" content="Rosie Dazzlers admin dashboard." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260310a" />
+  <meta name="description" content="Admin dashboard for Rosie Dazzlers." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260311l" />
   <style>
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width:1100px){ .grid3{grid-template-columns:repeat(2,1fr)} }
+    @media (max-width:980px){ .grid3{grid-template-columns:1fr} }
     .muted{color:rgba(234,242,255,.62)}
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.10);vertical-align:top}
-    th{color:rgba(234,242,255,.70);font-weight:600;text-align:left}
-    .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
-    .pill.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
-    .pill.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
-    .pill.bad{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.10)}
-    .actions{display:flex;gap:8px;flex-wrap:wrap}
-    .smallBtn{padding:8px 10px;font-size:.92rem}
-    input[type="date"]{min-width:190px}
-    .stickyTop{position:sticky;top:0;background:rgba(10,14,24,.96);backdrop-filter:blur(10px);z-index:10;border-radius:16px}
+    .card{cursor:default}
+    .card h3{margin:0}
+    .card .muted{margin-top:8px;font-size:.95rem}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
   </style>
 </head>
 
@@ -52,118 +44,71 @@
   </div>
 
   <div class="container">
-
-    <div class="panel stickyTop">
-      <h1 style="margin:0 0 6px">Admin Dashboard</h1>
-      <p class="kicker" style="margin:0">Bookings, slot blocking, and quick tools.</p>
+    <div class="panel">
+      <h1 style="margin:0 0 6px">Admin</h1>
+      <p class="kicker" style="margin:0">Bookings, schedule blocks, progress photos, and gift certificates.</p>
 
       <div class="hr"></div>
 
       <div class="row">
-        <label style="display:flex;flex-direction:column;gap:6px;min-width:260px">
-          <span class="muted">Admin password</span>
-          <input id="pw" type="password" placeholder="Enter admin password…" />
-        </label>
-
-        <label style="display:flex;flex-direction:column;gap:6px;min-width:220px">
-          <span class="muted">Booking list</span>
-          <select id="mode">
-            <option value="next30" selected>Next 30 days</option>
-            <option value="latest100">Latest 100</option>
-          </select>
-        </label>
-
-        <div class="row" style="align-items:flex-end">
-          <button class="btn primary" id="loadBtn" type="button">Load bookings</button>
-          <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
-        </div>
-
-        <div class="row" style="align-items:flex-end">
-          <a class="btn ghost" href="/admin-booking.html">Booking controls</a>
-          <a class="btn ghost" href="/admin-upload.html">Upload photos</a>
-          <a class="btn ghost" href="/admin-progress.html">Post progress</a>
-          <a class="btn ghost" href="/admin-assign.html">Assign staff</a>
-        </div>
-      </div>
-
-      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
-    </div>
-
-    <div class="section grid2">
-      <!-- BLOCKS -->
-      <div class="panel">
-        <h2 style="margin-top:0">Block time</h2>
-        <div class="muted">Blocks affect availability + prevent booking checkout.</div>
-
-        <div class="hr"></div>
-
-        <div class="row">
-          <label style="display:flex;flex-direction:column;gap:6px">
-            <span class="muted">Date</span>
-            <input id="blockDate" type="date" />
-          </label>
-
-          <label style="display:flex;flex-direction:column;gap:6px;flex:1;min-width:240px">
-            <span class="muted">Reason (optional)</span>
-            <input id="blockReason" type="text" placeholder="Vacation / Admin day / Weather…" />
-          </label>
-        </div>
-
-        <div class="row" style="margin-top:10px">
-          <button class="btn ghost smallBtn" id="blockDayBtn" type="button">Block day</button>
-          <button class="btn ghost smallBtn" id="unblockDayBtn" type="button">Unblock day</button>
-          <button class="btn ghost smallBtn" id="blockAmBtn" type="button">Block AM</button>
-          <button class="btn ghost smallBtn" id="unblockAmBtn" type="button">Unblock AM</button>
-          <button class="btn ghost smallBtn" id="blockPmBtn" type="button">Block PM</button>
-          <button class="btn ghost smallBtn" id="unblockPmBtn" type="button">Unblock PM</button>
-          <button class="btn primary smallBtn" id="checkAvailBtn" type="button">Check availability</button>
-        </div>
-
-        <div id="blockOut" class="notice" style="display:none;margin-top:12px"></div>
-      </div>
-
-      <!-- HELP -->
-      <div class="panel">
-        <h2 style="margin-top:0">How to use</h2>
-        <ol class="muted">
-          <li>Enter admin password, click <strong>Save password</strong>.</li>
-          <li>Click <strong>Load bookings</strong>.</li>
-          <li>Use actions to control each booking (status, progress, uploads).</li>
-          <li>Use blocks to keep days/slots unavailable.</li>
-        </ol>
-
-        <div class="notice warn">
-          Password is stored in your browser (localStorage) on this device only.
-        </div>
+        <a class="btn primary" href="/admin-booking">Booking controls</a>
+        <a class="btn ghost" href="/admin-progress">Post progress</a>
+        <a class="btn ghost" href="/admin-upload">Upload photos</a>
+        <a class="btn ghost" href="/admin-assign">Assign staff</a>
       </div>
     </div>
 
-    <!-- BOOKINGS -->
     <div class="section">
-      <div class="panel">
-        <div class="row" style="justify-content:space-between">
-          <h2 style="margin:0">Bookings</h2>
-          <div class="muted">Tip: click “Controls” to generate/copy customer progress links.</div>
+      <div class="grid3">
+        <div class="panel card">
+          <h3>Bookings</h3>
+          <div class="muted">View upcoming bookings, confirm status, and open each booking’s tools.</div>
+          <div class="row" style="margin-top:12px">
+            <a class="btn primary" href="/admin-booking">Open controls</a>
+          </div>
         </div>
 
-        <div class="hr"></div>
+        <div class="panel card">
+          <h3>Schedule blocks</h3>
+          <div class="muted">Block AM/PM slots (vacation, travel, admin work) and block full days.</div>
+          <div class="row" style="margin-top:12px">
+            <a class="btn primary" href="/admin-blocks.html">Open blocks</a>
+          </div>
+        </div>
 
-        <div style="overflow:auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Date / Slot</th>
-                <th>Customer</th>
-                <th>Package</th>
-                <th>Status</th>
-                <th>Staff</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="rows">
-              <tr><td colspan="6" class="muted">Load bookings to begin.</td></tr>
-            </tbody>
-          </table>
+        <div class="panel card">
+          <h3>Progress feed</h3>
+          <div class="muted">Upload photos + notes during a job so customers can follow along.</div>
+          <div class="row" style="margin-top:12px">
+            <a class="btn primary" href="/admin-progress">Post updates</a>
+            <a class="btn ghost" href="/admin-upload">Upload</a>
+          </div>
+        </div>
+
+        <div class="panel card">
+          <h3>Gift certificates</h3>
+          <div class="muted">Service gifts + dollar gifts. 1 year expiry. No refunds.</div>
+          <div class="row" style="margin-top:12px">
+            <a class="btn primary" href="/gifts">Customer page</a>
+            <a class="btn ghost" href="/admin-gifts.html">Gift admin</a>
+          </div>
+        </div>
+
+        <div class="panel card">
+          <h3>Discount codes</h3>
+          <div class="muted">Create promo codes (percent or dollar). (Next feature to implement.)</div>
+          <div class="row" style="margin-top:12px">
+            <a class="btn ghost" href="/admin-promos.html">Promo admin</a>
+          </div>
+        </div>
+
+        <div class="panel card">
+          <h3>Health check</h3>
+          <div class="muted">Quick test for API + Stripe mode.</div>
+          <div class="row" style="margin-top:12px">
+            <a class="btn ghost" href="/api/health" target="_blank" rel="noopener">/api/health</a>
+            <a class="btn ghost" href="/api/debug/stripe_mode" target="_blank" rel="noopener">stripe_mode</a>
+          </div>
         </div>
       </div>
     </div>
@@ -171,226 +116,6 @@
     <div class="footer" data-footer></div>
   </div>
 
-  <script type="module">
-    const qs = (s) => document.querySelector(s);
-
-    function showStatus(msg, kind=""){
-      const el = qs("#status");
-      el.style.display = "block";
-      el.className = "notice " + (kind || "");
-      el.textContent = msg;
-    }
-    function hideStatus(){ qs("#status").style.display = "none"; }
-
-    function showBlock(msg, kind=""){
-      const el = qs("#blockOut");
-      el.style.display = "block";
-      el.className = "notice " + (kind || "");
-      el.textContent = msg;
-    }
-
-    function pill(text, kind=""){
-      return `<span class="pill ${kind}">${escapeHtml(text)}</span>`;
-    }
-
-    function escapeHtml(s){
-      return String(s || "")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;")
-        .replaceAll(">","&gt;").replaceAll('"',"&quot;")
-        .replaceAll("'","&#39;");
-    }
-
-    function fmtDateSlot(b){
-      return `${escapeHtml(b.service_date || "")} • ${escapeHtml(b.start_slot || "")} (${escapeHtml(String(b.duration_slots || ""))})`;
-    }
-
-    function prettyPkg(code){
-      const map = {
-        premium_wash: "Premium Wash",
-        basic_detail: "Basic Detail",
-        complete_detail: "Complete Detail",
-        interior_detail: "Interior Detail",
-        exterior_detail: "Exterior Detail",
-      };
-      return map[code] || code || "";
-    }
-
-    function statusPill(b){
-      const s = b.status || "";
-      const js = b.job_status || "";
-      const pieces = [];
-      if (s) pieces.push(s);
-      if (js) pieces.push(js);
-
-      const text = pieces.join(" / ") || "—";
-      let kind = "";
-      if (js === "completed") kind = "ok";
-      if (js === "cancelled") kind = "bad";
-      if (s === "pending") kind = "warn";
-      return pill(text, kind);
-    }
-
-    function getPw(){ return (qs("#pw").value || "").trim(); }
-    function setPw(v){ qs("#pw").value = v || ""; }
-
-    // load saved pw
-    try {
-      const saved = localStorage.getItem("rosie_admin_pw") || "";
-      if (saved) setPw(saved);
-    } catch {}
-
-    qs("#savePwBtn").addEventListener("click", () => {
-      const pw = getPw();
-      if (!pw) return showStatus("Enter password first.", "bad");
-      try {
-        localStorage.setItem("rosie_admin_pw", pw);
-        showStatus("Saved password on this device.", "ok");
-        setTimeout(hideStatus, 1200);
-      } catch {
-        showStatus("Could not save password (browser storage blocked).", "bad");
-      }
-    });
-
-    async function postJson(url, payload){
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "content-type":"application/json" },
-        body: JSON.stringify(payload),
-      });
-      const out = await res.json().catch(()=>null);
-      return { ok: res.ok, status: res.status, out };
-    }
-
-    async function loadBookings(){
-      const pw = getPw();
-      if (!pw) return showStatus("Missing admin password.", "bad");
-
-      const mode = qs("#mode").value;
-
-      showStatus("Loading bookings…");
-      const r = await postJson("/api/admin/bookings", { admin_password: pw, mode });
-
-      if (!r.ok || !r.out?.ok) {
-        return showStatus(r.out?.error ? `Error: ${r.out.error}` : "Error loading bookings.", "bad");
-      }
-
-      renderRows(r.out.rows || []);
-      showStatus(`Loaded ${r.out.rows?.length || 0} bookings.`, "ok");
-      setTimeout(hideStatus, 1200);
-    }
-
-    function renderRows(rows){
-      const tb = qs("#rows");
-      tb.innerHTML = "";
-
-      if (!rows.length) {
-        tb.innerHTML = `<tr><td colspan="6" class="muted">No bookings found.</td></tr>`;
-        return;
-      }
-
-      for (const b of rows) {
-        const bid = b.id;
-        const tr = document.createElement("tr");
-
-        const staff = (b.assigned_staff_name || "—");
-
-        tr.innerHTML = `
-          <td>
-            <div><strong>${fmtDateSlot(b)}</strong></div>
-            <div class="muted mono" style="margin-top:6px">${escapeHtml(b.id || "")}</div>
-          </td>
-
-          <td>
-            <div><strong>${escapeHtml(b.customer_name || "")}</strong></div>
-            <div class="muted">${escapeHtml(b.customer_email || "")}</div>
-            ${b.customer_phone ? `<div class="muted">${escapeHtml(b.customer_phone)}</div>` : ``}
-          </td>
-
-          <td>
-            <div><strong>${escapeHtml(prettyPkg(b.package_code))}</strong></div>
-            <div class="muted">Size: ${escapeHtml(b.vehicle_size || "")}</div>
-            ${b.vehicle?.year || b.vehicle?.make || b.vehicle?.model
-              ? `<div class="muted">${escapeHtml(`${b.vehicle?.year || ""} ${b.vehicle?.make || ""} ${b.vehicle?.model || ""}`.trim())}</div>`
-              : ``}
-          </td>
-
-          <td>${statusPill(b)}</td>
-
-          <td>${escapeHtml(staff)}</td>
-
-          <td>
-            <div class="actions">
-              <a class="btn ghost smallBtn" href="/admin-booking.html?bid=${encodeURIComponent(bid)}">Controls</a>
-              <a class="btn ghost smallBtn" href="/admin-upload.html?bid=${encodeURIComponent(bid)}">Upload</a>
-              <a class="btn ghost smallBtn" href="/admin-progress.html?bid=${encodeURIComponent(bid)}">Progress</a>
-              <a class="btn ghost smallBtn" href="/admin-assign.html?bid=${encodeURIComponent(bid)}">Assign</a>
-            </div>
-          </td>
-        `;
-
-        tb.appendChild(tr);
-      }
-    }
-
-    qs("#loadBtn").addEventListener("click", loadBookings);
-
-    // Blocking actions
-    function blockPayload(){
-      const pw = getPw();
-      const d = (qs("#blockDate").value || "").trim();
-      const reason = (qs("#blockReason").value || "").trim() || null;
-      return { pw, d, reason };
-    }
-
-    async function doBlock(action, slot=null){
-      const { pw, d, reason } = blockPayload();
-      if (!pw) return showBlock("Missing admin password.", "bad");
-      if (!d) return showBlock("Pick a date first.", "bad");
-
-      showBlock("Saving…");
-      const payload = {
-        admin_password: pw,
-        action,
-        service_date: d,
-        reason,
-      };
-      if (slot) payload.slot = slot;
-
-      const r = await postJson("/api/admin/blocks", payload);
-      if (!r.ok || !r.out?.ok) {
-        return showBlock(r.out?.error ? `Error: ${r.out.error}` : "Block update failed.", "bad");
-      }
-      showBlock("Saved.", "ok");
-    }
-
-    qs("#blockDayBtn").addEventListener("click", ()=>doBlock("date_block_add"));
-    qs("#unblockDayBtn").addEventListener("click", ()=>doBlock("date_block_remove"));
-    qs("#blockAmBtn").addEventListener("click", ()=>doBlock("slot_block_add","AM"));
-    qs("#unblockAmBtn").addEventListener("click", ()=>doBlock("slot_block_remove","AM"));
-    qs("#blockPmBtn").addEventListener("click", ()=>doBlock("slot_block_add","PM"));
-    qs("#unblockPmBtn").addEventListener("click", ()=>doBlock("slot_block_remove","PM"));
-
-    qs("#checkAvailBtn").addEventListener("click", async () => {
-      const d = (qs("#blockDate").value || "").trim();
-      if (!d) return showBlock("Pick a date first.", "bad");
-      showBlock("Checking…");
-
-      const res = await fetch(`/api/availability?date=${encodeURIComponent(d)}`, { cache:"no-store" });
-      const out = await res.json().catch(()=>null);
-
-      if (!res.ok || !out?.ok) {
-        return showBlock(out?.error ? `Error: ${out.error}` : "Availability check failed.", "bad");
-      }
-
-      if (out.blocked) return showBlock(`Date blocked: ${out.reason || "Blocked"}`, "bad");
-
-      showBlock(`Availability — AM: ${out.AM ? "Open" : "Blocked/Booked"} • PM: ${out.PM ? "Open" : "Blocked/Booked"} • Blocked slots: ${(out.blocked_slots||[]).join(", ") || "none"}`, "ok");
-    });
-
-    // default date = today
-    qs("#blockDate").value = new Date().toISOString().slice(0,10);
-  </script>
-
-  <script type="module" src="/assets/chrome.js?v=20260310a"></script>
+  <script type="module" src="/assets/chrome.js?v=20260311l"></script>
 </body>
 </html>
