@@ -1,15 +1,14 @@
 /* /assets/chrome.js
    REPLACE ENTIRE FILE
 
-   What this does:
-   - Builds a clean, consistent nav across ALL pages (including Gifts + About + Contact)
-   - Sets logo/banner/reviews images anywhere you used data-logo / data-banner / data-reviews
-   - Renders the footer into any element with [data-footer]
-   - Handles “return from Stripe” messages on the home page (or any page that has [data-checkout-status])
+   Fixes:
+   - Footer now includes a logo image again
+   - Menu toggle no longer "jumps" you; it toggles nav visibility cleanly
+   - Nav links include Gifts + About + Contact (public) and Admin set on admin pages
+   - Brand images: logo/banner/reviews are set if blank
 */
 
 const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
-const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages";
 
 const SOCIALS = [
   { label: "TikTok", href: "https://www.tiktok.com/@rosiedazzler" },
@@ -35,10 +34,10 @@ const NAV_PUBLIC = [
 
 const NAV_ADMIN = [
   { href: "/admin", label: "Admin" },
-  { href: "/admin-booking.html", label: "Controls" },
-  { href: "/admin-upload.html", label: "Upload" },
-  { href: "/admin-progress.html", label: "Progress" },
-  { href: "/admin-assign.html", label: "Assign" },
+  { href: "/admin-booking", label: "Controls" },
+  { href: "/admin-upload", label: "Upload" },
+  { href: "/admin-progress", label: "Progress" },
+  { href: "/admin-assign", label: "Assign" },
 ];
 
 function qs(sel) {
@@ -52,62 +51,98 @@ function setImgIfEmpty(selector, url) {
   if (!current) el.setAttribute("src", url);
 }
 
+function normalizePath(p) {
+  if (!p) return "/";
+  if (p === "/index.html") return "/";
+  if (p.endsWith("/") && p !== "/") return p.slice(0, -1);
+  return p;
+}
+
+function escapeHtml(s) {
+  return String(s || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 function buildNav() {
   const navLinks = qs("#navLinks");
   if (!navLinks) return;
 
-  const path = location.pathname || "/";
+  const path = normalizePath(location.pathname || "/");
   const isAdmin = path.startsWith("/admin");
 
   const links = isAdmin ? NAV_ADMIN : NAV_PUBLIC;
 
   navLinks.innerHTML = links
     .map((l) => {
-      const active = normalizePath(path) === normalizePath(l.href);
+      const active = normalizePath(l.href) === path;
       const cls = active ? "active" : "";
       const aria = active ? 'aria-current="page"' : "";
       return `<a class="${cls}" ${aria} href="${l.href}">${escapeHtml(l.label)}</a>`;
     })
     .join("");
 
-  // Mobile toggle
+  // Mobile toggle behavior
   const toggle = qs("#navToggle");
-  if (toggle) {
-    toggle.addEventListener("click", () => {
-      const expanded = toggle.getAttribute("aria-expanded") === "true";
-      toggle.setAttribute("aria-expanded", expanded ? "false" : "true");
-      navLinks.style.display = expanded ? "" : "flex";
+  if (!toggle) return;
+
+  // Ensure the element starts hidden on mobile via CSS, but we manage "open" here
+  let open = false;
+
+  toggle.addEventListener("click", (e) => {
+    e.preventDefault();
+    open = !open;
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+
+    if (open) {
+      navLinks.style.display = "flex";
       navLinks.style.flexDirection = "column";
+      navLinks.style.alignItems = "stretch";
       navLinks.style.gap = "10px";
       navLinks.style.padding = "10px 0";
-    });
-  }
+    } else {
+      navLinks.style.display = "";
+      navLinks.style.flexDirection = "";
+      navLinks.style.alignItems = "";
+      navLinks.style.gap = "";
+      navLinks.style.padding = "";
+    }
+  });
 }
 
 function setBrandImages() {
-  // Prefer your crisp 3D logo + big banner + reviews
   setImgIfEmpty("[data-logo]", `${BRAND_BASE}/RosieDazzlerLogoOriginal3D.png`);
   setImgIfEmpty("[data-banner]", `${BRAND_BASE}/RosieDazzlersBanner.png`);
   setImgIfEmpty("[data-reviews]", `${BRAND_BASE}/RosieReviews.png`);
-
-  // If you later add a main background hero image, you can set it here too.
 }
 
 function setFooter() {
   const foot = qs("[data-footer]");
   if (!foot) return;
 
+  // footer logo choice: use your crisp 3D logo (or switch to logolayer3.png if preferred)
+  const footerLogo = `${BRAND_BASE}/RosieDazzlerLogoOriginal3D.png`;
+
   foot.innerHTML = `
     <div class="panel" style="margin-top:22px">
       <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px">
         <div>
-          <strong>Rosie Dazzlers Mobile Auto Detailing</strong>
-          <div style="margin-top:8px;opacity:.85">
+          <div style="display:flex;gap:10px;align-items:center">
+            <img src="${footerLogo}" alt="Rosie Dazzlers logo" style="width:44px;height:44px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.06);object-fit:contain" />
+            <strong>Rosie Dazzlers Mobile Auto Detailing</strong>
+          </div>
+
+          <div style="margin-top:10px;opacity:.85">
             Serving <strong>Norfolk</strong> & <strong>Oxford</strong> Counties (Ontario)
           </div>
+
           <div style="margin-top:8px;opacity:.85">
             Email: <a href="mailto:info@rosiedazzlers.ca">info@rosiedazzlers.ca</a>
           </div>
+
           <div style="margin-top:8px;opacity:.75;font-size:.95rem">
             Driveway required • customer provides power + water (or additional charges) • customer accepts local bylaw responsibility for runoff/chemicals
           </div>
@@ -116,7 +151,7 @@ function setFooter() {
         <div>
           <strong>Quick links</strong>
           <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
-            ${NAV_PUBLIC.slice(0, 6).map(l => `<a href="${l.href}">${escapeHtml(l.label)}</a>`).join("")}
+            ${NAV_PUBLIC.slice(0, 7).map(l => `<a href="${l.href}">${escapeHtml(l.label)}</a>`).join("")}
           </div>
         </div>
 
@@ -147,7 +182,6 @@ function handleCheckoutReturn() {
 
   const p = new URLSearchParams(location.search);
 
-  // Booking deposit return
   if (p.get("checkout") === "success") {
     box.style.display = "block";
     box.className = "notice ok";
@@ -161,7 +195,6 @@ function handleCheckoutReturn() {
     return;
   }
 
-  // Gift purchase return
   if (p.get("gift") === "success") {
     box.style.display = "block";
     box.className = "notice ok";
@@ -178,28 +211,10 @@ function handleCheckoutReturn() {
   box.style.display = "none";
 }
 
-function normalizePath(p) {
-  // Normalize “/index.html” to “/” and remove trailing slash (except root)
-  if (!p) return "/";
-  if (p === "/index.html") return "/";
-  if (p.endsWith("/") && p !== "/") return p.slice(0, -1);
-  return p;
-}
-
-function escapeHtml(s) {
-  return String(s || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
-
-// Run on load
+// Run
 buildNav();
 setBrandImages();
 setFooter();
 handleCheckoutReturn();
 
-// Export (optional)
 export { buildNav, setBrandImages, setFooter, handleCheckoutReturn };
