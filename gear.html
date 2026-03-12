@@ -1,7 +1,11 @@
 <!-- /gear.html
      REPLACE ENTIRE FILE
 
-     Uses the JSON that actually exists in /data:
+     Fix:
+     - If amazon_url is missing in systems_catalog.json,
+       generate an Amazon search link automatically from the item name.
+
+     Data file:
        /data/systems_catalog.json
 -->
 <!doctype html>
@@ -11,7 +15,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Gear | Rosie Dazzlers</title>
   <meta name="description" content="The tools, machines, and gear we use for mobile auto detailing." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260311g" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260311h" />
   <style>
     .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
     @media (max-width:1100px){ .grid3{grid-template-columns:repeat(2,1fr)} }
@@ -27,6 +31,7 @@
       background:rgba(255,255,255,.04);
     }
     .mini{font-size:.92rem}
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
   </style>
 </head>
 
@@ -70,8 +75,8 @@
   </div>
 
   <script type="module">
-    // Correct deployed filename:
-    const DATA_URL = "/data/systems_catalog.json?v=20260311g";
+    const DATA_URL = "/data/systems_catalog.json?v=20260311h";
+    const AMAZON_CA_SEARCH = "https://www.amazon.ca/s?k=";
 
     const qs = (s)=>document.querySelector(s);
 
@@ -92,17 +97,23 @@
     }
 
     function normalizeItem(x){
-      return {
-        name: x.name || x.title || x.item || x.filename || "Item",
-        image_url: x.image_url || x.image || x.r2_url || x.url || null,
-        amazon_url: x.amazon_url || x.amazon || x.link || null,
-        notes: x.notes || x.description || x.caption || "",
-      };
+      const name = x.name || x.title || x.item || x.filename || "Item";
+      const notes = x.notes || x.description || x.caption || "";
+      const image_url = x.image_url || x.image || x.r2_url || x.url || null;
+
+      const given = x.amazon_url || x.amazon || x.link || null;
+      const amazon_url = given && String(given).trim()
+        ? String(given).trim()
+        : (AMAZON_CA_SEARCH + encodeURIComponent(name));
+
+      const amazon_is_generated = !(given && String(given).trim());
+
+      return { name, notes, image_url, amazon_url, amazon_is_generated };
     }
 
     function matches(item, q){
       if (!q) return true;
-      const hay = `${item.name} ${item.notes} ${item.amazon_url||""}`.toLowerCase();
+      const hay = `${item.name} ${item.notes}`.toLowerCase();
       return hay.includes(q.toLowerCase());
     }
 
@@ -123,17 +134,22 @@
           ? `<img class="cardImg" alt="${escapeHtml(it.name)}" src="${escapeHtml(it.image_url)}" loading="lazy" decoding="async" />`
           : "";
 
-        const linkBtn = it.amazon_url
-          ? `<a class="btn primary" target="_blank" rel="noopener" href="${escapeHtml(it.amazon_url)}">Amazon link</a>`
-          : "";
+        const badge = it.amazon_is_generated
+          ? `<span class="tag">Amazon search</span>`
+          : `<span class="tag">Amazon link</span>`;
 
         card.innerHTML = `
           ${img}
           <div style="margin-top:${img ? "10px":"0"}">
-            <h3 style="margin:0">${escapeHtml(it.name)}</h3>
+            <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap">
+              <h3 style="margin:0">${escapeHtml(it.name)}</h3>
+              ${badge}
+            </div>
+
             ${it.notes ? `<div class="muted mini" style="margin-top:6px">${escapeHtml(it.notes)}</div>` : ``}
+
             <div class="row" style="margin-top:12px">
-              ${linkBtn}
+              <a class="btn primary" target="_blank" rel="noopener" href="${escapeHtml(it.amazon_url)}">View on Amazon</a>
             </div>
           </div>
         `;
@@ -145,14 +161,10 @@
       }
     }
 
-    let list = [];
-
     try {
       const raw = await fetchJsonStrict(DATA_URL);
-
-      // Accept either {items:[...]} or [...]
       const arr = Array.isArray(raw) ? raw : (Array.isArray(raw.items) ? raw.items : []);
-      list = arr.map(normalizeItem);
+      const list = arr.map(normalizeItem);
 
       render(list);
 
@@ -168,6 +180,6 @@
     }
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260311g"></script>
+  <script type="module" src="/assets/chrome.js?v=20260311h"></script>
 </body>
 </html>
