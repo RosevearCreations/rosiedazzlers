@@ -1,0 +1,254 @@
+<!-- /admin-blocks.html
+     REPLACE ENTIRE FILE
+
+     Purpose:
+     - Admin UI to block AM/PM slots (or full day) using slot_blocks and date_blocks
+     - Uses existing endpoints (expected):
+         POST /api/admin/block_slot   { admin_password, blocked_date, slot, reason }
+         POST /api/admin/unblock_slot { admin_password, blocked_date, slot }
+         POST /api/admin/block_date   { admin_password, blocked_date, reason }
+         POST /api/admin/unblock_date { admin_password, blocked_date }
+         GET  /api/availability?date=YYYY-MM-DD   (already exists)
+
+     If your endpoint names differ, tell me the filenames in /functions/api/admin and I’ll align them.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Blocks | Rosie Dazzlers</title>
+  <meta name="description" content="Block AM/PM slots or full days for Rosie Dazzlers scheduling." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260311m" />
+  <style>
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .muted{color:rgba(234,242,255,.62)}
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
+    .tag.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
+    .tag.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
+    .tag.bad{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.10)}
+    textarea{min-height:120px}
+    pre{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px}
+  </style>
+</head>
+
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers</strong>
+      </a>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
+      <div class="nav-links" id="navLinks"></div>
+      <a class="btn primary" href="/admin">Admin</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="panel">
+      <h1 style="margin:0 0 6px">Schedule Blocks</h1>
+      <p class="kicker" style="margin:0">Block AM/PM slots or full days for admin work, travel, or time off.</p>
+
+      <div class="hr"></div>
+
+      <div class="row">
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:260px">
+          <span class="muted">Admin password</span>
+          <input id="pw" type="password" placeholder="Enter admin password…" />
+        </label>
+
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:240px">
+          <span class="muted">Date</span>
+          <input id="d" type="date" />
+        </label>
+
+        <div class="row" style="align-items:flex-end">
+          <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
+          <a class="btn ghost" href="/admin">Back</a>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:10px">
+        <div>
+          <label for="reason">Reason (optional)</label>
+          <textarea id="reason" placeholder="Vacation / travel / admin day / weather etc."></textarea>
+        </div>
+
+        <div>
+          <div class="muted mini" style="margin-bottom:6px">Current availability</div>
+          <div id="availBox" class="notice" style="display:none"></div>
+          <div class="muted mini" style="margin-top:10px">
+            Tip: Use “Full day block” to block AM+PM and prevent full-day bookings.
+          </div>
+        </div>
+      </div>
+
+      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
+    </div>
+
+    <div class="section grid2">
+      <div class="panel">
+        <h2 style="margin-top:0">Block / unblock day</h2>
+        <div class="row">
+          <button class="btn primary" id="blockDayBtn" type="button">Full day block</button>
+          <button class="btn ghost" id="unblockDayBtn" type="button">Remove full day block</button>
+        </div>
+        <div class="muted mini" style="margin-top:10px">
+          Full day blocks are stored in <span class="mono">date_blocks</span>.
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-top:0">Block / unblock slots</h2>
+        <div class="row">
+          <button class="btn primary" id="blockAMBtn" type="button">Block AM</button>
+          <button class="btn primary" id="blockPMBtn" type="button">Block PM</button>
+          <button class="btn ghost" id="unblockAMBtn" type="button">Unblock AM</button>
+          <button class="btn ghost" id="unblockPMBtn" type="button">Unblock PM</button>
+        </div>
+        <div class="muted mini" style="margin-top:10px">
+          Slot blocks are stored in <span class="mono">slot_blocks</span>.
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="panel">
+        <h2 style="margin-top:0">Last response</h2>
+        <pre id="raw" class="mono">{}</pre>
+      </div>
+    </div>
+
+    <div class="footer" data-footer></div>
+  </div>
+
+  <script type="module">
+    const qs = (s)=>document.querySelector(s);
+
+    function showStatus(msg, kind=""){
+      const el = qs("#status");
+      el.style.display = "block";
+      el.className = "notice " + (kind || "");
+      el.textContent = msg;
+    }
+    function hideStatus(){ qs("#status").style.display = "none"; }
+
+    function getPw(){ return (qs("#pw").value || "").trim(); }
+    function getDate(){ return (qs("#d").value || "").trim(); }
+    function getReason(){ return (qs("#reason").value || "").trim() || null; }
+
+    async function postJson(url, payload){
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "content-type":"application/json" },
+        body: JSON.stringify(payload),
+      });
+      const out = await res.json().catch(()=>null);
+      return { ok: res.ok, status: res.status, out };
+    }
+
+    // Save PW
+    try {
+      const saved = localStorage.getItem("rosie_admin_pw") || "";
+      if (saved) qs("#pw").value = saved;
+    } catch {}
+
+    qs("#savePwBtn").addEventListener("click", () => {
+      const pw = getPw();
+      if (!pw) return showStatus("Enter password first.", "bad");
+      try {
+        localStorage.setItem("rosie_admin_pw", pw);
+        showStatus("Saved password on this device.", "ok");
+        setTimeout(hideStatus, 1200);
+      } catch {
+        showStatus("Could not save password.", "bad");
+      }
+    });
+
+    // Default date = today
+    qs("#d").value = new Date().toISOString().slice(0,10);
+
+    async function refreshAvailability(){
+      const date = getDate();
+      if (!date) return;
+      const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache:"no-store" });
+      const out = await res.json().catch(()=>null);
+
+      const box = qs("#availBox");
+      box.style.display = "block";
+
+      if (!res.ok || !out?.ok){
+        box.className = "notice bad";
+        box.textContent = out?.error ? `Availability error: ${out.error}` : "Availability error.";
+        return;
+      }
+
+      if (out.blocked){
+        box.className = "notice bad";
+        box.textContent = `FULL DAY BLOCKED: ${out.reason || "Blocked"}`;
+        return;
+      }
+
+      box.className = "notice ok";
+      box.textContent = `AM: ${out.AM ? "Open" : "Blocked"} • PM: ${out.PM ? "Open" : "Blocked"}`;
+    }
+
+    qs("#d").addEventListener("change", refreshAvailability);
+    refreshAvailability();
+
+    // Actions
+    async function act(url, payload){
+      hideStatus();
+      const r = await postJson(url, payload);
+      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
+
+      if (!r.ok || !r.out?.ok){
+        showStatus(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
+      } else {
+        showStatus("Done.", "ok");
+      }
+      await refreshAvailability();
+    }
+
+    // Full day blocks
+    qs("#blockDayBtn").addEventListener("click", async ()=>{
+      const pw = getPw(), d = getDate();
+      if (!pw || !d) return showStatus("Missing password or date.", "bad");
+      await act("/api/admin/block_date", { admin_password: pw, blocked_date: d, reason: getReason() });
+    });
+    qs("#unblockDayBtn").addEventListener("click", async ()=>{
+      const pw = getPw(), d = getDate();
+      if (!pw || !d) return showStatus("Missing password or date.", "bad");
+      await act("/api/admin/unblock_date", { admin_password: pw, blocked_date: d });
+    });
+
+    // Slot blocks
+    qs("#blockAMBtn").addEventListener("click", async ()=>{
+      const pw = getPw(), d = getDate();
+      if (!pw || !d) return showStatus("Missing password or date.", "bad");
+      await act("/api/admin/block_slot", { admin_password: pw, blocked_date: d, slot: "AM", reason: getReason() });
+    });
+    qs("#blockPMBtn").addEventListener("click", async ()=>{
+      const pw = getPw(), d = getDate();
+      if (!pw || !d) return showStatus("Missing password or date.", "bad");
+      await act("/api/admin/block_slot", { admin_password: pw, blocked_date: d, slot: "PM", reason: getReason() });
+    });
+    qs("#unblockAMBtn").addEventListener("click", async ()=>{
+      const pw = getPw(), d = getDate();
+      if (!pw || !d) return showStatus("Missing password or date.", "bad");
+      await act("/api/admin/unblock_slot", { admin_password: pw, blocked_date: d, slot: "AM" });
+    });
+    qs("#unblockPMBtn").addEventListener("click", async ()=>{
+      const pw = getPw(), d = getDate();
+      if (!pw || !d) return showStatus("Missing password or date.", "bad");
+      await act("/api/admin/unblock_slot", { admin_password: pw, blocked_date: d, slot: "PM" });
+    });
+  </script>
+
+  <script type="module" src="/assets/chrome.js?v=20260311m"></script>
+</body>
+</html>
