@@ -1,0 +1,33 @@
+# /_redirects
+# CREATE OR REPLACE THIS FILE IN THE REPO ROOT (same level as index.html)
+# Then commit + push to redeploy.
+
+# --- Never rewrite these (they must return real files/functions) ---
+/assets/*   /assets/:splat   200
+/data/*     /data/:splat     200
+/api/*      /api/:splat      200
+
+# --- Pretty URLs (no .html in the address bar) ---
+/about              /about.html              200
+/services           /services.html           200
+/pricing            /pricing.html            200
+/gear               /gear.html               200
+/consumables         /consumables.html        200
+/book               /book.html               200
+/gifts              /gifts.html              200
+/contact            /contact.html            200
+/privacy            /privacy.html            200
+/terms              /terms.html              200
+/waiver             /waiver.html             200
+
+/admin              /admin.html              200
+/admin-booking       /admin-booking.html      200
+/admin-upload        /admin-upload.html       200
+/admin-progress      /admin-progress.html     200
+/admin-assign        /admin-assign.html       200
+
+/progress           /progress.html           200
+/complete           /complete.html           200
+
+# --- Fallback (optional, keeps unknown routes from 404ing) ---
+/*                  /index.html              200
