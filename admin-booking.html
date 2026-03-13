@@ -1,37 +1,38 @@
 <!-- /admin-booking.html
      REPLACE ENTIRE FILE
 
-     Admin booking controls:
-      - Loads a booking row by ID (from ?bid=... or typed)
-      - Uses /api/admin/bookings (next30 + latest100) to find the booking
-      - Updates booking via /api/admin/booking_update:
-          set_job_status, set_progress_enabled, regen_progress_token
-      - Shows/copies customer links:
-          /progress?token=...
-          /complete?token=...
+     Purpose:
+     - Admin view of upcoming bookings + status updates
+     - Calls: POST /api/admin/bookings (the endpoint you just added)
+     - Also shows availability for a selected day (GET /api/availability?date=...)
+
+     Requires:
+     - ADMIN_PASSWORD set in Cloudflare Pages env vars
 -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin Booking Controls | Rosie Dazzlers</title>
+  <title>Admin Bookings | Rosie Dazzlers</title>
   <meta name="description" content="Admin booking controls for Rosie Dazzlers." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260310b" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260311n" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    @media (max-width:980px){ .grid2,.grid3{grid-template-columns:1fr} }
-
+    @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
     .muted{color:rgba(234,242,255,.62)}
-    .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
-    .pill.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
-    .pill.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
-    .pill.bad{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.10)}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.10);vertical-align:top}
+    th{color:rgba(234,242,255,.70);font-weight:600;text-align:left}
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
+    .tag.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
+    .tag.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
+    .tag.bad{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.10)}
+    .mini{font-size:.92rem}
     pre{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px}
-    a.inline{color:rgba(234,242,255,.90)}
+    .btn.small{padding:7px 10px}
   </style>
 </head>
 
@@ -51,7 +52,7 @@
   <div class="container">
     <div class="panel">
       <h1 style="margin:0 0 6px">Booking Controls</h1>
-      <p class="kicker" style="margin:0">Manage a booking, generate customer links, and update job status.</p>
+      <p class="kicker" style="margin:0">View and manage bookings (pending/confirmed/etc.).</p>
 
       <div class="hr"></div>
 
@@ -61,78 +62,85 @@
           <input id="pw" type="password" placeholder="Enter admin password…" />
         </label>
 
-        <label style="display:flex;flex-direction:column;gap:6px;min-width:420px;flex:1">
-          <span class="muted">Booking ID (uuid)</span>
-          <input id="bid" class="mono" type="text" placeholder="d751e9f0-717d-4ab6-a2be-dba309006b76" />
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:190px">
+          <span class="muted">From</span>
+          <input id="from" type="date" />
+        </label>
+
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:190px">
+          <span class="muted">To</span>
+          <input id="to" type="date" />
         </label>
 
         <div class="row" style="align-items:flex-end">
-          <button class="btn primary" id="loadBtn" type="button">Load booking</button>
           <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
-          <a class="btn ghost" href="/admin">Back to Admin</a>
+          <button class="btn primary" id="loadBtn" type="button">Load</button>
+          <a class="btn ghost" href="/admin">Back</a>
         </div>
+      </div>
+
+      <div class="row" style="margin-top:10px">
+        <label class="row" style="gap:8px">
+          <input id="st_pending" type="checkbox" checked />
+          <span class="muted">pending</span>
+        </label>
+        <label class="row" style="gap:8px">
+          <input id="st_confirmed" type="checkbox" checked />
+          <span class="muted">confirmed</span>
+        </label>
+        <label class="row" style="gap:8px">
+          <input id="st_cancelled" type="checkbox" />
+          <span class="muted">cancelled</span>
+        </label>
+        <label class="row" style="gap:8px">
+          <input id="st_completed" type="checkbox" />
+          <span class="muted">completed</span>
+        </label>
       </div>
 
       <div id="status" class="notice" style="display:none;margin-top:12px"></div>
     </div>
 
     <div class="section grid2">
-      <!-- LEFT: BOOKING DETAILS -->
       <div class="panel">
-        <h2 style="margin-top:0">Details</h2>
-        <div id="details" class="notice warn">Load a booking to see details.</div>
-
+        <h2 style="margin-top:0">Bookings</h2>
+        <div class="muted mini" id="count"></div>
         <div class="hr"></div>
-
-        <h2 style="margin-top:0">Customer Links</h2>
-        <div id="links" class="notice warn">Enable progress to generate links.</div>
-
-        <div class="row" style="margin-top:12px">
-          <button class="btn ghost" id="copyProgressBtn" type="button" disabled>Copy progress link</button>
-          <button class="btn ghost" id="copyCompleteBtn" type="button" disabled>Copy completion link</button>
-          <a class="btn ghost" id="openProgressBtn" href="#" target="_blank" rel="noopener" style="display:none">Open progress</a>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <a class="btn ghost" id="uploadBtn" href="#">Upload photos</a>
-          <a class="btn ghost" id="postProgressBtn" href="#">Post update</a>
-          <a class="btn ghost" id="assignBtn" href="#">Assign staff</a>
+        <div style="overflow:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Slot</th>
+                <th>Customer</th>
+                <th>Package</th>
+                <th>Vehicle</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="rows">
+              <tr><td colspan="7" class="muted">Load bookings…</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <!-- RIGHT: CONTROLS -->
       <div class="panel">
-        <h2 style="margin-top:0">Controls</h2>
-
-        <div class="grid2">
-          <div>
-            <label for="job_status">Job status</label>
-            <select id="job_status">
-              <option value="scheduled">scheduled</option>
-              <option value="in_progress">in_progress</option>
-              <option value="completed">completed</option>
-              <option value="cancelled">cancelled</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="progress_enabled">Progress enabled</label>
-            <select id="progress_enabled">
-              <option value="true">true</option>
-              <option value="false">false</option>
-            </select>
-          </div>
+        <h2 style="margin-top:0">Availability check</h2>
+        <div class="row">
+          <label style="display:flex;flex-direction:column;gap:6px;min-width:240px">
+            <span class="muted">Date</span>
+            <input id="availDate" type="date" />
+          </label>
+          <button class="btn ghost" id="availBtn" type="button">Check</button>
         </div>
 
-        <div class="row" style="margin-top:12px">
-          <button class="btn primary" id="saveStatusBtn" type="button" disabled>Save status</button>
-          <button class="btn primary" id="saveProgressBtn" type="button" disabled>Save progress setting</button>
-          <button class="btn ghost" id="regenTokenBtn" type="button" disabled>Regenerate token</button>
-        </div>
+        <div id="availBox" class="notice" style="display:none;margin-top:12px"></div>
 
         <div class="hr"></div>
 
-        <h2 style="margin-top:0">Raw booking JSON</h2>
+        <h2 style="margin-top:0">Raw</h2>
         <pre id="raw" class="mono">{}</pre>
       </div>
     </div>
@@ -141,42 +149,51 @@
   </div>
 
   <script type="module">
-    const qs = (s) => document.querySelector(s);
+    const qs = (s)=>document.querySelector(s);
 
-    function escapeHtml(s){
-      return String(s || "")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#39;");
-    }
-
-    function showStatus(msg, kind=""){
+    function show(msg, kind=""){
       const el = qs("#status");
       el.style.display = "block";
       el.className = "notice " + (kind || "");
       el.textContent = msg;
     }
-    function hideStatus(){ qs("#status").style.display = "none"; }
+    function hide(){ qs("#status").style.display = "none"; }
 
     function getPw(){ return (qs("#pw").value || "").trim(); }
-    function getBid(){ return (qs("#bid").value || "").trim(); }
-
-    function prettyPkg(code){
-      const map = {
-        premium_wash: "Premium Wash",
-        basic_detail: "Basic Detail",
-        complete_detail: "Complete Detail",
-        interior_detail: "Interior Detail",
-        exterior_detail: "Exterior Detail",
-      };
-      return map[code] || code || "";
+    function getStatuses(){
+      const st = [];
+      if (qs("#st_pending").checked) st.push("pending");
+      if (qs("#st_confirmed").checked) st.push("confirmed");
+      if (qs("#st_cancelled").checked) st.push("cancelled");
+      if (qs("#st_completed").checked) st.push("completed");
+      return st;
     }
 
-    function fmtMoneyCents(cents){
-      if (cents == null) return "—";
-      return new Intl.NumberFormat("en-CA", { style:"currency", currency:"CAD" }).format(Number(cents)/100);
-    }
+    // defaults
+    const today = new Date();
+    const ymd = (d)=> d.toISOString().slice(0,10);
+    qs("#from").value = ymd(today);
+    const to = new Date(today.getTime() + 1000*60*60*24*21);
+    qs("#to").value = ymd(to);
+    qs("#availDate").value = ymd(today);
+
+    // save pw
+    try {
+      const saved = localStorage.getItem("rosie_admin_pw") || "";
+      if (saved) qs("#pw").value = saved;
+    } catch {}
+
+    qs("#savePwBtn").addEventListener("click", () => {
+      const pw = getPw();
+      if (!pw) return show("Enter password first.", "bad");
+      try {
+        localStorage.setItem("rosie_admin_pw", pw);
+        show("Saved password on this device.", "ok");
+        setTimeout(hide, 1200);
+      } catch {
+        show("Could not save password.", "bad");
+      }
+    });
 
     async function postJson(url, payload){
       const res = await fetch(url, {
@@ -188,249 +205,141 @@
       return { ok: res.ok, status: res.status, out };
     }
 
-    // Save PW in local storage
-    try {
-      const saved = localStorage.getItem("rosie_admin_pw") || "";
-      if (saved) qs("#pw").value = saved;
-    } catch {}
+    function esc(s){
+      return String(s||"")
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#39;");
+    }
 
-    qs("#savePwBtn").addEventListener("click", () => {
+    function badge(status){
+      if (status === "confirmed") return `<span class="tag ok">confirmed</span>`;
+      if (status === "pending") return `<span class="tag warn">pending</span>`;
+      if (status === "cancelled") return `<span class="tag bad">cancelled</span>`;
+      if (status === "completed") return `<span class="tag ok">completed</span>`;
+      return `<span class="tag">${esc(status)}</span>`;
+    }
+
+    async function loadBookings(){
+      hide();
       const pw = getPw();
-      if (!pw) return showStatus("Enter password first.", "bad");
-      try {
-        localStorage.setItem("rosie_admin_pw", pw);
-        showStatus("Saved password on this device.", "ok");
-        setTimeout(hideStatus, 1200);
-      } catch {
-        showStatus("Could not save password (browser storage blocked).", "bad");
+      if (!pw) return show("Missing admin password.", "bad");
+
+      const payload = {
+        admin_password: pw,
+        action: "list",
+        date_from: qs("#from").value || null,
+        date_to: qs("#to").value || null,
+        statuses: getStatuses(),
+      };
+
+      qs("#loadBtn").disabled = true;
+      qs("#loadBtn").textContent = "Loading…";
+
+      const r = await postJson("/api/admin/bookings", payload);
+      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
+
+      qs("#loadBtn").disabled = false;
+      qs("#loadBtn").textContent = "Load";
+
+      if (!r.ok || !r.out?.ok){
+        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
       }
-    });
 
-    // Prefill bid from querystring
-    (function prefill(){
-      const p = new URLSearchParams(location.search);
-      const bid = (p.get("bid") || "").trim();
-      if (bid) qs("#bid").value = bid;
-    })();
+      const rows = Array.isArray(r.out.rows) ? r.out.rows : [];
+      qs("#count").textContent = `${rows.length} bookings`;
 
-    let currentBooking = null;
-    let currentLinks = null;
+      const tb = qs("#rows");
+      tb.innerHTML = "";
 
-    function setButtonsEnabled(on){
-      qs("#saveStatusBtn").disabled = !on;
-      qs("#saveProgressBtn").disabled = !on;
-      qs("#regenTokenBtn").disabled = !on;
+      for (const b of rows){
+        const tr = document.createElement("tr");
+        const veh = b.vehicle ? b.vehicle : (b.vehicle_info || b.vehicle_json || null);
+        const vehText = veh
+          ? `${veh.year||""} ${veh.make||""} ${veh.model||""}`.trim()
+          : (b.vehicle_make_model || "");
+
+        tr.innerHTML = `
+          <td class="mono">${esc(b.service_date)}</td>
+          <td class="mono">${esc(b.start_slot)}${Number(b.duration_slots)===2 ? " +PM" : ""}</td>
+          <td>
+            <div><strong>${esc(b.customer_name)}</strong></div>
+            <div class="muted mini">${esc(b.customer_email || "")}</div>
+          </td>
+          <td class="mono">${esc(b.package_code)} / ${esc(b.vehicle_size)}</td>
+          <td>${esc(vehText)}</td>
+          <td>${badge(b.status)}</td>
+          <td>
+            <div class="row">
+              <button class="btn small ghost" data-set="confirmed" data-id="${esc(b.id)}">Confirm</button>
+              <button class="btn small ghost" data-set="cancelled" data-id="${esc(b.id)}">Cancel</button>
+              <button class="btn small ghost" data-set="completed" data-id="${esc(b.id)}">Complete</button>
+            </div>
+          </td>
+        `;
+        tb.appendChild(tr);
+      }
+
+      // wire status buttons
+      tb.querySelectorAll("button[data-set]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const pw2 = getPw();
+          const id = btn.getAttribute("data-id");
+          const st = btn.getAttribute("data-set");
+          if (!pw2) return show("Missing admin password.", "bad");
+
+          btn.disabled = true;
+          const r2 = await postJson("/api/admin/bookings", {
+            admin_password: pw2,
+            action: "set_status",
+            booking_id: id,
+            status: st,
+          });
+          qs("#raw").textContent = JSON.stringify(r2.out || {}, null, 2);
+          btn.disabled = false;
+
+          if (!r2.ok || !r2.out?.ok){
+            return show(r2.out?.error ? `Error: ${r2.out.error}` : `Error (HTTP ${r2.status})`, "bad");
+          }
+          show("Updated.", "ok");
+          setTimeout(hide, 800);
+          await loadBookings();
+        });
+      });
+
+      show("Loaded.", "ok");
+      setTimeout(hide, 800);
     }
 
-    function updateDeepLinks(bid){
-      qs("#uploadBtn").href = `/admin-upload.html?bid=${encodeURIComponent(bid)}`;
-      qs("#postProgressBtn").href = `/admin-progress.html?bid=${encodeURIComponent(bid)}`;
-      qs("#assignBtn").href = `/admin-assign.html?bid=${encodeURIComponent(bid)}`;
-    }
+    qs("#loadBtn").addEventListener("click", loadBookings);
 
-    function renderBooking(b){
-      currentBooking = b;
+    // availability check
+    qs("#availBtn").addEventListener("click", async ()=>{
+      const date = (qs("#availDate").value || "").trim();
+      if (!date) return;
 
-      // controls
-      if (b.job_status) qs("#job_status").value = b.job_status;
-      qs("#progress_enabled").value = (b.progress_enabled === true) ? "true" : "false";
+      const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache:"no-store" });
+      const out = await res.json().catch(()=>null);
+      qs("#raw").textContent = JSON.stringify(out || {}, null, 2);
 
-      // details
-      const vehicle = b.vehicle || null;
-      const vehicleLine = vehicle
-        ? `${vehicle.year || ""} ${vehicle.make || ""} ${vehicle.model || ""}`.trim()
-        : "";
+      const box = qs("#availBox");
+      box.style.display = "block";
 
-      qs("#details").className = "notice";
-      qs("#details").innerHTML = `
-        <div><strong>${escapeHtml(b.customer_name || "")}</strong> — ${escapeHtml(b.customer_email || "")}</div>
-        ${b.customer_phone ? `<div class="muted">${escapeHtml(b.customer_phone)}</div>` : ``}
-        <div class="hr"></div>
-        <div><strong>${escapeHtml(prettyPkg(b.package_code))}</strong> (${escapeHtml(b.vehicle_size || "")})</div>
-        ${vehicleLine ? `<div class="muted">Vehicle: ${escapeHtml(vehicleLine)}</div>` : ``}
-        <div class="muted">Date: ${escapeHtml(b.service_date || "")} • Slot: ${escapeHtml(b.start_slot || "")} • Duration: ${escapeHtml(String(b.duration_slots || ""))}</div>
-        <div class="muted">Area: ${escapeHtml(b.service_area || "")}</div>
-        <div class="muted">Address: ${escapeHtml(b.address_line1 || "")} ${b.city ? "• "+escapeHtml(b.city) : ""} ${b.postal_code ? "• "+escapeHtml(b.postal_code) : ""}</div>
-        <div class="hr"></div>
-        <div class="muted">Subtotal: <strong>${fmtMoneyCents(b.subtotal_cents)}</strong> • Total: <strong>${fmtMoneyCents(b.price_total_cents)}</strong> • Deposit: <strong>${fmtMoneyCents(b.deposit_cents)}</strong></div>
-        <div class="muted">Status: <strong>${escapeHtml(b.status || "")}</strong> • Job: <strong>${escapeHtml(b.job_status || "")}</strong></div>
-        ${b.assigned_staff_name ? `<div class="muted">Staff: <strong>${escapeHtml(b.assigned_staff_name)}</strong></div>` : ``}
-      `;
-
-      // raw
-      qs("#raw").textContent = JSON.stringify(b, null, 2);
-
-      setButtonsEnabled(true);
-      updateDeepLinks(b.id);
-    }
-
-    function renderLinks(links){
-      currentLinks = links;
-
-      const area = qs("#links");
-      if (!links) {
-        area.className = "notice warn";
-        area.textContent = "Enable progress to generate links.";
-        qs("#copyProgressBtn").disabled = true;
-        qs("#copyCompleteBtn").disabled = true;
-        qs("#openProgressBtn").style.display = "none";
+      if (!res.ok || !out?.ok){
+        box.className = "notice bad";
+        box.textContent = out?.error ? `Availability error: ${out.error}` : "Availability error.";
         return;
       }
-
-      area.className = "notice ok";
-      area.innerHTML = `
-        <div><strong>Progress:</strong> <a class="inline mono" href="${escapeHtml(links.progress_url)}" target="_blank" rel="noopener">${escapeHtml(links.progress_url)}</a></div>
-        <div style="margin-top:8px"><strong>Completion:</strong> <a class="inline mono" href="${escapeHtml(links.complete_url)}" target="_blank" rel="noopener">${escapeHtml(links.complete_url)}</a></div>
-      `;
-
-      qs("#copyProgressBtn").disabled = false;
-      qs("#copyCompleteBtn").disabled = false;
-      qs("#openProgressBtn").href = links.progress_url;
-      qs("#openProgressBtn").style.display = "inline-flex";
-    }
-
-    async function findBookingById(pw, bid){
-      // Try next30 then latest100
-      const r1 = await postJson("/api/admin/bookings", { admin_password: pw, mode: "next30" });
-      if (r1.ok && r1.out?.ok) {
-        const hit = (r1.out.rows || []).find(x => x.id === bid);
-        if (hit) return hit;
+      if (out.blocked){
+        box.className = "notice bad";
+        box.textContent = `FULL DAY BLOCKED: ${out.reason || "Blocked"}`;
+        return;
       }
-
-      const r2 = await postJson("/api/admin/bookings", { admin_password: pw, mode: "latest100" });
-      if (r2.ok && r2.out?.ok) {
-        const hit = (r2.out.rows || []).find(x => x.id === bid);
-        if (hit) return hit;
-      }
-
-      return null;
-    }
-
-    async function loadBooking(){
-      const pw = getPw();
-      const bid = getBid();
-
-      if (!pw) return showStatus("Missing admin password.", "bad");
-      if (!bid) return showStatus("Missing booking id.", "bad");
-
-      showStatus("Loading booking…");
-      setButtonsEnabled(false);
-
-      const b = await findBookingById(pw, bid);
-      if (!b) {
-        return showStatus("Booking not found in next30 or latest100 list. Load it from /admin and open Controls from there.", "bad");
-      }
-
-      renderBooking(b);
-
-      // If booking already has token and enabled, show links from origin
-      // (We still prefer server-provided links after update calls.)
-      if (b.progress_enabled === true && b.progress_token) {
-        const origin = location.origin;
-        renderLinks({
-          progress_url: `${origin}/progress?token=${encodeURIComponent(b.progress_token)}`,
-          complete_url: `${origin}/complete?token=${encodeURIComponent(b.progress_token)}`,
-        });
-      } else {
-        renderLinks(null);
-      }
-
-      showStatus("Loaded.", "ok");
-      setTimeout(hideStatus, 1200);
-    }
-
-    qs("#loadBtn").addEventListener("click", loadBooking);
-
-    // Save job status
-    qs("#saveStatusBtn").addEventListener("click", async () => {
-      const pw = getPw(), bid = getBid();
-      const job_status = qs("#job_status").value;
-
-      showStatus("Saving status…");
-      const r = await postJson("/api/admin/booking_update", {
-        admin_password: pw,
-        booking_id: bid,
-        action: "set_job_status",
-        job_status,
-      });
-
-      if (!r.ok || !r.out?.ok) return showStatus(r.out?.error ? `Error: ${r.out.error}` : "Update failed.", "bad");
-
-      renderBooking({ ...currentBooking, ...r.out.row });
-      renderLinks(r.out.links || null);
-      showStatus("Saved.", "ok");
-      setTimeout(hideStatus, 1200);
+      box.className = "notice ok";
+      box.textContent = `AM: ${out.AM ? "Open" : "Blocked"} • PM: ${out.PM ? "Open" : "Blocked"}`;
     });
 
-    // Save progress enabled
-    qs("#saveProgressBtn").addEventListener("click", async () => {
-      const pw = getPw(), bid = getBid();
-      const progress_enabled = (qs("#progress_enabled").value === "true");
-
-      showStatus("Saving progress setting…");
-      const r = await postJson("/api/admin/booking_update", {
-        admin_password: pw,
-        booking_id: bid,
-        action: "set_progress_enabled",
-        progress_enabled,
-      });
-
-      if (!r.ok || !r.out?.ok) return showStatus(r.out?.error ? `Error: ${r.out.error}` : "Update failed.", "bad");
-
-      renderBooking({ ...currentBooking, ...r.out.row });
-      renderLinks(r.out.links || null);
-      showStatus("Saved.", "ok");
-      setTimeout(hideStatus, 1200);
-    });
-
-    // Regenerate token
-    qs("#regenTokenBtn").addEventListener("click", async () => {
-      const pw = getPw(), bid = getBid();
-
-      showStatus("Regenerating token…");
-      const r = await postJson("/api/admin/booking_update", {
-        admin_password: pw,
-        booking_id: bid,
-        action: "regen_progress_token",
-      });
-
-      if (!r.ok || !r.out?.ok) return showStatus(r.out?.error ? `Error: ${r.out.error}` : "Update failed.", "bad");
-
-      renderBooking({ ...currentBooking, ...r.out.row });
-      renderLinks(r.out.links || null);
-      showStatus("Token regenerated.", "ok");
-      setTimeout(hideStatus, 1200);
-    });
-
-    // Copy buttons
-    async function copyText(t){
-      try {
-        await navigator.clipboard.writeText(t);
-        showStatus("Copied to clipboard.", "ok");
-        setTimeout(hideStatus, 900);
-      } catch {
-        showStatus("Clipboard blocked by browser. Copy manually from the links box.", "bad");
-      }
-    }
-
-    qs("#copyProgressBtn").addEventListener("click", () => {
-      if (!currentLinks?.progress_url) return;
-      copyText(currentLinks.progress_url);
-    });
-
-    qs("#copyCompleteBtn").addEventListener("click", () => {
-      if (!currentLinks?.complete_url) return;
-      copyText(currentLinks.complete_url);
-    });
-
-    // Auto load if bid present
-    (async function autoLoad(){
-      const bid = getBid();
-      const pw = getPw();
-      if (bid && pw) await loadBooking();
-    })();
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260310b"></script>
+  <script type="module" src="/assets/chrome.js?v=20260311n"></script>
 </body>
 </html>
