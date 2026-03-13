@@ -3,41 +3,33 @@
 //
 // GET /api/availability?date=YYYY-MM-DD
 //
-// Returns availability for AM/PM, respecting:
-// - date_blocks (full day blocked)
-// - slot_blocks (AM/PM blocked)
-// - existing bookings (pending + confirmed)
+// Returns:
+// { ok:true, date:"YYYY-MM-DD", blocked:false|true, reason?, AM:true|false, PM:true|false }
 //
-// Env vars required:
-// - SUPABASE_URL
-// - SUPABASE_SERVICE_ROLE_KEY
-//
-// Response example:
-// {
-//   "date":"2026-02-28",
-//   "blocked":false,
-//   "reason":null,
-//   "AM":true,
-//   "PM":false,
-//   "blocked_slots":["PM"],
-//   "hold_minutes":30
-// }
+// Logic:
+// 1) If date is in date_blocks => blocked=true
+// 2) Otherwise start with AM/PM open, then apply:
+//    - slot_blocks for that date (AM/PM blocks)
+//    - bookings (pending/confirmed) reserve AM/PM depending on duration_slots/start_slot
+
+export async function onRequestOptions() {
+  return new Response(null, { status: 204, headers: corsHeaders() });
+}
 
 export async function onRequestGet({ request, env }) {
   try {
+    const url = new URL(request.url);
+    const date = (url.searchParams.get("date") || "").trim();
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      return json({ ok: false, error: "Missing or invalid date (YYYY-MM-DD)" }, 400);
+    }
+
     const SUPABASE_URL = env.SUPABASE_URL;
     const SERVICE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
 
-    const HOLD_MINUTES = Number(env.PENDING_HOLD_MINUTES || 30);
-
     if (!SUPABASE_URL || !SERVICE_KEY) {
       return json({ ok: false, error: "Server not configured (Supabase env vars missing)" }, 500);
-    }
-
-    const url = new URL(request.url);
-    const date = String(url.searchParams.get("date") || "").trim();
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-      return json({ ok: false, error: "date must be YYYY-MM-DD" }, 400);
     }
 
     const supaGet = async (path) => {
@@ -51,88 +43,90 @@ export async function onRequestGet({ request, env }) {
       });
       const text = await res.text();
       const data = text ? safeJson(text) : null;
-      return { ok: res.ok, status: res.status, data, raw: text };
+      if (!res.ok) return { ok: false, status: res.status, data, raw: text };
+      return { ok: true, status: res.status, data };
     };
 
-    // 1) Full-day block?
-    const day = await supaGet(
-      `/rest/v1/date_blocks?select=blocked_date,reason&blocked_date=eq.${encodeURIComponent(date)}&limit=1`
+    // ---- 1) Full-day block? ----
+    const dayBlock = await supaGet(
+      `/rest/v1/date_blocks?select=blocked_date,reason&blocked_date=eq.${encodeURIComponent(date)}`
     );
-    if (!day.ok) return json({ ok: false, error: "Supabase error (date_blocks)", details: day }, 502);
 
-    if (Array.isArray(day.data) && day.data.length > 0) {
+    if (!dayBlock.ok) {
+      return json({ ok: false, error: "Supabase error (date_blocks)", details: dayBlock }, 502);
+    }
+
+    if (Array.isArray(dayBlock.data) && dayBlock.data.length > 0) {
       return json({
         ok: true,
         date,
         blocked: true,
-        reason: day.data[0]?.reason ?? "Blocked",
+        reason: dayBlock.data[0]?.reason ?? "Blocked",
         AM: false,
         PM: false,
-        blocked_slots: ["AM", "PM"],
-        hold_minutes: HOLD_MINUTES,
       });
     }
 
-    // 2) Slot blocks?
-    const sblk = await supaGet(
-      `/rest/v1/slot_blocks?select=slot,reason&blocked_date=eq.${encodeURIComponent(date)}`
-    );
-    if (!sblk.ok) return json({ ok: false, error: "Supabase error (slot_blocks)", details: sblk }, 502);
+    // Start as open
+    let AM = true;
+    let PM = true;
 
-    const blockedSlots = new Set();
-    for (const r of (sblk.data || [])) {
-      const s = String(r.slot || "").toUpperCase();
-      if (s === "AM" || s === "PM") blockedSlots.add(s);
+    // ---- 2) Slot blocks ----
+    const slotBlocks = await supaGet(
+      `/rest/v1/slot_blocks?select=blocked_date,slot,reason&blocked_date=eq.${encodeURIComponent(date)}`
+    );
+
+    if (!slotBlocks.ok) {
+      return json({ ok: false, error: "Supabase error (slot_blocks)", details: slotBlocks }, 502);
     }
 
-    let AM = !blockedSlots.has("AM");
-    let PM = !blockedSlots.has("PM");
+    const slots = Array.isArray(slotBlocks.data) ? slotBlocks.data : [];
+    for (const s of slots) {
+      const slot = String(s.slot || "").toUpperCase();
+      if (slot === "AM") AM = false;
+      if (slot === "PM") PM = false;
+    }
 
-    // 3) Bookings on this date (pending + confirmed reserve)
-    // NOTE: If you later add hold-expiry logic (created_at), we can exclude old pending holds.
-    const bks = await supaGet(
+    // ---- 3) Bookings reserve slots ----
+    const bookings = await supaGet(
       `/rest/v1/bookings?select=status,start_slot,duration_slots&service_date=eq.${encodeURIComponent(date)}&status=in.(pending,confirmed)`
     );
-    if (!bks.ok) return json({ ok: false, error: "Supabase error (bookings)", details: bks }, 502);
 
-    for (const b of (bks.data || [])) {
-      const dur = Number(b.duration_slots);
-      if (dur === 2) { AM = false; PM = false; break; }
-      if (dur === 1 && String(b.start_slot).toUpperCase() === "AM") AM = false;
-      if (dur === 1 && String(b.start_slot).toUpperCase() === "PM") PM = false;
+    if (!bookings.ok) {
+      return json({ ok: false, error: "Supabase error (bookings)", details: bookings }, 502);
     }
 
-    const outBlocked = [];
-    if (!AM) outBlocked.push("AM");
-    if (!PM) outBlocked.push("PM");
+    for (const b of (bookings.data || [])) {
+      const dur = Number(b.duration_slots);
+      const start = String(b.start_slot || "").toUpperCase();
 
-    return json({
-      ok: true,
-      date,
-      blocked: false,
-      reason: null,
-      AM,
-      PM,
-      blocked_slots: outBlocked,
-      hold_minutes: HOLD_MINUTES,
-    });
+      if (dur === 2) { AM = false; PM = false; break; }
+      if (dur === 1 && start === "AM") AM = false;
+      if (dur === 1 && start === "PM") PM = false;
+    }
+
+    return json({ ok: true, date, blocked: false, AM, PM });
+
   } catch (e) {
     return json({ ok: false, error: "Server error", details: String(e) }, 500);
   }
 }
 
-/* ---------------- helpers ---------------- */
-
 function safeJson(text) {
   try { return JSON.parse(text); } catch { return { raw: text }; }
+}
+
+function corsHeaders() {
+  return {
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET,POST,OPTIONS",
+    "access-control-allow-headers": "content-type,authorization",
+  };
 }
 
 function json(obj, status = 200) {
   return new Response(JSON.stringify(obj), {
     status,
-    headers: {
-      "content-type": "application/json",
-      "access-control-allow-origin": "*",
-    },
+    headers: { "content-type": "application/json", ...corsHeaders() },
   });
 }
