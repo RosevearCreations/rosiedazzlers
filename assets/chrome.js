@@ -8,6 +8,7 @@ const BRAND = {
   name: "Rosie Dazzlers",
   logo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
   banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
+  reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png",
   footerLogo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
 };
 
@@ -128,6 +129,95 @@ function ensureMainBanner() {
   } else {
     document.body.insertBefore(wrap, document.body.firstChild);
   }
+}
+
+function ensureReviewsPanel() {
+  const path = normalizePath(location.pathname);
+  if (path !== "/") return;
+
+  const directImg =
+    document.querySelector("[data-reviews]") ||
+    document.querySelector("#reviewsImage") ||
+    document.querySelector(".reviews img") ||
+    document.querySelector(".review-banner img") ||
+    document.querySelector("img[data-role='reviews']");
+
+  if (directImg && directImg.tagName && directImg.tagName.toLowerCase() === "img") {
+    directImg.src = BRAND.reviews;
+    directImg.alt = "Rosie Dazzlers reviews";
+    directImg.loading = "lazy";
+    directImg.style.display = "block";
+    directImg.style.width = "100%";
+    directImg.style.height = "auto";
+    directImg.style.objectFit = "contain";
+    return;
+  }
+
+  const wrapTarget =
+    document.querySelector(".reviews") ||
+    document.querySelector(".review-banner") ||
+    document.querySelector("[data-reviews-wrap]");
+
+  if (wrapTarget) {
+    wrapTarget.innerHTML = `
+      <img
+        src="${BRAND.reviews}"
+        alt="Rosie Dazzlers reviews"
+        loading="lazy"
+        style="display:block;width:100%;height:auto;object-fit:contain"
+      >
+    `;
+    return;
+  }
+
+  if (document.querySelector("#globalReviewsPanel")) return;
+
+  const afterBanner =
+    document.querySelector("#globalMainBanner") ||
+    document.querySelector("[data-main-banner]") ||
+    document.querySelector("#mainBanner") ||
+    document.querySelector(".main-banner");
+
+  const homePackages =
+    document.querySelector("#homePackages") ||
+    document.querySelector("main") ||
+    document.querySelector(".container");
+
+  const wrap = document.createElement("div");
+  wrap.id = "globalReviewsPanel";
+  wrap.className = "container";
+  wrap.style.paddingTop = "8px";
+  wrap.style.paddingBottom = "8px";
+
+  wrap.innerHTML = `
+    <div
+      class="panel"
+      style="padding:12px;display:flex;align-items:center;justify-content:center;overflow:hidden"
+    >
+      <img
+        src="${BRAND.reviews}"
+        alt="Rosie Dazzlers reviews"
+        loading="lazy"
+        style="display:block;width:100%;max-width:980px;height:auto;object-fit:contain"
+      >
+    </div>
+  `;
+
+  if (afterBanner && afterBanner.parentNode) {
+    if (afterBanner.nextSibling) {
+      afterBanner.parentNode.insertBefore(wrap, afterBanner.nextSibling);
+    } else {
+      afterBanner.parentNode.appendChild(wrap);
+    }
+    return;
+  }
+
+  if (homePackages && homePackages.parentNode) {
+    homePackages.parentNode.insertBefore(wrap, homePackages);
+    return;
+  }
+
+  document.body.appendChild(wrap);
 }
 
 function setActiveNavLink() {
@@ -387,6 +477,7 @@ function initChrome() {
   ensureNavLinks();
   setBrandImagesEverywhere();
   ensureMainBanner();
+  ensureReviewsPanel();
   setActiveNavLink();
   initNavToggle();
   setFooter();
