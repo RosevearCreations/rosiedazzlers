@@ -1,8 +1,14 @@
 // /assets/chrome.js
 
 /* =========================
-   NAV + FOOTER
+   BRAND / NAV / FOOTER
    ========================= */
+
+const BRAND = {
+  name: "Rosie Dazzlers",
+  logo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
+  footerLogo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
+};
 
 const SOCIALS = [
   ["TikTok", "https://www.tiktok.com/@rosiedazzler"],
@@ -41,6 +47,19 @@ function ensureNavLinks() {
   ).join("");
 }
 
+function setBrandImagesEverywhere() {
+  document.querySelectorAll("[data-logo]").forEach((logo) => {
+    if (!logo.getAttribute("src")) {
+      logo.src = BRAND.logo;
+    } else {
+      logo.src = BRAND.logo;
+    }
+    if (!logo.getAttribute("alt")) {
+      logo.alt = `${BRAND.name} logo`;
+    }
+  });
+}
+
 function setActiveNavLink() {
   const path = normalizePath(location.pathname);
   document.querySelectorAll(".nav-links a").forEach((a) => {
@@ -57,7 +76,6 @@ function initNavToggle() {
   const links = document.querySelector("#navLinks");
   if (!btn || !links) return;
 
-  // prevent duplicate binding
   if (btn.dataset.bound === "1") return;
   btn.dataset.bound = "1";
 
@@ -83,11 +101,20 @@ function setFooter() {
   el.innerHTML = `
     <div class="footer-grid">
       <div class="footer-col">
-        <div class="footer-title">Rosie Dazzlers</div>
-        <div class="footer-muted">Mobile Auto Detailing</div>
-        <div class="footer-muted">Norfolk & Oxford Counties, Ontario</div>
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <img
+            src="${BRAND.footerLogo}"
+            alt="${BRAND.name} logo"
+            style="width:72px;height:72px;object-fit:contain;border-radius:14px;flex:0 0 auto;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.10);padding:6px;"
+          >
+          <div>
+            <div class="footer-title">Rosie Dazzlers</div>
+            <div class="footer-muted">Mobile Auto Detailing</div>
+            <div class="footer-muted">Norfolk & Oxford Counties, Ontario</div>
+          </div>
+        </div>
 
-        <div class="footer-muted" style="margin-top:10px">
+        <div class="footer-muted" style="margin-top:12px">
           Email: <a href="mailto:info@rosiedazzlers.ca">info@rosiedazzlers.ca</a><br>
           Backup: <a href="mailto:rosiedazzlers@gmail.com">rosiedazzlers@gmail.com</a>
         </div>
@@ -288,6 +315,7 @@ function attachRotators(containerSelector) {
 
 function initChrome() {
   ensureNavLinks();
+  setBrandImagesEverywhere();
   setActiveNavLink();
   initNavToggle();
   setFooter();
