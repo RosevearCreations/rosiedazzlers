@@ -1,5 +1,6 @@
 // assets/chrome.js
-// Shared site chrome: header, navigation, footer, and basic page wiring.
+// Shared site chrome: header, navigation, footer.
+// Conservative version to preserve existing CSS hooks while enforcing canonical URLs.
 
 (function () {
   const NAV_LINKS = [
@@ -28,46 +29,68 @@
 
   function normalizePath(pathname) {
     if (!pathname) return "/";
-    let p = pathname.trim();
-    if (p === "") return "/";
+    let p = String(pathname).trim();
+    if (!p) return "/";
     if (p !== "/" && p.endsWith("/")) p = p.slice(0, -1);
     if (p.endsWith(".html")) p = p.replace(/\.html$/i, "");
     return p || "/";
   }
 
   function isActiveLink(href) {
-    const current = normalizePath(window.location.pathname);
-    const target = normalizePath(href);
-    return current === target;
+    return normalizePath(window.location.pathname) === normalizePath(href);
+  }
+
+  function setClasses(el, classes) {
+    el.className = classes.join(" ");
+    return el;
   }
 
   function buildHeader() {
-    const header = document.createElement("header");
-    header.className = "site-header";
+    const header = setClasses(document.createElement("header"), [
+      "site-header",
+      "header",
+      "top-header"
+    ]);
 
-    const inner = document.createElement("div");
-    inner.className = "site-header-inner";
+    const inner = setClasses(document.createElement("div"), [
+      "site-header-inner",
+      "header-inner",
+      "container",
+      "wrapper"
+    ]);
 
-    const brand = document.createElement("a");
-    brand.className = "site-brand";
+    const brand = setClasses(document.createElement("a"), [
+      "site-brand",
+      "brand",
+      "logo-wrap"
+    ]);
     brand.href = "/";
     brand.setAttribute("aria-label", BRAND.name);
 
-    const logo = document.createElement("img");
+    const logo = setClasses(document.createElement("img"), [
+      "site-brand-logo",
+      "brand-logo",
+      "logo"
+    ]);
     logo.src = BRAND.logo;
     logo.alt = BRAND.name;
-    logo.className = "site-brand-logo";
     logo.loading = "eager";
 
-    const brandText = document.createElement("div");
-    brandText.className = "site-brand-text";
+    const brandText = setClasses(document.createElement("div"), [
+      "site-brand-text",
+      "brand-text"
+    ]);
 
-    const brandName = document.createElement("div");
-    brandName.className = "site-brand-name";
+    const brandName = setClasses(document.createElement("div"), [
+      "site-brand-name",
+      "brand-name"
+    ]);
     brandName.textContent = BRAND.name;
 
-    const brandTag = document.createElement("div");
-    brandTag.className = "site-brand-tagline";
+    const brandTag = setClasses(document.createElement("div"), [
+      "site-brand-tagline",
+      "brand-tagline"
+    ]);
     brandTag.textContent = BRAND.tagline;
 
     brandText.appendChild(brandName);
@@ -75,25 +98,38 @@
     brand.appendChild(logo);
     brand.appendChild(brandText);
 
-    const nav = document.createElement("nav");
-    nav.className = "site-nav";
+    const nav = setClasses(document.createElement("nav"), [
+      "site-nav",
+      "nav",
+      "main-nav"
+    ]);
     nav.setAttribute("aria-label", "Main navigation");
 
-    const ul = document.createElement("ul");
-    ul.className = "site-nav-list";
+    const ul = setClasses(document.createElement("ul"), [
+      "site-nav-list",
+      "nav-list",
+      "menu",
+      "menu-list"
+    ]);
 
     for (const link of NAV_LINKS) {
-      const li = document.createElement("li");
-      li.className = "site-nav-item";
+      const li = setClasses(document.createElement("li"), [
+        "site-nav-item",
+        "nav-item",
+        "menu-item"
+      ]);
 
-      const a = document.createElement("a");
-      a.className = "site-nav-link";
+      const a = setClasses(document.createElement("a"), [
+        "site-nav-link",
+        "nav-link",
+        "menu-link"
+      ]);
       a.href = link.href;
       a.textContent = link.label;
 
       if (isActiveLink(link.href)) {
+        a.classList.add("is-active", "active", "current");
         a.setAttribute("aria-current", "page");
-        a.classList.add("is-active");
       }
 
       li.appendChild(a);
@@ -109,30 +145,47 @@
   }
 
   function buildFooter() {
-    const footer = document.createElement("footer");
-    footer.className = "site-footer";
+    const footer = setClasses(document.createElement("footer"), [
+      "site-footer",
+      "footer"
+    ]);
 
-    const inner = document.createElement("div");
-    inner.className = "site-footer-inner";
+    const inner = setClasses(document.createElement("div"), [
+      "site-footer-inner",
+      "footer-inner",
+      "container",
+      "wrapper"
+    ]);
 
-    const brandWrap = document.createElement("div");
-    brandWrap.className = "site-footer-brand";
+    const brandWrap = setClasses(document.createElement("div"), [
+      "site-footer-brand",
+      "footer-brand"
+    ]);
 
-    const logo = document.createElement("img");
+    const logo = setClasses(document.createElement("img"), [
+      "site-footer-logo",
+      "footer-logo",
+      "logo"
+    ]);
     logo.src = BRAND.footerLogo;
     logo.alt = BRAND.name;
-    logo.className = "site-footer-logo";
     logo.loading = "lazy";
 
-    const textWrap = document.createElement("div");
-    textWrap.className = "site-footer-text";
+    const textWrap = setClasses(document.createElement("div"), [
+      "site-footer-text",
+      "footer-text"
+    ]);
 
-    const name = document.createElement("div");
-    name.className = "site-footer-name";
+    const name = setClasses(document.createElement("div"), [
+      "site-footer-name",
+      "footer-name"
+    ]);
     name.textContent = BRAND.name;
 
-    const tag = document.createElement("div");
-    tag.className = "site-footer-tagline";
+    const tag = setClasses(document.createElement("div"), [
+      "site-footer-tagline",
+      "footer-tagline"
+    ]);
     tag.textContent = BRAND.tagline;
 
     textWrap.appendChild(name);
@@ -140,12 +193,18 @@
     brandWrap.appendChild(logo);
     brandWrap.appendChild(textWrap);
 
-    const nav = document.createElement("nav");
-    nav.className = "site-footer-nav";
+    const nav = setClasses(document.createElement("nav"), [
+      "site-footer-nav",
+      "footer-nav"
+    ]);
     nav.setAttribute("aria-label", "Footer navigation");
 
-    const navList = document.createElement("ul");
-    navList.className = "site-footer-nav-list";
+    const navList = setClasses(document.createElement("ul"), [
+      "site-footer-nav-list",
+      "footer-nav-list",
+      "menu",
+      "menu-list"
+    ]);
 
     for (const link of NAV_LINKS) {
       const li = document.createElement("li");
@@ -158,8 +217,10 @@
 
     nav.appendChild(navList);
 
-    const socials = document.createElement("div");
-    socials.className = "site-footer-socials";
+    const socials = setClasses(document.createElement("div"), [
+      "site-footer-socials",
+      "footer-socials"
+    ]);
 
     for (const social of SOCIAL_LINKS) {
       const a = document.createElement("a");
@@ -170,8 +231,10 @@
       socials.appendChild(a);
     }
 
-    const legal = document.createElement("div");
-    legal.className = "site-footer-legal";
+    const legal = setClasses(document.createElement("div"), [
+      "site-footer-legal",
+      "footer-legal"
+    ]);
     legal.innerHTML = `
       <a href="/privacy">Privacy</a>
       <span>•</span>
@@ -180,8 +243,10 @@
       <a href="/waiver">Waiver</a>
     `;
 
-    const copy = document.createElement("div");
-    copy.className = "site-footer-copy";
+    const copy = setClasses(document.createElement("div"), [
+      "site-footer-copy",
+      "footer-copy"
+    ]);
     copy.textContent = `© ${new Date().getFullYear()} ${BRAND.name}. All rights reserved.`;
 
     inner.appendChild(brandWrap);
@@ -194,26 +259,34 @@
     return footer;
   }
 
-  function ensureMount(selector, builder, position) {
-    const existing = document.querySelector(selector);
-    if (existing) return;
+  function mountIfMissing(selector, builder, mode) {
+    if (document.querySelector(selector)) return;
 
     const built = builder();
+    const main = document.querySelector("main");
 
-    if (position === "before-main") {
-      const main = document.querySelector("main");
-      if (main && main.parentNode) {
-        main.parentNode.insertBefore(built, main);
-        return;
-      }
+    if (mode === "before-main" && main && main.parentNode) {
+      main.parentNode.insertBefore(built, main);
+      return;
     }
 
     document.body.appendChild(built);
   }
 
+  function rewriteCanonicalLinks(root) {
+    root.querySelectorAll('a[href="/services.html"], a[href="services.html"]').forEach((a) => {
+      a.href = "/services";
+    });
+
+    root.querySelectorAll('a[href="/pricing.html"], a[href="pricing.html"]').forEach((a) => {
+      a.href = "/pricing";
+    });
+  }
+
   function initChrome() {
-    ensureMount(".site-header", buildHeader, "before-main");
-    ensureMount(".site-footer", buildFooter, "append");
+    mountIfMissing(".site-header, .header, .top-header", buildHeader, "before-main");
+    mountIfMissing(".site-footer, .footer", buildFooter, "append");
+    rewriteCanonicalLinks(document);
   }
 
   if (document.readyState === "loading") {
