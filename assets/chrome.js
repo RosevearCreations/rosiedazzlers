@@ -7,6 +7,7 @@
 const BRAND = {
   name: "Rosie Dazzlers",
   logo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
+  banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
   footerLogo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
 };
 
@@ -49,15 +50,84 @@ function ensureNavLinks() {
 
 function setBrandImagesEverywhere() {
   document.querySelectorAll("[data-logo]").forEach((logo) => {
-    if (!logo.getAttribute("src")) {
-      logo.src = BRAND.logo;
-    } else {
-      logo.src = BRAND.logo;
-    }
+    logo.src = BRAND.logo;
     if (!logo.getAttribute("alt")) {
       logo.alt = `${BRAND.name} logo`;
     }
   });
+}
+
+function ensureMainBanner() {
+  const existingImg =
+    document.querySelector("[data-main-banner] img") ||
+    document.querySelector("#mainBanner img") ||
+    document.querySelector(".main-banner img") ||
+    document.querySelector("img[data-main-banner]") ||
+    document.querySelector("img[data-banner]") ||
+    document.querySelector("#bannerImage");
+
+  if (existingImg) {
+    existingImg.src = BRAND.banner;
+    existingImg.alt = "Rosie Dazzlers banner";
+    existingImg.loading = "eager";
+    existingImg.style.display = "block";
+    existingImg.style.width = "100%";
+    existingImg.style.height = "auto";
+    existingImg.style.objectFit = "contain";
+    return;
+  }
+
+  const existingWrap =
+    document.querySelector("[data-main-banner]") ||
+    document.querySelector("#mainBanner") ||
+    document.querySelector(".main-banner");
+
+  if (existingWrap) {
+    existingWrap.innerHTML = `
+      <img
+        src="${BRAND.banner}"
+        alt="Rosie Dazzlers banner"
+        loading="eager"
+        style="display:block;width:100%;height:auto;object-fit:contain"
+      >
+    `;
+    return;
+  }
+
+  if (document.querySelector("#globalMainBanner")) return;
+
+  const nav = document.querySelector(".nav");
+  const anchor = nav || document.querySelector("header") || document.body.firstElementChild || document.body;
+
+  const wrap = document.createElement("div");
+  wrap.id = "globalMainBanner";
+  wrap.className = "container";
+  wrap.style.paddingTop = "14px";
+  wrap.style.paddingBottom = "8px";
+
+  wrap.innerHTML = `
+    <div
+      class="panel"
+      style="padding:12px;display:flex;align-items:center;justify-content:center;overflow:hidden"
+    >
+      <img
+        src="${BRAND.banner}"
+        alt="Rosie Dazzlers banner"
+        loading="eager"
+        style="display:block;width:100%;max-width:980px;height:auto;object-fit:contain"
+      >
+    </div>
+  `;
+
+  if (anchor && anchor.parentNode) {
+    if (anchor === document.body) {
+      document.body.insertBefore(wrap, document.body.firstChild);
+    } else {
+      anchor.parentNode.insertBefore(wrap, anchor.nextSibling);
+    }
+  } else {
+    document.body.insertBefore(wrap, document.body.firstChild);
+  }
 }
 
 function setActiveNavLink() {
@@ -316,6 +386,7 @@ function attachRotators(containerSelector) {
 function initChrome() {
   ensureNavLinks();
   setBrandImagesEverywhere();
+  ensureMainBanner();
   setActiveNavLink();
   initNavToggle();
   setFooter();
