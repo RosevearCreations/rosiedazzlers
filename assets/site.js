@@ -320,6 +320,43 @@ function updateBookingSummary(data) {
   if (totalEl) totalEl.dataset.total = String(total);
 }
 
+function forceBannerIntoContainer(container) {
+  if (!container) return;
+
+  const tag = container.tagName ? container.tagName.toLowerCase() : "";
+
+  if (tag === "img") {
+    container.src = BRAND.banner;
+    container.alt = "Rosie Dazzlers banner";
+    container.loading = "lazy";
+    container.style.display = "";
+    return;
+  }
+
+  const existingImg = container.querySelector("img");
+  if (existingImg) {
+    existingImg.src = BRAND.banner;
+    existingImg.alt = "Rosie Dazzlers banner";
+    existingImg.loading = "lazy";
+    existingImg.style.display = "";
+  } else {
+    const img = document.createElement("img");
+    img.src = BRAND.banner;
+    img.alt = "Rosie Dazzlers banner";
+    img.loading = "lazy";
+    img.style.display = "block";
+    img.style.width = "100%";
+    img.style.height = "auto";
+    img.style.objectFit = "contain";
+    container.appendChild(img);
+  }
+
+  container.style.backgroundImage = `url("${BRAND.banner}")`;
+  container.style.backgroundRepeat = "no-repeat";
+  container.style.backgroundPosition = "center";
+  container.style.backgroundSize = "contain";
+}
+
 function applyBrandImages() {
   document.querySelectorAll("[data-logo]").forEach((el) => {
     el.src = BRAND.logo;
@@ -329,17 +366,14 @@ function applyBrandImages() {
   const bannerTargets = [
     ...document.querySelectorAll("[data-banner]"),
     ...document.querySelectorAll("#bannerImage"),
+    ...document.querySelectorAll(".hero-banner"),
     ...document.querySelectorAll(".hero-banner img"),
+    ...document.querySelectorAll(".banner"),
     ...document.querySelectorAll(".banner img"),
     ...document.querySelectorAll("img[data-role='banner']")
   ];
 
-  bannerTargets.forEach((el) => {
-    el.src = BRAND.banner;
-    el.alt = "Rosie Dazzlers banner";
-    el.loading = "lazy";
-    el.style.display = "";
-  });
+  bannerTargets.forEach(forceBannerIntoContainer);
 
   const reviews = document.querySelector("[data-reviews]");
   if (reviews) {
