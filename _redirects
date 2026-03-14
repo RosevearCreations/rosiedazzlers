@@ -1,0 +1,7 @@
+# Canonical pretty URLs for service pages
+/services.html  /services  301
+/pricing.html   /pricing   301
+
+# Normalize optional trailing slashes
+/services/      /services  301
+/pricing/       /pricing   301
