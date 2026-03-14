@@ -1,16 +1,15 @@
 <!-- /progress.html
      REPLACE ENTIRE FILE
 
-     Customer-facing progress page:
-       /progress?token=UUID
+     Customer progress page:
+     - Customer arrives via link like: /progress?bid=<booking_id>
+     - Shows PUBLIC progress updates only
+     - Calls: POST /api/progress_list_public (we create next)
 
-     Shows:
-       - booking header
-       - notes timeline
-       - media gallery (signed URLs from /api/progress/view)
-
-     Also links to completion page when ready:
-       /complete?token=UUID
+     Notes:
+     - No login required yet (simple share-link model)
+     - Later we can secure this by requiring:
+         booking_id + customer_email match, or an auth account
 -->
 <!doctype html>
 <html lang="en">
@@ -18,34 +17,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Progress | Rosie Dazzlers</title>
-  <meta name="description" content="View your detailing progress updates." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260309x" />
+  <meta name="description" content="Follow your vehicle detailing progress." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260311q" />
   <style>
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .muted{color:rgba(234,242,255,.62)}
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-    .timeline{display:flex;flex-direction:column;gap:10px}
-    .item{border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.04)}
-    .mediaGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    @media (max-width:1100px){ .mediaGrid{grid-template-columns:repeat(2,1fr)} }
-    @media (max-width:980px){ .mediaGrid{grid-template-columns:1fr} }
-    .img{
+    .cardImg{
       width:100%;
-      aspect-ratio: 16/10;
-      object-fit: cover;
+      aspect-ratio:16/10;
+      object-fit:cover;
       border-radius:16px;
       border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.04);
-      cursor:pointer;
     }
-    .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
-    .tag.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
-    .tag.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
-    .modalBack{position:fixed; inset:0; background:rgba(0,0,0,.70); display:none; align-items:center; justify-content:center; z-index:9999; padding:18px;}
-    .modal{max-width:1100px; width:100%; border:1px solid rgba(255,255,255,.12); background:rgba(10,14,24,.96); border-radius:18px; padding:14px;}
-    .modal img{width:100%; height:auto; border-radius:14px; border:1px solid rgba(255,255,255,.10)}
-    .modalHead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
+    .mini{font-size:.92rem}
   </style>
 </head>
 
@@ -58,179 +44,138 @@
       </a>
       <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
       <div class="nav-links" id="navLinks"></div>
-      <a class="btn primary" href="/book">Book now</a>
+      <a class="btn primary" href="/book">Book</a>
     </div>
   </div>
 
   <div class="container">
     <div class="panel">
-      <h1 style="margin:0 0 6px">Your Detail Progress</h1>
+      <h1 style="margin:0 0 6px">Detailing Progress</h1>
       <p class="kicker" style="margin:0">
-        Updates and photos from your appointment. Keep this link private.
+        Live updates posted by our team during your detail.
       </p>
-      <div id="tokenNote" class="notice warn" style="margin-top:12px;display:none"></div>
-      <div id="err" class="notice bad" style="margin-top:12px;display:none"></div>
-    </div>
 
-    <div class="section grid2">
-      <div class="panel">
-        <h2 style="margin-top:0">Booking</h2>
-        <div id="bookingBox" class="notice"></div>
-        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-          <a id="completeLink" class="btn primary" href="#" style="display:none">Sign completion</a>
-          <a class="btn ghost" href="/waiver">Service waiver</a>
+      <div class="hr"></div>
+
+      <div class="row">
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:340px;flex:1">
+          <span class="muted">Booking ID (from your link)</span>
+          <input id="bid" class="mono" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+        </label>
+
+        <div class="row" style="align-items:flex-end">
+          <button class="btn primary" id="loadBtn" type="button">Load progress</button>
         </div>
       </div>
 
-      <div class="panel">
-        <h2 style="margin-top:0">Tips</h2>
-        <ul class="muted">
-          <li>Photos may take a moment to load (signed links).</li>
-          <li>If you see something that needs attention, email us.</li>
-          <li>Email: <a href="mailto:info@rosiedazzlers.ca">info@rosiedazzlers.ca</a></li>
-        </ul>
-      </div>
+      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
     </div>
 
-    <div class="section grid2">
-      <div class="panel">
-        <h2 style="margin-top:0">Notes</h2>
-        <div id="notes" class="timeline"></div>
-      </div>
-
-      <div class="panel">
-        <h2 style="margin-top:0">Photos</h2>
-        <div id="media" class="mediaGrid"></div>
-      </div>
+    <div class="section">
+      <div id="updatesBox"></div>
     </div>
 
     <div class="footer" data-footer></div>
   </div>
 
-  <!-- MODAL -->
-  <div class="modalBack" id="modalBack" role="dialog" aria-modal="true">
-    <div class="modal">
-      <div class="modalHead">
-        <strong id="modalTitle">Photo</strong>
-        <button class="btn ghost" id="modalCloseBtn" type="button">Close</button>
-      </div>
-      <img id="modalImg" alt="Preview image" />
-    </div>
-  </div>
-
   <script type="module">
-    const qs = (s) => document.querySelector(s);
+    const qs = (s)=>document.querySelector(s);
 
-    function escapeHtml(s){
-      return String(s || "")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;")
-        .replaceAll(">","&gt;").replaceAll('"',"&quot;")
-        .replaceAll("'","&#39;");
+    function show(msg, kind=""){
+      const el = qs("#status");
+      el.style.display = "block";
+      el.className = "notice " + (kind || "");
+      el.textContent = msg;
+    }
+    function hide(){ qs("#status").style.display = "none"; }
+
+    function esc(s){
+      return String(s||"")
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#39;");
     }
 
-    function fmtTime(iso){
-      try {
-        const d = new Date(iso);
-        return d.toLocaleString("en-CA", { dateStyle:"medium", timeStyle:"short" });
-      } catch {
-        return iso || "";
-      }
-    }
-
-    // Modal
-    function openModal(title, imgUrl){
-      qs("#modalTitle").textContent = title;
-      qs("#modalImg").src = imgUrl;
-      qs("#modalBack").style.display = "flex";
-    }
-    function closeModal(){ qs("#modalBack").style.display = "none"; qs("#modalImg").src = ""; }
-    qs("#modalCloseBtn").addEventListener("click", closeModal);
-    qs("#modalBack").addEventListener("click", (e)=>{ if(e.target.id==="modalBack") closeModal(); });
-
-    const p = new URLSearchParams(location.search);
-    const token = (p.get("token") || "").trim();
-
-    if (!token) {
-      qs("#tokenNote").style.display = "block";
-      qs("#tokenNote").innerHTML = `Missing token. Use a link like <span class="mono">/progress?token=UUID</span>.`;
-      throw new Error("Missing token");
-    }
-
-    qs("#tokenNote").style.display = "block";
-    qs("#tokenNote").innerHTML = `Token: <span class="mono">${escapeHtml(token)}</span>`;
-
-    async function load(){
-      const res = await fetch(`/api/progress/view?token=${encodeURIComponent(token)}`, { cache:"no-store" });
+    async function postJson(url, payload){
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "content-type":"application/json" },
+        body: JSON.stringify(payload),
+      });
       const out = await res.json().catch(()=>null);
+      return { ok: res.ok, status: res.status, out };
+    }
 
-      if (!res.ok || !out?.ok) {
-        qs("#err").style.display = "block";
-        qs("#err").textContent = out?.error ? `Error: ${out.error}` : "Error loading progress.";
+    function renderUpdates(items){
+      const box = qs("#updatesBox");
+      box.innerHTML = "";
+
+      if (!items.length){
+        box.innerHTML = `<div class="panel"><div class="notice warn">No updates yet.</div></div>`;
         return;
       }
 
-      const b = out.booking || {};
-      qs("#bookingBox").innerHTML = `
-        <div><strong>${escapeHtml(b.customer_name || "Customer")}</strong></div>
-        <div class="muted">Date: <strong>${escapeHtml(b.service_date || "")}</strong></div>
-        <div class="muted">Package: <strong>${escapeHtml(b.package_code || "")}</strong> (${escapeHtml(b.vehicle_size || "")})</div>
-        <div class="muted">Job status: <span class="tag">${escapeHtml(b.job_status || "scheduled")}</span></div>
-        ${b.completed_at ? `<div class="muted">Completed at: ${escapeHtml(fmtTime(b.completed_at))}</div>` : ``}
-      `;
+      for (const u of items){
+        const card = document.createElement("div");
+        card.className = "panel";
+        card.style.marginTop = "12px";
 
-      // completion link
-      const complete = qs("#completeLink");
-      complete.href = `/complete?token=${encodeURIComponent(token)}`;
-      complete.style.display = "inline-flex";
+        const img = u.photo_url
+          ? `<img class="cardImg" alt="Progress photo" src="${esc(u.photo_url)}" loading="lazy" decoding="async" />`
+          : "";
 
-      // notes
-      const notes = qs("#notes");
-      notes.innerHTML = "";
-      const upd = Array.isArray(out.updates) ? out.updates : [];
-      if (!upd.length) {
-        notes.innerHTML = `<div class="notice warn">No notes yet.</div>`;
-      } else {
-        for (const u of upd) {
-          const el = document.createElement("div");
-          el.className = "item";
-          el.innerHTML = `
+        card.innerHTML = `
+          ${img}
+          <div style="margin-top:${img ? "10px":"0"}">
             <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
-              <strong>${escapeHtml(u.created_by || "Rosie Dazzlers")}</strong>
-              <span class="muted">${escapeHtml(fmtTime(u.created_at))}</span>
+              <strong>${esc(u.stage || "update")}${u.progress_percent!=null ? " — " + esc(u.progress_percent) + "%" : ""}</strong>
+              <span class="muted mini mono">${esc(u.created_at || "")}</span>
             </div>
-            <div style="margin-top:8px">${escapeHtml(u.note || "")}</div>
-          `;
-          notes.appendChild(el);
-        }
-      }
+            ${u.note ? `<div class="muted" style="margin-top:8px">${esc(u.note)}</div>` : ``}
+          </div>
+        `;
 
-      // media
-      const media = qs("#media");
-      media.innerHTML = "";
-      const photos = Array.isArray(out.media) ? out.media : [];
-      if (!photos.length) {
-        media.innerHTML = `<div class="notice warn">No photos yet.</div>`;
-      } else {
-        for (const m of photos) {
-          const url = m.media_url;
-          if (!url) continue;
+        const imgEl = card.querySelector("img");
+        if (imgEl) imgEl.onerror = ()=>{ imgEl.style.display = "none"; };
 
-          const cap = m.caption || m.kind || "Photo";
-          const img = document.createElement("img");
-          img.className = "img";
-          img.alt = cap;
-          img.src = url;
-          img.loading = "lazy";
-          img.decoding = "async";
-          img.addEventListener("click", () => openModal(cap, url));
-          media.appendChild(img);
-        }
+        box.appendChild(card);
       }
     }
 
-    load();
+    async function load(){
+      hide();
+      const bid = (qs("#bid").value || "").trim();
+      if (!bid) return show("Missing booking id.", "bad");
+
+      qs("#loadBtn").disabled = true;
+      qs("#loadBtn").textContent = "Loading…";
+
+      const r = await postJson("/api/progress_list_public", { booking_id: bid, limit: 50 });
+
+      qs("#loadBtn").disabled = false;
+      qs("#loadBtn").textContent = "Load progress";
+
+      if (!r.ok || !r.out?.ok){
+        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
+      }
+
+      renderUpdates(Array.isArray(r.out.rows) ? r.out.rows : []);
+      show("Loaded.", "ok");
+      setTimeout(hide, 700);
+    }
+
+    qs("#loadBtn").addEventListener("click", load);
+
+    // Prefill from query string: /progress?bid=...
+    (function prefill(){
+      const p = new URLSearchParams(location.search);
+      const bid = (p.get("bid") || "").trim();
+      if (bid) {
+        qs("#bid").value = bid;
+        load();
+      }
+    })();
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260309x"></script>
+  <script type="module" src="/assets/chrome.js?v=20260311q"></script>
 </body>
 </html>
