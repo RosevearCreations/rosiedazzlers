@@ -1,297 +1,285 @@
-// assets/chrome.js
-// Shared site chrome: header, navigation, footer.
-// Conservative version to preserve existing CSS hooks while enforcing canonical URLs.
+// /assets/chrome.js
 
-(function () {
-  const NAV_LINKS = [
-    { href: "/", label: "Home" },
-    { href: "/services", label: "Services" },
-    { href: "/pricing", label: "Pricing" },
-    { href: "/book", label: "Book" },
-    { href: "/gifts", label: "Gifts" },
-    { href: "/gear", label: "Gear" },
-    { href: "/consumables", label: "Consumables" },
-    { href: "/about", label: "About" },
-    { href: "/contact", label: "Contact" }
-  ];
+/* =========================
+   NAV + FOOTER (existing)
+   ========================= */
 
-  const SOCIAL_LINKS = [
-    { href: "https://www.facebook.com/", label: "Facebook" },
-    { href: "https://www.instagram.com/", label: "Instagram" }
-  ];
+const SOCIALS = [
+  ["TikTok", "https://www.tiktok.com/@rosiedazzler"],
+  ["Instagram", "https://www.instagram.com/rosiedazzlers/"],
+  ["Facebook", "https://www.facebook.com/rosiedazzlers"],
+  ["YouTube", "https://www.youtube.com/@rosiedazzlers"],
+  ["Twitch", "https://www.twitch.tv/rosiedazzlers/"],
+  ["X", "https://x.com/RosieDazzlers"],
+  ["LinkedIn", "https://www.linkedin.com/in/rosiedazzlers/"],
+];
 
-  const BRAND = {
-    name: "Rosie Dazzlers",
-    tagline: "Mobile Auto Detailing",
-    logo: "https://assets.rosiedazzlers.ca/brand/logo.png",
-    footerLogo: "https://assets.rosiedazzlers.ca/brand/logo.png"
-  };
+function normalizePath(p) {
+  const x = (p || "/").replace(/\/+$/, "");
+  return x === "" ? "/" : x;
+}
 
-  function normalizePath(pathname) {
-    if (!pathname) return "/";
-    let p = String(pathname).trim();
-    if (!p) return "/";
-    if (p !== "/" && p.endsWith("/")) p = p.slice(0, -1);
-    if (p.endsWith(".html")) p = p.replace(/\.html$/i, "");
-    return p || "/";
+function setActiveNavLink() {
+  const path = normalizePath(location.pathname);
+  document.querySelectorAll(".nav-links a").forEach((a) => {
+    const href = normalizePath(a.getAttribute("href") || "/");
+    const active = (href === "/" && path === "/") || (href !== "/" && path.startsWith(href));
+    a.classList.toggle("active", active);
+  });
+}
+
+function initNavToggle() {
+  const btn = document.querySelector("#navToggle");
+  const links = document.querySelector("#navLinks");
+  if (!btn || !links) return;
+
+  btn.addEventListener("click", () => {
+    links.classList.toggle("open");
+    btn.setAttribute("aria-expanded", links.classList.contains("open") ? "true" : "false");
+  });
+
+  links.querySelectorAll("a").forEach((a) => {
+    a.addEventListener("click", () => links.classList.remove("open"));
+  });
+}
+
+function setFooter() {
+  const el = document.querySelector("[data-footer]");
+  if (!el) return;
+
+  const year = new Date().getFullYear();
+
+  el.innerHTML = `
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-title">Rosie Dazzlers</div>
+        <div class="footer-muted">Mobile Auto Detailing</div>
+        <div class="footer-muted">Norfolk & Oxford Counties, Ontario</div>
+
+        <div class="footer-muted" style="margin-top:10px">
+          Email: <a href="mailto:info@rosiedazzlers.ca">info@rosiedazzlers.ca</a><br>
+          Backup: <a href="mailto:rosiedazzlers@gmail.com">rosiedazzlers@gmail.com</a>
+        </div>
+
+        <div class="footer-note" style="margin-top:10px">
+          Driveway required · customer provides power + water (or additional charges may apply).
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-title">Explore</div>
+        <a href="/services">Services</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/book">Book</a>
+        <a href="/gear">Gear</a>
+        <a href="/consumables">Consumables</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-title">Company</div>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+
+        <div class="footer-title" style="margin-top:12px">Social</div>
+        <div class="footer-social">
+          ${SOCIALS.map(([name, url]) => `<a href="${url}" target="_blank" rel="noopener">${name}</a>`).join("")}
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-title">Policies</div>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/waiver">Waiver</a>
+
+        <div class="footer-note" style="margin-top:12px">
+          Deposits secure booking times. Cancellation fees may apply.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© ${year} Rosie Dazzlers Mobile Auto Detailing</div>
+      <div class="footer-bottom-links">
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/waiver">Waiver</a>
+      </div>
+    </div>
+  `;
+}
+
+/* =========================
+   PACKAGE CARD HOVER ROTATION
+   (fixes blanks + uses your real filenames)
+   ========================= */
+
+const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages/";
+
+// These exist in your /packages directory (exact names)
+const STATIC_HOVER_FILES = [
+  "Exterior Detail.png",
+  "Interior Detail.png",
+  "CarSizeChart.PNG",
+];
+
+// Also use size-specific images you already have
+const SIZE_ICON_BY_VALUE = {
+  small: "SmallCar.png",
+  mid: "MidSizedCars.png",
+  oversize: "ExoticLargeSizedCars.png",
+};
+
+const loadState = new Map(); // url -> "ok" | "fail" | "pending"
+
+function fileUrl(fileName) {
+  // filenames contain spaces, so encodeURI is required
+  return encodeURI(`${PACKAGES_BASE}${fileName}`);
+}
+
+function preload(url) {
+  const s = loadState.get(url);
+  if (s === "ok" || s === "fail" || s === "pending") return;
+
+  loadState.set(url, "pending");
+  const img = new Image();
+  img.onload = () => loadState.set(url, "ok");
+  img.onerror = () => loadState.set(url, "fail");
+  img.src = url;
+}
+
+function isOk(url) {
+  return loadState.get(url) === "ok";
+}
+
+function currentSize() {
+  // services + pricing use #size for the viewer selector
+  const sel = document.querySelector("#size");
+  return sel && sel.value ? sel.value : null;
+}
+
+function guessGiftCertUrl(baseSrc) {
+  // If your card image is ...Something.png, try ...SomethingGiftCert.png
+  // Works for items like PremiumExternalWash.png, FullInteriorDetailSmallCars.png, etc.
+  try {
+    const u = new URL(baseSrc);
+    const file = u.pathname.split("/").pop() || "";
+    if (!/\.png$/i.test(file)) return null;
+
+    const giftFile = file.replace(/\.png$/i, "GiftCert.png");
+    const giftUrl = `${u.origin}/packages/${encodeURIComponent(giftFile)}`;
+    return giftUrl.replace(/%2F/g, "/");
+  } catch {
+    return null;
   }
+}
 
-  function isActiveLink(href) {
-    return normalizePath(window.location.pathname) === normalizePath(href);
-  }
+function buildPlaylist(baseSrc) {
+  const urls = [];
 
-  function setClasses(el, classes) {
-    el.className = classes.join(" ");
-    return el;
-  }
+  // 1) main image (size-specific package image)
+  urls.push(baseSrc);
 
-  function buildHeader() {
-    const header = setClasses(document.createElement("header"), [
-      "site-header",
-      "header",
-      "top-header"
-    ]);
+  // 2) static hover images (Exterior / Interior / Size chart)
+  for (const f of STATIC_HOVER_FILES) urls.push(fileUrl(f));
 
-    const inner = setClasses(document.createElement("div"), [
-      "site-header-inner",
-      "header-inner",
-      "container",
-      "wrapper"
-    ]);
+  // 3) size icon that matches the size dropdown
+  const s = currentSize();
+  if (s && SIZE_ICON_BY_VALUE[s]) urls.push(fileUrl(SIZE_ICON_BY_VALUE[s]));
 
-    const brand = setClasses(document.createElement("a"), [
-      "site-brand",
-      "brand",
-      "logo-wrap"
-    ]);
-    brand.href = "/";
-    brand.setAttribute("aria-label", BRAND.name);
+  // 4) gift cert version of the current card image (if it exists)
+  const gift = guessGiftCertUrl(baseSrc);
+  if (gift) urls.push(gift);
 
-    const logo = setClasses(document.createElement("img"), [
-      "site-brand-logo",
-      "brand-logo",
-      "logo"
-    ]);
-    logo.src = BRAND.logo;
-    logo.alt = BRAND.name;
-    logo.loading = "eager";
+  // de-dupe
+  return urls.filter((u, i, arr) => arr.indexOf(u) === i);
+}
 
-    const brandText = setClasses(document.createElement("div"), [
-      "site-brand-text",
-      "brand-text"
-    ]);
+function attachRotators(containerSelector) {
+  const container = document.querySelector(containerSelector);
+  if (!container) return;
 
-    const brandName = setClasses(document.createElement("div"), [
-      "site-brand-name",
-      "brand-name"
-    ]);
-    brandName.textContent = BRAND.name;
+  function attach(card) {
+    if (!card || card.dataset.hoverInit === "1") return;
+    const img = card.querySelector("img");
+    if (!img) return;
 
-    const brandTag = setClasses(document.createElement("div"), [
-      "site-brand-tagline",
-      "brand-tagline"
-    ]);
-    brandTag.textContent = BRAND.tagline;
+    card.dataset.hoverInit = "1";
 
-    brandText.appendChild(brandName);
-    brandText.appendChild(brandTag);
-    brand.appendChild(logo);
-    brand.appendChild(brandText);
+    let timer = null;
+    let playlist = [];
+    let base = "";
 
-    const nav = setClasses(document.createElement("nav"), [
-      "site-nav",
-      "nav",
-      "main-nav"
-    ]);
-    nav.setAttribute("aria-label", "Main navigation");
-
-    const ul = setClasses(document.createElement("ul"), [
-      "site-nav-list",
-      "nav-list",
-      "menu",
-      "menu-list"
-    ]);
-
-    for (const link of NAV_LINKS) {
-      const li = setClasses(document.createElement("li"), [
-        "site-nav-item",
-        "nav-item",
-        "menu-item"
-      ]);
-
-      const a = setClasses(document.createElement("a"), [
-        "site-nav-link",
-        "nav-link",
-        "menu-link"
-      ]);
-      a.href = link.href;
-      a.textContent = link.label;
-
-      if (isActiveLink(link.href)) {
-        a.classList.add("is-active", "active", "current");
-        a.setAttribute("aria-current", "page");
-      }
-
-      li.appendChild(a);
-      ul.appendChild(li);
+    function stop() {
+      if (timer) clearInterval(timer);
+      timer = null;
+      if (base) img.src = base;
     }
 
-    nav.appendChild(ul);
-    inner.appendChild(brand);
-    inner.appendChild(nav);
-    header.appendChild(inner);
+    card.addEventListener("mouseenter", () => {
+      base = img.currentSrc || img.src;
 
-    return header;
-  }
+      // ensure we never "blank" the card
+      img.onerror = () => {
+        img.style.display = "";
+        img.src = base;
+      };
 
-  function buildFooter() {
-    const footer = setClasses(document.createElement("footer"), [
-      "site-footer",
-      "footer"
-    ]);
+      playlist = buildPlaylist(base);
+      playlist.forEach(preload);
 
-    const inner = setClasses(document.createElement("div"), [
-      "site-footer-inner",
-      "footer-inner",
-      "container",
-      "wrapper"
-    ]);
+      if (timer) clearInterval(timer);
 
-    const brandWrap = setClasses(document.createElement("div"), [
-      "site-footer-brand",
-      "footer-brand"
-    ]);
+      // rotate ONLY to images that are confirmed loaded (no blanks)
+      timer = setInterval(() => {
+        if (!playlist.length) return;
 
-    const logo = setClasses(document.createElement("img"), [
-      "site-footer-logo",
-      "footer-logo",
-      "logo"
-    ]);
-    logo.src = BRAND.footerLogo;
-    logo.alt = BRAND.name;
-    logo.loading = "lazy";
+        // Try up to playlist length to find next loaded image
+        const currentIdx = playlist.indexOf(img.src);
+        let idx = currentIdx >= 0 ? currentIdx : 0;
 
-    const textWrap = setClasses(document.createElement("div"), [
-      "site-footer-text",
-      "footer-text"
-    ]);
+        for (let tries = 0; tries < playlist.length; tries++) {
+          idx = (idx + 1) % playlist.length;
+          const candidate = playlist[idx];
 
-    const name = setClasses(document.createElement("div"), [
-      "site-footer-name",
-      "footer-name"
-    ]);
-    name.textContent = BRAND.name;
-
-    const tag = setClasses(document.createElement("div"), [
-      "site-footer-tagline",
-      "footer-tagline"
-    ]);
-    tag.textContent = BRAND.tagline;
-
-    textWrap.appendChild(name);
-    textWrap.appendChild(tag);
-    brandWrap.appendChild(logo);
-    brandWrap.appendChild(textWrap);
-
-    const nav = setClasses(document.createElement("nav"), [
-      "site-footer-nav",
-      "footer-nav"
-    ]);
-    nav.setAttribute("aria-label", "Footer navigation");
-
-    const navList = setClasses(document.createElement("ul"), [
-      "site-footer-nav-list",
-      "footer-nav-list",
-      "menu",
-      "menu-list"
-    ]);
-
-    for (const link of NAV_LINKS) {
-      const li = document.createElement("li");
-      const a = document.createElement("a");
-      a.href = link.href;
-      a.textContent = link.label;
-      li.appendChild(a);
-      navList.appendChild(li);
-    }
-
-    nav.appendChild(navList);
-
-    const socials = setClasses(document.createElement("div"), [
-      "site-footer-socials",
-      "footer-socials"
-    ]);
-
-    for (const social of SOCIAL_LINKS) {
-      const a = document.createElement("a");
-      a.href = social.href;
-      a.textContent = social.label;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-      socials.appendChild(a);
-    }
-
-    const legal = setClasses(document.createElement("div"), [
-      "site-footer-legal",
-      "footer-legal"
-    ]);
-    legal.innerHTML = `
-      <a href="/privacy">Privacy</a>
-      <span>•</span>
-      <a href="/terms">Terms</a>
-      <span>•</span>
-      <a href="/waiver">Waiver</a>
-    `;
-
-    const copy = setClasses(document.createElement("div"), [
-      "site-footer-copy",
-      "footer-copy"
-    ]);
-    copy.textContent = `© ${new Date().getFullYear()} ${BRAND.name}. All rights reserved.`;
-
-    inner.appendChild(brandWrap);
-    inner.appendChild(nav);
-    inner.appendChild(socials);
-    inner.appendChild(legal);
-    inner.appendChild(copy);
-    footer.appendChild(inner);
-
-    return footer;
-  }
-
-  function mountIfMissing(selector, builder, mode) {
-    if (document.querySelector(selector)) return;
-
-    const built = builder();
-    const main = document.querySelector("main");
-
-    if (mode === "before-main" && main && main.parentNode) {
-      main.parentNode.insertBefore(built, main);
-      return;
-    }
-
-    document.body.appendChild(built);
-  }
-
-  function rewriteCanonicalLinks(root) {
-    root.querySelectorAll('a[href="/services.html"], a[href="services.html"]').forEach((a) => {
-      a.href = "/services";
+          // base is always allowed
+          if (candidate === base) {
+            img.src = candidate;
+            return;
+          }
+          // only rotate to loaded hover images
+          if (isOk(candidate)) {
+            img.src = candidate;
+            return;
+          }
+        }
+        // none ready yet -> keep current image
+      }, 1200);
     });
 
-    root.querySelectorAll('a[href="/pricing.html"], a[href="pricing.html"]').forEach((a) => {
-      a.href = "/pricing";
-    });
+    card.addEventListener("mouseleave", stop);
   }
 
-  function initChrome() {
-    mountIfMissing(".site-header, .header, .top-header", buildHeader, "before-main");
-    mountIfMissing(".site-footer, .footer", buildFooter, "append");
-    rewriteCanonicalLinks(document);
-  }
+  // existing + future cards
+  container.querySelectorAll(".card").forEach(attach);
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initChrome);
-  } else {
-    initChrome();
-  }
-})();
+  const mo = new MutationObserver(() => {
+    container.querySelectorAll(".card").forEach(attach);
+  });
+  mo.observe(container, { childList: true, subtree: true });
+}
+
+/* =========================
+   BOOT
+   ========================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  setActiveNavLink();
+  initNavToggle();
+  setFooter();
+
+  // package cards on home/services/pricing
+  attachRotators("#homePackages");
+  attachRotators("#packagesGrid");
+  attachRotators("#pricingPackages");
+});
