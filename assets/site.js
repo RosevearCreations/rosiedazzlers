@@ -320,41 +320,41 @@ function updateBookingSummary(data) {
   if (totalEl) totalEl.dataset.total = String(total);
 }
 
-function forceBannerIntoContainer(container) {
-  if (!container) return;
+function forceImageIntoTarget(target, src, alt) {
+  if (!target) return;
 
-  const tag = container.tagName ? container.tagName.toLowerCase() : "";
+  const tag = target.tagName ? target.tagName.toLowerCase() : "";
 
   if (tag === "img") {
-    container.src = BRAND.banner;
-    container.alt = "Rosie Dazzlers banner";
-    container.loading = "lazy";
-    container.style.display = "";
+    target.src = src;
+    target.alt = alt;
+    target.loading = "lazy";
+    target.style.display = "block";
+    target.style.width = target.style.width || "100%";
+    target.style.height = target.style.height || "auto";
     return;
   }
 
-  const existingImg = container.querySelector("img");
+  const existingImg = target.querySelector("img");
   if (existingImg) {
-    existingImg.src = BRAND.banner;
-    existingImg.alt = "Rosie Dazzlers banner";
+    existingImg.src = src;
+    existingImg.alt = alt;
     existingImg.loading = "lazy";
-    existingImg.style.display = "";
-  } else {
-    const img = document.createElement("img");
-    img.src = BRAND.banner;
-    img.alt = "Rosie Dazzlers banner";
-    img.loading = "lazy";
-    img.style.display = "block";
-    img.style.width = "100%";
-    img.style.height = "auto";
-    img.style.objectFit = "contain";
-    container.appendChild(img);
+    existingImg.style.display = "block";
+    existingImg.style.width = existingImg.style.width || "100%";
+    existingImg.style.height = existingImg.style.height || "auto";
+    return;
   }
 
-  container.style.backgroundImage = `url("${BRAND.banner}")`;
-  container.style.backgroundRepeat = "no-repeat";
-  container.style.backgroundPosition = "center";
-  container.style.backgroundSize = "contain";
+  const img = document.createElement("img");
+  img.src = src;
+  img.alt = alt;
+  img.loading = "lazy";
+  img.style.display = "block";
+  img.style.width = "100%";
+  img.style.height = "auto";
+  img.style.objectFit = "contain";
+  target.appendChild(img);
 }
 
 function applyBrandImages() {
@@ -373,13 +373,23 @@ function applyBrandImages() {
     ...document.querySelectorAll("img[data-role='banner']")
   ];
 
-  bannerTargets.forEach(forceBannerIntoContainer);
+  bannerTargets.forEach((el) => {
+    forceImageIntoTarget(el, BRAND.banner, "Rosie Dazzlers banner");
+  });
 
-  const reviews = document.querySelector("[data-reviews]");
-  if (reviews) {
-    reviews.src = BRAND.reviews;
-    reviews.alt = "Rosie Dazzlers reviews";
-  }
+  const reviewTargets = [
+    ...document.querySelectorAll("[data-reviews]"),
+    ...document.querySelectorAll("#reviewsImage"),
+    ...document.querySelectorAll(".reviews"),
+    ...document.querySelectorAll(".reviews img"),
+    ...document.querySelectorAll(".review-banner"),
+    ...document.querySelectorAll(".review-banner img"),
+    ...document.querySelectorAll("img[data-role='reviews']")
+  ];
+
+  reviewTargets.forEach((el) => {
+    forceImageIntoTarget(el, BRAND.reviews, "Rosie Dazzlers reviews");
+  });
 }
 
 function getUrlParams() {
