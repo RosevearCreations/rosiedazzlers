@@ -1,340 +1,557 @@
-// assets/site.js
-// Shared rendering/helpers for Rosie Dazzlers pages.
-// Uses assets/config.js as the source of truth for package media, charts, pricing, and add-ons.
+// /assets/site.js
 
-import {
-  PATHS,
-  CHARTS,
-  PACKAGE_MEDIA,
-  PRICING,
-  ADDONS,
-  assetUrl,
-  money,
-  calcDepositCents,
-} from "./config.js";
+const DATA_URL = "/data/rosie_services_pricing_and_packages.json";
 
-function qs(selector, root = document) {
-  return root.querySelector(selector);
+const BRAND = {
+  logo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
+  banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
+  reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png"
+};
+
+const CONTACT = {
+  phone: "226-752-7613",
+  email: "info@rosiedazzlers.ca",
+  serviceArea: "Norfolk & Oxford Counties"
+};
+
+// Base URL for package media in R2 (filenames include spaces)
+const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages/";
+const pkgFile = (filename) => encodeURI(`${PACKAGES_BASE}${filename}`);
+
+// Hover/rotation images shown on package cards (these filenames MUST match R2 exactly)
+const HOVER_MEDIA = {
+  exterior: pkgFile("Exterior Detail.png"),
+  interior: pkgFile("Interior Detail.png"),
+  size: pkgFile("CarSizeChart.PNG")
+};
+
+const ADDON_MEDIA = {
+  de_badging: "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
+  de_ionizing_treatment: "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png",
+  engine_cleaning: "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
+  external_ceramic_coating: "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
+  external_graphene_fine_finish: "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png",
+  external_wax: "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png",
+  vinyl_wrapping: "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
+  window_tinting: "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png"
+};
+
+let _servicesData = null;
+
+async function loadServicesData() {
+  if (_servicesData) return _servicesData;
+  const res = await fetch(`${DATA_URL}?v=20260301e`, { cache: "no-store" });
+  if (!res.ok) throw new Error(`Could not load ${DATA_URL}`);
+  _servicesData = await res.json();
+  return _servicesData;
 }
 
-function qsa(selector, root = document) {
-  return Array.from(root.querySelectorAll(selector));
+function money(value) {
+  return new Intl.NumberFormat("en-CA", {
+    style: "currency",
+    currency: "CAD"
+  }).format(Number(value || 0));
 }
 
-function normalizeKey(value) {
-  return String(value || "")
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "_");
+function centsToMoney(cents) {
+  return money(Number(cents || 0) / 100);
 }
 
-function packageImageUrl(packageCode, vehicleSize) {
-  const media = PACKAGE_MEDIA[packageCode];
-  if (!media) return "";
-  const file = media[vehicleSize];
-  if (!file) return "";
-  return assetUrl(PATHS.packages, file);
+function q(id) {
+  return document.getElementById(id);
 }
 
-function chartImageUrl(chartKey) {
-  const file = CHARTS[chartKey];
-  if (!file) return "";
-  return assetUrl(PATHS.brand, file);
+function setText(id, value) {
+  const el = q(id);
+  if (el) el.textContent = value;
 }
 
-function getPackagePrice(packageCode, vehicleSize) {
-  const pkg = PRICING[packageCode];
-  if (!pkg) return null;
-  return pkg[vehicleSize] ?? null;
-}
-
-function getAddonPrice(addonKey, vehicleSize) {
-  const addon = ADDONS[addonKey];
-  if (!addon) return null;
-  if (typeof addon.price_cents === "number") return addon.price_cents;
-  if (addon.prices_cents && typeof addon.prices_cents[vehicleSize] === "number") {
-    return addon.prices_cents[vehicleSize];
-  }
-  return null;
-}
-
-function renderImage(el, src, alt) {
+function setImage(sel, src, alt = "") {
+  const el = document.querySelector(sel);
   if (!el) return;
-  if (!src) {
-    el.removeAttribute("src");
-    el.alt = alt || "";
+  el.src = src;
+  el.alt = alt;
+  el.loading = "lazy";
+}
+
+function packagePrice(pkg, size) {
+  if (!pkg || !pkg.prices) return 0;
+  return Number(pkg.prices[size] || 0);
+}
+
+function calcDeposit(pkg) {
+  return Number(pkg?.deposit || 0);
+}
+
+function sizeLabel(size) {
+  if (size === "small") return "Small";
+  if (size === "mid") return "Mid";
+  if (size === "oversize") return "Oversize / Exotic";
+  return size || "";
+}
+
+function getSelectedSize() {
+  const sel = q("size");
+  return sel?.value || "small";
+}
+
+function getCurrentPackageCode() {
+  const sel = q("package");
+  return sel?.value || "";
+}
+
+function buildMainCardGallery(pkg, size) {
+  const files = [];
+
+  if (pkg?.images?.[size]) files.push(pkg.images[size]);
+  if (HOVER_MEDIA.exterior) files.push(HOVER_MEDIA.exterior);
+  if (HOVER_MEDIA.interior) files.push(HOVER_MEDIA.interior);
+  if (HOVER_MEDIA.size) files.push(HOVER_MEDIA.size);
+
+  return [...new Set(files)];
+}
+
+function buildAddonGallery(addon) {
+  const files = [];
+  if (addon?.image) files.push(addon.image);
+  if (addon?.code && ADDON_MEDIA[addon.code]) files.push(ADDON_MEDIA[addon.code]);
+  return [...new Set(files)];
+}
+
+function initSimpleCarousels() {
+  const wraps = document.querySelectorAll("[data-carousel]");
+  wraps.forEach((wrap) => {
+    const imgs = [...wrap.querySelectorAll("img")];
+    if (imgs.length <= 1) return;
+
+    let current = 0;
+    let timer = null;
+
+    const show = (idx) => {
+      imgs.forEach((img, i) => img.classList.toggle("active", i === idx));
+    };
+
+    show(0);
+
+    wrap.addEventListener("mouseenter", () => {
+      if (timer) return;
+      timer = setInterval(() => {
+        current = (current + 1) % imgs.length;
+        show(current);
+      }, 1200);
+    });
+
+    wrap.addEventListener("mouseleave", () => {
+      clearInterval(timer);
+      timer = null;
+      current = 0;
+      show(0);
+    });
+  });
+}
+
+function renderMainPackages(cardsEl, data, size) {
+  if (!cardsEl) return;
+  cardsEl.innerHTML = "";
+
+  for (const pkg of data.packages || []) {
+    const price = packagePrice(pkg, size);
+    const deposit = calcDeposit(pkg);
+    const gallery = buildMainCardGallery(pkg, size);
+
+    const included = (pkg.included_services || [])
+      .map((s) => {
+        const note = s.optional_condition_note ? ` <span class="note">${s.optional_condition_note}</span>` : "";
+        return `<li>${s.name}${note}</li>`;
+      })
+      .join("");
+
+    const notes = (pkg.notes || []).map((n) => `<div class="tag">${n}</div>`).join("");
+
+    const mediaHtml = `
+      <div class="service-media" data-carousel>
+        ${gallery.map((src, i) => `<img loading="lazy" src="${src}" alt="${pkg.name}" class="${i === 0 ? "active" : ""}" onerror="this.style.display='none'">`).join("")}
+      </div>
+    `;
+
+    cardsEl.insertAdjacentHTML(
+      "beforeend",
+      `
+      <article class="card">
+        ${mediaHtml}
+        <div class="card-body">
+          <div class="row between">
+            <div>
+              <h3>${pkg.name}</h3>
+              <div class="muted">${pkg.subtitle || ""}</div>
+            </div>
+            <div class="price">${money(price)}</div>
+          </div>
+
+          <div class="chips">
+            <span class="chip">Deposit ${money(deposit)}</span>
+            <span class="chip">${sizeLabel(size)}</span>
+          </div>
+
+          <p>${pkg.description || ""}</p>
+
+          <div class="subhead">Included</div>
+          <ul class="list">${included}</ul>
+
+          ${notes ? `<div class="tags">${notes}</div>` : ""}
+
+          <div class="actions">
+            <a class="btn primary" href="/book?package=${encodeURIComponent(pkg.code)}&size=${encodeURIComponent(size)}">Book this package</a>
+          </div>
+        </div>
+      </article>
+      `
+    );
+  }
+
+  initSimpleCarousels();
+}
+
+function renderAddonCards(cardsEl, data, size) {
+  if (!cardsEl) return;
+  cardsEl.innerHTML = "";
+
+  for (const addon of data.addons || []) {
+    const price = addon.prices ? addon.prices[size] : null;
+    const priceHtml = addon.quote_required
+      ? `<div class="price quote">Quote required</div>`
+      : `<div class="price">${money(price || 0)}</div>`;
+
+    const gallery = buildAddonGallery(addon);
+    const mediaHtml = gallery.length
+      ? `
+      <div class="service-media" data-carousel>
+        ${gallery.map((src, i) => `<img loading="lazy" src="${src}" alt="${addon.name}" class="${i === 0 ? "active" : ""}" onerror="this.style.display='none'">`).join("")}
+      </div>
+      `
+      : "";
+
+    cardsEl.insertAdjacentHTML(
+      "beforeend",
+      `
+      <article class="card addon">
+        ${mediaHtml}
+        <div class="card-body">
+          <div class="row between">
+            <div>
+              <h3>${addon.name}</h3>
+              <div class="muted">${addon.subtitle || ""}</div>
+            </div>
+            ${priceHtml}
+          </div>
+
+          <p>${addon.description || ""}</p>
+
+          ${
+            addon.quote_required
+              ? `<div class="notice warn">This add-on requires a custom quote. Contact us or mention it during booking.</div>`
+              : `<div class="chips"><span class="chip">${sizeLabel(size)}</span></div>`
+          }
+        </div>
+      </article>
+      `
+    );
+  }
+
+  initSimpleCarousels();
+}
+
+function populateBookingPackages(selectEl, data) {
+  if (!selectEl) return;
+
+  const current = selectEl.value;
+  selectEl.innerHTML = "";
+
+  for (const pkg of data.packages || []) {
+    const opt = document.createElement("option");
+    opt.value = pkg.code;
+    opt.textContent = pkg.name;
+    selectEl.appendChild(opt);
+  }
+
+  if (current) selectEl.value = current;
+}
+
+function populateAddonChecklist(wrap, data, size) {
+  if (!wrap) return;
+  wrap.innerHTML = "";
+
+  for (const addon of data.addons || []) {
+    const id = `addon_${addon.code}`;
+    const price = addon.quote_required ? "Quote required" : money(addon.prices?.[size] || 0);
+
+    wrap.insertAdjacentHTML(
+      "beforeend",
+      `
+      <label class="check-card" for="${id}">
+        <input type="checkbox" id="${id}" name="addons" value="${addon.code}">
+        <div>
+          <strong>${addon.name}</strong>
+          <div class="muted">${addon.subtitle || ""}</div>
+          <div class="mini-price">${price}</div>
+        </div>
+      </label>
+      `
+    );
+  }
+}
+
+function findPackage(data, code) {
+  return (data.packages || []).find((p) => p.code === code) || null;
+}
+
+function getSelectedAddons(data) {
+  const checks = [...document.querySelectorAll('input[name="addons"]:checked')];
+  return checks
+    .map((c) => (data.addons || []).find((a) => a.code === c.value))
+    .filter(Boolean);
+}
+
+function updateBookingSummary(data) {
+  const size = getSelectedSize();
+  const pkg = findPackage(data, getCurrentPackageCode());
+  if (!pkg) return;
+
+  const base = packagePrice(pkg, size);
+  const deposit = calcDeposit(pkg);
+
+  let addons = 0;
+  for (const addon of getSelectedAddons(data)) {
+    if (!addon.quote_required) addons += Number(addon.prices?.[size] || 0);
+  }
+
+  const total = base + addons;
+
+  setText("summaryPackage", pkg.name);
+  setText("summarySize", sizeLabel(size));
+  setText("summaryBase", money(base));
+  setText("summaryAddons", money(addons));
+  setText("summaryTotal", money(total));
+  setText("summaryDeposit", money(deposit));
+
+  const totalEl = q("summaryTotal");
+  if (totalEl) totalEl.dataset.total = String(total);
+}
+
+function applyBrandImages() {
+  const logoEls = document.querySelectorAll("[data-logo]");
+  logoEls.forEach((el) => {
+    el.src = BRAND.logo;
+    el.alt = "Rosie Dazzlers logo";
+  });
+
+  const banner = document.querySelector("[data-banner]");
+  if (banner) {
+    banner.src = BRAND.banner;
+    banner.alt = "Rosie Dazzlers banner";
+  }
+
+  const reviews = document.querySelector("[data-reviews]");
+  if (reviews) {
+    reviews.src = BRAND.reviews;
+    reviews.alt = "Rosie Dazzlers reviews";
+  }
+}
+
+function getUrlParams() {
+  return new URLSearchParams(location.search);
+}
+
+function preselectBookingFromQuery() {
+  const params = getUrlParams();
+  const pkg = params.get("package");
+  const size = params.get("size");
+
+  const pkgSel = q("package");
+  const sizeSel = q("size");
+
+  if (pkg && pkgSel) pkgSel.value = pkg;
+  if (size && sizeSel) sizeSel.value = size;
+}
+
+async function renderHomePage() {
+  const cardsEl = q("homePackages");
+  if (!cardsEl) return;
+
+  const data = await loadServicesData();
+  renderMainPackages(cardsEl, data, "small");
+}
+
+async function renderServicesPage() {
+  const cardsEl = q("packagesGrid");
+  const sizeSel = q("size");
+  if (!cardsEl || !sizeSel) return;
+
+  const data = await loadServicesData();
+
+  const rerender = () => {
+    renderMainPackages(cardsEl, data, sizeSel.value || "small");
+  };
+
+  sizeSel.addEventListener("change", rerender);
+  rerender();
+}
+
+async function renderPricingPage() {
+  const cardsEl = q("pricingPackages");
+  const addonEl = q("addonsGrid");
+  const sizeSel = q("size");
+  if (!cardsEl || !addonEl || !sizeSel) return;
+
+  const data = await loadServicesData();
+
+  const rerender = () => {
+    const size = sizeSel.value || "small";
+    renderMainPackages(cardsEl, data, size);
+    renderAddonCards(addonEl, data, size);
+  };
+
+  sizeSel.addEventListener("change", rerender);
+  rerender();
+}
+
+async function renderBookingPage() {
+  const pkgSel = q("package");
+  const sizeSel = q("size");
+  const addonsWrap = q("addonsWrap");
+  const form = q("bookingForm");
+
+  if (!pkgSel || !sizeSel || !addonsWrap || !form) return;
+
+  const data = await loadServicesData();
+
+  populateBookingPackages(pkgSel, data);
+  preselectBookingFromQuery();
+
+  const rerender = () => {
+    populateAddonChecklist(addonsWrap, data, sizeSel.value || "small");
+    updateBookingSummary(data);
+    document.querySelectorAll('input[name="addons"]').forEach((el) => {
+      el.addEventListener("change", () => updateBookingSummary(data));
+    });
+  };
+
+  pkgSel.addEventListener("change", () => updateBookingSummary(data));
+  sizeSel.addEventListener("change", rerender);
+
+  rerender();
+
+  const statusEl = q("bookingStatus");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if (statusEl) {
+      statusEl.textContent = "Creating checkout session…";
+      statusEl.className = "notice";
+    }
+
+    const fd = new FormData(form);
+    const payload = {
+      customer_name: String(fd.get("customer_name") || "").trim(),
+      customer_email: String(fd.get("customer_email") || "").trim(),
+      customer_phone: String(fd.get("customer_phone") || "").trim(),
+      address_line1: String(fd.get("address_line1") || "").trim(),
+      city: String(fd.get("city") || "").trim(),
+      postal_code: String(fd.get("postal_code") || "").trim(),
+      service_area: String(fd.get("service_area") || "").trim(),
+      service_date: String(fd.get("service_date") || "").trim(),
+      start_slot: String(fd.get("start_slot") || "").trim(),
+      duration_slots: Number(fd.get("duration_slots") || 1),
+      package_code: String(fd.get("package") || "").trim(),
+      vehicle_size: String(fd.get("size") || "").trim(),
+      addons: fd.getAll("addons"),
+      notes: String(fd.get("notes") || "").trim(),
+      ack_driveway: fd.get("ack_driveway") === "on",
+      ack_power_water: fd.get("ack_power_water") === "on",
+      ack_bylaw: fd.get("ack_bylaw") === "on",
+      ack_cancellation: fd.get("ack_cancellation") === "on"
+    };
+
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const json = await res.json();
+
+      if (!res.ok) {
+        throw new Error(json?.error || "Could not start checkout");
+      }
+
+      if (!json?.checkout_url) {
+        throw new Error("Missing Stripe checkout URL");
+      }
+
+      if (statusEl) {
+        statusEl.textContent = "Redirecting to secure checkout…";
+        statusEl.className = "notice ok";
+      }
+
+      location.href = json.checkout_url;
+    } catch (err) {
+      if (statusEl) {
+        statusEl.textContent = err.message || "Checkout failed";
+        statusEl.className = "notice err";
+      }
+    }
+  });
+}
+
+function showCheckoutReturnStatus() {
+  const el = document.querySelector("[data-checkout-status]");
+  if (!el) return;
+
+  const params = getUrlParams();
+  const ok = params.get("checkout");
+  const kind = params.get("kind");
+
+  if (ok === "success" && kind === "booking") {
+    el.textContent = "Deposit received. Your booking is being confirmed.";
+    el.className = "notice ok";
+  } else if (ok === "cancel") {
+    el.textContent = "Checkout cancelled. No payment was taken.";
+    el.className = "notice warn";
+  } else {
+    el.textContent = "";
+    el.className = "notice";
     el.style.display = "none";
     return;
   }
-  el.src = src;
-  el.alt = alt || "";
-  el.style.display = "";
+
+  el.style.display = "block";
 }
 
-function buildPackageCards() {
-  const mount = qs("[data-package-grid]");
-  if (!mount) return;
-
-  const sizes = ["small", "mid", "oversize"];
-  const order = [
-    "premium_wash",
-    "basic_detail",
-    "complete_detail",
-    "interior_detail",
-    "exterior_detail",
-  ];
-
-  mount.innerHTML = "";
-
-  for (const packageCode of order) {
-    const pkg = PRICING[packageCode];
-    if (!pkg) continue;
-
-    const article = document.createElement("article");
-    article.className = "package-card";
-    article.dataset.packageCode = packageCode;
-
-    const preview = document.createElement("div");
-    preview.className = "package-card-preview";
-
-    const img = document.createElement("img");
-    img.className = "package-card-image";
-    img.loading = "lazy";
-    renderImage(img, packageImageUrl(packageCode, "small"), pkg.label);
-
-    preview.appendChild(img);
-
-    const body = document.createElement("div");
-    body.className = "package-card-body";
-
-    const title = document.createElement("h3");
-    title.className = "package-card-title";
-    title.textContent = pkg.label;
-
-    const subtitle = document.createElement("p");
-    subtitle.className = "package-card-subtitle";
-    subtitle.textContent = pkg.subtitle || "";
-
-    const pricing = document.createElement("div");
-    pricing.className = "package-card-pricing";
-
-    for (const size of sizes) {
-      const row = document.createElement("div");
-      row.className = "package-card-price-row";
-      row.dataset.size = size;
-
-      const label = document.createElement("span");
-      label.className = "package-card-price-label";
-      label.textContent = size === "small" ? "Small" : size === "mid" ? "Mid" : "Oversize";
-
-      const value = document.createElement("span");
-      value.className = "package-card-price-value";
-      value.textContent = money(pkg[size]);
-
-      row.appendChild(label);
-      row.appendChild(value);
-
-      row.addEventListener("mouseenter", () => {
-        renderImage(img, packageImageUrl(packageCode, size), `${pkg.label} — ${label.textContent}`);
-      });
-
-      row.addEventListener("focusin", () => {
-        renderImage(img, packageImageUrl(packageCode, size), `${pkg.label} — ${label.textContent}`);
-      });
-
-      pricing.appendChild(row);
-    }
-
-    const deposit = document.createElement("p");
-    deposit.className = "package-card-deposit";
-    deposit.textContent = `Deposit: ${money(calcDepositCents(packageCode))}`;
-
-    const ctaWrap = document.createElement("div");
-    ctaWrap.className = "package-card-actions";
-
-    const cta = document.createElement("a");
-    cta.className = "btn btn-primary";
-    cta.href = `/book?package=${encodeURIComponent(packageCode)}`;
-    cta.textContent = "Book This Service";
-
-    const pricingLink = document.createElement("a");
-    pricingLink.className = "btn btn-secondary";
-    pricingLink.href = "/pricing";
-    pricingLink.textContent = "View Pricing";
-
-    ctaWrap.appendChild(cta);
-    ctaWrap.appendChild(pricingLink);
-
-    body.appendChild(title);
-    body.appendChild(subtitle);
-    body.appendChild(pricing);
-    body.appendChild(deposit);
-    body.appendChild(ctaWrap);
-
-    article.appendChild(preview);
-    article.appendChild(body);
-    mount.appendChild(article);
-  }
+function wireContactBits() {
+  document.querySelectorAll("[data-phone]").forEach((el) => (el.textContent = CONTACT.phone));
+  document.querySelectorAll("[data-email]").forEach((el) => (el.textContent = CONTACT.email));
+  document.querySelectorAll("[data-service-area]").forEach((el) => (el.textContent = CONTACT.serviceArea));
 }
 
-function buildAddonsList() {
-  const mount = qs("[data-addons-list]");
-  if (!mount) return;
+async function init() {
+  applyBrandImages();
+  wireContactBits();
+  showCheckoutReturnStatus();
 
-  mount.innerHTML = "";
-
-  for (const [key, addon] of Object.entries(ADDONS)) {
-    const card = document.createElement("article");
-    card.className = "addon-card";
-    card.dataset.addonKey = key;
-
-    const title = document.createElement("h3");
-    title.className = "addon-card-title";
-    title.textContent = addon.label;
-
-    const detail = document.createElement("div");
-    detail.className = "addon-card-detail";
-
-    if (addon.quote_required) {
-      detail.textContent = "Quote required";
-    } else if (typeof addon.price_cents === "number") {
-      detail.textContent = money(addon.price_cents);
-    } else if (addon.prices_cents) {
-      const parts = [];
-      if (typeof addon.prices_cents.small === "number") parts.push(`Small ${money(addon.prices_cents.small)}`);
-      if (typeof addon.prices_cents.mid === "number") parts.push(`Mid ${money(addon.prices_cents.mid)}`);
-      if (typeof addon.prices_cents.oversize === "number") parts.push(`Oversize ${money(addon.prices_cents.oversize)}`);
-      detail.textContent = parts.join(" • ");
-    } else {
-      detail.textContent = "Contact for pricing";
-    }
-
-    card.appendChild(title);
-    card.appendChild(detail);
-    mount.appendChild(card);
-  }
+  if (q("homePackages")) await renderHomePage();
+  if (q("packagesGrid")) await renderServicesPage();
+  if (q("pricingPackages")) await renderPricingPage();
+  if (q("bookingForm")) await renderBookingPage();
 }
 
-function wirePackagePreviewPicker() {
-  const select = qs("[data-package-select]");
-  const sizeSelect = qs("[data-size-select]");
-  const image = qs("[data-package-preview-image]");
-  const title = qs("[data-package-preview-title]");
-  const price = qs("[data-package-preview-price]");
-  const deposit = qs("[data-package-preview-deposit]");
-  const includesChart = qs("[data-includes-chart]");
-  const sizeChart = qs("[data-size-chart]");
+document.addEventListener("DOMContentLoaded", init);
 
-  if (!select || !sizeSelect) return;
-
-  function update() {
-    const packageCode = normalizeKey(select.value);
-    const vehicleSize = normalizeKey(sizeSelect.value) || "small";
-    const pkg = PRICING[packageCode];
-
-    if (!pkg) {
-      renderImage(image, "", "");
-      if (title) title.textContent = "";
-      if (price) price.textContent = "";
-      if (deposit) deposit.textContent = "";
-      return;
-    }
-
-    if (title) title.textContent = pkg.label;
-    if (price) {
-      const cents = getPackagePrice(packageCode, vehicleSize);
-      price.textContent = cents != null ? money(cents) : "Contact for pricing";
-    }
-    if (deposit) deposit.textContent = money(calcDepositCents(packageCode));
-
-    renderImage(
-      image,
-      packageImageUrl(packageCode, vehicleSize),
-      `${pkg.label} preview`
-    );
-
-    renderImage(
-      includesChart,
-      chartImageUrl("includes"),
-      "Included service chart"
-    );
-
-    renderImage(
-      sizeChart,
-      chartImageUrl("size"),
-      "Vehicle size chart"
-    );
-  }
-
-  select.addEventListener("change", update);
-  sizeSelect.addEventListener("change", update);
-  update();
+export function setBrandImages() {
+  applyBrandImages();
 }
 
-function wireAddonEstimator() {
-  const packageSelect = qs("[data-estimator-package]");
-  const sizeSelect = qs("[data-estimator-size]");
-  const addonCheckboxes = qsa("[data-addon-key]");
-  const packageTotal = qs("[data-estimator-package-total]");
-  const addonTotal = qs("[data-estimator-addon-total]");
-  const grandTotal = qs("[data-estimator-grand-total]");
-  const depositTotal = qs("[data-estimator-deposit-total]");
-
-  if (!packageSelect || !sizeSelect || !packageTotal || !addonTotal || !grandTotal || !depositTotal) {
-    return;
-  }
-
-  function update() {
-    const packageCode = normalizeKey(packageSelect.value);
-    const vehicleSize = normalizeKey(sizeSelect.value);
-
-    const base = getPackagePrice(packageCode, vehicleSize) || 0;
-    let addonsTotalCents = 0;
-
-    for (const checkbox of addonCheckboxes) {
-      if (!checkbox.checked) continue;
-      const addonKey = checkbox.dataset.addonKey;
-      const addon = ADDONS[addonKey];
-      if (!addon || addon.quote_required) continue;
-      const cents = getAddonPrice(addonKey, vehicleSize);
-      if (typeof cents === "number") addonsTotalCents += cents;
-    }
-
-    packageTotal.textContent = money(base);
-    addonTotal.textContent = money(addonsTotalCents);
-    grandTotal.textContent = money(base + addonsTotalCents);
-    depositTotal.textContent = money(calcDepositCents(packageCode));
-  }
-
-  packageSelect.addEventListener("change", update);
-  sizeSelect.addEventListener("change", update);
-  for (const checkbox of addonCheckboxes) {
-    checkbox.addEventListener("change", update);
-  }
-
-  update();
-}
-
-function wireCanonicalLinks() {
-  qsa('a[href="/services.html"], a[href="services.html"]').forEach((a) => {
-    a.href = "/services";
-  });
-
-  qsa('a[href="/pricing.html"], a[href="pricing.html"]').forEach((a) => {
-    a.href = "/pricing";
-  });
-}
-
-function init() {
-  wireCanonicalLinks();
-  buildPackageCards();
-  buildAddonsList();
-  wirePackagePreviewPicker();
-  wireAddonEstimator();
-}
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", init);
-} else {
-  init();
+export function handleCheckoutReturn() {
+  showCheckoutReturnStatus();
 }
