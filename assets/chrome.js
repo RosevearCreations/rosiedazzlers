@@ -57,9 +57,16 @@ function initNavToggle() {
   const links = document.querySelector("#navLinks");
   if (!btn || !links) return;
 
+  // prevent duplicate binding
+  if (btn.dataset.bound === "1") return;
+  btn.dataset.bound = "1";
+
   btn.addEventListener("click", () => {
     links.classList.toggle("open");
-    btn.setAttribute("aria-expanded", links.classList.contains("open") ? "true" : "false");
+    btn.setAttribute(
+      "aria-expanded",
+      links.classList.contains("open") ? "true" : "false"
+    );
   });
 
   links.querySelectorAll("a").forEach((a) => {
@@ -135,7 +142,6 @@ function setFooter() {
 
 /* =========================
    PACKAGE CARD HOVER ROTATION
-   (fixes blanks + uses your real filenames)
    ========================= */
 
 const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages/";
@@ -280,13 +286,21 @@ function attachRotators(containerSelector) {
    BOOT
    ========================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+function initChrome() {
   ensureNavLinks();
   setActiveNavLink();
   initNavToggle();
   setFooter();
 
   attachRotators("#homePackages");
+  attachRotators("#packageCards");
+  attachRotators("#pricingCards");
   attachRotators("#packagesGrid");
   attachRotators("#pricingPackages");
-});
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initChrome);
+} else {
+  initChrome();
+}
