@@ -62,3 +62,187 @@ Static HTML + JavaScript is the intended design.
 # 3) Backend Must Remain Serverless
 
 Backend logic must remain inside:
+
+
+/functions/api
+
+
+Do not introduce:
+
+Express servers  
+Node hosting services  
+Docker containers  
+Persistent backend services  
+
+All backend logic must run through **Cloudflare Pages Functions**.
+
+---
+
+# 4) Do Not Duplicate Business Logic
+
+Business rules must exist in **one place only**.
+
+Examples:
+
+Pricing logic  
+Add-on definitions  
+Promo code rules  
+Package definitions  
+
+Preferred location for business configuration:
+
+
+/data/*.json
+
+
+Both frontend and backend should read from the same source.
+
+---
+
+# 5) Do Not Hardcode Asset Paths
+
+Images must follow the R2 asset structure.
+
+Base domain:
+
+https://assets.rosiedazzlers.ca
+
+Folders:
+
+brand/  
+packages/  
+products/  
+systems/
+
+Do not hardcode new asset locations that break this structure.
+
+---
+
+# 6) Database Schema Changes
+
+Database schema is defined in:
+
+
+SUPABASE_SCHEMA.sql
+
+
+Rules:
+
+• do not create tables outside this file  
+• keep schema changes backward compatible  
+• use `create table if not exists` patterns  
+• use `add column if not exists` when modifying tables  
+
+All schema updates must be reflected in this file.
+
+---
+
+# 7) Protect the Booking System
+
+The booking system is the **core business logic**.
+
+Key files:
+
+
+/functions/api/checkout.js
+/functions/api/availability.js
+/functions/api/stripe/webhook.js
+
+
+Changes to booking logic must preserve:
+
+AM / PM slot system  
+date_blocks  
+slot_blocks  
+deposit checkout flow  
+Stripe webhook confirmation
+
+Do not alter booking flow without careful validation.
+
+---
+
+# 8) Protect the Gift Certificate System
+
+Gift certificates are intentionally **separate from bookings**.
+
+Key endpoints:
+
+
+/api/gifts/checkout
+/api/gifts/webhook
+/api/gifts/receipt
+
+
+Do not merge gift logic into the booking system.
+
+---
+
+# 9) Admin Endpoints Must Remain Protected
+
+Admin API endpoints must require:
+
+
+ADMIN_PASSWORD
+
+
+Never expose admin endpoints publicly without authentication.
+
+---
+
+# 10) Avoid Introducing State on the Frontend
+
+The frontend should remain simple and stateless.
+
+Avoid:
+
+complex client-side frameworks  
+persistent client state systems  
+local database storage  
+
+State belongs in the database.
+
+---
+
+# 11) Respect the Documentation System
+
+This repository includes structured documentation.
+
+README.md — project overview  
+PROJECT_BRAIN.md — system overview  
+AI_CONTEXT.md — AI guidance  
+REPO_GUIDE.md — repo structure  
+SANITY_CHECK.md — development priorities  
+DEVELOPMENT_ROADMAP.md — next upgrades  
+SUPABASE_SCHEMA.sql — database schema  
+
+Any major change should update the relevant documentation.
+
+---
+
+# 12) Prefer Simple Solutions
+
+When adding features:
+
+Prefer
+
+simple JavaScript  
+JSON configuration  
+serverless functions  
+
+Avoid unnecessary complexity.
+
+The goal is a **maintainable small-business platform**, not an enterprise framework.
+
+---
+
+# Final Rule
+
+If a proposed change makes the system:
+
+• harder to understand  
+• more complex to deploy  
+• dependent on new infrastructure  
+
+then it is likely **the wrong change**.
+
+Always favor the simplest architecture that preserves functionality.
