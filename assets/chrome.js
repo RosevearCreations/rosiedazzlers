@@ -1,7 +1,7 @@
 // /assets/chrome.js
 
 /* =========================
-   NAV + FOOTER (existing)
+   NAV + FOOTER
    ========================= */
 
 const SOCIALS = [
@@ -14,16 +14,40 @@ const SOCIALS = [
   ["LinkedIn", "https://www.linkedin.com/in/rosiedazzlers/"],
 ];
 
+const DEFAULT_NAV_LINKS = [
+  ["/services", "Services"],
+  ["/pricing", "Pricing"],
+  ["/gear", "Gear"],
+  ["/consumables", "Consumables"],
+  ["/about", "About"],
+  ["/contact", "Contact"],
+  ["/book", "Book"],
+];
+
 function normalizePath(p) {
   const x = (p || "/").replace(/\/+$/, "");
   return x === "" ? "/" : x;
+}
+
+function ensureNavLinks() {
+  const links = document.querySelector("#navLinks");
+  if (!links) return;
+
+  const existing = links.querySelectorAll("a");
+  if (existing.length > 0) return;
+
+  links.innerHTML = DEFAULT_NAV_LINKS.map(
+    ([href, label]) => `<a href="${href}">${label}</a>`
+  ).join("");
 }
 
 function setActiveNavLink() {
   const path = normalizePath(location.pathname);
   document.querySelectorAll(".nav-links a").forEach((a) => {
     const href = normalizePath(a.getAttribute("href") || "/");
-    const active = (href === "/" && path === "/") || (href !== "/" && path.startsWith(href));
+    const active =
+      (href === "/" && path === "/") ||
+      (href !== "/" && path.startsWith(href));
     a.classList.toggle("active", active);
   });
 }
@@ -116,24 +140,21 @@ function setFooter() {
 
 const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages/";
 
-// These exist in your /packages directory (exact names)
 const STATIC_HOVER_FILES = [
   "Exterior Detail.png",
   "Interior Detail.png",
   "CarSizeChart.PNG",
 ];
 
-// Also use size-specific images you already have
 const SIZE_ICON_BY_VALUE = {
   small: "SmallCar.png",
   mid: "MidSizedCars.png",
   oversize: "ExoticLargeSizedCars.png",
 };
 
-const loadState = new Map(); // url -> "ok" | "fail" | "pending"
+const loadState = new Map();
 
 function fileUrl(fileName) {
-  // filenames contain spaces, so encodeURI is required
   return encodeURI(`${PACKAGES_BASE}${fileName}`);
 }
 
@@ -153,14 +174,11 @@ function isOk(url) {
 }
 
 function currentSize() {
-  // services + pricing use #size for the viewer selector
   const sel = document.querySelector("#size");
   return sel && sel.value ? sel.value : null;
 }
 
 function guessGiftCertUrl(baseSrc) {
-  // If your card image is ...Something.png, try ...SomethingGiftCert.png
-  // Works for items like PremiumExternalWash.png, FullInteriorDetailSmallCars.png, etc.
   try {
     const u = new URL(baseSrc);
     const file = u.pathname.split("/").pop() || "";
@@ -177,21 +195,16 @@ function guessGiftCertUrl(baseSrc) {
 function buildPlaylist(baseSrc) {
   const urls = [];
 
-  // 1) main image (size-specific package image)
   urls.push(baseSrc);
 
-  // 2) static hover images (Exterior / Interior / Size chart)
   for (const f of STATIC_HOVER_FILES) urls.push(fileUrl(f));
 
-  // 3) size icon that matches the size dropdown
   const s = currentSize();
   if (s && SIZE_ICON_BY_VALUE[s]) urls.push(fileUrl(SIZE_ICON_BY_VALUE[s]));
 
-  // 4) gift cert version of the current card image (if it exists)
   const gift = guessGiftCertUrl(baseSrc);
   if (gift) urls.push(gift);
 
-  // de-dupe
   return urls.filter((u, i, arr) => arr.indexOf(u) === i);
 }
 
@@ -219,7 +232,6 @@ function attachRotators(containerSelector) {
     card.addEventListener("mouseenter", () => {
       base = img.currentSrc || img.src;
 
-      // ensure we never "blank" the card
       img.onerror = () => {
         img.style.display = "";
         img.src = base;
@@ -230,11 +242,9 @@ function attachRotators(containerSelector) {
 
       if (timer) clearInterval(timer);
 
-      // rotate ONLY to images that are confirmed loaded (no blanks)
       timer = setInterval(() => {
         if (!playlist.length) return;
 
-        // Try up to playlist length to find next loaded image
         const currentIdx = playlist.indexOf(img.src);
         let idx = currentIdx >= 0 ? currentIdx : 0;
 
@@ -242,25 +252,22 @@ function attachRotators(containerSelector) {
           idx = (idx + 1) % playlist.length;
           const candidate = playlist[idx];
 
-          // base is always allowed
           if (candidate === base) {
             img.src = candidate;
             return;
           }
-          // only rotate to loaded hover images
+
           if (isOk(candidate)) {
             img.src = candidate;
             return;
           }
         }
-        // none ready yet -> keep current image
       }, 1200);
     });
 
     card.addEventListener("mouseleave", stop);
   }
 
-  // existing + future cards
   container.querySelectorAll(".card").forEach(attach);
 
   const mo = new MutationObserver(() => {
@@ -274,11 +281,11 @@ function attachRotators(containerSelector) {
    ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
+  ensureNavLinks();
   setActiveNavLink();
   initNavToggle();
   setFooter();
 
-  // package cards on home/services/pricing
   attachRotators("#homePackages");
   attachRotators("#packagesGrid");
   attachRotators("#pricingPackages");
