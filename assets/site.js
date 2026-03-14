@@ -1,5 +1,3 @@
-// /assets/site.js
-
 const DATA_URL = "/data/rosie_services_pricing_and_packages.json";
 
 const BRAND = {
@@ -14,11 +12,9 @@ const CONTACT = {
   serviceArea: "Norfolk & Oxford Counties"
 };
 
-// Base URL for package media in R2 (filenames include spaces)
 const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages/";
 const pkgFile = (filename) => encodeURI(`${PACKAGES_BASE}${filename}`);
 
-// Hover/rotation images shown on package cards (these filenames MUST match R2 exactly)
 const HOVER_MEDIA = {
   exterior: pkgFile("Exterior Detail.png"),
   interior: pkgFile("Interior Detail.png"),
@@ -53,10 +49,6 @@ function money(value) {
   }).format(Number(value || 0));
 }
 
-function centsToMoney(cents) {
-  return money(Number(cents || 0) / 100);
-}
-
 function q(id) {
   return document.getElementById(id);
 }
@@ -64,14 +56,6 @@ function q(id) {
 function setText(id, value) {
   const el = q(id);
   if (el) el.textContent = value;
-}
-
-function setImage(sel, src, alt = "") {
-  const el = document.querySelector(sel);
-  if (!el) return;
-  el.src = src;
-  el.alt = alt;
-  el.loading = "lazy";
 }
 
 function packagePrice(pkg, size) {
@@ -102,12 +86,10 @@ function getCurrentPackageCode() {
 
 function buildMainCardGallery(pkg, size) {
   const files = [];
-
   if (pkg?.images?.[size]) files.push(pkg.images[size]);
   if (HOVER_MEDIA.exterior) files.push(HOVER_MEDIA.exterior);
   if (HOVER_MEDIA.interior) files.push(HOVER_MEDIA.interior);
   if (HOVER_MEDIA.size) files.push(HOVER_MEDIA.size);
-
   return [...new Set(files)];
 }
 
@@ -339,17 +321,25 @@ function updateBookingSummary(data) {
 }
 
 function applyBrandImages() {
-  const logoEls = document.querySelectorAll("[data-logo]");
-  logoEls.forEach((el) => {
+  document.querySelectorAll("[data-logo]").forEach((el) => {
     el.src = BRAND.logo;
     el.alt = "Rosie Dazzlers logo";
   });
 
-  const banner = document.querySelector("[data-banner]");
-  if (banner) {
-    banner.src = BRAND.banner;
-    banner.alt = "Rosie Dazzlers banner";
-  }
+  const bannerTargets = [
+    ...document.querySelectorAll("[data-banner]"),
+    ...document.querySelectorAll("#bannerImage"),
+    ...document.querySelectorAll(".hero-banner img"),
+    ...document.querySelectorAll(".banner img"),
+    ...document.querySelectorAll("img[data-role='banner']")
+  ];
+
+  bannerTargets.forEach((el) => {
+    el.src = BRAND.banner;
+    el.alt = "Rosie Dazzlers banner";
+    el.loading = "lazy";
+    el.style.display = "";
+  });
 
   const reviews = document.querySelector("[data-reviews]");
   if (reviews) {
