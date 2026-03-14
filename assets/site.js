@@ -1,817 +1,340 @@
-const DATA_URL = "/data/rosie_services_pricing_and_packages.json";
+// assets/site.js
+// Shared rendering/helpers for Rosie Dazzlers pages.
+// Uses assets/config.js as the source of truth for package media, charts, pricing, and add-ons.
 
-const BRAND = {
-  logo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
-  banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
-  reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png"
-};
+import {
+  PATHS,
+  CHARTS,
+  PACKAGE_MEDIA,
+  PRICING,
+  ADDONS,
+  assetUrl,
+  money,
+  calcDepositCents,
+} from "./config.js";
 
-const CONTACT = {
-  phone: "226-752-7613",
-  email: "info@rosiedazzlers.ca",
-  serviceArea: "Norfolk & Oxford Counties"
-};
-
-const HOVER_MEDIA = {
-  exterior: "https://assets.rosiedazzlers.ca/packages/Exteriordetail.png",
-  interior: "https://assets.rosiedazzlers.ca/packages/Interiordetail.png",
-  size: "https://assets.rosiedazzlers.ca/packages/carsizechart.png"
-};
-
-const ADDON_MEDIA = {
-  de_badging: "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
-  de_ionizing_treatment: "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png",
-  engine_cleaning: "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
-  external_ceramic_coating: "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
-  external_graphene_fine_finish: "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png",
-  external_wax: "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png",
-  vinyl_wrapping: "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
-  window_tinting: "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png"
-};
-
-let _servicesData = null;
-
-async function loadServicesData() {
-  if (_servicesData) return _servicesData;
-  const res = await fetch(`${DATA_URL}?v=20260301e`, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Could not load ${DATA_URL}`);
-  _servicesData = await res.json();
-  return _servicesData;
+function qs(selector, root = document) {
+  return root.querySelector(selector);
 }
 
-function money(value) {
-  return new Intl.NumberFormat("en-CA", {
-    style: "currency",
-    currency: "CAD"
-  }).format(Number(value || 0));
+function qsa(selector, root = document) {
+  return Array.from(root.querySelectorAll(selector));
 }
 
-function getPackageByCode(data, code) {
-  return (data.packages || []).find((p) => p.code === code) || null;
+function normalizeKey(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "_");
 }
 
-function packagePrice(pkg, size) {
-  return Number(pkg?.prices_cad?.[size] || 0);
+function packageImageUrl(packageCode, vehicleSize) {
+  const media = PACKAGE_MEDIA[packageCode];
+  if (!media) return "";
+  const file = media[vehicleSize];
+  if (!file) return "";
+  return assetUrl(PATHS.packages, file);
 }
 
-function packageImageForSize(pkg, size) {
-  return pkg?.images_by_size?.[size] || "";
+function chartImageUrl(chartKey) {
+  const file = CHARTS[chartKey];
+  if (!file) return "";
+  return assetUrl(PATHS.brand, file);
 }
 
-function addonImageForCode(code) {
-  return ADDON_MEDIA[code] || "";
+function getPackagePrice(packageCode, vehicleSize) {
+  const pkg = PRICING[packageCode];
+  if (!pkg) return null;
+  return pkg[vehicleSize] ?? null;
 }
 
-function addonDisplay(addon, size) {
-  if (addon.quote_required === true) {
-    if (addon.prices_cad?.[size] != null) return `From ${money(addon.prices_cad[size])} · Quote required`;
-    if (addon.price_cad != null) return `From ${money(addon.price_cad)} · Quote required`;
-    return "Quote required";
+function getAddonPrice(addonKey, vehicleSize) {
+  const addon = ADDONS[addonKey];
+  if (!addon) return null;
+  if (typeof addon.price_cents === "number") return addon.price_cents;
+  if (addon.prices_cents && typeof addon.prices_cents[vehicleSize] === "number") {
+    return addon.prices_cents[vehicleSize];
   }
-  if (addon.prices_cad?.[size] != null) return money(addon.prices_cad[size]);
-  if (addon.price_cad != null) return money(addon.price_cad);
-  return "Quote required";
+  return null;
 }
 
-function addonCharge(addon, size) {
-  if (!addon || addon.quote_required === true) return 0;
-  if (addon.prices_cad?.[size] != null) return Number(addon.prices_cad[size]);
-  if (addon.price_cad != null) return Number(addon.price_cad);
-  return 0;
-}
-
-function calcDeposit(pkg) {
-  return Number(pkg?.deposit_cad || 0);
-}
-
-function ensureLightbox() {
-  let lb = document.querySelector("#lightbox");
-  if (lb) return lb;
-
-  lb = document.createElement("div");
-  lb.id = "lightbox";
-  lb.className = "lightbox";
-  lb.innerHTML = `
-    <div class="lightbox-inner">
-      <div class="lightbox-top">
-        <div class="title" id="lbTitle"></div>
-        <button class="btn small ghost" id="lbClose" type="button">Close</button>
-      </div>
-      <img id="lbImg" alt="">
-      <div class="kicker">Tip: right-click → open image in new tab</div>
-    </div>
-  `;
-  document.body.appendChild(lb);
-
-  const close = () => lb.classList.remove("open");
-  lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
-  lb.querySelector("#lbClose").addEventListener("click", close);
-  window.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
-
-  return lb;
-}
-
-export function openLightbox(title, src) {
-  const lb = ensureLightbox();
-  lb.querySelector("#lbTitle").textContent = title || "";
-  const img = lb.querySelector("#lbImg");
-  img.src = src;
-  img.alt = title || "";
-  lb.classList.add("open");
-}
-
-export function setBrandImages() {
-  const logo = document.querySelector("[data-logo]");
-  if (logo) logo.src = BRAND.logo;
-
-  const banner = document.querySelector("[data-banner]");
-  if (banner) banner.src = BRAND.banner;
-
-  const reviews = document.querySelector("[data-reviews]");
-  if (reviews) reviews.src = BRAND.reviews;
-}
-
-export function setFooter() {
-  const el = document.querySelector("[data-footer]");
+function renderImage(el, src, alt) {
   if (!el) return;
-  el.innerHTML = `
-    <div><strong>Rosie Dazzlers Mobile Auto Detailing</strong> — ${CONTACT.serviceArea}</div>
-    <div>Phone: <a href="tel:${CONTACT.phone}">${CONTACT.phone}</a> · Email: <a href="mailto:${CONTACT.email}">${CONTACT.email}</a></div>
-    <div class="kicker">Driveway required · customer provides power + water (or additional charges may apply).</div>
-  `;
-}
-
-export function handleCheckoutReturn() {
-  const params = new URLSearchParams(location.search);
-  const state = params.get("checkout");
-  const bid = params.get("bid");
-
-  const box = document.querySelector("[data-checkout-status]");
-  if (!box || !state) return;
-
-  if (state === "success") {
-    box.className = "notice ok";
-    box.innerHTML = `<strong>Deposit received.</strong> Booking ID: <code>${bid || ""}</code><br>We’ll confirm details by email.`;
-  } else if (state === "cancel") {
-    box.className = "notice warn";
-    box.innerHTML = `<strong>Checkout cancelled.</strong> Booking ID: <code>${bid || ""}</code><br>No deposit was taken. You can try again.`;
-  }
-}
-
-function chartButtons(data, selectorMap) {
-  const charts = data.charts || [];
-  const byName = Object.fromEntries(charts.map((c) => [c.filename, c]));
-
-  const bind = (selector, name, title) => {
-    const el = document.querySelector(selector);
-    if (el && byName[name]) {
-      el.addEventListener("click", () => openLightbox(title, byName[name].r2_url));
-    }
-  };
-
-  if (selectorMap.price) bind(selectorMap.price, "CarPrice2025.PNG", "Vehicle Price Chart 2025");
-  if (selectorMap.details) bind(selectorMap.details, "CarPriceDetails2025.PNG", "Package Service Details Chart");
-  if (selectorMap.size) bind(selectorMap.size, "CarSizeChart.PNG", "Vehicle Size Chart");
-}
-
-function buildMainCardGallery(pkg, size) {
-  const gallery = [];
-  const main = packageImageForSize(pkg, size);
-  if (main) gallery.push(main);
-  gallery.push(HOVER_MEDIA.exterior, HOVER_MEDIA.interior, HOVER_MEDIA.size);
-  return [...new Set(gallery.filter(Boolean))];
-}
-
-function attachHoverCarousel(root) {
-  const wraps = root.querySelectorAll("[data-carousel]");
-  wraps.forEach((wrap) => {
-    const imgs = [...wrap.querySelectorAll("img")];
-    if (imgs.length <= 1) return;
-
-    let current = 0;
-    let timer = null;
-
-    const show = (idx) => {
-      imgs.forEach((img, i) => img.classList.toggle("active", i === idx));
-    };
-
-    show(0);
-
-    wrap.addEventListener("mouseenter", () => {
-      if (timer) return;
-      timer = setInterval(() => {
-        current = (current + 1) % imgs.length;
-        show(current);
-      }, 1200);
-    });
-
-    wrap.addEventListener("mouseleave", () => {
-      clearInterval(timer);
-      timer = null;
-      current = 0;
-      show(0);
-    });
-  });
-}
-
-function renderMainPackages(cardsEl, data, size) {
-  if (!cardsEl) return;
-  cardsEl.innerHTML = "";
-
-  for (const pkg of data.packages || []) {
-    const price = packagePrice(pkg, size);
-    const deposit = calcDeposit(pkg);
-    const gallery = buildMainCardGallery(pkg, size);
-
-    const included = (pkg.included_services || [])
-      .map((s) => {
-        const note = s.optional_condition_note ? ` <span class="note">${s.optional_condition_note}</span>` : "";
-        return `<li>${s.name}${note}</li>`;
-      })
-      .join("");
-
-    const notes = (pkg.notes || []).map((n) => `<div class="tag">${n}</div>`).join("");
-
-    const mediaHtml = `
-      <div class="service-media" data-carousel>
-        ${gallery.map((src, i) => `<img loading="lazy" src="${src}" alt="${pkg.name}" class="${i === 0 ? "active" : ""}" onerror="this.style.display='none'">`).join("")}
-      </div>
-    `;
-
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `
-      ${mediaHtml}
-      <h3>${pkg.name}</h3>
-      <p>${pkg.subtitle || ""}</p>
-      <div class="price">${money(price)} <span class="kicker">(${size.toUpperCase()})</span></div>
-      <div class="kicker">Deposit: ${money(deposit)}</div>
-      <div class="hr"></div>
-      <ul class="list">${included}</ul>
-      <div class="hr"></div>
-      ${notes}
-      <div class="hr"></div>
-      <a class="btn primary" href="/book?package=${encodeURIComponent(pkg.code)}&size=${encodeURIComponent(size)}">Book this</a>
-    `;
-    cardsEl.appendChild(div);
-  }
-
-  attachHoverCarousel(cardsEl);
-}
-
-function renderCompareTable(container, data) {
-  if (!container) return;
-  const packages = data.packages || [];
-  const matrix = data.service_matrix || [];
-
-  const head = packages.map((p) => `<th>${p.name}</th>`).join("");
-
-  const rows = matrix.map((row) => {
-    const tds = packages.map((p) => {
-      const has = row.included_in?.[p.code] === true;
-      return `<td>${has ? '<span class="check">✓</span>' : '<span class="nope">—</span>'}</td>`;
-    }).join("");
-
-    return `
-      <tr>
-        <td>
-          <strong>${row.service}</strong>
-          ${row.conditional_note ? `<span class="note">${row.conditional_note}</span>` : ""}
-        </td>
-        ${tds}
-      </tr>
-    `;
-  }).join("");
-
-  container.innerHTML = `
-    <div class="compare-wrap">
-      <table class="compare-table">
-        <thead>
-          <tr>
-            <th>Included service</th>
-            ${head}
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>
-  `;
-}
-
-function renderAddons(container, data, size) {
-  if (!container) return;
-  container.innerHTML = "";
-
-  for (const addon of data.addons || []) {
-    const pricing = addonDisplay(addon, size);
-    const image = addonImageForCode(addon.code);
-
-    const tags = [
-      addon.quote_required ? `<span class="tag quote">Quote required</span>` : `<span class="tag flat">Priced online</span>`,
-      addon.source ? `<span class="tag">${addon.source.replaceAll("_", " ")}</span>` : ""
-    ].join("");
-
-    const notes = (addon.notes || []).map((n) => `<div class="kicker">${n}</div>`).join("");
-
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `
-      ${image ? `<img class="img" loading="lazy" src="${image}" alt="${addon.name}" onerror="this.style.display='none'">` : ""}
-      <h3>${addon.name}</h3>
-      <div class="price">${pricing}</div>
-      <div class="hr"></div>
-      ${tags}
-      ${notes ? `<div class="hr"></div>${notes}` : ""}
-      <div class="hr"></div>
-      <a class="btn ghost" href="/book?size=${encodeURIComponent(size)}">Add to booking</a>
-    `;
-    container.appendChild(div);
-  }
-}
-
-function renderPackageSummary(target, pkg) {
-  if (!target || !pkg) return;
-  const items = (pkg.included_services || [])
-    .map((s) => `<li>${s.name}${s.optional_condition_note ? ` <span class="note">${s.optional_condition_note}</span>` : ""}</li>`)
-    .join("");
-
-  target.innerHTML = `
-    <strong>${pkg.name} includes</strong>
-    <div class="hr"></div>
-    <ul class="list">${items}</ul>
-  `;
-}
-
-function renderAddonPicker(target, data, size, selectedCodes = []) {
-  if (!target) return;
-  target.innerHTML = "";
-
-  for (const addon of data.addons || []) {
-    const id = `addon_${addon.code}`;
-    const priceText = addonDisplay(addon, size);
-
-    const row = document.createElement("label");
-    row.style.display = "grid";
-    row.style.gridTemplateColumns = "24px 1fr";
-    row.style.gap = "10px";
-    row.style.alignItems = "start";
-    row.style.marginBottom = "10px";
-
-    row.innerHTML = `
-      <input id="${id}" type="checkbox" name="addon_codes" value="${addon.code}" ${selectedCodes.includes(addon.code) ? "checked" : ""}>
-      <span>
-        <strong>${addon.name}</strong><br>
-        <span class="kicker">${priceText}</span>
-      </span>
-    `;
-
-    target.appendChild(row);
-  }
-}
-
-function selectedAddonCodes(form) {
-  return [...form.querySelectorAll("input[name='addon_codes']:checked")].map((x) => x.value);
-}
-
-function currentSize(form) {
-  return form.vehicle_size?.value || "small";
-}
-
-function currentPackageCode(form) {
-  return form.package_code?.value || "";
-}
-
-function calcBookingTotals(form, data) {
-  const size = currentSize(form);
-  const pkgCode = currentPackageCode(form);
-  const pkg = getPackageByCode(data, pkgCode);
-
-  const base = packagePrice(pkg, size);
-  const deposit = calcDeposit(pkg);
-
-  const selectedCodes = selectedAddonCodes(form);
-  const selectedAddons = (data.addons || []).filter((a) => selectedCodes.includes(a.code));
-
-  let pricedAddons = 0;
-  const quoteAddons = [];
-
-  for (const addon of selectedAddons) {
-    if (addon.quote_required === true) {
-      quoteAddons.push(addon.name);
-      continue;
-    }
-    pricedAddons += addonCharge(addon, size);
-  }
-
-  return {
-    pkg,
-    base,
-    deposit,
-    pricedAddons,
-    quoteAddons,
-    total: base + pricedAddons,
-    selectedCodes
-  };
-}
-
-async function checkAvailability(date) {
-  if (!date) return null;
-  const r = await fetch(`/api/availability?date=${encodeURIComponent(date)}`);
-  return await r.json();
-}
-
-export async function initServicesPage() {
-  const data = await loadServicesData();
-
-  const sizeSel = document.querySelector("#size");
-  const cardsEl = document.querySelector("#packageCards");
-  const compareEl = document.querySelector("#compareTable");
-  const addonsEl = document.querySelector("#addonCards");
-
-  const render = () => {
-    const size = sizeSel?.value || "small";
-    renderMainPackages(cardsEl, data, size);
-    renderCompareTable(compareEl, data);
-    renderAddons(addonsEl, data, size);
-  };
-
-  sizeSel?.addEventListener("change", render);
-  render();
-
-  chartButtons(data, {
-    price: "#openPrice",
-    details: "#openDetails",
-    size: "#openSize"
-  });
-}
-
-export async function initPricingPage() {
-  const data = await loadServicesData();
-
-  const sizeSel = document.querySelector("#size");
-  const cardsEl = document.querySelector("#pricingCards");
-  const addonsEl = document.querySelector("#pricingAddons");
-
-  const render = () => {
-    const size = sizeSel?.value || "small";
-    renderMainPackages(cardsEl, data, size);
-    renderAddons(addonsEl, data, size);
-  };
-
-  sizeSel?.addEventListener("change", render);
-  render();
-
-  chartButtons(data, {
-    price: "#openPrice",
-    details: "#openDetails",
-    size: "#openSize"
-  });
-}
-
-export async function initBookingPage() {
-  const data = await loadServicesData();
-
-  const form = document.querySelector("#bookingForm");
-  if (!form) return;
-
-  const packageSummary = document.querySelector("#packageSummary");
-  const addonPicker = document.querySelector("#addonPicker");
-  const availBox = document.querySelector("#availBox");
-  const priceBox = document.querySelector("#priceBox");
-  const submitBtn = document.querySelector("#submitBtn");
-
-  const params = new URLSearchParams(location.search);
-  const qpPackage = params.get("package");
-  const qpSize = params.get("size");
-
-  if (form.package_code && !form.package_code.dataset.built) {
-    form.package_code.innerHTML = (data.packages || [])
-      .map((p) => `<option value="${p.code}">${p.name}</option>`)
-      .join("");
-    form.package_code.dataset.built = "1";
-  }
-
-  if (qpPackage && form.package_code) form.package_code.value = qpPackage;
-  if (qpSize && form.vehicle_size) form.vehicle_size.value = qpSize;
-
-  const redraw = async (checkDate = false) => {
-    const previouslySelected = selectedAddonCodes(form);
-    const size = currentSize(form);
-    const pkg = getPackageByCode(data, currentPackageCode(form));
-
-    renderPackageSummary(packageSummary, pkg);
-    renderAddonPicker(addonPicker, data, size, previouslySelected);
-
-    const totals = calcBookingTotals(form, data);
-
-    priceBox.className = "notice";
-    priceBox.innerHTML = `
-      <div><strong>Estimate</strong></div>
-      <div>Base: ${money(totals.base)} · Priced add-ons: ${money(totals.pricedAddons)} · <strong>Total: ${money(totals.total)}</strong></div>
-      <div class="kicker">Deposit due now: <strong>${money(totals.deposit)}</strong></div>
-      ${totals.quoteAddons.length ? `<div class="kicker">Quote add-ons selected: ${totals.quoteAddons.join(", ")} (not included in online total)</div>` : ""}
-    `;
-
-    if (checkDate && form.service_date?.value) {
-      const avail = await checkAvailability(form.service_date.value);
-      if (avail?.blocked) {
-        availBox.className = "notice bad";
-        availBox.innerHTML = `This date is blocked: ${avail.reason || "Blocked"}`;
-      } else if (avail) {
-        availBox.className = "notice ok";
-        availBox.innerHTML = `
-          <strong>Availability for ${avail.date}</strong><br>
-          AM: ${avail.AM ? "✅ Available" : "❌ Not available"} ·
-          PM: ${avail.PM ? "✅ Available" : "❌ Not available"}
-          <div class="kicker">Pending holds expire after ~${avail.hold_minutes || 30} minutes.</div>
-        `;
-      }
-    }
-  };
-
-  await redraw(false);
-
-  form.package_code?.addEventListener("change", () => redraw(false));
-  form.vehicle_size?.addEventListener("change", () => redraw(false));
-  addonPicker.addEventListener("change", () => redraw(false));
-  form.service_date?.addEventListener("change", () => redraw(true));
-
-  chartButtons(data, {
-    price: "[data-open-price]",
-    details: "[data-open-details]",
-    size: "[data-open-size]"
-  });
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Creating checkout…";
-
-    try {
-      const totals = calcBookingTotals(form, data);
-
-      const payload = {
-        service_date: form.service_date.value,
-        start_slot: form.start_slot.value,
-        duration_slots: Number(form.duration_slots.value),
-        service_area: form.service_area.value,
-
-        package_code: form.package_code.value,
-        vehicle_size: form.vehicle_size.value,
-
-        customer_name: form.customer_name.value,
-        customer_email: form.customer_email.value,
-        customer_phone: form.customer_phone.value,
-
-        address_line1: form.address_line1.value,
-        city: form.city.value,
-        postal_code: form.postal_code.value,
-
-        addon_codes: totals.selectedCodes,
-
-        ack_driveway: form.ack_driveway.checked,
-        ack_power_water: form.ack_power_water.checked,
-        ack_bylaw: form.ack_bylaw.checked,
-        ack_cancellation: form.ack_cancellation.checked
-      };
-
-      if (!payload.ack_driveway || !payload.ack_power_water || !payload.ack_bylaw || !payload.ack_cancellation) {
-        throw new Error("Please confirm all required acknowledgements.");
-      }
-
-      const avail = await checkAvailability(payload.service_date);
-      if (avail?.blocked) throw new Error(avail.reason || "This date is blocked.");
-
-      if (payload.duration_slots === 2 && (!avail?.AM || !avail?.PM)) {
-        throw new Error("Full day not available. Please choose another date.");
-      }
-      if (payload.duration_slots === 1 && payload.start_slot === "AM" && !avail?.AM) {
-        throw new Error("AM not available. Please choose another date.");
-      }
-      if (payload.duration_slots === 1 && payload.start_slot === "PM" && !avail?.PM) {
-        throw new Error("PM not available. Please choose another date.");
-      }
-
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      const json = await res.json();
-      if (!res.ok) throw new Error(json?.error || "Checkout failed.");
-
-      window.location.href = json.checkout_url;
-    } catch (err) {
-      priceBox.className = "notice bad";
-      priceBox.innerHTML = `<strong>Error:</strong> ${String(err.message || err)}`;
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Pay deposit & book";
-    }
-  });
-}
-
-function titleFromName(raw) {
-  if (!raw) return "";
-  return String(raw)
-    .replace(/\.[a-z0-9]+$/i, "")
-    .replace(/[_-]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function amazonSearchUrl(query) {
-  return `https://www.amazon.ca/s?k=${encodeURIComponent(query)}`;
-}
-
-async function fetchJsonSafe(url) {
-  try {
-    const r = await fetch(`${url}?v=20260301e`, { cache: "no-store" });
-    if (!r.ok) return null;
-    return await r.json();
-  } catch {
-    return null;
-  }
-}
-
-function classifyProductType(item) {
-  const explicit = String(item?.type || "").toLowerCase();
-  if (explicit === "gear" || explicit === "consumable") return explicit;
-
-  const category = String(item?.category || "").toLowerCase();
-  const path = String(item?.path || item?.sanitized || item?.filename || item?.original || "").toLowerCase();
-
-  const consumableHints = [
-    "soap", "wax", "sealant", "ceramic", "graphene", "spray", "cleaner", "polish",
-    "compound", "degreaser", "dressing", "towel", "microfiber", "odor", "odour",
-    "shampoo", "detailer", "protectant", "chemical", "liquid"
-  ];
-
-  if (consumableHints.some((x) => category.includes(x) || path.includes(x))) {
-    return "consumable";
-  }
-
-  return "gear";
-}
-
-function buildInventoryImage(item, mode) {
-  const rawPath =
-    item?.path ||
-    item?.sanitized ||
-    item?.filename ||
-    item?.original ||
-    "";
-
-  if (!rawPath) return "";
-
-  const cleanPath = String(rawPath).replace(/^\/+/, "");
-
-  if (item?.r2_url) return item.r2_url;
-  if (mode === "gear" && item?.source_kind === "systems") {
-    return `https://assets.rosiedazzlers.ca/systems/${encodeURIComponent(cleanPath).replaceAll("%2F", "/")}`;
-  }
-  if (mode === "consumables") {
-    return `https://assets.rosiedazzlers.ca/consumables/${encodeURIComponent(cleanPath).replaceAll("%2F", "/")}`;
-  }
-
-  if (item?.source_kind === "products") {
-    return `https://assets.rosiedazzlers.ca/products/${encodeURIComponent(cleanPath).replaceAll("%2F", "/")}`;
-  }
-
-  return `https://assets.rosiedazzlers.ca/systems/${encodeURIComponent(cleanPath).replaceAll("%2F", "/")}`;
-}
-
-function buildInventoryTitle(item) {
-  return (
-    item?.title ||
-    item?.name ||
-    titleFromName(item?.original) ||
-    titleFromName(item?.filename) ||
-    titleFromName(item?.path) ||
-    titleFromName(item?.sanitized) ||
-    "Untitled Item"
-  );
-}
-
-function buildInventoryCategory(item) {
-  return item?.category || item?.group || item?.folder || "general";
-}
-
-function buildAmazonQuery(item, title) {
-  return [item?.brand, title].filter(Boolean).join(" ");
-}
-
-export async function initInventoryPage(mode) {
-  const listEl = document.querySelector("#invList");
-  const statusEl = document.querySelector("#invStatus");
-  const catEl = document.querySelector("#invCategory");
-  const qEl = document.querySelector("#invSearch");
-
-  if (!listEl || !statusEl || !catEl || !qEl) return;
-
-  statusEl.className = "notice";
-  statusEl.textContent = "Loading…";
-
-  const products = await fetchJsonSafe("/data/rosie_products_catalog.json");
-  const systems = await fetchJsonSafe("/data/systems_catalog.json");
-
-  if (!products && !systems) {
-    statusEl.className = "notice bad";
-    statusEl.innerHTML = `
-      <strong>Missing data files.</strong><br>
-      Expected:
-      <ul class="list">
-        <li><code>/data/rosie_products_catalog.json</code></li>
-        <li><code>/data/systems_catalog.json</code></li>
-      </ul>
-    `;
+  if (!src) {
+    el.removeAttribute("src");
+    el.alt = alt || "";
+    el.style.display = "none";
     return;
   }
+  el.src = src;
+  el.alt = alt || "";
+  el.style.display = "";
+}
 
-  const items = [];
+function buildPackageCards() {
+  const mount = qs("[data-package-grid]");
+  if (!mount) return;
 
-  if (Array.isArray(products)) {
-    for (const p of products) {
-      const type = classifyProductType(p);
-      if (mode === "gear" && type !== "gear") continue;
-      if (mode === "consumables" && type !== "consumable") continue;
+  const sizes = ["small", "mid", "oversize"];
+  const order = [
+    "premium_wash",
+    "basic_detail",
+    "complete_detail",
+    "interior_detail",
+    "exterior_detail",
+  ];
 
-      const title = buildInventoryTitle(p);
-      const category = buildInventoryCategory(p);
+  mount.innerHTML = "";
 
-      items.push({
-        source_kind: "products",
-        title,
-        category,
-        img: buildInventoryImage({ ...p, source_kind: "products" }, mode),
-        amazon: amazonSearchUrl(buildAmazonQuery(p, title))
+  for (const packageCode of order) {
+    const pkg = PRICING[packageCode];
+    if (!pkg) continue;
+
+    const article = document.createElement("article");
+    article.className = "package-card";
+    article.dataset.packageCode = packageCode;
+
+    const preview = document.createElement("div");
+    preview.className = "package-card-preview";
+
+    const img = document.createElement("img");
+    img.className = "package-card-image";
+    img.loading = "lazy";
+    renderImage(img, packageImageUrl(packageCode, "small"), pkg.label);
+
+    preview.appendChild(img);
+
+    const body = document.createElement("div");
+    body.className = "package-card-body";
+
+    const title = document.createElement("h3");
+    title.className = "package-card-title";
+    title.textContent = pkg.label;
+
+    const subtitle = document.createElement("p");
+    subtitle.className = "package-card-subtitle";
+    subtitle.textContent = pkg.subtitle || "";
+
+    const pricing = document.createElement("div");
+    pricing.className = "package-card-pricing";
+
+    for (const size of sizes) {
+      const row = document.createElement("div");
+      row.className = "package-card-price-row";
+      row.dataset.size = size;
+
+      const label = document.createElement("span");
+      label.className = "package-card-price-label";
+      label.textContent = size === "small" ? "Small" : size === "mid" ? "Mid" : "Oversize";
+
+      const value = document.createElement("span");
+      value.className = "package-card-price-value";
+      value.textContent = money(pkg[size]);
+
+      row.appendChild(label);
+      row.appendChild(value);
+
+      row.addEventListener("mouseenter", () => {
+        renderImage(img, packageImageUrl(packageCode, size), `${pkg.label} — ${label.textContent}`);
       });
-    }
-  }
 
-  if (Array.isArray(systems) && mode === "gear") {
-    for (const s of systems) {
-      const title = buildInventoryTitle(s);
-      const category = buildInventoryCategory(s);
-
-      items.push({
-        source_kind: "systems",
-        title,
-        category,
-        img: buildInventoryImage({ ...s, source_kind: "systems" }, mode),
-        amazon: amazonSearchUrl(buildAmazonQuery(s, title))
+      row.addEventListener("focusin", () => {
+        renderImage(img, packageImageUrl(packageCode, size), `${pkg.label} — ${label.textContent}`);
       });
+
+      pricing.appendChild(row);
     }
+
+    const deposit = document.createElement("p");
+    deposit.className = "package-card-deposit";
+    deposit.textContent = `Deposit: ${money(calcDepositCents(packageCode))}`;
+
+    const ctaWrap = document.createElement("div");
+    ctaWrap.className = "package-card-actions";
+
+    const cta = document.createElement("a");
+    cta.className = "btn btn-primary";
+    cta.href = `/book?package=${encodeURIComponent(packageCode)}`;
+    cta.textContent = "Book This Service";
+
+    const pricingLink = document.createElement("a");
+    pricingLink.className = "btn btn-secondary";
+    pricingLink.href = "/pricing";
+    pricingLink.textContent = "View Pricing";
+
+    ctaWrap.appendChild(cta);
+    ctaWrap.appendChild(pricingLink);
+
+    body.appendChild(title);
+    body.appendChild(subtitle);
+    body.appendChild(pricing);
+    body.appendChild(deposit);
+    body.appendChild(ctaWrap);
+
+    article.appendChild(preview);
+    article.appendChild(body);
+    mount.appendChild(article);
   }
+}
 
-  const categories = Array.from(new Set(items.map((i) => i.category))).sort((a, b) => a.localeCompare(b));
-  catEl.innerHTML =
-    `<option value="all">All categories</option>` +
-    categories.map((c) => `<option value="${c}">${c}</option>`).join("");
+function buildAddonsList() {
+  const mount = qs("[data-addons-list]");
+  if (!mount) return;
 
-  statusEl.className = "notice ok";
-  statusEl.innerHTML = `<strong>Loaded:</strong> ${items.length} items`;
+  mount.innerHTML = "";
 
-  function render() {
-    const cat = catEl.value;
-    const q = qEl.value.trim().toLowerCase();
+  for (const [key, addon] of Object.entries(ADDONS)) {
+    const card = document.createElement("article");
+    card.className = "addon-card";
+    card.dataset.addonKey = key;
 
-    const filtered = items.filter((i) => {
-      if (cat !== "all" && i.category !== cat) return false;
-      if (q) {
-        const hay = `${i.title} ${i.category}`.toLowerCase();
-        if (!hay.includes(q)) return false;
-      }
-      return true;
-    });
+    const title = document.createElement("h3");
+    title.className = "addon-card-title";
+    title.textContent = addon.label;
 
-    listEl.innerHTML = "";
+    const detail = document.createElement("div");
+    detail.className = "addon-card-detail";
 
-    if (filtered.length === 0) {
-      listEl.innerHTML = `<div class="notice warn">No matches found.</div>`;
+    if (addon.quote_required) {
+      detail.textContent = "Quote required";
+    } else if (typeof addon.price_cents === "number") {
+      detail.textContent = money(addon.price_cents);
+    } else if (addon.prices_cents) {
+      const parts = [];
+      if (typeof addon.prices_cents.small === "number") parts.push(`Small ${money(addon.prices_cents.small)}`);
+      if (typeof addon.prices_cents.mid === "number") parts.push(`Mid ${money(addon.prices_cents.mid)}`);
+      if (typeof addon.prices_cents.oversize === "number") parts.push(`Oversize ${money(addon.prices_cents.oversize)}`);
+      detail.textContent = parts.join(" • ");
+    } else {
+      detail.textContent = "Contact for pricing";
+    }
+
+    card.appendChild(title);
+    card.appendChild(detail);
+    mount.appendChild(card);
+  }
+}
+
+function wirePackagePreviewPicker() {
+  const select = qs("[data-package-select]");
+  const sizeSelect = qs("[data-size-select]");
+  const image = qs("[data-package-preview-image]");
+  const title = qs("[data-package-preview-title]");
+  const price = qs("[data-package-preview-price]");
+  const deposit = qs("[data-package-preview-deposit]");
+  const includesChart = qs("[data-includes-chart]");
+  const sizeChart = qs("[data-size-chart]");
+
+  if (!select || !sizeSelect) return;
+
+  function update() {
+    const packageCode = normalizeKey(select.value);
+    const vehicleSize = normalizeKey(sizeSelect.value) || "small";
+    const pkg = PRICING[packageCode];
+
+    if (!pkg) {
+      renderImage(image, "", "");
+      if (title) title.textContent = "";
+      if (price) price.textContent = "";
+      if (deposit) deposit.textContent = "";
       return;
     }
 
-    for (const i of filtered) {
-      const div = document.createElement("div");
-      div.className = "card";
-      div.innerHTML = `
-        ${i.img ? `<img class="img" loading="lazy" src="${i.img}" alt="${i.title}" onerror="this.style.display='none'">` : ""}
-        <h3>${i.title}</h3>
-        <p class="kicker">${i.category}</p>
-        <div class="hr"></div>
-        <a class="btn primary" href="${i.amazon}" target="_blank" rel="noopener">View on Amazon</a>
-      `;
-      listEl.appendChild(div);
+    if (title) title.textContent = pkg.label;
+    if (price) {
+      const cents = getPackagePrice(packageCode, vehicleSize);
+      price.textContent = cents != null ? money(cents) : "Contact for pricing";
     }
+    if (deposit) deposit.textContent = money(calcDepositCents(packageCode));
+
+    renderImage(
+      image,
+      packageImageUrl(packageCode, vehicleSize),
+      `${pkg.label} preview`
+    );
+
+    renderImage(
+      includesChart,
+      chartImageUrl("includes"),
+      "Included service chart"
+    );
+
+    renderImage(
+      sizeChart,
+      chartImageUrl("size"),
+      "Vehicle size chart"
+    );
   }
 
-  catEl.addEventListener("change", render);
-  qEl.addEventListener("input", render);
-  render();
+  select.addEventListener("change", update);
+  sizeSelect.addEventListener("change", update);
+  update();
 }
 
-export async function initBookingForm() {
-  return initBookingPage();
+function wireAddonEstimator() {
+  const packageSelect = qs("[data-estimator-package]");
+  const sizeSelect = qs("[data-estimator-size]");
+  const addonCheckboxes = qsa("[data-addon-key]");
+  const packageTotal = qs("[data-estimator-package-total]");
+  const addonTotal = qs("[data-estimator-addon-total]");
+  const grandTotal = qs("[data-estimator-grand-total]");
+  const depositTotal = qs("[data-estimator-deposit-total]");
+
+  if (!packageSelect || !sizeSelect || !packageTotal || !addonTotal || !grandTotal || !depositTotal) {
+    return;
+  }
+
+  function update() {
+    const packageCode = normalizeKey(packageSelect.value);
+    const vehicleSize = normalizeKey(sizeSelect.value);
+
+    const base = getPackagePrice(packageCode, vehicleSize) || 0;
+    let addonsTotalCents = 0;
+
+    for (const checkbox of addonCheckboxes) {
+      if (!checkbox.checked) continue;
+      const addonKey = checkbox.dataset.addonKey;
+      const addon = ADDONS[addonKey];
+      if (!addon || addon.quote_required) continue;
+      const cents = getAddonPrice(addonKey, vehicleSize);
+      if (typeof cents === "number") addonsTotalCents += cents;
+    }
+
+    packageTotal.textContent = money(base);
+    addonTotal.textContent = money(addonsTotalCents);
+    grandTotal.textContent = money(base + addonsTotalCents);
+    depositTotal.textContent = money(calcDepositCents(packageCode));
+  }
+
+  packageSelect.addEventListener("change", update);
+  sizeSelect.addEventListener("change", update);
+  for (const checkbox of addonCheckboxes) {
+    checkbox.addEventListener("change", update);
+  }
+
+  update();
+}
+
+function wireCanonicalLinks() {
+  qsa('a[href="/services.html"], a[href="services.html"]').forEach((a) => {
+    a.href = "/services";
+  });
+
+  qsa('a[href="/pricing.html"], a[href="pricing.html"]').forEach((a) => {
+    a.href = "/pricing";
+  });
+}
+
+function init() {
+  wireCanonicalLinks();
+  buildPackageCards();
+  buildAddonsList();
+  wirePackagePreviewPicker();
+  wireAddonEstimator();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
 }
