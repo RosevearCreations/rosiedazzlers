@@ -1,22 +1,49 @@
-<!-- README.md (replace repo README with this) -->
+<!-- README.md -->
 
-# Rosie Dazzlers — Mobile Auto Detailing (Cloudflare Pages + Supabase + Stripe)
+# Rosie Dazzlers — Mobile Auto Detailing
+Cloudflare Pages + Supabase + Stripe booking system
 
-Modern static site + serverless backend for Rosie Dazzlers (Norfolk & Oxford Counties).
+Modern static website with a serverless backend used by
+Rosie Dazzlers Mobile Auto Detailing (Norfolk & Oxford Counties).
 
-## Stack
-- Cloudflare Pages (static hosting + Functions backend)
-- Cloudflare R2 (public image hosting)
-- Supabase (Postgres database)
-- Stripe (deposits + gift certificate checkout)
+---
 
-## Local structure
+# System Architecture
+
+Browser  
+↓  
+Cloudflare Pages (static site)  
+↓  
+Pages Functions (`/functions/api`)  
+↓  
+Supabase Database  
+↓  
+Stripe Payments  
+↓  
+Cloudflare R2 (images/assets)
+
+---
+
+# Stack
+
+- Cloudflare Pages — static hosting + serverless backend
+- Cloudflare R2 — public image hosting
+- Supabase (Postgres) — database
+- Stripe — booking deposits and gift certificate checkout
+
+---
+
+# Local Repo Structure
+
 - `/*.html` — site pages
 - `/assets/*` — shared CSS/JS (theme + nav/footer + helpers)
 - `/data/*` — JSON data powering services, pricing, gear, consumables
 - `/functions/api/*` — backend endpoints (Cloudflare Pages Functions)
 
-## Key Pages
+---
+
+# Key Pages
+
 - Home: `/`
 - Services: `/services` (choose canonical: `services.html` OR `services/index.html`)
 - Pricing: `/pricing` (choose canonical: `pricing.html` OR `pricing/index.html`)
@@ -26,52 +53,134 @@ Modern static site + serverless backend for Rosie Dazzlers (Norfolk & Oxford Cou
 - Consumables: `/consumables`
 - Admin: `/admin`
 
-## API Endpoints (core)
-### Booking
-- `GET /api/availability?date=YYYY-MM-DD`
-- `POST /api/checkout` → returns Stripe `checkout_url`
+---
 
-### Stripe booking webhook
-- `POST /api/stripe/webhook`
+# Canonical Route Note
 
-### Gifts
-- `POST /api/gifts/checkout`
-- `POST /api/gifts/webhook`
-- `POST /api/gifts/receipt`
+Currently both exist:
 
-### Admin
-- `POST /api/admin/bookings` (list + set status)
-- `POST /api/admin/block_date` / `unblock_date`
-- `POST /api/admin/block_slot` / `unblock_slot`
-- `POST /api/admin/progress_post` / `progress_list`
-- `POST /api/admin/assign_booking`
-- `POST /api/admin/promo_create` / `promo_list` / `promo_disable`
+services.html  
+services/index.html  
 
-## Environment Variables (Cloudflare Pages)
+pricing.html  
+pricing/index.html  
+
+Choose **one canonical routing pattern** and remove the duplicate
+version to avoid redirect or routing ambiguity.
+
+Recommended: folder routes (`/services/index.html`).
+
+---
+
+# API Endpoints
+
+## Booking
+
+GET `/api/availability?date=YYYY-MM-DD`  
+POST `/api/checkout`
+
+Creates a Stripe checkout session for booking deposits.
+
+---
+
+## Stripe Booking Webhook
+
+POST `/api/stripe/webhook`
+
+Confirms deposit payments and updates booking status.
+
+---
+
+## Gift Certificates
+
+POST `/api/gifts/checkout`  
+POST `/api/gifts/webhook`  
+POST `/api/gifts/receipt`
+
+Handles gift certificate purchases and code retrieval.
+
+---
+
+## Admin API
+
+POST `/api/admin/bookings`  
+POST `/api/admin/block_date`  
+POST `/api/admin/unblock_date`  
+POST `/api/admin/block_slot`  
+POST `/api/admin/unblock_slot`  
+POST `/api/admin/progress_post`  
+POST `/api/admin/progress_list`  
+POST `/api/admin/assign_booking`  
+POST `/api/admin/promo_create`  
+POST `/api/admin/promo_list`  
+POST `/api/admin/promo_disable`
+
+Admin endpoints require the `ADMIN_PASSWORD`.
+
+---
+
+# Environment Variables (Cloudflare Pages)
+
 Required:
-- `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `ADMIN_PASSWORD`
+
+SUPABASE_URL  
+SUPABASE_SERVICE_ROLE_KEY  
+ADMIN_PASSWORD  
 
 Stripe:
-- `STRIPE_SECRET_KEY`
-- `STRIPE_WEBHOOK_SECRET` (bookings)
-- `STRIPE_WEBHOOK_SECRET_GIFTS` (gifts)
 
-## R2 Assets
-This repo expects an R2 custom domain:
-- `https://assets.rosiedazzlers.ca`
+STRIPE_SECRET_KEY  
+STRIPE_WEBHOOK_SECRET  
+STRIPE_WEBHOOK_SECRET_GIFTS  
 
-Folders:
-- `brand/`
-- `packages/`
-- `products/`
-- `systems/`
+Preview environments use Stripe **TEST** keys.  
+Production uses Stripe **LIVE** keys.
 
-## Database
-See `SUPABASE_SCHEMA.sql` (create/repair statements for the tables used by this codebase).
+---
 
-## Notes
-- Booking capacity is AM/PM slots (half-day), with a full-day option (AM+PM).
-- Customers must provide driveway + power + water; acknowledgements are required at checkout.
-- Gift certificates are separate from bookings and have a 1-year expiry (no refunds).
+# R2 Assets
+
+The site expects an R2 custom domain:
+
+https://assets.rosiedazzlers.ca
+
+Folder layout used in code:
+
+brand/  
+packages/  
+products/  
+systems/  
+
+Example:
+
+https://assets.rosiedazzlers.ca/packages/Exterior Detail.png
+
+---
+
+# Database
+
+Database schema is defined in:
+
+SUPABASE_SCHEMA.sql
+
+This file contains **create/repair SQL statements** for all tables
+used by the application.
+
+---
+
+# Repo Documentation
+
+Additional documentation included in the repository:
+
+SANITY_CHECK.md — project status and development priorities  
+REPO_GUIDE.md — repository structure and file map  
+SUPABASE_SCHEMA.sql — database schema and repair script  
+
+---
+
+# Notes
+
+- Booking capacity uses **AM / PM half-day slots**.
+- A full-day booking uses **both slots**.
+- Customers must confirm driveway access, power, and water during booking.
+- Gift certificates are valid for **1 year** and are non-refundable.
