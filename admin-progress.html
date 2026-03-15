@@ -1,385 +1,347 @@
-<!-- /admin-progress.html
-     REPLACE ENTIRE FILE
-
-     Purpose:
-     - Admin UI to post "job progress" updates (photos + notes) tied to a booking_id
-     - Pulls recent bookings into a dropdown (uses /api/admin/bookings action=list)
-     - Posts updates to /api/admin/progress_post  (we’ll create that endpoint next)
-     - Loads updates from /api/admin/progress_list (we’ll create that endpoint next)
-
-     Requires:
-     - ADMIN_PASSWORD env var set (same as other admin endpoints)
--->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Progress | Rosie Dazzlers</title>
-  <meta name="description" content="Post job progress updates for customers to view." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260311p" />
-  <style>
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    @media (max-width:980px){ .grid2,.grid3{grid-template-columns:1fr} }
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .muted{color:rgba(234,242,255,.62)}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-    .cardImg{
-      width:100%;
-      aspect-ratio:16/10;
-      object-fit:cover;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.04);
-    }
-    pre{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px}
-    .mini{font-size:.92rem}
-  </style>
+  <meta name="description" content="Admin progress update tools for Rosie Dazzlers." />
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
-
-<body>
-  <div class="nav">
+<body data-page="admin-progress">
+  <header class="nav">
     <div class="nav-inner">
-      <a class="brand" href="/">
+      <a class="brand" href="/admin.html">
         <img data-logo alt="Rosie Dazzlers logo" />
-        <strong>Rosie Dazzlers</strong>
+        <strong>Rosie Dazzlers Admin</strong>
       </a>
-      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
-      <div class="nav-links" id="navLinks"></div>
-      <a class="btn primary" href="/admin">Admin</a>
+
+      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
+        Menu
+      </button>
+
+      <nav id="navLinks" class="nav-links">
+        <a href="/admin.html">Dashboard</a>
+        <a href="/admin-booking.html">Bookings</a>
+        <a href="/admin-blocks.html">Blocks</a>
+        <a href="/admin-progress.html">Progress</a>
+        <a href="/admin-promos.html">Promos</a>
+        <a href="/book">Public Site</a>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <div class="container">
-    <div class="panel">
-      <h1 style="margin:0 0 6px">Job Progress</h1>
-      <p class="kicker" style="margin:0">Post photos + notes during a detail so the customer can follow along.</p>
+  <main class="container">
+    <section class="section">
+      <div class="panel">
+        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
+      </div>
+    </section>
 
-      <div class="hr"></div>
-
-      <div class="row">
-        <label style="display:flex;flex-direction:column;gap:6px;min-width:260px">
-          <span class="muted">Admin password</span>
-          <input id="pw" type="password" placeholder="Enter admin password…" />
-        </label>
-
-        <div class="row" style="align-items:flex-end">
-          <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
-          <button class="btn ghost" id="loadBookingsBtn" type="button">Load bookings</button>
-          <a class="btn ghost" href="/admin">Back</a>
+    <section class="section">
+      <div class="hero">
+        <div>
+          <div class="badge">Admin Progress</div>
+          <h1>Post customer progress updates</h1>
+          <p>Load a booking by progress token, review current customer-visible updates, and post a new note.</p>
+        </div>
+        <div class="panel">
+          <div class="kicker">Loaded booking</div>
+          <h3 id="bookingTitle" style="margin:6px 0 8px">No booking loaded</h3>
+          <div id="bookingMeta" class="kicker">Enter the progress token below.</div>
         </div>
       </div>
+    </section>
 
-      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
-    </div>
+    <section class="section">
+      <div id="pageNotice" class="notice">Ready.</div>
+    </section>
 
-    <div class="section grid2">
-      <div class="panel">
-        <h2 style="margin-top:0">1) Select booking</h2>
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Load booking</h2>
+          <form id="loadForm" class="form">
+            <label>
+              Admin password
+              <input id="adminPassword" name="adminPassword" type="password" autocomplete="current-password" required />
+            </label>
 
-        <label class="muted mini">Booking</label>
-        <select id="bookingSel"></select>
+            <label>
+              Progress token
+              <input id="progressToken" name="progressToken" type="text" placeholder="Paste booking progress token" required />
+            </label>
 
-        <div class="muted mini" style="margin-top:8px">
-          If you don’t see a booking, click <strong>Load bookings</strong> (it loads the next ~21 days).
+            <div>
+              <button class="btn primary" type="submit">Load progress</button>
+            </div>
+          </form>
         </div>
 
-        <div class="hr"></div>
-
-        <div class="row">
-          <button class="btn ghost" id="refreshUpdatesBtn" type="button">Refresh updates</button>
-          <a class="btn ghost" id="customerLink" href="/progress" target="_blank" rel="noopener">Open customer view</a>
+        <div class="panel">
+          <h2>Customer link</h2>
+          <div id="customerLinkBox" class="kicker">No token loaded yet.</div>
         </div>
-
-        <div class="muted mini" style="margin-top:10px">Latest updates:</div>
-        <div id="updatesBox" style="margin-top:10px"></div>
       </div>
+    </section>
 
+    <section class="section">
       <div class="panel">
-        <h2 style="margin-top:0">2) Post an update</h2>
+        <h2>Post new update</h2>
+        <form id="updateForm" class="form">
+          <label>
+            Posted by
+            <input id="createdBy" name="createdBy" type="text" placeholder="Example: Laurie / Rosie Dazzlers" required />
+          </label>
 
-        <div class="grid3">
-          <div>
-            <label for="stage">Stage</label>
-            <select id="stage">
-              <option value="arrival">Arrival</option>
-              <option value="precheck">Pre-check</option>
-              <option value="wash">Wash</option>
-              <option value="interior">Interior</option>
-              <option value="exterior">Exterior</option>
-              <option value="finishing">Finishing</option>
-              <option value="complete">Complete</option>
+          <label>
+            Update note
+            <textarea id="updateNote" name="updateNote" rows="5" placeholder="Write the customer-visible update here..." required></textarea>
+          </label>
+
+          <label>
+            Visibility
+            <select id="visibility" name="visibility">
+              <option value="customer">Customer</option>
+              <option value="internal">Internal</option>
             </select>
-          </div>
+          </label>
 
           <div>
-            <label for="percent">Progress % (optional)</label>
-            <input id="percent" type="number" min="0" max="100" placeholder="50" />
+            <button id="postBtn" class="btn primary" type="submit" disabled>Post update</button>
           </div>
-
-          <div>
-            <label for="visibility">Visible to customer</label>
-            <select id="visibility">
-              <option value="public">Yes</option>
-              <option value="private">No (internal note)</option>
-            </select>
-          </div>
-        </div>
-
-        <label for="photo_url" style="margin-top:10px">Photo URL (optional)</label>
-        <input id="photo_url" type="url" placeholder="https://… (R2 public link recommended)" />
-
-        <label for="note" style="margin-top:10px">Note</label>
-        <textarea id="note" placeholder="Quick note about what was done, what’s next, any issues, etc."></textarea>
-
-        <div class="row" style="margin-top:12px">
-          <button class="btn primary" id="postBtn" type="button">Post update</button>
-          <button class="btn ghost" id="clearBtn" type="button">Clear</button>
-        </div>
-
-        <div class="hr"></div>
-
-        <div class="muted mini">
-          Tip: For fast posting in the field, upload images to R2 first (or use any public link), then paste the URL here.
-          We can add “direct upload to R2” later via signed URLs.
-        </div>
+        </form>
       </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="section">
       <div class="panel">
-        <h2 style="margin-top:0">Raw response</h2>
-        <pre id="raw" class="mono">{}</pre>
+        <h2>Existing updates</h2>
+        <div id="updatesList" class="grid" style="margin-top:12px">
+          <div class="notice">No booking loaded yet.</div>
+        </div>
       </div>
-    </div>
+    </section>
+  </main>
 
-    <div class="footer" data-footer></div>
-  </div>
+  <footer class="footer container" data-footer></footer>
 
+  <script src="/assets/chrome.js"></script>
   <script type="module">
-    const qs = (s)=>document.querySelector(s);
+    import { setBrandImages, setFooter } from "/assets/site.js";
 
-    function show(msg, kind=""){
-      const el = qs("#status");
-      el.style.display = "block";
-      el.className = "notice " + (kind || "");
-      el.textContent = msg;
-    }
-    function hide(){ qs("#status").style.display = "none"; }
+    let currentToken = "";
+    let currentBookingId = "";
 
-    function getPw(){ return (qs("#pw").value || "").trim(); }
-
-    async function postJson(url, payload){
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "content-type":"application/json" },
-        body: JSON.stringify(payload),
-      });
-      const out = await res.json().catch(()=>null);
-      return { ok: res.ok, status: res.status, out };
+    function formatDateTime(value) {
+      if (!value) return "—";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return String(value);
+      return new Intl.DateTimeFormat("en-CA", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      }).format(d);
     }
 
-    function esc(s){
-      return String(s||"")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;").replaceAll("'","&#39;");
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
     }
 
-    // Save PW
-    try {
-      const saved = localStorage.getItem("rosie_admin_pw") || "";
-      if (saved) qs("#pw").value = saved;
-    } catch {}
-
-    qs("#savePwBtn").addEventListener("click", () => {
-      const pw = getPw();
-      if (!pw) return show("Enter password first.", "bad");
-      try {
-        localStorage.setItem("rosie_admin_pw", pw);
-        show("Saved password on this device.", "ok");
-        setTimeout(hide, 1200);
-      } catch {
-        show("Could not save password.", "bad");
-      }
-    });
-
-    // Bookings dropdown
-    function setBookingOptions(rows){
-      const sel = qs("#bookingSel");
-      sel.innerHTML = "";
-      for (const b of rows){
-        const opt = document.createElement("option");
-        const slot = `${b.start_slot}${Number(b.duration_slots)===2 ? "+PM" : ""}`;
-        const veh = b.vehicle ? `${b.vehicle.year||""} ${b.vehicle.make||""} ${b.vehicle.model||""}`.trim() : "";
-        opt.value = b.id;
-        opt.textContent = `${b.service_date} ${slot} — ${b.customer_name} — ${b.package_code}/${b.vehicle_size}${veh ? " — " + veh : ""}`;
-        sel.appendChild(opt);
-      }
-      if (!sel.options.length){
-        const opt = document.createElement("option");
-        opt.value = "";
-        opt.textContent = "(no bookings loaded)";
-        sel.appendChild(opt);
-      }
-      updateCustomerLink();
+    function setNotice(message, kind = "") {
+      const el = document.querySelector("#pageNotice");
+      if (!el) return;
+      el.className = kind ? `notice ${kind}` : "notice";
+      el.textContent = message;
     }
 
-    function updateCustomerLink(){
-      const bid = qs("#bookingSel").value || "";
-      qs("#customerLink").href = bid ? `/progress?bid=${encodeURIComponent(bid)}` : "/progress";
-    }
+    function renderHeader(data) {
+      const booking = data.booking || {};
 
-    qs("#bookingSel").addEventListener("change", ()=>{
-      updateCustomerLink();
-      refreshUpdates();
-    });
+      const bookingTitle = document.querySelector("#bookingTitle");
+      const bookingMeta = document.querySelector("#bookingMeta");
 
-    async function loadBookings(){
-      hide();
-      const pw = getPw();
-      if (!pw) return show("Missing admin password.", "bad");
-
-      // next 21 days
-      const from = new Date();
-      const to = new Date(from.getTime() + 1000*60*60*24*21);
-      const ymd = (d)=> d.toISOString().slice(0,10);
-
-      const r = await postJson("/api/admin/bookings", {
-        admin_password: pw,
-        action: "list",
-        date_from: ymd(from),
-        date_to: ymd(to),
-        statuses: ["pending","confirmed","completed"],
-      });
-
-      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
-
-      if (!r.ok || !r.out?.ok){
-        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
+      if (bookingTitle) {
+        bookingTitle.textContent = booking.package_name || booking.package_code || "Booking loaded";
       }
 
-      const rows = Array.isArray(r.out.rows) ? r.out.rows : [];
-      setBookingOptions(rows);
-      show(`Loaded ${rows.length} bookings.`, "ok");
-      setTimeout(hide, 900);
-      await refreshUpdates();
+      if (bookingMeta) {
+        const bits = [];
+        if (booking.customer_name) bits.push(booking.customer_name);
+        if (booking.service_date) bits.push(booking.service_date);
+        if (booking.start_slot) bits.push(booking.start_slot);
+        if (booking.status) bits.push(`status: ${booking.status}`);
+        if (booking.job_status) bits.push(`job: ${booking.job_status}`);
+        bookingMeta.textContent = bits.length ? bits.join(" · ") : "Booking loaded.";
+      }
+
+      currentBookingId = booking.id || "";
     }
 
-    qs("#loadBookingsBtn").addEventListener("click", loadBookings);
+    function renderCustomerLink(token) {
+      const box = document.querySelector("#customerLinkBox");
+      if (!box) return;
 
-    // Updates list
-    function renderUpdates(items){
-      const box = qs("#updatesBox");
-      box.innerHTML = "";
-
-      if (!items.length){
-        box.innerHTML = `<div class="notice warn">No updates yet.</div>`;
+      if (!token) {
+        box.textContent = "No token loaded yet.";
         return;
       }
 
-      for (const u of items){
-        const card = document.createElement("div");
-        card.className = "panel";
-        card.style.marginTop = "10px";
-
-        const img = u.photo_url
-          ? `<img class="cardImg" alt="Progress photo" src="${esc(u.photo_url)}" loading="lazy" decoding="async" />`
-          : "";
-
-        card.innerHTML = `
-          ${img}
-          <div style="margin-top:${img ? "10px":"0"}">
-            <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
-              <strong>${esc(u.stage || "update")}${u.progress_percent!=null ? " — " + esc(u.progress_percent) + "%" : ""}</strong>
-              <span class="muted mini mono">${esc(u.created_at || "")}</span>
-            </div>
-            ${u.note ? `<div class="muted" style="margin-top:8px">${esc(u.note)}</div>` : ``}
-            ${u.visibility === "private" ? `<div class="muted mini" style="margin-top:8px">Internal note (not visible to customer)</div>` : ``}
-          </div>
-        `;
-        const imgEl = card.querySelector("img");
-        if (imgEl) imgEl.onerror = ()=>{ imgEl.style.display = "none"; };
-
-        box.appendChild(card);
-      }
+      const url = `${window.location.origin}/progress.html?token=${encodeURIComponent(token)}`;
+      box.innerHTML = `
+        <div><strong>Customer URL</strong></div>
+        <div style="margin-top:8px;word-break:break-all">
+          <a href="${url}" target="_blank" rel="noopener">${url}</a>
+        </div>
+      `;
     }
 
-    async function refreshUpdates(){
-      const pw = getPw();
-      const bid = qs("#bookingSel").value || "";
-      if (!pw || !bid) return;
+    function renderUpdates(data) {
+      const wrap = document.querySelector("#updatesList");
+      if (!wrap) return;
 
-      const r = await postJson("/api/admin/progress_list", {
-        admin_password: pw,
-        booking_id: bid,
-        limit: 20
+      const updates = Array.isArray(data.updates) ? data.updates : [];
+      if (!updates.length) {
+        wrap.innerHTML = `<div class="notice">No updates posted yet.</div>`;
+        return;
+      }
+
+      wrap.innerHTML = updates.map((item) => `
+        <article class="card">
+          <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
+          <h3>${escapeHtml(item.created_by || "Rosie Dazzlers")}</h3>
+          <p>${escapeHtml(item.note || "Update posted.")}</p>
+          <div class="kicker">Visibility: ${escapeHtml(item.visibility || "customer")}</div>
+        </article>
+      `).join("");
+    }
+
+    async function loadProgress(token) {
+      const res = await fetch(`/api/progress/view?token=${encodeURIComponent(token)}`, {
+        method: "GET",
+        headers: {
+          "Accept": "application/json"
+        }
       });
 
-      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
-
-      if (!r.ok || !r.out?.ok){
-        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || "Could not load progress information.");
       }
 
-      renderUpdates(Array.isArray(r.out.rows) ? r.out.rows : []);
+      return data;
     }
 
-    qs("#refreshUpdatesBtn").addEventListener("click", refreshUpdates);
+    async function reloadCurrent() {
+      if (!currentToken) return;
+      const data = await loadProgress(currentToken);
+      renderHeader(data);
+      renderCustomerLink(currentToken);
+      renderUpdates(data);
+      document.querySelector("#postBtn").disabled = false;
+    }
 
-    // Post update
-    qs("#clearBtn").addEventListener("click", ()=>{
-      qs("#photo_url").value = "";
-      qs("#note").value = "";
-      qs("#percent").value = "";
-      qs("#stage").value = "arrival";
-      qs("#visibility").value = "public";
-    });
+    async function postUpdate(password, token, createdBy, note, visibility) {
+      const res = await fetch("/api/admin/progress_post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": password
+        },
+        body: JSON.stringify({
+          token,
+          created_by: createdBy,
+          note,
+          visibility
+        })
+      });
 
-    qs("#postBtn").addEventListener("click", async ()=>{
-      hide();
-      const pw = getPw();
-      const bid = qs("#bookingSel").value || "";
-      if (!pw) return show("Missing admin password.", "bad");
-      if (!bid) return show("Select a booking.", "bad");
-
-      const payload = {
-        admin_password: pw,
-        booking_id: bid,
-        stage: qs("#stage").value,
-        progress_percent: qs("#percent").value ? Number(qs("#percent").value) : null,
-        visibility: qs("#visibility").value,
-        photo_url: (qs("#photo_url").value || "").trim() || null,
-        note: (qs("#note").value || "").trim() || null,
-      };
-
-      if (!payload.note && !payload.photo_url){
-        return show("Add a note or a photo URL.", "bad");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || "Could not post update.");
       }
 
-      qs("#postBtn").disabled = true;
-      qs("#postBtn").textContent = "Posting…";
+      return data;
+    }
 
-      const r = await postJson("/api/admin/progress_post", payload);
+    async function boot() {
+      setBrandImages();
+      setFooter();
 
-      qs("#postBtn").disabled = false;
-      qs("#postBtn").textContent = "Post update";
+      const loadForm = document.querySelector("#loadForm");
+      const updateForm = document.querySelector("#updateForm");
 
-      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
+      loadForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-      if (!r.ok || !r.out?.ok){
-        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
-      }
+        const password = document.querySelector("#adminPassword").value.trim();
+        const token = document.querySelector("#progressToken").value.trim();
 
-      show("Posted.", "ok");
-      setTimeout(hide, 800);
-      await refreshUpdates();
-    });
+        if (!password) {
+          setNotice("Admin password is required.", "bad");
+          return;
+        }
 
-    // Initial placeholder
-    setBookingOptions([]);
+        if (!token) {
+          setNotice("Progress token is required.", "bad");
+          return;
+        }
+
+        try {
+          currentToken = token;
+          setNotice("Loading progress information…");
+          await reloadCurrent();
+          setNotice("Booking loaded.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not load booking.", "bad");
+        }
+      });
+
+      updateForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const password = document.querySelector("#adminPassword").value.trim();
+        const token = document.querySelector("#progressToken").value.trim();
+        const createdBy = document.querySelector("#createdBy").value.trim();
+        const note = document.querySelector("#updateNote").value.trim();
+        const visibility = document.querySelector("#visibility").value;
+
+        if (!password) {
+          setNotice("Admin password is required.", "bad");
+          return;
+        }
+
+        if (!token) {
+          setNotice("Load a booking first.", "bad");
+          return;
+        }
+
+        if (!createdBy) {
+          setNotice("Posted by is required.", "bad");
+          return;
+        }
+
+        if (!note) {
+          setNotice("Update note is required.", "bad");
+          return;
+        }
+
+        try {
+          setNotice("Posting update…");
+          await postUpdate(password, token, createdBy, note, visibility);
+          document.querySelector("#updateNote").value = "";
+          await reloadCurrent();
+          setNotice("Update posted.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not post update.", "bad");
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", boot);
   </script>
-
-  <script type="module" src="/assets/chrome.js?v=20260311p"></script>
 </body>
 </html>
