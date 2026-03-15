@@ -77,6 +77,32 @@
 
     <section class="section">
       <div class="panel">
+        <h2>Completion signoff</h2>
+        <form id="signoffForm" class="form">
+          <label>
+            Your name
+            <input id="signerName" name="signerName" type="text" required />
+          </label>
+
+          <label>
+            Your email
+            <input id="signerEmail" name="signerEmail" type="email" required />
+          </label>
+
+          <label>
+            Notes (optional)
+            <textarea id="signoffNotes" name="signoffNotes" rows="4" placeholder="Optional note about your service or completion."></textarea>
+          </label>
+
+          <div>
+            <button id="signoffBtn" class="btn primary" type="submit" disabled>Submit signoff</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="panel">
         <h2>Progress updates</h2>
         <div id="updatesList" class="grid" style="margin-top:12px">
           <div class="notice">No updates yet.</div>
@@ -111,6 +137,9 @@
   <script src="/assets/chrome.js"></script>
   <script type="module">
     import { setBrandImages, setFooter } from "/assets/site.js";
+
+    let currentToken = "";
+    let hasSignoff = false;
 
     function formatDateTime(value) {
       if (!value) return "—";
@@ -231,11 +260,16 @@
 
     function renderSignoff(data) {
       const wrap = document.querySelector("#signoffBox");
-      if (!wrap) return;
+      const form = document.querySelector("#signoffForm");
+      const btn = document.querySelector("#signoffBtn");
+      if (!wrap || !form || !btn) return;
 
       const signoffs = Array.isArray(data.signoffs) ? data.signoffs : [];
+      hasSignoff = signoffs.length > 0;
+
       if (!signoffs.length) {
         wrap.innerHTML = "No signoff recorded yet.";
+        btn.disabled = false;
         return;
       }
 
@@ -246,6 +280,8 @@
         <div><strong>When:</strong> ${escapeHtml(formatDateTime(latest.signed_at))}</div>
         ${latest.notes ? `<div><strong>Notes:</strong> ${escapeHtml(latest.notes)}</div>` : ""}
       `;
+
+      btn.disabled = true;
     }
 
     async function loadProgress() {
@@ -258,6 +294,8 @@
         setNotice("Missing progress token. Add ?token=YOUR_TOKEN to the page URL.", "warn");
         return;
       }
+
+      currentToken = token;
 
       try {
         const res = await fetch(`/api/progress/view?token=${encodeURIComponent(token)}`, {
@@ -284,7 +322,70 @@
       }
     }
 
-    document.addEventListener("DOMContentLoaded", loadProgress);
+    async function submitSignoff(event) {
+      event.preventDefault();
+
+      const btn = document.querySelector("#signoffBtn");
+      if (!currentToken) {
+        setNotice("Missing progress token.", "bad");
+        return;
+      }
+
+      if (hasSignoff) {
+        setNotice("A signoff has already been recorded.", "warn");
+        return;
+      }
+
+      const signer_name = document.querySelector("#signerName").value.trim();
+      const signer_email = document.querySelector("#signerEmail").value.trim();
+      const notes = document.querySelector("#signoffNotes").value.trim();
+
+      if (!signer_name) {
+        setNotice("Your name is required.", "bad");
+        return;
+      }
+
+      if (!signer_email) {
+        setNotice("Your email is required.", "bad");
+        return;
+      }
+
+      try {
+        btn.disabled = true;
+        setNotice("Submitting signoff…");
+
+        const res = await fetch("/api/progress/signoff", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            token: currentToken,
+            signer_name,
+            signer_email,
+            notes
+          })
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(data.error || "Could not submit signoff.");
+        }
+
+        document.querySelector("#signoffNotes").value = "";
+        await loadProgress();
+        setNotice("Signoff submitted.", "ok");
+      } catch (err) {
+        btn.disabled = false;
+        setNotice(err.message || "Could not submit signoff.", "bad");
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadProgress();
+      document.querySelector("#signoffForm")?.addEventListener("submit", submitSignoff);
+    });
   </script>
 </body>
 </html>
