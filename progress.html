@@ -1,181 +1,290 @@
-<!-- /progress.html
-     REPLACE ENTIRE FILE
-
-     Customer progress page:
-     - Customer arrives via link like: /progress?bid=<booking_id>
-     - Shows PUBLIC progress updates only
-     - Calls: POST /api/progress_list_public (we create next)
-
-     Notes:
-     - No login required yet (simple share-link model)
-     - Later we can secure this by requiring:
-         booking_id + customer_email match, or an auth account
--->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Progress | Rosie Dazzlers</title>
-  <meta name="description" content="Follow your vehicle detailing progress." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260311q" />
-  <style>
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .muted{color:rgba(234,242,255,.62)}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-    .cardImg{
-      width:100%;
-      aspect-ratio:16/10;
-      object-fit:cover;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.04);
-    }
-    .mini{font-size:.92rem}
-  </style>
+  <meta name="description" content="View your Rosie Dazzlers service progress updates." />
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
-
-<body>
-  <div class="nav">
+<body data-page="progress">
+  <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/">
         <img data-logo alt="Rosie Dazzlers logo" />
         <strong>Rosie Dazzlers</strong>
       </a>
-      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
-      <div class="nav-links" id="navLinks"></div>
-      <a class="btn primary" href="/book">Book</a>
+
+      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
+        Menu
+      </button>
+
+      <nav id="navLinks" class="nav-links">
+        <a href="/services">Services</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/gear">Gear</a>
+        <a href="/consumables">Consumables</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/book">Book</a>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <div class="container">
-    <div class="panel">
-      <h1 style="margin:0 0 6px">Detailing Progress</h1>
-      <p class="kicker" style="margin:0">
-        Live updates posted by our team during your detail.
-      </p>
+  <main class="container">
+    <section class="section">
+      <div class="panel">
+        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
+      </div>
+    </section>
 
-      <div class="hr"></div>
-
-      <div class="row">
-        <label style="display:flex;flex-direction:column;gap:6px;min-width:340px;flex:1">
-          <span class="muted">Booking ID (from your link)</span>
-          <input id="bid" class="mono" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
-        </label>
-
-        <div class="row" style="align-items:flex-end">
-          <button class="btn primary" id="loadBtn" type="button">Load progress</button>
+    <section class="section">
+      <div class="hero">
+        <div>
+          <div class="badge">Customer Progress</div>
+          <h1>Your service progress</h1>
+          <p>Use this page to view updates, photos, current status, and completion information for your booking.</p>
+          <div class="badges">
+            <div class="badge" id="statusBadge">Waiting for token</div>
+            <div class="badge" id="jobStatusBadge">No status yet</div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="kicker">Booking</div>
+          <h3 id="bookingTitle" style="margin:6px 0 8px">No booking loaded</h3>
+          <div id="bookingMeta" class="kicker">Add your progress token to the URL to view updates.</div>
         </div>
       </div>
+    </section>
 
-      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
-    </div>
+    <section class="section">
+      <div id="pageNotice" class="notice">Loading progress information…</div>
+    </section>
 
-    <div class="section">
-      <div id="updatesBox"></div>
-    </div>
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Service summary</h2>
+          <div id="summaryBox" class="kicker">No summary loaded yet.</div>
+        </div>
 
-    <div class="footer" data-footer></div>
-  </div>
+        <div class="panel">
+          <h2>Signoff</h2>
+          <div id="signoffBox" class="kicker">No signoff recorded yet.</div>
+        </div>
+      </div>
+    </section>
 
+    <section class="section">
+      <div class="panel">
+        <h2>Progress updates</h2>
+        <div id="updatesList" class="grid" style="margin-top:12px">
+          <div class="notice">No updates yet.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="panel">
+        <h2>Photos and media</h2>
+        <div id="mediaGrid" class="grid cards" style="margin-top:12px">
+          <div class="notice">No media yet.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="panel">
+        <h2>Need help?</h2>
+        <p>If you have questions about your booking or updates, please contact Rosie Dazzlers directly.</p>
+        <div class="badges" style="margin-top:10px">
+          <div class="badge">Phone: <span data-phone></span></div>
+          <div class="badge">Email: <span data-email></span></div>
+          <div class="badge">Service Area: <span data-service-area></span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer container" data-footer></footer>
+
+  <script src="/assets/chrome.js"></script>
   <script type="module">
-    const qs = (s)=>document.querySelector(s);
+    import { setBrandImages, setFooter } from "/assets/site.js";
 
-    function show(msg, kind=""){
-      const el = qs("#status");
-      el.style.display = "block";
-      el.className = "notice " + (kind || "");
-      el.textContent = msg;
-    }
-    function hide(){ qs("#status").style.display = "none"; }
-
-    function esc(s){
-      return String(s||"")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;").replaceAll("'","&#39;");
+    function formatDateTime(value) {
+      if (!value) return "—";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return String(value);
+      return new Intl.DateTimeFormat("en-CA", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      }).format(d);
     }
 
-    async function postJson(url, payload){
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "content-type":"application/json" },
-        body: JSON.stringify(payload),
-      });
-      const out = await res.json().catch(()=>null);
-      return { ok: res.ok, status: res.status, out };
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
     }
 
-    function renderUpdates(items){
-      const box = qs("#updatesBox");
-      box.innerHTML = "";
+    function getToken() {
+      const params = new URLSearchParams(window.location.search);
+      return (params.get("token") || "").trim();
+    }
 
-      if (!items.length){
-        box.innerHTML = `<div class="panel"><div class="notice warn">No updates yet.</div></div>`;
+    function setNotice(message, kind = "") {
+      const el = document.querySelector("#pageNotice");
+      if (!el) return;
+      el.className = kind ? `notice ${kind}` : "notice";
+      el.textContent = message;
+    }
+
+    function renderSummary(data) {
+      const summary = document.querySelector("#summaryBox");
+      if (!summary) return;
+
+      const booking = data.booking || {};
+      const lines = [
+        booking.customer_name ? `<div><strong>Customer:</strong> ${escapeHtml(booking.customer_name)}</div>` : "",
+        booking.package_name ? `<div><strong>Package:</strong> ${escapeHtml(booking.package_name)}</div>` : "",
+        booking.vehicle_size ? `<div><strong>Vehicle Size:</strong> ${escapeHtml(booking.vehicle_size)}</div>` : "",
+        booking.service_date ? `<div><strong>Date:</strong> ${escapeHtml(booking.service_date)}</div>` : "",
+        booking.start_slot ? `<div><strong>Slot:</strong> ${escapeHtml(booking.start_slot)}</div>` : "",
+        booking.assigned_to ? `<div><strong>Assigned To:</strong> ${escapeHtml(booking.assigned_to)}</div>` : ""
+      ].filter(Boolean);
+
+      summary.innerHTML = lines.length ? lines.join("") : "No summary available.";
+    }
+
+    function renderHeader(data) {
+      const booking = data.booking || {};
+
+      const bookingTitle = document.querySelector("#bookingTitle");
+      const bookingMeta = document.querySelector("#bookingMeta");
+      const statusBadge = document.querySelector("#statusBadge");
+      const jobStatusBadge = document.querySelector("#jobStatusBadge");
+
+      if (bookingTitle) {
+        bookingTitle.textContent = booking.package_name || booking.package_code || "Booking loaded";
+      }
+
+      if (bookingMeta) {
+        const meta = [];
+        if (booking.customer_name) meta.push(booking.customer_name);
+        if (booking.service_date) meta.push(booking.service_date);
+        if (booking.start_slot) meta.push(booking.start_slot);
+        bookingMeta.textContent = meta.length ? meta.join(" · ") : "Booking information loaded.";
+      }
+
+      if (statusBadge) {
+        statusBadge.textContent = booking.status ? `Booking: ${booking.status}` : "Booking loaded";
+      }
+
+      if (jobStatusBadge) {
+        jobStatusBadge.textContent = booking.job_status ? `Job: ${booking.job_status}` : "Job status not set";
+      }
+    }
+
+    function renderUpdates(data) {
+      const wrap = document.querySelector("#updatesList");
+      if (!wrap) return;
+
+      const updates = Array.isArray(data.updates) ? data.updates : [];
+      if (!updates.length) {
+        wrap.innerHTML = `<div class="notice">No updates have been posted yet.</div>`;
         return;
       }
 
-      for (const u of items){
-        const card = document.createElement("div");
-        card.className = "panel";
-        card.style.marginTop = "12px";
+      wrap.innerHTML = updates.map((item) => `
+        <article class="card">
+          <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
+          <h3>${escapeHtml(item.created_by || "Rosie Dazzlers")}</h3>
+          <p>${escapeHtml(item.note || "Update posted.")}</p>
+          <div class="kicker">Visibility: ${escapeHtml(item.visibility || "customer")}</div>
+        </article>
+      `).join("");
+    }
 
-        const img = u.photo_url
-          ? `<img class="cardImg" alt="Progress photo" src="${esc(u.photo_url)}" loading="lazy" decoding="async" />`
-          : "";
+    function renderMedia(data) {
+      const wrap = document.querySelector("#mediaGrid");
+      if (!wrap) return;
 
-        card.innerHTML = `
-          ${img}
-          <div style="margin-top:${img ? "10px":"0"}">
-            <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
-              <strong>${esc(u.stage || "update")}${u.progress_percent!=null ? " — " + esc(u.progress_percent) + "%" : ""}</strong>
-              <span class="muted mini mono">${esc(u.created_at || "")}</span>
-            </div>
-            ${u.note ? `<div class="muted" style="margin-top:8px">${esc(u.note)}</div>` : ``}
-          </div>
-        `;
+      const media = Array.isArray(data.media) ? data.media : [];
+      if (!media.length) {
+        wrap.innerHTML = `<div class="notice">No photos or media have been posted yet.</div>`;
+        return;
+      }
 
-        const imgEl = card.querySelector("img");
-        if (imgEl) imgEl.onerror = ()=>{ imgEl.style.display = "none"; };
+      wrap.innerHTML = media.map((item) => `
+        <article class="card">
+          ${item.media_url ? `<img class="img" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || "Progress media")}" onerror="this.style.display='none'">` : ""}
+          <h3>${escapeHtml(item.caption || item.kind || "Progress media")}</h3>
+          <p>${escapeHtml(item.created_by || "Rosie Dazzlers")}</p>
+          <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
+        </article>
+      `).join("");
+    }
 
-        box.appendChild(card);
+    function renderSignoff(data) {
+      const wrap = document.querySelector("#signoffBox");
+      if (!wrap) return;
+
+      const signoffs = Array.isArray(data.signoffs) ? data.signoffs : [];
+      if (!signoffs.length) {
+        wrap.innerHTML = "No signoff recorded yet.";
+        return;
+      }
+
+      const latest = signoffs[0];
+      wrap.innerHTML = `
+        <div><strong>Signed by:</strong> ${escapeHtml(latest.signer_name || "Unknown")}</div>
+        <div><strong>Email:</strong> ${escapeHtml(latest.signer_email || "—")}</div>
+        <div><strong>When:</strong> ${escapeHtml(formatDateTime(latest.signed_at))}</div>
+        ${latest.notes ? `<div><strong>Notes:</strong> ${escapeHtml(latest.notes)}</div>` : ""}
+      `;
+    }
+
+    async function loadProgress() {
+      const token = getToken();
+
+      setBrandImages();
+      setFooter();
+
+      if (!token) {
+        setNotice("Missing progress token. Add ?token=YOUR_TOKEN to the page URL.", "warn");
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/progress/view?token=${encodeURIComponent(token)}`, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          throw new Error(data.error || "Could not load progress information.");
+        }
+
+        renderHeader(data);
+        renderSummary(data);
+        renderUpdates(data);
+        renderMedia(data);
+        renderSignoff(data);
+        setNotice("Progress information loaded.", "ok");
+      } catch (err) {
+        setNotice(err.message || "Could not load progress information.", "bad");
       }
     }
 
-    async function load(){
-      hide();
-      const bid = (qs("#bid").value || "").trim();
-      if (!bid) return show("Missing booking id.", "bad");
-
-      qs("#loadBtn").disabled = true;
-      qs("#loadBtn").textContent = "Loading…";
-
-      const r = await postJson("/api/progress_list_public", { booking_id: bid, limit: 50 });
-
-      qs("#loadBtn").disabled = false;
-      qs("#loadBtn").textContent = "Load progress";
-
-      if (!r.ok || !r.out?.ok){
-        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
-      }
-
-      renderUpdates(Array.isArray(r.out.rows) ? r.out.rows : []);
-      show("Loaded.", "ok");
-      setTimeout(hide, 700);
-    }
-
-    qs("#loadBtn").addEventListener("click", load);
-
-    // Prefill from query string: /progress?bid=...
-    (function prefill(){
-      const p = new URLSearchParams(location.search);
-      const bid = (p.get("bid") || "").trim();
-      if (bid) {
-        qs("#bid").value = bid;
-        load();
-      }
-    })();
+    document.addEventListener("DOMContentLoaded", loadProgress);
   </script>
-
-  <script type="module" src="/assets/chrome.js?v=20260311q"></script>
 </body>
 </html>
