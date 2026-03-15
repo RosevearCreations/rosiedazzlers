@@ -1,345 +1,392 @@
-<!-- /admin-booking.html
-     REPLACE ENTIRE FILE
-
-     Purpose:
-     - Admin view of upcoming bookings + status updates
-     - Calls: POST /api/admin/bookings (the endpoint you just added)
-     - Also shows availability for a selected day (GET /api/availability?date=...)
-
-     Requires:
-     - ADMIN_PASSWORD set in Cloudflare Pages env vars
--->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Bookings | Rosie Dazzlers</title>
-  <meta name="description" content="Admin booking controls for Rosie Dazzlers." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260311n" />
-  <style>
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .muted{color:rgba(234,242,255,.62)}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.10);vertical-align:top}
-    th{color:rgba(234,242,255,.70);font-weight:600;text-align:left}
-    .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
-    .tag.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
-    .tag.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
-    .tag.bad{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.10)}
-    .mini{font-size:.92rem}
-    pre{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px}
-    .btn.small{padding:7px 10px}
-  </style>
+  <meta name="description" content="Admin booking management for Rosie Dazzlers." />
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
-
-<body>
-  <div class="nav">
+<body data-page="admin-bookings">
+  <header class="nav">
     <div class="nav-inner">
-      <a class="brand" href="/">
+      <a class="brand" href="/admin.html">
         <img data-logo alt="Rosie Dazzlers logo" />
-        <strong>Rosie Dazzlers</strong>
+        <strong>Rosie Dazzlers Admin</strong>
       </a>
-      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
-      <div class="nav-links" id="navLinks"></div>
-      <a class="btn primary" href="/admin">Admin</a>
+
+      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
+        Menu
+      </button>
+
+      <nav id="navLinks" class="nav-links">
+        <a href="/admin.html">Dashboard</a>
+        <a href="/admin-booking.html">Bookings</a>
+        <a href="/admin-blocks.html">Blocks</a>
+        <a href="/admin-progress.html">Progress</a>
+        <a href="/admin-promos.html">Promos</a>
+        <a href="/book">Public Site</a>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <div class="container">
-    <div class="panel">
-      <h1 style="margin:0 0 6px">Booking Controls</h1>
-      <p class="kicker" style="margin:0">View and manage bookings (pending/confirmed/etc.).</p>
-
-      <div class="hr"></div>
-
-      <div class="row">
-        <label style="display:flex;flex-direction:column;gap:6px;min-width:260px">
-          <span class="muted">Admin password</span>
-          <input id="pw" type="password" placeholder="Enter admin password…" />
-        </label>
-
-        <label style="display:flex;flex-direction:column;gap:6px;min-width:190px">
-          <span class="muted">From</span>
-          <input id="from" type="date" />
-        </label>
-
-        <label style="display:flex;flex-direction:column;gap:6px;min-width:190px">
-          <span class="muted">To</span>
-          <input id="to" type="date" />
-        </label>
-
-        <div class="row" style="align-items:flex-end">
-          <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
-          <button class="btn primary" id="loadBtn" type="button">Load</button>
-          <a class="btn ghost" href="/admin">Back</a>
-        </div>
-      </div>
-
-      <div class="row" style="margin-top:10px">
-        <label class="row" style="gap:8px">
-          <input id="st_pending" type="checkbox" checked />
-          <span class="muted">pending</span>
-        </label>
-        <label class="row" style="gap:8px">
-          <input id="st_confirmed" type="checkbox" checked />
-          <span class="muted">confirmed</span>
-        </label>
-        <label class="row" style="gap:8px">
-          <input id="st_cancelled" type="checkbox" />
-          <span class="muted">cancelled</span>
-        </label>
-        <label class="row" style="gap:8px">
-          <input id="st_completed" type="checkbox" />
-          <span class="muted">completed</span>
-        </label>
-      </div>
-
-      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
-    </div>
-
-    <div class="section grid2">
+  <main class="container">
+    <section class="section">
       <div class="panel">
-        <h2 style="margin-top:0">Bookings</h2>
-        <div class="muted mini" id="count"></div>
-        <div class="hr"></div>
-        <div style="overflow:auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Slot</th>
-                <th>Customer</th>
-                <th>Package</th>
-                <th>Vehicle</th>
-                <th>Status</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody id="rows">
-              <tr><td colspan="7" class="muted">Load bookings…</td></tr>
-            </tbody>
-          </table>
+        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="hero">
+        <div>
+          <div class="badge">Admin Bookings</div>
+          <h1>Manage bookings and assignments</h1>
+          <p>Review bookings, update status, assign staff, and copy the progress token for the customer progress workflow.</p>
+        </div>
+        <div class="panel">
+          <div class="kicker">Loaded booking</div>
+          <h3 id="bookingTitle" style="margin:6px 0 8px">No booking selected</h3>
+          <div id="bookingMeta" class="kicker">Load bookings below to begin.</div>
         </div>
       </div>
+    </section>
 
-      <div class="panel">
-        <h2 style="margin-top:0">Availability check</h2>
-        <div class="row">
-          <label style="display:flex;flex-direction:column;gap:6px;min-width:240px">
-            <span class="muted">Date</span>
-            <input id="availDate" type="date" />
-          </label>
-          <button class="btn ghost" id="availBtn" type="button">Check</button>
-        </div>
+    <section class="section">
+      <div id="pageNotice" class="notice">Ready.</div>
+    </section>
 
-        <div id="availBox" class="notice" style="display:none;margin-top:12px"></div>
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Admin access</h2>
+          <form id="adminForm" class="form">
+            <label>
+              Admin password
+              <input id="adminPassword" name="adminPassword" type="password" autocomplete="current-password" required />
+            </label>
 
-        <div class="hr"></div>
-
-        <h2 style="margin-top:0">Raw</h2>
-        <pre id="raw" class="mono">{}</pre>
-      </div>
-    </div>
-
-    <div class="footer" data-footer></div>
-  </div>
-
-  <script type="module">
-    const qs = (s)=>document.querySelector(s);
-
-    function show(msg, kind=""){
-      const el = qs("#status");
-      el.style.display = "block";
-      el.className = "notice " + (kind || "");
-      el.textContent = msg;
-    }
-    function hide(){ qs("#status").style.display = "none"; }
-
-    function getPw(){ return (qs("#pw").value || "").trim(); }
-    function getStatuses(){
-      const st = [];
-      if (qs("#st_pending").checked) st.push("pending");
-      if (qs("#st_confirmed").checked) st.push("confirmed");
-      if (qs("#st_cancelled").checked) st.push("cancelled");
-      if (qs("#st_completed").checked) st.push("completed");
-      return st;
-    }
-
-    // defaults
-    const today = new Date();
-    const ymd = (d)=> d.toISOString().slice(0,10);
-    qs("#from").value = ymd(today);
-    const to = new Date(today.getTime() + 1000*60*60*24*21);
-    qs("#to").value = ymd(to);
-    qs("#availDate").value = ymd(today);
-
-    // save pw
-    try {
-      const saved = localStorage.getItem("rosie_admin_pw") || "";
-      if (saved) qs("#pw").value = saved;
-    } catch {}
-
-    qs("#savePwBtn").addEventListener("click", () => {
-      const pw = getPw();
-      if (!pw) return show("Enter password first.", "bad");
-      try {
-        localStorage.setItem("rosie_admin_pw", pw);
-        show("Saved password on this device.", "ok");
-        setTimeout(hide, 1200);
-      } catch {
-        show("Could not save password.", "bad");
-      }
-    });
-
-    async function postJson(url, payload){
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "content-type":"application/json" },
-        body: JSON.stringify(payload),
-      });
-      const out = await res.json().catch(()=>null);
-      return { ok: res.ok, status: res.status, out };
-    }
-
-    function esc(s){
-      return String(s||"")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;").replaceAll("'","&#39;");
-    }
-
-    function badge(status){
-      if (status === "confirmed") return `<span class="tag ok">confirmed</span>`;
-      if (status === "pending") return `<span class="tag warn">pending</span>`;
-      if (status === "cancelled") return `<span class="tag bad">cancelled</span>`;
-      if (status === "completed") return `<span class="tag ok">completed</span>`;
-      return `<span class="tag">${esc(status)}</span>`;
-    }
-
-    async function loadBookings(){
-      hide();
-      const pw = getPw();
-      if (!pw) return show("Missing admin password.", "bad");
-
-      const payload = {
-        admin_password: pw,
-        action: "list",
-        date_from: qs("#from").value || null,
-        date_to: qs("#to").value || null,
-        statuses: getStatuses(),
-      };
-
-      qs("#loadBtn").disabled = true;
-      qs("#loadBtn").textContent = "Loading…";
-
-      const r = await postJson("/api/admin/bookings", payload);
-      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
-
-      qs("#loadBtn").disabled = false;
-      qs("#loadBtn").textContent = "Load";
-
-      if (!r.ok || !r.out?.ok){
-        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
-      }
-
-      const rows = Array.isArray(r.out.rows) ? r.out.rows : [];
-      qs("#count").textContent = `${rows.length} bookings`;
-
-      const tb = qs("#rows");
-      tb.innerHTML = "";
-
-      for (const b of rows){
-        const tr = document.createElement("tr");
-        const veh = b.vehicle ? b.vehicle : (b.vehicle_info || b.vehicle_json || null);
-        const vehText = veh
-          ? `${veh.year||""} ${veh.make||""} ${veh.model||""}`.trim()
-          : (b.vehicle_make_model || "");
-
-        tr.innerHTML = `
-          <td class="mono">${esc(b.service_date)}</td>
-          <td class="mono">${esc(b.start_slot)}${Number(b.duration_slots)===2 ? " +PM" : ""}</td>
-          <td>
-            <div><strong>${esc(b.customer_name)}</strong></div>
-            <div class="muted mini">${esc(b.customer_email || "")}</div>
-          </td>
-          <td class="mono">${esc(b.package_code)} / ${esc(b.vehicle_size)}</td>
-          <td>${esc(vehText)}</td>
-          <td>${badge(b.status)}</td>
-          <td>
-            <div class="row">
-              <button class="btn small ghost" data-set="confirmed" data-id="${esc(b.id)}">Confirm</button>
-              <button class="btn small ghost" data-set="cancelled" data-id="${esc(b.id)}">Cancel</button>
-              <button class="btn small ghost" data-set="completed" data-id="${esc(b.id)}">Complete</button>
+            <div>
+              <button id="loadBookingsBtn" class="btn primary" type="submit">Load bookings</button>
             </div>
-          </td>
-        `;
-        tb.appendChild(tr);
+          </form>
+        </div>
+
+        <div class="panel">
+          <h2>Selected booking tools</h2>
+          <div id="selectedBookingTools" class="kicker">Choose a booking to view tools.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="panel">
+        <h2>Bookings</h2>
+        <div id="bookingsList" class="grid" style="margin-top:12px">
+          <div class="notice">Bookings have not been loaded yet.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Update status</h2>
+          <form id="statusForm" class="form">
+            <label>
+              Status
+              <select id="bookingStatus" name="bookingStatus">
+                <option value="pending">pending</option>
+                <option value="confirmed">confirmed</option>
+                <option value="cancelled">cancelled</option>
+                <option value="completed">completed</option>
+              </select>
+            </label>
+
+            <label>
+              Job status
+              <select id="jobStatus" name="jobStatus">
+                <option value="">-- none --</option>
+                <option value="scheduled">scheduled</option>
+                <option value="in_progress">in_progress</option>
+                <option value="completed">completed</option>
+              </select>
+            </label>
+
+            <div>
+              <button id="statusBtn" class="btn primary" type="submit" disabled>Save status</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <h2>Assign staff</h2>
+          <form id="assignForm" class="form">
+            <label>
+              Assigned to
+              <input id="assignedTo" name="assignedTo" type="text" placeholder="Example: Laurie / Jack / Team" />
+            </label>
+
+            <div>
+              <button id="assignBtn" class="btn primary" type="submit" disabled>Save assignment</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer container" data-footer></footer>
+
+  <script src="/assets/chrome.js"></script>
+  <script type="module">
+    import { setBrandImages, setFooter } from "/assets/site.js";
+
+    let currentBooking = null;
+    let allBookings = [];
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function formatDate(value) {
+      if (!value) return "—";
+      return escapeHtml(value);
+    }
+
+    function setNotice(message, kind = "") {
+      const el = document.querySelector("#pageNotice");
+      if (!el) return;
+      el.className = kind ? `notice ${kind}` : "notice";
+      el.textContent = message;
+    }
+
+    async function loadBookings(password) {
+      const res = await fetch("/api/admin/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": password
+        },
+        body: JSON.stringify({})
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Could not load bookings.");
+      return data;
+    }
+
+    async function updateBookingStatus(password, bookingId, status, jobStatus) {
+      const res = await fetch("/api/admin/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": password
+        },
+        body: JSON.stringify({
+          booking_id: bookingId,
+          status,
+          job_status: jobStatus || null
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Could not update booking status.");
+      return data;
+    }
+
+    async function assignBooking(password, bookingId, assignedTo) {
+      const res = await fetch("/api/admin/assign_booking", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": password
+        },
+        body: JSON.stringify({
+          booking_id: bookingId,
+          assigned_to: assignedTo
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Could not assign booking.");
+      return data;
+    }
+
+    function renderSelectedBooking() {
+      const title = document.querySelector("#bookingTitle");
+      const meta = document.querySelector("#bookingMeta");
+      const tools = document.querySelector("#selectedBookingTools");
+
+      const statusBtn = document.querySelector("#statusBtn");
+      const assignBtn = document.querySelector("#assignBtn");
+
+      if (!currentBooking) {
+        title.textContent = "No booking selected";
+        meta.textContent = "Choose a booking from the list below.";
+        tools.textContent = "Choose a booking to view tools.";
+        statusBtn.disabled = true;
+        assignBtn.disabled = true;
+        return;
       }
 
-      // wire status buttons
-      tb.querySelectorAll("button[data-set]").forEach(btn=>{
-        btn.addEventListener("click", async ()=>{
-          const pw2 = getPw();
-          const id = btn.getAttribute("data-id");
-          const st = btn.getAttribute("data-set");
-          if (!pw2) return show("Missing admin password.", "bad");
+      title.textContent = currentBooking.customer_name || currentBooking.package_code || "Booking selected";
+      meta.textContent = [
+        currentBooking.service_date || "—",
+        currentBooking.start_slot || "—",
+        currentBooking.package_code || "—",
+        currentBooking.vehicle_size || "—"
+      ].join(" · ");
 
-          btn.disabled = true;
-          const r2 = await postJson("/api/admin/bookings", {
-            admin_password: pw2,
-            action: "set_status",
-            booking_id: id,
-            status: st,
-          });
-          qs("#raw").textContent = JSON.stringify(r2.out || {}, null, 2);
-          btn.disabled = false;
+      const progressLink = currentBooking.progress_token
+        ? `${window.location.origin}/progress.html?token=${encodeURIComponent(currentBooking.progress_token)}`
+        : "No progress token";
 
-          if (!r2.ok || !r2.out?.ok){
-            return show(r2.out?.error ? `Error: ${r2.out.error}` : `Error (HTTP ${r2.status})`, "bad");
-          }
-          show("Updated.", "ok");
-          setTimeout(hide, 800);
-          await loadBookings();
+      tools.innerHTML = `
+        <div><strong>Booking ID:</strong> ${escapeHtml(currentBooking.id || "")}</div>
+        <div><strong>Assigned To:</strong> ${escapeHtml(currentBooking.assigned_to || "—")}</div>
+        <div><strong>Progress Token:</strong> ${escapeHtml(currentBooking.progress_token || "—")}</div>
+        ${currentBooking.progress_token ? `<div style="margin-top:8px;word-break:break-all"><a href="${progressLink}" target="_blank" rel="noopener">Open customer progress page</a></div>` : ""}
+      `;
+
+      document.querySelector("#bookingStatus").value = currentBooking.status || "pending";
+      document.querySelector("#jobStatus").value = currentBooking.job_status || "";
+      document.querySelector("#assignedTo").value = currentBooking.assigned_to || "";
+
+      statusBtn.disabled = false;
+      assignBtn.disabled = false;
+    }
+
+    function renderBookingsList() {
+      const wrap = document.querySelector("#bookingsList");
+      if (!wrap) return;
+
+      if (!allBookings.length) {
+        wrap.innerHTML = `<div class="notice">No bookings found.</div>`;
+        return;
+      }
+
+      wrap.innerHTML = allBookings.map((booking) => `
+        <article class="card">
+          <div class="kicker">${formatDate(booking.service_date)} · ${escapeHtml(booking.start_slot || "—")}</div>
+          <h3>${escapeHtml(booking.customer_name || "Unknown customer")}</h3>
+          <p>${escapeHtml(booking.package_code || "—")} · ${escapeHtml(booking.vehicle_size || "—")}</p>
+          <div class="kicker">Status: ${escapeHtml(booking.status || "pending")} · Job: ${escapeHtml(booking.job_status || "—")}</div>
+          <div class="kicker">Assigned: ${escapeHtml(booking.assigned_to || "—")}</div>
+          <div class="hr"></div>
+          <button class="btn primary" type="button" data-booking-id="${escapeHtml(booking.id)}">Select booking</button>
+        </article>
+      `).join("");
+
+      wrap.querySelectorAll("[data-booking-id]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const bookingId = btn.getAttribute("data-booking-id");
+          currentBooking = allBookings.find((b) => b.id === bookingId) || null;
+          renderSelectedBooking();
         });
       });
-
-      show("Loaded.", "ok");
-      setTimeout(hide, 800);
     }
 
-    qs("#loadBtn").addEventListener("click", loadBookings);
+    async function refreshBookings() {
+      const password = document.querySelector("#adminPassword").value.trim();
+      const data = await loadBookings(password);
 
-    // availability check
-    qs("#availBtn").addEventListener("click", async ()=>{
-      const date = (qs("#availDate").value || "").trim();
-      if (!date) return;
+      allBookings = Array.isArray(data.bookings) ? data.bookings : [];
+      renderBookingsList();
 
-      const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache:"no-store" });
-      const out = await res.json().catch(()=>null);
-      qs("#raw").textContent = JSON.stringify(out || {}, null, 2);
-
-      const box = qs("#availBox");
-      box.style.display = "block";
-
-      if (!res.ok || !out?.ok){
-        box.className = "notice bad";
-        box.textContent = out?.error ? `Availability error: ${out.error}` : "Availability error.";
-        return;
+      if (currentBooking?.id) {
+        currentBooking = allBookings.find((b) => b.id === currentBooking.id) || null;
       }
-      if (out.blocked){
-        box.className = "notice bad";
-        box.textContent = `FULL DAY BLOCKED: ${out.reason || "Blocked"}`;
-        return;
-      }
-      box.className = "notice ok";
-      box.textContent = `AM: ${out.AM ? "Open" : "Blocked"} • PM: ${out.PM ? "Open" : "Blocked"}`;
-    });
 
+      renderSelectedBooking();
+    }
+
+    async function boot() {
+      setBrandImages();
+      setFooter();
+
+      document.querySelector("#adminForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const password = document.querySelector("#adminPassword").value.trim();
+        if (!password) {
+          setNotice("Admin password is required.", "bad");
+          return;
+        }
+
+        try {
+          setNotice("Loading bookings…");
+          await refreshBookings();
+          setNotice("Bookings loaded.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not load bookings.", "bad");
+        }
+      });
+
+      document.querySelector("#statusForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const password = document.querySelector("#adminPassword").value.trim();
+        if (!password) {
+          setNotice("Admin password is required.", "bad");
+          return;
+        }
+
+        if (!currentBooking?.id) {
+          setNotice("Choose a booking first.", "bad");
+          return;
+        }
+
+        try {
+          setNotice("Saving status…");
+          await updateBookingStatus(
+            password,
+            currentBooking.id,
+            document.querySelector("#bookingStatus").value,
+            document.querySelector("#jobStatus").value
+          );
+          await refreshBookings();
+          setNotice("Booking status updated.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not update booking status.", "bad");
+        }
+      });
+
+      document.querySelector("#assignForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const password = document.querySelector("#adminPassword").value.trim();
+        if (!password) {
+          setNotice("Admin password is required.", "bad");
+          return;
+        }
+
+        if (!currentBooking?.id) {
+          setNotice("Choose a booking first.", "bad");
+          return;
+        }
+
+        try {
+          setNotice("Saving assignment…");
+          await assignBooking(
+            password,
+            currentBooking.id,
+            document.querySelector("#assignedTo").value.trim()
+          );
+          await refreshBookings();
+          setNotice("Booking assignment updated.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not update assignment.", "bad");
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", boot);
   </script>
-
-  <script type="module" src="/assets/chrome.js?v=20260311n"></script>
 </body>
 </html>
