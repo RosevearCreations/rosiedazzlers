@@ -1,121 +1,124 @@
-<!-- /admin.html
-     REPLACE ENTIRE FILE
-
-     Purpose:
-     - Modern Admin landing page
-     - Links to: bookings list, blocks, gift admin, progress, upload, assign
-     - Uses shared nav/footer via /assets/chrome.js
-
-     Notes:
-     - You already have most API endpoints built.
-     - This page is just a clean "hub" so you stop hunting URLs.
--->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin | Rosie Dazzlers</title>
-  <meta name="description" content="Admin dashboard for Rosie Dazzlers." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260311l" />
-  <style>
-    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    @media (max-width:1100px){ .grid3{grid-template-columns:repeat(2,1fr)} }
-    @media (max-width:980px){ .grid3{grid-template-columns:1fr} }
-    .muted{color:rgba(234,242,255,.62)}
-    .card{cursor:default}
-    .card h3{margin:0}
-    .card .muted{margin-top:8px;font-size:.95rem}
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  </style>
+  <title>Admin Dashboard | Rosie Dazzlers</title>
+  <meta name="description" content="Rosie Dazzlers admin dashboard." />
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
-
-<body>
-  <div class="nav">
+<body data-page="admin">
+  <header class="nav">
     <div class="nav-inner">
-      <a class="brand" href="/">
+      <a class="brand" href="/admin.html">
         <img data-logo alt="Rosie Dazzlers logo" />
-        <strong>Rosie Dazzlers</strong>
+        <strong>Rosie Dazzlers Admin</strong>
       </a>
-      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
-      <div class="nav-links" id="navLinks"></div>
-      <a class="btn primary" href="/admin">Admin</a>
+
+      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
+        Menu
+      </button>
+
+      <nav id="navLinks" class="nav-links">
+        <a href="/admin.html">Dashboard</a>
+        <a href="/admin-booking.html">Bookings</a>
+        <a href="/admin-blocks.html">Blocks</a>
+        <a href="/admin-progress.html">Progress</a>
+        <a href="/admin-promos.html">Promos</a>
+        <a href="/book">Public Site</a>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <div class="container">
-    <div class="panel">
-      <h1 style="margin:0 0 6px">Admin</h1>
-      <p class="kicker" style="margin:0">Bookings, schedule blocks, progress photos, and gift certificates.</p>
-
-      <div class="hr"></div>
-
-      <div class="row">
-        <a class="btn primary" href="/admin-booking">Booking controls</a>
-        <a class="btn ghost" href="/admin-progress">Post progress</a>
-        <a class="btn ghost" href="/admin-upload">Upload photos</a>
-        <a class="btn ghost" href="/admin-assign">Assign staff</a>
+  <main class="container">
+    <section class="section">
+      <div class="panel">
+        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
       </div>
-    </div>
+    </section>
 
-    <div class="section">
-      <div class="grid3">
-        <div class="panel card">
+    <section class="section">
+      <div class="hero">
+        <div>
+          <div class="badge">Admin Dashboard</div>
+          <h1>Rosie Dazzlers operations hub</h1>
+          <p>Use this dashboard to manage bookings, date blocks, progress updates, customer links, and promo tools.</p>
+          <div class="badges">
+            <div class="badge">Bookings</div>
+            <div class="badge">Progress</div>
+            <div class="badge">Promos</div>
+            <div class="badge">Availability Blocks</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="kicker">Quick note</div>
+          <h3 style="margin:6px 0 8px">Use one workflow at a time</h3>
+          <p class="kicker">
+            Start by loading a booking, then enable progress, post updates,
+            attach media, and finally let the customer sign off from their token link.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid cards">
+        <article class="card">
           <h3>Bookings</h3>
-          <div class="muted">View upcoming bookings, confirm status, and open each booking’s tools.</div>
-          <div class="row" style="margin-top:12px">
-            <a class="btn primary" href="/admin-booking">Open controls</a>
-          </div>
-        </div>
+          <p>Review bookings, update statuses, and manage day-to-day customer jobs.</p>
+          <div class="hr"></div>
+          <a class="btn primary" href="/admin-booking.html">Open Bookings</a>
+        </article>
 
-        <div class="panel card">
-          <h3>Schedule blocks</h3>
-          <div class="muted">Block AM/PM slots (vacation, travel, admin work) and block full days.</div>
-          <div class="row" style="margin-top:12px">
-            <a class="btn primary" href="/admin-blocks.html">Open blocks</a>
-          </div>
-        </div>
+        <article class="card">
+          <h3>Blocks</h3>
+          <p>Block full dates or AM / PM slots to control scheduling and availability.</p>
+          <div class="hr"></div>
+          <a class="btn primary" href="/admin-blocks.html">Open Blocks</a>
+        </article>
 
-        <div class="panel card">
-          <h3>Progress feed</h3>
-          <div class="muted">Upload photos + notes during a job so customers can follow along.</div>
-          <div class="row" style="margin-top:12px">
-            <a class="btn primary" href="/admin-progress">Post updates</a>
-            <a class="btn ghost" href="/admin-upload">Upload</a>
-          </div>
-        </div>
+        <article class="card">
+          <h3>Progress</h3>
+          <p>Enable customer progress links, post updates, attach media, and review signoffs.</p>
+          <div class="hr"></div>
+          <a class="btn primary" href="/admin-progress.html">Open Progress</a>
+        </article>
 
-        <div class="panel card">
-          <h3>Gift certificates</h3>
-          <div class="muted">Service gifts + dollar gifts. 1 year expiry. No refunds.</div>
-          <div class="row" style="margin-top:12px">
-            <a class="btn primary" href="/gifts">Customer page</a>
-            <a class="btn ghost" href="/admin-gifts.html">Gift admin</a>
-          </div>
-        </div>
-
-        <div class="panel card">
-          <h3>Discount codes</h3>
-          <div class="muted">Create promo codes (percent or dollar). (Next feature to implement.)</div>
-          <div class="row" style="margin-top:12px">
-            <a class="btn ghost" href="/admin-promos.html">Promo admin</a>
-          </div>
-        </div>
-
-        <div class="panel card">
-          <h3>Health check</h3>
-          <div class="muted">Quick test for API + Stripe mode.</div>
-          <div class="row" style="margin-top:12px">
-            <a class="btn ghost" href="/api/health" target="_blank" rel="noopener">/api/health</a>
-            <a class="btn ghost" href="/api/debug/stripe_mode" target="_blank" rel="noopener">stripe_mode</a>
-          </div>
-        </div>
+        <article class="card">
+          <h3>Promos</h3>
+          <p>Create and manage promo codes for discounts and special campaigns.</p>
+          <div class="hr"></div>
+          <a class="btn primary" href="/admin-promos.html">Open Promos</a>
+        </article>
       </div>
-    </div>
+    </section>
 
-    <div class="footer" data-footer></div>
-  </div>
+    <section class="section">
+      <div class="panel">
+        <h2>Recommended workflow</h2>
+        <ul class="list">
+          <li>Open Bookings and confirm the customer job.</li>
+          <li>Open Progress and load the booking token.</li>
+          <li>Enable the progress link if needed.</li>
+          <li>Post updates and attach media during the service.</li>
+          <li>Send the customer their progress link.</li>
+          <li>Let the customer sign off after completion.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
 
-  <script type="module" src="/assets/chrome.js?v=20260311l"></script>
+  <footer class="footer container" data-footer></footer>
+
+  <script src="/assets/chrome.js"></script>
+  <script type="module">
+    import { setBrandImages, setFooter } from "/assets/site.js";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setBrandImages();
+      setFooter();
+    });
+  </script>
 </body>
 </html>
