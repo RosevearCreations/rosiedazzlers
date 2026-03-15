@@ -42,7 +42,7 @@
         <div>
           <div class="badge">Admin Progress</div>
           <h1>Post customer progress updates</h1>
-          <p>Load a booking by progress token, review progress entries, and post a new note.</p>
+          <p>Load a booking by progress token, review progress entries, post a new note, and attach media by URL.</p>
         </div>
         <div class="panel">
           <div class="kicker">Loaded booking</div>
@@ -85,31 +85,73 @@
     </section>
 
     <section class="section">
-      <div class="panel">
-        <h2>Post new update</h2>
-        <form id="updateForm" class="form">
-          <label>
-            Posted by
-            <input id="createdBy" name="createdBy" type="text" placeholder="Example: Laurie / Rosie Dazzlers" required />
-          </label>
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Post new update</h2>
+          <form id="updateForm" class="form">
+            <label>
+              Posted by
+              <input id="createdBy" name="createdBy" type="text" placeholder="Example: Laurie / Rosie Dazzlers" required />
+            </label>
 
-          <label>
-            Update note
-            <textarea id="updateNote" name="updateNote" rows="5" placeholder="Write the update here..." required></textarea>
-          </label>
+            <label>
+              Update note
+              <textarea id="updateNote" name="updateNote" rows="5" placeholder="Write the update here..." required></textarea>
+            </label>
 
-          <label>
-            Visibility
-            <select id="visibility" name="visibility">
-              <option value="customer">Customer</option>
-              <option value="internal">Internal</option>
-            </select>
-          </label>
+            <label>
+              Visibility
+              <select id="visibility" name="visibility">
+                <option value="customer">Customer</option>
+                <option value="internal">Internal</option>
+              </select>
+            </label>
 
-          <div>
-            <button id="postBtn" class="btn primary" type="submit" disabled>Post update</button>
-          </div>
-        </form>
+            <div>
+              <button id="postBtn" class="btn primary" type="submit" disabled>Post update</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <h2>Attach media by URL</h2>
+          <form id="mediaForm" class="form">
+            <label>
+              Posted by
+              <input id="mediaCreatedBy" name="mediaCreatedBy" type="text" placeholder="Example: Laurie / Rosie Dazzlers" required />
+            </label>
+
+            <label>
+              Media type
+              <select id="mediaKind" name="mediaKind">
+                <option value="photo">Photo</option>
+                <option value="video">Video</option>
+              </select>
+            </label>
+
+            <label>
+              Caption
+              <input id="mediaCaption" name="mediaCaption" type="text" placeholder="Optional caption for the customer" />
+            </label>
+
+            <label>
+              Media URL
+              <input id="mediaUrl" name="mediaUrl" type="url" placeholder="https://..." required />
+            </label>
+
+            <label>
+              Visibility
+              <select id="mediaVisibility" name="mediaVisibility">
+                <option value="customer">Customer</option>
+                <option value="internal">Internal</option>
+              </select>
+            </label>
+
+            <div>
+              <button id="mediaBtn" class="btn primary" type="submit" disabled>Attach media</button>
+            </div>
+          </form>
+        </div>
       </div>
     </section>
 
@@ -317,6 +359,31 @@
       return data;
     }
 
+    async function postMedia(password, token, createdBy, kind, caption, mediaUrl, visibility) {
+      const res = await fetch("/api/admin/progress_media_post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": password
+        },
+        body: JSON.stringify({
+          token,
+          created_by: createdBy,
+          kind,
+          caption,
+          media_url: mediaUrl,
+          visibility
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || "Could not attach media.");
+      }
+
+      return data;
+    }
+
     async function reloadCurrent() {
       if (!currentToken) return;
 
@@ -330,6 +397,7 @@
       renderSignoffs(data);
 
       document.querySelector("#postBtn").disabled = false;
+      document.querySelector("#mediaBtn").disabled = false;
     }
 
     async function boot() {
@@ -338,6 +406,7 @@
 
       const loadForm = document.querySelector("#loadForm");
       const updateForm = document.querySelector("#updateForm");
+      const mediaForm = document.querySelector("#mediaForm");
 
       loadForm.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -402,6 +471,49 @@
           setNotice("Update posted.", "ok");
         } catch (err) {
           setNotice(err.message || "Could not post update.", "bad");
+        }
+      });
+
+      mediaForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const password = document.querySelector("#adminPassword").value.trim();
+        const token = document.querySelector("#progressToken").value.trim();
+        const createdBy = document.querySelector("#mediaCreatedBy").value.trim();
+        const kind = document.querySelector("#mediaKind").value;
+        const caption = document.querySelector("#mediaCaption").value.trim();
+        const mediaUrl = document.querySelector("#mediaUrl").value.trim();
+        const visibility = document.querySelector("#mediaVisibility").value;
+
+        if (!password) {
+          setNotice("Admin password is required.", "bad");
+          return;
+        }
+
+        if (!token) {
+          setNotice("Load a booking first.", "bad");
+          return;
+        }
+
+        if (!createdBy) {
+          setNotice("Posted by is required for media.", "bad");
+          return;
+        }
+
+        if (!mediaUrl) {
+          setNotice("Media URL is required.", "bad");
+          return;
+        }
+
+        try {
+          setNotice("Attaching media…");
+          await postMedia(password, token, createdBy, kind, caption, mediaUrl, visibility);
+          document.querySelector("#mediaCaption").value = "";
+          document.querySelector("#mediaUrl").value = "";
+          await reloadCurrent();
+          setNotice("Media attached.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not attach media.", "bad");
         }
       });
     }
