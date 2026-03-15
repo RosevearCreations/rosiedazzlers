@@ -21,22 +21,11 @@ const HOVER_MEDIA = {
   size: pkgFile("CarSizeChart.PNG")
 };
 
-const ADDON_MEDIA = {
-  de_badging: "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
-  de_ionizing_treatment: "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png",
-  engine_cleaning: "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
-  external_ceramic_coating: "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
-  external_graphene_fine_finish: "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png",
-  external_wax: "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png",
-  vinyl_wrapping: "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
-  window_tinting: "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png"
-};
-
 let _servicesData = null;
 
 async function loadServicesData() {
   if (_servicesData) return _servicesData;
-  const res = await fetch(`${DATA_URL}?v=20260301e`, { cache: "no-store" });
+  const res = await fetch(`${DATA_URL}?v=20260314a`, { cache: "no-store" });
   if (!res.ok) throw new Error(`Could not load ${DATA_URL}`);
   _servicesData = await res.json();
   return _servicesData;
@@ -96,7 +85,6 @@ function buildMainCardGallery(pkg, size) {
 function buildAddonGallery(addon) {
   const files = [];
   if (addon?.image) files.push(addon.image);
-  if (addon?.code && ADDON_MEDIA[addon.code]) files.push(ADDON_MEDIA[addon.code]);
   return [...new Set(files)];
 }
 
@@ -304,7 +292,9 @@ function updateBookingSummary(data) {
 
   let addons = 0;
   for (const addon of getSelectedAddons(data)) {
-    if (!addon.quote_required) addons += Number(addon.prices?.[size] || 0);
+    if (!addon.quote_required) {
+      addons += Number(addon.prices?.[size] || 0);
+    }
   }
 
   const total = base + addons;
