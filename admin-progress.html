@@ -42,7 +42,7 @@
         <div>
           <div class="badge">Admin Progress</div>
           <h1>Post customer progress updates</h1>
-          <p>Load a booking by progress token, review current customer-visible updates, and post a new note.</p>
+          <p>Load a booking by progress token, review progress entries, and post a new note.</p>
         </div>
         <div class="panel">
           <div class="kicker">Loaded booking</div>
@@ -95,7 +95,7 @@
 
           <label>
             Update note
-            <textarea id="updateNote" name="updateNote" rows="5" placeholder="Write the customer-visible update here..." required></textarea>
+            <textarea id="updateNote" name="updateNote" rows="5" placeholder="Write the update here..." required></textarea>
           </label>
 
           <label>
@@ -114,9 +114,27 @@
     </section>
 
     <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Updates</h2>
+          <div id="updatesList" class="grid" style="margin-top:12px">
+            <div class="notice">No booking loaded yet.</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Signoffs</h2>
+          <div id="signoffsList" class="grid" style="margin-top:12px">
+            <div class="notice">No booking loaded yet.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
       <div class="panel">
-        <h2>Existing updates</h2>
-        <div id="updatesList" class="grid" style="margin-top:12px">
+        <h2>Media</h2>
+        <div id="mediaGrid" class="grid cards" style="margin-top:12px">
           <div class="notice">No booking loaded yet.</div>
         </div>
       </div>
@@ -130,7 +148,6 @@
     import { setBrandImages, setFooter } from "/assets/site.js";
 
     let currentToken = "";
-    let currentBookingId = "";
 
     function formatDateTime(value) {
       if (!value) return "—";
@@ -160,7 +177,6 @@
 
     function renderHeader(data) {
       const booking = data.booking || {};
-
       const bookingTitle = document.querySelector("#bookingTitle");
       const bookingMeta = document.querySelector("#bookingMeta");
 
@@ -175,10 +191,9 @@
         if (booking.start_slot) bits.push(booking.start_slot);
         if (booking.status) bits.push(`status: ${booking.status}`);
         if (booking.job_status) bits.push(`job: ${booking.job_status}`);
+        if (booking.assigned_to) bits.push(`assigned: ${booking.assigned_to}`);
         bookingMeta.textContent = bits.length ? bits.join(" · ") : "Booking loaded.";
       }
-
-      currentBookingId = booking.id || "";
     }
 
     function renderCustomerLink(token) {
@@ -219,12 +234,56 @@
       `).join("");
     }
 
-    async function loadProgress(token) {
-      const res = await fetch(`/api/progress/view?token=${encodeURIComponent(token)}`, {
-        method: "GET",
+    function renderMedia(data) {
+      const wrap = document.querySelector("#mediaGrid");
+      if (!wrap) return;
+
+      const media = Array.isArray(data.media) ? data.media : [];
+      if (!media.length) {
+        wrap.innerHTML = `<div class="notice">No media posted yet.</div>`;
+        return;
+      }
+
+      wrap.innerHTML = media.map((item) => `
+        <article class="card">
+          ${item.media_url ? `<img class="img" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || "Progress media")}" onerror="this.style.display='none'">` : ""}
+          <h3>${escapeHtml(item.caption || item.kind || "Progress media")}</h3>
+          <p>${escapeHtml(item.created_by || "Rosie Dazzlers")}</p>
+          <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
+          <div class="kicker">Visibility: ${escapeHtml(item.visibility || "customer")}</div>
+        </article>
+      `).join("");
+    }
+
+    function renderSignoffs(data) {
+      const wrap = document.querySelector("#signoffsList");
+      if (!wrap) return;
+
+      const signoffs = Array.isArray(data.signoffs) ? data.signoffs : [];
+      if (!signoffs.length) {
+        wrap.innerHTML = `<div class="notice">No signoffs recorded yet.</div>`;
+        return;
+      }
+
+      wrap.innerHTML = signoffs.map((item) => `
+        <article class="card">
+          <div class="kicker">${escapeHtml(formatDateTime(item.signed_at))}</div>
+          <h3>${escapeHtml(item.signer_name || "Unknown signer")}</h3>
+          <p>${escapeHtml(item.signer_email || "—")}</p>
+          <div class="kicker">Type: ${escapeHtml(item.signer_type || "customer")}</div>
+          ${item.notes ? `<div class="hr"></div><p>${escapeHtml(item.notes)}</p>` : ""}
+        </article>
+      `).join("");
+    }
+
+    async function loadProgress(password, token) {
+      const res = await fetch("/api/admin/progress_list", {
+        method: "POST",
         headers: {
-          "Accept": "application/json"
-        }
+          "Content-Type": "application/json",
+          "x-admin-password": password
+        },
+        body: JSON.stringify({ token })
       });
 
       const data = await res.json().catch(() => ({}));
@@ -233,15 +292,6 @@
       }
 
       return data;
-    }
-
-    async function reloadCurrent() {
-      if (!currentToken) return;
-      const data = await loadProgress(currentToken);
-      renderHeader(data);
-      renderCustomerLink(currentToken);
-      renderUpdates(data);
-      document.querySelector("#postBtn").disabled = false;
     }
 
     async function postUpdate(password, token, createdBy, note, visibility) {
@@ -265,6 +315,21 @@
       }
 
       return data;
+    }
+
+    async function reloadCurrent() {
+      if (!currentToken) return;
+
+      const password = document.querySelector("#adminPassword").value.trim();
+      const data = await loadProgress(password, currentToken);
+
+      renderHeader(data);
+      renderCustomerLink(currentToken);
+      renderUpdates(data);
+      renderMedia(data);
+      renderSignoffs(data);
+
+      document.querySelector("#postBtn").disabled = false;
     }
 
     async function boot() {
