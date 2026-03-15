@@ -42,7 +42,7 @@
         <div>
           <div class="badge">Admin Progress</div>
           <h1>Post customer progress updates</h1>
-          <p>Load a booking by progress token, review progress entries, post a new note, and attach media by URL.</p>
+          <p>Load a booking by progress token, enable the customer progress link, review progress entries, post a new note, and attach media by URL.</p>
         </div>
         <div class="panel">
           <div class="kicker">Loaded booking</div>
@@ -80,6 +80,9 @@
         <div class="panel">
           <h2>Customer link</h2>
           <div id="customerLinkBox" class="kicker">No token loaded yet.</div>
+          <div style="margin-top:12px">
+            <button id="enableProgressBtn" class="btn primary" type="button" disabled>Enable progress link</button>
+          </div>
         </div>
       </div>
     </section>
@@ -190,6 +193,8 @@
     import { setBrandImages, setFooter } from "/assets/site.js";
 
     let currentToken = "";
+    let currentBookingId = "";
+    let progressEnabled = false;
 
     function formatDateTime(value) {
       if (!value) return "—";
@@ -222,6 +227,9 @@
       const bookingTitle = document.querySelector("#bookingTitle");
       const bookingMeta = document.querySelector("#bookingMeta");
 
+      currentBookingId = booking.id || "";
+      progressEnabled = booking.progress_enabled === true;
+
       if (bookingTitle) {
         bookingTitle.textContent = booking.package_name || booking.package_code || "Booking loaded";
       }
@@ -234,16 +242,24 @@
         if (booking.status) bits.push(`status: ${booking.status}`);
         if (booking.job_status) bits.push(`job: ${booking.job_status}`);
         if (booking.assigned_to) bits.push(`assigned: ${booking.assigned_to}`);
+        if (booking.progress_enabled === true) bits.push("progress enabled");
         bookingMeta.textContent = bits.length ? bits.join(" · ") : "Booking loaded.";
+      }
+
+      const enableBtn = document.querySelector("#enableProgressBtn");
+      if (enableBtn) {
+        enableBtn.disabled = !currentBookingId || progressEnabled;
       }
     }
 
     function renderCustomerLink(token) {
       const box = document.querySelector("#customerLinkBox");
+      const enableBtn = document.querySelector("#enableProgressBtn");
       if (!box) return;
 
       if (!token) {
         box.textContent = "No token loaded yet.";
+        if (enableBtn) enableBtn.disabled = true;
         return;
       }
 
@@ -254,6 +270,10 @@
           <a href="${url}" target="_blank" rel="noopener">${url}</a>
         </div>
       `;
+
+      if (enableBtn) {
+        enableBtn.disabled = progressEnabled;
+      }
     }
 
     function renderUpdates(data) {
@@ -384,6 +404,26 @@
       return data;
     }
 
+    async function enableProgress(password) {
+      const res = await fetch("/api/admin/progress_enable", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": password
+        },
+        body: JSON.stringify({
+          booking_id: currentBookingId
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || "Could not enable progress.");
+      }
+
+      return data;
+    }
+
     async function reloadCurrent() {
       if (!currentToken) return;
 
@@ -407,6 +447,7 @@
       const loadForm = document.querySelector("#loadForm");
       const updateForm = document.querySelector("#updateForm");
       const mediaForm = document.querySelector("#mediaForm");
+      const enableBtn = document.querySelector("#enableProgressBtn");
 
       loadForm.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -431,6 +472,33 @@
           setNotice("Booking loaded.", "ok");
         } catch (err) {
           setNotice(err.message || "Could not load booking.", "bad");
+        }
+      });
+
+      enableBtn.addEventListener("click", async () => {
+        const password = document.querySelector("#adminPassword").value.trim();
+
+        if (!password) {
+          setNotice("Admin password is required.", "bad");
+          return;
+        }
+
+        if (!currentBookingId) {
+          setNotice("Load a booking first.", "bad");
+          return;
+        }
+
+        try {
+          setNotice("Enabling progress link…");
+          const data = await enableProgress(password);
+          if (data.progress_token) {
+            currentToken = data.progress_token;
+            document.querySelector("#progressToken").value = currentToken;
+          }
+          await reloadCurrent();
+          setNotice("Progress link enabled.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not enable progress.", "bad");
         }
       });
 
