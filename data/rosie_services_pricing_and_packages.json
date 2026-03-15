@@ -1,317 +1,439 @@
 {
-  "meta": {
-    "name": "Rosie Dazzlers Services, Pricing, and Packages",
-    "currency": "CAD",
-    "service_areas": ["Norfolk", "Oxford"],
-    "vehicle_sizes": {
-      "small": "Small",
-      "mid": "Mid",
-      "oversize": "Oversize / Exotic"
+  "charts": [
+    {
+      "filename": "CarPrice2025.PNG",
+      "title": "Vehicle Price Chart 2025",
+      "r2_url": "https://assets.rosiedazzlers.ca/brand/CarPrice2025.PNG"
     },
-    "deposit_rules": {
-      "premium_wash": 50,
-      "basic_detail": 50,
-      "interior_detail": 100,
-      "exterior_detail": 100,
-      "complete_detail": 100
+    {
+      "filename": "CarPriceDetails2025.PNG",
+      "title": "Package Service Details Chart",
+      "r2_url": "https://assets.rosiedazzlers.ca/brand/CarPriceDetails2025.PNG"
+    },
+    {
+      "filename": "CarSizeChart.PNG",
+      "title": "Vehicle Size Chart",
+      "r2_url": "https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG"
     }
-  },
+  ],
   "packages": [
     {
       "code": "premium_wash",
       "name": "Premium Wash",
-      "subtitle": "Exterior wash + quick finish",
-      "description": "A premium exterior wash service for routine maintenance and shine.",
-      "deposit": 50,
-      "prices": {
+      "subtitle": "Quick exterior clean",
+      "prices_cad": {
         "small": 85,
         "mid": 105,
         "oversize": 125
       },
-      "images": {
+      "deposit_cad": 50,
+      "images_by_size": {
         "small": "https://assets.rosiedazzlers.ca/packages/PremiumExternalWash.png",
         "mid": "https://assets.rosiedazzlers.ca/packages/PremiumExternalWashMidSize.png",
         "oversize": "https://assets.rosiedazzlers.ca/packages/PremiumExternalWashLargeSizeExotic.png"
       },
       "included_services": [
-        { "name": "Hand wash exterior" },
-        { "name": "Wheel face cleaning" },
-        { "name": "Tire shine" },
-        { "name": "Door jamb wipe-down" },
-        { "name": "Quick dry finish" }
+        {
+          "name": "Hand Wash & Dry"
+        },
+        {
+          "name": "Clean Dash & Centre Console"
+        },
+        {
+          "name": "Clean Windows (In/Out)"
+        },
+        {
+          "name": "Door Jambs"
+        },
+        {
+          "name": "Wash Tires & Wheel Wells"
+        }
       ],
       "notes": [
-        "Great for regular maintenance",
-        "Deposit required to secure booking"
+        "Quick exterior-focused clean",
+        "Main image changes with vehicle size"
       ]
     },
     {
       "code": "basic_detail",
       "name": "Basic Detail",
-      "subtitle": "Basic interior clean",
-      "description": "An entry-level interior refresh for daily drivers needing a tidy-up.",
-      "deposit": 50,
-      "prices": {
+      "subtitle": "Quick interior clean",
+      "prices_cad": {
         "small": 115,
         "mid": 135,
         "oversize": 170
       },
-      "images": {
+      "deposit_cad": 50,
+      "images_by_size": {
         "small": "https://assets.rosiedazzlers.ca/packages/BasicInteriorDetailSmallSize.png",
         "mid": "https://assets.rosiedazzlers.ca/packages/BasicInteriorDetailMidSize.png",
         "oversize": "https://assets.rosiedazzlers.ca/packages/BasicInteriorDetailExotics.png"
       },
       "included_services": [
-        { "name": "Vacuum interior" },
-        { "name": "Wipe dash and console" },
-        { "name": "Clean interior glass" },
-        { "name": "Light debris removal" }
+        {
+          "name": "Full Vacuum (Seats, Carpets, Mats, Trunk)"
+        },
+        {
+          "name": "Clean Dash & Centre Console"
+        },
+        {
+          "name": "Clean Windows (In/Out)"
+        },
+        {
+          "name": "Clean Leather / Vinyl Seats",
+          "optional_condition_note": "Where equipped"
+        },
+        {
+          "name": "Door Jambs"
+        },
+        {
+          "name": "Wash Tires & Wheel Wells"
+        }
       ],
       "notes": [
-        "Ideal for upkeep between full details",
-        "Deposit required to secure booking"
+        "Quick interior-focused package",
+        "Main image changes with vehicle size"
+      ]
+    },
+    {
+      "code": "complete_detail",
+      "name": "Complete Detail",
+      "subtitle": "Our #1 choice",
+      "prices_cad": {
+        "small": 319,
+        "mid": 369,
+        "oversize": 419
+      },
+      "deposit_cad": 100,
+      "images_by_size": {
+        "small": "https://assets.rosiedazzlers.ca/packages/CompleteDetailSmallCars.png",
+        "mid": "https://assets.rosiedazzlers.ca/packages/CompleteDetailMidSizelCars.png",
+        "oversize": "https://assets.rosiedazzlers.ca/packages/CompleteDetailOverSizeExoticCars.png"
+      },
+      "included_services": [
+        {
+          "name": "Hand Wash & Dry"
+        },
+        {
+          "name": "Full Vacuum (Seats, Carpets, Mats, Trunk)"
+        },
+        {
+          "name": "Clean Dash & Centre Console"
+        },
+        {
+          "name": "Clean Windows (In/Out)"
+        },
+        {
+          "name": "Door Jambs"
+        },
+        {
+          "name": "Wash Tires & Wheel Wells"
+        },
+        {
+          "name": "Clean Leather / Vinyl Seats",
+          "optional_condition_note": "Where equipped"
+        },
+        {
+          "name": "Shampoo Carpets & Mats"
+        },
+        {
+          "name": "Shampoo Cloth Seats",
+          "optional_condition_note": "Where equipped"
+        }
+      ],
+      "notes": [
+        "Best all-around package",
+        "Main image changes with vehicle size"
       ]
     },
     {
       "code": "interior_detail",
       "name": "Interior Detail",
       "subtitle": "Full interior detailing",
-      "description": "A deeper interior restoration focused on seats, trim, carpets, and interior surfaces.",
-      "deposit": 100,
-      "prices": {
+      "prices_cad": {
         "small": 195,
         "mid": 220,
         "oversize": 245
       },
-      "images": {
+      "deposit_cad": 100,
+      "images_by_size": {
         "small": "https://assets.rosiedazzlers.ca/packages/FullInteriorDetailSmallCars.png",
         "mid": "https://assets.rosiedazzlers.ca/packages/FullInteriorDetailMidSuvCars.png",
         "oversize": "https://assets.rosiedazzlers.ca/packages/FullInteriorDetailLargeExoticCars.png"
       },
       "included_services": [
-        { "name": "Full vacuum" },
-        { "name": "Dash, console, and panel cleaning" },
-        { "name": "Interior glass cleaning" },
-        { "name": "Seat and surface wipe-down" },
-        { "name": "Floor and mat cleaning" }
+        {
+          "name": "Full Vacuum (Seats, Carpets, Mats, Trunk)"
+        },
+        {
+          "name": "Clean Dash & Centre Console"
+        },
+        {
+          "name": "Clean Windows (In/Out)"
+        },
+        {
+          "name": "Clean Leather / Vinyl Seats",
+          "optional_condition_note": "Where equipped"
+        },
+        {
+          "name": "Shampoo Carpets & Mats"
+        },
+        {
+          "name": "Shampoo Cloth Seats",
+          "optional_condition_note": "Where equipped"
+        }
       ],
       "notes": [
-        "Condition may affect final labor time"
+        "Interior-only full detailing package",
+        "Main image changes with vehicle size"
       ]
     },
     {
       "code": "exterior_detail",
       "name": "Exterior Detail",
       "subtitle": "Full exterior detailing",
-      "description": "A detailed exterior service to improve paint appearance, shine, and surface cleanliness.",
-      "deposit": 100,
-      "prices": {
+      "prices_cad": {
         "small": 195,
         "mid": 220,
         "oversize": 245
       },
-      "images": {
+      "deposit_cad": 100,
+      "images_by_size": {
         "small": "https://assets.rosiedazzlers.ca/packages/FullExteriorDetailSmallSizeCars.png",
         "mid": "https://assets.rosiedazzlers.ca/packages/FullExteriorDetailMidSizeCars.png",
         "oversize": "https://assets.rosiedazzlers.ca/packages/FullExteriorDetailLargeExoticCars.png"
       },
       "included_services": [
-        { "name": "Hand wash exterior" },
-        { "name": "Wheel and tire cleaning" },
-        { "name": "Dry and finish" },
-        { "name": "Exterior trim wipe-down" },
-        { "name": "Basic paint surface refresh" }
+        {
+          "name": "Hand Wash & Dry"
+        },
+        {
+          "name": "Clean Windows (In/Out)"
+        },
+        {
+          "name": "Door Jambs"
+        },
+        {
+          "name": "Wash Tires & Wheel Wells"
+        }
       ],
       "notes": [
-        "Excellent prep for wax or sealant add-ons"
+        "Exterior-only full detailing package",
+        "Main image changes with vehicle size"
       ]
+    }
+  ],
+  "service_matrix": [
+    {
+      "service": "Hand Wash & Dry",
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
     },
     {
-      "code": "complete_detail",
-      "name": "Complete Detail",
-      "subtitle": "Our most popular full-service package",
-      "description": "A full inside-and-out detail package designed for the deepest overall refresh.",
-      "deposit": 100,
-      "prices": {
-        "small": 319,
-        "mid": 369,
-        "oversize": 419
-      },
-      "images": {
-        "small": "https://assets.rosiedazzlers.ca/packages/CompleteDetailSmallCars.png",
-        "mid": "https://assets.rosiedazzlers.ca/packages/CompleteDetailMidSizelCars.png",
-        "oversize": "https://assets.rosiedazzlers.ca/packages/CompleteDetailOverSizeExoticCars.png"
-      },
-      "included_services": [
-        { "name": "Full vacuum" },
-        { "name": "Dash, console, and panel cleaning" },
-        { "name": "Interior glass cleaning" },
-        { "name": "Hand wash exterior" },
-        { "name": "Wheel and tire cleaning" },
-        { "name": "Dry and finish" }
-      ],
-      "notes": [
-        "Best overall value",
-        "Most popular package"
-      ]
+      "service": "Full Vacuum (Seats, Carpets, Mats, Trunk)",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "Clean Dash & Centre Console",
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "Clean Windows (In/Out)",
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "Door Jambs",
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "Wash Tires & Wheel Wells",
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "Clean Leather / Vinyl Seats",
+      "conditional_note": "Where equipped",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "Shampoo Carpets & Mats",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "Shampoo Cloth Seats",
+      "conditional_note": "Where equipped",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
     }
   ],
   "addons": [
     {
       "code": "full_clay_treatment",
       "name": "Full Clay Treatment",
-      "subtitle": "Surface decontamination treatment",
-      "description": "Helps remove bonded contaminants from exterior paint before finishing steps.",
-      "quote_required": false,
-      "prices": {
+      "prices_cad": {
         "small": 79,
         "mid": 99,
         "oversize": 129
       },
-      "image": "https://assets.rosiedazzlers.ca/packages/Exterior Detail.png"
+      "quote_required": false,
+      "source": "interpreted_pricing",
+      "notes": [
+        "Add-on service not included in any package"
+      ]
     },
     {
       "code": "two_stage_polish",
       "name": "Two Stage Polish",
-      "subtitle": "Correction-focused polishing service",
-      "description": "A more intensive polishing process intended for paint correction and gloss improvement.",
-      "quote_required": true,
-      "prices": {
+      "prices_cad": {
         "small": 199,
         "mid": 279,
         "oversize": 359
       },
-      "image": "https://assets.rosiedazzlers.ca/packages/Exterior Detail.png"
+      "quote_required": true,
+      "source": "interpreted_pricing",
+      "notes": [
+        "Quote required because paint condition varies"
+      ]
     },
     {
       "code": "high_grade_paint_sealant",
       "name": "High Grade Paint Sealant",
-      "subtitle": "Added exterior protection",
-      "description": "Adds durable surface protection and helps maintain shine.",
-      "quote_required": false,
-      "prices": {
+      "prices_cad": {
         "small": 59,
         "mid": 79,
         "oversize": 99
       },
-      "image": "https://assets.rosiedazzlers.ca/packages/Exterior Detail.png"
+      "quote_required": false,
+      "source": "interpreted_pricing"
     },
     {
       "code": "uv_protectant_applied_on_interior_panels",
       "name": "UV Protectant Applied on Interior Panels",
-      "subtitle": "Interior trim protection",
-      "description": "Protective treatment for interior vinyl and plastic surfaces.",
-      "quote_required": false,
-      "prices": {
+      "prices_cad": {
         "small": 25,
         "mid": 35,
         "oversize": 45
       },
-      "image": "https://assets.rosiedazzlers.ca/packages/Interior Detail.png"
+      "quote_required": false,
+      "source": "interpreted_pricing"
     },
     {
       "code": "de_ionizing_treatment",
       "name": "De-Ionizing Treatment",
-      "subtitle": "Specialized surface treatment",
-      "description": "Treatment for stubborn contamination or problem finish conditions.",
-      "quote_required": true,
-      "prices": {
-        "small": null,
-        "mid": null,
-        "oversize": null
+      "prices_cad": {
+        "small": 59,
+        "mid": 79,
+        "oversize": 99
       },
-      "image": "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png"
+      "quote_required": true,
+      "source": "package_asset"
     },
     {
       "code": "de_badging",
       "name": "De-Badging",
-      "subtitle": "Badge and emblem removal",
-      "description": "Careful removal of exterior badges or emblems.",
       "quote_required": true,
-      "prices": {
-        "small": null,
-        "mid": null,
-        "oversize": null
-      },
-      "image": "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png"
+      "source": "package_asset"
     },
     {
       "code": "engine_cleaning",
       "name": "Engine Cleaning",
-      "subtitle": "Engine bay cleaning service",
-      "description": "Engine bay cleaning performed with appropriate care and conditions.",
+      "price_cad": 59,
       "quote_required": false,
-      "prices": {
-        "small": 59,
-        "mid": 59,
-        "oversize": 59
-      },
-      "image": "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png"
+      "source": "package_asset"
     },
     {
       "code": "external_ceramic_coating",
       "name": "External Ceramic Coating",
-      "subtitle": "Advanced exterior protection",
-      "description": "Longer-term paint protection option requiring condition assessment.",
+      "price_cad": 299,
       "quote_required": true,
-      "prices": {
-        "small": null,
-        "mid": null,
-        "oversize": null
-      },
-      "image": "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png"
+      "source": "package_asset",
+      "notes": [
+        "Starting price only"
+      ]
     },
     {
       "code": "external_graphene_fine_finish",
       "name": "External Graphene Fine Finish",
-      "subtitle": "Premium finish option",
-      "description": "Enhanced exterior finish option requiring consultation.",
+      "price_cad": 249,
       "quote_required": true,
-      "prices": {
-        "small": null,
-        "mid": null,
-        "oversize": null
-      },
-      "image": "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png"
+      "source": "package_asset",
+      "notes": [
+        "Starting price only"
+      ]
     },
     {
       "code": "external_wax",
       "name": "External Wax",
-      "subtitle": "Traditional exterior wax finish",
-      "description": "Adds shine and short-term paint protection.",
-      "quote_required": false,
-      "prices": {
+      "prices_cad": {
         "small": 49,
         "mid": 59,
         "oversize": 69
       },
-      "image": "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png"
+      "quote_required": false,
+      "source": "package_asset"
     },
     {
       "code": "vinyl_wrapping",
       "name": "Vinyl Wrapping",
-      "subtitle": "Custom wrap service",
-      "description": "Wrap service available by quote depending on scope and materials.",
       "quote_required": true,
-      "prices": {
-        "small": null,
-        "mid": null,
-        "oversize": null
-      },
-      "image": "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png"
+      "source": "package_asset"
     },
     {
       "code": "window_tinting",
       "name": "Window Tinting",
-      "subtitle": "Tint service by quote",
-      "description": "Window tinting options based on vehicle and film choice.",
       "quote_required": true,
-      "prices": {
-        "small": null,
-        "mid": null,
-        "oversize": null
-      },
-      "image": "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png"
+      "source": "package_asset"
     }
   ]
 }
