@@ -58,13 +58,13 @@
         <div class="panel">
           <div class="kicker">Current booking</div>
           <h3 id="jobsiteBookingTitle" style="margin:6px 0 8px">No booking loaded</h3>
-          <div id="jobsiteBookingMeta" class="kicker">This screen will be tied to the selected booking.</div>
+          <div id="jobsiteBookingMeta" class="kicker">Load a booking id below.</div>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div id="pageNotice" class="notice">UI draft ready for wiring.</div>
+      <div id="pageNotice" class="notice">Ready.</div>
     </section>
 
     <section class="section">
@@ -74,12 +74,12 @@
           <form id="jobsiteLoadForm" class="form">
             <label>
               Admin / staff password
-              <input id="jobsitePassword" type="password" autocomplete="current-password" />
+              <input id="jobsitePassword" type="password" autocomplete="current-password" required />
             </label>
 
             <label>
-              Booking ID or progress token
-              <input id="jobsiteLookup" type="text" placeholder="Paste booking id or progress token" />
+              Booking ID
+              <input id="jobsiteLookup" type="text" placeholder="Paste booking id" required />
             </label>
 
             <label>
@@ -88,7 +88,7 @@
             </label>
 
             <div>
-              <button class="btn primary" type="button">Load job</button>
+              <button class="btn primary" id="loadJobBtn" type="submit">Load job</button>
             </div>
           </form>
         </div>
@@ -103,296 +103,271 @@
           </div>
 
           <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:12px">
-            <button class="btn primary" type="button">Mark Arrived</button>
-            <button class="btn primary" type="button">Start Work</button>
-            <button class="btn ghost" type="button">Start Break</button>
-            <button class="btn ghost" type="button">Resume Work</button>
-            <button class="btn ghost" type="button">Rain Break</button>
-            <button class="btn ghost" type="button">Heat Break</button>
-            <button class="btn primary" type="button">Stop Job</button>
+            <button class="btn primary" type="button" disabled>Mark Arrived</button>
+            <button class="btn primary" type="button" disabled>Start Work</button>
+            <button class="btn ghost" type="button" disabled>Start Break</button>
+            <button class="btn ghost" type="button" disabled>Resume Work</button>
+            <button class="btn ghost" type="button" disabled>Rain Break</button>
+            <button class="btn ghost" type="button" disabled>Heat Break</button>
+            <button class="btn primary" type="button" disabled>Stop Job</button>
           </div>
 
           <label style="margin-top:12px;display:block">
             Break / stop note
-            <textarea rows="3" placeholder="Optional note for break, delay, weather issue, or stop reason."></textarea>
+            <textarea rows="3" placeholder="Optional note for break, delay, weather issue, or stop reason." disabled></textarea>
           </label>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="panel">
-        <h2>Pre-detail vehicle inspection</h2>
-        <div class="grid cards">
-          <div class="card">
-            <h3>Vehicle condition notes</h3>
-            <label>
-              Exterior condition
-              <textarea rows="4" placeholder="Scratches, dents, paint issues, trim issues, cracked glass, chipped windshield, etc."></textarea>
-            </label>
-
-            <label>
-              Interior condition
-              <textarea rows="4" placeholder="Heavy debris, stains, pet hair, odor, mold concerns, spills, excessive clutter, sharp items, etc."></textarea>
-            </label>
-
-            <label>
-              Existing damage / concerns already present
-              <textarea rows="5" placeholder="List all pre-existing damage or concerns noted before work begins."></textarea>
-            </label>
-          </div>
-
-          <div class="card">
-            <h3>Valuables / customer property</h3>
-            <label>
-              Valuables present?
-              <select>
-                <option value="">Select</option>
-                <option>None seen</option>
-                <option>Yes - documented</option>
-              </select>
-            </label>
-
-            <label>
-              Valuables notes
-              <textarea rows="4" placeholder="Wallet, cash, electronics, jewelry, tools, documents, medication, etc."></textarea>
-            </label>
-
-            <label>
-              Valuables photo URL(s)
-              <textarea rows="4" placeholder="Paste one or more image URLs documenting valuables or customer property."></textarea>
-            </label>
-          </div>
-
-          <div class="card">
-            <h3>Pre-inspection photo log</h3>
-            <label>
-              Exterior photo URL(s)
-              <textarea rows="4" placeholder="Paste image URLs for pre-detail exterior inspection photos."></textarea>
-            </label>
-
-            <label>
-              Interior photo URL(s)
-              <textarea rows="4" placeholder="Paste image URLs for pre-detail interior inspection photos."></textarea>
-            </label>
-
-            <label>
-              Damage / issue photo URL(s)
-              <textarea rows="4" placeholder="Paste image URLs showing existing damage or problem areas."></textarea>
-            </label>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="grid cards">
+      <form id="jobsiteIntakeForm" class="form">
         <div class="panel">
-          <h2>Pre-job checklist</h2>
-          <div class="grid" style="gap:8px">
-            <label class="check-card">
-              <input type="checkbox" />
-              <div><strong>Keys collected</strong><div class="mini-price">Customer has provided keys or access.</div></div>
-            </label>
+          <h2>Pre-detail vehicle inspection</h2>
+          <div class="grid cards">
+            <div class="card">
+              <h3>Vehicle condition notes</h3>
+              <label>
+                Exterior condition
+                <textarea id="exterior_condition_notes" rows="4" placeholder="Scratches, dents, paint issues, trim issues, cracked glass, chipped windshield, etc."></textarea>
+              </label>
 
-            <label class="check-card">
-              <input type="checkbox" />
-              <div><strong>Owner present for visual inspection</strong><div class="mini-price">Vehicle reviewed with owner before work begins.</div></div>
-            </label>
+              <label>
+                Interior condition
+                <textarea id="interior_condition_notes" rows="4" placeholder="Heavy debris, stains, pet hair, odor, mold concerns, spills, excessive clutter, sharp items, etc."></textarea>
+              </label>
 
-            <label class="check-card">
-              <input type="checkbox" />
-              <div><strong>Water hookup located</strong><div class="mini-price">Water source found and ready.</div></div>
-            </label>
+              <label>
+                Existing damage / concerns already present
+                <textarea id="existing_damage_notes" rows="5" placeholder="List all pre-existing damage or concerns noted before work begins."></textarea>
+              </label>
+            </div>
 
-            <label class="check-card">
-              <input type="checkbox" />
-              <div><strong>Water tested</strong><div class="mini-price">Confirmed usable on site.</div></div>
-            </label>
+            <div class="card">
+              <h3>Valuables / customer property</h3>
+              <label>
+                Valuables present?
+                <select id="valuables_present">
+                  <option value="">Select</option>
+                  <option value="false">None seen</option>
+                  <option value="true">Yes - documented</option>
+                </select>
+              </label>
 
-            <label class="check-card">
-              <input type="checkbox" />
-              <div><strong>Power hookup located</strong><div class="mini-price">Power source found and ready.</div></div>
-            </label>
+              <label>
+                Valuables notes
+                <textarea id="valuables_notes" rows="4" placeholder="Wallet, cash, electronics, jewelry, tools, documents, medication, etc."></textarea>
+              </label>
 
-            <label class="check-card">
-              <input type="checkbox" />
-              <div><strong>Power tested</strong><div class="mini-price">Confirmed usable on site.</div></div>
-            </label>
+              <label>
+                Valuables photo URL(s)
+                <textarea id="valuables_photo_urls" rows="4" placeholder="Paste one URL per line."></textarea>
+              </label>
+            </div>
 
-            <label class="check-card">
-              <input type="checkbox" />
-              <div><strong>Vehicle accessible and safe to work on</strong><div class="mini-price">Safe parking, access, and working conditions confirmed.</div></div>
-            </label>
+            <div class="card">
+              <h3>Pre-inspection photo log</h3>
+              <label>
+                Exterior photo URL(s)
+                <textarea id="exterior_photo_urls" rows="4" placeholder="Paste one URL per line."></textarea>
+              </label>
+
+              <label>
+                Interior photo URL(s)
+                <textarea id="interior_photo_urls" rows="4" placeholder="Paste one URL per line."></textarea>
+              </label>
+
+              <label>
+                Damage / issue photo URL(s)
+                <textarea id="damage_photo_urls" rows="4" placeholder="Paste one URL per line."></textarea>
+              </label>
+            </div>
           </div>
         </div>
 
-        <div class="panel">
-          <h2>Extra charge review</h2>
+        <section class="section">
+          <div class="grid cards">
+            <div class="panel">
+              <h2>Pre-job checklist</h2>
+              <div class="grid" style="gap:8px">
+                <label class="check-card"><input id="keys_collected" type="checkbox" /><div><strong>Keys collected</strong><div class="mini-price">Customer has provided keys or access.</div></div></label>
+                <label class="check-card"><input id="owner_present_for_visual_inspection" type="checkbox" /><div><strong>Owner present for visual inspection</strong><div class="mini-price">Vehicle reviewed with owner before work begins.</div></div></label>
+                <label class="check-card"><input id="water_hookup_located" type="checkbox" /><div><strong>Water hookup located</strong><div class="mini-price">Water source found and ready.</div></div></label>
+                <label class="check-card"><input id="water_tested" type="checkbox" /><div><strong>Water tested</strong><div class="mini-price">Confirmed usable on site.</div></div></label>
+                <label class="check-card"><input id="power_hookup_located" type="checkbox" /><div><strong>Power hookup located</strong><div class="mini-price">Power source found and ready.</div></div></label>
+                <label class="check-card"><input id="power_tested" type="checkbox" /><div><strong>Power tested</strong><div class="mini-price">Confirmed usable on site.</div></div></label>
+                <label class="check-card"><input id="vehicle_accessible_and_safe" type="checkbox" /><div><strong>Vehicle accessible and safe to work on</strong><div class="mini-price">Safe parking, access, and working conditions confirmed.</div></div></label>
+              </div>
+            </div>
 
-          <label>
-            Garbage bag estimate
-            <select>
-              <option value="">Select</option>
-              <option>1 medium white Glad bag or less</option>
-              <option>More than 1 medium white Glad bag</option>
-            </select>
-          </label>
+            <div class="panel">
+              <h2>Extra charge review</h2>
 
-          <label>
-            Extra bag count
-            <input type="number" min="0" step="1" placeholder="0" />
-          </label>
+              <label>
+                Garbage bag estimate
+                <select id="garbage_bag_estimate">
+                  <option value="">Select</option>
+                  <option>1 medium white Glad bag or less</option>
+                  <option>More than 1 medium white Glad bag</option>
+                </select>
+              </label>
 
-          <label>
-            Extra clutter / debris charge may apply?
-            <select>
-              <option value="">Select</option>
-              <option>No</option>
-              <option>Yes - possible extra charge</option>
-            </select>
-          </label>
+              <label>
+                Extra bag count
+                <input id="extra_bag_count" type="number" min="0" step="1" placeholder="0" />
+              </label>
 
-          <label>
-            Extra charge notes
-            <textarea rows="5" placeholder="Describe excessive garbage, clutter, heavy debris, unusual cleanup conditions, or other reasons for additional charges."></textarea>
-          </label>
-        </div>
-      </div>
-    </section>
+              <label>
+                Extra clutter / debris charge may apply?
+                <select id="extra_debris_charge_possible">
+                  <option value="">Select</option>
+                  <option value="false">No</option>
+                  <option value="true">Yes - possible extra charge</option>
+                </select>
+              </label>
 
-    <section class="section">
-      <div class="grid cards">
-        <div class="panel">
-          <h2>Owner acknowledgement</h2>
-
-          <label>
-            Owner / customer name
-            <input type="text" placeholder="Full name" />
-          </label>
-
-          <label>
-            Owner email
-            <input type="email" placeholder="Email address" />
-          </label>
-
-          <label>
-            Inspection acknowledged
-            <select>
-              <option value="">Select</option>
-              <option>Yes</option>
-              <option>No</option>
-            </select>
-          </label>
-
-          <label>
-            Existing condition acknowledged
-            <select>
-              <option value="">Select</option>
-              <option>Yes</option>
-              <option>No</option>
-            </select>
-          </label>
-
-          <label>
-            Keys handed over acknowledged
-            <select>
-              <option value="">Select</option>
-              <option>Yes</option>
-              <option>No</option>
-            </select>
-          </label>
-
-          <label>
-            Owner notes
-            <textarea rows="4" placeholder="Owner comments, concerns, or acknowledgements."></textarea>
-          </label>
-        </div>
-
-        <div class="panel">
-          <h2>Detailer completion of intake</h2>
-
-          <label>
-            Detailer pre-job notes
-            <textarea rows="5" placeholder="Anything the detailer wants recorded before work begins."></textarea>
-          </label>
-
-          <label>
-            Site / weather notes
-            <textarea rows="4" placeholder="Rain risk, heat, driveway slope, limited space, difficult access, etc."></textarea>
-          </label>
-
-          <label>
-            Intake complete
-            <select>
-              <option value="">Select</option>
-              <option>Yes - ready to begin</option>
-              <option>No - waiting on customer / site issue</option>
-            </select>
-          </label>
-
-          <div style="margin-top:12px">
-            <button class="btn primary" type="button">Save Pre-Inspection Intake</button>
+              <label>
+                Extra charge notes
+                <textarea id="extra_charge_notes" rows="5" placeholder="Describe excessive garbage, clutter, heavy debris, unusual cleanup conditions, or other reasons for additional charges."></textarea>
+              </label>
+            </div>
           </div>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <section class="section">
-      <div class="grid cards">
-        <div class="panel">
-          <h2>Live progress note</h2>
-          <label>
-            Progress note
-            <textarea rows="5" placeholder="Describe what is being done right now or what has just been completed."></textarea>
-          </label>
+        <section class="section">
+          <div class="grid cards">
+            <div class="panel">
+              <h2>Owner acknowledgement</h2>
 
-          <label>
-            Customer visible?
-            <select>
-              <option>Customer</option>
-              <option>Internal</option>
-            </select>
-          </label>
+              <label>
+                Owner / customer name
+                <input id="owner_name" type="text" placeholder="Full name" />
+              </label>
 
-          <div style="margin-top:12px">
-            <button class="btn primary" type="button">Post Progress Note</button>
+              <label>
+                Owner email
+                <input id="owner_email" type="email" placeholder="Email address" />
+              </label>
+
+              <label>
+                Inspection acknowledged
+                <select id="inspection_acknowledged">
+                  <option value="">Select</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+
+              <label>
+                Existing condition acknowledged
+                <select id="existing_condition_acknowledged">
+                  <option value="">Select</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+
+              <label>
+                Keys handed over acknowledged
+                <select id="keys_handed_over_acknowledged">
+                  <option value="">Select</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </label>
+
+              <label>
+                Owner notes
+                <textarea id="owner_notes" rows="4" placeholder="Owner comments, concerns, or acknowledgements."></textarea>
+              </label>
+            </div>
+
+            <div class="panel">
+              <h2>Detailer completion of intake</h2>
+
+              <label>
+                Detailer pre-job notes
+                <textarea id="detailer_pre_job_notes" rows="5" placeholder="Anything the detailer wants recorded before work begins."></textarea>
+              </label>
+
+              <label>
+                Site / weather notes
+                <textarea id="site_weather_notes" rows="4" placeholder="Rain risk, heat, driveway slope, limited space, difficult access, etc."></textarea>
+              </label>
+
+              <label>
+                Intake complete
+                <select id="intake_complete">
+                  <option value="">Select</option>
+                  <option>Yes - ready to begin</option>
+                  <option>No - waiting on customer / site issue</option>
+                </select>
+              </label>
+
+              <div style="margin-top:12px">
+                <button class="btn primary" id="saveIntakeBtn" type="submit" disabled>Save Pre-Inspection Intake</button>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <div class="panel">
-          <h2>Upload / attach progress media</h2>
-          <label>
-            Media type
-            <select>
-              <option>Photo</option>
-              <option>Video</option>
-            </select>
-          </label>
+        <section class="section">
+          <div class="grid cards">
+            <div class="panel">
+              <h2>Live progress note</h2>
+              <label>
+                Progress note
+                <textarea rows="5" placeholder="Describe what is being done right now or what has just been completed." disabled></textarea>
+              </label>
 
-          <label>
-            Caption
-            <input type="text" placeholder="Short caption for customer/admin" />
-          </label>
+              <label>
+                Customer visible?
+                <select disabled>
+                  <option>Customer</option>
+                  <option>Internal</option>
+                </select>
+              </label>
 
-          <label>
-            Media URL
-            <input type="url" placeholder="https://..." />
-          </label>
+              <div style="margin-top:12px">
+                <button class="btn primary" type="button" disabled>Post Progress Note</button>
+              </div>
+            </div>
 
-          <label>
-            Customer visible?
-            <select>
-              <option>Customer</option>
-              <option>Internal</option>
-            </select>
-          </label>
+            <div class="panel">
+              <h2>Upload / attach progress media</h2>
+              <label>
+                Media type
+                <select disabled>
+                  <option>Photo</option>
+                  <option>Video</option>
+                </select>
+              </label>
 
-          <div style="margin-top:12px">
-            <button class="btn primary" type="button">Attach Media</button>
+              <label>
+                Caption
+                <input type="text" placeholder="Short caption for customer/admin" disabled />
+              </label>
+
+              <label>
+                Media URL
+                <input type="url" placeholder="https://..." disabled />
+              </label>
+
+              <label>
+                Customer visible?
+                <select disabled>
+                  <option>Customer</option>
+                  <option>Internal</option>
+                </select>
+              </label>
+
+              <div style="margin-top:12px">
+                <button class="btn primary" type="button" disabled>Attach Media</button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </form>
     </section>
   </main>
 
@@ -402,9 +377,209 @@
   <script type="module">
     import { setBrandImages, setFooter } from "/assets/site.js";
 
+    let currentBookingId = "";
+    let currentPassword = "";
+
+    function setNotice(message, kind = "") {
+      const el = document.querySelector("#pageNotice");
+      if (!el) return;
+      el.className = kind ? `notice ${kind}` : "notice";
+      el.textContent = message;
+    }
+
+    function splitLines(value) {
+      return String(value || "")
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+
+    function boolOrNull(value) {
+      if (value === "") return null;
+      return value === "true";
+    }
+
+    async function apiPost(url, password, body) {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": password
+        },
+        body: JSON.stringify(body || {})
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Request failed for ${url}`);
+      return data;
+    }
+
+    function fillBooking(booking) {
+      document.querySelector("#jobsiteBookingTitle").textContent =
+        booking?.customer_name || booking?.package_code || "Booking loaded";
+
+      document.querySelector("#jobsiteBookingMeta").textContent = [
+        booking?.service_date || "—",
+        booking?.start_slot || "—",
+        booking?.package_code || "—",
+        booking?.vehicle_size || "—",
+        booking?.assigned_to || "unassigned"
+      ].join(" · ");
+    }
+
+    function fillIntake(intake) {
+      const data = intake || {};
+
+      document.querySelector("#detailerName").value = data.detailer_name || "";
+      document.querySelector("#exterior_condition_notes").value = data.exterior_condition_notes || "";
+      document.querySelector("#interior_condition_notes").value = data.interior_condition_notes || "";
+      document.querySelector("#existing_damage_notes").value = data.existing_damage_notes || "";
+
+      document.querySelector("#valuables_present").value =
+        data.valuables_present === null || data.valuables_present === undefined ? "" : String(data.valuables_present);
+      document.querySelector("#valuables_notes").value = data.valuables_notes || "";
+      document.querySelector("#valuables_photo_urls").value = Array.isArray(data.valuables_photo_urls) ? data.valuables_photo_urls.join("\n") : "";
+
+      document.querySelector("#exterior_photo_urls").value = Array.isArray(data.exterior_photo_urls) ? data.exterior_photo_urls.join("\n") : "";
+      document.querySelector("#interior_photo_urls").value = Array.isArray(data.interior_photo_urls) ? data.interior_photo_urls.join("\n") : "";
+      document.querySelector("#damage_photo_urls").value = Array.isArray(data.damage_photo_urls) ? data.damage_photo_urls.join("\n") : "";
+
+      document.querySelector("#keys_collected").checked = !!data.keys_collected;
+      document.querySelector("#owner_present_for_visual_inspection").checked = !!data.owner_present_for_visual_inspection;
+      document.querySelector("#water_hookup_located").checked = !!data.water_hookup_located;
+      document.querySelector("#water_tested").checked = !!data.water_tested;
+      document.querySelector("#power_hookup_located").checked = !!data.power_hookup_located;
+      document.querySelector("#power_tested").checked = !!data.power_tested;
+      document.querySelector("#vehicle_accessible_and_safe").checked = !!data.vehicle_accessible_and_safe;
+
+      document.querySelector("#garbage_bag_estimate").value = data.garbage_bag_estimate || "";
+      document.querySelector("#extra_bag_count").value = data.extra_bag_count ?? "";
+      document.querySelector("#extra_debris_charge_possible").value =
+        data.extra_debris_charge_possible === null || data.extra_debris_charge_possible === undefined ? "" : String(data.extra_debris_charge_possible);
+      document.querySelector("#extra_charge_notes").value = data.extra_charge_notes || "";
+
+      document.querySelector("#owner_name").value = data.owner_name || "";
+      document.querySelector("#owner_email").value = data.owner_email || "";
+      document.querySelector("#inspection_acknowledged").value =
+        data.inspection_acknowledged === null || data.inspection_acknowledged === undefined ? "" : String(data.inspection_acknowledged);
+      document.querySelector("#existing_condition_acknowledged").value =
+        data.existing_condition_acknowledged === null || data.existing_condition_acknowledged === undefined ? "" : String(data.existing_condition_acknowledged);
+      document.querySelector("#keys_handed_over_acknowledged").value =
+        data.keys_handed_over_acknowledged === null || data.keys_handed_over_acknowledged === undefined ? "" : String(data.keys_handed_over_acknowledged);
+      document.querySelector("#owner_notes").value = data.owner_notes || "";
+
+      document.querySelector("#detailer_pre_job_notes").value = data.detailer_pre_job_notes || "";
+      document.querySelector("#site_weather_notes").value = data.site_weather_notes || "";
+      document.querySelector("#intake_complete").value = data.intake_complete || "";
+    }
+
+    function collectIntakePayload() {
+      return {
+        booking_id: currentBookingId,
+        detailer_name: document.querySelector("#detailerName").value.trim(),
+
+        exterior_condition_notes: document.querySelector("#exterior_condition_notes").value.trim(),
+        interior_condition_notes: document.querySelector("#interior_condition_notes").value.trim(),
+        existing_damage_notes: document.querySelector("#existing_damage_notes").value.trim(),
+
+        valuables_present: boolOrNull(document.querySelector("#valuables_present").value),
+        valuables_notes: document.querySelector("#valuables_notes").value.trim(),
+        valuables_photo_urls: splitLines(document.querySelector("#valuables_photo_urls").value),
+
+        exterior_photo_urls: splitLines(document.querySelector("#exterior_photo_urls").value),
+        interior_photo_urls: splitLines(document.querySelector("#interior_photo_urls").value),
+        damage_photo_urls: splitLines(document.querySelector("#damage_photo_urls").value),
+
+        keys_collected: document.querySelector("#keys_collected").checked,
+        owner_present_for_visual_inspection: document.querySelector("#owner_present_for_visual_inspection").checked,
+        water_hookup_located: document.querySelector("#water_hookup_located").checked,
+        water_tested: document.querySelector("#water_tested").checked,
+        power_hookup_located: document.querySelector("#power_hookup_located").checked,
+        power_tested: document.querySelector("#power_tested").checked,
+        vehicle_accessible_and_safe: document.querySelector("#vehicle_accessible_and_safe").checked,
+
+        garbage_bag_estimate: document.querySelector("#garbage_bag_estimate").value,
+        extra_bag_count: document.querySelector("#extra_bag_count").value,
+        extra_debris_charge_possible: boolOrNull(document.querySelector("#extra_debris_charge_possible").value),
+        extra_charge_notes: document.querySelector("#extra_charge_notes").value.trim(),
+
+        owner_name: document.querySelector("#owner_name").value.trim(),
+        owner_email: document.querySelector("#owner_email").value.trim(),
+        inspection_acknowledged: boolOrNull(document.querySelector("#inspection_acknowledged").value),
+        existing_condition_acknowledged: boolOrNull(document.querySelector("#existing_condition_acknowledged").value),
+        keys_handed_over_acknowledged: boolOrNull(document.querySelector("#keys_handed_over_acknowledged").value),
+        owner_notes: document.querySelector("#owner_notes").value.trim(),
+
+        detailer_pre_job_notes: document.querySelector("#detailer_pre_job_notes").value.trim(),
+        site_weather_notes: document.querySelector("#site_weather_notes").value.trim(),
+        intake_complete: document.querySelector("#intake_complete").value
+      };
+    }
+
+    async function loadJob() {
+      const password = document.querySelector("#jobsitePassword").value.trim();
+      const bookingId = document.querySelector("#jobsiteLookup").value.trim();
+
+      if (!password) {
+        setNotice("Password is required.", "bad");
+        return;
+      }
+      if (!bookingId) {
+        setNotice("Booking ID is required.", "bad");
+        return;
+      }
+
+      currentPassword = password;
+      currentBookingId = bookingId;
+
+      setNotice("Loading job-site intake…");
+
+      const data = await apiPost("/api/admin/jobsite_intake_get", password, {
+        booking_id: bookingId
+      });
+
+      fillBooking(data.booking || {});
+      fillIntake(data.intake || null);
+
+      document.querySelector("#saveIntakeBtn").disabled = false;
+      setNotice("Job-site intake loaded.", "ok");
+    }
+
+    async function saveIntake(event) {
+      event.preventDefault();
+
+      if (!currentPassword || !currentBookingId) {
+        setNotice("Load a booking first.", "bad");
+        return;
+      }
+
+      setNotice("Saving pre-inspection intake…");
+
+      await apiPost("/api/admin/jobsite_intake_save", currentPassword, collectIntakePayload());
+
+      setNotice("Pre-inspection intake saved.", "ok");
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       setBrandImages();
       setFooter();
+
+      document.querySelector("#jobsiteLoadForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        try {
+          await loadJob();
+        } catch (err) {
+          setNotice(err.message || "Could not load job-site intake.", "bad");
+        }
+      });
+
+      document.querySelector("#jobsiteIntakeForm").addEventListener("submit", async (event) => {
+        try {
+          await saveIntake(event);
+        } catch (err) {
+          setNotice(err.message || "Could not save intake.", "bad");
+        }
+      });
     });
   </script>
 </body>
