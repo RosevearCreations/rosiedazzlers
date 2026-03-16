@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Job Site Intake | Rosie Dazzlers</title>
+  <meta name="description" content="Detailer pre-job intake and live job tracking for Rosie Dazzlers." />
+  <link rel="stylesheet" href="/assets/site.css" />
+</head>
+<body data-page="admin-jobsite">
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/admin.html">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers Admin</strong>
+      </a>
+
+      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
+        Menu
+      </button>
+
+      <nav id="navLinks" class="nav-links">
+        <a href="/admin.html">Dashboard</a>
+        <a href="/admin-booking.html">Bookings</a>
+        <a href="/admin-blocks.html">Blocks</a>
+        <a href="/admin-progress.html">Progress</a>
+        <a href="/admin-jobsite.html">Job Site</a>
+        <a href="/admin-promos.html">Promos</a>
+        <a href="/book">Public Site</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <div class="panel">
+        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="hero">
+        <div>
+          <div class="badge">Detailer Job Site Intake</div>
+          <h1>Pre-job inspection and live work tracking</h1>
+          <p>
+            Use this screen at the customer location to inspect the vehicle, record existing conditions,
+            confirm prep items, capture owner acknowledgement, and track working time.
+          </p>
+          <div class="badges">
+            <div class="badge">Pre-Inspection</div>
+            <div class="badge">Owner Acknowledgement</div>
+            <div class="badge">Time Tracking</div>
+            <div class="badge">Live Progress</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="kicker">Current booking</div>
+          <h3 id="jobsiteBookingTitle" style="margin:6px 0 8px">No booking loaded</h3>
+          <div id="jobsiteBookingMeta" class="kicker">This screen will be tied to the selected booking.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div id="pageNotice" class="notice">UI draft ready for wiring.</div>
+    </section>
+
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Booking + staff</h2>
+          <form id="jobsiteLoadForm" class="form">
+            <label>
+              Admin / staff password
+              <input id="jobsitePassword" type="password" autocomplete="current-password" />
+            </label>
+
+            <label>
+              Booking ID or progress token
+              <input id="jobsiteLookup" type="text" placeholder="Paste booking id or progress token" />
+            </label>
+
+            <label>
+              Detailer name
+              <input id="detailerName" type="text" placeholder="Example: Laurie / Jack" />
+            </label>
+
+            <div>
+              <button class="btn primary" type="button">Load job</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <h2>Time tracker</h2>
+          <div class="grid" style="gap:10px">
+            <div class="badge">Arrived: <span id="arrivedAtText">Not started</span></div>
+            <div class="badge">Work started: <span id="startedAtText">Not started</span></div>
+            <div class="badge">Current status: <span id="workStatusText">Idle</span></div>
+            <div class="badge">Tracked time: <span id="trackedTimeText">00:00:00</span></div>
+          </div>
+
+          <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:12px">
+            <button class="btn primary" type="button">Mark Arrived</button>
+            <button class="btn primary" type="button">Start Work</button>
+            <button class="btn ghost" type="button">Start Break</button>
+            <button class="btn ghost" type="button">Resume Work</button>
+            <button class="btn ghost" type="button">Rain Break</button>
+            <button class="btn ghost" type="button">Heat Break</button>
+            <button class="btn primary" type="button">Stop Job</button>
+          </div>
+
+          <label style="margin-top:12px;display:block">
+            Break / stop note
+            <textarea rows="3" placeholder="Optional note for break, delay, weather issue, or stop reason."></textarea>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="panel">
+        <h2>Pre-detail vehicle inspection</h2>
+        <div class="grid cards">
+          <div class="card">
+            <h3>Vehicle condition notes</h3>
+            <label>
+              Exterior condition
+              <textarea rows="4" placeholder="Scratches, dents, paint issues, trim issues, cracked glass, chipped windshield, etc."></textarea>
+            </label>
+
+            <label>
+              Interior condition
+              <textarea rows="4" placeholder="Heavy debris, stains, pet hair, odor, mold concerns, spills, excessive clutter, sharp items, etc."></textarea>
+            </label>
+
+            <label>
+              Existing damage / concerns already present
+              <textarea rows="5" placeholder="List all pre-existing damage or concerns noted before work begins."></textarea>
+            </label>
+          </div>
+
+          <div class="card">
+            <h3>Valuables / customer property</h3>
+            <label>
+              Valuables present?
+              <select>
+                <option value="">Select</option>
+                <option>None seen</option>
+                <option>Yes - documented</option>
+              </select>
+            </label>
+
+            <label>
+              Valuables notes
+              <textarea rows="4" placeholder="Wallet, cash, electronics, jewelry, tools, documents, medication, etc."></textarea>
+            </label>
+
+            <label>
+              Valuables photo URL(s)
+              <textarea rows="4" placeholder="Paste one or more image URLs documenting valuables or customer property."></textarea>
+            </label>
+          </div>
+
+          <div class="card">
+            <h3>Pre-inspection photo log</h3>
+            <label>
+              Exterior photo URL(s)
+              <textarea rows="4" placeholder="Paste image URLs for pre-detail exterior inspection photos."></textarea>
+            </label>
+
+            <label>
+              Interior photo URL(s)
+              <textarea rows="4" placeholder="Paste image URLs for pre-detail interior inspection photos."></textarea>
+            </label>
+
+            <label>
+              Damage / issue photo URL(s)
+              <textarea rows="4" placeholder="Paste image URLs showing existing damage or problem areas."></textarea>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Pre-job checklist</h2>
+          <div class="grid" style="gap:8px">
+            <label class="check-card">
+              <input type="checkbox" />
+              <div><strong>Keys collected</strong><div class="mini-price">Customer has provided keys or access.</div></div>
+            </label>
+
+            <label class="check-card">
+              <input type="checkbox" />
+              <div><strong>Owner present for visual inspection</strong><div class="mini-price">Vehicle reviewed with owner before work begins.</div></div>
+            </label>
+
+            <label class="check-card">
+              <input type="checkbox" />
+              <div><strong>Water hookup located</strong><div class="mini-price">Water source found and ready.</div></div>
+            </label>
+
+            <label class="check-card">
+              <input type="checkbox" />
+              <div><strong>Water tested</strong><div class="mini-price">Confirmed usable on site.</div></div>
+            </label>
+
+            <label class="check-card">
+              <input type="checkbox" />
+              <div><strong>Power hookup located</strong><div class="mini-price">Power source found and ready.</div></div>
+            </label>
+
+            <label class="check-card">
+              <input type="checkbox" />
+              <div><strong>Power tested</strong><div class="mini-price">Confirmed usable on site.</div></div>
+            </label>
+
+            <label class="check-card">
+              <input type="checkbox" />
+              <div><strong>Vehicle accessible and safe to work on</strong><div class="mini-price">Safe parking, access, and working conditions confirmed.</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Extra charge review</h2>
+
+          <label>
+            Garbage bag estimate
+            <select>
+              <option value="">Select</option>
+              <option>1 medium white Glad bag or less</option>
+              <option>More than 1 medium white Glad bag</option>
+            </select>
+          </label>
+
+          <label>
+            Extra bag count
+            <input type="number" min="0" step="1" placeholder="0" />
+          </label>
+
+          <label>
+            Extra clutter / debris charge may apply?
+            <select>
+              <option value="">Select</option>
+              <option>No</option>
+              <option>Yes - possible extra charge</option>
+            </select>
+          </label>
+
+          <label>
+            Extra charge notes
+            <textarea rows="5" placeholder="Describe excessive garbage, clutter, heavy debris, unusual cleanup conditions, or other reasons for additional charges."></textarea>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Owner acknowledgement</h2>
+
+          <label>
+            Owner / customer name
+            <input type="text" placeholder="Full name" />
+          </label>
+
+          <label>
+            Owner email
+            <input type="email" placeholder="Email address" />
+          </label>
+
+          <label>
+            Inspection acknowledged
+            <select>
+              <option value="">Select</option>
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </label>
+
+          <label>
+            Existing condition acknowledged
+            <select>
+              <option value="">Select</option>
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </label>
+
+          <label>
+            Keys handed over acknowledged
+            <select>
+              <option value="">Select</option>
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </label>
+
+          <label>
+            Owner notes
+            <textarea rows="4" placeholder="Owner comments, concerns, or acknowledgements."></textarea>
+          </label>
+        </div>
+
+        <div class="panel">
+          <h2>Detailer completion of intake</h2>
+
+          <label>
+            Detailer pre-job notes
+            <textarea rows="5" placeholder="Anything the detailer wants recorded before work begins."></textarea>
+          </label>
+
+          <label>
+            Site / weather notes
+            <textarea rows="4" placeholder="Rain risk, heat, driveway slope, limited space, difficult access, etc."></textarea>
+          </label>
+
+          <label>
+            Intake complete
+            <select>
+              <option value="">Select</option>
+              <option>Yes - ready to begin</option>
+              <option>No - waiting on customer / site issue</option>
+            </select>
+          </label>
+
+          <div style="margin-top:12px">
+            <button class="btn primary" type="button">Save Pre-Inspection Intake</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Live progress note</h2>
+          <label>
+            Progress note
+            <textarea rows="5" placeholder="Describe what is being done right now or what has just been completed."></textarea>
+          </label>
+
+          <label>
+            Customer visible?
+            <select>
+              <option>Customer</option>
+              <option>Internal</option>
+            </select>
+          </label>
+
+          <div style="margin-top:12px">
+            <button class="btn primary" type="button">Post Progress Note</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Upload / attach progress media</h2>
+          <label>
+            Media type
+            <select>
+              <option>Photo</option>
+              <option>Video</option>
+            </select>
+          </label>
+
+          <label>
+            Caption
+            <input type="text" placeholder="Short caption for customer/admin" />
+          </label>
+
+          <label>
+            Media URL
+            <input type="url" placeholder="https://..." />
+          </label>
+
+          <label>
+            Customer visible?
+            <select>
+              <option>Customer</option>
+              <option>Internal</option>
+            </select>
+          </label>
+
+          <div style="margin-top:12px">
+            <button class="btn primary" type="button">Attach Media</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer container" data-footer></footer>
+
+  <script src="/assets/chrome.js"></script>
+  <script type="module">
+    import { setBrandImages, setFooter } from "/assets/site.js";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setBrandImages();
+      setFooter();
+    });
+  </script>
+</body>
+</html>
