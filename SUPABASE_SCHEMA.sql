@@ -183,3 +183,41 @@ create index if not exists staff_override_log_booking_idx on public.staff_overri
 create index if not exists staff_override_log_source_idx on public.staff_override_log(source_table, source_row_id);
 
 alter table public.staff_override_log enable row level security;
+-- -----------------------------
+-- JOB TIME ENTRIES (detailer live time tracking)
+-- -----------------------------
+create table if not exists public.job_time_entries (
+  id uuid primary key default gen_random_uuid(),
+  booking_id uuid not null references public.bookings(id) on delete cascade,
+  staff_user_id uuid null references public.staff_users(id) on delete set null,
+
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+
+  entry_type text not null check (
+    entry_type in (
+      'arrival',
+      'work_start',
+      'work_stop',
+      'break_start',
+      'break_stop',
+      'rain_break_start',
+      'rain_break_stop',
+      'heat_break_start',
+      'heat_break_stop',
+      'job_complete'
+    )
+  ),
+
+  event_time timestamptz not null default now(),
+  note text null,
+
+  created_by_name text null,
+  source text null default 'jobsite' -- jobsite | admin | system
+);
+
+create index if not exists job_time_entries_booking_idx on public.job_time_entries(booking_id);
+create index if not exists job_time_entries_staff_idx on public.job_time_entries(staff_user_id);
+create index if not exists job_time_entries_event_time_idx on public.job_time_entries(event_time);
+
+alter table public.job_time_entries enable row level security;
