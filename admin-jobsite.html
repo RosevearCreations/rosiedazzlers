@@ -25,6 +25,7 @@
         <a href="/admin-blocks.html">Blocks</a>
         <a href="/admin-progress.html">Progress</a>
         <a href="/admin-jobsite.html">Job Site</a>
+        <a href="/admin-staff.html">Staff</a>
         <a href="/admin-promos.html">Promos</a>
         <a href="/book">Public Site</a>
       </nav>
@@ -103,18 +104,18 @@
           </div>
 
           <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:12px">
-            <button class="btn primary" type="button" disabled>Mark Arrived</button>
-            <button class="btn primary" type="button" disabled>Start Work</button>
-            <button class="btn ghost" type="button" disabled>Start Break</button>
-            <button class="btn ghost" type="button" disabled>Resume Work</button>
-            <button class="btn ghost" type="button" disabled>Rain Break</button>
-            <button class="btn ghost" type="button" disabled>Heat Break</button>
-            <button class="btn primary" type="button" disabled>Stop Job</button>
+            <button class="btn primary" id="markArrivedBtn" type="button" disabled>Mark Arrived</button>
+            <button class="btn primary" id="startWorkBtn" type="button" disabled>Start Work</button>
+            <button class="btn ghost" id="startBreakBtn" type="button" disabled>Start Break</button>
+            <button class="btn ghost" id="resumeWorkBtn" type="button" disabled>Resume Work</button>
+            <button class="btn ghost" id="rainBreakBtn" type="button" disabled>Rain Break</button>
+            <button class="btn ghost" id="heatBreakBtn" type="button" disabled>Heat Break</button>
+            <button class="btn primary" id="stopJobBtn" type="button" disabled>Stop Job</button>
           </div>
 
           <label style="margin-top:12px;display:block">
             Break / stop note
-            <textarea rows="3" placeholder="Optional note for break, delay, weather issue, or stop reason." disabled></textarea>
+            <textarea id="timeEntryNote" rows="3" placeholder="Optional note for break, delay, weather issue, or stop reason."></textarea>
           </label>
         </div>
       </div>
@@ -310,64 +311,16 @@
             </div>
           </div>
         </section>
-
-        <section class="section">
-          <div class="grid cards">
-            <div class="panel">
-              <h2>Live progress note</h2>
-              <label>
-                Progress note
-                <textarea rows="5" placeholder="Describe what is being done right now or what has just been completed." disabled></textarea>
-              </label>
-
-              <label>
-                Customer visible?
-                <select disabled>
-                  <option>Customer</option>
-                  <option>Internal</option>
-                </select>
-              </label>
-
-              <div style="margin-top:12px">
-                <button class="btn primary" type="button" disabled>Post Progress Note</button>
-              </div>
-            </div>
-
-            <div class="panel">
-              <h2>Upload / attach progress media</h2>
-              <label>
-                Media type
-                <select disabled>
-                  <option>Photo</option>
-                  <option>Video</option>
-                </select>
-              </label>
-
-              <label>
-                Caption
-                <input type="text" placeholder="Short caption for customer/admin" disabled />
-              </label>
-
-              <label>
-                Media URL
-                <input type="url" placeholder="https://..." disabled />
-              </label>
-
-              <label>
-                Customer visible?
-                <select disabled>
-                  <option>Customer</option>
-                  <option>Internal</option>
-                </select>
-              </label>
-
-              <div style="margin-top:12px">
-                <button class="btn primary" type="button" disabled>Attach Media</button>
-              </div>
-            </div>
-          </div>
-        </section>
       </form>
+    </section>
+
+    <section class="section">
+      <div class="panel">
+        <h2>Time entry history</h2>
+        <div id="timeEntriesList" class="grid" style="margin-top:12px">
+          <div class="notice">No job loaded yet.</div>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -379,6 +332,7 @@
 
     let currentBookingId = "";
     let currentPassword = "";
+    let timeEntries = [];
 
     function setNotice(message, kind = "") {
       const el = document.querySelector("#pageNotice");
@@ -399,13 +353,44 @@
       return value === "true";
     }
 
+    function formatDateTime(value) {
+      if (!value) return "—";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return String(value);
+      return new Intl.DateTimeFormat("en-CA", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      }).format(d);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function formatDuration(ms) {
+      const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+      const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+      const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
+      const seconds = String(totalSeconds % 60).padStart(2, "0");
+      return `${hours}:${minutes}:${seconds}`;
+    }
+
+    function apiHeaders(password) {
+      return {
+        "Content-Type": "application/json",
+        "x-admin-password": password
+      };
+    }
+
     async function apiPost(url, password, body) {
       const res = await fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": password
-        },
+        headers: apiHeaders(password),
         body: JSON.stringify(body || {})
       });
 
@@ -516,6 +501,135 @@
       };
     }
 
+    function computeWorkSummary(entries) {
+      let arrivedAt = null;
+      let startedAt = null;
+      let status = "Idle";
+      let totalWorkMs = 0;
+      let activeStart = null;
+
+      for (const entry of entries) {
+        const t = new Date(entry.event_time).getTime();
+        if (Number.isNaN(t)) continue;
+
+        if (entry.entry_type === "arrival" && !arrivedAt) {
+          arrivedAt = entry.event_time;
+        }
+
+        if (entry.entry_type === "work_start") {
+          if (!startedAt) startedAt = entry.event_time;
+          activeStart = t;
+          status = "Working";
+        }
+
+        if (["break_start", "rain_break_start", "heat_break_start", "work_stop", "job_complete"].includes(entry.entry_type)) {
+          if (activeStart != null) {
+            totalWorkMs += Math.max(0, t - activeStart);
+            activeStart = null;
+          }
+
+          if (entry.entry_type === "break_start") status = "On Break";
+          if (entry.entry_type === "rain_break_start") status = "Rain Break";
+          if (entry.entry_type === "heat_break_start") status = "Heat Break";
+          if (entry.entry_type === "work_stop") status = "Stopped";
+          if (entry.entry_type === "job_complete") status = "Completed";
+        }
+
+        if (["break_stop", "rain_break_stop", "heat_break_stop"].includes(entry.entry_type)) {
+          activeStart = t;
+          status = "Working";
+        }
+      }
+
+      if (activeStart != null) {
+        totalWorkMs += Math.max(0, Date.now() - activeStart);
+      }
+
+      return {
+        arrivedAt,
+        startedAt,
+        status,
+        totalWorkMs
+      };
+    }
+
+    function renderTimeSummary() {
+      const summary = computeWorkSummary(timeEntries);
+
+      document.querySelector("#arrivedAtText").textContent = summary.arrivedAt ? formatDateTime(summary.arrivedAt) : "Not started";
+      document.querySelector("#startedAtText").textContent = summary.startedAt ? formatDateTime(summary.startedAt) : "Not started";
+      document.querySelector("#workStatusText").textContent = summary.status;
+      document.querySelector("#trackedTimeText").textContent = formatDuration(summary.totalWorkMs);
+    }
+
+    function renderTimeEntries() {
+      const wrap = document.querySelector("#timeEntriesList");
+      if (!wrap) return;
+
+      if (!timeEntries.length) {
+        wrap.innerHTML = `<div class="notice">No time entries yet.</div>`;
+        renderTimeSummary();
+        return;
+      }
+
+      wrap.innerHTML = timeEntries.map((entry) => `
+        <article class="card">
+          <div class="kicker">${escapeHtml(formatDateTime(entry.event_time))}</div>
+          <h3>${escapeHtml(entry.entry_type)}</h3>
+          <p>${escapeHtml(entry.created_by_name || "Rosie Dazzlers")}</p>
+          ${entry.note ? `<div class="hr"></div><p>${escapeHtml(entry.note)}</p>` : ""}
+        </article>
+      `).join("");
+
+      renderTimeSummary();
+    }
+
+    function setTimeButtonsEnabled(enabled) {
+      const ids = [
+        "markArrivedBtn",
+        "startWorkBtn",
+        "startBreakBtn",
+        "resumeWorkBtn",
+        "rainBreakBtn",
+        "heatBreakBtn",
+        "stopJobBtn"
+      ];
+      ids.forEach((id) => {
+        const el = document.querySelector(`#${id}`);
+        if (el) el.disabled = !enabled;
+      });
+    }
+
+    async function loadTimeEntries() {
+      if (!currentPassword || !currentBookingId) return;
+      const data = await apiPost("/api/admin/job_time_entries_get", currentPassword, {
+        booking_id: currentBookingId
+      });
+      timeEntries = Array.isArray(data.time_entries) ? data.time_entries : [];
+      renderTimeEntries();
+    }
+
+    async function postTimeEntry(entryType) {
+      if (!currentPassword || !currentBookingId) {
+        setNotice("Load a booking first.", "bad");
+        return;
+      }
+
+      const detailerName = document.querySelector("#detailerName").value.trim();
+      const note = document.querySelector("#timeEntryNote").value.trim();
+
+      await apiPost("/api/admin/job_time_entry_post", currentPassword, {
+        booking_id: currentBookingId,
+        entry_type: entryType,
+        created_by_name: detailerName || null,
+        note: note || null,
+        source: "jobsite"
+      });
+
+      document.querySelector("#timeEntryNote").value = "";
+      await loadTimeEntries();
+    }
+
     async function loadJob() {
       const password = document.querySelector("#jobsitePassword").value.trim();
       const bookingId = document.querySelector("#jobsiteLookup").value.trim();
@@ -540,8 +654,10 @@
 
       fillBooking(data.booking || {});
       fillIntake(data.intake || null);
+      await loadTimeEntries();
 
       document.querySelector("#saveIntakeBtn").disabled = false;
+      setTimeButtonsEnabled(true);
       setNotice("Job-site intake loaded.", "ok");
     }
 
@@ -580,6 +696,78 @@
           setNotice(err.message || "Could not save intake.", "bad");
         }
       });
+
+      document.querySelector("#markArrivedBtn").addEventListener("click", async () => {
+        try {
+          setNotice("Saving arrival time…");
+          await postTimeEntry("arrival");
+          setNotice("Arrival time saved.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not save arrival time.", "bad");
+        }
+      });
+
+      document.querySelector("#startWorkBtn").addEventListener("click", async () => {
+        try {
+          setNotice("Starting work…");
+          await postTimeEntry("work_start");
+          setNotice("Work start saved.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not start work.", "bad");
+        }
+      });
+
+      document.querySelector("#startBreakBtn").addEventListener("click", async () => {
+        try {
+          setNotice("Starting break…");
+          await postTimeEntry("break_start");
+          setNotice("Break start saved.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not start break.", "bad");
+        }
+      });
+
+      document.querySelector("#resumeWorkBtn").addEventListener("click", async () => {
+        try {
+          setNotice("Resuming work…");
+          await postTimeEntry("break_stop");
+          setNotice("Work resumed.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not resume work.", "bad");
+        }
+      });
+
+      document.querySelector("#rainBreakBtn").addEventListener("click", async () => {
+        try {
+          setNotice("Starting rain break…");
+          await postTimeEntry("rain_break_start");
+          setNotice("Rain break saved.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not save rain break.", "bad");
+        }
+      });
+
+      document.querySelector("#heatBreakBtn").addEventListener("click", async () => {
+        try {
+          setNotice("Starting heat break…");
+          await postTimeEntry("heat_break_start");
+          setNotice("Heat break saved.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not save heat break.", "bad");
+        }
+      });
+
+      document.querySelector("#stopJobBtn").addEventListener("click", async () => {
+        try {
+          setNotice("Stopping job…");
+          await postTimeEntry("work_stop");
+          setNotice("Job stop saved.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not stop job.", "bad");
+        }
+      });
+
+      setTimeButtonsEnabled(false);
     });
   </script>
 </body>
