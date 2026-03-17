@@ -10,6 +10,7 @@
 /admin-jobsite.html   /admin-jobsite    301
 /admin-live.html      /admin-live       301
 /admin-staff.html     /admin-staff      301
+/admin-customers.html /admin-customers  301
 /admin-promos.html    /admin-promos     301
 
 # Normalize optional trailing slashes
@@ -22,4 +23,5 @@
 /admin-jobsite/       /admin-jobsite    301
 /admin-live/          /admin-live       301
 /admin-staff/         /admin-staff      301
+/admin-customers/     /admin-customers  301
 /admin-promos/        /admin-promos     301
