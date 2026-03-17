@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Customers | Rosie Dazzlers</title>
+  <meta name="description" content="Manage customer profiles and tiers for Rosie Dazzlers." />
+  <link rel="stylesheet" href="/assets/site.css" />
+</head>
+<body data-page="admin-customers">
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/admin.html">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers Admin</strong>
+      </a>
+
+      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
+        Menu
+      </button>
+
+      <nav id="navLinks" class="nav-links">
+        <a href="/admin.html">Dashboard</a>
+        <a href="/admin-booking.html">Bookings</a>
+        <a href="/admin-blocks.html">Blocks</a>
+        <a href="/admin-progress.html">Progress</a>
+        <a href="/admin-jobsite.html">Job Site</a>
+        <a href="/admin-live.html">Live Monitor</a>
+        <a href="/admin-staff.html">Staff</a>
+        <a href="/admin-customers.html">Customers</a>
+        <a href="/admin-promos.html">Promos</a>
+        <a href="/book">Public Site</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <div class="panel">
+        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="hero">
+        <div>
+          <div class="badge">Admin Customers</div>
+          <h1>Manage customer profiles and tiers</h1>
+          <p>
+            Create and update customer profiles, assign loyalty tiers, track repeat customers,
+            and mark big tippers or high-value clients.
+          </p>
+          <div class="badges">
+            <div class="badge">Random</div>
+            <div class="badge">Regular</div>
+            <div class="badge">Silver</div>
+            <div class="badge">Gold</div>
+            <div class="badge">VIP</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="kicker">Selected customer</div>
+          <h3 id="customerTitle" style="margin:6px 0 8px">No customer selected</h3>
+          <div id="customerMeta" class="kicker">Load customer profiles to begin.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div id="pageNotice" class="notice">Ready.</div>
+    </section>
+
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Admin access</h2>
+          <form id="adminForm" class="form">
+            <label>
+              Admin password
+              <input id="adminPassword" type="password" autocomplete="current-password" required />
+            </label>
+
+            <div>
+              <button class="btn primary" type="submit">Load customers</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <h2>Available tiers</h2>
+          <div id="tiersBox" class="kicker">Not loaded yet.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Customer list</h2>
+          <div id="customerList" class="grid" style="margin-top:12px">
+            <div class="notice">Customer profiles have not been loaded yet.</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Create / edit customer</h2>
+          <form id="customerForm" class="form">
+            <input id="customerId" type="hidden" />
+
+            <label>
+              Full name
+              <input id="fullName" type="text" placeholder="Full name" />
+            </label>
+
+            <label>
+              Email
+              <input id="email" type="email" placeholder="Email address" required />
+            </label>
+
+            <label>
+              Phone
+              <input id="phone" type="text" placeholder="Phone number" />
+            </label>
+
+            <label>
+              Tier
+              <select id="tierCode" required>
+                <option value="random">random</option>
+                <option value="regular">regular</option>
+                <option value="silver">silver</option>
+                <option value="gold">gold</option>
+                <option value="vip">vip</option>
+              </select>
+            </label>
+
+            <label>
+              Lifetime bookings
+              <input id="lifetimeBookings" type="number" min="0" step="1" value="0" />
+            </label>
+
+            <label>
+              Lifetime spend (cents)
+              <input id="lifetimeSpendCents" type="number" min="0" step="1" value="0" />
+            </label>
+
+            <label class="check-card">
+              <input id="bigTipper" type="checkbox" />
+              <div>
+                <strong>Big tipper</strong>
+                <div class="mini-price">Flag for consistently generous tips or premium treatment.</div>
+              </div>
+            </label>
+
+            <label>
+              Notes
+              <textarea id="notes" rows="4" placeholder="Optional internal notes"></textarea>
+            </label>
+
+            <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
+              <button id="saveCustomerBtn" class="btn primary" type="submit" disabled>Save customer</button>
+              <button id="newCustomerBtn" class="btn ghost" type="button" disabled>Create new</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer container" data-footer></footer>
+
+  <script src="/assets/chrome.js"></script>
+  <script type="module">
+    import { setBrandImages, setFooter } from "/assets/site.js";
+
+    let currentPassword = "";
+    let customerProfiles = [];
+    let customerTiers = [];
+    let selectedCustomerId = "";
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function moneyFromCents(cents) {
+      return new Intl.NumberFormat("en-CA", {
+        style: "currency",
+        currency: "CAD"
+      }).format((Number(cents) || 0) / 100);
+    }
+
+    function setNotice(message, kind = "") {
+      const el = document.querySelector("#pageNotice");
+      if (!el) return;
+      el.className = kind ? `notice ${kind}` : "notice";
+      el.textContent = message;
+    }
+
+    async function apiPost(url, password, body) {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": password
+        },
+        body: JSON.stringify(body || {})
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Request failed for ${url}`);
+      return data;
+    }
+
+    function renderTiers() {
+      const box = document.querySelector("#tiersBox");
+      if (!box) return;
+
+      if (!customerTiers.length) {
+        box.textContent = "No customer tiers loaded.";
+        return;
+      }
+
+      box.innerHTML = customerTiers
+        .map((tier) => `<div><strong>${escapeHtml(tier.label || tier.code)}</strong> — ${escapeHtml(tier.description || "")}</div>`)
+        .join("");
+    }
+
+    function renderSelectedCustomer() {
+      const title = document.querySelector("#customerTitle");
+      const meta = document.querySelector("#customerMeta");
+
+      const row = customerProfiles.find((c) => c.id === selectedCustomerId) || null;
+
+      if (!row) {
+        title.textContent = "No customer selected";
+        meta.textContent = "Choose a customer profile or create a new one.";
+        return;
+      }
+
+      title.textContent = row.full_name || row.email || "Customer selected";
+      meta.textContent = [
+        row.email || "—",
+        row.tier_code || "random",
+        row.big_tipper ? "big tipper" : "standard"
+      ].join(" · ");
+    }
+
+    function fillForm(row) {
+      document.querySelector("#customerId").value = row?.id || "";
+      document.querySelector("#fullName").value = row?.full_name || "";
+      document.querySelector("#email").value = row?.email || "";
+      document.querySelector("#phone").value = row?.phone || "";
+      document.querySelector("#tierCode").value = row?.tier_code || "random";
+      document.querySelector("#lifetimeBookings").value = row?.lifetime_bookings ?? 0;
+      document.querySelector("#lifetimeSpendCents").value = row?.lifetime_spend_cents ?? 0;
+      document.querySelector("#bigTipper").checked = !!row?.big_tipper;
+      document.querySelector("#notes").value = row?.notes || "";
+    }
+
+    function clearForm() {
+      selectedCustomerId = "";
+      fillForm(null);
+      renderSelectedCustomer();
+    }
+
+    function renderCustomerList() {
+      const wrap = document.querySelector("#customerList");
+      if (!wrap) return;
+
+      if (!customerProfiles.length) {
+        wrap.innerHTML = `<div class="notice">No customer profiles found.</div>`;
+        return;
+      }
+
+      wrap.innerHTML = customerProfiles.map((row) => `
+        <article class="card">
+          <div class="kicker">${escapeHtml(row.tier_code || "random")} · ${row.big_tipper ? "big tipper" : "standard"}</div>
+          <h3>${escapeHtml(row.full_name || row.email || "Unnamed")}</h3>
+          <p>${escapeHtml(row.email || "—")}</p>
+          <div class="kicker">Bookings: ${escapeHtml(row.lifetime_bookings ?? 0)} · Spend: ${escapeHtml(moneyFromCents(row.lifetime_spend_cents ?? 0))}</div>
+          <div class="hr"></div>
+          <button class="btn primary" type="button" data-customer-id="${escapeHtml(row.id)}">Edit customer</button>
+        </article>
+      `).join("");
+
+      wrap.querySelectorAll("[data-customer-id]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          selectedCustomerId = btn.getAttribute("data-customer-id");
+          const row = customerProfiles.find((c) => c.id === selectedCustomerId) || null;
+          fillForm(row);
+          renderSelectedCustomer();
+        });
+      });
+    }
+
+    async function refreshCustomers() {
+      const data = await apiPost("/api/admin/customer_profiles_list", currentPassword, {});
+      customerProfiles = Array.isArray(data.customer_profiles) ? data.customer_profiles : [];
+      customerTiers = Array.isArray(data.customer_tiers) ? data.customer_tiers : [];
+      renderCustomerList();
+      renderTiers();
+
+      document.querySelector("#saveCustomerBtn").disabled = false;
+      document.querySelector("#newCustomerBtn").disabled = false;
+
+      if (selectedCustomerId) {
+        const row = customerProfiles.find((c) => c.id === selectedCustomerId) || null;
+        fillForm(row);
+      }
+
+      renderSelectedCustomer();
+    }
+
+    function collectPayload() {
+      return {
+        id: document.querySelector("#customerId").value.trim() || null,
+        full_name: document.querySelector("#fullName").value.trim(),
+        email: document.querySelector("#email").value.trim(),
+        phone: document.querySelector("#phone").value.trim(),
+        tier_code: document.querySelector("#tierCode").value,
+        lifetime_bookings: document.querySelector("#lifetimeBookings").value,
+        lifetime_spend_cents: document.querySelector("#lifetimeSpendCents").value,
+        big_tipper: document.querySelector("#bigTipper").checked,
+        notes: document.querySelector("#notes").value.trim()
+      };
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setBrandImages();
+      setFooter();
+
+      document.querySelector("#adminForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const password = document.querySelector("#adminPassword").value.trim();
+        if (!password) {
+          setNotice("Admin password is required.", "bad");
+          return;
+        }
+
+        try {
+          currentPassword = password;
+          setNotice("Loading customer profiles…");
+          await refreshCustomers();
+          setNotice("Customer profiles loaded.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not load customer profiles.", "bad");
+        }
+      });
+
+      document.querySelector("#customerForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!currentPassword) {
+          setNotice("Load admin access first.", "bad");
+          return;
+        }
+
+        try {
+          setNotice("Saving customer profile…");
+          await apiPost("/api/admin/customer_profiles_save", currentPassword, collectPayload());
+          await refreshCustomers();
+          setNotice("Customer profile saved.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not save customer profile.", "bad");
+        }
+      });
+
+      document.querySelector("#newCustomerBtn").addEventListener("click", () => {
+        clearForm();
+        setNotice("Ready to create a new customer profile.");
+      });
+    });
+  </script>
+</body>
+</html>
