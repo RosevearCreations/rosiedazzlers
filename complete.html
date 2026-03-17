@@ -1,28 +1,32 @@
 <!-- /complete.html
-     Customer completion page (no login yet).
-     Uses progress token:
-       /complete?token=UUID
-     Allows typed signature to accept completion & close the job.
+     REPLACE ENTIRE FILE
 
-     Calls:
-       POST /api/progress/signoff
+     Customer completion/sign-off page:
+       /complete?token=UUID
+
+     What it does:
+     - Loads booking header via /api/progress/view?token=...
+     - Collects typed signature + optional notes
+     - Posts to /api/progress/signoff (we’ll add/verify that endpoint next if needed)
 -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Complete | Rosie Dazzlers</title>
-  <meta name="description" content="Accept completion of your detailing job." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260309f" />
+  <title>Completion | Rosie Dazzlers</title>
+  <meta name="description" content="Sign off and confirm completion of your detailing job." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260309y" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-    .muted{color:rgba(234,242,255,.62)}
     @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
-    textarea{min-height:110px}
+    .muted{color:rgba(234,242,255,.62)}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    textarea{min-height:120px}
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
   </style>
 </head>
+
 <body>
   <div class="nav">
     <div class="nav-inner">
@@ -38,60 +42,60 @@
 
   <div class="container">
     <div class="panel">
-      <h1 style="margin:0 0 6px">Job Completion</h1>
+      <h1 style="margin:0 0 6px">Completion Sign-off</h1>
       <p class="kicker" style="margin:0">
-        Review your detailing progress and confirm completion with a typed signature.
+        Confirm your detail is complete. This is a typed signature (hand-drawn signature can be added next).
       </p>
+
       <div id="tokenNote" class="notice warn" style="margin-top:12px;display:none"></div>
+      <div id="err" class="notice bad" style="margin-top:12px;display:none"></div>
+      <div id="ok" class="notice ok" style="margin-top:12px;display:none"></div>
     </div>
 
     <div class="section grid2">
       <div class="panel">
-        <h2 style="margin-top:0">Before you sign</h2>
-        <p class="muted">
-          Please review photos/notes first:
-          <a id="progressLink" href="/progress" class="mono">/progress?token=...</a>
-        </p>
-        <div class="notice">
-          <strong>Reminder:</strong> Completion confirms the job is finished to your satisfaction.
-          If something needs attention, contact us first.
+        <h2 style="margin-top:0">Booking</h2>
+        <div id="bookingBox" class="notice"></div>
+
+        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <a id="progressLink" class="btn ghost" href="#">Back to progress</a>
+          <a class="btn ghost" href="/waiver">Service waiver</a>
         </div>
-
-        <div class="hr"></div>
-
-        <h2>Typed signature</h2>
-        <label for="typed_name">Full name (typed) <span class="mono">(required)</span></label>
-        <input id="typed_name" type="text" placeholder="Your full name" />
-
-        <label for="completion_notes" style="margin-top:10px">Notes (optional)</label>
-        <textarea id="completion_notes" placeholder="Looks great! Thank you."></textarea>
-
-        <label class="checkbox" style="margin-top:10px">
-          <input type="checkbox" id="accept" />
-          I accept completion of this detailing job.
-        </label>
-
-        <div class="row" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn primary" id="signBtn" type="button">Sign & Complete</button>
-        </div>
-
-        <div id="status" class="notice" style="display:none;margin-top:12px"></div>
       </div>
 
       <div class="panel">
-        <h2 style="margin-top:0">What happens next</h2>
-        <ul>
-          <li>The job status is marked <strong>completed</strong>.</li>
-          <li>Your signature is stored with a timestamp.</li>
-          <li>We can add “before/after gallery” selection later.</li>
-        </ul>
+        <h2 style="margin-top:0">Sign-off</h2>
 
-        <div class="hr"></div>
+        <form id="signForm">
+          <div class="grid2">
+            <div>
+              <label for="signer_name">Your name (typed signature)</label>
+              <input id="signer_name" type="text" required placeholder="Full name" />
+            </div>
+            <div>
+              <label for="signer_email">Your email</label>
+              <input id="signer_email" type="email" required placeholder="you@example.com" />
+            </div>
+          </div>
 
-        <h2>Need help?</h2>
-        <p class="muted">
-          Email: <a href="mailto:info@rosiedazzlers.ca">info@rosiedazzlers.ca</a>
-        </p>
+          <label for="notes" style="margin-top:10px">Notes (optional)</label>
+          <textarea id="notes" placeholder="Anything we should know? e.g., 'Please revisit the rear mats next time.'"></textarea>
+
+          <label style="display:flex;gap:10px;align-items:flex-start;margin-top:10px">
+            <input id="agree" type="checkbox" required />
+            <span>
+              <strong>I confirm the service is complete</strong> to my satisfaction (or I have left notes above).
+            </span>
+          </label>
+
+          <div class="row" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+            <button id="submitBtn" class="btn primary" type="submit">Sign completion</button>
+          </div>
+
+          <div class="muted" style="margin-top:10px">
+            This will record your sign-off timestamp for this booking.
+          </div>
+        </form>
       </div>
     </div>
 
@@ -102,68 +106,113 @@
     const qs = (s) => document.querySelector(s);
 
     function escapeHtml(s){
-      return String(s||"")
+      return String(s || "")
         .replaceAll("&","&amp;").replaceAll("<","&lt;")
         .replaceAll(">","&gt;").replaceAll('"',"&quot;")
         .replaceAll("'","&#39;");
     }
 
-    function show(msg, kind="") {
-      const el = qs("#status");
-      el.style.display = "block";
-      el.className = "notice " + (kind || "");
-      el.textContent = msg;
+    function fmtTime(iso){
+      try {
+        const d = new Date(iso);
+        return d.toLocaleString("en-CA", { dateStyle:"medium", timeStyle:"short" });
+      } catch {
+        return iso || "";
+      }
     }
 
-    const params = new URLSearchParams(location.search);
-    const token = (params.get("token") || "").trim();
+    function show(id, msg){
+      const el = qs("#"+id);
+      el.style.display = "block";
+      el.textContent = msg;
+    }
+    function hide(id){ qs("#"+id).style.display = "none"; }
+
+    const p = new URLSearchParams(location.search);
+    const token = (p.get("token") || "").trim();
 
     if (!token) {
       qs("#tokenNote").style.display = "block";
       qs("#tokenNote").innerHTML = `Missing token. Use a link like <span class="mono">/complete?token=UUID</span>.`;
-    } else {
-      qs("#tokenNote").style.display = "block";
-      qs("#tokenNote").innerHTML = `Token: <span class="mono">${escapeHtml(token)}</span>`;
-      const pl = qs("#progressLink");
-      pl.href = `/progress?token=${encodeURIComponent(token)}`;
-      pl.textContent = pl.href;
+      throw new Error("Missing token");
     }
 
-    qs("#signBtn").addEventListener("click", async () => {
-      if (!token) return show("Missing token.", "bad");
+    qs("#tokenNote").style.display = "block";
+    qs("#tokenNote").innerHTML = `Token: <span class="mono">${escapeHtml(token)}</span>`;
 
-      const typed_name = (qs("#typed_name").value || "").trim();
-      const completion_notes = (qs("#completion_notes").value || "").trim();
-      const accept = qs("#accept").checked;
+    qs("#progressLink").href = `/progress?token=${encodeURIComponent(token)}`;
 
-      if (!typed_name) return show("Please type your full name.", "bad");
-      if (!accept) return show("Please check the acceptance box.", "bad");
+    // Load booking header (reuse progress view endpoint)
+    async function loadBooking(){
+      const res = await fetch(`/api/progress/view?token=${encodeURIComponent(token)}`, { cache:"no-store" });
+      const out = await res.json().catch(()=>null);
 
-      show("Submitting…");
-
-      const res = await fetch("/api/progress/signoff", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          token,
-          method: "typed",
-          typed_name,
-          completion_notes: completion_notes || null,
-        }),
-      });
-
-      const data = await res.json().catch(()=>null);
-      if (!res.ok || !data?.ok) {
-        return show(data?.error ? `Error: ${data.error}` : "Error completing job.", "bad");
+      if (!res.ok || !out?.ok) {
+        qs("#err").style.display = "block";
+        qs("#err").textContent = out?.error ? `Error: ${out.error}` : "Error loading booking.";
+        return;
       }
 
-      show("Completed. Thank you!", "ok");
-      setTimeout(() => {
-        location.href = `/progress?token=${encodeURIComponent(token)}`;
-      }, 1200);
+      const b = out.booking || {};
+      qs("#bookingBox").innerHTML = `
+        <div><strong>${escapeHtml(b.customer_name || "Customer")}</strong></div>
+        <div class="muted">Date: <strong>${escapeHtml(b.service_date || "")}</strong></div>
+        <div class="muted">Package: <strong>${escapeHtml(b.package_code || "")}</strong> (${escapeHtml(b.vehicle_size || "")})</div>
+        <div class="muted">Job status: <span class="tag">${escapeHtml(b.job_status || "scheduled")}</span></div>
+        ${b.completed_at ? `<div class="muted">Completed at: ${escapeHtml(fmtTime(b.completed_at))}</div>` : ``}
+      `;
+    }
+
+    loadBooking();
+
+    // Submit signoff
+    qs("#signForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      hide("err"); hide("ok");
+
+      const signer_name = (qs("#signer_name").value || "").trim();
+      const signer_email = (qs("#signer_email").value || "").trim();
+      const notes = (qs("#notes").value || "").trim() || null;
+      const agree = qs("#agree").checked;
+
+      if (!signer_name || !signer_email || !agree) {
+        return show("err", "Please fill name, email, and check the confirmation box.");
+      }
+
+      qs("#submitBtn").disabled = true;
+      qs("#submitBtn").textContent = "Submitting…";
+
+      try {
+        const res = await fetch("/api/progress/signoff", {
+          method: "POST",
+          headers: { "content-type":"application/json" },
+          body: JSON.stringify({
+            token,
+            signer_name,
+            signer_email,
+            notes,
+            signer_type: "customer",
+          }),
+        });
+
+        const out = await res.json().catch(()=>null);
+
+        if (!res.ok || !out?.ok) {
+          qs("#submitBtn").disabled = false;
+          qs("#submitBtn").textContent = "Sign completion";
+          return show("err", out?.error ? `Error: ${out.error}` : "Signoff failed.");
+        }
+
+        show("ok", "Thank you! Completion recorded.");
+        qs("#submitBtn").textContent = "Signed";
+      } catch (err) {
+        qs("#submitBtn").disabled = false;
+        qs("#submitBtn").textContent = "Sign completion";
+        return show("err", String(err));
+      }
     });
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260309f"></script>
+  <script type="module" src="/assets/chrome.js?v=20260309y"></script>
 </body>
 </html>

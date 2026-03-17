@@ -1,129 +1,93 @@
+<!-- /privacy.html
+     Minimal privacy page (required since footer links to /privacy).
+-->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Privacy Policy | Rosie Dazzlers</title>
+  <title>Privacy | Rosie Dazzlers</title>
   <meta name="description" content="Privacy policy for Rosie Dazzlers Mobile Auto Detailing." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260306b" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260309p" />
+  <style>
+    .muted{color:rgba(234,242,255,.62)}
+    .stack > *{margin-top:10px}
+    .stack > *:first-child{margin-top:0}
+    ul{margin:8px 0 0 18px}
+    li{margin:6px 0}
+  </style>
 </head>
-
 <body>
-  <!-- Standard Nav -->
   <div class="nav">
     <div class="nav-inner">
       <a class="brand" href="/">
         <img data-logo alt="Rosie Dazzlers logo" />
         <strong>Rosie Dazzlers</strong>
       </a>
-
-      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">
-        Menu
-      </button>
-
-      <div class="nav-links" id="navLinks">
-        <a href="/services">Services</a>
-        <a href="/pricing">Pricing</a>
-        <a href="/gear">Gear</a>
-        <a href="/consumables">Consumables</a>
-        <a href="/about">About</a>
-        <a href="/contact">Contact</a>
-        <a href="/book">Book</a>
-      </div>
-
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
+      <div class="nav-links" id="navLinks"></div>
       <a class="btn primary" href="/book">Book now</a>
     </div>
   </div>
 
   <div class="container">
     <div class="panel">
-      <h1 style="margin-top:0">Privacy Policy</h1>
-      <p class="kicker">Last updated: March 6, 2026</p>
+      <h1 style="margin:0 0 6px">Privacy</h1>
+      <p class="kicker" style="margin:0">How we handle your information.</p>
+    </div>
 
-      <div class="hr"></div>
+    <div class="section">
+      <div class="panel stack">
+        <h2 style="margin:0">What we collect</h2>
+        <ul class="muted">
+          <li>Contact details you submit (name, email, phone).</li>
+          <li>Service address and booking details.</li>
+          <li>Vehicle details you provide (year/make/model and optional photo link).</li>
+          <li>Payment processing is handled by Stripe (we do not store your full card number).</li>
+        </ul>
 
-      <p>
-        Rosie Dazzlers Mobile Auto Detailing respects your privacy and aims to handle personal information responsibly.
-        This page explains the kinds of information we may collect through our website and booking process, how we use it, and how you can contact us with privacy questions.
-      </p>
+        <div class="hr"></div>
 
-      <h2>1. Information we may collect</h2>
-      <p>Depending on how you use the site, we may collect information such as:</p>
-      <ul class="list">
-        <li>Name</li>
-        <li>Email address</li>
-        <li>Phone number</li>
-        <li>Service address</li>
-        <li>Vehicle size and booking details</li>
-        <li>Add-on selections and appointment notes</li>
-        <li>Technical information needed for website operation and booking security</li>
-      </ul>
+        <h2 style="margin:0">How we use it</h2>
+        <ul class="muted">
+          <li>To schedule and perform your detailing service.</li>
+          <li>To contact you about your appointment.</li>
+          <li>To provide receipts and booking confirmation.</li>
+          <li>To show you your job progress (if enabled) via a private link.</li>
+        </ul>
 
-      <h2>2. Why we collect it</h2>
-      <p>We collect information primarily to:</p>
-      <ul class="list">
-        <li>Respond to inquiries</li>
-        <li>Process and manage bookings</li>
-        <li>Collect deposits and confirm appointments</li>
-        <li>Communicate about services, scheduling, and changes</li>
-        <li>Improve website functionality and customer experience</li>
-      </ul>
+        <div class="hr"></div>
 
-      <h2>3. Payments</h2>
-      <p>
-        Deposit payments may be processed by third-party payment providers such as Stripe. Rosie Dazzlers does not store full payment card information on this website.
-        Payment providers handle payment data according to their own terms and privacy practices.
-      </p>
+        <h2 style="margin:0">Sharing</h2>
+        <ul class="muted">
+          <li>We share data with service providers only as needed (e.g., Stripe for payments, Supabase for data storage).</li>
+          <li>We do not sell your personal information.</li>
+        </ul>
 
-      <h2>4. Website tools and third parties</h2>
-      <p>
-        The site may use third-party services to operate booking, hosting, analytics, forms, databases, email, or payments.
-        These may include Cloudflare, GitHub, Supabase, Stripe, and other service providers used to run the website and booking system.
-      </p>
+        <div class="hr"></div>
 
-      <h2>5. Marketing communications</h2>
-      <p>
-        If Rosie Dazzlers sends promotional emails or similar commercial electronic messages, those communications should only be sent where appropriate consent exists and should include sender identification and an unsubscribe method.
-      </p>
+        <h2 style="margin:0">Progress links</h2>
+        <p class="muted">
+          If progress tracking is enabled, you may receive a link like <strong>/progress?token=…</strong>.
+          Anyone with that link can view the progress feed. Keep it private.
+        </p>
 
-      <h2>6. Data retention</h2>
-      <p>
-        We may retain customer and booking information for as long as reasonably necessary to operate the business, maintain records, manage appointments, resolve disputes, and meet legal, accounting, or operational needs.
-      </p>
+        <div class="hr"></div>
 
-      <h2>7. Access and correction</h2>
-      <p>
-        If you want to ask what personal information we hold about you, or request corrections to inaccurate information, contact us using the email below.
-      </p>
+        <h2 style="margin:0">Contact</h2>
+        <p class="muted">
+          Questions? Email us at <a href="mailto:info@rosiedazzlers.ca">info@rosiedazzlers.ca</a>.
+        </p>
 
-      <h2>8. Security</h2>
-      <p>
-        We use reasonable steps to protect personal information connected to our website and booking process. However, no website, email system, or online platform can guarantee absolute security.
-      </p>
-
-      <h2>9. Contact</h2>
-      <p>
-        For privacy questions or requests, contact:
-        <br />
-        <a href="mailto:info@rosiedazzlers.ca">info@rosiedazzlers.ca</a>
-      </p>
-
-      <div class="hr"></div>
-
-      <div class="notice">
-        This privacy page is a practical website policy, not legal advice. If you add newsletters, SMS marketing, paid ads/remarketing, or extensive analytics, update this policy.
+        <div class="notice warn">
+          This is a simple privacy notice. We can expand it later (retention periods, deletion requests, etc.).
+        </div>
       </div>
     </div>
 
-    <!-- Footer injected by chrome.js -->
     <div class="footer" data-footer></div>
   </div>
 
-  <script type="module">
-    import { setBrandImages } from "/assets/site.js?v=20260306b";
-    setBrandImages();
-  </script>
-
-  <script type="module" src="/assets/chrome.js?v=20260306b"></script>
+  <script type="module" src="/assets/chrome.js?v=20260309p"></script>
 </body>
 </html>

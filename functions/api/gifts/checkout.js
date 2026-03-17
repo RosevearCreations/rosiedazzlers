@@ -1,9 +1,13 @@
 // /functions/api/gifts/checkout.js
-// Creates Stripe Checkout Sessions for gift purchases.
-// FIXES:
-// 1) Vehicle photo is OPTIONAL (recommended) for service gifts.
-// 2) Success/cancel always returns to /gifts (not home).
-// 3) Avoids double slashes by normalizing origin (removes trailing /).
+// Gift checkout -> creates a Stripe Checkout Session.
+//
+// FIXES (requested):
+// - Vehicle photo is RECOMMENDED (optional), not required.
+// - Returns to /gifts (not home) after Stripe.
+// - Normalizes origin to avoid double slashes.
+// - Adds "version" into ALL responses so we can confirm the deployed file.
+
+const VERSION = "gifts_checkout_v5_photo_optional_return_gifts";
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -11,14 +15,14 @@ export async function onRequestPost({ request, env }) {
 
     // ---- 1) Validate input ----
     const items = Array.isArray(body?.items) ? body.items : [];
-    if (!items.length) return json({ error: "Missing items[]" }, 400);
+    if (!items.length) return json({ version: VERSION, error: "Missing items[]" }, 400);
 
     const purchaser_email = asString(body?.purchaser_email);
     const recipient_email = asString(body?.recipient_email);
     const recipient_name = asString(body?.recipient_name);
 
-    if (!purchaser_email) return json({ error: "Missing purchaser_email" }, 400);
-    if (!recipient_email) return json({ error: "Missing recipient_email" }, 400);
+    if (!purchaser_email) return json({ version: VERSION, error: "Missing purchaser_email" }, 400);
+    if (!recipient_email) return json({ version: VERSION, error: "Missing recipient_email" }, 400);
 
     const vehicle = body?.vehicle && typeof body.vehicle === "object" ? body.vehicle : null;
 
@@ -28,28 +32,27 @@ export async function onRequestPost({ request, env }) {
     const STRIPE_KEY = env.STRIPE_SECRET_KEY;
 
     if (!SUPABASE_URL || !SERVICE_KEY) {
-      return json({ error: "Server not configured (Supabase env vars missing)" }, 500);
+      return json({ version: VERSION, error: "Server not configured (Supabase env vars missing)" }, 500);
     }
     if (!STRIPE_KEY) {
-      return json({ error: "Server not configured (Stripe secret missing)" }, 500);
+      return json({ version: VERSION, error: "Server not configured (Stripe secret missing)" }, 500);
     }
 
     // ORIGIN: prefer env.SITE_ORIGIN, otherwise infer from request
-    const inferredOrigin = inferOrigin(request);
-    const originRaw = env.SITE_ORIGIN || inferredOrigin || "https://rosiedazzlers.ca";
+    const originRaw = env.SITE_ORIGIN || inferOrigin(request) || "https://rosiedazzlers.ca";
     const ORIGIN = stripTrailingSlashes(originRaw);
 
     // ---- 3) Load gift_products from Supabase ----
     const skus = [...new Set(items.map((i) => asString(i?.sku)).filter(Boolean))];
-    if (!skus.length) return json({ error: "No valid SKUs in items[]" }, 400);
+    if (!skus.length) return json({ version: VERSION, error: "No valid SKUs in items[]" }, 400);
 
     const products = await supaGetGiftProducts(SUPABASE_URL, SERVICE_KEY, skus);
     const bySku = new Map(products.map((p) => [p.sku, p]));
 
-    // Determine if cart contains ANY service gifts
     const hasServiceGift = products.some((p) => p.type === "service");
 
-    // If service gift exists, require vehicle object fields (photo OPTIONAL)
+    // ---- 3b) Vehicle requirements for SERVICE gifts ----
+    // Photo is OPTIONAL now.
     let vYear = "", vMake = "", vModel = "", vBody = "", vSize = "", vPhoto = "";
     if (hasServiceGift) {
       vYear = asString(vehicle?.year);
@@ -57,20 +60,29 @@ export async function onRequestPost({ request, env }) {
       vModel = asString(vehicle?.model);
       vBody = asString(vehicle?.body_style);
       vSize = asString(vehicle?.declared_size);
-      vPhoto = asString(vehicle?.photo_url); // OPTIONAL
+      vPhoto = asString(vehicle?.photo_url); // optional
 
-      if (!vYear || !vMake || !vModel || !vBody || !vSize) {
+      const missing = [];
+      if (!vYear) missing.push("vehicle.year");
+      if (!vMake) missing.push("vehicle.make");
+      if (!vModel) missing.push("vehicle.model");
+      if (!vBody) missing.push("vehicle.body_style");
+      if (!vSize) missing.push("vehicle.declared_size");
+
+      if (missing.length) {
         return json(
           {
+            version: VERSION,
             error: "Missing vehicle info for service gift purchase",
+            missing_fields: missing,
             required: [
               "vehicle.year",
               "vehicle.make",
               "vehicle.model",
               "vehicle.body_style",
-              "vehicle.declared_size"
+              "vehicle.declared_size",
             ],
-            optional: ["vehicle.photo_url"]
+            optional: ["vehicle.photo_url"],
           },
           400
         );
@@ -78,53 +90,50 @@ export async function onRequestPost({ request, env }) {
     }
 
     // ---- 4) Build Stripe line items ----
-    const lineItems = [];
     const cartCompact = []; // sku:qty:amount(optional)
+    const lineItems = [];
 
     for (const reqItem of items) {
       const sku = asString(reqItem?.sku);
       const qty = toInt(reqItem?.qty, 1);
-      if (!sku || qty < 1 || qty > 25) return json({ error: `Invalid qty for sku ${sku}` }, 400);
+      if (!sku || qty < 1 || qty > 25) {
+        return json({ version: VERSION, error: `Invalid qty for sku ${sku}` }, 400);
+      }
 
       const p = bySku.get(sku);
-      if (!p) return json({ error: `Unknown SKU: ${sku}` }, 400);
-      if (p.is_active !== true) return json({ error: `SKU not active: ${sku}` }, 400);
+      if (!p) return json({ version: VERSION, error: `Unknown SKU: ${sku}` }, 400);
+      if (p.is_active !== true) return json({ version: VERSION, error: `SKU not active: ${sku}` }, 400);
 
       let unitAmount = Number(p.sale_price_cents);
 
       if (p.type === "open_value") {
         const amt = toInt(reqItem?.amount_cents, 0);
         if (amt < 2500 || amt > 200000) {
-          return json({ error: `Invalid amount_cents for ${sku}. Min 2500, max 200000.` }, 400);
+          return json({ version: VERSION, error: `Invalid amount_cents for ${sku}. Min 2500, max 200000.` }, 400);
         }
         unitAmount = amt;
       }
 
       if (!Number.isFinite(unitAmount) || unitAmount < 0) {
-        return json({ error: `Invalid price for ${sku}` }, 400);
+        return json({ version: VERSION, error: `Invalid price for ${sku}` }, 400);
       }
 
-      const name = asString(p.name) || sku;
-      const desc = asString(p.description) || undefined;
-      const img = asString(p.image_url) || undefined;
-
-      lineItems.push({
-        sku,
-        qty,
-        unit_amount: unitAmount,
-        name,
-        description: desc,
-        image: img,
-        currency: (p.currency || "CAD").toLowerCase(),
-      });
-
       cartCompact.push(`${sku}:${qty}:${p.type === "open_value" ? unitAmount : ""}`);
+
+      // Stripe line item
+      lineItems.push({
+        qty,
+        currency: (p.currency || "CAD").toLowerCase(),
+        unit_amount: unitAmount,
+        name: asString(p.name) || sku,
+        description: asString(p.description) || "",
+        image: asString(p.image_url) || "",
+      });
     }
 
-    // ---- 5) Create Stripe Checkout Session ----
-    // FIX: always return to /gifts so receipt UI can show codes
+    // ---- 5) Stripe session (return to /gifts) ----
     const successUrl = `${ORIGIN}/gifts?gift=success&session_id={CHECKOUT_SESSION_ID}`;
-    const cancelUrl  = `${ORIGIN}/gifts?gift=cancel`;
+    const cancelUrl = `${ORIGIN}/gifts?gift=cancel`;
 
     const form = new URLSearchParams();
     form.set("mode", "payment");
@@ -132,14 +141,14 @@ export async function onRequestPost({ request, env }) {
     form.set("cancel_url", cancelUrl);
     form.set("customer_email", purchaser_email);
 
-    // Session metadata (used by webhook fulfilment)
+    // Metadata for webhook fulfilment
     form.set("metadata[purpose]", "gift");
     form.set("metadata[cart]", cartCompact.join("|"));
     form.set("metadata[purchaser_email]", purchaser_email);
     form.set("metadata[recipient_email]", recipient_email);
     if (recipient_name) form.set("metadata[recipient_name]", recipient_name);
 
-    // Vehicle metadata (photo OPTIONAL)
+    // Vehicle metadata (photo optional)
     if (hasServiceGift) {
       form.set("metadata[vehicle_year]", vYear);
       form.set("metadata[vehicle_make]", vMake);
@@ -148,8 +157,6 @@ export async function onRequestPost({ request, env }) {
       form.set("metadata[vehicle_declared_size]", vSize);
       if (vPhoto) form.set("metadata[vehicle_photo_url]", vPhoto.slice(0, 480));
     }
-
-    form.set("client_reference_id", `gift_${crypto.randomUUID()}`.slice(0, 200));
 
     lineItems.forEach((li, idx) => {
       form.set(`line_items[${idx}][quantity]`, String(li.qty));
@@ -174,19 +181,19 @@ export async function onRequestPost({ request, env }) {
     const stripe = safeJsonText(stripeText);
 
     if (!stripeRes.ok) {
-      return json({ error: "Stripe error creating session", stripe }, 502);
+      return json({ version: VERSION, error: "Stripe error creating session", stripe }, 502);
     }
 
     return json({
       ok: true,
-      version: "gifts_checkout_v4_photo_optional_and_return_fix",
+      version: VERSION,
       checkout_url: stripe.url,
       session_id: stripe.id,
-      return_origin: ORIGIN,
-      return_success_url: successUrl
+      return_success_url: successUrl,
     });
+
   } catch (e) {
-    return json({ error: "Server error", details: String(e) }, 500);
+    return json({ version: VERSION, error: "Server error", details: String(e) }, 500);
   }
 }
 
@@ -248,7 +255,10 @@ function json(obj, status = 200) {
 
 async function supaGetGiftProducts(SUPABASE_URL, SERVICE_KEY, skus) {
   const inList = skus.map((s) => `"${s.replace(/"/g, "")}"`).join(",");
-  const url = `${SUPABASE_URL}/rest/v1/gift_products?select=sku,type,name,description,package_code,vehicle_size,face_value_cents,sale_price_cents,currency,image_url,is_active&sku=in.(${encodeURIComponent(inList)})`;
+  const url =
+    `${SUPABASE_URL}/rest/v1/gift_products` +
+    `?select=sku,type,name,description,package_code,vehicle_size,face_value_cents,sale_price_cents,currency,image_url,is_active` +
+    `&sku=in.(${encodeURIComponent(inList)})`;
 
   const res = await fetch(url, {
     method: "GET",

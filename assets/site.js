@@ -519,195 +519,176 @@ async function fetchJsonSafe(url) {
   }
 }
 
-function classifyProductType(item) {
-  const explicit = String(item?.type || "").toLowerCase();
-  if (explicit === "gear" || explicit === "consumable") return explicit;
+export async function initGearPage() {
+  const grid = document.querySelector("#gearGrid");
+  if (!grid) return;
 
-  const category = String(item?.category || "").toLowerCase();
-  const path = String(item?.path || item?.sanitized || item?.filename || item?.original || "").toLowerCase();
+  const [catalog, manifest] = await Promise.all([
+    fetchJsonSafe("/data/systems_catalog.json"),
+    fetchJsonSafe("/data/systems_manifest.json")
+  ]);
 
-  const consumableHints = [
-    "soap", "wax", "sealant", "ceramic", "graphene", "spray", "cleaner", "polish",
-    "compound", "degreaser", "dressing", "towel", "microfiber", "odor", "odour",
-    "shampoo", "detailer", "protectant", "chemical", "liquid"
-  ];
+  const items = Array.isArray(catalog?.items) ? catalog.items : [];
+  const files = Array.isArray(manifest?.files) ? manifest.files : [];
 
-  if (consumableHints.some((x) => category.includes(x) || path.includes(x))) {
-    return "consumable";
-  }
+  const bySlug = new Map(
+    files.map((f) => [
+      (f?.slug || "").toLowerCase(),
+      f?.r2_url || ""
+    ])
+  );
 
-  return "gear";
-}
+  grid.innerHTML = items.map((it) => {
+    const img = it.image_url || bySlug.get((it.slug || "").toLowerCase()) || "";
+    const title = it.title || titleFromName(it.name || it.slug || "Gear Item");
+    const desc = it.description || it.category || "Detailing equipment";
+    const searchHref = amazonSearchUrl(title);
 
-function buildInventoryImage(item, mode) {
-  const rawPath =
-    item?.path ||
-    item?.sanitized ||
-    item?.filename ||
-    item?.original ||
-    "";
-
-  if (!rawPath) return "";
-
-  // If file is already a URL, use it
-  if (/^https?:\/\//i.test(rawPath)) return rawPath;
-
-  // Otherwise assume the file is in R2 under /products or /systems
-  const file = rawPath.split("/").pop();
-  if (!file) return "";
-
-  const base = mode === "products" ? "https://assets.rosiedazzlers.ca/products/" : "https://assets.rosiedazzlers.ca/systems/";
-  return encodeURI(`${base}${file}`);
-}
-
-function renderInventoryPage(mode, listSelector, searchSelector) {
-  const listEl = document.querySelector(listSelector);
-  const searchEl = document.querySelector(searchSelector);
-  if (!listEl) return;
-
-  const url = mode === "products"
-    ? "/data/rosie_products_catalog_r2_corrected.json"
-    : "/data/systems_catalog_r2_corrected.json";
-
-  let items = [];
-  let filtered = [];
-
-  const render = () => {
-    listEl.innerHTML = "";
-
-    if (!filtered.length) {
-      listEl.innerHTML = `<div class="notice warn">No items found.</div>`;
-      return;
-    }
-
-    for (const it of filtered) {
-      const title = it.title || titleFromName(it.filename || it.original || it.path);
-      const img = buildInventoryImage(it, mode);
-      const amazon = it.amazon_url || amazonSearchUrl(title);
-
-      const div = document.createElement("div");
-      div.className = "card";
-
-      div.innerHTML = `
+    return `
+      <article class="card">
         ${img ? `<img class="img" loading="lazy" src="${img}" alt="${title}" onerror="this.style.display='none'">` : ""}
         <h3>${title}</h3>
-        ${it.category ? `<div class="kicker">${it.category}</div>` : ""}
+        <p>${desc}</p>
         <div class="hr"></div>
-        <a class="btn ghost" href="${amazon}" target="_blank" rel="noopener">Find on Amazon</a>
-      `;
-      listEl.appendChild(div);
-    }
-  };
-
-  const apply = () => {
-    const q = String(searchEl?.value || "").trim().toLowerCase();
-    if (!q) {
-      filtered = items.slice();
-    } else {
-      filtered = items.filter((x) => {
-        const title = String(x.title || "").toLowerCase();
-        const cat = String(x.category || "").toLowerCase();
-        const file = String(x.filename || x.path || x.original || "").toLowerCase();
-        return title.includes(q) || cat.includes(q) || file.includes(q);
-      });
-    }
-    render();
-  };
-
-  (async () => {
-    const data = await fetchJsonSafe(url);
-    items = Array.isArray(data?.items) ? data.items : Array.isArray(data) ? data : [];
-    filtered = items.slice();
-    render();
-    searchEl?.addEventListener("input", apply);
-  })();
+        <a class="btn small ghost" href="${searchHref}" target="_blank" rel="noopener">Search on Amazon</a>
+      </article>
+    `;
+  }).join("");
 }
 
-export function initGearPage() {
-  renderInventoryPage("systems", "#gearList", "#gearSearch");
-}
+export async function initConsumablesPage() {
+  const grid = document.querySelector("#consumablesGrid");
+  if (!grid) return;
 
-export function initConsumablesPage() {
-  renderInventoryPage("products", "#consumablesList", "#consumablesSearch");
-}
+  const [catalog, manifest] = await Promise.all([
+    fetchJsonSafe("/data/rosie_products_catalog.json"),
+    fetchJsonSafe("/data/RosieProducts_manifest.json")
+  ]);
 
-/* ---------- booking helpers ---------- */
+  const items = Array.isArray(catalog?.items) ? catalog.items : [];
+  const files = Array.isArray(manifest?.files) ? manifest.files : [];
+
+  const bySlug = new Map(
+    files.map((f) => [
+      (f?.slug || "").toLowerCase(),
+      f?.r2_url || ""
+    ])
+  );
+
+  grid.innerHTML = items.map((it) => {
+    const img = it.image_url || bySlug.get((it.slug || "").toLowerCase()) || "";
+    const title = it.title || titleFromName(it.name || it.slug || "Consumable");
+    const desc = it.description || it.category || "Detailing consumable";
+    const searchHref = amazonSearchUrl(title);
+
+    return `
+      <article class="card">
+        ${img ? `<img class="img" loading="lazy" src="${img}" alt="${title}" onerror="this.style.display='none'">` : ""}
+        <h3>${title}</h3>
+        <p>${desc}</p>
+        <div class="hr"></div>
+        <a class="btn small ghost" href="${searchHref}" target="_blank" rel="noopener">Search on Amazon</a>
+      </article>
+    `;
+  }).join("");
+}
 
 function currentPackageCode(form) {
-  return form?.package_code?.value || "";
+  return form.package_code?.value || "";
 }
 
 function currentSize(form) {
-  return form?.vehicle_size?.value || "small";
+  return form.vehicle_size?.value || "small";
 }
 
 function selectedAddonCodes(form) {
-  const boxes = form.querySelectorAll("input[name='addons']:checked");
-  return [...boxes].map((b) => b.value);
-}
-
-function renderPackageSummary(el, pkg) {
-  if (!el) return;
-  if (!pkg) {
-    el.innerHTML = `<div class="notice warn">Choose a package to see details.</div>`;
-    return;
-  }
-  el.innerHTML = `
-    <div><strong>${pkg.name}</strong></div>
-    <div class="kicker">${pkg.subtitle || ""}</div>
-    <div class="hr"></div>
-    <ul class="list">${(pkg.included_services || []).map((s) => `<li>${s.name}</li>`).join("")}</ul>
-  `;
-}
-
-function renderAddonPicker(el, data, size, previouslySelected) {
-  if (!el) return;
-
-  const selected = new Set(previouslySelected || []);
-  const html = (data.addons || []).map((a) => {
-    const checked = selected.has(a.code) ? "checked" : "";
-    const label = addonDisplay(a, size);
-    const tag = a.quote_required ? `<span class="tag quote">Quote</span>` : `<span class="tag flat">${label}</span>`;
-    return `
-      <label class="checkbox">
-        <input type="checkbox" name="addons" value="${a.code}" ${checked}>
-        ${a.name} ${tag}
-      </label>
-    `;
-  }).join("");
-
-  el.innerHTML = html || `<div class="notice warn">No add-ons found.</div>`;
+  return [...form.querySelectorAll('input[name="addon_codes"]:checked')].map((el) => el.value);
 }
 
 function calcBookingTotals(form, data) {
-  const size = currentSize(form);
   const pkg = getPackageByCode(data, currentPackageCode(form));
+  const size = currentSize(form);
+  const selectedCodes = selectedAddonCodes(form);
 
   const base = packagePrice(pkg, size);
   const deposit = calcDeposit(pkg);
 
-  const selectedCodes = selectedAddonCodes(form);
-  const quoteAddons = [];
-  let pricedAddons = 0;
+  const selectedAddons = (data.addons || []).filter((a) => selectedCodes.includes(a.code));
+  const pricedAddons = selectedAddons.reduce((sum, a) => sum + addonCharge(a, size), 0);
+  const quoteAddons = selectedAddons.filter((a) => a.quote_required).map((a) => a.name);
 
-  for (const code of selectedCodes) {
-    const a = (data.addons || []).find((x) => x.code === code);
-    if (!a) continue;
-    if (a.quote_required) quoteAddons.push(a.name);
-    pricedAddons += addonCharge(a, size);
-  }
-
-  const total = base + pricedAddons;
-
-  return { base, deposit, pricedAddons, total, quoteAddons, selectedCodes };
+  return {
+    pkg,
+    size,
+    base,
+    deposit,
+    pricedAddons,
+    quoteAddons,
+    total: base + pricedAddons,
+    selectedCodes
+  };
 }
 
-async function checkAvailability(dateStr) {
-  const res = await fetch("/api/availability", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ date: dateStr })
-  });
-  if (!res.ok) return null;
+function renderPackageSummary(el, pkg) {
+  if (!el || !pkg) return;
+
+  const small = packageImageForSize(pkg, "small");
+  const mid = packageImageForSize(pkg, "mid");
+  const over = packageImageForSize(pkg, "oversize");
+
+  el.innerHTML = `
+    <div class="panel">
+      <h3>${pkg.name}</h3>
+      <p>${pkg.subtitle || ""}</p>
+      <div class="grid cards">
+        ${small ? `<img class="img" loading="lazy" src="${small}" alt="${pkg.name} small" onerror="this.style.display='none'">` : ""}
+        ${mid ? `<img class="img" loading="lazy" src="${mid}" alt="${pkg.name} mid" onerror="this.style.display='none'">` : ""}
+        ${over ? `<img class="img" loading="lazy" src="${over}" alt="${pkg.name} oversize" onerror="this.style.display='none'">` : ""}
+      </div>
+    </div>
+  `;
+}
+
+function renderAddonPicker(el, data, size, selected = []) {
+  if (!el) return;
+
+  el.innerHTML = (data.addons || []).map((addon) => {
+    const checked = selected.includes(addon.code) ? "checked" : "";
+    const display = addonDisplay(addon, size);
+    return `
+      <label class="checkbox">
+        <input type="checkbox" name="addon_codes" value="${addon.code}" ${checked}>
+        <span><strong>${addon.name}</strong> — ${display}</span>
+      </label>
+    `;
+  }).join("");
+}
+
+async function checkAvailability(date) {
+  const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`);
+  if (!res.ok) throw new Error("Could not check availability.");
   return await res.json();
 }
+
+document.addEventListener("DOMContentLoaded", async () => {
+  setBrandImages();
+  setFooter();
+  handleCheckoutReturn();
+
+  const page = document.body.dataset.page;
+
+  try {
+    if (page === "services") await initServicesPage();
+    if (page === "pricing") await initPricingPage();
+    if (page === "booking") await initBookingPage();
+    if (page === "gear") await initGearPage();
+    if (page === "consumables") await initConsumablesPage();
+  } catch (err) {
+    console.error(err);
+    const box = document.querySelector("[data-page-error]");
+    if (box) {
+      box.className = "notice bad";
+      box.textContent = String(err.message || err);
+    }
+  }
+});

@@ -1,26 +1,15 @@
 // functions/api/codes/preview.js
 // POST /api/codes/preview
-// Validates promo_code and/or gift_code and returns a pricing preview.
+// Validates promo_code and/or gift_code and returns a pricing/deposit preview.
 //
-// Input (JSON):
+// Request JSON:
 // {
 //   "subtotal_cents": 20400,
 //   "deposit_base_cents": 5000,
 //   "package_code": "premium_wash",
 //   "vehicle_size": "small",
 //   "promo_code": "WELCOME10",
-//   "gift_code": "RD-ABC123..."
-// }
-//
-// Output (JSON):
-// {
-//   ok: true,
-//   promo: { ... },
-//   gift: { ... },
-//   promo_discount_cents,
-//   gift_apply_cents,
-//   total_after_discounts_cents,
-//   deposit_due_now_cents
+//   "gift_code": "RD-XXXXXX"
 // }
 
 export async function onRequestOptions() {
@@ -47,7 +36,6 @@ export async function onRequestPost({ request, env }) {
 
     const subtotalCents = Number(body.subtotal_cents);
     const depositBaseCents = Number(body.deposit_base_cents);
-
     const packageCode = String(body.package_code || "").trim();
     const vehicleSize = String(body.vehicle_size || "").trim();
 
@@ -65,9 +53,9 @@ export async function onRequestPost({ request, env }) {
       return corsJson({ ok: false, version: VERSION, error: "vehicle_size must be small, mid, or oversize" }, 400);
     }
 
-    const supa = async (method, path) => {
+    const supaGet = async (path) => {
       const res = await fetch(`${SUPABASE_URL}${path}`, {
-        method,
+        method: "GET",
         headers: {
           apikey: SERVICE_KEY,
           Authorization: `Bearer ${SERVICE_KEY}`,
@@ -75,20 +63,19 @@ export async function onRequestPost({ request, env }) {
         },
       });
       const text = await res.text();
-      const data = text ? safeJson(text) : null;
+      const data = text ? safeJsonText(text) : null;
       return { ok: res.ok, status: res.status, data, raw: text };
     };
 
     // -----------------------
-    // 1) Promo validation
+    // Promo validation
     // -----------------------
     let promo = null;
     let promoDiscountCents = 0;
     let promoMessage = null;
 
     if (promoCode) {
-      const promoRes = await supa(
-        "GET",
+      const promoRes = await supaGet(
         `/rest/v1/promo_codes?select=code,active,discount_type,discount_percent,discount_cents,starts_at,ends_at,max_uses,uses&code=eq.${encodeURIComponent(
           promoCode
         )}&limit=1`
@@ -124,7 +111,7 @@ export async function onRequestPost({ request, env }) {
 
             if (!Number.isFinite(promoDiscountCents) || promoDiscountCents < 0) promoDiscountCents = 0;
             promoDiscountCents = Math.min(promoDiscountCents, subtotalCents);
-            promoMessage = promoDiscountCents > 0 ? "Promo applied" : "Promo applied (no discount)";
+            promoMessage = "Promo applied";
           }
         }
       }
@@ -133,15 +120,14 @@ export async function onRequestPost({ request, env }) {
     const afterPromoCents = Math.max(0, subtotalCents - promoDiscountCents);
 
     // -----------------------
-    // 2) Gift validation
+    // Gift validation
     // -----------------------
     let gift = null;
     let giftApplyCents = 0;
     let giftMessage = null;
 
     if (giftCode) {
-      const giftRes = await supa(
-        "GET",
+      const giftRes = await supaGet(
         `/rest/v1/gift_certificates?select=id,code,type,status,remaining_cents,expires_at,package_code,vehicle_size,currency&code=eq.${encodeURIComponent(
           giftCode
         )}&limit=1`
@@ -161,21 +147,17 @@ export async function onRequestPost({ request, env }) {
         else if (gift.expires_at && String(gift.expires_at) <= nowIso) giftMessage = "Gift code has expired";
         else {
           const remaining = Number(gift.remaining_cents ?? 0);
-          if (!Number.isFinite(remaining) || remaining <= 0) {
-            giftMessage = "Gift code has no remaining balance";
-          } else {
+          if (!Number.isFinite(remaining) || remaining <= 0) giftMessage = "Gift code has no remaining balance";
+          else {
             const gType = String(gift.type || "").toLowerCase();
-
             if (gType === "service") {
               if (gift.package_code !== packageCode || gift.vehicle_size !== vehicleSize) {
                 giftMessage = "Service gift does not match selected package/size";
               } else {
-                // Service gift: apply up to total-after-promo
                 giftApplyCents = Math.min(remaining, afterPromoCents);
                 giftMessage = "Service gift valid";
               }
             } else {
-              // Dollar gift
               giftApplyCents = Math.min(remaining, afterPromoCents);
               giftMessage = "Dollar gift valid";
             }
@@ -186,7 +168,7 @@ export async function onRequestPost({ request, env }) {
 
     const totalAfterDiscounts = Math.max(0, afterPromoCents - giftApplyCents);
 
-    // Deposit reduction: promo reduces payable total; gift can cover deposit too
+    // Deposit reduction (gift can cover deposit too)
     const depositCapped = Math.min(depositBaseCents, afterPromoCents);
     const giftToDeposit = Math.min(depositCapped, giftApplyCents);
     const depositDueNow = Math.max(0, depositCapped - giftToDeposit);
@@ -194,16 +176,15 @@ export async function onRequestPost({ request, env }) {
     return corsJson({
       ok: true,
       version: VERSION,
+
       subtotal_cents: subtotalCents,
       deposit_base_cents: depositBaseCents,
 
       promo_code: promoCode || null,
-      promo: promo ? scrubPromo(promo) : null,
       promo_message: promoMessage,
       promo_discount_cents: promoDiscountCents,
 
       gift_code: giftCode || null,
-      gift: gift ? scrubGift(gift) : null,
       gift_message: giftMessage,
       gift_apply_cents: giftApplyCents,
 
@@ -217,38 +198,14 @@ export async function onRequestPost({ request, env }) {
 
 /* ---------------- helpers ---------------- */
 
-function scrubPromo(p) {
-  return {
-    code: p.code,
-    discount_type: p.discount_type,
-    discount_percent: p.discount_percent ?? null,
-    discount_cents: p.discount_cents ?? null,
-    starts_at: p.starts_at ?? null,
-    ends_at: p.ends_at ?? null,
-  };
-}
-
-function scrubGift(g) {
-  return {
-    code: g.code,
-    type: g.type,
-    status: g.status,
-    remaining_cents: g.remaining_cents ?? null,
-    expires_at: g.expires_at ?? null,
-    package_code: g.package_code ?? null,
-    vehicle_size: g.vehicle_size ?? null,
-    currency: g.currency ?? null,
-  };
-}
-
-function safeJson(text) {
+function safeJsonText(text) {
   try { return JSON.parse(text); } catch { return { raw: text }; }
 }
 
 function corsHeaders() {
   return {
     "access-control-allow-origin": "*",
-    "access-control-allow-methods": "GET,POST,OPTIONS",
+    "access-control-allow-methods": "POST,OPTIONS",
     "access-control-allow-headers": "Content-Type",
   };
 }

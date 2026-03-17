@@ -1,7 +1,16 @@
 // functions/api/checkout.js
+// REPLACE ENTIRE FILE
+//
 // POST /api/checkout
 // Creates a pending booking in Supabase, creates a Stripe Checkout Session for the deposit,
 // then returns checkout_url.
+//
+// Updates in this version:
+// - Enforces vehicle Year/Make/Model BEFORE Stripe (photo recommended, not required)
+// - Respects slot_blocks (AM/PM) in addition to bookings/date_blocks
+// - Supports promo_code (percent or amount) from public.promo_codes
+//   * Promo reduces the TOTAL (price_total_cents), but DOES NOT reduce the deposit charged today
+//   * Promo is recorded in booking notes + Stripe metadata (no DB schema change required)
 //
 // Rules:
 // - confirmed bookings always block
@@ -67,10 +76,29 @@ export async function onRequestPost({ request, env }) {
       return corsJson({ error: "vehicle_size must be small, mid, or oversize" }, 400);
     }
 
+    // Mandatory acknowledgements
     const acks = ["ack_driveway", "ack_power_water", "ack_bylaw", "ack_cancellation"];
     for (const a of acks) {
       if (body[a] !== true) return corsJson({ error: `Missing acknowledgement: ${a}` }, 400);
     }
+
+    // Mandatory vehicle intake (photo recommended, not required)
+    const vehicle = body.vehicle || {};
+    const vYear = Number(vehicle.year);
+    const vMake = String(vehicle.make || "").trim();
+    const vModel = String(vehicle.model || "").trim();
+    const vPhoto = String(vehicle.photo_url || "").trim() || null;
+
+    if (!Number.isFinite(vYear) || vYear < 1950 || vYear > 2100) {
+      return corsJson({ error: "Missing/invalid vehicle.year" }, 400);
+    }
+    if (!vMake) return corsJson({ error: "Missing vehicle.make" }, 400);
+    if (!vModel) return corsJson({ error: "Missing vehicle.model" }, 400);
+
+    // Optional codes
+    const promoCodeRaw = String(body.promo_code || "").trim();
+    const promoCode = promoCodeRaw ? promoCodeRaw.toUpperCase() : null;
+    const giftCode = String(body.gift_code || "").trim() || null;
 
     // ---- 2) Server config ----
     const SUPABASE_URL = env.SUPABASE_URL;
@@ -87,8 +115,8 @@ export async function onRequestPost({ request, env }) {
     // ---- 3) Package pricing (matches your corrected pricing) ----
     // cents CAD
     const PRICING = {
-      premium_wash:    { small:  8500, mid: 10500, oversize: 12500 },
-      basic_detail:    { small: 11500, mid: 13500, oversize: 17000 },
+      premium_wash: { small: 8500, mid: 10500, oversize: 12500 },
+      basic_detail: { small: 11500, mid: 13500, oversize: 17000 },
       complete_detail: { small: 31900, mid: 36900, oversize: 41900 },
       interior_detail: { small: 19500, mid: 22000, oversize: 24500 },
       exterior_detail: { small: 19500, mid: 22000, oversize: 24500 },
@@ -118,40 +146,18 @@ export async function onRequestPost({ request, env }) {
         prices_cents: { small: 2500, mid: 3500, oversize: 4500 },
         quote_required: false,
       },
-      de_ionizing_treatment: {
-        label: "De-Ionizing Treatment",
-        quote_required: true,
-      },
-      de_badging: {
-        label: "De-Badging",
-        quote_required: true,
-      },
-      engine_cleaning: {
-        label: "Engine Cleaning",
-        price_cents: 5900,
-        quote_required: false,
-      },
-      external_ceramic_coating: {
-        label: "External Ceramic Coating",
-        quote_required: true,
-      },
-      external_graphene_fine_finish: {
-        label: "External Graphene Fine Finish",
-        quote_required: true,
-      },
+      de_ionizing_treatment: { label: "De-Ionizing Treatment", quote_required: true },
+      de_badging: { label: "De-Badging", quote_required: true },
+      engine_cleaning: { label: "Engine Cleaning", price_cents: 5900, quote_required: false },
+      external_ceramic_coating: { label: "External Ceramic Coating", quote_required: true },
+      external_graphene_fine_finish: { label: "External Graphene Fine Finish", quote_required: true },
       external_wax: {
         label: "External Wax",
         prices_cents: { small: 4900, mid: 5900, oversize: 6900 },
         quote_required: false,
       },
-      vinyl_wrapping: {
-        label: "Vinyl Wrapping",
-        quote_required: true,
-      },
-      window_tinting: {
-        label: "Window Tinting",
-        quote_required: true,
-      },
+      vinyl_wrapping: { label: "Vinyl Wrapping", quote_required: true },
+      window_tinting: { label: "Window Tinting", quote_required: true },
     };
 
     // ---- 5) Base price ----
@@ -194,13 +200,12 @@ export async function onRequestPost({ request, env }) {
       }
     }
 
-    const totalCents = base + addonsTotal;
+    let totalCents = base + addonsTotal;
 
     // ---- 7) Deposit rule ----
     // Premium Wash / Basic Detail = $50
     // Full-day detail packages = $100
-    const depositCents =
-      ["premium_wash", "basic_detail"].includes(body.package_code) ? 5000 : 10000;
+    const depositCents = ["premium_wash", "basic_detail"].includes(body.package_code) ? 5000 : 10000;
 
     // ---- 8) Supabase helper ----
     const supa = async (method, path, payload) => {
@@ -230,43 +235,55 @@ export async function onRequestPost({ request, env }) {
     if (!blk.ok) return corsJson({ error: "Supabase error (date_blocks)", details: blk }, 500);
 
     if (Array.isArray(blk.data) && blk.data.length > 0) {
-      return corsJson(
-        { error: "Date is blocked", reason: blk.data[0]?.reason ?? "Blocked" },
-        409
-      );
+      return corsJson({ error: "Date is blocked", reason: blk.data[0]?.reason ?? "Blocked" }, 409);
+    }
+
+    // ---- 9.5) Slot blocks (AM/PM) ----
+    const slotBlocks = await supa(
+      "GET",
+      `/rest/v1/slot_blocks?select=blocked_date,slot,reason&blocked_date=eq.${encodeURIComponent(body.service_date)}`
+    );
+    if (!slotBlocks.ok) return corsJson({ error: "Supabase error (slot_blocks)", details: slotBlocks }, 500);
+
+    let slotAM = true;
+    let slotPM = true;
+    for (const s of slotBlocks.data || []) {
+      const slot = String(s.slot || "").toUpperCase();
+      if (slot === "AM") slotAM = false;
+      if (slot === "PM") slotPM = false;
     }
 
     // ---- 10) Availability with hold timeout ----
     const HOLD_MINUTES = 30;
     const holdSince = new Date(Date.now() - HOLD_MINUTES * 60 * 1000).toISOString();
 
-    // clean old pending
+    // clean old pending (optional field "failed" may not exist as enum; fallback to cancelled-like)
     await supa(
       "PATCH",
-      `/rest/v1/bookings?service_date=eq.${encodeURIComponent(body.service_date)}&status=eq.pending&created_at=lt.${encodeURIComponent(holdSince)}`,
-      { status: "failed" }
+      `/rest/v1/bookings?service_date=eq.${encodeURIComponent(body.service_date)}&status=eq.pending&created_at=lt.${encodeURIComponent(
+        holdSince
+      )}`,
+      { status: "cancelled" }
     );
 
     const confirmed = await supa(
       "GET",
       `/rest/v1/bookings?select=status,start_slot,duration_slots&service_date=eq.${encodeURIComponent(body.service_date)}&status=eq.confirmed`
     );
-    if (!confirmed.ok) {
-      return corsJson({ error: "Supabase error (confirmed)", details: confirmed }, 500);
-    }
+    if (!confirmed.ok) return corsJson({ error: "Supabase error (confirmed)", details: confirmed }, 500);
 
     const pending = await supa(
       "GET",
-      `/rest/v1/bookings?select=status,start_slot,duration_slots,created_at&service_date=eq.${encodeURIComponent(body.service_date)}&status=eq.pending&created_at=gte.${encodeURIComponent(holdSince)}`
+      `/rest/v1/bookings?select=status,start_slot,duration_slots,created_at&service_date=eq.${encodeURIComponent(
+        body.service_date
+      )}&status=eq.pending&created_at=gte.${encodeURIComponent(holdSince)}`
     );
-    if (!pending.ok) {
-      return corsJson({ error: "Supabase error (pending)", details: pending }, 500);
-    }
+    if (!pending.ok) return corsJson({ error: "Supabase error (pending)", details: pending }, 500);
 
     const rows = [...(confirmed.data || []), ...(pending.data || [])];
 
-    let AM = true;
-    let PM = true;
+    let AM = slotAM;
+    let PM = slotPM;
 
     for (const b of rows) {
       const dur = Number(b.duration_slots);
@@ -281,7 +298,7 @@ export async function onRequestPost({ request, env }) {
 
     const want = body.start_slot;
     const okSlot = want === "AM" ? AM : PM;
-    const okFullDay = duration === 2 ? (AM && PM) : true;
+    const okFullDay = duration === 2 ? AM && PM : true;
 
     if (!okSlot || !okFullDay) {
       return corsJson(
@@ -294,10 +311,60 @@ export async function onRequestPost({ request, env }) {
       );
     }
 
+    // ---- 10.5) Promo code validation (optional) ----
+    let promo = null;
+    let promoDiscountCents = 0;
+
+    if (promoCode) {
+      const pr = await supa(
+        "GET",
+        `/rest/v1/promo_codes?select=code,is_active,percent_off,amount_off_cents,starts_on,ends_on&code=eq.${encodeURIComponent(
+          promoCode
+        )}&limit=1`
+      );
+
+      if (!pr.ok) return corsJson({ error: "Supabase error (promo_codes)", details: pr }, 500);
+
+      promo = Array.isArray(pr.data) ? pr.data[0] : null;
+      if (!promo?.code) return corsJson({ error: `Invalid promo code: ${promoCode}` }, 400);
+      if (promo.is_active !== true) return corsJson({ error: `Promo code not active: ${promoCode}` }, 400);
+
+      // Apply window against the SERVICE DATE (not "today")
+      const d = body.service_date;
+      if (promo.starts_on && d < promo.starts_on) {
+        return corsJson({ error: `Promo not started yet: ${promoCode}` }, 400);
+      }
+      if (promo.ends_on && d > promo.ends_on) {
+        return corsJson({ error: `Promo expired: ${promoCode}` }, 400);
+      }
+
+      // Compute discount against total, but never below deposit
+      let discount = 0;
+      if (promo.percent_off != null) {
+        discount = Math.round((totalCents * Number(promo.percent_off)) / 100);
+      } else if (promo.amount_off_cents != null) {
+        discount = Number(promo.amount_off_cents);
+      }
+
+      const maxDiscount = Math.max(0, totalCents - depositCents);
+      promoDiscountCents = Math.max(0, Math.min(discount, maxDiscount));
+      totalCents = totalCents - promoDiscountCents;
+    }
+
     // ---- 11) Insert pending booking ----
     const ip = request.headers.get("cf-connecting-ip") || null;
 
     const notes = [];
+    notes.push(`Vehicle: ${vYear} ${vMake} ${vModel}`);
+    if (vPhoto) notes.push(`Vehicle photo: ${vPhoto}`);
+    if (giftCode) notes.push(`Gift code provided: ${giftCode}`);
+    if (promo && promoDiscountCents > 0) {
+      const promoLabel =
+        promo.percent_off != null
+          ? `${promo.code} (${promo.percent_off}% off)`
+          : `${promo.code} ($${(Number(promo.amount_off_cents) / 100).toFixed(2)} off)`;
+      notes.push(`Promo applied: ${promoLabel} (-$${(promoDiscountCents / 100).toFixed(2)})`);
+    }
     if (quoteAddonsChosen.length) {
       notes.push(`Quote add-ons requested: ${quoteAddonsChosen.join(", ")}`);
     }
@@ -365,9 +432,14 @@ export async function onRequestPost({ request, env }) {
       `${body.package_code} (${body.vehicle_size}) - ${body.service_date} ${body.start_slot}`
     );
 
+    // Metadata
     form.set("metadata[booking_id]", booking.id);
     form.set("metadata[service_date]", body.service_date);
     form.set("metadata[package_code]", body.package_code);
+    form.set("metadata[vehicle]", `${vYear} ${vMake} ${vModel}`.trim());
+    if (promoCode) form.set("metadata[promo_code]", promoCode);
+    if (promoDiscountCents > 0) form.set("metadata[promo_discount_cents]", String(promoDiscountCents));
+    if (giftCode) form.set("metadata[gift_code]", giftCode);
 
     const stripeRes = await fetch("https://api.stripe.com/v1/checkout/sessions", {
       method: "POST",
@@ -403,6 +475,7 @@ export async function onRequestPost({ request, env }) {
       booking_id: booking.id,
       deposit_cents: depositCents,
       total_cents: totalCents,
+      promo_discount_cents: promoDiscountCents,
       checkout_url: stripe.url,
       hold_minutes: HOLD_MINUTES,
       quote_addons: quoteAddonsChosen,

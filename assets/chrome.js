@@ -1,8 +1,16 @@
 // /assets/chrome.js
 
 /* =========================
-   NAV + FOOTER (existing)
+   BRAND / NAV / FOOTER
    ========================= */
+
+const BRAND = {
+  name: "Rosie Dazzlers",
+  logo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
+  banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
+  reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png",
+  footerLogo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
+};
 
 const SOCIALS = [
   ["TikTok", "https://www.tiktok.com/@rosiedazzler"],
@@ -14,16 +22,211 @@ const SOCIALS = [
   ["LinkedIn", "https://www.linkedin.com/in/rosiedazzlers/"],
 ];
 
+const DEFAULT_NAV_LINKS = [
+  ["/services", "Services"],
+  ["/pricing", "Pricing"],
+  ["/gear", "Gear"],
+  ["/consumables", "Consumables"],
+  ["/about", "About"],
+  ["/contact", "Contact"],
+  ["/book", "Book"],
+];
+
 function normalizePath(p) {
   const x = (p || "/").replace(/\/+$/, "");
   return x === "" ? "/" : x;
+}
+
+function ensureNavLinks() {
+  const links = document.querySelector("#navLinks");
+  if (!links) return;
+
+  const existing = links.querySelectorAll("a");
+  if (existing.length > 0) return;
+
+  links.innerHTML = DEFAULT_NAV_LINKS.map(
+    ([href, label]) => `<a href="${href}">${label}</a>`
+  ).join("");
+}
+
+function setBrandImagesEverywhere() {
+  document.querySelectorAll("[data-logo]").forEach((logo) => {
+    logo.src = BRAND.logo;
+    if (!logo.getAttribute("alt")) {
+      logo.alt = `${BRAND.name} logo`;
+    }
+  });
+}
+
+function ensureMainBanner() {
+  const existingImg =
+    document.querySelector("[data-main-banner] img") ||
+    document.querySelector("#mainBanner img") ||
+    document.querySelector(".main-banner img") ||
+    document.querySelector("img[data-main-banner]") ||
+    document.querySelector("img[data-banner]") ||
+    document.querySelector("#bannerImage");
+
+  if (existingImg) {
+    existingImg.src = BRAND.banner;
+    existingImg.alt = "Rosie Dazzlers banner";
+    existingImg.loading = "eager";
+    existingImg.style.display = "block";
+    existingImg.style.width = "100%";
+    existingImg.style.height = "auto";
+    existingImg.style.objectFit = "contain";
+    return;
+  }
+
+  const existingWrap =
+    document.querySelector("[data-main-banner]") ||
+    document.querySelector("#mainBanner") ||
+    document.querySelector(".main-banner");
+
+  if (existingWrap) {
+    existingWrap.innerHTML = `
+      <img
+        src="${BRAND.banner}"
+        alt="Rosie Dazzlers banner"
+        loading="eager"
+        style="display:block;width:100%;height:auto;object-fit:contain"
+      >
+    `;
+    return;
+  }
+
+  if (document.querySelector("#globalMainBanner")) return;
+
+  const nav = document.querySelector(".nav");
+  const anchor = nav || document.querySelector("header") || document.body.firstElementChild || document.body;
+
+  const wrap = document.createElement("div");
+  wrap.id = "globalMainBanner";
+  wrap.className = "container";
+  wrap.style.paddingTop = "14px";
+  wrap.style.paddingBottom = "8px";
+
+  wrap.innerHTML = `
+    <div
+      class="panel"
+      style="padding:12px;display:flex;align-items:center;justify-content:center;overflow:hidden"
+    >
+      <img
+        src="${BRAND.banner}"
+        alt="Rosie Dazzlers banner"
+        loading="eager"
+        style="display:block;width:100%;max-width:980px;height:auto;object-fit:contain"
+      >
+    </div>
+  `;
+
+  if (anchor && anchor.parentNode) {
+    if (anchor === document.body) {
+      document.body.insertBefore(wrap, document.body.firstChild);
+    } else {
+      anchor.parentNode.insertBefore(wrap, anchor.nextSibling);
+    }
+  } else {
+    document.body.insertBefore(wrap, document.body.firstChild);
+  }
+}
+
+function ensureReviewsPanel() {
+  const path = normalizePath(location.pathname);
+  if (path !== "/") return;
+
+  const directImg =
+    document.querySelector("[data-reviews]") ||
+    document.querySelector("#reviewsImage") ||
+    document.querySelector(".reviews img") ||
+    document.querySelector(".review-banner img") ||
+    document.querySelector("img[data-role='reviews']");
+
+  if (directImg && directImg.tagName && directImg.tagName.toLowerCase() === "img") {
+    directImg.src = BRAND.reviews;
+    directImg.alt = "Rosie Dazzlers reviews";
+    directImg.loading = "lazy";
+    directImg.style.display = "block";
+    directImg.style.width = "100%";
+    directImg.style.height = "auto";
+    directImg.style.objectFit = "contain";
+    return;
+  }
+
+  const wrapTarget =
+    document.querySelector(".reviews") ||
+    document.querySelector(".review-banner") ||
+    document.querySelector("[data-reviews-wrap]");
+
+  if (wrapTarget) {
+    wrapTarget.innerHTML = `
+      <img
+        src="${BRAND.reviews}"
+        alt="Rosie Dazzlers reviews"
+        loading="lazy"
+        style="display:block;width:100%;height:auto;object-fit:contain"
+      >
+    `;
+    return;
+  }
+
+  if (document.querySelector("#globalReviewsPanel")) return;
+
+  const afterBanner =
+    document.querySelector("#globalMainBanner") ||
+    document.querySelector("[data-main-banner]") ||
+    document.querySelector("#mainBanner") ||
+    document.querySelector(".main-banner");
+
+  const homePackages =
+    document.querySelector("#homePackages") ||
+    document.querySelector("main") ||
+    document.querySelector(".container");
+
+  const wrap = document.createElement("div");
+  wrap.id = "globalReviewsPanel";
+  wrap.className = "container";
+  wrap.style.paddingTop = "8px";
+  wrap.style.paddingBottom = "8px";
+
+  wrap.innerHTML = `
+    <div
+      class="panel"
+      style="padding:12px;display:flex;align-items:center;justify-content:center;overflow:hidden"
+    >
+      <img
+        src="${BRAND.reviews}"
+        alt="Rosie Dazzlers reviews"
+        loading="lazy"
+        style="display:block;width:100%;max-width:980px;height:auto;object-fit:contain"
+      >
+    </div>
+  `;
+
+  if (afterBanner && afterBanner.parentNode) {
+    if (afterBanner.nextSibling) {
+      afterBanner.parentNode.insertBefore(wrap, afterBanner.nextSibling);
+    } else {
+      afterBanner.parentNode.appendChild(wrap);
+    }
+    return;
+  }
+
+  if (homePackages && homePackages.parentNode) {
+    homePackages.parentNode.insertBefore(wrap, homePackages);
+    return;
+  }
+
+  document.body.appendChild(wrap);
 }
 
 function setActiveNavLink() {
   const path = normalizePath(location.pathname);
   document.querySelectorAll(".nav-links a").forEach((a) => {
     const href = normalizePath(a.getAttribute("href") || "/");
-    const active = (href === "/" && path === "/") || (href !== "/" && path.startsWith(href));
+    const active =
+      (href === "/" && path === "/") ||
+      (href !== "/" && path.startsWith(href));
     a.classList.toggle("active", active);
   });
 }
@@ -33,9 +236,15 @@ function initNavToggle() {
   const links = document.querySelector("#navLinks");
   if (!btn || !links) return;
 
+  if (btn.dataset.bound === "1") return;
+  btn.dataset.bound = "1";
+
   btn.addEventListener("click", () => {
     links.classList.toggle("open");
-    btn.setAttribute("aria-expanded", links.classList.contains("open") ? "true" : "false");
+    btn.setAttribute(
+      "aria-expanded",
+      links.classList.contains("open") ? "true" : "false"
+    );
   });
 
   links.querySelectorAll("a").forEach((a) => {
@@ -52,11 +261,20 @@ function setFooter() {
   el.innerHTML = `
     <div class="footer-grid">
       <div class="footer-col">
-        <div class="footer-title">Rosie Dazzlers</div>
-        <div class="footer-muted">Mobile Auto Detailing</div>
-        <div class="footer-muted">Norfolk & Oxford Counties, Ontario</div>
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <img
+            src="${BRAND.footerLogo}"
+            alt="${BRAND.name} logo"
+            style="width:72px;height:72px;object-fit:contain;border-radius:14px;flex:0 0 auto;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.10);padding:6px;"
+          >
+          <div>
+            <div class="footer-title">Rosie Dazzlers</div>
+            <div class="footer-muted">Mobile Auto Detailing</div>
+            <div class="footer-muted">Norfolk & Oxford Counties, Ontario</div>
+          </div>
+        </div>
 
-        <div class="footer-muted" style="margin-top:10px">
+        <div class="footer-muted" style="margin-top:12px">
           Email: <a href="mailto:info@rosiedazzlers.ca">info@rosiedazzlers.ca</a><br>
           Backup: <a href="mailto:rosiedazzlers@gmail.com">rosiedazzlers@gmail.com</a>
         </div>
@@ -111,29 +329,25 @@ function setFooter() {
 
 /* =========================
    PACKAGE CARD HOVER ROTATION
-   (fixes blanks + uses your real filenames)
    ========================= */
 
 const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages/";
 
-// These exist in your /packages directory (exact names)
 const STATIC_HOVER_FILES = [
   "Exterior Detail.png",
   "Interior Detail.png",
   "CarSizeChart.PNG",
 ];
 
-// Also use size-specific images you already have
 const SIZE_ICON_BY_VALUE = {
   small: "SmallCar.png",
   mid: "MidSizedCars.png",
   oversize: "ExoticLargeSizedCars.png",
 };
 
-const loadState = new Map(); // url -> "ok" | "fail" | "pending"
+const loadState = new Map();
 
 function fileUrl(fileName) {
-  // filenames contain spaces, so encodeURI is required
   return encodeURI(`${PACKAGES_BASE}${fileName}`);
 }
 
@@ -153,14 +367,11 @@ function isOk(url) {
 }
 
 function currentSize() {
-  // services + pricing use #size for the viewer selector
   const sel = document.querySelector("#size");
   return sel && sel.value ? sel.value : null;
 }
 
 function guessGiftCertUrl(baseSrc) {
-  // If your card image is ...Something.png, try ...SomethingGiftCert.png
-  // Works for items like PremiumExternalWash.png, FullInteriorDetailSmallCars.png, etc.
   try {
     const u = new URL(baseSrc);
     const file = u.pathname.split("/").pop() || "";
@@ -177,21 +388,16 @@ function guessGiftCertUrl(baseSrc) {
 function buildPlaylist(baseSrc) {
   const urls = [];
 
-  // 1) main image (size-specific package image)
   urls.push(baseSrc);
 
-  // 2) static hover images (Exterior / Interior / Size chart)
   for (const f of STATIC_HOVER_FILES) urls.push(fileUrl(f));
 
-  // 3) size icon that matches the size dropdown
   const s = currentSize();
   if (s && SIZE_ICON_BY_VALUE[s]) urls.push(fileUrl(SIZE_ICON_BY_VALUE[s]));
 
-  // 4) gift cert version of the current card image (if it exists)
   const gift = guessGiftCertUrl(baseSrc);
   if (gift) urls.push(gift);
 
-  // de-dupe
   return urls.filter((u, i, arr) => arr.indexOf(u) === i);
 }
 
@@ -219,7 +425,6 @@ function attachRotators(containerSelector) {
     card.addEventListener("mouseenter", () => {
       base = img.currentSrc || img.src;
 
-      // ensure we never "blank" the card
       img.onerror = () => {
         img.style.display = "";
         img.src = base;
@@ -230,11 +435,9 @@ function attachRotators(containerSelector) {
 
       if (timer) clearInterval(timer);
 
-      // rotate ONLY to images that are confirmed loaded (no blanks)
       timer = setInterval(() => {
         if (!playlist.length) return;
 
-        // Try up to playlist length to find next loaded image
         const currentIdx = playlist.indexOf(img.src);
         let idx = currentIdx >= 0 ? currentIdx : 0;
 
@@ -242,48 +445,52 @@ function attachRotators(containerSelector) {
           idx = (idx + 1) % playlist.length;
           const candidate = playlist[idx];
 
-          // base is always allowed
           if (candidate === base) {
             img.src = candidate;
             return;
           }
-          // only rotate to loaded hover images
+
           if (isOk(candidate)) {
             img.src = candidate;
             return;
           }
         }
-        // none ready yet -> keep current image
       }, 1200);
     });
 
     card.addEventListener("mouseleave", stop);
   }
 
-  // Existing cards
   container.querySelectorAll(".card").forEach(attach);
 
-  // Cards added later by page JS
   const mo = new MutationObserver(() => {
     container.querySelectorAll(".card").forEach(attach);
   });
   mo.observe(container, { childList: true, subtree: true });
 }
 
-function initPackageHoverRotation() {
-  attachRotators("#packageCards");  // services page
-  attachRotators("#pricingCards");  // pricing page
-  // attachRotators("#homePackages"); // optional (homepage featured cards)
-}
+/* =========================
+   BOOT
+   ========================= */
 
-/* ========================= */
-
-function applyChrome() {
+function initChrome() {
+  ensureNavLinks();
+  setBrandImagesEverywhere();
+  ensureMainBanner();
+  ensureReviewsPanel();
   setActiveNavLink();
   initNavToggle();
   setFooter();
-  initPackageHoverRotation();
+
+  attachRotators("#homePackages");
+  attachRotators("#packageCards");
+  attachRotators("#pricingCards");
+  attachRotators("#packagesGrid");
+  attachRotators("#pricingPackages");
 }
 
-applyChrome();
-window.addEventListener("popstate", applyChrome);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initChrome);
+} else {
+  initChrome();
+}

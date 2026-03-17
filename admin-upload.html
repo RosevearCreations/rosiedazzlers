@@ -1,0 +1,832 @@
+<!-- /admin-upload.html
+     REPLACE ENTIRE FILE
+
+     Purpose:
+     - Simple "upload helper" page for admins while working in the field
+     - Since direct browser->R2 upload (signed URLs) is a later feature,
+       this page currently:
+         1) Lets you paste an R2 public URL (or any URL)
+         2) Posts it into progress as an update (so customer sees it)
+
+     Uses:
+       POST /api/admin/progress_post
+       POST /api/admin/progress_list
+
+     Notes:
+     - This page is intentionally minimal and fast.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Upload | Rosie Dazzlers</title>
+  <meta name="description" content="Admin upload helper for posting progress photos." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260311r" />
+  <style>
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .muted{color:rgba(234,242,255,.62)}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .cardImg{
+      width:100%;
+      aspect-ratio:16/10;
+      object-fit:cover;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+    }
+    pre{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px}
+    .mini{font-size:.92rem}
+  </style>
+</head>
+
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers</strong>
+      </a>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
+      <div class="nav-links" id="navLinks"></div>
+      <a class="btn primary" href="/admin">Admin</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="panel">
+      <h1 style="margin:0 0 6px">Upload Helper</h1>
+      <p class="kicker" style="margin:0">Paste a photo URL and post it as a progress update.</p>
+
+      <div class="hr"></div>
+
+      <div class="row">
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:260px">
+          <span class="muted">Admin password</span>
+          <input id="pw" type="password" placeholder="Enter admin password…" />
+        </label>
+
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:340px;flex:1">
+          <span class="muted">Booking ID</span>
+          <input id="bid" class="mono" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+        </label>
+
+        <div class="row" style="align-items:flex-end">
+          <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
+          <button class="btn ghost" id="loadBtn" type="button">Load latest</button>
+          <a class="btn ghost" href="/admin">Back</a>
+        </div>
+      </div>
+
+      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
+    </div>
+
+    <div class="section grid2">
+      <div class="panel">
+        <h2 style="margin-top:0">Post photo update</h2>
+
+        <label for="photo_url">Photo URL (R2 public link recommended)</label>
+        <input id="photo_url" type="url" placeholder="https://… (paste URL)" />
+
+        <div class="grid2" style="margin-top:10px">
+          <div>
+            <label for="stage">Stage</label>
+            <select id="stage">
+              <option value="wash">Wash</option>
+              <option value="interior">Interior</option>
+              <option value="exterior">Exterior</option>
+              <option value="finishing">Finishing</option>
+              <option value="complete">Complete</option>
+            </select>
+          </div>
+          <div>
+            <label for="visibility">Visible to customer</label>
+            <select id="visibility">
+              <option value="public">Yes</option>
+              <option value="private">No</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="note" style="margin-top:10px">Note (optional)</label>
+        <textarea id="note" placeholder="Quick note about this photo…"></textarea>
+
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary" id="postBtn" type="button">Post</button>
+          <button class="btn ghost" id="clearBtn" type="button">Clear</button>
+          <a class="btn ghost" id="customerLink" href="/progress" target="_blank" rel="noopener">Customer view</a>
+        </div>
+
+        <div class="muted mini" style="margin-top:10px">
+          Next upgrade: direct camera upload to R2 via signed URLs (no copy/paste).
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-top:0">Latest public update preview</h2>
+        <img id="previewImg" class="cardImg" alt="Preview" style="display:none" />
+        <div id="previewText" class="muted mini" style="margin-top:10px"></div>
+        <div class="hr"></div>
+        <pre id="raw" class="mono">{}</pre>
+      </div>
+    </div>
+
+    <div class="footer" data-footer></div>
+  </div>
+
+  <script type="module">
+    const qs = (s)=>document.querySelector(s);
+
+    function show(msg, kind=""){
+      const el = qs("#status");
+      el.style.display = "block";
+      el.className = "notice " + (kind || "");
+      el.textContent = msg;
+    }
+    function hide(){ qs("#status").style.display = "none"; }
+
+    function getPw(){ return (qs("#pw").value || "").trim(); }
+    function getBid(){ return (qs("#bid").value || "").trim(); }
+
+    async function postJson(url, payload){
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "content-type":"application/json" },
+        body: JSON.stringify(payload),
+      });
+      const out = await res.json().catch(()=>null);
+      return { ok: res.ok, status: res.status, out };
+    }
+
+    // Save PW
+    try {
+      const saved = localStorage.getItem("rosie_admin_pw") || "";
+      if (saved) qs("#pw").value = saved;
+    } catch {}
+
+    qs("#savePwBtn").addEventListener("click", () => {
+      const pw = getPw();
+      if (!pw) return show("Enter password first.", "bad");
+      try {
+        localStorage.setItem("rosie_admin_pw", pw);
+        show("Saved password on this device.", "ok");
+        setTimeout(hide, 1000);
+      } catch {
+        show("Could not save password.", "bad");
+      }
+    });
+
+    function updateCustomerLink(){
+      const bid = getBid();
+      qs("#customerLink").href = bid ? `/progress?bid=${encodeURIComponent(bid)}` : "/progress";
+    }
+    qs("#bid").addEventListener("input", updateCustomerLink);
+    updateCustomerLink();
+
+    async function loadLatest(){
+      hide();
+      const pw = getPw();
+      const bid = getBid();
+      if (!pw) return show("Missing admin password.", "bad");
+      if (!bid) return show("Missing booking id.", "bad");
+
+      const r = await postJson("/api/admin/progress_list", {
+        admin_password: pw,
+        booking_id: bid,
+        limit: 10
+      });
+
+      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
+
+      if (!r.ok || !r.out?.ok){
+        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
+      }
+
+      const rows = Array.isArray(r.out.rows) ? r.out.rows : [];
+      const pub = rows.filter(x=>x.visibility === "public");
+      const latest = pub[0] || null;
+
+      const img = qs("#previewImg");
+      if (latest?.photo_url){
+        img.style.display = "block";
+        img.src = latest.photo_url;
+        img.onerror = ()=>{ img.style.display = "none"; };
+      } else {
+        img.style.display = "none";
+        img.src = "";
+      }
+
+      qs("#previewText").textContent = latest
+        ? `${latest.stage || "update"}${latest.progress_percent!=null ? " — " + latest.progress_percent + "%" : ""}${latest.note ? " — " + latest.note : ""}`
+        : "No public updates yet.";
+
+      show("Loaded.", "ok");
+      setTimeout(hide, 800);
+    }
+
+    qs("#loadBtn").addEventListener("click", loadLatest);
+
+    qs("#clearBtn").addEventListener("click", ()=>{
+      qs("#photo_url").value = "";
+      qs("#note").value = "";
+      qs("#stage").value = "wash";
+      qs("#visibility").value = "public";
+    });
+
+    qs("#postBtn").addEventListener("click", async ()=>{
+      hide();
+      const pw = getPw();
+      const bid = getBid();
+      const photo_url = (qs("#photo_url").value || "").trim() || null;
+      const note = (qs("#note").value || "").trim() || null;
+
+      if (!pw) return show("Missing admin password.", "bad");
+      if (!bid) return show("Missing booking id.", "bad");
+      if (!photo_url && !note) return show("Add a photo URL or a note.", "bad");
+
+      qs("#postBtn").disabled = true;
+      qs("#postBtn").textContent = "Posting…";
+
+      const r = await postJson("/api/admin/progress_post", {
+        admin_password: pw,
+        booking_id: bid,
+        stage: qs("#stage").value,
+        visibility: qs("#visibility").value,
+        photo_url,
+        note
+      });
+
+      qs("#postBtn").disabled = false;
+      qs("#postBtn").textContent = "Post";
+
+      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
+
+      if (!r.ok || !r.out?.ok){
+        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
+      }
+
+      show("Posted.", "ok");
+      setTimeout(hide, 800);
+      await loadLatest();
+    });
+  </script>
+
+  <script type="module" src="/assets/chrome.js?v=20260311r"></script>
+</body>
+</html><!-- /admin-upload.html
+     REPLACE ENTIRE FILE
+
+     Purpose:
+     - Simple "upload helper" page for admins while working in the field
+     - Since direct browser->R2 upload (signed URLs) is a later feature,
+       this page currently:
+         1) Lets you paste an R2 public URL (or any URL)
+         2) Posts it into progress as an update (so customer sees it)
+
+     Uses:
+       POST /api/admin/progress_post
+       POST /api/admin/progress_list
+
+     Notes:
+     - This page is intentionally minimal and fast.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Upload | Rosie Dazzlers</title>
+  <meta name="description" content="Admin upload helper for posting progress photos." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260311r" />
+  <style>
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .muted{color:rgba(234,242,255,.62)}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .cardImg{
+      width:100%;
+      aspect-ratio:16/10;
+      object-fit:cover;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+    }
+    pre{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px}
+    .mini{font-size:.92rem}
+  </style>
+</head>
+
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers</strong>
+      </a>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
+      <div class="nav-links" id="navLinks"></div>
+      <a class="btn primary" href="/admin">Admin</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="panel">
+      <h1 style="margin:0 0 6px">Upload Helper</h1>
+      <p class="kicker" style="margin:0">Paste a photo URL and post it as a progress update.</p>
+
+      <div class="hr"></div>
+
+      <div class="row">
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:260px">
+          <span class="muted">Admin password</span>
+          <input id="pw" type="password" placeholder="Enter admin password…" />
+        </label>
+
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:340px;flex:1">
+          <span class="muted">Booking ID</span>
+          <input id="bid" class="mono" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+        </label>
+
+        <div class="row" style="align-items:flex-end">
+          <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
+          <button class="btn ghost" id="loadBtn" type="button">Load latest</button>
+          <a class="btn ghost" href="/admin">Back</a>
+        </div>
+      </div>
+
+      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
+    </div>
+
+    <div class="section grid2">
+      <div class="panel">
+        <h2 style="margin-top:0">Post photo update</h2>
+
+        <label for="photo_url">Photo URL (R2 public link recommended)</label>
+        <input id="photo_url" type="url" placeholder="https://… (paste URL)" />
+
+        <div class="grid2" style="margin-top:10px">
+          <div>
+            <label for="stage">Stage</label>
+            <select id="stage">
+              <option value="wash">Wash</option>
+              <option value="interior">Interior</option>
+              <option value="exterior">Exterior</option>
+              <option value="finishing">Finishing</option>
+              <option value="complete">Complete</option>
+            </select>
+          </div>
+          <div>
+            <label for="visibility">Visible to customer</label>
+            <select id="visibility">
+              <option value="public">Yes</option>
+              <option value="private">No</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="note" style="margin-top:10px">Note (optional)</label>
+        <textarea id="note" placeholder="Quick note about this photo…"></textarea>
+
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary" id="postBtn" type="button">Post</button>
+          <button class="btn ghost" id="clearBtn" type="button">Clear</button>
+          <a class="btn ghost" id="customerLink" href="/progress" target="_blank" rel="noopener">Customer view</a>
+        </div>
+
+        <div class="muted mini" style="margin-top:10px">
+          Next upgrade: direct camera upload to R2 via signed URLs (no copy/paste).
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-top:0">Latest public update preview</h2>
+        <img id="previewImg" class="cardImg" alt="Preview" style="display:none" />
+        <div id="previewText" class="muted mini" style="margin-top:10px"></div>
+        <div class="hr"></div>
+        <pre id="raw" class="mono">{}</pre>
+      </div>
+    </div>
+
+    <div class="footer" data-footer></div>
+  </div>
+
+  <script type="module">
+    const qs = (s)=>document.querySelector(s);
+
+    function show(msg, kind=""){
+      const el = qs("#status");
+      el.style.display = "block";
+      el.className = "notice " + (kind || "");
+      el.textContent = msg;
+    }
+    function hide(){ qs("#status").style.display = "none"; }
+
+    function getPw(){ return (qs("#pw").value || "").trim(); }
+    function getBid(){ return (qs("#bid").value || "").trim(); }
+
+    async function postJson(url, payload){
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "content-type":"application/json" },
+        body: JSON.stringify(payload),
+      });
+      const out = await res.json().catch(()=>null);
+      return { ok: res.ok, status: res.status, out };
+    }
+
+    // Save PW
+    try {
+      const saved = localStorage.getItem("rosie_admin_pw") || "";
+      if (saved) qs("#pw").value = saved;
+    } catch {}
+
+    qs("#savePwBtn").addEventListener("click", () => {
+      const pw = getPw();
+      if (!pw) return show("Enter password first.", "bad");
+      try {
+        localStorage.setItem("rosie_admin_pw", pw);
+        show("Saved password on this device.", "ok");
+        setTimeout(hide, 1000);
+      } catch {
+        show("Could not save password.", "bad");
+      }
+    });
+
+    function updateCustomerLink(){
+      const bid = getBid();
+      qs("#customerLink").href = bid ? `/progress?bid=${encodeURIComponent(bid)}` : "/progress";
+    }
+    qs("#bid").addEventListener("input", updateCustomerLink);
+    updateCustomerLink();
+
+    async function loadLatest(){
+      hide();
+      const pw = getPw();
+      const bid = getBid();
+      if (!pw) return show("Missing admin password.", "bad");
+      if (!bid) return show("Missing booking id.", "bad");
+
+      const r = await postJson("/api/admin/progress_list", {
+        admin_password: pw,
+        booking_id: bid,
+        limit: 10
+      });
+
+      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
+
+      if (!r.ok || !r.out?.ok){
+        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
+      }
+
+      const rows = Array.isArray(r.out.rows) ? r.out.rows : [];
+      const pub = rows.filter(x=>x.visibility === "public");
+      const latest = pub[0] || null;
+
+      const img = qs("#previewImg");
+      if (latest?.photo_url){
+        img.style.display = "block";
+        img.src = latest.photo_url;
+        img.onerror = ()=>{ img.style.display = "none"; };
+      } else {
+        img.style.display = "none";
+        img.src = "";
+      }
+
+      qs("#previewText").textContent = latest
+        ? `${latest.stage || "update"}${latest.progress_percent!=null ? " — " + latest.progress_percent + "%" : ""}${latest.note ? " — " + latest.note : ""}`
+        : "No public updates yet.";
+
+      show("Loaded.", "ok");
+      setTimeout(hide, 800);
+    }
+
+    qs("#loadBtn").addEventListener("click", loadLatest);
+
+    qs("#clearBtn").addEventListener("click", ()=>{
+      qs("#photo_url").value = "";
+      qs("#note").value = "";
+      qs("#stage").value = "wash";
+      qs("#visibility").value = "public";
+    });
+
+    qs("#postBtn").addEventListener("click", async ()=>{
+      hide();
+      const pw = getPw();
+      const bid = getBid();
+      const photo_url = (qs("#photo_url").value || "").trim() || null;
+      const note = (qs("#note").value || "").trim() || null;
+
+      if (!pw) return show("Missing admin password.", "bad");
+      if (!bid) return show("Missing booking id.", "bad");
+      if (!photo_url && !note) return show("Add a photo URL or a note.", "bad");
+
+      qs("#postBtn").disabled = true;
+      qs("#postBtn").textContent = "Posting…";
+
+      const r = await postJson("/api/admin/progress_post", {
+        admin_password: pw,
+        booking_id: bid,
+        stage: qs("#stage").value,
+        visibility: qs("#visibility").value,
+        photo_url,
+        note
+      });
+
+      qs("#postBtn").disabled = false;
+      qs("#postBtn").textContent = "Post";
+
+      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
+
+      if (!r.ok || !r.out?.ok){
+        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
+      }
+
+      show("Posted.", "ok");
+      setTimeout(hide, 800);
+      await loadLatest();
+    });
+  </script>
+
+  <script type="module" src="/assets/chrome.js?v=20260311r"></script>
+</body>
+</html><!-- /admin-upload.html
+     REPLACE ENTIRE FILE
+
+     Purpose:
+     - Simple "upload helper" page for admins while working in the field
+     - Since direct browser->R2 upload (signed URLs) is a later feature,
+       this page currently:
+         1) Lets you paste an R2 public URL (or any URL)
+         2) Posts it into progress as an update (so customer sees it)
+
+     Uses:
+       POST /api/admin/progress_post
+       POST /api/admin/progress_list
+
+     Notes:
+     - This page is intentionally minimal and fast.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Upload | Rosie Dazzlers</title>
+  <meta name="description" content="Admin upload helper for posting progress photos." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260311r" />
+  <style>
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .muted{color:rgba(234,242,255,.62)}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .cardImg{
+      width:100%;
+      aspect-ratio:16/10;
+      object-fit:cover;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+    }
+    pre{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px}
+    .mini{font-size:.92rem}
+  </style>
+</head>
+
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers</strong>
+      </a>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
+      <div class="nav-links" id="navLinks"></div>
+      <a class="btn primary" href="/admin">Admin</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="panel">
+      <h1 style="margin:0 0 6px">Upload Helper</h1>
+      <p class="kicker" style="margin:0">Paste a photo URL and post it as a progress update.</p>
+
+      <div class="hr"></div>
+
+      <div class="row">
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:260px">
+          <span class="muted">Admin password</span>
+          <input id="pw" type="password" placeholder="Enter admin password…" />
+        </label>
+
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:340px;flex:1">
+          <span class="muted">Booking ID</span>
+          <input id="bid" class="mono" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+        </label>
+
+        <div class="row" style="align-items:flex-end">
+          <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
+          <button class="btn ghost" id="loadBtn" type="button">Load latest</button>
+          <a class="btn ghost" href="/admin">Back</a>
+        </div>
+      </div>
+
+      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
+    </div>
+
+    <div class="section grid2">
+      <div class="panel">
+        <h2 style="margin-top:0">Post photo update</h2>
+
+        <label for="photo_url">Photo URL (R2 public link recommended)</label>
+        <input id="photo_url" type="url" placeholder="https://… (paste URL)" />
+
+        <div class="grid2" style="margin-top:10px">
+          <div>
+            <label for="stage">Stage</label>
+            <select id="stage">
+              <option value="wash">Wash</option>
+              <option value="interior">Interior</option>
+              <option value="exterior">Exterior</option>
+              <option value="finishing">Finishing</option>
+              <option value="complete">Complete</option>
+            </select>
+          </div>
+          <div>
+            <label for="visibility">Visible to customer</label>
+            <select id="visibility">
+              <option value="public">Yes</option>
+              <option value="private">No</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="note" style="margin-top:10px">Note (optional)</label>
+        <textarea id="note" placeholder="Quick note about this photo…"></textarea>
+
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary" id="postBtn" type="button">Post</button>
+          <button class="btn ghost" id="clearBtn" type="button">Clear</button>
+          <a class="btn ghost" id="customerLink" href="/progress" target="_blank" rel="noopener">Customer view</a>
+        </div>
+
+        <div class="muted mini" style="margin-top:10px">
+          Next upgrade: direct camera upload to R2 via signed URLs (no copy/paste).
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-top:0">Latest public update preview</h2>
+        <img id="previewImg" class="cardImg" alt="Preview" style="display:none" />
+        <div id="previewText" class="muted mini" style="margin-top:10px"></div>
+        <div class="hr"></div>
+        <pre id="raw" class="mono">{}</pre>
+      </div>
+    </div>
+
+    <div class="footer" data-footer></div>
+  </div>
+
+  <script type="module">
+    const qs = (s)=>document.querySelector(s);
+
+    function show(msg, kind=""){
+      const el = qs("#status");
+      el.style.display = "block";
+      el.className = "notice " + (kind || "");
+      el.textContent = msg;
+    }
+    function hide(){ qs("#status").style.display = "none"; }
+
+    function getPw(){ return (qs("#pw").value || "").trim(); }
+    function getBid(){ return (qs("#bid").value || "").trim(); }
+
+    async function postJson(url, payload){
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "content-type":"application/json" },
+        body: JSON.stringify(payload),
+      });
+      const out = await res.json().catch(()=>null);
+      return { ok: res.ok, status: res.status, out };
+    }
+
+    // Save PW
+    try {
+      const saved = localStorage.getItem("rosie_admin_pw") || "";
+      if (saved) qs("#pw").value = saved;
+    } catch {}
+
+    qs("#savePwBtn").addEventListener("click", () => {
+      const pw = getPw();
+      if (!pw) return show("Enter password first.", "bad");
+      try {
+        localStorage.setItem("rosie_admin_pw", pw);
+        show("Saved password on this device.", "ok");
+        setTimeout(hide, 1000);
+      } catch {
+        show("Could not save password.", "bad");
+      }
+    });
+
+    function updateCustomerLink(){
+      const bid = getBid();
+      qs("#customerLink").href = bid ? `/progress?bid=${encodeURIComponent(bid)}` : "/progress";
+    }
+    qs("#bid").addEventListener("input", updateCustomerLink);
+    updateCustomerLink();
+
+    async function loadLatest(){
+      hide();
+      const pw = getPw();
+      const bid = getBid();
+      if (!pw) return show("Missing admin password.", "bad");
+      if (!bid) return show("Missing booking id.", "bad");
+
+      const r = await postJson("/api/admin/progress_list", {
+        admin_password: pw,
+        booking_id: bid,
+        limit: 10
+      });
+
+      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
+
+      if (!r.ok || !r.out?.ok){
+        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
+      }
+
+      const rows = Array.isArray(r.out.rows) ? r.out.rows : [];
+      const pub = rows.filter(x=>x.visibility === "public");
+      const latest = pub[0] || null;
+
+      const img = qs("#previewImg");
+      if (latest?.photo_url){
+        img.style.display = "block";
+        img.src = latest.photo_url;
+        img.onerror = ()=>{ img.style.display = "none"; };
+      } else {
+        img.style.display = "none";
+        img.src = "";
+      }
+
+      qs("#previewText").textContent = latest
+        ? `${latest.stage || "update"}${latest.progress_percent!=null ? " — " + latest.progress_percent + "%" : ""}${latest.note ? " — " + latest.note : ""}`
+        : "No public updates yet.";
+
+      show("Loaded.", "ok");
+      setTimeout(hide, 800);
+    }
+
+    qs("#loadBtn").addEventListener("click", loadLatest);
+
+    qs("#clearBtn").addEventListener("click", ()=>{
+      qs("#photo_url").value = "";
+      qs("#note").value = "";
+      qs("#stage").value = "wash";
+      qs("#visibility").value = "public";
+    });
+
+    qs("#postBtn").addEventListener("click", async ()=>{
+      hide();
+      const pw = getPw();
+      const bid = getBid();
+      const photo_url = (qs("#photo_url").value || "").trim() || null;
+      const note = (qs("#note").value || "").trim() || null;
+
+      if (!pw) return show("Missing admin password.", "bad");
+      if (!bid) return show("Missing booking id.", "bad");
+      if (!photo_url && !note) return show("Add a photo URL or a note.", "bad");
+
+      qs("#postBtn").disabled = true;
+      qs("#postBtn").textContent = "Posting…";
+
+      const r = await postJson("/api/admin/progress_post", {
+        admin_password: pw,
+        booking_id: bid,
+        stage: qs("#stage").value,
+        visibility: qs("#visibility").value,
+        photo_url,
+        note
+      });
+
+      qs("#postBtn").disabled = false;
+      qs("#postBtn").textContent = "Post";
+
+      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
+
+      if (!r.ok || !r.out?.ok){
+        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
+      }
+
+      show("Posted.", "ok");
+      setTimeout(hide, 800);
+      await loadLatest();
+    });
+  </script>
+
+  <script type="module" src="/assets/chrome.js?v=20260311r"></script>
+</body>
+</html>

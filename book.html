@@ -1,21 +1,49 @@
+<!-- /book.html
+     REPLACE ENTIRE FILE
+
+     Fixes:
+     - Uses the correct chart URLs:
+         Size chart is in BRAND bucket: https://assets.rosiedazzlers.ca/brand/CarSizeChart.PNG
+       (It was previously pointing to /packages/CarSizeChart.PNG on some pages)
+     - Also adds an inline hero banner at top (so booking page feels consistent)
+
+     Keeps:
+     - Mandatory email + vehicle year/make/model
+     - Photo recommended (not required)
+     - Availability lookup + deposit checkout
+-->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Book | Rosie Dazzlers</title>
-  <meta name="description" content="Book your mobile auto detailing service in Norfolk & Oxford Counties. Deposit required." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260308c" />
+  <meta name="description" content="Book a mobile auto detailing appointment in Norfolk & Oxford Counties. Deposit required." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260311k" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width:980px){ .grid2,.grid3{grid-template-columns:1fr} }
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .muted{color:rgba(234,242,255,.62)}
-    .req{color:rgba(239,68,68,.92);font-weight:800}
-    .codebox{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
+    .tag.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
+    .tag.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
     .mini{font-size:.92rem}
-    @media (max-width: 980px){
-      .grid2,.grid3{grid-template-columns:1fr}
+    .modalBack{
+      position:fixed; inset:0; background:rgba(0,0,0,.70);
+      display:none; align-items:center; justify-content:center;
+      z-index:9999; padding:18px;
     }
+    .modal{
+      max-width:1100px; width:100%;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(10,14,24,.96);
+      border-radius:18px; padding:14px;
+    }
+    .modal img{width:100%; height:auto; border-radius:14px; border:1px solid rgba(255,255,255,.10)}
+    .modalHead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
   </style>
 </head>
 
@@ -34,10 +62,97 @@
 
   <div class="container">
     <div class="panel">
-      <div class="badges">
-        <span class="badge">Online booking</span>
-        <span class="badge">Deposit required</span>
-        <span class="badge">Norfolk + Oxford</span>
+      <img data-banner alt="Rosie Dazzlers banner"
+           style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)" />
+
+      <h1 style="margin:14px 0 6px">Book an appointment</h1>
+      <p class="kicker" style="margin:0">
+        One vehicle per day (unless half-day jobs). Deposit required to lock your spot.
+      </p>
+
+      <div class="section row" style="margin-top:12px">
+        <button class="btn ghost" id="openSizeChartBtn" type="button">Open size chart</button>
+        <button class="btn ghost" id="openPriceChartBtn" type="button">Open price chart</button>
+        <button class="btn ghost" id="openDetailsChartBtn" type="button">Open details chart</button>
+        <a class="btn ghost" href="/pricing">Pricing page</a>
+      </div>
+
+      <div id="loadErr" class="notice bad" style="display:none;margin-top:12px"></div>
+      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
+    </div>
+
+    <div class="section grid2">
+      <div class="panel">
+        <h2 style="margin-top:0">1) Choose date + slot</h2>
+
+        <div class="grid3">
+          <div>
+            <label for="service_date">Date</label>
+            <input id="service_date" type="date" required />
+          </div>
+
+          <div>
+            <label for="service_area">Service area</label>
+            <select id="service_area" required>
+              <option value="Norfolk">Norfolk</option>
+              <option value="Oxford">Oxford</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="slot_choice">Time</label>
+            <select id="slot_choice" required>
+              <option value="AM">AM (half-day)</option>
+              <option value="PM">PM (half-day)</option>
+              <option value="FULL">Full day</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="availBox" class="notice" style="display:none;margin-top:12px"></div>
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-top:0">2) Package + vehicle size</h2>
+
+        <div class="grid2">
+          <div>
+            <label for="package_code">Package</label>
+            <select id="package_code" required></select>
+            <div class="muted mini" id="pkgSubtitle" style="margin-top:6px"></div>
+          </div>
+
+          <div>
+            <label for="vehicle_size">Vehicle size</label>
+            <select id="vehicle_size" required>
+              <option value="small">Small</option>
+              <option value="mid">Mid-sized</option>
+              <option value="oversize">Over-size / Exotic</option>
+            </select>
+            <div class="muted mini" id="sizeHint" style="margin-top:6px"></div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px;justify-content:space-between">
+          <div class="row">
+            <span class="tag ok" id="priceTag">$—</span>
+            <span class="tag" id="depositTag">Deposit $—</span>
+            <span class="tag warn" id="quoteTag" style="display:none">Quote add-ons selected</span>
+          </div>
+          <div class="row">
+            <a class="btn ghost" href="/services">What’s included</a>
+          </div>
+        </div>
+
+        <div id="sizeMismatch" class="notice warn" style="display:none;margin-top:12px"></div>
+
+        <label style="display:flex;gap:10px;align-items:flex-start;margin-top:12px">
+          <input id="confirm_size" type="checkbox" />
+          <span>
+            <strong>I confirm my vehicle size selection is correct</strong>.
+            (We may contact you if it looks mismatched to the size chart.)
+          </span>
+        </label>
       </div>
       <h1 style="margin:12px 0 8px">Book a Detail</h1>
       <p class="kicker">Choose a date, package, and time slot. We do one vehicle per day unless two half-day jobs.</p>
@@ -46,421 +161,457 @@
 
     <div class="section grid2">
       <div class="panel">
-        <h2 style="margin-top:0">1) Booking details</h2>
+        <h2 style="margin-top:0">3) Vehicle details (required)</h2>
 
-        <div class="grid2">
-          <div>
-            <label for="service_date">Service date <span class="req">*</span></label>
-            <input id="service_date" type="date" />
-          </div>
-          <div>
-            <label for="start_slot">Time slot <span class="req">*</span></label>
-            <select id="start_slot">
-              <option value="">Select…</option>
-              <option value="AM">AM</option>
-              <option value="PM">PM</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid2" style="margin-top:10px">
-          <div>
-            <label for="service_area">Service area <span class="req">*</span></label>
-            <select id="service_area">
-              <option value="">Select…</option>
-              <option value="Norfolk">Norfolk</option>
-              <option value="Oxford">Oxford</option>
-            </select>
-          </div>
-          <div>
-            <label for="vehicle_size">Vehicle size <span class="req">*</span></label>
-            <select id="vehicle_size">
-              <option value="">Select…</option>
-              <option value="small">Small</option>
-              <option value="mid">Mid-sized</option>
-              <option value="oversize">Over-size / Exotic</option>
-            </select>
-            <div class="muted">
-              Use size chart:
-              <a href="https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG" target="_blank" rel="noopener">Open</a>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top:10px">
-          <label for="package_code">Package <span class="req">*</span></label>
-          <select id="package_code">
-            <option value="">Loading packages…</option>
-          </select>
-          <div class="muted">Prices update automatically based on size.</div>
-        </div>
-
-        <div class="hr"></div>
-
-        <h3 style="margin:0 0 8px">Vehicle info (required)</h3>
         <div class="grid3">
           <div>
-            <label for="car_year">Year <span class="req">*</span></label>
-            <input id="car_year" type="number" min="1980" max="2030" placeholder="2020" />
+            <label for="veh_year">Year</label>
+            <input id="veh_year" type="number" min="1950" max="2100" required placeholder="2020" />
           </div>
           <div>
-            <label for="car_make">Make <span class="req">*</span></label>
-            <input id="car_make" type="text" placeholder="Toyota" />
+            <label for="veh_make">Make</label>
+            <input id="veh_make" type="text" required placeholder="Honda" />
           </div>
           <div>
-            <label for="car_model">Model <span class="req">*</span></label>
-            <input id="car_model" type="text" placeholder="RAV4" />
-          </div>
-        </div>
-        <div class="grid2" style="margin-top:10px">
-          <div>
-            <label for="car_plate">License plate (optional)</label>
-            <input id="car_plate" type="text" placeholder="ABC123" />
-          </div>
-          <div>
-            <label for="car_photo_url">Vehicle photo URL (recommended)</label>
-            <input id="car_photo_url" type="url" placeholder="https://..." />
+            <label for="veh_model">Model</label>
+            <input id="veh_model" type="text" required placeholder="Civic" />
           </div>
         </div>
 
-        <div class="hr"></div>
+        <div class="grid3" style="margin-top:10px">
+          <div>
+            <label for="veh_body">Body style (helps size check)</label>
+            <select id="veh_body">
+              <option value="">(select)</option>
+              <option value="sedan">Sedan / Coupe</option>
+              <option value="hatch">Hatchback</option>
+              <option value="crossover">Crossover</option>
+              <option value="suv">SUV</option>
+              <option value="truck">Truck</option>
+              <option value="van">Van</option>
+              <option value="exotic">Exotic / Supercar</option>
+            </select>
+          </div>
+          <div>
+            <label for="veh_plate">License plate (optional)</label>
+            <input id="veh_plate" type="text" placeholder="ABC123" />
+          </div>
+          <div>
+            <label for="veh_mileage">Mileage (optional)</label>
+            <input id="veh_mileage" type="number" min="0" placeholder="123456" />
+          </div>
+        </div>
 
-        <h3 style="margin:0 0 8px">Add-ons</h3>
-        <div id="addonsList" class="list"></div>
+        <label for="veh_photo" style="margin-top:10px">Vehicle photo link (recommended, not required)</label>
+        <input id="veh_photo" type="url" placeholder="https://… (R2 link or other link)" />
+
         <div class="muted mini" style="margin-top:8px">
-          Quote add-ons are recorded but not charged online. We’ll confirm pricing by message.
+          Photo helps us verify size and plan the job — but it’s optional.
         </div>
       </div>
 
       <div class="panel">
-        <h2 style="margin-top:0">2) Contact + address</h2>
+        <h2 style="margin-top:0">4) Add-ons</h2>
+        <div class="muted mini">Quote-required add-ons are requested here but not charged online.</div>
 
+        <div id="addonsBox" class="section"></div>
+
+        <div class="hr"></div>
+
+        <h2 style="margin-top:0">Discounts / Gift</h2>
         <div class="grid2">
           <div>
-            <label for="customer_name">Full name <span class="req">*</span></label>
-            <input id="customer_name" type="text" />
+            <label for="gift_code">Gift certificate code (optional)</label>
+            <input id="gift_code" class="mono" type="text" placeholder="RD-XXXX-XXXX" />
           </div>
           <div>
-            <label for="customer_email">Email <span class="req">*</span></label>
-            <input id="customer_email" type="email" />
+            <label for="promo_code">Promo code (optional)</label>
+            <input id="promo_code" class="mono" type="text" placeholder="SPRING10" />
           </div>
         </div>
 
-        <div class="grid2" style="margin-top:10px">
-          <div>
-            <label for="customer_phone">Phone (optional)</label>
-            <input id="customer_phone" type="tel" />
-          </div>
-          <div>
-            <label for="address_line1">Address <span class="req">*</span></label>
-            <input id="address_line1" type="text" placeholder="123 Main St" />
-          </div>
+        <div class="muted mini" style="margin-top:8px">
+          Codes are stored with the booking now; we’ll enable automated discounts next.
         </div>
+      </div>
+    </div>
 
-        <div class="grid2" style="margin-top:10px">
-          <div>
-            <label for="city">City</label>
-            <input id="city" type="text" />
-          </div>
-          <div>
-            <label for="postal_code">Postal code</label>
-            <input id="postal_code" type="text" placeholder="N0J 1P0" />
-          </div>
+    <div class="section panel">
+      <h2 style="margin-top:0">5) Contact + location + acknowledgements</h2>
+
+      <div class="grid2">
+        <div>
+          <label for="customer_name">Name</label>
+          <input id="customer_name" type="text" required />
         </div>
-
-        <div class="hr"></div>
-
-        <h3 style="margin:0 0 8px">Codes (optional)</h3>
-
-        <div class="grid2">
-          <div>
-            <label for="gift_code">Gift code</label>
-            <input id="gift_code" class="codebox" type="text" placeholder="RD-ABCDEF1234" />
-            <div class="muted">Service Gifts must match package + size. Dollar Gifts deduct from total.</div>
-          </div>
-          <div>
-            <label for="promo_code">Promo code</label>
-            <input id="promo_code" class="codebox" type="text" placeholder="WELCOME10" />
-            <div class="muted">Promos can be % off or $ off (specials).</div>
-          </div>
+        <div>
+          <label for="customer_email">Email (required)</label>
+          <input id="customer_email" type="email" required />
         </div>
+      </div>
 
-        <div class="grid2" style="margin-top:10px">
-          <div>
-            <button class="btn ghost" id="applyCodesBtn" type="button">Apply codes</button>
-          </div>
-          <div id="codesResult"></div>
+      <div class="grid2" style="margin-top:10px">
+        <div>
+          <label for="customer_phone">Phone (recommended)</label>
+          <input id="customer_phone" type="tel" placeholder="(555) 555-5555" />
         </div>
-
-        <div class="hr"></div>
-
-        <h3 style="margin:0 0 8px">Required acknowledgements</h3>
-        <div class="list">
-          <label class="checkbox"><input type="checkbox" id="ack_driveway" /> Driveway required</label>
-          <label class="checkbox"><input type="checkbox" id="ack_power_water" /> Customer provides power + water (extra charges may apply otherwise)</label>
-          <label class="checkbox"><input type="checkbox" id="ack_bylaw" /> Customer accepts responsibility for local bylaws related to washing/chemicals</label>
-          <label class="checkbox"><input type="checkbox" id="ack_cancellation" /> Cancellation policy accepted</label>
+        <div>
+          <label for="address_line1">Service address (driveway required)</label>
+          <input id="address_line1" type="text" required placeholder="123 Main St" />
         </div>
+      </div>
 
-        <div class="hr"></div>
-
-        <div id="summary" class="notice"></div>
-
-        <div class="row" style="margin-top:10px">
-          <button class="btn primary" id="checkoutBtn" type="button">Proceed to deposit checkout</button>
+      <div class="grid2" style="margin-top:10px">
+        <div>
+          <label for="city">City (optional)</label>
+          <input id="city" type="text" />
         </div>
-
-        <div class="muted" style="margin-top:10px">
-          Deposit is charged now to reserve your slot. Remaining balance is due at service (or per invoice/payment method).
+        <div>
+          <label for="postal_code">Postal code (optional)</label>
+          <input id="postal_code" type="text" placeholder="N0E 1W0" />
         </div>
+      </div>
+
+      <label for="special_notes" style="margin-top:10px">Special notes (optional)</label>
+      <textarea id="special_notes" placeholder="Pet hair, stains, allergies, access notes, etc."></textarea>
+
+      <div class="hr"></div>
+
+      <div class="grid2">
+        <label style="display:flex;gap:10px;align-items:flex-start">
+          <input id="ack_driveway" type="checkbox" required />
+          <span><strong>Driveway required</strong> (we need space to work)</span>
+        </label>
+
+        <label style="display:flex;gap:10px;align-items:flex-start">
+          <input id="ack_power_water" type="checkbox" required />
+          <span><strong>Customer provides power + water</strong> (or additional charges)</span>
+        </label>
+
+        <label style="display:flex;gap:10px;align-items:flex-start">
+          <input id="ack_bylaw" type="checkbox" required />
+          <span><strong>Customer accepts any bylaw responsibility</strong> related to washing/chemicals</span>
+        </label>
+
+        <label style="display:flex;gap:10px;align-items:flex-start">
+          <input id="ack_cancellation" type="checkbox" required />
+          <span><strong>Deposit + cancellation policy acknowledged</strong> (see waiver)</span>
+        </label>
+      </div>
+
+      <div class="row" style="margin-top:14px">
+        <button class="btn primary" id="checkoutBtn" type="button">Continue to deposit payment</button>
+        <a class="btn ghost" href="/waiver">View waiver / policies</a>
       </div>
     </div>
 
     <div class="footer" data-footer></div>
   </div>
 
+  <!-- MODAL -->
+  <div class="modalBack" id="modalBack" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modalHead">
+        <strong id="modalTitle">Preview</strong>
+        <button class="btn ghost" id="modalCloseBtn" type="button">Close</button>
+      </div>
+      <img id="modalImg" alt="Preview image" />
+    </div>
+  </div>
+
   <script type="module">
-    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260308c";
+    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260311k";
+    const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
 
-    const money = (cents) =>
-      new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" })
-        .format((Number(cents || 0) / 100));
+    const qs = (s)=>document.querySelector(s);
+    const money = (cad)=> new Intl.NumberFormat("en-CA",{style:"currency",currency:"CAD"}).format(Number(cad||0));
 
-    function showDataError(msg) {
-      const el = document.querySelector("#dataError");
-      if (!el) return;
+    function show(id,msg,kind=""){
+      const el = qs("#"+id);
       el.style.display = "block";
+      el.className = "notice " + (kind || "");
       el.textContent = msg;
     }
+    function hide(id){ qs("#"+id).style.display = "none"; }
 
-    async function fetchJsonStrict(url) {
-      const res = await fetch(url, { cache: "no-store" });
+    async function fetchJsonStrict(url){
+      const res = await fetch(url,{cache:"no-store"});
       const text = await res.text();
       try { return JSON.parse(text); }
       catch {
-        const head = text.slice(0, 120).replace(/\s+/g, " ");
+        const head = text.slice(0,120).replace(/\s+/g," ");
         throw new Error(`Expected JSON from ${url} but got: ${head}`);
       }
     }
 
-    function val(id){ return (document.querySelector(id)?.value || "").trim(); }
-    function checked(id){ return !!document.querySelector(id)?.checked; }
+    // Modal
+    function openModal(title,imgUrl){
+      qs("#modalTitle").textContent = title;
+      qs("#modalImg").src = imgUrl;
+      qs("#modalBack").style.display = "flex";
+    }
+    function closeModal(){ qs("#modalBack").style.display="none"; qs("#modalImg").src=""; }
+    qs("#modalCloseBtn").addEventListener("click", closeModal);
+    qs("#modalBack").addEventListener("click",(e)=>{ if(e.target.id==="modalBack") closeModal(); });
 
-    function addonCodes(){
-      return Array.from(document.querySelectorAll("[data-addon]"))
-        .filter(x => x.checked)
-        .map(x => x.getAttribute("data-addon"));
+    // IMPORTANT: Size chart is in BRAND bucket
+    qs("#openSizeChartBtn").addEventListener("click",()=> openModal("Vehicle Size Chart", `${BRAND_BASE}/CarSizeChart.PNG`));
+    qs("#openPriceChartBtn").addEventListener("click",()=> openModal("Vehicle Price Chart 2025", `${BRAND_BASE}/CarPrice2025.PNG`));
+    qs("#openDetailsChartBtn").addEventListener("click",()=> openModal("Package Service Details Chart", `${BRAND_BASE}/CarPriceDetails2025.PNG`));
+
+    // Default date
+    qs("#service_date").value = new Date().toISOString().slice(0,10);
+
+    let data = null;
+    let addonsState = new Set();
+
+    function getSelectedPkg(){
+      const code = qs("#package_code").value;
+      return (data?.packages || []).find(p=>p.code===code) || null;
+    }
+    function getSelectedSize(){ return qs("#vehicle_size").value; }
+
+    function updatePriceUI(){
+      const pkg = getSelectedPkg();
+      if (!pkg) return;
+      const sz = getSelectedSize();
+      const price = pkg.prices_cad?.[sz] ?? null;
+      qs("#priceTag").textContent = price != null ? money(price) : "$—";
+      qs("#depositTag").textContent = `Deposit ${money(pkg.deposit_cad || 0)}`;
+      qs("#pkgSubtitle").textContent = pkg.subtitle || "";
     }
 
-    function depositFor(pkgCode){
-      return (pkgCode === "premium_wash" || pkgCode === "basic_detail") ? 5000 : 10000;
+    function addonDisplayPrice(a){
+      const sz = getSelectedSize();
+      if (a.quote_required) return "Quote required";
+      if (a.prices_cad && a.prices_cad[sz]!=null) return money(a.prices_cad[sz]);
+      if (a.price_cad!=null) return money(a.price_cad);
+      return "—";
     }
 
-    let servicesData = null;
-    let lastPreview = null; // server preview response, if codes applied
-
-    function pkgPriceCents(pkgCode, size){
-      const p = (servicesData?.packages || []).find(x => x.code === pkgCode);
-      if (!p) return 0;
-      const cad = p.prices_cad?.[size] ?? 0;
-      return Math.round(Number(cad) * 100);
-    }
-
-    function addonsTotalCents(size){
-      let total = 0;
-      for (const code of addonCodes()){
-        const a = (servicesData?.addons || []).find(x => x.code === code);
-        if (!a) continue;
-        if (a.quote_required) continue;
-        if (a.prices_cad && a.prices_cad[size] != null) total += Math.round(Number(a.prices_cad[size]) * 100);
-        else if (a.price_cad != null) total += Math.round(Number(a.price_cad) * 100);
+    function updateQuoteTag(){
+      const list = Array.isArray(data?.addons) ? data.addons : [];
+      let hasQuote = false;
+      for (const code of addonsState){
+        const a = list.find(x=>x.code===code);
+        if (a?.quote_required) { hasQuote = true; break; }
       }
-      return total;
+      qs("#quoteTag").style.display = hasQuote ? "inline-flex" : "none";
     }
 
-    function computeSubtotalCents(){
-      const pkgCode = val("#package_code");
-      const size = val("#vehicle_size");
-      const base = pkgPriceCents(pkgCode, size);
-      const add = addonsTotalCents(size);
-      return base + add;
-    }
+    function buildAddonUI(){
+      const box = qs("#addonsBox");
+      box.innerHTML = "";
 
-    function recompute(){
-      const pkgCode = val("#package_code");
-      const subtotal = computeSubtotalCents();
-      const depBase = pkgCode ? depositFor(pkgCode) : 0;
-
-      if (lastPreview?.ok) {
-        document.querySelector("#summary").innerHTML =
-          `<strong>Estimate (with codes)</strong><br>` +
-          `Subtotal: ${money(lastPreview.subtotal_cents)}<br>` +
-          (lastPreview.promo_code ? `Promo discount: -${money(lastPreview.promo_discount_cents)}<br>` : "") +
-          (lastPreview.gift_code ? `Gift applied: -${money(lastPreview.gift_apply_cents)}<br>` : "") +
-          `<strong>Total after discounts:</strong> ${money(lastPreview.total_after_discounts_cents)}<br>` +
-          `<strong>Deposit due now:</strong> ${money(lastPreview.deposit_due_now_cents)}`;
-      } else {
-        document.querySelector("#summary").innerHTML =
-          `<strong>Estimate</strong><br>` +
-          `Total (before codes): ${money(subtotal)}<br>` +
-          `Deposit due now (before codes): ${money(depBase)}`;
-      }
-    }
-
-    function renderPackages() {
-      const pkgSel = document.querySelector("#package_code");
-      const pkgs = servicesData?.packages || [];
-      pkgSel.innerHTML = `<option value="">Select…</option>` + pkgs.map(p =>
-        `<option value="${p.code}">${p.name} — ${p.subtitle || ""}</option>`
-      ).join("");
-
-      const qs = new URLSearchParams(location.search);
-      const qpPackage = (qs.get("package") || "").trim();
-      const qpSize = (qs.get("size") || "").trim();
-
-      if (qpSize && ["small","mid","oversize"].includes(qpSize)) {
-        document.querySelector("#vehicle_size").value = qpSize;
-      }
-      if (qpPackage) pkgSel.value = qpPackage;
-    }
-
-    function renderAddons() {
-      const list = document.querySelector("#addonsList");
-      const ads = servicesData?.addons || [];
-      list.innerHTML = ads.map(a => {
-        const tag = a.quote_required ? `<span class="badge">Quote</span>` : "";
-        return `
-          <label class="checkbox">
-            <input type="checkbox" data-addon="${a.code}" />
-            ${a.name} ${tag}
-          </label>
-        `;
-      }).join("");
-
-      document.querySelectorAll("[data-addon]").forEach(chk => chk.addEventListener("change", () => {
-        lastPreview = null; // codes preview invalidated if pricing changes
-        document.querySelector("#codesResult").innerHTML = "";
-        recompute();
-      }));
-    }
-
-    async function applyCodes(){
-      // Normalize
-      const gift = val("#gift_code").toUpperCase();
-      const promo = val("#promo_code").toUpperCase();
-      document.querySelector("#gift_code").value = gift;
-      document.querySelector("#promo_code").value = promo;
-
-      const pkg = val("#package_code");
-      const size = val("#vehicle_size");
-
-      // If not enough info selected, don’t call server yet
-      if (!pkg || !size) {
-        document.querySelector("#codesResult").innerHTML =
-          `<div class="notice warn">Choose package and vehicle size first.</div>`;
-        lastPreview = null;
+      const list = Array.isArray(data?.addons) ? data.addons : [];
+      if (!list.length){
+        box.innerHTML = `<div class="notice warn">No add-ons loaded.</div>`;
         return;
       }
 
-      const subtotal = computeSubtotalCents();
-      const depositBase = depositFor(pkg);
+      for (const a of list){
+        const wrap = document.createElement("label");
+        wrap.style.display = "flex";
+        wrap.style.gap = "10px";
+        wrap.style.alignItems = "flex-start";
+        wrap.style.marginTop = "10px";
 
-      const payload = {
-        subtotal_cents: subtotal,
-        deposit_base_cents: depositBase,
-        package_code: pkg,
-        vehicle_size: size,
-        gift_code: gift || null,
-        promo_code: promo || null,
-      };
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.value = a.code;
+        cb.checked = addonsState.has(a.code);
+        cb.addEventListener("change",()=>{
+          if (cb.checked) addonsState.add(a.code);
+          else addonsState.delete(a.code);
+          updateQuoteTag();
+        });
 
-      const res = await fetch("/api/codes/preview", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(payload),
+        const price = addonDisplayPrice(a);
+        const badge = a.quote_required ? `<span class="tag warn">Quote</span>` : `<span class="tag ok">${price}</span>`;
+
+        const inner = document.createElement("div");
+        inner.style.flex = "1";
+        inner.innerHTML = `
+          <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+            <strong>${a.name}</strong>
+            ${badge}
+          </div>
+          <div class="muted mini mono">${a.code}</div>
+        `;
+
+        wrap.appendChild(cb);
+        wrap.appendChild(inner);
+        box.appendChild(wrap);
+      }
+      updateQuoteTag();
+    }
+
+    // Size recommendation (simple)
+    function recommendedSize(){
+      const body = (qs("#veh_body").value || "").toLowerCase();
+      if (body === "truck" || body === "van" || body === "exotic") return "oversize";
+      if (body === "suv" || body === "crossover") return "mid";
+      if (body === "sedan" || body === "hatch") return "small";
+      return null;
+    }
+    function updateSizeHint(){
+      const rec = recommendedSize();
+      const chosen = getSelectedSize();
+      if (!rec){
+        qs("#sizeHint").textContent = "Tip: choose body style for a size recommendation.";
+        qs("#sizeMismatch").style.display = "none";
+        return;
+      }
+      qs("#sizeHint").innerHTML = `Recommended size based on vehicle info: <strong>${rec}</strong>`;
+      if (rec !== chosen){
+        qs("#sizeMismatch").style.display = "block";
+        qs("#sizeMismatch").textContent =
+          `Your selection is "${chosen}", but we recommend "${rec}". Please confirm vehicle size (checkbox) or adjust.`;
+      } else {
+        qs("#sizeMismatch").style.display = "none";
+      }
+    }
+    ["veh_body","veh_make","veh_model","vehicle_size"].forEach(id=>{
+      const el = qs("#"+id);
+      if (el) el.addEventListener("input", updateSizeHint);
+      if (el) el.addEventListener("change", updateSizeHint);
+    });
+
+    // Availability
+    async function refreshAvailability(){
+      hide("status");
+      const date = qs("#service_date").value;
+      if (!date) return;
+
+      const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache:"no-store" });
+      const out = await res.json().catch(()=>null);
+
+      if (!res.ok || !out?.ok){
+        qs("#availBox").style.display = "block";
+        qs("#availBox").className = "notice bad";
+        qs("#availBox").textContent = out?.error ? `Availability error: ${out.error}` : "Availability error.";
+        return;
+      }
+
+      if (out.blocked){
+        qs("#availBox").style.display = "block";
+        qs("#availBox").className = "notice bad";
+        qs("#availBox").textContent = `Date blocked: ${out.reason || "Blocked"}`;
+        return;
+      }
+
+      const msg = `Availability — AM: ${out.AM ? "Open" : "Not available"} • PM: ${out.PM ? "Open" : "Not available"}`;
+      qs("#availBox").style.display = "block";
+      qs("#availBox").className = "notice ok";
+      qs("#availBox").textContent = msg;
+    }
+    qs("#service_date").addEventListener("change", refreshAvailability);
+    qs("#slot_choice").addEventListener("change", refreshAvailability);
+
+    // Load JSON
+    try {
+      data = await fetchJsonStrict(DATA_URL);
+
+      const sel = qs("#package_code");
+      sel.innerHTML = "";
+      for (const p of (data.packages || [])){
+        const opt = document.createElement("option");
+        opt.value = p.code;
+        opt.textContent = `${p.name}${p.subtitle ? " — " + p.subtitle : ""}`;
+        sel.appendChild(opt);
+      }
+      if (sel.options.length) sel.value = sel.options[0].value;
+
+      sel.addEventListener("change", ()=>{
+        updatePriceUI();
+      });
+      qs("#vehicle_size").addEventListener("change", ()=>{
+        updatePriceUI();
+        buildAddonUI();
+        updateSizeHint();
       });
 
-      const data = await res.json().catch(()=>null);
-      if (!res.ok || !data) {
-        document.querySelector("#codesResult").innerHTML =
-          `<div class="notice bad">Could not validate codes.</div>`;
-        lastPreview = null;
-        recompute();
-        return;
-      }
+      updatePriceUI();
+      buildAddonUI();
+      updateSizeHint();
+      await refreshAvailability();
 
-      lastPreview = data;
+      // Optional prefill from query: /book?pkg=...&size=...
+      (function prefill(){
+        const p = new URLSearchParams(location.search);
+        const pkg = (p.get("pkg") || "").trim();
+        const size = (p.get("size") || "").trim();
+        if (pkg) sel.value = pkg;
+        if (["small","mid","oversize"].includes(size)) qs("#vehicle_size").value = size;
+        updatePriceUI();
+        buildAddonUI();
+      })();
 
-      const promoLine = data.promo_code
-        ? `<div class="mini">${escapeHtml(data.promo_message || "Promo checked")}</div>`
-        : "";
-      const giftLine = data.gift_code
-        ? `<div class="mini">${escapeHtml(data.gift_message || "Gift checked")}</div>`
-        : "";
-
-      document.querySelector("#codesResult").innerHTML =
-        `<div class="notice">${promoLine}${giftLine}</div>`;
-
-      recompute();
+    } catch (e) {
+      qs("#loadErr").style.display = "block";
+      qs("#loadErr").textContent = `Failed to load booking data: ${e.message || e}`;
     }
 
-    document.querySelector("#applyCodesBtn")?.addEventListener("click", applyCodes);
+    // Checkout
+    qs("#checkoutBtn").addEventListener("click", async () => {
+      hide("status");
 
-    async function checkout(){
-      const required = [
-        ["#service_date","Service date"],
-        ["#start_slot","Time slot"],
-        ["#service_area","Service area"],
-        ["#vehicle_size","Vehicle size"],
-        ["#package_code","Package"],
-        ["#customer_name","Full name"],
-        ["#customer_email","Email"],
-        ["#address_line1","Address"],
-        ["#car_year","Vehicle year"],
-        ["#car_make","Vehicle make"],
-        ["#car_model","Vehicle model"],
+      const requiredIds = [
+        "service_date","service_area","slot_choice",
+        "package_code","vehicle_size",
+        "customer_name","customer_email","address_line1",
+        "veh_year","veh_make","veh_model",
+        "ack_driveway","ack_power_water","ack_bylaw","ack_cancellation"
       ];
-      for (const [id,label] of required){
-        if (!val(id)) { alert(`Missing: ${label}`); return; }
+      for (const id of requiredIds){
+        const el = qs("#"+id);
+        if (!el) continue;
+        const ok = el.type === "checkbox" ? el.checked : String(el.value||"").trim().length > 0;
+        if (!ok) return show("status", `Missing: ${id}`, "bad");
       }
 
-      const acks = [
-        ["#ack_driveway","Driveway required acknowledgement"],
-        ["#ack_power_water","Power/water acknowledgement"],
-        ["#ack_bylaw","Bylaw acknowledgement"],
-        ["#ack_cancellation","Cancellation acknowledgement"]
-      ];
-      for (const [id,label] of acks){
-        if (!checked(id)) { alert(`Missing: ${label}`); return; }
+      const rec = recommendedSize();
+      const chosen = getSelectedSize();
+      if (rec && rec !== chosen && !qs("#confirm_size").checked){
+        return show("status", `Please confirm vehicle size selection (checkbox) or switch size to "${rec}".`, "bad");
       }
+
+      const slotChoice = qs("#slot_choice").value;
+      const start_slot = slotChoice === "FULL" ? "AM" : slotChoice;
+      const duration_slots = slotChoice === "FULL" ? 2 : 1;
 
       const payload = {
-        service_date: val("#service_date"),
-        start_slot: val("#start_slot"),
-        duration_slots: 1,
+        service_date: qs("#service_date").value,
+        start_slot,
+        duration_slots,
+        service_area: qs("#service_area").value,
+        package_code: qs("#package_code").value,
+        vehicle_size: qs("#vehicle_size").value,
 
-        service_area: val("#service_area"),
-        package_code: val("#package_code"),
-        vehicle_size: val("#vehicle_size"),
+        customer_name: qs("#customer_name").value.trim(),
+        customer_email: qs("#customer_email").value.trim(),
+        customer_phone: qs("#customer_phone").value.trim() || null,
 
-        customer_name: val("#customer_name"),
-        customer_email: val("#customer_email"),
-        customer_phone: val("#customer_phone"),
+        address_line1: qs("#address_line1").value.trim(),
+        city: qs("#city").value.trim() || null,
+        postal_code: qs("#postal_code").value.trim() || null,
 
-        address_line1: val("#address_line1"),
-        city: val("#city"),
-        postal_code: val("#postal_code"),
+        addon_codes: Array.from(addonsState),
 
-        addon_codes: addonCodes(),
+        gift_code: (qs("#gift_code").value || "").trim() || null,
+        promo_code: (qs("#promo_code").value || "").trim() || null,
 
-        car_year: val("#car_year"),
-        car_make: val("#car_make"),
-        car_model: val("#car_model"),
-        car_plate: val("#car_plate"),
-        car_photo_url: val("#car_photo_url"),
+        vehicle: {
+          year: Number(qs("#veh_year").value),
+          make: qs("#veh_make").value.trim(),
+          model: qs("#veh_model").value.trim(),
+          plate: qs("#veh_plate").value.trim() || null,
+          mileage: qs("#veh_mileage").value ? Number(qs("#veh_mileage").value) : null,
+          photo_url: qs("#veh_photo").value.trim() || null,
+          body_style: qs("#veh_body").value || null
+        },
 
-        gift_code: (val("#gift_code") || "").toUpperCase() || null,
-        promo_code: (val("#promo_code") || "").toUpperCase() || null,
+        special_notes: (qs("#special_notes").value || "").trim() || null,
 
         ack_driveway: true,
         ack_power_water: true,
@@ -468,52 +619,34 @@
         ack_cancellation: true,
       };
 
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      qs("#checkoutBtn").disabled = true;
+      qs("#checkoutBtn").textContent = "Creating checkout…";
 
-      const data = await res.json().catch(()=>({}));
-      if (!res.ok) { alert(data?.error ? `Checkout error: ${data.error}` : "Checkout error"); return; }
-      if (!data.checkout_url) { alert("Checkout URL missing. Please try again."); return; }
-
-      location.href = data.checkout_url;
-    }
-
-    document.querySelector("#checkoutBtn")?.addEventListener("click", checkout);
-
-    function escapeHtml(s){
-      return String(s || "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#39;");
-    }
-
-    // init
-    try {
-      servicesData = await fetchJsonStrict(DATA_URL);
-      renderPackages();
-      renderAddons();
-
-      ["#package_code","#vehicle_size","#start_slot","#service_date","#service_area"].forEach(sel=>{
-        document.querySelector(sel)?.addEventListener("change", () => {
-          lastPreview = null; // invalidate preview when key inputs change
-          document.querySelector("#codesResult").innerHTML = "";
-          recompute();
+      try {
+        const res = await fetch("/api/checkout", {
+          method: "POST",
+          headers: { "content-type":"application/json" },
+          body: JSON.stringify(payload),
         });
-      });
 
-      recompute();
-    } catch (e) {
-      showDataError(String(e.message || e));
-      document.querySelector("#package_code").innerHTML = `<option value="">(Could not load packages)</option>`;
-      document.querySelector("#addonsList").innerHTML = `<div class="notice bad">Could not load add-ons.</div>`;
-    }
+        const out = await res.json().catch(()=>null);
+
+        if (!res.ok || !out?.ok || !out?.checkout_url){
+          qs("#checkoutBtn").disabled = false;
+          qs("#checkoutBtn").textContent = "Continue to deposit payment";
+          return show("status", out?.error ? `Checkout error: ${out.error}` : "Checkout failed.", "bad");
+        }
+
+        location.href = out.checkout_url;
+
+      } catch (err) {
+        qs("#checkoutBtn").disabled = false;
+        qs("#checkoutBtn").textContent = "Continue to deposit payment";
+        return show("status", String(err), "bad");
+      }
+    });
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260308c"></script>
+  <script type="module" src="/assets/chrome.js?v=20260311k"></script>
 </body>
 </html>

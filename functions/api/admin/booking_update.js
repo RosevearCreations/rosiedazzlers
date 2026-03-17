@@ -1,28 +1,33 @@
-// functions/api/admin/booking_update.js
+// /functions/api/admin/booking_update.js
+// CREATE THIS FILE (or REPLACE ENTIRE FILE)
+//
 // POST /api/admin/booking_update
-// Admin-only: update booking operational fields:
-// - job_status (scheduled | in_progress | completed | cancelled)
-// - progress_enabled (true/false)
-// - regenerate progress_token (new UUID) and return the customer progress/complete links
+//
+// Actions used by /admin-booking.html:
+// - set_job_status
+// - set_progress_enabled
+// - regen_progress_token
+//
+// Request JSON:
+// {
+//   "admin_password": "...",
+//   "booking_id": "uuid",
+//   "action": "set_job_status",
+//   "job_status": "scheduled|in_progress|completed|cancelled",  // required for set_job_status
+//   "progress_enabled": true|false                             // required for set_progress_enabled
+// }
+//
+// Response:
+// {
+//   ok:true,
+//   row: { ... },
+//   links: { progress_url, complete_url }
+// }
 //
 // Env vars required:
 // - ADMIN_PASSWORD
 // - SUPABASE_URL
 // - SUPABASE_SERVICE_ROLE_KEY
-//
-// Request JSON examples:
-//
-// 1) Set job status:
-// { "admin_password":"...", "booking_id":"uuid", "action":"set_job_status", "job_status":"in_progress" }
-//
-// 2) Toggle progress visibility:
-// { "admin_password":"...", "booking_id":"uuid", "action":"set_progress_enabled", "progress_enabled":true }
-//
-// 3) Regenerate progress token:
-// { "admin_password":"...", "booking_id":"uuid", "action":"regen_progress_token" }
-//
-// Response:
-// { ok:true, booking_id, row, links:{ progress_url, complete_url } }
 
 export async function onRequestOptions() {
   return corsResponse("", 204);
@@ -35,19 +40,21 @@ export async function onRequestPost({ request, env }) {
     const SERVICE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!ADMIN_PASSWORD) return corsJson({ ok: false, error: "Server missing ADMIN_PASSWORD" }, 500);
-    if (!SUPABASE_URL || !SERVICE_KEY) return corsJson({ ok: false, error: "Server missing Supabase env vars" }, 500);
+    if (!SUPABASE_URL || !SERVICE_KEY) {
+      return corsJson({ ok: false, error: "Server not configured (Supabase env vars missing)" }, 500);
+    }
 
     const body = await readJson(request);
 
     const pw = String(body.admin_password || "");
     if (!timingSafeEqual(pw, ADMIN_PASSWORD)) return corsJson({ ok: false, error: "Unauthorized" }, 401);
 
-    const bookingId = String(body.booking_id || "").trim();
-    if (!isUuid(bookingId)) return corsJson({ ok: false, error: "booking_id must be a uuid" }, 400);
+    const booking_id = String(body.booking_id || "").trim();
+    if (!isUuid(booking_id)) return corsJson({ ok: false, error: "booking_id must be a uuid" }, 400);
 
     const action = String(body.action || "").trim();
 
-    const supa = async (method, path, payload) => {
+    const supa = async (method, path, payload, prefer = "return=representation") => {
       const res = await fetch(`${SUPABASE_URL}${path}`, {
         method,
         headers: {
@@ -55,7 +62,7 @@ export async function onRequestPost({ request, env }) {
           Authorization: `Bearer ${SERVICE_KEY}`,
           "Content-Type": "application/json",
           Accept: "application/json",
-          Prefer: "return=representation",
+          Prefer: prefer,
         },
         body: payload ? JSON.stringify(payload) : undefined,
       });
@@ -64,68 +71,82 @@ export async function onRequestPost({ request, env }) {
       return { ok: res.ok, status: res.status, data, raw: text };
     };
 
-    let patch = null;
+    // Load booking to ensure it exists + to return links
+    const get = await supa(
+      "GET",
+      `/rest/v1/bookings?select=id,progress_token,progress_enabled,job_status,service_date,package_code,vehicle_size&` +
+        `id=eq.${encodeURIComponent(booking_id)}&limit=1`,
+      null,
+      "return=representation"
+    );
+    if (!get.ok) return corsJson({ ok: false, error: "Supabase error (booking lookup)", details: get }, 502);
+
+    const booking = Array.isArray(get.data) ? get.data[0] : null;
+    if (!booking) return corsJson({ ok: false, error: "Booking not found" }, 404);
+
+    const now = new Date().toISOString();
+    let patchPayload = null;
 
     if (action === "set_job_status") {
-      const s = String(body.job_status || "").trim();
-      const allowed = ["scheduled", "in_progress", "completed", "cancelled"];
-      if (!allowed.includes(s)) {
-        return corsJson({ ok: false, error: "job_status must be scheduled, in_progress, completed, cancelled" }, 400);
+      const job_status = String(body.job_status || "").trim();
+      if (!["scheduled", "in_progress", "completed", "cancelled"].includes(job_status)) {
+        return corsJson({ ok: false, error: "job_status must be scheduled|in_progress|completed|cancelled" }, 400);
       }
-      patch = { job_status: s };
-
-      // If admin forces completed, also set completed_at
-      if (s === "completed") patch.completed_at = new Date().toISOString();
-      // If moving away from completed, clear completed_at (optional behavior)
-      if (s !== "completed") patch.completed_at = null;
+      patchPayload = { job_status, updated_at: now };
+      if (job_status === "completed") patchPayload.completed_at = now;
     }
 
-    else if (action === "set_progress_enabled") {
+    if (action === "set_progress_enabled") {
       const pe = body.progress_enabled;
-      if (typeof pe !== "boolean") {
-        return corsJson({ ok: false, error: "progress_enabled must be boolean" }, 400);
+      if (typeof pe !== "boolean") return corsJson({ ok: false, error: "progress_enabled must be boolean" }, 400);
+
+      patchPayload = { progress_enabled: pe, updated_at: now };
+
+      // If enabling and there isn't a token yet, create one
+      if (pe === true && !booking.progress_token) {
+        patchPayload.progress_token = crypto.randomUUID();
       }
-      patch = { progress_enabled: pe };
     }
 
-    else if (action === "regen_progress_token") {
-      // generate new UUID token
-      const token = crypto.randomUUID();
-      patch = { progress_token: token, progress_enabled: true };
+    if (action === "regen_progress_token") {
+      patchPayload = {
+        progress_token: crypto.randomUUID(),
+        progress_enabled: true,
+        updated_at: now,
+      };
     }
 
-    else {
+    if (!patchPayload) {
       return corsJson({ ok: false, error: "Unknown action" }, 400);
     }
 
     const upd = await supa(
       "PATCH",
-      `/rest/v1/bookings?id=eq.${encodeURIComponent(bookingId)}`,
-      patch
+      `/rest/v1/bookings?id=eq.${encodeURIComponent(booking_id)}`,
+      patchPayload,
+      "return=representation"
     );
-
-    if (!upd.ok) {
-      return corsJson({ ok: false, error: "Supabase update failed", details: upd }, 502);
-    }
+    if (!upd.ok) return corsJson({ ok: false, error: "Supabase update failed (bookings)", details: upd }, 502);
 
     const row = Array.isArray(upd.data) ? upd.data[0] : upd.data;
 
-    // Build customer links if we have a token in the returned row
-    const origin = new URL(request.url).origin;
-    const token = row?.progress_token ? String(row.progress_token) : null;
+    const origin = new URL(request.url).origin; // works for prod + preview
+    const token = row.progress_token || null;
 
-    const links = token ? {
-      progress_url: `${origin}/progress?token=${encodeURIComponent(token)}`,
-      complete_url: `${origin}/complete?token=${encodeURIComponent(token)}`,
-    } : null;
+    const links = token
+      ? {
+          progress_url: `${origin}/progress?token=${encodeURIComponent(token)}`,
+          complete_url: `${origin}/complete?token=${encodeURIComponent(token)}`,
+        }
+      : null;
 
-    return corsJson({ ok: true, booking_id: bookingId, row, links });
+    return corsJson({ ok: true, row, links });
   } catch (e) {
     return corsJson({ ok: false, error: "Server error", details: String(e) }, 500);
   }
 }
 
-/* helpers */
+/* ---------------- helpers ---------------- */
 
 async function readJson(request) {
   const t = await request.text();

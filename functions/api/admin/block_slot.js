@@ -1,83 +1,94 @@
-export async function onRequestPost(context) {
-  const { request, env } = context;
+// /functions/api/admin/block_slot.js
+// REPLACE ENTIRE FILE
+//
+// POST JSON:
+// {
+//   "admin_password": "....",
+//   "blocked_date": "YYYY-MM-DD",
+//   "slot": "AM" | "PM",
+//   "reason": "optional"
+// }
+//
+// Writes to public.slot_blocks (blocked_date, slot, reason)
+// Uses UPSERT on (blocked_date,slot) so you can edit the reason without errors.
 
+export async function onRequestOptions() {
+  return new Response(null, { status: 204, headers: corsHeaders() });
+}
+
+export async function onRequestPost({ request, env }) {
   try {
-    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
-      return json({ error: "Server configuration is incomplete." }, 500);
-    }
-
-    const adminPassword = request.headers.get("x-admin-password") || "";
-    if (!env.ADMIN_PASSWORD || adminPassword !== env.ADMIN_PASSWORD) {
-      return json({ error: "Unauthorized." }, 401);
-    }
-
     const body = await request.json().catch(() => null);
-    if (!body || typeof body !== "object") {
-      return json({ error: "Invalid request body." }, 400);
+
+    const ADMIN_PASSWORD = env.ADMIN_PASSWORD;
+    if (!ADMIN_PASSWORD) return json({ ok: false, error: "Server not configured (ADMIN_PASSWORD missing)" }, 500);
+    if (!body?.admin_password || body.admin_password !== ADMIN_PASSWORD) {
+      return json({ ok: false, error: "Unauthorized" }, 401);
     }
 
     const blocked_date = String(body.blocked_date || "").trim();
     const slot = String(body.slot || "").trim().toUpperCase();
-    const reason = String(body.reason || "").trim();
+    const reason = body.reason ? String(body.reason).trim() : null;
 
-    if (!blocked_date) {
-      return json({ error: "Missing blocked_date." }, 400);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(blocked_date)) {
+      return json({ ok: false, error: "blocked_date must be YYYY-MM-DD" }, 400);
     }
-
     if (!["AM", "PM"].includes(slot)) {
-      return json({ error: "Invalid slot. Use AM or PM." }, 400);
+      return json({ ok: false, error: "slot must be AM or PM" }, 400);
     }
 
-    const headers = {
-      apikey: env.SUPABASE_SERVICE_ROLE_KEY,
-      Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
-      "Content-Type": "application/json",
-      Prefer: "return=representation,resolution=merge-duplicates"
-    };
+    const SUPABASE_URL = env.SUPABASE_URL;
+    const SERVICE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!SUPABASE_URL || !SERVICE_KEY) {
+      return json({ ok: false, error: "Server not configured (Supabase env vars missing)" }, 500);
+    }
 
-    const insertRes = await fetch(`${env.SUPABASE_URL}/rest/v1/slot_blocks`, {
+    // UPSERT: unique index on (blocked_date, slot)
+    const url = `${SUPABASE_URL}/rest/v1/slot_blocks?on_conflict=blocked_date,slot`;
+    const payload = [{ blocked_date, slot, reason }];
+
+    const res = await fetch(url, {
       method: "POST",
-      headers,
-      body: JSON.stringify([
-        {
-          blocked_date,
-          slot,
-          reason: reason || null
-        }
-      ])
+      headers: {
+        apikey: SERVICE_KEY,
+        Authorization: `Bearer ${SERVICE_KEY}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Prefer: "resolution=merge-duplicates,return=representation",
+      },
+      body: JSON.stringify(payload),
     });
 
-    if (!insertRes.ok) {
-      const text = await insertRes.text();
-      return json({ error: `Could not block slot. ${text}` }, 500);
+    const text = await res.text();
+    const data = safeJson(text);
+
+    if (!res.ok) {
+      return json({ ok: false, error: "Supabase error (slot_blocks upsert)", details: data }, 500);
     }
 
-    const rows = await insertRes.json();
-    const row = Array.isArray(rows) ? rows[0] : null;
+    const row = Array.isArray(data) ? data[0] : data;
+    return json({ ok: true, row });
 
-    return json({
-      ok: true,
-      message: "Slot blocked.",
-      slot_block: row || {
-        blocked_date,
-        slot,
-        reason: reason || null
-      }
-    });
-  } catch (err) {
-    return json(
-      { error: err && err.message ? err.message : "Unexpected server error." },
-      500
-    );
+  } catch (e) {
+    return json({ ok: false, error: "Server error", details: String(e) }, 500);
   }
 }
 
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), {
+function safeJson(text) {
+  try { return JSON.parse(text); } catch { return { raw: text }; }
+}
+
+function corsHeaders() {
+  return {
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET,POST,OPTIONS",
+    "access-control-allow-headers": "content-type,authorization",
+  };
+}
+
+function json(obj, status = 200) {
+  return new Response(JSON.stringify(obj), {
     status,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-store"
-    }
+    headers: { "content-type": "application/json", ...corsHeaders() },
   });
 }
