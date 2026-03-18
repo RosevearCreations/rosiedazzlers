@@ -1,23 +1,51 @@
+// functions/api/admin/staff_list.js
+//
+// Role-aware staff list endpoint.
+//
+// What this file does:
+// - keeps current ADMIN_PASSWORD bridge protection
+// - requires staff identity/capability through staff_users
+// - allows only admin / can_manage_staff users to load staff admin data
+// - returns staff users plus customer tiers for the admin-staff page
+//
+// Request headers supported:
+// - x-admin-password: required
+// - x-staff-email: recommended during transition
+// - x-staff-user-id: optional alternative
+
+import {
+  requireStaffAccess,
+  serviceHeaders,
+  json,
+  methodNotAllowed
+} from "../_lib/staff-auth.js";
+
+export async function onRequestOptions() {
+  return new Response("", {
+    status: 204,
+    headers: corsHeaders()
+  });
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
   try {
-    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
-      return json({ error: "Server configuration is incomplete." }, 500);
+    const body = await request.json().catch(() => ({}));
+
+    const access = await requireStaffAccess({
+      request,
+      env,
+      body,
+      capability: "manage_staff",
+      allowLegacyAdminFallback: true
+    });
+
+    if (!access.ok) {
+      return withCors(access.response);
     }
 
-    const adminPassword = request.headers.get("x-admin-password") || "";
-    if (!env.ADMIN_PASSWORD || adminPassword !== env.ADMIN_PASSWORD) {
-      return json({ error: "Unauthorized." }, 401);
-    }
-
-    await request.json().catch(() => ({}));
-
-    const headers = {
-      apikey: env.SUPABASE_SERVICE_ROLE_KEY,
-      Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
-      "Content-Type": "application/json"
-    };
+    const headers = serviceHeaders(env);
 
     const [staffRes, tiersRes] = await Promise.all([
       fetch(
@@ -38,38 +66,69 @@ export async function onRequestPost(context) {
 
     if (!staffRes.ok) {
       const text = await staffRes.text();
-      return json({ error: `Could not load staff users. ${text}` }, 500);
+      return withCors(json({ error: `Could not load staff users. ${text}` }, 500));
     }
 
     if (!tiersRes.ok) {
       const text = await tiersRes.text();
-      return json({ error: `Could not load customer tiers. ${text}` }, 500);
+      return withCors(json({ error: `Could not load customer tiers. ${text}` }, 500));
     }
 
     const [staffUsers, customerTiers] = await Promise.all([
-      staffRes.json(),
-      tiersRes.json()
+      staffRes.json().catch(() => []),
+      tiersRes.json().catch(() => [])
     ]);
 
-    return json({
-      ok: true,
-      staff_users: Array.isArray(staffUsers) ? staffUsers : [],
-      customer_tiers: Array.isArray(customerTiers) ? customerTiers : []
-    });
+    return withCors(
+      json({
+        ok: true,
+        actor: {
+          id: access.actor.id || null,
+          full_name: access.actor.full_name || null,
+          email: access.actor.email || null,
+          role_code: access.actor.role_code || null
+        },
+        staff_users: Array.isArray(staffUsers) ? staffUsers : [],
+        customer_tiers: Array.isArray(customerTiers) ? customerTiers : []
+      })
+    );
   } catch (err) {
-    return json(
-      { error: err && err.message ? err.message : "Unexpected server error." },
-      500
+    return withCors(
+      json(
+        { error: err && err.message ? err.message : "Unexpected server error." },
+        500
+      )
     );
   }
 }
 
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), {
-    status,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-store"
-    }
+export async function onRequestGet() {
+  return withCors(methodNotAllowed());
+}
+
+/* ---------------- helpers ---------------- */
+
+function corsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST,OPTIONS",
+    "Access-Control-Allow-Headers":
+      "Content-Type, x-admin-password, x-staff-email, x-staff-user-id",
+    "Cache-Control": "no-store"
+  };
+}
+
+function withCors(response) {
+  const headers = new Headers(response.headers || {});
+  const extras = corsHeaders();
+
+  for (const [key, value] of Object.entries(extras)) {
+    headers.set(key, value);
+  }
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers
   });
 }
