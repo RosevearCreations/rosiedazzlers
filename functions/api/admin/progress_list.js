@@ -1,130 +1,192 @@
+// functions/api/admin/progress_list.js
+//
+// Role-aware progress list endpoint.
+//
+// What this file does:
+// - keeps current ADMIN_PASSWORD bridge protection
+// - requires staff identity/capability through staff_users
+// - supports token-based booking lookup (preferred progress model)
+// - allows admin / booking managers to read any booking progress
+// - allows assigned detailers / senior detailers to read only bookings they can work
+// - returns job_updates for the booking in newest-first order
+//
+// Supported request body:
+// {
+//   token?: "progress-token",
+//   booking_id?: "uuid"
+// }
+//
+// Request headers supported:
+// - x-admin-password: required
+// - x-staff-email: recommended during transition
+// - x-staff-user-id: optional alternative
+
+import {
+  requireStaffAccess,
+  serviceHeaders,
+  json,
+  methodNotAllowed,
+  isUuid
+} from "../_lib/staff-auth.js";
+
+export async function onRequestOptions() {
+  return new Response("", {
+    status: 204,
+    headers: corsHeaders()
+  });
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
   try {
-    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
-      return json({ error: "Server configuration is incomplete." }, 500);
-    }
-
-    const adminPassword = request.headers.get("x-admin-password") || "";
-    if (!env.ADMIN_PASSWORD || adminPassword !== env.ADMIN_PASSWORD) {
-      return json({ error: "Unauthorized." }, 401);
-    }
-
     const body = await request.json().catch(() => null);
     if (!body || typeof body !== "object") {
-      return json({ error: "Invalid request body." }, 400);
+      return withCors(json({ error: "Invalid request body." }, 400));
     }
 
     const token = String(body.token || "").trim();
-    if (!token) {
-      return json({ error: "Missing token." }, 400);
+    const directBookingId = String(body.booking_id || "").trim();
+
+    if (!token && !directBookingId) {
+      return withCors(json({ error: "Missing token or booking_id." }, 400));
     }
 
-    const headers = {
-      apikey: env.SUPABASE_SERVICE_ROLE_KEY,
-      Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
-      "Content-Type": "application/json"
-    };
-
-    const bookingUrl =
-      `${env.SUPABASE_URL}/rest/v1/bookings` +
-      `?select=id,status,job_status,customer_name,service_date,start_slot,package_code,vehicle_size,assigned_to,progress_enabled,progress_token` +
-      `&progress_token=eq.${encodeURIComponent(token)}` +
-      `&limit=1`;
-
-    const bookingRes = await fetch(bookingUrl, { headers });
-    if (!bookingRes.ok) {
-      const text = await bookingRes.text();
-      return json({ error: `Could not load booking. ${text}` }, 500);
+    if (directBookingId && !isUuid(directBookingId)) {
+      return withCors(json({ error: "Invalid booking_id." }, 400));
     }
 
-    const bookings = await bookingRes.json();
-    const booking = Array.isArray(bookings) ? bookings[0] : null;
+    const headers = serviceHeaders(env);
 
-    if (!booking) {
-      return json({ error: "Booking not found for token." }, 404);
+    const bookingLookup = await loadBookingByTokenOrId({
+      env,
+      headers,
+      token,
+      bookingId: directBookingId
+    });
+
+    if (!bookingLookup.ok) {
+      return withCors(bookingLookup.response);
     }
 
-    const bookingId = booking.id;
+    const booking = bookingLookup.booking;
 
-    const [updatesRes, mediaRes, signoffsRes] = await Promise.all([
-      fetch(
-        `${env.SUPABASE_URL}/rest/v1/job_updates?select=id,created_at,created_by,note,visibility&booking_id=eq.${bookingId}&order=created_at.desc`,
-        { headers }
-      ),
-      fetch(
-        `${env.SUPABASE_URL}/rest/v1/job_media?select=id,created_at,created_by,kind,caption,media_url,visibility&booking_id=eq.${bookingId}&order=created_at.desc`,
-        { headers }
-      ),
-      fetch(
-        `${env.SUPABASE_URL}/rest/v1/job_signoffs?select=id,signer_type,signer_name,signer_email,notes,signed_at,user_agent&booking_id=eq.${bookingId}&order=signed_at.desc`,
-        { headers }
-      )
-    ]);
+    const access = await requireStaffAccess({
+      request,
+      env,
+      body,
+      capability: "work_booking",
+      bookingId: booking.id,
+      allowLegacyAdminFallback: true
+    });
+
+    if (!access.ok) {
+      return withCors(access.response);
+    }
+
+    const updatesRes = await fetch(
+      `${env.SUPABASE_URL}/rest/v1/job_updates` +
+        `?select=id,booking_id,created_at,created_by,note,visibility` +
+        `&booking_id=eq.${encodeURIComponent(booking.id)}` +
+        `&order=created_at.desc`,
+      { headers }
+    );
 
     if (!updatesRes.ok) {
       const text = await updatesRes.text();
-      return json({ error: `Could not load updates. ${text}` }, 500);
+      return withCors(json({ error: `Could not load progress updates. ${text}` }, 500));
     }
 
-    if (!mediaRes.ok) {
-      const text = await mediaRes.text();
-      return json({ error: `Could not load media. ${text}` }, 500);
-    }
+    const rows = await updatesRes.json().catch(() => []);
 
-    if (!signoffsRes.ok) {
-      const text = await signoffsRes.text();
-      return json({ error: `Could not load signoffs. ${text}` }, 500);
-    }
-
-    const [updates, media, signoffs] = await Promise.all([
-      updatesRes.json(),
-      mediaRes.json(),
-      signoffsRes.json()
-    ]);
-
-    const packageName = booking.package_code
-      ? booking.package_code
-          .split("_")
-          .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-          .join(" ")
-      : "";
-
-    return json({
-      ok: true,
-      booking: {
-        id: booking.id,
-        status: booking.status,
-        job_status: booking.job_status,
-        customer_name: booking.customer_name,
-        service_date: booking.service_date,
-        start_slot: booking.start_slot,
-        package_code: booking.package_code,
-        package_name: packageName,
-        vehicle_size: booking.vehicle_size,
-        assigned_to: booking.assigned_to,
-        progress_enabled: booking.progress_enabled,
-        progress_token: booking.progress_token
-      },
-      updates: Array.isArray(updates) ? updates : [],
-      media: Array.isArray(media) ? media : [],
-      signoffs: Array.isArray(signoffs) ? signoffs : []
-    });
+    return withCors(
+      json({
+        ok: true,
+        booking: {
+          id: booking.id,
+          progress_enabled: booking.progress_enabled,
+          progress_token: booking.progress_token || null
+        },
+        updates: Array.isArray(rows) ? rows : []
+      })
+    );
   } catch (err) {
-    return json(
-      { error: err && err.message ? err.message : "Unexpected server error." },
-      500
+    return withCors(
+      json(
+        {
+          error: err && err.message ? err.message : "Unexpected server error."
+        },
+        500
+      )
     );
   }
 }
 
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), {
-    status,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-store"
-    }
+export async function onRequestGet() {
+  return withCors(methodNotAllowed());
+}
+
+/* ---------------- helpers ---------------- */
+
+function corsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST,OPTIONS",
+    "Access-Control-Allow-Headers":
+      "Content-Type, x-admin-password, x-staff-email, x-staff-user-id",
+    "Cache-Control": "no-store"
+  };
+}
+
+function withCors(response) {
+  const headers = new Headers(response.headers || {});
+  const extras = corsHeaders();
+
+  for (const [key, value] of Object.entries(extras)) {
+    headers.set(key, value);
+  }
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers
   });
+}
+
+async function loadBookingByTokenOrId({ env, headers, token, bookingId }) {
+  let url =
+    `${env.SUPABASE_URL}/rest/v1/bookings` +
+    `?select=id,progress_enabled,progress_token,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,status,job_status` +
+    `&limit=1`;
+
+  if (bookingId) {
+    url += `&id=eq.${encodeURIComponent(bookingId)}`;
+  } else {
+    url += `&progress_token=eq.${encodeURIComponent(token)}`;
+  }
+
+  const res = await fetch(url, { headers });
+
+  if (!res.ok) {
+    const text = await res.text();
+    return {
+      ok: false,
+      response: json({ error: `Could not load booking. ${text}` }, 500)
+    };
+  }
+
+  const rows = await res.json().catch(() => []);
+  const booking = Array.isArray(rows) ? rows[0] || null : null;
+
+  if (!booking) {
+    return {
+      ok: false,
+      response: json(
+        { error: bookingId ? "Booking not found." : "Booking not found for token." },
+        404
+      )
+    };
+  }
+
+  return { ok: true, booking };
 }
