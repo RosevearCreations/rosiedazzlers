@@ -1,77 +1,132 @@
-// /functions/api/admin/promo_list.js
-// REPLACE ENTIRE FILE
+// functions/api/admin/promos_list.js
 //
-// Lists promo codes (admin).
+// Role-aware promo list endpoint.
 //
-// POST JSON:
+// What this file does:
+// - keeps current ADMIN_PASSWORD bridge protection
+// - requires manage_promos capability
+// - returns promo codes for the admin promos page
+// - supports optional active-only filtering
+//
+// Supported request body:
 // {
-//   "admin_password": "...."
+//   active_only?: true
 // }
+//
+// Request headers supported:
+// - x-admin-password: required
+// - x-staff-email: recommended during transition
+// - x-staff-user-id: optional alternative
+
+import {
+  requireStaffAccess,
+  serviceHeaders,
+  json,
+  methodNotAllowed,
+  toBoolean
+} from "../_lib/staff-auth.js";
 
 export async function onRequestOptions() {
-  return new Response(null, { status: 204, headers: corsHeaders() });
+  return new Response("", {
+    status: 204,
+    headers: corsHeaders()
+  });
 }
 
-export async function onRequestPost({ request, env }) {
+export async function onRequestPost(context) {
+  const { request, env } = context;
+
   try {
-    const body = await request.json().catch(() => null);
+    const body = await request.json().catch(() => ({}));
 
-    // --- Auth ---
-    const ADMIN_PASSWORD = env.ADMIN_PASSWORD;
-    if (!ADMIN_PASSWORD) return json({ ok: false, error: "Server not configured (ADMIN_PASSWORD missing)" }, 500);
-    if (!body?.admin_password || body.admin_password !== ADMIN_PASSWORD) {
-      return json({ ok: false, error: "Unauthorized" }, 401);
-    }
-
-    // --- Supabase config ---
-    const SUPABASE_URL = env.SUPABASE_URL;
-    const SERVICE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
-    if (!SUPABASE_URL || !SERVICE_KEY) {
-      return json({ ok: false, error: "Server not configured (Supabase env vars missing)" }, 500);
-    }
-
-    const url =
-      `${SUPABASE_URL}/rest/v1/promo_codes?select=*` +
-      `&order=created_at.desc`;
-
-    const res = await fetch(url, {
-      method: "GET",
-      headers: {
-        apikey: SERVICE_KEY,
-        Authorization: `Bearer ${SERVICE_KEY}`,
-        Accept: "application/json",
-      },
+    const access = await requireStaffAccess({
+      request,
+      env,
+      body,
+      capability: "manage_promos",
+      allowLegacyAdminFallback: true
     });
 
-    const text = await res.text();
-    const data = safeJson(text);
-
-    if (!res.ok) {
-      return json({ ok: false, error: "Supabase error (promo_codes list)", details: data }, 502);
+    if (!access.ok) {
+      return withCors(access.response);
     }
 
-    return json({ ok: true, rows: Array.isArray(data) ? data : [] });
+    const activeOnly = body.active_only === undefined ? false : toBoolean(body.active_only);
+    const headers = serviceHeaders(env);
 
-  } catch (e) {
-    return json({ ok: false, error: "Server error", details: String(e) }, 500);
+    let url =
+      `${env.SUPABASE_URL}/rest/v1/promo_codes` +
+      `?select=id,created_at,updated_at,code,label,description,discount_type,discount_value,` +
+      `minimum_subtotal,is_active,starts_at,ends_at,max_uses,total_uses,applies_to,notes` +
+      `&order=created_at.desc`;
+
+    if (activeOnly) {
+      url += `&is_active=eq.true`;
+    }
+
+    const res = await fetch(url, { headers });
+
+    if (!res.ok) {
+      const text = await res.text();
+      return withCors(json({ error: `Could not load promo codes. ${text}` }, 500));
+    }
+
+    const rows = await res.json().catch(() => []);
+
+    return withCors(
+      json({
+        ok: true,
+        actor: {
+          id: access.actor.id || null,
+          full_name: access.actor.full_name || null,
+          email: access.actor.email || null,
+          role_code: access.actor.role_code || null
+        },
+        filters: {
+          active_only: activeOnly
+        },
+        promo_codes: Array.isArray(rows) ? rows : []
+      })
+    );
+  } catch (err) {
+    return withCors(
+      json(
+        {
+          error: err && err.message ? err.message : "Unexpected server error."
+        },
+        500
+      )
+    );
   }
 }
 
-function safeJson(text) {
-  try { return JSON.parse(text); } catch { return { raw: text }; }
+export async function onRequestGet() {
+  return withCors(methodNotAllowed());
 }
+
+/* ---------------- helpers ---------------- */
 
 function corsHeaders() {
   return {
-    "access-control-allow-origin": "*",
-    "access-control-allow-methods": "POST,OPTIONS",
-    "access-control-allow-headers": "content-type,authorization",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST,OPTIONS",
+    "Access-Control-Allow-Headers":
+      "Content-Type, x-admin-password, x-staff-email, x-staff-user-id",
+    "Cache-Control": "no-store"
   };
 }
 
-function json(obj, status = 200) {
-  return new Response(JSON.stringify(obj), {
-    status,
-    headers: { "content-type": "application/json", ...corsHeaders() },
+function withCors(response) {
+  const headers = new Headers(response.headers || {});
+  const extras = corsHeaders();
+
+  for (const [key, value] of Object.entries(extras)) {
+    headers.set(key, value);
+  }
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers
   });
 }
