@@ -24,6 +24,10 @@
         <a href="/admin-booking.html">Bookings</a>
         <a href="/admin-blocks.html">Blocks</a>
         <a href="/admin-progress.html">Progress</a>
+        <a href="/admin-jobsite.html">Job Site</a>
+        <a href="/admin-live.html">Live Monitor</a>
+        <a href="/admin-staff.html">Staff</a>
+        <a href="/admin-customers.html">Customers</a>
         <a href="/admin-promos.html">Promos</a>
         <a href="/book">Public Site</a>
       </nav>
@@ -42,7 +46,7 @@
         <div>
           <div class="badge">Admin Bookings</div>
           <h1>Manage bookings and assignments</h1>
-          <p>Review bookings, update status, assign staff, and copy the progress token for the customer progress workflow.</p>
+          <p>Review bookings, update status, assign staff, and link bookings to customer profiles.</p>
         </div>
         <div class="panel">
           <div class="kicker">Loaded booking</div>
@@ -134,6 +138,27 @@
         </div>
       </div>
     </section>
+
+    <section class="section">
+      <div class="panel">
+        <h2>Link customer profile</h2>
+        <form id="customerLinkForm" class="form">
+          <label>
+            Customer profile
+            <select id="customerProfileSelect" disabled>
+              <option value="">-- no customer profile linked --</option>
+            </select>
+          </label>
+
+          <div class="kicker" id="customerLinkMeta">Load bookings first.</div>
+
+          <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
+            <button id="linkCustomerBtn" class="btn primary" type="submit" disabled>Save customer link</button>
+            <button id="clearCustomerBtn" class="btn ghost" type="button" disabled>Clear customer link</button>
+          </div>
+        </form>
+      </div>
+    </section>
   </main>
 
   <footer class="footer container" data-footer></footer>
@@ -144,6 +169,7 @@
 
     let currentBooking = null;
     let allBookings = [];
+    let allCustomerProfiles = [];
 
     function escapeHtml(value) {
       return String(value ?? "")
@@ -166,56 +192,112 @@
       el.textContent = message;
     }
 
-    async function loadBookings(password) {
-      const res = await fetch("/api/admin/bookings", {
+    async function apiPost(url, password, body) {
+      const res = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "x-admin-password": password
         },
-        body: JSON.stringify({})
+        body: JSON.stringify(body || {})
       });
 
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Could not load bookings.");
+      if (!res.ok) throw new Error(data.error || `Request failed for ${url}`);
       return data;
+    }
+
+    async function loadBookings(password) {
+      return apiPost("/api/admin/bookings", password, {});
+    }
+
+    async function loadCustomerProfiles(password) {
+      return apiPost("/api/admin/customer_profiles_list", password, {});
     }
 
     async function updateBookingStatus(password, bookingId, status, jobStatus) {
-      const res = await fetch("/api/admin/bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": password
-        },
-        body: JSON.stringify({
-          booking_id: bookingId,
-          status,
-          job_status: jobStatus || null
-        })
+      return apiPost("/api/admin/bookings", password, {
+        booking_id: bookingId,
+        status,
+        job_status: jobStatus || null
       });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Could not update booking status.");
-      return data;
     }
 
     async function assignBooking(password, bookingId, assignedTo) {
-      const res = await fetch("/api/admin/assign_booking", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": password
-        },
-        body: JSON.stringify({
-          booking_id: bookingId,
-          assigned_to: assignedTo
-        })
+      return apiPost("/api/admin/assign_booking", password, {
+        booking_id: bookingId,
+        assigned_to: assignedTo
       });
+    }
 
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Could not assign booking.");
-      return data;
+    async function linkBookingCustomer(password, bookingId, customerProfileId) {
+      return apiPost("/api/admin/booking_customer_link", password, {
+        booking_id: bookingId,
+        customer_profile_id: customerProfileId || null
+      });
+    }
+
+    function selectedCustomerProfile() {
+      if (!currentBooking?.customer_profile_id) return null;
+      return allCustomerProfiles.find((p) => p.id === currentBooking.customer_profile_id) || null;
+    }
+
+    function populateCustomerSelect() {
+      const select = document.querySelector("#customerProfileSelect");
+      if (!select) return;
+
+      const options = [`<option value="">-- no customer profile linked --</option>`]
+        .concat(
+          allCustomerProfiles.map((profile) => {
+            const label = [
+              profile.full_name || "(no name)",
+              profile.email || "",
+              profile.tier_code || "random"
+            ].filter(Boolean).join(" · ");
+
+            return `<option value="${escapeHtml(profile.id)}">${escapeHtml(label)}</option>`;
+          })
+        );
+
+      select.innerHTML = options.join("");
+      select.disabled = !currentBooking;
+
+      if (currentBooking?.customer_profile_id) {
+        select.value = currentBooking.customer_profile_id;
+      } else {
+        select.value = "";
+      }
+    }
+
+    function renderSelectedCustomerLink() {
+      const meta = document.querySelector("#customerLinkMeta");
+      const linkBtn = document.querySelector("#linkCustomerBtn");
+      const clearBtn = document.querySelector("#clearCustomerBtn");
+
+      if (!currentBooking) {
+        meta.textContent = "Choose a booking first.";
+        linkBtn.disabled = true;
+        clearBtn.disabled = true;
+        return;
+      }
+
+      const profile = selectedCustomerProfile();
+
+      if (!profile) {
+        meta.innerHTML = `
+          <div><strong>Current link:</strong> none</div>
+          <div><strong>Booking tier:</strong> ${escapeHtml(currentBooking.customer_tier_code || "—")}</div>
+        `;
+      } else {
+        meta.innerHTML = `
+          <div><strong>Current link:</strong> ${escapeHtml(profile.full_name || profile.email || "Customer")}</div>
+          <div><strong>Email:</strong> ${escapeHtml(profile.email || "—")}</div>
+          <div><strong>Tier:</strong> ${escapeHtml(profile.tier_code || "random")}</div>
+        `;
+      }
+
+      linkBtn.disabled = false;
+      clearBtn.disabled = false;
     }
 
     function renderSelectedBooking() {
@@ -232,6 +314,8 @@
         tools.textContent = "Choose a booking to view tools.";
         statusBtn.disabled = true;
         assignBtn.disabled = true;
+        populateCustomerSelect();
+        renderSelectedCustomerLink();
         return;
       }
 
@@ -250,6 +334,7 @@
       tools.innerHTML = `
         <div><strong>Booking ID:</strong> ${escapeHtml(currentBooking.id || "")}</div>
         <div><strong>Assigned To:</strong> ${escapeHtml(currentBooking.assigned_to || "—")}</div>
+        <div><strong>Customer Tier:</strong> ${escapeHtml(currentBooking.customer_tier_code || "—")}</div>
         <div><strong>Progress Token:</strong> ${escapeHtml(currentBooking.progress_token || "—")}</div>
         ${currentBooking.progress_token ? `<div style="margin-top:8px;word-break:break-all"><a href="${progressLink}" target="_blank" rel="noopener">Open customer progress page</a></div>` : ""}
       `;
@@ -260,6 +345,9 @@
 
       statusBtn.disabled = false;
       assignBtn.disabled = false;
+
+      populateCustomerSelect();
+      renderSelectedCustomerLink();
     }
 
     function renderBookingsList() {
@@ -277,7 +365,7 @@
           <h3>${escapeHtml(booking.customer_name || "Unknown customer")}</h3>
           <p>${escapeHtml(booking.package_code || "—")} · ${escapeHtml(booking.vehicle_size || "—")}</p>
           <div class="kicker">Status: ${escapeHtml(booking.status || "pending")} · Job: ${escapeHtml(booking.job_status || "—")}</div>
-          <div class="kicker">Assigned: ${escapeHtml(booking.assigned_to || "—")}</div>
+          <div class="kicker">Assigned: ${escapeHtml(booking.assigned_to || "—")} · Tier: ${escapeHtml(booking.customer_tier_code || "—")}</div>
           <div class="hr"></div>
           <button class="btn primary" type="button" data-booking-id="${escapeHtml(booking.id)}">Select booking</button>
         </article>
@@ -292,11 +380,17 @@
       });
     }
 
-    async function refreshBookings() {
+    async function refreshData() {
       const password = document.querySelector("#adminPassword").value.trim();
-      const data = await loadBookings(password);
 
-      allBookings = Array.isArray(data.bookings) ? data.bookings : [];
+      const [bookingData, customerData] = await Promise.all([
+        loadBookings(password),
+        loadCustomerProfiles(password)
+      ]);
+
+      allBookings = Array.isArray(bookingData.bookings) ? bookingData.bookings : [];
+      allCustomerProfiles = Array.isArray(customerData.customer_profiles) ? customerData.customer_profiles : [];
+
       renderBookingsList();
 
       if (currentBooking?.id) {
@@ -306,7 +400,7 @@
       renderSelectedBooking();
     }
 
-    async function boot() {
+    document.addEventListener("DOMContentLoaded", () => {
       setBrandImages();
       setFooter();
 
@@ -320,8 +414,8 @@
         }
 
         try {
-          setNotice("Loading bookings…");
-          await refreshBookings();
+          setNotice("Loading bookings and customer profiles…");
+          await refreshData();
           setNotice("Bookings loaded.", "ok");
         } catch (err) {
           setNotice(err.message || "Could not load bookings.", "bad");
@@ -350,7 +444,7 @@
             document.querySelector("#bookingStatus").value,
             document.querySelector("#jobStatus").value
           );
-          await refreshBookings();
+          await refreshData();
           setNotice("Booking status updated.", "ok");
         } catch (err) {
           setNotice(err.message || "Could not update booking status.", "bad");
@@ -378,15 +472,63 @@
             currentBooking.id,
             document.querySelector("#assignedTo").value.trim()
           );
-          await refreshBookings();
+          await refreshData();
           setNotice("Booking assignment updated.", "ok");
         } catch (err) {
           setNotice(err.message || "Could not update assignment.", "bad");
         }
       });
-    }
 
-    document.addEventListener("DOMContentLoaded", boot);
+      document.querySelector("#customerLinkForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const password = document.querySelector("#adminPassword").value.trim();
+        if (!password) {
+          setNotice("Admin password is required.", "bad");
+          return;
+        }
+
+        if (!currentBooking?.id) {
+          setNotice("Choose a booking first.", "bad");
+          return;
+        }
+
+        try {
+          setNotice("Saving customer link…");
+          await linkBookingCustomer(
+            password,
+            currentBooking.id,
+            document.querySelector("#customerProfileSelect").value
+          );
+          await refreshData();
+          setNotice("Booking customer link updated.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not link booking to customer.", "bad");
+        }
+      });
+
+      document.querySelector("#clearCustomerBtn").addEventListener("click", async () => {
+        const password = document.querySelector("#adminPassword").value.trim();
+        if (!password) {
+          setNotice("Admin password is required.", "bad");
+          return;
+        }
+
+        if (!currentBooking?.id) {
+          setNotice("Choose a booking first.", "bad");
+          return;
+        }
+
+        try {
+          setNotice("Clearing customer link…");
+          await linkBookingCustomer(password, currentBooking.id, null);
+          await refreshData();
+          setNotice("Booking customer link cleared.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not clear customer link.", "bad");
+        }
+      });
+    });
   </script>
 </body>
 </html>
