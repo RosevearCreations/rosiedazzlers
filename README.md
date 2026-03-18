@@ -1,186 +1,111 @@
-<!-- README.md -->
-
 # Rosie Dazzlers — Mobile Auto Detailing
-Cloudflare Pages + Supabase + Stripe booking system
 
-Modern static website with a serverless backend used by
-Rosie Dazzlers Mobile Auto Detailing (Norfolk & Oxford Counties).
+Modern static site + serverless backend for Rosie Dazzlers (Norfolk & Oxford Counties).
 
----
+## Stack
+- Cloudflare Pages (static hosting + Functions backend)
+- Cloudflare R2 (public image hosting)
+- Supabase (Postgres database)
+- Stripe (deposits + gift certificate checkout)
 
-# System Architecture
+## Main site
+- `/` — home
+- `/services` — services
+- `/pricing` — pricing
+- `/book` — booking form
+- `/gifts` — gift certificates
+- `/gear` — gear catalog
+- `/consumables` — consumables catalog
+- `/progress` — customer progress page (token-based)
 
-Browser  
-↓  
-Cloudflare Pages (static site)  
-↓  
-Pages Functions (`/functions/api`)  
-↓  
-Supabase Database  
-↓  
-Stripe Payments  
-↓  
-Cloudflare R2 (images/assets)
+## Admin area
+Clean admin routes are available through redirects:
+- `/admin`
+- `/admin-booking`
+- `/admin-blocks`
+- `/admin-progress`
+- `/admin-jobsite`
+- `/admin-live`
+- `/admin-staff`
+- `/admin-customers`
+- `/admin-promos`
 
----
+## Core backend areas
+### Booking
+- `GET /api/availability?date=YYYY-MM-DD`
+- `POST /api/checkout`
+- `POST /api/stripe/webhook`
 
-# Stack
+### Gifts
+- `POST /api/gifts/checkout`
+- `POST /api/gifts/webhook`
+- `POST /api/gifts/receipt`
 
-- Cloudflare Pages — static hosting + serverless backend
-- Cloudflare R2 — public image hosting
-- Supabase (Postgres) — database
-- Stripe — booking deposits and gift certificate checkout
+### Progress
+- `GET /api/progress/view?token=...`
+- `POST /api/progress/signoff`
+- `POST /api/admin/progress_enable`
+- `POST /api/admin/progress_post`
+- `POST /api/admin/progress_media_post`
+- `POST /api/admin/progress_list`
 
----
+### Jobsite / live ops
+- `POST /api/admin/jobsite_intake_get`
+- `POST /api/admin/jobsite_intake_save`
+- `POST /api/admin/job_time_entry_post`
+- `POST /api/admin/job_time_entries_get`
+- `POST /api/admin/job_time_summary_get`
 
-# Local Repo Structure
+### Admin operations
+- `POST /api/admin/bookings`
+- `POST /api/admin/assign_booking`
+- `POST /api/admin/booking_customer_link`
+- `POST /api/admin/blocks`
+- `POST /api/admin/block_date`
+- `POST /api/admin/unblock_date`
+- `POST /api/admin/block_slot`
+- `POST /api/admin/unblock_slot`
+- `POST /api/admin/staff_list`
+- `POST /api/admin/staff_save`
+- `POST /api/admin/customer_profiles_list`
+- `POST /api/admin/customer_profiles_save`
 
-- `/*.html` — site pages
-- `/assets/*` — shared CSS/JS (theme + nav/footer + helpers)
-- `/data/*` — JSON data powering services, pricing, gear, consumables
-- `/functions/api/*` — backend endpoints (Cloudflare Pages Functions)
-
----
-
-# Key Pages
-
-- Home: `/`
-- Services: `/services` (choose canonical: `services.html` OR `services/index.html`)
-- Pricing: `/pricing` (choose canonical: `pricing.html` OR `pricing/index.html`)
-- Booking: `/book`
-- Gifts: `/gifts`
-- Gear: `/gear`
-- Consumables: `/consumables`
-- Admin: `/admin`
-
----
-
-# Canonical Route Note
-
-Currently both exist:
-
-services.html  
-services/index.html  
-
-pricing.html  
-pricing/index.html  
-
-Choose **one canonical routing pattern** and remove the duplicate
-version to avoid redirect or routing ambiguity.
-
-Recommended: folder routes (`/services/index.html`).
-
----
-
-# API Endpoints
-
-## Booking
-
-GET `/api/availability?date=YYYY-MM-DD`  
-POST `/api/checkout`
-
-Creates a Stripe checkout session for booking deposits.
-
----
-
-## Stripe Booking Webhook
-
-POST `/api/stripe/webhook`
-
-Confirms deposit payments and updates booking status.
-
----
-
-## Gift Certificates
-
-POST `/api/gifts/checkout`  
-POST `/api/gifts/webhook`  
-POST `/api/gifts/receipt`
-
-Handles gift certificate purchases and code retrieval.
-
----
-
-## Admin API
-
-POST `/api/admin/bookings`  
-POST `/api/admin/block_date`  
-POST `/api/admin/unblock_date`  
-POST `/api/admin/block_slot`  
-POST `/api/admin/unblock_slot`  
-POST `/api/admin/progress_post`  
-POST `/api/admin/progress_list`  
-POST `/api/admin/assign_booking`  
-POST `/api/admin/promo_create`  
-POST `/api/admin/promo_list`  
-POST `/api/admin/promo_disable`
-
-Admin endpoints require the `ADMIN_PASSWORD`.
-
----
-
-# Environment Variables (Cloudflare Pages)
-
+## Environment variables
 Required:
-
-SUPABASE_URL  
-SUPABASE_SERVICE_ROLE_KEY  
-ADMIN_PASSWORD  
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `ADMIN_PASSWORD`
 
 Stripe:
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `STRIPE_WEBHOOK_SECRET_GIFTS`
 
-STRIPE_SECRET_KEY  
-STRIPE_WEBHOOK_SECRET  
-STRIPE_WEBHOOK_SECRET_GIFTS  
+## Assets
+R2 custom domain:
+- `https://assets.rosiedazzlers.ca`
 
-Preview environments use Stripe **TEST** keys.  
-Production uses Stripe **LIVE** keys.
+Folders:
+- `brand/`
+- `packages/`
+- `products/`
+- `systems/`
 
----
+## Database
+See `SUPABASE_SCHEMA.sql`.
 
-# R2 Assets
+Recent schema additions include:
+- token-based progress fields on `bookings`
+- `job_updates`, `job_media`, `job_signoffs`
+- `jobsite_intake`
+- `staff_users`
+- `customer_tiers`
+- `customer_profiles`
+- `staff_override_log`
+- `job_time_entries`
 
-The site expects an R2 custom domain:
-
-https://assets.rosiedazzlers.ca
-
-Folder layout used in code:
-
-brand/  
-packages/  
-products/  
-systems/  
-
-Example:
-
-https://assets.rosiedazzlers.ca/packages/Exterior Detail.png
-
----
-
-# Database
-
-Database schema is defined in:
-
-SUPABASE_SCHEMA.sql
-
-This file contains **create/repair SQL statements** for all tables
-used by the application.
-
----
-
-# Repo Documentation
-
-Additional documentation included in the repository:
-
-SANITY_CHECK.md — project status and development priorities  
-REPO_GUIDE.md — repository structure and file map  
-SUPABASE_SCHEMA.sql — database schema and repair script  
-
----
-
-# Notes
-
-- Booking capacity uses **AM / PM half-day slots**.
-- A full-day booking uses **both slots**.
-- Customers must confirm driveway access, power, and water during booking.
-- Gift certificates are valid for **1 year** and are non-refundable.
+## Notes
+- Booking capacity is AM/PM slot based.
+- Customers must acknowledge driveway, power, water, bylaw, and cancellation rules.
+- Token-based progress is now the preferred customer progress path.
+- Shared admin-password pages still exist now, but the project is moving toward role-based staff access.

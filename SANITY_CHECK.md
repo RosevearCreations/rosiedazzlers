@@ -1,184 +1,107 @@
-<!-- SANITY_CHECK.md -->
+# Rosie Dazzlers — Sanity / Health Check (updated March 2026)
 
-# Rosie Dazzlers — Sanity / Health Check (as of March 2026)
+## What is working / built
 
-## What we’ve accomplished (working pieces)
+### 1) Shared site framework
+- `assets/site.css` provides theme/layout
+- `assets/chrome.js` handles shared nav/footer/banner/reviews behavior
+- `assets/site.js` drives services/pricing/booking/catalog pages
 
-### 1) Modern static site + shared theme
-- Standardized styling across pages via: `assets/site.css` (theme variables in `:root`).
-- Shared navigation + footer logic via: `assets/chrome.js` (includes socials + footer logo).
+### 2) R2 asset hosting
+- Brand, package, product, and system images are served from `https://assets.rosiedazzlers.ca`
+- Banner and review image issues were corrected without changing live asset names
 
-### 2) R2 asset hosting (images, charts, packages)
-- R2 custom domain pattern is in use:
-  - `https://assets.rosiedazzlers.ca/brand/...`
-  - `https://assets.rosiedazzlers.ca/packages/...`
-  - `https://assets.rosiedazzlers.ca/products/...`
-  - `https://assets.rosiedazzlers.ca/systems/...`
-- Brand assets and package images are wired into the site through:
-  - `assets/config.js`
-  - `assets/site.js`
-  - `data/rosie_services_pricing_and_packages.json`
+### 3) Booking + deposit flow
+- Booking form posts to `functions/api/checkout.js`
+- Availability checks read from `date_blocks` and `slot_blocks`
+- Stripe webhook confirms deposit flow
 
-### 3) Booking + deposits (Stripe + Supabase)
-- Booking endpoint (deposit checkout session):
-  - `functions/api/checkout.js`
-- Availability endpoint (reads date blocks, slot blocks, bookings):
-  - `functions/api/availability.js`
-- Stripe booking webhook confirms deposits:
-  - `functions/api/stripe/webhook.js`
-- Admin tooling (basic):
-  - bookings list / status changes: `functions/api/admin/bookings.js`
-  - date/slot block add/remove: `functions/api/admin/block_date.js`, `block_slot.js`, `unblock_*`
-  - UI pages: `admin.html`, `admin-booking.html`, `admin-blocks.html`
+### 4) Gift certificate flow
+- Separate gift checkout + webhook + receipt endpoints exist
+- Gift system is still separate from full booking redemption logic
 
-### 4) Gift certificates system (separate from booking)
-- Gift cart + checkout:
-  - `functions/api/gifts/checkout.js`
-- Gift webhook issues certificates in Supabase:
-  - `functions/api/gifts/webhook.js`
-- Receipt lookup:
-  - `functions/api/gifts/receipt.js`
-- Gift UI page:
-  - `gifts.html`
+### 5) Token-based progress system
+- Customer progress page: `progress.html`
+- Customer read endpoint: `functions/api/progress/view.js`
+- Customer signoff endpoint: `functions/api/progress/signoff.js`
+- Admin progress enable/post/list/media endpoints exist
+- Customer progress link can now be enabled and shared from admin
 
-### 5) Product + gear listing pages (JSON-driven)
-- Data lives in `/data/*.json` and pages render lists:
-  - `consumables.html` (already working well)
-  - `gear.html` (now loading images/names; amazon links still need alignment)
+### 6) Admin pages now present
+- `admin.html`
+- `admin-booking.html`
+- `admin-blocks.html`
+- `admin-progress.html`
+- `admin-jobsite.html`
+- `admin-live.html`
+- `admin-staff.html`
+- `admin-customers.html`
+- `admin-promos.html`
 
-### 6) Admin “progress updates” (field updates)
-- Admin pages + endpoints to post progress notes/photos:
-  - `admin-progress.html`, `admin-upload.html`
-  - `functions/api/admin/progress_post.js`
-  - `functions/api/admin/progress_list.js`
-  - public viewer: `progress.html` + `functions/api/progress_list_public.js`
-- Supabase table expected:
-  - `progress_updates`
+### 7) Jobsite intake foundation
+- Pre-inspection intake UI created
+- Intake save/load endpoints created
+- `jobsite_intake` table added
+- Supports pre-existing damage notes, valuables notes, owner acknowledgement, garbage/debris notes, and pre-job checklist
 
-### 7) Promo codes (discounts separate from gifts)
-- Admin promo UI + endpoints:
-  - `admin-promos.html`
-  - `functions/api/admin/promo_create.js`, `promo_list.js`, `promo_disable.js`
-- Table expected:
-  - `promo_codes`
-- Booking checkout supports optional `promo_code`:
-  - `functions/api/checkout.js` (latest version)
+### 8) Time tracking foundation
+- `job_time_entries` table added
+- Time entry post/get/summary endpoints created
+- Jobsite page can now record arrival, work start, breaks, weather pauses, and stop events
+- Live monitor page can summarize tracked work and pause time
 
----
+### 9) Live admin monitoring foundation
+- `admin-live.html` created
+- Can auto-refresh booking, intake, time summary, progress notes, media, and signoffs
 
-## Current “must-fix” issues (highest priority)
+### 10) Access/security foundation
+- `staff_users` table added
+- `customer_tiers` and `customer_profiles` added
+- `staff_override_log` added
+- Staff admin endpoints/pages exist
+- Customer profile/tier endpoints/pages exist
+- Booking can now be linked to a customer profile and inherit a tier
 
-### A) Duplicate routes / redirect risk
-You currently have BOTH:
-- `services.html` AND `services/index.html`
-- `pricing.html` AND `pricing/index.html`
+## Highest-priority remaining issues
 
-Depending on Cloudflare Pages “pretty URLs” behavior, this can cause:
-- route ambiguity
-- occasional redirect loops
+### A) Canonical route cleanup
+You still need to fully choose one structure for services/pricing.
 
-**Must-have decision:** choose ONE canonical approach:
-- Either “folder routes”: `/services/index.html` and remove `services.html`
-- OR “root pages”: keep `services.html` and remove `services/index.html`
+### B) Add-on unification
+Add-ons still need one true source of truth shared by frontend and checkout logic.
 
-Then add a redirect rule to enforce one canonical URL.
+### C) Gift redemption completion
+Gift purchase works, but booking-time redemption still needs full implementation.
 
-### B) Hover carousel media mismatches (blank hover cards)
-`assets/site.js` currently references hover images with filenames that **don’t match** your real R2 objects:
-- It uses: `.../packages/Exteriordetail.png`, `Interiordetail.png`, `carsizechart.png`
-- Your actual objects are like: `Exterior Detail.png`, `Interior Detail.png`, and the size chart is `CarSizeChart.PNG` (often in `brand/`)
+### D) Security is documented but not fully enforced
+Shared admin password still gates most admin actions.
+Role-based enforcement for Admin vs Senior Detailer vs Detailer is the next major security step.
 
-This will create the “blank hover” issue (404 images).
+### E) Direct mobile upload flow
+Progress media currently supports URL posting. Direct signed uploads are still a next-phase feature.
 
-### C) Add-ons mismatch: frontend vs backend
-- `assets/config.js` contains ADDONS like `engine_bay`, `pet_hair`, `odor_treatment`
-- `functions/api/checkout.js` contains a different set of add-ons (the detailed ones)
+## MVP status
+### Customer-side MVP
+Mostly present:
+- services/pricing/booking/gifts working
+- progress viewing + signoff present
 
-**Must-have:** unify the add-on keys + prices between:
-- front-end config / JSON
-- backend checkout logic
+### Admin-side MVP
+Now much stronger:
+- booking ops present
+- block ops present
+- progress ops present
+- jobsite intake foundation present
+- live monitor present
+- staff/customer admin present
 
-### D) Booking availability error (slot_blocks / schema drift)
-You recently fixed some schema errors; however, the codebase still contains multiple variants of block endpoints (`admin/blocks.js` vs `admin/block_*`).
-**Must-have:** keep ONE system and remove/ignore the other to reduce confusion.
+## Next practical priorities
+1. Enforce role-aware API access
+2. Link jobsite/staff actions to real staff users instead of just names
+3. Complete gift redemption on booking
+4. Unify add-on pricing/config
+5. Add direct photo upload from phone
+6. Add actual live detailer-safe login/session flow
 
----
-
-## “Must haves” to be considered complete (MVP definition)
-
-### Customer side MVP
-- Services page correct (images + included service matrix + add-ons)
-- Pricing page correct (prices must match your 2025 chart)
-- Booking page:
-  - availability works
-  - vehicle info required (year/make/model)
-  - deposit checkout works
-  - confirmation/return flow clear
-- Gift certificates:
-  - buy gift (service or dollar amount)
-  - receipt page returns the code
-  - customer can redeem on booking
-
-### Admin side MVP
-- Block dates and slots (AM/PM)
-- View bookings list + set status (pending/confirmed/cancelled/completed)
-- Assign staff name to booking (simple `assigned_to`)
-- Progress updates:
-  - admin can post notes/photos
-  - customer can view link
-
----
-
-## Wishlist (next wave features)
-
-### 1) Proper customer accounts + vehicle profiles
-- Supabase Auth:
-  - create account / login
-  - store customer profile
-- Vehicle table:
-  - year/make/model/plate/mileage
-  - photos interior/exterior
-- Booking references customer + vehicle record
-
-### 2) Direct photo upload from the field
-- Best approach:
-  - signed upload URLs (Supabase Storage or R2 signed URLs)
-  - upload directly from phone browser
-  - auto-create a “progress update” with uploaded media reference
-
-### 3) Completion sign-off workflow
-- Customer view: “sign off” (typed signature)
-- Store signoff record:
-  - name, email, timestamp, user agent
-- Optional: draw signature (canvas) later
-
-### 4) Staff assignment + permissions
-- Staff accounts
-- Restrict admin endpoints (no single shared admin password)
-
-### 5) Admin calendar / capacity view
-- Visual schedule: “today + next 30 days”
-- One-car-per-day logic + half-day slot rules
-- Time-off blocks + travel-day blocks
-
----
-
-## What’s left to do (practical next steps in order)
-
-1) **Choose canonical routes** (services/pricing) and remove the duplicate pages causing route ambiguity.
-2) **Fix `assets/site.js` hover media** to point to the real filenames and correct folders.
-3) **Unify add-ons** (front-end selection + backend pricing + images).
-4) **Confirm booking schema + block schema** and remove duplicate admin endpoints.
-5) **Harden gift certificate redemption flow** so booking can accept a gift code and reduce remaining total.
-6) **Add one “Admin dashboard page” link list** to everything admin (blocks, bookings, promos, progress, assign).
-7) **Implement customer signoff UI** (you already have `/api/progress/signoff` scaffolded).
-
----
-
-## Repo health notes
-- The repo contains TWO progress systems:
-  1) `progress_updates` table + `/api/progress_list_public` (simple, working)
-  2) “token-based” progress system (`job_updates/job_media/job_signoffs`) (more secure, partially wired)
-  
-**Recommendation:** pick ONE path and complete it.  
-If you want security + shareable customer links without exposing booking IDs, finish the token-based system.
+## Repo health note
+The codebase has moved from a simple booking site toward an operations platform. The next major risk is not missing features — it is keeping architecture and access rules consistent while the system grows.
