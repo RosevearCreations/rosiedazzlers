@@ -1,380 +1,263 @@
-<!-- AI_CONTEXT.md -->
+# Rosie Dazzlers — AI Context
 
-# Rosie Dazzlers — AI Context Document
-
-This document is designed to give any AI assistant immediate context about the Rosie Dazzlers system so it can help effectively without needing the entire repository.
-
-This file should be pasted into new AI chats when requesting help with the project.
+Use this document as the fast handoff context for future work on the `dev` branch.
 
 ---
 
-# Project Identity
+## Branch rule
 
-Project Name  
-Rosie Dazzlers — Mobile Auto Detailing
+Treat the **`dev` branch** as the current source of truth for active Rosie Dazzlers development work.
 
-Business Area  
-Norfolk County and Oxford County, Ontario, Canada
-
-Primary Purpose  
-Provide an online system where customers can:
-
-• view detailing services  
-• see pricing  
-• book appointments  
-• pay booking deposits  
-• purchase gift certificates  
-• receive progress updates about their vehicle  
-
-Admins use the system to:
-
-• manage bookings  
-• block dates or AM/PM slots  
-• assign staff  
-• manage promo codes  
-• upload progress photos and updates  
+Do not assume `main` is current.
 
 ---
 
-# System Architecture
+## What Rosie Dazzlers is now
 
-Customer Browser  
-↓  
-Cloudflare Pages (static site)  
-↓  
-Cloudflare Pages Functions (`/functions/api`)  
-↓  
-Supabase Postgres Database  
-↓  
-Stripe (payments)  
-↓  
-Cloudflare R2 (image storage)
+Rosie Dazzlers is no longer only a static marketing and booking website.
 
----
+It is becoming a fuller small-business operations platform for a mobile auto detailing business covering:
 
-# Core Technologies
-
-Hosting  
-Cloudflare Pages
-
-Serverless Backend  
-Cloudflare Pages Functions
-
-Database  
-Supabase (Postgres)
-
-Payments  
-Stripe
-
-Image Hosting  
-Cloudflare R2
-
-Public Asset Domain  
-https://assets.rosiedazzlers.ca
+- customer booking
+- Stripe deposit checkout
+- gift certificates
+- admin booking management
+- token-based customer progress sharing
+- detailer jobsite intake
+- time tracking
+- media handling
+- customer signoff
+- live admin monitoring
+- staff roles and permissions
+- customer profiles and loyalty tiers
 
 ---
 
-# Repository Structure
+## Core stack
 
-Root HTML pages  
-/*.html
-
-Shared assets  
-/assets
-
-JSON data files  
-/data
-
-Backend API endpoints  
-/functions/api
-
-Database schema definition  
-SUPABASE_SCHEMA.sql
-
-Documentation  
-README.md  
-REPO_GUIDE.md  
-SANITY_CHECK.md  
-PROJECT_BRAIN.md  
+- Cloudflare Pages
+- Cloudflare Pages Functions
+- Supabase Postgres
+- Stripe
+- Cloudflare R2
 
 ---
 
-# Important Pages
+## Main customer pages
 
-Home  
-/
-
-Services  
-/services
-
-Pricing  
-/pricing
-
-Booking  
-/book
-
-Gift Certificates  
-/gifts
-
-Gear Catalog  
-/gear
-
-Consumables Catalog  
-/consumables
-
-Admin Dashboard  
-/admin
-
-Customer Progress Viewer  
-/progress
+- `/`
+- `/services`
+- `/pricing`
+- `/book`
+- `/gifts`
+- `/gear`
+- `/consumables`
+- `/progress?token=...`
 
 ---
 
-# Booking System Model
+## Main admin pages
 
-Bookings are based on half-day slots.
-
-Available slots
-
-AM  
-PM  
-
-A full-day booking uses both AM and PM.
-
-Booking capacity is controlled by two tables:
-
-date_blocks — blocks entire day  
-slot_blocks — blocks AM or PM
-
-Bookings are stored in the table:
-
-bookings
-
-Booking lifecycle states:
-
-pending  
-confirmed  
-cancelled  
-completed
-
-Deposits are processed through Stripe checkout.
-
-Stripe webhook endpoint:
-
-/api/stripe/webhook
-
-This webhook confirms deposits and updates booking status.
+- `/admin`
+- `/admin-booking`
+- `/admin-blocks`
+- `/admin-progress`
+- `/admin-jobsite`
+- `/admin-live`
+- `/admin-staff`
+- `/admin-customers`
+- `/admin-promos`
 
 ---
 
-# Gift Certificate System
+## Current system direction
 
-Gift certificates are purchased separately from bookings.
+### Preferred progress model
+Use the **token-based progress system** as the long-term path.
 
-Flow:
+Important tables:
+- `job_updates`
+- `job_media`
+- `job_signoffs`
 
-Customer → `/gifts`  
-↓  
-Stripe checkout session  
-↓  
-Stripe webhook  
-↓  
-Gift certificate created in database  
-↓  
-Customer receives gift code
+Booking should use:
+- `progress_enabled`
+- `progress_token`
 
-Gift certificates can represent:
+Customer should view progress using:
+- `progress.html?token=...`
 
-• a specific service package  
-• an open dollar value  
+### Security direction
+Current bridge:
+- shared `ADMIN_PASSWORD`
 
-Certificates expire after **1 year**.
+Current build direction:
+- Admin
+- Senior Detailer
+- Detailer
+- Customer
 
----
+Important:
+- customer tiers are **not** security roles
+- customer tiers are business segmentation only
 
-# Admin System
+### Booking model
+- Half-day slots: `AM`, `PM`
+- Full-day consumes both
+- Capacity is controlled by:
+  - `date_blocks`
+  - `slot_blocks`
 
-Admin pages allow operational control of the system.
+Booking statuses:
+- `pending`
+- `confirmed`
+- `cancelled`
+- `completed`
 
-Admin capabilities include:
-
-• view bookings  
-• change booking status  
-• block calendar dates  
-• block AM or PM slots  
-• assign staff to bookings  
-• upload progress photos  
-• add progress notes  
-• manage promo codes  
-
-Admin API endpoints require the environment variable:
-
-ADMIN_PASSWORD
-
----
-
-# Progress Update System
-
-Two progress systems currently exist.
-
-Simple progress system
-
-Table  
-progress_updates
-
-Endpoint  
-/api/progress_list_public
-
-This system is already functional.
+Job statuses:
+- `scheduled`
+- `in_progress`
+- `cancelled`
+- `completed`
 
 ---
 
-Token-based secure progress system
+## What has already been built recently
 
-Tables
+A large role-aware admin/detailer backend scaffold now exists across:
 
-job_updates  
-job_media  
-job_signoffs  
+### Booking operations
+- search
+- detail
+- save
+- confirm
+- complete
+- cancel
+- delete
+- availability checks
+- schedule/day view
+- form bootstrap support
 
-Endpoints
+### Block operations
+- list
+- save
+- date/slot schedule checks
 
-/api/progress/view  
-/api/progress/signoff
+### Progress operations
+- enable
+- post/list/detail
+- delete
 
-This system uses a unique progress token attached to the booking.
+### Jobsite operations
+- intake save/list/detail/delete
+- time save/list/delete
+- media save/list/delete
+- signoff save/list/delete
 
-Recommended long-term system: token-based progress system.
+### Operations views
+- live list
+- dashboard summary
+- day schedule
 
----
+### Staff operations
+- current actor
+- staff list/save/detail
+- active toggle
+- assignable list
+- override log list
 
-# Database Overview
+### Customer operations
+- customer list/detail/save/delete
+- customer tier list/save/delete
 
-Main operational tables
-
-bookings  
-date_blocks  
-slot_blocks  
-promo_codes  
-gift_products  
-gift_certificates  
-booking_events  
-
-Progress system tables
-
-progress_updates
-
-or
-
-job_updates  
-job_media  
-job_signoffs  
-
-The database schema is defined in:
-
-SUPABASE_SCHEMA.sql
-
----
-
-# Image Storage (Cloudflare R2)
-
-Images are stored in R2 and served through the custom domain:
-
-https://assets.rosiedazzlers.ca
-
-Folder structure used by the site
-
-brand/  
-packages/  
-products/  
-systems/
-
-Example
-
-https://assets.rosiedazzlers.ca/packages/Exterior Detail.png
+### Promo operations
+- promo list/detail/save
+- promo active toggle
+- promo delete
 
 ---
 
-# Environment Variables
+## Important schema direction
 
-Cloudflare Pages environment variables
+Core groups now include:
 
-SUPABASE_URL  
-SUPABASE_SERVICE_ROLE_KEY  
-ADMIN_PASSWORD  
+### Booking / scheduling
+- `bookings`
+- `date_blocks`
+- `slot_blocks`
 
-Stripe configuration
+### Gifts / promos
+- `gift_products`
+- `gift_certificates`
+- `promo_codes`
 
-STRIPE_SECRET_KEY  
-STRIPE_WEBHOOK_SECRET  
-STRIPE_WEBHOOK_SECRET_GIFTS  
+### Progress / delivery
+- `job_updates`
+- `job_media`
+- `job_signoffs`
 
-Preview environments use Stripe TEST keys.
+### Jobsite / time
+- `jobsite_intake`
+- `job_time_entries`
 
-Production uses Stripe LIVE keys.
-
----
-
-# Development Rules for AI Assistants
-
-When modifying this project:
-
-Do not duplicate pricing logic between frontend and backend.
-
-Use JSON configuration files when possible instead of hardcoding data.
-
-Keep image paths consistent with the R2 folder structure.
-
-Follow the API patterns already used in `/functions/api`.
-
-Avoid introducing frameworks that conflict with the static site architecture.
-
-Preserve the serverless design.
+### Staff / customers
+- `staff_users`
+- `staff_override_log`
+- `customer_profiles`
+- `customer_tiers`
 
 ---
 
-# Known Development Priorities
+## Current biggest remaining priorities
 
-See SANITY_CHECK.md for the authoritative list.
-
-Important current tasks include:
-
-• resolving duplicate routes for services and pricing  
-• aligning add-on pricing definitions between frontend and backend  
-• cleaning up duplicate admin block endpoints  
-• finishing the token-based progress update system  
-• improving admin dashboard usability  
+1. Add real staff login/session handling
+2. Make all jobsite actions consistently use real staff identity
+3. Complete gift certificate redemption during booking
+4. Unify add-on pricing/config into one canonical source
+5. Add direct phone-friendly media upload flow
+6. Build a cleaner role-aware internal admin/detailer shell
+7. Reduce legacy/duplicate admin endpoint patterns after replacements are fully live
 
 ---
 
-# Quick Mental Model
+## What not to break
 
-Rosie Dazzlers is essentially:
-
-A static website  
-+  
-A serverless booking API  
-+  
-A Supabase database  
-+  
-Stripe payment processing  
-+  
-Cloudflare R2 image hosting  
-
-All hosted through Cloudflare.
+- working booking checkout flow
+- Stripe webhook behavior
+- token-based progress flow
+- live R2 asset filenames and paths
+- JSON keys already used by the frontend
+- separation between customer tiers and security roles
 
 ---
 
-# How to Use This Document with AI
+## Working style for future updates
 
-When starting a new AI session, paste this file first.
+When continuing work:
 
-Then ask the AI for help with:
+- prefer additive changes over destructive rewrites
+- avoid renaming files or keys unless necessary
+- keep code blocks complete when delivering file replacements
+- treat `dev` as the active branch
+- keep admin/detailer work aligned with role-aware access
+- keep customer tiers separate from permissions
+- avoid parallel old/new systems longer than necessary
 
-• debugging endpoints  
-• improving booking flow  
-• writing new admin tools  
-• database queries  
-• deployment issues  
+---
 
-This gives the AI enough context to operate effectively without needing the entire repository.
+## Best next tasks after docs refresh
+
+The most logical next build steps are:
+
+- staff auth/session layer
+- staff-linked jobsite identity cleanup
+- gift redemption during booking
+- add-on unification
+- direct upload flow
+- internal admin/detailer shell cleanup
+
+---
+
+## One-sentence handoff
+
+Rosie Dazzlers on `dev` is now a growing detailing operations platform with a large role-aware backend foundation, and the next phase is to finish auth, unify workflow logic, and make the internal staff experience smoother.
