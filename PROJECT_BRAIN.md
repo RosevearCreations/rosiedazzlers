@@ -1,28 +1,37 @@
 # Rosie Dazzlers — Project Brain
 
 ## What it is
+
 Rosie Dazzlers is a mobile auto detailing platform for Norfolk and Oxford Counties, Ontario.
 
-It is no longer just a marketing + booking site. It is now becoming a full small-business operations system covering:
+It is no longer just a marketing + booking site.  
+On the `dev` branch it is becoming a fuller small-business operations system covering:
+
 - customer booking
 - deposit checkout
 - gift certificates
-- admin operations
+- admin booking operations
 - customer progress sharing
 - detailer jobsite intake
-- time tracking
+- job time tracking
 - live admin monitoring
-- staff roles
-- customer loyalty tiers
+- staff roles and permissions
+- customer profiles and loyalty tiers
+
+---
 
 ## Core stack
+
 - Cloudflare Pages
 - Cloudflare Pages Functions
 - Supabase Postgres
 - Stripe
 - Cloudflare R2
 
+---
+
 ## Main customer pages
+
 - `/`
 - `/services`
 - `/pricing`
@@ -32,7 +41,10 @@ It is no longer just a marketing + booking site. It is now becoming a full small
 - `/consumables`
 - `/progress?token=...`
 
+---
+
 ## Main admin pages
+
 - `/admin`
 - `/admin-booking`
 - `/admin-blocks`
@@ -43,58 +55,236 @@ It is no longer just a marketing + booking site. It is now becoming a full small
 - `/admin-customers`
 - `/admin-promos`
 
+---
+
 ## Core business flow
-Customer books service → deposit checkout in Stripe → booking stored in Supabase → admin confirms / assigns staff → progress link enabled → detailer performs intake and work → progress/media/time updates happen → customer reviews progress and signs off.
+
+Customer books service  
+→ deposit checkout in Stripe  
+→ booking stored in Supabase  
+→ admin confirms booking  
+→ admin assigns staff  
+→ customer progress link can be enabled  
+→ detailer performs intake and work  
+→ progress, media, and time updates are recorded  
+→ customer reviews progress and signs off  
+→ booking is completed or reopened if needed
+
+---
 
 ## Booking model
+
 - Half-day slots: `AM`, `PM`
 - Full day uses both slots
-- Capacity controlled by `date_blocks` and `slot_blocks`
-- Booking statuses include `pending`, `confirmed`, `cancelled`, `completed`
+- Capacity is controlled by:
+  - `date_blocks`
+  - `slot_blocks`
+
+Booking statuses include:
+
+- `pending`
+- `confirmed`
+- `cancelled`
+- `completed`
+
+Job statuses include:
+
+- `scheduled`
+- `in_progress`
+- `cancelled`
+- `completed`
+
+Structured assignment fields now exist alongside legacy `assigned_to`:
+
+- `assigned_staff_user_id`
+- `assigned_staff_email`
+- `assigned_staff_name`
+- `assigned_to` (legacy compatibility)
+
+---
 
 ## Progress model
-Preferred system is token-based:
-- booking stores `progress_token`
-- customer uses `progress.html?token=...`
-- progress data comes from `job_updates`, `job_media`, `job_signoffs`
+
+Preferred long-term model is token-based.
+
+Booking stores:
+
+- `progress_enabled`
+- `progress_token`
+
+Customer uses:
+
+- `progress.html?token=...`
+
+Progress data comes from:
+
+- `job_updates`
+- `job_media`
+- `job_signoffs`
+
+The older simple progress flow is no longer the main direction.
+
+---
 
 ## Jobsite model
+
 Detailer/admin can now record:
+
 - pre-existing vehicle condition
 - valuables
 - pre-job checklist
-- owner acknowledgement notes
+- owner notes
+- acknowledgement notes
 - intake completion state
-- work/break/weather timing through `job_time_entries`
+
+Time tracking is now part of the same workflow through:
+
+- `job_time_entries`
+
+This supports:
+
+- work time
+- travel time
+- setup
+- cleanup
+- pauses / interruptions
+
+---
 
 ## Live monitor model
+
 Admin can open one live screen to watch:
+
 - booking summary
 - intake summary
 - time summary
 - progress notes
-- media
-- signoffs
+- media count / media items
+- signoff state
 
-## Security model
-Current production reality:
-- admin pages use shared `ADMIN_PASSWORD`
+This is the operational view of the day’s work.
 
-Current design direction:
+---
+
+## Customer model
+
+Customer management is now broader than a booking row.
+
+Foundation now includes:
+
+- `customer_profiles`
+- `customer_tiers`
+
+Customer profile data is meant to support:
+
+- repeat-customer management
+- tiering / loyalty handling
+- linked booking history
+- future vehicle history
+
+Important rule:
+
+- customer tiers are business segmentation
+- customer tiers are **not** security roles
+
+---
+
+## Staff / security model
+
+### Current bridge reality
+Admin pages still use shared `ADMIN_PASSWORD`
+
+### Current design direction
+The project is moving toward real role-aware staff access:
+
 - Admin
 - Senior Detailer
 - Detailer
 - Customer
-- customer tiers separate from access tiers
 
 Security foundation added in schema:
+
 - `staff_users`
-- `customer_tiers`
-- `customer_profiles`
 - `staff_override_log`
 
-## Important rule
-Customer tiers are business segmentation, not security roles.
+The API layer is now being updated to use role-aware checks such as:
 
-## Current most important next step
-Turn documented access rules into actual API enforcement.
+- manage bookings
+- manage blocks
+- manage promos
+- manage staff
+- work booking
+- override lower entries
+
+---
+
+## Override model
+
+Some workflows now support controlled overwrite/delete behavior.
+
+When a higher-authority staff user changes or removes another staff user’s record, the action should be written to:
+
+- `staff_override_log`
+
+This is part of the audit trail direction for:
+
+- intake
+- time entries
+- progress entries
+- media
+- signoff
+- future higher-risk admin actions
+
+---
+
+## Main operational data groups
+
+### Booking + scheduling
+- `bookings`
+- `date_blocks`
+- `slot_blocks`
+
+### Gifts + promos
+- `gift_products`
+- `gift_certificates`
+- `promo_codes`
+
+### Progress + delivery
+- `job_updates`
+- `job_media`
+- `job_signoffs`
+
+### Jobsite + time
+- `jobsite_intake`
+- `job_time_entries`
+
+### Staff + customers
+- `staff_users`
+- `staff_override_log`
+- `customer_profiles`
+- `customer_tiers`
+
+---
+
+## Current most important development direction
+
+The most important current step is no longer “add more pages.”
+
+It is:
+
+- turning documented access rules into actual API enforcement
+- making the admin/detailer system role-aware
+- keeping the newer operations model consistent as it grows
+
+---
+
+## Mental model in one sentence
+
+Rosie Dazzlers is now:
+
+a static customer-facing site  
++ a serverless booking and operations API  
++ a Supabase business database  
++ Stripe for payment flows  
++ R2 for media  
++ an emerging role-aware admin/detailer operations layer
