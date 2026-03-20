@@ -1,12 +1,16 @@
 # Rosie Dazzlers Repo Guide
 
 ## 1) What this repo is
+
 A Cloudflare Pages site with:
+
 - Static HTML pages (marketing + booking + gifts + catalogs)
 - Cloudflare Pages Functions in `/functions`
 - Data JSON in `/data`
 - Images served from Cloudflare R2 (`assets.rosiedazzlers.ca`)
-- Growing admin operations area for bookings, progress, jobsite, staff, customers, and live monitoring
+- A growing admin/detailer operations area for bookings, progress, jobsite work, staff, customers, promos, and live monitoring
+
+---
 
 ## 2) Folder map (high level)
 
@@ -18,7 +22,11 @@ A Cloudflare Pages site with:
 - `gifts.html`
 - `gear.html`
 - `consumables.html`
-- `contact.html`, `about.html`, `privacy.html`, `terms.html`, `waiver.html`
+- `contact.html`
+- `about.html`
+- `privacy.html`
+- `terms.html`
+- `waiver.html`
 - `progress.html`
 
 ### Admin UI pages
@@ -32,64 +40,182 @@ A Cloudflare Pages site with:
 - `admin-customers.html`
 - `admin-promos.html`
 
-### `/assets`
+These pages are increasingly acting less like separate isolated tools and more like pieces of an internal operations app.
+
+---
+
+## 3) `/assets`
+
+Shared site assets:
+
 - `site.css` — theme and shared layout
 - `chrome.js` — shared nav/footer/banner/reviews behavior
 - `site.js` — page helpers for services, pricing, booking, gear, consumables
 - `config.js` — legacy/shared constants if still present
 
-### `/data`
+Recommended direction:
+- keep shared layout/theme logic centralized here
+- avoid spreading duplicate visual logic into page files
+
+---
+
+## 4) `/data`
+
+Static JSON used by the site:
+
 - `rosie_services_pricing_and_packages.json`
 - `rosie_products_catalog.json`
 - `systems_catalog.json`
 - manifests and helper JSON files
 
-### `/functions/api`
-#### Booking + payments
+Important rule:
+- pricing and add-on definitions should move toward one canonical source rather than split frontend/backend duplicates
+
+---
+
+## 5) `/functions/api`
+
+Backend endpoints live here.
+
+The repo is moving from a simple booking backend toward a broader operations backend.
+
+### Public booking + payment
 - `checkout.js`
 - `availability.js`
 - `stripe/webhook.js`
-- gifts endpoints
 
-#### Admin booking ops
+### Gift flow
+- `gifts/checkout.js`
+- `gifts/webhook.js`
+- `gifts/receipt.js`
+
+### Public customer progress
+- `progress/view.js`
+- `progress/signoff.js`
+
+### Admin booking operations
+Examples now include:
 - `admin/bookings.js`
+- `admin/bookings_search.js`
+- `admin/booking_detail.js`
+- `admin/booking_save.js`
+- `admin/booking_confirm.js`
+- `admin/booking_complete.js`
+- `admin/booking_cancel.js`
+- `admin/bookings_delete.js`
 - `admin/assign_booking.js`
-- `admin/booking_customer_link.js`
+- `admin/booking_availability.js`
+- `admin/booking_form_data.js`
+- `admin/day_schedule.js`
 
-#### Admin block ops
+### Admin block operations
+Examples now include:
 - `admin/blocks.js`
+- `admin/blocks_list.js`
+- `admin/blocks_save.js`
 - `admin/block_date.js`
 - `admin/unblock_date.js`
 - `admin/block_slot.js`
 - `admin/unblock_slot.js`
 
-#### Progress system
+Long-term direction should reduce duplicate legacy/newer patterns.
+
+### Progress system
+Examples now include:
 - `progress/view.js`
 - `progress/signoff.js`
 - `admin/progress_enable.js`
 - `admin/progress_post.js`
-- `admin/progress_media_post.js`
 - `admin/progress_list.js`
+- `admin/progress_detail.js`
+- `admin/progress_delete.js`
 
-#### Jobsite / live ops
-- `admin/jobsite_intake_get.js`
-- `admin/jobsite_intake_save.js`
-- `admin/job_time_entry_post.js`
-- `admin/job_time_entries_get.js`
-- `admin/job_time_summary_get.js`
+### Jobsite / live ops
+Examples now include:
+- `admin/jobsite_save.js`
+- `admin/jobsite_list.js`
+- `admin/jobsite_detail.js`
+- `admin/jobsite_delete.js`
+- `admin/time_save.js`
+- `admin/time_list.js`
+- `admin/time_delete.js`
+- `admin/media_save.js`
+- `admin/media_list.js`
+- `admin/media_delete.js`
+- `admin/signoff_save.js`
+- `admin/signoff_list.js`
+- `admin/signoff_delete.js`
+- `admin/live_list.js`
+- `admin/dashboard_summary.js`
 
-#### Staff / customer admin
+### Staff admin
+Examples now include:
+- `admin/staff_me.js`
 - `admin/staff_list.js`
 - `admin/staff_save.js`
-- `admin/customer_profiles_list.js`
-- `admin/customer_profiles_save.js`
+- `admin/staff_detail.js`
+- `admin/staff_toggle_active.js`
+- `admin/staff_assignable_list.js`
+- `admin/override_log_list.js`
 
-## 3) Environments
-Typically:
-- Preview → Stripe test keys
-- Production → Stripe live keys
+### Customer admin
+Examples now include:
+- `admin/customers_list.js`
+- `admin/customers_detail.js`
+- `admin/customers_save.js`
+- `admin/customers_delete.js`
+- `admin/customer_tiers_list.js`
+- `admin/customer_tiers_save.js`
+- `admin/customer_tiers_delete.js`
 
-## 4) Cloudflare Pages environment variables
+### Promo admin
+Examples now include:
+- `admin/promos_list.js`
+- `admin/promos_detail.js`
+- `admin/promos_save.js`
+- `admin/promos_toggle_active.js`
+- `admin/promos_delete.js`
+
+---
+
+## 6) Key backend pattern change
+
+The important `dev` branch shift is not only “more endpoints.”
+
+It is:
+- moving from shared-password-only admin logic
+- toward role-aware API enforcement
+- across bookings, progress, jobsite, time, media, signoff, staff, customers, and promos
+
+Bridge reality:
+- `ADMIN_PASSWORD` still exists
+
+Current direction:
+- resolve acting staff user
+- apply capability checks
+- scope detailer/senior-detailer work to allowed bookings
+- keep customer tiers separate from security roles
+
+---
+
+## 7) Environments
+
+Typical deployment setup:
+
+### Preview
+- branch builds
+- Stripe test keys
+
+### Production
+- live domain
+- Stripe live keys
+
+The `dev` branch should be treated as the active development source for current admin/detailer work.
+
+---
+
+## 8) Cloudflare Pages environment variables
+
 Required:
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
@@ -100,20 +226,102 @@ Stripe:
 - `STRIPE_WEBHOOK_SECRET`
 - `STRIPE_WEBHOOK_SECRET_GIFTS`
 
-## 5) R2 asset conventions
+Future likely addition:
+- real staff auth/session variables or supporting config when the login/session layer is added
+
+---
+
+## 9) R2 asset conventions
+
+Images are served from:
+
+- `https://assets.rosiedazzlers.ca`
+
+Expected folder layout:
 - `brand/`
 - `packages/`
 - `products/`
 - `systems/`
 
-## 6) Theme changes
-Prefer changing variables in `assets/site.css` under `:root`.
+Do not rename live asset files casually.  
+Keep code paths aligned with actual uploaded filenames.
 
-## 7) Route notes
-`_redirects` currently provides clean routes for public and admin pages.
+---
 
-## 8) Architecture notes
+## 10) Route notes
+
+`_redirects` provides clean routes for public and admin pages.
+
+Still important:
+- fully settle canonical structure for `services` and `pricing`
+- avoid long-term duplicate route patterns
+
+---
+
+## 11) Database shape
+
+Database schema is defined in:
+
+- `SUPABASE_SCHEMA.sql`
+
+Core data groups now include:
+
+### Booking + scheduling
+- `bookings`
+- `date_blocks`
+- `slot_blocks`
+
+### Gifts + promos
+- `gift_products`
+- `gift_certificates`
+- `promo_codes`
+
+### Progress + delivery
+- `job_updates`
+- `job_media`
+- `job_signoffs`
+
+### Jobsite + time
+- `jobsite_intake`
+- `job_time_entries`
+
+### Staff + customers
+- `staff_users`
+- `staff_override_log`
+- `customer_profiles`
+- `customer_tiers`
+
+---
+
+## 12) Current architecture notes
+
 - Token-based progress is now the main customer progress direction.
-- Admin still uses shared password gates today.
-- Project is moving toward role-based access: Admin, Senior Detailer, Detailer, Customer.
-- Customer loyalty segmentation is now documented via customer tiers: random, regular, silver, gold, vip.
+- Shared admin password is still the bridge gate today.
+- The project is moving toward role-based staff access:
+  - Admin
+  - Senior Detailer
+  - Detailer
+  - Customer
+- Customer tiers remain business segmentation only.
+- The codebase is shifting from a “site with admin pages” toward a more complete internal operations platform.
+
+---
+
+## 13) Development rules
+
+- Avoid duplicating business logic between frontend and backend
+- Prefer one canonical pricing/add-on source
+- Keep JSON-driven content stable where possible
+- Use additive changes instead of destructive rewrites unless cleanup is intentional
+- Keep role/security logic clearly separate from loyalty/customer segmentation
+- Avoid parallel old/new endpoint systems longer than necessary
+
+---
+
+## 14) Related repo docs
+
+- `README.md` — project overview
+- `PROJECT_BRAIN.md` — mental model of the system
+- `DEVELOPMENT_ROADMAP.md` — next build order
+- `SANITY_CHECK.md` — current status and priorities
+- `SUPABASE_SCHEMA.sql` — schema foundation
