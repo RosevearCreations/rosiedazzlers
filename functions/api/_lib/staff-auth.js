@@ -168,7 +168,6 @@ export async function requireStaffAccess({
 
 async function resolveSessionActor({ request, env }) {
   try {
-    // If session env is not present yet, silently skip session mode.
     if (!env.STAFF_SESSION_SECRET) {
       return { actor: null };
     }
@@ -514,6 +513,32 @@ export function cleanEmail(value) {
   const s = String(value || "").trim().toLowerCase();
   if (!s) return null;
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s) ? s : null;
+}
+
+export function cleanStringArray(value, { dedupe = true, allowEmpty = false } = {}) {
+  const input = Array.isArray(value)
+    ? value
+    : value == null
+      ? []
+      : [value];
+
+  const cleaned = input
+    .map((item) => cleanText(item))
+    .filter((item) => (allowEmpty ? item !== null : !!item));
+
+  if (!dedupe) return cleaned;
+
+  const seen = new Set();
+  const out = [];
+
+  for (const item of cleaned) {
+    const key = String(item).toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(item);
+  }
+
+  return out;
 }
 
 export function toBoolean(value) {
