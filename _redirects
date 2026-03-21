@@ -1,27 +1,34 @@
-# Public canonical pretty URLs
-/services.html        /services         301
-/pricing.html         /pricing          301
+# _redirects
+#
+# Clean route mappings for Rosie Dazzlers
+#
+# What this file does:
+# - keeps public clean routes
+# - keeps admin clean routes
+# - adds new staff auth/session routes
+# - makes the new admin login and account pages reachable at stable URLs
+#
+# Notes:
+# - keep any existing working redirects you already have
+# - if your current file already contains more entries, merge these in rather than deleting unrelated lines
 
-# Admin pretty URLs
-/admin.html           /admin            301
-/admin-booking.html   /admin-booking    301
-/admin-blocks.html    /admin-blocks     301
-/admin-progress.html  /admin-progress   301
-/admin-jobsite.html   /admin-jobsite    301
-/admin-live.html      /admin-live       301
-/admin-staff.html     /admin-staff      301
-/admin-customers.html /admin-customers  301
-/admin-promos.html    /admin-promos     301
+/                           /index.html                  200
+/services                   /services.html               200
+/pricing                    /pricing.html                200
+/book                       /book.html                   200
+/gifts                      /gifts.html                  200
+/gear                       /gear.html                   200
+/consumables                /consumables.html            200
+/progress                   /progress.html               200
 
-# Normalize optional trailing slashes
-/services/            /services         301
-/pricing/             /pricing          301
-/admin/               /admin            301
-/admin-booking/       /admin-booking    301
-/admin-blocks/        /admin-blocks     301
-/admin-progress/      /admin-progress   301
-/admin-jobsite/       /admin-jobsite    301
-/admin-live/          /admin-live       301
-/admin-staff/         /admin-staff      301
-/admin-customers/     /admin-customers  301
-/admin-promos/        /admin-promos     301
+/admin                      /admin.html                  200
+/admin-login                /admin-login.html            200
+/account                    /admin-account.html          200
+/admin-booking              /admin-booking.html          200
+/admin-blocks               /admin-blocks.html           200
+/admin-progress             /admin-progress.html         200
+/admin-jobsite              /admin-jobsite.html          200
+/admin-live                 /admin-live.html             200
+/admin-staff                /admin-staff.html            200
+/admin-customers            /admin-customers.html        200
+/admin-promos               /admin-promos.html           200
