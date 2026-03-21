@@ -1,161 +1,282 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin Dashboard | Rosie Dazzlers</title>
-  <meta name="description" content="Rosie Dazzlers admin dashboard." />
+  <title>Rosie Dazzlers — Admin Dashboard</title>
+  <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 35%),
+        linear-gradient(180deg, #0f172a 0%, #111827 100%);
+      color: #f8fafc;
+    }
+
+    .shell {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .loading {
+      display: grid;
+      place-items: center;
+      min-height: 60vh;
+      color: #cbd5e1;
+      font-size: 1rem;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .brandblock h1 {
+      margin: 0 0 6px;
+      font-size: 1.8rem;
+      line-height: 1.15;
+    }
+
+    .brandblock p {
+      margin: 0;
+      color: #cbd5e1;
+    }
+
+    .actorcard {
+      min-width: 280px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 16px 18px;
+      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
+    }
+
+    .actorline {
+      margin: 4px 0;
+      color: #e5e7eb;
+      font-size: 0.96rem;
+    }
+
+    .actorlabel {
+      color: #93c5fd;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+
+    .logout-btn {
+      margin-top: 10px;
+      appearance: none;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: #2563eb;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .status {
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(220,38,38,0.12);
+      border: 1px solid rgba(248,113,113,0.25);
+      color: #fecaca;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      grid-column: span 12;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+    }
+
+    .card p {
+      margin: 0 0 14px;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    .navlist {
+      display: grid;
+      gap: 10px;
+    }
+
+    .navlink {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #f8fafc;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.07);
+      transition: background 0.15s ease, transform 0.05s ease;
+    }
+
+    .navlink:hover {
+      background: rgba(255,255,255,0.09);
+    }
+
+    .navlink:active {
+      transform: translateY(1px);
+    }
+
+    .kicker {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #93c5fd;
+    }
+
+    .muted {
+      color: #94a3b8;
+      font-size: 0.92rem;
+    }
+
+    @media (min-width: 760px) {
+      .card.span-6 {
+        grid-column: span 6;
+      }
+
+      .card.span-4 {
+        grid-column: span 4;
+      }
+
+      .card.span-8 {
+        grid-column: span 8;
+      }
+    }
+  </style>
 </head>
-<body data-page="admin">
-  <header class="nav">
-    <div class="nav-inner">
-      <a class="brand" href="/admin.html">
-        <img data-logo alt="Rosie Dazzlers logo" />
-        <strong>Rosie Dazzlers Admin</strong>
-      </a>
-
-      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
-        Menu
-      </button>
-
-      <nav id="navLinks" class="nav-links">
-        <a href="/admin.html">Dashboard</a>
-        <a href="/admin-booking.html">Bookings</a>
-        <a href="/admin-blocks.html">Blocks</a>
-        <a href="/admin-progress.html">Progress</a>
-        <a href="/admin-jobsite.html">Job Site</a>
-        <a href="/admin-live.html">Live Monitor</a>
-        <a href="/admin-staff.html">Staff</a>
-        <a href="/admin-customers.html">Customers</a>
-        <a href="/admin-promos.html">Promos</a>
-        <a href="/book">Public Site</a>
-      </nav>
+<body>
+  <main class="shell">
+    <div class="loading" data-admin-shell-loading>
+      Loading admin dashboard...
     </div>
-  </header>
 
-  <main class="container">
-    <section class="section">
-      <div class="panel">
-        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
-      </div>
-    </section>
+    <div data-admin-shell-ready hidden>
+      <header class="topbar">
+        <div class="brandblock">
+          <div class="kicker">Rosie Dazzlers</div>
+          <h1>Admin Dashboard</h1>
+          <p>Session-aware internal dashboard for admin and detailer tools.</p>
+        </div>
 
-    <section class="section">
-      <div class="hero">
-        <div>
-          <div class="badge">Admin Dashboard</div>
-          <h1>Rosie Dazzlers operations hub</h1>
-          <p>Use this dashboard to manage bookings, date blocks, progress updates, job-site intake, live monitoring, staff roles, customer tiers, and promo tools.</p>
-          <div class="badges">
-            <div class="badge">Bookings</div>
-            <div class="badge">Progress</div>
-            <div class="badge">Job Site</div>
-            <div class="badge">Live Monitor</div>
-            <div class="badge">Staff</div>
-            <div class="badge">Customers</div>
-            <div class="badge">Promos</div>
-            <div class="badge">Availability Blocks</div>
+        <section class="actorcard" aria-label="Signed in staff">
+          <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
+          <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
+          <div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div>
+          <button class="logout-btn" type="button" data-admin-logout>Sign Out</button>
+        </section>
+      </header>
+
+      <div class="status" data-admin-shell-status hidden></div>
+
+      <section class="grid">
+        <article class="card span-6">
+          <h2>Operations</h2>
+          <p>Core booking, day schedule, live operations, and workflow pages.</p>
+          <div class="navlist">
+            <a class="navlink" href="/admin-booking" data-page-access="admin-booking">
+              <span>Booking Management</span>
+              <span class="muted">Bookings, confirm, complete, cancel</span>
+            </a>
+            <a class="navlink" href="/admin-blocks" data-page-access="admin-blocks">
+              <span>Blocks & Availability</span>
+              <span class="muted">Date and slot capacity control</span>
+            </a>
+            <a class="navlink" href="/admin-live" data-page-access="admin-live">
+              <span>Live Monitor</span>
+              <span class="muted">Today’s work, progress, time, signoff</span>
+            </a>
+            <a class="navlink" href="/admin-progress" data-page-access="admin-progress">
+              <span>Progress Tools</span>
+              <span class="muted">Progress notes and customer updates</span>
+            </a>
+            <a class="navlink" href="/admin-jobsite" data-page-access="admin-jobsite">
+              <span>Jobsite Workspace</span>
+              <span class="muted">Intake, time, media, signoff workflow</span>
+            </a>
           </div>
-        </div>
+        </article>
 
-        <div class="panel">
-          <div class="kicker">Quick note</div>
-          <h3 style="margin:6px 0 8px">Recommended flow</h3>
-          <p class="kicker">
-            Load the booking, assign staff, enable progress, complete pre-job intake,
-            monitor the live job, post updates and media, then let the customer sign off when the job is done.
+        <article class="card span-6">
+          <h2>Admin Management</h2>
+          <p>Staff, customers, and promo tools based on your permissions.</p>
+          <div class="navlist">
+            <a class="navlink" href="/admin-staff" data-page-access="admin-staff">
+              <span>Staff Management</span>
+              <span class="muted">Roles, active state, assignment support</span>
+            </a>
+            <a class="navlink" href="/admin-customers" data-page-access="admin-customers">
+              <span>Customer Management</span>
+              <span class="muted">Profiles, tiers, linked booking context</span>
+            </a>
+            <a class="navlink" href="/admin-promos" data-page-access="admin-promos">
+              <span>Promo Management</span>
+              <span class="muted">Promo codes, activation, retirement</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="card span-8">
+          <h2>Current Direction</h2>
+          <p>
+            This dashboard is now session-aware. The backend is moving from shared-password
+            bridge access toward real staff identity, role-aware UI, and scoped detailer workflows.
           </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="grid cards">
-        <article class="card">
-          <h3>Bookings</h3>
-          <p>Review bookings, update statuses, assign staff, and access progress tokens.</p>
-          <div class="hr"></div>
-          <a class="btn primary" href="/admin-booking.html">Open Bookings</a>
+          <p class="muted">
+            Best next development steps remain: staff auth/session rollout, real staff identity
+            linkage across jobsite actions, gift redemption, direct upload flow, and internal shell cleanup.
+          </p>
         </article>
 
-        <article class="card">
-          <h3>Blocks</h3>
-          <p>Block full dates or AM / PM slots to control scheduling and availability.</p>
-          <div class="hr"></div>
-          <a class="btn primary" href="/admin-blocks.html">Open Blocks</a>
+        <article class="card span-4">
+          <h2>Role-based visibility</h2>
+          <p class="muted">
+            Links above are automatically hidden if your current role/capabilities should not see them.
+            Admin sees all. Other staff see only the tools appropriate to their role.
+          </p>
         </article>
-
-        <article class="card">
-          <h3>Progress</h3>
-          <p>Enable customer progress links, post updates, attach media, and review signoffs.</p>
-          <div class="hr"></div>
-          <a class="btn primary" href="/admin-progress.html">Open Progress</a>
-        </article>
-
-        <article class="card">
-          <h3>Job Site</h3>
-          <p>Run the pre-inspection intake, capture existing conditions, and track on-site work.</p>
-          <div class="hr"></div>
-          <a class="btn primary" href="/admin-jobsite.html">Open Job Site</a>
-        </article>
-
-        <article class="card">
-          <h3>Live Monitor</h3>
-          <p>Watch the active job in near real time, including time tracking, progress notes, media, and signoffs.</p>
-          <div class="hr"></div>
-          <a class="btn primary" href="/admin-live.html">Open Live Monitor</a>
-        </article>
-
-        <article class="card">
-          <h3>Staff</h3>
-          <p>Manage Admin, Senior Detailer, and Detailer roles and permissions.</p>
-          <div class="hr"></div>
-          <a class="btn primary" href="/admin-staff.html">Open Staff</a>
-        </article>
-
-        <article class="card">
-          <h3>Customers</h3>
-          <p>Manage customer profiles, loyalty tiers, repeat clients, and big tipper flags.</p>
-          <div class="hr"></div>
-          <a class="btn primary" href="/admin-customers.html">Open Customers</a>
-        </article>
-
-        <article class="card">
-          <h3>Promos</h3>
-          <p>Create and manage promo codes for discounts and special campaigns.</p>
-          <div class="hr"></div>
-          <a class="btn primary" href="/admin-promos.html">Open Promos</a>
-        </article>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="panel">
-        <h2>Recommended workflow</h2>
-        <ul class="list">
-          <li>Open Bookings and confirm the customer job.</li>
-          <li>Assign the detailer or senior detailer.</li>
-          <li>Enable the customer progress link if needed.</li>
-          <li>Open Job Site and complete the pre-inspection intake.</li>
-          <li>Use Live Monitor to follow the job in real time.</li>
-          <li>Use Progress to review customer-facing notes, media, and signoffs.</li>
-          <li>Use Customers to maintain loyalty tiers and repeat-customer records.</li>
-          <li>Let the customer review and sign off after completion.</li>
-        </ul>
-      </div>
-    </section>
+      </section>
+    </div>
   </main>
 
-  <footer class="footer container" data-footer></footer>
-
-  <script src="/assets/chrome.js"></script>
-  <script type="module">
-    import { setBrandImages, setFooter } from "/assets/site.js";
-
-    document.addEventListener("DOMContentLoaded", () => {
-      setBrandImages();
-      setFooter();
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script>
+    window.AdminShell.boot({
+      pageKey: "admin"
     });
   </script>
 </body>
