@@ -6,7 +6,7 @@
 # - keeps public clean routes
 # - keeps admin clean routes
 # - adds new staff auth/session routes
-# - makes the new admin login and account pages reachable at stable URLs
+# - makes the new admin login, bootstrap, and account pages reachable at stable URLs
 #
 # Notes:
 # - keep any existing working redirects you already have
@@ -23,6 +23,7 @@
 
 /admin                      /admin.html                  200
 /admin-login                /admin-login.html            200
+/admin-bootstrap            /admin-bootstrap.html        200
 /account                    /admin-account.html          200
 /admin-booking              /admin-booking.html          200
 /admin-blocks               /admin-blocks.html           200
