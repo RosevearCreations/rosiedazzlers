@@ -1,381 +1,653 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin Customers | Rosie Dazzlers</title>
-  <meta name="description" content="Manage customer profiles and tiers for Rosie Dazzlers." />
+  <title>Rosie Dazzlers — Customer Management</title>
+  <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 35%),
+        linear-gradient(180deg, #0f172a 0%, #111827 100%);
+      color: #f8fafc;
+    }
+
+    .shell {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .loading {
+      display: grid;
+      place-items: center;
+      min-height: 60vh;
+      color: #cbd5e1;
+      font-size: 1rem;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .titleblock h1 {
+      margin: 0 0 6px;
+      font-size: 1.8rem;
+      line-height: 1.15;
+    }
+
+    .titleblock p {
+      margin: 0;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    .actorcard {
+      min-width: 280px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 16px 18px;
+      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
+    }
+
+    .actorline {
+      margin: 4px 0;
+      color: #e5e7eb;
+      font-size: 0.96rem;
+    }
+
+    .actorlabel {
+      color: #93c5fd;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+
+    .logout-btn,
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: #2563eb;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn.secondary {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #f8fafc;
+    }
+
+    .logout-btn {
+      margin-top: 10px;
+    }
+
+    .status {
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.05);
+      color: #e5e7eb;
+    }
+
+    .status[data-state="error"] {
+      background: rgba(220,38,38,0.12);
+      border-color: rgba(248,113,113,0.25);
+      color: #fecaca;
+    }
+
+    .status[data-state="success"] {
+      background: rgba(34,197,94,0.10);
+      border-color: rgba(134,239,172,0.22);
+      color: #bbf7d0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      grid-column: span 12;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+      align-items: end;
+    }
+
+    .field {
+      grid-column: span 12;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #e5e7eb;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-size: 0.98rem;
+      background: rgba(255,255,255,0.04);
+      color: #f8fafc;
+      outline: none;
+    }
+
+    .field textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: #60a5fa;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 920px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      vertical-align: top;
+      font-size: 0.95rem;
+    }
+
+    th {
+      color: #93c5fd;
+      font-weight: 700;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .muted {
+      color: #94a3b8;
+      font-size: 0.92rem;
+    }
+
+    .pillrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.82rem;
+      color: #e5e7eb;
+    }
+
+    .detail-box {
+      border-radius: 14px;
+      padding: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .detail-box pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #dbeafe;
+      font-size: 0.92rem;
+      line-height: 1.45;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .list-item {
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .list-item strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    @media (min-width: 900px) {
+      .field.span-3 { grid-column: span 3; }
+      .field.span-4 { grid-column: span 4; }
+      .field.span-6 { grid-column: span 6; }
+
+      .card.span-7 { grid-column: span 7; }
+      .card.span-5 { grid-column: span 5; }
+      .card.span-6 { grid-column: span 6; }
+    }
+  </style>
 </head>
-<body data-page="admin-customers">
-  <header class="nav">
-    <div class="nav-inner">
-      <a class="brand" href="/admin.html">
-        <img data-logo alt="Rosie Dazzlers logo" />
-        <strong>Rosie Dazzlers Admin</strong>
-      </a>
-
-      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
-        Menu
-      </button>
-
-      <nav id="navLinks" class="nav-links">
-        <a href="/admin.html">Dashboard</a>
-        <a href="/admin-booking.html">Bookings</a>
-        <a href="/admin-blocks.html">Blocks</a>
-        <a href="/admin-progress.html">Progress</a>
-        <a href="/admin-jobsite.html">Job Site</a>
-        <a href="/admin-live.html">Live Monitor</a>
-        <a href="/admin-staff.html">Staff</a>
-        <a href="/admin-customers.html">Customers</a>
-        <a href="/admin-promos.html">Promos</a>
-        <a href="/book">Public Site</a>
-      </nav>
+<body>
+  <main class="shell">
+    <div class="loading" data-admin-shell-loading>
+      Loading customer management...
     </div>
-  </header>
 
-  <main class="container">
-    <section class="section">
-      <div class="panel">
-        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="hero">
-        <div>
-          <div class="badge">Admin Customers</div>
-          <h1>Manage customer profiles and tiers</h1>
+    <div data-admin-shell-ready hidden>
+      <header class="topbar">
+        <div class="titleblock">
+          <h1>Customer Management</h1>
           <p>
-            Create and update customer profiles, assign loyalty tiers, track repeat customers,
-            and mark big tippers or high-value clients.
+            Session-aware customer workspace for profiles, tiers, and linked booking history.
           </p>
-          <div class="badges">
-            <div class="badge">Random</div>
-            <div class="badge">Regular</div>
-            <div class="badge">Silver</div>
-            <div class="badge">Gold</div>
-            <div class="badge">VIP</div>
-          </div>
         </div>
 
-        <div class="panel">
-          <div class="kicker">Selected customer</div>
-          <h3 id="customerTitle" style="margin:6px 0 8px">No customer selected</h3>
-          <div id="customerMeta" class="kicker">Load customer profiles to begin.</div>
-        </div>
-      </div>
-    </section>
+        <section class="actorcard" aria-label="Signed in staff">
+          <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
+          <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
+          <div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div>
+          <button class="logout-btn" type="button" data-admin-logout>Sign Out</button>
+        </section>
+      </header>
 
-    <section class="section">
-      <div id="pageNotice" class="notice">Ready.</div>
-    </section>
+      <div class="status" data-admin-shell-status hidden></div>
 
-    <section class="section">
-      <div class="grid cards">
-        <div class="panel">
-          <h2>Admin access</h2>
-          <form id="adminForm" class="form">
-            <label>
-              Admin password
-              <input id="adminPassword" type="password" autocomplete="current-password" required />
-            </label>
+      <section class="grid">
+        <article class="card">
+          <h2>Search Customers</h2>
+          <p>Search customer profiles by name, email, phone, or tier.</p>
 
-            <div>
-              <button class="btn primary" type="submit">Load customers</button>
+          <form id="customer-search-form" class="filters" novalidate>
+            <div class="field span-6">
+              <label for="customer-q">Search</label>
+              <input id="customer-q" name="q" type="text" placeholder="Name, email, phone, notes" />
             </div>
-          </form>
-        </div>
 
-        <div class="panel">
-          <h2>Available tiers</h2>
-          <div id="tiersBox" class="kicker">Not loaded yet.</div>
-        </div>
-      </div>
-    </section>
+            <div class="field span-3">
+              <label for="customer-tier">Tier Code</label>
+              <input id="customer-tier" name="tier_code" type="text" placeholder="gold, vip, etc." />
+            </div>
 
-    <section class="section">
-      <div class="grid cards">
-        <div class="panel">
-          <h2>Customer list</h2>
-          <div id="customerList" class="grid" style="margin-top:12px">
-            <div class="notice">Customer profiles have not been loaded yet.</div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h2>Create / edit customer</h2>
-          <form id="customerForm" class="form">
-            <input id="customerId" type="hidden" />
-
-            <label>
-              Full name
-              <input id="fullName" type="text" placeholder="Full name" />
-            </label>
-
-            <label>
-              Email
-              <input id="email" type="email" placeholder="Email address" required />
-            </label>
-
-            <label>
-              Phone
-              <input id="phone" type="text" placeholder="Phone number" />
-            </label>
-
-            <label>
-              Tier
-              <select id="tierCode" required>
-                <option value="random">random</option>
-                <option value="regular">regular</option>
-                <option value="silver">silver</option>
-                <option value="gold">gold</option>
-                <option value="vip">vip</option>
-              </select>
-            </label>
-
-            <label>
-              Lifetime bookings
-              <input id="lifetimeBookings" type="number" min="0" step="1" value="0" />
-            </label>
-
-            <label>
-              Lifetime spend (cents)
-              <input id="lifetimeSpendCents" type="number" min="0" step="1" value="0" />
-            </label>
-
-            <label class="check-card">
-              <input id="bigTipper" type="checkbox" />
-              <div>
-                <strong>Big tipper</strong>
-                <div class="mini-price">Flag for consistently generous tips or premium treatment.</div>
+            <div class="field span-3">
+              <div class="action-row">
+                <button class="btn" id="customer-search-btn" type="submit">Search</button>
+                <button class="btn secondary" id="customer-reset-btn" type="button">Reset</button>
               </div>
-            </label>
-
-            <label>
-              Notes
-              <textarea id="notes" rows="4" placeholder="Optional internal notes"></textarea>
-            </label>
-
-            <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
-              <button id="saveCustomerBtn" class="btn primary" type="submit" disabled>Save customer</button>
-              <button id="newCustomerBtn" class="btn ghost" type="button" disabled>Create new</button>
             </div>
           </form>
-        </div>
-      </div>
-    </section>
+        </article>
+
+        <article class="card span-7">
+          <h2>Customer Results</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Tier</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="customer-results-body">
+                <tr>
+                  <td colspan="5" class="muted">Run a search to load customers.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="card span-5">
+          <h2>Selected Customer</h2>
+          <p>Open a profile to inspect customer detail, tier, and booking summary.</p>
+
+          <div id="customer-pills" class="pillrow">
+            <span class="pill">No customer selected</span>
+          </div>
+
+          <div id="customer-detail" class="detail-box">
+            <pre>No customer detail loaded yet.</pre>
+          </div>
+        </article>
+
+        <article class="card span-6">
+          <h2>Customer Tier</h2>
+          <div id="customer-tier-box" class="detail-box">
+            <pre>No tier data loaded yet.</pre>
+          </div>
+        </article>
+
+        <article class="card span-6">
+          <h2>Booking Summary</h2>
+          <div id="customer-booking-summary" class="detail-box">
+            <pre>No booking summary loaded yet.</pre>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Linked Bookings</h2>
+          <div id="customer-linked-bookings" class="list">
+            <div class="list-item muted">No linked bookings loaded yet.</div>
+          </div>
+        </article>
+      </section>
+    </div>
   </main>
 
-  <footer class="footer container" data-footer></footer>
-
-  <script src="/assets/chrome.js"></script>
-  <script type="module">
-    import { setBrandImages, setFooter } from "/assets/site.js";
-
-    let currentPassword = "";
-    let customerProfiles = [];
-    let customerTiers = [];
-    let selectedCustomerId = "";
-
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#39;");
-    }
-
-    function moneyFromCents(cents) {
-      return new Intl.NumberFormat("en-CA", {
-        style: "currency",
-        currency: "CAD"
-      }).format((Number(cents) || 0) / 100);
-    }
-
-    function setNotice(message, kind = "") {
-      const el = document.querySelector("#pageNotice");
-      if (!el) return;
-      el.className = kind ? `notice ${kind}` : "notice";
-      el.textContent = message;
-    }
-
-    async function apiPost(url, password, body) {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": password
-        },
-        body: JSON.stringify(body || {})
-      });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || `Request failed for ${url}`);
-      return data;
-    }
-
-    function renderTiers() {
-      const box = document.querySelector("#tiersBox");
-      if (!box) return;
-
-      if (!customerTiers.length) {
-        box.textContent = "No customer tiers loaded.";
-        return;
-      }
-
-      box.innerHTML = customerTiers
-        .map((tier) => `<div><strong>${escapeHtml(tier.label || tier.code)}</strong> — ${escapeHtml(tier.description || "")}</div>`)
-        .join("");
-    }
-
-    function renderSelectedCustomer() {
-      const title = document.querySelector("#customerTitle");
-      const meta = document.querySelector("#customerMeta");
-
-      const row = customerProfiles.find((c) => c.id === selectedCustomerId) || null;
-
-      if (!row) {
-        title.textContent = "No customer selected";
-        meta.textContent = "Choose a customer profile or create a new one.";
-        return;
-      }
-
-      title.textContent = row.full_name || row.email || "Customer selected";
-      meta.textContent = [
-        row.email || "—",
-        row.tier_code || "random",
-        row.big_tipper ? "big tipper" : "standard"
-      ].join(" · ");
-    }
-
-    function fillForm(row) {
-      document.querySelector("#customerId").value = row?.id || "";
-      document.querySelector("#fullName").value = row?.full_name || "";
-      document.querySelector("#email").value = row?.email || "";
-      document.querySelector("#phone").value = row?.phone || "";
-      document.querySelector("#tierCode").value = row?.tier_code || "random";
-      document.querySelector("#lifetimeBookings").value = row?.lifetime_bookings ?? 0;
-      document.querySelector("#lifetimeSpendCents").value = row?.lifetime_spend_cents ?? 0;
-      document.querySelector("#bigTipper").checked = !!row?.big_tipper;
-      document.querySelector("#notes").value = row?.notes || "";
-    }
-
-    function clearForm() {
-      selectedCustomerId = "";
-      fillForm(null);
-      renderSelectedCustomer();
-    }
-
-    function renderCustomerList() {
-      const wrap = document.querySelector("#customerList");
-      if (!wrap) return;
-
-      if (!customerProfiles.length) {
-        wrap.innerHTML = `<div class="notice">No customer profiles found.</div>`;
-        return;
-      }
-
-      wrap.innerHTML = customerProfiles.map((row) => `
-        <article class="card">
-          <div class="kicker">${escapeHtml(row.tier_code || "random")} · ${row.big_tipper ? "big tipper" : "standard"}</div>
-          <h3>${escapeHtml(row.full_name || row.email || "Unnamed")}</h3>
-          <p>${escapeHtml(row.email || "—")}</p>
-          <div class="kicker">Bookings: ${escapeHtml(row.lifetime_bookings ?? 0)} · Spend: ${escapeHtml(moneyFromCents(row.lifetime_spend_cents ?? 0))}</div>
-          <div class="hr"></div>
-          <button class="btn primary" type="button" data-customer-id="${escapeHtml(row.id)}">Edit customer</button>
-        </article>
-      `).join("");
-
-      wrap.querySelectorAll("[data-customer-id]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          selectedCustomerId = btn.getAttribute("data-customer-id");
-          const row = customerProfiles.find((c) => c.id === selectedCustomerId) || null;
-          fillForm(row);
-          renderSelectedCustomer();
-        });
-      });
-    }
-
-    async function refreshCustomers() {
-      const data = await apiPost("/api/admin/customer_profiles_list", currentPassword, {});
-      customerProfiles = Array.isArray(data.customer_profiles) ? data.customer_profiles : [];
-      customerTiers = Array.isArray(data.customer_tiers) ? data.customer_tiers : [];
-      renderCustomerList();
-      renderTiers();
-
-      document.querySelector("#saveCustomerBtn").disabled = false;
-      document.querySelector("#newCustomerBtn").disabled = false;
-
-      if (selectedCustomerId) {
-        const row = customerProfiles.find((c) => c.id === selectedCustomerId) || null;
-        fillForm(row);
-      }
-
-      renderSelectedCustomer();
-    }
-
-    function collectPayload() {
-      return {
-        id: document.querySelector("#customerId").value.trim() || null,
-        full_name: document.querySelector("#fullName").value.trim(),
-        email: document.querySelector("#email").value.trim(),
-        phone: document.querySelector("#phone").value.trim(),
-        tier_code: document.querySelector("#tierCode").value,
-        lifetime_bookings: document.querySelector("#lifetimeBookings").value,
-        lifetime_spend_cents: document.querySelector("#lifetimeSpendCents").value,
-        big_tipper: document.querySelector("#bigTipper").checked,
-        notes: document.querySelector("#notes").value.trim()
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script>
+    (function () {
+      const els = {
+        form: document.getElementById("customer-search-form"),
+        q: document.getElementById("customer-q"),
+        tier: document.getElementById("customer-tier"),
+        searchBtn: document.getElementById("customer-search-btn"),
+        resetBtn: document.getElementById("customer-reset-btn"),
+        tbody: document.getElementById("customer-results-body"),
+        pills: document.getElementById("customer-pills"),
+        detail: document.getElementById("customer-detail"),
+        tierBox: document.getElementById("customer-tier-box"),
+        bookingSummary: document.getElementById("customer-booking-summary"),
+        linkedBookings: document.getElementById("customer-linked-bookings")
       };
-    }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      setBrandImages();
-      setFooter();
+      let selectedCustomer = null;
 
-      document.querySelector("#adminForm").addEventListener("submit", async (event) => {
-        event.preventDefault();
+      function setShellStatus(message, type) {
+        const nodes = document.querySelectorAll("[data-admin-shell-status]");
+        nodes.forEach((node) => {
+          node.hidden = !message;
+          node.textContent = message || "";
+          node.dataset.state = type || "";
+        });
+      }
 
-        const password = document.querySelector("#adminPassword").value.trim();
-        if (!password) {
-          setNotice("Admin password is required.", "bad");
+      function setSearchBusy(busy) {
+        els.searchBtn.disabled = !!busy;
+        els.searchBtn.textContent = busy ? "Searching..." : "Search";
+      }
+
+      function renderPre(target, data) {
+        target.innerHTML = "";
+        const pre = document.createElement("pre");
+        pre.textContent = typeof data === "string" ? data : JSON.stringify(data, null, 2);
+        target.appendChild(pre);
+      }
+
+      function renderCustomerPills(data) {
+        els.pills.innerHTML = "";
+
+        if (!data || !data.customer_profile) {
+          els.pills.innerHTML = '<span class="pill">No customer selected</span>';
           return;
         }
 
-        try {
-          currentPassword = password;
-          setNotice("Loading customer profiles…");
-          await refreshCustomers();
-          setNotice("Customer profiles loaded.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not load customer profiles.", "bad");
-        }
-      });
+        const profile = data.customer_profile;
+        const summary = data.booking_summary || {};
 
-      document.querySelector("#customerForm").addEventListener("submit", async (event) => {
-        event.preventDefault();
+        const flags = [
+          ["Customer", profile.customer_name || "—"],
+          ["Tier", profile.tier_code || "—"],
+          ["Bookings", String(summary.booking_count || 0)],
+          ["Completed", String(summary.completed_count || 0)],
+          ["Cancelled", String(summary.cancelled_count || 0)]
+        ];
 
-        if (!currentPassword) {
-          setNotice("Load admin access first.", "bad");
+        flags.forEach(([label, value]) => {
+          const span = document.createElement("span");
+          span.className = "pill";
+          span.textContent = `${label}: ${value}`;
+          els.pills.appendChild(span);
+        });
+      }
+
+      function renderLinkedBookings(data) {
+        const rows = data && Array.isArray(data.bookings) ? data.bookings : [];
+        els.linkedBookings.innerHTML = "";
+
+        if (!rows.length) {
+          els.linkedBookings.innerHTML = '<div class="list-item muted">No linked bookings found.</div>';
           return;
         }
 
+        rows.forEach((row) => {
+          const item = document.createElement("div");
+          item.className = "list-item";
+          item.innerHTML = `
+            <strong>${escapeHtml(row.service_date || "No date")} — ${escapeHtml(row.package_code || "No package")}</strong>
+            <div>Status: ${escapeHtml(row.status || "—")} | Job: ${escapeHtml(row.job_status || "—")} | Slot: ${escapeHtml(row.start_slot || "—")}</div>
+            <div class="muted">Assigned: ${escapeHtml(row.assigned_to || row.assigned_staff_name || "—")} | Total: ${formatMoney(row.total_price)}</div>
+            <div class="muted">Booking ID: ${escapeHtml(row.id || "—")}</div>
+          `;
+          els.linkedBookings.appendChild(item);
+        });
+      }
+
+      function renderCustomerDetail(data) {
+        renderCustomerPills(data);
+        renderPre(els.detail, data && data.customer_profile ? data.customer_profile : "No customer detail loaded yet.");
+        renderPre(els.tierBox, data && data.customer_tier ? data.customer_tier : "No tier data loaded yet.");
+        renderPre(els.bookingSummary, data && data.booking_summary ? data.booking_summary : "No booking summary loaded yet.");
+        renderLinkedBookings(data);
+      }
+
+      async function searchCustomers() {
+        setShellStatus("", "");
+        setSearchBusy(true);
+
         try {
-          setNotice("Saving customer profile…");
-          await apiPost("/api/admin/customer_profiles_save", currentPassword, collectPayload());
-          await refreshCustomers();
-          setNotice("Customer profile saved.", "ok");
+          const response = await fetch("/api/admin/customers_list", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              q: String(els.q.value || "").trim() || undefined,
+              tier_code: String(els.tier.value || "").trim() || undefined
+            })
+          });
+
+          const data = await response.json().catch(() => null);
+
+          if (!response.ok) {
+            throw new Error((data && data.error) || "Could not search customers.");
+          }
+
+          const rows =
+            data && Array.isArray(data.customer_profiles)
+              ? data.customer_profiles
+              : data && Array.isArray(data.customers)
+                ? data.customers
+                : [];
+
+          renderResults(rows);
+          setShellStatus(`Loaded ${rows.length} customer profile(s).`, "success");
         } catch (err) {
-          setNotice(err.message || "Could not save customer profile.", "bad");
+          renderResults([]);
+          setShellStatus(
+            err && err.message ? err.message : "Could not search customers.",
+            "error"
+          );
+        } finally {
+          setSearchBusy(false);
         }
+      }
+
+      function renderResults(rows) {
+        els.tbody.innerHTML = "";
+
+        if (!rows.length) {
+          els.tbody.innerHTML = '<tr><td colspan="5" class="muted">No customers found.</td></tr>';
+          return;
+        }
+
+        rows.forEach((row) => {
+          const tr = document.createElement("tr");
+
+          const openBtn = document.createElement("button");
+          openBtn.type = "button";
+          openBtn.className = "btn secondary";
+          openBtn.textContent = "Open";
+          openBtn.addEventListener("click", function () {
+            loadCustomerDetail(row.id);
+          });
+
+          const tdAction = document.createElement("td");
+          tdAction.appendChild(openBtn);
+
+          tr.innerHTML = `
+            <td>${escapeHtml(row.customer_name || row.full_name || "—")}</td>
+            <td>${escapeHtml(row.customer_email || row.email || "—")}</td>
+            <td>${escapeHtml(row.customer_phone || row.phone || "—")}</td>
+            <td>${escapeHtml(row.tier_code || "—")}</td>
+          `;
+          tr.appendChild(tdAction);
+          els.tbody.appendChild(tr);
+        });
+      }
+
+      async function loadCustomerDetail(customerProfileId) {
+        setShellStatus("", "");
+        selectedCustomer = null;
+        renderCustomerDetail(null);
+
+        try {
+          const response = await fetch("/api/admin/customers_detail", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              customer_profile_id: customerProfileId
+            })
+          });
+
+          const data = await response.json().catch(() => null);
+
+          if (!response.ok) {
+            throw new Error((data && data.error) || "Could not load customer detail.");
+          }
+
+          selectedCustomer = data;
+          renderCustomerDetail(data);
+          setShellStatus("Customer detail loaded.", "success");
+        } catch (err) {
+          renderCustomerDetail(null);
+          setShellStatus(
+            err && err.message ? err.message : "Could not load customer detail.",
+            "error"
+          );
+        }
+      }
+
+      function resetSearch() {
+        els.form.reset();
+        renderResults([]);
+        renderCustomerDetail(null);
+        selectedCustomer = null;
+        setShellStatus("", "");
+      }
+
+      function formatMoney(value) {
+        const n = Number(value);
+        if (!Number.isFinite(n)) return "—";
+        return new Intl.NumberFormat("en-CA", {
+          style: "currency",
+          currency: "CAD"
+        }).format(n);
+      }
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      els.form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        searchCustomers();
       });
 
-      document.querySelector("#newCustomerBtn").addEventListener("click", () => {
-        clearForm();
-        setNotice("Ready to create a new customer profile.");
+      els.resetBtn.addEventListener("click", resetSearch);
+
+      window.AdminShell.boot({
+        pageKey: "admin-customers"
       });
-    });
+    })();
   </script>
 </body>
 </html>
