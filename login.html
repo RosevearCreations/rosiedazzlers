@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rosie Dazzlers | Client Login</title>
+  <link rel="stylesheet" href="/assets/site.css" />
+</head>
+<body>
+  <div class="nav"><div class="nav-inner"><a class="brand" href="/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a><div class="nav-links" id="navLinks"></div><a class="btn primary" href="/book">Book now</a></div></div>
+  <div class="container">
+    <div class="grid cards" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:start;">
+      <section class="panel">
+        <h1 style="margin-top:0">Client Login</h1>
+        <p class="muted">Sign in to view your account details and booking profile.</p>
+        <form id="loginForm">
+          <div class="field"><label for="loginEmail">Email</label><input id="loginEmail" type="email" required /></div>
+          <div class="field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" required /></div>
+          <button class="btn primary" id="loginBtn" type="submit">Sign In</button>
+          <div id="loginStatus" class="muted" style="margin-top:12px"></div>
+        </form>
+      </section>
+      <section class="panel">
+        <h2 style="margin-top:0">Create Client Account</h2>
+        <p class="muted">Create a customer login with your most important profile details.</p>
+        <form id="signupForm">
+          <div class="field"><label for="signupName">Full Name</label><input id="signupName" required /></div>
+          <div class="field"><label for="signupEmail">Email</label><input id="signupEmail" type="email" required /></div>
+          <div class="field"><label for="signupPhone">Phone</label><input id="signupPhone" /></div>
+          <div class="field"><label for="signupPassword">Password</label><input id="signupPassword" type="password" required minlength="8" /></div>
+          <div class="field"><label for="signupAddress1">Address</label><input id="signupAddress1" /></div>
+          <div class="field"><label for="signupCity">City</label><input id="signupCity" /></div>
+          <div class="field"><label for="signupProvince">Province</label><input id="signupProvince" value="ON" /></div>
+          <div class="field"><label for="signupPostal">Postal Code</label><input id="signupPostal" /></div>
+          <div class="field"><label for="signupVehicleNotes">Vehicle Details</label><textarea id="signupVehicleNotes"></textarea></div>
+          <button class="btn primary" id="signupBtn" type="submit">Create Account</button>
+          <div id="signupStatus" class="muted" style="margin-top:12px"></div>
+        </form>
+      </section>
+    </div>
+    <div class="footer" data-footer></div>
+  </div>
+  <script src="/assets/client-auth.js"></script>
+  <script type="module" src="/assets/chrome.js"></script>
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    function status(el, msg, ok=false){ el.textContent = msg || ''; el.style.color = ok ? '#86efac' : '#fca5a5'; }
+    loginForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const out=document.getElementById('loginStatus'); status(out,''); try { await window.ClientAuth.signIn({ email: loginEmail.value.trim(), password: loginPassword.value }); status(out,'Signed in. Redirecting...',true); setTimeout(()=>location.replace('/my-account'),300); } catch(err){ status(out, err.message || 'Login failed.'); } });
+    signupForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const out=document.getElementById('signupStatus'); status(out,''); try { await window.ClientAuth.signUp({ full_name: signupName.value.trim(), email: signupEmail.value.trim(), phone: signupPhone.value.trim(), password: signupPassword.value, address_line1: signupAddress1.value.trim(), city: signupCity.value.trim(), province: signupProvince.value.trim(), postal_code: signupPostal.value.trim(), vehicle_notes: signupVehicleNotes.value.trim() }); status(out,'Account created. Redirecting...',true); setTimeout(()=>location.replace('/my-account'),300); } catch(err){ status(out, err.message || 'Sign-up failed.'); } });
+  </script>
+</body>
+</html>

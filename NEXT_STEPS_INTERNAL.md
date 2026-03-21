@@ -150,3 +150,9 @@ That is the most important next step because the backend is now strong enough to
 ## One-sentence summary
 
 The next Rosie Dazzlers phase should focus on **real staff auth, consistent staff identity, gift redemption, upload flow, and internal workflow polish** rather than simply adding more disconnected backend pieces.
+
+### 11) Connect client accounts to booking history
+Need:
+- show client bookings in `/my-account`
+- connect gift redemption and progress access to the signed-in client
+- reduce dependence on email-only lookup where a session exists

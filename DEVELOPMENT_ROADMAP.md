@@ -237,3 +237,9 @@ If development continues in the most logical order, the next priorities should b
 ## One-sentence roadmap summary
 
 The `dev` branch has largely finished the **role-aware backend foundation**, so the next phase is to turn it into a **real staff-operated internal app** with proper auth, direct uploads, unified pricing logic, and smoother detailer workflow.
+
+## New work moved forward
+
+The project now has an early client account/auth foundation and public top-bar sign-in status. Because of that, one new practical next step is:
+
+- connect client accounts more deeply to booking history, gift redemption, and progress access

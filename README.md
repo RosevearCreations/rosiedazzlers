@@ -296,3 +296,19 @@ It forwards to the newer bootstrap path:
 - `POST /api/admin/auth_bootstrap_admin_password`
 
 This was added to tolerate stale browser code, cached scripts, or older tooling during the auth transition.
+
+## March 2026 auth/profile additions
+
+The current dev branch now includes a client auth foundation in addition to staff auth:
+
+- `/login` — client login + sign-up
+- `/my-account` — client account/profile page
+- `/api/client/auth_signup`
+- `/api/client/auth_login`
+- `/api/client/auth_me`
+- `/api/client/auth_logout`
+- `/api/client/profile_update`
+
+The public nav now shows current sign-in status at the top for staff and clients, including the signed-in username and a logout link.
+
+A new SQL migration adds richer profile fields for customer and staff records plus `customer_auth_sessions`. Run `sql/2026-03-21_customer_auth_and_profile_fields.sql` before using the client login/account flow in production.

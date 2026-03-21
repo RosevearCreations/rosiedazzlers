@@ -178,3 +178,11 @@ This phase substantially improved the backend foundation.
 Rosie Dazzlers is now much closer to being:
 - an internal operations platform
 - not just a static site with a few admin tools
+
+## Additional auth/profile expansion
+
+After the admin/detailer refresh, the dev branch also gained:
+- client login/sign-up foundation
+- client account page foundation
+- nav-level session status for public pages
+- richer profile fields for future admin/client workflows

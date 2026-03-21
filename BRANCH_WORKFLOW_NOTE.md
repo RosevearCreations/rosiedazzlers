@@ -88,3 +88,8 @@ If a future AI/dev session starts and there is any doubt:
 ## One-line takeaway
 
 For Rosie Dazzlers active development, **`dev` is the working source of truth and `main` should not be assumed current**.
+
+## Current migration note
+
+The dev branch now expects the newer client/staff profile migration file as part of the active auth rollout:
+- `sql/2026-03-21_customer_auth_and_profile_fields.sql`

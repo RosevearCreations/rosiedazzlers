@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rosie Dazzlers | My Account</title>
+  <link rel="stylesheet" href="/assets/site.css" />
+</head>
+<body>
+  <div class="nav"><div class="nav-inner"><a class="brand" href="/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a><div class="nav-links" id="navLinks"></div><a class="btn primary" href="/book">Book now</a></div></div>
+  <div class="container">
+    <section class="panel">
+      <h1 style="margin-top:0">My Client Account</h1>
+      <p class="muted">Update your contact, address, and vehicle details.</p>
+      <div id="accountStatus" class="muted" style="margin-bottom:12px"></div>
+      <form id="accountForm" hidden>
+        <div class="grid cards">
+          <div class="field"><label for="acctName">Full Name</label><input id="acctName" /></div>
+          <div class="field"><label for="acctEmail">Email</label><input id="acctEmail" disabled /></div>
+          <div class="field"><label for="acctPhone">Phone</label><input id="acctPhone" /></div>
+          <div class="field"><label for="acctAddress1">Address Line 1</label><input id="acctAddress1" /></div>
+          <div class="field"><label for="acctAddress2">Address Line 2</label><input id="acctAddress2" /></div>
+          <div class="field"><label for="acctCity">City</label><input id="acctCity" /></div>
+          <div class="field"><label for="acctProvince">Province</label><input id="acctProvince" /></div>
+          <div class="field"><label for="acctPostal">Postal Code</label><input id="acctPostal" /></div>
+          <div class="field"><label for="acctVehicleNotes">Vehicle Details</label><textarea id="acctVehicleNotes"></textarea></div>
+          <div class="field"><label for="acctNotes">Notes</label><textarea id="acctNotes"></textarea></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+          <button class="btn primary" id="saveAccountBtn" type="submit">Save Profile</button>
+          <button class="btn ghost" id="logoutBtn" type="button">Logout</button>
+        </div>
+      </form>
+    </section>
+    <div class="footer" data-footer></div>
+  </div>
+  <script src="/assets/client-auth.js"></script>
+  <script type="module" src="/assets/chrome.js"></script>
+  <script>
+    const form=document.getElementById('accountForm'); const statusEl=document.getElementById('accountStatus');
+    function show(msg, ok=false){ statusEl.textContent=msg||''; statusEl.style.color=ok?'#86efac':'#fca5a5'; }
+    function fill(c){ acctName.value=c.full_name||''; acctEmail.value=c.email||''; acctPhone.value=c.phone||''; acctAddress1.value=c.address_line1||''; acctAddress2.value=c.address_line2||''; acctCity.value=c.city||''; acctProvince.value=c.province||''; acctPostal.value=c.postal_code||''; acctVehicleNotes.value=c.vehicle_notes||''; acctNotes.value=c.notes||''; }
+    async function boot(){ try{ const current=await window.ClientAuth.loadCurrentCustomer(); if(!current.authenticated){ location.replace('/login?next=/my-account'); return; } fill(current.customer); form.hidden=false; show(`Signed in as ${current.customer.full_name||current.customer.email}`, true); }catch(err){ show(err.message||'Could not load account.'); } }
+    form.addEventListener('submit', async (e)=>{ e.preventDefault(); try{ const result=await window.ClientAuth.updateProfile({ full_name: acctName.value.trim(), phone: acctPhone.value.trim(), address_line1: acctAddress1.value.trim(), address_line2: acctAddress2.value.trim(), city: acctCity.value.trim(), province: acctProvince.value.trim(), postal_code: acctPostal.value.trim(), vehicle_notes: acctVehicleNotes.value.trim(), notes: acctNotes.value.trim() }); fill(result.customer||window.ClientAuth.getCustomer()); show('Profile saved.', true);} catch(err){ show(err.message||'Could not save profile.'); }});
+    logoutBtn.addEventListener('click', async()=>{ try{ await window.ClientAuth.signOut(); location.replace('/'); }catch(err){ show(err.message||'Could not sign out.'); } });
+    boot();
+  </script>
+</body>
+</html>

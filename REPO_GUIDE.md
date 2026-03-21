@@ -325,3 +325,17 @@ Core data groups now include:
 - `DEVELOPMENT_ROADMAP.md` — next build order
 - `SANITY_CHECK.md` — current status and priorities
 - `SUPABASE_SCHEMA.sql` — schema foundation
+
+## Additional new files
+
+Recent auth/profile additions include:
+- `assets/client-auth.js`
+- `login.html`
+- `my-account.html`
+- `functions/api/client/auth_signup.js`
+- `functions/api/client/auth_login.js`
+- `functions/api/client/auth_me.js`
+- `functions/api/client/auth_logout.js`
+- `functions/api/client/profile_update.js`
+- `functions/api/_lib/customer-session.js`
+- `sql/2026-03-21_customer_auth_and_profile_fields.sql`

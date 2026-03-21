@@ -261,3 +261,10 @@ The most logical next build steps are:
 ## One-sentence handoff
 
 Rosie Dazzlers on `dev` is now a growing detailing operations platform with a large role-aware backend foundation, and the next phase is to finish auth, unify workflow logic, and make the internal staff experience smoother.
+
+## Recent additions
+
+- public client login/sign-up flow
+- public client account page
+- nav-level sign-in status for staff/client users
+- richer profile/session SQL migration for customer and staff records

@@ -229,3 +229,9 @@ rather than just adding more isolated endpoints.
 ## Additional transition note
 
 A legacy compatibility alias was added for older bootstrap callers so stale browser code hitting `/api/auth/bootstrap-admin` no longer fails with a 405 during the auth migration.
+
+### 13) Client auth/profile foundation
+- new client sign-up/login/logout endpoints now exist
+- client account/profile update endpoint now exists
+- public pages now show sign-in status in the top nav
+- new profile fields and client session storage require the latest SQL migration before full use

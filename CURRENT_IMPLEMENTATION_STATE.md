@@ -193,3 +193,9 @@ Judge current implementation against `dev`, not `main`.
 ## One-line summary
 
 The `dev` branch already has a strong operations/backend foundation, but the next phase should focus on **auth, workflow consistency, uploads, pricing unification, and cleanup** rather than just adding more isolated pieces.
+
+### Client account foundation
+- client sign-up/login/logout endpoints exist
+- client account page exists
+- top nav can show who is signed in for staff or client users
+- richer customer/staff profile fields require the latest SQL migration

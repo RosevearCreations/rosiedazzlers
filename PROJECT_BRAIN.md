@@ -288,3 +288,15 @@ a static customer-facing site
 + Stripe for payment flows  
 + R2 for media  
 + an emerging role-aware admin/detailer operations layer
+
+## New client account direction
+
+Public pages now have a lightweight client auth direction in progress:
+
+- client sign-up
+- client login/logout
+- client session cookie
+- client account/profile maintenance
+- top-of-site sign-in status on public pages
+
+This is intentionally lighter than full staff admin auth but gives customers visible account state and profile ownership.
