@@ -1,352 +1,663 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin Blocks | Rosie Dazzlers</title>
-  <meta name="description" content="Admin availability blocks for Rosie Dazzlers." />
+  <title>Rosie Dazzlers — Blocks & Availability</title>
+  <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 35%),
+        linear-gradient(180deg, #0f172a 0%, #111827 100%);
+      color: #f8fafc;
+    }
+
+    .shell {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .loading {
+      display: grid;
+      place-items: center;
+      min-height: 60vh;
+      color: #cbd5e1;
+      font-size: 1rem;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .titleblock h1 {
+      margin: 0 0 6px;
+      font-size: 1.8rem;
+      line-height: 1.15;
+    }
+
+    .titleblock p {
+      margin: 0;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    .actorcard {
+      min-width: 280px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 16px 18px;
+      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
+    }
+
+    .actorline {
+      margin: 4px 0;
+      color: #e5e7eb;
+      font-size: 0.96rem;
+    }
+
+    .actorlabel {
+      color: #93c5fd;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+
+    .logout-btn,
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: #2563eb;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn.secondary {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #f8fafc;
+    }
+
+    .logout-btn {
+      margin-top: 10px;
+    }
+
+    .status {
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.05);
+      color: #e5e7eb;
+    }
+
+    .status[data-state="error"] {
+      background: rgba(220,38,38,0.12);
+      border-color: rgba(248,113,113,0.25);
+      color: #fecaca;
+    }
+
+    .status[data-state="success"] {
+      background: rgba(34,197,94,0.10);
+      border-color: rgba(134,239,172,0.22);
+      color: #bbf7d0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      grid-column: span 12;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #e5e7eb;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-size: 0.98rem;
+      background: rgba(255,255,255,0.04);
+      color: #f8fafc;
+      outline: none;
+    }
+
+    .field textarea {
+      min-height: 88px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: #60a5fa;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .pillrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.82rem;
+      color: #e5e7eb;
+    }
+
+    .detail-box {
+      border-radius: 14px;
+      padding: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .detail-box pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #dbeafe;
+      font-size: 0.92rem;
+      line-height: 1.45;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .slot-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .slot-card {
+      border-radius: 14px;
+      padding: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .slot-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      color: #e5e7eb;
+    }
+
+    .checkbox input {
+      width: 18px;
+      height: 18px;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .list-item {
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .list-item strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .muted {
+      color: #94a3b8;
+      font-size: 0.92rem;
+    }
+
+    @media (min-width: 860px) {
+      .span-7 { grid-column: span 7; }
+      .span-5 { grid-column: span 5; }
+      .slot-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
 </head>
-<body data-page="admin-blocks">
-  <header class="nav">
-    <div class="nav-inner">
-      <a class="brand" href="/admin.html">
-        <img data-logo alt="Rosie Dazzlers logo" />
-        <strong>Rosie Dazzlers Admin</strong>
-      </a>
-
-      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
-        Menu
-      </button>
-
-      <nav id="navLinks" class="nav-links">
-        <a href="/admin.html">Dashboard</a>
-        <a href="/admin-booking.html">Bookings</a>
-        <a href="/admin-blocks.html">Blocks</a>
-        <a href="/admin-progress.html">Progress</a>
-        <a href="/admin-promos.html">Promos</a>
-        <a href="/book">Public Site</a>
-      </nav>
+<body>
+  <main class="shell">
+    <div class="loading" data-admin-shell-loading>
+      Loading blocks and availability...
     </div>
-  </header>
 
-  <main class="container">
-    <section class="section">
-      <div class="panel">
-        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="hero">
-        <div>
-          <div class="badge">Admin Blocks</div>
-          <h1>Control booking availability</h1>
-          <p>Block full dates or just AM / PM slots so customers cannot book unavailable times.</p>
+    <div data-admin-shell-ready hidden>
+      <header class="topbar">
+        <div class="titleblock">
+          <h1>Blocks & Availability</h1>
+          <p>
+            Session-aware day schedule and block management page for admin users.
+          </p>
         </div>
-        <div class="panel">
-          <div class="kicker">Current view</div>
-          <h3 style="margin:6px 0 8px">Availability blocks</h3>
-          <div class="kicker">Use this page to add and remove date-based availability restrictions.</div>
-        </div>
-      </div>
-    </section>
 
-    <section class="section">
-      <div id="pageNotice" class="notice">Ready.</div>
-    </section>
+        <section class="actorcard" aria-label="Signed in staff">
+          <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
+          <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
+          <div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div>
+          <button class="logout-btn" type="button" data-admin-logout>Sign Out</button>
+        </section>
+      </header>
 
-    <section class="section">
-      <div class="grid cards">
-        <div class="panel">
-          <h2>Admin access</h2>
-          <form id="adminForm" class="form">
-            <label>
-              Admin password
-              <input id="adminPassword" name="adminPassword" type="password" autocomplete="current-password" required />
-            </label>
+      <div class="status" data-admin-shell-status hidden></div>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Load Day Schedule</h2>
+          <p>Choose a service date to view block state and bookings for that day.</p>
+
+          <form id="schedule-form" class="actions">
+            <div class="field" style="min-width:240px; flex:1 1 240px;">
+              <label for="service-date">Service Date</label>
+              <input id="service-date" name="service_date" type="date" required />
+            </div>
 
             <div>
-              <button class="btn primary" type="submit">Load blocks</button>
+              <button class="btn" id="schedule-load-btn" type="submit">Load Day</button>
             </div>
           </form>
-        </div>
 
-        <div class="panel">
-          <h2>Quick note</h2>
-          <div class="kicker">
-            Full-date blocks prevent all booking for that day.
-            Slot blocks only prevent AM or PM.
+          <div id="schedule-flags" class="pillrow">
+            <span class="pill">No day loaded</span>
           </div>
-        </div>
-      </div>
-    </section>
+        </article>
 
-    <section class="section">
-      <div class="grid cards">
-        <div class="panel">
-          <h2>Block full date</h2>
-          <form id="blockDateForm" class="form">
-            <label>
-              Date
-              <input id="blockDate" name="blockDate" type="date" required />
-            </label>
+        <article class="card span-7">
+          <h2>Day Summary</h2>
+          <div id="day-summary" class="detail-box">
+            <pre>No schedule loaded yet.</pre>
+          </div>
+        </article>
 
-            <label>
-              Reason
-              <input id="blockDateReason" name="blockDateReason" type="text" placeholder="Optional reason" />
-            </label>
+        <article class="card span-5">
+          <h2>Save Blocks</h2>
+          <p>Update the closed/blocked state for this date and its AM/PM slots.</p>
 
-            <div>
-              <button id="blockDateBtn" class="btn primary" type="submit" disabled>Block date</button>
+          <form id="blocks-form" novalidate>
+            <div class="checkbox">
+              <input id="is-date-closed" name="is_date_closed" type="checkbox" />
+              <label for="is-date-closed">Close the entire day</label>
+            </div>
+
+            <div class="field">
+              <label for="date-reason">Day Reason</label>
+              <textarea id="date-reason" name="date_reason" placeholder="Optional reason for closing the day"></textarea>
+            </div>
+
+            <div class="slot-grid">
+              <div class="slot-card">
+                <h3>AM Slot</h3>
+                <div class="checkbox">
+                  <input id="block-am" name="block_am" type="checkbox" />
+                  <label for="block-am">Block AM</label>
+                </div>
+                <div class="field" style="margin-bottom:0;">
+                  <label for="am-reason">AM Reason</label>
+                  <textarea id="am-reason" name="am_reason" placeholder="Optional AM reason"></textarea>
+                </div>
+              </div>
+
+              <div class="slot-card">
+                <h3>PM Slot</h3>
+                <div class="checkbox">
+                  <input id="block-pm" name="block_pm" type="checkbox" />
+                  <label for="block-pm">Block PM</label>
+                </div>
+                <div class="field" style="margin-bottom:0;">
+                  <label for="pm-reason">PM Reason</label>
+                  <textarea id="pm-reason" name="pm_reason" placeholder="Optional PM reason"></textarea>
+                </div>
+              </div>
+
+              <div class="slot-card">
+                <h3>Notes</h3>
+                <p class="muted">
+                  A full-day booking uses both AM and PM slots. A closed day should normally override slot usage entirely.
+                </p>
+              </div>
+            </div>
+
+            <div class="actions" style="margin-top:14px;">
+              <button class="btn" id="blocks-save-btn" type="submit" disabled>Save Blocks</button>
             </div>
           </form>
-        </div>
+        </article>
 
-        <div class="panel">
-          <h2>Block slot</h2>
-          <form id="blockSlotForm" class="form">
-            <label>
-              Date
-              <input id="blockSlotDate" name="blockSlotDate" type="date" required />
-            </label>
-
-            <label>
-              Slot
-              <select id="blockSlotValue" name="blockSlotValue">
-                <option value="AM">AM</option>
-                <option value="PM">PM</option>
-              </select>
-            </label>
-
-            <label>
-              Reason
-              <input id="blockSlotReason" name="blockSlotReason" type="text" placeholder="Optional reason" />
-            </label>
-
-            <div>
-              <button id="blockSlotBtn" class="btn primary" type="submit" disabled>Block slot</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="grid cards">
-        <div class="panel">
-          <h2>Blocked dates</h2>
-          <div id="dateBlocksList" class="grid" style="margin-top:12px">
-            <div class="notice">Blocks not loaded yet.</div>
+        <article class="card">
+          <h2>Bookings On This Day</h2>
+          <div id="day-bookings" class="list">
+            <div class="list-item muted">No bookings loaded yet.</div>
           </div>
-        </div>
-
-        <div class="panel">
-          <h2>Blocked slots</h2>
-          <div id="slotBlocksList" class="grid" style="margin-top:12px">
-            <div class="notice">Blocks not loaded yet.</div>
-          </div>
-        </div>
-      </div>
-    </section>
+        </article>
+      </section>
+    </div>
   </main>
 
-  <footer class="footer container" data-footer></footer>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script>
+    (function () {
+      const els = {
+        dateInput: document.getElementById("service-date"),
+        scheduleForm: document.getElementById("schedule-form"),
+        loadBtn: document.getElementById("schedule-load-btn"),
+        flags: document.getElementById("schedule-flags"),
+        summary: document.getElementById("day-summary"),
+        bookings: document.getElementById("day-bookings"),
 
-  <script src="/assets/chrome.js"></script>
-  <script type="module">
-    import { setBrandImages, setFooter } from "/assets/site.js";
+        blocksForm: document.getElementById("blocks-form"),
+        saveBtn: document.getElementById("blocks-save-btn"),
+        isDateClosed: document.getElementById("is-date-closed"),
+        dateReason: document.getElementById("date-reason"),
+        blockAm: document.getElementById("block-am"),
+        amReason: document.getElementById("am-reason"),
+        blockPm: document.getElementById("block-pm"),
+        pmReason: document.getElementById("pm-reason")
+      };
 
-    let currentPassword = "";
+      let currentDay = null;
 
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#39;");
-    }
-
-    function setNotice(message, kind = "") {
-      const el = document.querySelector("#pageNotice");
-      if (!el) return;
-      el.className = kind ? `notice ${kind}` : "notice";
-      el.textContent = message;
-    }
-
-    async function apiPost(url, password, body) {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": password
-        },
-        body: JSON.stringify(body || {})
-      });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data.error || `Request failed for ${url}`);
-      }
-      return data;
-    }
-
-    function renderDateBlocks(data) {
-      const wrap = document.querySelector("#dateBlocksList");
-      if (!wrap) return;
-
-      const items = Array.isArray(data.date_blocks) ? data.date_blocks : [];
-      if (!items.length) {
-        wrap.innerHTML = `<div class="notice">No blocked dates.</div>`;
-        return;
-      }
-
-      wrap.innerHTML = items.map((item) => `
-        <article class="card">
-          <h3>${escapeHtml(item.blocked_date || "—")}</h3>
-          <p>${escapeHtml(item.reason || "No reason provided")}</p>
-          <div class="hr"></div>
-          <button class="btn small ghost" type="button" data-unblock-date="${escapeHtml(item.blocked_date || "")}">Unblock date</button>
-        </article>
-      `).join("");
-
-      wrap.querySelectorAll("[data-unblock-date]").forEach((btn) => {
-        btn.addEventListener("click", async () => {
-          try {
-            setNotice("Removing date block…");
-            await apiPost("/api/admin/unblock_date", currentPassword, {
-              blocked_date: btn.getAttribute("data-unblock-date")
-            });
-            await refreshBlocks();
-            setNotice("Date block removed.", "ok");
-          } catch (err) {
-            setNotice(err.message || "Could not remove date block.", "bad");
-          }
+      function setShellStatus(message, type) {
+        const nodes = document.querySelectorAll("[data-admin-shell-status]");
+        nodes.forEach((node) => {
+          node.hidden = !message;
+          node.textContent = message || "";
+          node.dataset.state = type || "";
         });
-      });
-    }
-
-    function renderSlotBlocks(data) {
-      const wrap = document.querySelector("#slotBlocksList");
-      if (!wrap) return;
-
-      const items = Array.isArray(data.slot_blocks) ? data.slot_blocks : [];
-      if (!items.length) {
-        wrap.innerHTML = `<div class="notice">No blocked slots.</div>`;
-        return;
       }
 
-      wrap.innerHTML = items.map((item) => `
-        <article class="card">
-          <h3>${escapeHtml(item.blocked_date || "—")} · ${escapeHtml(item.slot || "—")}</h3>
-          <p>${escapeHtml(item.reason || "No reason provided")}</p>
-          <div class="hr"></div>
-          <button
-            class="btn small ghost"
-            type="button"
-            data-unblock-slot-date="${escapeHtml(item.blocked_date || "")}"
-            data-unblock-slot-value="${escapeHtml(item.slot || "")}"
-          >Unblock slot</button>
-        </article>
-      `).join("");
+      function setLoadBusy(busy) {
+        els.loadBtn.disabled = !!busy;
+        els.loadBtn.textContent = busy ? "Loading..." : "Load Day";
+      }
 
-      wrap.querySelectorAll("[data-unblock-slot-date]").forEach((btn) => {
-        btn.addEventListener("click", async () => {
-          try {
-            setNotice("Removing slot block…");
-            await apiPost("/api/admin/unblock_slot", currentPassword, {
-              blocked_date: btn.getAttribute("data-unblock-slot-date"),
-              slot: btn.getAttribute("data-unblock-slot-value")
-            });
-            await refreshBlocks();
-            setNotice("Slot block removed.", "ok");
-          } catch (err) {
-            setNotice(err.message || "Could not remove slot block.", "bad");
-          }
+      function setSaveBusy(busy) {
+        els.saveBtn.disabled = !!busy;
+        els.saveBtn.textContent = busy ? "Saving..." : "Save Blocks";
+      }
+
+      function renderPre(target, data) {
+        target.innerHTML = "";
+        const pre = document.createElement("pre");
+        pre.textContent = typeof data === "string" ? data : JSON.stringify(data, null, 2);
+        target.appendChild(pre);
+      }
+
+      function renderFlags(data) {
+        els.flags.innerHTML = "";
+
+        if (!data) {
+          els.flags.innerHTML = '<span class="pill">No day loaded</span>';
+          return;
+        }
+
+        const dayClosed = !!(data.date_block && data.date_block.is_closed);
+        const slotAM = data.slots && data.slots.AM ? data.slots.AM : null;
+        const slotPM = data.slots && data.slots.PM ? data.slots.PM : null;
+
+        const flags = [
+          ["Date", data.service_date || "—"],
+          ["Day Closed", dayClosed ? "Yes" : "No"],
+          ["AM Blocked", slotAM && slotAM.blocked ? "Yes" : "No"],
+          ["PM Blocked", slotPM && slotPM.blocked ? "Yes" : "No"],
+          ["AM Bookings", slotAM ? String(slotAM.active_booking_count || 0) : "0"],
+          ["PM Bookings", slotPM ? String(slotPM.active_booking_count || 0) : "0"]
+        ];
+
+        flags.forEach(([label, value]) => {
+          const span = document.createElement("span");
+          span.className = "pill";
+          span.textContent = `${label}: ${value}`;
+          els.flags.appendChild(span);
         });
-      });
-    }
+      }
 
-    async function refreshBlocks() {
-      const data = await apiPost("/api/admin/blocks", currentPassword, {});
-      renderDateBlocks(data);
-      renderSlotBlocks(data);
+      function renderBookings(data) {
+        const bookings = data && Array.isArray(data.bookings) ? data.bookings : [];
+        els.bookings.innerHTML = "";
 
-      document.querySelector("#blockDateBtn").disabled = false;
-      document.querySelector("#blockSlotBtn").disabled = false;
-    }
-
-    async function boot() {
-      setBrandImages();
-      setFooter();
-
-      document.querySelector("#adminForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const password = document.querySelector("#adminPassword").value.trim();
-        if (!password) {
-          setNotice("Admin password is required.", "bad");
+        if (!bookings.length) {
+          els.bookings.innerHTML = '<div class="list-item muted">No bookings on this day.</div>';
           return;
         }
 
+        bookings.forEach((row) => {
+          const item = document.createElement("div");
+          item.className = "list-item";
+          item.innerHTML = `
+            <strong>${escapeHtml(row.customer_name || "Unknown Customer")}</strong>
+            <div>Slot: ${escapeHtml(row.start_slot || "—")} | Status: ${escapeHtml(row.status || "—")} | Job: ${escapeHtml(row.job_status || "—")}</div>
+            <div class="muted">Package: ${escapeHtml(row.package_code || "—")} | Assigned: ${escapeHtml(row.assigned_to || row.assigned_staff_name || "—")}</div>
+            <div class="muted">Booking ID: ${escapeHtml(row.id || "—")}</div>
+          `;
+          els.bookings.appendChild(item);
+        });
+      }
+
+      function populateFormFromDay(data) {
+        const dateClosed = !!(data && data.date_block && data.date_block.is_closed);
+        const dateReason = data && data.date_block ? (data.date_block.reason || "") : "";
+
+        const slotBlocks = Array.isArray(data && data.slot_blocks) ? data.slot_blocks : [];
+        const amBlock = slotBlocks.find((row) => String(row.slot_code || "").toUpperCase() === "AM");
+        const pmBlock = slotBlocks.find((row) => String(row.slot_code || "").toUpperCase() === "PM");
+
+        els.isDateClosed.checked = dateClosed;
+        els.dateReason.value = dateReason;
+
+        els.blockAm.checked = !!(amBlock && amBlock.is_blocked);
+        els.amReason.value = amBlock && amBlock.reason ? amBlock.reason : "";
+
+        els.blockPm.checked = !!(pmBlock && pmBlock.is_blocked);
+        els.pmReason.value = pmBlock && pmBlock.reason ? pmBlock.reason : "";
+
+        els.saveBtn.disabled = !data;
+      }
+
+      async function loadDay(serviceDate) {
+        setShellStatus("", "");
+        setLoadBusy(true);
+        currentDay = null;
+        els.saveBtn.disabled = true;
+
         try {
-          currentPassword = password;
-          setNotice("Loading current blocks…");
-          await refreshBlocks();
-          setNotice("Blocks loaded.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not load blocks.", "bad");
-        }
-      });
-
-      document.querySelector("#blockDateForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        if (!currentPassword) {
-          setNotice("Load admin access first.", "bad");
-          return;
-        }
-
-        try {
-          setNotice("Blocking date…");
-          await apiPost("/api/admin/block_date", currentPassword, {
-            blocked_date: document.querySelector("#blockDate").value,
-            reason: document.querySelector("#blockDateReason").value.trim()
+          const response = await fetch("/api/admin/day_schedule", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              service_date: serviceDate
+            })
           });
-          document.querySelector("#blockDateReason").value = "";
-          await refreshBlocks();
-          setNotice("Date blocked.", "ok");
+
+          const data = await response.json().catch(() => null);
+
+          if (!response.ok) {
+            throw new Error((data && data.error) || "Could not load day schedule.");
+          }
+
+          currentDay = data;
+          renderFlags(data);
+          renderPre(els.summary, data);
+          renderBookings(data);
+          populateFormFromDay(data);
+          setShellStatus("Day schedule loaded.", "success");
         } catch (err) {
-          setNotice(err.message || "Could not block date.", "bad");
+          renderFlags(null);
+          renderPre(els.summary, "No schedule loaded yet.");
+          renderBookings(null);
+          populateFormFromDay(null);
+          setShellStatus(
+            err && err.message ? err.message : "Could not load day schedule.",
+            "error"
+          );
+        } finally {
+          setLoadBusy(false);
         }
-      });
+      }
 
-      document.querySelector("#blockSlotForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
+      async function saveBlocks(event) {
+        event.preventDefault();
 
-        if (!currentPassword) {
-          setNotice("Load admin access first.", "bad");
+        const serviceDate = String(els.dateInput.value || "").trim();
+        if (!serviceDate) {
+          setShellStatus("Service date is required before saving blocks.", "error");
           return;
         }
 
+        setShellStatus("", "");
+        setSaveBusy(true);
+
         try {
-          setNotice("Blocking slot…");
-          await apiPost("/api/admin/block_slot", currentPassword, {
-            blocked_date: document.querySelector("#blockSlotDate").value,
-            slot: document.querySelector("#blockSlotValue").value,
-            reason: document.querySelector("#blockSlotReason").value.trim()
+          const response = await fetch("/api/admin/blocks_save", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              service_date: serviceDate,
+              is_date_closed: !!els.isDateClosed.checked,
+              date_reason: String(els.dateReason.value || "").trim() || null,
+              slot_updates: [
+                {
+                  slot_code: "AM",
+                  is_blocked: !!els.blockAm.checked,
+                  reason: String(els.amReason.value || "").trim() || null
+                },
+                {
+                  slot_code: "PM",
+                  is_blocked: !!els.blockPm.checked,
+                  reason: String(els.pmReason.value || "").trim() || null
+                }
+              ]
+            })
           });
-          document.querySelector("#blockSlotReason").value = "";
-          await refreshBlocks();
-          setNotice("Slot blocked.", "ok");
+
+          const data = await response.json().catch(() => null);
+
+          if (!response.ok) {
+            throw new Error((data && data.error) || "Could not save block changes.");
+          }
+
+          setShellStatus("Blocks saved successfully.", "success");
+          await loadDay(serviceDate);
         } catch (err) {
-          setNotice(err.message || "Could not block slot.", "bad");
+          setShellStatus(
+            err && err.message ? err.message : "Could not save block changes.",
+            "error"
+          );
+        } finally {
+          setSaveBusy(false);
+        }
+      }
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      els.scheduleForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const serviceDate = String(els.dateInput.value || "").trim();
+
+        if (!serviceDate) {
+          setShellStatus("Please choose a service date.", "error");
+          return;
+        }
+
+        loadDay(serviceDate);
+      });
+
+      els.blocksForm.addEventListener("submit", saveBlocks);
+
+      window.AdminShell.boot({
+        pageKey: "admin-blocks",
+        onReady: async function () {
+          const today = new Date();
+          const yyyy = today.getFullYear();
+          const mm = String(today.getMonth() + 1).padStart(2, "0");
+          const dd = String(today.getDate()).padStart(2, "0");
+          els.dateInput.value = `${yyyy}-${mm}-${dd}`;
+          await loadDay(els.dateInput.value);
         }
       });
-    }
-
-    document.addEventListener("DOMContentLoaded", boot);
+    })();
   </script>
 </body>
 </html>
