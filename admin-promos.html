@@ -1,341 +1,777 @@
-<!-- /admin-promos.html
-     REPLACE ENTIRE FILE
-
-     Purpose:
-     - Simple admin UI to create and manage promo codes (percent or fixed amount)
-     - This is the "framework" UI — the API + DB table comes next.
-
-     Uses (expected next endpoints we will create):
-       POST /api/admin/promo_create
-       POST /api/admin/promo_list
-       POST /api/admin/promo_disable
-
-     Notes:
-     - Promo codes are separate from Gift Certificates.
-     - Promo codes can be:
-         - percent_off (e.g. 10%)
-         - amount_off_cents (e.g. $25.00)
-     - We will apply them in /api/checkout after this.
--->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin Promos | Rosie Dazzlers</title>
-  <meta name="description" content="Create discount promo codes." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260311t" />
+  <title>Rosie Dazzlers — Promo Management</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css" />
   <style>
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .muted{color:rgba(234,242,255,.62)}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.10);vertical-align:top}
-    th{color:rgba(234,242,255,.70);font-weight:600;text-align:left}
-    .mini{font-size:.92rem}
-    pre{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px}
-    .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
-    .tag.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
-    .tag.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
-    .tag.bad{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.10)}
+    :root {
+      color-scheme: dark;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 35%),
+        linear-gradient(180deg, #0f172a 0%, #111827 100%);
+      color: #f8fafc;
+    }
+
+    .shell {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .loading {
+      display: grid;
+      place-items: center;
+      min-height: 60vh;
+      color: #cbd5e1;
+      font-size: 1rem;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .titleblock h1 {
+      margin: 0 0 6px;
+      font-size: 1.8rem;
+      line-height: 1.15;
+    }
+
+    .titleblock p {
+      margin: 0;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    .actorcard {
+      min-width: 280px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 16px 18px;
+      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
+    }
+
+    .actorline {
+      margin: 4px 0;
+      color: #e5e7eb;
+      font-size: 0.96rem;
+    }
+
+    .actorlabel {
+      color: #93c5fd;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+
+    .logout-btn,
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: #2563eb;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn.secondary {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #f8fafc;
+    }
+
+    .btn.warn {
+      background: #b45309;
+    }
+
+    .btn.danger {
+      background: #b91c1c;
+    }
+
+    .logout-btn {
+      margin-top: 10px;
+    }
+
+    .status {
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.05);
+      color: #e5e7eb;
+    }
+
+    .status[data-state="error"] {
+      background: rgba(220,38,38,0.12);
+      border-color: rgba(248,113,113,0.25);
+      color: #fecaca;
+    }
+
+    .status[data-state="success"] {
+      background: rgba(34,197,94,0.10);
+      border-color: rgba(134,239,172,0.22);
+      color: #bbf7d0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      grid-column: span 12;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+      align-items: end;
+    }
+
+    .field {
+      grid-column: span 12;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #e5e7eb;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-size: 0.98rem;
+      background: rgba(255,255,255,0.04);
+      color: #f8fafc;
+      outline: none;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: #60a5fa;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 980px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      vertical-align: top;
+      font-size: 0.95rem;
+    }
+
+    th {
+      color: #93c5fd;
+      font-weight: 700;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .muted {
+      color: #94a3b8;
+      font-size: 0.92rem;
+    }
+
+    .pillrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.82rem;
+      color: #e5e7eb;
+    }
+
+    .detail-box {
+      border-radius: 14px;
+      padding: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .detail-box pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #dbeafe;
+      font-size: 0.92rem;
+      line-height: 1.45;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .list-item {
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .list-item strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    @media (min-width: 900px) {
+      .field.span-4 { grid-column: span 4; }
+      .field.span-3 { grid-column: span 3; }
+      .field.span-2 { grid-column: span 2; }
+
+      .card.span-7 { grid-column: span 7; }
+      .card.span-5 { grid-column: span 5; }
+    }
   </style>
 </head>
-
 <body>
-  <div class="nav">
-    <div class="nav-inner">
-      <a class="brand" href="/">
-        <img data-logo alt="Rosie Dazzlers logo" />
-        <strong>Rosie Dazzlers</strong>
-      </a>
-      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
-      <div class="nav-links" id="navLinks"></div>
-      <a class="btn primary" href="/admin">Admin</a>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="panel">
-      <h1 style="margin:0 0 6px">Promo Codes</h1>
-      <p class="kicker" style="margin:0">Create discount codes (percent or dollar amount).</p>
-
-      <div class="hr"></div>
-
-      <div class="row">
-        <label style="display:flex;flex-direction:column;gap:6px;min-width:260px">
-          <span class="muted">Admin password</span>
-          <input id="pw" type="password" placeholder="Enter admin password…" />
-        </label>
-
-        <div class="row" style="align-items:flex-end">
-          <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
-          <button class="btn ghost" id="refreshBtn" type="button">Refresh</button>
-          <a class="btn ghost" href="/admin">Back</a>
-        </div>
-      </div>
-
-      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
+  <main class="shell">
+    <div class="loading" data-admin-shell-loading>
+      Loading promo management...
     </div>
 
-    <div class="section grid2">
-      <div class="panel">
-        <h2 style="margin-top:0">Create promo</h2>
+    <div data-admin-shell-ready hidden>
+      <header class="topbar">
+        <div class="titleblock">
+          <h1>Promo Management</h1>
+          <p>
+            Session-aware promo workspace for listing, inspecting, activating, deactivating,
+            and deleting promo codes.
+          </p>
+        </div>
 
-        <label class="muted mini">Code</label>
-        <input id="code" class="mono" type="text" placeholder="SPRING10" />
+        <section class="actorcard" aria-label="Signed in staff">
+          <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
+          <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
+          <div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div>
+          <button class="logout-btn" type="button" data-admin-logout>Sign Out</button>
+        </section>
+      </header>
 
-        <div class="grid2" style="margin-top:10px">
-          <div>
-            <label for="kind">Type</label>
-            <select id="kind">
-              <option value="percent">Percent off</option>
-              <option value="amount">Amount off (CAD)</option>
-            </select>
+      <div class="status" data-admin-shell-status hidden></div>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Search Promos</h2>
+          <p>Search promo codes by code, label, active state, or date window.</p>
+
+          <form id="promo-search-form" class="filters" novalidate>
+            <div class="field span-4">
+              <label for="promo-q">Search</label>
+              <input id="promo-q" name="q" type="text" placeholder="Promo code, label, description" />
+            </div>
+
+            <div class="field span-2">
+              <label for="promo-active">Active State</label>
+              <select id="promo-active" name="is_active">
+                <option value="">Any</option>
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+              </select>
+            </div>
+
+            <div class="field span-3">
+              <label for="promo-starts-after">Starts After</label>
+              <input id="promo-starts-after" name="starts_after" type="date" />
+            </div>
+
+            <div class="field span-3">
+              <label for="promo-ends-before">Ends Before</label>
+              <input id="promo-ends-before" name="ends_before" type="date" />
+            </div>
+
+            <div class="field span-4">
+              <div class="action-row">
+                <button class="btn" id="promo-search-btn" type="submit">Search</button>
+                <button class="btn secondary" id="promo-reset-btn" type="button">Reset</button>
+              </div>
+            </div>
+          </form>
+        </article>
+
+        <article class="card span-7">
+          <h2>Promo Results</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Label</th>
+                  <th>Type</th>
+                  <th>Value</th>
+                  <th>Active</th>
+                  <th>Uses</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="promo-results-body">
+                <tr>
+                  <td colspan="7" class="muted">Run a search to load promos.</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div>
-            <label for="value">Value</label>
-            <input id="value" type="number" min="0" step="0.01" placeholder="10" />
+        </article>
+
+        <article class="card span-5">
+          <h2>Selected Promo</h2>
+          <p>Open a promo code to inspect detail and usage context.</p>
+
+          <div id="promo-pills" class="pillrow">
+            <span class="pill">No promo selected</span>
           </div>
-        </div>
 
-        <div class="grid2" style="margin-top:10px">
-          <div>
-            <label for="starts">Starts (optional)</label>
-            <input id="starts" type="date" />
+          <div id="promo-detail" class="detail-box">
+            <pre>No promo detail loaded yet.</pre>
           </div>
-          <div>
-            <label for="ends">Ends (optional)</label>
-            <input id="ends" type="date" />
+
+          <div class="action-row">
+            <button class="btn warn" id="promo-toggle-btn" type="button" disabled>Toggle Active</button>
+            <button class="btn danger" id="promo-delete-btn" type="button" disabled>Delete Promo</button>
           </div>
-        </div>
+        </article>
 
-        <label style="display:flex;gap:10px;align-items:flex-start;margin-top:10px">
-          <input id="active" type="checkbox" checked />
-          <span>Active</span>
-        </label>
-
-        <label for="note" style="margin-top:10px">Internal note (optional)</label>
-        <textarea id="note" placeholder="What this promo is for…"></textarea>
-
-        <div class="row" style="margin-top:12px">
-          <button class="btn primary" id="createBtn" type="button">Create</button>
-          <button class="btn ghost" id="clearBtn" type="button">Clear</button>
-        </div>
-
-        <div class="muted mini" style="margin-top:10px">
-          Next step: apply promo codes automatically at checkout.
-        </div>
-      </div>
-
-      <div class="panel">
-        <h2 style="margin-top:0">Existing promos</h2>
-        <div class="muted mini" id="count"></div>
-        <div class="hr"></div>
-
-        <div style="overflow:auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Code</th>
-                <th>Discount</th>
-                <th>Window</th>
-                <th>Status</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody id="rows">
-              <tr><td colspan="5" class="muted">No data yet.</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="hr"></div>
-        <pre id="raw" class="mono">{}</pre>
-      </div>
+        <article class="card">
+          <h2>Usage / Linked Bookings</h2>
+          <div id="promo-linked-bookings" class="list">
+            <div class="list-item muted">No usage data loaded yet.</div>
+          </div>
+        </article>
+      </section>
     </div>
+  </main>
 
-    <div class="footer" data-footer></div>
-  </div>
-
-  <script type="module">
-    const qs = (s)=>document.querySelector(s);
-
-    function show(msg, kind=""){
-      const el = qs("#status");
-      el.style.display = "block";
-      el.className = "notice " + (kind || "");
-      el.textContent = msg;
-    }
-    function hide(){ qs("#status").style.display = "none"; }
-
-    function getPw(){ return (qs("#pw").value || "").trim(); }
-
-    async function postJson(url, payload){
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "content-type":"application/json" },
-        body: JSON.stringify(payload),
-      });
-      const out = await res.json().catch(()=>null);
-      return { ok: res.ok, status: res.status, out };
-    }
-
-    function esc(s){
-      return String(s||"")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;").replaceAll("'","&#39;");
-    }
-
-    // Save PW
-    try {
-      const saved = localStorage.getItem("rosie_admin_pw") || "";
-      if (saved) qs("#pw").value = saved;
-    } catch {}
-
-    qs("#savePwBtn").addEventListener("click", () => {
-      const pw = getPw();
-      if (!pw) return show("Enter password first.", "bad");
-      try {
-        localStorage.setItem("rosie_admin_pw", pw);
-        show("Saved password on this device.", "ok");
-        setTimeout(hide, 1000);
-      } catch {
-        show("Could not save password.", "bad");
-      }
-    });
-
-    qs("#clearBtn").addEventListener("click", ()=>{
-      qs("#code").value = "";
-      qs("#kind").value = "percent";
-      qs("#value").value = "";
-      qs("#starts").value = "";
-      qs("#ends").value = "";
-      qs("#active").checked = true;
-      qs("#note").value = "";
-    });
-
-    function discountLabel(p){
-      if (p.percent_off != null) return `${p.percent_off}% off`;
-      if (p.amount_off_cents != null) return `$${(p.amount_off_cents/100).toFixed(2)} off`;
-      return "—";
-    }
-
-    function statusTag(p){
-      if (!p.is_active) return `<span class="tag bad">disabled</span>`;
-      const today = new Date().toISOString().slice(0,10);
-      if (p.starts_on && today < p.starts_on) return `<span class="tag warn">scheduled</span>`;
-      if (p.ends_on && today > p.ends_on) return `<span class="tag warn">expired</span>`;
-      return `<span class="tag ok">active</span>`;
-    }
-
-    async function refresh(){
-      hide();
-      const pw = getPw();
-      if (!pw) return show("Missing admin password.", "bad");
-
-      const r = await postJson("/api/admin/promo_list", { admin_password: pw });
-      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
-
-      if (!r.ok || !r.out?.ok){
-        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
-      }
-
-      const rows = Array.isArray(r.out.rows) ? r.out.rows : [];
-      qs("#count").textContent = `${rows.length} promo codes`;
-
-      const tb = qs("#rows");
-      tb.innerHTML = "";
-
-      if (!rows.length){
-        tb.innerHTML = `<tr><td colspan="5" class="muted">No promo codes yet.</td></tr>`;
-        return;
-      }
-
-      for (const p of rows){
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td class="mono"><strong>${esc(p.code)}</strong></td>
-          <td>${esc(discountLabel(p))}</td>
-          <td class="muted mini">${esc(p.starts_on || "")}${p.ends_on ? " → " + esc(p.ends_on) : ""}</td>
-          <td>${statusTag(p)}</td>
-          <td>
-            <button class="btn ghost" data-disable="${esc(p.id)}">${p.is_active ? "Disable" : "Enable"}</button>
-          </td>
-        `;
-        tb.appendChild(tr);
-      }
-
-      tb.querySelectorAll("button[data-disable]").forEach(btn=>{
-        btn.addEventListener("click", async ()=>{
-          const pw2 = getPw();
-          const id = btn.getAttribute("data-disable");
-          if (!pw2) return show("Missing admin password.", "bad");
-
-          btn.disabled = true;
-          const r2 = await postJson("/api/admin/promo_disable", { admin_password: pw2, promo_id: id });
-          btn.disabled = false;
-
-          qs("#raw").textContent = JSON.stringify(r2.out || {}, null, 2);
-
-          if (!r2.ok || !r2.out?.ok){
-            return show(r2.out?.error ? `Error: ${r2.out.error}` : `Error (HTTP ${r2.status})`, "bad");
-          }
-
-          show("Updated.", "ok");
-          setTimeout(hide, 800);
-          await refresh();
-        });
-      });
-    }
-
-    qs("#refreshBtn").addEventListener("click", refresh);
-
-    qs("#createBtn").addEventListener("click", async ()=>{
-      hide();
-      const pw = getPw();
-      if (!pw) return show("Missing admin password.", "bad");
-
-      const code = (qs("#code").value || "").trim().toUpperCase();
-      if (!code) return show("Missing promo code.", "bad");
-
-      const kind = qs("#kind").value;
-      const value = Number(qs("#value").value);
-      if (!Number.isFinite(value) || value <= 0) return show("Enter a valid value > 0.", "bad");
-
-      const payload = {
-        admin_password: pw,
-        code,
-        is_active: !!qs("#active").checked,
-        starts_on: qs("#starts").value || null,
-        ends_on: qs("#ends").value || null,
-        note: (qs("#note").value || "").trim() || null,
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script>
+    (function () {
+      const els = {
+        form: document.getElementById("promo-search-form"),
+        q: document.getElementById("promo-q"),
+        active: document.getElementById("promo-active"),
+        startsAfter: document.getElementById("promo-starts-after"),
+        endsBefore: document.getElementById("promo-ends-before"),
+        searchBtn: document.getElementById("promo-search-btn"),
+        resetBtn: document.getElementById("promo-reset-btn"),
+        tbody: document.getElementById("promo-results-body"),
+        pills: document.getElementById("promo-pills"),
+        detail: document.getElementById("promo-detail"),
+        toggleBtn: document.getElementById("promo-toggle-btn"),
+        deleteBtn: document.getElementById("promo-delete-btn"),
+        linkedBookings: document.getElementById("promo-linked-bookings")
       };
 
-      if (kind === "percent") payload.percent_off = Math.round(value * 100) / 100;
-      if (kind === "amount") payload.amount_off_cents = Math.round(value * 100);
+      let selectedPromo = null;
 
-      qs("#createBtn").disabled = true;
-      qs("#createBtn").textContent = "Creating…";
-
-      const r = await postJson("/api/admin/promo_create", payload);
-
-      qs("#createBtn").disabled = false;
-      qs("#createBtn").textContent = "Create";
-
-      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
-
-      if (!r.ok || !r.out?.ok){
-        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
+      function setShellStatus(message, type) {
+        const nodes = document.querySelectorAll("[data-admin-shell-status]");
+        nodes.forEach((node) => {
+          node.hidden = !message;
+          node.textContent = message || "";
+          node.dataset.state = type || "";
+        });
       }
 
-      show("Created.", "ok");
-      setTimeout(hide, 800);
-      await refresh();
-    });
-  </script>
+      function setSearchBusy(busy) {
+        els.searchBtn.disabled = !!busy;
+        els.searchBtn.textContent = busy ? "Searching..." : "Search";
+      }
 
-  <script type="module" src="/assets/chrome.js?v=20260311t"></script>
+      function setActionBusy(button, busy, busyText, normalText) {
+        button.disabled = !!busy;
+        button.textContent = busy ? busyText : normalText;
+      }
+
+      function renderPre(target, data) {
+        target.innerHTML = "";
+        const pre = document.createElement("pre");
+        pre.textContent = typeof data === "string" ? data : JSON.stringify(data, null, 2);
+        target.appendChild(pre);
+      }
+
+      function renderPromoPills(data) {
+        els.pills.innerHTML = "";
+
+        if (!data || !data.promo_code) {
+          els.pills.innerHTML = '<span class="pill">No promo selected</span>';
+          els.toggleBtn.disabled = true;
+          els.deleteBtn.disabled = true;
+          return;
+        }
+
+        const promo = data.promo_code;
+        const usage = data.usage_summary || {};
+
+        const flags = [
+          ["Code", promo.code || "—"],
+          ["Active", promo.is_active ? "Yes" : "No"],
+          ["Type", promo.discount_type || "—"],
+          ["Value", promo.discount_value != null ? String(promo.discount_value) : "—"],
+          ["Bookings", String(usage.booking_count || 0)],
+          ["Uses", promo.total_uses != null ? String(promo.total_uses) : "0"]
+        ];
+
+        flags.forEach(([label, value]) => {
+          const span = document.createElement("span");
+          span.className = "pill";
+          span.textContent = `${label}: ${value}`;
+          els.pills.appendChild(span);
+        });
+
+        els.toggleBtn.disabled = false;
+        els.deleteBtn.disabled = false;
+        els.toggleBtn.textContent = promo.is_active ? "Deactivate Promo" : "Activate Promo";
+      }
+
+      function renderUsage(data) {
+        const rows = data && Array.isArray(data.recent_bookings) ? data.recent_bookings : [];
+        els.linkedBookings.innerHTML = "";
+
+        if (!rows.length) {
+          els.linkedBookings.innerHTML = '<div class="list-item muted">No linked booking usage found.</div>';
+          return;
+        }
+
+        rows.forEach((row) => {
+          const item = document.createElement("div");
+          item.className = "list-item";
+          item.innerHTML = `
+            <strong>${escapeHtml(row.service_date || "No date")} — ${escapeHtml(row.customer_name || "Unknown Customer")}</strong>
+            <div>Status: ${escapeHtml(row.status || "—")} | Job: ${escapeHtml(row.job_status || "—")} | Slot: ${escapeHtml(row.start_slot || "—")}</div>
+            <div class="muted">Email: ${escapeHtml(row.customer_email || "—")} | Total: ${formatMoney(row.total_price)}</div>
+            <div class="muted">Booking ID: ${escapeHtml(row.id || "—")}</div>
+          `;
+          els.linkedBookings.appendChild(item);
+        });
+      }
+
+      function renderResults(rows) {
+        els.tbody.innerHTML = "";
+
+        if (!rows.length) {
+          els.tbody.innerHTML = '<tr><td colspan="7" class="muted">No promos found.</td></tr>';
+          return;
+        }
+
+        rows.forEach((row) => {
+          const tr = document.createElement("tr");
+
+          const openBtn = document.createElement("button");
+          openBtn.type = "button";
+          openBtn.className = "btn secondary";
+          openBtn.textContent = "Open";
+          openBtn.addEventListener("click", function () {
+            loadPromoDetail(row.id);
+          });
+
+          const tdAction = document.createElement("td");
+          tdAction.appendChild(openBtn);
+
+          tr.innerHTML = `
+            <td>${escapeHtml(row.code || "—")}</td>
+            <td>${escapeHtml(row.label || "—")}</td>
+            <td>${escapeHtml(row.discount_type || "—")}</td>
+            <td>${escapeHtml(row.discount_value != null ? String(row.discount_value) : "—")}</td>
+            <td>${row.is_active === true ? "Yes" : "No"}</td>
+            <td>${escapeHtml(row.total_uses != null ? String(row.total_uses) : "0")}</td>
+          `;
+          tr.appendChild(tdAction);
+          els.tbody.appendChild(tr);
+        });
+      }
+
+      async function searchPromos() {
+        setShellStatus("", "");
+        setSearchBusy(true);
+
+        try {
+          const response = await fetch("/api/admin/promos_list", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              q: String(els.q.value || "").trim() || undefined,
+              is_active:
+                String(els.active.value || "").trim() === ""
+                  ? undefined
+                  : String(els.active.value || "").trim() === "true",
+              starts_after: String(els.startsAfter.value || "").trim() || undefined,
+              ends_before: String(els.endsBefore.value || "").trim() || undefined
+            })
+          });
+
+          const data = await response.json().catch(() => null);
+
+          if (!response.ok) {
+            throw new Error((data && data.error) || "Could not search promos.");
+          }
+
+          const rows =
+            data && Array.isArray(data.promo_codes)
+              ? data.promo_codes
+              : data && Array.isArray(data.promos)
+                ? data.promos
+                : [];
+
+          renderResults(rows);
+          setShellStatus(`Loaded ${rows.length} promo code(s).`, "success");
+        } catch (err) {
+          renderResults([]);
+          setShellStatus(
+            err && err.message ? err.message : "Could not search promos.",
+            "error"
+          );
+        } finally {
+          setSearchBusy(false);
+        }
+      }
+
+      async function loadPromoDetail(promoId) {
+        setShellStatus("", "");
+        selectedPromo = null;
+        renderPromoPills(null);
+        renderPre(els.detail, "No promo detail loaded yet.");
+        renderUsage(null);
+
+        try {
+          const response = await fetch("/api/admin/promos_detail", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              promo_id: promoId
+            })
+          });
+
+          const data = await response.json().catch(() => null);
+
+          if (!response.ok) {
+            throw new Error((data && data.error) || "Could not load promo detail.");
+          }
+
+          selectedPromo = data;
+          renderPromoPills(data);
+          renderPre(els.detail, {
+            promo_code: data.promo_code || null,
+            usage_summary: data.usage_summary || null
+          });
+          renderUsage(data);
+          setShellStatus("Promo detail loaded.", "success");
+        } catch (err) {
+          setShellStatus(
+            err && err.message ? err.message : "Could not load promo detail.",
+            "error"
+          );
+        }
+      }
+
+      async function togglePromo() {
+        if (!selectedPromo || !selectedPromo.promo_code || !selectedPromo.promo_code.id) {
+          setShellStatus("Select a promo first.", "error");
+          return;
+        }
+
+        const promo = selectedPromo.promo_code;
+        const nextState = !(promo.is_active === true);
+        const originalText = els.toggleBtn.textContent;
+
+        setShellStatus("", "");
+        setActionBusy(els.toggleBtn, true, nextState ? "Activating..." : "Deactivating...", originalText);
+
+        try {
+          const response = await fetch("/api/admin/promos_toggle_active", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              promo_id: promo.id,
+              is_active: nextState
+            })
+          });
+
+          const data = await response.json().catch(() => null);
+
+          if (!response.ok) {
+            throw new Error((data && data.error) || "Could not update promo state.");
+          }
+
+          setShellStatus(nextState ? "Promo activated." : "Promo deactivated.", "success");
+          await loadPromoDetail(promo.id);
+          await searchPromos();
+        } catch (err) {
+          setShellStatus(
+            err && err.message ? err.message : "Could not update promo state.",
+            "error"
+          );
+        } finally {
+          setActionBusy(els.toggleBtn, false, "", originalText);
+        }
+      }
+
+      async function deletePromo() {
+        if (!selectedPromo || !selectedPromo.promo_code || !selectedPromo.promo_code.id) {
+          setShellStatus("Select a promo first.", "error");
+          return;
+        }
+
+        const promo = selectedPromo.promo_code;
+        const ok = window.confirm(`Delete promo "${promo.code || promo.label || promo.id}"? This cannot be undone.`);
+        if (!ok) return;
+
+        const originalText = els.deleteBtn.textContent;
+        setShellStatus("", "");
+        setActionBusy(els.deleteBtn, true, "Deleting...", originalText);
+
+        try {
+          const response = await fetch("/api/admin/promos_delete", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              promo_id: promo.id
+            })
+          });
+
+          const data = await response.json().catch(() => null);
+
+          if (!response.ok) {
+            throw new Error((data && data.error) || "Could not delete promo.");
+          }
+
+          selectedPromo = null;
+          renderPromoPills(null);
+          renderPre(els.detail, "No promo detail loaded yet.");
+          renderUsage(null);
+          setShellStatus("Promo deleted.", "success");
+          await searchPromos();
+        } catch (err) {
+          setShellStatus(
+            err && err.message ? err.message : "Could not delete promo.",
+            "error"
+          );
+        } finally {
+          setActionBusy(els.deleteBtn, false, "", originalText);
+        }
+      }
+
+      function resetSearch() {
+        els.form.reset();
+        renderResults([]);
+        selectedPromo = null;
+        renderPromoPills(null);
+        renderPre(els.detail, "No promo detail loaded yet.");
+        renderUsage(null);
+        setShellStatus("", "");
+      }
+
+      function formatMoney(value) {
+        const n = Number(value);
+        if (!Number.isFinite(n)) return "—";
+        return new Intl.NumberFormat("en-CA", {
+          style: "currency",
+          currency: "CAD"
+        }).format(n);
+      }
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      els.form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        searchPromos();
+      });
+
+      els.resetBtn.addEventListener("click", resetSearch);
+      els.toggleBtn.addEventListener("click", togglePromo);
+      els.deleteBtn.addEventListener("click", deletePromo);
+
+      window.AdminShell.boot({
+        pageKey: "admin-promos"
+      });
+    })();
+  </script>
 </body>
 </html>
