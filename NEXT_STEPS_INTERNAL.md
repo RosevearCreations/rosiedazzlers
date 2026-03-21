@@ -156,3 +156,10 @@ Need:
 - show client bookings in `/my-account`
 - connect gift redemption and progress access to the signed-in client
 - reduce dependence on email-only lookup where a session exists
+
+
+## Newly moved forward
+- client booking history dashboard
+- gift certificate and redemption history view
+- detailer/client progress chat foundation
+- notification preference fields

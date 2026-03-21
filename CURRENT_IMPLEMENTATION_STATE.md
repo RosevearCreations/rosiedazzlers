@@ -199,3 +199,10 @@ The `dev` branch already has a strong operations/backend foundation, but the nex
 - client account page exists
 - top nav can show who is signed in for staff or client users
 - richer customer/staff profile fields require the latest SQL migration
+
+
+## Latest additions
+- Staff sessions now fall back safely when the dedicated session secret env var is not set.
+- Client dashboard now includes booking history, gift certificates, redemption history, and direct progress links.
+- Customer profiles now support notification preferences and detailer chat opt-in.
+- Progress pages now support signed-in client replies visible to detailers and admins.

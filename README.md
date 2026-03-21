@@ -312,3 +312,9 @@ The current dev branch now includes a client auth foundation in addition to staf
 The public nav now shows current sign-in status at the top for staff and clients, including the signed-in username and a logout link.
 
 A new SQL migration adds richer profile fields for customer and staff records plus `customer_auth_sessions`. Run `sql/2026-03-21_customer_auth_and_profile_fields.sql` before using the client login/account flow in production.
+
+
+### Customer interaction and account additions
+- `/my-account` now includes booking history, active gift certificates, and redemption history.
+- `/progress?token=...` now includes client/detailer chat replies when enabled.
+- Customer profiles now include notification preferences and detailer chat opt-in.

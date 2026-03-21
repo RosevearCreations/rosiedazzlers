@@ -235,3 +235,14 @@ A legacy compatibility alias was added for older bootstrap callers so stale brow
 - client account/profile update endpoint now exists
 - public pages now show sign-in status in the top nav
 - new profile fields and client session storage require the latest SQL migration before full use
+
+
+### 13) Client account/history foundation
+- client account page now shows booking history
+- active gift certificates and redemption history now have backend support
+- customer notification preferences and detailer chat opt-in fields now exist
+
+### 14) Progress interaction foundation
+- progress view now includes comment/chat history
+- signed-in booking owner can reply to detailer/admin updates when chat is enabled
+- admin live/jobsite detail can see interaction history through the backend
