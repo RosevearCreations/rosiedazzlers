@@ -1,4 +1,5 @@
 import { getCurrentCustomerSession } from "../_lib/customer-session.js";
+import { maybeQueueCustomerNotification } from "../_lib/notification-hooks.js";
 export async function onRequestOptions(){ return new Response("", { status:204, headers:corsHeaders() }); }
 export async function onRequestPost(context){
   const { request, env } = context;
@@ -14,7 +15,7 @@ export async function onRequestPost(context){
     if (!token) return withCors(json({ error:'Missing token.' },400));
     if (!message) return withCors(json({ error:'Message is required.' },400));
     const headers = { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, "Content-Type":"application/json" };
-    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,customer_email,progress_enabled&progress_token=eq.${encodeURIComponent(token)}&limit=1`, { headers });
+    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,customer_email,customer_profile_id,progress_enabled,assigned_staff_email,assigned_staff_name&progress_token=eq.${encodeURIComponent(token)}&limit=1`, { headers });
     if (!bookingRes.ok) return withCors(json({ error:`Could not load booking. ${await bookingRes.text()}` },500));
     const bookingRows = await bookingRes.json().catch(() => []);
     const booking = Array.isArray(bookingRows) ? bookingRows[0] || null : null;
@@ -27,6 +28,9 @@ export async function onRequestPost(context){
     });
     if (!insertRes.ok) return withCors(json({ error:`Could not save comment. ${await insertRes.text()}` },500));
     const rows = await insertRes.json().catch(() => []);
+    await maybeQueueCustomerNotification({
+      env, booking, customer_profile: current.customer_profile, event_type: 'client_progress_comment_posted', message, channel_hint: current.customer_profile.notification_channel || 'email', payload: { role:'client', assigned_staff_email: booking.assigned_staff_email || null, assigned_staff_name: booking.assigned_staff_name || null }
+    });
     return withCors(json({ ok:true, message:'Comment posted.', comment: Array.isArray(rows)? rows[0] || null : null }));
   } catch (err) { return withCors(json({ error: err?.message || 'Unexpected server error.' },500)); }
 }

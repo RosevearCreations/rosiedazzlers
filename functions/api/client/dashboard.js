@@ -17,9 +17,9 @@ async function handle(context){
     const headers = { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, "Content-Type":"application/json" };
     const email = current.customer_profile.email;
     const [bookRes, giftRes, redeemRes] = await Promise.all([
-      fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,created_at,service_date,start_slot,status,job_status,package_code,vehicle_size,total_price,deposit_amount,progress_enabled,progress_token&customer_email=eq.${encodeURIComponent(email)}&order=created_at.desc`, { headers }),
+      fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,created_at,service_date,start_slot,status,job_status,package_code,vehicle_size,price_total_cents,deposit_cents,progress_enabled,progress_token,customer_tier_code,assigned_staff_name&customer_email=eq.${encodeURIComponent(email)}&order=created_at.desc`, { headers }),
       fetch(`${env.SUPABASE_URL}/rest/v1/gift_certificates?select=id,code,sku,type,status,remaining_cents,face_value_cents,expires_at,currency,package_code,vehicle_size,created_at,purchaser_email,recipient_email&or=(purchaser_email.eq.${encodeURIComponent(email)},recipient_email.eq.${encodeURIComponent(email)})&order=created_at.desc`, { headers }),
-      fetch(`${env.SUPABASE_URL}/rest/v1/gift_certificate_redemptions?select=id,gift_certificate_id,booking_id,amount_cents,created_at,notes,gift_code:gift_certificates(code)&order=created_at.desc`, { headers }).catch(() => null)
+      fetch(`${env.SUPABASE_URL}/rest/v1/gift_certificate_redemptions?select=id,gift_certificate_id,booking_id,amount_cents,created_at,notes,gift_certificate:gift_certificates(code),booking:bookings(service_date,package_code,status)&order=created_at.desc`, { headers }).catch(() => null)
     ]);
     if (!bookRes.ok) return withCors(json({ error:`Could not load booking history. ${await bookRes.text()}` },500));
     if (!giftRes.ok) return withCors(json({ error:`Could not load gift certificates. ${await giftRes.text()}` },500));

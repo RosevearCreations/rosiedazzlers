@@ -314,6 +314,8 @@ export async function onRequestPost({ request, env }) {
     // ---- 10.5) Promo code validation (optional) ----
     let promo = null;
     let promoDiscountCents = 0;
+    let giftCertificate = null;
+    let giftDiscountCents = 0;
 
     if (promoCode) {
       const pr = await supa(
@@ -351,6 +353,25 @@ export async function onRequestPost({ request, env }) {
       totalCents = totalCents - promoDiscountCents;
     }
 
+    // ---- 10.6) Gift certificate validation (optional) ----
+    if (giftCode) {
+      const gc = await supa(
+        "GET",
+        `/rest/v1/gift_certificates?select=id,code,status,remaining_cents,currency,expires_at,recipient_email,purchaser_email&type=in.(open_value,service)&code=eq.${encodeURIComponent(giftCode)}&limit=1`
+      );
+      if (!gc.ok) return corsJson({ error: "Supabase error (gift_certificates)", details: gc }, 500);
+      giftCertificate = Array.isArray(gc.data) ? gc.data[0] : null;
+      if (!giftCertificate?.id) return corsJson({ error: `Invalid gift code: ${giftCode}` }, 400);
+      if (giftCertificate.status !== 'active') return corsJson({ error: `Gift code not active: ${giftCode}` }, 400);
+      if (giftCertificate.expires_at && new Date(giftCertificate.expires_at).getTime() < Date.now()) return corsJson({ error: `Gift code expired: ${giftCode}` }, 400);
+      if (giftCertificate.currency && giftCertificate.currency !== 'CAD') return corsJson({ error: `Gift currency not supported: ${giftCode}` }, 400);
+      const remaining = Number(giftCertificate.remaining_cents || 0);
+      if (!Number.isFinite(remaining) || remaining <= 0) return corsJson({ error: `Gift code has no remaining value: ${giftCode}` }, 400);
+      const maxGiftDiscount = Math.max(0, totalCents - depositCents);
+      giftDiscountCents = Math.max(0, Math.min(remaining, maxGiftDiscount));
+      totalCents = totalCents - giftDiscountCents;
+    }
+
     // ---- 11) Insert pending booking ----
     const ip = request.headers.get("cf-connecting-ip") || null;
 
@@ -358,6 +379,7 @@ export async function onRequestPost({ request, env }) {
     notes.push(`Vehicle: ${vYear} ${vMake} ${vModel}`);
     if (vPhoto) notes.push(`Vehicle photo: ${vPhoto}`);
     if (giftCode) notes.push(`Gift code provided: ${giftCode}`);
+    if (giftDiscountCents > 0) notes.push(`Gift applied: ${giftCode} (-$${(giftDiscountCents / 100).toFixed(2)})`);
     if (promo && promoDiscountCents > 0) {
       const promoLabel =
         promo.percent_off != null
@@ -440,6 +462,8 @@ export async function onRequestPost({ request, env }) {
     if (promoCode) form.set("metadata[promo_code]", promoCode);
     if (promoDiscountCents > 0) form.set("metadata[promo_discount_cents]", String(promoDiscountCents));
     if (giftCode) form.set("metadata[gift_code]", giftCode);
+    if (giftCertificate?.id) form.set("metadata[gift_certificate_id]", giftCertificate.id);
+    if (giftDiscountCents > 0) form.set("metadata[gift_redeemed_cents]", String(giftDiscountCents));
 
     const stripeRes = await fetch("https://api.stripe.com/v1/checkout/sessions", {
       method: "POST",
@@ -476,6 +500,7 @@ export async function onRequestPost({ request, env }) {
       deposit_cents: depositCents,
       total_cents: totalCents,
       promo_discount_cents: promoDiscountCents,
+      gift_discount_cents: giftDiscountCents,
       checkout_url: stripe.url,
       hold_minutes: HOLD_MINUTES,
       quote_addons: quoteAddonsChosen,
