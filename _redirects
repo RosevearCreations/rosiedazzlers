@@ -1,18 +1,7 @@
-# _redirects
-# another upload test
-# Clean route mappings for Rosie Dazzlers
-#
-# What this file does: 
-# - keeps public clean routes
-# - keeps admin clean routes
-# - adds new staff auth/session routes
-# - makes the new admin login, bootstrap, and account pages reachable at stable URLs
-#
-# Notes:
-# - keep any existing working redirects you already have
-# - if your current file already contains more entries, merge these in rather than deleting unrelated lines
-
+# Public site routes
 /                           /index.html                  200
+/about                      /about.html                  200
+/contact                    /contact.html                200
 /services                   /services.html               200
 /pricing                    /pricing.html                200
 /book                       /book.html                   200
@@ -20,7 +9,11 @@
 /gear                       /gear.html                   200
 /consumables                /consumables.html            200
 /progress                   /progress.html               200
+/privacy                    /privacy.html                200
+/terms                      /terms.html                  200
+/waiver                     /waiver.html                 200
 
+# Admin and staff auth routes
 /admin                      /admin.html                  200
 /admin-login                /admin-login.html            200
 /admin-bootstrap            /admin-bootstrap.html        200
