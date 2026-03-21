@@ -1,28 +1,5 @@
-# Public site routes
-/                           /index.html                  200
-/about                      /about.html                  200
-/contact                    /contact.html                200
-/services                   /services.html               200
-/pricing                    /pricing.html                200
-/book                       /book.html                   200
-/gifts                      /gifts.html                  200
-/gear                       /gear.html                   200
-/consumables                /consumables.html            200
-/progress                   /progress.html               200
-/privacy                    /privacy.html                200
-/terms                      /terms.html                  200
-/waiver                     /waiver.html                 200
+# Only keep redirects that are true aliases and do not already match the file name.
 
-# Admin and staff auth routes
-/admin                      /admin.html                  200
-/admin-login                /admin-login.html            200
-/admin-bootstrap            /admin-bootstrap.html        200
+# Custom alias:
+# /account should point to admin-account.html because the route name does not match the file name.
 /account                    /admin-account.html          200
-/admin-booking              /admin-booking.html          200
-/admin-blocks               /admin-blocks.html           200
-/admin-progress             /admin-progress.html         200
-/admin-jobsite              /admin-jobsite.html          200
-/admin-live                 /admin-live.html             200
-/admin-staff                /admin-staff.html            200
-/admin-customers            /admin-customers.html        200
-/admin-promos               /admin-promos.html           200
