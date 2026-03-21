@@ -1,5 +1,3 @@
-# Only keep redirects that are true aliases and do not already match the file name.
-
-# Custom alias:
-# /account should point to admin-account.html because the route name does not match the file name.
 /account                    /admin-account.html          200
+/login                      /login.html                  200
+/my-account                 /my-account.html             200
