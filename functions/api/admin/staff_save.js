@@ -91,6 +91,18 @@ export async function onRequestPost(context) {
         can_manage_progress: payload.can_manage_progress,
         can_manage_promos: payload.can_manage_promos,
         can_manage_staff: payload.can_manage_staff,
+        phone: payload.phone,
+        address_line1: payload.address_line1,
+        address_line2: payload.address_line2,
+        city: payload.city,
+        province: payload.province,
+        postal_code: payload.postal_code,
+        employee_code: payload.employee_code,
+        position_title: payload.position_title,
+        hire_date: payload.hire_date,
+        emergency_contact_name: payload.emergency_contact_name,
+        emergency_contact_phone: payload.emergency_contact_phone,
+        vehicle_notes: payload.vehicle_notes,
         notes: payload.notes,
         updated_at: new Date().toISOString()
       };
@@ -136,6 +148,18 @@ export async function onRequestPost(context) {
       can_manage_progress: payload.can_manage_progress,
       can_manage_promos: payload.can_manage_promos,
       can_manage_staff: payload.can_manage_staff,
+      phone: payload.phone,
+      address_line1: payload.address_line1,
+      address_line2: payload.address_line2,
+      city: payload.city,
+      province: payload.province,
+      postal_code: payload.postal_code,
+      employee_code: payload.employee_code,
+      position_title: payload.position_title,
+      hire_date: payload.hire_date,
+      emergency_contact_name: payload.emergency_contact_name,
+      emergency_contact_phone: payload.emergency_contact_phone,
+      vehicle_notes: payload.vehicle_notes,
       notes: payload.notes
     };
 

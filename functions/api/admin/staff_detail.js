@@ -68,7 +68,7 @@ export async function onRequestPost(context) {
       `${env.SUPABASE_URL}/rest/v1/staff_users` +
         `?select=id,created_at,updated_at,full_name,email,role_code,is_active,` +
         `can_override_lower_entries,can_manage_bookings,can_manage_blocks,` +
-        `can_manage_progress,can_manage_promos,can_manage_staff,notes` +
+        `can_manage_progress,can_manage_promos,can_manage_staff,phone,address_line1,address_line2,city,province,postal_code,employee_code,position_title,hire_date,emergency_contact_name,emergency_contact_phone,vehicle_notes,notes` +
         `&id=eq.${encodeURIComponent(staff_user_id)}` +
         `&limit=1`,
       { headers }
@@ -140,6 +140,18 @@ export async function onRequestPost(context) {
           can_manage_progress: staff.can_manage_progress === true,
           can_manage_promos: staff.can_manage_promos === true,
           can_manage_staff: staff.can_manage_staff === true,
+          phone: staff.phone || null,
+          address_line1: staff.address_line1 || null,
+          address_line2: staff.address_line2 || null,
+          city: staff.city || null,
+          province: staff.province || null,
+          postal_code: staff.postal_code || null,
+          employee_code: staff.employee_code || null,
+          position_title: staff.position_title || null,
+          hire_date: staff.hire_date || null,
+          emergency_contact_name: staff.emergency_contact_name || null,
+          emergency_contact_phone: staff.emergency_contact_phone || null,
+          vehicle_notes: staff.vehicle_notes || null,
           notes: staff.notes || null
         },
         assignment_summary: summarizeBookings(bookings),
