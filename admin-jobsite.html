@@ -1,774 +1,198 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Job Site Intake | Rosie Dazzlers</title>
-  <meta name="description" content="Detailer pre-job intake and live job tracking for Rosie Dazzlers." />
+  <title>Rosie Dazzlers — Jobsite Workspace</title>
+  <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
-</head>
-<body data-page="admin-jobsite">
-  <header class="nav">
-    <div class="nav-inner">
-      <a class="brand" href="/admin.html">
-        <img data-logo alt="Rosie Dazzlers logo" />
-        <strong>Rosie Dazzlers Admin</strong>
-      </a>
-
-      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
-        Menu
-      </button>
-
-      <nav id="navLinks" class="nav-links">
-        <a href="/admin.html">Dashboard</a>
-        <a href="/admin-booking.html">Bookings</a>
-        <a href="/admin-blocks.html">Blocks</a>
-        <a href="/admin-progress.html">Progress</a>
-        <a href="/admin-jobsite.html">Job Site</a>
-        <a href="/admin-staff.html">Staff</a>
-        <a href="/admin-promos.html">Promos</a>
-        <a href="/book">Public Site</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container">
-    <section class="section">
-      <div class="panel">
-        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="hero">
-        <div>
-          <div class="badge">Detailer Job Site Intake</div>
-          <h1>Pre-job inspection and live work tracking</h1>
-          <p>
-            Use this screen at the customer location to inspect the vehicle, record existing conditions,
-            confirm prep items, capture owner acknowledgement, and track working time.
-          </p>
-          <div class="badges">
-            <div class="badge">Pre-Inspection</div>
-            <div class="badge">Owner Acknowledgement</div>
-            <div class="badge">Time Tracking</div>
-            <div class="badge">Live Progress</div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="kicker">Current booking</div>
-          <h3 id="jobsiteBookingTitle" style="margin:6px 0 8px">No booking loaded</h3>
-          <div id="jobsiteBookingMeta" class="kicker">Load a booking id below.</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div id="pageNotice" class="notice">Ready.</div>
-    </section>
-
-    <section class="section">
-      <div class="grid cards">
-        <div class="panel">
-          <h2>Booking + staff</h2>
-          <form id="jobsiteLoadForm" class="form">
-            <label>
-              Admin / staff password
-              <input id="jobsitePassword" type="password" autocomplete="current-password" required />
-            </label>
-
-            <label>
-              Booking ID
-              <input id="jobsiteLookup" type="text" placeholder="Paste booking id" required />
-            </label>
-
-            <label>
-              Detailer name
-              <input id="detailerName" type="text" placeholder="Example: Laurie / Jack" />
-            </label>
-
-            <div>
-              <button class="btn primary" id="loadJobBtn" type="submit">Load job</button>
-            </div>
-          </form>
-        </div>
-
-        <div class="panel">
-          <h2>Time tracker</h2>
-          <div class="grid" style="gap:10px">
-            <div class="badge">Arrived: <span id="arrivedAtText">Not started</span></div>
-            <div class="badge">Work started: <span id="startedAtText">Not started</span></div>
-            <div class="badge">Current status: <span id="workStatusText">Idle</span></div>
-            <div class="badge">Tracked time: <span id="trackedTimeText">00:00:00</span></div>
-          </div>
-
-          <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:12px">
-            <button class="btn primary" id="markArrivedBtn" type="button" disabled>Mark Arrived</button>
-            <button class="btn primary" id="startWorkBtn" type="button" disabled>Start Work</button>
-            <button class="btn ghost" id="startBreakBtn" type="button" disabled>Start Break</button>
-            <button class="btn ghost" id="resumeWorkBtn" type="button" disabled>Resume Work</button>
-            <button class="btn ghost" id="rainBreakBtn" type="button" disabled>Rain Break</button>
-            <button class="btn ghost" id="heatBreakBtn" type="button" disabled>Heat Break</button>
-            <button class="btn primary" id="stopJobBtn" type="button" disabled>Stop Job</button>
-          </div>
-
-          <label style="margin-top:12px;display:block">
-            Break / stop note
-            <textarea id="timeEntryNote" rows="3" placeholder="Optional note for break, delay, weather issue, or stop reason."></textarea>
-          </label>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <form id="jobsiteIntakeForm" class="form">
-        <div class="panel">
-          <h2>Pre-detail vehicle inspection</h2>
-          <div class="grid cards">
-            <div class="card">
-              <h3>Vehicle condition notes</h3>
-              <label>
-                Exterior condition
-                <textarea id="exterior_condition_notes" rows="4" placeholder="Scratches, dents, paint issues, trim issues, cracked glass, chipped windshield, etc."></textarea>
-              </label>
-
-              <label>
-                Interior condition
-                <textarea id="interior_condition_notes" rows="4" placeholder="Heavy debris, stains, pet hair, odor, mold concerns, spills, excessive clutter, sharp items, etc."></textarea>
-              </label>
-
-              <label>
-                Existing damage / concerns already present
-                <textarea id="existing_damage_notes" rows="5" placeholder="List all pre-existing damage or concerns noted before work begins."></textarea>
-              </label>
-            </div>
-
-            <div class="card">
-              <h3>Valuables / customer property</h3>
-              <label>
-                Valuables present?
-                <select id="valuables_present">
-                  <option value="">Select</option>
-                  <option value="false">None seen</option>
-                  <option value="true">Yes - documented</option>
-                </select>
-              </label>
-
-              <label>
-                Valuables notes
-                <textarea id="valuables_notes" rows="4" placeholder="Wallet, cash, electronics, jewelry, tools, documents, medication, etc."></textarea>
-              </label>
-
-              <label>
-                Valuables photo URL(s)
-                <textarea id="valuables_photo_urls" rows="4" placeholder="Paste one URL per line."></textarea>
-              </label>
-            </div>
-
-            <div class="card">
-              <h3>Pre-inspection photo log</h3>
-              <label>
-                Exterior photo URL(s)
-                <textarea id="exterior_photo_urls" rows="4" placeholder="Paste one URL per line."></textarea>
-              </label>
-
-              <label>
-                Interior photo URL(s)
-                <textarea id="interior_photo_urls" rows="4" placeholder="Paste one URL per line."></textarea>
-              </label>
-
-              <label>
-                Damage / issue photo URL(s)
-                <textarea id="damage_photo_urls" rows="4" placeholder="Paste one URL per line."></textarea>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <section class="section">
-          <div class="grid cards">
-            <div class="panel">
-              <h2>Pre-job checklist</h2>
-              <div class="grid" style="gap:8px">
-                <label class="check-card"><input id="keys_collected" type="checkbox" /><div><strong>Keys collected</strong><div class="mini-price">Customer has provided keys or access.</div></div></label>
-                <label class="check-card"><input id="owner_present_for_visual_inspection" type="checkbox" /><div><strong>Owner present for visual inspection</strong><div class="mini-price">Vehicle reviewed with owner before work begins.</div></div></label>
-                <label class="check-card"><input id="water_hookup_located" type="checkbox" /><div><strong>Water hookup located</strong><div class="mini-price">Water source found and ready.</div></div></label>
-                <label class="check-card"><input id="water_tested" type="checkbox" /><div><strong>Water tested</strong><div class="mini-price">Confirmed usable on site.</div></div></label>
-                <label class="check-card"><input id="power_hookup_located" type="checkbox" /><div><strong>Power hookup located</strong><div class="mini-price">Power source found and ready.</div></div></label>
-                <label class="check-card"><input id="power_tested" type="checkbox" /><div><strong>Power tested</strong><div class="mini-price">Confirmed usable on site.</div></div></label>
-                <label class="check-card"><input id="vehicle_accessible_and_safe" type="checkbox" /><div><strong>Vehicle accessible and safe to work on</strong><div class="mini-price">Safe parking, access, and working conditions confirmed.</div></div></label>
-              </div>
-            </div>
-
-            <div class="panel">
-              <h2>Extra charge review</h2>
-
-              <label>
-                Garbage bag estimate
-                <select id="garbage_bag_estimate">
-                  <option value="">Select</option>
-                  <option>1 medium white Glad bag or less</option>
-                  <option>More than 1 medium white Glad bag</option>
-                </select>
-              </label>
-
-              <label>
-                Extra bag count
-                <input id="extra_bag_count" type="number" min="0" step="1" placeholder="0" />
-              </label>
-
-              <label>
-                Extra clutter / debris charge may apply?
-                <select id="extra_debris_charge_possible">
-                  <option value="">Select</option>
-                  <option value="false">No</option>
-                  <option value="true">Yes - possible extra charge</option>
-                </select>
-              </label>
-
-              <label>
-                Extra charge notes
-                <textarea id="extra_charge_notes" rows="5" placeholder="Describe excessive garbage, clutter, heavy debris, unusual cleanup conditions, or other reasons for additional charges."></textarea>
-              </label>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <div class="grid cards">
-            <div class="panel">
-              <h2>Owner acknowledgement</h2>
-
-              <label>
-                Owner / customer name
-                <input id="owner_name" type="text" placeholder="Full name" />
-              </label>
-
-              <label>
-                Owner email
-                <input id="owner_email" type="email" placeholder="Email address" />
-              </label>
-
-              <label>
-                Inspection acknowledged
-                <select id="inspection_acknowledged">
-                  <option value="">Select</option>
-                  <option value="true">Yes</option>
-                  <option value="false">No</option>
-                </select>
-              </label>
-
-              <label>
-                Existing condition acknowledged
-                <select id="existing_condition_acknowledged">
-                  <option value="">Select</option>
-                  <option value="true">Yes</option>
-                  <option value="false">No</option>
-                </select>
-              </label>
-
-              <label>
-                Keys handed over acknowledged
-                <select id="keys_handed_over_acknowledged">
-                  <option value="">Select</option>
-                  <option value="true">Yes</option>
-                  <option value="false">No</option>
-                </select>
-              </label>
-
-              <label>
-                Owner notes
-                <textarea id="owner_notes" rows="4" placeholder="Owner comments, concerns, or acknowledgements."></textarea>
-              </label>
-            </div>
-
-            <div class="panel">
-              <h2>Detailer completion of intake</h2>
-
-              <label>
-                Detailer pre-job notes
-                <textarea id="detailer_pre_job_notes" rows="5" placeholder="Anything the detailer wants recorded before work begins."></textarea>
-              </label>
-
-              <label>
-                Site / weather notes
-                <textarea id="site_weather_notes" rows="4" placeholder="Rain risk, heat, driveway slope, limited space, difficult access, etc."></textarea>
-              </label>
-
-              <label>
-                Intake complete
-                <select id="intake_complete">
-                  <option value="">Select</option>
-                  <option>Yes - ready to begin</option>
-                  <option>No - waiting on customer / site issue</option>
-                </select>
-              </label>
-
-              <div style="margin-top:12px">
-                <button class="btn primary" id="saveIntakeBtn" type="submit" disabled>Save Pre-Inspection Intake</button>
-              </div>
-            </div>
-          </div>
-        </section>
-      </form>
-    </section>
-
-    <section class="section">
-      <div class="panel">
-        <h2>Time entry history</h2>
-        <div id="timeEntriesList" class="grid" style="margin-top:12px">
-          <div class="notice">No job loaded yet.</div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer container" data-footer></footer>
-
-  <script src="/assets/chrome.js"></script>
-  <script type="module">
-    import { setBrandImages, setFooter } from "/assets/site.js";
-
-    let currentBookingId = "";
-    let currentPassword = "";
-    let timeEntries = [];
-
-    function setNotice(message, kind = "") {
-      const el = document.querySelector("#pageNotice");
-      if (!el) return;
-      el.className = kind ? `notice ${kind}` : "notice";
-      el.textContent = message;
+  <style>
+    :root {
+      color-scheme: dark;
     }
 
-    function splitLines(value) {
-      return String(value || "")
-        .split("\n")
-        .map((s) => s.trim())
-        .filter(Boolean);
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 35%),
+        linear-gradient(180deg, #0f172a 0%, #111827 100%);
+      color: #f8fafc;
     }
 
-    function boolOrNull(value) {
-      if (value === "") return null;
-      return value === "true";
+    .shell {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
     }
 
-    function formatDateTime(value) {
-      if (!value) return "—";
-      const d = new Date(value);
-      if (Number.isNaN(d.getTime())) return String(value);
-      return new Intl.DateTimeFormat("en-CA", {
-        dateStyle: "medium",
-        timeStyle: "short"
-      }).format(d);
+    .loading {
+      display: grid;
+      place-items: center;
+      min-height: 60vh;
+      color: #cbd5e1;
+      font-size: 1rem;
     }
 
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#39;");
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
     }
 
-    function formatDuration(ms) {
-      const totalSeconds = Math.max(0, Math.floor(ms / 1000));
-      const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
-      const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
-      const seconds = String(totalSeconds % 60).padStart(2, "0");
-      return `${hours}:${minutes}:${seconds}`;
+    .brandblock h1 {
+      margin: 0 0 8px;
+      font-size: 1.8rem;
+      line-height: 1.15;
     }
 
-    function apiHeaders(password) {
-      return {
-        "Content-Type": "application/json",
-        "x-admin-password": password
-      };
+    .brandblock p {
+      margin: 0;
+      color: #cbd5e1;
+      max-width: 720px;
+      line-height: 1.5;
     }
 
-    async function apiPost(url, password, body) {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: apiHeaders(password),
-        body: JSON.stringify(body || {})
-      });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || `Request failed for ${url}`);
-      return data;
+    .actorcard {
+      min-width: 280px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 16px 18px;
+      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
     }
 
-    function fillBooking(booking) {
-      document.querySelector("#jobsiteBookingTitle").textContent =
-        booking?.customer_name || booking?.package_code || "Booking loaded";
-
-      document.querySelector("#jobsiteBookingMeta").textContent = [
-        booking?.service_date || "—",
-        booking?.start_slot || "—",
-        booking?.package_code || "—",
-        booking?.vehicle_size || "—",
-        booking?.assigned_to || "unassigned"
-      ].join(" · ");
+    .actorline {
+      margin: 4px 0;
+      color: #e5e7eb;
+      font-size: 0.96rem;
     }
 
-    function fillIntake(intake) {
-      const data = intake || {};
-
-      document.querySelector("#detailerName").value = data.detailer_name || "";
-      document.querySelector("#exterior_condition_notes").value = data.exterior_condition_notes || "";
-      document.querySelector("#interior_condition_notes").value = data.interior_condition_notes || "";
-      document.querySelector("#existing_damage_notes").value = data.existing_damage_notes || "";
-
-      document.querySelector("#valuables_present").value =
-        data.valuables_present === null || data.valuables_present === undefined ? "" : String(data.valuables_present);
-      document.querySelector("#valuables_notes").value = data.valuables_notes || "";
-      document.querySelector("#valuables_photo_urls").value = Array.isArray(data.valuables_photo_urls) ? data.valuables_photo_urls.join("\n") : "";
-
-      document.querySelector("#exterior_photo_urls").value = Array.isArray(data.exterior_photo_urls) ? data.exterior_photo_urls.join("\n") : "";
-      document.querySelector("#interior_photo_urls").value = Array.isArray(data.interior_photo_urls) ? data.interior_photo_urls.join("\n") : "";
-      document.querySelector("#damage_photo_urls").value = Array.isArray(data.damage_photo_urls) ? data.damage_photo_urls.join("\n") : "";
-
-      document.querySelector("#keys_collected").checked = !!data.keys_collected;
-      document.querySelector("#owner_present_for_visual_inspection").checked = !!data.owner_present_for_visual_inspection;
-      document.querySelector("#water_hookup_located").checked = !!data.water_hookup_located;
-      document.querySelector("#water_tested").checked = !!data.water_tested;
-      document.querySelector("#power_hookup_located").checked = !!data.power_hookup_located;
-      document.querySelector("#power_tested").checked = !!data.power_tested;
-      document.querySelector("#vehicle_accessible_and_safe").checked = !!data.vehicle_accessible_and_safe;
-
-      document.querySelector("#garbage_bag_estimate").value = data.garbage_bag_estimate || "";
-      document.querySelector("#extra_bag_count").value = data.extra_bag_count ?? "";
-      document.querySelector("#extra_debris_charge_possible").value =
-        data.extra_debris_charge_possible === null || data.extra_debris_charge_possible === undefined ? "" : String(data.extra_debris_charge_possible);
-      document.querySelector("#extra_charge_notes").value = data.extra_charge_notes || "";
-
-      document.querySelector("#owner_name").value = data.owner_name || "";
-      document.querySelector("#owner_email").value = data.owner_email || "";
-      document.querySelector("#inspection_acknowledged").value =
-        data.inspection_acknowledged === null || data.inspection_acknowledged === undefined ? "" : String(data.inspection_acknowledged);
-      document.querySelector("#existing_condition_acknowledged").value =
-        data.existing_condition_acknowledged === null || data.existing_condition_acknowledged === undefined ? "" : String(data.existing_condition_acknowledged);
-      document.querySelector("#keys_handed_over_acknowledged").value =
-        data.keys_handed_over_acknowledged === null || data.keys_handed_over_acknowledged === undefined ? "" : String(data.keys_handed_over_acknowledged);
-      document.querySelector("#owner_notes").value = data.owner_notes || "";
-
-      document.querySelector("#detailer_pre_job_notes").value = data.detailer_pre_job_notes || "";
-      document.querySelector("#site_weather_notes").value = data.site_weather_notes || "";
-      document.querySelector("#intake_complete").value = data.intake_complete || "";
+    .actorlabel {
+      color: #93c5fd;
+      font-weight: 700;
+      margin-right: 6px;
     }
 
-    function collectIntakePayload() {
-      return {
-        booking_id: currentBookingId,
-        detailer_name: document.querySelector("#detailerName").value.trim(),
-
-        exterior_condition_notes: document.querySelector("#exterior_condition_notes").value.trim(),
-        interior_condition_notes: document.querySelector("#interior_condition_notes").value.trim(),
-        existing_damage_notes: document.querySelector("#existing_damage_notes").value.trim(),
-
-        valuables_present: boolOrNull(document.querySelector("#valuables_present").value),
-        valuables_notes: document.querySelector("#valuables_notes").value.trim(),
-        valuables_photo_urls: splitLines(document.querySelector("#valuables_photo_urls").value),
-
-        exterior_photo_urls: splitLines(document.querySelector("#exterior_photo_urls").value),
-        interior_photo_urls: splitLines(document.querySelector("#interior_photo_urls").value),
-        damage_photo_urls: splitLines(document.querySelector("#damage_photo_urls").value),
-
-        keys_collected: document.querySelector("#keys_collected").checked,
-        owner_present_for_visual_inspection: document.querySelector("#owner_present_for_visual_inspection").checked,
-        water_hookup_located: document.querySelector("#water_hookup_located").checked,
-        water_tested: document.querySelector("#water_tested").checked,
-        power_hookup_located: document.querySelector("#power_hookup_located").checked,
-        power_tested: document.querySelector("#power_tested").checked,
-        vehicle_accessible_and_safe: document.querySelector("#vehicle_accessible_and_safe").checked,
-
-        garbage_bag_estimate: document.querySelector("#garbage_bag_estimate").value,
-        extra_bag_count: document.querySelector("#extra_bag_count").value,
-        extra_debris_charge_possible: boolOrNull(document.querySelector("#extra_debris_charge_possible").value),
-        extra_charge_notes: document.querySelector("#extra_charge_notes").value.trim(),
-
-        owner_name: document.querySelector("#owner_name").value.trim(),
-        owner_email: document.querySelector("#owner_email").value.trim(),
-        inspection_acknowledged: boolOrNull(document.querySelector("#inspection_acknowledged").value),
-        existing_condition_acknowledged: boolOrNull(document.querySelector("#existing_condition_acknowledged").value),
-        keys_handed_over_acknowledged: boolOrNull(document.querySelector("#keys_handed_over_acknowledged").value),
-        owner_notes: document.querySelector("#owner_notes").value.trim(),
-
-        detailer_pre_job_notes: document.querySelector("#detailer_pre_job_notes").value.trim(),
-        site_weather_notes: document.querySelector("#site_weather_notes").value.trim(),
-        intake_complete: document.querySelector("#intake_complete").value
-      };
+    .logout-btn {
+      margin-top: 10px;
+      appearance: none;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: #2563eb;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
     }
 
-    function computeWorkSummary(entries) {
-      let arrivedAt = null;
-      let startedAt = null;
-      let status = "Idle";
-      let totalWorkMs = 0;
-      let activeStart = null;
-
-      for (const entry of entries) {
-        const t = new Date(entry.event_time).getTime();
-        if (Number.isNaN(t)) continue;
-
-        if (entry.entry_type === "arrival" && !arrivedAt) {
-          arrivedAt = entry.event_time;
-        }
-
-        if (entry.entry_type === "work_start") {
-          if (!startedAt) startedAt = entry.event_time;
-          activeStart = t;
-          status = "Working";
-        }
-
-        if (["break_start", "rain_break_start", "heat_break_start", "work_stop", "job_complete"].includes(entry.entry_type)) {
-          if (activeStart != null) {
-            totalWorkMs += Math.max(0, t - activeStart);
-            activeStart = null;
-          }
-
-          if (entry.entry_type === "break_start") status = "On Break";
-          if (entry.entry_type === "rain_break_start") status = "Rain Break";
-          if (entry.entry_type === "heat_break_start") status = "Heat Break";
-          if (entry.entry_type === "work_stop") status = "Stopped";
-          if (entry.entry_type === "job_complete") status = "Completed";
-        }
-
-        if (["break_stop", "rain_break_stop", "heat_break_stop"].includes(entry.entry_type)) {
-          activeStart = t;
-          status = "Working";
-        }
-      }
-
-      if (activeStart != null) {
-        totalWorkMs += Math.max(0, Date.now() - activeStart);
-      }
-
-      return {
-        arrivedAt,
-        startedAt,
-        status,
-        totalWorkMs
-      };
+    .status {
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(220,38,38,0.12);
+      border: 1px solid rgba(248,113,113,0.25);
+      color: #fecaca;
     }
 
-    function renderTimeSummary() {
-      const summary = computeWorkSummary(timeEntries);
-
-      document.querySelector("#arrivedAtText").textContent = summary.arrivedAt ? formatDateTime(summary.arrivedAt) : "Not started";
-      document.querySelector("#startedAtText").textContent = summary.startedAt ? formatDateTime(summary.startedAt) : "Not started";
-      document.querySelector("#workStatusText").textContent = summary.status;
-      document.querySelector("#trackedTimeText").textContent = formatDuration(summary.totalWorkMs);
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr auto;
+      gap: 12px;
+      margin-bottom: 18px;
     }
 
-    function renderTimeEntries() {
-      const wrap = document.querySelector("#timeEntriesList");
-      if (!wrap) return;
-
-      if (!timeEntries.length) {
-        wrap.innerHTML = `<div class="notice">No time entries yet.</div>`;
-        renderTimeSummary();
-        return;
-      }
-
-      wrap.innerHTML = timeEntries.map((entry) => `
-        <article class="card">
-          <div class="kicker">${escapeHtml(formatDateTime(entry.event_time))}</div>
-          <h3>${escapeHtml(entry.entry_type)}</h3>
-          <p>${escapeHtml(entry.created_by_name || "Rosie Dazzlers")}</p>
-          ${entry.note ? `<div class="hr"></div><p>${escapeHtml(entry.note)}</p>` : ""}
-        </article>
-      `).join("");
-
-      renderTimeSummary();
+    .input,
+    .select,
+    .button {
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: #f8fafc;
+      padding: 12px 14px;
+      font-size: 0.98rem;
     }
 
-    function setTimeButtonsEnabled(enabled) {
-      const ids = [
-        "markArrivedBtn",
-        "startWorkBtn",
-        "startBreakBtn",
-        "resumeWorkBtn",
-        "rainBreakBtn",
-        "heatBreakBtn",
-        "stopJobBtn"
-      ];
-      ids.forEach((id) => {
-        const el = document.querySelector(`#${id}`);
-        if (el) el.disabled = !enabled;
-      });
+    .button {
+      background: #2563eb;
+      font-weight: 700;
+      cursor: pointer;
+      border: 0;
+      width: auto;
+      min-width: 140px;
     }
 
-    async function loadTimeEntries() {
-      if (!currentPassword || !currentBookingId) return;
-      const data = await apiPost("/api/admin/job_time_entries_get", currentPassword, {
-        booking_id: currentBookingId
-      });
-      timeEntries = Array.isArray(data.time_entries) ? data.time_entries : [];
-      renderTimeEntries();
+    .button.secondary {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
     }
 
-    async function postTimeEntry(entryType) {
-      if (!currentPassword || !currentBookingId) {
-        setNotice("Load a booking first.", "bad");
-        return;
-      }
-
-      const detailerName = document.querySelector("#detailerName").value.trim();
-      const note = document.querySelector("#timeEntryNote").value.trim();
-
-      await apiPost("/api/admin/job_time_entry_post", currentPassword, {
-        booking_id: currentBookingId,
-        entry_type: entryType,
-        created_by_name: detailerName || null,
-        note: note || null,
-        source: "jobsite"
-      });
-
-      document.querySelector("#timeEntryNote").value = "";
-      await loadTimeEntries();
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
     }
 
-    async function loadJob() {
-      const password = document.querySelector("#jobsitePassword").value.trim();
-      const bookingId = document.querySelector("#jobsiteLookup").value.trim();
-
-      if (!password) {
-        setNotice("Password is required.", "bad");
-        return;
-      }
-      if (!bookingId) {
-        setNotice("Booking ID is required.", "bad");
-        return;
-      }
-
-      currentPassword = password;
-      currentBookingId = bookingId;
-
-      setNotice("Loading job-site intake…");
-
-      const data = await apiPost("/api/admin/jobsite_intake_get", password, {
-        booking_id: bookingId
-      });
-
-      fillBooking(data.booking || {});
-      fillIntake(data.intake || null);
-      await loadTimeEntries();
-
-      document.querySelector("#saveIntakeBtn").disabled = false;
-      setTimeButtonsEnabled(true);
-      setNotice("Job-site intake loaded.", "ok");
+    .card {
+      grid-column: span 12;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
     }
 
-    async function saveIntake(event) {
-      event.preventDefault();
-
-      if (!currentPassword || !currentBookingId) {
-        setNotice("Load a booking first.", "bad");
-        return;
-      }
-
-      setNotice("Saving pre-inspection intake…");
-
-      await apiPost("/api/admin/jobsite_intake_save", currentPassword, collectIntakePayload());
-
-      setNotice("Pre-inspection intake saved.", "ok");
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.1rem;
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      setBrandImages();
-      setFooter();
+    .card p {
+      margin: 0 0 12px;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
 
-      document.querySelector("#jobsiteLoadForm").addEventListener("submit", async (event) => {
-        event.preventDefault();
-        try {
-          await loadJob();
-        } catch (err) {
-          setNotice(err.message || "Could not load job-site intake.", "bad");
-        }
-      });
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
 
-      document.querySelector("#jobsiteIntakeForm").addEventListener("submit", async (event) => {
-        try {
-          await saveIntake(event);
-        } catch (err) {
-          setNotice(err.message || "Could not save intake.", "bad");
-        }
-      });
+    .meta-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 12px;
+    }
 
-      document.querySelector("#markArrivedBtn").addEventListener("click", async () => {
-        try {
-          setNotice("Saving arrival time…");
-          await postTimeEntry("arrival");
-          setNotice("Arrival time saved.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not save arrival time.", "bad");
-        }
-      });
+    .meta-label {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #93c5fd;
+      margin-bottom: 6px;
+    }
 
-      document.querySelector("#startWorkBtn").addEventListener("click", async () => {
-        try {
-          setNotice("Starting work…");
-          await postTimeEntry("work_start");
-          setNotice("Work start saved.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not start work.", "bad");
-        }
-      });
+    .meta-value {
+      color: #f8fafc;
+      word-break: break-word;
+    }
 
-      document.querySelector("#startBreakBtn").addEventListener("click", async () => {
-        try {
-          setNotice("Starting break…");
-          await postTimeEntry("break_start");
-          setNotice("Break start saved.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not start break.", "bad");
-        }
-      });
+    .stack {
+      display: grid;
+      gap: 12px;
+    }
 
-      document.querySelector("#resumeWorkBtn").addEventListener("click", async () => {
-        try {
-          setNotice("Resuming work…");
-          await postTimeEntry("break_stop");
-          setNotice("Work resumed.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not resume work.", "bad");
-        }
-      });
-
-      document.querySelector("#rainBreakBtn").addEventListener("click", async () => {
-        try {
-          setNotice("Starting rain break…");
-          await postTimeEntry("rain_break_start");
-          setNotice("Rain break saved.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not save rain break.", "bad");
-        }
-      });
-
-      document.querySelector("#heatBreakBtn").addEventListener("click", async () => {
-        try {
-          setNotice("Starting heat break…");
-          await postTimeEntry("heat_break_start");
-          setNotice("Heat break saved.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not save heat break.", "bad");
-        }
-      });
-
-      document.querySelector("#stopJobBtn").addEventListener("click", async () => {
-        try {
-          setNotice("Stopping job…");
-          await postTimeEntry("work_stop");
-          setNotice("Job stop saved.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not stop job.", "bad");
-        }
-      });
-
-      setTimeButtonsEnabled(false);
-    });
-  </script>
-</body>
-</html>
+    .placeholder-box {
+      border-radius: 14px;
+      border: 1px dashed rgba(255,255,255,0.14);
+      padding: 14px;
+      color: #cbd5e1;
+      background: rgba(255,
