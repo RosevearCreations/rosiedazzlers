@@ -1,8 +1,8 @@
 # _redirects
-#
+# another upload test
 # Clean route mappings for Rosie Dazzlers
 #
-# What this file does:
+# What this file does: 
 # - keeps public clean routes
 # - keeps admin clean routes
 # - adds new staff auth/session routes
