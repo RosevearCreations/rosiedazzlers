@@ -8,32 +8,12 @@
 // - reads/writes the staff session cookie
 // - loads the current session + staff user
 // - supports session rotation and logout invalidation
+// - allows a safe fallback secret if STAFF_SESSION_SECRET is not set yet
 //
 // Expected env vars:
 // - SUPABASE_URL
 // - SUPABASE_SERVICE_ROLE_KEY
-// - STAFF_SESSION_SECRET
-//
-// Expected table direction:
-// - staff_auth_sessions
-//   columns such as:
-//   id uuid primary key
-//   staff_user_id uuid not null
-//   token_hash text not null unique
-//   created_at timestamptz default now()
-//   updated_at timestamptz default now()
-//   expires_at timestamptz not null
-//   revoked_at timestamptz null
-//   last_seen_at timestamptz null
-//   ip_address text null
-//   user_agent text null
-//
-// Cookie name:
-// - rd_staff_session
-//
-// Notes:
-// - this file is intentionally independent from page/UI logic
-// - later auth endpoints can call these helpers directly
+// - STAFF_SESSION_SECRET (preferred, but fallback now supported)
 
 const STAFF_SESSION_COOKIE = "rd_staff_session";
 const DEFAULT_SESSION_DAYS = 14;
@@ -341,10 +321,20 @@ function readCookie(request, name) {
 async function makeOpaqueSessionToken(env, staffUserId) {
   const randomBytes = crypto.getRandomValues(new Uint8Array(32));
   const randomHex = [...randomBytes].map((b) => b.toString(16).padStart(2, "0")).join("");
-  const base = `${staffUserId}.${Date.now()}.${randomHex}.${getSessionSecret(env)}`;
+  const secret = getSessionSecret(env);
+  const base = `${staffUserId}.${Date.now()}.${randomHex}.${secret}`;
   const digest = await sha256Hex(base);
 
   return `${randomHex}.${digest}`;
+}
+
+function getSessionSecret(env) {
+  return (
+    env.STAFF_SESSION_SECRET ||
+    env.SUPABASE_SERVICE_ROLE_KEY ||
+    env.ADMIN_PASSWORD ||
+    "rosie-dev-fallback-staff-secret"
+  );
 }
 
 async function sha256Hex(input) {
@@ -402,11 +392,6 @@ function getUserAgent(request) {
   return request.headers.get("user-agent") || null;
 }
 
-
-function getSessionSecret(env) {
-  return env.STAFF_SESSION_SECRET || env.ADMIN_PASSWORD || env.SUPABASE_SERVICE_ROLE_KEY || "rosiedazzlers-session-fallback";
-}
-
 function assertSessionEnv(env) {
   if (!env || !env.SUPABASE_URL) {
     throw new Error("Missing SUPABASE_URL.");
@@ -415,6 +400,4 @@ function assertSessionEnv(env) {
   if (!env || !env.SUPABASE_SERVICE_ROLE_KEY) {
     throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY.");
   }
-
-
 }
