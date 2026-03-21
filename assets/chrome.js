@@ -473,6 +473,77 @@ function attachRotators(containerSelector) {
    BOOT
    ========================= */
 
+
+
+async function ensureAuthStatus() {
+  const navInner = document.querySelector(".nav-inner");
+  if (!navInner) return;
+
+  let mount = document.querySelector("#siteAuthStatus");
+  if (!mount) {
+    mount = document.createElement("div");
+    mount.id = "siteAuthStatus";
+    mount.className = "site-auth-status muted";
+    mount.textContent = "Checking sign-in…";
+    navInner.appendChild(mount);
+  }
+
+  const makeLink = (href, label, cls = "") => `<a href="${href}" class="${cls}">${label}</a>`;
+
+  async function loadJson(url) {
+    const res = await fetch(url, { credentials: "include", cache: "no-store" });
+    try {
+      return await res.json();
+    } catch {
+      return null;
+    }
+  }
+
+  try {
+    const [staff, client] = await Promise.all([
+      loadJson("/api/admin/auth_me").catch(() => null),
+      loadJson("/api/client/auth_me").catch(() => null)
+    ]);
+
+    if (staff && staff.authenticated && staff.actor) {
+      const actor = staff.actor;
+      mount.innerHTML = `Signed in: <strong>${escapeHtml(actor.full_name || actor.email || "Staff")}</strong> <span class="site-auth-role">(${escapeHtml(actor.role_code || "staff")})</span> ${makeLink("/admin", "Dashboard")} <a href="#" id="siteStaffLogout">Logout</a>`;
+      const logout = document.getElementById("siteStaffLogout");
+      if (logout) logout.addEventListener("click", async (event) => {
+        event.preventDefault();
+        await fetch("/api/admin/auth_logout", { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" }, body: "{}" }).catch(() => null);
+        location.replace("/");
+      });
+      return;
+    }
+
+    if (client && client.authenticated && client.customer) {
+      const customer = client.customer;
+      mount.innerHTML = `Signed in: <strong>${escapeHtml(customer.full_name || customer.email || "Client")}</strong> <span class="site-auth-role">(client)</span> ${makeLink("/my-account", "My Account")} <a href="#" id="siteClientLogout">Logout</a>`;
+      const logout = document.getElementById("siteClientLogout");
+      if (logout) logout.addEventListener("click", async (event) => {
+        event.preventDefault();
+        await fetch("/api/client/auth_logout", { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" }, body: "{}" }).catch(() => null);
+        location.reload();
+      });
+      return;
+    }
+
+    mount.innerHTML = `${makeLink("/login", "Client Login")} · ${makeLink("/admin-login", "Staff Login")}`;
+  } catch {
+    mount.innerHTML = `${makeLink("/login", "Client Login")} · ${makeLink("/admin-login", "Staff Login")}`;
+  }
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function initChrome() {
   ensureNavLinks();
   setBrandImagesEverywhere();
@@ -481,6 +552,7 @@ function initChrome() {
   setActiveNavLink();
   initNavToggle();
   setFooter();
+  ensureAuthStatus();
 
   attachRotators("#homePackages");
   attachRotators("#packageCards");

@@ -110,6 +110,24 @@ a { color: inherit; }
   display: none;
 }
 
+.site-auth-status {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  font-size: 13px;
+  margin-left: auto;
+}
+.site-auth-status a {
+  text-decoration: none;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.05);
+}
+.site-auth-status a:hover { background: rgba(255,255,255,.09); }
+.site-auth-role { color: var(--muted); }
+
 .btn {
   display: inline-flex;
   align-items: center;
