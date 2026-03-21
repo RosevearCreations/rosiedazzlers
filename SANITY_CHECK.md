@@ -224,3 +224,8 @@ The next phase should focus on:
 - gift redemption completion
 
 rather than just adding more isolated endpoints.
+
+
+## Additional transition note
+
+A legacy compatibility alias was added for older bootstrap callers so stale browser code hitting `/api/auth/bootstrap-admin` no longer fails with a 405 during the auth migration.

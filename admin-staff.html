@@ -1,392 +1,159 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin Staff | Rosie Dazzlers</title>
-  <meta name="description" content="Manage staff roles and access for Rosie Dazzlers." />
+  <title>Rosie Dazzlers — Staff Management</title>
+  <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    :root { color-scheme: dark; }
+    body { margin:0; min-height:100vh; background:radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 35%), linear-gradient(180deg, #0f172a 0%, #111827 100%); color:#f8fafc; }
+    .shell { max-width:1280px; margin:0 auto; padding:24px; }
+    .loading { display:grid; place-items:center; min-height:60vh; color:#cbd5e1; font-size:1rem; }
+    .topbar { display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:20px; }
+    .titleblock h1 { margin:0 0 6px; font-size:1.8rem; line-height:1.15; }
+    .titleblock p { margin:0; color:#cbd5e1; line-height:1.5; }
+    .actorcard { min-width:280px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); border-radius:18px; padding:16px 18px; box-shadow:0 14px 35px rgba(0,0,0,0.22); }
+    .actorline { margin:4px 0; color:#e5e7eb; font-size:0.96rem; }
+    .actorlabel { color:#93c5fd; font-weight:700; margin-right:6px; }
+    .logout-btn,.btn { appearance:none; border:0; border-radius:10px; padding:10px 14px; background:#2563eb; color:white; font-weight:700; cursor:pointer; }
+    .logout-btn { margin-top:10px; }
+    .status { margin-bottom:16px; padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,0.10); background:rgba(255,255,255,0.05); color:#e5e7eb; }
+    .status[data-state="error"] { background:rgba(220,38,38,0.12); border-color:rgba(248,113,113,0.25); color:#fecaca; }
+    .status[data-state="success"] { background:rgba(34,197,94,0.10); border-color:rgba(134,239,172,0.22); color:#bbf7d0; }
+    .grid { display:grid; grid-template-columns:repeat(12, 1fr); gap:16px; }
+    .card { grid-column:span 12; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:20px; box-shadow:0 14px 35px rgba(0,0,0,0.22); }
+    .card h2 { margin:0 0 10px; font-size:1.15rem; }
+    .card p { margin:0 0 12px; color:#cbd5e1; line-height:1.5; }
+    .field { margin-bottom:14px; }
+    .field label { display:block; margin-bottom:8px; font-size:0.92rem; font-weight:700; color:#e5e7eb; }
+    .field input,.field select { width:100%; box-sizing:border-box; border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:11px 12px; font-size:0.98rem; background:rgba(255,255,255,0.04); color:#f8fafc; outline:none; }
+    .field input:focus,.field select:focus { border-color:#60a5fa; background:rgba(255,255,255,0.06); }
+    .table-wrap { overflow:auto; border-radius:14px; border:1px solid rgba(255,255,255,0.08); }
+    table { width:100%; border-collapse:collapse; min-width:820px; background:rgba(255,255,255,0.03); }
+    th,td { padding:12px 14px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.07); vertical-align:top; font-size:0.95rem; }
+    th { color:#93c5fd; font-weight:700; background:rgba(255,255,255,0.03); }
+    .muted { color:#94a3b8; font-size:0.92rem; }
+    .pill { display:inline-flex; align-items:center; border-radius:999px; padding:6px 10px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); font-size:0.82rem; color:#e5e7eb; margin-right:6px; margin-bottom:6px; }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; align-items:end; }
+    @media (min-width:900px) { .span-7 { grid-column:span 7; } .span-5 { grid-column:span 5; } }
+  </style>
 </head>
-<body data-page="admin-staff">
-  <header class="nav">
-    <div class="nav-inner">
-      <a class="brand" href="/admin.html">
-        <img data-logo alt="Rosie Dazzlers logo" />
-        <strong>Rosie Dazzlers Admin</strong>
-      </a>
-
-      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
-        Menu
-      </button>
-
-      <nav id="navLinks" class="nav-links">
-        <a href="/admin.html">Dashboard</a>
-        <a href="/admin-booking.html">Bookings</a>
-        <a href="/admin-blocks.html">Blocks</a>
-        <a href="/admin-progress.html">Progress</a>
-        <a href="/admin-jobsite.html">Job Site</a>
-        <a href="/admin-staff.html">Staff</a>
-        <a href="/admin-promos.html">Promos</a>
-        <a href="/book">Public Site</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container">
-    <section class="section">
-      <div class="panel">
-        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="hero">
-        <div>
-          <div class="badge">Admin Staff</div>
-          <h1>Manage staff access</h1>
-          <p>
-            Create and update Admin, Senior Detailer, and Detailer records.
-            This is the first step toward full role-based access across the site.
-          </p>
-          <div class="badges">
-            <div class="badge">Admins</div>
-            <div class="badge">Senior Detailers</div>
-            <div class="badge">Detailers</div>
+<body>
+  <main class="shell">
+    <div class="loading" data-admin-shell-loading>Loading staff management...</div>
+    <div data-admin-shell-ready hidden>
+      <header class="topbar">
+        <div class="titleblock">
+          <h1>Staff Management</h1>
+          <p>Session-aware admin page for viewing staff accounts and setting/resetting passwords.</p>
+        </div>
+        <section class="actorcard" aria-label="Signed in staff">
+          <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
+          <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
+          <div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div>
+          <button class="logout-btn" type="button" data-admin-logout>Sign Out</button>
+        </section>
+      </header>
+      <div class="status" data-admin-shell-status hidden></div>
+      <section class="grid">
+        <article class="card span-7">
+          <h2>Staff Accounts</h2>
+          <p>Loaded from the existing admin staff list endpoint.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Active</th><th>Capabilities</th></tr></thead>
+              <tbody id="staff-table-body"><tr><td colspan="5" class="muted">No staff loaded yet.</td></tr></tbody>
+            </table>
           </div>
-        </div>
-
-        <div class="panel">
-          <div class="kicker">Selected staff user</div>
-          <h3 id="staffTitle" style="margin:6px 0 8px">No staff selected</h3>
-          <div id="staffMeta" class="kicker">Load staff to begin.</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div id="pageNotice" class="notice">Ready.</div>
-    </section>
-
-    <section class="section">
-      <div class="grid cards">
-        <div class="panel">
-          <h2>Admin access</h2>
-          <form id="adminForm" class="form">
-            <label>
-              Admin password
-              <input id="adminPassword" type="password" autocomplete="current-password" required />
-            </label>
-
-            <div>
-              <button class="btn primary" type="submit">Load staff</button>
-            </div>
-          </form>
-        </div>
-
-        <div class="panel">
-          <h2>Customer tiers</h2>
-          <div id="tiersBox" class="kicker">Not loaded yet.</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="grid cards">
-        <div class="panel">
-          <h2>Staff list</h2>
-          <div id="staffList" class="grid" style="margin-top:12px">
-            <div class="notice">Staff have not been loaded yet.</div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h2>Create / edit staff</h2>
-          <form id="staffForm" class="form">
-            <input id="staffId" type="hidden" />
-
-            <label>
-              Full name
-              <input id="fullName" type="text" placeholder="Full name" required />
-            </label>
-
-            <label>
-              Email
-              <input id="email" type="email" placeholder="Email address" required />
-            </label>
-
-            <label>
-              Role
-              <select id="roleCode" required>
-                <option value="detailer">detailer</option>
-                <option value="senior_detailer">senior_detailer</option>
-                <option value="admin">admin</option>
-              </select>
-            </label>
-
-            <label>
-              Active
-              <select id="isActive">
-                <option value="true">true</option>
-                <option value="false">false</option>
-              </select>
-            </label>
-
-            <div class="grid" style="gap:8px">
-              <label class="check-card">
-                <input id="canOverride" type="checkbox" />
-                <div><strong>Can override lower entries</strong></div>
-              </label>
-
-              <label class="check-card">
-                <input id="canManageBookings" type="checkbox" />
-                <div><strong>Can manage bookings</strong></div>
-              </label>
-
-              <label class="check-card">
-                <input id="canManageBlocks" type="checkbox" />
-                <div><strong>Can manage blocks</strong></div>
-              </label>
-
-              <label class="check-card">
-                <input id="canManageProgress" type="checkbox" />
-                <div><strong>Can manage progress</strong></div>
-              </label>
-
-              <label class="check-card">
-                <input id="canManagePromos" type="checkbox" />
-                <div><strong>Can manage promos</strong></div>
-              </label>
-
-              <label class="check-card">
-                <input id="canManageStaff" type="checkbox" />
-                <div><strong>Can manage staff</strong></div>
-              </label>
-            </div>
-
-            <label>
-              Notes
-              <textarea id="notes" rows="4" placeholder="Optional internal notes"></textarea>
-            </label>
-
-            <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
-              <button id="saveStaffBtn" class="btn primary" type="submit" disabled>Save staff user</button>
-              <button id="newStaffBtn" class="btn ghost" type="button" disabled>Create new</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer container" data-footer></footer>
-
-  <script src="/assets/chrome.js"></script>
-  <script type="module">
-    import { setBrandImages, setFooter } from "/assets/site.js";
-
-    let currentPassword = "";
-    let staffUsers = [];
-    let customerTiers = [];
-    let selectedStaffId = "";
-
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#39;");
-    }
-
-    function setNotice(message, kind = "") {
-      const el = document.querySelector("#pageNotice");
-      if (!el) return;
-      el.className = kind ? `notice ${kind}` : "notice";
-      el.textContent = message;
-    }
-
-    async function apiPost(url, password, body) {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": password
-        },
-        body: JSON.stringify(body || {})
-      });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || `Request failed for ${url}`);
-      return data;
-    }
-
-    function renderTiers() {
-      const box = document.querySelector("#tiersBox");
-      if (!box) return;
-
-      if (!customerTiers.length) {
-        box.textContent = "No customer tiers loaded.";
-        return;
-      }
-
-      box.innerHTML = customerTiers
-        .map((tier) => `<div><strong>${escapeHtml(tier.label || tier.code)}</strong> — ${escapeHtml(tier.description || "")}</div>`)
-        .join("");
-    }
-
-    function renderSelectedStaff() {
-      const title = document.querySelector("#staffTitle");
-      const meta = document.querySelector("#staffMeta");
-
-      const row = staffUsers.find((s) => s.id === selectedStaffId) || null;
-
-      if (!row) {
-        title.textContent = "No staff selected";
-        meta.textContent = "Choose a staff record or create a new one.";
-        return;
-      }
-
-      title.textContent = row.full_name || "Staff selected";
-      meta.textContent = [
-        row.email || "—",
-        row.role_code || "—",
-        row.is_active ? "active" : "inactive"
-      ].join(" · ");
-    }
-
-    function fillForm(row) {
-      document.querySelector("#staffId").value = row?.id || "";
-      document.querySelector("#fullName").value = row?.full_name || "";
-      document.querySelector("#email").value = row?.email || "";
-      document.querySelector("#roleCode").value = row?.role_code || "detailer";
-      document.querySelector("#isActive").value = row?.is_active === false ? "false" : "true";
-
-      document.querySelector("#canOverride").checked = !!row?.can_override_lower_entries;
-      document.querySelector("#canManageBookings").checked = !!row?.can_manage_bookings;
-      document.querySelector("#canManageBlocks").checked = !!row?.can_manage_blocks;
-      document.querySelector("#canManageProgress").checked = !!row?.can_manage_progress;
-      document.querySelector("#canManagePromos").checked = !!row?.can_manage_promos;
-      document.querySelector("#canManageStaff").checked = !!row?.can_manage_staff;
-
-      document.querySelector("#notes").value = row?.notes || "";
-    }
-
-    function clearForm() {
-      selectedStaffId = "";
-      fillForm(null);
-      renderSelectedStaff();
-    }
-
-    function renderStaffList() {
-      const wrap = document.querySelector("#staffList");
-      if (!wrap) return;
-
-      if (!staffUsers.length) {
-        wrap.innerHTML = `<div class="notice">No staff users found.</div>`;
-        return;
-      }
-
-      wrap.innerHTML = staffUsers.map((row) => `
-        <article class="card">
-          <div class="kicker">${escapeHtml(row.role_code || "detailer")} · ${row.is_active ? "active" : "inactive"}</div>
-          <h3>${escapeHtml(row.full_name || "Unnamed")}</h3>
-          <p>${escapeHtml(row.email || "—")}</p>
-          <div class="hr"></div>
-          <button class="btn primary" type="button" data-staff-id="${escapeHtml(row.id)}">Edit staff</button>
         </article>
-      `).join("");
-
-      wrap.querySelectorAll("[data-staff-id]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          selectedStaffId = btn.getAttribute("data-staff-id");
-          const row = staffUsers.find((s) => s.id === selectedStaffId) || null;
-          fillForm(row);
-          renderSelectedStaff();
-        });
-      });
-    }
-
-    async function refreshStaff() {
-      const data = await apiPost("/api/admin/staff_list", currentPassword, {});
-      staffUsers = Array.isArray(data.staff_users) ? data.staff_users : [];
-      customerTiers = Array.isArray(data.customer_tiers) ? data.customer_tiers : [];
-      renderStaffList();
-      renderTiers();
-
-      document.querySelector("#saveStaffBtn").disabled = false;
-      document.querySelector("#newStaffBtn").disabled = false;
-
-      if (selectedStaffId) {
-        const row = staffUsers.find((s) => s.id === selectedStaffId) || null;
-        fillForm(row);
-      }
-
-      renderSelectedStaff();
-    }
-
-    function collectPayload() {
-      return {
-        id: document.querySelector("#staffId").value.trim() || null,
-        full_name: document.querySelector("#fullName").value.trim(),
-        email: document.querySelector("#email").value.trim(),
-        role_code: document.querySelector("#roleCode").value,
-        is_active: document.querySelector("#isActive").value === "true",
-        can_override_lower_entries: document.querySelector("#canOverride").checked,
-        can_manage_bookings: document.querySelector("#canManageBookings").checked,
-        can_manage_blocks: document.querySelector("#canManageBlocks").checked,
-        can_manage_progress: document.querySelector("#canManageProgress").checked,
-        can_manage_promos: document.querySelector("#canManagePromos").checked,
-        can_manage_staff: document.querySelector("#canManageStaff").checked,
-        notes: document.querySelector("#notes").value.trim()
+        <article class="card span-5">
+          <h2>Set / Reset Staff Password</h2>
+          <p>Choose a staff account and set a new password hash through the new <code>/api/admin/auth_set_password</code> endpoint.</p>
+          <form id="password-form" novalidate>
+            <div class="field"><label for="staff-select">Staff User</label><select id="staff-select" name="staff_user_id" required><option value="">Select staff user</option></select></div>
+            <div class="field"><label for="new-password">New Password</label><input id="new-password" name="new_password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required /></div>
+            <div class="field"><label for="hash-mode">Hash Mode</label><select id="hash-mode" name="hash_mode"><option value="bcrypt" selected>bcrypt (preferred)</option><option value="sha256">sha256 (fallback/bootstrap)</option></select></div>
+            <div class="actions"><button class="btn" id="password-submit-btn" type="submit">Update Password</button></div>
+          </form>
+          <p class="muted" style="margin-top:12px;">Use bcrypt whenever possible. The sha256 option is only a temporary fallback path.</p>
+        </article>
+      </section>
+    </div>
+  </main>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script>
+    (function () {
+      const els = {
+        tableBody: document.getElementById("staff-table-body"),
+        staffSelect: document.getElementById("staff-select"),
+        form: document.getElementById("password-form"),
+        passwordInput: document.getElementById("new-password"),
+        hashMode: document.getElementById("hash-mode"),
+        submitBtn: document.getElementById("password-submit-btn")
       };
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      setBrandImages();
-      setFooter();
-
-      document.querySelector("#adminForm").addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        const password = document.querySelector("#adminPassword").value.trim();
-        if (!password) {
-          setNotice("Admin password is required.", "bad");
-          return;
-        }
-
+      function setShellStatus(message, type) {
+        document.querySelectorAll("[data-admin-shell-status]").forEach((node) => {
+          node.hidden = !message; node.textContent = message || ""; node.dataset.state = type || "";
+        });
+      }
+      function humanizeRole(roleCode) { return window.AdminShell.humanizeRole(roleCode); }
+      function capabilityPills(row) {
+        const pills = [];
+        const caps = [["Bookings", row.can_manage_bookings===true],["Blocks", row.can_manage_blocks===true],["Progress", row.can_manage_progress===true],["Promos", row.can_manage_promos===true],["Staff", row.can_manage_staff===true],["Override", row.can_override_lower_entries===true]];
+        caps.forEach(([label,on]) => { if (on) pills.push(`<span class="pill">${label}</span>`); });
+        return pills.length ? pills.join("") : '<span class="muted">No special capabilities</span>';
+      }
+      function renderStaffTable(rows) {
+        els.tableBody.innerHTML = "";
+        if (!rows.length) { els.tableBody.innerHTML = '<tr><td colspan="5" class="muted">No staff accounts found.</td></tr>'; return; }
+        rows.forEach((row) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${escapeHtml(row.full_name||"—")}</td><td>${escapeHtml(row.email||"—")}</td><td>${escapeHtml(humanizeRole(row.role_code||""))}</td><td>${row.is_active===true?"Yes":"No"}</td><td>${capabilityPills(row)}</td>`;
+          els.tableBody.appendChild(tr);
+        });
+      }
+      function renderStaffSelect(rows) {
+        els.staffSelect.innerHTML = '<option value="">Select staff user</option>';
+        rows.forEach((row) => {
+          const option = document.createElement("option");
+          option.value = row.id || "";
+          option.textContent = `${row.full_name || row.email || "Unknown"} — ${humanizeRole(row.role_code || "")}`;
+          els.staffSelect.appendChild(option);
+        });
+      }
+      async function loadStaff() {
+        setShellStatus("", "");
+        const response = await fetch("/api/admin/staff_list", { method:"POST", credentials:"include", headers:{"Content-Type":"application/json"}, body:JSON.stringify({}) });
+        const data = await response.json().catch(() => null);
+        if (!response.ok) throw new Error((data && data.error) || "Could not load staff list.");
+        const rows = data && Array.isArray(data.staff_users) ? data.staff_users : data && Array.isArray(data.staff) ? data.staff : [];
+        renderStaffTable(rows); renderStaffSelect(rows);
+      }
+      function setSubmitBusy(busy) { els.submitBtn.disabled = !!busy; els.submitBtn.textContent = busy ? "Updating..." : "Update Password"; }
+      async function submitPasswordForm(event) {
+        event.preventDefault(); setShellStatus("", "");
+        const staff_user_id = String(els.staffSelect.value || "").trim();
+        const new_password = String(els.passwordInput.value || "");
+        const hash_mode = String(els.hashMode.value || "bcrypt").trim();
+        if (!staff_user_id) { setShellStatus("Please choose a staff user.", "error"); return; }
+        if (!new_password || new_password.length < 8) { setShellStatus("Password must be at least 8 characters long.", "error"); return; }
+        setSubmitBusy(true);
         try {
-          currentPassword = password;
-          setNotice("Loading staff users…");
-          await refreshStaff();
-          setNotice("Staff users loaded.", "ok");
+          const response = await fetch("/api/admin/auth_set_password", { method:"POST", credentials:"include", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ staff_user_id, new_password, hash_mode }) });
+          const data = await response.json().catch(() => null);
+          if (!response.ok) throw new Error((data && data.error) || "Could not update password.");
+          els.passwordInput.value = ""; setShellStatus("Password updated successfully.", "success");
         } catch (err) {
-          setNotice(err.message || "Could not load staff users.", "bad");
-        }
-      });
-
-      document.querySelector("#staffForm").addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        if (!currentPassword) {
-          setNotice("Load admin access first.", "bad");
-          return;
-        }
-
-        try {
-          setNotice("Saving staff user…");
-          await apiPost("/api/admin/staff_save", currentPassword, collectPayload());
-          await refreshStaff();
-          setNotice("Staff user saved.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not save staff user.", "bad");
-        }
-      });
-
-      document.querySelector("#newStaffBtn").addEventListener("click", () => {
-        clearForm();
-        setNotice("Ready to create a new staff user.");
-      });
-    });
+          setShellStatus(err && err.message ? err.message : "Could not update password.", "error");
+        } finally { setSubmitBusy(false); }
+      }
+      function escapeHtml(value) { return String(value || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&#39;"); }
+      els.form.addEventListener("submit", submitPasswordForm);
+      window.AdminShell.boot({ pageKey: "admin-staff", onReady: async function () { try { await loadStaff(); } catch (err) { setShellStatus(err && err.message ? err.message : "Could not initialize staff page.", "error"); } } });
+    })();
   </script>
 </body>
 </html>

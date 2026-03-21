@@ -283,3 +283,16 @@ The `dev` branch is focused on:
 - Token-based progress is now the preferred customer progress path.
 - Shared admin-password gates still exist as a bridge, but the project is moving toward role-aware staff access.
 - Customer tiers must remain separate from security roles.
+
+
+## Compatibility note
+
+A legacy compatibility alias now exists for older bootstrap callers:
+
+- `POST /api/auth/bootstrap-admin`
+
+It forwards to the newer bootstrap path:
+
+- `POST /api/admin/auth_bootstrap_admin_password`
+
+This was added to tolerate stale browser code, cached scripts, or older tooling during the auth transition.
