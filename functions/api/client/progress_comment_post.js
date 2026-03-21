@@ -1,0 +1,35 @@
+import { getCurrentCustomerSession } from "../_lib/customer-session.js";
+export async function onRequestOptions(){ return new Response("", { status:204, headers:corsHeaders() }); }
+export async function onRequestPost(context){
+  const { request, env } = context;
+  try {
+    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return withCors(json({ error:"Server configuration is incomplete." },500));
+    const current = await getCurrentCustomerSession({ env, request });
+    if (!current?.customer_profile?.id) return withCors(json({ error:"Unauthorized." },401));
+    const body = await request.json().catch(() => ({}));
+    const token = String(body.token || '').trim();
+    const message = String(body.message || '').trim();
+    const parent_type = String(body.parent_type || 'booking').trim().toLowerCase();
+    const parent_id = String(body.parent_id || '').trim() || null;
+    if (!token) return withCors(json({ error:'Missing token.' },400));
+    if (!message) return withCors(json({ error:'Message is required.' },400));
+    const headers = { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, "Content-Type":"application/json" };
+    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,customer_email,progress_enabled&progress_token=eq.${encodeURIComponent(token)}&limit=1`, { headers });
+    if (!bookingRes.ok) return withCors(json({ error:`Could not load booking. ${await bookingRes.text()}` },500));
+    const bookingRows = await bookingRes.json().catch(() => []);
+    const booking = Array.isArray(bookingRows) ? bookingRows[0] || null : null;
+    if (!booking) return withCors(json({ error:'Progress record not found.' },404));
+    if (booking.progress_enabled === false) return withCors(json({ error:'Progress is not enabled for this booking.' },403));
+    if ((booking.customer_email || '').toLowerCase() !== (current.customer_profile.email || '').toLowerCase()) return withCors(json({ error:'This booking does not belong to the signed-in client.' },403));
+    const insertRes = await fetch(`${env.SUPABASE_URL}/rest/v1/progress_comments`, {
+      method:'POST', headers: { ...headers, Prefer:'return=representation' },
+      body: JSON.stringify([{ booking_id: booking.id, parent_type, parent_id, author_type:'client', author_name: current.customer_profile.full_name || 'Client', author_email: current.customer_profile.email || null, message }])
+    });
+    if (!insertRes.ok) return withCors(json({ error:`Could not save comment. ${await insertRes.text()}` },500));
+    const rows = await insertRes.json().catch(() => []);
+    return withCors(json({ ok:true, message:'Comment posted.', comment: Array.isArray(rows)? rows[0] || null : null }));
+  } catch (err) { return withCors(json({ error: err?.message || 'Unexpected server error.' },500)); }
+}
+function json(data,status=200){ return new Response(JSON.stringify(data,null,2),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"}}); }
+function corsHeaders(){ return {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"POST,OPTIONS","Access-Control-Allow-Headers":"Content-Type","Cache-Control":"no-store"}; }
+function withCors(response){ const h=new Headers(response.headers||{}); for(const [k,v] of Object.entries(corsHeaders())) h.set(k,v); return new Response(response.body,{status:response.status,statusText:response.statusText,headers:h}); }

@@ -4,7 +4,7 @@ export async function onRequestOptions() { return new Response("", { status: 204
 export async function onRequestPost(context) {
   const { request, env } = context;
   try {
-    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY || !env.CUSTOMER_SESSION_SECRET) return withCors(json({ error: "Server configuration is incomplete." }, 500));
+    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY ) return withCors(json({ error: "Server configuration is incomplete." }, 500));
     const body = await request.json().catch(() => ({}));
     const email = cleanEmail(body.email);
     const password = String(body.password || "");
