@@ -300,3 +300,10 @@ Public pages now have a lightweight client auth direction in progress:
 - top-of-site sign-in status on public pages
 
 This is intentionally lighter than full staff admin auth but gives customers visible account state and profile ownership.
+
+
+## Latest auth/progress/gift pass
+- Added actual gift redemption writes through booking confirmation webhook using `gift_certificate_redemptions`.
+- Added staff/detailer observation-thread posting through `progress_comments`.
+- Added notification queue hooks through `notification_events` for customer email/SMS preference flows.
+- Added richer customer/staff profile field direction and a current schema snapshot in `DATABASE_STRUCTURE_CURRENT.md`.

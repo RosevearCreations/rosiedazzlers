@@ -246,3 +246,10 @@ A legacy compatibility alias was added for older bootstrap callers so stale brow
 - progress view now includes comment/chat history
 - signed-in booking owner can reply to detailer/admin updates when chat is enabled
 - admin live/jobsite detail can see interaction history through the backend
+
+
+## Latest auth/progress/gift pass
+- Added actual gift redemption writes through booking confirmation webhook using `gift_certificate_redemptions`.
+- Added staff/detailer observation-thread posting through `progress_comments`.
+- Added notification queue hooks through `notification_events` for customer email/SMS preference flows.
+- Added richer customer/staff profile field direction and a current schema snapshot in `DATABASE_STRUCTURE_CURRENT.md`.

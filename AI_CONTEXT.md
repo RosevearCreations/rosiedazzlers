@@ -268,3 +268,10 @@ Rosie Dazzlers on `dev` is now a growing detailing operations platform with a la
 - public client account page
 - nav-level sign-in status for staff/client users
 - richer profile/session SQL migration for customer and staff records
+
+
+## Latest auth/progress/gift pass
+- Added actual gift redemption writes through booking confirmation webhook using `gift_certificate_redemptions`.
+- Added staff/detailer observation-thread posting through `progress_comments`.
+- Added notification queue hooks through `notification_events` for customer email/SMS preference flows.
+- Added richer customer/staff profile field direction and a current schema snapshot in `DATABASE_STRUCTURE_CURRENT.md`.

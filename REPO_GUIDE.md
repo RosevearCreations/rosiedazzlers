@@ -339,3 +339,10 @@ Recent auth/profile additions include:
 - `functions/api/client/profile_update.js`
 - `functions/api/_lib/customer-session.js`
 - `sql/2026-03-21_customer_auth_and_profile_fields.sql`
+
+
+## Latest auth/progress/gift pass
+- Added actual gift redemption writes through booking confirmation webhook using `gift_certificate_redemptions`.
+- Added staff/detailer observation-thread posting through `progress_comments`.
+- Added notification queue hooks through `notification_events` for customer email/SMS preference flows.
+- Added richer customer/staff profile field direction and a current schema snapshot in `DATABASE_STRUCTURE_CURRENT.md`.

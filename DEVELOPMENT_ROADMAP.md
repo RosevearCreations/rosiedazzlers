@@ -243,3 +243,10 @@ The `dev` branch has largely finished the **role-aware backend foundation**, so 
 The project now has an early client account/auth foundation and public top-bar sign-in status. Because of that, one new practical next step is:
 
 - connect client accounts more deeply to booking history, gift redemption, and progress access
+
+
+## Latest auth/progress/gift pass
+- Added actual gift redemption writes through booking confirmation webhook using `gift_certificate_redemptions`.
+- Added staff/detailer observation-thread posting through `progress_comments`.
+- Added notification queue hooks through `notification_events` for customer email/SMS preference flows.
+- Added richer customer/staff profile field direction and a current schema snapshot in `DATABASE_STRUCTURE_CURRENT.md`.

@@ -318,3 +318,10 @@ A new SQL migration adds richer profile fields for customer and staff records pl
 - `/my-account` now includes booking history, active gift certificates, and redemption history.
 - `/progress?token=...` now includes client/detailer chat replies when enabled.
 - Customer profiles now include notification preferences and detailer chat opt-in.
+
+
+## Latest auth/progress/gift pass
+- Added actual gift redemption writes through booking confirmation webhook using `gift_certificate_redemptions`.
+- Added staff/detailer observation-thread posting through `progress_comments`.
+- Added notification queue hooks through `notification_events` for customer email/SMS preference flows.
+- Added richer customer/staff profile field direction and a current schema snapshot in `DATABASE_STRUCTURE_CURRENT.md`.

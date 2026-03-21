@@ -206,3 +206,10 @@ The `dev` branch already has a strong operations/backend foundation, but the nex
 - Client dashboard now includes booking history, gift certificates, redemption history, and direct progress links.
 - Customer profiles now support notification preferences and detailer chat opt-in.
 - Progress pages now support signed-in client replies visible to detailers and admins.
+
+
+## Latest auth/progress/gift pass
+- Added actual gift redemption writes through booking confirmation webhook using `gift_certificate_redemptions`.
+- Added staff/detailer observation-thread posting through `progress_comments`.
+- Added notification queue hooks through `notification_events` for customer email/SMS preference flows.
+- Added richer customer/staff profile field direction and a current schema snapshot in `DATABASE_STRUCTURE_CURRENT.md`.
