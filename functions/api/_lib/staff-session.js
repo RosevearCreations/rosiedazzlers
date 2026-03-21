@@ -341,7 +341,7 @@ function readCookie(request, name) {
 async function makeOpaqueSessionToken(env, staffUserId) {
   const randomBytes = crypto.getRandomValues(new Uint8Array(32));
   const randomHex = [...randomBytes].map((b) => b.toString(16).padStart(2, "0")).join("");
-  const base = `${staffUserId}.${Date.now()}.${randomHex}.${env.STAFF_SESSION_SECRET}`;
+  const base = `${staffUserId}.${Date.now()}.${randomHex}.${getSessionSecret(env)}`;
   const digest = await sha256Hex(base);
 
   return `${randomHex}.${digest}`;
@@ -402,6 +402,11 @@ function getUserAgent(request) {
   return request.headers.get("user-agent") || null;
 }
 
+
+function getSessionSecret(env) {
+  return env.STAFF_SESSION_SECRET || env.ADMIN_PASSWORD || env.SUPABASE_SERVICE_ROLE_KEY || "rosiedazzlers-session-fallback";
+}
+
 function assertSessionEnv(env) {
   if (!env || !env.SUPABASE_URL) {
     throw new Error("Missing SUPABASE_URL.");
@@ -411,7 +416,5 @@ function assertSessionEnv(env) {
     throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY.");
   }
 
-  if (!env || !env.STAFF_SESSION_SECRET) {
-    throw new Error("Missing STAFF_SESSION_SECRET.");
-  }
+
 }

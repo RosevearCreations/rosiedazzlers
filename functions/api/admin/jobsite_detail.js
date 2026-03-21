@@ -168,6 +168,7 @@ export async function onRequestPost(context) {
     const updates = Array.isArray(updateRows) ? updateRows : [];
     const media = Array.isArray(mediaRows) ? mediaRows : [];
     const signoff = Array.isArray(signoffRows) ? signoffRows[0] || null : null;
+    const comments = Array.isArray(commentRows) ? commentRows : [];
 
     if (!booking) {
       return withCors(json({ error: "Booking not found." }, 404));
@@ -257,6 +258,17 @@ export async function onRequestPost(context) {
             created_at: row.created_at || null
           }))
         },
+        comments: comments.map((row) => ({
+          id: row.id,
+          booking_id: row.booking_id || null,
+          parent_type: row.parent_type || null,
+          parent_id: row.parent_id || null,
+          author_type: row.author_type || null,
+          author_name: row.author_name || null,
+          author_email: row.author_email || null,
+          message: row.message || null,
+          created_at: row.created_at || null
+        })),
         signoff: signoff
           ? {
               id: signoff.id,

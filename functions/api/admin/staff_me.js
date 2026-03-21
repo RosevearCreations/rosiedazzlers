@@ -41,7 +41,7 @@ async function handleStaffMe(context) {
   const { request, env } = context;
 
   try {
-    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY || !env.STAFF_SESSION_SECRET) {
+    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY ) {
       return withCors(json({ error: "Server configuration is incomplete." }, 500));
     }
 
