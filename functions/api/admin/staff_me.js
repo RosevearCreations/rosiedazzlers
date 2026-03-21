@@ -1,35 +1,26 @@
 // functions/api/admin/staff_me.js
 //
-// Role-aware current staff identity endpoint.
+// Compatibility current-staff endpoint.
 //
 // What this file does:
-// - keeps current ADMIN_PASSWORD bridge protection
-// - resolves the acting staff user through staff_users
-// - returns the current role/capabilities for the admin/detailer UI
-// - supports legacy admin fallback during transition
+// - keeps the older /api/admin/staff_me route working
+// - resolves the current signed-in staff user from the session cookie
+// - returns a familiar actor/capability payload for older admin pages
+// - clears the session cookie if it is invalid / expired / revoked
+// - acts as a bridge while pages move from older patterns to auth_me.js
 //
-// Supported request body:
-// {
-//   staff_email?: "detailer@example.com",
-//   staff_user_id?: "uuid"
-// }
-//
-// Request headers supported:
-// - x-admin-password: required
-// - x-staff-email: recommended during transition
-// - x-staff-user-id: optional alternative
-//
-// Why this file matters:
-// - admin/detailer pages need an easy way to know what actions to show
-// - the project is in transition from shared password to role-aware operations
-// - this endpoint lets the UI react to the real staff capability set without
-//   duplicating permission logic on the frontend
+// Expected env vars:
+// - SUPABASE_URL
+// - SUPABASE_SERVICE_ROLE_KEY
+// - STAFF_SESSION_SECRET
 
 import {
-  requireStaffAccess,
-  json,
-  methodNotAllowed
-} from "../_lib/staff-auth.js";
+  getCurrentStaffSession,
+  touchStaffSession,
+  rotateStaffSession,
+  appendSetCookie,
+  buildClearSessionCookie
+} from "../_lib/staff-session.js";
 
 export async function onRequestOptions() {
   return new Response("", {
@@ -38,51 +29,104 @@ export async function onRequestOptions() {
   });
 }
 
+export async function onRequestGet(context) {
+  return handleStaffMe(context);
+}
+
 export async function onRequestPost(context) {
+  return handleStaffMe(context);
+}
+
+async function handleStaffMe(context) {
   const { request, env } = context;
 
   try {
-    const body = await request.json().catch(() => ({}));
-
-    const access = await requireStaffAccess({
-      request,
-      env,
-      body,
-      capability: "view_live_ops",
-      allowLegacyAdminFallback: true
-    });
-
-    if (!access.ok) {
-      return withCors(access.response);
+    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY || !env.STAFF_SESSION_SECRET) {
+      return withCors(json({ error: "Server configuration is incomplete." }, 500));
     }
 
-    const actor = access.actor;
+    const current = await getCurrentStaffSession({
+      env,
+      request
+    });
 
-    return withCors(
-      json({
-        ok: true,
-        actor: {
-          id: actor.id || null,
-          full_name: actor.full_name || null,
-          email: actor.email || null,
-          role_code: actor.role_code || null,
-          is_active: actor.is_active === true,
+    if (!current || !current.staff_user) {
+      let headers = new Headers({
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "no-store"
+      });
 
-          is_admin: actor.is_admin === true,
-          is_senior_detailer: actor.is_senior_detailer === true,
-          is_detailer: actor.is_detailer === true,
-          is_legacy_admin: actor.is_legacy_admin === true,
+      headers = appendSetCookie(
+        headers,
+        current && current.clear_cookie ? current.clear_cookie : buildClearSessionCookie()
+      );
+      headers = applyCors(headers);
 
-          capabilities: {
-            can_override_lower_entries: actor.can_override_lower_entries === true,
-            can_manage_bookings: actor.can_manage_bookings === true,
-            can_manage_blocks: actor.can_manage_blocks === true,
-            can_manage_progress: actor.can_manage_progress === true,
-            can_manage_promos: actor.can_manage_promos === true,
-            can_manage_staff: actor.can_manage_staff === true
-          }
+      return new Response(
+        JSON.stringify(
+          {
+            ok: true,
+            authenticated: false,
+            actor: null,
+            staff_user: null
+          },
+          null,
+          2
+        ),
+        {
+          status: 200,
+          headers
         }
-      })
+      );
+    }
+
+    await touchStaffSession({
+      env,
+      sessionId: current.session && current.session.id ? current.session.id : null,
+      request
+    });
+
+    let rotatedCookie = null;
+
+    if (current.needs_rotation === true) {
+      const rotated = await rotateStaffSession({
+        env,
+        request,
+        currentSession: current.session,
+        staffUser: current.staff_user
+      });
+
+      rotatedCookie = rotated.cookie || null;
+    }
+
+    const actor = formatActor(current.staff_user);
+
+    let headers = new Headers({
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store"
+    });
+
+    if (rotatedCookie) {
+      headers = appendSetCookie(headers, rotatedCookie);
+    }
+
+    headers = applyCors(headers);
+
+    return new Response(
+      JSON.stringify(
+        {
+          ok: true,
+          authenticated: true,
+          actor,
+          staff_user: actor
+        },
+        null,
+        2
+      ),
+      {
+        status: 200,
+        headers
+      }
     );
   } catch (err) {
     return withCors(
@@ -96,30 +140,72 @@ export async function onRequestPost(context) {
   }
 }
 
-export async function onRequestGet() {
-  return withCors(methodNotAllowed());
+/* ---------------- actor formatting ---------------- */
+
+function formatActor(staffUser) {
+  return {
+    id: staffUser.id || null,
+    full_name: staffUser.full_name || null,
+    email: staffUser.email || null,
+    role_code: staffUser.role_code || null,
+    is_active: staffUser.is_active === true,
+
+    is_admin: staffUser.is_admin === true,
+    is_senior_detailer: staffUser.is_senior_detailer === true,
+    is_detailer: staffUser.is_detailer === true,
+
+    can_override_lower_entries: staffUser.can_override_lower_entries === true,
+    can_manage_bookings: staffUser.can_manage_bookings === true,
+    can_manage_blocks: staffUser.can_manage_blocks === true,
+    can_manage_progress: staffUser.can_manage_progress === true,
+    can_manage_promos: staffUser.can_manage_promos === true,
+    can_manage_staff: staffUser.can_manage_staff === true,
+
+    capabilities: {
+      can_override_lower_entries: staffUser.can_override_lower_entries === true,
+      can_manage_bookings: staffUser.can_manage_bookings === true,
+      can_manage_blocks: staffUser.can_manage_blocks === true,
+      can_manage_progress: staffUser.can_manage_progress === true,
+      can_manage_promos: staffUser.can_manage_promos === true,
+      can_manage_staff: staffUser.can_manage_staff === true
+    }
+  };
 }
 
 /* ---------------- helpers ---------------- */
 
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data, null, 2), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store"
+    }
+  });
+}
+
 function corsHeaders() {
   return {
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST,OPTIONS",
-    "Access-Control-Allow-Headers":
-      "Content-Type, x-admin-password, x-staff-email, x-staff-user-id",
+    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
     "Cache-Control": "no-store"
   };
 }
 
-function withCors(response) {
-  const headers = new Headers(response.headers || {});
+function applyCors(headers) {
+  const out = headers instanceof Headers ? new Headers(headers) : new Headers(headers || {});
   const extras = corsHeaders();
 
   for (const [key, value] of Object.entries(extras)) {
-    headers.set(key, value);
+    if (!out.has(key)) out.set(key, value);
   }
 
+  return out;
+}
+
+function withCors(response) {
+  const headers = applyCors(response.headers || {});
   return new Response(response.body, {
     status: response.status,
     statusText: response.statusText,
