@@ -1,5 +1,6 @@
 import { requireStaffAccess, serviceHeaders, json, methodNotAllowed, isUuid } from "../_lib/staff-auth.js";
 import { maybeQueueCustomerNotification } from "../_lib/notification-hooks.js";
+import { loadFeatureFlags } from "../_lib/app-settings.js";
 
 export async function onRequestOptions(){ return new Response("", { status:204, headers:corsHeaders() }); }
 export async function onRequestPost(context){
@@ -13,6 +14,8 @@ export async function onRequestPost(context){
     const visibility = String(body.visibility || 'internal').trim().toLowerCase();
     if (!booking_id || !isUuid(booking_id)) return withCors(json({ error:'Valid booking_id is required.' },400));
     if (!message) return withCors(json({ error:'Message is required.' },400));
+    const flags = await loadFeatureFlags(env);
+    if (visibility === 'customer' && flags.customer_chat_enabled === false) return withCors(json({ error:'Customer-visible chat is disabled.' },403));
     const access = await requireStaffAccess({ request, env, body, capability:'work_booking', bookingId: booking_id, allowLegacyAdminFallback:true });
     if (!access.ok) return withCors(access.response);
     const headers = serviceHeaders(env);
