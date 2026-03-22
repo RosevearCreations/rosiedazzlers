@@ -32,7 +32,7 @@ export async function onRequestGet(context) {
       fetch(`${env.SUPABASE_URL}/rest/v1/job_signoffs?select=id,signer_type,signer_name,signer_email,notes,signed_at,user_agent&booking_id=eq.${bookingId}&order=signed_at.desc`, { headers }),
       fetch(`${env.SUPABASE_URL}/rest/v1/progress_comments?select=id,booking_id,parent_type,parent_id,author_type,author_name,author_email,message,created_at,visibility&booking_id=eq.${bookingId}&order=created_at.asc`, { headers }),
       booking.customer_email ? fetch(`${env.SUPABASE_URL}/rest/v1/customer_profiles?select=id,notification_opt_in,notification_channel,detailer_chat_opt_in&email=eq.${encodeURIComponent(booking.customer_email)}&limit=1`, { headers }) : Promise.resolve(null),
-      fetch(`${env.SUPABASE_URL}/rest/v1/observation_annotations?select=id,booking_id,media_id,x_percent,y_percent,title,note,visibility,created_by_type,created_by_name,created_at&booking_id=eq.${bookingId}&visibility=eq.customer&order=created_at.asc`, { headers }).catch(() => null)
+      fetch(`${env.SUPABASE_URL}/rest/v1/observation_annotations?select=id,booking_id,media_id,x_percent,y_percent,title,note,visibility,category,severity,pin_color,created_by_type,created_by_name,created_at&booking_id=eq.${bookingId}&visibility=eq.customer&order=created_at.asc`, { headers }).catch(() => null)
     ]);
 
     for (const [res, label] of [[updatesRes,'updates'],[mediaRes,'media'],[signoffsRes,'signoffs'],[commentsRes,'comments']]) {
@@ -55,6 +55,13 @@ export async function onRequestGet(context) {
       if (row.author_type === 'client') return true;
       return customerChatEnabled;
     });
+
+    const commentMap = new Map(comments.map(row => [row.id, row]));
+    const annotationMap = new Map((Array.isArray(annotations) ? annotations : []).map(row => [row.id, row]));
+    const enrichedComments = comments.map(row => ({
+      ...row,
+      reply_target_label: row.parent_type === 'annotation' ? (annotationMap.get(row.parent_id)?.title || annotationMap.get(row.parent_id)?.note || 'Annotation') : row.parent_type === 'comment' ? (commentMap.get(row.parent_id)?.message || 'Comment') : 'Booking thread'
+    }));
 
     const mediaWithAnnotations = (Array.isArray(media) ? media : []).map(item => ({
       ...item,
@@ -86,7 +93,7 @@ export async function onRequestGet(context) {
       updates: Array.isArray(updates) ? updates : [],
       media: mediaWithAnnotations,
       signoffs: Array.isArray(signoffs) ? signoffs : [],
-      comments,
+      comments: enrichedComments,
       annotations: Array.isArray(annotations) ? annotations : []
     });
   } catch (err) {
