@@ -53,3 +53,12 @@ Current direction includes:
 - actual gift redemption write path from booking checkout confirmation
 - staff/detailer observation-thread comments
 - notification queue hooks for email/SMS preference flows
+
+
+## March 2026 additions
+
+- Client garage foundation added through `customer_vehicles` plus new client vehicle APIs.
+- Observation-thread UI foundation added on the jobsite screen using `progress_comments`.
+- Gift redemption history is now surfaced in the client dashboard and customer detail direction.
+- Richer customer/staff fields now include alternate service address, preferred contact/SMS, admin level, supervisor, pay schedule, hourly rate, and tips history support.
+- Layout cleanup pass added shared form-grid / check-grid helpers to reduce overlapping boxes and misaligned checkboxes.

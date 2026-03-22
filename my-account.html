@@ -1,69 +1,51 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rosie Dazzlers | My Account</title>
-  <link rel="stylesheet" href="/assets/site.css" />
-</head>
-<body>
-  <header class="nav">
-    <div class="nav-inner">
-      <a class="brand" href="/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a>
-      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button>
-      <nav id="navLinks" class="nav-links">
-        <a href="/services">Services</a><a href="/pricing">Pricing</a><a href="/gear">Gear</a><a href="/consumables">Consumables</a><a href="/about">About</a><a href="/contact">Contact</a><a href="/book">Book</a>
-      </nav>
-    </div>
-  </header>
-  <main class="container">
-    <section class="section"><div class="hero"><div><div class="badge">Client Account</div><h1>My account</h1><p>Update your profile, communication preferences, vehicle notes, and review booking and gift certificate history.</p></div><div class="panel"><div class="kicker">Account Status</div><h3 id="accountTitle" style="margin:6px 0 8px">Checking session…</h3><div id="accountMeta" class="kicker">Please wait.</div></div></div></section>
-    <section class="section"><div id="accountNotice" class="notice">Loading account…</div></section>
-    <section class="section"><div class="grid cards"><div class="panel"><h2>Profile</h2><form id="accountForm" class="form" hidden>
-      <label>Full name<input id="acctName" /></label>
-      <label>Email<input id="acctEmail" disabled /></label>
-      <label>Phone<input id="acctPhone" /></label>
-      <label>Address line 1<input id="acctAddr1" /></label>
-      <label>Address line 2<input id="acctAddr2" /></label>
-      <label>City<input id="acctCity" /></label>
-      <label>Province<input id="acctProvince" /></label>
-      <label>Postal code<input id="acctPostal" /></label>
-      <label>Vehicle notes<textarea id="acctVehicleNotes" rows="4"></textarea></label>
-      <label>Account notes<textarea id="acctNotes" rows="3"></textarea></label>
-      <div class="badge">Notifications & chat</div>
-      <label><input id="acctNotifyOptIn" type="checkbox" /> Send me regular detailing notifications</label>
-      <label>Preferred notification channel<select id="acctNotifyChannel"><option value="email">Email</option><option value="sms">SMS</option><option value="none">None</option></select></label>
-      <label><input id="acctChatOptIn" type="checkbox" /> Allow detailer/client chat on progress posts</label>
+<html lang="en"><head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rosie Dazzlers | My Account</title><link rel="stylesheet" href="/assets/site.css" />
+</head><body>
+<header class="nav"><div class="nav-inner"><a class="brand" href="/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a><button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button><nav id="navLinks" class="nav-links"><a href="/services">Services</a><a href="/pricing">Pricing</a><a href="/gear">Gear</a><a href="/consumables">Consumables</a><a href="/about">About</a><a href="/contact">Contact</a><a href="/book">Book</a></nav></div></header>
+<main class="container">
+  <section class="section"><div class="hero"><div><div class="badge">Client Account</div><h1>My account & garage</h1><p>Manage profile details, communication preferences, vehicles, booking history, progress access, and gift certificate history.</p></div><div class="panel"><div class="kicker">Account Status</div><h3 id="accountTitle" style="margin:6px 0 8px">Checking session…</h3><div id="accountMeta" class="kicker">Please wait.</div></div></div></section>
+  <section class="section"><div id="accountNotice" class="notice">Loading account…</div></section>
+  <section class="section"><div class="grid cards two-col-stretch">
+    <div class="panel"><h2>Client profile</h2><form id="accountForm" class="form" hidden>
+      <div class="form-grid two-col"><label>Full name<input id="acctName" /></label><label>Email<input id="acctEmail" disabled /></label><label>Phone<input id="acctPhone" /></label><label>Preferred contact name<input id="acctPreferredName" /></label></div>
+      <div class="form-grid two-col"><label>Home address<input id="acctAddr1" /></label><label>Address line 2<input id="acctAddr2" /></label><label>City<input id="acctCity" /></label><label>Province<input id="acctProvince" /></label><label>Postal code<input id="acctPostal" /></label><label>Alternate address<textarea id="acctAltAddress" rows="3" placeholder="Work, condo garage, or other service location"></textarea></label></div>
+      <div class="form-grid two-col"><label>Account notes<textarea id="acctNotes" rows="3"></textarea></label><label>Client-private notes about your preferences<textarea id="acctPrivateNotes" rows="3" placeholder="Only you and admin-style systems should rely on this later."></textarea></label></div>
+      <div class="badge">Notifications & live updates</div>
+      <div class="check-grid"><label class="checkbox"><input id="acctNotifyOptIn" type="checkbox" /><span>Regular notifications on</span></label><label class="checkbox"><input id="acctChatOptIn" type="checkbox" /><span>Allow live detailer/client chat</span></label></div>
+      <div class="form-grid two-col"><label>Preferred notification channel<select id="acctNotifyChannel"><option value="email">Email</option><option value="sms">SMS</option><option value="none">None</option></select></label><label>SMS phone<input id="acctSmsPhone" placeholder="Optional SMS number" /></label></div>
       <div><button class="btn primary" type="submit">Save profile</button></div>
     </form></div>
-    <div class="panel"><h2>Booking history</h2><div id="bookingHistory" class="grid"></div></div></div></section>
-    <section class="section"><div class="grid cards"><div class="panel"><h2>Gift certificates on file</h2><div id="giftList" class="grid"></div></div><div class="panel"><h2>Gift redemption history</h2><div id="redeemList" class="grid"></div></div></div></section>
-  </main>
-  <footer class="footer container" data-footer></footer>
-  <script src="/assets/chrome.js"></script>
-  <script src="/assets/client-auth.js"></script>
-  <script type="module">
-    import { setBrandImages, setFooter } from "/assets/site.js";
-    const $ = (s) => document.querySelector(s);
-    function esc(v){ return String(v ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
-    function setNotice(msg, kind=''){ const el=$('#accountNotice'); if(!el) return; el.className = kind ? `notice ${kind}` : 'notice'; el.textContent=msg; }
-    function renderHistory(rows){ const wrap=$('#bookingHistory'); if(!wrap) return; if(!rows.length){ wrap.innerHTML='<div class="notice">No bookings yet.</div>'; return; } wrap.innerHTML = rows.map(r=>`<article class="card"><div class="kicker">${esc(r.service_date||r.created_at||'—')} · ${esc(r.start_slot||'—')}</div><h3>${esc(r.package_code||'Booking')}</h3><p>Status: ${esc(r.status||'—')} | Job: ${esc(r.job_status||'—')}</p><p>Vehicle: ${esc(r.vehicle_size||'—')}</p><p>${r.progress_enabled && r.progress_token ? `<a class="btn small" href="/progress?token=${encodeURIComponent(r.progress_token)}">Open progress</a>` : '<span class="kicker">Progress not enabled</span>'}</p></article>`).join(''); }
-    function renderGifts(rows){ const wrap=$('#giftList'); if(!wrap) return; if(!rows.length){ wrap.innerHTML='<div class="notice">No gift certificates found.</div>'; return; } wrap.innerHTML=rows.map(r=>`<article class="card"><div class="kicker">${esc(r.code||'Gift')}</div><h3>${esc(r.type||'gift')}</h3><p>Status: ${esc(r.status||'—')}</p><p>Remaining: ${esc(String(r.remaining_cents ?? '—'))}</p><p>Expires: ${esc(r.expires_at || '—')}</p></article>`).join(''); }
-    function renderRedemptions(rows){ const wrap=$('#redeemList'); if(!wrap) return; if(!rows.length){ wrap.innerHTML='<div class="notice">No redemptions yet.</div>'; return; } wrap.innerHTML=rows.map(r=>`<article class="card"><div class="kicker">${esc(r.created_at||'—')}</div><h3>${esc(r.gift_code?.code || r.gift_code || 'Gift redemption')}</h3><p>Amount cents: ${esc(String(r.amount_cents ?? '—'))}</p><p>Booking ID: ${esc(r.booking_id || '—')}</p><p>${esc(r.notes || '')}</p></article>`).join(''); }
-    async function loadDashboard(){
-      const me = await window.ClientAuth.loadCurrentCustomer();
-      if(!me?.authenticated || !me.customer){ window.location.replace('/login?next=/my-account'); return; }
-      $('#accountTitle').textContent = me.customer.full_name || me.customer.email || 'Client account';
-      $('#accountMeta').textContent = [me.customer.email || '', me.customer.tier_code ? `Tier: ${me.customer.tier_code}` : ''].filter(Boolean).join(' · ');
-      const res = await fetch('/api/client/dashboard',{credentials:'include',cache:'no-store'});
-      let data=null; try{ data=await res.json(); }catch{}
-      if(!res.ok) throw new Error(data?.error || 'Could not load client dashboard.');
-      const c = data.customer || me.customer;
-      $('#acctName').value=c.full_name||''; $('#acctEmail').value=c.email||''; $('#acctPhone').value=c.phone||''; $('#acctAddr1').value=c.address_line1||''; $('#acctAddr2').value=c.address_line2||''; $('#acctCity').value=c.city||''; $('#acctProvince').value=c.province||''; $('#acctPostal').value=c.postal_code||''; $('#acctVehicleNotes').value=c.vehicle_notes||''; $('#acctNotes').value=c.notes||''; $('#acctNotifyOptIn').checked = c.notification_opt_in===true; $('#acctNotifyChannel').value=c.notification_channel||'email'; $('#acctChatOptIn').checked = c.detailer_chat_opt_in!==false;
-      $('#accountForm').hidden=false; renderHistory(Array.isArray(data.bookings)?data.bookings:[]); renderGifts(Array.isArray(data.gift_certificates)?data.gift_certificates:[]); renderRedemptions(Array.isArray(data.redemptions)?data.redemptions:[]); setNotice('Account loaded.','success');
-    }
-    $('#accountForm').addEventListener('submit', async (e)=>{ e.preventDefault(); setNotice('Saving…'); const body={ full_name:$('#acctName').value, phone:$('#acctPhone').value, address_line1:$('#acctAddr1').value, address_line2:$('#acctAddr2').value, city:$('#acctCity').value, province:$('#acctProvince').value, postal_code:$('#acctPostal').value, vehicle_notes:$('#acctVehicleNotes').value, notes:$('#acctNotes').value, notification_opt_in:$('#acctNotifyOptIn').checked, notification_channel:$('#acctNotifyChannel').value, detailer_chat_opt_in:$('#acctChatOptIn').checked }; const res=await fetch('/api/client/profile_update',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); let data=null; try{ data=await res.json(); }catch{} if(!res.ok) return setNotice(data?.error||'Could not save profile.','error'); setNotice('Profile saved.','success'); });
-    setBrandImages(); setFooter(); loadDashboard().catch(err=>setNotice(err?.message||'Could not load account.','error'));
-  </script>
-</body>
-</html>
+    <div class="panel"><h2>Booking history</h2><div id="bookingHistory" class="grid"></div></div>
+  </div></section>
+  <section class="section"><div class="panel"><div class="section-head"><h2>Vehicle garage</h2><button id="vehicleNewBtn" class="btn small" type="button">Add vehicle</button></div><div id="vehicleList" class="grid cards"></div><form id="vehicleForm" class="form" hidden>
+    <input id="vehicleId" type="hidden" />
+    <div class="form-grid three-col"><label>Vehicle name<input id="vehName" placeholder="Jess's CR-V" /></label><label>Year<input id="vehYear" type="number" min="1900" max="2100" /></label><label>Brand / Make<input id="vehMake" /></label><label>Model<input id="vehModel" /></label><label>Colour<input id="vehColor" /></label><label>Mileage (km)<input id="vehMileage" type="number" min="0" /></label></div>
+    <div class="form-grid two-col"><label>Last wash date<input id="vehLastWash" type="date" /></label><label>Parking / service location<input id="vehParking" placeholder="Driveway, work lot, underground, etc." /></label></div>
+    <div class="form-grid two-col"><label>Alternate service address<textarea id="vehAltAddr" rows="3"></textarea></label><label>Notes for team<textarea id="vehTeamNotes" rows="3" placeholder="Contact preferences, access notes, known issues."></textarea></label></div>
+    <div class="check-grid"><label class="checkbox"><input id="vehLiveUpdates" type="checkbox" /><span>Live updates for this vehicle</span></label><label class="checkbox"><input id="vehWater" type="checkbox" /><span>Water hookup available</span></label><label class="checkbox"><input id="vehPower" type="checkbox" /><span>Power hookup available</span></label><label class="checkbox"><input id="vehBilling" type="checkbox" /><span>Keep billing info on file for this vehicle</span></label><label class="checkbox"><input id="vehPrimary" type="checkbox" /><span>Primary vehicle</span></label></div>
+    <div class="form-grid two-col"><label>Detailer-visible notes<textarea id="vehDetailerNotes" rows="3" placeholder="Visible to detailers."></textarea></label><label>Admin-only notes<textarea id="vehAdminNotes" rows="3" placeholder="Intended for admin-only viewing."></textarea></label></div>
+    <div class="action-row"><button class="btn primary" type="submit">Save vehicle</button><button id="vehicleCancelBtn" class="btn" type="button">Cancel</button></div>
+  </form></div></section>
+  <section class="section"><div class="grid cards two-col-stretch"><div class="panel"><h2>Gift certificates on file</h2><div id="giftList" class="grid"></div></div><div class="panel"><h2>Gift redemption history</h2><div id="redeemList" class="grid"></div></div></div></section>
+</main><footer class="footer container" data-footer></footer>
+<script src="/assets/chrome.js"></script><script src="/assets/client-auth.js"></script>
+<script type="module">
+import { setBrandImages, setFooter } from "/assets/site.js";
+const $=(s)=>document.querySelector(s); const esc=(v)=>String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+function setNotice(msg,kind=''){ const el=$('#accountNotice'); el.className=kind?`notice ${kind}`:'notice'; el.textContent=msg; }
+function washMeter(lastWash){ if(!lastWash) return 0; const then = new Date(lastWash); if(Number.isNaN(then.getTime())) return 0; const days = Math.max(0, Math.round((Date.now()-then.getTime())/86400000)); return Math.min(100, Math.round((days/30)*100)); }
+function renderHistory(rows){ const wrap=$('#bookingHistory'); wrap.innerHTML = rows.length ? rows.map(r=>`<article class="card"><div class="kicker">${esc(r.service_date||r.created_at||'—')} · ${esc(r.start_slot||'—')}</div><h3>${esc(r.package_code||'Booking')}</h3><p>Status: ${esc(r.status||'—')} | Job: ${esc(r.job_status||'—')}</p><p>Vehicle size: ${esc(r.vehicle_size||'—')}</p><p>${r.progress_enabled && r.progress_token ? `<a class="btn small" href="/progress?token=${encodeURIComponent(r.progress_token)}">Open progress</a>` : '<span class="kicker">Progress not enabled</span>'}</p></article>`).join('') : '<div class="notice">No bookings yet.</div>'; }
+function renderGifts(rows){ const wrap=$('#giftList'); wrap.innerHTML=rows.length?rows.map(r=>`<article class="card"><div class="kicker">${esc(r.code||'Gift')}</div><h3>${esc(r.type||'gift')}</h3><p>Status: ${esc(r.status||'—')}</p><p>Remaining cents: ${esc(String(r.remaining_cents ?? '—'))}</p><p>Expires: ${esc(r.expires_at || '—')}</p></article>`).join(''):'<div class="notice">No gift certificates found.</div>'; }
+function renderRedemptions(rows){ const wrap=$('#redeemList'); wrap.innerHTML=rows.length?rows.map(r=>`<article class="card"><div class="kicker">${esc(r.created_at||'—')}</div><h3>${esc(r.gift_certificate?.code || 'Gift redemption')}</h3><p>Amount cents: ${esc(String(r.amount_cents ?? '—'))}</p><p>Booking: ${esc(r.booking?.package_code || r.booking_id || '—')}</p><p>${esc(r.notes || '')}</p></article>`).join(''):'<div class="notice">No redemptions yet.</div>'; }
+function renderVehicles(rows){ const wrap=$('#vehicleList'); wrap.innerHTML = rows.length ? rows.map(v=>{ const meter=washMeter(v.last_wash_at); return `<article class="card vehicle-card"><div class="section-head"><h3>${esc(v.vehicle_name || `${v.model_year||''} ${v.make||''} ${v.model||''}`.trim() || 'Vehicle')}</h3><button class="btn small" type="button" data-edit-vehicle="${esc(v.id)}">Edit</button></div><p>${esc([v.model_year,v.make,v.model,v.color].filter(Boolean).join(' · ') || 'Details pending')}</p><p>Mileage: ${esc(String(v.mileage_km ?? '—'))} km</p><div class="gauge"><div class="gauge-fill" style="width:${meter}%"></div></div><div class="kicker">Last wash: ${esc(v.last_wash_at || 'unknown')}</div><div class="badges"><span class="badge">${v.live_updates_opt_in ? 'Live updates on' : 'Live updates off'}</span><span class="badge">${v.has_water_hookup ? 'Water hookup' : 'No water hookup'}</span><span class="badge">${v.has_power_hookup ? 'Power hookup' : 'No power hookup'}</span></div></article>`; }).join('') : '<div class="notice">No vehicles yet. Add the first vehicle to your garage.</div>'; [...document.querySelectorAll('[data-edit-vehicle]')].forEach(btn=>btn.addEventListener('click',()=>editVehicle(btn.getAttribute('data-edit-vehicle')))); }
+let state={ customer:null, vehicles:[] };
+function fillVehicleForm(v){ $('#vehicleId').value=v?.id||''; $('#vehName').value=v?.vehicle_name||''; $('#vehYear').value=v?.model_year||''; $('#vehMake').value=v?.make||''; $('#vehModel').value=v?.model||''; $('#vehColor').value=v?.color||''; $('#vehMileage').value=v?.mileage_km||''; $('#vehLastWash').value=v?.last_wash_at||''; $('#vehParking').value=v?.parking_location||''; $('#vehAltAddr').value=v?.alternate_service_address||''; $('#vehTeamNotes').value=v?.notes_for_team||''; $('#vehLiveUpdates').checked=!!v?.live_updates_opt_in; $('#vehWater').checked=!!v?.has_water_hookup; $('#vehPower').checked=!!v?.has_power_hookup; $('#vehBilling').checked=!!v?.save_billing_on_file; $('#vehPrimary').checked=!!v?.is_primary; $('#vehDetailerNotes').value=v?.detailer_visible_notes||''; $('#vehAdminNotes').value=v?.admin_private_notes||''; $('#vehicleForm').hidden=false; }
+function editVehicle(id){ const v=state.vehicles.find(x=>x.id===id); fillVehicleForm(v||null); }
+$('#vehicleNewBtn').addEventListener('click',()=>fillVehicleForm(null)); $('#vehicleCancelBtn').addEventListener('click',()=>$('#vehicleForm').hidden=true);
+async function loadDashboard(){ const me=await window.ClientAuth.loadCurrentCustomer(); if(!me?.authenticated||!me.customer){ window.location.replace('/login?next=/my-account'); return; } $('#accountTitle').textContent = me.customer.full_name || me.customer.email || 'Client account'; $('#accountMeta').textContent = [me.customer.email || '', me.customer.tier_code ? `Tier: ${me.customer.tier_code}` : ''].filter(Boolean).join(' · '); const res=await fetch('/api/client/dashboard',{credentials:'include',cache:'no-store'}); let data=null; try{ data=await res.json(); }catch{} if(!res.ok) throw new Error(data?.error || 'Could not load client dashboard.'); state.customer=data.customer || me.customer; state.vehicles=Array.isArray(data.vehicles)?data.vehicles:[]; const c=state.customer; $('#acctName').value=c.full_name||''; $('#acctEmail').value=c.email||''; $('#acctPhone').value=c.phone||''; $('#acctPreferredName').value=c.preferred_contact_name||''; $('#acctAddr1').value=c.address_line1||''; $('#acctAddr2').value=c.address_line2||''; $('#acctCity').value=c.city||''; $('#acctProvince').value=c.province||''; $('#acctPostal').value=c.postal_code||''; $('#acctAltAddress').value=c.alternate_service_address||''; $('#acctNotes').value=c.notes||''; $('#acctPrivateNotes').value=c.client_private_notes||''; $('#acctNotifyOptIn').checked=c.notification_opt_in===true; $('#acctNotifyChannel').value=c.notification_channel||'email'; $('#acctChatOptIn').checked=c.detailer_chat_opt_in!==false; $('#acctSmsPhone').value=c.sms_phone||''; $('#accountForm').hidden=false; renderHistory(Array.isArray(data.bookings)?data.bookings:[]); renderGifts(Array.isArray(data.gift_certificates)?data.gift_certificates:[]); renderRedemptions(Array.isArray(data.redemptions)?data.redemptions:[]); renderVehicles(state.vehicles); setNotice('Account loaded.','success'); }
+$('#accountForm').addEventListener('submit', async (e)=>{ e.preventDefault(); setNotice('Saving…'); const body={ full_name:$('#acctName').value, phone:$('#acctPhone').value, preferred_contact_name:$('#acctPreferredName').value, address_line1:$('#acctAddr1').value, address_line2:$('#acctAddr2').value, city:$('#acctCity').value, province:$('#acctProvince').value, postal_code:$('#acctPostal').value, alternate_service_address:$('#acctAltAddress').value, notes:$('#acctNotes').value, client_private_notes:$('#acctPrivateNotes').value, notification_opt_in:$('#acctNotifyOptIn').checked, notification_channel:$('#acctNotifyChannel').value, detailer_chat_opt_in:$('#acctChatOptIn').checked, sms_phone:$('#acctSmsPhone').value }; const res=await fetch('/api/client/profile_update',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); let data=null; try{ data=await res.json(); }catch{} if(!res.ok) return setNotice(data?.error||'Could not save profile.','error'); setNotice('Profile saved.','success'); });
+$('#vehicleForm').addEventListener('submit', async (e)=>{ e.preventDefault(); setNotice('Saving vehicle…'); const body={ vehicle_id:$('#vehicleId').value, vehicle_name:$('#vehName').value, model_year:$('#vehYear').value, make:$('#vehMake').value, model:$('#vehModel').value, color:$('#vehColor').value, mileage_km:$('#vehMileage').value, last_wash_at:$('#vehLastWash').value, parking_location:$('#vehParking').value, alternate_service_address:$('#vehAltAddr').value, notes_for_team:$('#vehTeamNotes').value, live_updates_opt_in:$('#vehLiveUpdates').checked, has_water_hookup:$('#vehWater').checked, has_power_hookup:$('#vehPower').checked, save_billing_on_file:$('#vehBilling').checked, is_primary:$('#vehPrimary').checked, detailer_visible_notes:$('#vehDetailerNotes').value, admin_private_notes:$('#vehAdminNotes').value }; const res=await fetch('/api/client/vehicles_save',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); let data=null; try{ data=await res.json(); }catch{} if(!res.ok) return setNotice(data?.error||'Could not save vehicle.','error'); $('#vehicleForm').hidden=true; await loadDashboard(); setNotice('Vehicle saved.','success'); });
+setBrandImages(); setFooter(); loadDashboard().catch(err=>setNotice(err?.message||'Could not load account.','error'));
+</script></body></html>

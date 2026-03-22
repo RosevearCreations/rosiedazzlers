@@ -363,6 +363,7 @@
             <pre>No signoff loaded yet.</pre>
           </div>
         </article>
+              <article class="card"><h2>Observation Thread</h2><div id="commentThread" class="list"><div class="list-item muted">No comments loaded yet.</div></div><form id="jobCommentForm" class="form" style="margin-top:12px"><div class="field"><label for="jobCommentVisibility">Visibility</label><select id="jobCommentVisibility"><option value="customer">customer</option><option value="internal">internal</option></select></div><div class="field"><label for="jobCommentMessage">Observation / reply</label><textarea id="jobCommentMessage" rows="4" placeholder="Add an observation, reply, or customer-facing note."></textarea></div><div><button class="btn" id="jobCommentBtn" type="submit">Post Comment</button></div></form></article>
       </section>
     </div>
   </main>
@@ -464,6 +465,15 @@
         });
       }
 
+      function renderComments(detail) {
+        const items = detail && Array.isArray(detail.comments) ? detail.comments : [];
+        const wrap = document.getElementById('commentThread');
+        if (!wrap) return;
+        wrap.innerHTML = '';
+        if (!items.length) { wrap.innerHTML = '<div class="list-item muted">No comments loaded yet.</div>'; return; }
+        items.forEach((row) => { const item=document.createElement('div'); item.className='list-item'; item.innerHTML = `<strong>${row.author_name || row.author_email || 'Participant'} — ${row.created_at || ''}</strong><div>${row.message || ''}</div><div class="muted">${row.author_type || 'user'} · ${row.visibility || 'internal'}</div>`; wrap.appendChild(item); });
+      }
+
       function renderMedia(detail) {
         const items = detail && detail.media && Array.isArray(detail.media.items)
           ? detail.media.items
@@ -532,6 +542,7 @@
           renderFlags(data);
           renderProgress(data);
           renderMedia(data);
+          renderComments(data);
 
           setShellStatus("Workspace loaded.", "success");
         } catch (err) {
@@ -543,6 +554,8 @@
           setButtonBusy(false);
         }
       }
+
+      document.getElementById('jobCommentForm')?.addEventListener('submit', async function (event) { event.preventDefault(); const bookingId=String(els.bookingId.value||'').trim(); const message=String(document.getElementById('jobCommentMessage').value||'').trim(); const visibility=String(document.getElementById('jobCommentVisibility').value||'customer'); if(!bookingId||!message){ setShellStatus('Booking ID and comment are required.','error'); return; } try { const response = await fetch('/api/admin/progress_comment_post', { method:'POST', credentials:'include', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ booking_id: bookingId, message, visibility, parent_type:'booking' }) }); const data = await response.json().catch(() => null); if(!response.ok) throw new Error((data && data.error) || 'Could not post comment.'); document.getElementById('jobCommentMessage').value=''; setShellStatus('Comment posted.','success'); await loadWorkspace(bookingId);} catch(err){ setShellStatus(err && err.message ? err.message : 'Could not post comment.','error'); } });
 
       els.form.addEventListener("submit", function (event) {
         event.preventDefault();
