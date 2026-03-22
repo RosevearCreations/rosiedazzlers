@@ -19,7 +19,33 @@ export async function onRequestPost(context){
     return withCors(json({ ok:true, vehicle: Array.isArray(rows)? rows[0] || null : null }));
   } catch (err) { return withCors(json({ error: err?.message || 'Unexpected server error.' },500)); }
 }
-function normalize(b, customer_profile_id){ return { customer_profile_id, vehicle_name: text(b.vehicle_name), model_year: intOrNull(b.model_year), make: text(b.make), model: text(b.model), color: text(b.color), mileage_km: intOrNull(b.mileage_km), last_wash_at: text(b.last_wash_at), parking_location: text(b.parking_location), alternate_service_address: text(b.alternate_service_address), notes_for_team: text(b.notes_for_team), detailer_visible_notes: text(b.detailer_visible_notes), admin_private_notes: text(b.admin_private_notes), has_water_hookup: boolVal(b.has_water_hookup), has_power_hookup: boolVal(b.has_power_hookup), live_updates_opt_in: boolVal(b.live_updates_opt_in), save_billing_on_file: boolVal(b.save_billing_on_file), is_primary: boolVal(b.is_primary), display_order: intOrNull(b.display_order) ?? 0, updated_at: new Date().toISOString() }; }
+function normalize(b, customer_profile_id){ return {
+  customer_profile_id,
+  vehicle_name: text(b.vehicle_name),
+  model_year: intOrNull(b.model_year),
+  make: text(b.make),
+  model: text(b.model),
+  color: text(b.color),
+  mileage_km: intOrNull(b.mileage_km),
+  last_wash_at: text(b.last_wash_at),
+  parking_location: text(b.parking_location),
+  alternate_service_address: text(b.alternate_service_address),
+  notes_for_team: text(b.notes_for_team),
+  detailer_visible_notes: text(b.detailer_visible_notes),
+  admin_private_notes: text(b.admin_private_notes),
+  preferred_contact_name: text(b.preferred_contact_name),
+  contact_email: text(b.contact_email),
+  contact_phone: text(b.contact_phone),
+  text_updates_opt_in: boolVal(b.text_updates_opt_in),
+  live_updates_opt_in: boolVal(b.live_updates_opt_in),
+  has_water_hookup: boolVal(b.has_water_hookup),
+  has_power_hookup: boolVal(b.has_power_hookup),
+  save_billing_on_file: boolVal(b.save_billing_on_file),
+  billing_label: text(b.billing_label),
+  is_primary: boolVal(b.is_primary),
+  display_order: intOrNull(b.display_order) ?? 0,
+  updated_at: new Date().toISOString()
+}; }
 function text(v){ const s=String(v ?? '').trim(); return s || null; }
 function intOrNull(v){ if(v===null||v===undefined||v==='') return null; const n=Number(v); return Number.isInteger(n)?n:null; }
 function boolVal(v){ return v===true || String(v||'').toLowerCase()==='true' || String(v||'')==='1' || String(v||'').toLowerCase()==='yes'; }
