@@ -7,114 +7,155 @@
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
   <style>
-    :root { color-scheme: dark; }
-    body { margin:0; min-height:100vh; background:radial-gradient(circle at top, rgba(255,255,255,.08), transparent 35%), linear-gradient(180deg,#0f172a 0%,#111827 100%); color:#f8fafc; }
-    .shell { max-width: 1320px; margin: 0 auto; padding: 24px; }
-    .loading { display:grid; place-items:center; min-height:60vh; color:#cbd5e1; }
-    .topbar { display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:20px; }
-    .actorcard{ min-width:280px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:18px; box-shadow:0 14px 35px rgba(0,0,0,.22); }
-    .actorline { margin:4px 0; } .actorlabel { color:#93c5fd; font-weight:700; margin-right:6px; }
-    .logout-btn,.btn { appearance:none; border:0; border-radius:10px; padding:10px 14px; background:#2563eb; color:white; font-weight:700; cursor:pointer; }
-    .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:16px; }
-    .card { grid-column:span 12; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:20px; }
-    .table-wrap { overflow:auto; border-radius:14px; border:1px solid rgba(255,255,255,.08); }
-    table { width:100%; border-collapse:collapse; min-width:980px; background:rgba(255,255,255,.03); }
-    th,td { padding:12px 14px; text-align:left; border-bottom:1px solid rgba(255,255,255,.07); vertical-align:top; }
-    th { color:#93c5fd; }
-    .pill { display:inline-flex; border-radius:999px; padding:6px 10px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); font-size:.82rem; margin:0 8px 8px 0; }
-    .muted { color:#94a3b8; font-size:.92rem; }
-    ul.tight { margin:10px 0 0 18px; color:#cbd5e1; line-height:1.5; }
-    @media (min-width:900px){ .span-7{grid-column:span 7}.span-5{grid-column:span 5}.span-6{grid-column:span 6}.span-4{grid-column:span 4}.span-8{grid-column:span 8} }
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at top, rgba(255,255,255,.08), transparent 35%),linear-gradient(180deg,#0f172a 0%,#111827 100%);color:#f8fafc}
+    .shell{max-width:1320px;margin:0 auto;padding:24px}
+    .topbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-bottom:20px}
+    .card,.actorcard{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:18px;box-shadow:0 14px 35px rgba(0,0,0,.22)}
+    .card{padding:20px}.actorcard{min-width:280px;padding:16px 18px}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.span-8{grid-column:span 12}.span-4{grid-column:span 12}
+    @media(min-width:960px){.span-8{grid-column:span 8}.span-4{grid-column:span 4}}
+    .field{margin-bottom:12px}.field label{display:block;margin-bottom:6px;font-weight:700}.field input,.field textarea,.field select{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.05);color:#fff}
+    .field textarea{min-height:110px;resize:vertical}
+    .checkrow{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:start;margin-top:8px}
+    .status{margin-bottom:16px;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);display:none}
+    .status[data-state="error"], .status[data-state="success"]{display:block}
+    .muted{color:#94a3b8}
+    .loading{display:grid;place-items:center;min-height:60vh;color:#cbd5e1}
   </style>
 </head>
 <body>
-<main class="shell">
-  <div class="loading" data-admin-shell-loading>Loading app management…</div>
-  <div data-admin-shell-ready hidden>
-    <header class="topbar">
-      <div>
-        <h1 style="margin:0 0 6px">App Management</h1>
-        <p class="muted">Admin-only control surface for permissions, workflow splits, scheduling authority, and which notes are visible to whom.</p>
+  <main class="shell">
+    <div class="loading" data-admin-shell-loading>Loading app management…</div>
+    <div data-admin-shell-ready hidden>
+      <header class="topbar">
+        <div><h1 style="margin:0 0 6px">App Management</h1><p class="muted" style="margin:0">Set policy, visibility, and feature controls across Customer, Detailer, and Admin experiences.</p></div>
+        <section class="actorcard"><div><strong>Name:</strong> <span data-actor-name></span></div><div><strong>Role:</strong> <span data-actor-role></span></div><div><strong>Email:</strong> <span data-actor-email></span></div><button class="btn" type="button" data-admin-logout style="margin-top:10px">Sign Out</button></section>
+      </header>
+      <div class="grid">
+        <aside class="span-4"><div data-admin-menu-mount></div></aside>
+        <section class="span-8">
+          <div class="status" data-admin-shell-status></div>
+
+          <article class="card">
+            <h2 style="margin-top:0">Visibility matrix</h2>
+            <p class="muted">Define which internal notes and controls are visible per role.</p>
+            <div class="checkrow"><input id="vis_customer_detailer_notes" type="checkbox"><label for="vis_customer_detailer_notes">Detailers can see customer detailer-visible notes</label></div>
+            <div class="checkrow"><input id="vis_customer_admin_notes" type="checkbox"><label for="vis_customer_admin_notes">Only admins can see customer admin/private notes</label></div>
+            <div class="checkrow"><input id="vis_detailer_admin_notes" type="checkbox"><label for="vis_detailer_admin_notes">Only admins can see detailer/admin private note zones</label></div>
+            <button class="btn" type="button" id="saveVisibilityBtn" style="margin-top:12px">Save visibility</button>
+          </article>
+
+          <article class="card" style="margin-top:16px">
+            <h2 style="margin-top:0">Manual scheduling & blocking policy</h2>
+            <div class="checkrow"><input id="manual_schedule_admin_only" type="checkbox"><label for="manual_schedule_admin_only">Manual scheduling is admin-only</label></div>
+            <div class="checkrow"><input id="blocking_admin_only" type="checkbox"><label for="blocking_admin_only">Blocking time is admin-only</label></div>
+            <div class="field"><label for="manual_schedule_notes">Operational policy notes</label><textarea id="manual_schedule_notes" placeholder="Describe who can override availability, who can confirm exceptions, and how manual scheduling should work."></textarea></div>
+            <button class="btn" type="button" id="saveSchedulingBtn">Save scheduling policy</button>
+          </article>
+
+          <article class="card" style="margin-top:16px">
+            <h2 style="margin-top:0">Feature flags</h2>
+            <div class="checkrow"><input id="flag_live_updates_default" type="checkbox"><label for="flag_live_updates_default">Enable live updates by default for new customers</label></div>
+            <div class="checkrow"><input id="flag_customer_chat_enabled" type="checkbox"><label for="flag_customer_chat_enabled">Enable customer/detailer threaded comment experience</label></div>
+            <div class="checkrow"><input id="flag_picture_first_observations" type="checkbox"><label for="flag_picture_first_observations">Prefer picture-first observations on jobsite screens</label></div>
+            <div class="checkrow"><input id="flag_tier_discount_badges" type="checkbox"><label for="flag_tier_discount_badges">Show tier discount badges in booking/account flows</label></div>
+            <button class="btn" type="button" id="saveFlagsBtn" style="margin-top:12px">Save feature flags</button>
+          </article>
+        </section>
       </div>
-      <section class="actorcard" aria-label="Signed in staff">
-        <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
-        <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
-        <div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div>
-        <button class="logout-btn" type="button" data-admin-logout>Sign Out</button>
-      </section>
-    </header>
+    </div>
+  </main>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/admin-menu.js"></script>
+  <script src="/assets/admin-page-init.js"></script>
+  <script>
+    (function(){
+      function setShellStatus(message, type) {
+        const node = document.querySelector("[data-admin-shell-status]");
+        if (!node) return;
+        node.textContent = message || "";
+        node.dataset.state = type || "";
+      }
+      async function saveSetting(key, value, successText) {
+        setShellStatus("", "");
+        const res = await fetch("/api/admin/app_settings_save", {
+          method: "POST",
+          credentials: "include",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify({ key, value })
+        });
+        const out = await res.json().catch(() => null);
+        if (!res.ok) throw new Error(out?.error || "Could not save settings.");
+        setShellStatus(successText, "success");
+      }
+      function readVisibility(){
+        return {
+          customer_detailer_notes: document.getElementById("vis_customer_detailer_notes").checked,
+          customer_admin_notes_admin_only: document.getElementById("vis_customer_admin_notes").checked,
+          detailer_admin_notes_admin_only: document.getElementById("vis_detailer_admin_notes").checked
+        };
+      }
+      function readScheduling(){
+        return {
+          manual_schedule_admin_only: document.getElementById("manual_schedule_admin_only").checked,
+          blocking_admin_only: document.getElementById("blocking_admin_only").checked,
+          notes: document.getElementById("manual_schedule_notes").value || ""
+        };
+      }
+      function readFlags(){
+        return {
+          live_updates_default: document.getElementById("flag_live_updates_default").checked,
+          customer_chat_enabled: document.getElementById("flag_customer_chat_enabled").checked,
+          picture_first_observations: document.getElementById("flag_picture_first_observations").checked,
+          tier_discount_badges: document.getElementById("flag_tier_discount_badges").checked
+        };
+      }
+      function applySetting(setting, fallback={}) { return setting && typeof setting.value === "object" ? setting.value : fallback; }
+      async function loadSettings() {
+        setShellStatus("", "");
+        const res = await fetch("/api/admin/app_settings_get", {
+          method: "POST",
+          credentials: "include",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify({})
+        });
+        const out = await res.json().catch(() => null);
+        if (!res.ok) throw new Error(out?.error || "Could not load settings.");
+        const s = out?.settings || {};
+        const visibility = applySetting(s.visibility_matrix);
+        const scheduling = applySetting(s.manual_scheduling_rules);
+        const flags = applySetting(s.feature_flags);
+        document.getElementById("vis_customer_detailer_notes").checked = !!visibility.customer_detailer_notes;
+        document.getElementById("vis_customer_admin_notes").checked = visibility.customer_admin_notes_admin_only !== false;
+        document.getElementById("vis_detailer_admin_notes").checked = visibility.detailer_admin_notes_admin_only !== false;
+        document.getElementById("manual_schedule_admin_only").checked = scheduling.manual_schedule_admin_only !== false;
+        document.getElementById("blocking_admin_only").checked = scheduling.blocking_admin_only !== false;
+        document.getElementById("manual_schedule_notes").value = scheduling.notes || "";
+        document.getElementById("flag_live_updates_default").checked = !!flags.live_updates_default;
+        document.getElementById("flag_customer_chat_enabled").checked = flags.customer_chat_enabled !== false;
+        document.getElementById("flag_picture_first_observations").checked = flags.picture_first_observations !== false;
+        document.getElementById("flag_tier_discount_badges").checked = flags.tier_discount_badges !== false;
+      }
 
-    <section class="grid">
-      <article class="card span-8">
-        <h2>Role & visibility matrix</h2>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Capability / Screen Area</th><th>Client</th><th>Detailer L1-2</th><th>Detailer L3-4</th><th>Admin L1</th><th>Admin L2</th></tr></thead>
-            <tbody>
-              <tr><td>Book and view own booking history</td><td>Yes</td><td>No</td><td>No</td><td>Yes</td><td>Yes</td></tr>
-              <tr><td>View / reply in progress thread</td><td>Own bookings only</td><td>Assigned jobs</td><td>Assigned + supervised jobs</td><td>All</td><td>All</td></tr>
-              <tr><td>Post photo observations</td><td>No</td><td>Assigned jobs</td><td>Assigned + supervised jobs</td><td>All</td><td>All</td></tr>
-              <tr><td>Manual scheduling</td><td>No</td><td>No</td><td>Optional later</td><td>Yes</td><td>Yes</td></tr>
-              <tr><td>Blocking time / capacity</td><td>No</td><td>No</td><td>No</td><td>Yes</td><td>Yes</td></tr>
-              <tr><td>Customer admin-only notes</td><td>No</td><td>No</td><td>No</td><td>Yes</td><td>Yes</td></tr>
-              <tr><td>Customer detailer-visible notes</td><td>No</td><td>Assigned jobs only</td><td>Assigned + supervised jobs</td><td>Yes</td><td>Yes</td></tr>
-              <tr><td>Staff payroll / tips / private notes</td><td>No</td><td>No</td><td>No</td><td>Limited</td><td>Full</td></tr>
-              <tr><td>App settings & role overrides</td><td>No</td><td>No</td><td>No</td><td>No</td><td>Yes</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </article>
+      document.getElementById("saveVisibilityBtn").addEventListener("click", async () => {
+        try { await saveSetting("visibility_matrix", readVisibility(), "Visibility settings saved."); }
+        catch (err) { setShellStatus(err?.message || "Could not save visibility settings.", "error"); }
+      });
+      document.getElementById("saveSchedulingBtn").addEventListener("click", async () => {
+        try { await saveSetting("manual_scheduling_rules", readScheduling(), "Scheduling policy saved."); }
+        catch (err) { setShellStatus(err?.message || "Could not save scheduling policy.", "error"); }
+      });
+      document.getElementById("saveFlagsBtn").addEventListener("click", async () => {
+        try { await saveSetting("feature_flags", readFlags(), "Feature flags saved."); }
+        catch (err) { setShellStatus(err?.message || "Could not save feature flags.", "error"); }
+      });
 
-      <article class="card span-4">
-        <h2>Current policy rules</h2>
-        <div class="pill">Blocking time is Admin-only</div>
-        <div class="pill">Staff management is Admin-only</div>
-        <div class="pill">Garage is client-managed</div>
-        <div class="pill">Observation replies visible to Admin + assigned team</div>
-        <div class="pill">Gift redemptions write in webhook</div>
-        <div class="pill">Tier pricing applies at booking/checkout</div>
-        <ul class="tight">
-          <li>Admin Level 1: operational admin</li>
-          <li>Admin Level 2: policy + permissions + finance</li>
-          <li>Detailer Levels 1-4: seniority / pay ladder later</li>
-        </ul>
-      </article>
-
-      <article class="card span-4">
-        <h2>Customer screen target</h2>
-        <ul class="tight">
-          <li>Garage of unlimited vehicles</li>
-          <li>Per-vehicle contacts, notes, alternate service address</li>
-          <li>Tier badge and discount visibility</li>
-          <li>Booking history, progress access, gifts and redemptions</li>
-          <li>Client-only notes plus stored preferences</li>
-        </ul>
-      </article>
-
-      <article class="card span-4">
-        <h2>Detailer screen target</h2>
-        <ul class="tight">
-          <li>Profile, contact, work hours, emergency contact</li>
-          <li>Hourly rate, tips, payout history, supervisor</li>
-          <li>Assigned jobs, observation posting, thread replies</li>
-          <li>Admin-only staff section for pay and private notes</li>
-        </ul>
-      </article>
-
-      <article class="card span-4">
-        <h2>Admin screen target</h2>
-        <ul class="tight">
-          <li>Address/contact info and admin-shared notes</li>
-          <li>Manual scheduling and block-time controls</li>
-          <li>Customer/detailer private admin notes</li>
-          <li>Permissions profiles and future upgrade toggles</li>
-        </ul>
-      </article>
-    </section>
-  </div>
-</main>
-<script src="/assets/admin-auth.js"></script>
-<script src="/assets/admin-shell.js"></script>
-<script>window.AdminShell.boot({ pageKey: "admin-app" });</script>
+      window.AdminPageInit.init({
+        pageKey: "admin-app",
+        onReady: async function(){ await loadSettings(); }
+      });
+    })();
+  </script>
 </body>
 </html>

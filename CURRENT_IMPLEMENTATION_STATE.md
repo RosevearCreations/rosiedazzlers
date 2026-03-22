@@ -1,10 +1,11 @@
 # Current Implementation State
 
 ## Completed in this pass
-- Customer screen refreshed around a full profile + garage model.
-- Detailer/Admin screen refreshed around one richer staff profile editor.
-- Admin management screen refreshed as the policy/visibility matrix.
-- Booking add-on layout fixed in the prior pass and preserved.
+- Booking page add-on row layout corrected and preserved.
+- Admin app-management screen now persists settings instead of staying planning-only.
+- Admin notifications queue screen added.
+- Internal navigation and dashboard updated for notification review.
+- Progress/jobsite flow continues to center around picture-first observations and threaded updates.
 
 ## Customer screen now centers on
 - profile, preferred contact, email, phone, SMS
@@ -28,10 +29,16 @@
 ## Admin management screen now centers on
 - role/visibility matrix
 - blocking time as Admin-only
-- manual scheduling authority planning
-- separation of Customer, Detailer, and Admin note visibility
+- manual scheduling authority settings
+- feature flags for live updates, chat, picture-first observations, and tier badges
+
+## Notifications now cover
+- queued comment / progress / media hooks
+- recipient email/phone visibility
+- queue status, attempts, last error, processed timestamp
 
 ## Still next
-- wire persistence for more of the app-management settings
-- picture-first observation UI refinement
-- stronger threaded client/detailer comments on both sides
+- richer image annotation tools inside the observation workflow
+- stronger two-sided thread UI polish for customers and detailers
+- real dispatch workers for queued notification events
+- more persistence across admin policy controls and role-specific enforcement

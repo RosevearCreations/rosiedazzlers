@@ -34,7 +34,31 @@ Shared Detailer/Admin screen fields now expected include:
 - supervisor_staff_user_id
 - vehicle_info, vehicle_notes
 - notes, admin_private_notes, personal_admin_notes, tips_payout_notes
-- role/capability booleans
+
+## progress_comments
+Thread fields now support:
+- booking_id
+- parent_type / parent_id
+- visibility
+- created_by_customer_profile_id or created_by_staff_user_id
+- message
+- image linkage through related media timeline
+
+## notification_events
+Notification queue now expects:
+- event_type
+- channel
+- booking_id
+- customer_profile_id
+- recipient_email / recipient_phone
+- payload jsonb
+- status
+- attempt_count
+- last_error
+- processed_at
 
 ## app_management_settings
-Used for future persisted management toggles and visibility policies.
+Saved admin policy/settings store now includes:
+- `visibility_matrix`
+- `manual_scheduling_rules`
+- `feature_flags`
