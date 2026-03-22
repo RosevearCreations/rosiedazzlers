@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,276 +8,69 @@
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
   <style>
-    :root {
-      color-scheme: dark;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 35%),
-        linear-gradient(180deg, #0f172a 0%, #111827 100%);
-      color: #f8fafc;
-    }
-
-    .shell {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    .loading {
-      display: grid;
-      place-items: center;
-      min-height: 60vh;
-      color: #cbd5e1;
-      font-size: 1rem;
-    }
-
-    .topbar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-
-    .titleblock h1 {
-      margin: 0 0 6px;
-      font-size: 1.8rem;
-      line-height: 1.15;
-    }
-
-    .titleblock p {
-      margin: 0;
-      color: #cbd5e1;
-      line-height: 1.5;
-    }
-
-    .actorcard {
-      min-width: 280px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 18px;
-      padding: 16px 18px;
-      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
-    }
-
-    .actorline {
-      margin: 4px 0;
-      color: #e5e7eb;
-      font-size: 0.96rem;
-    }
-
-    .actorlabel {
-      color: #93c5fd;
-      font-weight: 700;
-      margin-right: 6px;
-    }
-
-    .logout-btn,
-    .btn {
-      appearance: none;
-      border: 0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      background: #2563eb;
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .logout-btn {
-      margin-top: 10px;
-    }
-
-    .status {
-      margin-bottom: 16px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.05);
-      color: #e5e7eb;
-    }
-
-    .status[data-state="error"] {
-      background: rgba(220,38,38,0.12);
-      border-color: rgba(248,113,113,0.25);
-      color: #fecaca;
-    }
-
-    .status[data-state="success"] {
-      background: rgba(34,197,94,0.10);
-      border-color: rgba(134,239,172,0.22);
-      color: #bbf7d0;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 16px;
-    }
-
-    .card {
-      grid-column: span 12;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
-    }
-
-    .card h2 {
-      margin: 0 0 10px;
-      font-size: 1.15rem;
-    }
-
-    .card p {
-      margin: 0 0 12px;
-      color: #cbd5e1;
-      line-height: 1.5;
-    }
-
-    .searchbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: end;
-    }
-
-    .field {
-      flex: 1 1 220px;
-    }
-
-    .field label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: #e5e7eb;
-    }
-
-    .field input,
-    .field select,
-    .field textarea {
-      width: 100%;
-      box-sizing: border-box;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 11px 12px;
-      font-size: 0.98rem;
-      background: rgba(255,255,255,0.04);
-      color: #f8fafc;
-      outline: none;
-    }
-
-    .field textarea {
-      min-height: 96px;
-      resize: vertical;
-    }
-
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus {
-      border-color: #60a5fa;
-      background: rgba(255,255,255,0.06);
-    }
-
-    .muted {
-      color: #94a3b8;
-      font-size: 0.92rem;
-    }
-
-    .pillrow {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border-radius: 999px;
-      padding: 8px 12px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      font-size: 0.88rem;
-      color: #e5e7eb;
-    }
-
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-
-    .data-box {
-      border-radius: 14px;
-      padding: 14px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .data-box pre {
-      margin: 0;
-      white-space: pre-wrap;
-      word-break: break-word;
-      color: #dbeafe;
-      font-size: 0.92rem;
-      line-height: 1.45;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    }
-
-    .list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .list-item {
-      border-radius: 14px;
-      padding: 12px 14px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .list-item strong {
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    @media (min-width: 860px) {
+    :root { color-scheme: dark; }
+    body { margin:0; min-height:100vh; background:radial-gradient(circle at top, rgba(255,255,255,.08), transparent 35%), linear-gradient(180deg,#0f172a 0%,#111827 100%); color:#f8fafc; }
+    .shell { max-width:1320px; margin:0 auto; padding:24px; }
+    .loading { display:grid; place-items:center; min-height:60vh; color:#cbd5e1; font-size:1rem; }
+    .topbar { display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:20px; }
+    .titleblock h1 { margin:0 0 6px; font-size:1.8rem; line-height:1.15; }
+    .titleblock p { margin:0; color:#cbd5e1; line-height:1.5; }
+    .actorcard,.card { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:20px; box-shadow:0 14px 35px rgba(0,0,0,.22); }
+    .actorcard { min-width:280px; padding:16px 18px; border-radius:18px; }
+    .actorline { margin:4px 0; color:#e5e7eb; font-size:.96rem; }
+    .actorlabel { color:#93c5fd; font-weight:700; margin-right:6px; }
+    .btn,.logout-btn { appearance:none; border:0; border-radius:12px; padding:10px 14px; background:#2563eb; color:#fff; font-weight:700; cursor:pointer; }
+    .btn.secondary { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); }
+    .btn.warn { background:#b45309; }
+    .logout-btn { margin-top:10px; }
+    .status { margin-bottom:16px; padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.05); color:#e5e7eb; }
+    .status[data-state="error"] { background:rgba(220,38,38,.12); border-color:rgba(248,113,113,.25); color:#fecaca; }
+    .status[data-state="success"] { background:rgba(34,197,94,.10); border-color:rgba(134,239,172,.22); color:#bbf7d0; }
+    .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:16px; }
+    .card { grid-column:span 12; padding:20px; }
+    .field { margin-bottom:14px; }
+    .field label { display:block; margin-bottom:8px; font-size:.92rem; font-weight:700; color:#e5e7eb; }
+    .field input,.field select,.field textarea { width:100%; box-sizing:border-box; border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:11px 12px; font-size:.98rem; background:rgba(255,255,255,.04); color:#f8fafc; outline:none; }
+    .field textarea { min-height:100px; resize:vertical; }
+    .field input:focus,.field select:focus,.field textarea:focus { border-color:#60a5fa; background:rgba(255,255,255,.06); }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; align-items:end; }
+    .pillrow { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .pill { display:inline-flex; align-items:center; border-radius:999px; padding:6px 10px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); font-size:.82rem; color:#e5e7eb; }
+    .detail-box { border-radius:14px; padding:14px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06); }
+    .detail-box pre { margin:0; white-space:pre-wrap; word-break:break-word; color:#dbeafe; font-size:.92rem; line-height:1.45; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; }
+    .list { display:grid; gap:10px; }
+    .list-item { border-radius:14px; padding:12px 14px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06); }
+    .list-item strong { display:block; margin-bottom:6px; }
+    .muted { color:#94a3b8; font-size:.92rem; }
+    .media-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+    .thumb { position:relative; overflow:hidden; border-radius:14px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); }
+    .thumb img { display:block; width:100%; aspect-ratio:4/3; object-fit:cover; }
+    .thumb figcaption { padding:8px 10px; font-size:.88rem; color:#dbeafe; }
+    .thread { display:grid; gap:12px; }
+    .bubble { border-radius:16px; padding:12px 14px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); }
+    .bubble.staff { border-color:rgba(96,165,250,.25); background:rgba(37,99,235,.10); }
+    .bubble.client { border-color:rgba(34,197,94,.25); background:rgba(34,197,94,.10); }
+    .bubble .meta { color:#93c5fd; font-size:.82rem; margin-bottom:6px; }
+    .obs-preview { display:none; margin-top:12px; }
+    .obs-preview img { width:100%; max-width:520px; border-radius:16px; border:1px solid rgba(255,255,255,.10); display:block; }
+    @media (min-width: 900px) {
       .span-4 { grid-column: span 4; }
       .span-5 { grid-column: span 5; }
       .span-6 { grid-column: span 6; }
       .span-7 { grid-column: span 7; }
       .span-8 { grid-column: span 8; }
-
-      .two-col {
-        grid-template-columns: 1fr 1fr;
-      }
     }
   </style>
 </head>
 <body>
   <main class="shell">
-    <div class="loading" data-admin-shell-loading>
-      Loading jobsite workspace...
-    </div>
-
+    <div class="loading" data-admin-shell-loading>Loading jobsite workspace...</div>
     <div data-admin-shell-ready hidden>
       <header class="topbar">
         <div class="titleblock">
           <h1>Jobsite Workspace</h1>
-          <p>
-            Session-aware detailer/admin workspace for intake, time, progress, media,
-            and signoff review on one booking.
-          </p>
+          <p>Picture-first observation workspace for admin and detailer teams.</p>
         </div>
-
         <section class="actorcard" aria-label="Signed in staff">
           <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
           <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
@@ -290,80 +84,97 @@
       <section class="grid">
         <article class="card">
           <h2>Open Booking Workspace</h2>
-          <p>Enter a booking ID to load the full jobsite view for that booking.</p>
-
-          <form id="jobsite-open-form" class="searchbar">
-            <div class="field">
+          <form id="jobsite-open-form" class="actions">
+            <div class="field" style="min-width:260px;flex:1 1 260px;">
               <label for="jobsite-booking-id">Booking ID</label>
-              <input
-                id="jobsite-booking-id"
-                name="booking_id"
-                type="text"
-                placeholder="Enter booking UUID"
-                autocomplete="off"
-              />
+              <input id="jobsite-booking-id" name="booking_id" type="text" placeholder="Enter booking UUID" autocomplete="off" />
             </div>
-
-            <div>
-              <button class="btn" id="jobsite-open-btn" type="submit">Load Workspace</button>
-            </div>
+            <div><button class="btn" id="jobsite-open-btn" type="submit">Load Workspace</button></div>
           </form>
-
-          <p class="muted">
-            This page uses <code>/api/admin/jobsite_detail</code> and respects the new
-            session-aware staff access model.
-          </p>
+          <div id="quick-flags" class="pillrow"><span class="pill">No workspace loaded</span></div>
         </article>
 
         <article class="card span-7">
           <h2>Booking Summary</h2>
-          <div id="booking-summary" class="data-box">
-            <pre>No booking loaded yet.</pre>
-          </div>
+          <div id="booking-summary" class="detail-box"><pre>No booking loaded yet.</pre></div>
         </article>
 
         <article class="card span-5">
-          <h2>Quick Flags</h2>
-          <div id="quick-flags" class="pillrow">
-            <span class="pill">No workspace loaded</span>
+          <h2>Picture-first observation</h2>
+          <form id="observation-form" novalidate>
+            <div class="field">
+              <label for="obs-file">Upload photo</label>
+              <input id="obs-file" type="file" accept="image/*" />
+            </div>
+            <div class="field">
+              <label for="obs-url">Or image URL</label>
+              <input id="obs-url" type="url" placeholder="https://..." />
+            </div>
+            <div class="field">
+              <label for="obs-caption">Observation caption</label>
+              <textarea id="obs-caption" placeholder="Observed damage, stain, scratch, missing trim, customer concern..."></textarea>
+            </div>
+            <div class="field">
+              <label for="obs-visibility">Visibility</label>
+              <select id="obs-visibility">
+                <option value="customer">Customer visible</option>
+                <option value="internal">Internal only</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="obs-message">Thread message (optional)</label>
+              <textarea id="obs-message" placeholder="Add context for the photo, next step, or question to the client."></textarea>
+            </div>
+            <div class="actions">
+              <button class="btn" id="obs-submit-btn" type="submit" disabled>Post Observation</button>
+            </div>
+            <div id="obs-preview" class="obs-preview">
+              <img id="obs-preview-img" alt="Observation preview" />
+            </div>
+          </form>
+        </article>
+
+        <article class="card span-6">
+          <h2>Observation gallery</h2>
+          <div id="media-gallery" class="media-grid">
+            <div class="list-item muted">No media loaded yet.</div>
           </div>
         </article>
 
         <article class="card span-6">
-          <h2>Intake</h2>
-          <div id="intake-summary" class="data-box">
-            <pre>No intake loaded yet.</pre>
+          <h2>Threaded comments</h2>
+          <div id="comment-thread" class="thread">
+            <div class="list-item muted">No comments loaded yet.</div>
           </div>
+          <form id="comment-form" style="margin-top:12px;" novalidate>
+            <div class="field">
+              <label for="comment-visibility">Comment visibility</label>
+              <select id="comment-visibility">
+                <option value="customer">Customer visible</option>
+                <option value="internal">Internal only</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="comment-message">Post comment</label>
+              <textarea id="comment-message" placeholder="Type a note to the client or the internal team."></textarea>
+            </div>
+            <div class="actions">
+              <button class="btn secondary" id="comment-submit-btn" type="submit" disabled>Post Comment</button>
+            </div>
+          </form>
         </article>
 
         <article class="card span-6">
-          <h2>Time Summary</h2>
-          <div id="time-summary" class="data-box">
-            <pre>No time data loaded yet.</pre>
-          </div>
-        </article>
-
-        <article class="card span-6">
-          <h2>Progress Updates</h2>
+          <h2>Progress updates</h2>
           <div id="progress-list" class="list">
             <div class="list-item muted">No progress updates loaded yet.</div>
           </div>
         </article>
 
         <article class="card span-6">
-          <h2>Media</h2>
-          <div id="media-list" class="list">
-            <div class="list-item muted">No media loaded yet.</div>
-          </div>
-        </article>
-
-        <article class="card">
           <h2>Signoff</h2>
-          <div id="signoff-summary" class="data-box">
-            <pre>No signoff loaded yet.</pre>
-          </div>
+          <div id="signoff-summary" class="detail-box"><pre>No signoff loaded yet.</pre></div>
         </article>
-              <article class="card"><h2>Observation Thread</h2><div id="commentThread" class="list"><div class="list-item muted">No comments loaded yet.</div></div><form id="jobCommentForm" class="form" style="margin-top:12px"><div class="field"><label for="jobCommentVisibility">Visibility</label><select id="jobCommentVisibility"><option value="customer">customer</option><option value="internal">internal</option></select></div><div class="field"><label for="jobCommentMessage">Observation / reply</label><textarea id="jobCommentMessage" rows="4" placeholder="Add an observation, reply, or customer-facing note."></textarea></div><div><button class="btn" id="jobCommentBtn" type="submit">Post Comment</button></div></form></article>
       </section>
     </div>
   </main>
@@ -373,17 +184,32 @@
   <script>
     (function () {
       const els = {
-        form: document.getElementById("jobsite-open-form"),
+        openForm: document.getElementById("jobsite-open-form"),
         bookingId: document.getElementById("jobsite-booking-id"),
-        button: document.getElementById("jobsite-open-btn"),
+        openBtn: document.getElementById("jobsite-open-btn"),
         bookingSummary: document.getElementById("booking-summary"),
-        intakeSummary: document.getElementById("intake-summary"),
-        timeSummary: document.getElementById("time-summary"),
+        quickFlags: document.getElementById("quick-flags"),
+        gallery: document.getElementById("media-gallery"),
+        thread: document.getElementById("comment-thread"),
         progressList: document.getElementById("progress-list"),
-        mediaList: document.getElementById("media-list"),
         signoffSummary: document.getElementById("signoff-summary"),
-        quickFlags: document.getElementById("quick-flags")
+        obsForm: document.getElementById("observation-form"),
+        obsFile: document.getElementById("obs-file"),
+        obsUrl: document.getElementById("obs-url"),
+        obsCaption: document.getElementById("obs-caption"),
+        obsVisibility: document.getElementById("obs-visibility"),
+        obsMessage: document.getElementById("obs-message"),
+        obsSubmit: document.getElementById("obs-submit-btn"),
+        obsPreview: document.getElementById("obs-preview"),
+        obsPreviewImg: document.getElementById("obs-preview-img"),
+        commentForm: document.getElementById("comment-form"),
+        commentVisibility: document.getElementById("comment-visibility"),
+        commentMessage: document.getElementById("comment-message"),
+        commentSubmit: document.getElementById("comment-submit-btn")
       };
+
+      let currentBookingId = null;
+      let currentDetail = null;
 
       function setShellStatus(message, type) {
         const nodes = document.querySelectorAll("[data-admin-shell-status]");
@@ -394,9 +220,13 @@
         });
       }
 
-      function setButtonBusy(busy) {
-        els.button.disabled = !!busy;
-        els.button.textContent = busy ? "Loading..." : "Load Workspace";
+      function escapeHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
       }
 
       function renderPre(target, data) {
@@ -406,24 +236,26 @@
         target.appendChild(pre);
       }
 
+      function setActionState(enabled) {
+        els.obsSubmit.disabled = !enabled;
+        els.commentSubmit.disabled = !enabled;
+      }
+
       function renderFlags(detail) {
         els.quickFlags.innerHTML = "";
-
         if (!detail || !detail.booking) {
           els.quickFlags.innerHTML = '<span class="pill">No workspace loaded</span>';
           return;
         }
-
         const flags = [
+          ["Booking", detail.booking.id || "—"],
           ["Status", detail.booking.status || "—"],
           ["Job", detail.booking.job_status || "—"],
-          ["Progress Enabled", detail.booking.progress_enabled ? "Yes" : "No"],
-          ["Intake Complete", detail.intake && detail.intake.intake_complete ? "Yes" : "No"],
-          ["Media Count", String((detail.media && detail.media.count) || 0)],
-          ["Progress Count", String((detail.progress && detail.progress.count) || 0)],
+          ["Date", detail.booking.service_date || "—"],
+          ["Media", String(detail.media?.count || 0)],
+          ["Comments", String(detail.comments?.count || 0)],
           ["Signoff", detail.signoff ? "Present" : "Missing"]
         ];
-
         flags.forEach(([label, value]) => {
           const span = document.createElement("span");
           span.className = "pill";
@@ -432,146 +264,239 @@
         });
       }
 
-      function renderProgress(detail) {
-        const updates = detail && detail.progress && Array.isArray(detail.progress.updates)
-          ? detail.progress.updates
-          : [];
-
-        els.progressList.innerHTML = "";
-
-        if (!updates.length) {
-          els.progressList.innerHTML = '<div class="list-item muted">No progress updates found.</div>';
+      function renderGallery(detail) {
+        const items = Array.isArray(detail?.media?.items) ? detail.media.items : [];
+        els.gallery.innerHTML = "";
+        if (!items.length) {
+          els.gallery.innerHTML = '<div class="list-item muted">No media loaded yet.</div>';
           return;
         }
-
-        updates.forEach((row) => {
-          const item = document.createElement("div");
-          item.className = "list-item";
-
-          const heading = document.createElement("strong");
-          heading.textContent = `${row.created_by || "Unknown"} — ${row.created_at || ""}`;
-
-          const note = document.createElement("div");
-          note.textContent = row.note || "(No note)";
-
-          const meta = document.createElement("div");
-          meta.className = "muted";
-          meta.textContent = `Visibility: ${row.visibility || "internal"}`;
-
-          item.appendChild(heading);
-          item.appendChild(note);
-          item.appendChild(meta);
-          els.progressList.appendChild(item);
+        items.forEach((row) => {
+          const fig = document.createElement("figure");
+          fig.className = "thumb";
+          const imageUrl = row.media_url || "";
+          fig.innerHTML = `
+            <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(row.caption || 'Observation image')}" />
+            <figcaption>
+              <strong>${escapeHtml(row.caption || row.media_type || 'Image')}</strong><br>
+              <span class="muted">${escapeHtml(row.visibility || 'customer')} • ${escapeHtml(row.created_at || '')}</span>
+            </figcaption>
+          `;
+          els.gallery.appendChild(fig);
         });
       }
 
-      function renderComments(detail) {
-        const items = detail && Array.isArray(detail.comments) ? detail.comments : [];
-        const wrap = document.getElementById('commentThread');
-        if (!wrap) return;
-        wrap.innerHTML = '';
-        if (!items.length) { wrap.innerHTML = '<div class="list-item muted">No comments loaded yet.</div>'; return; }
-        items.forEach((row) => { const item=document.createElement('div'); item.className='list-item'; item.innerHTML = `<strong>${row.author_name || row.author_email || 'Participant'} — ${row.created_at || ''}</strong><div>${row.message || ''}</div><div class="muted">${row.author_type || 'user'} · ${row.visibility || 'internal'}</div>`; wrap.appendChild(item); });
-      }
-
-      function renderMedia(detail) {
-        const items = detail && detail.media && Array.isArray(detail.media.items)
-          ? detail.media.items
-          : [];
-
-        els.mediaList.innerHTML = "";
-
+      function renderThread(detail) {
+        const items = Array.isArray(detail?.comments?.items) ? detail.comments.items : [];
+        els.thread.innerHTML = "";
         if (!items.length) {
-          els.mediaList.innerHTML = '<div class="list-item muted">No media items found.</div>';
+          els.thread.innerHTML = '<div class="list-item muted">No comments loaded yet.</div>';
           return;
         }
-
         items.forEach((row) => {
+          const div = document.createElement("div");
+          div.className = "bubble " + (row.author_type === "client" ? "client" : "staff");
+          div.innerHTML = `
+            <div class="meta">${escapeHtml(row.author_name || row.author_type || 'Unknown')} • ${escapeHtml(row.author_type || '')} • ${escapeHtml(row.visibility || 'customer')} • ${escapeHtml(row.created_at || '')}</div>
+            <div>${escapeHtml(row.message || '')}</div>
+          `;
+          els.thread.appendChild(div);
+        });
+      }
+
+      function renderProgress(detail) {
+        const updates = Array.isArray(detail?.progress?.updates) ? detail.progress.updates : [];
+        els.progressList.innerHTML = "";
+        if (!updates.length) {
+          els.progressList.innerHTML = '<div class="list-item muted">No progress updates loaded yet.</div>';
+          return;
+        }
+        updates.forEach((row) => {
           const item = document.createElement("div");
           item.className = "list-item";
-
-          const heading = document.createElement("strong");
-          heading.textContent = `${row.media_type || "media"} — ${row.created_at || ""}`;
-
-          const caption = document.createElement("div");
-          caption.textContent = row.caption || "(No caption)";
-
-          const url = document.createElement("a");
-          url.href = row.media_url || "#";
-          url.textContent = row.media_url || "No URL";
-          url.target = "_blank";
-          url.rel = "noopener noreferrer";
-          url.style.color = "#93c5fd";
-          url.style.display = "block";
-          url.style.marginTop = "6px";
-          url.style.wordBreak = "break-all";
-
-          item.appendChild(heading);
-          item.appendChild(caption);
-          item.appendChild(url);
-          els.mediaList.appendChild(item);
+          item.innerHTML = `
+            <strong>${escapeHtml(row.created_by || "Unknown")} — ${escapeHtml(row.created_at || "")}</strong>
+            <div>${escapeHtml(row.note || "(No note)")}</div>
+            <div class="muted">Visibility: ${escapeHtml(row.visibility || "internal")}</div>
+          `;
+          els.progressList.appendChild(item);
         });
       }
 
       async function loadWorkspace(bookingId) {
         setShellStatus("", "");
-        setButtonBusy(true);
-
         try {
           const response = await fetch("/api/admin/jobsite_detail", {
             method: "POST",
             credentials: "include",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              booking_id: bookingId
-            })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ booking_id: bookingId })
           });
-
           const data = await response.json().catch(() => null);
+          if (!response.ok) throw new Error((data && data.error) || "Could not load jobsite workspace.");
 
-          if (!response.ok) {
-            throw new Error((data && data.error) || "Could not load jobsite workspace.");
-          }
-
+          currentBookingId = bookingId;
+          currentDetail = data;
+          setActionState(true);
           renderPre(els.bookingSummary, data.booking || "No booking data.");
-          renderPre(els.intakeSummary, data.intake || "No intake data.");
-          renderPre(els.timeSummary, data.time || "No time data.");
           renderPre(els.signoffSummary, data.signoff || "No signoff data.");
           renderFlags(data);
+          renderGallery(data);
+          renderThread(data);
           renderProgress(data);
-          renderMedia(data);
-          renderComments(data);
-
           setShellStatus("Workspace loaded.", "success");
         } catch (err) {
-          setShellStatus(
-            err && err.message ? err.message : "Could not load workspace.",
-            "error"
-          );
-        } finally {
-          setButtonBusy(false);
+          currentBookingId = null;
+          currentDetail = null;
+          setActionState(false);
+          renderFlags(null);
+          renderPre(els.bookingSummary, "No booking loaded yet.");
+          renderPre(els.signoffSummary, "No signoff loaded yet.");
+          els.gallery.innerHTML = '<div class="list-item muted">No media loaded yet.</div>';
+          els.thread.innerHTML = '<div class="list-item muted">No comments loaded yet.</div>';
+          els.progressList.innerHTML = '<div class="list-item muted">No progress updates loaded yet.</div>';
+          setShellStatus(err?.message || "Could not load workspace.", "error");
         }
       }
 
-      document.getElementById('jobCommentForm')?.addEventListener('submit', async function (event) { event.preventDefault(); const bookingId=String(els.bookingId.value||'').trim(); const message=String(document.getElementById('jobCommentMessage').value||'').trim(); const visibility=String(document.getElementById('jobCommentVisibility').value||'customer'); if(!bookingId||!message){ setShellStatus('Booking ID and comment are required.','error'); return; } try { const response = await fetch('/api/admin/progress_comment_post', { method:'POST', credentials:'include', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ booking_id: bookingId, message, visibility, parent_type:'booking' }) }); const data = await response.json().catch(() => null); if(!response.ok) throw new Error((data && data.error) || 'Could not post comment.'); document.getElementById('jobCommentMessage').value=''; setShellStatus('Comment posted.','success'); await loadWorkspace(bookingId);} catch(err){ setShellStatus(err && err.message ? err.message : 'Could not post comment.','error'); } });
+      async function uploadFileAndGetUrl(file) {
+        const signRes = await fetch("/api/admin/progress_upload_url", {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            booking_id: currentBookingId,
+            filename: file.name,
+            content_type: file.type || "image/jpeg"
+          })
+        });
+        const signData = await signRes.json().catch(() => null);
+        if (!signRes.ok) throw new Error((signData && signData.error) || "Could not prepare upload.");
 
-      els.form.addEventListener("submit", function (event) {
+        const putRes = await fetch(signData.upload_url, {
+          method: "PUT",
+          headers: { "Content-Type": file.type || signData.content_type || "image/jpeg" },
+          body: file
+        });
+        if (!putRes.ok) throw new Error("Upload failed.");
+
+        return signData.media_url;
+      }
+
+      async function postObservation(event) {
         event.preventDefault();
-        const bookingId = String(els.bookingId.value || "").trim();
+        if (!currentBookingId) return setShellStatus("Load a booking first.", "error");
 
-        if (!bookingId) {
-          setShellStatus("Booking ID is required.", "error");
+        try {
+          let mediaUrl = String(els.obsUrl.value || "").trim();
+          const file = els.obsFile.files && els.obsFile.files[0] ? els.obsFile.files[0] : null;
+
+          if (file) {
+            mediaUrl = await uploadFileAndGetUrl(file);
+          }
+          if (!mediaUrl) {
+            throw new Error("Provide a photo file or image URL.");
+          }
+
+          const caption = String(els.obsCaption.value || "").trim();
+          const visibility = String(els.obsVisibility.value || "customer").trim();
+          const message = String(els.obsMessage.value || "").trim();
+
+          const mediaRes = await fetch("/api/admin/media_save", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              booking_id: currentBookingId,
+              media_url: mediaUrl,
+              media_type: "image",
+              caption: caption || "Observation photo",
+              visibility
+            })
+          });
+          const mediaData = await mediaRes.json().catch(() => null);
+          if (!mediaRes.ok) throw new Error((mediaData && mediaData.error) || "Could not save observation image.");
+
+          if (message) {
+            const commentRes = await fetch("/api/admin/progress_comment_post", {
+              method: "POST",
+              credentials: "include",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                booking_id: currentBookingId,
+                parent_type: "media",
+                parent_id: mediaData?.media?.id || null,
+                visibility,
+                message
+              })
+            });
+            const commentData = await commentRes.json().catch(() => null);
+            if (!commentRes.ok) throw new Error((commentData && commentData.error) || "Could not post observation comment.");
+          }
+
+          els.obsForm.reset();
+          els.obsPreview.style.display = "none";
+          setShellStatus("Observation posted.", "success");
+          await loadWorkspace(currentBookingId);
+        } catch (err) {
+          setShellStatus(err?.message || "Could not post observation.", "error");
+        }
+      }
+
+      async function postComment(event) {
+        event.preventDefault();
+        if (!currentBookingId) return setShellStatus("Load a booking first.", "error");
+        const message = String(els.commentMessage.value || "").trim();
+        if (!message) return setShellStatus("Comment message is required.", "error");
+        try {
+          const response = await fetch("/api/admin/progress_comment_post", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              booking_id: currentBookingId,
+              visibility: String(els.commentVisibility.value || "customer"),
+              message
+            })
+          });
+          const data = await response.json().catch(() => null);
+          if (!response.ok) throw new Error((data && data.error) || "Could not post comment.");
+          els.commentForm.reset();
+          setShellStatus("Comment posted.", "success");
+          await loadWorkspace(currentBookingId);
+        } catch (err) {
+          setShellStatus(err?.message || "Could not post comment.", "error");
+        }
+      }
+
+      els.obsFile.addEventListener("change", function () {
+        const file = this.files && this.files[0] ? this.files[0] : null;
+        if (!file) {
+          els.obsPreview.style.display = "none";
           return;
         }
+        const url = URL.createObjectURL(file);
+        els.obsPreviewImg.src = url;
+        els.obsPreview.style.display = "block";
+      });
 
+      els.obsUrl.addEventListener("input", function () {
+        const value = String(this.value || "").trim();
+        if (!value) return;
+        els.obsPreviewImg.src = value;
+        els.obsPreview.style.display = "block";
+      });
+
+      els.openForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const bookingId = String(els.bookingId.value || "").trim();
+        if (!bookingId) return setShellStatus("Booking ID is required.", "error");
         loadWorkspace(bookingId);
       });
+      els.obsForm.addEventListener("submit", postObservation);
+      els.commentForm.addEventListener("submit", postComment);
 
-      window.AdminShell.boot({
-        pageKey: "admin-jobsite"
-      });
+      window.AdminShell.boot({ pageKey: "admin-jobsite" });
     })();
   </script>
 </body>

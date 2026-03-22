@@ -361,3 +361,7 @@ Current next priorities:
 - manual scheduling / app-management rules UI completion
 - final layout polish across booking and internal screens
 
+
+### Latest feature pass
+This pass adds a picture-first observation flow in the admin jobsite workspace, threaded client/detailer messages on the progress page, and safer customer session handling for the public site chrome.
+

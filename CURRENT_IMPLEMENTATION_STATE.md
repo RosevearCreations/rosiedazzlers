@@ -248,3 +248,10 @@ Current next priorities:
 - manual scheduling / app-management rules UI completion
 - final layout polish across booking and internal screens
 
+
+## Latest pass
+- Added session-aware signed upload endpoint for picture-first observations.
+- Rebuilt the admin jobsite screen around a picture-first observation workflow.
+- Upgraded the customer progress page with threaded messages and photo timeline cards.
+- Added a fallback customer session secret path to prevent `/api/client/auth_me` from hard-failing when the explicit secret is not set yet.
+

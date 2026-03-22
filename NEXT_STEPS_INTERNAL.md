@@ -196,3 +196,10 @@ Current next priorities:
 - manual scheduling / app-management rules UI completion
 - final layout polish across booking and internal screens
 
+
+## Updated next focus
+1. Customer screen refinement: garage cards, tier pricing visibility, gift redemption timeline.
+2. Detailer screen refinement: richer assignments, payout/tips view, observation shortcuts.
+3. Admin screen refinement: permissions/app management and customer/detailer private note zones.
+4. Picture interface follow-up: drag/drop uploads, inline annotations, image delete/reorder.
+
