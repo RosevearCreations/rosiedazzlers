@@ -658,3 +658,18 @@ textarea:focus {
     align-items: flex-start;
   }
 }
+
+/* Additional admin/client layout cleanup */
+* { box-sizing: border-box; }
+.panel, .card, .hero > div { min-width: 0; overflow-wrap: anywhere; }
+.form-grid { display:grid; gap:12px; }
+.form-grid.two-col { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.form-grid.three-col { grid-template-columns: repeat(3, minmax(0,1fr)); }
+.check-grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:10px 14px; }
+.section-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; flex-wrap:wrap; }
+.two-col-stretch { grid-template-columns: 1.1fr .9fr; }
+.gauge { position:relative; height:12px; border-radius:999px; border:1px solid var(--border); background:rgba(255,255,255,.05); overflow:hidden; margin:10px 0 6px; }
+.gauge-fill { height:100%; background:linear-gradient(90deg, var(--accent2), var(--warn), var(--danger)); }
+.vehicle-card .badges { margin-top:8px; }
+textarea { min-height: 110px; }
+@media (max-width: 880px){ .form-grid.two-col, .form-grid.three-col, .check-grid, .two-col-stretch { grid-template-columns: 1fr; } .site-auth-status { width:100%; justify-content:flex-start; margin-left:0; } }
