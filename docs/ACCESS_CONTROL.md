@@ -382,3 +382,21 @@ What the customer can see during booking progress
 How valuable / recurring the customer is from a service and loyalty perspective
 
 These must remain separate concepts so the system stays clean and flexible.
+
+
+## Current snapshot — March 21, 2026
+
+Latest pass completed:
+- fixed booking add-on checkbox/text layout pressure
+- improved service/package image fallback with extra photo cards
+- expanded staff management toward richer Admin/Detailer profile editing
+- added customer tier discount support in the UI/data model direction
+- added/confirmed garage, gift, and redemption visibility in client/admin screens
+- added current SQL for tier discounts and richer staff/customer fields
+
+Current next priorities:
+- picture-first observation interface
+- richer client/detailer threaded comments UI
+- manual scheduling / app-management rules UI completion
+- final layout polish across booking and internal screens
+
