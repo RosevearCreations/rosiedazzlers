@@ -213,14 +213,31 @@
       border: 1px solid rgba(255,255,255,0.06);
     }
 
-    .detail-box pre {
-      margin: 0;
-      white-space: pre-wrap;
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .summary-label {
+      color: #93c5fd;
+      font-weight: 700;
+    }
+
+    .summary-value {
+      color: #e5e7eb;
+      min-width: 0;
       word-break: break-word;
-      color: #dbeafe;
-      font-size: 0.92rem;
-      line-height: 1.45;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
     .slot-grid {
@@ -243,7 +260,7 @@
 
     .checkbox {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 10px;
       margin-bottom: 10px;
       color: #e5e7eb;
@@ -252,6 +269,8 @@
     .checkbox input {
       width: 18px;
       height: 18px;
+      margin-top: 2px;
+      flex: 0 0 auto;
     }
 
     .list {
@@ -276,11 +295,40 @@
       font-size: 0.92rem;
     }
 
+    .raw-toggle {
+      margin-top: 14px;
+    }
+
+    .raw-box {
+      margin-top: 12px;
+      border-radius: 14px;
+      padding: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      display: none;
+    }
+
+    .raw-box pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #dbeafe;
+      font-size: 0.90rem;
+      line-height: 1.45;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
     @media (min-width: 860px) {
       .span-7 { grid-column: span 7; }
       .span-5 { grid-column: span 5; }
       .slot-grid {
         grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .summary-row {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -334,6 +382,19 @@
         <article class="card span-7">
           <h2>Day Summary</h2>
           <div id="day-summary" class="detail-box">
+            <div class="summary-grid">
+              <div class="summary-row">
+                <div class="summary-label">Status</div>
+                <div class="summary-value">No schedule loaded yet.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="raw-toggle">
+            <button class="btn secondary" id="toggle-raw-btn" type="button">Show Raw Data</button>
+          </div>
+
+          <div id="day-summary-raw" class="raw-box">
             <pre>No schedule loaded yet.</pre>
           </div>
         </article>
@@ -412,6 +473,8 @@
         loadBtn: document.getElementById("schedule-load-btn"),
         flags: document.getElementById("schedule-flags"),
         summary: document.getElementById("day-summary"),
+        summaryRaw: document.getElementById("day-summary-raw"),
+        toggleRawBtn: document.getElementById("toggle-raw-btn"),
         bookings: document.getElementById("day-bookings"),
 
         blocksForm: document.getElementById("blocks-form"),
@@ -425,6 +488,7 @@
       };
 
       let currentDay = null;
+      let rawOpen = false;
 
       function setShellStatus(message, type) {
         const nodes = document.querySelectorAll("[data-admin-shell-status]");
@@ -445,11 +509,81 @@
         els.saveBtn.textContent = busy ? "Saving..." : "Save Blocks";
       }
 
-      function renderPre(target, data) {
+      function formatDate(value) {
+        if (!value) return "—";
+        const dt = new Date(`${value}T00:00:00`);
+        if (Number.isNaN(dt.getTime())) return value;
+        return new Intl.DateTimeFormat("en-CA", {
+          year: "numeric",
+          month: "long",
+          day: "numeric"
+        }).format(dt);
+      }
+
+      function yesNo(value) {
+        return value ? "Yes" : "No";
+      }
+
+      function renderRaw(target, data) {
         target.innerHTML = "";
         const pre = document.createElement("pre");
         pre.textContent = typeof data === "string" ? data : JSON.stringify(data, null, 2);
         target.appendChild(pre);
+        target.style.display = rawOpen ? "block" : "none";
+      }
+
+      function summaryRow(label, value) {
+        const row = document.createElement("div");
+        row.className = "summary-row";
+
+        const left = document.createElement("div");
+        left.className = "summary-label";
+        left.textContent = label;
+
+        const right = document.createElement("div");
+        right.className = "summary-value";
+        right.textContent = value;
+
+        row.appendChild(left);
+        row.appendChild(right);
+        return row;
+      }
+
+      function renderSummary(data) {
+        els.summary.innerHTML = "";
+        const grid = document.createElement("div");
+        grid.className = "summary-grid";
+
+        if (!data) {
+          grid.appendChild(summaryRow("Status", "No schedule loaded yet."));
+          els.summary.appendChild(grid);
+          renderRaw(els.summaryRaw, "No schedule loaded yet.");
+          return;
+        }
+
+        const slots = data.slots || {};
+        const am = slots.AM || {};
+        const pm = slots.PM || {};
+        const full = slots.FULL || {};
+
+        const totalBookings = Array.isArray(data.bookings) ? data.bookings.length : 0;
+        const dayClosed = !!(data.date_block && data.date_block.is_closed);
+        const dayReason = data.date_block && data.date_block.reason ? data.date_block.reason : "—";
+
+        grid.appendChild(summaryRow("Date", formatDate(data.service_date)));
+        grid.appendChild(summaryRow("Day Blocked", yesNo(dayClosed)));
+        grid.appendChild(summaryRow("Day Reason", dayReason));
+        grid.appendChild(summaryRow("AM Blocked", yesNo(!!am.blocked)));
+        grid.appendChild(summaryRow("AM Bookings", String(am.active_booking_count || 0)));
+        grid.appendChild(summaryRow("AM Available", yesNo(!!am.available)));
+        grid.appendChild(summaryRow("PM Blocked", yesNo(!!pm.blocked)));
+        grid.appendChild(summaryRow("PM Bookings", String(pm.active_booking_count || 0)));
+        grid.appendChild(summaryRow("PM Available", yesNo(!!pm.available)));
+        grid.appendChild(summaryRow("Full-Day Available", yesNo(!!full.available)));
+        grid.appendChild(summaryRow("Total Bookings", String(totalBookings)));
+
+        els.summary.appendChild(grid);
+        renderRaw(els.summaryRaw, data);
       }
 
       function renderFlags(data) {
@@ -469,8 +603,8 @@
           ["Day Closed", dayClosed ? "Yes" : "No"],
           ["AM Blocked", slotAM && slotAM.blocked ? "Yes" : "No"],
           ["PM Blocked", slotPM && slotPM.blocked ? "Yes" : "No"],
-          ["AM Bookings", slotAM ? String(slotAM.active_booking_count || 0) : "0"],
-          ["PM Bookings", slotPM ? String(slotPM.active_booking_count || 0) : "0"]
+          ["AM Bookings", String(slotAM && slotAM.active_booking_count || 0)],
+          ["PM Bookings", String(slotPM && slotPM.active_booking_count || 0)]
         ];
 
         flags.forEach(([label, value]) => {
@@ -508,8 +642,8 @@
         const dateReason = data && data.date_block ? (data.date_block.reason || "") : "";
 
         const slotBlocks = Array.isArray(data && data.slot_blocks) ? data.slot_blocks : [];
-        const amBlock = slotBlocks.find((row) => String(row.slot_code || "").toUpperCase() === "AM");
-        const pmBlock = slotBlocks.find((row) => String(row.slot_code || "").toUpperCase() === "PM");
+        const amBlock = slotBlocks.find((row) => String(row.slot_code || row.slot || "").toUpperCase() === "AM");
+        const pmBlock = slotBlocks.find((row) => String(row.slot_code || row.slot || "").toUpperCase() === "PM");
 
         els.isDateClosed.checked = dateClosed;
         els.dateReason.value = dateReason;
@@ -549,13 +683,13 @@
 
           currentDay = data;
           renderFlags(data);
-          renderPre(els.summary, data);
+          renderSummary(data);
           renderBookings(data);
           populateFormFromDay(data);
           setShellStatus("Day schedule loaded.", "success");
         } catch (err) {
           renderFlags(null);
-          renderPre(els.summary, "No schedule loaded yet.");
+          renderSummary(null);
           renderBookings(null);
           populateFormFromDay(null);
           setShellStatus(
@@ -645,6 +779,12 @@
       });
 
       els.blocksForm.addEventListener("submit", saveBlocks);
+
+      els.toggleRawBtn.addEventListener("click", function () {
+        rawOpen = !rawOpen;
+        els.summaryRaw.style.display = rawOpen ? "block" : "none";
+        els.toggleRawBtn.textContent = rawOpen ? "Hide Raw Data" : "Show Raw Data";
+      });
 
       window.AdminShell.boot({
         pageKey: "admin-blocks",
