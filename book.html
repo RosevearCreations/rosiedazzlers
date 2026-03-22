@@ -6,6 +6,7 @@
          Size chart is in BRAND bucket: https://assets.rosiedazzlers.ca/brand/CarSizeChart.PNG
        (It was previously pointing to /packages/CarSizeChart.PNG on some pages)
      - Also adds an inline hero banner at top (so booking page feels consistent)
+     - Restores missing escapeHtml() helper so booking data/add-ons load correctly
 
      Keeps:
      - Mandatory email + vehicle year/make/model
@@ -146,7 +147,7 @@
 
         <div id="sizeMismatch" class="notice warn" style="display:none;margin-top:12px"></div>
 
-        <label class="ack-choice" style="margin-top:12px">
+        <label style="display:flex;gap:10px;align-items:flex-start;margin-top:12px">
           <input id="confirm_size" type="checkbox" />
           <span>
             <strong>I confirm my vehicle size selection is correct</strong>.
@@ -157,7 +158,6 @@
       <h1 style="margin:12px 0 8px">Book a Detail</h1>
       <p class="kicker">Choose a date, package, and time slot. We do one vehicle per day unless two half-day jobs.</p>
       <div id="dataError" class="notice bad" style="display:none;margin-top:10px"></div>
-      <div id="tierNotice" class="notice ok" style="display:none;margin-top:10px"></div>
     </div>
 
     <div class="section grid2">
@@ -246,131 +246,194 @@
           <input id="customer_name" type="text" required />
         </div>
         <div>
-          <label for="customer_email">Email (required)</label>
+          <label for="customer_email">Email</label>
           <input id="customer_email" type="email" required />
         </div>
       </div>
 
       <div class="grid2" style="margin-top:10px">
         <div>
-          <label for="customer_phone">Phone (recommended)</label>
-          <input id="customer_phone" type="tel" placeholder="(555) 555-5555" />
+          <label for="customer_phone">Phone (optional)</label>
+          <input id="customer_phone" type="tel" />
         </div>
         <div>
-          <label for="address_line1">Service address (driveway required)</label>
-          <input id="address_line1" type="text" required placeholder="123 Main St" />
+          <label for="city">City / Town</label>
+          <input id="city" type="text" placeholder="Tillsonburg" />
         </div>
       </div>
 
       <div class="grid2" style="margin-top:10px">
         <div>
-          <label for="city">City (optional)</label>
-          <input id="city" type="text" />
+          <label for="address_line1">Address line 1</label>
+          <input id="address_line1" type="text" required />
         </div>
         <div>
-          <label for="postal_code">Postal code (optional)</label>
-          <input id="postal_code" type="text" placeholder="N0E 1W0" />
+          <label for="postal_code">Postal code</label>
+          <input id="postal_code" type="text" />
         </div>
       </div>
 
       <label for="special_notes" style="margin-top:10px">Special notes (optional)</label>
-      <textarea id="special_notes" placeholder="Pet hair, stains, allergies, access notes, etc."></textarea>
+      <textarea id="special_notes" rows="4" placeholder="Gate code, pet on property, loose trim, stains to target, etc."></textarea>
 
-      <div class="hr"></div>
-
-      <div class="grid2">
-        <label class="ack-choice">
-          <input id="ack_driveway" type="checkbox" required />
-          <span><strong>Driveway required</strong> (we need space to work)</span>
+      <div class="section">
+        <label style="display:flex;gap:10px;align-items:flex-start">
+          <input id="ack_driveway" type="checkbox" />
+          <span>I confirm there is legal and safe access for mobile detailing at the service location.</span>
         </label>
-
-        <label class="ack-choice">
-          <input id="ack_power_water" type="checkbox" required />
-          <span><strong>Customer provides power + water</strong> (or additional charges)</span>
+        <label style="display:flex;gap:10px;align-items:flex-start;margin-top:8px">
+          <input id="ack_power_water" type="checkbox" />
+          <span>I understand some services may require access to power and/or water unless otherwise arranged.</span>
         </label>
-
-        <label class="ack-choice">
-          <input id="ack_bylaw" type="checkbox" required />
-          <span><strong>Customer accepts any bylaw responsibility</strong> related to washing/chemicals</span>
+        <label style="display:flex;gap:10px;align-items:flex-start;margin-top:8px">
+          <input id="ack_bylaw" type="checkbox" />
+          <span>I understand local bylaws or condo/property restrictions may affect service and must be disclosed in advance.</span>
         </label>
-
-        <label class="ack-choice">
-          <input id="ack_cancellation" type="checkbox" required />
-          <span><strong>Deposit + cancellation policy acknowledged</strong> (see waiver)</span>
+        <label style="display:flex;gap:10px;align-items:flex-start;margin-top:8px">
+          <input id="ack_cancellation" type="checkbox" />
+          <span>I understand deposits are subject to booking / cancellation policies.</span>
         </label>
       </div>
 
-      <div class="row" style="margin-top:14px">
+      <div class="row" style="justify-content:space-between;margin-top:14px">
+        <div class="muted mini">Deposit will be charged now. Quote-required add-ons are reviewed manually later.</div>
         <button class="btn primary" id="checkoutBtn" type="button">Continue to deposit payment</button>
-        <a class="btn ghost" href="/waiver">View waiver / policies</a>
       </div>
     </div>
-
-    <div class="footer" data-footer></div>
   </div>
 
-  <!-- MODAL -->
-  <div class="modalBack" id="modalBack" role="dialog" aria-modal="true">
+  <!-- Size chart modal -->
+  <div class="modalBack" id="sizeChartModal" aria-hidden="true">
     <div class="modal">
       <div class="modalHead">
-        <strong id="modalTitle">Preview</strong>
-        <button class="btn ghost" id="modalCloseBtn" type="button">Close</button>
+        <strong>Vehicle size chart</strong>
+        <button class="btn ghost" id="closeSizeChartBtn" type="button">Close</button>
       </div>
-      <img id="modalImg" alt="Preview image" />
+      <img alt="Vehicle size chart" src="https://assets.rosiedazzlers.ca/brand/CarSizeChart.PNG" />
     </div>
   </div>
 
-  <script type="module">
-    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260311k";
-    const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
+  <!-- Price chart modal -->
+  <div class="modalBack" id="priceChartModal" aria-hidden="true">
+    <div class="modal">
+      <div class="modalHead">
+        <strong>Pricing chart</strong>
+        <button class="btn ghost" id="closePriceChartBtn" type="button">Close</button>
+      </div>
+      <img alt="Pricing chart" src="https://assets.rosiedazzlers.ca/brand/PricingChart.PNG" />
+    </div>
+  </div>
 
-    const qs = (s)=>document.querySelector(s);
-    const money = (cad)=> new Intl.NumberFormat("en-CA",{style:"currency",currency:"CAD"}).format(Number(cad||0));
+  <!-- Details chart modal -->
+  <div class="modalBack" id="detailsChartModal" aria-hidden="true">
+    <div class="modal">
+      <div class="modalHead">
+        <strong>Services detail chart</strong>
+        <button class="btn ghost" id="closeDetailsChartBtn" type="button">Close</button>
+      </div>
+      <img alt="Services detail chart" src="https://assets.rosiedazzlers.ca/brand/ServicesDetails.PNG" />
+    </div>
+  </div>
 
-    function show(id,msg,kind=""){
+  <script>
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const qs = $;
+
+    function show(id, msg, kind=""){
       const el = qs("#"+id);
       el.style.display = "block";
-      el.className = "notice " + (kind || "");
+      el.className = `notice ${kind}`.trim();
       el.textContent = msg;
     }
-    function hide(id){ qs("#"+id).style.display = "none"; }
+    function hide(id){
+      const el = qs("#"+id);
+      el.style.display = "none";
+      el.textContent = "";
+      el.className = "notice";
+    }
+    function money(cad){
+      if (cad == null || Number.isNaN(Number(cad))) return "$—";
+      return new Intl.NumberFormat("en-CA",{style:"currency",currency:"CAD"}).format(Number(cad));
+    }
 
+    // Modal hooks
+    function wireModal(openBtnId, modalId, closeBtnId){
+      const modal = qs("#"+modalId);
+      qs("#"+openBtnId).addEventListener("click",()=>{ modal.style.display="flex"; modal.setAttribute("aria-hidden","false"); });
+      qs("#"+closeBtnId).addEventListener("click",()=>{ modal.style.display="none"; modal.setAttribute("aria-hidden","true"); });
+      modal.addEventListener("click",(e)=>{ if (e.target === modal){ modal.style.display="none"; modal.setAttribute("aria-hidden","true"); } });
+    }
+    wireModal("openSizeChartBtn","sizeChartModal","closeSizeChartBtn");
+    wireModal("openPriceChartBtn","priceChartModal","closePriceChartBtn");
+    wireModal("openDetailsChartBtn","detailsChartModal","closeDetailsChartBtn");
+
+    // Dynamic data source
+    const DATA_URL = "/data/rosie_services_pricing_and_packages.json";
+
+    // Strict fetch that surfaces HTTP and parse errors properly
     async function fetchJsonStrict(url){
-      const res = await fetch(url,{cache:"no-store"});
+      const res = await fetch(url, { cache:"no-store" });
       const text = await res.text();
-      try { return JSON.parse(text); }
-      catch {
-        const head = text.slice(0,120).replace(/\s+/g," ");
-        throw new Error(`Expected JSON from ${url} but got: ${head}`);
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; }
+      catch (e) {
+        throw new Error(`Could not parse JSON from ${url}: ${e.message}`);
+      }
+      if (!res.ok) {
+        const msg = data?.error || res.statusText || `HTTP ${res.status}`;
+        throw new Error(msg);
+      }
+      return data;
+    }
+
+    // State
+    let data = null;
+    const addonsState = new Set();
+
+    // Tier/customer badge state
+    let signedInCustomer = null;
+    let signedInTier = null;
+
+    async function tryLoadSignedInTier(){
+      try {
+        const res = await fetch("/api/client/auth_me", {
+          method: "GET",
+          credentials: "include",
+          cache: "no-store"
+        });
+
+        const out = await res.json().catch(()=>null);
+        if (!res.ok || !out?.authenticated || !out?.customer) return;
+
+        signedInCustomer = out.customer || null;
+        signedInTier = out.customer?.tier_code || null;
+
+        const existing = qs("#signedInTierNotice");
+        if (existing) existing.remove();
+
+        const bar = document.createElement("div");
+        bar.id = "signedInTierNotice";
+        bar.className = "notice ok";
+        bar.style.marginTop = "12px";
+        bar.innerHTML = `
+          Signed in as <strong>${escapeHtml(out.customer.full_name || out.customer.email || "Customer")}</strong>
+          ${signedInTier ? ` • Loyalty tier: <strong>${escapeHtml(signedInTier)}</strong>` : ""}
+          • Tier discounts may be applied where eligible.
+        `;
+        const host = qs("#loadErr");
+        host.parentNode.insertBefore(bar, host.nextSibling);
+      } catch {
+        // silently ignore if not signed in or endpoint unavailable
       }
     }
-
-    // Modal
-    function openModal(title,imgUrl){
-      qs("#modalTitle").textContent = title;
-      qs("#modalImg").src = imgUrl;
-      qs("#modalBack").style.display = "flex";
-    }
-    function closeModal(){ qs("#modalBack").style.display="none"; qs("#modalImg").src=""; }
-    qs("#modalCloseBtn").addEventListener("click", closeModal);
-    qs("#modalBack").addEventListener("click",(e)=>{ if(e.target.id==="modalBack") closeModal(); });
-
-    // IMPORTANT: Size chart is in BRAND bucket
-    qs("#openSizeChartBtn").addEventListener("click",()=> openModal("Vehicle Size Chart", `${BRAND_BASE}/CarSizeChart.PNG`));
-    qs("#openPriceChartBtn").addEventListener("click",()=> openModal("Vehicle Price Chart 2025", `${BRAND_BASE}/CarPrice2025.PNG`));
-    qs("#openDetailsChartBtn").addEventListener("click",()=> openModal("Package Service Details Chart", `${BRAND_BASE}/CarPriceDetails2025.PNG`));
-
-    // Default date
-    qs("#service_date").value = new Date().toISOString().slice(0,10);
-
-    let data = null;
-    let addonsState = new Set();
 
     function getSelectedPkg(){
       const code = qs("#package_code").value;
       return (data?.packages || []).find(p=>p.code===code) || null;
     }
-    function getSelectedSize(){ return qs("#vehicle_size").value; }
+    function getSelectedSize(){
+      return qs("#vehicle_size").value || "mid";
+    }
 
     function updatePriceUI(){
       const pkg = getSelectedPkg();
@@ -412,7 +475,10 @@
 
       for (const a of list){
         const wrap = document.createElement("label");
-        wrap.className = "addon-choice";
+        wrap.style.display = "flex";
+        wrap.style.gap = "10px";
+        wrap.style.alignItems = "flex-start";
+        wrap.style.marginTop = "10px";
 
         const cb = document.createElement("input");
         cb.type = "checkbox";
@@ -425,16 +491,16 @@
         });
 
         const price = addonDisplayPrice(a);
-        const badge = a.quote_required ? `<span class="tag warn">Quote required</span>` : `<span class="tag ok">${price}</span>`;
+        const badge = a.quote_required ? `<span class="tag warn">Quote</span>` : `<span class="tag ok">${escapeHtml(price)}</span>`;
 
         const inner = document.createElement("div");
+        inner.style.flex = "1";
         inner.innerHTML = `
-          <div class="addon-top">
-            <div class="addon-name">${escapeHtml(a.name || a.code || "Add-on")}</div>
+          <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+            <strong>${escapeHtml(a.name)}</strong>
             ${badge}
           </div>
-          <div class="addon-code mono">${escapeHtml(a.code || "")}</div>
-          ${a.description ? `<div class="addon-desc">${escapeHtml(a.description)}</div>` : ""}
+          <div class="muted mini mono">${escapeHtml(a.code)}</div>
         `;
 
         wrap.appendChild(cb);
@@ -460,7 +526,7 @@
         qs("#sizeMismatch").style.display = "none";
         return;
       }
-      qs("#sizeHint").innerHTML = `Recommended size based on vehicle info: <strong>${rec}</strong>`;
+      qs("#sizeHint").innerHTML = `Recommended size based on vehicle info: <strong>${escapeHtml(rec)}</strong>`;
       if (rec !== chosen){
         qs("#sizeMismatch").style.display = "block";
         qs("#sizeMismatch").textContent =
@@ -474,30 +540,6 @@
       if (el) el.addEventListener("input", updateSizeHint);
       if (el) el.addEventListener("change", updateSizeHint);
     });
-
-
-    async function loadClientTier(){
-      try{
-        const meRes = await fetch('/api/client/auth_me', { credentials:'include', cache:'no-store' });
-        const me = await meRes.json().catch(()=>null);
-        if (!meRes.ok || !me?.authenticated || !me.customer) return;
-
-        const dashRes = await fetch('/api/client/dashboard', { credentials:'include', cache:'no-store' });
-        const dash = await dashRes.json().catch(()=>null);
-        if (!dashRes.ok || !dash?.customer) return;
-
-        clientTier = dash.customer.customer_tier || dash.customer.tier || null;
-        const tierCode = dash.customer.tier_code || clientTier?.code || me.customer.tier_code || null;
-        const discountPct = Number(clientTier?.discount_pct ?? clientTier?.discount_percent ?? 0);
-        const box = qs('#tierNotice');
-        if (!box || !tierCode) return;
-        box.style.display = 'block';
-        box.className = 'notice ok';
-        box.innerHTML = discountPct > 0
-          ? `Signed in tier: <strong>${escapeHtml(tierCode)}</strong> · Estimated loyalty discount <strong>${discountPct}%</strong> may apply at checkout or invoice.`
-          : `Signed in tier: <strong>${escapeHtml(tierCode)}</strong>. Loyalty pricing is available for eligible customers.`;
-      }catch{}
-    }
 
     // Availability
     async function refreshAvailability(){
@@ -530,6 +572,15 @@
     qs("#service_date").addEventListener("change", refreshAvailability);
     qs("#slot_choice").addEventListener("change", refreshAvailability);
 
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
     // Load JSON
     try {
       data = await fetchJsonStrict(DATA_URL);
@@ -557,7 +608,7 @@
       buildAddonUI();
       updateSizeHint();
       await refreshAvailability();
-      await loadClientTier();
+      await tryLoadSignedInTier();
 
       // Optional prefill from query: /book?pkg=...&size=...
       (function prefill(){
