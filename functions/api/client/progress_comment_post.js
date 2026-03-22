@@ -1,5 +1,6 @@
 import { getCurrentCustomerSession } from "../_lib/customer-session.js";
 import { maybeQueueCustomerNotification } from "../_lib/notification-hooks.js";
+import { loadFeatureFlags } from "../_lib/app-settings.js";
 export async function onRequestOptions(){ return new Response("", { status:204, headers:corsHeaders() }); }
 export async function onRequestPost(context){
   const { request, env } = context;
@@ -14,6 +15,8 @@ export async function onRequestPost(context){
     const parent_id = String(body.parent_id || '').trim() || null;
     if (!token) return withCors(json({ error:'Missing token.' },400));
     if (!message) return withCors(json({ error:'Message is required.' },400));
+    const flags = await loadFeatureFlags(env);
+    if (flags.customer_chat_enabled === false) return withCors(json({ error:'Client chat is disabled right now.' },403));
     const headers = { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, "Content-Type":"application/json" };
     const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,customer_email,customer_profile_id,progress_enabled,assigned_staff_email,assigned_staff_name&progress_token=eq.${encodeURIComponent(token)}&limit=1`, { headers });
     if (!bookingRes.ok) return withCors(json({ error:`Could not load booking. ${await bookingRes.text()}` },500));
