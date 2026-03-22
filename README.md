@@ -28,3 +28,16 @@ Current dev snapshot includes:
 - Notification queue can be reviewed in `/admin-notifications`
 - Menu/dashboard updated for notifications
 - Docs snapshot refreshed again
+
+
+## Latest pass: annotations, threading, settings enforcement, notification retries
+
+This pass added:
+- picture-first observation annotations through `observation_annotations`
+- stronger jobsite workspace support for image click-to-annotate
+- richer customer progress timeline with annotation pins and reply targets
+- app-management settings loading inside progress/comment APIs
+- notification queue retry/process controls in Admin
+
+Run next SQL:
+- `sql/2026-03-22_annotations_and_notification_retry.sql`

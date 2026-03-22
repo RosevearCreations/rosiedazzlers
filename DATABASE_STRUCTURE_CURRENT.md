@@ -62,3 +62,35 @@ Saved admin policy/settings store now includes:
 - `visibility_matrix`
 - `manual_scheduling_rules`
 - `feature_flags`
+
+
+## New tables / fields in latest pass
+
+### `observation_annotations`
+Stores point-style annotations tied to a booking and optionally a media item.
+Suggested fields:
+- `id`
+- `booking_id`
+- `media_id`
+- `x_percent`
+- `y_percent`
+- `title`
+- `note`
+- `visibility`
+- `created_by_type`
+- `created_by_name`
+- `created_by_email`
+- `created_at`
+
+### `notification_events` queue handling
+Expected fields now used by the app:
+- `status`
+- `attempt_count`
+- `last_error`
+- `processed_at`
+
+### `app_management_settings`
+Feature flags now actively used by APIs, including:
+- `customer_chat_enabled`
+- `picture_first_observations`
+- `image_annotations_enabled`

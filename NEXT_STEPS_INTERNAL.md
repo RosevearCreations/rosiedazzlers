@@ -26,3 +26,12 @@
    - Customer screen: garage polish, billing storage choices, loyalty pricing display
    - Detailer screen: payout, schedule, and assignment workflow
    - Admin screen: management/reporting utilities and moderation
+
+
+## Immediate next priorities after annotation/retry pass
+
+1. Persist true drawing/shape annotations beyond point pins
+2. Add client-side media zoom/lightbox with annotation focus
+3. Apply saved `app_management_settings` to more admin/customer/detailer screens
+4. Add real transport dispatchers for `notification_events` (email/SMS providers)
+5. Extend Admin / Detailer / Customer screen-specific controls field by field

@@ -18,3 +18,18 @@ Operational polish and policy enforcement:
 2. Notification dispatch worker path
 3. Admin moderation controls for threads
 4. More reporting around loyalty tiers, gift redemptions, and staff operations
+
+
+## Roadmap update
+
+Completed this pass:
+- image annotation foundation
+- better two-sided client/detailer thread targeting
+- admin notification retry/process controls
+- app settings enforcement in key APIs
+
+Upcoming:
+- full annotation editor
+- image zoom / carousel improvements around annotated photos
+- screen-by-screen enforcement of saved management rules
+- provider-backed notification dispatch

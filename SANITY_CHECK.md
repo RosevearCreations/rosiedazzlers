@@ -23,3 +23,12 @@
 
 ## SQL to run
 - `sql/2026-03-22_admin_notifications_and_settings_persistence.sql`
+
+
+## Sanity check additions
+
+After this pass test:
+- `/admin-jobsite` image upload + annotation creation
+- `/progress?token=...` annotation visibility and reply flow
+- `/admin-notifications` retry visible queued items
+- feature flag changes in `/admin-app` affecting customer chat / annotation availability

@@ -15,3 +15,13 @@ Rosie Dazzlers is now structured around three primary user surfaces:
 - continue turning picture-first observations into the core field workflow
 - make threaded communication clearer for both client and detailer
 - enforce role/policy settings more consistently across the UI and APIs
+
+
+## Current product direction snapshot
+
+The platform is now moving from simple progress notes into a picture-first workflow:
+- team uploads a photo
+- team annotates the exact point on the image
+- team/client discuss that observation in-thread
+- admin can monitor queue notifications and retry failures
+- app-management feature flags increasingly control what the UI and APIs allow

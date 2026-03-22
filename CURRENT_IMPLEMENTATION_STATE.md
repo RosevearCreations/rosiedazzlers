@@ -42,3 +42,23 @@
 - stronger two-sided thread UI polish for customers and detailers
 - real dispatch workers for queued notification events
 - more persistence across admin policy controls and role-specific enforcement
+
+
+## March 2026 annotation + retry state
+
+Implemented in this pass:
+- Admin jobsite screen supports image-first observations with annotation posting
+- Customer progress screen shows photo annotations and better reply threading
+- Feature flags from `app_management_settings` are now consulted by comment and progress APIs
+- Admin notifications screen can retry/process queued items
+
+New/updated files of note:
+- `functions/api/_lib/app-settings.js`
+- `functions/api/admin/observation_annotation_post.js`
+- `functions/api/admin/notifications_process.js`
+- `functions/api/progress/view.js`
+- `functions/api/admin/jobsite_detail.js`
+- `admin-jobsite.html`
+- `progress.html`
+- `admin-notifications.html`
+- `sql/2026-03-22_annotations_and_notification_retry.sql`

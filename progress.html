@@ -1,36 +1,32 @@
-
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Progress | Rosie Dazzlers</title>
-  <meta name="description" content="View your Rosie Dazzlers service progress updates, photos, and threaded conversation." />
+  <meta name="description" content="View your Rosie Dazzlers service progress updates, photos, annotations, and threaded conversation." />
   <link rel="stylesheet" href="/assets/site.css" />
   <style>
-    .thread{display:grid;gap:12px}
-    .bubble{border-radius:16px;padding:12px 14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05)}
-    .bubble.staff{border-color:rgba(96,165,250,.25);background:rgba(37,99,235,.10)}
-    .bubble.client{border-color:rgba(34,197,94,.25);background:rgba(34,197,94,.10)}
-    .bubble .meta{font-size:.82rem;color:#93c5fd;margin-bottom:6px}
-    .media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-    .thumb{position:relative;overflow:hidden;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04)}
-    .thumb img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
-    .thumb figcaption{padding:8px 10px;font-size:.88rem;color:#dbeafe}
+    .thread{display:grid;gap:12px}.bubble{border-radius:16px;padding:12px 14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05)}
+    .bubble.staff{border-color:rgba(96,165,250,.25);background:rgba(37,99,235,.10)}.bubble.client{border-color:rgba(34,197,94,.25);background:rgba(34,197,94,.10)}
+    .bubble .meta{font-size:.82rem;color:#93c5fd;margin-bottom:6px}.media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .thumb{position:relative;overflow:hidden;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04)}.thumb img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+    .thumb figcaption{padding:8px 10px;font-size:.88rem;color:#dbeafe}.ann-pin{position:absolute;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:999px;border:2px solid #fff;background:#f59e0b;box-shadow:0 0 0 4px rgba(245,158,11,.25)}
+    .ann-list{display:grid;gap:8px;margin-top:10px}.ann-item{border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)}
   </style>
 </head>
 <body data-page="progress">
   <header class="nav"><div class="nav-inner"><a class="brand" href="/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a><button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button><nav id="navLinks" class="nav-links"><a href="/services">Services</a><a href="/pricing">Pricing</a><a href="/gear">Gear</a><a href="/consumables">Consumables</a><a href="/about">About</a><a href="/contact">Contact</a><a href="/book">Book</a></nav></div></header>
   <main class="container">
     <section class="section"><div class="panel"><img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" /></div></section>
-    <section class="section"><div class="hero"><div><div class="badge">Customer Progress</div><h1>Your service progress</h1><p>Use this page to view updates, photos, current status, and message your detailer when chat is enabled.</p><div class="badges"><div class="badge" id="statusBadge">Waiting for token</div><div class="badge" id="jobStatusBadge">No status yet</div><div class="badge" id="chatBadge">Chat unknown</div></div></div><div class="panel"><div class="kicker">Booking</div><h3 id="bookingTitle" style="margin:6px 0 8px">No booking loaded</h3><div id="bookingMeta" class="kicker">Add your progress token to the URL to view updates.</div></div></div></section>
+    <section class="section"><div class="hero"><div><div class="badge">Customer Progress</div><h1>Your service progress</h1><p>View updates, photos, image annotations, and the shared conversation with your detailer.</p><div class="badges"><div class="badge" id="statusBadge">Waiting for token</div><div class="badge" id="jobStatusBadge">No status yet</div><div class="badge" id="chatBadge">Chat unknown</div><div class="badge" id="annBadge">Annotations unknown</div></div></div><div class="panel"><div class="kicker">Booking</div><h3 id="bookingTitle" style="margin:6px 0 8px">No booking loaded</h3><div id="bookingMeta" class="kicker">Add your progress token to the URL to view updates.</div></div></div></section>
     <section class="section"><div id="pageNotice" class="notice">Loading progress information…</div></section>
     <section class="section"><div class="grid cards"><div class="panel"><h2>Service summary</h2><div id="summaryBox" class="kicker">No summary loaded yet.</div></div><div class="panel"><h2>Signoff</h2><div id="signoffBox" class="kicker">No signoff recorded yet.</div></div></div></section>
     <section class="section"><div class="panel"><h2>Photo timeline</h2><div id="mediaGallery" class="media-grid" style="margin-top:12px"><div class="notice">No photos yet.</div></div></div></section>
     <section class="section"><div class="panel"><h2>Threaded messages</h2><div id="commentsList" class="thread" style="margin-top:12px"><div class="notice">No messages yet.</div></div></div></section>
     <section class="section"><div class="panel"><h2>Completion signoff</h2><form id="signoffForm" class="form"><label>Your name<input id="signerName" name="signerName" type="text" required /></label><label>Your email<input id="signerEmail" name="signerEmail" type="email" required /></label><label>Notes (optional)<textarea id="signoffNotes" name="signoffNotes" rows="4" placeholder="Optional note about your service or completion."></textarea></label><div><button id="signoffBtn" class="btn primary" type="submit" disabled>Submit signoff</button></div></form></div></section>
     <section class="section"><div class="panel"><h2>Progress updates</h2><div id="updatesList" class="grid" style="margin-top:12px"><div class="notice">No updates yet.</div></div></div></section>
-    <section class="section"><div class="panel"><h2>Message your detailer</h2><form id="commentForm" class="form"><label>Your message<textarea id="commentMessage" rows="4" placeholder="Ask a question, confirm a decision, or respond to an observation."></textarea></label><div><button id="commentBtn" class="btn secondary" type="submit" disabled>Send message</button></div></form></div></section>
+    <section class="section"><div class="panel"><h2>Message your detailer</h2><form id="commentForm" class="form"><label>Reply to comment/annotation ID (optional)<input id="commentParentId" type="text" placeholder="Paste an ID from the thread or annotations" /></label><label>Parent type<select id="commentParentType"><option value="booking">Booking</option><option value="annotation">Annotation</option><option value="comment">Comment</option></select></label><label>Your message<textarea id="commentMessage" rows="4" placeholder="Ask a question, confirm a decision, or respond to an observation."></textarea></label><div><button id="commentBtn" class="btn secondary" type="submit" disabled>Send message</button></div></form></div></section>
   </main>
   <script type="module" src="/assets/chrome.js?v=20260311k"></script>
   <script>
@@ -39,18 +35,19 @@
     let currentToken = token;
     let currentBooking = null;
     let currentPrefs = null;
+    let appSettings = null;
     function setNotice(message, type=''){ const el=$('#pageNotice'); el.className=`notice ${type}`.trim(); el.textContent=message; }
     function escapeHtml(value){ return String(value ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
     function setBadges(data){
       $('#statusBadge').textContent = `Booking: ${data.booking?.status || 'unknown'}`;
       $('#jobStatusBadge').textContent = `Job: ${data.booking?.job_status || 'unknown'}`;
-      const chatOn = data.customer_preferences?.detailer_chat_opt_in === true;
+      const chatOn = data.customer_preferences?.customer_chat_enabled === true;
       $('#chatBadge').textContent = chatOn ? 'Chat enabled' : 'Chat limited';
+      $('#annBadge').textContent = data.app_settings?.feature_flags?.image_annotations_enabled === false ? 'Annotations off' : 'Annotations on';
       $('#commentBtn').disabled = !chatOn;
     }
     function renderSummary(data){
-      currentBooking = data.booking || null;
-      currentPrefs = data.customer_preferences || null;
+      currentBooking = data.booking || null; currentPrefs = data.customer_preferences || null; appSettings = data.app_settings || null;
       $('#bookingTitle').textContent = currentBooking ? `${currentBooking.customer_name || 'Customer'} — ${currentBooking.package_code || 'Package'}` : 'No booking loaded';
       $('#bookingMeta').textContent = currentBooking ? `${currentBooking.service_date || ''} • ${currentBooking.start_slot || ''} • ${currentBooking.vehicle_size || ''}` : 'Add your progress token to the URL to view updates.';
       $('#summaryBox').innerHTML = currentBooking ? `
@@ -68,24 +65,27 @@
       const media = Array.isArray(data.media) ? data.media : [];
       const comments = Array.isArray(data.comments) ? data.comments : [];
       $('#updatesList').innerHTML = updates.length ? updates.map(row=>`
-        <article class="panel">
-          <div class="kicker">${escapeHtml(row.created_at || '')} • ${escapeHtml(row.created_by || 'Team')}</div>
-          <h3 style="margin:6px 0 8px">${escapeHtml(row.visibility || 'customer')} update</h3>
-          <div>${escapeHtml(row.note || '')}</div>
-        </article>
+        <article class="panel"><div class="kicker">${escapeHtml(row.created_at || '')} • ${escapeHtml(row.created_by || 'Team')}</div><h3 style="margin:6px 0 8px">${escapeHtml(row.visibility || 'customer')} update</h3><div>${escapeHtml(row.note || '')}</div></article>
       `).join('') : '<div class="notice">No updates yet.</div>';
       $('#mediaGallery').innerHTML = media.length ? media.map(row=>`
         <figure class="thumb">
-          <img src="${escapeHtml(row.media_url || '')}" alt="${escapeHtml(row.caption || 'Progress photo')}" />
+          <div style="position:relative">
+            <img src="${escapeHtml(row.media_url || '')}" alt="${escapeHtml(row.caption || 'Progress photo')}" />
+            ${(row.annotations||[]).map(a => `<span class="ann-pin" style="left:${Number(a.x_percent ?? 50)}%;top:${Number(a.y_percent ?? 50)}%" title="${escapeHtml(a.title || a.note || 'Annotation')}"></span>`).join('')}
+          </div>
           <figcaption><strong>${escapeHtml(row.caption || row.kind || 'Photo')}</strong><br><span class="muted">${escapeHtml(row.created_at || '')}</span></figcaption>
+          <div class="ann-list">${(row.annotations||[]).map(a => `<div class="ann-item"><strong>${escapeHtml(a.title || 'Annotation')}</strong><div>${escapeHtml(a.note || '')}</div><div class="muted">${escapeHtml(a.created_by_name || a.created_by_type || 'Team')} • ${escapeHtml(a.created_at || '')}</div></div>`).join('')}</div>
         </figure>
       `).join('') : '<div class="notice">No photos yet.</div>';
       $('#commentsList').innerHTML = comments.length ? comments.map(row=>`
         <div class="bubble ${row.author_type === 'client' ? 'client' : 'staff'}">
           <div class="meta">${escapeHtml(row.author_name || row.author_type || 'Unknown')} • ${escapeHtml(row.author_type || '')} • ${escapeHtml(row.created_at || '')}</div>
           <div>${escapeHtml(row.message || '')}</div>
+          <div class="muted" style="margin-top:8px">Parent: ${escapeHtml(row.parent_type || 'booking')} ${row.parent_id ? '• '+escapeHtml(row.parent_id) : ''}</div>
+          <div style="margin-top:8px"><button class="btn small ghost reply-btn" data-id="${escapeHtml(row.id || '')}">Reply</button></div>
         </div>
       `).join('') : '<div class="notice">No messages yet.</div>';
+      document.querySelectorAll('.reply-btn').forEach(btn => btn.addEventListener('click', ()=>{ $('#commentParentType').value='comment'; $('#commentParentId').value=btn.dataset.id || ''; $('#commentMessage').focus(); }));
     }
     async function loadProgress(){
       if (!currentToken) { setNotice('Missing progress token in URL.','error'); return; }
@@ -96,12 +96,7 @@
     }
     $('#signoffForm').addEventListener('submit', async (event)=>{
       event.preventDefault();
-      const payload = {
-        token: currentToken,
-        signer_name: $('#signerName').value.trim(),
-        signer_email: $('#signerEmail').value.trim(),
-        notes: $('#signoffNotes').value.trim() || null
-      };
+      const payload = { token: currentToken, signer_name: $('#signerName').value.trim(), signer_email: $('#signerEmail').value.trim(), notes: $('#signoffNotes').value.trim() || null };
       const res = await fetch('/api/progress/signoff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
       let data = null; try{ data = await res.json(); }catch{}
       if(!res.ok) return setNotice(data?.error || 'Could not submit signoff.','error');
@@ -112,10 +107,11 @@
       event.preventDefault();
       const message = $('#commentMessage').value.trim();
       if(!message) return setNotice('Message is required.','error');
-      const res = await fetch('/api/client/progress_comment_post',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:currentToken,message})});
+      const body = {token:currentToken,message,parent_type: $('#commentParentType').value,parent_id: ($('#commentParentId').value || '').trim() || null};
+      const res = await fetch('/api/client/progress_comment_post',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
       let data = null; try{ data = await res.json(); }catch{}
       if(!res.ok) return setNotice(data?.error || 'Could not send message.','error');
-      $('#commentMessage').value='';
+      $('#commentMessage').value=''; $('#commentParentId').value=''; $('#commentParentType').value='booking';
       setNotice('Message sent. Admin and detailer can now see it.','success');
       await loadProgress();
     });
