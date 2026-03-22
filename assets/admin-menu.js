@@ -78,6 +78,14 @@
       description: "Users and passwords",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-staff")
     },
+
+    {
+      key: "admin-app",
+      label: "App Management",
+      href: "/admin-app",
+      description: "Roles, screens, feature access",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-app")
+    },
     {
       key: "admin-customers",
       label: "Customers",
