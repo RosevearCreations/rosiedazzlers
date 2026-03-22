@@ -400,3 +400,10 @@ Current next priorities:
 - manual scheduling / app-management rules UI completion
 - final layout polish across booking and internal screens
 
+
+## Annotation / chat controls
+
+Feature flags in `app_management_settings.feature_flags` now influence:
+- customer-visible threaded chat
+- picture-first observation posting
+- image annotation availability
