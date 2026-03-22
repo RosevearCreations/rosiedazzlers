@@ -178,3 +178,21 @@ Need:
 - Expand `/admin-staff` into a richer staff/admin profile editor with detailer-level and payout history views
 - Add picture-first observation UI on jobsite and customer progress screens
 - Add separate admin-only vs detailer-visible note editors in the customer and staff screens
+
+
+## Current snapshot — March 21, 2026
+
+Latest pass completed:
+- fixed booking add-on checkbox/text layout pressure
+- improved service/package image fallback with extra photo cards
+- expanded staff management toward richer Admin/Detailer profile editing
+- added customer tier discount support in the UI/data model direction
+- added/confirmed garage, gift, and redemption visibility in client/admin screens
+- added current SQL for tier discounts and richer staff/customer fields
+
+Current next priorities:
+- picture-first observation interface
+- richer client/detailer threaded comments UI
+- manual scheduling / app-management rules UI completion
+- final layout polish across booking and internal screens
+

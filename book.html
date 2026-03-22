@@ -146,7 +146,7 @@
 
         <div id="sizeMismatch" class="notice warn" style="display:none;margin-top:12px"></div>
 
-        <label style="display:flex;gap:10px;align-items:flex-start;margin-top:12px">
+        <label class="ack-choice" style="margin-top:12px">
           <input id="confirm_size" type="checkbox" />
           <span>
             <strong>I confirm my vehicle size selection is correct</strong>.
@@ -157,6 +157,7 @@
       <h1 style="margin:12px 0 8px">Book a Detail</h1>
       <p class="kicker">Choose a date, package, and time slot. We do one vehicle per day unless two half-day jobs.</p>
       <div id="dataError" class="notice bad" style="display:none;margin-top:10px"></div>
+      <div id="tierNotice" class="notice ok" style="display:none;margin-top:10px"></div>
     </div>
 
     <div class="section grid2">
@@ -278,22 +279,22 @@
       <div class="hr"></div>
 
       <div class="grid2">
-        <label style="display:flex;gap:10px;align-items:flex-start">
+        <label class="ack-choice">
           <input id="ack_driveway" type="checkbox" required />
           <span><strong>Driveway required</strong> (we need space to work)</span>
         </label>
 
-        <label style="display:flex;gap:10px;align-items:flex-start">
+        <label class="ack-choice">
           <input id="ack_power_water" type="checkbox" required />
           <span><strong>Customer provides power + water</strong> (or additional charges)</span>
         </label>
 
-        <label style="display:flex;gap:10px;align-items:flex-start">
+        <label class="ack-choice">
           <input id="ack_bylaw" type="checkbox" required />
           <span><strong>Customer accepts any bylaw responsibility</strong> related to washing/chemicals</span>
         </label>
 
-        <label style="display:flex;gap:10px;align-items:flex-start">
+        <label class="ack-choice">
           <input id="ack_cancellation" type="checkbox" required />
           <span><strong>Deposit + cancellation policy acknowledged</strong> (see waiver)</span>
         </label>
@@ -411,10 +412,7 @@
 
       for (const a of list){
         const wrap = document.createElement("label");
-        wrap.style.display = "flex";
-        wrap.style.gap = "10px";
-        wrap.style.alignItems = "flex-start";
-        wrap.style.marginTop = "10px";
+        wrap.className = "addon-choice";
 
         const cb = document.createElement("input");
         cb.type = "checkbox";
@@ -427,16 +425,16 @@
         });
 
         const price = addonDisplayPrice(a);
-        const badge = a.quote_required ? `<span class="tag warn">Quote</span>` : `<span class="tag ok">${price}</span>`;
+        const badge = a.quote_required ? `<span class="tag warn">Quote required</span>` : `<span class="tag ok">${price}</span>`;
 
         const inner = document.createElement("div");
-        inner.style.flex = "1";
         inner.innerHTML = `
-          <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
-            <strong>${a.name}</strong>
+          <div class="addon-top">
+            <div class="addon-name">${escapeHtml(a.name || a.code || "Add-on")}</div>
             ${badge}
           </div>
-          <div class="muted mini mono">${a.code}</div>
+          <div class="addon-code mono">${escapeHtml(a.code || "")}</div>
+          ${a.description ? `<div class="addon-desc">${escapeHtml(a.description)}</div>` : ""}
         `;
 
         wrap.appendChild(cb);
@@ -476,6 +474,30 @@
       if (el) el.addEventListener("input", updateSizeHint);
       if (el) el.addEventListener("change", updateSizeHint);
     });
+
+
+    async function loadClientTier(){
+      try{
+        const meRes = await fetch('/api/client/auth_me', { credentials:'include', cache:'no-store' });
+        const me = await meRes.json().catch(()=>null);
+        if (!meRes.ok || !me?.authenticated || !me.customer) return;
+
+        const dashRes = await fetch('/api/client/dashboard', { credentials:'include', cache:'no-store' });
+        const dash = await dashRes.json().catch(()=>null);
+        if (!dashRes.ok || !dash?.customer) return;
+
+        clientTier = dash.customer.customer_tier || dash.customer.tier || null;
+        const tierCode = dash.customer.tier_code || clientTier?.code || me.customer.tier_code || null;
+        const discountPct = Number(clientTier?.discount_pct ?? clientTier?.discount_percent ?? 0);
+        const box = qs('#tierNotice');
+        if (!box || !tierCode) return;
+        box.style.display = 'block';
+        box.className = 'notice ok';
+        box.innerHTML = discountPct > 0
+          ? `Signed in tier: <strong>${escapeHtml(tierCode)}</strong> · Estimated loyalty discount <strong>${discountPct}%</strong> may apply at checkout or invoice.`
+          : `Signed in tier: <strong>${escapeHtml(tierCode)}</strong>. Loyalty pricing is available for eligible customers.`;
+      }catch{}
+    }
 
     // Availability
     async function refreshAvailability(){
@@ -535,6 +557,7 @@
       buildAddonUI();
       updateSizeHint();
       await refreshAvailability();
+      await loadClientTier();
 
       // Optional prefill from query: /book?pkg=...&size=...
       (function prefill(){

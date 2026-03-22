@@ -346,3 +346,21 @@ Recent auth/profile additions include:
 - Added staff/detailer observation-thread posting through `progress_comments`.
 - Added notification queue hooks through `notification_events` for customer email/SMS preference flows.
 - Added richer customer/staff profile field direction and a current schema snapshot in `DATABASE_STRUCTURE_CURRENT.md`.
+
+
+## Current snapshot — March 21, 2026
+
+Latest pass completed:
+- fixed booking add-on checkbox/text layout pressure
+- improved service/package image fallback with extra photo cards
+- expanded staff management toward richer Admin/Detailer profile editing
+- added customer tier discount support in the UI/data model direction
+- added/confirmed garage, gift, and redemption visibility in client/admin screens
+- added current SQL for tier discounts and richer staff/customer fields
+
+Current next priorities:
+- picture-first observation interface
+- richer client/detailer threaded comments UI
+- manual scheduling / app-management rules UI completion
+- final layout polish across booking and internal screens
+

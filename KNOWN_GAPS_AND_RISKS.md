@@ -262,3 +262,21 @@ The biggest current risks are:
 ## One-line summary
 
 The main Rosie Dazzlers risk is no longer lack of features — it is keeping identity, access, workflow, and architecture consistent while the system transitions from a simple site into a role-aware operations platform.
+
+
+## Current snapshot — March 21, 2026
+
+Latest pass completed:
+- fixed booking add-on checkbox/text layout pressure
+- improved service/package image fallback with extra photo cards
+- expanded staff management toward richer Admin/Detailer profile editing
+- added customer tier discount support in the UI/data model direction
+- added/confirmed garage, gift, and redemption visibility in client/admin screens
+- added current SQL for tier discounts and richer staff/customer fields
+
+Current next priorities:
+- picture-first observation interface
+- richer client/detailer threaded comments UI
+- manual scheduling / app-management rules UI completion
+- final layout polish across booking and internal screens
+

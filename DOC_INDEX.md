@@ -135,3 +135,21 @@ That gives the fastest useful picture.
 ## One-line summary
 
 This index exists so future Rosie Dazzlers work can start from the right docs quickly, using the `dev` branch as the current source of truth.
+
+
+## Current snapshot — March 21, 2026
+
+Latest pass completed:
+- fixed booking add-on checkbox/text layout pressure
+- improved service/package image fallback with extra photo cards
+- expanded staff management toward richer Admin/Detailer profile editing
+- added customer tier discount support in the UI/data model direction
+- added/confirmed garage, gift, and redemption visibility in client/admin screens
+- added current SQL for tier discounts and richer staff/customer fields
+
+Current next priorities:
+- picture-first observation interface
+- richer client/detailer threaded comments UI
+- manual scheduling / app-management rules UI completion
+- final layout polish across booking and internal screens
+

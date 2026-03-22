@@ -259,6 +259,12 @@
 
       // Carousel image set: main + 3 required images
       const getImages = ()=>[mainImg, ...HOVER_EXTRA_IMAGES].filter(Boolean);
+      const thumbCards = HOVER_EXTRA_IMAGES.filter(Boolean).map((url, i)=>`
+        <a class="thumb-card" href="${url}" target="_blank" rel="noopener noreferrer">
+          <img src="${url}" alt="${escapeHtml(pkg.name)} extra ${i+1}" loading="lazy" decoding="async" />
+          <span>${["Interior","Exterior","Size Chart","Extra"][i] || `Photo ${i+1}`}</span>
+        </a>
+      `).join("");
 
       el.innerHTML = `
         <img class="cardImg" alt="${escapeHtml(pkg.name)}" />
@@ -282,6 +288,7 @@
           <a class="btn primary" href="/book?pkg=${encodeURIComponent(pkg.code)}&size=${encodeURIComponent(sz)}">Book this</a>
           <span class="muted mini">Hover image to preview: Interior / Exterior / Size Chart</span>
         </div>
+        ${thumbCards ? `<div class="thumb-strip">${thumbCards}</div>` : ""}
       `;
 
       const img = el.querySelector("img");
