@@ -222,3 +222,11 @@ The `dev` branch already has a strong operations/backend foundation, but the nex
 - Gift redemption history is now surfaced in the client dashboard and customer detail direction.
 - Richer customer/staff fields now include alternate service address, preferred contact/SMS, admin level, supervisor, pay schedule, hourly rate, and tips history support.
 - Layout cleanup pass added shared form-grid / check-grid helpers to reduce overlapping boxes and misaligned checkboxes.
+
+
+## Additional current-state notes
+
+- `/admin-staff` unauthorized issues caused by session resolution mismatch were addressed in the shared staff auth helper.
+- `/admin-app` now exists as a live planning/control screen for role splits and future feature switches.
+- Admin customer detail now exposes vehicles, gift certificates, and redemption history in the UI.
+- Next schema pass includes customer-vehicle contact fields, admin/detailer private notes, detailer level/pay metadata, and app-management settings.

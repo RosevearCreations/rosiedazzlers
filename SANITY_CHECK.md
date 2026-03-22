@@ -262,3 +262,10 @@ A legacy compatibility alias was added for older bootstrap callers so stale brow
 - Gift redemption history is now surfaced in the client dashboard and customer detail direction.
 - Richer customer/staff fields now include alternate service address, preferred contact/SMS, admin level, supervisor, pay schedule, hourly rate, and tips history support.
 - Layout cleanup pass added shared form-grid / check-grid helpers to reduce overlapping boxes and misaligned checkboxes.
+
+
+## New pass updates
+
+- Admin-only **App Management** screen added for role split planning.
+- Customer management UI now includes garage and gift/redemption context.
+- Shared layout utilities were expanded to reduce checkbox misalignment and box overlap issues.

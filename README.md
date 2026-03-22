@@ -334,3 +334,12 @@ A new SQL migration adds richer profile fields for customer and staff records pl
 - Gift redemption history is now surfaced in the client dashboard and customer detail direction.
 - Richer customer/staff fields now include alternate service address, preferred contact/SMS, admin level, supervisor, pay schedule, hourly rate, and tips history support.
 - Layout cleanup pass added shared form-grid / check-grid helpers to reduce overlapping boxes and misaligned checkboxes.
+
+
+## Latest snapshot additions
+
+- Staff session auth now tolerates fallback secret handling more consistently across admin screens.
+- Added **App Management** planning screen at `/admin-app` for role visibility, scheduling authority, and future feature gating.
+- Customer admin now surfaces **garage vehicles**, **gift certificates**, and **gift redemption history**.
+- Blocking time remains an **Admin-only** feature.
+- Current schema planning now includes richer customer-vehicle contact data, detailer/admin private notes, detailer level, supervisor/pay schedule data, and app management settings.

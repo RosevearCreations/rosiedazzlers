@@ -62,3 +62,28 @@ Current direction includes:
 - Gift redemption history is now surfaced in the client dashboard and customer detail direction.
 - Richer customer/staff fields now include alternate service address, preferred contact/SMS, admin level, supervisor, pay schedule, hourly rate, and tips history support.
 - Layout cleanup pass added shared form-grid / check-grid helpers to reduce overlapping boxes and misaligned checkboxes.
+
+
+## Latest planned/added fields
+
+### customer_vehicles
+- `contact_email`
+- `contact_phone`
+- `contact_sms_phone`
+- `billing_profile_label`
+- `last_wash_score`
+- `notification_opt_in`
+
+### staff_users
+- `detailer_level`
+- `department`
+- `permissions_profile`
+- `personal_admin_notes`
+- `vehicle_info`
+- `tips_payout_notes`
+
+### app_management_settings
+- `key`
+- `value`
+- `updated_at`
+- `updated_by_staff_user_id`

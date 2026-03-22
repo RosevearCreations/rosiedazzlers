@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rosie Dazzlers — App Management</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    :root { color-scheme: dark; }
+    body { margin:0; min-height:100vh; background:radial-gradient(circle at top, rgba(255,255,255,.08), transparent 35%), linear-gradient(180deg,#0f172a 0%,#111827 100%); color:#f8fafc; }
+    .shell { max-width: 1280px; margin: 0 auto; padding: 24px; }
+    .loading { display:grid; place-items:center; min-height:60vh; color:#cbd5e1; }
+    .topbar { display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:20px; }
+    .actorcard,.panel { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:18px; box-shadow:0 14px 35px rgba(0,0,0,.22); }
+    .actorline { margin:4px 0; }
+    .actorlabel { color:#93c5fd; font-weight:700; margin-right:6px; }
+    .logout-btn,.btn { appearance:none; border:0; border-radius:10px; padding:10px 14px; background:#2563eb; color:white; font-weight:700; cursor:pointer; }
+    .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:16px; }
+    .card { grid-column:span 12; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:20px; }
+    .card h2 { margin:0 0 10px; }
+    .table-wrap { overflow:auto; border-radius:14px; border:1px solid rgba(255,255,255,.08); }
+    table { width:100%; border-collapse:collapse; min-width:860px; background:rgba(255,255,255,.03); }
+    th,td { padding:12px 14px; text-align:left; border-bottom:1px solid rgba(255,255,255,.07); }
+    th { color:#93c5fd; }
+    .pill { display:inline-flex; border-radius:999px; padding:6px 10px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); font-size:.82rem; margin:0 8px 8px 0; }
+    .muted { color:#94a3b8; font-size:.92rem; }
+    @media (min-width:900px){ .span-7{grid-column:span 7}.span-5{grid-column:span 5}.span-6{grid-column:span 6} }
+  </style>
+</head>
+<body>
+<main class="shell">
+  <div class="loading" data-admin-shell-loading>Loading app management…</div>
+  <div data-admin-shell-ready hidden>
+    <header class="topbar">
+      <div>
+        <h1 style="margin:0 0 6px">App Management</h1>
+        <p class="muted">Admin-only planning screen for role visibility, scheduling authority, and future feature switches.</p>
+      </div>
+      <section class="actorcard" aria-label="Signed in staff">
+        <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
+        <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
+        <div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div>
+        <button class="logout-btn" type="button" data-admin-logout>Sign Out</button>
+      </section>
+    </header>
+
+    <div class="grid">
+      <article class="card span-7">
+        <h2>Role access matrix</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Feature</th><th>Client</th><th>Detailer</th><th>Senior Detailer</th><th>Admin</th></tr></thead>
+            <tbody>
+              <tr><td>Booking history / progress</td><td>Yes</td><td>No</td><td>No</td><td>Yes</td></tr>
+              <tr><td>Observation thread posting</td><td>Reply only</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+              <tr><td>Manual scheduling</td><td>No</td><td>No</td><td>Optional later</td><td>Yes</td></tr>
+              <tr><td>Block time / capacity</td><td>No</td><td>No</td><td>No</td><td>Yes</td></tr>
+              <tr><td>Customer private admin notes</td><td>No</td><td>No</td><td>No</td><td>Yes</td></tr>
+              <tr><td>Detailer private admin notes</td><td>No</td><td>No</td><td>No</td><td>Yes</td></tr>
+              <tr><td>Gift redemption history</td><td>Own only</td><td>View by booking</td><td>View by booking</td><td>Full</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="card span-5">
+        <h2>Current policy snapshot</h2>
+        <div class="pill">Blocking time is Admin-only</div>
+        <div class="pill">Staff management is Admin-only</div>
+        <div class="pill">Client garage is self-managed</div>
+        <div class="pill">Observation replies visible to Admin + assigned team</div>
+        <div class="pill">Gift redemption writes in webhook path</div>
+        <p class="muted">This screen is intentionally a live planning/control surface placeholder. The next step is wiring these switches to persisted app settings and per-role overrides.</p>
+      </article>
+
+      <article class="card span-6">
+        <h2>Customer screen target</h2>
+        <ul>
+          <li>Garage of unlimited vehicles</li>
+          <li>Per-vehicle contact and service preferences</li>
+          <li>Alternate service address support</li>
+          <li>Booking history, active gift certificates, redemption history</li>
+          <li>Progress and observation reply interface</li>
+          <li>Customer-visible notes separate from team/admin notes</li>
+        </ul>
+      </article>
+
+      <article class="card span-6">
+        <h2>Staff/Admin screen target</h2>
+        <ul>
+          <li>Full address + contact information</li>
+          <li>Emergency contact and work-hour preferences</li>
+          <li>Hourly rate, detailer level, supervisor, pay schedule</li>
+          <li>Total tips and payout history</li>
+          <li>Vehicle info for staff if relevant</li>
+          <li>Admin-only private notes and management fields</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</main>
+<script src="/assets/admin-auth.js"></script>
+<script src="/assets/admin-shell.js"></script>
+<script>window.AdminShell.boot({ pageKey: "admin-app" });</script>
+</body>
+</html>

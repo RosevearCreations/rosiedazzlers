@@ -170,3 +170,11 @@ Need:
 - Added staff/detailer observation-thread posting through `progress_comments`.
 - Added notification queue hooks through `notification_events` for customer email/SMS preference flows.
 - Added richer customer/staff profile field direction and a current schema snapshot in `DATABASE_STRUCTURE_CURRENT.md`.
+
+
+## Newly opened follow-up tasks
+
+- Wire persistent app-management controls to `app_management_settings`
+- Expand `/admin-staff` into a richer staff/admin profile editor with detailer-level and payout history views
+- Add picture-first observation UI on jobsite and customer progress screens
+- Add separate admin-only vs detailer-visible note editors in the customer and staff screens

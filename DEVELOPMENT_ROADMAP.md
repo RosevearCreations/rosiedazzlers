@@ -259,3 +259,9 @@ The project now has an early client account/auth foundation and public top-bar s
 - Gift redemption history is now surfaced in the client dashboard and customer detail direction.
 - Richer customer/staff fields now include alternate service address, preferred contact/SMS, admin level, supervisor, pay schedule, hourly rate, and tips history support.
 - Layout cleanup pass added shared form-grid / check-grid helpers to reduce overlapping boxes and misaligned checkboxes.
+
+
+### Newly started
+- richer customer garage + redemption visibility in admin UI
+- app management / role split planning screen
+- auth helper cleanup for staff-only admin pages

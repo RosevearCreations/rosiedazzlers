@@ -316,3 +316,12 @@ This is intentionally lighter than full staff admin auth but gives customers vis
 - Gift redemption history is now surfaced in the client dashboard and customer detail direction.
 - Richer customer/staff fields now include alternate service address, preferred contact/SMS, admin level, supervisor, pay schedule, hourly rate, and tips history support.
 - Layout cleanup pass added shared form-grid / check-grid helpers to reduce overlapping boxes and misaligned checkboxes.
+
+
+## App management layer
+
+A lightweight app-management layer is now part of the project direction. It is intended to define:
+- who sees which internal screens
+- who can schedule manually
+- who can block time
+- which future upgrades are Admin-only vs Detailer-visible
