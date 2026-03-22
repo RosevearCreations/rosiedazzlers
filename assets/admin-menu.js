@@ -94,6 +94,14 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-customers")
     },
     {
+      key: "admin-notifications",
+      label: "Notifications",
+      href: "/admin-notifications",
+      description: "Queued notices and hooks",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-notifications")
+    },
+
+    {
       key: "admin-promos",
       label: "Promos",
       href: "/admin-promos",
