@@ -37,7 +37,8 @@ import {
   methodNotAllowed,
   isUuid,
   cleanText,
-  toBoolean
+  toBoolean,
+  toNullableInteger
 } from "../_lib/staff-auth.js";
 
 export async function onRequestOptions() {
@@ -291,6 +292,36 @@ function normalizeStaffPayload(body) {
       body.can_manage_staff === undefined
         ? defaults.can_manage_staff
         : toBoolean(body.can_manage_staff),
+
+    preferred_contact_name: cleanText(body.preferred_contact_name),
+    phone: cleanText(body.phone),
+    sms_phone: cleanText(body.sms_phone),
+    address_line1: cleanText(body.address_line1),
+    address_line2: cleanText(body.address_line2),
+    city: cleanText(body.city),
+    province: cleanText(body.province),
+    postal_code: cleanText(body.postal_code),
+    employee_code: cleanText(body.employee_code),
+    position_title: cleanText(body.position_title),
+    hire_date: cleanText(body.hire_date),
+    emergency_contact_name: cleanText(body.emergency_contact_name),
+    emergency_contact_phone: cleanText(body.emergency_contact_phone),
+    vehicle_notes: cleanText(body.vehicle_notes),
+    vehicle_info: cleanText(body.vehicle_info),
+    department: cleanText(body.department),
+    admin_level: toNullableInteger(body.admin_level),
+    pay_schedule: cleanText(body.pay_schedule),
+    hourly_rate_cents: toNullableInteger(body.hourly_rate_cents),
+    preferred_work_hours: cleanText(body.preferred_work_hours),
+    admin_private_notes: cleanText(body.admin_private_notes),
+    detailer_level: toNullableInteger(body.detailer_level),
+    permissions_profile:
+      body.permissions_profile && typeof body.permissions_profile === "object"
+        ? body.permissions_profile
+        : {},
+    personal_admin_notes: cleanText(body.personal_admin_notes),
+    tips_payout_notes: cleanText(body.tips_payout_notes),
+    supervisor_staff_user_id: cleanText(body.supervisor_staff_user_id),
 
     notes: cleanText(body.notes)
   };
