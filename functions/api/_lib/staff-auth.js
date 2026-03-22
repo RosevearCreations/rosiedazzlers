@@ -168,10 +168,6 @@ export async function requireStaffAccess({
 
 async function resolveSessionActor({ request, env }) {
   try {
-    if (!env.STAFF_SESSION_SECRET) {
-      return { actor: null };
-    }
-
     const current = await getCurrentStaffSession({
       env,
       request
@@ -420,7 +416,7 @@ export async function insertOverrideLog({
 /* ---------------- actor shaping ---------------- */
 
 function normalizeActor(row, { is_legacy_admin = false } = {}) {
-  const roleCode = String(row.role_code || "").trim();
+  const roleCode = String(row.role_code || "").trim().toLowerCase();
 
   return {
     id: row.id || null,
