@@ -9,397 +9,127 @@
   <style>
     :root { color-scheme: dark; }
     body { margin:0; min-height:100vh; background:radial-gradient(circle at top, rgba(255,255,255,.08), transparent 35%), linear-gradient(180deg,#0f172a 0%,#111827 100%); color:#f8fafc; }
-    .shell { max-width:1400px; margin:0 auto; padding:24px; }
+    .shell { max-width: 1320px; margin: 0 auto; padding: 24px; }
     .loading { display:grid; place-items:center; min-height:60vh; color:#cbd5e1; }
     .topbar { display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:20px; }
-    .actorcard,.card { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:18px; box-shadow:0 14px 35px rgba(0,0,0,.22); }
-    .actorcard { min-width:280px; padding:16px 18px; }
-    .actorline { margin:4px 0; }
-    .actorlabel { color:#93c5fd; font-weight:700; margin-right:6px; }
+    .actorcard { min-width:280px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:16px 18px; box-shadow:0 14px 35px rgba(0,0,0,.22); }
+    .actorline { margin:4px 0; } .actorlabel { color:#93c5fd; font-weight:700; margin-right:6px; }
     .logout-btn,.btn { appearance:none; border:0; border-radius:10px; padding:10px 14px; background:#2563eb; color:white; font-weight:700; cursor:pointer; }
-    .btn.secondary { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); color:#f8fafc; }
     .status { margin-bottom:16px; padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.05); color:#e5e7eb; }
     .status[data-state="error"] { background:rgba(220,38,38,.12); border-color:rgba(248,113,113,.25); color:#fecaca; }
     .status[data-state="success"] { background:rgba(34,197,94,.10); border-color:rgba(134,239,172,.22); color:#bbf7d0; }
     .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:16px; }
-    .card { grid-column:span 12; padding:20px; }
-    .card h2 { margin:0 0 10px; font-size:1.15rem; }
-    .card p { margin:0 0 12px; color:#cbd5e1; line-height:1.5; }
+    .card { grid-column:span 12; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:20px; box-shadow:0 14px 35px rgba(0,0,0,.22); }
     .table-wrap { overflow:auto; border-radius:14px; border:1px solid rgba(255,255,255,.08); }
-    table { width:100%; border-collapse:collapse; min-width:980px; background:rgba(255,255,255,.03); }
-    th,td { padding:12px 14px; text-align:left; border-bottom:1px solid rgba(255,255,255,.07); vertical-align:top; font-size:.95rem; }
-    th { color:#93c5fd; font-weight:700; background:rgba(255,255,255,.03); }
-    .muted { color:#94a3b8; font-size:.92rem; }
-    .detail-box { border-radius:14px; padding:14px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06); }
-    .detail-box pre { margin:0; white-space:pre-wrap; word-break:break-word; color:#dbeafe; font-size:.92rem; line-height:1.45; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; }
-    .pillrow { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
-    .pill { display:inline-flex; align-items:center; border-radius:999px; padding:6px 10px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); font-size:.82rem; color:#e5e7eb; }
-    .form-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px}
-    .field{grid-column:span 12}
-    .field.span-6{grid-column:span 6}
-    .field.span-4{grid-column:span 4}
-    .field.span-3{grid-column:span 3}
-    .field label{display:block;margin-bottom:8px;font-size:.92rem;font-weight:700;color:#e5e7eb}
-    .field input,.field select,.field textarea{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;font-size:.98rem;background:rgba(255,255,255,.04);color:#f8fafc;outline:none}
-    .field textarea{min-height:90px;resize:vertical}
-    .field input:focus,.field select:focus,.field textarea:focus{border-color:#60a5fa;background:rgba(255,255,255,.06)}
-    .actions{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
-    .section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
-    @media (min-width: 980px){ .span-5{grid-column:span 5}.span-7{grid-column:span 7}.span-6{grid-column:span 6} }
-    @media (max-width: 860px){ .field.span-6,.field.span-4,.field.span-3{grid-column:span 12} }
+    table { width:100%; border-collapse:collapse; min-width:880px; background:rgba(255,255,255,.03); }
+    th,td { padding:12px 14px; text-align:left; border-bottom:1px solid rgba(255,255,255,.07); vertical-align:top; }
+    th { color:#93c5fd; }
+    .form-grid { display:grid; gap:12px; } .form-grid.two-col{grid-template-columns:repeat(2,minmax(0,1fr))} .form-grid.three-col{grid-template-columns:repeat(3,minmax(0,1fr))}
+    label{display:block;color:#e5e7eb;font-size:.92rem;font-weight:700} input,select,textarea{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;font-size:.98rem;background:rgba(255,255,255,.04);color:#f8fafc;outline:none;margin-top:8px} textarea{min-height:96px;resize:vertical}
+    .check-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}.checkbox{display:grid;grid-template-columns:20px minmax(0,1fr);gap:10px;align-items:start;padding:10px 12px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.03)} .checkbox input{margin:2px 0 0 0;width:18px;height:18px}.checkbox span{font-weight:500;line-height:1.35}
+    .pill{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:.82rem;color:#e5e7eb;margin-right:6px;margin-bottom:6px}.muted{color:#94a3b8;font-size:.92rem}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}.list{display:grid;gap:10px}.list-item{border-radius:14px;padding:12px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
+    @media (min-width:900px){ .span-7{grid-column:span 7}.span-5{grid-column:span 5}.span-6{grid-column:span 6} } @media (max-width:900px){ .form-grid.two-col,.form-grid.three-col,.check-grid{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
-  <main class="shell">
-    <div class="loading" data-admin-shell-loading>Loading staff management...</div>
-    <div data-admin-shell-ready hidden>
-      <header class="topbar">
-        <div class="titleblock">
-          <h1>Staff Management</h1>
-          <p>Admin-only workspace for staff, detailer, and admin profile records, role settings, pay metadata, and password resets.</p>
-        </div>
-        <section class="actorcard">
-          <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
-          <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
-          <div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div>
-          <button class="logout-btn" type="button" data-admin-logout>Sign Out</button>
-        </section>
-      </header>
-
-      <div class="status" data-admin-shell-status hidden></div>
-
-      <section class="grid">
-        <article class="card span-7">
-          <div class="section-head">
-            <div><h2>Staff Accounts</h2><p>Select a staff record to edit the richer profile.</p></div>
-            <button class="btn secondary" type="button" id="staff-new-btn">New Staff</button>
+<main class="shell">
+  <div class="loading" data-admin-shell-loading>Loading staff management...</div>
+  <div data-admin-shell-ready hidden>
+    <header class="topbar">
+      <div><h1 style="margin:0 0 6px">Detailer & Admin screens</h1><p style="margin:0;color:#cbd5e1;line-height:1.5">Manage full staff profiles, pay metadata, emergency contacts, private admin notes, permissions, recent assignments, and tip payout history.</p></div>
+      <section class="actorcard"><div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div><div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div><div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div><button class="logout-btn" type="button" data-admin-logout>Sign Out</button></section>
+    </header>
+    <div class="status" data-admin-shell-status hidden></div>
+    <section class="grid">
+      <article class="card span-5">
+        <div class="section-head"><div><h2>Staff directory</h2><p class="muted">Admins and detailers share one editor. Role-specific fields are grouped below.</p></div><button class="btn" id="newStaffBtn" type="button">New staff profile</button></div>
+        <div class="table-wrap"><table><thead><tr><th>Name</th><th>Role</th><th>Status</th><th>Action</th></tr></thead><tbody id="staffTableBody"><tr><td colspan="4" class="muted">Loading staff…</td></tr></tbody></table></div>
+      </article>
+      <article class="card span-7">
+        <form id="staffForm">
+          <input id="staffId" type="hidden" />
+          <div class="section-head"><div><h2 id="staffFormTitle">Staff profile</h2><p class="muted">This screen is the combined Detailer/Admin profile editor.</p></div></div>
+          <div class="form-grid three-col">
+            <label>Full name<input id="staffName" required /></label>
+            <label>Email<input id="staffEmail" type="email" required /></label>
+            <label>Role<select id="staffRole"><option value="detailer">Detailer</option><option value="senior_detailer">Senior Detailer</option><option value="admin">Admin</option></select></label>
+            <label>Preferred contact name<input id="staffPreferredName" /></label>
+            <label>Phone<input id="staffPhone" /></label>
+            <label>SMS phone<input id="staffSmsPhone" /></label>
           </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Active</th><th>Rates / Level</th><th>Action</th></tr></thead>
-              <tbody id="staff-table-body"><tr><td colspan="6" class="muted">Loading staff…</td></tr></tbody>
-            </table>
+          <div class="form-grid three-col">
+            <label>Address line 1<input id="staffAddr1" /></label>
+            <label>Address line 2<input id="staffAddr2" /></label>
+            <label>City<input id="staffCity" /></label>
+            <label>Province<input id="staffProvince" /></label>
+            <label>Postal code<input id="staffPostal" /></label>
+            <label>Department<input id="staffDepartment" placeholder="Operations, admin, detailing" /></label>
           </div>
-        </article>
-
-        <article class="card span-5">
-          <h2>Password reset</h2>
-          <p>Set a password for the selected staff user.</p>
-          <form id="password-form" novalidate>
-            <div class="field"><label for="staff-select">Staff User</label><select id="staff-select"></select></div>
-            <div class="field"><label for="new-password">New Password</label><input id="new-password" type="password" minlength="8" placeholder="At least 8 characters" required /></div>
-            <div class="field"><label for="hash-mode">Hash Mode</label><select id="hash-mode"><option value="bcrypt" selected>bcrypt (preferred)</option><option value="sha256">sha256 (fallback)</option></select></div>
-            <div class="actions"><button class="btn" id="password-submit-btn" type="submit">Update Password</button></div>
-          </form>
-        </article>
-
-        <article class="card">
-          <h2>Selected Staff Profile</h2>
-          <form id="staff-detail-form" novalidate>
-            <input id="staffId" type="hidden" />
-            <div class="pillrow" id="staff-pills"><span class="pill">No staff selected</span></div>
-
-            <div class="form-grid" style="margin-top:14px;">
-              <div class="field span-6"><label>Full name<input id="fullName" /></label></div>
-              <div class="field span-6"><label>Email<input id="staffEmail" type="email" /></label></div>
-              <div class="field span-3"><label>Role<select id="roleCode"><option value="detailer">Detailer</option><option value="senior_detailer">Senior Detailer</option><option value="admin">Admin</option></select></label></div>
-              <div class="field span-3"><label>Preferred contact name<input id="preferredContactName" /></label></div>
-              <div class="field span-3"><label>Phone<input id="staffPhone" /></label></div>
-              <div class="field span-3"><label>SMS phone<input id="staffSmsPhone" /></label></div>
-
-              <div class="field span-6"><label>Address line 1<input id="address1" /></label></div>
-              <div class="field span-6"><label>Address line 2<input id="address2" /></label></div>
-              <div class="field span-4"><label>City<input id="city" /></label></div>
-              <div class="field span-4"><label>Province<input id="province" /></label></div>
-              <div class="field span-4"><label>Postal code<input id="postalCode" /></label></div>
-
-              <div class="field span-4"><label>Employee code<input id="employeeCode" /></label></div>
-              <div class="field span-4"><label>Position title<input id="positionTitle" /></label></div>
-              <div class="field span-4"><label>Hire date<input id="hireDate" type="date" /></label></div>
-
-              <div class="field span-4"><label>Emergency contact name<input id="emergencyName" /></label></div>
-              <div class="field span-4"><label>Emergency phone<input id="emergencyPhone" /></label></div>
-              <div class="field span-4"><label>Department<input id="department" /></label></div>
-
-              <div class="field span-3"><label>Admin level<input id="adminLevel" type="number" min="1" max="4" /></label></div>
-              <div class="field span-3"><label>Detailer level<input id="detailerLevel" type="number" min="1" max="4" /></label></div>
-              <div class="field span-3"><label>Hourly rate (cents)<input id="hourlyRate" type="number" min="0" step="1" /></label></div>
-              <div class="field span-3"><label>Pay schedule<input id="paySchedule" placeholder="biweekly" /></label></div>
-
-              <div class="field span-6"><label>Preferred work hours<input id="preferredWorkHours" placeholder="Mon–Fri 8:00–17:00" /></label></div>
-              <div class="field span-6"><label>Supervisor staff user id<input id="supervisorId" placeholder="Optional UUID" /></label></div>
-
-              <div class="field span-6"><label>Vehicle info<textarea id="vehicleInfo"></textarea></label></div>
-              <div class="field span-6"><label>Vehicle notes<textarea id="vehicleNotes"></textarea></label></div>
-
-              <div class="field span-6"><label>General notes<textarea id="staffNotes"></textarea></label></div>
-              <div class="field span-6"><label>Admin private notes<textarea id="adminPrivateNotes"></textarea></label></div>
-              <div class="field span-6"><label>Personal admin notes<textarea id="personalAdminNotes"></textarea></label></div>
-              <div class="field span-6"><label>Tips / payout notes<textarea id="tipsNotes"></textarea></label></div>
-
-              <div class="field span-3"><label><input id="isActive" type="checkbox" /> Active</label></div>
-              <div class="field span-3"><label><input id="capOverride" type="checkbox" /> Can override lower entries</label></div>
-              <div class="field span-3"><label><input id="capBookings" type="checkbox" /> Can manage bookings</label></div>
-              <div class="field span-3"><label><input id="capBlocks" type="checkbox" /> Can manage blocks</label></div>
-              <div class="field span-3"><label><input id="capProgress" type="checkbox" /> Can manage progress</label></div>
-              <div class="field span-3"><label><input id="capPromos" type="checkbox" /> Can manage promos</label></div>
-              <div class="field span-3"><label><input id="capStaff" type="checkbox" /> Can manage staff</label></div>
-            </div>
-
-            <div class="actions" style="margin-top:14px;">
-              <button class="btn" type="submit" id="staff-save-btn">Save Staff Profile</button>
-            </div>
-          </form>
-        </article>
-
-        <article class="card span-6">
-          <h2>Recent assignments</h2>
-          <div id="staff-bookings" class="detail-box"><pre>No staff selected.</pre></div>
-        </article>
-        <article class="card span-6">
-          <h2>Tip payout history</h2>
-          <div id="staff-payouts" class="detail-box"><pre>No staff selected.</pre></div>
-        </article>
-      </section>
-    </div>
-  </main>
-
-  <script src="/assets/admin-auth.js"></script>
-  <script src="/assets/admin-shell.js"></script>
-  <script>
-    (function () {
-      const els = {
-        tableBody: document.getElementById("staff-table-body"),
-        staffSelect: document.getElementById("staff-select"),
-        passwordForm: document.getElementById("password-form"),
-        passwordInput: document.getElementById("new-password"),
-        hashMode: document.getElementById("hash-mode"),
-        passwordBtn: document.getElementById("password-submit-btn"),
-        newBtn: document.getElementById("staff-new-btn"),
-        saveBtn: document.getElementById("staff-save-btn"),
-        detailForm: document.getElementById("staff-detail-form"),
-        pills: document.getElementById("staff-pills"),
-        bookings: document.getElementById("staff-bookings"),
-        payouts: document.getElementById("staff-payouts"),
-
-        staffId: document.getElementById("staffId"),
-        fullName: document.getElementById("fullName"),
-        staffEmail: document.getElementById("staffEmail"),
-        roleCode: document.getElementById("roleCode"),
-        preferredContactName: document.getElementById("preferredContactName"),
-        staffPhone: document.getElementById("staffPhone"),
-        staffSmsPhone: document.getElementById("staffSmsPhone"),
-        address1: document.getElementById("address1"),
-        address2: document.getElementById("address2"),
-        city: document.getElementById("city"),
-        province: document.getElementById("province"),
-        postalCode: document.getElementById("postalCode"),
-        employeeCode: document.getElementById("employeeCode"),
-        positionTitle: document.getElementById("positionTitle"),
-        hireDate: document.getElementById("hireDate"),
-        emergencyName: document.getElementById("emergencyName"),
-        emergencyPhone: document.getElementById("emergencyPhone"),
-        department: document.getElementById("department"),
-        adminLevel: document.getElementById("adminLevel"),
-        detailerLevel: document.getElementById("detailerLevel"),
-        hourlyRate: document.getElementById("hourlyRate"),
-        paySchedule: document.getElementById("paySchedule"),
-        preferredWorkHours: document.getElementById("preferredWorkHours"),
-        supervisorId: document.getElementById("supervisorId"),
-        vehicleInfo: document.getElementById("vehicleInfo"),
-        vehicleNotes: document.getElementById("vehicleNotes"),
-        staffNotes: document.getElementById("staffNotes"),
-        adminPrivateNotes: document.getElementById("adminPrivateNotes"),
-        personalAdminNotes: document.getElementById("personalAdminNotes"),
-        tipsNotes: document.getElementById("tipsNotes"),
-        isActive: document.getElementById("isActive"),
-        capOverride: document.getElementById("capOverride"),
-        capBookings: document.getElementById("capBookings"),
-        capBlocks: document.getElementById("capBlocks"),
-        capProgress: document.getElementById("capProgress"),
-        capPromos: document.getElementById("capPromos"),
-        capStaff: document.getElementById("capStaff")
-      };
-      let staffRows = [];
-      function setShellStatus(message, type) {
-        document.querySelectorAll("[data-admin-shell-status]").forEach((node) => {
-          node.hidden = !message; node.textContent = message || ""; node.dataset.state = type || "";
-        });
-      }
-      function esc(v){ return String(v || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
-      function humanizeRole(v){ return window.AdminShell.humanizeRole(v); }
-      function renderTable(rows){
-        els.tableBody.innerHTML = rows.length ? rows.map(row => `
-          <tr>
-            <td>${esc(row.full_name || "—")}</td>
-            <td>${esc(row.email || "—")}</td>
-            <td>${esc(humanizeRole(row.role_code || ""))}</td>
-            <td>${row.is_active ? "Yes" : "No"}</td>
-            <td>${esc([row.hourly_rate_cents != null ? `¢${row.hourly_rate_cents}/hr` : "", row.detailer_level ? `L${row.detailer_level}` : "", row.admin_level ? `Admin ${row.admin_level}` : ""].filter(Boolean).join(" · ") || "—")}</td>
-            <td><button class="btn secondary" type="button" data-open-staff="${esc(row.id)}">Open</button></td>
-          </tr>`).join("") : '<tr><td colspan="6" class="muted">No staff accounts found.</td></tr>';
-        els.tableBody.querySelectorAll("[data-open-staff]").forEach(btn => btn.addEventListener("click", ()=>loadStaffDetail(btn.dataset.openStaff)));
-      }
-      function renderSelect(rows){
-        els.staffSelect.innerHTML = '<option value="">Select staff user</option>' + rows.map(row => `<option value="${esc(row.id)}">${esc(row.full_name || row.email || "Unknown")} — ${esc(humanizeRole(row.role_code || ""))}</option>`).join("");
-      }
-      async function loadStaff(){
-        const response = await fetch("/api/admin/staff_list", { method:"POST", credentials:"include", headers:{"Content-Type":"application/json"}, body:JSON.stringify({}) });
-        const data = await response.json().catch(()=>null);
-        if (!response.ok) throw new Error((data && data.error) || "Could not load staff list.");
-        staffRows = Array.isArray(data?.staff_users) ? data.staff_users : (Array.isArray(data?.staff) ? data.staff : []);
-        renderTable(staffRows); renderSelect(staffRows);
-      }
-      function resetForm(){
-        els.detailForm.reset(); els.staffId.value = "";
-        els.pills.innerHTML = '<span class="pill">New staff profile</span>';
-        els.bookings.innerHTML = '<pre>No staff selected.</pre>';
-        els.payouts.innerHTML = '<pre>No staff selected.</pre>';
-      }
-      function fillForm(staff){
-        els.staffId.value = staff.id || "";
-        els.fullName.value = staff.full_name || "";
-        els.staffEmail.value = staff.email || "";
-        els.roleCode.value = staff.role_code || "detailer";
-        els.preferredContactName.value = staff.preferred_contact_name || "";
-        els.staffPhone.value = staff.phone || "";
-        els.staffSmsPhone.value = staff.sms_phone || "";
-        els.address1.value = staff.address_line1 || "";
-        els.address2.value = staff.address_line2 || "";
-        els.city.value = staff.city || "";
-        els.province.value = staff.province || "";
-        els.postalCode.value = staff.postal_code || "";
-        els.employeeCode.value = staff.employee_code || "";
-        els.positionTitle.value = staff.position_title || "";
-        els.hireDate.value = staff.hire_date || "";
-        els.emergencyName.value = staff.emergency_contact_name || "";
-        els.emergencyPhone.value = staff.emergency_contact_phone || "";
-        els.department.value = staff.department || "";
-        els.adminLevel.value = staff.admin_level ?? "";
-        els.detailerLevel.value = staff.detailer_level ?? "";
-        els.hourlyRate.value = staff.hourly_rate_cents ?? "";
-        els.paySchedule.value = staff.pay_schedule || "";
-        els.preferredWorkHours.value = staff.preferred_work_hours || "";
-        els.supervisorId.value = staff.supervisor_staff_user_id || "";
-        els.vehicleInfo.value = staff.vehicle_info || "";
-        els.vehicleNotes.value = staff.vehicle_notes || "";
-        els.staffNotes.value = staff.notes || "";
-        els.adminPrivateNotes.value = staff.admin_private_notes || "";
-        els.personalAdminNotes.value = staff.personal_admin_notes || "";
-        els.tipsNotes.value = staff.tips_payout_notes || "";
-        els.isActive.checked = staff.is_active === true;
-        els.capOverride.checked = staff.can_override_lower_entries === true;
-        els.capBookings.checked = staff.can_manage_bookings === true;
-        els.capBlocks.checked = staff.can_manage_blocks === true;
-        els.capProgress.checked = staff.can_manage_progress === true;
-        els.capPromos.checked = staff.can_manage_promos === true;
-        els.capStaff.checked = staff.can_manage_staff === true;
-      }
-      function renderDetail(detail){
-        const staff = detail?.staff_user || null;
-        if (!staff) return resetForm();
-        fillForm(staff);
-        els.staffSelect.value = staff.id || "";
-        els.pills.innerHTML = [
-          `<span class="pill">${esc(staff.full_name || "Staff")}</span>`,
-          `<span class="pill">${esc(humanizeRole(staff.role_code || ""))}</span>`,
-          `<span class="pill">${staff.is_active ? "Active" : "Inactive"}</span>`
-        ].join("");
-        els.bookings.innerHTML = `<pre>${JSON.stringify(detail.assigned_bookings || [], null, 2)}</pre>`;
-        els.payouts.innerHTML = `<pre>${JSON.stringify(detail.tip_payout_history || [], null, 2)}</pre>`;
-      }
-      async function loadStaffDetail(id){
-        setShellStatus("", "");
-        const response = await fetch("/api/admin/staff_detail", { method:"POST", credentials:"include", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ staff_user_id:id }) });
-        const data = await response.json().catch(()=>null);
-        if (!response.ok) throw new Error((data && data.error) || "Could not load staff detail.");
-        renderDetail(data);
-      }
-      function collectPayload(){
-        return {
-          id: els.staffId.value || undefined,
-          full_name: els.fullName.value,
-          email: els.staffEmail.value,
-          role_code: els.roleCode.value,
-          preferred_contact_name: els.preferredContactName.value,
-          phone: els.staffPhone.value,
-          sms_phone: els.staffSmsPhone.value,
-          address_line1: els.address1.value,
-          address_line2: els.address2.value,
-          city: els.city.value,
-          province: els.province.value,
-          postal_code: els.postalCode.value,
-          employee_code: els.employeeCode.value,
-          position_title: els.positionTitle.value,
-          hire_date: els.hireDate.value || null,
-          emergency_contact_name: els.emergencyName.value,
-          emergency_contact_phone: els.emergencyPhone.value,
-          department: els.department.value,
-          admin_level: els.adminLevel.value || null,
-          detailer_level: els.detailerLevel.value || null,
-          hourly_rate_cents: els.hourlyRate.value || null,
-          pay_schedule: els.paySchedule.value,
-          preferred_work_hours: els.preferredWorkHours.value,
-          supervisor_staff_user_id: els.supervisorId.value || null,
-          vehicle_info: els.vehicleInfo.value,
-          vehicle_notes: els.vehicleNotes.value,
-          notes: els.staffNotes.value,
-          admin_private_notes: els.adminPrivateNotes.value,
-          personal_admin_notes: els.personalAdminNotes.value,
-          tips_payout_notes: els.tipsNotes.value,
-          is_active: els.isActive.checked,
-          can_override_lower_entries: els.capOverride.checked,
-          can_manage_bookings: els.capBookings.checked,
-          can_manage_blocks: els.capBlocks.checked,
-          can_manage_progress: els.capProgress.checked,
-          can_manage_promos: els.capPromos.checked,
-          can_manage_staff: els.capStaff.checked,
-          permissions_profile: {
-            can_block_time: els.capBlocks.checked,
-            can_manual_schedule: els.capBookings.checked,
-            can_view_admin_notes: els.roleCode.value === 'admin'
-          }
-        };
-      }
-      els.newBtn.addEventListener("click", resetForm);
-      els.passwordForm.addEventListener("submit", async (event)=>{
-        event.preventDefault();
-        const staff_user_id = String(els.staffSelect.value || "").trim();
-        const new_password = String(els.passwordInput.value || "");
-        const hash_mode = String(els.hashMode.value || "bcrypt");
-        if (!staff_user_id) return setShellStatus("Please choose a staff user.", "error");
-        if (new_password.length < 8) return setShellStatus("Password must be at least 8 characters long.", "error");
-        els.passwordBtn.disabled = true; els.passwordBtn.textContent = "Updating...";
-        try{
-          const response = await fetch("/api/admin/auth_set_password", { method:"POST", credentials:"include", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ staff_user_id, new_password, hash_mode }) });
-          const data = await response.json().catch(()=>null);
-          if (!response.ok) throw new Error((data && data.error) || "Could not update password.");
-          els.passwordInput.value = ""; setShellStatus("Password updated successfully.", "success");
-        }catch(err){ setShellStatus(err?.message || "Could not update password.", "error"); }
-        finally{ els.passwordBtn.disabled = false; els.passwordBtn.textContent = "Update Password"; }
-      });
-      els.detailForm.addEventListener("submit", async (event)=>{
-        event.preventDefault();
-        const payload = collectPayload();
-        els.saveBtn.disabled = true; els.saveBtn.textContent = "Saving...";
-        try{
-          const response = await fetch("/api/admin/staff_save", { method:"POST", credentials:"include", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) });
-          const data = await response.json().catch(()=>null);
-          if (!response.ok) throw new Error((data && data.error) || "Could not save staff profile.");
-          setShellStatus("Staff profile saved.", "success");
-          await loadStaff();
-          if (data?.staff_user?.id) await loadStaffDetail(data.staff_user.id);
-        }catch(err){ setShellStatus(err?.message || "Could not save staff profile.", "error"); }
-        finally{ els.saveBtn.disabled = false; els.saveBtn.textContent = "Save Staff Profile"; }
-      });
-      window.AdminShell.boot({
-        pageKey:"admin-staff",
-        onReady: async function(){
-          try { await loadStaff(); resetForm(); }
-          catch (err) { setShellStatus(err?.message || "Could not initialize staff page.", "error"); }
-        }
-      });
-    })();
-  </script>
+          <div class="form-grid three-col">
+            <label>Employee code<input id="staffEmployeeCode" /></label>
+            <label>Position title<input id="staffTitle" /></label>
+            <label>Hire date<input id="staffHireDate" type="date" /></label>
+            <label>Emergency contact name<input id="staffEmergencyName" /></label>
+            <label>Emergency contact phone<input id="staffEmergencyPhone" /></label>
+            <label>Preferred work hours<input id="staffWorkHours" placeholder="Mon-Fri 8-4 / weekends optional" /></label>
+          </div>
+          <div class="section-head" style="margin-top:12px"><div><h3 style="margin:0">Detailer-specific / payroll</h3><p class="muted">Shown here for Admin management; detailers should not see the Admin-only section later.</p></div></div>
+          <div class="form-grid three-col">
+            <label>Detailer level (1-4)<input id="staffDetailerLevel" type="number" min="1" max="4" /></label>
+            <label>Hourly rate (cents)<input id="staffHourlyRate" type="number" min="0" /></label>
+            <label>Pay schedule<input id="staffPaySchedule" placeholder="Bi-weekly / monthly" /></label>
+            <label>Supervisor staff id<input id="staffSupervisor" /></label>
+            <label>Admin level<input id="staffAdminLevel" type="number" min="1" max="2" /></label>
+            <label>Permissions profile<input id="staffPermissionsProfile" placeholder="detailer-standard / admin-l2" /></label>
+          </div>
+          <div class="form-grid two-col">
+            <label>Vehicle info<textarea id="staffVehicleInfo" rows="3" placeholder="Vehicle make/model/plate used for work"></textarea></label>
+            <label>Vehicle notes<textarea id="staffVehicleNotes" rows="3" placeholder="Fuel card, wrap, maintenance notes"></textarea></label>
+          </div>
+          <div class="form-grid two-col">
+            <label>General notes<textarea id="staffNotes" rows="3"></textarea></label>
+            <label>Admin-shared private notes<textarea id="staffAdminNotes" rows="3" placeholder="Visible to admins only"></textarea></label>
+            <label>Personal admin notes<textarea id="staffPersonalAdminNotes" rows="3" placeholder="Manager reminders"></textarea></label>
+            <label>Tips / payout notes<textarea id="staffTipsNotes" rows="3" placeholder="Tip handling, payout notes"></textarea></label>
+          </div>
+          <div class="check-grid">
+            <label class="checkbox"><input id="staffActive" type="checkbox" /><span>Active staff account</span></label>
+            <label class="checkbox"><input id="staffCanOverride" type="checkbox" /><span>Can override lower entries</span></label>
+            <label class="checkbox"><input id="staffCanBookings" type="checkbox" /><span>Can manage bookings</span></label>
+            <label class="checkbox"><input id="staffCanBlocks" type="checkbox" /><span>Can manage blocks / time</span></label>
+            <label class="checkbox"><input id="staffCanProgress" type="checkbox" /><span>Can manage progress</span></label>
+            <label class="checkbox"><input id="staffCanPromos" type="checkbox" /><span>Can manage promos</span></label>
+            <label class="checkbox"><input id="staffCanStaff" type="checkbox" /><span>Can manage staff</span></label>
+          </div>
+          <div class="section-head" style="margin-top:16px"><div><h3 style="margin:0">Password reset</h3><p class="muted">Set a new password for the selected staff member.</p></div></div>
+          <div class="form-grid two-col"><label>New password<input id="staffPassword" type="password" placeholder="Leave blank to keep current password" /></label><label>Hash mode<select id="staffHashMode"><option value="bcrypt">bcrypt</option><option value="sha256">sha256 fallback</option></select></label></div>
+          <div class="section-head" style="margin-top:16px"><div><h3 style="margin:0">Recent assignments</h3></div></div><div id="assignmentList" class="list"><div class="list-item muted">Select a staff member to load assignments.</div></div>
+          <div class="section-head" style="margin-top:16px"><div><h3 style="margin:0">Tip payout history</h3></div></div><div id="tipList" class="list"><div class="list-item muted">Select a staff member to load payout history.</div></div>
+          <div class="action-row" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn" type="submit">Save screen</button><button class="btn" id="staffResetBtn" type="button">Reset form</button></div>
+        </form>
+      </article>
+    </section>
+  </div>
+</main>
+<script src="/assets/admin-auth.js"></script>
+<script src="/assets/admin-shell.js"></script>
+<script>
+(function(){
+ const $=s=>document.querySelector(s), tbody=$('#staffTableBody'); let staffRows=[];
+ function setStatus(m,t=''){ const n=document.querySelector('[data-admin-shell-status]'); n.hidden=!m; n.textContent=m||''; n.dataset.state=t||''; }
+ function escapeHtml(v){ return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+ function renderTable(rows){ tbody.innerHTML = rows.length ? rows.map(r=>`<tr><td>${escapeHtml(r.full_name||'—')}<div class="muted">${escapeHtml(r.email||'')}</div></td><td>${escapeHtml(r.role_code||'—')}</td><td>${r.is_active?'Active':'Inactive'}</td><td><button class="btn" data-open="${escapeHtml(r.id)}" type="button">Open</button></td></tr>`).join('') : '<tr><td colspan="4" class="muted">No staff found.</td></tr>'; document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>loadDetail(b.getAttribute('data-open')))); }
+ async function loadList(){ const res=await fetch('/api/admin/staff_list',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:'{}'}); const data=await res.json().catch(()=>null); if(!res.ok) throw new Error(data?.error||'Could not load staff list.'); staffRows = Array.isArray(data.staff_users)?data.staff_users:Array.isArray(data.staff)?data.staff:[]; renderTable(staffRows); }
+ function fillForm(s){ $('#staffId').value=s?.id||''; $('#staffFormTitle').textContent = s?.id ? `Staff profile — ${s.full_name || s.email || 'record'}` : 'New staff profile'; $('#staffName').value=s?.full_name||''; $('#staffEmail').value=s?.email||''; $('#staffRole').value=s?.role_code||'detailer'; $('#staffPreferredName').value=s?.preferred_contact_name||''; $('#staffPhone').value=s?.phone||''; $('#staffSmsPhone').value=s?.sms_phone||''; $('#staffAddr1').value=s?.address_line1||''; $('#staffAddr2').value=s?.address_line2||''; $('#staffCity').value=s?.city||''; $('#staffProvince').value=s?.province||''; $('#staffPostal').value=s?.postal_code||''; $('#staffDepartment').value=s?.department||''; $('#staffEmployeeCode').value=s?.employee_code||''; $('#staffTitle').value=s?.position_title||''; $('#staffHireDate').value=s?.hire_date||''; $('#staffEmergencyName').value=s?.emergency_contact_name||''; $('#staffEmergencyPhone').value=s?.emergency_contact_phone||''; $('#staffWorkHours').value=s?.preferred_work_hours||''; $('#staffDetailerLevel').value=s?.detailer_level||''; $('#staffHourlyRate').value=s?.hourly_rate_cents||''; $('#staffPaySchedule').value=s?.pay_schedule||''; $('#staffSupervisor').value=s?.supervisor_staff_user_id||''; $('#staffAdminLevel').value=s?.admin_level||''; $('#staffPermissionsProfile').value=s?.permissions_profile||''; $('#staffVehicleInfo').value=s?.vehicle_info||''; $('#staffVehicleNotes').value=s?.vehicle_notes||''; $('#staffNotes').value=s?.notes||''; $('#staffAdminNotes').value=s?.admin_private_notes||''; $('#staffPersonalAdminNotes').value=s?.personal_admin_notes||''; $('#staffTipsNotes').value=s?.tips_payout_notes||''; $('#staffActive').checked=!!s?.is_active; $('#staffCanOverride').checked=!!s?.can_override_lower_entries; $('#staffCanBookings').checked=!!s?.can_manage_bookings; $('#staffCanBlocks').checked=!!s?.can_manage_blocks; $('#staffCanProgress').checked=!!s?.can_manage_progress; $('#staffCanPromos').checked=!!s?.can_manage_promos; $('#staffCanStaff').checked=!!s?.can_manage_staff; $('#staffPassword').value=''; renderAssignments(s?.recent_assigned_bookings||[]); renderTips(s?.tip_payout_history||[]); }
+ function renderAssignments(rows){ $('#assignmentList').innerHTML = rows.length ? rows.map(r=>`<div class="list-item"><strong>${escapeHtml(r.service_date||'—')} · ${escapeHtml(r.start_slot||'—')}</strong><div>${escapeHtml(r.customer_name||'—')} — ${escapeHtml(r.package_code||'—')}</div><div class="muted">${escapeHtml(r.status||'—')} / ${escapeHtml(r.job_status||'—')}</div></div>`).join('') : '<div class="list-item muted">No recent assignments.</div>'; }
+ function renderTips(rows){ $('#tipList').innerHTML = rows.length ? rows.map(r=>`<div class="list-item"><strong>${escapeHtml(r.paid_at||r.payout_date||r.created_at||'—')}</strong><div>Tips paid: ${escapeHtml(String(r.amount_cents||0))} cents</div><div class="muted">${escapeHtml(r.notes||'')}</div></div>`).join('') : '<div class="list-item muted">No tip payout history yet.</div>'; }
+ async function loadDetail(id){ const res=await fetch('/api/admin/staff_detail',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({staff_user_id:id})}); const data=await res.json().catch(()=>null); if(!res.ok) throw new Error(data?.error||'Could not load staff detail.'); fillForm(data.staff_user||data.staff||null); }
+ $('#newStaffBtn').addEventListener('click',()=>fillForm(null)); $('#staffResetBtn').addEventListener('click',()=>fillForm(null));
+ $('#staffForm').addEventListener('submit', async (e)=>{ e.preventDefault(); const payload={ id:$('#staffId').value||null, full_name:$('#staffName').value, email:$('#staffEmail').value, role_code:$('#staffRole').value, preferred_contact_name:$('#staffPreferredName').value, phone:$('#staffPhone').value, sms_phone:$('#staffSmsPhone').value, address_line1:$('#staffAddr1').value, address_line2:$('#staffAddr2').value, city:$('#staffCity').value, province:$('#staffProvince').value, postal_code:$('#staffPostal').value, department:$('#staffDepartment').value, employee_code:$('#staffEmployeeCode').value, position_title:$('#staffTitle').value, hire_date:$('#staffHireDate').value, emergency_contact_name:$('#staffEmergencyName').value, emergency_contact_phone:$('#staffEmergencyPhone').value, preferred_work_hours:$('#staffWorkHours').value, detailer_level:$('#staffDetailerLevel').value, hourly_rate_cents:$('#staffHourlyRate').value, pay_schedule:$('#staffPaySchedule').value, supervisor_staff_user_id:$('#staffSupervisor').value, admin_level:$('#staffAdminLevel').value, permissions_profile:$('#staffPermissionsProfile').value, vehicle_info:$('#staffVehicleInfo').value, vehicle_notes:$('#staffVehicleNotes').value, notes:$('#staffNotes').value, admin_private_notes:$('#staffAdminNotes').value, personal_admin_notes:$('#staffPersonalAdminNotes').value, tips_payout_notes:$('#staffTipsNotes').value, is_active:$('#staffActive').checked, can_override_lower_entries:$('#staffCanOverride').checked, can_manage_bookings:$('#staffCanBookings').checked, can_manage_blocks:$('#staffCanBlocks').checked, can_manage_progress:$('#staffCanProgress').checked, can_manage_promos:$('#staffCanPromos').checked, can_manage_staff:$('#staffCanStaff').checked };
+ const res=await fetch('/api/admin/staff_save',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const data=await res.json().catch(()=>null); if(!res.ok) return setStatus(data?.error||'Could not save staff.','error'); setStatus('Staff screen saved.','success'); if(data?.staff_user?.id) fillForm(data.staff_user); await loadList(); if($('#staffPassword').value.trim() && (data?.staff_user?.id || $('#staffId').value)){ const pwdRes=await fetch('/api/admin/auth_set_password',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({staff_user_id:data?.staff_user?.id || $('#staffId').value,new_password:$('#staffPassword').value,hash_mode:$('#staffHashMode').value})}); const pwd=await pwdRes.json().catch(()=>null); setStatus(pwdRes.ok?'Staff screen + password updated.':(pwd?.error||'Password update failed.'), pwdRes.ok?'success':'error'); $('#staffPassword').value=''; }
+ });
+ window.AdminShell.boot({ pageKey:'admin-staff', onReady: async ()=>{ try{ await loadList(); fillForm(null); } catch(err){ setStatus(err.message||'Could not initialize staff screen.','error'); } } });
+})();
+</script>
 </body>
 </html>

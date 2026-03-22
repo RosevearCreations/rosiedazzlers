@@ -11,211 +11,51 @@
     body { margin:0; min-height:100vh; background:radial-gradient(circle at top, rgba(255,255,255,.08), transparent 35%), linear-gradient(180deg,#0f172a 0%,#111827 100%); color:#f8fafc; }
     .shell { max-width:1320px; margin:0 auto; padding:24px; }
     .loading { display:grid; place-items:center; min-height:60vh; color:#cbd5e1; }
-    .topbar { display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:20px; }
+    .topbar { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:20px; }
     .actorcard,.card { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:18px; box-shadow:0 14px 35px rgba(0,0,0,.22); }
-    .actorcard { min-width:280px; padding:16px 18px; }
-    .actorline { margin:4px 0; }
-    .actorlabel { color:#93c5fd; font-weight:700; margin-right:6px; }
-    .logout-btn,.btn { appearance:none; border:0; border-radius:10px; padding:10px 14px; background:#2563eb; color:white; font-weight:700; cursor:pointer; }
-    .btn.secondary { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); color:#f8fafc; }
-    .status { margin-bottom:16px; padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.05); }
-    .status[data-state="error"] { background:rgba(220,38,38,.12); border-color:rgba(248,113,113,.25); color:#fecaca; }
-    .status[data-state="success"] { background:rgba(34,197,94,.10); border-color:rgba(134,239,172,.22); color:#bbf7d0; }
-    .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:16px; }
-    .card { grid-column:span 12; padding:20px; }
-    .card h2 { margin:0 0 10px; }
-    .muted { color:#94a3b8; font-size:.92rem; }
-    .table-wrap { overflow:auto; border-radius:14px; border:1px solid rgba(255,255,255,.08); }
-    table { width:100%; border-collapse:collapse; min-width:900px; background:rgba(255,255,255,.03); }
-    th,td { padding:12px 14px; text-align:left; border-bottom:1px solid rgba(255,255,255,.07); vertical-align:top; }
-    th { color:#93c5fd; }
-    .detail-box, .list-item { border-radius:14px; padding:14px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06); }
-    .detail-box pre { margin:0; white-space:pre-wrap; word-break:break-word; color:#dbeafe; font-size:.92rem; line-height:1.45; font-family: ui-monospace, monospace; }
-    .list { display:grid; gap:10px; }
-    .pill { display:inline-flex; border-radius:999px; padding:6px 10px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); font-size:.82rem; margin:0 8px 8px 0; }
-    .filters { display:grid; grid-template-columns:repeat(12,1fr); gap:12px; align-items:end; }
-    .field { grid-column:span 12; }
-    .field label { display:block; margin-bottom:8px; font-size:.92rem; font-weight:700; color:#e5e7eb; }
-    .field input { width:100%; box-sizing:border-box; border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:11px 12px; background:rgba(255,255,255,.04); color:#f8fafc; outline:none; }
-    .field input:focus { border-color:#60a5fa; background:rgba(255,255,255,.06); }
-    .action-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
-    @media (min-width: 900px) { .field.span-6{grid-column:span 6}.field.span-3{grid-column:span 3}.card.span-7{grid-column:span 7}.card.span-5{grid-column:span 5}.card.span-6{grid-column:span 6} }
+    .actorcard { min-width:280px; padding:16px 18px; } .actorline{margin:4px 0;} .actorlabel{color:#93c5fd;font-weight:700;margin-right:6px}
+    .logout-btn,.btn{appearance:none;border:0;border-radius:10px;padding:10px 14px;background:#2563eb;color:#fff;font-weight:700;cursor:pointer}.btn.secondary{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+    .status{margin-bottom:16px;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);color:#e5e7eb}.status[data-state="error"]{background:rgba(220,38,38,.12);border-color:rgba(248,113,113,.25);color:#fecaca}.status[data-state="success"]{background:rgba(34,197,94,.10);border-color:rgba(134,239,172,.22);color:#bbf7d0}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{grid-column:span 12;padding:20px}.table-wrap{overflow:auto;border-radius:14px;border:1px solid rgba(255,255,255,.08)} table{width:100%;border-collapse:collapse;min-width:880px;background:rgba(255,255,255,.03)} th,td{padding:12px 14px;text-align:left;border-bottom:1px solid rgba(255,255,255,.07);vertical-align:top} th{color:#93c5fd}
+    .pill{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:.82rem;color:#e5e7eb;margin-right:6px;margin-bottom:6px}.muted{color:#94a3b8;font-size:.92rem}.list{display:grid;gap:10px}.list-item{border-radius:14px;padding:12px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}.detail-box{border-radius:14px;padding:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}.detail-box pre{margin:0;white-space:pre-wrap;word-break:break-word;color:#dbeafe;font-size:.92rem;line-height:1.45;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+    @media (min-width:900px){.span-7{grid-column:span 7}.span-5{grid-column:span 5}.span-6{grid-column:span 6}.span-4{grid-column:span 4}.span-8{grid-column:span 8}}
   </style>
 </head>
 <body>
 <main class="shell">
-  <div class="loading" data-admin-shell-loading>Loading customer management…</div>
-  <div data-admin-shell-ready hidden>
-    <header class="topbar">
-      <div><h1 style="margin:0 0 6px">Customer Management</h1><p class="muted">Profiles, garage vehicles, booking history, gifts, redemptions, and visibility-separated notes.</p></div>
-      <section class="actorcard"><div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div><div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div><div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div><button class="logout-btn" type="button" data-admin-logout>Sign Out</button></section>
-    </header>
-
-    <div class="status" data-admin-shell-status hidden></div>
-
-    <section class="grid">
-      <article class="card">
-        <h2>Search Customers</h2>
-        <form id="customer-search-form" class="filters">
-          <div class="field span-6"><label for="customer-q">Search</label><input id="customer-q" type="text" placeholder="Name, email, phone, notes" /></div>
-          <div class="field span-3"><label for="customer-tier">Tier Code</label><input id="customer-tier" type="text" placeholder="regular, silver, vip" /></div>
-          <div class="field span-3"><div class="action-row"><button class="btn" id="customer-search-btn" type="submit">Search</button><button class="btn secondary" id="customer-reset-btn" type="button">Reset</button></div></div>
-        </form>
-      </article>
-
-      <article class="card span-7">
-        <h2>Customer Results</h2>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Tier</th><th>Action</th></tr></thead>
-            <tbody id="customer-results-body"><tr><td colspan="5" class="muted">Run a search to load customers.</td></tr></tbody>
-          </table>
-        </div>
-      </article>
-
-      <article class="card span-5">
-        <h2>Selected Customer</h2>
-        <div id="customer-pills"><span class="pill">No customer selected</span></div>
-        <div id="customer-detail" class="detail-box"><pre>No customer detail loaded yet.</pre></div>
-      </article>
-
-      <article class="card span-6">
-        <h2>Garage Vehicles</h2>
-        <div id="customer-vehicles" class="list"><div class="list-item muted">No vehicles loaded yet.</div></div>
-      </article>
-
-      <article class="card span-6">
-        <h2>Gift Certificates & Redemptions</h2>
-        <div id="customer-gifts" class="list"><div class="list-item muted">No gift data loaded yet.</div></div>
-      </article>
-
-      <article class="card span-6">
-        <h2>Booking Summary</h2>
-        <div id="customer-booking-summary" class="detail-box"><pre>No booking summary loaded yet.</pre></div>
-      </article>
-
-      <article class="card span-6">
-        <h2>Linked Bookings</h2>
-        <div id="customer-linked-bookings" class="list"><div class="list-item muted">No linked bookings loaded yet.</div></div>
-      </article>
-    </section>
-  </div>
+<div class="loading" data-admin-shell-loading>Loading customer screen...</div>
+<div data-admin-shell-ready hidden>
+<header class="topbar">
+  <div><h1 style="margin:0 0 6px">Customer screen management</h1><p style="margin:0;color:#cbd5e1;line-height:1.5">Admin view of customer profiles, garage vehicles, tier pricing, detailer-visible notes, admin-only notes, booking history, and gift redemption history.</p></div>
+  <section class="actorcard"><div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div><div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div><div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div><button class="logout-btn" type="button" data-admin-logout>Sign Out</button></section>
+</header>
+<div class="status" data-admin-shell-status hidden></div>
+<section class="grid">
+  <article class="card span-7"><h2>Customer directory</h2><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Tier</th><th>Action</th></tr></thead><tbody id="customerResultsBody"><tr><td colspan="5" class="muted">Loading customer profiles…</td></tr></tbody></table></div></article>
+  <article class="card span-5"><h2>Selected customer summary</h2><div id="customerPills"></div><div id="customerSummary" class="detail-box"><pre>Select a customer.</pre></div></article>
+  <article class="card span-6"><h2>Customer profile / note zones</h2><div id="customerProfileBox" class="detail-box"><pre>No customer selected.</pre></div></article>
+  <article class="card span-6"><h2>Booking & gift summary</h2><div id="customerBookingBox" class="detail-box"><pre>No customer selected.</pre></div></article>
+  <article class="card span-8"><h2>Vehicle garage</h2><div id="vehicleList" class="list"><div class="list-item muted">No vehicles yet.</div></div></article>
+  <article class="card span-4"><h2>Gift redemption history</h2><div id="redeemList" class="list"><div class="list-item muted">No redemptions yet.</div></div></article>
+  <article class="card"><h2>Bookings</h2><div id="bookingList" class="list"><div class="list-item muted">No bookings yet.</div></div></article>
+</section>
+</div>
 </main>
-<script src="/assets/admin-auth.js"></script>
-<script src="/assets/admin-shell.js"></script>
+<script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
 <script>
-(function(){
-  const els = {
-    form: document.getElementById('customer-search-form'),
-    q: document.getElementById('customer-q'),
-    tier: document.getElementById('customer-tier'),
-    searchBtn: document.getElementById('customer-search-btn'),
-    resetBtn: document.getElementById('customer-reset-btn'),
-    tbody: document.getElementById('customer-results-body'),
-    pills: document.getElementById('customer-pills'),
-    detail: document.getElementById('customer-detail'),
-    vehicles: document.getElementById('customer-vehicles'),
-    gifts: document.getElementById('customer-gifts'),
-    bookingSummary: document.getElementById('customer-booking-summary'),
-    linkedBookings: document.getElementById('customer-linked-bookings')
-  };
-  function setShellStatus(message, type){
-    document.querySelectorAll('[data-admin-shell-status]').forEach((node)=>{ node.hidden=!message; node.textContent=message||''; node.dataset.state=type||''; });
-  }
-  function renderPre(target, data){
-    target.innerHTML=''; const pre=document.createElement('pre'); pre.textContent=typeof data==='string'?data:JSON.stringify(data,null,2); target.appendChild(pre);
-  }
-  function renderVehicles(rows){
-    els.vehicles.innerHTML='';
-    if(!rows.length){ els.vehicles.innerHTML='<div class="list-item muted">No vehicles found.</div>'; return; }
-    rows.forEach((row)=>{
-      const lastWashDays = row.last_wash_at ? Math.max(0, Math.round((Date.now()-new Date(row.last_wash_at).getTime())/86400000)) : null;
-      const level = lastWashDays==null ? 40 : Math.max(8, Math.min(100, 100 - lastWashDays));
-      const item=document.createElement('div'); item.className='list-item';
-      item.innerHTML = `
-        <strong>${escapeHtml(row.vehicle_name || ((row.model_year||'') + ' ' + (row.make||'') + ' ' + (row.model||'')).trim() || 'Vehicle')}</strong>
-        <div>${escapeHtml([row.model_year,row.make,row.model,row.color].filter(Boolean).join(' • ') || 'No vehicle meta yet')}</div>
-        <div class="muted">Mileage: ${escapeHtml(row.mileage_km != null ? String(row.mileage_km) + ' km' : '—')} | Primary: ${row.is_primary ? 'Yes' : 'No'}</div>
-        <div class="vehicle-gauge"><div class="vehicle-gauge-fill" style="width:${level}%"></div></div>
-        <div class="vehicle-gauge-label">Last wash: ${row.last_wash_at ? escapeHtml(row.last_wash_at) : 'unknown'}</div>
-        <div class="muted">Water: ${row.has_water_hookup ? 'Yes' : 'No'} | Power: ${row.has_power_hookup ? 'Yes' : 'No'} | Live updates: ${row.live_updates_opt_in ? 'Yes' : 'No'}</div>
-        <div class="muted">Detailer-visible notes: ${escapeHtml(row.detailer_visible_notes || '—')}</div>
-        <div class="muted">Admin-only notes: ${escapeHtml(row.admin_private_notes || '—')}</div>`;
-      els.vehicles.appendChild(item);
-    });
-  }
-  function renderGifts(gifts, redemptions){
-    els.gifts.innerHTML='';
-    if(!gifts.length && !redemptions.length){ els.gifts.innerHTML='<div class="list-item muted">No gift data found.</div>'; return; }
-    gifts.forEach((row)=>{
-      const item=document.createElement('div'); item.className='list-item';
-      item.innerHTML=`<strong>${escapeHtml(row.code || 'Gift')}</strong>
-      <div>Status: ${escapeHtml(row.status || '—')} | Remaining: ${formatMoneyFromCents(row.remaining_cents)}</div>
-      <div class="muted">Recipient: ${escapeHtml(row.recipient_email || '—')} | Purchaser: ${escapeHtml(row.purchaser_email || '—')}</div>`;
-      els.gifts.appendChild(item);
-    });
-    redemptions.forEach((row)=>{
-      const item=document.createElement('div'); item.className='list-item';
-      const gift=row.gift_certificate || {};
-      item.innerHTML=`<strong>Redemption — ${escapeHtml(gift.code || row.gift_certificate_id || 'Gift')}</strong>
-      <div>Amount: ${formatMoneyFromCents(row.amount_cents)} | ${escapeHtml(row.created_at || '')}</div>
-      <div class="muted">Booking: ${escapeHtml(row.booking_id || '—')} | Notes: ${escapeHtml(row.notes || '—')}</div>`;
-      els.gifts.appendChild(item);
-    });
-  }
-  function renderBookings(rows){
-    els.linkedBookings.innerHTML='';
-    if(!rows.length){ els.linkedBookings.innerHTML='<div class="list-item muted">No linked bookings found.</div>'; return; }
-    rows.forEach((row)=>{
-      const item=document.createElement('div'); item.className='list-item';
-      item.innerHTML = `<strong>${escapeHtml(row.service_date || 'No date')} — ${escapeHtml(row.package_code || 'No package')}</strong>
-      <div>Status: ${escapeHtml(row.status || '—')} | Job: ${escapeHtml(row.job_status || '—')} | Slot: ${escapeHtml(row.start_slot || '—')}</div>
-      <div class="muted">Assigned: ${escapeHtml(row.assigned_to || row.assigned_staff_name || '—')} | Total: ${formatMoneyFromCents(row.price_total_cents)}</div>`;
-      els.linkedBookings.appendChild(item);
-    });
-  }
-  function renderCustomerDetail(data){
-    els.pills.innerHTML='';
-    if(!data || !data.customer_profile){ els.pills.innerHTML='<span class="pill">No customer selected</span>'; renderPre(els.detail,'No customer detail loaded yet.'); renderVehicles([]); renderGifts([],[]); renderPre(els.bookingSummary,'No booking summary loaded yet.'); renderBookings([]); return; }
-    const profile=data.customer_profile, summary=data.booking_summary || {};
-    [['Customer', profile.full_name || profile.customer_name || '—'], ['Tier', profile.tier_code || '—'], ['Bookings', String(summary.booking_count || 0)], ['Completed', String(summary.completed_count || 0)], ['Cancelled', String(summary.cancelled_count || 0)]].forEach(([label,val])=>{ const span=document.createElement('span'); span.className='pill'; span.textContent=`${label}: ${val}`; els.pills.appendChild(span); });
-    renderPre(els.detail, profile); renderVehicles(Array.isArray(data.vehicles)?data.vehicles:[]); renderGifts(Array.isArray(data.gift_certificates)?data.gift_certificates:[], Array.isArray(data.redemptions)?data.redemptions:[]); renderPre(els.bookingSummary, summary); renderBookings(Array.isArray(data.bookings)?data.bookings:[]);
-  }
-  function renderResults(rows){
-    els.tbody.innerHTML='';
-    if(!rows.length){ els.tbody.innerHTML='<tr><td colspan="5" class="muted">No customers found.</td></tr>'; return; }
-    rows.forEach((row)=>{
-      const tr=document.createElement('tr');
-      const btn=document.createElement('button'); btn.type='button'; btn.className='btn secondary'; btn.textContent='Open'; btn.addEventListener('click',()=>loadCustomerDetail(row.id));
-      const action=document.createElement('td'); action.appendChild(btn);
-      tr.innerHTML=`<td>${escapeHtml(row.full_name || row.customer_name || '—')}</td><td>${escapeHtml(row.email || row.customer_email || '—')}</td><td>${escapeHtml(row.phone || row.customer_phone || '—')}</td><td>${escapeHtml(row.tier_code || '—')}</td>`;
-      tr.appendChild(action); els.tbody.appendChild(tr);
-    });
-  }
-  async function searchCustomers(){
-    setShellStatus('', ''); els.searchBtn.disabled=true; els.searchBtn.textContent='Searching...';
-    try{
-      const res=await fetch('/api/admin/customers_list',{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ q: String(els.q.value||'').trim() || undefined, tier_code: String(els.tier.value||'').trim() || undefined })});
-      const data=await res.json().catch(()=>null); if(!res.ok) throw new Error((data&&data.error)||'Could not search customers.');
-      const rows = data && Array.isArray(data.customer_profiles) ? data.customer_profiles : data && Array.isArray(data.customers) ? data.customers : [];
-      renderResults(rows); setShellStatus(`Loaded ${rows.length} customer profile(s).`,'success');
-    }catch(err){ renderResults([]); setShellStatus(err&&err.message?err.message:'Could not search customers.','error'); }
-    finally{ els.searchBtn.disabled=false; els.searchBtn.textContent='Search'; }
-  }
-  async function loadCustomerDetail(id){
-    setShellStatus('', '');
-    try{
-      const res=await fetch('/api/admin/customers_detail',{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ customer_profile_id: id })});
-      const data=await res.json().catch(()=>null); if(!res.ok) throw new Error((data&&data.error)||'Could not load customer detail.');
-      renderCustomerDetail(data); setShellStatus('Customer detail loaded.','success');
-    }catch(err){ renderCustomerDetail(null); setShellStatus(err&&err.message?err.message:'Could not load customer detail.','error'); }
-  }
-  function formatMoneyFromCents(value){ const n=Number(value); if(!Number.isFinite(n)) return '—'; return new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(n/100); }
-  function escapeHtml(value){ return String(value || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
-  els.form.addEventListener('submit',(e)=>{ e.preventDefault(); searchCustomers(); });
-  els.resetBtn.addEventListener('click',()=>{ els.form.reset(); renderResults([]); renderCustomerDetail(null); setShellStatus('', ''); });
-  window.AdminShell.boot({ pageKey: 'admin-customers' });
+(function(){ const $=s=>document.querySelector(s); let rows=[];
+ function setStatus(m,t=''){ const n=document.querySelector('[data-admin-shell-status]'); n.hidden=!m; n.textContent=m||''; n.dataset.state=t||''; }
+ function esc(v){ return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+ function money(c){ return new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format((Number(c||0))/100); }
+ function renderDirectory(items){ $('#customerResultsBody').innerHTML = items.length ? items.map(r=>`<tr><td>${esc(r.customer_name || r.full_name || '—')}</td><td>${esc(r.customer_email || r.email || '—')}</td><td>${esc(r.customer_phone || r.phone || '—')}</td><td>${esc(r.tier_code || '—')}</td><td><button class="btn secondary" data-open="${esc(r.id)}" type="button">Open</button></td></tr>`).join('') : '<tr><td colspan="5" class="muted">No customers found.</td></tr>'; document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>loadDetail(b.getAttribute('data-open')))); }
+ function renderDetail(data){ const p=data.customer_profile||{}, tier=data.customer_tier||null, summary=data.booking_summary||{}; $('#customerPills').innerHTML=`<span class="pill">Tier: ${esc(tier?.name || p.tier_code || '—')}</span><span class="pill">Bookings: ${esc(String(summary.booking_count||0))}</span><span class="pill">Completed: ${esc(String(summary.completed_count||0))}</span><span class="pill">Active gifts: ${esc(String((data.gift_certificates||[]).length))}</span>`; $('#customerSummary').innerHTML=`<pre>${JSON.stringify({ name:p.full_name||p.customer_name||null, email:p.email||null, phone:p.phone||null, preferred_contact_name:p.preferred_contact_name||null, notification_channel:p.notification_channel||null, live_updates_enabled:p.live_updates_enabled||false, billing_profile_enabled:p.billing_profile_enabled||false, tier:tier },null,2)}</pre>`; $('#customerProfileBox').innerHTML=`<pre>${JSON.stringify({ customer_notes:p.notes||null, detailer_visible_notes:p.detailer_visible_notes||null, admin_private_notes:p.admin_private_notes||null, client_private_notes:p.client_private_notes||null, alternate_address_label:p.alternate_address_label||null, alternate_address_line1:p.alternate_address_line1||null, alternate_city:p.alternate_city||null },null,2)}</pre>`; $('#customerBookingBox').innerHTML=`<pre>${JSON.stringify({ booking_summary:summary, gifts:(data.gift_certificates||[]).map(g=>({code:g.code,status:g.status,remaining_cents:g.remaining_cents,expires_at:g.expires_at})) },null,2)}</pre>`;
+ $('#vehicleList').innerHTML=(data.vehicles||[]).length?(data.vehicles||[]).map(v=>`<div class="list-item"><strong>${esc(v.vehicle_name || [v.model_year,v.make,v.model].filter(Boolean).join(' ') || 'Vehicle')}</strong><div>${esc([v.color, v.contact_phone || v.contact_email].filter(Boolean).join(' · ') || 'No vehicle contact override')}</div><div class="muted">Detailer notes: ${esc(v.detailer_visible_notes || '—')}</div><div class="muted">Admin notes: ${esc(v.admin_private_notes || '—')}</div><div class="muted">Alt service address: ${esc(v.alternate_service_address || '—')}</div></div>`).join(''):'<div class="list-item muted">No vehicles yet.</div>';
+ $('#redeemList').innerHTML=(data.redemptions||[]).length?(data.redemptions||[]).map(r=>`<div class="list-item"><strong>${esc(r.gift_certificate?.code||'Gift')}</strong><div>${money(r.amount_cents||0)} redeemed</div><div class="muted">${esc(r.created_at||'—')}</div></div>`).join(''):'<div class="list-item muted">No redemptions yet.</div>';
+ $('#bookingList').innerHTML=(data.bookings||[]).length?(data.bookings||[]).map(b=>`<div class="list-item"><strong>${esc(b.service_date||'—')} · ${esc(b.package_code||'—')}</strong><div>Status: ${esc(b.status||'—')} / ${esc(b.job_status||'—')}</div><div class="muted">Vehicle size: ${esc(b.vehicle_size||'—')} · Total ${money(b.price_total_cents||0)}</div></div>`).join(''):'<div class="list-item muted">No bookings yet.</div>';
+ }
+ async function loadList(){ const res=await fetch('/api/admin/customers_list',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:'{}'}); const data=await res.json().catch(()=>null); if(!res.ok) throw new Error(data?.error||'Could not load customers.'); rows=Array.isArray(data.customer_profiles)?data.customer_profiles:Array.isArray(data.customers)?data.customers:[]; renderDirectory(rows); }
+ async function loadDetail(id){ const res=await fetch('/api/admin/customers_detail',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({customer_profile_id:id})}); const data=await res.json().catch(()=>null); if(!res.ok) return setStatus(data?.error||'Could not load customer.','error'); renderDetail(data); setStatus('Customer screen loaded.','success'); }
+ window.AdminShell.boot({ pageKey:'admin-customers', onReady: async()=>{ try{ await loadList(); } catch(err){ setStatus(err.message||'Could not initialize customer screen.','error'); } } });
 })();
 </script>
-</body>
-</html>
+</body></html>
