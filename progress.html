@@ -27,7 +27,7 @@
     <section class="section"><div class="panel"><h2>Completion signoff</h2><form id="signoffForm" class="form"><label>Your name<input id="signerName" name="signerName" type="text" required /></label><label>Your email<input id="signerEmail" name="signerEmail" type="email" required /></label><label>Notes (optional)<textarea id="signoffNotes" name="signoffNotes" rows="4" placeholder="Optional note about your service or completion."></textarea></label><div><button id="signoffBtn" class="btn primary" type="submit" disabled>Submit signoff</button></div></form></div></section>
     <section class="section"><div class="panel"><h2>Progress updates</h2><div id="updatesList" class="grid" style="margin-top:12px"><div class="notice">No updates yet.</div></div></div></section>
     <section class="section"><div class="panel"><h2>Message your detailer</h2><form id="commentForm" class="form"><label>Reply to comment/annotation ID (optional)<input id="commentParentId" type="text" placeholder="Paste an ID from the thread or annotations" /></label><label>Parent type<select id="commentParentType"><option value="booking">Booking</option><option value="annotation">Annotation</option><option value="comment">Comment</option></select></label><label>Your message<textarea id="commentMessage" rows="4" placeholder="Ask a question, confirm a decision, or respond to an observation."></textarea></label><div><button id="commentBtn" class="btn secondary" type="submit" disabled>Send message</button></div></form></div></section>
-  </main>
+  <div id="progressLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:9999;align-items:center;justify-content:center;padding:24px"><div style="max-width:1100px;width:100%"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><strong>Progress photo</strong><button class="btn ghost" id="closeProgressLightbox" type="button">Close</button></div><img id="progressLightboxImg" alt="Progress photo" style="display:block;width:100%;max-height:80vh;object-fit:contain;border-radius:14px;border:1px solid rgba(255,255,255,.12)" /></div></div></main>
   <script type="module" src="/assets/chrome.js?v=20260311k"></script>
   <script>
     const $ = (sel, root=document) => root.querySelector(sel);
@@ -70,7 +70,7 @@
       $('#mediaGallery').innerHTML = media.length ? media.map(row=>`
         <figure class="thumb">
           <div style="position:relative">
-            <img src="${escapeHtml(row.media_url || '')}" alt="${escapeHtml(row.caption || 'Progress photo')}" />
+            <img class="progress-lightbox-trigger" src="${escapeHtml(row.media_url || '')}" alt="${escapeHtml(row.caption || 'Progress photo')}" />
             ${(row.annotations||[]).map(a => `<span class="ann-pin" style="left:${Number(a.x_percent ?? 50)}%;top:${Number(a.y_percent ?? 50)}%" title="${escapeHtml(a.title || a.note || 'Annotation')}"></span>`).join('')}
           </div>
           <figcaption><strong>${escapeHtml(row.caption || row.kind || 'Photo')}</strong><br><span class="muted">${escapeHtml(row.created_at || '')}</span></figcaption>
@@ -81,7 +81,7 @@
         <div class="bubble ${row.author_type === 'client' ? 'client' : 'staff'}">
           <div class="meta">${escapeHtml(row.author_name || row.author_type || 'Unknown')} • ${escapeHtml(row.author_type || '')} • ${escapeHtml(row.created_at || '')}</div>
           <div>${escapeHtml(row.message || '')}</div>
-          <div class="muted" style="margin-top:8px">Parent: ${escapeHtml(row.parent_type || 'booking')} ${row.parent_id ? '• '+escapeHtml(row.parent_id) : ''}</div>
+          <div class="muted" style="margin-top:8px">Parent: ${escapeHtml(row.parent_type || 'booking')} ${row.parent_id ? '• '+escapeHtml(row.parent_id) : ''} ${row.reply_target_label ? '• '+escapeHtml(row.reply_target_label) : ''}</div>
           <div style="margin-top:8px"><button class="btn small ghost reply-btn" data-id="${escapeHtml(row.id || '')}">Reply</button></div>
         </div>
       `).join('') : '<div class="notice">No messages yet.</div>';
@@ -115,7 +115,7 @@
       setNotice('Message sent. Admin and detailer can now see it.','success');
       await loadProgress();
     });
-    setBrandImages(); setFooter(); loadProgress().catch(err=>setNotice(err?.message||'Could not load progress.','error'));
+    document.addEventListener('click', (e)=>{ const img=e.target.closest('.progress-lightbox-trigger'); if(img && appSettings?.feature_flags?.annotation_lightbox_enabled!==false){ $('#progressLightboxImg').src = img.src; $('#progressLightbox').style.display='flex'; } }); $('#closeProgressLightbox')?.addEventListener('click', ()=>{ $('#progressLightbox').style.display='none'; }); setBrandImages(); setFooter(); loadProgress().catch(err=>setNotice(err?.message||'Could not load progress.','error'));
   </script>
 </body>
 </html>
