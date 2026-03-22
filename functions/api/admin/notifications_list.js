@@ -20,7 +20,7 @@ export async function onRequestPost(context) {
 
     const limit = Number.isFinite(Number(body.limit)) ? Math.min(Math.max(Number(body.limit), 1), 200) : 100;
     const status = String(body.status || "").trim();
-    let url = `${env.SUPABASE_URL}/rest/v1/notification_events?select=id,created_at,event_type,channel,booking_id,customer_profile_id,recipient_email,recipient_phone,payload,status,attempt_count,last_error,processed_at&order=created_at.desc&limit=${limit}`;
+    let url = `${env.SUPABASE_URL}/rest/v1/notification_events?select=id,created_at,event_type,channel,booking_id,customer_profile_id,recipient_email,recipient_phone,payload,status,attempt_count,last_error,processed_at,next_attempt_at,max_attempts&order=created_at.desc&limit=${limit}`;
     if (status) url += `&status=eq.${encodeURIComponent(status)}`;
 
     const res = await fetch(url, { headers: serviceHeaders(env) });

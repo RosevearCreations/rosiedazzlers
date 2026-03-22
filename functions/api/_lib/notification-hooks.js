@@ -20,7 +20,11 @@ export async function queueNotificationEvent({ env, event_type, channel = null, 
         customer_profile_id,
         recipient_email,
         recipient_phone,
-        payload
+        payload,
+        status: 'queued',
+        attempt_count: 0,
+        next_attempt_at: new Date().toISOString(),
+        max_attempts: 5
       }])
     });
     return { ok: res.ok, status: res.status };

@@ -15,6 +15,10 @@ export async function onRequestPost(context) {
     const title = String(body.title || "").trim() || null;
     const note = String(body.note || "").trim();
     const visibility = String(body.visibility || "customer").trim().toLowerCase();
+    const category = String(body.category || 'issue').trim().toLowerCase();
+    const severity = String(body.severity || 'medium').trim().toLowerCase();
+    const pin_color = String(body.pin_color || '#f59e0b').trim() || '#f59e0b';
+    const reply_message = String(body.reply_message || '').trim() || null;
     const x_percent = body.x_percent === null || body.x_percent === undefined || body.x_percent === "" ? null : Number(body.x_percent);
     const y_percent = body.y_percent === null || body.y_percent === undefined || body.y_percent === "" ? null : Number(body.y_percent);
 
@@ -46,6 +50,9 @@ export async function onRequestPost(context) {
       title,
       note,
       visibility,
+      category,
+      severity,
+      pin_color,
       created_by_type: access.actor.is_admin ? 'admin' : 'detailer',
       created_by_name: actorName,
       created_by_email: actorEmail
@@ -60,17 +67,30 @@ export async function onRequestPost(context) {
     const rows = await insertRes.json().catch(() => []);
     const annotation = Array.isArray(rows) ? rows[0] || null : null;
 
+    let linked_comment = null;
+    if (reply_message) {
+      const commentRes = await fetch(`${env.SUPABASE_URL}/rest/v1/progress_comments`, {
+        method: 'POST',
+        headers: { ...headers, Prefer: 'return=representation' },
+        body: JSON.stringify([{ booking_id, parent_type: 'annotation', parent_id: annotation?.id || null, author_type: access.actor.is_admin ? 'admin' : 'detailer', author_name: actorName, author_email: actorEmail, message: reply_message, visibility }])
+      });
+      if (commentRes.ok) {
+        const commentRows = await commentRes.json().catch(() => []);
+        linked_comment = Array.isArray(commentRows) ? commentRows[0] || null : null;
+      }
+    }
+
     if (visibility === 'customer') {
       await maybeQueueCustomerNotification({
         env,
         booking,
         event_type: 'annotation_posted',
-        message: note,
-        payload: { title, media_id, x_percent, y_percent, author_name: actorName }
+        message: reply_message || note,
+        payload: { title, media_id, x_percent, y_percent, author_name: actorName, category, severity, pin_color, annotation_id: annotation?.id || null }
       });
     }
 
-    return withCors(json({ ok: true, annotation }));
+    return withCors(json({ ok: true, annotation, linked_comment }));
   } catch (err) {
     return withCors(json({ error: err?.message || 'Unexpected server error.' }, 500));
   }

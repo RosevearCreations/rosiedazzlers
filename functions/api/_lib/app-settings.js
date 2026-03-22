@@ -17,7 +17,10 @@ export const DEFAULT_APP_SETTINGS = {
     customer_chat_enabled: true,
     picture_first_observations: true,
     tier_discount_badges: true,
-    image_annotations_enabled: true
+    image_annotations_enabled: true,
+    annotation_lightbox_enabled: true,
+    annotation_thread_replies_enabled: true,
+    notifications_retry_enabled: true
   }
 };
 

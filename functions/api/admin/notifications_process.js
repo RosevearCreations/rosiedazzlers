@@ -1,10 +1,12 @@
 import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "../_lib/staff-auth.js";
+import { loadFeatureFlags } from "../_lib/app-settings.js";
 
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 export async function onRequestPost(context) {
   const { request, env } = context;
   try {
     const body = await request.json().catch(() => ({}));
+    const flags = await loadFeatureFlags(env);
     const access = await requireStaffAccess({ request, env, body, capability: 'manage_staff', allowLegacyAdminFallback: true });
     if (!access.ok) return withCors(access.response);
 
@@ -22,17 +24,44 @@ export async function onRequestPost(context) {
     const results = [];
 
     for (const item of items) {
-      const simulatedOk = !!(item.recipient_email || item.recipient_phone);
-      const patch = action === 'mark_failed'
-        ? { status: 'failed', attempt_count: Number(item.attempt_count || 0) + 1, last_error: 'Manually marked failed.', processed_at: new Date().toISOString() }
-        : simulatedOk
-          ? { status: 'sent', attempt_count: Number(item.attempt_count || 0) + 1, last_error: null, processed_at: new Date().toISOString() }
-          : { status: 'failed', attempt_count: Number(item.attempt_count || 0) + 1, last_error: 'Missing recipient.', processed_at: new Date().toISOString() };
+      const hasRecipient = !!(item.recipient_email || item.recipient_phone);
+      const currentAttempts = Number(item.attempt_count || 0);
+      const maxAttempts = Number(item.max_attempts || 5);
+      const canRetry = flags.notifications_retry_enabled !== false && currentAttempts < maxAttempts;
+      const backoffMinutes = Math.min(60, Math.max(5, currentAttempts * 5 || 5));
+      const nextAttemptAt = new Date(Date.now() + backoffMinutes * 60 * 1000).toISOString();
+
+      let patch;
+      if (action === 'mark_failed') {
+        patch = {
+          status: 'failed',
+          attempt_count: currentAttempts + 1,
+          last_error: 'Manually marked failed.',
+          processed_at: new Date().toISOString(),
+          next_attempt_at: canRetry ? nextAttemptAt : null
+        };
+      } else if (hasRecipient) {
+        patch = {
+          status: 'sent',
+          attempt_count: currentAttempts + 1,
+          last_error: null,
+          processed_at: new Date().toISOString(),
+          next_attempt_at: null
+        };
+      } else {
+        patch = {
+          status: canRetry ? 'queued' : 'failed',
+          attempt_count: currentAttempts + 1,
+          last_error: 'Missing recipient.',
+          processed_at: new Date().toISOString(),
+          next_attempt_at: canRetry ? nextAttemptAt : null
+        };
+      }
 
       const patchRes = await fetch(`${env.SUPABASE_URL}/rest/v1/notification_events?id=eq.${encodeURIComponent(item.id)}`, {
         method: 'PATCH', headers: { ...headers, Prefer: 'return=minimal' }, body: JSON.stringify(patch)
       });
-      results.push({ id: item.id, ok: patchRes.ok, status: patch.status, last_error: patch.last_error || null });
+      results.push({ id: item.id, ok: patchRes.ok, status: patch.status, last_error: patch.last_error || null, next_attempt_at: patch.next_attempt_at || null });
     }
 
     return withCors(json({ ok: true, processed: results.length, results }));
