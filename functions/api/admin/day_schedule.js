@@ -3,26 +3,18 @@
 // Role-aware admin day schedule endpoint.
 //
 // What this file does:
-// - keeps current ADMIN_PASSWORD bridge protection
 // - requires manage_bookings capability
 // - loads one service date schedule in one call
+// - supports the LIVE legacy block schema:
+//     date_blocks(blocked_date, reason)
+//     slot_blocks(blocked_date, slot, reason)
+// - maps those legacy rows into the newer UI shape expected by admin-blocks.html
 // - returns date block, slot blocks, and bookings occupying AM / PM / FULL space
-// - helps admin-booking and admin-blocks pages reason about daily capacity
 //
 // Supported request body:
 // {
 //   service_date: "2026-03-21"
 // }
-//
-// Booking model notes:
-// - Half-day slots are AM / PM
-// - Full day consumes both slots
-// - Existing bookings using FULL, FULL_DAY, or BOTH are treated as both AM and PM
-//
-// Request headers supported:
-// - x-admin-password: required
-// - x-staff-email: recommended during transition
-// - x-staff-user-id: optional alternative
 
 import {
   requireStaffAccess,
@@ -109,19 +101,22 @@ export async function onRequestPost(context) {
         service_date,
         date_block: dateBlock
           ? {
-              id: dateBlock.id,
-              block_date: dateBlock.block_date || null,
-              is_closed: dateBlock.is_closed === true,
+              id: dateBlock.id || null,
+              block_date: dateBlock.blocked_date || null,
+              blocked_date: dateBlock.blocked_date || null,
+              is_closed: true,
               reason: dateBlock.reason || null,
               created_at: dateBlock.created_at || null,
               updated_at: dateBlock.updated_at || null
             }
           : null,
         slot_blocks: slotBlocks.map((row) => ({
-          id: row.id,
-          block_date: row.block_date || null,
-          slot_code: normalizeSlot(row.slot_code) || row.slot_code || null,
-          is_blocked: row.is_blocked === true,
+          id: row.id || null,
+          block_date: row.blocked_date || null,
+          blocked_date: row.blocked_date || null,
+          slot_code: normalizeSlot(row.slot) || row.slot || null,
+          slot: normalizeSlot(row.slot) || row.slot || null,
+          is_blocked: true,
           reason: row.reason || null,
           created_at: row.created_at || null,
           updated_at: row.updated_at || null
@@ -149,7 +144,9 @@ export async function onRequestPost(context) {
   } catch (err) {
     return withCors(
       json(
-        { error: err && err.message ? err.message : "Unexpected server error." },
+        {
+          error: err && err.message ? err.message : "Unexpected server error."
+        },
         500
       )
     );
@@ -165,8 +162,8 @@ export async function onRequestGet() {
 function buildDateBlockUrl(env, service_date) {
   return (
     `${env.SUPABASE_URL}/rest/v1/date_blocks` +
-    `?select=id,block_date,is_closed,reason,created_at,updated_at` +
-    `&block_date=eq.${encodeURIComponent(service_date)}` +
+    `?select=id,blocked_date,reason,created_at` +
+    `&blocked_date=eq.${encodeURIComponent(service_date)}` +
     `&limit=1`
   );
 }
@@ -174,9 +171,9 @@ function buildDateBlockUrl(env, service_date) {
 function buildSlotBlocksUrl(env, service_date) {
   return (
     `${env.SUPABASE_URL}/rest/v1/slot_blocks` +
-    `?select=id,block_date,slot_code,is_blocked,reason,created_at,updated_at` +
-    `&block_date=eq.${encodeURIComponent(service_date)}` +
-    `&order=slot_code.asc,created_at.desc`
+    `?select=id,blocked_date,slot,reason,created_at` +
+    `&blocked_date=eq.${encodeURIComponent(service_date)}` +
+    `&order=slot.asc,created_at.desc`
   );
 }
 
@@ -195,14 +192,14 @@ function summarizeSlots(slotBlocks, bookings) {
   const blockMap = new Map();
 
   for (const row of slotBlocks) {
-    const slot = normalizeSlot(row.slot_code);
+    const slot = normalizeSlot(row.slot);
     if (!slot) continue;
 
     const current = blockMap.get(slot) || [];
     current.push({
       id: row.id,
       reason: row.reason || null,
-      is_blocked: row.is_blocked === true
+      is_blocked: true
     });
     blockMap.set(slot, current);
   }
@@ -216,38 +213,40 @@ function summarizeSlots(slotBlocks, bookings) {
   return {
     AM: {
       slot_code: "AM",
-      blocked: (blockMap.get("AM") || []).some((row) => row.is_blocked),
+      blocked: (blockMap.get("AM") || []).length > 0,
       block_reasons: (blockMap.get("AM") || []).filter((row) => row.reason).map((row) => row.reason),
       active_booking_count: amBookings.length,
       available:
-        !(blockMap.get("AM") || []).some((row) => row.is_blocked) && amBookings.length === 0,
+        (blockMap.get("AM") || []).length === 0 && amBookings.length === 0,
       bookings: amBookings.map(slimBooking)
     },
     PM: {
       slot_code: "PM",
-      blocked: (blockMap.get("PM") || []).some((row) => row.is_blocked),
+      blocked: (blockMap.get("PM") || []).length > 0,
       block_reasons: (blockMap.get("PM") || []).filter((row) => row.reason).map((row) => row.reason),
       active_booking_count: pmBookings.length,
       available:
-        !(blockMap.get("PM") || []).some((row) => row.is_blocked) && pmBookings.length === 0,
+        (blockMap.get("PM") || []).length === 0 && pmBookings.length === 0,
       bookings: pmBookings.map(slimBooking)
     },
     FULL: {
       slot_code: "FULL",
       blocked:
-        (blockMap.get("AM") || []).some((row) => row.is_blocked) ||
-        (blockMap.get("PM") || []).some((row) => row.is_blocked),
+        (blockMap.get("AM") || []).length > 0 ||
+        (blockMap.get("PM") || []).length > 0,
       block_reasons: [
         ...((blockMap.get("AM") || []).filter((row) => row.reason).map((row) => `AM: ${row.reason}`)),
         ...((blockMap.get("PM") || []).filter((row) => row.reason).map((row) => `PM: ${row.reason}`))
       ],
       active_booking_count: fullDayBookings.length,
       available:
-        !(blockMap.get("AM") || []).some((row) => row.is_blocked) &&
-        !(blockMap.get("PM") || []).some((row) => row.is_blocked) &&
+        (blockMap.get("AM") || []).length === 0 &&
+        (blockMap.get("PM") || []).length === 0 &&
         amBookings.length === 0 &&
         pmBookings.length === 0,
-      bookings: activeBookings.filter((row) => bookingUsesSlot(row.start_slot, "AM") || bookingUsesSlot(row.start_slot, "PM")).map(slimBooking)
+      bookings: activeBookings
+        .filter((row) => bookingUsesSlot(row.start_slot, "AM") || bookingUsesSlot(row.start_slot, "PM"))
+        .map(slimBooking)
     }
   };
 }
@@ -259,39 +258,38 @@ function slimBooking(row) {
     status: row.status || null,
     job_status: row.job_status || null,
     customer_name: row.customer_name || null,
+    customer_email: row.customer_email || null,
     package_code: row.package_code || null,
     vehicle_size: row.vehicle_size || null,
     assigned_to: row.assigned_to || null
   };
 }
 
-function bookingUsesSlot(bookingSlot, requestedSlot) {
-  const normalized = normalizeSlot(bookingSlot);
-  if (!normalized) return false;
-  if (normalized === requestedSlot) return true;
-  return normalized === "FULL";
+/* ---------------- booking / slot helpers ---------------- */
+
+function normalizeSlot(value) {
+  const s = String(value || "").trim().toUpperCase();
+
+  if (["AM", "MORNING"].includes(s)) return "AM";
+  if (["PM", "AFTERNOON"].includes(s)) return "PM";
+  if (["FULL", "FULL_DAY", "BOTH", "ALL_DAY"].includes(s)) return "FULL";
+
+  return s || null;
+}
+
+function bookingUsesSlot(startSlot, slot) {
+  const normalized = normalizeSlot(startSlot);
+  const wanted = normalizeSlot(slot);
+
+  if (!normalized || !wanted) return false;
+  if (normalized === "FULL") return wanted === "AM" || wanted === "PM";
+  return normalized === wanted;
 }
 
 function isCancelled(status, job_status) {
   const a = String(status || "").trim().toLowerCase();
   const b = String(job_status || "").trim().toLowerCase();
   return a === "cancelled" || b === "cancelled";
-}
-
-/* ---------------- cleaners ---------------- */
-
-function cleanDate(value) {
-  const s = cleanText(value);
-  if (!s) return null;
-  return /^\d{4}-\d{2}-\d{2}$/.test(s) ? s : null;
-}
-
-function normalizeSlot(value) {
-  const s = String(value || "").trim().toUpperCase();
-  if (s === "AM" || s === "MORNING") return "AM";
-  if (s === "PM" || s === "AFTERNOON") return "PM";
-  if (s === "FULL" || s === "FULL_DAY" || s === "BOTH") return "FULL";
-  return null;
 }
 
 /* ---------------- shared helpers ---------------- */
@@ -319,4 +317,10 @@ function withCors(response) {
     statusText: response.statusText,
     headers
   });
+}
+
+function cleanDate(value) {
+  const s = cleanText(value);
+  if (!s) return null;
+  return /^\d{4}-\d{2}-\d{2}$/.test(s) ? s : null;
 }
