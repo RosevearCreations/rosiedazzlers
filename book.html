@@ -30,6 +30,73 @@
     }
     .modal img{width:100%; height:auto; border-radius:14px; border:1px solid rgba(255,255,255,.10)}
     .modalHead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
+
+    /* Add-on layout fix */
+    #addonsBox{
+      display:grid;
+      gap:10px;
+      margin-top:10px;
+    }
+    .addon-option{
+      display:grid;
+      grid-template-columns:22px minmax(0,1fr);
+      gap:12px;
+      align-items:start;
+      padding:12px 14px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      background:rgba(255,255,255,.04);
+    }
+    .addon-option input[type="checkbox"]{
+      margin:2px 0 0 0;
+      width:18px;
+      height:18px;
+      justify-self:start;
+      align-self:start;
+    }
+    .addon-copy{
+      min-width:0;
+      width:100%;
+    }
+    .addon-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .addon-title{
+      font-weight:700;
+      line-height:1.3;
+      min-width:0;
+      word-break:break-word;
+    }
+    .addon-meta{
+      margin-top:4px;
+      min-width:0;
+      word-break:break-word;
+    }
+
+    /* Checkbox rows lower on page */
+    .ack-row{
+      display:grid;
+      grid-template-columns:22px minmax(0,1fr);
+      gap:10px;
+      align-items:start;
+      margin-top:8px;
+    }
+    .ack-row:first-child{margin-top:0}
+    .ack-row input[type="checkbox"]{
+      width:18px;
+      height:18px;
+      margin:2px 0 0 0;
+      justify-self:start;
+      align-self:start;
+    }
+    .ack-row span{
+      min-width:0;
+      line-height:1.45;
+    }
   </style>
 </head>
 
@@ -132,7 +199,7 @@
 
         <div id="sizeMismatch" class="notice warn" style="display:none;margin-top:12px"></div>
 
-        <label style="display:flex;gap:10px;align-items:flex-start;margin-top:12px">
+        <label class="ack-row" style="margin-top:12px">
           <input id="confirm_size" type="checkbox" />
           <span>
             <strong>I confirm my vehicle size selection is correct</strong>.
@@ -262,19 +329,19 @@
       <textarea id="special_notes" rows="4" placeholder="Gate code, pet on property, loose trim, stains to target, etc."></textarea>
 
       <div class="section">
-        <label style="display:flex;gap:10px;align-items:flex-start">
+        <label class="ack-row">
           <input id="ack_driveway" type="checkbox" />
           <span>I confirm there is legal and safe access for mobile detailing at the service location.</span>
         </label>
-        <label style="display:flex;gap:10px;align-items:flex-start;margin-top:8px">
+        <label class="ack-row">
           <input id="ack_power_water" type="checkbox" />
           <span>I understand some services may require access to power and/or water unless otherwise arranged.</span>
         </label>
-        <label style="display:flex;gap:10px;align-items:flex-start;margin-top:8px">
+        <label class="ack-row">
           <input id="ack_bylaw" type="checkbox" />
           <span>I understand local bylaws or condo/property restrictions may affect service and must be disclosed in advance.</span>
         </label>
-        <label style="display:flex;gap:10px;align-items:flex-start;margin-top:8px">
+        <label class="ack-row">
           <input id="ack_cancellation" type="checkbox" />
           <span>I understand deposits are subject to booking / cancellation policies.</span>
         </label>
@@ -459,10 +526,7 @@
 
       for (const a of list){
         const wrap = document.createElement("label");
-        wrap.style.display = "flex";
-        wrap.style.gap = "10px";
-        wrap.style.alignItems = "flex-start";
-        wrap.style.marginTop = "10px";
+        wrap.className = "addon-option";
 
         const cb = document.createElement("input");
         cb.type = "checkbox";
@@ -475,16 +539,18 @@
         });
 
         const price = addonDisplayPrice(a);
-        const badge = a.quote_required ? `<span class="tag warn">Quote</span>` : `<span class="tag ok">${escapeHtml(price)}</span>`;
+        const badge = a.quote_required
+          ? `<span class="tag warn">Quote</span>`
+          : `<span class="tag ok">${escapeHtml(price)}</span>`;
 
         const inner = document.createElement("div");
-        inner.style.flex = "1";
+        inner.className = "addon-copy";
         inner.innerHTML = `
-          <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
-            <strong>${escapeHtml(a.name)}</strong>
+          <div class="addon-head">
+            <strong class="addon-title">${escapeHtml(a.name)}</strong>
             ${badge}
           </div>
-          <div class="muted mini mono">${escapeHtml(a.code)}</div>
+          <div class="muted mini mono addon-meta">${escapeHtml(a.code)}</div>
         `;
 
         wrap.appendChild(cb);
