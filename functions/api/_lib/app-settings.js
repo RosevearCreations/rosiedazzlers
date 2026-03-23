@@ -20,7 +20,8 @@ export const DEFAULT_APP_SETTINGS = {
     image_annotations_enabled: true,
     annotation_lightbox_enabled: true,
     annotation_thread_replies_enabled: true,
-    notifications_retry_enabled: true
+    notifications_retry_enabled: true,
+    analytics_tracking_enabled: true
   }
 };
 

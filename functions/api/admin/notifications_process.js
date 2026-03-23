@@ -13,9 +13,9 @@ export async function onRequestPost(context) {
     const ids = Array.isArray(body.ids) ? body.ids.filter(Boolean) : [];
     const action = String(body.action || 'retry').trim().toLowerCase();
     const headers = serviceHeaders(env);
-    let url = `${env.SUPABASE_URL}/rest/v1/notification_events?select=id,event_type,channel,recipient_email,recipient_phone,payload,status,attempt_count,last_error`;
+    let url = `${env.SUPABASE_URL}/rest/v1/notification_events?select=id,event_type,channel,recipient_email,recipient_phone,payload,status,attempt_count,last_error,max_attempts,next_attempt_at`;
     if (ids.length) url += `&id=in.(${ids.map(encodeURIComponent).join(',')})`;
-    else url += `&status=in.(queued,failed)&limit=50&order=created_at.asc`;
+    else url += `&status=in.(queued,failed)&or=(next_attempt_at.is.null,next_attempt_at.lte.${encodeURIComponent(new Date().toISOString())})&limit=50&order=created_at.asc`;
 
     const res = await fetch(url, { headers });
     if (!res.ok) return withCors(json({ error: `Could not load notifications. ${await res.text()}` }, 500));
