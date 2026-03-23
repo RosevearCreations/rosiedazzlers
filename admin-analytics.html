@@ -1,46 +1,64 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rosie Dazzlers — Analytics</title>
-  <meta name="robots" content="noindex,nofollow" />
-  <link rel="stylesheet" href="/assets/site.css" />
-  <style>
-    body{margin:0;min-height:100vh;background:radial-gradient(circle at top, rgba(255,255,255,.08), transparent 35%),linear-gradient(180deg,#0f172a 0%,#111827 100%);color:#f8fafc}.shell{max-width:1280px;margin:0 auto;padding:24px}.loading{display:grid;place-items:center;min-height:60vh;color:#cbd5e1}.topbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-bottom:20px}.titleblock h1{margin:0 0 6px;font-size:1.8rem}.titleblock p{margin:0;color:#cbd5e1}.actorcard{min-width:280px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px 18px;box-shadow:0 14px 35px rgba(0,0,0,.22)}.actorline{margin:4px 0}.actorlabel{color:#93c5fd;font-weight:700;margin-right:6px}.logout-btn,.btn{appearance:none;border:0;border-radius:10px;padding:10px 14px;background:#2563eb;color:white;font-weight:700;cursor:pointer}.logout-btn{margin-top:10px}.status{margin-bottom:16px;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05)}.status[data-state="error"]{background:rgba(220,38,38,.12);border-color:rgba(248,113,113,.25);color:#fecaca}.status[data-state="success"]{background:rgba(34,197,94,.10);border-color:rgba(134,239,172,.22);color:#bbf7d0}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{grid-column:span 12;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:20px;box-shadow:0 14px 35px rgba(0,0,0,.22)}.card h2{margin:0 0 10px;font-size:1.15rem}.card p{margin:0 0 12px;color:#cbd5e1}.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.metric{border-radius:14px;padding:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}.metric strong{display:block;font-size:1.4rem}.list{display:grid;gap:10px}.list-item{border-radius:14px;padding:12px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}.muted{color:#94a3b8;font-size:.92rem}.field{margin-bottom:12px}.field label{display:block;margin-bottom:8px;font-weight:700}.field select{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;background:rgba(255,255,255,.04);color:#f8fafc}.pill{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:.82rem;color:#e5e7eb;margin-right:8px;margin-bottom:8px}@media(min-width:860px){.span-4{grid-column:span 4}.span-6{grid-column:span 6}.span-8{grid-column:span 8}}
-  </style>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Rosie Dazzlers — Analytics</title>
+<meta name="robots" content="noindex,nofollow" />
+<link rel="stylesheet" href="/assets/site.css" />
+<style>
+body{margin:0;min-height:100vh;background:radial-gradient(circle at top, rgba(255,255,255,.08), transparent 35%),linear-gradient(180deg,#0f172a 0%,#111827 100%);color:#f8fafc}.shell{max-width:1280px;margin:0 auto;padding:24px}.loading{display:grid;place-items:center;min-height:60vh;color:#cbd5e1}.topbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-bottom:20px}.titleblock h1{margin:0 0 6px;font-size:1.8rem}.titleblock p{margin:0;color:#cbd5e1}.actorcard{min-width:280px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px 18px;box-shadow:0 14px 35px rgba(0,0,0,.22)}.actorline{margin:4px 0}.actorlabel{color:#93c5fd;font-weight:700;margin-right:6px}.logout-btn,.btn{appearance:none;border:0;border-radius:10px;padding:10px 14px;background:#2563eb;color:white;font-weight:700;cursor:pointer}.status{margin-bottom:16px;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);color:#e5e7eb}.status[data-state="error"]{background:rgba(220,38,38,.12);border-color:rgba(248,113,113,.25);color:#fecaca}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{grid-column:span 12;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:20px;box-shadow:0 14px 35px rgba(0,0,0,.22)}.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.kpi .box{padding:14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}.box strong{display:block;font-size:1.3rem}.list{display:grid;gap:10px}.item{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}.muted{color:#94a3b8;font-size:.92rem}@media(max-width:980px){.kpi{grid-template-columns:1fr 1fr}}@media(max-width:640px){.kpi{grid-template-columns:1fr}}
+</style>
 </head>
-<body>
-  <main class="shell">
-    <div class="loading" data-admin-shell-loading>Loading analytics...</div>
-    <div data-admin-shell-ready hidden>
-      <header class="topbar">
-        <div class="titleblock"><h1>Analytics & Security</h1><p>Visitor activity, countries, site journeys, and estimated abandoned checkouts.</p></div>
-        <section class="actorcard"><div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div><div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div><div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div><button class="logout-btn" type="button" data-admin-logout>Sign Out</button></section>
-      </header>
-      <div class="status" data-admin-shell-status hidden></div>
-      <section class="grid">
-        <article class="card span-4"><h2>Load Analytics</h2><div class="field"><label for="days">Window</label><select id="days"><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="60">Last 60 days</option><option value="90">Last 90 days</option></select></div><button class="btn" id="load-btn" type="button">Refresh</button><div style="margin-top:12px" id="feature-flags"></div></article>
-        <article class="card span-8"><h2>Overview</h2><div class="metrics" id="metrics"><div class="metric"><div class="muted">No data yet.</div></div></div></article>
-        <article class="card span-4"><h2>Top Pages</h2><div class="list" id="top-pages"><div class="list-item muted">No data yet.</div></div></article>
-        <article class="card span-4"><h2>Top Countries</h2><div class="list" id="top-countries"><div class="list-item muted">No data yet.</div></div></article>
-        <article class="card span-4"><h2>Top Referrers</h2><div class="list" id="top-referrers"><div class="list-item muted">No data yet.</div></div></article>
-        <article class="card"><h2>Estimated Abandoned Checkouts</h2><div class="list" id="abandoned-list"><div class="list-item muted">No data yet.</div></div></article>
-      </section>
-    </div>
-  </main>
-  <script src="/assets/admin-auth.js"></script>
-  <script src="/assets/admin-shell.js"></script>
-  <script>
-  (()=>{
-    const els={days:document.getElementById('days'),loadBtn:document.getElementById('load-btn'),metrics:document.getElementById('metrics'),topPages:document.getElementById('top-pages'),topCountries:document.getElementById('top-countries'),topReferrers:document.getElementById('top-referrers'),abandonedList:document.getElementById('abandoned-list'),featureFlags:document.getElementById('feature-flags')};
-    function setShellStatus(message,type){document.querySelectorAll('[data-admin-shell-status]').forEach(n=>{n.hidden=!message;n.textContent=message||'';n.dataset.state=type||'';});}
-    function renderMetric(label,val){const d=document.createElement('div');d.className='metric';d.innerHTML=`<div class="muted">${label}</div><strong>${val}</strong>`;return d;}
-    function renderList(el,items,formatter){el.innerHTML='';if(!items||!items.length){el.innerHTML='<div class="list-item muted">No data yet.</div>';return;}items.forEach(item=>{const div=document.createElement('div');div.className='list-item';div.innerHTML=formatter(item);el.appendChild(div);});}
-    function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-    async function loadAnalytics(){setShellStatus('','');els.loadBtn.disabled=true;els.loadBtn.textContent='Loading...';try{const res=await fetch('/api/admin/analytics_overview',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({days:Number(els.days.value||30)})});const out=await res.json().catch(()=>null);if(!res.ok) throw new Error(out?.error||'Could not load analytics.');els.metrics.innerHTML='';const t=out.totals||{};[['Unique visitors',t.unique_visitors||0],['Unique sessions',t.unique_sessions||0],['Page views',t.page_views||0],['Checkout starts',t.checkout_starts||0],['Checkout completes',t.checkout_completes||0],['Estimated abandoned',t.estimated_abandoned_checkouts||0]].forEach(([l,v])=>els.metrics.appendChild(renderMetric(l,v)));renderList(els.topPages,out.top_pages,(i)=>`<strong>${esc(i.label)}</strong><div class="muted">${i.count} visits</div>`);renderList(els.topCountries,out.top_countries,(i)=>`<strong>${esc(i.label)}</strong><div class="muted">${i.count} events</div>`);renderList(els.topReferrers,out.top_referrers,(i)=>`<strong>${esc(i.label)}</strong><div class="muted">${i.count} visits</div>`);renderList(els.abandonedList,out.latest_abandoned_checkouts,(i)=>`<strong>${esc(i.page_path||'/book')}</strong><div class="muted">${esc(i.country||'Unknown')} • ${esc(i.created_at||'')}</div><div class="muted">Referrer: ${esc(i.referrer||'Direct')}</div>`);const flags=out.settings?.feature_flags||{};els.featureFlags.innerHTML=Object.entries(flags).map(([k,v])=>`<span class="pill">${esc(k)}: ${v===false?'off':'on'}</span>`).join('');setShellStatus('Analytics loaded.','success');}catch(err){setShellStatus(err?.message||'Could not load analytics.','error');}finally{els.loadBtn.disabled=false;els.loadBtn.textContent='Refresh';}}
-    els.loadBtn.addEventListener('click',loadAnalytics);window.AdminShell.boot({pageKey:'admin-analytics',onReady:loadAnalytics});
-  })();
-  </script>
-</body>
-</html>
+<body><main class="shell"><div class="loading" data-admin-shell-loading>Loading analytics...</div><div data-admin-shell-ready hidden>
+<header class="topbar"><div class="titleblock"><h1>Analytics & Recovery</h1><p>Session journeys, abandonment, top pages, and recovery queue controls.</p></div><section class="actorcard"><div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div><div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div><div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div><button class="logout-btn" type="button" data-admin-logout>Sign Out</button></section></header>
+<div class="status" data-admin-shell-status hidden></div>
+<section class="grid">
+<article class="card"><div class="kpi" id="kpi-grid"><div class="box"><div class="muted">Loading…</div><strong>—</strong></div></div></article>
+<article class="card"><h2>Top Pages</h2><div id="top-pages" class="list"></div></article>
+<article class="card"><h2>Top Countries</h2><div id="top-countries" class="list"></div></article>
+<article class="card"><h2>Top Referrers</h2><div id="top-referrers" class="list"></div></article>
+<article class="card"><h2>Session Journeys</h2><div id="session-journeys" class="list"></div></article>
+<article class="card"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap"><h2 style="margin:0">Abandoned Orders</h2><button class="btn" id="queue-all-recovery-btn" type="button">Queue Recovery Emails</button></div><div id="abandoned-orders" class="list"></div></article>
+</section></div></main>
+<script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
+<script>
+(function(){
+  const els={kpi:document.getElementById("kpi-grid"),pages:document.getElementById("top-pages"),countries:document.getElementById("top-countries"),referrers:document.getElementById("top-referrers"),journeys:document.getElementById("session-journeys"),abandoned:document.getElementById("abandoned-orders"),queueAll:document.getElementById("queue-all-recovery-btn")};
+  let abandonedRows=[];
+  function setShellStatus(message,type){document.querySelectorAll("[data-admin-shell-status]").forEach(node=>{node.hidden=!message;node.textContent=message||"";node.dataset.state=type||"";});}
+  function esc(v){return String(v||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
+  function renderList(node, rows, formatter){node.innerHTML=""; if(!rows||!rows.length){node.innerHTML='<div class="item muted">No data.</div>'; return;} rows.forEach(r=>{const div=document.createElement("div"); div.className="item"; div.innerHTML=formatter(r); node.appendChild(div);});}
+  async function load(){
+    const [analyticsRes, abandonedRes] = await Promise.all([
+      fetch("/api/admin/analytics_overview",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({days:30})}),
+      fetch("/api/admin/abandoned_orders_list",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({days:30})})
+    ]);
+    const analytics=await analyticsRes.json().catch(()=>null); const abandoned=await abandonedRes.json().catch(()=>null);
+    if(!analyticsRes.ok) throw new Error(analytics?.error||"Could not load analytics.");
+    if(!abandonedRes.ok) throw new Error(abandoned?.error||"Could not load abandoned orders.");
+    els.kpi.innerHTML=`
+      <div class="box"><div class="muted">Events</div><strong>${Number(analytics.summary?.events||0)}</strong></div>
+      <div class="box"><div class="muted">Page Views</div><strong>${Number(analytics.summary?.page_views||0)}</strong></div>
+      <div class="box"><div class="muted">Visitors</div><strong>${Number(analytics.summary?.unique_visitors||0)}</strong></div>
+      <div class="box"><div class="muted">Abandoned</div><strong>${Number(analytics.summary?.abandoned_sessions||0)}</strong></div>`;
+    renderList(els.pages, analytics.top_pages||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} views</div>`);
+    renderList(els.countries, analytics.top_countries||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} sessions</div>`);
+    renderList(els.referrers, analytics.top_referrers||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} referrals</div>`);
+    renderList(els.journeys, (analytics.session_journeys||[]).slice(0,20), r=>`<strong>${esc(r.session_id)}</strong><div class="muted">${esc((r.path||[]).join(" → "))}</div>`);
+    abandonedRows=abandoned.abandoned_orders||[];
+    renderList(els.abandoned, abandonedRows, r=>`<strong>${esc(r.customer_email||r.session_id)}</strong><div class="muted">${esc((r.path||[]).join(" → "))}</div><div class="muted">Recovery possible: ${r.recovery_possible?"Yes":"No"}</div>`);
+  }
+  els.queueAll.addEventListener("click", async ()=>{
+    const recoverable=abandonedRows.filter(r=>r.recovery_possible);
+    if(!recoverable.length){setShellStatus("No recoverable abandoned orders found.","error"); return;}
+    let queued=0;
+    for(const row of recoverable){
+      const res=await fetch("/api/admin/abandoned_recovery_enqueue",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({customer_email:row.customer_email,session_id:row.session_id})});
+      if(res.ok) queued+=1;
+    }
+    setShellStatus(`Queued ${queued} recovery email(s).`,"success");
+  });
+  window.AdminShell.boot({pageKey:"admin-staff", onReady: async ()=>{try{await load();}catch(err){setShellStatus(err?.message||"Could not initialize analytics.","error");}}});
+})();
+</script></body></html>

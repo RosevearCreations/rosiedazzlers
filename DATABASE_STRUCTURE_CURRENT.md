@@ -27,88 +27,56 @@ Shared Detailer/Admin screen fields now expected include:
 - full_name, email, preferred_contact_name, phone, sms_phone
 - full address
 - employee_code, position_title, hire_date
-- emergency_contact_name, emergency_contact_phone
+- emergency contact fields
 - department, admin_level, detailer_level
-- permissions_profile, preferred_work_hours
-- pay_schedule, hourly_rate_cents
+- hourly_rate_cents, pay_schedule, preferred_work_hours
 - supervisor_staff_user_id
-- vehicle_info, vehicle_notes
-- notes, admin_private_notes, personal_admin_notes, tips_payout_notes
-
-## progress_comments
-Thread fields now support:
-- booking_id
-- parent_type / parent_id
-- visibility
-- created_by_customer_profile_id or created_by_staff_user_id
-- message
-- image linkage through related media timeline
-
-## notification_events
-Notification queue now expects:
-- event_type
-- channel
-- booking_id
-- customer_profile_id
-- recipient_email / recipient_phone
-- payload jsonb
-- status
-- attempt_count
-- last_error
-- processed_at
+- permissions_profile
+- vehicle info / vehicle notes
+- notes, admin_private_notes, personal_admin_notes, tips_notes
 
 ## app_management_settings
-Saved admin policy/settings store now includes:
-- `visibility_matrix`
-- `manual_scheduling_rules`
-- `feature_flags`
+Used to persist feature flags and admin policy:
+- key
+- value_json
+- notes
 
+## notification_events
+Queue/dispatch table now expected to include:
+- event_type
+- channel
+- recipient_email / recipient_phone
+- subject / body_text / body_html
+- payload
+- status
+- attempt_count
+- max_attempts
+- next_attempt_at
+- processed_at
+- last_error
+- provider_response
 
-## New tables / fields in latest pass
+## observation_annotations
+Picture-first observation metadata now includes:
+- booking_id
+- media_id
+- x / y
+- title / note
+- category
+- severity
+- pin_color
+- visibility
 
-### `observation_annotations`
-Stores point-style annotations tied to a booking and optionally a media item.
-Suggested fields:
-- `id`
-- `booking_id`
-- `media_id`
-- `x_percent`
-- `y_percent`
-- `title`
-- `note`
-- `visibility`
-- `created_by_type`
-- `created_by_name`
-- `created_by_email`
-- `created_at`
-
-### `notification_events` queue handling
-Expected fields now used by the app:
-- `status`
-- `attempt_count`
-- `last_error`
-- `processed_at`
-
-### `app_management_settings`
-Feature flags now actively used by APIs, including:
-- `customer_chat_enabled`
-- `picture_first_observations`
-- `image_annotations_enabled`
-
-## Latest March 2026 Annotation/Retry Pass
-
-- Added richer observation annotation metadata: category, severity, and pin color.
-- Added optional annotation-linked reply message creation from the jobsite screen.
-- Expanded progress/thread payloads so customer view can show reply target labels and richer annotation cards.
-- Added image lightbox behavior to both jobsite and customer progress screens when enabled by app settings.
-- Expanded app feature flags with `annotation_lightbox_enabled`, `annotation_thread_replies_enabled`, and `notifications_retry_enabled`.
-- Expanded notification queue events to track `next_attempt_at` and `max_attempts` and process retries with backoff.
-- Notification list/process APIs now surface and manage retry scheduling state.
-
-## Latest schema additions
-
-### `site_activity_events`
-Stores public visitor/session activity, page views, checkout starts/completions, referrers, location, and lightweight payload metadata for admin analytics.
-
-### `app_management_settings.feature_flags` additions
-- `analytics_tracking_enabled`
+## catalog_items
+Admin-maintained operational catalog for systems and consumables:
+- catalog_type (`systems` or `consumables`)
+- title
+- category
+- image_url
+- supplier_url
+- sort_order
+- quantity_on_hand
+- reorder_level
+- unit_cost_cents
+- notes
+- is_active
