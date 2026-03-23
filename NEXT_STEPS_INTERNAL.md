@@ -45,3 +45,11 @@
 - Expanded app feature flags with `annotation_lightbox_enabled`, `annotation_thread_replies_enabled`, and `notifications_retry_enabled`.
 - Expanded notification queue events to track `next_attempt_at` and `max_attempts` and process retries with backoff.
 - Notification list/process APIs now surface and manage retry scheduling state.
+
+## Next strongest moves after latest pass
+
+- Build geo/session drill-down from Admin analytics into visitor journeys.
+- Add true checkout/order recovery workflows (email capture + abandoned recovery messaging).
+- Add richer image annotation states (resolved, assigned, approval-needed).
+- Add provider-backed email/SMS dispatch workers for `notification_events`.
+- Expand per-page SEO copy/H1/meta tuning across all public landing pages.

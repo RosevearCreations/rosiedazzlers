@@ -207,7 +207,7 @@
           </span>
         </label>
       </div>
-      <h1 style="margin:12px 0 8px">Book a Detail</h1>
+      <h2 style="margin:12px 0 8px">Booking details</h2>
       <p class="kicker">Choose a date, package, and time slot. We do one vehicle per day unless two half-day jobs.</p>
       <div id="dataError" class="notice bad" style="display:none;margin-top:10px"></div>
     </div>
@@ -733,6 +733,15 @@
       qs("#checkoutBtn").textContent = "Creating checkout…";
 
       try {
+        if (window.RDAnalytics && typeof window.RDAnalytics.markCheckoutStarted === "function") {
+          window.RDAnalytics.markCheckoutStarted({
+            package_code: payload.package_code,
+            vehicle_size: payload.vehicle_size,
+            service_area: payload.service_area,
+            service_date: payload.service_date
+          });
+        }
+
         const res = await fetch("/api/checkout", {
           method: "POST",
           headers: { "content-type":"application/json" },

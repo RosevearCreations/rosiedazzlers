@@ -43,3 +43,10 @@ Upcoming:
 - Expanded app feature flags with `annotation_lightbox_enabled`, `annotation_thread_replies_enabled`, and `notifications_retry_enabled`.
 - Expanded notification queue events to track `next_attempt_at` and `max_attempts` and process retries with backoff.
 - Notification list/process APIs now surface and manage retry scheduling state.
+
+## Added roadmap track: Security analytics + SEO
+
+- Visitor analytics and session journey visibility
+- Abandoned checkout identification
+- Admin-side analytics dashboards
+- SEO structure: canonical, keywords, JSON-LD, H1 cleanup, local business relevance

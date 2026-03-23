@@ -35,3 +35,9 @@ The platform is now moving from simple progress notes into a picture-first workf
 - Expanded app feature flags with `annotation_lightbox_enabled`, `annotation_thread_replies_enabled`, and `notifications_retry_enabled`.
 - Expanded notification queue events to track `next_attempt_at` and `max_attempts` and process retries with backoff.
 - Notification list/process APIs now surface and manage retry scheduling state.
+
+## Latest pass memory
+
+- Added security/analytics foundation with visitor/session/page event logging.
+- Added Admin analytics page for visitors, countries, referrers, and abandoned checkout estimation.
+- Added front-end SEO helpers in `assets/chrome.js` and booking-page checkout-start tracking.

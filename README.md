@@ -51,3 +51,12 @@ Run next SQL:
 - Expanded app feature flags with `annotation_lightbox_enabled`, `annotation_thread_replies_enabled`, and `notifications_retry_enabled`.
 - Expanded notification queue events to track `next_attempt_at` and `max_attempts` and process retries with backoff.
 - Notification list/process APIs now surface and manage retry scheduling state.
+
+## Latest pass: security analytics, admin insights, and SEO foundation
+
+- Added public visitor/page analytics ingest through `site_activity_events` and `/api/analytics/ingest`.
+- Added Admin analytics screen for top pages, countries, referrers, visitor counts, and estimated abandoned checkouts.
+- Added checkout-start tracking from the booking page and complete-page conversion tracking.
+- Expanded SEO support with canonical tags, keyword meta tags, and LocalBusiness JSON-LD injection in `assets/chrome.js`.
+- Strengthened notification processing by respecting retry windows and attempt limits.
+- Added SQL migration: `sql/2026-03-23_security_analytics_and_seo_foundation.sql`.

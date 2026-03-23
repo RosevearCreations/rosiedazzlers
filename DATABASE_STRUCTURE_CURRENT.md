@@ -104,3 +104,11 @@ Feature flags now actively used by APIs, including:
 - Expanded app feature flags with `annotation_lightbox_enabled`, `annotation_thread_replies_enabled`, and `notifications_retry_enabled`.
 - Expanded notification queue events to track `next_attempt_at` and `max_attempts` and process retries with backoff.
 - Notification list/process APIs now surface and manage retry scheduling state.
+
+## Latest schema additions
+
+### `site_activity_events`
+Stores public visitor/session activity, page views, checkout starts/completions, referrers, location, and lightweight payload metadata for admin analytics.
+
+### `app_management_settings.feature_flags` additions
+- `analytics_tracking_enabled`

@@ -72,3 +72,11 @@ New/updated files of note:
 - Expanded app feature flags with `annotation_lightbox_enabled`, `annotation_thread_replies_enabled`, and `notifications_retry_enabled`.
 - Expanded notification queue events to track `next_attempt_at` and `max_attempts` and process retries with backoff.
 - Notification list/process APIs now surface and manage retry scheduling state.
+
+## Current implementation additions from latest pass
+
+- Admin now has an Analytics & Security screen backed by `/api/admin/analytics_overview`.
+- Public site activity logging is persisted in `site_activity_events`.
+- Checkout abandonment is estimated by comparing `checkout_started` vs completion events by session.
+- Front-end SEO support now injects canonical tags, keyword metadata, and LocalBusiness JSON-LD automatically.
+- Notification queue retry handling now respects `next_attempt_at` and `max_attempts`.

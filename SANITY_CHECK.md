@@ -42,3 +42,10 @@ After this pass test:
 - Expanded app feature flags with `annotation_lightbox_enabled`, `annotation_thread_replies_enabled`, and `notifications_retry_enabled`.
 - Expanded notification queue events to track `next_attempt_at` and `max_attempts` and process retries with backoff.
 - Notification list/process APIs now surface and manage retry scheduling state.
+
+## Latest sanity-check items
+
+- Run `sql/2026-03-23_security_analytics_and_seo_foundation.sql`.
+- Confirm `/admin-analytics` loads for Admin.
+- Confirm page views are writing to `site_activity_events`.
+- Confirm booking page records `checkout_started` and complete page records completion.
