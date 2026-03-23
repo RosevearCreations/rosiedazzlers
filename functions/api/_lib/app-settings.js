@@ -21,6 +21,10 @@ export const DEFAULT_APP_SETTINGS = {
     annotation_lightbox_enabled: true,
     annotation_thread_replies_enabled: true,
     notifications_retry_enabled: true,
+  catalog_management_enabled: true,
+  analytics_journeys_enabled: true,
+  abandoned_recovery_enabled: true,
+  seo_structured_data_enabled: true,
     analytics_tracking_enabled: true
   }
 };
