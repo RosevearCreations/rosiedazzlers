@@ -100,6 +100,13 @@
       description: "Queued notices and hooks",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-notifications")
     },
+    {
+      key: "admin-analytics",
+      label: "Analytics",
+      href: "/admin-analytics",
+      description: "Visitors, referrers, abandoned checkouts",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-analytics")
+    },
 
     {
       key: "admin-promos",

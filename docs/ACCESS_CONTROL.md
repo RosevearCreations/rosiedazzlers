@@ -417,3 +417,8 @@ Feature flags in `app_management_settings.feature_flags` now influence:
 - Expanded app feature flags with `annotation_lightbox_enabled`, `annotation_thread_replies_enabled`, and `notifications_retry_enabled`.
 - Expanded notification queue events to track `next_attempt_at` and `max_attempts` and process retries with backoff.
 - Notification list/process APIs now surface and manage retry scheduling state.
+
+## Latest access + analytics note
+
+- `/admin-analytics` is intended for Admin/staff-management level users only.
+- Public analytics ingest is anonymous and should be limited to lightweight event payloads only.

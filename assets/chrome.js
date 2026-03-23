@@ -544,6 +544,93 @@ function escapeHtml(value) {
     .replace(/'/g, "&#39;");
 }
 
+
+function ensureCanonical() {
+  let link = document.querySelector('link[rel="canonical"]');
+  if (!link) {
+    link = document.createElement('link');
+    link.rel = 'canonical';
+    document.head.appendChild(link);
+  }
+  link.href = new URL(location.pathname + location.search, location.origin).toString();
+}
+
+function ensureSeoKeywords() {
+  const keywordsByPath = {
+    '/': 'mobile auto detailing Ontario, mobile car detailing Tillsonburg, Norfolk County detailing, Oxford County auto detailing',
+    '/services': 'interior detail, exterior detail, full detail, headlight restoration, engine bay detailing',
+    '/pricing': 'car detailing prices Ontario, mobile detailing packages, detailing cost Norfolk Oxford',
+    '/book': 'book mobile detailing, car detailing appointment Ontario',
+    '/about': 'Rosie Dazzlers mobile auto detailing about',
+    '/contact': 'contact Rosie Dazzlers auto detailing'
+  };
+  const path = normalizePath(location.pathname);
+  const content = keywordsByPath[path] || 'mobile auto detailing, car cleaning, Ontario detailing';
+  let meta = document.querySelector('meta[name="keywords"]');
+  if (!meta) {
+    meta = document.createElement('meta');
+    meta.name = 'keywords';
+    document.head.appendChild(meta);
+  }
+  meta.content = content;
+}
+
+function ensureStructuredData() {
+  const id = 'rd-localbusiness-jsonld';
+  let script = document.getElementById(id);
+  if (!script) {
+    script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = id;
+    document.head.appendChild(script);
+  }
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'AutoDetailing',
+    name: BRAND.name,
+    url: location.origin,
+    image: BRAND.banner,
+    logo: BRAND.logo,
+    areaServed: ['Norfolk County', 'Oxford County', 'Tillsonburg', 'Woodstock', 'Ingersoll', 'Simcoe'],
+    address: { '@type': 'PostalAddress', addressLocality: 'Tillsonburg', addressRegion: 'ON', addressCountry: 'CA' },
+    sameAs: SOCIALS.map(([, url]) => url),
+    email: 'info@rosiedazzlers.ca',
+    description: 'Rosie Dazzlers is a mobile auto detailing business serving Norfolk and Oxford Counties in Ontario with interior, exterior, and full vehicle detailing.'
+  };
+  script.textContent = JSON.stringify(data);
+}
+
+const RDAnalytics = (() => {
+  const VISITOR_KEY = 'rd_visitor_id';
+  const SESSION_KEY = 'rd_session_id';
+  const CHECKOUT_KEY = 'rd_checkout_started';
+  function getOrMake(key) {
+    try {
+      let v = localStorage.getItem(key);
+      if (!v) {
+        v = crypto && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+        localStorage.setItem(key, v);
+      }
+      return v;
+    } catch {
+      return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+  }
+  async function track(event_type, payload = {}) {
+    try {
+      await fetch('/api/analytics/ingest', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: true,
+        body: JSON.stringify({ visitor_id: getOrMake(VISITOR_KEY), session_id: getOrMake(SESSION_KEY), event_type, page_path: location.pathname, page_title: document.title, referrer: document.referrer || null, locale: navigator.language || null, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || null, screen: `${window.screen?.width || 0}x${window.screen?.height || 0}`, payload })
+      });
+    } catch {}
+  }
+  function markCheckoutStarted(payload = {}) { try { localStorage.setItem(CHECKOUT_KEY, JSON.stringify({ at: Date.now(), path: location.pathname, payload })); } catch {} track('checkout_started', payload); }
+  function maybeMarkCheckoutCompleted() { if (normalizePath(location.pathname) !== '/complete') return; try { localStorage.removeItem(CHECKOUT_KEY); } catch {} track('checkout_completed', { path: location.pathname }); }
+  function pageView() { track('page_view'); }
+  return { track, pageView, markCheckoutStarted, maybeMarkCheckoutCompleted };
+})();
+window.RDAnalytics = RDAnalytics;
+
 function initChrome() {
   ensureNavLinks();
   setBrandImagesEverywhere();
@@ -553,6 +640,11 @@ function initChrome() {
   initNavToggle();
   setFooter();
   ensureAuthStatus();
+  ensureCanonical();
+  ensureSeoKeywords();
+  ensureStructuredData();
+  RDAnalytics.pageView();
+  RDAnalytics.maybeMarkCheckoutCompleted();
 
   attachRotators("#homePackages");
   attachRotators("#packageCards");

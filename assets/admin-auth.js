@@ -213,6 +213,9 @@
           hasCapability("can_manage_staff")
         );
 
+      case "admin-analytics":
+        return actor.is_admin === true || hasCapability("can_manage_staff");
+
       case "admin-promos":
         return hasCapability("can_manage_promos");
 
