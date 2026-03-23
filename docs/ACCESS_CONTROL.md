@@ -422,3 +422,9 @@ Feature flags in `app_management_settings.feature_flags` now influence:
 
 - `/admin-analytics` is intended for Admin/staff-management level users only.
 - Public analytics ingest is anonymous and should be limited to lightweight event payloads only.
+
+
+## Admin-only additions
+- Catalog management for systems and consumables is Admin-only.
+- Analytics, visitor journeys, and abandoned-order recovery are Admin-only.
+- Blocking time remains Admin-only.

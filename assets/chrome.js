@@ -658,3 +658,94 @@ if (document.readyState === "loading") {
 } else {
   initChrome();
 }
+
+
+/* =========================
+   SEO / ANALYTICS ENHANCEMENTS
+   ========================= */
+
+function upsertMeta(name, content) {
+  if (!content) return;
+  let el = document.head.querySelector(`meta[name="${name}"]`);
+  if (!el) {
+    el = document.createElement("meta");
+    el.setAttribute("name", name);
+    document.head.appendChild(el);
+  }
+  el.setAttribute("content", content);
+}
+
+function upsertCanonical(url) {
+  if (!url) return;
+  let el = document.head.querySelector('link[rel="canonical"]');
+  if (!el) {
+    el = document.createElement("link");
+    el.setAttribute("rel", "canonical");
+    document.head.appendChild(el);
+  }
+  el.setAttribute("href", url);
+}
+
+function inferKeywordsFromPath(pathname) {
+  const map = {
+    "/": "mobile auto detailing tillsonburg, norfolk county detailing, oxford county detailing, rosie dazzlers",
+    "/services": "auto detailing services, interior detail, exterior detail, ceramic coating, norfolk oxford",
+    "/pricing": "auto detailing prices, detailing cost tillsonburg, mobile detail pricing",
+    "/book": "book mobile detailing, auto detailing booking, rosie dazzlers booking",
+    "/about": "about rosie dazzlers, mobile detailers in ontario",
+    "/contact": "contact rosie dazzlers, mobile detail booking contact",
+    "/gear": "detailing systems, detailing tools, rosie dazzlers gear",
+    "/consumables": "detailing consumables, car care chemicals, rosie dazzlers consumables"
+  };
+  return map[normalizePath(pathname)] || "rosie dazzlers, mobile auto detailing, norfolk county, oxford county";
+}
+
+function ensureSeoSignals() {
+  const path = normalizePath(location.pathname);
+  upsertCanonical(location.origin + path);
+  upsertMeta("keywords", inferKeywordsFromPath(path));
+
+  const h1 = document.querySelector("h1");
+  if (h1 && !h1.id) h1.id = "page-title";
+
+  const businessJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "AutoDetailing",
+    "name": "Rosie Dazzlers",
+    "url": location.origin,
+    "areaServed": ["Norfolk County", "Oxford County", "Tillsonburg"],
+    "serviceType": "Mobile Auto Detailing"
+  };
+
+  let script = document.querySelector('script[data-rd-jsonld="localbusiness"]');
+  if (!script) {
+    script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.setAttribute("data-rd-jsonld", "localbusiness");
+    document.head.appendChild(script);
+  }
+  script.textContent = JSON.stringify(businessJsonLd);
+}
+
+window.RDAnalytics = window.RDAnalytics || {
+  async track(event_type, payload = {}) {
+    try {
+      await fetch("/api/analytics/ingest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ event_type, payload, page_path: normalizePath(location.pathname), referrer: document.referrer || null })
+      });
+    } catch {}
+  }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  ensureSeoSignals();
+  if (window.RDAnalytics) {
+    window.RDAnalytics.track("page_view", {
+      title: document.title || null,
+      h1: document.querySelector("h1")?.textContent?.trim() || null
+    });
+  }
+});
