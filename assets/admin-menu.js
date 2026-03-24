@@ -87,6 +87,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-app")
     },
     {
+      key: "admin-catalog",
+      label: "Catalog",
+      href: "/admin-catalog",
+      description: "Tools, systems, consumables",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-catalog")
+    },
+    {
       key: "admin-customers",
       label: "Customers",
       href: "/admin-customers",

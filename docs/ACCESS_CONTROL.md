@@ -428,3 +428,9 @@ Feature flags in `app_management_settings.feature_flags` now influence:
 - Catalog management for systems and consumables is Admin-only.
 - Analytics, visitor journeys, and abandoned-order recovery are Admin-only.
 - Blocking time remains Admin-only.
+
+
+## Access notes update
+- `/api/catalog_public` is intentionally public-read and only returns active catalog items.
+- Admin catalog create/edit remains staff-protected.
+- Recovery template/rule editing remains Admin/staff-management protected.
