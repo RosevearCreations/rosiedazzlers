@@ -25,7 +25,9 @@ export async function onRequestPost(context) {
       "blocking_policy",
       "feature_flags",
       "recovery_templates",
-      "recovery_rules"
+      "recovery_rules",
+      "recovery_provider_rules",
+      "moderation_rules"
     ];
 
     const out = {};

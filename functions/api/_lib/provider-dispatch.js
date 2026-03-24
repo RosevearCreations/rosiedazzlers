@@ -1,5 +1,6 @@
+import { loadRecoverySettings } from "./app-settings.js";
 
-export async function dispatchNotificationThroughProvider(env, event) {
+export async function dispatchNotificationThroughProvider(env, event, options = {}) {
   const channel = String(event.channel || "").trim().toLowerCase();
   const payload = {
     id: event.id || null,
@@ -10,41 +11,42 @@ export async function dispatchNotificationThroughProvider(env, event) {
     subject: event.subject || null,
     body_text: event.body_text || null,
     body_html: event.body_html || null,
-    payload: event.payload || null
+    payload: event.payload || null,
+    preview_mode: options.preview === true
   };
 
+  const recoverySettings = await loadRecoverySettings(env).catch(() => null);
+  const providerRules = recoverySettings?.recovery_provider_rules || {};
+  const eventType = String(event.event_type || '').trim().toLowerCase();
+  const isRecovery = eventType === 'abandoned_checkout_recovery';
+  const rule = providerRules?.[channel] || {};
+
+  if (rule.enabled === false) {
+    return { ok: false, provider: channel || 'unknown', error: `${channel || 'Provider'} dispatch is disabled by settings.` };
+  }
+
   if (channel === "email") {
-    const url = env.NOTIFICATIONS_EMAIL_WEBHOOK_URL || "";
-    if (!url) {
-      return {
-        ok: false,
-        provider: "email",
-        error: "Missing NOTIFICATIONS_EMAIL_WEBHOOK_URL."
-      };
-    }
-    return postJson(url, payload, env.NOTIFICATIONS_PROVIDER_AUTH_TOKEN);
+    const url = (isRecovery && rule.recovery_webhook_url) || env.RECOVERY_EMAIL_WEBHOOK_URL || env.NOTIFICATIONS_EMAIL_WEBHOOK_URL || "";
+    const authToken = rule.auth_token || env.RECOVERY_PROVIDER_AUTH_TOKEN || env.NOTIFICATIONS_PROVIDER_AUTH_TOKEN || '';
+    const previewRecipient = options.previewRecipient || rule.send_test_to || '';
+    const outbound = options.preview === true && previewRecipient ? { ...payload, recipient_email: previewRecipient } : payload;
+    if (!url) return { ok: false, provider: rule.provider_key || 'email', error: 'Missing email provider webhook URL.' };
+    return postJson(url, outbound, authToken, rule.provider_key || 'email');
   }
 
   if (channel === "sms") {
-    const url = env.NOTIFICATIONS_SMS_WEBHOOK_URL || "";
-    if (!url) {
-      return {
-        ok: false,
-        provider: "sms",
-        error: "Missing NOTIFICATIONS_SMS_WEBHOOK_URL."
-      };
-    }
-    return postJson(url, payload, env.NOTIFICATIONS_PROVIDER_AUTH_TOKEN);
+    const url = (isRecovery && rule.recovery_webhook_url) || env.RECOVERY_SMS_WEBHOOK_URL || env.NOTIFICATIONS_SMS_WEBHOOK_URL || "";
+    const authToken = rule.auth_token || env.RECOVERY_PROVIDER_AUTH_TOKEN || env.NOTIFICATIONS_PROVIDER_AUTH_TOKEN || '';
+    const previewRecipient = options.previewRecipient || rule.send_test_to || '';
+    const outbound = options.preview === true && previewRecipient ? { ...payload, recipient_phone: previewRecipient } : payload;
+    if (!url) return { ok: false, provider: rule.provider_key || 'sms', error: 'Missing SMS provider webhook URL.' };
+    return postJson(url, outbound, authToken, rule.provider_key || 'sms');
   }
 
-  return {
-    ok: false,
-    provider: channel || "unknown",
-    error: "Unsupported notification channel."
-  };
+  return { ok: false, provider: channel || "unknown", error: "Unsupported notification channel." };
 }
 
-async function postJson(url, payload, bearerToken) {
+async function postJson(url, payload, bearerToken, providerKey) {
   try {
     const headers = { "Content-Type": "application/json" };
     if (bearerToken) headers.Authorization = `Bearer ${bearerToken}`;
@@ -60,22 +62,11 @@ async function postJson(url, payload, bearerToken) {
     try { data = text ? JSON.parse(text) : null; } catch {}
 
     if (!response.ok) {
-      return {
-        ok: false,
-        status: response.status,
-        error: data?.error || text || `Provider returned ${response.status}.`
-      };
+      return { ok: false, status: response.status, provider: providerKey || null, error: data?.error || text || `Provider returned ${response.status}.` };
     }
 
-    return {
-      ok: true,
-      status: response.status,
-      provider_response: data || text || null
-    };
+    return { ok: true, status: response.status, provider: providerKey || null, provider_response: data || text || null };
   } catch (err) {
-    return {
-      ok: false,
-      error: err?.message || "Provider dispatch failed."
-    };
+    return { ok: false, provider: providerKey || null, error: err?.message || 'Provider dispatch failed.' };
   }
 }

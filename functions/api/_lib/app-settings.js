@@ -20,14 +20,53 @@ export const DEFAULT_APP_SETTINGS = {
     image_annotations_enabled: true,
     annotation_lightbox_enabled: true,
     annotation_thread_replies_enabled: true,
+    annotation_moderation_enabled: true,
+    two_sided_thread_controls_enabled: true,
     notifications_retry_enabled: true,
-  catalog_management_enabled: true,
-  analytics_journeys_enabled: true,
-  abandoned_recovery_enabled: true,
-  seo_structured_data_enabled: true,
+    catalog_management_enabled: true,
+    analytics_journeys_enabled: true,
+    abandoned_recovery_enabled: true,
+    seo_structured_data_enabled: true,
     analytics_tracking_enabled: true,
     public_catalog_db_enabled: true,
-    recovery_templates_enabled: true
+    recovery_templates_enabled: true,
+    low_stock_alerts_enabled: true
+  },
+  recovery_templates: {
+    abandoned_checkout_subject: 'Complete your Rosie Dazzlers booking',
+    abandoned_checkout_body_text: 'We noticed you started a booking but did not complete checkout. Come back to finish your order when you are ready.',
+    abandoned_checkout_body_html: ''
+  },
+  recovery_rules: {
+    abandoned_recovery_enabled: true,
+    minimum_page_events: 2,
+    require_email: true,
+    cooldown_hours: 24,
+    default_recovery_channel: 'email'
+  },
+  recovery_provider_rules: {
+    email: {
+      enabled: true,
+      provider_key: 'default_email',
+      send_test_to: '',
+      recovery_webhook_url: '',
+      auth_token: ''
+    },
+    sms: {
+      enabled: false,
+      provider_key: 'default_sms',
+      send_test_to: '',
+      recovery_webhook_url: '',
+      auth_token: ''
+    }
+  },
+  moderation_rules: {
+    annotation_customer_visibility_default: true,
+    comment_customer_visibility_default: true,
+    client_reply_depth_limit: 4,
+    staff_reply_depth_limit: 8,
+    allow_client_annotation_replies: true,
+    allow_staff_hide_without_delete: true
   }
 };
 
@@ -52,10 +91,11 @@ export async function loadAppSettings(env, keys = ['visibility_matrix','manual_s
 }
 
 export async function loadRecoverySettings(env) {
-  const settings = await loadAppSettings(env, ['recovery_templates','recovery_rules']);
+  const settings = await loadAppSettings(env, ['recovery_templates','recovery_rules','recovery_provider_rules']);
   return {
     recovery_templates: settings.recovery_templates || structuredClone(DEFAULT_APP_SETTINGS.recovery_templates),
-    recovery_rules: settings.recovery_rules || structuredClone(DEFAULT_APP_SETTINGS.recovery_rules)
+    recovery_rules: settings.recovery_rules || structuredClone(DEFAULT_APP_SETTINGS.recovery_rules),
+    recovery_provider_rules: settings.recovery_provider_rules || structuredClone(DEFAULT_APP_SETTINGS.recovery_provider_rules)
   };
 }
 
