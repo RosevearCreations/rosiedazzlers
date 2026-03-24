@@ -35,3 +35,9 @@
 - Added ratings and richer inventory fields for tools/systems/consumables.
 - Added recovery template/rule editing to App Management.
 - Updated schema snapshot and migration set to include catalog ratings and recovery settings.
+
+## Completed in the current repair pass
+- Added provider-aware abandoned-recovery settings with preview/test-send support.
+- Added moderation metadata and thread-status handling for progress comments and annotations.
+- Added low-stock alert tracking plus per-item reorder actions in catalog admin.
+- Fixed malformed root-page H1 rendering on the main public marketing pages.

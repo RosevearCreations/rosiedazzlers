@@ -1,30 +1,19 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rosie Dazzlers — Catalog Management</title>
-  <meta name="robots" content="noindex,nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Catalog Management | Rosie Dazzlers</title>
   <link rel="stylesheet" href="/assets/site.css" />
   <style>
-    body{margin:0;min-height:100vh;background:radial-gradient(circle at top, rgba(255,255,255,.08), transparent 35%),linear-gradient(180deg,#0f172a 0%,#111827 100%);color:#f8fafc}
-    .shell{max-width:1280px;margin:0 auto;padding:24px}.loading{display:grid;place-items:center;min-height:60vh;color:#cbd5e1}
-    .topbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-bottom:20px}
-    .titleblock h1{margin:0 0 6px;font-size:1.8rem}.titleblock p{margin:0;color:#cbd5e1}
-    .actorcard{min-width:280px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px 18px;box-shadow:0 14px 35px rgba(0,0,0,.22)}
-    .actorline{margin:4px 0}.actorlabel{color:#93c5fd;font-weight:700;margin-right:6px}
-    .logout-btn,.btn{appearance:none;border:0;border-radius:10px;padding:10px 14px;background:#2563eb;color:white;font-weight:700;cursor:pointer}
-    .status{margin-bottom:16px;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);color:#e5e7eb}
-    .status[data-state="error"]{background:rgba(220,38,38,.12);border-color:rgba(248,113,113,.25);color:#fecaca}
-    .status[data-state="success"]{background:rgba(34,197,94,.10);border-color:rgba(134,239,172,.22);color:#bbf7d0}
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{grid-column:span 12;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:20px;box-shadow:0 14px 35px rgba(0,0,0,.22)}
-    .field{margin-bottom:14px}.field label{display:block;margin-bottom:8px;font-size:.92rem;font-weight:700;color:#e5e7eb}
-    .field input,.field select,.field textarea{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;font-size:.98rem;background:rgba(255,255,255,.04);color:#f8fafc;outline:none}
-    .field textarea{min-height:100px;resize:vertical}.actions{display:flex;gap:10px;flex-wrap:wrap}.list{display:grid;gap:10px}
-    .item{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
-    .item strong{display:block;margin-bottom:6px}.muted{color:#94a3b8;font-size:.92rem}
-    @media(min-width:900px){.span-7{grid-column:span 7}.span-5{grid-column:span 5}}
+    body{background:#08111f;color:#e6eef8;font-family:Inter,Arial,sans-serif}.shell{max-width:1280px;margin:0 auto;padding:20px}.topbar{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:18px}
+    .titleblock h1{margin:0 0 6px}.titleblock p{margin:0;color:#9fb0c8}.actorcard{min-width:260px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+    .actorline{display:flex;gap:8px;margin:4px 0}.actorlabel{font-weight:700;color:#9fb0c8}.logout-btn,.btn{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:#f8fbff;border-radius:12px;padding:10px 14px;cursor:pointer}
+    .btn.warn{border-color:rgba(245,158,11,.35)} .status{padding:12px 14px;border-radius:12px;margin-bottom:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09)}
+    .status[data-state="success"]{border-color:rgba(34,197,94,.35)} .status[data-state="error"]{border-color:rgba(248,113,113,.35)} .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .card{grid-column:span 12;padding:18px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)} .list{display:grid;gap:10px}.item{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
+    .item.low{border-color:rgba(245,158,11,.35)} .muted{color:#94a3b8;font-size:.92rem}.field{display:grid;gap:6px;margin-bottom:10px}.field input,.field textarea,.field select{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;background:rgba(255,255,255,.04);color:#f8fafc}.field textarea{min-height:100px;resize:vertical}.actions{display:flex;gap:10px;flex-wrap:wrap}
+    @media(min-width:980px){.span-7{grid-column:span 7}.span-5{grid-column:span 5}.span-4{grid-column:span 4}.span-8{grid-column:span 8}}
   </style>
 </head>
 <body>
@@ -32,7 +21,7 @@
   <div class="loading" data-admin-shell-loading>Loading catalog management...</div>
   <div data-admin-shell-ready hidden>
     <header class="topbar">
-      <div class="titleblock"><h1>Catalog Management</h1><p>Maintain systems and consumables as inventory grows, including ordering and reorder notes.</p></div>
+      <div class="titleblock"><h1>Catalog Management</h1><p>Maintain systems and consumables, trigger reorders, and watch low-stock alerts.</p></div>
       <section class="actorcard" aria-label="Signed in staff">
         <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
         <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
@@ -42,13 +31,14 @@
     </header>
     <div class="status" data-admin-shell-status hidden></div>
     <section class="grid">
-      <article class="card span-7">
+      <article class="card span-8">
         <h2>Catalog Items</h2>
-        <div class="actions" style="margin-bottom:12px;">
-          <button class="btn" type="button" data-type-btn="systems">Systems</button>
-          <button class="btn" type="button" data-type-btn="consumables">Consumables</button>
-        </div>
+        <div class="actions" style="margin-bottom:12px;"><button class="btn" type="button" data-type-btn="systems">Systems</button><button class="btn" type="button" data-type-btn="consumables">Consumables</button><button class="btn warn" type="button" id="refresh-low-stock-btn">Refresh low stock</button></div>
         <div id="catalog-list" class="list"><div class="item muted">No items loaded yet.</div></div>
+      </article>
+      <article class="card span-4">
+        <h2>Low-Stock Alerts</h2>
+        <div id="low-stock-list" class="list"><div class="item muted">No low-stock items yet.</div></div>
       </article>
       <article class="card span-5">
         <h2>Edit Item</h2>
@@ -71,8 +61,13 @@
           <div class="field"><label for="usefulness-rating">Usefulness Rating (0-5)</label><input id="usefulness-rating" type="number" min="0" max="5" value="0" /></div>
           <div class="field"><label for="notes">Notes</label><textarea id="notes"></textarea></div>
           <div class="field"><label><input id="is-active" type="checkbox" checked /> Active</label></div>
-          <div class="actions"><button class="btn" type="submit">Save Item</button><button class="btn" type="button" id="new-item-btn">New</button></div>
+          <div class="actions"><button class="btn" type="submit">Save Item</button><button class="btn" type="button" id="new-item-btn">New</button><button class="btn warn" type="button" id="request-reorder-btn">Request reorder</button><button class="btn" type="button" id="resolve-reorder-btn">Resolve alert</button></div>
         </form>
+      </article>
+      <article class="card span-7">
+        <h2>Reorder Notes</h2>
+        <div class="field"><label for="reorder-notes">Notes for supplier/order run</label><textarea id="reorder-notes" placeholder="Example: order 2 more pads and refill spray bottles"></textarea></div>
+        <div class="muted">Per-item reorder actions now create or update a low-stock alert and stamp the item with the latest reorder request time.</div>
       </article>
     </section>
   </div>
@@ -81,29 +76,21 @@
 <script src="/assets/admin-shell.js"></script>
 <script>
 (function(){
-  const els={list:document.getElementById("catalog-list"),form:document.getElementById("catalog-form"),id:document.getElementById("item-id"),type:document.getElementById("catalog-type"),title:document.getElementById("title"),category:document.getElementById("category"),brand:document.getElementById("brand"),model:document.getElementById("model"),locationLabel:document.getElementById("location-label"),acquiredOn:document.getElementById("acquired-on"),imageUrl:document.getElementById("image-url"),supplierUrl:document.getElementById("supplier-url"),sortOrder:document.getElementById("sort-order"),quantity:document.getElementById("quantity-on-hand"),reorder:document.getElementById("reorder-level"),cost:document.getElementById("unit-cost-cents"),conditionRating:document.getElementById("condition-rating"),usefulnessRating:document.getElementById("usefulness-rating"),notes:document.getElementById("notes"),active:document.getElementById("is-active"),newBtn:document.getElementById("new-item-btn")};
-  let currentType="systems"; let items=[];
-  function setShellStatus(message,type){document.querySelectorAll("[data-admin-shell-status]").forEach(node=>{node.hidden=!message; node.textContent=message||""; node.dataset.state=type||"";});}
-  function resetForm(){els.form.reset(); els.id.value=""; els.type.value=currentType; els.sortOrder.value="0"; els.quantity.value="0"; els.reorder.value="0"; els.cost.value="0"; els.active.checked=true;}
-  function populate(item){els.id.value=item.id||""; els.type.value=item.catalog_type||currentType; els.title.value=item.title||""; els.category.value=item.category||""; els.brand.value=item.brand||""; els.model.value=item.model||""; els.locationLabel.value=item.location_label||""; els.acquiredOn.value=item.acquired_on||""; els.imageUrl.value=item.image_url||""; els.supplierUrl.value=item.supplier_url||""; els.sortOrder.value=item.sort_order||0; els.quantity.value=item.quantity_on_hand||0; els.reorder.value=item.reorder_level||0; els.cost.value=item.unit_cost_cents||0; els.conditionRating.value=item.condition_rating||0; els.usefulnessRating.value=item.usefulness_rating||0; els.notes.value=item.notes||""; els.active.checked=item.is_active!==false;}
-  function render(items){els.list.innerHTML=""; if(!items.length){els.list.innerHTML='<div class="item muted">No items found for this catalog.</div>'; return;}
-    items.forEach(item=>{const div=document.createElement("div"); div.className="item"; div.innerHTML=`<strong>${escapeHtml(item.title||"Untitled")}</strong><div class="muted">${escapeHtml(item.category||"general")} • Qty ${Number(item.quantity_on_hand||0)} • Reorder ${Number(item.reorder_level||0)} • Sort ${Number(item.sort_order||0)}</div><div class="muted">${escapeHtml(item.brand||"")} ${escapeHtml(item.model||"")} ${item.location_label ? '• '+escapeHtml(item.location_label) : ''}</div><div class="muted">Rating ${Number(item.overall_rating||0) || '—'} / 5 • Condition ${Number(item.condition_rating||0)} • Usefulness ${Number(item.usefulness_rating||0)}</div><div class="muted">${escapeHtml(item.notes||"")}</div>`; div.addEventListener("click",()=>populate(item)); els.list.appendChild(div);});
-  }
-  async function load(type=currentType){currentType=type; resetForm(); els.type.value=currentType;
-    const res=await fetch("/api/admin/catalog_items_get",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({catalog_type:type})});
-    const data=await res.json().catch(()=>null); if(!res.ok) throw new Error(data?.error||"Could not load catalog items.");
-    items=data?.items||[]; render(items);
-  }
-  els.form.addEventListener("submit", async (event)=>{event.preventDefault(); setShellStatus("",""); try{
-    const payload={id:els.id.value||undefined,catalog_type:els.type.value,title:els.title.value,category:els.category.value,brand:els.brand.value,model:els.model.value,location_label:els.locationLabel.value,acquired_on:els.acquiredOn.value||null,image_url:els.imageUrl.value,supplier_url:els.supplierUrl.value,sort_order:Number(els.sortOrder.value||0),quantity_on_hand:Number(els.quantity.value||0),reorder_level:Number(els.reorder.value||0),unit_cost_cents:Number(els.cost.value||0),condition_rating:Number(els.conditionRating.value||0),usefulness_rating:Number(els.usefulnessRating.value||0),notes:els.notes.value,is_active:els.active.checked};
-    const res=await fetch("/api/admin/catalog_items_save",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-    const data=await res.json().catch(()=>null); if(!res.ok) throw new Error(data?.error||"Could not save item.");
-    setShellStatus("Catalog item saved.","success"); await load(currentType); if(data?.item) populate(data.item);
-  }catch(err){setShellStatus(err?.message||"Could not save item.","error");}});
-  els.newBtn.addEventListener("click", resetForm);
-  document.querySelectorAll("[data-type-btn]").forEach(btn=>btn.addEventListener("click", ()=>load(btn.getAttribute("data-type-btn"))));
-  function escapeHtml(v){return String(v||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
-  window.AdminShell.boot({pageKey:"admin-catalog", onReady: async ()=>{try{await load("systems");}catch(err){setShellStatus(err?.message||"Could not initialize catalog screen.","error");}}});
+  const els={list:document.getElementById('catalog-list'),lowStock:document.getElementById('low-stock-list'),form:document.getElementById('catalog-form'),id:document.getElementById('item-id'),type:document.getElementById('catalog-type'),title:document.getElementById('title'),category:document.getElementById('category'),brand:document.getElementById('brand'),model:document.getElementById('model'),locationLabel:document.getElementById('location-label'),acquiredOn:document.getElementById('acquired-on'),imageUrl:document.getElementById('image-url'),supplierUrl:document.getElementById('supplier-url'),sortOrder:document.getElementById('sort-order'),quantity:document.getElementById('quantity-on-hand'),reorder:document.getElementById('reorder-level'),cost:document.getElementById('unit-cost-cents'),conditionRating:document.getElementById('condition-rating'),usefulnessRating:document.getElementById('usefulness-rating'),notes:document.getElementById('notes'),active:document.getElementById('is-active'),newBtn:document.getElementById('new-item-btn'),reorderNotes:document.getElementById('reorder-notes'),requestReorderBtn:document.getElementById('request-reorder-btn'),resolveReorderBtn:document.getElementById('resolve-reorder-btn'),refreshLowStockBtn:document.getElementById('refresh-low-stock-btn')};
+  let currentType='systems'; let items=[];
+  function setShellStatus(message,type){document.querySelectorAll('[data-admin-shell-status]').forEach(node=>{node.hidden=!message; node.textContent=message||''; node.dataset.state=type||'';});}
+  function resetForm(){els.form.reset(); els.id.value=''; els.type.value=currentType; els.sortOrder.value='0'; els.quantity.value='0'; els.reorder.value='0'; els.cost.value='0'; els.active.checked=true;}
+  function populate(item){els.id.value=item.id||''; els.type.value=item.catalog_type||currentType; els.title.value=item.title||''; els.category.value=item.category||''; els.brand.value=item.brand||''; els.model.value=item.model||''; els.locationLabel.value=item.location_label||''; els.acquiredOn.value=item.acquired_on||''; els.imageUrl.value=item.image_url||''; els.supplierUrl.value=item.supplier_url||''; els.sortOrder.value=item.sort_order||0; els.quantity.value=item.quantity_on_hand||0; els.reorder.value=item.reorder_level||0; els.cost.value=item.unit_cost_cents||0; els.conditionRating.value=item.condition_rating||0; els.usefulnessRating.value=item.usefulness_rating||0; els.notes.value=item.notes||''; els.active.checked=item.is_active!==false; els.reorderNotes.value=item.last_reorder_note || '';}
+  function renderCatalog(rows){els.list.innerHTML=''; if(!rows.length){els.list.innerHTML='<div class="item muted">No items found for this catalog.</div>'; return;} rows.forEach(item=>{const low=Number(item.quantity_on_hand||0)<=Number(item.reorder_level||0); const div=document.createElement('div'); div.className='item'+(low?' low':''); div.innerHTML=`<strong>${escapeHtml(item.title||'Untitled')}</strong><div class="muted">${escapeHtml(item.category||'general')} • Qty ${Number(item.quantity_on_hand||0)} • Reorder ${Number(item.reorder_level||0)} • Sort ${Number(item.sort_order||0)}</div><div class="muted">${escapeHtml(item.brand||'')} ${escapeHtml(item.model||'')} ${item.location_label ? '• '+escapeHtml(item.location_label) : ''}</div><div class="muted">Rating ${Number(item.overall_rating||0)||'—'} / 5 • Condition ${Number(item.condition_rating||0)} • Usefulness ${Number(item.usefulness_rating||0)}</div><div class="muted">${escapeHtml(item.notes||'')}</div><div class="muted">Last reorder: ${escapeHtml(item.last_reorder_requested_at || '—')}</div><div class="actions" style="margin-top:10px"><button class="btn warn" type="button" data-action="reorder">Request reorder</button></div>`; div.addEventListener('click',e=>{ if(e.target.closest('[data-action="reorder"]')){ e.stopPropagation(); reorderItem(item.id,'request').catch(err=>setShellStatus(err?.message||'Could not request reorder.','error')); return; } populate(item); }); els.list.appendChild(div);}); }
+  function renderLowStock(items, alerts){els.lowStock.innerHTML=''; if(!items.length){els.lowStock.innerHTML='<div class="item muted">No low-stock items yet.</div>'; return;} items.forEach(item=>{ const hasAlert=(alerts||[]).find(a=>a.catalog_item_id===item.id); const div=document.createElement('div'); div.className='item low'; div.innerHTML=`<strong>${escapeHtml(item.title||'Untitled')}</strong><div class="muted">${escapeHtml(item.catalog_type||'catalog')} • Qty ${Number(item.quantity_on_hand||0)} / Reorder ${Number(item.reorder_level||0)}</div><div class="muted">${escapeHtml(item.location_label||'')}</div><div class="muted">Alert: ${escapeHtml(hasAlert?.status || 'not opened')}</div><div class="actions" style="margin-top:10px"><button class="btn warn" type="button">Request reorder</button></div>`; div.querySelector('button').addEventListener('click',()=>reorderItem(item.id,'request').catch(err=>setShellStatus(err?.message||'Could not request reorder.','error'))); div.addEventListener('click',()=>populate(item)); els.lowStock.appendChild(div); }); }
+  async function load(type=currentType){currentType=type; resetForm(); els.type.value=currentType; const res=await fetch('/api/admin/catalog_items_get',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({catalog_type:type})}); const data=await res.json().catch(()=>null); if(!res.ok) throw new Error(data?.error||'Could not load catalog items.'); items=data?.items||[]; renderCatalog(items); }
+  async function loadLowStock(){ const res=await fetch('/api/admin/catalog_low_stock_list',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({})}); const data=await res.json().catch(()=>null); if(!res.ok) throw new Error(data?.error||'Could not load low-stock items.'); renderLowStock(data?.items||[], data?.alerts||[]); }
+  async function reorderItem(id, action){ if(!id) throw new Error('Select an item first.'); const res=await fetch('/api/admin/catalog_reorder_request',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({catalog_item_id:id, action, notes:els.reorderNotes.value||''})}); const data=await res.json().catch(()=>null); if(!res.ok) throw new Error(data?.error||'Could not update reorder alert.'); setShellStatus(action==='resolve' ? 'Low-stock alert resolved.' : 'Reorder alert updated.', 'success'); await Promise.all([load(currentType), loadLowStock()]); }
+  els.form.addEventListener('submit', async (event)=>{event.preventDefault(); try{ const payload={id:els.id.value||undefined,catalog_type:els.type.value,title:els.title.value,category:els.category.value,brand:els.brand.value,model:els.model.value,location_label:els.locationLabel.value,acquired_on:els.acquiredOn.value||null,image_url:els.imageUrl.value,supplier_url:els.supplierUrl.value,sort_order:Number(els.sortOrder.value||0),quantity_on_hand:Number(els.quantity.value||0),reorder_level:Number(els.reorder.value||0),unit_cost_cents:Number(els.cost.value||0),condition_rating:Number(els.conditionRating.value||0),usefulness_rating:Number(els.usefulnessRating.value||0),notes:els.notes.value,is_active:els.active.checked}; const res=await fetch('/api/admin/catalog_items_save',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const data=await res.json().catch(()=>null); if(!res.ok) throw new Error(data?.error||'Could not save item.'); setShellStatus('Catalog item saved.','success'); await Promise.all([load(currentType), loadLowStock()]); if(data?.item) populate(data.item); }catch(err){ setShellStatus(err?.message||'Could not save item.','error'); }});
+  els.newBtn.addEventListener('click', resetForm); els.requestReorderBtn.addEventListener('click',()=>reorderItem(els.id.value,'request').catch(err=>setShellStatus(err?.message||'Could not request reorder.','error'))); els.resolveReorderBtn.addEventListener('click',()=>reorderItem(els.id.value,'resolve').catch(err=>setShellStatus(err?.message||'Could not resolve alert.','error'))); els.refreshLowStockBtn.addEventListener('click',()=>loadLowStock().catch(err=>setShellStatus(err?.message||'Could not refresh low stock.','error')));
+  document.querySelectorAll('[data-type-btn]').forEach(btn=>btn.addEventListener('click', ()=>load(btn.getAttribute('data-type-btn')).catch(err=>setShellStatus(err?.message||'Could not switch catalog.','error'))));
+  function escapeHtml(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+  window.AdminShell.boot({pageKey:'admin-catalog', onReady: async ()=>{ try{ await Promise.all([load('systems'), loadLowStock()]); }catch(err){ setShellStatus(err?.message||'Could not initialize catalog screen.','error'); } }});
 })();
 </script>
 </body>

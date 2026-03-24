@@ -28,3 +28,14 @@ Operational intelligence + visibility:
 - Public catalog connection to DB inventory
 - Rated tool/consumable inventory
 - Recovery templates and rules persistence
+
+## Roadmap adjustment
+Recently moved forward:
+- recovery-message provider rules and testing foundations
+- low-stock/reorder admin workflow foundation
+- moderation-aware two-sided progress thread foundation
+
+Move up next:
+- jobsite moderation controls UI
+- gift redemption inside booking totals/checkout
+- add-on pricing canonicalization

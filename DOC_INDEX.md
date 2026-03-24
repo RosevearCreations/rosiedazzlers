@@ -153,3 +153,5 @@ Current next priorities:
 - manual scheduling / app-management rules UI completion
 - final layout polish across booking and internal screens
 
+## Latest documentation touchpoints
+Recent pass updates were applied to the main operational docs, schema snapshot, handoff note, and risk list to reflect recovery-provider rules, thread moderation, and low-stock reorder tracking.

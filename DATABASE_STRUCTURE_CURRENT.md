@@ -85,3 +85,10 @@ Admin-maintained operational catalog for systems and consumables:
 ## Catalog ratings and recovery settings
 - `catalog_items` now includes: `brand`, `model`, `location_label`, `acquired_on`, `condition_rating`, `usefulness_rating`, and computed `overall_rating`.
 - `app_management_settings` also stores `recovery_templates` and `recovery_rules` for abandoned-order messaging.
+
+## Thread moderation and recovery-provider additions
+- `progress_comments` now also includes: `thread_status`, `moderated_at`, `moderated_by_staff_user_id`, `moderated_by_name`, and `moderation_reason`.
+- `observation_annotations` now also includes: `thread_status`, `moderated_at`, `moderated_by_staff_user_id`, `moderated_by_name`, and `moderation_reason`.
+- `catalog_items` now also includes: `last_reorder_requested_at` and `last_reorder_note`.
+- `catalog_low_stock_alerts` stores low-stock/reorder workflow records per catalog item.
+- `app_management_settings` also stores `recovery_provider_rules` and `moderation_rules`.

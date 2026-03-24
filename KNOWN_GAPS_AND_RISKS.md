@@ -280,3 +280,16 @@ Current next priorities:
 - manual scheduling / app-management rules UI completion
 - final layout polish across booking and internal screens
 
+## March 24, 2026 mitigation update
+Partial mitigations completed in this pass:
+- provider-specific recovery rules now exist with preview/testing support
+- thread moderation now has storage + endpoint foundations
+- per-item reorder + low-stock alert workflow now exists in Admin Catalog
+- core public SEO/H1 cleanup has started on the highest-traffic pages
+
+Still remaining:
+- full UI moderation controls inside jobsite/progress admin screens
+- real staff auth/session completion across all screens
+- gift redemption completion at booking checkout
+- canonical add-on pricing unification across all paths
+- deeper SEO cleanup across every remaining route

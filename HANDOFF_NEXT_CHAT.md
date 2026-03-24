@@ -92,3 +92,15 @@ Current next priorities:
 - manual scheduling / app-management rules UI completion
 - final layout polish across booking and internal screens
 
+## Current snapshot — March 24, 2026
+Latest pass completed:
+- added provider-specific recovery rules plus preview/test-send tools in App Management
+- added thread moderation fields/endpoints for two-sided customer/detailer conversations
+- added low-stock alert tracking and per-item reorder actions in Admin Catalog
+- repaired malformed H1 output on key public pages and tightened several titles/meta descriptions
+
+Current next priorities:
+- add visible moderation controls directly into `admin-jobsite.html`
+- finish gift redemption inside booking/checkout flow
+- keep consolidating add-on pricing to one canonical source
+- continue route-by-route SEO cleanup and content expansion

@@ -21,3 +21,6 @@ Rosie Dazzlers is now structured around three primary user surfaces:
 
 ## Current direction update
 The app now treats tools, systems, and consumables as a rateable backend-managed catalog with a public read path. Recovery messaging is also becoming a first-class managed setting instead of hard-coded copy.
+
+## Architecture update from this pass
+The repo now has a stronger operational layer in three places: provider-aware recovery messaging, moderation-aware two-sided progress threads, and low-stock/reorder tracking for inventory. These additions reduce drift risk by pushing policy into app settings and persistent tables rather than leaving behavior only in screen code.

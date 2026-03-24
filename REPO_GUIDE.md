@@ -364,3 +364,9 @@ Current next priorities:
 - manual scheduling / app-management rules UI completion
 - final layout polish across booking and internal screens
 
+## New files/endpoints added in this pass
+- `sql/2026-03-24_recovery_threads_catalog_alerts.sql`
+- `functions/api/admin/recovery_message_preview.js`
+- `functions/api/admin/progress_comment_moderate.js`
+- `functions/api/admin/catalog_low_stock_list.js`
+- `functions/api/admin/catalog_reorder_request.js`

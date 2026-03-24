@@ -41,3 +41,10 @@ Current dev snapshot includes:
 - Catalog items now support equipment ratings, brand/model, storage location, and acquisition date.
 - Admin App Management now stores abandoned-order recovery templates and rules.
 - Notification recovery/dispatch foundations continue to use queue rules and retry fields.
+
+## March 24, 2026 repairs in this pass
+- Added provider-specific recovery-message rules, preview generation, and test-send support from App Management.
+- Added deeper thread moderation foundations with comment thread status, moderation metadata, and a staff moderation endpoint.
+- Added per-item reorder actions, low-stock alert tracking, and reorder timestamps/notes in Admin Catalog.
+- Fixed malformed H1 markers on core public pages and tightened several public page titles/meta descriptions.
+- Added a new migration: `sql/2026-03-24_recovery_threads_catalog_alerts.sql`.

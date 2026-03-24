@@ -34,3 +34,9 @@
 2. Add admin UI for true recovery-message preview/testing and channel rules.
 3. Expand annotation moderation tools and provider-backed notifications.
 4. Continue public SEO cleanup page by page, with location/service-specific metadata.
+
+## Newly opened follow-up after this pass
+1. Add admin jobsite UI buttons for comment hide/remove/reveal so moderation is fully screen-driven.
+2. Add true preview history/logging for recovery-message tests and provider test responses.
+3. Connect low-stock alerts to optional notification events or scheduled reorder reminders.
+4. Continue page-by-page SEO cleanup on the remaining account/admin/public support pages.

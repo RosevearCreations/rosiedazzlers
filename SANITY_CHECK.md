@@ -31,3 +31,12 @@
 - Added public catalog endpoint and wired gear/consumables pages to prefer DB-backed inventory.
 - Added catalog rating fields and recovery template/rule settings migration.
 - Updated admin catalog UI and app management UI accordingly.
+
+## Additional checks from this pass
+- `/admin-app` can save provider-specific recovery rules and generate/send a recovery preview test.
+- `/admin-catalog` shows low-stock items and can create/resolve per-item reorder alerts.
+- `/api/admin/progress_comment_moderate` can hide/remove customer thread items without deleting records.
+- Core pages `/`, `/services`, and `/pricing` now render proper H1 content again.
+
+## SQL to run now
+- `sql/2026-03-24_recovery_threads_catalog_alerts.sql`

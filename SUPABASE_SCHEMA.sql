@@ -224,3 +224,38 @@ alter table public.job_time_entries enable row level security;
 
 -- NOTE: latest incremental migrations also add catalog ratings/recovery settings via
 -- sql/2026-03-24_catalog_ratings_public_and_recovery_templates.sql
+
+-- -----------------------------
+-- LATEST INCREMENTAL ADDITIONS (March 24, 2026)
+-- -----------------------------
+-- progress_comments:
+--   thread_status text default ''visible''
+--   moderated_at timestamptz
+--   moderated_by_staff_user_id uuid -> staff_users(id)
+--   moderated_by_name text
+--   moderation_reason text
+-- observation_annotations:
+--   thread_status text default ''visible''
+--   moderated_at timestamptz
+--   moderated_by_staff_user_id uuid -> staff_users(id)
+--   moderated_by_name text
+--   moderation_reason text
+-- catalog_items:
+--   last_reorder_requested_at timestamptz
+--   last_reorder_note text
+-- catalog_low_stock_alerts:
+--   id uuid primary key default gen_random_uuid()
+--   catalog_item_id uuid references public.catalog_items(id) on delete cascade
+--   status text default ''open''
+--   quantity_snapshot integer
+--   reorder_level_snapshot integer
+--   notes text
+--   resolution_notes text
+--   last_notified_at timestamptz
+--   resolved_at timestamptz
+--   resolved_by_name text
+--   created_at timestamptz default now()
+-- app_management_settings keys also now include:
+--   recovery_provider_rules
+--   moderation_rules
+-- See full migration: sql/2026-03-24_recovery_threads_catalog_alerts.sql
