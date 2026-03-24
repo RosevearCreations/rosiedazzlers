@@ -51,6 +51,7 @@ export async function onRequestGet(context) {
     const customerChatEnabled = settings.feature_flags?.customer_chat_enabled !== false && (prefs?.detailer_chat_opt_in !== false);
 
     const comments = (Array.isArray(rawComments) ? rawComments : []).filter(row => {
+      if (row.thread_status === 'removed' || row.thread_status === 'hidden') return false;
       if (row.visibility === 'internal') return false;
       if (row.author_type === 'client') return true;
       return customerChatEnabled;
