@@ -1,132 +1,77 @@
-// functions/api/admin/promos_list.js
+// /functions/api/admin/promo_list.js
+// REPLACE ENTIRE FILE
 //
-// Role-aware promo list endpoint.
+// Lists promo codes (admin).
 //
-// What this file does:
-// - keeps current ADMIN_PASSWORD bridge protection
-// - requires manage_promos capability
-// - returns promo codes for the admin promos page
-// - supports optional active-only filtering
-//
-// Supported request body:
+// POST JSON:
 // {
-//   active_only?: true
+//   "admin_password": "...."
 // }
-//
-// Request headers supported:
-// - x-admin-password: required
-// - x-staff-email: recommended during transition
-// - x-staff-user-id: optional alternative
-
-import {
-  requireStaffAccess,
-  serviceHeaders,
-  json,
-  methodNotAllowed,
-  toBoolean
-} from "../_lib/staff-auth.js";
 
 export async function onRequestOptions() {
-  return new Response("", {
-    status: 204,
-    headers: corsHeaders()
-  });
+  return new Response(null, { status: 204, headers: corsHeaders() });
 }
 
-export async function onRequestPost(context) {
-  const { request, env } = context;
-
+export async function onRequestPost({ request, env }) {
   try {
-    const body = await request.json().catch(() => ({}));
+    const body = await request.json().catch(() => null);
 
-    const access = await requireStaffAccess({
-      request,
-      env,
-      body,
-      capability: "manage_promos",
-      allowLegacyAdminFallback: true
-    });
-
-    if (!access.ok) {
-      return withCors(access.response);
+    // --- Auth ---
+    const ADMIN_PASSWORD = env.ADMIN_PASSWORD;
+    if (!ADMIN_PASSWORD) return json({ ok: false, error: "Server not configured (ADMIN_PASSWORD missing)" }, 500);
+    if (!body?.admin_password || body.admin_password !== ADMIN_PASSWORD) {
+      return json({ ok: false, error: "Unauthorized" }, 401);
     }
 
-    const activeOnly = body.active_only === undefined ? false : toBoolean(body.active_only);
-    const headers = serviceHeaders(env);
+    // --- Supabase config ---
+    const SUPABASE_URL = env.SUPABASE_URL;
+    const SERVICE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!SUPABASE_URL || !SERVICE_KEY) {
+      return json({ ok: false, error: "Server not configured (Supabase env vars missing)" }, 500);
+    }
 
-    let url =
-      `${env.SUPABASE_URL}/rest/v1/promo_codes` +
-      `?select=id,created_at,updated_at,code,label,description,discount_type,discount_value,` +
-      `minimum_subtotal,is_active,starts_at,ends_at,max_uses,total_uses,applies_to,notes` +
+    const url =
+      `${SUPABASE_URL}/rest/v1/promo_codes?select=*` +
       `&order=created_at.desc`;
 
-    if (activeOnly) {
-      url += `&is_active=eq.true`;
-    }
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        apikey: SERVICE_KEY,
+        Authorization: `Bearer ${SERVICE_KEY}`,
+        Accept: "application/json",
+      },
+    });
 
-    const res = await fetch(url, { headers });
+    const text = await res.text();
+    const data = safeJson(text);
 
     if (!res.ok) {
-      const text = await res.text();
-      return withCors(json({ error: `Could not load promo codes. ${text}` }, 500));
+      return json({ ok: false, error: "Supabase error (promo_codes list)", details: data }, 502);
     }
 
-    const rows = await res.json().catch(() => []);
+    return json({ ok: true, rows: Array.isArray(data) ? data : [] });
 
-    return withCors(
-      json({
-        ok: true,
-        actor: {
-          id: access.actor.id || null,
-          full_name: access.actor.full_name || null,
-          email: access.actor.email || null,
-          role_code: access.actor.role_code || null
-        },
-        filters: {
-          active_only: activeOnly
-        },
-        promo_codes: Array.isArray(rows) ? rows : []
-      })
-    );
-  } catch (err) {
-    return withCors(
-      json(
-        {
-          error: err && err.message ? err.message : "Unexpected server error."
-        },
-        500
-      )
-    );
+  } catch (e) {
+    return json({ ok: false, error: "Server error", details: String(e) }, 500);
   }
 }
 
-export async function onRequestGet() {
-  return withCors(methodNotAllowed());
+function safeJson(text) {
+  try { return JSON.parse(text); } catch { return { raw: text }; }
 }
-
-/* ---------------- helpers ---------------- */
 
 function corsHeaders() {
   return {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST,OPTIONS",
-    "Access-Control-Allow-Headers":
-      "Content-Type, x-admin-password, x-staff-email, x-staff-user-id",
-    "Cache-Control": "no-store"
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "POST,OPTIONS",
+    "access-control-allow-headers": "content-type,authorization",
   };
 }
 
-function withCors(response) {
-  const headers = new Headers(response.headers || {});
-  const extras = corsHeaders();
-
-  for (const [key, value] of Object.entries(extras)) {
-    headers.set(key, value);
-  }
-
-  return new Response(response.body, {
-    status: response.status,
-    statusText: response.statusText,
-    headers
+function json(obj, status = 200) {
+  return new Response(JSON.stringify(obj), {
+    status,
+    headers: { "content-type": "application/json", ...corsHeaders() },
   });
 }
