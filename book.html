@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Book Mobile Detailing | Rosie Dazzlers</title>
+  <link rel="canonical" href="https://www.rosiedazzlers.ca/book" />
   <meta name="description" content="Book a mobile auto detailing appointment in Norfolk & Oxford Counties. Deposit required." />
   <link rel="stylesheet" href="/assets/site.css?v=20260311k" />
   <style>
@@ -132,6 +133,7 @@
 
       <div id="loadErr" class="notice bad" style="display:none;margin-top:12px"></div>
       <div id="status" class="notice" style="display:none;margin-top:12px"></div>
+      <div id="paypalNotice" class="notice" style="display:none;margin-top:12px"></div>
     </div>
 
     <div class="section grid2">
@@ -276,6 +278,15 @@
           <div>
             <label for="gift_code">Gift certificate code (optional)</label>
             <input id="gift_code" class="mono" type="text" placeholder="RD-XXXX-XXXX" />
+          </div>
+
+          <div>
+            <label for="payment_method">Payment method for deposit</label>
+            <select id="payment_method">
+              <option value="stripe">Stripe card checkout</option>
+              <option value="paypal">PayPal</option>
+            </select>
+            <div class="muted mini" style="margin-top:6px">If a gift fully covers the deposit, no payment step is required.</div>
           </div>
           <div>
             <label for="promo_code">Promo code (optional)</label>
@@ -620,6 +631,8 @@
     qs("#service_date").addEventListener("change", refreshAvailability);
     qs("#slot_choice").addEventListener("change", refreshAvailability);
 
+    handlePaypalReturn();
+
     try {
       data = await fetchJsonStrict(DATA_URL);
 
@@ -709,6 +722,7 @@
         addon_codes: Array.from(addonsState),
 
         gift_code: (qs("#gift_code").value || "").trim() || null,
+        payment_method: (qs("#payment_method")?.value || "stripe").trim(),
         promo_code: (qs("#promo_code").value || "").trim() || null,
 
         vehicle: {
@@ -750,13 +764,28 @@
 
         const out = await res.json().catch(()=>null);
 
-        if (!res.ok || !out?.ok || !out?.checkout_url){
+        if (!res.ok || !out?.ok){
           qs("#checkoutBtn").disabled = false;
           qs("#checkoutBtn").textContent = "Continue to deposit payment";
           return show("status", out?.error ? `Checkout error: ${out.error}` : "Checkout failed.", "bad");
         }
 
-        location.href = out.checkout_url;
+        if (out.redirect_url) {
+          location.href = out.redirect_url;
+          return;
+        }
+        if (out.payment_method === 'paypal' && out.approval_url) {
+          location.href = out.approval_url;
+          return;
+        }
+        if (out.checkout_url) {
+          location.href = out.checkout_url;
+          return;
+        }
+
+        qs("#checkoutBtn").disabled = false;
+        qs("#checkoutBtn").textContent = "Continue to deposit payment";
+        return show("status", "No checkout redirect URL was returned.", "bad");
 
       } catch (err) {
         qs("#checkoutBtn").disabled = false;

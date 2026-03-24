@@ -24,3 +24,12 @@ The app now treats tools, systems, and consumables as a rateable backend-managed
 
 ## Architecture update from this pass
 The repo now has a stronger operational layer in three places: provider-aware recovery messaging, moderation-aware two-sided progress threads, and low-stock/reorder tracking for inventory. These additions reduce drift risk by pushing policy into app settings and persistent tables rather than leaving behavior only in screen code.
+
+
+## March 24 2026 pass update
+- Added PayPal deposit checkout flow alongside Stripe.
+- Completed booking-time gift redemption through checkout, including zero-due gift confirmation when the deposit is fully covered.
+- Switched booking checkout pricing/add-on validation to the canonical public pricing JSON.
+- Added annotation moderation endpoint and moderation controls in the jobsite workspace, plus thread visibility summaries in progress management.
+- Added per-item quick quantity adjustments and stronger low-stock/reorder handling in Admin Catalog.
+- Continued route metadata cleanup across remaining public pages.

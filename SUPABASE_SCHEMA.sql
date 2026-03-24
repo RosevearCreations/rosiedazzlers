@@ -259,3 +259,15 @@ alter table public.job_time_entries enable row level security;
 --   recovery_provider_rules
 --   moderation_rules
 -- See full migration: sql/2026-03-24_recovery_threads_catalog_alerts.sql
+
+
+-- -----------------------------
+-- PAYPAL / PAYMENT PROVIDER FIELDS
+-- -----------------------------
+alter table public.bookings
+  add column if not exists payment_provider text null,
+  add column if not exists paypal_order_id text null,
+  add column if not exists paypal_capture_id text null;
+
+create index if not exists bookings_payment_provider_idx on public.bookings(payment_provider);
+create index if not exists bookings_paypal_order_id_idx on public.bookings(paypal_order_id);

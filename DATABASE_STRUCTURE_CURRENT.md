@@ -92,3 +92,11 @@ Admin-maintained operational catalog for systems and consumables:
 - `catalog_items` now also includes: `last_reorder_requested_at` and `last_reorder_note`.
 - `catalog_low_stock_alerts` stores low-stock/reorder workflow records per catalog item.
 - `app_management_settings` also stores `recovery_provider_rules` and `moderation_rules`.
+
+
+## Booking payment provider additions
+- `bookings` now also includes `payment_provider`, `paypal_order_id`, and `paypal_capture_id`.
+- Booking checkout can now confirm through Stripe, PayPal, or `gift_only` when the deposit is fully covered by a valid gift certificate.
+
+## Annotation moderation additions
+- `observation_annotations` now also includes `thread_status`, `moderated_at`, `moderated_by_staff_user_id`, `moderated_by_name`, and `moderation_reason`.

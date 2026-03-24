@@ -48,3 +48,12 @@ Current dev snapshot includes:
 - Added per-item reorder actions, low-stock alert tracking, and reorder timestamps/notes in Admin Catalog.
 - Fixed malformed H1 markers on core public pages and tightened several public page titles/meta descriptions.
 - Added a new migration: `sql/2026-03-24_recovery_threads_catalog_alerts.sql`.
+
+
+## March 24 2026 pass update
+- Added PayPal deposit checkout flow alongside Stripe.
+- Completed booking-time gift redemption through checkout, including zero-due gift confirmation when the deposit is fully covered.
+- Switched booking checkout pricing/add-on validation to the canonical public pricing JSON.
+- Added annotation moderation endpoint and moderation controls in the jobsite workspace, plus thread visibility summaries in progress management.
+- Added per-item quick quantity adjustments and stronger low-stock/reorder handling in Admin Catalog.
+- Continued route metadata cleanup across remaining public pages.

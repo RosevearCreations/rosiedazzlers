@@ -356,6 +356,17 @@
           </div>
         </article>
 
+        <article class="card span-6">
+          <h2>Thread & Moderation</h2>
+          <div id="thread-list" class="list"><div class="list-item muted">No thread data loaded yet.</div></div>
+        </article>
+
+        <article class="card span-6">
+          <h2>Jobsite Moderation</h2>
+          <p>Open the jobsite workspace for image annotations, threaded replies, and moderation controls.</p>
+          <div class="actions"><a id="jobsiteLinkBtn" class="btn secondary" href="/admin-jobsite.html">Open Jobsite Workspace</a></div>
+        </article>
+
         <article class="card">
           <h2>Customer Signoff</h2>
           <div id="signoff-box" class="detail-box">
@@ -379,6 +390,8 @@
         progressList: document.getElementById("progress-list"),
         mediaList: document.getElementById("media-list"),
         signoffBox: document.getElementById("signoff-box"),
+        threadList: document.getElementById("thread-list"),
+        jobsiteLinkBtn: document.getElementById("jobsiteLinkBtn"),
 
         postForm: document.getElementById("progress-post-form"),
         visibility: document.getElementById("progress-visibility"),
@@ -463,6 +476,13 @@
           `;
           els.progressList.appendChild(item);
         });
+      }
+
+      function renderThread(detail) {
+        const items = Array.isArray(detail?.comments) ? detail.comments : [];
+        els.threadList.innerHTML = '';
+        if (!items.length) { els.threadList.innerHTML = '<div class="list-item muted">No thread entries found.</div>'; return; }
+        items.forEach((row) => { const item = document.createElement('div'); item.className='list-item'; item.innerHTML = `<strong>${escapeHtml(row.author_name || row.author_type || 'Unknown')}</strong><div>${escapeHtml(row.message || '(No message)')}</div><div class="muted">${escapeHtml(row.parent_type || 'booking')} · ${escapeHtml(row.visibility || 'internal')} · ${escapeHtml(row.thread_status || 'visible')}</div>`; els.threadList.appendChild(item); });
       }
 
       function renderMedia(detail) {

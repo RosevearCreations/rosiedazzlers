@@ -52,39 +52,23 @@ Consistent staff identity across:
 
 ## 3) Gift redemption gap
 
-### Risk
-Gift certificates can be purchased, but booking-time redemption is not yet fully complete.
+### Current state
+Booking checkout now validates gift codes, applies remaining balance to totals, reduces the deposit due immediately, and can auto-confirm a booking when the gift fully covers the deposit. Stripe and PayPal completion now both write redemption records and reduce the remaining gift balance.
 
-### Why it matters
-This leaves an important customer-facing workflow unfinished.
-
-### Needed
-- validate gift code
-- fetch remaining value
-- apply to booking total
-- update remaining balance
-- mark fully redeemed when exhausted
+### Remaining edge cases
+- broader UI messaging in every customer account screen
+- optional customer gift-balance checker outside checkout
 
 ---
 
 ## 4) Add-on pricing drift risk
 
-### Risk
-Add-ons still need one canonical source across frontend and backend.
+### Current state
+Booking checkout now reads package and add-on pricing from `/data/rosie_services_pricing_and_packages.json`, matching the frontend booking flow instead of relying on a second hard-coded pricing map.
 
-### Why it matters
-Split definitions can cause:
-- wrong totals
-- confusing UI
-- checkout mismatches
-- maintenance headaches
-
-### Needed
-One canonical add-on/pricing structure used by:
-- frontend display
-- frontend selection
-- backend validation
-- checkout/Stripe logic
+### Remaining edge cases
+- move any remaining admin/report references that still assume legacy labels
+- add automated comparison tests for pricing JSON vs checkout behavior
 
 ---
 
@@ -293,3 +277,13 @@ Still remaining:
 - gift redemption completion at booking checkout
 - canonical add-on pricing unification across all paths
 - deeper SEO cleanup across every remaining route
+
+
+## 13) PayPal completion risk
+
+### Current state
+A PayPal deposit path has now been added with server-side order creation and capture.
+
+### Remaining edge cases
+- add webhook-based reconciliation for rare redirect/capture failures
+- surface PayPal payment details more deeply in admin reporting

@@ -41,3 +41,12 @@
 - Added moderation metadata and thread-status handling for progress comments and annotations.
 - Added low-stock alert tracking plus per-item reorder actions in catalog admin.
 - Fixed malformed root-page H1 rendering on the main public marketing pages.
+
+
+## March 24 2026 pass update
+- Added PayPal deposit checkout flow alongside Stripe.
+- Completed booking-time gift redemption through checkout, including zero-due gift confirmation when the deposit is fully covered.
+- Switched booking checkout pricing/add-on validation to the canonical public pricing JSON.
+- Added annotation moderation endpoint and moderation controls in the jobsite workspace, plus thread visibility summaries in progress management.
+- Added per-item quick quantity adjustments and stronger low-stock/reorder handling in Admin Catalog.
+- Continued route metadata cleanup across remaining public pages.
