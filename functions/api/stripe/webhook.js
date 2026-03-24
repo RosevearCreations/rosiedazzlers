@@ -14,7 +14,7 @@ export async function onRequestPost({ request, env }) {
   const session = event?.data?.object;
   const bookingId = session?.metadata?.booking_id;
   if (!bookingId) { await logEvent(SUPABASE_URL, SERVICE_KEY, null, "stripe_webhook_missing_booking_id", event); return new Response("Missing booking_id metadata", { status: 200 }); }
-  const patch = await supaPatch(SUPABASE_URL, SERVICE_KEY, `/rest/v1/bookings?id=eq.${encodeURIComponent(bookingId)}`, { status: "confirmed", stripe_session_id: session?.id ?? null, stripe_payment_intent_id: session?.payment_intent ?? null });
+  const patch = await supaPatch(SUPABASE_URL, SERVICE_KEY, `/rest/v1/bookings?id=eq.${encodeURIComponent(bookingId)}`, { status: "confirmed", stripe_session_id: session?.id ?? null, stripe_payment_intent_id: session?.payment_intent ?? null, payment_provider: 'stripe' });
   if (!patch.ok) { await logEvent(SUPABASE_URL, SERVICE_KEY, bookingId, "stripe_webhook_update_failed", patch); return new Response("Supabase update failed", { status: 500 }); }
   const giftCode = String(session?.metadata?.gift_code || '').trim() || null;
   const giftCertificateId = String(session?.metadata?.gift_certificate_id || '').trim() || null;
