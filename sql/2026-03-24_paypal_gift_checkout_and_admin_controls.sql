@@ -5,8 +5,11 @@ alter table public.bookings
   add column if not exists paypal_order_id text null,
   add column if not exists paypal_capture_id text null;
 
-create index if not exists bookings_payment_provider_idx on public.bookings(payment_provider);
-create index if not exists bookings_paypal_order_id_idx on public.bookings(paypal_order_id);
+create index if not exists bookings_payment_provider_idx
+  on public.bookings(payment_provider);
+
+create index if not exists bookings_paypal_order_id_idx
+  on public.bookings(paypal_order_id);
 
 alter table public.catalog_low_stock_alerts
   add column if not exists resolved_by_name text null,
@@ -19,11 +22,17 @@ alter table public.observation_annotations
   add column if not exists moderated_by_name text null,
   add column if not exists moderation_reason text null;
 
-create index if not exists observation_annotations_thread_status_idx on public.observation_annotations(thread_status);
+create index if not exists observation_annotations_thread_status_idx
+  on public.observation_annotations(thread_status);
 
-insert into public.app_management_settings (setting_key, setting_value, updated_at)
+insert into public.app_management_settings (key, value, updated_at)
 values
-  ('payment_methods', '{"stripe":true,"paypal":true,"gift_only_confirm":true}'::jsonb, now())
-on conflict (setting_key) do update set
-  setting_value = excluded.setting_value,
+  (
+    'payment_methods',
+    '{"stripe": true, "paypal": true, "gift_only_confirm": true}'::jsonb,
+    now()
+  )
+on conflict (key) do update
+set
+  value = excluded.value,
   updated_at = now();
