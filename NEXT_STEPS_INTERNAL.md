@@ -27,3 +27,10 @@
    - connect notification events to real providers
    - add templates for booking/progress/recovery messages
    - add manual resend actions in admin
+
+
+## Updated next steps
+1. Connect public pages fully to catalog admin workflows, including create/edit images and reorder previews.
+2. Add admin UI for true recovery-message preview/testing and channel rules.
+3. Expand annotation moderation tools and provider-backed notifications.
+4. Continue public SEO cleanup page by page, with location/service-specific metadata.

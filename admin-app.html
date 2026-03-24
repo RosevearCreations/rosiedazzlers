@@ -61,6 +61,17 @@
             <div class="checkrow"><input id="flag_tier_discount_badges" type="checkbox"><label for="flag_tier_discount_badges">Show tier discount badges in booking/account flows</label></div>
             <button class="btn" type="button" id="saveFlagsBtn" style="margin-top:12px">Save feature flags</button>
           </article>
+
+          <article class="card" style="margin-top:16px">
+            <h2 style="margin-top:0">Recovery templates & rules</h2>
+            <div class="field"><label for="recovery_subject">Recovery email subject</label><input id="recovery_subject" /></div>
+            <div class="field"><label for="recovery_body_text">Recovery email body (text)</label><textarea id="recovery_body_text"></textarea></div>
+            <div class="field"><label for="recovery_body_html">Recovery email body (HTML)</label><textarea id="recovery_body_html"></textarea></div>
+            <div class="checkrow"><input id="recovery_enabled" type="checkbox"><label for="recovery_enabled">Enable abandoned-order recovery</label></div>
+            <div class="field"><label for="recovery_min_events">Minimum tracked events before recovery</label><input id="recovery_min_events" type="number" min="0" value="2"></div>
+            <div class="field"><label for="recovery_cooldown_hours">Recovery cooldown hours</label><input id="recovery_cooldown_hours" type="number" min="0" value="24"></div>
+            <button class="btn" type="button" id="saveRecoveryBtn">Save recovery settings</button>
+          </article>
         </section>
       </div>
     </div>
@@ -103,6 +114,8 @@
           notes: document.getElementById("manual_schedule_notes").value || ""
         };
       }
+      function readRecoveryTemplates(){ return { abandoned_checkout_subject: document.getElementById('recovery_subject').value || '', abandoned_checkout_body_text: document.getElementById('recovery_body_text').value || '', abandoned_checkout_body_html: document.getElementById('recovery_body_html').value || '' }; }
+      function readRecoveryRules(){ return { abandoned_recovery_enabled: document.getElementById('recovery_enabled').checked, minimum_page_events: Number(document.getElementById('recovery_min_events').value || 0), require_email: true, cooldown_hours: Number(document.getElementById('recovery_cooldown_hours').value || 24) }; }
       function readFlags(){
         return {
           live_updates_default: document.getElementById("flag_live_updates_default").checked,
@@ -126,6 +139,8 @@
         const visibility = applySetting(s.visibility_matrix);
         const scheduling = applySetting(s.manual_scheduling_rules);
         const flags = applySetting(s.feature_flags);
+        const recoveryTemplates = applySetting(s.recovery_templates);
+        const recoveryRules = applySetting(s.recovery_rules);
         document.getElementById("vis_customer_detailer_notes").checked = !!visibility.customer_detailer_notes;
         document.getElementById("vis_customer_admin_notes").checked = visibility.customer_admin_notes_admin_only !== false;
         document.getElementById("vis_detailer_admin_notes").checked = visibility.detailer_admin_notes_admin_only !== false;
@@ -136,6 +151,12 @@
         document.getElementById("flag_customer_chat_enabled").checked = flags.customer_chat_enabled !== false;
         document.getElementById("flag_picture_first_observations").checked = flags.picture_first_observations !== false;
         document.getElementById("flag_tier_discount_badges").checked = flags.tier_discount_badges !== false;
+        document.getElementById('recovery_subject').value = recoveryTemplates.abandoned_checkout_subject || '';
+        document.getElementById('recovery_body_text').value = recoveryTemplates.abandoned_checkout_body_text || '';
+        document.getElementById('recovery_body_html').value = recoveryTemplates.abandoned_checkout_body_html || '';
+        document.getElementById('recovery_enabled').checked = recoveryRules.abandoned_recovery_enabled !== false;
+        document.getElementById('recovery_min_events').value = recoveryRules.minimum_page_events ?? 2;
+        document.getElementById('recovery_cooldown_hours').value = recoveryRules.cooldown_hours ?? 24;
       }
 
       document.getElementById("saveVisibilityBtn").addEventListener("click", async () => {
@@ -149,6 +170,12 @@
       document.getElementById("saveFlagsBtn").addEventListener("click", async () => {
         try { await saveSetting("feature_flags", readFlags(), "Feature flags saved."); }
         catch (err) { setShellStatus(err?.message || "Could not save feature flags.", "error"); }
+      });
+      document.getElementById('saveRecoveryBtn').addEventListener('click', async ()=>{
+        try {
+          await saveSetting('recovery_templates', readRecoveryTemplates(), 'Recovery templates saved.');
+          await saveSetting('recovery_rules', readRecoveryRules(), 'Recovery rules saved.');
+        } catch (err) { setShellStatus(err?.message || 'Could not save recovery settings.', 'error'); }
       });
 
       window.AdminPageInit.init({

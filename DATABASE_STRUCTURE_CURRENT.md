@@ -80,3 +80,8 @@ Admin-maintained operational catalog for systems and consumables:
 - unit_cost_cents
 - notes
 - is_active
+
+
+## Catalog ratings and recovery settings
+- `catalog_items` now includes: `brand`, `model`, `location_label`, `acquired_on`, `condition_rating`, `usefulness_rating`, and computed `overall_rating`.
+- `app_management_settings` also stores `recovery_templates` and `recovery_rules` for abandoned-order messaging.

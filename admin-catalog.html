@@ -57,12 +57,18 @@
           <div class="field"><label for="catalog-type">Catalog Type</label><select id="catalog-type"><option value="systems">Systems</option><option value="consumables">Consumables</option></select></div>
           <div class="field"><label for="title">Title</label><input id="title" required /></div>
           <div class="field"><label for="category">Category</label><input id="category" /></div>
+          <div class="field"><label for="brand">Brand</label><input id="brand" /></div>
+          <div class="field"><label for="model">Model</label><input id="model" /></div>
+          <div class="field"><label for="location-label">Location</label><input id="location-label" /></div>
+          <div class="field"><label for="acquired-on">Acquired On</label><input id="acquired-on" type="date" /></div>
           <div class="field"><label for="image-url">Image URL</label><input id="image-url" /></div>
           <div class="field"><label for="supplier-url">Supplier URL</label><input id="supplier-url" /></div>
           <div class="field"><label for="sort-order">Sort Order</label><input id="sort-order" type="number" value="0" /></div>
           <div class="field"><label for="quantity-on-hand">Quantity On Hand</label><input id="quantity-on-hand" type="number" value="0" /></div>
           <div class="field"><label for="reorder-level">Reorder Level</label><input id="reorder-level" type="number" value="0" /></div>
           <div class="field"><label for="unit-cost-cents">Unit Cost (cents)</label><input id="unit-cost-cents" type="number" value="0" /></div>
+          <div class="field"><label for="condition-rating">Condition Rating (0-5)</label><input id="condition-rating" type="number" min="0" max="5" value="0" /></div>
+          <div class="field"><label for="usefulness-rating">Usefulness Rating (0-5)</label><input id="usefulness-rating" type="number" min="0" max="5" value="0" /></div>
           <div class="field"><label for="notes">Notes</label><textarea id="notes"></textarea></div>
           <div class="field"><label><input id="is-active" type="checkbox" checked /> Active</label></div>
           <div class="actions"><button class="btn" type="submit">Save Item</button><button class="btn" type="button" id="new-item-btn">New</button></div>
@@ -75,13 +81,13 @@
 <script src="/assets/admin-shell.js"></script>
 <script>
 (function(){
-  const els={list:document.getElementById("catalog-list"),form:document.getElementById("catalog-form"),id:document.getElementById("item-id"),type:document.getElementById("catalog-type"),title:document.getElementById("title"),category:document.getElementById("category"),imageUrl:document.getElementById("image-url"),supplierUrl:document.getElementById("supplier-url"),sortOrder:document.getElementById("sort-order"),quantity:document.getElementById("quantity-on-hand"),reorder:document.getElementById("reorder-level"),cost:document.getElementById("unit-cost-cents"),notes:document.getElementById("notes"),active:document.getElementById("is-active"),newBtn:document.getElementById("new-item-btn")};
+  const els={list:document.getElementById("catalog-list"),form:document.getElementById("catalog-form"),id:document.getElementById("item-id"),type:document.getElementById("catalog-type"),title:document.getElementById("title"),category:document.getElementById("category"),brand:document.getElementById("brand"),model:document.getElementById("model"),locationLabel:document.getElementById("location-label"),acquiredOn:document.getElementById("acquired-on"),imageUrl:document.getElementById("image-url"),supplierUrl:document.getElementById("supplier-url"),sortOrder:document.getElementById("sort-order"),quantity:document.getElementById("quantity-on-hand"),reorder:document.getElementById("reorder-level"),cost:document.getElementById("unit-cost-cents"),conditionRating:document.getElementById("condition-rating"),usefulnessRating:document.getElementById("usefulness-rating"),notes:document.getElementById("notes"),active:document.getElementById("is-active"),newBtn:document.getElementById("new-item-btn")};
   let currentType="systems"; let items=[];
   function setShellStatus(message,type){document.querySelectorAll("[data-admin-shell-status]").forEach(node=>{node.hidden=!message; node.textContent=message||""; node.dataset.state=type||"";});}
   function resetForm(){els.form.reset(); els.id.value=""; els.type.value=currentType; els.sortOrder.value="0"; els.quantity.value="0"; els.reorder.value="0"; els.cost.value="0"; els.active.checked=true;}
-  function populate(item){els.id.value=item.id||""; els.type.value=item.catalog_type||currentType; els.title.value=item.title||""; els.category.value=item.category||""; els.imageUrl.value=item.image_url||""; els.supplierUrl.value=item.supplier_url||""; els.sortOrder.value=item.sort_order||0; els.quantity.value=item.quantity_on_hand||0; els.reorder.value=item.reorder_level||0; els.cost.value=item.unit_cost_cents||0; els.notes.value=item.notes||""; els.active.checked=item.is_active!==false;}
+  function populate(item){els.id.value=item.id||""; els.type.value=item.catalog_type||currentType; els.title.value=item.title||""; els.category.value=item.category||""; els.brand.value=item.brand||""; els.model.value=item.model||""; els.locationLabel.value=item.location_label||""; els.acquiredOn.value=item.acquired_on||""; els.imageUrl.value=item.image_url||""; els.supplierUrl.value=item.supplier_url||""; els.sortOrder.value=item.sort_order||0; els.quantity.value=item.quantity_on_hand||0; els.reorder.value=item.reorder_level||0; els.cost.value=item.unit_cost_cents||0; els.conditionRating.value=item.condition_rating||0; els.usefulnessRating.value=item.usefulness_rating||0; els.notes.value=item.notes||""; els.active.checked=item.is_active!==false;}
   function render(items){els.list.innerHTML=""; if(!items.length){els.list.innerHTML='<div class="item muted">No items found for this catalog.</div>'; return;}
-    items.forEach(item=>{const div=document.createElement("div"); div.className="item"; div.innerHTML=`<strong>${escapeHtml(item.title||"Untitled")}</strong><div class="muted">${escapeHtml(item.category||"general")} • Qty ${Number(item.quantity_on_hand||0)} • Reorder ${Number(item.reorder_level||0)} • Sort ${Number(item.sort_order||0)}</div><div class="muted">${escapeHtml(item.notes||"")}</div>`; div.addEventListener("click",()=>populate(item)); els.list.appendChild(div);});
+    items.forEach(item=>{const div=document.createElement("div"); div.className="item"; div.innerHTML=`<strong>${escapeHtml(item.title||"Untitled")}</strong><div class="muted">${escapeHtml(item.category||"general")} • Qty ${Number(item.quantity_on_hand||0)} • Reorder ${Number(item.reorder_level||0)} • Sort ${Number(item.sort_order||0)}</div><div class="muted">${escapeHtml(item.brand||"")} ${escapeHtml(item.model||"")} ${item.location_label ? '• '+escapeHtml(item.location_label) : ''}</div><div class="muted">Rating ${Number(item.overall_rating||0) || '—'} / 5 • Condition ${Number(item.condition_rating||0)} • Usefulness ${Number(item.usefulness_rating||0)}</div><div class="muted">${escapeHtml(item.notes||"")}</div>`; div.addEventListener("click",()=>populate(item)); els.list.appendChild(div);});
   }
   async function load(type=currentType){currentType=type; resetForm(); els.type.value=currentType;
     const res=await fetch("/api/admin/catalog_items_get",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({catalog_type:type})});
@@ -89,7 +95,7 @@
     items=data?.items||[]; render(items);
   }
   els.form.addEventListener("submit", async (event)=>{event.preventDefault(); setShellStatus("",""); try{
-    const payload={id:els.id.value||undefined,catalog_type:els.type.value,title:els.title.value,category:els.category.value,image_url:els.imageUrl.value,supplier_url:els.supplierUrl.value,sort_order:Number(els.sortOrder.value||0),quantity_on_hand:Number(els.quantity.value||0),reorder_level:Number(els.reorder.value||0),unit_cost_cents:Number(els.cost.value||0),notes:els.notes.value,is_active:els.active.checked};
+    const payload={id:els.id.value||undefined,catalog_type:els.type.value,title:els.title.value,category:els.category.value,brand:els.brand.value,model:els.model.value,location_label:els.locationLabel.value,acquired_on:els.acquiredOn.value||null,image_url:els.imageUrl.value,supplier_url:els.supplierUrl.value,sort_order:Number(els.sortOrder.value||0),quantity_on_hand:Number(els.quantity.value||0),reorder_level:Number(els.reorder.value||0),unit_cost_cents:Number(els.cost.value||0),condition_rating:Number(els.conditionRating.value||0),usefulness_rating:Number(els.usefulnessRating.value||0),notes:els.notes.value,is_active:els.active.checked};
     const res=await fetch("/api/admin/catalog_items_save",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
     const data=await res.json().catch(()=>null); if(!res.ok) throw new Error(data?.error||"Could not save item.");
     setShellStatus("Catalog item saved.","success"); await load(currentType); if(data?.item) populate(data.item);
@@ -97,7 +103,7 @@
   els.newBtn.addEventListener("click", resetForm);
   document.querySelectorAll("[data-type-btn]").forEach(btn=>btn.addEventListener("click", ()=>load(btn.getAttribute("data-type-btn"))));
   function escapeHtml(v){return String(v||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
-  window.AdminShell.boot({pageKey:"admin-staff", onReady: async ()=>{try{await load("systems");}catch(err){setShellStatus(err?.message||"Could not initialize catalog screen.","error");}}});
+  window.AdminShell.boot({pageKey:"admin-catalog", onReady: async ()=>{try{await load("systems");}catch(err){setShellStatus(err?.message||"Could not initialize catalog screen.","error");}}});
 })();
 </script>
 </body>

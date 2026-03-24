@@ -28,3 +28,10 @@
 - keyword meta support
 - structured data for local mobile detailing
 - cleaner H1/title/description alignment on core public pages
+
+
+## Latest pass
+- Connected public gear/consumables pages to database-backed catalog items via a public read endpoint.
+- Added ratings and richer inventory fields for tools/systems/consumables.
+- Added recovery template/rule editing to App Management.
+- Updated schema snapshot and migration set to include catalog ratings and recovery settings.

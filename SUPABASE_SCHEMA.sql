@@ -221,3 +221,6 @@ create index if not exists job_time_entries_staff_idx on public.job_time_entries
 create index if not exists job_time_entries_event_time_idx on public.job_time_entries(event_time);
 
 alter table public.job_time_entries enable row level security;
+
+-- NOTE: latest incremental migrations also add catalog ratings/recovery settings via
+-- sql/2026-03-24_catalog_ratings_public_and_recovery_templates.sql

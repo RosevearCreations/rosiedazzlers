@@ -17,3 +17,7 @@ Rosie Dazzlers is now structured around three primary user surfaces:
 - make analytics and recovery useful in the admin interface
 - continue deepening annotation + thread UX
 - connect systems/consumables maintenance to real purchasing and reorder decisions
+
+
+## Current direction update
+The app now treats tools, systems, and consumables as a rateable backend-managed catalog with a public read path. Recovery messaging is also becoming a first-class managed setting instead of hard-coded copy.

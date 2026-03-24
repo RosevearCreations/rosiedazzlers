@@ -75,6 +75,7 @@
   </div>
 
   <script type="module">
+    const PUBLIC_CATALOG_URL = "/api/catalog_public?catalog_type=systems";
     const DATA_URL = "/data/systems_catalog.json?v=20260311h";
     const AMAZON_CA_SEARCH = "https://www.amazon.ca/s?k=";
 
@@ -96,6 +97,8 @@
       }
     }
 
+    function renderStars(value){ const rounded = Math.round(Number(value||0)); return rounded ? "★".repeat(rounded) + "☆".repeat(5-rounded) : ""; }
+
     function normalizeItem(x){
       const name = x.name || x.title || x.item || x.filename || "Item";
       const notes = x.notes || x.description || x.caption || "";
@@ -108,7 +111,7 @@
 
       const amazon_is_generated = !(given && String(given).trim());
 
-      return { name, notes, image_url, amazon_url, amazon_is_generated };
+      return { name, notes, image_url, amazon_url, amazon_is_generated, rating: x.overall_rating ?? null, brand: x.brand || null, model: x.model || null, location_label: x.location_label || null };
     }
 
     function matches(item, q){
@@ -147,6 +150,8 @@
             </div>
 
             ${it.notes ? `<div class="muted mini" style="margin-top:6px">${escapeHtml(it.notes)}</div>` : ``}
+            ${(it.brand || it.model || it.location_label) ? `<div class="muted mini" style="margin-top:6px">${escapeHtml([it.brand,it.model].filter(Boolean).join(" "))}${it.location_label ? ` • ${escapeHtml(it.location_label)}` : ``}</div>` : ``}
+            ${it.rating ? `<div class="muted mini" style="margin-top:6px">Equipment rating: ${escapeHtml(renderStars(it.rating))} (${escapeHtml(String(it.rating))}/5)</div>` : ``}
 
             <div class="row" style="margin-top:12px">
               <a class="btn primary" target="_blank" rel="noopener" href="${escapeHtml(it.amazon_url)}">View on Amazon</a>
@@ -162,7 +167,9 @@
     }
 
     try {
-      const raw = await fetchJsonStrict(DATA_URL);
+      let raw = null;
+      try { raw = await fetchJsonStrict(PUBLIC_CATALOG_URL); } catch {}
+      if (!raw || raw.ok === false) raw = await fetchJsonStrict(DATA_URL);
       const arr = Array.isArray(raw) ? raw : (Array.isArray(raw.items) ? raw.items : []);
       const list = arr.map(normalizeItem);
 

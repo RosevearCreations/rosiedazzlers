@@ -59,6 +59,6 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at top, rgba(25
     }
     setShellStatus(`Queued ${queued} recovery email(s).`,"success");
   });
-  window.AdminShell.boot({pageKey:"admin-staff", onReady: async ()=>{try{await load();}catch(err){setShellStatus(err?.message||"Could not initialize analytics.","error");}}});
+  window.AdminShell.boot({pageKey:"admin-analytics", onReady: async ()=>{try{await load();}catch(err){setShellStatus(err?.message||"Could not initialize analytics.","error");}}});
 })();
 </script></body></html>

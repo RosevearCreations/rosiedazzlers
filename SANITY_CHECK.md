@@ -25,3 +25,9 @@
 
 ## SQL to run
 - `sql/2026-03-24_catalog_recovery_and_dispatch.sql`
+
+
+## Sanity check update
+- Added public catalog endpoint and wired gear/consumables pages to prefer DB-backed inventory.
+- Added catalog rating fields and recovery template/rule settings migration.
+- Updated admin catalog UI and app management UI accordingly.

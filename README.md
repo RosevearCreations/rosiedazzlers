@@ -34,3 +34,10 @@ Current dev snapshot includes:
 - Catalog items can be maintained and reordered from the admin interface.
 - Notification processing can dispatch to provider webhooks with retry/backoff.
 - SEO helpers now add keywords, canonical tags, and structured data.
+
+
+## March 24, 2026 additions
+- Public gear and consumables pages can now read from the live `catalog_items` table through `/api/catalog_public` with JSON fallbacks.
+- Catalog items now support equipment ratings, brand/model, storage location, and acquisition date.
+- Admin App Management now stores abandoned-order recovery templates and rules.
+- Notification recovery/dispatch foundations continue to use queue rules and retry fields.

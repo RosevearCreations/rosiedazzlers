@@ -22,3 +22,9 @@ Operational intelligence + visibility:
 2. Recovery email/SMS templates and flows
 3. Deeper thread moderation and annotation tooling
 4. Catalog reorder reminders and purchasing workflows
+
+
+## Newly advanced
+- Public catalog connection to DB inventory
+- Rated tool/consumable inventory
+- Recovery templates and rules persistence

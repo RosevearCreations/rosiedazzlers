@@ -102,6 +102,7 @@
 
   <script type="module">
     // Try multiple JSON paths
+    const PUBLIC_CATALOG_URL = "/api/catalog_public?catalog_type=consumables";
     const CANDIDATE_JSON = [
       "/data/rosie_products_catalog_r2_corrected.json",
       "/data/rosie_products_catalog_rebuilt.json",
@@ -142,6 +143,15 @@
       }
     }
 
+    async function loadPublicThenFallback(urls){
+      try {
+        const data = await fetchJsonStrict(`${PUBLIC_CATALOG_URL}&v=${Date.now()}`);
+        if (data && Array.isArray(data.items)) return { url: PUBLIC_CATALOG_URL, data: data.items };
+      } catch {}
+
+      return loadFirstWorkingJson(urls);
+    }
+
     async function loadFirstWorkingJson(urls){
       let lastErr = null;
       for (const u of urls) {
@@ -155,6 +165,8 @@
       }
       throw lastErr || new Error("No JSON source worked.");
     }
+
+    function renderStars(value){ const rounded = Math.round(Number(value||0)); return rounded ? "★".repeat(rounded) + "☆".repeat(5-rounded) : ""; }
 
     function normalizeItem(it){
       const title = it.title || it.filename || it.original || it.sanitized || "(untitled)";
@@ -178,6 +190,10 @@
         amazonQuery,
         path: it.path || "",
         filename: it.filename || "",
+        rating: it.overall_rating ?? null,
+        brand: it.brand || null,
+        model: it.model || null,
+        location_label: it.location_label || null
       };
     }
 
@@ -317,7 +333,7 @@
     // Load JSON
     try {
       showStatus("Loading consumables catalog…");
-      const { url, data } = await loadFirstWorkingJson(CANDIDATE_JSON);
+      const { url, data } = await loadPublicThenFallback(CANDIDATE_JSON);
 
       all = data.map(normalizeItem).filter(x => x.img && x.title);
       buildCategoryOptions(all);
