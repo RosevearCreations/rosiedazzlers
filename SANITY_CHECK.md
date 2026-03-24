@@ -182,3 +182,12 @@ You recently fixed some schema errors; however, the codebase still contains mult
   
 **Recommendation:** pick ONE path and complete it.  
 If you want security + shareable customer links without exposing booking IDs, finish the token-based system.
+
+
+## March 24, 2026 pass additions
+- Checkout now loads canonical package/add-on pricing from `data/rosie_services_pricing_and_packages.json`.
+- Checkout now supports gift-aware deposit handling and gift-only confirmation when the deposit is fully covered.
+- Admin progress now supports threaded replies plus moderation statuses (`visible`, `hidden`, `internal_only`, `pinned`).
+- Recovery template persistence was added through `functions/api/admin/recovery_templates.js`, `functions/api/admin/recovery_preview.js`, and `admin-recovery.html`.
+- Inventory/purchasing foundations were added through `functions/api/catalog_public.js`, `functions/api/admin/catalog_inventory_list.js`, `functions/api/admin/catalog_inventory_save.js`, `functions/api/admin/catalog_reorder_request.js`, and `admin-catalog.html`.
+- Public `gear.html` and `consumables.html` now try the database inventory first and fall back to JSON.

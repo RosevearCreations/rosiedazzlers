@@ -17,8 +17,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Book | Rosie Dazzlers</title>
-  <meta name="description" content="Book a mobile auto detailing appointment in Norfolk & Oxford Counties. Deposit required." />
+  <title>Book Mobile Detailing | Rosie Dazzlers</title>
+  <meta name="description" content="Book Rosie Dazzlers mobile auto detailing online. Choose your package, add-ons, date, slot, and apply promo or gift codes." />
+  <link rel="canonical" href="https://rosiedazzlers.ca/book" />
+  <meta property="og:title" content="Book Mobile Detailing | Rosie Dazzlers" />
+  <meta property="og:description" content="Book Rosie Dazzlers mobile auto detailing online. Choose your package, add-ons, date, slot, and apply promo or gift codes." />
   <link rel="stylesheet" href="/assets/site.css?v=20260311k" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -300,7 +303,7 @@
       </div>
 
       <div class="row" style="margin-top:14px">
-        <button class="btn primary" id="checkoutBtn" type="button">Continue to deposit payment</button>
+        <button class="btn primary" id="checkoutBtn" type="button">Continue to payment / confirmation</button>
         <a class="btn ghost" href="/waiver">View waiver / policies</a>
       </div>
     </div>
@@ -620,7 +623,7 @@
       };
 
       qs("#checkoutBtn").disabled = true;
-      qs("#checkoutBtn").textContent = "Creating checkout…";
+      qs("#checkoutBtn").textContent = "Preparing payment…";
 
       try {
         const res = await fetch("/api/checkout", {
@@ -633,7 +636,7 @@
 
         if (!res.ok || !out?.ok || !out?.checkout_url){
           qs("#checkoutBtn").disabled = false;
-          qs("#checkoutBtn").textContent = "Continue to deposit payment";
+          qs("#checkoutBtn").textContent = "Continue to payment / confirmation";
           return show("status", out?.error ? `Checkout error: ${out.error}` : "Checkout failed.", "bad");
         }
 
@@ -641,7 +644,7 @@
 
       } catch (err) {
         qs("#checkoutBtn").disabled = false;
-        qs("#checkoutBtn").textContent = "Continue to deposit payment";
+        qs("#checkoutBtn").textContent = "Continue to payment / confirmation";
         return show("status", String(err), "bad");
       }
     });

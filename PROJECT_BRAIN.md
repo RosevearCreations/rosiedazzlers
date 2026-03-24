@@ -331,3 +331,27 @@ A **Supabase database**
 **R2 for images**
 
 All hosted through **Cloudflare**.
+
+
+---
+
+# March 2026 architecture notes
+
+Additional persisted layers now expected by the current build:
+
+Recovery / messaging
+- `recovery_message_templates`
+- `app_management_settings` key: `recovery_provider_rules`
+
+Inventory / purchasing
+- `catalog_inventory_items`
+- `catalog_low_stock_alerts`
+- `catalog_purchase_orders`
+
+Moderation / threads
+- `job_updates.parent_update_id`
+- `job_updates.thread_status`
+- `job_media.thread_status`
+
+Public catalog strategy now supports database inventory first, with JSON fallback.
+Checkout now supports canonical pricing JSON plus gift-aware deposit reduction.

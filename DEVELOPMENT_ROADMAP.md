@@ -310,3 +310,30 @@ Rosie Dazzlers development priorities are:
 10) add field photo uploads
 
 Following this roadmap will transform the system from **functional prototype** into a **fully mature detailing operations platform**.
+
+
+---
+
+# March 24, 2026 pass update
+
+## Recently moved forward
+- recovery-message provider rules and preview/testing foundations
+- low-stock/reorder admin workflow foundation
+- moderation-aware two-sided progress thread foundation
+
+## Newly advanced
+- public catalog connection to DB inventory with JSON fallback
+- rated tool/consumable inventory fields and public display support
+- recovery templates and rules persistence
+- roadmap adjusted to reflect current sequencing
+
+## Move up next
+- jobsite moderation controls UI
+- gift redemption inside booking totals/checkout
+- add-on pricing canonicalization
+
+## Upcoming implementation targets
+1. Page-by-page SEO/H1/meta audit
+2. Recovery email/SMS templates and flows
+3. Deeper thread moderation and annotation tooling
+4. Catalog reorder reminders and purchasing workflows

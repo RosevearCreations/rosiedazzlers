@@ -13,8 +13,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Consumables | Rosie Dazzlers</title>
-  <meta name="description" content="Rosie Dazzlers consumables and products used for mobile auto detailing." />
+  <title>Detailing Consumables We Use | Rosie Dazzlers</title>
+  <meta name="description" content="Browse Rosie Dazzlers detailing consumables and products, with public inventory and rated items when available." />
+  <link rel="canonical" href="https://rosiedazzlers.ca/consumables" />
+  <meta property="og:title" content="Detailing Consumables We Use | Rosie Dazzlers" />
+  <meta property="og:description" content="Browse Rosie Dazzlers detailing consumables and products, with public inventory and rated items when available." />
   <link rel="stylesheet" href="/assets/site.css?v=20260309w" />
   <style>
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
@@ -102,6 +105,7 @@
 
   <script type="module">
     // Try multiple JSON paths
+    const DB_URL = "/api/catalog_public?kind=consumable";
     const CANDIDATE_JSON = [
       "/data/rosie_products_catalog_r2_corrected.json",
       "/data/rosie_products_catalog_rebuilt.json",
@@ -143,6 +147,7 @@
     }
 
     async function loadFirstWorkingJson(urls){
+      try { const dbRes = await fetch(DB_URL, { cache:"no-store" }); const dbJson = await dbRes.json(); if (dbRes.ok && dbJson?.ok && Array.isArray(dbJson.items) && dbJson.items.length) return { url: DB_URL, data: dbJson.items }; } catch {}
       let lastErr = null;
       for (const u of urls) {
         try {
@@ -178,6 +183,11 @@
         amazonQuery,
         path: it.path || "",
         filename: it.filename || "",
+        qty_on_hand: it.qty_on_hand ?? null,
+        unit_label: it.unit_label || "",
+        rating_value: it.rating_value ?? null,
+        rating_count: Number(it.rating_count || 0),
+        notes: it.notes || it.description || ""
       };
     }
 

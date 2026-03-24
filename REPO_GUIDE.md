@@ -255,3 +255,15 @@ job_signoffs
 README.md — project overview  
 SANITY_CHECK.md — development priorities  
 SUPABASE_SCHEMA.sql — database schema
+
+
+## March 24, 2026 update
+
+This repo now includes:
+- persisted recovery template management and preview endpoints
+- database-backed public catalog support with JSON fallback
+- rated inventory fields for tools and consumables
+- admin catalog and recovery pages
+- two-sided progress threads with moderation states
+- a refreshed schema snapshot in `SUPABASE_SCHEMA.sql`
+- migration file: `sql/2026-03-24_recovery_inventory_moderation_and_checkout.sql`
