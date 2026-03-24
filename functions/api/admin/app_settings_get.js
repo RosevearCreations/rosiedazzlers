@@ -23,7 +23,9 @@ export async function onRequestPost(context) {
       "visibility_matrix",
       "manual_scheduling_rules",
       "blocking_policy",
-      "feature_flags"
+      "feature_flags",
+      "recovery_templates",
+      "recovery_rules"
     ];
 
     const out = {};

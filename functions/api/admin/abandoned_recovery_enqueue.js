@@ -1,5 +1,6 @@
 
 import { requireStaffAccess, json, methodNotAllowed, serviceHeaders } from "../_lib/staff-auth.js";
+import { loadRecoverySettings } from "../_lib/app-settings.js";
 
 export async function onRequestOptions(){return new Response("",{status:204,headers:corsHeaders()});}
 export async function onRequestPost(context){
@@ -11,19 +12,31 @@ export async function onRequestPost(context){
 
     const customer_email=String(body.customer_email||"").trim().toLowerCase();
     const session_id=String(body.session_id||"").trim() || null;
+    const page_events=Number(body.page_events||0);
     if(!customer_email) return withCors(json({error:"customer_email is required."},400));
+
+    const recovery = await loadRecoverySettings(env);
+    const rules = recovery.recovery_rules || {};
+    const templates = recovery.recovery_templates || {};
+    if (rules.abandoned_recovery_enabled === false) return withCors(json({error:"Abandoned recovery is disabled by settings."},403));
+    if (rules.require_email !== false && !customer_email) return withCors(json({error:"customer_email is required."},400));
+    if (page_events && Number.isFinite(page_events) && page_events < Number(rules.minimum_page_events || 0)) {
+      return withCors(json({error:"Session does not meet recovery rules."},400));
+    }
+    const cooldownHours = Number(rules.cooldown_hours || 24);
 
     const payload=[{
       event_type:"abandoned_checkout_recovery",
       channel:"email",
       recipient_email:customer_email,
-      subject:"Complete your Rosie Dazzlers booking",
-      body_text:"We noticed you started a booking but did not complete checkout. Come back to finish your order when you're ready.",
-      payload:{session_id, recovery_url: env.PUBLIC_SITE_URL ? `${env.PUBLIC_SITE_URL}/book` : "/book"},
+      subject:templates.abandoned_checkout_subject || "Complete your Rosie Dazzlers booking",
+      body_text:templates.abandoned_checkout_body_text || "We noticed you started a booking but did not complete checkout. Come back to finish your order when you're ready.",
+      body_html:templates.abandoned_checkout_body_html || null,
+      payload:{session_id, recovery_url: env.PUBLIC_SITE_URL ? `${env.PUBLIC_SITE_URL}/book` : "/book", page_events},
       status:"queued",
       attempt_count:0,
       max_attempts:5,
-      next_attempt_at:new Date().toISOString()
+      next_attempt_at:new Date(Date.now() + cooldownHours * 60 * 60 * 1000).toISOString()
     }];
 
     const res=await fetch(`${env.SUPABASE_URL}/rest/v1/notification_events`,{

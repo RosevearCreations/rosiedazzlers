@@ -25,7 +25,9 @@ export const DEFAULT_APP_SETTINGS = {
   analytics_journeys_enabled: true,
   abandoned_recovery_enabled: true,
   seo_structured_data_enabled: true,
-    analytics_tracking_enabled: true
+    analytics_tracking_enabled: true,
+    public_catalog_db_enabled: true,
+    recovery_templates_enabled: true
   }
 };
 
@@ -47,6 +49,14 @@ export async function loadAppSettings(env, keys = ['visibility_matrix','manual_s
     } catch {}
   }
   return out;
+}
+
+export async function loadRecoverySettings(env) {
+  const settings = await loadAppSettings(env, ['recovery_templates','recovery_rules']);
+  return {
+    recovery_templates: settings.recovery_templates || structuredClone(DEFAULT_APP_SETTINGS.recovery_templates),
+    recovery_rules: settings.recovery_rules || structuredClone(DEFAULT_APP_SETTINGS.recovery_rules)
+  };
 }
 
 export async function loadFeatureFlags(env) {

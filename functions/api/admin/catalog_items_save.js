@@ -13,12 +13,18 @@ export async function onRequestPost(context){
       catalog_type:String(body.catalog_type||"").trim().toLowerCase(),
       title:String(body.title||"").trim(),
       category:String(body.category||"general").trim(),
+      brand:String(body.brand||"").trim()||null,
+      model:String(body.model||"").trim()||null,
+      location_label:String(body.location_label||"").trim()||null,
+      acquired_on:String(body.acquired_on||"").trim()||null,
       image_url:String(body.image_url||"").trim()||null,
       supplier_url:String(body.supplier_url||"").trim()||null,
       sort_order:Number.isFinite(Number(body.sort_order))?Number(body.sort_order):0,
       quantity_on_hand:Number.isFinite(Number(body.quantity_on_hand))?Number(body.quantity_on_hand):0,
       reorder_level:Number.isFinite(Number(body.reorder_level))?Number(body.reorder_level):0,
       unit_cost_cents:Number.isFinite(Number(body.unit_cost_cents))?Number(body.unit_cost_cents):0,
+      condition_rating:Number.isFinite(Number(body.condition_rating))?Math.max(0,Math.min(5,Number(body.condition_rating))):0,
+      usefulness_rating:Number.isFinite(Number(body.usefulness_rating))?Math.max(0,Math.min(5,Number(body.usefulness_rating))):0,
       notes:String(body.notes||"").trim()||null,
       is_active: body.is_active !== false
     };

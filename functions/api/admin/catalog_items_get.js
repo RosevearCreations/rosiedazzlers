@@ -10,8 +10,8 @@ export async function onRequestPost(context){
     if(!access.ok) return withCors(access.response);
 
     const catalog_type=String(body.catalog_type||"").trim().toLowerCase();
-    let url=`${env.SUPABASE_URL}/rest/v1/catalog_items?select=*&order=catalog_type.asc,sort_order.asc,updated_at.desc&limit=500`;
-    if(catalog_type) url=`${env.SUPABASE_URL}/rest/v1/catalog_items?select=*&catalog_type=eq.${encodeURIComponent(catalog_type)}&order=sort_order.asc,updated_at.desc&limit=500`;
+    let url=`${env.SUPABASE_URL}/rest/v1/catalog_items?select=id,created_at,updated_at,catalog_type,title,category,brand,model,location_label,acquired_on,image_url,supplier_url,sort_order,quantity_on_hand,reorder_level,unit_cost_cents,condition_rating,usefulness_rating,overall_rating,notes,is_active&order=catalog_type.asc,sort_order.asc,updated_at.desc&limit=500`;
+    if(catalog_type) url=`${env.SUPABASE_URL}/rest/v1/catalog_items?select=id,created_at,updated_at,catalog_type,title,category,brand,model,location_label,acquired_on,image_url,supplier_url,sort_order,quantity_on_hand,reorder_level,unit_cost_cents,condition_rating,usefulness_rating,overall_rating,notes,is_active&catalog_type=eq.${encodeURIComponent(catalog_type)}&order=sort_order.asc,updated_at.desc&limit=500`;
     const res=await fetch(url,{headers:serviceHeaders(env)});
     if(!res.ok) return withCors(json({error:`Could not load catalog items. ${await res.text()}`},500));
     const rows=await res.json().catch(()=>[]);
