@@ -1,606 +1,475 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rosie Dazzlers — Live Monitor</title>
-  <meta name="robots" content="noindex,nofollow" />
+  <title>Live Job Monitor | Rosie Dazzlers</title>
+  <meta name="description" content="Live admin monitoring for Rosie Dazzlers jobs." />
   <link rel="stylesheet" href="/assets/site.css" />
-  <style>
-    :root {
-      color-scheme: dark;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 35%),
-        linear-gradient(180deg, #0f172a 0%, #111827 100%);
-      color: #f8fafc;
-    }
-
-    .shell {
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    .loading {
-      display: grid;
-      place-items: center;
-      min-height: 60vh;
-      color: #cbd5e1;
-      font-size: 1rem;
-    }
-
-    .topbar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-
-    .titleblock h1 {
-      margin: 0 0 6px;
-      font-size: 1.8rem;
-      line-height: 1.15;
-    }
-
-    .titleblock p {
-      margin: 0;
-      color: #cbd5e1;
-      line-height: 1.5;
-    }
-
-    .actorcard {
-      min-width: 280px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 18px;
-      padding: 16px 18px;
-      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
-    }
-
-    .actorline {
-      margin: 4px 0;
-      color: #e5e7eb;
-      font-size: 0.96rem;
-    }
-
-    .actorlabel {
-      color: #93c5fd;
-      font-weight: 700;
-      margin-right: 6px;
-    }
-
-    .logout-btn,
-    .btn {
-      appearance: none;
-      border: 0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      background: #2563eb;
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .btn.secondary {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: #f8fafc;
-    }
-
-    .logout-btn {
-      margin-top: 10px;
-    }
-
-    .status {
-      margin-bottom: 16px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.05);
-      color: #e5e7eb;
-    }
-
-    .status[data-state="error"] {
-      background: rgba(220,38,38,0.12);
-      border-color: rgba(248,113,113,0.25);
-      color: #fecaca;
-    }
-
-    .status[data-state="success"] {
-      background: rgba(34,197,94,0.10);
-      border-color: rgba(134,239,172,0.22);
-      color: #bbf7d0;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 16px;
-    }
-
-    .card {
-      grid-column: span 12;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
-    }
-
-    .card h2 {
-      margin: 0 0 10px;
-      font-size: 1.15rem;
-    }
-
-    .card p {
-      margin: 0 0 12px;
-      color: #cbd5e1;
-      line-height: 1.5;
-    }
-
-    .field {
-      margin-bottom: 14px;
-    }
-
-    .field label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: #e5e7eb;
-    }
-
-    .field input {
-      width: 100%;
-      box-sizing: border-box;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 11px 12px;
-      font-size: 0.98rem;
-      background: rgba(255,255,255,0.04);
-      color: #f8fafc;
-      outline: none;
-    }
-
-    .field input:focus {
-      border-color: #60a5fa;
-      background: rgba(255,255,255,0.06);
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: end;
-    }
-
-    .pillrow {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      padding: 6px 10px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      font-size: 0.82rem;
-      color: #e5e7eb;
-    }
-
-    .detail-box {
-      border-radius: 14px;
-      padding: 14px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .detail-box pre {
-      margin: 0;
-      white-space: pre-wrap;
-      word-break: break-word;
-      color: #dbeafe;
-      font-size: 0.92rem;
-      line-height: 1.45;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    }
-
-    .list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .list-item {
-      border-radius: 14px;
-      padding: 12px 14px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .list-item strong {
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    .muted {
-      color: #94a3b8;
-      font-size: 0.92rem;
-    }
-
-    @media (min-width: 900px) {
-      .span-7 { grid-column: span 7; }
-      .span-5 { grid-column: span 5; }
-      .span-6 { grid-column: span 6; }
-      .span-4 { grid-column: span 4; }
-      .span-8 { grid-column: span 8; }
-    }
-  </style>
 </head>
-<body>
-  <main class="shell">
-    <div class="loading" data-admin-shell-loading>
-      Loading live monitor...
-    </div>
+<body data-page="admin-live">
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/admin.html">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers Admin</strong>
+      </a>
 
-    <div data-admin-shell-ready hidden>
-      <header class="topbar">
-        <div class="titleblock">
-          <h1>Live Monitor</h1>
+      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
+        Menu
+      </button>
+
+      <nav id="navLinks" class="nav-links">
+        <a href="/admin.html">Dashboard</a>
+        <a href="/admin-booking.html">Bookings</a>
+        <a href="/admin-blocks.html">Blocks</a>
+        <a href="/admin-progress.html">Progress</a>
+        <a href="/admin-jobsite.html">Job Site</a>
+        <a href="/admin-live.html">Live Monitor</a>
+        <a href="/admin-staff.html">Staff</a>
+        <a href="/admin-promos.html">Promos</a>
+        <a href="/book">Public Site</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <div class="panel">
+        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="hero">
+        <div>
+          <div class="badge">Live Admin Monitor</div>
+          <h1>Watch a job site live</h1>
           <p>
-            Session-aware live operations workspace for one booking, combining booking, intake,
-            time, progress, media, and signoff visibility.
+            This screen is for Admin monitoring while the detailer is actively working.
+            It refreshes automatically and shows intake, time tracking, progress notes, media, and signoffs.
           </p>
+          <div class="badges">
+            <div class="badge">Auto Refresh</div>
+            <div class="badge">Time Tracking</div>
+            <div class="badge">Progress Notes</div>
+            <div class="badge">Media Feed</div>
+          </div>
         </div>
 
-        <section class="actorcard" aria-label="Signed in staff">
-          <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
-          <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
-          <div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div>
-          <button class="logout-btn" type="button" data-admin-logout>Sign Out</button>
-        </section>
-      </header>
+        <div class="panel">
+          <div class="kicker">Current booking</div>
+          <h3 id="liveBookingTitle" style="margin:6px 0 8px">No booking loaded</h3>
+          <div id="liveBookingMeta" class="kicker">Load a booking id below.</div>
+        </div>
+      </div>
+    </section>
 
-      <div class="status" data-admin-shell-status hidden></div>
+    <section class="section">
+      <div id="pageNotice" class="notice">Ready.</div>
+    </section>
 
-      <section class="grid">
-        <article class="card">
-          <h2>Open Live Workspace</h2>
-          <p>Enter a booking ID to load the live operational view for that booking.</p>
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Load live job</h2>
+          <form id="liveLoadForm" class="form">
+            <label>
+              Admin password
+              <input id="adminPassword" type="password" autocomplete="current-password" required />
+            </label>
 
-          <form id="live-open-form" class="actions" novalidate>
-            <div class="field" style="min-width:260px; flex:1 1 260px;">
-              <label for="live-booking-id">Booking ID</label>
-              <input
-                id="live-booking-id"
-                name="booking_id"
-                type="text"
-                autocomplete="off"
-                placeholder="Enter booking UUID"
-              />
-            </div>
+            <label>
+              Booking ID
+              <input id="bookingId" type="text" placeholder="Paste booking id" required />
+            </label>
 
-            <div>
-              <button class="btn" id="live-load-btn" type="submit">Load Live View</button>
+            <label>
+              Refresh interval
+              <select id="refreshSeconds">
+                <option value="10">10 seconds</option>
+                <option value="15" selected>15 seconds</option>
+                <option value="30">30 seconds</option>
+                <option value="60">60 seconds</option>
+              </select>
+            </label>
+
+            <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
+              <button class="btn primary" type="submit">Load live job</button>
+              <button id="toggleRefreshBtn" class="btn ghost" type="button" disabled>Pause refresh</button>
             </div>
           </form>
+        </div>
 
-          <div id="live-flags" class="pillrow">
-            <span class="pill">No booking loaded</span>
+        <div class="panel">
+          <h2>Live summary</h2>
+          <div class="grid" style="gap:10px">
+            <div class="badge">Refresh: <span id="refreshStatusText">Stopped</span></div>
+            <div class="badge">Last update: <span id="lastRefreshText">—</span></div>
+            <div class="badge">Current status: <span id="jobStatusText">Idle</span></div>
+            <div class="badge">Tracked work: <span id="trackedWorkText">00:00:00</span></div>
+            <div class="badge">Paused time: <span id="pausedTimeText">00:00:00</span></div>
           </div>
-        </article>
+        </div>
+      </div>
+    </section>
 
-        <article class="card span-8">
-          <h2>Live Summary</h2>
-          <div id="live-summary" class="detail-box">
-            <pre>No live detail loaded yet.</pre>
-          </div>
-        </article>
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Booking</h2>
+          <div id="bookingBox" class="kicker">No booking loaded.</div>
+        </div>
 
-        <article class="card span-4">
-          <h2>Quick Status</h2>
-          <div id="quick-status" class="list">
-            <div class="list-item muted">No quick status yet.</div>
-          </div>
-        </article>
+        <div class="panel">
+          <h2>Job-site intake</h2>
+          <div id="intakeBox" class="kicker">No intake loaded.</div>
+        </div>
+      </div>
+    </section>
 
-        <article class="card span-6">
-          <h2>Progress Updates</h2>
-          <div id="live-progress-list" class="list">
-            <div class="list-item muted">No progress loaded yet.</div>
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Time entries</h2>
+          <div id="timeEntriesList" class="grid" style="margin-top:12px">
+            <div class="notice">No time entries yet.</div>
           </div>
-        </article>
+        </div>
 
-        <article class="card span-6">
-          <h2>Media</h2>
-          <div id="live-media-list" class="list">
-            <div class="list-item muted">No media loaded yet.</div>
+        <div class="panel">
+          <h2>Progress updates</h2>
+          <div id="updatesList" class="grid" style="margin-top:12px">
+            <div class="notice">No updates yet.</div>
           </div>
-        </article>
+        </div>
+      </div>
+    </section>
 
-        <article class="card span-6">
-          <h2>Intake</h2>
-          <div id="live-intake" class="detail-box">
-            <pre>No intake loaded yet.</pre>
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Media feed</h2>
+          <div id="mediaGrid" class="grid cards" style="margin-top:12px">
+            <div class="notice">No media yet.</div>
           </div>
-        </article>
+        </div>
 
-        <article class="card span-6">
-          <h2>Time</h2>
-          <div id="live-time" class="detail-box">
-            <pre>No time loaded yet.</pre>
+        <div class="panel">
+          <h2>Signoffs</h2>
+          <div id="signoffsList" class="grid" style="margin-top:12px">
+            <div class="notice">No signoffs yet.</div>
           </div>
-        </article>
-
-        <article class="card">
-          <h2>Signoff</h2>
-          <div id="live-signoff" class="detail-box">
-            <pre>No signoff loaded yet.</pre>
-          </div>
-        </article>
-      </section>
-    </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <script src="/assets/admin-auth.js"></script>
-  <script src="/assets/admin-shell.js"></script>
-  <script>
-    (function () {
-      const els = {
-        openForm: document.getElementById("live-open-form"),
-        bookingId: document.getElementById("live-booking-id"),
-        loadBtn: document.getElementById("live-load-btn"),
-        flags: document.getElementById("live-flags"),
-        summary: document.getElementById("live-summary"),
-        quickStatus: document.getElementById("quick-status"),
-        progressList: document.getElementById("live-progress-list"),
-        mediaList: document.getElementById("live-media-list"),
-        intake: document.getElementById("live-intake"),
-        time: document.getElementById("live-time"),
-        signoff: document.getElementById("live-signoff")
+  <footer class="footer container" data-footer></footer>
+
+  <script src="/assets/chrome.js"></script>
+  <script type="module">
+    import { setBrandImages, setFooter } from "/assets/site.js";
+
+    let currentPassword = "";
+    let currentBookingId = "";
+    let refreshTimer = null;
+    let refreshPaused = false;
+
+    function setNotice(message, kind = "") {
+      const el = document.querySelector("#pageNotice");
+      if (!el) return;
+      el.className = kind ? `notice ${kind}` : "notice";
+      el.textContent = message;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function formatDateTime(value) {
+      if (!value) return "—";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return String(value);
+      return new Intl.DateTimeFormat("en-CA", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      }).format(d);
+    }
+
+    function formatDuration(ms) {
+      const totalSeconds = Math.max(0, Math.floor((Number(ms) || 0) / 1000));
+      const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+      const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
+      const seconds = String(totalSeconds % 60).padStart(2, "0");
+      return `${hours}:${minutes}:${seconds}`;
+    }
+
+    async function apiPost(url, body) {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": currentPassword
+        },
+        body: JSON.stringify(body || {})
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Request failed for ${url}`);
+      return data;
+    }
+
+    function renderBooking(booking) {
+      document.querySelector("#liveBookingTitle").textContent =
+        booking?.customer_name || booking?.package_code || "Booking loaded";
+
+      document.querySelector("#liveBookingMeta").textContent = [
+        booking?.service_date || "—",
+        booking?.start_slot || "—",
+        booking?.package_code || "—",
+        booking?.vehicle_size || "—",
+        booking?.assigned_to || "unassigned"
+      ].join(" · ");
+
+      document.querySelector("#bookingBox").innerHTML = `
+        <div><strong>Customer:</strong> ${escapeHtml(booking?.customer_name || "—")}</div>
+        <div><strong>Email:</strong> ${escapeHtml(booking?.customer_email || "—")}</div>
+        <div><strong>Status:</strong> ${escapeHtml(booking?.status || "—")}</div>
+        <div><strong>Job Status:</strong> ${escapeHtml(booking?.job_status || "—")}</div>
+        <div><strong>Assigned:</strong> ${escapeHtml(booking?.assigned_to || "—")}</div>
+        <div><strong>Progress Enabled:</strong> ${booking?.progress_enabled ? "Yes" : "No"}</div>
+      `;
+    }
+
+    function renderIntake(intake) {
+      if (!intake) {
+        document.querySelector("#intakeBox").innerHTML = "No intake saved yet.";
+        return;
+      }
+
+      document.querySelector("#intakeBox").innerHTML = `
+        <div><strong>Detailer:</strong> ${escapeHtml(intake.detailer_name || "—")}</div>
+        <div><strong>Keys Collected:</strong> ${intake.keys_collected ? "Yes" : "No"}</div>
+        <div><strong>Owner Inspection:</strong> ${intake.owner_present_for_visual_inspection ? "Yes" : "No"}</div>
+        <div><strong>Water Tested:</strong> ${intake.water_tested ? "Yes" : "No"}</div>
+        <div><strong>Power Tested:</strong> ${intake.power_tested ? "Yes" : "No"}</div>
+        <div><strong>Extra Debris Charge Possible:</strong> ${
+          intake.extra_debris_charge_possible === null || intake.extra_debris_charge_possible === undefined
+            ? "—"
+            : intake.extra_debris_charge_possible ? "Yes" : "No"
+        }</div>
+        <div><strong>Intake Complete:</strong> ${escapeHtml(intake.intake_complete || "—")}</div>
+      `;
+    }
+
+    function renderTimeSummary(summary) {
+      document.querySelector("#jobStatusText").textContent = summary?.current_status || "idle";
+      document.querySelector("#trackedWorkText").textContent = formatDuration(summary?.total_work_ms || 0);
+      document.querySelector("#pausedTimeText").textContent = formatDuration(summary?.total_pause_ms || 0);
+    }
+
+    function renderTimeEntries(entries) {
+      const wrap = document.querySelector("#timeEntriesList");
+      if (!wrap) return;
+
+      if (!entries.length) {
+        wrap.innerHTML = `<div class="notice">No time entries yet.</div>`;
+        return;
+      }
+
+      wrap.innerHTML = entries.map((entry) => `
+        <article class="card">
+          <div class="kicker">${escapeHtml(formatDateTime(entry.event_time))}</div>
+          <h3>${escapeHtml(entry.entry_type || "entry")}</h3>
+          <p>${escapeHtml(entry.created_by_name || "Rosie Dazzlers")}</p>
+          ${entry.note ? `<div class="hr"></div><p>${escapeHtml(entry.note)}</p>` : ""}
+        </article>
+      `).join("");
+    }
+
+    function renderUpdates(updates) {
+      const wrap = document.querySelector("#updatesList");
+      if (!wrap) return;
+
+      if (!updates.length) {
+        wrap.innerHTML = `<div class="notice">No updates yet.</div>`;
+        return;
+      }
+
+      wrap.innerHTML = updates.map((item) => `
+        <article class="card">
+          <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
+          <h3>${escapeHtml(item.created_by || "Rosie Dazzlers")}</h3>
+          <p>${escapeHtml(item.note || "Update posted.")}</p>
+          <div class="kicker">Visibility: ${escapeHtml(item.visibility || "customer")}</div>
+        </article>
+      `).join("");
+    }
+
+    function renderMedia(media) {
+      const wrap = document.querySelector("#mediaGrid");
+      if (!wrap) return;
+
+      if (!media.length) {
+        wrap.innerHTML = `<div class="notice">No media yet.</div>`;
+        return;
+      }
+
+      wrap.innerHTML = media.map((item) => `
+        <article class="card">
+          ${item.media_url ? `<img class="img" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || "Progress media")}" onerror="this.style.display='none'">` : ""}
+          <h3>${escapeHtml(item.caption || item.kind || "Media")}</h3>
+          <p>${escapeHtml(item.created_by || "Rosie Dazzlers")}</p>
+          <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
+          <div class="kicker">Visibility: ${escapeHtml(item.visibility || "customer")}</div>
+        </article>
+      `).join("");
+    }
+
+    function renderSignoffs(signoffs) {
+      const wrap = document.querySelector("#signoffsList");
+      if (!wrap) return;
+
+      if (!signoffs.length) {
+        wrap.innerHTML = `<div class="notice">No signoffs yet.</div>`;
+        return;
+      }
+
+      wrap.innerHTML = signoffs.map((item) => `
+        <article class="card">
+          <div class="kicker">${escapeHtml(formatDateTime(item.signed_at))}</div>
+          <h3>${escapeHtml(item.signer_name || "Unknown signer")}</h3>
+          <p>${escapeHtml(item.signer_email || "—")}</p>
+          <div class="kicker">Type: ${escapeHtml(item.signer_type || "customer")}</div>
+          ${item.notes ? `<div class="hr"></div><p>${escapeHtml(item.notes)}</p>` : ""}
+        </article>
+      `).join("");
+    }
+
+    async function refreshLiveData(showNotice = false) {
+      if (!currentPassword || !currentBookingId) return;
+
+      if (showNotice) setNotice("Refreshing live job data…");
+
+      const [intakeData, timeData, bookingData] = await Promise.all([
+        apiPost("/api/admin/jobsite_intake_get", { booking_id: currentBookingId }),
+        apiPost("/api/admin/job_time_summary_get", { booking_id: currentBookingId }),
+        apiPost("/api/admin/bookings", {})
+      ]);
+
+      const allBookings = Array.isArray(bookingData.bookings) ? bookingData.bookings : [];
+      const booking = allBookings.find((b) => b.id === currentBookingId) || intakeData.booking || null;
+
+      let progressData = {
+        updates: [],
+        media: [],
+        signoffs: []
       };
 
-      function setShellStatus(message, type) {
-        const nodes = document.querySelectorAll("[data-admin-shell-status]");
-        nodes.forEach((node) => {
-          node.hidden = !message;
-          node.textContent = message || "";
-          node.dataset.state = type || "";
+      if (booking?.progress_token) {
+        progressData = await apiPost("/api/admin/progress_list", {
+          token: booking.progress_token
         });
       }
 
-      function setLoadBusy(busy) {
-        els.loadBtn.disabled = !!busy;
-        els.loadBtn.textContent = busy ? "Loading..." : "Load Live View";
+      renderBooking(booking || intakeData.booking || null);
+      renderIntake(intakeData.intake || null);
+      renderTimeSummary(timeData.summary || {});
+      renderTimeEntries(Array.isArray(timeData.time_entries) ? timeData.time_entries : []);
+      renderUpdates(Array.isArray(progressData.updates) ? progressData.updates : []);
+      renderMedia(Array.isArray(progressData.media) ? progressData.media : []);
+      renderSignoffs(Array.isArray(progressData.signoffs) ? progressData.signoffs : []);
+
+      document.querySelector("#lastRefreshText").textContent = formatDateTime(new Date().toISOString());
+
+      if (showNotice) {
+        setNotice("Live job data refreshed.", "ok");
       }
+    }
 
-      function renderPre(target, data) {
-        target.innerHTML = "";
-        const pre = document.createElement("pre");
-        pre.textContent = typeof data === "string" ? data : JSON.stringify(data, null, 2);
-        target.appendChild(pre);
+    function stopRefreshLoop() {
+      if (refreshTimer) {
+        clearInterval(refreshTimer);
+        refreshTimer = null;
       }
+      document.querySelector("#refreshStatusText").textContent = "Stopped";
+      document.querySelector("#toggleRefreshBtn").textContent = "Start refresh";
+      refreshPaused = true;
+    }
 
-      function renderFlags(detail) {
-        els.flags.innerHTML = "";
+    function startRefreshLoop() {
+      stopRefreshLoop();
+      const seconds = Number(document.querySelector("#refreshSeconds").value || 15);
 
-        if (!detail || !detail.booking) {
-          els.flags.innerHTML = '<span class="pill">No booking loaded</span>';
-          return;
-        }
-
-        const flags = [
-          ["Booking", detail.booking.id || "—"],
-          ["Status", detail.booking.status || "—"],
-          ["Job", detail.booking.job_status || "—"],
-          ["Date", detail.booking.service_date || "—"],
-          ["Progress", detail.progress && detail.progress.count != null ? String(detail.progress.count) : "0"],
-          ["Media", detail.media && detail.media.count != null ? String(detail.media.count) : "0"],
-          ["Signoff", detail.signoff ? "Present" : "Missing"]
-        ];
-
-        flags.forEach(([label, value]) => {
-          const span = document.createElement("span");
-          span.className = "pill";
-          span.textContent = `${label}: ${value}`;
-          els.flags.appendChild(span);
+      refreshTimer = setInterval(() => {
+        refreshLiveData(false).catch((err) => {
+          setNotice(err.message || "Live refresh failed.", "bad");
         });
-      }
+      }, seconds * 1000);
 
-      function renderQuickStatus(detail) {
-        els.quickStatus.innerHTML = "";
+      document.querySelector("#refreshStatusText").textContent = `Running every ${seconds}s`;
+      document.querySelector("#toggleRefreshBtn").textContent = "Pause refresh";
+      refreshPaused = false;
+    }
 
-        if (!detail || !detail.booking) {
-          els.quickStatus.innerHTML = '<div class="list-item muted">No quick status yet.</div>';
-          return;
-        }
+    document.addEventListener("DOMContentLoaded", () => {
+      setBrandImages();
+      setFooter();
 
-        const items = [
-          {
-            title: "Booking",
-            text: `${detail.booking.customer_name || "Unknown"} — ${detail.booking.package_code || "No package"}`
-          },
-          {
-            title: "Assignment",
-            text: detail.booking.assigned_to || detail.booking.assigned_staff_name || "Unassigned"
-          },
-          {
-            title: "Progress Enabled",
-            text: detail.booking.progress_enabled ? "Yes" : "No"
-          },
-          {
-            title: "Intake Complete",
-            text: detail.intake && detail.intake.intake_complete ? "Yes" : "No"
-          }
-        ];
+      const loadForm = document.querySelector("#liveLoadForm");
+      const toggleBtn = document.querySelector("#toggleRefreshBtn");
 
-        items.forEach((row) => {
-          const item = document.createElement("div");
-          item.className = "list-item";
-          item.innerHTML = `
-            <strong>${escapeHtml(row.title)}</strong>
-            <div>${escapeHtml(row.text)}</div>
-          `;
-          els.quickStatus.appendChild(item);
-        });
-      }
-
-      function renderProgress(detail) {
-        const updates = detail && detail.progress && Array.isArray(detail.progress.updates)
-          ? detail.progress.updates
-          : [];
-
-        els.progressList.innerHTML = "";
-
-        if (!updates.length) {
-          els.progressList.innerHTML = '<div class="list-item muted">No progress loaded yet.</div>';
-          return;
-        }
-
-        updates.forEach((row) => {
-          const item = document.createElement("div");
-          item.className = "list-item";
-          item.innerHTML = `
-            <strong>${escapeHtml(row.created_by || "Unknown")} — ${escapeHtml(row.created_at || "")}</strong>
-            <div>${escapeHtml(row.note || "(No note)")}</div>
-            <div class="muted">Visibility: ${escapeHtml(row.visibility || "internal")}</div>
-          `;
-          els.progressList.appendChild(item);
-        });
-      }
-
-      function renderMedia(detail) {
-        const items = detail && detail.media && Array.isArray(detail.media.items)
-          ? detail.media.items
-          : [];
-
-        els.mediaList.innerHTML = "";
-
-        if (!items.length) {
-          els.mediaList.innerHTML = '<div class="list-item muted">No media loaded yet.</div>';
-          return;
-        }
-
-        items.forEach((row) => {
-          const item = document.createElement("div");
-          item.className = "list-item";
-
-          const heading = document.createElement("strong");
-          heading.textContent = `${row.media_type || "media"} — ${row.created_at || ""}`;
-
-          const caption = document.createElement("div");
-          caption.textContent = row.caption || "(No caption)";
-
-          const link = document.createElement("a");
-          link.href = row.media_url || "#";
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.textContent = row.media_url || "No media URL";
-          link.style.display = "block";
-          link.style.marginTop = "6px";
-          link.style.color = "#93c5fd";
-          link.style.wordBreak = "break-all";
-
-          item.appendChild(heading);
-          item.appendChild(caption);
-          item.appendChild(link);
-          els.mediaList.appendChild(item);
-        });
-      }
-
-      async function loadLiveWorkspace(bookingId) {
-        setShellStatus("", "");
-        setLoadBusy(true);
-
-        try {
-          const response = await fetch("/api/admin/jobsite_detail", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              booking_id: bookingId
-            })
-          });
-
-          const data = await response.json().catch(() => null);
-
-          if (!response.ok) {
-            throw new Error((data && data.error) || "Could not load live workspace.");
-          }
-
-          renderFlags(data);
-          renderQuickStatus(data);
-          renderPre(els.summary, {
-            booking: data.booking || null,
-            intake: data.intake ? { intake_complete: !!data.intake.intake_complete } : null,
-            time: data.time || null,
-            progress_count: data.progress ? data.progress.count || 0 : 0,
-            media_count: data.media ? data.media.count || 0 : 0,
-            signoff_present: !!data.signoff
-          });
-          renderProgress(data);
-          renderMedia(data);
-          renderPre(els.intake, data.intake || "No intake loaded yet.");
-          renderPre(els.time, data.time || "No time loaded yet.");
-          renderPre(els.signoff, data.signoff || "No signoff loaded yet.");
-
-          setShellStatus("Live workspace loaded.", "success");
-        } catch (err) {
-          renderFlags(null);
-          renderQuickStatus(null);
-          renderPre(els.summary, "No live detail loaded yet.");
-          renderProgress(null);
-          renderMedia(null);
-          renderPre(els.intake, "No intake loaded yet.");
-          renderPre(els.time, "No time loaded yet.");
-          renderPre(els.signoff, "No signoff loaded yet.");
-
-          setShellStatus(
-            err && err.message ? err.message : "Could not load live workspace.",
-            "error"
-          );
-        } finally {
-          setLoadBusy(false);
-        }
-      }
-
-      function escapeHtml(value) {
-        return String(value || "")
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#39;");
-      }
-
-      els.openForm.addEventListener("submit", function (event) {
+      loadForm.addEventListener("submit", async (event) => {
         event.preventDefault();
-        const bookingId = String(els.bookingId.value || "").trim();
+
+        const password = document.querySelector("#adminPassword").value.trim();
+        const bookingId = document.querySelector("#bookingId").value.trim();
+
+        if (!password) {
+          setNotice("Admin password is required.", "bad");
+          return;
+        }
 
         if (!bookingId) {
-          setShellStatus("Booking ID is required.", "error");
+          setNotice("Booking ID is required.", "bad");
           return;
         }
 
-        loadLiveWorkspace(bookingId);
+        try {
+          currentPassword = password;
+          currentBookingId = bookingId;
+          toggleBtn.disabled = false;
+
+          await refreshLiveData(true);
+          startRefreshLoop();
+        } catch (err) {
+          setNotice(err.message || "Could not load live job.", "bad");
+        }
       });
 
-      window.AdminShell.boot({
-        pageKey: "admin-live"
+      toggleBtn.addEventListener("click", async () => {
+        if (!currentBookingId) return;
+
+        if (refreshPaused) {
+          try {
+            await refreshLiveData(true);
+            startRefreshLoop();
+          } catch (err) {
+            setNotice(err.message || "Could not restart refresh.", "bad");
+          }
+          return;
+        }
+
+        stopRefreshLoop();
+        setNotice("Auto refresh paused.", "warn");
       });
-    })();
+    });
   </script>
 </body>
 </html>

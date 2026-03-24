@@ -13,9 +13,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Detailing Gear | Rosie Dazzlers</title>
-  <link rel="canonical" href="https://www.rosiedazzlers.ca/gear" />
-  <meta name="description" content="Explore the detailing machines, tools, and working gear used by Rosie Dazzlers in the field and workshop." />
+  <title>Detailing Gear We Use | Rosie Dazzlers</title>
+  <meta name="description" content="Browse the detailing tools, machines, and gear Rosie Dazzlers uses, now with live database inventory when available." />
+  <link rel="canonical" href="https://rosiedazzlers.ca/gear" />
+  <meta property="og:title" content="Detailing Gear We Use | Rosie Dazzlers" />
+  <meta property="og:description" content="Browse the detailing tools, machines, and gear Rosie Dazzlers uses, now with live database inventory when available." />
   <link rel="stylesheet" href="/assets/site.css?v=20260311h" />
   <style>
     .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
@@ -76,8 +78,8 @@
   </div>
 
   <script type="module">
-    const PUBLIC_CATALOG_URL = "/api/catalog_public?catalog_type=systems";
-    const DATA_URL = "/data/systems_catalog.json?v=20260311h";
+    const DATA_URL = "/data/systems_catalog.json?v=20260324a";
+    const DB_URL = "/api/catalog_public?kind=tool";
     const AMAZON_CA_SEARCH = "https://www.amazon.ca/s?k=";
 
     const qs = (s)=>document.querySelector(s);
@@ -98,12 +100,14 @@
       }
     }
 
-    function renderStars(value){ const rounded = Math.round(Number(value||0)); return rounded ? "★".repeat(rounded) + "☆".repeat(5-rounded) : ""; }
-
     function normalizeItem(x){
       const name = x.name || x.title || x.item || x.filename || "Item";
       const notes = x.notes || x.description || x.caption || "";
       const image_url = x.image_url || x.image || x.r2_url || x.url || null;
+      const rating_value = x.rating_value ?? x.rating ?? null;
+      const rating_count = Number(x.rating_count || 0);
+      const qty_on_hand = x.qty_on_hand ?? null;
+      const unit_label = x.unit_label || "";
 
       const given = x.amazon_url || x.amazon || x.link || null;
       const amazon_url = given && String(given).trim()
@@ -112,7 +116,7 @@
 
       const amazon_is_generated = !(given && String(given).trim());
 
-      return { name, notes, image_url, amazon_url, amazon_is_generated, rating: x.overall_rating ?? null, brand: x.brand || null, model: x.model || null, location_label: x.location_label || null };
+      return { name, notes, image_url, amazon_url, amazon_is_generated, rating_value, rating_count, qty_on_hand, unit_label };
     }
 
     function matches(item, q){
@@ -151,8 +155,8 @@
             </div>
 
             ${it.notes ? `<div class="muted mini" style="margin-top:6px">${escapeHtml(it.notes)}</div>` : ``}
-            ${(it.brand || it.model || it.location_label) ? `<div class="muted mini" style="margin-top:6px">${escapeHtml([it.brand,it.model].filter(Boolean).join(" "))}${it.location_label ? ` • ${escapeHtml(it.location_label)}` : ``}</div>` : ``}
-            ${it.rating ? `<div class="muted mini" style="margin-top:6px">Equipment rating: ${escapeHtml(renderStars(it.rating))} (${escapeHtml(String(it.rating))}/5)</div>` : ``}
+            ${it.rating_value != null ? `<div class="muted mini" style="margin-top:6px">Rated ${escapeHtml(Number(it.rating_value).toFixed(1))}/5${it.rating_count ? ` from ${escapeHtml(it.rating_count)}` : ""}</div>` : ``}
+            ${it.qty_on_hand != null ? `<div class="muted mini" style="margin-top:4px">Stock: ${escapeHtml(it.qty_on_hand)} ${escapeHtml(it.unit_label || "")}</div>` : ``}
 
             <div class="row" style="margin-top:12px">
               <a class="btn primary" target="_blank" rel="noopener" href="${escapeHtml(it.amazon_url)}">View on Amazon</a>
@@ -168,10 +172,9 @@
     }
 
     try {
-      let raw = null;
-      try { raw = await fetchJsonStrict(PUBLIC_CATALOG_URL); } catch {}
-      if (!raw || raw.ok === false) raw = await fetchJsonStrict(DATA_URL);
-      const arr = Array.isArray(raw) ? raw : (Array.isArray(raw.items) ? raw.items : []);
+      let arr = [];
+      try { const dbRes = await fetch(DB_URL, { cache: "no-store" }); const dbJson = await dbRes.json(); if (dbRes.ok && dbJson?.ok && Array.isArray(dbJson.items) && dbJson.items.length) arr = dbJson.items; } catch {}
+      if (!arr.length) { const raw = await fetchJsonStrict(DATA_URL); arr = Array.isArray(raw) ? raw : (Array.isArray(raw.items) ? raw.items : []); }
       const list = arr.map(normalizeItem);
 
       render(list);

@@ -13,9 +13,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Detailing Consumables | Rosie Dazzlers</title>
-  <link rel="canonical" href="https://www.rosiedazzlers.ca/consumables" />
-  <meta name="description" content="See the soaps, compounds, towels, applicators, and other consumables Rosie Dazzlers uses for detailing work." />
+  <title>Detailing Consumables We Use | Rosie Dazzlers</title>
+  <meta name="description" content="Browse Rosie Dazzlers detailing consumables and products, with public inventory and rated items when available." />
+  <link rel="canonical" href="https://rosiedazzlers.ca/consumables" />
+  <meta property="og:title" content="Detailing Consumables We Use | Rosie Dazzlers" />
+  <meta property="og:description" content="Browse Rosie Dazzlers detailing consumables and products, with public inventory and rated items when available." />
   <link rel="stylesheet" href="/assets/site.css?v=20260309w" />
   <style>
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
@@ -103,7 +105,7 @@
 
   <script type="module">
     // Try multiple JSON paths
-    const PUBLIC_CATALOG_URL = "/api/catalog_public?catalog_type=consumables";
+    const DB_URL = "/api/catalog_public?kind=consumable";
     const CANDIDATE_JSON = [
       "/data/rosie_products_catalog_r2_corrected.json",
       "/data/rosie_products_catalog_rebuilt.json",
@@ -144,16 +146,8 @@
       }
     }
 
-    async function loadPublicThenFallback(urls){
-      try {
-        const data = await fetchJsonStrict(`${PUBLIC_CATALOG_URL}&v=${Date.now()}`);
-        if (data && Array.isArray(data.items)) return { url: PUBLIC_CATALOG_URL, data: data.items };
-      } catch {}
-
-      return loadFirstWorkingJson(urls);
-    }
-
     async function loadFirstWorkingJson(urls){
+      try { const dbRes = await fetch(DB_URL, { cache:"no-store" }); const dbJson = await dbRes.json(); if (dbRes.ok && dbJson?.ok && Array.isArray(dbJson.items) && dbJson.items.length) return { url: DB_URL, data: dbJson.items }; } catch {}
       let lastErr = null;
       for (const u of urls) {
         try {
@@ -166,8 +160,6 @@
       }
       throw lastErr || new Error("No JSON source worked.");
     }
-
-    function renderStars(value){ const rounded = Math.round(Number(value||0)); return rounded ? "★".repeat(rounded) + "☆".repeat(5-rounded) : ""; }
 
     function normalizeItem(it){
       const title = it.title || it.filename || it.original || it.sanitized || "(untitled)";
@@ -191,10 +183,11 @@
         amazonQuery,
         path: it.path || "",
         filename: it.filename || "",
-        rating: it.overall_rating ?? null,
-        brand: it.brand || null,
-        model: it.model || null,
-        location_label: it.location_label || null
+        qty_on_hand: it.qty_on_hand ?? null,
+        unit_label: it.unit_label || "",
+        rating_value: it.rating_value ?? null,
+        rating_count: Number(it.rating_count || 0),
+        notes: it.notes || it.description || ""
       };
     }
 
@@ -334,7 +327,7 @@
     // Load JSON
     try {
       showStatus("Loading consumables catalog…");
-      const { url, data } = await loadPublicThenFallback(CANDIDATE_JSON);
+      const { url, data } = await loadFirstWorkingJson(CANDIDATE_JSON);
 
       all = data.map(normalizeItem).filter(x => x.img && x.title);
       buildCategoryOptions(all);

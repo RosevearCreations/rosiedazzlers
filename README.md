@@ -1,59 +1,198 @@
-# Rosie Dazzlers
+<!-- README.md -->
 
-Current dev snapshot includes:
-- public booking flow with package/add-on loading fixed
-- customer login/account/garage foundation
-- staff/admin login and dashboard foundation
-- screen-by-screen Customer, Detailer, and Admin passes
-- picture-first observation workflow foundation
-- threaded progress conversation foundation
-- admin app-management settings persistence
-- admin notifications queue screen
-- admin analytics + recovery views
-- catalog management for systems and consumables
-- stronger SEO/structured-data foundation
+# Rosie Dazzlers — Mobile Auto Detailing
+Cloudflare Pages + Supabase + Stripe booking system
 
-## Recommended next run order
-1. Run any new SQL migrations in `sql/`
-2. Deploy
-3. Test:
-   - `/book`
-   - `/login`
-   - `/my-account`
-   - `/admin-login`
-   - `/admin-jobsite`
-   - `/progress`
-   - `/admin-app`
-   - `/admin-notifications`
-   - `/admin-analytics`
-   - `/admin-catalog`
+Modern static website with a serverless backend used by
+Rosie Dazzlers Mobile Auto Detailing (Norfolk & Oxford Counties).
 
-## New in this pass
-- Admin can review session journeys and abandoned orders.
-- Recovery emails can be queued from the analytics screen.
-- Catalog items can be maintained and reordered from the admin interface.
-- Notification processing can dispatch to provider webhooks with retry/backoff.
-- SEO helpers now add keywords, canonical tags, and structured data.
+---
+
+# System Architecture
+
+Browser  
+↓  
+Cloudflare Pages (static site)  
+↓  
+Pages Functions (`/functions/api`)  
+↓  
+Supabase Database  
+↓  
+Stripe Payments  
+↓  
+Cloudflare R2 (images/assets)
+
+---
+
+# Stack
+
+- Cloudflare Pages — static hosting + serverless backend
+- Cloudflare R2 — public image hosting
+- Supabase (Postgres) — database
+- Stripe — booking deposits and gift certificate checkout
+
+---
+
+# Local Repo Structure
+
+- `/*.html` — site pages
+- `/assets/*` — shared CSS/JS (theme + nav/footer + helpers)
+- `/data/*` — JSON data powering services, pricing, gear, consumables
+- `/functions/api/*` — backend endpoints (Cloudflare Pages Functions)
+
+---
+
+# Key Pages
+
+- Home: `/`
+- Services: `/services` (choose canonical: `services.html` OR `services/index.html`)
+- Pricing: `/pricing` (choose canonical: `pricing.html` OR `pricing/index.html`)
+- Booking: `/book`
+- Gifts: `/gifts`
+- Gear: `/gear`
+- Consumables: `/consumables`
+- Admin: `/admin`
+
+---
+
+# Canonical Route Note
+
+Currently both exist:
+
+services.html  
+services/index.html  
+
+pricing.html  
+pricing/index.html  
+
+Choose **one canonical routing pattern** and remove the duplicate
+version to avoid redirect or routing ambiguity.
+
+Recommended: folder routes (`/services/index.html`).
+
+---
+
+# API Endpoints
+
+## Booking
+
+GET `/api/availability?date=YYYY-MM-DD`  
+POST `/api/checkout`
+
+Creates a Stripe checkout session for booking deposits.
+
+---
+
+## Stripe Booking Webhook
+
+POST `/api/stripe/webhook`
+
+Confirms deposit payments and updates booking status.
+
+---
+
+## Gift Certificates
+
+POST `/api/gifts/checkout`  
+POST `/api/gifts/webhook`  
+POST `/api/gifts/receipt`
+
+Handles gift certificate purchases and code retrieval.
+
+---
+
+## Admin API
+
+POST `/api/admin/bookings`  
+POST `/api/admin/block_date`  
+POST `/api/admin/unblock_date`  
+POST `/api/admin/block_slot`  
+POST `/api/admin/unblock_slot`  
+POST `/api/admin/progress_post`  
+POST `/api/admin/progress_list`  
+POST `/api/admin/assign_booking`  
+POST `/api/admin/promo_create`  
+POST `/api/admin/promo_list`  
+POST `/api/admin/promo_disable`
+
+Admin endpoints require the `ADMIN_PASSWORD`.
+
+---
+
+# Environment Variables (Cloudflare Pages)
+
+Required:
+
+SUPABASE_URL  
+SUPABASE_SERVICE_ROLE_KEY  
+ADMIN_PASSWORD  
+
+Stripe:
+
+STRIPE_SECRET_KEY  
+STRIPE_WEBHOOK_SECRET  
+STRIPE_WEBHOOK_SECRET_GIFTS  
+
+Preview environments use Stripe **TEST** keys.  
+Production uses Stripe **LIVE** keys.
+
+---
+
+# R2 Assets
+
+The site expects an R2 custom domain:
+
+https://assets.rosiedazzlers.ca
+
+Folder layout used in code:
+
+brand/  
+packages/  
+products/  
+systems/  
+
+Example:
+
+https://assets.rosiedazzlers.ca/packages/Exterior Detail.png
+
+---
+
+# Database
+
+Database schema is defined in:
+
+SUPABASE_SCHEMA.sql
+
+This file contains **create/repair SQL statements** for all tables
+used by the application.
+
+---
+
+# Repo Documentation
+
+Additional documentation included in the repository:
+
+SANITY_CHECK.md — project status and development priorities  
+REPO_GUIDE.md — repository structure and file map  
+SUPABASE_SCHEMA.sql — database schema and repair script  
+
+---
+
+# Notes
+
+- Booking capacity uses **AM / PM half-day slots**.
+- A full-day booking uses **both slots**.
+- Customers must confirm driveway access, power, and water during booking.
+- Gift certificates are valid for **1 year** and are non-refundable.
 
 
-## March 24, 2026 additions
-- Public gear and consumables pages can now read from the live `catalog_items` table through `/api/catalog_public` with JSON fallbacks.
-- Catalog items now support equipment ratings, brand/model, storage location, and acquisition date.
-- Admin App Management now stores abandoned-order recovery templates and rules.
-- Notification recovery/dispatch foundations continue to use queue rules and retry fields.
+## March 24, 2026 update
 
-## March 24, 2026 repairs in this pass
-- Added provider-specific recovery-message rules, preview generation, and test-send support from App Management.
-- Added deeper thread moderation foundations with comment thread status, moderation metadata, and a staff moderation endpoint.
-- Added per-item reorder actions, low-stock alert tracking, and reorder timestamps/notes in Admin Catalog.
-- Fixed malformed H1 markers on core public pages and tightened several public page titles/meta descriptions.
-- Added a new migration: `sql/2026-03-24_recovery_threads_catalog_alerts.sql`.
-
-
-## March 24 2026 pass update
-- Added PayPal deposit checkout flow alongside Stripe.
-- Completed booking-time gift redemption through checkout, including zero-due gift confirmation when the deposit is fully covered.
-- Switched booking checkout pricing/add-on validation to the canonical public pricing JSON.
-- Added annotation moderation endpoint and moderation controls in the jobsite workspace, plus thread visibility summaries in progress management.
-- Added per-item quick quantity adjustments and stronger low-stock/reorder handling in Admin Catalog.
-- Continued route metadata cleanup across remaining public pages.
+This repo now includes:
+- persisted recovery template management and preview endpoints
+- database-backed public catalog support with JSON fallback
+- rated inventory fields for tools and consumables
+- admin catalog and recovery pages
+- two-sided progress threads with moderation states
+- a refreshed schema snapshot in `SUPABASE_SCHEMA.sql`
+- migration file: `sql/2026-03-24_recovery_inventory_moderation_and_checkout.sql`

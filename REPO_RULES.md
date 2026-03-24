@@ -1,50 +1,248 @@
-# Rosie Dazzlers Repo Rules
+<!-- docs/REPO_RULES.md -->
 
-## 1) Preserve working field names
-Do not rename JSON keys, DB columns, or page IDs unless the entire chain is updated and tested.
+# Rosie Dazzlers — Repository Rules
 
-## 2) Preserve asset paths
-Do not casually rename or "clean up" R2 filenames. Exact path matching matters.
+This document defines the **non-negotiable rules** for modifying the Rosie Dazzlers codebase.
 
-## 3) Prefer additive changes
-New feature? Add endpoint/page/schema carefully instead of rewriting large working areas.
+These rules exist to prevent architectural drift and ensure that future development (human or AI) maintains the intended design of the system.
 
-## 4) One source of truth per concern
-- packages/pricing/add-ons should converge toward one canonical source
-- roles/permissions should come from staff data, not page assumptions
+Any AI assistant helping with this repository **must follow these rules**.
 
-## 5) Keep customer and admin visibility separate
-Anything marked internal must never appear on customer progress pages.
+---
 
-## 6) Customer tiers are not security
-`gold`, `silver`, `vip`, etc. are business labels only.
+# 1) Preserve the Architecture
 
-## 7) Shared admin password is temporary architecture
-Do not design future work as if shared password is the final security model.
+The Rosie Dazzlers platform is intentionally built as:
 
-## 8) Token-based progress is the preferred progress system
-Do not build new customer-facing progress features on the old simple progress path.
+Static Website  
++  
+Serverless API  
++  
+Supabase Database  
++  
+Stripe Payments  
++  
+Cloudflare R2 Image Hosting
 
-## 9) Jobsite work must remain mobile-friendly
-Any new jobsite/detailer workflow should assume phone or tablet use in the field.
+Architecture flow:
 
-## 10) Document new systems when added
-If a new subsystem is created, update the main `.md` docs so future chats can follow the architecture.
+Browser  
+↓  
+Cloudflare Pages (static site)  
+↓  
+Pages Functions (`/functions/api`)  
+↓  
+Supabase (Postgres)  
+↓  
+Stripe  
+↓  
+R2 storage
+
+Do **not** introduce frameworks or changes that break this architecture.
+
+---
+
+# 2) Do Not Introduce Frontend Frameworks
+
+This project is intentionally a **static HTML site**.
+
+Do not introduce:
+
+React  
+Next.js  
+Vue  
+Angular  
+Svelte  
+Astro  
+
+Static HTML + JavaScript is the intended design.
+
+---
+
+# 3) Backend Must Remain Serverless
+
+Backend logic must remain inside:
 
 
-## Current snapshot — March 21, 2026
+/functions/api
 
-Latest pass completed:
-- fixed booking add-on checkbox/text layout pressure
-- improved service/package image fallback with extra photo cards
-- expanded staff management toward richer Admin/Detailer profile editing
-- added customer tier discount support in the UI/data model direction
-- added/confirmed garage, gift, and redemption visibility in client/admin screens
-- added current SQL for tier discounts and richer staff/customer fields
 
-Current next priorities:
-- picture-first observation interface
-- richer client/detailer threaded comments UI
-- manual scheduling / app-management rules UI completion
-- final layout polish across booking and internal screens
+Do not introduce:
 
+Express servers  
+Node hosting services  
+Docker containers  
+Persistent backend services  
+
+All backend logic must run through **Cloudflare Pages Functions**.
+
+---
+
+# 4) Do Not Duplicate Business Logic
+
+Business rules must exist in **one place only**.
+
+Examples:
+
+Pricing logic  
+Add-on definitions  
+Promo code rules  
+Package definitions  
+
+Preferred location for business configuration:
+
+
+/data/*.json
+
+
+Both frontend and backend should read from the same source.
+
+---
+
+# 5) Do Not Hardcode Asset Paths
+
+Images must follow the R2 asset structure.
+
+Base domain:
+
+https://assets.rosiedazzlers.ca
+
+Folders:
+
+brand/  
+packages/  
+products/  
+systems/
+
+Do not hardcode new asset locations that break this structure.
+
+---
+
+# 6) Database Schema Changes
+
+Database schema is defined in:
+
+
+SUPABASE_SCHEMA.sql
+
+
+Rules:
+
+• do not create tables outside this file  
+• keep schema changes backward compatible  
+• use `create table if not exists` patterns  
+• use `add column if not exists` when modifying tables  
+
+All schema updates must be reflected in this file.
+
+---
+
+# 7) Protect the Booking System
+
+The booking system is the **core business logic**.
+
+Key files:
+
+
+/functions/api/checkout.js
+/functions/api/availability.js
+/functions/api/stripe/webhook.js
+
+
+Changes to booking logic must preserve:
+
+AM / PM slot system  
+date_blocks  
+slot_blocks  
+deposit checkout flow  
+Stripe webhook confirmation
+
+Do not alter booking flow without careful validation.
+
+---
+
+# 8) Protect the Gift Certificate System
+
+Gift certificates are intentionally **separate from bookings**.
+
+Key endpoints:
+
+
+/api/gifts/checkout
+/api/gifts/webhook
+/api/gifts/receipt
+
+
+Do not merge gift logic into the booking system.
+
+---
+
+# 9) Admin Endpoints Must Remain Protected
+
+Admin API endpoints must require:
+
+
+ADMIN_PASSWORD
+
+
+Never expose admin endpoints publicly without authentication.
+
+---
+
+# 10) Avoid Introducing State on the Frontend
+
+The frontend should remain simple and stateless.
+
+Avoid:
+
+complex client-side frameworks  
+persistent client state systems  
+local database storage  
+
+State belongs in the database.
+
+---
+
+# 11) Respect the Documentation System
+
+This repository includes structured documentation.
+
+README.md — project overview  
+PROJECT_BRAIN.md — system overview  
+AI_CONTEXT.md — AI guidance  
+REPO_GUIDE.md — repo structure  
+SANITY_CHECK.md — development priorities  
+DEVELOPMENT_ROADMAP.md — next upgrades  
+SUPABASE_SCHEMA.sql — database schema  
+
+Any major change should update the relevant documentation.
+
+---
+
+# 12) Prefer Simple Solutions
+
+When adding features:
+
+Prefer
+
+simple JavaScript  
+JSON configuration  
+serverless functions  
+
+Avoid unnecessary complexity.
+
+The goal is a **maintainable small-business platform**, not an enterprise framework.
+
+---
+
+# Final Rule
+
+If a proposed change makes the system:
+
+• harder to understand  
+• more complex to deploy  
+• dependent on new infrastructure  
+
+then it is likely **the wrong change**.
+
+Always favor the simplest architecture that preserves functionality.

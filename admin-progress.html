@@ -1,674 +1,592 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rosie Dazzlers — Progress Management</title>
-  <meta name="robots" content="noindex,nofollow" />
+  <title>Admin Progress | Rosie Dazzlers</title>
+  <meta name="description" content="Admin progress update tools for Rosie Dazzlers." />
   <link rel="stylesheet" href="/assets/site.css" />
-  <style>
-    :root {
-      color-scheme: dark;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 35%),
-        linear-gradient(180deg, #0f172a 0%, #111827 100%);
-      color: #f8fafc;
-    }
-
-    .shell {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    .loading {
-      display: grid;
-      place-items: center;
-      min-height: 60vh;
-      color: #cbd5e1;
-      font-size: 1rem;
-    }
-
-    .topbar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-
-    .titleblock h1 {
-      margin: 0 0 6px;
-      font-size: 1.8rem;
-      line-height: 1.15;
-    }
-
-    .titleblock p {
-      margin: 0;
-      color: #cbd5e1;
-      line-height: 1.5;
-    }
-
-    .actorcard {
-      min-width: 280px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 18px;
-      padding: 16px 18px;
-      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
-    }
-
-    .actorline {
-      margin: 4px 0;
-      color: #e5e7eb;
-      font-size: 0.96rem;
-    }
-
-    .actorlabel {
-      color: #93c5fd;
-      font-weight: 700;
-      margin-right: 6px;
-    }
-
-    .logout-btn,
-    .btn {
-      appearance: none;
-      border: 0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      background: #2563eb;
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .btn.secondary {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: #f8fafc;
-    }
-
-    .logout-btn {
-      margin-top: 10px;
-    }
-
-    .status {
-      margin-bottom: 16px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.05);
-      color: #e5e7eb;
-    }
-
-    .status[data-state="error"] {
-      background: rgba(220,38,38,0.12);
-      border-color: rgba(248,113,113,0.25);
-      color: #fecaca;
-    }
-
-    .status[data-state="success"] {
-      background: rgba(34,197,94,0.10);
-      border-color: rgba(134,239,172,0.22);
-      color: #bbf7d0;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 16px;
-    }
-
-    .card {
-      grid-column: span 12;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 14px 35px rgba(0,0,0,0.22);
-    }
-
-    .card h2 {
-      margin: 0 0 10px;
-      font-size: 1.15rem;
-    }
-
-    .card p {
-      margin: 0 0 12px;
-      color: #cbd5e1;
-      line-height: 1.5;
-    }
-
-    .field {
-      margin-bottom: 14px;
-    }
-
-    .field label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: #e5e7eb;
-    }
-
-    .field input,
-    .field select,
-    .field textarea {
-      width: 100%;
-      box-sizing: border-box;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 11px 12px;
-      font-size: 0.98rem;
-      background: rgba(255,255,255,0.04);
-      color: #f8fafc;
-      outline: none;
-    }
-
-    .field textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus {
-      border-color: #60a5fa;
-      background: rgba(255,255,255,0.06);
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: end;
-    }
-
-    .pillrow {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      padding: 6px 10px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      font-size: 0.82rem;
-      color: #e5e7eb;
-    }
-
-    .list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .list-item {
-      border-radius: 14px;
-      padding: 12px 14px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .list-item strong {
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    .detail-box {
-      border-radius: 14px;
-      padding: 14px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .detail-box pre {
-      margin: 0;
-      white-space: pre-wrap;
-      word-break: break-word;
-      color: #dbeafe;
-      font-size: 0.92rem;
-      line-height: 1.45;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    }
-
-    .muted {
-      color: #94a3b8;
-      font-size: 0.92rem;
-    }
-
-    @media (min-width: 900px) {
-      .span-7 { grid-column: span 7; }
-      .span-5 { grid-column: span 5; }
-      .span-6 { grid-column: span 6; }
-    }
-  </style>
 </head>
-<body>
-  <main class="shell">
-    <div class="loading" data-admin-shell-loading>
-      Loading progress workspace...
+<body data-page="admin-progress">
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/admin.html">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers Admin</strong>
+      </a>
+
+      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
+        Menu
+      </button>
+
+      <nav id="navLinks" class="nav-links">
+        <a href="/admin.html">Dashboard</a>
+        <a href="/admin-booking.html">Bookings</a>
+        <a href="/admin-blocks.html">Blocks</a>
+        <a href="/admin-progress.html">Progress</a>
+        <a href="/admin-promos.html">Promos</a>
+        <a href="/book">Public Site</a>
+      </nav>
     </div>
+  </header>
 
-    <div data-admin-shell-ready hidden>
-      <header class="topbar">
-        <div class="titleblock">
-          <h1>Progress Management</h1>
-          <p>
-            Session-aware progress workspace for loading one booking, reviewing progress/media/signoff,
-            and posting a new progress update.
-          </p>
+  <main class="container">
+    <section class="section">
+      <div class="panel">
+        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="hero">
+        <div>
+          <div class="badge">Admin Progress</div>
+          <h1>Post customer progress updates</h1>
+          <p>Load a booking by progress token, enable the customer progress link, review progress entries, post a new note, and attach media by URL.</p>
         </div>
+        <div class="panel">
+          <div class="kicker">Loaded booking</div>
+          <h3 id="bookingTitle" style="margin:6px 0 8px">No booking loaded</h3>
+          <div id="bookingMeta" class="kicker">Enter the progress token below.</div>
+        </div>
+      </div>
+    </section>
 
-        <section class="actorcard" aria-label="Signed in staff">
-          <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
-          <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
-          <div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div>
-          <button class="logout-btn" type="button" data-admin-logout>Sign Out</button>
-        </section>
-      </header>
+    <section class="section">
+      <div id="pageNotice" class="notice">Ready.</div>
+    </section>
 
-      <div class="status" data-admin-shell-status hidden></div>
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Load booking</h2>
+          <form id="loadForm" class="form">
+            <label>
+              Admin password
+              <input id="adminPassword" name="adminPassword" type="password" autocomplete="current-password" required />
+            </label>
 
-      <section class="grid">
-        <article class="card">
-          <h2>Open Booking Progress Workspace</h2>
-          <p>Enter a booking ID to load progress-related data for that booking.</p>
-
-          <form id="progress-open-form" class="actions" novalidate>
-            <div class="field" style="min-width:260px; flex:1 1 260px;">
-              <label for="progress-booking-id">Booking ID</label>
-              <input
-                id="progress-booking-id"
-                name="booking_id"
-                type="text"
-                autocomplete="off"
-                placeholder="Enter booking UUID"
-              />
-            </div>
+            <label>
+              Progress token
+              <input id="progressToken" name="progressToken" type="text" placeholder="Paste booking progress token" required />
+            </label>
 
             <div>
-              <button class="btn" id="progress-load-btn" type="submit">Load Progress</button>
+              <button class="btn primary" type="submit">Load progress</button>
             </div>
           </form>
+        </div>
 
-          <div id="progress-flags" class="pillrow">
-            <span class="pill">No booking loaded</span>
+        <div class="panel">
+          <h2>Customer link</h2>
+          <div id="customerLinkBox" class="kicker">No token loaded yet.</div>
+          <div style="margin-top:12px">
+            <button id="enableProgressBtn" class="btn primary" type="button" disabled>Enable progress link</button>
           </div>
-        </article>
+        </div>
+      </div>
+    </section>
 
-        <article class="card span-7">
-          <h2>Booking / Progress Summary</h2>
-          <div id="progress-summary" class="detail-box">
-            <pre>No booking loaded yet.</pre>
-          </div>
-        </article>
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Post new update</h2>
+          <form id="updateForm" class="form">
+            <label>
+              Posted by
+              <input id="createdBy" name="createdBy" type="text" placeholder="Example: Laurie / Rosie Dazzlers" required />
+            </label>
 
-        <article class="card span-5">
-          <h2>Post Progress Update</h2>
-          <p>Post a new progress note for the currently loaded booking.</p>
+            <label>
+              Update note
+              <textarea id="updateNote" name="updateNote" rows="5" placeholder="Write the update here..." required></textarea>
+            </label>
 
-          <form id="progress-post-form" novalidate>
-            <div class="field">
-              <label for="progress-visibility">Visibility</label>
-              <select id="progress-visibility" name="visibility">
-                <option value="customer" selected>customer</option>
-                <option value="internal">internal</option>
+            <label>
+              Visibility
+              <select id="visibility" name="visibility">
+                <option value="customer">Customer</option>
+                <option value="internal">Internal</option>
               </select>
-            </div>
+            </label>
 
-            <div class="field">
-              <label for="progress-note">Note</label>
-              <textarea
-                id="progress-note"
-                name="note"
-                placeholder="Describe the work completed, findings, or next step."
-              ></textarea>
-            </div>
-
-            <div class="actions">
-              <button class="btn" id="progress-post-btn" type="submit" disabled>Post Update</button>
+            <div>
+              <button id="postBtn" class="btn primary" type="submit" disabled>Post update</button>
             </div>
           </form>
-        </article>
+        </div>
 
-        <article class="card span-6">
-          <h2>Progress Updates</h2>
-          <div id="progress-list" class="list">
-            <div class="list-item muted">No progress updates loaded yet.</div>
+        <div class="panel">
+          <h2>Attach media by URL</h2>
+          <form id="mediaForm" class="form">
+            <label>
+              Posted by
+              <input id="mediaCreatedBy" name="mediaCreatedBy" type="text" placeholder="Example: Laurie / Rosie Dazzlers" required />
+            </label>
+
+            <label>
+              Media type
+              <select id="mediaKind" name="mediaKind">
+                <option value="photo">Photo</option>
+                <option value="video">Video</option>
+              </select>
+            </label>
+
+            <label>
+              Caption
+              <input id="mediaCaption" name="mediaCaption" type="text" placeholder="Optional caption for the customer" />
+            </label>
+
+            <label>
+              Media URL
+              <input id="mediaUrl" name="mediaUrl" type="url" placeholder="https://..." required />
+            </label>
+
+            <label>
+              Visibility
+              <select id="mediaVisibility" name="mediaVisibility">
+                <option value="customer">Customer</option>
+                <option value="internal">Internal</option>
+              </select>
+            </label>
+
+            <div>
+              <button id="mediaBtn" class="btn primary" type="submit" disabled>Attach media</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Updates</h2>
+          <div id="updatesList" class="grid" style="margin-top:12px">
+            <div class="notice">No booking loaded yet.</div>
           </div>
-        </article>
+        </div>
 
-        <article class="card span-6">
-          <h2>Media</h2>
-          <div id="media-list" class="list">
-            <div class="list-item muted">No media loaded yet.</div>
+        <div class="panel">
+          <h2>Signoffs</h2>
+          <div id="signoffsList" class="grid" style="margin-top:12px">
+            <div class="notice">No booking loaded yet.</div>
           </div>
-        </article>
+        </div>
+      </div>
+    </section>
 
-        <article class="card span-6">
-          <h2>Thread & Moderation</h2>
-          <div id="thread-list" class="list"><div class="list-item muted">No thread data loaded yet.</div></div>
-        </article>
-
-        <article class="card span-6">
-          <h2>Jobsite Moderation</h2>
-          <p>Open the jobsite workspace for image annotations, threaded replies, and moderation controls.</p>
-          <div class="actions"><a id="jobsiteLinkBtn" class="btn secondary" href="/admin-jobsite.html">Open Jobsite Workspace</a></div>
-        </article>
-
-        <article class="card">
-          <h2>Customer Signoff</h2>
-          <div id="signoff-box" class="detail-box">
-            <pre>No signoff loaded yet.</pre>
-          </div>
-        </article>
-      </section>
-    </div>
+    <section class="section">
+      <div class="panel">
+        <h2>Media</h2>
+        <div id="mediaGrid" class="grid cards" style="margin-top:12px">
+          <div class="notice">No booking loaded yet.</div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <script src="/assets/admin-auth.js"></script>
-  <script src="/assets/admin-shell.js"></script>
-  <script>
-    (function () {
-      const els = {
-        openForm: document.getElementById("progress-open-form"),
-        bookingId: document.getElementById("progress-booking-id"),
-        loadBtn: document.getElementById("progress-load-btn"),
-        flags: document.getElementById("progress-flags"),
-        summary: document.getElementById("progress-summary"),
-        progressList: document.getElementById("progress-list"),
-        mediaList: document.getElementById("media-list"),
-        signoffBox: document.getElementById("signoff-box"),
-        threadList: document.getElementById("thread-list"),
-        jobsiteLinkBtn: document.getElementById("jobsiteLinkBtn"),
+  <footer class="footer container" data-footer></footer>
 
-        postForm: document.getElementById("progress-post-form"),
-        visibility: document.getElementById("progress-visibility"),
-        note: document.getElementById("progress-note"),
-        postBtn: document.getElementById("progress-post-btn")
-      };
+  <script src="/assets/chrome.js"></script>
+  <script type="module">
+    import { setBrandImages, setFooter } from "/assets/site.js";
 
-      let currentBookingId = null;
-      let currentDetail = null;
+    let currentToken = "";
+    let currentBookingId = "";
+    let progressEnabled = false;
 
-      function setShellStatus(message, type) {
-        const nodes = document.querySelectorAll("[data-admin-shell-status]");
-        nodes.forEach((node) => {
-          node.hidden = !message;
-          node.textContent = message || "";
-          node.dataset.state = type || "";
-        });
+    function formatDateTime(value) {
+      if (!value) return "—";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return String(value);
+      return new Intl.DateTimeFormat("en-CA", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      }).format(d);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function setNotice(message, kind = "") {
+      const el = document.querySelector("#pageNotice");
+      if (!el) return;
+      el.className = kind ? `notice ${kind}` : "notice";
+      el.textContent = message;
+    }
+
+    function renderHeader(data) {
+      const booking = data.booking || {};
+      const bookingTitle = document.querySelector("#bookingTitle");
+      const bookingMeta = document.querySelector("#bookingMeta");
+
+      currentBookingId = booking.id || "";
+      progressEnabled = booking.progress_enabled === true;
+
+      if (bookingTitle) {
+        bookingTitle.textContent = booking.package_name || booking.package_code || "Booking loaded";
       }
 
-      function setLoadBusy(busy) {
-        els.loadBtn.disabled = !!busy;
-        els.loadBtn.textContent = busy ? "Loading..." : "Load Progress";
+      if (bookingMeta) {
+        const bits = [];
+        if (booking.customer_name) bits.push(booking.customer_name);
+        if (booking.service_date) bits.push(booking.service_date);
+        if (booking.start_slot) bits.push(booking.start_slot);
+        if (booking.status) bits.push(`status: ${booking.status}`);
+        if (booking.job_status) bits.push(`job: ${booking.job_status}`);
+        if (booking.assigned_to) bits.push(`assigned: ${booking.assigned_to}`);
+        if (booking.progress_enabled === true) bits.push("progress enabled");
+        bookingMeta.textContent = bits.length ? bits.join(" · ") : "Booking loaded.";
       }
 
-      function setPostBusy(busy) {
-        els.postBtn.disabled = !!busy || !currentBookingId;
-        els.postBtn.textContent = busy ? "Posting..." : "Post Update";
+      const enableBtn = document.querySelector("#enableProgressBtn");
+      if (enableBtn) {
+        enableBtn.disabled = !currentBookingId || progressEnabled;
+      }
+    }
+
+    function renderCustomerLink(token) {
+      const box = document.querySelector("#customerLinkBox");
+      const enableBtn = document.querySelector("#enableProgressBtn");
+      if (!box) return;
+
+      if (!token) {
+        box.textContent = "No token loaded yet.";
+        if (enableBtn) enableBtn.disabled = true;
+        return;
       }
 
-      function renderPre(target, data) {
-        target.innerHTML = "";
-        const pre = document.createElement("pre");
-        pre.textContent = typeof data === "string" ? data : JSON.stringify(data, null, 2);
-        target.appendChild(pre);
+      const url = `${window.location.origin}/progress.html?token=${encodeURIComponent(token)}`;
+      box.innerHTML = `
+        <div><strong>Customer URL</strong></div>
+        <div style="margin-top:8px;word-break:break-all">
+          <a href="${url}" target="_blank" rel="noopener">${url}</a>
+        </div>
+      `;
+
+      if (enableBtn) {
+        enableBtn.disabled = progressEnabled;
+      }
+    }
+
+    function renderUpdates(data) {
+      const wrap = document.querySelector("#updatesList");
+      if (!wrap) return;
+
+      const updates = Array.isArray(data.updates) ? data.updates : [];
+      if (!updates.length) {
+        wrap.innerHTML = `<div class="notice">No updates posted yet.</div>`;
+        return;
       }
 
-      function renderFlags(detail) {
-        els.flags.innerHTML = "";
+      wrap.innerHTML = updates.map((item) => `
+        <article class="card">
+          <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
+          <h3>${escapeHtml(item.created_by || "Rosie Dazzlers")}</h3>
+          <p>${escapeHtml(item.note || "Update posted.")}</p>
+          <div class="kicker">Visibility: ${escapeHtml(item.visibility || "customer")}</div>
+        </article>
+      `).join("");
+    }
 
-        if (!detail || !detail.booking) {
-          els.flags.innerHTML = '<span class="pill">No booking loaded</span>';
+    function renderMedia(data) {
+      const wrap = document.querySelector("#mediaGrid");
+      if (!wrap) return;
+
+      const media = Array.isArray(data.media) ? data.media : [];
+      if (!media.length) {
+        wrap.innerHTML = `<div class="notice">No media posted yet.</div>`;
+        return;
+      }
+
+      wrap.innerHTML = media.map((item) => `
+        <article class="card">
+          ${item.media_url ? `<img class="img" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || "Progress media")}" onerror="this.style.display='none'">` : ""}
+          <h3>${escapeHtml(item.caption || item.kind || "Progress media")}</h3>
+          <p>${escapeHtml(item.created_by || "Rosie Dazzlers")}</p>
+          <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
+          <div class="kicker">Visibility: ${escapeHtml(item.visibility || "customer")}</div>
+        </article>
+      `).join("");
+    }
+
+    function renderSignoffs(data) {
+      const wrap = document.querySelector("#signoffsList");
+      if (!wrap) return;
+
+      const signoffs = Array.isArray(data.signoffs) ? data.signoffs : [];
+      if (!signoffs.length) {
+        wrap.innerHTML = `<div class="notice">No signoffs recorded yet.</div>`;
+        return;
+      }
+
+      wrap.innerHTML = signoffs.map((item) => `
+        <article class="card">
+          <div class="kicker">${escapeHtml(formatDateTime(item.signed_at))}</div>
+          <h3>${escapeHtml(item.signer_name || "Unknown signer")}</h3>
+          <p>${escapeHtml(item.signer_email || "—")}</p>
+          <div class="kicker">Type: ${escapeHtml(item.signer_type || "customer")}</div>
+          ${item.notes ? `<div class="hr"></div><p>${escapeHtml(item.notes)}</p>` : ""}
+        </article>
+      `).join("");
+    }
+
+    async function loadProgress(password, token) {
+      const res = await fetch("/api/admin/progress_list", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": password
+        },
+        body: JSON.stringify({ token })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || "Could not load progress information.");
+      }
+
+      return data;
+    }
+
+    async function postUpdate(password, token, createdBy, note, visibility) {
+      const res = await fetch("/api/admin/progress_post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": password
+        },
+        body: JSON.stringify({
+          token,
+          created_by: createdBy,
+          note,
+          visibility
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || "Could not post update.");
+      }
+
+      return data;
+    }
+
+    async function postMedia(password, token, createdBy, kind, caption, mediaUrl, visibility) {
+      const res = await fetch("/api/admin/progress_media_post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": password
+        },
+        body: JSON.stringify({
+          token,
+          created_by: createdBy,
+          kind,
+          caption,
+          media_url: mediaUrl,
+          visibility
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || "Could not attach media.");
+      }
+
+      return data;
+    }
+
+    async function enableProgress(password) {
+      const res = await fetch("/api/admin/progress_enable", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": password
+        },
+        body: JSON.stringify({
+          booking_id: currentBookingId
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || "Could not enable progress.");
+      }
+
+      return data;
+    }
+
+    async function reloadCurrent() {
+      if (!currentToken) return;
+
+      const password = document.querySelector("#adminPassword").value.trim();
+      const data = await loadProgress(password, currentToken);
+
+      renderHeader(data);
+      renderCustomerLink(currentToken);
+      renderUpdates(data);
+      renderMedia(data);
+      renderSignoffs(data);
+
+      document.querySelector("#postBtn").disabled = false;
+      document.querySelector("#mediaBtn").disabled = false;
+    }
+
+    async function boot() {
+      setBrandImages();
+      setFooter();
+
+      const loadForm = document.querySelector("#loadForm");
+      const updateForm = document.querySelector("#updateForm");
+      const mediaForm = document.querySelector("#mediaForm");
+      const enableBtn = document.querySelector("#enableProgressBtn");
+
+      loadForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const password = document.querySelector("#adminPassword").value.trim();
+        const token = document.querySelector("#progressToken").value.trim();
+
+        if (!password) {
+          setNotice("Admin password is required.", "bad");
           return;
         }
 
-        const flags = [
-          ["Booking", detail.booking.id || "—"],
-          ["Status", detail.booking.status || "—"],
-          ["Job", detail.booking.job_status || "—"],
-          ["Progress Enabled", detail.booking.progress_enabled ? "Yes" : "No"],
-          ["Progress Count", detail.progress && detail.progress.count != null ? String(detail.progress.count) : "0"],
-          ["Media Count", detail.media && detail.media.count != null ? String(detail.media.count) : "0"],
-          ["Signoff", detail.signoff ? "Present" : "Missing"]
-        ];
-
-        flags.forEach(([label, value]) => {
-          const span = document.createElement("span");
-          span.className = "pill";
-          span.textContent = `${label}: ${value}`;
-          els.flags.appendChild(span);
-        });
-      }
-
-      function renderProgressUpdates(detail) {
-        const updates = detail && detail.progress && Array.isArray(detail.progress.updates)
-          ? detail.progress.updates
-          : [];
-
-        els.progressList.innerHTML = "";
-
-        if (!updates.length) {
-          els.progressList.innerHTML = '<div class="list-item muted">No progress updates found.</div>';
+        if (!token) {
+          setNotice("Progress token is required.", "bad");
           return;
         }
-
-        updates.forEach((row) => {
-          const item = document.createElement("div");
-          item.className = "list-item";
-          item.innerHTML = `
-            <strong>${escapeHtml(row.created_by || "Unknown")} — ${escapeHtml(row.created_at || "")}</strong>
-            <div>${escapeHtml(row.note || "(No note)")}</div>
-            <div class="muted">Visibility: ${escapeHtml(row.visibility || "internal")}</div>
-          `;
-          els.progressList.appendChild(item);
-        });
-      }
-
-      function renderThread(detail) {
-        const items = Array.isArray(detail?.comments) ? detail.comments : [];
-        els.threadList.innerHTML = '';
-        if (!items.length) { els.threadList.innerHTML = '<div class="list-item muted">No thread entries found.</div>'; return; }
-        items.forEach((row) => { const item = document.createElement('div'); item.className='list-item'; item.innerHTML = `<strong>${escapeHtml(row.author_name || row.author_type || 'Unknown')}</strong><div>${escapeHtml(row.message || '(No message)')}</div><div class="muted">${escapeHtml(row.parent_type || 'booking')} · ${escapeHtml(row.visibility || 'internal')} · ${escapeHtml(row.thread_status || 'visible')}</div>`; els.threadList.appendChild(item); });
-      }
-
-      function renderMedia(detail) {
-        const items = detail && detail.media && Array.isArray(detail.media.items)
-          ? detail.media.items
-          : [];
-
-        els.mediaList.innerHTML = "";
-
-        if (!items.length) {
-          els.mediaList.innerHTML = '<div class="list-item muted">No media found.</div>';
-          return;
-        }
-
-        items.forEach((row) => {
-          const item = document.createElement("div");
-          item.className = "list-item";
-
-          const heading = document.createElement("strong");
-          heading.textContent = `${row.media_type || "media"} — ${row.created_at || ""}`;
-
-          const caption = document.createElement("div");
-          caption.textContent = row.caption || "(No caption)";
-
-          const link = document.createElement("a");
-          link.href = row.media_url || "#";
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.textContent = row.media_url || "No media URL";
-          link.style.display = "block";
-          link.style.marginTop = "6px";
-          link.style.color = "#93c5fd";
-          link.style.wordBreak = "break-all";
-
-          item.appendChild(heading);
-          item.appendChild(caption);
-          item.appendChild(link);
-          els.mediaList.appendChild(item);
-        });
-      }
-
-      async function loadProgressWorkspace(bookingId) {
-        setShellStatus("", "");
-        setLoadBusy(true);
-        currentBookingId = null;
-        currentDetail = null;
-        setPostBusy(false);
 
         try {
-          const response = await fetch("/api/admin/jobsite_detail", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              booking_id: bookingId
-            })
-          });
-
-          const data = await response.json().catch(() => null);
-
-          if (!response.ok) {
-            throw new Error((data && data.error) || "Could not load progress workspace.");
-          }
-
-          currentBookingId = bookingId;
-          currentDetail = data;
-
-          renderFlags(data);
-          renderPre(els.summary, {
-            booking: data.booking || null,
-            progress: data.progress
-              ? {
-                  count: data.progress.count || 0
-                }
-              : null,
-            media: data.media
-              ? {
-                  count: data.media.count || 0
-                }
-              : null,
-            signoff_present: !!data.signoff
-          });
-          renderProgressUpdates(data);
-          renderMedia(data);
-          renderPre(els.signoffBox, data.signoff || "No signoff data.");
-          setPostBusy(false);
-          setShellStatus("Progress workspace loaded.", "success");
+          currentToken = token;
+          setNotice("Loading progress information…");
+          await reloadCurrent();
+          setNotice("Booking loaded.", "ok");
         } catch (err) {
-          currentBookingId = null;
-          currentDetail = null;
-          renderFlags(null);
-          renderPre(els.summary, "No booking loaded yet.");
-          renderProgressUpdates(null);
-          renderMedia(null);
-          renderPre(els.signoffBox, "No signoff loaded yet.");
-          setPostBusy(false);
-          setShellStatus(
-            err && err.message ? err.message : "Could not load progress workspace.",
-            "error"
-          );
-        } finally {
-          setLoadBusy(false);
+          setNotice(err.message || "Could not load booking.", "bad");
         }
-      }
+      });
 
-      async function postProgressUpdate(event) {
-        event.preventDefault();
+      enableBtn.addEventListener("click", async () => {
+        const password = document.querySelector("#adminPassword").value.trim();
+
+        if (!password) {
+          setNotice("Admin password is required.", "bad");
+          return;
+        }
 
         if (!currentBookingId) {
-          setShellStatus("Load a booking before posting progress.", "error");
+          setNotice("Load a booking first.", "bad");
           return;
         }
-
-        const note = String(els.note.value || "").trim();
-        const visibility = String(els.visibility.value || "customer").trim();
-
-        if (!note) {
-          setShellStatus("Progress note is required.", "error");
-          return;
-        }
-
-        setShellStatus("", "");
-        setPostBusy(true);
 
         try {
-          const response = await fetch("/api/admin/progress_post", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              booking_id: currentBookingId,
-              note,
-              visibility
-            })
-          });
-
-          const data = await response.json().catch(() => null);
-
-          if (!response.ok) {
-            throw new Error((data && data.error) || "Could not post progress update.");
+          setNotice("Enabling progress link…");
+          const data = await enableProgress(password);
+          if (data.progress_token) {
+            currentToken = data.progress_token;
+            document.querySelector("#progressToken").value = currentToken;
           }
-
-          els.note.value = "";
-          setShellStatus("Progress update posted.", "success");
-          await loadProgressWorkspace(currentBookingId);
+          await reloadCurrent();
+          setNotice("Progress link enabled.", "ok");
         } catch (err) {
-          setShellStatus(
-            err && err.message ? err.message : "Could not post progress update.",
-            "error"
-          );
-        } finally {
-          setPostBusy(false);
+          setNotice(err.message || "Could not enable progress.", "bad");
         }
-      }
+      });
 
-      function escapeHtml(value) {
-        return String(value || "")
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#39;");
-      }
+      updateForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-      els.openForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        const bookingId = String(els.bookingId.value || "").trim();
+        const password = document.querySelector("#adminPassword").value.trim();
+        const token = document.querySelector("#progressToken").value.trim();
+        const createdBy = document.querySelector("#createdBy").value.trim();
+        const note = document.querySelector("#updateNote").value.trim();
+        const visibility = document.querySelector("#visibility").value;
 
-        if (!bookingId) {
-          setShellStatus("Booking ID is required.", "error");
+        if (!password) {
+          setNotice("Admin password is required.", "bad");
           return;
         }
 
-        loadProgressWorkspace(bookingId);
+        if (!token) {
+          setNotice("Load a booking first.", "bad");
+          return;
+        }
+
+        if (!createdBy) {
+          setNotice("Posted by is required.", "bad");
+          return;
+        }
+
+        if (!note) {
+          setNotice("Update note is required.", "bad");
+          return;
+        }
+
+        try {
+          setNotice("Posting update…");
+          await postUpdate(password, token, createdBy, note, visibility);
+          document.querySelector("#updateNote").value = "";
+          await reloadCurrent();
+          setNotice("Update posted.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not post update.", "bad");
+        }
       });
 
-      els.postForm.addEventListener("submit", postProgressUpdate);
+      mediaForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-      window.AdminShell.boot({
-        pageKey: "admin-progress"
+        const password = document.querySelector("#adminPassword").value.trim();
+        const token = document.querySelector("#progressToken").value.trim();
+        const createdBy = document.querySelector("#mediaCreatedBy").value.trim();
+        const kind = document.querySelector("#mediaKind").value;
+        const caption = document.querySelector("#mediaCaption").value.trim();
+        const mediaUrl = document.querySelector("#mediaUrl").value.trim();
+        const visibility = document.querySelector("#mediaVisibility").value;
+
+        if (!password) {
+          setNotice("Admin password is required.", "bad");
+          return;
+        }
+
+        if (!token) {
+          setNotice("Load a booking first.", "bad");
+          return;
+        }
+
+        if (!createdBy) {
+          setNotice("Posted by is required for media.", "bad");
+          return;
+        }
+
+        if (!mediaUrl) {
+          setNotice("Media URL is required.", "bad");
+          return;
+        }
+
+        try {
+          setNotice("Attaching media…");
+          await postMedia(password, token, createdBy, kind, caption, mediaUrl, visibility);
+          document.querySelector("#mediaCaption").value = "";
+          document.querySelector("#mediaUrl").value = "";
+          await reloadCurrent();
+          setNotice("Media attached.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not attach media.", "bad");
+        }
       });
-    })();
+    }
+
+    document.addEventListener("DOMContentLoaded", boot);
   </script>
 </body>
 </html>

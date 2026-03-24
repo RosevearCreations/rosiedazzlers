@@ -14,9 +14,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mobile Auto Detailing Services | Rosie Dazzlers</title>
-  <link rel="canonical" href="https://www.rosiedazzlers.ca/services" />
-  <meta name="description" content="Explore Rosie Dazzlers interior, exterior, and specialty mobile auto detailing services." />
+  <title>Detailing Services | Rosie Dazzlers Mobile Auto Detailing</title>
+  <meta name="description" content="See Rosie Dazzlers detailing packages, what is included, add-ons, and service options for small, mid-size, and oversized vehicles." />
+  <link rel="canonical" href="https://rosiedazzlers.ca/services" />
+  <meta property="og:title" content="Detailing Services | Rosie Dazzlers Mobile Auto Detailing" />
+  <meta property="og:description" content="See Rosie Dazzlers detailing packages, what is included, add-ons, and service options for small, mid-size, and oversized vehicles." />
   <link rel="stylesheet" href="/assets/site.css?v=20260311j" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -68,7 +70,7 @@
       <img data-banner alt="Rosie Dazzlers banner"
            style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)" />
 
-      <h1 style="margin:14px 0 6px">Mobile Auto Detailing Services</h1>
+      <h1 style="margin:14px 0 6px">Services</h1>
       <p class="kicker" style="margin:0">
         Clear packages with optional add-ons. We come to you across <strong>Norfolk</strong> & <strong>Oxford</strong> Counties.
       </p>
@@ -251,12 +253,6 @@
       const incList = inc.slice(0, 9).map(s=>`<li>${escapeHtml(s.name || "")}</li>`).join("");
 
       const getImages = ()=>[mainImg, ...HOVER_EXTRA_IMAGES].filter(Boolean);
-      const thumbCards = HOVER_EXTRA_IMAGES.filter(Boolean).map((url, i)=>`
-        <a class="thumb-card" href="${url}" target="_blank" rel="noopener noreferrer">
-          <img src="${url}" alt="${escapeHtml(pkg.name)} extra ${i+1}" loading="lazy" decoding="async" />
-          <span>${["Interior","Exterior","Size Chart","Extra"][i] || `Photo ${i+1}`}</span>
-        </a>
-      `).join("");
 
       el.innerHTML = `
         <img class="cardImg" alt="${escapeHtml(pkg.name)}" />
@@ -278,16 +274,15 @@
 
         <div class="row" style="margin-top:12px;justify-content:space-between">
           <a class="btn primary" href="/book?pkg=${encodeURIComponent(pkg.code)}&size=${encodeURIComponent(sz)}">Book this</a>
-          <span class="muted mini">Hover/tap image or use the extra photo cards below.</span>
+          <span class="muted mini">Hover/tap image: Interior / Exterior / Size Chart</span>
         </div>
-        ${thumbCards ? `<div class="thumb-strip">${thumbCards}</div>` : ""}
       `;
 
       const img = el.querySelector("img");
       img.src = mainImg;
       img.loading = "lazy";
       img.decoding = "async";
-      img.onerror = ()=>{ img.src = HOVER_EXTRA_IMAGES.find(Boolean) || "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png"; };
+      img.onerror = ()=>{ img.style.display = "none"; };
 
       attachHoverCarousel(img, getImages);
 
