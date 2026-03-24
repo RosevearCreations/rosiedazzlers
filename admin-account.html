@@ -77,19 +77,31 @@
     }
 
     .logout-btn,
-    .btn {
+    .btn,
+    .ghost-btn {
       appearance: none;
       border: 0;
       border-radius: 10px;
       padding: 10px 14px;
-      background: #2563eb;
-      color: white;
       font-weight: 700;
       cursor: pointer;
     }
 
+    .btn {
+      background: #2563eb;
+      color: white;
+    }
+
     .logout-btn {
       margin-top: 10px;
+      background: #2563eb;
+      color: white;
+    }
+
+    .ghost-btn {
+      background: rgba(255,255,255,0.06);
+      color: #e5e7eb;
+      border: 1px solid rgba(255,255,255,0.10);
     }
 
     .status {
@@ -209,6 +221,74 @@
       color: #e5e7eb;
     }
 
+    .summary-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .summary-item {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: baseline;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .summary-label {
+      min-width: 120px;
+      font-weight: 700;
+      color: #93c5fd;
+    }
+
+    .summary-value {
+      color: #f8fafc;
+      word-break: break-word;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .badge.ok {
+      background: rgba(34,197,94,0.14);
+      color: #bbf7d0;
+      border-color: rgba(134,239,172,0.22);
+    }
+
+    .badge.off {
+      background: rgba(148,163,184,0.12);
+      color: #cbd5e1;
+      border-color: rgba(148,163,184,0.22);
+    }
+
+    .debug-wrap {
+      margin-top: 14px;
+    }
+
+    .debug-panel[hidden] {
+      display: none;
+    }
+
+    .debug-panel {
+      margin-top: 12px;
+    }
+
     @media (min-width: 900px) {
       .span-6 { grid-column: span 6; }
     }
@@ -246,8 +326,28 @@
             This reflects the current authenticated staff session resolved by
             <code>/api/admin/auth_me</code>.
           </p>
-          <div id="actor-json" class="data-box">
-            <pre>Loading actor data...</pre>
+
+          <div id="actor-summary" class="summary-list" aria-live="polite">
+            <div class="summary-item">
+              <span class="summary-label">Status</span>
+              <span class="summary-value">Loading account details...</span>
+            </div>
+          </div>
+
+          <div class="debug-wrap" id="actor-debug-wrap" hidden>
+            <button
+              class="ghost-btn"
+              type="button"
+              id="toggle-actor-debug"
+              aria-expanded="false"
+              aria-controls="actor-debug-panel"
+            >
+              Show Debug Details
+            </button>
+
+            <div id="actor-debug-panel" class="debug-panel data-box" hidden>
+              <pre>Loading actor data...</pre>
+            </div>
           </div>
         </article>
 
@@ -318,14 +418,26 @@
   <script>
     (function () {
       const els = {
-        actorJson: document.getElementById("actor-json"),
+        actorSummary: document.getElementById("actor-summary"),
         actorCaps: document.getElementById("actor-caps"),
+        actorDebugWrap: document.getElementById("actor-debug-wrap"),
+        actorDebugToggle: document.getElementById("toggle-actor-debug"),
+        actorDebugPanel: document.getElementById("actor-debug-panel"),
         form: document.getElementById("change-password-form"),
         currentPassword: document.getElementById("current-password"),
         newPassword: document.getElementById("new-password"),
         hashMode: document.getElementById("hash-mode"),
         submitBtn: document.getElementById("change-password-btn")
       };
+
+      function escapeHtml(value) {
+        return String(value == null ? "" : value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
 
       function setShellStatus(message, type) {
         const nodes = document.querySelectorAll("[data-admin-shell-status]");
@@ -336,15 +448,88 @@
         });
       }
 
-      function renderActor(actor) {
-        els.actorJson.innerHTML = "";
+      function boolBadge(label, value) {
+        const safeLabel = escapeHtml(label);
+        return `<span class="badge ${value ? "ok" : "off"}">${safeLabel}: ${value ? "Yes" : "No"}</span>`;
+      }
+
+      function renderActorSummary(actor) {
+        if (!actor) {
+          els.actorSummary.innerHTML = `
+            <div class="summary-item">
+              <span class="summary-label">Status</span>
+              <span class="summary-value">No staff identity loaded.</span>
+            </div>
+          `;
+          return;
+        }
+
+        const caps = actor.capabilities || {};
+        const statusText = actor.is_active ? "Active" : "Inactive";
+
+        els.actorSummary.innerHTML = `
+          <div class="summary-item">
+            <span class="summary-label">Name</span>
+            <span class="summary-value">${escapeHtml(actor.full_name || "Unknown")}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Email</span>
+            <span class="summary-value">${escapeHtml(actor.email || "Not available")}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Role</span>
+            <span class="summary-value">${escapeHtml(actor.role_code || "staff")}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Account Status</span>
+            <span class="summary-value">${escapeHtml(statusText)}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Staff ID</span>
+            <span class="summary-value">${escapeHtml(actor.id || "Not available")}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Role Flags</span>
+            <span class="summary-value">
+              <div class="badge-row">
+                ${boolBadge("Admin", actor.is_admin === true)}
+                ${boolBadge("Senior Detailer", actor.is_senior_detailer === true)}
+                ${boolBadge("Detailer", actor.is_detailer === true)}
+              </div>
+            </span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Key Permissions</span>
+            <span class="summary-value">
+              <div class="badge-row">
+                ${boolBadge("Manage Bookings", caps.can_manage_bookings === true)}
+                ${boolBadge("Manage Blocks", caps.can_manage_blocks === true)}
+                ${boolBadge("Manage Progress", caps.can_manage_progress === true)}
+                ${boolBadge("Manage Promos", caps.can_manage_promos === true)}
+                ${boolBadge("Manage Staff", caps.can_manage_staff === true)}
+                ${boolBadge("Override Lower Entries", caps.can_override_lower_entries === true)}
+              </div>
+            </span>
+          </div>
+        `;
+      }
+
+      function renderActorDebug(actor) {
+        if (!els.actorDebugPanel) return;
+        els.actorDebugPanel.innerHTML = "";
         const pre = document.createElement("pre");
         pre.textContent = JSON.stringify(actor || null, null, 2);
-        els.actorJson.appendChild(pre);
+        els.actorDebugPanel.appendChild(pre);
+      }
+
+      function renderActor(actor) {
+        renderActorSummary(actor || null);
+        renderActorDebug(actor || null);
 
         els.actorCaps.innerHTML = "";
         if (!actor) {
           els.actorCaps.innerHTML = '<span class="pill">No actor loaded</span>';
+          els.actorDebugWrap.hidden = true;
           return;
         }
 
@@ -365,9 +550,21 @@
         items.forEach(([label, value]) => {
           const span = document.createElement("span");
           span.className = "pill";
-          span.textContent = typeof value === "boolean" ? `${label}: ${value ? "Yes" : "No"}` : `${label}: ${value}`;
+          span.textContent = typeof value === "boolean"
+            ? `${label}: ${value ? "Yes" : "No"}`
+            : `${label}: ${value}`;
           els.actorCaps.appendChild(span);
         });
+
+        els.actorDebugWrap.hidden = !(actor.is_admin === true);
+      }
+
+      function toggleDebugPanel() {
+        if (!els.actorDebugPanel || !els.actorDebugToggle) return;
+        const willShow = els.actorDebugPanel.hidden;
+        els.actorDebugPanel.hidden = !willShow;
+        els.actorDebugToggle.setAttribute("aria-expanded", willShow ? "true" : "false");
+        els.actorDebugToggle.textContent = willShow ? "Hide Debug Details" : "Show Debug Details";
       }
 
       function setSubmitBusy(busy) {
@@ -434,6 +631,10 @@
           renderActor(actor || null);
         }
       });
+
+      if (els.actorDebugToggle) {
+        els.actorDebugToggle.addEventListener("click", toggleDebugPanel);
+      }
 
       els.form.addEventListener("submit", submitPasswordChange);
     })();
