@@ -70,14 +70,14 @@
       <div class="hr"></div>
 
       <div class="row inputs">
-        <input id="q" type="search" placeholder="Search consumables (name/category)..." />
+        <input id="q" type="search" placeholder="Search consumables (name/category)..." autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="search" />
         <select id="cat"></select>
         <select id="sort">
           <option value="title_asc">Sort: Title (A→Z)</option>
           <option value="title_desc">Sort: Title (Z→A)</option>
           <option value="category_asc">Sort: Category</option>
           <option value="size_desc">Sort: File size (largest)</option>
-          <option value="size_asc">Sort: File size (smallest)</option>
+          <option value="size_asc">Sort: File size (smallest)</option><option value="stock_desc">Sort: Stock (high→low)</option><option value="rating_desc">Sort: Rating</option>
         </select>
         <button class="btn ghost" id="clearBtn" type="button">Clear</button>
       </div>
@@ -166,7 +166,7 @@
       const category = it.category || "other";
       const bytes = Number(it.bytes || 0);
 
-      let img = it.r2_url || "";
+      let img = it.image_url || it.r2_url || "";
       if (!img && it.path) {
         img = `${R2_PUBLIC_DEV_BASE}/${encodeURI(it.path).replaceAll("#","%23")}`;
       }
@@ -238,6 +238,8 @@
       if (mode === "category_asc") arr.sort(byCat);
       if (mode === "size_desc") arr.sort((a,b)=>(b.bytes||0)-(a.bytes||0));
       if (mode === "size_asc") arr.sort((a,b)=>(a.bytes||0)-(b.bytes||0));
+      if (mode === "stock_desc") arr.sort((a,b)=>Number(b.qty_on_hand||0)-Number(a.qty_on_hand||0));
+      if (mode === "rating_desc") arr.sort((a,b)=>Number(b.rating_value||0)-Number(a.rating_value||0));
 
       return arr;
     }

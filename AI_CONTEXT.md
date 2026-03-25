@@ -394,3 +394,6 @@ This repo now includes:
 - two-sided progress threads with moderation states
 - a refreshed schema snapshot in `SUPABASE_SCHEMA.sql`
 - migration file: `sql/2026-03-24_recovery_inventory_moderation_and_checkout.sql`
+
+### March 25, 2026 pass note
+This doc was refreshed during the vehicle catalog, progress-session, layout, and public catalog filter pass. The repo now includes NHTSA-backed vehicle make/model endpoints, a DB cache table for vehicle catalog rows, progress moderation/enable session upgrades, and public search/filter cleanup on Gear and Consumables.

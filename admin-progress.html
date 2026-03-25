@@ -46,7 +46,7 @@
           <p>Load a booking by progress token, enable the customer progress link, review progress entries, post a new note, attach media, and moderate thread visibility.</p>
         </div>
         <div class="panel">
-          <div class="kicker">Loaded booking</div>
+          <div class="kicker">Signed-in staff</div><div id="actorMeta" class="kicker" style="margin-bottom:10px">Checking session…</div><div class="hr"></div><div class="kicker">Loaded booking</div>
           <h3 id="bookingTitle" style="margin:6px 0 8px">No booking loaded</h3>
           <div id="bookingMeta" class="kicker">Enter the progress token below.</div>
         </div>
@@ -63,8 +63,8 @@
           <h2>Load booking</h2>
           <form id="loadForm" class="form">
             <label>
-              Admin password
-              <input id="adminPassword" name="adminPassword" type="password" autocomplete="current-password" required />
+              Staff password (optional fallback)
+              <input id="adminPassword" name="adminPassword" type="password" autocomplete="current-password" />
             </label>
 
             <label>
@@ -336,6 +336,20 @@
         </article>`).join("");
     }
 
+    
+    async function loadActor(){
+      try {
+        const res = await fetch('/api/admin/auth_me', { credentials:'include', cache:'no-store' });
+        const out = await res.json().catch(()=>null);
+        if (!res.ok || !out?.ok || !out?.actor) throw new Error(out?.error || 'No active staff session.');
+        document.querySelector('#actorMeta').textContent = `${out.actor.full_name || out.actor.email || 'Staff'} · ${out.actor.role_code || 'staff'}`;
+        if (!document.querySelector('#createdBy').value.trim()) document.querySelector('#createdBy').value = out.actor.full_name || out.actor.email || '';
+        if (!document.querySelector('#mediaCreatedBy').value.trim()) document.querySelector('#mediaCreatedBy').value = out.actor.full_name || out.actor.email || '';
+      } catch (err) {
+        document.querySelector('#actorMeta').textContent = 'No staff session found. Use the fallback password field if needed.';
+      }
+    }
+
     async function loadProgress(password, token) {
       const res = await fetch("/api/admin/progress_list", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-password": password }, body: JSON.stringify({ token }) });
       const data = await res.json().catch(() => ({}));
@@ -412,6 +426,7 @@
 
     async function boot() {
       setBrandImages();
+      await loadActor();
       setFooter();
       const loadForm = document.querySelector("#loadForm");
       const updateForm = document.querySelector("#updateForm");

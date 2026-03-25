@@ -156,3 +156,8 @@ Important fields include:
 ## staff_auth_sessions
 Opaque staff session table used by internal pages and newer role-aware endpoints.
 This is now the preferred auth model for internal workflows, while the shared admin password remains a temporary bridge.
+
+## March 25, 2026 additions
+- `bookings` now tracks normalized vehicle fields such as `vehicle_year`, `vehicle_make`, `vehicle_model`, `vehicle_body_style`, `vehicle_category`, `vehicle_plate`, `vehicle_mileage_km`, and `vehicle_photo_url`.
+- `customer_vehicles` now carries richer operational and communication fields plus `vehicle_size`, `body_style`, `vehicle_category`, and `is_exotic`.
+- `vehicle_catalog_cache` stores year/make/model rows fetched from NHTSA vPIC for later DB-backed reuse.

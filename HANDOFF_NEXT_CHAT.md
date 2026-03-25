@@ -35,3 +35,9 @@ Rosie Dazzlers is now a role-aware detailing operations platform with booking, d
 ## March 25, 2026 late-pass resume note
 
 The latest pass moved checkout pricing onto a DB-backed canonical setting source, turned admin upload into a signed-upload mobile workflow, and added purchase-order receive/cancel actions in admin catalog. Continue next with converting the remaining legacy internal endpoints to real staff sessions, finishing gift/account messaging polish, hardening production media URL strategy, and continuing route-by-route public SEO cleanup.
+
+## New notes from the March 25 vehicle/session pass
+- Run `sql/2026-03-25_vehicle_catalog_and_staff_flow.sql`.
+- Booking now calls `/api/vehicle_makes` and `/api/vehicle_models` for the year/make/model selectors.
+- Progress enable/moderation now accept staff sessions; continue by removing remaining visible password fallbacks from legacy admin screens.
+- Next worthwhile follow-up: extend the same shared vehicle catalog controls into the customer garage (`my-account.html`) and any admin booking editor screen.

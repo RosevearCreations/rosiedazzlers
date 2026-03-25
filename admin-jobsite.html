@@ -72,11 +72,11 @@
     <section class="section">
       <div class="grid cards">
         <div class="panel">
-          <h2>Booking + staff</h2>
+          <h2>Booking + staff</h2><div id="jobsiteActorMeta" class="kicker" style="margin-bottom:10px">Checking session…</div>
           <form id="jobsiteLoadForm" class="form">
             <label>
-              Admin / staff password
-              <input id="jobsitePassword" type="password" autocomplete="current-password" required />
+              Staff password (optional fallback)
+              <input id="jobsitePassword" type="password" autocomplete="current-password" />
             </label>
 
             <label>
@@ -352,6 +352,18 @@
 
     let currentBookingId = "";
     let currentPassword = "";
+
+    async function loadActorMeta(){
+      try {
+        const res = await fetch("/api/admin/auth_me", { credentials:"include", cache:"no-store" });
+        const out = await res.json().catch(()=>null);
+        if (!res.ok || !out?.ok || !out?.actor) throw new Error(out?.error || "No session");
+        document.querySelector("#jobsiteActorMeta").textContent = `${out.actor.full_name || out.actor.email || "Staff"} · ${out.actor.role_code || "staff"}`;
+        if (!document.querySelector("#detailerName").value.trim()) document.querySelector("#detailerName").value = out.actor.full_name || out.actor.email || "";
+      } catch {
+        document.querySelector("#jobsiteActorMeta").textContent = "No staff session found. Use the fallback password field if needed.";
+      }
+    }
     let timeEntries = [];
     let jobsiteComments = [];
     let jobsiteAnnotations = [];

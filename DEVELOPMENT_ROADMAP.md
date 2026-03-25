@@ -93,3 +93,7 @@ On every build:
 - moved forward: mobile-friendly direct upload page now uses the signed-in staff session
 - moved forward: purchase-order receive/cancel workflow now exists in admin catalog
 - move up next: finish the same session-aware conversion on the remaining legacy admin endpoints and screens
+
+
+### March 25, 2026 pass note
+This doc was refreshed during the vehicle catalog, progress-session, layout, and public catalog filter pass. The repo now includes NHTSA-backed vehicle make/model endpoints, a DB cache table for vehicle catalog rows, progress moderation/enable session upgrades, and public search/filter cleanup on Gear and Consumables.

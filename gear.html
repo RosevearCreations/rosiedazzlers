@@ -1,196 +1,58 @@
-<!-- /gear.html
-     REPLACE ENTIRE FILE
-
-     Fix:
-     - If amazon_url is missing in systems_catalog.json,
-       generate an Amazon search link automatically from the item name.
-
-     Data file:
-       /data/systems_catalog.json
--->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Detailing Gear We Use | Rosie Dazzlers</title>
-  <meta name="description" content="Browse the detailing tools, machines, and gear Rosie Dazzlers uses, now with live database inventory when available." />
+  <meta name="description" content="Browse the detailing tools, machines, and gear Rosie Dazzlers uses, with live public inventory where available." />
   <link rel="canonical" href="https://rosiedazzlers.ca/gear" />
   <meta property="og:title" content="Detailing Gear We Use | Rosie Dazzlers" />
-  <meta property="og:description" content="Browse the detailing tools, machines, and gear Rosie Dazzlers uses, now with live database inventory when available." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260311h" />
+  <meta property="og:description" content="Browse the detailing tools, machines, and gear Rosie Dazzlers uses, with live public inventory where available." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260325b" />
   <style>
     .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
     @media (max-width:1100px){ .grid3{grid-template-columns:repeat(2,1fr)} }
     @media (max-width:980px){ .grid3{grid-template-columns:1fr} }
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .muted{color:rgba(234,242,255,.62)}
-    .cardImg{
-      width:100%;
-      aspect-ratio:16/10;
-      object-fit:cover;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.04);
-    }
+    .cardImg{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04)}
     .mini{font-size:.92rem}
     .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
+    .inputs input,.inputs select{min-width:220px}
   </style>
 </head>
-
 <body>
-  <div class="nav">
-    <div class="nav-inner">
-      <a class="brand" href="/">
-        <img data-logo alt="Rosie Dazzlers logo" />
-        <strong>Rosie Dazzlers</strong>
-      </a>
-      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
-      <div class="nav-links" id="navLinks"></div>
-      <a class="btn primary" href="/book">Book now</a>
-    </div>
-  </div>
-
+  <div class="nav"><div class="nav-inner"><a class="brand" href="/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a><button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button><div class="nav-links" id="navLinks"></div><a class="btn primary" href="/book">Book now</a></div></div>
   <div class="container">
     <div class="panel">
       <h1 style="margin:0 0 6px">Gear</h1>
       <p class="kicker" style="margin:0">The equipment we use to do the job right.</p>
-
       <div class="hr"></div>
-
-      <div class="row">
-        <label style="flex:1;min-width:260px">
-          <span class="muted mini">Search</span>
-          <input id="q" type="text" placeholder="Search gear…" />
-        </label>
+      <div class="row inputs">
+        <input id="q" type="search" placeholder="Search gear…" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="search" />
+        <select id="cat"></select>
+        <select id="sort"><option value="title_asc">Sort: Title (A→Z)</option><option value="title_desc">Sort: Title (Z→A)</option><option value="category_asc">Sort: Category</option><option value="stock_desc">Sort: Stock (high→low)</option><option value="stock_asc">Sort: Stock (low→high)</option><option value="rating_desc">Sort: Rating</option></select>
         <button class="btn ghost" id="clearBtn" type="button">Clear</button>
       </div>
-
       <div id="loadErr" class="notice bad" style="display:none;margin-top:12px"></div>
       <div class="muted mini" id="count" style="margin-top:10px"></div>
     </div>
-
-    <div class="section">
-      <div class="grid3" id="grid"></div>
-    </div>
-
+    <div class="section"><div class="grid3" id="grid"></div></div>
     <div class="footer" data-footer></div>
   </div>
-
   <script type="module">
-    const DATA_URL = "/data/systems_catalog.json?v=20260324a";
+    const DATA_URL = "/data/systems_catalog.json?v=20260325b";
     const DB_URL = "/api/catalog_public?kind=tool";
     const AMAZON_CA_SEARCH = "https://www.amazon.ca/s?k=";
-
     const qs = (s)=>document.querySelector(s);
-
-    function escapeHtml(s){
-      return String(s||"")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;").replaceAll("'","&#39;");
-    }
-
-    async function fetchJsonStrict(url){
-      const res = await fetch(url,{cache:"no-store"});
-      const text = await res.text();
-      try { return JSON.parse(text); }
-      catch {
-        const head = text.slice(0,120).replace(/\s+/g," ");
-        throw new Error(`Expected JSON from ${url} but got: ${head}`);
-      }
-    }
-
-    function normalizeItem(x){
-      const name = x.name || x.title || x.item || x.filename || "Item";
-      const notes = x.notes || x.description || x.caption || "";
-      const image_url = x.image_url || x.image || x.r2_url || x.url || null;
-      const rating_value = x.rating_value ?? x.rating ?? null;
-      const rating_count = Number(x.rating_count || 0);
-      const qty_on_hand = x.qty_on_hand ?? null;
-      const unit_label = x.unit_label || "";
-
-      const given = x.amazon_url || x.amazon || x.link || null;
-      const amazon_url = given && String(given).trim()
-        ? String(given).trim()
-        : (AMAZON_CA_SEARCH + encodeURIComponent(name));
-
-      const amazon_is_generated = !(given && String(given).trim());
-
-      return { name, notes, image_url, amazon_url, amazon_is_generated, rating_value, rating_count, qty_on_hand, unit_label };
-    }
-
-    function matches(item, q){
-      if (!q) return true;
-      const hay = `${item.name} ${item.notes}`.toLowerCase();
-      return hay.includes(q.toLowerCase());
-    }
-
-    function render(list){
-      const grid = qs("#grid");
-      grid.innerHTML = "";
-
-      const q = (qs("#q").value || "").trim();
-      const filtered = list.filter(it => matches(it, q));
-
-      qs("#count").textContent = `${filtered.length} items`;
-
-      for (const it of filtered){
-        const card = document.createElement("div");
-        card.className = "panel";
-
-        const img = it.image_url
-          ? `<img class="cardImg" alt="${escapeHtml(it.name)}" src="${escapeHtml(it.image_url)}" loading="lazy" decoding="async" />`
-          : "";
-
-        const badge = it.amazon_is_generated
-          ? `<span class="tag">Amazon search</span>`
-          : `<span class="tag">Amazon link</span>`;
-
-        card.innerHTML = `
-          ${img}
-          <div style="margin-top:${img ? "10px":"0"}">
-            <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap">
-              <h3 style="margin:0">${escapeHtml(it.name)}</h3>
-              ${badge}
-            </div>
-
-            ${it.notes ? `<div class="muted mini" style="margin-top:6px">${escapeHtml(it.notes)}</div>` : ``}
-            ${it.rating_value != null ? `<div class="muted mini" style="margin-top:6px">Rated ${escapeHtml(Number(it.rating_value).toFixed(1))}/5${it.rating_count ? ` from ${escapeHtml(it.rating_count)}` : ""}</div>` : ``}
-            ${it.qty_on_hand != null ? `<div class="muted mini" style="margin-top:4px">Stock: ${escapeHtml(it.qty_on_hand)} ${escapeHtml(it.unit_label || "")}</div>` : ``}
-
-            <div class="row" style="margin-top:12px">
-              <a class="btn primary" target="_blank" rel="noopener" href="${escapeHtml(it.amazon_url)}">View on Amazon</a>
-            </div>
-          </div>
-        `;
-
-        const imgEl = card.querySelector("img");
-        if (imgEl) imgEl.onerror = ()=>{ imgEl.style.display = "none"; };
-
-        grid.appendChild(card);
-      }
-    }
-
-    try {
-      let arr = [];
-      try { const dbRes = await fetch(DB_URL, { cache: "no-store" }); const dbJson = await dbRes.json(); if (dbRes.ok && dbJson?.ok && Array.isArray(dbJson.items) && dbJson.items.length) arr = dbJson.items; } catch {}
-      if (!arr.length) { const raw = await fetchJsonStrict(DATA_URL); arr = Array.isArray(raw) ? raw : (Array.isArray(raw.items) ? raw.items : []); }
-      const list = arr.map(normalizeItem);
-
-      render(list);
-
-      qs("#q").addEventListener("input", ()=>render(list));
-      qs("#clearBtn").addEventListener("click", ()=>{
-        qs("#q").value = "";
-        render(list);
-      });
-
-    } catch (e) {
-      qs("#loadErr").style.display = "block";
-      qs("#loadErr").textContent = `Failed to load gear JSON: ${e.message || e}`;
-    }
+    function escapeHtml(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;"); }
+    async function fetchJsonStrict(url){ const res=await fetch(url,{cache:"no-store"}); const text=await res.text(); try{return JSON.parse(text);}catch{ throw new Error(`Expected JSON from ${url}`);} }
+    function normalizeItem(x){ const name=x.name||x.title||x.item||x.filename||"Item"; const notes=x.notes||x.description||x.caption||""; const image_url=x.image_url||x.image||x.r2_url||x.url||null; const rating_value=x.rating_value ?? x.rating ?? null; const rating_count=Number(x.rating_count||0); const qty_on_hand=x.qty_on_hand ?? null; const unit_label=x.unit_label || ""; const category=x.category || x.item_type || 'other'; const given=x.amazon_url||x.amazon||x.link||null; const amazon_url=given&&String(given).trim()?String(given).trim():(AMAZON_CA_SEARCH+encodeURIComponent(name)); const amazon_is_generated=!(given&&String(given).trim()); return { name, notes, image_url, amazon_url, amazon_is_generated, rating_value, rating_count, qty_on_hand, unit_label, category }; }
+    function buildCategories(list){ const sel=qs('#cat'); const map=new Map(); list.forEach(it=>map.set(it.category,(map.get(it.category)||0)+1)); const opts=[`<option value="">All categories (${list.length})</option>`]; [...map.keys()].sort((a,b)=>a.localeCompare(b)).forEach(c=>opts.push(`<option value="${escapeHtml(c)}">${escapeHtml(c)} (${map.get(c)})</option>`)); sel.innerHTML=opts.join(''); }
+    function apply(list){ const q=(qs('#q').value||'').trim().toLowerCase(); const cat=qs('#cat').value||''; const mode=qs('#sort').value; let out=list.filter(it=>!q||`${it.name} ${it.notes} ${it.category}`.toLowerCase().includes(q)); if(cat) out=out.filter(it=>it.category===cat); out=[...out]; if(mode==='title_asc') out.sort((a,b)=>a.name.localeCompare(b.name)); if(mode==='title_desc') out.sort((a,b)=>b.name.localeCompare(a.name)); if(mode==='category_asc') out.sort((a,b)=>(a.category||'').localeCompare(b.category||'')||a.name.localeCompare(b.name)); if(mode==='stock_desc') out.sort((a,b)=>Number(b.qty_on_hand||0)-Number(a.qty_on_hand||0)); if(mode==='stock_asc') out.sort((a,b)=>Number(a.qty_on_hand||0)-Number(b.qty_on_hand||0)); if(mode==='rating_desc') out.sort((a,b)=>Number(b.rating_value||0)-Number(a.rating_value||0)); render(out); }
+    function render(list){ const grid=qs('#grid'); grid.innerHTML=''; qs('#count').textContent=`${list.length} items`; if(!list.length){ grid.innerHTML='<div class="notice warn">No gear matches the current filters.</div>'; return; } for(const it of list){ const card=document.createElement('div'); card.className='panel'; const img=it.image_url?`<img class="cardImg" alt="${escapeHtml(it.name)}" src="${escapeHtml(it.image_url)}" loading="lazy" decoding="async" />`:''; const badge=it.amazon_is_generated?`<span class="tag">Amazon search</span>`:`<span class="tag">Amazon link</span>`; card.innerHTML=`${img}<div style="margin-top:${img?'10px':'0'}"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap"><h3 style="margin:0">${escapeHtml(it.name)}</h3><div style="display:flex;gap:8px;flex-wrap:wrap">${badge}<span class="tag">${escapeHtml(it.category)}</span></div></div>${it.notes?`<div class="muted mini" style="margin-top:6px">${escapeHtml(it.notes)}</div>`:''}${it.rating_value!=null?`<div class="muted mini" style="margin-top:6px">Rated ${escapeHtml(Number(it.rating_value).toFixed(1))}/5${it.rating_count?` from ${escapeHtml(it.rating_count)}`:''}</div>`:''}${it.qty_on_hand!=null?`<div class="muted mini" style="margin-top:4px">Stock: ${escapeHtml(it.qty_on_hand)} ${escapeHtml(it.unit_label||'')}</div>`:''}<div class="row" style="margin-top:12px"><a class="btn primary" target="_blank" rel="noopener" href="${escapeHtml(it.amazon_url)}">View on Amazon</a></div></div>`; const imgEl=card.querySelector('img'); if(imgEl) imgEl.onerror=()=>{imgEl.style.display='none';}; grid.appendChild(card);} }
+    try { let arr=[]; try{ const dbRes=await fetch(DB_URL,{cache:'no-store'}); const dbJson=await dbRes.json(); if(dbRes.ok&&dbJson?.ok&&Array.isArray(dbJson.items)&&dbJson.items.length) arr=dbJson.items; }catch{} if(!arr.length){ const raw=await fetchJsonStrict(DATA_URL); arr=Array.isArray(raw)?raw:(Array.isArray(raw.items)?raw.items:[]);} const list=arr.map(normalizeItem).filter(it=>it.name); buildCategories(list); apply(list); ['q','cat','sort'].forEach(id=>qs('#'+id).addEventListener(id==='q'?'input':'change',()=>apply(list))); qs('#clearBtn').addEventListener('click',()=>{qs('#q').value='';qs('#cat').value='';qs('#sort').value='title_asc';apply(list);}); } catch(e){ qs('#loadErr').style.display='block'; qs('#loadErr').textContent=`Failed to load gear catalog: ${e.message||e}`; }
   </script>
-
-  <script type="module" src="/assets/chrome.js?v=20260311h"></script>
+  <script type="module" src="/assets/chrome.js?v=20260325b"></script>
 </body>
 </html>

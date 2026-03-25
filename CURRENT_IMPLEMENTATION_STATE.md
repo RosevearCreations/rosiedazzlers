@@ -26,3 +26,10 @@
 - provider-backed reorder reminder sending is still not automated yet
 - signed upload flow is now present, but customer-facing/private media URL strategy still needs final hardening for production buckets
 - remaining public route-by-route SEO cleanup and structured-data pass
+
+## March 25, 2026 vehicle/session/layout pass
+- Booking now uses live year/make/model dropdowns backed by NHTSA vPIC through server-side proxy endpoints and caches results into `vehicle_catalog_cache` when available.
+- Progress moderation and progress enable flows now accept real staff sessions instead of requiring only the shared admin password.
+- Gear and consumables search/filter UI was cleaned up to reduce bad browser autofill and add richer category/sort controls.
+- Checkbox/card alignment was tightened in shared CSS for admin/jobsite/staff style forms.
+- Schema/docs now reflect booking vehicle fields, richer customer vehicle fields, and the vehicle catalog cache table.

@@ -97,3 +97,7 @@ The hard part now is not adding isolated features — it is keeping booking, sta
 - the preferred internal auth path is now session-first on more recovery, catalog, and progress/upload endpoints
 - the preferred pricing path is now DB settings first, JSON fallback second
 - the preferred field-media path is signed upload + media save instead of pasted URLs
+
+
+### March 25, 2026 pass note
+This doc was refreshed during the vehicle catalog, progress-session, layout, and public catalog filter pass. The repo now includes NHTSA-backed vehicle make/model endpoints, a DB cache table for vehicle catalog rows, progress moderation/enable session upgrades, and public search/filter cleanup on Gear and Consumables.

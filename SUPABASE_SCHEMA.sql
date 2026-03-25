@@ -1,5 +1,5 @@
 -- Rosie Dazzlers - Current Supabase Schema Snapshot
--- Updated: 2026-03-24
+-- Updated: 2026-03-25
 
 create extension if not exists pgcrypto;
 
@@ -26,6 +26,7 @@ create table if not exists public.bookings (
   customer_email text not null,
   customer_phone text null,
   address_line1 text not null,
+  address_line2 text null,
   city text null,
   postal_code text null,
   currency text not null default 'CAD',
@@ -50,6 +51,14 @@ create table if not exists public.bookings (
   ack_bylaw boolean not null default false,
   ack_cancellation boolean not null default false,
   notes text null,
+  vehicle_year integer null,
+  vehicle_make text null,
+  vehicle_model text null,
+  vehicle_body_style text null,
+  vehicle_category text null,
+  vehicle_plate text null,
+  vehicle_mileage_km numeric null,
+  vehicle_photo_url text null,
   completed_at timestamptz null
 );
 
@@ -163,13 +172,46 @@ create table if not exists public.customer_vehicles (
   model_year integer null,
   make text null,
   model text null,
+  vehicle_size text null,
+  body_style text null,
+  vehicle_category text null,
+  is_exotic boolean not null default false,
   color text null,
   mileage_km numeric null,
   parking_location text null,
   alternate_service_address text null,
   notes_for_team text null,
+  detailer_visible_notes text null,
+  admin_private_notes text null,
+  preferred_contact_name text null,
+  contact_email text null,
+  contact_phone text null,
+  text_updates_opt_in boolean not null default false,
+  live_updates_opt_in boolean not null default true,
+  has_water_hookup boolean not null default false,
+  has_power_hookup boolean not null default false,
+  save_billing_on_file boolean not null default false,
+  billing_label text null,
+  display_order integer not null default 0,
+  last_wash_at date null,
   is_primary boolean not null default false
 );
+
+create table if not exists public.vehicle_catalog_cache (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  model_year integer not null,
+  make text not null,
+  model text not null,
+  vehicle_type text not null default '',
+  size_bucket text null,
+  is_exotic boolean not null default false,
+  source text not null default 'nhtsa_vpic',
+  last_seen_at timestamptz not null default now(),
+  unique (model_year, make, model, vehicle_type)
+);
+
 create table if not exists public.observation_annotations (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -195,3 +237,6 @@ create index if not exists catalog_purchase_orders_status_idx on public.catalog_
 create index if not exists catalog_purchase_orders_reminder_at_idx on public.catalog_purchase_orders(reminder_at);
 create index if not exists catalog_purchase_orders_item_key_idx on public.catalog_purchase_orders(item_key);
 -- app_management_settings.pricing_catalog is now the canonical DB-backed pricing source, with bundled JSON as fallback.
+
+create index if not exists vehicle_catalog_cache_year_make_idx on public.vehicle_catalog_cache(model_year, make);
+create index if not exists vehicle_catalog_cache_make_model_idx on public.vehicle_catalog_cache(make, model);

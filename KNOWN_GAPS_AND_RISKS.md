@@ -244,3 +244,9 @@ Partially mitigated in the newest pass:
 - admin upload now has a signed-upload flow and session-aware mobile UI
 - purchase-order lifecycle now includes ordered / received / cancelled state changes in admin
 - several internal endpoints now trust the signed-in staff session before the legacy bridge
+
+## March 25, 2026 update
+- Real staff auth/session is further improved on progress enable/moderation flows, but some legacy admin screens still expose fallback password fields in the UI.
+- Vehicle data duplication risk is reduced by moving year/make/model selection toward a shared live catalog path plus DB cache instead of free-typed fields alone.
+- Pricing/gift polish and reorder lifecycle still remain live risks outside this pass.
+- Public SEO cleanup continues; protected screens remain non-indexed and exposed pages should keep a single H1.
