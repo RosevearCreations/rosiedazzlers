@@ -7,13 +7,15 @@ export async function onRequestPost(context) {
   try {
     const body = await request.json().catch(() => ({}));
     const booking_id = String(body.booking_id || "").trim();
+    const token = String(body.token || "").trim();
     const note = cleanText(body.note);
     const visibility = String(body.visibility || "customer").trim().toLowerCase();
-    if (!isUuid(booking_id)) return withCors(json({ error: "Invalid booking_id." }, 400));
+    const resolvedBookingId = isUuid(booking_id) ? booking_id : await resolveBookingIdByToken({ env, token });
+    if (!resolvedBookingId) return withCors(json({ error: "Invalid booking_id or token." }, 400));
     if (!note) return withCors(json({ error: "Missing note." }, 400));
     if (!["customer","internal"].includes(visibility)) return withCors(json({ error: "Invalid visibility." }, 400));
 
-    const access = await requireStaffAccess({ request, env, body, capability: "work_booking", bookingId: booking_id, allowLegacyAdminFallback: true });
+    const access = await requireStaffAccess({ request, env, body: { ...body, booking_id: resolvedBookingId }, capability: "work_booking", bookingId: resolvedBookingId, allowLegacyAdminFallback: true });
     if (!access.ok) return withCors(access.response);
 
     const headers = {
@@ -25,7 +27,7 @@ export async function onRequestPost(context) {
     const insertRes = await fetch(`${env.SUPABASE_URL}/rest/v1/job_updates`, {
       method: "POST",
       headers,
-      body: JSON.stringify([{ booking_id, created_by: access.actor.full_name || "Staff", note, visibility, staff_user_id: access.actor.id || null }])
+      body: JSON.stringify([{ booking_id: resolvedBookingId, created_by: access.actor.full_name || "Staff", note, visibility, staff_user_id: access.actor.id || null }])
     });
     if (!insertRes.ok) return withCors(json({ error: `Could not save update. ${await insertRes.text()}` }, 500));
     const rows = await insertRes.json().catch(() => []);

@@ -7,21 +7,23 @@ export async function onRequestPost(context) {
   try {
     const body = await request.json().catch(() => ({}));
     const booking_id = String(body.booking_id || "").trim();
-    if (!isUuid(booking_id)) return withCors(json({ error: "Invalid booking_id." }, 400));
+    const token = String(body.token || "").trim();
+    const resolvedBookingId = isUuid(booking_id) ? booking_id : await resolveBookingIdByToken({ env, token });
+    if (!resolvedBookingId) return withCors(json({ error: "Invalid booking_id or token." }, 400));
 
-    const access = await requireStaffAccess({ request, env, body, capability: "work_booking", bookingId: booking_id, allowLegacyAdminFallback: true });
+    const access = await requireStaffAccess({ request, env, body: { ...body, booking_id: resolvedBookingId }, capability: "work_booking", bookingId: resolvedBookingId, allowLegacyAdminFallback: true });
     if (!access.ok) return withCors(access.response);
 
     const headers = { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, Accept: "application/json" };
-    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,customer_name,service_date,start_slot,package_code,vehicle_size,assigned_to,progress_enabled,progress_token&id=eq.${encodeURIComponent(booking_id)}&limit=1`, { headers });
+    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,customer_name,service_date,start_slot,package_code,vehicle_size,assigned_to,progress_enabled,progress_token&id=eq.${encodeURIComponent(resolvedBookingId)}&limit=1`, { headers });
     if (!bookingRes.ok) return withCors(json({ error: `Could not load booking. ${await bookingRes.text()}` }, 500));
     const booking = (await bookingRes.json().catch(() => []))?.[0] || null;
     if (!booking) return withCors(json({ error: "Booking not found." }, 404));
 
     const [updatesRes, mediaRes, signoffsRes] = await Promise.all([
-      fetch(`${env.SUPABASE_URL}/rest/v1/job_updates?select=id,created_at,created_by,note,visibility,thread_status,moderated_at,moderated_by_name,moderation_reason&booking_id=eq.${encodeURIComponent(booking_id)}&order=created_at.desc`, { headers }),
-      fetch(`${env.SUPABASE_URL}/rest/v1/job_media?select=id,created_at,created_by,kind,caption,media_url,visibility,thread_status,moderated_at,moderated_by_name,moderation_reason&booking_id=eq.${encodeURIComponent(booking_id)}&order=created_at.desc`, { headers }),
-      fetch(`${env.SUPABASE_URL}/rest/v1/job_signoffs?select=id,signer_type,signer_name,signer_email,notes,signed_at,user_agent&booking_id=eq.${encodeURIComponent(booking_id)}&order=signed_at.desc`, { headers })
+      fetch(`${env.SUPABASE_URL}/rest/v1/job_updates?select=id,created_at,created_by,note,visibility,thread_status,moderated_at,moderated_by_name,moderation_reason&booking_id=eq.${encodeURIComponent(resolvedBookingId)}&order=created_at.desc`, { headers }),
+      fetch(`${env.SUPABASE_URL}/rest/v1/job_media?select=id,created_at,created_by,kind,caption,media_url,visibility,thread_status,moderated_at,moderated_by_name,moderation_reason&booking_id=eq.${encodeURIComponent(resolvedBookingId)}&order=created_at.desc`, { headers }),
+      fetch(`${env.SUPABASE_URL}/rest/v1/job_signoffs?select=id,signer_type,signer_name,signer_email,notes,signed_at,user_agent&booking_id=eq.${encodeURIComponent(resolvedBookingId)}&order=signed_at.desc`, { headers })
     ]);
     if (!updatesRes.ok) return withCors(json({ error: `Could not load updates. ${await updatesRes.text()}` }, 500));
     if (!mediaRes.ok) return withCors(json({ error: `Could not load media. ${await mediaRes.text()}` }, 500));
