@@ -57,7 +57,7 @@ export async function getCurrentCustomerSession({ env, request }) {
   const res = await fetch(
     `${env.SUPABASE_URL}/rest/v1/customer_auth_sessions` +
       `?select=id,customer_profile_id,created_at,updated_at,expires_at,revoked_at,last_seen_at,ip_address,user_agent,` +
-      `customer_profile:customer_profiles!customer_auth_sessions_customer_profile_id_fkey(id,created_at,updated_at,email,full_name,phone,tier_code,notes,address_line1,address_line2,city,province,postal_code,vehicle_notes,is_active,notification_opt_in,notification_channel,detailer_chat_opt_in)` +
+      `customer_profile:customer_profiles!customer_auth_sessions_customer_profile_id_fkey(id,created_at,updated_at,email,full_name,phone,tier_code,notes,address_line1,address_line2,city,province,postal_code,vehicle_notes,is_active,notification_opt_in,notification_channel,detailer_chat_opt_in,email_verified_at)` +
       `&token_hash=eq.${encodeURIComponent(tokenHash)}` +
       `&limit=1`,
     { headers: serviceHeaders(env) }
