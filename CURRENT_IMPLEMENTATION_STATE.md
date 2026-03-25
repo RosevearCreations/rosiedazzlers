@@ -34,3 +34,9 @@
 - Expanded admin analytics toward live online sessions, cart signals, and engagement-time visibility.
 - Refreshed login UX, key docs, and schema notes to match the current implementation.
 
+
+## March 24, 2026 late-pass additions
+
+- Public login and the site-wide account widget now support staff sign-in fallback in the UI, so staff can use public entry points without hitting a client-only 401 wall.
+- The main admin dashboard now shows the signed-in staff identity again and surfaces live site traffic on the landing screen.
+- Admin analytics now includes daily traffic summaries, checkout-state mix, top countries/referrers, abandoned checkout visibility, and auto-refreshing live session monitoring.

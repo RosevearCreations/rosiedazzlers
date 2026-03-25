@@ -31,3 +31,7 @@ Rosie Dazzlers is now a role-aware detailing operations platform with booking, d
 - admin analytics now surfaces live-online and cart signal views
 - docs and schema snapshot refreshed again
 
+
+## March 24, 2026 late-pass resume note
+
+The public login regression was addressed by letting the UI try staff auth after client auth fails. The admin dashboard now shows current signed-in identity again and surfaces analytics summary widgets. Continue next with deeper staff session hardening, upload flow, gift/account polish, reorder lifecycle completion, and broader public SEO cleanup.

@@ -39,3 +39,19 @@
 - upload flow completion
 - reorder workflow completion
 - continued SEO and security hardening on every pass
+
+
+## Latest pass — March 24, 2026 (late)
+
+Completed now:
+- fixed public login so admin credentials can route through staff auth instead of failing on client-only login
+- restored visible signed-in identity controls on the main admin dashboard
+- expanded analytics screen with daily traffic and live monitoring summaries
+- kept SEO/security/error handling in scope for touched pages
+
+Next strongest moves:
+1. finish deeper staff session consistency on all internal screens
+2. complete gift/account messaging polish
+3. complete mobile upload flow
+4. finish reorder receive/close/reminder lifecycle
+5. continue public SEO route audit

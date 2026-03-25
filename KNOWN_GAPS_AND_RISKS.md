@@ -221,3 +221,18 @@ Still remaining at the top:
 - fuller reorder receive/close/reminder lifecycle
 - route-by-route SEO cleanup beyond the pages touched so far
 
+
+## March 24, 2026 late-pass update
+
+Mitigations advanced in this pass:
+- public login now accepts both client and staff credentials through UI fallback to staff auth
+- public account widget now recognizes signed-in staff on public pages and links them back to Admin
+- main admin dashboard now restores signed-in identity display and adds live analytics summary cards
+- admin analytics now includes daily traffic, checkout-state mix, live online sessions, and faster refresh controls
+
+Still important:
+- real staff auth/session is improved in UI routing, but full staff-only internal shell consistency is still a live project risk
+- gift redemption/account messaging and upload flow remain unfinished
+- canonical pricing still needs final convergence across every remaining report and edge path
+- reorder workflow still needs receive/close/reminder completion
+- public SEO cleanup still needs a broader route-by-route pass

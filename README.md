@@ -99,3 +99,7 @@ Use `dev` as the active source of truth unless explicitly told otherwise.
 - stronger public login/reset screen
 - docs/schema refresh aligned to the current dev branch
 
+
+### March 24, 2026 late-pass notes
+
+This build now includes a dual-path public sign-in experience (client first, staff fallback in the UI), a restored signed-in identity panel on the main admin dashboard, and a stronger analytics screen for live online activity, daily traffic, countries, referrers, carts, and abandoned checkout review.

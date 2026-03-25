@@ -184,3 +184,7 @@ create table if not exists public.observation_annotations (
   moderated_by_name text null,
   moderation_reason text null
 );
+
+-- March 24, 2026 late-pass note
+-- Public analytics continues to store raw events in public.site_activity_events.
+-- Daily traffic, live-online counts, cart signals, and checkout-state summaries are currently derived in the admin analytics layer rather than via separate aggregate tables.

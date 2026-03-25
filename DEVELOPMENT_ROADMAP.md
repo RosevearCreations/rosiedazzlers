@@ -78,3 +78,11 @@ On every build:
 - keep admin/token/private pages noindex
 - continue public support-page cleanup
 - maintain sitemap/robots consistency
+
+
+## Newly moved forward
+
+- public/client login flow now hands off to staff auth when the credentials belong to staff
+- public account widget now recognizes staff sessions as well as customer sessions
+- admin dashboard has a live analytics summary surface again
+- analytics view has stronger historical + live monitoring detail

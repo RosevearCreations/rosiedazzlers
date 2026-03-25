@@ -137,3 +137,7 @@ Public analytics event stream for page views, heartbeats, referrers, session jou
 ### notification_events
 Queued notification log used by customer/recovery communication flows.
 
+
+## Analytics note
+
+The current public tracking implementation continues to use `site_activity_events` as the raw event stream. Historical daily traffic, live-online session estimates, cart signals, and checkout-state summaries are now computed from that table inside the admin analytics layer rather than through a separate reporting table.
