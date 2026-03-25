@@ -206,3 +206,18 @@ The biggest current risks are:
 
 ## One-line summary
 The main Rosie Dazzlers risk is no longer lack of features — it is keeping identity, access, moderation, pricing, recovery, inventory, and documentation consistent while the system transitions into a role-aware operations platform.
+
+## March 24, 2026 update
+Partially mitigated in the newest pass:
+- public login/account widget now exists in shared site chrome
+- customer reset + verification flows now exist
+- public analytics tracking now captures page views, heartbeats, and cart signals
+
+Still remaining at the top:
+- real staff auth/session completion
+- full pricing/add-on convergence in every path
+- broader gift redemption/account messaging polish
+- direct mobile upload flow completion
+- fuller reorder receive/close/reminder lifecycle
+- route-by-route SEO cleanup beyond the pages touched so far
+

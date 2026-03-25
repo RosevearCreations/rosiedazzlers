@@ -34,3 +34,17 @@
    - continue page-by-page title/H1/meta review
    - keep admin/token/protected pages noindex
    - keep error handling and access controls moving forward each pass
+
+## Newly moved forward
+- site-wide public account widget
+- client password reset + email verification token flow
+- public analytics tracking and live-session visibility foundation
+
+## Move up next
+1. complete real staff auth/session across internal screens
+2. finish canonical pricing/add-on convergence across every path
+3. polish gift messaging across checkout and customer account surfaces
+4. finish direct mobile upload flow
+5. deepen reorder lifecycle from request to ordered/received/reminded
+6. continue page-by-page SEO audit and structured-data cleanup
+

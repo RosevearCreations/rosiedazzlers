@@ -1,5 +1,7 @@
 # Database Structure Current
 
+> Last synchronized: March 24, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+
 ## Snapshot note
 This file is the human-readable companion to `SUPABASE_SCHEMA.sql`.
 Last synchronized: March 24, 2026.
@@ -118,3 +120,20 @@ Includes:
 - status
 - reminder / ordered / received timestamps
 - purchase URL / note
+
+## Newer auth + tracking structures
+### customer_profiles
+Customer account/profile record now also carries password + verification-adjacent fields used by the public account widget and recovery flows.
+
+### customer_auth_sessions
+Cookie/session backing table for logged-in customer sessions.
+
+### customer_auth_tokens
+Short-lived token store for password reset and email verification links.
+
+### site_activity_events
+Public analytics event stream for page views, heartbeats, referrers, session journeys, cart signals, and checkout progress.
+
+### notification_events
+Queued notification log used by customer/recovery communication flows.
+

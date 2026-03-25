@@ -1,5 +1,7 @@
 <!-- README.md -->
 
+> Last synchronized: March 24, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+
 > Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
 # Rosie Dazzlers — Mobile Auto Detailing Platform
@@ -85,3 +87,15 @@ Read these first:
 
 ## Branch rule
 Use `dev` as the active source of truth unless explicitly told otherwise.
+
+## Last synchronized
+- March 24, 2026
+- This pass added a site-wide public account widget through the shared chrome, customer password reset + email verification token flows, lightweight public analytics tracking, and refreshed risk/docs/schema snapshots.
+
+## Newly advanced in this pass
+- public login/account status widget injected across public pages
+- forgot password + email verification resend + token verification flows
+- analytics tracking for page views, heartbeats, cart snapshots, and simple live-session reporting
+- stronger public login/reset screen
+- docs/schema refresh aligned to the current dev branch
+

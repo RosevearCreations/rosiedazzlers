@@ -23,3 +23,11 @@ Rosie Dazzlers is now a role-aware detailing operations platform with booking, d
 - one file at a time
 - brief description first
 - then one complete code block for the entire file
+
+## Newest pass summary
+- Shared public login/account widget added through site chrome
+- customer password reset and email verification token flows added
+- public analytics/event tracking added for page, heartbeat, and cart signals
+- admin analytics now surfaces live-online and cart signal views
+- docs and schema snapshot refreshed again
+

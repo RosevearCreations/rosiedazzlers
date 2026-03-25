@@ -1,5 +1,7 @@
 # Docs Update Note
 
+> Last synchronized: March 24, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+
 Last synchronized: March 24, 2026.
 
 This refresh aligned the main docs to the current `dev` branch after a pass focused on:

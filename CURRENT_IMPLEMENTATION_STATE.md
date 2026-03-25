@@ -26,3 +26,11 @@
 - mobile upload flow completion
 - reorder purchasing workflow close/receive/remind lifecycle
 - final route cleanup for services/pricing duplicates
+
+## Completed / strengthened in this pass
+- Added a shared public account widget through `assets/chrome.js` so public pages can show current client session state, login/logout, settings, forgot password, and forgot email verification flows.
+- Added token-based customer auth support for password reset and email verification.
+- Added lightweight public website tracking through `assets/public-analytics.js` using the existing `site_activity_events` pipeline.
+- Expanded admin analytics toward live online sessions, cart signals, and engagement-time visibility.
+- Refreshed login UX, key docs, and schema notes to match the current implementation.
+

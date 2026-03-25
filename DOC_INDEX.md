@@ -1,5 +1,7 @@
 # Rosie Dazzlers — Documentation Index
 
+> Last synchronized: March 24, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+
 Use this file as the quick map to the main Markdown documents for the `dev` branch.
 Last synchronized: March 24, 2026.
 

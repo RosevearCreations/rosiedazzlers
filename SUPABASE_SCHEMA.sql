@@ -66,3 +66,121 @@ create table if not exists public.recovery_message_templates (id uuid primary ke
 create table if not exists public.catalog_inventory_items (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), item_key text not null unique, item_type text not null check (item_type in ('tool','consumable')), name text not null, category text null, description text null, image_url text null, amazon_url text null, is_public boolean not null default true, is_active boolean not null default true, qty_on_hand numeric(12,2) not null default 0, reorder_point numeric(12,2) not null default 0, reorder_qty numeric(12,2) not null default 0, unit_label text null, cost_cents integer null, preferred_vendor text null, vendor_sku text null, rating_value numeric(3,2) null, rating_count integer not null default 0, notes text null);
 create table if not exists public.catalog_low_stock_alerts (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), item_id uuid not null references public.catalog_inventory_items(id) on delete cascade, item_key text null, qty_snapshot numeric(12,2) null, reorder_point_snapshot numeric(12,2) null, is_resolved boolean not null default false, resolved_at timestamptz null, resolved_by_name text null, resolution_notes text null);
 create table if not exists public.catalog_purchase_orders (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), item_id uuid null references public.catalog_inventory_items(id) on delete set null, item_key text null, item_name text null, vendor_name text null, qty_ordered numeric(12,2) not null default 0, unit_cost_cents integer null, status text not null default 'draft' check (status in ('draft','requested','ordered','received','cancelled')), reminder_at timestamptz null, ordered_at timestamptz null, received_at timestamptz null, purchase_url text null, note text null);
+
+
+create table if not exists public.customer_profiles (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  email text not null unique,
+  full_name text null,
+  phone text null,
+  tier_code text null,
+  notes text null,
+  address_line1 text null,
+  address_line2 text null,
+  city text null,
+  province text null,
+  postal_code text null,
+  vehicle_notes text null,
+  password_hash text null,
+  is_active boolean not null default true,
+  notification_opt_in boolean not null default true,
+  notification_channel text null,
+  detailer_chat_opt_in boolean not null default true,
+  email_verified_at timestamptz null,
+  marketing_source text null,
+  last_login_at timestamptz null
+);
+create table if not exists public.customer_auth_sessions (
+  id uuid primary key default gen_random_uuid(),
+  customer_profile_id uuid not null references public.customer_profiles(id) on delete cascade,
+  token_hash text not null unique,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  expires_at timestamptz not null,
+  revoked_at timestamptz null,
+  last_seen_at timestamptz null,
+  ip_address text null,
+  user_agent text null
+);
+create table if not exists public.customer_auth_tokens (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  customer_profile_id uuid not null references public.customer_profiles(id) on delete cascade,
+  purpose text not null check (purpose in ('password_reset','email_verification')),
+  token_hash text not null unique,
+  expires_at timestamptz not null,
+  used_at timestamptz null,
+  payload jsonb not null default '{}'::jsonb
+);
+create table if not exists public.site_activity_events (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  visitor_id text not null,
+  session_id text not null,
+  event_type text not null,
+  page_path text not null,
+  page_title text null,
+  referrer text null,
+  country text null,
+  ip_address text null,
+  user_agent text null,
+  locale text null,
+  timezone text null,
+  screen text null,
+  source text null,
+  campaign text null,
+  checkout_state text null,
+  payload jsonb not null default '{}'::jsonb
+);
+create table if not exists public.notification_events (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  event_type text not null,
+  channel text null,
+  booking_id uuid null,
+  customer_profile_id uuid null,
+  recipient_email text null,
+  recipient_phone text null,
+  payload jsonb not null default '{}'::jsonb,
+  status text not null default 'queued',
+  attempt_count integer not null default 0,
+  next_attempt_at timestamptz null,
+  max_attempts integer not null default 5,
+  provider_response jsonb null,
+  subject text null,
+  body_text text null,
+  body_html text null
+);
+create table if not exists public.customer_vehicles (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  customer_profile_id uuid not null references public.customer_profiles(id) on delete cascade,
+  vehicle_name text null,
+  model_year integer null,
+  make text null,
+  model text null,
+  color text null,
+  mileage_km numeric null,
+  parking_location text null,
+  alternate_service_address text null,
+  notes_for_team text null,
+  is_primary boolean not null default false
+);
+create table if not exists public.observation_annotations (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  booking_id uuid not null references public.bookings(id) on delete cascade,
+  media_id uuid null references public.job_media(id) on delete cascade,
+  author_type text null,
+  author_name text null,
+  annotation_text text null,
+  thread_status text not null default 'visible',
+  moderated_at timestamptz null,
+  moderated_by_staff_user_id uuid null,
+  moderated_by_name text null,
+  moderation_reason text null
+);
