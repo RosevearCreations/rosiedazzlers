@@ -1,42 +1,36 @@
+
+> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 # Next Steps Internal
 
 ## Highest-value next build targets
-1. **SEO / validation**
-   - page-by-page title / H1 / meta review
-   - sitemap expansion
-   - business/location landing content
-   - OpenGraph/Twitter card cleanup
+1. **Staff auth/session**
+   - finish real staff login/session
+   - reduce reliance on shared password bridge
+   - make actor resolution the trusted backend source
 
-2. **Analytics / recovery**
-   - richer funnel reporting
-   - better session journey filtering
-   - abandoned-order recovery templates and rules
-   - conversion reporting
+2. **Identity consistency**
+   - unify actor linkage across intake, progress, media, time, signoff, and assignment
 
-3. **Catalog / operations**
-   - tie catalog items to real reorder reminders
-   - expose reorder-needed views in admin
-   - connect systems/consumables maintenance to the live front-end lists
+3. **Pricing/gift cleanup**
+   - finish pricing/add-on convergence on pricing JSON
+   - improve gift messaging in customer-facing screens
+   - review rare reconciliation edges
 
-4. **Observation / thread UX**
-   - keep deepening annotation tools
-   - stronger two-sided thread moderation
-   - admin moderation and escalation controls
+4. **Upload / field UX**
+   - complete direct upload flow
+   - improve mobile field workflow around media and progress
 
-5. **Notifications**
-   - connect notification events to real providers
-   - add templates for booking/progress/recovery messages
-   - add manual resend actions in admin
+5. **Inventory / purchasing**
+   - reminders
+   - order receive/close states
+   - optional notification-backed reorder nudges
 
+6. **Recovery operations**
+   - stronger provider dispatch history
+   - manual resend/escalation options
+   - richer rule validation and testing traces
 
-## Updated next steps
-1. Connect public pages fully to catalog admin workflows, including create/edit images and reorder previews.
-2. Add admin UI for true recovery-message preview/testing and channel rules.
-3. Expand annotation moderation tools and provider-backed notifications.
-4. Continue public SEO cleanup page by page, with location/service-specific metadata.
-
-## Newly opened follow-up after this pass
-1. Add admin jobsite UI buttons for comment hide/remove/reveal so moderation is fully screen-driven.
-2. Add true preview history/logging for recovery-message tests and provider test responses.
-3. Connect low-stock alerts to optional notification events or scheduled reorder reminders.
-4. Continue page-by-page SEO cleanup on the remaining account/admin/public support pages.
+7. **SEO + security on every pass**
+   - continue page-by-page title/H1/meta review
+   - keep admin/token/protected pages noindex
+   - keep error handling and access controls moving forward each pass

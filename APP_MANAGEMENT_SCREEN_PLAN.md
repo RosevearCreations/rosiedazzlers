@@ -1,3 +1,5 @@
+
+> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 # Rosie Dazzlers — App Management Screen Plan
 
 This document captures the current split between Customer, Detailer, Senior Detailer, and Admin screens.
@@ -47,4 +49,3 @@ Current next priorities:
 - richer client/detailer threaded comments UI
 - manual scheduling / app-management rules UI completion
 - final layout polish across booking and internal screens
-

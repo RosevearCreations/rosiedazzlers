@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Progress | Rosie Dazzlers</title>
   <meta name="description" content="Admin progress update tools for Rosie Dazzlers." />
+  <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body data-page="admin-progress">
@@ -42,7 +43,7 @@
         <div>
           <div class="badge">Admin Progress</div>
           <h1>Post customer progress updates</h1>
-          <p>Load a booking by progress token, enable the customer progress link, review progress entries, post a new note, and attach media by URL.</p>
+          <p>Load a booking by progress token, enable the customer progress link, review progress entries, post a new note, attach media, and moderate thread visibility.</p>
         </div>
         <div class="panel">
           <div class="kicker">Loaded booking</div>
@@ -170,7 +171,7 @@
         <div class="panel">
           <h2>Signoffs</h2>
           <div id="signoffsList" class="grid" style="margin-top:12px">
-            <div class="notice">No booking loaded yet.</div>
+            <div class="notice">No signoffs recorded yet.</div>
           </div>
         </div>
       </div>
@@ -200,10 +201,7 @@
       if (!value) return "—";
       const d = new Date(value);
       if (Number.isNaN(d.getTime())) return String(value);
-      return new Intl.DateTimeFormat("en-CA", {
-        dateStyle: "medium",
-        timeStyle: "short"
-      }).format(d);
+      return new Intl.DateTimeFormat("en-CA", { dateStyle: "medium", timeStyle: "short" }).format(d);
     }
 
     function escapeHtml(value) {
@@ -222,111 +220,112 @@
       el.textContent = message;
     }
 
+    function moderationBadges(item) {
+      const bits = [];
+      if (item.visibility) bits.push(`Visibility: ${escapeHtml(item.visibility)}`);
+      if (item.thread_status) bits.push(`Thread: ${escapeHtml(item.thread_status)}`);
+      if (item.moderated_at) bits.push(`Moderated: ${escapeHtml(formatDateTime(item.moderated_at))}`);
+      if (item.moderated_by_name) bits.push(`By: ${escapeHtml(item.moderated_by_name)}`);
+      return bits.length ? `<div class="kicker">${bits.join(" · ")}</div>` : "";
+    }
+
+    function moderationReason(item) {
+      return item.moderation_reason ? `<div class="hr"></div><p><strong>Reason:</strong> ${escapeHtml(item.moderation_reason)}</p>` : "";
+    }
+
+    function moderationControls(entity, item) {
+      const id = escapeHtml(item.id || "");
+      return `
+        <div class="hr"></div>
+        <div class="grid" style="gap:8px">
+          <label>
+            Moderation reason
+            <input type="text" data-reason-for="${id}" placeholder="Optional reason" />
+          </label>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <button class="btn ghost" type="button" data-moderate-entity="${entity}" data-moderate-id="${id}" data-action="visible">Visible</button>
+            <button class="btn ghost" type="button" data-moderate-entity="${entity}" data-moderate-id="${id}" data-action="hidden">Hide</button>
+            <button class="btn ghost" type="button" data-moderate-entity="${entity}" data-moderate-id="${id}" data-action="internal_only">Internal Only</button>
+            <button class="btn ghost" type="button" data-moderate-entity="${entity}" data-moderate-id="${id}" data-action="pinned">Pin</button>
+          </div>
+        </div>
+      `;
+    }
+
     function renderHeader(data) {
       const booking = data.booking || {};
-      const bookingTitle = document.querySelector("#bookingTitle");
-      const bookingMeta = document.querySelector("#bookingMeta");
-
       currentBookingId = booking.id || "";
       progressEnabled = booking.progress_enabled === true;
-
-      if (bookingTitle) {
-        bookingTitle.textContent = booking.package_name || booking.package_code || "Booking loaded";
-      }
-
-      if (bookingMeta) {
-        const bits = [];
-        if (booking.customer_name) bits.push(booking.customer_name);
-        if (booking.service_date) bits.push(booking.service_date);
-        if (booking.start_slot) bits.push(booking.start_slot);
-        if (booking.status) bits.push(`status: ${booking.status}`);
-        if (booking.job_status) bits.push(`job: ${booking.job_status}`);
-        if (booking.assigned_to) bits.push(`assigned: ${booking.assigned_to}`);
-        if (booking.progress_enabled === true) bits.push("progress enabled");
-        bookingMeta.textContent = bits.length ? bits.join(" · ") : "Booking loaded.";
-      }
-
-      const enableBtn = document.querySelector("#enableProgressBtn");
-      if (enableBtn) {
-        enableBtn.disabled = !currentBookingId || progressEnabled;
-      }
+      document.querySelector("#bookingTitle").textContent = booking.package_name || booking.package_code || "Booking loaded";
+      const bits = [];
+      if (booking.customer_name) bits.push(booking.customer_name);
+      if (booking.service_date) bits.push(booking.service_date);
+      if (booking.start_slot) bits.push(booking.start_slot);
+      if (booking.status) bits.push(`status: ${booking.status}`);
+      if (booking.job_status) bits.push(`job: ${booking.job_status}`);
+      if (booking.assigned_to) bits.push(`assigned: ${booking.assigned_to}`);
+      if (booking.progress_enabled === true) bits.push("progress enabled");
+      document.querySelector("#bookingMeta").textContent = bits.length ? bits.join(" · ") : "Booking loaded.";
+      document.querySelector("#enableProgressBtn").disabled = !currentBookingId || progressEnabled;
     }
 
     function renderCustomerLink(token) {
       const box = document.querySelector("#customerLinkBox");
       const enableBtn = document.querySelector("#enableProgressBtn");
-      if (!box) return;
-
       if (!token) {
         box.textContent = "No token loaded yet.";
-        if (enableBtn) enableBtn.disabled = true;
+        enableBtn.disabled = true;
         return;
       }
-
       const url = `${window.location.origin}/progress.html?token=${encodeURIComponent(token)}`;
-      box.innerHTML = `
-        <div><strong>Customer URL</strong></div>
-        <div style="margin-top:8px;word-break:break-all">
-          <a href="${url}" target="_blank" rel="noopener">${url}</a>
-        </div>
-      `;
-
-      if (enableBtn) {
-        enableBtn.disabled = progressEnabled;
-      }
+      box.innerHTML = `<div><strong>Customer URL</strong></div><div style="margin-top:8px;word-break:break-all"><a href="${url}" target="_blank" rel="noopener">${url}</a></div>`;
+      enableBtn.disabled = progressEnabled;
     }
 
     function renderUpdates(data) {
       const wrap = document.querySelector("#updatesList");
-      if (!wrap) return;
-
       const updates = Array.isArray(data.updates) ? data.updates : [];
       if (!updates.length) {
         wrap.innerHTML = `<div class="notice">No updates posted yet.</div>`;
         return;
       }
-
       wrap.innerHTML = updates.map((item) => `
         <article class="card">
           <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
           <h3>${escapeHtml(item.created_by || "Rosie Dazzlers")}</h3>
           <p>${escapeHtml(item.note || "Update posted.")}</p>
-          <div class="kicker">Visibility: ${escapeHtml(item.visibility || "customer")}</div>
-        </article>
-      `).join("");
+          ${moderationBadges(item)}
+          ${moderationReason(item)}
+          ${moderationControls("update", item)}
+        </article>`).join("");
     }
 
     function renderMedia(data) {
       const wrap = document.querySelector("#mediaGrid");
-      if (!wrap) return;
-
       const media = Array.isArray(data.media) ? data.media : [];
       if (!media.length) {
         wrap.innerHTML = `<div class="notice">No media posted yet.</div>`;
         return;
       }
-
       wrap.innerHTML = media.map((item) => `
         <article class="card">
           ${item.media_url ? `<img class="img" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || "Progress media")}" onerror="this.style.display='none'">` : ""}
           <h3>${escapeHtml(item.caption || item.kind || "Progress media")}</h3>
           <p>${escapeHtml(item.created_by || "Rosie Dazzlers")}</p>
           <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
-          <div class="kicker">Visibility: ${escapeHtml(item.visibility || "customer")}</div>
-        </article>
-      `).join("");
+          ${moderationBadges(item)}
+          ${moderationReason(item)}
+          ${moderationControls("media", item)}
+        </article>`).join("");
     }
 
     function renderSignoffs(data) {
       const wrap = document.querySelector("#signoffsList");
-      if (!wrap) return;
-
       const signoffs = Array.isArray(data.signoffs) ? data.signoffs : [];
       if (!signoffs.length) {
         wrap.innerHTML = `<div class="notice">No signoffs recorded yet.</div>`;
         return;
       }
-
       wrap.innerHTML = signoffs.map((item) => `
         <article class="card">
           <div class="kicker">${escapeHtml(formatDateTime(item.signed_at))}</div>
@@ -334,116 +333,86 @@
           <p>${escapeHtml(item.signer_email || "—")}</p>
           <div class="kicker">Type: ${escapeHtml(item.signer_type || "customer")}</div>
           ${item.notes ? `<div class="hr"></div><p>${escapeHtml(item.notes)}</p>` : ""}
-        </article>
-      `).join("");
+        </article>`).join("");
     }
 
     async function loadProgress(password, token) {
-      const res = await fetch("/api/admin/progress_list", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": password
-        },
-        body: JSON.stringify({ token })
-      });
-
+      const res = await fetch("/api/admin/progress_list", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-password": password }, body: JSON.stringify({ token }) });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data.error || "Could not load progress information.");
-      }
-
+      if (!res.ok) throw new Error(data.error || "Could not load progress information.");
       return data;
     }
 
     async function postUpdate(password, token, createdBy, note, visibility) {
-      const res = await fetch("/api/admin/progress_post", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": password
-        },
-        body: JSON.stringify({
-          token,
-          created_by: createdBy,
-          note,
-          visibility
-        })
-      });
-
+      const res = await fetch("/api/admin/progress_post", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-password": password }, body: JSON.stringify({ token, created_by: createdBy, note, visibility }) });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data.error || "Could not post update.");
-      }
-
+      if (!res.ok) throw new Error(data.error || "Could not post update.");
       return data;
     }
 
     async function postMedia(password, token, createdBy, kind, caption, mediaUrl, visibility) {
-      const res = await fetch("/api/admin/progress_media_post", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": password
-        },
-        body: JSON.stringify({
-          token,
-          created_by: createdBy,
-          kind,
-          caption,
-          media_url: mediaUrl,
-          visibility
-        })
-      });
-
+      const res = await fetch("/api/admin/progress_media_post", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-password": password }, body: JSON.stringify({ token, created_by: createdBy, kind, caption, media_url: mediaUrl, visibility }) });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data.error || "Could not attach media.");
-      }
-
+      if (!res.ok) throw new Error(data.error || "Could not attach media.");
       return data;
     }
 
     async function enableProgress(password) {
-      const res = await fetch("/api/admin/progress_enable", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": password
-        },
-        body: JSON.stringify({
-          booking_id: currentBookingId
-        })
-      });
-
+      const res = await fetch("/api/admin/progress_enable", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-password": password }, body: JSON.stringify({ booking_id: currentBookingId }) });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data.error || "Could not enable progress.");
-      }
+      if (!res.ok) throw new Error(data.error || "Could not enable progress.");
+      return data;
+    }
 
+    async function moderateProgressEntry(password, entity, id, action, reason) {
+      const res = await fetch("/api/admin/progress_moderate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-password": password },
+        body: JSON.stringify({ entity, id, action, moderation_reason: reason || null })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Could not moderate progress entry.");
       return data;
     }
 
     async function reloadCurrent() {
       if (!currentToken) return;
-
       const password = document.querySelector("#adminPassword").value.trim();
       const data = await loadProgress(password, currentToken);
-
       renderHeader(data);
       renderCustomerLink(currentToken);
       renderUpdates(data);
       renderMedia(data);
       renderSignoffs(data);
-
       document.querySelector("#postBtn").disabled = false;
       document.querySelector("#mediaBtn").disabled = false;
+    }
+
+    async function handleModerationClick(e) {
+      const btn = e.target.closest("[data-moderate-entity]");
+      if (!btn) return;
+      const password = document.querySelector("#adminPassword").value.trim();
+      if (!password) return setNotice("Admin password is required.", "bad");
+      const entity = btn.dataset.moderateEntity;
+      const id = btn.dataset.moderateId;
+      const action = btn.dataset.action;
+      const reason = document.querySelector(`[data-reason-for="${CSS.escape(id)}"]`)?.value?.trim() || "";
+      try {
+        btn.disabled = true;
+        setNotice(`Applying ${action} moderation…`);
+        await moderateProgressEntry(password, entity, id, action, reason);
+        await reloadCurrent();
+        setNotice(`Updated ${entity} moderation.`, "ok");
+      } catch (err) {
+        setNotice(err.message || "Could not moderate entry.", "bad");
+      } finally {
+        btn.disabled = false;
+      }
     }
 
     async function boot() {
       setBrandImages();
       setFooter();
-
       const loadForm = document.querySelector("#loadForm");
       const updateForm = document.querySelector("#updateForm");
       const mediaForm = document.querySelector("#mediaForm");
@@ -451,20 +420,10 @@
 
       loadForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-
         const password = document.querySelector("#adminPassword").value.trim();
         const token = document.querySelector("#progressToken").value.trim();
-
-        if (!password) {
-          setNotice("Admin password is required.", "bad");
-          return;
-        }
-
-        if (!token) {
-          setNotice("Progress token is required.", "bad");
-          return;
-        }
-
+        if (!password) return setNotice("Admin password is required.", "bad");
+        if (!token) return setNotice("Progress token is required.", "bad");
         try {
           currentToken = token;
           setNotice("Loading progress information…");
@@ -477,17 +436,8 @@
 
       enableBtn.addEventListener("click", async () => {
         const password = document.querySelector("#adminPassword").value.trim();
-
-        if (!password) {
-          setNotice("Admin password is required.", "bad");
-          return;
-        }
-
-        if (!currentBookingId) {
-          setNotice("Load a booking first.", "bad");
-          return;
-        }
-
+        if (!password) return setNotice("Admin password is required.", "bad");
+        if (!currentBookingId) return setNotice("Load a booking first.", "bad");
         try {
           setNotice("Enabling progress link…");
           const data = await enableProgress(password);
@@ -504,33 +454,14 @@
 
       updateForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-
         const password = document.querySelector("#adminPassword").value.trim();
         const token = document.querySelector("#progressToken").value.trim();
         const createdBy = document.querySelector("#createdBy").value.trim();
         const note = document.querySelector("#updateNote").value.trim();
         const visibility = document.querySelector("#visibility").value;
-
-        if (!password) {
-          setNotice("Admin password is required.", "bad");
-          return;
-        }
-
-        if (!token) {
-          setNotice("Load a booking first.", "bad");
-          return;
-        }
-
-        if (!createdBy) {
-          setNotice("Posted by is required.", "bad");
-          return;
-        }
-
-        if (!note) {
-          setNotice("Update note is required.", "bad");
-          return;
-        }
-
+        if (!password) return setNotice("Admin password is required.", "bad");
+        if (!token) return setNotice("Load a booking first.", "bad");
+        if (!createdBy || !note) return setNotice("Created by and update note are required.", "bad");
         try {
           setNotice("Posting update…");
           await postUpdate(password, token, createdBy, note, visibility);
@@ -544,7 +475,6 @@
 
       mediaForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-
         const password = document.querySelector("#adminPassword").value.trim();
         const token = document.querySelector("#progressToken").value.trim();
         const createdBy = document.querySelector("#mediaCreatedBy").value.trim();
@@ -552,27 +482,9 @@
         const caption = document.querySelector("#mediaCaption").value.trim();
         const mediaUrl = document.querySelector("#mediaUrl").value.trim();
         const visibility = document.querySelector("#mediaVisibility").value;
-
-        if (!password) {
-          setNotice("Admin password is required.", "bad");
-          return;
-        }
-
-        if (!token) {
-          setNotice("Load a booking first.", "bad");
-          return;
-        }
-
-        if (!createdBy) {
-          setNotice("Posted by is required for media.", "bad");
-          return;
-        }
-
-        if (!mediaUrl) {
-          setNotice("Media URL is required.", "bad");
-          return;
-        }
-
+        if (!password) return setNotice("Admin password is required.", "bad");
+        if (!token) return setNotice("Load a booking first.", "bad");
+        if (!createdBy || !mediaUrl) return setNotice("Posted by and media URL are required.", "bad");
         try {
           setNotice("Attaching media…");
           await postMedia(password, token, createdBy, kind, caption, mediaUrl, visibility);
@@ -584,9 +496,11 @@
           setNotice(err.message || "Could not attach media.", "bad");
         }
       });
+
+      document.addEventListener("click", handleModerationClick);
     }
 
-    document.addEventListener("DOMContentLoaded", boot);
+    boot();
   </script>
 </body>
 </html>

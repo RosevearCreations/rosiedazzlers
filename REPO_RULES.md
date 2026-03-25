@@ -1,5 +1,7 @@
 <!-- docs/REPO_RULES.md -->
 
+> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+
 # Rosie Dazzlers — Repository Rules
 
 This document defines the **non-negotiable rules** for modifying the Rosie Dazzlers codebase.

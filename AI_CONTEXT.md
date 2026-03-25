@@ -1,5 +1,7 @@
 <!-- AI_CONTEXT.md -->
 
+> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+
 # Rosie Dazzlers — AI Context Document
 
 This document is designed to give any AI assistant immediate context about the Rosie Dazzlers system so it can help effectively without needing the entire repository.

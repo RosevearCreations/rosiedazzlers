@@ -1,3 +1,5 @@
+
+> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 # Rosie Dazzlers — Next Steps Internal
 
 

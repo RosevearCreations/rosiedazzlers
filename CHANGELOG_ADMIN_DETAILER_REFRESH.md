@@ -1,3 +1,5 @@
+
+> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 # Rosie Dazzlers — Admin/Detailer Refresh Changelog
 
 ## Scope of this refresh
@@ -210,4 +212,3 @@ Current next priorities:
 - richer client/detailer threaded comments UI
 - manual scheduling / app-management rules UI completion
 - final layout polish across booking and internal screens
-

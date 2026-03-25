@@ -1,52 +1,28 @@
+
+> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 # Current Implementation State
 
-## Completed in this pass
-- Added Admin analytics journey and abandoned-order review.
-- Added abandoned recovery queue flow through notification events.
-- Added catalog management for systems and consumables through a real admin screen.
-- Strengthened notification dispatch/retry handling with provider webhook support.
-- Expanded site-side SEO foundation with canonical, keywords, and JSON-LD support.
+## Completed / strengthened in this pass
+- Added a real admin recovery screen for persisted recovery templates, preview rendering, and safe test sending.
+- Added moderation controls directly into `admin-progress.html` for updates and media.
+- Added moderation controls directly into `admin-jobsite.html` for threaded comments and observation annotations.
+- Tightened protected-page SEO behavior by adding `noindex,nofollow` to admin/protected progress screens touched in this pass.
+- Fixed a moderation CORS gap on `observation_annotation_moderate` so browser requests can send admin/staff headers cleanly.
+- Refreshed repo docs and schema snapshot docs to align with the current `dev` branch direction.
 
-## Admin analytics now centers on
-- top pages
-- top countries
-- top referrers
-- session journeys
-- abandoned orders
-- recovery queue actions
+## Already present before this pass and still active
+- PayPal deposit path foundation
+- persisted recovery template table + endpoints
+- provider-specific recovery rules/settings
+- catalog inventory table + public DB feed
+- rating fields for tools/consumables
+- low-stock alert and reorder request foundations
+- two-sided progress comments/annotation foundations
 
-## Catalog management now centers on
-- systems vs consumables
-- sort order / backend reordering
-- quantity on hand
-- reorder level
-- unit cost / notes
-- active/inactive state
-
-## SEO/site validation direction now includes
-- canonical tags
-- keyword meta support
-- structured data for local mobile detailing
-- cleaner H1/title/description alignment on core public pages
-
-
-## Latest pass
-- Connected public gear/consumables pages to database-backed catalog items via a public read endpoint.
-- Added ratings and richer inventory fields for tools/systems/consumables.
-- Added recovery template/rule editing to App Management.
-- Updated schema snapshot and migration set to include catalog ratings and recovery settings.
-
-## Completed in the current repair pass
-- Added provider-aware abandoned-recovery settings with preview/test-send support.
-- Added moderation metadata and thread-status handling for progress comments and annotations.
-- Added low-stock alert tracking plus per-item reorder actions in catalog admin.
-- Fixed malformed root-page H1 rendering on the main public marketing pages.
-
-
-## March 24 2026 pass update
-- Added PayPal deposit checkout flow alongside Stripe.
-- Completed booking-time gift redemption through checkout, including zero-due gift confirmation when the deposit is fully covered.
-- Switched booking checkout pricing/add-on validation to the canonical public pricing JSON.
-- Added annotation moderation endpoint and moderation controls in the jobsite workspace, plus thread visibility summaries in progress management.
-- Added per-item quick quantity adjustments and stronger low-stock/reorder handling in Admin Catalog.
-- Continued route metadata cleanup across remaining public pages.
+## Still partial / still open
+- real staff auth/session across all internal screens
+- broader gift redemption messaging across customer account screens
+- full add-on/pricing canonicalization in every code path
+- mobile upload flow completion
+- reorder purchasing workflow close/receive/remind lifecycle
+- final route cleanup for services/pricing duplicates

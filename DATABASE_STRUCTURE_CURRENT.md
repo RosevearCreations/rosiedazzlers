@@ -1,102 +1,120 @@
 # Database Structure Current
 
-## customer_profiles
-Core customer screen fields now expected include:
-- full_name, email, phone, sms_phone, preferred_contact_name
-- address_line1/address_line2/city/province/postal_code
-- alternate_address_label + alternate address fields
-- notes, client_private_notes, detailer_visible_notes, admin_private_notes
-- notification_opt_in, notification_channel, detailer_chat_opt_in
-- notify_on_progress_post, notify_on_media_upload, notify_on_comment_reply
-- has_water_hookup, has_power_hookup, live_updates_enabled, billing_profile_enabled
-- tier_code
+## Snapshot note
+This file is the human-readable companion to `SUPABASE_SCHEMA.sql`.
+Last synchronized: March 24, 2026.
+No new tables were introduced in this UI/docs pass, but the descriptions below were refreshed to match the current feature set.
 
-## customer_vehicles
-Vehicle garage fields now expected include:
-- vehicle_name, model_year, make, model, color, mileage_km
-- preferred_contact_name, contact_email, contact_phone
-- parking_location, alternate_service_address
-- notes_for_team, detailer_visible_notes, admin_private_notes
-- text_updates_opt_in, live_updates_opt_in
-- has_water_hookup, has_power_hookup
-- save_billing_on_file, billing_label
-- is_primary, display_order
+---
 
-## staff_users
-Shared Detailer/Admin screen fields now expected include:
-- full_name, email, preferred_contact_name, phone, sms_phone
-- full address
-- employee_code, position_title, hire_date
-- emergency contact fields
-- department, admin_level, detailer_level
-- hourly_rate_cents, pay_schedule, preferred_work_hours
-- supervisor_staff_user_id
-- permissions_profile
-- vehicle info / vehicle notes
-- notes, admin_private_notes, personal_admin_notes, tips_notes
+## bookings
+Core operational booking record.
+Important fields now include:
+- service date / slot / duration
+- package code / vehicle size / addons
+- price/deposit totals
+- Stripe + PayPal references
+- progress token + progress enabled
+- assigned staff references
+- customer profile/tier linkage
+- waiver acknowledgements
 
 ## app_management_settings
-Used to persist feature flags and admin policy:
-- key
-- value_json
+Key/value JSON settings storage used for:
+- feature flags
+- moderation defaults
+- recovery rules
+- recovery provider rules
+- payment method toggles
+- other admin policy settings
+
+## gift_certificates / gift_products
+Gift sale and redemption model.
+Includes:
+- product definitions
+- issued gift codes
+- remaining balance / status
+- purchaser/recipient fields
+- payment references
+
+## job_updates / job_media / job_signoffs
+Token-based progress model.
+Includes:
+- visibility
+- thread status / moderation metadata
+- media URLs/captions
+- signoff metadata
+
+## progress_comments
+Two-sided threaded comments for booking progress.
+Includes:
+- parent_type / parent_id
+- author type/name/email
+- visibility
+- thread status
+- moderation metadata
+
+## observation_annotations
+Picture-first observation markers tied to media.
+Includes:
+- booking/media linkage
+- x/y coordinates
+- title / note / category / severity / pin color
+- visibility
+- thread status
+- moderation metadata
+
+## jobsite_intake / job_time_entries
+Field workflow tables for:
+- pre-inspection intake
+- acknowledgements
+- valuables/conditions/prep notes
+- time tracking and work state history
+
+## recovery_message_templates
+Persisted message templates for recovery flows.
+Includes:
+- template key
+- channel
+- provider
+- active state
+- subject/body templates
+- variables
+- per-template rules
 - notes
 
 ## notification_events
-Queue/dispatch table now expected to include:
-- event_type
-- channel
-- recipient_email / recipient_phone
-- subject / body_text / body_html
-- payload
-- status
-- attempt_count
-- max_attempts
-- next_attempt_at
-- processed_at
-- last_error
-- provider_response
+Queue/dispatch table for outbound notifications.
+Includes:
+- event type/channel
+- recipient targets
+- subject/body payloads
+- retry state
+- provider response/error tracking
 
-## observation_annotations
-Picture-first observation metadata now includes:
-- booking_id
-- media_id
-- x / y
-- title / note
-- category
-- severity
-- pin_color
-- visibility
-
-## catalog_items
-Admin-maintained operational catalog for systems and consumables:
-- catalog_type (`systems` or `consumables`)
-- title
-- category
-- image_url
-- supplier_url
-- sort_order
-- quantity_on_hand
-- reorder_level
-- unit_cost_cents
+## catalog_inventory_items
+DB-backed public/admin inventory for tools and consumables.
+Includes:
+- item key/type/name/category
+- public/active flags
+- image/Amazon links
+- quantity / reorder point / reorder qty
+- vendor and cost data
+- public rating fields
 - notes
-- is_active
 
+## catalog_low_stock_alerts
+Operational low-stock tracking.
+Includes:
+- item linkage
+- qty/reorder snapshots
+- resolution fields
 
-## Catalog ratings and recovery settings
-- `catalog_items` now includes: `brand`, `model`, `location_label`, `acquired_on`, `condition_rating`, `usefulness_rating`, and computed `overall_rating`.
-- `app_management_settings` also stores `recovery_templates` and `recovery_rules` for abandoned-order messaging.
-
-## Thread moderation and recovery-provider additions
-- `progress_comments` now also includes: `thread_status`, `moderated_at`, `moderated_by_staff_user_id`, `moderated_by_name`, and `moderation_reason`.
-- `observation_annotations` now also includes: `thread_status`, `moderated_at`, `moderated_by_staff_user_id`, `moderated_by_name`, and `moderation_reason`.
-- `catalog_items` now also includes: `last_reorder_requested_at` and `last_reorder_note`.
-- `catalog_low_stock_alerts` stores low-stock/reorder workflow records per catalog item.
-- `app_management_settings` also stores `recovery_provider_rules` and `moderation_rules`.
-
-
-## Booking payment provider additions
-- `bookings` now also includes `payment_provider`, `paypal_order_id`, and `paypal_capture_id`.
-- Booking checkout can now confirm through Stripe, PayPal, or `gift_only` when the deposit is fully covered by a valid gift certificate.
-
-## Annotation moderation additions
-- `observation_annotations` now also includes `thread_status`, `moderated_at`, `moderated_by_staff_user_id`, `moderated_by_name`, and `moderation_reason`.
+## catalog_purchase_orders
+Purchasing/reorder workflow foundation.
+Includes:
+- item linkage
+- vendor / qty / cost
+- status
+- reminder / ordered / received timestamps
+- purchase URL / note

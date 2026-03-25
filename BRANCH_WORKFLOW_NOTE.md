@@ -1,3 +1,5 @@
+
+> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 # Rosie Dazzlers — Branch Workflow Note
 
 This document explains how branch usage should be treated during active Rosie Dazzlers development.
@@ -110,4 +112,3 @@ Current next priorities:
 - richer client/detailer threaded comments UI
 - manual scheduling / app-management rules UI completion
 - final layout polish across booking and internal screens
-
