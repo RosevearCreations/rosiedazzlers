@@ -1,5 +1,5 @@
 
-> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+> Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 # Rosie Dazzlers — Known Gaps and Risks
 
 Use this file as the quick current list of the biggest gaps, architectural risks, and workflow risks on the `dev` branch.
@@ -18,8 +18,8 @@ Without real staff auth/session:
 - role-aware UI cannot fully mature
 
 ### Current bridge
-- `ADMIN_PASSWORD`
-- transitional staff identity resolution
+- `ADMIN_PASSWORD` still exists as a compatibility fallback
+- newer catalog/recovery/progress/upload flows now accept the signed-in staff session first
 
 ### Needed
 - real staff login
@@ -63,7 +63,7 @@ Booking checkout now validates gift codes, applies remaining balance to totals, 
 
 ## 4) Add-on pricing drift risk
 ### Current state
-The platform direction is to read package and add-on pricing from `data/rosie_services_pricing_and_packages.json`.
+The platform direction is now to read package and add-on pricing from `app_management_settings.pricing_catalog`, with `data/rosie_services_pricing_and_packages.json` kept as the bundled fallback.
 
 ### Remaining edge cases
 - some code paths still need final convergence
@@ -84,9 +84,9 @@ Without a strong upload path:
 - operators may rely on manual URL-style workarounds
 
 ### Needed
-- signed upload URL flow or direct storage integration
-- mobile-friendly upload UX
-- clean save into job/progress media tables
+- production hardening for the new signed upload flow
+- clear bucket/public-vs-private strategy for customer-visible media
+- broader reuse of the upload pattern across remaining field screens
 
 ---
 
@@ -207,7 +207,7 @@ The biggest current risks are:
 ## One-line summary
 The main Rosie Dazzlers risk is no longer lack of features — it is keeping identity, access, moderation, pricing, recovery, inventory, and documentation consistent while the system transitions into a role-aware operations platform.
 
-## March 24, 2026 update
+## March 25, 2026 update
 Partially mitigated in the newest pass:
 - public login/account widget now exists in shared site chrome
 - customer reset + verification flows now exist
@@ -222,7 +222,7 @@ Still remaining at the top:
 - route-by-route SEO cleanup beyond the pages touched so far
 
 
-## March 24, 2026 late-pass update
+## March 25, 2026 late-pass update
 
 Mitigations advanced in this pass:
 - public login now accepts both client and staff credentials through UI fallback to staff auth
@@ -236,3 +236,11 @@ Still important:
 - canonical pricing still needs final convergence across every remaining report and edge path
 - reorder workflow still needs receive/close/reminder completion
 - public SEO cleanup still needs a broader route-by-route pass
+
+
+## March 25, 2026 update
+Partially mitigated in the newest pass:
+- pricing now has a DB-backed canonical setting source with bundled JSON fallback
+- admin upload now has a signed-upload flow and session-aware mobile UI
+- purchase-order lifecycle now includes ordered / received / cancelled state changes in admin
+- several internal endpoints now trust the signed-in staff session before the legacy bridge

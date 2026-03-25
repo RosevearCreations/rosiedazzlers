@@ -1,14 +1,14 @@
-
-> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+> Last synchronized: March 25, 2026. This file was reviewed during the staff-session, pricing-catalog, upload, reorder, SEO, and docs/schema refresh pass.
 # Current Implementation State
 
 ## Completed / strengthened in this pass
-- Added a real admin recovery screen for persisted recovery templates, preview rendering, and safe test sending.
-- Added moderation controls directly into `admin-progress.html` for updates and media.
-- Added moderation controls directly into `admin-jobsite.html` for threaded comments and observation annotations.
-- Tightened protected-page SEO behavior by adding `noindex,nofollow` to admin/protected progress screens touched in this pass.
-- Fixed a moderation CORS gap on `observation_annotation_moderate` so browser requests can send admin/staff headers cleanly.
-- Refreshed repo docs and schema snapshot docs to align with the current `dev` branch direction.
+- Checkout now reads canonical package/add-on pricing from `app_management_settings.pricing_catalog`, with the bundled JSON file as fallback.
+- Added `functions/api/_lib/pricing-catalog.js` so pricing drift can converge on one source instead of repeated hard-coded maps.
+- `admin-upload.html` is now a real mobile-friendly signed upload page using the current staff session rather than a pasted shared password.
+- `progress_upload_url`, `progress_post`, `progress_list`, and `media_save` now work with the resolved staff session and keep the legacy admin bridge only as a fallback.
+- Catalog admin flow now includes purchase-order list and status updates (requested → ordered → received/cancelled) through the admin UI.
+- Recovery and catalog management endpoints now accept the signed-in staff session instead of requiring only the legacy admin password.
+- Public/booking SEO cleanup continued and duplicate H1 issues were removed from the exposed booking page.
 
 ## Already present before this pass and still active
 - PayPal deposit path foundation
@@ -16,27 +16,13 @@
 - provider-specific recovery rules/settings
 - catalog inventory table + public DB feed
 - rating fields for tools/consumables
-- low-stock alert and reorder request foundations
+- public analytics tracking and live-session visibility foundation
 - two-sided progress comments/annotation foundations
 
 ## Still partial / still open
-- real staff auth/session across all internal screens
+- some older internal/admin endpoints still rely on the legacy bridge and need the same session-aware conversion pattern
 - broader gift redemption messaging across customer account screens
-- full add-on/pricing canonicalization in every code path
-- mobile upload flow completion
-- reorder purchasing workflow close/receive/remind lifecycle
-- final route cleanup for services/pricing duplicates
-
-## Completed / strengthened in this pass
-- Added a shared public account widget through `assets/chrome.js` so public pages can show current client session state, login/logout, settings, forgot password, and forgot email verification flows.
-- Added token-based customer auth support for password reset and email verification.
-- Added lightweight public website tracking through `assets/public-analytics.js` using the existing `site_activity_events` pipeline.
-- Expanded admin analytics toward live online sessions, cart signals, and engagement-time visibility.
-- Refreshed login UX, key docs, and schema notes to match the current implementation.
-
-
-## March 24, 2026 late-pass additions
-
-- Public login and the site-wide account widget now support staff sign-in fallback in the UI, so staff can use public entry points without hitting a client-only 401 wall.
-- The main admin dashboard now shows the signed-in staff identity again and surfaces live site traffic on the landing screen.
-- Admin analytics now includes daily traffic summaries, checkout-state mix, top countries/referrers, abandoned checkout visibility, and auto-refreshing live session monitoring.
+- full add-on/pricing convergence in admin reporting and every remaining legacy path
+- provider-backed reorder reminder sending is still not automated yet
+- signed upload flow is now present, but customer-facing/private media URL strategy still needs final hardening for production buckets
+- remaining public route-by-route SEO cleanup and structured-data pass

@@ -1,8 +1,8 @@
 <!-- PROJECT_BRAIN.md -->
 
-> Last synchronized: March 24, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
 
-> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+> Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
 # Rosie Dazzlers — Project Brain
 
@@ -11,7 +11,7 @@ This is the compact mental model for the `dev` branch.
 ---
 
 ## Last synchronized
-- March 24, 2026
+- March 25, 2026
 - Reflects recovery template persistence, provider preview/testing foundations, DB-backed public catalog work, low-stock/reorder foundation, and deeper progress/jobsite moderation UI.
 
 ---
@@ -34,7 +34,7 @@ Rosie Dazzlers is a mobile detailing operations platform for Southern Ontario se
 - Stripe deposit checkout is active
 - PayPal deposit path exists
 - promo + gift validation are part of checkout logic
-- pricing should converge on `data/rosie_services_pricing_and_packages.json`
+- pricing now prefers `app_management_settings.pricing_catalog`, with the bundled JSON file as fallback
 
 ### 2) Customer progress
 - token-based progress is the preferred model
@@ -92,3 +92,8 @@ Every pass should consider:
 
 ## One-line project summary
 The hard part now is not adding isolated features — it is keeping booking, staff identity, moderation, pricing, recovery, inventory, and documentation consistent while the platform grows.
+
+## March 25, 2026 mental-model update
+- the preferred internal auth path is now session-first on more recovery, catalog, and progress/upload endpoints
+- the preferred pricing path is now DB settings first, JSON fallback second
+- the preferred field-media path is signed upload + media save instead of pasted URLs

@@ -1,12 +1,12 @@
 <!-- DEVELOPMENT_ROADMAP.md -->
 
-> Last synchronized: March 24, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
 
-> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+> Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
 # Rosie Dazzlers — Development Roadmap
 
-This is the practical implementation order for the `dev` branch after the March 24, 2026 documentation and UI refresh.
+This is the practical implementation order for the `dev` branch after the March 25, 2026 documentation and UI refresh.
 
 ---
 
@@ -14,8 +14,8 @@ This is the practical implementation order for the `dev` branch after the March 
 
 ### 1) Real staff auth/session completion
 Finish the transition away from shared-password dependence.
-- staff login/session cookies or equivalent
-- session-aware admin/detailer shell
+- continue converting older endpoints/screens to session-aware auth
+- keep the legacy bridge as fallback only
 - resolved actor trusted across all internal screens
 
 ### 2) Staff identity consistency cleanup
@@ -86,3 +86,10 @@ On every build:
 - public account widget now recognizes staff sessions as well as customer sessions
 - admin dashboard has a live analytics summary surface again
 - analytics view has stronger historical + live monitoring detail
+
+
+## March 25, 2026 update
+- moved forward: canonical pricing now has a DB-backed setting source with JSON fallback
+- moved forward: mobile-friendly direct upload page now uses the signed-in staff session
+- moved forward: purchase-order receive/cancel workflow now exists in admin catalog
+- move up next: finish the same session-aware conversion on the remaining legacy admin endpoints and screens

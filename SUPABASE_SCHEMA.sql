@@ -188,3 +188,10 @@ create table if not exists public.observation_annotations (
 -- March 24, 2026 late-pass note
 -- Public analytics continues to store raw events in public.site_activity_events.
 -- Daily traffic, live-online counts, cart signals, and checkout-state summaries are currently derived in the admin analytics layer rather than via separate aggregate tables.
+
+
+-- March 25, 2026 indexes / settings helpers
+create index if not exists catalog_purchase_orders_status_idx on public.catalog_purchase_orders(status);
+create index if not exists catalog_purchase_orders_reminder_at_idx on public.catalog_purchase_orders(reminder_at);
+create index if not exists catalog_purchase_orders_item_key_idx on public.catalog_purchase_orders(item_key);
+-- app_management_settings.pricing_catalog is now the canonical DB-backed pricing source, with bundled JSON as fallback.

@@ -1,5 +1,5 @@
 
-> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+> Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 # Next Steps Internal
 
 ## Highest-value next build targets
@@ -17,7 +17,8 @@
    - review rare reconciliation edges
 
 4. **Upload / field UX**
-   - complete direct upload flow
+   - extend the new signed-upload/session-aware pattern to other field screens
+   - harden storage/public/private media strategy
    - improve mobile field workflow around media and progress
 
 5. **Inventory / purchasing**
@@ -48,3 +49,9 @@
 5. deepen reorder lifecycle from request to ordered/received/reminded
 6. continue page-by-page SEO audit and structured-data cleanup
 
+
+
+## March 25, 2026 moved forward
+- DB-backed canonical pricing setting added for checkout
+- session-aware signed mobile upload page added
+- purchase-order lifecycle status actions added in admin catalog

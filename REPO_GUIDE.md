@@ -1,19 +1,19 @@
 <!-- REPO_GUIDE.md -->
 
-> Last synchronized: March 24, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
 
-> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+> Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
 # Rosie Dazzlers Repo Guide
 
 ## Last synchronized
-- March 24, 2026
+- March 25, 2026
 
 ## What this repo contains
 A Cloudflare Pages project with:
 - static HTML screens for public, customer, and admin use
 - Pages Functions under `/functions/api`
-- JSON data under `/data`
+- JSON data under `/data` (now primarily bundled fallback content for pricing/catalog where DB-backed settings/tables exist)
 - SQL migrations under `/sql`
 - Markdown operating docs at repo root
 
@@ -78,3 +78,9 @@ Ordered migration history. New SQL should be additive and keep `SUPABASE_SCHEMA.
 - Prefer role-aware/staff-aware endpoints over older bridge-style ones.
 - Prefer additive changes over destructive rewrites.
 - Keep protected/admin/token pages out of search indexing.
+
+## March 25, 2026 notable files
+- `functions/api/_lib/pricing-catalog.js` — canonical pricing loader (DB setting first, JSON fallback)
+- `functions/api/admin/progress_upload_url.js` — signed upload URL generator using staff sessions
+- `functions/api/admin/catalog_purchase_orders_list.js` — purchase-order list/reminder view
+- `functions/api/admin/catalog_purchase_order_update.js` — purchase-order status workflow updates

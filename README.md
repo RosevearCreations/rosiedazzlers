@@ -1,8 +1,8 @@
 <!-- README.md -->
 
-> Last synchronized: March 24, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
 
-> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+> Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
 # Rosie Dazzlers — Mobile Auto Detailing Platform
 Cloudflare Pages + Supabase + Stripe/PayPal + R2
@@ -12,8 +12,8 @@ Rosie Dazzlers is now more than a brochure site. On the `dev` branch it is a rol
 ---
 
 ## Last synchronized
-- March 24, 2026
-- This pass added stronger recovery-template admin UI, progress/jobsite moderation UI, public/private SEO safeguards (`noindex` on protected/admin flows), and refreshed repo/docs/schema snapshots.
+- March 25, 2026
+- This pass added session-aware internal workflow upgrades, DB-backed canonical pricing for checkout, mobile-friendly direct media upload, purchase-order receive/close actions, and another SEO/H1/doc/schema refresh.
 
 ---
 
@@ -23,7 +23,7 @@ Rosie Dazzlers is now more than a brochure site. On the `dev` branch it is a rol
 - Cloudflare R2 — media/assets
 - Stripe — booking deposits and gift purchases
 - PayPal — deposit checkout path
-- JSON data in `/data` — pricing/packages and fallback catalog content
+- DB-backed app settings now hold the canonical pricing catalog (`pricing_catalog`), with JSON still kept as the bundled fallback source
 
 ---
 
@@ -89,7 +89,7 @@ Read these first:
 Use `dev` as the active source of truth unless explicitly told otherwise.
 
 ## Last synchronized
-- March 24, 2026
+- March 25, 2026
 - This pass added a site-wide public account widget through the shared chrome, customer password reset + email verification token flows, lightweight public analytics tracking, and refreshed risk/docs/schema snapshots.
 
 ## Newly advanced in this pass
@@ -100,6 +100,6 @@ Use `dev` as the active source of truth unless explicitly told otherwise.
 - docs/schema refresh aligned to the current dev branch
 
 
-### March 24, 2026 late-pass notes
+### March 25, 2026 late-pass notes
 
 This build now includes a dual-path public sign-in experience (client first, staff fallback in the UI), a restored signed-in identity panel on the main admin dashboard, and a stronger analytics screen for live online activity, daily traffic, countries, referrers, carts, and abandoned checkout review.

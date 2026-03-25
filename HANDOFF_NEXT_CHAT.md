@@ -1,5 +1,5 @@
 
-> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+> Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 # Rosie Dazzlers — Handoff for Next Chat
 
 ## Branch rule
@@ -32,6 +32,6 @@ Rosie Dazzlers is now a role-aware detailing operations platform with booking, d
 - docs and schema snapshot refreshed again
 
 
-## March 24, 2026 late-pass resume note
+## March 25, 2026 late-pass resume note
 
-The public login regression was addressed by letting the UI try staff auth after client auth fails. The admin dashboard now shows current signed-in identity again and surfaces analytics summary widgets. Continue next with deeper staff session hardening, upload flow, gift/account polish, reorder lifecycle completion, and broader public SEO cleanup.
+The latest pass moved checkout pricing onto a DB-backed canonical setting source, turned admin upload into a signed-upload mobile workflow, and added purchase-order receive/cancel actions in admin catalog. Continue next with converting the remaining legacy internal endpoints to real staff sessions, finishing gift/account messaging polish, hardening production media URL strategy, and continuing route-by-route public SEO cleanup.

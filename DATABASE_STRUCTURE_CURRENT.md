@@ -1,10 +1,10 @@
 # Database Structure Current
 
-> Last synchronized: March 24, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
 
 ## Snapshot note
 This file is the human-readable companion to `SUPABASE_SCHEMA.sql`.
-Last synchronized: March 24, 2026.
+Last synchronized: March 25, 2026.
 No new tables were introduced in this UI/docs pass, but the descriptions below were refreshed to match the current feature set.
 
 ---
@@ -28,6 +28,7 @@ Key/value JSON settings storage used for:
 - recovery rules
 - recovery provider rules
 - payment method toggles
+- canonical pricing catalog (`pricing_catalog`)
 - other admin policy settings
 
 ## gift_certificates / gift_products
@@ -141,3 +142,17 @@ Queued notification log used by customer/recovery communication flows.
 ## Analytics note
 
 The current public tracking implementation continues to use `site_activity_events` as the raw event stream. Historical daily traffic, live-online session estimates, cart signals, and checkout-state summaries are now computed from that table inside the admin analytics layer rather than through a separate reporting table.
+
+
+## catalog_purchase_orders
+Tracks reorder and purchasing workflow for tools/consumables.
+Important fields include:
+- item link fields (`item_id`, `item_key`, `item_name`)
+- vendor name / purchase URL
+- ordered quantity / unit cost
+- status (`draft`, `requested`, `ordered`, `received`, `cancelled`)
+- reminder date plus ordered/received timestamps
+
+## staff_auth_sessions
+Opaque staff session table used by internal pages and newer role-aware endpoints.
+This is now the preferred auth model for internal workflows, while the shared admin password remains a temporary bridge.

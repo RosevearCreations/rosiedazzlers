@@ -1,8 +1,8 @@
 <!-- SANITY_CHECK.md -->
 
-> Last synchronized: March 24, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
 
-> Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+> Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
 # Rosie Dazzlers — Sanity / Health Check
 
@@ -18,10 +18,11 @@
 - Low-stock alerts and reorder request foundations exist.
 
 ## What improved in this pass
-- recovery template admin UI now exists
-- progress moderation is now screen-driven in admin-progress
-- jobsite comment/annotation moderation is now screen-driven in admin-jobsite
-- protected/internal pages touched in this pass now explicitly use `noindex,nofollow`
+- checkout pricing now has a DB-backed canonical source instead of another duplicated hard-coded map
+- direct mobile upload now has a signed-upload path and real session-aware admin screen
+- purchase-order workflow can now move through requested / ordered / received / cancelled states
+- key recovery/catalog/progress endpoints now accept the signed-in staff session
+- duplicate H1 issues were removed from the exposed booking page
 - docs/schema snapshots were refreshed together again
 
 ## Biggest remaining risks
@@ -41,7 +42,7 @@
 - continued SEO and security hardening on every pass
 
 
-## Latest pass — March 24, 2026 (late)
+## Latest pass — March 25, 2026 (late)
 
 Completed now:
 - fixed public login so admin credentials can route through staff auth instead of failing on client-only login
