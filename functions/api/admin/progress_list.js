@@ -50,11 +50,11 @@ export async function onRequestPost(context) {
 
     const [updatesRes, mediaRes, signoffsRes] = await Promise.all([
       fetch(
-        `${env.SUPABASE_URL}/rest/v1/job_updates?select=id,created_at,created_by,note,visibility&booking_id=eq.${bookingId}&order=created_at.desc`,
+        `${env.SUPABASE_URL}/rest/v1/job_updates?select=id,created_at,created_by,note,visibility,thread_status,moderated_at,moderated_by_name,moderation_reason&booking_id=eq.${bookingId}&order=created_at.desc`,
         { headers }
       ),
       fetch(
-        `${env.SUPABASE_URL}/rest/v1/job_media?select=id,created_at,created_by,kind,caption,media_url,visibility&booking_id=eq.${bookingId}&order=created_at.desc`,
+        `${env.SUPABASE_URL}/rest/v1/job_media?select=id,created_at,created_by,kind,caption,media_url,visibility,thread_status,moderated_at,moderated_by_name,moderation_reason&booking_id=eq.${bookingId}&order=created_at.desc`,
         { headers }
       ),
       fetch(
