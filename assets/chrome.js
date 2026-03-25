@@ -37,6 +37,15 @@ function normalizePath(p) {
   return x === "" ? "/" : x;
 }
 
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function ensureNavLinks() {
   const links = document.querySelector("#navLinks");
   if (!links) return;
@@ -469,6 +478,214 @@ function attachRotators(containerSelector) {
   mo.observe(container, { childList: true, subtree: true });
 }
 
+
+
+/* =========================
+   PUBLIC ACCOUNT WIDGET + ANALYTICS
+   ========================= */
+
+function isAdminLikePath() {
+  const path = normalizePath(location.pathname);
+  return path.startsWith('/admin');
+}
+
+function ensureSupportScript(src) {
+  return new Promise((resolve, reject) => {
+    const existing = [...document.scripts].find((s) => s.src && s.src.includes(src));
+    if (existing) {
+      if (existing.dataset.loaded === '1') return resolve();
+      existing.addEventListener('load', () => resolve(), { once: true });
+      existing.addEventListener('error', () => reject(new Error(`Could not load ${src}`)), { once: true });
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    script.addEventListener('load', () => { script.dataset.loaded = '1'; resolve(); }, { once: true });
+    script.addEventListener('error', () => reject(new Error(`Could not load ${src}`)), { once: true });
+    document.head.appendChild(script);
+  });
+}
+
+function ensurePublicAccountWidgetStyles() {
+  if (document.querySelector('#publicAccountWidgetStyles')) return;
+  const style = document.createElement('style');
+  style.id = 'publicAccountWidgetStyles';
+  style.textContent = `
+    .public-account-widget{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-left:auto}
+    .public-account-widget .state{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .public-account-widget .meta{font-size:.86rem;color:rgba(234,242,255,.78)}
+    .public-account-widget .pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);font-size:.85rem}
+    .public-account-pop{position:fixed;right:18px;top:72px;z-index:9999;max-width:420px;width:min(420px,calc(100vw - 24px));background:rgba(10,14,24,.98);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:16px;box-shadow:0 16px 46px rgba(0,0,0,.35);display:none}
+    .public-account-pop.open{display:block}
+    .public-account-pop h3{margin:0 0 8px}
+    .public-account-pop .muted{color:#94a3b8;font-size:.92rem}
+    .public-account-pop .field{margin-bottom:10px}
+    .public-account-pop label{display:block;margin-bottom:6px;font-size:.9rem;font-weight:700}
+    .public-account-pop input{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#f8fafc}
+    .public-account-pop .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .public-account-pop .status{margin-top:10px;font-size:.92rem;color:#e5e7eb}
+    .public-account-pop .status.error{color:#fecaca}.public-account-pop .status.success{color:#bbf7d0}
+    @media (max-width:980px){.public-account-widget{width:100%;justify-content:flex-start;margin-top:8px}}
+  `;
+  document.head.appendChild(style);
+}
+
+function ensurePublicAccountWidgetMarkup() {
+  if (isAdminLikePath()) return null;
+  const navInner = document.querySelector('.nav .nav-inner');
+  if (!navInner) return null;
+  let widget = document.querySelector('#publicAccountWidget');
+  if (!widget) {
+    widget = document.createElement('div');
+    widget.id = 'publicAccountWidget';
+    widget.className = 'public-account-widget';
+    widget.innerHTML = `<div class="state"><span class="pill">Account</span><span class="meta">Checking session…</span></div>`;
+    const bookBtn = navInner.querySelector('a.btn.primary');
+    if (bookBtn && bookBtn.parentNode) navInner.insertBefore(widget, bookBtn);
+    else navInner.appendChild(widget);
+  }
+  let pop = document.querySelector('#publicAccountPopover');
+  if (!pop) {
+    pop = document.createElement('div');
+    pop.id = 'publicAccountPopover';
+    pop.className = 'public-account-pop';
+    pop.innerHTML = `
+      <h3>Account help</h3>
+      <div class="muted">Sign in, request a password reset, or resend a verification email.</div>
+      <div class="field"><label for="publicAccountEmail">Email</label><input id="publicAccountEmail" type="email" placeholder="you@example.com"></div>
+      <div class="field"><label for="publicAccountPassword">Password</label><input id="publicAccountPassword" type="password" placeholder="Password"></div>
+      <div class="field" id="resetTokenWrap" style="display:none"><label for="publicResetToken">Reset token</label><input id="publicResetToken" type="text" placeholder="Paste reset token"></div>
+      <div class="field" id="newPasswordWrap" style="display:none"><label for="publicNewPassword">New password</label><input id="publicNewPassword" type="password" placeholder="New password"></div>
+      <div class="actions">
+        <button class="btn small" type="button" id="publicSignInBtn">Login</button>
+        <a class="btn small ghost" href="/login">Open login page</a>
+        <button class="btn small ghost" type="button" id="publicForgotBtn">Forgot password</button>
+        <button class="btn small ghost" type="button" id="publicVerifyBtn">Forgot email verification</button>
+        <button class="btn small ghost" type="button" id="publicResetBtn" style="display:none">Reset now</button>
+        <button class="btn small ghost" type="button" id="publicCloseBtn">Close</button>
+      </div>
+      <div id="publicAccountStatus" class="status"></div>
+    `;
+    document.body.appendChild(pop);
+  }
+  return { widget, pop };
+}
+
+async function initPublicAccountWidget() {
+  if (isAdminLikePath()) return;
+  ensurePublicAccountWidgetStyles();
+  const nodes = ensurePublicAccountWidgetMarkup();
+  if (!nodes) return;
+  try { await ensureSupportScript('/assets/client-auth.js'); } catch { return; }
+  try { await ensureSupportScript('/assets/public-analytics.js'); } catch {}
+  const { widget, pop } = nodes;
+  const stateWrap = widget.querySelector('.state');
+  const statusEl = pop.querySelector('#publicAccountStatus');
+  const emailEl = pop.querySelector('#publicAccountEmail');
+  const passwordEl = pop.querySelector('#publicAccountPassword');
+  const resetTokenWrap = pop.querySelector('#resetTokenWrap');
+  const newPasswordWrap = pop.querySelector('#newPasswordWrap');
+  const resetTokenEl = pop.querySelector('#publicResetToken');
+  const newPasswordEl = pop.querySelector('#publicNewPassword');
+  const resetBtn = pop.querySelector('#publicResetBtn');
+
+  function setStatus(message, type) {
+    statusEl.textContent = message || '';
+    statusEl.className = `status ${type || ''}`;
+  }
+  function openPop() { pop.classList.add('open'); }
+  function closePop() { pop.classList.remove('open'); }
+  function showResetMode(token) {
+    resetTokenWrap.style.display = '';
+    newPasswordWrap.style.display = '';
+    resetBtn.style.display = '';
+    if (token) resetTokenEl.value = token;
+    openPop();
+  }
+  function renderLoggedOut() {
+    stateWrap.innerHTML = `<span class="pill">Guest</span><a class="btn small ghost" href="/login">Login</a><button class="btn small ghost" type="button" id="publicAccountHelpBtn">Need help?</button><span class="meta">Password reset and verification are available here.</span>`;
+    const help = stateWrap.querySelector('#publicAccountHelpBtn');
+    if (help) help.addEventListener('click', openPop);
+  }
+  function renderLoggedIn(customer) {
+    const verified = customer?.email_verification_pending ? 'Verification pending' : 'Verified';
+    stateWrap.innerHTML = `<span class="pill">${escapeHtml(customer?.full_name || customer?.email || 'Customer')}</span><span class="meta">${verified}</span><a class="btn small ghost" href="/my-account">Settings</a><button class="btn small ghost" type="button" id="publicLogoutBtn">Logout</button>`;
+    const logoutBtn = stateWrap.querySelector('#publicLogoutBtn');
+    if (logoutBtn) logoutBtn.addEventListener('click', async () => {
+      setStatus('Signing out…');
+      try { await window.ClientAuth.signOut(); setStatus('Signed out.', 'success'); renderLoggedOut(); setTimeout(closePop, 500); }
+      catch (err) { setStatus(err?.message || 'Could not sign out.', 'error'); }
+    });
+  }
+  async function refresh() {
+    try {
+      const result = await window.ClientAuth.loadCurrentCustomer();
+      if (result?.authenticated && result.customer) renderLoggedIn(result.customer);
+      else renderLoggedOut();
+      if (window.RosieAnalytics?.track) window.RosieAnalytics.track('account_widget_refresh', { authenticated: !!result?.authenticated });
+    } catch {
+      renderLoggedOut();
+    }
+  }
+
+  pop.querySelector('#publicCloseBtn').addEventListener('click', closePop);
+  pop.querySelector('#publicSignInBtn').addEventListener('click', async () => {
+    setStatus('Signing in…');
+    try {
+      await window.ClientAuth.signIn({ email: emailEl.value.trim(), password: passwordEl.value });
+      setStatus('Signed in successfully.', 'success');
+      await refresh();
+      setTimeout(closePop, 600);
+    } catch (err) { setStatus(err?.message || 'Could not sign in.', 'error'); }
+  });
+  pop.querySelector('#publicForgotBtn').addEventListener('click', async () => {
+    setStatus('Sending password reset…');
+    try {
+      await window.ClientAuth.forgotPassword({ email: emailEl.value.trim() });
+      setStatus('If the email exists, a reset link has been sent.', 'success');
+      showResetMode('');
+    } catch (err) { setStatus(err?.message || 'Could not start reset.', 'error'); }
+  });
+  pop.querySelector('#publicVerifyBtn').addEventListener('click', async () => {
+    setStatus('Sending verification link…');
+    try {
+      await window.ClientAuth.resendVerification({ email: emailEl.value.trim() });
+      setStatus('If the email exists, a verification link has been sent.', 'success');
+    } catch (err) { setStatus(err?.message || 'Could not resend verification.', 'error'); }
+  });
+  resetBtn.addEventListener('click', async () => {
+    setStatus('Resetting password…');
+    try {
+      await window.ClientAuth.resetPassword({ token: resetTokenEl.value.trim(), password: newPasswordEl.value });
+      setStatus('Password reset successful. You are now signed in.', 'success');
+      await refresh();
+      setTimeout(closePop, 900);
+    } catch (err) { setStatus(err?.message || 'Could not reset password.', 'error'); }
+  });
+
+  const params = new URLSearchParams(location.search);
+  const verifyToken = params.get('verify_token');
+  const resetToken = params.get('reset_token');
+  if (verifyToken) {
+    openPop();
+    setStatus('Verifying email…');
+    window.ClientAuth.verifyEmail({ token: verifyToken }).then(async () => {
+      setStatus('Email verified successfully.', 'success');
+      await refresh();
+    }).catch((err) => setStatus(err?.message || 'Could not verify email.', 'error'));
+  }
+  if (resetToken) showResetMode(resetToken);
+
+  document.addEventListener('click', (event) => {
+    if (!pop.classList.contains('open')) return;
+    if (pop.contains(event.target) || widget.contains(event.target)) return;
+    closePop();
+  });
+
+  await refresh();
+}
+
 /* =========================
    BOOT
    ========================= */
@@ -481,6 +698,7 @@ function initChrome() {
   setActiveNavLink();
   initNavToggle();
   setFooter();
+  initPublicAccountWidget();
 
   attachRotators("#homePackages");
   attachRotators("#packageCards");
