@@ -193,6 +193,10 @@ export async function onRequestPost({ request, env }) {
       vehicle_year: vYear,
       vehicle_make: vMake,
       vehicle_model: vModel,
+      vehicle_body_style: String(vehicle.body_style || '').trim() || null,
+      vehicle_category: String(vehicle.category || '').trim() || null,
+      vehicle_plate: String(vehicle.plate || '').trim() || null,
+      vehicle_mileage_km: Number.isFinite(Number(vehicle.mileage)) ? Number(vehicle.mileage) : null,
       vehicle_photo_url: String(vehicle.photo_url || "").trim() || null
     };
 
