@@ -552,7 +552,7 @@ function ensurePublicAccountWidgetMarkup() {
     pop.className = 'public-account-pop';
     pop.innerHTML = `
       <h3>Account help</h3>
-      <div class="muted">Sign in, request a password reset, or resend a verification email.</div>
+      <div class="muted">Sign in as a customer or staff member, request a password reset, or resend a verification email.</div>
       <div class="field"><label for="publicAccountEmail">Email</label><input id="publicAccountEmail" type="email" placeholder="you@example.com"></div>
       <div class="field"><label for="publicAccountPassword">Password</label><input id="publicAccountPassword" type="password" placeholder="Password"></div>
       <div class="field" id="resetTokenWrap" style="display:none"><label for="publicResetToken">Reset token</label><input id="publicResetToken" type="text" placeholder="Paste reset token"></div>
@@ -578,6 +578,7 @@ async function initPublicAccountWidget() {
   const nodes = ensurePublicAccountWidgetMarkup();
   if (!nodes) return;
   try { await ensureSupportScript('/assets/client-auth.js'); } catch { return; }
+  try { await ensureSupportScript('/assets/admin-auth.js'); } catch {}
   try { await ensureSupportScript('/assets/public-analytics.js'); } catch {}
   const { widget, pop } = nodes;
   const stateWrap = widget.querySelector('.state');
@@ -603,12 +604,19 @@ async function initPublicAccountWidget() {
     if (token) resetTokenEl.value = token;
     openPop();
   }
+  function safeNext(defaultPath) {
+    if (location.pathname === '/login') {
+      const next = new URL(location.href).searchParams.get('next');
+      if (next && next.startsWith('/') && !next.startsWith('//')) return next;
+    }
+    return defaultPath;
+  }
   function renderLoggedOut() {
-    stateWrap.innerHTML = `<span class="pill">Guest</span><a class="btn small ghost" href="/login">Login</a><button class="btn small ghost" type="button" id="publicAccountHelpBtn">Need help?</button><span class="meta">Password reset and verification are available here.</span>`;
+    stateWrap.innerHTML = `<span class="pill">Guest</span><a class="btn small ghost" href="/login">Login</a><button class="btn small ghost" type="button" id="publicAccountHelpBtn">Need help?</button><span class="meta">Customers and staff can sign in here.</span>`;
     const help = stateWrap.querySelector('#publicAccountHelpBtn');
     if (help) help.addEventListener('click', openPop);
   }
-  function renderLoggedIn(customer) {
+  function renderLoggedInCustomer(customer) {
     const verified = customer?.email_verification_pending ? 'Verification pending' : 'Verified';
     stateWrap.innerHTML = `<span class="pill">${escapeHtml(customer?.full_name || customer?.email || 'Customer')}</span><span class="meta">${verified}</span><a class="btn small ghost" href="/my-account">Settings</a><button class="btn small ghost" type="button" id="publicLogoutBtn">Logout</button>`;
     const logoutBtn = stateWrap.querySelector('#publicLogoutBtn');
@@ -618,12 +626,29 @@ async function initPublicAccountWidget() {
       catch (err) { setStatus(err?.message || 'Could not sign out.', 'error'); }
     });
   }
+  function renderLoggedInStaff(actor) {
+    stateWrap.innerHTML = `<span class="pill">${escapeHtml(actor?.full_name || actor?.email || 'Staff')}</span><span class="meta">${escapeHtml(actor?.role_code || 'staff')}</span><a class="btn small ghost" href="/admin">Admin</a><a class="btn small ghost" href="/admin-account">Settings</a><button class="btn small ghost" type="button" id="publicStaffLogoutBtn">Logout</button>`;
+    const logoutBtn = stateWrap.querySelector('#publicStaffLogoutBtn');
+    if (logoutBtn) logoutBtn.addEventListener('click', async () => {
+      setStatus('Signing out…');
+      try { await window.AdminAuth.signOut(); setStatus('Signed out.', 'success'); renderLoggedOut(); setTimeout(closePop, 500); }
+      catch (err) { setStatus(err?.message || 'Could not sign out.', 'error'); }
+    });
+  }
   async function refresh() {
     try {
+      if (window.AdminAuth?.loadCurrentActor) {
+        const staff = await window.AdminAuth.loadCurrentActor();
+        if (staff?.authenticated && staff.actor) {
+          renderLoggedInStaff(staff.actor);
+          if (window.RosieAnalytics?.track) window.RosieAnalytics.track('account_widget_refresh', { authenticated: true, auth_kind: 'staff' });
+          return;
+        }
+      }
       const result = await window.ClientAuth.loadCurrentCustomer();
-      if (result?.authenticated && result.customer) renderLoggedIn(result.customer);
+      if (result?.authenticated && result.customer) renderLoggedInCustomer(result.customer);
       else renderLoggedOut();
-      if (window.RosieAnalytics?.track) window.RosieAnalytics.track('account_widget_refresh', { authenticated: !!result?.authenticated });
+      if (window.RosieAnalytics?.track) window.RosieAnalytics.track('account_widget_refresh', { authenticated: !!result?.authenticated, auth_kind: result?.authenticated ? 'client' : 'guest' });
     } catch {
       renderLoggedOut();
     }
@@ -632,12 +657,27 @@ async function initPublicAccountWidget() {
   pop.querySelector('#publicCloseBtn').addEventListener('click', closePop);
   pop.querySelector('#publicSignInBtn').addEventListener('click', async () => {
     setStatus('Signing in…');
+    const email = emailEl.value.trim();
+    const password = passwordEl.value;
     try {
-      await window.ClientAuth.signIn({ email: emailEl.value.trim(), password: passwordEl.value });
+      await window.ClientAuth.signIn({ email, password });
       setStatus('Signed in successfully.', 'success');
       await refresh();
-      setTimeout(closePop, 600);
-    } catch (err) { setStatus(err?.message || 'Could not sign in.', 'error'); }
+      if (location.pathname === '/login') setTimeout(() => location.replace(safeNext('/my-account')), 350);
+      else setTimeout(closePop, 600);
+      return;
+    } catch (clientErr) {
+      try {
+        if (!window.AdminAuth?.signIn) throw clientErr;
+        await window.AdminAuth.signIn({ email, password });
+        setStatus('Staff sign-in successful.', 'success');
+        await refresh();
+        if (location.pathname === '/login') setTimeout(() => location.replace(safeNext('/admin')), 350);
+        else setTimeout(closePop, 600);
+      } catch (staffErr) {
+        setStatus((staffErr && staffErr.message) || (clientErr && clientErr.message) || 'Could not sign in.', 'error');
+      }
+    }
   });
   pop.querySelector('#publicForgotBtn').addEventListener('click', async () => {
     setStatus('Sending password reset…');
@@ -685,7 +725,6 @@ async function initPublicAccountWidget() {
 
   await refresh();
 }
-
 /* =========================
    BOOT
    ========================= */
