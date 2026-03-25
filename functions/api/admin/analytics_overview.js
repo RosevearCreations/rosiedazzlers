@@ -24,6 +24,7 @@ export async function onRequestPost(context){
     const rows = await res.json().catch(()=>[]);
     const data = Array.isArray(rows)?rows:[];
     const pageViews = data.filter(r=>r.event_type==="page_view");
+    const heartbeatEvents = data.filter(r=>r.event_type==="heartbeat");
     const uniqueVisitors = new Set(data.map(r=>r.visitor_id).filter(Boolean)).size;
     const uniqueSessions = new Set(data.map(r=>r.session_id).filter(Boolean)).size;
     const topPages = summarizeCounts(pageViews.map(r=>r.page_path || "/"));
@@ -31,6 +32,9 @@ export async function onRequestPost(context){
     const topReferrers = summarizeCounts(data.map(r=>r.referrer || "Direct"));
     const sessionJourneys = summarizeJourneys(data);
     const abandoned = summarizeAbandoned(data);
+    const liveOnline = summarizeLiveOnline(sessionJourneys);
+    const avgEngagementSeconds = heartbeatEvents.length ? Math.round(heartbeatEvents.reduce((sum, r)=>sum + Number(r?.payload?.duration_ms || 0), 0) / heartbeatEvents.length / 1000) : 0;
+    const cartSnapshots = summarizeCartSnapshots(data);
 
     return withCors(json({
       ok:true,
@@ -41,12 +45,16 @@ export async function onRequestPost(context){
         page_views:pageViews.length,
         unique_visitors:uniqueVisitors,
         unique_sessions:uniqueSessions,
-        abandoned_sessions:abandoned.length
+        abandoned_sessions:abandoned.length,
+        live_online_sessions: liveOnline.length,
+        avg_engagement_seconds: avgEngagementSeconds
       },
       top_pages: topPages,
       top_countries: topCountries,
       top_referrers: topReferrers,
       session_journeys: sessionJourneys.slice(0,50),
+      live_online_sessions: liveOnline.slice(0,50),
+      cart_snapshots: cartSnapshots.slice(0,50),
       abandoned_checkouts: abandoned.slice(0,50)
     }));
   }catch(err){
@@ -106,3 +114,19 @@ function summarizeAbandoned(rows){
 
 function corsHeaders(){return {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"POST,OPTIONS","Access-Control-Allow-Headers":"Content-Type","Cache-Control":"no-store"};}
 function withCors(response){const h=new Headers(response.headers||{}); for(const [k,v] of Object.entries(corsHeaders())) h.set(k,v); return new Response(response.body,{status:response.status,statusText:response.statusText,headers:h});}
+
+
+function summarizeLiveOnline(journeys){
+  const cutoff = Date.now() - 2 * 60 * 1000;
+  return journeys.filter(j => j.ended_at && new Date(j.ended_at).getTime() >= cutoff).map(j => ({ session_id:j.session_id, ended_at:j.ended_at, path:j.path.slice(-5) }));
+}
+
+function summarizeCartSnapshots(rows){
+  return rows.filter(r => r.event_type === "cart_snapshot").slice(0,50).map(r => ({
+    session_id: r.session_id || null,
+    page_path: r.page_path || null,
+    created_at: r.created_at || null,
+    item_count: Number(r?.payload?.item_count || 0),
+    cart_key: r?.payload?.cart_key || null
+  })).sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)));
+}
