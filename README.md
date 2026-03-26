@@ -106,3 +106,13 @@ This build now includes a dual-path public sign-in experience (client first, sta
 
 ## Latest pass summary
 This pass focused on staff-session consistency in progress flows, booking vehicle catalog normalization, form/layout cleanup, richer public gear/consumables filtering, and another schema/doc refresh. Vehicle year/make/model selection is now designed around official NHTSA vPIC data with an internal cache path for future DB-first use.
+
+
+## March 26, 2026 inventory/review/layout pass
+- Added DB-backed inventory movement logging for adjustments, receive events, and detail-product usage.
+- Added after-detail checklist persistence for keys/water/power/debrief and suggested next-service cadence.
+- Extended customer garage vehicles with next-cleaning due date, interval days, and auto-schedule preference.
+- Added in-app customer review capture plus a Google review handoff link.
+- Hardened Gear/Consumables search inputs against browser email autofill and expanded sorting/filter controls.
+- Updated logo references to use brand/untitled.png.
+- Continue removing legacy admin-password fallback and continue route-by-route SEO cleanup with one H1 per exposed page.

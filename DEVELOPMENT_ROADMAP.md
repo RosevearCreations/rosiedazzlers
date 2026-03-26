@@ -109,3 +109,13 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Remove the final legacy fallback flags from the remaining admin endpoints now that the env gate is in place.
 - Continue moving public catalog content from JSON fallback into DB-first inventory content.
 - Add structured-data coverage route by route after the remaining content cleanup pass.
+
+
+## March 26, 2026 inventory/review/layout pass
+- Added DB-backed inventory movement logging for adjustments, receive events, and detail-product usage.
+- Added after-detail checklist persistence for keys/water/power/debrief and suggested next-service cadence.
+- Extended customer garage vehicles with next-cleaning due date, interval days, and auto-schedule preference.
+- Added in-app customer review capture plus a Google review handoff link.
+- Hardened Gear/Consumables search inputs against browser email autofill and expanded sorting/filter controls.
+- Updated logo references to use brand/untitled.png.
+- Continue removing legacy admin-password fallback and continue route-by-route SEO cleanup with one H1 per exposed page.

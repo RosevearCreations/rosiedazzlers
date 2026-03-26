@@ -29,10 +29,10 @@
       <p class="kicker" style="margin:0">The equipment we use to do the job right.</p>
       <div class="hr"></div>
       <div class="row inputs">
-        <input id="q" class="search-input" type="search" placeholder="Search gear…" autocomplete="section-catalog off" autocapitalize="off" spellcheck="false" inputmode="search" enterkeyhint="search" aria-label="Search catalog" name="catalog_search_query" data-lpignore="true" />
+        <input id="q" class="search-input" type="text" placeholder="Search gear…" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="search" enterkeyhint="search" aria-label="Search catalog" name="catalog_search_query" data-lpignore="true" readonly onfocus="this.removeAttribute('readonly');" />
         <select id="cat"></select>
         <select id="sort"><option value="title_asc">Sort: Title (A→Z)</option><option value="title_desc">Sort: Title (Z→A)</option><option value="category_asc">Sort: Category</option><option value="stock_desc">Sort: Stock (high→low)</option><option value="stock_asc">Sort: Stock (low→high)</option><option value="rating_desc">Sort: Rating</option><option value="vendor_asc">Sort: Vendor</option><option value="custom_asc">Sort: Saved order</option></select>
-        <button class="btn ghost" id="clearBtn" type="button">Clear</button>
+        <select id="gearCat"><option value="">All categories</option></select><select id="gearSort"><option value="name_asc">Sort: Name</option><option value="category_asc">Sort: Category</option><option value="rating_desc">Sort: Rating</option><option value="stock_asc">Sort: Stock low→high</option></select><button class="btn ghost" id="clearBtn" type="button">Clear</button>
       </div>
       <div id="loadErr" class="notice bad" style="display:none;margin-top:12px"></div>
       <div class="muted mini" id="count" style="margin-top:10px"></div>

@@ -647,3 +647,44 @@ textarea:focus {
 .search-input { -webkit-text-fill-color: var(--text); }
 .search-input::-webkit-credentials-auto-fill-button { visibility: hidden; display: none !important; pointer-events: none; }
 .search-input:-webkit-autofill, .search-input:-webkit-autofill:hover, .search-input:-webkit-autofill:focus { -webkit-box-shadow: 0 0 0px 1000px rgba(10,15,26,.9) inset; -webkit-text-fill-color: var(--text); transition: background-color 5000s ease-in-out 0s; }
+
+/* Pass 2026-03-26b: checkbox, add-on, and search field polish */
+.check-grid.spread-checks,
+.form .check-grid,
+.panel .check-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px 14px;
+  align-items: start;
+}
+.check-grid .checkbox,
+.spread-checks .checkbox {
+  min-height: 46px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,.03);
+}
+#addonsBox, #addonsWrap, #addonsList { display:grid; gap:10px; }
+#addonsBox .check-card, #addonsWrap .check-card, #addonsList .check-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255,255,255,.03);
+  padding: 12px 14px;
+}
+.search-input[readonly] { caret-color: transparent; }
+.search-input { appearance:none; -webkit-appearance:none; }
+.search-input::-webkit-contacts-auto-fill-button,
+.search-input::-webkit-credentials-auto-fill-button {
+  visibility:hidden; display:none !important; pointer-events:none;
+}
+input.search-input:-webkit-autofill,
+input.search-input:-webkit-autofill:hover,
+input.search-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px rgba(10,15,26,.92) inset !important;
+  -webkit-text-fill-color: var(--text) !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+.star-row { display:inline-flex; gap:2px; vertical-align:middle; }
+.star-row .star { font-size:15px; line-height:1; color: rgba(255,255,255,.26); }
+.star-row .star.on { color:#fbbf24; }

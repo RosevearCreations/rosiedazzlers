@@ -256,3 +256,13 @@ Partially mitigated in the newest pass:
 - Legacy admin password fallback is now intentionally gated behind ALLOW_LEGACY_ADMIN_FALLBACK=true. Leave it unset in normal operation.
 - Catalog inventory is closer to a single source of truth, but older JSON fallback content still exists on some public pages and should continue to be reduced over time.
 - Vehicle size/category data is now captured in both booking and customer garage flows, but reporting screens should be checked for any remaining old field assumptions.
+
+
+## March 26, 2026 inventory/review/layout pass
+- Added DB-backed inventory movement logging for adjustments, receive events, and detail-product usage.
+- Added after-detail checklist persistence for keys/water/power/debrief and suggested next-service cadence.
+- Extended customer garage vehicles with next-cleaning due date, interval days, and auto-schedule preference.
+- Added in-app customer review capture plus a Google review handoff link.
+- Hardened Gear/Consumables search inputs against browser email autofill and expanded sorting/filter controls.
+- Updated logo references to use brand/untitled.png.
+- Continue removing legacy admin-password fallback and continue route-by-route SEO cleanup with one H1 per exposed page.

@@ -63,7 +63,7 @@
           <h2>Load booking</h2>
           <form id="loadForm" class="form">
             <label>
-              Staff password (optional fallback)
+              Staff password (legacy fallback only)
               <input id="adminPassword" name="adminPassword" type="password" autocomplete="current-password" />
             </label>
 
@@ -451,8 +451,7 @@
 
       enableBtn.addEventListener("click", async () => {
         const password = document.querySelector("#adminPassword").value.trim();
-        if (!password) return setNotice("Admin password is required.", "bad");
-        if (!currentBookingId) return setNotice("Load a booking first.", "bad");
+                if (!currentBookingId) return setNotice("Load a booking first.", "bad");
         try {
           setNotice("Enabling progress link…");
           const data = await enableProgress(password);
@@ -474,8 +473,7 @@
         const createdBy = document.querySelector("#createdBy").value.trim();
         const note = document.querySelector("#updateNote").value.trim();
         const visibility = document.querySelector("#visibility").value;
-        if (!password) return setNotice("Admin password is required.", "bad");
-        if (!token) return setNotice("Load a booking first.", "bad");
+                if (!token) return setNotice("Load a booking first.", "bad");
         if (!createdBy || !note) return setNotice("Created by and update note are required.", "bad");
         try {
           setNotice("Posting update…");
@@ -497,8 +495,7 @@
         const caption = document.querySelector("#mediaCaption").value.trim();
         const mediaUrl = document.querySelector("#mediaUrl").value.trim();
         const visibility = document.querySelector("#mediaVisibility").value;
-        if (!password) return setNotice("Admin password is required.", "bad");
-        if (!token) return setNotice("Load a booking first.", "bad");
+                if (!token) return setNotice("Load a booking first.", "bad");
         if (!createdBy || !mediaUrl) return setNotice("Posted by and media URL are required.", "bad");
         try {
           setNotice("Attaching media…");

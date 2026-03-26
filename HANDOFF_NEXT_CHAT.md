@@ -45,3 +45,13 @@ The latest pass moved checkout pricing onto a DB-backed canonical setting source
 
 ## 2026-03-26 handoff note
 Run `sql/2026-03-26_catalog_admin_vehicle_account_and_auth_cleanup.sql` before testing the new admin catalog fields. Focus next on remaining admin endpoint fallback removal, public structured data, and any leftover JSON duplication.
+
+
+## March 26, 2026 inventory/review/layout pass
+- Added DB-backed inventory movement logging for adjustments, receive events, and detail-product usage.
+- Added after-detail checklist persistence for keys/water/power/debrief and suggested next-service cadence.
+- Extended customer garage vehicles with next-cleaning due date, interval days, and auto-schedule preference.
+- Added in-app customer review capture plus a Google review handoff link.
+- Hardened Gear/Consumables search inputs against browser email autofill and expanded sorting/filter controls.
+- Updated logo references to use brand/untitled.png.
+- Continue removing legacy admin-password fallback and continue route-by-route SEO cleanup with one H1 per exposed page.

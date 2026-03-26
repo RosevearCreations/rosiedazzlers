@@ -167,3 +167,13 @@ This is now the preferred auth model for internal workflows, while the shared ad
 - `catalog_inventory_items.subcategory` — second-level display/type label for admin and public filtering.
 - `catalog_inventory_items.sort_key` — saved manual sort order.
 - `catalog_inventory_items.reuse_policy` — `reorder`, `single_use`, or `never_reuse`.
+
+
+## March 26, 2026 inventory/review/layout pass
+- Added DB-backed inventory movement logging for adjustments, receive events, and detail-product usage.
+- Added after-detail checklist persistence for keys/water/power/debrief and suggested next-service cadence.
+- Extended customer garage vehicles with next-cleaning due date, interval days, and auto-schedule preference.
+- Added in-app customer review capture plus a Google review handoff link.
+- Hardened Gear/Consumables search inputs against browser email autofill and expanded sorting/filter controls.
+- Updated logo references to use brand/untitled.png.
+- Continue removing legacy admin-password fallback and continue route-by-route SEO cleanup with one H1 per exposed page.

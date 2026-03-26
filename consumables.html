@@ -70,8 +70,9 @@
       <div class="hr"></div>
 
       <div class="row inputs">
-        <input id="q" class="search-input" type="search" placeholder="Search consumables (name/category)..." autocomplete="section-catalog off" autocapitalize="off" spellcheck="false" inputmode="search" enterkeyhint="search" aria-label="Search catalog" name="catalog_search_query" data-lpignore="true" />
+        <input id="q" class="search-input" type="text" placeholder="Search consumables (name/category)..." autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="search" enterkeyhint="search" aria-label="Search catalog" name="catalog_search_query" data-lpignore="true" readonly onfocus="this.removeAttribute('readonly');" />
         <select id="cat"></select>
+        <select id="typeFilter"><option value="">All types</option></select>
         <select id="sort">
           <option value="title_asc">Sort: Title (A→Z)</option>
           <option value="title_desc">Sort: Title (Z→A)</option>
@@ -253,9 +254,11 @@
     function applyFilters(){
       const q = (qs("#q").value || "").trim().toLowerCase();
       const cat = (qs("#cat").value || "").trim();
+      const typeFilter = (qs("#typeFilter").value || "").trim();
 
       let out = all;
       if (cat) out = out.filter(i => i.category === cat);
+      if (typeFilter) out = out.filter(i => String(i.subcategory || "") === typeFilter);
 
       if (q) {
         out = out.filter(i => {
@@ -325,9 +328,11 @@
     qs("#q").addEventListener("input", applyFilters);
     qs("#cat").addEventListener("change", applyFilters);
     qs("#sort").addEventListener("change", applyFilters);
+    if (qs("#typeFilter")) qs("#typeFilter").addEventListener("change", applyFilters);
     qs("#clearBtn").addEventListener("click", () => {
       qs("#q").value = "";
       qs("#cat").value = "";
+      if (qs("#typeFilter")) qs("#typeFilter").value = "";
       qs("#sort").value = "title_asc";
       applyFilters();
     });

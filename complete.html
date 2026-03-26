@@ -102,6 +102,8 @@
       </div>
     </div>
 
+    <div class="section grid2"><div class="panel"><h2 style="margin-top:0">Leave a review</h2><p class="muted">Save an in-app review now and then continue to Google if you wish.</p><form id="reviewForm"><div class="grid2"><div><label for="review_rating">Rating</label><select id="review_rating"><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select></div><div><label for="review_title">Title</label><input id="review_title" type="text" placeholder="Quick headline" /></div></div><label for="review_text" style="margin-top:10px">Review</label><textarea id="review_text" placeholder="Tell us what went well and what we should improve."></textarea><label style="display:flex;gap:10px;align-items:flex-start;margin-top:10px"><input id="review_public" type="checkbox" /><span>Allow Rosie Dazzlers to reuse this review publicly after approval.</span></label><div class="row" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap"><button id="reviewBtn" class="btn" type="button">Save in-app review</button><a id="googleReviewLink" class="btn ghost" href="https://www.google.com/search?q=Rosie+Dazzlers+review" target="_blank" rel="noopener">Google review</a></div></form></div></div>
+
     <div class="footer" data-footer></div>
   </div>
 
@@ -167,6 +169,8 @@
     }
 
     loadBooking();
+
+    qs("#reviewBtn").addEventListener("click", async () => { hide("err"); hide("ok"); const rating = Number(qs("#review_rating").value || 0); const review_title = (qs("#review_title").value || "").trim(); const review_text = (qs("#review_text").value || "").trim(); const is_public = qs("#review_public").checked; const res = await fetch("/api/client/reviews_save", { method:"POST", credentials:"include", headers:{"content-type":"application/json"}, body: JSON.stringify({ rating, review_title, review_text, is_public, review_source:"app", google_review_url: qs("#googleReviewLink").href }) }); const out = await res.json().catch(()=>null); if (!res.ok || !out?.ok) return show("err", out?.error || "Could not save review."); show("ok", "Review saved. Thank you."); });
 
     // Submit signoff
     qs("#signForm").addEventListener("submit", async (e) => {
