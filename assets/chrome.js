@@ -6,10 +6,10 @@
 
 const BRAND = {
   name: "Rosie Dazzlers",
-  logo: "https://assets.rosiedazzlers.ca/brand/untitled.png",
+  logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
   banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
   reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png",
-  footerLogo: "https://assets.rosiedazzlers.ca/brand/untitled.png",
+  footerLogo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
 };
 
 const SOCIALS = [
@@ -21,6 +21,46 @@ const SOCIALS = [
   ["X", "https://x.com/RosieDazzlers"],
   ["LinkedIn", "https://www.linkedin.com/in/rosiedazzlers/"],
 ];
+
+
+const LOCAL_SEO = {
+  url: "https://rosiedazzlers.ca",
+  phone: "+1-226-752-7613",
+  email: "info@rosiedazzlers.ca",
+  counties: ["Oxford County, Ontario", "Norfolk County, Ontario"],
+  cities: ["Tillsonburg", "Woodstock", "Ingersoll", "Norwich", "Delhi", "Simcoe", "Port Dover", "Aylmer"]
+};
+
+function ensureLocalBusinessStructuredData() {
+  const path = normalizePath(location.pathname);
+  if (path.startsWith('/admin') || path === '/progress') return;
+  if (document.querySelector('script[data-rd-local-seo="1"]')) return;
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.dataset.rdLocalSeo = '1';
+  script.textContent = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'AutoDetailing',
+    '@id': LOCAL_SEO.url + '#business',
+    name: BRAND.name,
+    url: LOCAL_SEO.url,
+    logo: BRAND.logo,
+    image: BRAND.banner,
+    telephone: LOCAL_SEO.phone,
+    email: LOCAL_SEO.email,
+    areaServed: [...LOCAL_SEO.counties, ...LOCAL_SEO.cities].map((name) => ({ '@type': 'Place', name })),
+    serviceArea: LOCAL_SEO.counties.map((name) => ({ '@type': 'AdministrativeArea', name })),
+    sameAs: SOCIALS.map((x) => x[1]),
+    priceRange: '$$',
+    description: 'Mobile auto detailing serving Norfolk County and Oxford County, Ontario.',
+    makesOffer: [
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Mobile auto detailing' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Interior detailing' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Exterior detailing' } }
+    ]
+  });
+  document.head.appendChild(script);
+}
 
 const DEFAULT_NAV_LINKS = [
   ["/services", "Services"],
@@ -734,6 +774,7 @@ function initChrome() {
   setBrandImagesEverywhere();
   ensureMainBanner();
   ensureReviewsPanel();
+  ensureLocalBusinessStructuredData();
   setActiveNavLink();
   initNavToggle();
   setFooter();
