@@ -1,105 +1,40 @@
+import { requireStaffAccess, json, methodNotAllowed, cleanText, isUuid } from "../_lib/staff-auth.js";
+
+export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
+export async function onRequestGet() { return withCors(methodNotAllowed()); }
 export async function onRequestPost(context) {
   const { request, env } = context;
-
   try {
-    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
-      return json({ error: "Server configuration is incomplete." }, 500);
-    }
-
-    const adminPassword = request.headers.get("x-admin-password") || "";
-    if (!env.ADMIN_PASSWORD || adminPassword !== env.ADMIN_PASSWORD) {
-      return json({ error: "Unauthorized." }, 401);
-    }
-
-    const body = await request.json().catch(() => null);
-    if (!body || typeof body !== "object") {
-      return json({ error: "Invalid request body." }, 400);
-    }
-
+    const body = await request.json().catch(() => ({}));
+    const booking_id = String(body.booking_id || "").trim();
     const token = String(body.token || "").trim();
-    const created_by = String(body.created_by || "").trim();
-    const note = String(body.note || "").trim();
-    const visibility = String(body.visibility || "customer").trim();
+    const note = cleanText(body.note);
+    const visibility = String(body.visibility || "customer").trim().toLowerCase();
+    const resolvedBookingId = isUuid(booking_id) ? booking_id : await resolveBookingIdByToken({ env, token });
+    if (!resolvedBookingId) return withCors(json({ error: "Invalid booking_id or token." }, 400));
+    if (!note) return withCors(json({ error: "Missing note." }, 400));
+    if (!["customer","internal"].includes(visibility)) return withCors(json({ error: "Invalid visibility." }, 400));
 
-    if (!token) return json({ error: "Missing token." }, 400);
-    if (!created_by) return json({ error: "Missing created_by." }, 400);
-    if (!note) return json({ error: "Missing note." }, 400);
-    if (!["customer", "internal"].includes(visibility)) {
-      return json({ error: "Invalid visibility." }, 400);
-    }
+    const access = await requireStaffAccess({ request, env, body: { ...body, booking_id: resolvedBookingId }, capability: "work_booking", bookingId: resolvedBookingId, allowLegacyAdminFallback: true });
+    if (!access.ok) return withCors(access.response);
 
     const headers = {
       apikey: env.SUPABASE_SERVICE_ROLE_KEY,
       Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Prefer: "return=representation"
     };
-
-    const bookingUrl =
-      `${env.SUPABASE_URL}/rest/v1/bookings` +
-      `?select=id,progress_enabled,progress_token` +
-      `&progress_token=eq.${encodeURIComponent(token)}` +
-      `&limit=1`;
-
-    const bookingRes = await fetch(bookingUrl, { headers });
-    if (!bookingRes.ok) {
-      const text = await bookingRes.text();
-      return json({ error: `Could not load booking. ${text}` }, 500);
-    }
-
-    const bookings = await bookingRes.json();
-    const booking = Array.isArray(bookings) ? bookings[0] : null;
-
-    if (!booking) {
-      return json({ error: "Booking not found for token." }, 404);
-    }
-
-    if (booking.progress_enabled === false) {
-      return json({ error: "Progress is not enabled for this booking." }, 403);
-    }
-
     const insertRes = await fetch(`${env.SUPABASE_URL}/rest/v1/job_updates`, {
       method: "POST",
-      headers: {
-        ...headers,
-        Prefer: "return=representation"
-      },
-      body: JSON.stringify([
-        {
-          booking_id: booking.id,
-          created_by,
-          note,
-          visibility
-        }
-      ])
+      headers,
+      body: JSON.stringify([{ booking_id: resolvedBookingId, created_by: access.actor.full_name || "Staff", note, visibility, staff_user_id: access.actor.id || null }])
     });
-
-    if (!insertRes.ok) {
-      const text = await insertRes.text();
-      return json({ error: `Could not save update. ${text}` }, 500);
-    }
-
-    const rows = await insertRes.json();
-    const row = Array.isArray(rows) ? rows[0] : null;
-
-    return json({
-      ok: true,
-      message: "Update posted.",
-      update: row || null
-    });
+    if (!insertRes.ok) return withCors(json({ error: `Could not save update. ${await insertRes.text()}` }, 500));
+    const rows = await insertRes.json().catch(() => []);
+    return withCors(json({ ok: true, message: "Update posted.", update: Array.isArray(rows) ? rows[0] || null : null }));
   } catch (err) {
-    return json(
-      { error: err && err.message ? err.message : "Unexpected server error." },
-      500
-    );
+    return withCors(json({ error: err && err.message ? err.message : "Unexpected server error." }, 500));
   }
 }
-
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), {
-    status,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-store"
-    }
-  });
-}
+function corsHeaders() { return { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type, x-admin-password, x-staff-email, x-staff-user-id", "Cache-Control": "no-store" }; }
+function withCors(response) { const headers = new Headers(response.headers || {}); for (const [k,v] of Object.entries(corsHeaders())) headers.set(k,v); return new Response(response.body, { status: response.status, statusText: response.statusText, headers }); }

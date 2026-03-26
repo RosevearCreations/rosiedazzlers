@@ -1,116 +1,54 @@
-export async function onRequestPost(context) {
-  const { request, env } = context;
+import { requireStaffAccess, json, methodNotAllowed } from '../_lib/staff-auth.js';
 
+export async function onRequestOptions() { return new Response('', { status: 204, headers: corsHeaders() }); }
+export async function onRequestGet() { return withCors(methodNotAllowed()); }
+export async function onRequestPost({ request, env }) {
   try {
-    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
-      return json({ error: "Server configuration is incomplete." }, 500);
+    const body = await request.json().catch(() => ({}));
+    const token = String(body.token || '').trim();
+    const booking_id = String(body.booking_id || '').trim();
+    if (!token && !booking_id) return withCors(json({ error: 'Missing token or booking_id.' }, 400));
+
+    let resolvedBookingId = booking_id;
+    if (!resolvedBookingId && token) {
+      const booking = await getBookingByToken(env, token);
+      if (!booking?.id) return withCors(json({ error: 'Booking not found.' }, 404));
+      resolvedBookingId = booking.id;
     }
 
-    const adminPassword = request.headers.get("x-admin-password") || "";
-    if (!env.ADMIN_PASSWORD || adminPassword !== env.ADMIN_PASSWORD) {
-      return json({ error: "Unauthorized." }, 401);
-    }
+    const access = await requireStaffAccess({ request, env, body: { ...body, booking_id: resolvedBookingId }, capability: 'work_booking', bookingId: resolvedBookingId, allowLegacyAdminFallback: true });
+    if (!access.ok) return withCors(access.response);
 
-    const body = await request.json().catch(() => null);
-    if (!body || typeof body !== "object") {
-      return json({ error: "Invalid request body." }, 400);
-    }
-
-    const token = String(body.token || "").trim();
-    const booking_id = String(body.booking_id || "").trim();
-
-    if (!token && !booking_id) {
-      return json({ error: "Missing token or booking_id." }, 400);
-    }
-
-    const headers = {
-      apikey: env.SUPABASE_SERVICE_ROLE_KEY,
-      Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
-      "Content-Type": "application/json"
-    };
-
-    let booking = null;
-
-    if (booking_id) {
-      const bookingRes = await fetch(
-        `${env.SUPABASE_URL}/rest/v1/bookings?select=id,progress_enabled,progress_token,status,job_status&` +
-        `id=eq.${encodeURIComponent(booking_id)}&limit=1`,
-        { headers }
-      );
-
-      if (!bookingRes.ok) {
-        const text = await bookingRes.text();
-        return json({ error: `Could not load booking. ${text}` }, 500);
-      }
-
-      const rows = await bookingRes.json();
-      booking = Array.isArray(rows) ? rows[0] : null;
-    } else {
-      const bookingRes = await fetch(
-        `${env.SUPABASE_URL}/rest/v1/bookings?select=id,progress_enabled,progress_token,status,job_status&` +
-        `progress_token=eq.${encodeURIComponent(token)}&limit=1`,
-        { headers }
-      );
-
-      if (!bookingRes.ok) {
-        const text = await bookingRes.text();
-        return json({ error: `Could not load booking. ${text}` }, 500);
-      }
-
-      const rows = await bookingRes.json();
-      booking = Array.isArray(rows) ? rows[0] : null;
-    }
-
-    if (!booking) {
-      return json({ error: "Booking not found." }, 404);
-    }
+    const booking = booking_id ? await getBookingById(env, booking_id) : await getBookingByToken(env, token);
+    if (!booking?.id) return withCors(json({ error: 'Booking not found.' }, 404));
 
     const progressToken = booking.progress_token || crypto.randomUUID();
-
-    const patchRes = await fetch(
-      `${env.SUPABASE_URL}/rest/v1/bookings?id=eq.${encodeURIComponent(booking.id)}`,
-      {
-        method: "PATCH",
-        headers: {
-          ...headers,
-          Prefer: "return=representation"
-        },
-        body: JSON.stringify({
-          progress_enabled: true,
-          progress_token: progressToken
-        })
-      }
-    );
-
-    if (!patchRes.ok) {
-      const text = await patchRes.text();
-      return json({ error: `Could not enable progress. ${text}` }, 500);
-    }
-
-    const rows = await patchRes.json();
-    const updated = Array.isArray(rows) ? rows[0] : null;
-
-    return json({
-      ok: true,
-      message: "Progress enabled.",
-      booking_id: updated?.id || booking.id,
-      progress_token: updated?.progress_token || progressToken,
-      progress_enabled: true
+    const patchRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?id=eq.${encodeURIComponent(booking.id)}`, {
+      method: 'PATCH',
+      headers: { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=representation' },
+      body: JSON.stringify({ progress_enabled: true, progress_token: progressToken })
     });
+    if (!patchRes.ok) return withCors(json({ error: `Could not enable progress. ${await patchRes.text()}` }, 500));
+    const rows = await patchRes.json().catch(() => []);
+    const updated = Array.isArray(rows) ? rows[0] || null : null;
+    return withCors(json({ ok: true, message: 'Progress enabled.', booking_id: updated?.id || booking.id, progress_token: updated?.progress_token || progressToken, progress_enabled: true }));
   } catch (err) {
-    return json(
-      { error: err && err.message ? err.message : "Unexpected server error." },
-      500
-    );
+    return withCors(json({ error: err?.message || 'Unexpected server error.' }, 500));
   }
 }
 
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), {
-    status,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-store"
-    }
-  });
+async function getBookingById(env, booking_id) {
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,progress_enabled,progress_token,status,job_status&id=eq.${encodeURIComponent(booking_id)}&limit=1`, { headers: serviceHeaders(env) });
+  if (!res.ok) throw new Error(`Could not load booking. ${await res.text()}`);
+  const rows = await res.json().catch(() => []);
+  return Array.isArray(rows) ? rows[0] || null : null;
 }
+async function getBookingByToken(env, token) {
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,progress_enabled,progress_token,status,job_status&progress_token=eq.${encodeURIComponent(token)}&limit=1`, { headers: serviceHeaders(env) });
+  if (!res.ok) throw new Error(`Could not load booking. ${await res.text()}`);
+  const rows = await res.json().catch(() => []);
+  return Array.isArray(rows) ? rows[0] || null : null;
+}
+function serviceHeaders(env){ return { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, Accept: 'application/json' }; }
+function corsHeaders(){ return { 'Access-Control-Allow-Origin':'*','Access-Control-Allow-Methods':'POST,OPTIONS','Access-Control-Allow-Headers':'Content-Type, x-admin-password, x-staff-email, x-staff-user-id','Cache-Control':'no-store' }; }
+function withCors(response){ const headers=new Headers(response.headers||{}); for(const [k,v] of Object.entries(corsHeaders())) headers.set(k,v); return new Response(response.body,{status:response.status,statusText:response.statusText,headers}); }
