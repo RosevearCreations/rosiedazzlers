@@ -70,7 +70,7 @@
       <div class="hr"></div>
 
       <div class="row inputs">
-        <input id="q" class="search-input" type="text" placeholder="Search consumables (name/category)..." autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="search" enterkeyhint="search" aria-label="Search catalog" name="catalog_search_query" data-lpignore="true" readonly onfocus="this.removeAttribute('readonly');" />
+        <input id="q" class="search-input" type="search" placeholder="Search consumables (name/category)…" autocomplete="new-password" autocorrect="off" autocapitalize="none" spellcheck="false" inputmode="search" enterkeyhint="search" aria-label="Search catalog" name="site-search-consumables" data-lpignore="true" data-1p-ignore="true" data-form-type="other" />
         <select id="cat"></select>
         <select id="typeFilter"><option value="">All types</option></select>
         <select id="sort">
@@ -140,7 +140,9 @@
     async function fetchJsonStrict(url){
       const res = await fetch(url, { cache:"no-store" });
       const text = await res.text();
-      try { return JSON.parse(text); }
+      hardenSearchInput(qs("#q"));
+
+    try { return JSON.parse(text); }
       catch {
         const head = text.slice(0, 120).replace(/\s+/g, " ");
         throw new Error(`Expected JSON but got: ${head}`);
@@ -213,6 +215,21 @@
       el.textContent = msg;
     }
     function hideStatus(){ qs("#status").style.display = "none"; }
+
+    
+    function hardenSearchInput(el){
+      if(!el) return;
+      el.value = "";
+      el.setAttribute("autocomplete","new-password");
+      el.setAttribute("autocorrect","off");
+      el.setAttribute("autocapitalize","none");
+      el.setAttribute("spellcheck","false");
+      const wipe = () => { if (/@/.test(el.value || "")) el.value = ""; };
+      requestAnimationFrame(wipe);
+      setTimeout(wipe, 150);
+      setTimeout(wipe, 700);
+      el.addEventListener("focus", wipe);
+    }
 
     let all = [];
     let filtered = [];

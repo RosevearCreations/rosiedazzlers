@@ -76,3 +76,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Hardened Gear/Consumables search inputs against browser email autofill and expanded sorting/filter controls.
 - Updated logo references to use brand/untitled.png.
 - Continue removing legacy admin-password fallback and continue route-by-route SEO cleanup with one H1 per exposed page.
+
+
+## Latest pass sanity notes
+- Verify the new logo loads from https://assets.rosiedazzlers.ca/brand/Untitled.png across public and admin pages.
+- Verify Gear and Consumables search inputs no longer invite saved email credentials and remain blank after refresh/focus.
+- Verify admin catalog movement history loads and job-use entries reduce inventory quantities immediately.
+- Verify admin progress can record products used for the loaded booking and refresh the usage history panel.

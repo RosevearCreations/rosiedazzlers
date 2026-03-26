@@ -119,3 +119,11 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Hardened Gear/Consumables search inputs against browser email autofill and expanded sorting/filter controls.
 - Updated logo references to use brand/untitled.png.
 - Continue removing legacy admin-password fallback and continue route-by-route SEO cleanup with one H1 per exposed page.
+
+
+## March 26, 2026 search/inventory/admin UX pass
+- Continued DB-first inventory work by extending public sorting/filtering and admin movement-history visibility.
+- Added booking-level product usage recording UI in admin progress and admin catalog.
+- Continued session-aware progress tooling so signed-in staff can work without depending on the fallback password on newer flows.
+- Continued local SEO work for Norfolk County and Oxford County with structured-data and page-metadata cleanup.
+- Move up next: gift/account polish, final legacy fallback removal, broader structured-data coverage route by route, and a fuller purchase reminder lifecycle.

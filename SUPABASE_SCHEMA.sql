@@ -1,3 +1,4 @@
+-- March 26, 2026 pass note: no new table was required in this pass; the focus moved to UI coverage over existing catalog inventory, movement, booking-linked usage, and progress/session flows.
 -- Rosie Dazzlers - Current Supabase Schema Snapshot
 -- Updated: 2026-03-25
 

@@ -52,3 +52,10 @@
 - Hardened Gear/Consumables search inputs against browser email autofill and expanded sorting/filter controls.
 - Updated logo references to use brand/untitled.png.
 - Continue removing legacy admin-password fallback and continue route-by-route SEO cleanup with one H1 per exposed page.
+
+
+## March 26, 2026 current implementation update
+- Public Gear/Consumables pages now have stronger anti-autofill search behavior, richer category/type/vendor sorting, and corrected logo-path handling.
+- Admin catalog now exposes movement-history review and can record products used on a booking directly from inventory.
+- Admin progress now includes booking-level product-usage recording and relies on signed-in staff sessions first on newer actions.
+- LocalBusiness structured data is now injected on exposed public pages to support local search understanding for Oxford and Norfolk coverage.

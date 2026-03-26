@@ -116,3 +116,10 @@ This pass focused on staff-session consistency in progress flows, booking vehicl
 - Hardened Gear/Consumables search inputs against browser email autofill and expanded sorting/filter controls.
 - Updated logo references to use brand/untitled.png.
 - Continue removing legacy admin-password fallback and continue route-by-route SEO cleanup with one H1 per exposed page.
+
+
+### March 26, 2026 pass highlights
+- Fixed public brand references to the new `brand/Untitled.png` logo asset.
+- Continued local SEO cleanup for Oxford County and Norfolk County public pages.
+- Added stronger admin catalog movement-history and booking usage UI on top of the existing inventory movement endpoints.
+- Continued reducing shared-password dependence by letting newer progress tooling trust the signed-in staff session first.

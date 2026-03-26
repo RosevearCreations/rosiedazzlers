@@ -177,3 +177,7 @@ This is now the preferred auth model for internal workflows, while the shared ad
 - Hardened Gear/Consumables search inputs against browser email autofill and expanded sorting/filter controls.
 - Updated logo references to use brand/untitled.png.
 - Continue removing legacy admin-password fallback and continue route-by-route SEO cleanup with one H1 per exposed page.
+
+
+## March 26, 2026 note
+No new table was required in this pass. The operational focus moved to UI coverage over the existing catalog inventory, movement, and booking-linked usage tables while continuing the JSON-to-DB reduction direction.
