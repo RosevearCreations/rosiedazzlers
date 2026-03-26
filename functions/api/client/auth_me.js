@@ -124,9 +124,7 @@ function formatCustomer(customer) {
     is_active: customer.is_active === true,
     notification_opt_in: customer.notification_opt_in === true,
     notification_channel: customer.notification_channel || null,
-    detailer_chat_opt_in: customer.detailer_chat_opt_in === true,
-    email_verified_at: customer.email_verified_at || null,
-    email_verification_pending: !customer.email_verified_at
+    detailer_chat_opt_in: customer.detailer_chat_opt_in === true
   };
 }
 

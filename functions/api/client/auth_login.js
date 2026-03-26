@@ -15,7 +15,6 @@ export async function onRequestPost(context) {
     if (!customer.password_hash) return withCors(json({ error: "This client account cannot sign in yet." }, 403));
     const ok = await verifyPassword(password, customer.password_hash);
     if (!ok) return withCors(json({ error: "Invalid email or password." }, 401));
-    await fetch(`${env.SUPABASE_URL}/rest/v1/customer_profiles?id=eq.${encodeURIComponent(customer.id)}`, { method:'PATCH', headers:{ ...serviceHeaders(env), Prefer:'return=minimal' }, body: JSON.stringify({ last_login_at: new Date().toISOString() }) }).catch(() => null);
     const session = await createCustomerSession({ env, customerProfile: customer, request });
     let headers = new Headers({ "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
     headers = appendSetCookie(headers, session.cookie);
@@ -27,7 +26,7 @@ export async function onRequestPost(context) {
 }
 
 async function loadCustomerByEmail(env, email) {
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/customer_profiles?select=id,email,full_name,phone,tier_code,notes,address_line1,address_line2,city,province,postal_code,vehicle_notes,is_active,password_hash,email_verified_at&email=eq.${encodeURIComponent(email)}&limit=1`, { headers: serviceHeaders(env) });
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/customer_profiles?select=id,email,full_name,phone,tier_code,notes,address_line1,address_line2,city,province,postal_code,vehicle_notes,is_active,password_hash&email=eq.${encodeURIComponent(email)}&limit=1`, { headers: serviceHeaders(env) });
   if (!res.ok) throw new Error(`Could not load client account. ${await res.text()}`);
   const rows = await res.json().catch(() => []);
   return Array.isArray(rows) ? rows[0] || null : null;
@@ -48,7 +47,7 @@ async function verifyPassword(password, storedHash) {
 async function loadBcrypt() { try { const mod = await import("bcryptjs"); return mod.default || mod; } catch { return null; } }
 async function sha256Hex(input) { const data = new TextEncoder().encode(String(input||"")); const hash = await crypto.subtle.digest("SHA-256", data); return [...new Uint8Array(hash)].map((b)=>b.toString(16).padStart(2,"0")).join(""); }
 function safeEqual(a,b){ const x=String(a||""); const y=String(b||""); if(x.length!==y.length) return false; let out=0; for(let i=0;i<x.length;i++) out|=x.charCodeAt(i)^y.charCodeAt(i); return out===0; }
-function formatCustomer(row){ return { id: row.id||null, email: row.email||null, full_name: row.full_name||null, phone: row.phone||null, tier_code: row.tier_code||null, address_line1: row.address_line1||null, address_line2: row.address_line2||null, city: row.city||null, province: row.province||null, postal_code: row.postal_code||null, vehicle_notes: row.vehicle_notes||null, email_verified_at: row.email_verified_at||null, email_verification_pending: !row.email_verified_at }; }
+function formatCustomer(row){ return { id: row.id||null, email: row.email||null, full_name: row.full_name||null, phone: row.phone||null, tier_code: row.tier_code||null, address_line1: row.address_line1||null, address_line2: row.address_line2||null, city: row.city||null, province: row.province||null, postal_code: row.postal_code||null, vehicle_notes: row.vehicle_notes||null }; }
 function cleanEmail(v){ const s=String(v||"").trim().toLowerCase(); return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)?s:null; }
 function json(data,status=200){ return new Response(JSON.stringify(data,null,2),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"}}); }
 function corsHeaders(){ return {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"POST,OPTIONS","Access-Control-Allow-Headers":"Content-Type","Cache-Control":"no-store"}; }

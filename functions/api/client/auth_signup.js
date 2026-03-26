@@ -1,5 +1,4 @@
 import { createCustomerSession, appendSetCookie, serviceHeaders } from "../_lib/customer-session.js";
-import { issueCustomerAuthToken, sendCustomerAuthEmail } from "../_lib/customer-auth-tokens.js";
 
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 
@@ -34,7 +33,6 @@ export async function onRequestPost(context) {
         notification_channel: payload.notification_channel,
         detailer_chat_opt_in: payload.detailer_chat_opt_in,
         is_active: true,
-        email_verified_at: null,
         password_hash
       }])
     });
@@ -44,13 +42,11 @@ export async function onRequestPost(context) {
     const profile = Array.isArray(rows) ? rows[0] || null : null;
     if (!profile?.id) throw new Error("Client account was created without a usable profile id.");
 
-    const verification = await issueCustomerAuthToken({ env, customerProfileId: profile.id, purpose:'email_verification', expiresMinutes: 24*60, payload:{ email: profile.email || payload.email } }).catch(() => null);
-    if (verification?.rawToken) { await sendCustomerAuthEmail({ env, request, customer: profile, purpose:'email_verification', rawToken: verification.rawToken }).catch(() => null); }
     const session = await createCustomerSession({ env, customerProfile: profile, request });
     let headers = new Headers({ "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
     headers = appendSetCookie(headers, session.cookie);
     headers = applyCors(headers);
-    return new Response(JSON.stringify({ ok: true, message: "Client account created. Verification email queued.", customer: formatCustomer(profile) }, null, 2), { status: 200, headers });
+    return new Response(JSON.stringify({ ok: true, message: "Client account created.", customer: formatCustomer(profile) }, null, 2), { status: 200, headers });
   } catch (err) {
     return withCors(json({ error: err?.message || "Unexpected server error." }, 500));
   }
@@ -93,7 +89,7 @@ async function loadBcrypt() { try { const mod = await import("bcryptjs"); return
 async function sha256Hex(input) { const data = new TextEncoder().encode(String(input||"")); const hash = await crypto.subtle.digest("SHA-256", data); return [...new Uint8Array(hash)].map((b)=>b.toString(16).padStart(2,"0")).join(""); }
 function validatePassword(password){ if(!password) return {ok:false,error:"Password is required."}; if(password.length<8) return {ok:false,error:"Password must be at least 8 characters long."}; if(password.length>200) return {ok:false,error:"Password is too long."}; return {ok:true}; }
 function normalizeHashMode(value){ const s=String(value||"").trim().toLowerCase(); return s === "sha256" ? "sha256" : "bcrypt"; }
-function formatCustomer(row){ return { id: row.id||null, email: row.email||null, full_name: row.full_name||null, phone: row.phone||null, tier_code: row.tier_code||null, address_line1: row.address_line1||null, address_line2: row.address_line2||null, city: row.city||null, province: row.province||null, postal_code: row.postal_code||null, vehicle_notes: row.vehicle_notes||null, notification_opt_in: row.notification_opt_in===true, notification_channel: row.notification_channel||'email', detailer_chat_opt_in: row.detailer_chat_opt_in!==false, email_verified_at: row.email_verified_at||null, email_verification_pending: !row.email_verified_at }; }
+function formatCustomer(row){ return { id: row.id||null, email: row.email||null, full_name: row.full_name||null, phone: row.phone||null, tier_code: row.tier_code||null, address_line1: row.address_line1||null, address_line2: row.address_line2||null, city: row.city||null, province: row.province||null, postal_code: row.postal_code||null, vehicle_notes: row.vehicle_notes||null, notification_opt_in: row.notification_opt_in===true, notification_channel: row.notification_channel||'email', detailer_chat_opt_in: row.detailer_chat_opt_in!==false }; }
 function cleanText(v){ const s=String(v??"").trim(); return s||null; }
 function cleanEmail(v){ const s=String(v||"").trim().toLowerCase(); return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)?s:null; }
 function toBoolean(v){ if(typeof v === 'boolean') return v; const s=String(v||"").trim().toLowerCase(); return s==='true'||s==='1'||s==='yes'||s==='on'; }

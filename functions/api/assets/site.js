@@ -1,7 +1,7 @@
 const DATA_URL = "/data/rosie_services_pricing_and_packages.json";
 
 const BRAND = {
-  logo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
+  logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
   banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
   reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png"
 };
