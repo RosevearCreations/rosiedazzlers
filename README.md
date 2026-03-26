@@ -1,198 +1,125 @@
 <!-- README.md -->
 
-# Rosie Dazzlers — Mobile Auto Detailing
-Cloudflare Pages + Supabase + Stripe booking system
+> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
 
-Modern static website with a serverless backend used by
-Rosie Dazzlers Mobile Auto Detailing (Norfolk & Oxford Counties).
+> Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+
+# Rosie Dazzlers — Mobile Auto Detailing Platform
+Cloudflare Pages + Supabase + Stripe/PayPal + R2
+
+Rosie Dazzlers is now more than a brochure site. On the `dev` branch it is a role-aware operations platform for mobile detailing in Norfolk and Oxford Counties, with booking, gift certificates, customer progress, jobsite intake, staff/admin tools, recovery messaging, and catalog/inventory workflows.
 
 ---
 
-# System Architecture
+## Last synchronized
+- March 25, 2026
+- This pass added session-aware internal workflow upgrades, DB-backed canonical pricing for checkout, mobile-friendly direct media upload, purchase-order receive/close actions, and another SEO/H1/doc/schema refresh.
 
+---
+
+## Stack
+- Cloudflare Pages — static hosting + Pages Functions
+- Supabase Postgres — core database
+- Cloudflare R2 — media/assets
+- Stripe — booking deposits and gift purchases
+- PayPal — deposit checkout path
+- DB-backed app settings now hold the canonical pricing catalog (`pricing_catalog`), with JSON still kept as the bundled fallback source
+
+---
+
+## Core customer flows
+- Marketing pages: `/`, `/services`, `/pricing`, `/about`, `/contact`
+- Booking flow: `/book`
+- Gift certificates: `/gifts`
+- Client account: `/login`, `/my-account`
+- Customer progress page: `/progress.html?token=...`
+- Public operational catalogs: `/gear`, `/consumables`
+
+---
+
+## Core admin flows
+- Dashboard: `/admin.html`
+- Bookings / scheduling: `/admin-booking.html`, `/admin-blocks.html`, `/admin-assign.html`
+- Progress + moderation: `/admin-progress.html`
+- Jobsite intake + moderation: `/admin-jobsite.html`
+- Recovery rules/templates/testing: `/admin-recovery.html`, `/admin-app.html`, `/admin-analytics.html`
+- Catalog / low stock / reorder workflow: `/admin-catalog.html`
+- Staff / customer management: `/admin-staff.html`, `/admin-customers.html`, `/admin-account.html`
+
+---
+
+## Current architecture
 Browser  
 ↓  
-Cloudflare Pages (static site)  
+Cloudflare Pages static HTML  
 ↓  
-Pages Functions (`/functions/api`)  
+Pages Functions in `/functions/api`  
 ↓  
-Supabase Database  
+Supabase Postgres  
 ↓  
-Stripe Payments  
+Stripe / PayPal / provider dispatch integrations  
 ↓  
-Cloudflare R2 (images/assets)
+Cloudflare R2 assets + uploaded media
 
 ---
 
-# Stack
-
-- Cloudflare Pages — static hosting + serverless backend
-- Cloudflare R2 — public image hosting
-- Supabase (Postgres) — database
-- Stripe — booking deposits and gift certificate checkout
-
----
-
-# Local Repo Structure
-
-- `/*.html` — site pages
-- `/assets/*` — shared CSS/JS (theme + nav/footer + helpers)
-- `/data/*` — JSON data powering services, pricing, gear, consumables
-- `/functions/api/*` — backend endpoints (Cloudflare Pages Functions)
+## Current direction
+Highest-value work is no longer basic feature creation. The main need is consistency:
+- real staff auth/session completion
+- consistent staff identity across jobsite/progress/media/time flows
+- gift redemption polish across all customer/account screens
+- canonical pricing/add-on behavior everywhere
+- stronger upload/mobile workflow
+- continued SEO cleanup without exposing protected flows to indexing
 
 ---
 
-# Key Pages
-
-- Home: `/`
-- Services: `/services` (choose canonical: `services.html` OR `services/index.html`)
-- Pricing: `/pricing` (choose canonical: `pricing.html` OR `pricing/index.html`)
-- Booking: `/book`
-- Gifts: `/gifts`
-- Gear: `/gear`
-- Consumables: `/consumables`
-- Admin: `/admin`
+## Source-of-truth docs
+Read these first:
+- `PROJECT_BRAIN.md`
+- `CURRENT_IMPLEMENTATION_STATE.md`
+- `KNOWN_GAPS_AND_RISKS.md`
+- `DEVELOPMENT_ROADMAP.md`
+- `REPO_GUIDE.md`
+- `SUPABASE_SCHEMA.sql`
 
 ---
 
-# Canonical Route Note
+## Branch rule
+Use `dev` as the active source of truth unless explicitly told otherwise.
 
-Currently both exist:
+## Last synchronized
+- March 25, 2026
+- This pass added a site-wide public account widget through the shared chrome, customer password reset + email verification token flows, lightweight public analytics tracking, and refreshed risk/docs/schema snapshots.
 
-services.html  
-services/index.html  
-
-pricing.html  
-pricing/index.html  
-
-Choose **one canonical routing pattern** and remove the duplicate
-version to avoid redirect or routing ambiguity.
-
-Recommended: folder routes (`/services/index.html`).
-
----
-
-# API Endpoints
-
-## Booking
-
-GET `/api/availability?date=YYYY-MM-DD`  
-POST `/api/checkout`
-
-Creates a Stripe checkout session for booking deposits.
-
----
-
-## Stripe Booking Webhook
-
-POST `/api/stripe/webhook`
-
-Confirms deposit payments and updates booking status.
-
----
-
-## Gift Certificates
-
-POST `/api/gifts/checkout`  
-POST `/api/gifts/webhook`  
-POST `/api/gifts/receipt`
-
-Handles gift certificate purchases and code retrieval.
-
----
-
-## Admin API
-
-POST `/api/admin/bookings`  
-POST `/api/admin/block_date`  
-POST `/api/admin/unblock_date`  
-POST `/api/admin/block_slot`  
-POST `/api/admin/unblock_slot`  
-POST `/api/admin/progress_post`  
-POST `/api/admin/progress_list`  
-POST `/api/admin/assign_booking`  
-POST `/api/admin/promo_create`  
-POST `/api/admin/promo_list`  
-POST `/api/admin/promo_disable`
-
-Admin endpoints require the `ADMIN_PASSWORD`.
-
----
-
-# Environment Variables (Cloudflare Pages)
-
-Required:
-
-SUPABASE_URL  
-SUPABASE_SERVICE_ROLE_KEY  
-ADMIN_PASSWORD  
-
-Stripe:
-
-STRIPE_SECRET_KEY  
-STRIPE_WEBHOOK_SECRET  
-STRIPE_WEBHOOK_SECRET_GIFTS  
-
-Preview environments use Stripe **TEST** keys.  
-Production uses Stripe **LIVE** keys.
-
----
-
-# R2 Assets
-
-The site expects an R2 custom domain:
-
-https://assets.rosiedazzlers.ca
-
-Folder layout used in code:
-
-brand/  
-packages/  
-products/  
-systems/  
-
-Example:
-
-https://assets.rosiedazzlers.ca/packages/Exterior Detail.png
-
----
-
-# Database
-
-Database schema is defined in:
-
-SUPABASE_SCHEMA.sql
-
-This file contains **create/repair SQL statements** for all tables
-used by the application.
-
----
-
-# Repo Documentation
-
-Additional documentation included in the repository:
-
-SANITY_CHECK.md — project status and development priorities  
-REPO_GUIDE.md — repository structure and file map  
-SUPABASE_SCHEMA.sql — database schema and repair script  
-
----
-
-# Notes
-
-- Booking capacity uses **AM / PM half-day slots**.
-- A full-day booking uses **both slots**.
-- Customers must confirm driveway access, power, and water during booking.
-- Gift certificates are valid for **1 year** and are non-refundable.
+## Newly advanced in this pass
+- public login/account status widget injected across public pages
+- forgot password + email verification resend + token verification flows
+- analytics tracking for page views, heartbeats, cart snapshots, and simple live-session reporting
+- stronger public login/reset screen
+- docs/schema refresh aligned to the current dev branch
 
 
-## March 24, 2026 update
+### March 25, 2026 late-pass notes
 
-This repo now includes:
-- persisted recovery template management and preview endpoints
-- database-backed public catalog support with JSON fallback
-- rated inventory fields for tools and consumables
-- admin catalog and recovery pages
-- two-sided progress threads with moderation states
-- a refreshed schema snapshot in `SUPABASE_SCHEMA.sql`
-- migration file: `sql/2026-03-24_recovery_inventory_moderation_and_checkout.sql`
+This build now includes a dual-path public sign-in experience (client first, staff fallback in the UI), a restored signed-in identity panel on the main admin dashboard, and a stronger analytics screen for live online activity, daily traffic, countries, referrers, carts, and abandoned checkout review.
+
+## Latest pass summary
+This pass focused on staff-session consistency in progress flows, booking vehicle catalog normalization, form/layout cleanup, richer public gear/consumables filtering, and another schema/doc refresh. Vehicle year/make/model selection is now designed around official NHTSA vPIC data with an internal cache path for future DB-first use.
+
+
+## March 26, 2026 inventory/review/layout pass
+- Added DB-backed inventory movement logging for adjustments, receive events, and detail-product usage.
+- Added after-detail checklist persistence for keys/water/power/debrief and suggested next-service cadence.
+- Extended customer garage vehicles with next-cleaning due date, interval days, and auto-schedule preference.
+- Added in-app customer review capture plus a Google review handoff link.
+- Hardened Gear/Consumables search inputs against browser email autofill and expanded sorting/filter controls.
+- Updated logo references to use brand/untitled.png.
+- Continue removing legacy admin-password fallback and continue route-by-route SEO cleanup with one H1 per exposed page.
+
+
+### March 26, 2026 pass highlights
+- Fixed public brand references to the new `brand/Untitled.png` logo asset.
+- Continued local SEO cleanup for Oxford County and Norfolk County public pages.
+- Added stronger admin catalog movement-history and booking usage UI on top of the existing inventory movement endpoints.
+- Continued reducing shared-password dependence by letting newer progress tooling trust the signed-in staff session first.

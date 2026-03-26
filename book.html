@@ -17,8 +17,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Book Mobile Detailing | Rosie Dazzlers</title>
-  <meta name="description" content="Book Rosie Dazzlers mobile auto detailing online. Choose your package, add-ons, date, slot, and apply promo or gift codes." />
+  <title>Book Mobile Auto Detailing | Oxford & Norfolk Counties | Rosie Dazzlers</title>
+  <meta name="description" content="Book Rosie Dazzlers mobile auto detailing in Oxford County and Norfolk County, Ontario. Choose your package, add-ons, and vehicle details online." />
   <link rel="canonical" href="https://rosiedazzlers.ca/book" />
   <meta property="og:title" content="Book Mobile Detailing | Rosie Dazzlers" />
   <meta property="og:description" content="Book Rosie Dazzlers mobile auto detailing online. Choose your package, add-ons, date, slot, and apply promo or gift codes." />
@@ -157,8 +157,6 @@
           </span>
         </label>
       </div>
-      <h1 style="margin:12px 0 8px">Book a Detail</h1>
-      <p class="kicker">Choose a date, package, and time slot. We do one vehicle per day unless two half-day jobs.</p>
       <div id="dataError" class="notice bad" style="display:none;margin-top:10px"></div>
     </div>
 
@@ -169,15 +167,15 @@
         <div class="grid3">
           <div>
             <label for="veh_year">Year</label>
-            <input id="veh_year" type="number" min="1950" max="2100" required placeholder="2020" />
+            <select id="veh_year" required autocomplete="off"><option value="">Select year</option></select>
           </div>
           <div>
             <label for="veh_make">Make</label>
-            <input id="veh_make" type="text" required placeholder="Honda" />
+            <select id="veh_make" required autocomplete="off"><option value="">Select make</option></select>
           </div>
           <div>
             <label for="veh_model">Model</label>
-            <input id="veh_model" type="text" required placeholder="Civic" />
+            <select id="veh_model" required autocomplete="off"><option value="">Select model</option></select>
           </div>
         </div>
 
@@ -203,6 +201,15 @@
             <label for="veh_mileage">Mileage (optional)</label>
             <input id="veh_mileage" type="number" min="0" placeholder="123456" />
           </div>
+          <div>
+            <label for="veh_category">Vehicle category</label>
+            <select id="veh_category">
+              <option value="small">Small car</option>
+              <option value="mid" selected>Medium / standard</option>
+              <option value="oversize">Oversized</option>
+              <option value="exotic">Exotic / luxury special handling</option>
+            </select>
+          </div>
         </div>
 
         <label for="veh_photo" style="margin-top:10px">Vehicle photo link (recommended, not required)</label>
@@ -215,7 +222,7 @@
 
       <div class="panel">
         <h2 style="margin-top:0">4) Add-ons</h2>
-        <div class="muted mini">Quote-required add-ons are requested here but not charged online.</div>
+        <div class="muted mini">Quote-required add-ons are requested here but not charged online. Weather or unsafe conditions may require a reschedule under the service terms.</div>
 
         <div id="addonsBox" class="section"></div>
 
@@ -451,6 +458,9 @@
 
     // Size recommendation (simple)
     function recommendedSize(){
+      const category = (qs("#veh_category")?.value || "").toLowerCase();
+      if (category === "exotic") return "oversize";
+      if (["small","mid","oversize"].includes(category)) return category;
       const body = (qs("#veh_body").value || "").toLowerCase();
       if (body === "truck" || body === "van" || body === "exotic") return "oversize";
       if (body === "suv" || body === "crossover") return "mid";
@@ -474,11 +484,59 @@
         qs("#sizeMismatch").style.display = "none";
       }
     }
-    ["veh_body","veh_make","veh_model","vehicle_size"].forEach(id=>{
+    ["veh_body","veh_make","veh_model","veh_category","vehicle_size"].forEach(id=>{
       const el = qs("#"+id);
       if (el) el.addEventListener("input", updateSizeHint);
       if (el) el.addEventListener("change", updateSizeHint);
     });
+
+    const VEHICLE_MAKES_URL = "/api/vehicle_makes";
+    function escapeHtml(s){ return String(s || "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;"); }
+    const VEHICLE_MODELS_URL = "/api/vehicle_models";
+
+    async function loadVehicleMakes(){
+      const res = await fetch(VEHICLE_MAKES_URL, { cache:"no-store" });
+      const out = await res.json().catch(()=>null);
+      if (!res.ok || !out?.ok) throw new Error(out?.error || "Could not load vehicle makes.");
+      const yearSel = qs("#veh_year");
+      const makeSel = qs("#veh_make");
+      const years = Array.isArray(out.years) ? out.years : [];
+      yearSel.innerHTML = `<option value="">Select year</option>` + years.map((y)=>`<option value="${y}">${y}</option>`).join("");
+      const makes = Array.isArray(out.makes) ? out.makes : [];
+      makeSel.innerHTML = `<option value="">Select make</option>` + makes.map((row)=>`<option value="${escapeHtml(row.make)}">${escapeHtml(row.make)}</option>`).join("");
+      qs("#veh_model").innerHTML = `<option value="">Select model</option>`;
+    }
+
+    function applyModelClassification(row){
+      if (!row) return;
+      if (["small","mid","oversize"].includes(row.size_bucket)) qs("#vehicle_size").value = row.size_bucket;
+      qs("#veh_category").value = row.is_exotic ? 'exotic' : (row.size_bucket || 'mid');
+      const body = String(row.vehicle_type || '').toLowerCase();
+      if (body.includes('truck')) qs("#veh_body").value = 'truck';
+      else if (body.includes('multipurpose')) qs("#veh_body").value = 'suv';
+      else if (body.includes('passenger')) qs("#veh_body").value = 'sedan';
+      updatePriceUI();
+      buildAddonUI();
+      updateSizeHint();
+    }
+
+    async function loadVehicleModels(){
+      const year = qs("#veh_year").value;
+      const make = qs("#veh_make").value;
+      const modelSel = qs("#veh_model");
+      modelSel.innerHTML = `<option value="">${year && make ? 'Loading models…' : 'Select model'}</option>`;
+      if (!year || !make) return;
+      const res = await fetch(`${VEHICLE_MODELS_URL}?year=${encodeURIComponent(year)}&make=${encodeURIComponent(make)}`, { cache:'no-store' });
+      const out = await res.json().catch(()=>null);
+      if (!res.ok || !out?.ok) throw new Error(out?.error || 'Could not load vehicle models.');
+      const models = Array.isArray(out.models) ? out.models : [];
+      modelSel.innerHTML = `<option value="">Select model</option>` + models.map((row, idx)=>`<option value="${escapeHtml(row.model)}" data-size="${escapeHtml(row.size_bucket || '')}" data-exotic="${row.is_exotic ? '1' : '0'}" data-type="${escapeHtml(row.vehicle_type || '')}">${escapeHtml(row.model)}${row.category_label ? ` — ${escapeHtml(row.category_label)}` : ''}</option>`).join('');
+      modelSel.onchange = () => {
+        const opt = modelSel.selectedOptions?.[0] || null;
+        if (!opt || !opt.value) return updateSizeHint();
+        applyModelClassification({ model: opt.value, size_bucket: opt.dataset.size || 'mid', is_exotic: opt.dataset.exotic === '1', vehicle_type: opt.dataset.type || '' });
+      };
+    }
 
     // Availability
     async function refreshAvailability(){
@@ -537,6 +595,9 @@
       updatePriceUI();
       buildAddonUI();
       updateSizeHint();
+      await loadVehicleMakes();
+      qs("#veh_year").addEventListener("change", loadVehicleModels);
+      qs("#veh_make").addEventListener("change", loadVehicleModels);
       await refreshAvailability();
 
       // Optional prefill from query: /book?pkg=...&size=...
@@ -606,12 +667,13 @@
 
         vehicle: {
           year: Number(qs("#veh_year").value),
-          make: qs("#veh_make").value.trim(),
-          model: qs("#veh_model").value.trim(),
+          make: qs("#veh_make").value,
+          model: qs("#veh_model").value,
           plate: qs("#veh_plate").value.trim() || null,
           mileage: qs("#veh_mileage").value ? Number(qs("#veh_mileage").value) : null,
           photo_url: qs("#veh_photo").value.trim() || null,
-          body_style: qs("#veh_body").value || null
+          body_style: qs("#veh_body").value || null,
+          category: qs("#veh_category").value || null
         },
 
         special_notes: (qs("#special_notes").value || "").trim() || null,

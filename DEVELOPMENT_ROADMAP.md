@@ -1,339 +1,129 @@
 <!-- DEVELOPMENT_ROADMAP.md -->
 
+> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+
+> Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+
 # Rosie Dazzlers — Development Roadmap
 
-This document defines the **next upgrades for the Rosie Dazzlers system in the correct implementation order**.
-
-It is intended to guide both developers and AI assistants so work proceeds logically without breaking existing functionality.
-
-For system overview see:
-
-PROJECT_BRAIN.md  
-AI_CONTEXT.md  
-SANITY_CHECK.md  
-REPO_GUIDE.md  
+This is the practical implementation order for the `dev` branch after the March 25, 2026 documentation and UI refresh.
 
 ---
 
-# Current System Status
+## Immediate priorities
 
-The Rosie Dazzlers platform already includes:
+### 1) Real staff auth/session completion
+Finish the transition away from shared-password dependence.
+- continue converting older endpoints/screens to session-aware auth
+- keep the legacy bridge as fallback only
+- resolved actor trusted across all internal screens
 
-• Static marketing website  
-• Booking system with Stripe deposit checkout  
-• Gift certificate purchase system  
-• Admin booking management  
-• Date and slot blocking system  
-• Promo code system  
-• Product and gear catalog pages  
-• Two progress update systems (simple + token-based)
+### 2) Staff identity consistency cleanup
+Ensure the same actor model is used across:
+- jobsite intake
+- progress updates
+- media
+- comments / annotations
+- time entries
+- signoff / assignment
 
-The system is **functional but still evolving**.
+### 3) Gift redemption polish
+Booking checkout is much better, but still needs:
+- consistent customer-facing gift balance messaging
+- account-side gift checker/history
+- final webhook-safe reconciliation review
 
-Primary goals of the roadmap:
+### 4) Canonical pricing and add-ons
+Continue removing pricing drift.
+- booking checkout
+- admin reporting references
+- future invoices / summaries
+- tests against `data/rosie_services_pricing_and_packages.json`
 
-• stabilize the architecture  
-• unify duplicate systems  
-• improve admin usability  
-• complete customer workflow features  
-• maintain serverless simplicity
-
----
-
-# Upgrade Order (Next 10 Improvements)
-
-## 1) Resolve Duplicate Routes (Stability Fix)
-
-Currently both route styles exist:
-
-services.html  
-services/index.html  
-
-pricing.html  
-pricing/index.html  
-
-This can create routing ambiguity in Cloudflare Pages.
-
-Required action:
-
-Choose **one canonical structure** and remove duplicates.
-
-Recommended approach:
-
-Use folder routes
-
-/services/index.html  
-/pricing/index.html
-
-Then enforce redirects if necessary.
+### 5) Mobile upload completion
+Complete direct upload flow.
+- signed upload URLs or direct storage flow
+- mobile-friendly jobsite/progress upload UX
+- save media cleanly into operational tables
 
 ---
 
-## 2) Fix Hover Carousel Image Paths
+## Secondary priorities
 
-The hover media defined in `assets/site.js` does not always match the actual R2 filenames.
+### 6) Recovery operations hardening
+- provider-backed send logging
+- retry/test history visibility
+- provider-specific template/rule validation
+- optional recovery audit trail in admin
 
-Example mismatch:
+### 7) Catalog purchasing workflow
+- reorder reminders
+- ordered / received / cancelled states surfaced clearly
+- low-stock alert resolution flow
+- optional vendor reminder notifications
 
-site.js references  
-`packages/Exteriordetail.png`
+### 8) Internal shell cohesion
+- unify admin/detailer navigation
+- reduce screen-to-screen fragmentation
+- improve field/mobile usage
 
-Actual file
+### 9) Route and endpoint cleanup
+- finalize canonical public route structure
+- retire duplicate/legacy endpoint patterns
+- document preferred replacements clearly
 
-`packages/Exterior Detail.png`
+### 10) Ongoing SEO pass
+On every build:
+- review page title/H1/meta
+- keep admin/token/private pages noindex
+- continue public support-page cleanup
+- maintain sitemap/robots consistency
 
-Required action:
 
-Align hover media paths with the exact filenames stored in R2.
+## Newly moved forward
 
-Correct folder usage:
+- public/client login flow now hands off to staff auth when the credentials belong to staff
+- public account widget now recognizes staff sessions as well as customer sessions
+- admin dashboard has a live analytics summary surface again
+- analytics view has stronger historical + live monitoring detail
 
-brand/  
-packages/  
-products/  
-systems/
 
----
+## March 25, 2026 update
+- moved forward: canonical pricing now has a DB-backed setting source with JSON fallback
+- moved forward: mobile-friendly direct upload page now uses the signed-in staff session
+- moved forward: purchase-order receive/cancel workflow now exists in admin catalog
+- move up next: finish the same session-aware conversion on the remaining legacy admin endpoints and screens
 
-## 3) Unify Add-On Definitions
 
-Add-ons currently exist in multiple places:
+### March 25, 2026 pass note
+This doc was refreshed during the vehicle catalog, progress-session, layout, and public catalog filter pass. The repo now includes NHTSA-backed vehicle make/model endpoints, a DB cache table for vehicle catalog rows, progress moderation/enable session upgrades, and public search/filter cleanup on Gear and Consumables.
 
-assets/config.js  
-assets/site.js  
-functions/api/checkout.js  
-rosie_services_pricing_and_packages.json
 
-This creates a risk of pricing mismatches.
-
-Required action:
-
-Define add-ons in **one canonical source**.
-
-Recommended location:
-
-data/rosie_services_pricing_and_packages.json
-
-Frontend and backend should both read from this.
-
----
-
-## 4) Clean Up Duplicate Admin Block Endpoints
-
-There are multiple versions of date/slot block logic.
-
-Examples:
-
-admin/block_date.js  
-admin/block_slot.js  
-admin/unblock_date.js  
-admin/unblock_slot.js  
-
-Older block logic may still exist elsewhere.
-
-Required action:
-
-Consolidate to **one clear system** for:
-
-date_blocks  
-slot_blocks
-
-Remove legacy endpoints.
-
----
-
-## 5) Harden Booking Checkout Validation
-
-Improve booking reliability by validating:
-
-vehicle size  
-package compatibility  
-add-on selections  
-promo codes  
-slot availability
-
-Validation should occur **before creating the Stripe checkout session**.
-
-Primary file:
-
-functions/api/checkout.js
-
----
-
-## 6) Complete Gift Certificate Redemption
-
-Currently gift certificates can be purchased but redemption during booking should be fully integrated.
-
-Required features:
-
-validate gift code  
-determine remaining value  
-apply to booking total  
-update remaining balance  
-mark certificate as redeemed if fully used
-
-Database table used:
-
-gift_certificates
-
----
-
-## 7) Finish Token-Based Progress Update System
-
-Two progress systems exist.
-
-Simple system
-
-progress_updates
-
-Token-based system
-
-job_updates  
-job_media  
-job_signoffs
-
-Recommended long-term system:
-
-Token-based system.
-
-Required tasks:
-
-finish `/api/progress/view`  
-finish `/api/progress/signoff`  
-generate progress_token for bookings  
-remove or archive simple progress system once replacement is complete
-
----
-
-## 8) Improve Admin Dashboard
-
-The admin dashboard currently links to multiple tools but can be improved.
-
-Desired upgrades:
-
-central dashboard page  
-today’s bookings view  
-quick status update buttons  
-links to progress updates  
-links to gift certificates and promo tools
-
-Admin pages involved:
-
-admin.html  
-admin-booking.html  
-admin-progress.html  
-admin-upload.html  
-admin-promos.html  
-
----
-
-## 9) Implement Customer Completion Sign-Off
-
-Allow customers to sign off after a service is completed.
-
-Required functionality:
-
-customer enters name and email  
-signoff timestamp recorded  
-user agent stored  
-optional note field
-
-Database table:
-
-job_signoffs
-
-This feature increases service accountability and professionalism.
-
----
-
-## 10) Add Field Photo Upload System
-
-Allow technicians to upload photos directly from a phone while working.
-
-Recommended implementation:
-
-generate signed upload URL  
-upload image directly to R2 or Supabase Storage  
-store media reference in database
-
-Database table:
-
-job_media
-
-This will enable:
-
-before/after photos  
-damage documentation  
-customer progress updates
-
----
-
-# Future Enhancements (After the Top 10)
-
-These are valuable but lower priority.
-
-Customer accounts with Supabase Auth  
-Vehicle profiles with service history  
-Admin scheduling calendar  
-Route planning for mobile detailing visits  
-Automated reminder emails  
-Customer review collection  
-Analytics dashboard
-
----
-
-# Development Philosophy
-
-Maintain the following design principles:
-
-• keep the site mostly static for speed  
-• use serverless functions for business logic  
-• avoid heavy frameworks unless necessary  
-• prefer configuration and JSON over hardcoded values  
-• maintain clear separation between frontend and backend logic
-
----
-
-# Quick Summary
-
-Rosie Dazzlers development priorities are:
-
-1) stabilize routing  
-2) fix asset references  
-3) unify pricing definitions  
-4) clean backend endpoints  
-5) strengthen booking validation  
-6) finish gift redemption  
-7) complete token-based progress system  
-8) improve admin usability  
-9) implement customer signoff  
-10) add field photo uploads
-
-Following this roadmap will transform the system from **functional prototype** into a **fully mature detailing operations platform**.
-
-
----
-
-# March 24, 2026 pass update
-
-## Recently moved forward
-- recovery-message provider rules and preview/testing foundations
-- low-stock/reorder admin workflow foundation
-- moderation-aware two-sided progress thread foundation
-
-## Newly advanced
-- public catalog connection to DB inventory with JSON fallback
-- rated tool/consumable inventory fields and public display support
-- recovery templates and rules persistence
-- roadmap adjusted to reflect current sequencing
+## Newly moved forward (2026-03-26)
+- Admin-side gear/consumables editing for rating, stock, reorder rules, vendor, category, and saved order.
+- Receive/close purchase workflow now updates inventory quantities.
+- My Account vehicle editor upgraded to live year/make/model lookups.
+- Book page booking-data error fixed.
 
 ## Move up next
-- jobsite moderation controls UI
-- gift redemption inside booking totals/checkout
-- add-on pricing canonicalization
+- Remove the final legacy fallback flags from the remaining admin endpoints now that the env gate is in place.
+- Continue moving public catalog content from JSON fallback into DB-first inventory content.
+- Add structured-data coverage route by route after the remaining content cleanup pass.
 
-## Upcoming implementation targets
-1. Page-by-page SEO/H1/meta audit
-2. Recovery email/SMS templates and flows
-3. Deeper thread moderation and annotation tooling
-4. Catalog reorder reminders and purchasing workflows
+
+## March 26, 2026 inventory/review/layout pass
+- Added DB-backed inventory movement logging for adjustments, receive events, and detail-product usage.
+- Added after-detail checklist persistence for keys/water/power/debrief and suggested next-service cadence.
+- Extended customer garage vehicles with next-cleaning due date, interval days, and auto-schedule preference.
+- Added in-app customer review capture plus a Google review handoff link.
+- Hardened Gear/Consumables search inputs against browser email autofill and expanded sorting/filter controls.
+- Updated logo references to use brand/untitled.png.
+- Continue removing legacy admin-password fallback and continue route-by-route SEO cleanup with one H1 per exposed page.
+
+
+## March 26, 2026 search/inventory/admin UX pass
+- Continued DB-first inventory work by extending public sorting/filtering and admin movement-history visibility.
+- Added booking-level product usage recording UI in admin progress and admin catalog.
+- Continued session-aware progress tooling so signed-in staff can work without depending on the fallback password on newer flows.
+- Continued local SEO work for Norfolk County and Oxford County with structured-data and page-metadata cleanup.
+- Move up next: gift/account polish, final legacy fallback removal, broader structured-data coverage route by route, and a fuller purchase reminder lifecycle.

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Job Site Intake | Rosie Dazzlers</title>
   <meta name="description" content="Detailer pre-job intake and live job tracking for Rosie Dazzlers." />
+  <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body data-page="admin-jobsite">
@@ -71,11 +72,11 @@
     <section class="section">
       <div class="grid cards">
         <div class="panel">
-          <h2>Booking + staff</h2>
+          <h2>Booking + staff</h2><div id="jobsiteActorMeta" class="kicker" style="margin-bottom:10px">Checking session…</div>
           <form id="jobsiteLoadForm" class="form">
             <label>
-              Admin / staff password
-              <input id="jobsitePassword" type="password" autocomplete="current-password" required />
+              Staff password (optional fallback)
+              <input id="jobsitePassword" type="password" autocomplete="current-password" />
             </label>
 
             <label>
@@ -314,6 +315,25 @@
       </form>
     </section>
 
+
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Progress thread moderation</h2>
+          <div id="jobsiteCommentsList" class="grid" style="margin-top:12px">
+            <div class="notice">No job loaded yet.</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Observation moderation</h2>
+          <div id="jobsiteAnnotationsList" class="grid" style="margin-top:12px">
+            <div class="notice">No job loaded yet.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section">
       <div class="panel">
         <h2>Time entry history</h2>
@@ -332,7 +352,21 @@
 
     let currentBookingId = "";
     let currentPassword = "";
+
+    async function loadActorMeta(){
+      try {
+        const res = await fetch("/api/admin/auth_me", { credentials:"include", cache:"no-store" });
+        const out = await res.json().catch(()=>null);
+        if (!res.ok || !out?.ok || !out?.actor) throw new Error(out?.error || "No session");
+        document.querySelector("#jobsiteActorMeta").textContent = `${out.actor.full_name || out.actor.email || "Staff"} · ${out.actor.role_code || "staff"}`;
+        if (!document.querySelector("#detailerName").value.trim()) document.querySelector("#detailerName").value = out.actor.full_name || out.actor.email || "";
+      } catch {
+        document.querySelector("#jobsiteActorMeta").textContent = "No staff session found. Use the fallback password field if needed.";
+      }
+    }
     let timeEntries = [];
+    let jobsiteComments = [];
+    let jobsiteAnnotations = [];
 
     function setNotice(message, kind = "") {
       const el = document.querySelector("#pageNotice");
@@ -553,6 +587,82 @@
       };
     }
 
+
+
+    function renderJobsiteComments() {
+      const wrap = document.querySelector("#jobsiteCommentsList");
+      if (!wrap) return;
+      if (!jobsiteComments.length) {
+        wrap.innerHTML = `<div class="notice">No threaded comments loaded for this booking.</div>`;
+        return;
+      }
+      wrap.innerHTML = jobsiteComments.map((item) => `
+        <article class="card">
+          <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
+          <h3>${escapeHtml(item.author_name || item.author_type || 'Comment')}</h3>
+          <p>${escapeHtml(item.message || '')}</p>
+          <div class="kicker">Visibility: ${escapeHtml(item.visibility || 'customer')} · Thread: ${escapeHtml(item.thread_status || 'visible')}</div>
+          ${item.moderation_reason ? `<div class="hr"></div><p><strong>Reason:</strong> ${escapeHtml(item.moderation_reason)}</p>` : ''}
+          <div class="grid" style="gap:8px;margin-top:10px">
+            <label>
+              Moderation reason
+              <input type="text" data-comment-reason="${escapeHtml(item.id)}" placeholder="Optional reason" />
+            </label>
+            <label>
+              Visibility
+              <select data-comment-visibility="${escapeHtml(item.id)}">
+                <option value="customer" ${item.visibility === 'customer' ? 'selected' : ''}>Customer</option>
+                <option value="internal" ${item.visibility === 'internal' ? 'selected' : ''}>Internal</option>
+              </select>
+            </label>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <button class="btn ghost" type="button" data-comment-action="visible" data-comment-id="${escapeHtml(item.id)}">Visible</button>
+              <button class="btn ghost" type="button" data-comment-action="hidden" data-comment-id="${escapeHtml(item.id)}">Hide</button>
+              <button class="btn ghost" type="button" data-comment-action="removed" data-comment-id="${escapeHtml(item.id)}">Remove</button>
+            </div>
+          </div>
+        </article>`).join('');
+    }
+
+    function renderJobsiteAnnotations() {
+      const wrap = document.querySelector("#jobsiteAnnotationsList");
+      if (!wrap) return;
+      if (!jobsiteAnnotations.length) {
+        wrap.innerHTML = `<div class="notice">No observation annotations loaded for this booking.</div>`;
+        return;
+      }
+      wrap.innerHTML = jobsiteAnnotations.map((item) => `
+        <article class="card">
+          <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
+          <h3>${escapeHtml(item.title || item.category || 'Annotation')}</h3>
+          <p>${escapeHtml(item.note || '')}</p>
+          <div class="kicker">Visibility: ${escapeHtml(item.visibility || 'customer')} · Thread: ${escapeHtml(item.thread_status || 'visible')} · Severity: ${escapeHtml(item.severity || 'normal')}</div>
+          ${item.moderation_reason ? `<div class="hr"></div><p><strong>Reason:</strong> ${escapeHtml(item.moderation_reason)}</p>` : ''}
+          <div class="grid" style="gap:8px;margin-top:10px">
+            <label>
+              Moderation reason
+              <input type="text" data-annotation-reason="${escapeHtml(item.id)}" placeholder="Optional reason" />
+            </label>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <button class="btn ghost" type="button" data-annotation-action="visible" data-annotation-id="${escapeHtml(item.id)}">Visible</button>
+              <button class="btn ghost" type="button" data-annotation-action="hidden" data-annotation-id="${escapeHtml(item.id)}">Hide</button>
+              <button class="btn ghost" type="button" data-annotation-action="removed" data-annotation-id="${escapeHtml(item.id)}">Remove</button>
+            </div>
+          </div>
+        </article>`).join('');
+    }
+
+    async function moderateJobsiteComment(commentId, threadStatus) {
+      const reason = document.querySelector(`[data-comment-reason="${CSS.escape(commentId)}"]`)?.value?.trim() || '';
+      const visibility = document.querySelector(`[data-comment-visibility="${CSS.escape(commentId)}"]`)?.value || 'customer';
+      return apiPost('/api/admin/progress_comment_moderate', currentPassword, { comment_id: commentId, thread_status: threadStatus, moderation_reason: reason || null, visibility });
+    }
+
+    async function moderateJobsiteAnnotation(annotationId, threadStatus) {
+      const reason = document.querySelector(`[data-annotation-reason="${CSS.escape(annotationId)}"]`)?.value?.trim() || '';
+      return apiPost('/api/admin/observation_annotation_moderate', currentPassword, { annotation_id: annotationId, thread_status: threadStatus, moderation_reason: reason || null });
+    }
+
     function renderTimeSummary() {
       const summary = computeWorkSummary(timeEntries);
 
@@ -648,13 +758,18 @@
 
       setNotice("Loading job-site intake…");
 
-      const data = await apiPost("/api/admin/jobsite_intake_get", password, {
+      const data = await apiPost("/api/admin/jobsite_detail", password, {
         booking_id: bookingId
       });
 
       fillBooking(data.booking || {});
       fillIntake(data.intake || null);
-      await loadTimeEntries();
+      jobsiteComments = Array.isArray(data.comments) ? data.comments : [];
+      jobsiteAnnotations = Array.isArray(data.annotations) ? data.annotations : [];
+      renderJobsiteComments();
+      renderJobsiteAnnotations();
+      timeEntries = Array.isArray(data.time?.entries) ? data.time.entries : [];
+      renderTimeEntries();
 
       document.querySelector("#saveIntakeBtn").disabled = false;
       setTimeButtonsEnabled(true);
@@ -767,7 +882,35 @@
         }
       });
 
+      document.addEventListener("click", async (event) => {
+        const commentBtn = event.target.closest("[data-comment-action]");
+        if (commentBtn) {
+          try {
+            setNotice("Updating thread moderation…");
+            await moderateJobsiteComment(commentBtn.dataset.commentId, commentBtn.dataset.commentAction);
+            await loadJob();
+            setNotice("Comment moderation saved.", "ok");
+          } catch (err) {
+            setNotice(err.message || "Could not moderate comment.", "bad");
+          }
+          return;
+        }
+        const annotationBtn = event.target.closest("[data-annotation-action]");
+        if (annotationBtn) {
+          try {
+            setNotice("Updating annotation moderation…");
+            await moderateJobsiteAnnotation(annotationBtn.dataset.annotationId, annotationBtn.dataset.annotationAction);
+            await loadJob();
+            setNotice("Annotation moderation saved.", "ok");
+          } catch (err) {
+            setNotice(err.message || "Could not moderate annotation.", "bad");
+          }
+        }
+      });
+
       setTimeButtonsEnabled(false);
+      renderJobsiteComments();
+      renderJobsiteAnnotations();
     });
   </script>
 </body>
