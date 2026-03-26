@@ -126,8 +126,8 @@ export async function requireStaffAccess({
       };
     }
 
-    // 3) Optional legacy admin password fallback.
-    if (allowLegacyAdminFallback) {
+    // 3) Optional legacy admin password fallback. Disabled unless ALLOW_LEGACY_ADMIN_FALLBACK=true.
+    if (allowLegacyAdminFallback && env.ALLOW_LEGACY_ADMIN_FALLBACK === "true") {
       const passwordOk = checkAdminPassword(request, env);
       if (passwordOk) {
         const actor = makeLegacyAdminActor();
