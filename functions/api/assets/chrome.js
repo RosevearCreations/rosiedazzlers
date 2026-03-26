@@ -6,10 +6,10 @@
 
 const BRAND = {
   name: "Rosie Dazzlers",
-  logo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
+  logo: "https://assets.rosiedazzlers.ca/brand/untitled.png",
   banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
   reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png",
-  footerLogo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
+  footerLogo: "https://assets.rosiedazzlers.ca/brand/untitled.png",
 };
 
 const SOCIALS = [
