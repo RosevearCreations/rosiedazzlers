@@ -250,3 +250,9 @@ Partially mitigated in the newest pass:
 - Vehicle data duplication risk is reduced by moving year/make/model selection toward a shared live catalog path plus DB cache instead of free-typed fields alone.
 - Pricing/gift polish and reorder lifecycle still remain live risks outside this pass.
 - Public SEO cleanup continues; protected screens remain non-indexed and exposed pages should keep a single H1.
+
+
+## 2026-03-26 risk refresh
+- Legacy admin password fallback is now intentionally gated behind ALLOW_LEGACY_ADMIN_FALLBACK=true. Leave it unset in normal operation.
+- Catalog inventory is closer to a single source of truth, but older JSON fallback content still exists on some public pages and should continue to be reduced over time.
+- Vehicle size/category data is now captured in both booking and customer garage flows, but reporting screens should be checked for any remaining old field assumptions.

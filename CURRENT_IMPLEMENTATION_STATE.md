@@ -33,3 +33,12 @@
 - Gear and consumables search/filter UI was cleaned up to reduce bad browser autofill and add richer category/sort controls.
 - Checkbox/card alignment was tightened in shared CSS for admin/jobsite/staff style forms.
 - Schema/docs now reflect booking vehicle fields, richer customer vehicle fields, and the vehicle catalog cache table.
+
+
+## 2026-03-26 pass
+- Book page vehicle make/model loading fixed by restoring local HTML escaping in the booking script.
+- Admin catalog now edits stock, rating, category, subcategory, vendor, sort order, public visibility, and reuse policy from one screen.
+- Purchase orders now update inventory when marked received and resolve open low-stock alerts.
+- Public gear and consumables pages now expose more sort/filter signals and use stronger search-field autofill suppression.
+- My Account garage editor now uses the live year/make/model selectors and saves vehicle size/category/body style/exotic flags.
+- Legacy admin password fallback is now disabled unless ALLOW_LEGACY_ADMIN_FALLBACK=true is explicitly set in env.

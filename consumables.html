@@ -70,14 +70,14 @@
       <div class="hr"></div>
 
       <div class="row inputs">
-        <input id="q" type="search" placeholder="Search consumables (name/category)..." autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="search" />
+        <input id="q" class="search-input" type="search" placeholder="Search consumables (name/category)..." autocomplete="section-catalog off" autocapitalize="off" spellcheck="false" inputmode="search" enterkeyhint="search" aria-label="Search catalog" name="catalog_search_query" data-lpignore="true" />
         <select id="cat"></select>
         <select id="sort">
           <option value="title_asc">Sort: Title (A→Z)</option>
           <option value="title_desc">Sort: Title (Z→A)</option>
           <option value="category_asc">Sort: Category</option>
           <option value="size_desc">Sort: File size (largest)</option>
-          <option value="size_asc">Sort: File size (smallest)</option><option value="stock_desc">Sort: Stock (high→low)</option><option value="rating_desc">Sort: Rating</option>
+          <option value="size_asc">Sort: File size (smallest)</option><option value="stock_desc">Sort: Stock (high→low)</option><option value="rating_desc">Sort: Rating</option><option value="vendor_asc">Sort: Vendor</option><option value="custom_asc">Sort: Saved order</option>
         </select>
         <button class="btn ghost" id="clearBtn" type="button">Clear</button>
       </div>
@@ -187,6 +187,10 @@
         unit_label: it.unit_label || "",
         rating_value: it.rating_value ?? null,
         rating_count: Number(it.rating_count || 0),
+        preferred_vendor: it.preferred_vendor || '',
+        subcategory: it.subcategory || '',
+        sort_key: Number(it.sort_key || 0),
+        reuse_policy: it.reuse_policy || 'reorder',
         notes: it.notes || it.description || ""
       };
     }
@@ -238,6 +242,8 @@
       if (mode === "category_asc") arr.sort(byCat);
       if (mode === "size_desc") arr.sort((a,b)=>(b.bytes||0)-(a.bytes||0));
       if (mode === "size_asc") arr.sort((a,b)=>(a.bytes||0)-(b.bytes||0));
+      if (mode === "vendor_asc") arr.sort((a,b)=>(a.preferred_vendor||'').localeCompare(b.preferred_vendor||'') || String(a.title).localeCompare(String(b.title)));
+      if (mode === "custom_asc") arr.sort((a,b)=>Number(a.sort_key||0)-Number(b.sort_key||0) || String(a.title).localeCompare(String(b.title)));
       if (mode === "stock_desc") arr.sort((a,b)=>Number(b.qty_on_hand||0)-Number(a.qty_on_hand||0));
       if (mode === "rating_desc") arr.sort((a,b)=>Number(b.rating_value||0)-Number(a.rating_value||0));
 

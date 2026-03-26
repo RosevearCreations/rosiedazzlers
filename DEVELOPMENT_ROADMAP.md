@@ -97,3 +97,15 @@ On every build:
 
 ### March 25, 2026 pass note
 This doc was refreshed during the vehicle catalog, progress-session, layout, and public catalog filter pass. The repo now includes NHTSA-backed vehicle make/model endpoints, a DB cache table for vehicle catalog rows, progress moderation/enable session upgrades, and public search/filter cleanup on Gear and Consumables.
+
+
+## Newly moved forward (2026-03-26)
+- Admin-side gear/consumables editing for rating, stock, reorder rules, vendor, category, and saved order.
+- Receive/close purchase workflow now updates inventory quantities.
+- My Account vehicle editor upgraded to live year/make/model lookups.
+- Book page booking-data error fixed.
+
+## Move up next
+- Remove the final legacy fallback flags from the remaining admin endpoints now that the env gate is in place.
+- Continue moving public catalog content from JSON fallback into DB-first inventory content.
+- Add structured-data coverage route by route after the remaining content cleanup pass.

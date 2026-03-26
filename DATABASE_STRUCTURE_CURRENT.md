@@ -161,3 +161,9 @@ This is now the preferred auth model for internal workflows, while the shared ad
 - `bookings` now tracks normalized vehicle fields such as `vehicle_year`, `vehicle_make`, `vehicle_model`, `vehicle_body_style`, `vehicle_category`, `vehicle_plate`, `vehicle_mileage_km`, and `vehicle_photo_url`.
 - `customer_vehicles` now carries richer operational and communication fields plus `vehicle_size`, `body_style`, `vehicle_category`, and `is_exotic`.
 - `vehicle_catalog_cache` stores year/make/model rows fetched from NHTSA vPIC for later DB-backed reuse.
+
+
+## Catalog inventory additions (2026-03-26)
+- `catalog_inventory_items.subcategory` — second-level display/type label for admin and public filtering.
+- `catalog_inventory_items.sort_key` — saved manual sort order.
+- `catalog_inventory_items.reuse_policy` — `reorder`, `single_use`, or `never_reuse`.

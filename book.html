@@ -157,8 +157,6 @@
           </span>
         </label>
       </div>
-      <h2 style="margin:12px 0 8px">Book a Detail</h2>
-      <p class="kicker">Choose a date, package, and time slot. We do one vehicle per day unless two half-day jobs.</p>
       <div id="dataError" class="notice bad" style="display:none;margin-top:10px"></div>
     </div>
 
@@ -493,6 +491,7 @@
     });
 
     const VEHICLE_MAKES_URL = "/api/vehicle_makes";
+    function escapeHtml(s){ return String(s || "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;"); }
     const VEHICLE_MODELS_URL = "/api/vehicle_models";
 
     async function loadVehicleMakes(){

@@ -41,3 +41,7 @@ The latest pass moved checkout pricing onto a DB-backed canonical setting source
 - Booking now calls `/api/vehicle_makes` and `/api/vehicle_models` for the year/make/model selectors.
 - Progress enable/moderation now accept staff sessions; continue by removing remaining visible password fallbacks from legacy admin screens.
 - Next worthwhile follow-up: extend the same shared vehicle catalog controls into the customer garage (`my-account.html`) and any admin booking editor screen.
+
+
+## 2026-03-26 handoff note
+Run `sql/2026-03-26_catalog_admin_vehicle_account_and_auth_cleanup.sql` before testing the new admin catalog fields. Focus next on remaining admin endpoint fallback removal, public structured data, and any leftover JSON duplication.

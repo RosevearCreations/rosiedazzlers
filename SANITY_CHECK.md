@@ -60,3 +60,9 @@ Next strongest moves:
 
 ### March 25, 2026 pass note
 This doc was refreshed during the vehicle catalog, progress-session, layout, and public catalog filter pass. The repo now includes NHTSA-backed vehicle make/model endpoints, a DB cache table for vehicle catalog rows, progress moderation/enable session upgrades, and public search/filter cleanup on Gear and Consumables.
+
+
+## 2026-03-26 sanity update
+- Admin catalog screen now supports editing core inventory fields instead of only viewing and reordering.
+- Book page JS error for `escapeHtml` was repaired.
+- Garage editing now uses live vehicle lookups instead of plain text year/make/model entry.
