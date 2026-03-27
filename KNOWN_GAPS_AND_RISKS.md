@@ -294,3 +294,10 @@ Partially mitigated in the newest pass:
 - Add-on media drift risk is reduced because the missing add-on cards now use packaged local assets.
 - Detailer workflow risk is reduced because assigned staff now have a dedicated job screen for accept/decline and live workflow-state transitions.
 - Staff/session risk still remains until the final legacy bridge is removed from every remaining older admin screen.
+
+## March 27, 2026 mobile wizard / account-widget refresh
+- Mobile UX risk is reduced because booking no longer relies on one long page and no longer jumps the user back to the very top between steps.
+- Public account-entry risk is reduced because the shared site chrome now exposes login/create-account for guests and garage/admin shortcuts for signed-in users.
+- Customer/privacy risk is reduced because public progress now suppresses internal-only updates, keeping admin/detailer private notes off the customer-facing feed.
+- Still remaining: full notification delivery wiring, final legacy fallback removal, broader DB-first content replacement, and full inventory lifecycle polish.
+

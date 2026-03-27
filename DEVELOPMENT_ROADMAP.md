@@ -150,3 +150,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - moved forward: detailer jobs now have a dedicated signed-in screen for accept/decline, dispatch, arrival, start/pause/resume, and complete-to-billing actions.
 - moved forward: customer progress now shows a clearer workflow timeline in addition to photos, comments, signoff, checklist, and products used.
 - move up next: final legacy fallback removal, customer-facing checklist/signoff history in My Account, invoice/receipt design, and fuller notification delivery wiring.
+
+## March 27, 2026 mobile booking + public account widget pass
+- moved forward: booking now uses a more phone-friendly wizard with step validation, quick available-date choices, and smoother scroll behavior.
+- moved forward: public site chrome now shows a real login / create account / garage / admin widget depending on the resolved session.
+- moved forward: customer progress feed now filters out internal-only updates so admin/detailer private notes stay private.
+- move up next: finish session-only cleanup on the last legacy admin screens, complete end-to-end notification delivery, and continue DB-first inventory consolidation.
+

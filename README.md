@@ -136,3 +136,7 @@ This pass repaired booking add-on imagery, continued local SEO tuning for Oxford
 - continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
 - extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
 - continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.
+
+## Latest pass note
+This build continues the mobile-first booking, staff workflow, inventory, and local SEO direction. The newest user-facing changes are the mobile booking wizard, shared public account widget, and tighter customer/private progress separation.
+

@@ -103,3 +103,9 @@ The hard part now is not adding isolated features — it is keeping booking, sta
 
 ### March 25, 2026 pass note
 This doc was refreshed during the vehicle catalog, progress-session, layout, and public catalog filter pass. The repo now includes NHTSA-backed vehicle make/model endpoints, a DB cache table for vehicle catalog rows, progress moderation/enable session upgrades, and public search/filter cleanup on Gear and Consumables.
+
+## March 27, 2026 pass memory
+- Booking wizard was reworked for mobile use and clearer per-step validation.
+- Public chrome now has a session-aware account widget.
+- Customer progress now hides internal-only updates by filtering existing visibility data.
+

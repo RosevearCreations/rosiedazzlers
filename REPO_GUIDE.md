@@ -90,3 +90,9 @@ Ordered migration history. New SQL should be additive and keep `SUPABASE_SCHEMA.
 
 ### March 25, 2026 pass note
 This doc was refreshed during the vehicle catalog, progress-session, layout, and public catalog filter pass. The repo now includes NHTSA-backed vehicle make/model endpoints, a DB cache table for vehicle catalog rows, progress moderation/enable session upgrades, and public search/filter cleanup on Gear and Consumables.
+
+## March 27, 2026 repository note
+- `/book.html` is now a mobile-first wizard page.
+- `/assets/chrome.js` owns the public account widget behavior.
+- `functions/api/progress/view.js` is now responsible for suppressing internal-only updates from the customer-facing feed.
+

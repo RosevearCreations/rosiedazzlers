@@ -69,3 +69,10 @@ Run `sql/2026-03-26_catalog_admin_vehicle_account_and_auth_cleanup.sql` before t
 - continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
 - extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
 - continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.
+
+### Newest pass summary — March 27, 2026
+- rebuilt booking into a more mobile-friendly wizard
+- added shared public login / create-account / garage / admin widget
+- filtered internal-only updates out of customer progress view
+- no new SQL migration required in this pass
+

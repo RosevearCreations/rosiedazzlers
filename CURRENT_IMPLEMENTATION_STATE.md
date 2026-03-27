@@ -75,3 +75,9 @@
 - continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
 - extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
 - continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.
+
+## March 27, 2026 pass update
+- Booking is now mobile-friendlier with a step-driven wizard, date availability strip, saved garage vehicle prefill, and per-step validation.
+- Shared public chrome now renders a session-aware account widget for guest, customer, and staff states.
+- Customer progress/feed view now filters internal-only updates instead of exposing every staff note.
+

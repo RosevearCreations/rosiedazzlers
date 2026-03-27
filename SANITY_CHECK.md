@@ -98,3 +98,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
 - extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
 - continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.
+
+## March 27, 2026 sanity update
+- Booking flow is substantially easier to test on phones.
+- Public site now exposes account entry points more clearly.
+- Internal-only progress notes are now separated from the customer feed.
+- Continue testing: booking date/slot selection, garage prefill, package selection by vehicle size, and checkout handoff.
+

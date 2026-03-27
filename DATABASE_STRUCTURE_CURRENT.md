@@ -193,3 +193,7 @@ No new tables were required in this pass. The current work was focused on using 
 - continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
 - extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
 - continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.
+
+## March 27, 2026 note
+No new table or column was required in this pass. The main change was behavioral: customer progress views now rely on existing visibility data to suppress internal-only updates, and booking now uses the existing vehicle / pricing / availability structures in a more mobile-friendly way.
+
