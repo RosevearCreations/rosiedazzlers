@@ -59,6 +59,9 @@ function setBrandImagesEverywhere() {
 }
 
 function ensureMainBanner() {
+  const path = normalizePath(location.pathname);
+  if (["/book","/login","/my-account","/progress","/complete","/detailer-jobs"].includes(path)) return;
+
   const existingImg =
     document.querySelector("[data-main-banner] img") ||
     document.querySelector("#mainBanner img") ||
@@ -475,73 +478,100 @@ function attachRotators(containerSelector) {
 
 
 
-async function ensureAuthStatus() {
-  const navInner = document.querySelector(".nav-inner");
-  if (!navInner) return;
+/* =========================
+   PUBLIC ACCOUNT WIDGET
+   ========================= */
 
-  let mount = document.querySelector("#siteAuthStatus");
-  if (!mount) {
-    mount = document.createElement("div");
-    mount.id = "siteAuthStatus";
-    mount.className = "site-auth-status muted";
-    mount.textContent = "Checking sign-in…";
-    navInner.appendChild(mount);
-  }
-
-  const makeLink = (href, label, cls = "") => `<a href="${href}" class="${cls}">${label}</a>`;
-
-  async function loadJson(url) {
-    const res = await fetch(url, { credentials: "include", cache: "no-store" });
-    try {
-      return await res.json();
-    } catch {
-      return null;
-    }
-  }
-
+async function readJsonSafe(url, options = {}) {
   try {
-    const [staff, client] = await Promise.all([
-      loadJson("/api/admin/auth_me").catch(() => null),
-      loadJson("/api/client/auth_me").catch(() => null)
-    ]);
-
-    if (staff && staff.authenticated && staff.actor) {
-      const actor = staff.actor;
-      mount.innerHTML = `Signed in: <strong>${escapeHtml(actor.full_name || actor.email || "Staff")}</strong> <span class="site-auth-role">(${escapeHtml(actor.role_code || "staff")})</span> ${makeLink("/admin", "Dashboard")} <a href="#" id="siteStaffLogout">Logout</a>`;
-      const logout = document.getElementById("siteStaffLogout");
-      if (logout) logout.addEventListener("click", async (event) => {
-        event.preventDefault();
-        await fetch("/api/admin/auth_logout", { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" }, body: "{}" }).catch(() => null);
-        location.replace("/");
-      });
-      return;
-    }
-
-    if (client && client.authenticated && client.customer) {
-      const customer = client.customer;
-      mount.innerHTML = `Signed in: <strong>${escapeHtml(customer.full_name || customer.email || "Client")}</strong> <span class="site-auth-role">(client)</span> ${makeLink("/my-account", "My Account")} <a href="#" id="siteClientLogout">Logout</a>`;
-      const logout = document.getElementById("siteClientLogout");
-      if (logout) logout.addEventListener("click", async (event) => {
-        event.preventDefault();
-        await fetch("/api/client/auth_logout", { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" }, body: "{}" }).catch(() => null);
-        location.reload();
-      });
-      return;
-    }
-
-    mount.innerHTML = `${makeLink("/login", "Client Login")} · ${makeLink("/admin-login", "Staff Login")}`;
-  } catch {
-    mount.innerHTML = `${makeLink("/login", "Client Login")} · ${makeLink("/admin-login", "Staff Login")}`;
+    const res = await fetch(url, { credentials: "include", cache: "no-store", ...options });
+    const data = await res.json().catch(() => null);
+    return { ok: res.ok, status: res.status, data };
+  } catch (err) {
+    return { ok: false, status: 0, data: { error: err && err.message ? err.message : "Request failed." } };
   }
 }
 
-function escapeHtml(value) {
-  return String(value || "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/\"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+function ensureAccountHost() {
+  const navInner = document.querySelector('.nav-inner');
+  if (!navInner) return null;
+  let host = document.querySelector('#publicAccountWidget');
+  if (host) return host;
+  host = document.createElement('div');
+  host.id = 'publicAccountWidget';
+  host.className = 'account-widget';
+  const primaryBtn = navInner.querySelector('a.btn.primary[href="/book"]');
+  if (primaryBtn && primaryBtn.parentNode === navInner) {
+    navInner.insertBefore(host, primaryBtn);
+  } else {
+    navInner.appendChild(host);
+  }
+  return host;
+}
+
+function widgetButton(href, label, extraClass = 'ghost', attrs = '') {
+  return `<a class="btn ${extraClass}" href="${href}" ${attrs}>${label}</a>`;
+}
+
+function widgetActionButton(id, label, extraClass = 'ghost') {
+  return `<button class="btn ${extraClass}" type="button" id="${id}">${label}</button>`;
+}
+
+async function initAccountWidget() {
+  const host = ensureAccountHost();
+  if (!host) return;
+  host.innerHTML = `<span class="account-chip">Checking account…</span>`;
+
+  const [staff, client] = await Promise.all([
+    readJsonSafe('/api/admin/auth_me'),
+    readJsonSafe('/api/client/auth_me')
+  ]);
+
+  const staffActor = staff.ok && staff.data && (staff.data.actor || staff.data.staff_user || staff.data.staff) ? (staff.data.actor || staff.data.staff_user || staff.data.staff) : null;
+  const clientCustomer = client.ok && client.data && client.data.authenticated === true ? client.data.customer : null;
+
+  if (staffActor) {
+    const role = staffActor.role_code || (staffActor.is_admin ? 'admin' : 'staff');
+    host.innerHTML = `
+      <div class="account-widget-inner">
+        <span class="account-chip">${staffActor.full_name || staffActor.email || 'Staff'} · ${role}</span>
+        ${widgetButton('/admin', 'Admin', 'ghost')}
+        ${widgetButton('/detailer-jobs', 'Jobs', 'ghost')}
+        ${widgetButton('/admin-account', 'Settings', 'ghost')}
+        ${widgetActionButton('publicLogoutBtn', 'Sign out', 'primary')}
+      </div>
+    `;
+    host.querySelector('#publicLogoutBtn')?.addEventListener('click', async () => {
+      await readJsonSafe('/api/admin/auth_logout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+      await readJsonSafe('/api/client/auth_logout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+      location.href = '/login';
+    });
+    return;
+  }
+
+  if (clientCustomer) {
+    host.innerHTML = `
+      <div class="account-widget-inner">
+        <span class="account-chip">${clientCustomer.full_name || clientCustomer.email || 'Customer'}</span>
+        ${widgetButton('/my-account', 'Garage & account', 'ghost')}
+        ${widgetButton('/book', 'Book again', 'ghost')}
+        ${widgetActionButton('publicLogoutBtn', 'Sign out', 'primary')}
+      </div>
+    `;
+    host.querySelector('#publicLogoutBtn')?.addEventListener('click', async () => {
+      await readJsonSafe('/api/client/auth_logout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+      location.href = '/login';
+    });
+    return;
+  }
+
+  host.innerHTML = `
+    <div class="account-widget-inner">
+      <span class="account-chip">Account</span>
+      ${widgetButton('/login', 'Login', 'ghost')}
+      ${widgetButton('/login#signupForm', 'Create account', 'primary')}
+    </div>
+  `;
 }
 
 function initChrome() {
@@ -552,7 +582,7 @@ function initChrome() {
   setActiveNavLink();
   initNavToggle();
   setFooter();
-  ensureAuthStatus();
+  initAccountWidget();
 
   attachRotators("#homePackages");
   attachRotators("#packageCards");
