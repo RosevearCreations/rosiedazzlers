@@ -15,21 +15,23 @@ export async function onRequestPost(context) {
     if (!access.ok) return withCors(access.response);
 
     const headers = { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, Accept: "application/json" };
-    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,customer_name,service_date,start_slot,package_code,vehicle_size,assigned_to,progress_enabled,progress_token&id=eq.${encodeURIComponent(resolvedBookingId)}&limit=1`, { headers });
+    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,customer_name,service_date,start_slot,package_code,vehicle_size,assigned_to,progress_enabled,progress_token,current_workflow_stage,detailer_response_status,detailer_response_reason&id=eq.${encodeURIComponent(resolvedBookingId)}&limit=1`, { headers });
     if (!bookingRes.ok) return withCors(json({ error: `Could not load booking. ${await bookingRes.text()}` }, 500));
     const booking = (await bookingRes.json().catch(() => []))?.[0] || null;
     if (!booking) return withCors(json({ error: "Booking not found." }, 404));
 
-    const [updatesRes, mediaRes, signoffsRes] = await Promise.all([
+    const [updatesRes, mediaRes, signoffsRes, workflowRes] = await Promise.all([
       fetch(`${env.SUPABASE_URL}/rest/v1/job_updates?select=id,created_at,created_by,note,visibility,thread_status,moderated_at,moderated_by_name,moderation_reason&booking_id=eq.${encodeURIComponent(resolvedBookingId)}&order=created_at.desc`, { headers }),
       fetch(`${env.SUPABASE_URL}/rest/v1/job_media?select=id,created_at,created_by,kind,caption,media_url,visibility,thread_status,moderated_at,moderated_by_name,moderation_reason&booking_id=eq.${encodeURIComponent(resolvedBookingId)}&order=created_at.desc`, { headers }),
-      fetch(`${env.SUPABASE_URL}/rest/v1/job_signoffs?select=id,signer_type,signer_name,signer_email,notes,signed_at,user_agent&booking_id=eq.${encodeURIComponent(resolvedBookingId)}&order=signed_at.desc`, { headers })
+      fetch(`${env.SUPABASE_URL}/rest/v1/job_signoffs?select=id,signer_type,signer_name,signer_email,notes,signed_at,user_agent&booking_id=eq.${encodeURIComponent(resolvedBookingId)}&order=signed_at.desc`, { headers }),
+      fetch(`${env.SUPABASE_URL}/rest/v1/booking_events?select=id,created_at,event_type,event_note,actor_name,payload&booking_id=eq.${encodeURIComponent(resolvedBookingId)}&order=created_at.asc`, { headers })
     ]);
     if (!updatesRes.ok) return withCors(json({ error: `Could not load updates. ${await updatesRes.text()}` }, 500));
     if (!mediaRes.ok) return withCors(json({ error: `Could not load media. ${await mediaRes.text()}` }, 500));
     if (!signoffsRes.ok) return withCors(json({ error: `Could not load signoffs. ${await signoffsRes.text()}` }, 500));
-    const [updates, media, signoffs] = await Promise.all([updatesRes.json().catch(() => []), mediaRes.json().catch(() => []), signoffsRes.json().catch(() => [])]);
-    return withCors(json({ ok: true, booking, updates: Array.isArray(updates)?updates:[], media: Array.isArray(media)?media:[], signoffs: Array.isArray(signoffs)?signoffs:[] }));
+    if (!workflowRes.ok) return withCors(json({ error: `Could not load workflow events. ${await workflowRes.text()}` }, 500));
+    const [updates, media, signoffs, workflow_events] = await Promise.all([updatesRes.json().catch(() => []), mediaRes.json().catch(() => []), signoffsRes.json().catch(() => []), workflowRes.json().catch(() => [])]);
+    return withCors(json({ ok: true, booking, updates: Array.isArray(updates)?updates:[], media: Array.isArray(media)?media:[], signoffs: Array.isArray(signoffs)?signoffs:[], workflow_events: Array.isArray(workflow_events)?workflow_events:[] }));
   } catch (err) { return withCors(json({ error: err && err.message ? err.message : "Unexpected server error." }, 500)); }
 }
 function corsHeaders() { return { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type, x-admin-password, x-staff-email, x-staff-user-id", "Cache-Control": "no-store" }; }
