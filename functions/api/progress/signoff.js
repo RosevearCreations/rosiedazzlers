@@ -15,6 +15,7 @@ export async function onRequestPost(context) {
     const signer_name = String(body.signer_name || "").trim();
     const signer_email = String(body.signer_email || "").trim();
     const notes = String(body.notes || "").trim();
+    const signature_data_url = String(body.signature_data_url || "").trim() || null;
 
     if (!token) return json({ error: "Missing token." }, 400);
     if (!signer_name) return json({ error: "Missing signer name." }, 400);
@@ -65,6 +66,7 @@ export async function onRequestPost(context) {
           signer_name,
           signer_email,
           notes: notes || null,
+          signature_data_url,
           user_agent
         }
       ])
