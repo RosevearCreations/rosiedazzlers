@@ -278,3 +278,10 @@ Partially mitigated in the newest pass:
 - Search-box autofill/credential interference on Gear and Consumables was hardened again because it directly hurts product discovery and user trust.
 - Booking add-on image drift risk was reduced by moving add-on image URLs into the canonical pricing/add-on JSON.
 - Inventory workflow risk is reduced further because low-stock and reorder candidate visibility is now clearer in Admin Catalog, but reminder lifecycle and vendor notification polish still remain.
+
+
+## March 26, 2026 customer-flow and advanced inventory pass
+- fixed booking add-on image sizing so package assets no longer blow out the add-ons grid.
+- continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
+- extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
+- continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.

@@ -409,6 +409,26 @@
       qs("#quoteTag").style.display = hasQuote ? "inline-flex" : "none";
     }
 
+
+    function addonImageUrl(a){
+      if (a?.image_url) return a.image_url;
+      const mapped = {
+        full_clay_treatment: 'https://assets.rosiedazzlers.ca/packages/Clay%20Treatment%20add%20on%20service.png',
+        two_stage_polish: 'https://assets.rosiedazzlers.ca/packages/Two%20Stage%20Polish%20add%20on%20service.png',
+        high_grade_paint_sealant: 'https://assets.rosiedazzlers.ca/packages/High%20Grade%20Paint%20Sealant%20add%20on%20service.png',
+        uv_protectant_applied_on_interior_panels: 'https://assets.rosiedazzlers.ca/packages/UV%20Protectant%20interior%20add%20on%20service.png',
+        de_ionizing_treatment: 'https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png',
+        de_badging: 'https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png',
+        engine_cleaning: 'https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png',
+        external_ceramic_coating: 'https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png',
+        external_graphene_fine_finish: 'https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20Finish%20add%20on%20service.png',
+        external_wax: 'https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png',
+        vinyl_wrapping: 'https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png',
+        window_tinting: 'https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png'
+      };
+      return mapped[a?.code] || '';
+    }
+
     function buildAddonUI(){
       const box = qs("#addonsBox");
       box.innerHTML = "";
@@ -432,7 +452,8 @@
         const checked = addonsState.has(a.code);
         const price = addonDisplayPrice(a);
         const badge = a.quote_required ? `<span class="tag warn">Quote required</span>` : `<span class="tag ok">${price}</span>`;
-        const image = a.image_url ? `<img class="cardImg" alt="${escapeHtml(a.name)}" src="${escapeHtml(a.image_url)}" loading="lazy" decoding="async" onerror="this.style.display='none'" />` : ``;
+        const addonImg = addonImageUrl(a);
+        const image = addonImg ? `<img class="cardImg" alt="${escapeHtml(a.name)}" src="${escapeHtml(addonImg)}" loading="lazy" decoding="async" onerror="this.style.display='none'" />` : ``;
         const meta = [a.category, a.type].filter(Boolean).map((x)=>`<span class="tag">${escapeHtml(x)}</span>`).join("");
         const notes = Array.isArray(a.notes) ? a.notes.join(" · ") : (a.notes || (a.quote_required ? "Requested online, priced after inspection." : "Optional add-on service."));
 

@@ -133,3 +133,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - moved forward: admin catalog now has a stronger low-stock and reorder candidate surface plus Amazon-link draft intake.
 - moved forward: public catalog filters now expose category/type sorting more clearly.
 - move up next: finish the detailer-side products-used picker polish and continue DB-first replacement of remaining JSON fallback content.
+
+
+## March 26, 2026 customer-flow and advanced inventory pass
+- fixed booking add-on image sizing so package assets no longer blow out the add-ons grid.
+- continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
+- extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
+- continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.

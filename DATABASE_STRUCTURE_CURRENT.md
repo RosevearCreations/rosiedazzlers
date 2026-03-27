@@ -184,3 +184,10 @@ No new table was required in this pass. The operational focus moved to UI covera
 
 ## Pass note — March 26, 2026
 No new tables were required in this pass. The current work was focused on using the existing inventory, movement, and pricing structures more consistently in the UI and documentation.
+
+
+## March 26, 2026 customer-flow and advanced inventory pass
+- fixed booking add-on image sizing so package assets no longer blow out the add-ons grid.
+- continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
+- extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
+- continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.

@@ -60,3 +60,10 @@ Run `sql/2026-03-26_catalog_admin_vehicle_account_and_auth_cleanup.sql` before t
 - Add-on image URLs now live in the canonical pricing/add-on JSON used by the booking page.
 - Admin Catalog now includes a low-stock candidate table and Amazon-link helper for creating/updating inventory items.
 - Public catalog search inputs were re-hardened, but browser autofill behavior should still be re-tested after deployment in Chrome.
+
+
+## March 26, 2026 customer-flow and advanced inventory pass
+- fixed booking add-on image sizing so package assets no longer blow out the add-ons grid.
+- continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
+- extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
+- continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.

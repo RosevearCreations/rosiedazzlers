@@ -66,6 +66,10 @@
     <section class="section">
       <div class="grid cards">
         <div class="panel">
+          <h2>Customer links</h2>
+          <div id="customerLinksBox" class="kicker">Your account, garage, and completion links will appear here when your booking is loaded.</div>
+        </div>
+        <div class="panel">
           <h2>Service summary</h2>
           <div id="summaryBox" class="kicker">No summary loaded yet.</div>
         </div>
@@ -92,6 +96,12 @@
           </label>
 
           <label>
+            Drawn signature
+            <canvas id="signoffSignaturePad" class="signature-pad" width="900" height="220"></canvas>
+          </label>
+          <div><button id="clearProgressSignatureBtn" class="btn ghost" type="button">Clear signature</button></div>
+
+          <label>
             Notes (optional)
             <textarea id="signoffNotes" name="signoffNotes" rows="4" placeholder="Optional note about your service or completion."></textarea>
           </label>
@@ -100,6 +110,13 @@
             <button id="signoffBtn" class="btn primary" type="submit" disabled>Submit signoff</button>
           </div>
         </form>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel"><h2>After-detail checklist</h2><div id="checklistBox" class="kicker">Checklist not available yet.</div></div>
+        <div class="panel"><h2>Products used</h2><div id="productsUsedBox" class="kicker">No products used have been shared yet.</div></div>
       </div>
     </section>
 
@@ -189,6 +206,30 @@
       ].filter(Boolean);
 
       summary.innerHTML = lines.length ? lines.join("") : "No summary available.";
+      renderChecklist(data.checklist || null);
+      renderProductsUsed(Array.isArray(data.products_used) ? data.products_used : []);
+    }
+
+
+    function renderChecklist(checklist) {
+      const box = document.querySelector("#checklistBox");
+      if (!box) return;
+      if (!checklist) { box.innerHTML = 'Checklist not available yet.'; return; }
+      box.innerHTML = [
+        `<div><strong>Keys returned:</strong> ${checklist.keys_returned === true ? 'Yes' : checklist.keys_returned === false ? 'No' : '—'}</div>`,
+        `<div><strong>Water shut off:</strong> ${checklist.water_disconnected === true ? 'Yes' : checklist.water_disconnected === false ? 'No' : '—'}</div>`,
+        `<div><strong>Power disconnected:</strong> ${checklist.electricity_disconnected === true ? 'Yes' : checklist.electricity_disconnected === false ? 'No' : '—'}</div>`,
+        `<div><strong>Debrief completed:</strong> ${checklist.debrief_completed === true ? 'Yes' : checklist.debrief_completed === false ? 'No' : '—'}</div>`,
+        checklist.suggested_next_steps ? `<div><strong>Suggested next steps:</strong> ${escapeHtml(checklist.suggested_next_steps)}</div>` : '',
+        checklist.recommended_interval_days ? `<div><strong>Suggested return interval:</strong> ${escapeHtml(checklist.recommended_interval_days)} days</div>` : ''
+      ].filter(Boolean).join('');
+    }
+
+    function renderProductsUsed(rows) {
+      const box = document.querySelector("#productsUsedBox");
+      if (!box) return;
+      if (!Array.isArray(rows) || !rows.length) { box.innerHTML = 'No products used have been shared yet.'; return; }
+      box.innerHTML = rows.map((row)=>`<div><strong>${escapeHtml(row.item_name || row.item_key || 'Inventory item')}</strong> · ${escapeHtml(Math.abs(Number(row.qty_delta || 0)))} used${row.note ? `<div class="kicker">${escapeHtml(row.note)}</div>` : ''}</div>`).join('');
     }
 
     function renderHeader(data) {
@@ -217,6 +258,14 @@
 
       if (jobStatusBadge) {
         jobStatusBadge.textContent = booking.job_status ? `Job: ${booking.job_status}` : "Job status not set";
+      }
+      const links = document.querySelector('#customerLinksBox');
+      if (links) {
+        links.innerHTML = `
+          <div><a class="btn ghost" href="/my-account">My account & garage</a></div>
+          <div style="margin-top:10px"><a class="btn ghost" href="/complete?token=${encodeURIComponent(currentToken)}">Completion signoff</a></div>
+          <div class="kicker" style="margin-top:10px">Use My Account for your garage, booking history, next cleaning dates, and future scheduling.</div>
+        `;
       }
     }
 
@@ -285,6 +334,17 @@
 
       btn.disabled = true;
     }
+
+    const signCanvas = document.querySelector("#signoffSignaturePad");
+    const signCtx = signCanvas ? signCanvas.getContext("2d") : null;
+    let signDrawing = false;
+    let signHasInk = false;
+    function resizeSignCanvas(){ if(!signCanvas || !signCtx) return; const ratio=Math.max(window.devicePixelRatio||1,1); const rect=signCanvas.getBoundingClientRect(); signCanvas.width=Math.max(600, Math.floor(rect.width*ratio)); signCanvas.height=Math.floor(220*ratio); signCtx.setTransform(1,0,0,1,0,0); signCtx.scale(ratio, ratio); signCtx.fillStyle="#ffffff"; signCtx.fillRect(0,0,rect.width,220); signCtx.strokeStyle="#111827"; signCtx.lineWidth=2; signCtx.lineCap="round"; signCtx.lineJoin="round"; }
+    function signPoint(evt){ const rect=signCanvas.getBoundingClientRect(); const p=evt.touches&&evt.touches[0]?evt.touches[0]:evt; return {x:p.clientX-rect.left,y:p.clientY-rect.top}; }
+    function signStart(evt){ if(!signCtx) return; signDrawing=true; signHasInk=true; const p=signPoint(evt); signCtx.beginPath(); signCtx.moveTo(p.x,p.y); evt.preventDefault(); }
+    function signMove(evt){ if(!signDrawing||!signCtx) return; const p=signPoint(evt); signCtx.lineTo(p.x,p.y); signCtx.stroke(); evt.preventDefault(); }
+    function signEnd(){ signDrawing=false; }
+    if(signCanvas&&signCtx){ resizeSignCanvas(); window.addEventListener("resize", resizeSignCanvas); ["mousedown","touchstart"].forEach(ev=>signCanvas.addEventListener(ev,signStart,{passive:false})); ["mousemove","touchmove"].forEach(ev=>signCanvas.addEventListener(ev,signMove,{passive:false})); ["mouseup","mouseleave","touchend","touchcancel"].forEach(ev=>signCanvas.addEventListener(ev,signEnd)); document.querySelector("#clearProgressSignatureBtn")?.addEventListener("click",()=>{ resizeSignCanvas(); signHasInk=false; }); }
 
     async function loadProgress() {
       const token = getToken();
