@@ -101,7 +101,7 @@ export async function onRequestGet(context) {
       return json({ error: `Could not load booking events. ${text}` }, 500);
     }
 
-    const [updates, media, signoffs, checklistRows, productsUsed, bookingEvents] = await Promise.all([
+    const [updatesRaw, media, signoffs, checklistRows, productsUsed, bookingEvents] = await Promise.all([
       updatesRes.json(),
       mediaRes.json(),
       signoffsRes.json(),
@@ -109,6 +109,10 @@ export async function onRequestGet(context) {
       usageRes.json(),
       eventsRes.json()
     ]);
+
+    const updates = Array.isArray(updatesRaw)
+      ? updatesRaw.filter((row) => String(row.visibility || "customer").toLowerCase() !== "internal")
+      : [];
 
     const packageName = booking.package_code
       ? booking.package_code
@@ -138,7 +142,7 @@ export async function onRequestGet(context) {
         detailing_started_at: booking.detailing_started_at || null,
         detailing_completed_at: booking.detailing_completed_at || null
       },
-      updates: Array.isArray(updates) ? updates : [],
+      updates,
       media: Array.isArray(media) ? media : [],
       signoffs: Array.isArray(signoffs) ? signoffs : [],
       checklist: Array.isArray(checklistRows) ? checklistRows[0] || null : null,
