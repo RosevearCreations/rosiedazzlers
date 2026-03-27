@@ -1,0 +1,30 @@
+
+import { requireStaffAccess, json, methodNotAllowed, serviceHeaders } from "../_lib/staff-auth.js";
+
+export async function onRequestGet(context) {
+  const { request, env } = context;
+  const access = await requireStaffAccess({ request, env, capability: "work_booking", allowLegacyAdminFallback: false });
+  if (!access.ok) return access.response;
+  const actor = access.actor;
+  const params = new URL(request.url).searchParams;
+  const jobStatus = String(params.get("job_status") || "").trim();
+  let url = `${env.SUPABASE_URL}/rest/v1/bookings?select=id,service_date,start_slot,status,job_status,current_workflow_stage,detailer_response_status,detailer_response_reason,customer_name,customer_email,package_code,vehicle_size,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,progress_token,progress_enabled,notes&order=service_date.asc,start_slot.asc`;
+  if (!(actor.is_admin || actor.can_manage_bookings)) {
+    const ors = [];
+    if (actor.id) ors.push(`assigned_staff_user_id.eq.${encodeURIComponent(actor.id)}`);
+    if (actor.email) ors.push(`assigned_staff_email.eq.${encodeURIComponent(actor.email)}`);
+    if (actor.full_name) {
+      const like = encodeURIComponent(`*${actor.full_name}*`);
+      ors.push(`assigned_staff_name.ilike.${like}`);
+      ors.push(`assigned_to.ilike.${like}`);
+    }
+    if (ors.length) url += `&or=(${ors.join(",")})`;
+  }
+  if (jobStatus) url += `&job_status=eq.${encodeURIComponent(jobStatus)}`;
+  const res = await fetch(url, { headers: serviceHeaders(env) });
+  if (!res.ok) return json({ error: `Could not load assigned jobs. ${await res.text()}` }, 500);
+  const rows = await res.json().catch(()=>[]);
+  return json({ ok:true, actor, jobs: Array.isArray(rows)?rows:[] });
+}
+
+export const onRequestPost = methodNotAllowed;

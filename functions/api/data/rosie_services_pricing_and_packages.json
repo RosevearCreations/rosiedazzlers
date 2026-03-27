@@ -330,7 +330,10 @@
       "source": "interpreted_pricing",
       "notes": [
         "Add-on service not included in any package"
-      ]
+      ],
+      "image_url": "/assets/addons/full_clay_treatment.svg",
+      "category": "Paint correction",
+      "type": "Exterior finish"
     },
     {
       "code": "two_stage_polish",
@@ -344,7 +347,10 @@
       "source": "interpreted_pricing",
       "notes": [
         "Quote required because paint condition varies"
-      ]
+      ],
+      "image_url": "/assets/addons/two_stage_polish.svg",
+      "category": "Paint correction",
+      "type": "Exterior finish"
     },
     {
       "code": "high_grade_paint_sealant",
@@ -355,7 +361,13 @@
         "oversize": 99
       },
       "quote_required": false,
-      "source": "interpreted_pricing"
+      "source": "interpreted_pricing",
+      "image_url": "/assets/addons/high_grade_paint_sealant.svg",
+      "notes": [
+        "Longer-lasting gloss"
+      ],
+      "category": "Exterior protection",
+      "type": "Sealant"
     },
     {
       "code": "uv_protectant_applied_on_interior_panels",
@@ -366,7 +378,13 @@
         "oversize": 45
       },
       "quote_required": false,
-      "source": "interpreted_pricing"
+      "source": "interpreted_pricing",
+      "image_url": "/assets/addons/uv_protectant_applied_on_interior_panels.svg",
+      "notes": [
+        "Interior panel dressing"
+      ],
+      "category": "Interior protection",
+      "type": "Protectant"
     },
     {
       "code": "de_ionizing_treatment",
@@ -377,20 +395,29 @@
         "oversize": 99
       },
       "quote_required": true,
-      "source": "package_asset"
+      "source": "package_asset",
+      "image_url": "/assets/addons/de_ionizing_treatment.svg",
+      "category": "Odor treatment",
+      "type": "Interior service"
     },
     {
       "code": "de_badging",
       "name": "De-Badging",
       "quote_required": true,
-      "source": "package_asset"
+      "source": "package_asset",
+      "image_url": "/assets/addons/de_badging.svg",
+      "category": "Exterior customization",
+      "type": "Badge removal"
     },
     {
       "code": "engine_cleaning",
       "name": "Engine Cleaning",
       "price_cad": 59,
       "quote_required": false,
-      "source": "package_asset"
+      "source": "package_asset",
+      "image_url": "/assets/addons/engine_cleaning.svg",
+      "category": "Engine bay",
+      "type": "Cleaning"
     },
     {
       "code": "external_ceramic_coating",
@@ -400,7 +427,10 @@
       "source": "package_asset",
       "notes": [
         "Starting price only"
-      ]
+      ],
+      "image_url": "/assets/addons/external_ceramic_coating.svg",
+      "category": "Exterior protection",
+      "type": "Ceramic coating"
     },
     {
       "code": "external_graphene_fine_finish",
@@ -410,7 +440,10 @@
       "source": "package_asset",
       "notes": [
         "Starting price only"
-      ]
+      ],
+      "image_url": "/assets/addons/external_graphene_fine_finish.svg",
+      "category": "Exterior protection",
+      "type": "Graphene finish"
     },
     {
       "code": "external_wax",
@@ -421,19 +454,28 @@
         "oversize": 69
       },
       "quote_required": false,
-      "source": "package_asset"
+      "source": "package_asset",
+      "image_url": "/assets/addons/external_wax.svg",
+      "category": "Exterior protection",
+      "type": "Wax"
     },
     {
       "code": "vinyl_wrapping",
       "name": "Vinyl Wrapping",
       "quote_required": true,
-      "source": "package_asset"
+      "source": "package_asset",
+      "image_url": "/assets/addons/vinyl_wrapping.svg",
+      "category": "Exterior customization",
+      "type": "Wrap"
     },
     {
       "code": "window_tinting",
       "name": "Window Tinting",
       "quote_required": true,
-      "source": "package_asset"
+      "source": "package_asset",
+      "image_url": "/assets/addons/window_tinting.svg",
+      "category": "Glass upgrade",
+      "type": "Tint"
     }
   ]
 }
