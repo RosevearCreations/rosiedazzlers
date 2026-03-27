@@ -330,7 +330,9 @@
       "source": "interpreted_pricing",
       "notes": [
         "Add-on service not included in any package"
-      ]
+      ],
+      "category": "paint correction",
+      "type": "surface prep"
     },
     {
       "code": "two_stage_polish",
@@ -344,7 +346,9 @@
       "source": "interpreted_pricing",
       "notes": [
         "Quote required because paint condition varies"
-      ]
+      ],
+      "category": "paint correction",
+      "type": "machine polishing"
     },
     {
       "code": "high_grade_paint_sealant",
@@ -355,7 +359,9 @@
         "oversize": 99
       },
       "quote_required": false,
-      "source": "interpreted_pricing"
+      "source": "interpreted_pricing",
+      "category": "paint protection",
+      "type": "sealant"
     },
     {
       "code": "uv_protectant_applied_on_interior_panels",
@@ -366,7 +372,9 @@
         "oversize": 45
       },
       "quote_required": false,
-      "source": "interpreted_pricing"
+      "source": "interpreted_pricing",
+      "category": "interior protection",
+      "type": "uv protectant"
     },
     {
       "code": "de_ionizing_treatment",
@@ -377,20 +385,29 @@
         "oversize": 99
       },
       "quote_required": true,
-      "source": "package_asset"
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png",
+      "category": "odor treatment",
+      "type": "de-ionizing"
     },
     {
       "code": "de_badging",
       "name": "De-Badging",
       "quote_required": true,
-      "source": "package_asset"
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
+      "category": "appearance modifications",
+      "type": "badge removal"
     },
     {
       "code": "engine_cleaning",
       "name": "Engine Cleaning",
       "price_cad": 59,
       "quote_required": false,
-      "source": "package_asset"
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
+      "category": "engine bay",
+      "type": "cleaning"
     },
     {
       "code": "external_ceramic_coating",
@@ -400,7 +417,10 @@
       "source": "package_asset",
       "notes": [
         "Starting price only"
-      ]
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
+      "category": "paint protection",
+      "type": "ceramic coating"
     },
     {
       "code": "external_graphene_fine_finish",
@@ -410,7 +430,10 @@
       "source": "package_asset",
       "notes": [
         "Starting price only"
-      ]
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png",
+      "category": "paint protection",
+      "type": "graphene finish"
     },
     {
       "code": "external_wax",
@@ -421,19 +444,28 @@
         "oversize": 69
       },
       "quote_required": false,
-      "source": "package_asset"
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png",
+      "category": "paint protection",
+      "type": "wax"
     },
     {
       "code": "vinyl_wrapping",
       "name": "Vinyl Wrapping",
       "quote_required": true,
-      "source": "package_asset"
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
+      "category": "appearance modifications",
+      "type": "vinyl wrapping"
     },
     {
       "code": "window_tinting",
       "name": "Window Tinting",
       "quote_required": true,
-      "source": "package_asset"
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png",
+      "category": "glass services",
+      "type": "window tinting"
     }
   ]
 }

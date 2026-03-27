@@ -56,7 +56,7 @@ a { color: inherit; }
 
 .nav-inner {
   display: flex;
-  align-items: start;
+  align-items: center;
   gap: 14px;
   justify-content: space-between;
   padding: 12px 16px;
@@ -337,14 +337,14 @@ textarea:focus {
 .check-card,
 .checkbox {
   display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
-  align-items: center;
-  column-gap: 14px;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: start;
+  column-gap: 12px;
   row-gap: 0;
   width: 100%;
   text-align: left;
   margin: 0;
-  padding: 10px 0;
+  padding: 8px 0;
   color: rgba(234,242,255,.86);
 }
 
@@ -356,12 +356,11 @@ textarea:focus {
   min-width: 18px;
   max-width: 18px;
   height: 18px;
-  margin: 0;
+  margin: 2px 0 0 0;
   padding: 0;
   border-radius: 4px;
   justify-self: start;
   align-self: start;
-  margin-top: 2px;
   accent-color: var(--accent);
 }
 
@@ -641,80 +640,3 @@ textarea:focus {
     align-items: flex-start;
   }
 }
-
-
-/* Search field autofill guard */
-.search-input { -webkit-text-fill-color: var(--text); }
-.search-input::-webkit-credentials-auto-fill-button { visibility: hidden; display: none !important; pointer-events: none; }
-.search-input:-webkit-autofill, .search-input:-webkit-autofill:hover, .search-input:-webkit-autofill:focus { -webkit-box-shadow: 0 0 0px 1000px rgba(10,15,26,.9) inset; -webkit-text-fill-color: var(--text); transition: background-color 5000s ease-in-out 0s; }
-
-/* Pass 2026-03-26b: checkbox, add-on, and search field polish */
-.check-grid.spread-checks,
-.form .check-grid,
-.panel .check-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 10px 14px;
-  align-items: start;
-}
-.check-grid .checkbox,
-.spread-checks .checkbox {
-  min-height: 46px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 12px 14px;
-  background: rgba(255,255,255,.03);
-}
-#addonsBox, #addonsWrap, #addonsList { display:grid; gap:10px; }
-#addonsBox .check-card, #addonsWrap .check-card, #addonsList .check-card {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: rgba(255,255,255,.03);
-  padding: 12px 14px;
-}
-.search-input[readonly] { caret-color: transparent; }
-.search-input { appearance:none; -webkit-appearance:none; }
-.search-input::-webkit-contacts-auto-fill-button,
-.search-input::-webkit-credentials-auto-fill-button {
-  visibility:hidden; display:none !important; pointer-events:none;
-}
-input.search-input:-webkit-autofill,
-input.search-input:-webkit-autofill:hover,
-input.search-input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0px 1000px rgba(10,15,26,.92) inset !important;
-  -webkit-text-fill-color: var(--text) !important;
-  transition: background-color 9999s ease-in-out 0s;
-}
-.star-row { display:inline-flex; gap:2px; vertical-align:middle; }
-.star-row .star { font-size:15px; line-height:1; color: rgba(255,255,255,.26); }
-.star-row .star.on { color:#fbbf24; }
-
-.search-input,
-input[type="search"].search-input { font-family: inherit; }
-.search-input::-webkit-search-decoration,
-.search-input::-webkit-search-cancel-button,
-.search-input::-webkit-search-results-button,
-.search-input::-webkit-search-results-decoration {
-  -webkit-appearance: none;
-  appearance: none;
-}
-.search-input:-webkit-autofill,
-.search-input:-webkit-autofill:hover,
-.search-input:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--text) !important;
-  box-shadow: 0 0 0 1000px rgba(10,15,26,.92) inset !important;
-}
-#addonsBox .check-card,
-#addonsWrap .check-card,
-#addonsList .check-card {
-  grid-template-columns: 24px minmax(0, 1fr);
-  align-items: start;
-}
-#addonsBox .check-card strong,
-#addonsWrap .check-card strong,
-#addonsList .check-card strong {
-  display:block;
-  margin-bottom:4px;
-}
-.table-compact td .mini,
-.table-compact th .mini { display:block; }
