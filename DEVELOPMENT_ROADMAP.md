@@ -1,6 +1,6 @@
 <!-- DEVELOPMENT_ROADMAP.md -->
 
-> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 
 > Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
@@ -127,3 +127,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Continued session-aware progress tooling so signed-in staff can work without depending on the fallback password on newer flows.
 - Continued local SEO work for Norfolk County and Oxford County with structured-data and page-metadata cleanup.
 - Move up next: gift/account polish, final legacy fallback removal, broader structured-data coverage route by route, and a fuller purchase reminder lifecycle.
+
+## March 26, 2026 booking/catalog/local SEO pass
+- moved forward: booking add-on images now come from the canonical pricing/add-on JSON source instead of a separate page-only map.
+- moved forward: admin catalog now has a stronger low-stock and reorder candidate surface plus Amazon-link draft intake.
+- moved forward: public catalog filters now expose category/type sorting more clearly.
+- move up next: finish the detailer-side products-used picker polish and continue DB-first replacement of remaining JSON fallback content.

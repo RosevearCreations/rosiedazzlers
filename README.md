@@ -1,6 +1,6 @@
 <!-- README.md -->
 
-> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 
 > Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
@@ -123,3 +123,7 @@ This pass focused on staff-session consistency in progress flows, booking vehicl
 - Continued local SEO cleanup for Oxford County and Norfolk County public pages.
 - Added stronger admin catalog movement-history and booking usage UI on top of the existing inventory movement endpoints.
 - Continued reducing shared-password dependence by letting newer progress tooling trust the signed-in staff session first.
+
+
+### Latest pass
+This pass repaired booking add-on imagery, continued local SEO tuning for Oxford and Norfolk counties, hardened public catalog search inputs against credential autofill, and expanded Admin Catalog with low-stock reorder visibility and Amazon-link draft intake.

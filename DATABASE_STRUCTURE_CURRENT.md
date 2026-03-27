@@ -1,6 +1,6 @@
 # Database Structure Current
 
-> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 
 ## Snapshot note
 This file is the human-readable companion to `SUPABASE_SCHEMA.sql`.
@@ -181,3 +181,6 @@ This is now the preferred auth model for internal workflows, while the shared ad
 
 ## March 26, 2026 note
 No new table was required in this pass. The operational focus moved to UI coverage over the existing catalog inventory, movement, and booking-linked usage tables while continuing the JSON-to-DB reduction direction.
+
+## Pass note — March 26, 2026
+No new tables were required in this pass. The current work was focused on using the existing inventory, movement, and pricing structures more consistently in the UI and documentation.

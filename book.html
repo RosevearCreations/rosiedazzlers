@@ -330,7 +330,7 @@
   </div>
 
   <script type="module">
-    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260311k";
+    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260326d";
     const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
 
     const qs = (s)=>document.querySelector(s);
@@ -419,40 +419,49 @@
         return;
       }
 
-      for (const a of list){
-        const wrap = document.createElement("label");
-        wrap.style.display = "flex";
-        wrap.style.gap = "10px";
-        wrap.style.alignItems = "flex-start";
-        wrap.style.marginTop = "10px";
+      const grid = document.createElement("div");
+      grid.className = "cards cards-3";
 
-        const cb = document.createElement("input");
-        cb.type = "checkbox";
-        cb.value = a.code;
-        cb.checked = addonsState.has(a.code);
+      for (const a of list){
+        const card = document.createElement("label");
+        card.className = "panel addon-card";
+        card.style.display = "grid";
+        card.style.gap = "10px";
+        card.style.cursor = "pointer";
+
+        const checked = addonsState.has(a.code);
+        const price = addonDisplayPrice(a);
+        const badge = a.quote_required ? `<span class="tag warn">Quote required</span>` : `<span class="tag ok">${price}</span>`;
+        const image = a.image_url ? `<img class="cardImg" alt="${escapeHtml(a.name)}" src="${escapeHtml(a.image_url)}" loading="lazy" decoding="async" onerror="this.style.display='none'" />` : ``;
+        const meta = [a.category, a.type].filter(Boolean).map((x)=>`<span class="tag">${escapeHtml(x)}</span>`).join("");
+        const notes = Array.isArray(a.notes) ? a.notes.join(" · ") : (a.notes || (a.quote_required ? "Requested online, priced after inspection." : "Optional add-on service."));
+
+        card.innerHTML = `
+          ${image}
+          <div class="row" style="justify-content:space-between;align-items:flex-start">
+            <div class="row" style="align-items:flex-start;gap:10px;flex:1">
+              <input type="checkbox" value="${escapeHtml(a.code)}" ${checked ? "checked" : ""} />
+              <div style="flex:1;min-width:0">
+                <strong>${escapeHtml(a.name)}</strong>
+                <div class="muted mini mono">${escapeHtml(a.code)}</div>
+              </div>
+            </div>
+            ${badge}
+          </div>
+          ${meta ? `<div class="row">${meta}</div>` : ``}
+          <div class="muted mini">${escapeHtml(notes)}</div>
+        `;
+
+        const cb = card.querySelector('input[type="checkbox"]');
         cb.addEventListener("change",()=>{
           if (cb.checked) addonsState.add(a.code);
           else addonsState.delete(a.code);
           updateQuoteTag();
         });
 
-        const price = addonDisplayPrice(a);
-        const badge = a.quote_required ? `<span class="tag warn">Quote</span>` : `<span class="tag ok">${price}</span>`;
-
-        const inner = document.createElement("div");
-        inner.style.flex = "1";
-        inner.innerHTML = `
-          <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
-            <strong>${a.name}</strong>
-            ${badge}
-          </div>
-          <div class="muted mini mono">${a.code}</div>
-        `;
-
-        wrap.appendChild(cb);
-        wrap.appendChild(inner);
-        box.appendChild(wrap);
+        grid.appendChild(card);
       }
+      box.appendChild(grid);
       updateQuoteTag();
     }
 

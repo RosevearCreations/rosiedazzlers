@@ -309,3 +309,8 @@ create index if not exists catalog_inventory_movements_item_key_idx on public.ca
 create index if not exists catalog_inventory_movements_booking_id_idx on public.catalog_inventory_movements(booking_id);
 create index if not exists customer_reviews_booking_id_idx on public.customer_reviews(booking_id);
 create index if not exists customer_reviews_customer_profile_id_idx on public.customer_reviews(customer_profile_id);
+
+
+-- Pass note: March 26, 2026
+-- No new schema migration was required for the booking add-on imagery, public catalog autofill hardening,
+-- low-stock reorder UI, or Amazon-link inventory intake pass.

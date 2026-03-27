@@ -1,4 +1,4 @@
-> Last synchronized: March 25, 2026. This file was reviewed during the staff-session, pricing-catalog, upload, reorder, SEO, and docs/schema refresh pass.
+> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Current Implementation State
 
 ## Completed / strengthened in this pass
@@ -59,3 +59,10 @@
 - Admin catalog now exposes movement-history review and can record products used on a booking directly from inventory.
 - Admin progress now includes booking-level product-usage recording and relies on signed-in staff sessions first on newer actions.
 - LocalBusiness structured data is now injected on exposed public pages to support local search understanding for Oxford and Norfolk coverage.
+
+## March 26, 2026 booking/catalog/local SEO pass
+- Book page add-ons now read image URLs from the canonical pricing/add-on JSON so the booking page and service pages can share the same add-on image source.
+- Gear and Consumables public search inputs were hardened again against browser credential autofill and moved toward generic text-search behavior.
+- Admin Catalog now surfaces low-stock items, movement history, Amazon-link draft intake, and easier reorder creation from current inventory levels.
+- Local search emphasis continues to target Oxford County and Norfolk County through page titles, descriptions, and structured-data support.
+- No schema migration was required in this pass.

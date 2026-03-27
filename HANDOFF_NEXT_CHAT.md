@@ -1,5 +1,5 @@
 
-> Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Rosie Dazzlers — Handoff for Next Chat
 
 ## Branch rule
@@ -55,3 +55,8 @@ Run `sql/2026-03-26_catalog_admin_vehicle_account_and_auth_cleanup.sql` before t
 - Hardened Gear/Consumables search inputs against browser email autofill and expanded sorting/filter controls.
 - Updated logo references to use brand/untitled.png.
 - Continue removing legacy admin-password fallback and continue route-by-route SEO cleanup with one H1 per exposed page.
+
+## Latest pass handoff
+- Add-on image URLs now live in the canonical pricing/add-on JSON used by the booking page.
+- Admin Catalog now includes a low-stock candidate table and Amazon-link helper for creating/updating inventory items.
+- Public catalog search inputs were re-hardened, but browser autofill behavior should still be re-tested after deployment in Chrome.

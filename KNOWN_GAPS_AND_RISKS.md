@@ -1,5 +1,5 @@
 
-> Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Rosie Dazzlers — Known Gaps and Risks
 
 Use this file as the quick current list of the biggest gaps, architectural risks, and workflow risks on the `dev` branch.
@@ -273,3 +273,8 @@ Partially mitigated in the newest pass:
 - Inventory movement history and per-booking product usage now have stronger UI coverage, but the workflow still needs final polish across the full admin/detailer shell.
 - Public catalog content is closer to DB-first inventory, but JSON fallback still exists and should continue to be reduced over time.
 - Local SEO work is improving, especially for Norfolk County and Oxford County targeting, but route-by-route metadata and structured-data coverage should continue.
+
+## March 26, 2026 booking/catalog/local SEO pass
+- Search-box autofill/credential interference on Gear and Consumables was hardened again because it directly hurts product discovery and user trust.
+- Booking add-on image drift risk was reduced by moving add-on image URLs into the canonical pricing/add-on JSON.
+- Inventory workflow risk is reduced further because low-stock and reorder candidate visibility is now clearer in Admin Catalog, but reminder lifecycle and vendor notification polish still remain.
