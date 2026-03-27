@@ -47,6 +47,16 @@
     }
     .modal img{width:100%; height:auto; border-radius:14px; border:1px solid rgba(255,255,255,.10)}
     .modalHead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
+
+    .booking-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:14px}
+    .booking-step{padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04)}
+    .booking-step strong{display:block;font-size:.92rem}
+    .booking-step span{display:block;font-size:.82rem;color:rgba(234,242,255,.68)}
+    .booking-step.is-active{border-color:rgba(96,165,250,.48);background:rgba(37,99,235,.12)}
+    .step-panel[hidden]{display:none !important}
+    .wizard-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .wizard-actions .right{display:flex;gap:10px;flex-wrap:wrap}
+    @media (max-width:980px){ .booking-steps{grid-template-columns:1fr 1fr} }
   </style>
 </head>
 
@@ -82,10 +92,17 @@
 
       <div id="loadErr" class="notice bad" style="display:none;margin-top:12px"></div>
       <div id="status" class="notice" style="display:none;margin-top:12px"></div>
+      <div class="booking-steps" id="bookingSteps">
+        <div class="booking-step is-active"><strong>Step 1</strong><span>Date & slot</span></div>
+        <div class="booking-step"><strong>Step 2</strong><span>Main service</span></div>
+        <div class="booking-step"><strong>Step 3</strong><span>Vehicle & requirements</span></div>
+        <div class="booking-step"><strong>Step 4</strong><span>Add-ons</span></div>
+        <div class="booking-step"><strong>Step 5</strong><span>Review & pay</span></div>
+      </div>
     </div>
 
     <div class="section grid2">
-      <div class="panel">
+      <div class="panel step-panel" data-step="1">
         <h2 style="margin-top:0">1) Choose date + slot</h2>
 
         <div class="grid3">
@@ -115,8 +132,8 @@
         <div id="availBox" class="notice" style="display:none;margin-top:12px"></div>
       </div>
 
-      <div class="panel">
-        <h2 style="margin-top:0">2) Package + vehicle size</h2>
+      <div class="panel step-panel" data-step="2">
+        <h2 style="margin-top:0">2) Choose main service</h2>
 
         <div class="grid2">
           <div>
@@ -161,8 +178,8 @@
     </div>
 
     <div class="section grid2">
-      <div class="panel">
-        <h2 style="margin-top:0">3) Vehicle details (required)</h2>
+      <div class="panel step-panel" data-step="3">
+        <h2 style="margin-top:0">3) Verify vehicle & garage details</h2>
 
         <div class="grid3">
           <div>
@@ -220,8 +237,8 @@
         </div>
       </div>
 
-      <div class="panel">
-        <h2 style="margin-top:0">4) Add-ons</h2>
+      <div class="panel step-panel" data-step="4">
+        <h2 style="margin-top:0">4) Choose add-ons</h2>
         <div class="muted mini">Quote-required add-ons are requested here but not charged online. Weather or unsafe conditions may require a reschedule under the service terms.</div>
 
         <div id="addonsBox" class="section"></div>
@@ -246,8 +263,8 @@
       </div>
     </div>
 
-    <div class="section panel">
-      <h2 style="margin-top:0">5) Contact + location + acknowledgements</h2>
+    <div class="section panel step-panel" data-step="5">
+      <h2 style="margin-top:0">5) Review, requirements & pay</h2>
 
       <div class="grid2">
         <div>
@@ -309,9 +326,13 @@
         </label>
       </div>
 
-      <div class="row" style="margin-top:14px">
-        <button class="btn primary" id="checkoutBtn" type="button">Continue to payment / confirmation</button>
-        <a class="btn ghost" href="/waiver">View waiver / policies</a>
+      <div class="wizard-actions">
+        <button class="btn ghost" id="prevStepBtn" type="button">Back</button>
+        <div class="right">
+          <button class="btn ghost" id="nextStepBtn" type="button">Next step</button>
+          <button class="btn primary" id="checkoutBtn" type="button">Book and pay</button>
+          <a class="btn ghost" href="/waiver">View waiver / policies</a>
+        </div>
       </div>
     </div>
 
@@ -369,8 +390,27 @@
     qs("#openPriceChartBtn").addEventListener("click",()=> openModal("Vehicle Price Chart 2025", `${BRAND_BASE}/CarPrice2025.PNG`));
     qs("#openDetailsChartBtn").addEventListener("click",()=> openModal("Package Service Details Chart", `${BRAND_BASE}/CarPriceDetails2025.PNG`));
 
+
+    let currentStep = 1;
+    function allStepPanels(){ return [...document.querySelectorAll('.step-panel')]; }
+    function syncWizard(){
+      const panels = allStepPanels();
+      panels.forEach((panel, idx)=>{ panel.hidden = (idx+1)!==currentStep; });
+      document.querySelectorAll('#bookingSteps .booking-step').forEach((step, idx)=>{ step.classList.toggle('is-active', idx+1===currentStep); });
+      const prev = qs('#prevStepBtn'); const next = qs('#nextStepBtn'); const checkout = qs('#checkoutBtn');
+      if (prev) prev.disabled = currentStep===1;
+      if (next) next.style.display = currentStep>=panels.length ? 'none' : 'inline-flex';
+      if (checkout) checkout.style.display = currentStep>=panels.length ? 'inline-flex' : 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function gotoStep(step){ const total = allStepPanels().length; currentStep = Math.max(1, Math.min(total, step)); syncWizard(); }
+
     // Default date
     qs("#service_date").value = new Date().toISOString().slice(0,10);
+    syncWizard();
+    qs("#nextStepBtn")?.addEventListener("click", ()=>gotoStep(currentStep+1));
+    qs("#prevStepBtn")?.addEventListener("click", ()=>gotoStep(currentStep-1));
+    document.querySelectorAll("#bookingSteps .booking-step").forEach((el,idx)=>el.addEventListener("click", ()=>gotoStep(idx+1)));
 
     let data = null;
     let addonsState = new Set();
@@ -413,18 +453,18 @@
     function addonImageUrl(a){
       if (a?.image_url) return a.image_url;
       const mapped = {
-        full_clay_treatment: 'https://assets.rosiedazzlers.ca/packages/Clay%20Treatment%20add%20on%20service.png',
-        two_stage_polish: 'https://assets.rosiedazzlers.ca/packages/Two%20Stage%20Polish%20add%20on%20service.png',
-        high_grade_paint_sealant: 'https://assets.rosiedazzlers.ca/packages/High%20Grade%20Paint%20Sealant%20add%20on%20service.png',
-        uv_protectant_applied_on_interior_panels: 'https://assets.rosiedazzlers.ca/packages/UV%20Protectant%20interior%20add%20on%20service.png',
-        de_ionizing_treatment: 'https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png',
-        de_badging: 'https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png',
-        engine_cleaning: 'https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png',
-        external_ceramic_coating: 'https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png',
-        external_graphene_fine_finish: 'https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20Finish%20add%20on%20service.png',
-        external_wax: 'https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png',
-        vinyl_wrapping: 'https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png',
-        window_tinting: 'https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png'
+        full_clay_treatment: '/assets/addons/full_clay_treatment.svg',
+        two_stage_polish: '/assets/addons/two_stage_polish.svg',
+        high_grade_paint_sealant: '/assets/addons/high_grade_paint_sealant.svg',
+        uv_protectant_applied_on_interior_panels: '/assets/addons/uv_protectant_applied_on_interior_panels.svg',
+        de_ionizing_treatment: '/assets/addons/de_ionizing_treatment.svg',
+        de_badging: '/assets/addons/de_badging.svg',
+        engine_cleaning: '/assets/addons/engine_cleaning.svg',
+        external_ceramic_coating: '/assets/addons/external_ceramic_coating.svg',
+        external_graphene_fine_finish: '/assets/addons/external_graphene_fine_finish.svg',
+        external_wax: '/assets/addons/external_wax.svg',
+        vinyl_wrapping: '/assets/addons/vinyl_wrapping.svg',
+        window_tinting: '/assets/addons/window_tinting.svg'
       };
       return mapped[a?.code] || '';
     }

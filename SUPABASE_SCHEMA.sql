@@ -60,6 +60,14 @@ create table if not exists public.bookings (
   vehicle_plate text null,
   vehicle_mileage_km numeric null,
   vehicle_photo_url text null,
+  current_workflow_stage text null,
+  detailer_response_status text null,
+  detailer_response_reason text null,
+  dispatched_at timestamptz null,
+  arrived_at timestamptz null,
+  detailing_started_at timestamptz null,
+  detailing_paused_at timestamptz null,
+  detailing_completed_at timestamptz null,
   completed_at timestamptz null
 );
 

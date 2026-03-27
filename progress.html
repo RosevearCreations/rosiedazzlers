@@ -117,6 +117,7 @@
       <div class="grid cards">
         <div class="panel"><h2>After-detail checklist</h2><div id="checklistBox" class="kicker">Checklist not available yet.</div></div>
         <div class="panel"><h2>Products used</h2><div id="productsUsedBox" class="kicker">No products used have been shared yet.</div></div>
+        <div class="panel"><h2>Job timeline</h2><div id="workflowBox" class="kicker">Workflow timeline not available yet.</div></div>
       </div>
     </section>
 
@@ -225,6 +226,20 @@
       ].filter(Boolean).join('');
     }
 
+
+    function renderWorkflow(events, booking) {
+      const box = document.querySelector("#workflowBox");
+      if (!box) return;
+      const rows = [];
+      if (booking.current_workflow_stage) rows.push(`<div><strong>Current stage:</strong> ${escapeHtml(booking.current_workflow_stage)}</div>`);
+      if (booking.detailer_response_status) rows.push(`<div><strong>Detailer response:</strong> ${escapeHtml(booking.detailer_response_status)}</div>`);
+      if (booking.detailer_response_reason) rows.push(`<div><strong>Response note:</strong> ${escapeHtml(booking.detailer_response_reason)}</div>`);
+      for (const item of Array.isArray(events)?events:[]) {
+        rows.push(`<div><strong>${escapeHtml(formatDateTime(item.created_at))}</strong> — ${escapeHtml(item.event_type || 'update')}${item.event_note ? ` · ${escapeHtml(item.event_note)}` : ''}${item.actor_name ? ` · ${escapeHtml(item.actor_name)}` : ''}</div>`);
+      }
+      box.innerHTML = rows.length ? rows.join('') : 'Workflow timeline not available yet.';
+    }
+
     function renderProductsUsed(rows) {
       const box = document.querySelector("#productsUsedBox");
       if (!box) return;
@@ -263,7 +278,7 @@
       if (links) {
         links.innerHTML = `
           <div><a class="btn ghost" href="/my-account">My account & garage</a></div>
-          <div style="margin-top:10px"><a class="btn ghost" href="/complete?token=${encodeURIComponent(currentToken)}">Completion signoff</a></div>
+          <div style="margin-top:10px" class="row"><a class="btn ghost" href="/complete?token=${encodeURIComponent(currentToken)}">Completion signoff</a><a class="btn ghost" href="/my-account.html">My Account & Garage</a></div>
           <div class="kicker" style="margin-top:10px">Use My Account for your garage, booking history, next cleaning dates, and future scheduling.</div>
         `;
       }

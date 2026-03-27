@@ -63,7 +63,7 @@
           <h2>Load booking</h2>
           <form id="loadForm" class="form">
             <label>
-              Staff password (legacy fallback only — optional when signed in)
+              Staff password (optional compatibility fallback)
               <input id="adminPassword" name="adminPassword" type="password" autocomplete="current-password" />
             </label>
 
@@ -412,6 +412,23 @@
     }
 
     
+
+    function renderWorkflow(data) {
+      const wrap = document.querySelector('#workflowList');
+      const booking = data.booking || {};
+      const events = Array.isArray(data.workflow_events) ? data.workflow_events : [];
+      document.querySelector('#workflowMeta').textContent = booking.current_workflow_stage ? `Current stage: ${booking.current_workflow_stage}` : 'No workflow action recorded yet.';
+      if (!events.length) { wrap.innerHTML = `<div class="notice">No workflow events recorded yet.</div>`; return; }
+      wrap.innerHTML = events.map((item)=>`<article class="card"><div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div><h3>${escapeHtml(item.event_type || 'workflow')}</h3><p>${escapeHtml(item.event_note || '')}</p><div class="kicker">${escapeHtml(item.actor_name || 'Staff')}</div></article>`).join('');
+    }
+    async function runFlowAction(action) {
+      if (!currentBookingId) throw new Error('Load a booking first.');
+      const res = await fetch('/api/detailer/job_action', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ booking_id: currentBookingId, action, reason: document.querySelector('#flowReason').value.trim() }) });
+      const data = await res.json().catch(()=>({}));
+      if (!res.ok) throw new Error(data.error || 'Could not update workflow.');
+      return data;
+    }
+
     async function loadActor(){
       try {
         const res = await fetch('/api/admin/auth_me', { credentials:'include', cache:'no-store' });
@@ -474,6 +491,7 @@
       renderUpdates(data);
       renderMedia(data);
       renderSignoffs(data);
+      renderWorkflow(data);
       await loadUsageHistory();
       document.querySelector("#postBtn").disabled = false;
       document.querySelector("#mediaBtn").disabled = false;
@@ -588,6 +606,7 @@
       });
 
       document.addEventListener("click", handleModerationClick);
+      document.querySelectorAll("[data-flow-action]").forEach((btn)=>btn.addEventListener("click", async ()=>{ try { setNotice(`Updating workflow…`); await runFlowAction(btn.dataset.flowAction); await reloadCurrent(); setNotice(`Workflow updated: ${btn.dataset.flowAction}.`, "ok"); } catch (err) { setNotice(err.message || "Could not update workflow.", "bad"); } }));
 
       const usageForm = document.querySelector('#usageForm');
       usageForm.addEventListener('submit', async (e) => {

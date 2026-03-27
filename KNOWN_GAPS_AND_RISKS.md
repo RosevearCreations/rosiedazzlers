@@ -1,3 +1,5 @@
+> Last synchronized: March 27, 2026. Reviewed during the booking wizard, detailer workflow, add-on asset, and docs/schema refresh pass.
+
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Rosie Dazzlers — Known Gaps and Risks
@@ -285,3 +287,10 @@ Partially mitigated in the newest pass:
 - continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
 - extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
 - continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.
+
+
+## March 27, 2026 workflow/customer-journey refresh
+- Customer journey risk is reduced because booking now follows a clearer visible step sequence instead of one long undifferentiated page.
+- Add-on media drift risk is reduced because the missing add-on cards now use packaged local assets.
+- Detailer workflow risk is reduced because assigned staff now have a dedicated job screen for accept/decline and live workflow-state transitions.
+- Staff/session risk still remains until the final legacy bridge is removed from every remaining older admin screen.
