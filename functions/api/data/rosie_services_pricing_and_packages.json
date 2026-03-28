@@ -331,9 +331,9 @@
       "notes": [
         "Add-on service not included in any package"
       ],
-      "image_url": "https://assets.rosiedazzlers.ca/assets/addons/full_clay_treatment.svg",
-      "category": "Paint correction",
-      "type": "Exterior finish"
+      "category": "paint correction",
+      "type": "surface prep",
+      "image_url": "https://assets.rosiedazzlers.ca/assets/addons/full_clay_treatment.svg"
     },
     {
       "code": "two_stage_polish",
@@ -348,9 +348,9 @@
       "notes": [
         "Quote required because paint condition varies"
       ],
-      "image_url": "/assets/addons/two_stage_polish.svg",
-      "category": "Paint correction",
-      "type": "Exterior finish"
+      "category": "paint correction",
+      "type": "machine polishing",
+      "image_url": "/assets/addons/two_stage_polish.svg"
     },
     {
       "code": "high_grade_paint_sealant",
@@ -362,12 +362,12 @@
       },
       "quote_required": false,
       "source": "interpreted_pricing",
+      "category": "paint protection",
+      "type": "sealant",
       "image_url": "/assets/addons/high_grade_paint_sealant.svg",
       "notes": [
         "Longer-lasting gloss"
-      ],
-      "category": "Exterior protection",
-      "type": "Sealant"
+      ]
     },
     {
       "code": "uv_protectant_applied_on_interior_panels",
@@ -379,12 +379,12 @@
       },
       "quote_required": false,
       "source": "interpreted_pricing",
+      "category": "interior protection",
+      "type": "uv protectant",
       "image_url": "https://assets.rosiedazzlers.ca/assets/addons/uv_protectant_applied_on_interior_panels.svg",
       "notes": [
         "Interior panel dressing"
-      ],
-      "category": "Interior protection",
-      "type": "Protectant"
+      ]
     },
     {
       "code": "de_ionizing_treatment",
@@ -397,8 +397,8 @@
       "quote_required": true,
       "source": "package_asset",
       "image_url": "/assets/addons/de_ionizing_treatment.svg",
-      "category": "Odor treatment",
-      "type": "Interior service"
+      "category": "odor treatment",
+      "type": "de-ionizing"
     },
     {
       "code": "de_badging",
@@ -406,8 +406,8 @@
       "quote_required": true,
       "source": "package_asset",
       "image_url": "/assets/addons/de_badging.svg",
-      "category": "Exterior customization",
-      "type": "Badge removal"
+      "category": "appearance modifications",
+      "type": "badge removal"
     },
     {
       "code": "engine_cleaning",
@@ -416,8 +416,8 @@
       "quote_required": false,
       "source": "package_asset",
       "image_url": "/assets/addons/engine_cleaning.svg",
-      "category": "Engine bay",
-      "type": "Cleaning"
+      "category": "engine bay",
+      "type": "cleaning"
     },
     {
       "code": "external_ceramic_coating",
@@ -429,8 +429,8 @@
         "Starting price only"
       ],
       "image_url": "/assets/addons/external_ceramic_coating.svg",
-      "category": "Exterior protection",
-      "type": "Ceramic coating"
+      "category": "paint protection",
+      "type": "ceramic coating"
     },
     {
       "code": "external_graphene_fine_finish",
@@ -442,8 +442,8 @@
         "Starting price only"
       ],
       "image_url": "/assets/addons/external_graphene_fine_finish.svg",
-      "category": "Exterior protection",
-      "type": "Graphene finish"
+      "category": "paint protection",
+      "type": "graphene finish"
     },
     {
       "code": "external_wax",
@@ -456,8 +456,8 @@
       "quote_required": false,
       "source": "package_asset",
       "image_url": "/assets/addons/external_wax.svg",
-      "category": "Exterior protection",
-      "type": "Wax"
+      "category": "paint protection",
+      "type": "wax"
     },
     {
       "code": "vinyl_wrapping",
@@ -465,8 +465,8 @@
       "quote_required": true,
       "source": "package_asset",
       "image_url": "/assets/addons/vinyl_wrapping.svg",
-      "category": "Exterior customization",
-      "type": "Wrap"
+      "category": "appearance modifications",
+      "type": "vinyl wrapping"
     },
     {
       "code": "window_tinting",
@@ -474,8 +474,8 @@
       "quote_required": true,
       "source": "package_asset",
       "image_url": "/assets/addons/window_tinting.svg",
-      "category": "Glass upgrade",
-      "type": "Tint"
+      "category": "glass services",
+      "type": "window tinting"
     }
   ]
 }
