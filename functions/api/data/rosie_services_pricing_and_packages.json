@@ -331,7 +331,7 @@
       "notes": [
         "Add-on service not included in any package"
       ],
-      "image_url": "/assets/addons/full_clay_treatment.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/assets/addons/full_clay_treatment.svg",
       "category": "Paint correction",
       "type": "Exterior finish"
     },
@@ -379,7 +379,7 @@
       },
       "quote_required": false,
       "source": "interpreted_pricing",
-      "image_url": "/assets/addons/uv_protectant_applied_on_interior_panels.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/assets/addons/uv_protectant_applied_on_interior_panels.svg",
       "notes": [
         "Interior panel dressing"
       ],
