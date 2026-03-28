@@ -94,6 +94,25 @@
     }
   }
 
+  function ensureReturnMenu(root, pageKey) {
+    if (document.querySelector(".admin-return-bar")) return;
+    if (document.querySelector("header.nav")) return;
+
+    const host = document.querySelector("main.shell") || document.querySelector("main.container") || document.body;
+    if (!host) return;
+
+    const wrap = document.createElement("div");
+    wrap.className = "admin-return-bar";
+    wrap.innerHTML = `
+      <a class="btn ghost small" href="/admin.html">← Admin Dashboard</a>
+      <a class="btn ghost small" href="/admin-account.html">Account</a>
+      <a class="btn ghost small" href="/admin-analytics.html">Analytics</a>
+      <span class="crumb">${pageKey || "admin"}</span>
+    `;
+
+    host.insertBefore(wrap, host.firstChild);
+  }
+
   function wireLogout(root, options = {}) {
     const redirectTo = options.logoutRedirect || "/admin-login";
 
@@ -171,6 +190,7 @@
       globalScope.AdminAuth.applyVisibility(root);
       globalScope.AdminAuth.renderActorText(root);
       wireLogout(root, options);
+      ensureReturnMenu(root, pageKey);
 
       if (typeof options.onReady === "function") {
         await options.onReady({
@@ -180,6 +200,7 @@
       }
 
       setLoading(root, false);
+      find(root, "[data-admin-shell-loading]").forEach((node) => { node.hidden = true; node.style.display = "none"; });
 
       return {
         ok: true,
@@ -187,6 +208,7 @@
       };
     } catch (err) {
       setLoading(root, false);
+      find(root, "[data-admin-shell-loading]").forEach((node) => { node.hidden = true; node.style.display = "none"; });
       setStatus(
         root,
         err && err.message ? err.message : "Could not initialize this page.",
