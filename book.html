@@ -68,7 +68,7 @@
     </div>
   </div>
 
-  <main class="container">
+  <main class="container wizard-shell">
     <section class="panel wizard-top" id="wizardTop">
       <div class="step-head">
         <div>
@@ -271,8 +271,11 @@
       currentStep = Math.max(1, Math.min(steps.length, step));
       qsa('.wizard-step').forEach((panel)=>{ panel.hidden = Number(panel.dataset.step)!==currentStep; });
       renderWizardNav();
-      const top = qs('#wizardTop');
-      if (top) top.scrollIntoView({ behavior:'smooth', block:'start' });
+      const activePanel = document.querySelector(`.wizard-step[data-step="${currentStep}"]`);
+      if (activePanel) {
+        const top = Math.max(0, activePanel.getBoundingClientRect().top + window.scrollY - 92);
+        window.scrollTo({ top, behavior:'smooth' });
+      }
       if (currentStep===4) renderReviewVehicle();
       if (currentStep===5) renderFinalSummary();
     }

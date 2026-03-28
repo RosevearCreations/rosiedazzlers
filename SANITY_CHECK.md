@@ -1,4 +1,5 @@
-> Last synchronized: March 27, 2026. Reviewed during the booking wizard, detailer workflow, add-on asset, and docs/schema refresh pass.
+> Last synchronized: March 27, 2026. Reviewed during the booking wizard sticky-fix, mobile layout cleanup, two-way active-job communication pass, and docs/schema refresh.
+
 
 <!-- SANITY_CHECK.md -->
 
@@ -105,3 +106,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Internal-only progress notes are now separated from the customer feed.
 - Continue testing: booking date/slot selection, garage prefill, package selection by vehicle size, and checkout handoff.
 
+
+## Current smoke-test focus
+1. Booking wizard on phone width: header should stay in normal flow and not cover inputs.
+2. Step navigation: next/back should scroll to the visible step card, not the wizard header.
+3. Customer progress: post a message and confirm it appears in admin progress.
+4. Detailer jobs: post one public update and one internal note, then confirm the customer feed only shows the public note.

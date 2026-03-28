@@ -1,3 +1,5 @@
+> Last synchronized: March 27, 2026. Reviewed during the booking wizard sticky-fix, mobile layout cleanup, two-way active-job communication pass, and docs/schema refresh.
+
 # Rosie Dazzlers — Customer / Detailer / Admin Flow Roadmap
 
 Last synchronized: March 27, 2026.
@@ -48,3 +50,10 @@ Last synchronized: March 27, 2026.
 - next-step actions should be large tap targets
 - field entry should be minimized when saved account / garage data already exists
 - private/internal notes must stay clearly separated from customer-visible notes
+
+
+## Booking + live-job workflow update
+- Booking should behave as a true wizard where each step is reachable and readable on a phone without floating headers blocking fields.
+- Customer live-job communication now supports public messages from the progress page.
+- Detailer live-job communication now supports both public updates and internal-only notes from the jobs screen.
+- Admin remains the moderation layer for public and private job communication.

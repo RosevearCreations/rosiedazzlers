@@ -1,4 +1,5 @@
-> Last synchronized: March 27, 2026. Reviewed during the booking wizard, detailer workflow, add-on asset, and docs/schema refresh pass.
+> Last synchronized: March 27, 2026. Reviewed during the booking wizard sticky-fix, mobile layout cleanup, two-way active-job communication pass, and docs/schema refresh.
+
 
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
@@ -301,3 +302,9 @@ Partially mitigated in the newest pass:
 - Customer/privacy risk is reduced because public progress now suppresses internal-only updates, keeping admin/detailer private notes off the customer-facing feed.
 - Still remaining: full notification delivery wiring, final legacy fallback removal, broader DB-first content replacement, and full inventory lifecycle polish.
 
+
+## March 27, 2026 wizard + communication update
+- mitigated: booking wizard top panel is no longer sticky over the working step content on phones or desktop.
+- moved forward: customer-to-team live messaging now has a public progress-page message path, while signed-in detailers can post either customer-visible updates or internal-only notes.
+- moved forward: booking step navigation now scrolls to the active step instead of snapping the user back to the wizard header.
+- move up next: finish notification delivery for comment/update events and keep removing the last legacy fallback screens.

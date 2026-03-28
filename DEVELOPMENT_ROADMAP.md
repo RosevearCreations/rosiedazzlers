@@ -1,4 +1,5 @@
-> Last synchronized: March 27, 2026. Reviewed during the booking wizard, detailer workflow, add-on asset, and docs/schema refresh pass.
+> Last synchronized: March 27, 2026. Reviewed during the booking wizard sticky-fix, mobile layout cleanup, two-way active-job communication pass, and docs/schema refresh.
+
 
 <!-- DEVELOPMENT_ROADMAP.md -->
 
@@ -157,3 +158,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - moved forward: customer progress feed now filters out internal-only updates so admin/detailer private notes stay private.
 - move up next: finish session-only cleanup on the last legacy admin screens, complete end-to-end notification delivery, and continue DB-first inventory consolidation.
 
+
+## March 27, 2026 wizard cleanup + two-way communication pass
+- moved forward: booking wizard header is now non-sticky so step fields remain reachable on mobile.
+- moved forward: step transitions now scroll to the active content panel instead of the wizard header.
+- moved forward: customer progress now supports customer-posted live messages through the progress token path.
+- moved forward: detailer jobs now supports posting customer-visible updates and internal staff notes directly from the assigned-jobs screen.
+- move up next: notification fan-out for new notes, richer customer history in My Account, and final removal of shared-password compatibility on the oldest internal screens.

@@ -1,4 +1,5 @@
-> Last synchronized: March 27, 2026. Reviewed during the booking wizard, detailer workflow, add-on asset, and docs/schema refresh pass.
+> Last synchronized: March 27, 2026. Reviewed during the booking wizard sticky-fix, mobile layout cleanup, two-way active-job communication pass, and docs/schema refresh.
+
 
 <!-- README.md -->
 
@@ -140,3 +141,6 @@ This pass repaired booking add-on imagery, continued local SEO tuning for Oxford
 ## Latest pass note
 This build continues the mobile-first booking, staff workflow, inventory, and local SEO direction. The newest user-facing changes are the mobile booking wizard, shared public account widget, and tighter customer/private progress separation.
 
+
+## Latest pass summary
+This pass focused on booking wizard usability, two-way live job communication, mobile-safe layout behavior, and documentation/schema synchronization.

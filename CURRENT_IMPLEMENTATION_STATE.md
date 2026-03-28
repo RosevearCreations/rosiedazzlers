@@ -1,4 +1,5 @@
-> Last synchronized: March 27, 2026. Reviewed during the booking wizard, detailer workflow, add-on asset, and docs/schema refresh pass.
+> Last synchronized: March 27, 2026. Reviewed during the booking wizard sticky-fix, mobile layout cleanup, two-way active-job communication pass, and docs/schema refresh.
+
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Current Implementation State
@@ -81,3 +82,9 @@
 - Shared public chrome now renders a session-aware account widget for guest, customer, and staff states.
 - Customer progress/feed view now filters internal-only updates instead of exposing every staff note.
 
+
+## March 27, 2026 current-state note
+- Booking wizard header no longer overlays step content.
+- Booking step changes now scroll to the active step card.
+- Customer progress feed remains customer-only, while new customer comment posting is now supported through the progress token flow.
+- Detailers can now post either public or internal notes from the assigned jobs screen.
