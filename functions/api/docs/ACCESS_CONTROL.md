@@ -1,3 +1,5 @@
+> Last synchronized: March 27, 2026. Reviewed during the booking wizard sticky-fix, mobile layout cleanup, two-way active-job communication pass, and docs/schema refresh.
+
 # Rosie Dazzlers Access Control Model
 
 ## Purpose
