@@ -325,3 +325,8 @@ create index if not exists customer_reviews_customer_profile_id_idx on public.cu
 -- Pass note: March 26, 2026
 -- No new schema migration was required for the booking add-on imagery, public catalog autofill hardening,
 -- low-stock reorder UI, or Amazon-link inventory intake pass.
+
+
+-- 2026-03-28 late pass
+-- No schema changes were required in this pass.
+-- This pass repaired shared staff-auth compatibility, admin-shell loading UX, button contrast, and image-path issues.

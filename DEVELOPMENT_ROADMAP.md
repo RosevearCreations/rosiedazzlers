@@ -165,3 +165,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - moved forward: customer progress now supports customer-posted live messages through the progress token path.
 - moved forward: detailer jobs now supports posting customer-visible updates and internal staff notes directly from the assigned-jobs screen.
 - move up next: notification fan-out for new notes, richer customer history in My Account, and final removal of shared-password compatibility on the oldest internal screens.
+
+
+## 2026-03-28 late pass moved forward
+- Stabilize deploy/build path by finishing the shared staff auth helper normalization.
+- Continue admin UX polish with persistent return navigation and cleaner loading states.
+- Continue route-by-route visual QA for asset path drift, contrast drift, and mobile layout regressions.

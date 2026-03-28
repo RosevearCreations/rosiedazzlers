@@ -308,3 +308,10 @@ Partially mitigated in the newest pass:
 - moved forward: customer-to-team live messaging now has a public progress-page message path, while signed-in detailers can post either customer-visible updates or internal-only notes.
 - moved forward: booking step navigation now scrolls to the active step instead of snapping the user back to the wizard header.
 - move up next: finish notification delivery for comment/update events and keep removing the last legacy fallback screens.
+
+
+## 2026-03-28 late pass status
+- Deploy blocker from `requireStaffSessionOrThrow` import mismatch: repaired.
+- Pricing/services missing image path regressions: repaired for the size chart and key add-on assets.
+- Admin page loading overlays persisting after data load: mitigated in shared AdminShell and shared CSS.
+- UI contrast regression on dark buttons: repaired in shared CSS.

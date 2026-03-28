@@ -88,3 +88,11 @@
 - Booking step changes now scroll to the active step card.
 - Customer progress feed remains customer-only, while new customer comment posting is now supported through the progress token flow.
 - Detailers can now post either public or internal notes from the assigned jobs screen.
+
+
+## 2026-03-28 late pass
+- Fixed the staff-auth deploy blocker by standardizing `job_note_post.js` on `requireStaffAccess` and adding a compatibility export in `functions/api/_lib/staff-auth.js`.
+- Fixed missing package/service imagery for the vehicle size chart and add-on asset references that were still using the wrong base path.
+- Fixed dark button text contrast so button labels render in light text consistently across the site.
+- Fixed lingering admin loading banners by forcing `hidden` states to win and by hiding stale loader nodes after AdminShell boot completes.
+- Added a small return menu for admin pages that do not already have a full admin nav header.

@@ -112,3 +112,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 2. Step navigation: next/back should scroll to the visible step card, not the wizard header.
 3. Customer progress: post a message and confirm it appears in admin progress.
 4. Detailer jobs: post one public update and one internal note, then confirm the customer feed only shows the public note.
+
+
+## 2026-03-28 late pass quick check
+- Staff note endpoint now builds cleanly against the shared auth helper.
+- Pricing size chart path corrected to the packages bucket.
+- Shared dark buttons now render light text.
+- Admin loaders now hide after shell boot, and pages without a full admin header get a return bar.

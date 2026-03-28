@@ -198,3 +198,7 @@ No new tables were required in this pass. The current work was focused on using 
 ## March 27, 2026 note
 No new table or column was required in this pass. The main change was behavioral: customer progress views now rely on existing visibility data to suppress internal-only updates, and booking now uses the existing vehicle / pricing / availability structures in a more mobile-friendly way.
 
+
+
+## 2026-03-28 note
+No new schema objects were required in this pass. This pass focused on frontend/admin-shell stabilization, asset-path repair, and staff-auth build compatibility.
