@@ -164,6 +164,38 @@ export async function requireStaffAccess({
   }
 }
 
+/* ---------------- compatibility export ---------------- */
+
+export async function requireStaffSessionOrThrow(
+  context,
+  {
+    body = {},
+    capability,
+    bookingId = null,
+    allowLegacyAdminFallback = false,
+    allowLegacyFallback = false
+  } = {}
+) {
+  const access = await requireStaffAccess({
+    request: context?.request,
+    env: context?.env,
+    body,
+    capability,
+    bookingId,
+    allowLegacyAdminFallback:
+      allowLegacyAdminFallback === true || allowLegacyFallback === true
+  });
+
+  if (!access.ok) {
+    const err = new Error("Unauthorized.");
+    err.status = access.response?.status || 401;
+    err.response = access.response || null;
+    throw err;
+  }
+
+  return access.actor;
+}
+
 /* ---------------- actor resolution ---------------- */
 
 async function resolveSessionActor({ request, env }) {
@@ -566,30 +598,4 @@ function assertBaseEnv(env) {
   if (!env || !env.SUPABASE_SERVICE_ROLE_KEY) {
     throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY.");
   }
-}
-
-
-export async function requireStaffSessionOrThrow(contextOrOptions = {}, maybeOptions = {}) {
-  const context = contextOrOptions && contextOrOptions.request ? contextOrOptions : null;
-  const options = context ? (maybeOptions || {}) : (contextOrOptions || {});
-  const request = options.request || (context && context.request);
-  const env = options.env || (context && context.env);
-  const body = options.body || {};
-
-  const access = await requireStaffAccess({
-    request,
-    env,
-    body,
-    capability: options.capability || null,
-    bookingId: options.bookingId || options.booking_id || null,
-    allowLegacyAdminFallback: options.allowLegacyAdminFallback === true || options.allowLegacyFallback === true
-  });
-
-  if (!access.ok) {
-    const err = new Error('Unauthorized.');
-    err.status = access.response && access.response.status ? access.response.status : 401;
-    throw err;
-  }
-
-  return access.actor;
 }
