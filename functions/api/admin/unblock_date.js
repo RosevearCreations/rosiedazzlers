@@ -1,3 +1,5 @@
+import { requireStaffAccess, json, serviceHeaders } from "../_lib/staff-auth.js";
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
@@ -6,15 +8,19 @@ export async function onRequestPost(context) {
       return json({ error: "Server configuration is incomplete." }, 500);
     }
 
-    const adminPassword = request.headers.get("x-admin-password") || "";
-    if (!env.ADMIN_PASSWORD || adminPassword !== env.ADMIN_PASSWORD) {
-      return json({ error: "Unauthorized." }, 401);
-    }
-
     const body = await request.json().catch(() => null);
     if (!body || typeof body !== "object") {
       return json({ error: "Invalid request body." }, 400);
     }
+
+    const access = await requireStaffAccess({
+      request,
+      env,
+      body,
+      capability: "manage_blocks",
+      allowLegacyAdminFallback: true
+    });
+    if (!access.ok) return access.response;
 
     const blocked_date = String(body.blocked_date || "").trim();
 
@@ -22,18 +28,12 @@ export async function onRequestPost(context) {
       return json({ error: "Missing blocked_date." }, 400);
     }
 
-    const headers = {
-      apikey: env.SUPABASE_SERVICE_ROLE_KEY,
-      Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
-      "Content-Type": "application/json"
-    };
-
     const deleteRes = await fetch(
       `${env.SUPABASE_URL}/rest/v1/date_blocks?blocked_date=eq.${encodeURIComponent(blocked_date)}`,
       {
         method: "DELETE",
         headers: {
-          ...headers,
+          ...serviceHeaders(env),
           Prefer: "return=representation"
         }
       }
@@ -50,6 +50,12 @@ export async function onRequestPost(context) {
     return json({
       ok: true,
       message: "Date block removed.",
+      actor: {
+        id: access.actor.id || null,
+        full_name: access.actor.full_name || null,
+        email: access.actor.email || null,
+        role_code: access.actor.role_code || null
+      },
       removed: removed || { blocked_date }
     });
   } catch (err) {
@@ -58,14 +64,4 @@ export async function onRequestPost(context) {
       500
     );
   }
-}
-
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), {
-    status,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-store"
-    }
-  });
 }
