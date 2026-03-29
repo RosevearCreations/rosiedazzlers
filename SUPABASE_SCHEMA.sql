@@ -1,4 +1,6 @@
-
+-- March 28, 2026 sync note: no new tables were required for this pass; this refresh mainly aligns UI readability, catalog presentation, and documentation with the current build.
+-- 
+-- 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
 
 -- Last synchronized: March 27, 2026. Reviewed during the booking wizard sticky-fix, two-way active-job communication pass, and docs/schema refresh.

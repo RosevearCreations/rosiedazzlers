@@ -1,3 +1,5 @@
+> Last synchronized: March 28, 2026. Reviewed during the image-fit, booking-slot readability, dark-text contrast, and current-build documentation/schema sync pass.
+
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
 
@@ -316,3 +318,9 @@ Partially mitigated in the newest pass:
 - Pricing/services missing image path regressions: repaired for the size chart and key add-on assets.
 - Admin page loading overlays persisting after data load: mitigated in shared AdminShell and shared CSS.
 - UI contrast regression on dark buttons: repaired in shared CSS.
+
+## 2026-03-28 contrast, image-fit, and slot-readability pass
+- Catalog image cards now fit within their frames more cleanly instead of appearing over-zoomed.
+- Booking slot buttons and related dark-surface controls now force light readable text.
+- Shared dark-button contrast was tightened again to avoid black-on-dark regressions.
+- This pass improves UI readability and cohesion, but does not honestly eliminate every remaining structural gap; auth/session completion, pricing convergence, upload hardening, and final endpoint cleanup still remain active work.

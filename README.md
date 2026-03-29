@@ -1,3 +1,5 @@
+> Last synchronized: March 28, 2026. Reviewed during the image-fit, booking-slot readability, dark-text contrast, and current-build documentation/schema sync pass.
+
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
 
