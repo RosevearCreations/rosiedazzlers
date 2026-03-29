@@ -1,3 +1,5 @@
+import { requireStaffAccess, json, serviceHeaders } from "../_lib/staff-auth.js";
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
@@ -6,68 +8,42 @@ export async function onRequestPost(context) {
       return json({ error: "Server configuration is incomplete." }, 500);
     }
 
-    const adminPassword = request.headers.get("x-admin-password") || "";
-    if (!env.ADMIN_PASSWORD || adminPassword !== env.ADMIN_PASSWORD) {
-      return json({ error: "Unauthorized." }, 401);
-    }
+    const body = await request.json().catch(() => ({}));
+    const access = await requireStaffAccess({
+      request,
+      env,
+      body,
+      capability: "manage_bookings",
+      allowLegacyAdminFallback: true
+    });
+    if (!access.ok) return access.response;
 
-    await request.json().catch(() => ({}));
-
-    const headers = {
-      apikey: env.SUPABASE_SERVICE_ROLE_KEY,
-      Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
-      "Content-Type": "application/json"
-    };
-
+    const headers = serviceHeaders(env);
     const [profilesRes, tiersRes] = await Promise.all([
-      fetch(
-        `${env.SUPABASE_URL}/rest/v1/customer_profiles` +
-          `?select=id,created_at,updated_at,email,full_name,phone,tier_code,lifetime_bookings,lifetime_spend_cents,big_tipper,notes` +
-          `&order=full_name.asc.nullslast,email.asc`,
-        { headers }
-      ),
-      fetch(
-        `${env.SUPABASE_URL}/rest/v1/customer_tiers` +
-          `?select=code,sort_order,label,description,is_active` +
-          `&order=sort_order.asc`,
-        { headers }
-      )
+      fetch(`${env.SUPABASE_URL}/rest/v1/customer_profiles?select=id,created_at,updated_at,email,full_name,phone,tier_code,lifetime_bookings,lifetime_spend_cents,big_tipper,notes&order=full_name.asc.nullslast,email.asc`, { headers }),
+      fetch(`${env.SUPABASE_URL}/rest/v1/customer_tiers?select=code,sort_order,label,description,is_active&order=sort_order.asc`, { headers })
     ]);
 
-    if (!profilesRes.ok) {
-      const text = await profilesRes.text();
-      return json({ error: `Could not load customer profiles. ${text}` }, 500);
-    }
-
-    if (!tiersRes.ok) {
-      const text = await tiersRes.text();
-      return json({ error: `Could not load customer tiers. ${text}` }, 500);
-    }
+    if (!profilesRes.ok) return json({ error: `Could not load customer profiles. ${await profilesRes.text()}` }, 500);
+    if (!tiersRes.ok) return json({ error: `Could not load customer tiers. ${await tiersRes.text()}` }, 500);
 
     const [profiles, tiers] = await Promise.all([
-      profilesRes.json(),
-      tiersRes.json()
+      profilesRes.json().catch(() => []),
+      tiersRes.json().catch(() => [])
     ]);
 
     return json({
       ok: true,
+      actor: {
+        id: access.actor.id || null,
+        full_name: access.actor.full_name || null,
+        email: access.actor.email || null,
+        role_code: access.actor.role_code || null
+      },
       customer_profiles: Array.isArray(profiles) ? profiles : [],
       customer_tiers: Array.isArray(tiers) ? tiers : []
     });
   } catch (err) {
-    return json(
-      { error: err && err.message ? err.message : "Unexpected server error." },
-      500
-    );
+    return json({ error: err && err.message ? err.message : "Unexpected server error." }, 500);
   }
-}
-
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), {
-    status,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-store"
-    }
-  });
 }
