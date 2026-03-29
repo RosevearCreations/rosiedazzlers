@@ -337,3 +337,10 @@ Partially mitigated in the newest pass:
 - improved customer gift/account polish by adding dashboard gift summary totals and a signed-in gift balance checker on My Account.
 - hardened the signed upload endpoint with media-type and file-size validation plus customer-visible/public-url handling guidance.
 - continued DB-first cleanup and doc/schema synchronization for the current dev build.
+
+
+## March 29, 2026 promo / blocks / purchase reminder pass
+- promo list/create/disable and block date/slot actions now prefer signed-in staff session access through the shared role-aware auth helper instead of direct shared-password checks.
+- booking_update and assign now log actor-attributed booking events while using the resolved current staff actor.
+- purchase-order reminder lifecycle moved forward with reminder logging fields, a reminder action endpoint, and overdue reminder reporting in the purchase-order list endpoint.
+- this reduced more of the old/new endpoint overlap and shared-password bridge risk, but did not fully eliminate every remaining legacy-only admin path yet.
