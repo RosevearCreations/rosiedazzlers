@@ -1,3 +1,5 @@
+> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+
 March 28, 2026 sync note: no new tables were required for this pass; this refresh mainly aligns UI readability, catalog presentation, and documentation with the current build.
 
 > Last synchronized: March 28, 2026. Reviewed during the image-fit, booking-slot readability, dark-text contrast, and current-build documentation/schema sync pass.
@@ -207,3 +209,6 @@ No new table or column was required in this pass. The main change was behavioral
 
 ## 2026-03-28 note
 No new schema objects were required in this pass. This pass focused on frontend/admin-shell stabilization, asset-path repair, and staff-auth build compatibility.
+
+
+March 29, 2026 sync note: no new tables were required for this pass; the main changes were endpoint/session hardening and actor-attribution improvements using the existing schema.

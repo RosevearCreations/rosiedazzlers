@@ -1,5 +1,4 @@
-> Last synchronized: March 28, 2026. Reviewed during the image-fit, booking-slot readability, dark-text contrast, and current-build documentation/schema sync pass.
-
+> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
 
@@ -122,3 +121,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Pricing size chart path corrected to the packages bucket.
 - Shared dark buttons now render light text.
 - Admin loaders now hide after shell boot, and pages without a full admin header get a return bar.
+
+## March 29, 2026 sanity update
+- Pages build blocker remains repaired.
+- Internal auth/session coverage is broader than the prior pass because time/intake/media/booking/staff flows now accept the real signed-in staff actor first.
+- Legacy bridge risk is reduced but not gone; continue converting the remaining shared-password-only admin endpoints and pages.
+- No new DDL required in this pass.

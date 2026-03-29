@@ -1,5 +1,4 @@
-> Last synchronized: March 28, 2026. Reviewed during the image-fit, booking-slot readability, dark-text contrast, and current-build documentation/schema sync pass.
-
+> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
 
@@ -99,3 +98,9 @@
 - Fixed dark button text contrast so button labels render in light text consistently across the site.
 - Fixed lingering admin loading banners by forcing `hidden` states to win and by hiding stale loader nodes after AdminShell boot completes.
 - Added a small return menu for admin pages that do not already have a full admin nav header.
+
+## March 29, 2026 pass
+- Converted more internal workflows to trust the signed-in staff actor first: booking list/update, assignment, blocks listing, time entries, time summary, jobsite intake get/save, progress media post, and staff list/save.
+- Reduced shared-password-only behavior in the admin UI by auto-loading Bookings, Blocks, and Staff screens from the staff session where available.
+- Improved identity consistency by writing actor-derived names and staff IDs into time/media/intake responses and booking events where possible.
+- No new database tables were required; this pass primarily reduced auth drift and endpoint overlap.

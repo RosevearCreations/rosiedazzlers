@@ -1,5 +1,4 @@
-> Last synchronized: March 28, 2026. Reviewed during the image-fit, booking-slot readability, dark-text contrast, and current-build documentation/schema sync pass.
-
+> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
 
@@ -174,3 +173,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Stabilize deploy/build path by finishing the shared staff auth helper normalization.
 - Continue admin UX polish with persistent return navigation and cleaner loading states.
 - Continue route-by-route visual QA for asset path drift, contrast drift, and mobile layout regressions.
+
+## Roadmap movement — March 29, 2026
+- Advanced the auth/session completion track by converting another batch of admin endpoints away from direct shared-password-only checks.
+- Advanced the identity-consistency track by using the resolved signed-in actor in time/intake/media and booking-event flows.
+- Advanced UI cohesion by making Bookings, Blocks, and Staff pages load from the real staff session instead of requiring a password-first flow.
+- Move up next: remaining legacy-only admin endpoints (`bookings/assign/blocks` companion actions, intake edge routes, and any pages still hard-coded around `x-admin-password`) plus notification delivery and upload hardening.

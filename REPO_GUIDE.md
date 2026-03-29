@@ -1,5 +1,4 @@
-> Last synchronized: March 28, 2026. Reviewed during the image-fit, booking-slot readability, dark-text contrast, and current-build documentation/schema sync pass.
-
+> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 <!-- REPO_GUIDE.md -->
 
@@ -97,3 +96,6 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - `/assets/chrome.js` owns the public account widget behavior.
 - `functions/api/progress/view.js` is now responsible for suppressing internal-only updates from the customer-facing feed.
 
+
+## March 29, 2026 guide note
+Prefer the session-aware admin/detailer endpoints over any older shared-password-only admin path. If two endpoints appear to overlap, treat the role-aware version that imports `requireStaffAccess` as the current preferred direction.
