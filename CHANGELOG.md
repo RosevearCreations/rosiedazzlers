@@ -1,53 +1,15 @@
-# YWI HSE Safety System
+# Changelog
 
-YWI HSE is a Supabase-backed safety, people, jobs, and equipment web app for construction and field operations.
-
-## Current scope
-- login with email/password and magic link fallback
-- top-right session controls with signed-in user name, settings, and logout
-- employee self-profile
-- supervisor/admin crew visibility
-- admin directory and management for profiles, sites, and assignments
-- toolbox, PPE, first aid, inspection, and drill forms
-- logbook and review workflow
-- jobs and equipment planning scaffold
-
-## Current frontend modules
-- `js/bootstrap.js`
-- `js/security.js`
-- `js/auth.js`
-- `js/api.js`
-- `js/ui-auth.js`
-- `js/account-ui.js`
-- `js/profile-ui.js`
-- `js/reference-data.js`
-- `js/jobs-ui.js`
-- `js/admin-ui.js`
-- `js/admin-actions.js`
-- `js/outbox.js`
-- `js/logbook-ui.js`
-- `js/forms-toolbox.js`
-- `js/forms-ppe.js`
-- `js/forms-firstaid.js`
-- `js/forms-inspection.js`
-- `js/forms-drill.js`
-
-## New backend direction in this pass
-- richer user hierarchy fields
-- default and override supervisor/admin chains
-- jobs and equipment schema
-- new Edge Functions for `jobs-directory` and `jobs-manage`
-- updated reference/admin functions to support richer profile and site data
-
-## SQL added in this pass
-- `043_user_hierarchy_and_strengths.sql`
-- `044_jobs_equipment_and_reservations.sql`
-- `045_directory_views_and_scope_helpers.sql`
-
-## Current focus
-1. finish user hierarchy and permissions
-2. finish backend enforcement with SQL/RLS and Edge Functions
-3. continue job creation and equipment reservation workflows
+## Current pass
+- added top-right session controls with signed-in name, settings, and logout
+- expanded user hierarchy model with default/override supervisor/admin fields
+- added start date, employee number, and strengths support
+- expanded admin profile and site forms
+- added jobs and equipment planning screens
+- added `js/jobs-ui.js`
+- added SQL files 043, 044, and 045
+- added Edge Functions `jobs-directory` and `jobs-manage`
+- updated markdown docs to match this pass
 
 
 ## Latest security and workflow pass
@@ -288,9 +250,12 @@ Additional quality changes in this pass:
 
 
 
-## 2026-03-26 login/bootstrap stability pass
-
-This pass focused on the app-shell and auth startup problems that were leaving users stuck on **Checking sign-in status...** or showing half-loaded worker screens. The frontend now defers protected module loading until an authenticated session exists, restores missing Jobs draft constants, aligns local asset cache-busting to one release tag, adds packaged icons/favicons to stop manifest 404s, and adds a bootstrap timeout so the login form can recover if email-link session restoration hangs. No new schema migration was added in this pass; `sql/000_full_schema_reference.sql` remains the current reference snapshot.
+## 2026-03-26
+- Fixed stuck auth restore state by adding a bootstrap timeout and cleaner fallback to the visible login form.
+- Deferred protected modules until authenticated to stop startup 401s against reference-data, profile, jobs, and admin endpoints.
+- Restored missing `JOB_DRAFT_KEY` / `EQUIPMENT_DRAFT_KEY` constants that were crashing Jobs UI startup.
+- Unified app-shell version tags and added packaged icons/favicon to reduce stale mixed-cache releases.
+- No new SQL migration in this pass; schema reference snapshot remains current.
 
 
 ## 2026-03-26 confirmation history and autosave reliability pass

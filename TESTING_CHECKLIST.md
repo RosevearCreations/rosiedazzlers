@@ -1,58 +1,56 @@
-# YWI HSE Safety System
+# Testing Checklist
 
-YWI HSE is a Supabase-backed safety, people, jobs, and equipment web app for construction and field operations.
+## Auth
+- email/password login
+- magic link login
+- logout current session
+- logout everywhere
+- header session controls visible
 
-## Current scope
-- login with email/password and magic link fallback
-- top-right session controls with signed-in user name, settings, and logout
-- employee self-profile
-- supervisor/admin crew visibility
-- admin directory and management for profiles, sites, and assignments
-- toolbox, PPE, first aid, inspection, and drill forms
-- logbook and review workflow
-- jobs and equipment planning scaffold
+## People
+- self profile loads
+- self profile saves
+- supervisor sees crew
+- admin sees all
+- hierarchy names populate
 
-## Current frontend modules
-- `js/bootstrap.js`
-- `js/security.js`
-- `js/auth.js`
-- `js/api.js`
-- `js/ui-auth.js`
-- `js/account-ui.js`
-- `js/profile-ui.js`
-- `js/reference-data.js`
-- `js/jobs-ui.js`
-- `js/admin-ui.js`
-- `js/admin-actions.js`
-- `js/outbox.js`
-- `js/logbook-ui.js`
-- `js/forms-toolbox.js`
-- `js/forms-ppe.js`
-- `js/forms-firstaid.js`
-- `js/forms-inspection.js`
-- `js/forms-drill.js`
+## Admin
+- profile save with hierarchy fields
+- site save with site leadership fields
+- assignment save with reporting overrides
 
-## New backend direction in this pass
-- richer user hierarchy fields
-- default and override supervisor/admin chains
-- jobs and equipment schema
-- new Edge Functions for `jobs-directory` and `jobs-manage`
-- updated reference/admin functions to support richer profile and site data
-
-## SQL added in this pass
-- `043_user_hierarchy_and_strengths.sql`
-- `044_jobs_equipment_and_reservations.sql`
-- `045_directory_views_and_scope_helpers.sql`
-
-## Current focus
-1. finish user hierarchy and permissions
-2. finish backend enforcement with SQL/RLS and Edge Functions
-3. continue job creation and equipment reservation workflows
+## Jobs and equipment
+- jobs screen visible to supervisor+
+- equipment screen visible to supervisor+
+- local draft fallback works
+- backend load works after function deployment
 
 
 ## Latest security and workflow pass
 
 This pass adds password/account maintenance improvements, email verification resend, phone verification request workflow, direct-report crew filtering, equipment checkout/return workflow, reservation enforcement hooks, and a refreshed full schema reference. New backend pieces include `supabase/functions/account-maintenance`, expanded `jobs-manage`, expanded `jobs-directory`, and updated `admin-directory`. New SQL references include `046_account_validation_and_notifications.sql` and `047_password_validation_equipment_workflow.sql`.
+
+
+## Account / validation workflow
+
+- Email verification resend works from Account Security
+- Phone verification request creates an admin notification
+- Change password works after magic-link sign-in
+- Clear current session works
+- Log out everywhere works
+
+## Crew / hierarchy workflow
+
+- Worker sees self only in My Profile / Crew restrictions
+- Supervisor sees direct reports by hierarchy or assignment reporting lines
+- Admin/HSE/Job Admin can see broader scoped crew data
+
+## Equipment workflow
+
+- Equipment can be reserved from a job requirement
+- Equipment checkout moves item to checked_out
+- Equipment return moves item back to available
+- Admin notifications are queued on checkout/return
 
 ---
 
@@ -90,28 +88,6 @@ This pass updates the repo toward the next high-value workflow layer:
 - add per-notification email preview/test send controls
 - add requirement-level approve/reject buttons directly from job/equipment screens
 - add provider-specific retry / dead-letter handling for email and SMS failures
-
-## Password-First Auth / Admin Approval UI Pass (March 24, 2026)
-
-This pass shifts the app to a password-first daily login flow while keeping magic link as backup/recovery only, and brings the approval/email workflow into the live frontend.
-
-### Included in this pass
-- bootstrap now restores Supabase sessions from `code=` callbacks as well as token hashes
-- login screen is now clearly password-first with forgot-password support and cleaner auth-wall behavior
-- settings now renders a live account security panel with password save/change, email verification resend, phone verification request, SMS code send/verify, and logout controls
-- admin now renders a visible approval queue with approve/reject/resolve actions
-- admin now includes email preview, test-send, and retry-send controls for notifications
-- jobs/equipment screens now render live forms inside the frontend shell instead of depending on missing static markup
-- jobs now support direct requirement review buttons for request / approve / reject actions
-- backend notification actions now support preview_email, test_send, and retry_send
-- account maintenance now supports retry_phone_verification_code
-- functions no longer depend on `admin_notifications.subject` existing
-
-### Most valuable next pass after this
-- add richer job editing/loading from saved rows back into the form
-- add stronger per-role UI hiding for approve/reject buttons
-- add provider-specific delivery attempt counters and dead-letter handling
-- add full admin CRUD layout restoration if broad directory management becomes the next focus
 
 ## 2026-03-24 pass: auth, approvals, delivery retries, and saved-job restore
 

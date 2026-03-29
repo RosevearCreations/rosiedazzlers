@@ -1,58 +1,119 @@
-# YWI HSE Safety System
+# DATABASE_STRUCTURE.md
+# YWI HSE Safety System — Database Structure Reference
 
-YWI HSE is a Supabase-backed safety, people, jobs, and equipment web app for construction and field operations.
+This document summarizes the current intended schema for the YWI HSE system. The SQL source of truth for the latest full reference is:
 
-## Current scope
-- login with email/password and magic link fallback
-- top-right session controls with signed-in user name, settings, and logout
-- employee self-profile
-- supervisor/admin crew visibility
-- admin directory and management for profiles, sites, and assignments
-- toolbox, PPE, first aid, inspection, and drill forms
-- logbook and review workflow
-- jobs and equipment planning scaffold
+- `sql/000_full_schema_reference.sql`
 
-## Current frontend modules
-- `js/bootstrap.js`
-- `js/security.js`
-- `js/auth.js`
-- `js/api.js`
-- `js/ui-auth.js`
-- `js/account-ui.js`
-- `js/profile-ui.js`
-- `js/reference-data.js`
-- `js/jobs-ui.js`
-- `js/admin-ui.js`
-- `js/admin-actions.js`
-- `js/outbox.js`
-- `js/logbook-ui.js`
-- `js/forms-toolbox.js`
-- `js/forms-ppe.js`
-- `js/forms-firstaid.js`
-- `js/forms-inspection.js`
-- `js/forms-drill.js`
+## Core people and hierarchy
 
-## New backend direction in this pass
-- richer user hierarchy fields
-- default and override supervisor/admin chains
-- jobs and equipment schema
-- new Edge Functions for `jobs-directory` and `jobs-manage`
-- updated reference/admin functions to support richer profile and site data
+Main user table:
+- `profiles`
 
-## SQL added in this pass
+Important profile fields include:
+- identity: `id`, `email`, `full_name`, `role`, `is_active`
+- contact: `phone`, `phone_verified`, `email_verified`
+- address: `address_line1`, `address_line2`, `city`, `province`, `postal_code`
+- employment: `employee_number`, `start_date`, `years_employed`, `current_position`, `previous_employee`
+- construction-specific: `trade_specialty`, `strengths`, `certifications`, `vehicle_make_model`, `vehicle_plate`
+- emergency: `emergency_contact_name`, `emergency_contact_phone`
+- preferences: `feature_preferences`
+- hierarchy: `default_supervisor_profile_id`, `override_supervisor_profile_id`, `default_admin_profile_id`, `override_admin_profile_id`
+
+Supporting site relationship table:
+- `site_assignments`
+
+Important assignment fields include:
+- `site_id`, `profile_id`, `assignment_role`, `is_primary`
+- `reports_to_supervisor_profile_id`
+- `reports_to_admin_profile_id`
+
+## Sites
+
+Main site table:
+- `sites`
+
+Important fields include:
+- `site_code`, `site_name`, `address`
+- `region`, `client_name`, `project_code`, `project_status`
+- `site_supervisor_profile_id`
+- `signing_supervisor_profile_id`
+- `admin_profile_id`
+- `notes`, `is_active`
+
+## Safety submissions
+
+Main operational tables:
+- `submissions`
+- `toolbox_attendees`
+- `submission_reviews`
+- `submission_images`
+
+Submission records support:
+- site and site id
+- form type A–E
+- supervisor/signing supervisor/admin sign-off references
+- review status and payload JSON
+
+## Jobs and equipment
+
+Main planning and tracking tables:
+- `jobs`
+- `equipment_items`
+- `job_equipment_requirements`
+- `equipment_signouts`
+
+These support:
+- job creation and approval chain
+- equipment reservation intent
+- equipment checkout/return tracking
+- linking equipment to current jobs and supervisors
+
+## Notifications and validation workflow
+
+Notification queue table:
+- `admin_notifications`
+
+Used for:
+- supervisor sign-off notifications
+- phone verification requests
+- equipment checkout notifications
+- equipment return notifications
+- future approval workflows
+
+## Reference catalogs
+
+Reference tables include:
+- `position_catalog`
+- `trade_catalog`
+
+These are used to populate admin/user forms and reduce free-text drift.
+
+## Views expected by the frontend/backend
+
+Directory and planning views:
+- `v_people_directory`
+- `v_assignments_directory`
+- `v_jobs_directory`
+- `v_equipment_directory`
+
+## SQL migration set to review
+
+Important SQL files now include:
+- `030_profiles_sites_assignments.sql`
+- `036_employee_profile_expansion.sql`
+- `040_reference_data_and_catalogs.sql`
+- `041_submission_notifications_and_signoff.sql`
 - `043_user_hierarchy_and_strengths.sql`
 - `044_jobs_equipment_and_reservations.sql`
 - `045_directory_views_and_scope_helpers.sql`
+- `046_account_validation_and_notifications.sql`
+- `047_password_validation_equipment_workflow.sql`
+- `000_full_schema_reference.sql`
 
-## Current focus
-1. finish user hierarchy and permissions
-2. finish backend enforcement with SQL/RLS and Edge Functions
-3. continue job creation and equipment reservation workflows
+## Current implementation note
 
-
-## Latest security and workflow pass
-
-This pass adds password/account maintenance improvements, email verification resend, phone verification request workflow, direct-report crew filtering, equipment checkout/return workflow, reservation enforcement hooks, and a refreshed full schema reference. New backend pieces include `supabase/functions/account-maintenance`, expanded `jobs-manage`, expanded `jobs-directory`, and updated `admin-directory`. New SQL references include `046_account_validation_and_notifications.sql` and `047_password_validation_equipment_workflow.sql`.
+The live project may still be catching up to the newest reference schema. If a SQL file fails because a column does not exist yet, compare the live database to `000_full_schema_reference.sql` and apply the missing migration steps in order.
 
 ---
 
