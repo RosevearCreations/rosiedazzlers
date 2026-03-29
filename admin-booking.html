@@ -59,17 +59,11 @@
     <section class="section">
       <div class="grid cards">
         <div class="panel">
-          <h2>Admin access</h2>
-          <form id="adminForm" class="form">
-            <label>
-              Admin password
-              <input id="adminPassword" name="adminPassword" type="password" autocomplete="current-password" required />
-            </label>
-
-            <div>
-              <button id="loadBookingsBtn" class="btn primary" type="submit">Load bookings</button>
-            </div>
-          </form>
+          <h2>Staff session</h2>
+          <p class="kicker" id="sessionMeta">Signed-in staff access is required. This page now prefers the real staff session.</p>
+          <div>
+            <button id="loadBookingsBtn" class="btn primary" type="button">Refresh bookings</button>
+          </div>
         </div>
 
         <div class="panel">
@@ -166,13 +160,13 @@
       el.textContent = message;
     }
 
-    async function loadBookings(password) {
+    async function loadBookings() {
       const res = await fetch("/api/admin/bookings", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": password
+          "Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify({})
       });
 
@@ -181,13 +175,13 @@
       return data;
     }
 
-    async function updateBookingStatus(password, bookingId, status, jobStatus) {
+    async function updateBookingStatus(bookingId, status, jobStatus) {
       const res = await fetch("/api/admin/bookings", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": password
+          "Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify({
           booking_id: bookingId,
           status,
@@ -200,13 +194,13 @@
       return data;
     }
 
-    async function assignBooking(password, bookingId, assignedTo) {
+    async function assignBooking(bookingId, assignedTo) {
       const res = await fetch("/api/admin/assign_booking", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": password
+          "Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify({
           booking_id: bookingId,
           assigned_to: assignedTo
@@ -293,8 +287,8 @@
     }
 
     async function refreshBookings() {
-      const password = document.querySelector("#adminPassword").value.trim();
-      const data = await loadBookings(password);
+      const data = await loadBookings();
+      document.querySelector("#sessionMeta").textContent = data?.actor?.full_name ? `Signed in as ${data.actor.full_name}.` : "Signed-in staff access is required.";
 
       allBookings = Array.isArray(data.bookings) ? data.bookings : [];
       renderBookingsList();
@@ -310,15 +304,7 @@
       setBrandImages();
       setFooter();
 
-      document.querySelector("#adminForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const password = document.querySelector("#adminPassword").value.trim();
-        if (!password) {
-          setNotice("Admin password is required.", "bad");
-          return;
-        }
-
+      document.querySelector("#loadBookingsBtn").addEventListener("click", async () => {
         try {
           setNotice("Loading bookings…");
           await refreshBookings();
@@ -331,12 +317,6 @@
       document.querySelector("#statusForm").addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const password = document.querySelector("#adminPassword").value.trim();
-        if (!password) {
-          setNotice("Admin password is required.", "bad");
-          return;
-        }
-
         if (!currentBooking?.id) {
           setNotice("Choose a booking first.", "bad");
           return;
@@ -345,7 +325,6 @@
         try {
           setNotice("Saving status…");
           await updateBookingStatus(
-            password,
             currentBooking.id,
             document.querySelector("#bookingStatus").value,
             document.querySelector("#jobStatus").value
@@ -360,12 +339,6 @@
       document.querySelector("#assignForm").addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const password = document.querySelector("#adminPassword").value.trim();
-        if (!password) {
-          setNotice("Admin password is required.", "bad");
-          return;
-        }
-
         if (!currentBooking?.id) {
           setNotice("Choose a booking first.", "bad");
           return;
@@ -374,7 +347,6 @@
         try {
           setNotice("Saving assignment…");
           await assignBooking(
-            password,
             currentBooking.id,
             document.querySelector("#assignedTo").value.trim()
           );
@@ -386,7 +358,7 @@
       });
     }
 
-    document.addEventListener("DOMContentLoaded", boot);
+    document.addEventListener("DOMContentLoaded", async () => { await boot(); document.querySelector("#loadBookingsBtn").click(); });
   </script>
 </body>
 </html>

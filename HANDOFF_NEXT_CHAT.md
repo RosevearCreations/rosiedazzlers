@@ -1,5 +1,6 @@
+> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
-> Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
+> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Rosie Dazzlers — Handoff for Next Chat
 
 ## Branch rule
@@ -55,3 +56,22 @@ Run `sql/2026-03-26_catalog_admin_vehicle_account_and_auth_cleanup.sql` before t
 - Hardened Gear/Consumables search inputs against browser email autofill and expanded sorting/filter controls.
 - Updated logo references to use brand/untitled.png.
 - Continue removing legacy admin-password fallback and continue route-by-route SEO cleanup with one H1 per exposed page.
+
+## Latest pass handoff
+- Add-on image URLs now live in the canonical pricing/add-on JSON used by the booking page.
+- Admin Catalog now includes a low-stock candidate table and Amazon-link helper for creating/updating inventory items.
+- Public catalog search inputs were re-hardened, but browser autofill behavior should still be re-tested after deployment in Chrome.
+
+
+## March 26, 2026 customer-flow and advanced inventory pass
+- fixed booking add-on image sizing so package assets no longer blow out the add-ons grid.
+- continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
+- extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
+- continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.
+
+### Newest pass summary — March 27, 2026
+- rebuilt booking into a more mobile-friendly wizard
+- added shared public login / create-account / garage / admin widget
+- filtered internal-only updates out of customer progress view
+- no new SQL migration required in this pass
+

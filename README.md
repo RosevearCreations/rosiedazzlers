@@ -1,6 +1,11 @@
+> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+
+> Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
+
+
 <!-- README.md -->
 
-> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 
 > Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
@@ -123,3 +128,38 @@ This pass focused on staff-session consistency in progress flows, booking vehicl
 - Continued local SEO cleanup for Oxford County and Norfolk County public pages.
 - Added stronger admin catalog movement-history and booking usage UI on top of the existing inventory movement endpoints.
 - Continued reducing shared-password dependence by letting newer progress tooling trust the signed-in staff session first.
+
+
+### Latest pass
+This pass repaired booking add-on imagery, continued local SEO tuning for Oxford and Norfolk counties, hardened public catalog search inputs against credential autofill, and expanded Admin Catalog with low-stock reorder visibility and Amazon-link draft intake.
+
+
+## March 26, 2026 customer-flow and advanced inventory pass
+- fixed booking add-on image sizing so package assets no longer blow out the add-ons grid.
+- continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
+- extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
+- continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.
+
+## Latest pass note
+This build continues the mobile-first booking, staff workflow, inventory, and local SEO direction. The newest user-facing changes are the mobile booking wizard, shared public account widget, and tighter customer/private progress separation.
+
+
+## Latest pass summary
+This pass focused on booking wizard usability, two-way live job communication, mobile-safe layout behavior, and documentation/schema synchronization.
+
+## March 29, 2026 update
+This pass focused on reducing the biggest active operational risks rather than adding new data tables: more admin/detailer endpoints now trust the signed-in staff session first, actor attribution is stronger across booking/time/intake/media flows, and several internal pages now load from session state instead of demanding a password-first workflow.
+
+
+## March 29, 2026 gift / upload / endpoint pass
+- moved more admin endpoints off direct shared-password checks and onto session-aware `requireStaffAccess`, including customer-profile tooling, booking customer linking, and unblock date/slot actions.
+- improved customer gift/account polish by adding dashboard gift summary totals and a signed-in gift balance checker on My Account.
+- hardened the signed upload endpoint with media-type and file-size validation plus customer-visible/public-url handling guidance.
+- continued DB-first cleanup and doc/schema synchronization for the current dev build.
+
+
+## March 29, 2026 promo / blocks / purchase reminder pass
+- promo list/create/disable and block date/slot actions now prefer signed-in staff session access through the shared role-aware auth helper instead of direct shared-password checks.
+- booking_update and assign now log actor-attributed booking events while using the resolved current staff actor.
+- purchase-order reminder lifecycle moved forward with reminder logging fields, a reminder action endpoint, and overdue reminder reporting in the purchase-order list endpoint.
+- this reduced more of the old/new endpoint overlap and shared-password bridge risk, but did not fully eliminate every remaining legacy-only admin path yet.

@@ -1,6 +1,8 @@
+> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+
 <!-- REPO_GUIDE.md -->
 
-> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 
 > Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
@@ -88,3 +90,26 @@ Ordered migration history. New SQL should be additive and keep `SUPABASE_SCHEMA.
 
 ### March 25, 2026 pass note
 This doc was refreshed during the vehicle catalog, progress-session, layout, and public catalog filter pass. The repo now includes NHTSA-backed vehicle make/model endpoints, a DB cache table for vehicle catalog rows, progress moderation/enable session upgrades, and public search/filter cleanup on Gear and Consumables.
+
+## March 27, 2026 repository note
+- `/book.html` is now a mobile-first wizard page.
+- `/assets/chrome.js` owns the public account widget behavior.
+- `functions/api/progress/view.js` is now responsible for suppressing internal-only updates from the customer-facing feed.
+
+
+## March 29, 2026 guide note
+Prefer the session-aware admin/detailer endpoints over any older shared-password-only admin path. If two endpoints appear to overlap, treat the role-aware version that imports `requireStaffAccess` as the current preferred direction.
+
+
+## March 29, 2026 gift / upload / endpoint pass
+- moved more admin endpoints off direct shared-password checks and onto session-aware `requireStaffAccess`, including customer-profile tooling, booking customer linking, and unblock date/slot actions.
+- improved customer gift/account polish by adding dashboard gift summary totals and a signed-in gift balance checker on My Account.
+- hardened the signed upload endpoint with media-type and file-size validation plus customer-visible/public-url handling guidance.
+- continued DB-first cleanup and doc/schema synchronization for the current dev build.
+
+
+## March 29, 2026 promo / blocks / purchase reminder pass
+- promo list/create/disable and block date/slot actions now prefer signed-in staff session access through the shared role-aware auth helper instead of direct shared-password checks.
+- booking_update and assign now log actor-attributed booking events while using the resolved current staff actor.
+- purchase-order reminder lifecycle moved forward with reminder logging fields, a reminder action endpoint, and overdue reminder reporting in the purchase-order list endpoint.
+- this reduced more of the old/new endpoint overlap and shared-password bridge risk, but did not fully eliminate every remaining legacy-only admin path yet.

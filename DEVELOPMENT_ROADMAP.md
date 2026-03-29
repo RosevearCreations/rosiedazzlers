@@ -1,6 +1,11 @@
+> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+
+> Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
+
+
 <!-- DEVELOPMENT_ROADMAP.md -->
 
-> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 
 > Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
@@ -127,3 +132,64 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Continued session-aware progress tooling so signed-in staff can work without depending on the fallback password on newer flows.
 - Continued local SEO work for Norfolk County and Oxford County with structured-data and page-metadata cleanup.
 - Move up next: gift/account polish, final legacy fallback removal, broader structured-data coverage route by route, and a fuller purchase reminder lifecycle.
+
+## March 26, 2026 booking/catalog/local SEO pass
+- moved forward: booking add-on images now come from the canonical pricing/add-on JSON source instead of a separate page-only map.
+- moved forward: admin catalog now has a stronger low-stock and reorder candidate surface plus Amazon-link draft intake.
+- moved forward: public catalog filters now expose category/type sorting more clearly.
+- move up next: finish the detailer-side products-used picker polish and continue DB-first replacement of remaining JSON fallback content.
+
+
+## March 26, 2026 customer-flow and advanced inventory pass
+- fixed booking add-on image sizing so package assets no longer blow out the add-ons grid.
+- continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
+- extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
+- continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.
+
+
+## March 27, 2026 booking wizard + detailer workflow pass
+- moved forward: booking now has a visible 5-step wizard flow for date/slot, main service, add-ons, vehicle verification, and final review/payment.
+- moved forward: add-on imagery now uses local packaged assets so the remaining missing cards no longer render blank.
+- moved forward: detailer jobs now have a dedicated signed-in screen for accept/decline, dispatch, arrival, start/pause/resume, and complete-to-billing actions.
+- moved forward: customer progress now shows a clearer workflow timeline in addition to photos, comments, signoff, checklist, and products used.
+- move up next: final legacy fallback removal, customer-facing checklist/signoff history in My Account, invoice/receipt design, and fuller notification delivery wiring.
+
+## March 27, 2026 mobile booking + public account widget pass
+- moved forward: booking now uses a more phone-friendly wizard with step validation, quick available-date choices, and smoother scroll behavior.
+- moved forward: public site chrome now shows a real login / create account / garage / admin widget depending on the resolved session.
+- moved forward: customer progress feed now filters out internal-only updates so admin/detailer private notes stay private.
+- move up next: finish session-only cleanup on the last legacy admin screens, complete end-to-end notification delivery, and continue DB-first inventory consolidation.
+
+
+## March 27, 2026 wizard cleanup + two-way communication pass
+- moved forward: booking wizard header is now non-sticky so step fields remain reachable on mobile.
+- moved forward: step transitions now scroll to the active content panel instead of the wizard header.
+- moved forward: customer progress now supports customer-posted live messages through the progress token path.
+- moved forward: detailer jobs now supports posting customer-visible updates and internal staff notes directly from the assigned-jobs screen.
+- move up next: notification fan-out for new notes, richer customer history in My Account, and final removal of shared-password compatibility on the oldest internal screens.
+
+
+## 2026-03-28 late pass moved forward
+- Stabilize deploy/build path by finishing the shared staff auth helper normalization.
+- Continue admin UX polish with persistent return navigation and cleaner loading states.
+- Continue route-by-route visual QA for asset path drift, contrast drift, and mobile layout regressions.
+
+## Roadmap movement — March 29, 2026
+- Advanced the auth/session completion track by converting another batch of admin endpoints away from direct shared-password-only checks.
+- Advanced the identity-consistency track by using the resolved signed-in actor in time/intake/media and booking-event flows.
+- Advanced UI cohesion by making Bookings, Blocks, and Staff pages load from the real staff session instead of requiring a password-first flow.
+- Move up next: remaining legacy-only admin endpoints (`bookings/assign/blocks` companion actions, intake edge routes, and any pages still hard-coded around `x-admin-password`) plus notification delivery and upload hardening.
+
+
+## March 29, 2026 gift / upload / endpoint pass
+- moved more admin endpoints off direct shared-password checks and onto session-aware `requireStaffAccess`, including customer-profile tooling, booking customer linking, and unblock date/slot actions.
+- improved customer gift/account polish by adding dashboard gift summary totals and a signed-in gift balance checker on My Account.
+- hardened the signed upload endpoint with media-type and file-size validation plus customer-visible/public-url handling guidance.
+- continued DB-first cleanup and doc/schema synchronization for the current dev build.
+
+
+## March 29, 2026 promo / blocks / purchase reminder pass
+- promo list/create/disable and block date/slot actions now prefer signed-in staff session access through the shared role-aware auth helper instead of direct shared-password checks.
+- booking_update and assign now log actor-attributed booking events while using the resolved current staff actor.
+- purchase-order reminder lifecycle moved forward with reminder logging fields, a reminder action endpoint, and overdue reminder reporting in the purchase-order list endpoint.
+- this reduced more of the old/new endpoint overlap and shared-password bridge risk, but did not fully eliminate every remaining legacy-only admin path yet.

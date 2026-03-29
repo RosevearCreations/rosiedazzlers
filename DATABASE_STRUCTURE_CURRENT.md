@@ -1,6 +1,16 @@
+> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+
+March 28, 2026 sync note: no new tables were required for this pass; this refresh mainly aligns UI readability, catalog presentation, and documentation with the current build.
+
+> Last synchronized: March 28, 2026. Reviewed during the image-fit, booking-slot readability, dark-text contrast, and current-build documentation/schema sync pass.
+
+
+> Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
+
+
 # Database Structure Current
 
-> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 
 ## Snapshot note
 This file is the human-readable companion to `SUPABASE_SCHEMA.sql`.
@@ -181,3 +191,38 @@ This is now the preferred auth model for internal workflows, while the shared ad
 
 ## March 26, 2026 note
 No new table was required in this pass. The operational focus moved to UI coverage over the existing catalog inventory, movement, and booking-linked usage tables while continuing the JSON-to-DB reduction direction.
+
+## Pass note — March 26, 2026
+No new tables were required in this pass. The current work was focused on using the existing inventory, movement, and pricing structures more consistently in the UI and documentation.
+
+
+## March 26, 2026 customer-flow and advanced inventory pass
+- fixed booking add-on image sizing so package assets no longer blow out the add-ons grid.
+- continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
+- extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
+- continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.
+
+## March 27, 2026 note
+No new table or column was required in this pass. The main change was behavioral: customer progress views now rely on existing visibility data to suppress internal-only updates, and booking now uses the existing vehicle / pricing / availability structures in a more mobile-friendly way.
+
+
+
+## 2026-03-28 note
+No new schema objects were required in this pass. This pass focused on frontend/admin-shell stabilization, asset-path repair, and staff-auth build compatibility.
+
+
+March 29, 2026 sync note: no new tables were required for this pass; the main changes were endpoint/session hardening and actor-attribution improvements using the existing schema.
+
+
+## March 29, 2026 gift / upload / endpoint pass
+- moved more admin endpoints off direct shared-password checks and onto session-aware `requireStaffAccess`, including customer-profile tooling, booking customer linking, and unblock date/slot actions.
+- improved customer gift/account polish by adding dashboard gift summary totals and a signed-in gift balance checker on My Account.
+- hardened the signed upload endpoint with media-type and file-size validation plus customer-visible/public-url handling guidance.
+- continued DB-first cleanup and doc/schema synchronization for the current dev build.
+
+
+## March 29, 2026 promo / blocks / purchase reminder pass
+- promo list/create/disable and block date/slot actions now prefer signed-in staff session access through the shared role-aware auth helper instead of direct shared-password checks.
+- booking_update and assign now log actor-attributed booking events while using the resolved current staff actor.
+- purchase-order reminder lifecycle moved forward with reminder logging fields, a reminder action endpoint, and overdue reminder reporting in the purchase-order list endpoint.
+- this reduced more of the old/new endpoint overlap and shared-password bridge risk, but did not fully eliminate every remaining legacy-only admin path yet.

@@ -59,11 +59,11 @@
     <section class="section">
       <div class="grid cards">
         <div class="panel">
-          <h2>Admin access</h2>
+          <h2>Staff session</h2>
           <form id="adminForm" class="form">
             <label>
-              Admin password
-              <input id="adminPassword" name="adminPassword" type="password" autocomplete="current-password" required />
+              Signed-in staff session
+              <input id="adminPassword" name="adminPassword" type="password" autocomplete="off" placeholder="Optional legacy fallback" />
             </label>
 
             <div>
@@ -176,12 +176,12 @@
     }
 
     async function apiPost(url, password, body) {
+      const headers = { "Content-Type": "application/json" };
+      if (password) headers["x-admin-password"] = password;
       const res = await fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": password
-        },
+        headers,
+        credentials: "include",
         body: JSON.stringify(body || {})
       });
 
@@ -285,11 +285,6 @@
         e.preventDefault();
 
         const password = document.querySelector("#adminPassword").value.trim();
-        if (!password) {
-          setNotice("Admin password is required.", "bad");
-          return;
-        }
-
         try {
           currentPassword = password;
           setNotice("Loading current blocks…");
@@ -302,11 +297,6 @@
 
       document.querySelector("#blockDateForm").addEventListener("submit", async (e) => {
         e.preventDefault();
-
-        if (!currentPassword) {
-          setNotice("Load admin access first.", "bad");
-          return;
-        }
 
         try {
           setNotice("Blocking date…");
@@ -325,11 +315,6 @@
       document.querySelector("#blockSlotForm").addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        if (!currentPassword) {
-          setNotice("Load admin access first.", "bad");
-          return;
-        }
-
         try {
           setNotice("Blocking slot…");
           await apiPost("/api/admin/block_slot", currentPassword, {
@@ -346,7 +331,7 @@
       });
     }
 
-    document.addEventListener("DOMContentLoaded", boot);
+    document.addEventListener("DOMContentLoaded", async () => { await boot(); document.querySelector("#adminForm").requestSubmit(); });
   </script>
 </body>
 </html>

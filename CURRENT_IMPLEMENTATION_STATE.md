@@ -1,4 +1,9 @@
-> Last synchronized: March 25, 2026. This file was reviewed during the staff-session, pricing-catalog, upload, reorder, SEO, and docs/schema refresh pass.
+> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+
+> Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
+
+
+> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Current Implementation State
 
 ## Completed / strengthened in this pass
@@ -59,3 +64,57 @@
 - Admin catalog now exposes movement-history review and can record products used on a booking directly from inventory.
 - Admin progress now includes booking-level product-usage recording and relies on signed-in staff sessions first on newer actions.
 - LocalBusiness structured data is now injected on exposed public pages to support local search understanding for Oxford and Norfolk coverage.
+
+## March 26, 2026 booking/catalog/local SEO pass
+- Book page add-ons now read image URLs from the canonical pricing/add-on JSON so the booking page and service pages can share the same add-on image source.
+- Gear and Consumables public search inputs were hardened again against browser credential autofill and moved toward generic text-search behavior.
+- Admin Catalog now surfaces low-stock items, movement history, Amazon-link draft intake, and easier reorder creation from current inventory levels.
+- Local search emphasis continues to target Oxford County and Norfolk County through page titles, descriptions, and structured-data support.
+- No schema migration was required in this pass.
+
+
+## March 26, 2026 customer-flow and advanced inventory pass
+- fixed booking add-on image sizing so package assets no longer blow out the add-ons grid.
+- continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
+- extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
+- continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.
+
+## March 27, 2026 pass update
+- Booking is now mobile-friendlier with a step-driven wizard, date availability strip, saved garage vehicle prefill, and per-step validation.
+- Shared public chrome now renders a session-aware account widget for guest, customer, and staff states.
+- Customer progress/feed view now filters internal-only updates instead of exposing every staff note.
+
+
+## March 27, 2026 current-state note
+- Booking wizard header no longer overlays step content.
+- Booking step changes now scroll to the active step card.
+- Customer progress feed remains customer-only, while new customer comment posting is now supported through the progress token flow.
+- Detailers can now post either public or internal notes from the assigned jobs screen.
+
+
+## 2026-03-28 late pass
+- Fixed the staff-auth deploy blocker by standardizing `job_note_post.js` on `requireStaffAccess` and adding a compatibility export in `functions/api/_lib/staff-auth.js`.
+- Fixed missing package/service imagery for the vehicle size chart and add-on asset references that were still using the wrong base path.
+- Fixed dark button text contrast so button labels render in light text consistently across the site.
+- Fixed lingering admin loading banners by forcing `hidden` states to win and by hiding stale loader nodes after AdminShell boot completes.
+- Added a small return menu for admin pages that do not already have a full admin nav header.
+
+## March 29, 2026 pass
+- Converted more internal workflows to trust the signed-in staff actor first: booking list/update, assignment, blocks listing, time entries, time summary, jobsite intake get/save, progress media post, and staff list/save.
+- Reduced shared-password-only behavior in the admin UI by auto-loading Bookings, Blocks, and Staff screens from the staff session where available.
+- Improved identity consistency by writing actor-derived names and staff IDs into time/media/intake responses and booking events where possible.
+- No new database tables were required; this pass primarily reduced auth drift and endpoint overlap.
+
+
+## March 29, 2026 gift / upload / endpoint pass
+- moved more admin endpoints off direct shared-password checks and onto session-aware `requireStaffAccess`, including customer-profile tooling, booking customer linking, and unblock date/slot actions.
+- improved customer gift/account polish by adding dashboard gift summary totals and a signed-in gift balance checker on My Account.
+- hardened the signed upload endpoint with media-type and file-size validation plus customer-visible/public-url handling guidance.
+- continued DB-first cleanup and doc/schema synchronization for the current dev build.
+
+
+## March 29, 2026 promo / blocks / purchase reminder pass
+- promo list/create/disable and block date/slot actions now prefer signed-in staff session access through the shared role-aware auth helper instead of direct shared-password checks.
+- booking_update and assign now log actor-attributed booking events while using the resolved current staff actor.
+- purchase-order reminder lifecycle moved forward with reminder logging fields, a reminder action endpoint, and overdue reminder reporting in the purchase-order list endpoint.
+- this reduced more of the old/new endpoint overlap and shared-password bridge risk, but did not fully eliminate every remaining legacy-only admin path yet.

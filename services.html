@@ -175,7 +175,7 @@
     qs("#modalCloseBtn").addEventListener("click", closeModal);
     qs("#modalBack").addEventListener("click",(e)=>{ if(e.target.id==="modalBack") closeModal(); });
 
-    qs("#openSizeChartBtn").addEventListener("click",()=> openModal("Vehicle Size Chart", `${BRAND_BASE}/CarSizeChart.PNG`));
+    qs("#openSizeChartBtn").addEventListener("click",()=> openModal("Vehicle Size Chart", `${PACKAGES_BASE}/CarSizeChart.PNG`));
     qs("#openPriceChartBtn").addEventListener("click",()=> openModal("Vehicle Price Chart 2025", `${BRAND_BASE}/CarPrice2025.PNG`));
     qs("#openDetailsChartBtn").addEventListener("click",()=> openModal("Package Service Details Chart", `${BRAND_BASE}/CarPriceDetails2025.PNG`));
 
@@ -190,7 +190,7 @@
     const HOVER_EXTRA_IMAGES = [
       imgUrlFromFilename("Interior Detail.png"),
       imgUrlFromFilename("Exterior Detail.png"),
-      `${BRAND_BASE}/CarSizeChart.PNG`,
+      `${PACKAGES_BASE}/CarSizeChart.PNG`,
     ];
 
     // Add-on image map (filenames in /packages)

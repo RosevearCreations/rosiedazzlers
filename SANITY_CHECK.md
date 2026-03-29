@@ -1,6 +1,11 @@
+> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+
+> Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
+
+
 <!-- SANITY_CHECK.md -->
 
-> Last synchronized: March 25, 2026. Reviewed during the public account widget, reset/verification, analytics, SEO, security, and docs/schema refresh pass.
+> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 
 > Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
@@ -83,3 +88,56 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Verify Gear and Consumables search inputs no longer invite saved email credentials and remain blank after refresh/focus.
 - Verify admin catalog movement history loads and job-use entries reduce inventory quantities immediately.
 - Verify admin progress can record products used for the loaded booking and refresh the usage history panel.
+
+## Latest pass quick check
+- booking add-on imagery repaired from canonical add-on data
+- public catalog search inputs hardened again against browser email autofill
+- admin catalog now shows low-stock reorder candidates and Amazon-link draft intake
+- schema/docs refreshed with no new migration required in this pass
+
+
+## March 26, 2026 customer-flow and advanced inventory pass
+- fixed booking add-on image sizing so package assets no longer blow out the add-ons grid.
+- continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
+- extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
+- continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.
+
+## March 27, 2026 sanity update
+- Booking flow is substantially easier to test on phones.
+- Public site now exposes account entry points more clearly.
+- Internal-only progress notes are now separated from the customer feed.
+- Continue testing: booking date/slot selection, garage prefill, package selection by vehicle size, and checkout handoff.
+
+
+## Current smoke-test focus
+1. Booking wizard on phone width: header should stay in normal flow and not cover inputs.
+2. Step navigation: next/back should scroll to the visible step card, not the wizard header.
+3. Customer progress: post a message and confirm it appears in admin progress.
+4. Detailer jobs: post one public update and one internal note, then confirm the customer feed only shows the public note.
+
+
+## 2026-03-28 late pass quick check
+- Staff note endpoint now builds cleanly against the shared auth helper.
+- Pricing size chart path corrected to the packages bucket.
+- Shared dark buttons now render light text.
+- Admin loaders now hide after shell boot, and pages without a full admin header get a return bar.
+
+## March 29, 2026 sanity update
+- Pages build blocker remains repaired.
+- Internal auth/session coverage is broader than the prior pass because time/intake/media/booking/staff flows now accept the real signed-in staff actor first.
+- Legacy bridge risk is reduced but not gone; continue converting the remaining shared-password-only admin endpoints and pages.
+- No new DDL required in this pass.
+
+
+## March 29, 2026 gift / upload / endpoint pass
+- moved more admin endpoints off direct shared-password checks and onto session-aware `requireStaffAccess`, including customer-profile tooling, booking customer linking, and unblock date/slot actions.
+- improved customer gift/account polish by adding dashboard gift summary totals and a signed-in gift balance checker on My Account.
+- hardened the signed upload endpoint with media-type and file-size validation plus customer-visible/public-url handling guidance.
+- continued DB-first cleanup and doc/schema synchronization for the current dev build.
+
+
+## March 29, 2026 promo / blocks / purchase reminder pass
+- promo list/create/disable and block date/slot actions now prefer signed-in staff session access through the shared role-aware auth helper instead of direct shared-password checks.
+- booking_update and assign now log actor-attributed booking events while using the resolved current staff actor.
+- purchase-order reminder lifecycle moved forward with reminder logging fields, a reminder action endpoint, and overdue reminder reporting in the purchase-order list endpoint.
+- this reduced more of the old/new endpoint overlap and shared-password bridge risk, but did not fully eliminate every remaining legacy-only admin path yet.
