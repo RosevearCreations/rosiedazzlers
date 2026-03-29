@@ -1,3 +1,5 @@
+import { requireStaffAccess, json, cleanText, cleanEmail, serviceHeaders, toBoolean } from "../_lib/staff-auth.js";
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
@@ -6,15 +8,19 @@ export async function onRequestPost(context) {
       return json({ error: "Server configuration is incomplete." }, 500);
     }
 
-    const adminPassword = request.headers.get("x-admin-password") || "";
-    if (!env.ADMIN_PASSWORD || adminPassword !== env.ADMIN_PASSWORD) {
-      return json({ error: "Unauthorized." }, 401);
-    }
-
     const body = await request.json().catch(() => null);
     if (!body || typeof body !== "object") {
       return json({ error: "Invalid request body." }, 400);
     }
+
+    const access = await requireStaffAccess({
+      request,
+      env,
+      body,
+      capability: "manage_bookings",
+      allowLegacyAdminFallback: true
+    });
+    if (!access.ok) return access.response;
 
     const id = cleanText(body.id);
     const email = cleanEmail(body.email);
@@ -23,16 +29,11 @@ export async function onRequestPost(context) {
     const tier_code = cleanTier(body.tier_code);
     const lifetime_bookings = toNonNegativeInteger(body.lifetime_bookings, 0);
     const lifetime_spend_cents = toNonNegativeInteger(body.lifetime_spend_cents, 0);
-    const big_tipper = toBooleanDefault(body.big_tipper, false);
+    const big_tipper = toBoolean(body.big_tipper);
     const notes = cleanText(body.notes);
 
-    if (!email) {
-      return json({ error: "Missing or invalid email." }, 400);
-    }
-
-    if (!tier_code) {
-      return json({ error: "Invalid tier_code." }, 400);
-    }
+    if (!email) return json({ error: "Missing or invalid email." }, 400);
+    if (!tier_code) return json({ error: "Invalid tier_code." }, 400);
 
     const record = {
       email,
@@ -46,89 +47,33 @@ export async function onRequestPost(context) {
       updated_at: new Date().toISOString()
     };
 
-    const headers = {
-      apikey: env.SUPABASE_SERVICE_ROLE_KEY,
-      Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
-      "Content-Type": "application/json"
-    };
+    const headers = serviceHeaders(env);
 
     if (id) {
-      const patchRes = await fetch(
-        `${env.SUPABASE_URL}/rest/v1/customer_profiles?id=eq.${encodeURIComponent(id)}`,
-        {
-          method: "PATCH",
-          headers: {
-            ...headers,
-            Prefer: "return=representation"
-          },
-          body: JSON.stringify(record)
-        }
-      );
-
-      if (!patchRes.ok) {
-        const text = await patchRes.text();
-        return json({ error: `Could not update customer profile. ${text}` }, 500);
-      }
-
-      const rows = await patchRes.json();
-      const row = Array.isArray(rows) ? rows[0] : null;
-
-      if (!row) {
-        return json({ error: "Customer profile not found." }, 404);
-      }
-
-      return json({
-        ok: true,
-        message: "Customer profile updated.",
-        customer_profile: row
+      const patchRes = await fetch(`${env.SUPABASE_URL}/rest/v1/customer_profiles?id=eq.${encodeURIComponent(id)}`, {
+        method: "PATCH",
+        headers: { ...headers, Prefer: "return=representation" },
+        body: JSON.stringify(record)
       });
+      if (!patchRes.ok) return json({ error: `Could not update customer profile. ${await patchRes.text()}` }, 500);
+      const rows = await patchRes.json().catch(() => []);
+      const row = Array.isArray(rows) ? rows[0] : null;
+      if (!row) return json({ error: "Customer profile not found." }, 404);
+      return json({ ok: true, message: "Customer profile updated.", actor: { id: access.actor.id || null, full_name: access.actor.full_name || null }, customer_profile: row });
     }
 
     const insertRes = await fetch(`${env.SUPABASE_URL}/rest/v1/customer_profiles`, {
       method: "POST",
-      headers: {
-        ...headers,
-        Prefer: "return=representation"
-      },
-      body: JSON.stringify([
-        {
-          ...record,
-          created_at: new Date().toISOString()
-        }
-      ])
+      headers: { ...headers, Prefer: "return=representation" },
+      body: JSON.stringify([{ ...record, created_at: new Date().toISOString() }])
     });
-
-    if (!insertRes.ok) {
-      const text = await insertRes.text();
-      return json({ error: `Could not create customer profile. ${text}` }, 500);
-    }
-
-    const rows = await insertRes.json();
+    if (!insertRes.ok) return json({ error: `Could not create customer profile. ${await insertRes.text()}` }, 500);
+    const rows = await insertRes.json().catch(() => []);
     const row = Array.isArray(rows) ? rows[0] : null;
-
-    return json({
-      ok: true,
-      message: "Customer profile created.",
-      customer_profile: row || null
-    });
+    return json({ ok: true, message: "Customer profile created.", actor: { id: access.actor.id || null, full_name: access.actor.full_name || null }, customer_profile: row || null });
   } catch (err) {
-    return json(
-      { error: err && err.message ? err.message : "Unexpected server error." },
-      500
-    );
+    return json({ error: err && err.message ? err.message : "Unexpected server error." }, 500);
   }
-}
-
-function cleanText(value) {
-  const s = String(value ?? "").trim();
-  return s || null;
-}
-
-function cleanEmail(value) {
-  const s = String(value ?? "").trim().toLowerCase();
-  if (!s) return null;
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)) return null;
-  return s;
 }
 
 function cleanTier(value) {
@@ -141,19 +86,4 @@ function toNonNegativeInteger(value, fallback = 0) {
   const n = Number(value);
   if (!Number.isFinite(n) || n < 0) return fallback;
   return Math.floor(n);
-}
-
-function toBooleanDefault(value, fallback = false) {
-  if (value === null || value === undefined || value === "") return fallback;
-  return value === true || value === "true" || value === "on" || value === 1 || value === "1";
-}
-
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), {
-    status,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-store"
-    }
-  });
 }

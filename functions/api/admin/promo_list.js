@@ -1,12 +1,4 @@
-// /functions/api/admin/promo_list.js
-// REPLACE ENTIRE FILE
-//
-// Lists promo codes (admin).
-//
-// POST JSON:
-// {
-//   "admin_password": "...."
-// }
+import { requireStaffAccess, json, serviceHeaders } from "../_lib/staff-auth.js";
 
 export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: corsHeaders() });
@@ -14,46 +6,38 @@ export async function onRequestOptions() {
 
 export async function onRequestPost({ request, env }) {
   try {
-    const body = await request.json().catch(() => null);
-
-    // --- Auth ---
-    const ADMIN_PASSWORD = env.ADMIN_PASSWORD;
-    if (!ADMIN_PASSWORD) return json({ ok: false, error: "Server not configured (ADMIN_PASSWORD missing)" }, 500);
-    if (!body?.admin_password || body.admin_password !== ADMIN_PASSWORD) {
-      return json({ ok: false, error: "Unauthorized" }, 401);
-    }
-
-    // --- Supabase config ---
-    const SUPABASE_URL = env.SUPABASE_URL;
-    const SERVICE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
-    if (!SUPABASE_URL || !SERVICE_KEY) {
-      return json({ ok: false, error: "Server not configured (Supabase env vars missing)" }, 500);
-    }
-
-    const url =
-      `${SUPABASE_URL}/rest/v1/promo_codes?select=*` +
-      `&order=created_at.desc`;
-
-    const res = await fetch(url, {
-      method: "GET",
-      headers: {
-        apikey: SERVICE_KEY,
-        Authorization: `Bearer ${SERVICE_KEY}`,
-        Accept: "application/json",
-      },
+    const body = await request.json().catch(() => ({}));
+    const access = await requireStaffAccess({
+      request,
+      env,
+      body,
+      capability: "manage_promos",
+      allowLegacyAdminFallback: false,
     });
+    if (!access.ok) return withCors(access.response);
+
+    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
+      return withCors(json({ ok: false, error: "Server not configured (Supabase env vars missing)" }, 500));
+    }
+
+    const res = await fetch(
+      `${env.SUPABASE_URL}/rest/v1/promo_codes?select=*&order=created_at.desc`,
+      {
+        method: "GET",
+        headers: { ...serviceHeaders(env), Accept: "application/json" },
+      }
+    );
 
     const text = await res.text();
     const data = safeJson(text);
 
     if (!res.ok) {
-      return json({ ok: false, error: "Supabase error (promo_codes list)", details: data }, 502);
+      return withCors(json({ ok: false, error: "Supabase error (promo_codes list)", details: data }, 502));
     }
 
-    return json({ ok: true, rows: Array.isArray(data) ? data : [] });
-
+    return withCors(json({ ok: true, rows: Array.isArray(data) ? data : [], actor: access.actor.full_name || access.actor.email || "Staff" }));
   } catch (e) {
-    return json({ ok: false, error: "Server error", details: String(e) }, 500);
+    return withCors(json({ ok: false, error: "Server error", details: String(e) }, 500));
   }
 }
 
@@ -63,15 +47,15 @@ function safeJson(text) {
 
 function corsHeaders() {
   return {
-    "access-control-allow-origin": "*",
-    "access-control-allow-methods": "POST,OPTIONS",
-    "access-control-allow-headers": "content-type,authorization",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, x-admin-password, x-staff-email, x-staff-user-id",
+    "Cache-Control": "no-store",
   };
 }
 
-function json(obj, status = 200) {
-  return new Response(JSON.stringify(obj), {
-    status,
-    headers: { "content-type": "application/json", ...corsHeaders() },
-  });
+function withCors(response) {
+  const headers = new Headers(response.headers || {});
+  for (const [k, v] of Object.entries(corsHeaders())) headers.set(k, v);
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }

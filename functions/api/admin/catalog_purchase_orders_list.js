@@ -15,7 +15,8 @@ export async function onRequestGet(context) {
     const orders = Array.isArray(rows) ? rows : [];
     const now = Date.now();
     const due = orders.filter((row) => row.reminder_at && Date.parse(row.reminder_at) <= now && !['received','cancelled'].includes(String(row.status || '')));
-    return withCors(json({ ok: true, orders, reminder_due: due }));
+    const overdue = due.filter((row) => !row.reminder_sent_at || Date.parse(row.reminder_sent_at) < Date.parse(row.reminder_at));
+    return withCors(json({ ok: true, orders, reminder_due: due, reminder_overdue: overdue }));
   } catch (err) { return withCors(json({ error: String(err) }, 500)); }
 }
 function corsHeaders(){return {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"GET,OPTIONS","Access-Control-Allow-Headers":"Content-Type, x-admin-password, x-staff-email, x-staff-user-id","Cache-Control":"no-store"};}

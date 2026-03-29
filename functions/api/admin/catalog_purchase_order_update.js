@@ -15,10 +15,11 @@ export async function onRequestPost(context) {
     if (!currentRes.ok) return withCors(json({ error: await currentRes.text() }, 500));
     const current = (await currentRes.json().catch(()=>[]))?.[0] || null;
     if (!current) return withCors(json({ error: 'Purchase order not found.' }, 404));
-    const patch = { status, updated_at: new Date().toISOString(), note: String(body?.note || '').trim() || current.note || null };
+    const patch = { status, updated_at: new Date().toISOString(), note: String(body?.note || '').trim() || current.note || null, reminder_at: body?.reminder_at ? String(body.reminder_at).trim() : current.reminder_at || null };
     if (status === 'ordered' && !current.ordered_at) patch.ordered_at = new Date().toISOString();
+    if (status === 'ordered' && !patch.reminder_at) patch.reminder_at = new Date(Date.now() + 3*24*60*60*1000).toISOString();
     if (status === 'received' && !current.received_at) patch.received_at = new Date().toISOString();
-    if (status === 'cancelled') patch.reminder_at = null;
+    if (status === 'cancelled') { patch.reminder_at = null; patch.reminder_sent_at = null; patch.reminder_last_channel = null; }
     const res = await fetch(`${env.SUPABASE_URL}/rest/v1/catalog_purchase_orders?id=eq.${encodeURIComponent(id)}`, { method: 'PATCH', headers: { ...baseHeaders, 'Content-Type': 'application/json', Prefer: 'return=representation' }, body: JSON.stringify(patch) });
     if (!res.ok) return withCors(json({ error: await res.text() }, 500));
     const updated = (await res.json().catch(()=>[]))?.[0] || null;
