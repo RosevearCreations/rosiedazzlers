@@ -212,3 +212,10 @@ No new schema objects were required in this pass. This pass focused on frontend/
 
 
 March 29, 2026 sync note: no new tables were required for this pass; the main changes were endpoint/session hardening and actor-attribution improvements using the existing schema.
+
+
+## March 29, 2026 gift / upload / endpoint pass
+- moved more admin endpoints off direct shared-password checks and onto session-aware `requireStaffAccess`, including customer-profile tooling, booking customer linking, and unblock date/slot actions.
+- improved customer gift/account polish by adding dashboard gift summary totals and a signed-in gift balance checker on My Account.
+- hardened the signed upload endpoint with media-type and file-size validation plus customer-visible/public-url handling guidance.
+- continued DB-first cleanup and doc/schema synchronization for the current dev build.

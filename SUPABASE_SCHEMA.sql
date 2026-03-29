@@ -335,3 +335,6 @@ create index if not exists customer_reviews_customer_profile_id_idx on public.cu
 -- 2026-03-28 late pass
 -- No schema changes were required in this pass.
 -- This pass repaired shared staff-auth compatibility, admin-shell loading UX, button contrast, and image-path issues.
+
+-- March 29, 2026 gift / upload / endpoint pass
+-- No new schema objects were required in this pass. Work focused on staff-session coverage, gift/account polish, upload validation, and documentation synchronization.
