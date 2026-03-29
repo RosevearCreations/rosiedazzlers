@@ -35,13 +35,42 @@ async function handle(context){
     const tier = Array.isArray(tiers) ? tiers[0] || null : null;
     const redemptions = Array.isArray(redemptionsAll) ? redemptionsAll.filter((row) => { const gift = row.gift_certificate || {}; return (String(gift.purchaser_email || '').toLowerCase() === String(email || '').toLowerCase()) || (String(gift.recipient_email || '').toLowerCase() === String(email || '').toLowerCase()); }) : [];
     const reviews = reviewRes && reviewRes.ok ? await reviewRes.json().catch(() => []) : [];
+    const giftSummary = summarizeGiftCertificates(Array.isArray(gifts) ? gifts : [], Array.isArray(redemptions) ? redemptions : []);
     let headersOut = new Headers({ "Content-Type":"application/json; charset=utf-8", "Cache-Control":"no-store" });
     if (rotatedCookie) headersOut = appendSetCookie(headersOut, rotatedCookie);
     headersOut = applyCors(headersOut);
-    return new Response(JSON.stringify({ ok:true, customer: current.customer_profile, tier, bookings: Array.isArray(bookings)?bookings:[], vehicles: Array.isArray(vehicles)?vehicles:[], gift_certificates: Array.isArray(gifts)?gifts:[], redemptions: Array.isArray(redemptions)?redemptions:[], reviews: Array.isArray(reviews)?reviews:[] }, null, 2), { status:200, headers: headersOut });
+    return new Response(JSON.stringify({ ok:true, customer: current.customer_profile, tier, bookings: Array.isArray(bookings)?bookings:[], vehicles: Array.isArray(vehicles)?vehicles:[], gift_certificates: Array.isArray(gifts)?gifts:[], redemptions: Array.isArray(redemptions)?redemptions:[], gift_summary: giftSummary, reviews: Array.isArray(reviews)?reviews:[] }, null, 2), { status:200, headers: headersOut });
   } catch (err) { return withCors(json({ error: err?.message || 'Unexpected server error.' },500)); }
 }
 function json(data,status=200){ return new Response(JSON.stringify(data,null,2),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"}}); }
 function corsHeaders(){ return {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"GET,POST,OPTIONS","Access-Control-Allow-Headers":"Content-Type","Cache-Control":"no-store"}; }
 function applyCors(headers){ const out=headers instanceof Headers?new Headers(headers):new Headers(headers||{}); for(const [k,v] of Object.entries(corsHeaders())) if(!out.has(k)) out.set(k,v); return out; }
 function withCors(response){ return new Response(response.body,{status:response.status,statusText:response.statusText,headers:applyCors(response.headers||{})}); }
+
+function summarizeGiftCertificates(gifts, redemptions) {
+  const rows = Array.isArray(gifts) ? gifts : [];
+  const used = Array.isArray(redemptions) ? redemptions : [];
+  const now = Date.now();
+  let active_count = 0;
+  let active_remaining_cents = 0;
+  let expired_count = 0;
+  let redeemed_cents = 0;
+  for (const row of rows) {
+    const remaining = Number(row.remaining_cents || 0);
+    const expiresAt = row.expires_at ? Date.parse(row.expires_at) : null;
+    const expired = Number.isFinite(expiresAt) && expiresAt < now;
+    if (expired) expired_count += 1;
+    if (!expired && String(row.status || '').toLowerCase() !== 'void') {
+      active_count += 1;
+      active_remaining_cents += remaining > 0 ? remaining : 0;
+    }
+  }
+  for (const row of used) redeemed_cents += Number(row.amount_cents || 0);
+  return {
+    active_count,
+    active_remaining_cents,
+    expired_count,
+    redeemed_cents,
+    redemption_count: used.length
+  };
+}
