@@ -1,7 +1,7 @@
 const DATA_URL = "/data/rosie_services_pricing_and_packages.json";
 
 const BRAND = {
-  logo: "https://assets.rosiedazzlers.ca/brand/RosieDazzlerLogoOriginal3D.png",
+  logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
   banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
   reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png"
 };
@@ -24,14 +24,18 @@ const HOVER_MEDIA = {
 };
 
 const ADDON_MEDIA = {
-  de_badging: "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
-  de_ionizing_treatment: "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png",
-  engine_cleaning: "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
-  external_ceramic_coating: "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
-  external_graphene_fine_finish: "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png",
-  external_wax: "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png",
-  vinyl_wrapping: "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
-  window_tinting: "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png"
+  full_clay_treatment: '/assets/addons/full_clay_treatment.svg',
+  two_stage_polish: '/assets/addons/two_stage_polish.svg',
+  high_grade_paint_sealant: '/assets/addons/high_grade_paint_sealant.svg',
+  uv_protectant_applied_on_interior_panels: '/assets/addons/uv_protectant_applied_on_interior_panels.svg',
+  de_ionizing_treatment: '/assets/addons/de_ionizing_treatment.svg',
+  de_badging: '/assets/addons/de_badging.svg',
+  engine_cleaning: '/assets/addons/engine_cleaning.svg',
+  external_ceramic_coating: '/assets/addons/external_ceramic_coating.svg',
+  external_graphene_fine_finish: '/assets/addons/external_graphene_fine_finish.svg',
+  external_wax: '/assets/addons/external_wax.svg',
+  vinyl_wrapping: '/assets/addons/vinyl_wrapping.svg',
+  window_tinting: '/assets/addons/window_tinting.svg'
 };
 
 let _servicesData = null;

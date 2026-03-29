@@ -59,6 +59,9 @@ function setBrandImagesEverywhere() {
 }
 
 function ensureMainBanner() {
+  const path = normalizePath(location.pathname);
+  if (["/book","/login","/my-account","/progress","/complete","/detailer-jobs"].includes(path)) return;
+
   const existingImg =
     document.querySelector("[data-main-banner] img") ||
     document.querySelector("#mainBanner img") ||
@@ -473,6 +476,104 @@ function attachRotators(containerSelector) {
    BOOT
    ========================= */
 
+
+
+/* =========================
+   PUBLIC ACCOUNT WIDGET
+   ========================= */
+
+async function readJsonSafe(url, options = {}) {
+  try {
+    const res = await fetch(url, { credentials: "include", cache: "no-store", ...options });
+    const data = await res.json().catch(() => null);
+    return { ok: res.ok, status: res.status, data };
+  } catch (err) {
+    return { ok: false, status: 0, data: { error: err && err.message ? err.message : "Request failed." } };
+  }
+}
+
+function ensureAccountHost() {
+  const navInner = document.querySelector('.nav-inner');
+  if (!navInner) return null;
+  let host = document.querySelector('#publicAccountWidget');
+  if (host) return host;
+  host = document.createElement('div');
+  host.id = 'publicAccountWidget';
+  host.className = 'account-widget';
+  const primaryBtn = navInner.querySelector('a.btn.primary[href="/book"]');
+  if (primaryBtn && primaryBtn.parentNode === navInner) {
+    navInner.insertBefore(host, primaryBtn);
+  } else {
+    navInner.appendChild(host);
+  }
+  return host;
+}
+
+function widgetButton(href, label, extraClass = 'ghost', attrs = '') {
+  return `<a class="btn ${extraClass}" href="${href}" ${attrs}>${label}</a>`;
+}
+
+function widgetActionButton(id, label, extraClass = 'ghost') {
+  return `<button class="btn ${extraClass}" type="button" id="${id}">${label}</button>`;
+}
+
+async function initAccountWidget() {
+  const host = ensureAccountHost();
+  if (!host) return;
+  host.innerHTML = `<span class="account-chip">Checking account…</span>`;
+
+  const [staff, client] = await Promise.all([
+    readJsonSafe('/api/admin/auth_me'),
+    readJsonSafe('/api/client/auth_me')
+  ]);
+
+  const staffActor = staff.ok && staff.data && (staff.data.actor || staff.data.staff_user || staff.data.staff) ? (staff.data.actor || staff.data.staff_user || staff.data.staff) : null;
+  const clientCustomer = client.ok && client.data && client.data.authenticated === true ? client.data.customer : null;
+
+  if (staffActor) {
+    const role = staffActor.role_code || (staffActor.is_admin ? 'admin' : 'staff');
+    host.innerHTML = `
+      <div class="account-widget-inner">
+        <span class="account-chip">${staffActor.full_name || staffActor.email || 'Staff'} · ${role}</span>
+        ${widgetButton('/admin', 'Admin', 'ghost')}
+        ${widgetButton('/detailer-jobs', 'Jobs', 'ghost')}
+        ${widgetButton('/admin-account', 'Settings', 'ghost')}
+        ${widgetActionButton('publicLogoutBtn', 'Sign out', 'primary')}
+      </div>
+    `;
+    host.querySelector('#publicLogoutBtn')?.addEventListener('click', async () => {
+      await readJsonSafe('/api/admin/auth_logout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+      await readJsonSafe('/api/client/auth_logout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+      location.href = '/login';
+    });
+    return;
+  }
+
+  if (clientCustomer) {
+    host.innerHTML = `
+      <div class="account-widget-inner">
+        <span class="account-chip">${clientCustomer.full_name || clientCustomer.email || 'Customer'}</span>
+        ${widgetButton('/my-account', 'Garage & account', 'ghost')}
+        ${widgetButton('/book', 'Book again', 'ghost')}
+        ${widgetActionButton('publicLogoutBtn', 'Sign out', 'primary')}
+      </div>
+    `;
+    host.querySelector('#publicLogoutBtn')?.addEventListener('click', async () => {
+      await readJsonSafe('/api/client/auth_logout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+      location.href = '/login';
+    });
+    return;
+  }
+
+  host.innerHTML = `
+    <div class="account-widget-inner">
+      <span class="account-chip">Account</span>
+      ${widgetButton('/login', 'Login', 'ghost')}
+      ${widgetButton('/login#signupForm', 'Create account', 'primary')}
+    </div>
+  `;
+}
+
 function initChrome() {
   ensureNavLinks();
   setBrandImagesEverywhere();
@@ -481,6 +582,7 @@ function initChrome() {
   setActiveNavLink();
   initNavToggle();
   setFooter();
+  initAccountWidget();
 
   attachRotators("#homePackages");
   attachRotators("#packageCards");

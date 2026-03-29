@@ -332,7 +332,8 @@
         "Add-on service not included in any package"
       ],
       "category": "paint correction",
-      "type": "surface prep"
+      "type": "surface prep",
+      "image_url": "https://assets.rosiedazzlers.ca/assets/addons/full_clay_treatment.svg"
     },
     {
       "code": "two_stage_polish",
@@ -348,7 +349,8 @@
         "Quote required because paint condition varies"
       ],
       "category": "paint correction",
-      "type": "machine polishing"
+      "type": "machine polishing",
+      "image_url": "/assets/addons/two_stage_polish.svg"
     },
     {
       "code": "high_grade_paint_sealant",
@@ -361,7 +363,11 @@
       "quote_required": false,
       "source": "interpreted_pricing",
       "category": "paint protection",
-      "type": "sealant"
+      "type": "sealant",
+      "image_url": "/assets/addons/high_grade_paint_sealant.svg",
+      "notes": [
+        "Longer-lasting gloss"
+      ]
     },
     {
       "code": "uv_protectant_applied_on_interior_panels",
@@ -374,7 +380,11 @@
       "quote_required": false,
       "source": "interpreted_pricing",
       "category": "interior protection",
-      "type": "uv protectant"
+      "type": "uv protectant",
+      "image_url": "https://assets.rosiedazzlers.ca/assets/addons/uv_protectant_applied_on_interior_panels.svg",
+      "notes": [
+        "Interior panel dressing"
+      ]
     },
     {
       "code": "de_ionizing_treatment",
@@ -386,7 +396,7 @@
       },
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png",
+      "image_url": "/assets/addons/de_ionizing_treatment.svg",
       "category": "odor treatment",
       "type": "de-ionizing"
     },
@@ -395,7 +405,7 @@
       "name": "De-Badging",
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
+      "image_url": "/assets/addons/de_badging.svg",
       "category": "appearance modifications",
       "type": "badge removal"
     },
@@ -405,7 +415,7 @@
       "price_cad": 59,
       "quote_required": false,
       "source": "package_asset",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
+      "image_url": "/assets/addons/engine_cleaning.svg",
       "category": "engine bay",
       "type": "cleaning"
     },
@@ -418,7 +428,7 @@
       "notes": [
         "Starting price only"
       ],
-      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
+      "image_url": "/assets/addons/external_ceramic_coating.svg",
       "category": "paint protection",
       "type": "ceramic coating"
     },
@@ -431,7 +441,7 @@
       "notes": [
         "Starting price only"
       ],
-      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png",
+      "image_url": "/assets/addons/external_graphene_fine_finish.svg",
       "category": "paint protection",
       "type": "graphene finish"
     },
@@ -445,7 +455,7 @@
       },
       "quote_required": false,
       "source": "package_asset",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png",
+      "image_url": "/assets/addons/external_wax.svg",
       "category": "paint protection",
       "type": "wax"
     },
@@ -454,7 +464,7 @@
       "name": "Vinyl Wrapping",
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
+      "image_url": "/assets/addons/vinyl_wrapping.svg",
       "category": "appearance modifications",
       "type": "vinyl wrapping"
     },
@@ -463,7 +473,7 @@
       "name": "Window Tinting",
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png",
+      "image_url": "/assets/addons/window_tinting.svg",
       "category": "glass services",
       "type": "window tinting"
     }

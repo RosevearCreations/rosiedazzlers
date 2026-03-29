@@ -1,3 +1,5 @@
+> Last synchronized: March 28, 2026. Reviewed during the image-fit, booking-slot readability, dark-text contrast, and current-build documentation/schema sync pass.
+
 # Rosie Dazzlers Access Control Model
 
 ## Purpose
