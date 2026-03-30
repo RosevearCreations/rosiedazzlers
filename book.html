@@ -314,9 +314,6 @@
 
     async function loadGarageVehicles(){
       try {
-        const authRes = await fetch('/api/client/auth_me', { credentials:'include', cache:'no-store' });
-        const authOut = await authRes.json().catch(()=>null);
-        if (!authRes.ok || !authOut?.ok || authOut.authenticated !== true) return;
         const res = await fetch('/api/client/dashboard', { credentials:'include', cache:'no-store' });
         const out = await res.json().catch(()=>null);
         if (!res.ok || !out?.ok) return;

@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Live Job Monitor | Rosie Dazzlers</title>
-  <meta name="robots" content="noindex,nofollow" />
   <meta name="description" content="Live admin monitoring for Rosie Dazzlers jobs." />
   <link rel="stylesheet" href="/assets/site.css" />
 </head>
@@ -212,12 +211,12 @@
     }
 
     async function apiPost(url, body) {
-      const headers = { "Content-Type": "application/json" };
-      if (currentPassword) headers["x-admin-password"] = currentPassword;
       const res = await fetch(url, {
         method: "POST",
-        headers,
-        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": currentPassword
+        },
         body: JSON.stringify(body || {})
       });
 
