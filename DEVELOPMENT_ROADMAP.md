@@ -1,5 +1,3 @@
-> Last synchronized: March 30, 2026. Reviewed during the promo create compatibility fix, guest-booking auth noise cleanup, and docs/schema synchronization pass.
-
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
@@ -202,8 +200,3 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - admin recovery now has a recovery audit list endpoint, and jobsite/progress detail endpoints now support visibility filtering to make moderation review more practical.
 - purchase-order reminder logging now also creates an internal notification-event trail, moving reminder lifecycle closer to a fuller operational audit path.
 - this pass continues to reduce the gaps, but the remaining work is still the final elimination of the last legacy-only screens/endpoints, broader mobile upload reuse, and complete operational convergence.
-
-
-## March 30, 2026 promo compatibility fix
-- moved forward: the older admin promo-create path now writes the canonical promo discount fields required by the current table shape, reducing a live create failure.
-- move up next: retire the remaining duplicate promo endpoint path and keep one canonical promo save/create contract.
