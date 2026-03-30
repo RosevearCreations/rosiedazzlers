@@ -1,7 +1,3 @@
-> Last synchronized: March 29, 2026. Reviewed during the session-only admin cleanup, private-page noindex pass, and docs/schema refresh.
-
-> Last synchronized: March 29, 2026. Reviewed during the known-gaps reduction, session-first admin-screen cleanup, and docs/schema synchronization pass.
-
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 <!-- REPO_GUIDE.md -->
@@ -124,8 +120,3 @@ Prefer the session-aware admin/detailer endpoints over any older shared-password
 - admin recovery now has a recovery audit list endpoint, and jobsite/progress detail endpoints now support visibility filtering to make moderation review more practical.
 - purchase-order reminder logging now also creates an internal notification-event trail, moving reminder lifecycle closer to a fuller operational audit path.
 - this pass continues to reduce the gaps, but the remaining work is still the final elimination of the last legacy-only screens/endpoints, broader mobile upload reuse, and complete operational convergence.
-
-## March 29, 2026 repo note
-- Admin/internal page scripts now lean harder on the signed-in staff session and the remaining admin endpoints have been moved further away from bridge-era fallback behavior.
-- Private/internal/account completion pages should remain non-indexed; this pass added more `noindex,nofollow` coverage.
-

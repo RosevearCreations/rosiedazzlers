@@ -1,7 +1,3 @@
-> Last synchronized: March 29, 2026. Reviewed during the session-only admin cleanup, private-page noindex pass, and docs/schema refresh.
-
-> Last synchronized: March 29, 2026. Reviewed during the known-gaps reduction, session-first admin-screen cleanup, and docs/schema synchronization pass.
-
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 # Docs Update Note

@@ -32,7 +32,6 @@
     pre{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px}
     input.small{padding:10px 10px}
   </style>
-  <meta name="robots" content="noindex,nofollow" />
 </head>
 
 <body>
@@ -57,15 +56,14 @@
 
       <div class="row">
         <label style="display:flex;flex-direction:column;gap:6px;min-width:260px">
-          <span class="muted">Staff session / optional legacy fallback</span>
-          <input id="pw" type="password" autocomplete="off" placeholder="Optional legacy fallback" />
+          <span class="muted">Admin password</span>
+          <input id="pw" type="password" placeholder="Enter admin password…" />
         </label>
 
         <div class="row" style="align-items:flex-end">
-          <button class="btn ghost" id="savePwBtn" type="button">Save fallback</button>
+          <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
           <button class="btn primary" id="loadBtn" type="button">Load bookings</button>
           <a class="btn ghost" href="/admin">Back</a>
-          <span class="muted mini" id="sessionMeta">Uses signed-in staff session first.</span>
         </div>
       </div>
 
@@ -121,13 +119,10 @@
 
     function getPw(){ return (qs("#pw").value || "").trim(); }
 
-    async function postJson(url, payload, password = ""){
-      const headers = { "content-type":"application/json" };
-      if (password) headers["x-admin-password"] = password;
+    async function postJson(url, payload){
       const res = await fetch(url, {
         method: "POST",
-        headers,
-        credentials: "include",
+        headers: { "content-type":"application/json" },
         body: JSON.stringify(payload),
       });
       const out = await res.json().catch(()=>null);
@@ -148,10 +143,10 @@
 
     qs("#savePwBtn").addEventListener("click", () => {
       const pw = getPw();
-      if (!pw) return show("Enter fallback password first.", "bad");
+      if (!pw) return show("Enter password first.", "bad");
       try {
         localStorage.setItem("rosie_admin_pw", pw);
-        show("Saved fallback password on this device.", "ok");
+        show("Saved password on this device.", "ok");
         setTimeout(hide, 1000);
       } catch {
         show("Could not save password.", "bad");
@@ -161,6 +156,7 @@
     async function loadBookings(){
       hide();
       const pw = getPw();
+      if (!pw) return show("Missing admin password.", "bad");
 
       // next 21 days
       const from = new Date();
@@ -171,11 +167,12 @@
       qs("#loadBtn").textContent = "Loading…";
 
       const r = await postJson("/api/admin/bookings", {
+        admin_password: pw,
         action: "list",
         date_from: ymd(from),
         date_to: ymd(to),
         statuses: ["pending","confirmed","completed"],
-      }, pw);
+      });
 
       qs("#loadBtn").disabled = false;
       qs("#loadBtn").textContent = "Load bookings";
@@ -215,6 +212,7 @@
       tb.querySelectorAll("button[data-save]").forEach(btn=>{
         btn.addEventListener("click", async ()=>{
           const pw2 = getPw();
+          if (!pw2) return show("Missing admin password.", "bad");
 
           const booking_id = btn.getAttribute("data-save");
           const input = btn.closest("tr").querySelector("input[data-assign-input]");
@@ -223,9 +221,10 @@
           btn.disabled = true;
 
           const r2 = await postJson("/api/admin/assign_booking", {
+            admin_password: pw2,
             booking_id,
             assigned_to
-          }, pw2);
+          });
 
           btn.disabled = false;
 
@@ -245,20 +244,6 @@
     }
 
     qs("#loadBtn").addEventListener("click", loadBookings);
-
-    document.addEventListener("DOMContentLoaded", async () => {
-      try {
-        const probe = await postJson("/api/admin/bookings", { action: "list" }, getPw());
-        if (probe.ok && probe.out?.ok) {
-          qs("#sessionMeta").textContent = probe.out?.actor?.full_name ? `Signed in as ${probe.out.actor.full_name}.` : "Signed-in staff session ready.";
-          await loadBookings();
-        } else {
-          qs("#sessionMeta").textContent = "Signed-in staff session required. Use fallback only if needed.";
-        }
-      } catch {
-        qs("#sessionMeta").textContent = "Signed-in staff session required. Use fallback only if needed.";
-      }
-    });
   </script>
 
   <script type="module" src="/assets/chrome.js?v=20260311s"></script>

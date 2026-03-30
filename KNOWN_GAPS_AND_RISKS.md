@@ -1,7 +1,3 @@
-> Last synchronized: March 29, 2026. Reviewed during the session-only admin cleanup, private-page noindex pass, and docs/schema refresh.
-
-> Last synchronized: March 29, 2026. Reviewed during the known-gaps reduction, session-first admin-screen cleanup, and docs/schema synchronization pass.
-
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
@@ -349,22 +345,9 @@ Partially mitigated in the newest pass:
 - purchase-order reminder lifecycle moved forward with reminder logging fields, a reminder action endpoint, and overdue reminder reporting in the purchase-order list endpoint.
 - this reduced more of the old/new endpoint overlap and shared-password bridge risk, but did not fully eliminate every remaining legacy-only admin path yet.
 
-## March 29, 2026 known-gaps reduction pass
-- Shared-password bridge risk is reduced again because Admin Promos, Admin Assign, and Admin Recovery now use the signed-in staff session first in the UI and only keep the fallback field for transitional access.
-- Old/new endpoint overlap is reduced again because `progress_post` and `observation_annotation_post` no longer allow the legacy admin-password fallback path.
-- H1/SEO regression risk was re-checked across exposed HTML pages and no multi-H1 public page was found in this build.
-- Remaining risk is now concentrated in the last explicit password-first screens, upload reuse across all field flows, and complete operational convergence.
-
 ## March 29, 2026 pricing/session/recovery/moderation pass
 - public pricing pages now have a DB-first `/api/pricing_catalog_public` endpoint so services, pricing, gifts, and booking can reduce hard-coded JSON drift while keeping bundled fallback behavior.
 - more legacy fallback use was removed from signoff, recovery, notification, moderation, and low-stock endpoints by preferring session-only role-aware access.
 - admin recovery now has a recovery audit list endpoint, and jobsite/progress detail endpoints now support visibility filtering to make moderation review more practical.
 - purchase-order reminder logging now also creates an internal notification-event trail, moving reminder lifecycle closer to a fuller operational audit path.
 - this pass continues to reduce the gaps, but the remaining work is still the final elimination of the last legacy-only screens/endpoints, broader mobile upload reuse, and complete operational convergence.
-
-## March 29, 2026 session-only admin cleanup pass
-- Shared-password bridge risk is reduced again because the remaining admin endpoints that still explicitly allowed legacy fallback were moved to session-only access checks.
-- Old/new endpoint overlap is reduced again because the browser-side admin tools now describe the signed-in staff session as the normal path on Live, Jobsite, Progress, and Recovery screens.
-- Private-page indexing risk is reduced because more internal/account completion pages now explicitly declare `noindex,nofollow`.
-- Remaining risk is now concentrated in true staff-auth maturity/UX, broader upload reuse, final gift/account polish, and fully retiring bridge-era bootstrap language and helper assumptions.
-

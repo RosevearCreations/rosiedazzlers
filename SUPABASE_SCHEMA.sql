@@ -1,7 +1,14 @@
--- Last synchronized: March 29, 2026. Reviewed during the session-only admin cleanup, private-page noindex pass, and docs/schema refresh.
--- March 29, 2026 pass note: no new tables or columns were required; this refresh mainly removed remaining explicit legacy-fallback allowance from admin endpoints, shifted more browser tools toward signed-in staff session language, and tightened private-page indexing protection.
+-- March 29, 2026 sync note: no new tables were required for this pass; this refresh mainly extends signed-in staff session coverage, reduces shared-password-only endpoint usage, and improves actor attribution in time/intake/media/booking flows.
+-- 
+-- 
+> Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
+
+-- Last synchronized: March 27, 2026. Reviewed during the booking wizard sticky-fix, two-way active-job communication pass, and docs/schema refresh.
+-- March 27, 2026 mobile booking + account widget pass: no new DDL required; booking flow, account widget, and customer progress filtering changed application behavior only.
+
+-- March 26, 2026 pass note: no new table was required in this pass; the focus moved to UI coverage over existing catalog inventory, movement, booking-linked usage, and progress/session flows.
 -- Rosie Dazzlers - Current Supabase Schema Snapshot
--- Updated: 2026-03-29
+-- Updated: 2026-03-25
 
 create extension if not exists pgcrypto;
 
