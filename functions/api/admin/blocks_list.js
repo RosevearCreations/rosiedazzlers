@@ -15,7 +15,7 @@
 // }
 //
 // Request headers supported:
-// - x-admin-password: required
+// Signed-in staff session preferred; legacy admin password bridge disabled for this route.
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -45,7 +45,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "manage_blocks",
-      allowLegacyAdminFallback: true
+      allowLegacyAdminFallback: false
     });
 
     if (!access.ok) {
