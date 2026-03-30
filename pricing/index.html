@@ -8,7 +8,7 @@
      - Avoids duplicating logic (loads the same JSON as services/book)
 
      Uses:
-       /data/rosie_services_pricing_and_packages.json
+       /api/pricing_catalog_public
        R2 brand images for charts
 -->
 <!doctype html>
@@ -163,7 +163,7 @@
   </div>
 
   <script type="module">
-    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260328ac";
+    const DATA_URL = "/api/pricing_catalog_public?v=20260328ac";
     const qs = (s)=>document.querySelector(s);
     const money = (cad)=> new Intl.NumberFormat("en-CA",{style:"currency",currency:"CAD"}).format(Number(cad||0));
     let chartMap = new Map();
