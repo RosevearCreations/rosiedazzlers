@@ -135,3 +135,5 @@ The current pass mainly touches `admin-promos.html`, `book.html`, and a further 
 - Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
 - Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
 
+## March 30, 2026 repo update
+Current work in this pass focused on `functions/api/admin/*` convergence: more booking, customer, staff, promo companion, and time endpoints now require the resolved staff session path instead of permitting the old bridge fallback.

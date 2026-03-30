@@ -92,3 +92,5 @@ Run `sql/2026-03-26_catalog_admin_vehicle_account_and_auth_cleanup.sql` before t
 - Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
 - Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
 
+## March 30, 2026 handoff note
+The latest pass removed another large set of legacy admin fallback allowances from booking/customer/staff/promo companion/time endpoints. Continue next with the remaining bridge-only bootstrap/helper routes, upload reuse, and any route/comment cleanup that still treats the bridge as primary behavior.

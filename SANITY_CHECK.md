@@ -165,3 +165,7 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
 - Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
 
+## March 30, 2026 sanity note
+- Verified another session-first cleanup pass across booking/customer/staff/time related admin endpoints.
+- Verified exposed public pages still present a single H1 each in this build.
+- Verified docs and schema snapshot were refreshed again after the code changes in this pass.

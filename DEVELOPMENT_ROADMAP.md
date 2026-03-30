@@ -218,3 +218,6 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
 - Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
 
+## March 30, 2026 roadmap movement
+- moved forward: booking management, customer/customer-tier management, promo companion routes, and staff/time endpoints were pushed further toward session-first access by removing another batch of legacy fallback allowances.
+- move up next: retire the remaining explicit bridge-only bootstrap/utility routes, continue route comment/header normalization, and reuse the signed upload flow across the remaining field screens.

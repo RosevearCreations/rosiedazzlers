@@ -143,3 +143,7 @@
 - Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
 - Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
 
+## March 30, 2026 booking/customer/staff-time cleanup pass
+- Removed legacy admin fallback from another large active set of endpoints around booking actions, customer management, customer tiers, staff detail/toggle, promo management companion routes, signoff delete, media delete, and time entry/list/delete.
+- Continued shifting the backend toward signed-in staff session trust over the shared password bridge, reducing overlap in day-to-day admin flows.
+- No new tables were required in this pass; this was an auth/endpoint convergence and docs/schema synchronization pass.

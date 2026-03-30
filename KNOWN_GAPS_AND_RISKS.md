@@ -369,3 +369,7 @@ Partially mitigated in the newest pass:
 - Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
 - Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
 
+## March 30, 2026 bridge-reduction pass
+- Shared-password bridge risk is reduced again because another large active batch of booking, customer, staff, promo companion, signoff/media delete, and time endpoints no longer allow the legacy admin fallback path.
+- Old/new endpoint overlap risk is reduced again because more everyday admin flows now converge on the signed-in staff session model instead of mixed bridge/session behavior.
+- The remaining main risk is still complete operational convergence: a smaller set of older helper/bootstrap endpoints, route comments, and upload reuse gaps still need cleanup before this section can honestly be called complete.

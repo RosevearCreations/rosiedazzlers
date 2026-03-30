@@ -78,3 +78,7 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
 - Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
 
+## March 30, 2026 next-step update
+1. Remove the remaining explicit legacy-bridge endpoints/helpers and normalize their comments/CORS guidance.
+2. Continue upload-flow reuse across the remaining field screens.
+3. Continue pricing/report convergence and remaining route cleanup after the auth overlap is smaller.

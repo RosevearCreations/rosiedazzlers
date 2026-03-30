@@ -185,3 +185,5 @@ This pass stabilized promo management against the live database shape, reduced g
 - Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
 - Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
 
+## March 30, 2026 update
+This build continues the session-first admin transition by removing another large batch of legacy admin fallback allowances across booking, customer, staff, promo companion, and time-management endpoints. Documentation and schema notes were refreshed in the same pass.
