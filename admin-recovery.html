@@ -74,7 +74,7 @@
     <section class="section">
       <div class="panel">
         <h2>Saved templates</h2>
-        <div id="templateList" class="grid" style="margin-top:12px"><div class="notice">Load templates with an admin password.</div></div>
+        <div id="templateList" class="grid" style="margin-top:12px"><div class="notice">Load templates with a signed-in staff session or optional fallback password.</div></div>
       </div>
     </section>
   </main>
@@ -89,7 +89,7 @@
 
     function esc(v) { return String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;"); }
     function setNotice(message, kind="") { const el=byId("pageNotice"); el.className = kind ? `notice ${kind}` : "notice"; el.textContent = message; }
-    function adminHeaders(password){ return { "Content-Type":"application/json", "x-admin-password": password }; }
+    function adminHeaders(password){ const headers = { "Content-Type":"application/json" }; if (password) headers["x-admin-password"] = password; return headers; }
 
     function readRulesJson() {
       try { return JSON.parse(byId("templateRules").value || "{}"); }
@@ -139,7 +139,7 @@
     }
 
     async function fetchTemplates(password) {
-      const res = await fetch("/api/admin/recovery_templates", { headers: adminHeaders(password) });
+      const res = await fetch("/api/admin/recovery_templates", { headers: adminHeaders(password), credentials: "include" });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Could not load templates.");
       templates = Array.isArray(data.templates) ? data.templates : [];
@@ -162,6 +162,7 @@
       const res = await fetch("/api/admin/recovery_templates", {
         method: "POST",
         headers: adminHeaders(password),
+        credentials: "include",
         body: JSON.stringify(payload)
       });
       const data = await res.json().catch(() => ({}));
@@ -197,7 +198,7 @@
         }};
       }
 
-      const res = await fetch(url, { method:"POST", headers: adminHeaders(password), body: JSON.stringify(body) });
+      const res = await fetch(url, { method:"POST", headers: adminHeaders(password), credentials: "include", body: JSON.stringify(body) });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Could not build recovery preview.");
       return data;
@@ -221,7 +222,6 @@
       byId("templateForm").addEventListener("submit", async (e) => {
         e.preventDefault();
         const password = byId("adminPassword").value.trim();
-        if (!password) return setNotice("Admin password is required.", "bad");
         try {
           setNotice("Saving recovery template…");
           await saveTemplate(password);
@@ -233,7 +233,6 @@
       });
       byId("buildPreviewBtn").addEventListener("click", async () => {
         const password = byId("adminPassword").value.trim();
-        if (!password) return setNotice("Admin password is required.", "bad");
         try {
           setNotice("Building recovery preview…");
           const data = await buildPreview(password, false);
@@ -245,7 +244,6 @@
       });
       byId("sendTestBtn").addEventListener("click", async () => {
         const password = byId("adminPassword").value.trim();
-        if (!password) return setNotice("Admin password is required.", "bad");
         try {
           setNotice("Sending test recovery message…");
           const data = await buildPreview(password, true);
@@ -257,10 +255,17 @@
       });
       byId("adminPassword").addEventListener("change", async () => {
         const password = byId("adminPassword").value.trim();
-        if (!password) return;
         try { await fetchTemplates(password); setNotice("Recovery templates loaded.", "ok"); }
         catch (err) { setNotice(err.message || "Could not load templates.", "bad"); }
       });
+      try {
+        const password = byId("adminPassword").value.trim();
+        const data = await fetchTemplates(password);
+        setNotice(data?.templates ? "Recovery templates loaded." : "Ready.", "ok");
+      } catch (err) {
+        setNotice(err.message || "Signed-in staff session required. Use fallback only if needed.", "bad");
+      }
+
       document.addEventListener("click", (e) => {
         const btn = e.target.closest("[data-load-template]");
         if (!btn) return;

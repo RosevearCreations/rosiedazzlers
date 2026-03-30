@@ -1,3 +1,5 @@
+> Last synchronized: March 29, 2026. Reviewed during the known-gaps reduction, session-first admin-screen cleanup, and docs/schema synchronization pass.
+
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 March 28, 2026 sync note: no new tables were required for this pass; this refresh mainly aligns UI readability, catalog presentation, and documentation with the current build.
@@ -226,6 +228,11 @@ March 29, 2026 sync note: no new tables were required for this pass; the main ch
 - booking_update and assign now log actor-attributed booking events while using the resolved current staff actor.
 - purchase-order reminder lifecycle moved forward with reminder logging fields, a reminder action endpoint, and overdue reminder reporting in the purchase-order list endpoint.
 - this reduced more of the old/new endpoint overlap and shared-password bridge risk, but did not fully eliminate every remaining legacy-only admin path yet.
+
+## March 29, 2026 known-gaps reduction pass
+- No new tables or columns were introduced in this pass.
+- This pass mainly tightened which existing auth path is considered canonical by the UI and endpoint layer.
+- Schema direction remains: `staff_auth_sessions` + `staff_users` are the intended internal identity source, with the shared admin password remaining transitional only where explicitly retained.
 
 ## March 29, 2026 pricing/session/recovery/moderation pass
 - public pricing pages now have a DB-first `/api/pricing_catalog_public` endpoint so services, pricing, gifts, and booking can reduce hard-coded JSON drift while keeping bundled fallback behavior.

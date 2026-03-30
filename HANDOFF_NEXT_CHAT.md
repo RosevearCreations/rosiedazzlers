@@ -1,3 +1,5 @@
+> Last synchronized: March 29, 2026. Reviewed during the known-gaps reduction, session-first admin-screen cleanup, and docs/schema synchronization pass.
+
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
@@ -11,6 +13,11 @@ Continue Rosie Dazzlers from the `dev` branch docs. Use `README.md`, `PROJECT_BR
 
 ## Current state in one paragraph
 Rosie Dazzlers is now a role-aware detailing operations platform with booking, deposits, gifts, token-based customer progress, jobsite intake/time tracking, customer/staff/admin screens, recovery messaging foundations, and DB-backed catalog/inventory foundations. The newest pass focused on turning backend moderation and recovery foundations into real admin screens, tightening protected-page SEO behavior, and refreshing repo/schema docs.
+
+## Latest pass summary — March 29, 2026 known-gaps reduction
+- moved Admin Promos, Admin Assign, and Admin Recovery toward real staff-session-first UI behavior
+- removed legacy fallback from `progress_post` and `observation_annotation_post`
+- rechecked public H1 compliance and docs/schema alignment
 
 ## Most likely next priorities
 1. real staff auth/session completion

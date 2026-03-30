@@ -1,3 +1,5 @@
+> Last synchronized: March 29, 2026. Reviewed during the known-gaps reduction, session-first admin-screen cleanup, and docs/schema synchronization pass.
+
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
@@ -41,6 +43,11 @@
 - site-wide public account widget
 - client password reset + email verification token flow
 - public analytics tracking and live-session visibility foundation
+
+## Newly moved forward in the known-gaps reduction pass
+- Admin Promos, Admin Assign, and Admin Recovery now follow session-first browser behavior.
+- `progress_post` and `observation_annotation_post` no longer allow the legacy fallback bridge.
+- Public H1 compliance was rechecked across exposed pages.
 
 ## Move up next
 1. complete real staff auth/session across internal screens

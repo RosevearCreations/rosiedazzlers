@@ -1,3 +1,5 @@
+> Last synchronized: March 29, 2026. Reviewed during the known-gaps reduction, session-first admin-screen cleanup, and docs/schema synchronization pass.
+
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
@@ -193,6 +195,11 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - booking_update and assign now log actor-attributed booking events while using the resolved current staff actor.
 - purchase-order reminder lifecycle moved forward with reminder logging fields, a reminder action endpoint, and overdue reminder reporting in the purchase-order list endpoint.
 - this reduced more of the old/new endpoint overlap and shared-password bridge risk, but did not fully eliminate every remaining legacy-only admin path yet.
+
+## March 29, 2026 known-gaps reduction pass
+- moved forward: three more internal admin screens now follow the signed-in staff session first in the browser UI instead of presenting password-first behavior.
+- moved forward: legacy fallback was removed from `progress_post` and `observation_annotation_post`, shrinking the old/new endpoint overlap further.
+- move up next: convert the remaining explicit password-first internal screens, then audit any endpoint comments/CORS headers that still describe the bridge as primary behavior.
 
 ## March 29, 2026 pricing/session/recovery/moderation pass
 - public pricing pages now have a DB-first `/api/pricing_catalog_public` endpoint so services, pricing, gifts, and booking can reduce hard-coded JSON drift while keeping bundled fallback behavior.

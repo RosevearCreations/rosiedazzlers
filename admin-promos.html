@@ -65,14 +65,15 @@
 
       <div class="row">
         <label style="display:flex;flex-direction:column;gap:6px;min-width:260px">
-          <span class="muted">Admin password</span>
-          <input id="pw" type="password" placeholder="Enter admin password…" />
+          <span class="muted">Staff session / optional legacy fallback</span>
+          <input id="pw" type="password" autocomplete="off" placeholder="Optional legacy fallback" />
         </label>
 
         <div class="row" style="align-items:flex-end">
-          <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
+          <button class="btn ghost" id="savePwBtn" type="button">Save fallback</button>
           <button class="btn ghost" id="refreshBtn" type="button">Refresh</button>
           <a class="btn ghost" href="/admin">Back</a>
+          <span class="muted mini" id="sessionMeta">Uses signed-in staff session first.</span>
         </div>
       </div>
 
@@ -172,10 +173,13 @@
 
     function getPw(){ return (qs("#pw").value || "").trim(); }
 
-    async function postJson(url, payload){
+    async function postJson(url, payload, password = ""){
+      const headers = { "content-type":"application/json" };
+      if (password) headers["x-admin-password"] = password;
       const res = await fetch(url, {
         method: "POST",
-        headers: { "content-type":"application/json" },
+        headers,
+        credentials: "include",
         body: JSON.stringify(payload),
       });
       const out = await res.json().catch(()=>null);
@@ -196,10 +200,10 @@
 
     qs("#savePwBtn").addEventListener("click", () => {
       const pw = getPw();
-      if (!pw) return show("Enter password first.", "bad");
+      if (!pw) return show("Enter fallback password first.", "bad");
       try {
         localStorage.setItem("rosie_admin_pw", pw);
-        show("Saved password on this device.", "ok");
+        show("Saved fallback password on this device.", "ok");
         setTimeout(hide, 1000);
       } catch {
         show("Could not save password.", "bad");
@@ -233,9 +237,8 @@
     async function refresh(){
       hide();
       const pw = getPw();
-      if (!pw) return show("Missing admin password.", "bad");
 
-      const r = await postJson("/api/admin/promo_list", { admin_password: pw });
+      const r = await postJson("/api/admin/promo_list", {}, pw);
       qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
 
       if (!r.ok || !r.out?.ok){
@@ -271,10 +274,9 @@
         btn.addEventListener("click", async ()=>{
           const pw2 = getPw();
           const id = btn.getAttribute("data-disable");
-          if (!pw2) return show("Missing admin password.", "bad");
 
           btn.disabled = true;
-          const r2 = await postJson("/api/admin/promo_disable", { admin_password: pw2, promo_id: id });
+          const r2 = await postJson("/api/admin/promo_disable", { promo_id: id }, pw2);
           btn.disabled = false;
 
           qs("#raw").textContent = JSON.stringify(r2.out || {}, null, 2);
@@ -295,7 +297,6 @@
     qs("#createBtn").addEventListener("click", async ()=>{
       hide();
       const pw = getPw();
-      if (!pw) return show("Missing admin password.", "bad");
 
       const code = (qs("#code").value || "").trim().toUpperCase();
       if (!code) return show("Missing promo code.", "bad");
@@ -305,7 +306,6 @@
       if (!Number.isFinite(value) || value <= 0) return show("Enter a valid value > 0.", "bad");
 
       const payload = {
-        admin_password: pw,
         code,
         is_active: !!qs("#active").checked,
         starts_on: qs("#starts").value || null,
@@ -319,7 +319,7 @@
       qs("#createBtn").disabled = true;
       qs("#createBtn").textContent = "Creating…";
 
-      const r = await postJson("/api/admin/promo_create", payload);
+      const r = await postJson("/api/admin/promo_create", payload, pw);
 
       qs("#createBtn").disabled = false;
       qs("#createBtn").textContent = "Create";
@@ -333,6 +333,20 @@
       show("Created.", "ok");
       setTimeout(hide, 800);
       await refresh();
+    });
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const probe = await postJson("/api/admin/promo_list", {}, getPw());
+        if (probe.ok && probe.out?.ok) {
+          qs("#sessionMeta").textContent = probe.out?.actor ? `Signed in as ${probe.out.actor}.` : "Signed-in staff session ready.";
+          await refresh();
+        } else {
+          qs("#sessionMeta").textContent = "Signed-in staff session required. Use fallback only if needed.";
+        }
+      } catch {
+        qs("#sessionMeta").textContent = "Signed-in staff session required. Use fallback only if needed.";
+      }
     });
   </script>
 
