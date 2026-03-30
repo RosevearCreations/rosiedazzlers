@@ -57,7 +57,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "manage_promos",
-      allowLegacyAdminFallback: true
+      allowLegacyAdminFallback: false
     });
 
     if (!access.ok) {

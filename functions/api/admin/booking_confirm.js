@@ -65,7 +65,7 @@ export async function onRequestPost(context) {
       body,
       capability: "manage_bookings",
       bookingId: booking_id,
-      allowLegacyAdminFallback: true
+      allowLegacyAdminFallback: false
     });
 
     if (!access.ok) {

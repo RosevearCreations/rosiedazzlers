@@ -70,7 +70,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "manage_blocks",
-      allowLegacyAdminFallback: true
+      allowLegacyAdminFallback: false
     });
 
     if (!access.ok) {
