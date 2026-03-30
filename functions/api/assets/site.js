@@ -1,4 +1,4 @@
-const DATA_URL = "/data/rosie_services_pricing_and_packages.json";
+const DATA_URL = "/api/pricing_catalog_public";
 
 const BRAND = {
   logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
