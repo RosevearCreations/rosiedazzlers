@@ -47,6 +47,7 @@ export async function onRequestPost(context) {
 
     const token = String(body.token || "").trim();
     const booking_id = String(body.booking_id || "").trim();
+    const visibility_filter = String(body.visibility_filter || "all").trim().toLowerCase();
 
     if (!token && !booking_id) {
       return withCors(json({ error: "Missing token or booking_id." }, 400));
@@ -77,7 +78,7 @@ export async function onRequestPost(context) {
       body,
       capability: "work_booking",
       bookingId: booking.id,
-      allowLegacyAdminFallback: true
+      allowLegacyAdminFallback: false
     });
 
     if (!access.ok) {
@@ -129,8 +130,10 @@ export async function onRequestPost(context) {
       signoffRes.json().catch(() => [])
     ]);
 
-    const updates = Array.isArray(updateRows) ? updateRows : [];
-    const media = Array.isArray(mediaRows) ? mediaRows : [];
+    const allUpdates = Array.isArray(updateRows) ? updateRows : [];
+    const allMedia = Array.isArray(mediaRows) ? mediaRows : [];
+    const updates = applyVisibilityFilter(allUpdates, visibility_filter);
+    const media = applyVisibilityFilter(allMedia, visibility_filter);
     const signoff = Array.isArray(signoffRows) ? signoffRows[0] || null : null;
 
     return withCors(
@@ -162,6 +165,12 @@ export async function onRequestPost(context) {
         media: {
           count: media.length,
           items: media
+        },
+        actor: {
+          id: access.actor.id || null,
+          full_name: access.actor.full_name || null,
+          email: access.actor.email || null,
+          role_code: access.actor.role_code || null
         },
         signoff: signoff
           ? {
@@ -258,4 +267,14 @@ function withCors(response) {
     statusText: response.statusText,
     headers
   });
+}
+
+
+function applyVisibilityFilter(items, filterValue) {
+  const rows = Array.isArray(items) ? items : [];
+  if (!filterValue || filterValue === "all") return rows;
+  if (filterValue === "internal") return rows.filter((row) => String(row.visibility || "customer").toLowerCase() === "internal");
+  if (filterValue === "hidden") return rows.filter((row) => String(row.visibility || "customer").toLowerCase() === "hidden");
+  if (filterValue === "customer") return rows.filter((row) => !row.visibility || String(row.visibility).toLowerCase() === "customer");
+  return rows;
 }

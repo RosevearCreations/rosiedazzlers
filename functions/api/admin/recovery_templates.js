@@ -3,7 +3,7 @@ export async function onRequestOptions() { return new Response("", { status: 204
 export async function onRequestGet(context) {
   const { request, env } = context;
   try {
-    const access = await requireStaffAccess({ request, env, capability: "manage_staff", allowLegacyAdminFallback: true });
+    const access = await requireStaffAccess({ request, env, capability: "manage_staff", allowLegacyAdminFallback: false });
     if (!access.ok) return withCors(access.response);
     const res = await fetch(`${env.SUPABASE_URL}/rest/v1/recovery_message_templates?select=*&order=channel.asc,template_key.asc`, { headers: { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, Accept: 'application/json' } });
     if (!res.ok) return withCors(json({ error: await res.text() }, 500));
@@ -14,7 +14,7 @@ export async function onRequestPost(context) {
   const { request, env } = context;
   try {
     const body = await request.json().catch(() => null);
-    const access = await requireStaffAccess({ request, env, body: body || {}, capability: "manage_staff", allowLegacyAdminFallback: true });
+    const access = await requireStaffAccess({ request, env, body: body || {}, capability: "manage_staff", allowLegacyAdminFallback: false });
     if (!access.ok) return withCors(access.response);
     const payload = { template_key: String(body?.template_key || '').trim(), channel: String(body?.channel || '').trim().toLowerCase(), provider: String(body?.provider || 'manual').trim(), is_active: body?.is_active !== false, subject_template: String(body?.subject_template || '').trim() || null, body_template: String(body?.body_template || '').trim(), variables: Array.isArray(body?.variables) ? body.variables : [], rules: body?.rules && typeof body.rules === 'object' ? body.rules : {}, notes: String(body?.notes || '').trim() || null, updated_at: new Date().toISOString() };
     if (!payload.template_key || !['email','sms'].includes(payload.channel) || !payload.body_template) return withCors(json({ error: 'Missing required fields.' }, 400));

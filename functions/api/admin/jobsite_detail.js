@@ -7,9 +7,10 @@ export async function onRequestPost(context) {
   try {
     const body = await request.json().catch(() => ({}));
     const booking_id = String(body.booking_id || "").trim();
+    const visibility_filter = String(body.visibility_filter || "all").trim().toLowerCase();
     if (!booking_id) return withCors(json({ error: "Missing booking_id." }, 400));
     if (!isUuid(booking_id)) return withCors(json({ error: "Invalid booking_id." }, 400));
-    const access = await requireStaffAccess({ request, env, body, capability: "work_booking", bookingId: booking_id, allowLegacyAdminFallback: true });
+    const access = await requireStaffAccess({ request, env, body, capability: "work_booking", bookingId: booking_id, allowLegacyAdminFallback: false });
     if (!access.ok) return withCors(access.response);
     const headers = serviceHeaders(env);
     const settings = await loadAppSettings(env, ['feature_flags','visibility_matrix']);
@@ -31,11 +32,11 @@ export async function onRequestPost(context) {
     if (!booking) return withCors(json({ error:'Booking not found.' },404));
     const intake = Array.isArray(intakeRows) ? intakeRows[0] || null : null;
     const timeEntries = Array.isArray(timeRows) ? timeRows : [];
-    const updates = Array.isArray(updateRows) ? updateRows : [];
-    const media = Array.isArray(mediaRows) ? mediaRows : [];
+    const updates = applyVisibilityFilter(Array.isArray(updateRows) ? updateRows : [], visibility_filter);
+    const media = applyVisibilityFilter(Array.isArray(mediaRows) ? mediaRows : [], visibility_filter);
     const signoff = Array.isArray(signoffRows) ? signoffRows[0] || null : null;
-    const comments = Array.isArray(commentRows) ? commentRows : [];
-    const annotations = Array.isArray(annRows) ? annRows : [];
+    const comments = applyVisibilityFilter(Array.isArray(commentRows) ? commentRows : [], visibility_filter);
+    const annotations = applyVisibilityFilter(Array.isArray(annRows) ? annRows : [], visibility_filter);
     const mediaWithAnnotations = media.map(item => ({ ...item, annotations: annotations.filter(a => a.media_id === item.id) }));
     return withCors(json({
       ok:true,
@@ -47,7 +48,8 @@ export async function onRequestPost(context) {
       media: { count: media.length, items: mediaWithAnnotations },
       signoff,
       comments,
-      annotations
+      annotations,
+      actor: { id: access.actor.id || null, full_name: access.actor.full_name || null, email: access.actor.email || null, role_code: access.actor.role_code || null }
     }));
   } catch (err) { return withCors(json({ error: err?.message || 'Unexpected server error.' },500)); }
 }
@@ -55,3 +57,14 @@ export async function onRequestGet(){ return withCors(methodNotAllowed()); }
 function summarizeTime(entries){ const totals={ total_minutes:0, work_minutes:0, travel_minutes:0, setup_minutes:0, cleanup_minutes:0, pause_minutes:0 }; for(const row of entries||[]){ const m=Number(row.minutes||0); totals.total_minutes += m; const k=String(row.entry_type||'').toLowerCase(); if(k==='work') totals.work_minutes+=m; else if(k==='travel') totals.travel_minutes+=m; else if(k==='setup') totals.setup_minutes+=m; else if(k==='cleanup') totals.cleanup_minutes+=m; else if(k==='pause') totals.pause_minutes+=m; } return totals; }
 function corsHeaders(){ return {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"POST,OPTIONS","Access-Control-Allow-Headers":"Content-Type, x-admin-password, x-staff-email, x-staff-user-id","Cache-Control":"no-store"}; }
 function withCors(response){ const headers=new Headers(response.headers||{}); for(const [k,v] of Object.entries(corsHeaders())) headers.set(k,v); return new Response(response.body,{status:response.status,statusText:response.statusText,headers}); }
+
+
+function applyVisibilityFilter(items, filterValue) {
+  const rows = Array.isArray(items) ? items : [];
+  if (!filterValue || filterValue === "all") return rows;
+  const norm = (v) => String(v || "customer").toLowerCase();
+  if (filterValue === "internal") return rows.filter((row) => norm(row.visibility || row.thread_status) === "internal");
+  if (filterValue === "hidden") return rows.filter((row) => ["hidden","removed"].includes(norm(row.visibility || row.thread_status)));
+  if (filterValue === "customer") return rows.filter((row) => !["internal","hidden","removed"].includes(norm(row.visibility || row.thread_status)));
+  return rows;
+}
