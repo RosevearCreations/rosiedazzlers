@@ -48,13 +48,21 @@ export async function onRequestPost({ request, env }) {
     }
 
     const url = `${env.SUPABASE_URL}/rest/v1/promo_codes?on_conflict=code`;
+    const normalizedPercent = percent_off === null ? null : Math.round(percent_off * 100) / 100;
+    const normalizedAmountCents = amount_off_cents === null ? null : Math.round(amount_off_cents);
     const payload = [{
       code,
       is_active,
-      percent_off: percent_off === null ? null : Math.round(percent_off * 100) / 100,
-      amount_off_cents: amount_off_cents === null ? null : Math.round(amount_off_cents),
+      active: is_active,
+      discount_type: normalizedPercent !== null ? "percent" : "fixed",
+      discount_value: normalizedPercent !== null ? normalizedPercent : (normalizedAmountCents === null ? null : normalizedAmountCents / 100),
+      percent_off: normalizedPercent,
+      amount_off_cents: normalizedAmountCents,
+      discount_percent: normalizedPercent,
+      discount_cents: normalizedAmountCents,
       starts_on,
       ends_on,
+      notes: note,
       note,
       updated_at: new Date().toISOString(),
     }];

@@ -66,7 +66,7 @@ export async function onRequestPost(context) {
       body,
       capability: "work_booking",
       bookingId: booking_id,
-      allowLegacyAdminFallback: false
+      allowLegacyAdminFallback: true
     });
 
     if (!access.ok) {
