@@ -1,3 +1,5 @@
+> Last synchronized: March 29, 2026. Reviewed during the session-only admin cleanup, private-page noindex pass, and docs/schema refresh.
+
 > Last synchronized: March 29, 2026. Reviewed during the known-gaps reduction, session-first admin-screen cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -81,4 +83,10 @@ Run `sql/2026-03-26_catalog_admin_vehicle_account_and_auth_cleanup.sql` before t
 - added shared public login / create-account / garage / admin widget
 - filtered internal-only updates out of customer progress view
 - no new SQL migration required in this pass
+
+## March 29, 2026 latest handoff note
+- session-only cleanup continued: the remaining admin endpoints that still explicitly allowed legacy fallback were switched over to signed-in staff session access.
+- private-page SEO protection tightened: more admin/internal/account completion pages now carry `noindex,nofollow`.
+- browser UI wording now treats the staff session as primary on Live, Jobsite, Progress, and Recovery.
+- no new SQL migration was required in this pass.
 

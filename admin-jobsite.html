@@ -75,8 +75,8 @@
           <h2>Booking + staff</h2><div id="jobsiteActorMeta" class="kicker" style="margin-bottom:10px">Checking session…</div>
           <form id="jobsiteLoadForm" class="form">
             <label>
-              Staff password (optional fallback)
-              <input id="jobsitePassword" type="password" autocomplete="current-password" />
+              Staff session / optional legacy fallback
+              <input id="jobsitePassword" type="password" autocomplete="off" />
             </label>
 
             <label>
@@ -361,7 +361,7 @@
         document.querySelector("#jobsiteActorMeta").textContent = `${out.actor.full_name || out.actor.email || "Staff"} · ${out.actor.role_code || "staff"}`;
         if (!document.querySelector("#detailerName").value.trim()) document.querySelector("#detailerName").value = out.actor.full_name || out.actor.email || "";
       } catch {
-        document.querySelector("#jobsiteActorMeta").textContent = "No staff session found. Use the fallback password field if needed.";
+        document.querySelector("#jobsiteActorMeta").textContent = "No staff session found. Legacy fallback is transitional only.";
       }
     }
     let timeEntries = [];
@@ -415,15 +415,15 @@
     }
 
     function apiHeaders(password) {
-      return {
-        "Content-Type": "application/json",
-        "x-admin-password": password
-      };
+      const headers = { "Content-Type": "application/json" };
+      if (password) headers["x-admin-password"] = password;
+      return headers;
     }
 
     async function apiPost(url, password, body) {
       const res = await fetch(url, {
         method: "POST",
+        credentials: "include",
         headers: apiHeaders(password),
         body: JSON.stringify(body || {})
       });

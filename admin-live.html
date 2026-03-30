@@ -6,6 +6,7 @@
   <title>Live Job Monitor | Rosie Dazzlers</title>
   <meta name="description" content="Live admin monitoring for Rosie Dazzlers jobs." />
   <link rel="stylesheet" href="/assets/site.css" />
+  <meta name="robots" content="noindex,nofollow" />
 </head>
 <body data-page="admin-live">
   <header class="nav">
@@ -60,7 +61,7 @@
         <div class="panel">
           <div class="kicker">Current booking</div>
           <h3 id="liveBookingTitle" style="margin:6px 0 8px">No booking loaded</h3>
-          <div id="liveBookingMeta" class="kicker">Load a booking id below.</div>
+          <div id="liveBookingMeta" class="kicker">Load a booking with your staff session. Legacy fallback is transitional only.</div>
         </div>
       </div>
     </section>
@@ -75,8 +76,8 @@
           <h2>Load live job</h2>
           <form id="liveLoadForm" class="form">
             <label>
-              Admin password
-              <input id="adminPassword" type="password" autocomplete="current-password" required />
+              Staff session / optional legacy fallback
+              <input id="adminPassword" type="password" autocomplete="off" />
             </label>
 
             <label>
@@ -173,6 +174,7 @@
 
     let currentPassword = "";
     let currentBookingId = "";
+    let hasSession = false;
     let refreshTimer = null;
     let refreshPaused = false;
 
@@ -210,13 +212,30 @@
       return `${hours}:${minutes}:${seconds}`;
     }
 
+    function authHeaders() {
+      const headers = { "Content-Type": "application/json" };
+      if (currentPassword) headers["x-admin-password"] = currentPassword;
+      return headers;
+    }
+
+    async function loadActorMeta() {
+      try {
+        const res = await fetch("/api/admin/auth_me", { credentials: "include", cache: "no-store" });
+        const out = await res.json().catch(() => null);
+        if (!res.ok || !out?.ok || !out?.actor) throw new Error(out?.error || "No session");
+        hasSession = true;
+        document.querySelector("#liveBookingMeta").textContent = `Signed in as ${out.actor.full_name || out.actor.email || "Staff"}. Load a booking id below.`;
+      } catch {
+        hasSession = false;
+        document.querySelector("#liveBookingMeta").textContent = "No staff session found. Legacy fallback is transitional only.";
+      }
+    }
+
     async function apiPost(url, body) {
       const res = await fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-password": currentPassword
-        },
+        credentials: "include",
+        headers: authHeaders(),
         body: JSON.stringify(body || {})
       });
 
@@ -421,6 +440,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       setBrandImages();
       setFooter();
+      await loadActorMeta();
 
       const loadForm = document.querySelector("#liveLoadForm");
       const toggleBtn = document.querySelector("#toggleRefreshBtn");
@@ -432,7 +452,7 @@
         const bookingId = document.querySelector("#bookingId").value.trim();
 
         if (!password) {
-          setNotice("Admin password is required.", "bad");
+          setNotice("Staff session / optional legacy fallback is required.", "bad");
           return;
         }
 

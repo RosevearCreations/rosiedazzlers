@@ -1,3 +1,5 @@
+> Last synchronized: March 29, 2026. Reviewed during the session-only admin cleanup, private-page noindex pass, and docs/schema refresh.
+
 > Last synchronized: March 29, 2026. Reviewed during the known-gaps reduction, session-first admin-screen cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -207,3 +209,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - admin recovery now has a recovery audit list endpoint, and jobsite/progress detail endpoints now support visibility filtering to make moderation review more practical.
 - purchase-order reminder logging now also creates an internal notification-event trail, moving reminder lifecycle closer to a fuller operational audit path.
 - this pass continues to reduce the gaps, but the remaining work is still the final elimination of the last legacy-only screens/endpoints, broader mobile upload reuse, and complete operational convergence.
+
+## March 29, 2026 session-only admin cleanup pass
+- moved forward: the remaining admin endpoints that still explicitly allowed legacy password fallback were switched to session-only `requireStaffAccess` behavior.
+- moved forward: Admin Live, Admin Jobsite, Admin Progress, and Admin Recovery now describe the staff session as the primary path in the browser UI instead of behaving like password-first tooling.
+- moved forward: more private/internal pages now explicitly ship with `noindex,nofollow` so route-by-route SEO cleanup is tighter.
+- move up next: finish retiring the leftover bridge-oriented bootstrap language and complete operational polish for uploads, gift/account history, and notification fan-out.
+

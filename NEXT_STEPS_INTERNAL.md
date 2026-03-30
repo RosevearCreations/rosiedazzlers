@@ -1,3 +1,5 @@
+> Last synchronized: March 29, 2026. Reviewed during the session-only admin cleanup, private-page noindex pass, and docs/schema refresh.
+
 > Last synchronized: March 29, 2026. Reviewed during the known-gaps reduction, session-first admin-screen cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -67,3 +69,10 @@
 
 ### March 25, 2026 pass note
 This doc was refreshed during the vehicle catalog, progress-session, layout, and public catalog filter pass. The repo now includes NHTSA-backed vehicle make/model endpoints, a DB cache table for vehicle catalog rows, progress moderation/enable session upgrades, and public search/filter cleanup on Gear and Consumables.
+
+## March 29, 2026 follow-up after session-only cleanup
+- test signed-in staff flows on Live, Jobsite, Progress, Recovery, customer management, and booking management without any fallback password supplied
+- remove or soften any remaining bridge-era UI copy that still implies password-first admin access
+- continue upload reuse across field-facing flows so staff can attach media without manual URL workarounds
+- continue gift/account history polish and notification fan-out wiring
+

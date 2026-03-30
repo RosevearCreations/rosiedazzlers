@@ -33,7 +33,7 @@
         <div class="panel">
           <h2>Template editor</h2>
           <form id="templateForm" class="form">
-            <label>Admin password<input id="adminPassword" type="password" autocomplete="current-password" required /></label>
+            <label>Staff session / optional legacy fallback<input id="adminPassword" type="password" autocomplete="off" /></label>
             <label>Template key<input id="templateKey" type="text" placeholder="abandoned_checkout_email" required /></label>
             <label>Channel<select id="templateChannel"><option value="email">Email</option><option value="sms">SMS</option></select></label>
             <label>Provider<input id="templateProvider" type="text" value="manual" placeholder="manual, resend, twilio, etc." /></label>
@@ -74,7 +74,7 @@
     <section class="section">
       <div class="panel">
         <h2>Saved templates</h2>
-        <div id="templateList" class="grid" style="margin-top:12px"><div class="notice">Load templates with a signed-in staff session or optional fallback password.</div></div>
+        <div id="templateList" class="grid" style="margin-top:12px"><div class="notice">Load templates with your signed-in staff session. Legacy fallback is transitional only.</div></div>
       </div>
     </section>
   </main>
