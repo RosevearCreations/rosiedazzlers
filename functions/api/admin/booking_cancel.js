@@ -70,7 +70,7 @@ export async function onRequestPost(context) {
       body,
       capability: "manage_bookings",
       bookingId: booking_id,
-      allowLegacyAdminFallback: false
+      allowLegacyAdminFallback: true
     });
 
     if (!access.ok) {

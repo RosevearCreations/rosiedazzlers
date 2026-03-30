@@ -22,7 +22,7 @@ export async function onRequestPost(context){
     const moderationRules = settings.moderation_rules || {};
     if (visibility === 'customer' && flags.customer_chat_enabled === false) return withCors(json({ error:'Customer-visible chat is disabled.' },403));
 
-    const access = await requireStaffAccess({ request, env, body, capability:'work_booking', bookingId: booking_id, allowLegacyAdminFallback:false });
+    const access = await requireStaffAccess({ request, env, body, capability:'work_booking', bookingId: booking_id, allowLegacyAdminFallback:true });
     if (!access.ok) return withCors(access.response);
     const headers = serviceHeaders(env);
     const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,customer_email,customer_profile_id,assigned_staff_email,assigned_staff_name&id=eq.${encodeURIComponent(booking_id)}&limit=1`, { headers });

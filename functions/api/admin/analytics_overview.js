@@ -7,7 +7,7 @@ export async function onRequestPost(context){
   const {request, env}=context;
   try{
     const body=await request.json().catch(()=>({}));
-    const access=await requireStaffAccess({request, env, body, capability:"manage_staff", allowLegacyAdminFallback:false});
+    const access=await requireStaffAccess({request, env, body, capability:"manage_staff", allowLegacyAdminFallback:true});
     if(!access.ok) return withCors(access.response);
 
     const days=Math.max(1,Math.min(90,Number(body.days||30)));

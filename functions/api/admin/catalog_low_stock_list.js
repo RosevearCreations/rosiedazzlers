@@ -6,7 +6,7 @@ export async function onRequestPost(context){
   const { request, env } = context;
   try {
     const body = await request.json().catch(() => ({}));
-    const access = await requireStaffAccess({ request, env, body, capability:'manage_staff', allowLegacyAdminFallback:false });
+    const access = await requireStaffAccess({ request, env, body, capability:'manage_staff', allowLegacyAdminFallback:true });
     if (!access.ok) return withCors(access.response);
     const flags = await loadFeatureFlags(env);
     if (flags.low_stock_alerts_enabled === false) return withCors(json({ error:'Low-stock alerts are disabled.' }, 403));

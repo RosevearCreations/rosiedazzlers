@@ -28,7 +28,7 @@ export async function onRequestPost({ request, env }) {
     const res = await fetch(`${env.SUPABASE_URL}/rest/v1/date_blocks?on_conflict=blocked_date`, {
       method: "POST",
       headers: { ...serviceHeaders(env), Accept: "application/json", Prefer: "resolution=merge-duplicates,return=representation" },
-      body: JSON.stringify([{ blocked_date, reason, updated_at: new Date().toISOString() }]),
+      body: JSON.stringify([{ blocked_date, reason }]),
     });
     const text = await res.text();
     const data = safeJson(text);
