@@ -14,7 +14,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "manage_bookings",
-      allowLegacyAdminFallback: true
+      allowLegacyAdminFallback: false
     });
     if (!access.ok) return access.response;
 

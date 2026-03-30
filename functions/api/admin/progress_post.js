@@ -15,7 +15,7 @@ export async function onRequestPost(context) {
     if (!note) return withCors(json({ error: "Missing note." }, 400));
     if (!["customer","internal"].includes(visibility)) return withCors(json({ error: "Invalid visibility." }, 400));
 
-    const access = await requireStaffAccess({ request, env, body: { ...body, booking_id: resolvedBookingId }, capability: "work_booking", bookingId: resolvedBookingId, allowLegacyAdminFallback: true });
+    const access = await requireStaffAccess({ request, env, body: { ...body, booking_id: resolvedBookingId }, capability: "work_booking", bookingId: resolvedBookingId, allowLegacyAdminFallback: false });
     if (!access.ok) return withCors(access.response);
 
     const headers = {
