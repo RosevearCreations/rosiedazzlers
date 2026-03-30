@@ -89,7 +89,7 @@
 
     function esc(v) { return String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;"); }
     function setNotice(message, kind="") { const el=byId("pageNotice"); el.className = kind ? `notice ${kind}` : "notice"; el.textContent = message; }
-    function adminHeaders(password){ return { "Content-Type":"application/json", "x-admin-password": password }; }
+    function adminHeaders(password){ return { "Content-Type":"application/json", ...(password ? { "x-admin-password": password } : {}) }; }
 
     function readRulesJson() {
       try { return JSON.parse(byId("templateRules").value || "{}"); }

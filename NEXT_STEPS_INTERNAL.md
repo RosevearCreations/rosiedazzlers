@@ -72,3 +72,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 2. Normalize stale endpoint comments/CORS/header docs that still imply `x-admin-password` is the primary path.
 3. Reuse the signed upload pattern on the remaining field screens that still rely on older/manual flows.
 4. Continue DB-first cleanup where JSON fallback still exists only as temporary compatibility.
+
+## March 30, 2026 session-first cleanup pass
+- Reduced bridge risk again by removing legacy admin fallback from another active set of endpoints, including progress posting/upload, customer-profile save/list, booking customer linking, unblock actions, and app-settings access.
+- Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
+- Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
+

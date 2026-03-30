@@ -363,3 +363,9 @@ Partially mitigated in the newest pass:
 - Guest booking noise risk is reduced because the Book page now checks `/api/client/auth_me` before calling `/api/client/dashboard`, preventing expected guest-state `401` console noise.
 - Shared-password bridge risk is reduced again because additional active internal endpoints now require the signed-in staff session instead of allowing the legacy bridge on list/save/comment/moderation flows.
 - Remaining top risk is still full operational convergence: older duplicate admin endpoints and route comments/header hints still need retirement or normalization, and upload reuse across the rest of the field workflow is still incomplete.
+
+## March 30, 2026 session-first cleanup pass
+- Reduced bridge risk again by removing legacy admin fallback from another active set of endpoints, including progress posting/upload, customer-profile save/list, booking customer linking, unblock actions, and app-settings access.
+- Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
+- Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
+

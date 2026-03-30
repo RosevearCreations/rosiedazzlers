@@ -159,3 +159,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Promo create/list behavior is now aligned with the reconciled live promo schema and no longer leaves the main promo list area as raw JSON.
 - Book page guest-state console noise is reduced by checking auth before optional dashboard prefill calls.
 - Shared-password bridge reduction continues on active list/save/comment/moderation endpoints, but full endpoint retirement is still not complete.
+
+## March 30, 2026 session-first cleanup pass
+- Reduced bridge risk again by removing legacy admin fallback from another active set of endpoints, including progress posting/upload, customer-profile save/list, booking customer linking, unblock actions, and app-settings access.
+- Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
+- Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
+

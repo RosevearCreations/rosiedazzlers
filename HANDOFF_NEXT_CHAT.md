@@ -86,3 +86,9 @@ Run `sql/2026-03-26_catalog_admin_vehicle_account_and_auth_cleanup.sql` before t
 - Promo management is now stabilized enough to test create/list/disable behavior against the reconciled live promo table.
 - Book page no longer needs to hit the customer dashboard endpoint for guests before auth is confirmed.
 - Continue next with the remaining bridge cleanup and route/endpoint retirement work from `KNOWN_GAPS_AND_RISKS.md`.
+
+## March 30, 2026 session-first cleanup pass
+- Reduced bridge risk again by removing legacy admin fallback from another active set of endpoints, including progress posting/upload, customer-profile save/list, booking customer linking, unblock actions, and app-settings access.
+- Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
+- Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
+

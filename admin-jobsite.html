@@ -417,7 +417,7 @@
     function apiHeaders(password) {
       return {
         "Content-Type": "application/json",
-        "x-admin-password": password
+        ...(password ? { "x-admin-password": password } : {})
       };
     }
 

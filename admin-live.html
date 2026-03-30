@@ -215,7 +215,7 @@
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-admin-password": currentPassword
+          ...(currentPassword ? { "x-admin-password": currentPassword } : {})
         },
         body: JSON.stringify(body || {})
       });

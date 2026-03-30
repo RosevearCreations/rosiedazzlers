@@ -129,3 +129,9 @@ Prefer the session-aware admin/detailer endpoints over any older shared-password
 
 ## March 30, 2026 repo note
 The current pass mainly touches `admin-promos.html`, `book.html`, and a further batch of `functions/api/admin/*` session-access routes. The docs/schema files were refreshed again to reflect promo-schema reconciliation and continued session-first cleanup.
+
+## March 30, 2026 session-first cleanup pass
+- Reduced bridge risk again by removing legacy admin fallback from another active set of endpoints, including progress posting/upload, customer-profile save/list, booking customer linking, unblock actions, and app-settings access.
+- Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
+- Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
+

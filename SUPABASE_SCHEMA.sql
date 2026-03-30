@@ -1,3 +1,4 @@
+-- Last synchronized: March 30, 2026. Reviewed during the session-first cleanup, promo stabilization follow-up, and docs/schema synchronization pass.
 -- March 30, 2026 promo stability and session-noise pass note
 -- Promo management now aligns with the reconciled live promo_codes table/constraint model, guest booking no longer hits client dashboard prefill until auth is confirmed, and more active admin routes now require session-first staff access.
 

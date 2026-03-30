@@ -212,3 +212,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - moved forward: the admin promo screen now renders operational promo data instead of a raw JSON dump in the main workflow area.
 - moved forward: guest booking now avoids unnecessary customer-dashboard calls until customer auth is confirmed, reducing false console noise during public booking use.
 - move up next: finish the remaining session-only cleanup on older admin endpoints, normalize stale CORS/header comments that still describe the bridge as primary behavior, and continue upload-flow reuse across the remaining field screens.
+
+## March 30, 2026 session-first cleanup pass
+- Reduced bridge risk again by removing legacy admin fallback from another active set of endpoints, including progress posting/upload, customer-profile save/list, booking customer linking, unblock actions, and app-settings access.
+- Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
+- Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
+
