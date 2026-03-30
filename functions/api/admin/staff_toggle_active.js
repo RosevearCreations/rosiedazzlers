@@ -3,7 +3,7 @@
 // Role-aware staff activate / deactivate endpoint.
 //
 // What this file does:
-// - keeps current ADMIN_PASSWORD bridge protection
+// - prefers signed-in staff session access
 // - requires manage_staff capability
 // - activates or deactivates staff_users without deleting rows
 // - preserves audit/history for assignments and override logs
@@ -17,7 +17,7 @@
 // }
 //
 // Request headers supported:
-// - x-admin-password: required
+// - x-admin-password: transitional compatibility only when explicitly used
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -63,7 +63,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "manage_staff",
-      allowLegacyAdminFallback: true
+      allowLegacyAdminFallback: false
     });
 
     if (!access.ok) {

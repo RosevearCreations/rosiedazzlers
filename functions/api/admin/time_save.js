@@ -3,7 +3,7 @@
 // Role-aware job time save endpoint.
 //
 // What this file does:
-// - keeps current ADMIN_PASSWORD bridge protection
+// - prefers signed-in staff session access
 // - requires staff identity/capability through staff_users
 // - allows admin / booking managers to log time for any booking
 // - allows assigned detailers / senior detailers to log time only for bookings they can work
@@ -19,7 +19,7 @@
 // }
 //
 // Request headers supported:
-// - x-admin-password: required
+// - x-admin-password: transitional compatibility only when explicitly used
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -75,7 +75,7 @@ export async function onRequestPost(context) {
       body,
       capability: "work_booking",
       bookingId: booking_id,
-      allowLegacyAdminFallback: true
+      allowLegacyAdminFallback: false
     });
 
     if (!access.ok) {
