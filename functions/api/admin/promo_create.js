@@ -25,6 +25,8 @@ export async function onRequestPost({ request, env }) {
     const is_active = body.is_active === false ? false : true;
     const percent_off = body.percent_off === null || body.percent_off === undefined || body.percent_off === "" ? null : Number(body.percent_off);
     const amount_off_cents = body.amount_off_cents === null || body.amount_off_cents === undefined || body.amount_off_cents === "" ? null : Number(body.amount_off_cents);
+    const discount_type = percent_off !== null ? "percent" : "fixed";
+    const discount_value = percent_off !== null ? Math.round(percent_off * 100) / 100 : Math.round((amount_off_cents || 0) / 100 * 100) / 100;
 
     if (percent_off !== null && (!Number.isFinite(percent_off) || percent_off <= 0 || percent_off > 100)) {
       return withCors(json({ ok: false, error: "percent_off must be >0 and <=100" }, 400));
@@ -42,28 +44,25 @@ export async function onRequestPost({ request, env }) {
     if (ends_on && !/^\d{4}-\d{2}-\d{2}$/.test(ends_on)) return withCors(json({ ok: false, error: "ends_on must be YYYY-MM-DD" }, 400));
 
     const note = body.note ? String(body.note).trim() : null;
+    const notes = body.notes ? String(body.notes).trim() : note;
 
     if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
       return withCors(json({ ok: false, error: "Server not configured (Supabase env vars missing)" }, 500));
     }
 
     const url = `${env.SUPABASE_URL}/rest/v1/promo_codes?on_conflict=code`;
-    const normalizedPercent = percent_off === null ? null : Math.round(percent_off * 100) / 100;
-    const normalizedAmountCents = amount_off_cents === null ? null : Math.round(amount_off_cents);
     const payload = [{
       code,
       is_active,
-      active: is_active,
-      discount_type: normalizedPercent !== null ? "percent" : "fixed",
-      discount_value: normalizedPercent !== null ? normalizedPercent : (normalizedAmountCents === null ? null : normalizedAmountCents / 100),
-      percent_off: normalizedPercent,
-      amount_off_cents: normalizedAmountCents,
-      discount_percent: normalizedPercent,
-      discount_cents: normalizedAmountCents,
+      discount_type,
+      discount_value,
+      discount_percent: percent_off === null ? null : Math.round(percent_off * 100) / 100,
+      discount_cents: amount_off_cents === null ? null : Math.round(amount_off_cents),
+      percent_off: percent_off === null ? null : Math.round(percent_off * 100) / 100,
+      amount_off_cents: amount_off_cents === null ? null : Math.round(amount_off_cents),
       starts_on,
       ends_on,
-      notes: note,
-      note,
+      notes,
       updated_at: new Date().toISOString(),
     }];
 
