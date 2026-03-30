@@ -3,7 +3,7 @@
 // Role-aware booking complete / reopen endpoint.
 //
 // What this file does:
-// - keeps current ADMIN_PASSWORD bridge protection
+// - prefers signed-in staff session access
 // - allows admin / booking managers to mark any booking complete
 // - allows assigned detailers / senior detailers to reopen only bookings they can work
 // - sets status/job_status consistently
@@ -23,7 +23,7 @@
 //                      or sensible defaults
 //
 // Request headers supported:
-// - x-admin-password: required
+// - x-admin-password: transitional compatibility only when explicitly used
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -71,7 +71,7 @@ export async function onRequestPost(context) {
       body,
       capability: completed ? "manage_bookings" : "work_booking",
       bookingId: booking_id,
-      allowLegacyAdminFallback: true
+      allowLegacyAdminFallback: false
     });
 
     if (!access.ok) {

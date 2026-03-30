@@ -3,7 +3,7 @@
 // Role-aware staff override log list endpoint.
 //
 // What this file does:
-// - keeps current ADMIN_PASSWORD bridge protection
+// - prefers signed-in staff session access
 // - requires manage_staff capability
 // - returns staff override log rows
 // - supports optional filtering by booking_id and source_table
@@ -16,7 +16,7 @@
 // }
 //
 // Request headers supported:
-// - x-admin-password: required
+// - x-admin-password: transitional compatibility only when explicitly used
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -48,7 +48,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "manage_staff",
-      allowLegacyAdminFallback: true
+      allowLegacyAdminFallback: false
     });
 
     if (!access.ok) {

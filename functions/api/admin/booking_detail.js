@@ -3,7 +3,7 @@
 // Role-aware booking detail endpoint.
 //
 // What this file does:
-// - keeps current ADMIN_PASSWORD bridge protection
+// - prefers signed-in staff session access
 // - requires manage_bookings capability
 // - loads one booking in full for the admin booking page
 // - includes linked intake/time/progress/media/signoff summary data
@@ -15,7 +15,7 @@
 // }
 //
 // Request headers supported:
-// - x-admin-password: required
+// - x-admin-password: transitional compatibility only when explicitly used
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -55,7 +55,7 @@ export async function onRequestPost(context) {
       body,
       capability: "manage_bookings",
       bookingId: booking_id,
-      allowLegacyAdminFallback: true
+      allowLegacyAdminFallback: false
     });
 
     if (!access.ok) {
