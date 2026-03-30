@@ -47,7 +47,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "view_live_ops",
-      allowLegacyAdminFallback: true
+      allowLegacyAdminFallback: false
     });
 
     if (!access.ok) {
