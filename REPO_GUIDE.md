@@ -1,4 +1,4 @@
-> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+> Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 <!-- REPO_GUIDE.md -->
 
@@ -125,3 +125,7 @@ Prefer the session-aware admin/detailer endpoints over any older shared-password
 ## March 30, 2026 promo compatibility pass
 - Admin promo creation now sends the minimal canonical promo payload (`code`, `is_active`, `discount_type`, `discount_value`, `starts_at`, `ends_at`, `description`) to reduce schema drift against the live `promo_codes` table.
 - This pass specifically removes older create-path dependence on legacy promo fields like `active`, `applies_to`, `percent_off`, and `amount_off_cents` during promo creation.
+
+
+## March 30, 2026 repo note
+The current pass mainly touches `admin-promos.html`, `book.html`, and a further batch of `functions/api/admin/*` session-access routes. The docs/schema files were refreshed again to reflect promo-schema reconciliation and continued session-first cleanup.

@@ -1,4 +1,4 @@
-> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+> Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Next Steps Internal
@@ -65,3 +65,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 ## March 30, 2026 promo compatibility pass
 - Admin promo creation now sends the minimal canonical promo payload (`code`, `is_active`, `discount_type`, `discount_value`, `starts_at`, `ends_at`, `description`) to reduce schema drift against the live `promo_codes` table.
 - This pass specifically removes older create-path dependence on legacy promo fields like `active`, `applies_to`, `percent_off`, and `amount_off_cents` during promo creation.
+
+
+## March 30, 2026 next-step update
+1. Continue converting the remaining duplicate/legacy admin endpoints away from the shared-password bridge.
+2. Normalize stale endpoint comments/CORS/header docs that still imply `x-admin-password` is the primary path.
+3. Reuse the signed upload pattern on the remaining field screens that still rely on older/manual flows.
+4. Continue DB-first cleanup where JSON fallback still exists only as temporary compatibility.

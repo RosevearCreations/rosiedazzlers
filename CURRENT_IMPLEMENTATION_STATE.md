@@ -1,4 +1,4 @@
-> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+> Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
 
@@ -130,3 +130,10 @@
 ## March 30, 2026 promo compatibility pass
 - Admin promo creation now sends the minimal canonical promo payload (`code`, `is_active`, `discount_type`, `discount_value`, `starts_at`, `ends_at`, `description`) to reduce schema drift against the live `promo_codes` table.
 - This pass specifically removes older create-path dependence on legacy promo fields like `active`, `applies_to`, `percent_off`, and `amount_off_cents` during promo creation.
+
+
+## March 30, 2026 promo stability and session-noise pass
+- Promo creation and listing were stabilized against the current live `promo_codes` model after the database reconciliation work, and the admin promo screen now renders a readable promo table with optional raw-response debug instead of dumping JSON into the main list view.
+- Book page garage/customer prefill now checks authenticated customer state first so guest visitors no longer trigger the expected `/api/client/dashboard` `401` request on page load.
+- More internal admin endpoints now use session-only staff access on active list/save/comment/moderation flows, continuing the reduction of shared-password bridge dependence.
+- No new application tables were required in this pass; the database change was promo-schema reconciliation rather than a broader schema expansion.

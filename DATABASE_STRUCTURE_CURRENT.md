@@ -1,4 +1,4 @@
-> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+> Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 March 28, 2026 sync note: no new tables were required for this pass; this refresh mainly aligns UI readability, catalog presentation, and documentation with the current build.
 
@@ -238,3 +238,7 @@ March 29, 2026 sync note: no new tables were required for this pass; the main ch
 ## March 30, 2026 promo compatibility pass
 - Admin promo creation now sends the minimal canonical promo payload (`code`, `is_active`, `discount_type`, `discount_value`, `starts_at`, `ends_at`, `description`) to reduce schema drift against the live `promo_codes` table.
 - This pass specifically removes older create-path dependence on legacy promo fields like `active`, `applies_to`, `percent_off`, and `amount_off_cents` during promo creation.
+
+
+## March 30, 2026 database note
+The meaningful database change in this pass is promo-code reconciliation: the live `promo_codes` structure and constraints were aligned with the canonical `discount_type` / `discount_value` model so admin promo create/list behavior matches the real table shape.

@@ -1,4 +1,4 @@
-> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+> Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
 
@@ -205,3 +205,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 ## March 30, 2026 promo compatibility pass
 - Admin promo creation now sends the minimal canonical promo payload (`code`, `is_active`, `discount_type`, `discount_value`, `starts_at`, `ends_at`, `description`) to reduce schema drift against the live `promo_codes` table.
 - This pass specifically removes older create-path dependence on legacy promo fields like `active`, `applies_to`, `percent_off`, and `amount_off_cents` during promo creation.
+
+
+## March 30, 2026 movement
+- moved forward: promo management is now more stable against the live database shape after reconciling the promo table and constraint model.
+- moved forward: the admin promo screen now renders operational promo data instead of a raw JSON dump in the main workflow area.
+- moved forward: guest booking now avoids unnecessary customer-dashboard calls until customer auth is confirmed, reducing false console noise during public booking use.
+- move up next: finish the remaining session-only cleanup on older admin endpoints, normalize stale CORS/header comments that still describe the bridge as primary behavior, and continue upload-flow reuse across the remaining field screens.
