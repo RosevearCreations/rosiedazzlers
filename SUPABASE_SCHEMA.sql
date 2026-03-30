@@ -1,3 +1,4 @@
+-- Last synchronized: March 30, 2026. Reviewed during the guest-booking auth-noise cleanup, session-first endpoint tightening, private-page noindex pass, and docs/schema synchronization pass.
 -- March 29, 2026 sync note: no new tables were required for this pass; this refresh mainly extends signed-in staff session coverage, reduces shared-password-only endpoint usage, and improves actor attribution in time/intake/media/booking flows.
 -- 
 -- 
@@ -346,3 +347,8 @@ create index if not exists catalog_purchase_orders_reminder_sent_at_idx on publi
 
 -- March 29, 2026 pricing/session/recovery/moderation pass
 -- No new table was required in this pass; the main changes were DB-first public pricing consumption, endpoint auth cleanup, recovery audit visibility, moderation filtering, and purchase reminder audit logging.
+
+
+-- March 30, 2026 gap-reduction pass:
+-- Removed more legacy admin fallback allowances from active internal endpoint paths without requiring new tables.
+-- Book-page guest auth noise was reduced in page logic; no schema migration was required for this pass.

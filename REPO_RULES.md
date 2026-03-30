@@ -6,6 +6,8 @@
 
 > Last synchronized: March 24, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
+> Last synchronized: March 30, 2026. Reviewed during the guest-booking auth-noise cleanup, session-first endpoint tightening, private-page noindex pass, and docs/schema synchronization pass.
+
 # Rosie Dazzlers — Repository Rules
 
 This document defines the **non-negotiable rules** for modifying the Rosie Dazzlers codebase.

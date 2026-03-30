@@ -6,6 +6,8 @@
 
 > Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
+> Last synchronized: March 30, 2026. Reviewed during the guest-booking auth-noise cleanup, session-first endpoint tightening, private-page noindex pass, and docs/schema synchronization pass.
+
 # Rosie Dazzlers — Project Brain
 
 This is the compact mental model for the `dev` branch.
@@ -108,4 +110,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Booking wizard was reworked for mobile use and clearer per-step validation.
 - Public chrome now has a session-aware account widget.
 - Customer progress now hides internal-only updates by filtering existing visibility data.
+
+## March 30, 2026 gap-reduction pass
+- Removed more legacy admin-fallback allowances from active blocks/live/jobsite/media/progress moderation paths so signed-in staff session access remains the preferred internal route.
+- Book page now checks customer auth before requesting the client dashboard, reducing guest-session 401 noise during normal booking loads.
+- Continued private-route SEO hardening by adding missing `noindex,nofollow` coverage to more internal/account completion pages while keeping exposed public pages on the one-H1 rule.
+- Docs and schema snapshot were re-synchronized to this build after the latest endpoint and page cleanup pass.
 
