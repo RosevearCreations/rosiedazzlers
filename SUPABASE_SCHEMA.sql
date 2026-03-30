@@ -342,3 +342,7 @@ create index if not exists customer_reviews_customer_profile_id_idx on public.cu
 create index if not exists catalog_purchase_orders_reminder_sent_at_idx on public.catalog_purchase_orders(reminder_sent_at);
 
 -- Last synchronized: 2026-03-29. Reviewed during the promo/block/session conversion and purchase-order reminder lifecycle pass.
+
+
+-- March 29, 2026 pricing/session/recovery/moderation pass
+-- No new table was required in this pass; the main changes were DB-first public pricing consumption, endpoint auth cleanup, recovery audit visibility, moderation filtering, and purchase reminder audit logging.

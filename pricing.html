@@ -6,7 +6,7 @@
      What it does:
      - Uses the same layout as /pricing/index.html
      - Shows the chart images from the Brand bucket
-     - Loads /data/rosie_services_pricing_and_packages.json to build the table
+     - Loads /api/pricing_catalog_public to build the table
 -->
 <!doctype html>
 <html lang="en">
@@ -158,7 +158,7 @@
   </div>
 
   <script type="module">
-    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260328ad";
+    const DATA_URL = "/api/pricing_catalog_public?v=20260328ad";
     const qs = (s)=>document.querySelector(s);
     const money = (cad)=> new Intl.NumberFormat("en-CA",{style:"currency",currency:"CAD"}).format(Number(cad||0));
     let chartMap = new Map();

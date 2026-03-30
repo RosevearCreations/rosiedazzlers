@@ -215,7 +215,7 @@
   </div>
 
   <script type="module">
-    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260327mobile1";
+    const DATA_URL = "/api/pricing_catalog_public?v=20260327mobile1";
     const VEHICLE_MAKES_URL = "/api/vehicle_makes";
     const VEHICLE_MODELS_URL = "/api/vehicle_models";
     const qs = (s)=>document.querySelector(s);
@@ -247,8 +247,8 @@
     function openModal(title,imgUrl){ qs('#modalTitle').textContent=title; qs('#modalImg').src=imgUrl; qs('#modalBack').style.display='flex'; }
     function closeModal(){ qs('#modalBack').style.display='none'; qs('#modalImg').src=''; }
     qs('#modalCloseBtn').addEventListener('click', closeModal); qs('#modalBack').addEventListener('click',(e)=>{ if(e.target.id==='modalBack') closeModal(); });
-    qs('#openSizeChartBtn').addEventListener('click',()=>openModal('Vehicle size chart',`${BRAND_BASE}/CarSizeChart.PNG`));
-    qs('#openPriceChartBtn').addEventListener('click',()=>openModal('Vehicle price chart',`${BRAND_BASE}/CarPrice2025.PNG`));
+    qs('#openSizeChartBtn').addEventListener('click',()=>openModal('Vehicle size chart','https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG'));
+    qs('#openPriceChartBtn').addEventListener('click',()=>openModal('Vehicle price chart','https://assets.rosiedazzlers.ca/brand/CarPrice2025.PNG'));
 
     function selectedPackage(){ return (pricing?.packages || []).find((pkg)=>pkg.code===selectedPackageCode) || null; }
     function selectedSize(){ return qs('#vehicle_size').value; }
