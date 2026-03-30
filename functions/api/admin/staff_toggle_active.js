@@ -63,7 +63,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "manage_staff",
-      allowLegacyAdminFallback: true
+      allowLegacyAdminFallback: false
     });
 
     if (!access.ok) {
