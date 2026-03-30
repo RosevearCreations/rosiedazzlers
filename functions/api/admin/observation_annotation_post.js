@@ -29,7 +29,7 @@ export async function onRequestPost(context) {
     const flags = await loadFeatureFlags(env);
     if (flags.image_annotations_enabled === false) return withCors(json({ error: "Image annotations are disabled." }, 403));
 
-    const access = await requireStaffAccess({ request, env, body, capability: "work_booking", bookingId: booking_id, allowLegacyAdminFallback: true });
+    const access = await requireStaffAccess({ request, env, body, capability: "work_booking", bookingId: booking_id, allowLegacyAdminFallback: false });
     if (!access.ok) return withCors(access.response);
 
     const headers = serviceHeaders(env);
