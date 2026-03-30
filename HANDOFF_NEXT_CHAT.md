@@ -75,3 +75,8 @@ Run `sql/2026-03-26_catalog_admin_vehicle_account_and_auth_cleanup.sql` before t
 - filtered internal-only updates out of customer progress view
 - no new SQL migration required in this pass
 
+
+
+## March 30, 2026 promo compatibility pass
+- Admin promo creation now sends the minimal canonical promo payload (`code`, `is_active`, `discount_type`, `discount_value`, `starts_at`, `ends_at`, `description`) to reduce schema drift against the live `promo_codes` table.
+- This pass specifically removes older create-path dependence on legacy promo fields like `active`, `applies_to`, `percent_off`, and `amount_off_cents` during promo creation.

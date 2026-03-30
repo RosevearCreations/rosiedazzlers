@@ -308,17 +308,24 @@
         admin_password: pw,
         code,
         is_active: !!qs("#active").checked,
-        starts_at: qs("#starts").value ? new Date(`${qs("#starts").value}T00:00:00`).toISOString() : null,
-        ends_at: qs("#ends").value ? new Date(`${qs("#ends").value}T23:59:59`).toISOString() : null,
-        notes: (qs("#note").value || "").trim() || null,
-        discount_type: kind === "percent" ? "percent" : "fixed",
-        discount_value: kind === "percent" ? Math.round(value * 100) / 100 : Math.round(value * 100) / 100,
+        starts_at: qs("#starts").value ? `${qs("#starts").value}T00:00:00.000Z` : null,
+        ends_at: qs("#ends").value ? `${qs("#ends").value}T23:59:59.999Z` : null,
+        description: (qs("#note").value || "").trim() || null,
       };
+
+      if (kind === "percent") {
+        payload.discount_type = "percent";
+        payload.discount_value = Math.round(value * 100) / 100;
+      }
+      if (kind === "amount") {
+        payload.discount_type = "fixed";
+        payload.discount_value = Math.round(value * 100) / 100;
+      }
 
       qs("#createBtn").disabled = true;
       qs("#createBtn").textContent = "Creating…";
 
-      const r = await postJson("/api/admin/promos_save", payload);
+      const r = await postJson("/api/admin/promo_create", payload);
 
       qs("#createBtn").disabled = false;
       qs("#createBtn").textContent = "Create";

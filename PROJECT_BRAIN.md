@@ -109,3 +109,8 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Public chrome now has a session-aware account widget.
 - Customer progress now hides internal-only updates by filtering existing visibility data.
 
+
+
+## March 30, 2026 promo compatibility pass
+- Admin promo creation now sends the minimal canonical promo payload (`code`, `is_active`, `discount_type`, `discount_value`, `starts_at`, `ends_at`, `description`) to reduce schema drift against the live `promo_codes` table.
+- This pass specifically removes older create-path dependence on legacy promo fields like `active`, `applies_to`, `percent_off`, and `amount_off_cents` during promo creation.
