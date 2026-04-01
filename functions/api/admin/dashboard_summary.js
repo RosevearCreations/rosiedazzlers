@@ -15,7 +15,7 @@
 // }
 //
 // Request headers supported:
-// - x-admin-password: required
+// - x-admin-password: transitional compatibility only when explicitly used
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -45,7 +45,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "view_live_ops",
-      allowLegacyAdminFallback: true
+      allowLegacyAdminFallback: false
     });
 
     if (!access.ok) {

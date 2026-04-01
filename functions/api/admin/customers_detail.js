@@ -7,7 +7,7 @@ export async function onRequestPost(context){
     const customer_profile_id = String(body.customer_profile_id || "").trim();
     if (!customer_profile_id) return withCors(json({ error:"Missing customer_profile_id." },400));
     if (!isUuid(customer_profile_id)) return withCors(json({ error:"Invalid customer_profile_id." },400));
-    const access = await requireStaffAccess({ request, env, body, capability:"manage_bookings", allowLegacyAdminFallback:true });
+    const access = await requireStaffAccess({ request, env, body, capability:"manage_bookings", allowLegacyAdminFallback:false });
     if (!access.ok) return withCors(access.response);
     const headers = serviceHeaders(env);
     const profileRes = await fetch(`${env.SUPABASE_URL}/rest/v1/customer_profiles?select=*&id=eq.${encodeURIComponent(customer_profile_id)}&limit=1`, { headers });
