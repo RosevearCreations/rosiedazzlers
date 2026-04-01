@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 <!-- docs/REPO_RULES.md -->
@@ -252,3 +254,9 @@ If a proposed change makes the system:
 then it is likely **the wrong change**.
 
 Always favor the simplest architecture that preserves functionality.
+
+## March 31, 2026 reminder
+- keep public exposed pages to one H1
+- keep docs/schema in sync on every pass
+- prefer DB-first shared sources over duplicated JSON when a stable endpoint already exists
+- treat legacy admin fallback as transitional only

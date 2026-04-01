@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 # Docs Update Note
@@ -28,3 +30,5 @@ Primary docs refreshed together:
 - Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
 - Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
 
+## March 31, 2026 docs update note
+This documentation refresh syncs the repo to the current build where public catalog loaders prefer DB-backed feeds, the progress screen supports signed file upload reuse, and no new schema objects were added.

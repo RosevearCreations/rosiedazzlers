@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
@@ -94,3 +96,8 @@ Run `sql/2026-03-26_catalog_admin_vehicle_account_and_auth_cleanup.sql` before t
 
 ## March 30, 2026 handoff note
 The latest pass removed another large set of legacy admin fallback allowances from booking/customer/staff/promo companion/time endpoints. Continue next with the remaining bridge-only bootstrap/helper routes, upload reuse, and any route/comment cleanup that still treats the bridge as primary behavior.
+
+## March 31, 2026 handoff note
+- Public catalog loaders now prefer `/api/catalog_public` before bundled JSON fallback, reducing another duplication/drift path on gear and consumables surfaces.
+- `admin-progress.html` now supports direct signed file upload as well as URL attach, so upload reuse is no longer isolated to the standalone helper page.
+- No new SQL migration was required in this pass. Continue next with the remaining helper/bootstrap cleanup, deeper upload reuse where still missing, and route-by-route SEO/structured-data work.

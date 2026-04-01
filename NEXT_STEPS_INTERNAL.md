@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
@@ -82,3 +84,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 1. Remove the remaining explicit legacy-bridge endpoints/helpers and normalize their comments/CORS guidance.
 2. Continue upload-flow reuse across the remaining field screens.
 3. Continue pricing/report convergence and remaining route cleanup after the auth overlap is smaller.
+
+## March 31, 2026 next-step refinement
+- Keep the standalone upload helper, but treat the reusable signed-upload pattern on `admin-progress.html` as the new baseline for other field screens.
+- Prioritize any remaining detailer/jobsite screens that still force manual URL entry or older media flows.
+- Continue removing stale comments/header hints that make the bridge look primary when it is now transitional.
+- Continue replacing public JSON catalog reads with DB-first endpoints where coverage already exists.

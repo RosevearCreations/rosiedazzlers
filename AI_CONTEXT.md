@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 <!-- AI_CONTEXT.md -->
@@ -410,3 +412,8 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
 - Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
 
+## March 31, 2026 AI handoff sync
+Current newest pass:
+- DB-first public catalog preference expanded into shared/public loaders.
+- Signed upload reuse now exists on `admin-progress.html` in addition to `admin-upload.html`.
+- No new migration required in this pass.

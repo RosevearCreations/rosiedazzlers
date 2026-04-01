@@ -1,3 +1,5 @@
+-- Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+-- March 31, 2026 pass note: no new DDL required; this pass reused existing catalog, media upload, and staff-session structures while reducing duplication/drift in application code.
 -- Last synchronized: March 30, 2026. Reviewed during the endpoint-normalization, session-first admin cleanup, promo stabilization, and docs/schema synchronization pass.
 -- Last synchronized: March 30, 2026. Reviewed during the session-first cleanup, promo stabilization follow-up, and docs/schema synchronization pass.
 -- March 30, 2026 promo stability and session-noise pass note

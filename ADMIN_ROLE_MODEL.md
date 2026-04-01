@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
@@ -352,3 +354,6 @@ Current next priorities:
 - richer client/detailer threaded comments UI
 - manual scheduling / app-management rules UI completion
 - final layout polish across booking and internal screens
+
+## March 31, 2026 role-model sync
+No role table expansion was required in this pass. The meaningful role/access change here is clearer session-first behavior and another reduction in how prominently legacy fallback is presented in active admin tooling.

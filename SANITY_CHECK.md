@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
@@ -175,3 +177,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Session-first admin cleanup advanced again by removing another batch of bridge-enabled endpoint options.
 - Promo stabilization remains in place after the live schema reconciliation work.
 - Public H1 review should still remain part of every pass; no public multi-H1 issue was found during this build check.
+
+## March 31, 2026 sanity snapshot
+- public gear/consumables pages: still working, now closer to DB-first catalog delivery with JSON kept as fallback
+- admin progress media flow: stronger, because direct signed file upload is now available on the progress screen
+- schema state: unchanged from the March 30 pass
+- remaining honest risks: final auth/session convergence, remaining bridge/helper cleanup, deeper production media strategy, and route-by-route SEO polish

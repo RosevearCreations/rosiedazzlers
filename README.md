@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
@@ -191,3 +193,9 @@ This build continues the session-first admin transition by removing another larg
 
 ## March 30, 2026 current note
 This build continues the role-aware admin transition by removing another batch of bridge-enabled admin endpoint settings and by tightening browser-side admin helpers so transitional password headers are only sent when intentionally present.
+
+## March 31, 2026 gaps/risk reduction pass
+- Public gear and consumables loaders now prefer the DB-backed `/api/catalog_public` feed before bundled JSON fallback, reducing duplicate catalog drift across public pages.
+- `admin-progress.html` now supports direct file upload from the same screen through the signed upload flow, while still allowing URL-based media attachment when needed.
+- Transitional legacy-bridge wording was tightened again in active admin pages and endpoint comments so the signed-in staff session remains the primary path.
+- No new tables were required in this pass; this was an operational convergence, upload reuse, SEO/H1 review, and docs/schema synchronization build.

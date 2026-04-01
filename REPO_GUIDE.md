@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 <!-- REPO_GUIDE.md -->
@@ -137,3 +139,8 @@ The current pass mainly touches `admin-promos.html`, `book.html`, and a further 
 
 ## March 30, 2026 repo update
 Current work in this pass focused on `functions/api/admin/*` convergence: more booking, customer, staff, promo companion, and time endpoints now require the resolved staff session path instead of permitting the old bridge fallback.
+
+## March 31, 2026 repo sync
+- `admin-progress.html` now includes signed file upload reuse on the progress screen in addition to the standalone `admin-upload.html` helper.
+- `assets/site.js` and `functions/api/assets/site.js` now prefer `/api/catalog_public?kind=tool|consumable` before bundled JSON fallbacks.
+- No new SQL file was required in this pass because the work reused existing upload, catalog, and auth/session structures.

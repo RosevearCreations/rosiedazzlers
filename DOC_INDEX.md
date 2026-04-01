@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 # Rosie Dazzlers — Documentation Index
@@ -27,3 +29,6 @@ When architecture changes, refresh the docs above together so the handoff stays 
 
 ### March 25, 2026 pass note
 This doc was refreshed during the vehicle catalog, progress-session, layout, and public catalog filter pass. The repo now includes NHTSA-backed vehicle make/model endpoints, a DB cache table for vehicle catalog rows, progress moderation/enable session upgrades, and public search/filter cleanup on Gear and Consumables.
+
+## March 31, 2026 index note
+The docs were refreshed again during the known-gaps/risk reduction pass. The main code-side changes in this sync were DB-first public catalog preference, progress-screen upload reuse, and another round of session-bridge wording cleanup.

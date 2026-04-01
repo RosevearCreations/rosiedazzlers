@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
@@ -227,3 +229,14 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - moved forward: removed the last explicit `allowLegacyAdminFallback:true` settings from another active batch of admin endpoints.
 - moved forward: browser-side admin helpers are cleaner about only sending transitional password headers when intentionally used.
 - move up next: broader upload/mobile reuse, remaining duplicate route retirement, and deeper lifecycle completion for recovery/moderation/inventory workflows.
+
+## March 31, 2026 roadmap sync
+### Newly reduced risk
+- public catalog JSON drift reduced again by preferring DB-first catalog feeds on shared/public loaders
+- upload reuse reduced again by supporting signed file upload directly from `admin-progress.html`
+
+### Next worthwhile steps
+1. extend the same signed-upload reuse into any remaining detailer/jobsite media screens
+2. continue retiring stale bridge hints/comments/bootstrap helpers
+3. keep replacing remaining public JSON catalog dependencies with DB-first endpoints where practical
+4. continue route-by-route structured-data and metadata cleanup on exposed pages

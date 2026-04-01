@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
@@ -153,3 +155,9 @@
 - Another batch of admin endpoints now requires session-first staff access without explicit legacy-fallback enablement, reducing overlap across analytics, abandoned recovery, catalog item admin, customer detail, schedule/dashboard, jobsite delete, recovery preview, and moderation/comment flows.
 - Admin bootstrap/progress/staff page helpers now only attach the transitional admin-password header when a value is actually present, reducing noisy password-shaped requests during normal signed-in operation.
 - No new database tables were required in this pass.
+
+## March 31, 2026 pass
+- Public gear and consumables loaders now prefer the DB-backed `catalog_inventory_items` feed through `/api/catalog_public`, using bundled JSON only as fallback.
+- `admin-progress.html` now reuses the signed upload pattern directly on the progress screen so staff can upload a file without switching to a URL-only workflow.
+- Transitional fallback wording/comments were cleaned up again on active admin routes/screens so session-first access is clearer.
+- No schema expansion was required in this pass.

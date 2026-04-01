@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 <!-- PROJECT_BRAIN.md -->
@@ -126,3 +128,8 @@ Recent work continues to focus on operational convergence rather than net-new fe
 
 ## March 30, 2026 current focus
 The repo is still in the role-aware convergence phase. This pass specifically reduced another large batch of booking/customer/staff/promo companion/time endpoint fallback overlap so more internal flows depend on the signed-in staff session model.
+
+## March 31, 2026 project-brain sync
+- Public catalog delivery is moving further toward DB-first behavior; gear and consumables loaders now prefer `/api/catalog_public` and use bundled JSON as fallback only.
+- Upload reuse progressed again: signed media upload is now available directly in `admin-progress.html`, not only in the standalone upload helper.
+- No new schema objects were introduced in this pass; the focus remained operational convergence and risk reduction.

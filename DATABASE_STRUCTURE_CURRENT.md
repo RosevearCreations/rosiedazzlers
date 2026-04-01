@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 March 28, 2026 sync note: no new tables were required for this pass; this refresh mainly aligns UI readability, catalog presentation, and documentation with the current build.
@@ -250,3 +252,8 @@ The meaningful database change in this pass is promo-code reconciliation: the li
 
 ## March 30, 2026 structure note
 No new tables or columns were introduced in this pass. The work was focused on endpoint/auth convergence and keeping the schema snapshot aligned with the current build.
+
+## March 31, 2026 schema/doc sync note
+- No new tables, views, or columns were required in this pass.
+- The build moved further toward DB-first public catalog delivery and broader signed-upload reuse using existing structures.
+- Schema status remains aligned with the March 30, 2026 endpoint-normalization build.

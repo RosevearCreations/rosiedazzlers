@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
@@ -379,3 +381,9 @@ Partially mitigated in the newest pass:
 - Removed the remaining explicit `allowLegacyAdminFallback:true` settings from another group of active admin endpoints, including analytics, abandoned-order recovery, catalog item read/save, customer detail, dashboard/day schedule, jobsite delete, recovery preview messaging, and progress/comment moderation paths.
 - Browser-side admin helpers were tightened again so transitional `x-admin-password` headers are only attached when a password is actually present on bootstrap/progress/staff screens.
 - Remaining gap focus is now concentrated in broader upload reuse, final route cleanup, deeper recovery/inventory lifecycle polish, and complete operational convergence rather than the biggest bridge-enabled admin routes.
+
+## March 31, 2026 gaps/risk reduction pass
+- Upload workflow gap is reduced again because `admin-progress.html` now reuses the signed upload flow directly instead of relying only on pasted media URLs or the separate upload helper page.
+- JSON/DB duplication risk is reduced again because shared public gear/consumables loaders now prefer `/api/catalog_public` before falling back to bundled JSON.
+- Shared-password bridge risk messaging is cleaner again, but complete operational convergence is still not finished.
+- Still remaining at the top: real staff auth/session completion everywhere, full identity consistency across every workflow, final route/bootstrap cleanup, and deeper production media strategy hardening.

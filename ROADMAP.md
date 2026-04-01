@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 # Rosie Dazzlers — Customer / Detailer / Admin Flow Roadmap
@@ -57,3 +59,8 @@ Last synchronized: March 27, 2026.
 - Customer live-job communication now supports public messages from the progress page.
 - Detailer live-job communication now supports both public updates and internal-only notes from the jobs screen.
 - Admin remains the moderation layer for public and private job communication.
+
+## March 31, 2026 roadmap note
+- reduce duplication further by preferring DB-first public catalog feeds anywhere the endpoint already exists
+- keep reusing signed-upload flow on every field/admin screen that still leans on manual URLs
+- continue removing transitional bridge hints/comments until the remaining operational path is clearly session-first
