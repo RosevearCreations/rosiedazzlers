@@ -1,3 +1,5 @@
+> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
+
 > Last synchronized: March 28, 2026. Reviewed during the image-fit, booking-slot readability, dark-text contrast, and current-build documentation/schema sync pass.
 
 # Rosie Dazzlers Access Control Model
@@ -384,3 +386,6 @@ What the customer can see during booking progress
 How valuable / recurring the customer is from a service and loyalty perspective
 
 These must remain separate concepts so the system stays clean and flexible.
+
+## March 31, 2026 access-control sync
+Access behavior did not gain new role types in this pass. The notable change is stronger session-first presentation plus further reduction of legacy-fallback wording in active admin flows.
