@@ -373,3 +373,9 @@ Partially mitigated in the newest pass:
 - Shared-password bridge risk is reduced again because another large active batch of booking, customer, staff, promo companion, signoff/media delete, and time endpoints no longer allow the legacy admin fallback path.
 - Old/new endpoint overlap risk is reduced again because more everyday admin flows now converge on the signed-in staff session model instead of mixed bridge/session behavior.
 - The remaining main risk is still complete operational convergence: a smaller set of older helper/bootstrap endpoints, route comments, and upload reuse gaps still need cleanup before this section can honestly be called complete.
+
+
+## March 30, 2026 endpoint-normalization pass
+- Removed the remaining explicit `allowLegacyAdminFallback:true` settings from another group of active admin endpoints, including analytics, abandoned-order recovery, catalog item read/save, customer detail, dashboard/day schedule, jobsite delete, recovery preview messaging, and progress/comment moderation paths.
+- Browser-side admin helpers were tightened again so transitional `x-admin-password` headers are only attached when a password is actually present on bootstrap/progress/staff screens.
+- Remaining gap focus is now concentrated in broader upload reuse, final route cleanup, deeper recovery/inventory lifecycle polish, and complete operational convergence rather than the biggest bridge-enabled admin routes.

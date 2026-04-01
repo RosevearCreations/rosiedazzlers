@@ -169,3 +169,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Verified another session-first cleanup pass across booking/customer/staff/time related admin endpoints.
 - Verified exposed public pages still present a single H1 each in this build.
 - Verified docs and schema snapshot were refreshed again after the code changes in this pass.
+
+
+## March 30, 2026 pass check
+- Session-first admin cleanup advanced again by removing another batch of bridge-enabled endpoint options.
+- Promo stabilization remains in place after the live schema reconciliation work.
+- Public H1 review should still remain part of every pass; no public multi-H1 issue was found during this build check.

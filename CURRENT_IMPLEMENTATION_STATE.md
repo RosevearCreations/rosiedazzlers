@@ -147,3 +147,9 @@
 - Removed legacy admin fallback from another large active set of endpoints around booking actions, customer management, customer tiers, staff detail/toggle, promo management companion routes, signoff delete, media delete, and time entry/list/delete.
 - Continued shifting the backend toward signed-in staff session trust over the shared password bridge, reducing overlap in day-to-day admin flows.
 - No new tables were required in this pass; this was an auth/endpoint convergence and docs/schema synchronization pass.
+
+
+## March 30, 2026 endpoint-normalization pass
+- Another batch of admin endpoints now requires session-first staff access without explicit legacy-fallback enablement, reducing overlap across analytics, abandoned recovery, catalog item admin, customer detail, schedule/dashboard, jobsite delete, recovery preview, and moderation/comment flows.
+- Admin bootstrap/progress/staff page helpers now only attach the transitional admin-password header when a value is actually present, reducing noisy password-shaped requests during normal signed-in operation.
+- No new database tables were required in this pass.

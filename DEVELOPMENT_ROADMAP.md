@@ -221,3 +221,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 ## March 30, 2026 roadmap movement
 - moved forward: booking management, customer/customer-tier management, promo companion routes, and staff/time endpoints were pushed further toward session-first access by removing another batch of legacy fallback allowances.
 - move up next: retire the remaining explicit bridge-only bootstrap/utility routes, continue route comment/header normalization, and reuse the signed upload flow across the remaining field screens.
+
+
+## March 30, 2026 moved forward again
+- moved forward: removed the last explicit `allowLegacyAdminFallback:true` settings from another active batch of admin endpoints.
+- moved forward: browser-side admin helpers are cleaner about only sending transitional password headers when intentionally used.
+- move up next: broader upload/mobile reuse, remaining duplicate route retirement, and deeper lifecycle completion for recovery/moderation/inventory workflows.

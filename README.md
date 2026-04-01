@@ -187,3 +187,7 @@ This pass stabilized promo management against the live database shape, reduced g
 
 ## March 30, 2026 update
 This build continues the session-first admin transition by removing another large batch of legacy admin fallback allowances across booking, customer, staff, promo companion, and time-management endpoints. Documentation and schema notes were refreshed in the same pass.
+
+
+## March 30, 2026 current note
+This build continues the role-aware admin transition by removing another batch of bridge-enabled admin endpoint settings and by tightening browser-side admin helpers so transitional password headers are only sent when intentionally present.
