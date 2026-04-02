@@ -1,3 +1,5 @@
+> Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
+
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
 
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -199,3 +201,6 @@ This build continues the role-aware admin transition by removing another batch o
 - `admin-progress.html` now supports direct file upload from the same screen through the signed upload flow, while still allowing URL-based media attachment when needed.
 - Transitional legacy-bridge wording was tightened again in active admin pages and endpoint comments so the signed-in staff session remains the primary path.
 - No new tables were required in this pass; this was an operational convergence, upload reuse, SEO/H1 review, and docs/schema synchronization build.
+
+## April 1, 2026 build note
+This pass focused on reducing live operational gaps rather than adding new tables: recovery is more session-first and auditable, jobsite intake now supports direct signed media upload, and public consumables loading moved further toward DB-first behavior. Remaining work is still the final staff-auth/session completion and the last route/helper convergence items.

@@ -1,3 +1,5 @@
+> Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
+
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
 
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -90,3 +92,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Prioritize any remaining detailer/jobsite screens that still force manual URL entry or older media flows.
 - Continue removing stale comments/header hints that make the bridge look primary when it is now transitional.
 - Continue replacing public JSON catalog reads with DB-first endpoints where coverage already exists.
+
+## April 1, 2026 next-step update
+1. Finish the remaining real staff-session conversion on the internal screens that still expose transitional password UX.
+2. Normalize actor/session attribution across the last jobsite/progress/time/media edge cases so names stop acting as partial identity.
+3. Continue removing stale route/helper/bootstrap behavior that still implies the bridge is a normal operating path.
+4. Keep pushing DB-first catalog/public data so legacy JSON becomes fallback only, not a parallel source of truth.
+5. Continue production media strategy hardening for public-vs-private job media.

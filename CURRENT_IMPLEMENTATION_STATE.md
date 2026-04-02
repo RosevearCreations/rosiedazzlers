@@ -1,3 +1,5 @@
+> Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
+
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
 
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -161,3 +163,9 @@
 - `admin-progress.html` now reuses the signed upload pattern directly on the progress screen so staff can upload a file without switching to a URL-only workflow.
 - Transitional fallback wording/comments were cleaned up again on active admin routes/screens so session-first access is clearer.
 - No schema expansion was required in this pass.
+
+## April 1, 2026 state update
+- Recovery admin is now more operationally useful: staff-session-first template/test tooling now includes audit visibility and a manual queue path for resend/escalation workflows.
+- Jobsite intake now reuses the signed upload path directly for pre-inspection media instead of forcing a separate helper page or pasted URLs only.
+- Public consumables loading moved another step toward DB-first convergence with legacy JSON now acting as layered fallback instead of the preferred source.
+- No new schema objects were added in this pass.

@@ -75,8 +75,8 @@
           <h2>Booking + staff</h2><div id="jobsiteActorMeta" class="kicker" style="margin-bottom:10px">Checking session…</div>
           <form id="jobsiteLoadForm" class="form">
             <label>
-              Staff password (optional fallback)
-              <input id="jobsitePassword" type="password" autocomplete="current-password" />
+              Transitional fallback password
+              <input id="jobsitePassword" type="password" autocomplete="off" placeholder="Only use if temporary fallback is still enabled" />
             </label>
 
             <label>
@@ -183,6 +183,40 @@
                 Damage / issue photo URL(s)
                 <textarea id="damage_photo_urls" rows="4" placeholder="Paste one URL per line."></textarea>
               </label>
+            </div>
+
+            <div class="card">
+              <h3>Direct media upload</h3>
+              <p class="kicker">Use the signed upload flow here, then append the uploaded URL directly into the matching photo field.</p>
+              <label>
+                Upload target field
+                <select id="jobsiteUploadTarget">
+                  <option value="valuables_photo_urls">Valuables photos</option>
+                  <option value="exterior_photo_urls">Exterior photos</option>
+                  <option value="interior_photo_urls">Interior photos</option>
+                  <option value="damage_photo_urls">Damage / issue photos</option>
+                </select>
+              </label>
+              <label>
+                Visibility
+                <select id="jobsiteUploadVisibility">
+                  <option value="internal">Internal-only media</option>
+                  <option value="customer">Customer-visible media</option>
+                </select>
+              </label>
+              <label>
+                Caption / note
+                <input id="jobsiteUploadCaption" type="text" placeholder="Optional caption for the uploaded media" />
+              </label>
+              <label>
+                File
+                <input id="jobsiteUploadFile" type="file" accept="image/*,video/*" capture="environment" />
+              </label>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+                <button class="btn ghost" id="jobsiteUploadBtn" type="button" disabled>Upload and append URL</button>
+                <a class="btn ghost" href="/admin-upload.html">Open upload helper</a>
+              </div>
+              <div id="jobsiteUploadMeta" class="kicker" style="margin-top:10px">Load a booking first to enable direct upload.</div>
             </div>
           </div>
         </div>
@@ -361,7 +395,7 @@
         document.querySelector("#jobsiteActorMeta").textContent = `${out.actor.full_name || out.actor.email || "Staff"} · ${out.actor.role_code || "staff"}`;
         if (!document.querySelector("#detailerName").value.trim()) document.querySelector("#detailerName").value = out.actor.full_name || out.actor.email || "";
       } catch {
-        document.querySelector("#jobsiteActorMeta").textContent = "No staff session found. Use the fallback password field if needed.";
+        document.querySelector("#jobsiteActorMeta").textContent = "No staff session found. Use the transitional fallback password only if it is still enabled.";
       }
     }
     let timeEntries = [];
@@ -431,6 +465,21 @@
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || `Request failed for ${url}`);
       return data;
+    }
+
+    function appendLineToTextarea(id, value) {
+      const el = document.getElementById(id);
+      if (!el || !value) return;
+      const lines = splitLines(el.value);
+      if (!lines.includes(value)) lines.push(value);
+      el.value = lines.join("\n");
+    }
+
+    function setUploadEnabled(enabled, message = "") {
+      const btn = document.querySelector("#jobsiteUploadBtn");
+      const meta = document.querySelector("#jobsiteUploadMeta");
+      if (btn) btn.disabled = !enabled;
+      if (meta && message) meta.textContent = message;
     }
 
     function fillBooking(booking) {
@@ -711,7 +760,7 @@
     }
 
     async function loadTimeEntries() {
-      if (!currentPassword || !currentBookingId) return;
+      if (!currentBookingId) return;
       const data = await apiPost("/api/admin/job_time_entries_get", currentPassword, {
         booking_id: currentBookingId
       });
@@ -720,7 +769,7 @@
     }
 
     async function postTimeEntry(entryType) {
-      if (!currentPassword || !currentBookingId) {
+      if (!currentBookingId) {
         setNotice("Load a booking first.", "bad");
         return;
       }
@@ -740,14 +789,51 @@
       await loadTimeEntries();
     }
 
+    async function uploadJobsiteMedia() {
+      if (!currentBookingId) return setNotice("Load a booking before uploading media.", "bad");
+      const file = document.querySelector("#jobsiteUploadFile")?.files?.[0] || null;
+      if (!file) return setNotice("Choose a file first.", "bad");
+      const target = document.querySelector("#jobsiteUploadTarget")?.value || "damage_photo_urls";
+      const visibility = document.querySelector("#jobsiteUploadVisibility")?.value || "internal";
+      const caption = document.querySelector("#jobsiteUploadCaption")?.value?.trim() || "";
+      const uploadBtn = document.querySelector("#jobsiteUploadBtn");
+      const uploadMeta = document.querySelector("#jobsiteUploadMeta");
+      try {
+        if (uploadBtn) { uploadBtn.disabled = true; uploadBtn.textContent = "Uploading…"; }
+        if (uploadMeta) uploadMeta.textContent = "Preparing signed upload…";
+        const signed = await apiPost("/api/admin/progress_upload_url", currentPassword, {
+          booking_id: currentBookingId,
+          filename: file.name || "upload",
+          content_type: file.type || "application/octet-stream",
+          file_size_bytes: file.size || 0,
+          customer_visible: visibility === "customer",
+          visibility,
+          media_kind: String(file.type || "").startsWith("video/") ? "video" : "image"
+        });
+        const put = await fetch(signed.upload_url, {
+          method: "PUT",
+          headers: { "Content-Type": file.type || "application/octet-stream" },
+          body: file
+        });
+        if (!put.ok) throw new Error(`Upload failed (${put.status}).`);
+        const mediaUrl = signed.public_url || signed.media_ref;
+        appendLineToTextarea(target, mediaUrl);
+        if (caption) appendLineToTextarea("detailer_pre_job_notes", `[media] ${caption} — ${mediaUrl}`);
+        document.querySelector("#jobsiteUploadFile").value = "";
+        if (uploadMeta) uploadMeta.textContent = `Uploaded to ${target.replaceAll("_", " ")}.`;
+        setNotice("Media uploaded and appended to the selected intake field.", "ok");
+      } catch (err) {
+        if (uploadMeta) uploadMeta.textContent = err?.message || "Upload failed.";
+        setNotice(err?.message || "Could not upload media.", "bad");
+      } finally {
+        if (uploadBtn) { uploadBtn.disabled = !currentBookingId; uploadBtn.textContent = "Upload and append URL"; }
+      }
+    }
+
     async function loadJob() {
       const password = document.querySelector("#jobsitePassword").value.trim();
       const bookingId = document.querySelector("#jobsiteLookup").value.trim();
 
-      if (!password) {
-        setNotice("Password is required.", "bad");
-        return;
-      }
       if (!bookingId) {
         setNotice("Booking ID is required.", "bad");
         return;
@@ -773,13 +859,14 @@
 
       document.querySelector("#saveIntakeBtn").disabled = false;
       setTimeButtonsEnabled(true);
+      setUploadEnabled(true, "Signed upload ready for this booking.");
       setNotice("Job-site intake loaded.", "ok");
     }
 
     async function saveIntake(event) {
       event.preventDefault();
 
-      if (!currentPassword || !currentBookingId) {
+      if (!currentBookingId) {
         setNotice("Load a booking first.", "bad");
         return;
       }
@@ -908,7 +995,16 @@
         }
       });
 
+      document.querySelector("#jobsiteUploadBtn").addEventListener("click", async () => {
+        try {
+          await uploadJobsiteMedia();
+        } catch (err) {
+          setNotice(err.message || "Could not upload job-site media.", "bad");
+        }
+      });
+
       setTimeButtonsEnabled(false);
+      setUploadEnabled(false, "Load a booking first to enable direct upload.");
       renderJobsiteComments();
       renderJobsiteAnnotations();
     });

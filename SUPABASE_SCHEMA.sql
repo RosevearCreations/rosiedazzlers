@@ -1,3 +1,5 @@
+-- Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
+-- April 1, 2026 pass note: no new DDL required; this pass extended signed-upload reuse into jobsite intake, improved session-first recovery tooling/audit visibility, and continued reducing JSON/catalog drift in application code.
 -- Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
 -- March 31, 2026 pass note: no new DDL required; this pass reused existing catalog, media upload, and staff-session structures while reducing duplication/drift in application code.
 -- Last synchronized: March 30, 2026. Reviewed during the endpoint-normalization, session-first admin cleanup, promo stabilization, and docs/schema synchronization pass.

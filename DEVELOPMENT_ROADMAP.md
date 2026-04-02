@@ -1,3 +1,5 @@
+> Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
+
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
 
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -240,3 +242,8 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 2. continue retiring stale bridge hints/comments/bootstrap helpers
 3. keep replacing remaining public JSON catalog dependencies with DB-first endpoints where practical
 4. continue route-by-route structured-data and metadata cleanup on exposed pages
+
+## April 1, 2026 roadmap adjustment
+- Move true staff-session completion and actor normalization ahead of new backend expansion work.
+- Keep recovery dispatch/audit tooling and production media strategy hardening in the active near-term lane.
+- Continue replacing remaining dual-source JSON/public catalog reads with DB-first endpoints.

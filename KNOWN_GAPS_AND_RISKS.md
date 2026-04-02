@@ -1,3 +1,5 @@
+> Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
+
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
 
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -387,3 +389,9 @@ Partially mitigated in the newest pass:
 - JSON/DB duplication risk is reduced again because shared public gear/consumables loaders now prefer `/api/catalog_public` before falling back to bundled JSON.
 - Shared-password bridge risk messaging is cleaner again, but complete operational convergence is still not finished.
 - Still remaining at the top: real staff auth/session completion everywhere, full identity consistency across every workflow, final route/bootstrap cleanup, and deeper production media strategy hardening.
+
+## April 1, 2026 recovery/jobsite/catalog convergence pass
+- Upload workflow gap is reduced again because `admin-jobsite.html` now reuses the signed upload flow directly for pre-inspection/jobsite media and can append uploaded URLs into the intake photo fields without leaving the screen.
+- Recovery operations risk is reduced because `admin-recovery.html` now surfaces recovery audit visibility and a manual queue path for resend/escalation workflows while preferring the signed-in staff session first.
+- JSON drift risk is reduced again because shared consumables loaders now prefer the DB-backed public catalog and only fall back through legacy JSON snapshots when needed.
+- Still not honestly complete: full real staff auth/session across every internal screen, final identity normalization in every workflow, final route/bootstrap cleanup, and complete removal of all transitional bridge assumptions.

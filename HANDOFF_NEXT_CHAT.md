@@ -1,3 +1,5 @@
+> Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
+
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
 
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -101,3 +103,9 @@ The latest pass removed another large set of legacy admin fallback allowances fr
 - Public catalog loaders now prefer `/api/catalog_public` before bundled JSON fallback, reducing another duplication/drift path on gear and consumables surfaces.
 - `admin-progress.html` now supports direct signed file upload as well as URL attach, so upload reuse is no longer isolated to the standalone helper page.
 - No new SQL migration was required in this pass. Continue next with the remaining helper/bootstrap cleanup, deeper upload reuse where still missing, and route-by-route SEO/structured-data work.
+
+## April 1, 2026 handoff note
+- `admin-jobsite.html` now includes direct signed media upload with append-to-intake behavior for valuables/exterior/interior/damage photo fields, reducing another manual URL-only field workflow.
+- `admin-recovery.html` now prefers the signed-in staff session, includes recovery audit visibility, and includes a manual recovery queue tool for resend/escalation use.
+- Shared consumables page loaders now try the DB-backed public catalog first and fall back through legacy JSON only when needed.
+- No new SQL migration was required in this pass. Continue next with the remaining true staff-auth completion, any leftover helper/bootstrap cleanup, and deeper identity normalization.

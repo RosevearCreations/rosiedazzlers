@@ -1,3 +1,5 @@
+> Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
+
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
 
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -183,3 +185,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - admin progress media flow: stronger, because direct signed file upload is now available on the progress screen
 - schema state: unchanged from the March 30 pass
 - remaining honest risks: final auth/session convergence, remaining bridge/helper cleanup, deeper production media strategy, and route-by-route SEO polish
+
+## April 1, 2026 sanity update
+- Verified: exposed pages still keep a single H1.
+- Verified: no new SQL migration is required for this pass.
+- Moved forward: recovery audit/manual queue UI, jobsite direct upload reuse, and more DB-first catalog fallback reduction.
+- Still open: full staff-auth completion everywhere and final operational convergence/bridge retirement.
