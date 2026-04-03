@@ -46,6 +46,7 @@ import {
   isUuid,
   toBoolean
 } from "../_lib/staff-auth.js";
+import { syncAccountingRecordForBooking } from "../_lib/accounting.js";
 
 export async function onRequestOptions() {
   return new Response("", {
@@ -139,12 +140,16 @@ export async function onRequestPost(context) {
       }
 
       const rows = await res.json().catch(() => []);
+      const bookingRow = Array.isArray(rows) ? rows[0] || null : null;
+      if (bookingRow) {
+        await syncAccountingRecordForBooking(env, bookingRow, { actor: access.actor, source: "booking" });
+      }
       return withCors(
         json({
           ok: true,
           mode: "update",
           message: "Booking updated.",
-          booking: Array.isArray(rows) ? rows[0] || null : null
+          booking: bookingRow
         })
       );
     }
@@ -189,12 +194,16 @@ export async function onRequestPost(context) {
     }
 
     const rows = await res.json().catch(() => []);
+    const bookingRow = Array.isArray(rows) ? rows[0] || null : null;
+    if (bookingRow) {
+      await syncAccountingRecordForBooking(env, bookingRow, { actor: access.actor, source: "booking" });
+    }
     return withCors(
       json({
         ok: true,
         mode: "create",
         message: "Booking created.",
-        booking: Array.isArray(rows) ? rows[0] || null : null
+        booking: bookingRow
       })
     );
   } catch (err) {

@@ -1,3 +1,4 @@
+import { syncAccountingRecordForBooking } from "../_lib/accounting.js";
 
 import { requireStaffAccess, serviceHeaders, json, methodNotAllowed, isUuid } from "../_lib/staff-auth.js";
 
@@ -100,6 +101,18 @@ export async function onRequestPost(context) {
     });
     if (!res.ok) return withCors(json({ error: `Could not record finance entry. ${await res.text()}` }, 500));
     const rows = await res.json().catch(() => []);
+
+    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,customer_name,customer_email,customer_phone,service_date,start_slot,package_code,vehicle_size,status,job_status,total_price,deposit_amount,notes&id=eq.${encodeURIComponent(bookingId)}&limit=1`, {
+      headers: serviceHeaders(env)
+    });
+    if (bookingRes.ok) {
+      const bookingRows = await bookingRes.json().catch(() => []);
+      const bookingRow = Array.isArray(bookingRows) ? bookingRows[0] || null : null;
+      if (bookingRow) {
+        await syncAccountingRecordForBooking(env, bookingRow, { actor: access.actor, source: "finance" });
+      }
+    }
+
     return withCors(json({ ok: true, entry: Array.isArray(rows) ? rows[0] || null : null }));
   } catch (err) {
     return withCors(json({ error: err && err.message ? err.message : "Unexpected server error." }, 500));
