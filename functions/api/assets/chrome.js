@@ -25,7 +25,6 @@ const SOCIALS = [
 const DEFAULT_NAV_LINKS = [
   ["/services", "Services"],
   ["/pricing", "Pricing"],
-  ["/videos", "Videos"],
   ["/gear", "Gear"],
   ["/consumables", "Consumables"],
   ["/about", "About"],
