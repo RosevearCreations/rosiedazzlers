@@ -72,6 +72,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-live")
     },
     {
+      key: "detailer-jobs",
+      label: "Detailer Jobs",
+      href: "/detailer-jobs",
+      description: "Accept work, post updates, complete jobs",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-live")
+    },
+    {
       key: "admin-staff",
       label: "Staff",
       href: "/admin-staff",
