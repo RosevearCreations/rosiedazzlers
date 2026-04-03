@@ -419,3 +419,10 @@ Partially mitigated in the newest pass:
 - Inventory intake gap is reduced because `admin-catalog.html` is more phone-friendly again, keeps supplier entry flexible for Amazon or local vendors, and now includes barcode-assisted intake to help capture UPC/EAN codes while drafting an Amazon lookup path.
 - Consumables workflow clarity is improved because the existing `estimated_jobs_per_unit` field is now surfaced more explicitly as the multi-detail usage model for products such as waxes, cleaners, and dressings that span several vehicles.
 - Still not honestly complete: full real staff auth/session on every internal route, full actor normalization across every booking-adjacent workflow, final duplicate-route/bootstrap cleanup, and deeper dedicated payments/media hardening.
+
+## April 3, 2026 UI / session / video pass
+- Continued route-by-route UI cleanup by moving more admin pages toward signed-in staff session usage instead of password-only page flows.
+- Tightened global CSS for dark-mode form usability, including calendar-icon visibility and better wrapping for row-based inputs/buttons on smaller screens.
+- Refreshed the public video/social experience so YouTube remains the main playback surface while Instagram supports reels, work photos, and single-image proof-of-work posting.
+- Continued docs/schema synchronization for the current build; no new schema migration was required in this pass.
+

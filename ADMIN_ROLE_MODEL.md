@@ -361,3 +361,10 @@ Current next priorities:
 No role table expansion was required in this pass. The meaningful role/access change here is clearer session-first behavior and another reduction in how prominently legacy fallback is presented in active admin tooling.
 
 > Last reviewed in the April 2, 2026 blocks/risk convergence pass.
+
+## April 3, 2026 UI / session / video pass
+- Continued route-by-route UI cleanup by moving more admin pages toward signed-in staff session usage instead of password-only page flows.
+- Tightened global CSS for dark-mode form usability, including calendar-icon visibility and better wrapping for row-based inputs/buttons on smaller screens.
+- Refreshed the public video/social experience so YouTube remains the main playback surface while Instagram supports reels, work photos, and single-image proof-of-work posting.
+- Continued docs/schema synchronization for the current build; no new schema migration was required in this pass.
+

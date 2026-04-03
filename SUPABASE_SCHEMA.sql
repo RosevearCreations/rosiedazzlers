@@ -366,3 +366,6 @@ create index if not exists catalog_purchase_orders_reminder_sent_at_idx on publi
 
 -- March 29, 2026 pricing/session/recovery/moderation pass
 -- No new table was required in this pass; the main changes were DB-first public pricing consumption, endpoint auth cleanup, recovery audit visibility, moderation filtering, and purchase reminder audit logging.
+-- April 3, 2026 UI / session / video pass
+-- Schema sync refresh only in this pass. No new migration required.
+
