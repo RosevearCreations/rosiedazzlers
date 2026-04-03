@@ -369,3 +369,5 @@ create index if not exists catalog_purchase_orders_reminder_sent_at_idx on publi
 -- April 3, 2026 UI / session / video pass
 -- Schema sync refresh only in this pass. No new migration required.
 
+
+-- April 4, 2026 sync note: no new SQL migration required in this pass. This was a mobile shell, CSS, security-tightening, and repo-cleanup pass.
