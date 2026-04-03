@@ -1,3 +1,6 @@
+
+
+> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -359,3 +362,5 @@ Current next priorities:
 
 ## March 31, 2026 role-model sync
 No role table expansion was required in this pass. The meaningful role/access change here is clearer session-first behavior and another reduction in how prominently legacy fallback is presented in active admin tooling.
+
+> Last reviewed in the April 2, 2026 blocks/risk convergence pass.

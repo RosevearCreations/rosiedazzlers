@@ -1,3 +1,6 @@
+
+
+> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -204,3 +207,16 @@ This build continues the role-aware admin transition by removing another batch o
 
 ## April 1, 2026 build note
 This pass focused on reducing live operational gaps rather than adding new tables: recovery is more session-first and auditable, jobsite intake now supports direct signed media upload, and public consumables loading moved further toward DB-first behavior. Remaining work is still the final staff-auth/session completion and the last route/helper convergence items.
+
+## April 2, 2026 sync note
+- Admin Blocks now supports date ranges for multi-day closures.
+- The schedule-block screen now uses the newer role-aware block list/save endpoints.
+- No new schema migration was required in this pass.
+
+> Last reviewed in the April 2, 2026 blocks/risk convergence pass.
+
+
+## April 2, 2026 update
+- Added a new public `/videos` page built around YouTube-first embeds with an Instagram/Reels social-proof strip below.
+- Shared site navigation now includes Videos, and Home now links into the new video hub.
+- No new SQL migration was required in this pass.

@@ -1,3 +1,6 @@
+
+
+> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -191,3 +194,16 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Verified: no new SQL migration is required for this pass.
 - Moved forward: recovery audit/manual queue UI, jobsite direct upload reuse, and more DB-first catalog fallback reduction.
 - Still open: full staff-auth completion everywhere and final operational convergence/bridge retirement.
+
+## April 2, 2026 sanity update
+- Verify `admin-blocks.html` can load current blocks, create a single blocked date, create an AM/PM slot block, and create a multi-day range block such as 14 or 30 days.
+- Confirm unblock actions still work after the page moved onto `/api/admin/blocks_list` and `/api/admin/blocks_save`.
+- Confirm exposed/public pages still keep one H1 each.
+
+> Last reviewed in the April 2, 2026 blocks/risk convergence pass.
+
+
+## April 2, 2026 sanity update
+- Public navigation includes Videos.
+- Home links to the new video hub.
+- `/videos` has one H1, public metadata, and a YouTube-first embedded layout with Instagram/Reels proof cards below.

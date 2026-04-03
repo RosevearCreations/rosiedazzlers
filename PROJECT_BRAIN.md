@@ -1,3 +1,6 @@
+
+
+> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -135,3 +138,8 @@ The repo is still in the role-aware convergence phase. This pass specifically re
 - Public catalog delivery is moving further toward DB-first behavior; gear and consumables loaders now prefer `/api/catalog_public` and use bundled JSON as fallback only.
 - Upload reuse progressed again: signed media upload is now available directly in `admin-progress.html`, not only in the standalone upload helper.
 - No new schema objects were introduced in this pass; the focus remained operational convergence and risk reduction.
+
+## April 2, 2026 project note
+- Operations/admin scheduling now supports multi-day closure windows directly in the Blocks screen, which is useful for vacations, downtime, travel, or shop maintenance periods.
+
+> Last reviewed in the April 2, 2026 blocks/risk convergence pass.

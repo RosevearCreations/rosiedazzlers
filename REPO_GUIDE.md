@@ -1,3 +1,6 @@
+
+
+> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -146,3 +149,8 @@ Current work in this pass focused on `functions/api/admin/*` convergence: more b
 - `admin-progress.html` now includes signed file upload reuse on the progress screen in addition to the standalone `admin-upload.html` helper.
 - `assets/site.js` and `functions/api/assets/site.js` now prefer `/api/catalog_public?kind=tool|consumable` before bundled JSON fallbacks.
 - No new SQL file was required in this pass because the work reused existing upload, catalog, and auth/session structures.
+
+## April 2, 2026 repo note
+- `admin-blocks.html` now uses the newer role-aware block list/save endpoints and includes date-range blocking presets.
+
+> Last reviewed in the April 2, 2026 blocks/risk convergence pass.

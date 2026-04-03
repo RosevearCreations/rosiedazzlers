@@ -1,3 +1,6 @@
+
+
+> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -99,3 +102,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 3. Continue removing stale route/helper/bootstrap behavior that still implies the bridge is a normal operating path.
 4. Keep pushing DB-first catalog/public data so legacy JSON becomes fallback only, not a parallel source of truth.
 5. Continue production media strategy hardening for public-vs-private job media.
+
+## April 2, 2026 next-step note
+- Blocks page date-range closures are now in place.
+- Remaining top work stays the same: real staff auth/session completion, full actor consistency, final route/bootstrap cleanup, production media strategy hardening, and more DB-first replacement of duplicated JSON paths.
+
+> Last reviewed in the April 2, 2026 blocks/risk convergence pass.

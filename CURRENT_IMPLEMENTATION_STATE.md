@@ -1,3 +1,6 @@
+
+
+> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -169,3 +172,16 @@
 - Jobsite intake now reuses the signed upload path directly for pre-inspection media instead of forcing a separate helper page or pasted URLs only.
 - Public consumables loading moved another step toward DB-first convergence with legacy JSON now acting as layered fallback instead of the preferred source.
 - No new schema objects were added in this pass.
+
+## April 2, 2026 update
+- Admin availability controls now support single-date, single-slot, and multi-day date-range blocking from `admin-blocks.html`.
+- The blocks page now follows the newer session-first admin direction by loading and saving through `/api/admin/blocks_list` and `/api/admin/blocks_save`.
+- This pass did not add a new SQL migration; it was a route-convergence, UI-cohesion, and documentation-sync pass.
+
+> Last reviewed in the April 2, 2026 blocks/risk convergence pass.
+
+
+## April 2, 2026 implementation update
+- Public site now includes a dedicated Videos page for Rosie Dazzlers detailing content.
+- The page uses embedded YouTube playback as the primary viewing experience and keeps Instagram/Reels as the secondary social-proof/follow path.
+- This pass focused on public marketing/content presentation rather than backend schema expansion.

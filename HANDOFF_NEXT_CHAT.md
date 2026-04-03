@@ -1,3 +1,6 @@
+
+
+> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -109,3 +112,16 @@ The latest pass removed another large set of legacy admin fallback allowances fr
 - `admin-recovery.html` now prefers the signed-in staff session, includes recovery audit visibility, and includes a manual recovery queue tool for resend/escalation use.
 - Shared consumables page loaders now try the DB-backed public catalog first and fall back through legacy JSON only when needed.
 - No new SQL migration was required in this pass. Continue next with the remaining true staff-auth completion, any leftover helper/bootstrap cleanup, and deeper identity normalization.
+
+## April 2, 2026 handoff note
+- Admin Blocks now supports full date-range blocking on the same page, including quick presets for 2 days, 1 week, 2 weeks, 3 weeks, and 1 month.
+- The blocks screen now prefers the newer `/api/admin/blocks_list` and `/api/admin/blocks_save` role-aware endpoints instead of continuing the older single-endpoint block pattern.
+- Continue next with the same remaining gap list: finish real staff auth/session everywhere, keep normalizing actor identity across every workflow, retire the last bridge/helper leftovers, and keep replacing duplicate JSON fallbacks where DB-backed public data already exists.
+
+> Last reviewed in the April 2, 2026 blocks/risk convergence pass.
+
+
+## April 2, 2026 handoff note
+- New public `/videos` page added using a YouTube-first embed layout plus Instagram/Reels proof strip.
+- Navigation and sitemap now expose Videos as a first-class public page.
+- Continue next with backend convergence/gaps work rather than replacing this page with a more complex custom video carousel unless there is a strong business reason.

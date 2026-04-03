@@ -1,3 +1,6 @@
+
+
+> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -34,3 +37,5 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 
 ## March 31, 2026 index note
 The docs were refreshed again during the known-gaps/risk reduction pass. The main code-side changes in this sync were DB-first public catalog preference, progress-screen upload reuse, and another round of session-bridge wording cleanup.
+
+> Last reviewed in the April 2, 2026 blocks/risk convergence pass.

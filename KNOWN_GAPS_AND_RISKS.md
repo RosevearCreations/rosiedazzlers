@@ -1,3 +1,6 @@
+
+
+> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -394,4 +397,20 @@ Partially mitigated in the newest pass:
 - Upload workflow gap is reduced again because `admin-jobsite.html` now reuses the signed upload flow directly for pre-inspection/jobsite media and can append uploaded URLs into the intake photo fields without leaving the screen.
 - Recovery operations risk is reduced because `admin-recovery.html` now surfaces recovery audit visibility and a manual queue path for resend/escalation workflows while preferring the signed-in staff session first.
 - JSON drift risk is reduced again because shared consumables loaders now prefer the DB-backed public catalog and only fall back through legacy JSON snapshots when needed.
+- Still not honestly complete: full real staff auth/session across every internal screen, final identity normalization in every workflow, final route/bootstrap cleanup, and complete removal of all transitional bridge assumptions.
+
+## April 2, 2026 blocks/risk convergence pass
+- Old/new endpoint overlap risk is reduced again because `admin-blocks.html` now uses the newer role-aware `/api/admin/blocks_list` and `/api/admin/blocks_save` paths instead of continuing to rely only on the older single-purpose block endpoints.
+- UI cohesion gap is reduced because Blocks now supports direct date-range closures for multi-day downtime such as 2 days, 3 weeks, or 1 month instead of forcing staff to block only one date at a time.
+- Shared-password bridge risk is reduced slightly again because the blocks screen now treats the transitional password more explicitly as fallback-only wording while continuing to prefer the signed-in staff session first.
+- JSON duplication/drift risk remains on some other routes, but the active schedule-block path is now more aligned with the newer canonical admin direction.
+- Still not honestly complete: full real staff auth/session everywhere, full workflow identity normalization, final route/bootstrap/helper cleanup, complete bridge retirement, and deeper production media hardening.
+
+> Last reviewed in the April 2, 2026 blocks/risk convergence pass.
+
+
+## April 2, 2026 video-hub / social-proof pass
+- Public marketing/content polish moved forward with a new `/videos` page that uses a YouTube-first embed layout and an Instagram/Reels proof strip below it.
+- Route cleanup moved forward slightly because the public nav and sitemap now treat Videos as a first-class public marketing page rather than leaving video content scattered only across external social links.
+- SEO coverage moved forward again with a dedicated videos page, its own metadata/canonical path, one-H1 structure, and internal links from Home/navigation.
 - Still not honestly complete: full real staff auth/session across every internal screen, final identity normalization in every workflow, final route/bootstrap cleanup, and complete removal of all transitional bridge assumptions.

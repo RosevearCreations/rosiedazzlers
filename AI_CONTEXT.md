@@ -1,3 +1,6 @@
+
+
+> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -419,3 +422,5 @@ Current newest pass:
 - DB-first public catalog preference expanded into shared/public loaders.
 - Signed upload reuse now exists on `admin-progress.html` in addition to `admin-upload.html`.
 - No new migration required in this pass.
+
+> Last reviewed in the April 2, 2026 blocks/risk convergence pass.

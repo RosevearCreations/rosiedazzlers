@@ -1,3 +1,6 @@
+
+
+> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -66,3 +69,5 @@ Last synchronized: March 27, 2026.
 - reduce duplication further by preferring DB-first public catalog feeds anywhere the endpoint already exists
 - keep reusing signed-upload flow on every field/admin screen that still leans on manual URLs
 - continue removing transitional bridge hints/comments until the remaining operational path is clearly session-first
+
+> Last reviewed in the April 2, 2026 blocks/risk convergence pass.

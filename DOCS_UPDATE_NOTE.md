@@ -1,3 +1,6 @@
+
+
+> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -34,3 +37,5 @@ Primary docs refreshed together:
 
 ## March 31, 2026 docs update note
 This documentation refresh syncs the repo to the current build where public catalog loaders prefer DB-backed feeds, the progress screen supports signed file upload reuse, and no new schema objects were added.
+
+> Last reviewed in the April 2, 2026 blocks/risk convergence pass.
