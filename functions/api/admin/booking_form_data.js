@@ -181,11 +181,11 @@ function buildPromosUrl(env) {
 function buildDateBlocksUrl(env, service_date) {
   let url =
     `${env.SUPABASE_URL}/rest/v1/date_blocks` +
-    `?select=id,block_date,is_closed,reason,created_at,updated_at` +
-    `&order=block_date.asc,created_at.desc`;
+    `?select=id,blocked_date,reason,created_at` +
+    `&order=blocked_date.asc,created_at.desc`;
 
   if (service_date) {
-    url += `&block_date=eq.${encodeURIComponent(service_date)}`;
+    url += `&blocked_date=eq.${encodeURIComponent(service_date)}`;
   }
 
   return url;
@@ -194,11 +194,11 @@ function buildDateBlocksUrl(env, service_date) {
 function buildSlotBlocksUrl(env, service_date) {
   let url =
     `${env.SUPABASE_URL}/rest/v1/slot_blocks` +
-    `?select=id,block_date,slot_code,is_blocked,reason,created_at,updated_at` +
-    `&order=block_date.asc,slot_code.asc,created_at.desc`;
+    `?select=id,blocked_date,slot,reason,created_at` +
+    `&order=blocked_date.asc,slot.asc,created_at.desc`;
 
   if (service_date) {
-    url += `&block_date=eq.${encodeURIComponent(service_date)}`;
+    url += `&blocked_date=eq.${encodeURIComponent(service_date)}`;
   }
 
   return url;
