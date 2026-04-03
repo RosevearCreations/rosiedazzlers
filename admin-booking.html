@@ -4,361 +4,135 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Bookings | Rosie Dazzlers</title>
-  <meta name="description" content="Admin booking management for Rosie Dazzlers." />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="description" content="Create, manage, and collect payments for Rosie Dazzlers bookings." />
   <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+    .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .stack{display:grid;gap:12px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .mini{font-size:.92rem;color:rgba(234,242,255,.72)}
+    .booking-card{padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(255,255,255,.03)}
+    .finance-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+    .ledger{display:grid;gap:8px}
+    .ledger-item{padding:10px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)}
+    @media(max-width:980px){.grid2,.grid3,.finance-grid{grid-template-columns:1fr}}
+  </style>
 </head>
-<body data-page="admin-bookings">
-  <header class="nav">
-    <div class="nav-inner">
-      <a class="brand" href="/admin.html">
-        <img data-logo alt="Rosie Dazzlers logo" />
-        <strong>Rosie Dazzlers Admin</strong>
-      </a>
-
-      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
-        Menu
-      </button>
-
-      <nav id="navLinks" class="nav-links">
-        <a href="/admin.html">Dashboard</a>
-        <a href="/admin-booking.html">Bookings</a>
-        <a href="/admin-blocks.html">Blocks</a>
-        <a href="/admin-progress.html">Progress</a>
-        <a href="/admin-promos.html">Promos</a>
-        <a href="/book">Public Site</a>
-      </nav>
+<body>
+<div class="nav"><div class="nav-inner"><a class="brand" href="/admin"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button><div class="nav-links" id="navLinks"></div></div></div>
+<main class="container">
+  <section class="panel stack">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <div class="badge">Admin Bookings</div>
+        <h1 style="margin:8px 0 6px">Manage bookings, payments, and tips</h1>
+        <p class="kicker" style="margin:0">Create manual detailing records from the phone or full site, track deposits, final payments, and tips, and keep booking operations moving in one place.</p>
+      </div>
+      <div id="actorBox" class="notice" style="display:none"></div>
     </div>
-  </header>
+    <div id="status" class="notice" style="display:none"></div>
+  </section>
 
-  <main class="container">
-    <section class="section">
-      <div class="panel">
-        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
+  <section class="section grid2">
+    <article class="panel stack">
+      <div class="row" style="justify-content:space-between"><h2 style="margin:0">Manual booking create / update</h2><button class="btn ghost" id="newBookingBtn" type="button">New booking</button></div>
+      <form id="bookingForm" class="stack">
+        <input id="bookingId" type="hidden" />
+        <div class="grid3">
+          <label>Customer name<input id="customerName" required /></label>
+          <label>Email<input id="customerEmail" type="email" /></label>
+          <label>Phone<input id="customerPhone" type="text" /></label>
+          <label>Service date<input id="serviceDate" type="date" required /></label>
+          <label>Start slot<select id="startSlot"><option value="AM">AM</option><option value="PM">PM</option></select></label>
+          <label>Package code<input id="packageCode" placeholder="complete_detail" /></label>
+          <label>Vehicle size<input id="vehicleSize" placeholder="small, mid, oversize" /></label>
+          <label>Status<select id="statusField"><option value="pending">pending</option><option value="confirmed">confirmed</option><option value="cancelled">cancelled</option><option value="completed">completed</option></select></label>
+          <label>Job status<select id="jobStatusField"><option value="scheduled">scheduled</option><option value="in_progress">in_progress</option><option value="completed">completed</option></select></label>
+          <label>Total price (CAD)<input id="totalPrice" type="number" step="0.01" min="0" /></label>
+          <label>Deposit amount (CAD)<input id="depositAmount" type="number" step="0.01" min="0" /></label>
+          <label>Assigned to<input id="assignedTo" placeholder="Laurie / Jack / Team" /></label>
+        </div>
+        <label>Notes<textarea id="bookingNotes" rows="3" placeholder="Vehicle notes, mobile intake notes, special requests, and anything the detailer should know."></textarea></label>
+        <label class="checkbox"><input id="progressEnabled" type="checkbox" /><span>Enable customer progress page</span></label>
+        <div class="row"><button class="btn primary" type="submit">Save booking</button><button class="btn ghost" id="clearBookingBtn" type="button">Clear</button></div>
+        <div class="mini">Use this for walk-up/manual jobs, phone-created records, or any booking that needs to be created by staff instead of the public checkout flow.</div>
+      </form>
+    </article>
+
+    <article class="panel stack">
+      <h2 style="margin:0">Selected booking</h2>
+      <div id="selectedMeta" class="mini">Choose or create a booking.</div>
+      <div class="finance-grid">
+        <div class="pill">Deposit: <span id="sumDeposit">$0.00</span></div>
+        <div class="pill">Final: <span id="sumFinal">$0.00</span></div>
+        <div class="pill">Tips: <span id="sumTip">$0.00</span></div>
+        <div class="pill">Refunds: <span id="sumRefund">$0.00</span></div>
+        <div class="pill">Collected: <span id="sumCollected">$0.00</span></div>
       </div>
-    </section>
+      <form id="financeForm" class="stack">
+        <div class="grid3">
+          <label>Entry type<select id="financeType"><option value="deposit">Deposit</option><option value="final_payment">Final payment</option><option value="tip">Tip</option><option value="refund">Refund</option><option value="other">Other</option></select></label>
+          <label>Amount (CAD)<input id="financeAmount" type="number" step="0.01" min="0.01" required /></label>
+          <label>Method<select id="financeMethod"><option value="cash">Cash</option><option value="debit">Debit</option><option value="credit">Credit</option><option value="stripe">Stripe</option><option value="paypal">PayPal</option><option value="etransfer">E-transfer</option><option value="other">Other</option></select></label>
+        </div>
+        <label>Note<textarea id="financeNote" rows="2" placeholder="Optional note, receipt detail, or reason."></textarea></label>
+        <div class="row"><button class="btn primary" type="submit" id="financeBtn" disabled>Record payment / tip</button></div>
+      </form>
+      <div id="ledger" class="ledger"><div class="mini">No finance entries loaded.</div></div>
+    </article>
+  </section>
 
-    <section class="section">
-      <div class="hero">
-        <div>
-          <div class="badge">Admin Bookings</div>
-          <h1>Manage bookings and assignments</h1>
-          <p>Review bookings, update status, assign staff, and copy the progress token for the customer progress workflow.</p>
-        </div>
-        <div class="panel">
-          <div class="kicker">Loaded booking</div>
-          <h3 id="bookingTitle" style="margin:6px 0 8px">No booking selected</h3>
-          <div id="bookingMeta" class="kicker">Load bookings below to begin.</div>
-        </div>
+  <section class="section panel stack">
+    <div class="row" style="justify-content:space-between;align-items:flex-end">
+      <div>
+        <h2 style="margin:0">Bookings</h2>
+        <div class="mini">Search and tap a booking to continue on phone or desktop.</div>
       </div>
-    </section>
-
-    <section class="section">
-      <div id="pageNotice" class="notice">Ready.</div>
-    </section>
-
-    <section class="section">
-      <div class="grid cards">
-        <div class="panel">
-          <h2>Staff session</h2>
-          <p class="kicker" id="sessionMeta">Signed-in staff access is required. This page now prefers the real staff session.</p>
-          <div>
-            <button id="loadBookingsBtn" class="btn primary" type="button">Refresh bookings</button>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h2>Selected booking tools</h2>
-          <div id="selectedBookingTools" class="kicker">Choose a booking to view tools.</div>
-        </div>
+      <div class="row">
+        <input id="searchQ" class="search-input" type="text" placeholder="Search customer, email, phone, package" autocomplete="off" />
+        <input id="fromDate" type="date" />
+        <input id="toDate" type="date" />
+        <button class="btn ghost" id="refreshBtn" type="button">Refresh</button>
       </div>
-    </section>
-
-    <section class="section">
-      <div class="panel">
-        <h2>Bookings</h2>
-        <div id="bookingsList" class="grid" style="margin-top:12px">
-          <div class="notice">Bookings have not been loaded yet.</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="grid cards">
-        <div class="panel">
-          <h2>Update status</h2>
-          <form id="statusForm" class="form">
-            <label>
-              Status
-              <select id="bookingStatus" name="bookingStatus">
-                <option value="pending">pending</option>
-                <option value="confirmed">confirmed</option>
-                <option value="cancelled">cancelled</option>
-                <option value="completed">completed</option>
-              </select>
-            </label>
-
-            <label>
-              Job status
-              <select id="jobStatus" name="jobStatus">
-                <option value="">-- none --</option>
-                <option value="scheduled">scheduled</option>
-                <option value="in_progress">in_progress</option>
-                <option value="completed">completed</option>
-              </select>
-            </label>
-
-            <div>
-              <button id="statusBtn" class="btn primary" type="submit" disabled>Save status</button>
-            </div>
-          </form>
-        </div>
-
-        <div class="panel">
-          <h2>Assign staff</h2>
-          <form id="assignForm" class="form">
-            <label>
-              Assigned to
-              <input id="assignedTo" name="assignedTo" type="text" placeholder="Example: Laurie / Jack / Team" />
-            </label>
-
-            <div>
-              <button id="assignBtn" class="btn primary" type="submit" disabled>Save assignment</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer container" data-footer></footer>
-
-  <script src="/assets/chrome.js"></script>
-  <script type="module">
-    import { setBrandImages, setFooter } from "/assets/site.js";
-
-    let currentBooking = null;
-    let allBookings = [];
-
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#39;");
-    }
-
-    function formatDate(value) {
-      if (!value) return "—";
-      return escapeHtml(value);
-    }
-
-    function setNotice(message, kind = "") {
-      const el = document.querySelector("#pageNotice");
-      if (!el) return;
-      el.className = kind ? `notice ${kind}` : "notice";
-      el.textContent = message;
-    }
-
-    async function loadBookings() {
-      const res = await fetch("/api/admin/bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        credentials: "include",
-        body: JSON.stringify({})
-      });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Could not load bookings.");
-      return data;
-    }
-
-    async function updateBookingStatus(bookingId, status, jobStatus) {
-      const res = await fetch("/api/admin/bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          booking_id: bookingId,
-          status,
-          job_status: jobStatus || null
-        })
-      });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Could not update booking status.");
-      return data;
-    }
-
-    async function assignBooking(bookingId, assignedTo) {
-      const res = await fetch("/api/admin/assign_booking", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          booking_id: bookingId,
-          assigned_to: assignedTo
-        })
-      });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Could not assign booking.");
-      return data;
-    }
-
-    function renderSelectedBooking() {
-      const title = document.querySelector("#bookingTitle");
-      const meta = document.querySelector("#bookingMeta");
-      const tools = document.querySelector("#selectedBookingTools");
-
-      const statusBtn = document.querySelector("#statusBtn");
-      const assignBtn = document.querySelector("#assignBtn");
-
-      if (!currentBooking) {
-        title.textContent = "No booking selected";
-        meta.textContent = "Choose a booking from the list below.";
-        tools.textContent = "Choose a booking to view tools.";
-        statusBtn.disabled = true;
-        assignBtn.disabled = true;
-        return;
-      }
-
-      title.textContent = currentBooking.customer_name || currentBooking.package_code || "Booking selected";
-      meta.textContent = [
-        currentBooking.service_date || "—",
-        currentBooking.start_slot || "—",
-        currentBooking.package_code || "—",
-        currentBooking.vehicle_size || "—"
-      ].join(" · ");
-
-      const progressLink = currentBooking.progress_token
-        ? `${window.location.origin}/progress.html?token=${encodeURIComponent(currentBooking.progress_token)}`
-        : "No progress token";
-
-      tools.innerHTML = `
-        <div><strong>Booking ID:</strong> ${escapeHtml(currentBooking.id || "")}</div>
-        <div><strong>Assigned To:</strong> ${escapeHtml(currentBooking.assigned_to || "—")}</div>
-        <div><strong>Progress Token:</strong> ${escapeHtml(currentBooking.progress_token || "—")}</div>
-        ${currentBooking.progress_token ? `<div style="margin-top:8px;word-break:break-all"><a href="${progressLink}" target="_blank" rel="noopener">Open customer progress page</a></div>` : ""}
-      `;
-
-      document.querySelector("#bookingStatus").value = currentBooking.status || "pending";
-      document.querySelector("#jobStatus").value = currentBooking.job_status || "";
-      document.querySelector("#assignedTo").value = currentBooking.assigned_to || "";
-
-      statusBtn.disabled = false;
-      assignBtn.disabled = false;
-    }
-
-    function renderBookingsList() {
-      const wrap = document.querySelector("#bookingsList");
-      if (!wrap) return;
-
-      if (!allBookings.length) {
-        wrap.innerHTML = `<div class="notice">No bookings found.</div>`;
-        return;
-      }
-
-      wrap.innerHTML = allBookings.map((booking) => `
-        <article class="card">
-          <div class="kicker">${formatDate(booking.service_date)} · ${escapeHtml(booking.start_slot || "—")}</div>
-          <h3>${escapeHtml(booking.customer_name || "Unknown customer")}</h3>
-          <p>${escapeHtml(booking.package_code || "—")} · ${escapeHtml(booking.vehicle_size || "—")}</p>
-          <div class="kicker">Status: ${escapeHtml(booking.status || "pending")} · Job: ${escapeHtml(booking.job_status || "—")}</div>
-          <div class="kicker">Assigned: ${escapeHtml(booking.assigned_to || "—")}</div>
-          <div class="hr"></div>
-          <button class="btn primary" type="button" data-booking-id="${escapeHtml(booking.id)}">Select booking</button>
-        </article>
-      `).join("");
-
-      wrap.querySelectorAll("[data-booking-id]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const bookingId = btn.getAttribute("data-booking-id");
-          currentBooking = allBookings.find((b) => b.id === bookingId) || null;
-          renderSelectedBooking();
-        });
-      });
-    }
-
-    async function refreshBookings() {
-      const data = await loadBookings();
-      document.querySelector("#sessionMeta").textContent = data?.actor?.full_name ? `Signed in as ${data.actor.full_name}.` : "Signed-in staff access is required.";
-
-      allBookings = Array.isArray(data.bookings) ? data.bookings : [];
-      renderBookingsList();
-
-      if (currentBooking?.id) {
-        currentBooking = allBookings.find((b) => b.id === currentBooking.id) || null;
-      }
-
-      renderSelectedBooking();
-    }
-
-    async function boot() {
-      setBrandImages();
-      setFooter();
-
-      document.querySelector("#loadBookingsBtn").addEventListener("click", async () => {
-        try {
-          setNotice("Loading bookings…");
-          await refreshBookings();
-          setNotice("Bookings loaded.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not load bookings.", "bad");
-        }
-      });
-
-      document.querySelector("#statusForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        if (!currentBooking?.id) {
-          setNotice("Choose a booking first.", "bad");
-          return;
-        }
-
-        try {
-          setNotice("Saving status…");
-          await updateBookingStatus(
-            currentBooking.id,
-            document.querySelector("#bookingStatus").value,
-            document.querySelector("#jobStatus").value
-          );
-          await refreshBookings();
-          setNotice("Booking status updated.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not update booking status.", "bad");
-        }
-      });
-
-      document.querySelector("#assignForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        if (!currentBooking?.id) {
-          setNotice("Choose a booking first.", "bad");
-          return;
-        }
-
-        try {
-          setNotice("Saving assignment…");
-          await assignBooking(
-            currentBooking.id,
-            document.querySelector("#assignedTo").value.trim()
-          );
-          await refreshBookings();
-          setNotice("Booking assignment updated.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not update assignment.", "bad");
-        }
-      });
-    }
-
-    document.addEventListener("DOMContentLoaded", async () => { await boot(); document.querySelector("#loadBookingsBtn").click(); });
-  </script>
+    </div>
+    <div id="bookingsList" class="stack"></div>
+  </section>
+</main>
+<footer class="footer container" data-footer></footer>
+<script src="/assets/admin-auth.js"></script>
+<script src="/assets/admin-shell.js"></script>
+<script>
+(function(){
+  const qs=(s)=>document.querySelector(s);
+  let actor=null, bookings=[], current=null;
+  const money=(n)=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(Number(n||0));
+  const esc=(v)=>String(v==null?'':v).replace(/[&<>"']/g,(m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  function show(msg,kind=''){ const el=qs('#status'); el.style.display='block'; el.className='notice '+(kind||''); el.textContent=msg; }
+  function hide(){ qs('#status').style.display='none'; }
+  async function getJson(url){ const res=await fetch(url,{credentials:'include',cache:'no-store'}); const out=await res.json().catch(()=>({})); return { ok:res.ok, out }; }
+  async function postJson(url,payload){ const res=await fetch(url,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload||{})}); const out=await res.json().catch(()=>({})); return { ok:res.ok, out }; }
+  function clearBookingForm(){ qs('#bookingId').value=''; qs('#customerName').value=''; qs('#customerEmail').value=''; qs('#customerPhone').value=''; qs('#serviceDate').value=''; qs('#startSlot').value='AM'; qs('#packageCode').value=''; qs('#vehicleSize').value=''; qs('#statusField').value='pending'; qs('#jobStatusField').value='scheduled'; qs('#totalPrice').value=''; qs('#depositAmount').value=''; qs('#assignedTo').value=''; qs('#bookingNotes').value=''; qs('#progressEnabled').checked=false; }
+  function fillBookingForm(item){ if(!item){ clearBookingForm(); return; } qs('#bookingId').value=item.id||''; qs('#customerName').value=item.customer_name||''; qs('#customerEmail').value=item.customer_email||''; qs('#customerPhone').value=item.customer_phone||''; qs('#serviceDate').value=item.service_date||''; qs('#startSlot').value=(item.start_slot||'AM').toUpperCase()==='PM'?'PM':'AM'; qs('#packageCode').value=item.package_code||''; qs('#vehicleSize').value=item.vehicle_size||''; qs('#statusField').value=item.status||'pending'; qs('#jobStatusField').value=item.job_status||'scheduled'; qs('#totalPrice').value=item.total_price ?? ''; qs('#depositAmount').value=item.deposit_amount ?? ''; qs('#assignedTo').value=item.assigned_to||item.assigned_staff_name||''; qs('#bookingNotes').value=item.notes||''; qs('#progressEnabled').checked=!!item.progress_enabled; }
+  function renderBookings(){ const wrap=qs('#bookingsList'); const q=(qs('#searchQ').value||'').trim().toLowerCase(); const rows=bookings.filter((b)=>!q || `${b.customer_name||''} ${b.customer_email||''} ${b.customer_phone||''} ${b.package_code||''} ${b.vehicle_size||''}`.toLowerCase().includes(q)); wrap.innerHTML=rows.map((b)=>`<button class="booking-card" type="button" data-id="${esc(b.id)}"><div class="row" style="justify-content:space-between"><strong>${esc(b.customer_name||'Booking')}</strong><span class="pill">${esc(b.status||'pending')}</span></div><div class="mini">${esc(b.service_date||'')} · ${esc((b.start_slot||'').toUpperCase())} · ${esc(b.package_code||'')}</div><div class="mini">${esc(b.customer_email||b.customer_phone||'')} ${b.assigned_to?`· ${esc(b.assigned_to)}`:''}</div><div class="mini">Total ${money(b.total_price)} · Deposit ${money(b.deposit_amount)}</div></button>`).join('') || '<div class="notice">No bookings found.</div>';
+    wrap.querySelectorAll('[data-id]').forEach((btn)=>btn.addEventListener('click',()=>selectBooking(btn.dataset.id)));
+  }
+  async function loadBookings(){ hide(); const payload={ q: qs('#searchQ').value.trim()||null, from_date: qs('#fromDate').value||null, to_date: qs('#toDate').value||null, limit: 150 }; const r=await postJson('/api/admin/bookings_search', payload); if(!r.ok||!r.out?.ok){ qs('#bookingsList').innerHTML=`<div class="notice bad">${(r.out&&r.out.error)||'Could not load bookings.'}</div>`; return; } bookings=Array.isArray(r.out.bookings)?r.out.bookings:[]; renderBookings(); }
+  async function selectBooking(id){ current=bookings.find((b)=>String(b.id)===String(id))||null; fillBookingForm(current); qs('#financeBtn').disabled=!current; qs('#selectedMeta').innerHTML=current?`<strong>${esc(current.customer_name||'Booking')}</strong><div class="mini">${esc(current.id)} · ${esc(current.service_date||'')} · ${esc((current.start_slot||'').toUpperCase())}</div><div class="mini">Package ${esc(current.package_code||'—')} · Total ${money(current.total_price)} · Deposit target ${money(current.deposit_amount)}</div>`:'Choose or create a booking.'; renderFinance([], null); if(current) await loadFinance(current.id); }
+  function renderFinance(entries, summary){ qs('#sumDeposit').textContent=money(summary?.deposit||0); qs('#sumFinal').textContent=money(summary?.final_payment||0); qs('#sumTip').textContent=money(summary?.tip||0); qs('#sumRefund').textContent=money(summary?.refund||0); qs('#sumCollected').textContent=money(summary?.collected_total||0); qs('#ledger').innerHTML=(entries||[]).map((e)=>`<div class="ledger-item"><div class="row" style="justify-content:space-between"><strong>${esc((e.entry_type||'').replaceAll('_',' '))}</strong><span>${money(e.amount_cad)}</span></div><div class="mini">${esc(e.payment_method||'')} · ${esc(new Date(e.recorded_at||e.created_at||Date.now()).toLocaleString())} · ${esc(e.actor_name||'')}</div>${e.note?`<div class="mini">${esc(e.note)}</div>`:''}</div>`).join('') || '<div class="mini">No finance entries recorded yet.</div>';
+  }
+  async function loadFinance(id){ const r=await getJson(`/api/admin/booking_finance?booking_id=${encodeURIComponent(id)}`); if(!r.ok||!r.out?.ok){ renderFinance([], null); show((r.out&&r.out.error)||'Could not load finance ledger.','bad'); return; } renderFinance(r.out.entries||[], r.out.summary||null); }
+  qs('#bookingForm').addEventListener('submit', async(e)=>{ e.preventDefault(); const payload={ id: qs('#bookingId').value.trim() || undefined, customer_name: qs('#customerName').value.trim(), customer_email: qs('#customerEmail').value.trim() || undefined, customer_phone: qs('#customerPhone').value.trim() || undefined, service_date: qs('#serviceDate').value, start_slot: qs('#startSlot').value, package_code: qs('#packageCode').value.trim() || undefined, vehicle_size: qs('#vehicleSize').value.trim() || undefined, status: qs('#statusField').value, job_status: qs('#jobStatusField').value, total_price: qs('#totalPrice').value === '' ? undefined : Number(qs('#totalPrice').value), deposit_amount: qs('#depositAmount').value === '' ? undefined : Number(qs('#depositAmount').value), assigned_to: qs('#assignedTo').value.trim() || undefined, notes: qs('#bookingNotes').value.trim() || undefined, progress_enabled: qs('#progressEnabled').checked };
+    const r=await postJson('/api/admin/booking_save', payload); if(!r.ok||!r.out?.ok) return show((r.out&&r.out.error)||'Could not save booking.','bad'); show(r.out.message || 'Booking saved.','ok'); await loadBookings(); const saved=r.out.booking||null; if(saved?.id){ current=saved; selectBooking(saved.id); }
+  });
+  qs('#financeForm').addEventListener('submit', async(e)=>{ e.preventDefault(); if(!current?.id) return show('Choose a booking first.','bad'); const payload={ booking_id: current.id, entry_type: qs('#financeType').value, amount_cad: Number(qs('#financeAmount').value||0), payment_method: qs('#financeMethod').value, note: qs('#financeNote').value.trim() || undefined }; const r=await postJson('/api/admin/booking_finance', payload); if(!r.ok||!r.out?.ok) return show((r.out&&r.out.error)||'Could not record finance entry.','bad'); show('Finance entry recorded.','ok'); qs('#financeAmount').value=''; qs('#financeNote').value=''; await loadFinance(current.id); });
+  qs('#clearBookingBtn').addEventListener('click',()=>{ current=null; clearBookingForm(); qs('#financeBtn').disabled=true; qs('#selectedMeta').textContent='Choose or create a booking.'; renderFinance([], null); });
+  qs('#newBookingBtn').addEventListener('click',()=>{ current=null; clearBookingForm(); qs('#financeBtn').disabled=true; qs('#selectedMeta').textContent='New booking draft.'; renderFinance([], null); });
+  qs('#refreshBtn').addEventListener('click', loadBookings); qs('#searchQ').addEventListener('input', renderBookings);
+  window.AdminShell.boot({ pageKey:'bookings', onReady: async ({actor:currentActor}) => { actor=currentActor||null; const box=qs('#actorBox'); if(actor){ box.style.display='block'; box.textContent=`Signed in as ${actor.full_name || actor.email || 'staff'} (${actor.role_code || 'staff'})`; } const today=new Date(); const to=(d)=>d.toISOString().slice(0,10); const from=new Date(today); from.setDate(today.getDate()-14); qs('#fromDate').value=to(from); qs('#toDate').value=to(today); await loadBookings(); } });
+})();
+</script>
+<script src="/assets/chrome.js"></script>
 </body>
 </html>

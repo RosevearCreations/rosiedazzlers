@@ -404,3 +404,18 @@ Partially mitigated in the newest pass:
 - Still not honestly complete: full real staff auth/session everywhere, full workflow identity normalization, final route/bootstrap/helper cleanup, complete bridge retirement, and deeper production media hardening.
 
 > Last reviewed in the April 2, 2026 blocks/risk convergence pass.
+
+
+## April 3, 2026 mobile booking / finance / inventory pass
+- Admin booking workflow now supports manual staff-created detailing records from phone or desktop through `admin-booking.html` and `/api/admin/booking_save`.
+- Added booking finance ledger tracking through `/api/admin/booking_finance` using `booking_events` so deposits, final payments, tips, refunds, and other manual collection entries can be recorded immediately without waiting for a dedicated payments table.
+- Admin catalog intake is more phone-friendly again: supplier entry remains free-form, consumables can keep `estimated_jobs_per_unit` for multi-detail usage, and barcode-assisted intake now helps capture UPC/EAN codes into the item notes while drafting an Amazon search link.
+- This pass moves the known gaps forward, especially UI cohesion, mobile operations, and operational payment/tip tracking, but it does not honestly finish the full auth/session and workflow identity gaps yet.
+
+
+## April 3, 2026 mobile booking / payment / inventory pass
+- UI cohesion gap is reduced because `admin-booking.html` now supports manual staff-created detailing records from either phone or desktop instead of assuming every live record starts only from the public booking flow.
+- Operational payment tracking gap is reduced because `/api/admin/booking_finance` now records deposits, final payments, tips, refunds, and other manual collection entries into the booking audit trail so staff can track real-world collection events immediately.
+- Inventory intake gap is reduced because `admin-catalog.html` is more phone-friendly again, keeps supplier entry flexible for Amazon or local vendors, and now includes barcode-assisted intake to help capture UPC/EAN codes while drafting an Amazon lookup path.
+- Consumables workflow clarity is improved because the existing `estimated_jobs_per_unit` field is now surfaced more explicitly as the multi-detail usage model for products such as waxes, cleaners, and dressings that span several vehicles.
+- Still not honestly complete: full real staff auth/session on every internal route, full actor normalization across every booking-adjacent workflow, final duplicate-route/bootstrap cleanup, and deeper dedicated payments/media hardening.

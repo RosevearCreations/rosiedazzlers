@@ -253,3 +253,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Move up next: finish the remaining auth/session-first cleanup on older helper/bootstrap routes, continue actor normalization across the remaining field workflows, and keep reducing JSON fallback duplication where DB-backed endpoints already exist.
 
 > Last reviewed in the April 2, 2026 blocks/risk convergence pass.
+
+
+## April 3, 2026 mobile booking / finance / inventory pass
+- Admin booking workflow now supports manual staff-created detailing records from phone or desktop through `admin-booking.html` and `/api/admin/booking_save`.
+- Added booking finance ledger tracking through `/api/admin/booking_finance` using `booking_events` so deposits, final payments, tips, refunds, and other manual collection entries can be recorded immediately without waiting for a dedicated payments table.
+- Admin catalog intake is more phone-friendly again: supplier entry remains free-form, consumables can keep `estimated_jobs_per_unit` for multi-detail usage, and barcode-assisted intake now helps capture UPC/EAN codes into the item notes while drafting an Amazon search link.
+- This pass moves the known gaps forward, especially UI cohesion, mobile operations, and operational payment/tip tracking, but it does not honestly finish the full auth/session and workflow identity gaps yet.

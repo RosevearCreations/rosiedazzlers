@@ -1,4 +1,7 @@
 
+-- April 3, 2026 sync note
+-- No new migration required in this pass. Manual payment/tip tracking currently uses booking_events as an operational ledger while the project continues moving toward fuller session-first convergence.
+
 -- April 2, 2026 sync note:
 -- No new SQL migration was required for the blocks/date-range pass.
 -- Current build changes in this pass were admin-page convergence and frontend workflow improvements, not schema expansion.
