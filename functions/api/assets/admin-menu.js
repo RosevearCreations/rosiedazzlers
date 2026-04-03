@@ -115,6 +115,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-notifications")
     },
     {
+      key: "admin-accounting",
+      label: "Accounting",
+      href: "/admin-accounting",
+      description: "Orders, collections, and balance due",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting")
+    },
+    {
       key: "admin-analytics",
       label: "Analytics",
       href: "/admin-analytics",
