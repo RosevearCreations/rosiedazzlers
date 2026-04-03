@@ -1,6 +1,3 @@
-
-
-> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.

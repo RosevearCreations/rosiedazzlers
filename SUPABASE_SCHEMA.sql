@@ -1,7 +1,3 @@
--- April 2, 2026 sync note:
--- No new SQL migration was required for the video hub / YouTube-first + Instagram strip pass.
--- Current build changes in this pass were public-page content/SEO improvements, shared navigation updates, and documentation synchronization.
-
 
 -- April 2, 2026 sync note:
 -- No new SQL migration was required for the blocks/date-range pass.

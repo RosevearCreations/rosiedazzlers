@@ -1,6 +1,3 @@
-
-
-> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -407,10 +404,3 @@ Partially mitigated in the newest pass:
 - Still not honestly complete: full real staff auth/session everywhere, full workflow identity normalization, final route/bootstrap/helper cleanup, complete bridge retirement, and deeper production media hardening.
 
 > Last reviewed in the April 2, 2026 blocks/risk convergence pass.
-
-
-## April 2, 2026 video-hub / social-proof pass
-- Public marketing/content polish moved forward with a new `/videos` page that uses a YouTube-first embed layout and an Instagram/Reels proof strip below it.
-- Route cleanup moved forward slightly because the public nav and sitemap now treat Videos as a first-class public marketing page rather than leaving video content scattered only across external social links.
-- SEO coverage moved forward again with a dedicated videos page, its own metadata/canonical path, one-H1 structure, and internal links from Home/navigation.
-- Still not honestly complete: full real staff auth/session across every internal screen, final identity normalization in every workflow, final route/bootstrap cleanup, and complete removal of all transitional bridge assumptions.

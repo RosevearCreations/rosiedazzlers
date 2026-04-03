@@ -1,6 +1,3 @@
-
-
-> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -256,8 +253,3 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Move up next: finish the remaining auth/session-first cleanup on older helper/bootstrap routes, continue actor normalization across the remaining field workflows, and keep reducing JSON fallback duplication where DB-backed endpoints already exist.
 
 > Last reviewed in the April 2, 2026 blocks/risk convergence pass.
-
-
-## April 2, 2026 roadmap refresh
-- Next public-content follow-up: optionally replace the manually curated featured video list with a DB-backed or API-backed feed once channel-management needs justify it.
-- Keep the current YouTube-first + Instagram-strip structure unless analytics show a strong reason to change playback strategy.

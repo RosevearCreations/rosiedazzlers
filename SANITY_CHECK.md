@@ -1,6 +1,3 @@
-
-
-> Last synchronized: April 2, 2026. Reviewed during the video-hub, YouTube-first embeds, Instagram/Reels proof-strip, navigation, sitemap, and docs/schema synchronization pass.
 > Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
 
 > Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
@@ -201,9 +198,3 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Confirm exposed/public pages still keep one H1 each.
 
 > Last reviewed in the April 2, 2026 blocks/risk convergence pass.
-
-
-## April 2, 2026 sanity update
-- Public navigation includes Videos.
-- Home links to the new video hub.
-- `/videos` has one H1, public metadata, and a YouTube-first embedded layout with Instagram/Reels proof cards below.
