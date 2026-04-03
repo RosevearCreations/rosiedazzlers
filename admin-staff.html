@@ -113,6 +113,28 @@
             </div>
           </form>
         </div>
+
+        <div class="panel">
+          <h2>Admin password controls</h2>
+          <p class="kicker">Admins can set or reset passwords for staff users, including other Admins.</p>
+          <form id="passwordForm" class="form">
+            <label>Target staff user
+              <select id="passwordStaffUser" required>
+                <option value="">Choose a staff user</option>
+              </select>
+            </label>
+            <label>New password
+              <input id="resetPassword" type="password" minlength="8" autocomplete="new-password" placeholder="At least 8 characters" required />
+            </label>
+            <label>Hash mode
+              <select id="resetHashMode">
+                <option value="bcrypt" selected>bcrypt (preferred)</option>
+                <option value="sha256">sha256 (fallback/bootstrap)</option>
+              </select>
+            </label>
+            <button id="resetPasswordBtn" class="btn primary" type="submit" disabled>Set password</button>
+          </form>
+        </div>
       </div>
     </section>
   </main>
@@ -169,6 +191,14 @@
       document.querySelector("#canManageStaff").checked = row?.can_manage_staff === true;
       document.querySelector("#notes").value = row?.notes || "";
     }
+    function populatePasswordOptions() {
+      const select = document.querySelector("#passwordStaffUser");
+      if (!select) return;
+      const current = select.value;
+      select.innerHTML = `<option value="">Choose a staff user</option>` + staffUsers.map((row) => `<option value="${escapeHtml(row.id)}">${escapeHtml(row.full_name || row.email || "Unnamed")} · ${escapeHtml(row.role_code || "staff")}</option>`).join("");
+      if (staffUsers.some((row) => row.id === current)) select.value = current;
+      document.querySelector("#resetPasswordBtn").disabled = !staffUsers.length;
+    }
     function renderSelectedStaff() {
       const row = staffUsers.find((s) => s.id === selectedStaffId) || null;
       document.querySelector("#staffTitle").textContent = row?.full_name || "No staff selected";
@@ -195,7 +225,7 @@
       staffUsers = Array.isArray(data.staff_users) ? data.staff_users : [];
       customerTiers = Array.isArray(data.customer_tiers) ? data.customer_tiers : [];
       document.querySelector("#sessionMeta").textContent = data?.actor?.full_name ? `Signed in as ${data.actor.full_name}.` : "Signed-in staff access is required.";
-      renderStaffList(); renderTiers(); renderSelectedStaff();
+      renderStaffList(); renderTiers(); populatePasswordOptions(); renderSelectedStaff();
       document.querySelector("#saveStaffBtn").disabled = false;
       document.querySelector("#newStaffBtn").disabled = false;
       if (selectedStaffId) fillForm(staffUsers.find((s) => s.id === selectedStaffId) || null);
@@ -232,6 +262,23 @@
         catch (err) { setNotice(err.message || "Could not save staff user.", "bad"); }
       });
       document.querySelector("#newStaffBtn").addEventListener("click", () => { clearForm(); setNotice("Ready to create a new staff user."); });
+      document.querySelector("#passwordForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const staff_user_id = document.querySelector("#passwordStaffUser").value.trim();
+        const new_password = document.querySelector("#resetPassword").value;
+        const hash_mode = document.querySelector("#resetHashMode").value || "bcrypt";
+        if (!staff_user_id) { setNotice("Choose a staff user first.", "bad"); return; }
+        if (!new_password || new_password.length < 8) { setNotice("New password must be at least 8 characters long.", "bad"); return; }
+        try {
+          setNotice("Updating password…");
+          await apiPost("/api/admin/auth_set_password", currentPassword, { staff_user_id, new_password, hash_mode });
+          document.querySelector("#passwordForm").reset();
+          document.querySelector("#resetHashMode").value = "bcrypt";
+          setNotice("Password updated successfully.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not update password.", "bad");
+        }
+      });
       document.querySelector("#adminForm").requestSubmit();
     });
   </script>

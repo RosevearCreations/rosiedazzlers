@@ -233,3 +233,10 @@ This pass focused on reducing live operational gaps rather than adding new table
 - Continued mobile-first field direction by linking admins and detailers into the same live job workflow path; admins can still act as detailers and work through arrival, evidence capture, sign-off, and billing from the phone side.
 - Reduced duplicate-route/file clutter slightly by renaming clearly unlinked legacy block endpoints and one accidental duplicate notes file with an `RM_` prefix for safe removal review.
 - Still not honestly complete: full role-aware auth/session convergence on every remaining internal route, final actor normalization everywhere, and total retirement of all transitional bridge assumptions.
+
+
+## April 4, 2026 accounting / password / roadmap pass
+- Added an `accounting_records` table + migration so bookings now seed a basic accounting interface record immediately and finance updates can keep that record in sync for future revenue/tax/inventory-cost expansion.
+- Added an internal Accounting screen and continued moving Admin tooling toward a session-first operational workflow.
+- Added Admin-side password reset controls for staff users, including other Admins, through the existing session-aware password endpoint.
+- Continued CSS/mobile polish and docs/schema synchronization for the current build.
