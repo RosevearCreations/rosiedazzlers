@@ -26,6 +26,45 @@
   --r: 16px;
 }
 
+
+
+*, *::before, *::after { box-sizing: border-box; }
+html { color-scheme: dark; }
+img, iframe { max-width: 100%; }
+
+.row > * { min-width: 0; }
+.row input,
+.row select,
+.row textarea,
+.row label {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+.row .btn,
+.row a.btn,
+.row button,
+.row .pill,
+.row .badge {
+  flex: 0 0 auto;
+}
+
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="time"] {
+  min-height: 46px;
+  color-scheme: dark;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+input[type="month"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(1.4);
+  opacity: .92;
+  cursor: pointer;
+}
+
 body {
   font-family: var(--font);
   background:
@@ -303,6 +342,17 @@ label {
   font-size: 13px;
   color: rgba(234,242,255,.72);
 }
+label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.search-input { min-width: min(100%, 260px); }
+
+input, select, textarea, button { font: inherit; }
+
+textarea { resize: vertical; }
 
 input,
 select,
