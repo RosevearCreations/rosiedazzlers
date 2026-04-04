@@ -402,3 +402,4 @@ Current next priorities:
 - manual scheduling / app-management rules UI completion
 - final layout polish across booking and internal screens
 
+<!-- Last synchronized: April 4, 2026. Reviewed during the mobile fit / session cleanup / closeout pass. -->
