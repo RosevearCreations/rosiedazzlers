@@ -290,8 +290,7 @@
     }
 
     function buildAddonCard(addon){
-      const imgName = ADDON_IMAGES[addon.code] || null;
-      const img = imgName ? imgUrlFromFilename(imgName) : null;
+      const img = addon.image_url || (ADDON_IMAGES[addon.code] ? imgUrlFromFilename(ADDON_IMAGES[addon.code]) : null);
 
       const el = document.createElement("div");
       el.className = "panel";

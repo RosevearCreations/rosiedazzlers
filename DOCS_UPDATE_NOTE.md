@@ -52,4 +52,10 @@ This documentation refresh syncs the repo to the current build where public cata
 - Reduced duplicate-route/file clutter slightly by renaming clearly unlinked legacy block endpoints and one accidental duplicate notes file with an `RM_` prefix for safe removal review.
 - Still not honestly complete: full role-aware auth/session convergence on every remaining internal route, final actor normalization everywhere, and total retirement of all transitional bridge assumptions.
 
-<!-- Last synchronized: April 4, 2026. Reviewed during the mobile fit / session cleanup / closeout pass. -->
+
+## April 4, 2026 add-on image / mobile-fit / docs pass
+- Replaced the four previously missing add-on image paths with local PNG assets for `full_clay_treatment`, `high_grade_paint_sealant`, `two_stage_polish`, and `uv_protectant_applied_on_interior_panels` so booking/services/add-on cards no longer depend on missing artwork references.
+- Tightened add-on/service card CSS again for mobile and website use by reducing overflow risk, enforcing safer image sizing, and forcing one-column card layouts on narrower screens.
+- Continued DB-first/catalog consistency work by updating both public and API-side pricing catalog fallbacks to use the same local add-on image asset paths.
+- Continued docs/schema synchronization for the current build while keeping the remaining true open items narrowed to auth/session convergence, actor normalization, final duplicate-route cleanup, and deeper production hardening.
+

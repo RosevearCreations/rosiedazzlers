@@ -170,4 +170,3 @@ The next Rosie Dazzlers phase should focus on **real staff auth, consistent staf
 - Refreshed the public video/social experience so YouTube remains the main playback surface while Instagram supports reels, work photos, and single-image proof-of-work posting.
 - Continued docs/schema synchronization for the current build; no new schema migration was required in this pass.
 
-<!-- Last synchronized: April 4, 2026. Reviewed during the mobile fit / session cleanup / closeout pass. -->

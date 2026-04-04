@@ -206,10 +206,10 @@
 - Added Admin-side password reset controls for staff users, including other Admins, through the existing session-aware password endpoint.
 - Continued CSS/mobile polish and docs/schema synchronization for the current build.
 
-## April 4, 2026 mobile fit / session cleanup / closeout pass
-- Continued mobile-app fit work with safer wrapping, safe-area spacing, sticky field-action support, and smoother button/input behavior on smaller screens.
-- Moved more internal workflow toward session-first behavior by cleaning Admin Staff loading wording/behavior and removing another obvious password-first assumption from the live monitor screen.
-- Improved the phone/detailer job screen with stronger quick links into Jobsite, Progress, and Accounting so the field workflow is more complete from one mobile surface.
-- Continued docs/schema synchronization for the current build while narrowing the remaining truly-open items to auth/session convergence, actor normalization, final duplicate-route cleanup, and deeper production hardening.
 
-<!-- Last synchronized: April 4, 2026. Reviewed during the mobile fit / session cleanup / closeout pass. -->
+## April 4, 2026 add-on image / mobile-fit / docs pass
+- Replaced the four previously missing add-on image paths with local PNG assets for `full_clay_treatment`, `high_grade_paint_sealant`, `two_stage_polish`, and `uv_protectant_applied_on_interior_panels` so booking/services/add-on cards no longer depend on missing artwork references.
+- Tightened add-on/service card CSS again for mobile and website use by reducing overflow risk, enforcing safer image sizing, and forcing one-column card layouts on narrower screens.
+- Continued DB-first/catalog consistency work by updating both public and API-side pricing catalog fallbacks to use the same local add-on image asset paths.
+- Continued docs/schema synchronization for the current build while keeping the remaining true open items narrowed to auth/session convergence, actor normalization, final duplicate-route cleanup, and deeper production hardening.
+

@@ -75,8 +75,8 @@
           <h2>Load live job</h2>
           <form id="liveLoadForm" class="form">
             <label>
-              Session-first access
-              <input id="adminPassword" type="password" autocomplete="off" placeholder="Only use if temporary fallback is still enabled" />
+              Admin password
+              <input id="adminPassword" type="password" autocomplete="current-password" required />
             </label>
 
             <label>
@@ -94,12 +94,9 @@
               </select>
             </label>
 
-            <div class="quick-link-grid" style="margin-top:10px">
+            <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
               <button class="btn primary" type="submit">Load live job</button>
               <button id="toggleRefreshBtn" class="btn ghost" type="button" disabled>Pause refresh</button>
-              <a class="btn ghost" id="openLiveProgress" href="#">Progress</a>
-              <a class="btn ghost" id="openLiveJobsite" href="#">Jobsite</a>
-              <a class="btn ghost" id="openLiveAccounting" href="#">Accounting</a>
             </div>
           </form>
         </div>
@@ -175,7 +172,6 @@
     import { setBrandImages, setFooter } from "/assets/site.js";
 
     let currentPassword = "";
-    let currentActor = null;
     let currentBookingId = "";
     let refreshTimer = null;
     let refreshPaused = false;
@@ -240,10 +236,6 @@
         booking?.vehicle_size || "—",
         booking?.assigned_to || "unassigned"
       ].join(" · ");
-
-      document.querySelector("#openLiveProgress").href = booking?.id ? `/admin-progress.html?booking_id=${encodeURIComponent(booking.id)}` : "#";
-      document.querySelector("#openLiveJobsite").href = booking?.id ? `/admin-jobsite.html?booking_id=${encodeURIComponent(booking.id)}` : "#";
-      document.querySelector("#openLiveAccounting").href = booking?.id ? `/admin-accounting.html?booking_id=${encodeURIComponent(booking.id)}` : "/admin-accounting.html";
 
       document.querySelector("#bookingBox").innerHTML = `
         <div><strong>Customer:</strong> ${escapeHtml(booking?.customer_name || "—")}</div>
