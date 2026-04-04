@@ -1,4 +1,4 @@
--- Last synchronized: April 4, 2026. Reviewed during the add-on image / mobile-fit / docs pass.
+-- Last synchronized: April 4, 2026. Reviewed during the mobile fit / session cleanup / closeout pass.
 
 -- April 4, 2026 sync note
 -- New migration: sql/2026-04-04_accounting_records_and_admin_password_controls.sql

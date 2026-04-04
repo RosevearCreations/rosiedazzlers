@@ -442,19 +442,15 @@ Partially mitigated in the newest pass:
 - Added Admin-side password reset controls for staff users, including other Admins, through the existing session-aware password endpoint.
 - Continued CSS/mobile polish and docs/schema synchronization for the current build.
 
+## April 4, 2026 mobile fit / session cleanup / closeout pass
+- Continued mobile-app fit work with safer wrapping, safe-area spacing, sticky field-action support, and smoother button/input behavior on smaller screens.
+- Moved more internal workflow toward session-first behavior by cleaning Admin Staff loading wording/behavior and removing another obvious password-first assumption from the live monitor screen.
+- Improved the phone/detailer job screen with stronger quick links into Jobsite, Progress, and Accounting so the field workflow is more complete from one mobile surface.
+- Continued docs/schema synchronization for the current build while narrowing the remaining truly-open items to auth/session convergence, actor normalization, final duplicate-route cleanup, and deeper production hardening.
 
-## April 4, 2026 add-on image / mobile-fit / docs pass
-- Replaced the four previously missing add-on image paths with local PNG assets for `full_clay_treatment`, `high_grade_paint_sealant`, `two_stage_polish`, and `uv_protectant_applied_on_interior_panels` so booking/services/add-on cards no longer depend on missing artwork references.
-- Tightened add-on/service card CSS again for mobile and website use by reducing overflow risk, enforcing safer image sizing, and forcing one-column card layouts on narrower screens.
-- Continued DB-first/catalog consistency work by updating both public and API-side pricing catalog fallbacks to use the same local add-on image asset paths.
-- Continued docs/schema synchronization for the current build while keeping the remaining true open items narrowed to auth/session convergence, actor normalization, final duplicate-route cleanup, and deeper production hardening.
+<!-- Last synchronized: April 4, 2026. Reviewed during the mobile fit / session cleanup / closeout pass. -->
 
 
-
-## April 4, 2026 add-on imagery / mobile-fit pass
-- Add-on media drift risk is reduced again because the four missing add-on image references now use local PNG assets and no longer depend on absent artwork URLs in the live booking/services experience.
-- UI cohesion gap is reduced again because add-on and service cards now use safer overflow/image-sizing behavior and collapse more reliably to one column on smaller screens.
-- JSON/DB/catalog drift risk is reduced slightly again because both public and API-side pricing catalog fallbacks now point at the same local add-on asset paths for these missing-image items.
-- Still not honestly complete: full role-aware auth/session convergence, full actor normalization, final duplicate-route/bootstrap/helper cleanup, and deeper production hardening.
-
-<!-- Last synchronized: April 4, 2026. Reviewed during the add-on image / mobile-fit / docs pass. -->
+## April 4, 2026 add-on image wiring fix
+- Add-on media drift risk is reduced again because the Services-page renderer no longer depends only on an outdated partial add-on image map and now prefers each add-on's canonical `image_url` value first.
+- The four previously missing add-on cards (`full_clay_treatment`, `two_stage_polish`, `high_grade_paint_sealant`, and `uv_protectant_applied_on_interior_panels`) are now aligned to local PNG asset paths in both pricing catalog copies.

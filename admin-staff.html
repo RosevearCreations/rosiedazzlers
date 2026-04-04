@@ -58,7 +58,7 @@
           <form id="adminForm" class="form">
             <label>
               Optional transitional fallback
-              <input id="adminPassword" type="password" autocomplete="off" placeholder="Only needed if temporary fallback is enabled" />
+              <input id="adminPassword" type="password" autocomplete="off" placeholder="Only use if temporary fallback is still enabled" />
             </label>
             <div><button class="btn primary" type="submit">Refresh staff</button></div>
           </form>
@@ -280,6 +280,7 @@
         }
       });
       document.querySelector("#adminForm").requestSubmit();
+      document.querySelector("#adminPassword").addEventListener("change", ()=> document.querySelector("#adminForm").requestSubmit());
     });
   </script>
 </body>
