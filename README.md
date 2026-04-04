@@ -240,3 +240,11 @@ This pass focused on reducing live operational gaps rather than adding new table
 - Added an internal Accounting screen and continued moving Admin tooling toward a session-first operational workflow.
 - Added Admin-side password reset controls for staff users, including other Admins, through the existing session-aware password endpoint.
 - Continued CSS/mobile polish and docs/schema synchronization for the current build.
+
+## April 4, 2026 mobile fit / session cleanup / closeout pass
+- Continued mobile-app fit work with safer wrapping, safe-area spacing, sticky field-action support, and smoother button/input behavior on smaller screens.
+- Moved more internal workflow toward session-first behavior by cleaning Admin Staff loading wording/behavior and removing another obvious password-first assumption from the live monitor screen.
+- Improved the phone/detailer job screen with stronger quick links into Jobsite, Progress, and Accounting so the field workflow is more complete from one mobile surface.
+- Continued docs/schema synchronization for the current build while narrowing the remaining truly-open items to auth/session convergence, actor normalization, final duplicate-route cleanup, and deeper production hardening.
+
+<!-- Last synchronized: April 4, 2026. Reviewed during the mobile fit / session cleanup / closeout pass. -->
