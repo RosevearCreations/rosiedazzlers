@@ -728,3 +728,16 @@ html[data-theme="dark"] input[type="date"], html[data-theme="dark"] input[type="
 input::-webkit-calendar-picker-indicator{opacity:1; filter:none; cursor:pointer;}
 .service-size-tools{align-items:flex-end;}
 @media (max-width: 720px){ .chart-preview{width:60% !important; min-width:140px;} .service-size-tools{align-items:stretch;} .compact-stack{max-width:none; min-width:0;} }
+
+
+/* April 2026 booking/admin reliability and mobile-fit pass */
+.chart-preview{max-width:220px !important; width:22% !important; min-width:120px;}
+.service-size-tools{gap:10px 14px; align-items:end;}
+.service-size-tools .compact-stack{min-width:150px; max-width:210px; gap:4px;}
+.service-size-tools .compact-stack .muted{font-size:.84rem; line-height:1.1;}
+.service-size-tools .compact-control{min-height:38px; padding:8px 10px;}
+input[type="date"], input[type="datetime-local"], input[type="time"], input[type="month"], input[type="week"]{appearance:auto; -webkit-appearance:auto; color-scheme:light; background:#ffffff !important; color:#0f172a !important; border-color:rgba(15,23,42,.18) !important;}
+html[data-theme="dark"] input[type="date"], html[data-theme="dark"] input[type="datetime-local"], html[data-theme="dark"] input[type="time"], html[data-theme="dark"] input[type="month"], html[data-theme="dark"] input[type="week"], body[data-theme="dark"] input[type="date"], body[data-theme="dark"] input[type="datetime-local"], body[data-theme="dark"] input[type="time"], body[data-theme="dark"] input[type="month"], body[data-theme="dark"] input[type="week"]{background:#ffffff !important; color:#0f172a !important;}
+input::-webkit-calendar-picker-indicator{opacity:1 !important; filter:invert(0) !important; background:transparent;}
+.row{row-gap:10px;}
+@media (max-width: 720px){ .chart-preview{width:40% !important; min-width:110px;} .service-size-tools .compact-stack{max-width:180px;} }
