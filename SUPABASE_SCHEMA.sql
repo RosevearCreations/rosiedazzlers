@@ -358,3 +358,7 @@ create index if not exists catalog_purchase_orders_reminder_sent_at_idx on publi
 
 -- April 4, 2026 booking/query/vehicle/CSS fix pass
 -- No new schema migration required in this pass. Live query compatibility, routing, and UI fit were adjusted against the existing schema.
+
+
+-- April 4, 2026 booking/query/admin-route/mobile-fit follow-up
+-- No new schema migration was required in this pass. This was a live-schema compatibility, routing, UI/CSS, and admin workflow clarification pass.

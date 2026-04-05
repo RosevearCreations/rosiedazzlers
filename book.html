@@ -135,8 +135,8 @@
       </div>
       <div class="grid3" style="margin-top:12px">
         <div><label for="veh_color">Colour</label><input id="veh_color" type="text" placeholder="Black, silver, blue" /></div>
-        <div><label for="vehicle_size">Vehicle size</label><select id="vehicle_size"><option value="">Select size</option><option value="small">Small car</option><option value="mid">Mid-sized</option><option value="oversize">Oversized / large</option></select></div>
-        <div><label for="veh_category">Vehicle category</label><select id="veh_category"><option value="">Select category</option><option value="small">Small car</option><option value="mid">Medium / standard</option><option value="oversize">Oversized</option><option value="exotic">Exotic / luxury</option></select></div>
+        <div><label for="vehicle_size">Vehicle size</label><select id="vehicle_size"><option value="">Select size</option><option value="small">Small car</option><option value="mid">Mid-sized</option><option value="oversize">Oversized / large</option></select><div class="mini muted">Chosen manually so the customer can confirm the correct size.</div></div>
+        <div><label for="veh_category">Vehicle category</label><select id="veh_category"><option value="">Select category</option><option value="small">Small car</option><option value="mid">Medium / standard</option><option value="oversize">Oversized</option><option value="exotic">Exotic / luxury</option></select><div class="mini muted">Defaults are no longer forced from model guesses. Override any choice here.</div></div>
       </div>
       <div class="grid2" style="margin-top:12px">
         <div><label for="veh_body">Body style</label><select id="veh_body"><option value="">Select body style</option><option value="sedan">Sedan / Coupe</option><option value="hatch">Hatchback</option><option value="crossover">Crossover</option><option value="suv">SUV</option><option value="truck">Truck</option><option value="van">Van</option><option value="exotic">Exotic / Supercar</option></select></div>
@@ -379,14 +379,9 @@
       const key = String(qs('#veh_model').value || '').trim().toLowerCase();
       const row = vehicleModelMeta.get(key);
       if (!row) { updateSizeHint(); return; }
-      if (row.size_bucket && !qs('#vehicle_size').value) qs('#vehicle_size').value = row.size_bucket;
       if (!qs('#veh_body').value && row.vehicle_type) {
         const t = String(row.vehicle_type).toLowerCase();
         qs('#veh_body').value = t.includes('truck') ? 'truck' : t.includes('multipurpose') || t.includes('suv') ? 'suv' : t.includes('van') ? 'van' : 'sedan';
-      }
-      if (!qs('#veh_category').value) {
-        if (row.is_exotic) qs('#veh_category').value = 'exotic';
-        else if (row.category_label && String(row.category_label).toLowerCase().includes('lux')) qs('#veh_category').value = 'luxury';
       }
       updateSizeHint();
     }

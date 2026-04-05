@@ -1,5 +1,5 @@
-const CACHE_NAME = "rosie-shell-v20260404";
-const CORE_ASSETS = ["/", "/assets/site.css", "/assets/chrome.js", "/assets/admin-auth.js", "/assets/admin-shell.js", "/admin.html", "/detailer-jobs", "/manifest.webmanifest"];
+const CACHE_NAME = "rosie-shell-v20260404b";
+const CORE_ASSETS = ["/", "/assets/site.css", "/assets/chrome.js", "/assets/admin-auth.js", "/assets/admin-shell.js", "/admin", "/admin-booking.html", "/detailer-jobs.html", "/manifest.webmanifest"];
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS)).then(() => self.skipWaiting()));
 });
@@ -18,5 +18,5 @@ self.addEventListener("fetch", (event) => {
     const copy = res.clone();
     caches.open(CACHE_NAME).then((cache) => cache.put(req, copy)).catch(() => {});
     return res;
-  }).catch(() => caches.match("/admin.html") || caches.match("/"))));
+  }).catch(() => caches.match("/admin") || caches.match("/") || caches.match("/admin-booking.html"))));
 });

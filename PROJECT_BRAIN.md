@@ -134,3 +134,11 @@ The repo is still in the role-aware convergence phase. This pass specifically re
 - Tightened public/mobile UI again by shrinking the Services vehicle-size selector footprint, reducing the Pricing vehicle size chart preview, and forcing date/time inputs onto a light control surface for better picker visibility.
 - Upgraded Book vehicle entry so year, make, and model now accept typed input with suggestion lists while still supporting default size/category/body inference and manual overrides.
 - Continued docs/schema synchronization for the current build.
+
+
+## April 4, 2026 booking/query/admin-route/mobile-fit follow-up
+- Repaired the booking/admin search path again by removing another live reference to the non-existent `bookings.updated_at` column and continuing to normalize booking reads/writes against the live schema shape.
+- Cleaned the admin dashboard pathing again so active internal links prefer `/admin` while static fallback routing still resolves to `admin.html` safely on Cloudflare Pages.
+- Backed out automatic size/category forcing from Year/Make/Model guesses on Book so customers can type/select the vehicle and then confirm size/category manually when the guessed class is unreliable.
+- Tightened Services/Pricing/date-input CSS again for smaller controls, visible date pickers on dark surfaces, smaller chart previews, and steadier mobile layout behavior.
+- Continued Admin inventory workflow clarity by making add/reorder actions more explicit on the Admin Catalog screen.
