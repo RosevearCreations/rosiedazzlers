@@ -378,12 +378,11 @@
     function applyVehicleDefaultsFromModel(){
       const key = String(qs('#veh_model').value || '').trim().toLowerCase();
       const row = vehicleModelMeta.get(key);
-      if (!row) { updateSizeHint(); return; }
-      if (!qs('#veh_body').value && row.vehicle_type) {
-        const t = String(row.vehicle_type).toLowerCase();
-        qs('#veh_body').value = t.includes('truck') ? 'truck' : t.includes('multipurpose') || t.includes('suv') ? 'suv' : t.includes('van') ? 'van' : 'sedan';
+      if (row && row.model) {
+        updateSizeHint(`Vehicle matched: ${row.make || qs('#veh_make').value || ''} ${row.model}. Please confirm size and category manually.`.trim());
+      } else {
+        updateSizeHint();
       }
-      updateSizeHint();
     }
     ['#veh_year','#veh_make'].forEach((selector)=>qs(selector).addEventListener('change', loadVehicleModels));
     ['#veh_year','#veh_make'].forEach((selector)=>qs(selector).addEventListener('input', loadVehicleModels));

@@ -362,3 +362,8 @@ create index if not exists catalog_purchase_orders_reminder_sent_at_idx on publi
 
 -- April 4, 2026 booking/query/admin-route/mobile-fit follow-up
 -- No new schema migration was required in this pass. This was a live-schema compatibility, routing, UI/CSS, and admin workflow clarification pass.
+
+
+-- April 5, 2026 sync
+-- No new schema migration in this pass.
+-- Continued booking query/admin route/date-picker/inventory UI follow-up and doc synchronization.

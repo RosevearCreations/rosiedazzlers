@@ -1,4 +1,4 @@
-const CACHE_NAME = "rosie-shell-v20260404b";
+const CACHE_NAME = "rosie-shell-v20260405a";
 const CORE_ASSETS = ["/", "/assets/site.css", "/assets/chrome.js", "/assets/admin-auth.js", "/assets/admin-shell.js", "/admin", "/admin-booking.html", "/detailer-jobs.html", "/manifest.webmanifest"];
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS)).then(() => self.skipWaiting()));

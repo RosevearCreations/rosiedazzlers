@@ -142,3 +142,11 @@ The repo is still in the role-aware convergence phase. This pass specifically re
 - Backed out automatic size/category forcing from Year/Make/Model guesses on Book so customers can type/select the vehicle and then confirm size/category manually when the guessed class is unreliable.
 - Tightened Services/Pricing/date-input CSS again for smaller controls, visible date pickers on dark surfaces, smaller chart previews, and steadier mobile layout behavior.
 - Continued Admin inventory workflow clarity by making add/reorder actions more explicit on the Admin Catalog screen.
+
+
+## April 5, 2026 booking/admin-route/date-picker/inventory follow-up
+- Continued fixing the booking/admin management pass by removing another stale `updated_at` assumption from active booking-path code and keeping internal dashboard navigation on `/admin` instead of broken `admin.html` links.
+- Tuned Services/Pricing UI again by shrinking the vehicle-size selector vertically, increasing chart previews, and keeping date inputs dark while brightening the picker icon instead of forcing white boxes.
+- Backed out automatic size/category assignment on Book so customers still get Year/Make/Model suggestions but confirm size and category manually when vehicle-class inference is unreliable.
+- Surfaced Inventory more clearly for Admins through dashboard/menu wording and continued docs/schema synchronization for the current build.
+<!-- Last synchronized: April 5, 2026. Reviewed during the bookings/admin-route/date-picker/inventory/menu/CSS/mobile-fit pass. -->
