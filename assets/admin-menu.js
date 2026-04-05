@@ -88,9 +88,9 @@
     },
     {
       key: "admin-catalog",
-      label: "Catalog",
+      label: "Inventory",
       href: "/admin-catalog",
-      description: "Tools, systems, consumables",
+      description: "Inventory, products, reorders",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-catalog")
     },
     {
