@@ -117,8 +117,7 @@ export async function onRequestPost(context) {
         notes: payload.notes,
         total_price: payload.total_price,
         deposit_amount: payload.deposit_amount,
-        customer_profile_id: customerProfileId,
-        updated_at: new Date().toISOString()
+        customer_profile_id: customerProfileId
       };
 
       const res = await fetch(
@@ -448,8 +447,7 @@ async function upsertCustomerProfileIfPossible(env, headers, payload) {
         body: JSON.stringify({
           customer_name: payload.customer_name,
           customer_email: payload.customer_email,
-          customer_phone: payload.customer_phone,
-          updated_at: new Date().toISOString()
+          customer_phone: payload.customer_phone
         })
       }
     ).catch(() => null);

@@ -25,7 +25,6 @@ export async function onRequestPost(context) {
     if (jobStatus !== null) patch.job_status = jobStatus || null;
     if (!Object.keys(patch).length) return json({ error: "Nothing to update." }, 400);
     if (patch.status === "completed" || patch.job_status === "completed") patch.completed_at = new Date().toISOString();
-    patch.updated_at = new Date().toISOString();
 
     const patchRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?id=eq.${encodeURIComponent(bookingId)}`, { method: "PATCH", headers: { ...serviceHeaders(env), Prefer: "return=representation" }, body: JSON.stringify(patch) });
     if (!patchRes.ok) return json({ error: `Could not update booking. ${await patchRes.text()}` }, 500);

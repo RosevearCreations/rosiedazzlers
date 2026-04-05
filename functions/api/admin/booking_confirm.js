@@ -91,8 +91,6 @@ export async function onRequestPost(context) {
           job_status: "scheduled"
         };
 
-    patch.updated_at = new Date().toISOString();
-
     const res = await fetch(
       `${env.SUPABASE_URL}/rest/v1/bookings?id=eq.${encodeURIComponent(booking_id)}`,
       {
@@ -139,7 +137,7 @@ export async function onRequestGet() {
 async function loadBooking(env, headers, bookingId) {
   const res = await fetch(
     `${env.SUPABASE_URL}/rest/v1/bookings` +
-      `?select=id,status,job_status,confirmed_at,updated_at` +
+      `?select=id,status,job_status,confirmed_at` +
       `&id=eq.${encodeURIComponent(bookingId)}` +
       `&limit=1`,
     { headers }
