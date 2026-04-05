@@ -367,3 +367,7 @@ create index if not exists catalog_purchase_orders_reminder_sent_at_idx on publi
 -- April 5, 2026 sync
 -- No new schema migration in this pass.
 -- Continued booking query/admin route/date-picker/inventory UI follow-up and doc synchronization.
+
+
+-- April 5, 2026 Cloudflare Functions import-compatibility pass
+-- Added compatibility shim modules under functions/_lib and functions/api/client/_lib so Pages Functions bundling can resolve older/mixed helper import patterns without failing the deploy.

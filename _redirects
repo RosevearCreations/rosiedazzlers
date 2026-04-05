@@ -23,5 +23,11 @@
 /admin-live/          /admin-live       301
 /admin-staff/         /admin-staff      301
 /admin-promos/        /admin-promos     301
+/admin-catalog.html   /admin-catalog    301
+/admin-accounting.html /admin-accounting 301
+/admin-catalog/       /admin-catalog    301
+/admin-accounting/    /admin-accounting 301
+/admin-catalog       /admin-catalog.html 200
+/admin-accounting    /admin-accounting.html 200
 
 /admin              /admin.html      200

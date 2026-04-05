@@ -177,3 +177,9 @@
 - Backed out automatic size/category assignment on Book so customers still get Year/Make/Model suggestions but confirm size and category manually when vehicle-class inference is unreliable.
 - Surfaced Inventory more clearly for Admins through dashboard/menu wording and continued docs/schema synchronization for the current build.
 <!-- Last synchronized: April 5, 2026. Reviewed during the bookings/admin-route/date-picker/inventory/menu/CSS/mobile-fit pass. -->
+
+
+## April 5, 2026 Cloudflare Functions import-compatibility pass
+- Added compatibility `_lib` shim files under `functions/_lib` and `functions/api/client/_lib` so Pages Functions builds do not fail when older or mixed relative import patterns are encountered during bundling.
+- Surfaced Inventory and Accounting more clearly through Admin dashboard/menu routing and added pretty-route redirects for `/admin-catalog` and `/admin-accounting`.
+- Continued docs/schema synchronization for the current build.
