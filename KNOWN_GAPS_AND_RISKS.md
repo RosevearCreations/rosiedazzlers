@@ -1,7 +1,3 @@
-> Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
-
-> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
-
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
@@ -384,73 +380,10 @@ Partially mitigated in the newest pass:
 - Browser-side admin helpers were tightened again so transitional `x-admin-password` headers are only attached when a password is actually present on bootstrap/progress/staff screens.
 - Remaining gap focus is now concentrated in broader upload reuse, final route cleanup, deeper recovery/inventory lifecycle polish, and complete operational convergence rather than the biggest bridge-enabled admin routes.
 
-## March 31, 2026 gaps/risk reduction pass
-- Upload workflow gap is reduced again because `admin-progress.html` now reuses the signed upload flow directly instead of relying only on pasted media URLs or the separate upload helper page.
-- JSON/DB duplication risk is reduced again because shared public gear/consumables loaders now prefer `/api/catalog_public` before falling back to bundled JSON.
-- Shared-password bridge risk messaging is cleaner again, but complete operational convergence is still not finished.
-- Still remaining at the top: real staff auth/session completion everywhere, full identity consistency across every workflow, final route/bootstrap cleanup, and deeper production media strategy hardening.
 
-## April 1, 2026 recovery/jobsite/catalog convergence pass
-- Upload workflow gap is reduced again because `admin-jobsite.html` now reuses the signed upload flow directly for pre-inspection/jobsite media and can append uploaded URLs into the intake photo fields without leaving the screen.
-- Recovery operations risk is reduced because `admin-recovery.html` now surfaces recovery audit visibility and a manual queue path for resend/escalation workflows while preferring the signed-in staff session first.
-- JSON drift risk is reduced again because shared consumables loaders now prefer the DB-backed public catalog and only fall back through legacy JSON snapshots when needed.
-- Still not honestly complete: full real staff auth/session across every internal screen, final identity normalization in every workflow, final route/bootstrap cleanup, and complete removal of all transitional bridge assumptions.
-
-## April 2, 2026 blocks/risk convergence pass
-- Old/new endpoint overlap risk is reduced again because `admin-blocks.html` now uses the newer role-aware `/api/admin/blocks_list` and `/api/admin/blocks_save` paths instead of continuing to rely only on the older single-purpose block endpoints.
-- UI cohesion gap is reduced because Blocks now supports direct date-range closures for multi-day downtime such as 2 days, 3 weeks, or 1 month instead of forcing staff to block only one date at a time.
-- Shared-password bridge risk is reduced slightly again because the blocks screen now treats the transitional password more explicitly as fallback-only wording while continuing to prefer the signed-in staff session first.
-- JSON duplication/drift risk remains on some other routes, but the active schedule-block path is now more aligned with the newer canonical admin direction.
-- Still not honestly complete: full real staff auth/session everywhere, full workflow identity normalization, final route/bootstrap/helper cleanup, complete bridge retirement, and deeper production media hardening.
-
-> Last reviewed in the April 2, 2026 blocks/risk convergence pass.
-
-
-## April 3, 2026 mobile booking / finance / inventory pass
-- Admin booking workflow now supports manual staff-created detailing records from phone or desktop through `admin-booking.html` and `/api/admin/booking_save`.
-- Added booking finance ledger tracking through `/api/admin/booking_finance` using `booking_events` so deposits, final payments, tips, refunds, and other manual collection entries can be recorded immediately without waiting for a dedicated payments table.
-- Admin catalog intake is more phone-friendly again: supplier entry remains free-form, consumables can keep `estimated_jobs_per_unit` for multi-detail usage, and barcode-assisted intake now helps capture UPC/EAN codes into the item notes while drafting an Amazon search link.
-- This pass moves the known gaps forward, especially UI cohesion, mobile operations, and operational payment/tip tracking, but it does not honestly finish the full auth/session and workflow identity gaps yet.
-
-
-## April 3, 2026 mobile booking / payment / inventory pass
-- UI cohesion gap is reduced because `admin-booking.html` now supports manual staff-created detailing records from either phone or desktop instead of assuming every live record starts only from the public booking flow.
-- Operational payment tracking gap is reduced because `/api/admin/booking_finance` now records deposits, final payments, tips, refunds, and other manual collection entries into the booking audit trail so staff can track real-world collection events immediately.
-- Inventory intake gap is reduced because `admin-catalog.html` is more phone-friendly again, keeps supplier entry flexible for Amazon or local vendors, and now includes barcode-assisted intake to help capture UPC/EAN codes while drafting an Amazon lookup path.
-- Consumables workflow clarity is improved because the existing `estimated_jobs_per_unit` field is now surfaced more explicitly as the multi-detail usage model for products such as waxes, cleaners, and dressings that span several vehicles.
-- Still not honestly complete: full real staff auth/session on every internal route, full actor normalization across every booking-adjacent workflow, final duplicate-route/bootstrap cleanup, and deeper dedicated payments/media hardening.
-
-## April 3, 2026 UI / session / video pass
-- Continued route-by-route UI cleanup by moving more admin pages toward signed-in staff session usage instead of password-only page flows.
-- Tightened global CSS for dark-mode form usability, including calendar-icon visibility and better wrapping for row-based inputs/buttons on smaller screens.
-- Refreshed the public video/social experience so YouTube remains the main playback surface while Instagram supports reels, work photos, and single-image proof-of-work posting.
-- Continued docs/schema synchronization for the current build; no new schema migration was required in this pass.
-
-
-
-## April 4, 2026 mobile shell / security / cleanup pass
-- Tightened shared CSS again for mobile form wrapping, input/button crowding, and dark-mode date-picker visibility so calendar icons remain visible on dark surfaces.
-- Added a real installable app shell foundation with `manifest.webmanifest`, `service-worker.js`, and an install banner so the field/detailer workflow feels more complete on phones.
-- Continued mobile-first field direction by linking admins and detailers into the same live job workflow path; admins can still act as detailers and work through arrival, evidence capture, sign-off, and billing from the phone side.
-- Reduced duplicate-route/file clutter slightly by renaming clearly unlinked legacy block endpoints and one accidental duplicate notes file with an `RM_` prefix for safe removal review.
-- Still not honestly complete: full role-aware auth/session convergence on every remaining internal route, final actor normalization everywhere, and total retirement of all transitional bridge assumptions.
-
-
-## April 4, 2026 accounting / password / roadmap pass
-- Added an `accounting_records` table + migration so bookings now seed a basic accounting interface record immediately and finance updates can keep that record in sync for future revenue/tax/inventory-cost expansion.
-- Added an internal Accounting screen and continued moving Admin tooling toward a session-first operational workflow.
-- Added Admin-side password reset controls for staff users, including other Admins, through the existing session-aware password endpoint.
-- Continued CSS/mobile polish and docs/schema synchronization for the current build.
-
-## April 4, 2026 mobile fit / session cleanup / closeout pass
-- Continued mobile-app fit work with safer wrapping, safe-area spacing, sticky field-action support, and smoother button/input behavior on smaller screens.
-- Moved more internal workflow toward session-first behavior by cleaning Admin Staff loading wording/behavior and removing another obvious password-first assumption from the live monitor screen.
-- Improved the phone/detailer job screen with stronger quick links into Jobsite, Progress, and Accounting so the field workflow is more complete from one mobile surface.
-- Continued docs/schema synchronization for the current build while narrowing the remaining truly-open items to auth/session convergence, actor normalization, final duplicate-route cleanup, and deeper production hardening.
-
-<!-- Last synchronized: April 4, 2026. Reviewed during the mobile fit / session cleanup / closeout pass. -->
-
-
-## April 4, 2026 add-on image wiring fix
-- Add-on media drift risk is reduced again because the Services-page renderer no longer depends only on an outdated partial add-on image map and now prefers each add-on's canonical `image_url` value first.
-- The four previously missing add-on cards (`full_clay_treatment`, `two_stage_polish`, `high_grade_paint_sealant`, and `uv_protectant_applied_on_interior_panels`) are now aligned to local PNG asset paths in both pricing catalog copies.
+## April 4, 2026 booking/query/vehicle/CSS fix pass
+- Fixed the admin booking search query so it no longer requests a non-existent `bookings.updated_at` column on the live schema.
+- Cleaned internal dashboard links away from `/admin.html` to `/admin` and added a safer admin redirect path.
+- Tightened public/mobile UI again by shrinking the Services vehicle-size selector footprint, reducing the Pricing vehicle size chart preview, and forcing date/time inputs onto a light control surface for better picker visibility.
+- Upgraded Book vehicle entry so year, make, and model now accept typed input with suggestion lists while still supporting default size/category/body inference and manual overrides.
+- Continued docs/schema synchronization for the current build.

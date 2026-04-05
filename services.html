@@ -83,10 +83,10 @@
 
       <div class="hr"></div>
 
-      <div class="row">
-        <label style="display:flex;flex-direction:column;gap:6px;min-width:220px">
+      <div class="row service-size-tools">
+        <label class="compact-stack">
           <span class="muted">Vehicle size (changes card pricing/images)</span>
-          <select id="sizeSel">
+          <select id="sizeSel" class="compact-control">
             <option value="small">Small</option>
             <option value="mid">Mid-sized</option>
             <option value="oversize">Over-size / Exotic</option>
@@ -201,10 +201,6 @@
       external_ceramic_coating: "External Ceramic coating add on service.png",
       external_graphene_fine_finish: "External Graphene Fine finish add on service.png",
       external_wax: "External Wax add on service.png",
-      full_clay_treatment: "full_clay_treatment.png",
-      two_stage_polish: "two_stage_polish.png",
-      high_grade_paint_sealant: "high_grade_paint_sealant.png",
-      uv_protectant_applied_on_interior_panels: "uv_protectant_applied_on_interior_panels.png",
       vinyl_wrapping: "Vinyl Wrapping add on service.png",
       window_tinting: "Window Tinting add on service.png",
     };
@@ -294,8 +290,8 @@
     }
 
     function buildAddonCard(addon){
-      const mappedImgName = ADDON_IMAGES[addon.code] || null;
-      const img = addon.image_url || (mappedImgName ? imgUrlFromFilename(mappedImgName) : null);
+      const imgName = ADDON_IMAGES[addon.code] || null;
+      const img = imgName ? imgUrlFromFilename(imgName) : null;
 
       const el = document.createElement("div");
       el.className = "panel";

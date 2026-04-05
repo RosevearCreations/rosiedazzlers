@@ -11,10 +11,10 @@
 <body data-page="admin-recovery">
   <header class="nav">
     <div class="nav-inner">
-      <a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers Admin</strong></a>
+      <a class="brand" href="/admin"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers Admin</strong></a>
       <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button>
       <nav id="navLinks" class="nav-links">
-        <a href="/admin.html">Dashboard</a>
+        <a href="/admin">Dashboard</a>
         <a href="/admin-app.html">App</a>
         <a href="/admin-analytics.html">Analytics</a>
         <a href="/admin-recovery.html">Recovery</a>
@@ -25,7 +25,7 @@
   </header>
 
   <main class="container">
-    <section class="section"><div class="hero"><div><div class="badge">Admin Recovery</div><h1>Recovery templates and testing</h1><p>Manage persisted recovery templates, preview token replacement, send safe provider-routed test messages, and review queued/sent recovery audit activity.</p></div><div class="panel"><div class="kicker">Current access</div><h3 id="recoveryActorTitle" style="margin:6px 0 8px">Checking session…</h3><div id="recoveryActorMeta" class="kicker">Signed-in staff access is preferred.</div></div></div></section>
+    <section class="section"><div class="hero"><div><div class="badge">Admin Recovery</div><h1>Recovery templates and testing</h1><p>Manage persisted recovery templates, preview token replacement, and send safe provider-routed test messages.</p></div></div></section>
     <section class="section"><div id="pageNotice" class="notice">Ready.</div></section>
 
     <section class="section">
@@ -33,7 +33,7 @@
         <div class="panel">
           <h2>Template editor</h2>
           <form id="templateForm" class="form">
-            <label>Transitional fallback password<input id="adminPassword" type="password" autocomplete="off" placeholder="Only use if temporary fallback is still enabled" /></label>
+            <label>Admin password<input id="adminPassword" type="password" autocomplete="current-password" required /></label>
             <label>Template key<input id="templateKey" type="text" placeholder="abandoned_checkout_email" required /></label>
             <label>Channel<select id="templateChannel"><option value="email">Email</option><option value="sms">SMS</option></select></label>
             <label>Provider<input id="templateProvider" type="text" value="manual" placeholder="manual, resend, twilio, etc." /></label>
@@ -74,34 +74,7 @@
     <section class="section">
       <div class="panel">
         <h2>Saved templates</h2>
-        <div id="templateList" class="grid" style="margin-top:12px"><div class="notice">Load templates using the signed-in staff session.</div></div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="grid cards">
-        <div class="panel">
-          <h2>Recovery audit</h2>
-          <form id="auditForm" class="form">
-            <label>Template key filter<select id="auditTemplateKey"><option value="">All recovery activity</option></select></label>
-            <label>Result limit<input id="auditLimit" type="number" min="1" max="100" value="25" /></label>
-            <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost" type="submit">Refresh audit</button></div>
-          </form>
-          <div id="auditList" class="grid" style="margin-top:12px"><div class="notice">Load audit activity with the signed-in staff session.</div></div>
-        </div>
-
-        <div class="panel">
-          <h2>Manual recovery queue</h2>
-          <form id="queueForm" class="form">
-            <label>Channel<select id="queueChannel"><option value="email">Email</option><option value="sms">SMS</option></select></label>
-            <label>Customer email<input id="queueCustomerEmail" type="email" placeholder="customer@example.com" /></label>
-            <label>Recipient phone<input id="queueRecipientPhone" type="text" placeholder="+15195551234" /></label>
-            <label>Stripe/session id<input id="queueSessionId" type="text" placeholder="Optional checkout session id" /></label>
-            <label>Observed page events<input id="queuePageEvents" type="number" min="0" step="1" value="0" /></label>
-            <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" type="submit">Queue manual recovery</button></div>
-          </form>
-          <div id="queueOutput" class="kicker" style="margin-top:12px">Use this for manual resend / escalation when a recovery follow-up should be queued again.</div>
-        </div>
+        <div id="templateList" class="grid" style="margin-top:12px"><div class="notice">Load templates with an admin password.</div></div>
       </div>
     </section>
   </main>
@@ -112,27 +85,11 @@
     import { setBrandImages, setFooter } from "/assets/site.js";
 
     let templates = [];
-    let actor = null;
     const byId = (id) => document.getElementById(id);
 
     function esc(v) { return String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;"); }
     function setNotice(message, kind="") { const el=byId("pageNotice"); el.className = kind ? `notice ${kind}` : "notice"; el.textContent = message; }
     function adminHeaders(password){ return { "Content-Type":"application/json", ...(password ? { "x-admin-password": password } : {}) }; }
-    function currentPassword(){ return byId("adminPassword")?.value.trim() || ""; }
-    async function loadActorMeta(){
-      try {
-        const res = await fetch("/api/admin/auth_me", { credentials:"include", cache:"no-store" });
-        const data = await res.json().catch(() => null);
-        if (!res.ok || !data?.ok || !data?.actor) throw new Error(data?.error || "No session");
-        actor = data.actor;
-        byId("recoveryActorTitle").textContent = actor.full_name || actor.email || "Staff";
-        byId("recoveryActorMeta").textContent = `${actor.role_code || 'staff'} session active. Transitional fallback password is optional only.`;
-      } catch {
-        actor = null;
-        byId("recoveryActorTitle").textContent = "No active staff session";
-        byId("recoveryActorMeta").textContent = "Use the transitional fallback password only if compatibility is still enabled.";
-      }
-    }
 
     function readRulesJson() {
       try { return JSON.parse(byId("templateRules").value || "{}"); }
@@ -140,12 +97,10 @@
     }
 
     function fillTemplateOptions() {
-      const options = templates.length
+      const sel = byId("previewTemplateKey");
+      sel.innerHTML = templates.length
         ? templates.map(t => `<option value="${esc(t.template_key)}">${esc(t.template_key)} (${esc(t.channel)})</option>`).join("")
         : `<option value="">No templates saved yet</option>`;
-      byId("previewTemplateKey").innerHTML = options;
-      const auditSel = byId("auditTemplateKey");
-      if (auditSel) auditSel.innerHTML = `<option value="">All recovery activity</option>` + (templates.length ? templates.map(t => `<option value="${esc(t.template_key)}">${esc(t.template_key)}</option>`).join("") : "");
     }
 
     function renderTemplates() {
@@ -260,73 +215,25 @@
       `;
     }
 
-    function renderAudit(items) {
-      const wrap = byId("auditList");
-      if (!items.length) {
-        wrap.innerHTML = `<div class="notice">No recovery audit rows found for this filter.</div>`;
-        return;
-      }
-      wrap.innerHTML = items.map((row) => `
-        <article class="card">
-          <div class="kicker">${esc(row.created_at || '—')} · ${esc(row.channel || '—')} · ${esc(row.status || 'queued')}</div>
-          <h3>${esc(row.subject || row.event_type || 'Recovery event')}</h3>
-          <p>${esc(row.recipient_email || row.recipient_phone || 'No recipient recorded')}</p>
-          <p>Attempts: ${esc(row.attempt_count || 0)}${row.processed_at ? ` · Processed: ${esc(row.processed_at)}` : ''}</p>
-          ${row.last_error ? `<div class="hr"></div><p><strong>Last error:</strong> ${esc(row.last_error)}</p>` : ``}
-          ${row.payload ? `<details style="margin-top:8px"><summary>Payload</summary><pre style="white-space:pre-wrap">${esc(JSON.stringify(row.payload, null, 2))}</pre></details>` : ``}
-        </article>
-      `).join("");
-    }
-
-    async function loadAudit(password) {
-      const res = await fetch('/api/admin/recovery_audit_list', {
-        method:'POST',
-        headers: adminHeaders(password),
-        body: JSON.stringify({ template_key: byId('auditTemplateKey').value, limit: Number(byId('auditLimit').value || 25) })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data?.ok) throw new Error(data.error || 'Could not load recovery audit.');
-      renderAudit(Array.isArray(data.items) ? data.items : []);
-      return data;
-    }
-
-    async function queueManualRecovery(password) {
-      const payload = {
-        channel: byId('queueChannel').value,
-        customer_email: byId('queueCustomerEmail').value.trim(),
-        recipient_phone: byId('queueRecipientPhone').value.trim(),
-        session_id: byId('queueSessionId').value.trim() || null,
-        page_events: Number(byId('queuePageEvents').value || 0)
-      };
-      const res = await fetch('/api/admin/abandoned_recovery_enqueue', {
-        method:'POST',
-        headers: adminHeaders(password),
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data?.ok) throw new Error(data.error || 'Could not queue recovery event.');
-      byId('queueOutput').textContent = `${data.queued || 0} recovery event(s) queued.`;
-      return data;
-    }
-
     async function boot() {
       setBrandImages();
       setFooter();
       byId("templateForm").addEventListener("submit", async (e) => {
         e.preventDefault();
-        const password = currentPassword();
+        const password = byId("adminPassword").value.trim();
+        if (!password) return setNotice("Admin password is required.", "bad");
         try {
           setNotice("Saving recovery template…");
           await saveTemplate(password);
           await fetchTemplates(password);
-          await loadAudit(password);
           setNotice("Recovery template saved.", "ok");
         } catch (err) {
           setNotice(err.message || "Could not save template.", "bad");
         }
       });
       byId("buildPreviewBtn").addEventListener("click", async () => {
-        const password = currentPassword();
+        const password = byId("adminPassword").value.trim();
+        if (!password) return setNotice("Admin password is required.", "bad");
         try {
           setNotice("Building recovery preview…");
           const data = await buildPreview(password, false);
@@ -337,7 +244,8 @@
         }
       });
       byId("sendTestBtn").addEventListener("click", async () => {
-        const password = currentPassword();
+        const password = byId("adminPassword").value.trim();
+        if (!password) return setNotice("Admin password is required.", "bad");
         try {
           setNotice("Sending test recovery message…");
           const data = await buildPreview(password, true);
@@ -348,50 +256,16 @@
         }
       });
       byId("adminPassword").addEventListener("change", async () => {
-        try {
-          setNotice("Refreshing recovery tools…");
-          await fetchTemplates(currentPassword());
-          await loadAudit(currentPassword());
-          setNotice("Recovery tools refreshed.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not refresh recovery tools.", "bad");
-        }
-      });
-      byId("auditForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        try {
-          setNotice("Loading recovery audit…");
-          await loadAudit(currentPassword());
-          setNotice("Recovery audit loaded.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not load recovery audit.", "bad");
-        }
-      });
-      byId("queueForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        try {
-          setNotice("Queueing manual recovery…");
-          await queueManualRecovery(currentPassword());
-          await loadAudit(currentPassword());
-          setNotice("Manual recovery queued.", "ok");
-        } catch (err) {
-          setNotice(err.message || "Could not queue manual recovery.", "bad");
-        }
+        const password = byId("adminPassword").value.trim();
+        if (!password) return;
+        try { await fetchTemplates(password); setNotice("Recovery templates loaded.", "ok"); }
+        catch (err) { setNotice(err.message || "Could not load templates.", "bad"); }
       });
       document.addEventListener("click", (e) => {
         const btn = e.target.closest("[data-load-template]");
         if (!btn) return;
         loadTemplateIntoEditor(btn.dataset.loadTemplate);
       });
-      await loadActorMeta();
-      try {
-        setNotice("Loading recovery tools…");
-        await fetchTemplates(currentPassword());
-        await loadAudit(currentPassword());
-        setNotice("Recovery tools ready.", "ok");
-      } catch (err) {
-        setNotice(err.message || "Recovery tools need a signed-in staff session or transitional fallback password.", "bad");
-      }
     }
 
     boot();

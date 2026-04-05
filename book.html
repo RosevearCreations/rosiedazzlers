@@ -129,9 +129,9 @@
         <div id="garageVehicleList" class="vehicle-quick-list" style="margin-top:8px"></div>
       </div>
       <div class="grid3" style="margin-top:12px">
-        <div><label for="veh_year">Year</label><select id="veh_year" autocomplete="off"><option value="">Select year</option></select></div>
-        <div><label for="veh_make">Make</label><select id="veh_make" autocomplete="off"><option value="">Select make</option></select></div>
-        <div><label for="veh_model">Model</label><select id="veh_model" autocomplete="off"><option value="">Select model</option></select></div>
+        <div><label for="veh_year">Year</label><input id="veh_year" list="veh_year_list" autocomplete="off" inputmode="numeric" placeholder="Type or choose year" /><datalist id="veh_year_list"></datalist></div>
+        <div><label for="veh_make">Make</label><input id="veh_make" list="veh_make_list" autocomplete="off" placeholder="Type or choose make" /><datalist id="veh_make_list"></datalist></div>
+        <div><label for="veh_model">Model</label><input id="veh_model" list="veh_model_list" autocomplete="off" placeholder="Type or choose model" /><datalist id="veh_model_list"></datalist></div>
       </div>
       <div class="grid3" style="margin-top:12px">
         <div><label for="veh_color">Colour</label><input id="veh_color" type="text" placeholder="Black, silver, blue" /></div>
@@ -348,40 +348,52 @@
       qs('#veh_category').value = vehicle.vehicle_category || '';
       qs('#veh_body').value = vehicle.body_style || '';
       qs('#veh_plate').value = vehicle.plate || '';
-      loadVehicleModels().then(()=>{ qs('#veh_model').value = vehicle.model || ''; updateSizeHint(); });
+      loadVehicleModels().then(()=>{ qs('#veh_model').value = vehicle.model || ''; applyVehicleDefaultsFromModel(); updateSizeHint(); });
       showStatus('Garage vehicle loaded into the booking form.', 'ok');
     }
 
+    let vehicleModelMeta = new Map();
     async function loadVehicleMakes(){
       const out = await fetchJsonStrict(VEHICLE_MAKES_URL);
       const years = Array.isArray(out.years) ? out.years : [];
       const makes = Array.isArray(out.makes) ? out.makes : [];
-      qs('#veh_year').innerHTML = '<option value="">Select year</option>' + years.map((y)=>`<option value="${y}">${y}</option>`).join('');
-      qs('#veh_make').innerHTML = '<option value="">Select make</option>' + makes.map((row)=>`<option value="${escapeHtml(row.make)}">${escapeHtml(row.make)}</option>`).join('');
-      qs('#veh_model').innerHTML = '<option value="">Select model</option>';
+      qs('#veh_year_list').innerHTML = years.map((y)=>`<option value="${y}"></option>`).join('');
+      qs('#veh_make_list').innerHTML = makes.map((row)=>`<option value="${escapeHtml(row.make)}"></option>`).join('');
+      qs('#veh_model_list').innerHTML = '';
     }
     async function loadVehicleModels(){
       const year = qs('#veh_year').value;
       const make = qs('#veh_make').value;
-      const modelSel = qs('#veh_model');
-      if (!year || !make) { modelSel.innerHTML = '<option value="">Select model</option>'; return; }
-      modelSel.innerHTML = '<option value="">Loading models…</option>';
+      const modelSel = qs('#veh_model_list');
+      if (!year || !make) { modelSel.innerHTML = ''; return; }
       const out = await fetchJsonStrict(`${VEHICLE_MODELS_URL}?year=${encodeURIComponent(year)}&make=${encodeURIComponent(make)}`);
       const models = Array.isArray(out.models) ? out.models : [];
-      modelSel.innerHTML = '<option value="">Select model</option>' + models.map((row)=>`<option value="${escapeHtml(row.model)}" data-size="${escapeHtml(row.size_bucket || '')}" data-type="${escapeHtml(row.vehicle_type || '')}" data-exotic="${row.is_exotic ? '1' : '0'}">${escapeHtml(row.model)}${row.category_label ? ` — ${escapeHtml(row.category_label)}` : ''}</option>`).join('');
+      vehicleModelMeta = new Map();
+      modelSel.innerHTML = models.map((row)=>{
+        const key = String(row.model || '').trim().toLowerCase();
+        if (key) vehicleModelMeta.set(key, row);
+        return `<option value="${escapeHtml(row.model)}"></option>`;
+      }).join('');
     }
-    qs('#veh_year').addEventListener('change', loadVehicleModels); qs('#veh_make').addEventListener('change', loadVehicleModels);
-    qs('#veh_model').addEventListener('change', ()=>{
-      const opt = qs('#veh_model').selectedOptions[0];
-      if (!opt) return;
-      if (opt.dataset.size && !qs('#vehicle_size').value) qs('#vehicle_size').value = opt.dataset.size;
-      if (opt.dataset.type && !qs('#veh_body').value) {
-        const t = opt.dataset.type.toLowerCase();
-        qs('#veh_body').value = t.includes('truck') ? 'truck' : t.includes('multipurpose') ? 'suv' : t.includes('van') ? 'van' : 'sedan';
+    function applyVehicleDefaultsFromModel(){
+      const key = String(qs('#veh_model').value || '').trim().toLowerCase();
+      const row = vehicleModelMeta.get(key);
+      if (!row) { updateSizeHint(); return; }
+      if (row.size_bucket && !qs('#vehicle_size').value) qs('#vehicle_size').value = row.size_bucket;
+      if (!qs('#veh_body').value && row.vehicle_type) {
+        const t = String(row.vehicle_type).toLowerCase();
+        qs('#veh_body').value = t.includes('truck') ? 'truck' : t.includes('multipurpose') || t.includes('suv') ? 'suv' : t.includes('van') ? 'van' : 'sedan';
       }
-      if (opt.dataset.exotic === '1' && !qs('#veh_category').value) qs('#veh_category').value = 'exotic';
+      if (!qs('#veh_category').value) {
+        if (row.is_exotic) qs('#veh_category').value = 'exotic';
+        else if (row.category_label && String(row.category_label).toLowerCase().includes('lux')) qs('#veh_category').value = 'luxury';
+      }
       updateSizeHint();
-    });
+    }
+    ['#veh_year','#veh_make'].forEach((selector)=>qs(selector).addEventListener('change', loadVehicleModels));
+    ['#veh_year','#veh_make'].forEach((selector)=>qs(selector).addEventListener('input', loadVehicleModels));
+    qs('#veh_model').addEventListener('change', applyVehicleDefaultsFromModel);
+    qs('#veh_model').addEventListener('input', applyVehicleDefaultsFromModel);
     ['#veh_body','#veh_category','#vehicle_size'].forEach((selector)=>qs(selector).addEventListener('change', updateSizeHint));
 
     async function loadAvailabilityOptions(){

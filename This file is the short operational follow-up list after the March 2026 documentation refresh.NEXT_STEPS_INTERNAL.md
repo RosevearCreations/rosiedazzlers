@@ -1,7 +1,3 @@
-> Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
-
-> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
-
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
@@ -156,18 +152,3 @@ That is the most important next step because the backend is now strong enough to
 ## One-sentence summary
 
 The next Rosie Dazzlers phase should focus on **real staff auth, consistent staff identity, gift redemption, upload flow, and internal workflow polish** rather than simply adding more disconnected backend pieces.
-
-## March 31, 2026 sync
-- progress screen now reuses signed file upload directly
-- public catalog loaders moved further toward DB-first behavior
-- no new SQL migration required in this pass
-
-> Last reviewed in the April 2, 2026 blocks/risk convergence pass.
-
-## April 3, 2026 UI / session / video pass
-- Continued route-by-route UI cleanup by moving more admin pages toward signed-in staff session usage instead of password-only page flows.
-- Tightened global CSS for dark-mode form usability, including calendar-icon visibility and better wrapping for row-based inputs/buttons on smaller screens.
-- Refreshed the public video/social experience so YouTube remains the main playback surface while Instagram supports reels, work photos, and single-image proof-of-work posting.
-- Continued docs/schema synchronization for the current build; no new schema migration was required in this pass.
-
-<!-- Last synchronized: April 4, 2026. Reviewed during the mobile fit / session cleanup / closeout pass. -->

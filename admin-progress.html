@@ -11,7 +11,7 @@
 <body data-page="admin-progress">
   <header class="nav">
     <div class="nav-inner">
-      <a class="brand" href="/admin.html">
+      <a class="brand" href="/admin">
         <img data-logo alt="Rosie Dazzlers logo" />
         <strong>Rosie Dazzlers Admin</strong>
       </a>
@@ -21,7 +21,7 @@
       </button>
 
       <nav id="navLinks" class="nav-links">
-        <a href="/admin.html">Dashboard</a>
+        <a href="/admin">Dashboard</a>
         <a href="/admin-booking.html">Bookings</a>
         <a href="/admin-blocks.html">Blocks</a>
         <a href="/admin-progress.html">Progress</a>
@@ -118,7 +118,7 @@
         </div>
 
         <div class="panel">
-          <h2>Attach media</h2>
+          <h2>Attach media by URL</h2>
           <form id="mediaForm" class="form">
             <label>
               Posted by
@@ -140,15 +140,8 @@
 
             <label>
               Media URL
-              <input id="mediaUrl" name="mediaUrl" type="url" placeholder="https://..." />
+              <input id="mediaUrl" name="mediaUrl" type="url" placeholder="https://..." required />
             </label>
-
-            <label>
-              Upload file
-              <input id="mediaFile" name="mediaFile" type="file" accept="image/*,video/*" capture="environment" />
-            </label>
-
-            <div class="kicker">Use either a direct media URL or upload a photo/video file from this screen.</div>
 
             <label>
               Visibility
@@ -158,9 +151,8 @@
               </select>
             </label>
 
-            <div class="row" style="margin-top:10px;gap:10px;flex-wrap:wrap">
+            <div>
               <button id="mediaBtn" class="btn primary" type="submit" disabled>Attach media</button>
-              <a class="btn ghost" href="/admin-upload.html">Open mobile upload helper</a>
             </div>
           </form>
         </div>
@@ -443,13 +435,11 @@
         const out = await res.json().catch(()=>null);
         if (!res.ok || !out?.ok || !out?.actor) throw new Error(out?.error || 'No active staff session.');
         hasSession = true;
-        currentActor = out.actor || null;
         document.querySelector('#actorMeta').textContent = `${out.actor.full_name || out.actor.email || 'Staff'} · ${out.actor.role_code || 'staff'}`;
         if (!document.querySelector('#createdBy').value.trim()) document.querySelector('#createdBy').value = out.actor.full_name || out.actor.email || '';
         if (!document.querySelector('#mediaCreatedBy').value.trim()) document.querySelector('#mediaCreatedBy').value = out.actor.full_name || out.actor.email || '';
       } catch (err) {
-        currentActor = null;
-        document.querySelector('#actorMeta').textContent = 'No staff session found. Use the transitional fallback password only if it is still enabled.';
+        document.querySelector('#actorMeta').textContent = 'No staff session found. Use the fallback password field if needed.';
       }
     }
 
@@ -471,42 +461,6 @@
       const res = await fetch("/api/admin/progress_media_post", { method: "POST", credentials:"include", headers: authHeaders(password), body: JSON.stringify({ token, created_by: createdBy, kind, caption, media_url: mediaUrl, visibility }) });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Could not attach media.");
-      return data;
-    }
-
-
-    async function createSignedUpload(password, bookingId, file) {
-      const res = await fetch('/api/admin/progress_upload_url', {
-        method: 'POST',
-        credentials:'include',
-        headers: authHeaders(password),
-        body: JSON.stringify({
-          booking_id: bookingId,
-          filename: file?.name || 'upload',
-          content_type: file?.type || 'application/octet-stream'
-        })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data?.ok) throw new Error(data.error || 'Could not prepare upload.');
-      return data;
-    }
-
-    async function saveUploadedMedia(password, bookingId, mediaUrl, mediaType, visibility, caption, staffName) {
-      const res = await fetch('/api/admin/media_save', {
-        method: 'POST',
-        credentials:'include',
-        headers: authHeaders(password),
-        body: JSON.stringify({
-          booking_id: bookingId,
-          media_url: mediaUrl,
-          media_type: mediaType,
-          visibility,
-          caption,
-          staff_name: staffName || 'Staff'
-        })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data?.ok) throw new Error(data.error || 'Could not save uploaded media.');
       return data;
     }
 
@@ -636,37 +590,18 @@
         const kind = document.querySelector("#mediaKind").value;
         const caption = document.querySelector("#mediaCaption").value.trim();
         const mediaUrl = document.querySelector("#mediaUrl").value.trim();
-        const file = document.querySelector('#mediaFile').files?.[0] || null;
         const visibility = document.querySelector("#mediaVisibility").value;
                 if (!token) return setNotice("Load a booking first.", "bad");
-        if (!createdBy) return setNotice("Posted by is required.", "bad");
-        if (!mediaUrl && !file) return setNotice("Add a media URL or choose a file to upload.", "bad");
+        if (!createdBy || !mediaUrl) return setNotice("Posted by and media URL are required.", "bad");
         try {
-          const mediaBtn = document.querySelector('#mediaBtn');
-          mediaBtn.disabled = true;
-          if (file) {
-            setNotice("Uploading media file…");
-            const signed = await createSignedUpload(password, currentBookingId, file);
-            const put = await fetch(signed.upload_url, {
-              method: 'PUT',
-              headers: { 'Content-Type': file.type || 'application/octet-stream' },
-              body: file
-            });
-            if (!put.ok) throw new Error('Upload storage rejected the file.');
-            await saveUploadedMedia(password, currentBookingId, signed.public_url, kind, visibility, caption || file.name, currentActor?.full_name || createdBy);
-          } else {
-            setNotice("Attaching media…");
-            await postMedia(password, token, createdBy, kind, caption, mediaUrl, visibility);
-          }
+          setNotice("Attaching media…");
+          await postMedia(password, token, createdBy, kind, caption, mediaUrl, visibility);
           document.querySelector("#mediaCaption").value = "";
           document.querySelector("#mediaUrl").value = "";
-          document.querySelector('#mediaFile').value = '';
           await reloadCurrent();
-          setNotice(file ? "Media uploaded and attached." : "Media attached.", "ok");
+          setNotice("Media attached.", "ok");
         } catch (err) {
           setNotice(err.message || "Could not attach media.", "bad");
-        } finally {
-          document.querySelector('#mediaBtn').disabled = false;
         }
       });
 

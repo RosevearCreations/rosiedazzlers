@@ -1,7 +1,3 @@
-> Last synchronized: April 1, 2026. Reviewed during the session-first recovery tooling, jobsite upload reuse, DB-first catalog fallback reduction, and docs/schema synchronization pass.
-
-> Last synchronized: March 31, 2026. Reviewed during the known-gaps/risk reduction, DB-first catalog convergence, progress-page upload reuse, and docs/schema synchronization pass.
-
 > Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 March 28, 2026 sync note: no new tables were required for this pass; this refresh mainly aligns UI readability, catalog presentation, and documentation with the current build.
@@ -254,27 +250,3 @@ The meaningful database change in this pass is promo-code reconciliation: the li
 
 ## March 30, 2026 structure note
 No new tables or columns were introduced in this pass. The work was focused on endpoint/auth convergence and keeping the schema snapshot aligned with the current build.
-
-## March 31, 2026 schema/doc sync note
-- No new tables, views, or columns were required in this pass.
-- The build moved further toward DB-first public catalog delivery and broader signed-upload reuse using existing structures.
-- Schema status remains aligned with the March 30, 2026 endpoint-normalization build.
-
-> Last reviewed in the April 2, 2026 blocks/risk convergence pass.
-
-## April 3, 2026 UI / session / video pass
-- Continued route-by-route UI cleanup by moving more admin pages toward signed-in staff session usage instead of password-only page flows.
-- Tightened global CSS for dark-mode form usability, including calendar-icon visibility and better wrapping for row-based inputs/buttons on smaller screens.
-- Refreshed the public video/social experience so YouTube remains the main playback surface while Instagram supports reels, work photos, and single-image proof-of-work posting.
-- Continued docs/schema synchronization for the current build; no new schema migration was required in this pass.
-
-
-
-## April 4, 2026 mobile shell / security / cleanup pass
-- Tightened shared CSS again for mobile form wrapping, input/button crowding, and dark-mode date-picker visibility so calendar icons remain visible on dark surfaces.
-- Added a real installable app shell foundation with `manifest.webmanifest`, `service-worker.js`, and an install banner so the field/detailer workflow feels more complete on phones.
-- Continued mobile-first field direction by linking admins and detailers into the same live job workflow path; admins can still act as detailers and work through arrival, evidence capture, sign-off, and billing from the phone side.
-- Reduced duplicate-route/file clutter slightly by renaming clearly unlinked legacy block endpoints and one accidental duplicate notes file with an `RM_` prefix for safe removal review.
-- Still not honestly complete: full role-aware auth/session convergence on every remaining internal route, final actor normalization everywhere, and total retirement of all transitional bridge assumptions.
-
-<!-- Last synchronized: April 4, 2026. Reviewed during the mobile fit / session cleanup / closeout pass. -->
