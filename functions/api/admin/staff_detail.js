@@ -66,7 +66,7 @@ export async function onRequestPost(context) {
 
     const staffRes = await fetch(
       `${env.SUPABASE_URL}/rest/v1/staff_users` +
-        `?select=id,created_at,updated_at,full_name,email,role_code,is_active,` +
+        `?select=id,created_at,full_name,email,role_code,is_active,` +
         `can_override_lower_entries,can_manage_bookings,can_manage_blocks,` +
         `can_manage_progress,can_manage_promos,can_manage_staff,preferred_contact_name,sms_phone,phone,address_line1,address_line2,city,province,postal_code,employee_code,position_title,hire_date,emergency_contact_name,emergency_contact_phone,vehicle_notes,vehicle_info,notes,department,admin_level,pay_schedule,hourly_rate_cents,preferred_work_hours,admin_private_notes,detailer_level,permissions_profile,personal_admin_notes,tips_payout_notes,supervisor_staff_user_id` +
         `&id=eq.${encodeURIComponent(staff_user_id)}` +
@@ -227,7 +227,7 @@ function buildBookingsUrl(env, staff) {
 
   let url =
     `${env.SUPABASE_URL}/rest/v1/bookings` +
-    `?select=id,created_at,updated_at,service_date,start_slot,status,job_status,customer_name,package_code,vehicle_size,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name` +
+    `?select=id,created_at,service_date,start_slot,status,job_status,customer_name,package_code,vehicle_size,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name` +
     `&order=service_date.desc,created_at.desc` +
     `&limit=100`;
 
