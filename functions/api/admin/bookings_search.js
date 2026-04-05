@@ -170,7 +170,7 @@ function normalizeFilters(body) {
 function buildSearchUrl(env, actor, filters) {
   let url =
     `${env.SUPABASE_URL}/rest/v1/bookings` +
-    `?select=id,created_at,updated_at,service_date,start_slot,status,job_status,customer_name,customer_email,customer_phone,package_code,vehicle_size,total_price,deposit_amount,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,progress_enabled,progress_token,notes` +
+    `?select=id,created_at,service_date,start_slot,status,job_status,customer_name,customer_email,customer_phone,package_code,vehicle_size,total_price,deposit_amount,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,progress_enabled,progress_token,notes` +
     `&order=service_date.desc,start_slot.asc,created_at.desc` +
     `&limit=${encodeURIComponent(String(filters.limit))}`;
 

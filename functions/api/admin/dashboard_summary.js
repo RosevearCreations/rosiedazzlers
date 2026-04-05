@@ -209,9 +209,9 @@ function buildBookingsUrl(env, actor, serviceDate) {
 function buildBlocksUrl(env, serviceDate) {
   return (
     `${env.SUPABASE_URL}/rest/v1/slot_blocks` +
-    `?select=id,blocked_date,slot` +
-    `&blocked_date=eq.${encodeURIComponent(serviceDate)}` +
-    ``
+    `?select=id,block_date,slot_code,is_blocked` +
+    `&block_date=eq.${encodeURIComponent(serviceDate)}` +
+    `&is_blocked=eq.true`
   );
 }
 
