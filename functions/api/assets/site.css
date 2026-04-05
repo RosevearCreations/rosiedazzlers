@@ -723,8 +723,6 @@ select.compact-control, input.compact-control, .compact-control{min-height:42px;
 .compact-stack{display:flex; flex-direction:column; gap:6px; min-width:200px; max-width:280px;}
 .compact-stack > span{font-size:.92rem;}
 .chart-preview{max-width:320px !important; width:32% !important; min-width:180px; margin-inline:auto; display:block; height:auto !important;}
-input[type="date"], input[type="datetime-local"], input[type="time"]{color-scheme:light; background:#ffffff !important; color:#0f172a !important; border-color:rgba(15,23,42,.18) !important;}
-html[data-theme="dark"] input[type="date"], html[data-theme="dark"] input[type="datetime-local"], html[data-theme="dark"] input[type="time"], body[data-theme="dark"] input[type="date"], body[data-theme="dark"] input[type="datetime-local"], body[data-theme="dark"] input[type="time"]{color-scheme:light; background:#ffffff !important; color:#0f172a !important;}
 input::-webkit-calendar-picker-indicator{opacity:1; filter:none; cursor:pointer;}
 .service-size-tools{align-items:flex-end;}
 @media (max-width: 720px){ .chart-preview{width:60% !important; min-width:140px;} .service-size-tools{align-items:stretch;} .compact-stack{max-width:none; min-width:0;} }
@@ -736,8 +734,20 @@ input::-webkit-calendar-picker-indicator{opacity:1; filter:none; cursor:pointer;
 .service-size-tools .compact-stack{min-width:150px; max-width:210px; gap:4px;}
 .service-size-tools .compact-stack .muted{font-size:.84rem; line-height:1.1;}
 .service-size-tools .compact-control{min-height:38px; padding:8px 10px;}
-input[type="date"], input[type="datetime-local"], input[type="time"], input[type="month"], input[type="week"]{appearance:auto; -webkit-appearance:auto; color-scheme:light; background:#ffffff !important; color:#0f172a !important; border-color:rgba(15,23,42,.18) !important;}
-html[data-theme="dark"] input[type="date"], html[data-theme="dark"] input[type="datetime-local"], html[data-theme="dark"] input[type="time"], html[data-theme="dark"] input[type="month"], html[data-theme="dark"] input[type="week"], body[data-theme="dark"] input[type="date"], body[data-theme="dark"] input[type="datetime-local"], body[data-theme="dark"] input[type="time"], body[data-theme="dark"] input[type="month"], body[data-theme="dark"] input[type="week"]{background:#ffffff !important; color:#0f172a !important;}
-input::-webkit-calendar-picker-indicator{opacity:1 !important; filter:invert(0) !important; background:transparent;}
 .row{row-gap:10px;}
 @media (max-width: 720px){ .chart-preview{width:40% !important; min-width:110px;} .service-size-tools .compact-stack{max-width:180px;} }
+
+
+/* date/time controls: keep dark fields, brighten picker icon */
+input[type="date"], input[type="datetime-local"], input[type="time"], input[type="month"], input[type="week"]{appearance:auto; -webkit-appearance:auto; color-scheme:dark; background:var(--panel) !important; color:var(--text) !important; border-color:rgba(255,255,255,.14) !important;}
+html[data-theme="dark"] input[type="date"], html[data-theme="dark"] input[type="datetime-local"], html[data-theme="dark"] input[type="time"], html[data-theme="dark"] input[type="month"], html[data-theme="dark"] input[type="week"], body[data-theme="dark"] input[type="date"], body[data-theme="dark"] input[type="datetime-local"], body[data-theme="dark"] input[type="time"], body[data-theme="dark"] input[type="month"], body[data-theme="dark"] input[type="week"]{background:var(--panel) !important; color:var(--text) !important; border-color:rgba(255,255,255,.14) !important;}
+input[type="date"]::-webkit-calendar-picker-indicator, input[type="datetime-local"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator, input[type="month"]::-webkit-calendar-picker-indicator, input[type="week"]::-webkit-calendar-picker-indicator{opacity:.92; cursor:pointer; filter:invert(1) brightness(1.55);}
+input[type="date"]::-webkit-datetime-edit, input[type="datetime-local"]::-webkit-datetime-edit, input[type="time"]::-webkit-datetime-edit, input[type="month"]::-webkit-datetime-edit, input[type="week"]::-webkit-datetime-edit{color:inherit;}
+
+.chart-preview{max-width:330px !important; width:33% !important; min-width:170px; margin-inline:auto; display:block; height:auto !important;}
+.service-size-tools{gap:8px 12px; align-items:end;}
+.service-size-tools .compact-stack{min-width:130px; max-width:180px; gap:2px;}
+.service-size-tools .compact-stack .muted{font-size:.76rem; line-height:1.0; letter-spacing:.01em;}
+.service-size-tools .compact-control{min-height:34px; padding:6px 10px; line-height:1.1;}
+.compact-control{font-size:.95rem;}
+@media (max-width: 720px){ .chart-preview{width:60% !important; min-width:145px;} .service-size-tools .compact-stack{max-width:150px;} .service-size-tools .compact-stack .muted{font-size:.72rem;} }
