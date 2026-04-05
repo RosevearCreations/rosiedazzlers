@@ -527,15 +527,12 @@ export async function initGearPage() {
   const grid = document.querySelector("#gearGrid");
   if (!grid) return;
 
-  const [dbCatalog, catalog, manifest] = await Promise.all([
-    fetchJsonSafe("/api/catalog_public?kind=tool"),
+  const [catalog, manifest] = await Promise.all([
     fetchJsonSafe("/data/systems_catalog.json"),
     fetchJsonSafe("/data/systems_manifest.json")
   ]);
 
-  const items = Array.isArray(dbCatalog?.items) && dbCatalog.items.length
-    ? dbCatalog.items
-    : (Array.isArray(catalog?.items) ? catalog.items : []);
+  const items = Array.isArray(catalog?.items) ? catalog.items : [];
   const files = Array.isArray(manifest?.files) ? manifest.files : [];
 
   const bySlug = new Map(
@@ -567,18 +564,12 @@ export async function initConsumablesPage() {
   const grid = document.querySelector("#consumablesGrid");
   if (!grid) return;
 
-  const [dbCatalog, catalogPrimary, catalogRebuilt, catalogCorrected, manifest] = await Promise.all([
-    fetchJsonSafe("/api/catalog_public?kind=consumable"),
+  const [catalog, manifest] = await Promise.all([
     fetchJsonSafe("/data/rosie_products_catalog.json"),
-    fetchJsonSafe("/data/rosie_products_catalog_rebuilt.json"),
-    fetchJsonSafe("/data/rosie_products_catalog_r2_corrected.json"),
     fetchJsonSafe("/data/RosieProducts_manifest.json")
   ]);
 
-  const fallbackCatalog = [catalogCorrected, catalogRebuilt, catalogPrimary].find((row) => Array.isArray(row?.items) && row.items.length) || null;
-  const items = Array.isArray(dbCatalog?.items) && dbCatalog.items.length
-    ? dbCatalog.items
-    : (Array.isArray(fallbackCatalog?.items) ? fallbackCatalog.items : []);
+  const items = Array.isArray(catalog?.items) ? catalog.items : [];
   const files = Array.isArray(manifest?.files) ? manifest.files : [];
 
   const bySlug = new Map(

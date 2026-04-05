@@ -28,82 +28,10 @@ const DEFAULT_NAV_LINKS = [
   ["/gear", "Gear"],
   ["/consumables", "Consumables"],
   ["/about", "About"],
-  ["/videos", "Videos"],
   ["/contact", "Contact"],
   ["/book", "Book"],
 ];
 
-
-
-let deferredInstallPrompt = null;
-
-function ensureMetaTag(selector, attrs) {
-  let el = document.head.querySelector(selector);
-  if (!el) {
-    el = document.createElement("meta");
-    document.head.appendChild(el);
-  }
-  Object.entries(attrs || {}).forEach(([k, v]) => el.setAttribute(k, v));
-  return el;
-}
-
-function ensureAppShellMeta() {
-  ensureMetaTag('meta[name="theme-color"]', { name: 'theme-color', content: '#08111f' });
-  ensureMetaTag('meta[name="apple-mobile-web-app-capable"]', { name: 'apple-mobile-web-app-capable', content: 'yes' });
-  ensureMetaTag('meta[name="apple-mobile-web-app-status-bar-style"]', { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' });
-  let manifest = document.head.querySelector('link[rel="manifest"]');
-  if (!manifest) {
-    manifest = document.createElement('link');
-    manifest.rel = 'manifest';
-    manifest.href = '/manifest.webmanifest';
-    document.head.appendChild(manifest);
-  }
-}
-
-function renderInstallBanner() {
-  if (document.querySelector('[data-install-banner]')) return;
-  const host = document.querySelector('main.container, main.shell, .container main, main') || document.body;
-  if (!host) return;
-  const path = normalizePath(location.pathname);
-  const isInternal = path.startsWith('/admin') || path === '/detailer-jobs';
-  const banner = document.createElement('section');
-  banner.className = 'app-install-banner';
-  banner.setAttribute('data-install-banner', '1');
-  banner.innerHTML = isInternal
-    ? `<h2>Install the field app</h2><p class="muted">Use the phone app for arrivals, checklists, photos, sign-off, and billing while the office side stays on desktop.</p><div class="mobile-work-grid"><div class="card"><strong>Arrival</strong><p class="muted">Walk-around, prior issues, and intake notes.</p></div><div class="card"><strong>Evidence</strong><p class="muted">Photo capture and progress updates without leaving the job.</p></div><div class="card"><strong>Finish</strong><p class="muted">Customer sign-off plus final billing and tips.</p></div></div><div class="app-install-actions"><button type="button" class="btn primary" data-install-app hidden>Install app</button><button type="button" class="btn ghost" data-close-install>Dismiss</button></div>`
-    : `<h2>Save Rosie Dazzlers to your phone</h2><p class="muted">Install the site for faster booking, progress checks, and account access.</p><div class="app-install-actions"><button type="button" class="btn primary" data-install-app hidden>Install app</button><button type="button" class="btn ghost" data-close-install>Dismiss</button></div>`;
-  host.insertBefore(banner, host.firstChild);
-  banner.querySelector('[data-close-install]')?.addEventListener('click',()=>banner.remove());
-  const installBtn = banner.querySelector('[data-install-app]');
-  if (installBtn) {
-    if (deferredInstallPrompt) installBtn.hidden = false;
-    installBtn.addEventListener('click', async ()=>{
-      if (!deferredInstallPrompt) return;
-      deferredInstallPrompt.prompt();
-      try { await deferredInstallPrompt.userChoice; } catch {}
-      deferredInstallPrompt = null;
-      installBtn.hidden = true;
-    });
-  }
-}
-
-function registerAppShell() {
-  ensureAppShellMeta();
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/service-worker.js').catch(() => {});
-    }, { once: true });
-  }
-  window.addEventListener('beforeinstallprompt', (event) => {
-    event.preventDefault();
-    deferredInstallPrompt = event;
-    document.querySelectorAll('[data-install-app]').forEach((btn)=>{ btn.hidden = false; });
-  });
-  window.addEventListener('appinstalled', () => {
-    deferredInstallPrompt = null;
-    document.querySelectorAll('[data-install-app]').forEach((btn)=>{ btn.hidden = true; });
-  });
-}
 function normalizePath(p) {
   const x = (p || "/").replace(/\/+$/, "");
   return x === "" ? "/" : x;
@@ -648,14 +576,12 @@ async function initAccountWidget() {
 
 function initChrome() {
   ensureNavLinks();
-  registerAppShell();
   setBrandImagesEverywhere();
   ensureMainBanner();
   ensureReviewsPanel();
   setActiveNavLink();
   initNavToggle();
   setFooter();
-  renderInstallBanner();
   initAccountWidget();
 
   attachRotators("#homePackages");

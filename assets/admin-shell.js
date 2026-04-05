@@ -104,7 +104,7 @@
     const wrap = document.createElement("div");
     wrap.className = "admin-return-bar";
     wrap.innerHTML = `
-      <a class="btn ghost small" href="/admin.html">← Admin Dashboard</a>
+      <a class="btn ghost small" href="/admin">← Admin Dashboard</a>
       <a class="btn ghost small" href="/admin-account.html">Account</a>
       <a class="btn ghost small" href="/admin-analytics.html">Analytics</a>
       <span class="crumb">${pageKey || "admin"}</span>
