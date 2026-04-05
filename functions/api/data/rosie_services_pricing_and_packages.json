@@ -333,7 +333,7 @@
       ],
       "category": "paint correction",
       "type": "surface prep",
-      "image_url": "/assets/addons/full_clay_treatment.png"
+      "image_url": "https://assets.rosiedazzlers.ca/assets/addons/full_clay_treatment.svg"
     },
     {
       "code": "two_stage_polish",
@@ -350,7 +350,7 @@
       ],
       "category": "paint correction",
       "type": "machine polishing",
-      "image_url": "/assets/addons/two_stage_polish.png"
+      "image_url": "/assets/addons/two_stage_polish.svg"
     },
     {
       "code": "high_grade_paint_sealant",
@@ -364,7 +364,7 @@
       "source": "interpreted_pricing",
       "category": "paint protection",
       "type": "sealant",
-      "image_url": "/assets/addons/high_grade_paint_sealant.png",
+      "image_url": "/assets/addons/high_grade_paint_sealant.svg",
       "notes": [
         "Longer-lasting gloss"
       ]
@@ -381,7 +381,7 @@
       "source": "interpreted_pricing",
       "category": "interior protection",
       "type": "uv protectant",
-      "image_url": "/assets/addons/uv_protectant_applied_on_interior_panels.png",
+      "image_url": "https://assets.rosiedazzlers.ca/assets/addons/uv_protectant_applied_on_interior_panels.svg",
       "notes": [
         "Interior panel dressing"
       ]

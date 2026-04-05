@@ -72,13 +72,6 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-live")
     },
     {
-      key: "detailer-jobs",
-      label: "Detailer Jobs",
-      href: "/detailer-jobs",
-      description: "Accept work, post updates, complete jobs",
-      visible: () => globalScope.AdminAuth.canAccessPage("admin-live")
-    },
-    {
       key: "admin-staff",
       label: "Staff",
       href: "/admin-staff",
@@ -94,41 +87,12 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-app")
     },
     {
-      key: "admin-catalog",
-      label: "Catalog",
-      href: "/admin-catalog",
-      description: "Tools, systems, consumables",
-      visible: () => globalScope.AdminAuth.canAccessPage("admin-catalog")
-    },
-    {
       key: "admin-customers",
       label: "Customers",
       href: "/admin-customers",
       description: "Profiles and tiers",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-customers")
     },
-    {
-      key: "admin-notifications",
-      label: "Notifications",
-      href: "/admin-notifications",
-      description: "Queued notices and hooks",
-      visible: () => globalScope.AdminAuth.canAccessPage("admin-notifications")
-    },
-    {
-      key: "admin-accounting",
-      label: "Accounting",
-      href: "/admin-accounting",
-      description: "Orders, collections, and balance due",
-      visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting")
-    },
-    {
-      key: "admin-analytics",
-      label: "Analytics",
-      href: "/admin-analytics",
-      description: "Visitors, referrers, abandoned checkouts",
-      visible: () => globalScope.AdminAuth.canAccessPage("admin-analytics")
-    },
-
     {
       key: "admin-promos",
       label: "Promos",
