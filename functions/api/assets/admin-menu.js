@@ -86,6 +86,14 @@
       description: "Roles, screens, feature access",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-app")
     },
+
+    {
+      key: "admin-accounting",
+      label: "Accounting",
+      href: "/admin-accounting",
+      description: "Office ledger and collections",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting")
+    },
     {
       key: "admin-customers",
       label: "Customers",
