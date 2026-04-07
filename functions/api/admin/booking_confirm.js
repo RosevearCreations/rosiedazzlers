@@ -3,7 +3,7 @@
 // Role-aware booking confirm / unconfirm endpoint.
 //
 // What this file does:
-// - prefers signed-in staff session access
+// - keeps current ADMIN_PASSWORD bridge protection
 // - requires manage_bookings capability
 // - confirms a booking by setting status/job_status consistently
 // - can return a booking to pending when needed
@@ -20,7 +20,7 @@
 // - confirmed=false -> status=pending,   job_status=scheduled
 //
 // Request headers supported:
-// - x-admin-password: transitional compatibility only when explicitly used
+// - x-admin-password: required
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -65,7 +65,7 @@ export async function onRequestPost(context) {
       body,
       capability: "manage_bookings",
       bookingId: booking_id,
-      allowLegacyAdminFallback: false
+      allowLegacyAdminFallback: true
     });
 
     if (!access.ok) {

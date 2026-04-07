@@ -3,7 +3,7 @@
 // Role-aware customer profile delete endpoint.
 //
 // What this file does:
-// - prefers signed-in staff session access
+// - keeps current ADMIN_PASSWORD bridge protection
 // - requires manage_bookings capability
 // - permanently deletes one customer_profiles row
 // - intended for true admin cleanup cases, not normal edits
@@ -18,7 +18,7 @@
 // - Use this only when the customer profile should be removed entirely
 //
 // Request headers supported:
-// - x-admin-password: transitional compatibility only when explicitly used
+// - x-admin-password: required
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -57,7 +57,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "manage_bookings",
-      allowLegacyAdminFallback: false
+      allowLegacyAdminFallback: true
     });
 
     if (!access.ok) {

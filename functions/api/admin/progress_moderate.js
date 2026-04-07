@@ -12,7 +12,7 @@ export async function onRequestPost({ request, env }) {
     if (!['update','media'].includes(entity) || !id) return withCors(json({ error: 'Missing entity or id.' }, 400));
     if (!['visible','hidden','internal_only','pinned'].includes(action)) return withCors(json({ error: 'Invalid action.' }, 400));
 
-    const access = await requireStaffAccess({ request, env, body, capability: 'manage_progress', allowLegacyAdminFallback: false });
+    const access = await requireStaffAccess({ request, env, body, capability: 'manage_progress', allowLegacyAdminFallback: true });
     if (!access.ok) return withCors(access.response);
 
     const table = entity === 'media' ? 'job_media' : 'job_updates';

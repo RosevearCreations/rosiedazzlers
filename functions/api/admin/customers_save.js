@@ -3,7 +3,7 @@
 // Role-aware customer save endpoint.
 //
 // What this file does:
-// - prefers signed-in staff session access
+// - keeps current ADMIN_PASSWORD bridge protection
 // - requires manage_bookings capability
 // - creates new customer_profiles rows
 // - updates existing customer_profiles rows
@@ -21,7 +21,7 @@
 // }
 //
 // Request headers supported:
-// - x-admin-password: transitional compatibility only when explicitly used
+// - x-admin-password: required
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -52,7 +52,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "manage_bookings",
-      allowLegacyAdminFallback: false
+      allowLegacyAdminFallback: true
     });
 
     if (!access.ok) {

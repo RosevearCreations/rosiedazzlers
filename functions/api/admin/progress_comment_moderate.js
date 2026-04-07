@@ -13,7 +13,7 @@ export async function onRequestPost(context){
     if (!['visible','hidden','removed'].includes(thread_status)) return withCors(json({ error:'thread_status must be visible, hidden, or removed.' },400));
     if (visibility !== undefined && visibility && !['customer','internal'].includes(visibility)) return withCors(json({ error:'visibility must be customer or internal.' },400));
 
-    const access = await requireStaffAccess({ request, env, body, capability:'manage_progress', allowLegacyAdminFallback:false });
+    const access = await requireStaffAccess({ request, env, body, capability:'manage_progress', allowLegacyAdminFallback:true });
     if (!access.ok) return withCors(access.response);
 
     const patch = {

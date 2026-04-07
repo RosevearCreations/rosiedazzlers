@@ -3,7 +3,7 @@
 // Role-aware booking cancel / restore endpoint.
 //
 // What this file does:
-// - prefers signed-in staff session access
+// - keeps current ADMIN_PASSWORD bridge protection
 // - requires manage_bookings capability
 // - cancels a booking by setting status/job_status
 // - can restore a cancelled booking back to an active state
@@ -24,7 +24,7 @@
 //                      or sensible defaults
 //
 // Request headers supported:
-// - x-admin-password: transitional compatibility only when explicitly used
+// - x-admin-password: required
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -70,7 +70,7 @@ export async function onRequestPost(context) {
       body,
       capability: "manage_bookings",
       bookingId: booking_id,
-      allowLegacyAdminFallback: false
+      allowLegacyAdminFallback: true
     });
 
     if (!access.ok) {

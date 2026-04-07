@@ -14,7 +14,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "manage_staff",
-      allowLegacyAdminFallback: false
+      allowLegacyAdminFallback: true
     });
     if (!access.ok) return withCors(access.response);
 

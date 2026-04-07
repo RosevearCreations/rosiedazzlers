@@ -33,7 +33,6 @@ export async function onRequestPost(context) {
     });
     if (!res.ok) return withCors(json({ error: await res.text() }, 500));
     const updated = (await res.json().catch(() => []))?.[0] || null;
-    await createReminderNotification(env, current, access.actor, channel).catch(() => null);
 
     return withCors(json({ ok: true, purchase_order: updated, reminded_by: access.actor.full_name || access.actor.email || "Staff" }));
   } catch (err) {
@@ -42,23 +41,3 @@ export async function onRequestPost(context) {
 }
 function corsHeaders(){return {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"POST,OPTIONS","Access-Control-Allow-Headers":"Content-Type, x-admin-password, x-staff-email, x-staff-user-id","Cache-Control":"no-store"};}
 function withCors(response){ const headers=new Headers(response.headers||{}); for (const [k,v] of Object.entries(corsHeaders())) headers.set(k,v); return new Response(response.body,{status:response.status,statusText:response.statusText,headers}); }
-
-
-async function createReminderNotification(env, purchaseOrder, actor, channel) {
-  const supplier = String(purchaseOrder?.supplier_name || purchaseOrder?.vendor_name || 'Supplier').trim();
-  const subject = `Purchase order reminder: ${supplier}`;
-  const bodyText = `Reminder logged for purchase order ${purchaseOrder?.id || ''} via ${channel} by ${actor?.full_name || actor?.email || 'Staff'}.`;
-  await fetch(`${env.SUPABASE_URL}/rest/v1/notification_events`, {
-    method: 'POST',
-    headers: { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-    body: JSON.stringify([{
-      event_type: 'purchase_order_reminder_logged',
-      channel: 'internal',
-      recipient_email: actor?.email || null,
-      subject,
-      body_text: bodyText,
-      status: 'queued',
-      payload: { purchase_order_id: purchaseOrder?.id || null, reminder_channel: channel, actor_id: actor?.id || null }
-    }])
-  }).catch(() => null);
-}

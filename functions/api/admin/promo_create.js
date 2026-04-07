@@ -23,25 +23,25 @@ export async function onRequestPost({ request, env }) {
     }
 
     const is_active = body.is_active === false ? false : true;
-    const discount_type = String(body.discount_type || "").trim().toLowerCase();
-    const discount_value = body.discount_value === null || body.discount_value === undefined || body.discount_value === "" ? null : Number(body.discount_value);
+    const percent_off = body.percent_off === null || body.percent_off === undefined || body.percent_off === "" ? null : Number(body.percent_off);
+    const amount_off_cents = body.amount_off_cents === null || body.amount_off_cents === undefined || body.amount_off_cents === "" ? null : Number(body.amount_off_cents);
 
-    if (!["percent", "fixed"].includes(discount_type)) {
-      return withCors(json({ ok: false, error: "discount_type must be 'percent' or 'fixed'" }, 400));
+    if (percent_off !== null && (!Number.isFinite(percent_off) || percent_off <= 0 || percent_off > 100)) {
+      return withCors(json({ ok: false, error: "percent_off must be >0 and <=100" }, 400));
     }
-    if (discount_value === null || !Number.isFinite(discount_value) || discount_value <= 0) {
-      return withCors(json({ ok: false, error: "discount_value must be > 0" }, 400));
+    if (amount_off_cents !== null && (!Number.isFinite(amount_off_cents) || amount_off_cents <= 0)) {
+      return withCors(json({ ok: false, error: "amount_off_cents must be >0" }, 400));
     }
-    if (discount_type === "percent" && discount_value > 100) {
-      return withCors(json({ ok: false, error: "Percent discount_value must be <= 100" }, 400));
+    if ((percent_off === null) === (amount_off_cents === null)) {
+      return withCors(json({ ok: false, error: "Provide either percent_off OR amount_off_cents (not both)" }, 400));
     }
 
-    const starts_at = body.starts_at ? String(body.starts_at).trim() : null;
-    const ends_at = body.ends_at ? String(body.ends_at).trim() : null;
-    if (starts_at && Number.isNaN(Date.parse(starts_at))) return withCors(json({ ok: false, error: "starts_at must be a valid datetime" }, 400));
-    if (ends_at && Number.isNaN(Date.parse(ends_at))) return withCors(json({ ok: false, error: "ends_at must be a valid datetime" }, 400));
+    const starts_on = body.starts_on ? String(body.starts_on).trim() : null;
+    const ends_on = body.ends_on ? String(body.ends_on).trim() : null;
+    if (starts_on && !/^\d{4}-\d{2}-\d{2}$/.test(starts_on)) return withCors(json({ ok: false, error: "starts_on must be YYYY-MM-DD" }, 400));
+    if (ends_on && !/^\d{4}-\d{2}-\d{2}$/.test(ends_on)) return withCors(json({ ok: false, error: "ends_on must be YYYY-MM-DD" }, 400));
 
-    const description = body.description ? String(body.description).trim() : null;
+    const note = body.note ? String(body.note).trim() : null;
 
     if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
       return withCors(json({ ok: false, error: "Server not configured (Supabase env vars missing)" }, 500));
@@ -51,11 +51,12 @@ export async function onRequestPost({ request, env }) {
     const payload = [{
       code,
       is_active,
-      discount_type,
-      discount_value: Math.round(discount_value * 100) / 100,
-      starts_at,
-      ends_at,
-      description,
+      percent_off: percent_off === null ? null : Math.round(percent_off * 100) / 100,
+      amount_off_cents: amount_off_cents === null ? null : Math.round(amount_off_cents),
+      starts_on,
+      ends_on,
+      note,
+      updated_at: new Date().toISOString(),
     }];
 
     const res = await fetch(url, {

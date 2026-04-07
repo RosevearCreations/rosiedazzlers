@@ -3,7 +3,7 @@
 // Role-aware promo detail endpoint.
 //
 // What this file does:
-// - prefers signed-in staff session access
+// - keeps current ADMIN_PASSWORD bridge protection
 // - requires manage_promos capability
 // - loads one promo_codes row in full
 // - returns basic usage context from bookings referencing that promo code
@@ -19,7 +19,7 @@
 // - this endpoint searches common field names conservatively and returns empty usage if none match
 //
 // Request headers supported:
-// - x-admin-password: transitional compatibility only when explicitly used
+// - x-admin-password: required
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -58,7 +58,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "manage_promos",
-      allowLegacyAdminFallback: false
+      allowLegacyAdminFallback: true
     });
 
     if (!access.ok) {

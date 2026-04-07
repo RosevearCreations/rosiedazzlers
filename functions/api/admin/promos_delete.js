@@ -3,7 +3,7 @@
 // Role-aware promo delete endpoint.
 //
 // What this file does:
-// - prefers signed-in staff session access
+// - keeps current ADMIN_PASSWORD bridge protection
 // - requires manage_promos capability
 // - permanently deletes one promo_codes row
 // - intended for true admin cleanup cases, not normal enable/disable flow
@@ -18,7 +18,7 @@
 // - Use this only when the promo should be removed entirely
 //
 // Request headers supported:
-// - x-admin-password: transitional compatibility only when explicitly used
+// - x-admin-password: required
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -57,7 +57,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "manage_promos",
-      allowLegacyAdminFallback: false
+      allowLegacyAdminFallback: true
     });
 
     if (!access.ok) {

@@ -3,7 +3,7 @@
 // Role-aware promo save endpoint.
 //
 // What this file does:
-// - prefers signed-in staff session access
+// - keeps current ADMIN_PASSWORD bridge protection
 // - requires manage_promos capability
 // - creates new promo_codes rows
 // - updates existing promo_codes rows
@@ -56,7 +56,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "manage_promos",
-      allowLegacyAdminFallback: false
+      allowLegacyAdminFallback: true
     });
 
     if (!access.ok) {

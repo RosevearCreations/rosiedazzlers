@@ -16,7 +16,7 @@ export async function onRequestPost({ request, env }) {
       resolvedBookingId = booking.id;
     }
 
-    const access = await requireStaffAccess({ request, env, body: { ...body, booking_id: resolvedBookingId }, capability: 'work_booking', bookingId: resolvedBookingId, allowLegacyAdminFallback: false });
+    const access = await requireStaffAccess({ request, env, body: { ...body, booking_id: resolvedBookingId }, capability: 'work_booking', bookingId: resolvedBookingId, allowLegacyAdminFallback: true });
     if (!access.ok) return withCors(access.response);
 
     const booking = booking_id ? await getBookingById(env, booking_id) : await getBookingByToken(env, token);

@@ -31,7 +31,7 @@ export async function onRequestPost(context) {
       }
     }
 
-    const access = await requireStaffAccess({ request, env, body, capability: "work_booking", bookingId: booking_id, allowLegacyAdminFallback: false });
+    const access = await requireStaffAccess({ request, env, body, capability: "work_booking", bookingId: booking_id, allowLegacyAdminFallback: true });
     if (!access.ok) return withCors(access.response);
 
     const bucket = String(env.JOB_MEDIA_BUCKET || "job-media").trim() || "job-media";

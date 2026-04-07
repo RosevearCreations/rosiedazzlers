@@ -3,7 +3,7 @@
 // Role-aware customer tier delete endpoint.
 //
 // What this file does:
-// - prefers signed-in staff session access
+// - keeps current ADMIN_PASSWORD bridge protection
 // - requires manage_bookings capability
 // - permanently deletes one customer_tiers row
 // - intended for true admin cleanup cases, not normal tier edits
@@ -19,7 +19,7 @@
 // - Customer tiers are business segmentation, not security roles
 //
 // Request headers supported:
-// - x-admin-password: transitional compatibility only when explicitly used
+// - x-admin-password: required
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -54,7 +54,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "manage_bookings",
-      allowLegacyAdminFallback: false
+      allowLegacyAdminFallback: true
     });
 
     if (!access.ok) {

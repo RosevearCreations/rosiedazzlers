@@ -15,7 +15,7 @@
 // }
 //
 // Request headers supported:
-// Signed-in staff session preferred; legacy admin password bridge disabled for this route.
+// - x-admin-password: required
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -55,7 +55,7 @@ export async function onRequestPost(context) {
       body,
       capability: "work_booking",
       bookingId: booking_id,
-      allowLegacyAdminFallback: false
+      allowLegacyAdminFallback: true
     });
 
     if (!access.ok) {
