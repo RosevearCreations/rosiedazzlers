@@ -11,10 +11,10 @@
 <body data-page="admin-recovery">
   <header class="nav">
     <div class="nav-inner">
-      <a class="brand" href="/admin/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers Admin</strong></a>
+      <a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers Admin</strong></a>
       <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button>
       <nav id="navLinks" class="nav-links">
-        <a href="/admin/">Dashboard</a>
+        <a href="/admin.html">Dashboard</a>
         <a href="/admin-app.html">App</a>
         <a href="/admin-analytics.html">Analytics</a>
         <a href="/admin-recovery.html">Recovery</a>
@@ -89,7 +89,7 @@
 
     function esc(v) { return String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;"); }
     function setNotice(message, kind="") { const el=byId("pageNotice"); el.className = kind ? `notice ${kind}` : "notice"; el.textContent = message; }
-    function adminHeaders(password){ return { "Content-Type":"application/json", ...(password ? { "x-admin-password": password } : {}) }; }
+    function adminHeaders(password){ return { "Content-Type":"application/json", "x-admin-password": password }; }
 
     function readRulesJson() {
       try { return JSON.parse(byId("templateRules").value || "{}"); }

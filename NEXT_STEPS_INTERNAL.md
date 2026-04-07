@@ -1,4 +1,4 @@
-> Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Next Steps Internal
@@ -62,23 +62,8 @@
 This doc was refreshed during the vehicle catalog, progress-session, layout, and public catalog filter pass. The repo now includes NHTSA-backed vehicle make/model endpoints, a DB cache table for vehicle catalog rows, progress moderation/enable session upgrades, and public search/filter cleanup on Gear and Consumables.
 
 
-## March 30, 2026 promo compatibility pass
-- Admin promo creation now sends the minimal canonical promo payload (`code`, `is_active`, `discount_type`, `discount_value`, `starts_at`, `ends_at`, `description`) to reduce schema drift against the live `promo_codes` table.
-- This pass specifically removes older create-path dependence on legacy promo fields like `active`, `applies_to`, `percent_off`, and `amount_off_cents` during promo creation.
-
-
-## March 30, 2026 next-step update
-1. Continue converting the remaining duplicate/legacy admin endpoints away from the shared-password bridge.
-2. Normalize stale endpoint comments/CORS/header docs that still imply `x-admin-password` is the primary path.
-3. Reuse the signed upload pattern on the remaining field screens that still rely on older/manual flows.
-4. Continue DB-first cleanup where JSON fallback still exists only as temporary compatibility.
-
-## March 30, 2026 session-first cleanup pass
-- Reduced bridge risk again by removing legacy admin fallback from another active set of endpoints, including progress posting/upload, customer-profile save/list, booking customer linking, unblock actions, and app-settings access.
-- Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
-- Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
-
-## March 30, 2026 next-step update
-1. Remove the remaining explicit legacy-bridge endpoints/helpers and normalize their comments/CORS guidance.
-2. Continue upload-flow reuse across the remaining field screens.
-3. Continue pricing/report convergence and remaining route cleanup after the auth overlap is smaller.
+## April 7, 2026 membership / mobile / deploy hardening pass
+- Standardized the four missing Services add-on images onto local bundled asset paths and added real PNG copies so the service cards stop depending on fragile external image URLs.
+- Added route-safe admin folder entry points and stronger Pages Functions helper shims so Cloudflare deploys are less sensitive to mixed helper import paths.
+- Moved customer segmentation toward a scalable membership model by seeding Bronze, Silver, and Gold tiers and making new customer creation default to Bronze instead of a legacy placeholder tier.
+- Continued mobile-fit and CSS hardening by tightening service-card/select sizing, overlap handling, and installable-app support through a shared install prompt + service worker path.

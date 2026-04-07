@@ -11,7 +11,7 @@
 <body data-page="admin-jobsite">
   <header class="nav">
     <div class="nav-inner">
-      <a class="brand" href="/admin/">
+      <a class="brand" href="/admin.html">
         <img data-logo alt="Rosie Dazzlers logo" />
         <strong>Rosie Dazzlers Admin</strong>
       </a>
@@ -21,7 +21,7 @@
       </button>
 
       <nav id="navLinks" class="nav-links">
-        <a href="/admin/">Dashboard</a>
+        <a href="/admin.html">Dashboard</a>
         <a href="/admin-booking.html">Bookings</a>
         <a href="/admin-blocks.html">Blocks</a>
         <a href="/admin-progress.html">Progress</a>
@@ -417,7 +417,7 @@
     function apiHeaders(password) {
       return {
         "Content-Type": "application/json",
-        ...(password ? { "x-admin-password": password } : {})
+        "x-admin-password": password
       };
     }
 

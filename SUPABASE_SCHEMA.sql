@@ -1,11 +1,3 @@
--- Last synchronized: March 30, 2026. Reviewed during the endpoint-normalization, session-first admin cleanup, promo stabilization, and docs/schema synchronization pass.
--- Last synchronized: March 30, 2026. Reviewed during the session-first cleanup, promo stabilization follow-up, and docs/schema synchronization pass.
--- March 30, 2026 promo stability and session-noise pass note
--- Promo management now aligns with the reconciled live promo_codes table/constraint model, guest booking no longer hits client dashboard prefill until auth is confirmed, and more active admin routes now require session-first staff access.
-
--- March 30, 2026 promo compatibility pass note
--- Admin promo creation now targets the minimal canonical promo payload expected by the live promo_codes table.
-
 -- March 29, 2026 sync note: no new tables were required for this pass; this refresh mainly extends signed-in staff session coverage, reduces shared-password-only endpoint usage, and improves actor attribution in time/intake/media/booking flows.
 -- 
 -- 
@@ -101,6 +93,32 @@ create table if not exists public.catalog_inventory_items (id uuid primary key d
 create table if not exists public.catalog_low_stock_alerts (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), item_id uuid not null references public.catalog_inventory_items(id) on delete cascade, item_key text null, qty_snapshot numeric(12,2) null, reorder_point_snapshot numeric(12,2) null, is_resolved boolean not null default false, resolved_at timestamptz null, resolved_by_name text null, resolution_notes text null);
 create table if not exists public.catalog_purchase_orders (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), item_id uuid null references public.catalog_inventory_items(id) on delete set null, item_key text null, item_name text null, vendor_name text null, qty_ordered numeric(12,2) not null default 0, unit_cost_cents integer null, status text not null default 'draft' check (status in ('draft','requested','ordered','received','cancelled')), reminder_at timestamptz null, reminder_sent_at timestamptz null, reminder_last_channel text null, ordered_at timestamptz null, received_at timestamptz null, purchase_url text null, note text null);
 
+
+
+create table if not exists public.customer_tiers (
+  code text primary key,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  sort_order integer not null default 0,
+  label text not null,
+  description text null,
+  is_active boolean not null default true,
+  discount_percent numeric(6,2) null default 0,
+  benefits jsonb not null default '[]'::jsonb
+);
+
+insert into public.customer_tiers (code, sort_order, label, description, is_active, discount_percent, benefits) values
+('bronze',10,'Bronze','Default customer tier with standard pricing.',true,0,'[]'::jsonb),
+('silver',20,'Silver','Membership tier with selected free upgrades and loyalty benefits.',true,0,'["free upgrade options","member pricing"]'::jsonb),
+('gold',30,'Gold','Premium membership tier with stronger loyalty benefits and complimentary cleanings.',true,0,'["free cleanings","priority booking","free upgrades"]'::jsonb)
+on conflict (code) do update set
+  sort_order = excluded.sort_order,
+  label = excluded.label,
+  description = excluded.description,
+  is_active = excluded.is_active,
+  discount_percent = excluded.discount_percent,
+  benefits = excluded.benefits,
+  updated_at = now();
 
 create table if not exists public.customer_profiles (
   id uuid primary key default gen_random_uuid(),
@@ -350,7 +368,3 @@ create index if not exists customer_reviews_customer_profile_id_idx on public.cu
 create index if not exists catalog_purchase_orders_reminder_sent_at_idx on public.catalog_purchase_orders(reminder_sent_at);
 
 -- Last synchronized: 2026-03-29. Reviewed during the promo/block/session conversion and purchase-order reminder lifecycle pass.
-
-
--- March 29, 2026 pricing/session/recovery/moderation pass
--- No new table was required in this pass; the main changes were DB-first public pricing consumption, endpoint auth cleanup, recovery audit visibility, moderation filtering, and purchase reminder audit logging.

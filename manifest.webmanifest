@@ -1,18 +1,9 @@
 {
-  "name": "Rosie Dazzlers Field App",
-  "short_name": "Rosie App",
-  "start_url": "/admin",
-  "scope": "/",
+  "name": "Rosie Dazzlers",
+  "short_name": "Rosie",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#08111f",
-  "theme_color": "#08111f",
-  "description": "Rosie Dazzlers mobile field and admin app for bookings, jobsite intake, progress, sign-off, and billing.",
-  "icons": [
-    {
-      "src": "https://assets.rosiedazzlers.ca/brand/Untitled.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ]
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": []
 }

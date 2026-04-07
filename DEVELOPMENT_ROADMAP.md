@@ -1,4 +1,4 @@
-> Last synchronized: March 30, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
 
@@ -194,36 +194,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - purchase-order reminder lifecycle moved forward with reminder logging fields, a reminder action endpoint, and overdue reminder reporting in the purchase-order list endpoint.
 - this reduced more of the old/new endpoint overlap and shared-password bridge risk, but did not fully eliminate every remaining legacy-only admin path yet.
 
-## March 29, 2026 pricing/session/recovery/moderation pass
-- public pricing pages now have a DB-first `/api/pricing_catalog_public` endpoint so services, pricing, gifts, and booking can reduce hard-coded JSON drift while keeping bundled fallback behavior.
-- more legacy fallback use was removed from signoff, recovery, notification, moderation, and low-stock endpoints by preferring session-only role-aware access.
-- admin recovery now has a recovery audit list endpoint, and jobsite/progress detail endpoints now support visibility filtering to make moderation review more practical.
-- purchase-order reminder logging now also creates an internal notification-event trail, moving reminder lifecycle closer to a fuller operational audit path.
-- this pass continues to reduce the gaps, but the remaining work is still the final elimination of the last legacy-only screens/endpoints, broader mobile upload reuse, and complete operational convergence.
 
-
-## March 30, 2026 promo compatibility pass
-- Admin promo creation now sends the minimal canonical promo payload (`code`, `is_active`, `discount_type`, `discount_value`, `starts_at`, `ends_at`, `description`) to reduce schema drift against the live `promo_codes` table.
-- This pass specifically removes older create-path dependence on legacy promo fields like `active`, `applies_to`, `percent_off`, and `amount_off_cents` during promo creation.
-
-
-## March 30, 2026 movement
-- moved forward: promo management is now more stable against the live database shape after reconciling the promo table and constraint model.
-- moved forward: the admin promo screen now renders operational promo data instead of a raw JSON dump in the main workflow area.
-- moved forward: guest booking now avoids unnecessary customer-dashboard calls until customer auth is confirmed, reducing false console noise during public booking use.
-- move up next: finish the remaining session-only cleanup on older admin endpoints, normalize stale CORS/header comments that still describe the bridge as primary behavior, and continue upload-flow reuse across the remaining field screens.
-
-## March 30, 2026 session-first cleanup pass
-- Reduced bridge risk again by removing legacy admin fallback from another active set of endpoints, including progress posting/upload, customer-profile save/list, booking customer linking, unblock actions, and app-settings access.
-- Tightened browser-side admin calls so active internal pages send `x-admin-password` only when a transitional password is actually present instead of always attaching the header shape.
-- Continued doc/schema synchronization and public-page SEO/H1 review for the current build.
-
-## March 30, 2026 roadmap movement
-- moved forward: booking management, customer/customer-tier management, promo companion routes, and staff/time endpoints were pushed further toward session-first access by removing another batch of legacy fallback allowances.
-- move up next: retire the remaining explicit bridge-only bootstrap/utility routes, continue route comment/header normalization, and reuse the signed upload flow across the remaining field screens.
-
-
-## March 30, 2026 moved forward again
-- moved forward: removed the last explicit `allowLegacyAdminFallback:true` settings from another active batch of admin endpoints.
-- moved forward: browser-side admin helpers are cleaner about only sending transitional password headers when intentionally used.
-- move up next: broader upload/mobile reuse, remaining duplicate route retirement, and deeper lifecycle completion for recovery/moderation/inventory workflows.
+## April 7, 2026 membership / mobile / deploy hardening pass
+- Standardized the four missing Services add-on images onto local bundled asset paths and added real PNG copies so the service cards stop depending on fragile external image URLs.
+- Added route-safe admin folder entry points and stronger Pages Functions helper shims so Cloudflare deploys are less sensitive to mixed helper import paths.
+- Moved customer segmentation toward a scalable membership model by seeding Bronze, Silver, and Gold tiers and making new customer creation default to Bronze instead of a legacy placeholder tier.
+- Continued mobile-fit and CSS hardening by tightening service-card/select sizing, overlap handling, and installable-app support through a shared install prompt + service worker path.

@@ -2,7 +2,7 @@
      REPLACE ENTIRE FILE
 
      Fixes/Includes:
-     - Loads /api/pricing_catalog_public (strict JSON parse)
+     - Loads /data/rosie_services_pricing_and_packages.json (strict JSON parse)
      - Renders 5 main package cards with correct names + prices by size
      - Hover (or tap) carousel per package:
          [package image for selected size] -> Interior Detail -> Exterior Detail -> Car Size Chart
@@ -141,7 +141,7 @@
   </div>
 
   <script type="module">
-    const DATA_URL = "/api/pricing_catalog_public?v=20260311b";
+    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260311b";
     const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
     const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages";
 

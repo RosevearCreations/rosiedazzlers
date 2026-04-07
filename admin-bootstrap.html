@@ -314,7 +314,7 @@
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              ...(legacyPassword ? { "x-admin-password": legacyPassword } : {})
+              "x-admin-password": legacyPassword
             },
             body: JSON.stringify({
               email,
