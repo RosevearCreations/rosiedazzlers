@@ -574,7 +574,63 @@ async function initAccountWidget() {
   `;
 }
 
+
+let deferredInstallPrompt = null;
+
+function ensureInstallPrompt(){
+  const navInner = document.querySelector('.nav-inner');
+  if (!navInner) return null;
+  let btn = document.querySelector('#installAppBtn');
+  if (btn) return btn;
+  btn = document.createElement('button');
+  btn.id = 'installAppBtn';
+  btn.type = 'button';
+  btn.className = 'btn ghost';
+  btn.textContent = 'Install App';
+  btn.hidden = true;
+  const publicBook = navInner.querySelector('a.btn.primary[href="/book"]');
+  if (publicBook && publicBook.parentNode === navInner) navInner.insertBefore(btn, publicBook);
+  else navInner.appendChild(btn);
+  btn.addEventListener('click', async ()=>{
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    try { await deferredInstallPrompt.userChoice; } catch {}
+    deferredInstallPrompt = null;
+    btn.hidden = true;
+  });
+  return btn;
+}
+
+function initInstallPrompt(){
+  const btn = ensureInstallPrompt();
+  window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    if (btn) btn.hidden = false;
+  });
+  window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    if (btn) btn.hidden = true;
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', ()=>{ navigator.serviceWorker.register('/service-worker.js').catch(()=>{}); });
+  }
+}
+
+
+function ensureManifest(){
+  const head=document.head||document.querySelector('head');
+  if(!head) return;
+  let m=head.querySelector('link[rel="manifest"]');
+  if(!m){ m=document.createElement('link'); m.rel='manifest'; head.appendChild(m); }
+  m.href='/manifest.webmanifest';
+  let theme=head.querySelector('meta[name="theme-color"]');
+  if(!theme){ theme=document.createElement('meta'); theme.name='theme-color'; head.appendChild(theme); }
+  theme.content='#0f172a';
+}
+
 function initChrome() {
+  ensureManifest();
   ensureNavLinks();
   setBrandImagesEverywhere();
   ensureMainBanner();
@@ -583,6 +639,7 @@ function initChrome() {
   initNavToggle();
   setFooter();
   initAccountWidget();
+  initInstallPrompt();
 
   attachRotators("#homePackages");
   attachRotators("#packageCards");

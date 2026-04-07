@@ -1,1 +1,1 @@
-export * from "../../_lib/staff-auth.js";
+export * from '../../_lib/staff-auth.js';

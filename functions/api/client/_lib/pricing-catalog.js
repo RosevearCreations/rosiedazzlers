@@ -1,1 +1,1 @@
-export * from "../../_lib/pricing-catalog.js";
+export * from '../../_lib/pricing-catalog.js';

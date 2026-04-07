@@ -1,1 +1,1 @@
-export * from "../../_lib/customer-session.js";
+export * from '../../_lib/customer-session.js';

@@ -1,1 +1,1 @@
-export * from "../../_lib/app-settings.js";
+export * from '../../_lib/app-settings.js';
