@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Accounting | Rosie Dazzlers</title>
+  <meta name="description" content="Internal accounting ledger for Rosie Dazzlers bookings, payments, and future inventory-cost tracking." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css" />
+</head>
+<body data-page="admin-accounting">
+  <main class="container shell">
+    <section class="section" data-admin-shell-loading>
+      <div class="notice">Loading accounting records…</div>
+    </section>
+    <section class="section" data-admin-shell-ready hidden>
+      <div class="grid cards" style="grid-template-columns:minmax(240px,320px) minmax(0,1fr)">
+        <div data-admin-menu-mount></div>
+        <div class="stack">
+          <div class="hero">
+            <div>
+              <div class="badge">Accounting</div>
+              <h1>Operational accounting ledger</h1>
+              <p>Create the basic accounting trail now so costs, tax, revenue, and inventory valuation can grow into a fuller backend later.</p>
+            </div>
+            <div class="panel">
+              <div class="kicker">Signed in as</div>
+              <strong data-actor-name>—</strong>
+              <div class="mini" data-actor-role></div>
+            </div>
+          </div>
+
+          <div class="notice" data-admin-shell-status hidden></div>
+
+          <div class="grid cards" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">
+            <article class="panel"><div class="kicker">Open</div><div id="sumOpen" class="hero-stat">0</div></article>
+            <article class="panel"><div class="kicker">Paid</div><div id="sumPaid" class="hero-stat">0</div></article>
+            <article class="panel"><div class="kicker">Collected</div><div id="sumCollected" class="hero-stat">$0.00</div></article>
+            <article class="panel"><div class="kicker">Balance Due</div><div id="sumBalance" class="hero-stat">$0.00</div></article>
+            <article class="panel"><div class="kicker">Tips</div><div id="sumTips" class="hero-stat">$0.00</div></article>
+          </div>
+
+          <article class="panel">
+            <form id="searchForm" class="row wrap" style="gap:12px;align-items:end">
+              <label style="min-width:240px;flex:1 1 280px">Search
+                <input id="searchQ" type="search" placeholder="Customer name, email, or package" />
+              </label>
+              <button class="btn primary" type="submit">Refresh</button>
+            </form>
+            <p class="mini">Records are created automatically when bookings are created and kept in sync when payment ledger entries are added.</p>
+          </article>
+
+          <article class="panel">
+            <div id="recordsWrap" class="stack"><div class="mini">No accounting records loaded yet.</div></div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/admin-menu.js"></script>
+  <script>
+    (function(){
+      const money = (n)=> new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(Number(n||0));
+      const esc = (v)=> String(v==null?'':v).replace(/[&<>"']/g,(m)=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+      const ids = ['sumOpen','sumPaid','sumCollected','sumBalance','sumTips'];
+      function setStatus(message, type='') { document.querySelectorAll('[data-admin-shell-status]').forEach((n)=>{n.hidden=!message;n.textContent=message||'';n.dataset.state=type||'';}); }
+      function renderSummary(summary={}) {
+        document.getElementById('sumOpen').textContent = String(summary.open || 0);
+        document.getElementById('sumPaid').textContent = String(summary.paid || 0);
+        document.getElementById('sumCollected').textContent = money(summary.collected_total_cad || 0);
+        document.getElementById('sumBalance').textContent = money(summary.balance_due_cad || 0);
+        document.getElementById('sumTips').textContent = money(summary.tip_cad || 0);
+      }
+      function renderRows(rows=[]) {
+        const wrap = document.getElementById('recordsWrap');
+        if (!rows.length) { wrap.innerHTML = '<div class="mini">No accounting records found.</div>'; return; }
+        wrap.innerHTML = rows.map((row)=>`<article class="card">
+          <div class="row wrap" style="justify-content:space-between;gap:10px">
+            <div>
+              <div class="kicker">${esc(row.order_status || 'open')} · ${esc(row.accounting_stage || 'open')}</div>
+              <h3 style="margin:6px 0">${esc(row.customer_name || 'Unknown customer')}</h3>
+              <div class="mini">${esc(row.customer_email || '')}${row.customer_phone ? ' · ' + esc(row.customer_phone) : ''}</div>
+            </div>
+            <div class="mini">${esc(row.service_date || '')}${row.package_code ? ' · ' + esc(row.package_code) : ''}</div>
+          </div>
+          <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:12px">
+            <div><strong>Total</strong><div>${money(row.total_cad || 0)}</div></div>
+            <div><strong>Collected</strong><div>${money(row.collected_total_cad || 0)}</div></div>
+            <div><strong>Balance</strong><div>${money(row.balance_due_cad || 0)}</div></div>
+            <div><strong>Tips</strong><div>${money(row.tip_cad || 0)}</div></div>
+          </div>
+          <div class="mini" style="margin-top:10px">Booking ${esc(row.booking_id || '')} · Updated ${esc(new Date(row.updated_at || row.created_at || Date.now()).toLocaleString())}</div>
+        </article>`).join('');
+      }
+      async function loadRecords(){
+        const q = document.getElementById('searchQ').value.trim();
+        setStatus('Loading accounting records…');
+        const res = await fetch('/api/admin/accounting_list' + (q ? `?q=${encodeURIComponent(q)}` : ''), { credentials:'include' });
+        const out = await res.json().catch(()=>null);
+        if (!res.ok || !out?.ok) throw new Error((out && out.error) || 'Could not load accounting records.');
+        renderSummary(out.summary || {}); renderRows(out.records || []); setStatus('Accounting records loaded.','success');
+      }
+      document.getElementById('searchForm').addEventListener('submit', async (e)=>{ e.preventDefault(); try { await loadRecords(); } catch(err){ setStatus(err.message || 'Could not load accounting records.','error'); } });
+      window.AdminShell.boot({ pageKey:'admin-accounting', onReady: async function(){ window.AdminMenu.render({ currentPage:'admin-accounting' }); await loadRecords(); } });
+    })();
+  </script>
+</body>
+</html>

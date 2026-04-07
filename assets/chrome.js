@@ -582,6 +582,7 @@ function initChrome() {
   setActiveNavLink();
   initNavToggle();
   setFooter();
+  ensureInstallAppPrompt();
   initAccountWidget();
 
   attachRotators("#homePackages");
@@ -592,7 +593,37 @@ function initChrome() {
 }
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initChrome);
+  
+function ensureInstallAppPrompt() {
+  let deferredPrompt = null;
+  if (document.querySelector('#installAppBanner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'installAppBanner';
+  banner.className = 'install-app-banner';
+  banner.hidden = true;
+  banner.innerHTML = '<div><strong>Install Rosie Dazzlers App</strong><div class="mini muted">Add this app to your home screen for quicker mobile field access.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn small primary" data-install-app>Install</button><button type="button" class="btn small ghost" data-dismiss-install>Later</button></div>' ;
+  document.body.appendChild(banner);
+  const installBtn = banner.querySelector('[data-install-app]');
+  const dismissBtn = banner.querySelector('[data-dismiss-install]');
+  installBtn?.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    try { await deferredPrompt.userChoice; } catch {}
+    deferredPrompt = null;
+    banner.hidden = true;
+  });
+  dismissBtn?.addEventListener('click', () => { banner.hidden = true; });
+  window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    deferredPrompt = event;
+    banner.hidden = false;
+  });
+  window.addEventListener('appinstalled', () => { banner.hidden = true; deferredPrompt = null; });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('/service-worker.js').catch(() => {}), { once: true });
+  }
+}
+document.addEventListener("DOMContentLoaded", initChrome);
 } else {
   initChrome();
 }
