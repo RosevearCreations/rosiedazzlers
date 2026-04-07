@@ -88,18 +88,10 @@
     },
     {
       key: "admin-catalog",
-      label: "Inventory",
+      label: "Catalog",
       href: "/admin-catalog",
-      description: "Inventory, products, reorders",
+      description: "Tools, systems, consumables",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-catalog")
-    },
-
-    {
-      key: "admin-accounting",
-      label: "Accounting",
-      href: "/admin-accounting",
-      description: "Office ledger and collections",
-      visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting")
     },
     {
       key: "admin-customers",

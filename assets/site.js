@@ -24,10 +24,10 @@ const HOVER_MEDIA = {
 };
 
 const ADDON_MEDIA = {
-  full_clay_treatment: '/assets/addons/full_clay_treatment.png',
-  two_stage_polish: '/assets/addons/two_stage_polish.png',
-  high_grade_paint_sealant: '/assets/addons/high_grade_paint_sealant.png',
-  uv_protectant_applied_on_interior_panels: '/assets/addons/uv_protectant_applied_on_interior_panels.png',
+  full_clay_treatment: '/assets/addons/full_clay_treatment.svg',
+  two_stage_polish: '/assets/addons/two_stage_polish.svg',
+  high_grade_paint_sealant: '/assets/addons/high_grade_paint_sealant.svg',
+  uv_protectant_applied_on_interior_panels: '/assets/addons/uv_protectant_applied_on_interior_panels.svg',
   de_ionizing_treatment: '/assets/addons/de_ionizing_treatment.svg',
   de_badging: '/assets/addons/de_badging.svg',
   engine_cleaning: '/assets/addons/engine_cleaning.svg',
