@@ -31,7 +31,6 @@ export async function loadPricingCatalog(env) {
 
 export function normalizeCatalog(raw) {
   const source = raw && typeof raw === "object" ? raw : {};
-  const charts = Array.isArray(source.charts) ? source.charts : [];
   const packages = Array.isArray(source.packages) ? source.packages : [];
   const addons = Array.isArray(source.addons) ? source.addons : [];
 
@@ -63,7 +62,6 @@ export function normalizeCatalog(raw) {
   }
 
   return {
-    charts,
     packages,
     addons,
     package_map: packageMap,

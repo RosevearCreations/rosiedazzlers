@@ -1,4 +1,4 @@
-const DATA_URL = "/api/pricing_catalog_public";
+const DATA_URL = "/data/rosie_services_pricing_and_packages.json";
 
 const BRAND = {
   logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
@@ -24,10 +24,10 @@ const HOVER_MEDIA = {
 };
 
 const ADDON_MEDIA = {
-  full_clay_treatment: '/assets/addons/full_clay_treatment.svg',
-  two_stage_polish: '/assets/addons/two_stage_polish.svg',
-  high_grade_paint_sealant: '/assets/addons/high_grade_paint_sealant.svg',
-  uv_protectant_applied_on_interior_panels: '/assets/addons/uv_protectant_applied_on_interior_panels.svg',
+  full_clay_treatment: '/assets/addons/full_clay_treatment.png',
+  two_stage_polish: '/assets/addons/two_stage_polish.png',
+  high_grade_paint_sealant: '/assets/addons/high_grade_paint_sealant.png',
+  uv_protectant_applied_on_interior_panels: '/assets/addons/uv_protectant_applied_on_interior_panels.png',
   de_ionizing_treatment: '/assets/addons/de_ionizing_treatment.svg',
   de_badging: '/assets/addons/de_badging.svg',
   engine_cleaning: '/assets/addons/engine_cleaning.svg',
