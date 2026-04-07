@@ -229,3 +229,8 @@ This build continues the role-aware admin transition by removing another batch o
 - Added a visible install-app prompt path and service-worker registration so the mobile field app can be offered for installation when the browser supports it.
 - Added a real /admin/index.html route, kept /admin pathing stable, and made Inventory more obvious on the Admin dashboard and menu.
 - Continued CSS/mobile tightening for service controls, date-picker visibility on dark UI, chart sizing, and anti-overlap behavior.
+## April 5, 2026 chrome/widget/install/admin-image regression fix
+- Repaired the shared public chrome script so the login/create-account widget and install-app prompt can render again.
+- Fixed the Services-page fallback image map again for the four missing add-on cards and made the page respect add-on `image_url` values when present.
+- Continued docs/schema synchronization for the current build.
+

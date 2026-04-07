@@ -203,6 +203,10 @@
       external_wax: "External Wax add on service.png",
       vinyl_wrapping: "Vinyl Wrapping add on service.png",
       window_tinting: "Window Tinting add on service.png",
+      full_clay_treatment: "full_clay_treatment.png",
+      two_stage_polish: "two_stage_polish.png",
+      high_grade_paint_sealant: "high_grade_paint_sealant.png",
+      uv_protectant_applied_on_interior_panels: "uv_protectant_applied_on_interior_panels.png",
     };
 
     function sizeKey(){ return qs("#sizeSel").value; }
@@ -290,7 +294,7 @@
     }
 
     function buildAddonCard(addon){
-      const imgName = ADDON_IMAGES[addon.code] || null;
+      const imgName = addon.image_url || ADDON_IMAGES[addon.code] || null;
       const img = imgName ? imgUrlFromFilename(imgName) : null;
 
       const el = document.createElement("div");
