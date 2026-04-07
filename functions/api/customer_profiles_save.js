@@ -78,7 +78,7 @@ export async function onRequestPost(context) {
 
 function cleanTier(value) {
   const s = String(value ?? "").trim().toLowerCase();
-  return ["random", "regular", "silver", "gold", "vip"].includes(s) ? s : null;
+  return ["bronze", "silver", "gold", "platinum", "custom"].includes(s) ? s : null;
 }
 
 function toNonNegativeInteger(value, fallback = 0) {
