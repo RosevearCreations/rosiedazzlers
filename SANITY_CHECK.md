@@ -205,3 +205,11 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Added compatibility `_lib` shim files under `functions/_lib` and `functions/api/client/_lib` so Pages Functions builds do not fail when older or mixed relative import patterns are encountered during bundling.
 - Surfaced Inventory and Accounting more clearly through Admin dashboard/menu routing and added pretty-route redirects for `/admin-catalog` and `/admin-accounting`.
 - Continued docs/schema synchronization for the current build.
+
+
+## April 5, 2026 functions build / install prompt / admin route / add-on image pass
+- Added compatibility helper resolution paths for Pages Functions so mixed helper import patterns are less likely to fail during Cloudflare bundling.
+- Restored the four missing Services add-on images by standardizing them to local PNG asset paths in both pricing catalog copies and both site script copies.
+- Added a visible install-app prompt path and service-worker registration so the mobile field app can be offered for installation when the browser supports it.
+- Added a real /admin/index.html route, kept /admin pathing stable, and made Inventory more obvious on the Admin dashboard and menu.
+- Continued CSS/mobile tightening for service controls, date-picker visibility on dark UI, chart sizing, and anti-overlap behavior.

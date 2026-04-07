@@ -30,4 +30,4 @@
 /admin-catalog       /admin-catalog.html 200
 /admin-accounting    /admin-accounting.html 200
 
-/admin              /admin.html      200
+/admin              /admin/index.html      200

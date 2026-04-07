@@ -1,3 +1,4 @@
+-- Last synchronized: April 5, 2026. Reviewed during the functions build / install prompt / admin route / add-on image pass.
 -- Last synchronized: March 30, 2026. Reviewed during the endpoint-normalization, session-first admin cleanup, promo stabilization, and docs/schema synchronization pass.
 -- Last synchronized: March 30, 2026. Reviewed during the session-first cleanup, promo stabilization follow-up, and docs/schema synchronization pass.
 -- March 30, 2026 promo stability and session-noise pass note
