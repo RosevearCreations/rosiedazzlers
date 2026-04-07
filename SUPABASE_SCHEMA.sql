@@ -94,6 +94,32 @@ create table if not exists public.catalog_low_stock_alerts (id uuid primary key 
 create table if not exists public.catalog_purchase_orders (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), item_id uuid null references public.catalog_inventory_items(id) on delete set null, item_key text null, item_name text null, vendor_name text null, qty_ordered numeric(12,2) not null default 0, unit_cost_cents integer null, status text not null default 'draft' check (status in ('draft','requested','ordered','received','cancelled')), reminder_at timestamptz null, reminder_sent_at timestamptz null, reminder_last_channel text null, ordered_at timestamptz null, received_at timestamptz null, purchase_url text null, note text null);
 
 
+
+create table if not exists public.customer_tiers (
+  code text primary key,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  sort_order integer not null default 0,
+  label text not null,
+  description text null,
+  is_active boolean not null default true,
+  discount_percent numeric(6,2) null default 0,
+  benefits jsonb not null default '[]'::jsonb
+);
+
+insert into public.customer_tiers (code, sort_order, label, description, is_active, discount_percent, benefits) values
+('bronze',10,'Bronze','Default customer tier with standard pricing.',true,0,'[]'::jsonb),
+('silver',20,'Silver','Membership tier with selected free upgrades and loyalty benefits.',true,0,'["free upgrade options","member pricing"]'::jsonb),
+('gold',30,'Gold','Premium membership tier with stronger loyalty benefits and complimentary cleanings.',true,0,'["free cleanings","priority booking","free upgrades"]'::jsonb)
+on conflict (code) do update set
+  sort_order = excluded.sort_order,
+  label = excluded.label,
+  description = excluded.description,
+  is_active = excluded.is_active,
+  discount_percent = excluded.discount_percent,
+  benefits = excluded.benefits,
+  updated_at = now();
+
 create table if not exists public.customer_profiles (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
