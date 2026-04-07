@@ -3,7 +3,7 @@
 /pricing.html         /pricing          301
 
 # Admin pretty URLs
-/admin.html           /admin            301
+
 /admin-booking.html   /admin-booking    301
 /admin-blocks.html    /admin-blocks     301
 /admin-progress.html  /admin-progress   301
