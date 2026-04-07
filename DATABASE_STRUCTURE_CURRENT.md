@@ -250,4 +250,3 @@ The meaningful database change in this pass is promo-code reconciliation: the li
 
 ## March 30, 2026 structure note
 No new tables or columns were introduced in this pass. The work was focused on endpoint/auth convergence and keeping the schema snapshot aligned with the current build.
-<!-- Last synchronized: April 5, 2026. Reviewed during the bookings/admin-route/date-picker/inventory/menu/CSS/mobile-fit pass. -->

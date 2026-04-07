@@ -1,4 +1,3 @@
--- Last synchronized: April 5, 2026. Reviewed during the functions build / install prompt / admin route / add-on image pass.
 -- Last synchronized: March 30, 2026. Reviewed during the endpoint-normalization, session-first admin cleanup, promo stabilization, and docs/schema synchronization pass.
 -- Last synchronized: March 30, 2026. Reviewed during the session-first cleanup, promo stabilization follow-up, and docs/schema synchronization pass.
 -- March 30, 2026 promo stability and session-noise pass note
@@ -355,20 +354,3 @@ create index if not exists catalog_purchase_orders_reminder_sent_at_idx on publi
 
 -- March 29, 2026 pricing/session/recovery/moderation pass
 -- No new table was required in this pass; the main changes were DB-first public pricing consumption, endpoint auth cleanup, recovery audit visibility, moderation filtering, and purchase reminder audit logging.
-
-
--- April 4, 2026 booking/query/vehicle/CSS fix pass
--- No new schema migration required in this pass. Live query compatibility, routing, and UI fit were adjusted against the existing schema.
-
-
--- April 4, 2026 booking/query/admin-route/mobile-fit follow-up
--- No new schema migration was required in this pass. This was a live-schema compatibility, routing, UI/CSS, and admin workflow clarification pass.
-
-
--- April 5, 2026 sync
--- No new schema migration in this pass.
--- Continued booking query/admin route/date-picker/inventory UI follow-up and doc synchronization.
-
-
--- April 5, 2026 Cloudflare Functions import-compatibility pass
--- Added compatibility shim modules under functions/_lib and functions/api/client/_lib so Pages Functions bundling can resolve older/mixed helper import patterns without failing the deploy.

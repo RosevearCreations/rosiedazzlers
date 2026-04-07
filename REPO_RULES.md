@@ -252,4 +252,3 @@ If a proposed change makes the system:
 then it is likely **the wrong change**.
 
 Always favor the simplest architecture that preserves functionality.
-<!-- Last synchronized: April 5, 2026. Reviewed during the bookings/admin-route/date-picker/inventory/menu/CSS/mobile-fit pass. -->

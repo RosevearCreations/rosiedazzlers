@@ -82,12 +82,3 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 1. Remove the remaining explicit legacy-bridge endpoints/helpers and normalize their comments/CORS guidance.
 2. Continue upload-flow reuse across the remaining field screens.
 3. Continue pricing/report convergence and remaining route cleanup after the auth overlap is smaller.
-
-
-## April 4, 2026 booking/query/vehicle/CSS fix pass
-- Fixed the admin booking search query so it no longer requests a non-existent `bookings.updated_at` column on the live schema.
-- Cleaned internal dashboard links away from `/admin.html` to `/admin` and added a safer admin redirect path.
-- Tightened public/mobile UI again by shrinking the Services vehicle-size selector footprint, reducing the Pricing vehicle size chart preview, and forcing date/time inputs onto a light control surface for better picker visibility.
-- Upgraded Book vehicle entry so year, make, and model now accept typed input with suggestion lists while still supporting default size/category/body inference and manual overrides.
-- Continued docs/schema synchronization for the current build.
-<!-- Last synchronized: April 5, 2026. Reviewed during the bookings/admin-route/date-picker/inventory/menu/CSS/mobile-fit pass. -->

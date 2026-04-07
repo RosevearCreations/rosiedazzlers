@@ -50,4 +50,3 @@ Current next priorities:
 - richer client/detailer threaded comments UI
 - manual scheduling / app-management rules UI completion
 - final layout polish across booking and internal screens
-<!-- Last synchronized: April 5, 2026. Reviewed during the bookings/admin-route/date-picker/inventory/menu/CSS/mobile-fit pass. -->

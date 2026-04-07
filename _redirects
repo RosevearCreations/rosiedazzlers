@@ -3,7 +3,6 @@
 /pricing.html         /pricing          301
 
 # Admin pretty URLs
-/admin.html           /admin            301
 /admin-booking.html   /admin-booking    301
 /admin-blocks.html    /admin-blocks     301
 /admin-progress.html  /admin-progress   301
@@ -15,7 +14,6 @@
 # Normalize optional trailing slashes
 /services/            /services         301
 /pricing/             /pricing          301
-/admin/               /admin            301
 /admin-booking/       /admin-booking    301
 /admin-blocks/        /admin-blocks     301
 /admin-progress/      /admin-progress   301
@@ -23,11 +21,5 @@
 /admin-live/          /admin-live       301
 /admin-staff/         /admin-staff      301
 /admin-promos/        /admin-promos     301
-/admin-catalog.html   /admin-catalog    301
-/admin-accounting.html /admin-accounting 301
-/admin-catalog/       /admin-catalog    301
-/admin-accounting/    /admin-accounting 301
-/admin-catalog       /admin-catalog.html 200
-/admin-accounting    /admin-accounting.html 200
-
-/admin              /admin/index.html      200
+/admin /admin/index.html 200
+/admin.html /admin/index.html 200

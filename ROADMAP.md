@@ -57,4 +57,3 @@ Last synchronized: March 27, 2026.
 - Customer live-job communication now supports public messages from the progress page.
 - Detailer live-job communication now supports both public updates and internal-only notes from the jobs screen.
 - Admin remains the moderation layer for public and private job communication.
-<!-- Last synchronized: April 5, 2026. Reviewed during the bookings/admin-route/date-picker/inventory/menu/CSS/mobile-fit pass. -->
