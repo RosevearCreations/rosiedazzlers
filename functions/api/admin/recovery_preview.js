@@ -4,7 +4,7 @@ export async function onRequestPost(context) {
   const { request, env } = context;
   try {
     const body = await request.json().catch(() => null);
-    const access = await requireStaffAccess({ request, env, body: body || {}, capability: "manage_staff", allowLegacyAdminFallback: false });
+    const access = await requireStaffAccess({ request, env, body: body || {}, capability: "manage_staff", allowLegacyAdminFallback: true });
     if (!access.ok) return withCors(access.response);
     const templateKey = String(body?.template_key || '').trim();
     const channel = String(body?.channel || '').trim().toLowerCase();

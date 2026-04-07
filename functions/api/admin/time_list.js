@@ -3,7 +3,7 @@
 // Role-aware job time list/read endpoint.
 //
 // What this file does:
-// - prefers signed-in staff session access
+// - keeps current ADMIN_PASSWORD bridge protection
 // - requires staff identity/capability through staff_users
 // - allows admin / booking managers to read time for any booking
 // - allows assigned detailers / senior detailers to read time only for bookings they can work
@@ -15,7 +15,7 @@
 // }
 //
 // Request headers supported:
-// - x-admin-password: transitional compatibility only when explicitly used
+// - x-admin-password: required
 // - x-staff-email: recommended during transition
 // - x-staff-user-id: optional alternative
 
@@ -55,7 +55,7 @@ export async function onRequestPost(context) {
       body,
       capability: "work_booking",
       bookingId: booking_id,
-      allowLegacyAdminFallback: false
+      allowLegacyAdminFallback: true
     });
 
     if (!access.ok) {
