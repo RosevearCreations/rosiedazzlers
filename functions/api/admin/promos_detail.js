@@ -69,7 +69,7 @@ export async function onRequestPost(context) {
 
     const promoRes = await fetch(
       `${env.SUPABASE_URL}/rest/v1/promo_codes` +
-        `?select=id,created_at,code,label,description,discount_type,discount_value,minimum_subtotal,is_active,starts_at,ends_at,max_uses,total_uses,applies_to,notes` +
+        `?select=id,created_at,updated_at,code,label,description,discount_type,discount_value,minimum_subtotal,is_active,starts_at,ends_at,max_uses,total_uses,applies_to,notes` +
         `&id=eq.${encodeURIComponent(promo_id)}` +
         `&limit=1`,
       { headers }
@@ -173,7 +173,7 @@ async function loadPromoBookings(env, headers, promoCode) {
 function buildPromoBookingsUrl(env, fieldName, promoCode) {
   return (
     `${env.SUPABASE_URL}/rest/v1/bookings` +
-    `?select=id,created_at,service_date,start_slot,status,job_status,customer_name,customer_email,total_price,deposit_amount` +
+    `?select=id,created_at,updated_at,service_date,start_slot,status,job_status,customer_name,customer_email,total_price,deposit_amount` +
     `&${fieldName}=eq.${encodeURIComponent(promoCode)}` +
     `&order=service_date.desc,created_at.desc` +
     `&limit=100`

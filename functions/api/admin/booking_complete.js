@@ -108,6 +108,8 @@ export async function onRequestPost(context) {
       ? buildCompletePatch()
       : buildReopenPatch(body, booking);
 
+    patch.updated_at = new Date().toISOString();
+
     const res = await fetch(
       `${env.SUPABASE_URL}/rest/v1/bookings?id=eq.${encodeURIComponent(booking_id)}`,
       {

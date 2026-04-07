@@ -210,7 +210,7 @@ function buildBookingsUrl(env, { actor, serviceDate, status, jobStatus }) {
     `${env.SUPABASE_URL}/rest/v1/bookings` +
     `?select=id,service_date,start_slot,status,job_status,package_code,vehicle_size,` +
     `customer_name,customer_email,customer_phone,progress_enabled,progress_token,` +
-    `assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,created_at` +
+    `assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,created_at,updated_at` +
     `&order=service_date.asc,start_slot.asc,created_at.desc`;
 
   if (serviceDate) {
@@ -256,7 +256,7 @@ function buildBookingsUrl(env, { actor, serviceDate, status, jobStatus }) {
 async function loadIntakeMap(env, headers, bookingIds) {
   const rows = await fetchRows(
     `${env.SUPABASE_URL}/rest/v1/jobsite_intake` +
-      `?select=id,booking_id,intake_complete,created_at` +
+      `?select=id,booking_id,intake_complete,created_at,updated_at` +
       `&booking_id=in.(${encodeIdList(bookingIds)})`,
     headers
   );
