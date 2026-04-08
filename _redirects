@@ -1,7 +1,62 @@
-# Minimal safe redirects only
-/admin /admin.html 302
-/admin/ /admin.html 302
-/admin-catalog /admin-catalog.html 302
-/admin-catalog/ /admin-catalog.html 302
-/admin-accounting /admin-accounting.html 302
-/admin-accounting/ /admin-accounting.html 302
+/admin /admin.html 200
+/admin/ /admin.html 200
+
+/admin-login /admin-login.html 200
+/admin-login/ /admin-login.html 200
+
+/admin-account /admin-account.html 200
+/admin-account/ /admin-account.html 200
+
+/admin-analytics /admin-analytics.html 200
+/admin-analytics/ /admin-analytics.html 200
+
+/admin-app /admin-app.html 200
+/admin-app/ /admin-app.html 200
+
+/admin-assign /admin-assign.html 200
+/admin-assign/ /admin-assign.html 200
+
+/admin-blocks /admin-blocks.html 200
+/admin-blocks/ /admin-blocks.html 200
+
+/admin-booking /admin-booking.html 200
+/admin-booking/ /admin-booking.html 200
+
+/admin-bootstrap /admin-bootstrap.html 200
+/admin-bootstrap/ /admin-bootstrap.html 200
+
+/admin-catalog /admin-catalog.html 200
+/admin-catalog/ /admin-catalog.html 200
+
+/admin-customers /admin-customers.html 200
+/admin-customers/ /admin-customers.html 200
+
+/admin-jobsite /admin-jobsite.html 200
+/admin-jobsite/ /admin-jobsite.html 200
+
+/admin-live /admin-live.html 200
+/admin-live/ /admin-live.html 200
+
+/admin-notifications /admin-notifications.html 200
+/admin-notifications/ /admin-notifications.html 200
+
+/admin-progress /admin-progress.html 200
+/admin-progress/ /admin-progress.html 200
+
+/admin-promos /admin-promos.html 200
+/admin-promos/ /admin-promos.html 200
+
+/admin-recovery /admin-recovery.html 200
+/admin-recovery/ /admin-recovery.html 200
+
+/admin-staff /admin-staff.html 200
+/admin-staff/ /admin-staff.html 200
+
+/admin-upload /admin-upload.html 200
+/admin-upload/ /admin-upload.html 200
+
+/admin-accounting /admin-accounting.html 200
+/admin-accounting/ /admin-accounting.html 200
+
+/detailer-jobs /detailer-jobs.html 200
+/detailer-jobs/ /detailer-jobs.html 200
