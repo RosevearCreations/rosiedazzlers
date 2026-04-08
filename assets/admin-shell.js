@@ -1,175 +1,245 @@
 // assets/admin-shell.js
-(() => {
-  const globalScope = window;
+//
+// Shared admin/detailer page bootstrap.
+//
+// What this file does:
+// - requires a valid signed-in staff session for protected pages
+// - loads current actor through AdminAuth
+// - updates page text placeholders like actor name / role / email
+// - applies role/capability/page-based visibility rules
+// - wires logout buttons automatically
+// - provides a small page bootstrap helper for admin/detailer screens
+//
+// Expected dependency:
+// - /assets/admin-auth.js
+//
+// Typical page usage:
+// <script src="/assets/admin-auth.js"></script>
+// <script src="/assets/admin-shell.js"></script>
+// <script>
+//   window.AdminShell.boot({ pageKey: "admin-jobsite" });
+// </script>
+//
+// Optional markup hooks:
+// - [data-actor-name]
+// - [data-actor-role]
+// - [data-actor-email]
+// - [data-auth-only]
+// - [data-guest-only]
+// - [data-role="admin"]
+// - [data-capability="can_manage_staff"]
+// - [data-page-access="admin-promos"]
+// - [data-admin-logout]
+// - [data-admin-shell-status]
+// - [data-admin-shell-loading]
+// - [data-admin-shell-ready]
 
-  function ensureStyles() {
-    if (document.getElementById("admin-shell-inline-styles")) return;
-    const style = document.createElement("style");
-    style.id = "admin-shell-inline-styles";
-    style.textContent = `
-      .admin-shell-loading {
-        position: fixed;
-        inset: 0;
-        display: grid;
-        place-items: center;
-        background: rgba(15, 23, 42, 0.55);
-        backdrop-filter: blur(2px);
-        z-index: 9999;
-      }
-      .admin-shell-loading[hidden] { display: none; }
-      .admin-shell-loading .panel {
-        min-width: 260px;
-        max-width: 92vw;
-        padding: 18px 20px;
-        border-radius: 16px;
-        background: #0f172a;
-        color: #e5e7eb;
-        box-shadow: 0 16px 40px rgba(0,0,0,.35);
-        border: 1px solid rgba(255,255,255,.08);
-        text-align: center;
-      }
-      .admin-shell-toolbar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 14px;
-      }
-      .admin-shell-toolbar .left,
-      .admin-shell-toolbar .right {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        align-items: center;
-      }
-      .admin-shell-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        border-radius: 999px;
-        padding: 6px 10px;
-        background: rgba(255,255,255,.08);
-        color: #e5e7eb;
-        font-size: .92rem;
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  function ensureLoadingOverlay() {
-    let node = document.getElementById("admin-shell-loading");
-    if (node) return node;
-    node = document.createElement("div");
-    node.id = "admin-shell-loading";
-    node.className = "admin-shell-loading";
-    node.hidden = true;
-    node.innerHTML = `
-      <div class="panel">
-        <div style="font-weight:700; font-size:1rem; margin-bottom:6px;">Loading admin…</div>
-        <div style="opacity:.85; font-size:.92rem;">Checking sign-in status and preparing the page.</div>
-      </div>
-    `;
-    document.body.appendChild(node);
-    return node;
-  }
-
-  function setLoading(active) {
-    const overlay = ensureLoadingOverlay();
-    overlay.hidden = !active;
-  }
-
-  function makeBtn(href, text) {
-    const a = document.createElement("a");
-    a.className = "btn ghost small";
-    a.href = href;
-    a.textContent = text;
-    return a;
-  }
-
-  function renderToolbar(container, actor) {
-    const wrap = document.createElement("div");
-    wrap.className = "admin-shell-toolbar";
-
-    const left = document.createElement("div");
-    left.className = "left";
-    left.appendChild(makeBtn("/admin", "← Admin Dashboard"));
-    left.appendChild(makeBtn("/admin-account", "Account"));
-    left.appendChild(makeBtn("/admin-analytics", "Analytics"));
-    left.appendChild(makeBtn("/admin-catalog", "Inventory"));
-
-    const right = document.createElement("div");
-    right.className = "right";
-
-    const chip = document.createElement("div");
-    chip.className = "admin-shell-chip";
-    chip.textContent = actor?.email
-      ? `Signed in: ${actor.email}${actor.role ? ` • ${actor.role}` : ""}`
-      : "Signed in";
-    right.appendChild(chip);
-
-    const logout = document.createElement("button");
-    logout.className = "btn ghost small";
-    logout.type = "button";
-    logout.textContent = "Logout";
-    logout.addEventListener("click", async () => {
-      try {
-        if (globalScope.AdminAuth?.logout) {
-          await globalScope.AdminAuth.logout();
-        } else {
-          await fetch("/api/admin/auth_logout", {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: "{}"
-          });
-        }
-      } finally {
-        window.location.href = "/admin-login";
-      }
-    });
-    right.appendChild(logout);
-
-    wrap.appendChild(left);
-    wrap.appendChild(right);
-    container.prepend(wrap);
-  }
-
-  async function init(options = {}) {
-    ensureStyles();
-    setLoading(true);
-
-    try {
-      let actor = null;
-
-      if (globalScope.AdminAuth?.ensureSignedIn) {
-        actor = await globalScope.AdminAuth.ensureSignedIn({
-          redirectTo: options.loginUrl || "/admin-login"
-        });
-      } else {
-        const res = await fetch("/api/admin/auth_me", { credentials: "include" });
-        if (!res.ok) {
-          window.location.href = options.loginUrl || "/admin-login";
-          return null;
-        }
-        const data = await res.json().catch(() => ({}));
-        actor = data?.actor || data?.staff || data || null;
-      }
-
-      const mount =
-        document.querySelector("[data-admin-shell]") ||
-        document.querySelector("main") ||
-        document.body;
-
-      renderToolbar(mount, actor);
-      return actor;
-    } finally {
-      setLoading(false);
+(function attachAdminShell(globalScope) {
+  function assertDependency() {
+    if (!globalScope.AdminAuth) {
+      throw new Error("AdminShell requires /assets/admin-auth.js to be loaded first.");
     }
   }
 
+  function find(root, selector) {
+    return Array.from((root || document).querySelectorAll(selector));
+  }
+
+  function setText(root, selector, value) {
+    find(root, selector).forEach((node) => {
+      node.textContent = value || "";
+    });
+  }
+
+  function setStatus(root, message, type) {
+    const nodes = find(root, "[data-admin-shell-status]");
+    nodes.forEach((node) => {
+      node.textContent = message || "";
+      node.dataset.state = type || "";
+      node.hidden = !message;
+    });
+  }
+
+  function setLoading(root, isLoading) {
+    find(root, "[data-admin-shell-loading]").forEach((node) => {
+      node.hidden = !isLoading;
+    });
+
+    find(root, "[data-admin-shell-ready]").forEach((node) => {
+      node.hidden = !!isLoading;
+    });
+
+    document.documentElement.dataset.adminLoading = isLoading ? "true" : "false";
+  }
+
+  function applyActor(root, actor) {
+    setText(root, "[data-actor-name]", actor && actor.full_name ? actor.full_name : "");
+    setText(root, "[data-actor-role]", actor ? humanizeRole(actor.role_code) : "");
+    setText(root, "[data-actor-email]", actor && actor.email ? actor.email : "");
+
+    document.documentElement.dataset.adminAuthenticated = actor ? "true" : "false";
+    document.documentElement.dataset.adminRole = actor && actor.role_code ? actor.role_code : "";
+  }
+
+  function humanizeRole(roleCode) {
+    switch (String(roleCode || "").trim()) {
+      case "admin":
+        return "Admin";
+      case "senior_detailer":
+        return "Senior Detailer";
+      case "detailer":
+        return "Detailer";
+      default:
+        return "Staff";
+    }
+  }
+
+  function ensureReturnMenu(root, pageKey) {
+    if (document.querySelector(".admin-return-bar")) return;
+    if (document.querySelector("header.nav")) return;
+
+    const host = document.querySelector("main.shell") || document.querySelector("main.container") || document.body;
+    if (!host) return;
+
+    const wrap = document.createElement("div");
+    wrap.className = "admin-return-bar";
+    wrap.innerHTML = `
+      <a class="btn ghost small" href="/admin.html">← Admin Dashboard</a>
+      <a class="btn ghost small" href="/admin-account.html">Account</a>
+      <a class="btn ghost small" href="/admin-analytics.html">Analytics</a>
+      <span class="crumb">${pageKey || "admin"}</span>
+    `;
+
+    host.insertBefore(wrap, host.firstChild);
+  }
+
+  function wireLogout(root, options = {}) {
+    const redirectTo = options.logoutRedirect || "/admin-login";
+
+    find(root, "[data-admin-logout]").forEach((node) => {
+      if (node.dataset.logoutBound === "true") return;
+
+      node.dataset.logoutBound = "true";
+      node.addEventListener("click", async function (event) {
+        event.preventDefault();
+
+        const originalText = "value" in node ? node.value : node.textContent;
+        try {
+          setStatus(root, "", "");
+          setBusy(node, true, "Signing Out...");
+          await globalScope.AdminAuth.signOut();
+          window.location.replace(redirectTo);
+        } catch (err) {
+          setBusy(node, false, originalText);
+          setStatus(
+            root,
+            err && err.message ? err.message : "Could not sign out.",
+            "error"
+          );
+        }
+      });
+    });
+  }
+
+  function setBusy(node, busy, busyLabel) {
+    if (!node) return;
+
+    if (busy) {
+      node.dataset.originalText =
+        "value" in node ? String(node.value || "") : String(node.textContent || "");
+      node.disabled = true;
+
+      if ("value" in node) node.value = busyLabel || "Working...";
+      else node.textContent = busyLabel || "Working...";
+      return;
+    }
+
+    const original = node.dataset.originalText || "";
+    node.disabled = false;
+
+    if ("value" in node) node.value = original;
+    else node.textContent = original;
+  }
+
+  async function boot(options = {}) {
+    assertDependency();
+
+    const root = options.root || document;
+    const pageKey = options.pageKey || null;
+    const loginUrl = options.loginUrl || "/admin-login";
+
+    setLoading(root, true);
+    setStatus(root, "", "");
+
+    try {
+      const result = await globalScope.AdminAuth.requireAuth({
+        redirectTo: loginUrl,
+        pageKey
+      });
+
+      if (!result || !result.ok) {
+        return {
+          ok: false,
+          redirected: true
+        };
+      }
+
+      const actor = result.actor || globalScope.AdminAuth.getActor() || null;
+
+      applyActor(root, actor);
+      globalScope.AdminAuth.applyVisibility(root);
+      globalScope.AdminAuth.renderActorText(root);
+      wireLogout(root, options);
+      ensureReturnMenu(root, pageKey);
+
+      if (typeof options.onReady === "function") {
+        await options.onReady({
+          actor,
+          auth: globalScope.AdminAuth
+        });
+      }
+
+      setLoading(root, false);
+      find(root, "[data-admin-shell-loading]").forEach((node) => { node.hidden = true; node.style.display = "none"; });
+
+      return {
+        ok: true,
+        actor
+      };
+    } catch (err) {
+      setLoading(root, false);
+      find(root, "[data-admin-shell-loading]").forEach((node) => { node.hidden = true; node.style.display = "none"; });
+      setStatus(
+        root,
+        err && err.message ? err.message : "Could not initialize this page.",
+        "error"
+      );
+
+      if (typeof options.onError === "function") {
+        options.onError(err);
+      }
+
+      return {
+        ok: false,
+        error: err
+      };
+    }
+  }
+
+  async function refresh(root = document) {
+    assertDependency();
+
+    const current = await globalScope.AdminAuth.loadCurrentActor();
+    applyActor(root, current && current.actor ? current.actor : null);
+    globalScope.AdminAuth.applyVisibility(root);
+    globalScope.AdminAuth.renderActorText(root);
+
+    return current;
+  }
+
   globalScope.AdminShell = {
-    init,
-    setLoading
+    boot,
+    refresh,
+    humanizeRole
   };
-})();
+})(window);

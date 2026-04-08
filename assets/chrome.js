@@ -535,16 +535,16 @@ async function initAccountWidget() {
     host.innerHTML = `
       <div class="account-widget-inner">
         <span class="account-chip">${staffActor.full_name || staffActor.email || 'Staff'} · ${role}</span>
-        ${widgetButton('/admin', 'Admin', 'ghost')}
-        ${widgetButton('/detailer-jobs', 'Jobs', 'ghost')}
-        ${widgetButton('/admin-account', 'Settings', 'ghost')}
+        ${widgetButton('/admin.html', 'Admin', 'ghost')}
+        ${widgetButton('/detailer-jobs.html', 'Jobs', 'ghost')}
+        ${widgetButton('/admin-account.html', 'Settings', 'ghost')}
         ${widgetActionButton('publicLogoutBtn', 'Sign out', 'primary')}
       </div>
     `;
     host.querySelector('#publicLogoutBtn')?.addEventListener('click', async () => {
       await readJsonSafe('/api/admin/auth_logout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
       await readJsonSafe('/api/client/auth_logout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
-      location.href = '/login';
+      location.href = '/login.html';
     });
     return;
   }
@@ -553,14 +553,14 @@ async function initAccountWidget() {
     host.innerHTML = `
       <div class="account-widget-inner">
         <span class="account-chip">${clientCustomer.full_name || clientCustomer.email || 'Customer'}</span>
-        ${widgetButton('/my-account', 'Garage & account', 'ghost')}
-        ${widgetButton('/book', 'Book again', 'ghost')}
+        ${widgetButton('/my-account.html', 'Garage & account', 'ghost')}
+        ${widgetButton('/book.html', 'Book again', 'ghost')}
         ${widgetActionButton('publicLogoutBtn', 'Sign out', 'primary')}
       </div>
     `;
     host.querySelector('#publicLogoutBtn')?.addEventListener('click', async () => {
       await readJsonSafe('/api/client/auth_logout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
-      location.href = '/login';
+      location.href = '/login.html';
     });
     return;
   }
@@ -568,7 +568,7 @@ async function initAccountWidget() {
   host.innerHTML = `
     <div class="account-widget-inner">
       <span class="account-chip">Account</span>
-      ${widgetButton('/login', 'Login', 'ghost')}
+      ${widgetButton('/login.html', 'Login', 'ghost')}
       ${widgetButton('/login#signupForm', 'Create account', 'primary')}
     </div>
   `;

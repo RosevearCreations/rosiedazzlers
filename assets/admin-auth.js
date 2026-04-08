@@ -228,7 +228,7 @@
   }
 
   async function requireAuth({
-    redirectTo = "/admin-login",
+    redirectTo = "/admin-login.html",
     pageKey = null
   } = {}) {
     if (!state.loaded) {
@@ -265,10 +265,10 @@
   }
 
   function redirectToSafeHome() {
-    window.location.replace("/admin");
+    window.location.replace("/admin.html");
   }
 
-  function readNextUrl(fallback = "/admin") {
+  function readNextUrl(fallback = "/admin.html") {
     const params = new URLSearchParams(window.location.search);
     const next = params.get("next");
     if (!next) return fallback;
