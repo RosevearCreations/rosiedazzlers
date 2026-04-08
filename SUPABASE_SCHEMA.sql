@@ -370,3 +370,51 @@ create index if not exists catalog_purchase_orders_reminder_sent_at_idx on publi
 -- Last synchronized: 2026-03-29. Reviewed during the promo/block/session conversion and purchase-order reminder lifecycle pass.
 
 -- April 8, 2026 admin route stabilization pass: no schema change; docs/build routing and shell repair only.
+
+
+-- 2026-04-08 general ledger accounting backend foundation
+create table if not exists public.accounting_accounts (
+  code text primary key,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  sort_order integer not null default 0,
+  label text not null,
+  account_type text not null,
+  account_group text null,
+  normal_balance text not null default 'debit',
+  is_active boolean not null default true,
+  is_system boolean not null default false,
+  notes text null
+);
+
+create table if not exists public.accounting_journal_entries (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  entry_date date not null default current_date,
+  entry_type text not null default 'manual',
+  status text not null default 'posted',
+  reference_type text null,
+  reference_id text null,
+  payee_name text null,
+  vendor_name text null,
+  memo text null,
+  subtotal_cad numeric(12,2) not null default 0,
+  tax_cad numeric(12,2) not null default 0,
+  total_cad numeric(12,2) not null default 0,
+  due_date date null,
+  paid_at timestamptz null,
+  created_by_name text null,
+  last_recorded_by_name text null
+);
+
+create table if not exists public.accounting_journal_lines (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  entry_id uuid not null references public.accounting_journal_entries(id) on delete cascade,
+  line_order integer not null default 0,
+  account_code text not null references public.accounting_accounts(code),
+  direction text not null,
+  amount_cad numeric(12,2) not null default 0,
+  memo text null
+);
