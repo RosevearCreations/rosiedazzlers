@@ -1,2 +1,1 @@
-# Leave this file empty for now on admin routes.
-# Do not add /admin or /admin-* redirects until the route cleanup pass is complete.
+# Admin routes intentionally use direct .html files in this build.
