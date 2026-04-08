@@ -368,3 +368,5 @@ create index if not exists customer_reviews_customer_profile_id_idx on public.cu
 create index if not exists catalog_purchase_orders_reminder_sent_at_idx on public.catalog_purchase_orders(reminder_sent_at);
 
 -- Last synchronized: 2026-03-29. Reviewed during the promo/block/session conversion and purchase-order reminder lifecycle pass.
+
+-- April 8, 2026 admin route stabilization pass: no schema change; docs/build routing and shell repair only.
