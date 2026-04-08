@@ -1,7 +1,1 @@
 # Minimal safe redirects only
-/admin /admin.html 302
-/admin/ /admin.html 302
-/admin-catalog /admin-catalog.html 302
-/admin-catalog/ /admin-catalog.html 302
-/admin-accounting /admin-accounting.html 302
-/admin-accounting/ /admin-accounting.html 302
