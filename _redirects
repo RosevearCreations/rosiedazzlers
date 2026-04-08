@@ -7,8 +7,10 @@
 # Admin pretty URLs
 /admin /admin/index.html 200
 /admin/ /admin/index.html 200
-/admin.html /admin/index.html 301
+/admin.html /admin/index.html 200
 /admin-catalog /admin-catalog/index.html 200
 /admin-catalog/ /admin-catalog/index.html 200
+/admin-catalog.html /admin-catalog/index.html 200
 /admin-accounting /admin-accounting/index.html 200
 /admin-accounting/ /admin-accounting/index.html 200
+/admin-accounting.html /admin-accounting/index.html 200
