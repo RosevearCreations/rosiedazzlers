@@ -384,3 +384,5 @@ What the customer can see during booking progress
 How valuable / recurring the customer is from a service and loyalty perspective
 
 These must remain separate concepts so the system stays clean and flexible.
+
+<!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->

@@ -107,6 +107,8 @@
       <a class="btn ghost small" href="/admin.html">← Admin Dashboard</a>
       <a class="btn ghost small" href="/admin-account.html">Account</a>
       <a class="btn ghost small" href="/admin-analytics.html">Analytics</a>
+      <a class="btn ghost small" href="/admin-catalog.html">Inventory</a>
+      <a class="btn ghost small" href="/admin-accounting.html">Accounting</a>
       <span class="crumb">${pageKey || "admin"}</span>
     `;
 

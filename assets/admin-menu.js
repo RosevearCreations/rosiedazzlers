@@ -123,6 +123,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-promos")
     },
     {
+      key: "admin-accounting",
+      label: "Accounting",
+      href: "/admin-accounting.html",
+      description: "Ledger, expenses, payables, tax, exports",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting") || globalScope.AdminAuth.canAccessPage("admin")
+    },
+    {
       key: "account",
       label: "My Account",
       href: "/admin-account.html",
