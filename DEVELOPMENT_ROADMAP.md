@@ -224,3 +224,8 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Suggested next mobile/operations features: quick expense entry from phone with receipt photo attachment, vendor quick-add during payable entry, and a month-end checklist panel for settlement, remittance, and report export.
 
 <!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->
+
+
+## April 9, 2026 accounting screen syntax fix
+- Fixed a JavaScript syntax error in `admin-accounting.html` that prevented the Accounting screen from booting past the “Loading Accounting Records” state.
+- Continued docs/schema synchronization for the current build.
