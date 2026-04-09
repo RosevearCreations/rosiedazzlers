@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Accounting | Rosie Dazzlers</title>
-  <meta name="description" content="Internal accounting ledger, expenses, payables, and month-end reporting for Rosie Dazzlers." />
+  <meta name="description" content="Internal accounting ledger for Rosie Dazzlers bookings, payments, payables, tax, and month-end reporting." />
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
 </head>
@@ -13,15 +13,17 @@
     <section class="section" data-admin-shell-loading>
       <div class="notice">Loading accounting records…</div>
     </section>
+
     <section class="section" data-admin-shell-ready hidden>
       <div class="grid cards" style="grid-template-columns:minmax(240px,320px) minmax(0,1fr)">
         <div data-admin-menu-mount></div>
+
         <div class="stack">
           <div class="hero">
             <div>
               <div class="badge">Accounting</div>
               <h1>Operational accounting ledger</h1>
-              <p>Track invoices, payables, utilities, rent, gas, repairs, and month-end performance in one simple digital accounting area built for an auto detailing business.</p>
+              <p>Create the accounting trail for bookings, payables, tax, inventory cost, and month-end reporting.</p>
             </div>
             <div class="panel">
               <div class="kicker">Signed in as</div>
@@ -40,279 +42,147 @@
             <article class="panel"><div class="kicker">Tips</div><div id="sumTips" class="hero-stat">$0.00</div></article>
           </div>
 
-          <div class="grid cards" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:start">
-            <article class="panel stack">
-              <h2 style="margin:0">Record expense / payable</h2>
-              <form id="expenseForm" class="stack">
-                <div class="row wrap" style="gap:12px">
-                  <label style="flex:1 1 180px">Mode
-                    <select id="expenseMode">
-                      <option value="payable">Payable / Bill</option>
-                      <option value="cash">Paid now</option>
-                    </select>
-                  </label>
-                  <label style="flex:1 1 180px">Entry date
-                    <input id="expenseDate" type="date" />
-                  </label>
-                </div>
-                <label>Vendor / Payee
-                  <input id="expenseVendor" type="text" placeholder="Hydro, landlord, Canadian Tire, fuel station" />
-                </label>
-                <div class="row wrap" style="gap:12px">
-                  <label style="flex:1 1 180px">Expense account
-                    <select id="expenseAccount"></select>
-                  </label>
-                  <label style="flex:1 1 180px">Pay from / credit to
-                    <select id="paymentAccount">
-                      <option value="accounts_payable">Accounts Payable</option>
-                      <option value="cash">Cash</option>
-                    </select>
-                  </label>
-                </div>
-                <div class="row wrap" style="gap:12px">
-                  <label style="flex:1 1 140px">Amount
-                    <input id="expenseAmount" type="number" min="0" step="0.01" placeholder="0.00" />
-                  </label>
-                  <label style="flex:1 1 140px">Tax
-                    <input id="expenseTax" type="number" min="0" step="0.01" value="0" />
-                  </label>
-                  <label style="flex:1 1 180px">Due date
-                    <input id="expenseDueDate" type="date" />
-                  </label>
-                </div>
-                <label>Memo
-                  <input id="expenseMemo" type="text" placeholder="Monthly hydro, shop rent, pressure washer repair" />
-                </label>
-                <div class="row wrap" style="gap:10px;justify-content:flex-end">
-                  <button class="btn primary" type="submit">Save entry</button>
-                </div>
-              </form>
-              <p class="mini">Use this for rent, gas, electricity, repairs, software, insurance, supplies, and other operating costs.</p>
-            </article>
-
-            <article class="panel stack">
-              <h2 style="margin:0">Month-end report</h2>
-              <form id="reportForm" class="row wrap" style="gap:12px;align-items:end">
-                <label style="flex:1 1 140px">Month
-                  <input id="reportMonth" type="number" min="1" max="12" />
-                </label>
-                <label style="flex:1 1 160px">Year
-                  <input id="reportYear" type="number" min="2020" max="2100" />
-                </label>
-                <button class="btn primary" type="submit">Load report</button>
-              </form>
-              <div class="grid cards" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr))">
-                <article class="panel"><div class="kicker">Revenue</div><div id="repRevenue" class="hero-stat" style="font-size:1.3rem">$0.00</div></article>
-                <article class="panel"><div class="kicker">Expenses</div><div id="repExpense" class="hero-stat" style="font-size:1.3rem">$0.00</div></article>
-                <article class="panel"><div class="kicker">Net</div><div id="repNet" class="hero-stat" style="font-size:1.3rem">$0.00</div></article>
-              </div>
-              <div id="reportWrap" class="stack"><div class="mini">No month-end report loaded yet.</div></div>
-            </article>
-          </div>
-
-          
-          <div class="grid cards" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:start">
-            <article class="panel stack">
-              <h2 style="margin:0">Payables settlement</h2>
-              <form id="payableForm" class="row wrap" style="gap:12px;align-items:end">
-                <label style="flex:2 1 220px">Open payable
-                  <select id="payableEntry"></select>
-                </label>
-                <label style="flex:1 1 140px">Amount
-                  <input id="payableAmount" type="number" min="0" step="0.01" placeholder="Leave blank for full balance" />
-                </label>
-                <label style="flex:1 1 160px">Paid from
-                  <select id="payableAccount">
-                    <option value="cash">Cash</option>
-                    <option value="accounts_payable">Accounts Payable</option>
-                  </select>
-                </label>
-                <label style="flex:1 1 160px">Payment date
-                  <input id="payableDate" type="date" />
-                </label>
-                <button class="btn primary" type="submit">Settle payable</button>
-              </form>
-              <div id="payablesWrap" class="stack"><div class="mini">No open payables loaded yet.</div></div>
-            </article>
-            <article class="panel stack">
-              <h2 style="margin:0">Tax and owner reports</h2>
-              <div class="grid cards" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
-                <article class="panel"><div class="kicker">Tax payable</div><div id="taxPayable" class="hero-stat" style="font-size:1.2rem">$0.00</div></article>
-                <article class="panel"><div class="kicker">Owner draw</div><div id="ownerDraw" class="hero-stat" style="font-size:1.2rem">$0.00</div></article>
-                <article class="panel"><div class="kicker">Equity delta</div><div id="ownerEquity" class="hero-stat" style="font-size:1.2rem">$0.00</div></article>
-              </div>
-              <div class="row wrap" style="gap:10px;justify-content:flex-end">
-                <a id="exportBtn" class="btn ghost" href="#" download>Download GL CSV</a>
-              </div>
-              <div id="reportMeta" class="mini"></div>
-            </article>
-          </div>
-<article class="panel">
+          <article class="panel">
             <form id="searchForm" class="row wrap" style="gap:12px;align-items:end">
-              <label style="min-width:240px;flex:1 1 280px">Search invoices / booking ledger
+              <label style="min-width:240px;flex:1 1 280px">
+                Search
                 <input id="searchQ" type="search" placeholder="Customer name, email, or package" />
               </label>
               <button class="btn primary" type="submit">Refresh</button>
             </form>
-            <p class="mini">Accounting records are created automatically from bookings. Manual journal entries above cover general ledger operating costs outside booking revenue.</p>
+            <p class="mini">Records are created automatically when bookings are created and kept in sync when payment ledger entries are added.</p>
           </article>
 
           <article class="panel">
-            <div id="recordsWrap" class="stack"><div class="mini">No accounting records loaded yet.</div></div>
+            <div id="recordsWrap" class="stack">
+              <div class="mini">No accounting records loaded yet.</div>
+            </div>
           </article>
         </div>
       </div>
     </section>
   </main>
+
   <script src="/assets/admin-auth.js"></script>
   <script src="/assets/admin-shell.js"></script>
   <script src="/assets/admin-menu.js"></script>
   <script>
-    (function(){
-      const money = (n)=> new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(Number(n||0));
-      const esc = (v)=> String(v==null?"":v).replace(/[&<>"']/g,(m)=>({"&":"&amp;","<":"&lt;",">":"&gt;",""":"&quot;","'":"&#39;"}[m]));
-      let accounts = [];
-      let payables = [];
-      let currentMonth = null;
-      let currentYear = null;
-      function setStatus(message, type='') { document.querySelectorAll('[data-admin-shell-status]').forEach((n)=>{n.hidden=!message;n.textContent=message||'';n.dataset.state=type||'';}); }
-      function getJson(url){ return fetch(url,{credentials:'include',cache:'no-store'}).then(async(res)=>({ok:res.ok,out:await res.json().catch(()=>null)})); }
-      function postJson(url,payload){ return fetch(url,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload||{})}).then(async(res)=>({ok:res.ok,out:await res.json().catch(()=>null)})); }
-      function renderSummary(summary={}) {
-        document.getElementById('sumOpen').textContent = String(summary.open || 0);
-        document.getElementById('sumPaid').textContent = String(summary.paid || 0);
-        document.getElementById('sumCollected').textContent = money(summary.collected_total_cad || 0);
-        document.getElementById('sumBalance').textContent = money(summary.balance_due_cad || 0);
-        document.getElementById('sumTips').textContent = money(summary.tip_cad || 0);
+    (function () {
+      function money(n) {
+        return new Intl.NumberFormat("en-CA", {
+          style: "currency",
+          currency: "CAD"
+        }).format(Number(n || 0));
       }
-      function renderRows(rows=[]) {
-        const wrap = document.getElementById('recordsWrap');
-        if (!rows.length) { wrap.innerHTML = '<div class="mini">No accounting records found.</div>'; return; }
-        wrap.innerHTML = rows.map((row)=>`<article class="card">
-          <div class="row wrap" style="justify-content:space-between;gap:10px">
-            <div>
-              <div class="kicker">${esc(row.order_status || 'open')} · ${esc(row.accounting_stage || 'open')}</div>
-              <h3 style="margin:6px 0">${esc(row.customer_name || 'Unknown customer')}</h3>
-              <div class="mini">${esc(row.customer_email || '')}${row.customer_phone ? ' · ' + esc(row.customer_phone) : ''}</div>
-            </div>
-            <div class="mini">${esc(row.service_date || '')}${row.package_code ? ' · ' + esc(row.package_code) : ''}</div>
-          </div>
-          <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:12px">
-            <div><strong>Total</strong><div>${money(row.total_cad || 0)}</div></div>
-            <div><strong>Collected</strong><div>${money(row.collected_total_cad || 0)}</div></div>
-            <div><strong>Balance</strong><div>${money(row.balance_due_cad || 0)}</div></div>
-            <div><strong>Tips</strong><div>${money(row.tip_cad || 0)}</div></div>
-          </div>
-          <div class="mini" style="margin-top:10px">Booking ${esc(row.booking_id || '')} · Updated ${esc(new Date(row.updated_at || row.created_at || Date.now()).toLocaleString())}</div>
-        </article>`).join('');
+
+      function esc(v) {
+        return String(v == null ? "" : v).replace(/[&<>"']/g, function (m) {
+          return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+          }[m];
+        });
       }
-      function fillAccounts() {
-        const expense = document.getElementById('expenseAccount');
-        const opts = accounts.filter((a)=>String(a.account_type)==='expense' && a.is_active !== false)
-          .map((a)=>`<option value="${esc(a.code)}">${esc(a.label)}</option>`).join('');
-        expense.innerHTML = opts || '<option value="shop_supplies">Shop Supplies</option>';
+
+      function setStatus(message, type) {
+        document.querySelectorAll("[data-admin-shell-status]").forEach(function (node) {
+          node.hidden = !message;
+          node.textContent = message || "";
+          node.dataset.state = type || "";
+        });
       }
-      function fillPayables(){
-        const sel = document.getElementById('payableEntry');
-        if(!payables.length){ sel.innerHTML='<option value="">No open payables</option>'; return; }
-        sel.innerHTML = payables.map((p)=>`<option value="${esc(p.id)}">${esc(p.vendor_name || p.payee_name || p.memo || 'Payable')} — ${money(p.balance_due_cad || 0)} due</option>`).join('');
+
+      function renderSummary(summary) {
+        summary = summary || {};
+        document.getElementById("sumOpen").textContent = String(summary.open || 0);
+        document.getElementById("sumPaid").textContent = String(summary.paid || 0);
+        document.getElementById("sumCollected").textContent = money(summary.collected_total_cad || 0);
+        document.getElementById("sumBalance").textContent = money(summary.balance_due_cad || 0);
+        document.getElementById("sumTips").textContent = money(summary.tip_cad || 0);
       }
-      function renderPayables(){
-        const wrap = document.getElementById('payablesWrap');
-        if(!payables.length){ wrap.innerHTML='<div class="mini">No open payables right now.</div>'; return; }
-        wrap.innerHTML = payables.map((p)=>`<article class="card"><div class="row wrap" style="justify-content:space-between;gap:10px"><strong>${esc(p.vendor_name || p.payee_name || 'Vendor')}</strong><span class="mini">${esc(p.entry_date || '')}</span></div><div class="mini">${esc(p.memo || '')}</div><div class="grid" style="grid-template-columns:repeat(3,minmax(100px,1fr));gap:10px;margin-top:10px"><div><strong>Total</strong><div>${money(p.total_cad || 0)}</div></div><div><strong>Settled</strong><div>${money(p.settled_amount_cad || 0)}</div></div><div><strong>Balance</strong><div>${money(p.balance_due_cad || 0)}</div></div></div></article>`).join('');
-      }
-      async function loadAccounts() {
-        const { ok, out } = await getJson('/api/admin/accounting_accounts_list');
-        if (!ok || !out?.ok) throw new Error((out && out.error) || 'Could not load accounting accounts.');
-        accounts = Array.isArray(out.accounts) ? out.accounts : [];
-        fillAccounts();
-      }
-      async function loadRecords() {
-        const q = (document.getElementById('searchQ').value || '').trim();
-        const { ok, out } = await getJson(`/api/admin/accounting_list${q ? `?q=${encodeURIComponent(q)}` : ''}`);
-        if (!ok || !out?.ok) throw new Error((out && out.error) || 'Could not load accounting records.');
-        renderSummary(out.summary || {});
-        renderRows(Array.isArray(out.records) ? out.records : []);
-      }
-      async function loadReport() {
-        currentMonth = Number(document.getElementById('reportMonth').value || 0);
-        currentYear = Number(document.getElementById('reportYear').value || 0);
-        const month = currentMonth; const year = currentYear;
-        const [{ok:ok1,out:out1},{ok:ok2,out:out2},{ok:ok3,out:out3}] = await Promise.all([
-          getJson(`/api/admin/accounting_report?month=${month}&year=${year}`),
-          getJson(`/api/admin/accounting_tax_report?month=${month}&year=${year}`),
-          getJson(`/api/admin/accounting_owner_report?month=${month}&year=${year}`)
-        ]);
-        if (!ok1 || !out1?.ok) throw new Error((out1 && out1.error) || 'Could not load month-end report.');
-        document.getElementById('repRevenue').textContent = money(out1.report?.totals?.revenue || 0);
-        document.getElementById('repExpense').textContent = money(out1.report?.totals?.expense || 0);
-        document.getElementById('repNet').textContent = money(out1.report?.totals?.net_income || 0);
-        document.getElementById('reportWrap').innerHTML = (Array.isArray(out1.report?.by_account) && out1.report.by_account.length)
-          ? out1.report.by_account.map((row)=>`<div class="row wrap" style="justify-content:space-between;border-top:1px solid rgba(255,255,255,.08);padding-top:8px"><span>${esc(row.label)}</span><strong>${money(row.amount_cad || 0)}</strong></div>`).join('')
-          : '<div class="mini">No ledger activity for this month.</div>';
-        if (ok2 && out2?.ok) document.getElementById('taxPayable').textContent = money(out2.report?.suggested_remittance_cad || 0);
-        if (ok3 && out3?.ok) {
-          document.getElementById('ownerDraw').textContent = money(out3.report?.owner_draw_cad || 0);
-          document.getElementById('ownerEquity').textContent = money(out3.report?.owner_equity_delta_cad || 0);
+
+      function renderRows(rows) {
+        var wrap = document.getElementById("recordsWrap");
+        rows = Array.isArray(rows) ? rows : [];
+
+        if (!rows.length) {
+          wrap.innerHTML = '<div class="mini">No accounting records found.</div>';
+          return;
         }
-        document.getElementById('reportMeta').textContent = `Period ${year}-${String(month).padStart(2,'0')} · tax remittance and owner equity views refreshed.`;
-        document.getElementById('exportBtn').href = `/api/admin/accounting_export?month=${month}&year=${year}`;
+
+        wrap.innerHTML = rows.map(function (row) {
+          return (
+            '<article class="card">' +
+              '<div class="row wrap" style="justify-content:space-between;gap:10px">' +
+                '<div>' +
+                  '<div class="kicker">' + esc(row.order_status || "open") + ' · ' + esc(row.accounting_stage || "open") + '</div>' +
+                  '<h3 style="margin:6px 0">' + esc(row.customer_name || "Unknown customer") + '</h3>' +
+                  '<div class="mini">' +
+                    esc(row.customer_email || "") +
+                    (row.customer_phone ? " · " + esc(row.customer_phone) : "") +
+                  '</div>' +
+                '</div>' +
+                '<div class="mini">' +
+                  esc(row.service_date || "") +
+                  (row.package_code ? " · " + esc(row.package_code) : "") +
+                '</div>' +
+              '</div>' +
+              '<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:12px">' +
+                '<div><strong>Total</strong><div>' + money(row.total_cad || 0) + '</div></div>' +
+                '<div><strong>Collected</strong><div>' + money(row.collected_total_cad || 0) + '</div></div>' +
+                '<div><strong>Balance</strong><div>' + money(row.balance_due_cad || 0) + '</div></div>' +
+                '<div><strong>Tips</strong><div>' + money(row.tip_cad || 0) + '</div></div>' +
+              '</div>' +
+              '<div class="mini" style="margin-top:10px">Booking ' +
+                esc(row.booking_id || "") +
+                " · Updated " +
+                esc(new Date(row.updated_at || row.created_at || Date.now()).toLocaleString()) +
+              '</div>' +
+            '</article>'
+          );
+        }).join("");
       }
-      async function loadPayables(){
-        const { ok, out } = await getJson('/api/admin/accounting_payables_list?status=open');
-        if (!ok || !out?.ok) throw new Error((out && out.error) || 'Could not load payables.');
-        payables = Array.isArray(out.payables) ? out.payables : [];
-        fillPayables();
-        renderPayables();
+
+      async function loadRecords() {
+        var q = document.getElementById("searchQ").value.trim();
+        setStatus("Loading accounting records…");
+
+        var res = await fetch("/api/admin/accounting_list" + (q ? ("?q=" + encodeURIComponent(q)) : ""), {
+          credentials: "include"
+        });
+
+        var out = await res.json().catch(function () { return null; });
+
+        if (!res.ok || !(out && out.ok)) {
+          throw new Error((out && out.error) || "Could not load accounting records.");
+        }
+
+        renderSummary(out.summary || {});
+        renderRows(out.records || []);
+        setStatus("Accounting records loaded.", "success");
       }
-      document.getElementById('searchForm').addEventListener('submit', async (e)=>{ e.preventDefault(); try { setStatus('Refreshing accounting records…'); await loadRecords(); setStatus('Accounting records refreshed.','success'); } catch(err) { setStatus(err.message || 'Could not load accounting records.','error'); } });
-      document.getElementById('reportForm').addEventListener('submit', async (e)=>{ e.preventDefault(); try { setStatus('Loading reports…'); await loadReport(); setStatus('Reports refreshed.','success'); } catch(err) { setStatus(err.message || 'Could not load reports.','error'); } });
-      document.getElementById('expenseForm').addEventListener('submit', async (e)=>{
+
+      document.getElementById("searchForm").addEventListener("submit", async function (e) {
         e.preventDefault();
         try {
-          const payload = {
-            mode: document.getElementById('expenseMode').value,
-            entry_date: document.getElementById('expenseDate').value,
-            vendor_name: document.getElementById('expenseVendor').value.trim(),
-            expense_account: document.getElementById('expenseAccount').value,
-            payment_account: document.getElementById('paymentAccount').value,
-            amount_cad: Number(document.getElementById('expenseAmount').value || 0),
-            tax_cad: Number(document.getElementById('expenseTax').value || 0),
-            due_date: document.getElementById('expenseDueDate').value || null,
-            memo: document.getElementById('expenseMemo').value.trim()
-          };
-          const res = await fetch('/api/admin/accounting_entry_save', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-          const out = await res.json().catch(()=>null);
-          if (!res.ok || !out?.ok) throw new Error((out && out.error) || 'Could not save accounting entry.');
-          document.getElementById('expenseForm').reset();
-          document.getElementById('expenseDate').value = new Date().toISOString().slice(0,10);
-          setStatus('Accounting entry saved.','success');
-          await Promise.all([loadRecords(), loadReport(), loadPayables()]);
-        } catch(err) { setStatus(err.message || 'Could not save accounting entry.','error'); }
+          await loadRecords();
+        } catch (err) {
+          setStatus((err && err.message) || "Could not load accounting records.", "error");
+        }
       });
-      document.getElementById('payableForm').addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        try {
-          const payload = { entry_id: document.getElementById('payableEntry').value, amount_cad: document.getElementById('payableAmount').value || null, payment_account: document.getElementById('payableAccount').value, payment_date: document.getElementById('payableDate').value, memo: 'Payable settlement from Admin Accounting' };
-          const { ok, out } = await postJson('/api/admin/accounting_payable_settle', payload);
-          if(!ok || !out?.ok) throw new Error((out && out.error) || 'Could not settle payable.');
-          document.getElementById('payableAmount').value='';
-          setStatus('Payable settled.','success');
-          await Promise.all([loadPayables(), loadReport()]);
-        } catch(err){ setStatus(err.message || 'Could not settle payable.','error'); }
+
+      window.AdminShell.boot({
+        pageKey: "admin-accounting",
+        onReady: async function () {
+          if (window.AdminMenu && typeof window.AdminMenu.render === "function") {
+            window.AdminMenu.render({ currentPage: "admin-accounting" });
+          }
+          await loadRecords();
+        }
       });
-      window.AdminShell.boot({ pageKey:'admin-accounting', onReady: async function(){
-        window.AdminMenu.render({ currentPage:'admin-accounting' });
-        const now = new Date();
-        document.getElementById('expenseDate').value = now.toISOString().slice(0,10);
-        document.getElementById('payableDate').value = now.toISOString().slice(0,10);
-        document.getElementById('reportMonth').value = String(now.getMonth()+1);
-        document.getElementById('reportYear').value = String(now.getFullYear());
-        await loadAccounts();
-        await Promise.all([loadRecords(), loadReport(), loadPayables()]);
-        setStatus('Accounting ready.','success');
-      } });
     })();
   </script>
 </body>
