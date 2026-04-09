@@ -138,3 +138,10 @@
 ## April 8, 2026 accounting backend extension
 - Admin Accounting now supports manual expense/vendor bill posting, open payable settlement, monthly revenue/expense/net reporting, tax payable summary, owner draw/equity summary, and general-ledger CSV export.
 - Booking product usage can now post first-pass COGS journal entries when the inventory item includes `cost_cents`.
+
+## April 8, 2026 accounting access and admin workflow pass
+- Accounting access is now surfaced directly in the Admin dashboard, shared admin menu, and shared return toolbar so office-side accounting work is no longer hidden behind direct URL knowledge alone.
+- This pass moves the roadmap and known gaps forward again by improving internal shell cohesion and operational discoverability without changing the underlying accounting schema.
+- Suggested next mobile/operations features: quick expense entry from phone with receipt photo attachment, vendor quick-add during payable entry, and a month-end checklist panel for settlement, remittance, and report export.
+
+<!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->

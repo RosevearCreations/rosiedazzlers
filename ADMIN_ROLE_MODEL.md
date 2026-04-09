@@ -354,3 +354,5 @@ Current next priorities:
 - richer client/detailer threaded comments UI
 - manual scheduling / app-management rules UI completion
 - final layout polish across booking and internal screens
+
+<!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->

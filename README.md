@@ -182,3 +182,10 @@ This pass focused on reducing the biggest active operational risks rather than a
 
 ## April 8, 2026 accounting note
 The repo now includes a first-pass general-ledger workflow for a small auto-detailing company: operational invoice records, manual expense/vendor bill entries, payable settlement, tax payable reporting, owner draw/equity reporting, inventory usage to COGS linkage, and monthly general-ledger CSV export.
+
+## April 8, 2026 accounting access and admin workflow pass
+- Accounting access is now surfaced directly in the Admin dashboard, shared admin menu, and shared return toolbar so office-side accounting work is no longer hidden behind direct URL knowledge alone.
+- This pass moves the roadmap and known gaps forward again by improving internal shell cohesion and operational discoverability without changing the underlying accounting schema.
+- Suggested next mobile/operations features: quick expense entry from phone with receipt photo attachment, vendor quick-add during payable entry, and a month-end checklist panel for settlement, remittance, and report export.
+
+<!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->

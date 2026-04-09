@@ -217,3 +217,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - moved forward: inventory cost linkage into COGS now begins at the product-usage step; when an inventory item has `cost_cents`, recording usage on a booking can create a journal entry that debits Cost of Goods Sold and credits Inventory & Supplies.
 - moved forward: deeper accounting exports now include a general-ledger CSV export for the selected month from Admin Accounting.
 - move up next: payable settlement history UX polish, remittance posting workflow, balance-sheet style reporting, and stronger inventory cost completeness coverage for items that still do not have `cost_cents` populated.
+
+## April 8, 2026 accounting access and admin workflow pass
+- Accounting access is now surfaced directly in the Admin dashboard, shared admin menu, and shared return toolbar so office-side accounting work is no longer hidden behind direct URL knowledge alone.
+- This pass moves the roadmap and known gaps forward again by improving internal shell cohesion and operational discoverability without changing the underlying accounting schema.
+- Suggested next mobile/operations features: quick expense entry from phone with receipt photo attachment, vendor quick-add during payable entry, and a month-end checklist panel for settlement, remittance, and report export.
+
+<!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->

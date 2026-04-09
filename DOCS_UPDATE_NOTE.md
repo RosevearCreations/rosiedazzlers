@@ -24,3 +24,5 @@ Primary docs refreshed together:
 - `SANITY_CHECK.md`
 - `DATABASE_STRUCTURE_CURRENT.md`
 - handoff/next-step docs
+
+<!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->

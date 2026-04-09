@@ -254,3 +254,5 @@ If a proposed change makes the system:
 then it is likely **the wrong change**.
 
 Always favor the simplest architecture that preserves functionality.
+
+<!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->

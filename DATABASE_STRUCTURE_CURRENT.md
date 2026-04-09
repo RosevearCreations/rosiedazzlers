@@ -228,3 +228,5 @@ March 29, 2026 sync note: no new tables were required for this pass; the main ch
 - booking_update and assign now log actor-attributed booking events while using the resolved current staff actor.
 - purchase-order reminder lifecycle moved forward with reminder logging fields, a reminder action endpoint, and overdue reminder reporting in the purchase-order list endpoint.
 - this reduced more of the old/new endpoint overlap and shared-password bridge risk, but did not fully eliminate every remaining legacy-only admin path yet.
+
+<!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->

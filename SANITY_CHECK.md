@@ -161,3 +161,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 ## April 8, 2026 sanity reminders
 - Run `sql/2026-04-08_general_ledger_accounting.sql` and `sql/2026-04-08_accounting_settlement_tax_exports.sql` before testing Admin Accounting settlement/report/export features.
 - For COGS posting tests, ensure the inventory item has `cost_cents` populated before recording product usage on a booking.
+
+## April 8, 2026 accounting access and admin workflow pass
+- Accounting access is now surfaced directly in the Admin dashboard, shared admin menu, and shared return toolbar so office-side accounting work is no longer hidden behind direct URL knowledge alone.
+- This pass moves the roadmap and known gaps forward again by improving internal shell cohesion and operational discoverability without changing the underlying accounting schema.
+- Suggested next mobile/operations features: quick expense entry from phone with receipt photo attachment, vendor quick-add during payable entry, and a month-end checklist panel for settlement, remittance, and report export.
+
+<!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->

@@ -364,3 +364,10 @@ Partially mitigated in the newest pass:
 ## April 8, 2026 accounting settlement / tax / export pass
 - Accounting backend risk is reduced because payable settlement, tax-payable reporting, owner draw/equity reporting, general-ledger CSV export, and first-pass inventory-to-COGS posting are now in place.
 - Remaining accounting gaps are now less about basic capability and more about polish/completeness: payable settlement history UX, tax remittance posting workflow, balance-sheet and cash-flow style reporting, and making sure stocked items consistently carry cost data for COGS posting.
+
+## April 8, 2026 accounting access and admin workflow pass
+- Accounting access is now surfaced directly in the Admin dashboard, shared admin menu, and shared return toolbar so office-side accounting work is no longer hidden behind direct URL knowledge alone.
+- This pass moves the roadmap and known gaps forward again by improving internal shell cohesion and operational discoverability without changing the underlying accounting schema.
+- Suggested next mobile/operations features: quick expense entry from phone with receipt photo attachment, vendor quick-add during payable entry, and a month-end checklist panel for settlement, remittance, and report export.
+
+<!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->
