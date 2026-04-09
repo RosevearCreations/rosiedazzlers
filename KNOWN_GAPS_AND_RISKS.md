@@ -359,3 +359,8 @@ Partially mitigated in the newest pass:
 - Repaired the current build by standardizing active admin navigation back to direct `.html` routes instead of mixed pretty-route/admin-folder assumptions.
 - Restored the shared admin shell from the richer canonical copy so pages that call `window.AdminShell.boot(...)` load again.
 - Kept compatibility folder `index.html` files for `/admin/`, `/admin-catalog/`, `/admin-accounting/`, `/services/`, and `/pricing/` while leaving direct `.html` links as the stable path for this build.
+
+
+## April 8, 2026 accounting settlement / tax / export pass
+- Accounting backend risk is reduced because payable settlement, tax-payable reporting, owner draw/equity reporting, general-ledger CSV export, and first-pass inventory-to-COGS posting are now in place.
+- Remaining accounting gaps are now less about basic capability and more about polish/completeness: payable settlement history UX, tax remittance posting workflow, balance-sheet and cash-flow style reporting, and making sure stocked items consistently carry cost data for COGS posting.

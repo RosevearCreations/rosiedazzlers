@@ -133,3 +133,8 @@
 - Repaired the current build by standardizing active admin navigation back to direct `.html` routes instead of mixed pretty-route/admin-folder assumptions.
 - Restored the shared admin shell from the richer canonical copy so pages that call `window.AdminShell.boot(...)` load again.
 - Kept compatibility folder `index.html` files for `/admin/`, `/admin-catalog/`, `/admin-accounting/`, `/services/`, and `/pricing/` while leaving direct `.html` links as the stable path for this build.
+
+
+## April 8, 2026 accounting backend extension
+- Admin Accounting now supports manual expense/vendor bill posting, open payable settlement, monthly revenue/expense/net reporting, tax payable summary, owner draw/equity summary, and general-ledger CSV export.
+- Booking product usage can now post first-pass COGS journal entries when the inventory item includes `cost_cents`.

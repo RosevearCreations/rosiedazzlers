@@ -208,3 +208,12 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Repaired the current build by standardizing active admin navigation back to direct `.html` routes instead of mixed pretty-route/admin-folder assumptions.
 - Restored the shared admin shell from the richer canonical copy so pages that call `window.AdminShell.boot(...)` load again.
 - Kept compatibility folder `index.html` files for `/admin/`, `/admin-catalog/`, `/admin-accounting/`, `/services/`, and `/pricing/` while leaving direct `.html` links as the stable path for this build.
+
+
+## April 8, 2026 accounting settlement / tax / export pass
+- moved forward: payable settlement flow now exists through Admin Accounting so open vendor bills can be partially or fully settled into Cash while reducing Accounts Payable.
+- moved forward: tax remittance reporting now has a dedicated reporting endpoint and Admin Accounting summary card built from the Sales Tax Payable account activity for the selected month.
+- moved forward: owner draw / equity reporting now has a dedicated reporting endpoint and Admin Accounting summary card so owner withdrawals and equity movement are easier to review month over month.
+- moved forward: inventory cost linkage into COGS now begins at the product-usage step; when an inventory item has `cost_cents`, recording usage on a booking can create a journal entry that debits Cost of Goods Sold and credits Inventory & Supplies.
+- moved forward: deeper accounting exports now include a general-ledger CSV export for the selected month from Admin Accounting.
+- move up next: payable settlement history UX polish, remittance posting workflow, balance-sheet style reporting, and stronger inventory cost completeness coverage for items that still do not have `cost_cents` populated.

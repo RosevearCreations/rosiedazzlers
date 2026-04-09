@@ -124,3 +124,7 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Repaired the current build by standardizing active admin navigation back to direct `.html` routes instead of mixed pretty-route/admin-folder assumptions.
 - Restored the shared admin shell from the richer canonical copy so pages that call `window.AdminShell.boot(...)` load again.
 - Kept compatibility folder `index.html` files for `/admin/`, `/admin-catalog/`, `/admin-accounting/`, `/services/`, and `/pricing/` while leaving direct `.html` links as the stable path for this build.
+
+
+## April 8, 2026 accounting memory
+Rosie Dazzlers now has a lightweight internal accounting backend with chart of accounts, journal entries/lines, booking-linked invoice records, payable settlement, tax-payable reporting, owner draw/equity reporting, and GL export. Inventory usage can begin posting COGS when unit cost data exists.

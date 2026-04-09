@@ -110,7 +110,44 @@
             </article>
           </div>
 
-          <article class="panel">
+          
+          <div class="grid cards" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:start">
+            <article class="panel stack">
+              <h2 style="margin:0">Payables settlement</h2>
+              <form id="payableForm" class="row wrap" style="gap:12px;align-items:end">
+                <label style="flex:2 1 220px">Open payable
+                  <select id="payableEntry"></select>
+                </label>
+                <label style="flex:1 1 140px">Amount
+                  <input id="payableAmount" type="number" min="0" step="0.01" placeholder="Leave blank for full balance" />
+                </label>
+                <label style="flex:1 1 160px">Paid from
+                  <select id="payableAccount">
+                    <option value="cash">Cash</option>
+                    <option value="accounts_payable">Accounts Payable</option>
+                  </select>
+                </label>
+                <label style="flex:1 1 160px">Payment date
+                  <input id="payableDate" type="date" />
+                </label>
+                <button class="btn primary" type="submit">Settle payable</button>
+              </form>
+              <div id="payablesWrap" class="stack"><div class="mini">No open payables loaded yet.</div></div>
+            </article>
+            <article class="panel stack">
+              <h2 style="margin:0">Tax and owner reports</h2>
+              <div class="grid cards" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+                <article class="panel"><div class="kicker">Tax payable</div><div id="taxPayable" class="hero-stat" style="font-size:1.2rem">$0.00</div></article>
+                <article class="panel"><div class="kicker">Owner draw</div><div id="ownerDraw" class="hero-stat" style="font-size:1.2rem">$0.00</div></article>
+                <article class="panel"><div class="kicker">Equity delta</div><div id="ownerEquity" class="hero-stat" style="font-size:1.2rem">$0.00</div></article>
+              </div>
+              <div class="row wrap" style="gap:10px;justify-content:flex-end">
+                <a id="exportBtn" class="btn ghost" href="#" download>Download GL CSV</a>
+              </div>
+              <div id="reportMeta" class="mini"></div>
+            </article>
+          </div>
+<article class="panel">
             <form id="searchForm" class="row wrap" style="gap:12px;align-items:end">
               <label style="min-width:240px;flex:1 1 280px">Search invoices / booking ledger
                 <input id="searchQ" type="search" placeholder="Customer name, email, or package" />
@@ -133,9 +170,14 @@
   <script>
     (function(){
       const money = (n)=> new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(Number(n||0));
-      const esc = (v)=> String(v==null?'':v).replace(/[&<>"']/g,(m)=>({"&":"&amp;","<":"&lt;",">":"&gt;",""":"&quot;","'":"&#39;"}[m]));
+      const esc = (v)=> String(v==null?"":v).replace(/[&<>"']/g,(m)=>({"&":"&amp;","<":"&lt;",">":"&gt;",""":"&quot;","'":"&#39;"}[m]));
       let accounts = [];
+      let payables = [];
+      let currentMonth = null;
+      let currentYear = null;
       function setStatus(message, type='') { document.querySelectorAll('[data-admin-shell-status]').forEach((n)=>{n.hidden=!message;n.textContent=message||'';n.dataset.state=type||'';}); }
+      function getJson(url){ return fetch(url,{credentials:'include',cache:'no-store'}).then(async(res)=>({ok:res.ok,out:await res.json().catch(()=>null)})); }
+      function postJson(url,payload){ return fetch(url,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload||{})}).then(async(res)=>({ok:res.ok,out:await res.json().catch(()=>null)})); }
       function renderSummary(summary={}) {
         document.getElementById('sumOpen').textContent = String(summary.open || 0);
         document.getElementById('sumPaid').textContent = String(summary.paid || 0);
@@ -170,55 +212,74 @@
           .map((a)=>`<option value="${esc(a.code)}">${esc(a.label)}</option>`).join('');
         expense.innerHTML = opts || '<option value="shop_supplies">Shop Supplies</option>';
       }
-      function renderReport(report) {
-        document.getElementById('repRevenue').textContent = money(report?.totals?.revenue || 0);
-        document.getElementById('repExpense').textContent = money(report?.totals?.expense || 0);
-        document.getElementById('repNet').textContent = money(report?.totals?.net_income || 0);
-        const wrap = document.getElementById('reportWrap');
-        const rows = Array.isArray(report?.by_account) ? report.by_account : [];
-        if (!rows.length) { wrap.innerHTML = '<div class="mini">No posted journal activity for that period yet.</div>'; return; }
-        wrap.innerHTML = rows.map((row)=>`<div class="row wrap" style="justify-content:space-between;gap:8px;border-top:1px solid rgba(255,255,255,.08);padding-top:8px">
-          <div><strong>${esc(row.label || row.account_code)}</strong><div class="mini">${esc(row.account_type || '')}${row.account_group ? ' · ' + esc(row.account_group) : ''}</div></div>
-          <div>${money(row.amount_cad || 0)}</div>
-        </div>`).join('');
+      function fillPayables(){
+        const sel = document.getElementById('payableEntry');
+        if(!payables.length){ sel.innerHTML='<option value="">No open payables</option>'; return; }
+        sel.innerHTML = payables.map((p)=>`<option value="${esc(p.id)}">${esc(p.vendor_name || p.payee_name || p.memo || 'Payable')} — ${money(p.balance_due_cad || 0)} due</option>`).join('');
       }
-      async function loadRecords(){
-        const q = document.getElementById('searchQ').value.trim();
-        const res = await fetch('/api/admin/accounting_list' + (q ? `?q=${encodeURIComponent(q)}` : ''), { credentials:'include' });
-        const out = await res.json().catch(()=>null);
-        if (!res.ok || !out?.ok) throw new Error((out && out.error) || 'Could not load accounting records.');
-        renderSummary(out.summary || {}); renderRows(out.records || []);
+      function renderPayables(){
+        const wrap = document.getElementById('payablesWrap');
+        if(!payables.length){ wrap.innerHTML='<div class="mini">No open payables right now.</div>'; return; }
+        wrap.innerHTML = payables.map((p)=>`<article class="card"><div class="row wrap" style="justify-content:space-between;gap:10px"><strong>${esc(p.vendor_name || p.payee_name || 'Vendor')}</strong><span class="mini">${esc(p.entry_date || '')}</span></div><div class="mini">${esc(p.memo || '')}</div><div class="grid" style="grid-template-columns:repeat(3,minmax(100px,1fr));gap:10px;margin-top:10px"><div><strong>Total</strong><div>${money(p.total_cad || 0)}</div></div><div><strong>Settled</strong><div>${money(p.settled_amount_cad || 0)}</div></div><div><strong>Balance</strong><div>${money(p.balance_due_cad || 0)}</div></div></div></article>`).join('');
       }
       async function loadAccounts() {
-        const res = await fetch('/api/admin/accounting_accounts_list', { credentials:'include' });
-        const out = await res.json().catch(()=>null);
-        if (!res.ok || !out?.ok) throw new Error((out && out.error) || 'Could not load accounting accounts.');
-        accounts = out.accounts || [];
+        const { ok, out } = await getJson('/api/admin/accounting_accounts_list');
+        if (!ok || !out?.ok) throw new Error((out && out.error) || 'Could not load accounting accounts.');
+        accounts = Array.isArray(out.accounts) ? out.accounts : [];
         fillAccounts();
       }
-      async function loadReport() {
-        const month = Number(document.getElementById('reportMonth').value || new Date().getMonth()+1);
-        const year = Number(document.getElementById('reportYear').value || new Date().getFullYear());
-        const res = await fetch(`/api/admin/accounting_report?month=${month}&year=${year}`, { credentials:'include' });
-        const out = await res.json().catch(()=>null);
-        if (!res.ok || !out?.ok) throw new Error((out && out.error) || 'Could not load accounting report.');
-        renderReport(out.report || {});
+      async function loadRecords() {
+        const q = (document.getElementById('searchQ').value || '').trim();
+        const { ok, out } = await getJson(`/api/admin/accounting_list${q ? `?q=${encodeURIComponent(q)}` : ''}`);
+        if (!ok || !out?.ok) throw new Error((out && out.error) || 'Could not load accounting records.');
+        renderSummary(out.summary || {});
+        renderRows(Array.isArray(out.records) ? out.records : []);
       }
-      document.getElementById('searchForm').addEventListener('submit', async (e)=>{ e.preventDefault(); try { setStatus('Loading accounting records…'); await loadRecords(); setStatus('Accounting records loaded.','success'); } catch(err){ setStatus(err.message || 'Could not load accounting records.','error'); } });
-      document.getElementById('reportForm').addEventListener('submit', async (e)=>{ e.preventDefault(); try { setStatus('Loading monthly report…'); await loadReport(); setStatus('Monthly report loaded.','success'); } catch(err){ setStatus(err.message || 'Could not load accounting report.','error'); } });
+      async function loadReport() {
+        currentMonth = Number(document.getElementById('reportMonth').value || 0);
+        currentYear = Number(document.getElementById('reportYear').value || 0);
+        const month = currentMonth; const year = currentYear;
+        const [{ok:ok1,out:out1},{ok:ok2,out:out2},{ok:ok3,out:out3}] = await Promise.all([
+          getJson(`/api/admin/accounting_report?month=${month}&year=${year}`),
+          getJson(`/api/admin/accounting_tax_report?month=${month}&year=${year}`),
+          getJson(`/api/admin/accounting_owner_report?month=${month}&year=${year}`)
+        ]);
+        if (!ok1 || !out1?.ok) throw new Error((out1 && out1.error) || 'Could not load month-end report.');
+        document.getElementById('repRevenue').textContent = money(out1.report?.totals?.revenue || 0);
+        document.getElementById('repExpense').textContent = money(out1.report?.totals?.expense || 0);
+        document.getElementById('repNet').textContent = money(out1.report?.totals?.net_income || 0);
+        document.getElementById('reportWrap').innerHTML = (Array.isArray(out1.report?.by_account) && out1.report.by_account.length)
+          ? out1.report.by_account.map((row)=>`<div class="row wrap" style="justify-content:space-between;border-top:1px solid rgba(255,255,255,.08);padding-top:8px"><span>${esc(row.label)}</span><strong>${money(row.amount_cad || 0)}</strong></div>`).join('')
+          : '<div class="mini">No ledger activity for this month.</div>';
+        if (ok2 && out2?.ok) document.getElementById('taxPayable').textContent = money(out2.report?.suggested_remittance_cad || 0);
+        if (ok3 && out3?.ok) {
+          document.getElementById('ownerDraw').textContent = money(out3.report?.owner_draw_cad || 0);
+          document.getElementById('ownerEquity').textContent = money(out3.report?.owner_equity_delta_cad || 0);
+        }
+        document.getElementById('reportMeta').textContent = `Period ${year}-${String(month).padStart(2,'0')} · tax remittance and owner equity views refreshed.`;
+        document.getElementById('exportBtn').href = `/api/admin/accounting_export?month=${month}&year=${year}`;
+      }
+      async function loadPayables(){
+        const { ok, out } = await getJson('/api/admin/accounting_payables_list?status=open');
+        if (!ok || !out?.ok) throw new Error((out && out.error) || 'Could not load payables.');
+        payables = Array.isArray(out.payables) ? out.payables : [];
+        fillPayables();
+        renderPayables();
+      }
+      document.getElementById('searchForm').addEventListener('submit', async (e)=>{ e.preventDefault(); try { setStatus('Refreshing accounting records…'); await loadRecords(); setStatus('Accounting records refreshed.','success'); } catch(err) { setStatus(err.message || 'Could not load accounting records.','error'); } });
+      document.getElementById('reportForm').addEventListener('submit', async (e)=>{ e.preventDefault(); try { setStatus('Loading reports…'); await loadReport(); setStatus('Reports refreshed.','success'); } catch(err) { setStatus(err.message || 'Could not load reports.','error'); } });
       document.getElementById('expenseForm').addEventListener('submit', async (e)=>{
         e.preventDefault();
         try {
-          setStatus('Saving accounting entry…');
           const payload = {
             mode: document.getElementById('expenseMode').value,
             entry_date: document.getElementById('expenseDate').value,
             vendor_name: document.getElementById('expenseVendor').value.trim(),
             expense_account: document.getElementById('expenseAccount').value,
             payment_account: document.getElementById('paymentAccount').value,
-            amount_cad: document.getElementById('expenseAmount').value,
-            tax_cad: document.getElementById('expenseTax').value,
-            due_date: document.getElementById('expenseDueDate').value,
+            amount_cad: Number(document.getElementById('expenseAmount').value || 0),
+            tax_cad: Number(document.getElementById('expenseTax').value || 0),
+            due_date: document.getElementById('expenseDueDate').value || null,
             memo: document.getElementById('expenseMemo').value.trim()
           };
           const res = await fetch('/api/admin/accounting_entry_save', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
@@ -227,17 +288,29 @@
           document.getElementById('expenseForm').reset();
           document.getElementById('expenseDate').value = new Date().toISOString().slice(0,10);
           setStatus('Accounting entry saved.','success');
-          await Promise.all([loadRecords(), loadReport()]);
+          await Promise.all([loadRecords(), loadReport(), loadPayables()]);
         } catch(err) { setStatus(err.message || 'Could not save accounting entry.','error'); }
+      });
+      document.getElementById('payableForm').addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        try {
+          const payload = { entry_id: document.getElementById('payableEntry').value, amount_cad: document.getElementById('payableAmount').value || null, payment_account: document.getElementById('payableAccount').value, payment_date: document.getElementById('payableDate').value, memo: 'Payable settlement from Admin Accounting' };
+          const { ok, out } = await postJson('/api/admin/accounting_payable_settle', payload);
+          if(!ok || !out?.ok) throw new Error((out && out.error) || 'Could not settle payable.');
+          document.getElementById('payableAmount').value='';
+          setStatus('Payable settled.','success');
+          await Promise.all([loadPayables(), loadReport()]);
+        } catch(err){ setStatus(err.message || 'Could not settle payable.','error'); }
       });
       window.AdminShell.boot({ pageKey:'admin-accounting', onReady: async function(){
         window.AdminMenu.render({ currentPage:'admin-accounting' });
         const now = new Date();
         document.getElementById('expenseDate').value = now.toISOString().slice(0,10);
+        document.getElementById('payableDate').value = now.toISOString().slice(0,10);
         document.getElementById('reportMonth').value = String(now.getMonth()+1);
         document.getElementById('reportYear').value = String(now.getFullYear());
         await loadAccounts();
-        await Promise.all([loadRecords(), loadReport()]);
+        await Promise.all([loadRecords(), loadReport(), loadPayables()]);
         setStatus('Accounting ready.','success');
       } });
     })();

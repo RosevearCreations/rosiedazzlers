@@ -178,3 +178,7 @@ This pass focused on reducing the biggest active operational risks rather than a
 - Repaired the current build by standardizing active admin navigation back to direct `.html` routes instead of mixed pretty-route/admin-folder assumptions.
 - Restored the shared admin shell from the richer canonical copy so pages that call `window.AdminShell.boot(...)` load again.
 - Kept compatibility folder `index.html` files for `/admin/`, `/admin-catalog/`, `/admin-accounting/`, `/services/`, and `/pricing/` while leaving direct `.html` links as the stable path for this build.
+
+
+## April 8, 2026 accounting note
+The repo now includes a first-pass general-ledger workflow for a small auto-detailing company: operational invoice records, manual expense/vendor bill entries, payable settlement, tax payable reporting, owner draw/equity reporting, inventory usage to COGS linkage, and monthly general-ledger CSV export.

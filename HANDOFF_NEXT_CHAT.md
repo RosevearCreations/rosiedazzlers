@@ -90,3 +90,11 @@ Run `sql/2026-03-26_catalog_admin_vehicle_account_and_auth_cleanup.sql` before t
 - Repaired the current build by standardizing active admin navigation back to direct `.html` routes instead of mixed pretty-route/admin-folder assumptions.
 - Restored the shared admin shell from the richer canonical copy so pages that call `window.AdminShell.boot(...)` load again.
 - Kept compatibility folder `index.html` files for `/admin/`, `/admin-catalog/`, `/admin-accounting/`, `/services/`, and `/pricing/` while leaving direct `.html` links as the stable path for this build.
+
+
+## Latest accounting state — April 8, 2026
+- Payable settlement flow exists in Admin Accounting.
+- Tax payable and owner draw/equity reports exist for the selected month.
+- General ledger CSV export exists.
+- Inventory usage to COGS posting exists when `cost_cents` is populated on the inventory item.
+- Best next accounting work: remittance posting workflow, payable history polish, balance-sheet style statements, and stronger cost completeness across inventory.
