@@ -1,3 +1,5 @@
+> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -61,3 +63,8 @@ Last synchronized: March 27, 2026.
 - Admin remains the moderation layer for public and private job communication.
 
 <!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->
+
+## April 9, 2026 accounting workflow roadmap update
+- Accounting has now crossed from backend foundation into usable office workflow.
+- The next roadmap layer should connect booking-side revenue and inventory-side cost data into cleaner per-job profitability and month-end close routines.
+- After that, the strongest route is deeper reconciliation and auth/session hardening rather than adding entirely new accounting tables.

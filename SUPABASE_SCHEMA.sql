@@ -1,3 +1,4 @@
+-- Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
 -- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. No schema change in this pass; documentation and access paths were updated.
 -- March 29, 2026 sync note: no new tables were required for this pass; this refresh mainly extends signed-in staff session coverage, reduces shared-password-only endpoint usage, and improves actor attribution in time/intake/media/booking flows.
 -- 
@@ -419,3 +420,11 @@ create table if not exists public.accounting_journal_lines (
   amount_cad numeric(12,2) not null default 0,
   memo text null
 );
+
+
+-- 2026-04-09 accounting reporting / inventory cost coverage support
+create index if not exists accounting_journal_entries_reference_type_date_idx
+  on public.accounting_journal_entries(reference_type, entry_date, status);
+
+create index if not exists catalog_inventory_items_active_cost_idx
+  on public.catalog_inventory_items(is_active, item_type, cost_cents, qty_on_hand);

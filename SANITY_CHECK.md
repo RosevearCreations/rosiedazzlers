@@ -1,3 +1,5 @@
+> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -173,3 +175,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 ## April 9, 2026 accounting screen syntax fix
 - Fixed a JavaScript syntax error in `admin-accounting.html` that prevented the Accounting screen from booting past the “Loading Accounting Records” state.
 - Continued docs/schema synchronization for the current build.
+
+## April 9, 2026 sanity check additions
+- Confirm `/admin-accounting.html` loads the monthly reports, payables, and booking records without syntax errors.
+- Confirm vendor-bill settlement posts update payable balance and history immediately after refresh.
+- Confirm tax remittance posting reduces the payable amount shown by the relevant tax account view.
+- Confirm inventory save now keeps cost, vendor SKU, purchase date, and estimated jobs/unit values.
+- Confirm `robots.txt`, `sitemap.xml`, and homepage structured data point to the production domain.

@@ -1,3 +1,5 @@
+> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -110,3 +112,8 @@ Run `sql/2026-03-26_catalog_admin_vehicle_account_and_auth_cleanup.sql` before t
 ## April 9, 2026 accounting screen syntax fix
 - Fixed a JavaScript syntax error in `admin-accounting.html` that prevented the Accounting screen from booting past the “Loading Accounting Records” state.
 - Continued docs/schema synchronization for the current build.
+
+## April 9, 2026 handoff note
+- The current strongest accounting pass is now in place: reporting, remittance posting, payable settlement history, export expansion, and inventory-cost persistence.
+- Resume from testing the new Admin Accounting screen first, then validate inventory cost-entry/save behavior, then move back to auth/session convergence and deeper accounting polish.
+- When continuing, treat `README.md`, `PROJECT_BRAIN.md`, `CURRENT_IMPLEMENTATION_STATE.md`, `KNOWN_GAPS_AND_RISKS.md`, `DEVELOPMENT_ROADMAP.md`, `NEXT_STEPS_INTERNAL.md`, and `DATABASE_STRUCTURE_CURRENT.md` as the main source-of-truth set.

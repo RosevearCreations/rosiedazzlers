@@ -1,3 +1,5 @@
+> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -150,3 +152,10 @@
 ## April 9, 2026 accounting screen syntax fix
 - Fixed a JavaScript syntax error in `admin-accounting.html` that prevented the Accounting screen from booting past the “Loading Accounting Records” state.
 - Continued docs/schema synchronization for the current build.
+
+## April 9, 2026 accounting reporting / remittance / cost coverage pass
+- Admin Accounting now loads booking accounting records, payables, monthly P&L, balance sheet, cash flow, tax report, inventory cost completeness, and remittance actions from one screen.
+- Vendor bills now show settlement history inline and can be partially or fully settled from the same page.
+- Tax remittance posting is now implemented as a journal-entry action against `sales_tax_payable` and the chosen payment account.
+- Inventory admin now stores unit-cost and vendor-SKU data needed for better COGS and cleanup reporting.
+- Public SEO state improved through production-domain sitemap/robots cleanup and homepage `AutoDetailing` structured data.

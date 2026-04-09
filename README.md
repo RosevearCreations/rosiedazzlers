@@ -1,3 +1,5 @@
+> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -194,3 +196,10 @@ The repo now includes a first-pass general-ledger workflow for a small auto-deta
 ## April 9, 2026 accounting screen syntax fix
 - Fixed a JavaScript syntax error in `admin-accounting.html` that prevented the Accounting screen from booting past the “Loading Accounting Records” state.
 - Continued docs/schema synchronization for the current build.
+
+## April 9, 2026 accounting reporting / remittance / cost coverage pass
+- Admin Accounting now includes monthly profit-and-loss, balance-sheet, and cash-flow views in one screen, plus tax remittance posting, settlement history on vendor bills, and broader CSV exports.
+- Inventory admin now persists `cost_cents`, `vendor_sku`, `purchase_date`, and `estimated_jobs_per_unit`, which makes missing-cost cleanup actionable instead of only visible.
+- Internal compatibility routing for `/admin-accounting/` now redirects to the primary screen to reduce page drift.
+- Public SEO housekeeping moved forward again: `robots.txt` and `sitemap.xml` now point to the production domain and the home page now carries `AutoDetailing` structured data.
+- Still not complete: full auth/session convergence, actor normalization across all remaining internal routes, deeper A/R and statement polish, fuller overhead allocation, and stronger reconciliation workflows.

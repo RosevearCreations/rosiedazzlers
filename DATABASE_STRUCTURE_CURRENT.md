@@ -1,3 +1,5 @@
+> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -230,3 +232,8 @@ March 29, 2026 sync note: no new tables were required for this pass; the main ch
 - this reduced more of the old/new endpoint overlap and shared-password bridge risk, but did not fully eliminate every remaining legacy-only admin path yet.
 
 <!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->
+
+## April 9, 2026 schema / reporting support note
+- No new core accounting tables were required in this pass.
+- Reporting/remittance/export expansion uses the April 8 accounting tables plus one new reference index for `accounting_journal_entries(reference_type, entry_date, status)` and one inventory-cost coverage index for `catalog_inventory_items(is_active, item_type, cost_cents, qty_on_hand)`.
+- Inventory-cost cleanup in this pass depends on already-existing columns that are now actively used by the UI: `cost_cents`, `vendor_sku`, `purchase_date`, and `estimated_jobs_per_unit`.

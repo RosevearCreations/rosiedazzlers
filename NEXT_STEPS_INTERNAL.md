@@ -1,3 +1,5 @@
+> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -82,3 +84,18 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Suggested next mobile/operations features: quick expense entry from phone with receipt photo attachment, vendor quick-add during payable entry, and a month-end checklist panel for settlement, remittance, and report export.
 
 <!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->
+
+## April 9, 2026 next practical targets after this pass
+1. **Auth/session convergence**
+   - remove remaining route-by-route drift in actor/session behavior
+   - make all internal screens resolve staff identity the same way
+2. **Accounting polish**
+   - add A/R-oriented customer statement views and better month-end checklist UX
+   - improve reconciliation confidence for remittance, owner equity, and retained earnings review
+3. **Inventory costing**
+   - finish backfilling missing `cost_cents` on active stocked items
+   - add optional mobile quick-edit for vendor + cost during receiving/reorder work
+4. **Operations UX**
+   - quick expense entry from phone with receipt photo attachment
+   - vendor quick-add during payable entry
+   - stronger export presets for accountant handoff and month-end archive

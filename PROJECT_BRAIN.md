@@ -1,3 +1,5 @@
+> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -140,3 +142,8 @@ Rosie Dazzlers now has a lightweight internal accounting backend with chart of a
 ## April 9, 2026 accounting screen syntax fix
 - Fixed a JavaScript syntax error in `admin-accounting.html` that prevented the Accounting screen from booting past the “Loading Accounting Records” state.
 - Continued docs/schema synchronization for the current build.
+
+## April 9, 2026 accounting reporting / remittance / cost coverage memory
+- Admin Accounting is now intended to be the office-side monthly accounting workspace, not just a booking-ledger viewer.
+- The strongest new flow is: review month -> inspect P&L / balance sheet / cash flow -> settle vendor bills -> post remittance -> export CSVs -> clean missing inventory costs.
+- Inventory-cost completeness is now tied directly to admin catalog editing because the save path now persists unit cost and related vendor metadata.

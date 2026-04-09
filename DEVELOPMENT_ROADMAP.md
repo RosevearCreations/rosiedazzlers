@@ -1,3 +1,5 @@
+> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
 > Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
@@ -229,3 +231,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 ## April 9, 2026 accounting screen syntax fix
 - Fixed a JavaScript syntax error in `admin-accounting.html` that prevented the Accounting screen from booting past the “Loading Accounting Records” state.
 - Continued docs/schema synchronization for the current build.
+
+## April 9, 2026 accounting reporting / remittance / cost coverage pass
+- moved forward: Admin Accounting is no longer only a record list; it now acts as a working monthly accounting workspace with P&L, balance sheet, cash flow, remittance posting, settlement history, and export coverage.
+- moved forward: inventory-cost completeness is now operationally fixable because inventory save now persists unit cost, vendor SKU, purchase date, and estimated jobs per unit from the admin form.
+- moved forward: stronger exports now include profit-and-loss, balance-sheet, cash-flow, payables, and missing-inventory-cost CSV outputs in addition to general ledger export.
+- moved forward: local-search hygiene improved again through production robots/sitemap cleanup and home-page structured data.
+- move up next: accounts-receivable workflow depth, month-end checklist UI, vendor quick-add during bill entry, and full reconciliation/statement polish tied to consistent staff session handling.
