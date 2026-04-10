@@ -24,6 +24,21 @@ const HOVER_MEDIA = {
 };
 
 const ADDON_MEDIA = {
+  full_clay_treatment: pkgFile('full_clay_treatment.png'),
+  two_stage_polish: pkgFile('two_stage_polish.png'),
+  high_grade_paint_sealant: pkgFile('high_grade_paint_sealant.png'),
+  uv_protectant_applied_on_interior_panels: pkgFile('uv_protectant_applied_on_interior_panels.png'),
+  de_ionizing_treatment: '/assets/addons/de_ionizing_treatment.svg',
+  de_badging: '/assets/addons/de_badging.svg',
+  engine_cleaning: '/assets/addons/engine_cleaning.svg',
+  external_ceramic_coating: '/assets/addons/external_ceramic_coating.svg',
+  external_graphene_fine_finish: '/assets/addons/external_graphene_fine_finish.svg',
+  external_wax: '/assets/addons/external_wax.svg',
+  vinyl_wrapping: '/assets/addons/vinyl_wrapping.svg',
+  window_tinting: '/assets/addons/window_tinting.svg'
+};
+
+const LOCAL_ADDON_FALLBACKS = {
   full_clay_treatment: '/assets/addons/full_clay_treatment.png',
   two_stage_polish: '/assets/addons/two_stage_polish.png',
   high_grade_paint_sealant: '/assets/addons/high_grade_paint_sealant.png',
@@ -68,7 +83,11 @@ function packageImageForSize(pkg, size) {
 }
 
 function addonImageForCode(code) {
-  return ADDON_MEDIA[code] || "";
+  return ADDON_MEDIA[code] || LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.svg';
+}
+
+function addonFallbackForCode(code) {
+  return LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.svg';
 }
 
 function addonDisplay(addon, size) {
@@ -301,7 +320,7 @@ function renderAddons(cardsEl, data, size) {
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `
-      ${img ? `<img class="img" loading="lazy" src="${img}" alt="${addon.name}" onerror="this.style.display='none'">` : ""}
+      ${img ? `<img class="img" loading="lazy" src="${img}" alt="${addon.name}" data-fallback="${addonFallbackForCode(addon.code)}" onerror="if(this.dataset.fallback && this.src!==this.dataset.fallback){this.src=this.dataset.fallback}else{this.style.display='none'}">` : ""}
       <h3>${addon.name}</h3>
       <p class="kicker">${display}</p>
       ${tags.length ? `<div class="hr"></div><div>${tags.join(" ")}</div>` : ""}

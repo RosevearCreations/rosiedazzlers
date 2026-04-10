@@ -333,7 +333,8 @@
       ],
       "category": "paint correction",
       "type": "surface prep",
-      "image_url": "/assets/addons/full_clay_treatment.png"
+      "image_url": "https://assets.rosiedazzlers.ca/packages/full_clay_treatment.png",
+      "image_fallback_url": "/assets/addons/full_clay_treatment.png"
     },
     {
       "code": "two_stage_polish",
@@ -350,7 +351,8 @@
       ],
       "category": "paint correction",
       "type": "machine polishing",
-      "image_url": "/assets/addons/two_stage_polish.png"
+      "image_url": "https://assets.rosiedazzlers.ca/packages/two_stage_polish.png",
+      "image_fallback_url": "/assets/addons/two_stage_polish.png"
     },
     {
       "code": "high_grade_paint_sealant",
@@ -364,10 +366,11 @@
       "source": "interpreted_pricing",
       "category": "paint protection",
       "type": "sealant",
-      "image_url": "/assets/addons/high_grade_paint_sealant.png",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/high_grade_paint_sealant.png",
       "notes": [
         "Longer-lasting gloss"
-      ]
+      ],
+      "image_fallback_url": "/assets/addons/high_grade_paint_sealant.png"
     },
     {
       "code": "uv_protectant_applied_on_interior_panels",
@@ -381,10 +384,11 @@
       "source": "interpreted_pricing",
       "category": "interior protection",
       "type": "uv protectant",
-      "image_url": "/assets/addons/uv_protectant_applied_on_interior_panels.png",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/uv_protectant_applied_on_interior_panels.png",
       "notes": [
         "Interior panel dressing"
-      ]
+      ],
+      "image_fallback_url": "/assets/addons/uv_protectant_applied_on_interior_panels.png"
     },
     {
       "code": "de_ionizing_treatment",
@@ -398,7 +402,8 @@
       "source": "package_asset",
       "image_url": "/assets/addons/de_ionizing_treatment.svg",
       "category": "odor treatment",
-      "type": "de-ionizing"
+      "type": "de-ionizing",
+      "image_fallback_url": "/assets/addons/de_ionizing_treatment.svg"
     },
     {
       "code": "de_badging",
@@ -407,7 +412,8 @@
       "source": "package_asset",
       "image_url": "/assets/addons/de_badging.svg",
       "category": "appearance modifications",
-      "type": "badge removal"
+      "type": "badge removal",
+      "image_fallback_url": "/assets/addons/de_badging.svg"
     },
     {
       "code": "engine_cleaning",
@@ -417,7 +423,8 @@
       "source": "package_asset",
       "image_url": "/assets/addons/engine_cleaning.svg",
       "category": "engine bay",
-      "type": "cleaning"
+      "type": "cleaning",
+      "image_fallback_url": "/assets/addons/engine_cleaning.svg"
     },
     {
       "code": "external_ceramic_coating",
@@ -430,7 +437,8 @@
       ],
       "image_url": "/assets/addons/external_ceramic_coating.svg",
       "category": "paint protection",
-      "type": "ceramic coating"
+      "type": "ceramic coating",
+      "image_fallback_url": "/assets/addons/external_ceramic_coating.svg"
     },
     {
       "code": "external_graphene_fine_finish",
@@ -443,7 +451,8 @@
       ],
       "image_url": "/assets/addons/external_graphene_fine_finish.svg",
       "category": "paint protection",
-      "type": "graphene finish"
+      "type": "graphene finish",
+      "image_fallback_url": "/assets/addons/external_graphene_fine_finish.svg"
     },
     {
       "code": "external_wax",
@@ -457,7 +466,8 @@
       "source": "package_asset",
       "image_url": "/assets/addons/external_wax.svg",
       "category": "paint protection",
-      "type": "wax"
+      "type": "wax",
+      "image_fallback_url": "/assets/addons/external_wax.svg"
     },
     {
       "code": "vinyl_wrapping",
@@ -466,7 +476,8 @@
       "source": "package_asset",
       "image_url": "/assets/addons/vinyl_wrapping.svg",
       "category": "appearance modifications",
-      "type": "vinyl wrapping"
+      "type": "vinyl wrapping",
+      "image_fallback_url": "/assets/addons/vinyl_wrapping.svg"
     },
     {
       "code": "window_tinting",
@@ -475,7 +486,8 @@
       "source": "package_asset",
       "image_url": "/assets/addons/window_tinting.svg",
       "category": "glass services",
-      "type": "window tinting"
+      "type": "window tinting",
+      "image_fallback_url": "/assets/addons/window_tinting.svg"
     }
   ]
 }
