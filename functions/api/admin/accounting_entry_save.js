@@ -34,7 +34,9 @@ export async function onRequestPost({request, env}){
       due_date: mode === 'payable' ? (cleanText(body.due_date) || null) : null,
       paid_at: mode === 'cash' ? new Date().toISOString() : null,
       created_by_name: actorName,
-      last_recorded_by_name: actorName
+      last_recorded_by_name: actorName,
+      created_by_staff_user_id: access.actor?.id || null,
+      last_recorded_by_staff_user_id: access.actor?.id || null
     }, [
       { account_code: expenseAccount, direction:'debit', amount_cad: amount, memo },
       ...(tax > 0 ? [{ account_code:'sales_tax_payable', direction:'debit', amount_cad: tax, memo:'Input tax / tax component' }] : []),

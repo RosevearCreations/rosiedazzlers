@@ -15,7 +15,8 @@ export async function onRequestPost({request, env}){
       payment_account: cleanText(body.payment_account) || 'cash',
       payment_date: cleanText(body.payment_date) || new Date().toISOString().slice(0,10),
       memo: cleanText(body.memo) || null,
-      actorName: access.actor?.full_name || access.actor?.email || null
+      actorName: access.actor?.full_name || access.actor?.email || null,
+      actorStaffUserId: access.actor?.id || null
     });
     return withCors(json({ ok:true, saved: settled.entry, lines: settled.lines }));
   } catch(err){ return withCors(json({ error: err?.message || 'Unexpected server error.' },500)); }

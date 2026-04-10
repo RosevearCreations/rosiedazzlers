@@ -16,6 +16,7 @@ export async function onRequestPost({ request, env }) {
       payment_date: paymentDate,
       memo: cleanText(body.memo) || null,
       actorName: access.actor?.full_name || access.actor?.email || null,
+      actorStaffUserId: access.actor?.id || null,
       referenceLabel: `${refYear}-${String(refMonth).padStart(2, '0')}`
     });
     return withCors(json({ ok: true, saved: saved.entry, lines: saved.lines }));

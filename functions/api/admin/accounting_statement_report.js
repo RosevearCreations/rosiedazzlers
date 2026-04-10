@@ -1,5 +1,5 @@
 import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
-import { buildBalanceSheetReport, buildCashFlowReport, buildInventoryCostCompletenessReport } from "../_lib/accounting-gl.js";
+import { buildBalanceSheetReport, buildCashFlowReport, buildInventoryCostCompletenessReport, buildReceivablesAgingReport, buildOperationalProfitabilityReport } from "../_lib/accounting-gl.js";
 
 export async function onRequestOptions() { return new Response('', { status: 204, headers: corsHeaders() }); }
 export async function onRequestGet({ request, env }) {
@@ -10,12 +10,14 @@ export async function onRequestGet({ request, env }) {
     const now = new Date();
     const month = Math.max(1, Math.min(12, Number(url.searchParams.get('month') || (now.getMonth() + 1))));
     const year = Math.max(2020, Math.min(2100, Number(url.searchParams.get('year') || now.getFullYear())));
-    const [balance_sheet, cash_flow, inventory_costs] = await Promise.all([
+    const [balance_sheet, cash_flow, inventory_costs, receivables_aging, operational_profitability] = await Promise.all([
       buildBalanceSheetReport(env, { month, year }),
       buildCashFlowReport(env, { month, year }),
-      buildInventoryCostCompletenessReport(env)
+      buildInventoryCostCompletenessReport(env),
+      buildReceivablesAgingReport(env, { month, year }),
+      buildOperationalProfitabilityReport(env, { month, year })
     ]);
-    return withCors(json({ ok: true, balance_sheet, cash_flow, inventory_costs }));
+    return withCors(json({ ok: true, balance_sheet, cash_flow, inventory_costs, receivables_aging, operational_profitability }));
   } catch (err) {
     return withCors(json({ error: err?.message || 'Unexpected server error.' }, 500));
   }

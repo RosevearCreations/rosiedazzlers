@@ -5,7 +5,9 @@ import {
   buildBalanceSheetExport,
   buildCashFlowExport,
   buildPayablesExport,
-  buildInventoryCostExport
+  buildInventoryCostExport,
+  buildReceivablesAgingExport,
+  buildOperationalProfitabilityExport
 } from "../_lib/accounting-gl.js";
 
 export async function onRequestOptions() { return new Response('', { status: 204, headers: corsHeaders() }); }
@@ -38,6 +40,12 @@ export async function onRequestGet({ request, env }) {
     } else if (type === 'inventory_missing_costs' || type === 'inventory_costs') {
       csv = await buildInventoryCostExport(env);
       filename = `rosie-inventory-missing-costs-${year}-${String(month).padStart(2, '0')}.csv`;
+    } else if (type === 'receivables_aging' || type === 'accounts_receivable') {
+      csv = await buildReceivablesAgingExport(env, { month, year });
+      filename = `rosie-receivables-aging-${year}-${String(month).padStart(2, '0')}.csv`;
+    } else if (type === 'operational_profitability' || type === 'profitability') {
+      csv = await buildOperationalProfitabilityExport(env, { month, year });
+      filename = `rosie-operational-profitability-${year}-${String(month).padStart(2, '0')}.csv`;
     } else {
       csv = await buildGeneralLedgerExport(env, { month, year });
     }
