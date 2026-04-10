@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -182,3 +182,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Confirm tax remittance posting reduces the payable amount shown by the relevant tax account view.
 - Confirm inventory save now keeps cost, vendor SKU, purchase date, and estimated jobs/unit values.
 - Confirm `robots.txt`, `sitemap.xml`, and homepage structured data point to the production domain.
+
+
+## April 9, 2026 sanity update
+- Public H1 count still checks out at one H1 per public page.
+- Auth shell cohesion improved on several internal routes.
+- Accounting has broader reporting/export coverage, but live deployed runtime validation is still required.

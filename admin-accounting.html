@@ -82,7 +82,7 @@
           </article>
 
           <section class="summary-cards">
-            <article class="panel"><div class="kicker">Open booking records</div><div id="sumOpen" class="hero-stat">0</div><div class="mini">Operational receivables still outstanding</div></article>
+            <article class="panel"><div class="kicker">Open receivables</div><div id="sumOpen" class="hero-stat">$0.00</div><div class="mini" id="sumOpenMeta">0 booking records with balance due</div></article>
             <article class="panel"><div class="kicker">Outstanding payables</div><div id="sumPayables" class="hero-stat">$0.00</div><div class="mini" id="sumPayablesCount">0 open vendor bills</div></article>
             <article class="panel"><div class="kicker">Suggested remittance</div><div id="sumTaxDue" class="hero-stat">$0.00</div><div class="mini">Current month sales-tax payable activity</div></article>
             <article class="panel"><div class="kicker">Net income</div><div id="sumNetIncome" class="hero-stat">$0.00</div><div class="mini">Month selected above</div></article>
@@ -236,6 +236,37 @@
             </article>
           </section>
 
+          <section class="admin-grid-2">
+            <article class="panel stack">
+              <div class="row wrap" style="justify-content:space-between">
+                <div>
+                  <h2 style="margin:0 0 6px">Receivables aging</h2>
+                  <p class="mini" style="margin:0">Outstanding booking balances bucketed by age so follow-up and reconciliation are easier.</p>
+                </div>
+                <div class="tag" id="receivablesAsOf">—</div>
+              </div>
+              <div class="table-lite" id="receivablesSummary"></div>
+              <div class="report-scroll">
+                <div class="table-lite" id="receivablesRows"></div>
+              </div>
+            </article>
+
+            <article class="panel stack">
+              <div class="row wrap" style="justify-content:space-between">
+                <div>
+                  <h2 style="margin:0 0 6px">Estimated booking profitability</h2>
+                  <p class="mini" style="margin:0">Rough booking-level profitability using recognized revenue, direct inventory COGS, and allocated overhead.</p>
+                </div>
+                <div class="tag" id="profitabilityPeriod">—</div>
+              </div>
+              <div class="mini" id="profitabilityMethodNote"></div>
+              <div class="table-lite" id="profitabilitySummary"></div>
+              <div class="report-scroll">
+                <div class="table-lite" id="profitabilityRows"></div>
+              </div>
+            </article>
+          </section>
+
           <article class="panel stack">
             <div>
               <h2 style="margin:0 0 6px">Exports</h2>
@@ -248,6 +279,8 @@
               <button class="btn ghost" type="button" data-export="cash_flow">Cash flow</button>
               <button class="btn ghost" type="button" data-export="payables">Payables</button>
               <button class="btn ghost" type="button" data-export="inventory_missing_costs">Missing item costs</button>
+              <button class="btn ghost" type="button" data-export="receivables_aging">Receivables aging</button>
+              <button class="btn ghost" type="button" data-export="operational_profitability">Profitability</button>
             </div>
           </article>
 
@@ -474,6 +507,52 @@
           return '<div class="table-lite__row"><span>' + esc(row.entry_date || '') + ' · ' + esc(row.category || '') + '<div class="mini">' + esc(row.entry_type || '') + (row.memo ? ' · ' + esc(row.memo) : '') + '</div></span><span>' + esc(money(row.cash_delta_cad || 0)) + '</span></div>';
         }).join('') || '<div class="mini">No cash entries found in this month.</div>';
       }
+      function renderReceivables(report) {
+        var summary = qs('#receivablesSummary');
+        var rowsWrap = qs('#receivablesRows');
+        if (!report) {
+          summary.innerHTML = '<div class="mini">No receivables-aging report loaded.</div>';
+          rowsWrap.innerHTML = '';
+          return;
+        }
+        qs('#receivablesAsOf').textContent = report.as_of || '—';
+        summary.innerHTML = [
+          ['Current', money(report.totals && report.totals.current_cad || 0)],
+          ['1-30 days', money(report.totals && report.totals.due_1_30_cad || 0)],
+          ['31-60 days', money(report.totals && report.totals.due_31_60_cad || 0)],
+          ['61-90 days', money(report.totals && report.totals.due_61_90_cad || 0)],
+          ['91+ days', money(report.totals && report.totals.due_91_plus_cad || 0)],
+          ['Total', money(report.totals && report.totals.total_balance_cad || 0)]
+        ].map(function (row) {
+          return '<div class="table-lite__row"><span>' + esc(row[0]) + '</span><span>' + esc(row[1]) + '</span></div>';
+        }).join('');
+        rowsWrap.innerHTML = (report.rows || []).slice(0, 40).map(function (row) {
+          return '<div class="table-lite__row"><span>' + esc(row.customer_name || 'Customer') + '<div class="mini">' + esc(row.service_date || '') + (row.package_code ? ' · ' + esc(row.package_code) : '') + (row.customer_email ? ' · ' + esc(row.customer_email) : '') + '</div></span><span>' + esc(money(row.balance_due_cad || 0)) + '<div class="mini">' + esc(String(row.days_outstanding || 0)) + ' days · ' + esc(row.aging_bucket || '') + '</div></span></div>';
+        }).join('') || '<div class="mini">No open receivables found.</div>';
+      }
+      function renderProfitability(report) {
+        var summary = qs('#profitabilitySummary');
+        var rowsWrap = qs('#profitabilityRows');
+        if (!report) {
+          summary.innerHTML = '<div class="mini">No profitability report loaded.</div>';
+          rowsWrap.innerHTML = '';
+          return;
+        }
+        qs('#profitabilityPeriod').textContent = (report.period_start || '') + ' to ' + (report.period_end_exclusive || '');
+        qs('#profitabilityMethodNote').textContent = report.method_note || '';
+        summary.innerHTML = [
+          ['Recognized revenue', money(report.totals && report.totals.recognized_revenue_cad || 0)],
+          ['Collected revenue', money(report.totals && report.totals.collected_revenue_cad || 0)],
+          ['Direct COGS', money(report.totals && report.totals.direct_cogs_cad || 0)],
+          ['Allocated overhead pool', money(report.totals && report.totals.overhead_pool_cad || 0)],
+          ['Estimated net', money(report.totals && report.totals.estimated_net_after_overhead_cad || 0)]
+        ].map(function (row) {
+          return '<div class="table-lite__row"><span>' + esc(row[0]) + '</span><span>' + esc(row[1]) + '</span></div>';
+        }).join('');
+        rowsWrap.innerHTML = (report.rows || []).slice(0, 40).map(function (row) {
+          return '<div class="table-lite__row"><span>' + esc(row.customer_name || 'Customer') + '<div class="mini">' + esc(row.service_date || '') + (row.package_code ? ' · ' + esc(row.package_code) : '') + (row.booking_id ? ' · ' + esc(row.booking_id) : '') + '</div></span><span>' + esc(money(row.estimated_net_after_overhead_cad || 0)) + '<div class="mini">Revenue ' + esc(money(row.recognized_revenue_cad || 0)) + ' · COGS ' + esc(money(row.direct_cogs_cad || 0)) + ' · Overhead ' + esc(money(row.allocated_overhead_cad || 0)) + '</div></span></div>';
+        }).join('') || '<div class="mini">No booking profitability rows found for this month.</div>';
+      }
       function renderInventoryCosts(report) {
         var summary = qs('#inventoryCostSummary');
         var missing = qs('#inventoryCostMissing');
@@ -509,7 +588,7 @@
           var settlements = Array.isArray(row.settlements) ? row.settlements : [];
           var settlementHtml = settlements.length
             ? settlements.map(function (item) {
-                return '<div class="settlement-item"><strong>' + esc(item.entry_date || '') + '</strong> · ' + esc(money(item.total_cad || 0)) + '<div class="mini">' + esc(item.entry_type || '') + (item.memo ? ' · ' + esc(item.memo) : '') + '</div></div>';
+                return '<div class="settlement-item"><strong>' + esc(item.entry_date || '') + '</strong> · ' + esc(money(item.total_cad || 0)) + '<div class="mini">' + esc(item.entry_type || '') + (item.memo ? ' · ' + esc(item.memo) : '') + ((item.last_recorded_by_name || item.created_by_name) ? ' · by ' + esc(item.last_recorded_by_name || item.created_by_name) : '') + '</div></div>';
               }).join('')
             : '<div class="mini">No settlements posted yet.</div>';
           var settleForm = Number(row.balance_due_cad || 0) > 0 ? (
@@ -578,10 +657,12 @@
         var pnl = state.reports && state.reports.profit_loss || {};
         var statements = state.reports && state.reports.statements || {};
         var inventory = statements.inventory_costs || {};
+        var receivables = statements.receivables_aging || {};
         var payables = state.payables || [];
         var outstanding = payables.reduce(function (sum, row) { return sum + Number(row.balance_due_cad || 0); }, 0);
         var openCount = payables.filter(function (row) { return ['open', 'partial'].includes(String(row.payment_status || '')); }).length;
-        qs('#sumOpen').textContent = String(recordSummary.open || 0);
+        qs('#sumOpen').textContent = money(receivables.totals && receivables.totals.total_balance_cad || 0);
+        qs('#sumOpenMeta').textContent = String(receivables.totals && receivables.totals.record_count || recordSummary.open || 0) + ' booking records with balance due';
         qs('#sumPayables').textContent = money(outstanding);
         qs('#sumPayablesCount').textContent = openCount + ' vendor bills with balance due';
         qs('#sumTaxDue').textContent = money(tax.suggested_remittance_cad || 0);
@@ -621,7 +702,9 @@
           statements: {
             balance_sheet: results[1].balance_sheet || null,
             cash_flow: results[1].cash_flow || null,
-            inventory_costs: results[1].inventory_costs || null
+            inventory_costs: results[1].inventory_costs || null,
+            receivables_aging: results[1].receivables_aging || null,
+            operational_profitability: results[1].operational_profitability || null
           }
         };
         state.tax = results[2].report || null;
@@ -630,6 +713,8 @@
         renderBalanceSheet(state.reports.statements.balance_sheet);
         renderCashFlow(state.reports.statements.cash_flow);
         renderInventoryCosts(state.reports.statements.inventory_costs);
+        renderReceivables(state.reports.statements.receivables_aging);
+        renderProfitability(state.reports.statements.operational_profitability);
         qs('#remitAmount').value = Number(state.tax && state.tax.suggested_remittance_cad || 0).toFixed(2);
       }
       async function refreshAll() {

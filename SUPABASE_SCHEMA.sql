@@ -1,4 +1,4 @@
--- Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+-- Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
 -- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. No schema change in this pass; documentation and access paths were updated.
 -- March 29, 2026 sync note: no new tables were required for this pass; this refresh mainly extends signed-in staff session coverage, reduces shared-password-only endpoint usage, and improves actor attribution in time/intake/media/booking flows.
 -- 
@@ -407,7 +407,9 @@ create table if not exists public.accounting_journal_entries (
   due_date date null,
   paid_at timestamptz null,
   created_by_name text null,
-  last_recorded_by_name text null
+  last_recorded_by_name text null,
+  created_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  last_recorded_by_staff_user_id uuid null references public.staff_users(id) on delete set null
 );
 
 create table if not exists public.accounting_journal_lines (
@@ -428,3 +430,11 @@ create index if not exists accounting_journal_entries_reference_type_date_idx
 
 create index if not exists catalog_inventory_items_active_cost_idx
   on public.catalog_inventory_items(is_active, item_type, cost_cents, qty_on_hand);
+
+
+-- 2026-04-09 accounting actor / receivables / profitability support
+create index if not exists accounting_journal_entries_actor_date_idx
+  on public.accounting_journal_entries(created_by_staff_user_id, entry_date);
+
+create index if not exists accounting_records_balance_service_idx
+  on public.accounting_records(order_status, service_date, balance_due_cad);

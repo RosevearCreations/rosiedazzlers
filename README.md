@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -203,3 +203,7 @@ The repo now includes a first-pass general-ledger workflow for a small auto-deta
 - Internal compatibility routing for `/admin-accounting/` now redirects to the primary screen to reduce page drift.
 - Public SEO housekeeping moved forward again: `robots.txt` and `sitemap.xml` now point to the production domain and the home page now carries `AutoDetailing` structured data.
 - Still not complete: full auth/session convergence, actor normalization across all remaining internal routes, deeper A/R and statement polish, fuller overhead allocation, and stronger reconciliation workflows.
+
+
+## Current build emphasis (April 9, 2026)
+This build is stronger on office-side accounting and internal-route cohesion. The current admin accounting screen now covers payables, remittance, statements, receivables aging, inventory cost completeness, and estimated booking profitability from one workflow.

@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -384,3 +384,10 @@ Partially mitigated in the newest pass:
 - Inventory cost-completeness risk is reduced because the admin inventory form now saves the fields needed to close missing-cost gaps; however, existing uncosted rows still need manual cleanup.
 - Remaining accounting risk is now concentrated in reconciliation quality rather than raw feature absence: A/R polish, overhead allocation accuracy, retained earnings confidence over time, and session/actor consistency on every internal route.
 - SEO/local-search risk improved slightly with production sitemap and robots cleanup, but ranking still depends heavily on Business Profile completeness, reviews, and ongoing location-page/service-content quality.
+
+
+## April 9, 2026 pass note
+- Reduced one auth/session gap by fixing page-key drift between the frontend shell/menu and protected internal routes.
+- Reduced one accounting gap by adding receivables-aging visibility and CSV export for office follow-up work.
+- Reduced one profitability gap by adding an estimated booking-profitability surface that allocates overhead across selected-month revenue.
+- Remaining risk: this profitability view is still operational/estimated, not full accountant-grade job costing, because labor burden, full overhead allocation rules, and every inventory/direct-cost path are not yet complete.

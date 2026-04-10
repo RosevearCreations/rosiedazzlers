@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -31,3 +31,7 @@ Primary docs refreshed together:
 
 ## April 9, 2026 docs update note
 This refresh aligns the docs with the accounting reporting/remittance pass, the inventory cost-field persistence fix, the stronger export set, and the production-domain sitemap/robots cleanup.
+
+
+## April 9, 2026 docs update note — second pass
+This refresh aligns the docs to the accounting actor-normalization, receivables-aging, profitability, export expansion, and auth/session page-key convergence pass.

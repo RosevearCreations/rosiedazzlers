@@ -86,7 +86,7 @@
       }
       qs('#uploadBtn').addEventListener('click', uploadFlow);
       qs('#refreshBtn').addEventListener('click', loadLatest);
-      window.AdminShell.boot({ pageKey:'upload', onReady: async ({actor:current}) => { actor=current||null; const box=qs('#actorBox'); if(actor){ box.style.display='block'; box.textContent=`Signed in as ${actor.full_name || actor.email || 'staff'} (${actor.role_code || 'staff'})`; } } });
+      window.AdminShell.boot({ pageKey:'admin-upload', onReady: async ({actor:current}) => { actor=current||null; const box=qs('#actorBox'); if(actor){ box.style.display='block'; box.textContent=`Signed in as ${actor.full_name || actor.email || 'staff'} (${actor.role_code || 'staff'})`; } } });
     })();
   </script>
 </body>

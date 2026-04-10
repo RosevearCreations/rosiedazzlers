@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -159,3 +159,9 @@
 - Tax remittance posting is now implemented as a journal-entry action against `sales_tax_payable` and the chosen payment account.
 - Inventory admin now stores unit-cost and vendor-SKU data needed for better COGS and cleanup reporting.
 - Public SEO state improved through production-domain sitemap/robots cleanup and homepage `AutoDetailing` structured data.
+
+
+## April 9, 2026 implementation state addendum
+- Accounting now has payable settlement history, remittance posting, P&L, balance sheet, cash flow, receivables aging, inventory cost completeness, and estimated booking profitability in the main office workflow.
+- Journal entries now support optional staff-user actor ids in addition to actor names.
+- Protected-route cohesion improved by aligning more internal pages with the shared auth shell page-access model.

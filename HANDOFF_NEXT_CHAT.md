@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -117,3 +117,13 @@ Run `sql/2026-03-26_catalog_admin_vehicle_account_and_auth_cleanup.sql` before t
 - The current strongest accounting pass is now in place: reporting, remittance posting, payable settlement history, export expansion, and inventory-cost persistence.
 - Resume from testing the new Admin Accounting screen first, then validate inventory cost-entry/save behavior, then move back to auth/session convergence and deeper accounting polish.
 - When continuing, treat `README.md`, `PROJECT_BRAIN.md`, `CURRENT_IMPLEMENTATION_STATE.md`, `KNOWN_GAPS_AND_RISKS.md`, `DEVELOPMENT_ROADMAP.md`, `NEXT_STEPS_INTERNAL.md`, and `DATABASE_STRUCTURE_CURRENT.md` as the main source-of-truth set.
+
+
+## April 9, 2026 continuation note
+The newest pass pushed Accounting further by adding receivables aging, estimated booking profitability, stronger exports, and accounting actor-id support. It also fixed internal protected-route page-key drift so My Account, Inventory, Upload, and Detailer Jobs align better with the shared auth shell.
+
+### Best next live tests
+1. Sign in as admin and verify Admin, Accounting, Inventory, Upload, and My Account all open without redirect drift.
+2. Sign in as a non-admin detailer/senior detailer and verify Detailer Jobs opens while Staff/Accounting remain blocked.
+3. Post one payable settlement and one tax remittance, then confirm the actor name shows in settlement history.
+4. Export receivables aging and profitability CSVs and verify the month filters match expectations.

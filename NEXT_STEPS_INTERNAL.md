@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -99,3 +99,9 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
    - quick expense entry from phone with receipt photo attachment
    - vendor quick-add during payable entry
    - stronger export presets for accountant handoff and month-end archive
+
+
+## Push next
+- complete actor-id normalization on remaining progress/jobsite/annotation/signoff/time-entry tables and endpoints
+- test admin vs detailer route gating live against deployed Pages/Supabase
+- tighten profitability inputs with labor burden and fuller overhead allocation rules

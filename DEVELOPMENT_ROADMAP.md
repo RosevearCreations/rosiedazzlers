@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting remittance/reporting, inventory cost coverage, export expansion, local SEO sitemap/structured-data, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -238,3 +238,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - moved forward: stronger exports now include profit-and-loss, balance-sheet, cash-flow, payables, and missing-inventory-cost CSV outputs in addition to general ledger export.
 - moved forward: local-search hygiene improved again through production robots/sitemap cleanup and home-page structured data.
 - move up next: accounts-receivable workflow depth, month-end checklist UI, vendor quick-add during bill entry, and full reconciliation/statement polish tied to consistent staff session handling.
+
+
+## April 9, 2026 accounting + auth convergence pass
+- moved forward: internal auth/session cohesion improved by normalizing page access keys for My Account, Inventory, Upload, Accounting, and Detailer Jobs screens.
+- moved forward: Accounting now includes receivables aging and an estimated booking profitability view/export.
+- moved forward: accounting journal entries now store optional staff-user actor ids for cleaner audit trails and future reconciliation.
+- move up next: finish the same actor-id normalization on remaining non-accounting operational tables and route handlers.
