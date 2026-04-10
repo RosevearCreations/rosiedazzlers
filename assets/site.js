@@ -23,20 +23,24 @@ const HOVER_MEDIA = {
   size: pkgFile("CarSizeChart.PNG")
 };
 
-const ADDON_MEDIA = {
-  full_clay_treatment: pkgFile('full_clay_treatment.png'),
-  two_stage_polish: pkgFile('two_stage_polish.png'),
-  high_grade_paint_sealant: pkgFile('high_grade_paint_sealant.png'),
-  uv_protectant_applied_on_interior_panels: pkgFile('uv_protectant_applied_on_interior_panels.png'),
-  de_ionizing_treatment: '/assets/addons/de_ionizing_treatment.svg',
-  de_badging: '/assets/addons/de_badging.svg',
-  engine_cleaning: '/assets/addons/engine_cleaning.svg',
-  external_ceramic_coating: '/assets/addons/external_ceramic_coating.svg',
-  external_graphene_fine_finish: '/assets/addons/external_graphene_fine_finish.svg',
-  external_wax: '/assets/addons/external_wax.svg',
-  vinyl_wrapping: '/assets/addons/vinyl_wrapping.svg',
-  window_tinting: '/assets/addons/window_tinting.svg'
+const ADDON_IMAGE_FILES = {
+  full_clay_treatment: 'full_clay_treatment.png',
+  two_stage_polish: 'two_stage_polish.png',
+  high_grade_paint_sealant: 'high_grade_paint_sealant.png',
+  uv_protectant_applied_on_interior_panels: 'uv_protectant_applied_on_interior_panels.png',
+  de_ionizing_treatment: 'De-Ionizing Vehicle Add on service.png',
+  de_badging: 'DeBadgingAddonService.png',
+  engine_cleaning: 'Engine Cleaning add on service.png',
+  external_ceramic_coating: 'External Ceramic coating add on service.png',
+  external_graphene_fine_finish: 'External Graphene Fine finish add on service.png',
+  external_wax: 'External Wax add on service.png',
+  vinyl_wrapping: 'Vinyl Wrapping add on service.png',
+  window_tinting: 'Window Tinting add on service.png'
 };
+
+const ADDON_MEDIA = Object.fromEntries(
+  Object.entries(ADDON_IMAGE_FILES).map(([code, filename]) => [code, pkgFile(filename)])
+);
 
 const LOCAL_ADDON_FALLBACKS = {
   full_clay_treatment: '/assets/addons/full_clay_treatment.png',

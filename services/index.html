@@ -199,7 +199,7 @@
     ];
 
     // Add-on image map (filenames in /packages)
-    const ADDON_IMAGES = {
+    const ADDON_IMAGE_FILES = {
       de_ionizing_treatment: "De-Ionizing Vehicle Add on service.png",
       de_badging: "DeBadgingAddonService.png",
       engine_cleaning: "Engine Cleaning add on service.png",
@@ -208,11 +208,17 @@
       external_wax: "External Wax add on service.png",
       vinyl_wrapping: "Vinyl Wrapping add on service.png",
       window_tinting: "Window Tinting add on service.png",
-      full_clay_treatment: imgUrlFromFilename("full_clay_treatment.png"),
-      two_stage_polish: imgUrlFromFilename("two_stage_polish.png"),
-      high_grade_paint_sealant: imgUrlFromFilename("high_grade_paint_sealant.png"),
-      uv_protectant_applied_on_interior_panels: imgUrlFromFilename("uv_protectant_applied_on_interior_panels.png"),
+      full_clay_treatment: "full_clay_treatment.png",
+      two_stage_polish: "two_stage_polish.png",
+      high_grade_paint_sealant: "high_grade_paint_sealant.png",
+      uv_protectant_applied_on_interior_panels: "uv_protectant_applied_on_interior_panels.png",
     };
+    const ADDON_IMAGES = Object.fromEntries(Object.entries(ADDON_IMAGE_FILES).map(([code, file]) => [code, imgUrlFromFilename(file)]));
+    function addonFallback(code){
+      const normalized = String(code || '').trim();
+      const ext = ['de_ionizing_treatment','de_badging','engine_cleaning','external_ceramic_coating','external_graphene_fine_finish','external_wax','vinyl_wrapping','window_tinting'].includes(normalized) ? '.svg' : '.png';
+      return `/assets/addons/${normalized}${ext}`;
+    }
 
     function sizeKey(){ return qs("#sizeSel").value; }
 
@@ -302,7 +308,7 @@
       const imageUrl = addon.image_url || null;
       const fallbackUrl = addon.image_fallback_url || addonFallback(addon.code);
       const imgName = ADDON_IMAGES[addon.code] || null;
-      const img = imageUrl ? imageUrl : (imgName ? (imgName.startsWith('/') ? imgName : imgUrlFromFilename(imgName)) : null);
+      const img = imageUrl ? imageUrl : (imgName || null);
 
       const el = document.createElement("div");
       el.className = "panel";

@@ -57,6 +57,8 @@ export function normalizeCatalog(raw) {
       name: String(addon?.name || code).trim(),
       quote_required: addon?.quote_required === true,
       prices_cad: normalizeSizeMap(addon?.prices_cad),
+      image_url: String(addon?.image_url || '').trim() || null,
+      image_fallback_url: String(addon?.image_fallback_url || '').trim() || null,
       notes: Array.isArray(addon?.notes) ? addon.notes.map((v) => String(v || "").trim()).filter(Boolean) : []
     };
   }
