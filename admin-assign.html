@@ -1,39 +1,46 @@
-<!-- /admin-assign.html
-     REPLACE ENTIRE FILE
-
-     Purpose:
-     - Assign a staff name to a booking (simple version)
-     - Lists upcoming bookings and lets you set "assigned_to"
-     - Calls: POST /api/admin/assign_booking  (we create next)
-     - Loads bookings via: POST /api/admin/bookings (action=list)
-
-     Notes:
-     - This does not require a full staff system yet.
-     - Later we can add staff accounts + permissions.
--->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Assign | Rosie Dazzlers</title>
-  <meta name="description" content="Assign staff to bookings." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260311s" />
+  <meta name="description" content="Assign a lead and crew of detailers to upcoming bookings." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260410a" />
   <style>
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+    .toolbar label{display:flex;flex-direction:column;gap:6px;min-width:240px;flex:1 1 280px}
     .muted{color:rgba(234,242,255,.62)}
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.10);vertical-align:top}
-    th{color:rgba(234,242,255,.70);font-weight:600;text-align:left}
     .mini{font-size:.92rem}
-    pre{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px}
-    input.small{padding:10px 10px}
+    .table-wrap{overflow:auto}
+    table{width:100%;border-collapse:collapse;min-width:980px}
+    th,td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,.10);vertical-align:top}
+    th{color:rgba(234,242,255,.70);font-weight:700;text-align:left}
+    .assign-box{display:grid;gap:10px;min-width:280px}
+    .crew-grid{display:grid;gap:8px}
+    .crew-item{display:grid;grid-template-columns:24px 24px minmax(0,1fr);gap:8px;align-items:start;padding:8px 10px;border:1px solid rgba(255,255,255,.10);border-radius:12px;background:rgba(255,255,255,.03)}
+    .crew-item input[type="checkbox"], .crew-item input[type="radio"]{width:18px;height:18px;margin:1px 0 0 0;accent-color:var(--accent)}
+    .crew-item.is-lead{border-color:rgba(77,119,255,.48);background:rgba(77,119,255,.08)}
+    .crew-item .name{font-weight:700}
+    .crew-item .meta{font-size:.85rem;color:rgba(234,242,255,.62)}
+    .lead-caption{font-size:.8rem;color:rgba(234,242,255,.58)}
+    .manual-box{display:grid;gap:8px}
+    .summary-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-size:.82rem;margin:0 6px 6px 0}
+    .summary-chip.lead{border-color:rgba(77,119,255,.5);background:rgba(77,119,255,.10)}
+    .sticky-tools{display:flex;gap:8px;flex-wrap:wrap}
+    .raw-box{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px}
+    @media (max-width: 980px){
+      table,thead,tbody,tr,td,th{display:block;min-width:0}
+      thead{display:none}
+      tbody{display:grid;gap:14px}
+      tr{border:1px solid rgba(255,255,255,.10);border-radius:16px;background:rgba(255,255,255,.03);padding:10px}
+      td{border:0;padding:6px 0}
+      td::before{content:attr(data-label);display:block;font-size:.78rem;color:rgba(234,242,255,.56);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em}
+      .sticky-tools .btn{flex:1 1 140px}
+      .assign-box{min-width:0}
+    }
   </style>
 </head>
-
 <body>
   <div class="nav">
     <div class="nav-inner">
@@ -49,24 +56,20 @@
 
   <div class="container">
     <div class="panel">
-      <h1 style="margin:0 0 6px">Assign Staff</h1>
-      <p class="kicker" style="margin:0">Assign a staff name to each booking (simple approach for now).</p>
-
+      <h1 style="margin:0 0 6px">Assign Crew</h1>
+      <p class="kicker" style="margin:0">Assign a lead / senior detailer plus a supporting crew so larger jobs can stay on schedule.</p>
       <div class="hr"></div>
-
-      <div class="row">
-        <label style="display:flex;flex-direction:column;gap:6px;min-width:260px">
+      <div class="toolbar">
+        <label>
           <span class="muted">Admin password (optional compatibility fallback)</span>
           <input id="pw" type="password" placeholder="Enter admin password…" />
         </label>
-
-        <div class="row" style="align-items:flex-end">
+        <div class="sticky-tools">
           <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
           <button class="btn primary" id="loadBtn" type="button">Load bookings</button>
           <a class="btn ghost" href="/admin.html">Back</a>
         </div>
       </div>
-
       <div id="status" class="notice" style="display:none;margin-top:12px"></div>
       <div id="actorBox" class="notice" style="margin-top:12px">Checking signed-in staff session…</div>
     </div>
@@ -76,8 +79,7 @@
         <h2 style="margin-top:0">Upcoming bookings</h2>
         <div class="muted mini" id="count"></div>
         <div class="hr"></div>
-
-        <div style="overflow:auto">
+        <div class="table-wrap">
           <table>
             <thead>
               <tr>
@@ -85,7 +87,7 @@
                 <th>Slot</th>
                 <th>Customer</th>
                 <th>Package</th>
-                <th>Assigned to</th>
+                <th>Lead / crew</th>
                 <th></th>
               </tr>
             </thead>
@@ -99,8 +101,8 @@
 
     <div class="section">
       <div class="panel">
-        <h2 style="margin-top:0">Raw</h2>
-        <pre id="raw" class="mono">{}</pre>
+        <h2 style="margin-top:0">Raw response</h2>
+        <pre id="raw" class="mono raw-box">{}</pre>
       </div>
     </div>
 
@@ -111,8 +113,10 @@
   <script src="/assets/admin-shell.js"></script>
   <script type="module">
     const qs = (s)=>document.querySelector(s);
+    const qsa = (s, root=document)=>Array.from(root.querySelectorAll(s));
     let actor = null;
     let assignableStaff = [];
+    let crewAssignmentsByBooking = Object.create(null);
 
     function show(msg, kind=""){
       const el = qs("#status");
@@ -121,8 +125,10 @@
       el.textContent = msg;
     }
     function hide(){ qs("#status").style.display = "none"; }
-
     function getPw(){ return (qs("#pw").value || "").trim(); }
+    function esc(s){ return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;"); }
+    function normalizeName(v){ return String(v || '').trim().toLowerCase(); }
+    function staffLabel(staff){ return staff.assignment_label || staff.full_name || staff.email || 'Staff'; }
 
     async function postJson(url, payload){
       const res = await fetch(url, {
@@ -135,160 +141,238 @@
       return { ok: res.ok, status: res.status, out };
     }
 
-    function esc(s){
-      return String(s||"")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;").replaceAll("'","&#39;");
+    function assignmentSummary(assignments, booking){
+      const list = Array.isArray(assignments) ? assignments : [];
+      if (!list.length) {
+        const fallback = booking?.assigned_to || '';
+        return fallback ? `<span class="summary-chip lead">Lead: ${esc(fallback)}</span>` : `<span class="summary-chip">Unassigned</span>`;
+      }
+      return list.map((row)=>`<span class="summary-chip ${row.assignment_role === 'lead' ? 'lead' : ''}">${row.assignment_role === 'lead' ? 'Lead' : 'Crew'}: ${esc(row.assigned_staff_name || row.assigned_to || row.assigned_staff_email || 'Staff')}</span>`).join('');
     }
-    function normalizeName(v){ return String(v || '').trim().toLowerCase(); }
-    function staffOptions(current){
-      const currentName = normalizeName(current);
-      return ['<option value="">Unassigned</option>'].concat(assignableStaff.map((staff)=>{
-        const selected = currentName && (normalizeName(staff.full_name)===currentName || normalizeName(staff.email)===currentName) ? ' selected' : '';
-        return `<option value="${esc(staff.id || '')}"${selected}>${esc(staff.assignment_label || staff.full_name || staff.email || 'Staff')}</option>`;
-      })).join('');
+
+    function bookingCrew(booking){
+      const existing = crewAssignmentsByBooking[String(booking.id || '')] || [];
+      if (existing.length) return existing;
+      if (booking?.assigned_staff_user_id || booking?.assigned_to) {
+        return [{
+          assigned_staff_user_id: booking.assigned_staff_user_id || null,
+          assigned_staff_email: booking.assigned_staff_email || null,
+          assigned_staff_name: booking.assigned_staff_name || booking.assigned_to || null,
+          assigned_to: booking.assigned_to || booking.assigned_staff_name || null,
+          assignment_role: 'lead'
+        }];
+      }
+      return [];
     }
+
+    function isStaffSelected(assignments, staff){
+      return assignments.some((row)=>
+        (row.assigned_staff_user_id && staff.id && String(row.assigned_staff_user_id) === String(staff.id)) ||
+        (row.assigned_staff_email && staff.email && normalizeName(row.assigned_staff_email) === normalizeName(staff.email)) ||
+        (row.assigned_staff_name && staff.full_name && normalizeName(row.assigned_staff_name) === normalizeName(staff.full_name)) ||
+        (row.assigned_to && staff.full_name && normalizeName(row.assigned_to) === normalizeName(staff.full_name))
+      );
+    }
+
+    function currentLeadId(assignments){
+      const lead = assignments.find((row)=>row.assignment_role === 'lead') || assignments[0] || null;
+      if (!lead) return '';
+      return String(lead.assigned_staff_user_id || lead.assigned_staff_email || lead.assigned_staff_name || lead.assigned_to || '');
+    }
+
+    function buildCrewSelector(booking){
+      const assignments = bookingCrew(booking);
+      const leadKey = currentLeadId(assignments);
+      return assignableStaff.map((staff)=>{
+        const key = String(staff.id || staff.email || staff.full_name || '');
+        const checked = isStaffSelected(assignments, staff) ? ' checked' : '';
+        const leadChecked = checked && leadKey && leadKey === key ? ' checked' : '';
+        return `
+          <label class="crew-item${leadChecked ? ' is-lead' : ''}">
+            <input type="checkbox" data-crew-check value="${esc(staff.id || '')}"${checked} />
+            <input type="radio" name="lead-${esc(booking.id || '')}" data-crew-lead value="${esc(key)}"${leadChecked} />
+            <span>
+              <div class="name">${esc(staff.full_name || staff.email || 'Staff')}</div>
+              <div class="meta">${esc(staff.role_code || 'staff')} · ${esc(staff.email || '')}</div>
+              <div class="lead-caption">Check for crew. Mark radio for lead / senior on job.</div>
+            </span>
+          </label>
+        `;
+      }).join('');
+    }
+
+    function attachRowInteractions(tr){
+      const checks = qsa('[data-crew-check]', tr);
+      const radios = qsa('[data-crew-lead]', tr);
+      const refreshLeadState = ()=>{
+        const checkedKeys = new Set(checks.filter((input)=>input.checked).map((input)=>String(input.value || '')));
+        let chosen = radios.find((input)=>input.checked && checkedKeys.has(String(input.value || '')));
+        if (!chosen) {
+          const firstChecked = checks.find((input)=>input.checked);
+          if (firstChecked) {
+            chosen = radios.find((input)=>String(input.value || '') === String(firstChecked.value || ''));
+            if (chosen) chosen.checked = true;
+          }
+        }
+        qsa('.crew-item', tr).forEach((item)=>item.classList.remove('is-lead'));
+        if (chosen) chosen.closest('.crew-item')?.classList.add('is-lead');
+      };
+      checks.forEach((input)=>input.addEventListener('change', refreshLeadState));
+      radios.forEach((input)=>input.addEventListener('change', refreshLeadState));
+      refreshLeadState();
+    }
+
     async function loadAssignableStaff(){
       const r = await postJson('/api/admin/staff_assignable_list', { include_admins: true });
       if (!r.ok || !r.out?.ok) throw new Error(r.out?.error || 'Could not load assignable staff.');
       assignableStaff = Array.isArray(r.out.staff_users) ? r.out.staff_users : [];
     }
-    function readAssignmentRow(tr){
-      const id = (tr.querySelector('[data-assign-select]')?.value || '').trim();
-      if (id) {
-        const staff = assignableStaff.find((row)=>String(row.id || '') === id);
-        if (staff) {
-          return {
-            assigned_to: staff.full_name || staff.email || '',
-            assigned_staff_name: staff.full_name || '',
-            assigned_staff_user_id: staff.id || null,
-            assigned_staff_email: staff.email || null
-          };
-        }
+
+    async function loadAssignmentMap(bookingIds){
+      if (!bookingIds.length) {
+        crewAssignmentsByBooking = Object.create(null);
+        return;
       }
+      const r = await postJson('/api/admin/booking_assignment_map', { booking_ids: bookingIds });
+      if (!r.ok || !r.out?.ok) {
+        crewAssignmentsByBooking = Object.create(null);
+        return;
+      }
+      crewAssignmentsByBooking = r.out.assignments_by_booking || Object.create(null);
+      if (r.out.warning) show(r.out.warning, 'warn');
+    }
+
+    function readAssignmentRow(tr){
+      const crew = [];
+      const checkedIds = qsa('[data-crew-check]:checked', tr).map((input)=>String(input.value || ''));
+      const leadInput = tr.querySelector('[data-crew-lead]:checked');
+      const leadValue = String(leadInput?.value || checkedIds[0] || '');
+      checkedIds.forEach((id, index)=>{
+        const staff = assignableStaff.find((row)=>String(row.id || '') === id);
+        if (!staff) return;
+        crew.push({
+          assigned_to: staff.full_name || staff.email || '',
+          assigned_staff_name: staff.full_name || staff.email || '',
+          assigned_staff_user_id: staff.id || null,
+          assigned_staff_email: staff.email || null,
+          assignment_role: leadValue && leadValue === String(staff.id || '') ? 'lead' : 'crew',
+          sort_order: index
+        });
+      });
+      if (crew.length) return { crew_assignments: crew };
       const manual = (tr.querySelector('[data-assign-input]')?.value || '').trim();
       return {
         assigned_to: manual,
         assigned_staff_name: manual,
         assigned_staff_user_id: null,
-        assigned_staff_email: null
+        assigned_staff_email: null,
+        crew_assignments: manual ? [{ assigned_to: manual, assigned_staff_name: manual, assignment_role: 'lead', sort_order: 0 }] : []
       };
     }
 
-    // Save PW
     try {
-      const saved = localStorage.getItem("rosie_admin_pw") || "";
-      if (saved) qs("#pw").value = saved;
+      const saved = localStorage.getItem('rosie_admin_pw') || '';
+      if (saved) qs('#pw').value = saved;
     } catch {}
 
-    qs("#savePwBtn").addEventListener("click", () => {
+    qs('#savePwBtn').addEventListener('click', ()=>{
       const pw = getPw();
-      if (!pw) return show("Enter password first.", "bad");
+      if (!pw) return show('Enter password first.', 'bad');
       try {
-        localStorage.setItem("rosie_admin_pw", pw);
-        show("Saved password on this device.", "ok");
+        localStorage.setItem('rosie_admin_pw', pw);
+        show('Saved password on this device.', 'ok');
         setTimeout(hide, 1000);
       } catch {
-        show("Could not save password.", "bad");
+        show('Could not save password.', 'bad');
       }
     });
 
     async function loadBookings(){
       hide();
       const pw = getPw();
-
-      // next 21 days
       const from = new Date();
       const to = new Date(from.getTime() + 1000*60*60*24*21);
       const ymd = (d)=> d.toISOString().slice(0,10);
+      qs('#loadBtn').disabled = true;
+      qs('#loadBtn').textContent = 'Loading…';
+      try {
+        await loadAssignableStaff();
+        const payload = { action:'list', date_from: ymd(from), date_to: ymd(to), statuses:['pending','confirmed','completed'] };
+        if (pw) payload.admin_password = pw;
+        const r = await postJson('/api/admin/bookings', payload);
+        qs('#raw').textContent = JSON.stringify(r.out || {}, null, 2);
+        if (!r.ok || !r.out?.ok) throw new Error(r.out?.error || `HTTP ${r.status}`);
+        const rows = Array.isArray(r.out.rows) ? r.out.rows : [];
+        await loadAssignmentMap(rows.map((row)=>row.id).filter(Boolean));
+        qs('#count').textContent = `${rows.length} bookings`;
+        const actorBox = qs('#actorBox');
+        actorBox.textContent = actor ? `Signed in as ${actor.full_name || actor.email || 'staff'} (${actor.role_code || 'staff'}). Password bridge is optional here.` : 'No signed-in staff session detected. Legacy password bridge is still available as a fallback.';
 
-      qs("#loadBtn").disabled = true;
-      qs("#loadBtn").textContent = "Loading…";
-
-      await loadAssignableStaff();
-      const actorBox = qs('#actorBox');
-      actorBox.textContent = actor ? `Signed in as ${actor.full_name || actor.email || 'staff'} (${actor.role_code || 'staff'}). Password bridge is optional here.` : 'No signed-in staff session detected. Legacy password bridge is still available as a fallback.';
-
-      const payload = {
-        action: "list",
-        date_from: ymd(from),
-        date_to: ymd(to),
-        statuses: ["pending","confirmed","completed"],
-      };
-      if (pw) payload.admin_password = pw;
-      const r = await postJson("/api/admin/bookings", payload);
-
-      qs("#loadBtn").disabled = false;
-      qs("#loadBtn").textContent = "Load bookings";
-
-      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
-
-      if (!r.ok || !r.out?.ok){
-        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
-      }
-
-      const rows = Array.isArray(r.out.rows) ? r.out.rows : [];
-      qs("#count").textContent = `${rows.length} bookings`;
-
-      const tb = qs("#rows");
-      tb.innerHTML = "";
-
-      for (const b of rows){
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td class="mono">${esc(b.service_date)}</td>
-          <td class="mono">${esc(b.start_slot)}${Number(b.duration_slots)===2 ? "+PM" : ""}</td>
-          <td>
-            <div><strong>${esc(b.customer_name)}</strong></div>
-            <div class="muted mini">${esc(b.customer_email || "")}</div>
-          </td>
-          <td class="mono">${esc(b.package_code)}/${esc(b.vehicle_size)}</td>
-          <td>
-            <select class="small" data-assign-select>${staffOptions(b.assigned_to || '')}</select>
-            <input class="small" style="margin-top:8px" data-assign-input value="${esc(b.assigned_staff_user_id ? '' : (b.assigned_to || ''))}" placeholder="Optional manual label" />
-          </td>
-          <td>
-            <button class="btn ghost" data-save="${esc(b.id)}">Save</button>
-          </td>
-        `;
-        tb.appendChild(tr);
-      }
-
-      tb.querySelectorAll("button[data-save]").forEach(btn=>{
-        btn.addEventListener("click", async ()=>{
-          const pw2 = getPw();
-
-          const booking_id = btn.getAttribute("data-save");
-          const tr = btn.closest("tr");
-          const assignment = readAssignmentRow(tr);
-
-          btn.disabled = true;
-
-          const payload = Object.assign({ booking_id }, assignment);
-          if (pw2) payload.admin_password = pw2;
-          const r2 = await postJson("/api/admin/assign_booking", payload);
-
-          btn.disabled = false;
-
-          qs("#raw").textContent = JSON.stringify(r2.out || {}, null, 2);
-
-          if (!r2.ok || !r2.out?.ok){
-            return show(r2.out?.error ? `Error: ${r2.out.error}` : `Error (HTTP ${r2.status})`, "bad");
-          }
-
-          show("Saved.", "ok");
-          setTimeout(hide, 800);
+        const tb = qs('#rows');
+        tb.innerHTML = '';
+        rows.forEach((b)=>{
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td data-label="Date" class="mono">${esc(b.service_date)}</td>
+            <td data-label="Slot" class="mono">${esc(b.start_slot)}${Number(b.duration_slots)===2 ? '+PM' : ''}</td>
+            <td data-label="Customer">
+              <div><strong>${esc(b.customer_name)}</strong></div>
+              <div class="muted mini">${esc(b.customer_email || '')}</div>
+              <div class="mini" style="margin-top:6px">${assignmentSummary(bookingCrew(b), b)}</div>
+            </td>
+            <td data-label="Package" class="mono">${esc(b.package_code)}/${esc(b.vehicle_size)}</td>
+            <td data-label="Lead / crew">
+              <div class="assign-box">
+                <div class="crew-grid">${buildCrewSelector(b)}</div>
+                <div class="manual-box">
+                  <input class="small" data-assign-input value="${esc(bookingCrew(b).length ? '' : (b.assigned_to || ''))}" placeholder="Manual fallback label if no staff record exists" />
+                  <div class="muted mini">Use manual text only when the person does not exist in staff records yet.</div>
+                </div>
+              </div>
+            </td>
+            <td data-label="Actions">
+              <button class="btn ghost" data-save="${esc(b.id)}">Save crew</button>
+            </td>
+          `;
+          tb.appendChild(tr);
+          attachRowInteractions(tr);
         });
-      });
 
-      show("Loaded.", "ok");
-      setTimeout(hide, 800);
+        tb.querySelectorAll('button[data-save]').forEach((btn)=>{
+          btn.addEventListener('click', async ()=>{
+            const booking_id = btn.getAttribute('data-save');
+            const tr = btn.closest('tr');
+            const assignment = readAssignmentRow(tr);
+            const payload = Object.assign({ booking_id }, assignment);
+            if (pw) payload.admin_password = pw;
+            btn.disabled = true;
+            btn.textContent = 'Saving…';
+            const r2 = await postJson('/api/admin/assign_booking', payload);
+            btn.disabled = false;
+            btn.textContent = 'Save crew';
+            qs('#raw').textContent = JSON.stringify(r2.out || {}, null, 2);
+            if (!r2.ok || !r2.out?.ok) return show(r2.out?.error ? `Error: ${r2.out.error}` : `Error (HTTP ${r2.status})`, 'bad');
+            crewAssignmentsByBooking[String(booking_id)] = Array.isArray(r2.out?.booking?.crew_assignments) ? r2.out.booking.crew_assignments : [];
+            if (r2.out?.warning) show(r2.out.warning, 'warn');
+            else show(r2.out?.message || 'Saved.', 'ok');
+            setTimeout(hide, 1400);
+          });
+        });
+
+        show('Loaded.', 'ok');
+        setTimeout(hide, 800);
+      } catch (err) {
+        show(`Error: ${err?.message || err}`, 'bad');
+      } finally {
+        qs('#loadBtn').disabled = false;
+        qs('#loadBtn').textContent = 'Load bookings';
+      }
     }
 
-    qs("#loadBtn").addEventListener("click", loadBookings);
+    qs('#loadBtn').addEventListener('click', loadBookings);
     document.addEventListener('DOMContentLoaded', async ()=>{
       await window.AdminShell.boot({
-        pageKey: 'admin-booking',
+        pageKey: 'admin-assign',
         onReady: async ({ actor: currentActor }) => {
           actor = currentActor || null;
           const actorBox = qs('#actorBox');
@@ -297,7 +381,6 @@
       });
     });
   </script>
-
   <script type="module" src="/assets/chrome.js?v=20260311s"></script>
 </body>
 </html>
