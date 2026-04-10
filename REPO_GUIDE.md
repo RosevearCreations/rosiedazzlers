@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -143,3 +143,9 @@ Prefer the session-aware admin/detailer endpoints over any older shared-password
 - `functions/api/_lib/accounting-gl.js` now also drives receivables-aging and estimated booking-profitability reporting/exports.
 - `assets/admin-auth.js` is now stricter about normalizing internal page keys before capability checks.
 - `sql/2026-04-09_accounting_actor_receivables_profitability.sql` adds accounting actor-id and receivables-support indexes.
+
+
+## April 9, 2026 pass notes
+- Run `sql/2026-04-09_accounting_month_end_checklist.sql` after pulling this pass.
+- Test `admin-accounting.html` month-end checklist save/load for at least one month.
+- Re-test `admin-booking.html`, `admin-assign.html`, `services.html`, and `book.html` to confirm the restored add-on imagery and resolved-staff assignment flow.

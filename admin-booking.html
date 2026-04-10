@@ -117,9 +117,18 @@
           <h2>Assign staff</h2>
           <form id="assignForm" class="form">
             <label>
-              Assigned to
-              <input id="assignedTo" name="assignedTo" type="text" placeholder="Example: Laurie / Jack / Team" />
+              Assignable staff
+              <select id="assignedStaffSelect" name="assignedStaffSelect">
+                <option value="">Unassigned</option>
+              </select>
             </label>
+
+            <label>
+              Manual fallback label
+              <input id="assignedTo" name="assignedTo" type="text" placeholder="Optional manual label when no staff profile matches" />
+            </label>
+
+            <div class="mini">Prefer the staff dropdown so the booking stores staff user id and email, not only a display name.</div>
 
             <div>
               <button id="assignBtn" class="btn primary" type="submit" disabled>Save assignment</button>
@@ -132,12 +141,16 @@
 
   <footer class="footer container" data-footer></footer>
 
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js"></script>
   <script type="module">
     import { setBrandImages, setFooter } from "/assets/site.js";
 
+    let actor = null;
     let currentBooking = null;
     let allBookings = [];
+    let assignableStaff = [];
 
     function escapeHtml(value) {
       return String(value ?? "")
@@ -194,22 +207,70 @@
       return data;
     }
 
-    async function assignBooking(bookingId, assignedTo) {
+    async function assignBooking(bookingId, selection) {
+      const payload = { booking_id: bookingId };
+
+      if (selection && selection.type === "staff") {
+        payload.assigned_to = selection.full_name || selection.email || "";
+        payload.assigned_staff_name = selection.full_name || "";
+        payload.assigned_staff_user_id = selection.id || null;
+        payload.assigned_staff_email = selection.email || null;
+      } else if (selection && selection.type === "manual") {
+        payload.assigned_to = selection.assigned_to || "";
+        payload.assigned_staff_name = selection.assigned_to || "";
+      }
+
       const res = await fetch("/api/admin/assign_booking", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         credentials: "include",
-        body: JSON.stringify({
-          booking_id: bookingId,
-          assigned_to: assignedTo
-        })
+        body: JSON.stringify(payload)
       });
 
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Could not assign booking.");
       return data;
+    }
+
+    async function loadAssignableStaff() {
+      const res = await fetch('/api/admin/staff_assignable_list', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ include_admins: true })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) throw new Error(data.error || 'Could not load assignable staff.');
+      assignableStaff = Array.isArray(data.staff_users) ? data.staff_users : [];
+      renderAssignableStaffOptions();
+    }
+
+    function renderAssignableStaffOptions() {
+      const select = document.querySelector('#assignedStaffSelect');
+      if (!select) return;
+      const currentId = currentBooking && currentBooking.assigned_staff_user_id ? String(currentBooking.assigned_staff_user_id) : '';
+      const currentName = currentBooking && currentBooking.assigned_to ? String(currentBooking.assigned_to) : '';
+      select.innerHTML = ['<option value="">Unassigned</option>'].concat(assignableStaff.map((staff) => {
+        const selected = currentId && String(staff.id) === currentId ? ' selected' : '';
+        const label = escapeHtml(staff.assignment_label || staff.full_name || staff.email || 'Staff');
+        return `<option value="${escapeHtml(staff.id || '')}"${selected}>${label}</option>`;
+      })).join('');
+      if (!currentId && !assignableStaff.some((staff) => String(staff.full_name || '').trim().toLowerCase() === currentName.trim().toLowerCase())) {
+        document.querySelector('#assignedTo').value = currentName || '';
+      }
+    }
+
+    function readAssignmentSelection() {
+      const selectedId = document.querySelector('#assignedStaffSelect').value || '';
+      if (selectedId) {
+        const staff = assignableStaff.find((row) => String(row.id || '') === String(selectedId));
+        if (staff) return Object.assign({ type: 'staff' }, staff);
+      }
+      const manualName = document.querySelector('#assignedTo').value.trim();
+      if (manualName) return { type: 'manual', assigned_to: manualName };
+      return { type: 'manual', assigned_to: '' };
     }
 
     function renderSelectedBooking() {
@@ -250,7 +311,8 @@
 
       document.querySelector("#bookingStatus").value = currentBooking.status || "pending";
       document.querySelector("#jobStatus").value = currentBooking.job_status || "";
-      document.querySelector("#assignedTo").value = currentBooking.assigned_to || "";
+      document.querySelector("#assignedTo").value = currentBooking.assigned_staff_user_id ? "" : (currentBooking.assigned_to || "");
+      renderAssignableStaffOptions();
 
       statusBtn.disabled = false;
       assignBtn.disabled = false;
@@ -288,7 +350,8 @@
 
     async function refreshBookings() {
       const data = await loadBookings();
-      document.querySelector("#sessionMeta").textContent = data?.actor?.full_name ? `Signed in as ${data.actor.full_name}.` : "Signed-in staff access is required.";
+      const sessionActor = data?.actor || actor || null;
+      document.querySelector("#sessionMeta").textContent = sessionActor?.full_name ? `Signed in as ${sessionActor.full_name} (${sessionActor.role_code || 'staff'}).` : "Signed-in staff access is required.";
 
       allBookings = Array.isArray(data.bookings) ? data.bookings : [];
       renderBookingsList();
@@ -346,10 +409,7 @@
 
         try {
           setNotice("Saving assignment…");
-          await assignBooking(
-            currentBooking.id,
-            document.querySelector("#assignedTo").value.trim()
-          );
+          await assignBooking(currentBooking.id, readAssignmentSelection());
           await refreshBookings();
           setNotice("Booking assignment updated.", "ok");
         } catch (err) {
@@ -358,7 +418,17 @@
       });
     }
 
-    document.addEventListener("DOMContentLoaded", async () => { await boot(); document.querySelector("#loadBookingsBtn").click(); });
+    document.addEventListener("DOMContentLoaded", async () => {
+      await window.AdminShell.boot({
+        pageKey: 'admin-booking',
+        onReady: async ({ actor: currentActor }) => {
+          actor = currentActor || null;
+          await boot();
+          await loadAssignableStaff();
+          document.querySelector("#loadBookingsBtn").click();
+        }
+      });
+    });
   </script>
 </body>
 </html>

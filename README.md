@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -207,3 +207,11 @@ The repo now includes a first-pass general-ledger workflow for a small auto-deta
 
 ## Current build emphasis (April 9, 2026)
 This build is stronger on office-side accounting and internal-route cohesion. The current admin accounting screen now covers payables, remittance, statements, receivables aging, inventory cost completeness, and estimated booking profitability from one workflow.
+
+
+## April 9, 2026 add-on image restore / month-end checklist / assignment identity pass
+- Restored the four custom add-on service cards to the Rosie packages R2 path first, with bundled local assets kept as fallback so the cards do not go blank if the remote asset is unavailable.
+- Admin Booking and Admin Assign now prefer real assignable staff records so booking assignment can store `assigned_staff_user_id` and `assigned_staff_email`, not only a display name.
+- Added a month-end checklist workflow to Admin Accounting plus a new `accounting_month_end_checklists` table and API endpoint so office-side close steps can be tracked per month.
+- Progress media posting now stores `staff_user_id`, continuing actor normalization outside accounting.
+- Continued local-search hygiene: keep one clear H1 per public page, use search-language terms in titles/headings, and keep sitemap / robots / structured-data alignment clean.

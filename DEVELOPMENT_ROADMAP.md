@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -245,3 +245,11 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - moved forward: Accounting now includes receivables aging and an estimated booking profitability view/export.
 - moved forward: accounting journal entries now store optional staff-user actor ids for cleaner audit trails and future reconciliation.
 - move up next: finish the same actor-id normalization on remaining non-accounting operational tables and route handlers.
+
+
+## April 9, 2026 add-on image restore / month-end checklist / assignment identity pass
+- moved forward: the four custom add-on cards now prefer the canonical Rosie packages R2 assets again, with bundled fallbacks so the images do not disappear if the remote asset is missing.
+- moved forward: booking assignment now has a stronger path toward actor normalization because admin assignment screens can send `assigned_staff_user_id`, `assigned_staff_email`, and `assigned_staff_name` instead of only `assigned_to`.
+- moved forward: Admin Accounting now has a real month-end checklist panel backed by DB persistence, which makes settlement/remittance/export close work easier to track from one office-side screen.
+- moved forward: progress media now records `staff_user_id`, closing one more non-accounting identity gap.
+- move up next: extend the same resolved staff-user-id pattern into the remaining live/jobsite/progress compatibility screens that still expose manual fallback labels more heavily than structured assignment.

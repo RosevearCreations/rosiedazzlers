@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -151,3 +151,10 @@ Rosie Dazzlers now has a lightweight internal accounting backend with chart of a
 
 ## April 9, 2026 brain note
 The accounting area is now becoming the office-side operational hub: receivables follow-up, vendor settlements, remittance, month-end statements, stronger exports, and rough profitability all sit in one place. Treat the profitability view as directional operational reporting until deeper labor/overhead costing is finished.
+
+
+## April 9, 2026 pass snapshot
+- Restored the four custom add-on service images to use the Rosie packages R2 path first, with local fallback assets preserved.
+- Added DB-backed month-end checklist persistence for Accounting.
+- Strengthened booking assignment identity by preferring assignable staff records instead of free-typed names alone.
+- Continued actor normalization by storing `staff_user_id` on progress media posts.

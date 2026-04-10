@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -105,3 +105,11 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - complete actor-id normalization on remaining progress/jobsite/annotation/signoff/time-entry tables and endpoints
 - test admin vs detailer route gating live against deployed Pages/Supabase
 - tighten profitability inputs with labor burden and fuller overhead allocation rules
+
+
+## Newly moved up after the April 9, 2026 add-on / checklist / assignment pass
+- remove more visible legacy password prompts from the remaining internal compatibility screens now that session-first handling is deeper
+- extend resolved staff-user-id assignment into every remaining live/jobsite/progress route and export that still leans on names
+- add vendor quick-add during payable entry
+- add receipt-photo attachment for quick phone expense entry
+- expand month-end checklist from one saved note into guided task links / export shortcuts / reconciliation reminders

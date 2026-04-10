@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -165,3 +165,10 @@
 - Accounting now has payable settlement history, remittance posting, P&L, balance sheet, cash flow, receivables aging, inventory cost completeness, and estimated booking profitability in the main office workflow.
 - Journal entries now support optional staff-user actor ids in addition to actor names.
 - Protected-route cohesion improved by aligning more internal pages with the shared auth shell page-access model.
+
+
+## April 9, 2026 add-on image restore / month-end checklist / assignment identity pass
+- Services and booking add-on cards now point back to the Rosie packages R2 image path first, with bundled local fallbacks so the four custom service images do not render as blank placeholders.
+- `admin-booking.html` and `admin-assign.html` now prefer assignable staff records during assignment so `assigned_staff_user_id` and `assigned_staff_email` can travel with the booking more reliably.
+- Added `functions/api/admin/accounting_month_end_checklist.js` and `public.accounting_month_end_checklists` so month-end close work can be saved by month with actor attribution and notes.
+- `progress_media_post` now writes `staff_user_id` into `job_media`, reducing another remaining actor-normalization gap outside accounting.

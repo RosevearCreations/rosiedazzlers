@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -391,3 +391,16 @@ Partially mitigated in the newest pass:
 - Reduced one accounting gap by adding receivables-aging visibility and CSV export for office follow-up work.
 - Reduced one profitability gap by adding an estimated booking-profitability surface that allocates overhead across selected-month revenue.
 - Remaining risk: this profitability view is still operational/estimated, not full accountant-grade job costing, because labor burden, full overhead allocation rules, and every inventory/direct-cost path are not yet complete.
+
+
+## April 9, 2026 add-on image / assignment / checklist update
+Partially mitigated again in this pass:
+- add-on imagery drift risk was reduced by restoring the custom service cards to the Rosie packages R2 path first, while keeping bundled local fallbacks in place
+- assignment identity drift was reduced by preferring real assignable staff records in the booking/admin assignment screens
+- month-end operational follow-through is improved because Accounting now has a persistent month-end checklist instead of relying only on memory or exported CSV files
+- progress media now records `staff_user_id`, reducing one more actor-attribution gap
+
+Still important:
+- several older compatibility screens still expose visible manual/password fallback patterns and need the same session-first cleanup
+- assignment normalization still needs to reach every remaining legacy workflow and report path
+- local search still depends on ongoing Business Profile completeness, reviews, and locally relevant service content in addition to clean technical SEO foundations

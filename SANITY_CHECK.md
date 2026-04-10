@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -188,3 +188,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Public H1 count still checks out at one H1 per public page.
 - Auth shell cohesion improved on several internal routes.
 - Accounting has broader reporting/export coverage, but live deployed runtime validation is still required.
+
+
+## April 9, 2026 sanity items
+- Confirm the four custom add-on cards render from R2 on `/services` and `/book`, then confirm they still fall back locally if the remote image fails.
+- Confirm Admin Booking and Admin Assign can save a booking with a real staff profile and that the booking row now carries `assigned_staff_user_id` / `assigned_staff_email`.
+- Confirm Admin Accounting month-end checklist can save and reload for the selected month.
+- Confirm progress media posts continue to save successfully and now carry `staff_user_id`.

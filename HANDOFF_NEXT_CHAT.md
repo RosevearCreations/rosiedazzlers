@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -127,3 +127,11 @@ The newest pass pushed Accounting further by adding receivables aging, estimated
 2. Sign in as a non-admin detailer/senior detailer and verify Detailer Jobs opens while Staff/Accounting remain blocked.
 3. Post one payable settlement and one tax remittance, then confirm the actor name shows in settlement history.
 4. Export receivables aging and profitability CSVs and verify the month filters match expectations.
+
+
+## April 9, 2026 handoff note
+- Run `sql/2026-04-09_accounting_month_end_checklist.sql`.
+- The newest pass restored the four custom add-on cards to the Rosie packages R2 path first, with bundled fallbacks still present.
+- Booking assignment now prefers real staff records from the assignable-staff endpoint, and `assign_booking` now resolves missing staff identity fields more defensively.
+- Accounting now includes a persistent month-end checklist panel and endpoint.
+- Progress media now stores `staff_user_id`; continue next with the remaining live/jobsite/progress legacy screens that still need the same session-first cleanup pattern.

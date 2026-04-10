@@ -1,4 +1,4 @@
-> Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
+> Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
 
@@ -35,3 +35,7 @@ This refresh aligns the docs with the accounting reporting/remittance pass, the 
 
 ## April 9, 2026 docs update note — second pass
 This refresh aligns the docs to the accounting actor-normalization, receivables-aging, profitability, export expansion, and auth/session page-key convergence pass.
+
+
+## April 9, 2026 docs/schema sync note
+This pass refreshed the documentation set again around three concrete build changes: restored custom add-on imagery, stronger staff assignment identity handling, and a DB-backed accounting month-end checklist. `SUPABASE_SCHEMA.sql` and a new migration file were updated to match the checklist table.
