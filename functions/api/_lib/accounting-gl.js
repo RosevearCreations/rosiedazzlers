@@ -94,7 +94,7 @@ export async function listPayables(env, { status = "open" } = {}) {
   return payables;
 }
 
-export async function settlePayable(env, { entry_id, amount_cad, payment_account = "cash", payment_date, memo = null, actorName = null }) {
+export async function settlePayable(env, { entry_id, amount_cad, payment_account = "cash", payment_date, memo = null, actorName = null, actorStaffUserId = null }) {
   const headers = serviceHeaders(env);
   const res = await fetch(`${env.SUPABASE_URL}/rest/v1/accounting_journal_entries?select=*&id=eq.${encodeURIComponent(entry_id)}&limit=1`, { headers });
   if (!res.ok) throw new Error(`Could not load payable entry. ${await res.text()}`);
@@ -123,7 +123,11 @@ export async function settlePayable(env, { entry_id, amount_cad, payment_account
     total_cad: settleAmount,
     paid_at: new Date().toISOString(),
     created_by_name: actorName,
-    last_recorded_by_name: actorName
+    last_recorded_by_name: actorName,
+    created_by_staff_user_id: actorStaffUserId,
+    last_recorded_by_staff_user_id: actorStaffUserId,
+    created_by_staff_user_id: actorStaffUserId,
+    last_recorded_by_staff_user_id: actorStaffUserId
   }, [
     { account_code: "accounts_payable", direction: "debit", amount_cad: settleAmount, memo: memo || `Settlement for payable ${entry_id}` },
     { account_code: payment_account, direction: "credit", amount_cad: settleAmount, memo: memo || `Settlement for payable ${entry_id}` }
@@ -141,7 +145,7 @@ export async function buildTaxReport(env, { month, year }) {
   return { month, year, collected_tax_cad: collected, tax_account_credits_cad: credits, tax_account_debits_cad: debits, net_tax_payable_cad: net, suggested_remittance_cad: Math.max(0, net), rows };
 }
 
-export async function postTaxRemittance(env, { amount_cad = null, payment_account = "cash", payment_date = null, memo = null, actorName = null, referenceLabel = null }) {
+export async function postTaxRemittance(env, { amount_cad = null, payment_account = "cash", payment_date = null, memo = null, actorName = null, actorStaffUserId = null, referenceLabel = null }) {
   const settleDate = payment_date || new Date().toISOString().slice(0, 10);
   const currentPayable = await loadAccountBalanceThroughDate(env, "sales_tax_payable", addDays(settleDate, 1));
   const outstanding = Math.max(0, roundMoney(currentPayable));
@@ -320,6 +324,133 @@ export async function buildInventoryCostCompletenessReport(env) {
   };
 }
 
+export async function buildReceivablesAgingReport(env, { month, year } = {}) {
+  const asOf = month && year
+    ? addDays(monthRange(month, year).nextMonth, -1)
+    : new Date().toISOString().slice(0, 10);
+  const rows = await loadAccountingRecords(env, { limit: 1000 });
+  const reportRows = [];
+  const totals = {
+    current_cad: 0,
+    due_1_30_cad: 0,
+    due_31_60_cad: 0,
+    due_61_90_cad: 0,
+    due_91_plus_cad: 0,
+    total_balance_cad: 0,
+    record_count: 0
+  };
+
+  for (const row of rows) {
+    const balance = roundMoney(row.balance_due_cad || 0);
+    if (balance <= 0) continue;
+    const orderStatus = String(row.order_status || "open").toLowerCase();
+    if (["paid", "cancelled"].includes(orderStatus)) continue;
+
+    const agingBase = resolveAccountingRecordDate(row);
+    if (agingBase > asOf) continue;
+
+    const daysOutstanding = Math.max(0, daysBetween(agingBase, asOf));
+    let bucketKey = "current_cad";
+    if (daysOutstanding >= 91) bucketKey = "due_91_plus_cad";
+    else if (daysOutstanding >= 61) bucketKey = "due_61_90_cad";
+    else if (daysOutstanding >= 31) bucketKey = "due_31_60_cad";
+    else if (daysOutstanding >= 1) bucketKey = "due_1_30_cad";
+
+    totals[bucketKey] = roundMoney(totals[bucketKey] + balance);
+    totals.total_balance_cad = roundMoney(totals.total_balance_cad + balance);
+    totals.record_count += 1;
+
+    reportRows.push({
+      ...row,
+      aging_date: agingBase,
+      days_outstanding: daysOutstanding,
+      aging_bucket: bucketKey.replace(/_cad$/, "")
+    });
+  }
+
+  reportRows.sort((a, b) => {
+    const byDays = Number(b.days_outstanding || 0) - Number(a.days_outstanding || 0);
+    if (byDays) return byDays;
+    return String(a.customer_name || "").localeCompare(String(b.customer_name || ""));
+  });
+
+  return {
+    month: month || null,
+    year: year || null,
+    as_of: asOf,
+    totals,
+    rows: reportRows.slice(0, 200)
+  };
+}
+
+export async function buildOperationalProfitabilityReport(env, { month, year }) {
+  const { start, nextMonth } = monthRange(month, year);
+  const records = (await loadAccountingRecords(env, { startDate: start, endDateExclusive: nextMonth, limit: 1000 }))
+    .filter((row) => String(row.order_status || "open").toLowerCase() !== "cancelled");
+
+  const monthlyReport = await buildMonthlyReport(env, { month, year });
+  const cogsRows = await loadPostedLineRows(env, { month, year, accountCode: "cost_of_goods_sold" });
+  const cogsByBooking = new Map();
+  let totalDirectCogs = 0;
+
+  for (const row of cogsRows) {
+    const entry = row.entry || {};
+    const refId = String(entry.reference_id || "").trim();
+    const amount = Math.max(0, roundMoney(signedAmountForRow(row).signed_amount_cad));
+    totalDirectCogs = roundMoney(totalDirectCogs + amount);
+    if (!refId) continue;
+    cogsByBooking.set(refId, roundMoney((cogsByBooking.get(refId) || 0) + amount));
+  }
+
+  const overheadPool = roundMoney(Math.max(0, Number(monthlyReport.totals?.expense || 0) - totalDirectCogs));
+  const totalRecognizedRevenue = roundMoney(records.reduce((sum, row) => sum + recognizedRevenueForRecord(row), 0));
+
+  const rows = records.map((row) => {
+    const bookingId = String(row.booking_id || "").trim();
+    const recognizedRevenue = recognizedRevenueForRecord(row);
+    const collectedRevenue = roundMoney(row.collected_total_cad || 0);
+    const directCogs = roundMoney(cogsByBooking.get(bookingId) || 0);
+    const revenueShare = totalRecognizedRevenue > 0 ? recognizedRevenue / totalRecognizedRevenue : 0;
+    const allocatedOverhead = roundMoney(overheadPool * revenueShare);
+    const estimatedGrossProfit = roundMoney(recognizedRevenue - directCogs);
+    const estimatedNetAfterOverhead = roundMoney(estimatedGrossProfit - allocatedOverhead);
+
+    return {
+      booking_id: bookingId || null,
+      service_date: row.service_date || null,
+      customer_name: row.customer_name || null,
+      customer_email: row.customer_email || null,
+      package_code: row.package_code || null,
+      order_status: row.order_status || null,
+      accounting_stage: row.accounting_stage || null,
+      recognized_revenue_cad: recognizedRevenue,
+      collected_revenue_cad: collectedRevenue,
+      balance_due_cad: roundMoney(row.balance_due_cad || 0),
+      direct_cogs_cad: directCogs,
+      allocated_overhead_cad: allocatedOverhead,
+      estimated_gross_profit_cad: estimatedGrossProfit,
+      estimated_net_after_overhead_cad: estimatedNetAfterOverhead
+    };
+  }).sort((a, b) => Number(b.estimated_net_after_overhead_cad || 0) - Number(a.estimated_net_after_overhead_cad || 0));
+
+  return {
+    month,
+    year,
+    period_start: start,
+    period_end_exclusive: nextMonth,
+    method_note: "Estimated overhead is allocated across the selected month's booking revenue share after subtracting direct inventory COGS already posted to Cost of Goods Sold.",
+    totals: {
+      booking_count: rows.length,
+      recognized_revenue_cad: totalRecognizedRevenue,
+      collected_revenue_cad: roundMoney(rows.reduce((sum, row) => sum + Number(row.collected_revenue_cad || 0), 0)),
+      direct_cogs_cad: totalDirectCogs,
+      overhead_pool_cad: overheadPool,
+      estimated_net_after_overhead_cad: roundMoney(rows.reduce((sum, row) => sum + Number(row.estimated_net_after_overhead_cad || 0), 0))
+    },
+    rows
+  };
+}
+
 export async function buildGeneralLedgerExport(env, { month, year }) {
   const rows = await loadPostedLineRows(env, { month, year });
   const header = ["Entry Date", "Entry Type", "Reference Type", "Reference ID", "Vendor / Payee", "Account Code", "Account Label", "Direction", "Amount CAD", "Memo"];
@@ -337,6 +468,8 @@ export async function buildGeneralLedgerExport(env, { month, year }) {
       csvSafe(account.label || ""),
       csvSafe(row.direction || ""),
       csvSafe(roundMoney(row.amount_cad || 0)),
+      csvSafe(entry.created_by_name || ""),
+      csvSafe(entry.last_recorded_by_name || ""),
       csvSafe(row.memo || entry.memo || "")
     ].join(","));
   }
@@ -439,6 +572,57 @@ export async function buildInventoryCostExport(env) {
   return lines.join("\n");
 }
 
+export async function buildReceivablesAgingExport(env, { month, year }) {
+  const report = await buildReceivablesAgingReport(env, { month, year });
+  const header = ["Booking ID", "Service Date", "Customer", "Email", "Package", "Order Status", "Balance Due CAD", "Days Outstanding", "Aging Bucket", "As Of"];
+  const lines = [header.join(",")];
+  for (const row of report.rows || []) {
+    lines.push([
+      csvSafe(row.booking_id || ""),
+      csvSafe(row.service_date || ""),
+      csvSafe(row.customer_name || ""),
+      csvSafe(row.customer_email || ""),
+      csvSafe(row.package_code || ""),
+      csvSafe(row.order_status || ""),
+      csvSafe(roundMoney(row.balance_due_cad || 0)),
+      csvSafe(row.days_outstanding || 0),
+      csvSafe(row.aging_bucket || ""),
+      csvSafe(report.as_of || "")
+    ].join(","));
+  }
+  lines.push(["", "", csvSafe("Current"), "", "", "", csvSafe(report.totals.current_cad || 0), "", "", csvSafe(report.as_of || "")].join(","));
+  lines.push(["", "", csvSafe("1-30 Days"), "", "", "", csvSafe(report.totals.due_1_30_cad || 0), "", "", csvSafe(report.as_of || "")].join(","));
+  lines.push(["", "", csvSafe("31-60 Days"), "", "", "", csvSafe(report.totals.due_31_60_cad || 0), "", "", csvSafe(report.as_of || "")].join(","));
+  lines.push(["", "", csvSafe("61-90 Days"), "", "", "", csvSafe(report.totals.due_61_90_cad || 0), "", "", csvSafe(report.as_of || "")].join(","));
+  lines.push(["", "", csvSafe("91+ Days"), "", "", "", csvSafe(report.totals.due_91_plus_cad || 0), "", "", csvSafe(report.as_of || "")].join(","));
+  lines.push(["", "", csvSafe("Total Open Receivables"), "", "", "", csvSafe(report.totals.total_balance_cad || 0), "", "", csvSafe(report.as_of || "")].join(","));
+  return lines.join("\n");
+}
+
+export async function buildOperationalProfitabilityExport(env, { month, year }) {
+  const report = await buildOperationalProfitabilityReport(env, { month, year });
+  const header = ["Booking ID", "Service Date", "Customer", "Package", "Order Status", "Recognized Revenue CAD", "Collected Revenue CAD", "Balance Due CAD", "Direct COGS CAD", "Allocated Overhead CAD", "Estimated Gross Profit CAD", "Estimated Net After Overhead CAD"];
+  const lines = [header.join(",")];
+  for (const row of report.rows || []) {
+    lines.push([
+      csvSafe(row.booking_id || ""),
+      csvSafe(row.service_date || ""),
+      csvSafe(row.customer_name || ""),
+      csvSafe(row.package_code || ""),
+      csvSafe(row.order_status || ""),
+      csvSafe(roundMoney(row.recognized_revenue_cad || 0)),
+      csvSafe(roundMoney(row.collected_revenue_cad || 0)),
+      csvSafe(roundMoney(row.balance_due_cad || 0)),
+      csvSafe(roundMoney(row.direct_cogs_cad || 0)),
+      csvSafe(roundMoney(row.allocated_overhead_cad || 0)),
+      csvSafe(roundMoney(row.estimated_gross_profit_cad || 0)),
+      csvSafe(roundMoney(row.estimated_net_after_overhead_cad || 0))
+    ].join(","));
+  }
+  lines.push(["", "", csvSafe("Totals"), "", "", csvSafe(report.totals.recognized_revenue_cad || 0), csvSafe(report.totals.collected_revenue_cad || 0), "", csvSafe(report.totals.direct_cogs_cad || 0), csvSafe(report.totals.overhead_pool_cad || 0), "", csvSafe(report.totals.estimated_net_after_overhead_cad || 0)].join(","));
+  return lines.join("\n");
+}
+
 export async function postInventoryUsageCOGS(env, { bookingId, item, qtyUsed, actorName = null, note = null }) {
   const costCents = Number(item?.cost_cents || 0);
   if (!Number.isFinite(costCents) || costCents <= 0 || !Number.isFinite(Number(qtyUsed)) || Number(qtyUsed) <= 0) return null;
@@ -466,7 +650,7 @@ export async function postInventoryUsageCOGS(env, { bookingId, item, qtyUsed, ac
 
 async function loadSettlementsForEntry(env, entryId) {
   const headers = serviceHeaders(env);
-  const url = `${env.SUPABASE_URL}/rest/v1/accounting_journal_entries?select=id,entry_date,entry_type,total_cad,memo,reference_id,settlement_of_entry_id&or=(reference_id.eq.${encodeURIComponent(entryId)},settlement_of_entry_id.eq.${encodeURIComponent(entryId)})&entry_type=in.(payable_settlement,payable_partial_settlement)&status=eq.posted&order=entry_date.asc`;
+  const url = `${env.SUPABASE_URL}/rest/v1/accounting_journal_entries?select=id,entry_date,entry_type,total_cad,memo,reference_id,settlement_of_entry_id,created_by_name,last_recorded_by_name&or=(reference_id.eq.${encodeURIComponent(entryId)},settlement_of_entry_id.eq.${encodeURIComponent(entryId)})&entry_type=in.(payable_settlement,payable_partial_settlement)&status=eq.posted&order=entry_date.asc`;
   const res = await fetch(url, { headers });
   if (!res.ok) throw new Error(`Could not load payable settlements. ${await res.text()}`);
   return await res.json().catch(() => []);
@@ -481,7 +665,7 @@ async function loadPostedLineRows(env, { month, year, accountCode = null, startD
     start = range.start;
     end = range.nextMonth;
   }
-  let url = `${env.SUPABASE_URL}/rest/v1/accounting_journal_lines?select=id,entry_id,direction,amount_cad,account_code,memo,entry:accounting_journal_entries!inner(id,entry_date,entry_type,status,reference_type,reference_id,vendor_name,payee_name,memo),account:accounting_accounts!inner(label,account_type,account_group,normal_balance)&entry.entry_date=gte.${start}&entry.entry_date=lt.${end}&entry.status=eq.posted`;
+  let url = `${env.SUPABASE_URL}/rest/v1/accounting_journal_lines?select=id,entry_id,direction,amount_cad,account_code,memo,entry:accounting_journal_entries!inner(id,entry_date,entry_type,status,reference_type,reference_id,vendor_name,payee_name,memo,created_by_name,last_recorded_by_name,created_by_staff_user_id,last_recorded_by_staff_user_id),account:accounting_accounts!inner(label,account_type,account_group,normal_balance)&entry.entry_date=gte.${start}&entry.entry_date=lt.${end}&entry.status=eq.posted`;
   if (accountCode) url += `&account_code=eq.${encodeURIComponent(accountCode)}`;
   const res = await fetch(url, { headers });
   if (!res.ok) throw new Error(`Could not load accounting rows. ${await res.text()}`);
@@ -513,6 +697,40 @@ function signedAmountForRow(row) {
     ? (dir === "credit" ? 1 : -1)
     : (dir === "debit" ? 1 : -1);
   return { signed_amount_cad: roundMoney(sign * amount), account_type: type };
+}
+
+async function loadAccountingRecords(env, { startDate = null, endDateExclusive = null, limit = 500 } = {}) {
+  const headers = serviceHeaders(env);
+  let url = `${env.SUPABASE_URL}/rest/v1/accounting_records?select=*&order=service_date.asc.nullslast,updated_at.desc&limit=${Math.max(1, Math.min(2000, Number(limit) || 500))}`;
+  const res = await fetch(url, { headers });
+  if (!res.ok) throw new Error(`Could not load accounting records. ${await res.text()}`);
+  const rows = await res.json().catch(() => []);
+  return (Array.isArray(rows) ? rows : []).filter((row) => {
+    const rowDate = resolveAccountingRecordDate(row);
+    if (startDate && rowDate < startDate) return false;
+    if (endDateExclusive && rowDate >= endDateExclusive) return false;
+    return true;
+  });
+}
+
+function resolveAccountingRecordDate(row) {
+  const serviceDate = String(row?.service_date || "").trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(serviceDate)) return serviceDate;
+  const updated = String(row?.updated_at || row?.created_at || "").slice(0, 10);
+  if (/^\d{4}-\d{2}-\d{2}$/.test(updated)) return updated;
+  return new Date().toISOString().slice(0, 10);
+}
+
+function daysBetween(startDate, endDate) {
+  const start = new Date(`${startDate}T00:00:00Z`);
+  const end = new Date(`${endDate}T00:00:00Z`);
+  return Math.max(0, Math.round((end - start) / 86400000));
+}
+
+function recognizedRevenueForRecord(row) {
+  const explicit = roundMoney(row?.revenue_cad || 0);
+  if (explicit > 0) return explicit;
+  return roundMoney(Math.max(0, Number(row?.total_cad || 0) - Number(row?.refund_cad || 0)));
 }
 
 function monthRange(month, year) {
