@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
+
 > Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
@@ -215,3 +217,10 @@ This build is stronger on office-side accounting and internal-route cohesion. Th
 - Added a month-end checklist workflow to Admin Accounting plus a new `accounting_month_end_checklists` table and API endpoint so office-side close steps can be tracked per month.
 - Progress media posting now stores `staff_user_id`, continuing actor normalization outside accounting.
 - Continued local-search hygiene: keep one clear H1 per public page, use search-language terms in titles/headings, and keep sitemap / robots / structured-data alignment clean.
+
+## April 10, 2026 pass update
+- Add-on imagery is now back on a canonical path: every add-on in `data/rosie_services_pricing_and_packages.json` now carries a primary R2 `image_url` plus a local `image_fallback_url` so booking, services, and future app-style surfaces can converge on one data source instead of maintaining separate maps.
+- Crew assignment now exists on `/admin-assign.html`: one booking can carry multiple detailers with one marked as the lead / senior-on-job while the older single-assignee booking fields stay synchronized for backward compatibility.
+- A new operational table, `booking_staff_assignments`, now supports multi-detailer scheduling without overloading the legacy `bookings.assigned_*` columns.
+- Detailer work-scope checks now honor crew assignments, so supporting crew members can see and work jobs assigned to them even when they are not the lead.
+- Internal mobile/tablet fit was tightened again with more compact shared spacing and a more app-like assignment screen.

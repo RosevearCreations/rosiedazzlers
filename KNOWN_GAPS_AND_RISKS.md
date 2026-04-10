@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
+
 > Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
@@ -404,3 +406,14 @@ Still important:
 - several older compatibility screens still expose visible manual/password fallback patterns and need the same session-first cleanup
 - assignment normalization still needs to reach every remaining legacy workflow and report path
 - local search still depends on ongoing Business Profile completeness, reviews, and locally relevant service content in addition to clean technical SEO foundations
+
+## April 10, 2026 update
+### Mitigations advanced
+- Add-on image drift risk is reduced because the bundled pricing/add-on JSON now carries primary/fallback image fields for every add-on instead of relying on separate page-only maps.
+- Single-detailer scheduling risk is reduced because the repo now supports `booking_staff_assignments` and a lead / crew assignment model.
+- Work-scope identity is slightly safer because crew members can now pass booking-scope checks, not just the lead detailer stored on the booking row.
+
+### New/remaining edge cases
+- Some older internal list/report pages still summarize only the lead assignment even though crew access now exists underneath.
+- The new crew table must be deployed before multi-detailer assignment is fully live; until then the lead assignment still saves, but crew persistence gracefully falls back.
+- End-to-end runtime validation is still needed against the live Pages/Supabase environment after the new migration.

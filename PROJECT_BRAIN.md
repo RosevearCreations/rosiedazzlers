@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
+
 > Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
@@ -158,3 +160,7 @@ The accounting area is now becoming the office-side operational hub: receivables
 - Added DB-backed month-end checklist persistence for Accounting.
 - Strengthened booking assignment identity by preferring assignable staff records instead of free-typed names alone.
 - Continued actor normalization by storing `staff_user_id` on progress media posts.
+
+## April 10, 2026 mental-model update
+- Booking assignment is no longer just a single `assigned_*` tuple on the booking row. The booking row still holds the lead for compatibility, but the real crew model now lives in `booking_staff_assignments`.
+- Add-on imagery should now be treated as data, not page-specific decoration: each add-on in the pricing/add-on JSON carries its preferred R2 image plus local fallback.

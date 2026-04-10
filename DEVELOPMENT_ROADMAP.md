@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
+
 > Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
@@ -253,3 +255,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - moved forward: Admin Accounting now has a real month-end checklist panel backed by DB persistence, which makes settlement/remittance/export close work easier to track from one office-side screen.
 - moved forward: progress media now records `staff_user_id`, closing one more non-accounting identity gap.
 - move up next: extend the same resolved staff-user-id pattern into the remaining live/jobsite/progress compatibility screens that still expose manual fallback labels more heavily than structured assignment.
+
+## April 10, 2026 pass moved forward
+- moved forward: add-on imagery is now canonicalized again through shared JSON + R2-first media, reducing service-page/booking-page drift.
+- moved forward: booking assignment can now support a lead plus additional crew members through `booking_staff_assignments`, while keeping the existing single-assignee booking fields in sync.
+- moved forward: detailer work-scope checks now recognize crew membership, not just the single lead assignment.
+- moved forward: internal assignment UI is more app-like on phone/tablet and has stronger fallbacks when media or crew tables are missing.
+- move up next: extend crew-aware summaries and filters across the rest of live ops, jobsite, time, media, and dashboard views so the whole internal shell matches the new scheduling model.

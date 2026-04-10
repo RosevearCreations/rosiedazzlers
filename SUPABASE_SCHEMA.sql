@@ -1,3 +1,4 @@
+-- Last synchronized: April 10, 2026. Reviewed during the canonical add-on media restore, crew assignment/senior detailer workflow, app-shell responsiveness pass, and docs/schema synchronization pass.
 -- Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
 -- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. No schema change in this pass; documentation and access paths were updated.
 -- March 29, 2026 sync note: no new tables were required for this pass; this refresh mainly extends signed-in staff session coverage, reduces shared-password-only endpoint usage, and improves actor attribution in time/intake/media/booking flows.
@@ -79,6 +80,21 @@ create table if not exists public.bookings (
   detailing_paused_at timestamptz null,
   detailing_completed_at timestamptz null,
   completed_at timestamptz null
+);
+
+create table if not exists public.booking_staff_assignments (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  booking_id uuid not null references public.bookings(id) on delete cascade,
+  staff_user_id uuid null references public.staff_users(id) on delete set null,
+  staff_email text null,
+  staff_name text null,
+  assignment_role text not null default 'crew' check (assignment_role in ('lead','crew')),
+  sort_order integer not null default 0,
+  assigned_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  assigned_by_name text null,
+  notes text null
 );
 
 create table if not exists public.date_blocks (id uuid primary key default gen_random_uuid(), blocked_date date not null unique, reason text null, created_at timestamptz not null default now());

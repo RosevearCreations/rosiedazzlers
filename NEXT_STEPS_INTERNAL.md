@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
+
 > Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
@@ -113,3 +115,16 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - add vendor quick-add during payable entry
 - add receipt-photo attachment for quick phone expense entry
 - expand month-end checklist from one saved note into guided task links / export shortcuts / reconciliation reminders
+
+## April 10, 2026 moved forward
+- every add-on card now has a canonical primary/fallback image path again
+- multi-detailer booking assignment now exists with one lead / senior-on-job plus supporting crew
+- detailer job visibility now respects crew membership instead of only the single lead stored on the booking record
+- assignment UI was tightened for more app-like tablet/phone use
+
+## Move up next after this pass
+1. extend crew-aware summaries into admin live/jobsite/progress/time/media list screens
+2. keep converting remaining internal pages to the shared auth/session shell and reduce lingering bridge-only behavior
+3. finish deeper A/R, reconciliation, and profitability polish
+4. run live end-to-end verification against deployed Pages + Supabase after the new SQL migration
+5. continue route-by-route local SEO cleanup, title clarity, and content relevance work

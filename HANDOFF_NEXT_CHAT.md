@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
+
 > Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
@@ -135,3 +137,12 @@ The newest pass pushed Accounting further by adding receivables aging, estimated
 - Booking assignment now prefers real staff records from the assignable-staff endpoint, and `assign_booking` now resolves missing staff identity fields more defensively.
 - Accounting now includes a persistent month-end checklist panel and endpoint.
 - Progress media now stores `staff_user_id`; continue next with the remaining live/jobsite/progress legacy screens that still need the same session-first cleanup pattern.
+
+## April 10, 2026 handoff note
+- The latest pass fixed the broader add-on image regression by moving every add-on back to a canonical R2-first image path with local fallbacks, not just the four custom PNG cards.
+- `data/rosie_services_pricing_and_packages.json` now stores `image_url` and `image_fallback_url` for every add-on.
+- New crew scheduling support now exists through `public.booking_staff_assignments`, `functions/api/admin/assign_booking.js`, and `functions/api/admin/booking_assignment_map.js`.
+- `/admin-assign.html` is now the preferred multi-detailer assignment screen. It supports assigning a crew and marking one person as the lead / senior on the job.
+- `functions/api/_lib/staff-auth.js` and `functions/api/detailer/jobs.js` now honor crew assignments for work scope.
+- Run `sql/2026-04-10_booking_crew_assignments_and_app_shell_hardening.sql` before testing the new crew workflow.
+- Best next pass: propagate crew-aware summaries into the remaining admin live/jobsite/time/media screens and do live runtime verification against the deployed environment.

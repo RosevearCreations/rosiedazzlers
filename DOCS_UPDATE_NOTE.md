@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
+
 > Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
 
 > Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
@@ -39,3 +41,6 @@ This refresh aligns the docs to the accounting actor-normalization, receivables-
 
 ## April 9, 2026 docs/schema sync note
 This pass refreshed the documentation set again around three concrete build changes: restored custom add-on imagery, stronger staff assignment identity handling, and a DB-backed accounting month-end checklist. `SUPABASE_SCHEMA.sql` and a new migration file were updated to match the checklist table.
+
+## April 10, 2026 docs refresh
+This refresh synchronized the repo around four concrete changes: canonical add-on image recovery, crew assignment support, responsive app-shell tightening, and local stability checks. The schema snapshot and migrations now include `booking_staff_assignments`, and the roadmap/gaps/handoff docs all point to crew-aware ops rollout as the next strongest pass.
