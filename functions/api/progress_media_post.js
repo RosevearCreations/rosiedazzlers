@@ -37,7 +37,7 @@ export async function onRequestPost(context) {
     const insertRes = await fetch(`${env.SUPABASE_URL}/rest/v1/job_media`, {
       method: "POST",
       headers: { ...serviceHeaders(env), Prefer: "return=representation" },
-      body: JSON.stringify([{ booking_id: resolvedBookingId, created_by: actor.full_name || actor.email || cleanText(body.created_by) || "Staff", kind, caption: caption || null, media_url, visibility }])
+      body: JSON.stringify([{ booking_id: resolvedBookingId, created_by: actor.full_name || actor.email || cleanText(body.created_by) || "Staff", kind, caption: caption || null, media_url, visibility, staff_user_id: actor.id || null }])
     });
     if (!insertRes.ok) return json({ error: `Could not save media. ${await insertRes.text()}` }, 500);
     const rows = await insertRes.json().catch(() => []);
@@ -46,7 +46,7 @@ export async function onRequestPost(context) {
     await fetch(`${env.SUPABASE_URL}/rest/v1/booking_events`, {
       method: "POST",
       headers: serviceHeaders(env),
-      body: JSON.stringify([{ booking_id: resolvedBookingId, event_type: visibility === "internal" ? "internal_media_posted" : "media_posted", actor_name: actor.full_name || actor.email || "Staff", event_note: `${kind}${caption ? `: ${caption}` : ""}`.slice(0, 250), payload: { kind, visibility, media_url } }])
+      body: JSON.stringify([{ booking_id: resolvedBookingId, event_type: visibility === "internal" ? "internal_media_posted" : "media_posted", actor_name: actor.full_name || actor.email || "Staff", event_note: `${kind}${caption ? `: ${caption}` : ""}`.slice(0, 250), payload: { kind, visibility, media_url, staff_user_id: actor.id || null } }])
     }).catch(() => null);
 
     return json({ ok: true, message: "Media attached.", actor: { id: actor.id || null, full_name: actor.full_name || null }, media: row || null });
