@@ -577,13 +577,15 @@
           ['Recognized revenue', money(report.totals && report.totals.recognized_revenue_cad || 0)],
           ['Collected revenue', money(report.totals && report.totals.collected_revenue_cad || 0)],
           ['Direct COGS', money(report.totals && report.totals.direct_cogs_cad || 0)],
+          ['Estimated direct labor', money(report.totals && report.totals.estimated_direct_labor_cad || 0)],
+          ['Contribution after labor', money(report.totals && report.totals.estimated_contribution_after_labor_cad || 0)],
           ['Allocated overhead pool', money(report.totals && report.totals.overhead_pool_cad || 0)],
           ['Estimated net', money(report.totals && report.totals.estimated_net_after_overhead_cad || 0)]
         ].map(function (row) {
           return '<div class="table-lite__row"><span>' + esc(row[0]) + '</span><span>' + esc(row[1]) + '</span></div>';
         }).join('');
         rowsWrap.innerHTML = (report.rows || []).slice(0, 40).map(function (row) {
-          return '<div class="table-lite__row"><span>' + esc(row.customer_name || 'Customer') + '<div class="mini">' + esc(row.service_date || '') + (row.package_code ? ' · ' + esc(row.package_code) : '') + (row.booking_id ? ' · ' + esc(row.booking_id) : '') + '</div></span><span>' + esc(money(row.estimated_net_after_overhead_cad || 0)) + '<div class="mini">Revenue ' + esc(money(row.recognized_revenue_cad || 0)) + ' · COGS ' + esc(money(row.direct_cogs_cad || 0)) + ' · Overhead ' + esc(money(row.allocated_overhead_cad || 0)) + '</div></span></div>';
+          return '<div class="table-lite__row"><span>' + esc(row.customer_name || 'Customer') + '<div class="mini">' + esc(row.service_date || '') + (row.package_code ? ' · ' + esc(row.package_code) : '') + (row.booking_id ? ' · ' + esc(row.booking_id) : '') + '</div></span><span>' + esc(money(row.estimated_contribution_after_labor_cad || row.estimated_net_after_overhead_cad || 0)) + '<div class="mini">Revenue ' + esc(money(row.recognized_revenue_cad || 0)) + ' · COGS ' + esc(money(row.direct_cogs_cad || 0)) + ' · Labor ' + esc(money(row.estimated_direct_labor_cad || 0)) + ' · Overhead ' + esc(money(row.allocated_overhead_cad || 0)) + ' · Net ' + esc(money(row.estimated_net_after_overhead_cad || 0)) + '</div></span></div>';
         }).join('') || '<div class="mini">No booking profitability rows found for this month.</div>';
       }
       function renderInventoryCosts(report) {

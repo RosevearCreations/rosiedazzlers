@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
@@ -225,3 +227,11 @@ Route hotfix sync reviewed on 2026-04-11.
 - `node --check` passed on the changed admin runtime, crew helper, and updated API files.
 - `python scripts/stress_static_checks.py` passed after route-collision folders and temporary check artifacts were removed.
 - Public one-H1 coverage and add-on coverage checks remain part of the stress script.
+
+## Verify after each build
+
+- Confirm the packaged zip does not contain duplicate clean routes such as `services.html` + `services/index.html`.
+- Smoke-check live dev Pages routes: `/`, `/services`, `/pricing`, `/book`.
+- Confirm Blocks, Staff, Promos, and Jobsite load with signed-in staff session before relying on any fallback bridge.
+- In Accounting, verify profitability rows now show labor and contribution figures where time logs and hourly rates exist.
+

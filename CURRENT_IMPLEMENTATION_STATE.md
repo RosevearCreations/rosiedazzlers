@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
@@ -209,3 +211,11 @@ Route hotfix sync reviewed on 2026-04-11.
 - Crew assignment context now propagates through booking/admin APIs more consistently, including bookings list, jobsite detail, progress list, and detailer jobs.
 - Internal runtime helper now surfaces timeout and text-body failures more clearly for session-first screens.
 - Static stress tooling now blocks leftover debug artifacts and duplicate-route outputs before packaging.
+
+## Internal app status
+
+- Dev Pages clean-route verification succeeded this pass for `/`, `/services`, `/pricing`, and `/book` before deeper code work continued.
+- The packaged build again strips duplicate `page.html` + `page/index.html` route collisions before release.
+- Admin Blocks, Staff, Promos, and Jobsite now initialize through the shared session-first admin shell and menu.
+- Accounting profitability now exposes estimated direct labor and contribution-after-labor in addition to direct COGS and allocated overhead.
+

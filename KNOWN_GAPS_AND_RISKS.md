@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
@@ -152,7 +154,11 @@ Backend/admin capability has grown faster than the internal UI shell.
 
 ## 10) Route cleanup still pending
 ### Risk
-Canonical route cleanup for services/pricing still needs to be fully settled.
+Canonical route cleanup is safer now, but duplicate clean-route folders can still reappear in uploaded zips and break deployment if they are not stripped before publish.
+
+### Current state
+- live clean-route verification confirmed the dev Pages build is currently resolving `/`, `/services`, `/pricing`, and `/book`
+- the uploaded zip still contained duplicate clean-route folders and those were removed again in this pass before packaging
 
 ---
 
@@ -212,6 +218,12 @@ Public DB inventory, ratings, low-stock alerts, and reorder request foundations 
 ---
 
 ## Highest-priority summary
+
+Partially mitigated in this pass:
+- public clean-route verification succeeded on the main booking/service routes before code changes continued
+- blocks, promos, staff, and jobsite now behave as session-first internal screens rather than device-password-first screens
+- profitability reporting now shows a separate estimated direct-labor lens using logged time × staff hourly rates when available
+
 
 Partially mitigated in this pass:
 - older recovery/live/progress screens are less dependent on the shared-password bridge

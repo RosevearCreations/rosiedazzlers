@@ -71,6 +71,10 @@
     </section>
 
     <section class="section">
+      <div data-admin-menu-mount></div>
+    </section>
+
+    <section class="section">
       <div class="grid cards">
         <div class="panel">
           <h2>Staff list</h2>
@@ -119,10 +123,16 @@
 
   <footer class="footer container" data-footer></footer>
 
+  <script src="/assets/admin-runtime.js"></script>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/admin-menu.js"></script>
+  <script src="/assets/admin-page-init.js"></script>
   <script src="/assets/chrome.js"></script>
   <script type="module">
     import { setBrandImages, setFooter } from "/assets/site.js";
 
+    const runtime = window.AdminRuntime;
     let currentPassword = "";
     let staffUsers = [];
     let customerTiers = [];
@@ -142,12 +152,9 @@
       el.textContent = message;
     }
     async function apiPost(url, password, body) {
-      const headers = { "Content-Type": "application/json" };
-      if (password) headers["x-admin-password"] = password;
-      const res = await fetch(url, { method: "POST", headers, credentials: "include", body: JSON.stringify(body || {}) });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || `Request failed for ${url}`);
-      return data;
+      const result = await runtime.requestJson(url, { method: "POST", body: body || {}, password: password || undefined });
+      if (!result.ok) throw new Error(runtime.normalizeError(result, `Request failed for ${url}`));
+      return result.data || {};
     }
     function renderTiers() {
       const box = document.querySelector("#tiersBox");
@@ -190,11 +197,18 @@
         btn.addEventListener("click", () => { selectedStaffId = btn.getAttribute("data-staff-id"); fillForm(staffUsers.find((s) => s.id === selectedStaffId) || null); renderSelectedStaff(); });
       });
     }
+    function syncSessionMeta(actor) {
+      var meta = document.querySelector("#sessionMeta");
+      if (!meta) return;
+      meta.textContent = runtime.bridgeLabel(actor || window.AdminAuth.getActor(), currentPassword);
+    }
+
     async function refreshStaff() {
+      syncSessionMeta();
       const data = await apiPost("/api/admin/staff_list", currentPassword, {});
       staffUsers = Array.isArray(data.staff_users) ? data.staff_users : [];
       customerTiers = Array.isArray(data.customer_tiers) ? data.customer_tiers : [];
-      document.querySelector("#sessionMeta").textContent = data?.actor?.full_name ? `Signed in as ${data.actor.full_name}.` : "Signed-in staff access is required.";
+      syncSessionMeta(data && data.actor ? data.actor : null);
       renderStaffList(); renderTiers(); renderSelectedStaff();
       document.querySelector("#saveStaffBtn").disabled = false;
       document.querySelector("#newStaffBtn").disabled = false;
@@ -220,6 +234,12 @@
     document.addEventListener("DOMContentLoaded", async () => {
       setBrandImages();
       setFooter();
+      syncSessionMeta();
+      document.querySelector("#adminPassword").addEventListener("input", function () {
+        currentPassword = document.querySelector("#adminPassword").value.trim();
+        syncSessionMeta();
+        syncSessionMeta();
+      });
       document.querySelector("#adminForm").addEventListener("submit", async (event) => {
         event.preventDefault();
         currentPassword = document.querySelector("#adminPassword").value.trim();
@@ -232,7 +252,13 @@
         catch (err) { setNotice(err.message || "Could not save staff user.", "bad"); }
       });
       document.querySelector("#newStaffBtn").addEventListener("click", () => { clearForm(); setNotice("Ready to create a new staff user."); });
-      document.querySelector("#adminForm").requestSubmit();
+      await window.AdminPageInit.init({
+        pageKey: "admin-staff",
+        onReady: async ({ actor }) => {
+          syncSessionMeta(actor);
+          document.querySelector("#adminForm").requestSubmit();
+        }
+      });
     });
   </script>
 </body>

@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
@@ -29,8 +31,9 @@ This is the practical implementation order for the `dev` branch after the March 
 
 ### 1) Real staff auth/session completion
 Finish the transition away from shared-password dependence.
-- continue converting older endpoints/screens to session-aware auth
-- keep the legacy bridge as fallback only
+- moved forward again: blocks, promos, staff, and jobsite now initialize through the shared signed-in admin shell first
+- keep the legacy bridge only where the endpoint still genuinely needs it
+- continue retiring bridge-only endpoints once deployed route checks stay clean
 - resolved actor trusted across all internal screens
 
 ### 2) Staff identity consistency cleanup
@@ -85,7 +88,8 @@ Complete direct upload flow.
 - improve field/mobile usage
 
 ### 9) Route and endpoint cleanup
-- finalize canonical public route structure
+- moved forward: duplicate clean-route folders were removed again from the current build before packaging
+- verify dev Pages clean routes live before each larger pass
 - retire duplicate/legacy endpoint patterns
 - document preferred replacements clearly
 

@@ -1,30 +1,12 @@
-<!-- /admin-promos.html
-     REPLACE ENTIRE FILE
-
-     Purpose:
-     - Simple admin UI to create and manage promo codes (percent or fixed amount)
-     - This is the "framework" UI — the API + DB table comes next.
-
-     Uses (expected next endpoints we will create):
-       POST /api/admin/promo_create
-       POST /api/admin/promo_list
-       POST /api/admin/promo_disable
-
-     Notes:
-     - Promo codes are separate from Gift Certificates.
-     - Promo codes can be:
-         - percent_off (e.g. 10%)
-         - amount_off_cents (e.g. $25.00)
-     - We will apply them in /api/checkout after this.
--->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Promos | Rosie Dazzlers</title>
-  <meta name="description" content="Create discount promo codes." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260311t" />
+  <meta name="description" content="Create and manage discount promo codes for Rosie Dazzlers." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
@@ -42,46 +24,53 @@
     .tag.bad{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.10)}
   </style>
 </head>
-
-<body>
-  <div class="nav">
+<body data-page="admin-promos">
+  <header class="nav">
     <div class="nav-inner">
-      <a class="brand" href="/">
+      <a class="brand" href="/admin.html">
         <img data-logo alt="Rosie Dazzlers logo" />
-        <strong>Rosie Dazzlers</strong>
+        <strong>Rosie Dazzlers Admin</strong>
       </a>
       <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
-      <div class="nav-links" id="navLinks"></div>
-      <a class="btn primary" href="/admin.html">Admin</a>
+      <nav id="navLinks" class="nav-links">
+        <a href="/admin.html">Dashboard</a>
+        <a href="/admin-booking.html">Bookings</a>
+        <a href="/admin-progress.html">Progress</a>
+        <a href="/admin-promos.html">Promos</a>
+        <a href="/admin-accounting.html">Accounting</a>
+        <a href="/book.html">Public Site</a>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <div class="container">
-    <div class="panel">
-      <h1 style="margin:0 0 6px">Promo Codes</h1>
-      <p class="kicker" style="margin:0">Create discount codes (percent or dollar amount).</p>
-
-      <div class="hr"></div>
-
-      <div class="row">
-        <label style="display:flex;flex-direction:column;gap:6px;min-width:260px">
-          <span class="muted">Admin password</span>
-          <input id="pw" type="password" placeholder="Enter admin password…" />
-        </label>
-
-        <div class="row" style="align-items:flex-end">
-          <button class="btn ghost" id="savePwBtn" type="button">Save password</button>
-          <button class="btn ghost" id="refreshBtn" type="button">Refresh</button>
-          <a class="btn ghost" href="/admin.html">Back</a>
+  <main class="container">
+    <section class="section">
+      <div class="hero">
+        <div>
+          <div class="badge">Admin Promos</div>
+          <h1>Manage promo codes</h1>
+          <p>Create and disable percentage or fixed-amount promo codes using the signed-in staff session.</p>
+        </div>
+        <div class="panel">
+          <div class="kicker">Session state</div>
+          <h3 id="promoActorTitle" style="margin:6px 0 8px">Checking session…</h3>
+          <div id="promoActorMeta" class="kicker">This screen now loads from the signed-in staff session first.</div>
         </div>
       </div>
+    </section>
 
-      <div id="status" class="notice" style="display:none;margin-top:12px"></div>
-    </div>
+    <section class="section">
+      <div data-admin-menu-mount></div>
+    </section>
 
-    <div class="section grid2">
+    <section class="section">
+      <div id="status" class="notice" style="display:none"></div>
+    </section>
+
+    <section class="section grid2">
       <div class="panel">
         <h2 style="margin-top:0">Create promo</h2>
+        <div class="muted mini" id="promoSessionMeta">Signed-in staff session required.</div>
 
         <label class="muted mini">Code</label>
         <input id="code" class="mono" type="text" placeholder="SPRING10" />
@@ -122,10 +111,11 @@
         <div class="row" style="margin-top:12px">
           <button class="btn primary" id="createBtn" type="button">Create</button>
           <button class="btn ghost" id="clearBtn" type="button">Clear</button>
+          <button class="btn ghost" id="refreshBtn" type="button">Refresh</button>
         </div>
 
         <div class="muted mini" style="margin-top:10px">
-          Next step: apply promo codes automatically at checkout.
+          Session-first screen. Promo actions ride the current signed-in staff session instead of device-saved passwords.
         </div>
       </div>
 
@@ -154,32 +144,28 @@
         <div class="hr"></div>
         <pre id="raw" class="mono">{}</pre>
       </div>
-    </div>
+    </section>
 
-    <div class="footer" data-footer></div>
-  </div>
+    <footer class="footer" data-footer></footer>
+  </main>
 
+  <script src="/assets/admin-runtime.js"></script>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/admin-menu.js"></script>
+  <script src="/assets/admin-page-init.js"></script>
+  <script src="/assets/chrome.js"></script>
   <script type="module">
+    import { setBrandImages, setFooter } from "/assets/site.js";
+
+    const runtime = window.AdminRuntime;
     const qs = (s)=>document.querySelector(s);
 
     function show(msg, kind=""){
       const el = qs("#status");
-      el.style.display = "block";
+      el.style.display = msg ? "block" : "none";
       el.className = "notice " + (kind || "");
-      el.textContent = msg;
-    }
-    function hide(){ qs("#status").style.display = "none"; }
-
-    function getPw(){ return (qs("#pw").value || "").trim(); }
-
-    async function postJson(url, payload){
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "content-type":"application/json" },
-        body: JSON.stringify(payload),
-      });
-      const out = await res.json().catch(()=>null);
-      return { ok: res.ok, status: res.status, out };
+      el.textContent = msg || "";
     }
 
     function esc(s){
@@ -188,25 +174,23 @@
         .replaceAll('"',"&quot;").replaceAll("'","&#39;");
     }
 
-    // Save PW
-    try {
-      const saved = localStorage.getItem("rosie_admin_pw") || "";
-      if (saved) qs("#pw").value = saved;
-    } catch {}
+    async function postJson(url, payload){
+      const result = await runtime.requestJson(url, { method:"POST", body: payload || {} });
+      const out = result.data || null;
+      return { ok: result.ok, status: result.status, out, error: runtime.normalizeError(result, 'Request failed.') };
+    }
 
-    qs("#savePwBtn").addEventListener("click", () => {
-      const pw = getPw();
-      if (!pw) return show("Enter password first.", "bad");
-      try {
-        localStorage.setItem("rosie_admin_pw", pw);
-        show("Saved password on this device.", "ok");
-        setTimeout(hide, 1000);
-      } catch {
-        show("Could not save password.", "bad");
-      }
-    });
+    function syncActor(actor){
+      const title = qs('#promoActorTitle');
+      const meta = qs('#promoActorMeta');
+      const session = qs('#promoSessionMeta');
+      const label = actor ? (actor.full_name || actor.email || 'Staff') : 'No session';
+      if (title) title.textContent = label;
+      if (meta) meta.textContent = actor ? `${actor.role_code || 'staff'} session active.` : 'Signed-in staff session required.';
+      if (session) session.textContent = runtime.actorLabel(actor || window.AdminAuth.getActor());
+    }
 
-    qs("#clearBtn").addEventListener("click", ()=>{
+    function clearForm(){
       qs("#code").value = "";
       qs("#kind").value = "percent";
       qs("#value").value = "";
@@ -214,7 +198,7 @@
       qs("#ends").value = "";
       qs("#active").checked = true;
       qs("#note").value = "";
-    });
+    }
 
     function discountLabel(p){
       if (p.percent_off != null) return `${p.percent_off}% off`;
@@ -231,111 +215,98 @@
     }
 
     async function refresh(){
-      hide();
-      const pw = getPw();
-      if (!pw) return show("Missing admin password.", "bad");
-
-      const r = await postJson("/api/admin/promo_list", { admin_password: pw });
-      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
-
+      show('');
+      const r = await postJson('/api/admin/promo_list', {});
+      qs('#raw').textContent = JSON.stringify(r.out || {}, null, 2);
+      syncActor(r.out && r.out.actor ? { full_name: r.out.actor } : window.AdminAuth.getActor());
       if (!r.ok || !r.out?.ok){
-        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
+        return show(r.out?.error || r.error || `Error (HTTP ${r.status})`, 'bad');
       }
 
       const rows = Array.isArray(r.out.rows) ? r.out.rows : [];
-      qs("#count").textContent = `${rows.length} promo codes`;
+      qs('#count').textContent = `${rows.length} promo codes`;
 
-      const tb = qs("#rows");
-      tb.innerHTML = "";
-
+      const tb = qs('#rows');
+      tb.innerHTML = '';
       if (!rows.length){
         tb.innerHTML = `<tr><td colspan="5" class="muted">No promo codes yet.</td></tr>`;
         return;
       }
 
       for (const p of rows){
-        const tr = document.createElement("tr");
+        const tr = document.createElement('tr');
         tr.innerHTML = `
           <td class="mono"><strong>${esc(p.code)}</strong></td>
           <td>${esc(discountLabel(p))}</td>
-          <td class="muted mini">${esc(p.starts_on || "")}${p.ends_on ? " → " + esc(p.ends_on) : ""}</td>
+          <td class="muted mini">${esc(p.starts_on || '')}${p.ends_on ? ' → ' + esc(p.ends_on) : ''}</td>
           <td>${statusTag(p)}</td>
-          <td>
-            <button class="btn ghost" data-disable="${esc(p.id)}">${p.is_active ? "Disable" : "Enable"}</button>
-          </td>
+          <td><button class="btn ghost" data-disable="${esc(p.id)}">${p.is_active ? 'Disable' : 'Enable'}</button></td>
         `;
         tb.appendChild(tr);
       }
 
-      tb.querySelectorAll("button[data-disable]").forEach(btn=>{
-        btn.addEventListener("click", async ()=>{
-          const pw2 = getPw();
-          const id = btn.getAttribute("data-disable");
-          if (!pw2) return show("Missing admin password.", "bad");
-
+      tb.querySelectorAll('button[data-disable]').forEach(btn=>{
+        btn.addEventListener('click', async ()=>{
+          const id = btn.getAttribute('data-disable');
           btn.disabled = true;
-          const r2 = await postJson("/api/admin/promo_disable", { admin_password: pw2, promo_id: id });
+          const r2 = await postJson('/api/admin/promo_disable', { promo_id: id });
           btn.disabled = false;
-
-          qs("#raw").textContent = JSON.stringify(r2.out || {}, null, 2);
-
+          qs('#raw').textContent = JSON.stringify(r2.out || {}, null, 2);
           if (!r2.ok || !r2.out?.ok){
-            return show(r2.out?.error ? `Error: ${r2.out.error}` : `Error (HTTP ${r2.status})`, "bad");
+            return show(r2.out?.error || r2.error || `Error (HTTP ${r2.status})`, 'bad');
           }
-
-          show("Updated.", "ok");
-          setTimeout(hide, 800);
+          show('Updated.', 'ok');
           await refresh();
         });
       });
     }
 
-    qs("#refreshBtn").addEventListener("click", refresh);
+    qs('#clearBtn').addEventListener('click', clearForm);
+    qs('#refreshBtn').addEventListener('click', refresh);
+    qs('#createBtn').addEventListener('click', async ()=>{
+      show('');
+      const code = (qs('#code').value || '').trim().toUpperCase();
+      if (!code) return show('Missing promo code.', 'bad');
 
-    qs("#createBtn").addEventListener("click", async ()=>{
-      hide();
-      const pw = getPw();
-      if (!pw) return show("Missing admin password.", "bad");
-
-      const code = (qs("#code").value || "").trim().toUpperCase();
-      if (!code) return show("Missing promo code.", "bad");
-
-      const kind = qs("#kind").value;
-      const value = Number(qs("#value").value);
-      if (!Number.isFinite(value) || value <= 0) return show("Enter a valid value > 0.", "bad");
+      const kind = qs('#kind').value;
+      const value = Number(qs('#value').value);
+      if (!Number.isFinite(value) || value <= 0) return show('Enter a valid value > 0.', 'bad');
 
       const payload = {
-        admin_password: pw,
         code,
-        is_active: !!qs("#active").checked,
-        starts_on: qs("#starts").value || null,
-        ends_on: qs("#ends").value || null,
-        note: (qs("#note").value || "").trim() || null,
+        is_active: !!qs('#active').checked,
+        starts_on: qs('#starts').value || null,
+        ends_on: qs('#ends').value || null,
+        note: (qs('#note').value || '').trim() || null,
       };
+      if (kind === 'percent') payload.percent_off = Math.round(value * 100) / 100;
+      if (kind === 'amount') payload.amount_off_cents = Math.round(value * 100);
 
-      if (kind === "percent") payload.percent_off = Math.round(value * 100) / 100;
-      if (kind === "amount") payload.amount_off_cents = Math.round(value * 100);
-
-      qs("#createBtn").disabled = true;
-      qs("#createBtn").textContent = "Creating…";
-
-      const r = await postJson("/api/admin/promo_create", payload);
-
-      qs("#createBtn").disabled = false;
-      qs("#createBtn").textContent = "Create";
-
-      qs("#raw").textContent = JSON.stringify(r.out || {}, null, 2);
-
+      qs('#createBtn').disabled = true;
+      qs('#createBtn').textContent = 'Creating…';
+      const r = await postJson('/api/admin/promo_create', payload);
+      qs('#createBtn').disabled = false;
+      qs('#createBtn').textContent = 'Create';
+      qs('#raw').textContent = JSON.stringify(r.out || {}, null, 2);
       if (!r.ok || !r.out?.ok){
-        return show(r.out?.error ? `Error: ${r.out.error}` : `Error (HTTP ${r.status})`, "bad");
+        return show(r.out?.error || r.error || `Error (HTTP ${r.status})`, 'bad');
       }
-
-      show("Created.", "ok");
-      setTimeout(hide, 800);
+      show('Created.', 'ok');
+      clearForm();
       await refresh();
     });
-  </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260311t"></script>
+    document.addEventListener('DOMContentLoaded', async ()=>{
+      setBrandImages();
+      setFooter();
+      await window.AdminPageInit.init({
+        pageKey:'admin-promos',
+        onReady: async ({ actor }) => {
+          syncActor(actor);
+          await refresh();
+        }
+      });
+    });
+  </script>
 </body>
 </html>

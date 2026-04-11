@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Blocks | Rosie Dazzlers</title>
   <meta name="description" content="Admin availability blocks for Rosie Dazzlers." />
+  <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body data-page="admin-blocks">
@@ -52,6 +53,10 @@
       </div>
     </section>
 
+
+    <section class="section">
+      <div data-admin-menu-mount></div>
+    </section>
     <section class="section">
       <div id="pageNotice" class="notice">Ready.</div>
     </section>
@@ -60,6 +65,7 @@
       <div class="grid cards">
         <div class="panel">
           <h2>Staff session</h2>
+          <div class="kicker" id="sessionMeta">Checking signed-in staff session…</div>
           <form id="adminForm" class="form">
             <label>
               Signed-in staff session
@@ -153,10 +159,16 @@
 
   <footer class="footer container" data-footer></footer>
 
+  <script src="/assets/admin-runtime.js"></script>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/admin-menu.js"></script>
+  <script src="/assets/admin-page-init.js"></script>
   <script src="/assets/chrome.js"></script>
   <script type="module">
     import { setBrandImages, setFooter } from "/assets/site.js";
 
+    const runtime = window.AdminRuntime;
     let currentPassword = "";
 
     function escapeHtml(value) {
@@ -176,20 +188,9 @@
     }
 
     async function apiPost(url, password, body) {
-      const headers = { "Content-Type": "application/json" };
-      if (password) headers["x-admin-password"] = password;
-      const res = await fetch(url, {
-        method: "POST",
-        headers,
-        credentials: "include",
-        body: JSON.stringify(body || {})
-      });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data.error || `Request failed for ${url}`);
-      }
-      return data;
+      const result = await runtime.requestJson(url, { method: "POST", body: body || {}, password: password || undefined });
+      if (!result.ok) throw new Error(runtime.normalizeError(result, `Request failed for ${url}`));
+      return result.data || {};
     }
 
     function renderDateBlocks(data) {
@@ -268,10 +269,18 @@
       });
     }
 
+    function syncSessionMeta(actor) {
+      var meta = document.querySelector("#sessionMeta");
+      if (!meta) return;
+      meta.textContent = runtime.bridgeLabel(actor || window.AdminAuth.getActor(), currentPassword);
+    }
+
     async function refreshBlocks() {
+      syncSessionMeta();
       const data = await apiPost("/api/admin/blocks", currentPassword, {});
       renderDateBlocks(data);
       renderSlotBlocks(data);
+      syncSessionMeta(data && data.actor ? data.actor : null);
 
       document.querySelector("#blockDateBtn").disabled = false;
       document.querySelector("#blockSlotBtn").disabled = false;
@@ -280,13 +289,19 @@
     async function boot() {
       setBrandImages();
       setFooter();
+      syncSessionMeta();
+
+      document.querySelector("#adminPassword").addEventListener("input", function () {
+        currentPassword = document.querySelector("#adminPassword").value.trim();
+        syncSessionMeta();
+      });
 
       document.querySelector("#adminForm").addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const password = document.querySelector("#adminPassword").value.trim();
         try {
-          currentPassword = password;
+          currentPassword = document.querySelector("#adminPassword").value.trim();
+          syncSessionMeta();
           setNotice("Loading current blocks…");
           await refreshBlocks();
           setNotice("Blocks loaded.", "ok");
@@ -331,7 +346,16 @@
       });
     }
 
-    document.addEventListener("DOMContentLoaded", async () => { await boot(); document.querySelector("#adminForm").requestSubmit(); });
+    document.addEventListener("DOMContentLoaded", async () => {
+      await boot();
+      await window.AdminPageInit.init({
+        pageKey: "admin-blocks",
+        onReady: async ({ actor }) => {
+          syncSessionMeta(actor);
+          document.querySelector("#adminForm").requestSubmit();
+        }
+      });
+    });
   </script>
 </body>
 </html>
