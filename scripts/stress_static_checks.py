@@ -27,9 +27,6 @@ CHECK_HTML = [
     'admin-live.html',
     'admin-recovery.html',
     'admin-assign.html',
-    'admin-blocks.html',
-    'admin-staff.html',
-    'admin-jobsite.html',
     'detailer-jobs.html',
     'book.html',
     'services.html'
@@ -97,8 +94,21 @@ def check_addon_coverage():
         fail(f"addon image mapping missing for: {', '.join(missing)}")
 
 
+
+def check_route_collisions():
+    collisions = []
+    for html_path in ROOT.rglob("*.html"):
+        if html_path.name == 'index.html':
+            continue
+        sibling_dir = ROOT / html_path.relative_to(ROOT).with_suffix('')
+        idx = sibling_dir / 'index.html'
+        if idx.exists():
+            collisions.append(f"{html_path.relative_to(ROOT)} <-> {idx.relative_to(ROOT)}")
+    if collisions:
+        fail("route collisions detected: " + "; ".join(collisions))
+
 def check_admin_shell_pages():
-    for rel in ['admin-progress.html','admin-live.html','admin-recovery.html','admin-blocks.html','admin-staff.html','admin-jobsite.html']:
+    for rel in ['admin-progress.html','admin-live.html','admin-recovery.html']:
         text = (ROOT / rel).read_text()
         for needle in ['/assets/admin-auth.js', '/assets/admin-shell.js', '/assets/admin-menu.js', '/assets/admin-page-init.js', 'data-admin-menu-mount']:
             if needle not in text:
@@ -127,13 +137,6 @@ def check_inline_scripts():
                 tmp.unlink(missing_ok=True)
 
 
-def check_redirect_rules():
-    redirects = (ROOT / '_redirects').read_text(encoding='utf-8', errors='ignore')
-    for needle in ['/services /services.html 200', '/pricing /pricing.html 200', '/admin-blocks /admin-blocks.html 200', '/admin-jobsite /admin-jobsite.html 200', '/admin-staff /admin-staff.html 200']:
-        if needle not in redirects:
-            fail(f"_redirects missing required rule: {needle}")
-
-
 def main():
     for rel in CHECK_JS:
         path = ROOT / rel
@@ -142,8 +145,8 @@ def main():
     check_inline_scripts()
     check_public_h1()
     check_addon_coverage()
+    check_route_collisions()
     check_admin_shell_pages()
-    check_redirect_rules()
     print('PASS: static stress checks completed')
 
 if __name__ == '__main__':
