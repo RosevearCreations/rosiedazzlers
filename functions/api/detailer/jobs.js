@@ -1,4 +1,5 @@
 import { requireStaffAccess, json, methodNotAllowed, serviceHeaders } from "../_lib/staff-auth.js";
+import { attachCrewAssignments, loadCrewAssignmentsMap } from "../_lib/crew-assignments.js";
 
 export async function onRequestGet(context) {
   const { request, env } = context;
@@ -25,7 +26,9 @@ export async function onRequestGet(context) {
   const res = await fetch(url, { headers: serviceHeaders(env) });
   if (!res.ok) return json({ error: `Could not load assigned jobs. ${await res.text()}` }, 500);
   const rows = await res.json().catch(() => []);
-  return json({ ok: true, actor, jobs: Array.isArray(rows) ? rows : [] });
+  const safeRows = Array.isArray(rows) ? rows : [];
+  const crewResult = await loadCrewAssignmentsMap(env, safeRows.map((row) => row?.id));
+  return json({ ok: true, actor, jobs: attachCrewAssignments(safeRows, crewResult.map), crew_warning: crewResult.warning || null });
 }
 
 export const onRequestPost = methodNotAllowed;
