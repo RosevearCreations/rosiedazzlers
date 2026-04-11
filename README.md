@@ -246,3 +246,14 @@ This pass keeps the route hotfix structure intact and adds stronger internal wor
 - improved crew summary propagation across internal workflow screens and APIs
 - hardened admin runtime request handling with timeout and text-response fallbacks
 - expanded static packaging checks so route collisions and leftover debug artifacts fail before packaging
+
+## 2026-04-11 pass 9 sync
+- Booking flow now uses a clearer service-area selector with town-level choices across Oxford and Norfolk communities.
+- Booking availability shows open, partial, and unavailable dates in the next 21-day snapshot, and the date picker contrast was tightened for dark mode.
+- Year / Make / Model on booking is now typeable with datalist-assisted lookup and validation against the existing vehicle catalog.
+- Public analytics was deepened with richer action tracking, viewport/session details, and location/device enrichment stored inside event payloads.
+- Route-collision folders and temporary check artifacts were removed again to keep Pages routing stable.
+### Pass 9 highlights
+- Booking UI and analytics were both deepened in this pass.
+- A new analytics index migration was added for richer payload-driven rollups.
+

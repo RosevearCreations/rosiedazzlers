@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Book Mobile Auto Detailing in Oxford & Norfolk Counties | Rosie Dazzlers</title>
-  <meta name="description" content="Book Rosie Dazzlers mobile auto detailing in Oxford County and Norfolk County. Choose an available day, match your vehicle from your garage, pick the right package and add-ons, then pay your deposit online." />
+  <title>Book Mobile Auto Detailing in Tillsonburg, Woodstock, Simcoe & More | Rosie Dazzlers</title>
+  <meta name="description" content="Book Rosie Dazzlers mobile auto detailing across Oxford County and Norfolk County, including Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi, Port Dover, and nearby communities. Choose an available day, match your vehicle, pick your package and add-ons, then pay your deposit online." />
   <link rel="canonical" href="https://rosiedazzlers.ca/book" />
   <meta property="og:title" content="Book Mobile Auto Detailing | Rosie Dazzlers" />
-  <meta property="og:description" content="Choose your date, vehicle, package, add-ons, and deposit payment for mobile detailing in Oxford and Norfolk counties." />
+  <meta property="og:description" content="Choose your date, town, vehicle, package, add-ons, and deposit payment for mobile detailing across Oxford and Norfolk communities." />
   <meta name="robots" content="index,follow" />
   <link rel="stylesheet" href="/assets/site.css?v=20260327mobile1" />
   <script type="application/ld+json">
@@ -74,7 +74,7 @@
       <div class="step-head">
         <div>
           <h1>Book mobile detailing</h1>
-          <p class="page-kicker">Phone-friendly booking for Oxford County and Norfolk County. Pick your date, vehicle, package, add-ons, then lock in your booking with a deposit.</p>
+          <p class="page-kicker">Phone-friendly booking for Oxford County and Norfolk County communities. Pick your date, exact service area, vehicle, package, and add-ons, then lock in your booking with a deposit.</p>
         </div>
         <div class="row">
           <button class="btn ghost" id="openSizeChartBtn" type="button">Size chart</button>
@@ -95,22 +95,26 @@
 
     <section class="section panel wizard-card wizard-step" data-step="1">
       <div class="step-head"><div><h2>Step 1 — Date, time, and vehicle</h2><p class="muted">Choose an available day, then confirm which vehicle you want us to detail.</p></div></div>
-      <div class="grid2" style="margin-top:12px">
+      <div class="service-area-grid" style="margin-top:12px">
         <div>
           <label for="service_date">Preferred date</label>
           <input id="service_date" type="date" required />
-          <div class="mini muted" style="margin-top:6px">Use the quick choices below or pick another date from the calendar.</div>
+          <div class="mini muted" style="margin-top:6px">Use the quick choices below or pick another date from the calendar. Available, partially open, and unavailable days are shown below.</div>
         </div>
         <div>
           <label for="service_area">Service area</label>
-          <select id="service_area">
-            <option value="Norfolk">Norfolk County</option>
-            <option value="Oxford">Oxford County</option>
-          </select>
+          <select id="service_area"></select>
+          <div id="serviceAreaNote" class="notice mini service-area-note" style="margin-top:8px">Choose the closest town or service zone so we can apply the right travel, parking, and local bylaw notes.</div>
         </div>
       </div>
       <div style="margin-top:12px">
-        <div class="kicker">Quick available dates</div>
+        <div class="kicker">Booking calendar snapshot</div>
+        <div class="booking-legend" aria-hidden="true">
+          <span class="open"><i></i>Open</span>
+          <span class="partial"><i></i>Partly open</span>
+          <span class="closed"><i></i>Unavailable</span>
+          <span class="selected"><i></i>Selected</span>
+        </div>
         <div id="availableDates" class="calendar-strip" style="margin-top:8px"></div>
       </div>
       <div style="margin-top:12px">
@@ -129,9 +133,21 @@
         <div id="garageVehicleList" class="vehicle-quick-list" style="margin-top:8px"></div>
       </div>
       <div class="grid3" style="margin-top:12px">
-        <div><label for="veh_year">Year</label><select id="veh_year" autocomplete="off"><option value="">Select year</option></select></div>
-        <div><label for="veh_make">Make</label><select id="veh_make" autocomplete="off"><option value="">Select make</option></select></div>
-        <div><label for="veh_model">Model</label><select id="veh_model" autocomplete="off"><option value="">Select model</option></select></div>
+        <div>
+          <label for="veh_year">Year</label>
+          <input id="veh_year" list="veh_year_list" inputmode="numeric" autocomplete="off" placeholder="Start typing year" />
+          <datalist id="veh_year_list"></datalist>
+        </div>
+        <div>
+          <label for="veh_make">Make</label>
+          <input id="veh_make" list="veh_make_list" autocomplete="off" placeholder="Start typing make" />
+          <datalist id="veh_make_list"></datalist>
+        </div>
+        <div>
+          <label for="veh_model">Model</label>
+          <input id="veh_model" list="veh_model_list" autocomplete="off" placeholder="Start typing model" />
+          <datalist id="veh_model_list"></datalist>
+        </div>
       </div>
       <div class="grid3" style="margin-top:12px">
         <div><label for="veh_color">Colour</label><input id="veh_color" type="text" placeholder="Black, silver, blue" /></div>
@@ -235,6 +251,9 @@
     let selectedPackageCode = '';
     let selectedSlotChoice = '';
     let garageVehicles = [];
+    let availabilityCache = new Map();
+    const vehicleCatalog = { years: [], makes: [], models: [] };
+    const defaultServiceAreas = [];
 
     function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,(m)=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
     function showStatus(msg, kind=''){ const el=qs('#bookingStatus'); el.style.display='block'; el.className='notice '+(kind||''); el.textContent=msg; }
@@ -253,6 +272,34 @@
     function selectedPackage(){ return (pricing?.packages || []).find((pkg)=>pkg.code===selectedPackageCode) || null; }
     function selectedSize(){ return qs('#vehicle_size').value; }
     function selectedDate(){ return qs('#service_date').value; }
+
+
+    function analyticsTrack(eventType, payload={}){ try { window.RosieAnalytics?.track?.(eventType, payload); } catch {} }
+    function setDatalistOptions(id, values){ const list = qs(id); if (!list) return; list.innerHTML = (values || []).map((value)=>`<option value="${escapeHtml(value)}"></option>`).join(''); }
+    function normalizeChoice(value){ return String(value || '').trim(); }
+    function choiceExists(values, value){ const needle = normalizeChoice(value).toLowerCase(); return !!needle && (values || []).some((row)=>normalizeChoice(row).toLowerCase() === needle); }
+    function requireKnownChoice(el, values, message){ const ok = choiceExists(values, el.value); el.setCustomValidity(ok ? '' : message); return ok; }
+    function configuredServiceAreas(){ return Array.isArray(pricing?.service_areas) && pricing.service_areas.length ? pricing.service_areas : defaultServiceAreas; }
+    function renderServiceAreas(){
+      const grouped = configuredServiceAreas().reduce((acc, row)=>{ const county = row?.county || 'Service area'; (acc[county] ||= []).push(row); return acc; }, {});
+      const select = qs('#service_area');
+      const groups = Object.entries(grouped).map(([county, rows])=>`<optgroup label="${escapeHtml(county)}">${rows.map((row)=>`<option value="${escapeHtml(row.value || row.label)}">${escapeHtml(row.label || row.value)}</option>`).join('')}</optgroup>`).join('');
+      select.innerHTML = `<option value="">Choose your town or service zone</option>${groups}`;
+      const preferred = 'Tillsonburg, Oxford County';
+      if ([...select.options].some((opt)=>opt.value === preferred)) select.value = preferred;
+      updateServiceAreaNote();
+    }
+    function updateServiceAreaNote(){
+      const note = qs('#serviceAreaNote');
+      const selected = configuredServiceAreas().find((row)=>[row?.value, row?.label].includes(qs('#service_area').value));
+      if (!selected) {
+        note.className = 'notice mini service-area-note';
+        note.textContent = 'Choose the closest town or service zone so we can apply the right travel, parking, and local bylaw notes.';
+        return;
+      }
+      note.className = 'notice warn mini service-area-note';
+      note.textContent = selected.bylaw_note || `${selected.label || selected.value} selected.`;
+    }
 
     function renderWizardNav(){
       const nav = qs('#wizardNav');
@@ -279,6 +326,7 @@
       }
       if (currentStep===4) renderReviewVehicle();
       if (currentStep===5) renderFinalSummary();
+      analyticsTrack('booking_step_view', { step_number: currentStep, step_label: steps[currentStep-1]?.subtitle || '' });
     }
     qs('#prevStepBtn').addEventListener('click', ()=>gotoStep(currentStep-1));
     qs('#nextStepBtn').addEventListener('click', async ()=>{ if (await validateStep(currentStep)) gotoStep(currentStep+1); });
@@ -345,78 +393,116 @@
       qs('#veh_category').value = vehicle.vehicle_category || '';
       qs('#veh_body').value = vehicle.body_style || '';
       qs('#veh_plate').value = vehicle.plate || '';
-      loadVehicleModels().then(()=>{ qs('#veh_model').value = vehicle.model || ''; updateSizeHint(); });
+      loadVehicleModels().then(()=>{ qs('#veh_model').value = vehicle.model || ''; applyVehicleModelMetadata(); });
       showStatus('Garage vehicle loaded into the booking form.', 'ok');
     }
 
+
     async function loadVehicleMakes(){
       const out = await fetchJsonStrict(VEHICLE_MAKES_URL);
-      const years = Array.isArray(out.years) ? out.years : [];
-      const makes = Array.isArray(out.makes) ? out.makes : [];
-      qs('#veh_year').innerHTML = '<option value="">Select year</option>' + years.map((y)=>`<option value="${y}">${y}</option>`).join('');
-      qs('#veh_make').innerHTML = '<option value="">Select make</option>' + makes.map((row)=>`<option value="${escapeHtml(row.make)}">${escapeHtml(row.make)}</option>`).join('');
-      qs('#veh_model').innerHTML = '<option value="">Select model</option>';
+      vehicleCatalog.years = Array.isArray(out.years) ? out.years.map(String) : [];
+      vehicleCatalog.makes = Array.isArray(out.makes) ? out.makes.map((row)=>String(row.make || '').trim()).filter(Boolean) : [];
+      vehicleCatalog.models = [];
+      setDatalistOptions('#veh_year_list', vehicleCatalog.years);
+      setDatalistOptions('#veh_make_list', vehicleCatalog.makes);
+      setDatalistOptions('#veh_model_list', []);
     }
     async function loadVehicleModels(){
-      const year = qs('#veh_year').value;
-      const make = qs('#veh_make').value;
-      const modelSel = qs('#veh_model');
-      if (!year || !make) { modelSel.innerHTML = '<option value="">Select model</option>'; return; }
-      modelSel.innerHTML = '<option value="">Loading models…</option>';
-      const out = await fetchJsonStrict(`${VEHICLE_MODELS_URL}?year=${encodeURIComponent(year)}&make=${encodeURIComponent(make)}`);
-      const models = Array.isArray(out.models) ? out.models : [];
-      modelSel.innerHTML = '<option value="">Select model</option>' + models.map((row)=>`<option value="${escapeHtml(row.model)}" data-size="${escapeHtml(row.size_bucket || '')}" data-type="${escapeHtml(row.vehicle_type || '')}" data-exotic="${row.is_exotic ? '1' : '0'}">${escapeHtml(row.model)}${row.category_label ? ` — ${escapeHtml(row.category_label)}` : ''}</option>`).join('');
-    }
-    qs('#veh_year').addEventListener('change', loadVehicleModels); qs('#veh_make').addEventListener('change', loadVehicleModels);
-    qs('#veh_model').addEventListener('change', ()=>{
-      const opt = qs('#veh_model').selectedOptions[0];
-      if (!opt) return;
-      if (opt.dataset.size && !qs('#vehicle_size').value) qs('#vehicle_size').value = opt.dataset.size;
-      if (opt.dataset.type && !qs('#veh_body').value) {
-        const t = opt.dataset.type.toLowerCase();
-        qs('#veh_body').value = t.includes('truck') ? 'truck' : t.includes('multipurpose') ? 'suv' : t.includes('van') ? 'van' : 'sedan';
-      }
-      if (opt.dataset.exotic === '1' && !qs('#veh_category').value) qs('#veh_category').value = 'exotic';
-      updateSizeHint();
-    });
-    ['#veh_body','#veh_category','#vehicle_size'].forEach((selector)=>qs(selector).addEventListener('change', updateSizeHint));
-
-    async function loadAvailabilityOptions(){
-      const today = new Date();
-      const buttons = [];
-      for (let i=0; i<14; i++) {
-        const d = new Date(today); d.setDate(today.getDate()+i);
-        const iso = d.toISOString().slice(0,10);
-        try {
-          const res = await fetch(`/api/availability?date=${encodeURIComponent(iso)}`, { cache:'no-store' });
-          const out = await res.json().catch(()=>null);
-          if (!res.ok || !out?.ok || out.blocked || (!out.AM && !out.PM)) continue;
-          buttons.push({ iso, AM: out.AM, PM: out.PM });
-        } catch {}
-      }
-      const wrap = qs('#availableDates');
-      if (!buttons.length) {
-        wrap.innerHTML = '<div class="notice">No open dates were found in the next two weeks. Choose another date in the calendar.</div>';
+      const year = normalizeChoice(qs('#veh_year').value);
+      const make = normalizeChoice(qs('#veh_make').value);
+      const modelInput = qs('#veh_model');
+      if (!choiceExists(vehicleCatalog.years, year) || !choiceExists(vehicleCatalog.makes, make)) {
+        vehicleCatalog.models = [];
+        setDatalistOptions('#veh_model_list', []);
+        modelInput.value = '';
         return;
       }
-      wrap.innerHTML = buttons.map((item)=>{
+      modelInput.placeholder = 'Loading models…';
+      const out = await fetchJsonStrict(`${VEHICLE_MODELS_URL}?year=${encodeURIComponent(year)}&make=${encodeURIComponent(make)}`);
+      vehicleCatalog.models = Array.isArray(out.models) ? out.models : [];
+      setDatalistOptions('#veh_model_list', vehicleCatalog.models.map((row)=>row.model).filter(Boolean));
+      modelInput.placeholder = 'Start typing model';
+    }
+    function applyVehicleModelMetadata(){
+      const chosen = vehicleCatalog.models.find((row)=>normalizeChoice(row.model).toLowerCase() === normalizeChoice(qs('#veh_model').value).toLowerCase());
+      if (!chosen) return;
+      if (chosen.size_bucket && !qs('#vehicle_size').value) qs('#vehicle_size').value = chosen.size_bucket;
+      if (chosen.vehicle_type && !qs('#veh_body').value) {
+        const t = String(chosen.vehicle_type).toLowerCase();
+        if (t.includes('truck')) qs('#veh_body').value = 'truck';
+        else if (t.includes('van')) qs('#veh_body').value = 'van';
+        else if (t.includes('suv')) qs('#veh_body').value = 'suv';
+        else if (t.includes('crossover')) qs('#veh_body').value = 'crossover';
+        else if (t.includes('hatch')) qs('#veh_body').value = 'hatch';
+        else qs('#veh_body').value = 'sedan';
+      }
+      if (chosen.is_exotic && !qs('#veh_category').value) qs('#veh_category').value = 'exotic';
+      updateSizeHint();
+    }
+    qs('#veh_year').addEventListener('change', async ()=>{ requireKnownChoice(qs('#veh_year'), vehicleCatalog.years, 'Choose a year from the list.'); await loadVehicleModels(); analyticsTrack('booking_vehicle_year', { year: qs('#veh_year').value || null }); });
+    qs('#veh_make').addEventListener('change', async ()=>{ requireKnownChoice(qs('#veh_make'), vehicleCatalog.makes, 'Choose a make from the list.'); await loadVehicleModels(); analyticsTrack('booking_vehicle_make', { make: qs('#veh_make').value || null }); });
+    qs('#veh_model').addEventListener('change', ()=>{ requireKnownChoice(qs('#veh_model'), vehicleCatalog.models.map((row)=>row.model), 'Choose a model from the list.'); applyVehicleModelMetadata(); analyticsTrack('booking_vehicle_model', { model: qs('#veh_model').value || null }); });
+
+    ['#veh_body','#veh_category','#vehicle_size'].forEach((selector)=>qs(selector).addEventListener('change', updateSizeHint));
+
+
+    async function fetchAvailability(date){
+      if (!date) return null;
+      if (availabilityCache.has(date)) return availabilityCache.get(date);
+      try {
+        const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache:'no-store' });
+        const out = await res.json().catch(()=>null);
+        if (!res.ok || !out?.ok) throw new Error(out?.error || 'Could not load availability.');
+        availabilityCache.set(date, out);
+        return out;
+      } catch (err) {
+        availabilityCache.set(date, null);
+        return null;
+      }
+    }
+    function availabilityStatus(out){
+      if (!out) return 'closed';
+      if (out.blocked || (!out.AM && !out.PM)) return 'closed';
+      if (out.AM && out.PM) return 'open';
+      return 'partial';
+    }
+    async function loadAvailabilityOptions(){
+      const today = new Date();
+      const items = [];
+      for (let i=0;i<21;i++) {
+        const d = new Date(today);
+        d.setDate(today.getDate()+i);
+        const iso = d.toISOString().slice(0,10);
+        const out = await fetchAvailability(iso);
+        items.push({ iso, out, status: availabilityStatus(out) });
+      }
+      const wrap = qs('#availableDates');
+      wrap.innerHTML = items.map((item)=>{
         const dt = new Date(item.iso + 'T12:00:00');
         const label = dt.toLocaleDateString('en-CA', { weekday:'short', month:'short', day:'numeric' });
-        return `<button class="date-pill ${item.iso===selectedDate()?'is-selected':''}" type="button" data-date-pill="${item.iso}"><strong>${label}</strong><span>${item.AM ? 'AM open' : 'AM booked'} · ${item.PM ? 'PM open' : 'PM booked'}</span></button>`;
+        const out = item.out || {};
+        const desc = item.status === 'open' ? 'AM open · PM open' : item.status === 'partial' ? `AM ${out.AM ? 'open' : 'booked'} · PM ${out.PM ? 'open' : 'booked'}` : (out.blocked ? 'Unavailable · blocked' : 'Unavailable · booked');
+        const disabled = item.status === 'closed' ? 'disabled' : '';
+        return `<button class="date-pill is-${item.status} ${item.iso===selectedDate()?'is-selected':''}" type="button" data-date-pill="${item.iso}" ${disabled}><strong>${label}</strong><span>${desc}</span></button>`;
       }).join('');
-      qsa('[data-date-pill]').forEach((btn)=>btn.addEventListener('click', ()=>{
+      qsa('[data-date-pill]').forEach((btn)=>btn.addEventListener('click', async ()=>{
+        if (btn.disabled) return;
         qs('#service_date').value = btn.getAttribute('data-date-pill');
-        refreshAvailability();
-        loadAvailabilityOptions();
+        analyticsTrack('booking_date_pick', { service_date: qs('#service_date').value });
+        qs('#service_date').min = new Date().toISOString().slice(0,10);
+      await refreshAvailability();
+        await loadAvailabilityOptions();
       }));
-      if (!selectedDate() && buttons[0]) qs('#service_date').value = buttons[0].iso;
+      if (!selectedDate()) {
+        const firstOpen = items.find((item)=>item.status !== 'closed');
+        if (firstOpen) qs('#service_date').value = firstOpen.iso;
+      }
     }
     async function refreshAvailability(){
       const date = selectedDate();
       if (!date) return;
-      const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache:'no-store' });
-      const out = await res.json().catch(()=>null);
-      if (!res.ok || !out?.ok) {
+      const out = await fetchAvailability(date);
+      if (!out?.ok) {
         qs('#availabilityNote').textContent = out?.error || 'Could not load availability.';
         return;
       }
@@ -429,13 +515,14 @@
         if (!open) btn.textContent = slot === 'FULL' ? 'Full day unavailable' : `${slot} unavailable`;
         else btn.textContent = slot === 'FULL' ? 'Full day' : `${slot} half day`;
       });
-      qs('#availabilityNote').textContent = `Availability for ${date}: AM ${out.AM ? 'open' : 'booked'}, PM ${out.PM ? 'open' : 'booked'}.`;
+      qs('#availabilityNote').textContent = `Availability for ${date}: AM ${out.AM ? 'open' : 'booked'}, PM ${out.PM ? 'open' : 'booked'}${out.blocked ? ` • ${out.reason || 'blocked'}` : ''}.`;
       if (!map[selectedSlotChoice]) selectedSlotChoice = out.AM ? 'AM' : out.PM ? 'PM' : '';
       qsa('[data-slot]').forEach((btn)=>btn.classList.toggle('active', btn.getAttribute('data-slot')===selectedSlotChoice));
       renderFinalSummary();
     }
-    qsa('[data-slot]').forEach((btn)=>btn.addEventListener('click', ()=>{ if (btn.disabled) return; selectedSlotChoice = btn.getAttribute('data-slot'); qsa('[data-slot]').forEach((node)=>node.classList.toggle('active', node===btn)); renderFinalSummary(); }));
-    qs('#service_date').addEventListener('change', refreshAvailability);
+    qsa('[data-slot]').forEach((btn)=>btn.addEventListener('click', ()=>{ if (btn.disabled) return; selectedSlotChoice = btn.getAttribute('data-slot'); qsa('[data-slot]').forEach((node)=>node.classList.toggle('active', node===btn)); analyticsTrack('booking_slot_pick', { slot: selectedSlotChoice, service_date: selectedDate() || null }); renderFinalSummary(); }));
+    qs('#service_date').addEventListener('change', async ()=>{ analyticsTrack('booking_date_pick', { service_date: selectedDate() || null, source: 'native_picker' }); await refreshAvailability(); await loadAvailabilityOptions(); });
+
 
     function renderPackages(){
       const wrap = qs('#packageCards');
@@ -446,7 +533,7 @@
         const img = packageImageForSize(pkg, size || 'small');
         return `<button class="service-card ${selectedPackageCode===pkg.code?'active':''}" type="button" data-package="${escapeHtml(pkg.code)}"><img src="${escapeHtml(img)}" alt="${escapeHtml(pkg.name)}" loading="lazy" /><strong>${escapeHtml(pkg.name)}</strong><span class="muted package-note">${escapeHtml(pkg.subtitle || '')}</span><span class="tag ok">${price != null ? money(price) : 'Choose size first'}</span><span class="muted mini">Deposit ${money(pkg.deposit_cad || 0)}</span></button>`;
       }).join('');
-      qsa('[data-package]').forEach((btn)=>btn.addEventListener('click', ()=>{ selectedPackageCode = btn.getAttribute('data-package'); renderPackages(); renderFinalSummary(); }));
+      qsa('[data-package]').forEach((btn)=>btn.addEventListener('click', ()=>{ selectedPackageCode = btn.getAttribute('data-package'); analyticsTrack('booking_package_pick', { package_code: selectedPackageCode, vehicle_size: selectedSize() || null }); renderPackages(); renderFinalSummary(); }));
     }
     function addonDisplayPrice(addon){ const size = selectedSize(); if (addon.quote_required) return 'Quote required'; if (addon.prices_cad && addon.prices_cad[size] != null) return money(addon.prices_cad[size]); if (addon.price_cad != null) return money(addon.price_cad); return 'Included in quote'; }
     const PACKAGE_ADDON_FILES = {
@@ -471,12 +558,13 @@
       const addons = pricing?.addons || [];
       wrap.innerHTML = addons.map((addon)=>`<button class="addon-card ${addonsState.has(addon.code)?'active':''}" type="button" data-addon="${escapeHtml(addon.code)}"><img class="addon-thumb" src="${escapeHtml(addon.image_url || addonPrimaryImage(addon.code))}" data-fallback="${escapeHtml(addon.image_fallback_url || addonFallbackImage(addon.code))}" alt="${escapeHtml(addon.name)}" loading="lazy" /><strong>${escapeHtml(addon.name)}</strong><span class="muted mini">${escapeHtml(addon.category || '')}${addon.type ? ` · ${escapeHtml(addon.type)}` : ''}</span><span class="tag ${addon.quote_required ? 'warn' : 'ok'}">${escapeHtml(addonDisplayPrice(addon))}</span><span class="muted mini">${escapeHtml((addon.notes || []).join(' • '))}</span></button>`).join('');
       qsa('.addon-thumb').forEach((img)=>{ img.onerror = ()=>{ const fallback = img.dataset.fallback || '/assets/addons/generic_addon.svg'; if (img.src !== new URL(fallback, window.location.origin).href) { img.src = fallback; return; } img.style.display = 'none'; }; });
-      qsa('[data-addon]').forEach((btn)=>btn.addEventListener('click', ()=>{ const code = btn.getAttribute('data-addon'); if (addonsState.has(code)) addonsState.delete(code); else addonsState.add(code); renderAddons(); renderFinalSummary(); }));
+      qsa('[data-addon]').forEach((btn)=>btn.addEventListener('click', ()=>{ const code = btn.getAttribute('data-addon'); if (addonsState.has(code)) addonsState.delete(code); else addonsState.add(code); analyticsTrack('booking_addon_toggle', { addon_code: code, selected: addonsState.has(code) ? 0 : 1, addon_count: addonsState.size + (addonsState.has(code) ? -1 : 1) }); renderAddons(); renderFinalSummary(); }));
     }
     function renderReviewVehicle(){
       const rows = [
         ['Date', selectedDate() || 'Not chosen'],
         ['Time', selectedSlotChoice || 'Not chosen'],
+        ['Service area', qs('#service_area').value || 'Not chosen'],
         ['Vehicle', [qs('#veh_year').value, qs('#veh_make').value, qs('#veh_model').value, qs('#veh_color').value].filter(Boolean).join(' · ') || 'Vehicle details incomplete'],
         ['Vehicle size', selectedSize() || 'Not chosen'],
         ['Category', qs('#veh_category').value || 'Not chosen']
@@ -502,6 +590,7 @@
       const rows = [
         ['Date', selectedDate() || 'Not chosen'],
         ['Time', selectedSlotChoice || 'Not chosen'],
+        ['Service area', qs('#service_area').value || 'Not chosen'],
         ['Package', pkg ? `${pkg.name} (${selectedSize() || 'size pending'})` : 'Not chosen'],
         ['Add-ons', selectedAddons().length ? selectedAddons().map((addon)=>addon.name).join(', ') : 'None'],
         ['Estimated subtotal', totals.subtotal ? money(totals.subtotal) : 'Package required'],
@@ -515,8 +604,12 @@
       clearFieldErrors(); hideStatus();
       if (step === 1) {
         if (!selectedDate()) return showFieldError(1, 'Choose a date.');
+        if (!qs('#service_area').value) return showFieldError(1, 'Choose the closest service area or town.');
         if (!selectedSlotChoice) return showFieldError(1, 'Choose an available time slot.');
         if (!qs('#veh_year').value || !qs('#veh_make').value || !qs('#veh_model').value) return showFieldError(1, 'Choose the vehicle year, make, and model.');
+        if (!requireKnownChoice(qs('#veh_year'), vehicleCatalog.years, 'Choose a year from the list.')) return showFieldError(1, 'Choose a year from the list.');
+        if (!requireKnownChoice(qs('#veh_make'), vehicleCatalog.makes, 'Choose a make from the list.')) return showFieldError(1, 'Choose a make from the list.');
+        if (!requireKnownChoice(qs('#veh_model'), vehicleCatalog.models.map((row)=>row.model), 'Choose a model from the list.')) return showFieldError(1, 'Choose a model from the list.');
         if (!selectedSize()) return showFieldError(1, 'Choose the vehicle size.');
         return true;
       }
@@ -550,6 +643,7 @@
         start_slot,
         duration_slots,
         service_area: qs('#service_area').value,
+        service_area_label: qs('#service_area').selectedOptions?.[0]?.textContent || qs('#service_area').value,
         package_code: selectedPackageCode,
         vehicle_size: selectedSize(),
         customer_name: qs('#customer_name').value.trim(),
@@ -579,24 +673,30 @@
       };
       const btn = qs('#checkoutBtn');
       btn.disabled = true; btn.textContent = 'Preparing payment…';
+      analyticsTrack('checkout_started', { package_code: selectedPackageCode, service_area: qs('#service_area').value || null, addon_count: addonsState.size, service_date: selectedDate() || null });
       try {
         const res = await fetch('/api/checkout', { method:'POST', headers:{ 'content-type':'application/json' }, body: JSON.stringify(payload) });
         const out = await res.json().catch(()=>null);
         if (!res.ok || !out?.ok || !out?.checkout_url) throw new Error(out?.error || 'Checkout failed.');
+        analyticsTrack('checkout_redirect', { booking_id: out.booking_id || null, provider: 'stripe' });
         location.href = out.checkout_url;
       } catch (err) {
+        analyticsTrack('checkout_error', { message: err?.message || 'Checkout failed.' });
         showStatus(err.message || 'Checkout failed.', 'bad');
         btn.disabled = false; btn.textContent = 'Book and pay deposit';
       }
     });
 
+    qs('#service_area').addEventListener('change', ()=>{ updateServiceAreaNote(); analyticsTrack('booking_service_area_pick', { service_area: qs('#service_area').value || null }); renderFinalSummary(); renderReviewVehicle(); });
     try {
       pricing = await fetchJsonStrict(DATA_URL);
+      renderServiceAreas();
       await Promise.all([loadVehicleMakes(), loadGarageVehicles(), loadAvailabilityOptions()]);
       if (!selectedDate()) {
         const today = new Date();
         qs('#service_date').value = today.toISOString().slice(0,10);
       }
+      qs('#service_date').min = new Date().toISOString().slice(0,10);
       await refreshAvailability();
       renderPackages();
       renderAddons();

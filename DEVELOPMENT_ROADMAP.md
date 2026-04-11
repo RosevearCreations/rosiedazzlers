@@ -289,3 +289,16 @@ Route hotfix sync reviewed on 2026-04-11.
 - moved forward: admin runtime now handles request timeouts and non-JSON/text error responses more gracefully for internal app screens
 - moved forward: static stress checks now fail when temporary check artifacts or route-collision outputs are present
 - move up next: continue true session-first cleanup on jobsite/time/media screens and then do deployed route-by-route verification after publish
+
+## 2026-04-11 pass 9 sync
+- Booking flow now uses a clearer service-area selector with town-level choices across Oxford and Norfolk communities.
+- Booking availability shows open, partial, and unavailable dates in the next 21-day snapshot, and the date picker contrast was tightened for dark mode.
+- Year / Make / Model on booking is now typeable with datalist-assisted lookup and validation against the existing vehicle catalog.
+- Public analytics was deepened with richer action tracking, viewport/session details, and location/device enrichment stored inside event payloads.
+- Route-collision folders and temporary check artifacts were removed again to keep Pages routing stable.
+### Added in pass 9
+- Booking UI polish for mobile and tablet overlap issues.
+- Town-level service-area precision for Oxford / Norfolk bookings.
+- Booking analytics depth for actions, clicks, scroll, viewport, and inferred location/device detail.
+- Next strongest step: carry the same precise service-area data into pricing/services copy blocks and into admin booking filters.
+

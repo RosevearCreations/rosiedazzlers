@@ -184,3 +184,15 @@ Next strongest pass after deployment:
 2. Continue shrinking the legacy bridge only after deployed internal route checks stay stable.
 3. Extend the direct-labor profitability view into exports or dashboards that need fully loaded job-cost rollups.
 
+## 2026-04-11 pass 9 sync
+- Booking flow now uses a clearer service-area selector with town-level choices across Oxford and Norfolk communities.
+- Booking availability shows open, partial, and unavailable dates in the next 21-day snapshot, and the date picker contrast was tightened for dark mode.
+- Year / Make / Model on booking is now typeable with datalist-assisted lookup and validation against the existing vehicle catalog.
+- Public analytics was deepened with richer action tracking, viewport/session details, and location/device enrichment stored inside event payloads.
+- Route-collision folders and temporary check artifacts were removed again to keep Pages routing stable.
+### Start here after pass 9
+1. Deploy the cleaned build and run the static stress checks again.
+2. Run the analytics payload index migration if deeper analytics queries are desired at scale.
+3. Verify booking UI on mobile width, tablet width, and desktop width, especially the date snapshot and service-area selector.
+4. Continue the services/pricing/local-copy SEO pass using the new town-level service-area list.
+

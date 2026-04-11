@@ -208,6 +208,13 @@ create table if not exists public.site_activity_events (
   checkout_state text null,
   payload jsonb not null default '{}'::jsonb
 );
+create index if not exists idx_site_activity_events_created_at on public.site_activity_events (created_at desc);
+create index if not exists idx_site_activity_events_event_type_created_at on public.site_activity_events (event_type, created_at desc);
+create index if not exists idx_site_activity_events_page_path_created_at on public.site_activity_events (page_path, created_at desc);
+create index if not exists idx_site_activity_events_payload_city_created_at on public.site_activity_events ((payload->>'city'), created_at desc);
+create index if not exists idx_site_activity_events_payload_region_created_at on public.site_activity_events ((payload->>'region'), created_at desc);
+create index if not exists idx_site_activity_events_payload_device_created_at on public.site_activity_events ((payload->>'device_type'), created_at desc);
+
 create table if not exists public.notification_events (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
