@@ -19,15 +19,20 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at top, rgba(25
 <article class="card"><h2>Recent Cart Signals</h2><div id="cart-signals" class="list"></div></article>
 <article class="card"><h2>Top Pages</h2><div id="top-pages" class="list"></div></article>
 <article class="card"><h2>Top Countries</h2><div id="top-countries" class="list"></div></article>
+<article class="card"><h2>Top Cities</h2><div id="top-cities" class="list"></div></article>
+<article class="card"><h2>Top Regions</h2><div id="top-regions" class="list"></div></article>
+<article class="card"><h2>Top Devices</h2><div id="top-devices" class="list"></div></article>
 <article class="card"><h2>Top Referrers</h2><div id="top-referrers" class="list"></div></article>
+<article class="card"><h2>Top Actions</h2><div id="top-actions" class="list"></div></article>
 <article class="card"><h2>Checkout State Mix</h2><div id="checkout-states" class="list"></div></article>
+<article class="card"><h2>Recent Actions</h2><div id="recent-actions" class="list"></div></article>
 <article class="card"><h2>Session Journeys</h2><div id="session-journeys" class="list"></div></article>
 <article class="card"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap"><h2 style="margin:0">Abandoned Orders</h2><button class="btn" id="queue-all-recovery-btn" type="button">Queue Recovery Emails</button></div><div id="abandoned-orders" class="list"></div></article>
 </section></div></main>
 <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
 <script>
 (function(){
-  const els={kpi:document.getElementById("kpi-grid"),pages:document.getElementById("top-pages"),countries:document.getElementById("top-countries"),referrers:document.getElementById("top-referrers"),journeys:document.getElementById("session-journeys"),live:document.getElementById("live-online"),cart:document.getElementById("cart-signals"),abandoned:document.getElementById("abandoned-orders"),queueAll:document.getElementById("queue-all-recovery-btn"),days:document.getElementById('analyticsDays'),refresh:document.getElementById('refreshAnalyticsBtn'),daily:document.getElementById('daily-traffic'),checkoutStates:document.getElementById('checkout-states')};
+  const els={kpi:document.getElementById("kpi-grid"),pages:document.getElementById("top-pages"),countries:document.getElementById("top-countries"),cities:document.getElementById("top-cities"),regions:document.getElementById("top-regions"),devices:document.getElementById("top-devices"),actions:document.getElementById("top-actions"),recentActions:document.getElementById("recent-actions"),referrers:document.getElementById("top-referrers"),journeys:document.getElementById("session-journeys"),live:document.getElementById("live-online"),cart:document.getElementById("cart-signals"),abandoned:document.getElementById("abandoned-orders"),queueAll:document.getElementById("queue-all-recovery-btn"),days:document.getElementById('analyticsDays'),refresh:document.getElementById('refreshAnalyticsBtn'),daily:document.getElementById('daily-traffic'),checkoutStates:document.getElementById('checkout-states')};
   let abandonedRows=[];
   let autoRefreshTimer=null;
   function setShellStatus(message,type){document.querySelectorAll("[data-admin-shell-status]").forEach(node=>{node.hidden=!message;node.textContent=message||"";node.dataset.state=type||"";});}
@@ -48,14 +53,20 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at top, rgba(25
       <div class="box"><div class="muted">Visitors</div><strong>${Number(analytics.summary?.unique_visitors||0)}</strong></div>
       <div class="box"><div class="muted">Sessions</div><strong>${Number(analytics.summary?.unique_sessions||0)}</strong></div>
       <div class="box"><div class="muted">Abandoned</div><strong>${Number(analytics.summary?.abandoned_sessions||0)}</strong></div>
-      <div class="box"><div class="muted">Live Online</div><strong>${Number(analytics.summary?.live_online_sessions||0)}</strong></div>`;
+      <div class="box"><div class="muted">Live Online</div><strong>${Number(analytics.summary?.live_online_sessions||0)}</strong></div>
+      <div class="box"><div class="muted">Avg. Engage</div><strong>${Number(analytics.summary?.avg_engagement_seconds||0)}s</strong></div>`;
     renderList(els.live, analytics.live_online_sessions||[], r=>`<strong>${esc(r.country||'Unknown')}</strong><div class="muted">${esc((r.path||[]).join(" → "))}</div><div class="muted">Seen: ${esc(r.ended_at||'')}</div>`, 'No live sessions right now.');
     renderList(els.cart, analytics.cart_snapshots||[], r=>`<strong>${esc(r.session_id||'unknown')}</strong><div class="muted">${esc(r.page_path||'')}</div><div class="muted">Items: ${Number(r.item_count||0)}${r.cart_key?` • ${esc(r.cart_key)}`:''}</div>`, 'No cart activity yet.');
     renderList(els.pages, analytics.top_pages||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} views</div>`);
     renderList(els.countries, analytics.top_countries||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} sessions</div>`);
+    renderList(els.cities, analytics.top_cities||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} events</div>`, 'No city detail yet.');
+    renderList(els.regions, analytics.top_regions||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} events</div>`, 'No region detail yet.');
+    renderList(els.devices, analytics.top_devices||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} events</div>`, 'No device mix yet.');
     renderList(els.referrers, analytics.top_referrers||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} referrals</div>`);
+    renderList(els.actions, analytics.top_actions||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} tracked actions</div>`, 'No action data yet.');
     renderList(els.checkoutStates, analytics.checkout_states||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} events</div>`, 'No checkout-state data yet.');
     renderList(els.daily, analytics.daily_traffic||[], r=>`<strong>${esc(r.day)}</strong><div class="muted">${Number(r.page_views||0)} page views • ${Number(r.unique_visitors||0)} visitors • ${Number(r.unique_sessions||0)} sessions • ${Number(r.abandoned_sessions||0)} abandoned</div>`,'No daily traffic data yet.');
+    renderList(els.recentActions, analytics.recent_actions||[], r=>`<strong>${esc(r.event_type||'activity')}</strong><div class="muted">${esc(r.page_path||'')}</div><div class="muted">${esc([r.city, r.region, r.device_type].filter(Boolean).join(' • ') || 'Location/device pending')} ${r.target_text ? `• ${esc(r.target_text)}` : ''} ${r.percent ? `• ${esc(String(r.percent))}% scroll` : ''}</div><div class="muted">${esc(r.created_at||'')}</div>`, 'No recent tracked actions yet.');
     renderList(els.journeys, (analytics.session_journeys||[]).slice(0,20), r=>`<strong>${esc(r.session_id)}</strong><div class="muted">${esc((r.path||[]).join(" → "))}</div><div class="muted">Events: ${Number(r.event_count||0)}</div>`);
     abandonedRows=abandoned.abandoned_orders||[];
     renderList(els.abandoned, abandonedRows, r=>`<strong>${esc(r.customer_email||r.session_id)}</strong><div class="muted">${esc((r.path||[]).join(" → "))}</div><div class="muted">Recovery possible: ${r.recovery_possible?"Yes":"No"}</div>`, 'No abandoned orders in this window.');

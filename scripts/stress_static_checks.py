@@ -120,6 +120,11 @@ def check_route_collisions():
     if collisions:
         fail("route collisions detected: " + "; ".join(collisions))
 
+def check_public_analytics_hook():
+    text = (ROOT / 'assets/chrome.js').read_text()
+    if 'ensurePublicAnalytics' not in text or '/assets/public-analytics.js' not in text:
+        fail('assets/chrome.js is missing public analytics bootstrap')
+
 def check_admin_shell_pages():
     for rel in ['admin-progress.html','admin-live.html','admin-recovery.html','admin-blocks.html','admin-staff.html','admin-promos.html','admin-jobsite.html']:
         text = (ROOT / rel).read_text()
@@ -160,6 +165,7 @@ def main():
     check_addon_coverage()
     check_temp_artifacts()
     check_route_collisions()
+    check_public_analytics_hook()
     check_admin_shell_pages()
     print('PASS: static stress checks completed')
 

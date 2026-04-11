@@ -882,3 +882,38 @@ input.search-input:-webkit-autofill:focus {
     flex: 1 1 100%;
   }
 }
+
+
+/* Booking flow polish */
+.wizard-top .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.wizard-top .row .btn{flex:0 1 auto}
+.service-area-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:12px}
+.booking-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.booking-legend span{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,.04);color:var(--muted);font-size:12px}
+.booking-legend i{display:inline-block;width:12px;height:12px;border-radius:999px;border:1px solid rgba(255,255,255,.12)}
+.booking-legend .open i{background:rgba(34,197,94,.65)}
+.booking-legend .partial i{background:rgba(245,158,11,.75)}
+.booking-legend .closed i{background:rgba(239,68,68,.65)}
+.booking-legend .selected i{background:rgba(77,119,255,.9)}
+.calendar-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:10px}
+.date-pill{min-height:82px;display:grid;gap:6px;align-content:start;transition:transform .15s ease,border-color .15s ease,background .15s ease,opacity .15s ease}
+.date-pill strong,.date-pill span{display:block}
+.date-pill:hover{transform:translateY(-1px)}
+.date-pill.is-open{border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.09)}
+.date-pill.is-partial{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.08)}
+.date-pill.is-closed{border-color:rgba(239,68,68,.22);background:rgba(239,68,68,.07);opacity:.72}
+.date-pill.is-selected{border-color:rgba(77,119,255,.62);background:rgba(77,119,255,.16);box-shadow:0 0 0 1px rgba(77,119,255,.22) inset}
+.date-pill[disabled]{cursor:not-allowed}
+input[type="date"]{color-scheme:dark;background:rgba(12,18,30,.96);color:#f8fafc;border-color:rgba(120,168,255,.3)}
+input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1) saturate(0) brightness(1.4);opacity:.95;cursor:pointer}
+input[list]{background:rgba(10,15,26,.92)}
+input[list]:invalid{border-color:rgba(245,158,11,.5);box-shadow:0 0 0 1px rgba(245,158,11,.18) inset}
+.service-area-note{min-height:64px}
+@media (max-width:980px){
+  .service-area-grid{grid-template-columns:1fr}
+  .wizard-top .row .btn{flex:1 1 180px}
+}
+@media (max-width:640px){
+  .wizard-nav{grid-template-columns:1fr}
+  .calendar-strip{grid-template-columns:1fr 1fr}
+}

@@ -1,1 +1,615 @@
-{"charts":[{"filename":"CarPrice2025.PNG","title":"Vehicle Price Chart 2025","r2_url":"https://assets.rosiedazzlers.ca/brand/CarPrice2025.PNG"},{"filename":"CarPriceDetails2025.PNG","title":"Package Service Details Chart","r2_url":"https://assets.rosiedazzlers.ca/brand/CarPriceDetails2025.PNG"},{"filename":"CarSizeChart.PNG","title":"Vehicle Size Chart","r2_url":"https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG"}],"packages":[{"code":"premium_wash","name":"Premium Wash","subtitle":"Quick exterior clean","prices_cad":{"small":85,"mid":105,"oversize":125},"deposit_cad":50,"images_by_size":{"small":"https://assets.rosiedazzlers.ca/packages/PremiumExternalWash.png","mid":"https://assets.rosiedazzlers.ca/packages/PremiumExternalWashMidSize.png","oversize":"https://assets.rosiedazzlers.ca/packages/PremiumExternalWashLargeSizeExotic.png"},"included_services":[{"name":"Hand Wash & Dry"},{"name":"Clean Dash & Centre Console"},{"name":"Clean Windows (In/Out)"},{"name":"Door Jambs"},{"name":"Wash Tires & Wheel Wells"}],"notes":["Quick exterior-focused clean","Main image changes with vehicle size"]},{"code":"basic_detail","name":"Basic Detail","subtitle":"Quick interior clean","prices_cad":{"small":115,"mid":135,"oversize":170},"deposit_cad":50,"images_by_size":{"small":"https://assets.rosiedazzlers.ca/packages/BasicInteriorDetailSmallSize.png","mid":"https://assets.rosiedazzlers.ca/packages/BasicInteriorDetailMidSize.png","oversize":"https://assets.rosiedazzlers.ca/packages/BasicInteriorDetailExotics.png"},"included_services":[{"name":"Full Vacuum (Seats, Carpets, Mats, Trunk)"},{"name":"Clean Dash & Centre Console"},{"name":"Clean Windows (In/Out)"},{"name":"Clean Leather / Vinyl Seats","optional_condition_note":"Where equipped"},{"name":"Door Jambs"},{"name":"Wash Tires & Wheel Wells"}],"notes":["Quick interior-focused package","Main image changes with vehicle size"]},{"code":"complete_detail","name":"Complete Detail","subtitle":"Our #1 choice","prices_cad":{"small":319,"mid":369,"oversize":419},"deposit_cad":100,"images_by_size":{"small":"https://assets.rosiedazzlers.ca/packages/CompleteDetailSmallCars.png","mid":"https://assets.rosiedazzlers.ca/packages/CompleteDetailMidSizelCars.png","oversize":"https://assets.rosiedazzlers.ca/packages/CompleteDetailOverSizeExoticCars.png"},"included_services":[{"name":"Hand Wash & Dry"},{"name":"Full Vacuum (Seats, Carpets, Mats, Trunk)"},{"name":"Clean Dash & Centre Console"},{"name":"Clean Windows (In/Out)"},{"name":"Door Jambs"},{"name":"Wash Tires & Wheel Wells"},{"name":"Clean Leather / Vinyl Seats","optional_condition_note":"Where equipped"},{"name":"Shampoo Carpets & Mats"},{"name":"Shampoo Cloth Seats","optional_condition_note":"Where equipped"}],"notes":["Best all-around package","Main image changes with vehicle size"]},{"code":"interior_detail","name":"Interior Detail","subtitle":"Full interior detailing","prices_cad":{"small":195,"mid":220,"oversize":245},"deposit_cad":100,"images_by_size":{"small":"https://assets.rosiedazzlers.ca/packages/FullInteriorDetailSmallCars.png","mid":"https://assets.rosiedazzlers.ca/packages/FullInteriorDetailMidSuvCars.png","oversize":"https://assets.rosiedazzlers.ca/packages/FullInteriorDetailLargeExoticCars.png"},"included_services":[{"name":"Full Vacuum (Seats, Carpets, Mats, Trunk)"},{"name":"Clean Dash & Centre Console"},{"name":"Clean Windows (In/Out)"},{"name":"Clean Leather / Vinyl Seats","optional_condition_note":"Where equipped"},{"name":"Shampoo Carpets & Mats"},{"name":"Shampoo Cloth Seats","optional_condition_note":"Where equipped"}],"notes":["Interior-only full detailing package","Main image changes with vehicle size"]},{"code":"exterior_detail","name":"Exterior Detail","subtitle":"Full exterior detailing","prices_cad":{"small":195,"mid":220,"oversize":245},"deposit_cad":100,"images_by_size":{"small":"https://assets.rosiedazzlers.ca/packages/FullExteriorDetailSmallSizeCars.png","mid":"https://assets.rosiedazzlers.ca/packages/FullExteriorDetailMidSizeCars.png","oversize":"https://assets.rosiedazzlers.ca/packages/FullExteriorDetailLargeExoticCars.png"},"included_services":[{"name":"Hand Wash & Dry"},{"name":"Clean Windows (In/Out)"},{"name":"Door Jambs"},{"name":"Wash Tires & Wheel Wells"}],"notes":["Exterior-only full detailing package","Main image changes with vehicle size"]}],"service_matrix":[{"service":"Hand Wash & Dry","included_in":{"premium_wash":true,"basic_detail":false,"complete_detail":true,"interior_detail":false,"exterior_detail":true}},{"service":"Full Vacuum (Seats, Carpets, Mats, Trunk)","included_in":{"premium_wash":false,"basic_detail":true,"complete_detail":true,"interior_detail":true,"exterior_detail":false}},{"service":"Clean Dash & Centre Console","included_in":{"premium_wash":true,"basic_detail":true,"complete_detail":true,"interior_detail":true,"exterior_detail":false}},{"service":"Clean Windows (In/Out)","included_in":{"premium_wash":true,"basic_detail":true,"complete_detail":true,"interior_detail":true,"exterior_detail":true}},{"service":"Door Jambs","included_in":{"premium_wash":true,"basic_detail":true,"complete_detail":true,"interior_detail":false,"exterior_detail":true}},{"service":"Wash Tires & Wheel Wells","included_in":{"premium_wash":true,"basic_detail":true,"complete_detail":true,"interior_detail":false,"exterior_detail":true}},{"service":"Clean Leather / Vinyl Seats","conditional_note":"Where equipped","included_in":{"premium_wash":false,"basic_detail":true,"complete_detail":true,"interior_detail":true,"exterior_detail":false}},{"service":"Shampoo Carpets & Mats","included_in":{"premium_wash":false,"basic_detail":false,"complete_detail":true,"interior_detail":true,"exterior_detail":false}},{"service":"Shampoo Cloth Seats","conditional_note":"Where equipped","included_in":{"premium_wash":false,"basic_detail":false,"complete_detail":true,"interior_detail":true,"exterior_detail":false}}],"addons":[{"code":"full_clay_treatment","name":"Full Clay Treatment","prices_cad":{"small":79,"mid":99,"oversize":129},"quote_required":false,"source":"interpreted_pricing","notes":["Add-on service not included in any package"],"category":"paint correction","type":"surface prep","image_url":"https://assets.rosiedazzlers.ca/packages/full_clay_treatment.png","image_fallback_url":"/assets/addons/full_clay_treatment.png"},{"code":"two_stage_polish","name":"Two Stage Polish","prices_cad":{"small":199,"mid":279,"oversize":359},"quote_required":true,"source":"interpreted_pricing","notes":["Quote required because paint condition varies"],"category":"paint correction","type":"machine polishing","image_url":"https://assets.rosiedazzlers.ca/packages/two_stage_polish.png","image_fallback_url":"/assets/addons/two_stage_polish.png"},{"code":"high_grade_paint_sealant","name":"High Grade Paint Sealant","prices_cad":{"small":59,"mid":79,"oversize":99},"quote_required":false,"source":"interpreted_pricing","category":"paint protection","type":"sealant","image_url":"https://assets.rosiedazzlers.ca/packages/high_grade_paint_sealant.png","notes":["Longer-lasting gloss"],"image_fallback_url":"/assets/addons/high_grade_paint_sealant.png"},{"code":"uv_protectant_applied_on_interior_panels","name":"UV Protectant Applied on Interior Panels","prices_cad":{"small":25,"mid":35,"oversize":45},"quote_required":false,"source":"interpreted_pricing","category":"interior protection","type":"uv protectant","image_url":"https://assets.rosiedazzlers.ca/packages/uv_protectant_applied_on_interior_panels.png","notes":["Interior panel dressing"],"image_fallback_url":"/assets/addons/uv_protectant_applied_on_interior_panels.png"},{"code":"de_ionizing_treatment","name":"De-Ionizing Treatment","prices_cad":{"small":59,"mid":79,"oversize":99},"quote_required":true,"source":"package_asset","image_url":"https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png","category":"odor treatment","type":"de-ionizing","image_fallback_url":"/assets/addons/de_ionizing_treatment.svg"},{"code":"de_badging","name":"De-Badging","quote_required":true,"source":"package_asset","image_url":"https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png","category":"appearance modifications","type":"badge removal","image_fallback_url":"/assets/addons/de_badging.svg"},{"code":"engine_cleaning","name":"Engine Cleaning","price_cad":59,"quote_required":false,"source":"package_asset","image_url":"https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png","category":"engine bay","type":"cleaning","image_fallback_url":"/assets/addons/engine_cleaning.svg"},{"code":"external_ceramic_coating","name":"External Ceramic Coating","price_cad":299,"quote_required":true,"source":"package_asset","notes":["Starting price only"],"image_url":"https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png","category":"paint protection","type":"ceramic coating","image_fallback_url":"/assets/addons/external_ceramic_coating.svg"},{"code":"external_graphene_fine_finish","name":"External Graphene Fine Finish","price_cad":249,"quote_required":true,"source":"package_asset","notes":["Starting price only"],"image_url":"https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png","category":"paint protection","type":"graphene finish","image_fallback_url":"/assets/addons/external_graphene_fine_finish.svg"},{"code":"external_wax","name":"External Wax","prices_cad":{"small":49,"mid":59,"oversize":69},"quote_required":false,"source":"package_asset","image_url":"https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png","category":"paint protection","type":"wax","image_fallback_url":"/assets/addons/external_wax.svg"},{"code":"vinyl_wrapping","name":"Vinyl Wrapping","quote_required":true,"source":"package_asset","image_url":"https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png","category":"appearance modifications","type":"vinyl wrapping","image_fallback_url":"/assets/addons/vinyl_wrapping.svg"},{"code":"window_tinting","name":"Window Tinting","quote_required":true,"source":"package_asset","image_url":"https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png","category":"glass services","type":"window tinting","image_fallback_url":"/assets/addons/window_tinting.svg"}]}
+{
+  "charts": [
+    {
+      "filename": "CarPrice2025.PNG",
+      "title": "Vehicle Price Chart 2025",
+      "r2_url": "https://assets.rosiedazzlers.ca/brand/CarPrice2025.PNG"
+    },
+    {
+      "filename": "CarPriceDetails2025.PNG",
+      "title": "Package Service Details Chart",
+      "r2_url": "https://assets.rosiedazzlers.ca/brand/CarPriceDetails2025.PNG"
+    },
+    {
+      "filename": "CarSizeChart.PNG",
+      "title": "Vehicle Size Chart",
+      "r2_url": "https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG"
+    }
+  ],
+  "packages": [
+    {
+      "code": "premium_wash",
+      "name": "Premium Wash",
+      "subtitle": "Quick exterior clean",
+      "prices_cad": {
+        "small": 85,
+        "mid": 105,
+        "oversize": 125
+      },
+      "deposit_cad": 50,
+      "images_by_size": {
+        "small": "https://assets.rosiedazzlers.ca/packages/PremiumExternalWash.png",
+        "mid": "https://assets.rosiedazzlers.ca/packages/PremiumExternalWashMidSize.png",
+        "oversize": "https://assets.rosiedazzlers.ca/packages/PremiumExternalWashLargeSizeExotic.png"
+      },
+      "included_services": [
+        {
+          "name": "Hand Wash & Dry"
+        },
+        {
+          "name": "Clean Dash & Centre Console"
+        },
+        {
+          "name": "Clean Windows (In/Out)"
+        },
+        {
+          "name": "Door Jambs"
+        },
+        {
+          "name": "Wash Tires & Wheel Wells"
+        }
+      ],
+      "notes": [
+        "Quick exterior-focused clean",
+        "Main image changes with vehicle size"
+      ]
+    },
+    {
+      "code": "basic_detail",
+      "name": "Basic Detail",
+      "subtitle": "Quick interior clean",
+      "prices_cad": {
+        "small": 115,
+        "mid": 135,
+        "oversize": 170
+      },
+      "deposit_cad": 50,
+      "images_by_size": {
+        "small": "https://assets.rosiedazzlers.ca/packages/BasicInteriorDetailSmallSize.png",
+        "mid": "https://assets.rosiedazzlers.ca/packages/BasicInteriorDetailMidSize.png",
+        "oversize": "https://assets.rosiedazzlers.ca/packages/BasicInteriorDetailExotics.png"
+      },
+      "included_services": [
+        {
+          "name": "Full Vacuum (Seats, Carpets, Mats, Trunk)"
+        },
+        {
+          "name": "Clean Dash & Centre Console"
+        },
+        {
+          "name": "Clean Windows (In/Out)"
+        },
+        {
+          "name": "Clean Leather / Vinyl Seats",
+          "optional_condition_note": "Where equipped"
+        },
+        {
+          "name": "Door Jambs"
+        },
+        {
+          "name": "Wash Tires & Wheel Wells"
+        }
+      ],
+      "notes": [
+        "Quick interior-focused package",
+        "Main image changes with vehicle size"
+      ]
+    },
+    {
+      "code": "complete_detail",
+      "name": "Complete Detail",
+      "subtitle": "Our #1 choice",
+      "prices_cad": {
+        "small": 319,
+        "mid": 369,
+        "oversize": 419
+      },
+      "deposit_cad": 100,
+      "images_by_size": {
+        "small": "https://assets.rosiedazzlers.ca/packages/CompleteDetailSmallCars.png",
+        "mid": "https://assets.rosiedazzlers.ca/packages/CompleteDetailMidSizelCars.png",
+        "oversize": "https://assets.rosiedazzlers.ca/packages/CompleteDetailOverSizeExoticCars.png"
+      },
+      "included_services": [
+        {
+          "name": "Hand Wash & Dry"
+        },
+        {
+          "name": "Full Vacuum (Seats, Carpets, Mats, Trunk)"
+        },
+        {
+          "name": "Clean Dash & Centre Console"
+        },
+        {
+          "name": "Clean Windows (In/Out)"
+        },
+        {
+          "name": "Door Jambs"
+        },
+        {
+          "name": "Wash Tires & Wheel Wells"
+        },
+        {
+          "name": "Clean Leather / Vinyl Seats",
+          "optional_condition_note": "Where equipped"
+        },
+        {
+          "name": "Shampoo Carpets & Mats"
+        },
+        {
+          "name": "Shampoo Cloth Seats",
+          "optional_condition_note": "Where equipped"
+        }
+      ],
+      "notes": [
+        "Best all-around package",
+        "Main image changes with vehicle size"
+      ]
+    },
+    {
+      "code": "interior_detail",
+      "name": "Interior Detail",
+      "subtitle": "Full interior detailing",
+      "prices_cad": {
+        "small": 195,
+        "mid": 220,
+        "oversize": 245
+      },
+      "deposit_cad": 100,
+      "images_by_size": {
+        "small": "https://assets.rosiedazzlers.ca/packages/FullInteriorDetailSmallCars.png",
+        "mid": "https://assets.rosiedazzlers.ca/packages/FullInteriorDetailMidSuvCars.png",
+        "oversize": "https://assets.rosiedazzlers.ca/packages/FullInteriorDetailLargeExoticCars.png"
+      },
+      "included_services": [
+        {
+          "name": "Full Vacuum (Seats, Carpets, Mats, Trunk)"
+        },
+        {
+          "name": "Clean Dash & Centre Console"
+        },
+        {
+          "name": "Clean Windows (In/Out)"
+        },
+        {
+          "name": "Clean Leather / Vinyl Seats",
+          "optional_condition_note": "Where equipped"
+        },
+        {
+          "name": "Shampoo Carpets & Mats"
+        },
+        {
+          "name": "Shampoo Cloth Seats",
+          "optional_condition_note": "Where equipped"
+        }
+      ],
+      "notes": [
+        "Interior-only full detailing package",
+        "Main image changes with vehicle size"
+      ]
+    },
+    {
+      "code": "exterior_detail",
+      "name": "Exterior Detail",
+      "subtitle": "Full exterior detailing",
+      "prices_cad": {
+        "small": 195,
+        "mid": 220,
+        "oversize": 245
+      },
+      "deposit_cad": 100,
+      "images_by_size": {
+        "small": "https://assets.rosiedazzlers.ca/packages/FullExteriorDetailSmallSizeCars.png",
+        "mid": "https://assets.rosiedazzlers.ca/packages/FullExteriorDetailMidSizeCars.png",
+        "oversize": "https://assets.rosiedazzlers.ca/packages/FullExteriorDetailLargeExoticCars.png"
+      },
+      "included_services": [
+        {
+          "name": "Hand Wash & Dry"
+        },
+        {
+          "name": "Clean Windows (In/Out)"
+        },
+        {
+          "name": "Door Jambs"
+        },
+        {
+          "name": "Wash Tires & Wheel Wells"
+        }
+      ],
+      "notes": [
+        "Exterior-only full detailing package",
+        "Main image changes with vehicle size"
+      ]
+    }
+  ],
+  "service_matrix": [
+    {
+      "service": "Hand Wash & Dry",
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "Full Vacuum (Seats, Carpets, Mats, Trunk)",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "Clean Dash & Centre Console",
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "Clean Windows (In/Out)",
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "Door Jambs",
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "Wash Tires & Wheel Wells",
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "Clean Leather / Vinyl Seats",
+      "conditional_note": "Where equipped",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "Shampoo Carpets & Mats",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "Shampoo Cloth Seats",
+      "conditional_note": "Where equipped",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    }
+  ],
+  "addons": [
+    {
+      "code": "full_clay_treatment",
+      "name": "Full Clay Treatment",
+      "prices_cad": {
+        "small": 79,
+        "mid": 99,
+        "oversize": 129
+      },
+      "quote_required": false,
+      "source": "interpreted_pricing",
+      "notes": [
+        "Add-on service not included in any package"
+      ],
+      "category": "paint correction",
+      "type": "surface prep",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/full_clay_treatment.png",
+      "image_fallback_url": "/assets/addons/full_clay_treatment.png"
+    },
+    {
+      "code": "two_stage_polish",
+      "name": "Two Stage Polish",
+      "prices_cad": {
+        "small": 199,
+        "mid": 279,
+        "oversize": 359
+      },
+      "quote_required": true,
+      "source": "interpreted_pricing",
+      "notes": [
+        "Quote required because paint condition varies"
+      ],
+      "category": "paint correction",
+      "type": "machine polishing",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/two_stage_polish.png",
+      "image_fallback_url": "/assets/addons/two_stage_polish.png"
+    },
+    {
+      "code": "high_grade_paint_sealant",
+      "name": "High Grade Paint Sealant",
+      "prices_cad": {
+        "small": 59,
+        "mid": 79,
+        "oversize": 99
+      },
+      "quote_required": false,
+      "source": "interpreted_pricing",
+      "category": "paint protection",
+      "type": "sealant",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/high_grade_paint_sealant.png",
+      "notes": [
+        "Longer-lasting gloss"
+      ],
+      "image_fallback_url": "/assets/addons/high_grade_paint_sealant.png"
+    },
+    {
+      "code": "uv_protectant_applied_on_interior_panels",
+      "name": "UV Protectant Applied on Interior Panels",
+      "prices_cad": {
+        "small": 25,
+        "mid": 35,
+        "oversize": 45
+      },
+      "quote_required": false,
+      "source": "interpreted_pricing",
+      "category": "interior protection",
+      "type": "uv protectant",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/uv_protectant_applied_on_interior_panels.png",
+      "notes": [
+        "Interior panel dressing"
+      ],
+      "image_fallback_url": "/assets/addons/uv_protectant_applied_on_interior_panels.png"
+    },
+    {
+      "code": "de_ionizing_treatment",
+      "name": "De-Ionizing Treatment",
+      "prices_cad": {
+        "small": 59,
+        "mid": 79,
+        "oversize": 99
+      },
+      "quote_required": true,
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png",
+      "category": "odor treatment",
+      "type": "de-ionizing",
+      "image_fallback_url": "/assets/addons/de_ionizing_treatment.svg"
+    },
+    {
+      "code": "de_badging",
+      "name": "De-Badging",
+      "quote_required": true,
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
+      "category": "appearance modifications",
+      "type": "badge removal",
+      "image_fallback_url": "/assets/addons/de_badging.svg"
+    },
+    {
+      "code": "engine_cleaning",
+      "name": "Engine Cleaning",
+      "price_cad": 59,
+      "quote_required": false,
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
+      "category": "engine bay",
+      "type": "cleaning",
+      "image_fallback_url": "/assets/addons/engine_cleaning.svg"
+    },
+    {
+      "code": "external_ceramic_coating",
+      "name": "External Ceramic Coating",
+      "price_cad": 299,
+      "quote_required": true,
+      "source": "package_asset",
+      "notes": [
+        "Starting price only"
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
+      "category": "paint protection",
+      "type": "ceramic coating",
+      "image_fallback_url": "/assets/addons/external_ceramic_coating.svg"
+    },
+    {
+      "code": "external_graphene_fine_finish",
+      "name": "External Graphene Fine Finish",
+      "price_cad": 249,
+      "quote_required": true,
+      "source": "package_asset",
+      "notes": [
+        "Starting price only"
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png",
+      "category": "paint protection",
+      "type": "graphene finish",
+      "image_fallback_url": "/assets/addons/external_graphene_fine_finish.svg"
+    },
+    {
+      "code": "external_wax",
+      "name": "External Wax",
+      "prices_cad": {
+        "small": 49,
+        "mid": 59,
+        "oversize": 69
+      },
+      "quote_required": false,
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png",
+      "category": "paint protection",
+      "type": "wax",
+      "image_fallback_url": "/assets/addons/external_wax.svg"
+    },
+    {
+      "code": "vinyl_wrapping",
+      "name": "Vinyl Wrapping",
+      "quote_required": true,
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
+      "category": "appearance modifications",
+      "type": "vinyl wrapping",
+      "image_fallback_url": "/assets/addons/vinyl_wrapping.svg"
+    },
+    {
+      "code": "window_tinting",
+      "name": "Window Tinting",
+      "quote_required": true,
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png",
+      "category": "glass services",
+      "type": "window tinting",
+      "image_fallback_url": "/assets/addons/window_tinting.svg"
+    }
+  ],
+  "service_areas": [
+    {
+      "county": "Oxford County",
+      "value": "Woodstock, Oxford County",
+      "label": "Woodstock \u2014 Oxford County",
+      "bylaw_note": "City driveway, parking, and runoff rules can vary by street and season. Please confirm private-property access and any local restrictions."
+    },
+    {
+      "county": "Oxford County",
+      "value": "Tillsonburg, Oxford County",
+      "label": "Tillsonburg \u2014 Oxford County",
+      "bylaw_note": "Town driveway, parking, and runoff rules can vary by street and season. Please confirm private-property access and any local restrictions."
+    },
+    {
+      "county": "Oxford County",
+      "value": "Ingersoll, Oxford County",
+      "label": "Ingersoll \u2014 Oxford County",
+      "bylaw_note": "Town driveway, parking, and runoff rules can vary by street and season. Please confirm private-property access and any local restrictions."
+    },
+    {
+      "county": "Oxford County",
+      "value": "Norwich / Otterville, Oxford County",
+      "label": "Norwich / Otterville \u2014 Oxford County",
+      "bylaw_note": "Township access, parking, and water-use expectations can differ between hamlets and rural properties."
+    },
+    {
+      "county": "Oxford County",
+      "value": "Thamesford / Embro / Innerkip, Oxford County",
+      "label": "Thamesford / Embro / Innerkip \u2014 Oxford County",
+      "bylaw_note": "Township access, parking, and water-use expectations can differ between hamlets and rural properties."
+    },
+    {
+      "county": "Oxford County",
+      "value": "Tavistock / Hickson, Oxford County",
+      "label": "Tavistock / Hickson \u2014 Oxford County",
+      "bylaw_note": "Township access, parking, and water-use expectations can differ between hamlets and rural properties."
+    },
+    {
+      "county": "Oxford County",
+      "value": "Beachville / South-West Oxford, Oxford County",
+      "label": "Beachville / South-West Oxford \u2014 Oxford County",
+      "bylaw_note": "Township access, parking, and water-use expectations can differ between hamlets and rural properties."
+    },
+    {
+      "county": "Oxford County",
+      "value": "Plattsville / Blandford-Blenheim, Oxford County",
+      "label": "Plattsville / Blandford-Blenheim \u2014 Oxford County",
+      "bylaw_note": "Township access, parking, and water-use expectations can differ between hamlets and rural properties."
+    },
+    {
+      "county": "Oxford County",
+      "value": "Rural Oxford County",
+      "label": "Rural Oxford County",
+      "bylaw_note": "Rural driveways may need extra access notes for gravel lanes, water source, outlet power, and turnaround space."
+    },
+    {
+      "county": "Norfolk County",
+      "value": "Simcoe, Norfolk County",
+      "label": "Simcoe \u2014 Norfolk County",
+      "bylaw_note": "Town driveway, parking, and runoff rules can vary by street and season. Please confirm private-property access and any local restrictions."
+    },
+    {
+      "county": "Norfolk County",
+      "value": "Delhi, Norfolk County",
+      "label": "Delhi \u2014 Norfolk County",
+      "bylaw_note": "Town driveway, parking, and runoff rules can vary by street and season. Please confirm private-property access and any local restrictions."
+    },
+    {
+      "county": "Norfolk County",
+      "value": "Port Dover, Norfolk County",
+      "label": "Port Dover \u2014 Norfolk County",
+      "bylaw_note": "Lakefront and downtown parking rules can be stricter during peak seasons. Please confirm driveway access details."
+    },
+    {
+      "county": "Norfolk County",
+      "value": "Waterford, Norfolk County",
+      "label": "Waterford \u2014 Norfolk County",
+      "bylaw_note": "Town driveway, parking, and runoff rules can vary by street and season. Please confirm private-property access and any local restrictions."
+    },
+    {
+      "county": "Norfolk County",
+      "value": "Port Rowan, Norfolk County",
+      "label": "Port Rowan \u2014 Norfolk County",
+      "bylaw_note": "Parking, access, and seasonal traffic rules can vary near waterfront and tourism areas."
+    },
+    {
+      "county": "Norfolk County",
+      "value": "Langton, Norfolk County",
+      "label": "Langton \u2014 Norfolk County",
+      "bylaw_note": "Town driveway, parking, and runoff rules can vary by street and season. Please confirm private-property access and any local restrictions."
+    },
+    {
+      "county": "Norfolk County",
+      "value": "Courtland, Norfolk County",
+      "label": "Courtland \u2014 Norfolk County",
+      "bylaw_note": "Hamlet and rural-property access may need extra notes for driveway width, water, and outlet access."
+    },
+    {
+      "county": "Norfolk County",
+      "value": "Vittoria / St. Williams, Norfolk County",
+      "label": "Vittoria / St. Williams \u2014 Norfolk County",
+      "bylaw_note": "Hamlet and rural-property access may need extra notes for driveway width, water, and outlet access."
+    },
+    {
+      "county": "Norfolk County",
+      "value": "Turkey Point / Long Point, Norfolk County",
+      "label": "Turkey Point / Long Point \u2014 Norfolk County",
+      "bylaw_note": "Seasonal beach-area traffic and parking controls can affect arrival windows and setup space."
+    },
+    {
+      "county": "Norfolk County",
+      "value": "Walsh / Walsingham, Norfolk County",
+      "label": "Walsh / Walsingham \u2014 Norfolk County",
+      "bylaw_note": "Hamlet and rural-property access may need extra notes for driveway width, water, and outlet access."
+    },
+    {
+      "county": "Norfolk County",
+      "value": "Rural Norfolk County",
+      "label": "Rural Norfolk County",
+      "bylaw_note": "Rural driveways may need extra access notes for gravel lanes, water source, outlet power, and turnaround space."
+    }
+  ]
+}
