@@ -8,11 +8,11 @@ export async function onRequestPost(context) {
     const status = body.status == null ? null : String(body.status).trim();
     const jobStatus = body.job_status == null ? null : String(body.job_status).trim();
 
-    const access = await requireStaffAccess({ request, env, body, capability: "manage_bookings", allowLegacyAdminFallback: false });
+    const access = await requireStaffAccess({ request, env, body, capability: "manage_bookings", allowLegacyAdminFallback: true });
     if (!access.ok) return access.response;
 
     if (!bookingId) {
-      const listUrl = `${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,customer_name,customer_email,service_date,start_slot,package_code,vehicle_size,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,progress_enabled,progress_token,created_at&order=service_date.asc,created_at.desc`;
+      const listUrl = `${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,customer_name,customer_email,service_date,start_slot,duration_slots,package_code,vehicle_size,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,progress_enabled,progress_token,created_at&order=service_date.asc,created_at.desc`;
       const listRes = await fetch(listUrl, { headers: serviceHeaders(env) });
       if (!listRes.ok) return json({ error: `Could not load bookings. ${await listRes.text()}` }, 500);
       const bookings = await listRes.json().catch(() => []);
