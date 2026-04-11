@@ -10,7 +10,7 @@ export async function onRequestPost(context){
     const moderation_reason = String(body.moderation_reason || '').trim() || null;
     if (!annotation_id || !isUuid(annotation_id)) return withCors(json({ error:'Valid annotation_id is required.' },400));
     if (!['visible','hidden','removed'].includes(thread_status)) return withCors(json({ error:'thread_status must be visible, hidden, or removed.' },400));
-    const access = await requireStaffAccess({ request, env, body, capability:'manage_progress', allowLegacyAdminFallback:true });
+    const access = await requireStaffAccess({ request, env, body, capability:'manage_progress', allowLegacyAdminFallback:false });
     if (!access.ok) return withCors(access.response);
     const payload = { thread_status, moderated_at:new Date().toISOString(), moderated_by_staff_user_id: access.actor?.staff_user_id || access.actor?.id || null, moderated_by_name: access.actor?.full_name || access.actor?.email || 'Staff', moderation_reason };
     const res = await fetch(`${env.SUPABASE_URL}/rest/v1/observation_annotations?id=eq.${encodeURIComponent(annotation_id)}`, { method:'PATCH', headers:{ ...serviceHeaders(env), Prefer:'return=representation' }, body: JSON.stringify(payload) });
