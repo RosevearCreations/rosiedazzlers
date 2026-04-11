@@ -9,7 +9,7 @@ export async function onRequestPost(context) {
     const booking_id = String(body.booking_id || "").trim();
     if (!booking_id) return withCors(json({ error: "Missing booking_id." }, 400));
     if (!isUuid(booking_id)) return withCors(json({ error: "Invalid booking_id." }, 400));
-    const access = await requireStaffAccess({ request, env, body, capability: "work_booking", bookingId: booking_id, allowLegacyAdminFallback: false });
+    const access = await requireStaffAccess({ request, env, body, capability: "work_booking", bookingId: booking_id, allowLegacyAdminFallback: true });
     if (!access.ok) return withCors(access.response);
     const headers = serviceHeaders(env);
     const settings = await loadAppSettings(env, ['feature_flags','visibility_matrix']);
