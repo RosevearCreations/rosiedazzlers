@@ -17,6 +17,7 @@ CHECK_JS = [
     'assets/admin-page-init.js',
     'assets/admin-menu.js',
     'assets/admin-runtime.js',
+    'functions/api/_lib/crew-assignments.js',
     'assets/site.js',
     'functions/api/admin/recovery_templates.js',
     'functions/api/admin/recovery_preview.js',
@@ -95,6 +96,14 @@ def check_addon_coverage():
 
 
 
+def check_temp_artifacts():
+    leftovers = []
+    for pattern in ('__check_*', '__tmp_*', '__stress_inline_*'):
+        leftovers.extend(sorted(path.relative_to(ROOT).as_posix() for path in ROOT.glob(pattern)))
+    if leftovers:
+        fail('temporary check artifacts present: ' + ', '.join(leftovers))
+
+
 def check_route_collisions():
     collisions = []
     for html_path in ROOT.rglob("*.html"):
@@ -145,6 +154,7 @@ def main():
     check_inline_scripts()
     check_public_h1()
     check_addon_coverage()
+    check_temp_artifacts()
     check_route_collisions()
     check_admin_shell_pages()
     print('PASS: static stress checks completed')
