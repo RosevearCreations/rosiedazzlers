@@ -1,13 +1,13 @@
-// functions/api/admin/signoff_list.js
+// functions/api/admin/time_list.js
 //
-// Role-aware job signoff list/read endpoint.
+// Role-aware job time list/read endpoint.
 //
 // What this file does:
 // - keeps current ADMIN_PASSWORD bridge protection
 // - requires staff identity/capability through staff_users
-// - allows admin / booking managers to read signoff for any booking
-// - allows assigned detailers / senior detailers to read signoff only for bookings they can work
-// - returns booking summary plus the current job signoff row
+// - allows admin / booking managers to read time for any booking
+// - allows assigned detailers / senior detailers to read time only for bookings they can work
+// - returns booking summary, time entries, and totals
 //
 // Supported request body:
 // {
@@ -64,7 +64,7 @@ export async function onRequestPost(context) {
 
     const headers = serviceHeaders(env);
 
-    const [bookingRes, signoffRes] = await Promise.all([
+    const [bookingRes, timeRes] = await Promise.all([
       fetch(
         `${env.SUPABASE_URL}/rest/v1/bookings` +
           `?select=id,service_date,start_slot,status,job_status,customer_name,customer_email,customer_phone,package_code,vehicle_size,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name` +
@@ -73,10 +73,10 @@ export async function onRequestPost(context) {
         { headers }
       ),
       fetch(
-        `${env.SUPABASE_URL}/rest/v1/job_signoffs` +
-          `?select=id,booking_id,customer_name,signature_data_url,approval_notes,signed_at,updated_by_staff_user_id,updated_by_staff_name,created_at,updated_at` +
+        `${env.SUPABASE_URL}/rest/v1/job_time_entries` +
+          `?select=id,booking_id,minutes,note,entry_type,staff_user_id,staff_name,created_at` +
           `&booking_id=eq.${encodeURIComponent(booking_id)}` +
-          `&limit=1`,
+          `&order=created_at.desc`,
         { headers }
       )
     ]);
@@ -86,20 +86,22 @@ export async function onRequestPost(context) {
       return withCors(json({ error: `Could not load booking. ${text}` }, 500));
     }
 
-    if (!signoffRes.ok) {
-      const text = await signoffRes.text();
-      return withCors(json({ error: `Could not load signoff. ${text}` }, 500));
+    if (!timeRes.ok) {
+      const text = await timeRes.text();
+      return withCors(json({ error: `Could not load time entries. ${text}` }, 500));
     }
 
     const bookingRows = await bookingRes.json().catch(() => []);
-    const signoffRows = await signoffRes.json().catch(() => []);
+    const timeRows = await timeRes.json().catch(() => []);
 
     const booking = Array.isArray(bookingRows) ? bookingRows[0] || null : null;
-    const signoff = Array.isArray(signoffRows) ? signoffRows[0] || null : null;
+    const entries = Array.isArray(timeRows) ? timeRows : [];
 
     if (!booking) {
       return withCors(json({ error: "Booking not found." }, 404));
     }
+
+    const totals = summarizeTime(entries);
 
     return withCors(
       json({
@@ -120,20 +122,17 @@ export async function onRequestPost(context) {
           assigned_staff_email: booking.assigned_staff_email || null,
           assigned_staff_name: booking.assigned_staff_name || null
         },
-        signoff: signoff
-          ? {
-              id: signoff.id,
-              booking_id: signoff.booking_id,
-              customer_name: signoff.customer_name || null,
-              signature_data_url: signoff.signature_data_url || null,
-              approval_notes: signoff.approval_notes || null,
-              signed_at: signoff.signed_at || null,
-              updated_by_staff_user_id: signoff.updated_by_staff_user_id || null,
-              updated_by_staff_name: signoff.updated_by_staff_name || null,
-              created_at: signoff.created_at || null,
-              updated_at: signoff.updated_at || null
-            }
-          : null
+        totals,
+        time_entries: entries.map((row) => ({
+          id: row.id,
+          booking_id: row.booking_id,
+          minutes: Number(row.minutes || 0),
+          note: row.note || null,
+          entry_type: row.entry_type || null,
+          staff_user_id: row.staff_user_id || null,
+          staff_name: row.staff_name || null,
+          created_at: row.created_at || null
+        }))
       })
     );
   } catch (err) {
@@ -153,6 +152,46 @@ export async function onRequestGet() {
 }
 
 /* ---------------- helpers ---------------- */
+
+function summarizeTime(entries) {
+  const totals = {
+    entry_count: 0,
+    total_minutes: 0,
+    by_type: {},
+    by_staff: {}
+  };
+
+  for (const row of entries) {
+    const minutes = Number(row.minutes || 0);
+    const entryType = String(row.entry_type || "work");
+    const staffName = String(row.staff_name || "Unknown");
+
+    totals.entry_count += 1;
+    totals.total_minutes += minutes;
+
+    if (!totals.by_type[entryType]) {
+      totals.by_type[entryType] = {
+        entry_count: 0,
+        total_minutes: 0
+      };
+    }
+
+    totals.by_type[entryType].entry_count += 1;
+    totals.by_type[entryType].total_minutes += minutes;
+
+    if (!totals.by_staff[staffName]) {
+      totals.by_staff[staffName] = {
+        entry_count: 0,
+        total_minutes: 0
+      };
+    }
+
+    totals.by_staff[staffName].entry_count += 1;
+    totals.by_staff[staffName].total_minutes += minutes;
+  }
+
+  return totals;
+}
 
 function corsHeaders() {
   return {
