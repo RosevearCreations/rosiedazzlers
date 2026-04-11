@@ -28,7 +28,11 @@ export async function onRequestPost(context){
     const uniqueSessions = new Set(data.map(r=>r.session_id).filter(Boolean)).size;
     const topPages = summarizeCounts(pageViews.map(r=>r.page_path || "/"));
     const topCountries = summarizeCounts(data.map(r=>r.country || "Unknown"));
+    const topRegions = summarizeCounts(data.map(r=> r?.payload?.region || 'Unknown'));
+    const topCities = summarizeCounts(data.map(r=> { const city = r?.payload?.city || ''; const region = r?.payload?.region || ''; return city ? `${city}${region ? `, ${region}` : ''}` : 'Unknown'; }));
+    const topDevices = summarizeCounts(data.map(r=>r?.payload?.device_type || 'Unknown'));
     const topReferrers = summarizeCounts(data.map(r=>r.referrer || "Direct"));
+    const topActions = summarizeCounts(data.filter(r=>!['heartbeat','page_focus','page_exit'].includes(r.event_type)).map(r=> r.event_type || 'unknown'));
     const checkoutStates = summarizeCounts(data.map(r=>r.checkout_state || '').filter(Boolean));
     const sessionJourneys = summarizeJourneys(data);
     const abandoned = summarizeAbandoned(data);
@@ -36,6 +40,7 @@ export async function onRequestPost(context){
     const avgEngagementSeconds = heartbeatEvents.length ? Math.round(heartbeatEvents.reduce((sum, r)=>sum + Number(r?.payload?.duration_ms || 0), 0) / heartbeatEvents.length / 1000) : 0;
     const cartSnapshots = summarizeCartSnapshots(data);
     const dailyTraffic = summarizeDailyTraffic(data);
+    const recentActions = summarizeRecentActions(data);
 
     return withCors(json({
       ok:true,
@@ -52,12 +57,17 @@ export async function onRequestPost(context){
       },
       top_pages: topPages,
       top_countries: topCountries,
+      top_regions: topRegions,
+      top_cities: topCities,
+      top_devices: topDevices,
       top_referrers: topReferrers,
+      top_actions: topActions,
       checkout_states: checkoutStates,
       daily_traffic: dailyTraffic,
       session_journeys: sessionJourneys.slice(0,50),
       live_online_sessions: liveOnline.slice(0,50),
       cart_snapshots: cartSnapshots.slice(0,50),
+      recent_actions: recentActions.slice(0,50),
       abandoned_checkouts: abandoned.slice(0,50)
     }));
   }catch(err){
@@ -160,3 +170,23 @@ function summarizeDailyTraffic(rows){
 
 function corsHeaders(){return {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"POST,OPTIONS","Access-Control-Allow-Headers":"Content-Type","Cache-Control":"no-store"};}
 function withCors(response){const h=new Headers(response.headers||{}); for(const [k,v] of Object.entries(corsHeaders())) h.set(k,v); return new Response(response.body,{status:response.status,statusText:response.statusText,headers:h});}
+
+function summarizeRecentActions(rows){
+  return rows
+    .filter(r=>!['heartbeat'].includes(r.event_type))
+    .sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)))
+    .slice(0,100)
+    .map(r=>({
+      created_at:r.created_at || null,
+      event_type:r.event_type || null,
+      page_path:r.page_path || null,
+      city:r?.payload?.city || null,
+      region:r?.payload?.region || null,
+      device_type:r?.payload?.device_type || null,
+      target_text:r?.payload?.target_text || null,
+      href:r?.payload?.href || null,
+      percent:r?.payload?.percent || null,
+      viewport:r?.payload?.viewport || null,
+      session_id:r.session_id || null
+    }));
+}
