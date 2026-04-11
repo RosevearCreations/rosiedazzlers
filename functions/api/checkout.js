@@ -26,7 +26,6 @@ export async function onRequestPost({ request, env }) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(String(body.service_date || ""))) return corsJson({ error: "service_date must be YYYY-MM-DD" }, 400);
     if (!["AM", "PM"].includes(String(body.start_slot || ""))) return corsJson({ error: "start_slot must be AM or PM" }, 400);
     if (![1,2].includes(Number(body.duration_slots))) return corsJson({ error: "duration_slots must be 1 or 2" }, 400);
-    if (!["Norfolk", "Oxford"].includes(String(body.service_area || ""))) return corsJson({ error: "service_area must be Norfolk or Oxford" }, 400);
     if (!["small", "mid", "oversize"].includes(String(body.vehicle_size || ""))) return corsJson({ error: "vehicle_size must be small, mid, or oversize" }, 400);
 
     for (const ack of ["ack_driveway", "ack_power_water", "ack_bylaw", "ack_cancellation"]) {
@@ -44,6 +43,10 @@ export async function onRequestPost({ request, env }) {
     if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return corsJson({ error: "Server not configured (Supabase env vars missing)" }, 500);
 
     const pricing = await loadPricingCatalog(env);
+    const serviceAreaRaw = String(body.service_area || "").trim();
+    const allowedAreas = new Set((Array.isArray(pricing.service_areas) ? pricing.service_areas : []).flatMap((row)=>[row?.value, row?.label]).filter(Boolean).map((v)=>String(v).trim()));
+    if (!serviceAreaRaw) return corsJson({ error: "Missing service_area" }, 400);
+    if (allowedAreas.size && !allowedAreas.has(serviceAreaRaw) && !["Norfolk", "Oxford", "Norfolk County", "Oxford County"].includes(serviceAreaRaw)) return corsJson({ error: "service_area is not a supported service zone" }, 400);
     const pkg = pricing.package_map[String(body.package_code || "")];
     if (!pkg) return corsJson({ error: "Unknown package_code" }, 400);
 
