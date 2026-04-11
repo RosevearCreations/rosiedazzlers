@@ -28,6 +28,10 @@ CHECK_HTML = [
     'admin-live.html',
     'admin-recovery.html',
     'admin-assign.html',
+    'admin-blocks.html',
+    'admin-staff.html',
+    'admin-promos.html',
+    'admin-jobsite.html',
     'detailer-jobs.html',
     'book.html',
     'services.html'
@@ -117,7 +121,7 @@ def check_route_collisions():
         fail("route collisions detected: " + "; ".join(collisions))
 
 def check_admin_shell_pages():
-    for rel in ['admin-progress.html','admin-live.html','admin-recovery.html']:
+    for rel in ['admin-progress.html','admin-live.html','admin-recovery.html','admin-blocks.html','admin-staff.html','admin-promos.html','admin-jobsite.html']:
         text = (ROOT / rel).read_text()
         for needle in ['/assets/admin-auth.js', '/assets/admin-shell.js', '/assets/admin-menu.js', '/assets/admin-page-init.js', 'data-admin-menu-mount']:
             if needle not in text:
