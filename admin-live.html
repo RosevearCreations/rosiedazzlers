@@ -175,13 +175,14 @@
 
     function renderBooking(booking) {
       qs('#liveBookingTitle').textContent = booking?.customer_name || booking?.package_code || 'Booking loaded';
-      qs('#liveBookingMeta').textContent = [booking?.service_date || '—', booking?.start_slot || '—', booking?.package_code || '—', booking?.vehicle_size || '—', booking?.assigned_staff_name || booking?.assigned_to || 'unassigned'].join(' · ');
+      const crewSummary = booking?.crew_summary || booking?.assigned_staff_name || booking?.assigned_to || 'unassigned';
+      qs('#liveBookingMeta').textContent = [booking?.service_date || '—', booking?.start_slot || '—', booking?.package_code || '—', booking?.vehicle_size || '—', crewSummary].join(' · ');
       qs('#bookingBox').innerHTML = `
         <div><strong>Customer:</strong> ${escapeHtml(booking?.customer_name || '—')}</div>
         <div><strong>Email:</strong> ${escapeHtml(booking?.customer_email || '—')}</div>
         <div><strong>Status:</strong> ${escapeHtml(booking?.status || '—')}</div>
         <div><strong>Job Status:</strong> ${escapeHtml(booking?.job_status || '—')}</div>
-        <div><strong>Assigned:</strong> ${escapeHtml(booking?.assigned_staff_name || booking?.assigned_to || '—')}</div>
+        <div><strong>Lead / crew:</strong> ${runtime.formatCrewBadges(booking?.crew_assignments, booking)}</div>
         <div><strong>Progress Enabled:</strong> ${booking?.progress_enabled ? 'Yes' : 'No'}</div>
       `;
     }
@@ -284,7 +285,10 @@
       renderMedia(Array.isArray(progressData.media) ? progressData.media : []);
       renderSignoffs(Array.isArray(progressData.signoffs) ? progressData.signoffs : []);
       qs('#lastRefreshText').textContent = formatDateTime(new Date().toISOString());
-      if (showNotice) setNotice('Live job data refreshed.', 'ok');
+      if (showNotice) {
+        const warning = bookingData.crew_warning || intakeData.crew_warning || progressData.crew_warning || '';
+        setNotice(warning ? `Live job data refreshed. ${warning}` : 'Live job data refreshed.', warning ? 'warn' : 'ok');
+      }
     }
 
     function stopRefreshLoop() {

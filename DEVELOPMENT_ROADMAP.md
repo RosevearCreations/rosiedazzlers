@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -276,3 +278,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 
 
 Route hotfix sync reviewed on 2026-04-11.
+
+## April 11, 2026 route safety + crew summary pass
+- moved forward: removed duplicate clean-route folder outputs again so this build stays aligned with the Pages route hotfix structure
+- moved forward: booking, progress, live monitor, jobsite, and detailer jobs now carry crew summary / lead + crew context more consistently
+- moved forward: admin runtime now handles request timeouts and non-JSON/text error responses more gracefully for internal app screens
+- moved forward: static stress checks now fail when temporary check artifacts or route-collision outputs are present
+- move up next: continue true session-first cleanup on jobsite/time/media screens and then do deployed route-by-route verification after publish

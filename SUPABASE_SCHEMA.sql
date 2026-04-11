@@ -1,3 +1,4 @@
+-- Last synchronized: April 11, 2026. Reviewed during the route-safety carry-forward, crew-summary workflow pass, runtime error-handling hardening pass, and docs/schema sync pass.
 -- 2026-04-11 route hotfix sync: no schema shape change in this pass.
 -- Last synchronized: April 10, 2026. Reviewed during the canonical add-on media restore, crew assignment/senior detailer workflow, app-shell responsiveness pass, and docs/schema synchronization pass.
 -- Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.

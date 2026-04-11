@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -135,3 +137,15 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 
 
 Route hotfix sync reviewed on 2026-04-11.
+
+## April 11, 2026 moved forward
+- route-hotfix-safe build structure carried forward again
+- crew summary now surfaces in more internal workflow screens
+- admin runtime request handling now has timeout + text fallback support
+- static checks now catch temporary debug/check files before packaging
+
+## Move up next after this pass
+1. finish session-first cleanup on the remaining jobsite/time/media edge screens
+2. deploy this pass and run route-by-route smoke checks on Pages immediately after publish
+3. continue crew-aware detail surfaces in any remaining exports/reports that still show only one assigned name
+4. keep route-by-route SEO/title/H1 cleanup going after the deployment is stable

@@ -245,7 +245,8 @@
       if (booking.start_slot) bits.push(booking.start_slot);
       if (booking.status) bits.push(`status: ${booking.status}`);
       if (booking.job_status) bits.push(`job: ${booking.job_status}`);
-      if (booking.assigned_staff_name || booking.assigned_to) bits.push(`assigned: ${booking.assigned_staff_name || booking.assigned_to}`);
+      if (booking.crew_summary) bits.push(booking.crew_summary);
+      else if (booking.assigned_staff_name || booking.assigned_to) bits.push(`assigned: ${booking.assigned_staff_name || booking.assigned_to}`);
       if (booking.progress_enabled === true) bits.push('progress enabled');
       qs('#bookingMeta').textContent = bits.length ? bits.join(' · ') : 'Booking loaded.';
       qs('#enableProgressBtn').disabled = !currentBookingId || progressEnabled;
@@ -339,6 +340,7 @@
       renderSignoffs(data);
       await loadUsageHistory();
       authReady(true);
+      if (data.crew_warning) setNotice(`Progress loaded. ${data.crew_warning}`, 'warn');
     }
 
     async function handleModerationClick(event) {

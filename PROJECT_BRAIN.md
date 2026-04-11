@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -171,3 +173,6 @@ The accounting area is now becoming the office-side operational hub: receivables
 
 
 Route hotfix sync reviewed on 2026-04-11.
+
+## April 11, 2026 project-brain note
+Current focus remains: preserve stable Pages routing while continuing the session-first internal app transition. This pass reduced route-risk again, strengthened crew context across operational screens, and improved internal request/error handling without changing schema shape.

@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -201,3 +203,9 @@
 
 
 Route hotfix sync reviewed on 2026-04-11.
+
+## April 11, 2026 implementation update
+- The build is back to a single-file canonical clean-route structure for `services`, `pricing`, `admin`, `admin-accounting`, and `admin-catalog`.
+- Crew assignment context now propagates through booking/admin APIs more consistently, including bookings list, jobsite detail, progress list, and detailer jobs.
+- Internal runtime helper now surfaces timeout and text-body failures more clearly for session-first screens.
+- Static stress tooling now blocks leftover debug artifacts and duplicate-route outputs before packaging.

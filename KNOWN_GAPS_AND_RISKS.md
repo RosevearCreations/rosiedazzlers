@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -431,3 +433,14 @@ Still important:
 
 
 Route hotfix sync reviewed on 2026-04-11.
+
+## April 11, 2026 pass risk update
+Partially mitigated in this pass:
+- route-collision risk was reduced again by removing duplicate clean-route outputs from the shipped build
+- crew-awareness is better across live/progress/jobsite/detailer views so large-job assignment context is less likely to drift screen to screen
+- internal request handling is safer because timeout and text-response fallbacks now surface clearer errors instead of failing silently
+
+Still remaining:
+- live deployed verification is still required after publish
+- some older internal flows still use manual password entry more visibly than the session-first target state
+- broader actor normalization and deeper profitability/reconciliation work are still open

@@ -346,10 +346,12 @@
 
   <footer class="footer container" data-footer></footer>
 
+  <script src="/assets/admin-runtime.js"></script>
   <script src="/assets/chrome.js"></script>
   <script type="module">
     import { setBrandImages, setFooter } from "/assets/site.js";
 
+    const runtime = window.AdminRuntime;
     let currentBookingId = "";
     let currentPassword = "";
 
@@ -437,12 +439,13 @@
       document.querySelector("#jobsiteBookingTitle").textContent =
         booking?.customer_name || booking?.package_code || "Booking loaded";
 
+      const crewSummary = booking?.crew_summary || booking?.assigned_staff_name || booking?.assigned_to || "unassigned";
       document.querySelector("#jobsiteBookingMeta").textContent = [
         booking?.service_date || "—",
         booking?.start_slot || "—",
         booking?.package_code || "—",
         booking?.vehicle_size || "—",
-        booking?.assigned_to || "unassigned"
+        crewSummary
       ].join(" · ");
     }
 
@@ -764,6 +767,10 @@
 
       fillBooking(data.booking || {});
       fillIntake(data.intake || null);
+      if (data.booking?.crew_assignments?.length && !document.querySelector("#detailerName").value.trim()) {
+        const lead = data.booking.crew_assignments.find((row) => row.assignment_role === 'lead') || data.booking.crew_assignments[0];
+        if (lead?.staff_name || lead?.staff_email) document.querySelector("#detailerName").value = lead.staff_name || lead.staff_email;
+      }
       jobsiteComments = Array.isArray(data.comments) ? data.comments : [];
       jobsiteAnnotations = Array.isArray(data.annotations) ? data.annotations : [];
       renderJobsiteComments();
@@ -773,7 +780,7 @@
 
       document.querySelector("#saveIntakeBtn").disabled = false;
       setTimeButtonsEnabled(true);
-      setNotice("Job-site intake loaded.", "ok");
+      setNotice(data.crew_warning ? `Job-site intake loaded. ${data.crew_warning}` : "Job-site intake loaded.", data.crew_warning ? "warn" : "ok");
     }
 
     async function saveIntake(event) {

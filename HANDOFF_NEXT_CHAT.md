@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -161,3 +163,15 @@ The newest pass pushed Accounting further by adding receivables aging, estimated
 
 
 Route hotfix sync reviewed on 2026-04-11.
+
+## Fresh-chat handoff update — April 11, 2026
+This pass focused on keeping the route hotfix intact while still moving the app forward:
+- duplicate clean-route folders were removed again from the uploaded build before packaging
+- crew summaries were pushed deeper into booking, live, progress, jobsite, and detailer workflows
+- admin runtime error handling now includes timeout and text-response fallback behavior
+- static checks now fail if temporary check artifacts or duplicate clean-route outputs are present
+
+Next strongest pass after deployment:
+- verify live Pages routes immediately after publish
+- continue session-first cleanup on the remaining older internal screens
+- keep actor normalization and accounting/profitability work moving

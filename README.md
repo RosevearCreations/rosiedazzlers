@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -235,3 +237,10 @@ This build moved Admin Recovery, Admin Live, and Admin Progress toward a stronge
 
 
 Route hotfix sync reviewed on 2026-04-11.
+
+## Latest pass summary — April 11, 2026
+This pass keeps the route hotfix structure intact and adds stronger internal workflow consistency:
+- removed duplicate clean-route folder outputs from the shipped build
+- improved crew summary propagation across internal workflow screens and APIs
+- hardened admin runtime request handling with timeout and text-response fallbacks
+- expanded static packaging checks so route collisions and leftover debug artifacts fail before packaging
