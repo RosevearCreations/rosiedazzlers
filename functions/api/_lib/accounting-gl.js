@@ -402,6 +402,24 @@ export async function buildOperationalProfitabilityReport(env, { month, year }) 
     cogsByBooking.set(refId, roundMoney((cogsByBooking.get(refId) || 0) + amount));
   }
 
+  const bookingIds = records.map((row) => String(row.booking_id || "").trim()).filter(Boolean);
+  const timeEntries = bookingIds.length ? await loadTimeEntriesForBookings(env, bookingIds) : [];
+  const staffRates = await loadStaffRates(env, Array.from(new Set(timeEntries.map((row) => String(row.staff_user_id || "").trim()).filter(Boolean))));
+  const laborByBooking = new Map();
+  let totalEstimatedDirectLabor = 0;
+
+  for (const entry of timeEntries) {
+    const bookingId = String(entry.booking_id || "").trim();
+    if (!bookingId) continue;
+    const minutes = Math.max(0, Number(entry.minutes || 0));
+    if (!minutes) continue;
+    const staffRateCents = Number(staffRates.get(String(entry.staff_user_id || "").trim()) || 0);
+    const laborCad = staffRateCents > 0 ? roundMoney((minutes / 60) * (staffRateCents / 100)) : 0;
+    if (laborCad <= 0) continue;
+    laborByBooking.set(bookingId, roundMoney((laborByBooking.get(bookingId) || 0) + laborCad));
+    totalEstimatedDirectLabor = roundMoney(totalEstimatedDirectLabor + laborCad);
+  }
+
   const overheadPool = roundMoney(Math.max(0, Number(monthlyReport.totals?.expense || 0) - totalDirectCogs));
   const totalRecognizedRevenue = roundMoney(records.reduce((sum, row) => sum + recognizedRevenueForRecord(row), 0));
 
@@ -410,9 +428,11 @@ export async function buildOperationalProfitabilityReport(env, { month, year }) 
     const recognizedRevenue = recognizedRevenueForRecord(row);
     const collectedRevenue = roundMoney(row.collected_total_cad || 0);
     const directCogs = roundMoney(cogsByBooking.get(bookingId) || 0);
+    const estimatedDirectLabor = roundMoney(laborByBooking.get(bookingId) || 0);
     const revenueShare = totalRecognizedRevenue > 0 ? recognizedRevenue / totalRecognizedRevenue : 0;
     const allocatedOverhead = roundMoney(overheadPool * revenueShare);
     const estimatedGrossProfit = roundMoney(recognizedRevenue - directCogs);
+    const estimatedContributionAfterLabor = roundMoney(estimatedGrossProfit - estimatedDirectLabor);
     const estimatedNetAfterOverhead = roundMoney(estimatedGrossProfit - allocatedOverhead);
 
     return {
@@ -427,23 +447,27 @@ export async function buildOperationalProfitabilityReport(env, { month, year }) 
       collected_revenue_cad: collectedRevenue,
       balance_due_cad: roundMoney(row.balance_due_cad || 0),
       direct_cogs_cad: directCogs,
+      estimated_direct_labor_cad: estimatedDirectLabor,
+      estimated_contribution_after_labor_cad: estimatedContributionAfterLabor,
       allocated_overhead_cad: allocatedOverhead,
       estimated_gross_profit_cad: estimatedGrossProfit,
       estimated_net_after_overhead_cad: estimatedNetAfterOverhead
     };
-  }).sort((a, b) => Number(b.estimated_net_after_overhead_cad || 0) - Number(a.estimated_net_after_overhead_cad || 0));
+  }).sort((a, b) => Number(b.estimated_contribution_after_labor_cad || 0) - Number(a.estimated_contribution_after_labor_cad || 0));
 
   return {
     month,
     year,
     period_start: start,
     period_end_exclusive: nextMonth,
-    method_note: "Estimated overhead is allocated across the selected month's booking revenue share after subtracting direct inventory COGS already posted to Cost of Goods Sold.",
+    method_note: "Estimated overhead is allocated across the selected month's booking revenue share after subtracting direct inventory COGS already posted to Cost of Goods Sold. Estimated direct labor is shown separately using logged job minutes × staff hourly_rate_cents when available, because payroll may already sit inside posted expenses.",
     totals: {
       booking_count: rows.length,
       recognized_revenue_cad: totalRecognizedRevenue,
       collected_revenue_cad: roundMoney(rows.reduce((sum, row) => sum + Number(row.collected_revenue_cad || 0), 0)),
       direct_cogs_cad: totalDirectCogs,
+      estimated_direct_labor_cad: totalEstimatedDirectLabor,
+      estimated_contribution_after_labor_cad: roundMoney(rows.reduce((sum, row) => sum + Number(row.estimated_contribution_after_labor_cad || 0), 0)),
       overhead_pool_cad: overheadPool,
       estimated_net_after_overhead_cad: roundMoney(rows.reduce((sum, row) => sum + Number(row.estimated_net_after_overhead_cad || 0), 0))
     },
@@ -601,7 +625,7 @@ export async function buildReceivablesAgingExport(env, { month, year }) {
 
 export async function buildOperationalProfitabilityExport(env, { month, year }) {
   const report = await buildOperationalProfitabilityReport(env, { month, year });
-  const header = ["Booking ID", "Service Date", "Customer", "Package", "Order Status", "Recognized Revenue CAD", "Collected Revenue CAD", "Balance Due CAD", "Direct COGS CAD", "Allocated Overhead CAD", "Estimated Gross Profit CAD", "Estimated Net After Overhead CAD"];
+  const header = ["Booking ID", "Service Date", "Customer", "Package", "Order Status", "Recognized Revenue CAD", "Collected Revenue CAD", "Balance Due CAD", "Direct COGS CAD", "Estimated Direct Labor CAD", "Contribution After Labor CAD", "Allocated Overhead CAD", "Estimated Gross Profit CAD", "Estimated Net After Overhead CAD"];
   const lines = [header.join(",")];
   for (const row of report.rows || []) {
     lines.push([
@@ -614,12 +638,14 @@ export async function buildOperationalProfitabilityExport(env, { month, year }) 
       csvSafe(roundMoney(row.collected_revenue_cad || 0)),
       csvSafe(roundMoney(row.balance_due_cad || 0)),
       csvSafe(roundMoney(row.direct_cogs_cad || 0)),
+      csvSafe(roundMoney(row.estimated_direct_labor_cad || 0)),
+      csvSafe(roundMoney(row.estimated_contribution_after_labor_cad || 0)),
       csvSafe(roundMoney(row.allocated_overhead_cad || 0)),
       csvSafe(roundMoney(row.estimated_gross_profit_cad || 0)),
       csvSafe(roundMoney(row.estimated_net_after_overhead_cad || 0))
     ].join(","));
   }
-  lines.push(["", "", csvSafe("Totals"), "", "", csvSafe(report.totals.recognized_revenue_cad || 0), csvSafe(report.totals.collected_revenue_cad || 0), "", csvSafe(report.totals.direct_cogs_cad || 0), csvSafe(report.totals.overhead_pool_cad || 0), "", csvSafe(report.totals.estimated_net_after_overhead_cad || 0)].join(","));
+  lines.push(["", "", csvSafe("Totals"), "", "", csvSafe(report.totals.recognized_revenue_cad || 0), csvSafe(report.totals.collected_revenue_cad || 0), "", csvSafe(report.totals.direct_cogs_cad || 0), csvSafe(report.totals.estimated_direct_labor_cad || 0), csvSafe(report.totals.estimated_contribution_after_labor_cad || 0), csvSafe(report.totals.overhead_pool_cad || 0), "", csvSafe(report.totals.estimated_net_after_overhead_cad || 0)].join(","));
   return lines.join("\n");
 }
 
@@ -670,6 +696,32 @@ async function loadPostedLineRows(env, { month, year, accountCode = null, startD
   const res = await fetch(url, { headers });
   if (!res.ok) throw new Error(`Could not load accounting rows. ${await res.text()}`);
   return await res.json().catch(() => []);
+}
+
+
+async function loadTimeEntriesForBookings(env, bookingIds = []) {
+  const ids = bookingIds.map((value) => String(value || "").trim()).filter(Boolean);
+  if (!ids.length) return [];
+  const headers = serviceHeaders(env);
+  const url = `${env.SUPABASE_URL}/rest/v1/job_time_entries?select=booking_id,minutes,staff_user_id&booking_id=in.(${encodeIdList(ids)})&limit=5000`;
+  const res = await fetch(url, { headers });
+  if (!res.ok) return [];
+  return await res.json().catch(() => []);
+}
+
+async function loadStaffRates(env, staffIds = []) {
+  const ids = staffIds.map((value) => String(value || "").trim()).filter(Boolean);
+  const map = new Map();
+  if (!ids.length) return map;
+  const headers = serviceHeaders(env);
+  const url = `${env.SUPABASE_URL}/rest/v1/staff_users?select=id,hourly_rate_cents&id=in.(${encodeIdList(ids)})`;
+  const res = await fetch(url, { headers });
+  if (!res.ok) return map;
+  const rows = await res.json().catch(() => []);
+  for (const row of Array.isArray(rows) ? rows : []) {
+    map.set(String(row.id || "").trim(), Number(row.hourly_rate_cents || 0));
+  }
+  return map;
 }
 
 async function loadAccountBalanceThroughDate(env, accountCode, endDateExclusive) {
