@@ -1,4 +1,4 @@
--- Last synchronized: 2026-04-10. No schema shape change in pass 6; session-first internal screen convergence, route rewrite hardening, deployed smoke-check tooling, and docs refresh.
+-- 2026-04-11 route hotfix sync: no schema shape change in this pass.
 -- Last synchronized: April 10, 2026. Reviewed during the canonical add-on media restore, crew assignment/senior detailer workflow, app-shell responsiveness pass, and docs/schema synchronization pass.
 -- Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
 -- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. No schema change in this pass; documentation and access paths were updated.

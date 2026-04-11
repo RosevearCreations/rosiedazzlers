@@ -1,5 +1,3 @@
-> Last synchronized: April 10, 2026. Reviewed during the remaining session-first internal screens pass, clean-route rewrite hardening pass, deployed route smoke-check pass, static stress-check expansion pass, and docs/schema synchronization pass.
-
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -215,8 +213,8 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - check Admin Progress can load a token, post updates/media, and moderate entries with a signed-in session
 - run `python scripts/stress_static_checks.py` after major internal UI changes
 
-## Pass 6 checks — April 10, 2026
-- static stress checks now also cover `admin-blocks.html`, `admin-staff.html`, and `admin-jobsite.html`
-- `_redirects` route coverage is now verified in the static stress script
-- post-deploy smoke checks should be run with `python scripts/deployed_route_smoke_check.py --base-url https://rosiedazzlers.ca` after publish
 
+- 2026-04-11 hotfix verification target: confirm `/services`, `/pricing`, `/book`, `/admin`, `/admin-accounting`, and `/admin-catalog` open without redirect loops after deploy, then purge cache if stale redirects persist.
+
+
+Route hotfix sync reviewed on 2026-04-11.

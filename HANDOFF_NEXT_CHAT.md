@@ -1,5 +1,3 @@
-> Last synchronized: April 10, 2026. Reviewed during the remaining session-first internal screens pass, clean-route rewrite hardening pass, deployed route smoke-check pass, static stress-check expansion pass, and docs/schema synchronization pass.
-
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -158,8 +156,8 @@ The newest pass pushed Accounting further by adding receivables aging, estimated
 - added a local static stress-check script and ran it before packaging
 - move up next: broader session-first conversion on the remaining password-bridge screens like jobsite/blocks/staff, plus deeper live deployed runtime testing
 
-## Pass 6 handoff note — April 10, 2026
-- newest pass converted Blocks, Staff, and Jobsite to the same session-first shell pattern already used by Recovery, Live, and Progress
-- newest pass also added explicit route rewrites and a deploy smoke-check script because live public checks showed route drift/looping on some clean URLs
-- best next pass: deploy, purge cache if needed, run the smoke-check script against production, then fix any remaining route mismatches still visible after the rewrite pass
 
+- Most urgent completed item on 2026-04-11: repair Cloudflare Pages route collisions that produced ERR_TOO_MANY_REDIRECTS. Next chat should verify the deployed routes first before resuming broader roadmap work.
+
+
+Route hotfix sync reviewed on 2026-04-11.

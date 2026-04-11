@@ -1,5 +1,3 @@
-> Last synchronized: April 10, 2026. Reviewed during the remaining session-first internal screens pass, clean-route rewrite hardening pass, deployed route smoke-check pass, static stress-check expansion pass, and docs/schema synchronization pass.
-
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -160,3 +158,6 @@ Prefer the session-aware admin/detailer endpoints over any older shared-password
 - `functions/api/admin/booking_assignment_map.js` is the new helper endpoint for loading crew assignments by booking id.
 - `sql/2026-04-10_booking_crew_assignments_and_app_shell_hardening.sql` must be run before multi-detailer crews are fully live.
 - `data/rosie_services_pricing_and_packages.json` now carries add-on image fields and should be treated as the bundled canonical fallback for add-on media metadata.
+
+
+Route hotfix sync reviewed on 2026-04-11.

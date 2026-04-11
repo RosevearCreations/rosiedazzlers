@@ -1,55 +1,7 @@
-# Clean-route normalization and stable Pages rewrites.
-# This helps reduce route drift between /page, /page/, and /page.html.
-
+# Route hotfix for Cloudflare Pages clean URLs.
+# Keep only trailing-slash compatibility redirects here.
 /services/ /services 301
 /pricing/ /pricing 301
-/about/ /about 301
-/contact/ /contact 301
-/book/ /book 301
-/gear/ /gear 301
-/consumables/ /consumables 301
-/gifts/ /gifts 301
-/videos/ /videos 301
-/privacy/ /privacy 301
-/terms/ /terms 301
-/waiver/ /waiver 301
-/login/ /login 301
-/my-account/ /my-account 301
-/progress/ /progress 301
-
-/services /services.html 200
-/pricing /pricing.html 200
-/about /about.html 200
-/contact /contact.html 200
-/book /book.html 200
-/gear /gear.html 200
-/consumables /consumables.html 200
-/gifts /gifts.html 200
-/videos /videos.html 200
-/privacy /privacy.html 200
-/terms /terms.html 200
-/waiver /waiver.html 200
-/login /login.html 200
-/my-account /my-account.html 200
-/progress /progress.html 200
-
-/admin /admin.html 200
-/admin-app /admin-app.html 200
-/admin-account /admin-account.html 200
-/admin-accounting /admin-accounting.html 200
-/admin-analytics /admin-analytics.html 200
-/admin-assign /admin-assign.html 200
-/admin-blocks /admin-blocks.html 200
-/admin-booking /admin-booking.html 200
-/admin-catalog /admin-catalog.html 200
-/admin-customers /admin-customers.html 200
-/admin-jobsite /admin-jobsite.html 200
-/admin-live /admin-live.html 200
-/admin-login /admin-login.html 200
-/admin-notifications /admin-notifications.html 200
-/admin-progress /admin-progress.html 200
-/admin-promos /admin-promos.html 200
-/admin-recovery /admin-recovery.html 200
-/admin-staff /admin-staff.html 200
-/admin-upload /admin-upload.html 200
-/detailer-jobs /detailer-jobs.html 200
+/admin/ /admin 301
+/admin-accounting/ /admin-accounting 301
+/admin-catalog/ /admin-catalog 301

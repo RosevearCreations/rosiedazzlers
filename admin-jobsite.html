@@ -6,7 +6,7 @@
   <title>Job Site Intake | Rosie Dazzlers</title>
   <meta name="description" content="Detailer pre-job intake and live job tracking for Rosie Dazzlers." />
   <meta name="robots" content="noindex,nofollow" />
-  <link rel="stylesheet" href="/assets/site.css?v=20260410c" />
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body data-page="admin-jobsite">
   <header class="nav">
@@ -33,10 +33,7 @@
     </div>
   </header>
 
-  <main class="container app-shell">
-    <aside class="app-shell__menu" data-admin-menu-mount></aside>
-
-    <div class="app-shell__content">
+  <main class="container">
     <section class="section">
       <div class="panel">
         <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
@@ -63,13 +60,13 @@
         <div class="panel">
           <div class="kicker">Current booking</div>
           <h3 id="jobsiteBookingTitle" style="margin:6px 0 8px">No booking loaded</h3>
-          <div id="jobsiteBookingMeta" class="kicker">Load a booking id below using the signed-in staff session.</div>
+          <div id="jobsiteBookingMeta" class="kicker">Load a booking id below.</div>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div id="pageNotice" class="notice" data-admin-shell-status>Ready.</div>
+      <div id="pageNotice" class="notice">Ready.</div>
     </section>
 
     <section class="section">
@@ -78,7 +75,7 @@
           <h2>Booking + staff</h2><div id="jobsiteActorMeta" class="kicker" style="margin-bottom:10px">Checking session…</div>
           <form id="jobsiteLoadForm" class="form">
             <label>
-              Legacy password bridge (optional fallback)
+              Staff password (optional fallback)
               <input id="jobsitePassword" type="password" autocomplete="current-password" />
             </label>
 
@@ -345,31 +342,26 @@
         </div>
       </div>
     </section>
-      </div>
   </main>
 
   <footer class="footer container" data-footer></footer>
-  <script src="/assets/admin-auth.js"></script>
-  <script src="/assets/admin-shell.js"></script>
-  <script src="/assets/admin-menu.js"></script>
-  <script src="/assets/admin-page-init.js"></script>
-  <script src="/assets/admin-runtime.js"></script>
+
   <script src="/assets/chrome.js"></script>
   <script type="module">
     import { setBrandImages, setFooter } from "/assets/site.js";
 
-    const runtime = window.AdminRuntime;
-    let actor = null;
     let currentBookingId = "";
     let currentPassword = "";
 
-    function password(){ return document.querySelector("#jobsitePassword")?.value.trim() || ""; }
-    function syncActorMeta(){
-      const label = runtime.bridgeLabel(actor, password());
-      const meta = document.querySelector("#jobsiteActorMeta");
-      if (meta) meta.textContent = label;
-      if (!document.querySelector("#detailerName").value.trim() && actor) {
-        document.querySelector("#detailerName").value = actor.full_name || actor.email || "";
+    async function loadActorMeta(){
+      try {
+        const res = await fetch("/api/admin/auth_me", { credentials:"include", cache:"no-store" });
+        const out = await res.json().catch(()=>null);
+        if (!res.ok || !out?.ok || !out?.actor) throw new Error(out?.error || "No session");
+        document.querySelector("#jobsiteActorMeta").textContent = `${out.actor.full_name || out.actor.email || "Staff"} · ${out.actor.role_code || "staff"}`;
+        if (!document.querySelector("#detailerName").value.trim()) document.querySelector("#detailerName").value = out.actor.full_name || out.actor.email || "";
+      } catch {
+        document.querySelector("#jobsiteActorMeta").textContent = "No staff session found. Use the fallback password field if needed.";
       }
     }
     let timeEntries = [];
@@ -422,14 +414,23 @@
       return `${hours}:${minutes}:${seconds}`;
     }
 
-    async function apiPost(url, providedPassword, body) {
-      const result = await runtime.requestJson(url, {
+    function apiHeaders(password) {
+      return {
+        "Content-Type": "application/json",
+        "x-admin-password": password
+      };
+    }
+
+    async function apiPost(url, password, body) {
+      const res = await fetch(url, {
         method: "POST",
-        password: providedPassword || password(),
-        body: body || {}
+        headers: apiHeaders(password),
+        body: JSON.stringify(body || {})
       });
-      if (!result.ok) throw new Error(runtime.normalizeError(result, `Request failed for ${url}`));
-      return result.data || {};
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Request failed for ${url}`);
+      return data;
     }
 
     function fillBooking(booking) {
@@ -710,7 +711,7 @@
     }
 
     async function loadTimeEntries() {
-      if (!currentBookingId) return;
+      if (!currentPassword || !currentBookingId) return;
       const data = await apiPost("/api/admin/job_time_entries_get", currentPassword, {
         booking_id: currentBookingId
       });
@@ -719,7 +720,7 @@
     }
 
     async function postTimeEntry(entryType) {
-      if (!currentBookingId) {
+      if (!currentPassword || !currentBookingId) {
         setNotice("Load a booking first.", "bad");
         return;
       }
@@ -740,21 +741,24 @@
     }
 
     async function loadJob() {
-      const fallbackPassword = document.querySelector("#jobsitePassword").value.trim();
+      const password = document.querySelector("#jobsitePassword").value.trim();
       const bookingId = document.querySelector("#jobsiteLookup").value.trim();
 
+      if (!password) {
+        setNotice("Password is required.", "bad");
+        return;
+      }
       if (!bookingId) {
         setNotice("Booking ID is required.", "bad");
         return;
       }
 
-      currentPassword = fallbackPassword || password();
-      syncActorMeta();
+      currentPassword = password;
       currentBookingId = bookingId;
 
       setNotice("Loading job-site intake…");
 
-      const data = await apiPost("/api/admin/jobsite_detail", fallbackPassword, {
+      const data = await apiPost("/api/admin/jobsite_detail", password, {
         booking_id: bookingId
       });
 
@@ -775,7 +779,7 @@
     async function saveIntake(event) {
       event.preventDefault();
 
-      if (!currentBookingId) {
+      if (!currentPassword || !currentBookingId) {
         setNotice("Load a booking first.", "bad");
         return;
       }
@@ -787,18 +791,9 @@
       setNotice("Pre-inspection intake saved.", "ok");
     }
 
-    document.addEventListener("DOMContentLoaded", async () => {
+    document.addEventListener("DOMContentLoaded", () => {
       setBrandImages();
       setFooter();
-      document.querySelector("#jobsitePassword")?.addEventListener("input", () => { currentPassword = password(); syncActorMeta(); });
-      await window.AdminPageInit.init({
-        pageKey: "admin-jobsite",
-        onReady: async ({ actor: readyActor }) => {
-          actor = readyActor || null;
-          currentPassword = password();
-          syncActorMeta();
-        }
-      });
 
       document.querySelector("#jobsiteLoadForm").addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -916,7 +911,6 @@
       setTimeButtonsEnabled(false);
       renderJobsiteComments();
       renderJobsiteAnnotations();
-      syncActorMeta();
     });
   </script>
 </body>

@@ -1,5 +1,3 @@
-> Last synchronized: April 10, 2026. Reviewed during the remaining session-first internal screens pass, clean-route rewrite hardening pass, deployed route smoke-check pass, static stress-check expansion pass, and docs/schema synchronization pass.
-
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -132,3 +130,8 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 3. finish deeper A/R, reconciliation, and profitability polish
 4. run live end-to-end verification against deployed Pages + Supabase after the new SQL migration
 5. continue route-by-route local SEO cleanup, title clarity, and content relevance work
+
+- 2026-04-11 hotfix first: verify deployed clean routes after removing duplicate static outputs, then continue the session-first migration work.
+
+
+Route hotfix sync reviewed on 2026-04-11.

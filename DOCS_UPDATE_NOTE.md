@@ -1,5 +1,3 @@
-> Last synchronized: April 10, 2026. Reviewed during the remaining session-first internal screens pass, clean-route rewrite hardening pass, deployed route smoke-check pass, static stress-check expansion pass, and docs/schema synchronization pass.
-
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -48,3 +46,8 @@ This pass refreshed the documentation set again around three concrete build chan
 
 ## April 10, 2026 docs refresh
 This refresh synchronized the repo around four concrete changes: canonical add-on image recovery, crew assignment support, responsive app-shell tightening, and local stability checks. The schema snapshot and migrations now include `booking_staff_assignments`, and the roadmap/gaps/handoff docs all point to crew-aware ops rollout as the next strongest pass.
+
+- 2026-04-11 docs/schema sync: deployment hotfix pass for Pages route collisions and 404 behavior.
+
+
+Route hotfix sync reviewed on 2026-04-11.

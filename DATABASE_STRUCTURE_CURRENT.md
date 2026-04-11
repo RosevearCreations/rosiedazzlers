@@ -1,5 +1,3 @@
-> Last synchronized: April 10, 2026. Reviewed during the remaining session-first internal screens pass, clean-route rewrite hardening pass, deployed route smoke-check pass, static stress-check expansion pass, and docs/schema synchronization pass.
-
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -248,3 +246,8 @@ March 29, 2026 sync note: no new tables were required for this pass; the main ch
 ## April 9, 2026 schema note
 - `accounting_journal_entries` now includes optional `created_by_staff_user_id` and `last_recorded_by_staff_user_id` references for cleaner audit trails.
 - Added support indexes for accounting actor/date lookup and receivables service-date/balance scanning.
+
+- 2026-04-11 note: no database shape change in this hotfix pass; schema files were resynced while the deploy issue was isolated to static route output.
+
+
+Route hotfix sync reviewed on 2026-04-11.

@@ -1,5 +1,3 @@
-> Last synchronized: April 10, 2026. Reviewed during the remaining session-first internal screens pass, clean-route rewrite hardening pass, deployed route smoke-check pass, static stress-check expansion pass, and docs/schema synchronization pass.
-
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -168,3 +166,8 @@ The accounting area is now becoming the office-side operational hub: receivables
 ## April 10, 2026 mental-model update
 - Booking assignment is no longer just a single `assigned_*` tuple on the booking row. The booking row still holds the lead for compatibility, but the real crew model now lives in `booking_staff_assignments`.
 - Add-on imagery should now be treated as data, not page-specific decoration: each add-on in the pricing/add-on JSON carries its preferred R2 image plus local fallback.
+
+- 2026-04-11 operational note: keep one physical output per clean public/admin route on Cloudflare Pages. Do not ship both `route.html` and `route/index.html` for the same path.
+
+
+Route hotfix sync reviewed on 2026-04-11.
