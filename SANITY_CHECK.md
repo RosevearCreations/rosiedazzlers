@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
 
 > Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
@@ -204,3 +206,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - Public exposed pages still validate at one H1 each in local checks.
 - Add-on coverage check confirmed that every add-on code now has image handling in `assets/site.js` and in the bundled pricing/add-on JSON.
 - Crew workflow still requires live deployment verification after running the new SQL migration.
+
+## April 10, 2026 pass sanity additions
+- check Admin Recovery loads templates and audit rows with a signed-in session before using the fallback password bridge
+- check Admin Live can load a booking with a signed-in session and auto-refresh without entering the password bridge
+- check Admin Progress can load a token, post updates/media, and moderate entries with a signed-in session
+- run `python scripts/stress_static_checks.py` after major internal UI changes
+

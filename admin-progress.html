@@ -6,7 +6,7 @@
   <title>Admin Progress | Rosie Dazzlers</title>
   <meta name="description" content="Admin progress update tools for Rosie Dazzlers." />
   <meta name="robots" content="noindex,nofollow" />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260410b" />
 </head>
 <body data-page="admin-progress">
   <header class="nav">
@@ -15,65 +15,62 @@
         <img data-logo alt="Rosie Dazzlers logo" />
         <strong>Rosie Dazzlers Admin</strong>
       </a>
-
-      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
-        Menu
-      </button>
-
+      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button>
       <nav id="navLinks" class="nav-links">
         <a href="/admin.html">Dashboard</a>
         <a href="/admin-booking.html">Bookings</a>
-        <a href="/admin-blocks.html">Blocks</a>
         <a href="/admin-progress.html">Progress</a>
-        <a href="/admin-promos.html">Promos</a>
+        <a href="/admin-live.html">Live</a>
         <a href="/book.html">Public Site</a>
       </nav>
     </div>
   </header>
 
-  <main class="container">
-    <section class="section">
-      <div class="panel">
-        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
-      </div>
-    </section>
+  <main class="container app-shell">
+    <aside class="app-shell__menu" data-admin-menu-mount></aside>
 
-    <section class="section">
-      <div class="hero">
-        <div>
-          <div class="badge">Admin Progress</div>
-          <h1>Post customer progress updates</h1>
-          <p>Load a booking by progress token, enable the customer progress link, review progress entries, post a new note, attach media, and moderate thread visibility.</p>
+    <div class="app-shell__content">
+      <section class="section">
+        <div class="hero">
+          <div>
+            <div class="badge">Admin Progress</div>
+            <h1>Post customer progress updates</h1>
+            <p>Load a booking by progress token, enable the customer progress link, review thread activity, attach media, record product usage, and moderate visibility from one internal screen.</p>
+          </div>
+          <div class="panel stack">
+            <div>
+              <div class="kicker">Signed-in staff</div>
+              <div id="actorMeta" class="kicker" style="margin-top:6px">Checking session…</div>
+            </div>
+            <div class="hr"></div>
+            <div>
+              <div class="kicker">Loaded booking</div>
+              <h3 id="bookingTitle" style="margin:6px 0 8px">No booking loaded</h3>
+              <div id="bookingMeta" class="kicker">Enter the progress token below.</div>
+            </div>
+          </div>
         </div>
-        <div class="panel">
-          <div class="kicker">Signed-in staff</div><div id="actorMeta" class="kicker" style="margin-bottom:10px">Checking session…</div><div class="hr"></div><div class="kicker">Loaded booking</div>
-          <h3 id="bookingTitle" style="margin:6px 0 8px">No booking loaded</h3>
-          <div id="bookingMeta" class="kicker">Enter the progress token below.</div>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section">
-      <div id="pageNotice" class="notice">Ready.</div>
-    </section>
+      <section class="section">
+        <div id="pageNotice" class="notice" data-admin-shell-status>Ready.</div>
+      </section>
 
-    <section class="section">
-      <div class="grid cards">
+      <section class="section surface-grid-2">
         <div class="panel">
           <h2>Load booking</h2>
           <form id="loadForm" class="form">
             <label>
-              Staff password (optional compatibility fallback)
-              <input id="adminPassword" name="adminPassword" type="password" autocomplete="current-password" />
+              Legacy password bridge (optional fallback)
+              <input id="adminPassword" name="adminPassword" type="password" autocomplete="current-password" placeholder="Only needed if session recovery fails" />
             </label>
-
             <label>
               Progress token
               <input id="progressToken" name="progressToken" type="text" placeholder="Paste booking progress token" required />
             </label>
-
-            <div>
+            <div class="toolbar-wrap">
               <button class="btn primary" type="submit">Load progress</button>
+              <button class="btn ghost" type="button" id="reloadCurrentBtn">Reload current booking</button>
             </div>
           </form>
         </div>
@@ -85,214 +82,127 @@
             <button id="enableProgressBtn" class="btn primary" type="button" disabled>Enable progress link</button>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section">
-      <div class="grid cards">
+      <section class="section surface-grid-2">
         <div class="panel">
           <h2>Post new update</h2>
           <form id="updateForm" class="form">
-            <label>
-              Posted by
-              <input id="createdBy" name="createdBy" type="text" placeholder="Example: Laurie / Rosie Dazzlers" required />
-            </label>
-
-            <label>
-              Update note
-              <textarea id="updateNote" name="updateNote" rows="5" placeholder="Write the update here..." required></textarea>
-            </label>
-
-            <label>
-              Visibility
-              <select id="visibility" name="visibility">
-                <option value="customer">Customer</option>
-                <option value="internal">Internal</option>
-              </select>
-            </label>
-
-            <div>
-              <button id="postBtn" class="btn primary" type="submit" disabled>Post update</button>
-            </div>
+            <label>Posted by<input id="createdBy" name="createdBy" type="text" placeholder="Example: Laurie / Rosie Dazzlers" required /></label>
+            <label>Update note<textarea id="updateNote" name="updateNote" rows="5" placeholder="Write the update here..." required></textarea></label>
+            <label>Visibility<select id="visibility" name="visibility"><option value="customer">Customer</option><option value="internal">Internal</option></select></label>
+            <div><button id="postBtn" class="btn primary" type="submit" disabled>Post update</button></div>
           </form>
         </div>
 
         <div class="panel">
           <h2>Attach media by URL</h2>
           <form id="mediaForm" class="form">
-            <label>
-              Posted by
-              <input id="mediaCreatedBy" name="mediaCreatedBy" type="text" placeholder="Example: Laurie / Rosie Dazzlers" required />
-            </label>
-
-            <label>
-              Media type
-              <select id="mediaKind" name="mediaKind">
-                <option value="photo">Photo</option>
-                <option value="video">Video</option>
-              </select>
-            </label>
-
-            <label>
-              Caption
-              <input id="mediaCaption" name="mediaCaption" type="text" placeholder="Optional caption for the customer" />
-            </label>
-
-            <label>
-              Media URL
-              <input id="mediaUrl" name="mediaUrl" type="url" placeholder="https://..." required />
-            </label>
-
-            <label>
-              Visibility
-              <select id="mediaVisibility" name="mediaVisibility">
-                <option value="customer">Customer</option>
-                <option value="internal">Internal</option>
-              </select>
-            </label>
-
-            <div>
-              <button id="mediaBtn" class="btn primary" type="submit" disabled>Attach media</button>
-            </div>
+            <label>Posted by<input id="mediaCreatedBy" name="mediaCreatedBy" type="text" placeholder="Example: Laurie / Rosie Dazzlers" required /></label>
+            <label>Media type<select id="mediaKind" name="mediaKind"><option value="photo">Photo</option><option value="video">Video</option></select></label>
+            <label>Caption<input id="mediaCaption" name="mediaCaption" type="text" placeholder="Optional caption for the customer" /></label>
+            <label>Media URL<input id="mediaUrl" name="mediaUrl" type="url" placeholder="https://..." required /></label>
+            <label>Visibility<select id="mediaVisibility" name="mediaVisibility"><option value="customer">Customer</option><option value="internal">Internal</option></select></label>
+            <div><button id="mediaBtn" class="btn primary" type="submit" disabled>Attach media</button></div>
           </form>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section">
-      <div class="grid cards">
+      <section class="section surface-grid-2">
         <div class="panel">
           <h2>Updates</h2>
-          <div id="updatesList" class="grid" style="margin-top:12px">
-            <div class="notice">No booking loaded yet.</div>
-          </div>
+          <div id="updatesList" class="grid" style="margin-top:12px"><div class="notice">No booking loaded yet.</div></div>
         </div>
-
         <div class="panel">
           <h2>Signoffs</h2>
-          <div id="signoffsList" class="grid" style="margin-top:12px">
-            <div class="notice">No signoffs recorded yet.</div>
-          </div>
+          <div id="signoffsList" class="grid" style="margin-top:12px"><div class="notice">No signoffs recorded yet.</div></div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section">
-      <div class="grid cards">
+      <section class="section surface-grid-2">
         <div class="panel">
           <h2>Products used on this detail</h2>
           <form id="usageForm" class="form">
-            <label>
-              Inventory item
-              <select id="usageItem"><option value="">Select inventory item</option></select>
-            </label>
-            <label>
-              Quantity used
-              <input id="usageQty" type="number" step="0.01" min="0.01" value="1" />
-            </label>
-            <label>
-              Usage note
-              <input id="usageNote" type="text" placeholder="Optional note for the job record" />
-            </label>
-            <div>
-              <button id="usageBtn" class="btn primary" type="submit" disabled>Record products used</button>
-            </div>
+            <label>Inventory item<select id="usageItem"><option value="">Select inventory item</option></select></label>
+            <label>Quantity used<input id="usageQty" type="number" step="0.01" min="0.01" value="1" /></label>
+            <label>Usage note<input id="usageNote" type="text" placeholder="Optional note for the job record" /></label>
+            <div><button id="usageBtn" class="btn primary" type="submit" disabled>Record products used</button></div>
           </form>
         </div>
-
         <div class="panel">
           <h2>Product usage history</h2>
-          <div id="usageList" class="grid" style="margin-top:12px">
-            <div class="notice">No booking loaded yet.</div>
-          </div>
+          <div id="usageList" class="grid" style="margin-top:12px"><div class="notice">No booking loaded yet.</div></div>
         </div>
-      </div>
-    </section>
-    <section class="section">
-      <div class="panel">
-        <h2>Media</h2>
-        <div id="mediaGrid" class="grid cards" style="margin-top:12px">
-          <div class="notice">No booking loaded yet.</div>
+      </section>
+
+      <section class="section">
+        <div class="panel">
+          <h2>Media</h2>
+          <div id="mediaGrid" class="grid cards" style="margin-top:12px"><div class="notice">No booking loaded yet.</div></div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   </main>
 
   <footer class="footer container" data-footer></footer>
-
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/admin-menu.js"></script>
+  <script src="/assets/admin-page-init.js"></script>
+  <script src="/assets/admin-runtime.js"></script>
   <script src="/assets/chrome.js"></script>
   <script type="module">
     import { setBrandImages, setFooter } from "/assets/site.js";
 
-    let currentToken = "";
-    let currentBookingId = "";
+    const runtime = window.AdminRuntime;
+    let actor = null;
+    let currentToken = '';
+    let currentBookingId = '';
     let progressEnabled = false;
-    let hasSession = false;
     let inventoryItems = [];
 
-    function formatDateTime(value) {
-      if (!value) return "—";
-      const d = new Date(value);
-      if (Number.isNaN(d.getTime())) return String(value);
-      return new Intl.DateTimeFormat("en-CA", { dateStyle: "medium", timeStyle: "short" }).format(d);
+    function qs(s){ return document.querySelector(s); }
+    function password(){ return qs('#adminPassword').value.trim(); }
+    function setNotice(message, kind=''){ const el = qs('#pageNotice'); el.className = kind ? `notice ${kind}` : 'notice'; el.textContent = message; }
+    function updateActorMeta(){ qs('#actorMeta').textContent = runtime.bridgeLabel(actor, password()); }
+    function formatDateTime(value) { if (!value) return '—'; const d = new Date(value); if (Number.isNaN(d.getTime())) return String(value); return new Intl.DateTimeFormat('en-CA', { dateStyle:'medium', timeStyle:'short' }).format(d); }
+    function escapeHtml(value) { return String(value ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
+
+    async function requestJson(url, options = {}) {
+      const result = await runtime.requestJson(url, { ...options, password: password() });
+      if (!result.ok) throw new Error(runtime.normalizeError(result, 'Request failed.'));
+      return result.data || {};
     }
 
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#39;");
-    }
-
-
-    function authHeaders(password) {
-      const headers = { "Content-Type": "application/json" };
-      if (password) headers["x-admin-password"] = password;
-      return headers;
+    function authReady(enabled) {
+      qs('#postBtn').disabled = !enabled;
+      qs('#mediaBtn').disabled = !enabled;
+      qs('#usageBtn').disabled = !enabled;
     }
 
     async function loadInventoryItems() {
-      const res = await fetch('/api/admin/catalog_inventory_list', { credentials:'include', cache:'no-store' });
-      const data = await res.json().catch(()=>({}));
-      if (!res.ok || !data?.ok) return;
-      inventoryItems = Array.isArray(data.items) ? data.items : [];
-      const sel = document.querySelector('#usageItem');
+      const result = await runtime.requestJson('/api/admin/catalog_inventory_list');
+      if (!result.ok || !result.data?.ok) return;
+      inventoryItems = Array.isArray(result.data.items) ? result.data.items : [];
+      const sel = qs('#usageItem');
       if (!sel) return;
       sel.innerHTML = '<option value="">Select inventory item</option>' + inventoryItems.map((item)=>`<option value="${escapeHtml(item.item_key)}">${escapeHtml(item.name)} (${escapeHtml(item.item_type || '')})</option>`).join('');
     }
 
     async function loadUsageHistory() {
-      const wrap = document.querySelector('#usageList');
+      const wrap = qs('#usageList');
       if (!wrap || !currentBookingId) return;
-      const res = await fetch(`/api/admin/catalog_usage_list?booking_id=${encodeURIComponent(currentBookingId)}`, { credentials:'include', cache:'no-store' });
-      const data = await res.json().catch(()=>({}));
-      if (!res.ok || !data?.ok) {
-        wrap.innerHTML = `<div class="notice bad">${escapeHtml(data?.error || 'Could not load usage history.')}</div>`;
+      const result = await runtime.requestJson(`/api/admin/catalog_usage_list?booking_id=${encodeURIComponent(currentBookingId)}`);
+      if (!result.ok || !result.data?.ok) {
+        wrap.innerHTML = `<div class="notice bad">${escapeHtml(result.data?.error || 'Could not load usage history.')}</div>`;
         return;
       }
-      const rows = Array.isArray(data.movements) ? data.movements : [];
+      const rows = Array.isArray(result.data.movements) ? result.data.movements : [];
       wrap.innerHTML = rows.length ? rows.map((row)=>`<article class="card"><div class="kicker">${escapeHtml(formatDateTime(row.created_at))}</div><h3>${escapeHtml(row.item_key || 'Inventory item')}</h3><p>Qty used: ${escapeHtml(Math.abs(Number(row.qty_delta || 0)))}</p><div class="kicker">${escapeHtml(row.actor_name || 'Staff')}</div>${row.note ? `<p>${escapeHtml(row.note)}</p>` : ''}</article>`).join('') : '<div class="notice">No products recorded for this booking yet.</div>';
     }
 
     async function addUsage(itemKey, qtyUsed, note) {
-      const res = await fetch('/api/admin/catalog_usage_add', {
-        method:'POST',
-        credentials:'include',
-        headers:{ 'Content-Type':'application/json' },
-        body: JSON.stringify({ booking_id: currentBookingId, item_key: itemKey, qty_used: qtyUsed, note })
-      });
-      const data = await res.json().catch(()=>({}));
-      if (!res.ok) throw new Error(data.error || 'Could not record products used.');
-      return data;
-    }
-
-    function setNotice(message, kind = "") {
-      const el = document.querySelector("#pageNotice");
-      if (!el) return;
-      el.className = kind ? `notice ${kind}` : "notice";
-      el.textContent = message;
+      return requestJson('/api/admin/catalog_usage_add', { method:'POST', body:{ booking_id: currentBookingId, item_key: itemKey, qty_used: qtyUsed, note } });
     }
 
     function moderationBadges(item) {
@@ -301,23 +211,20 @@
       if (item.thread_status) bits.push(`Thread: ${escapeHtml(item.thread_status)}`);
       if (item.moderated_at) bits.push(`Moderated: ${escapeHtml(formatDateTime(item.moderated_at))}`);
       if (item.moderated_by_name) bits.push(`By: ${escapeHtml(item.moderated_by_name)}`);
-      return bits.length ? `<div class="kicker">${bits.join(" · ")}</div>` : "";
+      return bits.length ? `<div class="kicker">${bits.join(' · ')}</div>` : '';
     }
 
     function moderationReason(item) {
-      return item.moderation_reason ? `<div class="hr"></div><p><strong>Reason:</strong> ${escapeHtml(item.moderation_reason)}</p>` : "";
+      return item.moderation_reason ? `<div class="hr"></div><p><strong>Reason:</strong> ${escapeHtml(item.moderation_reason)}</p>` : '';
     }
 
     function moderationControls(entity, item) {
-      const id = escapeHtml(item.id || "");
+      const id = escapeHtml(item.id || '');
       return `
         <div class="hr"></div>
         <div class="grid" style="gap:8px">
-          <label>
-            Moderation reason
-            <input type="text" data-reason-for="${id}" placeholder="Optional reason" />
-          </label>
-          <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <label>Moderation reason<input type="text" data-reason-for="${id}" placeholder="Optional reason" /></label>
+          <div class="toolbar-wrap">
             <button class="btn ghost" type="button" data-moderate-entity="${entity}" data-moderate-id="${id}" data-action="visible">Visible</button>
             <button class="btn ghost" type="button" data-moderate-entity="${entity}" data-moderate-id="${id}" data-action="hidden">Hide</button>
             <button class="btn ghost" type="button" data-moderate-entity="${entity}" data-moderate-id="${id}" data-action="internal_only">Internal Only</button>
@@ -329,26 +236,26 @@
 
     function renderHeader(data) {
       const booking = data.booking || {};
-      currentBookingId = booking.id || "";
+      currentBookingId = booking.id || '';
       progressEnabled = booking.progress_enabled === true;
-      document.querySelector("#bookingTitle").textContent = booking.package_name || booking.package_code || "Booking loaded";
+      qs('#bookingTitle').textContent = booking.package_name || booking.package_code || 'Booking loaded';
       const bits = [];
       if (booking.customer_name) bits.push(booking.customer_name);
       if (booking.service_date) bits.push(booking.service_date);
       if (booking.start_slot) bits.push(booking.start_slot);
       if (booking.status) bits.push(`status: ${booking.status}`);
       if (booking.job_status) bits.push(`job: ${booking.job_status}`);
-      if (booking.assigned_to) bits.push(`assigned: ${booking.assigned_to}`);
-      if (booking.progress_enabled === true) bits.push("progress enabled");
-      document.querySelector("#bookingMeta").textContent = bits.length ? bits.join(" · ") : "Booking loaded.";
-      document.querySelector("#enableProgressBtn").disabled = !currentBookingId || progressEnabled;
+      if (booking.assigned_staff_name || booking.assigned_to) bits.push(`assigned: ${booking.assigned_staff_name || booking.assigned_to}`);
+      if (booking.progress_enabled === true) bits.push('progress enabled');
+      qs('#bookingMeta').textContent = bits.length ? bits.join(' · ') : 'Booking loaded.';
+      qs('#enableProgressBtn').disabled = !currentBookingId || progressEnabled;
     }
 
     function renderCustomerLink(token) {
-      const box = document.querySelector("#customerLinkBox");
-      const enableBtn = document.querySelector("#enableProgressBtn");
+      const box = qs('#customerLinkBox');
+      const enableBtn = qs('#enableProgressBtn');
       if (!token) {
-        box.textContent = "No token loaded yet.";
+        box.textContent = 'No token loaded yet.';
         enableBtn.disabled = true;
         return;
       }
@@ -358,163 +265,98 @@
     }
 
     function renderUpdates(data) {
-      const wrap = document.querySelector("#updatesList");
+      const wrap = qs('#updatesList');
       const updates = Array.isArray(data.updates) ? data.updates : [];
-      if (!updates.length) {
-        wrap.innerHTML = `<div class="notice">No updates posted yet.</div>`;
-        return;
-      }
+      if (!updates.length) { wrap.innerHTML = '<div class="notice">No updates posted yet.</div>'; return; }
       wrap.innerHTML = updates.map((item) => `
         <article class="card">
           <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
-          <h3>${escapeHtml(item.created_by || "Rosie Dazzlers")}</h3>
-          <p>${escapeHtml(item.note || "Update posted.")}</p>
+          <h3>${escapeHtml(item.created_by || 'Rosie Dazzlers')}</h3>
+          <p>${escapeHtml(item.note || 'Update posted.')}</p>
           ${moderationBadges(item)}
           ${moderationReason(item)}
-          ${moderationControls("update", item)}
-        </article>`).join("");
+          ${moderationControls('update', item)}
+        </article>`).join('');
     }
 
     function renderMedia(data) {
-      const wrap = document.querySelector("#mediaGrid");
+      const wrap = qs('#mediaGrid');
       const media = Array.isArray(data.media) ? data.media : [];
-      if (!media.length) {
-        wrap.innerHTML = `<div class="notice">No media posted yet.</div>`;
-        return;
-      }
+      if (!media.length) { wrap.innerHTML = '<div class="notice">No media posted yet.</div>'; return; }
       wrap.innerHTML = media.map((item) => `
         <article class="card">
-          ${item.media_url ? `<img class="img" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || "Progress media")}" onerror="this.style.display='none'">` : ""}
-          <h3>${escapeHtml(item.caption || item.kind || "Progress media")}</h3>
-          <p>${escapeHtml(item.created_by || "Rosie Dazzlers")}</p>
+          ${item.media_url ? `<img class="img" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || 'Progress media')}" onerror="this.style.display='none'">` : ''}
+          <h3>${escapeHtml(item.caption || item.kind || 'Progress media')}</h3>
+          <p>${escapeHtml(item.created_by || 'Rosie Dazzlers')}</p>
           <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
           ${moderationBadges(item)}
           ${moderationReason(item)}
-          ${moderationControls("media", item)}
-        </article>`).join("");
+          ${moderationControls('media', item)}
+        </article>`).join('');
     }
 
     function renderSignoffs(data) {
-      const wrap = document.querySelector("#signoffsList");
+      const wrap = qs('#signoffsList');
       const signoffs = Array.isArray(data.signoffs) ? data.signoffs : [];
-      if (!signoffs.length) {
-        wrap.innerHTML = `<div class="notice">No signoffs recorded yet.</div>`;
-        return;
-      }
+      if (!signoffs.length) { wrap.innerHTML = '<div class="notice">No signoffs recorded yet.</div>'; return; }
       wrap.innerHTML = signoffs.map((item) => `
         <article class="card">
           <div class="kicker">${escapeHtml(formatDateTime(item.signed_at))}</div>
-          <h3>${escapeHtml(item.signer_name || "Unknown signer")}</h3>
-          <p>${escapeHtml(item.signer_email || "—")}</p>
-          <div class="kicker">Type: ${escapeHtml(item.signer_type || "customer")}</div>
-          ${item.notes ? `<div class="hr"></div><p>${escapeHtml(item.notes)}</p>` : ""}
-        </article>`).join("");
+          <h3>${escapeHtml(item.signer_name || 'Unknown signer')}</h3>
+          <p>${escapeHtml(item.signer_email || '—')}</p>
+          <div class="kicker">Type: ${escapeHtml(item.signer_type || 'customer')}</div>
+          ${item.notes ? `<div class="hr"></div><p>${escapeHtml(item.notes)}</p>` : ''}
+        </article>`).join('');
     }
 
-    
-
-    function renderWorkflow(data) {
-      const wrap = document.querySelector('#workflowList');
-      const booking = data.booking || {};
-      const events = Array.isArray(data.workflow_events) ? data.workflow_events : [];
-      document.querySelector('#workflowMeta').textContent = booking.current_workflow_stage ? `Current stage: ${booking.current_workflow_stage}` : 'No workflow action recorded yet.';
-      if (!events.length) { wrap.innerHTML = `<div class="notice">No workflow events recorded yet.</div>`; return; }
-      wrap.innerHTML = events.map((item)=>`<article class="card"><div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div><h3>${escapeHtml(item.event_type || 'workflow')}</h3><p>${escapeHtml(item.event_note || '')}</p><div class="kicker">${escapeHtml(item.actor_name || 'Staff')}</div></article>`).join('');
-    }
-    async function runFlowAction(action) {
-      if (!currentBookingId) throw new Error('Load a booking first.');
-      const res = await fetch('/api/detailer/job_action', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ booking_id: currentBookingId, action, reason: document.querySelector('#flowReason').value.trim() }) });
-      const data = await res.json().catch(()=>({}));
-      if (!res.ok) throw new Error(data.error || 'Could not update workflow.');
-      return data;
+    async function loadProgressList(token) {
+      return requestJson('/api/admin/progress_list', { method:'POST', body:{ token } });
     }
 
-    async function loadActor(){
-      try {
-        const res = await fetch('/api/admin/auth_me', { credentials:'include', cache:'no-store' });
-        const out = await res.json().catch(()=>null);
-        if (!res.ok || !out?.ok || !out?.actor) throw new Error(out?.error || 'No active staff session.');
-        hasSession = true;
-        document.querySelector('#actorMeta').textContent = `${out.actor.full_name || out.actor.email || 'Staff'} · ${out.actor.role_code || 'staff'}`;
-        if (!document.querySelector('#createdBy').value.trim()) document.querySelector('#createdBy').value = out.actor.full_name || out.actor.email || '';
-        if (!document.querySelector('#mediaCreatedBy').value.trim()) document.querySelector('#mediaCreatedBy').value = out.actor.full_name || out.actor.email || '';
-      } catch (err) {
-        document.querySelector('#actorMeta').textContent = 'No staff session found. Use the fallback password field if needed.';
-      }
+    async function postUpdate(token, createdBy, note, visibility) {
+      return requestJson('/api/admin/progress_post', { method:'POST', body:{ token, created_by: createdBy, note, visibility } });
     }
 
-    async function loadProgress(password, token) {
-      const res = await fetch("/api/admin/progress_list", { method: "POST", credentials:"include", headers: authHeaders(password), body: JSON.stringify({ token }) });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Could not load progress information.");
-      return data;
+    async function postMedia(token, createdBy, kind, caption, mediaUrl, visibility) {
+      return requestJson('/api/admin/progress_media_post', { method:'POST', body:{ token, created_by: createdBy, kind, caption, media_url: mediaUrl, visibility } });
     }
 
-    async function postUpdate(password, token, createdBy, note, visibility) {
-      const res = await fetch("/api/admin/progress_post", { method: "POST", credentials:"include", headers: authHeaders(password), body: JSON.stringify({ token, created_by: createdBy, note, visibility }) });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Could not post update.");
-      return data;
+    async function enableProgress() {
+      return requestJson('/api/admin/progress_enable', { method:'POST', body:{ booking_id: currentBookingId } });
     }
 
-    async function postMedia(password, token, createdBy, kind, caption, mediaUrl, visibility) {
-      const res = await fetch("/api/admin/progress_media_post", { method: "POST", credentials:"include", headers: authHeaders(password), body: JSON.stringify({ token, created_by: createdBy, kind, caption, media_url: mediaUrl, visibility }) });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Could not attach media.");
-      return data;
-    }
-
-    async function enableProgress(password) {
-      const res = await fetch("/api/admin/progress_enable", { method: "POST", credentials:"include", headers: authHeaders(password), body: JSON.stringify({ booking_id: currentBookingId }) });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Could not enable progress.");
-      return data;
-    }
-
-    async function moderateProgressEntry(password, entity, id, action, reason) {
-      const res = await fetch("/api/admin/progress_moderate", {
-        method: "POST",
-        credentials:"include", headers: authHeaders(password),
-        body: JSON.stringify({ entity, id, action, moderation_reason: reason || null })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Could not moderate progress entry.");
-      return data;
+    async function moderateEntry(entity, entryId, action, reason) {
+      return requestJson('/api/admin/progress_moderate', { method:'POST', body:{ entity, id: entryId, action, moderation_reason: reason, booking_id: currentBookingId } });
     }
 
     async function reloadCurrent() {
-      if (!currentToken) return;
-      const password = document.querySelector("#adminPassword").value.trim();
-      const data = await loadProgress(password, currentToken);
+      if (!currentToken) throw new Error('Load a booking first.');
+      const data = await loadProgressList(currentToken);
       renderHeader(data);
       renderCustomerLink(currentToken);
       renderUpdates(data);
       renderMedia(data);
       renderSignoffs(data);
-      renderWorkflow(data);
       await loadUsageHistory();
-      document.querySelector("#postBtn").disabled = false;
-      document.querySelector("#mediaBtn").disabled = false;
-      document.querySelector("#usageBtn").disabled = false;
+      authReady(true);
     }
 
-    async function handleModerationClick(e) {
-      const btn = e.target.closest("[data-moderate-entity]");
+    async function handleModerationClick(event) {
+      const btn = event.target.closest('[data-moderate-id]');
       if (!btn) return;
-      const password = document.querySelector("#adminPassword").value.trim();
-      if (!hasSession && !password) return setNotice("Sign in or enter the legacy password.", "bad");
       const entity = btn.dataset.moderateEntity;
       const id = btn.dataset.moderateId;
       const action = btn.dataset.action;
-      const reason = document.querySelector(`[data-reason-for="${CSS.escape(id)}"]`)?.value?.trim() || "";
+      const reasonInput = qs(`[data-reason-for="${CSS.escape(id)}"]`);
+      const reason = reasonInput ? reasonInput.value.trim() : '';
+      btn.disabled = true;
       try {
-        btn.disabled = true;
-        setNotice(`Applying ${action} moderation…`);
-        await moderateProgressEntry(password, entity, id, action, reason);
+        setNotice(`Updating ${entity} moderation…`);
+        await moderateEntry(entity, id, action, reason);
         await reloadCurrent();
-        setNotice(`Updated ${entity} moderation.`, "ok");
+        setNotice(`Updated ${entity} moderation.`, 'ok');
       } catch (err) {
-        setNotice(err.message || "Could not moderate entry.", "bad");
+        setNotice(err.message || 'Could not moderate entry.', 'bad');
       } finally {
         btn.disabled = false;
       }
@@ -522,112 +364,122 @@
 
     async function boot() {
       setBrandImages();
-      await loadActor();
       setFooter();
-      const loadForm = document.querySelector("#loadForm");
-      const updateForm = document.querySelector("#updateForm");
-      const mediaForm = document.querySelector("#mediaForm");
-      const enableBtn = document.querySelector("#enableProgressBtn");
-
-      loadForm.addEventListener("submit", async (e) => {
+      qs('#adminPassword').addEventListener('input', updateActorMeta);
+      qs('#loadForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const password = document.querySelector("#adminPassword").value.trim();
-        const token = document.querySelector("#progressToken").value.trim();
-        if (!hasSession && !password) return setNotice("Sign in or enter the legacy password.", "bad");
-        if (!token) return setNotice("Progress token is required.", "bad");
+        const token = qs('#progressToken').value.trim();
+        if (!token) return setNotice('Progress token is required.', 'bad');
         try {
           currentToken = token;
-          setNotice("Loading progress information…");
+          setNotice('Loading progress information…');
           await reloadCurrent();
-          setNotice("Booking loaded.", "ok");
+          setNotice('Booking loaded.', 'ok');
         } catch (err) {
-          setNotice(err.message || "Could not load booking.", "bad");
+          setNotice(err.message || 'Could not load booking.', 'bad');
         }
       });
 
-      enableBtn.addEventListener("click", async () => {
-        const password = document.querySelector("#adminPassword").value.trim();
-                if (!currentBookingId) return setNotice("Load a booking first.", "bad");
+      qs('#reloadCurrentBtn').addEventListener('click', async () => {
+        if (!currentToken) return setNotice('Load a booking first.', 'bad');
         try {
-          setNotice("Enabling progress link…");
-          const data = await enableProgress(password);
-          if (data.progress_token) {
-            currentToken = data.progress_token;
-            document.querySelector("#progressToken").value = currentToken;
-          }
+          setNotice('Reloading booking progress…');
           await reloadCurrent();
-          setNotice("Progress link enabled.", "ok");
+          setNotice('Booking reloaded.', 'ok');
         } catch (err) {
-          setNotice(err.message || "Could not enable progress.", "bad");
+          setNotice(err.message || 'Could not reload booking.', 'bad');
         }
       });
 
-      updateForm.addEventListener("submit", async (e) => {
+      qs('#enableProgressBtn').addEventListener('click', async () => {
+        if (!currentBookingId) return setNotice('Load a booking first.', 'bad');
+        try {
+          setNotice('Enabling progress link…');
+          const data = await enableProgress();
+          if (data.progress_token) { currentToken = data.progress_token; qs('#progressToken').value = currentToken; }
+          await reloadCurrent();
+          setNotice('Progress link enabled.', 'ok');
+        } catch (err) {
+          setNotice(err.message || 'Could not enable progress.', 'bad');
+        }
+      });
+
+      qs('#updateForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const password = document.querySelector("#adminPassword").value.trim();
-        const token = document.querySelector("#progressToken").value.trim();
-        const createdBy = document.querySelector("#createdBy").value.trim();
-        const note = document.querySelector("#updateNote").value.trim();
-        const visibility = document.querySelector("#visibility").value;
-                if (!token) return setNotice("Load a booking first.", "bad");
-        if (!createdBy || !note) return setNotice("Created by and update note are required.", "bad");
+        const token = qs('#progressToken').value.trim();
+        const createdBy = qs('#createdBy').value.trim();
+        const note = qs('#updateNote').value.trim();
+        const visibility = qs('#visibility').value;
+        if (!token) return setNotice('Load a booking first.', 'bad');
+        if (!createdBy || !note) return setNotice('Created by and update note are required.', 'bad');
         try {
-          setNotice("Posting update…");
-          await postUpdate(password, token, createdBy, note, visibility);
-          document.querySelector("#updateNote").value = "";
+          setNotice('Posting update…');
+          await postUpdate(token, createdBy, note, visibility);
+          qs('#updateNote').value = '';
           await reloadCurrent();
-          setNotice("Update posted.", "ok");
+          setNotice('Update posted.', 'ok');
         } catch (err) {
-          setNotice(err.message || "Could not post update.", "bad");
+          setNotice(err.message || 'Could not post update.', 'bad');
         }
       });
 
-      mediaForm.addEventListener("submit", async (e) => {
+      qs('#mediaForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const password = document.querySelector("#adminPassword").value.trim();
-        const token = document.querySelector("#progressToken").value.trim();
-        const createdBy = document.querySelector("#mediaCreatedBy").value.trim();
-        const kind = document.querySelector("#mediaKind").value;
-        const caption = document.querySelector("#mediaCaption").value.trim();
-        const mediaUrl = document.querySelector("#mediaUrl").value.trim();
-        const visibility = document.querySelector("#mediaVisibility").value;
-                if (!token) return setNotice("Load a booking first.", "bad");
-        if (!createdBy || !mediaUrl) return setNotice("Posted by and media URL are required.", "bad");
+        const token = qs('#progressToken').value.trim();
+        const createdBy = qs('#mediaCreatedBy').value.trim();
+        const kind = qs('#mediaKind').value;
+        const caption = qs('#mediaCaption').value.trim();
+        const mediaUrl = qs('#mediaUrl').value.trim();
+        const visibility = qs('#mediaVisibility').value;
+        if (!token) return setNotice('Load a booking first.', 'bad');
+        if (!createdBy || !mediaUrl) return setNotice('Posted by and media URL are required.', 'bad');
         try {
-          setNotice("Attaching media…");
-          await postMedia(password, token, createdBy, kind, caption, mediaUrl, visibility);
-          document.querySelector("#mediaCaption").value = "";
-          document.querySelector("#mediaUrl").value = "";
+          setNotice('Attaching media…');
+          await postMedia(token, createdBy, kind, caption, mediaUrl, visibility);
+          qs('#mediaCaption').value = '';
+          qs('#mediaUrl').value = '';
           await reloadCurrent();
-          setNotice("Media attached.", "ok");
+          setNotice('Media attached.', 'ok');
         } catch (err) {
-          setNotice(err.message || "Could not attach media.", "bad");
+          setNotice(err.message || 'Could not attach media.', 'bad');
         }
       });
 
-      document.addEventListener("click", handleModerationClick);
-      document.querySelectorAll("[data-flow-action]").forEach((btn)=>btn.addEventListener("click", async ()=>{ try { setNotice(`Updating workflow…`); await runFlowAction(btn.dataset.flowAction); await reloadCurrent(); setNotice(`Workflow updated: ${btn.dataset.flowAction}.`, "ok"); } catch (err) { setNotice(err.message || "Could not update workflow.", "bad"); } }));
-
-      const usageForm = document.querySelector('#usageForm');
-      usageForm.addEventListener('submit', async (e) => {
+      qs('#usageForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!currentBookingId) return setNotice('Load a booking first.', 'bad');
-        const itemKey = document.querySelector('#usageItem').value;
-        const qtyUsed = Number(document.querySelector('#usageQty').value || 0);
-        const note = document.querySelector('#usageNote').value.trim();
+        const itemKey = qs('#usageItem').value;
+        const qtyUsed = Number(qs('#usageQty').value || 0);
+        const note = qs('#usageNote').value.trim();
         if (!itemKey || !(qtyUsed > 0)) return setNotice('Inventory item and quantity are required.', 'bad');
         try {
           setNotice('Recording products used…');
           await addUsage(itemKey, qtyUsed, note);
-          document.querySelector('#usageQty').value = '1';
-          document.querySelector('#usageNote').value = '';
+          qs('#usageQty').value = '1';
+          qs('#usageNote').value = '';
           await loadUsageHistory();
           setNotice('Products used recorded.', 'ok');
         } catch (err) {
           setNotice(err.message || 'Could not record products used.', 'bad');
         }
       });
+
+      document.addEventListener('click', handleModerationClick);
       await loadInventoryItems();
+      authReady(false);
+
+      await window.AdminPageInit.init({
+        pageKey: 'admin-progress',
+        onReady: async ({ actor: currentActor }) => {
+          actor = currentActor || null;
+          updateActorMeta();
+          const label = actor?.full_name || actor?.email || '';
+          if (label && !qs('#createdBy').value.trim()) qs('#createdBy').value = label;
+          if (label && !qs('#mediaCreatedBy').value.trim()) qs('#mediaCreatedBy').value = label;
+          setNotice('Progress workspace ready. Load a progress token to begin.', 'ok');
+        },
+        onError: (err) => setNotice(err?.message || 'Could not initialize progress workspace.', 'bad')
+      });
     }
 
     boot();

@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
 
 > Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
@@ -62,6 +64,7 @@ Complete direct upload flow.
 ## Secondary priorities
 
 ### 6) Recovery operations hardening
+- moved forward: recent recovery audit visibility now exists directly on the Recovery screen
 - provider-backed send logging
 - retry/test history visibility
 - provider-specific template/rule validation
@@ -74,6 +77,7 @@ Complete direct upload flow.
 - optional vendor reminder notifications
 
 ### 8) Internal shell cohesion
+- moved forward: older recovery/live/progress screens now use the shared internal app shell
 - unify admin/detailer navigation
 - reduce screen-to-screen fragmentation
 - improve field/mobile usage
@@ -92,6 +96,11 @@ On every build:
 
 
 ## Newly moved forward
+
+- recovery/admin live/admin progress now behave as session-first internal app screens instead of password-first screens
+- recovery now exposes recent audit visibility directly in the admin UI
+- internal menu cohesion is better because Assign Crew and Recovery are now in the shared internal menu
+- added a reusable static stress-check script for H1, add-on coverage, and script syntax coverage
 
 - public/client login flow now hands off to staff auth when the credentials belong to staff
 - public account widget now recognizes staff sessions as well as customer sessions

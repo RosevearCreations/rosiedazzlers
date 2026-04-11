@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
 
 > Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
@@ -29,6 +31,7 @@ Without real staff auth/session:
 - role-aware UI cannot fully mature
 
 ### Current bridge
+- recovery/live/progress screens now prefer the signed-in session and only keep the legacy password as optional fallback in the UI
 - `ADMIN_PASSWORD` still exists as a compatibility fallback
 - newer catalog/recovery/progress/upload flows now accept the signed-in staff session first
 
@@ -178,7 +181,7 @@ Use `dev` as the active source of truth unless explicitly told otherwise.
 Recovery templates, rules persistence, provider preview/testing, and admin UI now exist.
 
 ### Remaining edge cases
-- stronger provider-backed send history/audit visibility
+- stronger provider-backed send history/audit visibility is partly mitigated because recent recovery audit rows are now visible from the recovery screen
 - deeper production dispatch handling
 - optional resend/manual escalation tools
 
@@ -207,6 +210,12 @@ Public DB inventory, ratings, low-stock alerts, and reorder request foundations 
 ---
 
 ## Highest-priority summary
+
+Partially mitigated in this pass:
+- older recovery/live/progress screens are less dependent on the shared-password bridge
+- internal shell cohesion is stronger on tablet/laptop/mobile because these screens now use the shared app shell and shared internal menu
+- recovery audit visibility is better for office-side review
+
 The biggest current risks are:
 1. no real staff auth/session yet
 2. inconsistent staff identity across workflows

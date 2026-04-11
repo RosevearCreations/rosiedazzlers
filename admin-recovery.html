@@ -6,7 +6,7 @@
   <title>Admin Recovery | Rosie Dazzlers</title>
   <meta name="description" content="Recovery message templates, provider rules preview, and testing tools for Rosie Dazzlers." />
   <meta name="robots" content="noindex,nofollow" />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260410b" />
 </head>
 <body data-page="admin-recovery">
   <header class="nav">
@@ -24,16 +24,39 @@
     </div>
   </header>
 
-  <main class="container">
-    <section class="section"><div class="hero"><div><div class="badge">Admin Recovery</div><h1>Recovery templates and testing</h1><p>Manage persisted recovery templates, preview token replacement, and send safe provider-routed test messages.</p></div></div></section>
-    <section class="section"><div id="pageNotice" class="notice">Ready.</div></section>
+  <main class="container app-shell">
+    <aside class="app-shell__menu" data-admin-menu-mount></aside>
 
-    <section class="section">
-      <div class="grid cards">
+    <div class="app-shell__content">
+      <section class="section">
+        <div class="hero">
+          <div>
+            <div class="badge">Admin Recovery</div>
+            <h1>Recovery templates and testing</h1>
+            <p>Manage persisted recovery templates, preview token replacement, send safe provider-routed tests, and review recent recovery delivery history from one internal screen.</p>
+          </div>
+          <div class="panel stack">
+            <div>
+              <div class="kicker">Signed-in staff</div>
+              <div id="actorBox" class="kicker" style="margin-top:6px">Checking session…</div>
+            </div>
+            <div class="hr"></div>
+            <label>
+              Legacy password bridge (optional fallback)
+              <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Only needed if session recovery fails" />
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div id="pageNotice" class="notice" data-admin-shell-status>Ready.</div>
+      </section>
+
+      <section class="section surface-grid-2">
         <div class="panel">
           <h2>Template editor</h2>
           <form id="templateForm" class="form">
-            <label>Admin password<input id="adminPassword" type="password" autocomplete="current-password" required /></label>
             <label>Template key<input id="templateKey" type="text" placeholder="abandoned_checkout_email" required /></label>
             <label>Channel<select id="templateChannel"><option value="email">Email</option><option value="sms">SMS</option></select></label>
             <label>Provider<input id="templateProvider" type="text" value="manual" placeholder="manual, resend, twilio, etc." /></label>
@@ -43,7 +66,10 @@
             <label>Rules JSON<textarea id="templateRules" rows="4" placeholder='{"send_window":"09:00-20:00"}'>{}</textarea></label>
             <label>Notes<textarea id="templateNotes" rows="3" placeholder="Optional notes for staff"></textarea></label>
             <label><input id="templateActive" type="checkbox" checked /> Template active</label>
-            <div><button class="btn primary" type="submit">Save template</button></div>
+            <div class="toolbar-wrap">
+              <button class="btn primary" type="submit">Save template</button>
+              <button class="btn ghost" type="button" id="reloadTemplatesBtn">Reload templates</button>
+            </div>
           </form>
         </div>
 
@@ -60,7 +86,7 @@
             <label>Package name<input id="previewPackageName" type="text" placeholder="Complete Detail" /></label>
             <label>Gift code<input id="previewGiftCode" type="text" placeholder="Optional" /></label>
             <label>Test recipient override<input id="previewTestRecipient" type="text" placeholder="email or phone override" /></label>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <div class="toolbar-wrap">
               <button class="btn primary" type="button" id="buildPreviewBtn">Build preview</button>
               <button class="btn ghost" type="button" id="sendTestBtn">Send test</button>
             </div>
@@ -68,38 +94,64 @@
           <div class="hr"></div>
           <div id="previewOutput" class="kicker">No preview built yet.</div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section">
-      <div class="panel">
-        <h2>Saved templates</h2>
-        <div id="templateList" class="grid" style="margin-top:12px"><div class="notice">Load templates with an admin password.</div></div>
-      </div>
-    </section>
+      <section class="section surface-grid-2">
+        <div class="panel">
+          <h2>Saved templates</h2>
+          <div id="templateList" class="grid" style="margin-top:12px"><div class="notice">Load templates with a staff session or legacy fallback password.</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="toolbar-wrap" style="justify-content:space-between">
+            <div>
+              <h2 style="margin:0">Recovery audit</h2>
+              <div class="kicker">Most recent template previews, sends, and provider-routed recovery events.</div>
+            </div>
+            <button class="btn ghost" type="button" id="reloadAuditBtn">Reload audit</button>
+          </div>
+          <div id="auditList" class="grid" style="margin-top:12px"><div class="notice">No audit loaded yet.</div></div>
+        </div>
+      </section>
+    </div>
   </main>
 
   <footer class="footer container" data-footer></footer>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/admin-menu.js"></script>
+  <script src="/assets/admin-page-init.js"></script>
+  <script src="/assets/admin-runtime.js"></script>
   <script src="/assets/chrome.js"></script>
   <script type="module">
     import { setBrandImages, setFooter } from "/assets/site.js";
 
-    let templates = [];
     const byId = (id) => document.getElementById(id);
+    const runtime = window.AdminRuntime;
+    let actor = null;
+    let templates = [];
 
     function esc(v) { return String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;"); }
-    function setNotice(message, kind="") { const el=byId("pageNotice"); el.className = kind ? `notice ${kind}` : "notice"; el.textContent = message; }
-    function adminHeaders(password){ return { "Content-Type":"application/json", "x-admin-password": password }; }
+    function password() { return byId('adminPassword').value.trim(); }
+    function setNotice(message, kind="") { const el=byId('pageNotice'); el.className = kind ? `notice ${kind}` : 'notice'; el.textContent = message; }
+    function updateActorBox(){ byId('actorBox').textContent = runtime.bridgeLabel(actor, password()); }
 
     function readRulesJson() {
       try { return JSON.parse(byId("templateRules").value || "{}"); }
       catch { throw new Error("Rules JSON is invalid."); }
     }
 
+    async function apiJson(url, options = {}) {
+      return runtime.requestJson(url, {
+        ...options,
+        password: password()
+      });
+    }
+
     function fillTemplateOptions() {
       const sel = byId("previewTemplateKey");
       sel.innerHTML = templates.length
-        ? templates.map(t => `<option value="${esc(t.template_key)}">${esc(t.template_key)} (${esc(t.channel)})</option>`).join("")
+        ? templates.map((t) => `<option value="${esc(t.template_key)}">${esc(t.template_key)} (${esc(t.channel)})</option>`).join("")
         : `<option value="">No templates saved yet</option>`;
     }
 
@@ -123,6 +175,25 @@
       fillTemplateOptions();
     }
 
+    function renderAudit(items) {
+      const wrap = byId('auditList');
+      const rows = Array.isArray(items) ? items : [];
+      if (!rows.length) {
+        wrap.innerHTML = '<div class="notice">No recovery audit rows found yet.</div>';
+        return;
+      }
+      wrap.innerHTML = rows.map((row) => `
+        <article class="card">
+          <div class="kicker">${esc(row.created_at || '—')} · ${esc(row.channel || '—')} · ${esc(row.status || 'queued')}</div>
+          <h3>${esc(row.subject || row.event_type || 'Recovery event')}</h3>
+          <p>${esc(row.recipient_email || row.recipient_phone || 'No recipient recorded')}</p>
+          <div class="kicker">Attempts: ${esc(row.attempt_count || 0)}${row.processed_at ? ` · Processed: ${esc(row.processed_at)}` : ''}</div>
+          ${(row.payload && row.payload.template_key) ? `<div class="kicker">Template: ${esc(row.payload.template_key)}</div>` : ''}
+          ${row.last_error ? `<div class="hr"></div><p><strong>Last error:</strong> ${esc(row.last_error)}</p>` : ''}
+        </article>
+      `).join('');
+    }
+
     function loadTemplateIntoEditor(key) {
       const tpl = templates.find((row) => row.template_key === key);
       if (!tpl) return;
@@ -138,16 +209,14 @@
       setNotice(`Loaded template ${key} into the editor.`, "ok");
     }
 
-    async function fetchTemplates(password) {
-      const res = await fetch("/api/admin/recovery_templates", { headers: adminHeaders(password) });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Could not load templates.");
-      templates = Array.isArray(data.templates) ? data.templates : [];
+    async function fetchTemplates() {
+      const result = await apiJson('/api/admin/recovery_templates');
+      if (!result.ok) throw new Error(runtime.normalizeError(result, 'Could not load templates.'));
+      templates = Array.isArray(result.data?.templates) ? result.data.templates : [];
       renderTemplates();
-      return data;
     }
 
-    async function saveTemplate(password) {
+    async function saveTemplate() {
       const payload = {
         template_key: byId("templateKey").value.trim(),
         channel: byId("templateChannel").value,
@@ -155,21 +224,16 @@
         is_active: byId("templateActive").checked,
         subject_template: byId("templateSubject").value.trim(),
         body_template: byId("templateBody").value,
-        variables: byId("templateVariables").value.split(",").map(s => s.trim()).filter(Boolean),
+        variables: byId("templateVariables").value.split(",").map((s) => s.trim()).filter(Boolean),
         rules: readRulesJson(),
         notes: byId("templateNotes").value.trim()
       };
-      const res = await fetch("/api/admin/recovery_templates", {
-        method: "POST",
-        headers: adminHeaders(password),
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Could not save template.");
-      return data;
+      const result = await apiJson('/api/admin/recovery_templates', { method:'POST', body: payload });
+      if (!result.ok) throw new Error(runtime.normalizeError(result, 'Could not save template.'));
+      return result.data;
     }
 
-    async function buildPreview(password, sendTest = false) {
+    async function buildPreview(sendTest = false) {
       const payload = {
         channel: byId("previewChannel").value || undefined,
         customer_name: byId("previewCustomerName").value.trim(),
@@ -188,19 +252,22 @@
       let body = payload;
       if (templateKey) {
         url = "/api/admin/recovery_preview";
-        body = { template_key: templateKey, channel: payload.channel, variables: {
-          customer_name: payload.customer_name,
-          recovery_url: payload.recovery_url,
-          service_date: payload.service_date,
-          package_name: payload.package_name,
-          gift_code: payload.gift_code
-        }};
+        body = {
+          template_key: templateKey,
+          channel: payload.channel,
+          variables: {
+            customer_name: payload.customer_name,
+            recovery_url: payload.recovery_url,
+            service_date: payload.service_date,
+            package_name: payload.package_name,
+            gift_code: payload.gift_code
+          }
+        };
       }
 
-      const res = await fetch(url, { method:"POST", headers: adminHeaders(password), body: JSON.stringify(body) });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Could not build recovery preview.");
-      return data;
+      const result = await apiJson(url, { method:'POST', body });
+      if (!result.ok) throw new Error(runtime.normalizeError(result, 'Could not build recovery preview.'));
+      return result.data;
     }
 
     function renderPreview(data) {
@@ -210,61 +277,97 @@
         ${preview.provider ? `<div><strong>Provider:</strong> ${esc(preview.provider)}</div>` : ``}
         ${preview.subject ? `<div style="margin-top:8px"><strong>Subject:</strong><br>${esc(preview.subject)}</div>` : ``}
         <div style="margin-top:8px"><strong>Body:</strong><pre style="white-space:pre-wrap">${esc(preview.body || preview.body_text || preview.body_html || '—')}</pre></div>
-        ${preview.provider_rule || preview.provider_rules ? `<div style="margin-top:8px"><strong>Provider rules:</strong><pre style="white-space:pre-wrap">${esc(JSON.stringify(preview.provider_rule || preview.provider_rules, null, 2))}</pre></div>` : ``}
+        ${(preview.provider_rule || preview.provider_rules) ? `<div style="margin-top:8px"><strong>Provider rules:</strong><pre style="white-space:pre-wrap">${esc(JSON.stringify(preview.provider_rule || preview.provider_rules, null, 2))}</pre></div>` : ``}
         ${data.dispatch ? `<div style="margin-top:8px"><strong>Dispatch:</strong><pre style="white-space:pre-wrap">${esc(JSON.stringify(data.dispatch, null, 2))}</pre></div>` : ``}
       `;
+    }
+
+    async function loadAudit() {
+      const result = await apiJson('/api/recovery_audit_list', { method:'POST', body:{ limit: 25 } });
+      if (!result.ok) throw new Error(runtime.normalizeError(result, 'Could not load recovery audit.'));
+      renderAudit(result.data?.items || []);
     }
 
     async function boot() {
       setBrandImages();
       setFooter();
-      byId("templateForm").addEventListener("submit", async (e) => {
+      byId('adminPassword').addEventListener('input', updateActorBox);
+      byId('templateForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const password = byId("adminPassword").value.trim();
-        if (!password) return setNotice("Admin password is required.", "bad");
         try {
-          setNotice("Saving recovery template…");
-          await saveTemplate(password);
-          await fetchTemplates(password);
-          setNotice("Recovery template saved.", "ok");
+          setNotice('Saving recovery template…');
+          await saveTemplate();
+          await fetchTemplates();
+          await loadAudit().catch(() => {});
+          setNotice('Recovery template saved.', 'ok');
         } catch (err) {
-          setNotice(err.message || "Could not save template.", "bad");
+          setNotice(err.message || 'Could not save template.', 'bad');
         }
       });
-      byId("buildPreviewBtn").addEventListener("click", async () => {
-        const password = byId("adminPassword").value.trim();
-        if (!password) return setNotice("Admin password is required.", "bad");
+
+      byId('reloadTemplatesBtn').addEventListener('click', async () => {
         try {
-          setNotice("Building recovery preview…");
-          const data = await buildPreview(password, false);
+          setNotice('Reloading recovery templates…');
+          await fetchTemplates();
+          setNotice('Recovery templates loaded.', 'ok');
+        } catch (err) {
+          setNotice(err.message || 'Could not reload templates.', 'bad');
+        }
+      });
+
+      byId('buildPreviewBtn').addEventListener('click', async () => {
+        try {
+          setNotice('Building recovery preview…');
+          const data = await buildPreview(false);
           renderPreview(data);
-          setNotice("Recovery preview built.", "ok");
+          setNotice('Recovery preview built.', 'ok');
         } catch (err) {
-          setNotice(err.message || "Could not build preview.", "bad");
+          setNotice(err.message || 'Could not build preview.', 'bad');
         }
       });
-      byId("sendTestBtn").addEventListener("click", async () => {
-        const password = byId("adminPassword").value.trim();
-        if (!password) return setNotice("Admin password is required.", "bad");
+
+      byId('sendTestBtn').addEventListener('click', async () => {
         try {
-          setNotice("Sending test recovery message…");
-          const data = await buildPreview(password, true);
+          setNotice('Sending test recovery message…');
+          const data = await buildPreview(true);
           renderPreview(data);
-          setNotice("Recovery test sent or simulated.", "ok");
+          await loadAudit().catch(() => {});
+          setNotice('Recovery test sent or simulated.', 'ok');
         } catch (err) {
-          setNotice(err.message || "Could not send test message.", "bad");
+          setNotice(err.message || 'Could not send test message.', 'bad');
         }
       });
-      byId("adminPassword").addEventListener("change", async () => {
-        const password = byId("adminPassword").value.trim();
-        if (!password) return;
-        try { await fetchTemplates(password); setNotice("Recovery templates loaded.", "ok"); }
-        catch (err) { setNotice(err.message || "Could not load templates.", "bad"); }
+
+      byId('reloadAuditBtn').addEventListener('click', async () => {
+        try {
+          setNotice('Loading recent recovery audit…');
+          await loadAudit();
+          setNotice('Recovery audit loaded.', 'ok');
+        } catch (err) {
+          setNotice(err.message || 'Could not load recovery audit.', 'bad');
+        }
       });
-      document.addEventListener("click", (e) => {
-        const btn = e.target.closest("[data-load-template]");
+
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-load-template]');
         if (!btn) return;
         loadTemplateIntoEditor(btn.dataset.loadTemplate);
+      });
+
+      await window.AdminPageInit.init({
+        pageKey: 'admin-recovery',
+        onReady: async ({ actor: currentActor }) => {
+          actor = currentActor || null;
+          updateActorBox();
+          try {
+            await fetchTemplates();
+            await loadAudit();
+            setNotice('Recovery workspace ready.', 'ok');
+          } catch (err) {
+            setNotice(err.message || 'Could not initialize recovery workspace.', 'bad');
+          }
+        },
+        onError: (err) => setNotice(err?.message || 'Could not initialize recovery workspace.', 'bad')
       });
     }
 

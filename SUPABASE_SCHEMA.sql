@@ -224,6 +224,9 @@ create table if not exists public.notification_events (
   body_text text null,
   body_html text null
 );
+create index if not exists idx_notification_events_event_type_created_at on public.notification_events (event_type, created_at desc);
+create index if not exists idx_notification_events_template_key_created_at on public.notification_events ((payload->>'template_key'), created_at desc);
+
 create table if not exists public.customer_vehicles (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),

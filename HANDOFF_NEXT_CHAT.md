@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
 
 > Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
@@ -146,3 +148,11 @@ The newest pass pushed Accounting further by adding receivables aging, estimated
 - `functions/api/_lib/staff-auth.js` and `functions/api/detailer/jobs.js` now honor crew assignments for work scope.
 - Run `sql/2026-04-10_booking_crew_assignments_and_app_shell_hardening.sql` before testing the new crew workflow.
 - Best next pass: propagate crew-aware summaries into the remaining admin live/jobsite/time/media screens and do live runtime verification against the deployed environment.
+
+## Latest pass summary (April 10, 2026)
+- moved older recovery/live/progress screens onto the shared internal app shell
+- added recovery audit visibility in the Recovery screen
+- added notification-event indexes to support recovery audit lookups
+- added a local static stress-check script and ran it before packaging
+- move up next: broader session-first conversion on the remaining password-bridge screens like jobsite/blocks/staff, plus deeper live deployed runtime testing
+

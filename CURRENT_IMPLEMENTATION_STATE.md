@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
 
 > Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
@@ -187,3 +189,10 @@
 - `admin-booking.html` still behaves mostly as a single-lead quick-assignment tool; the richer crew workflow currently lives on `admin-assign.html`.
 - Several admin operational list endpoints still display the legacy single-assignee summary even though booking access now honors crew membership.
 - Live deployed end-to-end verification against Pages + Supabase is still required after running the new SQL migration.
+
+## April 10, 2026 internal app-shell pass
+- Admin Recovery, Admin Live, and Admin Progress now behave as session-first internal screens with the legacy password bridge demoted to optional fallback.
+- Recovery now includes a recent audit surface powered by `recovery_audit_list`.
+- Shared internal menu now includes Assign Crew and Recovery for stronger app cohesion.
+- Static stress-check coverage now exists in `scripts/stress_static_checks.py`.
+

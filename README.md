@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
 
 > Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
@@ -224,3 +226,7 @@ This build is stronger on office-side accounting and internal-route cohesion. Th
 - A new operational table, `booking_staff_assignments`, now supports multi-detailer scheduling without overloading the legacy `bookings.assigned_*` columns.
 - Detailer work-scope checks now honor crew assignments, so supporting crew members can see and work jobs assigned to them even when they are not the lead.
 - Internal mobile/tablet fit was tightened again with more compact shared spacing and a more app-like assignment screen.
+
+## Latest internal operations pass
+This build moved Admin Recovery, Admin Live, and Admin Progress toward a stronger session-first internal app model, added recovery audit visibility, and added a reusable static stress-check script for syntax/H1/add-on coverage checks.
+
