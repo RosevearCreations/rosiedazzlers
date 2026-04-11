@@ -247,6 +247,12 @@
       case "admin-accounting":
         return actor.is_admin === true || hasCapability("can_manage_staff");
 
+      case "admin-assign":
+        return actor.is_admin === true || hasCapability("can_manage_bookings") || hasCapability("can_manage_staff");
+
+      case "admin-recovery":
+        return actor.is_admin === true || hasCapability("can_manage_staff");
+
       case "admin-customers":
         return hasCapability("can_manage_bookings");
 

@@ -51,6 +51,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-blocks")
     },
     {
+      key: "admin-assign",
+      label: "Assign Crew",
+      href: "/admin-assign.html",
+      description: "Lead + crew scheduling",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-assign")
+    },
+    {
       key: "admin-progress",
       label: "Progress",
       href: "/admin-progress.html",
@@ -106,6 +113,13 @@
       href: "/admin-notifications.html",
       description: "Queued notices and hooks",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-notifications")
+    },
+    {
+      key: "admin-recovery",
+      label: "Recovery",
+      href: "/admin-recovery.html",
+      description: "Templates, previews, audit",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-recovery")
     },
     {
       key: "admin-analytics",
