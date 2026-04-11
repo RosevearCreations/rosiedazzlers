@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the remaining session-first internal screens pass, clean-route rewrite hardening pass, deployed route smoke-check pass, static stress-check expansion pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -426,3 +428,9 @@ Still important:
 - Some older internal list/report pages still summarize only the lead assignment even though crew access now exists underneath.
 - The new crew table must be deployed before multi-detailer assignment is fully live; until then the lead assignment still saves, but crew persistence gracefully falls back.
 - End-to-end runtime validation is still needed against the live Pages/Supabase environment after the new migration.
+
+## Pass 6 note — April 10, 2026
+- legacy password bridge exposure is smaller because Blocks, Staff, and Jobsite now follow the same session-first screen pattern as Recovery, Live, and Progress
+- deployed public-route instability still needs verification after publish; live checks before this pass showed `/services` and `/pricing` looping and `/videos` resolving to home content, which is why explicit `_redirects` rewrites were added in this pass
+- continue shrinking fallback safely by watching post-deploy route results and only removing remaining bridges after route/runtime checks stay clean
+

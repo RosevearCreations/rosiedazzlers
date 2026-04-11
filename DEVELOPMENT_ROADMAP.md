@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the remaining session-first internal screens pass, clean-route rewrite hardening pass, deployed route smoke-check pass, static stress-check expansion pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -271,3 +273,10 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 - moved forward: detailer work-scope checks now recognize crew membership, not just the single lead assignment.
 - moved forward: internal assignment UI is more app-like on phone/tablet and has stronger fallbacks when media or crew tables are missing.
 - move up next: extend crew-aware summaries and filters across the rest of live ops, jobsite, time, media, and dashboard views so the whole internal shell matches the new scheduling model.
+
+## Pass 6 update — April 10, 2026
+- moved forward: admin blocks, admin staff, and admin jobsite now use the shared session-first app shell and internal menu pattern
+- moved forward: explicit clean-route rewrites were added in `_redirects` for public and major admin routes to reduce `/route`, `/route/`, and `.html` drift
+- moved forward: added `scripts/deployed_route_smoke_check.py` so post-deploy route checks can be run route by route against production
+- move up next: deploy this build, run the deployed smoke-check script, then resolve any remaining public-route mismatches still visible after cache refresh
+

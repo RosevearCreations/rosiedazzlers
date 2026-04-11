@@ -1,3 +1,5 @@
+> Last synchronized: April 10, 2026. Reviewed during the remaining session-first internal screens pass, clean-route rewrite hardening pass, deployed route smoke-check pass, static stress-check expansion pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
@@ -229,4 +231,9 @@ This build is stronger on office-side accounting and internal-route cohesion. Th
 
 ## Latest internal operations pass
 This build moved Admin Recovery, Admin Live, and Admin Progress toward a stronger session-first internal app model, added recovery audit visibility, and added a reusable static stress-check script for syntax/H1/add-on coverage checks.
+
+## Pass 6 snapshot — April 10, 2026
+- session-first app-shell coverage now includes Blocks, Staff, Jobsite, Recovery, Live, and Progress
+- clean-route rewrites were added in `_redirects` to reduce public/admin route drift during deployment
+- use `scripts/deployed_route_smoke_check.py` after deploy for route-by-route public/admin smoke testing
 

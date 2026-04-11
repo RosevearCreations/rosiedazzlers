@@ -6,7 +6,7 @@
   <title>Admin Staff | Rosie Dazzlers</title>
   <meta name="description" content="Manage staff access and customer tiers for Rosie Dazzlers." />
   <meta name="robots" content="noindex,nofollow" />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260410c" />
 </head>
 <body data-page="admin-staff">
   <header class="nav">
@@ -27,7 +27,10 @@
     </div>
   </header>
 
-  <main class="container">
+  <main class="container app-shell">
+    <aside class="app-shell__menu" data-admin-menu-mount></aside>
+
+    <div class="app-shell__content">
     <section class="section">
       <div class="hero">
         <div>
@@ -48,17 +51,17 @@
       </div>
     </section>
 
-    <section class="section"><div id="pageNotice" class="notice">Ready.</div></section>
+    <section class="section"><div id="pageNotice" class="notice" data-admin-shell-status>Ready.</div></section>
 
     <section class="section">
       <div class="grid cards">
         <div class="panel">
           <h2>Staff session</h2>
-          <p id="sessionMeta" class="kicker">Signed-in staff access is required. Optional password fallback can still be supplied while older endpoints are being retired.</p>
+          <p id="sessionMeta" class="kicker">Signed-in staff access is required. The legacy password bridge is optional only while older routes are being retired.</p>
           <form id="adminForm" class="form">
             <label>
               Optional legacy fallback
-              <input id="adminPassword" type="password" autocomplete="off" placeholder="Only needed if temporary fallback is enabled" />
+              <input id="adminPassword" type="password" autocomplete="off" placeholder="Only needed if legacy fallback is temporarily enabled" />
             </label>
             <div><button class="btn primary" type="submit">Refresh staff</button></div>
           </form>
@@ -115,15 +118,28 @@
         </div>
       </div>
     </section>
+      </div>
   </main>
 
   <footer class="footer container" data-footer></footer>
-
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/admin-menu.js"></script>
+  <script src="/assets/admin-page-init.js"></script>
+  <script src="/assets/admin-runtime.js"></script>
   <script src="/assets/chrome.js"></script>
   <script type="module">
     import { setBrandImages, setFooter } from "/assets/site.js";
 
+    const runtime = window.AdminRuntime;
+    let actor = null;
     let currentPassword = "";
+
+    function password(){ return document.querySelector("#adminPassword")?.value.trim() || ""; }
+    function syncSessionMeta(){
+      const meta = document.querySelector("#sessionMeta");
+      if (meta) meta.textContent = runtime.bridgeLabel(actor, password());
+    }
     let staffUsers = [];
     let customerTiers = [];
     let selectedStaffId = "";
@@ -141,13 +157,14 @@
       el.className = kind ? `notice ${kind}` : "notice";
       el.textContent = message;
     }
-    async function apiPost(url, password, body) {
-      const headers = { "Content-Type": "application/json" };
-      if (password) headers["x-admin-password"] = password;
-      const res = await fetch(url, { method: "POST", headers, credentials: "include", body: JSON.stringify(body || {}) });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || `Request failed for ${url}`);
-      return data;
+    async function apiPost(url, providedPassword, body) {
+      const result = await runtime.requestJson(url, {
+        method: "POST",
+        password: providedPassword || password(),
+        body: body || {}
+      });
+      if (!result.ok) throw new Error(runtime.normalizeError(result, `Request failed for ${url}`));
+      return result.data || {};
     }
     function renderTiers() {
       const box = document.querySelector("#tiersBox");
@@ -194,7 +211,7 @@
       const data = await apiPost("/api/admin/staff_list", currentPassword, {});
       staffUsers = Array.isArray(data.staff_users) ? data.staff_users : [];
       customerTiers = Array.isArray(data.customer_tiers) ? data.customer_tiers : [];
-      document.querySelector("#sessionMeta").textContent = data?.actor?.full_name ? `Signed in as ${data.actor.full_name}.` : "Signed-in staff access is required.";
+      syncSessionMeta();
       renderStaffList(); renderTiers(); renderSelectedStaff();
       document.querySelector("#saveStaffBtn").disabled = false;
       document.querySelector("#newStaffBtn").disabled = false;
@@ -220,9 +237,19 @@
     document.addEventListener("DOMContentLoaded", async () => {
       setBrandImages();
       setFooter();
+      document.querySelector("#adminPassword")?.addEventListener("input", () => { currentPassword = password(); syncSessionMeta(); });
+      await window.AdminPageInit.init({
+        pageKey: "admin-staff",
+        onReady: async ({ actor: readyActor }) => {
+          actor = readyActor || null;
+          currentPassword = password();
+          syncSessionMeta();
+        }
+      });
       document.querySelector("#adminForm").addEventListener("submit", async (event) => {
         event.preventDefault();
-        currentPassword = document.querySelector("#adminPassword").value.trim();
+        currentPassword = password();
+        syncSessionMeta();
         try { setNotice("Loading staff users…"); await refreshStaff(); setNotice("Staff users loaded.", "ok"); }
         catch (err) { setNotice(err.message || "Could not load staff users.", "bad"); }
       });
