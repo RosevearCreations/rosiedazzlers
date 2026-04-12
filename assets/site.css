@@ -1,3 +1,5 @@
+*,*::before,*::after{box-sizing:border-box}
+
 /* =========================================
    Rosie Dazzlers — Theme Tokens (edit here)
    ========================================= */
@@ -916,4 +918,41 @@ input[list]:invalid{border-color:rgba(245,158,11,.5);box-shadow:0 0 0 1px rgba(2
 @media (max-width:640px){
   .wizard-nav{grid-template-columns:1fr}
   .calendar-strip{grid-template-columns:1fr 1fr}
+}
+
+
+/* pass10 booking + analytics hardening */
+.wizard-shell,.wizard-card,.wizard-top,.wizard-card > div,.wizard-card > section,.wizard-card > article,.wizard-card .grid2,.wizard-card .grid3,.wizard-card .service-area-grid,.wizard-card .requirements-grid{min-width:0}
+.wizard-card .grid2,.wizard-card .grid3,.wizard-card .service-area-grid,.wizard-card .requirements-grid{align-items:start}
+.wizard-card .grid2 > div,.wizard-card .grid3 > div,.wizard-card .service-area-grid > div,.wizard-card .requirements-grid > label{min-width:0}
+.wizard-card input,.wizard-card select,.wizard-card textarea{min-height:48px}
+.wizard-card textarea{min-height:144px;resize:vertical}
+.wizard-card label{display:block;margin-bottom:8px}
+.wizard-top .row{min-width:0}
+.calendar-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+.calendar-toolbar .range{color:var(--muted);font-size:13px}
+.calendar-toolbar .btn{flex:0 1 auto}
+.service-area-panel{display:grid;gap:10px;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+.service-area-panel ul{margin:0;padding-left:18px;color:var(--muted)}
+.service-area-links{display:flex;flex-wrap:wrap;gap:8px}
+.service-area-links a{font-size:13px}
+.service-area-note{min-height:0}
+.date-pill{min-height:84px;display:grid;align-content:start;gap:6px}
+.date-pill.is-open{border-color:rgba(34,197,94,.28);background:rgba(34,197,94,.12)}
+.date-pill.is-partial{border-color:rgba(245,158,11,.28);background:rgba(245,158,11,.12)}
+.date-pill.is-closed{border-color:rgba(239,68,68,.22);background:rgba(239,68,68,.08)}
+input[type="date"]{appearance:none;-webkit-appearance:none;color-scheme:dark;background:linear-gradient(180deg,rgba(16,23,38,.98),rgba(14,20,34,.98));color:#f8fafc;border-color:rgba(99,163,255,.42);box-shadow:0 0 0 1px rgba(77,119,255,.12) inset}
+input[type="date"]::-webkit-datetime-edit,
+input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field{color:#f8fafc}
+input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1) saturate(0) brightness(1.55);opacity:1}
+@media (max-width:980px){
+  .calendar-strip{grid-template-columns:1fr 1fr}
+}
+@media (max-width:700px){
+  .calendar-strip{grid-template-columns:1fr}
+  .calendar-toolbar .btn{flex:1 1 160px}
 }

@@ -125,6 +125,21 @@ def check_public_analytics_hook():
     if 'ensurePublicAnalytics' not in text or '/assets/public-analytics.js' not in text:
         fail('assets/chrome.js is missing public analytics bootstrap')
 
+def check_booking_contract():
+    text = (ROOT / 'book.html').read_text()
+    required = ['availabilityPrevBtn','availabilityNextBtn','availabilityWindowLabel','serviceAreaPanel','service_area_meta']
+    for needle in required:
+        if needle not in text:
+            fail(f'book.html missing expected booking control: {needle}')
+    data = json.loads((ROOT / 'data/rosie_services_pricing_and_packages.json').read_text())
+    missing = []
+    for row in data.get('service_areas', []):
+        for key in ('municipality','zone','parking_rule','noise_rule','water_rule','access_rule'):
+            if not row.get(key):
+                missing.append(f"{row.get('value','unknown')}::{key}")
+    if missing:
+        fail('service area structured fields missing: ' + ', '.join(missing[:20]))
+
 def check_admin_shell_pages():
     for rel in ['admin-progress.html','admin-live.html','admin-recovery.html','admin-blocks.html','admin-staff.html','admin-promos.html','admin-jobsite.html']:
         text = (ROOT / rel).read_text()
@@ -166,6 +181,7 @@ def main():
     check_temp_artifacts()
     check_route_collisions()
     check_public_analytics_hook()
+    check_booking_contract()
     check_admin_shell_pages()
     print('PASS: static stress checks completed')
 
