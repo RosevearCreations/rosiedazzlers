@@ -1,4 +1,5 @@
-const DATA_URL = "/data/rosie_services_pricing_and_packages.json";
+const DATA_URL = "/api/pricing_catalog_public";
+const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json";
 
 const BRAND = {
   logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
@@ -59,11 +60,28 @@ const LOCAL_ADDON_FALLBACKS = {
 
 let _servicesData = null;
 
+async function fetchCatalogJson(url) {
+  const res = await fetch(url, { cache: "no-store" });
+  const text = await res.text();
+  let parsed = null;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    throw new Error(`Could not parse pricing data from ${url}`);
+  }
+  if (!res.ok) throw new Error(parsed?.error || `Could not load ${url}`);
+  return parsed;
+}
+
 async function loadServicesData() {
   if (_servicesData) return _servicesData;
-  const res = await fetch(`${DATA_URL}?v=20260301e`, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Could not load ${DATA_URL}`);
-  _servicesData = await res.json();
+  try {
+    _servicesData = await fetchCatalogJson(DATA_URL);
+  } catch (apiErr) {
+    _servicesData = await fetchCatalogJson(`${DATA_FALLBACK_URL}?v=20260411pass11`);
+    _servicesData._source = "bundled_json_fallback";
+    _servicesData._fallback_error = apiErr?.message || null;
+  }
   return _servicesData;
 }
 
