@@ -1023,5 +1023,25 @@
         }
       ]
     }
+  ],
+  "booking_rules": {
+    "availability_window_days": 21,
+    "default_service_area": "Tillsonburg, Oxford County",
+    "hold_minutes": 30,
+    "slot_labels": {
+      "AM": "AM half day",
+      "PM": "PM half day",
+      "FULL": "Full day"
+    },
+    "public_requirements": [
+      "Driveway required",
+      "Customer provides power and water or additional fees may apply",
+      "One vehicle per day unless half-day jobs are confirmed"
+    ]
+  },
+  "public_requirements": [
+    "Driveway required",
+    "Customer provides power and water or additional fees may apply",
+    "One vehicle per day unless half-day jobs are confirmed"
   ]
 }

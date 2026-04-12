@@ -1,5 +1,4 @@
-const DATA_URL = "/api/pricing_catalog_public";
-const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json";
+import { loadPricingCatalogClient, money as formatMoney, packageImageForSize as sharedPackageImageForSize, addonPrimaryImage as sharedAddonPrimaryImage, addonFallbackImage as sharedAddonFallbackImage, addonDisplay as sharedAddonDisplay } from "/assets/pricing-catalog-client.js?v=20260412pass12";
 
 const BRAND = {
   logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
@@ -60,36 +59,14 @@ const LOCAL_ADDON_FALLBACKS = {
 
 let _servicesData = null;
 
-async function fetchCatalogJson(url) {
-  const res = await fetch(url, { cache: "no-store" });
-  const text = await res.text();
-  let parsed = null;
-  try {
-    parsed = JSON.parse(text);
-  } catch {
-    throw new Error(`Could not parse pricing data from ${url}`);
-  }
-  if (!res.ok) throw new Error(parsed?.error || `Could not load ${url}`);
-  return parsed;
-}
-
 async function loadServicesData() {
   if (_servicesData) return _servicesData;
-  try {
-    _servicesData = await fetchCatalogJson(DATA_URL);
-  } catch (apiErr) {
-    _servicesData = await fetchCatalogJson(`${DATA_FALLBACK_URL}?v=20260411pass11`);
-    _servicesData._source = "bundled_json_fallback";
-    _servicesData._fallback_error = apiErr?.message || null;
-  }
+  _servicesData = await loadPricingCatalogClient({ fallbackUrl: "/data/rosie_services_pricing_and_packages.json?v=20260412pass12" });
   return _servicesData;
 }
 
 function money(value) {
-  return new Intl.NumberFormat("en-CA", {
-    style: "currency",
-    currency: "CAD"
-  }).format(Number(value || 0));
+  return formatMoney(value);
 }
 
 function getPackageByCode(data, code) {
@@ -101,26 +78,21 @@ function packagePrice(pkg, size) {
 }
 
 function packageImageForSize(pkg, size) {
-  return pkg?.images_by_size?.[size] || "";
+  return sharedPackageImageForSize(pkg, size);
 }
 
-function addonImageForCode(code) {
-  return ADDON_MEDIA[code] || LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.svg';
+function addonImageForCode(addonOrCode) {
+  const addon = addonOrCode && typeof addonOrCode === "object" ? addonOrCode : { code: addonOrCode };
+  return sharedAddonPrimaryImage(addon) || ADDON_MEDIA[addon.code] || LOCAL_ADDON_FALLBACKS[addon.code] || '/assets/addons/generic_addon.svg';
 }
 
-function addonFallbackForCode(code) {
-  return LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.svg';
+function addonFallbackForCode(addonOrCode) {
+  const addon = addonOrCode && typeof addonOrCode === "object" ? addonOrCode : { code: addonOrCode };
+  return sharedAddonFallbackImage(addon) || LOCAL_ADDON_FALLBACKS[addon.code] || '/assets/addons/generic_addon.svg';
 }
 
 function addonDisplay(addon, size) {
-  if (addon.quote_required === true) {
-    if (addon.prices_cad?.[size] != null) return `From ${money(addon.prices_cad[size])} · Quote required`;
-    if (addon.price_cad != null) return `From ${money(addon.price_cad)} · Quote required`;
-    return "Quote required";
-  }
-  if (addon.prices_cad?.[size] != null) return money(addon.prices_cad[size]);
-  if (addon.price_cad != null) return money(addon.price_cad);
-  return "Quote required";
+  return sharedAddonDisplay(addon, size);
 }
 
 function addonCharge(addon, size) {
@@ -330,7 +302,7 @@ function renderAddons(cardsEl, data, size) {
   cardsEl.innerHTML = "";
 
   for (const addon of data.addons || []) {
-    const img = addonImageForCode(addon.code);
+    const img = addonImageForCode(addon);
     const display = addonDisplay(addon, size);
 
     const tags = [];
@@ -342,7 +314,7 @@ function renderAddons(cardsEl, data, size) {
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `
-      ${img ? `<img class="img" loading="lazy" src="${img}" alt="${addon.name}" data-fallback="${addonFallbackForCode(addon.code)}" onerror="if(this.dataset.fallback && this.src!==this.dataset.fallback){this.src=this.dataset.fallback}else{this.style.display='none'}">` : ""}
+      ${img ? `<img class="img" loading="lazy" src="${img}" alt="${addon.name}" data-fallback="${addonFallbackForCode(addon)}" onerror="if(this.dataset.fallback && this.src!==this.dataset.fallback){this.src=this.dataset.fallback}else{this.style.display='none'}">` : ""}
       <h3>${addon.name}</h3>
       <p class="kicker">${display}</p>
       ${tags.length ? `<div class="hr"></div><div>${tags.join(" ")}</div>` : ""}
