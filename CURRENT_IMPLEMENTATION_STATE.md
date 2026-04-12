@@ -249,3 +249,5 @@ Route hotfix sync reviewed on 2026-04-11.
 - Booking, services, pricing, and checkout now share the same pricing catalog read path first: `/api/pricing_catalog_public`, which is backed by `app_management_settings.pricing_catalog` with bundled JSON fallback.
 - App Management now includes a pricing catalog editor so prices, included services, add-ons, charts, and service-area guidance can be updated from one place.
 - Booking preferred-date control is now compact with a dedicated visible picker button rather than relying only on the browser icon.
+
+> Pass update 2026-04-12: Re-synced the current uploaded build to the latest safe route structure. Removed duplicate clean-route folders that were reintroducing Cloudflare Pages redirect loops, preserved the newer booking experience already present in `book.html`, refreshed the deployed booking smoke check to recognize the shared `chrome.js` analytics bootstrap, and cleaned the login form autocomplete attributes. Immediate next step after deploy: verify `/`, `/services`, `/pricing`, `/book`, and `/admin` on the active branch before resuming larger feature work.

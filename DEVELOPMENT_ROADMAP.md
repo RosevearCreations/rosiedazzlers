@@ -321,3 +321,5 @@ Route hotfix sync reviewed on 2026-04-11.
 - Add catalog validation warnings before save (duplicate codes, missing service-area fields, missing image URLs, missing price maps).
 - Add a booking-page preview inside Admin App Management so pricing/inclusion changes can be checked before they reach the public booking flow.
 - Continue tightening public booking CSS around the remaining summary/review rows on narrow phone widths.
+
+> Pass update 2026-04-12: Re-synced the current uploaded build to the latest safe route structure. Removed duplicate clean-route folders that were reintroducing Cloudflare Pages redirect loops, preserved the newer booking experience already present in `book.html`, refreshed the deployed booking smoke check to recognize the shared `chrome.js` analytics bootstrap, and cleaned the login form autocomplete attributes. Immediate next step after deploy: verify `/`, `/services`, `/pricing`, `/book`, and `/admin` on the active branch before resuming larger feature work.

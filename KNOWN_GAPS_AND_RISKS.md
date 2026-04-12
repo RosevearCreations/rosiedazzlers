@@ -485,3 +485,5 @@ Still remaining:
 - Public pages now prefer the canonical pricing catalog API, but they still fall back to bundled JSON when the API is unavailable, so dual storage still exists as a resilience layer.
 - No pricing catalog version history, draft/publish workflow, or rollback screen exists yet.
 - The custom booking date picker button improves visibility, but full cross-browser/live device verification still needs to happen after deployment.
+
+> Pass update 2026-04-12: Re-synced the current uploaded build to the latest safe route structure. Removed duplicate clean-route folders that were reintroducing Cloudflare Pages redirect loops, preserved the newer booking experience already present in `book.html`, refreshed the deployed booking smoke check to recognize the shared `chrome.js` analytics bootstrap, and cleaned the login form autocomplete attributes. Immediate next step after deploy: verify `/`, `/services`, `/pricing`, `/book`, and `/admin` on the active branch before resuming larger feature work.

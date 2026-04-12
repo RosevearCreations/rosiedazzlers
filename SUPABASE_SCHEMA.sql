@@ -499,3 +499,4 @@ create index if not exists accounting_month_end_checklists_month_start_idx
 create index if not exists idx_bookings_service_area_zone_date on public.bookings (service_area_zone, service_date desc);
 create index if not exists idx_bookings_service_area_municipality_date on public.bookings (service_area_municipality, service_date desc);
 create index if not exists idx_bookings_service_area_county_date on public.bookings (service_area_county, service_date desc);
+-- Pass update 2026-04-12: No schema shape changes in this pass. Synced docs/build after removing duplicate clean-route folders, refreshing the deployed booking analytics smoke check, and tightening login form autocomplete attributes.
