@@ -1,3 +1,5 @@
+> Last synchronized: April 12, 2026. Reviewed during the canonical pricing-catalog completion pass, booking/service-area contract repair, clean-route collision removal, static stress-check verification, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
@@ -19,6 +21,14 @@
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Current Implementation State
+
+## Completed / strengthened in the April 12 canonical pricing pass
+- public booking, services, pricing, checkout, and the shared public site helper now consume the same client/server pricing-catalog normalizer instead of drifting field-by-field
+- `/api/pricing_catalog_public` now returns the full public catalog contract: charts, packages, service matrix, add-ons, service areas, booking rules, and public requirements
+- checkout now resolves structured service-area county / municipality / zone fields from the canonical catalog before the booking/payment session is created
+- booking now reads hold minutes, default service area, and slot labels from `booking_rules` instead of hidden local constants
+- duplicate clean-route wrapper folders were removed again for `/admin`, `/admin-accounting`, `/admin-catalog`, `/pricing`, and `/services`, while trailing-slash redirects remain handled in `_redirects`
+- static stress checks now pass against the repaired pricing contract and clean-route package
 
 ## Completed / strengthened in the April 11 booking + analytics pass
 - booking page now includes paged 21-day availability windows, stronger mobile-safe field layout, and a more visible date picker
@@ -50,7 +60,7 @@
 ## Still partial / still open
 - some older internal/admin endpoints still rely on the legacy bridge and need the same session-aware conversion pattern
 - broader gift redemption messaging across customer account screens
-- full add-on/pricing convergence in admin reporting and every remaining legacy path
+- admin/reporting copy still needs one more audit so every legacy summary uses the newer canonical labels and service-area dimensions
 - provider-backed reorder reminder sending is still not automated yet
 - signed upload flow is now present, but customer-facing/private media URL strategy still needs final hardening for production buckets
 - remaining public route-by-route SEO cleanup and structured-data pass
@@ -246,8 +256,8 @@ Route hotfix sync reviewed on 2026-04-11.
 - App Management now includes a pricing catalog editor so package prices, included services, add-ons, service-area rules, and chart links can be maintained from one source of truth.
 - No schema shape change landed in this pass; `SUPABASE_SCHEMA.sql` was refreshed to note the pricing-catalog consolidation and booking UI tightening work.
 ### Pass 11 implementation state
-- Booking, services, pricing, and checkout now share the same pricing catalog read path first: `/api/pricing_catalog_public`, which is backed by `app_management_settings.pricing_catalog` with bundled JSON fallback.
-- App Management now includes a pricing catalog editor so prices, included services, add-ons, charts, and service-area guidance can be updated from one place.
+- Booking, services, pricing, checkout, and shared public helpers now share the same pricing catalog read path first: `/api/pricing_catalog_public`, which is backed by `app_management_settings.pricing_catalog` with bundled JSON fallback.
+- App Management now includes a pricing catalog editor so prices, booking windows, included services, add-ons, charts, service-area guidance, and public requirement text can be updated from one place.
 - Booking preferred-date control is now compact with a dedicated visible picker button rather than relying only on the browser icon.
 
 > Pass update 2026-04-12: Re-synced the current uploaded build to the latest safe route structure. Removed duplicate clean-route folders that were reintroducing Cloudflare Pages redirect loops, preserved the newer booking experience already present in `book.html`, refreshed the deployed booking smoke check to recognize the shared `chrome.js` analytics bootstrap, and cleaned the login form autocomplete attributes. Immediate next step after deploy: verify `/`, `/services`, `/pricing`, `/book`, and `/admin` on the active branch before resuming larger feature work.

@@ -26,7 +26,7 @@
   <div class="loading" data-admin-shell-loading>Loading app management...</div>
   <div data-admin-shell-ready hidden>
     <header class="topbar">
-      <div class="titleblock"><h1>App Management</h1><p>Control feature flags, recovery messaging, provider rules, moderation defaults, and the single pricing catalog used by booking, services, pricing, and checkout.</p></div>
+      <div class="titleblock"><h1>App Management</h1><p>Control feature flags, recovery messaging, provider rules, moderation defaults, and the single pricing catalog used by booking, services, pricing, checkout, service-area rules, public requirements, and booking time windows.</p></div>
       <section class="actorcard" aria-label="Signed in staff">
         <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
         <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
@@ -179,6 +179,9 @@
     if (!parsed || typeof parsed !== 'object') throw new Error('Pricing catalog must be a JSON object.');
     if (!Array.isArray(parsed.packages)) throw new Error('Pricing catalog must include a packages array.');
     if (!Array.isArray(parsed.addons)) throw new Error('Pricing catalog must include an addons array.');
+    if (!Array.isArray(parsed.service_areas)) throw new Error('Pricing catalog must include a service_areas array.');
+    if (parsed.booking_rules != null && typeof parsed.booking_rules !== 'object') throw new Error('booking_rules must be an object when provided.');
+    if (parsed.public_requirements != null && !Array.isArray(parsed.public_requirements)) throw new Error('public_requirements must be an array when provided.');
     return parsed;
   }
   async function loadPricingCatalogEditor(savedSetting){

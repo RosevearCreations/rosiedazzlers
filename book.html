@@ -429,8 +429,22 @@
   </div>
 
   <script type="module">
-    const DATA_URL = "/api/pricing_catalog_public";
-    const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412bookfix1";
+    import {
+      loadPricingCatalogClient,
+      fetchJsonStrict,
+      money,
+      escapeHtml,
+      bookingRules,
+      serviceAreaRows,
+      findServiceArea,
+      addonPrimaryImage as sharedAddonPrimaryImage,
+      addonFallbackImage as sharedAddonFallbackImage,
+      packageImageForSize as sharedPackageImageForSize,
+      packagePrice as sharedPackagePrice,
+      chartUrl
+    } from "/assets/pricing-catalog-client.js?v=20260412pass12";
+
+    const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const VEHICLE_MAKES_URL = "/api/vehicle_makes";
     const VEHICLE_MODELS_URL = "/api/vehicle_models";
     const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
@@ -438,7 +452,6 @@
 
     const qs = (s) => document.querySelector(s);
     const qsa = (s) => [...document.querySelectorAll(s)];
-    const money = (cad) => new Intl.NumberFormat("en-CA", { style:"currency", currency:"CAD" }).format(Number(cad || 0));
 
     const steps = [
       { title:"Step 1", subtitle:"Date & vehicle" },
@@ -460,59 +473,13 @@
       vehicleCatalog: { years: [], makes: [], models: [] }
     };
 
-    const AVAILABILITY_WINDOW_DAYS = 21;
+    const DEFAULT_AVAILABILITY_WINDOW_DAYS = 21;
 
-    const defaultServiceAreas = [
-      { county:"Oxford County", value:"Tillsonburg, Oxford County", label:"Tillsonburg — Oxford County", municipality:"Tillsonburg", zone:"Tillsonburg", bylaw_note:"Tillsonburg work should stay on the customer driveway or private lot. Noise complaints and neighbourhood bylaw calls are the biggest operational risk.", parking_rule:"Avoid street setup unless the customer has confirmed it is allowed and safe.", noise_rule:"Reduce loud vacuums, compressors, and music near homes.", water_rule:"Keep water, cleaners, and debris controlled on-site.", access_rule:"Confirm driveway width, outlet access, and customer-supplied water before arrival." },
-      { county:"Oxford County", value:"Woodstock, Oxford County", label:"Woodstock — Oxford County", municipality:"Woodstock", zone:"Woodstock", bylaw_note:"Woodstock jobs should stay on private property whenever possible.", parking_rule:"Prefer driveway or private-lot setup.", noise_rule:"Avoid prolonged engine, vacuum, or music noise near homes.", water_rule:"Contain runoff and keep debris away from drains.", access_rule:"Confirm hose reach, outlet access, and turnaround room before dispatch." },
-      { county:"Oxford County", value:"Ingersoll, Oxford County", label:"Ingersoll — Oxford County", municipality:"Ingersoll", zone:"Ingersoll", bylaw_note:"Ingersoll jobs should prioritize private-property setup.", parking_rule:"Check posted street limits and avoid blocking sidewalks.", noise_rule:"Keep louder detailing steps inside reasonable daytime hours.", water_rule:"Keep runoff controlled and out of public areas.", access_rule:"Confirm private driveway space or off-street parking." },
-      { county:"Oxford County", value:"Norwich / Otterville, Oxford County", label:"Norwich / Otterville — Oxford County", municipality:"Norwich Township", zone:"Norwich / Otterville", bylaw_note:"Norwich Township jobs often involve mixed town-and-rural access.", parking_rule:"Use driveway or yard-side access only where the customer confirms room and permission.", noise_rule:"Keep generator, vacuum, and compressor noise within normal daytime expectations.", water_rule:"Treat runoff conservatively around roadside ditches and drainage paths.", access_rule:"Ask about gravel lanes, turnaround room, water source, and outlet distance." },
-      { county:"Oxford County", value:"Thamesford / Embro / Innerkip, Oxford County", label:"Thamesford / Embro / Innerkip — Oxford County", municipality:"Zorra / East Zorra-Tavistock", zone:"Thamesford / Embro / Innerkip", bylaw_note:"This service zone spans more than one Oxford municipality, so exact address confirmation matters.", parking_rule:"Prefer confirmed private-property setup.", noise_rule:"Use daytime-only detailing noise practices near homes and farm properties.", water_rule:"Keep runoff contained away from ditches and catch basins.", access_rule:"Confirm exact town, road type, and turnaround room." },
-      { county:"Oxford County", value:"Tavistock / Hickson, Oxford County", label:"Tavistock / Hickson — Oxford County", municipality:"East Zorra-Tavistock", zone:"Tavistock / Hickson", bylaw_note:"Village and rural properties in East Zorra-Tavistock need exact-address confirmation.", parking_rule:"Use the customer driveway or lot and avoid shoulder parking for long jobs.", noise_rule:"Plan louder work for standard daytime hours only.", water_rule:"Keep runoff off roadside ditches and unmanaged gravel edges.", access_rule:"Confirm lane width, trailer turning room, and water/power availability." },
-      { county:"Oxford County", value:"Beachville / South-West Oxford, Oxford County", label:"Beachville / South-West Oxford — Oxford County", municipality:"South-West Oxford", zone:"Beachville / South-West Oxford", bylaw_note:"South-West Oxford bookings should distinguish between village and rural properties.", parking_rule:"Private-property access is preferred.", noise_rule:"Minimize extended machine noise near homes and hamlet main streets.", water_rule:"Keep runoff controlled and away from ditches.", access_rule:"Confirm exact address, driveway surface, and setup room." },
-      { county:"Oxford County", value:"Plattsville / Blandford-Blenheim, Oxford County", label:"Plattsville / Blandford-Blenheim — Oxford County", municipality:"Blandford-Blenheim", zone:"Plattsville / Blandford-Blenheim", bylaw_note:"Blandford-Blenheim work often mixes village and rural conditions.", parking_rule:"Keep support vehicles on-site and off travelled roads or narrow shoulders.", noise_rule:"Use daytime-only machine noise practices.", water_rule:"Keep wastewater and debris off roadside drainage and shared lanes.", access_rule:"Confirm driveway surface, slope, and utility access." },
-      { county:"Oxford County", value:"Rural Oxford County", label:"Rural Oxford County", municipality:"Oxford County rural", zone:"Rural Oxford County", bylaw_note:"Rural Oxford jobs need stronger pre-dispatch checks for driveway access, turnaround space, and water supply.", parking_rule:"Do not assume roadside shoulders are suitable for support vehicles or trailers.", noise_rule:"Keep extended machine noise inside standard daytime work windows.", water_rule:"Protect wells, ditches, culverts, and gravel drainage paths.", access_rule:"Confirm road condition, driveway length, turnaround room, and utility distance." },
 
-      { county:"Norfolk County", value:"Simcoe, Norfolk County", label:"Simcoe — Norfolk County", municipality:"Norfolk County", zone:"Simcoe", bylaw_note:"Simcoe jobs should stay on private property whenever possible.", parking_rule:"Use driveway or private-lot setup.", noise_rule:"Keep louder detailing steps to daytime hours.", water_rule:"Keep runoff controlled and away from drains and curbs.", access_rule:"Confirm private-property working room and any building or condo access rules." },
-      { county:"Norfolk County", value:"Delhi, Norfolk County", label:"Delhi — Norfolk County", municipality:"Norfolk County", zone:"Delhi", bylaw_note:"Delhi bookings should confirm private-property working space and any downtown parking limitations.", parking_rule:"Avoid street setup if the customer cannot confirm long-enough parking.", noise_rule:"Use normal daytime noise practices near homes and mixed-use streets.", water_rule:"Keep runoff controlled on site.", access_rule:"Confirm driveway or lot access before dispatch." },
-      { county:"Norfolk County", value:"Port Dover, Norfolk County", label:"Port Dover — Norfolk County", municipality:"Norfolk County", zone:"Port Dover", bylaw_note:"Port Dover needs stronger parking and arrival planning during busier seasons.", parking_rule:"Check posted downtown, waterfront, and seasonal parking limits.", noise_rule:"Keep noisy work inside daytime windows.", water_rule:"Keep runoff well contained and away from public pedestrian areas.", access_rule:"Confirm off-street access, visitor traffic conditions, and any seasonal parking limits." },
-      { county:"Norfolk County", value:"Waterford, Norfolk County", label:"Waterford — Norfolk County", municipality:"Norfolk County", zone:"Waterford", bylaw_note:"Waterford bookings should confirm driveway or private-lot access.", parking_rule:"Avoid long street-side staging unless confirmed.", noise_rule:"Use normal daytime detailing noise practices.", water_rule:"Control runoff and debris on site.", access_rule:"Confirm driveway space, hose reach, and outlet access." },
-      { county:"Norfolk County", value:"Port Rowan, Norfolk County", label:"Port Rowan — Norfolk County", municipality:"Norfolk County", zone:"Port Rowan", bylaw_note:"Port Rowan needs seasonal parking awareness and private-property setup confirmation.", parking_rule:"Check waterfront and municipal-lot conditions before sending larger vehicles or crews.", noise_rule:"Keep machine noise to daytime windows only.", water_rule:"Keep runoff away from curbs, drains, and shoreline-adjacent infrastructure.", access_rule:"Confirm parking room and turnaround space at the exact address." },
-      { county:"Norfolk County", value:"Langton, Norfolk County", label:"Langton — Norfolk County", municipality:"Norfolk County", zone:"Langton", bylaw_note:"Langton jobs should confirm driveway or lot setup and treat runoff conservatively.", parking_rule:"Prefer off-street setup for full or crew-sized jobs.", noise_rule:"Keep louder steps to standard daytime hours.", water_rule:"Avoid uncontrolled runoff to ditches or roadside drainage.", access_rule:"Confirm driveway width and utility access." },
-      { county:"Norfolk County", value:"Courtland, Norfolk County", label:"Courtland — Norfolk County", municipality:"Norfolk County", zone:"Courtland", bylaw_note:"Courtland work should be treated like a hamlet or rural-edge job.", parking_rule:"Keep support vehicles fully on private property where possible.", noise_rule:"Use daytime-only machine noise practices.", water_rule:"Keep runoff and debris out of ditches and shared drainage edges.", access_rule:"Confirm exact property layout before crew assignment." },
-      { county:"Norfolk County", value:"Vittoria / St. Williams, Norfolk County", label:"Vittoria / St. Williams — Norfolk County", municipality:"Norfolk County", zone:"Vittoria / St. Williams", bylaw_note:"These hamlet-area bookings need exact-address confirmation.", parking_rule:"Use private-property staging only where the customer confirms enough room.", noise_rule:"Keep noisy steps inside daytime windows near homes and cottages.", water_rule:"Keep runoff away from roadside ditches and sensitive areas.", access_rule:"Confirm driveway width, turnaround room, and service utilities." },
-      { county:"Norfolk County", value:"Turkey Point / Long Point, Norfolk County", label:"Turkey Point / Long Point — Norfolk County", municipality:"Norfolk County", zone:"Turkey Point / Long Point", bylaw_note:"Beach-area jobs need the strongest seasonal parking and arrival planning.", parking_rule:"Confirm off-street parking before final approval.", noise_rule:"Use daytime-only machine noise practices near cottages and vacation properties.", water_rule:"Keep runoff tightly contained and away from shoreline areas.", access_rule:"Confirm the exact address, parking plan, and seasonal traffic conditions." },
-      { county:"Norfolk County", value:"Walsh / Walsingham, Norfolk County", label:"Walsh / Walsingham — Norfolk County", municipality:"Norfolk County", zone:"Walsh / Walsingham", bylaw_note:"Walsh and Walsingham bookings should be treated as rural setups.", parking_rule:"Do not assume roadside staging is suitable for equipment, vans, or trailers.", noise_rule:"Keep extended machine noise inside daytime work windows.", water_rule:"Keep runoff and debris away from ditches, gravel edges, and rural drainage features.", access_rule:"Confirm driveway length, surface, and available setup room." },
-      { county:"Norfolk County", value:"Rural Norfolk County", label:"Rural Norfolk County", municipality:"Norfolk County rural", zone:"Rural Norfolk County", bylaw_note:"Rural Norfolk jobs need stronger dispatch checks for long driveways, utility reach, and safe trailer turnaround.", parking_rule:"Keep all support vehicles on the customer property and out of travelled roads or soft shoulders.", noise_rule:"Use standard daytime-only machine-noise practices.", water_rule:"Protect ditches, culverts, wells, and unpaved drainage paths.", access_rule:"Confirm road conditions, driveway length, turnaround room, and customer-provided utilities." }
-    ];
+    const activeBookingRules = () => bookingRules(state.pricing || {});
 
-    const PACKAGE_ADDON_FILES = {
-      full_clay_treatment: "full_clay_treatment.png",
-      two_stage_polish: "two_stage_polish.png",
-      high_grade_paint_sealant: "high_grade_paint_sealant.png",
-      uv_protectant_applied_on_interior_panels: "uv_protectant_applied_on_interior_panels.png",
-      de_ionizing_treatment: "De-Ionizing Vehicle Add on service.png",
-      de_badging: "DeBadgingAddonService.png",
-      engine_cleaning: "Engine Cleaning add on service.png",
-      external_ceramic_coating: "External Ceramic coating add on service.png",
-      external_graphene_fine_finish: "External Graphene Fine finish add on service.png",
-      external_wax: "External Wax add on service.png",
-      vinyl_wrapping: "Vinyl Wrapping add on service.png",
-      window_tinting: "Window Tinting add on service.png"
-    };
-
-    function escapeHtml(value) {
-      return String(value ?? "").replace(/[&<>"']/g, (m) => ({
-        "&":"&amp;",
-        "<":"&lt;",
-        ">":"&gt;",
-        "\"":"&quot;",
-        "'":"&#39;"
-      }[m]));
-    }
-
-    function analyticsTrack(eventType, payload = {}) {
-      try { window.RosieAnalytics?.track?.(eventType, payload); } catch {}
+    function configuredServiceAreas() {
+      return serviceAreaRows(state.pricing || {});
     }
 
     function selectedDate() { return qs("#service_date").value; }
@@ -521,10 +488,6 @@
       return (state.pricing?.packages || []).find((pkg) => pkg.code === state.selectedPackageCode) || null;
     }
 
-    function configuredServiceAreas() {
-      const rows = state.pricing?.service_areas;
-      return Array.isArray(rows) && rows.length ? rows : defaultServiceAreas;
-    }
 
     function showStatus(msg, kind = "") {
       const el = qs("#bookingStatus");
@@ -580,87 +543,30 @@
     }
 
     function packagePrice(pkg, size) {
-      return pkg?.prices_cad?.[size] ?? null;
+      return sharedPackagePrice(pkg, size);
     }
 
     function packageImageForSize(pkg, size) {
-      return pkg?.images_by_size?.[size] || Object.values(pkg?.images_by_size || {})[0] || "";
+      return sharedPackageImageForSize(pkg, size);
     }
 
     function addonPrimaryImage(code) {
-      const file = PACKAGE_ADDON_FILES[String(code || "").trim()];
-      return file ? `${PACKAGE_BASE}${encodeURIComponent(file).replace(/%2F/g, "/")}` : "/assets/addons/generic_addon.svg";
+      const addon = (state.pricing?.addons || []).find((row) => row?.code === String(code || "").trim()) || { code };
+      return sharedAddonPrimaryImage(addon) || "/assets/addons/generic_addon.svg";
     }
 
     function addonFallbackImage(code) {
-      const c = String(code || "").trim();
-      const svgCodes = [
-        "de_ionizing_treatment",
-        "de_badging",
-        "engine_cleaning",
-        "external_ceramic_coating",
-        "external_graphene_fine_finish",
-        "external_wax",
-        "vinyl_wrapping",
-        "window_tinting"
-      ];
-      return `/assets/addons/${c}${svgCodes.includes(c) ? ".svg" : ".png"}`;
-    }
-
-    function openModal(title, imgUrl) {
-      qs("#modalTitle").textContent = title;
-      qs("#modalImg").src = imgUrl;
-      qs("#modalBack").style.display = "flex";
-    }
-
-    function closeModal() {
-      qs("#modalBack").style.display = "none";
-      qs("#modalImg").src = "";
-    }
-
-    qs("#modalCloseBtn").addEventListener("click", closeModal);
-    qs("#modalBack").addEventListener("click", (e) => {
-      if (e.target.id === "modalBack") closeModal();
-    });
-    qs("#openSizeChartBtn").addEventListener("click", () => openModal("Vehicle size chart", `${BRAND_BASE}/CarSizeChart.PNG`));
-    qs("#openPriceChartBtn").addEventListener("click", () => openModal("Vehicle price chart", `${BRAND_BASE}/CarPrice2025.PNG`));
-
-    qs("#serviceDatePickerBtn").addEventListener("click", () => {
-      const input = qs("#service_date");
-      try { input.showPicker?.(); } catch {}
-      input.focus();
-      input.click();
-    });
-
-    async function fetchJsonStrict(url) {
-      const res = await fetch(url, { credentials:"include", cache:"no-store" });
-      const text = await res.text();
-      let parsed = null;
-      try { parsed = JSON.parse(text); } catch { throw new Error(`Expected JSON from ${url}`); }
-      if (!res.ok) throw new Error(parsed?.error || `Request failed for ${url}`);
-      return parsed;
+      const addon = (state.pricing?.addons || []).find((row) => row?.code === String(code || "").trim()) || { code };
+      return sharedAddonFallbackImage(addon);
     }
 
     async function loadPricingData() {
-      try {
-        const apiData = await fetchJsonStrict(DATA_URL);
-        if (Array.isArray(apiData.packages) && Array.isArray(apiData.addons)) {
-          if (!Array.isArray(apiData.service_areas) || !apiData.service_areas.length) {
-            apiData.service_areas = defaultServiceAreas;
-          }
-          return apiData;
-        }
-        throw new Error("Pricing catalog response was incomplete.");
-      } catch {
-        const fallback = await fetchJsonStrict(DATA_FALLBACK_URL);
-        fallback.service_areas = Array.isArray(fallback?.service_areas) && fallback.service_areas.length ? fallback.service_areas : defaultServiceAreas;
-        return fallback;
-      }
+      return await loadPricingCatalogClient({ fallbackUrl: DATA_FALLBACK_URL, credentials: "include" });
     }
 
     function renderServiceAreas(rowsOverride = null) {
       const rows = Array.isArray(rowsOverride) && rowsOverride.length ? rowsOverride : configuredServiceAreas();
-      const safeRows = Array.isArray(rows) && rows.length ? rows : defaultServiceAreas;
+      const safeRows = Array.isArray(rows) && rows.length ? rows : [];
       const grouped = safeRows.reduce((acc, row) => {
         const county = row?.county || "Service area";
         (acc[county] ||= []).push(row);
@@ -668,17 +574,22 @@
       }, {});
       const select = qs("#service_area");
       const prior = select.value;
+      if (!safeRows.length) {
+        select.innerHTML = `<option value="">No service areas loaded</option>`;
+        updateServiceAreaNote();
+        return;
+      }
       select.innerHTML = `<option value="">Choose your town or service zone</option>` + Object.entries(grouped).map(([county, countyRows]) => {
         const options = countyRows.map((row) => `<option value="${escapeHtml(row.value || row.label)}">${escapeHtml(row.label || row.value)}</option>`).join("");
         return `<optgroup label="${escapeHtml(county)}">${options}</optgroup>`;
       }).join("");
-      const preferred = prior || "Tillsonburg, Oxford County";
+      const preferred = prior || activeBookingRules().default_service_area || "";
       if ([...select.options].some((opt) => opt.value === preferred)) select.value = preferred;
       updateServiceAreaNote();
     }
 
     function updateServiceAreaNote() {
-      const selected = configuredServiceAreas().find((row) => [row?.value, row?.label].includes(qs("#service_area").value));
+      const selected = findServiceArea(state.pricing || {}, qs("#service_area").value);
       const note = qs("#serviceAreaNote");
       const rules = qs("#serviceAreaRules");
       const links = qs("#serviceAreaLinks");
@@ -929,7 +840,7 @@
         items.push({ iso, out, status: availabilityStatus(out) });
       }
 
-      const end = addDaysLocal(start, AVAILABILITY_WINDOW_DAYS - 1);
+      const end = addDaysLocal(start, (Number(activeBookingRules().availability_window_days || DEFAULT_AVAILABILITY_WINDOW_DAYS) || DEFAULT_AVAILABILITY_WINDOW_DAYS) - 1);
       qs("#availabilityWindowLabel").textContent = `${start.toLocaleDateString("en-CA", { month:"short", day:"numeric" })} to ${end.toLocaleDateString("en-CA", { month:"short", day:"numeric", year:"numeric" })}`;
       qs("#availabilityPrevBtn").disabled = state.availabilityOffset === 0;
 
@@ -985,7 +896,7 @@
         btn.disabled = !open;
         btn.classList.toggle("active", state.selectedSlotChoice === slot);
         if (!open) btn.textContent = slot === "FULL" ? "Full day unavailable" : `${slot} unavailable`;
-        else btn.textContent = slot === "FULL" ? "Full day" : `${slot} half day`;
+        else btn.textContent = (activeBookingRules().slot_labels || {})[slot] || (slot === "FULL" ? "Full day" : `${slot} half day`);
       });
 
       qs("#availabilityNote").textContent = `Availability for ${date}: AM ${out.AM ? "open" : "booked"}, PM ${out.PM ? "open" : "booked"}${out.blocked ? ` • ${out.reason || "blocked"}` : ""}.`;
@@ -1129,7 +1040,7 @@
     }
 
     function renderReviewVehicle() {
-      const area = configuredServiceAreas().find((row) => [row?.value, row?.label].includes(qs("#service_area").value));
+      const area = findServiceArea(state.pricing || {}, qs("#service_area").value);
       const rows = [
         ["Date", selectedDate() || "Not chosen"],
         ["Time", state.selectedSlotChoice || "Not chosen"],
@@ -1145,7 +1056,7 @@
     function renderFinalSummary() {
       const pkg = selectedPackage();
       const totals = computeTotals();
-      const area = configuredServiceAreas().find((row) => [row?.value, row?.label].includes(qs("#service_area").value));
+      const area = findServiceArea(state.pricing || {}, qs("#service_area").value);
       const rows = [
         ["Date", selectedDate() || "Not chosen"],
         ["Time", state.selectedSlotChoice || "Not chosen"],
@@ -1218,7 +1129,7 @@
         duration_slots,
         service_area: qs("#service_area").value,
         service_area_label: qs("#service_area").selectedOptions?.[0]?.textContent || qs("#service_area").value,
-        service_area_meta: configuredServiceAreas().find((row) => [row?.value, row?.label].includes(qs("#service_area").value)) || null,
+        service_area_meta: findServiceArea(state.pricing || {}, qs("#service_area").value) || null,
         package_code: state.selectedPackageCode,
         vehicle_size: selectedSize(),
         customer_name: qs("#customer_name").value.trim(),
@@ -1282,11 +1193,15 @@
       renderFinalSummary();
     });
 
-    renderServiceAreas(defaultServiceAreas);
+    renderServiceAreas(configuredServiceAreas());
+    syncBookingRuleLabels();
 
     try {
       state.pricing = await loadPricingData();
       renderServiceAreas();
+      syncBookingRuleLabels();
+      qs("#openSizeChartBtn").addEventListener("click", () => openModal("Vehicle size chart", chartUrl(state.pricing || {}, "Vehicle Size Chart") || `${BRAND_BASE}/CarSizeChart.PNG`));
+      qs("#openPriceChartBtn").addEventListener("click", () => openModal("Vehicle price chart", chartUrl(state.pricing || {}, "Vehicle Price Chart 2025") || `${BRAND_BASE}/CarPrice2025.PNG`));
       await Promise.all([
         loadVehicleMakes(),
         loadGarageVehicles(),

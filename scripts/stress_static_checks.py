@@ -91,13 +91,16 @@ def check_public_h1():
             fail(f"{rel} has {count} H1 tags")
 
 
-def check_addon_coverage():
+def check_catalog_media_coverage():
     data = json.loads((ROOT / 'data/rosie_services_pricing_and_packages.json').read_text())
-    site_js = (ROOT / 'assets/site.js').read_text()
-    addon_codes = [row.get('code') for row in data.get('addons', []) if row.get('code')]
-    missing = [code for code in addon_codes if code not in site_js]
+    missing = []
+    for row in data.get('addons', []):
+        if not row.get('image_url'):
+            missing.append(f"{row.get('code','unknown')}::image_url")
+        if not row.get('image_fallback_url'):
+            missing.append(f"{row.get('code','unknown')}::image_fallback_url")
     if missing:
-        fail(f"addon image mapping missing for: {', '.join(missing)}")
+        fail('catalog add-on media fields missing: ' + ', '.join(missing))
 
 
 
@@ -120,6 +123,16 @@ def check_route_collisions():
             collisions.append(f"{html_path.relative_to(ROOT)} <-> {idx.relative_to(ROOT)}")
     if collisions:
         fail("route collisions detected: " + "; ".join(collisions))
+
+def check_public_catalog_helper_usage():
+    helper = (ROOT / 'assets/pricing-catalog-client.js').read_text()
+    if 'loadPricingCatalogClient' not in helper or 'normalizePricingCatalog' not in helper:
+        fail('assets/pricing-catalog-client.js is missing the shared catalog loader')
+    for rel in ['services.html', 'pricing.html', 'book.html', 'assets/site.js']:
+        text = (ROOT / rel).read_text()
+        if 'pricing-catalog-client.js' not in text:
+            fail(f"{rel} is missing the shared pricing catalog helper import")
+
 
 def check_public_analytics_hook():
     text = (ROOT / 'assets/chrome.js').read_text()
@@ -178,9 +191,10 @@ def main():
             run_node_check(path)
     check_inline_scripts()
     check_public_h1()
-    check_addon_coverage()
+    check_catalog_media_coverage()
     check_temp_artifacts()
     check_route_collisions()
+    check_public_catalog_helper_usage()
     check_public_analytics_hook()
     check_booking_contract()
     check_admin_shell_pages()
