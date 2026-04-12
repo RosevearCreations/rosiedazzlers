@@ -13,7 +13,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at top, rgba(25
 <header class="topbar"><div class="titleblock"><h1>Analytics & Recovery</h1><p>Live sessions, visitor journeys, historical traffic, referrers, cart activity, and abandoned checkout recovery controls.</p></div><section class="actorcard"><div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div><div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div><div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div><button class="logout-btn" type="button" data-admin-logout>Sign Out</button></section></header>
 <div class="status" data-admin-shell-status hidden></div>
 <section class="grid">
-<article class="card"><div class="toolbar"><h2 style="margin:0">Overview</h2><div class="toolbar-actions"><label class="muted" for="analyticsDays">Window</label><select id="analyticsDays"><option value="7">7 days</option><option value="14">14 days</option><option value="30" selected>30 days</option><option value="90">90 days</option></select><button class="ghost-btn" id="refreshAnalyticsBtn" type="button">Refresh</button></div></div><div class="kpi" id="kpi-grid"><div class="box"><div class="muted">Loading…</div><strong>—</strong></div></div></article>
+<article class="card"><div class="toolbar"><h2 style="margin:0">Overview</h2><div class="toolbar-actions"><label class="muted" for="analyticsDays">Window</label><select id="analyticsDays"><option value="7">7 days</option><option value="14">14 days</option><option value="30" selected>30 days</option><option value="90">90 days</option></select><label class="muted" for="analyticsServiceArea">Service area</label><select id="analyticsServiceArea"><option value="">All service areas</option></select><button class="ghost-btn" id="refreshAnalyticsBtn" type="button">Refresh</button><button class="ghost-btn" id="exportTrafficBtn" type="button">Export traffic CSV</button><button class="ghost-btn" id="exportFunnelBtn" type="button">Export funnel CSV</button><button class="ghost-btn" id="exportActionsBtn" type="button">Export actions CSV</button></div></div><div class="kpi" id="kpi-grid"><div class="box"><div class="muted">Loading…</div><strong>—</strong></div></div></article>
 <article class="card"><h2>Live Online Now</h2><div id="live-online" class="list"></div></article>
 <article class="card"><h2>Daily Traffic</h2><div id="daily-traffic" class="list"></div></article>
 <article class="card"><h2>Recent Cart Signals</h2><div id="cart-signals" class="list"></div></article>
@@ -24,6 +24,8 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at top, rgba(25
 <article class="card"><h2>Top Devices</h2><div id="top-devices" class="list"></div></article>
 <article class="card"><h2>Top Referrers</h2><div id="top-referrers" class="list"></div></article>
 <article class="card"><h2>Top Actions</h2><div id="top-actions" class="list"></div></article>
+<article class="card"><h2>Top Service Areas</h2><div id="top-service-areas" class="list"></div></article>
+<article class="card"><h2>Booking Funnel</h2><div id="booking-funnel" class="list"></div></article>
 <article class="card"><h2>Checkout State Mix</h2><div id="checkout-states" class="list"></div></article>
 <article class="card"><h2>Recent Actions</h2><div id="recent-actions" class="list"></div></article>
 <article class="card"><h2>Session Journeys</h2><div id="session-journeys" class="list"></div></article>
@@ -32,21 +34,28 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at top, rgba(25
 <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
 <script>
 (function(){
-  const els={kpi:document.getElementById("kpi-grid"),pages:document.getElementById("top-pages"),countries:document.getElementById("top-countries"),cities:document.getElementById("top-cities"),regions:document.getElementById("top-regions"),devices:document.getElementById("top-devices"),actions:document.getElementById("top-actions"),recentActions:document.getElementById("recent-actions"),referrers:document.getElementById("top-referrers"),journeys:document.getElementById("session-journeys"),live:document.getElementById("live-online"),cart:document.getElementById("cart-signals"),abandoned:document.getElementById("abandoned-orders"),queueAll:document.getElementById("queue-all-recovery-btn"),days:document.getElementById('analyticsDays'),refresh:document.getElementById('refreshAnalyticsBtn'),daily:document.getElementById('daily-traffic'),checkoutStates:document.getElementById('checkout-states')};
+  const els={kpi:document.getElementById("kpi-grid"),pages:document.getElementById("top-pages"),countries:document.getElementById("top-countries"),cities:document.getElementById("top-cities"),regions:document.getElementById("top-regions"),devices:document.getElementById("top-devices"),actions:document.getElementById("top-actions"),serviceAreas:document.getElementById("top-service-areas"),funnel:document.getElementById("booking-funnel"),recentActions:document.getElementById("recent-actions"),referrers:document.getElementById("top-referrers"),journeys:document.getElementById("session-journeys"),live:document.getElementById("live-online"),cart:document.getElementById("cart-signals"),abandoned:document.getElementById("abandoned-orders"),queueAll:document.getElementById("queue-all-recovery-btn"),days:document.getElementById('analyticsDays'),serviceAreaFilter:document.getElementById('analyticsServiceArea'),refresh:document.getElementById('refreshAnalyticsBtn'),exportTraffic:document.getElementById('exportTrafficBtn'),exportFunnel:document.getElementById('exportFunnelBtn'),exportActions:document.getElementById('exportActionsBtn'),daily:document.getElementById('daily-traffic'),checkoutStates:document.getElementById('checkout-states')};
   let abandonedRows=[];
+  let latestAnalytics=null;
   let autoRefreshTimer=null;
   function setShellStatus(message,type){document.querySelectorAll("[data-admin-shell-status]").forEach(node=>{node.hidden=!message;node.textContent=message||"";node.dataset.state=type||"";});}
   function esc(v){return String(v||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
   function renderList(node, rows, formatter, empty='No data.'){node.innerHTML=""; if(!rows||!rows.length){node.innerHTML=`<div class="item muted">${esc(empty)}</div>`; return;} rows.forEach(r=>{const div=document.createElement("div"); div.className="item"; div.innerHTML=formatter(r); node.appendChild(div);});}
+  function downloadCsv(filename, rows){ if(!rows || !rows.length){ setShellStatus('No data available for export.','error'); return; } const keys = Array.from(rows.reduce((set,row)=>{ Object.keys(row||{}).forEach((key)=>set.add(key)); return set; }, new Set())); const escapeCsv = (value)=> `"${String(value ?? '').replaceAll('\"','\"\"')}"`; const lines=[keys.join(',')].concat(rows.map((row)=>keys.map((key)=>escapeCsv(row?.[key])).join(','))); const blob = new Blob([lines.join('\n')], { type:'text/csv;charset=utf-8' }); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url), 2000); }
   async function load(){
     const days = Number(els.days.value || 30);
     const [analyticsRes, abandonedRes] = await Promise.all([
-      fetch("/api/admin/analytics_overview",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({days})}),
+      fetch("/api/admin/analytics_overview",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({days, service_area: els.serviceAreaFilter.value || null})}),
       fetch("/api/admin/abandoned_orders_list",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({days})})
     ]);
     const analytics=await analyticsRes.json().catch(()=>null); const abandoned=await abandonedRes.json().catch(()=>null);
     if(!analyticsRes.ok) throw new Error(analytics?.error||"Could not load analytics.");
     if(!abandonedRes.ok) throw new Error(abandoned?.error||"Could not load abandoned orders.");
+    latestAnalytics = analytics;
+    const filterValue = String(analytics.selected_service_area || "");
+    const options = Array.isArray(analytics.service_area_options) ? analytics.service_area_options : [];
+    els.serviceAreaFilter.innerHTML = `<option value="">All service areas</option>${options.map((value)=>`<option value="${esc(value)}">${esc(value)}</option>`).join("")}`;
+    if ([...els.serviceAreaFilter.options].some((opt)=>opt.value === filterValue)) els.serviceAreaFilter.value = filterValue;
     els.kpi.innerHTML=`
       <div class="box"><div class="muted">Events</div><strong>${Number(analytics.summary?.events||0)}</strong></div>
       <div class="box"><div class="muted">Page Views</div><strong>${Number(analytics.summary?.page_views||0)}</strong></div>
@@ -64,6 +73,9 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at top, rgba(25
     renderList(els.devices, analytics.top_devices||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} events</div>`, 'No device mix yet.');
     renderList(els.referrers, analytics.top_referrers||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} referrals</div>`);
     renderList(els.actions, analytics.top_actions||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} tracked actions</div>`, 'No action data yet.');
+    renderList(els.serviceAreas, analytics.top_service_areas||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} tracked events</div>`, 'No service-area tracking yet.');
+    const funnelRows = analytics.funnel ? Object.entries(analytics.funnel).map(([label,count])=>({label:label.replaceAll('_',' '), count})) : [];
+    renderList(els.funnel, funnelRows, r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} events</div>`, 'No funnel data yet.');
     renderList(els.checkoutStates, analytics.checkout_states||[], r=>`<strong>${esc(r.label)}</strong><div class="muted">${Number(r.count||0)} events</div>`, 'No checkout-state data yet.');
     renderList(els.daily, analytics.daily_traffic||[], r=>`<strong>${esc(r.day)}</strong><div class="muted">${Number(r.page_views||0)} page views • ${Number(r.unique_visitors||0)} visitors • ${Number(r.unique_sessions||0)} sessions • ${Number(r.abandoned_sessions||0)} abandoned</div>`,'No daily traffic data yet.');
     renderList(els.recentActions, analytics.recent_actions||[], r=>`<strong>${esc(r.event_type||'activity')}</strong><div class="muted">${esc(r.page_path||'')}</div><div class="muted">${esc([r.city, r.region, r.device_type].filter(Boolean).join(' • ') || 'Location/device pending')} ${r.target_text ? `• ${esc(r.target_text)}` : ''} ${r.percent ? `• ${esc(String(r.percent))}% scroll` : ''}</div><div class="muted">${esc(r.created_at||'')}</div>`, 'No recent tracked actions yet.');
@@ -82,6 +94,10 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at top, rgba(25
     setShellStatus(`Queued ${queued} recovery email(s).`,`success`);
   });
   els.days.addEventListener('change', ()=>load().catch(err=>setShellStatus(err?.message||'Could not refresh analytics.','error')));
+  els.serviceAreaFilter.addEventListener('change', ()=>load().catch(err=>setShellStatus(err?.message||'Could not refresh analytics.','error')));
+  els.exportTraffic.addEventListener('click', ()=>downloadCsv('analytics-traffic.csv', latestAnalytics?.daily_traffic || []));
+  els.exportFunnel.addEventListener('click', ()=>downloadCsv('analytics-funnel.csv', latestAnalytics?.funnel ? Object.entries(latestAnalytics.funnel).map(([label,count])=>({ label, count })) : []));
+  els.exportActions.addEventListener('click', ()=>downloadCsv('analytics-actions.csv', latestAnalytics?.recent_actions || []));
   els.refresh.addEventListener('click', ()=>load().catch(err=>setShellStatus(err?.message||'Could not refresh analytics.','error')));
   window.AdminShell.boot({pageKey:"admin-analytics", onReady: async ()=>{try{await load(); clearInterval(autoRefreshTimer); autoRefreshTimer=setInterval(()=>load().catch(()=>{}),30000);}catch(err){setShellStatus(err?.message||"Could not initialize analytics.","error");}}});
 })();

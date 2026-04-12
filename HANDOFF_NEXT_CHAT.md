@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
@@ -14,6 +16,13 @@
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Rosie Dazzlers — Handoff for Next Chat
+
+## Fresh handoff note — April 11 booking + analytics pass
+1. Run `sql/2026-04-11_booking_service_area_dimensions.sql`.
+2. Deploy the cleaned build and purge cache.
+3. Run both smoke scripts: `python scripts/stress_static_checks.py` and `python scripts/deployed_booking_analytics_smoke_check.py --base-url https://rosiedazzlers.ca`.
+4. Manually verify the booking page at phone/tablet/desktop widths and confirm service-area analytics populate in Admin Analytics.
+
 
 ## Branch rule
 Use `dev` as source of truth unless explicitly told otherwise.

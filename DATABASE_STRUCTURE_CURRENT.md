@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
@@ -21,6 +23,15 @@ March 28, 2026 sync note: no new tables were required for this pass; this refres
 
 
 # Database Structure Current
+
+## April 11 schema additions
+`bookings` now includes structured service-area dimensions:
+- `service_area_county`
+- `service_area_municipality`
+- `service_area_zone`
+
+These fields allow admin filtering/reporting without parsing the single public `service_area` text value.
+
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 

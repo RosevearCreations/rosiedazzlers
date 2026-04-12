@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
@@ -14,6 +16,13 @@
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Next Steps Internal
+
+## Fresh next steps after the April 11 pass
+1. Deploy and verify the repaired booking layout on real phone, tablet, and desktop widths.
+2. Confirm service-area analytics appear in the admin analytics screen and exported CSVs.
+3. Continue deeper accounting profitability once post-deploy booking and analytics checks are stable.
+4. Keep reducing legacy bridge behavior on any internal screens still not fully session-first.
+
 
 ## Highest-value next build targets
 1. **Staff auth/session**

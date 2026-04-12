@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
@@ -19,6 +21,10 @@
 > Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
 # Rosie Dazzlers — Project Brain
+
+## April 11 mental-model update
+Booking is no longer just date + package + vehicle. It now carries structured service-area context (county, municipality, zone, operational bylaw guidance, and official links) so dispatch, admin filtering, and analytics can all use the same location logic instead of re-parsing one text field.
+
 
 This is the compact mental model for the `dev` branch.
 

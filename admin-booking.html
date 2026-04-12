@@ -76,6 +76,11 @@
     <section class="section">
       <div class="panel">
         <h2>Bookings</h2>
+        <div id="bookingFilters" class="grid2" style="margin-top:12px">
+          <div><label for="bookingServiceAreaFilter">Service area</label><select id="bookingServiceAreaFilter"><option value="">All service areas</option></select></div>
+          <div><label for="bookingSearch">Search</label><input id="bookingSearch" type="search" class="search-input" placeholder="Customer, package, zone, or status" /></div>
+        </div>
+        <div id="bookingAreaSummary" class="notice mini" style="margin-top:12px">Filtering disabled until bookings load.</div>
         <div id="bookingsList" class="grid" style="margin-top:12px">
           <div class="notice">Bookings have not been loaded yet.</div>
         </div>
@@ -152,6 +157,7 @@
     let actor = null;
     let currentBooking = null;
     let allBookings = [];
+    let filteredBookings = [];
     let assignableStaff = [];
 
     function escapeHtml(value) {
@@ -324,16 +330,18 @@
       const wrap = document.querySelector("#bookingsList");
       if (!wrap) return;
 
-      if (!allBookings.length) {
-        wrap.innerHTML = `<div class="notice">No bookings found.</div>`;
+      const list = filteredBookings.length || !allBookings.length ? filteredBookings : allBookings;
+      if (!list.length) {
+        wrap.innerHTML = `<div class="notice">No bookings match the current filters.</div>`;
         return;
       }
 
-      wrap.innerHTML = allBookings.map((booking) => `
+      wrap.innerHTML = list.map((booking) => `
         <article class="card">
           <div class="kicker">${formatDate(booking.service_date)} · ${escapeHtml(booking.start_slot || "—")}</div>
           <h3>${escapeHtml(booking.customer_name || "Unknown customer")}</h3>
           <p>${escapeHtml(booking.package_code || "—")} · ${escapeHtml(booking.vehicle_size || "—")}</p>
+          <div class="kicker">Area: ${escapeHtml(booking.service_area_zone || booking.service_area || "—")} ${booking.service_area_municipality ? `· ${escapeHtml(booking.service_area_municipality)}` : ""}</div>
           <div class="kicker">Status: ${escapeHtml(booking.status || "pending")} · Job: ${escapeHtml(booking.job_status || "—")}</div>
           <div class="kicker">Assigned: ${escapeHtml(booking.assigned_to || "—")}</div>
           <div class="hr"></div>
@@ -344,10 +352,41 @@
       wrap.querySelectorAll("[data-booking-id]").forEach((btn) => {
         btn.addEventListener("click", () => {
           const bookingId = btn.getAttribute("data-booking-id");
-          currentBooking = allBookings.find((b) => b.id === bookingId) || null;
+          currentBooking = (filteredBookings.length ? filteredBookings : allBookings).find((b) => b.id === bookingId) || allBookings.find((b) => b.id === bookingId) || null;
           renderSelectedBooking();
         });
       });
+    }
+
+
+    function renderServiceAreaFilterOptions() {
+      const select = document.querySelector('#bookingServiceAreaFilter');
+      if (!select) return;
+      const current = select.value || '';
+      const options = Array.from(new Set(allBookings.map((booking) => booking.service_area_zone || booking.service_area || '').filter(Boolean))).sort((a,b)=>a.localeCompare(b));
+      select.innerHTML = `<option value="">All service areas</option>${options.map((value)=>`<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join('')}`;
+      if ([...select.options].some((opt)=>opt.value === current)) select.value = current;
+    }
+
+    function applyBookingFilters() {
+      const area = String(document.querySelector('#bookingServiceAreaFilter')?.value || '').trim().toLowerCase();
+      const query = String(document.querySelector('#bookingSearch')?.value || '').trim().toLowerCase();
+      filteredBookings = allBookings.filter((booking) => {
+        const areaValue = String(booking.service_area_zone || booking.service_area || '').trim().toLowerCase();
+        const searchHay = [booking.customer_name, booking.customer_email, booking.package_code, booking.vehicle_size, booking.status, booking.job_status, booking.service_area_zone, booking.service_area_municipality, booking.service_area].filter(Boolean).join(' ').toLowerCase();
+        if (area && areaValue !== area) return false;
+        if (query && !searchHay.includes(query)) return false;
+        return true;
+      });
+      const summary = document.querySelector('#bookingAreaSummary');
+      const counts = new Map();
+      for (const booking of filteredBookings) {
+        const key = booking.service_area_zone || booking.service_area || 'Unknown';
+        counts.set(key, (counts.get(key) || 0) + 1);
+      }
+      const top = [...counts.entries()].sort((a,b)=>b[1]-a[1]).slice(0,5).map(([label,count])=>`${label} (${count})`).join(' • ');
+      if (summary) summary.textContent = filteredBookings.length ? `Showing ${filteredBookings.length} booking(s). Top visible service areas: ${top || '—'}` : 'No bookings match the current filters.';
+      renderBookingsList();
     }
 
     async function refreshBookings() {
@@ -356,7 +395,8 @@
       document.querySelector("#sessionMeta").textContent = sessionActor?.full_name ? `Signed in as ${sessionActor.full_name} (${sessionActor.role_code || 'staff'}).` : "Signed-in staff access is required.";
 
       allBookings = Array.isArray(data.bookings) ? data.bookings : [];
-      renderBookingsList();
+      renderServiceAreaFilterOptions();
+      applyBookingFilters();
 
       if (currentBooking?.id) {
         currentBooking = allBookings.find((b) => b.id === currentBooking.id) || null;
@@ -368,6 +408,9 @@
     async function boot() {
       setBrandImages();
       setFooter();
+
+      document.querySelector("#bookingServiceAreaFilter")?.addEventListener("change", applyBookingFilters);
+      document.querySelector("#bookingSearch")?.addEventListener("input", applyBookingFilters);
 
       document.querySelector("#loadBookingsBtn").addEventListener("click", async () => {
         try {

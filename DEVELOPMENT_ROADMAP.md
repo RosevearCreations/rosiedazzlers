@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
@@ -22,6 +24,13 @@
 > Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
 # Rosie Dazzlers — Development Roadmap
+
+## April 11 booking + analytics pass
+- repaired booking form layout drift so public boxes stop colliding on phone/tablet/laptop widths
+- strengthened date input contrast and kept the 21-day availability view, now with previous/next paging windows
+- upgraded service-area records from simple labels to structured county/municipality/zone/bylaw guidance metadata
+- next target: finish town-level admin reporting and live post-deploy checks against the production build
+
 
 This is the practical implementation order for the `dev` branch after the March 25, 2026 documentation and UI refresh.
 

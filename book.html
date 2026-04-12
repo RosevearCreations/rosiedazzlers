@@ -49,6 +49,8 @@
     .mobile-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
     .page-kicker{margin:0;color:rgba(234,242,255,.7)}
     .date-pill,.date-pill strong,.date-pill span,#availabilityNote,.wizard-nav button{color:rgba(248,250,252,.96)!important}
+    .calendar-toolbar .range{font-weight:700;color:rgba(234,242,255,.78)}
+    .service-area-panel .notice{margin:0}
     @media (max-width:980px){
       .grid2,.grid3,.requirements-grid{grid-template-columns:1fr}
       .wizard-actions .btn{width:100%}
@@ -104,7 +106,7 @@
         <div>
           <label for="service_area">Service area</label>
           <select id="service_area"></select>
-          <div id="serviceAreaNote" class="notice mini service-area-note" style="margin-top:8px">Choose the closest town or service zone so we can apply the right travel, parking, and local bylaw notes.</div>
+          <div id="serviceAreaPanel" class="service-area-panel" style="margin-top:8px"><div id="serviceAreaNote" class="notice mini service-area-note">Choose the closest town or service zone so we can apply the right travel, parking, and local bylaw rules before dispatch.</div><ul id="serviceAreaRules"><li>Select a town or zone to load parking, noise, runoff, and access reminders.</li></ul><div id="serviceAreaLinks" class="service-area-links"></div></div>
         </div>
       </div>
       <div style="margin-top:12px">
@@ -115,6 +117,7 @@
           <span class="closed"><i></i>Unavailable</span>
           <span class="selected"><i></i>Selected</span>
         </div>
+        <div class="calendar-toolbar"><button class="btn ghost" id="availabilityPrevBtn" type="button">Previous 21 days</button><div id="availabilityWindowLabel" class="range">Loading availability window…</div><button class="btn ghost" id="availabilityNextBtn" type="button">Next 21 days</button></div>
         <div id="availableDates" class="calendar-strip" style="margin-top:8px"></div>
       </div>
       <div style="margin-top:12px">
@@ -252,6 +255,8 @@
     let selectedSlotChoice = '';
     let garageVehicles = [];
     let availabilityCache = new Map();
+    let availabilityWindowOffset = 0;
+    const AVAILABILITY_WINDOW_DAYS = 21;
     const vehicleCatalog = { years: [], makes: [], models: [] };
     const defaultServiceAreas = [];
 
@@ -275,6 +280,9 @@
 
 
     function analyticsTrack(eventType, payload={}){ try { window.RosieAnalytics?.track?.(eventType, payload); } catch {} }
+    function startOfLocalDay(date = new Date()) { return new Date(date.getFullYear(), date.getMonth(), date.getDate()); }
+    function addDaysLocal(date, days) { const copy = new Date(date); copy.setDate(copy.getDate() + days); return copy; }
+    function toIsoLocal(date) { const y = date.getFullYear(); const m = String(date.getMonth()+1).padStart(2,'0'); const d = String(date.getDate()).padStart(2,'0'); return `${y}-${m}-${d}`; }
     function setDatalistOptions(id, values){ const list = qs(id); if (!list) return; list.innerHTML = (values || []).map((value)=>`<option value="${escapeHtml(value)}"></option>`).join(''); }
     function normalizeChoice(value){ return String(value || '').trim(); }
     function choiceExists(values, value){ const needle = normalizeChoice(value).toLowerCase(); return !!needle && (values || []).some((row)=>normalizeChoice(row).toLowerCase() === needle); }
@@ -291,14 +299,24 @@
     }
     function updateServiceAreaNote(){
       const note = qs('#serviceAreaNote');
+      const rules = qs('#serviceAreaRules');
+      const links = qs('#serviceAreaLinks');
       const selected = configuredServiceAreas().find((row)=>[row?.value, row?.label].includes(qs('#service_area').value));
       if (!selected) {
         note.className = 'notice mini service-area-note';
-        note.textContent = 'Choose the closest town or service zone so we can apply the right travel, parking, and local bylaw notes.';
+        note.textContent = 'Choose the closest town or service zone so we can apply the right travel, parking, and local bylaw rules before dispatch.';
+        rules.innerHTML = '<li>Select a town or zone to load parking, noise, runoff, and access reminders.</li>';
+        links.innerHTML = '';
         return;
       }
       note.className = 'notice warn mini service-area-note';
       note.textContent = selected.bylaw_note || `${selected.label || selected.value} selected.`;
+      const ruleItems = [selected.parking_rule, selected.noise_rule, selected.water_rule, selected.access_rule].filter(Boolean);
+      rules.innerHTML = ruleItems.map((item)=>`<li>${escapeHtml(item)}</li>`).join('') || '<li>No extra rules found for this zone.</li>';
+      const officialLinks = Array.isArray(selected.official_links) ? selected.official_links : [];
+      links.innerHTML = officialLinks.map((row)=>`<a class="btn ghost small" href="${escapeHtml(row.url || '#')}" target="_blank" rel="noopener">${escapeHtml(row.label || 'Official source')}</a>`).join('');
+      renderFinalSummary();
+      renderReviewVehicle();
     }
 
     function renderWizardNav(){
@@ -439,9 +457,13 @@
       if (chosen.is_exotic && !qs('#veh_category').value) qs('#veh_category').value = 'exotic';
       updateSizeHint();
     }
-    qs('#veh_year').addEventListener('change', async ()=>{ requireKnownChoice(qs('#veh_year'), vehicleCatalog.years, 'Choose a year from the list.'); await loadVehicleModels(); analyticsTrack('booking_vehicle_year', { year: qs('#veh_year').value || null }); });
-    qs('#veh_make').addEventListener('change', async ()=>{ requireKnownChoice(qs('#veh_make'), vehicleCatalog.makes, 'Choose a make from the list.'); await loadVehicleModels(); analyticsTrack('booking_vehicle_make', { make: qs('#veh_make').value || null }); });
-    qs('#veh_model').addEventListener('change', ()=>{ requireKnownChoice(qs('#veh_model'), vehicleCatalog.models.map((row)=>row.model), 'Choose a model from the list.'); applyVehicleModelMetadata(); analyticsTrack('booking_vehicle_model', { model: qs('#veh_model').value || null }); });
+    const vehicleModelNames = ()=>vehicleCatalog.models.map((row)=>row.model);
+    async function onVehicleYearCommit(){ requireKnownChoice(qs('#veh_year'), vehicleCatalog.years, 'Choose a year from the list.'); await loadVehicleModels(); analyticsTrack('booking_vehicle_year', { year: qs('#veh_year').value || null }); }
+    async function onVehicleMakeCommit(){ requireKnownChoice(qs('#veh_make'), vehicleCatalog.makes, 'Choose a make from the list.'); await loadVehicleModels(); analyticsTrack('booking_vehicle_make', { make: qs('#veh_make').value || null }); }
+    function onVehicleModelCommit(){ requireKnownChoice(qs('#veh_model'), vehicleModelNames(), 'Choose a model from the list.'); applyVehicleModelMetadata(); analyticsTrack('booking_vehicle_model', { model: qs('#veh_model').value || null }); }
+    ['change','blur'].forEach((evt)=>qs('#veh_year').addEventListener(evt, ()=>{ onVehicleYearCommit(); }));
+    ['change','blur'].forEach((evt)=>qs('#veh_make').addEventListener(evt, ()=>{ onVehicleMakeCommit(); }));
+    ['change','blur'].forEach((evt)=>qs('#veh_model').addEventListener(evt, ()=>{ onVehicleModelCommit(); }));
 
     ['#veh_body','#veh_category','#vehicle_size'].forEach((selector)=>qs(selector).addEventListener('change', updateSizeHint));
 
@@ -467,21 +489,24 @@
       return 'partial';
     }
     async function loadAvailabilityOptions(){
-      const today = new Date();
+      const start = addDaysLocal(startOfLocalDay(), availabilityWindowOffset);
       const items = [];
-      for (let i=0;i<21;i++) {
-        const d = new Date(today);
-        d.setDate(today.getDate()+i);
-        const iso = d.toISOString().slice(0,10);
+      for (let i=0;i<AVAILABILITY_WINDOW_DAYS;i++) {
+        const d = addDaysLocal(start, i);
+        const iso = toIsoLocal(d);
         const out = await fetchAvailability(iso);
         items.push({ iso, out, status: availabilityStatus(out) });
       }
       const wrap = qs('#availableDates');
+      const labelEl = qs('#availabilityWindowLabel');
+      const end = addDaysLocal(start, AVAILABILITY_WINDOW_DAYS - 1);
+      labelEl.textContent = `${start.toLocaleDateString('en-CA',{month:'short',day:'numeric'})} to ${end.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'})}`;
+      qs('#availabilityPrevBtn').disabled = availabilityWindowOffset === 0;
       wrap.innerHTML = items.map((item)=>{
         const dt = new Date(item.iso + 'T12:00:00');
         const label = dt.toLocaleDateString('en-CA', { weekday:'short', month:'short', day:'numeric' });
         const out = item.out || {};
-        const desc = item.status === 'open' ? 'AM open · PM open' : item.status === 'partial' ? `AM ${out.AM ? 'open' : 'booked'} · PM ${out.PM ? 'open' : 'booked'}` : (out.blocked ? 'Unavailable · blocked' : 'Unavailable · booked');
+        const desc = item.status === 'open' ? 'AM open · PM open' : item.status === 'partial' ? `AM ${out.AM ? 'open' : 'booked'} · PM ${out.PM ? 'open' : 'booked'}` : (out.blocked ? `Unavailable · ${out.reason || 'blocked'}` : 'Unavailable · booked');
         const disabled = item.status === 'closed' ? 'disabled' : '';
         return `<button class="date-pill is-${item.status} ${item.iso===selectedDate()?'is-selected':''}" type="button" data-date-pill="${item.iso}" ${disabled}><strong>${label}</strong><span>${desc}</span></button>`;
       }).join('');
@@ -489,8 +514,8 @@
         if (btn.disabled) return;
         qs('#service_date').value = btn.getAttribute('data-date-pill');
         analyticsTrack('booking_date_pick', { service_date: qs('#service_date').value });
-        qs('#service_date').min = new Date().toISOString().slice(0,10);
-      await refreshAvailability();
+        qs('#service_date').min = toIsoLocal(startOfLocalDay());
+        await refreshAvailability();
         await loadAvailabilityOptions();
       }));
       if (!selectedDate()) {
@@ -521,7 +546,9 @@
       renderFinalSummary();
     }
     qsa('[data-slot]').forEach((btn)=>btn.addEventListener('click', ()=>{ if (btn.disabled) return; selectedSlotChoice = btn.getAttribute('data-slot'); qsa('[data-slot]').forEach((node)=>node.classList.toggle('active', node===btn)); analyticsTrack('booking_slot_pick', { slot: selectedSlotChoice, service_date: selectedDate() || null }); renderFinalSummary(); }));
-    qs('#service_date').addEventListener('change', async ()=>{ analyticsTrack('booking_date_pick', { service_date: selectedDate() || null, source: 'native_picker' }); await refreshAvailability(); await loadAvailabilityOptions(); });
+    qs('#service_date').addEventListener('change', async ()=>{ const picked = selectedDate() || null; if (picked) { const diff = Math.max(0, Math.floor((new Date(picked+'T12:00:00') - startOfLocalDay()) / 86400000)); availabilityWindowOffset = Math.floor(diff / AVAILABILITY_WINDOW_DAYS) * AVAILABILITY_WINDOW_DAYS; } analyticsTrack('booking_date_pick', { service_date: picked, source: 'native_picker' }); await refreshAvailability(); await loadAvailabilityOptions(); });
+    qs('#availabilityPrevBtn').addEventListener('click', async ()=>{ availabilityWindowOffset = Math.max(0, availabilityWindowOffset - AVAILABILITY_WINDOW_DAYS); analyticsTrack('booking_calendar_page', { direction: 'prev', offset_days: availabilityWindowOffset }); await loadAvailabilityOptions(); });
+    qs('#availabilityNextBtn').addEventListener('click', async ()=>{ availabilityWindowOffset += AVAILABILITY_WINDOW_DAYS; analyticsTrack('booking_calendar_page', { direction: 'next', offset_days: availabilityWindowOffset }); await loadAvailabilityOptions(); });
 
 
     function renderPackages(){
@@ -565,6 +592,7 @@
         ['Date', selectedDate() || 'Not chosen'],
         ['Time', selectedSlotChoice || 'Not chosen'],
         ['Service area', qs('#service_area').value || 'Not chosen'],
+        ['Local rules', configuredServiceAreas().find((row)=>[row?.value,row?.label].includes(qs('#service_area').value))?.municipality || 'Pending zone selection'],
         ['Vehicle', [qs('#veh_year').value, qs('#veh_make').value, qs('#veh_model').value, qs('#veh_color').value].filter(Boolean).join(' · ') || 'Vehicle details incomplete'],
         ['Vehicle size', selectedSize() || 'Not chosen'],
         ['Category', qs('#veh_category').value || 'Not chosen']
@@ -591,6 +619,7 @@
         ['Date', selectedDate() || 'Not chosen'],
         ['Time', selectedSlotChoice || 'Not chosen'],
         ['Service area', qs('#service_area').value || 'Not chosen'],
+        ['Local rules', configuredServiceAreas().find((row)=>[row?.value,row?.label].includes(qs('#service_area').value))?.municipality || 'Pending zone selection'],
         ['Package', pkg ? `${pkg.name} (${selectedSize() || 'size pending'})` : 'Not chosen'],
         ['Add-ons', selectedAddons().length ? selectedAddons().map((addon)=>addon.name).join(', ') : 'None'],
         ['Estimated subtotal', totals.subtotal ? money(totals.subtotal) : 'Package required'],
@@ -644,6 +673,7 @@
         duration_slots,
         service_area: qs('#service_area').value,
         service_area_label: qs('#service_area').selectedOptions?.[0]?.textContent || qs('#service_area').value,
+        service_area_meta: configuredServiceAreas().find((row)=>[row?.value,row?.label].includes(qs('#service_area').value)) || null,
         package_code: selectedPackageCode,
         vehicle_size: selectedSize(),
         customer_name: qs('#customer_name').value.trim(),
@@ -693,10 +723,10 @@
       renderServiceAreas();
       await Promise.all([loadVehicleMakes(), loadGarageVehicles(), loadAvailabilityOptions()]);
       if (!selectedDate()) {
-        const today = new Date();
-        qs('#service_date').value = today.toISOString().slice(0,10);
+        const today = startOfLocalDay();
+        qs('#service_date').value = toIsoLocal(today);
       }
-      qs('#service_date').min = new Date().toISOString().slice(0,10);
+      qs('#service_date').min = toIsoLocal(startOfLocalDay());
       await refreshAvailability();
       renderPackages();
       renderAddons();

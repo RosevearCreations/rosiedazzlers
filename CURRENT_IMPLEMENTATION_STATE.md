@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
@@ -17,6 +19,15 @@
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Current Implementation State
+
+## Completed / strengthened in the April 11 booking + analytics pass
+- booking page now includes paged 21-day availability windows, stronger mobile-safe field layout, and a more visible date picker
+- service areas now carry structured county / municipality / zone metadata plus parking / noise / runoff / access reminders and official municipal links
+- checkout now persists structured service-area dimensions for stronger admin filtering and future reporting
+- admin bookings now filter by service area and show visible area summaries
+- admin analytics now adds service-area mix, booking funnel metrics, and CSV export buttons for traffic and funnel data
+- added a deployed booking + analytics smoke-check script to support safer post-publish verification
+
 
 ## Completed / strengthened in this pass
 - Checkout now reads canonical package/add-on pricing from `app_management_settings.pricing_catalog`, with the bundled JSON file as fallback.

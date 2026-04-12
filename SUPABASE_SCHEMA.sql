@@ -1,3 +1,4 @@
+-- Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area reporting, analytics funnel/export pass, and docs/schema synchronization pass.
 -- Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, profitability labor-estimate pass, and docs/schema sync pass.
 -- 2026-04-11 pass 8 note: no schema shape change in this pass; route cleanup, session-first screen convergence, and accounting/reporting logic were updated at the application layer.
 -- Last synchronized: April 11, 2026. Reviewed during the route-safety carry-forward, crew-summary workflow pass, runtime error-handling hardening pass, and docs/schema sync pass.
@@ -35,6 +36,9 @@ create table if not exists public.bookings (
   start_slot text not null check (start_slot in ('AM','PM')),
   duration_slots integer not null default 1 check (duration_slots in (1,2)),
   service_area text not null,
+  service_area_county text null,
+  service_area_municipality text null,
+  service_area_zone text null,
   package_code text not null,
   vehicle_size text not null,
   addons jsonb not null default '[]'::jsonb,
@@ -490,3 +494,7 @@ create index if not exists accounting_records_balance_service_idx
 -- 2026-04-09 accounting month-end checklist support
 create index if not exists accounting_month_end_checklists_month_start_idx
   on public.accounting_month_end_checklists(month_start);
+
+create index if not exists idx_bookings_service_area_zone_date on public.bookings (service_area_zone, service_date desc);
+create index if not exists idx_bookings_service_area_municipality_date on public.bookings (service_area_municipality, service_date desc);
+create index if not exists idx_bookings_service_area_county_date on public.bookings (service_area_county, service_date desc);

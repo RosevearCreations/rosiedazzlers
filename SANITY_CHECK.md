@@ -1,3 +1,5 @@
+> Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
@@ -22,6 +24,15 @@
 > Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
 # Rosie Dazzlers — Sanity / Health Check
+
+## April 11 pass sanity additions
+- verify booking field boxes do not overlap at desktop, tablet, or phone widths
+- verify date picker text/icon contrast remains readable in dark mode
+- verify the booking calendar can page forward/backward in 21-day windows
+- verify the selected service area shows municipality-specific parking/noise/runoff/access guidance and source links
+- verify admin bookings can filter by service area
+- verify admin analytics shows top service areas, booking funnel rows, and CSV exports
+
 
 ## What is working well
 - Public site, booking, gifts, and customer account/public progress foundations exist.
