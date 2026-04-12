@@ -1,27 +1,47 @@
-// /functions/api/health.js
-// Runtime truth endpoint: confirms which Pages branch you're on and whether Stripe is test/live.
-// Safe: does NOT reveal the secret value.
-
-export function onRequest({ env, request }) {
-  const k = env.STRIPE_SECRET_KEY || "";
-  const stripe_key_mode =
-    k.startsWith("sk_test_") ? "test" :
-    k.startsWith("sk_live_") ? "live" :
-    "missing/unknown";
-
-  const out = {
-    ok: true,
-    stripe_key_mode,
-    CF_PAGES: env.CF_PAGES || null,
-    CF_PAGES_BRANCH: env.CF_PAGES_BRANCH || null,
-    CF_PAGES_URL: env.CF_PAGES_URL || null,
-    host: request.headers.get("host") || null,
-  };
-
-  return new Response(JSON.stringify(out, null, 2), {
-    headers: { "content-type": "application/json" },
+// functions/api/health.js
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data, null, 2), {
+    status,
+    headers: {
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "no-store",
+    },
   });
 }
 
-// (Optional) explicit GET handler alias
-export const onRequestGet = onRequest;
+export async function onRequestGet(context) {
+  const started = Date.now();
+
+  // D1 binding from Pages -> Settings -> Functions -> Bindings
+  const db = context.env.DD_DB;
+  if (!db) {
+    return json(
+      {
+        ok: false,
+        error:
+          "Missing D1 binding: DD_DB. In Cloudflare Pages: Settings -> Functions -> Bindings -> add D1 binding named DD_DB.",
+      },
+      500
+    );
+  }
+
+  try {
+    // Works even with zero tables
+    const row = await db.prepare("SELECT 1 AS ok").first();
+
+    return json({
+      ok: true,
+      d1: row?.ok === 1,
+      ms: Date.now() - started,
+    });
+  } catch (err) {
+    return json(
+      {
+        ok: false,
+        error: String(err?.message || err),
+        ms: Date.now() - started,
+      },
+      500
+    );
+  }
+}
