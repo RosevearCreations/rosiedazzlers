@@ -44,9 +44,14 @@ export async function onRequestPost({ request, env }) {
 
     const pricing = await loadPricingCatalog(env);
     const serviceAreaRaw = String(body.service_area || "").trim();
-    const allowedAreas = new Set((Array.isArray(pricing.service_areas) ? pricing.service_areas : []).flatMap((row)=>[row?.value, row?.label]).filter(Boolean).map((v)=>String(v).trim()));
+    const serviceAreaRows = Array.isArray(pricing.service_areas) ? pricing.service_areas : [];
+    const allowedAreas = new Set(serviceAreaRows.flatMap((row)=>[row?.value, row?.label]).filter(Boolean).map((v)=>String(v).trim()));
     if (!serviceAreaRaw) return corsJson({ error: "Missing service_area" }, 400);
     if (allowedAreas.size && !allowedAreas.has(serviceAreaRaw) && !["Norfolk", "Oxford", "Norfolk County", "Oxford County"].includes(serviceAreaRaw)) return corsJson({ error: "service_area is not a supported service zone" }, 400);
+    const serviceAreaMeta = serviceAreaRows.find((row)=> [row?.value, row?.label].some((entry)=> String(entry || "").trim() === serviceAreaRaw)) || null;
+    const resolvedServiceCounty = String(serviceAreaMeta?.county || serviceAreaMeta?.value || serviceAreaRaw || "").trim() || null;
+    const resolvedServiceMunicipality = String(serviceAreaMeta?.municipality || serviceAreaMeta?.county || serviceAreaRaw || "").trim() || null;
+    const resolvedServiceZone = String(serviceAreaMeta?.zone || serviceAreaMeta?.label || serviceAreaRaw || "").trim() || null;
     const pkg = pricing.package_map[String(body.package_code || "")];
     if (!pkg) return corsJson({ error: "Unknown package_code" }, 400);
 
@@ -106,7 +111,7 @@ export async function onRequestPost({ request, env }) {
     if (Number(body.duration_slots) === 1 && String(body.start_slot) === "AM" && !slotAM) return corsJson({ error: "Selected slot not available" }, 409);
     if (Number(body.duration_slots) === 1 && String(body.start_slot) === "PM" && !slotPM) return corsJson({ error: "Selected slot not available" }, 409);
 
-    const HOLD_MINUTES = 30;
+    const HOLD_MINUTES = Number(pricing?.booking_rules?.hold_minutes || 30) || 30;
     const holdSince = new Date(Date.now() - HOLD_MINUTES * 60 * 1000).toISOString();
     const bookingConflict = await supa(
       "GET",
