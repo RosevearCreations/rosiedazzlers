@@ -311,3 +311,13 @@ Route hotfix sync reviewed on 2026-04-11.
 - Booking analytics depth for actions, clicks, scroll, viewport, and inferred location/device detail.
 - Next strongest step: carry the same precise service-area data into pricing/services copy blocks and into admin booking filters.
 
+## 2026-04-11 pass 11 sync note
+- Tightened the booking preferred-date control so it no longer stretches wider than needed and added a visible white picker button.
+- Public booking, services, and pricing pages now read the canonical pricing catalog API first and only fall back to bundled JSON if the API is unavailable.
+- App Management now includes a pricing catalog editor so package prices, included services, add-ons, service-area rules, and chart links can be maintained from one source of truth.
+- No schema shape change landed in this pass; `SUPABASE_SCHEMA.sql` was refreshed to note the pricing-catalog consolidation and booking UI tightening work.
+### Pass 11 follow-through
+- Move the new pricing catalog editor from raw JSON only to a safer form-driven package/add-on editor in App Management.
+- Add catalog validation warnings before save (duplicate codes, missing service-area fields, missing image URLs, missing price maps).
+- Add a booking-page preview inside Admin App Management so pricing/inclusion changes can be checked before they reach the public booking flow.
+- Continue tightening public booking CSS around the remaining summary/review rows on narrow phone widths.

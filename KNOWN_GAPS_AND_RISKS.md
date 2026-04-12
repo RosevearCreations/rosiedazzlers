@@ -475,3 +475,13 @@ Still remaining:
 - Native browser date pickers still cannot fully color individual dates, so the 21-day booking snapshot is the visible availability guide while the native picker remains the input control.
 - Deeper analytics now depends on public analytics being loaded from chrome.js; route-level smoke tests should confirm the asset is reachable after deploy.
 
+## 2026-04-11 pass 11 sync note
+- Tightened the booking preferred-date control so it no longer stretches wider than needed and added a visible white picker button.
+- Public booking, services, and pricing pages now read the canonical pricing catalog API first and only fall back to bundled JSON if the API is unavailable.
+- App Management now includes a pricing catalog editor so package prices, included services, add-ons, service-area rules, and chart links can be maintained from one source of truth.
+- No schema shape change landed in this pass; `SUPABASE_SCHEMA.sql` was refreshed to note the pricing-catalog consolidation and booking UI tightening work.
+### Pass 11 remaining gaps
+- Pricing catalog editing is now centralized, but the first editor is still raw JSON and needs friendlier guardrails.
+- Public pages now prefer the canonical pricing catalog API, but they still fall back to bundled JSON when the API is unavailable, so dual storage still exists as a resilience layer.
+- No pricing catalog version history, draft/publish workflow, or rollback screen exists yet.
+- The custom booking date picker button improves visibility, but full cross-browser/live device verification still needs to happen after deployment.

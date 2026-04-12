@@ -263,3 +263,10 @@ This pass keeps the route hotfix structure intact and adds stronger internal wor
 - Booking UI and analytics were both deepened in this pass.
 - A new analytics index migration was added for richer payload-driven rollups.
 
+## 2026-04-11 pass 11 sync note
+- Tightened the booking preferred-date control so it no longer stretches wider than needed and added a visible white picker button.
+- Public booking, services, and pricing pages now read the canonical pricing catalog API first and only fall back to bundled JSON if the API is unavailable.
+- App Management now includes a pricing catalog editor so package prices, included services, add-ons, service-area rules, and chart links can be maintained from one source of truth.
+- No schema shape change landed in this pass; `SUPABASE_SCHEMA.sql` was refreshed to note the pricing-catalog consolidation and booking UI tightening work.
+### Pricing catalog source of truth
+Public pricing surfaces now read `/api/pricing_catalog_public` first. That endpoint reads `app_management_settings.pricing_catalog` and falls back to the bundled catalog JSON when needed. Use **Admin App Management → Pricing Catalog** to keep package prices, included services, add-ons, and service-area rules aligned.

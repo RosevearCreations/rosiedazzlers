@@ -26,7 +26,7 @@
   <div class="loading" data-admin-shell-loading>Loading app management...</div>
   <div data-admin-shell-ready hidden>
     <header class="topbar">
-      <div class="titleblock"><h1>App Management</h1><p>Control feature flags, recovery messaging, provider rules, and moderation defaults.</p></div>
+      <div class="titleblock"><h1>App Management</h1><p>Control feature flags, recovery messaging, provider rules, moderation defaults, and the single pricing catalog used by booking, services, pricing, and checkout.</p></div>
       <section class="actorcard" aria-label="Signed in staff">
         <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
         <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
@@ -63,6 +63,17 @@
         <div class="checkrow"><input id="flag_two_sided_thread_controls_enabled" type="checkbox"><label for="flag_two_sided_thread_controls_enabled">Two-sided thread controls enabled</label></div>
         <div class="checkrow"><input id="flag_low_stock_alerts_enabled" type="checkbox"><label for="flag_low_stock_alerts_enabled">Low-stock alerts enabled</label></div>
         <div class="actions"><button class="btn" type="button" id="saveFlagsBtn">Save feature flags</button></div>
+      </article>
+
+      <article class="card span-6">
+        <h2>Pricing Catalog</h2>
+        <p class="muted">Single source of truth for package prices, included services, charts, service areas, and add-ons. Booking, services, pricing, and checkout now read the same catalog path.</p>
+        <div class="field"><label for="pricing_catalog_json">Pricing catalog JSON</label><textarea id="pricing_catalog_json" spellcheck="false" placeholder='{"packages":[],"addons":[],"service_areas":[]}'></textarea></div>
+        <div class="actions">
+          <button class="btn" type="button" id="reloadPricingCatalogBtn">Reload catalog</button>
+          <button class="btn primary" type="button" id="savePricingCatalogBtn">Save pricing catalog</button>
+        </div>
+        <div class="note">Tip: update package prices, included services, add-on prices, service-area guidance, and chart links here, then the public booking and pricing screens stay aligned.</div>
       </article>
 
       <article class="card span-6">
@@ -160,6 +171,23 @@
   function readRecoveryTemplates(){ return { abandoned_checkout_subject: byId('recovery_subject').value || '', abandoned_checkout_body_text: byId('recovery_body_text').value || '', abandoned_checkout_body_html: byId('recovery_body_html').value || '' }; }
   function readRecoveryRules(){ return { abandoned_recovery_enabled: byId('recovery_enabled').checked, minimum_page_events: Number(byId('recovery_min_events').value || 0), require_email: true, cooldown_hours: Number(byId('recovery_cooldown_hours').value || 24), default_recovery_channel: byId('recovery_default_channel').value || 'email' }; }
   function readProviderRules(){ return { email: { enabled: byId('provider_email_enabled').checked, provider_key: byId('provider_email_key').value || 'default_email', recovery_webhook_url: byId('provider_email_webhook').value || '', send_test_to: byId('provider_email_test_to').value || '' }, sms: { enabled: byId('provider_sms_enabled').checked, provider_key: byId('provider_sms_key').value || 'default_sms', recovery_webhook_url: byId('provider_sms_webhook').value || '', send_test_to: byId('provider_sms_test_to').value || '' } }; }
+  function setPricingCatalogEditor(value){ byId('pricing_catalog_json').value = JSON.stringify(value || {}, null, 2); }
+  function readPricingCatalog(){
+    const raw = byId('pricing_catalog_json').value || '{}';
+    let parsed = null;
+    try { parsed = JSON.parse(raw); } catch { throw new Error('Pricing catalog JSON is invalid.'); }
+    if (!parsed || typeof parsed !== 'object') throw new Error('Pricing catalog must be a JSON object.');
+    if (!Array.isArray(parsed.packages)) throw new Error('Pricing catalog must include a packages array.');
+    if (!Array.isArray(parsed.addons)) throw new Error('Pricing catalog must include an addons array.');
+    return parsed;
+  }
+  async function loadPricingCatalogEditor(savedSetting){
+    if (savedSetting && typeof savedSetting === 'object' && Array.isArray(savedSetting.packages) && Array.isArray(savedSetting.addons)) { setPricingCatalogEditor(savedSetting); return; }
+    const res = await fetch('/api/pricing_catalog_public', { credentials:'include', cache:'no-store' });
+    const out = await res.json().catch(() => null);
+    if (!res.ok || !out) throw new Error(out?.error || 'Could not load pricing catalog.');
+    setPricingCatalogEditor(out);
+  }
   async function loadSettings(){
     const res = await fetch('/api/admin/app_settings_get', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:JSON.stringify({}) });
     const out = await res.json().catch(() => null);
@@ -172,6 +200,7 @@
     const recoveryTemplates = applySetting(s.recovery_templates);
     const recoveryRules = applySetting(s.recovery_rules);
     const providerRules = applySetting(s.recovery_provider_rules);
+    const pricingCatalog = applySetting(s.pricing_catalog, null);
 
     byId('vis_customer_detailer_notes').checked = !!visibility.customer_detailer_notes;
     byId('vis_customer_admin_notes').checked = visibility.customer_admin_notes_admin_only !== false;
@@ -211,6 +240,7 @@
     byId('provider_sms_key').value = providerRules?.sms?.provider_key || 'default_sms';
     byId('provider_sms_webhook').value = providerRules?.sms?.recovery_webhook_url || '';
     byId('provider_sms_test_to').value = providerRules?.sms?.send_test_to || '';
+    await loadPricingCatalogEditor(pricingCatalog);
   }
   function byId(id){ return document.getElementById(id); }
   async function previewRecovery(sendTest){
@@ -232,6 +262,8 @@
   byId('saveModerationBtn').addEventListener('click', async ()=>{ try{ await saveSetting('moderation_rules', readModeration(), 'Moderation defaults saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save moderation defaults.', 'error'); } });
   byId('saveRecoveryBtn').addEventListener('click', async ()=>{ try{ await saveSetting('recovery_templates', readRecoveryTemplates(), 'Recovery templates saved.'); await saveSetting('recovery_rules', readRecoveryRules(), 'Recovery rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save recovery settings.', 'error'); } });
   byId('saveProviderRulesBtn').addEventListener('click', async ()=>{ try{ await saveSetting('recovery_provider_rules', readProviderRules(), 'Recovery provider rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save provider rules.', 'error'); } });
+  byId('reloadPricingCatalogBtn').addEventListener('click', async ()=>{ try{ await loadPricingCatalogEditor(null); setShellStatus('Pricing catalog reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload pricing catalog.', 'error'); } });
+  byId('savePricingCatalogBtn').addEventListener('click', async ()=>{ try{ await saveSetting('pricing_catalog', readPricingCatalog(), 'Pricing catalog saved. Booking, pricing, and services now share this source.'); } catch(err){ setShellStatus(err?.message || 'Could not save pricing catalog.', 'error'); } });
   byId('previewRecoveryBtn').addEventListener('click', async ()=>{ try{ await previewRecovery(false); setShellStatus('Recovery preview generated.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not build recovery preview.', 'error'); } });
   byId('sendTestRecoveryBtn').addEventListener('click', async ()=>{ try{ await previewRecovery(true); } catch(err){ setShellStatus(err?.message || 'Could not send recovery test.', 'error'); } });
 

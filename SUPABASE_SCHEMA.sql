@@ -1,3 +1,4 @@
+-- 2026-04-11 pass 11 sync note: public booking/services/pricing now prefer the canonical pricing_catalog app setting via /api/pricing_catalog_public, with bundled JSON fallback and no schema shape change in this pass.
 -- Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area reporting, analytics funnel/export pass, and docs/schema synchronization pass.
 -- Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, profitability labor-estimate pass, and docs/schema sync pass.
 -- 2026-04-11 pass 8 note: no schema shape change in this pass; route cleanup, session-first screen convergence, and accounting/reporting logic were updated at the application layer.

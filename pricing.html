@@ -158,7 +158,8 @@
   </div>
 
   <script type="module">
-    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260328ad";
+    const DATA_URL = "/api/pricing_catalog_public";
+    const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260411pass11";
     const qs = (s)=>document.querySelector(s);
     const money = (cad)=> new Intl.NumberFormat("en-CA",{style:"currency",currency:"CAD"}).format(Number(cad||0));
     let chartMap = new Map();
@@ -187,10 +188,23 @@
     async function fetchJsonStrict(url){
       const res = await fetch(url,{cache:"no-store"});
       const text = await res.text();
-      try { return JSON.parse(text); }
+      let parsed = null;
+      try { parsed = JSON.parse(text); }
       catch {
         const head = text.slice(0,120).replace(/\s+/g," ");
         throw new Error(`Expected JSON from ${url} but got: ${head}`);
+      }
+      if (!res.ok) throw new Error(parsed?.error || `Request failed for ${url}`);
+      return parsed;
+    }
+    async function loadCatalog(){
+      try {
+        return await fetchJsonStrict(DATA_URL);
+      } catch (apiErr) {
+        const fallback = await fetchJsonStrict(DATA_FALLBACK_URL);
+        fallback._source = "bundled_json_fallback";
+        fallback._fallback_error = apiErr?.message || null;
+        return fallback;
       }
     }
 
@@ -226,7 +240,7 @@
     }
 
     try {
-      const data = await fetchJsonStrict(DATA_URL);
+      const data = await loadCatalog();
       chartMap = new Map((Array.isArray(data?.charts) ? data.charts : []).map((c)=> [String(c.title||""), String(c.r2_url||"")]));
       wireCharts();
       renderRows(Array.isArray(data?.packages) ? data.packages : []);

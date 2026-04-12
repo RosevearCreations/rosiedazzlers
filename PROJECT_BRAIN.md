@@ -195,3 +195,8 @@ Current focus remains: preserve stable Pages routing while continuing the sessio
 - Booking is now the heaviest public conversion surface and is being treated as a first-class app screen.
 - Service-area precision and analytics depth are both now tied to the same conversion flow.
 
+## 2026-04-11 pass 11 sync note
+- Tightened the booking preferred-date control so it no longer stretches wider than needed and added a visible white picker button.
+- Public booking, services, and pricing pages now read the canonical pricing catalog API first and only fall back to bundled JSON if the API is unavailable.
+- App Management now includes a pricing catalog editor so package prices, included services, add-ons, service-area rules, and chart links can be maintained from one source of truth.
+- No schema shape change landed in this pass; `SUPABASE_SCHEMA.sql` was refreshed to note the pricing-catalog consolidation and booking UI tightening work.

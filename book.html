@@ -98,9 +98,14 @@
     <section class="section panel wizard-card wizard-step" data-step="1">
       <div class="step-head"><div><h2>Step 1 — Date, time, and vehicle</h2><p class="muted">Choose an available day, then confirm which vehicle you want us to detail.</p></div></div>
       <div class="service-area-grid" style="margin-top:12px">
-        <div>
+        <div class="preferred-date-field">
           <label for="service_date">Preferred date</label>
-          <input id="service_date" type="date" required />
+          <div class="date-input-wrap">
+            <input id="service_date" type="date" required />
+            <button id="serviceDatePickerBtn" class="date-picker-button" type="button" aria-label="Show date picker" title="Show date picker">
+              <span class="sr-only">Show date picker</span>
+            </button>
+          </div>
           <div class="mini muted" style="margin-top:6px">Use the quick choices below or pick another date from the calendar. Available, partially open, and unavailable days are shown below.</div>
         </div>
         <div>
@@ -234,7 +239,8 @@
   </div>
 
   <script type="module">
-    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260327mobile1";
+    const DATA_URL = "/api/pricing_catalog_public";
+    const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260411pass11";
     const VEHICLE_MAKES_URL = "/api/vehicle_makes";
     const VEHICLE_MODELS_URL = "/api/vehicle_models";
     const qs = (s)=>document.querySelector(s);
@@ -265,7 +271,26 @@
     function hideStatus(){ qs('#bookingStatus').style.display='none'; }
     function showFieldError(step, msg){ const el = qs(`#step${step}Error`); if (el) el.textContent = msg || ''; }
     function clearFieldErrors(){ steps.forEach((_,idx)=>showFieldError(idx+1,'')); }
-    async function fetchJsonStrict(url){ const res = await fetch(url,{credentials:'include',cache:'no-store'}); const text = await res.text(); try{return JSON.parse(text);}catch{throw new Error(`Expected JSON from ${url}`);} }
+    async function fetchJsonStrict(url){
+      const res = await fetch(url,{credentials:'include',cache:'no-store'});
+      const text = await res.text();
+      let parsed = null;
+      try { parsed = JSON.parse(text); } catch { throw new Error(`Expected JSON from ${url}`); }
+      if (!res.ok) throw new Error(parsed?.error || `Request failed for ${url}`);
+      return parsed;
+    }
+    async function loadPricingData(){
+      try {
+        const out = await fetchJsonStrict(DATA_URL);
+        if (out && Array.isArray(out.packages) && Array.isArray(out.addons)) return out;
+        throw new Error('Pricing catalog response was incomplete.');
+      } catch (apiErr) {
+        const fallback = await fetchJsonStrict(DATA_FALLBACK_URL);
+        fallback._source = 'bundled_json_fallback';
+        fallback._fallback_error = apiErr?.message || null;
+        return fallback;
+      }
+    }
     function packagePrice(pkg, size){ return pkg?.prices_cad?.[size] ?? null; }
     function packageImageForSize(pkg, size){ return pkg?.images_by_size?.[size] || Object.values(pkg?.images_by_size || {})[0] || ''; }
     function openModal(title,imgUrl){ qs('#modalTitle').textContent=title; qs('#modalImg').src=imgUrl; qs('#modalBack').style.display='flex'; }
@@ -273,6 +298,7 @@
     qs('#modalCloseBtn').addEventListener('click', closeModal); qs('#modalBack').addEventListener('click',(e)=>{ if(e.target.id==='modalBack') closeModal(); });
     qs('#openSizeChartBtn').addEventListener('click',()=>openModal('Vehicle size chart',`${BRAND_BASE}/CarSizeChart.PNG`));
     qs('#openPriceChartBtn').addEventListener('click',()=>openModal('Vehicle price chart',`${BRAND_BASE}/CarPrice2025.PNG`));
+    qs('#serviceDatePickerBtn')?.addEventListener('click', ()=>{ const input = qs('#service_date'); try { input.showPicker?.(); } catch {} input.focus(); input.click(); });
 
     function selectedPackage(){ return (pricing?.packages || []).find((pkg)=>pkg.code===selectedPackageCode) || null; }
     function selectedSize(){ return qs('#vehicle_size').value; }
@@ -719,7 +745,7 @@
 
     qs('#service_area').addEventListener('change', ()=>{ updateServiceAreaNote(); analyticsTrack('booking_service_area_pick', { service_area: qs('#service_area').value || null }); renderFinalSummary(); renderReviewVehicle(); });
     try {
-      pricing = await fetchJsonStrict(DATA_URL);
+      pricing = await loadPricingData();
       renderServiceAreas();
       await Promise.all([loadVehicleMakes(), loadGarageVehicles(), loadAvailabilityOptions()]);
       if (!selectedDate()) {

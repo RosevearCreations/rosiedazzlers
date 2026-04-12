@@ -172,3 +172,8 @@ Route hotfix sync reviewed on 2026-04-11.
 - Add admin filters and exports by service-area town/zone.
 - Review whether route/visit analytics should also feed recovery timing and promo targeting.
 
+## 2026-04-11 pass 11 sync note
+- Tightened the booking preferred-date control so it no longer stretches wider than needed and added a visible white picker button.
+- Public booking, services, and pricing pages now read the canonical pricing catalog API first and only fall back to bundled JSON if the API is unavailable.
+- App Management now includes a pricing catalog editor so package prices, included services, add-ons, service-area rules, and chart links can be maintained from one source of truth.
+- No schema shape change landed in this pass; `SUPABASE_SCHEMA.sql` was refreshed to note the pricing-catalog consolidation and booking UI tightening work.

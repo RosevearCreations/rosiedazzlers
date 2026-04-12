@@ -205,3 +205,12 @@ Next strongest pass after deployment:
 3. Verify booking UI on mobile width, tablet width, and desktop width, especially the date snapshot and service-area selector.
 4. Continue the services/pricing/local-copy SEO pass using the new town-level service-area list.
 
+## 2026-04-11 pass 11 sync note
+- Tightened the booking preferred-date control so it no longer stretches wider than needed and added a visible white picker button.
+- Public booking, services, and pricing pages now read the canonical pricing catalog API first and only fall back to bundled JSON if the API is unavailable.
+- App Management now includes a pricing catalog editor so package prices, included services, add-ons, service-area rules, and chart links can be maintained from one source of truth.
+- No schema shape change landed in this pass; `SUPABASE_SCHEMA.sql` was refreshed to note the pricing-catalog consolidation and booking UI tightening work.
+### Pass 11 handoff
+- Verify the new compact preferred-date control on live mobile, tablet, and desktop widths after deployment.
+- Test a pricing catalog change in Admin App Management and confirm it appears on `/book`, `/services`, `/pricing`, and checkout totals.
+- Build the next safer layer for pricing maintenance: form-driven package/add-on editing plus validation/rollback.
