@@ -1,3 +1,5 @@
+> Last synchronized: April 12, 2026. Reviewed during the canonical pricing-catalog completion pass, booking/service-area contract repair, clean-route collision removal, static stress-check verification, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
@@ -92,9 +94,9 @@ Booking checkout now validates gift codes, applies remaining balance to totals, 
 The platform direction is now to read package and add-on pricing from `app_management_settings.pricing_catalog`, with `data/rosie_services_pricing_and_packages.json` kept as the bundled fallback.
 
 ### Remaining edge cases
-- some code paths still need final convergence
-- admin/report references may still assume legacy labels
-- automated comparison tests are still missing
+- the major public/customer paths now converge, but some admin/report references may still assume legacy labels or older service-area wording
+- automated comparison tests are still missing for deliberately partial `pricing_catalog` payloads versus bundled fallback merge behavior
+- future pricing edits still need disciplined use of the App Management catalog editor so page-local constants do not creep back in
 
 ---
 
@@ -453,6 +455,17 @@ Still important:
 
 
 Route hotfix sync reviewed on 2026-04-11.
+
+## April 12, 2026 risk update
+Partially mitigated in this pass:
+- one-source-of-truth pricing drift was reduced because the public pricing API and shared client helper now preserve charts, service areas, booking rules, and public requirement text instead of trimming them out
+- checkout service-area persistence risk was reduced because county / municipality / zone now resolve from the live canonical catalog before payment-session creation
+- Cloudflare Pages route-collision risk was reduced again because duplicate folder wrappers for clean routes were removed from the packaged build before the stress-check pass
+
+Still remaining:
+- admin/report label drift still needs one more audit
+- live deployed verification is still required after publish
+- the catalog editor still needs disciplined change control so local constants do not return
 
 ## April 11, 2026 pass risk update
 Partially mitigated in this pass:

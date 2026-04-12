@@ -80,11 +80,7 @@
         Clear packages with optional add-ons. We come to you across <strong>Norfolk</strong> & <strong>Oxford</strong> Counties.
       </p>
 
-      <div class="section row" style="margin-top:12px">
-        <span class="tag">Driveway required</span>
-        <span class="tag">Customer provides power + water (or additional fees)</span>
-        <span class="tag">Customer accepts bylaw responsibility</span>
-      </div>
+      <div class="section row" id="publicRequirementTags" style="margin-top:12px"></div>
 
       <div class="hr"></div>
 
@@ -147,44 +143,25 @@
   </div>
 
   <script type="module">
-    const DATA_URL = "/api/pricing_catalog_public";
-    const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260411pass11";
+    import {
+      loadPricingCatalogClient,
+      money,
+      escapeHtml,
+      addonPrimaryImage,
+      addonFallbackImage,
+      chartUrl
+    } from "/assets/pricing-catalog-client.js?v=20260412pass12";
+
+    const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
     const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages";
 
     const qs = (s)=>document.querySelector(s);
-    const money = (cad)=> new Intl.NumberFormat("en-CA",{style:"currency",currency:"CAD"}).format(Number(cad||0));
 
-    function escapeHtml(s){
-      return String(s||"")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;").replaceAll("'","&#39;");
-    }
-
-    async function fetchJsonStrict(url){
-      const res = await fetch(url,{cache:"no-store"});
-      const text = await res.text();
-      let parsed = null;
-      try { parsed = JSON.parse(text); }
-      catch {
-        const head = text.slice(0,120).replace(/\s+/g," ");
-        throw new Error(`Expected JSON from ${url} but got: ${head}`);
-      }
-      if (!res.ok) throw new Error(parsed?.error || `Request failed for ${url}`);
-      return parsed;
-    }
     async function loadCatalog(){
-      try {
-        return await fetchJsonStrict(DATA_URL);
-      } catch (apiErr) {
-        const fallback = await fetchJsonStrict(DATA_FALLBACK_URL);
-        fallback._source = "bundled_json_fallback";
-        fallback._fallback_error = apiErr?.message || null;
-        return fallback;
-      }
+      return await loadPricingCatalogClient({ fallbackUrl: DATA_FALLBACK_URL });
     }
 
-    // Modal
     function openModal(title,imgUrl){
       qs("#modalTitle").textContent = title;
       qs("#modalImg").src = imgUrl;
@@ -194,9 +171,14 @@
     qs("#modalCloseBtn").addEventListener("click", closeModal);
     qs("#modalBack").addEventListener("click",(e)=>{ if(e.target.id==="modalBack") closeModal(); });
 
-    qs("#openSizeChartBtn").addEventListener("click",()=> openModal("Vehicle Size Chart", `${PACKAGES_BASE}/CarSizeChart.PNG`));
-    qs("#openPriceChartBtn").addEventListener("click",()=> openModal("Vehicle Price Chart 2025", `${BRAND_BASE}/CarPrice2025.PNG`));
-    qs("#openDetailsChartBtn").addEventListener("click",()=> openModal("Package Service Details Chart", `${BRAND_BASE}/CarPriceDetails2025.PNG`));
+    function openCatalogChart(title, fallback){
+      const src = data ? (chartUrl(data, title) || fallback) : fallback;
+      openModal(title, src);
+    }
+
+    qs("#openSizeChartBtn").addEventListener("click",()=> openCatalogChart("Vehicle Size Chart", `${PACKAGES_BASE}/CarSizeChart.PNG`));
+    qs("#openPriceChartBtn").addEventListener("click",()=> openCatalogChart("Vehicle Price Chart 2025", `${BRAND_BASE}/CarPrice2025.PNG`));
+    qs("#openDetailsChartBtn").addEventListener("click",()=> openCatalogChart("Package Service Details Chart", `${BRAND_BASE}/CarPriceDetails2025.PNG`));
 
     function encodeFile(name){
       return encodeURIComponent(name).replace(/%2F/g,"/");
@@ -205,14 +187,12 @@
       return `${PACKAGES_BASE}/${encodeFile(filename)}`;
     }
 
-    // These must rotate in the hover carousel
     const HOVER_EXTRA_IMAGES = [
       imgUrlFromFilename("Interior Detail.png"),
       imgUrlFromFilename("Exterior Detail.png"),
       `${PACKAGES_BASE}/CarSizeChart.PNG`,
     ];
 
-    // Add-on image map (filenames in /packages)
     const ADDON_IMAGE_FILES = {
       de_ionizing_treatment: "De-Ionizing Vehicle Add on service.png",
       de_badging: "DeBadgingAddonService.png",
@@ -229,14 +209,12 @@
     };
     const ADDON_IMAGES = Object.fromEntries(Object.entries(ADDON_IMAGE_FILES).map(([code, file]) => [code, imgUrlFromFilename(file)]));
     function addonFallback(code){
-      const normalized = String(code || '').trim();
-      const ext = ['de_ionizing_treatment','de_badging','engine_cleaning','external_ceramic_coating','external_graphene_fine_finish','external_wax','vinyl_wrapping','window_tinting'].includes(normalized) ? '.svg' : '.png';
-      return `/assets/addons/${normalized}${ext}`;
+      const addon = (data?.addons || []).find((row) => row?.code === String(code || '').trim()) || { code };
+      return addonFallbackImage(addon) || `/assets/addons/${String(code || '').trim()}.png`;
     }
 
     function sizeKey(){ return qs("#sizeSel").value; }
 
-    // Carousel: swap image on hover/tap
     function attachHoverCarousel(imgEl, getImagesFn){
       let timer = null;
       let idx = 0;
@@ -319,10 +297,8 @@
     }
 
     function buildAddonCard(addon){
-      const imageUrl = addon.image_url || null;
-      const fallbackUrl = addon.image_fallback_url || addonFallback(addon.code);
-      const imgName = ADDON_IMAGES[addon.code] || null;
-      const img = imageUrl ? imageUrl : (imgName || null);
+      const imageUrl = addonPrimaryImage(addon) || ADDON_IMAGES[addon.code] || null;
+      const fallbackUrl = addonFallback(addon.code);
 
       const el = document.createElement("div");
       el.className = "panel";
@@ -336,8 +312,8 @@
         : `<span class="tag ok">${price!=null ? money(price) : "$—"}</span>`;
 
       el.innerHTML = `
-        ${img ? `<img class="cardImg" alt="${escapeHtml(addon.name)}" />` : ``}
-        <div style="margin-top:${img ? "10px":"0"};display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        ${imageUrl ? `<img class="cardImg" alt="${escapeHtml(addon.name)}" />` : ``}
+        <div style="margin-top:${imageUrl ? "10px":"0"};display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
           <div>
             <h3 style="margin:0">${escapeHtml(addon.name)}</h3>
             <div class="muted mini mono">${escapeHtml(addon.code)}</div>
@@ -351,7 +327,7 @@
 
       const imgEl = el.querySelector("img");
       if (imgEl){
-        imgEl.src = img;
+        imgEl.src = imageUrl;
         imgEl.loading = "lazy";
         imgEl.decoding = "async";
         imgEl.onerror = ()=>{ if (fallbackUrl && imgEl.src !== new URL(fallbackUrl, window.location.origin).href) { imgEl.src = fallbackUrl; return; } imgEl.style.display = "none"; };
@@ -381,12 +357,16 @@
       data = await loadCatalog();
       renderAll(data);
       qs("#sizeSel").addEventListener("change", ()=> renderAll(data));
+      if (data._source && data._source !== "api") {
+        qs("#loadErr").style.display = "block";
+        qs("#loadErr").className = "notice";
+        qs("#loadErr").textContent = data._fallback_error ? `Using bundled pricing fallback. ${data._fallback_error}` : "Using bundled pricing fallback.";
+      }
     } catch (e) {
       qs("#loadErr").style.display = "block";
       qs("#loadErr").textContent = `Failed to load services data: ${e.message || e}`;
     }
 
-    // Optional query preselect: /services?size=mid
     (function fromQuery(){
       const p = new URLSearchParams(location.search);
       const size = (p.get("size") || "").trim();

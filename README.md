@@ -1,3 +1,5 @@
+> Last synchronized: April 12, 2026. Reviewed during the canonical pricing-catalog completion pass, booking/service-area contract repair, clean-route collision removal, static stress-check verification, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
@@ -25,8 +27,8 @@
 
 # Rosie Dazzlers — Mobile Auto Detailing Platform
 
-## Latest pass highlight — April 11, 2026
-This pass focused on booking stability and operations reporting: the public booking page now has stronger mobile-safe layout rules, a more readable date picker, paged 21-day availability, structured service-area/bylaw metadata, and deeper admin analytics for service-area and funnel reporting.
+## Latest pass highlight — April 12, 2026
+This pass completed the public pricing/source-of-truth repair: booking, services, pricing, checkout, and shared public helpers now read the same canonical pricing catalog shape first, preserve service-area rules and charts, and fall back cleanly to the bundled catalog when the API or app setting is incomplete.
 
 Cloudflare Pages + Supabase + Stripe/PayPal + R2
 
@@ -91,7 +93,7 @@ Highest-value work is no longer basic feature creation. The main need is consist
 - real staff auth/session completion
 - consistent staff identity across jobsite/progress/media/time flows
 - gift redemption polish across all customer/account screens
-- canonical pricing/add-on behavior everywhere
+- canonical pricing/add-on behavior everywhere, including booking windows, service-area rules, and public requirement labels
 - stronger upload/mobile workflow
 - continued SEO cleanup without exposing protected flows to indexing
 
@@ -252,6 +254,9 @@ This pass keeps the route hotfix structure intact and adds stronger internal wor
 - improved crew summary propagation across internal workflow screens and APIs
 - hardened admin runtime request handling with timeout and text-response fallbacks
 - expanded static packaging checks so route collisions and leftover debug artifacts fail before packaging
+- April 12, 2026 canonical pricing/source-of-truth completion: `/api/pricing_catalog_public` now preserves charts, service areas, booking rules, and public requirements from `app_management_settings.pricing_catalog`, while booking/services/pricing/site helpers share one client normalizer and fallback path
+- April 12, 2026 routing hardening: removed duplicate clean-route wrapper folders for `/admin`, `/admin-accounting`, `/admin-catalog`, `/pricing`, and `/services`; trailing-slash redirects remain in `_redirects`
+- April 12, 2026 booking contract repair: checkout now resolves `service_area_county`, `service_area_municipality`, and `service_area_zone` from the canonical catalog before creating the booking/payment session
 
 ## 2026-04-11 pass 9 sync
 - Booking flow now uses a clearer service-area selector with town-level choices across Oxford and Norfolk communities.
@@ -269,6 +274,6 @@ This pass keeps the route hotfix structure intact and adds stronger internal wor
 - App Management now includes a pricing catalog editor so package prices, included services, add-ons, service-area rules, and chart links can be maintained from one source of truth.
 - No schema shape change landed in this pass; `SUPABASE_SCHEMA.sql` was refreshed to note the pricing-catalog consolidation and booking UI tightening work.
 ### Pricing catalog source of truth
-Public pricing surfaces now read `/api/pricing_catalog_public` first. That endpoint reads `app_management_settings.pricing_catalog` and falls back to the bundled catalog JSON when needed. Use **Admin App Management → Pricing Catalog** to keep package prices, included services, add-ons, and service-area rules aligned.
+Public pricing surfaces now read `/api/pricing_catalog_public` first. That endpoint now preserves the full canonical catalog contract from `app_management_settings.pricing_catalog` — packages, add-ons, charts, service-area rules, booking rules, and public requirements — and falls back to the bundled catalog JSON when needed. Use **Admin App Management → Pricing Catalog** to keep package prices, booking windows, included services, add-ons, and service-area rules aligned.
 
 > Pass update 2026-04-12: Re-synced the current uploaded build to the latest safe route structure. Removed duplicate clean-route folders that were reintroducing Cloudflare Pages redirect loops, preserved the newer booking experience already present in `book.html`, refreshed the deployed booking smoke check to recognize the shared `chrome.js` analytics bootstrap, and cleaned the login form autocomplete attributes. Immediate next step after deploy: verify `/`, `/services`, `/pricing`, `/book`, and `/admin` on the active branch before resuming larger feature work.

@@ -1,4 +1,4 @@
--- 2026-04-11 pass 11 sync note: public booking/services/pricing now prefer the canonical pricing_catalog app setting via /api/pricing_catalog_public, with bundled JSON fallback and no schema shape change in this pass.
+-- 2026-04-12 sync note: public booking/services/pricing/checkout/shared site helpers now preserve the full canonical pricing_catalog contract (charts, packages, service areas, booking_rules, public_requirements) via /api/pricing_catalog_public, with bundled JSON fallback and no SQL table shape change in this pass.
 -- Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area reporting, analytics funnel/export pass, and docs/schema synchronization pass.
 -- Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, profitability labor-estimate pass, and docs/schema sync pass.
 -- 2026-04-11 pass 8 note: no schema shape change in this pass; route cleanup, session-first screen convergence, and accounting/reporting logic were updated at the application layer.
@@ -325,7 +325,7 @@ create index if not exists catalog_inventory_items_category_idx on public.catalo
 create index if not exists catalog_inventory_items_subcategory_idx on public.catalog_inventory_items(subcategory);
 create index if not exists catalog_inventory_items_sort_key_idx on public.catalog_inventory_items(sort_key);
 create index if not exists catalog_inventory_items_reuse_policy_idx on public.catalog_inventory_items(reuse_policy);
--- app_management_settings.pricing_catalog is now the canonical DB-backed pricing source, with bundled JSON as fallback.
+-- app_management_settings.pricing_catalog is now the canonical DB-backed pricing source, with bundled JSON as fallback. The expected JSON contract includes packages, addons, charts, service_areas, booking_rules, and public_requirements.
 
 create index if not exists vehicle_catalog_cache_year_make_idx on public.vehicle_catalog_cache(model_year, make);
 create index if not exists vehicle_catalog_cache_make_model_idx on public.vehicle_catalog_cache(make, model);

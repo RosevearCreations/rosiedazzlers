@@ -1,3 +1,5 @@
+> Last synchronized: April 12, 2026. Reviewed during the canonical pricing-catalog completion pass, booking/service-area contract repair, clean-route collision removal, static stress-check verification, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
@@ -22,8 +24,8 @@
 
 # Rosie Dazzlers — Project Brain
 
-## April 11 mental-model update
-Booking is no longer just date + package + vehicle. It now carries structured service-area context (county, municipality, zone, operational bylaw guidance, and official links) so dispatch, admin filtering, and analytics can all use the same location logic instead of re-parsing one text field.
+## April 12 mental-model update
+The public pricing contract is now explicit: booking, services, pricing, checkout, shared site helpers, and Admin App Management all revolve around the same canonical pricing catalog shape (packages, add-ons, charts, service areas, booking rules, and public requirements) with bundled JSON only as fallback.
 
 
 This is the compact mental model for the `dev` branch.
@@ -55,6 +57,7 @@ Rosie Dazzlers is a mobile detailing operations platform for Southern Ontario se
 - PayPal deposit path exists
 - promo + gift validation are part of checkout logic
 - pricing now prefers `app_management_settings.pricing_catalog`, with the bundled JSON file as fallback
+- booking windows, slot labels, public requirement text, and service-area dispatch rules should now be treated as catalog-owned values rather than page-local constants
 
 ### 2) Customer progress
 - token-based progress is the preferred model

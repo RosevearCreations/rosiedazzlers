@@ -1,3 +1,5 @@
+> Last synchronized: April 12, 2026. Reviewed during the canonical pricing-catalog completion pass, booking/service-area contract repair, clean-route collision removal, static stress-check verification, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
@@ -24,8 +26,10 @@ March 28, 2026 sync note: no new tables were required for this pass; this refres
 
 # Database Structure Current
 
-## April 11 schema additions
-`bookings` now includes structured service-area dimensions:
+## April 12 schema/contract note
+No new tables were required in this pass. The important contract update is that the canonical pricing setting and public pricing API now preserve the full catalog shape instead of trimming fields.
+
+`bookings` still includes structured service-area dimensions:
 - `service_area_county`
 - `service_area_municipality`
 - `service_area_zone`
@@ -61,7 +65,7 @@ Key/value JSON settings storage used for:
 - recovery rules
 - recovery provider rules
 - payment method toggles
-- canonical pricing catalog (`pricing_catalog`)
+- canonical pricing catalog (`pricing_catalog`) including packages, add-ons, charts, service areas, booking rules, and public requirements for the public booking/pricing/services surfaces
 - other admin policy settings
 
 ## gift_certificates / gift_products

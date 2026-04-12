@@ -1,3 +1,5 @@
+> Last synchronized: April 12, 2026. Reviewed during the canonical pricing-catalog completion pass, booking/service-area contract repair, clean-route collision removal, static stress-check verification, and docs/schema synchronization pass.
+
 > Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
@@ -24,6 +26,19 @@
 > Last synchronized: March 25, 2026. This file was reviewed during the recovery/moderation/docs/schema refresh pass.
 
 # Rosie Dazzlers — Development Roadmap
+
+## April 12, 2026 canonical pricing/source-of-truth pass
+Completed in this pass:
+- finish the public canonical pricing contract so booking, services, pricing, checkout, and shared public helpers all read the same normalized catalog shape
+- preserve charts, service areas, booking rules, and public requirements through `/api/pricing_catalog_public`
+- repair checkout service-area dimension resolution so county / municipality / zone are saved from the live catalog rather than undefined locals
+- remove duplicate clean-route wrapper folders and keep only trailing-slash compatibility redirects
+- rerun and pass `python3 scripts/stress_static_checks.py` after the cleanup
+
+Next highest-value roadmap items after this pass:
+- extend canonical pricing/service-area labels into any remaining admin analytics/report summaries
+- add comparison/smoke coverage that intentionally validates partial app-setting catalog payloads against bundled fallback merge rules
+- continue the session-first admin migration and mobile upload hardening
 
 ## April 11 booking + analytics pass
 - repaired booking form layout drift so public boxes stop colliding on phone/tablet/laptop widths
@@ -297,6 +312,7 @@ Route hotfix sync reviewed on 2026-04-11.
 - moved forward: booking, progress, live monitor, jobsite, and detailer jobs now carry crew summary / lead + crew context more consistently
 - moved forward: admin runtime now handles request timeouts and non-JSON/text error responses more gracefully for internal app screens
 - moved forward: static stress checks now fail when temporary check artifacts or route-collision outputs are present
+- moved forward: static stress checks now also cover the repaired public catalog-helper path after the April 12 canonical pricing/source-of-truth pass
 - move up next: continue true session-first cleanup on jobsite/time/media screens and then do deployed route-by-route verification after publish
 
 ## 2026-04-11 pass 9 sync
