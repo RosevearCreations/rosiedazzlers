@@ -1,7 +1,18 @@
-# Route hotfix for Cloudflare Pages clean URLs.
-# Keep only trailing-slash compatibility redirects here.
-/services/ /services 301
-/pricing/ /pricing 301
-/admin/ /admin 301
-/admin-accounting/ /admin-accounting 301
-/admin-catalog/ /admin-catalog 301
+/index.html /
+/about/index.html /about/
+/gallery/index.html /gallery/
+/creations/index.html /creations/
+/tools/index.html /tools/
+/supplies/index.html /supplies/
+/shop/index.html /shop/
+/search/index.html /search/
+/movies/index.html /movies/
+/socials/index.html /socials/
+/contact/index.html /contact/
+/cart/index.html /cart/
+/login/index.html /login/
+/register/index.html /register/
+/members/index.html /members/
+/admin/index.html /admin/
+/account-help/index.html /account-help/
+/admin/mobile-inventory/index.html /admin/mobile-inventory/
