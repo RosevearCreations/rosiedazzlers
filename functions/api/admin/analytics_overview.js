@@ -11,6 +11,7 @@ export async function onRequestPost(context){
     if(!access.ok) return withCors(access.response);
 
     const days=Math.max(1,Math.min(90,Number(body.days||30)));
+    const serviceAreaFilter = cleanText(body.service_area || "");
     const since=new Date(Date.now()-days*86400000).toISOString();
     const settings=await loadAppSettings(env);
 
@@ -21,7 +22,9 @@ export async function onRequestPost(context){
     if(!res.ok) return withCors(json({error:`Could not load analytics. ${await res.text()}`},500));
 
     const rows = await res.json().catch(()=>[]);
-    const data = Array.isArray(rows)?rows:[];
+    let data = Array.isArray(rows)?rows:[];
+    const serviceAreaCandidates = Array.from(new Set(data.map((r)=> String(r?.payload?.service_area_label || r?.payload?.service_area || "").trim()).filter(Boolean))).sort((a,b)=>a.localeCompare(b));
+    if (serviceAreaFilter) data = data.filter((r)=> String(r?.payload?.service_area_label || r?.payload?.service_area || "").trim() === serviceAreaFilter);
     const pageViews = data.filter(r=>r.event_type==="page_view");
     const heartbeatEvents = data.filter(r=>r.event_type==="heartbeat");
     const uniqueVisitors = new Set(data.map(r=>r.visitor_id).filter(Boolean)).size;
@@ -33,6 +36,8 @@ export async function onRequestPost(context){
     const topDevices = summarizeCounts(data.map(r=>r?.payload?.device_type || 'Unknown'));
     const topReferrers = summarizeCounts(data.map(r=>r.referrer || "Direct"));
     const topActions = summarizeCounts(data.filter(r=>!['heartbeat','page_focus','page_exit'].includes(r.event_type)).map(r=> r.event_type || 'unknown'));
+    const topServiceAreas = summarizeCounts(data.map(r=> r?.payload?.service_area_label || r?.payload?.service_area || '').filter(Boolean));
+    const funnel = summarizeBookingFunnel(data);
     const checkoutStates = summarizeCounts(data.map(r=>r.checkout_state || '').filter(Boolean));
     const sessionJourneys = summarizeJourneys(data);
     const abandoned = summarizeAbandoned(data);
@@ -62,6 +67,10 @@ export async function onRequestPost(context){
       top_devices: topDevices,
       top_referrers: topReferrers,
       top_actions: topActions,
+      top_service_areas: topServiceAreas,
+      service_area_options: serviceAreaCandidates,
+      selected_service_area: serviceAreaFilter || null,
+      funnel,
       checkout_states: checkoutStates,
       daily_traffic: dailyTraffic,
       session_journeys: sessionJourneys.slice(0,50),
@@ -190,3 +199,29 @@ function summarizeRecentActions(rows){
       session_id:r.session_id || null
     }));
 }
+
+
+function summarizeBookingFunnel(rows){
+  const eventCounts = (type)=> rows.filter((r)=>r.event_type === type).length;
+  const stepViews = new Map();
+  for (const row of rows.filter((r)=>r.event_type === 'booking_step_view')) {
+    const key = Number(row?.payload?.step_number || 0);
+    if (key) stepViews.set(key, (stepViews.get(key) || 0) + 1);
+  }
+  return {
+    step_1_views: stepViews.get(1) || 0,
+    step_2_views: stepViews.get(2) || 0,
+    step_3_views: stepViews.get(3) || 0,
+    step_4_views: stepViews.get(4) || 0,
+    step_5_views: stepViews.get(5) || 0,
+    service_area_picks: eventCounts('booking_service_area_pick'),
+    date_picks: eventCounts('booking_date_pick'),
+    package_picks: eventCounts('booking_package_pick'),
+    addon_toggles: eventCounts('booking_addon_toggle'),
+    checkout_started: eventCounts('checkout_started'),
+    checkout_redirects: eventCounts('checkout_redirect'),
+    checkout_errors: eventCounts('checkout_error')
+  };
+}
+
+function cleanText(value){return String(value||'').trim().slice(0,160);}
