@@ -494,7 +494,7 @@
     {
       "county": "Oxford County",
       "value": "Woodstock, Oxford County",
-      "label": "Woodstock — Oxford County",
+      "label": "Woodstock \u2014 Oxford County",
       "bylaw_note": "Woodstock jobs should stay on private property whenever possible. Street and winter parking restrictions can change by block, and unnecessary noise rules still apply during setup and cleanup.",
       "municipality": "Woodstock",
       "zone": "Woodstock",
@@ -522,7 +522,7 @@
     {
       "county": "Oxford County",
       "value": "Tillsonburg, Oxford County",
-      "label": "Tillsonburg — Oxford County",
+      "label": "Tillsonburg \u2014 Oxford County",
       "bylaw_note": "Tillsonburg work should stay on the customer driveway or private lot. Noise complaints and neighborhood bylaw calls are the biggest operational risk.",
       "municipality": "Tillsonburg",
       "zone": "Tillsonburg",
@@ -546,7 +546,7 @@
     {
       "county": "Oxford County",
       "value": "Ingersoll, Oxford County",
-      "label": "Ingersoll — Oxford County",
+      "label": "Ingersoll \u2014 Oxford County",
       "bylaw_note": "Ingersoll jobs should prioritize private-property setup. Downtown and street-side work need extra parking attention, especially if the customer depends on permit or timed parking areas.",
       "municipality": "Ingersoll",
       "zone": "Ingersoll",
@@ -574,7 +574,7 @@
     {
       "county": "Oxford County",
       "value": "Norwich / Otterville, Oxford County",
-      "label": "Norwich / Otterville — Oxford County",
+      "label": "Norwich / Otterville \u2014 Oxford County",
       "bylaw_note": "Norwich Township jobs often involve mixed town-and-rural access. Confirm whether the vehicle is on a village lot or a rural property before dispatch.",
       "municipality": "Norwich Township",
       "zone": "Norwich / Otterville",
@@ -598,7 +598,7 @@
     {
       "county": "Oxford County",
       "value": "Thamesford / Embro / Innerkip, Oxford County",
-      "label": "Thamesford / Embro / Innerkip — Oxford County",
+      "label": "Thamesford / Embro / Innerkip \u2014 Oxford County",
       "bylaw_note": "This service zone spans more than one Oxford municipality, so driveway, parking, and setup expectations should be confirmed for the exact address before scheduling.",
       "municipality": "Zorra / East Zorra-Tavistock",
       "zone": "Thamesford / Embro / Innerkip",
@@ -622,7 +622,7 @@
     {
       "county": "Oxford County",
       "value": "Tavistock / Hickson, Oxford County",
-      "label": "Tavistock / Hickson — Oxford County",
+      "label": "Tavistock / Hickson \u2014 Oxford County",
       "bylaw_note": "Village and rural properties in East Zorra-Tavistock need the exact address confirmed because setup room and access expectations can vary a lot.",
       "municipality": "East Zorra-Tavistock",
       "zone": "Tavistock / Hickson",
@@ -646,7 +646,7 @@
     {
       "county": "Oxford County",
       "value": "Beachville / South-West Oxford, Oxford County",
-      "label": "Beachville / South-West Oxford — Oxford County",
+      "label": "Beachville / South-West Oxford \u2014 Oxford County",
       "bylaw_note": "South-West Oxford bookings should distinguish between village addresses and more rural properties before dispatching staff or trailers.",
       "municipality": "South-West Oxford",
       "zone": "Beachville / South-West Oxford",
@@ -670,7 +670,7 @@
     {
       "county": "Oxford County",
       "value": "Plattsville / Blandford-Blenheim, Oxford County",
-      "label": "Plattsville / Blandford-Blenheim — Oxford County",
+      "label": "Plattsville / Blandford-Blenheim \u2014 Oxford County",
       "bylaw_note": "Blandford-Blenheim work often mixes village and rural conditions. Confirm the exact location before assigning a larger crew or trailer.",
       "municipality": "Blandford-Blenheim",
       "zone": "Plattsville / Blandford-Blenheim",
@@ -718,7 +718,7 @@
     {
       "county": "Norfolk County",
       "value": "Simcoe, Norfolk County",
-      "label": "Simcoe — Norfolk County",
+      "label": "Simcoe \u2014 Norfolk County",
       "bylaw_note": "Simcoe jobs should stay on private property whenever possible. Municipal parking, downtown activity, and residential noise expectations are the main operational considerations.",
       "municipality": "Norfolk County",
       "zone": "Simcoe",
@@ -746,7 +746,7 @@
     {
       "county": "Norfolk County",
       "value": "Delhi, Norfolk County",
-      "label": "Delhi — Norfolk County",
+      "label": "Delhi \u2014 Norfolk County",
       "bylaw_note": "Delhi bookings should confirm private-property working space and any downtown parking limitations before finalizing the schedule.",
       "municipality": "Norfolk County",
       "zone": "Delhi",
@@ -774,7 +774,7 @@
     {
       "county": "Norfolk County",
       "value": "Port Dover, Norfolk County",
-      "label": "Port Dover — Norfolk County",
+      "label": "Port Dover \u2014 Norfolk County",
       "bylaw_note": "Port Dover needs stronger parking and arrival planning because waterfront and downtown rules are tighter during busier seasons.",
       "municipality": "Norfolk County",
       "zone": "Port Dover",
@@ -802,7 +802,7 @@
     {
       "county": "Norfolk County",
       "value": "Waterford, Norfolk County",
-      "label": "Waterford — Norfolk County",
+      "label": "Waterford \u2014 Norfolk County",
       "bylaw_note": "Waterford bookings should confirm driveway or private-lot access and keep machine noise within normal daytime use.",
       "municipality": "Norfolk County",
       "zone": "Waterford",
@@ -830,7 +830,7 @@
     {
       "county": "Norfolk County",
       "value": "Port Rowan, Norfolk County",
-      "label": "Port Rowan — Norfolk County",
+      "label": "Port Rowan \u2014 Norfolk County",
       "bylaw_note": "Port Rowan needs seasonal parking awareness and private-property setup confirmation before dispatch.",
       "municipality": "Norfolk County",
       "zone": "Port Rowan",
@@ -858,7 +858,7 @@
     {
       "county": "Norfolk County",
       "value": "Langton, Norfolk County",
-      "label": "Langton — Norfolk County",
+      "label": "Langton \u2014 Norfolk County",
       "bylaw_note": "Langton jobs should confirm driveway or lot setup and treat runoff conservatively around roadside ditches and low drainage areas.",
       "municipality": "Norfolk County",
       "zone": "Langton",
@@ -886,7 +886,7 @@
     {
       "county": "Norfolk County",
       "value": "Courtland, Norfolk County",
-      "label": "Courtland — Norfolk County",
+      "label": "Courtland \u2014 Norfolk County",
       "bylaw_note": "Courtland work should be treated like a hamlet or rural-edge job: confirm driveway access, staging room, and utility reach before dispatch.",
       "municipality": "Norfolk County",
       "zone": "Courtland",
@@ -914,7 +914,7 @@
     {
       "county": "Norfolk County",
       "value": "Vittoria / St. Williams, Norfolk County",
-      "label": "Vittoria / St. Williams — Norfolk County",
+      "label": "Vittoria / St. Williams \u2014 Norfolk County",
       "bylaw_note": "These hamlet-area bookings need exact-address confirmation because road, driveway, and seasonal visitor conditions can vary sharply.",
       "municipality": "Norfolk County",
       "zone": "Vittoria / St. Williams",
@@ -942,7 +942,7 @@
     {
       "county": "Norfolk County",
       "value": "Turkey Point / Long Point, Norfolk County",
-      "label": "Turkey Point / Long Point — Norfolk County",
+      "label": "Turkey Point / Long Point \u2014 Norfolk County",
       "bylaw_note": "Beach-area jobs need the strongest seasonal parking and arrival planning. Dispatch should confirm exact parking availability before booking a crew or trailer.",
       "municipality": "Norfolk County",
       "zone": "Turkey Point / Long Point",
@@ -970,7 +970,7 @@
     {
       "county": "Norfolk County",
       "value": "Walsh / Walsingham, Norfolk County",
-      "label": "Walsh / Walsingham — Norfolk County",
+      "label": "Walsh / Walsingham \u2014 Norfolk County",
       "bylaw_note": "Walsh and Walsingham bookings should be treated as rural setups: confirm access, utility reach, and turnaround room before dispatch.",
       "municipality": "Norfolk County",
       "zone": "Walsh / Walsingham",
@@ -1037,7 +1037,22 @@
       "Driveway required",
       "Customer provides power and water or additional fees may apply",
       "One vehicle per day unless half-day jobs are confirmed"
-    ]
+    ],
+    "travel_pricing": {
+      "urban": 0,
+      "township": 0,
+      "hamlet": 10,
+      "coastal": 20,
+      "rural": 20,
+      "out_of_zone": 50,
+      "notes": "Travel charges are managed centrally in App Management."
+    },
+    "price_controls": {
+      "fuel_surcharge_cad": 0,
+      "material_surcharge_cad": 0,
+      "minimum_callout_cad": 0,
+      "tax_rate_percent": 13
+    }
   },
   "public_requirements": [
     "Driveway required",
