@@ -1,3 +1,5 @@
+> Last synchronized: April 12, 2026. Reviewed during the booking-lock, redirects-complete, pricing-control-center, accounting-pricing-window, canonical-pricing-helper resync, and docs/schema synchronization pass.
+
 > Last synchronized: April 12, 2026. Reviewed during the canonical pricing-catalog completion pass, booking/service-area contract repair, clean-route collision removal, static stress-check verification, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
@@ -163,7 +165,7 @@
 ## April 8, 2026 admin route stabilization pass
 - Repaired the current build by standardizing active admin navigation back to direct `.html` routes instead of mixed pretty-route/admin-folder assumptions.
 - Restored the shared admin shell from the richer canonical copy so pages that call `window.AdminShell.boot(...)` load again.
-- Kept compatibility folder `index.html` files for `/admin/`, `/admin-catalog/`, `/admin-accounting/`, `/services/`, and `/pricing/` while leaving direct `.html` links as the stable path for this build.
+- Removed duplicate clean-route wrapper folders for `/admin`, `/admin-catalog`, `/admin-accounting`, `/services`, and `/pricing`; `_redirects` remains the working compatibility layer.
 
 
 ## April 8, 2026 accounting backend extension
@@ -261,3 +263,10 @@ Route hotfix sync reviewed on 2026-04-11.
 - Booking preferred-date control is now compact with a dedicated visible picker button rather than relying only on the browser icon.
 
 > Pass update 2026-04-12: Re-synced the current uploaded build to the latest safe route structure. Removed duplicate clean-route folders that were reintroducing Cloudflare Pages redirect loops, preserved the newer booking experience already present in `book.html`, refreshed the deployed booking smoke check to recognize the shared `chrome.js` analytics bootstrap, and cleaned the login form autocomplete attributes. Immediate next step after deploy: verify `/`, `/services`, `/pricing`, `/book`, and `/admin` on the active branch before resuming larger feature work.
+
+## Completed / strengthened in the April 12 pricing control center pass
+- Booking is now explicitly treated as a **stable public screen** and should not be altered during ongoing admin pricing work unless a break/regression requires a targeted fix.
+- `_redirects` is now the accepted working route shim for this phase and is considered **complete** for the current Pages-safe structure.
+- App Management now acts as the **single preferred entry point** for package pricing, add-on pricing, service-area travel tiers, travel-charge defaults, and shared pricing-control values.
+- Admin Accounting now includes a **pricing window** so the office side can review the active pricing scope, travel tiers, and default service area without leaving the accounting workflow.
+- The canonical pricing helper was re-synchronized again so travel-pricing and shared price-control values stay in the same catalog alongside packages, add-ons, service areas, booking rules, and public requirements.

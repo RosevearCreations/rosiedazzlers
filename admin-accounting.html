@@ -26,6 +26,12 @@
     .checklist-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03)}
     .checklist-item input{margin-top:3px}
     .checklist-meta{font-size:.9rem;color:rgba(234,242,255,.68)}
+    .pricing-window{display:grid;gap:12px}
+    .pricing-window__summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+    .pricing-window__summary .panel{min-height:auto}
+    .pricing-window__tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+    .pricing-tier{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
+    .pricing-tier strong{display:block;font-size:1.2rem;margin-top:6px}
     @media (max-width: 980px){
       .admin-grid-2,.admin-grid-3{grid-template-columns:1fr}
     }
@@ -93,6 +99,19 @@
             <article class="panel"><div class="kicker">Closing cash</div><div id="sumClosingCash" class="hero-stat">$0.00</div><div class="mini">Cash balance at month end</div></article>
             <article class="panel"><div class="kicker">Missing item costs</div><div id="sumMissingCosts" class="hero-stat">0</div><div class="mini" id="sumCostCoverage">0% coverage</div></article>
           </section>
+
+          <article class="panel pricing-window">
+            <div class="row wrap" style="justify-content:space-between;align-items:flex-start;gap:12px">
+              <div>
+                <h2 style="margin:0 0 6px">Pricing control window</h2>
+                <p class="mini" style="margin:0">Read the current canonical pricing scope here, then open App Management for all price, package, add-on, service-area, and travel-charge edits from one entry point.</p>
+              </div>
+              <a class="btn" href="/admin-app.html">Open pricing control center</a>
+            </div>
+            <div id="pricingWindowSummary" class="pricing-window__summary"></div>
+            <div id="pricingWindowTiers" class="pricing-window__tiers"></div>
+            <div class="mini" id="pricingWindowNotes">Travel pricing is loaded from the canonical pricing catalog.</div>
+          </article>
 
           <section class="admin-grid-2">
             <article class="panel stack">
@@ -725,6 +744,37 @@
         });
         renderMonthEndChecklist(out.checklist || null);
       }
+      async function loadPricingWindow() {
+        try {
+          var res = await fetch('/api/pricing_catalog_public', { credentials: 'include', cache: 'no-store' });
+          var out = await res.json().catch(function () { return null; });
+          if (!res.ok || !out) throw new Error(out && out.error || 'Could not load pricing window.');
+          state.pricingCatalog = out;
+          renderPricingWindow();
+        } catch (err) {
+          qs('#pricingWindowSummary').innerHTML = '<div class="mini danger-note">' + esc(err && err.message ? err.message : 'Could not load pricing window.') + '</div>';
+          qs('#pricingWindowTiers').innerHTML = '';
+        }
+      }
+      function renderPricingWindow() {
+        var catalog = state.pricingCatalog || {};
+        var bookingRules = catalog.booking_rules || {};
+        var travel = bookingRules.travel_pricing || {};
+        qs('#pricingWindowSummary').innerHTML = [
+          ['Packages', String((catalog.packages || []).length)],
+          ['Add-ons', String((catalog.addons || []).length)],
+          ['Service areas', String((catalog.service_areas || []).length)],
+          ['Default area', esc(bookingRules.default_service_area || '—')],
+          ['Availability window', String(bookingRules.availability_window_days || 21) + ' days']
+        ].map(function (row) {
+          return '<div class="panel"><div class="kicker">' + row[0] + '</div><div class="hero-stat">' + row[1] + '</div></div>';
+        }).join('');
+        var tiers = ['urban','township','hamlet','coastal','rural','out_of_zone'];
+        qs('#pricingWindowTiers').innerHTML = tiers.map(function (tier) {
+          return '<div class="pricing-tier"><div class="kicker">' + esc(tier.replace(/_/g, ' ')) + '</div><strong>' + money(Number(travel[tier] || 0)) + '</strong></div>';
+        }).join('');
+        qs('#pricingWindowNotes').textContent = travel.notes || 'Travel pricing is loaded from the canonical pricing catalog.';
+      }
       function renderSummaryCards() {
         var recordSummary = state.recordSummary || {};
         var tax = state.tax || {};
@@ -793,7 +843,7 @@
       }
       async function refreshAll() {
         setStatus('Refreshing accounting workspace…');
-        await Promise.all([loadRecords(), loadPayables(), loadReports(), loadMonthEndChecklist()]);
+        await Promise.all([loadRecords(), loadPayables(), loadReports(), loadMonthEndChecklist(), loadPricingWindow()]);
         renderSummaryCards();
         setStatus('Accounting workspace refreshed.', 'success');
       }
