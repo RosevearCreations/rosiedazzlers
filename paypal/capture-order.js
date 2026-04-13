@@ -1,6 +1,8 @@
 // functions/api/paypal/capture-order.js
-// Capture an approved PayPal order, confirm the booking, and record any gift redemption.
-// Based on PayPal Orders v2 capture flow.
+// Capture an approved PayPal order, confirm the booking, record any gift redemption,
+// and queue the customer-facing confirmation message.
+
+import { queueOrderConfirmationNotification } from "../_lib/booking-documents.js";
 
 export async function onRequestOptions() {
   return corsResponse('', 204);
@@ -39,8 +41,9 @@ export async function onRequestPost({ request, env }) {
     }
 
     await updateBookingAndGift({ env, bookingId, orderId, captureData, metadata });
+    const notification = await queueOrderConfirmationNotification(env, bookingId, 'paypal_capture');
 
-    return corsJson({ ok: true, order: { id: captureData.id, status: captureData.status }, booking_id: bookingId });
+    return corsJson({ ok: true, order: { id: captureData.id, status: captureData.status }, booking_id: bookingId, notification });
   } catch (err) {
     return corsJson({ error: err?.message || 'Unexpected server error.' }, 500);
   }
@@ -53,9 +56,12 @@ async function updateBookingAndGift({ env, bookingId, orderId, captureData, meta
     headers: { ...headers, Prefer: 'return=minimal' },
     body: JSON.stringify({
       status: 'confirmed',
+      job_status: 'scheduled',
       paypal_order_id: orderId,
       paypal_capture_id: captureData?.purchase_units?.[0]?.payments?.captures?.[0]?.id || null,
-      payment_provider: 'paypal'
+      payment_provider: 'paypal',
+      confirmed_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     })
   });
 
