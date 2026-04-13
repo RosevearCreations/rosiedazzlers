@@ -475,8 +475,61 @@
 
     const DEFAULT_AVAILABILITY_WINDOW_DAYS = 21;
 
+    function analyticsTrack(event, detail = {}) {
+      try {
+        window.dispatchEvent(new CustomEvent("rd:analytics", { detail: { event, ...detail } }));
+      } catch {}
+    }
+
+    function openModal(title, src) {
+      const back = qs("#modalBack");
+      const img = qs("#modalImg");
+      const titleNode = qs("#modalTitle");
+      if (!back || !img || !titleNode || !src) return;
+      titleNode.textContent = title || "Preview";
+      img.src = src;
+      back.style.display = "flex";
+    }
+
+    function closeModal() {
+      const back = qs("#modalBack");
+      const img = qs("#modalImg");
+      if (img) img.removeAttribute("src");
+      if (back) back.style.display = "none";
+    }
+
+    qs("#modalCloseBtn").addEventListener("click", closeModal);
+    qs("#modalBack").addEventListener("click", (event) => {
+      if (event.target === qs("#modalBack")) closeModal();
+    });
+
+    qs("#serviceDatePickerBtn").addEventListener("click", () => {
+      const input = qs("#service_date");
+      if (!input) return;
+      if (typeof input.showPicker === "function") {
+        try {
+          input.showPicker();
+          return;
+        } catch {}
+      }
+      input.focus();
+      input.click();
+    });
 
     const activeBookingRules = () => bookingRules(state.pricing || {});
+
+    function availabilityWindowDays() {
+      const raw = Number(activeBookingRules().availability_window_days || DEFAULT_AVAILABILITY_WINDOW_DAYS);
+      return Number.isFinite(raw) && raw > 0 ? raw : DEFAULT_AVAILABILITY_WINDOW_DAYS;
+    }
+
+    function syncBookingRuleLabels() {
+      const days = availabilityWindowDays();
+      const prevBtn = qs("#availabilityPrevBtn");
+      const nextBtn = qs("#availabilityNextBtn");
+      if (prevBtn) prevBtn.textContent = `Previous ${days} days`;
+      if (nextBtn) nextBtn.textContent = `Next ${days} days`;
+    }
 
     function configuredServiceAreas() {
       return serviceAreaRows(state.pricing || {});
@@ -487,7 +540,6 @@
     function selectedPackage() {
       return (state.pricing?.packages || []).find((pkg) => pkg.code === state.selectedPackageCode) || null;
     }
-
 
     function showStatus(msg, kind = "") {
       const el = qs("#bookingStatus");
@@ -547,7 +599,7 @@
     }
 
     function packageImageForSize(pkg, size) {
-      return sharedPackageImageForSize(pkg, size);
+      return sharedPackageImageForSize(pkg, size) || `${PACKAGE_BASE}${encodeURIComponent(pkg.code || "package")}.png`;
     }
 
     function addonPrimaryImage(code) {
@@ -833,14 +885,16 @@
       const start = addDaysLocal(startOfLocalDay(), state.availabilityOffset);
       const items = [];
 
-      for (let i = 0; i < AVAILABILITY_WINDOW_DAYS; i++) {
+      const windowDays = availabilityWindowDays();
+
+      for (let i = 0; i < windowDays; i++) {
         const d = addDaysLocal(start, i);
         const iso = toIsoLocal(d);
         const out = await fetchAvailability(iso);
         items.push({ iso, out, status: availabilityStatus(out) });
       }
 
-      const end = addDaysLocal(start, (Number(activeBookingRules().availability_window_days || DEFAULT_AVAILABILITY_WINDOW_DAYS) || DEFAULT_AVAILABILITY_WINDOW_DAYS) - 1);
+      const end = addDaysLocal(start, windowDays - 1);
       qs("#availabilityWindowLabel").textContent = `${start.toLocaleDateString("en-CA", { month:"short", day:"numeric" })} to ${end.toLocaleDateString("en-CA", { month:"short", day:"numeric", year:"numeric" })}`;
       qs("#availabilityPrevBtn").disabled = state.availabilityOffset === 0;
 
@@ -925,7 +979,8 @@
       const picked = selectedDate() || null;
       if (picked) {
         const diff = Math.max(0, Math.floor((new Date(`${picked}T12:00:00`) - startOfLocalDay()) / 86400000));
-        state.availabilityOffset = Math.floor(diff / AVAILABILITY_WINDOW_DAYS) * AVAILABILITY_WINDOW_DAYS;
+        const windowDays = availabilityWindowDays();
+        state.availabilityOffset = Math.floor(diff / windowDays) * windowDays;
       }
       analyticsTrack("booking_date_pick", { service_date: picked, source:"native_picker" });
       await refreshAvailability();
@@ -933,13 +988,13 @@
     });
 
     qs("#availabilityPrevBtn").addEventListener("click", async () => {
-      state.availabilityOffset = Math.max(0, state.availabilityOffset - AVAILABILITY_WINDOW_DAYS);
+      state.availabilityOffset = Math.max(0, state.availabilityOffset - availabilityWindowDays());
       analyticsTrack("booking_calendar_page", { direction:"prev", offset_days: state.availabilityOffset });
       await loadAvailabilityWindow();
     });
 
     qs("#availabilityNextBtn").addEventListener("click", async () => {
-      state.availabilityOffset += AVAILABILITY_WINDOW_DAYS;
+      state.availabilityOffset += availabilityWindowDays();
       analyticsTrack("booking_calendar_page", { direction:"next", offset_days: state.availabilityOffset });
       await loadAvailabilityWindow();
     });
