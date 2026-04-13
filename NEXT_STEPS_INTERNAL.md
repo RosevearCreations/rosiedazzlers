@@ -1,3 +1,5 @@
+> Last synchronized: April 12, 2026. Reviewed during the booking-lock, redirects-complete, pricing-control-center, accounting-pricing-window, canonical-pricing-helper resync, and docs/schema synchronization pass.
+
 > Last synchronized: April 12, 2026. Reviewed during the canonical pricing-catalog completion pass, booking/service-area contract repair, clean-route collision removal, static stress-check verification, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
@@ -95,7 +97,7 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 ## April 8, 2026 admin route stabilization pass
 - Repaired the current build by standardizing active admin navigation back to direct `.html` routes instead of mixed pretty-route/admin-folder assumptions.
 - Restored the shared admin shell from the richer canonical copy so pages that call `window.AdminShell.boot(...)` load again.
-- Kept compatibility folder `index.html` files for `/admin/`, `/admin-catalog/`, `/admin-accounting/`, `/services/`, and `/pricing/` while leaving direct `.html` links as the stable path for this build.
+- Removed duplicate clean-route wrapper folders for `/admin`, `/admin-catalog`, `/admin-accounting`, `/services`, and `/pricing`; `_redirects` remains the working compatibility layer.
 
 ## April 8, 2026 accounting access and admin workflow pass
 - Accounting access is now surfaced directly in the Admin dashboard, shared admin menu, and shared return toolbar so office-side accounting work is no longer hidden behind direct URL knowledge alone.

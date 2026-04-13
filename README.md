@@ -1,3 +1,5 @@
+> Last synchronized: April 12, 2026. Reviewed during the booking-lock, redirects-complete, pricing-control-center, accounting-pricing-window, canonical-pricing-helper resync, and docs/schema synchronization pass.
+
 > Last synchronized: April 12, 2026. Reviewed during the canonical pricing-catalog completion pass, booking/service-area contract repair, clean-route collision removal, static stress-check verification, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
@@ -195,7 +197,7 @@ This pass focused on reducing the biggest active operational risks rather than a
 ## April 8, 2026 admin route stabilization pass
 - Repaired the current build by standardizing active admin navigation back to direct `.html` routes instead of mixed pretty-route/admin-folder assumptions.
 - Restored the shared admin shell from the richer canonical copy so pages that call `window.AdminShell.boot(...)` load again.
-- Kept compatibility folder `index.html` files for `/admin/`, `/admin-catalog/`, `/admin-accounting/`, `/services/`, and `/pricing/` while leaving direct `.html` links as the stable path for this build.
+- Removed duplicate clean-route wrapper folders for `/admin`, `/admin-catalog`, `/admin-accounting`, `/services`, and `/pricing`; `_redirects` remains the working compatibility layer.
 
 
 ## April 8, 2026 accounting note
@@ -277,3 +279,9 @@ This pass keeps the route hotfix structure intact and adds stronger internal wor
 Public pricing surfaces now read `/api/pricing_catalog_public` first. That endpoint now preserves the full canonical catalog contract from `app_management_settings.pricing_catalog` — packages, add-ons, charts, service-area rules, booking rules, and public requirements — and falls back to the bundled catalog JSON when needed. Use **Admin App Management → Pricing Catalog** to keep package prices, booking windows, included services, add-ons, and service-area rules aligned.
 
 > Pass update 2026-04-12: Re-synced the current uploaded build to the latest safe route structure. Removed duplicate clean-route folders that were reintroducing Cloudflare Pages redirect loops, preserved the newer booking experience already present in `book.html`, refreshed the deployed booking smoke check to recognize the shared `chrome.js` analytics bootstrap, and cleaned the login form autocomplete attributes. Immediate next step after deploy: verify `/`, `/services`, `/pricing`, `/book`, and `/admin` on the active branch before resuming larger feature work.
+
+## April 12, 2026 build note
+- Booking is now treated as stable and should not be altered during ongoing admin pricing work.
+- `_redirects` is considered working and complete for the current Pages-safe route structure.
+- `admin-app.html` now contains the preferred pricing control center for package pricing, add-ons, service-area travel tiers, travel-charge defaults, and shared pricing-control values.
+- `admin-accounting.html` now includes a pricing review window for office-side accounting oversight.

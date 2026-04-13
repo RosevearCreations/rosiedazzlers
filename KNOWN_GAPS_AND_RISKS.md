@@ -1,3 +1,5 @@
+> Last synchronized: April 12, 2026. Reviewed during the booking-lock, redirects-complete, pricing-control-center, accounting-pricing-window, canonical-pricing-helper resync, and docs/schema synchronization pass.
+
 > Last synchronized: April 12, 2026. Reviewed during the canonical pricing-catalog completion pass, booking/service-area contract repair, clean-route collision removal, static stress-check verification, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
@@ -395,7 +397,7 @@ Partially mitigated in the newest pass:
 ## April 8, 2026 admin route stabilization pass
 - Repaired the current build by standardizing active admin navigation back to direct `.html` routes instead of mixed pretty-route/admin-folder assumptions.
 - Restored the shared admin shell from the richer canonical copy so pages that call `window.AdminShell.boot(...)` load again.
-- Kept compatibility folder `index.html` files for `/admin/`, `/admin-catalog/`, `/admin-accounting/`, `/services/`, and `/pricing/` while leaving direct `.html` links as the stable path for this build.
+- Removed duplicate clean-route wrapper folders for `/admin`, `/admin-catalog`, `/admin-accounting`, `/services`, and `/pricing`; `_redirects` remains the working compatibility layer.
 
 
 ## April 8, 2026 accounting settlement / tax / export pass
@@ -500,3 +502,15 @@ Still remaining:
 - The custom booking date picker button improves visibility, but full cross-browser/live device verification still needs to happen after deployment.
 
 > Pass update 2026-04-12: Re-synced the current uploaded build to the latest safe route structure. Removed duplicate clean-route folders that were reintroducing Cloudflare Pages redirect loops, preserved the newer booking experience already present in `book.html`, refreshed the deployed booking smoke check to recognize the shared `chrome.js` analytics bootstrap, and cleaned the login form autocomplete attributes. Immediate next step after deploy: verify `/`, `/services`, `/pricing`, `/book`, and `/admin` on the active branch before resuming larger feature work.
+
+## April 12, 2026 pass update
+
+### Resolved / moved out of active risk
+- Booking screen is now marked **stable** and should not be treated as an active redesign target.
+- `_redirects` is marked **working and complete** for the current route model.
+- Pricing administration is no longer raw JSON only; a structured control center now exists for the most common pricing work.
+
+### Still open / next strongest gaps
+- Travel charges and new shared price-control fields are stored centrally now, but customer-facing checkout math should only begin consuming them after office review confirms the tier model.
+- The pricing editor still falls back to advanced JSON for deeper rows like chart maintenance, rich included-service details, and full service-area narrative fields.
+- Pricing change history and audit review are still needed so accounting and operations can see when a package/add-on/travel value changed and by whom.

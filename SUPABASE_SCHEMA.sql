@@ -1,3 +1,4 @@
+-- 2026-04-12 pricing-control-center note: booking remains stable and unchanged in this pass; _redirects is treated as complete; app_management_settings.pricing_catalog now also carries booking_rules.travel_pricing and booking_rules.price_controls for centralized travel/default pricing governance.
 -- 2026-04-12 sync note: public booking/services/pricing/checkout/shared site helpers now preserve the full canonical pricing_catalog contract (charts, packages, service areas, booking_rules, public_requirements) via /api/pricing_catalog_public, with bundled JSON fallback and no SQL table shape change in this pass.
 -- Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area reporting, analytics funnel/export pass, and docs/schema synchronization pass.
 -- Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, profitability labor-estimate pass, and docs/schema sync pass.
@@ -325,7 +326,7 @@ create index if not exists catalog_inventory_items_category_idx on public.catalo
 create index if not exists catalog_inventory_items_subcategory_idx on public.catalog_inventory_items(subcategory);
 create index if not exists catalog_inventory_items_sort_key_idx on public.catalog_inventory_items(sort_key);
 create index if not exists catalog_inventory_items_reuse_policy_idx on public.catalog_inventory_items(reuse_policy);
--- app_management_settings.pricing_catalog is now the canonical DB-backed pricing source, with bundled JSON as fallback. The expected JSON contract includes packages, addons, charts, service_areas, booking_rules, and public_requirements.
+-- app_management_settings.pricing_catalog is now the canonical DB-backed pricing source, with bundled JSON as fallback. The expected JSON contract includes packages, addons, charts, service_areas, booking_rules, public_requirements, booking_rules.travel_pricing, and booking_rules.price_controls.
 
 create index if not exists vehicle_catalog_cache_year_make_idx on public.vehicle_catalog_cache(model_year, make);
 create index if not exists vehicle_catalog_cache_make_model_idx on public.vehicle_catalog_cache(make, model);

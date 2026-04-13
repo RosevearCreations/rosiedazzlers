@@ -1,3 +1,5 @@
+> Last synchronized: April 12, 2026. Reviewed during the booking-lock, redirects-complete, pricing-control-center, accounting-pricing-window, canonical-pricing-helper resync, and docs/schema synchronization pass.
+
 > Last synchronized: April 12, 2026. Reviewed during the canonical pricing-catalog completion pass, booking/service-area contract repair, clean-route collision removal, static stress-check verification, and docs/schema synchronization pass.
 
 > Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
@@ -178,7 +180,7 @@ This doc was refreshed during the vehicle catalog, progress-session, layout, and
 ## April 8, 2026 admin route stabilization pass
 - Repaired the current build by standardizing active admin navigation back to direct `.html` routes instead of mixed pretty-route/admin-folder assumptions.
 - Restored the shared admin shell from the richer canonical copy so pages that call `window.AdminShell.boot(...)` load again.
-- Kept compatibility folder `index.html` files for `/admin/`, `/admin-catalog/`, `/admin-accounting/`, `/services/`, and `/pricing/` while leaving direct `.html` links as the stable path for this build.
+- Removed duplicate clean-route wrapper folders for `/admin`, `/admin-catalog`, `/admin-accounting`, `/services`, and `/pricing`; `_redirects` remains the working compatibility layer.
 
 
 ## April 8, 2026 sanity reminders
@@ -267,3 +269,9 @@ Route hotfix sync reviewed on 2026-04-11.
 - No schema shape change landed in this pass; `SUPABASE_SCHEMA.sql` was refreshed to note the pricing-catalog consolidation and booking UI tightening work.
 
 > Pass update 2026-04-12: Re-synced the current uploaded build to the latest safe route structure. Removed duplicate clean-route folders that were reintroducing Cloudflare Pages redirect loops, preserved the newer booking experience already present in `book.html`, refreshed the deployed booking smoke check to recognize the shared `chrome.js` analytics bootstrap, and cleaned the login form autocomplete attributes. Immediate next step after deploy: verify `/`, `/services`, `/pricing`, `/book`, and `/admin` on the active branch before resuming larger feature work.
+
+## April 12, 2026 sanity-check additions
+- Confirm `book.html` remains unchanged/stable after deploy.
+- Confirm `_redirects` handles the intended route behavior without duplicate folder-wrapper regressions.
+- Confirm `admin-app.html` loads the structured pricing control center and can save `pricing_catalog`.
+- Confirm `admin-accounting.html` loads the pricing review window from `/api/pricing_catalog_public`.
