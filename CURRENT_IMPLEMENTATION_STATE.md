@@ -1,28 +1,13 @@
-> Last synchronized: April 12, 2026. Reviewed during the booking-lock, redirects-complete, pricing-control-center, accounting-pricing-window, canonical-pricing-helper resync, and docs/schema synchronization pass.
+> Last synchronized: April 13, 2026. Reviewed during the social-feed-public endpoint repair, accounting GL duplicate-key cleanup, booking-lock carry-forward, route-completeness verification, and docs/schema synchronization pass.
 
-> Last synchronized: April 12, 2026. Reviewed during the canonical pricing-catalog completion pass, booking/service-area contract repair, clean-route collision removal, static stress-check verification, and docs/schema synchronization pass.
-
-> Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
-
-> Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
-
-> Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
-
-> Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
-
-> Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
-
-> Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
-
-> Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
-
-> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
-
-> Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
-
-
-> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Current Implementation State
+
+## April 13, 2026 build-stability + social feed endpoint pass
+- Added `functions/api/social_feed_public.js` as the canonical public/social-feed read path for the home page, videos page, and App Management reload action.
+- Removed duplicate `created_by_staff_user_id` / `last_recorded_by_staff_user_id` keys from `functions/api/_lib/accounting-gl.js`.
+- Preserved the booking screen as locked/stable and left `_redirects` as the current complete compatibility layer.
+- No new SQL table shape was required in this pass; schema notes were refreshed to reflect the build-stability and endpoint-completion work.
+
 
 ## Completed / strengthened in the April 12 canonical pricing pass
 - public booking, services, pricing, checkout, and the shared public site helper now consume the same client/server pricing-catalog normalizer instead of drifting field-by-field

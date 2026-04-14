@@ -1,29 +1,18 @@
-> Last synchronized: April 12, 2026. Reviewed during the booking-lock, redirects-complete, pricing-control-center, accounting-pricing-window, canonical-pricing-helper resync, and docs/schema synchronization pass.
+> Last synchronized: April 13, 2026. Reviewed during the social-feed-public endpoint repair, accounting GL duplicate-key cleanup, booking-lock carry-forward, route-completeness verification, and docs/schema synchronization pass.
 
-> Last synchronized: April 12, 2026. Reviewed during the canonical pricing-catalog completion pass, booking/service-area contract repair, clean-route collision removal, static stress-check verification, and docs/schema synchronization pass.
-
-> Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area filtering/reporting, analytics funnel/export expansion, deploy-smoke coverage pass, and docs/schema synchronization pass.
-
-> Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, operational profitability labor-estimate pass, route-collision cleanup, and docs/schema synchronization pass.
-
-> Last synchronized: April 11, 2026. Reviewed during the route-safety hotfix carry-forward, crew-summary workflow pass, admin runtime timeout/text-fallback hardening pass, stress-check cleanup pass, and docs/schema synchronization pass.
-
-> Last synchronized: April 10, 2026. Reviewed during the session-first admin recovery/live/progress app-shell pass, recovery audit visibility pass, static stress-check pass, and docs/schema synchronization pass.
-
-> Last synchronized: April 10, 2026. Reviewed during the canonical add-on media recovery, crew assignment/senior detailer workflow, responsive app-shell tightening, stability checks, and docs/schema synchronization pass.
-
-> Last synchronized: April 9, 2026. Reviewed during the add-on image restore, assignment identity normalization, month-end checklist, and docs/schema synchronization pass.
-
-> Last synchronized: April 8, 2026. Reviewed during the accounting backend, payable/expense, month-end reporting, and docs/schema synchronization pass.
-
-> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
-
-> Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
-
-
-
-> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Rosie Dazzlers — Known Gaps and Risks
+
+## April 13, 2026 pass status
+- the missing public social-feed API route is now present, so the public social sections and App Management reload flow finally point at a real endpoint instead of a dead URL
+- the booking screen remains locked and should not be altered unless a production defect forces a targeted repair
+- `_redirects` remains the complete route-compatibility layer for the current layout
+- the accounting GL duplicate-key warning is now removed from the current build
+
+## Current live risks after this pass
+- public social sections still depend on staff entering the latest five links per platform in App Management; the endpoint now exists, but content freshness is still operational work
+- canonical pricing is much safer now, but travel-charge and cross-report convergence still need disciplined use of the App Management control center
+- refund/discount workflows now exist, but a dedicated printable credit-memo style document is still missing
+
 
 ## April 11 pass status
 - public booking layout drift is now addressed in code, but still needs manual width checks on real devices after deploy
