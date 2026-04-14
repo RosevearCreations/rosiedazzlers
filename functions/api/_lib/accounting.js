@@ -9,18 +9,20 @@ export async function syncAccountingRecordForBooking(env, booking, options = {})
   const bookingId = String(booking.id);
   const financeSummary = await loadFinanceSummary(env, headers, bookingId);
 
-  const totalCad = toMoneyNumber(booking.total_price || 0);
-  const depositDueCad = toMoneyNumber(booking.deposit_amount || 0);
+  const totalCad = toMoneyNumber(booking.total_price ?? booking.price_total_cents ?? 0);
+  const depositDueCad = toMoneyNumber(booking.deposit_amount ?? booking.deposit_cents ?? 0);
   const tipCad = toMoneyNumber(financeSummary.tip);
   const refundCad = toMoneyNumber(financeSummary.refund);
+  const discountCad = toMoneyNumber(financeSummary.discount);
   const finalPaidCad = toMoneyNumber(financeSummary.final_payment);
   const depositPaidCad = toMoneyNumber(financeSummary.deposit);
   const otherPaidCad = toMoneyNumber(financeSummary.other);
   const collectedTotalCad = toMoneyNumber(financeSummary.collected_total);
-  const taxableAmountCad = totalCad;
+  const effectiveTotalCad = toMoneyNumber(Math.max(0, totalCad - discountCad));
+  const taxableAmountCad = effectiveTotalCad;
   const taxCad = 0;
   const revenueCad = toMoneyNumber(Math.max(0, collectedTotalCad - tipCad - refundCad));
-  const balanceDueCad = toMoneyNumber(Math.max(0, totalCad - depositPaidCad - finalPaidCad - otherPaidCad + refundCad));
+  const balanceDueCad = toMoneyNumber(Math.max(0, effectiveTotalCad - depositPaidCad - finalPaidCad - otherPaidCad + refundCad));
   const actor = options.actor || null;
   const source = options.source || "booking";
   const existing = await loadExistingAccountingRecord(env, headers, bookingId);
@@ -40,7 +42,7 @@ export async function syncAccountingRecordForBooking(env, booking, options = {})
     booking_status: booking.status || null,
     job_status: booking.job_status || null,
     subtotal_cad: totalCad,
-    total_cad: totalCad,
+    total_cad: effectiveTotalCad,
     taxable_amount_cad: taxableAmountCad,
     tax_cad: taxCad,
     deposit_due_cad: depositDueCad,
@@ -48,6 +50,7 @@ export async function syncAccountingRecordForBooking(env, booking, options = {})
     final_paid_cad: finalPaidCad,
     tip_cad: tipCad,
     refund_cad: refundCad,
+    discount_cad: discountCad,
     other_paid_cad: otherPaidCad,
     collected_total_cad: collectedTotalCad,
     revenue_cad: revenueCad,
@@ -60,16 +63,7 @@ export async function syncAccountingRecordForBooking(env, booking, options = {})
   };
 
   if (existing?.id) {
-    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/accounting_records?id=eq.${encodeURIComponent(existing.id)}`, {
-      method: "PATCH",
-      headers: { ...headers, Prefer: "return=representation" },
-      body: JSON.stringify(payload)
-    });
-    if (!res.ok) {
-      const text = await res.text();
-      throw new Error(`Could not update accounting record. ${text}`);
-    }
-    const rows = await res.json().catch(() => []);
+    const rows = await writeAccountingRecord(env, headers, existing.id, payload, "PATCH");
     return Array.isArray(rows) ? rows[0] || null : null;
   }
 
@@ -78,17 +72,47 @@ export async function syncAccountingRecordForBooking(env, booking, options = {})
     created_at: new Date().toISOString(),
     created_by_name: actor?.full_name || actor?.email || null
   }];
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/accounting_records`, {
-    method: "POST",
+  const rows = await writeAccountingRecord(env, headers, null, createPayload, "POST");
+  return Array.isArray(rows) ? rows[0] || null : null;
+}
+
+async function writeAccountingRecord(env, headers, recordId, payload, method) {
+  const url = recordId
+    ? `${env.SUPABASE_URL}/rest/v1/accounting_records?id=eq.${encodeURIComponent(recordId)}`
+    : `${env.SUPABASE_URL}/rest/v1/accounting_records`;
+  let res = await fetch(url, {
+    method,
     headers: { ...headers, Prefer: "return=representation" },
-    body: JSON.stringify(createPayload)
+    body: JSON.stringify(payload)
   });
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Could not create accounting record. ${text}`);
+    if (text.includes('discount_cad')) {
+      const stripped = stripDiscount(payload);
+      res = await fetch(url, {
+        method,
+        headers: { ...headers, Prefer: "return=representation" },
+        body: JSON.stringify(stripped)
+      });
+      if (!res.ok) {
+        throw new Error(`Could not ${method === 'PATCH' ? 'update' : 'create'} accounting record. ${await res.text()}`);
+      }
+      return await res.json().catch(() => []);
+    }
+    throw new Error(`Could not ${method === 'PATCH' ? 'update' : 'create'} accounting record. ${text}`);
   }
-  const rows = await res.json().catch(() => []);
-  return Array.isArray(rows) ? rows[0] || null : null;
+  return await res.json().catch(() => []);
+}
+
+function stripDiscount(payload) {
+  if (Array.isArray(payload)) return payload.map((row) => {
+    const clone = { ...row };
+    delete clone.discount_cad;
+    return clone;
+  });
+  const clone = { ...payload };
+  delete clone.discount_cad;
+  return clone;
 }
 
 async function loadExistingAccountingRecord(env, headers, bookingId) {
@@ -109,9 +133,10 @@ async function loadFinanceSummary(env, headers, bookingId) {
     "booking_finance_final_payment",
     "booking_finance_tip",
     "booking_finance_refund",
+    "booking_finance_discount",
     "booking_finance_other"
   ].map((x) => `event_type.eq.${x}`).join(",");
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/booking_events?select=created_at,event_type,payload&booking_id=eq.${encodeURIComponent(bookingId)}&or=(${types})&order=created_at.asc`, {
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/booking_events?select=created_at,event_type,payload,event_note&booking_id=eq.${encodeURIComponent(bookingId)}&or=(${types})&order=created_at.asc`, {
     headers
   });
   if (!res.ok) {
@@ -119,7 +144,7 @@ async function loadFinanceSummary(env, headers, bookingId) {
     throw new Error(`Could not load finance summary. ${text}`);
   }
   const rows = await res.json().catch(() => []);
-  const summary = { deposit: 0, final_payment: 0, tip: 0, refund: 0, other: 0, collected_total: 0, last_finance_event_at: null, last_finance_event_type: null };
+  const summary = { deposit: 0, final_payment: 0, tip: 0, refund: 0, discount: 0, other: 0, collected_total: 0, last_finance_event_at: null, last_finance_event_type: null };
   for (const row of Array.isArray(rows) ? rows : []) {
     const payload = row && typeof row.payload === "object" && row.payload ? row.payload : {};
     const entryType = String(payload.entry_type || row.event_type || "").replace("booking_finance_", "");
@@ -130,19 +155,21 @@ async function loadFinanceSummary(env, headers, bookingId) {
     summary.last_finance_event_at = row.created_at || summary.last_finance_event_at;
     summary.last_finance_event_type = entryType || summary.last_finance_event_type;
   }
-  for (const key of ["deposit","final_payment","tip","refund","other","collected_total"]) {
+  for (const key of ["deposit","final_payment","tip","refund","discount","other","collected_total"]) {
     summary[key] = toMoneyNumber(summary[key]);
   }
   return summary;
 }
 
 function normalizeAccountingStage({ booking, financeSummary }) {
-  const total = toMoneyNumber(booking.total_price || 0);
+  const total = toMoneyNumber(booking.total_price ?? booking.price_total_cents ?? 0);
+  const discount = toMoneyNumber(financeSummary.discount || 0);
+  const effectiveTotal = toMoneyNumber(Math.max(0, total - discount));
   const collected = toMoneyNumber(financeSummary.collected_total || 0);
-  const depositDue = toMoneyNumber(booking.deposit_amount || 0);
+  const depositDue = toMoneyNumber(booking.deposit_amount ?? booking.deposit_cents ?? 0);
   if (collected <= 0) return depositDue > 0 ? "deposit_due" : "open";
   if (depositDue > 0 && collected < depositDue) return "deposit_partial";
-  if (collected < total) return "balance_due";
+  if (collected < effectiveTotal) return "balance_due";
   return "paid";
 }
 
@@ -156,5 +183,7 @@ function normalizeOrderStatus(value) {
 
 function toMoneyNumber(value) {
   const num = Number(value || 0);
-  return Math.round((Number.isFinite(num) ? num : 0) * 100) / 100;
+  if (!Number.isFinite(num)) return 0;
+  if (Math.abs(num) >= 1000 && Number.isInteger(num)) return Math.round(num) / 100;
+  return Math.round(num * 100) / 100;
 }
