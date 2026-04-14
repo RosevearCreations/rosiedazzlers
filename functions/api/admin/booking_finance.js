@@ -1,14 +1,8 @@
 import { syncAccountingRecordForBooking } from "../_lib/accounting.js";
-
 import { requireStaffAccess, serviceHeaders, json, methodNotAllowed, isUuid } from "../_lib/staff-auth.js";
 
-const FINANCE_EVENT_TYPES = [
-  "booking_finance_deposit",
-  "booking_finance_final_payment",
-  "booking_finance_tip",
-  "booking_finance_refund",
-  "booking_finance_other"
-];
+const FINANCE_ENTRY_TYPES = ["deposit", "final_payment", "tip", "refund", "discount", "other"];
+const FINANCE_EVENT_TYPES = FINANCE_ENTRY_TYPES.map((type) => `booking_finance_${type}`);
 
 export async function onRequestOptions() {
   return new Response("", { status: 204, headers: corsHeaders() });
@@ -31,7 +25,7 @@ export async function onRequestGet(context) {
     if (!res.ok) return withCors(json({ error: `Could not load finance entries. ${await res.text()}` }, 500));
     const rows = await res.json().catch(() => []);
     const items = [];
-    const summary = { deposit: 0, final_payment: 0, tip: 0, refund: 0, other: 0, collected_total: 0 };
+    const summary = { deposit: 0, final_payment: 0, tip: 0, refund: 0, discount: 0, other: 0, collected_total: 0 };
 
     for (const row of Array.isArray(rows) ? rows : []) {
       const payload = row && typeof row.payload === "object" && row.payload ? row.payload : {};
@@ -41,8 +35,9 @@ export async function onRequestGet(context) {
         id: row.id,
         created_at: row.created_at,
         entry_type: entryType,
-        amount_cad: amount,
+        amount_cad: Math.round(amount * 100) / 100,
         payment_method: payload.payment_method || "",
+        reason_code: payload.reason_code || "",
         note: payload.note || row.event_note || "",
         recorded_at: payload.recorded_at || row.created_at,
         actor_name: row.actor_name || ""
@@ -50,6 +45,10 @@ export async function onRequestGet(context) {
       if (Object.prototype.hasOwnProperty.call(summary, entryType)) summary[entryType] += amount;
       if (["deposit", "final_payment", "tip", "other"].includes(entryType)) summary.collected_total += amount;
       if (entryType === "refund") summary.collected_total -= amount;
+    }
+
+    for (const key of Object.keys(summary)) {
+      summary[key] = Math.round(Number(summary[key] || 0) * 100) / 100;
     }
 
     return withCors(json({ ok: true, entries: items, summary }));
@@ -73,21 +72,25 @@ export async function onRequestPost(context) {
     const paymentMethod = String(body.payment_method || "").trim();
     const note = String(body.note || "").trim();
     const recordedAt = String(body.recorded_at || "").trim() || null;
+    const reasonCode = String(body.reason_code || "").trim() || null;
 
-    if (!["deposit", "final_payment", "tip", "refund", "other"].includes(entryType)) return withCors(json({ error: "Invalid entry_type." }, 400));
+    if (!FINANCE_ENTRY_TYPES.includes(entryType)) return withCors(json({ error: "Invalid entry_type." }, 400));
     if (!(amountCad > 0)) return withCors(json({ error: "amount_cad must be greater than 0." }, 400));
 
     const actorName = access.actor?.full_name || access.actor?.email || "Staff";
+    const cleanAmount = Math.round(amountCad * 100) / 100;
     const payload = {
       entry_type: entryType,
-      amount_cad: Math.round(amountCad * 100) / 100,
+      amount_cad: cleanAmount,
       payment_method: paymentMethod || null,
+      reason_code: reasonCode,
       note: note || null,
       recorded_at: recordedAt,
       recorded_by_staff_user_id: access.actor?.id || null,
       recorded_by_email: access.actor?.email || null
     };
 
+    const eventNote = `${entryType.replaceAll("_", " ")} ${cleanAmount.toFixed(2)}${paymentMethod ? ` via ${paymentMethod}` : ""}${reasonCode ? ` (${reasonCode})` : ""}`;
     const res = await fetch(`${env.SUPABASE_URL}/rest/v1/booking_events`, {
       method: "POST",
       headers: { ...serviceHeaders(env), Prefer: "return=representation" },
@@ -95,14 +98,14 @@ export async function onRequestPost(context) {
         booking_id: bookingId,
         event_type: `booking_finance_${entryType}`,
         actor_name: actorName,
-        event_note: `${entryType.replaceAll("_", " ")} ${payload.amount_cad.toFixed(2)}${paymentMethod ? ` via ${paymentMethod}` : ""}`,
+        event_note: eventNote,
         payload
       }])
     });
     if (!res.ok) return withCors(json({ error: `Could not record finance entry. ${await res.text()}` }, 500));
     const rows = await res.json().catch(() => []);
 
-    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,customer_name,customer_email,customer_phone,service_date,start_slot,package_code,vehicle_size,status,job_status,total_price,deposit_amount,notes&id=eq.${encodeURIComponent(bookingId)}&limit=1`, {
+    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,customer_name,customer_email,customer_phone,service_date,start_slot,package_code,vehicle_size,status,job_status,total_price,price_total_cents,deposit_amount,deposit_cents,notes,progress_token,service_area,service_area_county,service_area_municipality,service_area_zone&id=eq.${encodeURIComponent(bookingId)}&limit=1`, {
       headers: serviceHeaders(env)
     });
     if (bookingRes.ok) {

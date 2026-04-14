@@ -32,6 +32,7 @@ import {
   isUuid,
   toBoolean
 } from "../_lib/staff-auth.js";
+import { queueOrderConfirmationNotification } from "../_lib/booking-documents.js";
 
 export async function onRequestOptions() {
   return new Response("", {
@@ -112,12 +113,14 @@ export async function onRequestPost(context) {
 
     const rows = await res.json().catch(() => []);
     const row = Array.isArray(rows) ? rows[0] || null : null;
+    const notification = confirmed ? await queueOrderConfirmationNotification(env, booking_id, "admin_booking_confirm") : null;
 
     return withCors(
       json({
         ok: true,
         message: confirmed ? "Booking confirmed." : "Booking returned to pending.",
-        booking: row
+        booking: row,
+        notification
       })
     );
   } catch (err) {
