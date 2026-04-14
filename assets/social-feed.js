@@ -22,8 +22,9 @@ export async function renderSocialFeedMounts() {
     const platforms = Array.isArray(payload?.platforms) ? payload.platforms : [];
     mounts.forEach((mount) => {
       mount.innerHTML = platforms.map((platform) => {
-        const cards = platform.items.length
-          ? platform.items.map((item) => `
+        const items = Array.isArray(platform?.items) ? platform.items.slice(0, 5) : [];
+        const cards = items.length
+          ? items.map((item) => `
               <a class="social-feed-card" href="${esc(item.url)}" target="_blank" rel="noopener">
                 <span class="social-feed-type">${esc(platform.label)}</span>
                 <strong>${esc(item.title)}</strong>
