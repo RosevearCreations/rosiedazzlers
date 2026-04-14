@@ -125,8 +125,6 @@ export async function settlePayable(env, { entry_id, amount_cad, payment_account
     created_by_name: actorName,
     last_recorded_by_name: actorName,
     created_by_staff_user_id: actorStaffUserId,
-    last_recorded_by_staff_user_id: actorStaffUserId,
-    created_by_staff_user_id: actorStaffUserId,
     last_recorded_by_staff_user_id: actorStaffUserId
   }, [
     { account_code: "accounts_payable", direction: "debit", amount_cad: settleAmount, memo: memo || `Settlement for payable ${entry_id}` },
