@@ -27,7 +27,10 @@ export async function onRequestPost(context) {
       "recovery_templates",
       "recovery_rules",
       "recovery_provider_rules",
-      "moderation_rules"
+      "moderation_rules",
+      "pricing_catalog",
+      "document_templates",
+      "social_feeds"
     ];
 
     const out = {};
