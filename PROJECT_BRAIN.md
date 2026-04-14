@@ -214,3 +214,17 @@ Current focus remains: preserve stable Pages routing while continuing the sessio
 - Use `admin-app.html` as the single preferred pricing entry point.
 - Use `admin-accounting.html` as the accounting-side pricing review surface.
 - Keep the canonical pricing helper synchronized whenever pricing/admin work changes the catalog contract.
+
+## 2026-04-13 Pass 14 Sync
+- Booking screen remains stable and should not be altered in future passes unless a critical bug appears.
+- `_redirects` is working and treated as complete for the current route layout.
+- Pricing/packages/add-ons/service areas/travel charges continue to flow through the App Management pricing control center as the preferred single entry point.
+- This pass added office-facing finance adjustments for discounts/refunds plus customer-facing document work for order confirmation, invoice / summary, gift certificate printing, and social feed management.
+
+## Pass 14 quick brain refresh
+- Booking UI is stable and locked.
+- `_redirects` is finished.
+- One preferred pricing entry point: App Management pricing control center.
+- One preferred office adjustment point: Admin Bookings finance section.
+- Customer documents now exist for confirmation, invoice / summary, and printable gift certificates.
+- Social content display now expects the latest five links per platform from central settings.

@@ -134,6 +134,28 @@
         <div class="note">The structured editor above is the preferred entry point. The raw JSON area remains available for chart links, included-service detail, and advanced maintenance until every pricing field has its own dedicated form.</div>
       </article>
 
+      
+
+      <article class="card span-6">
+        <h2>Document templates</h2>
+        <p class="muted">Control the public wording used by the order confirmation, invoice / summary, and printable gift certificate pages.</p>
+        <div class="field"><label for="doc_confirmation_intro">Order confirmation intro</label><textarea id="doc_confirmation_intro" placeholder="Thank you for booking Rosie Dazzlers. Your booking details are below."></textarea></div>
+        <div class="field"><label for="doc_invoice_footer">Invoice footer</label><textarea id="doc_invoice_footer" placeholder="Please review your service summary before arrival."></textarea></div>
+        <div class="field"><label for="doc_gift_footer">Gift certificate footer</label><textarea id="doc_gift_footer" placeholder="Gift certificates are valid for one year from purchase and are non-refundable."></textarea></div>
+        <div class="actions"><button class="btn" type="button" id="saveDocumentTemplatesBtn">Save document templates</button></div>
+      </article>
+
+      <article class="card span-6">
+        <h2>Social feed manager</h2>
+        <p class="muted">Store the latest 5 links for each social platform here. The home page and video page can then show the newest five items per platform without hard-coding every post into the page.</p>
+        <div class="field"><label for="social_feeds_json">Social feed JSON</label><textarea id="social_feeds_json" spellcheck="false" placeholder='{"platforms":[{"platform":"youtube","items":[]}]}'></textarea></div>
+        <div class="actions">
+          <button class="btn" type="button" id="reloadSocialFeedsBtn">Reload social feed JSON</button>
+          <button class="btn" type="button" id="resetSocialFeedsBtn">Reset to template</button>
+          <button class="btn primary" type="button" id="saveSocialFeedsBtn">Save social feeds</button>
+        </div>
+      </article>
+
       <article class="card span-6">
         <h2>Moderation Defaults</h2>
         <div class="checkrow"><input id="mod_annotation_customer_visibility_default" type="checkbox"><label for="mod_annotation_customer_visibility_default">Customer-visible annotations by default</label></div>
@@ -545,6 +567,8 @@
     const recoveryRules = applySetting(s.recovery_rules);
     const providerRules = applySetting(s.recovery_provider_rules);
     const pricingCatalog = applySetting(s.pricing_catalog, null);
+    const documentTemplates = applySetting(s.document_templates, documentTemplatesDefaults());
+    const socialFeeds = applySetting(s.social_feeds, socialFeedsDefaults());
 
     byId('vis_customer_detailer_notes').checked = !!visibility.customer_detailer_notes;
     byId('vis_customer_admin_notes').checked = visibility.customer_admin_notes_admin_only !== false;
@@ -584,6 +608,10 @@
     byId('provider_sms_key').value = providerRules?.sms?.provider_key || 'default_sms';
     byId('provider_sms_webhook').value = providerRules?.sms?.recovery_webhook_url || '';
     byId('provider_sms_test_to').value = providerRules?.sms?.send_test_to || '';
+    byId('doc_confirmation_intro').value = documentTemplates.confirmation_intro || '';
+    byId('doc_invoice_footer').value = documentTemplates.invoice_footer || '';
+    byId('doc_gift_footer').value = documentTemplates.gift_footer || '';
+    setSocialFeedsEditor(socialFeeds);
     await loadPricingCatalogEditor(pricingCatalog);
   }
   function byId(id){ return document.getElementById(id); }
@@ -640,6 +668,10 @@
   byId('saveModerationBtn').addEventListener('click', async ()=>{ try{ await saveSetting('moderation_rules', readModeration(), 'Moderation defaults saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save moderation defaults.', 'error'); } });
   byId('saveRecoveryBtn').addEventListener('click', async ()=>{ try{ await saveSetting('recovery_templates', readRecoveryTemplates(), 'Recovery templates saved.'); await saveSetting('recovery_rules', readRecoveryRules(), 'Recovery rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save recovery settings.', 'error'); } });
   byId('saveProviderRulesBtn').addEventListener('click', async ()=>{ try{ await saveSetting('recovery_provider_rules', readProviderRules(), 'Recovery provider rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save provider rules.', 'error'); } });
+  byId('saveDocumentTemplatesBtn').addEventListener('click', async ()=>{ try{ await saveSetting('document_templates', readDocumentTemplates(), 'Document templates saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save document templates.', 'error'); } });
+  byId('reloadSocialFeedsBtn').addEventListener('click', async ()=>{ try{ const res = await fetch('/api/social_feed_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load social feed JSON.'); setSocialFeedsEditor(out); setShellStatus('Social feed JSON reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload social feed JSON.', 'error'); } });
+  byId('resetSocialFeedsBtn').addEventListener('click', ()=>{ setSocialFeedsEditor(socialFeedsDefaults()); setShellStatus('Social feed editor reset to the template structure.', 'success'); });
+  byId('saveSocialFeedsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('social_feeds', readSocialFeedsEditor(), 'Social feeds saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save social feeds.', 'error'); } });
   byId('reloadPricingCatalogBtn').addEventListener('click', async ()=>{ try{ await loadPricingCatalogEditor(null); setShellStatus('Pricing catalog reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload pricing catalog.', 'error'); } });
   byId('savePricingCatalogBtn').addEventListener('click', async ()=>{ try{ syncPricingEditorToJson(); await saveSetting('pricing_catalog', pricingCatalogState, 'Pricing catalog saved. Booking, pricing, services, checkout, and pricing controls now share this source.'); } catch(err){ setShellStatus(err?.message || 'Could not save pricing catalog.', 'error'); } });
   byId('previewRecoveryBtn').addEventListener('click', async ()=>{ try{ await previewRecovery(false); setShellStatus('Recovery preview generated.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not build recovery preview.', 'error'); } });

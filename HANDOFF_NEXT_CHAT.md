@@ -227,3 +227,18 @@ Next strongest pass after deployment:
 - Continue future pricing work from the App Management pricing control center first.
 - The new travel-pricing and price-control values live inside the canonical `pricing_catalog` JSON in `app_management_settings`.
 - Next best follow-up is wiring approved travel-charge logic into checkout totals only after office review confirms the tiers and amounts.
+
+## 2026-04-13 Pass 14 Sync
+- Booking screen remains stable and should not be altered in future passes unless a critical bug appears.
+- `_redirects` is working and treated as complete for the current route layout.
+- Pricing/packages/add-ons/service areas/travel charges continue to flow through the App Management pricing control center as the preferred single entry point.
+- This pass added office-facing finance adjustments for discounts/refunds plus customer-facing document work for order confirmation, invoice / summary, gift certificate printing, and social feed management.
+
+## Pass 14 handoff
+- Do not alter `book.html` unless there is a critical booking bug.
+- Treat `_redirects` as complete.
+- Use `admin-app.html` as the preferred pricing/package/add-on/service-area/travel-charge control center.
+- Use `admin-booking.html` for on-site discounts, refunds, finance notes, and customer-document actions.
+- Customer-facing docs now live at `order-confirmation.html`, `invoice.html`, and `gift-certificate-print.html`.
+- Confirmation notifications are queued from Stripe, PayPal, and admin confirm flows through `notification_events` via `functions/api/_lib/booking-documents.js`.
+- Social feed content is centrally managed via the `social_feeds` setting and rendered on the home page and videos page using `assets/social-feed.js`.

@@ -275,3 +275,17 @@ Route hotfix sync reviewed on 2026-04-11.
 - Confirm `_redirects` handles the intended route behavior without duplicate folder-wrapper regressions.
 - Confirm `admin-app.html` loads the structured pricing control center and can save `pricing_catalog`.
 - Confirm `admin-accounting.html` loads the pricing review window from `/api/pricing_catalog_public`.
+
+## 2026-04-13 Pass 14 Sync
+- Booking screen remains stable and should not be altered in future passes unless a critical bug appears.
+- `_redirects` is working and treated as complete for the current route layout.
+- Pricing/packages/add-ons/service areas/travel charges continue to flow through the App Management pricing control center as the preferred single entry point.
+- This pass added office-facing finance adjustments for discounts/refunds plus customer-facing document work for order confirmation, invoice / summary, gift certificate printing, and social feed management.
+
+## Pass 14 sanity check additions
+- Confirm booking screen is unchanged and still functional.
+- Confirm selected booking loads finance summary and can record discount/refund entries.
+- Confirm order confirmation and invoice links open for bookings with a progress token.
+- Confirm gift lookup offers a printable certificate link.
+- Confirm App Management loads/saves `document_templates` and `social_feeds`.
+- Confirm home and videos pages render the social-feed section without breaking layout.

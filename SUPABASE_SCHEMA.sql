@@ -501,3 +501,10 @@ create index if not exists idx_bookings_service_area_zone_date on public.booking
 create index if not exists idx_bookings_service_area_municipality_date on public.bookings (service_area_municipality, service_date desc);
 create index if not exists idx_bookings_service_area_county_date on public.bookings (service_area_county, service_date desc);
 -- Pass update 2026-04-12: No schema shape changes in this pass. Synced docs/build after removing duplicate clean-route folders, refreshing the deployed booking analytics smoke check, and tightening login form autocomplete attributes.
+
+
+-- Pass 14 addition: accounting_records can track office-entered discounts for scope changes, weather adjustments, and service-recovery credits.
+alter table if exists public.accounting_records
+  add column if not exists discount_cad numeric(12,2) not null default 0;
+
+-- App management settings keys in active use: pricing_catalog, document_templates, social_feeds.

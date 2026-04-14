@@ -298,3 +298,15 @@ Route hotfix sync reviewed on 2026-04-11.
   - `booking_rules.travel_pricing`
   - `booking_rules.price_controls`
 - This keeps travel-charge defaults, shared price controls, and future checkout/reporting inputs in the same entry point as package pricing.
+
+## 2026-04-13 Pass 14 Sync
+- Booking screen remains stable and should not be altered in future passes unless a critical bug appears.
+- `_redirects` is working and treated as complete for the current route layout.
+- Pricing/packages/add-ons/service areas/travel charges continue to flow through the App Management pricing control center as the preferred single entry point.
+- This pass added office-facing finance adjustments for discounts/refunds plus customer-facing document work for order confirmation, invoice / summary, gift certificate printing, and social feed management.
+
+## Pass 14 data notes
+- `accounting_records.discount_cad` is now part of the active schema plan so office-issued credits and scope/weather/detailing-error discounts can be represented directly in accounting rollups.
+- `app_management_settings` is now actively expected to serve these keys in production: `pricing_catalog`, `document_templates`, and `social_feeds`.
+- Customer-facing document URLs continue to use the existing booking `progress_token` instead of introducing a second document token column.
+- Notification delivery for order confirmations still queues through `notification_events`; delivery-provider execution remains a separate step.

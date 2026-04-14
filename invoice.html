@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Invoice / Summary | Rosie Dazzlers</title>
+  <meta name="description" content="Rosie Dazzlers invoice and adjustment summary." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .doc-shell{max-width:960px;margin:24px auto;padding:0 16px}.doc-sheet{background:#0c1627;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:22px}.doc-head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start}.line-table{display:grid;gap:10px}.line-row{display:grid;grid-template-columns:minmax(0,1fr) 140px 160px;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08);align-items:start}.totals{margin-top:16px;margin-left:auto;max-width:360px}.total-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08)}.doc-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}@media print {.doc-actions{display:none !important}.doc-shell{max-width:none;margin:0;padding:0}.doc-sheet{border:0;border-radius:0;padding:0;background:#fff;color:#000}.line-row,.total-row{color:#000}}@media(max-width:760px){.line-row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <main class="doc-shell">
+    <div id="docStatus" class="notice">Loading invoice…</div>
+    <article id="docRoot" class="doc-sheet" hidden>
+      <div class="doc-head">
+        <div>
+          <div class="badge">Rosie Dazzlers</div>
+          <h1 style="margin:10px 0 6px">Invoice / adjustment summary</h1>
+          <p id="docSubtitle" class="muted" style="margin:0"></p>
+        </div>
+        <div>
+          <div><strong id="invoiceNumber">—</strong></div>
+          <div class="mini" id="invoiceDate">—</div>
+        </div>
+      </div>
+      <section style="margin-top:16px">
+        <div class="line-table" id="lineTable"></div>
+      </section>
+      <section class="totals" id="totalTable"></section>
+      <section class="panel" style="margin-top:16px"><h2 style="margin-top:0">Customer and service summary</h2><div id="summaryRows"></div></section>
+      <div class="doc-actions"><button class="btn primary" type="button" onclick="window.print()">Print invoice</button><a id="confirmLink" class="btn ghost" href="#">Open order confirmation</a></div>
+    </article>
+  </main>
+  <script type="module">
+    const qs=(s)=>document.querySelector(s); const esc=(v)=>String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); const money=(c)=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format((Number(c||0))/100);
+    async function boot(){
+      const token=String(new URL(location.href).searchParams.get('token')||'').trim();
+      if(!token){ qs('#docStatus').className='notice bad'; qs('#docStatus').textContent='Missing token.'; return; }
+      const res=await fetch(`/api/document_booking_public?token=${encodeURIComponent(token)}`,{cache:'no-store'}); const out=await res.json().catch(()=>null);
+      if(!res.ok||!out?.document){ qs('#docStatus').className='notice bad'; qs('#docStatus').textContent=out?.error||'Could not load invoice.'; return; }
+      const d=out.document; qs('#docStatus').hidden=true; qs('#docRoot').hidden=false;
+      qs('#docSubtitle').textContent=d.company?.templates?.invoice_footer||'Office summary for print or email.';
+      qs('#invoiceNumber').textContent=`Invoice ${String(d.booking?.id||'').slice(0,8).toUpperCase()}`;
+      qs('#invoiceDate').textContent=d.booking?.created_at ? new Date(d.booking.created_at).toLocaleString('en-CA') : '';
+      qs('#confirmLink').href=d.documents?.confirmation_url||'#';
+      const rows=[];
+      rows.push({label:d.package?.name||'Service package', detail:d.booking?.slot_label||d.booking?.service_date||'', amount:d.package?.base_total_cents||d.summary?.base_total_cents||0});
+      (Array.isArray(d.addons)?d.addons:[]).forEach((addon)=>rows.push({label:addon.name, detail:addon.quote_required?'Quote required review':'Add-on', amount:addon.cents||0}));
+      if((d.summary?.discount_cents||0)>0) rows.push({label:'On-site discount / order adjustment', detail:'Discount recorded by office', amount:-(d.summary.discount_cents||0)});
+      if((d.summary?.refund_cents||0)>0) rows.push({label:'Refund issued', detail:'Refund recorded by office', amount:-(d.summary.refund_cents||0)});
+      qs('#lineTable').innerHTML=rows.map((row)=>`<div class="line-row"><div><strong>${esc(row.label)}</strong><div class="muted">${esc(row.detail||'')}</div></div><div>${row.amount<0?'Credit':'Charge'}</div><div><strong>${esc(money(row.amount))}</strong></div></div>`).join('');
+      qs('#totalTable').innerHTML=[
+        ['Booked total', money(d.summary?.base_total_cents||0)],
+        ['Discounts', money(-(d.summary?.discount_cents||0))],
+        ['Effective total', money(d.summary?.effective_total_cents||0)],
+        ['Collected to date', money(d.summary?.collected_total_cents||0)],
+        ['Refunds', money(-(d.summary?.refund_cents||0))],
+        ['Balance due', money(d.summary?.balance_due_cents||0)]
+      ].map(([l,v])=>`<div class="total-row"><span>${esc(l)}</span><strong>${esc(v)}</strong></div>`).join('');
+      qs('#summaryRows').innerHTML=[
+        ['Customer', d.booking?.customer_name||'—'],
+        ['Email', d.booking?.customer_email||'—'],
+        ['Phone', d.booking?.customer_phone||'—'],
+        ['Vehicle', d.vehicle?.label||'—'],
+        ['Service area', d.booking?.service_area_label||'—'],
+        ['Address', [d.booking?.address_line1,d.booking?.address_line2,d.booking?.city,d.booking?.postal_code].filter(Boolean).join(', ')||'—'],
+        ['Payment provider', d.booking?.payment_provider||'—'],
+        ['Notes', d.booking?.notes||'None recorded']
+      ].map(([l,v])=>`<div class="total-row"><span>${esc(l)}</span><strong>${esc(v)}</strong></div>`).join('');
+    }
+    boot().catch((err)=>{qs('#docStatus').className='notice bad'; qs('#docStatus').textContent=err?.message||'Could not load invoice.';});
+  </script>
+</body>
+</html>

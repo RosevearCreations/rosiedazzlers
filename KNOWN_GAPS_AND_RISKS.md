@@ -514,3 +514,16 @@ Still remaining:
 - Travel charges and new shared price-control fields are stored centrally now, but customer-facing checkout math should only begin consuming them after office review confirms the tier model.
 - The pricing editor still falls back to advanced JSON for deeper rows like chart maintenance, rich included-service details, and full service-area narrative fields.
 - Pricing change history and audit review are still needed so accounting and operations can see when a package/add-on/travel value changed and by whom.
+
+## 2026-04-13 Pass 14 Sync
+- Booking screen remains stable and should not be altered in future passes unless a critical bug appears.
+- `_redirects` is working and treated as complete for the current route layout.
+- Pricing/packages/add-ons/service areas/travel charges continue to flow through the App Management pricing control center as the preferred single entry point.
+- This pass added office-facing finance adjustments for discounts/refunds plus customer-facing document work for order confirmation, invoice / summary, gift certificate printing, and social feed management.
+
+## Pass 14 gaps and risks refresh
+- Order confirmations are now queued, but actual provider delivery still depends on the notification-processing layer and should be treated as incomplete until verified live.
+- `discount_cad` is part of the current schema/update plan; environments that have not run the new SQL will fall back gracefully but should still be migrated.
+- Travel-charge values are centrally editable, but checkout math should not depend on them until the final office pricing model is approved and tested.
+- Social-feed rendering is now in place, but freshness still depends on staff keeping the latest five links current in App Management.
+- Printable customer documents are now available, but branded print testing on office printers and mobile print targets should continue.

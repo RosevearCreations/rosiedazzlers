@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gift Certificate Printout | Rosie Dazzlers</title>
+  <meta name="description" content="Printable Rosie Dazzlers gift certificate." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .doc-shell{max-width:920px;margin:24px auto;padding:0 16px}.gift-card{background:#0c1627;border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:24px;margin-bottom:18px}.gift-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.gift-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08)}@media print{.doc-actions,.nav{display:none !important}.gift-card{border:2px solid #000;background:#fff;color:#000}}@media(max-width:760px){.gift-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <main class="doc-shell">
+    <div id="docStatus" class="notice">Loading gift certificate…</div>
+    <div id="giftWrap" hidden></div>
+    <div class="doc-actions" style="margin-top:14px"><button class="btn primary" type="button" onclick="window.print()">Print gift certificate</button></div>
+  </main>
+  <script type="module">
+    const qs=(s)=>document.querySelector(s); const esc=(v)=>String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); const money=(c)=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format((Number(c||0))/100);
+    async function boot(){ const url=new URL(location.href); const session_id=String(url.searchParams.get('session_id')||'').trim(); const email=String(url.searchParams.get('email')||'').trim(); if(!session_id||!email){ qs('#docStatus').className='notice bad'; qs('#docStatus').textContent='Missing session_id or email.'; return; }
+      const res=await fetch('/api/gifts/receipt',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id,email})}); const out=await res.json().catch(()=>null);
+      if(!res.ok||!out?.gifts){ qs('#docStatus').className='notice bad'; qs('#docStatus').textContent=out?.error||'Could not load gift certificate.'; return; }
+      qs('#docStatus').hidden=true; qs('#giftWrap').hidden=false; qs('#giftWrap').innerHTML=(out.gifts||[]).map((gift,idx)=>`<article class="gift-card"><div class="badge">Rosie Dazzlers Gift Certificate</div><h1 style="margin:12px 0 6px">Gift certificate</h1><p class="muted">Present this certificate when booking at Rosie Dazzlers.</p><div class="gift-grid"><section><div class="gift-row"><span>Gift code</span><strong>${esc(gift.code||'—')}</strong></div><div class="gift-row"><span>Recipient</span><strong>${esc(gift.recipient_name||gift.recipient_email||'Gift recipient')}</strong></div><div class="gift-row"><span>Type</span><strong>${esc(gift.type||'gift')}</strong></div><div class="gift-row"><span>Value / remaining</span><strong>${esc(money(gift.remaining_cents||gift.face_value_cents||0))}</strong></div></section><section><div class="gift-row"><span>Package</span><strong>${esc(gift.package_code||'Open value')}</strong></div><div class="gift-row"><span>Vehicle size</span><strong>${esc(gift.vehicle_size||'Any')}</strong></div><div class="gift-row"><span>Expires</span><strong>${esc(gift.expires_at||'See purchase terms')}</strong></div><div class="gift-row"><span>Purchaser email</span><strong>${esc(gift.purchaser_email||email)}</strong></div></section></div><div style="margin-top:14px" class="notice">Gift certificates are valid for one year from purchase and are non-refundable.</div></article>`).join(''); }
+    boot().catch((err)=>{qs('#docStatus').className='notice bad'; qs('#docStatus').textContent=err?.message||'Could not load gift certificate.';});
+  </script>
+</body>
+</html>

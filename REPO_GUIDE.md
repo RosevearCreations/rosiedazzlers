@@ -193,3 +193,16 @@ Route hotfix sync reviewed on 2026-04-11.
 - `admin-app.html` now carries the preferred pricing control center.
 - `admin-accounting.html` contains the accounting-side pricing summary window.
 - `_lib/pricing-catalog.js` and `functions/api/_lib/pricing-catalog.js` must stay synchronized because pricing/admin work depends on the same catalog contract everywhere.
+
+## 2026-04-13 Pass 14 Sync
+- Booking screen remains stable and should not be altered in future passes unless a critical bug appears.
+- `_redirects` is working and treated as complete for the current route layout.
+- Pricing/packages/add-ons/service areas/travel charges continue to flow through the App Management pricing control center as the preferred single entry point.
+- This pass added office-facing finance adjustments for discounts/refunds plus customer-facing document work for order confirmation, invoice / summary, gift certificate printing, and social feed management.
+
+## Pass 14 repo guide addendum
+- `functions/api/_lib/booking-documents.js`: shared builder for tokenized customer document payloads and queued confirmations.
+- `functions/api/document_booking_public.js`: public token-based booking document endpoint.
+- `functions/api/social_feed_public.js` + `assets/social-feed.js`: central social-feed API + renderer.
+- `order-confirmation.html`, `invoice.html`, `gift-certificate-print.html`: new printable customer documents.
+- `sql/2026-04-13_booking_documents_discounts_and_social_feed.sql`: pass 14 schema addition and settings note.

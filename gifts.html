@@ -361,6 +361,7 @@
             <div><strong>Type:</strong> ${escapeHtml(g.type)}</div>
             <div><strong>Remaining:</strong> ${escapeHtml(g.remaining)}</div>
             <div><strong>Expires:</strong> ${escapeHtml(g.expires_at)}</div>
+            <div style="margin-top:8px"><a class="btn ghost" href="/gift-certificate-print.html?session_id=${encodeURIComponent(session_id)}&email=${encodeURIComponent(email)}" target="_blank" rel="noopener">Open printable gift certificate</a></div>
           </div>
         `;
       }).join("");

@@ -270,3 +270,18 @@ Route hotfix sync reviewed on 2026-04-11.
 - App Management now acts as the **single preferred entry point** for package pricing, add-on pricing, service-area travel tiers, travel-charge defaults, and shared pricing-control values.
 - Admin Accounting now includes a **pricing window** so the office side can review the active pricing scope, travel tiers, and default service area without leaving the accounting workflow.
 - The canonical pricing helper was re-synchronized again so travel-pricing and shared price-control values stay in the same catalog alongside packages, add-ons, service areas, booking rules, and public requirements.
+
+## 2026-04-13 Pass 14 Sync
+- Booking screen remains stable and should not be altered in future passes unless a critical bug appears.
+- `_redirects` is working and treated as complete for the current route layout.
+- Pricing/packages/add-ons/service areas/travel charges continue to flow through the App Management pricing control center as the preferred single entry point.
+- This pass added office-facing finance adjustments for discounts/refunds plus customer-facing document work for order confirmation, invoice / summary, gift certificate printing, and social feed management.
+
+## Pass 14 implementation state
+- `book.html` is stable, verified, and intentionally locked against feature churn.
+- `_redirects` is functioning and considered complete for the current Pages routing approach.
+- `admin-booking.html` now exposes finance adjustments (discount/refund/tip/manual entries) and customer-document links for the selected booking.
+- `order-confirmation.html`, `invoice.html`, and `gift-certificate-print.html` provide printable customer-facing documents.
+- `functions/api/document_booking_public.js` and `functions/api/_lib/booking-documents.js` now drive customer document payloads from the booking record plus finance summary.
+- Stripe, PayPal, and admin confirm flows now queue an order-confirmation notification event after a booking is confirmed.
+- Public social sections are now ready to render the latest five links per platform from centrally managed `social_feeds` data.

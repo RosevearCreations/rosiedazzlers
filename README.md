@@ -285,3 +285,16 @@ Public pricing surfaces now read `/api/pricing_catalog_public` first. That endpo
 - `_redirects` is considered working and complete for the current Pages-safe route structure.
 - `admin-app.html` now contains the preferred pricing control center for package pricing, add-ons, service-area travel tiers, travel-charge defaults, and shared pricing-control values.
 - `admin-accounting.html` now includes a pricing review window for office-side accounting oversight.
+
+## 2026-04-13 Pass 14 Sync
+- Booking screen remains stable and should not be altered in future passes unless a critical bug appears.
+- `_redirects` is working and treated as complete for the current route layout.
+- Pricing/packages/add-ons/service areas/travel charges continue to flow through the App Management pricing control center as the preferred single entry point.
+- This pass added office-facing finance adjustments for discounts/refunds plus customer-facing document work for order confirmation, invoice / summary, gift certificate printing, and social feed management.
+
+## Pass 14 highlighted changes
+- Booking page is now a protected stable screen and should be treated as locked.
+- App Management remains the preferred control center for pricing, packages, add-ons, service-area travel tiers, travel charges, and related booking pricing controls.
+- Admin Bookings now includes an office workflow for on-site discounts, refunds, and finance notes tied back to the booking/accounting trail.
+- New printable customer documents were added for order confirmation, invoice / service summary, and gift certificates.
+- Social-feed content can now be managed centrally and rendered on the public site using the latest five links per platform.

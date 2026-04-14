@@ -355,3 +355,25 @@ Route hotfix sync reviewed on 2026-04-11.
 - Wire travel-charge controls into checkout totals only after office review confirms the tiers and wording.
 - Replace the remaining advanced JSON-only parts of pricing maintenance, especially chart rows, deep package service inclusions, and richer service-area notes, with dedicated form controls.
 - Add pricing change history / audit notes inside App Management so office-side edits are easier to reconcile later.
+
+## 2026-04-13 Pass 14 Sync
+- Booking screen remains stable and should not be altered in future passes unless a critical bug appears.
+- `_redirects` is working and treated as complete for the current route layout.
+- Pricing/packages/add-ons/service areas/travel charges continue to flow through the App Management pricing control center as the preferred single entry point.
+- This pass added office-facing finance adjustments for discounts/refunds plus customer-facing document work for order confirmation, invoice / summary, gift certificate printing, and social feed management.
+
+## Pass 14 roadmap update
+### Completed this pass
+- Lock booking screen and treat it as stable.
+- Treat `_redirects` as working/complete.
+- Keep pricing changes flowing through one preferred entry point in App Management.
+- Add office discount/refund adjustment workflow on the selected-booking screen.
+- Add printable order confirmation, invoice / service summary, and gift certificate documents.
+- Add central social-feed management plus public rendering hooks for the latest five links per platform.
+
+### Next recommended steps
+- Connect queued order-confirmation notifications to the live outbound provider so they actually send without manual intervention.
+- Apply travel-charge controls directly in checkout math once office values are fully approved.
+- Add a dedicated refund/credit memo print template for bookkeeping and customer-service handoffs.
+- Expand admin accounting exports so discounts/refunds can be filtered by reason code and date range.
+- Add a lightweight admin helper for updating the latest five social links per platform without editing raw JSON.

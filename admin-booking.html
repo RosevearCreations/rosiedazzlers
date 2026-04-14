@@ -87,6 +87,73 @@
       </div>
     </section>
 
+
+
+    <section class="section">
+      <div class="grid cards">
+        <div class="panel">
+          <h2>Finance adjustments and refunds</h2>
+          <p class="kicker">Use this office workflow for on-site discounts, weather adjustments, detailing-error refunds, tips, and any manual payment notes.</p>
+          <div id="financeSummary" class="notice mini">Choose a booking to load the finance summary.</div>
+          <form id="financeForm" class="form" style="margin-top:12px">
+            <label>
+              Entry type
+              <select id="financeEntryType" name="financeEntryType">
+                <option value="discount">discount</option>
+                <option value="refund">refund</option>
+                <option value="deposit">deposit</option>
+                <option value="final_payment">final_payment</option>
+                <option value="tip">tip</option>
+                <option value="other">other</option>
+              </select>
+            </label>
+            <label>
+              Amount (CAD)
+              <input id="financeAmount" name="financeAmount" type="number" min="0.01" step="0.01" placeholder="25.00" />
+            </label>
+            <label>
+              Payment method
+              <select id="financePaymentMethod" name="financePaymentMethod">
+                <option value="">-- optional --</option>
+                <option value="cash">cash</option>
+                <option value="card">card</option>
+                <option value="etransfer">etransfer</option>
+                <option value="paypal">paypal</option>
+                <option value="stripe">stripe</option>
+                <option value="manual">manual</option>
+              </select>
+            </label>
+            <label>
+              Reason code
+              <select id="financeReasonCode" name="financeReasonCode">
+                <option value="">-- optional --</option>
+                <option value="weather_adjustment">weather_adjustment</option>
+                <option value="scope_change">scope_change</option>
+                <option value="detailing_error">detailing_error</option>
+                <option value="customer_service">customer_service</option>
+                <option value="gift_redemption_manual">gift_redemption_manual</option>
+                <option value="other">other</option>
+              </select>
+            </label>
+            <label>
+              Note
+              <textarea id="financeNote" name="financeNote" placeholder="Describe why the discount, refund, or other change was issued."></textarea>
+            </label>
+            <div>
+              <button id="financeBtn" class="btn primary" type="submit" disabled>Record finance entry</button>
+            </div>
+          </form>
+          <div id="financeEntries" class="kicker" style="margin-top:12px">No finance entries loaded yet.</div>
+        </div>
+
+        <div class="panel">
+          <h2>Customer documents</h2>
+          <p class="kicker">Print or email the customer-facing paperwork from the selected booking. Booking stays the single source for the live details.</p>
+          <div id="documentTools" class="kicker">Choose a booking to unlock order confirmation, invoice, and progress links.</div>
+        </div>
+      </div>
+    </section>
+
     <section class="section">
       <div class="grid cards">
         <div class="panel">
@@ -281,6 +348,79 @@
       return { type: 'manual', assigned_to: '' };
     }
 
+
+
+    async function loadBookingFinance(bookingId) {
+      const res = await fetch(`/api/admin/booking_finance?booking_id=${encodeURIComponent(bookingId)}`, {
+        method: "GET",
+        credentials: "include",
+        headers: { "Accept": "application/json" }
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Could not load booking finance.");
+      return data;
+    }
+
+    async function recordBookingFinance(bookingId, payload) {
+      const res = await fetch("/api/admin/booking_finance", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.assign({ booking_id: bookingId }, payload))
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Could not record finance entry.");
+      return data;
+    }
+
+    function money(value) {
+      const n = Number(value || 0);
+      return new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(Number.isFinite(n) ? n : 0);
+    }
+
+    async function refreshSelectedBookingFinance() {
+      const summaryNode = document.querySelector('#financeSummary');
+      const entriesNode = document.querySelector('#financeEntries');
+      const documentTools = document.querySelector('#documentTools');
+      const financeBtn = document.querySelector('#financeBtn');
+      if (!currentBooking?.id) {
+        if (summaryNode) summaryNode.textContent = 'Choose a booking to load the finance summary.';
+        if (entriesNode) entriesNode.textContent = 'No finance entries loaded yet.';
+        if (documentTools) documentTools.textContent = 'Choose a booking to unlock order confirmation, invoice, and progress links.';
+        if (financeBtn) financeBtn.disabled = true;
+        return;
+      }
+      if (financeBtn) financeBtn.disabled = false;
+      try {
+        const finance = await loadBookingFinance(currentBooking.id);
+        const summary = finance?.summary || {};
+        if (summaryNode) {
+          summaryNode.innerHTML = `Deposit ${escapeHtml(money(summary.deposit))} · Final ${escapeHtml(money(summary.final_payment))} · Discounts ${escapeHtml(money(summary.discount))} · Refunds ${escapeHtml(money(summary.refund))} · Tips ${escapeHtml(money(summary.tip))} · Collected ${escapeHtml(money(summary.collected_total))}`;
+        }
+        const items = Array.isArray(finance?.entries) ? finance.entries : [];
+        if (entriesNode) {
+          entriesNode.innerHTML = items.length
+            ? items.map((entry) => `<div style="margin-top:8px"><strong>${escapeHtml(entry.entry_type)}</strong> — ${escapeHtml(money(entry.amount_cad))}${entry.payment_method ? ` via ${escapeHtml(entry.payment_method)}` : ''}${entry.reason_code ? ` (${escapeHtml(entry.reason_code)})` : ''}<br><span class="kicker">${escapeHtml(entry.recorded_at || entry.created_at || '')}${entry.actor_name ? ` · ${escapeHtml(entry.actor_name)}` : ''}${entry.note ? ` · ${escapeHtml(entry.note)}` : ''}</span></div>`).join('')
+            : 'No finance entries recorded for this booking yet.';
+        }
+      } catch (err) {
+        if (summaryNode) summaryNode.textContent = err.message || 'Could not load finance summary.';
+        if (entriesNode) entriesNode.textContent = 'Finance entries are unavailable right now.';
+      }
+
+      if (documentTools) {
+        const progressUrl = currentBooking.progress_token ? `${window.location.origin}/progress.html?token=${encodeURIComponent(currentBooking.progress_token)}` : '';
+        const orderUrl = currentBooking.progress_token ? `${window.location.origin}/order-confirmation?token=${encodeURIComponent(currentBooking.progress_token)}` : '';
+        const invoiceUrl = currentBooking.progress_token ? `${window.location.origin}/invoice?token=${encodeURIComponent(currentBooking.progress_token)}` : '';
+        documentTools.innerHTML = currentBooking.progress_token
+          ? `<div><strong>Order confirmation:</strong> <a href="${orderUrl}" target="_blank" rel="noopener">Open / print</a></div>
+             <div><strong>Invoice / summary:</strong> <a href="${invoiceUrl}" target="_blank" rel="noopener">Open / print</a></div>
+             <div><strong>Progress page:</strong> <a href="${progressUrl}" target="_blank" rel="noopener">Open customer progress page</a></div>
+             <div class="kicker" style="margin-top:8px">These pages are safe to email or print using the booking tokenized document route.</div>`
+          : 'This booking does not have a progress token yet, so customer-facing document links are unavailable.';
+      }
+    }
+
     function renderSelectedBooking() {
       const title = document.querySelector("#bookingTitle");
       const meta = document.querySelector("#bookingMeta");
@@ -295,6 +435,7 @@
         tools.textContent = "Choose a booking to view tools.";
         statusBtn.disabled = true;
         assignBtn.disabled = true;
+        refreshSelectedBookingFinance();
         return;
       }
 
@@ -324,6 +465,7 @@
 
       statusBtn.disabled = false;
       assignBtn.disabled = false;
+      refreshSelectedBookingFinance();
     }
 
     function renderBookingsList() {
@@ -459,6 +601,34 @@
           setNotice("Booking assignment updated.", "ok");
         } catch (err) {
           setNotice(err.message || "Could not update assignment.", "bad");
+        }
+      });
+
+      document.querySelector("#financeForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (!currentBooking?.id) {
+          setNotice("Choose a booking first.", "bad");
+          return;
+        }
+
+        try {
+          setNotice("Recording finance entry…");
+          await recordBookingFinance(currentBooking.id, {
+            entry_type: document.querySelector('#financeEntryType').value,
+            amount_cad: document.querySelector('#financeAmount').value,
+            payment_method: document.querySelector('#financePaymentMethod').value,
+            reason_code: document.querySelector('#financeReasonCode').value,
+            note: document.querySelector('#financeNote').value
+          });
+          document.querySelector('#financeAmount').value = '';
+          document.querySelector('#financeNote').value = '';
+          document.querySelector('#financePaymentMethod').value = '';
+          document.querySelector('#financeReasonCode').value = '';
+          await refreshSelectedBookingFinance();
+          setNotice("Finance entry recorded.", "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not record finance entry.", "bad");
         }
       });
     }
