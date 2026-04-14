@@ -34,7 +34,9 @@ export async function loadBookingDocumentPayloadByToken(env, token) {
 export async function queueOrderConfirmationNotification(env, bookingId, source = "system") {
   try {
     const payload = await loadBookingDocumentPayloadById(env, bookingId);
-    if (!payload?.booking?.customer_email) return { ok: false, skipped: true, reason: "no_customer_email" };
+    if (!payload?.booking?.customer_email) {
+      return { ok: false, skipped: true, reason: "no_customer_email" };
+    }
 
     const subject = `Rosie Dazzlers booking confirmation — ${payload.package.name} on ${payload.booking.service_date || "scheduled date"}`;
     const bodyText = [
@@ -50,6 +52,7 @@ export async function queueOrderConfirmationNotification(env, bookingId, source 
       `Order confirmation: ${payload.documents.confirmation_url}`,
       `Invoice / summary: ${payload.documents.invoice_url}`
     ].join("\n");
+
     const bodyHtml = `
       <h1>Booking confirmation</h1>
       <p>${escapeHtml(DEFAULT_TEMPLATES.confirmation_intro)}</p>
@@ -93,23 +96,32 @@ export async function queueOrderConfirmationNotification(env, bookingId, source 
     };
 
     const headers = { ...serviceHeaders(env), Prefer: "return=representation" };
+
     let res = await fetch(`${env.SUPABASE_URL}/rest/v1/notification_events`, {
       method: "POST",
       headers,
       body: JSON.stringify([row])
     });
+
     if (!res.ok) {
       const fallbackRow = { ...row };
       delete fallbackRow.subject;
       delete fallbackRow.body_text;
       delete fallbackRow.body_html;
-      fallbackRow.payload = { ...fallbackRow.payload, subject, body_text: bodyText, body_html: bodyHtml };
+      fallbackRow.payload = {
+        ...fallbackRow.payload,
+        subject,
+        body_text: bodyText,
+        body_html: bodyHtml
+      };
+
       res = await fetch(`${env.SUPABASE_URL}/rest/v1/notification_events`, {
         method: "POST",
         headers,
         body: JSON.stringify([fallbackRow])
       });
     }
+
     return { ok: res.ok, status: res.status };
   } catch (err) {
     return { ok: false, error: String(err) };
@@ -130,7 +142,10 @@ async function buildPayload(env, booking) {
   const balanceDueCents = Math.max(0, effectiveTotalCents - collectedCents + refundCents);
   const progressToken = String(booking.progress_token || "").trim() || null;
   const origin = COMPANY.website;
-  const serviceAreaLabel = [booking.service_area_zone, booking.service_area_municipality].filter(Boolean).join(" · ") || booking.service_area || "—";
+  const serviceAreaLabel =
+    [booking.service_area_zone, booking.service_area_municipality].filter(Boolean).join(" · ") ||
+    booking.service_area ||
+    "—";
   const slotLabel = slotLabelForBooking(booking);
   const templates = await loadDocumentTemplates(env);
 
@@ -169,7 +184,10 @@ async function buildPayload(env, booking) {
       body_style: booking.vehicle_body_style || null,
       category: booking.vehicle_category || null,
       size: booking.vehicle_size || null,
-      label: [booking.vehicle_year, booking.vehicle_make, booking.vehicle_model].filter(Boolean).join(" ") || [booking.package_code, booking.vehicle_size].filter(Boolean).join(" · ") || "Vehicle"
+      label:
+        [booking.vehicle_year, booking.vehicle_make, booking.vehicle_model].filter(Boolean).join(" ") ||
+        [booking.package_code, booking.vehicle_size].filter(Boolean).join(" · ") ||
+        "Vehicle"
     },
     package: {
       code: booking.package_code || null,
@@ -190,8 +208,12 @@ async function buildPayload(env, booking) {
       balance_due_cents: balanceDueCents
     },
     documents: {
-      confirmation_url: progressToken ? `${origin}/order-confirmation?token=${encodeURIComponent(progressToken)}` : null,
-      invoice_url: progressToken ? `${origin}/invoice?token=${encodeURIComponent(progressToken)}` : null,
+      confirmation_url: progressToken
+        ? `${origin}/order-confirmation?token=${encodeURIComponent(progressToken)}`
+        : null,
+      invoice_url: progressToken
+        ? `${origin}/invoice?token=${encodeURIComponent(progressToken)}`
+        : null,
       gift_certificate_url: `${origin}/gift-certificate-print`
     }
   };
@@ -199,12 +221,26 @@ async function buildPayload(env, booking) {
 
 async function loadDocumentTemplates(env) {
   try {
-    if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY) return DEFAULT_TEMPLATES;
-    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/app_management_settings?select=value&key=eq.document_templates&limit=1`, { headers: serviceHeaders(env) });
-    if (!res.ok) return DEFAULT_TEMPLATES;
+    if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY) {
+      return DEFAULT_TEMPLATES;
+    }
+
+    const res = await fetch(
+      `${env.SUPABASE_URL}/rest/v1/app_management_settings?select=value&key=eq.document_templates&limit=1`,
+      { headers: serviceHeaders(env) }
+    );
+
+    if (!res.ok) {
+      return DEFAULT_TEMPLATES;
+    }
+
     const rows = await res.json().catch(() => []);
     const row = Array.isArray(rows) ? rows[0] || null : null;
-    return { ...DEFAULT_TEMPLATES, ...(row?.value && typeof row.value === "object" ? row.value : {}) };
+
+    return {
+      ...DEFAULT_TEMPLATES,
+      ...(row?.value && typeof row.value === "object" ? row.value : {})
+    };
   } catch {
     return DEFAULT_TEMPLATES;
   }
@@ -212,10 +248,19 @@ async function loadDocumentTemplates(env) {
 
 function resolveAddonLines(pricing, rawAddons, vehicleSize) {
   const rows = Array.isArray(rawAddons) ? rawAddons : [];
+
   return rows.map((row) => {
     const code = String(row?.code || row || "").trim();
     const addon = pricing.addon_map?.[code] || null;
-    const cents = row?.cents != null ? toCents(row.cents) : addon?.prices_cad?.[vehicleSize] != null ? toCents(Math.round(Number(addon.prices_cad[vehicleSize]) * 100)) : addon?.price_cad != null ? toCents(Math.round(Number(addon.price_cad) * 100)) : 0;
+    const cents =
+      row?.cents != null
+        ? toCents(row.cents)
+        : addon?.prices_cad?.[vehicleSize] != null
+          ? toCents(Math.round(Number(addon.prices_cad[vehicleSize]) * 100))
+          : addon?.price_cad != null
+            ? toCents(Math.round(Number(addon.price_cad) * 100))
+            : 0;
+
     return {
       code,
       name: row?.label || addon?.name || code || "Add-on",
@@ -229,23 +274,46 @@ async function loadBookingFinanceSummary(env, bookingId) {
   if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY || !bookingId) {
     return emptyFinanceSummary();
   }
-  const filters = FINANCE_ENTRY_TYPES.map((entryType) => `event_type.eq.booking_finance_${entryType}`).join(",");
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/booking_events?select=created_at,event_type,payload,event_note&booking_id=eq.${encodeURIComponent(bookingId)}&or=(${filters})&order=created_at.asc`, {
-    headers: serviceHeaders(env)
-  });
-  if (!res.ok) return emptyFinanceSummary();
+
+  const filters = FINANCE_ENTRY_TYPES.map(
+    (entryType) => `event_type.eq.booking_finance_${entryType}`
+  ).join(",");
+
+  const res = await fetch(
+    `${env.SUPABASE_URL}/rest/v1/booking_events?select=created_at,event_type,payload,event_note&booking_id=eq.${encodeURIComponent(bookingId)}&or=(${filters})&order=created_at.asc`,
+    {
+      headers: serviceHeaders(env)
+    }
+  );
+
+  if (!res.ok) {
+    return emptyFinanceSummary();
+  }
+
   const rows = await res.json().catch(() => []);
   const summary = emptyFinanceSummary();
+
   for (const row of Array.isArray(rows) ? rows : []) {
     const payload = row && typeof row.payload === "object" && row.payload ? row.payload : {};
     const entryType = String(payload.entry_type || row.event_type || "").replace("booking_finance_", "");
     const amount = toMoney(payload.amount_cad || 0);
-    if (Object.prototype.hasOwnProperty.call(summary, entryType)) summary[entryType] = toMoney(summary[entryType] + amount);
-    if (["deposit", "final_payment", "tip", "other"].includes(entryType)) summary.collected_total = toMoney(summary.collected_total + amount);
-    if (entryType === "refund") summary.collected_total = toMoney(summary.collected_total - amount);
+
+    if (Object.prototype.hasOwnProperty.call(summary, entryType)) {
+      summary[entryType] = toMoney(summary[entryType] + amount);
+    }
+
+    if (["deposit", "final_payment", "tip", "other"].includes(entryType)) {
+      summary.collected_total = toMoney(summary.collected_total + amount);
+    }
+
+    if (entryType === "refund") {
+      summary.collected_total = toMoney(summary.collected_total - amount);
+    }
+
     summary.last_finance_event_at = row.created_at || summary.last_finance_event_at;
     summary.last_finance_event_type = entryType || summary.last_finance_event_type;
   }
+
   return summary;
 }
 
@@ -264,21 +332,41 @@ function emptyFinanceSummary() {
 }
 
 async function loadBookingById(env, bookingId) {
-  if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY || !bookingId) return null;
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=*&id=eq.${encodeURIComponent(bookingId)}&limit=1`, {
-    headers: serviceHeaders(env)
-  });
-  if (!res.ok) return null;
+  if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY || !bookingId) {
+    return null;
+  }
+
+  const res = await fetch(
+    `${env.SUPABASE_URL}/rest/v1/bookings?select=*&id=eq.${encodeURIComponent(bookingId)}&limit=1`,
+    {
+      headers: serviceHeaders(env)
+    }
+  );
+
+  if (!res.ok) {
+    return null;
+  }
+
   const rows = await res.json().catch(() => []);
   return Array.isArray(rows) ? rows[0] || null : null;
 }
 
 async function loadBookingByProgressToken(env, token) {
-  if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY || !token) return null;
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=*&progress_token=eq.${encodeURIComponent(token)}&limit=1`, {
-    headers: serviceHeaders(env)
-  });
-  if (!res.ok) return null;
+  if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY || !token) {
+    return null;
+  }
+
+  const res = await fetch(
+    `${env.SUPABASE_URL}/rest/v1/bookings?select=*&progress_token=eq.${encodeURIComponent(token)}&limit=1`,
+    {
+      headers: serviceHeaders(env)
+    }
+  );
+
+  if (!res.ok) {
+    return null;
+  }
+
   const rows = await res.json().catch(() => []);
   return Array.isArray(rows) ? rows[0] || null : null;
 }
@@ -286,6 +374,7 @@ async function loadBookingByProgressToken(env, token) {
 function slotLabelForBooking(booking) {
   const slot = String(booking.start_slot || "").toUpperCase();
   const duration = Number(booking.duration_slots || 1);
+
   if (duration === 2) return "Full day";
   if (slot === "AM") return "AM half day";
   if (slot === "PM") return "PM half day";
@@ -305,7 +394,10 @@ function toCents(value) {
 function formatMoney(cents) {
   const amount = Number(cents || 0) / 100;
   try {
-    return new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" }).format(amount);
+    return new Intl.NumberFormat("en-CA", {
+      style: "currency",
+      currency: "CAD"
+    }).format(amount);
   } catch {
     return `$${amount.toFixed(2)}`;
   }
