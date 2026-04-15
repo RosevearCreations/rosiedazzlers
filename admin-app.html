@@ -16,8 +16,22 @@
     .card h2,.card h3{margin:0 0 12px}.field{display:grid;gap:6px;margin-bottom:10px}.field input,.field textarea,.field select{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;background:rgba(255,255,255,.04);color:#f8fafc}
     .field textarea{min-height:110px;resize:vertical}.checkrow{display:flex;gap:10px;align-items:center;margin:8px 0}.actions{display:flex;gap:10px;flex-wrap:wrap}.muted{color:#9fb0c8;font-size:.94rem}
     .preview{white-space:pre-wrap;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);min-height:82px}
-    .subgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.note{font-size:.92rem;color:#9fb0c8}.panel-lite{padding:14px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}.stack-sm{display:grid;gap:10px}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.section-head h3{margin:0}.section-label{font-size:.82rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#9fb0c8}.pricing-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}.pricing-summary .stat{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}.pricing-summary .stat strong{display:block;font-size:1.35rem;margin-top:6px}.pricing-grid-4,.pricing-grid-5{display:grid;gap:10px}.pricing-grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}.pricing-grid-5{grid-template-columns:repeat(5,minmax(0,1fr))}.field.compact span{font-size:.82rem;color:#9fb0c8}.catalog-section{margin-top:18px}.catalog-table-wrap{overflow:auto}.catalog-table{display:grid;gap:8px}.catalog-row{display:grid;gap:8px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);align-items:end}.catalog-row.package{grid-template-columns:1.1fr 1.2fr 1fr .8fr .8fr .8fr .8fr auto}.catalog-row.addon{grid-template-columns:1fr 1.2fr .9fr .9fr .8fr .8fr .8fr .8fr auto}.catalog-row.service-area{grid-template-columns:1fr 1.1fr 1.1fr .9fr .9fr .8fr auto}.catalog-row.requirement{grid-template-columns:minmax(0,1fr) auto}.catalog-row__head{font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9fb0c8}.catalog-row .field{margin-bottom:0}.catalog-row button{align-self:center}.catalog-empty{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.12);color:#9fb0c8}@media(max-width:1200px){.catalog-row.package,.catalog-row.addon,.catalog-row.service-area,.pricing-grid-4,.pricing-grid-5{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:720px){.catalog-row.package,.catalog-row.addon,.catalog-row.service-area,.catalog-row.requirement,.pricing-grid-4,.pricing-grid-5{grid-template-columns:1fr}}
-    @media(min-width:980px){.span-6{grid-column:span 6}.span-4{grid-column:span 4}.span-8{grid-column:span 8}}
+    .subgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.note{font-size:.92rem;color:#9fb0c8}.panel-lite{padding:14px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}.stack-sm{display:grid;gap:10px}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.section-head h3{margin:0}.section-label{font-size:.82rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#9fb0c8}.pricing-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}.pricing-summary .stat{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}.pricing-summary .stat strong{display:block;font-size:1.35rem;margin-top:6px}.pricing-grid-4,.pricing-grid-5{display:grid;gap:10px}.pricing-grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}.pricing-grid-5{grid-template-columns:repeat(5,minmax(0,1fr))}.field.compact span{font-size:.82rem;color:#9fb0c8}.catalog-section{margin-top:18px}.catalog-table-wrap{overflow:auto}.catalog-table{display:grid;gap:8px}.catalog-row{display:grid;gap:8px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);align-items:end}.catalog-row.package{grid-template-columns:1.1fr 1.2fr 1fr .8fr .8fr .8fr .8fr auto}.catalog-row.addon{grid-template-columns:1fr 1.2fr .9fr .9fr .8fr .8fr .8fr .8fr auto}.catalog-row.service-area{grid-template-columns:1fr 1.1fr 1.1fr .9fr .9fr .8fr auto}.catalog-row.requirement{grid-template-columns:minmax(0,1fr) auto}.catalog-row__head{font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9fb0c8}.catalog-row .field{margin-bottom:0}.catalog-row button{align-self:center}.catalog-empty{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.12);color:#9fb0c8}
+    .app-layout{display:grid;grid-template-columns:minmax(250px,300px) minmax(0,1fr);gap:18px;align-items:start}
+    .menu-col{position:sticky;top:18px;display:grid;gap:14px}
+    .content-col{display:grid;gap:18px}
+    .nav-links-inline{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .intro-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .intro-card{padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
+    .intro-card h3{margin:0 0 8px;font-size:1rem}
+    .intro-card p{margin:0;color:#9fb0c8;font-size:.95rem}
+    .card > .muted + .feature-note,.card > h2 + .feature-note{margin-top:-2px}
+    .feature-note{margin:0 0 14px;color:#9fb0c8;font-size:.95rem;line-height:1.5}
+    .feature-list{margin:0;padding-left:18px;color:#c3d2e6;display:grid;gap:6px}
+    .admin-menu-slot:empty{display:none}
+    @media(max-width:1200px){.catalog-row.package,.catalog-row.addon,.catalog-row.service-area,.pricing-grid-4,.pricing-grid-5{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:980px){.span-6,.span-4,.span-8{grid-column:span 12}.app-layout{grid-template-columns:1fr}.menu-col{position:static}}
+    @media(max-width:720px){.catalog-row.package,.catalog-row.addon,.catalog-row.service-area,.catalog-row.requirement,.pricing-grid-4,.pricing-grid-5{grid-template-columns:1fr}}
     @media(max-width:900px){.subgrid{grid-template-columns:1fr}}
   </style>
 </head>
@@ -36,9 +50,38 @@
     </header>
     <div class="status" data-admin-shell-status hidden></div>
 
+    <div class="app-layout">
+      <aside class="menu-col">
+        <div class="panel-lite admin-menu-slot" data-admin-menu-mount></div>
+        <div class="panel-lite">
+          <div class="section-label">What this screen controls</div>
+          <ul class="feature-list">
+            <li>Feature visibility and moderation defaults</li>
+            <li>The single shared pricing and package catalog</li>
+            <li>Travel charges, surcharges, and tax controls</li>
+            <li>Document wording for confirmations, invoices, and gift certificates</li>
+            <li>The latest social links shown on the public site</li>
+            <li>Recovery message templates and provider rules</li>
+          </ul>
+          <div class="nav-links-inline">
+            <a class="btn" href="/admin.html">Dashboard</a>
+            <a class="btn" href="/admin-accounting.html">Accounting</a>
+            <a class="btn" href="/admin-catalog.html">Inventory</a>
+          </div>
+        </div>
+      </aside>
+      <div class="content-col">
+        <section class="intro-grid" aria-label="App management overview">
+          <article class="intro-card"><h3>Operations rules</h3><p>Control who can see notes, when manual scheduling stays admin-only, and which workflow flags are on by default.</p></article>
+          <article class="intro-card"><h3>Pricing source of truth</h3><p>Manage packages, add-ons, service areas, travel tiers, and price controls from one place used by booking, pricing, services, and checkout.</p></article>
+          <article class="intro-card"><h3>Customer documents</h3><p>Set the wording used in order confirmations, invoices, and printable gift certificates so the office output stays consistent.</p></article>
+          <article class="intro-card"><h3>Public social blocks</h3><p>Store the latest five social links per platform so the home and videos pages stay current without hand-editing those pages.</p></article>
+        </section>
+
     <section class="grid">
       <article class="card span-6">
         <h2>Visibility Matrix</h2>
+        <p class="feature-note">Use these switches to decide which internal note types remain staff-only and which can be shown safely in shared customer workflows.</p>
         <div class="checkrow"><input id="vis_customer_detailer_notes" type="checkbox"><label for="vis_customer_detailer_notes">Customer/detailer notes visible when allowed</label></div>
         <div class="checkrow"><input id="vis_customer_admin_notes" type="checkbox"><label for="vis_customer_admin_notes">Customer/admin notes stay admin only</label></div>
         <div class="checkrow"><input id="vis_detailer_admin_notes" type="checkbox"><label for="vis_detailer_admin_notes">Detailer/admin notes stay admin only</label></div>
@@ -47,6 +90,7 @@
 
       <article class="card span-6">
         <h2>Scheduling Policy</h2>
+        <p class="feature-note">These controls keep manual scheduling, blocking, and override notes tied to one office-managed policy instead of being scattered across pages.</p>
         <div class="checkrow"><input id="manual_schedule_admin_only" type="checkbox"><label for="manual_schedule_admin_only">Manual scheduling remains admin only</label></div>
         <div class="checkrow"><input id="blocking_admin_only" type="checkbox"><label for="blocking_admin_only">Blocking and blackout controls remain admin only</label></div>
         <div class="field"><label for="manual_schedule_notes">Notes</label><textarea id="manual_schedule_notes"></textarea></div>
@@ -55,6 +99,7 @@
 
       <article class="card span-6">
         <h2>Feature Flags</h2>
+        <p class="feature-note">Feature flags let you turn workflow behavior on and off without editing code, so you can test or pause operational features safely.</p>
         <div class="checkrow"><input id="flag_live_updates_default" type="checkbox"><label for="flag_live_updates_default">Live updates enabled by default</label></div>
         <div class="checkrow"><input id="flag_customer_chat_enabled" type="checkbox"><label for="flag_customer_chat_enabled">Customer chat enabled</label></div>
         <div class="checkrow"><input id="flag_picture_first_observations" type="checkbox"><label for="flag_picture_first_observations">Picture-first observations enabled</label></div>
@@ -67,6 +112,7 @@
 
       <article class="card span-12">
         <h2>Pricing Control Center</h2>
+        <p class="feature-note">This is the single entry point for price changes, travel charges, package edits, add-ons, and service-area pricing logic. The booking screen is stable and should stay untouched.</p>
         <p class="muted">This is now the one working entry point for package pricing, add-ons, service-area travel tiers, travel charges, and booking pricing controls. The public booking screen is stable and should not be altered here; booking, services, pricing, and checkout consume this catalog.</p>
 
         <div class="pricing-summary" id="pricingCatalogSummary"></div>
@@ -138,6 +184,7 @@
 
       <article class="card span-6">
         <h2>Document templates</h2>
+        <p class="feature-note">These values feed the customer-facing documents and confirmation messages. Keep them plain, clear, and office-approved.</p>
         <p class="muted">Control the public wording used by the order confirmation, invoice / summary, and printable gift certificate pages.</p>
         <div class="field"><label for="doc_confirmation_intro">Order confirmation intro</label><textarea id="doc_confirmation_intro" placeholder="Thank you for booking Rosie Dazzlers. Your booking details are below."></textarea></div>
         <div class="field"><label for="doc_invoice_footer">Invoice footer</label><textarea id="doc_invoice_footer" placeholder="Please review your service summary before arrival."></textarea></div>
@@ -147,6 +194,7 @@
 
       <article class="card span-6">
         <h2>Social feed manager</h2>
+        <p class="feature-note">Paste the newest public links here. The site trims each platform to the latest five items automatically.</p>
         <p class="muted">Store the latest 5 links for each social platform here. The home page and video page can then show the newest five items per platform without hard-coding every post into the page.</p>
         <div class="field"><label for="social_feeds_json">Social feed JSON</label><textarea id="social_feeds_json" spellcheck="false" placeholder='{"platforms":[{"platform":"youtube","items":[]}]}'></textarea></div>
         <div class="actions">
@@ -158,6 +206,7 @@
 
       <article class="card span-6">
         <h2>Moderation Defaults</h2>
+        <p class="feature-note">These defaults shape how notes, annotations, and replies behave before staff make any one-off exceptions on a job.</p>
         <div class="checkrow"><input id="mod_annotation_customer_visibility_default" type="checkbox"><label for="mod_annotation_customer_visibility_default">Customer-visible annotations by default</label></div>
         <div class="checkrow"><input id="mod_comment_customer_visibility_default" type="checkbox"><label for="mod_comment_customer_visibility_default">Customer-visible staff comments by default</label></div>
         <div class="field"><label for="mod_client_reply_depth_limit">Client reply depth limit</label><input id="mod_client_reply_depth_limit" type="number" min="1" value="4"></div>
@@ -169,6 +218,7 @@
 
       <article class="card span-8">
         <h2>Recovery Templates & Rules</h2>
+        <p class="feature-note">Configure the wording and send rules used when the site tries to recover abandoned bookings or unfinished customer actions.</p>
         <div class="field"><label for="recovery_subject">Recovery subject</label><input id="recovery_subject" placeholder="Complete your Rosie Dazzlers booking"></div>
         <div class="field"><label for="recovery_body_text">Recovery body (text)</label><textarea id="recovery_body_text" placeholder="Use tokens like {{customer_name}} and {{recovery_url}}"></textarea></div>
         <div class="field"><label for="recovery_body_html">Recovery body (HTML)</label><textarea id="recovery_body_html" placeholder="Optional HTML version"></textarea></div>
@@ -188,6 +238,7 @@
 
       <article class="card span-4">
         <h2>Provider-Specific Recovery Rules</h2>
+        <p class="feature-note">Keep channel-level test destinations and provider overrides here so recovery behavior stays documented and repeatable.</p>
         <h3>Email</h3>
         <div class="checkrow"><input id="provider_email_enabled" type="checkbox"><label for="provider_email_enabled">Email recovery enabled</label></div>
         <div class="field"><label for="provider_email_key">Provider label</label><input id="provider_email_key"></div>
@@ -203,6 +254,7 @@
 
       <article class="card span-12">
         <h2>Recovery Preview & Testing</h2>
+        <p class="feature-note">Generate a preview before sending a live test so the office can verify subject lines, wording, and merge tokens.</p>
         <div class="subgrid">
           <div>
             <div class="field"><label for="preview_channel">Channel</label><select id="preview_channel"><option value="email">Email</option><option value="sms">SMS</option></select></div>
@@ -221,6 +273,8 @@
         </div>
       </article>
     </section>
+      </div>
+    </div>
   </div>
 </main>
 <script src="/assets/admin-auth.js"></script>
@@ -244,6 +298,68 @@
     return out;
   }
   function applySetting(setting, fallback={}){ return setting && typeof setting.value === 'object' ? setting.value : fallback; }
+
+  function qsa(selector, root){ return Array.from((root || document).querySelectorAll(selector)); }
+  function escapeHtml(value){ return String(value == null ? '' : value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function documentTemplatesDefaults(){
+    return {
+      confirmation_intro: 'Thank you for booking Rosie Dazzlers. Your booking details are below.',
+      invoice_footer: 'Please review your service summary before arrival. On-site discounts, weather adjustments, and refunds should be documented through the office workflow.',
+      gift_footer: 'Gift certificates are valid for one year from purchase and are non-refundable.'
+    };
+  }
+  function readDocumentTemplates(){
+    return {
+      confirmation_intro: byId('doc_confirmation_intro').value || documentTemplatesDefaults().confirmation_intro,
+      invoice_footer: byId('doc_invoice_footer').value || documentTemplatesDefaults().invoice_footer,
+      gift_footer: byId('doc_gift_footer').value || documentTemplatesDefaults().gift_footer
+    };
+  }
+  function socialFeedsDefaults(){
+    return {
+      platforms: [
+        { platform: 'youtube', title: 'YouTube', intro: 'Latest videos and shorts.', items: [] },
+        { platform: 'facebook', title: 'Facebook', intro: 'Latest Facebook posts.', items: [] },
+        { platform: 'instagram', title: 'Instagram', intro: 'Latest Instagram posts.', items: [] },
+        { platform: 'tiktok', title: 'TikTok', intro: 'Latest TikTok posts.', items: [] },
+        { platform: 'x', title: 'X', intro: 'Latest X posts.', items: [] }
+      ]
+    };
+  }
+  function normalizeSocialFeeds(value){
+    var defaults = socialFeedsDefaults();
+    var src = value && typeof value === 'object' ? cloneValue(value) : cloneValue(defaults);
+    var rows = Array.isArray(src.platforms) ? src.platforms : [];
+    if (!rows.length) rows = defaults.platforms;
+    src.platforms = rows.map(function(platform, index){
+      var fallback = defaults.platforms[index] || { platform: 'platform_' + (index + 1), title: 'Platform ' + (index + 1), intro: '', items: [] };
+      var items = Array.isArray(platform && platform.items) ? platform.items : [];
+      return {
+        platform: (platform && platform.platform) || fallback.platform,
+        title: (platform && platform.title) || fallback.title,
+        intro: (platform && platform.intro) || fallback.intro,
+        items: items.slice(0, 5).map(function(item){
+          return {
+            title: item && item.title ? String(item.title) : '',
+            url: item && item.url ? String(item.url) : '',
+            published_at: item && item.published_at ? String(item.published_at) : '',
+            note: item && item.note ? String(item.note) : ''
+          };
+        })
+      };
+    });
+    return src;
+  }
+  function setSocialFeedsEditor(value){
+    byId('social_feeds_json').value = JSON.stringify(normalizeSocialFeeds(value), null, 2);
+  }
+  function readSocialFeedsEditor(){
+    var raw = byId('social_feeds_json').value || '{}';
+    var parsed;
+    try { parsed = JSON.parse(raw); } catch { throw new Error('Social feed JSON is invalid.'); }
+    if (!parsed || typeof parsed !== 'object') throw new Error('Social feed JSON must be a JSON object.');
+    return normalizeSocialFeeds(parsed);
+  }
   function readVisibility(){ return { customer_detailer_notes: byId('vis_customer_detailer_notes').checked, customer_admin_notes_admin_only: byId('vis_customer_admin_notes').checked, detailer_admin_notes_admin_only: byId('vis_detailer_admin_notes').checked }; }
   function readScheduling(){ return { manual_schedule_admin_only: byId('manual_schedule_admin_only').checked, blocking_admin_only: byId('blocking_admin_only').checked, notes: byId('manual_schedule_notes').value || '' }; }
   function readFlags(){ return { live_updates_default: byId('flag_live_updates_default').checked, customer_chat_enabled: byId('flag_customer_chat_enabled').checked, picture_first_observations: byId('flag_picture_first_observations').checked, tier_discount_badges: byId('flag_tier_discount_badges').checked, annotation_moderation_enabled: byId('flag_annotation_moderation_enabled').checked, two_sided_thread_controls_enabled: byId('flag_two_sided_thread_controls_enabled').checked, low_stock_alerts_enabled: byId('flag_low_stock_alerts_enabled').checked }; }
