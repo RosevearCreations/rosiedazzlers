@@ -196,8 +196,8 @@ function chartButtons(data, selectorMap) {
 
   // Fallbacks (some charts exist in /packages, and some may not exist in /brand)
   const FALLBACK = {
-    "CarPrice2025.PNG": "https://assets.rosiedazzlers.ca/brand/CarPrice2025.PNG",
-    "CarPriceDetails2025.PNG": "https://assets.rosiedazzlers.ca/brand/CarPriceDetails2025.PNG",
+    "CarPrice2025.PNG": "/assets/brand/CarPrice2025.PNG",
+    "CarPriceDetails2025.PNG": "/assets/brand/CarPriceDetails2025.PNG",
     // IMPORTANT: Size chart is served from /packages (brand/CarSizeChart.PNG may be missing)
     "CarSizeChart.PNG": pkgFile("CarSizeChart.PNG")
   };
