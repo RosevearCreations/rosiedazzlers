@@ -433,3 +433,14 @@ Route hotfix sync reviewed on 2026-04-11.
 - Office-issued discounts/refunds and customer-doc actions belong in Admin Bookings.
 - Current printable document set: order confirmation, invoice / summary, and gift certificate.
 - Social surfaces now expect the latest five links per platform from central settings.
+
+---
+
+## Pass sync — 2026-04-14 (pass 16)
+
+- Booking screen remains locked and stable.
+- `_redirects` remains the working route layer and includes the admin-app trailing-slash compatibility line.
+- App Management was repaired in this pass: the page now restores its missing helper functions, shows a proper internal menu mount, includes clearer feature descriptions, and exposes document/social defaults without crashing.
+- Admin navigation now includes a visible path to App Management from the dashboard, shared admin menu, and return bar.
+- No new database table or column changes were introduced in this pass; schema files were refreshed to reflect a no-DDL stability/documentation pass.
+- Strongest next steps remain the single-entry pricing/accounting workflow, refund-credit memo document polish, and provider-tested email sending.

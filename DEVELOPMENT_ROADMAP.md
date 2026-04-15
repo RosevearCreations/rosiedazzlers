@@ -365,3 +365,14 @@ Route hotfix sync reviewed on 2026-04-11.
 - Add a dedicated refund/credit memo print template for bookkeeping and customer-service handoffs.
 - Expand admin accounting exports so discounts/refunds can be filtered by reason code and date range.
 - Add a lightweight admin helper for updating the latest five social links per platform without editing raw JSON.
+
+---
+
+## Pass sync — 2026-04-14 (pass 16)
+
+- Booking screen remains locked and stable.
+- `_redirects` remains the working route layer and includes the admin-app trailing-slash compatibility line.
+- App Management was repaired in this pass: the page now restores its missing helper functions, shows a proper internal menu mount, includes clearer feature descriptions, and exposes document/social defaults without crashing.
+- Admin navigation now includes a visible path to App Management from the dashboard, shared admin menu, and return bar.
+- No new database table or column changes were introduced in this pass; schema files were refreshed to reflect a no-DDL stability/documentation pass.
+- Strongest next steps remain the single-entry pricing/accounting workflow, refund-credit memo document polish, and provider-tested email sending.

@@ -516,3 +516,14 @@ Still remaining:
 - Travel-charge values are centrally editable, but checkout math should not depend on them until the final office pricing model is approved and tested.
 - Social-feed rendering is now in place, but freshness still depends on staff keeping the latest five links current in App Management.
 - Printable customer documents are now available, but branded print testing on office printers and mobile print targets should continue.
+
+---
+
+## Pass sync — 2026-04-14 (pass 16)
+
+- Booking screen remains locked and stable.
+- `_redirects` remains the working route layer and includes the admin-app trailing-slash compatibility line.
+- App Management was repaired in this pass: the page now restores its missing helper functions, shows a proper internal menu mount, includes clearer feature descriptions, and exposes document/social defaults without crashing.
+- Admin navigation now includes a visible path to App Management from the dashboard, shared admin menu, and return bar.
+- No new database table or column changes were introduced in this pass; schema files were refreshed to reflect a no-DDL stability/documentation pass.
+- Strongest next steps remain the single-entry pricing/accounting workflow, refund-credit memo document polish, and provider-tested email sending.

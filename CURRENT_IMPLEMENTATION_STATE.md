@@ -270,3 +270,14 @@ Route hotfix sync reviewed on 2026-04-11.
 - `functions/api/document_booking_public.js` and `functions/api/_lib/booking-documents.js` now drive customer document payloads from the booking record plus finance summary.
 - Stripe, PayPal, and admin confirm flows now queue an order-confirmation notification event after a booking is confirmed.
 - Public social sections are now ready to render the latest five links per platform from centrally managed `social_feeds` data.
+
+---
+
+## Pass sync — 2026-04-14 (pass 16)
+
+- Booking screen remains locked and stable.
+- `_redirects` remains the working route layer and includes the admin-app trailing-slash compatibility line.
+- App Management was repaired in this pass: the page now restores its missing helper functions, shows a proper internal menu mount, includes clearer feature descriptions, and exposes document/social defaults without crashing.
+- Admin navigation now includes a visible path to App Management from the dashboard, shared admin menu, and return bar.
+- No new database table or column changes were introduced in this pass; schema files were refreshed to reflect a no-DDL stability/documentation pass.
+- Strongest next steps remain the single-entry pricing/accounting workflow, refund-credit memo document polish, and provider-tested email sending.

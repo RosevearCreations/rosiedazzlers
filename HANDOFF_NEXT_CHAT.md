@@ -231,3 +231,14 @@ Next strongest pass after deployment:
 - Customer-facing docs now live at `order-confirmation.html`, `invoice.html`, and `gift-certificate-print.html`.
 - Confirmation notifications are queued from Stripe, PayPal, and admin confirm flows through `notification_events` via `functions/api/_lib/booking-documents.js`.
 - Social feed content is centrally managed via the `social_feeds` setting and rendered on the home page and videos page using `assets/social-feed.js`.
+
+---
+
+## Pass sync — 2026-04-14 (pass 16)
+
+- Booking screen remains locked and stable.
+- `_redirects` remains the working route layer and includes the admin-app trailing-slash compatibility line.
+- App Management was repaired in this pass: the page now restores its missing helper functions, shows a proper internal menu mount, includes clearer feature descriptions, and exposes document/social defaults without crashing.
+- Admin navigation now includes a visible path to App Management from the dashboard, shared admin menu, and return bar.
+- No new database table or column changes were introduced in this pass; schema files were refreshed to reflect a no-DDL stability/documentation pass.
+- Strongest next steps remain the single-entry pricing/accounting workflow, refund-credit memo document polish, and provider-tested email sending.
