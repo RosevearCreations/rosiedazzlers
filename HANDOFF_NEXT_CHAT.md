@@ -1,6 +1,14 @@
-> Last synchronized: April 13, 2026. Reviewed during the social-feed-public endpoint repair, accounting GL duplicate-key cleanup, booking-lock carry-forward, route-completeness verification, and docs/schema synchronization pass.
+> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 # Rosie Dazzlers — Handoff for Next Chat
+
+## Fresh handoff note — April 14 admin-app pricing clarity pass
+1. Deploy this build and verify `/admin-app.html` visually on desktop and mobile widths.
+2. In App Management, confirm the checkbox rows align in two clean columns and the add-on quote checkboxes still read correctly.
+3. Confirm the summary now shows package families and package price points separately.
+4. Keep `book.html` locked unless a direct production defect forces a repair.
+5. Decide in a future pass whether `oversize / exotic` should remain a shared price column or become a distinct canonical price field.
+
 
 ## Fresh handoff note — April 13 build-stability + social feed endpoint pass
 1. Deploy this build and verify `/`, `/videos`, `/admin-app.html`, and one saved social-feed reload action end to end.

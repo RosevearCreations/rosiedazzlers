@@ -1,6 +1,20 @@
-> Last synchronized: April 13, 2026. Reviewed during the social-feed-public endpoint repair, accounting GL duplicate-key cleanup, booking-lock carry-forward, route-completeness verification, and docs/schema synchronization pass.
+> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 # Rosie Dazzlers — Development Roadmap
+
+## April 14, 2026 admin-app pricing clarity pass
+Completed in this pass:
+- aligned the non-catalog checkbox rows in `admin-app.html` so the checkbox column and label column stay visually consistent
+- preserved the add-on quote checkbox layout that was already working well
+- clarified package reporting so App Management now shows package families separately from size-priced entries
+- relabeled the package pricing columns to `Oversize / exotic` where the current catalog intentionally shares that price path
+- refreshed Markdown and schema notes to match the current repo state
+
+Next highest-value roadmap items after this pass:
+- keep App Management as the single entry point for package, add-on, service-area, and travel-charge changes
+- decide whether exotic pricing should stay coupled to oversize or be promoted to a distinct canonical price column in a future schema/catalog pass
+- continue office-document polish, especially refund / credit memo output and live notification delivery verification
+
 
 ## April 13, 2026 build-stability + social feed API pass
 Completed in this pass:

@@ -1,6 +1,16 @@
-> Last synchronized: April 13, 2026. Reviewed during the social-feed-public endpoint repair, accounting GL duplicate-key cleanup, booking-lock carry-forward, route-completeness verification, and docs/schema synchronization pass.
+> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 # Rosie Dazzlers — Known Gaps and Risks
+
+## April 14, 2026 pass status
+- App Management checkbox alignment is now cleaner and easier to scan in the office workflow
+- package counts in App Management now distinguish between package families and size-priced entries instead of only showing the family count
+- the current canonical pricing model still stores `oversize / exotic` together in one column by design
+
+## Current live risks after this pass
+- staff may still expect exotic pricing to be fully separate from oversize pricing; that is not yet a distinct canonical field
+- App Management is much clearer now, but it still needs continued visual regression checks after each broader admin pass
+
 
 ## April 13, 2026 pass status
 - the missing public social-feed API route is now present, so the public social sections and App Management reload flow finally point at a real endpoint instead of a dead URL

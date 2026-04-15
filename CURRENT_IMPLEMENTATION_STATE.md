@@ -1,6 +1,14 @@
-> Last synchronized: April 13, 2026. Reviewed during the social-feed-public endpoint repair, accounting GL duplicate-key cleanup, booking-lock carry-forward, route-completeness verification, and docs/schema synchronization pass.
+> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 # Current Implementation State
+
+## April 14, 2026 App Management pricing clarity pass
+- Adjusted `admin-app.html` checkbox-row CSS so settings blocks read like a cleaner two-column office form.
+- Preserved the add-on quote checkbox alignment while improving the rest of the screen.
+- Added package-family vs. package-price-point reporting to the Pricing Control Center summary.
+- Clarified the package and add-on size-column labels to `Oversize / exotic` to match the current shared pricing model.
+- No new SQL table shape was required in this pass; schema notes were refreshed to reflect the UI clarification work.
+
 
 ## April 13, 2026 build-stability + social feed endpoint pass
 - Added `functions/api/social_feed_public.js` as the canonical public/social-feed read path for the home page, videos page, and App Management reload action.

@@ -1,6 +1,13 @@
-> Last synchronized: April 13, 2026. Reviewed during the social-feed-public endpoint repair, accounting GL duplicate-key cleanup, booking-lock carry-forward, route-completeness verification, and docs/schema synchronization pass.
+> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 # Rosie Dazzlers — Sanity / Health Check
+
+## April 14, 2026 sanity note
+- `admin-app.html` checkbox rows aligned
+- add-on quote checkbox layout preserved
+- package family count vs size-price count clarified
+- no booking-screen edits made
+
 
 ## April 11 pass sanity additions
 - verify booking field boxes do not overlap at desktop, tablet, or phone widths

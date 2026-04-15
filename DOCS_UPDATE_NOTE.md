@@ -1,6 +1,10 @@
-> Last synchronized: April 13, 2026. Reviewed during the social-feed-public endpoint repair, accounting GL duplicate-key cleanup, booking-lock carry-forward, route-completeness verification, and docs/schema synchronization pass.
+> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 # Docs Update Note
+
+## April 14, 2026 documentation sync
+This refresh aligns the docs to the App Management checkbox-alignment repair and package-count clarification pass. The pricing control center now explains package families separately from size-priced entries, add-on quote checkboxes keep their working alignment, and the current canonical pricing model still treats oversize and exotic as a shared column unless a later schema pass deliberately splits them.
+
 
 ## April 13, 2026 documentation sync
 This pass synchronized the docs around build stability rather than new schema breadth. The repo now contains the missing public social-feed endpoint, the avoidable accounting GL duplicate-key warning was removed, booking remains locked/stable, `_redirects` remains complete, and no new SQL table shape was required.

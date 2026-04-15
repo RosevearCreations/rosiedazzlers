@@ -1,6 +1,10 @@
-> Last synchronized: April 13, 2026. Reviewed during the social-feed-public endpoint repair, accounting GL duplicate-key cleanup, booking-lock carry-forward, route-completeness verification, and docs/schema synchronization pass.
+> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 # Rosie Dazzlers — Mobile Auto Detailing Platform
+
+## Latest pass highlight — April 14, 2026
+This pass focused on finishing the App Management pricing editor so it reads more clearly for office use. Checkbox rows are now aligned in a cleaner two-column layout, add-on quote checkboxes retain their current aligned presentation, package reporting now distinguishes package families from size-based price points, and the package editor now explains that one package family can contain multiple size prices while still remaining a single source of truth.
+
 
 ## Latest pass highlight — April 13, 2026
 This pass tightened build stability instead of broadening the public workflow surface. The repo now includes a real `functions/api/social_feed_public.js` endpoint for both the public site and App Management reload flow, the duplicate accounting GL object keys were removed to eliminate avoidable Pages warnings, booking remains intentionally locked/stable, and `_redirects` remains the complete compatibility layer for the current route model.
