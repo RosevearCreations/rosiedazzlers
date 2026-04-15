@@ -89,7 +89,7 @@
     {
       key: "admin-app",
       label: "App Management",
-      href: "/admin-app.html",
+      href: "/admin-app",
       description: "Roles, screens, feature access",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-app")
     },

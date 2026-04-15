@@ -110,6 +110,7 @@
       <a class="btn ghost small" href="/admin-catalog.html">Inventory</a>
       <a class="btn ghost small" href="/admin-assign.html">Assign Crew</a>
       <a class="btn ghost small" href="/admin-recovery.html">Recovery</a>
+      <a class="btn ghost small" href="/admin-app">App</a>
       <a class="btn ghost small" href="/admin-accounting.html">Accounting</a>
       <span class="crumb">${pageKey || "admin"}</span>
     `;
