@@ -2,10 +2,15 @@
 // Shared client-side pricing catalog loader and normalizer for public Rosie Dazzlers pages.
 
 const DEFAULT_CHARTS = [
-  { filename: "CarPrice2025.PNG", title: "Vehicle Price Chart 2025", r2_url: "https://assets.rosiedazzlers.ca/brand/CarPrice2025.PNG" },
-  { filename: "CarPriceDetails2025.PNG", title: "Package Service Details Chart", r2_url: "https://assets.rosiedazzlers.ca/brand/CarPriceDetails2025.PNG" },
+  { filename: "CarPrice2025.PNG", title: "Vehicle Price Chart 2025", r2_url: "/assets/brand/CarPrice2025.PNG" },
+  { filename: "CarPriceDetails2025.PNG", title: "Package Service Details Chart", r2_url: "/assets/brand/CarPriceDetails2025.PNG" },
   { filename: "CarSizeChart.PNG", title: "Vehicle Size Chart", r2_url: "https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG" }
 ];
+
+const LOCAL_CHART_URLS = {
+  "CarPrice2025.PNG": "/assets/brand/CarPrice2025.PNG",
+  "CarPriceDetails2025.PNG": "/assets/brand/CarPriceDetails2025.PNG"
+};
 
 export const DEFAULT_BOOKING_RULES = {
   availability_window_days: 21,
@@ -39,11 +44,14 @@ function normalizeSizeMap(value) {
 
 function normalizeCharts(rows) {
   const source = Array.isArray(rows) && rows.length ? rows : DEFAULT_CHARTS;
-  return source.map((row) => ({
-    filename: String(row?.filename || "").trim() || null,
-    title: String(row?.title || row?.filename || "").trim() || null,
-    r2_url: String(row?.r2_url || "").trim() || null
-  })).filter((row) => row.title && row.r2_url);
+  return source.map((row) => {
+    const filename = String(row?.filename || "").trim() || null;
+    return {
+      filename,
+      title: String(row?.title || row?.filename || "").trim() || null,
+      r2_url: LOCAL_CHART_URLS[filename] || String(row?.r2_url || "").trim() || null
+    };
+  }).filter((row) => row.title && row.r2_url);
 }
 
 function normalizePackages(rows) {
