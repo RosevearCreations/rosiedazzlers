@@ -14,7 +14,7 @@
     .status[data-state="success"]{border-color:rgba(34,197,94,.35)} .status[data-state="error"]{border-color:rgba(248,113,113,.35)}
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{grid-column:span 12;padding:18px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
     .card h2,.card h3{margin:0 0 12px}.field{display:grid;gap:6px;margin-bottom:10px}.field input,.field textarea,.field select{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;background:rgba(255,255,255,.04);color:#f8fafc}
-    .field textarea{min-height:110px;resize:vertical}.checkrow{display:flex;gap:10px;align-items:center;margin:8px 0}.actions{display:flex;gap:10px;flex-wrap:wrap}.muted{color:#9fb0c8;font-size:.94rem}
+    .field textarea{min-height:110px;resize:vertical}.checkrow{display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;align-items:start;margin:8px 0}.checkrow input{justify-self:end;margin-top:2px}.checkrow label,.checkrow span{display:block;text-align:left;line-height:1.45}.checkrow.inline-check{display:flex;gap:10px;align-items:center}.checkrow.inline-check input{justify-self:auto;margin-top:0}.actions{display:flex;gap:10px;flex-wrap:wrap}.muted{color:#9fb0c8;font-size:.94rem}
     .preview{white-space:pre-wrap;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);min-height:82px}
     .subgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.note{font-size:.92rem;color:#9fb0c8}.panel-lite{padding:14px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}.stack-sm{display:grid;gap:10px}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.section-head h3{margin:0}.section-label{font-size:.82rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#9fb0c8}.pricing-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}.pricing-summary .stat{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}.pricing-summary .stat strong{display:block;font-size:1.35rem;margin-top:6px}.pricing-grid-4,.pricing-grid-5{display:grid;gap:10px}.pricing-grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}.pricing-grid-5{grid-template-columns:repeat(5,minmax(0,1fr))}.field.compact span{font-size:.82rem;color:#9fb0c8}.catalog-section{margin-top:18px}.catalog-table-wrap{overflow:auto}.catalog-table{display:grid;gap:8px}.catalog-row{display:grid;gap:8px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);align-items:end}.catalog-row.package{grid-template-columns:1.1fr 1.2fr 1fr .8fr .8fr .8fr .8fr auto}.catalog-row.addon{grid-template-columns:1fr 1.2fr .9fr .9fr .8fr .8fr .8fr .8fr auto}.catalog-row.service-area{grid-template-columns:1fr 1.1fr 1.1fr .9fr .9fr .8fr auto}.catalog-row.requirement{grid-template-columns:minmax(0,1fr) auto}.catalog-row__head{font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9fb0c8}.catalog-row .field{margin-bottom:0}.catalog-row button{align-self:center}.catalog-empty{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.12);color:#9fb0c8}
     .app-layout{display:grid;grid-template-columns:minmax(250px,300px) minmax(0,1fr);gap:18px;align-items:start}
@@ -145,7 +145,8 @@
         </div>
 
         <div class="catalog-section" style="margin-top:16px">
-          <div class="section-head"><h3>Packages</h3><div class="actions"><button class="btn" type="button" id="addPackageBtn">Add package</button></div></div>
+          <div class="section-head"><h3>Packages and size pricing</h3><div class="actions"><button class="btn" type="button" id="addPackageBtn">Add package</button></div></div>
+          <p class="feature-note" id="packageSectionNote">Packages are stored as package families with separate size-price columns so one catalog controls booking, services, pricing, and checkout.</p>
           <div class="catalog-table-wrap"><div id="packageTable" class="catalog-table"></div></div>
         </div>
 
@@ -515,12 +516,17 @@
   function renderPricingDashboard(){
     var catalog = pricingCatalogState;
     byId('pricingCatalogSummary').innerHTML = [
-      ['Packages', catalog.packages.length],
+      ['Package families', catalog.packages.length],
+      ['Package price points', packagePricePointCount(catalog.packages)],
       ['Add-ons', catalog.addons.length],
+      ['Priced catalog lines', packagePricePointCount(catalog.packages) + catalog.addons.length],
       ['Service areas', catalog.service_areas.length],
       ['Public requirements', catalog.public_requirements.length],
       ['Default service area', catalog.booking_rules.default_service_area || '—']
     ].map(function (row) { return '<div class="stat"><div class="note">' + row[0] + '</div><strong>' + row[1] + '</strong></div>'; }).join('');
+
+    var packagePointCount = packagePricePointCount(catalog.packages);
+    byId('packageSectionNote').textContent = catalog.packages.length + ' package families with ' + packagePointCount + ' editable size-price entries. Small, mid, and oversize / exotic pricing stay together here so the whole site reads one source of truth.';
 
     byId('travel_charge_urban').value = Number(catalog.booking_rules.travel_pricing.urban || 0).toFixed(2);
     byId('travel_charge_township').value = Number(catalog.booking_rules.travel_pricing.township || 0).toFixed(2);
@@ -541,11 +547,17 @@
     byId('requirementList').innerHTML = renderRequirementRows(catalog.public_requirements);
     bindPricingCatalogRowInputs();
   }
+  function packagePricePointCount(rows){
+    return (Array.isArray(rows) ? rows : []).reduce(function (sum, pkg) {
+      var prices = pkg && pkg.prices_cad && typeof pkg.prices_cad === 'object' ? pkg.prices_cad : {};
+      return sum + ['small','mid','oversize'].filter(function (key) { return prices[key] !== undefined && prices[key] !== null && prices[key] !== ''; }).length;
+    }, 0);
+  }
   function renderPackageRows(rows){
     if (!rows.length) return '<div class="catalog-empty">No packages yet.</div>';
     return rows.map(function (pkg, index) {
       return '<div class="catalog-row package">' +
-        '<div class="catalog-row__head">Code</div><div class="catalog-row__head">Name</div><div class="catalog-row__head">Subtitle</div><div class="catalog-row__head">Small</div><div class="catalog-row__head">Mid</div><div class="catalog-row__head">Oversize</div><div class="catalog-row__head">Deposit</div><div></div>' +
+        '<div class="catalog-row__head">Code</div><div class="catalog-row__head">Name</div><div class="catalog-row__head">Subtitle</div><div class="catalog-row__head">Small</div><div class="catalog-row__head">Mid</div><div class="catalog-row__head">Oversize / exotic</div><div class="catalog-row__head">Deposit</div><div></div>' +
         '<label class="field"><input data-pkg-field="code" data-pkg-index="' + index + '" value="' + escapeHtml(pkg.code || '') + '"></label>' +
         '<label class="field"><input data-pkg-field="name" data-pkg-index="' + index + '" value="' + escapeHtml(pkg.name || '') + '"></label>' +
         '<label class="field"><input data-pkg-field="subtitle" data-pkg-index="' + index + '" value="' + escapeHtml(pkg.subtitle || '') + '"></label>' +
@@ -561,7 +573,7 @@
     if (!rows.length) return '<div class="catalog-empty">No add-ons yet.</div>';
     return rows.map(function (addon, index) {
       return '<div class="catalog-row addon">' +
-        '<div class="catalog-row__head">Code</div><div class="catalog-row__head">Name</div><div class="catalog-row__head">Category</div><div class="catalog-row__head">Type</div><div class="catalog-row__head">Small</div><div class="catalog-row__head">Mid</div><div class="catalog-row__head">Oversize</div><div class="catalog-row__head">Quote?</div><div></div>' +
+        '<div class="catalog-row__head">Code</div><div class="catalog-row__head">Name</div><div class="catalog-row__head">Category</div><div class="catalog-row__head">Type</div><div class="catalog-row__head">Small</div><div class="catalog-row__head">Mid</div><div class="catalog-row__head">Oversize / exotic</div><div class="catalog-row__head">Quote?</div><div></div>' +
         '<label class="field"><input data-addon-field="code" data-addon-index="' + index + '" value="' + escapeHtml(addon.code || '') + '"></label>' +
         '<label class="field"><input data-addon-field="name" data-addon-index="' + index + '" value="' + escapeHtml(addon.name || '') + '"></label>' +
         '<label class="field"><input data-addon-field="category" data-addon-index="' + index + '" value="' + escapeHtml(addon.category || '') + '"></label>' +
@@ -569,7 +581,7 @@
         '<label class="field"><input type="number" step="0.01" data-addon-field="prices_cad.small" data-addon-index="' + index + '" value="' + escapeHtml(String(addon.prices_cad.small ?? 0)) + '"></label>' +
         '<label class="field"><input type="number" step="0.01" data-addon-field="prices_cad.mid" data-addon-index="' + index + '" value="' + escapeHtml(String(addon.prices_cad.mid ?? 0)) + '"></label>' +
         '<label class="field"><input type="number" step="0.01" data-addon-field="prices_cad.oversize" data-addon-index="' + index + '" value="' + escapeHtml(String(addon.prices_cad.oversize ?? 0)) + '"></label>' +
-        '<label class="checkrow"><input type="checkbox" data-addon-field="quote_required" data-addon-index="' + index + '" ' + (addon.quote_required ? 'checked' : '') + '><span>Quote</span></label>' +
+        '<label class="checkrow inline-check"><input type="checkbox" data-addon-field="quote_required" data-addon-index="' + index + '" ' + (addon.quote_required ? 'checked' : '') + '><span>Quote</span></label>' +
         '<button class="btn" type="button" data-delete-addon="' + index + '">Delete</button>' +
       '</div>';
     }).join('');
