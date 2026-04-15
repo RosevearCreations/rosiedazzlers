@@ -1,5 +1,9 @@
 > Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
+## April 15, 2026 schema-state note
+No relational schema change landed in this pass. The work was a chart-asset carry-forward pass that keeps legacy PNG outputs aligned with the canonical bundled pricing catalog and local static asset paths.
+
+
 March 28, 2026 sync note: no new tables were required for this pass; this refresh mainly aligns UI readability, catalog presentation, and documentation with the current build.
 
 > Last synchronized: March 28, 2026. Reviewed during the image-fit, booking-slot readability, dark-text contrast, and current-build documentation/schema sync pass.
@@ -303,3 +307,5 @@ Route hotfix sync reviewed on 2026-04-11.
 - Admin navigation now includes a visible path to App Management from the dashboard, shared admin menu, and return bar.
 - No new database table or column changes were introduced in this pass; schema files were refreshed to reflect a no-DDL stability/documentation pass.
 - Strongest next steps remain the single-entry pricing/accounting workflow, refund-credit memo document polish, and provider-tested email sending.
+
+> Pass sync April 15, 2026: generated local price-chart PNG assets from the canonical bundled pricing catalog, rewired chart fallbacks to `/assets/brand`, added a regeneration script, and refreshed docs/schema notes for the legacy price-image carry-forward pass.

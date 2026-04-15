@@ -1,5 +1,9 @@
 > Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
+## April 15, 2026 handoff note
+This pass generated local replacements for the legacy `CarPrice2025.PNG` and `CarPriceDetails2025.PNG` tables from the bundled pricing catalog and rewired the known chart fallbacks to `/assets/brand`. If the next pass touches pricing governance again, the safest continuation is to decide whether those chart assets stay static-with-regeneration or move to live-rendered chart pages from the canonical pricing source.
+
+
 # Rosie Dazzlers — Handoff for Next Chat
 
 ## Fresh handoff note — April 14 admin-app pricing clarity pass
@@ -250,3 +254,5 @@ Next strongest pass after deployment:
 - Admin navigation now includes a visible path to App Management from the dashboard, shared admin menu, and return bar.
 - No new database table or column changes were introduced in this pass; schema files were refreshed to reflect a no-DDL stability/documentation pass.
 - Strongest next steps remain the single-entry pricing/accounting workflow, refund-credit memo document polish, and provider-tested email sending.
+
+> Pass sync April 15, 2026: generated local price-chart PNG assets from the canonical bundled pricing catalog, rewired chart fallbacks to `/assets/brand`, added a regeneration script, and refreshed docs/schema notes for the legacy price-image carry-forward pass.

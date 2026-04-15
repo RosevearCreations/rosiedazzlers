@@ -1,5 +1,11 @@
 > Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
+## April 15, 2026 sanity sync
+- Confirm `/pricing` and `/services` open the new local `/assets/brand/CarPrice2025.PNG` and `/assets/brand/CarPriceDetails2025.PNG` assets.
+- Confirm the chart helpers still open `CarSizeChart.PNG` from the package asset path.
+- Confirm static chart assets visually match the current package/add-on/service-matrix data in the bundled pricing JSON.
+
+
 # Rosie Dazzlers — Sanity / Health Check
 
 ## April 14, 2026 sanity note
@@ -280,3 +286,5 @@ Route hotfix sync reviewed on 2026-04-11.
 - Admin navigation now includes a visible path to App Management from the dashboard, shared admin menu, and return bar.
 - No new database table or column changes were introduced in this pass; schema files were refreshed to reflect a no-DDL stability/documentation pass.
 - Strongest next steps remain the single-entry pricing/accounting workflow, refund-credit memo document polish, and provider-tested email sending.
+
+> Pass sync April 15, 2026: generated local price-chart PNG assets from the canonical bundled pricing catalog, rewired chart fallbacks to `/assets/brand`, added a regeneration script, and refreshed docs/schema notes for the legacy price-image carry-forward pass.
