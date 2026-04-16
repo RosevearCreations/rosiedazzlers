@@ -8,7 +8,11 @@ export async function onRequestGet(context) {
       ok: true,
       charts: Array.isArray(catalog.charts) ? catalog.charts : [],
       packages: Array.isArray(catalog.packages) ? catalog.packages : [],
+      service_matrix: Array.isArray(catalog.service_matrix) ? catalog.service_matrix : [],
       addons: Array.isArray(catalog.addons) ? catalog.addons : [],
+      service_areas: Array.isArray(catalog.service_areas) ? catalog.service_areas : [],
+      booking_rules: catalog.booking_rules && typeof catalog.booking_rules === "object" ? catalog.booking_rules : {},
+      public_requirements: Array.isArray(catalog.public_requirements) ? catalog.public_requirements : [],
       source: env?.SUPABASE_URL && env?.SUPABASE_SERVICE_ROLE_KEY ? "db_or_fallback" : "fallback"
     }));
   } catch (err) {
