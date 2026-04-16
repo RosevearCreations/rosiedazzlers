@@ -1,4 +1,8 @@
-> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
+
+## April 15, 2026 schema-state note
+No relational schema change landed in this pass. The work was a chart-asset carry-forward pass that keeps legacy PNG outputs aligned with the canonical bundled pricing catalog and local static asset paths.
+
 
 March 28, 2026 sync note: no new tables were required for this pass; this refresh mainly aligns UI readability, catalog presentation, and documentation with the current build.
 
@@ -9,6 +13,17 @@ March 28, 2026 sync note: no new tables were required for this pass; this refres
 
 
 # Database Structure Current
+
+## April 12 schema/contract note
+No new tables were required in this pass. The important contract update is that the canonical pricing setting and public pricing API now preserve the full catalog shape instead of trimming fields.
+
+`bookings` still includes structured service-area dimensions:
+- `service_area_county`
+- `service_area_municipality`
+- `service_area_zone`
+
+These fields allow admin filtering/reporting without parsing the single public `service_area` text value.
+
 
 > Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 
@@ -38,7 +53,7 @@ Key/value JSON settings storage used for:
 - recovery rules
 - recovery provider rules
 - payment method toggles
-- canonical pricing catalog (`pricing_catalog`)
+- canonical pricing catalog (`pricing_catalog`) including packages, add-ons, charts, service areas, booking rules, and public requirements for the public booking/pricing/services surfaces
 - other admin policy settings
 
 ## gift_certificates / gift_products
@@ -226,3 +241,73 @@ March 29, 2026 sync note: no new tables were required for this pass; the main ch
 - booking_update and assign now log actor-attributed booking events while using the resolved current staff actor.
 - purchase-order reminder lifecycle moved forward with reminder logging fields, a reminder action endpoint, and overdue reminder reporting in the purchase-order list endpoint.
 - this reduced more of the old/new endpoint overlap and shared-password bridge risk, but did not fully eliminate every remaining legacy-only admin path yet.
+
+<!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->
+
+## April 9, 2026 schema / reporting support note
+- No new core accounting tables were required in this pass.
+- Reporting/remittance/export expansion uses the April 8 accounting tables plus one new reference index for `accounting_journal_entries(reference_type, entry_date, status)` and one inventory-cost coverage index for `catalog_inventory_items(is_active, item_type, cost_cents, qty_on_hand)`.
+- Inventory-cost cleanup in this pass depends on already-existing columns that are now actively used by the UI: `cost_cents`, `vendor_sku`, `purchase_date`, and `estimated_jobs_per_unit`.
+
+
+## April 9, 2026 schema note
+- `accounting_journal_entries` now includes optional `created_by_staff_user_id` and `last_recorded_by_staff_user_id` references for cleaner audit trails.
+- Added support indexes for accounting actor/date lookup and receivables service-date/balance scanning.
+
+- 2026-04-11 note: no database shape change in this hotfix pass; schema files were resynced while the deploy issue was isolated to static route output.
+
+
+Route hotfix sync reviewed on 2026-04-11.
+
+## 2026-04-11 pass 9 sync
+- Booking flow now uses a clearer service-area selector with town-level choices across Oxford and Norfolk communities.
+- Booking availability shows open, partial, and unavailable dates in the next 21-day snapshot, and the date picker contrast was tightened for dark mode.
+- Year / Make / Model on booking is now typeable with datalist-assisted lookup and validation against the existing vehicle catalog.
+- Public analytics was deepened with richer action tracking, viewport/session details, and location/device enrichment stored inside event payloads.
+- Route-collision folders and temporary check artifacts were removed again to keep Pages routing stable.
+### Pass 9 schema note
+- No table shape changed in this pass.
+- Added optional expression indexes for analytics payload lookups on city, region, and device type.
+
+## 2026-04-11 pass 11 sync note
+- Tightened the booking preferred-date control so it no longer stretches wider than needed and added a visible white picker button.
+- Public booking, services, and pricing pages now read the canonical pricing catalog API first and only fall back to bundled JSON if the API is unavailable.
+- App Management now includes a pricing catalog editor so package prices, included services, add-ons, service-area rules, and chart links can be maintained from one source of truth.
+- No schema shape change landed in this pass; `SUPABASE_SCHEMA.sql` was refreshed to note the pricing-catalog consolidation and booking UI tightening work.
+
+> Pass update 2026-04-12: Re-synced the current uploaded build to the latest safe route structure. Removed duplicate clean-route folders that were reintroducing Cloudflare Pages redirect loops, preserved the newer booking experience already present in `book.html`, refreshed the deployed booking smoke check to recognize the shared `chrome.js` analytics bootstrap, and cleaned the login form autocomplete attributes. Immediate next step after deploy: verify `/`, `/services`, `/pricing`, `/book`, and `/admin` on the active branch before resuming larger feature work.
+
+## April 12, 2026 pricing-control-center note
+- No new SQL table was required in this pass.
+- The canonical pricing source remains `app_management_settings.key = 'pricing_catalog'`.
+- The expected catalog JSON now explicitly includes not only packages, add-ons, charts, service areas, booking rules, and public requirements, but also:
+  - `booking_rules.travel_pricing`
+  - `booking_rules.price_controls`
+- This keeps travel-charge defaults, shared price controls, and future checkout/reporting inputs in the same entry point as package pricing.
+
+## 2026-04-13 Pass 14 Sync
+- Booking screen remains stable and should not be altered in future passes unless a critical bug appears.
+- `_redirects` is working and treated as complete for the current route layout.
+- Pricing/packages/add-ons/service areas/travel charges continue to flow through the App Management pricing control center as the preferred single entry point.
+- This pass added office-facing finance adjustments for discounts/refunds plus customer-facing document work for order confirmation, invoice / summary, gift certificate printing, and social feed management.
+
+## Pass 14 data notes
+- `accounting_records.discount_cad` is now part of the active schema plan so office-issued credits and scope/weather/detailing-error discounts can be represented directly in accounting rollups.
+- `app_management_settings` is now actively expected to serve these keys in production: `pricing_catalog`, `document_templates`, and `social_feeds`.
+- Customer-facing document URLs continue to use the existing booking `progress_token` instead of introducing a second document token column.
+- Notification delivery for order confirmations still queues through `notification_events`; delivery-provider execution remains a separate step.
+
+---
+
+## Pass sync — 2026-04-14 (pass 16)
+
+- Booking screen remains locked and stable.
+- `_redirects` remains the working route layer and includes the admin-app trailing-slash compatibility line.
+- App Management was repaired in this pass: the page now restores its missing helper functions, shows a proper internal menu mount, includes clearer feature descriptions, and exposes document/social defaults without crashing.
+- Admin navigation now includes a visible path to App Management from the dashboard, shared admin menu, and return bar.
+- No new database table or column changes were introduced in this pass; schema files were refreshed to reflect a no-DDL stability/documentation pass.
+- Strongest next steps remain the single-entry pricing/accounting workflow, refund-credit memo document polish, and provider-tested email sending.
+
+> Pass sync April 15, 2026: generated local price-chart PNG assets from the canonical bundled pricing catalog, rewired chart fallbacks to `/assets/brand`, added a regeneration script, and refreshed docs/schema notes for the legacy price-image carry-forward pass.
+
+Update note — 2026-04-16 pass20: Added explicit admin route wrappers for social feed and vehicle catalog endpoints to stop Pages Function import-resolution failures on /api/admin routes. Booking remains stable; no schema DDL change in this pass.

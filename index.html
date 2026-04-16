@@ -16,11 +16,33 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Mobile Auto Detailing in Oxford & Norfolk Counties | Rosie Dazzlers</title>
-  <meta name="description" content="Mobile auto detailing in Oxford County and Norfolk County, Ontario. Interior, exterior, and full detailing with driveway service from Rosie Dazzlers." />
+  <meta name="description" content="Mobile auto detailing in Oxford County and Norfolk County, Ontario, including Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi, and Port Dover. Interior, exterior, and full detailing with driveway service from Rosie Dazzlers." />
   <link rel="canonical" href="https://rosiedazzlers.ca/" />
   <meta property="og:title" content="Rosie Dazzlers | Mobile Auto Detailing Norfolk & Oxford" />
-  <meta property="og:description" content="Mobile auto detailing for Norfolk and Oxford Counties, Ontario. View services, transparent pricing, gift certificates, and online booking with deposit." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260311i" />
+  <meta property="og:description" content="Mobile auto detailing for Tillsonburg, Woodstock, Simcoe, Delhi, Port Dover, and nearby Oxford and Norfolk communities. View services, transparent pricing, gift certificates, and online booking with deposit." />
+  <meta name="robots" content="index,follow" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260409seo1" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AutoDetailing",
+    "name": "Rosie Dazzlers Mobile Auto Detailing",
+    "url": "https://rosiedazzlers.ca/",
+    "image": "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
+    "telephone": "+1-226-752-7613",
+    "areaServed": [
+      {"@type": "AdministrativeArea", "name": "Oxford County, Ontario"},
+      {"@type": "AdministrativeArea", "name": "Norfolk County, Ontario"}
+    ],
+    "address": {"@type": "PostalAddress", "addressRegion": "ON", "addressCountry": "CA"},
+    "sameAs": [
+      "https://www.tiktok.com/@rosiedazzler",
+      "https://www.instagram.com/rosiedazzlers/",
+      "https://www.facebook.com/rosiedazzlers",
+      "https://www.youtube.com/@rosiedazzlers"
+    ]
+  }
+  </script>
 
   <!-- OPTIONAL: Use a high-end car as a subtle background -->
   <style>
@@ -28,6 +50,8 @@
       --bg-image: url("https://assets.rosiedazzlers.ca/brand/KatBlackCar.PNG");
       --bg-image-opacity: .12;
     }
+  
+    .social-feed-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.social-feed-card{border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px;background:rgba(255,255,255,.03)}.social-feed-card h3{margin:0 0 8px}.social-feed-card p{margin:0 0 10px;color:var(--muted)}.social-feed-items{display:grid;gap:8px}.social-feed-item{display:block;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);text-decoration:none;color:inherit}.social-feed-item strong{display:block}.social-feed-item span{display:block;margin-top:4px;color:var(--muted);font-size:.92rem}
   </style>
 </head>
 
@@ -98,8 +122,21 @@
       </div>
     </div>
 
+    
+
+    <section class="section panel">
+      <h2 style="margin:0 0 12px">Latest from our socials</h2>
+      <p class="muted">We can show the latest five links for each platform here. Update them from App Management so the site stays current without editing every page.</p>
+      <div data-social-feed-mount class="social-feed-grid"></div>
+    </section>
+
     <div class="footer" data-footer></div>
   </div>
+
+  <script type="module">
+    import { renderSocialFeedMounts } from "/assets/social-feed.js";
+    renderSocialFeedMounts();
+  </script>
 
   <script type="module" src="/assets/chrome.js?v=20260311i"></script>
 </body>

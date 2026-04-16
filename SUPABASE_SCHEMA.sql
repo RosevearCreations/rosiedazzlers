@@ -1,3 +1,15 @@
+-- Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
+-- 2026-04-13 build-stability note: no new DDL landed in this pass; added the missing public social-feed API route at the application layer, removed duplicate GL actor keys, kept booking locked/stable, and kept _redirects as the current complete compatibility layer.
+-- 2026-04-12 pricing-control-center note: booking remains stable and unchanged in this pass; _redirects is treated as complete; app_management_settings.pricing_catalog now also carries booking_rules.travel_pricing and booking_rules.price_controls for centralized travel/default pricing governance.
+-- 2026-04-12 sync note: public booking/services/pricing/checkout/shared site helpers now preserve the full canonical pricing_catalog contract (charts, packages, service areas, booking_rules, public_requirements) via /api/pricing_catalog_public, with bundled JSON fallback and no SQL table shape change in this pass.
+-- Last synchronized: April 11, 2026. Reviewed during the booking layout/date-picker repair, paged 21-day availability, structured service-area/bylaw logic, service-area reporting, analytics funnel/export pass, and docs/schema synchronization pass.
+-- Last synchronized: April 11, 2026. Reviewed during the live clean-route verification pass, remaining session-first internal-screen cleanup, profitability labor-estimate pass, and docs/schema sync pass.
+-- 2026-04-11 pass 8 note: no schema shape change in this pass; route cleanup, session-first screen convergence, and accounting/reporting logic were updated at the application layer.
+-- Last synchronized: April 11, 2026. Reviewed during the route-safety carry-forward, crew-summary workflow pass, runtime error-handling hardening pass, and docs/schema sync pass.
+-- 2026-04-11 route hotfix sync: no schema shape change in this pass.
+-- Last synchronized: April 10, 2026. Reviewed during the canonical add-on media restore, crew assignment/senior detailer workflow, app-shell responsiveness pass, and docs/schema synchronization pass.
+-- Last synchronized: April 9, 2026. Reviewed during the accounting actor normalization, receivables-aging, profitability, export expansion, auth/session convergence, and docs/schema synchronization pass.
+-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. No schema change in this pass; documentation and access paths were updated.
 -- March 29, 2026 sync note: no new tables were required for this pass; this refresh mainly extends signed-in staff session coverage, reduces shared-password-only endpoint usage, and improves actor attribution in time/intake/media/booking flows.
 -- 
 -- 
@@ -28,6 +40,9 @@ create table if not exists public.bookings (
   start_slot text not null check (start_slot in ('AM','PM')),
   duration_slots integer not null default 1 check (duration_slots in (1,2)),
   service_area text not null,
+  service_area_county text null,
+  service_area_municipality text null,
+  service_area_zone text null,
   package_code text not null,
   vehicle_size text not null,
   addons jsonb not null default '[]'::jsonb,
@@ -77,6 +92,21 @@ create table if not exists public.bookings (
   detailing_paused_at timestamptz null,
   detailing_completed_at timestamptz null,
   completed_at timestamptz null
+);
+
+create table if not exists public.booking_staff_assignments (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  booking_id uuid not null references public.bookings(id) on delete cascade,
+  staff_user_id uuid null references public.staff_users(id) on delete set null,
+  staff_email text null,
+  staff_name text null,
+  assignment_role text not null default 'crew' check (assignment_role in ('lead','crew')),
+  sort_order integer not null default 0,
+  assigned_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  assigned_by_name text null,
+  notes text null
 );
 
 create table if not exists public.date_blocks (id uuid primary key default gen_random_uuid(), blocked_date date not null unique, reason text null, created_at timestamptz not null default now());
@@ -186,6 +216,13 @@ create table if not exists public.site_activity_events (
   checkout_state text null,
   payload jsonb not null default '{}'::jsonb
 );
+create index if not exists idx_site_activity_events_created_at on public.site_activity_events (created_at desc);
+create index if not exists idx_site_activity_events_event_type_created_at on public.site_activity_events (event_type, created_at desc);
+create index if not exists idx_site_activity_events_page_path_created_at on public.site_activity_events (page_path, created_at desc);
+create index if not exists idx_site_activity_events_payload_city_created_at on public.site_activity_events ((payload->>'city'), created_at desc);
+create index if not exists idx_site_activity_events_payload_region_created_at on public.site_activity_events ((payload->>'region'), created_at desc);
+create index if not exists idx_site_activity_events_payload_device_created_at on public.site_activity_events ((payload->>'device_type'), created_at desc);
+
 create table if not exists public.notification_events (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -206,6 +243,9 @@ create table if not exists public.notification_events (
   body_text text null,
   body_html text null
 );
+create index if not exists idx_notification_events_event_type_created_at on public.notification_events (event_type, created_at desc);
+create index if not exists idx_notification_events_template_key_created_at on public.notification_events ((payload->>'template_key'), created_at desc);
+
 create table if not exists public.customer_vehicles (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -288,7 +328,7 @@ create index if not exists catalog_inventory_items_category_idx on public.catalo
 create index if not exists catalog_inventory_items_subcategory_idx on public.catalog_inventory_items(subcategory);
 create index if not exists catalog_inventory_items_sort_key_idx on public.catalog_inventory_items(sort_key);
 create index if not exists catalog_inventory_items_reuse_policy_idx on public.catalog_inventory_items(reuse_policy);
--- app_management_settings.pricing_catalog is now the canonical DB-backed pricing source, with bundled JSON as fallback.
+-- app_management_settings.pricing_catalog is now the canonical DB-backed pricing source, with bundled JSON as fallback. The expected JSON contract includes packages, addons, charts, service_areas, booking_rules, public_requirements, booking_rules.travel_pricing, and booking_rules.price_controls.
 
 create index if not exists vehicle_catalog_cache_year_make_idx on public.vehicle_catalog_cache(model_year, make);
 create index if not exists vehicle_catalog_cache_make_model_idx on public.vehicle_catalog_cache(make, model);
@@ -368,3 +408,113 @@ create index if not exists customer_reviews_customer_profile_id_idx on public.cu
 create index if not exists catalog_purchase_orders_reminder_sent_at_idx on public.catalog_purchase_orders(reminder_sent_at);
 
 -- Last synchronized: 2026-03-29. Reviewed during the promo/block/session conversion and purchase-order reminder lifecycle pass.
+
+-- April 8, 2026 admin route stabilization pass: no schema change; docs/build routing and shell repair only.
+
+
+-- 2026-04-08 general ledger accounting backend foundation
+create table if not exists public.accounting_accounts (
+  code text primary key,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  sort_order integer not null default 0,
+  label text not null,
+  account_type text not null,
+  account_group text null,
+  normal_balance text not null default 'debit',
+  is_active boolean not null default true,
+  is_system boolean not null default false,
+  notes text null
+);
+
+create table if not exists public.accounting_journal_entries (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  entry_date date not null default current_date,
+  entry_type text not null default 'manual',
+  status text not null default 'posted',
+  reference_type text null,
+  reference_id text null,
+  payee_name text null,
+  vendor_name text null,
+  memo text null,
+  subtotal_cad numeric(12,2) not null default 0,
+  tax_cad numeric(12,2) not null default 0,
+  total_cad numeric(12,2) not null default 0,
+  due_date date null,
+  paid_at timestamptz null,
+  created_by_name text null,
+  last_recorded_by_name text null,
+  created_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  last_recorded_by_staff_user_id uuid null references public.staff_users(id) on delete set null
+);
+
+create table if not exists public.accounting_journal_lines (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  entry_id uuid not null references public.accounting_journal_entries(id) on delete cascade,
+  line_order integer not null default 0,
+  account_code text not null references public.accounting_accounts(code),
+  direction text not null,
+  amount_cad numeric(12,2) not null default 0,
+  memo text null
+);
+
+
+create table if not exists public.accounting_month_end_checklists (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  month_start date not null unique,
+  remittance_reviewed boolean not null default false,
+  payables_reviewed boolean not null default false,
+  receivables_reviewed boolean not null default false,
+  statements_exported boolean not null default false,
+  inventory_costs_reviewed boolean not null default false,
+  profitability_reviewed boolean not null default false,
+  notes text null,
+  updated_by_name text null,
+  updated_by_staff_user_id uuid null references public.staff_users(id) on delete set null
+);
+
+
+-- 2026-04-09 accounting reporting / inventory cost coverage support
+create index if not exists accounting_journal_entries_reference_type_date_idx
+  on public.accounting_journal_entries(reference_type, entry_date, status);
+
+create index if not exists catalog_inventory_items_active_cost_idx
+  on public.catalog_inventory_items(is_active, item_type, cost_cents, qty_on_hand);
+
+
+-- 2026-04-09 accounting actor / receivables / profitability support
+create index if not exists accounting_journal_entries_actor_date_idx
+  on public.accounting_journal_entries(created_by_staff_user_id, entry_date);
+
+create index if not exists accounting_records_balance_service_idx
+  on public.accounting_records(order_status, service_date, balance_due_cad);
+
+
+-- 2026-04-09 accounting month-end checklist support
+create index if not exists accounting_month_end_checklists_month_start_idx
+  on public.accounting_month_end_checklists(month_start);
+
+create index if not exists idx_bookings_service_area_zone_date on public.bookings (service_area_zone, service_date desc);
+create index if not exists idx_bookings_service_area_municipality_date on public.bookings (service_area_municipality, service_date desc);
+create index if not exists idx_bookings_service_area_county_date on public.bookings (service_area_county, service_date desc);
+-- Pass update 2026-04-12: No schema shape changes in this pass. Synced docs/build after removing duplicate clean-route folders, refreshing the deployed booking analytics smoke check, and tightening login form autocomplete attributes.
+
+
+-- Pass 14 addition: accounting_records can track office-entered discounts for scope changes, weather adjustments, and service-recovery credits.
+alter table if exists public.accounting_records
+  add column if not exists discount_cad numeric(12,2) not null default 0;
+
+-- App management settings keys in active use: pricing_catalog, document_templates, social_feeds.
+-- Pass sync 2026-04-14 (pass 16): no DDL changes in this pass. Admin App Management repair, menu exposure, and documentation refresh only.
+
+
+-- 2026-04-14 note: no DDL change in this pass; schema documentation refreshed to reflect App Management UI clarification and package family vs size-price reporting.
+-- April 15, 2026 note: generated local legacy pricing-chart PNG assets from the bundled canonical pricing catalog and rewired chart fallbacks to `/assets/brand`; no relational DDL change in this pass.
+
+-- Update note — 2026-04-16 pass20
+-- No schema DDL change in this pass. Added explicit admin Pages Function wrappers for social feed and vehicle catalog endpoints to stop build-time import path failures.

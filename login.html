@@ -17,8 +17,8 @@
         <h1 style="margin-top:0">Client or Staff Login</h1>
         <p class="muted">Customers can sign in to view bookings and gifts. Staff can also use this page and will be sent to the admin tools automatically.</p>
         <form id="loginForm">
-          <div class="field"><label for="loginEmail">Email</label><input id="loginEmail" type="email" required /></div>
-          <div class="field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" required /></div>
+          <div class="field"><label for="loginEmail">Email</label><input id="loginEmail" type="email" required autocomplete="username" /></div>
+          <div class="field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" required autocomplete="current-password" /></div>
           <button class="btn primary" id="loginBtn" type="submit">Sign In</button>
           <div id="loginStatus" class="muted" style="margin-top:12px"></div>
         </form>
@@ -29,14 +29,14 @@
         <h2 style="margin-top:0">Create Client Account</h2>
         <p class="muted">Create a customer login with your most important profile details.</p>
         <form id="signupForm">
-          <div class="field"><label for="signupName">Full Name</label><input id="signupName" required /></div>
-          <div class="field"><label for="signupEmail">Email</label><input id="signupEmail" type="email" required /></div>
-          <div class="field"><label for="signupPhone">Phone</label><input id="signupPhone" /></div>
-          <div class="field"><label for="signupPassword">Password</label><input id="signupPassword" type="password" required minlength="8" /></div>
-          <div class="field"><label for="signupAddress1">Address</label><input id="signupAddress1" /></div>
-          <div class="field"><label for="signupCity">City</label><input id="signupCity" /></div>
-          <div class="field"><label for="signupProvince">Province</label><input id="signupProvince" value="ON" /></div>
-          <div class="field"><label for="signupPostal">Postal Code</label><input id="signupPostal" /></div>
+          <div class="field"><label for="signupName">Full Name</label><input id="signupName" required autocomplete="name" /></div>
+          <div class="field"><label for="signupEmail">Email</label><input id="signupEmail" type="email" required autocomplete="email" /></div>
+          <div class="field"><label for="signupPhone">Phone</label><input id="signupPhone" autocomplete="tel" /></div>
+          <div class="field"><label for="signupPassword">Password</label><input id="signupPassword" type="password" required minlength="8" autocomplete="new-password" /></div>
+          <div class="field"><label for="signupAddress1">Address</label><input id="signupAddress1" autocomplete="street-address" /></div>
+          <div class="field"><label for="signupCity">City</label><input id="signupCity" autocomplete="address-level2" /></div>
+          <div class="field"><label for="signupProvince">Province</label><input id="signupProvince" value="ON" autocomplete="address-level1" /></div>
+          <div class="field"><label for="signupPostal">Postal Code</label><input id="signupPostal" autocomplete="postal-code" /></div>
           <div class="field"><label for="signupVehicleNotes">Vehicle Details</label><textarea id="signupVehicleNotes"></textarea></div>
           <button class="btn primary" id="signupBtn" type="submit">Create Account</button>
           <div id="signupStatus" class="muted" style="margin-top:12px"></div>

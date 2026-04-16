@@ -14,7 +14,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Mobile Detailing Prices in Oxford & Norfolk Counties | Rosie Dazzlers</title>
-  <meta name="description" content="See Rosie Dazzlers pricing for mobile detailing packages and add-ons across Oxford County and Norfolk County, Ontario." />
+  <meta name="description" content="See Rosie Dazzlers pricing for mobile detailing packages and add-ons across Oxford County and Norfolk County, including Tillsonburg, Woodstock, Simcoe, Delhi, and Port Dover." />
   <link rel="canonical" href="https://rosiedazzlers.ca/pricing" />
   <meta property="og:title" content="Detailing Pricing | Rosie Dazzlers Norfolk & Oxford" />
   <meta property="og:description" content="Transparent Rosie Dazzlers pricing for premium wash, basic detail, complete detail, interior detail, exterior detail, and add-ons." />
@@ -77,11 +77,7 @@
         Transparent pricing, deposit required to lock your appointment.
       </p>
 
-      <div class="section row" style="margin-top:12px">
-        <span class="tag">Driveway required</span>
-        <span class="tag">Customer provides power + water (or additional fees)</span>
-        <span class="tag">One vehicle per day (unless half-day jobs)</span>
-      </div>
+      <div class="section row" id="publicRequirementTags" style="margin-top:12px"></div>
 
       <div id="loadErr" class="notice bad" style="display:none;margin-top:12px"></div>
     </div>
@@ -158,10 +154,18 @@
   </div>
 
   <script type="module">
-    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260328ad";
+    import {
+      loadPricingCatalogClient,
+      money,
+      escapeHtml,
+      chartUrl,
+      publicRequirements
+    } from "/assets/pricing-catalog-client.js?v=20260412pass12";
+
+    const FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const qs = (s)=>document.querySelector(s);
-    const money = (cad)=> new Intl.NumberFormat("en-CA",{style:"currency",currency:"CAD"}).format(Number(cad||0));
     let chartMap = new Map();
+
     function qsAll(s){ return Array.from(document.querySelectorAll(s)); }
     function openChart(title, src){
       const back = qs("#chartModalBack");
@@ -176,7 +180,7 @@
     function wireCharts(){
       qsAll(".chart-preview").forEach((img)=>{
         const key = img.getAttribute("data-chart-key") || img.alt || "";
-        const src = chartMap.get(key) || chartMap.get(img.alt || "") || "";
+        const src = chartMap.get(key) || "";
         if (src) img.src = src;
         img.addEventListener("click", ()=> openChart(key || img.alt, img.src));
       });
@@ -184,20 +188,12 @@
       qs("#chartModalBack")?.addEventListener("click", (e)=>{ if(e.target.id === "chartModalBack") closeChart(); });
     }
 
-    async function fetchJsonStrict(url){
-      const res = await fetch(url,{cache:"no-store"});
-      const text = await res.text();
-      try { return JSON.parse(text); }
-      catch {
-        const head = text.slice(0,120).replace(/\s+/g," ");
-        throw new Error(`Expected JSON from ${url} but got: ${head}`);
-      }
-    }
-
-    function escapeHtml(s){
-      return String(s||"")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;").replaceAll("'","&#39;");
+    function renderRequirementTags(data){
+      const box = qs("#publicRequirementTags");
+      const requirements = publicRequirements(data);
+      box.innerHTML = requirements.length
+        ? requirements.map((row)=> `<span class="tag">${escapeHtml(row)}</span>`).join("")
+        : `<span class="tag">Driveway required</span><span class="tag">Customer provides power + water</span>`;
     }
 
     function renderRows(pkgs){
@@ -226,10 +222,21 @@
     }
 
     try {
-      const data = await fetchJsonStrict(DATA_URL);
-      chartMap = new Map((Array.isArray(data?.charts) ? data.charts : []).map((c)=> [String(c.title||""), String(c.r2_url||"")]));
+      const data = await loadPricingCatalogClient({ fallbackUrl: FALLBACK_URL });
+      renderRequirementTags(data);
+      chartMap = new Map([
+        ["Vehicle Price Chart 2025", chartUrl(data, "Vehicle Price Chart 2025")],
+        ["Package Service Details Chart", chartUrl(data, "Package Service Details Chart")],
+        ["Vehicle Size Chart", chartUrl(data, "Vehicle Size Chart")]
+      ]);
       wireCharts();
       renderRows(Array.isArray(data?.packages) ? data.packages : []);
+      if (data._source && data._source !== "api") {
+        const box = qs("#loadErr");
+        box.style.display = "block";
+        box.className = "notice";
+        box.textContent = data._fallback_error ? `Using bundled pricing fallback. ${data._fallback_error}` : "Using bundled pricing fallback.";
+      }
     } catch (e) {
       qs("#loadErr").style.display = "block";
       qs("#loadErr").textContent = `Failed to load pricing data: ${e.message || e}`;

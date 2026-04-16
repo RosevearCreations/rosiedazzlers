@@ -1,5 +1,4 @@
-
 User-agent: *
 Allow: /
 
-Sitemap: https://dev.rosiedazzlers.pages.dev/sitemap.xml
+Sitemap: https://rosiedazzlers.ca/sitemap.xml

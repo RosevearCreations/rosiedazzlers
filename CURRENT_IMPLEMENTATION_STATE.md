@@ -1,10 +1,45 @@
-> Last synchronized: March 29, 2026. Reviewed during the staff-session, time-flow identity, intake/media session hardening, booking/admin shell cleanup, and docs/schema synchronization pass.
+> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
-> Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
+## April 15, 2026 state update
+- Legacy price chart assets now exist locally at `/assets/brand/CarPrice2025.PNG` and `/assets/brand/CarPriceDetails2025.PNG`.
+- Chart URLs in bundled pricing JSON and fallback helpers now point to the local generated assets instead of remote brand paths for those two legacy tables.
+- `scripts/generate_pricing_chart_images.py` can rebuild both chart PNGs from `data/rosie_services_pricing_and_packages.json`.
+- Booking remains locked/stable and was not altered in this pass.
 
 
-> Last synchronized: March 26, 2026. Reviewed during the booking add-on imagery, catalog autofill, low-stock reorder UI, Amazon-link intake, local SEO, and docs/schema refresh pass.
 # Current Implementation State
+
+## April 14, 2026 App Management pricing clarity pass
+- Adjusted `admin-app.html` checkbox-row CSS so settings blocks read like a cleaner two-column office form.
+- Preserved the add-on quote checkbox alignment while improving the rest of the screen.
+- Added package-family vs. package-price-point reporting to the Pricing Control Center summary.
+- Clarified the package and add-on size-column labels to `Oversize / exotic` to match the current shared pricing model.
+- No new SQL table shape was required in this pass; schema notes were refreshed to reflect the UI clarification work.
+
+
+## April 13, 2026 build-stability + social feed endpoint pass
+- Added `functions/api/social_feed_public.js` as the canonical public/social-feed read path for the home page, videos page, and App Management reload action.
+- Removed duplicate `created_by_staff_user_id` / `last_recorded_by_staff_user_id` keys from `functions/api/_lib/accounting-gl.js`.
+- Preserved the booking screen as locked/stable and left `_redirects` as the current complete compatibility layer.
+- No new SQL table shape was required in this pass; schema notes were refreshed to reflect the build-stability and endpoint-completion work.
+
+
+## Completed / strengthened in the April 12 canonical pricing pass
+- public booking, services, pricing, checkout, and the shared public site helper now consume the same client/server pricing-catalog normalizer instead of drifting field-by-field
+- `/api/pricing_catalog_public` now returns the full public catalog contract: charts, packages, service matrix, add-ons, service areas, booking rules, and public requirements
+- checkout now resolves structured service-area county / municipality / zone fields from the canonical catalog before the booking/payment session is created
+- booking now reads hold minutes, default service area, and slot labels from `booking_rules` instead of hidden local constants
+- duplicate clean-route wrapper folders were removed again for `/admin`, `/admin-accounting`, `/admin-catalog`, `/pricing`, and `/services`, while trailing-slash redirects remain handled in `_redirects`
+- static stress checks now pass against the repaired pricing contract and clean-route package
+
+## Completed / strengthened in the April 11 booking + analytics pass
+- booking page now includes paged 21-day availability windows, stronger mobile-safe field layout, and a more visible date picker
+- service areas now carry structured county / municipality / zone metadata plus parking / noise / runoff / access reminders and official municipal links
+- checkout now persists structured service-area dimensions for stronger admin filtering and future reporting
+- admin bookings now filter by service area and show visible area summaries
+- admin analytics now adds service-area mix, booking funnel metrics, and CSV export buttons for traffic and funnel data
+- added a deployed booking + analytics smoke-check script to support safer post-publish verification
+
 
 ## Completed / strengthened in this pass
 - Checkout now reads canonical package/add-on pricing from `app_management_settings.pricing_catalog`, with the bundled JSON file as fallback.
@@ -27,7 +62,7 @@
 ## Still partial / still open
 - some older internal/admin endpoints still rely on the legacy bridge and need the same session-aware conversion pattern
 - broader gift redemption messaging across customer account screens
-- full add-on/pricing convergence in admin reporting and every remaining legacy path
+- admin/reporting copy still needs one more audit so every legacy summary uses the newer canonical labels and service-area dimensions
 - provider-backed reorder reminder sending is still not automated yet
 - signed upload flow is now present, but customer-facing/private media URL strategy still needs final hardening for production buckets
 - remaining public route-by-route SEO cleanup and structured-data pass
@@ -125,3 +160,143 @@
 - Added route-safe admin folder entry points and stronger Pages Functions helper shims so Cloudflare deploys are less sensitive to mixed helper import paths.
 - Moved customer segmentation toward a scalable membership model by seeding Bronze, Silver, and Gold tiers and making new customer creation default to Bronze instead of a legacy placeholder tier.
 - Continued mobile-fit and CSS hardening by tightening service-card/select sizing, overlap handling, and installable-app support through a shared install prompt + service worker path.
+
+
+## April 8, 2026 admin route stabilization pass
+- Repaired the current build by standardizing active admin navigation back to direct `.html` routes instead of mixed pretty-route/admin-folder assumptions.
+- Restored the shared admin shell from the richer canonical copy so pages that call `window.AdminShell.boot(...)` load again.
+- Removed duplicate clean-route wrapper folders for `/admin`, `/admin-catalog`, `/admin-accounting`, `/services`, and `/pricing`; `_redirects` remains the working compatibility layer.
+
+
+## April 8, 2026 accounting backend extension
+- Admin Accounting now supports manual expense/vendor bill posting, open payable settlement, monthly revenue/expense/net reporting, tax payable summary, owner draw/equity summary, and general-ledger CSV export.
+- Booking product usage can now post first-pass COGS journal entries when the inventory item includes `cost_cents`.
+
+## April 8, 2026 accounting access and admin workflow pass
+- Accounting access is now surfaced directly in the Admin dashboard, shared admin menu, and shared return toolbar so office-side accounting work is no longer hidden behind direct URL knowledge alone.
+- This pass moves the roadmap and known gaps forward again by improving internal shell cohesion and operational discoverability without changing the underlying accounting schema.
+- Suggested next mobile/operations features: quick expense entry from phone with receipt photo attachment, vendor quick-add during payable entry, and a month-end checklist panel for settlement, remittance, and report export.
+
+<!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->
+
+
+## April 9, 2026 accounting screen syntax fix
+- Fixed a JavaScript syntax error in `admin-accounting.html` that prevented the Accounting screen from booting past the “Loading Accounting Records” state.
+- Continued docs/schema synchronization for the current build.
+
+## April 9, 2026 accounting reporting / remittance / cost coverage pass
+- Admin Accounting now loads booking accounting records, payables, monthly P&L, balance sheet, cash flow, tax report, inventory cost completeness, and remittance actions from one screen.
+- Vendor bills now show settlement history inline and can be partially or fully settled from the same page.
+- Tax remittance posting is now implemented as a journal-entry action against `sales_tax_payable` and the chosen payment account.
+- Inventory admin now stores unit-cost and vendor-SKU data needed for better COGS and cleanup reporting.
+- Public SEO state improved through production-domain sitemap/robots cleanup and homepage `AutoDetailing` structured data.
+
+
+## April 9, 2026 implementation state addendum
+- Accounting now has payable settlement history, remittance posting, P&L, balance sheet, cash flow, receivables aging, inventory cost completeness, and estimated booking profitability in the main office workflow.
+- Journal entries now support optional staff-user actor ids in addition to actor names.
+- Protected-route cohesion improved by aligning more internal pages with the shared auth shell page-access model.
+
+
+## April 9, 2026 add-on image restore / month-end checklist / assignment identity pass
+- Services and booking add-on cards now point back to the Rosie packages R2 image path first, with bundled local fallbacks so the four custom service images do not render as blank placeholders.
+- `admin-booking.html` and `admin-assign.html` now prefer assignable staff records during assignment so `assigned_staff_user_id` and `assigned_staff_email` can travel with the booking more reliably.
+- Added `functions/api/admin/accounting_month_end_checklist.js` and `public.accounting_month_end_checklists` so month-end close work can be saved by month with actor attribution and notes.
+- `progress_media_post` now writes `staff_user_id` into `job_media`, reducing another remaining actor-normalization gap outside accounting.
+
+## April 10, 2026 pass
+- Restored the full add-on image set by moving all add-on cards back to R2-first media with local bundled fallbacks, instead of only fixing the four custom PNG cards.
+- Added canonical `image_url` and `image_fallback_url` fields to each add-on inside `data/rosie_services_pricing_and_packages.json`, which reduces page-by-page image drift and gives future DB/app surfaces one shared fallback structure.
+- Added `booking_staff_assignments` plus new admin endpoints so one booking can carry a lead plus a crew.
+- `admin-assign.html` is now a multi-detailer assignment screen with lead selection, crew checkboxes, and a responsive layout that fits mobile/tablet better than the older one-line assignment flow.
+- `requireStaffAccess(... work_booking ...)` and `detailer/jobs` now respect crew assignments so non-lead detailers can still see and work their assigned jobs.
+- Local automated checks were rerun for JS syntax, inline page scripts, add-on coverage, and one-H1 public-page validation.
+
+## Still partial after this pass
+- `admin-booking.html` still behaves mostly as a single-lead quick-assignment tool; the richer crew workflow currently lives on `admin-assign.html`.
+- Several admin operational list endpoints still display the legacy single-assignee summary even though booking access now honors crew membership.
+- Live deployed end-to-end verification against Pages + Supabase is still required after running the new SQL migration.
+
+## April 10, 2026 internal app-shell pass
+- Admin Recovery, Admin Live, and Admin Progress now behave as session-first internal screens with the legacy password bridge demoted to optional fallback.
+- Recovery now includes a recent audit surface powered by `recovery_audit_list`.
+- Shared internal menu now includes Assign Crew and Recovery for stronger app cohesion.
+- Static stress-check coverage now exists in `scripts/stress_static_checks.py`.
+
+
+- 2026-04-11 deployment hotfix: removed duplicate route pairs that mapped the same clean URLs (`/services`, `/pricing`, `/admin`, `/admin-accounting`, `/admin-catalog`) and added a top-level `404.html` so Pages no longer treats the site like a catch-all SPA.
+
+
+Route hotfix sync reviewed on 2026-04-11.
+
+## April 11, 2026 implementation update
+- The build is back to a single-file canonical clean-route structure for `services`, `pricing`, `admin`, `admin-accounting`, and `admin-catalog`.
+- Crew assignment context now propagates through booking/admin APIs more consistently, including bookings list, jobsite detail, progress list, and detailer jobs.
+- Internal runtime helper now surfaces timeout and text-body failures more clearly for session-first screens.
+- Static stress tooling now blocks leftover debug artifacts and duplicate-route outputs before packaging.
+
+## Internal app status
+
+- Dev Pages clean-route verification succeeded this pass for `/`, `/services`, `/pricing`, and `/book` before deeper code work continued.
+- The packaged build again strips duplicate `page.html` + `page/index.html` route collisions before release.
+- Admin Blocks, Staff, Promos, and Jobsite now initialize through the shared session-first admin shell and menu.
+- Accounting profitability now exposes estimated direct labor and contribution-after-labor in addition to direct COGS and allocated overhead.
+
+## 2026-04-11 pass 9 sync
+- Booking flow now uses a clearer service-area selector with town-level choices across Oxford and Norfolk communities.
+- Booking availability shows open, partial, and unavailable dates in the next 21-day snapshot, and the date picker contrast was tightened for dark mode.
+- Year / Make / Model on booking is now typeable with datalist-assisted lookup and validation against the existing vehicle catalog.
+- Public analytics was deepened with richer action tracking, viewport/session details, and location/device enrichment stored inside event payloads.
+- Route-collision folders and temporary check artifacts were removed again to keep Pages routing stable.
+### Pass 9 implementation state
+- Public booking flow now tracks service-area selection, package/add-on choices, step changes, slot picks, and checkout start/error events.
+- Analytics overview now surfaces top cities, regions, devices, actions, and recent tracked events using payload enrichment.
+
+## 2026-04-11 pass 11 sync note
+- Tightened the booking preferred-date control so it no longer stretches wider than needed and added a visible white picker button.
+- Public booking, services, and pricing pages now read the canonical pricing catalog API first and only fall back to bundled JSON if the API is unavailable.
+- App Management now includes a pricing catalog editor so package prices, included services, add-ons, service-area rules, and chart links can be maintained from one source of truth.
+- No schema shape change landed in this pass; `SUPABASE_SCHEMA.sql` was refreshed to note the pricing-catalog consolidation and booking UI tightening work.
+### Pass 11 implementation state
+- Booking, services, pricing, checkout, and shared public helpers now share the same pricing catalog read path first: `/api/pricing_catalog_public`, which is backed by `app_management_settings.pricing_catalog` with bundled JSON fallback.
+- App Management now includes a pricing catalog editor so prices, booking windows, included services, add-ons, charts, service-area guidance, and public requirement text can be updated from one place.
+- Booking preferred-date control is now compact with a dedicated visible picker button rather than relying only on the browser icon.
+
+> Pass update 2026-04-12: Re-synced the current uploaded build to the latest safe route structure. Removed duplicate clean-route folders that were reintroducing Cloudflare Pages redirect loops, preserved the newer booking experience already present in `book.html`, refreshed the deployed booking smoke check to recognize the shared `chrome.js` analytics bootstrap, and cleaned the login form autocomplete attributes. Immediate next step after deploy: verify `/`, `/services`, `/pricing`, `/book`, and `/admin` on the active branch before resuming larger feature work.
+
+## Completed / strengthened in the April 12 pricing control center pass
+- Booking is now explicitly treated as a **stable public screen** and should not be altered during ongoing admin pricing work unless a break/regression requires a targeted fix.
+- `_redirects` is now the accepted working route shim for this phase and is considered **complete** for the current Pages-safe structure.
+- App Management now acts as the **single preferred entry point** for package pricing, add-on pricing, service-area travel tiers, travel-charge defaults, and shared pricing-control values.
+- Admin Accounting now includes a **pricing window** so the office side can review the active pricing scope, travel tiers, and default service area without leaving the accounting workflow.
+- The canonical pricing helper was re-synchronized again so travel-pricing and shared price-control values stay in the same catalog alongside packages, add-ons, service areas, booking rules, and public requirements.
+
+## 2026-04-13 Pass 14 Sync
+- Booking screen remains stable and should not be altered in future passes unless a critical bug appears.
+- `_redirects` is working and treated as complete for the current route layout.
+- Pricing/packages/add-ons/service areas/travel charges continue to flow through the App Management pricing control center as the preferred single entry point.
+- This pass added office-facing finance adjustments for discounts/refunds plus customer-facing document work for order confirmation, invoice / summary, gift certificate printing, and social feed management.
+
+## Pass 14 implementation state
+- `book.html` is stable, verified, and intentionally locked against feature churn.
+- `_redirects` is functioning and considered complete for the current Pages routing approach.
+- `admin-booking.html` now exposes finance adjustments (discount/refund/tip/manual entries) and customer-document links for the selected booking.
+- `order-confirmation.html`, `invoice.html`, and `gift-certificate-print.html` provide printable customer-facing documents.
+- `functions/api/document_booking_public.js` and `functions/api/_lib/booking-documents.js` now drive customer document payloads from the booking record plus finance summary.
+- Stripe, PayPal, and admin confirm flows now queue an order-confirmation notification event after a booking is confirmed.
+- Public social sections are now ready to render the latest five links per platform from centrally managed `social_feeds` data.
+
+---
+
+## Pass sync — 2026-04-14 (pass 16)
+
+- Booking screen remains locked and stable.
+- `_redirects` remains the working route layer and includes the admin-app trailing-slash compatibility line.
+- App Management was repaired in this pass: the page now restores its missing helper functions, shows a proper internal menu mount, includes clearer feature descriptions, and exposes document/social defaults without crashing.
+- Admin navigation now includes a visible path to App Management from the dashboard, shared admin menu, and return bar.
+- No new database table or column changes were introduced in this pass; schema files were refreshed to reflect a no-DDL stability/documentation pass.
+- Strongest next steps remain the single-entry pricing/accounting workflow, refund-credit memo document polish, and provider-tested email sending.
+
+> Pass sync April 15, 2026: generated local price-chart PNG assets from the canonical bundled pricing catalog, rewired chart fallbacks to `/assets/brand`, added a regeneration script, and refreshed docs/schema notes for the legacy price-image carry-forward pass.
+
+Update note — 2026-04-16 pass20: Added explicit admin route wrappers for social feed and vehicle catalog endpoints to stop Pages Function import-resolution failures on /api/admin routes. Booking remains stable; no schema DDL change in this pass.
