@@ -516,5 +516,5 @@ alter table if exists public.accounting_records
 -- 2026-04-14 note: no DDL change in this pass; schema documentation refreshed to reflect App Management UI clarification and package family vs size-price reporting.
 -- April 15, 2026 note: generated local legacy pricing-chart PNG assets from the bundled canonical pricing catalog and rewired chart fallbacks to `/assets/brand`; no relational DDL change in this pass.
 
--- April 15, 2026 inventory usage and write-off pass
--- job_use movements no longer imply an on-hand quantity decrease. Staff now log booking usage separately from finish/defect/write-off stock actions.
+-- Update note — 2026-04-16 pass20
+-- No schema DDL change in this pass. Added explicit admin Pages Function wrappers for social feed and vehicle catalog endpoints to stop build-time import path failures.

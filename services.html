@@ -153,7 +153,7 @@
     } from "/assets/pricing-catalog-client.js?v=20260412pass12";
 
     const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
-    const BRAND_BASE = "/assets/brand";
+    const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
     const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages";
 
     const qs = (s)=>document.querySelector(s);
@@ -176,7 +176,7 @@
       openModal(title, src);
     }
 
-    qs("#openSizeChartBtn").addEventListener("click",()=> openCatalogChart("Vehicle Size Chart", `${BRAND_BASE}/CarSizeChart.PNG`));
+    qs("#openSizeChartBtn").addEventListener("click",()=> openCatalogChart("Vehicle Size Chart", `${PACKAGES_BASE}/CarSizeChart.PNG`));
     qs("#openPriceChartBtn").addEventListener("click",()=> openCatalogChart("Vehicle Price Chart 2025", `${BRAND_BASE}/CarPrice2025.PNG`));
     qs("#openDetailsChartBtn").addEventListener("click",()=> openCatalogChart("Package Service Details Chart", `${BRAND_BASE}/CarPriceDetails2025.PNG`));
 
@@ -190,7 +190,7 @@
     const HOVER_EXTRA_IMAGES = [
       imgUrlFromFilename("Interior Detail.png"),
       imgUrlFromFilename("Exterior Detail.png"),
-      `${BRAND_BASE}/CarSizeChart.PNG`,
+      `${PACKAGES_BASE}/CarSizeChart.PNG`,
     ];
 
     const ADDON_IMAGE_FILES = {
