@@ -1,14 +1,46 @@
-import { fetchVehicleMakes, allowedYears } from './_lib/vehicle-catalog.js';
+import { fetchVehicleMakes, allowedYears } from "../_lib/vehicle-catalog.js";
+import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
 
-export async function onRequestGet() {
+export async function onRequestGet({ request, env }) {
+  const access = await requireStaffAccess({
+    request,
+    env,
+    capability: "manage_bookings",
+    allowLegacyAdminFallback: true
+  });
+  if (!access.ok) return access.response;
+
   try {
     const makes = await fetchVehicleMakes();
-    return json({ ok: true, years: allowedYears(), makes });
+    return withCors(json({ ok: true, years: allowedYears(), makes }));
   } catch (err) {
-    return json({ error: err?.message || 'Could not load vehicle makes.' }, 500);
+    return withCors(json({ error: err?.message || "Could not load vehicle makes." }, 500));
   }
 }
 
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'Access-Control-Allow-Origin': '*' } });
+export async function onRequestOptions() {
+  return new Response("", { status: 204, headers: corsHeaders() });
+}
+
+export async function onRequestPost() {
+  return withCors(methodNotAllowed(["GET", "OPTIONS"]));
+}
+
+function corsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, x-admin-password, x-staff-email, x-staff-user-id",
+    "Cache-Control": "no-store"
+  };
+}
+
+function withCors(response) {
+  const headers = new Headers(response.headers || {});
+  for (const [key, value] of Object.entries(corsHeaders())) headers.set(key, value);
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers
+  });
 }
