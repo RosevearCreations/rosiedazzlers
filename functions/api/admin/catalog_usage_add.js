@@ -14,23 +14,20 @@ export async function onRequestPost({ request, env }){
     const qtyUsed = Number(body?.qty_used || 0);
     if (!itemKey || !(qtyUsed > 0)) return withCors(json({ error:'Item and qty_used are required.' },400));
     const headers = { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, Accept:'application/json' };
-    const itemRes = await fetch(`${env.SUPABASE_URL}/rest/v1/catalog_inventory_items?select=id,item_key,name,qty_on_hand,unit_label,cost_cents&item_key=eq.${encodeURIComponent(itemKey)}&limit=1`, { headers });
+    const itemRes = await fetch(`${env.SUPABASE_URL}/rest/v1/catalog_inventory_items?select=id,item_key,name,qty_on_hand,unit_label,cost_cents,item_type,reuse_policy&item_key=eq.${encodeURIComponent(itemKey)}&limit=1`, { headers });
     if (!itemRes.ok) return withCors(json({ error: await itemRes.text() },500));
     const item = (await itemRes.json().catch(()=>[]))?.[0] || null;
-    if (!item) return withCors(json({ error:'Inventory item not found.' },404));
-    const prevQty = Number(item.qty_on_hand || 0);
-    const nextQty = Math.max(0, prevQty - qtyUsed);
-    const patchRes = await fetch(`${env.SUPABASE_URL}/rest/v1/catalog_inventory_items?id=eq.${encodeURIComponent(item.id)}`, { method:'PATCH', headers:{ ...headers, 'Content-Type':'application/json', Prefer:'return=representation' }, body: JSON.stringify({ qty_on_hand: nextQty, updated_at:new Date().toISOString() }) });
-    if (!patchRes.ok) return withCors(json({ error: await patchRes.text() },500));
+    if (!item) return withCors(json({ error:'Inventory item not found.' },404));    const prevQty = Number(item.qty_on_hand || 0);
+    const nextQty = prevQty;
     const note = String(body?.note || '').trim() || null;
-    const movement = await insertCatalogMovement(env, { item_id:item.id, item_key:item.item_key, booking_id:bookingId, movement_type:'job_use', qty_delta:-qtyUsed, previous_qty:prevQty, new_qty:nextQty, unit_label:item.unit_label || null, note, actor_name: access.actor.full_name || access.actor.email || 'Staff', actor_staff_user_id: access.actor.id || null });
+    const movement = await insertCatalogMovement(env, { item_id:item.id, item_key:item.item_key, booking_id:bookingId, movement_type:'job_use', qty_delta:0, previous_qty:prevQty, new_qty:nextQty, unit_label:item.unit_label || null, note, actor_name: access.actor.full_name || access.actor.email || 'Staff', actor_staff_user_id: access.actor.id || null });
     let accounting = null;
     try {
       accounting = await postInventoryUsageCOGS(env, { bookingId, item, qtyUsed, actorName: access.actor.full_name || access.actor.email || 'Staff', note });
     } catch (_err) {
       accounting = null;
     }
-    return withCors(json({ ok:true, item:{ ...item, qty_on_hand: nextQty }, movement: movement.movement || null, accounting: accounting?.entry || null }));
+    return withCors(json({ ok:true, item:{ ...item, qty_on_hand: nextQty }, movement: movement.movement || null, accounting: accounting?.entry || null, inventory_reduced:false }));
   } catch (err) { return withCors(json({ error:String(err) },500)); }
 }
 function corsHeaders(){return {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"POST,OPTIONS","Access-Control-Allow-Headers":"Content-Type, x-admin-password, x-staff-email, x-staff-user-id","Cache-Control":"no-store"};}
