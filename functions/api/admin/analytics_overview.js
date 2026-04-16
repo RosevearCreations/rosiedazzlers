@@ -11,6 +11,7 @@ export async function onRequestPost(context){
     if(!access.ok) return withCors(access.response);
 
     const days=Math.max(1,Math.min(90,Number(body.days||30)));
+    const serviceAreaFilter = cleanText(body.service_area || "");
     const since=new Date(Date.now()-days*86400000).toISOString();
     const settings=await loadAppSettings(env);
 
@@ -21,14 +22,22 @@ export async function onRequestPost(context){
     if(!res.ok) return withCors(json({error:`Could not load analytics. ${await res.text()}`},500));
 
     const rows = await res.json().catch(()=>[]);
-    const data = Array.isArray(rows)?rows:[];
+    let data = Array.isArray(rows)?rows:[];
+    const serviceAreaCandidates = Array.from(new Set(data.map((r)=> String(r?.payload?.service_area_label || r?.payload?.service_area || "").trim()).filter(Boolean))).sort((a,b)=>a.localeCompare(b));
+    if (serviceAreaFilter) data = data.filter((r)=> String(r?.payload?.service_area_label || r?.payload?.service_area || "").trim() === serviceAreaFilter);
     const pageViews = data.filter(r=>r.event_type==="page_view");
     const heartbeatEvents = data.filter(r=>r.event_type==="heartbeat");
     const uniqueVisitors = new Set(data.map(r=>r.visitor_id).filter(Boolean)).size;
     const uniqueSessions = new Set(data.map(r=>r.session_id).filter(Boolean)).size;
     const topPages = summarizeCounts(pageViews.map(r=>r.page_path || "/"));
     const topCountries = summarizeCounts(data.map(r=>r.country || "Unknown"));
+    const topRegions = summarizeCounts(data.map(r=> r?.payload?.region || 'Unknown'));
+    const topCities = summarizeCounts(data.map(r=> { const city = r?.payload?.city || ''; const region = r?.payload?.region || ''; return city ? `${city}${region ? `, ${region}` : ''}` : 'Unknown'; }));
+    const topDevices = summarizeCounts(data.map(r=>r?.payload?.device_type || 'Unknown'));
     const topReferrers = summarizeCounts(data.map(r=>r.referrer || "Direct"));
+    const topActions = summarizeCounts(data.filter(r=>!['heartbeat','page_focus','page_exit'].includes(r.event_type)).map(r=> r.event_type || 'unknown'));
+    const topServiceAreas = summarizeCounts(data.map(r=> r?.payload?.service_area_label || r?.payload?.service_area || '').filter(Boolean));
+    const funnel = summarizeBookingFunnel(data);
     const checkoutStates = summarizeCounts(data.map(r=>r.checkout_state || '').filter(Boolean));
     const sessionJourneys = summarizeJourneys(data);
     const abandoned = summarizeAbandoned(data);
@@ -36,6 +45,7 @@ export async function onRequestPost(context){
     const avgEngagementSeconds = heartbeatEvents.length ? Math.round(heartbeatEvents.reduce((sum, r)=>sum + Number(r?.payload?.duration_ms || 0), 0) / heartbeatEvents.length / 1000) : 0;
     const cartSnapshots = summarizeCartSnapshots(data);
     const dailyTraffic = summarizeDailyTraffic(data);
+    const recentActions = summarizeRecentActions(data);
 
     return withCors(json({
       ok:true,
@@ -52,12 +62,21 @@ export async function onRequestPost(context){
       },
       top_pages: topPages,
       top_countries: topCountries,
+      top_regions: topRegions,
+      top_cities: topCities,
+      top_devices: topDevices,
       top_referrers: topReferrers,
+      top_actions: topActions,
+      top_service_areas: topServiceAreas,
+      service_area_options: serviceAreaCandidates,
+      selected_service_area: serviceAreaFilter || null,
+      funnel,
       checkout_states: checkoutStates,
       daily_traffic: dailyTraffic,
       session_journeys: sessionJourneys.slice(0,50),
       live_online_sessions: liveOnline.slice(0,50),
       cart_snapshots: cartSnapshots.slice(0,50),
+      recent_actions: recentActions.slice(0,50),
       abandoned_checkouts: abandoned.slice(0,50)
     }));
   }catch(err){
@@ -160,3 +179,49 @@ function summarizeDailyTraffic(rows){
 
 function corsHeaders(){return {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"POST,OPTIONS","Access-Control-Allow-Headers":"Content-Type","Cache-Control":"no-store"};}
 function withCors(response){const h=new Headers(response.headers||{}); for(const [k,v] of Object.entries(corsHeaders())) h.set(k,v); return new Response(response.body,{status:response.status,statusText:response.statusText,headers:h});}
+
+function summarizeRecentActions(rows){
+  return rows
+    .filter(r=>!['heartbeat'].includes(r.event_type))
+    .sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)))
+    .slice(0,100)
+    .map(r=>({
+      created_at:r.created_at || null,
+      event_type:r.event_type || null,
+      page_path:r.page_path || null,
+      city:r?.payload?.city || null,
+      region:r?.payload?.region || null,
+      device_type:r?.payload?.device_type || null,
+      target_text:r?.payload?.target_text || null,
+      href:r?.payload?.href || null,
+      percent:r?.payload?.percent || null,
+      viewport:r?.payload?.viewport || null,
+      session_id:r.session_id || null
+    }));
+}
+
+
+function summarizeBookingFunnel(rows){
+  const eventCounts = (type)=> rows.filter((r)=>r.event_type === type).length;
+  const stepViews = new Map();
+  for (const row of rows.filter((r)=>r.event_type === 'booking_step_view')) {
+    const key = Number(row?.payload?.step_number || 0);
+    if (key) stepViews.set(key, (stepViews.get(key) || 0) + 1);
+  }
+  return {
+    step_1_views: stepViews.get(1) || 0,
+    step_2_views: stepViews.get(2) || 0,
+    step_3_views: stepViews.get(3) || 0,
+    step_4_views: stepViews.get(4) || 0,
+    step_5_views: stepViews.get(5) || 0,
+    service_area_picks: eventCounts('booking_service_area_pick'),
+    date_picks: eventCounts('booking_date_pick'),
+    package_picks: eventCounts('booking_package_pick'),
+    addon_toggles: eventCounts('booking_addon_toggle'),
+    checkout_started: eventCounts('checkout_started'),
+    checkout_redirects: eventCounts('checkout_redirect'),
+    checkout_errors: eventCounts('checkout_error')
+  };
+}
+
+function cleanText(value){return String(value||'').trim().slice(0,160);}

@@ -1,5 +1,6 @@
 import { requireStaffAccess, serviceHeaders, json, methodNotAllowed, isUuid } from "../_lib/staff-auth.js";
 import { loadAppSettings } from "../_lib/app-settings.js";
+import { attachCrewAssignments, loadCrewAssignmentsMap } from "../_lib/crew-assignments.js";
 
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 export async function onRequestPost(context) {
@@ -29,6 +30,8 @@ export async function onRequestPost(context) {
     ]);
     const booking = Array.isArray(bookingRows) ? bookingRows[0] || null : null;
     if (!booking) return withCors(json({ error:'Booking not found.' },404));
+    const crewResult = await loadCrewAssignmentsMap(env, [booking.id]);
+    const bookingWithCrew = attachCrewAssignments([{ ...booking, total_price_cents: booking.price_total_cents ?? null, deposit_cents: booking.deposit_cents ?? null }], crewResult.map)[0] || booking;
     const intake = Array.isArray(intakeRows) ? intakeRows[0] || null : null;
     const timeEntries = Array.isArray(timeRows) ? timeRows : [];
     const updates = Array.isArray(updateRows) ? updateRows : [];
@@ -40,7 +43,8 @@ export async function onRequestPost(context) {
     return withCors(json({
       ok:true,
       app_settings: settings,
-      booking: { ...booking, total_price_cents: booking.price_total_cents ?? null, deposit_cents: booking.deposit_cents ?? null },
+      booking: bookingWithCrew,
+      crew_warning: crewResult.warning || null,
       intake: intake ? { ...intake, valuables: Array.isArray(intake.valuables)? intake.valuables : [], pre_job_checklist: Array.isArray(intake.pre_job_checklist)? intake.pre_job_checklist : [] } : null,
       time: { totals: summarizeTime(timeEntries), entries: timeEntries },
       progress: { count: updates.length, latest_at: updates[0]?.created_at || null, updates },

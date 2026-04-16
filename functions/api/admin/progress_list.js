@@ -1,4 +1,5 @@
 import { requireStaffAccess, json, methodNotAllowed, isUuid } from "../_lib/staff-auth.js";
+import { attachCrewAssignments, loadCrewAssignmentsMap } from "../_lib/crew-assignments.js";
 
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 export async function onRequestGet() { return withCors(methodNotAllowed()); }
@@ -15,7 +16,7 @@ export async function onRequestPost(context) {
     if (!access.ok) return withCors(access.response);
 
     const headers = { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, Accept: "application/json" };
-    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,customer_name,service_date,start_slot,package_code,vehicle_size,assigned_to,progress_enabled,progress_token,current_workflow_stage,detailer_response_status,detailer_response_reason&id=eq.${encodeURIComponent(resolvedBookingId)}&limit=1`, { headers });
+    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,customer_name,service_date,start_slot,package_code,vehicle_size,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,progress_enabled,progress_token,current_workflow_stage,detailer_response_status,detailer_response_reason&id=eq.${encodeURIComponent(resolvedBookingId)}&limit=1`, { headers });
     if (!bookingRes.ok) return withCors(json({ error: `Could not load booking. ${await bookingRes.text()}` }, 500));
     const booking = (await bookingRes.json().catch(() => []))?.[0] || null;
     if (!booking) return withCors(json({ error: "Booking not found." }, 404));
@@ -31,7 +32,9 @@ export async function onRequestPost(context) {
     if (!signoffsRes.ok) return withCors(json({ error: `Could not load signoffs. ${await signoffsRes.text()}` }, 500));
     if (!workflowRes.ok) return withCors(json({ error: `Could not load workflow events. ${await workflowRes.text()}` }, 500));
     const [updates, media, signoffs, workflow_events] = await Promise.all([updatesRes.json().catch(() => []), mediaRes.json().catch(() => []), signoffsRes.json().catch(() => []), workflowRes.json().catch(() => [])]);
-    return withCors(json({ ok: true, booking, updates: Array.isArray(updates)?updates:[], media: Array.isArray(media)?media:[], signoffs: Array.isArray(signoffs)?signoffs:[], workflow_events: Array.isArray(workflow_events)?workflow_events:[] }));
+    const crewResult = await loadCrewAssignmentsMap(env, [booking.id]);
+    const bookingWithCrew = attachCrewAssignments([booking], crewResult.map)[0] || booking;
+    return withCors(json({ ok: true, booking: bookingWithCrew, updates: Array.isArray(updates)?updates:[], media: Array.isArray(media)?media:[], signoffs: Array.isArray(signoffs)?signoffs:[], workflow_events: Array.isArray(workflow_events)?workflow_events:[], crew_warning: crewResult.warning || null }));
   } catch (err) { return withCors(json({ error: err && err.message ? err.message : "Unexpected server error." }, 500)); }
 }
 function corsHeaders() { return { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type, x-admin-password, x-staff-email, x-staff-user-id", "Cache-Control": "no-store" }; }
