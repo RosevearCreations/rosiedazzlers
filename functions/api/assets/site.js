@@ -23,7 +23,26 @@ const HOVER_MEDIA = {
   size: pkgFile("CarSizeChart.PNG")
 };
 
-const ADDON_MEDIA = {
+const ADDON_IMAGE_FILES = {
+  full_clay_treatment: 'full_clay_treatment.png',
+  two_stage_polish: 'two_stage_polish.png',
+  high_grade_paint_sealant: 'high_grade_paint_sealant.png',
+  uv_protectant_applied_on_interior_panels: 'uv_protectant_applied_on_interior_panels.png',
+  de_ionizing_treatment: 'De-Ionizing Vehicle Add on service.png',
+  de_badging: 'DeBadgingAddonService.png',
+  engine_cleaning: 'Engine Cleaning add on service.png',
+  external_ceramic_coating: 'External Ceramic coating add on service.png',
+  external_graphene_fine_finish: 'External Graphene Fine finish add on service.png',
+  external_wax: 'External Wax add on service.png',
+  vinyl_wrapping: 'Vinyl Wrapping add on service.png',
+  window_tinting: 'Window Tinting add on service.png'
+};
+
+const ADDON_MEDIA = Object.fromEntries(
+  Object.entries(ADDON_IMAGE_FILES).map(([code, filename]) => [code, pkgFile(filename)])
+);
+
+const LOCAL_ADDON_FALLBACKS = {
   full_clay_treatment: '/assets/addons/full_clay_treatment.png',
   two_stage_polish: '/assets/addons/two_stage_polish.png',
   high_grade_paint_sealant: '/assets/addons/high_grade_paint_sealant.png',
@@ -68,7 +87,11 @@ function packageImageForSize(pkg, size) {
 }
 
 function addonImageForCode(code) {
-  return ADDON_MEDIA[code] || "";
+  return ADDON_MEDIA[code] || LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.svg';
+}
+
+function addonFallbackForCode(code) {
+  return LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.svg';
 }
 
 function addonDisplay(addon, size) {
@@ -173,8 +196,8 @@ function chartButtons(data, selectorMap) {
 
   // Fallbacks (some charts exist in /packages, and some may not exist in /brand)
   const FALLBACK = {
-    "CarPrice2025.PNG": "https://assets.rosiedazzlers.ca/brand/CarPrice2025.PNG",
-    "CarPriceDetails2025.PNG": "https://assets.rosiedazzlers.ca/brand/CarPriceDetails2025.PNG",
+    "CarPrice2025.PNG": "/assets/brand/CarPrice2025.PNG",
+    "CarPriceDetails2025.PNG": "/assets/brand/CarPriceDetails2025.PNG",
     // IMPORTANT: Size chart is served from /packages (brand/CarSizeChart.PNG may be missing)
     "CarSizeChart.PNG": pkgFile("CarSizeChart.PNG")
   };
@@ -301,7 +324,7 @@ function renderAddons(cardsEl, data, size) {
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `
-      ${img ? `<img class="img" loading="lazy" src="${img}" alt="${addon.name}" onerror="this.style.display='none'">` : ""}
+      ${img ? `<img class="img" loading="lazy" src="${img}" alt="${addon.name}" data-fallback="${addonFallbackForCode(addon.code)}" onerror="if(this.dataset.fallback && this.src!==this.dataset.fallback){this.src=this.dataset.fallback}else{this.style.display='none'}">` : ""}
       <h3>${addon.name}</h3>
       <p class="kicker">${display}</p>
       ${tags.length ? `<div class="hr"></div><div>${tags.join(" ")}</div>` : ""}

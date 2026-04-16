@@ -261,6 +261,11 @@ async function canActorWorkBooking({ env, actor, bookingId }) {
     return { ok: true };
   }
 
+  const matchesCrew = await actorMatchesCrewAssignment(env, bookingId, actor);
+  if (matchesCrew) {
+    return { ok: true };
+  }
+
   return {
     ok: false,
     response: json({ error: "This booking is outside your work scope." }, 403)
@@ -366,6 +371,28 @@ async function loadBookingScopeRow(env, bookingId) {
 
   const rows = await res.json().catch(() => []);
   return Array.isArray(rows) ? rows[0] || null : null;
+}
+
+async function actorMatchesCrewAssignment(env, bookingId, actor) {
+  const parts = [];
+  if (actor.id && isUuid(actor.id)) parts.push(`staff_user_id.eq.${encodeURIComponent(actor.id)}`);
+  if (actor.email) parts.push(`staff_email.eq.${encodeURIComponent(String(actor.email).trim().toLowerCase())}`);
+  const actorName = String(actor.full_name || '').trim();
+  if (actorName) parts.push(`staff_name.ilike.${encodeURIComponent(`*${actorName}*`)}`);
+  if (!parts.length) return false;
+
+  const res = await fetch(
+    `${env.SUPABASE_URL}/rest/v1/booking_staff_assignments` +
+      `?select=booking_id` +
+      `&booking_id=eq.${encodeURIComponent(bookingId)}` +
+      `&or=(${parts.join(',')})` +
+      `&limit=1`,
+    { headers: serviceHeaders(env) }
+  );
+
+  if (!res.ok) return false;
+  const rows = await res.json().catch(() => []);
+  return Array.isArray(rows) && rows.length > 0;
 }
 
 /* ---------------- override log helper ---------------- */

@@ -1,8 +1,8 @@
 // functions/api/stripe/webhook.js
-// Verifies Stripe signature (HMAC-SHA256) using the raw request body,
-// then confirms the booking in Supabase.
-//
-// Stripe requires the *raw* body for verification. :contentReference[oaicite:1]{index=1}
+// Verifies Stripe signature using the raw request body,
+// confirms the booking, logs the event, and queues a customer confirmation.
+
+import { queueOrderConfirmationNotification } from "../_lib/booking-documents.js";
 
 export async function onRequestPost({ request, env }) {
   const SUPABASE_URL = env.SUPABASE_URL;
@@ -16,16 +16,13 @@ export async function onRequestPost({ request, env }) {
   const sig = request.headers.get("stripe-signature");
   if (!sig) return new Response("Missing Stripe-Signature", { status: 400 });
 
-  // IMPORTANT: raw body (do not call request.json() before verifying)
   const rawBody = await request.text();
-
   const verified = await verifyStripeSignature({
     signatureHeader: sig,
     payload: rawBody,
     secret: WEBHOOK_SECRET,
-    toleranceSeconds: 300, // 5 minutes
+    toleranceSeconds: 300,
   });
-
   if (!verified.ok) {
     return new Response(`Signature verification failed: ${verified.reason}`, { status: 400 });
   }
@@ -37,47 +34,47 @@ export async function onRequestPost({ request, env }) {
     return new Response("Invalid JSON", { status: 400 });
   }
 
-  // We only need this event for deposit confirmation. :contentReference[oaicite:2]{index=2}
   if (event?.type !== "checkout.session.completed") {
     return new Response("Ignored", { status: 200 });
   }
 
   const session = event?.data?.object;
-  const bookingId = session?.metadata?.booking_id; // we set metadata in /api/checkout :contentReference[oaicite:3]{index=3}
-
-  // Always return 200 for Stripe retries prevention unless something is truly broken.
+  const bookingId = session?.metadata?.booking_id;
   if (!bookingId) {
     await logEvent(SUPABASE_URL, SERVICE_KEY, null, "stripe_webhook_missing_booking_id", event);
     return new Response("Missing booking_id metadata", { status: 200 });
   }
 
-  // Update booking to confirmed
   const patch = await supaPatch(
     SUPABASE_URL,
     SERVICE_KEY,
     `/rest/v1/bookings?id=eq.${encodeURIComponent(bookingId)}`,
     {
       status: "confirmed",
+      job_status: "scheduled",
       stripe_session_id: session?.id ?? null,
       stripe_payment_intent_id: session?.payment_intent ?? null,
+      payment_provider: "stripe",
+      confirmed_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     }
   );
 
   if (!patch.ok) {
     await logEvent(SUPABASE_URL, SERVICE_KEY, bookingId, "stripe_webhook_update_failed", patch);
-    // Return 500 so Stripe retries (temporary DB issue)
     return new Response("Supabase update failed", { status: 500 });
   }
+
+  const notification = await queueOrderConfirmationNotification(env, bookingId, "stripe_webhook");
 
   await logEvent(SUPABASE_URL, SERVICE_KEY, bookingId, "stripe_webhook_confirmed", {
     session_id: session?.id,
     payment_intent: session?.payment_intent,
+    notification
   });
 
   return new Response("OK", { status: 200 });
 }
-
-/* -------------------- Supabase helpers -------------------- */
 
 async function supaPatch(SUPABASE_URL, SERVICE_KEY, path, payload) {
   const res = await fetch(`${SUPABASE_URL}${path}`, {
@@ -96,7 +93,6 @@ async function supaPatch(SUPABASE_URL, SERVICE_KEY, path, payload) {
 }
 
 async function logEvent(SUPABASE_URL, SERVICE_KEY, bookingId, eventType, details) {
-  // best-effort audit log
   try {
     await fetch(`${SUPABASE_URL}/rest/v1/booking_events`, {
       method: "POST",
@@ -112,17 +108,9 @@ async function logEvent(SUPABASE_URL, SERVICE_KEY, bookingId, eventType, details
         details: details ?? {},
       }),
     });
-  } catch {
-    // ignore
-  }
+  } catch {}
 }
 
-/* -------------------- Stripe signature verification -------------------- */
-/*
-Stripe signature format: "t=timestamp,v1=signature,..."
-Signed payload: `${t}.${rawBody}`
-Signature: HMAC-SHA256(secret, signed_payload)
-*/
 async function verifyStripeSignature({ signatureHeader, payload, secret, toleranceSeconds }) {
   const parts = Object.fromEntries(
     signatureHeader.split(",").map(kv => {
@@ -146,10 +134,7 @@ async function verifyStripeSignature({ signatureHeader, payload, secret, toleran
 
   const signedPayload = `${t}.${payload}`;
   const expected = await hmacSha256Hex(secret, signedPayload);
-
-  // constant-time-ish compare
   if (!timingSafeEqualHex(expected, v1)) return { ok: false, reason: "Bad signature" };
-
   return { ok: true };
 }
 
@@ -169,8 +154,6 @@ async function hmacSha256Hex(secret, message) {
 function timingSafeEqualHex(a, b) {
   if (a.length !== b.length) return false;
   let out = 0;
-  for (let i = 0; i < a.length; i++) {
-    out |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  }
+  for (let i = 0; i < a.length; i++) out |= a.charCodeAt(i) ^ b.charCodeAt(i);
   return out === 0;
 }
