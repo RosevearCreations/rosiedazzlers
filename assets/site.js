@@ -20,7 +20,7 @@ const pkgFile = (filename) => encodeURI(`${PACKAGES_BASE}${filename}`);
 const HOVER_MEDIA = {
   exterior: pkgFile("Exterior Detail.png"),
   interior: pkgFile("Interior Detail.png"),
-  size: pkgFile("CarSizeChart.PNG")
+  size: "/assets/brand/CarSizeChart.PNG"
 };
 
 const ADDON_IMAGE_FILES = {
@@ -189,7 +189,7 @@ function chartButtons(data, selectorMap) {
     "CarPrice2025.PNG": "/assets/brand/CarPrice2025.PNG",
     "CarPriceDetails2025.PNG": "/assets/brand/CarPriceDetails2025.PNG",
     // IMPORTANT: Size chart is served from /packages (brand/CarSizeChart.PNG may be missing)
-    "CarSizeChart.PNG": pkgFile("CarSizeChart.PNG")
+    "CarSizeChart.PNG": "/assets/brand/CarSizeChart.PNG"
   };
 
   const resolveSrc = (name) => {

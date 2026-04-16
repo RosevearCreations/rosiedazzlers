@@ -4,12 +4,13 @@
 const DEFAULT_CHARTS = [
   { filename: "CarPrice2025.PNG", title: "Vehicle Price Chart 2025", r2_url: "/assets/brand/CarPrice2025.PNG" },
   { filename: "CarPriceDetails2025.PNG", title: "Package Service Details Chart", r2_url: "/assets/brand/CarPriceDetails2025.PNG" },
-  { filename: "CarSizeChart.PNG", title: "Vehicle Size Chart", r2_url: "https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG" }
+  { filename: "CarSizeChart.PNG", title: "Vehicle Size Chart", r2_url: "/assets/brand/CarSizeChart.PNG" }
 ];
 
 const LOCAL_CHART_URLS = {
   "CarPrice2025.PNG": "/assets/brand/CarPrice2025.PNG",
-  "CarPriceDetails2025.PNG": "/assets/brand/CarPriceDetails2025.PNG"
+  "CarPriceDetails2025.PNG": "/assets/brand/CarPriceDetails2025.PNG",
+  "CarSizeChart.PNG": "/assets/brand/CarSizeChart.PNG"
 };
 
 export const DEFAULT_BOOKING_RULES = {
