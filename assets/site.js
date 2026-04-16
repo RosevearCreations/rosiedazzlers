@@ -1,4 +1,4 @@
-const DATA_URL = "/data/rosie_services_pricing_and_packages.json";
+import { loadPricingCatalogClient, money as formatMoney, packageImageForSize as sharedPackageImageForSize, addonPrimaryImage as sharedAddonPrimaryImage, addonFallbackImage as sharedAddonFallbackImage, addonDisplay as sharedAddonDisplay } from "/assets/pricing-catalog-client.js?v=20260412pass12";
 
 const BRAND = {
   logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
@@ -23,7 +23,26 @@ const HOVER_MEDIA = {
   size: pkgFile("CarSizeChart.PNG")
 };
 
-const ADDON_MEDIA = {
+const ADDON_IMAGE_FILES = {
+  full_clay_treatment: 'full_clay_treatment.png',
+  two_stage_polish: 'two_stage_polish.png',
+  high_grade_paint_sealant: 'high_grade_paint_sealant.png',
+  uv_protectant_applied_on_interior_panels: 'uv_protectant_applied_on_interior_panels.png',
+  de_ionizing_treatment: 'De-Ionizing Vehicle Add on service.png',
+  de_badging: 'DeBadgingAddonService.png',
+  engine_cleaning: 'Engine Cleaning add on service.png',
+  external_ceramic_coating: 'External Ceramic coating add on service.png',
+  external_graphene_fine_finish: 'External Graphene Fine finish add on service.png',
+  external_wax: 'External Wax add on service.png',
+  vinyl_wrapping: 'Vinyl Wrapping add on service.png',
+  window_tinting: 'Window Tinting add on service.png'
+};
+
+const ADDON_MEDIA = Object.fromEntries(
+  Object.entries(ADDON_IMAGE_FILES).map(([code, filename]) => [code, pkgFile(filename)])
+);
+
+const LOCAL_ADDON_FALLBACKS = {
   full_clay_treatment: '/assets/addons/full_clay_treatment.png',
   two_stage_polish: '/assets/addons/two_stage_polish.png',
   high_grade_paint_sealant: '/assets/addons/high_grade_paint_sealant.png',
@@ -42,17 +61,12 @@ let _servicesData = null;
 
 async function loadServicesData() {
   if (_servicesData) return _servicesData;
-  const res = await fetch(`${DATA_URL}?v=20260301e`, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Could not load ${DATA_URL}`);
-  _servicesData = await res.json();
+  _servicesData = await loadPricingCatalogClient({ fallbackUrl: "/data/rosie_services_pricing_and_packages.json?v=20260412pass12" });
   return _servicesData;
 }
 
 function money(value) {
-  return new Intl.NumberFormat("en-CA", {
-    style: "currency",
-    currency: "CAD"
-  }).format(Number(value || 0));
+  return formatMoney(value);
 }
 
 function getPackageByCode(data, code) {
@@ -64,22 +78,21 @@ function packagePrice(pkg, size) {
 }
 
 function packageImageForSize(pkg, size) {
-  return pkg?.images_by_size?.[size] || "";
+  return sharedPackageImageForSize(pkg, size);
 }
 
-function addonImageForCode(code) {
-  return ADDON_MEDIA[code] || "";
+function addonImageForCode(addonOrCode) {
+  const addon = addonOrCode && typeof addonOrCode === "object" ? addonOrCode : { code: addonOrCode };
+  return sharedAddonPrimaryImage(addon) || ADDON_MEDIA[addon.code] || LOCAL_ADDON_FALLBACKS[addon.code] || '/assets/addons/generic_addon.svg';
+}
+
+function addonFallbackForCode(addonOrCode) {
+  const addon = addonOrCode && typeof addonOrCode === "object" ? addonOrCode : { code: addonOrCode };
+  return sharedAddonFallbackImage(addon) || LOCAL_ADDON_FALLBACKS[addon.code] || '/assets/addons/generic_addon.svg';
 }
 
 function addonDisplay(addon, size) {
-  if (addon.quote_required === true) {
-    if (addon.prices_cad?.[size] != null) return `From ${money(addon.prices_cad[size])} · Quote required`;
-    if (addon.price_cad != null) return `From ${money(addon.price_cad)} · Quote required`;
-    return "Quote required";
-  }
-  if (addon.prices_cad?.[size] != null) return money(addon.prices_cad[size]);
-  if (addon.price_cad != null) return money(addon.price_cad);
-  return "Quote required";
+  return sharedAddonDisplay(addon, size);
 }
 
 function addonCharge(addon, size) {
@@ -173,8 +186,8 @@ function chartButtons(data, selectorMap) {
 
   // Fallbacks (some charts exist in /packages, and some may not exist in /brand)
   const FALLBACK = {
-    "CarPrice2025.PNG": "https://assets.rosiedazzlers.ca/brand/CarPrice2025.PNG",
-    "CarPriceDetails2025.PNG": "https://assets.rosiedazzlers.ca/brand/CarPriceDetails2025.PNG",
+    "CarPrice2025.PNG": "/assets/brand/CarPrice2025.PNG",
+    "CarPriceDetails2025.PNG": "/assets/brand/CarPriceDetails2025.PNG",
     // IMPORTANT: Size chart is served from /packages (brand/CarSizeChart.PNG may be missing)
     "CarSizeChart.PNG": pkgFile("CarSizeChart.PNG")
   };
@@ -289,7 +302,7 @@ function renderAddons(cardsEl, data, size) {
   cardsEl.innerHTML = "";
 
   for (const addon of data.addons || []) {
-    const img = addonImageForCode(addon.code);
+    const img = addonImageForCode(addon);
     const display = addonDisplay(addon, size);
 
     const tags = [];
@@ -301,7 +314,7 @@ function renderAddons(cardsEl, data, size) {
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `
-      ${img ? `<img class="img" loading="lazy" src="${img}" alt="${addon.name}" onerror="this.style.display='none'">` : ""}
+      ${img ? `<img class="img" loading="lazy" src="${img}" alt="${addon.name}" data-fallback="${addonFallbackForCode(addon)}" onerror="if(this.dataset.fallback && this.src!==this.dataset.fallback){this.src=this.dataset.fallback}else{this.style.display='none'}">` : ""}
       <h3>${addon.name}</h3>
       <p class="kicker">${display}</p>
       ${tags.length ? `<div class="hr"></div><div>${tags.join(" ")}</div>` : ""}

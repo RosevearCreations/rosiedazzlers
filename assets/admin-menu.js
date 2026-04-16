@@ -32,49 +32,56 @@
     {
       key: "admin",
       label: "Dashboard",
-      href: "/admin",
+      href: "/admin.html",
       description: "Internal home",
       visible: () => true
     },
     {
       key: "admin-booking",
       label: "Bookings",
-      href: "/admin-booking",
+      href: "/admin-booking.html",
       description: "Search and manage bookings",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-booking")
     },
     {
       key: "admin-blocks",
       label: "Blocks",
-      href: "/admin-blocks",
+      href: "/admin-blocks.html",
       description: "Day and slot capacity",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-blocks")
     },
     {
+      key: "admin-assign",
+      label: "Assign Crew",
+      href: "/admin-assign.html",
+      description: "Lead + crew scheduling",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-assign")
+    },
+    {
       key: "admin-progress",
       label: "Progress",
-      href: "/admin-progress",
+      href: "/admin-progress.html",
       description: "Customer progress updates",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-progress")
     },
     {
       key: "admin-jobsite",
       label: "Jobsite",
-      href: "/admin-jobsite",
+      href: "/admin-jobsite.html",
       description: "Live field workspace",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-jobsite")
     },
     {
       key: "admin-live",
       label: "Live",
-      href: "/admin-live",
+      href: "/admin-live.html",
       description: "Operational live view",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-live")
     },
     {
       key: "admin-staff",
       label: "Staff",
-      href: "/admin-staff",
+      href: "/admin-staff.html",
       description: "Users and passwords",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-staff")
     },
@@ -89,28 +96,35 @@
     {
       key: "admin-catalog",
       label: "Inventory",
-      href: "/admin-catalog",
+      href: "/admin-catalog.html",
       description: "Inventory, reorder, add items",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-catalog")
     },
     {
       key: "admin-customers",
       label: "Customers",
-      href: "/admin-customers",
+      href: "/admin-customers.html",
       description: "Profiles and tiers",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-customers")
     },
     {
       key: "admin-notifications",
       label: "Notifications",
-      href: "/admin-notifications",
+      href: "/admin-notifications.html",
       description: "Queued notices and hooks",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-notifications")
     },
     {
+      key: "admin-recovery",
+      label: "Recovery",
+      href: "/admin-recovery.html",
+      description: "Templates, previews, audit",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-recovery")
+    },
+    {
       key: "admin-analytics",
       label: "Analytics",
-      href: "/admin-analytics",
+      href: "/admin-analytics.html",
       description: "Visitors, referrers, abandoned checkouts",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-analytics")
     },
@@ -118,14 +132,21 @@
     {
       key: "admin-promos",
       label: "Promos",
-      href: "/admin-promos",
+      href: "/admin-promos.html",
       description: "Promo code management",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-promos")
     },
     {
+      key: "admin-accounting",
+      label: "Accounting",
+      href: "/admin-accounting.html",
+      description: "Ledger, expenses, payables, tax, exports",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting") || globalScope.AdminAuth.canAccessPage("admin")
+    },
+    {
       key: "account",
       label: "My Account",
-      href: "/account",
+      href: "/admin-account.html",
       description: "My session and password",
       visible: () => globalScope.AdminAuth.isAuthenticated()
     }

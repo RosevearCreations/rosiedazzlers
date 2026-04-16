@@ -1,4 +1,4 @@
-> Last synchronized: March 28, 2026. Reviewed during the image-fit, booking-slot readability, dark-text contrast, and current-build documentation/schema sync pass.
+> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 # Rosie Dazzlers Access Control Model
 
@@ -384,3 +384,26 @@ What the customer can see during booking progress
 How valuable / recurring the customer is from a service and loyalty perspective
 
 These must remain separate concepts so the system stays clean and flexible.
+
+<!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->
+
+## 2026-04-13 Pass 14 Sync
+- Booking screen remains stable and should not be altered in future passes unless a critical bug appears.
+- `_redirects` is working and treated as complete for the current route layout.
+- Pricing/packages/add-ons/service areas/travel charges continue to flow through the App Management pricing control center as the preferred single entry point.
+- This pass added office-facing finance adjustments for discounts/refunds plus customer-facing document work for order confirmation, invoice / summary, gift certificate printing, and social feed management.
+
+---
+
+## Pass sync — 2026-04-14 (pass 16)
+
+- Booking screen remains locked and stable.
+- `_redirects` remains the working route layer and includes the admin-app trailing-slash compatibility line.
+- App Management was repaired in this pass: the page now restores its missing helper functions, shows a proper internal menu mount, includes clearer feature descriptions, and exposes document/social defaults without crashing.
+- Admin navigation now includes a visible path to App Management from the dashboard, shared admin menu, and return bar.
+- No new database table or column changes were introduced in this pass; schema files were refreshed to reflect a no-DDL stability/documentation pass.
+- Strongest next steps remain the single-entry pricing/accounting workflow, refund-credit memo document polish, and provider-tested email sending.
+
+> Pass sync April 15, 2026: generated local price-chart PNG assets from the canonical bundled pricing catalog, rewired chart fallbacks to `/assets/brand`, added a regeneration script, and refreshed docs/schema notes for the legacy price-image carry-forward pass.
+
+Update note — 2026-04-16 pass20: Added explicit admin route wrappers for social feed and vehicle catalog endpoints to stop Pages Function import-resolution failures on /api/admin routes. Booking remains stable; no schema DDL change in this pass.

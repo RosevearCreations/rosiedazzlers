@@ -166,12 +166,34 @@
     }
   }
 
+  function normalizePageKey(pageKey) {
+    switch (String(pageKey || "").trim()) {
+      case "catalog":
+        return "admin-catalog";
+      case "upload":
+        return "admin-upload";
+      case "progress":
+        return "admin-progress";
+      case "admin-account":
+        return "account";
+      default:
+        return String(pageKey || "").trim();
+    }
+  }
+
   function canAccessPage(pageKey) {
     const actor = state.actor;
     if (!actor) return false;
+
+    const normalizedPageKey = normalizePageKey(pageKey);
+
+    if (normalizedPageKey === "account") {
+      return true;
+    }
+
     if (actor.is_admin === true) return true;
 
-    switch (String(pageKey || "")) {
+    switch (normalizedPageKey) {
       case "admin":
       case "admin-booking":
         return hasCapability("can_manage_bookings");
@@ -206,6 +228,31 @@
       case "admin-catalog":
         return actor.is_admin === true || hasCapability("can_manage_staff");
 
+      case "admin-upload":
+        return (
+          hasCapability("can_manage_bookings") ||
+          hasCapability("can_manage_progress") ||
+          actor.is_senior_detailer === true ||
+          actor.is_detailer === true
+        );
+
+      case "detailer-jobs":
+        return (
+          hasCapability("can_manage_bookings") ||
+          hasCapability("can_manage_progress") ||
+          actor.is_senior_detailer === true ||
+          actor.is_detailer === true
+        );
+
+      case "admin-accounting":
+        return actor.is_admin === true || hasCapability("can_manage_staff");
+
+      case "admin-assign":
+        return actor.is_admin === true || hasCapability("can_manage_bookings") || hasCapability("can_manage_staff");
+
+      case "admin-recovery":
+        return actor.is_admin === true || hasCapability("can_manage_staff");
+
       case "admin-customers":
         return hasCapability("can_manage_bookings");
 
@@ -228,12 +275,14 @@
   }
 
   async function requireAuth({
-    redirectTo = "/admin-login",
+    redirectTo = "/admin-login.html",
     pageKey = null
   } = {}) {
     if (!state.loaded) {
       await loadCurrentActor();
     }
+
+    const normalizedPageKey = normalizePageKey(pageKey);
 
     if (!state.authenticated || !state.actor) {
       redirectWithReturn(redirectTo);
@@ -243,7 +292,7 @@
       };
     }
 
-    if (pageKey && !canAccessPage(pageKey)) {
+    if (normalizedPageKey && !canAccessPage(normalizedPageKey)) {
       redirectToSafeHome();
       return {
         ok: false,
@@ -265,10 +314,10 @@
   }
 
   function redirectToSafeHome() {
-    window.location.replace("/admin");
+    window.location.replace("/admin.html");
   }
 
-  function readNextUrl(fallback = "/admin") {
+  function readNextUrl(fallback = "/admin.html") {
     const params = new URLSearchParams(window.location.search);
     const next = params.get("next");
     if (!next) return fallback;
@@ -308,7 +357,7 @@
     const pageNodes = root.querySelectorAll("[data-page-access]");
     pageNodes.forEach((node) => {
       const pageKey = node.getAttribute("data-page-access");
-      node.hidden = !canAccessPage(pageKey);
+      node.hidden = !canAccessPage(normalizePageKey(pageKey));
     });
   }
 
@@ -366,6 +415,7 @@
     applyVisibility,
     renderActorText,
     readNextUrl,
-    humanizeRole
+    humanizeRole,
+    normalizePageKey
   };
 })(window);
