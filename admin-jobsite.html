@@ -28,7 +28,7 @@
         <a href="/admin-jobsite.html">Job Site</a>
         <a href="/admin-staff.html">Staff</a>
         <a href="/admin-promos.html">Promos</a>
-        <a href="/book">Public Site</a>
+        <a href="/book.html">Public Site</a>
       </nav>
     </div>
   </header>
@@ -63,6 +63,10 @@
           <div id="jobsiteBookingMeta" class="kicker">Load a booking id below.</div>
         </div>
       </div>
+    </section>
+
+    <section class="section">
+      <div data-admin-menu-mount></div>
     </section>
 
     <section class="section">
@@ -346,22 +350,26 @@
 
   <footer class="footer container" data-footer></footer>
 
+  <script src="/assets/admin-runtime.js"></script>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/admin-menu.js"></script>
+  <script src="/assets/admin-page-init.js"></script>
   <script src="/assets/chrome.js"></script>
   <script type="module">
     import { setBrandImages, setFooter } from "/assets/site.js";
 
+    const runtime = window.AdminRuntime;
     let currentBookingId = "";
     let currentPassword = "";
 
-    async function loadActorMeta(){
-      try {
-        const res = await fetch("/api/admin/auth_me", { credentials:"include", cache:"no-store" });
-        const out = await res.json().catch(()=>null);
-        if (!res.ok || !out?.ok || !out?.actor) throw new Error(out?.error || "No session");
-        document.querySelector("#jobsiteActorMeta").textContent = `${out.actor.full_name || out.actor.email || "Staff"} · ${out.actor.role_code || "staff"}`;
-        if (!document.querySelector("#detailerName").value.trim()) document.querySelector("#detailerName").value = out.actor.full_name || out.actor.email || "";
-      } catch {
-        document.querySelector("#jobsiteActorMeta").textContent = "No staff session found. Use the fallback password field if needed.";
+    function syncActorMeta(actor) {
+      const meta = document.querySelector("#jobsiteActorMeta");
+      if (!meta) return;
+      const activeActor = actor || window.AdminAuth.getActor();
+      meta.textContent = runtime.bridgeLabel(activeActor, currentPassword);
+      if (activeActor && !document.querySelector("#detailerName").value.trim()) {
+        document.querySelector("#detailerName").value = activeActor.full_name || activeActor.email || "";
       }
     }
     let timeEntries = [];
@@ -414,35 +422,23 @@
       return `${hours}:${minutes}:${seconds}`;
     }
 
-    function apiHeaders(password) {
-      return {
-        "Content-Type": "application/json",
-        "x-admin-password": password
-      };
-    }
-
     async function apiPost(url, password, body) {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: apiHeaders(password),
-        body: JSON.stringify(body || {})
-      });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || `Request failed for ${url}`);
-      return data;
+      const result = await runtime.requestJson(url, { method: "POST", body: body || {}, password: password || undefined });
+      if (!result.ok) throw new Error(runtime.normalizeError(result, `Request failed for ${url}`));
+      return result.data || {};
     }
 
     function fillBooking(booking) {
       document.querySelector("#jobsiteBookingTitle").textContent =
         booking?.customer_name || booking?.package_code || "Booking loaded";
 
+      const crewSummary = booking?.crew_summary || booking?.assigned_staff_name || booking?.assigned_to || "unassigned";
       document.querySelector("#jobsiteBookingMeta").textContent = [
         booking?.service_date || "—",
         booking?.start_slot || "—",
         booking?.package_code || "—",
         booking?.vehicle_size || "—",
-        booking?.assigned_to || "unassigned"
+        crewSummary
       ].join(" · ");
     }
 
@@ -764,6 +760,10 @@
 
       fillBooking(data.booking || {});
       fillIntake(data.intake || null);
+      if (data.booking?.crew_assignments?.length && !document.querySelector("#detailerName").value.trim()) {
+        const lead = data.booking.crew_assignments.find((row) => row.assignment_role === 'lead') || data.booking.crew_assignments[0];
+        if (lead?.staff_name || lead?.staff_email) document.querySelector("#detailerName").value = lead.staff_name || lead.staff_email;
+      }
       jobsiteComments = Array.isArray(data.comments) ? data.comments : [];
       jobsiteAnnotations = Array.isArray(data.annotations) ? data.annotations : [];
       renderJobsiteComments();
@@ -773,7 +773,7 @@
 
       document.querySelector("#saveIntakeBtn").disabled = false;
       setTimeButtonsEnabled(true);
-      setNotice("Job-site intake loaded.", "ok");
+      setNotice(data.crew_warning ? `Job-site intake loaded. ${data.crew_warning}` : "Job-site intake loaded.", data.crew_warning ? "warn" : "ok");
     }
 
     async function saveIntake(event) {
@@ -791,7 +791,7 @@
       setNotice("Pre-inspection intake saved.", "ok");
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
       setBrandImages();
       setFooter();
 
@@ -911,6 +911,12 @@
       setTimeButtonsEnabled(false);
       renderJobsiteComments();
       renderJobsiteAnnotations();
+      await window.AdminPageInit.init({
+        pageKey: "admin-jobsite",
+        onReady: async ({ actor }) => {
+          syncActorMeta(actor);
+        }
+      });
     });
   </script>
 </body>

@@ -1,0 +1,5 @@
+-- April 15, 2026
+-- No relational DDL change in this pass.
+-- This note records the generated local legacy chart assets (`CarPrice2025.PNG`, `CarPriceDetails2025.PNG`)
+-- and the fallback-url rewiring to `/assets/brand` so the legacy price tables no longer depend on
+-- hand-edited screenshot images.
