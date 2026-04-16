@@ -1255,7 +1255,7 @@
       state.pricing = await loadPricingData();
       renderServiceAreas();
       syncBookingRuleLabels();
-      qs("#openSizeChartBtn").addEventListener("click", () => openModal("Vehicle size chart", chartUrl(state.pricing || {}, "Vehicle Size Chart") || `${BRAND_BASE}/CarSizeChart.PNG`));
+      qs("#openSizeChartBtn").addEventListener("click", () => openModal("Vehicle size chart", chartUrl(state.pricing || {}, "Vehicle Size Chart") || `/assets/brand/CarSizeChart.PNG`));
       qs("#openPriceChartBtn").addEventListener("click", () => openModal("Vehicle price chart", chartUrl(state.pricing || {}, "Vehicle Price Chart 2025") || `/assets/brand/CarPrice2025.PNG`));
       await Promise.all([
         loadVehicleMakes(),
