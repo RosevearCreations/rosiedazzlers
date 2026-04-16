@@ -1,4 +1,4 @@
-import { modelsForMakeYear, cacheVehicleModels } from "../_lib/vehicle-catalog.js";
+import { fetchVehicleModelsForMakeYear, cacheVehicleModels } from "../_lib/vehicle-catalog.js";
 import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
 
 export async function onRequestGet({ request, env }) {
@@ -19,8 +19,9 @@ export async function onRequestGet({ request, env }) {
       return withCors(json({ error: "year and make are required." }, 400));
     }
 
-    const models = await modelsForMakeYear(year, make);
-    cacheVehicleModels?.(year, make, models);
+    const models = await fetchVehicleModelsForMakeYear({ make, year });
+    await cacheVehicleModels({ env, rows: models, year });
+
     return withCors(json({ ok: true, year, make, models }));
   } catch (err) {
     return withCors(json({ error: err?.message || "Could not load vehicle models." }, 500));
