@@ -225,12 +225,91 @@ def details_chart(data):
     img.convert("RGB").save(OUT_DIR / "CarPriceDetails2025.PNG", quality=95)
 
 
+
+def size_chart(data):
+    width, height, margin = 1700, 1080, 70
+    img = Image.new("RGBA", (width, height), BG)
+    draw = ImageDraw.Draw(img)
+
+    rounded(draw, (margin, 45, width - margin, 230), fill=PANEL, outline=BORDER, radius=28, width=2)
+    draw.text((margin + 36, 88), "Rosie Dazzlers Vehicle Size Guide", font=font("black", 46), fill=TEXT)
+    subtitle = "Use this quick guide before booking or quoting. Final size can still be adjusted after staff review, but this keeps small, mid-size, and oversize / exotic choices consistent with the live pricing catalog."
+    draw.multiline_text((margin + 36, 145), "\n".join(wrap(draw, subtitle, font("regular", 24), width - margin * 2 - 72)), font=font("regular", 24), fill=MUTED, spacing=8)
+
+    badge = "Matches booking + pricing"
+    badge_w = draw.textbbox((0, 0), badge, font=font("bold", 22))[2]
+    rounded(draw, (width - margin - 36 - badge_w - 28, 86, width - margin - 36, 132), fill=ACCENT, radius=18)
+    draw.text((width - margin - 50, 109), badge, font=font("bold", 22), fill=WHITE, anchor="ra")
+
+    card_y = 280
+    gap = 26
+    card_w = int((width - (margin * 2) - (gap * 2)) / 3)
+    card_h = 540
+    size_cards = [
+        {
+            "title": "Small",
+            "accent": "#22c55e",
+            "price": "Compact pricing tier",
+            "examples": ["Compact cars", "Sedans", "Coupes", "Hatchbacks"],
+            "rule": "Best fit when the vehicle is lower, narrower, and closer to standard passenger-car size.",
+        },
+        {
+            "title": "Mid-size",
+            "accent": "#4d77ff",
+            "price": "Mid-size pricing tier",
+            "examples": ["Crossovers", "Mid-size sedans", "Small SUVs", "Wagons"],
+            "rule": "Use this when the vehicle has more cabin or cargo room than a compact car but is not a full-size SUV, truck, or van.",
+        },
+        {
+            "title": "Oversize / Exotic",
+            "accent": "#f59e0b",
+            "price": "Oversize + exotic pricing tier",
+            "examples": ["SUVs", "Trucks", "Vans", "Exotic / specialty vehicles"],
+            "rule": "Use this tier for larger body sizes, oversized work vehicles, or premium/exotic vehicles that need extra setup time or care.",
+        },
+    ]
+
+    for idx, card in enumerate(size_cards):
+        x0 = margin + idx * (card_w + gap)
+        x1 = x0 + card_w
+        rounded(draw, (x0, card_y, x1, card_y + card_h), fill=PANEL, outline=BORDER, radius=24, width=2)
+        rounded(draw, (x0, card_y, x1, card_y + 74), fill=card["accent"], radius=24)
+        draw.text((x0 + 22, card_y + 20), card["title"], font=font("bold", 30), fill=WHITE)
+        draw.text((x0 + 22, card_y + 96), card["price"], font=font("bold", 24), fill=TEXT)
+
+        yy = card_y + 142
+        draw.text((x0 + 22, yy), "Common examples", font=font("bold", 22), fill=MUTED)
+        yy += 38
+        for ex in card["examples"]:
+            draw.text((x0 + 28, yy), f"• {ex}", font=font("regular", 22), fill=TEXT)
+            yy += 34
+
+        yy += 16
+        draw.text((x0 + 22, yy), "Sizing note", font=font("bold", 22), fill=MUTED)
+        yy += 38
+        rule_lines = wrap(draw, card["rule"], font("regular", 21), card_w - 44)
+        draw.multiline_text((x0 + 22, yy), "\n".join(rule_lines), font=font("regular", 21), fill=TEXT, spacing=6)
+
+    note_y = card_y + card_h + 28
+    rounded(draw, (margin, note_y, width - margin, note_y + 170), fill=PANEL_ALT, outline=BORDER, radius=22, width=1)
+    notes = [
+        "Quick reminders:",
+        "• Vehicle size affects package price and many add-on prices.",
+        "• Staff can still adjust the final size during review if the booking choice does not match the actual vehicle.",
+        "• Oversize / Exotic is currently one shared tier in the canonical pricing catalog.",
+    ]
+    draw.multiline_text((margin + 24, note_y + 24), "\n".join(notes), font=font("regular", 22), fill=MUTED, spacing=8)
+
+    img.convert("RGB").save(OUT_DIR / "CarSizeChart.PNG", quality=95)
+
 def main():
     data = json.loads(DATA_PATH.read_text())
     price_chart(data)
     details_chart(data)
+    size_chart(data)
     print("Generated", OUT_DIR / "CarPrice2025.PNG")
     print("Generated", OUT_DIR / "CarPriceDetails2025.PNG")
+    print("Generated", OUT_DIR / "CarSizeChart.PNG")
 
 
 if __name__ == "__main__":
