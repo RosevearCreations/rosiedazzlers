@@ -76,6 +76,7 @@
           <article class="intro-card"><h3>Pricing source of truth</h3><p>Manage packages, add-ons, service areas, travel tiers, and price controls from one place used by booking, pricing, services, and checkout.</p></article>
           <article class="intro-card"><h3>Customer documents</h3><p>Set the wording used in order confirmations, invoices, and printable gift certificates so the office output stays consistent.</p></article>
           <article class="intro-card"><h3>Public social blocks</h3><p>Store the latest five social links per platform so the home and videos pages stay current without hand-editing those pages.</p></article>
+          <article class="intro-card"><h3>Next growth layer</h3><p>Use this screen to shape stronger quote-first booking, scheduled e-gift delivery, and recurring maintenance-plan offers before they are pushed deeper into checkout and follow-up flows.</p></article>
         </section>
 
     <section class="grid">
@@ -108,6 +109,42 @@
         <div class="checkrow"><input id="flag_two_sided_thread_controls_enabled" type="checkbox"><label for="flag_two_sided_thread_controls_enabled">Two-sided thread controls enabled</label></div>
         <div class="checkrow"><input id="flag_low_stock_alerts_enabled" type="checkbox"><label for="flag_low_stock_alerts_enabled">Low-stock alerts enabled</label></div>
         <div class="actions"><button class="btn" type="button" id="saveFlagsBtn">Save feature flags</button></div>
+      </article>
+
+
+      <article class="card span-6">
+        <h2>Self-Serve Quote &amp; Booking</h2>
+        <p class="feature-note">Make the quote result more prominent so customers can move from vehicle details to an exact or near-exact booking total with less back-and-forth.</p>
+        <div class="checkrow"><input id="quote_prominent_cta" type="checkbox"><label for="quote_prominent_cta">Show a stronger “Build my quote” call to action on public pages</label></div>
+        <div class="checkrow"><input id="quote_show_exact_total" type="checkbox"><label for="quote_show_exact_total">Show package + add-on total early once the vehicle and service choices are known</label></div>
+        <div class="checkrow"><input id="quote_show_time_expectation" type="checkbox"><label for="quote_show_time_expectation">Show estimated site-time ranges beside package choices</label></div>
+        <div class="field"><label for="quote_teaser_text">Quote teaser text</label><textarea id="quote_teaser_text" placeholder="Choose your vehicle, package, and add-ons to see your expected total before checkout."></textarea></div>
+        <div class="actions"><button class="btn" type="button" id="saveQuoteSettingsBtn">Save quote settings</button></div>
+      </article>
+
+      <article class="card span-6">
+        <h2>Scheduled E-Gift Delivery</h2>
+        <p class="feature-note">Prepare the gift workflow for scheduled delivery, recipient naming, and office review instead of one-time plain printable gifts only.</p>
+        <div class="checkrow"><input id="gift_delivery_enabled" type="checkbox"><label for="gift_delivery_enabled">Enable recipient name and scheduled delivery fields on gift checkout</label></div>
+        <div class="checkrow"><input id="gift_delivery_manual_review" type="checkbox"><label for="gift_delivery_manual_review">Hold scheduled gifts for office review before send</label></div>
+        <div class="field"><label for="gift_delivery_default_message">Default e-gift helper text</label><textarea id="gift_delivery_default_message" placeholder="Choose a recipient, add a message, and pick the day you want us to send the gift."></textarea></div>
+        <div class="actions"><button class="btn" type="button" id="saveGiftDeliverySettingsBtn">Save e-gift settings</button></div>
+      </article>
+
+      <article class="card span-12">
+        <h2>Maintenance &amp; Membership Plans</h2>
+        <p class="feature-note">Use this section to shape recurring-clean offers that support repeat local customers, smoother scheduling, and predictable follow-up revenue.</p>
+        <div class="subgrid">
+          <div class="checkrow"><input id="membership_enabled" type="checkbox"><label for="membership_enabled">Show a maintenance-plan teaser on public pages</label></div>
+          <div class="checkrow"><input id="membership_waitlist_enabled" type="checkbox"><label for="membership_waitlist_enabled">Use a waitlist / interest CTA before taking recurring plan orders</label></div>
+        </div>
+        <div class="subgrid">
+          <div class="field"><label for="membership_name">Plan name</label><input id="membership_name" placeholder="Maintain Your Shine Plan"></div>
+          <div class="field"><label for="membership_cycle">Cycle label</label><input id="membership_cycle" placeholder="Every 4 or 8 weeks"></div>
+        </div>
+        <div class="field"><label for="membership_teaser">Public teaser</label><textarea id="membership_teaser" placeholder="Keep your vehicle on a repeating clean schedule with priority reminders and simpler rebooking."></textarea></div>
+        <div class="field"><label for="membership_benefits">Benefits (one per line)</label><textarea id="membership_benefits" placeholder="Priority reminder before your preferred date&#10;Faster rebooking using your saved vehicle&#10;Cleaner predictable maintenance cycle"></textarea></div>
+        <div class="actions"><button class="btn" type="button" id="saveMembershipSettingsBtn">Save maintenance plan settings</button></div>
       </article>
 
       <article class="card span-12">
@@ -364,6 +401,12 @@
   function readVisibility(){ return { customer_detailer_notes: byId('vis_customer_detailer_notes').checked, customer_admin_notes_admin_only: byId('vis_customer_admin_notes').checked, detailer_admin_notes_admin_only: byId('vis_detailer_admin_notes').checked }; }
   function readScheduling(){ return { manual_schedule_admin_only: byId('manual_schedule_admin_only').checked, blocking_admin_only: byId('blocking_admin_only').checked, notes: byId('manual_schedule_notes').value || '' }; }
   function readFlags(){ return { live_updates_default: byId('flag_live_updates_default').checked, customer_chat_enabled: byId('flag_customer_chat_enabled').checked, picture_first_observations: byId('flag_picture_first_observations').checked, tier_discount_badges: byId('flag_tier_discount_badges').checked, annotation_moderation_enabled: byId('flag_annotation_moderation_enabled').checked, two_sided_thread_controls_enabled: byId('flag_two_sided_thread_controls_enabled').checked, low_stock_alerts_enabled: byId('flag_low_stock_alerts_enabled').checked }; }
+  function quoteSettingsDefaults(){ return { prominent_cta: true, show_exact_total: true, show_time_expectation: true, teaser_text: 'Choose your vehicle, package, and add-ons to see your expected total before checkout.' }; }
+  function readQuoteSettings(){ return { prominent_cta: byId('quote_prominent_cta').checked, show_exact_total: byId('quote_show_exact_total').checked, show_time_expectation: byId('quote_show_time_expectation').checked, teaser_text: byId('quote_teaser_text').value || quoteSettingsDefaults().teaser_text }; }
+  function giftDeliveryDefaults(){ return { enabled: true, manual_review: true, default_message: 'Choose a recipient, add a message, and pick the day you want us to send the gift.' }; }
+  function readGiftDeliverySettings(){ return { enabled: byId('gift_delivery_enabled').checked, manual_review: byId('gift_delivery_manual_review').checked, default_message: byId('gift_delivery_default_message').value || giftDeliveryDefaults().default_message }; }
+  function membershipPlanDefaults(){ return { enabled: false, waitlist_enabled: true, plan_name: 'Maintain Your Shine Plan', cycle_label: 'Every 4 or 8 weeks', teaser: 'Keep your vehicle on a repeating clean schedule with priority reminders and simpler rebooking.', benefits: ['Priority reminder before your preferred date','Faster rebooking using your saved vehicle','Cleaner predictable maintenance cycle'] }; }
+  function readMembershipPlanSettings(){ return { enabled: byId('membership_enabled').checked, waitlist_enabled: byId('membership_waitlist_enabled').checked, plan_name: byId('membership_name').value || membershipPlanDefaults().plan_name, cycle_label: byId('membership_cycle').value || membershipPlanDefaults().cycle_label, teaser: byId('membership_teaser').value || membershipPlanDefaults().teaser, benefits: (byId('membership_benefits').value || '').split(/\n+/).map(function (row) { return row.trim(); }).filter(Boolean) }; }
   function readModeration(){ return { annotation_customer_visibility_default: byId('mod_annotation_customer_visibility_default').checked, comment_customer_visibility_default: byId('mod_comment_customer_visibility_default').checked, client_reply_depth_limit: Number(byId('mod_client_reply_depth_limit').value || 4), staff_reply_depth_limit: Number(byId('mod_staff_reply_depth_limit').value || 8), allow_client_annotation_replies: byId('mod_allow_client_annotation_replies').checked, allow_staff_hide_without_delete: byId('mod_allow_staff_hide_without_delete').checked }; }
   function readRecoveryTemplates(){ return { abandoned_checkout_subject: byId('recovery_subject').value || '', abandoned_checkout_body_text: byId('recovery_body_text').value || '', abandoned_checkout_body_html: byId('recovery_body_html').value || '' }; }
   function readRecoveryRules(){ return { abandoned_recovery_enabled: byId('recovery_enabled').checked, minimum_page_events: Number(byId('recovery_min_events').value || 0), require_email: true, cooldown_hours: Number(byId('recovery_cooldown_hours').value || 24), default_recovery_channel: byId('recovery_default_channel').value || 'email' }; }
@@ -690,6 +733,9 @@
     const visibility = applySetting(s.visibility_matrix);
     const scheduling = applySetting(s.manual_scheduling_rules);
     const flags = applySetting(s.feature_flags);
+    const quoteSettings = applySetting(s.quote_booking_settings, quoteSettingsDefaults());
+    const giftDeliverySettings = applySetting(s.gift_delivery_settings, giftDeliveryDefaults());
+    const membershipPlanSettings = applySetting(s.membership_plan_settings, membershipPlanDefaults());
     const moderation = applySetting(s.moderation_rules);
     const recoveryTemplates = applySetting(s.recovery_templates);
     const recoveryRules = applySetting(s.recovery_rules);
@@ -712,6 +758,22 @@
     byId('flag_annotation_moderation_enabled').checked = flags.annotation_moderation_enabled !== false;
     byId('flag_two_sided_thread_controls_enabled').checked = flags.two_sided_thread_controls_enabled !== false;
     byId('flag_low_stock_alerts_enabled').checked = flags.low_stock_alerts_enabled !== false;
+
+    byId('quote_prominent_cta').checked = quoteSettings.prominent_cta !== false;
+    byId('quote_show_exact_total').checked = quoteSettings.show_exact_total !== false;
+    byId('quote_show_time_expectation').checked = quoteSettings.show_time_expectation !== false;
+    byId('quote_teaser_text').value = quoteSettings.teaser_text || quoteSettingsDefaults().teaser_text;
+
+    byId('gift_delivery_enabled').checked = giftDeliverySettings.enabled !== false;
+    byId('gift_delivery_manual_review').checked = giftDeliverySettings.manual_review !== false;
+    byId('gift_delivery_default_message').value = giftDeliverySettings.default_message || giftDeliveryDefaults().default_message;
+
+    byId('membership_enabled').checked = !!membershipPlanSettings.enabled;
+    byId('membership_waitlist_enabled').checked = membershipPlanSettings.waitlist_enabled !== false;
+    byId('membership_name').value = membershipPlanSettings.plan_name || membershipPlanDefaults().plan_name;
+    byId('membership_cycle').value = membershipPlanSettings.cycle_label || membershipPlanDefaults().cycle_label;
+    byId('membership_teaser').value = membershipPlanSettings.teaser || membershipPlanDefaults().teaser;
+    byId('membership_benefits').value = Array.isArray(membershipPlanSettings.benefits) ? membershipPlanSettings.benefits.join('\n') : membershipPlanDefaults().benefits.join('\n');
 
     byId('mod_annotation_customer_visibility_default').checked = moderation.annotation_customer_visibility_default !== false;
     byId('mod_comment_customer_visibility_default').checked = moderation.comment_customer_visibility_default !== false;
@@ -793,6 +855,9 @@
   byId('saveVisibilityBtn').addEventListener('click', async ()=>{ try{ await saveSetting('visibility_matrix', readVisibility(), 'Visibility settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save visibility settings.', 'error'); } });
   byId('saveSchedulingBtn').addEventListener('click', async ()=>{ try{ await saveSetting('manual_scheduling_rules', readScheduling(), 'Scheduling policy saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save scheduling policy.', 'error'); } });
   byId('saveFlagsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('feature_flags', readFlags(), 'Feature flags saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save feature flags.', 'error'); } });
+  byId('saveQuoteSettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('quote_booking_settings', readQuoteSettings(), 'Quote and booking settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save quote settings.', 'error'); } });
+  byId('saveGiftDeliverySettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('gift_delivery_settings', readGiftDeliverySettings(), 'E-gift delivery settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save e-gift settings.', 'error'); } });
+  byId('saveMembershipSettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('membership_plan_settings', readMembershipPlanSettings(), 'Maintenance plan settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save maintenance plan settings.', 'error'); } });
   byId('saveModerationBtn').addEventListener('click', async ()=>{ try{ await saveSetting('moderation_rules', readModeration(), 'Moderation defaults saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save moderation defaults.', 'error'); } });
   byId('saveRecoveryBtn').addEventListener('click', async ()=>{ try{ await saveSetting('recovery_templates', readRecoveryTemplates(), 'Recovery templates saved.'); await saveSetting('recovery_rules', readRecoveryRules(), 'Recovery rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save recovery settings.', 'error'); } });
   byId('saveProviderRulesBtn').addEventListener('click', async ()=>{ try{ await saveSetting('recovery_provider_rules', readProviderRules(), 'Recovery provider rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save provider rules.', 'error'); } });
