@@ -9,3 +9,4 @@
 > Pass sync April 15, 2026: generated local price-chart PNG assets from the canonical bundled pricing catalog, rewired chart fallbacks to `/assets/brand`, added a regeneration script, and refreshed docs/schema notes for the legacy price-image carry-forward pass.
 
 Pass sync (2026-04-15): price references now use the generated local pricing charts, a local vehicle size chart was added, booking/job usage logs no longer reduce stock on hand automatically, and inventory now supports finished / defective / write-off stock actions for reorder and accounting follow-up.
+- Pass sync 2026-04-16 (pass 21): added crew time/payroll workflow, staff availability blocks, payroll runs + accounting-post option, staff pay/work-cap settings, and service-time insight reporting; booking screen remains stable.
