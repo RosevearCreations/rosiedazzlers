@@ -1,4 +1,4 @@
--- Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
+-- Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 -- 2026-04-13 build-stability note: no new DDL landed in this pass; added the missing public social-feed API route at the application layer, removed duplicate GL actor keys, kept booking locked/stable, and kept _redirects as the current complete compatibility layer.
 -- 2026-04-12 pricing-control-center note: booking remains stable and unchanged in this pass; _redirects is treated as complete; app_management_settings.pricing_catalog now also carries booking_rules.travel_pricing and booking_rules.price_controls for centralized travel/default pricing governance.
 -- 2026-04-12 sync note: public booking/services/pricing/checkout/shared site helpers now preserve the full canonical pricing_catalog contract (charts, packages, service areas, booking_rules, public_requirements) via /api/pricing_catalog_public, with bundled JSON fallback and no SQL table shape change in this pass.
@@ -28,6 +28,55 @@ create table if not exists public.app_management_settings (
   key text primary key,
   value jsonb not null default '{}'::jsonb,
   updated_at timestamptz not null default now()
+);
+
+
+create table if not exists public.staff_users (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  full_name text not null,
+  email text not null unique,
+  role_code text not null default 'detailer' check (role_code in ('admin','senior_detailer','detailer')),
+  is_active boolean not null default true,
+  password_hash text null,
+  can_override_lower_entries boolean not null default false,
+  can_manage_bookings boolean not null default false,
+  can_manage_blocks boolean not null default false,
+  can_manage_progress boolean not null default false,
+  can_manage_promos boolean not null default false,
+  can_manage_staff boolean not null default false,
+  preferred_contact_name text null,
+  sms_phone text null,
+  phone text null,
+  address_line1 text null,
+  address_line2 text null,
+  city text null,
+  province text null,
+  postal_code text null,
+  employee_code text null,
+  position_title text null,
+  hire_date date null,
+  emergency_contact_name text null,
+  emergency_contact_phone text null,
+  vehicle_notes text null,
+  vehicle_info jsonb not null default '{}'::jsonb,
+  notes text null,
+  department text null,
+  admin_level text null,
+  pay_schedule text null,
+  hourly_rate_cents integer not null default 0,
+  max_hours_per_day numeric(6,2) not null default 8,
+  max_hours_per_week numeric(6,2) not null default 40,
+  payroll_enabled boolean not null default true,
+  payroll_notes text null,
+  preferred_work_hours jsonb not null default '{}'::jsonb,
+  admin_private_notes text null,
+  detailer_level text null,
+  permissions_profile jsonb not null default '{}'::jsonb,
+  personal_admin_notes text null,
+  tips_payout_notes text null,
+  supervisor_staff_user_id uuid null references public.staff_users(id) on delete set null
 );
 
 create table if not exists public.bookings (
@@ -112,6 +161,34 @@ create table if not exists public.booking_staff_assignments (
 create table if not exists public.date_blocks (id uuid primary key default gen_random_uuid(), blocked_date date not null unique, reason text null, created_at timestamptz not null default now());
 create table if not exists public.slot_blocks (id uuid primary key default gen_random_uuid(), blocked_date date not null, slot text not null check (slot in ('AM','PM')), reason text null, created_at timestamptz not null default now(), unique (blocked_date, slot));
 create table if not exists public.booking_events (id uuid primary key default gen_random_uuid(), booking_id uuid not null references public.bookings(id) on delete cascade, created_at timestamptz not null default now(), event_type text not null, event_note text null, actor_name text null, payload jsonb not null default '{}'::jsonb);
+
+create table if not exists public.job_time_entries (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  booking_id uuid not null references public.bookings(id) on delete cascade,
+  staff_user_id uuid null references public.staff_users(id) on delete set null,
+  staff_name text null,
+  created_by_name text null,
+  source text not null default 'admin',
+  entry_type text not null,
+  minutes numeric(10,2) not null default 0,
+  event_time timestamptz null,
+  note text null
+);
+
+create table if not exists public.staff_availability_blocks (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  staff_user_id uuid not null references public.staff_users(id) on delete cascade,
+  start_at timestamptz not null,
+  end_at timestamptz not null,
+  availability_type text not null default 'unavailable' check (availability_type in ('unavailable','vacation','sick','training','light_duty')),
+  note text null,
+  created_by_name text null,
+  created_by_staff_user_id uuid null references public.staff_users(id) on delete set null
+);
 create table if not exists public.promo_codes (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), code text not null unique, active boolean not null default true, is_active boolean not null default true, discount_type text null, discount_percent numeric(6,2) null, discount_cents integer null, percent_off numeric(6,2) null, amount_off_cents integer null, starts_at timestamptz null, ends_at timestamptz null, starts_on date null, ends_on date null, max_uses integer null, uses integer not null default 0, notes text null);
 create table if not exists public.gift_products (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), sku text not null unique, type text not null check (type in ('service','open','fixed_amount')), package_code text null, vehicle_size text null, face_value_cents integer not null default 0, currency text not null default 'CAD', is_active boolean not null default true, title text null, description text null);
 create table if not exists public.gift_certificates (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), code text not null unique, type text not null check (type in ('service','open','fixed_amount')), status text not null default 'active', currency text not null default 'CAD', package_code text null, vehicle_size text null, original_value_cents integer not null default 0, remaining_cents integer not null default 0, purchaser_email text null, recipient_name text null, recipient_email text null, stripe_session_id text null, redeemed_at timestamptz null, expires_at timestamptz null, notes text null);
@@ -427,6 +504,20 @@ create table if not exists public.accounting_accounts (
   notes text null
 );
 
+insert into public.accounting_accounts (code, sort_order, label, account_type, account_group, normal_balance, is_active, is_system, notes) values
+('payroll_expense',250,'Payroll Expense','expense','direct_labor','debit',true,true,'Crew payroll cost posted from payroll runs.'),
+('wages_payable',85,'Wages Payable','liability','current_liability','credit',true,true,'Crew payroll payable created when payroll runs are posted before payout.')
+on conflict (code) do update set
+  sort_order = excluded.sort_order,
+  label = excluded.label,
+  account_type = excluded.account_type,
+  account_group = excluded.account_group,
+  normal_balance = excluded.normal_balance,
+  is_active = excluded.is_active,
+  is_system = excluded.is_system,
+  notes = excluded.notes,
+  updated_at = now();
+
 create table if not exists public.accounting_journal_entries (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -459,6 +550,46 @@ create table if not exists public.accounting_journal_lines (
   direction text not null,
   amount_cad numeric(12,2) not null default 0,
   memo text null
+);
+
+
+create table if not exists public.staff_payroll_runs (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  period_start date not null,
+  period_end date not null,
+  status text not null default 'draft' check (status in ('draft','posted','cancelled')),
+  staff_count integer not null default 0,
+  total_hours numeric(12,2) not null default 0,
+  total_gross_cad numeric(12,2) not null default 0,
+  note text null,
+  accounting_entry_id uuid null references public.accounting_journal_entries(id) on delete set null,
+  created_by_name text null,
+  created_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  posted_at timestamptz null,
+  posted_by_name text null,
+  posted_by_staff_user_id uuid null references public.staff_users(id) on delete set null
+);
+
+create table if not exists public.staff_payroll_run_lines (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  payroll_run_id uuid not null references public.staff_payroll_runs(id) on delete cascade,
+  staff_user_id uuid null references public.staff_users(id) on delete set null,
+  staff_name text null,
+  staff_email text null,
+  line_order integer not null default 0,
+  regular_hours numeric(12,2) not null default 0,
+  overtime_hours numeric(12,2) not null default 0,
+  total_hours numeric(12,2) not null default 0,
+  scheduled_hours numeric(12,2) not null default 0,
+  hourly_rate_cents integer not null default 0,
+  gross_pay_cad numeric(12,2) not null default 0,
+  booking_count integer not null default 0,
+  availability_conflicts integer not null default 0,
+  is_overworked boolean not null default false,
+  note text null
 );
 
 
@@ -518,3 +649,26 @@ alter table if exists public.accounting_records
 
 -- Update note — 2026-04-16 pass20
 -- No schema DDL change in this pass. Added explicit admin Pages Function wrappers for social feed and vehicle catalog endpoints to stop build-time import path failures.
+
+
+-- 2026-04-16 crew time, availability, and payroll support
+create index if not exists staff_users_role_active_idx
+  on public.staff_users(role_code, is_active, full_name);
+
+create index if not exists job_time_entries_booking_staff_event_idx
+  on public.job_time_entries(booking_id, staff_user_id, created_at desc);
+
+create index if not exists job_time_entries_staff_created_idx
+  on public.job_time_entries(staff_user_id, created_at desc);
+
+create index if not exists staff_availability_blocks_staff_window_idx
+  on public.staff_availability_blocks(staff_user_id, start_at, end_at);
+
+create index if not exists staff_payroll_runs_period_idx
+  on public.staff_payroll_runs(period_start, period_end, status);
+
+create index if not exists staff_payroll_run_lines_run_staff_idx
+  on public.staff_payroll_run_lines(payroll_run_id, staff_user_id, line_order);
+
+-- Update note — 2026-04-16 pass21
+-- Added staff_users / job_time_entries schema coverage to the repo snapshot, staff availability blocks, payroll run tables, and payroll account seeds so crew time, workload review, and payroll posting can live in one system.

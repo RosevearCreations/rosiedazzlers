@@ -1,4 +1,4 @@
-> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
+> Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## April 15, 2026 generated chart-assets pass
 This repo now includes generated local legacy pricing charts at `/assets/brand/CarPrice2025.PNG` and `/assets/brand/CarPriceDetails2025.PNG`, plus `scripts/generate_pricing_chart_images.py` to rebuild them from the bundled canonical pricing JSON.
@@ -298,3 +298,10 @@ Public pricing surfaces now read `/api/pricing_catalog_public` first. That endpo
 > Pass sync April 15, 2026: generated local price-chart PNG assets from the canonical bundled pricing catalog, rewired chart fallbacks to `/assets/brand`, added a regeneration script, and refreshed docs/schema notes for the legacy price-image carry-forward pass.
 
 Update note — 2026-04-16 pass20: Added explicit admin route wrappers for social feed and vehicle catalog endpoints to stop Pages Function import-resolution failures on /api/admin routes. Booking remains stable; no schema DDL change in this pass.
+
+## Current internal operations additions
+- Crew Time & Payroll: `/admin-payroll.html`
+- Staff availability blocks for vacation/sick/training/light-duty windows
+- Payroll run drafts with optional accounting journal posting
+- Service-time insights for average package time and average job time when add-ons are present
+- Pass sync 2026-04-16 (pass 21): added crew time/payroll workflow, staff availability blocks, payroll runs + accounting-post option, staff pay/work-cap settings, and service-time insight reporting; booking screen remains stable.

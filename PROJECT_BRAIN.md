@@ -1,4 +1,4 @@
-> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
+> Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## April 15, 2026 quick context
 - Legacy pricing charts now live in the repo under `/assets/brand/CarPrice2025.PNG` and `/assets/brand/CarPriceDetails2025.PNG`.
@@ -239,3 +239,9 @@ Current focus remains: preserve stable Pages routing while continuing the sessio
 > Pass sync April 15, 2026: generated local price-chart PNG assets from the canonical bundled pricing catalog, rewired chart fallbacks to `/assets/brand`, added a regeneration script, and refreshed docs/schema notes for the legacy price-image carry-forward pass.
 
 Update note — 2026-04-16 pass20: Added explicit admin route wrappers for social feed and vehicle catalog endpoints to stop Pages Function import-resolution failures on /api/admin routes. Booking remains stable; no schema DDL change in this pass.
+
+## Current high-value internal ops areas
+- Booking screen is stable and should not be altered casually.
+- App Management remains the pricing/document/source-of-truth office screen.
+- Crew Time & Payroll is now the office screen for staff availability, workload limits, logged hours, payroll draft/post actions, and service-time insight review.
+- Pass sync 2026-04-16 (pass 21): added crew time/payroll workflow, staff availability blocks, payroll runs + accounting-post option, staff pay/work-cap settings, and service-time insight reporting; booking screen remains stable.
