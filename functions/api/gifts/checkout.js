@@ -7,7 +7,7 @@
 // - Normalizes origin to avoid double slashes.
 // - Adds "version" into ALL responses so we can confirm the deployed file.
 
-const VERSION = "gifts_checkout_v5_photo_optional_return_gifts";
+const VERSION = "gifts_checkout_v6_recipient_name_and_delivery_date";
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -20,6 +20,8 @@ export async function onRequestPost({ request, env }) {
     const purchaser_email = asString(body?.purchaser_email);
     const recipient_email = asString(body?.recipient_email);
     const recipient_name = asString(body?.recipient_name);
+    const delivery_date = asString(body?.delivery_date);
+    const gift_message = asString(body?.message);
 
     if (!purchaser_email) return json({ version: VERSION, error: "Missing purchaser_email" }, 400);
     if (!recipient_email) return json({ version: VERSION, error: "Missing recipient_email" }, 400);
@@ -147,6 +149,8 @@ export async function onRequestPost({ request, env }) {
     form.set("metadata[purchaser_email]", purchaser_email);
     form.set("metadata[recipient_email]", recipient_email);
     if (recipient_name) form.set("metadata[recipient_name]", recipient_name);
+    if (delivery_date) form.set("metadata[delivery_date]", delivery_date);
+    if (gift_message) form.set("metadata[gift_message]", gift_message.slice(0, 450));
 
     // Vehicle metadata (photo optional)
     if (hasServiceGift) {
