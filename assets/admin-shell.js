@@ -62,6 +62,78 @@
     }
   }
 
+
+  function topNavItems() {
+    return [
+      { key: "admin", label: "Dashboard", href: "/admin.html", visible: () => true },
+      { key: "admin-booking", label: "Bookings", href: "/admin-booking.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-booking") },
+      { key: "admin-blocks", label: "Blocks", href: "/admin-blocks.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-blocks") },
+      { key: "admin-assign", label: "Assign Crew", href: "/admin-assign.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-assign") },
+      { key: "admin-progress", label: "Progress", href: "/admin-progress.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-progress") },
+      { key: "admin-jobsite", label: "Jobsite", href: "/admin-jobsite.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-jobsite") },
+      { key: "admin-live", label: "Live", href: "/admin-live.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-live") },
+      { key: "admin-staff", label: "Staff", href: "/admin-staff.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-staff") },
+      { key: "admin-payroll", label: "Crew Time & Payroll", href: "/admin-payroll.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-payroll") },
+      { key: "admin-catalog", label: "Inventory", href: "/admin-catalog.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-catalog") },
+      { key: "admin-customers", label: "Customers", href: "/admin-customers.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-customers") },
+      { key: "admin-notifications", label: "Notifications", href: "/admin-notifications.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-notifications") },
+      { key: "admin-analytics", label: "Analytics", href: "/admin-analytics.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-analytics") },
+      { key: "admin-promos", label: "Promos", href: "/admin-promos.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-promos") },
+      { key: "admin-accounting", label: "Accounting", href: "/admin-accounting.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting") || globalScope.AdminAuth.canAccessPage("admin") },
+      { key: "admin-app", label: "App Management", href: "/admin-app.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-app") },
+      { key: "account", label: "My Account", href: "/admin-account.html", visible: () => globalScope.AdminAuth.isAuthenticated() }
+    ];
+  }
+
+  function renderTopNavigation(root, pageKey, actor) {
+    const nav = document.querySelector("header.nav");
+    const navLinks = document.querySelector("#navLinks");
+    const navInner = document.querySelector(".nav-inner");
+    if (!nav || !navLinks || !navInner) return;
+
+    const currentPage = String(pageKey || "").trim();
+    const links = topNavItems().filter((item) => {
+      try {
+        return item.visible();
+      } catch {
+        return false;
+      }
+    });
+
+    navLinks.innerHTML = links
+      .map((item) => {
+        const active = item.key === currentPage ? ' aria-current="page"' : "";
+        return `<a href="${item.href}"${active}>${escapeHtml(item.label)}</a>`;
+      })
+      .join("");
+
+    let widget = navInner.querySelector(".account-widget");
+    if (!widget) {
+      widget = document.createElement("div");
+      widget.className = "account-widget";
+      navInner.appendChild(widget);
+    }
+
+    const actorLabel = actor && actor.full_name ? actor.full_name : "Signed in";
+    const roleLabel = actor ? humanizeRole(actor.role_code) : "Staff";
+    widget.innerHTML = `
+      <div class="account-widget-inner">
+        <span class="account-chip" title="${escapeHtml(actorLabel)}">${escapeHtml(actorLabel)} · ${escapeHtml(roleLabel)}</span>
+        <a class="btn small ghost" href="/admin-account.html">Account</a>
+        <button class="btn small ghost" type="button" data-admin-logout>Sign Out</button>
+      </div>
+    `;
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
   function ensureReturnMenu(root, pageKey) {
     if (document.querySelector(".admin-return-bar")) return;
     if (document.querySelector("header.nav")) return;
@@ -163,6 +235,7 @@
       applyActor(root, actor);
       globalScope.AdminAuth.applyVisibility(root);
       globalScope.AdminAuth.renderActorText(root);
+      renderTopNavigation(root, pageKey, actor);
       wireLogout(root, options);
       ensureReturnMenu(root, pageKey);
 
