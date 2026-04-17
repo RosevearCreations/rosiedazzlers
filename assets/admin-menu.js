@@ -87,6 +87,14 @@
     },
 
     {
+      key: "admin-payroll",
+      label: "Crew Time & Payroll",
+      href: "/admin-payroll.html",
+      description: "Availability, hours, and payroll",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-payroll")
+    },
+
+    {
       key: "admin-app",
       label: "App Management",
       href: "/admin-app",

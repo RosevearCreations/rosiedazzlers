@@ -112,6 +112,7 @@
       <a class="btn ghost small" href="/admin-recovery.html">Recovery</a>
       <a class="btn ghost small" href="/admin-app">App</a>
       <a class="btn ghost small" href="/admin-accounting.html">Accounting</a>
+      <a class="btn ghost small" href="/admin-payroll.html">Payroll</a>
       <span class="crumb">${pageKey || "admin"}</span>
     `;
 

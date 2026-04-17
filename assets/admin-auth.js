@@ -247,6 +247,9 @@
       case "admin-accounting":
         return actor.is_admin === true || hasCapability("can_manage_staff");
 
+      case "admin-payroll":
+        return actor.is_admin === true || hasCapability("can_manage_staff");
+
       case "admin-assign":
         return actor.is_admin === true || hasCapability("can_manage_bookings") || hasCapability("can_manage_staff");
 
