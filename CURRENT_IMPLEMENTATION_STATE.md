@@ -307,3 +307,5 @@ Update note — 2026-04-16 pass20: Added explicit admin route wrappers for socia
 - Time tracking still uses `job_time_entries`; payroll summary combines manual minute entries plus work-state event history where available.
 - Booking remains stable and unchanged in this pass.
 - Pass sync 2026-04-16 (pass 21): added crew time/payroll workflow, staff availability blocks, payroll runs + accounting-post option, staff pay/work-cap settings, and service-time insight reporting; booking screen remains stable.
+
+- Pass 22 sync: fixed admin-accounting date/input layout, moved admin-staff to a left-side internal menu layout, normalized admin login redirects to .html, and added clean admin route rewrites for payroll/staff/accounting/app/login.

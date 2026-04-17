@@ -416,3 +416,5 @@ Update note — 2026-04-16 pass20: Added explicit admin route wrappers for socia
 - moved forward: service-time insight reporting now shows average site time by package and average job time when an add-on is present, helping operations estimate invoicing/service effort more realistically.
 - move up next: connect staff availability warnings directly into `admin-assign.html` row-by-row so overloaded or unavailable crew members are flagged before saving assignments, and decide whether payroll payout settlement should get its own payable/settlement screen or stay inside accounting.
 - Pass sync 2026-04-16 (pass 21): added crew time/payroll workflow, staff availability blocks, payroll runs + accounting-post option, staff pay/work-cap settings, and service-time insight reporting; booking screen remains stable.
+
+- Pass 22 sync: fixed admin-accounting date/input layout, moved admin-staff to a left-side internal menu layout, normalized admin login redirects to .html, and added clean admin route rewrites for payroll/staff/accounting/app/login.
