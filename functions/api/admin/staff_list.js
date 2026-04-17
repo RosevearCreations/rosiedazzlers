@@ -8,7 +8,7 @@ export async function onRequestPost(context) {
     if (!access.ok) return access.response;
 
     const [staffRes, tiersRes] = await Promise.all([
-      fetch(`${env.SUPABASE_URL}/rest/v1/staff_users?select=id,created_at,updated_at,full_name,email,role_code,is_active,password_hash,can_override_lower_entries,can_manage_bookings,can_manage_blocks,can_manage_progress,can_manage_promos,can_manage_staff,notes&order=full_name.asc`, { headers: serviceHeaders(env) }),
+      fetch(`${env.SUPABASE_URL}/rest/v1/staff_users?select=id,created_at,updated_at,full_name,email,role_code,is_active,password_hash,can_override_lower_entries,can_manage_bookings,can_manage_blocks,can_manage_progress,can_manage_promos,can_manage_staff,employee_code,position_title,pay_schedule,hourly_rate_cents,max_hours_per_day,max_hours_per_week,payroll_enabled,tips_payout_notes,payroll_notes,preferred_work_hours,notes&order=full_name.asc`, { headers: serviceHeaders(env) }),
       fetch(`${env.SUPABASE_URL}/rest/v1/customer_tiers?select=code,sort_order,label,description,is_active&order=sort_order.asc`, { headers: serviceHeaders(env) })
     ]);
     if (!staffRes.ok) return json({ error: `Could not load staff users. ${await staffRes.text()}` }, 500);
