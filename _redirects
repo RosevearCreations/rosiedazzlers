@@ -3,10 +3,15 @@
 /services/ /services 301
 /pricing/ /pricing 301
 /admin/ /admin 301
-/admin-accounting/ /admin-accounting 301
 /admin-catalog/ /admin-catalog 301
 
-/admin-app/ /admin-app 301
-
+/admin-accounting /admin-accounting.html 200
+/admin-accounting/ /admin-accounting.html 200
+/admin-app /admin-app.html 200
+/admin-app/ /admin-app.html 200
+/admin-staff /admin-staff.html 200
+/admin-staff/ /admin-staff.html 200
+/admin-login /admin-login.html 200
+/admin-login/ /admin-login.html 200
 /admin-payroll /admin-payroll.html 200
 /admin-payroll/ /admin-payroll.html 200

@@ -32,8 +32,36 @@
     .pricing-window__tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
     .pricing-tier{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
     .pricing-tier strong{display:block;font-size:1.2rem;margin-top:6px}
+    #filterForm label,
+    #entryForm label,
+    #remitForm label,
+    #monthEndChecklistForm label{
+      display:grid;
+      gap:6px;
+      min-width:0;
+      align-content:start;
+    }
+    #filterForm > label{flex:1 1 170px;min-width:170px}
+    #filterForm > label[style]{min-width:240px;flex:1 1 280px}
+    #filterForm input,
+    #filterForm select,
+    #entryForm input,
+    #entryForm select,
+    #entryForm textarea,
+    #remitForm input,
+    #remitForm select,
+    #remitForm textarea,
+    #monthEndChecklistForm input,
+    #monthEndChecklistForm select,
+    #monthEndChecklistForm textarea{
+      width:100%;
+      max-width:none;
+      min-width:0;
+    }
     @media (max-width: 980px){
       .admin-grid-2,.admin-grid-3{grid-template-columns:1fr}
+      #filterForm > label,
+      #filterForm > label[style]{min-width:0;flex:1 1 100%}
     }
   </style>
 </head>
