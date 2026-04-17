@@ -674,3 +674,11 @@ create index if not exists staff_payroll_run_lines_run_staff_idx
 -- Added staff_users / job_time_entries schema coverage to the repo snapshot, staff availability blocks, payroll run tables, and payroll account seeds so crew time, workload review, and payroll posting can live in one system.
 
 -- Pass 22 note: no schema DDL change. This pass focused on admin-accounting form layout, admin-staff left-side menu layout, and admin login/route rewrite normalization.
+
+-- 2026-04-16 admin-nav and growth-direction pass
+-- No schema DDL change in this pass.
+-- App Management now uses additional logical settings keys:
+--   quote_booking_settings
+--   gift_delivery_settings
+--   membership_plan_settings
+-- Gift checkout now also captures recipient_name, delivery_date, and gift_message in checkout metadata for future delivery automation.
