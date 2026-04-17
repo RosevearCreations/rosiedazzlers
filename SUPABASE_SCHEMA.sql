@@ -672,3 +672,5 @@ create index if not exists staff_payroll_run_lines_run_staff_idx
 
 -- Update note — 2026-04-16 pass21
 -- Added staff_users / job_time_entries schema coverage to the repo snapshot, staff availability blocks, payroll run tables, and payroll account seeds so crew time, workload review, and payroll posting can live in one system.
+
+-- Pass 22 note: no schema DDL change. This pass focused on admin-accounting form layout, admin-staff left-side menu layout, and admin login/route rewrite normalization.

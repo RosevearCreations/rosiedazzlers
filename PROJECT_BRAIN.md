@@ -245,3 +245,5 @@ Update note — 2026-04-16 pass20: Added explicit admin route wrappers for socia
 - App Management remains the pricing/document/source-of-truth office screen.
 - Crew Time & Payroll is now the office screen for staff availability, workload limits, logged hours, payroll draft/post actions, and service-time insight review.
 - Pass sync 2026-04-16 (pass 21): added crew time/payroll workflow, staff availability blocks, payroll runs + accounting-post option, staff pay/work-cap settings, and service-time insight reporting; booking screen remains stable.
+
+- Pass 22 sync: fixed admin-accounting date/input layout, moved admin-staff to a left-side internal menu layout, normalized admin login redirects to .html, and added clean admin route rewrites for payroll/staff/accounting/app/login.

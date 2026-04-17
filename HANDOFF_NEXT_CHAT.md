@@ -266,3 +266,5 @@ Update note — 2026-04-16 pass20: Added explicit admin route wrappers for socia
 - New schema coverage added for `staff_users`, `job_time_entries`, `staff_availability_blocks`, `staff_payroll_runs`, and `staff_payroll_run_lines`.
 - Strongest next move: show availability/overtime warnings directly in crew assignment and optionally tie payroll settlement into payables/accounting close-out.
 - Pass sync 2026-04-16 (pass 21): added crew time/payroll workflow, staff availability blocks, payroll runs + accounting-post option, staff pay/work-cap settings, and service-time insight reporting; booking screen remains stable.
+
+- Pass 22 sync: fixed admin-accounting date/input layout, moved admin-staff to a left-side internal menu layout, normalized admin login redirects to .html, and added clean admin route rewrites for payroll/staff/accounting/app/login.
