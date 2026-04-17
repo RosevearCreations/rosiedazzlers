@@ -1,38 +1,6 @@
 // assets/admin-shell.js
 //
 // Shared admin/detailer page bootstrap.
-//
-// What this file does:
-// - requires a valid signed-in staff session for protected pages
-// - loads current actor through AdminAuth
-// - updates page text placeholders like actor name / role / email
-// - applies role/capability/page-based visibility rules
-// - wires logout buttons automatically
-// - provides a small page bootstrap helper for admin/detailer screens
-//
-// Expected dependency:
-// - /assets/admin-auth.js
-//
-// Typical page usage:
-// <script src="/assets/admin-auth.js"></script>
-// <script src="/assets/admin-shell.js"></script>
-// <script>
-//   window.AdminShell.boot({ pageKey: "admin-jobsite" });
-// </script>
-//
-// Optional markup hooks:
-// - [data-actor-name]
-// - [data-actor-role]
-// - [data-actor-email]
-// - [data-auth-only]
-// - [data-guest-only]
-// - [data-role="admin"]
-// - [data-capability="can_manage_staff"]
-// - [data-page-access="admin-promos"]
-// - [data-admin-logout]
-// - [data-admin-shell-status]
-// - [data-admin-shell-loading]
-// - [data-admin-shell-ready]
 
 (function attachAdminShell(globalScope) {
   function assertDependency() {
@@ -206,7 +174,10 @@
       }
 
       setLoading(root, false);
-      find(root, "[data-admin-shell-loading]").forEach((node) => { node.hidden = true; node.style.display = "none"; });
+      find(root, "[data-admin-shell-loading]").forEach((node) => {
+        node.hidden = true;
+        node.style.display = "none";
+      });
 
       return {
         ok: true,
@@ -214,7 +185,10 @@
       };
     } catch (err) {
       setLoading(root, false);
-      find(root, "[data-admin-shell-loading]").forEach((node) => { node.hidden = true; node.style.display = "none"; });
+      find(root, "[data-admin-shell-loading]").forEach((node) => {
+        node.hidden = true;
+        node.style.display = "none";
+      });
       setStatus(
         root,
         err && err.message ? err.message : "Could not initialize this page.",
