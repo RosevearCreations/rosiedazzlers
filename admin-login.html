@@ -7,10 +7,7 @@
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
   <style>
-    :root {
-      color-scheme: dark;
-    }
-
+    :root { color-scheme: dark; }
     body {
       min-height: 100vh;
       margin: 0;
@@ -21,12 +18,7 @@
         linear-gradient(180deg, #0f172a 0%, #111827 100%);
       padding: 24px;
     }
-
-    .login-shell {
-      width: 100%;
-      max-width: 440px;
-    }
-
+    .login-shell { width: 100%; max-width: 440px; }
     .login-card {
       background: rgba(17, 24, 39, 0.92);
       border: 1px solid rgba(255,255,255,0.08);
@@ -35,7 +27,6 @@
       box-shadow: 0 18px 50px rgba(0,0,0,0.35);
       backdrop-filter: blur(10px);
     }
-
     .brand-kicker {
       display: inline-block;
       font-size: 0.8rem;
@@ -44,25 +35,19 @@
       color: #93c5fd;
       margin-bottom: 10px;
     }
-
     h1 {
       margin: 0 0 8px;
       font-size: 1.8rem;
       line-height: 1.2;
       color: #f9fafb;
     }
-
     .subtext {
       margin: 0 0 22px;
       color: #cbd5e1;
       font-size: 0.98rem;
       line-height: 1.5;
     }
-
-    .field {
-      margin-bottom: 16px;
-    }
-
+    .field { margin-bottom: 16px; }
     .field label {
       display: block;
       margin-bottom: 8px;
@@ -70,7 +55,6 @@
       font-weight: 600;
       color: #e5e7eb;
     }
-
     .field input {
       width: 100%;
       border: 1px solid rgba(255,255,255,0.12);
@@ -83,19 +67,16 @@
       outline: none;
       transition: border-color 0.15s ease, background 0.15s ease;
     }
-
     .field input:focus {
       border-color: #60a5fa;
       background: rgba(255,255,255,0.06);
     }
-
     .actions {
       display: flex;
       gap: 12px;
       align-items: center;
       margin-top: 8px;
     }
-
     .btn {
       appearance: none;
       border: 0;
@@ -106,50 +87,28 @@
       cursor: pointer;
       transition: transform 0.05s ease, opacity 0.15s ease;
     }
-
-    .btn:active {
-      transform: translateY(1px);
-    }
-
+    .btn:active { transform: translateY(1px); }
     .btn-primary {
       background: #2563eb;
       color: #fff;
       flex: 1;
     }
-
     .btn-primary[disabled] {
       opacity: 0.6;
       cursor: wait;
     }
-
     .status {
       min-height: 24px;
       margin-top: 14px;
       font-size: 0.95rem;
       line-height: 1.4;
     }
-
-    .status.error {
-      color: #fca5a5;
-    }
-
-    .status.success {
-      color: #86efac;
-    }
-
+    .status.error { color: #fca5a5; }
+    .status.success { color: #86efac; }
     .footnote {
       margin-top: 18px;
       font-size: 0.85rem;
       color: #94a3b8;
-    }
-
-    .small-link {
-      color: #93c5fd;
-      text-decoration: none;
-    }
-
-    .small-link:hover {
-      text-decoration: underline;
     }
   </style>
 </head>
@@ -158,48 +117,27 @@
     <section class="login-card" aria-labelledby="staff-login-title">
       <div class="brand-kicker">Rosie Dazzlers</div>
       <h1 id="staff-login-title">Staff Login</h1>
-      <p class="subtext">
-        Sign in to access the admin and detailer tools.
-      </p>
+      <p class="subtext">Sign in to access the admin and detailer tools.</p>
 
       <form id="staff-login-form" novalidate>
         <div class="field">
           <label for="staff-email">Email</label>
-          <input
-            id="staff-email"
-            name="email"
-            type="email"
-            autocomplete="username"
-            inputmode="email"
-            required
-            placeholder="you@example.com"
-          />
+          <input id="staff-email" name="email" type="email" autocomplete="username" inputmode="email" required placeholder="you@example.com" />
         </div>
 
         <div class="field">
           <label for="staff-password">Password</label>
-          <input
-            id="staff-password"
-            name="password"
-            type="password"
-            autocomplete="current-password"
-            required
-            placeholder="Enter your password"
-          />
+          <input id="staff-password" name="password" type="password" autocomplete="current-password" required placeholder="Enter your password" />
         </div>
 
         <div class="actions">
-          <button id="staff-login-submit" class="btn btn-primary" type="submit">
-            Sign In
-          </button>
+          <button id="staff-login-submit" class="btn btn-primary" type="submit">Sign In</button>
         </div>
 
         <div id="staff-login-status" class="status" aria-live="polite"></div>
       </form>
 
-      <p class="footnote">
-        After sign-in, you will be returned to the page you were trying to access.
-      </p>
+      <p class="footnote">After sign-in, you will be returned to the page you were trying to access.</p>
     </section>
   </main>
 
@@ -226,7 +164,7 @@
         try {
           const current = await window.AdminAuth.loadCurrentActor();
           if (current && current.authenticated) {
-            window.location.replace(window.AdminAuth.readNextUrl("/admin"));
+            window.location.replace(window.AdminAuth.readNextUrl("/admin.html"));
             return;
           }
         } catch (err) {
@@ -258,16 +196,10 @@
             throw new Error("Sign-in did not complete.");
           }
 
-          setStatus("Signed in. Redirecting...", "success");
-
-          const nextUrl = window.AdminAuth.readNextUrl("/admin");
-          window.location.replace(nextUrl);
+          window.location.replace(window.AdminAuth.readNextUrl("/admin.html"));
         } catch (err) {
           setBusy(false);
-          setStatus(
-            err && err.message ? err.message : "Sign-in failed.",
-            "error"
-          );
+          setStatus(err && err.message ? err.message : "Could not sign in.", "error");
         }
       });
 
