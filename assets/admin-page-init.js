@@ -1,32 +1,6 @@
 // assets/admin-page-init.js
 //
 // Shared admin/detailer page initializer.
-//
-// What this file does:
-// - boots AdminShell for protected pages
-// - renders AdminMenu automatically
-// - gives each page one simple init call
-// - reduces repeated auth/menu startup code across admin pages
-//
-// Expected dependencies:
-// - /assets/admin-auth.js
-// - /assets/admin-shell.js
-// - /assets/admin-menu.js
-//
-// Typical page usage:
-// <script src="/assets/admin-auth.js"></script>
-// <script src="/assets/admin-shell.js"></script>
-// <script src="/assets/admin-menu.js"></script>
-// <script src="/assets/admin-page-init.js"></script>
-// <script>
-//   window.AdminPageInit.init({
-//     pageKey: "admin-booking",
-//     onReady: async ({ actor }) => { ... }
-//   });
-// </script>
-//
-// Optional page markup hook:
-// - [data-admin-menu-mount]
 
 (function attachAdminPageInit(globalScope) {
   function assertDependencies() {
@@ -69,7 +43,5 @@
     return result;
   }
 
-  globalScope.AdminPageInit = {
-    init
-  };
+  globalScope.AdminPageInit = { init };
 })(window);
