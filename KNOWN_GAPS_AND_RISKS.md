@@ -559,3 +559,22 @@ Update note — 2026-04-16 pass20: Added explicit admin route wrappers for socia
 - Pass sync 2026-04-16 (pass 21): added crew time/payroll workflow, staff availability blocks, payroll runs + accounting-post option, staff pay/work-cap settings, and service-time insight reporting; booking screen remains stable.
 
 - Pass 22 sync: fixed admin-accounting date/input layout, moved admin-staff to a left-side internal menu layout, normalized admin login redirects to .html, and added clean admin route rewrites for payroll/staff/accounting/app/login.
+
+## April 16, 2026 admin-nav and growth-direction pass
+
+- standardized the top admin navigation so pages that boot through the shared admin shell now overwrite incomplete page-level nav link lists with one consistent internal menu bar plus account/logout controls.
+- added new App Management sections for:
+  - stronger self-serve quote + booking emphasis
+  - scheduled e-gift delivery settings
+  - maintenance / membership plan settings
+- extended app settings loading so those three new settings keys are part of the shared office configuration pull.
+- moved the public direction forward with:
+  - stronger quote-first CTA messaging on the home and pricing pages
+  - richer gift checkout inputs for recipient name and preferred send date
+  - gift checkout metadata capture for recipient name, preferred send date, and gift message
+- no schema DDL change was required for this pass; this was a workflow/settings/UI pass.
+
+- Scheduled e-gift delivery is still metadata-first in this pass; office settings and checkout collection now exist, but timed send automation and recipient-side confirmations are still unfinished.
+- Maintenance / membership plans are now represented in App Management and public teaser copy, but recurring billing, recurring scheduling, and member-specific pricing logic are not built yet.
+
+Pass sync: April 16, 2026 — top admin navigation standardized, app-management growth settings added, quote-first public CTA strengthened, and gift checkout now collects recipient name plus preferred send date.

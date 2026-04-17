@@ -45,7 +45,7 @@
       <h1 style="margin:12px 0 8px">Gift Certificates</h1>
       <p class="kicker">
         Buy a gift certificate for a friend or family member. Service gifts cover a specific package + size.
-        Dollar gifts deduct from any booking total.
+        Dollar gifts deduct from any booking total, and you can now collect recipient name plus a preferred send date for e-gift delivery planning.
       </p>
       <div class="notice warn" style="margin-top:12px">
         <strong>Important:</strong> Gift certificates are valid for <strong>1 year</strong> from purchase and are <strong>non-refundable</strong>.
@@ -67,7 +67,7 @@
           <h3 style="margin:0 0 8px">Dollar Amount Gift</h3>
           <p class="muted">Pick an amount and enter recipient info. This gift deducts from any booking.</p>
 
-          <div class="grid3">
+          <div class="grid2">
             <div>
               <label for="dollarSku">Gift amount <span class="req">*</span></label>
               <select id="dollarSku">
@@ -85,6 +85,10 @@
               <label for="dRecipEmail">Recipient email <span class="req">*</span></label>
               <input id="dRecipEmail" type="email" placeholder="friend@example.com" />
             </div>
+            <div>
+              <label for="dRecipName">Recipient name (optional)</label>
+              <input id="dRecipName" type="text" placeholder="Friend or family member" />
+            </div>
           </div>
 
           <div class="grid2" style="margin-top:10px">
@@ -92,9 +96,14 @@
               <label for="dMessage">Message (optional)</label>
               <input id="dMessage" type="text" placeholder="Happy Birthday! Enjoy a clean ride." />
             </div>
-            <div class="row" style="align-items:flex-end">
-              <button class="btn primary" id="buyDollarBtn" type="button">Buy Dollar Gift</button>
+            <div>
+              <label for="dDeliveryDate">Preferred send date (optional)</label>
+              <input id="dDeliveryDate" type="date" />
             </div>
+          </div>
+
+          <div class="row" style="align-items:flex-end;margin-top:12px">
+            <button class="btn primary" id="buyDollarBtn" type="button">Buy Dollar Gift</button>
           </div>
 
           <div id="dollarStatus" class="notice" style="display:none;margin-top:12px"></div>
@@ -120,12 +129,12 @@
               </select>
               <div class="mini">
                 Size chart:
-                <a href="https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG" target="_blank" rel="noopener">Open</a>
+                <a href="/assets/brand/CarSizeChart.PNG" target="_blank" rel="noopener">Open</a>
               </div>
             </div>
           </div>
 
-          <div class="grid3" style="margin-top:10px">
+          <div class="grid2" style="margin-top:10px">
             <div>
               <label for="sPurchEmail">Purchaser email <span class="req">*</span></label>
               <input id="sPurchEmail" type="email" placeholder="you@example.com" />
@@ -135,8 +144,22 @@
               <input id="sRecipEmail" type="email" placeholder="friend@example.com" />
             </div>
             <div>
+              <label for="sRecipName">Recipient name (optional)</label>
+              <input id="sRecipName" type="text" placeholder="Friend or family member" />
+            </div>
+            <div>
+              <label for="sDeliveryDate">Preferred send date (optional)</label>
+              <input id="sDeliveryDate" type="date" />
+            </div>
+          </div>
+
+          <div class="grid2" style="margin-top:10px">
+            <div>
               <label for="sMessage">Message (optional)</label>
               <input id="sMessage" type="text" placeholder="Enjoy your detail!" />
+            </div>
+            <div class="notice" style="align-self:end">
+              Scheduled e-gift delivery details are now collected during checkout so office follow-up can stay consistent even before full automation is turned on.
             </div>
           </div>
 
@@ -177,6 +200,7 @@
           <li><strong>Dollar gifts</strong> deduct from the booking total.</li>
           <li><strong>Service gifts</strong> require the recipient to select the matching package + size when booking.</li>
           <li>Gift certificates are valid for <strong>1 year</strong> and are <strong>non-refundable</strong>.</li>
+          <li>Recipient name, message, and preferred send date can now be collected for e-gift planning.</li>
           <li>Redeem gifts during booking using the gift code.</li>
         </ul>
 
@@ -283,6 +307,8 @@
       const sku = qs("#dollarSku").value;
       const purchaser_email = (qs("#dPurchEmail").value || "").trim();
       const recipient_email = (qs("#dRecipEmail").value || "").trim();
+      const recipient_name = (qs("#dRecipName").value || "").trim();
+      const delivery_date = (qs("#dDeliveryDate").value || "").trim();
       const message = (qs("#dMessage").value || "").trim();
 
       if (!sku) return show(qs("#dollarStatus"), "Pick a gift amount.", "bad");
@@ -295,6 +321,8 @@
         items: [{ sku, qty: 1 }],
         purchaser_email,
         recipient_email,
+        recipient_name: recipient_name || null,
+        delivery_date: delivery_date || null,
         message: message || null,
       };
 
@@ -312,6 +340,8 @@
       const vehicle_size = qs("#sSize").value;
       const purchaser_email = (qs("#sPurchEmail").value || "").trim();
       const recipient_email = (qs("#sRecipEmail").value || "").trim();
+      const recipient_name = (qs("#sRecipName").value || "").trim();
+      const delivery_date = (qs("#sDeliveryDate").value || "").trim();
       const message = (qs("#sMessage").value || "").trim();
 
       if (!package_code) return show(qs("#serviceStatus"), "Pick a package.", "bad");
@@ -325,6 +355,8 @@
         items: [{ sku: `SERVICE-${package_code}-${vehicle_size}`, qty: 1 }],
         purchaser_email,
         recipient_email,
+        recipient_name: recipient_name || null,
+        delivery_date: delivery_date || null,
         message: message || null,
       };
 
