@@ -7,3 +7,6 @@
 /admin-catalog/ /admin-catalog 301
 
 /admin-app/ /admin-app 301
+
+/admin-payroll /admin-payroll.html 200
+/admin-payroll/ /admin-payroll.html 200

@@ -33,11 +33,12 @@
         <div>
           <div class="badge">Admin Staff</div>
           <h1>Manage staff access</h1>
-          <p>Create and update Admin, Senior Detailer, and Detailer records using the signed-in staff session.</p>
+          <p>Create and update Admin, Senior Detailer, and Detailer records using the signed-in staff session. Payroll setup, work caps, and preferred hours now live with the staff record so the crew-time screen can flag overloads sooner.</p>
           <div class="badges">
             <div class="badge">Admins</div>
             <div class="badge">Senior Detailers</div>
             <div class="badge">Detailers</div>
+            <a class="btn ghost small" href="/admin-payroll.html">Crew Time &amp; Payroll</a>
           </div>
         </div>
         <div class="panel">
@@ -108,8 +109,29 @@
               <label class="row"><input id="canManageProgress" type="checkbox" /> <div><strong>Can manage progress</strong></div></label>
               <label class="row"><input id="canManagePromos" type="checkbox" /> <div><strong>Can manage promos</strong></div></label>
               <label class="row"><input id="canManageStaff" type="checkbox" /> <div><strong>Can manage staff</strong></div></label>
+              <label class="row"><input id="payrollEnabled" type="checkbox" checked /> <div><strong>Payroll enabled</strong><div class="kicker">Include this staff member in payroll runs.</div></div></label>
             </div>
 
+            <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+              <label>Employee code<input id="employeeCode" type="text" placeholder="RD-001" /></label>
+              <label>Position title<input id="positionTitle" type="text" placeholder="Senior Detailer" /></label>
+              <label>Pay schedule
+                <select id="paySchedule">
+                  <option value="weekly">weekly</option>
+                  <option value="biweekly">biweekly</option>
+                  <option value="semimonthly">semimonthly</option>
+                  <option value="monthly">monthly</option>
+                  <option value="contractor">contractor</option>
+                </select>
+              </label>
+              <label>Hourly rate (CAD)<input id="hourlyRateCad" type="number" step="0.01" min="0" placeholder="0.00" /></label>
+              <label>Max hours / day<input id="maxHoursPerDay" type="number" step="0.25" min="0" placeholder="8" /></label>
+              <label>Max hours / week<input id="maxHoursPerWeek" type="number" step="0.25" min="0" placeholder="40" /></label>
+            </div>
+
+            <label>Preferred work hours / notes<textarea id="preferredWorkHours" rows="3" placeholder='Example: {"monday":"8-4","tuesday":"8-4"} or simple text notes'></textarea></label>
+            <label>Tips payout notes<textarea id="tipsPayoutNotes" rows="2" placeholder="Optional note for tips payout handling"></textarea></label>
+            <label>Payroll notes<textarea id="payrollNotes" rows="2" placeholder="Internal payroll reminder or exception"></textarea></label>
             <label>Notes<textarea id="notes" rows="4" placeholder="Optional internal notes"></textarea></label>
             <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
               <button id="saveStaffBtn" class="btn primary" type="submit" disabled>Save staff user</button>
@@ -174,6 +196,16 @@
       document.querySelector("#canManageProgress").checked = row?.can_manage_progress === true;
       document.querySelector("#canManagePromos").checked = row?.can_manage_promos === true;
       document.querySelector("#canManageStaff").checked = row?.can_manage_staff === true;
+      document.querySelector("#employeeCode").value = row?.employee_code || "";
+      document.querySelector("#positionTitle").value = row?.position_title || "";
+      document.querySelector("#paySchedule").value = row?.pay_schedule || "weekly";
+      document.querySelector("#hourlyRateCad").value = row?.hourly_rate_cents != null ? String((Number(row.hourly_rate_cents || 0) / 100).toFixed(2)) : "";
+      document.querySelector("#maxHoursPerDay").value = row?.max_hours_per_day != null ? row.max_hours_per_day : 8;
+      document.querySelector("#maxHoursPerWeek").value = row?.max_hours_per_week != null ? row.max_hours_per_week : 40;
+      document.querySelector("#payrollEnabled").checked = row?.payroll_enabled !== false;
+      document.querySelector("#preferredWorkHours").value = typeof row?.preferred_work_hours === 'string' ? row.preferred_work_hours : (row?.preferred_work_hours ? JSON.stringify(row.preferred_work_hours, null, 2) : "");
+      document.querySelector("#tipsPayoutNotes").value = row?.tips_payout_notes || "";
+      document.querySelector("#payrollNotes").value = row?.payroll_notes || "";
       document.querySelector("#notes").value = row?.notes || "";
     }
     function renderSelectedStaff() {
@@ -189,7 +221,7 @@
         <article class="card">
           <div class="kicker">${escapeHtml(row.role_code || "detailer")} · ${row.is_active ? "active" : "inactive"}</div>
           <h3>${escapeHtml(row.full_name || "Unnamed")}</h3>
-          <p>${escapeHtml(row.email || "—")}</p>
+          <p>${escapeHtml(row.email || "—")}</p><div class="kicker">${escapeHtml(row.position_title || row.pay_schedule || 'pay setup pending')}${row.hourly_rate_cents != null ? ' · $' + escapeHtml((Number(row.hourly_rate_cents || 0) / 100).toFixed(2)) + '/hr' : ''}</div>
           <div class="hr"></div>
           <button class="btn primary" type="button" data-staff-id="${escapeHtml(row.id)}">Edit staff</button>
         </article>`).join("");
@@ -227,6 +259,16 @@
         can_manage_progress: document.querySelector("#canManageProgress").checked,
         can_manage_promos: document.querySelector("#canManagePromos").checked,
         can_manage_staff: document.querySelector("#canManageStaff").checked,
+        employee_code: document.querySelector("#employeeCode").value.trim(),
+        position_title: document.querySelector("#positionTitle").value.trim(),
+        pay_schedule: document.querySelector("#paySchedule").value,
+        hourly_rate_cad: document.querySelector("#hourlyRateCad").value,
+        max_hours_per_day: document.querySelector("#maxHoursPerDay").value,
+        max_hours_per_week: document.querySelector("#maxHoursPerWeek").value,
+        payroll_enabled: document.querySelector("#payrollEnabled").checked,
+        preferred_work_hours: document.querySelector("#preferredWorkHours").value.trim(),
+        tips_payout_notes: document.querySelector("#tipsPayoutNotes").value.trim(),
+        payroll_notes: document.querySelector("#payrollNotes").value.trim(),
         notes: document.querySelector("#notes").value.trim()
       };
     }
