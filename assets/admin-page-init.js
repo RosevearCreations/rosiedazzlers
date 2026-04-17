@@ -47,8 +47,8 @@
 
     const result = await globalScope.AdminShell.boot({
       pageKey,
-      loginUrl: options.loginUrl || "/admin-login",
-      logoutRedirect: options.logoutRedirect || "/admin-login",
+      loginUrl: options.loginUrl || "/admin-login.html",
+      logoutRedirect: options.logoutRedirect || "/admin-login.html",
       root: options.root || document,
       onReady: async ({ actor, auth }) => {
         if (mount) {

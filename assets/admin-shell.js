@@ -110,7 +110,7 @@
       <a class="btn ghost small" href="/admin-catalog.html">Inventory</a>
       <a class="btn ghost small" href="/admin-assign.html">Assign Crew</a>
       <a class="btn ghost small" href="/admin-recovery.html">Recovery</a>
-      <a class="btn ghost small" href="/admin-app">App</a>
+      <a class="btn ghost small" href="/admin-app.html">App</a>
       <a class="btn ghost small" href="/admin-accounting.html">Accounting</a>
       <a class="btn ghost small" href="/admin-payroll.html">Payroll</a>
       <span class="crumb">${pageKey || "admin"}</span>
@@ -120,7 +120,7 @@
   }
 
   function wireLogout(root, options = {}) {
-    const redirectTo = options.logoutRedirect || "/admin-login";
+    const redirectTo = options.logoutRedirect || "/admin-login.html";
 
     find(root, "[data-admin-logout]").forEach((node) => {
       if (node.dataset.logoutBound === "true") return;
@@ -172,7 +172,7 @@
 
     const root = options.root || document;
     const pageKey = options.pageKey || null;
-    const loginUrl = options.loginUrl || "/admin-login";
+    const loginUrl = options.loginUrl || "/admin-login.html";
 
     setLoading(root, true);
     setStatus(root, "", "");
