@@ -1,4 +1,4 @@
-> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
+> Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## April 15, 2026 generated pricing-chart asset pass
 Completed in this pass:
@@ -407,3 +407,12 @@ Route hotfix sync reviewed on 2026-04-11.
 > Pass sync April 15, 2026: generated local price-chart PNG assets from the canonical bundled pricing catalog, rewired chart fallbacks to `/assets/brand`, added a regeneration script, and refreshed docs/schema notes for the legacy price-image carry-forward pass.
 
 Update note — 2026-04-16 pass20: Added explicit admin route wrappers for social feed and vehicle catalog endpoints to stop Pages Function import-resolution failures on /api/admin routes. Booking remains stable; no schema DDL change in this pass.
+
+## April 16, 2026 crew time / payroll pass
+- moved forward: added `admin-payroll.html` so office/admin users can review crew availability, logged hours, workload flags, payroll estimates, and service-time trends in one screen.
+- moved forward: added `staff_availability_blocks`, `staff_payroll_runs`, and `staff_payroll_run_lines` to the documented schema and created admin endpoints to list/save/delete availability blocks and save payroll runs.
+- moved forward: payroll runs can optionally post a journal entry into accounting using payroll expense / wages payable account codes when those accounts are available.
+- moved forward: staff records now carry pay schedule, hourly rate, max hours per day/week, payroll enabled flag, preferred work-hours notes, and payroll notes from the staff editor.
+- moved forward: service-time insight reporting now shows average site time by package and average job time when an add-on is present, helping operations estimate invoicing/service effort more realistically.
+- move up next: connect staff availability warnings directly into `admin-assign.html` row-by-row so overloaded or unavailable crew members are flagged before saving assignments, and decide whether payroll payout settlement should get its own payable/settlement screen or stay inside accounting.
+- Pass sync 2026-04-16 (pass 21): added crew time/payroll workflow, staff availability blocks, payroll runs + accounting-post option, staff pay/work-cap settings, and service-time insight reporting; booking screen remains stable.

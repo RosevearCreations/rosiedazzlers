@@ -1,4 +1,4 @@
-> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
+> Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## April 15, 2026 documentation sync
 This refresh aligns the docs with the generated pricing-chart asset pass. `CarPrice2025.PNG` and `CarPriceDetails2025.PNG` are now created from the current bundled pricing catalog, served locally from `/assets/brand`, and supported by a repeatable regeneration script so the legacy chart-image dependency no longer requires hand-editing table screenshots.
@@ -108,3 +108,6 @@ This pass synchronized code, schema notes, and Markdown around four themes: book
 > Pass sync April 15, 2026: generated local price-chart PNG assets from the canonical bundled pricing catalog, rewired chart fallbacks to `/assets/brand`, added a regeneration script, and refreshed docs/schema notes for the legacy price-image carry-forward pass.
 
 Update note — 2026-04-16 pass20: Added explicit admin route wrappers for social feed and vehicle catalog endpoints to stop Pages Function import-resolution failures on /api/admin routes. Booking remains stable; no schema DDL change in this pass.
+
+- 2026-04-16 pass 21: synced docs and schema for crew time/payroll, staff availability blocks, payroll runs, accounting-post option, and service-time insights.
+- Pass sync 2026-04-16 (pass 21): added crew time/payroll workflow, staff availability blocks, payroll runs + accounting-post option, staff pay/work-cap settings, and service-time insight reporting; booking screen remains stable.

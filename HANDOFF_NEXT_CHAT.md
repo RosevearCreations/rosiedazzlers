@@ -1,4 +1,4 @@
-> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
+> Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## April 15, 2026 handoff note
 This pass generated local replacements for the legacy `CarPrice2025.PNG` and `CarPriceDetails2025.PNG` tables from the bundled pricing catalog and rewired the known chart fallbacks to `/assets/brand`. If the next pass touches pricing governance again, the safest continuation is to decide whether those chart assets stay static-with-regeneration or move to live-rendered chart pages from the canonical pricing source.
@@ -258,3 +258,11 @@ Next strongest pass after deployment:
 > Pass sync April 15, 2026: generated local price-chart PNG assets from the canonical bundled pricing catalog, rewired chart fallbacks to `/assets/brand`, added a regeneration script, and refreshed docs/schema notes for the legacy price-image carry-forward pass.
 
 Update note — 2026-04-16 pass20: Added explicit admin route wrappers for social feed and vehicle catalog endpoints to stop Pages Function import-resolution failures on /api/admin routes. Booking remains stable; no schema DDL change in this pass.
+
+## Latest pass handoff
+- Crew/staff now tie into a documented availability + payroll workflow.
+- New admin page: `admin-payroll.html`.
+- New API: `admin/payroll_summary`, `admin/payroll_run_save`, `admin/staff_availability_list`, `admin/staff_availability_save`, `admin/staff_availability_delete`.
+- New schema coverage added for `staff_users`, `job_time_entries`, `staff_availability_blocks`, `staff_payroll_runs`, and `staff_payroll_run_lines`.
+- Strongest next move: show availability/overtime warnings directly in crew assignment and optionally tie payroll settlement into payables/accounting close-out.
+- Pass sync 2026-04-16 (pass 21): added crew time/payroll workflow, staff availability blocks, payroll runs + accounting-post option, staff pay/work-cap settings, and service-time insight reporting; booking screen remains stable.

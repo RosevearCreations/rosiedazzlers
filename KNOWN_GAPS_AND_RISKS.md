@@ -1,4 +1,4 @@
-> Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
+> Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## April 15, 2026 pricing-chart carry-forward note
 Reduced in this pass:
@@ -551,3 +551,9 @@ Still remaining:
 > Pass sync April 15, 2026: generated local price-chart PNG assets from the canonical bundled pricing catalog, rewired chart fallbacks to `/assets/brand`, added a regeneration script, and refreshed docs/schema notes for the legacy price-image carry-forward pass.
 
 Update note — 2026-04-16 pass20: Added explicit admin route wrappers for social feed and vehicle catalog endpoints to stop Pages Function import-resolution failures on /api/admin routes. Booking remains stable; no schema DDL change in this pass.
+
+## Crew time / payroll gaps
+- Overtime and workload warnings now exist on the payroll screen, but the assignment screen does not yet flag them inline before a crew save.
+- Add-on timing insight currently reports average full-job minutes when an add-on is present; it is not yet a stopwatch-accurate per-add-on labor model.
+- Payroll run posting can create journal entries, but final payout/settlement workflow still needs a dedicated follow-through step once wages are actually paid.
+- Pass sync 2026-04-16 (pass 21): added crew time/payroll workflow, staff availability blocks, payroll runs + accounting-post option, staff pay/work-cap settings, and service-time insight reporting; booking screen remains stable.
