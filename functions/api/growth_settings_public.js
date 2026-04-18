@@ -5,7 +5,7 @@ const DEFAULTS = {
     prominent_cta: true,
     show_exact_total: true,
     show_time_expectation: true,
-    teaser_text: "Choose your vehicle, package, and add-ons to see your expected total before checkout."
+    teaser_text: "Start with the live booking planner to see service-area restrictions, 21-day availability windows, package choices, add-ons, and deposit-ready details before checkout."
   },
   gift_delivery_settings: {
     enabled: true,
