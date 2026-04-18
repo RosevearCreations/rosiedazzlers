@@ -19,6 +19,8 @@
     .tab{cursor:pointer}
     .hidden{display:none !important}
     .mini{font-size:.92rem;color:rgba(234,242,255,.62)}
+    .gift-preview{display:grid;gap:8px;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);margin-top:12px}
+    .gift-preview .line{display:flex;justify-content:space-between;gap:12px}
     @media (max-width: 980px){ .grid2,.grid3{grid-template-columns:1fr} }
   </style>
 </head>
@@ -102,6 +104,12 @@
             </div>
           </div>
 
+          <div class="gift-preview" id="dollarPreview">
+            <div class="line"><span>Recipient</span><strong id="dollarPreviewName">—</strong></div>
+            <div class="line"><span>Preferred send date</span><strong id="dollarPreviewDate">Send now / manual follow-up</strong></div>
+            <div class="muted mini" id="dollarPreviewMessage">Your gift message preview will appear here.</div>
+          </div>
+
           <div class="row" style="align-items:flex-end;margin-top:12px">
             <button class="btn primary" id="buyDollarBtn" type="button">Buy Dollar Gift</button>
           </div>
@@ -161,6 +169,12 @@
             <div class="notice" style="align-self:end">
               Scheduled e-gift delivery details are now collected during checkout so office follow-up can stay consistent even before full automation is turned on.
             </div>
+          </div>
+
+          <div class="gift-preview" id="servicePreview">
+            <div class="line"><span>Recipient</span><strong id="servicePreviewName">—</strong></div>
+            <div class="line"><span>Preferred send date</span><strong id="servicePreviewDate">Send now / manual follow-up</strong></div>
+            <div class="muted mini" id="servicePreviewMessage">Your gift message preview will appear here.</div>
           </div>
 
           <div class="row" style="margin-top:12px">
@@ -224,6 +238,7 @@
   </div>
 
   <script type="module">
+    import { loadGrowthSettings } from "/assets/growth-settings.js";
     const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260309b";
 
     const qs = (s) => document.querySelector(s);
@@ -266,6 +281,40 @@
     qs("#tabDollar").addEventListener("click", ()=>setTab("dollar"));
     qs("#tabService").addEventListener("click", ()=>setTab("service"));
     qs("#tabLookup").addEventListener("click", ()=>setTab("lookup"));
+
+    function formatDeliveryDate(value){
+      if (!value) return 'Send now / manual follow-up';
+      const dt = new Date(`${value}T12:00:00`);
+      return Number.isNaN(dt.getTime()) ? value : dt.toLocaleDateString('en-CA', { month:'short', day:'numeric', year:'numeric' });
+    }
+    function updateGiftPreview(kind){
+      const isDollar = kind === 'dollar';
+      const name = (qs(isDollar ? '#dRecipName' : '#sRecipName').value || '').trim() || 'Recipient to be confirmed';
+      const date = (qs(isDollar ? '#dDeliveryDate' : '#sDeliveryDate').value || '').trim();
+      const msg = (qs(isDollar ? '#dMessage' : '#sMessage').value || '').trim() || 'Your gift message preview will appear here.';
+      qs(isDollar ? '#dollarPreviewName' : '#servicePreviewName').textContent = name;
+      qs(isDollar ? '#dollarPreviewDate' : '#servicePreviewDate').textContent = formatDeliveryDate(date);
+      qs(isDollar ? '#dollarPreviewMessage' : '#servicePreviewMessage').textContent = msg;
+    }
+
+    const growth = await loadGrowthSettings();
+    const giftCfg = growth.gift_delivery_settings || {};
+    const deliveryMessage = giftCfg.default_message || 'Choose a recipient, add a message, and pick the day you want us to send the gift.';
+    qs('#dMessage').placeholder = deliveryMessage;
+    qs('#sMessage').placeholder = deliveryMessage;
+    const deliveryMin = new Date();
+    const minIso = `${deliveryMin.getFullYear()}-${String(deliveryMin.getMonth()+1).padStart(2,'0')}-${String(deliveryMin.getDate()).padStart(2,'0')}`;
+    qs('#dDeliveryDate').min = minIso;
+    qs('#sDeliveryDate').min = minIso;
+    if (!giftCfg.enabled) {
+      show(qs('#dollarStatus'), 'E-gift delivery is temporarily limited. Office follow-up may be required after purchase.', 'warn');
+      show(qs('#serviceStatus'), 'E-gift delivery is temporarily limited. Office follow-up may be required after purchase.', 'warn');
+    }
+
+    ['#dRecipName','#dDeliveryDate','#dMessage'].forEach((selector)=>qs(selector).addEventListener('input', ()=>updateGiftPreview('dollar')));
+    ['#sRecipName','#sDeliveryDate','#sMessage'].forEach((selector)=>qs(selector).addEventListener('input', ()=>updateGiftPreview('service')));
+    updateGiftPreview('dollar');
+    updateGiftPreview('service');
 
     // Load packages into service gift selector
     let data = null;
