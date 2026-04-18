@@ -13,53 +13,26 @@ export async function onRequestPost(context) {
       request,
       env,
       body,
-      capability: "manage_staff",
+      capability: "manage_progress",
       allowLegacyAdminFallback: true
     });
     if (!access.ok) return withCors(access.response);
 
-    const headers = serviceHeaders(env);
-    const keys = [
-      "visibility_matrix",
-      "manual_scheduling_rules",
-      "blocking_policy",
-      "feature_flags",
-      "quote_booking_settings",
-      "gift_delivery_settings",
-      "membership_plan_settings",
-      "recovery_templates",
-      "recovery_rules",
-      "recovery_provider_rules",
-      "moderation_rules",
-      "pricing_catalog",
-      "document_templates",
-      "social_feeds"
-    ];
+    const limit = Number.isFinite(Number(body.limit)) ? Math.min(Math.max(Number(body.limit), 1), 200) : 100;
+    const status = String(body.status || "").trim();
+    let url = `${env.SUPABASE_URL}/rest/v1/notification_events?select=id,created_at,event_type,channel,booking_id,customer_profile_id,recipient_email,recipient_phone,payload,status,attempt_count,last_error,processed_at,next_attempt_at,max_attempts&order=created_at.desc&limit=${limit}`;
+    if (status) url += `&status=eq.${encodeURIComponent(status)}`;
 
-    const out = {};
-    for (const key of keys) {
-      const res = await fetch(
-        `${env.SUPABASE_URL}/rest/v1/app_management_settings?select=key,value,updated_at&key=eq.${encodeURIComponent(key)}&limit=1`,
-        { headers }
-      );
-      if (!res.ok) continue;
-      const rows = await res.json().catch(() => []);
-      out[key] = Array.isArray(rows) && rows[0] ? rows[0] : { key, value: {} };
-    }
-
-    return withCors(json({ ok: true, settings: out }));
+    const res = await fetch(url, { headers: serviceHeaders(env) });
+    if (!res.ok) return withCors(json({ error: `Could not load notifications. ${await res.text()}` }, 500));
+    const rows = await res.json().catch(() => []);
+    return withCors(json({ ok: true, notifications: rows }));
   } catch (err) {
     return withCors(json({ error: err?.message || "Unexpected server error." }, 500));
   }
 }
-
-export async function onRequestGet(context) {
-  return onRequestPost(context);
-}
-
-export async function onRequestPut() {
-  return withCors(methodNotAllowed());
-}
+export async function onRequestGet(context) { return onRequestPost(context); }
+export async function onRequestPut() { return withCors(methodNotAllowed()); }
 
 function corsHeaders() {
   return {
