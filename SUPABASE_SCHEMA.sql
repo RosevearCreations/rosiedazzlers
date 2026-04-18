@@ -682,3 +682,12 @@ create index if not exists staff_payroll_run_lines_run_staff_idx
 --   gift_delivery_settings
 --   membership_plan_settings
 -- Gift checkout now also captures recipient_name, delivery_date, and gift_message in checkout metadata for future delivery automation.
+
+-- Pass 24 Sync — 2026-04-17
+-- No DDL changes in this pass.
+-- Existing app_management_settings now also feeds the public growth-settings endpoint for:
+--   quote_booking_settings
+--   gift_delivery_settings
+--   membership_plan_settings
+-- Public pages now read those settings for quote-builder, gift-delivery, and maintenance-plan presentation.
+

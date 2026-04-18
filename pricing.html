@@ -54,6 +54,19 @@
     .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
     .tag.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
     .mini{font-size:.92rem}
+
+    .quote-builder{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
+    .quote-stack{display:grid;gap:12px}
+    .quote-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .quote-addons{display:grid;gap:8px;max-height:320px;overflow:auto;padding-right:4px}
+    .quote-addons label{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid rgba(255,255,255,.10);border-radius:14px;background:rgba(255,255,255,.03)}
+    .quote-addons input{margin-top:3px}
+    .quote-summary{display:grid;gap:10px}
+    .quote-summary .line{display:flex;justify-content:space-between;gap:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .quote-summary .line strong{text-align:right}
+    .quote-cta{display:flex;gap:10px;flex-wrap:wrap}
+    .benefits{display:grid;gap:8px;padding-left:18px}
+    @media (max-width:980px){ .quote-builder,.quote-grid{grid-template-columns:1fr} }
   </style>
 </head>
 
@@ -108,16 +121,65 @@
     <div class="section grid2">
       <div class="panel">
         <h2 style="margin-top:0">Quote-first booking</h2>
-        <p class="muted">Use the live pricing tables and charts here as the starting point, then move into booking to match your exact vehicle, add-ons, date, and slot. That is the direction the Rosie Dazzlers app is now pushing harder toward.</p>
+        <p class="muted" id="quoteTeaserCopy">Use the live pricing tables and charts here as the starting point, then move into booking to match your exact vehicle, add-ons, date, and slot. That is the direction the Rosie Dazzlers app is now pushing harder toward.</p>
         <div class="row" style="margin-top:12px">
-          <a class="btn primary" href="/book">Build my quote</a>
+          <a class="btn primary" href="#quote-builder">Start my quote</a>
           <a class="btn ghost" href="/services">Compare services</a>
         </div>
       </div>
       <div class="panel">
-        <h2 style="margin-top:0">Recurring clean direction</h2>
-        <p class="muted">A maintenance-plan layer is being prepared so repeat clients can stay on a predictable clean cycle with easier follow-up booking and steadier scheduling.</p>
-        <div class="tag ok">Planned recurring-clean support</div>
+        <h2 style="margin-top:0" id="membershipPlanName">Recurring clean direction</h2>
+        <p class="muted" id="membershipTeaserCopy">A maintenance-plan layer is being prepared so repeat clients can stay on a predictable clean cycle with easier follow-up booking and steadier scheduling.</p>
+        <div class="tag ok" id="membershipCycleTag">Planned recurring-clean support</div>
+      </div>
+    </div>
+
+    <div class="section" id="quote-builder">
+      <div class="panel">
+        <div class="row" style="justify-content:space-between;align-items:flex-start">
+          <div>
+            <h2 style="margin:0">Build your self-serve quote</h2>
+            <p class="muted mini" id="quoteHelperText">Choose your vehicle size, package, service area, and add-ons to see the current estimated total before moving into booking.</p>
+          </div>
+          <span class="tag ok" id="quoteExactTotalTag">Live pricing estimate</span>
+        </div>
+        <div class="hr"></div>
+        <div class="quote-builder">
+          <div class="quote-stack">
+            <div class="quote-grid">
+              <label>Vehicle size
+                <select id="qbSize">
+                  <option value="small">Small</option>
+                  <option value="mid">Mid-sized</option>
+                  <option value="oversize">Over-size / Exotic</option>
+                </select>
+              </label>
+              <label>Service area
+                <select id="qbServiceArea"><option value="">Loading…</option></select>
+              </label>
+            </div>
+            <label>Package
+              <select id="qbPackage"><option value="">Loading…</option></select>
+            </label>
+            <div>
+              <div class="kicker">Optional add-ons</div>
+              <div id="qbAddons" class="quote-addons"></div>
+            </div>
+          </div>
+          <div class="quote-stack">
+            <div class="panel" style="background:rgba(255,255,255,.02)">
+              <div class="kicker">Estimate summary</div>
+              <div id="qbSummary" class="quote-summary"></div>
+              <div id="qbTimeNote" class="notice" style="display:none;margin-top:10px"></div>
+              <div id="qbQuoteOnlyNote" class="notice warn" style="display:none;margin-top:10px"></div>
+            </div>
+            <div class="quote-cta">
+              <a class="btn primary" id="qbBookLink" href="/book">Continue to booking</a>
+              <a class="btn ghost" href="/book">Book without a quote</a>
+            </div>
+            <div class="mini muted">Package and size will prefill the booking screen. Add-ons, date, and slot are finalized during booking.</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -178,6 +240,7 @@
       chartUrl,
       publicRequirements
     } from "/assets/pricing-catalog-client.js?v=20260412pass12";
+    import { loadGrowthSettings } from "/assets/growth-settings.js";
 
     const FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const qs = (s)=>document.querySelector(s);
@@ -213,6 +276,96 @@
         : `<span class="tag">Driveway required</span><span class="tag">Customer provides power + water</span>`;
     }
 
+
+    function travelCharge(data, areaValue){
+      const area = (Array.isArray(data?.service_areas) ? data.service_areas : []).find((row)=>String(row.value||'') === String(areaValue||''));
+      const rules = data?.booking_rules?.travel_pricing || {};
+      const tier = area?.travel_tier || 'standard';
+      return Number(rules[tier] ?? rules.standard ?? 0) || 0;
+    }
+
+    function estimateTimeHours(pkgCode, addons){
+      const base = {
+        premium_wash: 2,
+        basic_detail: 2.5,
+        complete_detail: 5,
+        interior_detail: 3.5,
+        exterior_detail: 3.5
+      }[String(pkgCode || '')] || 3;
+      const addonBump = (addons || []).reduce((sum, addon)=> sum + (addon.quote_required ? 0.5 : 0.3), 0);
+      const total = Math.max(1.5, Math.round((base + addonBump) * 2) / 2);
+      return total;
+    }
+
+    function renderQuoteBuilder(data, growth){
+      const sizeSel = qs('#qbSize');
+      const pkgSel = qs('#qbPackage');
+      const areaSel = qs('#qbServiceArea');
+      const addonsBox = qs('#qbAddons');
+      const summary = qs('#qbSummary');
+      const bookLink = qs('#qbBookLink');
+      const timeNote = qs('#qbTimeNote');
+      const quoteOnlyNote = qs('#qbQuoteOnlyNote');
+      if (!sizeSel || !pkgSel || !areaSel || !addonsBox || !summary || !bookLink) return;
+
+      const quoteCfg = growth.quote_booking_settings || {};
+      const membershipCfg = growth.membership_plan_settings || {};
+      qs('#quoteTeaserCopy').textContent = quoteCfg.teaser_text || qs('#quoteTeaserCopy').textContent;
+      qs('#quoteHelperText').textContent = quoteCfg.teaser_text || qs('#quoteHelperText').textContent;
+      qs('#quoteExactTotalTag').textContent = quoteCfg.show_exact_total ? 'Live pricing estimate' : 'Guide pricing';
+      qs('#membershipPlanName').textContent = membershipCfg.plan_name || 'Maintenance plan direction';
+      qs('#membershipTeaserCopy').textContent = membershipCfg.teaser || qs('#membershipTeaserCopy').textContent;
+      qs('#membershipCycleTag').textContent = membershipCfg.cycle_label || 'Planned recurring-clean support';
+
+      pkgSel.innerHTML = (data.packages || []).map((p)=>`<option value="${escapeHtml(p.code)}">${escapeHtml(p.name)} — ${escapeHtml(p.subtitle || '')}</option>`).join('');
+      areaSel.innerHTML = (data.service_areas || []).map((row)=>`<option value="${escapeHtml(row.value)}">${escapeHtml(row.label || row.value)}</option>`).join('');
+
+      function renderAddons(){
+        const size = sizeSel.value || 'small';
+        addonsBox.innerHTML = (data.addons || []).map((addon)=>{
+          const checked = addon.code === 'full_clay_treatment' ? '' : '';
+          const display = addon.quote_required ? 'Quote required' : money(Number(addon.prices_cad?.[size] ?? addon.price_cad ?? 0));
+          return `<label><input type="checkbox" value="${escapeHtml(addon.code)}"> <span><strong>${escapeHtml(addon.name)}</strong><br><span class="muted mini">${escapeHtml(display)}${addon.notes?.length ? ' · ' + escapeHtml(addon.notes[0]) : ''}</span></span></label>`;
+        }).join('');
+      }
+
+      function redraw(){
+        const size = sizeSel.value || 'small';
+        const pkg = (data.packages || []).find((row)=>row.code === pkgSel.value) || data.packages?.[0] || null;
+        const selectedAddons = Array.from(addonsBox.querySelectorAll('input:checked')).map((input)=> (data.addons || []).find((row)=>row.code === input.value)).filter(Boolean);
+        const base = Number(pkg?.prices_cad?.[size] || 0);
+        const pricedAddons = selectedAddons.reduce((sum, addon)=> sum + Number(addon.quote_required ? 0 : (addon.prices_cad?.[size] ?? addon.price_cad ?? 0)), 0);
+        const travel = travelCharge(data, areaSel.value);
+        const total = base + pricedAddons + travel;
+        const deposit = Number(pkg?.deposit_cad || 0);
+        summary.innerHTML = [
+          ['Package', pkg ? `${pkg.name} (${size})` : 'Not selected'],
+          ['Base price', money(base)],
+          ['Priced add-ons', money(pricedAddons)],
+          ['Travel / zone charge', money(travel)],
+          ['Estimated total', money(total)],
+          ['Deposit due now', money(deposit)]
+        ].map(([label, value])=>`<div class="line"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join('');
+        const quoteOnly = selectedAddons.filter((addon)=>addon.quote_required).map((addon)=>addon.name);
+        quoteOnlyNote.style.display = quoteOnly.length ? 'block' : 'none';
+        quoteOnlyNote.textContent = quoteOnly.length ? `Quote-only add-ons selected: ${quoteOnly.join(', ')}. These stay out of the online total until confirmed.` : '';
+        if (quoteCfg.show_time_expectation) {
+          const hours = estimateTimeHours(pkg?.code, selectedAddons);
+          timeNote.style.display = 'block';
+          timeNote.textContent = `Expected site time: about ${hours} hour${hours === 1 ? '' : 's'} before weather, setup, or vehicle-condition adjustments.`;
+        } else {
+          timeNote.style.display = 'none';
+        }
+        bookLink.href = `/book?package=${encodeURIComponent(pkg?.code || '')}&size=${encodeURIComponent(size)}`;
+      }
+
+      renderAddons();
+      redraw();
+      sizeSel.addEventListener('change', ()=>{ renderAddons(); redraw(); });
+      pkgSel.addEventListener('change', redraw);
+      areaSel.addEventListener('change', redraw);
+      addonsBox.addEventListener('change', redraw);
+    }
     function renderRows(pkgs){
       const tb = qs("#rows");
       tb.innerHTML = "";
@@ -229,9 +382,9 @@
             <div><strong>${escapeHtml(p.name || p.code)}</strong></div>
             <div class="muted mini">${escapeHtml(p.subtitle || "")}</div>
           </td>
-          <td>${small!=null ? money(small) : "—"} <a class="btn small ghost" href="/book?pkg=${encodeURIComponent(p.code)}&size=small">Book</a></td>
-          <td>${mid!=null ? money(mid) : "—"} <a class="btn small ghost" href="/book?pkg=${encodeURIComponent(p.code)}&size=mid">Book</a></td>
-          <td>${over!=null ? money(over) : "—"} <a class="btn small ghost" href="/book?pkg=${encodeURIComponent(p.code)}&size=oversize">Book</a></td>
+          <td>${small!=null ? money(small) : "—"} <a class="btn small ghost" href="/book?package=${encodeURIComponent(p.code)}&size=small">Book</a></td>
+          <td>${mid!=null ? money(mid) : "—"} <a class="btn small ghost" href="/book?package=${encodeURIComponent(p.code)}&size=mid">Book</a></td>
+          <td>${over!=null ? money(over) : "—"} <a class="btn small ghost" href="/book?package=${encodeURIComponent(p.code)}&size=oversize">Book</a></td>
           <td><span class="tag ok">${money(p.deposit_cad || 0)}</span></td>
         `;
         tb.appendChild(tr);
@@ -239,7 +392,10 @@
     }
 
     try {
-      const data = await loadPricingCatalogClient({ fallbackUrl: FALLBACK_URL });
+      const [data, growth] = await Promise.all([
+        loadPricingCatalogClient({ fallbackUrl: FALLBACK_URL }),
+        loadGrowthSettings()
+      ]);
       renderRequirementTags(data);
       chartMap = new Map([
         ["Vehicle Price Chart 2025", chartUrl(data, "Vehicle Price Chart 2025")],
@@ -248,6 +404,7 @@
       ]);
       wireCharts();
       renderRows(Array.isArray(data?.packages) ? data.packages : []);
+      renderQuoteBuilder(data, growth);
       if (data._source && data._source !== "api") {
         const box = qs("#loadErr");
         box.style.display = "block";
