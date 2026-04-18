@@ -76,7 +76,7 @@
           <article class="intro-card"><h3>Pricing source of truth</h3><p>Manage packages, add-ons, service areas, travel tiers, and price controls from one place used by booking, pricing, services, and checkout.</p></article>
           <article class="intro-card"><h3>Customer documents</h3><p>Set the wording used in order confirmations, invoices, and printable gift certificates so the office output stays consistent.</p></article>
           <article class="intro-card"><h3>Public social blocks</h3><p>Store the latest five social links per platform so the home and videos pages stay current without hand-editing those pages.</p></article>
-          <article class="intro-card"><h3>Next growth layer</h3><p>Use this screen to shape stronger quote-first booking, scheduled e-gift delivery, and recurring maintenance-plan offers before they are pushed deeper into checkout and follow-up flows.</p></article>
+          <article class="intro-card"><h3>Next growth layer</h3><p>Use this screen to shape booking-led self-serve flows, scheduled e-gift delivery, and recurring maintenance-plan offers before they are pushed deeper into checkout and follow-up flows.</p></article>
         </section>
 
     <section class="grid">
@@ -113,7 +113,7 @@
 
 
       <article class="card span-6">
-        <h2>Self-Serve Quote &amp; Booking</h2>
+        <h2>Booking-Led Self-Serve &amp; Booking</h2>
         <p class="feature-note">Make the quote result more prominent so customers can move from vehicle details to an exact or near-exact booking total with less back-and-forth.</p>
         <div class="checkrow"><input id="quote_prominent_cta" type="checkbox"><label for="quote_prominent_cta">Show a stronger “Build my quote” call to action on public pages</label></div>
         <div class="checkrow"><input id="quote_show_exact_total" type="checkbox"><label for="quote_show_exact_total">Show package + add-on total early once the vehicle and service choices are known</label></div>
@@ -855,7 +855,7 @@
   byId('saveVisibilityBtn').addEventListener('click', async ()=>{ try{ await saveSetting('visibility_matrix', readVisibility(), 'Visibility settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save visibility settings.', 'error'); } });
   byId('saveSchedulingBtn').addEventListener('click', async ()=>{ try{ await saveSetting('manual_scheduling_rules', readScheduling(), 'Scheduling policy saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save scheduling policy.', 'error'); } });
   byId('saveFlagsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('feature_flags', readFlags(), 'Feature flags saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save feature flags.', 'error'); } });
-  byId('saveQuoteSettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('quote_booking_settings', readQuoteSettings(), 'Quote and booking settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save quote settings.', 'error'); } });
+  byId('saveQuoteSettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('quote_booking_settings', readQuoteSettings(), 'Booking-led self-serve settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save booking-led self-serve settings.', 'error'); } });
   byId('saveGiftDeliverySettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('gift_delivery_settings', readGiftDeliverySettings(), 'E-gift delivery settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save e-gift settings.', 'error'); } });
   byId('saveMembershipSettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('membership_plan_settings', readMembershipPlanSettings(), 'Maintenance plan settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save maintenance plan settings.', 'error'); } });
   byId('saveModerationBtn').addEventListener('click', async ()=>{ try{ await saveSetting('moderation_rules', readModeration(), 'Moderation defaults saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save moderation defaults.', 'error'); } });

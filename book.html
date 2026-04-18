@@ -112,6 +112,13 @@
     .modal{width:min(980px,100%);background:#0d1526;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px}
     .modalHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
     .modal img{width:100%;height:auto;display:block;border-radius:14px}
+    body.is-embed .nav,
+    body.is-embed .footer{display:none}
+    body.is-embed{background:transparent}
+    body.is-embed main.container{max-width:1280px;padding-top:0}
+    body.is-embed .wizard-top{margin-top:0}
+    body.is-embed .wizard-top .step-head .row a[href="/pricing"]{display:none}
+    body.is-embed .wizard-shell{padding-bottom:0}
     .sr-only{position:absolute;left:-9999px;opacity:0;pointer-events:none}
     @media (max-width:980px){
       .grid2,.grid3,.requirements-grid,.service-area-grid{grid-template-columns:1fr}
@@ -452,6 +459,8 @@
 
     const qs = (s) => document.querySelector(s);
     const qsa = (s) => [...document.querySelectorAll(s)];
+    const pageParams = new URLSearchParams(window.location.search);
+    const embedMode = ["1", "true", "yes"].includes(String(pageParams.get("embed") || "").toLowerCase());
 
     const steps = [
       { title:"Step 1", subtitle:"Date & vehicle" },
@@ -497,6 +506,85 @@
       if (img) img.removeAttribute("src");
       if (back) back.style.display = "none";
     }
+
+    function applyEmbedMode() {
+      if (!embedMode) return;
+      document.body.classList.add("is-embed");
+      const title = qs("#wizardTop h1");
+      const kicker = qs("#wizardTop .page-kicker");
+      if (title) title.textContent = "Start your self-serve booking";
+      if (kicker) kicker.textContent = "Use the live booking planner below to see location restrictions, 21-day availability windows, exact package/add-on choices, and deposit-ready booking details before checkout.";
+    }
+
+    function postEmbedHeight() {
+      if (!embedMode || window.parent === window) return;
+      const height = Math.max(
+        document.documentElement ? document.documentElement.scrollHeight : 0,
+        document.body ? document.body.scrollHeight : 0,
+        1200
+      );
+      window.parent.postMessage({ type: "rd-book-embed-size", height }, "*");
+    }
+
+    function wireEmbedResize() {
+      if (!embedMode) return;
+      const send = () => window.requestAnimationFrame(postEmbedHeight);
+      window.addEventListener("load", send);
+      window.addEventListener("resize", send);
+      if ("ResizeObserver" in window) {
+        const observer = new ResizeObserver(send);
+        if (document.body) observer.observe(document.body);
+        if (document.documentElement) observer.observe(document.documentElement);
+      }
+    }
+
+    function applyInitialPrefill() {
+      const size = String(pageParams.get("size") || "").trim().toLowerCase();
+      const packageCode = String(pageParams.get("package") || "").trim();
+      const serviceArea = String(pageParams.get("area") || "").trim();
+      const pickedDate = String(pageParams.get("date") || "").trim();
+      const pickedSlot = String(pageParams.get("slot") || "").trim().toUpperCase();
+      const addonCodes = String(pageParams.get("addons") || "")
+        .split(",")
+        .map((row) => row.trim())
+        .filter(Boolean);
+
+      if (["small", "mid", "oversize"].includes(size)) {
+        qs("#vehicle_size").value = size;
+      }
+
+      if (serviceArea && [...qs("#service_area").options].some((opt) => opt.value === serviceArea)) {
+        qs("#service_area").value = serviceArea;
+      }
+
+      if (/^\d{4}-\d{2}-\d{2}$/.test(pickedDate)) {
+        qs("#service_date").value = pickedDate;
+        const diff = Math.max(0, Math.floor((new Date(`${pickedDate}T12:00:00`) - startOfLocalDay()) / 86400000));
+        const windowDays = availabilityWindowDays();
+        state.availabilityOffset = Math.floor(diff / windowDays) * windowDays;
+      }
+
+      if (["AM", "PM", "FULL"].includes(pickedSlot)) {
+        state.selectedSlotChoice = pickedSlot;
+      }
+
+      if ((state.pricing?.packages || []).some((pkg) => pkg.code === packageCode)) {
+        state.selectedPackageCode = packageCode;
+      }
+
+      state.addons.clear();
+      addonCodes.forEach((code) => {
+        if ((state.pricing?.addons || []).some((addon) => addon.code === code)) {
+          state.addons.add(code);
+        }
+      });
+
+      updateServiceAreaNote();
+      updateSizeHint();
+    }
+
+    applyEmbedMode();
+    wireEmbedResize();
 
     qs("#modalCloseBtn").addEventListener("click", closeModal);
     qs("#modalBack").addEventListener("click", (event) => {
@@ -1263,6 +1351,8 @@
         loadAvailabilityWindow()
       ]);
 
+      applyInitialPrefill();
+
       if (!selectedDate()) {
         qs("#service_date").value = toIsoLocal(startOfLocalDay());
       }
@@ -1274,6 +1364,7 @@
       renderReviewVehicle();
       renderFinalSummary();
       gotoStep(1);
+      postEmbedHeight();
     } catch (err) {
       showStatus(`Failed to load booking data: ${err.message || err}`, "bad");
     }

@@ -157,7 +157,7 @@ Update note — 2026-04-16 pass20: Added explicit admin route wrappers for socia
 
 - Pass 22 sync: fixed admin-accounting date/input layout, moved admin-staff to a left-side internal menu layout, normalized admin login redirects to .html, and added clean admin route rewrites for payroll/staff/accounting/app/login.
 
-Pass sync: April 16, 2026 — top admin navigation standardized, app-management growth settings added, quote-first public CTA strengthened, and gift checkout now collects recipient name plus preferred send date.
+Pass sync: April 16, 2026 — top admin navigation standardized, app-management growth settings added, booking-led self-serve direction restored, and gift checkout now collects recipient name plus preferred send date.
 
 ---
 
@@ -165,8 +165,9 @@ Pass sync: April 16, 2026 — top admin navigation standardized, app-management 
 
 This pass focused on three areas:
 - normalized the shared top admin navigation and repaired the off-pattern `admin-assign` header so the top menu matches the other admin screens more closely
-- pushed the quote-first public flow forward by turning the pricing page into a real self-serve quote builder that estimates package, add-ons, travel zone, deposit, and approximate site time before booking
+- shifted the public self-serve direction back to a booking-led planner on the pricing page by embedding the live booking experience so customers keep the exact service-area restrictions, 21-day availability windows, slot logic, and booking aesthetics instead of using a separate quote-builder path
 - continued the scheduled e-gift direction by exposing public growth settings, improving the gift message/send-date experience, and adding live recipient/delivery preview boxes on the gifts page
 
 Schema impact for this pass: no new tables or columns. Existing `app_management_settings` is reused for public quote, e-gift, and membership display settings.
 
+Pass sync: April 17, 2026 — pricing now restores the booking page as the first self-serve step by embedding the live booking planner on /pricing so service-area restrictions, 21-day availability windows, add-on logic, and booking aesthetics stay in one source of truth.
