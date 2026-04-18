@@ -26,6 +26,16 @@ export async function onRequestPost(context) {
       can_manage_progress: toBooleanDefault(body.can_manage_progress, false),
       can_manage_promos: toBooleanDefault(body.can_manage_promos, false),
       can_manage_staff: toBooleanDefault(body.can_manage_staff, false),
+      employee_code: cleanText(body.employee_code),
+      position_title: cleanText(body.position_title),
+      pay_schedule: cleanPaySchedule(body.pay_schedule),
+      hourly_rate_cents: cleanMoneyToCents(body.hourly_rate_cad, body.hourly_rate_cents),
+      max_hours_per_day: cleanPositiveNumber(body.max_hours_per_day, 8),
+      max_hours_per_week: cleanPositiveNumber(body.max_hours_per_week, 40),
+      payroll_enabled: toBooleanDefault(body.payroll_enabled, true),
+      preferred_work_hours: cleanJsonOrText(body.preferred_work_hours),
+      tips_payout_notes: cleanText(body.tips_payout_notes),
+      payroll_notes: cleanText(body.payroll_notes),
       notes: cleanText(body.notes),
       updated_at: new Date().toISOString()
     };
@@ -55,4 +65,27 @@ function cleanRole(value) {
 function toBooleanDefault(value, fallback = false) {
   if (value === null || value === undefined || value === "") return fallback;
   return toBoolean(value);
+}
+
+function cleanPaySchedule(value) {
+  const s = String(value ?? "").trim().toLowerCase();
+  return ["weekly", "biweekly", "semimonthly", "monthly", "contractor"].includes(s) ? s : null;
+}
+function cleanPositiveNumber(value, fallback) {
+  const n = Number(value);
+  return Number.isFinite(n) && n > 0 ? Math.round(n * 100) / 100 : fallback;
+}
+function cleanMoneyToCents(cadValue, centsValue) {
+  const cents = Number(centsValue);
+  if (Number.isFinite(cents) && cents >= 0) return Math.round(cents);
+  const cad = Number(cadValue);
+  if (Number.isFinite(cad) && cad >= 0) return Math.round(cad * 100);
+  return 0;
+}
+function cleanJsonOrText(value) {
+  if (value == null || value === "") return null;
+  if (typeof value === "object") return value;
+  const s = String(value).trim();
+  if (!s) return null;
+  try { return JSON.parse(s); } catch { return s; }
 }
