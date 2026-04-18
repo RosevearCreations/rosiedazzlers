@@ -81,15 +81,28 @@
       { key: "admin-promos", label: "Promos", href: "/admin-promos.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-promos") },
       { key: "admin-accounting", label: "Accounting", href: "/admin-accounting.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting") || globalScope.AdminAuth.canAccessPage("admin") },
       { key: "admin-app", label: "App Management", href: "/admin-app.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-app") },
-      { key: "account", label: "My Account", href: "/admin-account.html", visible: () => globalScope.AdminAuth.isAuthenticated() }
+      { key: "account", label: "My Account", href: "/admin-account.html", visible: () => globalScope.AdminAuth.isAuthenticated() },
+      { key: "public-site", label: "Public Site", href: "/", visible: () => true }
     ];
   }
 
   function renderTopNavigation(root, pageKey, actor) {
-    const nav = document.querySelector("header.nav");
+    const nav = document.querySelector("header.nav, .nav");
     const navLinks = document.querySelector("#navLinks");
     const navInner = document.querySelector(".nav-inner");
     if (!nav || !navLinks || !navInner) return;
+
+    const brand = navInner.querySelector(".brand");
+    if (brand) {
+      brand.setAttribute("href", "/admin.html");
+      const brandLabel = brand.querySelector("strong");
+      if (brandLabel) brandLabel.textContent = "Rosie Dazzlers Admin";
+    }
+
+    Array.from(navInner.children).forEach((child) => {
+      const keep = child.classList?.contains("brand") || child.id === "navToggle" || child.id === "navLinks" || child.classList?.contains("account-widget");
+      if (!keep && child !== navLinks) child.remove();
+    });
 
     const currentPage = String(pageKey || "").trim();
     const links = topNavItems().filter((item) => {
@@ -102,8 +115,8 @@
 
     navLinks.innerHTML = links
       .map((item) => {
-        const active = item.key === currentPage ? ' aria-current="page"' : "";
-        return `<a href="${item.href}"${active}>${escapeHtml(item.label)}</a>`;
+        const isActive = item.key === currentPage;
+        return `<a href="${item.href}"${isActive ? ' class="active" aria-current="page"' : ""}>${escapeHtml(item.label)}</a>`;
       })
       .join("");
 
@@ -123,6 +136,15 @@
         <button class="btn small ghost" type="button" data-admin-logout>Sign Out</button>
       </div>
     `;
+
+    const toggle = navInner.querySelector("#navToggle");
+    if (toggle && toggle.dataset.bound !== "true") {
+      toggle.dataset.bound = "true";
+      toggle.addEventListener("click", () => {
+        const open = navLinks.classList.toggle("open");
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+    }
   }
 
   function escapeHtml(value) {
