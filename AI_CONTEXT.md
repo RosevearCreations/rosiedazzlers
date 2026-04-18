@@ -467,3 +467,15 @@ Update note — 2026-04-16 pass20: Added explicit admin route wrappers for socia
 - no schema DDL change was required for this pass; this was a workflow/settings/UI pass.
 
 Pass sync: April 16, 2026 — top admin navigation standardized, app-management growth settings added, quote-first public CTA strengthened, and gift checkout now collects recipient name plus preferred send date.
+
+---
+
+## Pass 24 Sync — 2026-04-17
+
+This pass focused on three areas:
+- normalized the shared top admin navigation and repaired the off-pattern `admin-assign` header so the top menu matches the other admin screens more closely
+- pushed the quote-first public flow forward by turning the pricing page into a real self-serve quote builder that estimates package, add-ons, travel zone, deposit, and approximate site time before booking
+- continued the scheduled e-gift direction by exposing public growth settings, improving the gift message/send-date experience, and adding live recipient/delivery preview boxes on the gifts page
+
+Schema impact for this pass: no new tables or columns. Existing `app_management_settings` is reused for public quote, e-gift, and membership display settings.
+
