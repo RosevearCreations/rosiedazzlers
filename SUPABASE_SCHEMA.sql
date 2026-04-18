@@ -689,5 +689,7 @@ create index if not exists staff_payroll_run_lines_run_staff_idx
 --   quote_booking_settings
 --   gift_delivery_settings
 --   membership_plan_settings
--- Public pages now read those settings for quote-builder, gift-delivery, and maintenance-plan presentation.
+-- Public pages now read those settings for booking-led self-serve presentation, gift-delivery, and maintenance-plan presentation.
 
+
+-- Pass sync: April 17, 2026 — no schema change. Public self-serve direction shifted away from a separate pricing-page quote builder and back to a booking-led embedded planner that preserves location restrictions, 21-day availability windows, and booking-page logic.
