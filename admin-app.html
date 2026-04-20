@@ -126,9 +126,15 @@
         <h2>Scheduled E-Gift Delivery</h2>
         <p class="feature-note">Prepare the gift workflow for scheduled delivery, recipient naming, and office review instead of one-time plain printable gifts only.</p>
         <div class="checkrow"><input id="gift_delivery_enabled" type="checkbox"><label for="gift_delivery_enabled">Enable recipient name and scheduled delivery fields on gift checkout</label></div>
+        <div class="checkrow"><input id="gift_delivery_automation_enabled" type="checkbox"><label for="gift_delivery_automation_enabled">Automatically send due e-gifts when their scheduled date arrives</label></div>
         <div class="checkrow"><input id="gift_delivery_manual_review" type="checkbox"><label for="gift_delivery_manual_review">Hold scheduled gifts for office review before send</label></div>
+        <div class="checkrow"><input id="gift_delivery_send_copy_to_purchaser" type="checkbox"><label for="gift_delivery_send_copy_to_purchaser">Send a delivery confirmation copy to the purchaser</label></div>
+        <div class="subgrid">
+          <div class="field"><label for="gift_delivery_send_hour">Default send hour (24h)</label><input id="gift_delivery_send_hour" type="number" min="0" max="23" step="1"></div>
+          <div class="field"><label for="gift_delivery_timezone">Time zone label</label><input id="gift_delivery_timezone" placeholder="America/Toronto"></div>
+        </div>
         <div class="field"><label for="gift_delivery_default_message">Default e-gift helper text</label><textarea id="gift_delivery_default_message" placeholder="Choose a recipient, add a message, and pick the day you want us to send the gift."></textarea></div>
-        <div class="actions"><button class="btn" type="button" id="saveGiftDeliverySettingsBtn">Save e-gift settings</button></div>
+        <div class="actions"><button class="btn" type="button" id="saveGiftDeliverySettingsBtn">Save e-gift settings</button><button class="btn ghost" type="button" id="runGiftDeliveryProcessBtn">Run due gift deliveries now</button></div>
       </article>
 
       <article class="card span-12">
@@ -137,6 +143,7 @@
         <div class="subgrid">
           <div class="checkrow"><input id="membership_enabled" type="checkbox"><label for="membership_enabled">Show a maintenance-plan teaser on public pages</label></div>
           <div class="checkrow"><input id="membership_waitlist_enabled" type="checkbox"><label for="membership_waitlist_enabled">Use a waitlist / interest CTA before taking recurring plan orders</label></div>
+          <div class="checkrow"><input id="membership_reminder_enabled" type="checkbox"><label for="membership_reminder_enabled">Send reminder-first recurring maintenance nudges</label></div>
         </div>
         <div class="subgrid">
           <div class="field"><label for="membership_name">Plan name</label><input id="membership_name" placeholder="Maintain Your Shine Plan"></div>
@@ -144,7 +151,11 @@
         </div>
         <div class="field"><label for="membership_teaser">Public teaser</label><textarea id="membership_teaser" placeholder="Keep your vehicle on a repeating clean schedule with priority reminders and simpler rebooking."></textarea></div>
         <div class="field"><label for="membership_benefits">Benefits (one per line)</label><textarea id="membership_benefits" placeholder="Priority reminder before your preferred date&#10;Faster rebooking using your saved vehicle&#10;Cleaner predictable maintenance cycle"></textarea></div>
-        <div class="actions"><button class="btn" type="button" id="saveMembershipSettingsBtn">Save maintenance plan settings</button><a class="btn" href="/maintenance-plan" target="_blank" rel="noopener">Open the public maintenance page</a></div>
+        <div class="subgrid">
+          <div class="field"><label for="membership_reminder_subject">Reminder email subject</label><input id="membership_reminder_subject" placeholder="It may be time to book your next Rosie Dazzlers clean"></div>
+          <div class="field"><label for="membership_reminder_intro">Reminder intro</label><textarea id="membership_reminder_intro" placeholder="Use the booking-led planner to pick your next clean while your preferred timing is still open."></textarea></div>
+        </div>
+        <div class="actions"><button class="btn" type="button" id="saveMembershipSettingsBtn">Save maintenance plan settings</button><button class="btn ghost" type="button" id="runMembershipReminderProcessBtn">Run due reminders now</button><a class="btn" href="/maintenance-plan" target="_blank" rel="noopener">Open the public maintenance page</a></div>
       </article>
 
       <article class="card span-12">
@@ -410,10 +421,10 @@
   function readFlags(){ return { live_updates_default: byId('flag_live_updates_default').checked, customer_chat_enabled: byId('flag_customer_chat_enabled').checked, picture_first_observations: byId('flag_picture_first_observations').checked, tier_discount_badges: byId('flag_tier_discount_badges').checked, annotation_moderation_enabled: byId('flag_annotation_moderation_enabled').checked, two_sided_thread_controls_enabled: byId('flag_two_sided_thread_controls_enabled').checked, low_stock_alerts_enabled: byId('flag_low_stock_alerts_enabled').checked }; }
   function quoteSettingsDefaults(){ return { prominent_cta: true, show_exact_total: true, show_time_expectation: true, teaser_text: 'Choose your vehicle, package, and add-ons to see your expected total before checkout.' }; }
   function readQuoteSettings(){ return { prominent_cta: byId('quote_prominent_cta').checked, show_exact_total: byId('quote_show_exact_total').checked, show_time_expectation: byId('quote_show_time_expectation').checked, teaser_text: byId('quote_teaser_text').value || quoteSettingsDefaults().teaser_text }; }
-  function giftDeliveryDefaults(){ return { enabled: true, manual_review: true, default_message: 'Choose a recipient, add a message, and pick the day you want us to send the gift.' }; }
-  function readGiftDeliverySettings(){ return { enabled: byId('gift_delivery_enabled').checked, manual_review: byId('gift_delivery_manual_review').checked, default_message: byId('gift_delivery_default_message').value || giftDeliveryDefaults().default_message }; }
-  function membershipPlanDefaults(){ return { enabled: false, waitlist_enabled: true, plan_name: 'Maintain Your Shine Plan', cycle_label: 'Every 4 or 8 weeks', teaser: 'Keep your vehicle on a repeating clean schedule with priority reminders and simpler rebooking.', benefits: ['Priority reminder before your preferred date','Faster rebooking using your saved vehicle','Cleaner predictable maintenance cycle'] }; }
-  function readMembershipPlanSettings(){ return { enabled: byId('membership_enabled').checked, waitlist_enabled: byId('membership_waitlist_enabled').checked, plan_name: byId('membership_name').value || membershipPlanDefaults().plan_name, cycle_label: byId('membership_cycle').value || membershipPlanDefaults().cycle_label, teaser: byId('membership_teaser').value || membershipPlanDefaults().teaser, benefits: (byId('membership_benefits').value || '').split(/\n+/).map(function (row) { return row.trim(); }).filter(Boolean) }; }
+  function giftDeliveryDefaults(){ return { enabled: true, manual_review: false, automation_enabled: true, default_message: 'Choose a recipient, add a message, and pick the day you want us to send the gift.', default_send_hour_local: 9, timezone_label: 'America/Toronto', send_copy_to_purchaser: true }; }
+  function readGiftDeliverySettings(){ return { enabled: byId('gift_delivery_enabled').checked, manual_review: byId('gift_delivery_manual_review').checked, automation_enabled: byId('gift_delivery_automation_enabled').checked, send_copy_to_purchaser: byId('gift_delivery_send_copy_to_purchaser').checked, default_send_hour_local: Number(byId('gift_delivery_send_hour').value || giftDeliveryDefaults().default_send_hour_local), timezone_label: byId('gift_delivery_timezone').value || giftDeliveryDefaults().timezone_label, default_message: byId('gift_delivery_default_message').value || giftDeliveryDefaults().default_message }; }
+  function membershipPlanDefaults(){ return { enabled: false, waitlist_enabled: true, plan_name: 'Maintain Your Shine Plan', cycle_label: 'Every 4 or 8 weeks', teaser: 'Keep your vehicle on a repeating clean schedule with priority reminders and simpler rebooking.', benefits: ['Priority reminder before your preferred date','Faster rebooking using your saved vehicle','Cleaner predictable maintenance cycle'], reminder_enabled: true, reminder_channel: 'email', reminder_subject: 'It may be time to book your next Rosie Dazzlers clean', reminder_intro: 'Use the booking-led planner to pick your next clean while your preferred timing is still open.', reminder_send_hour_local: 9, timezone_label: 'America/Toronto' }; }
+  function readMembershipPlanSettings(){ return { enabled: byId('membership_enabled').checked, waitlist_enabled: byId('membership_waitlist_enabled').checked, reminder_enabled: byId('membership_reminder_enabled').checked, plan_name: byId('membership_name').value || membershipPlanDefaults().plan_name, cycle_label: byId('membership_cycle').value || membershipPlanDefaults().cycle_label, teaser: byId('membership_teaser').value || membershipPlanDefaults().teaser, benefits: (byId('membership_benefits').value || '').split(/\n+/).map(function (row) { return row.trim(); }).filter(Boolean), reminder_subject: byId('membership_reminder_subject').value || membershipPlanDefaults().reminder_subject, reminder_intro: byId('membership_reminder_intro').value || membershipPlanDefaults().reminder_intro, reminder_channel: 'email', reminder_send_hour_local: membershipPlanDefaults().reminder_send_hour_local, timezone_label: membershipPlanDefaults().timezone_label }; }
   function renderMembershipInterestList(rows){
     var host = byId('membershipInterestList');
     if (!host) return;
@@ -790,14 +801,21 @@
 
     byId('gift_delivery_enabled').checked = giftDeliverySettings.enabled !== false;
     byId('gift_delivery_manual_review').checked = giftDeliverySettings.manual_review !== false;
+    byId('gift_delivery_automation_enabled').checked = giftDeliverySettings.automation_enabled !== false;
+    byId('gift_delivery_send_copy_to_purchaser').checked = giftDeliverySettings.send_copy_to_purchaser !== false;
+    byId('gift_delivery_send_hour').value = Number(giftDeliverySettings.default_send_hour_local || giftDeliveryDefaults().default_send_hour_local);
+    byId('gift_delivery_timezone').value = giftDeliverySettings.timezone_label || giftDeliveryDefaults().timezone_label;
     byId('gift_delivery_default_message').value = giftDeliverySettings.default_message || giftDeliveryDefaults().default_message;
 
     byId('membership_enabled').checked = !!membershipPlanSettings.enabled;
     byId('membership_waitlist_enabled').checked = membershipPlanSettings.waitlist_enabled !== false;
+    byId('membership_reminder_enabled').checked = membershipPlanSettings.reminder_enabled !== false;
     byId('membership_name').value = membershipPlanSettings.plan_name || membershipPlanDefaults().plan_name;
     byId('membership_cycle').value = membershipPlanSettings.cycle_label || membershipPlanDefaults().cycle_label;
     byId('membership_teaser').value = membershipPlanSettings.teaser || membershipPlanDefaults().teaser;
     byId('membership_benefits').value = Array.isArray(membershipPlanSettings.benefits) ? membershipPlanSettings.benefits.join('\n') : membershipPlanDefaults().benefits.join('\n');
+    byId('membership_reminder_subject').value = membershipPlanSettings.reminder_subject || membershipPlanDefaults().reminder_subject;
+    byId('membership_reminder_intro').value = membershipPlanSettings.reminder_intro || membershipPlanDefaults().reminder_intro;
 
     byId('mod_annotation_customer_visibility_default').checked = moderation.annotation_customer_visibility_default !== false;
     byId('mod_comment_customer_visibility_default').checked = moderation.comment_customer_visibility_default !== false;
@@ -882,7 +900,9 @@
   byId('saveFlagsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('feature_flags', readFlags(), 'Feature flags saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save feature flags.', 'error'); } });
   byId('saveQuoteSettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('quote_booking_settings', readQuoteSettings(), 'Booking-led self-serve settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save booking-led self-serve settings.', 'error'); } });
   byId('saveGiftDeliverySettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('gift_delivery_settings', readGiftDeliverySettings(), 'E-gift delivery settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save e-gift settings.', 'error'); } });
+  byId('runGiftDeliveryProcessBtn').addEventListener('click', async ()=>{ try{ const res = await fetch('/api/gifts/scheduled_delivery_process', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 50 }) }); const out = await res.json().catch(()=>null); if(!res.ok) throw new Error(out?.error || 'Could not run gift delivery automation.'); setShellStatus('Gift delivery automation scanned ' + (out?.scanned || 0) + ' gifts and processed ' + (out?.processed || 0) + '.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not run gift delivery automation.', 'error'); } });
   byId('saveMembershipSettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('membership_plan_settings', readMembershipPlanSettings(), 'Maintenance plan settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save maintenance plan settings.', 'error'); } });
+  byId('runMembershipReminderProcessBtn').addEventListener('click', async ()=>{ try{ const res = await fetch('/api/membership_reminders_process', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 50 }) }); const out = await res.json().catch(()=>null); if(!res.ok) throw new Error(out?.error || 'Could not run maintenance reminders.'); await loadMembershipInterest().catch(function(){}); setShellStatus('Maintenance reminders scanned ' + (out?.scanned || 0) + ' requests and processed ' + (out?.processed || 0) + '.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not run maintenance reminders.', 'error'); } });
   byId('reloadMembershipInterestBtn')?.addEventListener('click', async ()=>{ try{ await loadMembershipInterest(); setShellStatus('Recent maintenance-plan interest reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload maintenance-plan interest.', 'error'); } });
   byId('saveModerationBtn').addEventListener('click', async ()=>{ try{ await saveSetting('moderation_rules', readModeration(), 'Moderation defaults saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save moderation defaults.', 'error'); } });
   byId('saveRecoveryBtn').addEventListener('click', async ()=>{ try{ await saveSetting('recovery_templates', readRecoveryTemplates(), 'Recovery templates saved.'); await saveSetting('recovery_rules', readRecoveryRules(), 'Recovery rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save recovery settings.', 'error'); } });
