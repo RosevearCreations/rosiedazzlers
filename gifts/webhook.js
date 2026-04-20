@@ -1,6 +1,8 @@
+import { loadGiftDeliverySettings, processGiftDeliveryRow } from "../_lib/gift-delivery.js";
+
 // /functions/api/gifts/webhook.js
 // Stripe webhook -> Supabase fulfilment for Gift Certificate purchases
-// UPDATED: sets expires_at = purchase date + 1 year and stores vehicle intake in purchase_context JSON.
+// UPDATED: sets expires_at = purchase date + 1 year, stores gift delivery metadata, and can auto-dispatch due e-gifts.
 
 export async function onRequestPost({ request, env }) {
   const STRIPE_WEBHOOK_SECRET = env.STRIPE_WEBHOOK_SECRET_GIFTS;
@@ -148,11 +150,22 @@ export async function onRequestPost({ request, env }) {
 
   await supaInsertGiftCertificates(SUPABASE_URL, SERVICE_KEY, certRows);
 
+  let delivery_results = [];
+  try {
+    const giftSettings = await loadGiftDeliverySettings(env);
+    const issuedRows = await supaGetGiftCertificatesBySession(SUPABASE_URL, SERVICE_KEY, session.id);
+    for (const gift of issuedRows) {
+      const result = await processGiftDeliveryRow(env, gift, giftSettings, { origin: (env.SITE_ORIGIN || new URL(request.url).origin).replace(/\/+$/, '') });
+      delivery_results.push(result);
+    }
+  } catch {}
+
   return json({
     ok: true,
     issued: certRows.length,
     session_id: session.id,
     expires_at: expiresAt.toISOString(),
+    delivery_results
   });
 }
 
@@ -281,6 +294,21 @@ async function supaGetGiftProducts(SUPABASE_URL, SERVICE_KEY, skus) {
   }
 
   return await res.json();
+}
+
+async function supaGetGiftCertificatesBySession(SUPABASE_URL, SERVICE_KEY, sessionId) {
+  const url = `${SUPABASE_URL}/rest/v1/gift_certificates?select=id,created_at,code,type,package_code,vehicle_size,remaining_cents,face_value_cents,expires_at,purchaser_email,recipient_name,recipient_email,stripe_session_id,purchase_context,status&stripe_session_id=eq.${encodeURIComponent(sessionId)}&order=created_at.asc`;
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      apikey: SERVICE_KEY,
+      Authorization: `Bearer ${SERVICE_KEY}`,
+      Accept: "application/json",
+    },
+  });
+  if (!res.ok) return [];
+  const data = await res.json().catch(() => []);
+  return Array.isArray(data) ? data : [];
 }
 
 async function supaInsertGiftCertificates(SUPABASE_URL, SERVICE_KEY, rows) {

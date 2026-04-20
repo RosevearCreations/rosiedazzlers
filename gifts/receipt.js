@@ -71,6 +71,7 @@ export async function onRequestPost({ request, env }) {
         sender_name: r.purchase_context?.gift_delivery?.sender_name ?? null,
         delivery_date: r.purchase_context?.gift_delivery?.delivery_date ?? null,
         gift_message: r.purchase_context?.gift_delivery?.gift_message ?? null,
+        delivery_status: r.purchase_context?.gift_delivery?.delivery_status ?? null,
       })),
     });
   } catch (e) {
