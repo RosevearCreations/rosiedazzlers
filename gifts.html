@@ -4,10 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Gift Certificates | Rosie Dazzlers Mobile Detailing</title>
-  <meta name="description" content="Buy Rosie Dazzlers gift certificates for mobile detailing packages or dollar-value gifts in Norfolk and Oxford Counties." />
+  <meta name="description" content="Buy Rosie Dazzlers gift certificates for mobile detailing packages or dollar-value gifts in Norfolk and Oxford Counties, with scheduled e-gift delivery and printable certificate options." />
   <link rel="canonical" href="https://rosiedazzlers.ca/gifts" />
   <meta property="og:title" content="Gift Certificates | Rosie Dazzlers Mobile Detailing" />
-  <meta property="og:description" content="Buy Rosie Dazzlers gift certificates for mobile detailing packages or dollar-value gifts in Norfolk and Oxford Counties." />
+  <meta property="og:description" content="Buy Rosie Dazzlers gift certificates for mobile detailing packages or dollar-value gifts in Norfolk and Oxford Counties, with scheduled e-gift delivery and printable certificate options." />
   <link rel="stylesheet" href="/assets/site.css?v=20260309b" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -53,7 +53,7 @@
       <h1 style="margin:12px 0 8px">Gift Certificates</h1>
       <p class="kicker">
         Buy a gift certificate for a friend or family member. Service gifts cover a specific package + size.
-        Dollar gifts deduct from any booking total, and you can now collect recipient name plus a preferred send date for e-gift delivery planning.
+        Dollar gifts deduct from any booking total, and you can now collect recipient name plus a preferred send date for scheduled e-gift delivery.
       </p>
       <div class="notice warn" style="margin-top:12px">
         <strong>Important:</strong> Gift certificates are valid for <strong>1 year</strong> from purchase and are <strong>non-refundable</strong>.
@@ -117,7 +117,7 @@
           <div class="gift-preview" id="dollarPreview">
             <div class="line"><span>Recipient</span><strong id="dollarPreviewName">—</strong></div>
             <div class="line"><span>From</span><strong id="dollarPreviewSender">Rosie Dazzlers gift purchaser</strong></div>
-            <div class="line"><span>Preferred send date</span><strong id="dollarPreviewDate">Send now / manual follow-up</strong></div>
+            <div class="line"><span>Preferred send date</span><strong id="dollarPreviewDate">Send now / automated delivery</strong></div>
             <div class="muted mini" id="dollarPreviewMessage">Your gift message preview will appear here.</div>
           </div>
 
@@ -182,14 +182,14 @@
               <input id="sMessage" type="text" placeholder="Enjoy your detail!" />
             </div>
             <div class="notice" style="align-self:end">
-              Scheduled e-gift delivery details are now collected during checkout so office follow-up can stay consistent even before full automation is turned on.
+              Scheduled e-gift delivery can now be automated from the stored delivery date when office settings allow it.
             </div>
           </div>
 
           <div class="gift-preview" id="servicePreview">
             <div class="line"><span>Recipient</span><strong id="servicePreviewName">—</strong></div>
             <div class="line"><span>From</span><strong id="servicePreviewSender">Rosie Dazzlers gift purchaser</strong></div>
-            <div class="line"><span>Preferred send date</span><strong id="servicePreviewDate">Send now / manual follow-up</strong></div>
+            <div class="line"><span>Preferred send date</span><strong id="servicePreviewDate">Send now / automated delivery</strong></div>
             <div class="muted mini" id="servicePreviewMessage">Your gift message preview will appear here.</div>
           </div>
 
@@ -250,7 +250,7 @@
           <li><strong>Dollar gifts</strong> deduct from the booking total.</li>
           <li><strong>Service gifts</strong> require the recipient to select the matching package + size when booking.</li>
           <li>Gift certificates are valid for <strong>1 year</strong> and are <strong>non-refundable</strong>.</li>
-          <li>Recipient name, sender name, message, and preferred send date can now be collected for e-gift planning.</li>
+          <li>Recipient name, sender name, message, and preferred send date can now drive scheduled e-gift delivery automation.</li>
           <li>Service gifts can now preview the same booking-led self-serve flow the recipient will use when redeeming.</li>
           <li>If someone wants regular upkeep instead of a one-time gift, send them to the recurring-plan interest page.</li>
           <li>Redeem gifts during booking using the gift code.</li>
@@ -321,7 +321,7 @@
     qs("#tabLookup").addEventListener("click", ()=>setTab("lookup"));
 
     function formatDeliveryDate(value){
-      if (!value) return 'Send now / manual follow-up';
+      if (!value) return 'Send now / automated delivery';
       const dt = new Date(`${value}T12:00:00`);
       return Number.isNaN(dt.getTime()) ? value : dt.toLocaleDateString('en-CA', { month:'short', day:'numeric', year:'numeric' });
     }
@@ -370,8 +370,8 @@
     qs('#dDeliveryDate').min = minIso;
     qs('#sDeliveryDate').min = minIso;
     if (!giftCfg.enabled) {
-      show(qs('#dollarStatus'), 'E-gift delivery is temporarily limited. Office follow-up may be required after purchase.', 'warn');
-      show(qs('#serviceStatus'), 'E-gift delivery is temporarily limited. Office follow-up may be required after purchase.', 'warn');
+      show(qs('#dollarStatus'), 'Scheduled e-gift delivery is currently limited. Office follow-up may still be required after purchase.', 'warn');
+      show(qs('#serviceStatus'), 'Scheduled e-gift delivery is currently limited. Office follow-up may still be required after purchase.', 'warn');
     }
 
     ['#dRecipName','#dSenderName','#dDeliveryDate','#dMessage'].forEach((selector)=>qs(selector).addEventListener('input', ()=>updateGiftPreview('dollar')));
