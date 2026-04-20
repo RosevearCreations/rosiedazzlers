@@ -1,5 +1,5 @@
-import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "./_lib/staff-auth.js";
-import { loadMembershipPlanSettings, processMembershipReminderRow } from "./_lib/membership-reminders.js";
+import { requireStaffAccess, json, methodNotAllowed } from "./_lib/staff-auth.js";
+import { loadMembershipPlanSettings, buildMembershipReminderCandidates, processMembershipReminderCandidate } from "./_lib/membership-reminders.js";
 
 export async function onRequestOptions() {
   return new Response("", { status: 204, headers: corsHeaders() });
@@ -21,20 +21,29 @@ export async function onRequestPost({ request, env }) {
     }
 
     const settings = await loadMembershipPlanSettings(env);
-    const limit = Math.max(1, Math.min(100, Math.floor(Number(body.limit || 50))));
-    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/membership_interest_requests?select=id,created_at,full_name,email,phone,postal_code,vehicle_count,preferred_cycle,notes,status,reminder_opt_in,reminder_status,reminder_count,last_reminder_at,next_reminder_at&order=created_at.asc&limit=${limit}`, {
-      headers: serviceHeaders(env)
+    const limit = Math.max(1, Math.min(250, Math.floor(Number(body.limit || 75))));
+    const candidates = await buildMembershipReminderCandidates(env, settings, {
+      origin: String(env.SITE_ORIGIN || new URL(request.url).origin).replace(/\/+$/, ""),
+      limit
     });
-    const rows = res.ok ? await res.json().catch(() => []) : [];
-    const items = Array.isArray(rows) ? rows.filter((row) => !["closed","converted","opted_out"].includes(String(row.status || "").toLowerCase())) : [];
+    const dueOnly = candidates.filter((row) => row.due);
 
     const results = [];
-    for (const row of items) {
-      const result = await processMembershipReminderRow(env, row, settings, { origin: String(env.SITE_ORIGIN || new URL(request.url).origin).replace(/\/+$/, "") });
+    for (const candidate of dueOnly) {
+      const result = await processMembershipReminderCandidate(env, candidate, settings, {
+        origin: String(env.SITE_ORIGIN || new URL(request.url).origin).replace(/\/+$/, "")
+      });
       results.push(result);
     }
 
-    return withCors(json({ ok: true, scanned: items.length, processed: results.filter((row) => row.ok).length, skipped: results.filter((row) => row.skipped).length, results }));
+    return withCors(json({
+      ok: true,
+      scanned: candidates.length,
+      due: dueOnly.length,
+      processed: results.filter((row) => row.ok).length,
+      skipped: candidates.length - dueOnly.length,
+      results
+    }));
   } catch (err) {
     return withCors(json({ error: err?.message || "Could not process maintenance reminders." }, 500));
   }
