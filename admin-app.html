@@ -144,7 +144,14 @@
         </div>
         <div class="field"><label for="membership_teaser">Public teaser</label><textarea id="membership_teaser" placeholder="Keep your vehicle on a repeating clean schedule with priority reminders and simpler rebooking."></textarea></div>
         <div class="field"><label for="membership_benefits">Benefits (one per line)</label><textarea id="membership_benefits" placeholder="Priority reminder before your preferred date&#10;Faster rebooking using your saved vehicle&#10;Cleaner predictable maintenance cycle"></textarea></div>
-        <div class="actions"><button class="btn" type="button" id="saveMembershipSettingsBtn">Save maintenance plan settings</button></div>
+        <div class="actions"><button class="btn" type="button" id="saveMembershipSettingsBtn">Save maintenance plan settings</button><a class="btn" href="/maintenance-plan" target="_blank" rel="noopener">Open the public maintenance page</a></div>
+      </article>
+
+      <article class="card span-12">
+        <h2>Recent maintenance interest</h2>
+        <p class="feature-note">These are the newest recurring-clean interest requests submitted from the public maintenance-plan page. Use them to judge demand before turning full recurring-plan ordering on.</p>
+        <div class="actions" style="margin-bottom:12px"><button class="btn" type="button" id="reloadMembershipInterestBtn">Reload recent interest</button></div>
+        <div id="membershipInterestList" class="stack-sm"></div>
       </article>
 
       <article class="card span-12">
@@ -407,6 +414,23 @@
   function readGiftDeliverySettings(){ return { enabled: byId('gift_delivery_enabled').checked, manual_review: byId('gift_delivery_manual_review').checked, default_message: byId('gift_delivery_default_message').value || giftDeliveryDefaults().default_message }; }
   function membershipPlanDefaults(){ return { enabled: false, waitlist_enabled: true, plan_name: 'Maintain Your Shine Plan', cycle_label: 'Every 4 or 8 weeks', teaser: 'Keep your vehicle on a repeating clean schedule with priority reminders and simpler rebooking.', benefits: ['Priority reminder before your preferred date','Faster rebooking using your saved vehicle','Cleaner predictable maintenance cycle'] }; }
   function readMembershipPlanSettings(){ return { enabled: byId('membership_enabled').checked, waitlist_enabled: byId('membership_waitlist_enabled').checked, plan_name: byId('membership_name').value || membershipPlanDefaults().plan_name, cycle_label: byId('membership_cycle').value || membershipPlanDefaults().cycle_label, teaser: byId('membership_teaser').value || membershipPlanDefaults().teaser, benefits: (byId('membership_benefits').value || '').split(/\n+/).map(function (row) { return row.trim(); }).filter(Boolean) }; }
+  function renderMembershipInterestList(rows){
+    var host = byId('membershipInterestList');
+    if (!host) return;
+    var list = Array.isArray(rows) ? rows : [];
+    if (!list.length) { host.innerHTML = '<div class="catalog-empty">No maintenance-plan interest requests yet.</div>'; return; }
+    host.innerHTML = list.map(function (row) {
+      var created = row && row.created_at ? new Date(row.created_at).toLocaleString('en-CA', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit' }) : 'Unknown';
+      var notes = row && row.notes ? '<div class="note" style="margin-top:10px"><strong>Notes:</strong> ' + escapeHtml(row.notes) + '</div>' : '';
+      return '<div class="panel-lite"><div class="section-head"><strong>' + escapeHtml(row.full_name || 'Interest request') + '</strong><span class="note">' + escapeHtml(created) + '</span></div><div class="subgrid"><div class="stack-sm"><div><strong>Email:</strong> ' + escapeHtml(row.email || '—') + '</div><div><strong>Phone:</strong> ' + escapeHtml(row.phone || '—') + '</div><div><strong>Postal code:</strong> ' + escapeHtml(row.postal_code || '—') + '</div></div><div class="stack-sm"><div><strong>Cycle:</strong> ' + escapeHtml(row.preferred_cycle || '—') + '</div><div><strong>Vehicles:</strong> ' + escapeHtml(row.vehicle_count == null ? '—' : row.vehicle_count) + '</div><div><strong>Status:</strong> ' + escapeHtml(row.status || 'new') + '</div></div></div>' + notes + '</div>';
+    }).join('');
+  }
+  async function loadMembershipInterest(){
+    var res = await fetch('/api/admin/membership_interest_list', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 10 }) });
+    var out = await res.json().catch(function(){ return null; });
+    if (!res.ok) throw new Error(out?.error || 'Could not load maintenance interest requests.');
+    renderMembershipInterestList(out?.requests || []);
+  }
   function readModeration(){ return { annotation_customer_visibility_default: byId('mod_annotation_customer_visibility_default').checked, comment_customer_visibility_default: byId('mod_comment_customer_visibility_default').checked, client_reply_depth_limit: Number(byId('mod_client_reply_depth_limit').value || 4), staff_reply_depth_limit: Number(byId('mod_staff_reply_depth_limit').value || 8), allow_client_annotation_replies: byId('mod_allow_client_annotation_replies').checked, allow_staff_hide_without_delete: byId('mod_allow_staff_hide_without_delete').checked }; }
   function readRecoveryTemplates(){ return { abandoned_checkout_subject: byId('recovery_subject').value || '', abandoned_checkout_body_text: byId('recovery_body_text').value || '', abandoned_checkout_body_html: byId('recovery_body_html').value || '' }; }
   function readRecoveryRules(){ return { abandoned_recovery_enabled: byId('recovery_enabled').checked, minimum_page_events: Number(byId('recovery_min_events').value || 0), require_email: true, cooldown_hours: Number(byId('recovery_cooldown_hours').value || 24), default_recovery_channel: byId('recovery_default_channel').value || 'email' }; }
@@ -803,6 +827,7 @@
     byId('doc_gift_footer').value = documentTemplates.gift_footer || '';
     setSocialFeedsEditor(socialFeeds);
     await loadPricingCatalogEditor(pricingCatalog);
+    await loadMembershipInterest().catch(function(){ renderMembershipInterestList([]); });
   }
   function byId(id){ return document.getElementById(id); }
   async function previewRecovery(sendTest){
@@ -858,6 +883,7 @@
   byId('saveQuoteSettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('quote_booking_settings', readQuoteSettings(), 'Booking-led self-serve settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save booking-led self-serve settings.', 'error'); } });
   byId('saveGiftDeliverySettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('gift_delivery_settings', readGiftDeliverySettings(), 'E-gift delivery settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save e-gift settings.', 'error'); } });
   byId('saveMembershipSettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('membership_plan_settings', readMembershipPlanSettings(), 'Maintenance plan settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save maintenance plan settings.', 'error'); } });
+  byId('reloadMembershipInterestBtn')?.addEventListener('click', async ()=>{ try{ await loadMembershipInterest(); setShellStatus('Recent maintenance-plan interest reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload maintenance-plan interest.', 'error'); } });
   byId('saveModerationBtn').addEventListener('click', async ()=>{ try{ await saveSetting('moderation_rules', readModeration(), 'Moderation defaults saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save moderation defaults.', 'error'); } });
   byId('saveRecoveryBtn').addEventListener('click', async ()=>{ try{ await saveSetting('recovery_templates', readRecoveryTemplates(), 'Recovery templates saved.'); await saveSetting('recovery_rules', readRecoveryRules(), 'Recovery rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save recovery settings.', 'error'); } });
   byId('saveProviderRulesBtn').addEventListener('click', async ()=>{ try{ await saveSetting('recovery_provider_rules', readProviderRules(), 'Recovery provider rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save provider rules.', 'error'); } });
