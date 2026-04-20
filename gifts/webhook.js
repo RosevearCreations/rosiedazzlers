@@ -54,9 +54,19 @@ export async function onRequestPost({ request, env }) {
     ).trim();
   const recipient_email = String(session?.metadata?.recipient_email || "").trim();
   const recipient_name = String(session?.metadata?.recipient_name || "").trim();
+  const sender_name = String(session?.metadata?.sender_name || "").trim();
+  const delivery_date = String(session?.metadata?.delivery_date || "").trim();
+  const gift_message = String(session?.metadata?.gift_message || "").trim();
 
   // Capture vehicle intake fields from metadata (present only for service gift purchases)
   const purchase_context = {};
+  if (sender_name || delivery_date || gift_message) {
+    purchase_context.gift_delivery = {
+      sender_name: sender_name || null,
+      delivery_date: delivery_date || null,
+      gift_message: gift_message || null
+    };
+  }
   const vehicle = {
     year: String(session?.metadata?.vehicle_year || "").trim(),
     make: String(session?.metadata?.vehicle_make || "").trim(),
