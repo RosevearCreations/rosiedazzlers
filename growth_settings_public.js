@@ -9,12 +9,8 @@ const DEFAULTS = {
   },
   gift_delivery_settings: {
     enabled: true,
-    manual_review: false,
-    automation_enabled: true,
-    default_message: "Choose a recipient, add a message, and pick the day you want us to send the gift.",
-    default_send_hour_local: 9,
-    timezone_label: "America/Toronto",
-    send_copy_to_purchaser: true
+    manual_review: true,
+    default_message: "Choose a recipient, add a message, and pick the day you want us to send the gift."
   },
   membership_plan_settings: {
     enabled: false,
@@ -26,13 +22,7 @@ const DEFAULTS = {
       "Priority reminder before your preferred date",
       "Faster rebooking using your saved vehicle",
       "Cleaner predictable maintenance cycle"
-    ],
-    reminder_enabled: true,
-    reminder_channel: "email",
-    reminder_subject: "It may be time to book your next Rosie Dazzlers clean",
-    reminder_intro: "Use the booking-led planner to pick your next clean while your preferred timing is still open.",
-    reminder_send_hour_local: 9,
-    timezone_label: "America/Toronto"
+    ]
   }
 };
 
