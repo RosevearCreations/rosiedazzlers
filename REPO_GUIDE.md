@@ -252,3 +252,9 @@ Pass sync: April 17, 2026 — pricing now restores the booking page as the first
 ### April 17, 2026 pass27 note
 - moved the next public growth step forward with a new `/maintenance-plan` page, recurring-plan interest capture, admin visibility for recent interest requests, and stronger booking-link carry-forward from the live embedded planner.
 
+---
+Pass 28 sync — 2026-04-20
+- Continued the booking-led self-serve direction instead of replacing it with a separate quote-only tool.
+- Added scheduled e-gift delivery automation groundwork and live processor routes, plus printable gift lookup by code.
+- Added reminder-first recurring maintenance processing tied to maintenance-plan interest requests.
+- Strengthened visible live-booking / availability prompts and refreshed the documentation/schema trail for this pass.

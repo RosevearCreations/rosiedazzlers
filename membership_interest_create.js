@@ -1,4 +1,5 @@
 import { json } from "./_lib/http.js";
+import { computeNextReminderAt } from "./_lib/membership-reminders.js";
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -35,7 +36,11 @@ export async function onRequestPost({ request, env }) {
       preferred_cycle,
       notes: notes || null,
       source_url: source_url || null,
-      status: "new"
+      status: "new",
+      reminder_opt_in: true,
+      reminder_status: "pending",
+      reminder_count: 0,
+      next_reminder_at: computeNextReminderAt(preferred_cycle || "Every 4 weeks", new Date())
     };
 
     const res = await fetch(`${env.SUPABASE_URL}/rest/v1/membership_interest_requests`, {
