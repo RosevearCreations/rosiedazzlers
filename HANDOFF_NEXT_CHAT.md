@@ -298,3 +298,7 @@ Schema impact for this pass: no new tables or columns. Existing `app_management_
 
 Pass sync: April 17, 2026 — pricing now restores the booking page as the first self-serve step by embedding the live booking planner on /pricing so service-area restrictions, 21-day availability windows, add-on logic, and booking aesthetics stay in one source of truth.
 - 2026-04-17 pass26: extended booking-led self-serve with live embedded planner summaries on pricing and service-gift redemption preview, plus richer gift delivery metadata (sender name, preferred send date, message) through checkout, webhook, receipt, and printable certificate.
+
+### April 17, 2026 pass27 note
+- moved the next public growth step forward with a new `/maintenance-plan` page, recurring-plan interest capture, admin visibility for recent interest requests, and stronger booking-link carry-forward from the live embedded planner.
+
