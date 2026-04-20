@@ -695,3 +695,22 @@ create index if not exists staff_payroll_run_lines_run_staff_idx
 -- Pass sync: April 17, 2026 — no schema change. Public self-serve direction shifted away from a separate pricing-page quote builder and back to a booking-led embedded planner that preserves location restrictions, 21-day availability windows, and booking-page logic.
 
 -- 2026-04-17 pass26: No DDL change in this pass. Booking-led self-serve and gift-system work reused existing app settings and purchase_context JSON storage.
+
+
+-- April 17, 2026 recurring-plan interest capture
+create table if not exists membership_interest_requests (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  full_name text not null,
+  email text not null,
+  phone text,
+  postal_code text,
+  vehicle_count integer not null default 1,
+  preferred_cycle text,
+  notes text,
+  source_url text,
+  status text not null default 'new'
+);
+
+create index if not exists membership_interest_requests_created_at_idx on membership_interest_requests (created_at desc);
+create index if not exists membership_interest_requests_email_idx on membership_interest_requests (email);

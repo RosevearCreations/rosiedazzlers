@@ -127,12 +127,16 @@
         <div class="row" style="margin-top:12px">
           <a class="btn primary" href="#booking-planner">Start with booking</a>
           <a class="btn ghost" href="/services">Compare services</a>
+          <a class="btn ghost" href="/maintenance-plan">Recurring plan interest</a>
         </div>
       </div>
       <div class="panel">
         <h2 style="margin-top:0" id="membershipPlanName">Recurring clean direction</h2>
         <p class="muted" id="membershipTeaserCopy">A maintenance-plan layer is being prepared so repeat clients can stay on a predictable clean cycle with easier follow-up booking and steadier scheduling.</p>
         <div class="tag ok" id="membershipCycleTag">Planned recurring-clean support</div>
+        <div class="row" style="margin-top:12px">
+          <a class="btn ghost" id="membershipPlanBtn" href="/maintenance-plan">See recurring-plan details</a>
+        </div>
       </div>
     </div>
 
@@ -173,8 +177,10 @@
             </div>
             <div class="quote-cta">
               <a class="btn primary" id="bookingPlannerContinueLink" href="/book">Continue in the full booking page</a>
+              <button class="btn ghost" type="button" id="copyPlannerLinkBtn">Copy booking link</button>
               <a class="btn ghost" href="/services">Compare services</a>
             </div>
+            <div class="mini muted" id="plannerLinkStatus">Use the live planner first, then copy or open the exact booking path you built.</div>
             <div class="mini muted">The planner below is the same booking workflow, inserted here so pricing stays visible while customers work through the real restrictions, timing, and package logic.</div>
           </div>
         </div>
@@ -300,6 +306,25 @@
       qs('#membershipPlanName').textContent = membershipCfg.plan_name || 'Maintenance plan direction';
       qs('#membershipTeaserCopy').textContent = membershipCfg.teaser || qs('#membershipTeaserCopy').textContent;
       qs('#membershipCycleTag').textContent = membershipCfg.cycle_label || 'Planned recurring-clean support';
+      qs('#membershipPlanBtn').textContent = membershipCfg.waitlist_enabled === false ? 'See recurring-plan details' : 'Join the recurring-plan interest list';
+    }
+
+    function setPlannerLinkStatus(message){
+      const box = qs('#plannerLinkStatus');
+      if (box) box.textContent = message || '';
+    }
+
+    async function copyPlannerLink(){
+      const url = plannerState?.booking_url ? new URL(plannerState.booking_url, window.location.origin).href : new URL('/book', window.location.origin).href;
+      try {
+        if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(url);
+        else {
+          const helper = document.createElement('textarea'); helper.value = url; document.body.appendChild(helper); helper.select(); document.execCommand('copy'); helper.remove();
+        }
+        setPlannerLinkStatus('Booking link copied. You can paste this exact planner path into an email, text, or browser tab.');
+      } catch (err) {
+        setPlannerLinkStatus('Could not copy automatically. Use the full booking button to keep this plan instead.');
+      }
     }
 
     function renderPlannerSummary(state){
@@ -319,6 +344,7 @@
         : 'The summary updates live as the embedded booking planner changes.';
       const link = qs('#bookingPlannerContinueLink');
       if (link) link.href = state?.booking_url || '/book';
+      setPlannerLinkStatus(state?.booking_url ? 'This summary can open or copy the exact booking path you have built so far.' : 'Use the live planner first, then copy or open the exact booking path you built.');
     }
 
     function wireBookingPlannerFrame(){
@@ -379,6 +405,7 @@
       renderBookingPlanner(growth);
       renderPlannerSummary(plannerState);
       wireBookingPlannerFrame();
+      qs('#copyPlannerLinkBtn')?.addEventListener('click', copyPlannerLink);
       if (data._source && data._source !== "api") {
         const box = qs("#loadErr");
         box.style.display = "block";

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Maintenance Plan Interest | Rosie Dazzlers Mobile Detailing</title>
+  <meta name="description" content="Join the Rosie Dazzlers maintenance-plan interest list for recurring mobile detailing in Oxford County and Norfolk County. Get easier rebooking, reminder-first scheduling, and a cleaner repeat-maintenance cycle." />
+  <link rel="canonical" href="https://rosiedazzlers.ca/maintenance-plan" />
+  <meta property="og:title" content="Maintenance Plan Interest | Rosie Dazzlers" />
+  <meta property="og:description" content="Tell Rosie Dazzlers how often you want recurring mobile detailing so we can shape the next maintenance-plan layer around real local demand." />
+  <meta name="robots" content="index,follow" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260417mp1" />
+  <style>
+    .grid2{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
+    .muted{color:rgba(234,242,255,.72)}
+    .mini{font-size:.92rem}
+    .benefits{display:grid;gap:8px;padding-left:18px;margin:0}
+    .summary{display:grid;gap:10px}
+    .summary .line{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+    .summary .line:last-child{border-bottom:0}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .cta-row{display:flex;gap:10px;flex-wrap:wrap}
+    @media(max-width:980px){.grid2,.form-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers</strong>
+      </a>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
+      <div class="nav-links" id="navLinks"></div>
+      <a class="btn primary" href="/book">Book now</a>
+    </div>
+  </div>
+
+  <main class="container">
+    <section class="panel">
+      <h1 style="margin:0 0 8px">Maintenance plan interest</h1>
+      <p class="muted" id="planTeaser">Tell us how often you want recurring mobile detailing so we can shape the next Rosie Dazzlers maintenance-plan layer around real local demand in Oxford County and Norfolk County.</p>
+      <div class="cta-row" style="margin-top:12px">
+        <a class="btn primary" href="#membershipInterestForm">Join the interest list</a>
+        <a class="btn ghost" href="/pricing#booking-planner">Use the booking-led planner</a>
+      </div>
+    </section>
+
+    <section class="section grid2">
+      <article class="panel">
+        <h2 style="margin-top:0" id="planName">Maintain Your Shine Plan</h2>
+        <p class="muted mini" id="planCycle">Every 4 or 8 weeks</p>
+        <ul class="benefits" id="planBenefits">
+          <li>Priority reminder before your preferred date</li>
+          <li>Faster rebooking using your saved vehicle</li>
+          <li>Cleaner predictable maintenance cycle</li>
+        </ul>
+        <div class="notice" style="margin-top:14px">This is an interest / waitlist form for recurring clean plans. It does not create a subscription today.</div>
+      </article>
+      <article class="panel">
+        <h2 style="margin-top:0">Why add this now</h2>
+        <div class="summary">
+          <div class="line"><span>Repeat scheduling</span><strong>Less back-and-forth</strong></div>
+          <div class="line"><span>Preferred cycle</span><strong id="cycleSummary">Every 4 or 8 weeks</strong></div>
+          <div class="line"><span>Local planning</span><strong>Better crew forecasting</strong></div>
+          <div class="line"><span>Booking path</span><strong>Still uses the live booking flow</strong></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section panel" id="membershipInterestForm">
+      <h2 style="margin-top:0">Join the recurring-clean interest list</h2>
+      <p class="muted">Leave your preferred cycle and a few details about the vehicles you want covered. We will use this to shape the next maintenance-plan pass and reach out when recurring plan slots are ready.</p>
+      <div class="form-grid">
+        <div class="field"><label for="miName">Full name <span class="req">*</span></label><input id="miName" type="text" /></div>
+        <div class="field"><label for="miEmail">Email <span class="req">*</span></label><input id="miEmail" type="email" /></div>
+        <div class="field"><label for="miPhone">Phone</label><input id="miPhone" type="tel" placeholder="(555) 555-5555" /></div>
+        <div class="field"><label for="miPostal">Postal code</label><input id="miPostal" type="text" placeholder="N4G 1A1" /></div>
+        <div class="field"><label for="miVehicleCount">How many vehicles?</label><input id="miVehicleCount" type="number" min="1" step="1" value="1" /></div>
+        <div class="field"><label for="miCycle">Preferred cycle</label><select id="miCycle"><option value="Every 4 weeks">Every 4 weeks</option><option value="Every 6 weeks">Every 6 weeks</option><option value="Every 8 weeks">Every 8 weeks</option><option value="Seasonal / custom">Seasonal / custom</option></select></div>
+      </div>
+      <div class="field"><label for="miNotes">Notes</label><textarea id="miNotes" placeholder="Tell us if you want one vehicle or several, your typical location, or anything else that should shape the plan."></textarea></div>
+      <div class="cta-row">
+        <button class="btn primary" type="button" id="miSubmitBtn">Join the interest list</button>
+        <a class="btn ghost" href="/book">Prefer to book now instead</a>
+      </div>
+      <div id="miStatus" class="notice" style="display:none;margin-top:12px"></div>
+    </section>
+
+    <section class="section grid2">
+      <article class="panel">
+        <h2 style="margin-top:0">How this fits the self-serve direction</h2>
+        <p class="muted">Recurring plans should not replace the booking flow you already like. They should make the same booking-led experience easier to repeat with reminder-first scheduling, saved vehicle details, and clearer maintenance timing.</p>
+      </article>
+      <article class="panel">
+        <h2 style="margin-top:0">Good fit for</h2>
+        <ul class="benefits">
+          <li>Busy households trying to keep vehicles presentable year-round</li>
+          <li>Repeat clients who already know their package and preferred clean cycle</li>
+          <li>Work-from-home or driveway-friendly bookings across Oxford and Norfolk areas</li>
+        </ul>
+      </article>
+    </section>
+
+    <div class="footer" data-footer></div>
+  </main>
+
+  <script type="module">
+    import { loadGrowthSettings } from '/assets/growth-settings.js';
+    const qs = (s)=>document.querySelector(s);
+    function show(message, type=''){
+      const box = qs('#miStatus');
+      box.style.display = 'block';
+      box.className = `notice ${type}`.trim();
+      box.innerHTML = message;
+    }
+    function esc(v){ return String(v ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
+    const growth = await loadGrowthSettings();
+    const membership = growth.membership_plan_settings || {};
+    qs('#planName').textContent = membership.plan_name || 'Maintain Your Shine Plan';
+    qs('#planCycle').textContent = membership.cycle_label || 'Every 4 or 8 weeks';
+    qs('#cycleSummary').textContent = membership.cycle_label || 'Every 4 or 8 weeks';
+    qs('#planTeaser').textContent = membership.teaser || qs('#planTeaser').textContent;
+    const benefits = Array.isArray(membership.benefits) && membership.benefits.length ? membership.benefits : ['Priority reminder before your preferred date','Faster rebooking using your saved vehicle','Cleaner predictable maintenance cycle'];
+    qs('#planBenefits').innerHTML = benefits.map((item)=>`<li>${esc(item)}</li>`).join('');
+    if (membership.waitlist_enabled === false) {
+      show('The waitlist is currently paused. You can still book through the live booking planner now.', 'warn');
+    }
+    qs('#miSubmitBtn').addEventListener('click', async ()=>{
+      const payload = {
+        full_name: (qs('#miName').value || '').trim(),
+        email: (qs('#miEmail').value || '').trim(),
+        phone: (qs('#miPhone').value || '').trim(),
+        postal_code: (qs('#miPostal').value || '').trim(),
+        vehicle_count: Number(qs('#miVehicleCount').value || 1),
+        preferred_cycle: (qs('#miCycle').value || '').trim(),
+        notes: (qs('#miNotes').value || '').trim(),
+        source_url: window.location.href
+      };
+      if (!payload.full_name) return show('Please enter your name.', 'bad');
+      if (!payload.email || !payload.email.includes('@')) return show('Please enter a valid email.', 'bad');
+      try {
+        show('Saving your interest…');
+        const res = await fetch('/api/membership_interest_create', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+        const out = await res.json().catch(()=>null);
+        if (!res.ok || !out?.ok) throw new Error(out?.error || 'Could not save your interest right now.');
+        show('Thanks — your maintenance-plan interest is saved. We can use this to shape recurring clean options and follow up when that layer is ready.', 'ok');
+      } catch (err) {
+        show(esc(err?.message || 'Could not save your interest right now.'), 'bad');
+      }
+    });
+  </script>
+  <script type="module" src="/assets/chrome.js?v=20260417mp1"></script>
+</body>
+</html>
