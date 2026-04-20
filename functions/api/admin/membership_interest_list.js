@@ -1,4 +1,5 @@
-import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "../_lib/staff-auth.js";
+import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
+import { loadMembershipPlanSettings, buildMembershipReminderCandidates } from "../_lib/membership-reminders.js";
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -12,15 +13,16 @@ export async function onRequestPost({ request, env }) {
     });
     if (!access.ok) return withCors(access.response);
 
-    const limit = Math.max(1, Math.min(25, Math.floor(Number(body.limit || 10))));
-    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/membership_interest_requests?select=id,created_at,full_name,email,phone,postal_code,vehicle_count,preferred_cycle,notes,status,reminder_opt_in,reminder_status,reminder_count,last_reminder_at,next_reminder_at&order=created_at.desc&limit=${limit}`, {
-      headers: serviceHeaders(env)
+    const limit = Math.max(1, Math.min(50, Math.floor(Number(body.limit || 10))));
+    const settings = await loadMembershipPlanSettings(env);
+    const candidates = await buildMembershipReminderCandidates(env, settings, {
+      origin: String(env.SITE_ORIGIN || new URL(request.url).origin).replace(/\/+$/, ''),
+      limit: Math.max(limit * 6, 60)
     });
-    const rows = res.ok ? await res.json().catch(() => []) : [];
 
-    return withCors(json({ ok: true, requests: Array.isArray(rows) ? rows : [] }));
+    return withCors(json({ ok: true, requests: candidates.slice(0, limit) }));
   } catch (err) {
-    return withCors(json({ error: err?.message || 'Could not load maintenance interest requests.' }, 500));
+    return withCors(json({ error: err?.message || 'Could not load recurring reminder candidates.' }, 500));
   }
 }
 
