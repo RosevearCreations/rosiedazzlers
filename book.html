@@ -526,6 +526,50 @@
       window.parent.postMessage({ type: "rd-book-embed-size", height }, "*");
     }
 
+    function buildEmbedBookingUrl() {
+      const params = new URLSearchParams();
+      params.set('embed', '1');
+      if (state.selectedPackageCode) params.set('package', state.selectedPackageCode);
+      if (selectedSize()) params.set('size', selectedSize());
+      if (qs('#service_area').value) params.set('area', qs('#service_area').value);
+      if (selectedDate()) params.set('date', selectedDate());
+      if (state.selectedSlotChoice) params.set('slot', state.selectedSlotChoice);
+      if (state.addons.size) params.set('addons', Array.from(state.addons).join(','));
+      if (qs('#gift_code')?.value?.trim()) params.set('gift_code', qs('#gift_code').value.trim());
+      return `/book?${params.toString()}`;
+    }
+
+    function buildEmbedState() {
+      const pkg = selectedPackage();
+      const totals = computeTotals();
+      const area = findServiceArea(state.pricing || {}, qs('#service_area').value);
+      const addonRows = selectedAddons();
+      return {
+        current_step: state.currentStep,
+        current_step_title: steps[state.currentStep - 1]?.title || `Step ${state.currentStep}`,
+        selected_date: selectedDate() || null,
+        selected_slot: state.selectedSlotChoice || null,
+        service_area: qs('#service_area').value || null,
+        service_area_label: area?.label || qs('#service_area').selectedOptions?.[0]?.textContent || qs('#service_area').value || null,
+        local_rules_label: area?.municipality || null,
+        vehicle_label: [qs('#veh_year').value, qs('#veh_make').value, qs('#veh_model').value, qs('#veh_color').value].filter(Boolean).join(' · ') || null,
+        vehicle_size: selectedSize() || null,
+        package_code: state.selectedPackageCode || null,
+        package_name: pkg?.name || null,
+        addon_codes: addonRows.map((addon) => addon.code),
+        addon_names: addonRows.map((addon) => addon.name),
+        quote_only: totals.quoteOnly,
+        subtotal_cad: totals.subtotal || 0,
+        deposit_cad: totals.deposit || 0,
+        booking_url: buildEmbedBookingUrl()
+      };
+    }
+
+    function postEmbedState() {
+      if (!embedMode || window.parent === window) return;
+      window.parent.postMessage({ type: 'rd-book-embed-state', state: buildEmbedState() }, '*');
+    }
+
     function wireEmbedResize() {
       if (!embedMode) return;
       const send = () => window.requestAnimationFrame(postEmbedHeight);
@@ -548,6 +592,7 @@
         .split(",")
         .map((row) => row.trim())
         .filter(Boolean);
+      const giftCode = String(pageParams.get("gift_code") || "").trim();
 
       if (["small", "mid", "oversize"].includes(size)) {
         qs("#vehicle_size").value = size;
@@ -579,8 +624,13 @@
         }
       });
 
+      if (giftCode && qs('#gift_code')) {
+        qs('#gift_code').value = giftCode;
+      }
+
       updateServiceAreaNote();
       updateSizeHint();
+      postEmbedState();
     }
 
     applyEmbedMode();
@@ -790,6 +840,7 @@
       if (state.currentStep === 4) renderReviewVehicle();
       if (state.currentStep === 5) renderFinalSummary();
       analyticsTrack("booking_step_view", { step_number: state.currentStep });
+      postEmbedState();
     }
 
     qs("#prevStepBtn").addEventListener("click", () => gotoStep(state.currentStep - 1));
@@ -1212,6 +1263,7 @@
         ["Quote-only extras", totals.quoteOnly ? "Some selected extras are quote-required and will be confirmed separately." : "None"]
       ];
       qs("#finalSummary").innerHTML = rows.map(([label, value]) => `<div class="summary-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
+      postEmbedState();
     }
 
     async function validateStep(step) {
