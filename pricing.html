@@ -62,6 +62,12 @@
     .planner-note{margin-top:12px}
     .benefits{display:grid;gap:8px;padding-left:18px;margin:0}
     .quote-cta{display:flex;gap:10px;flex-wrap:wrap}
+    .planner-summary{display:grid;gap:10px;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03)}
+    .planner-summary .line{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:8px}
+    .planner-summary .line:last-child{border-bottom:0;padding-bottom:0}
+    .planner-summary .stack{display:grid;gap:4px}
+    .planner-summary .value{font-weight:700;text-align:right}
+    .planner-summary .list{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
     @media (max-width:980px){ .booking-lead{grid-template-columns:1fr} .booking-embed-frame{min-height:2250px} }
   </style>
 </head>
@@ -154,8 +160,19 @@
                 <li>Move straight into deposit-ready checkout without switching to a separate quote tool.</li>
               </ul>
             </div>
+            <div class="planner-summary" id="bookingPlannerSummary">
+              <div class="line"><span>Planner step</span><strong class="value" id="plannerStepValue">Step 1 — Date &amp; vehicle</strong></div>
+              <div class="line"><span>Date / time</span><strong class="value" id="plannerDateValue">Choose a date and available slot</strong></div>
+              <div class="line"><span>Service area</span><strong class="value" id="plannerAreaValue">Choose a town or service zone</strong></div>
+              <div class="line"><span>Vehicle</span><strong class="value" id="plannerVehicleValue">Match the vehicle before choosing the package</strong></div>
+              <div class="line"><span>Package</span><strong class="value" id="plannerPackageValue">Package not chosen yet</strong></div>
+              <div class="line"><span>Add-ons</span><div class="value list" id="plannerAddonsValue"><span class="tag">No add-ons yet</span></div></div>
+              <div class="line"><span>Estimated total</span><strong class="value" id="plannerSubtotalValue">Package required</strong></div>
+              <div class="line"><span>Deposit</span><strong class="value" id="plannerDepositValue">—</strong></div>
+              <div class="mini muted" id="plannerSummaryHelper">The summary updates live as the embedded booking planner changes.</div>
+            </div>
             <div class="quote-cta">
-              <a class="btn primary" href="/book">Open the full booking page</a>
+              <a class="btn primary" id="bookingPlannerContinueLink" href="/book">Continue in the full booking page</a>
               <a class="btn ghost" href="/services">Compare services</a>
             </div>
             <div class="mini muted">The planner below is the same booking workflow, inserted here so pricing stays visible while customers work through the real restrictions, timing, and package logic.</div>
@@ -226,6 +243,7 @@
     const FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const qs = (s)=>document.querySelector(s);
     let chartMap = new Map();
+    let plannerState = null;
 
     function qsAll(s){ return Array.from(document.querySelectorAll(s)); }
     function openChart(title, src){
@@ -284,15 +302,38 @@
       qs('#membershipCycleTag').textContent = membershipCfg.cycle_label || 'Planned recurring-clean support';
     }
 
+    function renderPlannerSummary(state){
+      const addonsBox = qs('#plannerAddonsValue');
+      qs('#plannerStepValue').textContent = state?.current_step_title ? `${state.current_step_title}` : 'Step 1 — Date & vehicle';
+      qs('#plannerDateValue').textContent = state?.selected_date ? `${state.selected_date}${state?.selected_slot ? ` · ${state.selected_slot}` : ''}` : 'Choose a date and available slot';
+      qs('#plannerAreaValue').textContent = state?.service_area_label || 'Choose a town or service zone';
+      qs('#plannerVehicleValue').textContent = state?.vehicle_label || 'Match the vehicle before choosing the package';
+      qs('#plannerPackageValue').textContent = state?.package_name ? `${state.package_name}${state?.vehicle_size ? ` · ${state.vehicle_size}` : ''}` : 'Package not chosen yet';
+      addonsBox.innerHTML = state?.addon_names?.length
+        ? state.addon_names.map((name) => `<span class="tag">${escapeHtml(name)}</span>`).join('')
+        : '<span class="tag">No add-ons yet</span>';
+      qs('#plannerSubtotalValue').textContent = state?.package_name ? money(Number(state.subtotal_cad || 0)) : 'Package required';
+      qs('#plannerDepositValue').textContent = state?.deposit_cad != null ? money(Number(state.deposit_cad || 0)) : '—';
+      qs('#plannerSummaryHelper').textContent = state?.quote_only
+        ? 'Some selected add-ons are quote-only and will be confirmed separately in the booking flow.'
+        : 'The summary updates live as the embedded booking planner changes.';
+      const link = qs('#bookingPlannerContinueLink');
+      if (link) link.href = state?.booking_url || '/book';
+    }
+
     function wireBookingPlannerFrame(){
       const frame = qs('#bookingPlannerFrame');
       if (!frame) return;
       window.addEventListener('message', (event) => {
         const payload = event.data || {};
-        if (payload.type !== 'rd-book-embed-size') return;
-        const nextHeight = Math.max(1400, Number(payload.height || 0) + 24);
-        if (Number.isFinite(nextHeight)) {
-          frame.style.height = `${nextHeight}px`;
+        if (payload.type === 'rd-book-embed-size') {
+          const nextHeight = Math.max(1400, Number(payload.height || 0) + 24);
+          if (Number.isFinite(nextHeight)) frame.style.height = `${nextHeight}px`;
+          return;
+        }
+        if (payload.type === 'rd-book-embed-state') {
+          plannerState = payload.state || null;
+          renderPlannerSummary(plannerState);
         }
       });
     }
@@ -336,6 +377,7 @@
       wireCharts();
       renderRows(Array.isArray(data?.packages) ? data.packages : []);
       renderBookingPlanner(growth);
+      renderPlannerSummary(plannerState);
       wireBookingPlannerFrame();
       if (data._source && data._source !== "api") {
         const box = qs("#loadErr");

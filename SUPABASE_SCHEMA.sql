@@ -693,3 +693,5 @@ create index if not exists staff_payroll_run_lines_run_staff_idx
 
 
 -- Pass sync: April 17, 2026 — no schema change. Public self-serve direction shifted away from a separate pricing-page quote builder and back to a booking-led embedded planner that preserves location restrictions, 21-day availability windows, and booking-page logic.
+
+-- 2026-04-17 pass26: No DDL change in this pass. Booking-led self-serve and gift-system work reused existing app settings and purchase_context JSON storage.
