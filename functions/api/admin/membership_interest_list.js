@@ -13,7 +13,7 @@ export async function onRequestPost({ request, env }) {
     if (!access.ok) return withCors(access.response);
 
     const limit = Math.max(1, Math.min(25, Math.floor(Number(body.limit || 10))));
-    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/membership_interest_requests?select=id,created_at,full_name,email,phone,postal_code,vehicle_count,preferred_cycle,notes,status&order=created_at.desc&limit=${limit}`, {
+    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/membership_interest_requests?select=id,created_at,full_name,email,phone,postal_code,vehicle_count,preferred_cycle,notes,status,reminder_opt_in,reminder_status,reminder_count,last_reminder_at,next_reminder_at&order=created_at.desc&limit=${limit}`, {
       headers: serviceHeaders(env)
     });
     const rows = res.ok ? await res.json().catch(() => []) : [];
