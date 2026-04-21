@@ -465,3 +465,6 @@ Pass 28 sync — 2026-04-20
 
 
 <!-- pass29-sync: customer-history recurring maintenance reminders -->
+
+
+> Pass sync April 20, 2026: customer screen raw JSON blocks were replaced with readable summaries and a visual garage layout, App Management social feeds gained a structured editor with the raw JSON moved into an advanced block, booking-led maintenance interest now requires Complete Detail selection before schedule interest capture, and customer-facing print/email correspondence styling was refined.
