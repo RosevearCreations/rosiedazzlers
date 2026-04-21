@@ -89,6 +89,7 @@ export async function buildMembershipReminderCandidates(env, settings, options =
     const dueState = reminderCandidateDue({
       email: summary.email,
       reminder_opt_in: profile?.maintenance_reminder_opt_in ?? profile?.notification_opt_in ?? true,
+      eligible_for_maintenance: summary.has_complete_detail,
       last_service_at: summary.last_service_at,
       last_reminder_at: lastReminderAt,
       next_reminder_at: profile?.maintenance_next_reminder_at || nextReminderAt
@@ -106,6 +107,8 @@ export async function buildMembershipReminderCandidates(env, settings, options =
       previous_service_at: summary.previous_service_at,
       cycle_days: cycleDays,
       cycle_label: cycleLabelFromDays(cycleDays),
+      has_complete_detail: summary.has_complete_detail,
+      latest_complete_detail_at: summary.latest_complete_detail_at,
       last_reminder_at: lastReminderAt,
       next_reminder_at: profile?.maintenance_next_reminder_at || nextReminderAt,
       reminder_status: profile?.maintenance_reminder_status || dueState.reason,
@@ -134,6 +137,7 @@ export async function buildMembershipReminderCandidates(env, settings, options =
 
 export function reminderCandidateDue(candidate, settings, now = new Date()) {
   if (!settings?.reminder_enabled) return { due: false, reason: "reminders_disabled" };
+  if (!candidate?.eligible_for_maintenance) return { due: false, reason: "requires_complete_detail" };
   if (candidate?.reminder_opt_in === false) return { due: false, reason: "opted_out" };
   if (!String(candidate?.email || "").trim()) return { due: false, reason: "missing_email" };
   const lastServiceAt = parseDate(candidate?.last_service_at);
@@ -277,6 +281,7 @@ function groupCompletedBookings(rows) {
     entry.bookings.sort((a, b) => String(b.service_at).localeCompare(String(a.service_at)));
     const latest = entry.bookings[0] || null;
     const previous = entry.bookings[1] || null;
+    const completeDetailBookings = entry.bookings.filter((row) => String(row?.package_code || "").trim().toLowerCase() === "complete_detail");
     return {
       customer_profile_id: entry.customer_profile_id,
       full_name: entry.full_name,
@@ -287,6 +292,9 @@ function groupCompletedBookings(rows) {
       booking_count: entry.bookings.length,
       latest_booking: latest,
       previous_booking: previous,
+      has_complete_detail: completeDetailBookings.length > 0,
+      latest_complete_detail_booking: completeDetailBookings[0] || null,
+      latest_complete_detail_at: completeDetailBookings[0]?.service_at || null,
       last_service_at: latest?.service_at || null,
       previous_service_at: previous?.service_at || null
     };

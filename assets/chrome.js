@@ -629,6 +629,17 @@ function ensureManifest(){
   theme.content='#0f172a';
 }
 
+
+function ensurePublicAnalytics(){
+  const head=document.head||document.querySelector("head");
+  if(!head || head.querySelector('script[data-public-analytics-bootstrap]')) return;
+  const script=document.createElement('script');
+  script.src='/assets/public-analytics.js';
+  script.defer=true;
+  script.dataset.publicAnalyticsBootstrap='true';
+  head.appendChild(script);
+}
+
 function initChrome() {
   ensureManifest();
   ensureNavLinks();
@@ -640,6 +651,7 @@ function initChrome() {
   setFooter();
   initAccountWidget();
   initInstallPrompt();
+  ensurePublicAnalytics();
 
   attachRotators("#homePackages");
   attachRotators("#packageCards");

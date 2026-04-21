@@ -1,3 +1,5 @@
+import { packageImageForSize as sharedPackageImageForSize } from "/assets/pricing-catalog-client.js";
+
 const DATA_URL = "/api/pricing_catalog_public";
 
 const BRAND = {
@@ -83,7 +85,7 @@ function packagePrice(pkg, size) {
 }
 
 function packageImageForSize(pkg, size) {
-  return pkg?.images_by_size?.[size] || "";
+  return sharedPackageImageForSize(pkg, size) || pkg?.images_by_size?.[size] || "";
 }
 
 function addonImageForCode(code) {
