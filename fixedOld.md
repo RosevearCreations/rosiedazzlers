@@ -36,3 +36,7 @@ Pass sync: April 17, 2026 — pricing now restores the booking page as the first
 
 
 > Pass sync April 20, 2026: customer screen raw JSON blocks were replaced with readable summaries and a visual garage layout, App Management social feeds gained a structured editor with the raw JSON moved into an advanced block, booking-led maintenance interest now requires Complete Detail selection before schedule interest capture, and customer-facing print/email correspondence styling was refined.
+
+
+<!-- pass31-sync: booking overflow polish, maintenance conversion from complete detail, fleet handoff path -->
+> Pass sync April 20, 2026: booking vehicle inputs and service cards were tightened to prevent text overflow, My Account now uses a real garage-bay view plus a fleet handoff path after 6 vehicles, and maintenance conversion now begins only after a completed Complete Detail with repeat-booking guidance tied to actual service history.

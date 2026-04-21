@@ -179,7 +179,7 @@
               <div class="row" style="justify-content:space-between;align-items:flex-start">
                 <div>
                   <strong>Maintenance schedule interest</strong>
-                  <div class="note" id="maintenanceEligibilityText">Choose the Complete Detail package first. We only offer maintenance pricing after a full complete detail has been completed.</div>
+                  <div class="note" id="maintenanceEligibilityText">Choose the Complete Detail package first. We only offer reduced maintenance pricing after a full Complete Detail has been completed and recorded in service history.</div>
                 </div>
                 <span class="tag" id="maintenanceEligibilityTag">Complete Detail required</span>
               </div>
@@ -349,7 +349,7 @@
       tag.textContent = eligible ? 'Eligible after first full detail' : 'Complete Detail required';
       text.textContent = eligible
         ? 'You selected Complete Detail. We can capture your maintenance-plan interest now and confirm reduced recurring pricing once that first full detail has been completed.'
-        : 'Choose the Complete Detail package first. We only offer maintenance pricing after a full complete detail has been completed.';
+        : 'Choose the Complete Detail package first. We only offer reduced maintenance pricing after a full Complete Detail has been completed and recorded in service history.';
       btn.disabled = !eligible;
     }
 
