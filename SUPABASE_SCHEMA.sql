@@ -447,6 +447,37 @@ create table if not exists public.job_completion_checklists (
   notes text null
 );
 
+
+
+alter table if exists public.customer_vehicles
+  add column if not exists next_service_mileage_km numeric null;
+alter table if exists public.customer_vehicles
+  add column if not exists garage_display_media_url text null;
+alter table if exists public.customer_vehicles
+  add column if not exists garage_display_media_kind text null;
+
+create table if not exists public.customer_vehicle_media (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  customer_profile_id uuid not null references public.customer_profiles(id) on delete cascade,
+  vehicle_id uuid not null references public.customer_vehicles(id) on delete cascade,
+  media_kind text not null default 'photo' check (media_kind in ('photo','video')),
+  media_url text not null,
+  capture_role text null,
+  caption text null,
+  is_primary boolean not null default false,
+  is_deleted boolean not null default false,
+  uploaded_by_customer boolean not null default true,
+  google_score numeric null,
+  google_score_label text null,
+  google_score_status text not null default 'pending',
+  admin_override_reason text null,
+  original_media_id uuid null references public.customer_vehicle_media(id) on delete set null
+);
+create index if not exists customer_vehicle_media_vehicle_idx on public.customer_vehicle_media(vehicle_id, created_at desc);
+create index if not exists customer_vehicle_media_customer_idx on public.customer_vehicle_media(customer_profile_id, created_at desc);
+
 create table if not exists public.customer_reviews (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -741,3 +772,5 @@ create index if not exists customer_profiles_maintenance_last_service_at_idx on 
 
 
 -- 2026-04-20 no-DDL note: booking overflow polish, maintenance conversion from complete detail, fleet handoff path.
+
+-- Pass note 2026-04-21: added customer vehicle media, garage-display overrides, next-service mileage tracking, booking mileage capture, gallery slider groundwork, and geolocation arrival groundwork.
