@@ -14,7 +14,7 @@
     .status[data-state="success"]{border-color:rgba(34,197,94,.35)} .status[data-state="error"]{border-color:rgba(248,113,113,.35)}
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{grid-column:span 12;padding:18px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
     .card h2,.card h3{margin:0 0 12px}.field{display:grid;gap:6px;margin-bottom:10px}.field input,.field textarea,.field select{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;background:rgba(255,255,255,.04);color:#f8fafc}
-    .field textarea{min-height:110px;resize:vertical}.checkrow{display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;align-items:start;margin:8px 0}.checkrow input{justify-self:end;margin-top:2px}.checkrow label,.checkrow span{display:block;text-align:left;line-height:1.45}.checkrow.inline-check{display:flex;gap:10px;align-items:center}.checkrow.inline-check input{justify-self:auto;margin-top:0}.actions{display:flex;gap:10px;flex-wrap:wrap}.muted{color:#9fb0c8;font-size:.94rem}.social-platform-grid{display:grid;gap:16px}.social-platform-card{border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px;background:rgba(255,255,255,.03)}.social-item-row{display:grid;grid-template-columns:1.2fr 1.4fr .9fr;gap:10px;padding:10px 0;border-top:1px solid rgba(255,255,255,.08)}.social-item-row:first-of-type{border-top:0}.social-item-row .field{margin-bottom:0}.social-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}.social-preview-link{font-size:.85rem}.catalog-advanced{margin-top:12px} @media (max-width:980px){.social-item-row{grid-template-columns:1fr}}
+    .field textarea{min-height:110px;resize:vertical}.checkrow{display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;align-items:start;margin:8px 0}.checkrow input{justify-self:end;margin-top:2px}.checkrow label,.checkrow span{display:block;text-align:left;line-height:1.45}.checkrow.inline-check{display:flex;gap:10px;align-items:center}.checkrow.inline-check input{justify-self:auto;margin-top:0}.actions{display:flex;gap:10px;flex-wrap:wrap}.muted{color:#9fb0c8;font-size:.94rem}
     .preview{white-space:pre-wrap;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);min-height:82px}
     .subgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.note{font-size:.92rem;color:#9fb0c8}.panel-lite{padding:14px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}.stack-sm{display:grid;gap:10px}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.section-head h3{margin:0}.section-label{font-size:.82rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#9fb0c8}.pricing-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}.pricing-summary .stat{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}.pricing-summary .stat strong{display:block;font-size:1.35rem;margin-top:6px}.pricing-grid-4,.pricing-grid-5{display:grid;gap:10px}.pricing-grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}.pricing-grid-5{grid-template-columns:repeat(5,minmax(0,1fr))}.field.compact span{font-size:.82rem;color:#9fb0c8}.catalog-section{margin-top:18px}.catalog-table-wrap{overflow:auto}.catalog-table{display:grid;gap:8px}.catalog-row{display:grid;gap:8px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);align-items:end}.catalog-row.package{grid-template-columns:1.1fr 1.2fr 1fr .8fr .8fr .8fr .8fr auto}.catalog-row.addon{grid-template-columns:1fr 1.2fr .9fr .9fr .8fr .8fr .8fr .8fr auto}.catalog-row.service-area{grid-template-columns:1fr 1.1fr 1.1fr .9fr .9fr .8fr auto}.catalog-row.requirement{grid-template-columns:minmax(0,1fr) auto}.catalog-row__head{font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9fb0c8}.catalog-row .field{margin-bottom:0}.catalog-row button{align-self:center}.catalog-empty{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.12);color:#9fb0c8}
     .app-layout{display:grid;grid-template-columns:minmax(250px,300px) minmax(0,1fr);gap:18px;align-items:start}
@@ -374,11 +374,11 @@
   function socialFeedsDefaults(){
     return {
       platforms: [
-        { key: 'youtube', label: 'YouTube', profile_url: 'https://www.youtube.com/@rosiedazzlers/videos', intro: 'Latest videos and shorts.', items: [] },
-        { key: 'instagram', label: 'Instagram', profile_url: 'https://www.instagram.com/rosiedazzlers/', intro: 'Latest Instagram posts and reels.', items: [] },
-        { key: 'facebook', label: 'Facebook', profile_url: 'https://www.facebook.com/rosiedazzlers', intro: 'Latest Facebook posts.', items: [] },
-        { key: 'tiktok', label: 'TikTok', profile_url: 'https://www.tiktok.com/@rosiedazzler', intro: 'Latest TikTok clips.', items: [] },
-        { key: 'x', label: 'X', profile_url: 'https://x.com/RosieDazzlers', intro: 'Latest X posts.', items: [] }
+        { platform: 'youtube', title: 'YouTube', intro: 'Latest videos and shorts.', items: [] },
+        { platform: 'facebook', title: 'Facebook', intro: 'Latest Facebook posts.', items: [] },
+        { platform: 'instagram', title: 'Instagram', intro: 'Latest Instagram posts.', items: [] },
+        { platform: 'tiktok', title: 'TikTok', intro: 'Latest TikTok posts.', items: [] },
+        { platform: 'x', title: 'X', intro: 'Latest X posts.', items: [] }
       ]
     };
   }
@@ -387,53 +387,27 @@
     var src = value && typeof value === 'object' ? cloneValue(value) : cloneValue(defaults);
     var rows = Array.isArray(src.platforms) ? src.platforms : [];
     if (!rows.length) rows = defaults.platforms;
-    return {
-      platforms: rows.map(function(platform, index){
-        var fallback = defaults.platforms[index] || { key: 'platform_' + (index + 1), label: 'Platform ' + (index + 1), profile_url: '', intro: '', items: [] };
-        var items = Array.isArray(platform && platform.items) ? platform.items : [];
-        return {
-          key: String(platform && (platform.key || platform.platform) || fallback.key),
-          label: String(platform && (platform.label || platform.title) || fallback.label),
-          profile_url: String(platform && platform.profile_url || fallback.profile_url || ''),
-          intro: String(platform && platform.intro || fallback.intro || ''),
-          items: items.slice(0, 5).map(function(item){
-            return {
-              title: item && item.title ? String(item.title) : '',
-              caption: item && item.caption ? String(item.caption) : (item && item.note ? String(item.note) : ''),
-              url: item && item.url ? String(item.url) : '',
-              published_at: item && item.published_at ? String(item.published_at) : ''
-            };
-          })
-        };
-      })
-    };
-  }
-  function renderSocialFeedsEditor(value){
-    var host = byId('socialFeedsManager');
-    if (!host) return;
-    var social = normalizeSocialFeeds(value);
-    host.innerHTML = social.platforms.map(function(platform, pIndex){
-      var items = platform.items && platform.items.length ? platform.items : [{title:'',caption:'',url:'',published_at:''},{title:'',caption:'',url:'',published_at:''},{title:'',caption:'',url:'',published_at:''},{title:'',caption:'',url:'',published_at:''},{title:'',caption:'',url:'',published_at:''}];
-      return '<section class="social-platform-card">' +
-        '<div class="social-head"><div><strong>' + escapeHtml(platform.label) + '</strong><div class="note">Profile link shown to customers and up to 5 recent items.</div></div>' +
-        (platform.profile_url ? '<a class="btn ghost small social-preview-link" href="' + escapeHtml(platform.profile_url) + '" target="_blank" rel="noopener">Open profile</a>' : '') + '</div>' +
-        '<div class="subgrid" style="margin-top:12px"><label class="field"><span>Label</span><input data-social-platform-index="' + pIndex + '" data-social-platform-field="label" value="' + escapeHtml(platform.label) + '"></label><label class="field"><span>Profile URL</span><input data-social-platform-index="' + pIndex + '" data-social-platform-field="profile_url" value="' + escapeHtml(platform.profile_url) + '"></label></div>' +
-        '<label class="field" style="margin-top:10px"><span>Intro</span><textarea data-social-platform-index="' + pIndex + '" data-social-platform-field="intro">' + escapeHtml(platform.intro) + '</textarea></label>' +
-        items.map(function(item, iIndex){
-          return '<div class="social-item-row">' +
-            '<label class="field"><span>Post title</span><input data-social-item-platform="' + pIndex + '" data-social-item-index="' + iIndex + '" data-social-item-field="title" value="' + escapeHtml(item.title) + '"></label>' +
-            '<label class="field"><span>URL</span><input data-social-item-platform="' + pIndex + '" data-social-item-index="' + iIndex + '" data-social-item-field="url" value="' + escapeHtml(item.url) + '"></label>' +
-            '<label class="field"><span>Published</span><input data-social-item-platform="' + pIndex + '" data-social-item-index="' + iIndex + '" data-social-item-field="published_at" value="' + escapeHtml(item.published_at) + '" placeholder="2026-04-20"></label>' +
-            '<label class="field" style="grid-column:1/-1"><span>Caption / note</span><textarea data-social-item-platform="' + pIndex + '" data-social-item-index="' + iIndex + '" data-social-item-field="caption">' + escapeHtml(item.caption) + '</textarea></label>' +
-          '</div>';
-        }).join('') +
-      '</section>';
-    }).join('');
-    bindSocialFeedsEditor();
+    src.platforms = rows.map(function(platform, index){
+      var fallback = defaults.platforms[index] || { platform: 'platform_' + (index + 1), title: 'Platform ' + (index + 1), intro: '', items: [] };
+      var items = Array.isArray(platform && platform.items) ? platform.items : [];
+      return {
+        platform: (platform && platform.platform) || fallback.platform,
+        title: (platform && platform.title) || fallback.title,
+        intro: (platform && platform.intro) || fallback.intro,
+        items: items.slice(0, 5).map(function(item){
+          return {
+            title: item && item.title ? String(item.title) : '',
+            url: item && item.url ? String(item.url) : '',
+            published_at: item && item.published_at ? String(item.published_at) : '',
+            note: item && item.note ? String(item.note) : ''
+          };
+        })
+      };
+    });
+    return src;
   }
   function setSocialFeedsEditor(value){
     byId('social_feeds_json').value = JSON.stringify(normalizeSocialFeeds(value), null, 2);
-    renderSocialFeedsEditor(value);
   }
   function readSocialFeedsEditor(){
     var raw = byId('social_feeds_json').value || '{}';
@@ -441,47 +415,6 @@
     try { parsed = JSON.parse(raw); } catch { throw new Error('Social feed JSON is invalid.'); }
     if (!parsed || typeof parsed !== 'object') throw new Error('Social feed JSON must be a JSON object.');
     return normalizeSocialFeeds(parsed);
-  }
-  function syncSocialFeedsJsonFromForm(){
-    byId('social_feeds_json').value = JSON.stringify(readSocialFeedsForm(), null, 2);
-  }
-  function readSocialFeedsForm(){
-    var social = normalizeSocialFeeds(readSocialFeedsEditor());
-    qsa('[data-social-platform-index]').forEach(function(input){
-      var pIndex = Number(input.getAttribute('data-social-platform-index'));
-      var field = input.getAttribute('data-social-platform-field');
-      if (!social.platforms[pIndex]) return;
-      social.platforms[pIndex][field] = input.value || '';
-    });
-    qsa('[data-social-item-platform]').forEach(function(input){
-      var pIndex = Number(input.getAttribute('data-social-item-platform'));
-      var iIndex = Number(input.getAttribute('data-social-item-index'));
-      var field = input.getAttribute('data-social-item-field');
-      if (!social.platforms[pIndex]) return;
-      if (!Array.isArray(social.platforms[pIndex].items)) social.platforms[pIndex].items = [];
-      while (social.platforms[pIndex].items.length <= iIndex) social.platforms[pIndex].items.push({title:'',caption:'',url:'',published_at:''});
-      social.platforms[pIndex].items[iIndex][field] = input.value || '';
-    });
-    social.platforms = social.platforms.map(function(platform){
-      platform.items = (platform.items || []).filter(function(item){
-        return String(item.title || item.url || item.caption || item.published_at || '').trim();
-      }).slice(0,5);
-      return platform;
-    });
-    return normalizeSocialFeeds(social);
-  }
-  function bindSocialFeedsEditor(){
-    qsa('[data-social-platform-index], [data-social-item-platform]').forEach(function(input){
-      var eventName = input.tagName === 'TEXTAREA' ? 'input' : 'change';
-      input.addEventListener(eventName, function(){
-        try { syncSocialFeedsJsonFromForm(); }
-        catch (err) { setShellStatus(err.message || 'Could not sync social feeds.', 'error'); }
-      });
-      if (eventName !== 'input') input.addEventListener('input', function(){
-        try { syncSocialFeedsJsonFromForm(); }
-        catch (err) { setShellStatus(err.message || 'Could not sync social feeds.', 'error'); }
-      });
-    });
   }
   function readVisibility(){ return { customer_detailer_notes: byId('vis_customer_detailer_notes').checked, customer_admin_notes_admin_only: byId('vis_customer_admin_notes').checked, detailer_admin_notes_admin_only: byId('vis_detailer_admin_notes').checked }; }
   function readScheduling(){ return { manual_schedule_admin_only: byId('manual_schedule_admin_only').checked, blocking_admin_only: byId('blocking_admin_only').checked, notes: byId('manual_schedule_notes').value || '' }; }
@@ -917,6 +850,15 @@
     await loadMembershipInterest().catch(function(){ renderMembershipInterestList([]); });
   }
   function byId(id){ return document.getElementById(id); }
+  function bindById(id, eventName, handler){
+    const node = byId(id);
+    if (!node) {
+      console.warn('admin-app missing element for event binding:', id, eventName);
+      return null;
+    }
+    node.addEventListener(eventName, handler);
+    return node;
+  }
   async function previewRecovery(sendTest){
     const res = await fetch('/api/admin/recovery_message_preview', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ channel: byId('preview_channel').value, customer_name: byId('preview_customer_name').value, customer_email: byId('preview_customer_email').value, recipient_phone: byId('preview_recipient_phone').value, test_recipient: byId('preview_test_recipient').value, recovery_url: byId('preview_recovery_url').value, send_test: sendTest === true }) });
     const out = await res.json().catch(() => null);
@@ -931,60 +873,59 @@
   }
 
   ['travel_charge_urban','travel_charge_township','travel_charge_hamlet','travel_charge_coastal','travel_charge_rural','travel_charge_out_of_zone'].forEach(function (id) {
-    byId(id).addEventListener('input', function () {
+    bindById(id, 'input', function () {
       var key = id.replace('travel_charge_', '');
       pricingCatalogState.booking_rules.travel_pricing[key] = moneyNum(byId(id).value, 0);
       syncPricingEditorToJson();
     });
   });
-  byId('travel_charge_notes').addEventListener('input', function () {
+  bindById('travel_charge_notes', 'input', function () {
     pricingCatalogState.booking_rules.travel_pricing.notes = byId('travel_charge_notes').value || '';
     syncPricingEditorToJson();
   });
-  byId('price_control_fuel').addEventListener('input', function () { pricingCatalogState.booking_rules.price_controls.fuel_surcharge_cad = moneyNum(byId('price_control_fuel').value, 0); syncPricingEditorToJson(); });
-  byId('price_control_material').addEventListener('input', function () { pricingCatalogState.booking_rules.price_controls.material_surcharge_cad = moneyNum(byId('price_control_material').value, 0); syncPricingEditorToJson(); });
-  byId('price_control_minimum').addEventListener('input', function () { pricingCatalogState.booking_rules.price_controls.minimum_callout_cad = moneyNum(byId('price_control_minimum').value, 0); syncPricingEditorToJson(); });
-  byId('price_control_tax').addEventListener('input', function () { pricingCatalogState.booking_rules.price_controls.tax_rate_percent = moneyNum(byId('price_control_tax').value, 0); syncPricingEditorToJson(); });
-  byId('addPackageBtn').addEventListener('click', function () {
+  bindById('price_control_fuel', 'input', function () { pricingCatalogState.booking_rules.price_controls.fuel_surcharge_cad = moneyNum(byId('price_control_fuel').value, 0); syncPricingEditorToJson(); });
+  bindById('price_control_material', 'input', function () { pricingCatalogState.booking_rules.price_controls.material_surcharge_cad = moneyNum(byId('price_control_material').value, 0); syncPricingEditorToJson(); });
+  bindById('price_control_minimum', 'input', function () { pricingCatalogState.booking_rules.price_controls.minimum_callout_cad = moneyNum(byId('price_control_minimum').value, 0); syncPricingEditorToJson(); });
+  bindById('price_control_tax', 'input', function () { pricingCatalogState.booking_rules.price_controls.tax_rate_percent = moneyNum(byId('price_control_tax').value, 0); syncPricingEditorToJson(); });
+  bindById('addPackageBtn', 'click', function () {
     pricingCatalogState.packages.push({ code: 'new_package', name: 'New Package', subtitle: '', prices_cad: { small: 0, mid: 0, oversize: 0 }, deposit_cad: 0, images_by_size: {}, included_services: [], notes: [] });
     syncPricingEditorToJson(); renderPricingDashboard();
   });
-  byId('addAddonBtn').addEventListener('click', function () {
+  bindById('addAddonBtn', 'click', function () {
     pricingCatalogState.addons.push({ code: 'new_addon', name: 'New Add-on', category: '', type: '', prices_cad: { small: 0, mid: 0, oversize: 0 }, price_cad: 0, quote_required: false, image_url: '', image_fallback_url: '', notes: [] });
     syncPricingEditorToJson(); renderPricingDashboard();
   });
-  byId('addServiceAreaBtn').addEventListener('click', function () {
+  bindById('addServiceAreaBtn', 'click', function () {
     pricingCatalogState.service_areas.push({ county: '', label: 'New Service Area', value: 'New Service Area', municipality: '', zone: '', travel_tier: 'township', area_type: '', bylaw_note: '', parking_rule: '', noise_rule: '', water_rule: '', access_rule: '', official_links: [] });
     syncPricingEditorToJson(); renderPricingDashboard();
   });
-  byId('addRequirementBtn').addEventListener('click', function () {
+  bindById('addRequirementBtn', 'click', function () {
     pricingCatalogState.public_requirements.push('New public requirement');
     pricingCatalogState.booking_rules.public_requirements = pricingCatalogState.public_requirements.slice();
     syncPricingEditorToJson(); renderPricingDashboard();
   });
-  byId('applyPricingJsonBtn').addEventListener('click', function () { try { setPricingCatalogState(readPricingCatalog()); setShellStatus('Pricing JSON applied to the structured editor.', 'success'); } catch (err) { setShellStatus(err?.message || 'Could not apply pricing JSON.', 'error'); } });
-  byId('syncPricingJsonBtn').addEventListener('click', function () { syncPricingEditorToJson(); setShellStatus('Raw pricing JSON refreshed from the structured editor.', 'success'); });
-  byId('saveVisibilityBtn').addEventListener('click', async ()=>{ try{ await saveSetting('visibility_matrix', readVisibility(), 'Visibility settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save visibility settings.', 'error'); } });
-  byId('saveSchedulingBtn').addEventListener('click', async ()=>{ try{ await saveSetting('manual_scheduling_rules', readScheduling(), 'Scheduling policy saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save scheduling policy.', 'error'); } });
-  byId('saveFlagsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('feature_flags', readFlags(), 'Feature flags saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save feature flags.', 'error'); } });
-  byId('saveQuoteSettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('quote_booking_settings', readQuoteSettings(), 'Booking-led self-serve settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save booking-led self-serve settings.', 'error'); } });
-  byId('saveGiftDeliverySettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('gift_delivery_settings', readGiftDeliverySettings(), 'E-gift delivery settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save e-gift settings.', 'error'); } });
-  byId('runGiftDeliveryProcessBtn').addEventListener('click', async ()=>{ try{ const res = await fetch('/api/gifts/scheduled_delivery_process', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 50 }) }); const out = await res.json().catch(()=>null); if(!res.ok) throw new Error(out?.error || 'Could not run gift delivery automation.'); setShellStatus('Gift delivery automation scanned ' + (out?.scanned || 0) + ' gifts and processed ' + (out?.processed || 0) + '.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not run gift delivery automation.', 'error'); } });
-  byId('saveMembershipSettingsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('membership_plan_settings', readMembershipPlanSettings(), 'Maintenance plan settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save maintenance plan settings.', 'error'); } });
-  byId('runMembershipReminderProcessBtn').addEventListener('click', async ()=>{ try{ const res = await fetch('/api/membership_reminders_process', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 50 }) }); const out = await res.json().catch(()=>null); if(!res.ok) throw new Error(out?.error || 'Could not run maintenance reminders.'); await loadMembershipInterest().catch(function(){}); setShellStatus('Maintenance reminders scanned ' + (out?.scanned || 0) + ' customers and processed ' + (out?.processed || 0) + '.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not run maintenance reminders.', 'error'); } });
-  byId('reloadMembershipInterestBtn')?.addEventListener('click', async ()=>{ try{ await loadMembershipInterest(); setShellStatus('Recurring reminder candidates reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload recurring reminder candidates.', 'error'); } });
-  byId('saveModerationBtn').addEventListener('click', async ()=>{ try{ await saveSetting('moderation_rules', readModeration(), 'Moderation defaults saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save moderation defaults.', 'error'); } });
-  byId('saveRecoveryBtn').addEventListener('click', async ()=>{ try{ await saveSetting('recovery_templates', readRecoveryTemplates(), 'Recovery templates saved.'); await saveSetting('recovery_rules', readRecoveryRules(), 'Recovery rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save recovery settings.', 'error'); } });
-  byId('saveProviderRulesBtn').addEventListener('click', async ()=>{ try{ await saveSetting('recovery_provider_rules', readProviderRules(), 'Recovery provider rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save provider rules.', 'error'); } });
-  byId('saveDocumentTemplatesBtn').addEventListener('click', async ()=>{ try{ await saveSetting('document_templates', readDocumentTemplates(), 'Document templates saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save document templates.', 'error'); } });
-  byId('reloadSocialFeedsBtn').addEventListener('click', async ()=>{ try{ const res = await fetch('/api/social_feed_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load social feed JSON.'); setSocialFeedsEditor(out?.social_feeds || socialFeedsDefaults()); setShellStatus(out?.warning ? `Social feed JSON reloaded with fallback defaults. ${out.warning}` : 'Social feed JSON reloaded.', out?.warning ? 'warning' : 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload social feed JSON.', 'error'); } });
-  byId('resetSocialFeedsBtn').addEventListener('click', ()=>{ setSocialFeedsEditor(socialFeedsDefaults()); setShellStatus('Social feed editor reset to the template structure.', 'success'); });
-  byId('validateSocialFeedsBtn').addEventListener('click', ()=>{ try{ syncSocialFeedsJsonFromForm(); readSocialFeedsForm(); setShellStatus('Social feeds validated successfully.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not validate social feeds.', 'error'); } });
-  byId('saveSocialFeedsBtn').addEventListener('click', async ()=>{ try{ syncSocialFeedsJsonFromForm(); await saveSetting('social_feeds', readSocialFeedsForm(), 'Social feeds saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save social feeds.', 'error'); } });
-  byId('reloadPricingCatalogBtn').addEventListener('click', async ()=>{ try{ await loadPricingCatalogEditor(null); setShellStatus('Pricing catalog reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload pricing catalog.', 'error'); } });
-  byId('savePricingCatalogBtn').addEventListener('click', async ()=>{ try{ syncPricingEditorToJson(); await saveSetting('pricing_catalog', pricingCatalogState, 'Pricing catalog saved. Booking, pricing, services, checkout, and pricing controls now share this source.'); } catch(err){ setShellStatus(err?.message || 'Could not save pricing catalog.', 'error'); } });
-  byId('previewRecoveryBtn').addEventListener('click', async ()=>{ try{ await previewRecovery(false); setShellStatus('Recovery preview generated.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not build recovery preview.', 'error'); } });
-  byId('sendTestRecoveryBtn').addEventListener('click', async ()=>{ try{ await previewRecovery(true); } catch(err){ setShellStatus(err?.message || 'Could not send recovery test.', 'error'); } });
+  bindById('applyPricingJsonBtn', 'click', function () { try { setPricingCatalogState(readPricingCatalog()); setShellStatus('Pricing JSON applied to the structured editor.', 'success'); } catch (err) { setShellStatus(err?.message || 'Could not apply pricing JSON.', 'error'); } });
+  bindById('syncPricingJsonBtn', 'click', function () { syncPricingEditorToJson(); setShellStatus('Raw pricing JSON refreshed from the structured editor.', 'success'); });
+  bindById('saveVisibilityBtn', 'click', async ()=>{ try{ await saveSetting('visibility_matrix', readVisibility(), 'Visibility settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save visibility settings.', 'error'); } });
+  bindById('saveSchedulingBtn', 'click', async ()=>{ try{ await saveSetting('manual_scheduling_rules', readScheduling(), 'Scheduling policy saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save scheduling policy.', 'error'); } });
+  bindById('saveFlagsBtn', 'click', async ()=>{ try{ await saveSetting('feature_flags', readFlags(), 'Feature flags saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save feature flags.', 'error'); } });
+  bindById('saveQuoteSettingsBtn', 'click', async ()=>{ try{ await saveSetting('quote_booking_settings', readQuoteSettings(), 'Booking-led self-serve settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save booking-led self-serve settings.', 'error'); } });
+  bindById('saveGiftDeliverySettingsBtn', 'click', async ()=>{ try{ await saveSetting('gift_delivery_settings', readGiftDeliverySettings(), 'E-gift delivery settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save e-gift settings.', 'error'); } });
+  bindById('runGiftDeliveryProcessBtn', 'click', async ()=>{ try{ const res = await fetch('/api/gifts/scheduled_delivery_process', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 50 }) }); const out = await res.json().catch(()=>null); if(!res.ok) throw new Error(out?.error || 'Could not run gift delivery automation.'); setShellStatus('Gift delivery automation scanned ' + (out?.scanned || 0) + ' gifts and processed ' + (out?.processed || 0) + '.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not run gift delivery automation.', 'error'); } });
+  bindById('saveMembershipSettingsBtn', 'click', async ()=>{ try{ await saveSetting('membership_plan_settings', readMembershipPlanSettings(), 'Maintenance plan settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save maintenance plan settings.', 'error'); } });
+  bindById('runMembershipReminderProcessBtn', 'click', async ()=>{ try{ const res = await fetch('/api/membership_reminders_process', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 50 }) }); const out = await res.json().catch(()=>null); if(!res.ok) throw new Error(out?.error || 'Could not run maintenance reminders.'); await loadMembershipInterest().catch(function(){}); setShellStatus('Maintenance reminders scanned ' + (out?.scanned || 0) + ' customers and processed ' + (out?.processed || 0) + '.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not run maintenance reminders.', 'error'); } });
+  bindById('reloadMembershipInterestBtn', 'click', async ()=>{ try{ await loadMembershipInterest(); setShellStatus('Recurring reminder candidates reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload recurring reminder candidates.', 'error'); } });
+  bindById('saveModerationBtn', 'click', async ()=>{ try{ await saveSetting('moderation_rules', readModeration(), 'Moderation defaults saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save moderation defaults.', 'error'); } });
+  bindById('saveRecoveryBtn', 'click', async ()=>{ try{ await saveSetting('recovery_templates', readRecoveryTemplates(), 'Recovery templates saved.'); await saveSetting('recovery_rules', readRecoveryRules(), 'Recovery rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save recovery settings.', 'error'); } });
+  bindById('saveProviderRulesBtn', 'click', async ()=>{ try{ await saveSetting('recovery_provider_rules', readProviderRules(), 'Recovery provider rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save provider rules.', 'error'); } });
+  bindById('saveDocumentTemplatesBtn', 'click', async ()=>{ try{ await saveSetting('document_templates', readDocumentTemplates(), 'Document templates saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save document templates.', 'error'); } });
+  bindById('reloadSocialFeedsBtn', 'click', async ()=>{ try{ const res = await fetch('/api/social_feed_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load social feed JSON.'); setSocialFeedsEditor(out?.social_feeds || socialFeedsDefaults()); setShellStatus(out?.warning ? `Social feed JSON reloaded with fallback defaults. ${out.warning}` : 'Social feed JSON reloaded.', out?.warning ? 'warning' : 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload social feed JSON.', 'error'); } });
+  bindById('resetSocialFeedsBtn', 'click', ()=>{ setSocialFeedsEditor(socialFeedsDefaults()); setShellStatus('Social feed editor reset to the template structure.', 'success'); });
+  bindById('saveSocialFeedsBtn', 'click', async ()=>{ try{ await saveSetting('social_feeds', readSocialFeedsEditor(), 'Social feeds saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save social feeds.', 'error'); } });
+  bindById('reloadPricingCatalogBtn', 'click', async ()=>{ try{ await loadPricingCatalogEditor(null); setShellStatus('Pricing catalog reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload pricing catalog.', 'error'); } });
+  bindById('savePricingCatalogBtn', 'click', async ()=>{ try{ syncPricingEditorToJson(); await saveSetting('pricing_catalog', pricingCatalogState, 'Pricing catalog saved. Booking, pricing, services, checkout, and pricing controls now share this source.'); } catch(err){ setShellStatus(err?.message || 'Could not save pricing catalog.', 'error'); } });
+  bindById('previewRecoveryBtn', 'click', async ()=>{ try{ await previewRecovery(false); setShellStatus('Recovery preview generated.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not build recovery preview.', 'error'); } });
+  bindById('sendTestRecoveryBtn', 'click', async ()=>{ try{ await previewRecovery(true); } catch(err){ setShellStatus(err?.message || 'Could not send recovery test.', 'error'); } });
 
   window.AdminPageInit.init({ pageKey:'admin-app', onReady: async ()=>{ try { await loadSettings(); } catch(err){ setShellStatus(err?.message || 'Could not initialize app management.', 'error'); } } });
 })();
