@@ -1,6 +1,25 @@
 // assets/admin-menu.js
 //
 // Shared internal admin/detailer navigation.
+//
+// What this file does:
+// - builds a session-aware internal menu for admin/detailer pages
+// - shows only links the current actor should see
+// - highlights the current page
+// - gives the growing internal app a reusable nav instead of hard-coded page links
+//
+// Expected dependencies:
+// - /assets/admin-auth.js
+//
+// Typical page usage:
+// <script src="/assets/admin-auth.js"></script>
+// <script src="/assets/admin-menu.js"></script>
+// <script>
+//   window.AdminMenu.render({
+//     currentPage: "admin-booking",
+//     mount: document.querySelector("[data-admin-menu-mount]")
+//   });
+// </script>
 
 (function attachAdminMenu(globalScope) {
   function assertDependency() {
@@ -10,24 +29,91 @@
   }
 
   const MENU_ITEMS = [
-    { key: "admin", label: "Dashboard", href: "/admin.html", description: "Internal home", visible: () => true },
-    { key: "admin-booking", label: "Bookings", href: "/admin-booking.html", description: "Search and manage bookings", visible: () => globalScope.AdminAuth.canAccessPage("admin-booking") },
-    { key: "admin-blocks", label: "Blocks", href: "/admin-blocks.html", description: "Day and slot capacity", visible: () => globalScope.AdminAuth.canAccessPage("admin-blocks") },
-    { key: "admin-assign", label: "Assign Crew", href: "/admin-assign.html", description: "Lead + crew scheduling", visible: () => globalScope.AdminAuth.canAccessPage("admin-assign") },
-    { key: "admin-progress", label: "Progress", href: "/admin-progress.html", description: "Customer progress updates", visible: () => globalScope.AdminAuth.canAccessPage("admin-progress") },
-    { key: "admin-jobsite", label: "Jobsite", href: "/admin-jobsite.html", description: "Live field workspace", visible: () => globalScope.AdminAuth.canAccessPage("admin-jobsite") },
-    { key: "admin-live", label: "Live", href: "/admin-live.html", description: "Operational live view", visible: () => globalScope.AdminAuth.canAccessPage("admin-live") },
-    { key: "admin-staff", label: "Staff", href: "/admin-staff.html", description: "Users and passwords", visible: () => globalScope.AdminAuth.canAccessPage("admin-staff") },
-    { key: "admin-payroll", label: "Crew Time & Payroll", href: "/admin-payroll.html", description: "Availability, hours, and payroll", visible: () => globalScope.AdminAuth.canAccessPage("admin-payroll") },
-    { key: "admin-app", label: "App Management", href: "/admin-app.html", description: "Roles, screens, feature access", visible: () => globalScope.AdminAuth.canAccessPage("admin-app") },
-    { key: "admin-catalog", label: "Inventory", href: "/admin-catalog.html", description: "Inventory, reorder, add items", visible: () => globalScope.AdminAuth.canAccessPage("admin-catalog") },
-    { key: "admin-customers", label: "Customers", href: "/admin-customers.html", description: "Profiles and tiers", visible: () => globalScope.AdminAuth.canAccessPage("admin-customers") },
-    { key: "admin-notifications", label: "Notifications", href: "/admin-notifications.html", description: "Queued notices and hooks", visible: () => globalScope.AdminAuth.canAccessPage("admin-notifications") },
-    { key: "admin-recovery", label: "Recovery", href: "/admin-recovery.html", description: "Templates, previews, audit", visible: () => globalScope.AdminAuth.canAccessPage("admin-recovery") },
-    { key: "admin-analytics", label: "Analytics", href: "/admin-analytics.html", description: "Visitors, referrers, abandoned checkouts", visible: () => globalScope.AdminAuth.canAccessPage("admin-analytics") },
-    { key: "admin-promos", label: "Promos", href: "/admin-promos.html", description: "Promo code management", visible: () => globalScope.AdminAuth.canAccessPage("admin-promos") },
-    { key: "admin-accounting", label: "Accounting", href: "/admin-accounting.html", description: "Ledger, expenses, payables, tax, exports", visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting") || globalScope.AdminAuth.canAccessPage("admin") },
-    { key: "account", label: "My Account", href: "/admin-account.html", description: "My session and password", visible: () => globalScope.AdminAuth.isAuthenticated() }
+    {
+      key: "admin",
+      label: "Dashboard",
+      href: "/admin.html",
+      description: "Internal home",
+      visible: () => true
+    },
+    {
+      key: "admin-booking",
+      label: "Bookings",
+      href: "/admin-booking.html",
+      description: "Search and manage bookings",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-booking")
+    },
+    {
+      key: "admin-blocks",
+      label: "Blocks",
+      href: "/admin-blocks.html",
+      description: "Day and slot capacity",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-blocks")
+    },
+    {
+      key: "admin-progress",
+      label: "Progress",
+      href: "/admin-progress.html",
+      description: "Customer progress updates",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-progress")
+    },
+    {
+      key: "admin-jobsite",
+      label: "Jobsite",
+      href: "/admin-jobsite.html",
+      description: "Live field workspace",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-jobsite")
+    },
+    {
+      key: "admin-live",
+      label: "Live",
+      href: "/admin-live.html",
+      description: "Operational live view",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-live")
+    },
+    {
+      key: "admin-staff",
+      label: "Staff",
+      href: "/admin-staff.html",
+      description: "Users and passwords",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-staff")
+    },
+
+    {
+      key: "admin-app",
+      label: "App Management",
+      href: "/admin-app.html",
+      description: "Roles, screens, feature access",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-app")
+    },
+    {
+      key: "admin-customers",
+      label: "Customers",
+      href: "/admin-customers.html",
+      description: "Profiles and tiers",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-customers")
+    },
+    {
+      key: "admin-promos",
+      label: "Promos",
+      href: "/admin-promos.html",
+      description: "Promo code management",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-promos")
+    },
+    {
+      key: "admin-accounting",
+      label: "Accounting",
+      href: "/admin-accounting.html",
+      description: "Ledger, expenses, payables, tax, exports",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting") || globalScope.AdminAuth.canAccessPage("admin")
+    },
+    {
+      key: "account",
+      label: "My Account",
+      href: "/admin-account.html",
+      description: "My session and password",
+      visible: () => globalScope.AdminAuth.isAuthenticated()
+    }
   ];
 
   function render(options = {}) {
@@ -64,6 +150,7 @@
         border: 1px solid rgba(255,255,255,0.08);
         box-shadow: 0 14px 35px rgba(0,0,0,0.18);
       }
+
       .admin-menu__title {
         margin: 0 0 12px;
         font-size: 0.95rem;
@@ -72,10 +159,12 @@
         text-transform: uppercase;
         color: #93c5fd;
       }
+
       .admin-menu__list {
         display: grid;
         gap: 10px;
       }
+
       .admin-menu__item {
         display: block;
         text-decoration: none;
@@ -86,21 +175,26 @@
         border: 1px solid rgba(255,255,255,0.06);
         transition: background 0.15s ease, transform 0.05s ease, border-color 0.15s ease;
       }
+
       .admin-menu__item:hover {
         background: rgba(255,255,255,0.08);
       }
+
       .admin-menu__item:active {
         transform: translateY(1px);
       }
+
       .admin-menu__item.is-active {
         background: rgba(37,99,235,0.22);
         border-color: rgba(96,165,250,0.42);
       }
+
       .admin-menu__label {
         display: block;
         font-weight: 700;
         margin-bottom: 4px;
       }
+
       .admin-menu__desc {
         display: block;
         color: #cbd5e1;
@@ -123,10 +217,17 @@
       const link = document.createElement("a");
       link.className = "admin-menu__item" + (item.key === currentPage ? " is-active" : "");
       link.href = item.href;
-      link.innerHTML = `
-        <span class="admin-menu__label">${escapeHtml(item.label)}</span>
-        <span class="admin-menu__desc">${escapeHtml(item.description)}</span>
-      `;
+
+      const label = document.createElement("span");
+      label.className = "admin-menu__label";
+      label.textContent = item.label;
+
+      const desc = document.createElement("span");
+      desc.className = "admin-menu__desc";
+      desc.textContent = item.description || "";
+
+      link.appendChild(label);
+      link.appendChild(desc);
       list.appendChild(link);
     });
 
@@ -134,14 +235,8 @@
     return wrapper;
   }
 
-  function escapeHtml(value) {
-    return String(value ?? "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#39;");
-  }
-
-  globalScope.AdminMenu = { render };
+  globalScope.AdminMenu = {
+    render,
+    items: MENU_ITEMS.slice()
+  };
 })(window);

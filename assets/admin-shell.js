@@ -1,6 +1,38 @@
 // assets/admin-shell.js
 //
 // Shared admin/detailer page bootstrap.
+//
+// What this file does:
+// - requires a valid signed-in staff session for protected pages
+// - loads current actor through AdminAuth
+// - updates page text placeholders like actor name / role / email
+// - applies role/capability/page-based visibility rules
+// - wires logout buttons automatically
+// - provides a small page bootstrap helper for admin/detailer screens
+//
+// Expected dependency:
+// - /assets/admin-auth.js
+//
+// Typical page usage:
+// <script src="/assets/admin-auth.js"></script>
+// <script src="/assets/admin-shell.js"></script>
+// <script>
+//   window.AdminShell.boot({ pageKey: "admin-jobsite" });
+// </script>
+//
+// Optional markup hooks:
+// - [data-actor-name]
+// - [data-actor-role]
+// - [data-actor-email]
+// - [data-auth-only]
+// - [data-guest-only]
+// - [data-role="admin"]
+// - [data-capability="can_manage_staff"]
+// - [data-page-access="admin-promos"]
+// - [data-admin-logout]
+// - [data-admin-shell-status]
+// - [data-admin-shell-loading]
+// - [data-admin-shell-ready]
 
 (function attachAdminShell(globalScope) {
   function assertDependency() {
@@ -62,100 +94,6 @@
     }
   }
 
-
-  function topNavItems() {
-    return [
-      { key: "admin", label: "Dashboard", href: "/admin.html", visible: () => true },
-      { key: "admin-booking", label: "Bookings", href: "/admin-booking.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-booking") },
-      { key: "admin-blocks", label: "Blocks", href: "/admin-blocks.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-blocks") },
-      { key: "admin-assign", label: "Assign Crew", href: "/admin-assign.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-assign") },
-      { key: "admin-progress", label: "Progress", href: "/admin-progress.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-progress") },
-      { key: "admin-jobsite", label: "Jobsite", href: "/admin-jobsite.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-jobsite") },
-      { key: "admin-live", label: "Live", href: "/admin-live.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-live") },
-      { key: "admin-staff", label: "Staff", href: "/admin-staff.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-staff") },
-      { key: "admin-payroll", label: "Crew Time & Payroll", href: "/admin-payroll.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-payroll") },
-      { key: "admin-catalog", label: "Inventory", href: "/admin-catalog.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-catalog") },
-      { key: "admin-customers", label: "Customers", href: "/admin-customers.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-customers") },
-      { key: "admin-notifications", label: "Notifications", href: "/admin-notifications.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-notifications") },
-      { key: "admin-analytics", label: "Analytics", href: "/admin-analytics.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-analytics") },
-      { key: "admin-promos", label: "Promos", href: "/admin-promos.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-promos") },
-      { key: "admin-accounting", label: "Accounting", href: "/admin-accounting.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting") || globalScope.AdminAuth.canAccessPage("admin") },
-      { key: "admin-app", label: "App Management", href: "/admin-app.html", visible: () => globalScope.AdminAuth.canAccessPage("admin-app") },
-      { key: "account", label: "My Account", href: "/admin-account.html", visible: () => globalScope.AdminAuth.isAuthenticated() },
-      { key: "public-site", label: "Public Site", href: "/", visible: () => true }
-    ];
-  }
-
-  function renderTopNavigation(root, pageKey, actor) {
-    const nav = document.querySelector("header.nav, .nav");
-    const navLinks = document.querySelector("#navLinks");
-    const navInner = document.querySelector(".nav-inner");
-    if (!nav || !navLinks || !navInner) return;
-
-    const brand = navInner.querySelector(".brand");
-    if (brand) {
-      brand.setAttribute("href", "/admin.html");
-      const brandLabel = brand.querySelector("strong");
-      if (brandLabel) brandLabel.textContent = "Rosie Dazzlers Admin";
-    }
-
-    Array.from(navInner.children).forEach((child) => {
-      const keep = child.classList?.contains("brand") || child.id === "navToggle" || child.id === "navLinks" || child.classList?.contains("account-widget");
-      if (!keep && child !== navLinks) child.remove();
-    });
-
-    const currentPage = String(pageKey || "").trim();
-    const links = topNavItems().filter((item) => {
-      try {
-        return item.visible();
-      } catch {
-        return false;
-      }
-    });
-
-    navLinks.innerHTML = links
-      .map((item) => {
-        const isActive = item.key === currentPage;
-        return `<a href="${item.href}"${isActive ? ' class="active" aria-current="page"' : ""}>${escapeHtml(item.label)}</a>`;
-      })
-      .join("");
-
-    let widget = navInner.querySelector(".account-widget");
-    if (!widget) {
-      widget = document.createElement("div");
-      widget.className = "account-widget";
-      navInner.appendChild(widget);
-    }
-
-    const actorLabel = actor && actor.full_name ? actor.full_name : "Signed in";
-    const roleLabel = actor ? humanizeRole(actor.role_code) : "Staff";
-    widget.innerHTML = `
-      <div class="account-widget-inner">
-        <span class="account-chip" title="${escapeHtml(actorLabel)}">${escapeHtml(actorLabel)} · ${escapeHtml(roleLabel)}</span>
-        <a class="btn small ghost" href="/admin-account.html">Account</a>
-        <button class="btn small ghost" type="button" data-admin-logout>Sign Out</button>
-      </div>
-    `;
-
-    const toggle = navInner.querySelector("#navToggle");
-    if (toggle && toggle.dataset.bound !== "true") {
-      toggle.dataset.bound = "true";
-      toggle.addEventListener("click", () => {
-        const open = navLinks.classList.toggle("open");
-        toggle.setAttribute("aria-expanded", open ? "true" : "false");
-      });
-    }
-  }
-
-  function escapeHtml(value) {
-    return String(value ?? "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#39;");
-  }
-
   function ensureReturnMenu(root, pageKey) {
     if (document.querySelector(".admin-return-bar")) return;
     if (document.querySelector("header.nav")) return;
@@ -170,11 +108,7 @@
       <a class="btn ghost small" href="/admin-account.html">Account</a>
       <a class="btn ghost small" href="/admin-analytics.html">Analytics</a>
       <a class="btn ghost small" href="/admin-catalog.html">Inventory</a>
-      <a class="btn ghost small" href="/admin-assign.html">Assign Crew</a>
-      <a class="btn ghost small" href="/admin-recovery.html">Recovery</a>
-      <a class="btn ghost small" href="/admin-app.html">App</a>
       <a class="btn ghost small" href="/admin-accounting.html">Accounting</a>
-      <a class="btn ghost small" href="/admin-payroll.html">Payroll</a>
       <span class="crumb">${pageKey || "admin"}</span>
     `;
 
@@ -182,7 +116,7 @@
   }
 
   function wireLogout(root, options = {}) {
-    const redirectTo = options.logoutRedirect || "/admin-login.html";
+    const redirectTo = options.logoutRedirect || "/admin-login";
 
     find(root, "[data-admin-logout]").forEach((node) => {
       if (node.dataset.logoutBound === "true") return;
@@ -234,7 +168,7 @@
 
     const root = options.root || document;
     const pageKey = options.pageKey || null;
-    const loginUrl = options.loginUrl || "/admin-login.html";
+    const loginUrl = options.loginUrl || "/admin-login";
 
     setLoading(root, true);
     setStatus(root, "", "");
@@ -257,7 +191,6 @@
       applyActor(root, actor);
       globalScope.AdminAuth.applyVisibility(root);
       globalScope.AdminAuth.renderActorText(root);
-      renderTopNavigation(root, pageKey, actor);
       wireLogout(root, options);
       ensureReturnMenu(root, pageKey);
 
@@ -269,10 +202,7 @@
       }
 
       setLoading(root, false);
-      find(root, "[data-admin-shell-loading]").forEach((node) => {
-        node.hidden = true;
-        node.style.display = "none";
-      });
+      find(root, "[data-admin-shell-loading]").forEach((node) => { node.hidden = true; node.style.display = "none"; });
 
       return {
         ok: true,
@@ -280,10 +210,7 @@
       };
     } catch (err) {
       setLoading(root, false);
-      find(root, "[data-admin-shell-loading]").forEach((node) => {
-        node.hidden = true;
-        node.style.display = "none";
-      });
+      find(root, "[data-admin-shell-loading]").forEach((node) => { node.hidden = true; node.style.display = "none"; });
       setStatus(
         root,
         err && err.message ? err.message : "Could not initialize this page.",

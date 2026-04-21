@@ -1,6 +1,32 @@
 // assets/admin-page-init.js
 //
 // Shared admin/detailer page initializer.
+//
+// What this file does:
+// - boots AdminShell for protected pages
+// - renders AdminMenu automatically
+// - gives each page one simple init call
+// - reduces repeated auth/menu startup code across admin pages
+//
+// Expected dependencies:
+// - /assets/admin-auth.js
+// - /assets/admin-shell.js
+// - /assets/admin-menu.js
+//
+// Typical page usage:
+// <script src="/assets/admin-auth.js"></script>
+// <script src="/assets/admin-shell.js"></script>
+// <script src="/assets/admin-menu.js"></script>
+// <script src="/assets/admin-page-init.js"></script>
+// <script>
+//   window.AdminPageInit.init({
+//     pageKey: "admin-booking",
+//     onReady: async ({ actor }) => { ... }
+//   });
+// </script>
+//
+// Optional page markup hook:
+// - [data-admin-menu-mount]
 
 (function attachAdminPageInit(globalScope) {
   function assertDependencies() {
@@ -21,8 +47,8 @@
 
     const result = await globalScope.AdminShell.boot({
       pageKey,
-      loginUrl: options.loginUrl || "/admin-login.html",
-      logoutRedirect: options.logoutRedirect || "/admin-login.html",
+      loginUrl: options.loginUrl || "/admin-login",
+      logoutRedirect: options.logoutRedirect || "/admin-login",
       root: options.root || document,
       onReady: async ({ actor, auth }) => {
         if (mount) {
@@ -43,5 +69,7 @@
     return result;
   }
 
-  globalScope.AdminPageInit = { init };
+  globalScope.AdminPageInit = {
+    init
+  };
 })(window);
