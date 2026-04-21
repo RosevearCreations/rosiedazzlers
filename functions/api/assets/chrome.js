@@ -27,6 +27,7 @@ const DEFAULT_NAV_LINKS = [
   ["/pricing", "Pricing"],
   ["/gear", "Gear"],
   ["/consumables", "Consumables"],
+  ["/gallery", "Gallery"],
   ["/about", "About"],
   ["/contact", "Contact"],
   ["/book", "Book"],

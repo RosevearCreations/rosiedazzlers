@@ -10,6 +10,8 @@ export async function onRequestPost(context) {
   const actor = access.actor;
   const action = cleanText(body.action);
   const reason = cleanText(body.reason);
+  const arrived_latitude = toCoord(body.arrived_latitude);
+  const arrived_longitude = toCoord(body.arrived_longitude);
   if (!bookingId || !action) return json({ error: "booking_id and action are required." }, 400);
   const now = new Date().toISOString();
   const patch = { updated_at: now };
@@ -18,7 +20,7 @@ export async function onRequestPost(context) {
     case 'accept': patch.detailer_response_status='accepted'; patch.detailer_response_reason=reason; patch.current_workflow_stage='accepted'; event.event_type='detailer_accepted'; event.event_note=reason || 'Detailer accepted the job.'; break;
     case 'decline': patch.detailer_response_status='declined'; patch.detailer_response_reason=reason; patch.current_workflow_stage='declined'; event.event_type='detailer_declined'; event.event_note=reason || 'Detailer declined the job.'; break;
     case 'dispatch': patch.current_workflow_stage='dispatched'; patch.dispatched_at=now; patch.job_status='scheduled'; event.event_type='detailer_dispatched'; event.event_note='Detailer is on the way.'; break;
-    case 'arrive': patch.current_workflow_stage='arrived'; patch.arrived_at=now; event.event_type='detailer_arrived'; event.event_note='Detailer arrived on site.'; break;
+    case 'arrive': patch.current_workflow_stage='arrived'; patch.arrived_at=now; event.event_type='detailer_arrived'; event.payload.arrived_latitude = arrived_latitude; event.payload.arrived_longitude = arrived_longitude; event.payload.location_verification_status = (arrived_latitude != null && arrived_longitude != null) ? 'captured' : 'unavailable'; event.event_note=(arrived_latitude != null && arrived_longitude != null) ? `Detailer arrived on site. Device location captured at ${arrived_latitude.toFixed(5)}, ${arrived_longitude.toFixed(5)}.` : 'Detailer arrived on site. Device geolocation was unavailable.'; break;
     case 'start': patch.current_workflow_stage='detailing'; patch.detailing_started_at=now; patch.detailing_paused_at=null; patch.job_status='in_progress'; event.event_type='detailing_started'; event.event_note='Detailing work started.'; break;
     case 'pause': patch.current_workflow_stage='paused'; patch.detailing_paused_at=now; event.event_type='detailing_paused'; event.event_note=reason || 'Detailing paused.'; break;
     case 'resume': patch.current_workflow_stage='detailing'; patch.detailing_paused_at=null; event.event_type='detailing_resumed'; event.event_note='Detailing resumed.'; break;
@@ -33,3 +35,4 @@ export async function onRequestPost(context) {
 }
 
 export const onRequestGet = methodNotAllowed;
+function toCoord(value){ const n=Number(value); return Number.isFinite(n) ? n : null; }
