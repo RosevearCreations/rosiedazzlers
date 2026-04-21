@@ -268,6 +268,10 @@
           <input id="veh_color" type="text" placeholder="Black, silver, blue" />
         </div>
         <div>
+          <label for="veh_mileage">Current mileage (km)</label>
+          <input id="veh_mileage" type="number" min="0" step="1" placeholder="Optional" />
+        </div>
+        <div>
           <label for="vehicle_size">Vehicle size</label>
           <select id="vehicle_size">
             <option value="">Select size</option>
@@ -309,6 +313,7 @@
       </div>
 
       <div id="sizeHint" class="notice" style="display:none;margin-top:12px"></div>
+      <div id="vehicleServiceHint" class="notice" style="display:none;margin-top:12px"></div>
       <div id="step1Error" class="field-error"></div>
     </section>
 
@@ -484,7 +489,8 @@
       garageVehicles: [],
       availabilityCache: new Map(),
       availabilityOffset: 0,
-      vehicleCatalog: { years: [], makes: [], models: [] }
+      vehicleCatalog: { years: [], makes: [], models: [] },
+      activeGarageVehicleId: null
     };
 
     const DEFAULT_AVAILABILITY_WINDOW_DAYS = 21;
@@ -883,6 +889,7 @@
       renderAddons();
       renderReviewVehicle();
       renderFinalSummary();
+      renderVehicleServiceHint();
     }
 
     async function loadGarageVehicles() {
@@ -920,10 +927,12 @@
             const vehicle = state.garageVehicles[Number(btn.getAttribute("data-garage-index"))];
             if (!vehicle) return;
             qsa("[data-garage-index]").forEach((node) => node.classList.remove("active"));
+            state.activeGarageVehicleId = vehicle.id || null;
             btn.classList.add("active");
             qs("#veh_year").value = vehicle.model_year || "";
             qs("#veh_make").value = vehicle.make || "";
             qs("#veh_color").value = vehicle.color || "";
+            qs("#veh_mileage").value = vehicle.mileage_km || "";
             qs("#vehicle_size").value = vehicle.vehicle_size || "";
             qs("#veh_category").value = vehicle.vehicle_category || "";
             qs("#veh_body").value = vehicle.body_style || "";
@@ -1238,6 +1247,17 @@
       };
     }
 
+    function renderVehicleServiceHint() {
+      const hint = qs('#vehicleServiceHint');
+      const saved = state.garageVehicles.find((v)=> normalizeChoice(v.id) === normalizeChoice(state.activeGarageVehicleId)) || null;
+      const nextDue = saved?.next_cleaning_due_at || '';
+      const nextMileage = saved?.next_service_mileage_km || '';
+      if (!saved || (!nextDue && !nextMileage)) { hint.style.display='none'; return; }
+      hint.style.display='block';
+      hint.className='notice';
+      hint.textContent = `Garage record: ${nextDue ? `next scheduled ${nextDue}` : 'no next date set'}${nextMileage ? ` • next service mileage ${nextMileage} km` : ''}.`;
+    }
+
     function renderReviewVehicle() {
       const area = findServiceArea(state.pricing || {}, qs("#service_area").value);
       const rows = [
@@ -1246,6 +1266,7 @@
         ["Service area", qs("#service_area").value || "Not chosen"],
         ["Local rules", area?.municipality || "Pending zone selection"],
         ["Vehicle", [qs("#veh_year").value, qs("#veh_make").value, qs("#veh_model").value, qs("#veh_color").value].filter(Boolean).join(" · ") || "Vehicle details incomplete"],
+        ["Mileage", qs('#veh_mileage').value ? `${qs('#veh_mileage').value} km` : 'Optional / not entered'],
         ["Vehicle size", selectedSize() || "Not chosen"],
         ["Category", qs("#veh_category").value || "Not chosen"]
       ];
@@ -1349,7 +1370,8 @@
           photo_url: qs("#veh_photo").value.trim() || null,
           body_style: qs("#veh_body").value || null,
           category: qs("#veh_category").value || null,
-          color: qs("#veh_color").value.trim() || null
+          color: qs("#veh_color").value.trim() || null,
+          mileage: qs('#veh_mileage').value || null
         },
         special_notes: qs("#special_notes").value.trim() || null,
         ack_driveway: true,
@@ -1420,6 +1442,7 @@
       renderAddons();
       renderReviewVehicle();
       renderFinalSummary();
+      renderVehicleServiceHint();
       gotoStep(1);
       postEmbedHeight();
     } catch (err) {

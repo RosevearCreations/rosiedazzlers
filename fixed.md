@@ -37,3 +37,5 @@ Pass sync: April 17, 2026 — pricing now restores the booking page as the first
 
 <!-- pass31-sync: booking overflow polish, maintenance conversion from complete detail, fleet handoff path -->
 > Pass sync April 20, 2026: booking vehicle inputs and service cards were tightened to prevent text overflow, My Account now uses a real garage-bay view plus a fleet handoff path after 6 vehicles, and maintenance conversion now begins only after a completed Complete Detail with repeat-booking guidance tied to actual service history.
+
+> Pass sync April 21, 2026: added mileage and next-service mileage capture, customer vehicle image/video library groundwork, garage-bay photo support, a public before/after slider gallery, admin vehicle-media override/delete tools, and detailer arrival geolocation capture groundwork.
