@@ -1,251 +1,181 @@
 > Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
-# Rosie Dazzlers — Repository Rules
+# Rosie Dazzlers — Next Steps Internal
 
-This document defines the **non-negotiable rules** for modifying the Rosie Dazzlers codebase.
 
-These rules exist to prevent architectural drift and ensure that future development (human or AI) maintains the intended design of the system.
-
-Any AI assistant helping with this repository **must follow these rules**.
+Use this when you want the fastest answer to:
+**“What should we do next?”**
 
 ---
 
-# 1) Preserve the Architecture
+## Immediate next priorities
 
-The Rosie Dazzlers platform is intentionally built as:
+### 1) Add real staff login / session handling
+Current admin/detailer access still relies on a bridge model.
 
-Static Website  
-+  
-Serverless API  
-+  
-Supabase Database  
-+  
-Stripe Payments  
-+  
-Cloudflare R2 Image Hosting
+Need:
+- real staff authentication
+- session-aware admin/detailer pages
+- backend trust in resolved staff identity
+- less dependence on manual headers or typed names
 
-Architecture flow:
-
-Browser  
-↓  
-Cloudflare Pages (static site)  
-↓  
-Pages Functions (`/functions/api`)  
-↓  
-Supabase (Postgres)  
-↓  
-Stripe  
-↓  
-R2 storage
-
-Do **not** introduce frameworks or changes that break this architecture.
+Why first:
+- role-aware backend patterns now exist
+- the missing piece is real identity/session flow
 
 ---
 
-# 2) Do Not Introduce Frontend Frameworks
+### 2) Make all jobsite actions consistently use real staff identity
+A lot of jobsite/admin flows now support staff-aware logic, but consistency still matters.
 
-This project is intentionally a **static HTML site**.
+Need:
+- consistent use of `staff_user_id`
+- cleaner linkage for:
+  - intake
+  - progress
+  - time
+  - media
+  - signoff
+- less fallback reliance on typed names
 
-Do not introduce:
-
-React  
-Next.js  
-Vue  
-Angular  
-Svelte  
-Astro  
-
-Static HTML + JavaScript is the intended design.
-
----
-
-# 3) Backend Must Remain Serverless
-
-Backend logic must remain inside:
-
-
-/functions/api
-
-
-Do not introduce:
-
-Express servers  
-Node hosting services  
-Docker containers  
-Persistent backend services  
-
-All backend logic must run through **Cloudflare Pages Functions**.
+Why next:
+- better audit trail
+- cleaner overrides
+- fewer ambiguous records
 
 ---
 
-# 4) Do Not Duplicate Business Logic
+### 3) Complete gift certificate redemption during booking
+Gift purchase works, but booking-time gift redemption still needs the full loop.
 
-Business rules must exist in **one place only**.
+Need:
+- gift code validation
+- remaining value lookup
+- total reduction during booking
+- remaining balance update
+- mark fully redeemed when exhausted
 
-Examples:
-
-Pricing logic  
-Add-on definitions  
-Promo code rules  
-Package definitions  
-
-Preferred location for business configuration:
-
-
-/data/*.json
-
-
-Both frontend and backend should read from the same source.
+Why next:
+- closes a major customer-facing workflow gap
 
 ---
 
-# 5) Do Not Hardcode Asset Paths
+### 4) Unify add-on pricing/config
+Add-ons still need a single canonical source.
 
-Images must follow the R2 asset structure.
+Need:
+- one structured source for add-ons
+- frontend and backend reading the same values
+- no pricing drift between display and checkout
 
-Base domain:
-
-https://assets.rosiedazzlers.ca
-
-Folders:
-
-brand/  
-packages/  
-products/  
-systems/
-
-Do not hardcode new asset locations that break this structure.
+Why next:
+- prevents silent pricing mismatches
 
 ---
 
-# 6) Database Schema Changes
+### 5) Add direct phone-friendly upload flow
+Media records exist, but direct field upload still needs a proper path.
 
-Database schema is defined in:
+Need:
+- signed upload URLs or direct storage integration
+- mobile-friendly upload UX
+- clean save into `job_media`
 
-
-SUPABASE_SCHEMA.sql
-
-
-Rules:
-
-• do not create tables outside this file  
-• keep schema changes backward compatible  
-• use `create table if not exists` patterns  
-• use `add column if not exists` when modifying tables  
-
-All schema updates must be reflected in this file.
+Why next:
+- makes field use much more realistic
+- removes friction for before/after uploads
 
 ---
 
-# 7) Protect the Booking System
+### 6) Build a cleaner internal admin/detailer shell
+There are now enough admin/detailer pages that navigation needs to mature.
 
-The booking system is the **core business logic**.
+Need:
+- shared internal shell
+- role-aware menu visibility
+- better mobile workflow
+- smoother movement between booking, progress, jobsite, live, staff, and customers
 
-Key files:
-
-
-/functions/api/checkout.js
-/functions/api/availability.js
-/functions/api/stripe/webhook.js
-
-
-Changes to booking logic must preserve:
-
-AM / PM slot system  
-date_blocks  
-slot_blocks  
-deposit checkout flow  
-Stripe webhook confirmation
-
-Do not alter booking flow without careful validation.
+Why next:
+- current pieces are strong enough to benefit from better structure
 
 ---
 
-# 8) Protect the Gift Certificate System
+## Cleanup phase after that
 
-Gift certificates are intentionally **separate from bookings**.
+### 7) Review older endpoints and duplicate patterns
+Need:
+- identify legacy shared-password-only paths
+- reduce duplicate old/new patterns
+- remove clearly obsolete routes once replacements are stable
 
-Key endpoints:
+### 8) Expand override logging consistency
+Need:
+- confirm all sensitive overwrite/delete actions write to `staff_override_log`
+- make reason capture consistent
 
+### 9) Grow customer + vehicle history
+Need:
+- deeper customer booking history
+- future vehicle profile/history direction
+- stronger repeat-customer context
 
-/api/gifts/checkout
-/api/gifts/webhook
-/api/gifts/receipt
-
-
-Do not merge gift logic into the booking system.
-
----
-
-# 9) Admin Endpoints Must Remain Protected
-
-Admin API endpoints must require:
-
-
-ADMIN_PASSWORD
-
-
-Never expose admin endpoints publicly without authentication.
+### 10) Finish route cleanup
+Need:
+- settle canonical structure for services/pricing
+- remove long-term route ambiguity
 
 ---
 
-# 10) Avoid Introducing State on the Frontend
+## What not to do next
 
-The frontend should remain simple and stateless.
-
-Avoid:
-
-complex client-side frameworks  
-persistent client state systems  
-local database storage  
-
-State belongs in the database.
+Avoid spending the next phase on:
+- adding lots of new isolated endpoints
+- renaming live asset files casually
+- mixing customer tiers with staff permissions
+- building fancy admin UI before auth/session basics are ready
+- keeping old/new admin flows in parallel longer than necessary
 
 ---
 
-# 11) Respect the Documentation System
+## If only one task is chosen
 
-This repository includes structured documentation.
+Pick:
 
-README.md — project overview  
-PROJECT_BRAIN.md — system overview  
-AI_CONTEXT.md — AI guidance  
-REPO_GUIDE.md — repo structure  
-SANITY_CHECK.md — development priorities  
-DEVELOPMENT_ROADMAP.md — next upgrades  
-SUPABASE_SCHEMA.sql — database schema  
+**real staff login/session handling**
 
-Any major change should update the relevant documentation.
+That is the most important next step because the backend is now strong enough to benefit from real identity and role-aware internal use.
 
 ---
 
-# 12) Prefer Simple Solutions
+## One-sentence summary
 
-When adding features:
+The next Rosie Dazzlers phase should focus on **real staff auth, consistent staff identity, gift redemption, upload flow, and internal workflow polish** rather than simply adding more disconnected backend pieces.
 
-Prefer
+## March 31, 2026 sync
+- progress screen now reuses signed file upload directly
+- public catalog loaders moved further toward DB-first behavior
+- no new SQL migration required in this pass
 
-simple JavaScript  
-JSON configuration  
-serverless functions  
+> Last reviewed in the April 2, 2026 blocks/risk convergence pass.
 
-Avoid unnecessary complexity.
+## April 3, 2026 UI / session / video pass
+- Continued route-by-route UI cleanup by moving more admin pages toward signed-in staff session usage instead of password-only page flows.
+- Tightened global CSS for dark-mode form usability, including calendar-icon visibility and better wrapping for row-based inputs/buttons on smaller screens.
+- Refreshed the public video/social experience so YouTube remains the main playback surface while Instagram supports reels, work photos, and single-image proof-of-work posting.
+- Continued docs/schema synchronization for the current build; no new schema migration was required in this pass.
 
-The goal is a **maintainable small-business platform**, not an enterprise framework.
 
----
 
-# Final Rule
+## April 4, 2026 mobile shell / security / cleanup pass
+- Tightened shared CSS again for mobile form wrapping, input/button crowding, and dark-mode date-picker visibility so calendar icons remain visible on dark surfaces.
+- Added a real installable app shell foundation with `manifest.webmanifest`, `service-worker.js`, and an install banner so the field/detailer workflow feels more complete on phones.
+- Continued mobile-first field direction by linking admins and detailers into the same live job workflow path; admins can still act as detailers and work through arrival, evidence capture, sign-off, and billing from the phone side.
+- Reduced duplicate-route/file clutter slightly by renaming clearly unlinked legacy block endpoints and one accidental duplicate notes file with an `RM_` prefix for safe removal review.
+- Still not honestly complete: full role-aware auth/session convergence on every remaining internal route, final actor normalization everywhere, and total retirement of all transitional bridge assumptions.
 
-If a proposed change makes the system:
-
-• harder to understand  
-• more complex to deploy  
-• dependent on new infrastructure  
-
-then it is likely **the wrong change**.
-
-Always favor the simplest architecture that preserves functionality.
+<!-- Last synchronized: April 4, 2026. Reviewed during the mobile fit / session cleanup / closeout pass. -->
+<!-- Last synchronized: April 5, 2026. Reviewed during the bookings/admin-route/date-picker/inventory/menu/CSS/mobile-fit pass. -->
 
 <!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->
 

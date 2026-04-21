@@ -67,7 +67,7 @@
     .planner-summary .line:last-child{border-bottom:0;padding-bottom:0}
     .planner-summary .stack{display:grid;gap:4px}
     .planner-summary .value{font-weight:700;text-align:right}
-    .planner-summary .list{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+    .planner-summary .list{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.maintenance-box{display:grid;gap:10px;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03)}.maintenance-box .field{display:grid;gap:6px}.maintenance-box input,.maintenance-box textarea{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;background:rgba(255,255,255,.04);color:#f8fafc}.maintenance-box textarea{min-height:92px;resize:vertical}.maintenance-box .note{font-size:.9rem;color:rgba(234,242,255,.62)} .maintenance-box[aria-disabled="true"]{opacity:.78} 
     @media (max-width:980px){ .booking-lead{grid-template-columns:1fr} .booking-embed-frame{min-height:2250px} }
   </style>
 </head>
@@ -174,6 +174,25 @@
               <div class="line"><span>Estimated total</span><strong class="value" id="plannerSubtotalValue">Package required</strong></div>
               <div class="line"><span>Deposit</span><strong class="value" id="plannerDepositValue">—</strong></div>
               <div class="mini muted" id="plannerSummaryHelper">The summary updates live as the embedded booking planner changes.</div>
+            </div>
+            <div class="maintenance-box" id="maintenanceInterestBox" aria-disabled="true">
+              <div class="row" style="justify-content:space-between;align-items:flex-start">
+                <div>
+                  <strong>Maintenance schedule interest</strong>
+                  <div class="note" id="maintenanceEligibilityText">Choose the Complete Detail package first. We only offer maintenance pricing after a full complete detail has been completed.</div>
+                </div>
+                <span class="tag" id="maintenanceEligibilityTag">Complete Detail required</span>
+              </div>
+              <div class="field"><label for="maintName">Your name</label><input id="maintName" placeholder="Full name" /></div>
+              <div class="field"><label for="maintEmail">Email</label><input id="maintEmail" type="email" placeholder="you@example.com" /></div>
+              <div class="field"><label for="maintPhone">Phone</label><input id="maintPhone" placeholder="Optional phone" /></div>
+              <div class="field"><label for="maintPostal">Postal code</label><input id="maintPostal" placeholder="N0J 1S0" /></div>
+              <div class="field"><label for="maintNotes">Notes</label><textarea id="maintNotes" placeholder="Tell us how many vehicles you want to keep on a repeating maintenance schedule. We will confirm eligibility after your first complete detail is finished."></textarea></div>
+              <div class="row">
+                <button class="btn" type="button" id="maintInterestBtn">Join maintenance interest list</button>
+                <a class="btn ghost" href="/maintenance-plan">See recurring plan details</a>
+              </div>
+              <div class="note" id="maintStatus">Maintenance-plan interest is captured separately from booking so regular reduced pricing is only offered after the first full complete detail is done.</div>
             </div>
             <div class="quote-cta">
               <a class="btn primary" id="bookingPlannerContinueLink" href="/book">Continue in the full booking page</a>
@@ -314,6 +333,59 @@
       if (box) box.textContent = message || '';
     }
 
+
+    function plannerEligibleForMaintenance(state){
+      return String(state?.package_code || '').trim().toLowerCase() === 'complete_detail';
+    }
+
+    function renderMaintenanceInterest(state){
+      const eligible = plannerEligibleForMaintenance(state);
+      const box = qs('#maintenanceInterestBox');
+      const tag = qs('#maintenanceEligibilityTag');
+      const text = qs('#maintenanceEligibilityText');
+      const btn = qs('#maintInterestBtn');
+      if (!box || !tag || !text || !btn) return;
+      box.setAttribute('aria-disabled', eligible ? 'false' : 'true');
+      tag.textContent = eligible ? 'Eligible after first full detail' : 'Complete Detail required';
+      text.textContent = eligible
+        ? 'You selected Complete Detail. We can capture your maintenance-plan interest now and confirm reduced recurring pricing once that first full detail has been completed.'
+        : 'Choose the Complete Detail package first. We only offer maintenance pricing after a full complete detail has been completed.';
+      btn.disabled = !eligible;
+    }
+
+    async function submitMaintenanceInterest(){
+      const eligible = plannerEligibleForMaintenance(plannerState);
+      if (!eligible) {
+        qs('#maintStatus').textContent = 'Choose Complete Detail in the planner first. Maintenance-plan pricing only opens after the first full complete detail.';
+        return;
+      }
+      const payload = {
+        full_name: qs('#maintName').value.trim(),
+        email: qs('#maintEmail').value.trim(),
+        phone: qs('#maintPhone').value.trim(),
+        postal_code: qs('#maintPostal').value.trim(),
+        preferred_cycle: 'Maintenance after complete detail',
+        source_url: location.pathname + '#booking-planner',
+        vehicle_count: plannerState?.vehicle_size ? 1 : 1,
+        notes: [
+          'Submitted from pricing planner.',
+          plannerState?.booking_url ? `Booking path: ${new URL(plannerState.booking_url, window.location.origin).href}` : '',
+          plannerState?.service_area_label ? `Area: ${plannerState.service_area_label}` : '',
+          plannerState?.vehicle_label ? `Vehicle: ${plannerState.vehicle_label}` : '',
+          plannerState?.package_name ? `Selected package: ${plannerState.package_name}` : '',
+          qs('#maintNotes').value.trim()
+        ].filter(Boolean).join(' | ')
+      };
+      const res = await fetch('/api/membership_interest_create', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const out = await res.json().catch(()=>null);
+      if (!res.ok || !out?.ok) {
+        qs('#maintStatus').textContent = out?.error || 'Could not save maintenance-plan interest.';
+        return;
+      }
+      qs('#maintStatus').textContent = 'Maintenance-plan interest saved. We will only move this into a regular reduced-price schedule after the first full complete detail is completed.';
+      qs('#maintInterestBtn').disabled = true;
+    }
+
     async function copyPlannerLink(){
       const url = plannerState?.booking_url ? new URL(plannerState.booking_url, window.location.origin).href : new URL('/book', window.location.origin).href;
       try {
@@ -344,6 +416,7 @@
         : 'The summary updates live as the embedded booking planner changes.';
       const link = qs('#bookingPlannerContinueLink');
       if (link) link.href = state?.booking_url || '/book';
+      renderMaintenanceInterest(state);
       setPlannerLinkStatus(state?.booking_url ? 'This summary can open or copy the exact booking path you have built so far.' : 'Use the live planner first, then copy or open the exact booking path you built.');
     }
 
@@ -406,6 +479,7 @@
       renderPlannerSummary(plannerState);
       wireBookingPlannerFrame();
       qs('#copyPlannerLinkBtn')?.addEventListener('click', copyPlannerLink);
+      qs('#maintInterestBtn')?.addEventListener('click', submitMaintenanceInterest);
       if (data._source && data._source !== "api") {
         const box = qs("#loadErr");
         box.style.display = "block";

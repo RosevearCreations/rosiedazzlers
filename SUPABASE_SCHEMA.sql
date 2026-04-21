@@ -735,3 +735,6 @@ alter table if exists public.customer_profiles add column if not exists maintena
 alter table if exists public.customer_profiles add column if not exists maintenance_reminder_count integer not null default 0;
 create index if not exists customer_profiles_maintenance_next_reminder_at_idx on public.customer_profiles (maintenance_next_reminder_at);
 create index if not exists customer_profiles_maintenance_last_service_at_idx on public.customer_profiles (maintenance_last_service_at desc);
+
+
+-- Pass note 2026-04-20: no DDL required for the customer screen / social feed structured editor / garage visualization pass. This pass focused on UI rendering, booking-led maintenance interest gating, polished document output, and cleanup/renaming of obviously obsolete duplicate docs.
