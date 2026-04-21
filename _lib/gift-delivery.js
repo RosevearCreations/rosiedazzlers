@@ -174,7 +174,7 @@ function buildGiftDeliveryPayload(gift, origin, settings, info) {
     "Thank you for choosing Rosie Dazzlers."
   ].filter(Boolean).join("\n");
   const body_html = `
-    <h1>Your Rosie Dazzlers e-gift is ready</h1>
+    <div style="font-family:Arial,sans-serif;background:#f4efe3;padding:24px;"><div style="max-width:680px;margin:0 auto;background:#fff;border:1px solid #e5e7eb;border-radius:18px;overflow:hidden;box-shadow:0 14px 34px rgba(15,23,42,.12);"><div style="padding:22px 24px;background:linear-gradient(135deg,#0f172a,#1d4ed8);color:#fff;"><div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.82;">Rosie Dazzlers</div><h1 style="margin:8px 0 0;font-size:28px;">Your Rosie Dazzlers e-gift is ready</h1></div><div style="padding:24px;color:#111827;line-height:1.55;">
     <p>Hi ${escapeHtml(recipient)},</p>
     <p><strong>${escapeHtml(sender)}</strong> sent you a Rosie Dazzlers e-gift${gift.delivery_date ? ` for <strong>${escapeHtml(gift.delivery_date)}</strong>` : ""}.</p>
     <p><strong>Gift code:</strong> ${escapeHtml(gift.code || "")}</p>
@@ -182,7 +182,7 @@ function buildGiftDeliveryPayload(gift, origin, settings, info) {
     ${info.gift_message ? `<p><strong>Message:</strong> ${escapeHtml(info.gift_message)}</p>` : ""}
     <p><a href="${bookingUrl}">Book using your gift</a><br><a href="${printUrl}">Open printable certificate</a></p>
     <p>Gift certificates expire on ${escapeHtml(friendlyDate(gift.expires_at) || "the printed expiry date")}.</p>
-    <p>Thank you for choosing Rosie Dazzlers.</p>
+    <p>Thank you for choosing Rosie Dazzlers.</p><p style="font-size:13px;color:#6b7280;">This delivery matches your printable certificate and can be redeemed through the same live booking planner used on the main site.</p></div></div></div>
   `;
   return {
     subject,
@@ -217,11 +217,11 @@ function buildGiftPurchaserCopyPayload(gift, origin, settings, info) {
     `Printable certificate: ${printUrl}`
   ].join("\n");
   const body_html = `
-    <h1>Your Rosie Dazzlers e-gift has been delivered</h1>
+    <div style="font-family:Arial,sans-serif;background:#f4efe3;padding:24px;"><div style="max-width:680px;margin:0 auto;background:#fff;border:1px solid #e5e7eb;border-radius:18px;overflow:hidden;box-shadow:0 14px 34px rgba(15,23,42,.12);"><div style="padding:22px 24px;background:linear-gradient(135deg,#0f172a,#1d4ed8);color:#fff;"><div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.82;">Rosie Dazzlers</div><h1 style="margin:8px 0 0;font-size:28px;">Your e-gift has been delivered</h1></div><div style="padding:24px;color:#111827;line-height:1.55;">
     <p>Hi ${escapeHtml(info.sender_name || "there")},</p>
     <p>Your Rosie Dazzlers gift for <strong>${escapeHtml(recipient)}</strong> has been delivered${gift.delivery_date ? ` on <strong>${escapeHtml(gift.delivery_date)}</strong>` : ""}.</p>
     <p><strong>Gift code:</strong> ${escapeHtml(gift.code || "")}</p>
-    <p><a href="${bookingUrl}">Recipient booking link</a><br><a href="${printUrl}">Printable certificate</a></p>
+    <p><a href="${bookingUrl}">Recipient booking link</a><br><a href="${printUrl}">Printable certificate</a></p><p style="font-size:13px;color:#6b7280;">Rosie Dazzlers keeps the printable certificate and the email delivery in the same polished gift record.</p></div></div></div>
   `;
   return {
     subject,
