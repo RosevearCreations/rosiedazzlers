@@ -738,3 +738,6 @@ create index if not exists customer_profiles_maintenance_last_service_at_idx on 
 
 
 -- Pass note 2026-04-20: no DDL required for the customer screen / social feed structured editor / garage visualization pass. This pass focused on UI rendering, booking-led maintenance interest gating, polished document output, and cleanup/renaming of obviously obsolete duplicate docs.
+
+
+-- 2026-04-20 no-DDL note: booking overflow polish, maintenance conversion from complete detail, fleet handoff path.
