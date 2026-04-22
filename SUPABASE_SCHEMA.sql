@@ -135,6 +135,18 @@ create table if not exists public.bookings (
   current_workflow_stage text null,
   detailer_response_status text null,
   detailer_response_reason text null,
+  trusted_service_latitude numeric null,
+  trusted_service_longitude numeric null,
+  trusted_service_coordinate_source text null,
+  trusted_service_coordinate_status text not null default 'pending',
+  trusted_service_coordinate_label text null,
+  trusted_service_coordinate_resolved_at timestamptz null,
+  trusted_service_geofence_radius_m numeric not null default 250,
+  arrival_device_latitude numeric null,
+  arrival_device_longitude numeric null,
+  arrival_geofence_status text null,
+  arrival_distance_m numeric null,
+  arrival_geofence_checked_at timestamptz null,
   dispatched_at timestamptz null,
   arrived_at timestamptz null,
   detailing_started_at timestamptz null,
@@ -466,12 +478,18 @@ create table if not exists public.customer_vehicle_media (
   media_url text not null,
   capture_role text null,
   caption text null,
+  alt_text text null,
+  image_title text null,
+  crop_history jsonb null,
+  media_width_px integer null,
+  media_height_px integer null,
+  media_orientation text null,
   is_primary boolean not null default false,
   is_deleted boolean not null default false,
   uploaded_by_customer boolean not null default true,
-  google_score numeric null,
-  google_score_label text null,
-  google_score_status text not null default 'pending',
+  media_score numeric null,
+  media_score_label text null,
+  media_score_status text not null default 'pending',
   admin_override_reason text null,
   original_media_id uuid null references public.customer_vehicle_media(id) on delete set null
 );
@@ -664,6 +682,8 @@ create index if not exists accounting_month_end_checklists_month_start_idx
 create index if not exists idx_bookings_service_area_zone_date on public.bookings (service_area_zone, service_date desc);
 create index if not exists idx_bookings_service_area_municipality_date on public.bookings (service_area_municipality, service_date desc);
 create index if not exists idx_bookings_service_area_county_date on public.bookings (service_area_county, service_date desc);
+create index if not exists idx_bookings_trusted_service_coordinate_status on public.bookings (trusted_service_coordinate_status, service_date desc);
+create index if not exists idx_bookings_arrival_geofence_status on public.bookings (arrival_geofence_status, service_date desc);
 -- Pass update 2026-04-12: No schema shape changes in this pass. Synced docs/build after removing duplicate clean-route folders, refreshing the deployed booking analytics smoke check, and tightening login form autocomplete attributes.
 
 

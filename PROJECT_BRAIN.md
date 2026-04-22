@@ -299,3 +299,18 @@ Pass 28 sync — 2026-04-20
 > Pass sync April 20, 2026: booking vehicle inputs and service cards were tightened to prevent text overflow, My Account now uses a real garage-bay view plus a fleet handoff path after 6 vehicles, and maintenance conversion now begins only after a completed Complete Detail with repeat-booking guidance tied to actual service history.
 
 > Pass sync April 21, 2026: added mileage and next-service mileage capture, customer vehicle image/video library groundwork, garage-bay photo support, a public before/after slider gallery, admin vehicle-media override/delete tools, and detailer arrival geolocation capture groundwork.
+
+## 2026-04-21 late pass — vehicle media / gallery / geofence completion
+
+- vehicle media uploads now accept photos or videos while customer and admin views show `media_score`, `media_score_label`, and `media_score_status`
+- added `/assets/vehicles/outline_front.svg` and `/assets/vehicles/outline_back.svg` so the customer upload screen can guide front/rear framing before upload
+- updated `functions/api/_lib/vehicle-media-scoring.js` to use local rule-based scoring; photo uploads are validated at upload time and save time, while videos remain manual-review items
+- public gallery no longer has to stay tied to `data/before_after_gallery.json`; `/api/before_after_gallery_public` now reads the admin-managed `app_management_settings.before_after_gallery` payload with a safe fallback sample
+- App Management now loads/saves `before_after_gallery` alongside `social_feeds`, pricing, and document templates
+- checkout now resolves and stores a trusted service coordinate on each booking using local service-area lookup data first, with county fallback when needed
+- detailer arrival now compares device geolocation against the trusted booking coordinate and stores `arrival_geofence_status`, `arrival_distance_m`, and `arrival_geofence_checked_at`
+- schema/migration sync for this pass lives in `sql/2026-04-21_vehicle_media_gallery_geofence.sql` and `SUPABASE_SCHEMA.sql`
+- no Google env vars are required for this pass:
+  - vehicle media scoring is local and rule-based
+  - trusted booking coordinates now come from local service-area lookup and county fallback data
+
