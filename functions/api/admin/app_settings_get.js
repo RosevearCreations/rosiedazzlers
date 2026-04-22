@@ -24,13 +24,17 @@ export async function onRequestPost(context) {
       "manual_scheduling_rules",
       "blocking_policy",
       "feature_flags",
+      "quote_booking_settings",
+      "gift_delivery_settings",
+      "membership_plan_settings",
       "recovery_templates",
       "recovery_rules",
       "recovery_provider_rules",
       "moderation_rules",
       "pricing_catalog",
       "document_templates",
-      "social_feeds"
+      "social_feeds",
+      "before_after_gallery"
     ];
 
     const out = {};

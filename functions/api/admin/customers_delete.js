@@ -1,26 +1,6 @@
 // functions/api/admin/customers_delete.js
 //
 // Role-aware customer profile delete endpoint.
-//
-// What this file does:
-// - keeps current ADMIN_PASSWORD bridge protection
-// - requires manage_bookings capability
-// - permanently deletes one customer_profiles row
-// - intended for true admin cleanup cases, not normal edits
-//
-// Supported request body:
-// {
-//   customer_profile_id: "uuid"
-// }
-//
-// Notes:
-// - Use customers_save.js for normal edits
-// - Use this only when the customer profile should be removed entirely
-//
-// Request headers supported:
-// - x-admin-password: required
-// - x-staff-email: recommended during transition
-// - x-staff-user-id: optional alternative
 
 import {
   requireStaffAccess,
@@ -98,9 +78,12 @@ export async function onRequestPost(context) {
         message: "Customer profile deleted.",
         deleted_customer_profile: {
           id: deleted.id || profile.id,
-          customer_name: deleted.customer_name || profile.customer_name || null,
-          customer_email: deleted.customer_email || profile.customer_email || null,
-          customer_phone: deleted.customer_phone || profile.customer_phone || null,
+          full_name: deleted.full_name || profile.full_name || null,
+          email: deleted.email || profile.email || null,
+          phone: deleted.phone || profile.phone || null,
+          customer_name: deleted.full_name || profile.full_name || null,
+          customer_email: deleted.email || profile.email || null,
+          customer_phone: deleted.phone || profile.phone || null,
           tier_code: deleted.tier_code || profile.tier_code || null,
           created_at: deleted.created_at || profile.created_at || null,
           updated_at: deleted.updated_at || profile.updated_at || null
@@ -126,7 +109,7 @@ export async function onRequestGet() {
 async function loadCustomerProfile(env, headers, customerProfileId) {
   const res = await fetch(
     `${env.SUPABASE_URL}/rest/v1/customer_profiles` +
-      `?select=id,customer_name,customer_email,customer_phone,tier_code,created_at,updated_at` +
+      `?select=id,full_name,email,phone,tier_code,created_at,updated_at` +
       `&id=eq.${encodeURIComponent(customerProfileId)}` +
       `&limit=1`,
     { headers }
