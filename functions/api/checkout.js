@@ -5,6 +5,7 @@
 // - validates gift codes and records gift metadata for later reconciliation
 
 import { loadPricingCatalog } from "./_lib/pricing-catalog.js";
+import { resolveTrustedBookingLocation, buildTrustedLocationPatch } from "./_lib/booking-location.js";
 
 export async function onRequestOptions() {
   return corsResponse("", 204);
@@ -52,6 +53,19 @@ export async function onRequestPost({ request, env }) {
     const resolvedServiceCounty = String(serviceAreaMeta?.county || serviceAreaMeta?.value || serviceAreaRaw || "").trim() || null;
     const resolvedServiceMunicipality = String(serviceAreaMeta?.municipality || serviceAreaMeta?.county || serviceAreaRaw || "").trim() || null;
     const resolvedServiceZone = String(serviceAreaMeta?.zone || serviceAreaMeta?.label || serviceAreaRaw || "").trim() || null;
+    const trustedServiceLocation = await resolveTrustedBookingLocation({
+      env,
+      bookingLike: {
+        service_area: serviceAreaRaw,
+        service_area_county: resolvedServiceCounty,
+        service_area_municipality: resolvedServiceMunicipality,
+        address_line1: body.address_line1,
+        address_line2: body.address_line2,
+        city: body.city,
+        postal_code: body.postal_code
+      },
+      serviceAreaMeta
+    });
     const pkg = pricing.package_map[String(body.package_code || "")];
     if (!pkg) return corsJson({ error: "Unknown package_code" }, 400);
 
@@ -185,6 +199,7 @@ export async function onRequestPost({ request, env }) {
       service_area_county: resolvedServiceCounty,
       service_area_municipality: resolvedServiceMunicipality,
       service_area_zone: resolvedServiceZone,
+      ...buildTrustedLocationPatch(trustedServiceLocation),
       package_code: pkg.code,
       vehicle_size: vehicleSize,
       customer_name: body.customer_name,
