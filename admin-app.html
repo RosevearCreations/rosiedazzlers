@@ -261,6 +261,18 @@
       </article>
 
       <article class="card span-6">
+        <h2>Before / after gallery manager</h2>
+        <p class="feature-note">Maintain the public before/after slider gallery here instead of editing a sample JSON file.</p>
+        <p class="muted">Each row can use paired images or paired videos. Only customer-approved media should be published here.</p>
+        <div class="field"><label for="before_after_gallery_json">Gallery JSON</label><textarea id="before_after_gallery_json" spellcheck="false" placeholder='{"items":[{"title":"Interior refresh","before_url":"","after_url":""}]}'></textarea></div>
+        <div class="actions">
+          <button class="btn" type="button" id="reloadBeforeAfterGalleryBtn">Reload gallery JSON</button>
+          <button class="btn" type="button" id="resetBeforeAfterGalleryBtn">Reset to template</button>
+          <button class="btn primary" type="button" id="saveBeforeAfterGalleryBtn">Save gallery</button>
+        </div>
+      </article>
+
+      <article class="card span-6">
         <h2>Moderation Defaults</h2>
         <p class="feature-note">These defaults shape how notes, annotations, and replies behave before staff make any one-off exceptions on a job.</p>
         <div class="checkrow"><input id="mod_annotation_customer_visibility_default" type="checkbox"><label for="mod_annotation_customer_visibility_default">Customer-visible annotations by default</label></div>
@@ -415,6 +427,52 @@
     try { parsed = JSON.parse(raw); } catch { throw new Error('Social feed JSON is invalid.'); }
     if (!parsed || typeof parsed !== 'object') throw new Error('Social feed JSON must be a JSON object.');
     return normalizeSocialFeeds(parsed);
+  }
+  function beforeAfterGalleryDefaults(){
+    return {
+      items: [
+        {
+          title: 'Interior refresh',
+          location: 'Tillsonburg, ON',
+          before_kind: 'image',
+          before_url: 'https://assets.rosiedazzlers.ca/brand/CarPrice2025.PNG',
+          after_kind: 'image',
+          after_url: 'https://assets.rosiedazzlers.ca/brand/CarPriceDetails2025.PNG',
+          note: 'Replace this sample pair with customer-approved work.',
+          consent_status: 'sample'
+        }
+      ]
+    };
+  }
+  function normalizeBeforeAfterGallery(value){
+    var src = value && typeof value === 'object' ? cloneValue(value) : cloneValue(beforeAfterGalleryDefaults());
+    var items = Array.isArray(src.items) ? src.items : [];
+    src.items = items.map(function(item){
+      return {
+        title: String(item && item.title || 'Detail result'),
+        location: String(item && item.location || 'Oxford / Norfolk Counties'),
+        before_kind: String(item && item.before_kind || 'image').toLowerCase() === 'video' ? 'video' : 'image',
+        before_url: String(item && item.before_url || ''),
+        after_kind: String(item && item.after_kind || 'image').toLowerCase() === 'video' ? 'video' : 'image',
+        after_url: String(item && item.after_url || ''),
+        note: String(item && item.note || ''),
+        consent_status: String(item && item.consent_status || ''),
+        customer_name: String(item && item.customer_name || ''),
+        vehicle_label: String(item && item.vehicle_label || '')
+      };
+    }).filter(function(item){ return item.before_url || item.after_url || item.title; });
+    if (!src.items.length) src.items = cloneValue(beforeAfterGalleryDefaults().items);
+    return src;
+  }
+  function setBeforeAfterGalleryEditor(value){
+    byId('before_after_gallery_json').value = JSON.stringify(normalizeBeforeAfterGallery(value), null, 2);
+  }
+  function readBeforeAfterGalleryEditor(){
+    var raw = byId('before_after_gallery_json').value || '{}';
+    var parsed;
+    try { parsed = JSON.parse(raw); } catch { throw new Error('Before / after gallery JSON is invalid.'); }
+    if (!parsed || typeof parsed !== 'object') throw new Error('Before / after gallery JSON must be a JSON object.');
+    return normalizeBeforeAfterGallery(parsed);
   }
   function readVisibility(){ return { customer_detailer_notes: byId('vis_customer_detailer_notes').checked, customer_admin_notes_admin_only: byId('vis_customer_admin_notes').checked, detailer_admin_notes_admin_only: byId('vis_detailer_admin_notes').checked }; }
   function readScheduling(){ return { manual_schedule_admin_only: byId('manual_schedule_admin_only').checked, blocking_admin_only: byId('blocking_admin_only').checked, notes: byId('manual_schedule_notes').value || '' }; }
@@ -780,6 +838,7 @@
     const pricingCatalog = applySetting(s.pricing_catalog, null);
     const documentTemplates = applySetting(s.document_templates, documentTemplatesDefaults());
     const socialFeeds = applySetting(s.social_feeds, socialFeedsDefaults());
+    const beforeAfterGallery = applySetting(s.before_after_gallery, beforeAfterGalleryDefaults());
 
     byId('vis_customer_detailer_notes').checked = !!visibility.customer_detailer_notes;
     byId('vis_customer_admin_notes').checked = visibility.customer_admin_notes_admin_only !== false;
@@ -846,6 +905,7 @@
     byId('doc_invoice_footer').value = documentTemplates.invoice_footer || '';
     byId('doc_gift_footer').value = documentTemplates.gift_footer || '';
     setSocialFeedsEditor(socialFeeds);
+    setBeforeAfterGalleryEditor(beforeAfterGallery);
     await loadPricingCatalogEditor(pricingCatalog);
     await loadMembershipInterest().catch(function(){ renderMembershipInterestList([]); });
   }
@@ -922,6 +982,9 @@
   bindById('reloadSocialFeedsBtn', 'click', async ()=>{ try{ const res = await fetch('/api/social_feed_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load social feed JSON.'); setSocialFeedsEditor(out?.social_feeds || socialFeedsDefaults()); setShellStatus(out?.warning ? `Social feed JSON reloaded with fallback defaults. ${out.warning}` : 'Social feed JSON reloaded.', out?.warning ? 'warning' : 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload social feed JSON.', 'error'); } });
   bindById('resetSocialFeedsBtn', 'click', ()=>{ setSocialFeedsEditor(socialFeedsDefaults()); setShellStatus('Social feed editor reset to the template structure.', 'success'); });
   bindById('saveSocialFeedsBtn', 'click', async ()=>{ try{ await saveSetting('social_feeds', readSocialFeedsEditor(), 'Social feeds saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save social feeds.', 'error'); } });
+  bindById('reloadBeforeAfterGalleryBtn', 'click', async ()=>{ try{ const res = await fetch('/api/before_after_gallery_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load before / after gallery JSON.'); setBeforeAfterGalleryEditor(out || beforeAfterGalleryDefaults()); setShellStatus(out?.warning ? `Before / after gallery reloaded with fallback defaults. ${out.warning}` : 'Before / after gallery reloaded.', out?.warning ? 'warning' : 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload before / after gallery JSON.', 'error'); } });
+  bindById('resetBeforeAfterGalleryBtn', 'click', ()=>{ setBeforeAfterGalleryEditor(beforeAfterGalleryDefaults()); setShellStatus('Before / after gallery editor reset to the template structure.', 'success'); });
+  bindById('saveBeforeAfterGalleryBtn', 'click', async ()=>{ try{ await saveSetting('before_after_gallery', readBeforeAfterGalleryEditor(), 'Before / after gallery saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save before / after gallery.', 'error'); } });
   bindById('reloadPricingCatalogBtn', 'click', async ()=>{ try{ await loadPricingCatalogEditor(null); setShellStatus('Pricing catalog reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload pricing catalog.', 'error'); } });
   bindById('savePricingCatalogBtn', 'click', async ()=>{ try{ syncPricingEditorToJson(); await saveSetting('pricing_catalog', pricingCatalogState, 'Pricing catalog saved. Booking, pricing, services, checkout, and pricing controls now share this source.'); } catch(err){ setShellStatus(err?.message || 'Could not save pricing catalog.', 'error'); } });
   bindById('previewRecoveryBtn', 'click', async ()=>{ try{ await previewRecovery(false); setShellStatus('Recovery preview generated.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not build recovery preview.', 'error'); } });
