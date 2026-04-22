@@ -1,3 +1,11 @@
+> Last synchronized: April 22, 2026. Reviewed during the live SVG pricing-chart, structured-data local SEO, static-check hardening, and docs/schema synchronization pass.
+
+## April 22, 2026 sanity sync
+- confirm `/pricing` now shows live SVG versions of the price and package-details charts and still falls back safely if catalog data is incomplete
+- confirm `/services` modal buttons open the same live chart renders for price/details plus the packaged size chart reference
+- confirm `about`, `contact`, `services`, `pricing`, and `/` each keep one H1 and structured-data markup after deploy
+- rerun `python3 scripts/stress_static_checks.py` before packaging future passes
+
 > Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## April 15, 2026 sanity sync

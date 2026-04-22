@@ -1,3 +1,10 @@
+> Last synchronized: April 22, 2026. Reviewed during the live SVG pricing-chart, structured-data local SEO, static-check hardening, and docs/schema synchronization pass.
+
+## April 22, 2026 repo guide note
+- `assets/pricing-catalog-client.js` now also owns the live SVG chart builders and public JSON-LD helpers for pricing/services.
+- `pricing.html` and `services.html` are now the main public consumers of those live chart helpers.
+- `scripts/stress_static_checks.py` now verifies title/description/canonical/JSON-LD coverage on the core local public pages in addition to H1 and syntax checks.
+
 > Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## April 15, 2026 repo guide note

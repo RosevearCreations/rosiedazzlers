@@ -1,3 +1,10 @@
+> Last synchronized: April 22, 2026. Reviewed during the live SVG pricing-chart, structured-data local SEO, static-check hardening, and docs/schema synchronization pass.
+
+## April 22, 2026 live-chart + local SEO pass
+- `/pricing` now generates live SVG versions of the price chart and package-details chart from the canonical pricing catalog, with packaged PNGs kept only as fallback.
+- `/services` now opens those same live catalog-driven charts in the preview modal instead of depending on legacy static PNGs first.
+- core local public pages now carry stronger structured-data coverage, and `scripts/stress_static_checks.py` now verifies SEO basics on the main local-search routes.
+
 > Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## April 15, 2026 generated chart-assets pass

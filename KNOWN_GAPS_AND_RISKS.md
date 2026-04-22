@@ -1,3 +1,15 @@
+> Last synchronized: April 22, 2026. Reviewed during the live SVG pricing-chart, structured-data local SEO, static-check hardening, and docs/schema synchronization pass.
+
+## April 22, 2026 carry-forward note
+Reduced in this pass:
+- drift risk is lower for the two main public pricing charts because they now render live from the canonical catalog on the site instead of relying on static PNGs first
+- core local-search pages now have stronger structured-data coverage and static-check enforcement
+
+Still open:
+- the vehicle size chart is still a packaged image asset rather than a live-rendered chart
+- App Management still does not expose a staff-facing live chart export/download helper
+- structured-data markup still needs post-deploy validation against live Google rich-result tools/search rendering
+
 > Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## April 15, 2026 pricing-chart carry-forward note

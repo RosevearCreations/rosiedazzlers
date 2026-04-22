@@ -1,42 +1,30 @@
 # NEW CHAT STATUS
 
-This pass keeps the build on the non-Google path and upgrades the vehicle-media system from a simpler rule-only score into a stronger local merchandising score.
+This pass focused on reducing public pricing drift and strengthening local-search readiness without changing the database schema.
 
 ## What changed
 
-- customer vehicle photo uploads now use EXIF-aware local image analysis before upload and at save time
-- `my-account.html` now previews local background, subject-fill, sharpness, brightness, contrast, duplicate-angle hints, and a preview merchandising score before upload
-- `functions/api/_lib/vehicle-media-scoring.js` now blends the existing metadata checks with local image-analysis inputs and duplicate-angle penalties
-- `functions/api/client/vehicle_media_save.js` now stores `media_analysis` for each photo row and reuses existing vehicle rows to penalize near-duplicate angles
-- videos remain supported and continue through a manual-review path instead of being scored like photos
-- `functions/api/_lib/booking-location.js` now supports explicit latitude/longitude in service-area metadata before falling back to local lookup tables and county centroids
-- key public pages had another SEO/local-search pass while keeping one H1 per exposed page
-- schema sync for this pass is in `sql/2026-04-22_vehicle_media_merchandising_score.sql` and `SUPABASE_SCHEMA.sql`
+- `/pricing` now renders the main price chart and package-details chart as live SVG tables built from the canonical pricing catalog
+- `/services` now opens those same live chart renders in the preview modal, while the vehicle size chart remains the packaged image reference
+- `assets/pricing-catalog-client.js` now owns reusable helpers for:
+  - live SVG pricing chart generation
+  - live SVG package-details matrix generation
+  - pricing/services JSON-LD payload generation
+- `pricing.html` now injects catalog-driven pricing structured data
+- `services.html` now injects catalog-driven services structured data
+- `about.html` and `contact.html` now include static structured-data markup for local business/about/contact context
+- `scripts/stress_static_checks.py` now verifies SEO basics on the core local public pages: title, description, canonical, JSON-LD, plus the existing H1/syntax checks
+- docs and schema notes were refreshed as a no-DDL pass
 
-## Current image scoring direction
+## What did not change
 
-The score is now built from:
-- image URL presence
-- alt text length
-- image size
-- orientation
-- crop history
-- caption/title support
-- background consistency
-- subject fill in frame
-- sharpness / blur checks
-- brightness / contrast checks
-- duplicate-angle penalty
-- small lifestyle-shot bonus for non-lead images
+- no new tables or columns were added
+- `book.html` was left untouched
+- the packaged vehicle size chart asset is still used as the visual reference for size guidance
 
-Lead-image checks are still stricter:
-- square or landscape
-- at least 1200×1200
-- alt text at least 12 characters
-- first image score must still reach the save threshold
+## Current strongest next steps
 
-## Still open / next-best direction
-
-- manual crop editing is still guide-led rather than a full in-browser crop editor
-- server-side image parsing is still not in place, so analysis depends on browser-side upload inspection
-- optional future cloud assist should stay optional and be limited to smart help only, not basic scoring or validation
+- add an App Management helper so staff can preview/download live pricing charts without editing files manually
+- decide whether the vehicle size chart should also move to live SVG/HTML rendering
+- continue route-by-route structured-data validation after deploy using live rendered pages
+- continue the vehicle-media crop/editor hardening path separately from pricing/public SEO work

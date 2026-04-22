@@ -1,3 +1,10 @@
+> Last synchronized: April 22, 2026. Reviewed during the live SVG pricing-chart, structured-data local SEO, static-check hardening, and docs/schema synchronization pass.
+
+## April 22, 2026 quick context
+- Canonical pricing is now not only the source of truth for booking/services/pricing logic; it also renders the main pricing charts live on `/pricing` and in the services modal helpers.
+- The long-term drift risk is reduced for the two main package charts, but the size chart is still a packaged asset and App Management still does not expose a live export/download helper yet.
+- Structured-data coverage is now present on the key local-search public pages and is part of the static check discipline.
+
 > Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## April 15, 2026 quick context

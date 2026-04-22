@@ -19,7 +19,16 @@
   <link rel="canonical" href="https://rosiedazzlers.ca/services" />
   <meta property="og:title" content="Mobile Auto Detailing Services | Rosie Dazzlers" />
   <meta property="og:description" content="See Rosie Dazzlers detailing packages, what is included, add-ons, and service options for small, mid-size, and oversized vehicles." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260407a" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260422livecharts1" />
+  <script type="application/ld+json" id="servicesSchema">
+  {
+    "@context": "https://schema.org",
+    "@type": "AutoDetailing",
+    "name": "Rosie Dazzlers Mobile Auto Detailing",
+    "url": "https://rosiedazzlers.ca/services",
+    "areaServed": ["Oxford County, Ontario", "Norfolk County, Ontario"]
+  }
+  </script>
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
@@ -159,8 +168,12 @@
       escapeHtml,
       addonPrimaryImage,
       addonFallbackImage,
-      chartUrl
-    } from "/assets/pricing-catalog-client.js?v=20260412pass12";
+      chartUrl,
+      buildLivePricingChartDataUri,
+      buildLiveServiceDetailsChartDataUri,
+      buildServicesCatalogSchema,
+      applyJsonLdScript
+    } from "/assets/pricing-catalog-client.js?v=20260422livecharts1";
 
     const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
@@ -181,9 +194,15 @@
     qs("#modalCloseBtn").addEventListener("click", closeModal);
     qs("#modalBack").addEventListener("click",(e)=>{ if(e.target.id==="modalBack") closeModal(); });
 
+    function liveChartSource(title, fallback){
+      if (!data) return fallback;
+      if (title === "Vehicle Price Chart 2025") return buildLivePricingChartDataUri(data) || chartUrl(data, title) || fallback;
+      if (title === "Package Service Details Chart") return buildLiveServiceDetailsChartDataUri(data) || chartUrl(data, title) || fallback;
+      return chartUrl(data, title) || fallback;
+    }
+
     function openCatalogChart(title, fallback){
-      const src = data ? (chartUrl(data, title) || fallback) : fallback;
-      openModal(title, src);
+      openModal(title, liveChartSource(title, fallback));
     }
 
     qs("#openSizeChartBtn").addEventListener("click",()=> openCatalogChart("Vehicle Size Chart", `${PACKAGES_BASE}/CarSizeChart.PNG`));
@@ -366,6 +385,7 @@
     try {
       data = await loadCatalog();
       renderAll(data);
+      applyJsonLdScript('servicesSchema', buildServicesCatalogSchema(data, 'https://rosiedazzlers.ca/services'));
       qs("#sizeSel").addEventListener("change", ()=> renderAll(data));
       if (data._source && data._source !== "api") {
         qs("#loadErr").style.display = "block";
