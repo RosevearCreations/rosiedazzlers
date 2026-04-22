@@ -28,8 +28,17 @@ Pass sync: April 17, 2026 — pricing now restores the booking page as the first
 - 2026-04-17 pass26: extended booking-led self-serve with live embedded planner summaries on pricing and service-gift redemption preview, plus richer gift delivery metadata (sender name, preferred send date, message) through checkout, webhook, receipt, and printable certificate.
 
 ### April 17, 2026 pass27 note
-- moved the next public growth step forward with a new `/maintenance-plan` page, recurring-plan waitlist capture, admin visibility for recurring reminder candidates, and stronger booking-link carry-forward from the live embedded planner.
+- moved the next public growth step forward with a new `/maintenance-plan` page, recurring-plan interest capture, admin visibility for recent interest requests, and stronger booking-link carry-forward from the live embedded planner.
 
 
 
-<!-- pass29-sync: customer-history recurring maintenance reminders -->
+<!-- pass31-sync: booking overflow polish, maintenance conversion from complete detail, fleet handoff path -->
+> Pass sync April 20, 2026: booking vehicle inputs and service cards were tightened to prevent text overflow, My Account now uses a real garage-bay view plus a fleet handoff path after 6 vehicles, and maintenance conversion now begins only after a completed Complete Detail with repeat-booking guidance tied to actual service history.
+
+> Pass sync April 21, 2026: added mileage and next-service mileage capture, customer vehicle image/video library groundwork, garage-bay photo support, a public before/after slider gallery, admin vehicle-media override/delete tools, and detailer arrival geolocation capture groundwork.
+
+## 2026-04-22 doc sync
+
+- reviewed during the merchandising / SEO / geofence refinement pass
+- no file-specific workflow changes were required beyond the centralized roadmap, schema, repo-guide, and handoff updates
+
