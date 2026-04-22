@@ -15,6 +15,7 @@ export async function onRequestPost(context){
     const alt_text = cleanText(body.alt_text);
     const image_title = cleanText(body.image_title);
     const crop_history = normalizeCropHistory(body.crop_history);
+    const media_analysis = normalizeMediaAnalysis(body.media_analysis);
     const media_width_px = normalizePositiveInt(body.media_width_px ?? body.width_px);
     const media_height_px = normalizePositiveInt(body.media_height_px ?? body.height_px);
     const media_orientation = normalizeOrientation(body.media_orientation ?? body.orientation, media_width_px, media_height_px);
@@ -25,7 +26,7 @@ export async function onRequestPost(context){
     const headers = serviceHeaders(env);
     const [vRes, mediaRes] = await Promise.all([
       fetch(`${env.SUPABASE_URL}/rest/v1/customer_vehicles?select=id,customer_profile_id,garage_display_media_url&customer_profile_id=eq.${encodeURIComponent(current.customer_profile.id)}&id=eq.${encodeURIComponent(vehicle_id)}&limit=1`, { headers }),
-      fetch(`${env.SUPABASE_URL}/rest/v1/customer_vehicle_media?select=id,media_kind,is_deleted&vehicle_id=eq.${encodeURIComponent(vehicle_id)}&customer_profile_id=eq.${encodeURIComponent(current.customer_profile.id)}&is_deleted=eq.false&order=created_at.asc`, { headers })
+      fetch(`${env.SUPABASE_URL}/rest/v1/customer_vehicle_media?select=id,media_kind,is_deleted,capture_role,media_url,media_analysis&vehicle_id=eq.${encodeURIComponent(vehicle_id)}&customer_profile_id=eq.${encodeURIComponent(current.customer_profile.id)}&is_deleted=eq.false&order=created_at.asc`, { headers })
     ]);
     const vRows = await vRes.json().catch(()=>[]);
     const vehicle = Array.isArray(vRows)?vRows[0]||null:null;
@@ -44,6 +45,9 @@ export async function onRequestPost(context){
       heightPx: media_height_px,
       orientation: media_orientation,
       cropHistory: crop_history,
+      mediaAnalysis: media_analysis,
+      existingMedia,
+      captureRole: capture_role,
       isFirstImage: is_first_image
     });
 
@@ -71,6 +75,7 @@ export async function onRequestPost(context){
       media_width_px,
       media_height_px,
       media_orientation,
+      media_analysis,
       is_primary: body.is_primary === true,
       is_deleted: false,
       uploaded_by_customer: true,
@@ -87,12 +92,13 @@ export async function onRequestPost(context){
     if (set_as_garage && media_kind === 'photo') {
       await fetch(`${env.SUPABASE_URL}/rest/v1/customer_vehicles?id=eq.${encodeURIComponent(vehicle_id)}&customer_profile_id=eq.${encodeURIComponent(current.customer_profile.id)}`, { method:'PATCH', headers:{ ...headers, Prefer:'return=minimal' }, body: JSON.stringify({ garage_display_media_url: media_url, garage_display_media_kind: media_kind, updated_at: new Date().toISOString() }) }).catch(()=>null);
     }
-    return withCors(json({ ok:true, media, media_score: scoring?.score ?? null, media_score_label: scoring?.label ?? null, media_score_status: scoring?.status || null, checks: scoring?.checks || null }));
+    return withCors(json({ ok:true, media, media_score: scoring?.score ?? null, media_score_label: scoring?.label ?? null, media_score_status: scoring?.status || null, checks: scoring?.checks || null, media_analysis }));
   } catch(err){ return withCors(json({ error: err?.message || 'Unexpected server error.' },500)); }
 }
 function cleanText(v){ const s=String(v??'').trim(); return s||null; }
 function normalizeKind(v){ const s=String(v||'photo').trim().toLowerCase(); if(['photo','image'].includes(s)) return 'photo'; if(s==='video') return 'video'; return null; }
 function normalizePositiveInt(v){ const n = Number(v); return Number.isFinite(n) && n > 0 ? Math.round(n) : null; }
+function normalizeMediaAnalysis(value){ if (value == null || value === '') return null; if (typeof value === 'string') { try { value = JSON.parse(value); } catch { return { raw:value.trim() }; } } return value && typeof value === 'object' ? value : null; }
 function normalizeCropHistory(value){
   if (value == null || value === '') return null;
   if (typeof value === 'string') {

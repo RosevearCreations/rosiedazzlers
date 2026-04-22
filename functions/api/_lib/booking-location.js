@@ -40,6 +40,18 @@ export async function resolveTrustedBookingLocation({ bookingLike = {}, serviceA
     };
   }
 
+  const explicitServiceAreaCoordinate = extractExplicitServiceAreaCoordinate(serviceAreaMeta, bookingLike);
+  if (explicitServiceAreaCoordinate) {
+    return {
+      latitude: explicitServiceAreaCoordinate.latitude,
+      longitude: explicitServiceAreaCoordinate.longitude,
+      source: 'service_area_meta',
+      status: 'resolved',
+      label: explicitServiceAreaCoordinate.label || buildLabel(bookingLike),
+      radius_m: explicitServiceAreaCoordinate.radius_m || 12000
+    };
+  }
+
   const serviceAreaMatch = lookupServiceAreaCoordinate(serviceAreaMeta, bookingLike);
   if (serviceAreaMatch) {
     return {
@@ -122,6 +134,19 @@ export function distanceMeters(lat1, lon1, lat2, lon2) {
   const a = Math.sin(dLat / 2) ** 2
     + Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) ** 2;
   return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function extractExplicitServiceAreaCoordinate(serviceAreaMeta, bookingLike) {
+  const latitude = toCoord(serviceAreaMeta?.latitude ?? serviceAreaMeta?.lat ?? bookingLike?.trusted_service_latitude);
+  const longitude = toCoord(serviceAreaMeta?.longitude ?? serviceAreaMeta?.lng ?? serviceAreaMeta?.lon ?? bookingLike?.trusted_service_longitude);
+  if (latitude == null || longitude == null) return null;
+  const radius_m = Number.isFinite(Number(serviceAreaMeta?.radius_m ?? serviceAreaMeta?.geofence_radius_m)) ? Number(serviceAreaMeta?.radius_m ?? serviceAreaMeta?.geofence_radius_m) : null;
+  return {
+    latitude,
+    longitude,
+    radius_m,
+    label: String(serviceAreaMeta?.label || serviceAreaMeta?.zone || serviceAreaMeta?.municipality || serviceAreaMeta?.value || '').trim() || buildLabel(bookingLike)
+  };
 }
 
 function lookupServiceAreaCoordinate(serviceAreaMeta, bookingLike) {
