@@ -484,6 +484,7 @@ create table if not exists public.customer_vehicle_media (
   media_width_px integer null,
   media_height_px integer null,
   media_orientation text null,
+  media_analysis jsonb null,
   is_primary boolean not null default false,
   is_deleted boolean not null default false,
   uploaded_by_customer boolean not null default true,
