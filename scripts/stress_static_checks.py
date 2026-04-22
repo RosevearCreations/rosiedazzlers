@@ -23,6 +23,9 @@ CHECK_JS = [
     'functions/api/admin/recovery_preview.js',
     'functions/api/recovery_audit_list.js',
 ]
+
+CORE_LOCAL_SEO_PAGES = ['index.html', 'services.html', 'pricing.html', 'about.html', 'contact.html']
+
 CHECK_HTML = [
     'admin-progress.html',
     'admin-live.html',
@@ -89,6 +92,19 @@ def check_public_h1():
         count = len(re.findall(r'<h1\b', text, flags=re.IGNORECASE))
         if count > 1:
             fail(f"{rel} has {count} H1 tags")
+
+
+def check_public_seo_basics():
+    for rel in CORE_LOCAL_SEO_PAGES:
+        path = ROOT / rel
+        if not path.exists():
+            continue
+        text = path.read_text(encoding='utf-8', errors='ignore')
+        for needle in ('<title>', 'meta name="description"', 'rel="canonical"'):
+            if needle not in text:
+                fail(f"{rel} missing required SEO basic: {needle}")
+        if 'application/ld+json' not in text:
+            fail(f"{rel} missing JSON-LD structured data")
 
 
 def check_catalog_media_coverage():
@@ -191,6 +207,7 @@ def main():
             run_node_check(path)
     check_inline_scripts()
     check_public_h1()
+    check_public_seo_basics()
     check_catalog_media_coverage()
     check_temp_artifacts()
     check_route_collisions()
