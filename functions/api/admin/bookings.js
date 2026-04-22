@@ -13,7 +13,7 @@ export async function onRequestPost(context) {
     if (!access.ok) return access.response;
 
     if (!bookingId) {
-      const listUrl = `${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,customer_name,customer_email,service_date,start_slot,duration_slots,service_area,service_area_county,service_area_municipality,service_area_zone,package_code,vehicle_size,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,progress_enabled,progress_token,created_at&order=service_date.asc,created_at.desc`;
+      const listUrl = `${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,customer_name,customer_email,service_date,start_slot,duration_slots,service_area,service_area_county,service_area_municipality,service_area_zone,package_code,vehicle_size,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,progress_enabled,progress_token,created_at,trusted_service_latitude,trusted_service_longitude,trusted_service_coordinate_source,trusted_service_coordinate_status,trusted_service_coordinate_label,trusted_service_geofence_radius_m,arrival_device_latitude,arrival_device_longitude,arrival_geofence_status,arrival_distance_m,arrival_geofence_checked_at&order=service_date.asc,created_at.desc`;
       const listRes = await fetch(listUrl, { headers: serviceHeaders(env) });
       if (!listRes.ok) return json({ error: `Could not load bookings. ${await listRes.text()}` }, 500);
       const bookings = await listRes.json().catch(() => []);

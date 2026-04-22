@@ -33,7 +33,8 @@ export async function onRequestPost(context) {
       "moderation_rules",
       "pricing_catalog",
       "document_templates",
-      "social_feeds"
+      "social_feeds",
+      "before_after_gallery"
     ];
 
     const out = {};
