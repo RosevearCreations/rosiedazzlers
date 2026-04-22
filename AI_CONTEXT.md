@@ -1,3 +1,10 @@
+> Last synchronized: April 22, 2026. Reviewed during the live SVG pricing-chart, structured-data local SEO, static-check hardening, and docs/schema synchronization pass.
+
+## April 22, 2026 context note
+- The main public pricing charts are now rendered live from the canonical pricing catalog on the site itself.
+- The current public SEO discipline now includes JSON-LD/structured-data on the core local-search pages plus static-check enforcement of title/description/canonical/H1 basics.
+- No new database tables or columns were introduced in this pass.
+
 > Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 # Rosie Dazzlers — AI Context Document

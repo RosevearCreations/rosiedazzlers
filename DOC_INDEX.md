@@ -1,3 +1,9 @@
+> Last synchronized: April 22, 2026. Reviewed during the live SVG pricing-chart, structured-data local SEO, static-check hardening, and docs/schema synchronization pass.
+
+## April 22, 2026 doc index note
+- Use this pass when handing off pricing/public SEO work: live chart rendering now starts in `assets/pricing-catalog-client.js`, with page use in `pricing.html` and `services.html`.
+- Schema files were refreshed as a no-DDL pass.
+
 > Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 # Rosie Dazzlers — Documentation Index

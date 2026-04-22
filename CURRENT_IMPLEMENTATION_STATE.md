@@ -1,3 +1,12 @@
+> Last synchronized: April 22, 2026. Reviewed during the live SVG pricing-chart, structured-data local SEO, static-check hardening, and docs/schema synchronization pass.
+
+## April 22, 2026 state update
+- `assets/pricing-catalog-client.js` now includes live SVG chart builders for the main pricing table and service-details matrix, plus reusable JSON-LD helpers for pricing/services pages.
+- `pricing.html` now renders the vehicle price chart and package-details chart from the current canonical pricing catalog instead of depending on static PNGs first.
+- `services.html` now opens those same live chart renders in the modal helpers while still retaining the packaged size-chart asset as fallback/reference.
+- `about.html`, `contact.html`, `pricing.html`, and `services.html` received another local SEO/structured-data refresh.
+- No relational DDL change landed in this pass; schema files were refreshed to reflect a no-DDL application/SEO pass.
+
 > Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## April 15, 2026 state update

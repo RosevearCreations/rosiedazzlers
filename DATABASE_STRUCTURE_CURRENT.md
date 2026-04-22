@@ -1,3 +1,8 @@
+> Last synchronized: April 22, 2026. Reviewed during the live SVG pricing-chart, structured-data local SEO, static-check hardening, and docs/schema synchronization pass.
+
+## April 22, 2026 schema-state note
+No relational schema change landed in this pass. The work moved the main public pricing charts to live SVG rendering from the canonical pricing catalog, strengthened structured-data coverage on core local pages, and hardened static SEO checks.
+
 > Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## April 15, 2026 schema-state note

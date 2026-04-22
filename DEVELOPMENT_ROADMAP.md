@@ -1,3 +1,17 @@
+> Last synchronized: April 22, 2026. Reviewed during the live SVG pricing-chart, structured-data local SEO, static-check hardening, and docs/schema synchronization pass.
+
+## April 22, 2026 live chart + structured-data pass
+Completed in this pass:
+- moved the main package pricing chart and package-details chart off legacy static-image-first behavior and onto live SVG rendering from the canonical pricing catalog
+- kept packaged images as fallback/reference only
+- extended local structured-data coverage on the main local-search public pages
+- hardened `scripts/stress_static_checks.py` so core public SEO basics are verified alongside H1 and syntax checks
+
+Next highest-value roadmap items after this pass:
+- add an App Management helper to preview/download regenerated live pricing charts without editing files manually
+- keep extending structured-data coverage route by route, especially home/booking/gifts once the wording is finalized
+- continue the customer vehicle crop-editor/upload hardening path without reopening unrelated booking work
+
 > Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## April 15, 2026 generated pricing-chart asset pass
