@@ -22,6 +22,9 @@ CHECK_JS = [
     'functions/api/admin/recovery_templates.js',
     'functions/api/admin/recovery_preview.js',
     'functions/api/recovery_audit_list.js',
+    'functions/api/_lib/analytics-rollups.js',
+    'functions/api/admin/analytics_overview.js',
+    'functions/api/admin/analytics_rollups_refresh.js',
 ]
 
 CORE_LOCAL_SEO_PAGES = ['index.html', 'services.html', 'pricing.html', 'about.html', 'contact.html']
@@ -142,6 +145,26 @@ def check_route_collisions():
     if collisions:
         fail("route collisions detected: " + "; ".join(collisions))
 
+
+
+def check_redirect_rules():
+    redirects = (ROOT / '_redirects').read_text(encoding='utf-8', errors='ignore')
+    risky = [
+        '/services/ /services 301',
+        '/pricing/ /pricing 301'
+    ]
+    for needle in risky:
+        if needle in redirects:
+            fail(f'_redirects still contains loop-prone rule: {needle}')
+    required = [
+        '/services /services.html 200',
+        '/pricing /pricing.html 200',
+        '/book /book.html 200'
+    ]
+    for needle in required:
+        if needle not in redirects:
+            fail(f'_redirects missing required clean-route rewrite: {needle}')
+
 def check_public_catalog_helper_usage():
     helper = (ROOT / 'assets/pricing-catalog-client.js').read_text()
     if 'loadPricingCatalogClient' not in helper or 'normalizePricingCatalog' not in helper:
@@ -217,6 +240,7 @@ def main():
     check_public_analytics_hook()
     check_booking_contract()
     check_admin_shell_pages()
+    check_redirect_rules()
     print('PASS: static stress checks completed')
 
 if __name__ == '__main__':

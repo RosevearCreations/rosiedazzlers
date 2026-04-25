@@ -231,6 +231,7 @@
               <label class="muted" for="analyticsServiceArea">Service area</label>
               <select id="analyticsServiceArea"><option value="">All service areas</option></select>
               <button class="ghost-btn" id="refreshAnalyticsBtn" type="button">Refresh</button>
+              <button class="ghost-btn" id="refreshRollupsBtn" type="button">Refresh rollups</button>
               <button class="ghost-btn" id="exportDailyBtn" type="button">Export daily CSV</button>
               <button class="ghost-btn" id="exportWeeklyBtn" type="button">Export weekly CSV</button>
               <button class="ghost-btn" id="exportMonthlyBtn" type="button">Export monthly CSV</button>
@@ -367,6 +368,7 @@
         days: document.getElementById("analyticsDays"),
         serviceAreaFilter: document.getElementById("analyticsServiceArea"),
         refresh: document.getElementById("refreshAnalyticsBtn"),
+        refreshRollups: document.getElementById("refreshRollupsBtn"),
         exportDaily: document.getElementById("exportDailyBtn"),
         exportWeekly: document.getElementById("exportWeeklyBtn"),
         exportMonthly: document.getElementById("exportMonthlyBtn"),
@@ -477,6 +479,8 @@
         if (!abandonedRes.ok) throw new Error(abandoned?.error || "Could not load abandoned orders.");
 
         latestAnalytics = analytics;
+        const sourceMode = analytics?.source?.mode === "rollups" ? "rollups + recent raw activity" : "raw events";
+        setShellStatus(`Loaded analytics via ${sourceMode}.`, "success");
 
         const filterValue = String(analytics.selected_service_area || "");
         const options = Array.isArray(analytics.service_area_options) ? analytics.service_area_options : [];
@@ -581,6 +585,23 @@
       els.exportFunnel.addEventListener("click", () => downloadCsv("analytics-funnel.csv", latestAnalytics?.funnel ? Object.entries(latestAnalytics.funnel).map(([label, count]) => ({ label, count })) : []));
       els.exportActions.addEventListener("click", () => downloadCsv("analytics-actions.csv", latestAnalytics?.recent_actions || []));
       els.refresh.addEventListener("click", () => load().catch((err) => setShellStatus(err?.message || "Could not refresh analytics.", "error")));
+      els.refreshRollups.addEventListener("click", async () => {
+        try {
+          setShellStatus("Refreshing analytics rollups…", "success");
+          const res = await fetch("/api/admin/analytics_rollups_refresh", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ days: Number(els.days.value || 30) })
+          });
+          const data = await res.json().catch(() => null);
+          if (!res.ok) throw new Error(data?.error || "Could not refresh analytics rollups.");
+          setShellStatus(`Analytics rollups refreshed from ${Number(data?.source_event_count || 0)} raw events.`, "success");
+          await load();
+        } catch (err) {
+          setShellStatus(err?.message || "Could not refresh analytics rollups.", "error");
+        }
+      });
 
       window.AdminShell.boot({
         pageKey: "admin-analytics",

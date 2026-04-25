@@ -1,19 +1,52 @@
-# Route hotfix for Cloudflare Pages clean URLs.
-# Keep this file minimal to avoid rewrite loops.
-# Cloudflare Pages will serve the matching .html files normally.
+# Cloudflare Pages clean-route rewrites.
+# Use explicit 200 rewrites for html-backed public routes to avoid slash-normalization loops.
 
-# Trailing-slash compatibility redirects
-/services/ /services 301
-/pricing/ /pricing 301
-/admin/ /admin 301
-/admin-accounting/ /admin-accounting 301
-/admin-catalog/ /admin-catalog 301
-/admin-app/ /admin-app 301
-/admin-staff/ /admin-staff 301
-/admin-payroll/ /admin-payroll 301
-/admin-login/ /admin-login 301
-/maintenance-plan/ /maintenance-plan 301
+/ /index.html 200
+/about /about.html 200
+/about/ /about.html 200
+/services /services.html 200
+/services/ /services.html 200
+/pricing /pricing.html 200
+/pricing/ /pricing.html 200
+/book /book.html 200
+/book/ /book.html 200
+/contact /contact.html 200
+/contact/ /contact.html 200
+/gallery /gallery.html 200
+/gallery/ /gallery.html 200
+/videos /videos.html 200
+/videos/ /videos.html 200
+/gifts /gifts.html 200
+/gifts/ /gifts.html 200
+/fleet-pricing /fleet-pricing.html 200
+/fleet-pricing/ /fleet-pricing.html 200
+/privacy /privacy.html 200
+/privacy/ /privacy.html 200
+/terms /terms.html 200
+/terms/ /terms.html 200
+/waiver /waiver.html 200
+/waiver/ /waiver.html 200
+/login /login.html 200
+/login/ /login.html 200
+/my-account /my-account.html 200
+/my-account/ /my-account.html 200
+/progress /progress.html 200
+/progress/ /progress.html 200
 
-/fleet-pricing/ /fleet-pricing 301
-
-/gallery/ /gallery 301
+# Admin compatibility rewrites.
+/admin /admin.html 200
+/admin/ /admin.html 200
+/admin-accounting /admin-accounting.html 200
+/admin-accounting/ /admin-accounting.html 200
+/admin-catalog /admin-catalog.html 200
+/admin-catalog/ /admin-catalog.html 200
+/admin-app /admin-app.html 200
+/admin-app/ /admin-app.html 200
+/admin-staff /admin-staff.html 200
+/admin-staff/ /admin-staff.html 200
+/admin-payroll /admin-payroll.html 200
+/admin-payroll/ /admin-payroll.html 200
+/admin-login /admin-login.html 200
+/admin-login/ /admin-login.html 200
+/maintenance-plan /maintenance-plan.html 200
+/maintenance-plan/ /maintenance-plan.html 200
