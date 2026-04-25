@@ -412,6 +412,50 @@ export function buildLiveServiceDetailsChartDataUri(catalog) {
   return svgDataUri(buildLiveServiceDetailsChartSvg(catalog));
 }
 
+
+export function buildLiveVehicleSizeChartSvg(catalog) {
+  const rows = [
+    {
+      cells: [
+        { text: 'Small', weight: 'bold', fill: '#ffffff' },
+        { text: 'Cars, compact SUVs, small crossovers' },
+        { text: 'Easiest fit for the base price tier' }
+      ]
+    },
+    {
+      cells: [
+        { text: 'Mid-sized', weight: 'bold', fill: '#ffffff' },
+        { text: 'Sedans, vans, regular SUVs, light trucks' },
+        { text: 'More cabin/cargo area and setup time' }
+      ]
+    },
+    {
+      cells: [
+        { text: 'Oversize / exotic', weight: 'bold', fill: '#ffffff' },
+        { text: 'Large SUVs, heavy trucks, specialty/exotic vehicles' },
+        { text: 'Highest surface area or special-care handling' }
+      ]
+    }
+  ];
+
+  return renderSvgTableChart({
+    title: 'Vehicle Size Guide',
+    subtitle: 'Generated live so the public size reference stays consistent with booking and pricing labels.',
+    columns: [
+      { index: 0, label: 'Pricing size', width: 1.1 },
+      { index: 1, label: 'Common examples', width: 2.8 },
+      { index: 2, label: 'How to choose', width: 2.2 }
+    ],
+    rows,
+    footer: 'Unsure? Choose the closest size and Rosie Dazzlers can confirm before the appointment.',
+    accent: '#38bdf8'
+  });
+}
+
+export function buildLiveVehicleSizeChartDataUri(catalog) {
+  return svgDataUri(buildLiveVehicleSizeChartSvg(catalog));
+}
+
 export function buildPricingOfferCatalogSchema(catalog, pageUrl = 'https://rosiedazzlers.ca/pricing') {
   const normalized = normalizePricingCatalog(catalog);
   const sizeLabels = {
