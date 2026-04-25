@@ -1,3 +1,4 @@
+<!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 23, 2026: live vehicle-size SVG guide, App Management chart preview/download helper, no-DDL schema sync, and continued public SEO/static-check direction.
 
 > Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
@@ -172,4 +173,9 @@ Pass 28 sync — 2026-04-20
 - Tightened form-control CSS so admin date inputs, text boxes, and wrapped button rows stop overlapping; `admin-accounting.html` now uses more resilient auto-fit grids for filter, entry, and remittance controls.
 - Expanded analytics reporting so `admin-analytics.html` now shows daily, weekly, monthly, and yearly traffic rollups with CSV export buttons, all generated from `site_activity_events` without adding a new reporting table in this pass.
 - No new database migration was required in this pass. `SUPABASE_SCHEMA.sql` was refreshed to document that schedule blocks still use the legacy `blocked_date` / `slot` shape and that analytics reports are computed from `site_activity_events` at request time.
+
+## 2026-04-25 pass
+- Added bulk blocking and calendar visualization to admin blocks.
+- Added the first town-focused location pages.
+- Stabilized pricing embed behavior.
 

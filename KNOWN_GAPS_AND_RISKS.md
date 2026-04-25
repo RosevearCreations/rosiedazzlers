@@ -1,3 +1,4 @@
+<!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
 
 ## April 25, 2026 route hardening + landing-page visibility pass
@@ -670,3 +671,10 @@ Pass 28 sync — 2026-04-20
 - the new analytics rollup path requires the April 24 SQL migration before the refresh endpoint can populate rollups
 - summary visitor/session counts on rollup-backed reports are currently summed from daily buckets when rollups are used, so they should be treated as operational reporting counts rather than perfect cross-window deduplicated totals
 - production should be rechecked after deploy because `/services` and `/pricing` were observed looping before the `_redirects` rewrite
+
+## 2026-04-25 status
+- Block calendar is now visible on the block page, but very long multi-month operational planning may still benefit from a dedicated yearly scheduler later.
+- Range blocking uses the existing date_blocks and slot_blocks tables; no new schema was added in this pass.
+- Pricing page embed height is now clamped to stop runaway growth, but live deployed testing after cache clear is still required.
+- Town pages are live in the codebase, but they still need continued content enrichment, reviews, and recent-work freshness over time.
+

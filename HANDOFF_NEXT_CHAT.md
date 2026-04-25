@@ -1,3 +1,4 @@
+<!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
 
 ## April 25, 2026 route hardening + landing-page visibility pass
@@ -52,3 +53,10 @@ Rosie Dazzlers is a role-aware detailing operations platform with booking, depos
 - Run `sql/2026-04-24_site_activity_rollups.sql` before using the rollup refresh endpoint.
 - Deploy and verify `/services` and `/pricing` after the `_redirects` rewrite because the live site showed redirect loops during sanity review.
 - Read `LOCAL_VISIBILITY_REVIEW_2026-04-24.md` before starting the next content/SEO pass.
+
+## Current best next steps (carry forward)
+1. Verify the new block calendar and range-save flow live after deploy.
+2. Continue enriching the town-focused landing pages with real recent jobs, photos, and stronger review/social proof.
+3. Keep the folder-backed clean-route approach as the live baseline.
+4. Connect Google-side reporting later through Search Console and Business Profile once internal analytics rollups are stable.
+

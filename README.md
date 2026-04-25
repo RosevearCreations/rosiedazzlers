@@ -1,3 +1,4 @@
+<!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
 
 ## April 25, 2026 route hardening + landing-page visibility pass
@@ -406,3 +407,9 @@ Pass 28 sync — 2026-04-20
 - Reporting still reads from `public.site_activity_events`; no rollup table was introduced in this pass.
 
 - Latest pass added analytics rollup storage/refresh support, repaired the loop-prone public clean-route rules, and added a local visibility review document for the next SEO/content wave.
+
+## 2026-04-25 recent changes
+- Added range-based block saving and a visual admin block calendar.
+- Added four town-focused landing pages for local visibility.
+- Stabilized embedded booking height handling on the pricing page.
+

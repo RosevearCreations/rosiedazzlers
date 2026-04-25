@@ -1,3 +1,4 @@
+<!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
 
 ## April 25, 2026 route hardening + landing-page visibility pass
@@ -349,3 +350,7 @@ Pass 28 sync — 2026-04-20
 - Admin analytics now has a rollup storage path for scale: refresh endpoint + rollup-backed overview + raw fallback.
 - Production route sanity matters right now because `/services` and `/pricing` were seen looping before the clean-route rewrite.
 - The next valuable growth work is content/reputation/local proof, not another generic design pass. Read `LOCAL_VISIBILITY_REVIEW_2026-04-24.md`.
+
+## 2026-04-25 operational note
+The current live-baseline priorities are: folder-backed clean routes, visible recent-work/review proof on public entry pages, admin scheduling usability, and later Google-side reporting after internal rollups stabilize.
+

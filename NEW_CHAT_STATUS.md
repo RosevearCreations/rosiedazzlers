@@ -1,3 +1,4 @@
+<!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
 
 ## April 25, 2026 route hardening + landing-page visibility pass
@@ -51,3 +52,11 @@ This pass continued the public pricing/SEO work by moving the vehicle size guide
 - Latest pass finished: analytics rollup foundation added, rollup refresh endpoint added, live-route loop fix prepared for `/services` and `/pricing`, and a competitor/local visibility review was added to the docs.
 - DB migration to run in this pass: `sql/2026-04-24_site_activity_rollups.sql`.
 - Best next chat focus: deploy/verify clean routes, refresh rollups, then build the first service-specific and town-specific local landing sections.
+
+## 2026-04-25 pass summary
+- Fixed: block page can now block a whole time frame at once.
+- Fixed: block page includes a calendar-style availability display.
+- Fixed: pricing page embedded planner no longer grows without limit in the codebase.
+- Added: Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, and Port Dover location pages.
+- No schema migration required in this pass.
+

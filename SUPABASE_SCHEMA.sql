@@ -1,3 +1,4 @@
+-- 2026-04-25 note: no DDL change in this pass; admin range blocking continues to use date_blocks(blocked_date, reason) and slot_blocks(blocked_date, slot, reason).
 -- Schema synchronization note: April 25, 2026 — no new DDL in this pass. Docs refreshed for folder-backed routes, special-service landing pages, recent-work proof mounts, and unchanged analytics rollup schema.
 -- April 23, 2026 live vehicle-size guide + chart helper pass.
 -- Added live SVG vehicle size guide generation beside the existing live price and package-details charts.

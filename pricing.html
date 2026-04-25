@@ -65,8 +65,8 @@
     .mini{font-size:.92rem}
 
     .booking-lead{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
-    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03)}
-    .booking-embed-frame{display:block;width:100%;min-height:1850px;border:0;background:transparent}
+    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03);position:relative}
+    .booking-embed-frame{display:block;width:100%;height:1850px;min-height:1850px;max-height:4200px;border:0;background:transparent;overflow:hidden}
     .booking-side{display:grid;gap:12px}
     .planner-note{margin-top:12px}
     .benefits{display:grid;gap:8px;padding-left:18px;margin:0}
@@ -252,7 +252,19 @@
     </div>
 
 
-    <section class="section panel">
+    
+<section class="section panel">
+  <h2 style="margin-top:0">Town-focused detailing pages</h2>
+  <p class="muted">These pages keep the folder-backed route approach and give the strongest service-area towns their own local wording, review proof, and recent-work support.</p>
+  <div class="local-town-grid" style="margin-top:12px">
+    <article class="local-town-card"><h3>Tillsonburg</h3><p class="muted">Dedicated page for local booking intent, travel wording, and detailing service questions.</p><a class="btn ghost small" href="/tillsonburg-auto-detailing">Open page</a></article>
+    <article class="local-town-card"><h3>Woodstock / Ingersoll</h3><p class="muted">Combined page for nearby Oxford County bookings, route questions, and local detailing visibility.</p><a class="btn ghost small" href="/woodstock-ingersoll-auto-detailing">Open page</a></article>
+    <article class="local-town-card"><h3>Simcoe / Delhi</h3><p class="muted">Combined page for Norfolk-side detailing demand, travel guidance, and local trust signals.</p><a class="btn ghost small" href="/simcoe-delhi-auto-detailing">Open page</a></article>
+    <article class="local-town-card"><h3>Port Dover</h3><p class="muted">Dedicated page for shoreline-area service intent, local wording, and proof of current work.</p><a class="btn ghost small" href="/port-dover-auto-detailing">Open page</a></article>
+  </div>
+</section>
+
+<section class="section panel">
       <h2 style="margin-top:0">High-intent service pages</h2>
       <p class="muted">These dedicated pages are now the clearest place to target special-service searches while still feeding into the same booking and contact flow.</p>
       <div class="service-link-grid" style="margin-top:12px">
@@ -466,8 +478,10 @@
       window.addEventListener('message', (event) => {
         const payload = event.data || {};
         if (payload.type === 'rd-book-embed-size') {
-          const nextHeight = Math.max(1400, Number(payload.height || 0) + 24);
-          if (Number.isFinite(nextHeight)) frame.style.height = `${nextHeight}px`;
+          const measured = Number(payload.height || 0);
+          const nextHeight = Math.min(4200, Math.max(1400, Math.round(measured) + 24));
+          const currentHeight = parseInt(frame.style.height || frame.getAttribute('height') || '0', 10) || 0;
+          if (Number.isFinite(nextHeight) && Math.abs(nextHeight - currentHeight) >= 12) frame.style.height = `${nextHeight}px`;
           return;
         }
         if (payload.type === 'rd-book-embed-state') {

@@ -1,3 +1,4 @@
+<!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
 
 ## April 25, 2026 route hardening + landing-page visibility pass
@@ -399,3 +400,10 @@ Pass 28 sync — 2026-04-20
 - run the April 24 analytics rollup migration and then test the Refresh rollups button in `admin-analytics.html`
 - verify admin analytics reports show `rollups + recent raw activity` after refresh
 - read `LOCAL_VISIBILITY_REVIEW_2026-04-24.md` before the next public SEO/content pass
+
+## 2026-04-25 sanity additions
+- Verify /admin-blocks range save with a short test window.
+- Verify calendar coloring on /admin-blocks for full-date and slot-only blocks.
+- Verify /pricing no longer keeps expanding below the vehicle-identification / booking-embed section.
+- Verify the four new town pages render one H1 each and load recent work/review proof correctly.
+

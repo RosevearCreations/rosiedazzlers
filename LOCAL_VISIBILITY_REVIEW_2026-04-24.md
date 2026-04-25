@@ -1,3 +1,4 @@
+<!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
 
 ## April 25, 2026 route hardening + landing-page visibility pass
@@ -158,3 +159,8 @@ Still the next best visibility steps after deploy:
 - add town-specific landing pages for Tillsonburg, Woodstock / Ingersoll, Simcoe / Delhi, and Port Dover
 - connect Search Console performance and Business Profile metrics as separate Google-side reporting once internal rollups are stable
 - keep loading new before/after pairs and recent social links from App Management so freshness stays visible without code edits
+
+## Follow-through completed on 2026-04-25
+- Added the first town-focused landing pages to support stronger local service-area visibility.
+- Kept recent work and review proof visible on the main public entry pages and the new town pages.
+
