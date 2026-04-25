@@ -1,5 +1,6 @@
 import { requireStaffAccess, json, methodNotAllowed, serviceHeaders } from "../_lib/staff-auth.js";
 import { loadAppSettings } from "../_lib/app-settings.js";
+import { ALL_SERVICE_AREA_LABEL } from "../_lib/analytics-rollups.js";
 
 export async function onRequestOptions() {
   return new Response("", { status: 204, headers: corsHeaders() });
@@ -22,105 +23,67 @@ export async function onRequestPost(context) {
     const days = Math.max(1, Math.min(365, Number(body.days || 30)));
     const serviceAreaFilter = cleanText(body.service_area || "");
     const since = new Date(Date.now() - days * 86400000).toISOString();
+    const sinceDate = since.slice(0, 10);
     const settings = await loadAppSettings(env);
 
-    const res = await fetch(
-      `${env.SUPABASE_URL}/rest/v1/site_activity_events?select=id,event_type,page_path,country,session_id,visitor_id,referrer,checkout_state,created_at,payload&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=25000`,
-      { headers: serviceHeaders(env) }
-    );
-    if (!res.ok) return withCors(json({ error: `Could not load analytics. ${await res.text()}` }, 500));
+    const rollupData = await loadRollupAnalytics(env, sinceDate, serviceAreaFilter).catch(() => null);
+    if (rollupData?.reports?.daily?.length) {
+      const recentWindowDays = Math.min(Math.max(days, 7), 14);
+      const recent = await loadRawSupplement(env, recentWindowDays, serviceAreaFilter);
+      const dailySummary = Array.isArray(rollupData.reports.daily) ? rollupData.reports.daily : [];
 
-    const rows = await res.json().catch(() => []);
-    let data = Array.isArray(rows) ? rows : [];
-
-    const serviceAreaCandidates = Array.from(
-      new Set(
-        data
-          .map((row) => String(row?.payload?.service_area_label || row?.payload?.service_area || "").trim())
-          .filter(Boolean)
-      )
-    ).sort((a, b) => a.localeCompare(b));
-
-    if (serviceAreaFilter) {
-      data = data.filter(
-        (row) => String(row?.payload?.service_area_label || row?.payload?.service_area || "").trim() === serviceAreaFilter
+      return withCors(
+        json({
+          ok: true,
+          settings,
+          generated_at: new Date().toISOString(),
+          days,
+          window: {
+            start_at: since,
+            end_at: new Date().toISOString()
+          },
+          summary: {
+            events: sumMetric(dailySummary, "events"),
+            page_views: sumMetric(dailySummary, "page_views"),
+            unique_visitors: sumMetric(dailySummary, "unique_visitors"),
+            unique_sessions: sumMetric(dailySummary, "unique_sessions"),
+            abandoned_sessions: recent.abandoned.length,
+            live_online_sessions: recent.liveOnline.length,
+            avg_engagement_seconds: recent.avgEngagementSeconds,
+            booking_starts: sumMetric(dailySummary, "booking_starts"),
+            booking_completions: sumMetric(dailySummary, "booking_completions")
+          },
+          top_pages: rollupData.top_pages,
+          top_countries: rollupData.top_countries,
+          top_regions: rollupData.top_regions,
+          top_cities: rollupData.top_cities,
+          top_devices: rollupData.top_devices,
+          top_referrers: rollupData.top_referrers,
+          top_actions: rollupData.top_actions,
+          top_service_areas: rollupData.top_service_areas,
+          service_area_options: rollupData.service_area_options,
+          selected_service_area: serviceAreaFilter || null,
+          funnel: rollupData.funnel,
+          checkout_states: rollupData.checkout_states,
+          reports: rollupData.reports,
+          daily_traffic: rollupData.reports.daily,
+          session_journeys: recent.sessionJourneys.slice(0, 50),
+          live_online_sessions: recent.liveOnline.slice(0, 50),
+          cart_snapshots: recent.cartSnapshots.slice(0, 50),
+          recent_actions: recent.recentActions.slice(0, 50),
+          abandoned_checkouts: recent.abandoned.slice(0, 50),
+          source: {
+            mode: "rollups",
+            summary_unique_scope: "summed_daily_rollups",
+            live_and_abandoned_scope_days: recentWindowDays,
+            all_service_area_label: ALL_SERVICE_AREA_LABEL
+          }
+        })
       );
     }
 
-    const pageViews = data.filter((row) => row.event_type === "page_view");
-    const heartbeatEvents = data.filter((row) => row.event_type === "heartbeat");
-    const uniqueVisitors = new Set(data.map((row) => row.visitor_id).filter(Boolean)).size;
-    const uniqueSessions = new Set(data.map((row) => row.session_id).filter(Boolean)).size;
-
-    const sessionJourneys = summarizeJourneys(data);
-    const abandoned = summarizeAbandoned(data);
-    const liveOnline = summarizeLiveOnline(sessionJourneys, data);
-
-    return withCors(
-      json({
-        ok: true,
-        settings,
-        generated_at: new Date().toISOString(),
-        days,
-        window: {
-          start_at: since,
-          end_at: new Date().toISOString()
-        },
-        summary: {
-          events: data.length,
-          page_views: pageViews.length,
-          unique_visitors: uniqueVisitors,
-          unique_sessions: uniqueSessions,
-          abandoned_sessions: abandoned.length,
-          live_online_sessions: liveOnline.length,
-          avg_engagement_seconds: heartbeatEvents.length
-            ? Math.round(
-                heartbeatEvents.reduce((sum, row) => sum + Number(row?.payload?.duration_ms || 0), 0) /
-                  heartbeatEvents.length /
-                  1000
-              )
-            : 0,
-          booking_starts: countTrafficEvents(data, (row) => row.event_type === "checkout_started" || row.checkout_state === "started"),
-          booking_completions: countTrafficEvents(data, (row) => row.event_type === "checkout_completed" || row.checkout_state === "completed")
-        },
-        top_pages: summarizeCounts(pageViews.map((row) => row.page_path || "/")),
-        top_countries: summarizeCounts(data.map((row) => row.country || "Unknown")),
-        top_regions: summarizeCounts(data.map((row) => row?.payload?.region || "Unknown")),
-        top_cities: summarizeCounts(
-          data.map((row) => {
-            const city = row?.payload?.city || "";
-            const region = row?.payload?.region || "";
-            return city ? `${city}${region ? `, ${region}` : ""}` : "Unknown";
-          })
-        ),
-        top_devices: summarizeCounts(data.map((row) => row?.payload?.device_type || "Unknown")),
-        top_referrers: summarizeCounts(data.map((row) => row.referrer || "Direct")),
-        top_actions: summarizeCounts(
-          data
-            .filter((row) => !["heartbeat", "page_focus", "page_exit"].includes(row.event_type))
-            .map((row) => row.event_type || "unknown")
-        ),
-        top_service_areas: summarizeCounts(
-          data.map((row) => row?.payload?.service_area_label || row?.payload?.service_area || "").filter(Boolean)
-        ),
-        service_area_options: serviceAreaCandidates,
-        selected_service_area: serviceAreaFilter || null,
-        funnel: summarizeBookingFunnel(data),
-        checkout_states: summarizeCounts(data.map((row) => row.checkout_state || "").filter(Boolean)),
-        reports: {
-          daily: summarizeTrafficByPeriod(data, "day"),
-          weekly: summarizeTrafficByPeriod(data, "week"),
-          monthly: summarizeTrafficByPeriod(data, "month"),
-          yearly: summarizeTrafficByPeriod(data, "year")
-        },
-        daily_traffic: summarizeTrafficByPeriod(data, "day"),
-        session_journeys: sessionJourneys.slice(0, 50),
-        live_online_sessions: liveOnline.slice(0, 50),
-        cart_snapshots: summarizeCartSnapshots(data).slice(0, 50),
-        recent_actions: summarizeRecentActions(data).slice(0, 50),
-        abandoned_checkouts: abandoned.slice(0, 50)
-      })
-    );
+    const raw = await loadRawAnalytics(env, since, days, serviceAreaFilter, settings);
+    return withCors(json(raw));
   } catch (err) {
     return withCors(json({ error: err?.message || "Unexpected server error." }, 500));
   }
@@ -128,6 +91,260 @@ export async function onRequestPost(context) {
 
 export async function onRequestGet() {
   return withCors(methodNotAllowed());
+}
+
+async function loadRollupAnalytics(env, sinceDate, serviceAreaFilter) {
+  const targetArea = serviceAreaFilter || ALL_SERVICE_AREA_LABEL;
+  const headers = serviceHeaders(env);
+  const [summaryRes, dimRes, funnelRes, areaRes] = await Promise.all([
+    fetch(
+      `${env.SUPABASE_URL}/rest/v1/site_activity_rollups?select=period_type,period_key,period_start,period_end,service_area_label,events,page_views,unique_visitors,unique_sessions,booking_starts,booking_completions,cart_snapshots&period_start=gte.${encodeURIComponent(sinceDate)}&service_area_label=eq.${encodeURIComponent(targetArea)}&order=period_start.asc&limit=5000`,
+      { headers }
+    ),
+    fetch(
+      `${env.SUPABASE_URL}/rest/v1/site_activity_dimension_daily_rollups?select=rollup_date,service_area_label,dimension_type,dimension_value,count&rollup_date=gte.${encodeURIComponent(sinceDate)}&service_area_label=eq.${encodeURIComponent(targetArea)}&order=rollup_date.asc&limit=50000`,
+      { headers }
+    ),
+    fetch(
+      `${env.SUPABASE_URL}/rest/v1/site_activity_funnel_daily_rollups?select=rollup_date,service_area_label,step_1_views,step_2_views,step_3_views,step_4_views,step_5_views,service_area_picks,date_picks,package_picks,addon_toggles,customer_continue,checkout_started,checkout_completed&rollup_date=gte.${encodeURIComponent(sinceDate)}&service_area_label=eq.${encodeURIComponent(targetArea)}&order=rollup_date.asc&limit=5000`,
+      { headers }
+    ),
+    fetch(
+      `${env.SUPABASE_URL}/rest/v1/site_activity_rollups?select=service_area_label&period_type=eq.day&period_start=gte.${encodeURIComponent(sinceDate)}&service_area_label=not.eq.${encodeURIComponent(ALL_SERVICE_AREA_LABEL)}&order=service_area_label.asc&limit=5000`,
+      { headers }
+    )
+  ]);
+
+  if (![summaryRes, dimRes, funnelRes, areaRes].every((res) => res.ok)) {
+    throw new Error("Rollup tables are not ready yet.");
+  }
+
+  const summaryRows = normalizeArray(await summaryRes.json().catch(() => []));
+  const dimensionRows = normalizeArray(await dimRes.json().catch(() => []));
+  const funnelRows = normalizeArray(await funnelRes.json().catch(() => []));
+  const areaRows = normalizeArray(await areaRes.json().catch(() => []));
+
+  return {
+    reports: {
+      daily: normalizePeriodRows(summaryRows.filter((row) => row.period_type === "day")),
+      weekly: normalizePeriodRows(summaryRows.filter((row) => row.period_type === "week")),
+      monthly: normalizePeriodRows(summaryRows.filter((row) => row.period_type === "month")),
+      yearly: normalizePeriodRows(summaryRows.filter((row) => row.period_type === "year"))
+    },
+    top_pages: summarizeDimensionCounts(dimensionRows, "page_path"),
+    top_countries: summarizeDimensionCounts(dimensionRows, "country"),
+    top_regions: summarizeDimensionCounts(dimensionRows, "region"),
+    top_cities: summarizeDimensionCounts(dimensionRows, "city"),
+    top_devices: summarizeDimensionCounts(dimensionRows, "device_type"),
+    top_referrers: summarizeDimensionCounts(dimensionRows, "referrer"),
+    top_actions: summarizeDimensionCounts(dimensionRows, "event_type"),
+    top_service_areas: serviceAreaFilter
+      ? [{ label: serviceAreaFilter, count: sumDimensionCount(dimensionRows, "page_path") }]
+      : summarizeDimensionCounts(dimensionRows, "service_area"),
+    checkout_states: summarizeDimensionCounts(dimensionRows, "checkout_state"),
+    service_area_options: Array.from(
+      new Set(areaRows.map((row) => cleanText(row.service_area_label)).filter((value) => value && value !== ALL_SERVICE_AREA_LABEL))
+    ).sort((a, b) => a.localeCompare(b)),
+    funnel: summarizeFunnelRows(funnelRows)
+  };
+}
+
+async function loadRawAnalytics(env, since, days, serviceAreaFilter, settings) {
+  const res = await fetch(
+    `${env.SUPABASE_URL}/rest/v1/site_activity_events?select=id,event_type,page_path,country,session_id,visitor_id,referrer,checkout_state,created_at,payload&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=25000`,
+    { headers: serviceHeaders(env) }
+  );
+  if (!res.ok) throw new Error(`Could not load analytics. ${await res.text()}`);
+
+  const rows = await res.json().catch(() => []);
+  let data = Array.isArray(rows) ? rows : [];
+
+  const serviceAreaCandidates = Array.from(
+    new Set(
+      data
+        .map((row) => String(row?.payload?.service_area_label || row?.payload?.service_area || "").trim())
+        .filter(Boolean)
+    )
+  ).sort((a, b) => a.localeCompare(b));
+
+  if (serviceAreaFilter) {
+    data = filterByServiceArea(data, serviceAreaFilter);
+  }
+
+  const pageViews = data.filter((row) => row.event_type === "page_view");
+  const heartbeatEvents = data.filter((row) => row.event_type === "heartbeat");
+  const uniqueVisitors = new Set(data.map((row) => row.visitor_id).filter(Boolean)).size;
+  const uniqueSessions = new Set(data.map((row) => row.session_id).filter(Boolean)).size;
+
+  const sessionJourneys = summarizeJourneys(data);
+  const abandoned = summarizeAbandoned(data);
+  const liveOnline = summarizeLiveOnline(sessionJourneys, data);
+
+  return {
+    ok: true,
+    settings,
+    generated_at: new Date().toISOString(),
+    days,
+    window: {
+      start_at: since,
+      end_at: new Date().toISOString()
+    },
+    summary: {
+      events: data.length,
+      page_views: pageViews.length,
+      unique_visitors: uniqueVisitors,
+      unique_sessions: uniqueSessions,
+      abandoned_sessions: abandoned.length,
+      live_online_sessions: liveOnline.length,
+      avg_engagement_seconds: heartbeatEvents.length
+        ? Math.round(
+            heartbeatEvents.reduce((sum, row) => sum + Number(row?.payload?.duration_ms || 0), 0) /
+              heartbeatEvents.length /
+              1000
+          )
+        : 0,
+      booking_starts: countTrafficEvents(data, (row) => row.event_type === "checkout_started" || row.checkout_state === "started"),
+      booking_completions: countTrafficEvents(data, (row) => row.event_type === "checkout_completed" || row.checkout_state === "completed")
+    },
+    top_pages: summarizeCounts(pageViews.map((row) => row.page_path || "/")),
+    top_countries: summarizeCounts(data.map((row) => row.country || "Unknown")),
+    top_regions: summarizeCounts(data.map((row) => row?.payload?.region || "Unknown")),
+    top_cities: summarizeCounts(
+      data.map((row) => {
+        const city = row?.payload?.city || "";
+        const region = row?.payload?.region || "";
+        return city ? `${city}${region ? `, ${region}` : ""}` : "Unknown";
+      })
+    ),
+    top_devices: summarizeCounts(data.map((row) => row?.payload?.device_type || "Unknown")),
+    top_referrers: summarizeCounts(data.map((row) => row.referrer || "Direct")),
+    top_actions: summarizeCounts(
+      data
+        .filter((row) => !["heartbeat", "page_focus", "page_exit"].includes(row.event_type))
+        .map((row) => row.event_type || "unknown")
+    ),
+    top_service_areas: summarizeCounts(
+      data.map((row) => row?.payload?.service_area_label || row?.payload?.service_area || "").filter(Boolean)
+    ),
+    service_area_options: serviceAreaCandidates,
+    selected_service_area: serviceAreaFilter || null,
+    funnel: summarizeBookingFunnel(data),
+    checkout_states: summarizeCounts(data.map((row) => row.checkout_state || "").filter(Boolean)),
+    reports: {
+      daily: summarizeTrafficByPeriod(data, "day"),
+      weekly: summarizeTrafficByPeriod(data, "week"),
+      monthly: summarizeTrafficByPeriod(data, "month"),
+      yearly: summarizeTrafficByPeriod(data, "year")
+    },
+    daily_traffic: summarizeTrafficByPeriod(data, "day"),
+    session_journeys: sessionJourneys.slice(0, 50),
+    live_online_sessions: liveOnline.slice(0, 50),
+    cart_snapshots: summarizeCartSnapshots(data).slice(0, 50),
+    recent_actions: summarizeRecentActions(data).slice(0, 50),
+    abandoned_checkouts: abandoned.slice(0, 50),
+    source: {
+      mode: "raw_events"
+    }
+  };
+}
+
+async function loadRawSupplement(env, days, serviceAreaFilter) {
+  const since = new Date(Date.now() - days * 86400000).toISOString();
+  const res = await fetch(
+    `${env.SUPABASE_URL}/rest/v1/site_activity_events?select=id,event_type,page_path,country,session_id,visitor_id,referrer,checkout_state,created_at,payload&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=10000`,
+    { headers: serviceHeaders(env) }
+  );
+  if (!res.ok) {
+    throw new Error(`Could not load recent analytics supplement. ${await res.text()}`);
+  }
+  let rows = normalizeArray(await res.json().catch(() => []));
+  if (serviceAreaFilter) rows = filterByServiceArea(rows, serviceAreaFilter);
+
+  const journeys = summarizeJourneys(rows);
+  const abandoned = summarizeAbandoned(rows);
+  const liveOnline = summarizeLiveOnline(journeys, rows);
+  const heartbeatEvents = rows.filter((row) => row.event_type === "heartbeat");
+
+  return {
+    sessionJourneys: journeys,
+    abandoned,
+    liveOnline,
+    cartSnapshots: summarizeCartSnapshots(rows),
+    recentActions: summarizeRecentActions(rows),
+    avgEngagementSeconds: heartbeatEvents.length
+      ? Math.round(heartbeatEvents.reduce((sum, row) => sum + Number(row?.payload?.duration_ms || 0), 0) / heartbeatEvents.length / 1000)
+      : 0
+  };
+}
+
+function normalizeArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function normalizePeriodRows(rows) {
+  return [...rows]
+    .sort((a, b) => String(a.period_start || a.period_key || "").localeCompare(String(b.period_start || b.period_key || "")))
+    .map((row) => ({
+      period_key: row.period_key,
+      label: row.period_type === "week" ? `${row.period_key} (${String(row.period_start || "").slice(0, 10)})` : row.period_key,
+      period_start: row.period_start,
+      period_end: row.period_end,
+      events: Number(row.events || 0),
+      page_views: Number(row.page_views || 0),
+      unique_visitors: Number(row.unique_visitors || 0),
+      unique_sessions: Number(row.unique_sessions || 0),
+      booking_starts: Number(row.booking_starts || 0),
+      booking_completions: Number(row.booking_completions || 0),
+      cart_snapshots: Number(row.cart_snapshots || 0)
+    }));
+}
+
+function summarizeDimensionCounts(rows, type) {
+  const map = new Map();
+  for (const row of rows) {
+    if (String(row?.dimension_type || "") !== type) continue;
+    const label = String(row?.dimension_value || "Unknown");
+    map.set(label, (map.get(label) || 0) + Number(row?.count || 0));
+  }
+  return [...map.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 20)
+    .map(([label, count]) => ({ label, count }));
+}
+
+function sumDimensionCount(rows, type) {
+  return rows.reduce((sum, row) => sum + (String(row?.dimension_type || "") === type ? Number(row?.count || 0) : 0), 0);
+}
+
+function summarizeFunnelRows(rows) {
+  const total = {
+    step_1_views: 0,
+    step_2_views: 0,
+    step_3_views: 0,
+    step_4_views: 0,
+    step_5_views: 0,
+    service_area_picks: 0,
+    date_picks: 0,
+    package_picks: 0,
+    addon_toggles: 0,
+    customer_continue: 0,
+    checkout_started: 0,
+    checkout_completed: 0
+  };
+  for (const row of rows) {
+    for (const key of Object.keys(total)) total[key] += Number(row?.[key] || 0);
+  }
+  return total;
+}
+
+function sumMetric(rows, field) {
+  return rows.reduce((sum, row) => sum + Number(row?.[field] || 0), 0);
+}
+
+function filterByServiceArea(rows, serviceAreaFilter) {
+  return rows.filter(
+    (row) => String(row?.payload?.service_area_label || row?.payload?.service_area || "").trim() === serviceAreaFilter
+  );
 }
 
 function countTrafficEvents(rows, predicate) {
@@ -178,9 +395,7 @@ function summarizeAbandoned(rows) {
   const journeys = summarizeJourneys(rows);
   return journeys
     .filter((journey) => {
-      const started = journey.events.some(
-        (event) => event.type === "checkout_started" || event.checkout_state === "started"
-      );
+      const started = journey.events.some((event) => event.type === "checkout_started" || event.checkout_state === "started");
       const completed = journey.events.some(
         (event) => event.type === "checkout_completed" || event.checkout_state === "completed"
       );
