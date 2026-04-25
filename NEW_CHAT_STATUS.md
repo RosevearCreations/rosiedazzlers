@@ -1,11 +1,18 @@
-> Documentation synchronized April 24, 2026: analytics rollup foundation, admin rollup refresh path, live route-loop repair for /services and /pricing, sanity-check refresh, and local visibility review added.
+> Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
 
-## April 24, 2026 analytics rollup + visibility review pass
-- Added pre-aggregated analytics rollup tables plus a new `/api/admin/analytics_rollups_refresh` path.
-- `/api/admin/analytics_overview` now prefers rollups for daily / weekly / monthly / yearly reporting and falls back to raw-event reporting when rollups are empty.
-- `admin-analytics.html` now includes a rollup refresh button and reports which source mode was used.
-- `_redirects` was rewritten to explicit html-backed clean-route rewrites after a live sanity check found redirect loops on `/services` and `/pricing`.
-- Added `LOCAL_VISIBILITY_REVIEW_2026-04-24.md` with competitor review notes and the next local-search visibility moves.
+## April 25, 2026 route hardening + landing-page visibility pass
+- Replaced the fragile clean-route dependency on `_redirects` with real folder-backed `index.html` route pages for the main public and admin screens to prevent recurring Cloudflare Pages redirect loops.
+- Added dedicated landing pages for ceramic coating, pet hair removal, odor removal, headlight restoration, and paint correction.
+- Added reusable recent-work proof mounts from the public before/after gallery and surfaced review proof / service-area wording more prominently on home, services, pricing, and the new landing pages.
+- Updated `sitemap.xml`, smoke/static checks, and the Markdown handoff set so the next chat starts from the live route-fix + visibility-expansion state.
+- No database DDL was added in this pass; `SUPABASE_SCHEMA.sql` was synchronized as a no-DDL documentation refresh.
+
+## Marked next best steps
+- Keep the folder-backed clean-route approach as the live deployment baseline unless a future router replaces it completely.
+- Build town-focused landing pages next for the strongest search towns first: Tillsonburg, Woodstock / Ingersoll, Simcoe / Delhi, and Port Dover.
+- Keep recent work, review proof, and social freshness visible on the public entry pages so new visitors see current activity before they contact or book.
+- Connect Google Search Console and Google Business Profile performance metrics later as a separate reporting layer once the internal rollups are stable.
+- Treat analytics rollup totals as operational counts when summed across buckets until a true cross-window de-duplication strategy is added.
 
 # NEW CHAT STATUS
 

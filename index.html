@@ -21,7 +21,7 @@
   <meta property="og:title" content="Rosie Dazzlers | Mobile Auto Detailing Norfolk & Oxford" />
   <meta property="og:description" content="Mobile auto detailing for Tillsonburg, Woodstock, Simcoe, Delhi, Port Dover, and nearby Oxford and Norfolk communities. View services, transparent pricing, gift certificates, and online booking with deposit." />
   <meta name="robots" content="index,follow" />
-  <link rel="stylesheet" href="/assets/site.css?v=20260409seo1" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260425visibility1" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -124,6 +124,44 @@
 
     
 
+    <section class="section panel">
+      <h2 style="margin:0 0 10px">Special detailing services</h2>
+      <p class="muted">These are the highest-intent services local customers often search for directly. Each now has its own landing page so pricing questions, booking intent, and local wording can be clearer.</p>
+      <div class="service-link-grid" style="margin-top:12px">
+        <article class="service-link-card"><h3>Ceramic coating</h3><p class="muted">Protection-focused page for customers comparing coatings, gloss, upkeep, and inspection-based quoting.</p><a class="btn ghost small" href="/ceramic-coating">Open page</a></article>
+        <article class="service-link-card"><h3>Pet hair removal</h3><p class="muted">Interior-focused page for stubborn pet hair, fabric cleanup, and quote expectations before arrival.</p><a class="btn ghost small" href="/pet-hair-removal">Open page</a></article>
+        <article class="service-link-card"><h3>Odor removal</h3><p class="muted">Smoke, pet, and spill odor page with source-treatment wording instead of a generic package mention.</p><a class="btn ghost small" href="/odor-removal">Open page</a></article>
+        <article class="service-link-card"><h3>Headlight restoration</h3><p class="muted">Dedicated page for cloudy headlights, night visibility, and before/after service intent.</p><a class="btn ghost small" href="/headlight-restoration">Open page</a></article>
+        <article class="service-link-card"><h3>Paint correction</h3><p class="muted">Dedicated page for swirl marks, gloss recovery, and inspection-led quoting before booking.</p><a class="btn ghost small" href="/paint-correction">Open page</a></article>
+      </div>
+    </section>
+
+    <section class="section panel">
+      <h2 style="margin:0 0 10px">Recent work and visible proof</h2>
+      <p class="muted">Keep fresh before/after work, review proof, and social updates visible so local visitors can see current activity before they book.</p>
+      <div data-recent-work-mount style="margin-top:12px"></div>
+      <div class="hr"></div>
+      <div class="proof-grid">
+        <article class="proof-card">
+          <h3>Review proof</h3>
+          <img data-reviews alt="Rosie Dazzlers reviews" class="proof-media" />
+        </article>
+        <article class="proof-card">
+          <h3>Where we work most often</h3>
+          <p class="muted">Tillsonburg, Woodstock, Ingersoll, Norwich, Simcoe, Delhi, Courtland, Port Dover, and nearby Oxford / Norfolk communities.</p>
+          <ul class="muted-list">
+            <li>Local wording now lives on the main public pages and the new special-service pages.</li>
+            <li>Booking still checks live service-area restrictions before checkout.</li>
+            <li>Gallery and socials are linked from the pages customers actually land on first.</li>
+          </ul>
+          <div class="cta-row" style="margin-top:10px">
+            <a class="btn ghost small" href="/gallery">Gallery</a>
+            <a class="btn ghost small" href="/contact">Service area questions</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <section class="section grid cards">
       <article class="card">
         <h2 style="margin-top:0">See exact live availability faster</h2>
@@ -158,7 +196,9 @@
 
   <script type="module">
     import { renderSocialFeedMounts } from "/assets/social-feed.js";
+    import { renderRecentWorkMounts } from "/assets/recent-work.js";
     renderSocialFeedMounts();
+    renderRecentWorkMounts(3);
   </script>
 
   <script type="module" src="/assets/chrome.js?v=20260311i"></script>

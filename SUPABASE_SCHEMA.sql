@@ -1,3 +1,4 @@
+-- Schema synchronization note: April 25, 2026 — no new DDL in this pass. Docs refreshed for folder-backed routes, special-service landing pages, recent-work proof mounts, and unchanged analytics rollup schema.
 -- April 23, 2026 live vehicle-size guide + chart helper pass.
 -- Added live SVG vehicle size guide generation beside the existing live price and package-details charts.
 -- /pricing and /services now prefer live chart renders for price, details, and size guidance, with packaged image assets retained only as fallback/reference.

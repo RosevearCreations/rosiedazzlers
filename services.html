@@ -19,7 +19,7 @@
   <link rel="canonical" href="https://rosiedazzlers.ca/services" />
   <meta property="og:title" content="Mobile Auto Detailing Services | Rosie Dazzlers" />
   <meta property="og:description" content="See Rosie Dazzlers detailing packages, what is included, add-ons, and service options for small, mid-size, and oversized vehicles." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260423livecharts2" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260425visibility1" />
   <script type="application/ld+json" id="servicesSchema">
   {
     "@context": "https://schema.org",
@@ -147,6 +147,40 @@
       </div>
     </div>
 
+
+    <div class="section panel">
+      <h2 style="margin-top:0">Special detailing landing pages</h2>
+      <p class="muted">These pages target the specific services people search for most often instead of forcing everything through one broad services page.</p>
+      <div class="service-link-grid" style="margin-top:12px">
+        <article class="service-link-card"><h3>Ceramic coating</h3><p class="muted">Protection, gloss, and coating preparation.</p><a class="btn ghost small" href="/ceramic-coating">Open page</a></article>
+        <article class="service-link-card"><h3>Pet hair removal</h3><p class="muted">Embedded pet hair, fabric cleanup, and interior recovery.</p><a class="btn ghost small" href="/pet-hair-removal">Open page</a></article>
+        <article class="service-link-card"><h3>Odor removal</h3><p class="muted">Source-focused interior deodorizing and treatment planning.</p><a class="btn ghost small" href="/odor-removal">Open page</a></article>
+        <article class="service-link-card"><h3>Headlight restoration</h3><p class="muted">Cloudy lens cleanup and clarity recovery.</p><a class="btn ghost small" href="/headlight-restoration">Open page</a></article>
+        <article class="service-link-card"><h3>Paint correction</h3><p class="muted">Swirl reduction, gloss recovery, and inspection-led quoting.</p><a class="btn ghost small" href="/paint-correction">Open page</a></article>
+      </div>
+    </div>
+
+    <div class="section panel">
+      <h2 style="margin-top:0">Recent work, reviews, and local service areas</h2>
+      <p class="muted">Show current work and clear service-area wording close to the booking CTA so local visitors do not have to dig for proof or location details.</p>
+      <div data-recent-work-mount style="margin-top:12px"></div>
+      <div class="hr"></div>
+      <div class="proof-grid">
+        <article class="proof-card">
+          <h3>Review proof</h3>
+          <img data-reviews alt="Rosie Dazzlers reviews" class="proof-media" />
+        </article>
+        <article class="proof-card">
+          <h3>Strongest service-area wording</h3>
+          <p class="muted">Tillsonburg, Woodstock, Ingersoll, Norwich, Simcoe, Delhi, Courtland, Port Dover, and nearby Oxford / Norfolk County communities.</p>
+          <div class="cta-row" style="margin-top:10px">
+            <a class="btn ghost small" href="/pricing#booking-planner">Check live availability</a>
+            <a class="btn ghost small" href="/contact">Ask about your town</a>
+          </div>
+        </article>
+      </div>
+    </div>
+
     <div class="footer" data-footer></div>
   </div>
 
@@ -175,6 +209,7 @@
       buildServicesCatalogSchema,
       applyJsonLdScript
     } from "/assets/pricing-catalog-client.js?v=20260423livecharts2";
+    import { renderRecentWorkMounts } from "/assets/recent-work.js";
 
     const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
@@ -400,6 +435,7 @@
     }
 
     (function fromQuery(){
+      renderRecentWorkMounts(3);
       const p = new URLSearchParams(location.search);
       const size = (p.get("size") || "").trim();
       if (["small","mid","oversize"].includes(size)) {

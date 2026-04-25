@@ -1,3 +1,19 @@
+> Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
+
+## April 25, 2026 route hardening + landing-page visibility pass
+- Replaced the fragile clean-route dependency on `_redirects` with real folder-backed `index.html` route pages for the main public and admin screens to prevent recurring Cloudflare Pages redirect loops.
+- Added dedicated landing pages for ceramic coating, pet hair removal, odor removal, headlight restoration, and paint correction.
+- Added reusable recent-work proof mounts from the public before/after gallery and surfaced review proof / service-area wording more prominently on home, services, pricing, and the new landing pages.
+- Updated `sitemap.xml`, smoke/static checks, and the Markdown handoff set so the next chat starts from the live route-fix + visibility-expansion state.
+- No database DDL was added in this pass; `SUPABASE_SCHEMA.sql` was synchronized as a no-DDL documentation refresh.
+
+## Marked next best steps
+- Keep the folder-backed clean-route approach as the live deployment baseline unless a future router replaces it completely.
+- Build town-focused landing pages next for the strongest search towns first: Tillsonburg, Woodstock / Ingersoll, Simcoe / Delhi, and Port Dover.
+- Keep recent work, review proof, and social freshness visible on the public entry pages so new visitors see current activity before they contact or book.
+- Connect Google Search Console and Google Business Profile performance metrics later as a separate reporting layer once the internal rollups are stable.
+- Treat analytics rollup totals as operational counts when summed across buckets until a true cross-window de-duplication strategy is added.
+
 # Rosie Dazzlers — Local Visibility Review (April 24, 2026)
 
 ## What this note is for
@@ -130,3 +146,15 @@ Example detailing sites reviewed:
 - https://mobileautoshine.ca/
 - https://www.precisiondetailingnorfolk.com/
 - https://jccardetailing.com/
+
+## April 25, 2026 practical implementation note
+Implemented in code this pass:
+- dedicated landing pages for ceramic coating, pet hair removal, odor removal, headlight restoration, and paint correction
+- recent-work proof mounts on home, services, pricing, and those new landing pages
+- stronger local town wording on the public entry pages
+- folder-backed route pages replacing the fragile `_redirects` dependency for the main clean URLs
+
+Still the next best visibility steps after deploy:
+- add town-specific landing pages for Tillsonburg, Woodstock / Ingersoll, Simcoe / Delhi, and Port Dover
+- connect Search Console performance and Business Profile metrics as separate Google-side reporting once internal rollups are stable
+- keep loading new before/after pairs and recent social links from App Management so freshness stays visible without code edits

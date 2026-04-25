@@ -18,7 +18,7 @@
   <link rel="canonical" href="https://rosiedazzlers.ca/pricing" />
   <meta property="og:title" content="Mobile Auto Detailing Pricing | Rosie Dazzlers" />
   <meta property="og:description" content="Transparent Rosie Dazzlers pricing for premium wash, basic detail, complete detail, interior detail, exterior detail, and add-ons." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260423livecharts2" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260425visibility1" />
   <script type="application/ld+json" id="pricingSchema">
   {
     "@context": "https://schema.org",
@@ -251,6 +251,30 @@
       </div>
     </div>
 
+
+    <section class="section panel">
+      <h2 style="margin-top:0">High-intent service pages</h2>
+      <p class="muted">These dedicated pages are now the clearest place to target special-service searches while still feeding into the same booking and contact flow.</p>
+      <div class="service-link-grid" style="margin-top:12px">
+        <article class="service-link-card"><h3>Ceramic coating</h3><a class="btn ghost small" href="/ceramic-coating">Open page</a></article>
+        <article class="service-link-card"><h3>Pet hair removal</h3><a class="btn ghost small" href="/pet-hair-removal">Open page</a></article>
+        <article class="service-link-card"><h3>Odor removal</h3><a class="btn ghost small" href="/odor-removal">Open page</a></article>
+        <article class="service-link-card"><h3>Headlight restoration</h3><a class="btn ghost small" href="/headlight-restoration">Open page</a></article>
+        <article class="service-link-card"><h3>Paint correction</h3><a class="btn ghost small" href="/paint-correction">Open page</a></article>
+      </div>
+    </section>
+
+    <section class="section panel">
+      <h2 style="margin-top:0">Recent work and local proof</h2>
+      <p class="muted">Pricing converts better when visitors can immediately see recent jobs, review proof, and the towns you actually serve.</p>
+      <div data-recent-work-mount style="margin-top:12px"></div>
+      <div class="hr"></div>
+      <div class="proof-grid">
+        <article class="proof-card"><h3>Review proof</h3><img data-reviews alt="Rosie Dazzlers reviews" class="proof-media" /></article>
+        <article class="proof-card"><h3>Common service areas</h3><p class="muted">Tillsonburg, Woodstock, Ingersoll, Norwich, Simcoe, Delhi, Courtland, Port Dover, and nearby Oxford / Norfolk communities.</p><div class="cta-row" style="margin-top:10px"><a class="btn ghost small" href="/gallery">Gallery</a><a class="btn ghost small" href="/contact">Ask about travel</a></div></article>
+      </div>
+    </section>
+
     <div class="footer" data-footer></div>
   </div>
 
@@ -277,11 +301,13 @@
       buildPricingOfferCatalogSchema,
       applyJsonLdScript
     } from "/assets/pricing-catalog-client.js?v=20260423livecharts2";
+    import { renderRecentWorkMounts } from "/assets/recent-work.js";
     import { loadGrowthSettings } from "/assets/growth-settings.js";
 
     const FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const qs = (s)=>document.querySelector(s);
     let chartMap = new Map();
+    renderRecentWorkMounts(3);
     let plannerState = null;
 
     function qsAll(s){ return Array.from(document.querySelectorAll(s)); }
