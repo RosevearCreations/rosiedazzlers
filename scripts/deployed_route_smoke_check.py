@@ -11,7 +11,8 @@ from html.parser import HTMLParser
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DEFAULT_ROUTES = [
     '/', '/services', '/pricing', '/about', '/contact', '/book', '/gear', '/consumables', '/gifts', '/videos', '/privacy', '/terms', '/waiver', '/login', '/my-account', '/progress',
-    '/admin-login', '/admin', '/admin-booking', '/admin-blocks', '/admin-jobsite', '/admin-staff', '/admin-progress', '/admin-live', '/admin-recovery', '/admin-accounting', '/admin-assign'
+    '/admin-login', '/admin', '/admin-booking', '/admin-blocks', '/admin-jobsite', '/admin-staff', '/admin-progress', '/admin-live', '/admin-recovery', '/admin-accounting', '/admin-assign',
+    '/ceramic-coating', '/pet-hair-removal', '/odor-removal', '/headlight-restoration', '/paint-correction'
 ]
 
 class H1Parser(HTMLParser):

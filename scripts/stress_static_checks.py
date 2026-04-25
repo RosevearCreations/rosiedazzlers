@@ -9,7 +9,8 @@ from html.parser import HTMLParser
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PUBLIC_PAGES = [
-    'index.html','about.html','services.html','pricing.html','book.html','contact.html','privacy.html','terms.html','videos.html','gear.html','consumables.html','gifts.html','complete.html','waiver.html','progress.html','login.html','my-account.html'
+    'index.html','about.html','services.html','pricing.html','book.html','contact.html','privacy.html','terms.html','videos.html','gear.html','consumables.html','gifts.html','complete.html','waiver.html','progress.html','login.html','my-account.html',
+    'ceramic-coating/index.html','pet-hair-removal/index.html','odor-removal/index.html','headlight-restoration/index.html','paint-correction/index.html'
 ]
 CHECK_JS = [
     'assets/admin-auth.js',
@@ -25,9 +26,10 @@ CHECK_JS = [
     'functions/api/_lib/analytics-rollups.js',
     'functions/api/admin/analytics_overview.js',
     'functions/api/admin/analytics_rollups_refresh.js',
+    'assets/recent-work.js',
 ]
 
-CORE_LOCAL_SEO_PAGES = ['index.html', 'services.html', 'pricing.html', 'about.html', 'contact.html']
+CORE_LOCAL_SEO_PAGES = ['index.html', 'services.html', 'pricing.html', 'about.html', 'contact.html', 'ceramic-coating/index.html', 'pet-hair-removal/index.html', 'odor-removal/index.html', 'headlight-restoration/index.html', 'paint-correction/index.html']
 
 CHECK_HTML = [
     'admin-progress.html',
@@ -141,30 +143,32 @@ def check_route_collisions():
         sibling_dir = ROOT / html_path.relative_to(ROOT).with_suffix('')
         idx = sibling_dir / 'index.html'
         if idx.exists():
-            collisions.append(f"{html_path.relative_to(ROOT)} <-> {idx.relative_to(ROOT)}")
+            src = html_path.read_text(encoding='utf-8', errors='ignore')
+            dup = idx.read_text(encoding='utf-8', errors='ignore')
+            if src != dup:
+                collisions.append(f"{html_path.relative_to(ROOT)} <-> {idx.relative_to(ROOT)}")
     if collisions:
-        fail("route collisions detected: " + "; ".join(collisions))
-
+        fail("route collisions detected with non-identical wrapper pages: " + "; ".join(collisions))
 
 
 def check_redirect_rules():
     redirects = (ROOT / '_redirects').read_text(encoding='utf-8', errors='ignore')
     risky = [
         '/services/ /services 301',
-        '/pricing/ /pricing 301'
+        '/pricing/ /pricing 301',
+        '/services /services.html 200',
+        '/pricing /pricing.html 200'
     ]
     for needle in risky:
         if needle in redirects:
-            fail(f'_redirects still contains loop-prone rule: {needle}')
-    required = [
-        '/services /services.html 200',
-        '/pricing /pricing.html 200',
-        '/book /book.html 200'
+            fail(f'_redirects still contains route rule not allowed in wrapper-backed mode: {needle}')
+    required_wrappers = [
+        'services/index.html', 'pricing/index.html', 'about/index.html', 'contact/index.html', 'book/index.html',
+        'gallery/index.html', 'gifts/index.html', 'videos/index.html', 'maintenance-plan/index.html'
     ]
-    for needle in required:
-        if needle not in redirects:
-            fail(f'_redirects missing required clean-route rewrite: {needle}')
-
+    for rel in required_wrappers:
+        if not (ROOT / rel).exists():
+            fail(f'missing wrapper-backed route page: {rel}')
 def check_public_catalog_helper_usage():
     helper = (ROOT / 'assets/pricing-catalog-client.js').read_text()
     if 'loadPricingCatalogClient' not in helper or 'normalizePricingCatalog' not in helper:
