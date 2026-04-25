@@ -326,3 +326,7 @@ Pass 28 sync — 2026-04-20
 - public SEO copy was tightened again on `services.html`, `pricing.html`, `contact.html`, and `gallery.html` with clearer local-search wording while preserving a single H1 per exposed page
 - schema/migration sync for this pass lives in `sql/2026-04-22_vehicle_media_merchandising_score.sql`, `sql/2026-04-21_vehicle_media_gallery_geofence.sql`, and `SUPABASE_SCHEMA.sql`
 - next-step direction is still the same operational split: local scoring + EXIF-aware orientation + guide-led framing now, optional cloud smart-assist later only if you want object recognition or damage-style analysis
+
+## Pass 27 sync — 2026-04-24
+- Remember: the current canonical schedule schema is still `date_blocks(blocked_date)` plus `slot_blocks(blocked_date, slot)`. Compatibility endpoints now normalize around that shape instead of trying to write newer fields that do not exist yet.
+- The analytics page is now the office reporting surface. It exposes grouped daily/weekly/monthly/yearly traffic rollups from `site_activity_events` and CSV exports without a separate reporting table.

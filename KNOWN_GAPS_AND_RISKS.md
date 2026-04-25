@@ -646,3 +646,8 @@ Pass 28 sync — 2026-04-20
 - public SEO copy was tightened again on `services.html`, `pricing.html`, `contact.html`, and `gallery.html` with clearer local-search wording while preserving a single H1 per exposed page
 - schema/migration sync for this pass lives in `sql/2026-04-22_vehicle_media_merchandising_score.sql`, `sql/2026-04-21_vehicle_media_gallery_geofence.sql`, and `SUPABASE_SCHEMA.sql`
 - next-step direction is still the same operational split: local scoring + EXIF-aware orientation + guide-led framing now, optional cloud smart-assist later only if you want object recognition or damage-style analysis
+
+## Pass 27 sync — 2026-04-24
+- Reporting now covers daily/weekly/monthly/yearly rollups, but it is still computed directly from `site_activity_events` at request time. This is correct for the current build, but larger traffic volumes should eventually move to pre-aggregated rollup storage.
+- Admin schedule controls are now compatibility-safe against the current legacy schedule schema, but the repository still contains both older and newer schedule endpoint families. Long term, keep only one canonical contract to reduce future drift.
+- Admin layout drift is materially better after this pass, but exact visual verification on the deployed site is still needed for `admin-accounting.html`, `admin-live.html`, and `admin-blocks.html` because browser date-control rendering can still vary slightly by platform.

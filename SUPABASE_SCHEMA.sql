@@ -179,6 +179,9 @@ create table if not exists public.booking_staff_assignments (
   notes text null
 );
 
+-- 2026-04-24 pass sync:
+-- Schedule blocks still use the legacy `blocked_date` / `slot` schema.
+-- Current compatibility endpoints normalize around this shape instead of requiring newer `block_date`, `slot_code`, or `updated_at` columns.
 create table if not exists public.date_blocks (id uuid primary key default gen_random_uuid(), blocked_date date not null unique, reason text null, created_at timestamptz not null default now());
 create table if not exists public.slot_blocks (id uuid primary key default gen_random_uuid(), blocked_date date not null, slot text not null check (slot in ('AM','PM')), reason text null, created_at timestamptz not null default now(), unique (blocked_date, slot));
 create table if not exists public.booking_events (id uuid primary key default gen_random_uuid(), booking_id uuid not null references public.bookings(id) on delete cascade, created_at timestamptz not null default now(), event_type text not null, event_note text null, actor_name text null, payload jsonb not null default '{}'::jsonb);
@@ -294,6 +297,9 @@ create table if not exists public.customer_auth_tokens (
   used_at timestamptz null,
   payload jsonb not null default '{}'::jsonb
 );
+-- Analytics reporting notes:
+-- Daily / weekly / monthly / yearly reports are computed from `public.site_activity_events` at request time in `/api/admin/analytics_overview`.
+-- No rollup table or materialized reporting view was added in this pass.
 create table if not exists public.site_activity_events (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),

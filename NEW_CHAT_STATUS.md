@@ -27,3 +27,8 @@ This pass continued the public pricing/SEO work by moving the vehicle size guide
 - keep polishing mobile admin layout where dense pricing rows still stack tightly on small screens
 
 > Last synchronized: April 23, 2026. Reviewed during the live vehicle-size guide, App Management chart helper, SEO/static-check carry-forward, and docs/schema synchronization pass.
+
+## Pass 27 sync — 2026-04-24
+- Latest pass finished: admin schedule block save error repaired, admin form/menu CSS drift reduced, and analytics expanded into a real reporting page with daily/weekly/monthly/yearly traffic exports.
+- No DB migration to run in this pass.
+- Best next chat focus: deployed visual QA for accounting/blocks/live screens, then optional report scheduling / rollup storage if raw analytics volume grows.
