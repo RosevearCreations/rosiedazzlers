@@ -18,7 +18,7 @@
   <link rel="canonical" href="https://rosiedazzlers.ca/pricing" />
   <meta property="og:title" content="Mobile Auto Detailing Pricing | Rosie Dazzlers" />
   <meta property="og:description" content="Transparent Rosie Dazzlers pricing for premium wash, basic detail, complete detail, interior detail, exterior detail, and add-ons." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260422livecharts1" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260423livecharts2" />
   <script type="application/ld+json" id="pricingSchema">
   {
     "@context": "https://schema.org",
@@ -110,7 +110,7 @@
       <div class="panel chart-wrap">
         <h2 style="margin-top:0">Vehicle Price Chart</h2>
         <img class="img chart-preview" data-chart-key="Vehicle Price Chart 2025" alt="Vehicle Price Chart 2025" src="" />
-        <div class="chart-note">Generated live from the current pricing catalog when available. Generated live from the current package/service matrix when available. Packaged size-reference chart. Hover to enlarge on desktop. Tap to open on mobile.</div>
+        <div class="chart-note">Generated live from the current pricing catalog when available. Hover to enlarge on desktop. Tap to open on mobile.</div>
       </div>
 
       <div class="panel chart-wrap">
@@ -124,7 +124,7 @@
       <div class="panel chart-wrap">
         <h2 style="margin-top:0">Vehicle Size Chart</h2>
         <img class="img chart-preview" data-chart-key="Vehicle Size Chart" alt="Vehicle Size Chart" src="" />
-        <div class="chart-note">Hover to enlarge on desktop. Tap to open on mobile.</div>
+        <div class="chart-note">Generated live from the current size guide. Hover to enlarge on desktop. Tap to open on mobile.</div>
       </div>
     </div>
 
@@ -273,9 +273,10 @@
       publicRequirements,
       buildLivePricingChartDataUri,
       buildLiveServiceDetailsChartDataUri,
+      buildLiveVehicleSizeChartDataUri,
       buildPricingOfferCatalogSchema,
       applyJsonLdScript
-    } from "/assets/pricing-catalog-client.js?v=20260422livecharts1";
+    } from "/assets/pricing-catalog-client.js?v=20260423livecharts2";
     import { loadGrowthSettings } from "/assets/growth-settings.js";
 
     const FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
@@ -483,10 +484,11 @@
       renderRequirementTags(data);
       const liveVehiclePriceChart = buildLivePricingChartDataUri(data) || chartUrl(data, "Vehicle Price Chart 2025");
       const liveServiceDetailsChart = buildLiveServiceDetailsChartDataUri(data) || chartUrl(data, "Package Service Details Chart");
+      const liveVehicleSizeChart = buildLiveVehicleSizeChartDataUri(data) || chartUrl(data, "Vehicle Size Chart");
       chartMap = new Map([
         ["Vehicle Price Chart 2025", liveVehiclePriceChart],
         ["Package Service Details Chart", liveServiceDetailsChart],
-        ["Vehicle Size Chart", chartUrl(data, "Vehicle Size Chart")]
+        ["Vehicle Size Chart", liveVehicleSizeChart]
       ]);
       applyJsonLdScript('pricingSchema', buildPricingOfferCatalogSchema(data, 'https://rosiedazzlers.ca/pricing'));
       wireCharts();
