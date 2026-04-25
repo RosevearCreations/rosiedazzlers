@@ -1,3 +1,4 @@
+<!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
 
 ## April 25, 2026 route hardening + landing-page visibility pass
@@ -546,3 +547,7 @@ Pass 28 sync — 2026-04-20
 - Analytics now has a rollup-refresh path. Read `sql/2026-04-24_site_activity_rollups.sql`, `functions/api/admin/analytics_rollups_refresh.js`, and `functions/api/admin/analytics_overview.js` together.
 - The live site sanity check caught redirect loops on `/services` and `/pricing`; `_redirects` was rewritten to explicit html-backed clean-route rewrites.
 - The best next public growth work is documented in `LOCAL_VISIBILITY_REVIEW_2026-04-24.md`.
+
+## 2026-04-25 context refresh
+Recent pass highlights: admin block time frame save + calendar, pricing embed-height stabilization, package/add-on card overflow hardening, and new town-focused landing pages.
+

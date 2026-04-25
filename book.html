@@ -93,19 +93,19 @@
     .service-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:stretch}
     .service-card{
       display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:1px solid rgba(255,255,255,.08);min-width:0;overflow:hidden;
-      border-radius:18px;padding:12px;background:rgba(255,255,255,.04);text-align:left
+      border-radius:18px;padding:12px;background:rgba(255,255,255,.04);text-align:left;width:100%;min-height:100%;box-sizing:border-box
     }
     .service-card strong,.service-card span{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
     .service-card.active{outline:2px solid #4d77ff}
-    .service-card img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px}
+    .service-card img{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;display:block}
     .addon-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .addon-card{
       display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:1px solid rgba(255,255,255,.08);min-width:0;overflow:hidden;
-      border-radius:18px;padding:12px;background:rgba(255,255,255,.04);text-align:left
+      border-radius:18px;padding:12px;background:rgba(255,255,255,.04);text-align:left;width:100%;min-height:100%;box-sizing:border-box
     }
     .addon-card strong,.addon-card span{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
     .addon-card.active{outline:2px solid #4d77ff}
-    .addon-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px}
+    .addon-thumb{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;display:block}
     .tag{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;font-size:.88rem;font-weight:700}
     .tag.ok{background:rgba(36,195,107,.15);color:#d7ffe8}
     .tag.warn{background:rgba(255,176,32,.18);color:#ffe6b3}
@@ -124,6 +124,8 @@
     body.is-embed .wizard-top{margin-top:0}
     body.is-embed .wizard-top .step-head .row a[href="/pricing"]{display:none}
     body.is-embed .wizard-shell{padding-bottom:0}
+    body.is-embed .panel, body.is-embed .card, body.is-embed .service-card, body.is-embed .addon-card{overflow:hidden}
+    body.is-embed .service-card strong, body.is-embed .service-card span, body.is-embed .addon-card strong, body.is-embed .addon-card span{display:block;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
     .sr-only{position:absolute;left:-9999px;opacity:0;pointer-events:none}
     @media (max-width:980px){
       .grid2,.grid3,.requirements-grid,.service-area-grid{grid-template-columns:1fr}

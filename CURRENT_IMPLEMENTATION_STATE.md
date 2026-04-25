@@ -1,3 +1,4 @@
+<!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
 
 ## April 25, 2026 route hardening + landing-page visibility pass
@@ -416,3 +417,9 @@ Pass 28 sync — 2026-04-20
 - a new admin endpoint rebuilds rollups from `site_activity_events` for the selected reporting window
 - `_redirects` was converted to explicit html-backed clean-route rewrites after the live sanity check surfaced looping on `/services` and `/pricing`
 - the next public growth wave is now documented in `LOCAL_VISIBILITY_REVIEW_2026-04-24.md`
+
+## 2026-04-25 implementation refresh
+- Admin Blocks now supports single-date block, single-slot block, bulk date-range block, month calendar status view, and quick date prefills from the calendar.
+- Public visibility layer now includes special-service landing pages plus four town-focused landing pages.
+- Pricing keeps the folder-backed route model and now has safer iframe sizing to prevent infinite growth while the embedded booking planner updates.
+

@@ -1,3 +1,4 @@
+<!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
 
 ## April 25, 2026 route hardening + landing-page visibility pass
@@ -157,3 +158,7 @@ Pass 28 sync — 2026-04-20
 
 ## New April 24, 2026 review file
 - `LOCAL_VISIBILITY_REVIEW_2026-04-24.md` — sanity-check findings, competitor/market review, and the next local visibility action list.
+
+## 2026-04-25 note
+Use DEVELOPMENT_ROADMAP.md, KNOWN_GAPS_AND_RISKS.md, CURRENT_IMPLEMENTATION_STATE.md, HANDOFF_NEXT_CHAT.md, and NEW_CHAT_STATUS.md first for the newest pass details.
+

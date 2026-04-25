@@ -1,3 +1,4 @@
+<!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
 
 ## April 25, 2026 route hardening + landing-page visibility pass
@@ -534,3 +535,11 @@ Pass 28 sync — 2026-04-20
 - run and validate the new analytics rollup tables + refresh endpoint
 - start public review-proof work and the first service-specific landing pages (ceramic coating, pet hair, odour removal)
 - begin town-level local SEO sections/pages for Tillsonburg, Woodstock, Simcoe, Delhi, and Port Dover
+
+## 2026-04-25 pass
+- Completed: admin block page now supports blocking a whole date range at once, plus an in-page calendar view that marks available dates green, full blocked dates red, and partial slot blocks amber.
+- Completed: pricing page embed growth was capped and stabilized to stop the endless-scroll behavior below the vehicle-identification area.
+- Completed: tighter card/iframe overflow handling for embedded package and add-on cards.
+- Completed: added town-focused landing pages for Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, and Port Dover.
+- Next best steps remain: keep folder-backed clean routes as baseline, keep recent work/review proof visible on entry pages, and connect Google-side reporting later through Search Console and Business Profile after internal rollups are stable.
+

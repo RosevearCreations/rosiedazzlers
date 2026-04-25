@@ -1,3 +1,4 @@
+<!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
 
 ## April 25, 2026 route hardening + landing-page visibility pass
@@ -421,3 +422,7 @@ Pass 28 sync — 2026-04-20
 
 ## April 24, 2026 schema-state note
 This pass added three analytics reporting tables: `public.site_activity_rollups`, `public.site_activity_dimension_daily_rollups`, and `public.site_activity_funnel_daily_rollups`. Raw events still land in `public.site_activity_events`; the rollup tables are derived reporting helpers.
+
+## 2026-04-25 note
+No schema changes this pass. Admin range blocking uses the existing date_blocks(blocked_date, reason) and slot_blocks(blocked_date, slot, reason) tables.
+
