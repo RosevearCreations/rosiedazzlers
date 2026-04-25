@@ -28,3 +28,8 @@ Rosie Dazzlers is a role-aware detailing operations platform with booking, depos
 - switched /pricing and /services to use the live size guide before the packaged fallback image
 - added an App Management live chart helper for preview/download of price, package-details, and size SVG charts
 - refreshed docs and schema notes with no DDL change in this pass
+
+## Pass 27 sync — 2026-04-24
+- Start by deployed-testing `admin-accounting.html`, `admin-live.html`, `admin-blocks.html`, and `admin-analytics.html` because this pass changed both layout behavior and the analytics payload/UI.
+- If the analytics page feels slow on a 365-day window in production, build rollup tables or nightly summaries from `site_activity_events`; the new UI already has the right export/report surfaces and only needs a faster backend source.
+- Keep the current schedule schema as `blocked_date` / `slot` unless you are ready to migrate every schedule endpoint and page together in one pass.

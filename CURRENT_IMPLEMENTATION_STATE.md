@@ -390,3 +390,9 @@ Pass 28 sync — 2026-04-20
 - public SEO copy was tightened again on `services.html`, `pricing.html`, `contact.html`, and `gallery.html` with clearer local-search wording while preserving a single H1 per exposed page
 - schema/migration sync for this pass lives in `sql/2026-04-22_vehicle_media_merchandising_score.sql`, `sql/2026-04-21_vehicle_media_gallery_geofence.sql`, and `SUPABASE_SCHEMA.sql`
 - next-step direction is still the same operational split: local scoring + EXIF-aware orientation + guide-led framing now, optional cloud smart-assist later only if you want object recognition or damage-style analysis
+
+## Pass 27 sync — 2026-04-24
+- `admin-accounting.html` now uses more resilient auto-fit form grids and wrapped button rows so date inputs, search boxes, and remittance controls no longer crowd each other on common desktop and laptop widths.
+- `admin-live.html` and `admin-blocks.html` now share the same sidebar-style internal shell behavior through global `assets/site.css` support for `.app-shell` and related layout helpers.
+- `admin-analytics.html` now exposes daily, weekly, monthly, and yearly reporting lists plus CSV export buttons. The underlying endpoint still reads `site_activity_events` directly and now returns grouped `reports.daily`, `reports.weekly`, `reports.monthly`, and `reports.yearly` payloads.
+- `/api/admin/block_date` and `/api/admin/block_slot` were repaired to match the current legacy schedule schema and no longer try to write unsupported `updated_at` fields.

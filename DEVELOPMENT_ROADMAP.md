@@ -508,3 +508,9 @@ Pass 28 sync — 2026-04-20
 - public SEO copy was tightened again on `services.html`, `pricing.html`, `contact.html`, and `gallery.html` with clearer local-search wording while preserving a single H1 per exposed page
 - schema/migration sync for this pass lives in `sql/2026-04-22_vehicle_media_merchandising_score.sql`, `sql/2026-04-21_vehicle_media_gallery_geofence.sql`, and `SUPABASE_SCHEMA.sql`
 - next-step direction is still the same operational split: local scoring + EXIF-aware orientation + guide-led framing now, optional cloud smart-assist later only if you want object recognition or damage-style analysis
+
+## Pass 27 sync — 2026-04-24
+- Completed this pass: repaired legacy date-block save compatibility, fixed the stretched admin menu/layout drift on `admin-live.html` and `admin-blocks.html`, cleaned up admin date/text input sizing in `admin-accounting.html`, and expanded `admin-analytics.html` into a real reporting workspace with daily/weekly/monthly/yearly rollups and CSV exports.
+- The next highest-value reporting step is optional pre-aggregation once traffic volume grows beyond comfortable raw-query reads. If `site_activity_events` regularly exceeds ~25k rows inside the selected window, add nightly rollup tables/materialized views and keep the current on-demand endpoint as a fallback.
+- The next strongest admin polish step is device testing of the accounting and booking-control screens on narrow laptop and tablet widths so any remaining control crowding can be removed with exact screenshots instead of guesswork.
+- The next strongest workflow step is scheduled report delivery: queue daily/weekly/monthly CSV snapshots for office review and accountant handoff using the new report payloads already returned by `/api/admin/analytics_overview`.
