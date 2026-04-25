@@ -28,7 +28,7 @@
     .card > .muted + .feature-note,.card > h2 + .feature-note{margin-top:-2px}
     .feature-note{margin:0 0 14px;color:#9fb0c8;font-size:.95rem;line-height:1.5}
     .feature-list{margin:0;padding-left:18px;color:#c3d2e6;display:grid;gap:6px}
-    .admin-menu-slot:empty{display:none}
+    .admin-menu-slot:empty{display:none}.chart-helper-preview{padding:10px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);overflow:auto}.chart-helper-preview img{display:block;max-width:100%;height:auto;border-radius:12px}
     @media(max-width:1200px){.catalog-row.package,.catalog-row.addon,.catalog-row.service-area,.pricing-grid-4,.pricing-grid-5{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:980px){.span-6,.span-4,.span-8{grid-column:span 12}.app-layout{grid-template-columns:1fr}.menu-col{position:static}}
     @media(max-width:720px){.catalog-row.package,.catalog-row.addon,.catalog-row.service-area,.catalog-row.requirement,.pricing-grid-4,.pricing-grid-5{grid-template-columns:1fr}}
@@ -226,6 +226,20 @@
           <div class="actions">
             <button class="btn" type="button" id="applyPricingJsonBtn">Apply JSON to editor</button>
             <button class="btn" type="button" id="syncPricingJsonBtn">Refresh JSON from editor</button>
+          </div>
+          <div class="panel-lite stack-sm" style="margin-top:12px">
+            <div class="section-label">Live chart helper</div>
+            <p class="note">Preview or download live SVG chart files from the catalog currently shown in this editor. Use Refresh JSON from editor first when you have changed form fields but have not saved yet.</p>
+            <div class="actions">
+              <select id="liveChartType" aria-label="Live chart type">
+                <option value="prices">Vehicle price chart</option>
+                <option value="details">Package service details chart</option>
+                <option value="sizes">Vehicle size guide</option>
+              </select>
+              <button class="btn" type="button" id="liveChartPreviewBtn">Preview chart</button>
+              <button class="btn" type="button" id="liveChartDownloadBtn">Download SVG</button>
+            </div>
+            <div id="liveChartPreviewWrap" class="chart-helper-preview" hidden><img id="liveChartPreviewImg" alt="Live chart preview" /></div>
           </div>
         </details>
 
@@ -992,6 +1006,78 @@
 
   window.AdminPageInit.init({ pageKey:'admin-app', onReady: async ()=>{ try { await loadSettings(); } catch(err){ setShellStatus(err?.message || 'Could not initialize app management.', 'error'); } } });
 })();
+</script>
+
+<script type="module">
+  import {
+    buildLivePricingChartSvg,
+    buildLiveServiceDetailsChartSvg,
+    buildLiveVehicleSizeChartSvg
+  } from "/assets/pricing-catalog-client.js?v=20260423livecharts2";
+
+  const chartBuilders = {
+    prices: { filename: 'rosie-vehicle-price-chart.svg', build: buildLivePricingChartSvg },
+    details: { filename: 'rosie-package-service-details-chart.svg', build: buildLiveServiceDetailsChartSvg },
+    sizes: { filename: 'rosie-vehicle-size-guide.svg', build: buildLiveVehicleSizeChartSvg }
+  };
+
+  function currentCatalogForChart(){
+    const raw = document.getElementById('pricing_catalog_json')?.value || '{}';
+    try { return JSON.parse(raw); }
+    catch (err) { throw new Error('Pricing catalog JSON is not valid yet. Refresh JSON from editor or fix the raw JSON before generating charts.'); }
+  }
+
+  function chartSelection(){
+    const key = document.getElementById('liveChartType')?.value || 'prices';
+    return chartBuilders[key] || chartBuilders.prices;
+  }
+
+  function setLocalChartStatus(message, state){
+    const box = document.querySelector('[data-admin-shell-status]');
+    if (!box) return;
+    box.hidden = false;
+    box.textContent = message;
+    if (state) box.dataset.state = state;
+  }
+
+  function makeSvgBlobUrl(svg){
+    return URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }));
+  }
+
+  document.getElementById('liveChartPreviewBtn')?.addEventListener('click', () => {
+    try {
+      const selected = chartSelection();
+      const svg = selected.build(currentCatalogForChart());
+      const img = document.getElementById('liveChartPreviewImg');
+      const wrap = document.getElementById('liveChartPreviewWrap');
+      if (img.dataset.objectUrl) URL.revokeObjectURL(img.dataset.objectUrl);
+      const url = makeSvgBlobUrl(svg);
+      img.dataset.objectUrl = url;
+      img.src = url;
+      wrap.hidden = false;
+      setLocalChartStatus('Live chart preview generated from the current editor JSON.', 'success');
+    } catch (err) {
+      setLocalChartStatus(err?.message || 'Could not generate live chart preview.', 'error');
+    }
+  });
+
+  document.getElementById('liveChartDownloadBtn')?.addEventListener('click', () => {
+    try {
+      const selected = chartSelection();
+      const svg = selected.build(currentCatalogForChart());
+      const url = makeSvgBlobUrl(svg);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = selected.filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setLocalChartStatus('Live SVG chart downloaded from the current editor JSON.', 'success');
+    } catch (err) {
+      setLocalChartStatus(err?.message || 'Could not download live chart.', 'error');
+    }
+  });
 </script>
 </body>
 </html>
