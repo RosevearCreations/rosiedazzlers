@@ -1,4 +1,11 @@
-> Documentation synchronized April 23, 2026: live vehicle-size SVG guide, App Management chart preview/download helper, no-DDL schema sync, and continued public SEO/static-check direction.
+> Documentation synchronized April 24, 2026: analytics rollup foundation, admin rollup refresh path, live route-loop repair for /services and /pricing, sanity-check refresh, and local visibility review added.
+
+## April 24, 2026 analytics rollup + visibility review pass
+- Added pre-aggregated analytics rollup tables plus a new `/api/admin/analytics_rollups_refresh` path.
+- `/api/admin/analytics_overview` now prefers rollups for daily / weekly / monthly / yearly reporting and falls back to raw-event reporting when rollups are empty.
+- `admin-analytics.html` now includes a rollup refresh button and reports which source mode was used.
+- `_redirects` was rewritten to explicit html-backed clean-route rewrites after a live sanity check found redirect loops on `/services` and `/pricing`.
+- Added `LOCAL_VISIBILITY_REVIEW_2026-04-24.md` with competitor review notes and the next local-search visibility moves.
 
 # NEW CHAT STATUS
 
@@ -32,3 +39,8 @@ This pass continued the public pricing/SEO work by moving the vehicle size guide
 - Latest pass finished: admin schedule block save error repaired, admin form/menu CSS drift reduced, and analytics expanded into a real reporting page with daily/weekly/monthly/yearly traffic exports.
 - No DB migration to run in this pass.
 - Best next chat focus: deployed visual QA for accounting/blocks/live screens, then optional report scheduling / rollup storage if raw analytics volume grows.
+
+## Pass 28 sync — 2026-04-24
+- Latest pass finished: analytics rollup foundation added, rollup refresh endpoint added, live-route loop fix prepared for `/services` and `/pricing`, and a competitor/local visibility review was added to the docs.
+- DB migration to run in this pass: `sql/2026-04-24_site_activity_rollups.sql`.
+- Best next chat focus: deploy/verify clean routes, refresh rollups, then build the first service-specific and town-specific local landing sections.

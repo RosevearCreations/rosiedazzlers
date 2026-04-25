@@ -1,4 +1,11 @@
-> Documentation synchronized April 23, 2026: live vehicle-size SVG guide, App Management chart preview/download helper, no-DDL schema sync, and continued public SEO/static-check direction.
+> Documentation synchronized April 24, 2026: analytics rollup foundation, admin rollup refresh path, live route-loop repair for /services and /pricing, sanity-check refresh, and local visibility review added.
+
+## April 24, 2026 analytics rollup + visibility review pass
+- Added pre-aggregated analytics rollup tables plus a new `/api/admin/analytics_rollups_refresh` path.
+- `/api/admin/analytics_overview` now prefers rollups for daily / weekly / monthly / yearly reporting and falls back to raw-event reporting when rollups are empty.
+- `admin-analytics.html` now includes a rollup refresh button and reports which source mode was used.
+- `_redirects` was rewritten to explicit html-backed clean-route rewrites after a live sanity check found redirect loops on `/services` and `/pricing`.
+- Added `LOCAL_VISIBILITY_REVIEW_2026-04-24.md` with competitor review notes and the next local-search visibility moves.
 
 # Rosie Dazzlers — Handoff for Next Chat
 
@@ -33,3 +40,8 @@ Rosie Dazzlers is a role-aware detailing operations platform with booking, depos
 - Start by deployed-testing `admin-accounting.html`, `admin-live.html`, `admin-blocks.html`, and `admin-analytics.html` because this pass changed both layout behavior and the analytics payload/UI.
 - If the analytics page feels slow on a 365-day window in production, build rollup tables or nightly summaries from `site_activity_events`; the new UI already has the right export/report surfaces and only needs a faster backend source.
 - Keep the current schedule schema as `blocked_date` / `slot` unless you are ready to migrate every schedule endpoint and page together in one pass.
+
+## Newest operational notes
+- Run `sql/2026-04-24_site_activity_rollups.sql` before using the rollup refresh endpoint.
+- Deploy and verify `/services` and `/pricing` after the `_redirects` rewrite because the live site showed redirect loops during sanity review.
+- Read `LOCAL_VISIBILITY_REVIEW_2026-04-24.md` before starting the next content/SEO pass.

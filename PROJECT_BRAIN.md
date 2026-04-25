@@ -1,4 +1,11 @@
-> Documentation synchronized April 23, 2026: live vehicle-size SVG guide, App Management chart preview/download helper, no-DDL schema sync, and continued public SEO/static-check direction.
+> Documentation synchronized April 24, 2026: analytics rollup foundation, admin rollup refresh path, live route-loop repair for /services and /pricing, sanity-check refresh, and local visibility review added.
+
+## April 24, 2026 analytics rollup + visibility review pass
+- Added pre-aggregated analytics rollup tables plus a new `/api/admin/analytics_rollups_refresh` path.
+- `/api/admin/analytics_overview` now prefers rollups for daily / weekly / monthly / yearly reporting and falls back to raw-event reporting when rollups are empty.
+- `admin-analytics.html` now includes a rollup refresh button and reports which source mode was used.
+- `_redirects` was rewritten to explicit html-backed clean-route rewrites after a live sanity check found redirect loops on `/services` and `/pricing`.
+- Added `LOCAL_VISIBILITY_REVIEW_2026-04-24.md` with competitor review notes and the next local-search visibility moves.
 
 ## April 23, 2026 live vehicle-size guide + chart helper pass
 - Added live SVG vehicle size guide generation beside the existing live price and package-details charts.
@@ -330,3 +337,8 @@ Pass 28 sync — 2026-04-20
 ## Pass 27 sync — 2026-04-24
 - Remember: the current canonical schedule schema is still `date_blocks(blocked_date)` plus `slot_blocks(blocked_date, slot)`. Compatibility endpoints now normalize around that shape instead of trying to write newer fields that do not exist yet.
 - The analytics page is now the office reporting surface. It exposes grouped daily/weekly/monthly/yearly traffic rollups from `site_activity_events` and CSV exports without a separate reporting table.
+
+## April 24, 2026 quick context
+- Admin analytics now has a rollup storage path for scale: refresh endpoint + rollup-backed overview + raw fallback.
+- Production route sanity matters right now because `/services` and `/pricing` were seen looping before the clean-route rewrite.
+- The next valuable growth work is content/reputation/local proof, not another generic design pass. Read `LOCAL_VISIBILITY_REVIEW_2026-04-24.md`.

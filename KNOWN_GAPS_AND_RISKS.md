@@ -1,4 +1,11 @@
-> Documentation synchronized April 23, 2026: live vehicle-size SVG guide, App Management chart preview/download helper, no-DDL schema sync, and continued public SEO/static-check direction.
+> Documentation synchronized April 24, 2026: analytics rollup foundation, admin rollup refresh path, live route-loop repair for /services and /pricing, sanity-check refresh, and local visibility review added.
+
+## April 24, 2026 analytics rollup + visibility review pass
+- Added pre-aggregated analytics rollup tables plus a new `/api/admin/analytics_rollups_refresh` path.
+- `/api/admin/analytics_overview` now prefers rollups for daily / weekly / monthly / yearly reporting and falls back to raw-event reporting when rollups are empty.
+- `admin-analytics.html` now includes a rollup refresh button and reports which source mode was used.
+- `_redirects` was rewritten to explicit html-backed clean-route rewrites after a live sanity check found redirect loops on `/services` and `/pricing`.
+- Added `LOCAL_VISIBILITY_REVIEW_2026-04-24.md` with competitor review notes and the next local-search visibility moves.
 
 ## April 23, 2026 live vehicle-size guide + chart helper pass
 - Added live SVG vehicle size guide generation beside the existing live price and package-details charts.
@@ -651,3 +658,8 @@ Pass 28 sync — 2026-04-20
 - Reporting now covers daily/weekly/monthly/yearly rollups, but it is still computed directly from `site_activity_events` at request time. This is correct for the current build, but larger traffic volumes should eventually move to pre-aggregated rollup storage.
 - Admin schedule controls are now compatibility-safe against the current legacy schedule schema, but the repository still contains both older and newer schedule endpoint families. Long term, keep only one canonical contract to reduce future drift.
 - Admin layout drift is materially better after this pass, but exact visual verification on the deployed site is still needed for `admin-accounting.html`, `admin-live.html`, and `admin-blocks.html` because browser date-control rendering can still vary slightly by platform.
+
+## April 24, 2026 current live risks after this pass
+- the new analytics rollup path requires the April 24 SQL migration before the refresh endpoint can populate rollups
+- summary visitor/session counts on rollup-backed reports are currently summed from daily buckets when rollups are used, so they should be treated as operational reporting counts rather than perfect cross-window deduplicated totals
+- production should be rechecked after deploy because `/services` and `/pricing` were observed looping before the `_redirects` rewrite

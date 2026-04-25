@@ -298,8 +298,8 @@ create table if not exists public.customer_auth_tokens (
   payload jsonb not null default '{}'::jsonb
 );
 -- Analytics reporting notes:
--- Daily / weekly / monthly / yearly reports are computed from `public.site_activity_events` at request time in `/api/admin/analytics_overview`.
--- No rollup table or materialized reporting view was added in this pass.
+-- Raw analytics events continue to land in `public.site_activity_events`.
+-- Admin reporting now prefers the pre-aggregated rollup tables below when they are populated by `/api/admin/analytics_rollups_refresh`, and safely falls back to raw-event reporting if rollups are empty.
 create table if not exists public.site_activity_events (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -326,6 +326,58 @@ create index if not exists idx_site_activity_events_page_path_created_at on publ
 create index if not exists idx_site_activity_events_payload_city_created_at on public.site_activity_events ((payload->>'city'), created_at desc);
 create index if not exists idx_site_activity_events_payload_region_created_at on public.site_activity_events ((payload->>'region'), created_at desc);
 create index if not exists idx_site_activity_events_payload_device_created_at on public.site_activity_events ((payload->>'device_type'), created_at desc);
+
+create table if not exists public.site_activity_rollups (
+  period_type text not null check (period_type in ('day','week','month','year')),
+  period_key text not null,
+  period_start date not null,
+  period_end date not null,
+  service_area_label text not null default '__all__',
+  events integer not null default 0,
+  page_views integer not null default 0,
+  unique_visitors integer not null default 0,
+  unique_sessions integer not null default 0,
+  booking_starts integer not null default 0,
+  booking_completions integer not null default 0,
+  cart_snapshots integer not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  primary key (period_type, period_key, service_area_label)
+);
+create index if not exists idx_site_activity_rollups_period_start on public.site_activity_rollups (period_start desc, period_type, service_area_label);
+
+create table if not exists public.site_activity_dimension_daily_rollups (
+  rollup_date date not null,
+  service_area_label text not null default '__all__',
+  dimension_type text not null,
+  dimension_value text not null,
+  count integer not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  primary key (rollup_date, service_area_label, dimension_type, dimension_value)
+);
+create index if not exists idx_site_activity_dimension_daily_rollups_lookup on public.site_activity_dimension_daily_rollups (rollup_date desc, service_area_label, dimension_type);
+
+create table if not exists public.site_activity_funnel_daily_rollups (
+  rollup_date date not null,
+  service_area_label text not null default '__all__',
+  step_1_views integer not null default 0,
+  step_2_views integer not null default 0,
+  step_3_views integer not null default 0,
+  step_4_views integer not null default 0,
+  step_5_views integer not null default 0,
+  service_area_picks integer not null default 0,
+  date_picks integer not null default 0,
+  package_picks integer not null default 0,
+  addon_toggles integer not null default 0,
+  customer_continue integer not null default 0,
+  checkout_started integer not null default 0,
+  checkout_completed integer not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  primary key (rollup_date, service_area_label)
+);
+create index if not exists idx_site_activity_funnel_daily_rollups_lookup on public.site_activity_funnel_daily_rollups (rollup_date desc, service_area_label);
 
 create table if not exists public.notification_events (
   id uuid primary key default gen_random_uuid(),
@@ -421,7 +473,8 @@ create table if not exists public.observation_annotations (
 
 -- March 24, 2026 late-pass note
 -- Public analytics continues to store raw events in public.site_activity_events.
--- Daily traffic, live-online counts, cart signals, and checkout-state summaries are currently derived in the admin analytics layer rather than via separate aggregate tables.
+-- Admin reporting now has pre-aggregated rollup tables for daily / weekly / monthly / yearly summaries, plus daily dimension and funnel rollups.
+-- `/api/admin/analytics_rollups_refresh` rebuilds those tables from raw events for the selected window and `/api/admin/analytics_overview` prefers rollups before falling back to raw-event computation.
 
 
 -- March 25, 2026 indexes / settings helpers
