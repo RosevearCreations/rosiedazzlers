@@ -36,6 +36,8 @@ CHECK_HTML = [
     'admin-promos.html',
     'admin-jobsite.html',
     'admin-app.html',
+    'admin-accounting.html',
+    'admin-analytics.html',
     'detailer-jobs.html',
     'book.html',
     'services.html'

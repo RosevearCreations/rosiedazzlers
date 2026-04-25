@@ -31,7 +31,10 @@
     </div>
   </header>
 
-  <main class="container">
+  <main class="container app-shell">
+    <aside class="app-shell__menu" data-admin-menu-mount></aside>
+
+    <div class="app-shell__content">
     <section class="section">
       <div class="panel">
         <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
@@ -53,10 +56,6 @@
       </div>
     </section>
 
-
-    <section class="section">
-      <div data-admin-menu-mount></div>
-    </section>
     <section class="section">
       <div id="pageNotice" class="notice">Ready.</div>
     </section>
@@ -155,6 +154,7 @@
         </div>
       </div>
     </section>
+    </div>
   </main>
 
   <footer class="footer container" data-footer></footer>
