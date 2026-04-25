@@ -1,3 +1,12 @@
+> Documentation synchronized April 23, 2026: live vehicle-size SVG guide, App Management chart preview/download helper, no-DDL schema sync, and continued public SEO/static-check direction.
+
+## April 23, 2026 live vehicle-size guide + chart helper pass
+- Added live SVG vehicle size guide generation beside the existing live price and package-details charts.
+- /pricing and /services now prefer live chart renders for price, details, and size guidance, with packaged image assets retained only as fallback/reference.
+- App Management now has a staff-facing helper to preview/download SVG charts from the current pricing editor JSON.
+- No database DDL was added in this pass; schema docs were synchronized to state that the change is frontend/helper logic only.
+- Next: deploy-test the admin chart helper, validate structured data on rendered pages, and continue the vehicle-media crop/editor hardening path.
+
 > Last synchronized: April 22, 2026. Reviewed during the live SVG pricing-chart, structured-data local SEO, static-check hardening, and docs/schema synchronization pass.
 
 ## April 22, 2026 live chart + structured-data pass
@@ -8,7 +17,7 @@ Completed in this pass:
 - hardened `scripts/stress_static_checks.py` so core public SEO basics are verified alongside H1 and syntax checks
 
 Next highest-value roadmap items after this pass:
-- add an App Management helper to preview/download regenerated live pricing charts without editing files manually
+- deploy-test and polish the App Management helper that previews/downloads live SVG charts
 - keep extending structured-data coverage route by route, especially home/booking/gifts once the wording is finalized
 - continue the customer vehicle crop-editor/upload hardening path without reopening unrelated booking work
 
