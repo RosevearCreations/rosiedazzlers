@@ -188,6 +188,7 @@ a { color: inherit; }
   background: rgba(255,255,255,.03);
   padding: 16px;
   box-shadow: var(--shadow);
+  min-width: 0;
 }
 
 .section { margin-top: 18px; }
@@ -211,6 +212,7 @@ a { color: inherit; }
   border-radius: 16px;
   background: rgba(255,255,255,.03);
   padding: 14px;
+  min-width: 0;
 }
 
 .card h3 { margin: 0 0 8px; }
@@ -304,6 +306,14 @@ label {
   color: rgba(234,242,255,.72);
 }
 
+button,
+input,
+select,
+textarea {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
 input,
 select,
 textarea {
@@ -316,10 +326,102 @@ textarea {
   outline: none;
 }
 
+input[type="date"],
+input[type="time"],
+input[type="month"],
+input[type="datetime-local"] {
+  appearance: none;
+  -webkit-appearance: none;
+  min-height: 46px;
+  line-height: 1.2;
+}
+
+input[type="date"]::-webkit-date-and-time-value,
+input[type="time"]::-webkit-date-and-time-value,
+input[type="month"]::-webkit-date-and-time-value,
+input[type="datetime-local"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="month"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: .92;
+}
+
+textarea {
+  max-width: 100%;
+  resize: vertical;
+}
+
 input:focus,
 select:focus,
 textarea:focus {
   border-color: rgba(77,119,255,.65);
+}
+
+.toolbar-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.surface-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.pill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.pill-card {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  min-width: 0;
+}
+
+.pill-card .label {
+  color: rgba(234,242,255,.62);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.pill-card .value {
+  font-size: 1rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: minmax(240px,320px) minmax(0,1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.app-shell__menu {
+  min-width: 0;
+  align-self: start;
+  position: sticky;
+  top: 84px;
+}
+
+.app-shell__content {
+  min-width: 0;
+  display: grid;
+  gap: 0;
 }
 
 .list {
@@ -502,6 +604,22 @@ textarea:focus {
   display: block;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,.10);
+}
+
+
+@media (max-width: 1100px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell__menu {
+    position: static;
+    top: auto;
+  }
+
+  .surface-grid-2 {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 880px) {
