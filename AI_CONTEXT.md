@@ -1,4 +1,11 @@
-> Documentation synchronized April 23, 2026: live vehicle-size SVG guide, App Management chart preview/download helper, no-DDL schema sync, and continued public SEO/static-check direction.
+> Documentation synchronized April 24, 2026: analytics rollup foundation, admin rollup refresh path, live route-loop repair for /services and /pricing, sanity-check refresh, and local visibility review added.
+
+## April 24, 2026 analytics rollup + visibility review pass
+- Added pre-aggregated analytics rollup tables plus a new `/api/admin/analytics_rollups_refresh` path.
+- `/api/admin/analytics_overview` now prefers rollups for daily / weekly / monthly / yearly reporting and falls back to raw-event reporting when rollups are empty.
+- `admin-analytics.html` now includes a rollup refresh button and reports which source mode was used.
+- `_redirects` was rewritten to explicit html-backed clean-route rewrites after a live sanity check found redirect loops on `/services` and `/pricing`.
+- Added `LOCAL_VISIBILITY_REVIEW_2026-04-24.md` with competitor review notes and the next local-search visibility moves.
 
 > Last synchronized: April 22, 2026. Reviewed during the live SVG pricing-chart, structured-data local SEO, static-check hardening, and docs/schema synchronization pass.
 
@@ -527,3 +534,8 @@ Pass 28 sync — 2026-04-20
 ## Pass 27 sync — 2026-04-24
 - Current admin reporting surface: `admin-analytics.html` now shows daily/weekly/monthly/yearly traffic rollups and CSV exports sourced from `site_activity_events` through `/api/admin/analytics_overview`.
 - Current schedule schema remains legacy (`blocked_date`, `slot`). The save endpoints were repaired to match that schema and the compatibility `blocks_list` / `blocks_save` endpoints now normalize around it.
+
+## April 24, 2026 context note
+- Analytics now has a rollup-refresh path. Read `sql/2026-04-24_site_activity_rollups.sql`, `functions/api/admin/analytics_rollups_refresh.js`, and `functions/api/admin/analytics_overview.js` together.
+- The live site sanity check caught redirect loops on `/services` and `/pricing`; `_redirects` was rewritten to explicit html-backed clean-route rewrites.
+- The best next public growth work is documented in `LOCAL_VISIBILITY_REVIEW_2026-04-24.md`.

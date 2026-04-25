@@ -1,4 +1,11 @@
-> Documentation synchronized April 23, 2026: live vehicle-size SVG guide, App Management chart preview/download helper, no-DDL schema sync, and continued public SEO/static-check direction.
+> Documentation synchronized April 24, 2026: analytics rollup foundation, admin rollup refresh path, live route-loop repair for /services and /pricing, sanity-check refresh, and local visibility review added.
+
+## April 24, 2026 analytics rollup + visibility review pass
+- Added pre-aggregated analytics rollup tables plus a new `/api/admin/analytics_rollups_refresh` path.
+- `/api/admin/analytics_overview` now prefers rollups for daily / weekly / monthly / yearly reporting and falls back to raw-event reporting when rollups are empty.
+- `admin-analytics.html` now includes a rollup refresh button and reports which source mode was used.
+- `_redirects` was rewritten to explicit html-backed clean-route rewrites after a live sanity check found redirect loops on `/services` and `/pricing`.
+- Added `LOCAL_VISIBILITY_REVIEW_2026-04-24.md` with competitor review notes and the next local-search visibility moves.
 
 ## April 23, 2026 live vehicle-size guide + chart helper pass
 - Added live SVG vehicle size guide generation beside the existing live price and package-details charts.
@@ -514,3 +521,9 @@ Pass 28 sync — 2026-04-20
 - The next highest-value reporting step is optional pre-aggregation once traffic volume grows beyond comfortable raw-query reads. If `site_activity_events` regularly exceeds ~25k rows inside the selected window, add nightly rollup tables/materialized views and keep the current on-demand endpoint as a fallback.
 - The next strongest admin polish step is device testing of the accounting and booking-control screens on narrow laptop and tablet widths so any remaining control crowding can be removed with exact screenshots instead of guesswork.
 - The next strongest workflow step is scheduled report delivery: queue daily/weekly/monthly CSV snapshots for office review and accountant handoff using the new report payloads already returned by `/api/admin/analytics_overview`.
+
+## April 24, 2026 next roadmap direction
+- deploy and verify the new clean-route rewrites for `/services` and `/pricing` on production
+- run and validate the new analytics rollup tables + refresh endpoint
+- start public review-proof work and the first service-specific landing pages (ceramic coating, pet hair, odour removal)
+- begin town-level local SEO sections/pages for Tillsonburg, Woodstock, Simcoe, Delhi, and Port Dover

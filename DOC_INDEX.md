@@ -1,4 +1,11 @@
-> Documentation synchronized April 23, 2026: live vehicle-size SVG guide, App Management chart preview/download helper, no-DDL schema sync, and continued public SEO/static-check direction.
+> Documentation synchronized April 24, 2026: analytics rollup foundation, admin rollup refresh path, live route-loop repair for /services and /pricing, sanity-check refresh, and local visibility review added.
+
+## April 24, 2026 analytics rollup + visibility review pass
+- Added pre-aggregated analytics rollup tables plus a new `/api/admin/analytics_rollups_refresh` path.
+- `/api/admin/analytics_overview` now prefers rollups for daily / weekly / monthly / yearly reporting and falls back to raw-event reporting when rollups are empty.
+- `admin-analytics.html` now includes a rollup refresh button and reports which source mode was used.
+- `_redirects` was rewritten to explicit html-backed clean-route rewrites after a live sanity check found redirect loops on `/services` and `/pricing`.
+- Added `LOCAL_VISIBILITY_REVIEW_2026-04-24.md` with competitor review notes and the next local-search visibility moves.
 
 > Last synchronized: April 22, 2026. Reviewed during the live SVG pricing-chart, structured-data local SEO, static-check hardening, and docs/schema synchronization pass.
 
@@ -140,3 +147,6 @@ Pass 28 sync — 2026-04-20
 - Expanded analytics reporting so `admin-analytics.html` now shows daily, weekly, monthly, and yearly traffic rollups with CSV export buttons, all generated from `site_activity_events` without adding a new reporting table in this pass.
 - No new database migration was required in this pass. `SUPABASE_SCHEMA.sql` was refreshed to document that schedule blocks still use the legacy `blocked_date` / `slot` shape and that analytics reports are computed from `site_activity_events` at request time.
 
+
+## New April 24, 2026 review file
+- `LOCAL_VISIBILITY_REVIEW_2026-04-24.md` — sanity-check findings, competitor/market review, and the next local visibility action list.
