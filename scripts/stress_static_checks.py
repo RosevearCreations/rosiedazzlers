@@ -10,7 +10,7 @@ from html.parser import HTMLParser
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PUBLIC_PAGES = [
     'index.html','about.html','services.html','pricing.html','book.html','contact.html','privacy.html','terms.html','videos.html','gear.html','consumables.html','gifts.html','complete.html','waiver.html','progress.html','login.html','my-account.html',
-    'ceramic-coating/index.html','pet-hair-removal/index.html','odor-removal/index.html','headlight-restoration/index.html','paint-correction/index.html'
+    'ceramic-coating/index.html','pet-hair-removal/index.html','odor-removal/index.html','headlight-restoration/index.html','paint-correction/index.html','tillsonburg-auto-detailing/index.html','woodstock-ingersoll-auto-detailing/index.html','simcoe-delhi-auto-detailing/index.html','port-dover-auto-detailing/index.html'
 ]
 CHECK_JS = [
     'assets/admin-auth.js',
@@ -29,7 +29,7 @@ CHECK_JS = [
     'assets/recent-work.js',
 ]
 
-CORE_LOCAL_SEO_PAGES = ['index.html', 'services.html', 'pricing.html', 'about.html', 'contact.html', 'ceramic-coating/index.html', 'pet-hair-removal/index.html', 'odor-removal/index.html', 'headlight-restoration/index.html', 'paint-correction/index.html']
+CORE_LOCAL_SEO_PAGES = ['index.html', 'services.html', 'pricing.html', 'about.html', 'contact.html', 'ceramic-coating/index.html', 'pet-hair-removal/index.html', 'odor-removal/index.html', 'headlight-restoration/index.html', 'paint-correction/index.html', 'tillsonburg-auto-detailing/index.html', 'woodstock-ingersoll-auto-detailing/index.html', 'simcoe-delhi-auto-detailing/index.html', 'port-dover-auto-detailing/index.html']
 
 CHECK_HTML = [
     'admin-progress.html',
@@ -164,7 +164,7 @@ def check_redirect_rules():
             fail(f'_redirects still contains route rule not allowed in wrapper-backed mode: {needle}')
     required_wrappers = [
         'services/index.html', 'pricing/index.html', 'about/index.html', 'contact/index.html', 'book/index.html',
-        'gallery/index.html', 'gifts/index.html', 'videos/index.html', 'maintenance-plan/index.html'
+        'gallery/index.html', 'gifts/index.html', 'videos/index.html', 'maintenance-plan/index.html', 'tillsonburg-auto-detailing/index.html', 'woodstock-ingersoll-auto-detailing/index.html', 'simcoe-delhi-auto-detailing/index.html', 'port-dover-auto-detailing/index.html'
     ]
     for rel in required_wrappers:
         if not (ROOT / rel).exists():
