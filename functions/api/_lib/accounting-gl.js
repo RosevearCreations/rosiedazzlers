@@ -25,6 +25,7 @@ export async function postJournalEntry(env, entry, lines) {
   if (debits <= 0 || credits <= 0 || debits !== credits) {
     throw new Error("Journal entry is not balanced.");
   }
+  await assertPeriodWritable(env, entry?.entry_date);
 
   const entryRes = await fetch(`${env.SUPABASE_URL}/rest/v1/accounting_journal_entries`, {
     method: "POST",
@@ -1382,4 +1383,439 @@ export async function buildYearEndPackageExport(env, { year }) {
   }
 
   return lines.join("\n");
+}
+
+
+export async function listAccountingDocuments(env, { relatedType = null, relatedId = null, documentKind = null, limit = 200 } = {}) {
+  const safeLimit = Math.max(1, Math.min(500, Number(limit) || 200));
+  let url = `${env.SUPABASE_URL}/rest/v1/accounting_documents?select=*&order=created_at.desc&limit=${safeLimit}`;
+  if (relatedType) url += `&related_type=eq.${encodeURIComponent(relatedType)}`;
+  if (relatedId) url += `&related_id=eq.${encodeURIComponent(relatedId)}`;
+  if (documentKind) url += `&document_kind=eq.${encodeURIComponent(documentKind)}`;
+  return await fetchRowsWithMissingTableFallback(env, url, "accounting_documents", "Could not load accounting documents.");
+}
+
+export async function saveAccountingDocument(env, payload = {}, actor = {}) {
+  const headers = serviceHeaders(env);
+  const row = {
+    related_type: cleanTextValue(payload.related_type) || "journal_entry",
+    related_id: cleanTextValue(payload.related_id) || null,
+    document_kind: cleanTextValue(payload.document_kind) || "attachment",
+    title: cleanTextValue(payload.title) || "Untitled document",
+    file_url: cleanTextValue(payload.file_url) || null,
+    storage_path: cleanTextValue(payload.storage_path) || null,
+    mime_type: cleanTextValue(payload.mime_type) || null,
+    size_bytes: payload.size_bytes == null || payload.size_bytes === "" ? null : Number(payload.size_bytes || 0),
+    notes: cleanTextValue(payload.notes) || null,
+    uploaded_by_name: actor.name || null,
+    uploaded_by_staff_user_id: actor.staffUserId || null
+  };
+  if (!row.file_url && !row.storage_path) throw new Error("A file URL or storage path is required.");
+  const docId = cleanTextValue(payload.id);
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/accounting_documents${docId ? `?id=eq.${encodeURIComponent(docId)}` : ""}`, {
+    method: docId ? "PATCH" : "POST",
+    headers: { ...headers, Prefer: "return=representation" },
+    body: JSON.stringify(docId ? row : [row])
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    if (isMissingTableText(text, "accounting_documents")) throw new Error("Run the 2026-04-27 accounting workflow migration before saving accounting documents.");
+    throw new Error(`Could not save accounting document. ${text}`);
+  }
+  const rows = await res.json().catch(() => []);
+  return Array.isArray(rows) ? rows[0] : rows;
+}
+
+export async function listRecurringExpenses(env, { activeOnly = false } = {}) {
+  let url = `${env.SUPABASE_URL}/rest/v1/accounting_recurring_expenses?select=*&order=next_due_date.asc,created_at.desc&limit=250`;
+  if (activeOnly) url += `&is_active=eq.true`;
+  return await fetchRowsWithMissingTableFallback(env, url, "accounting_recurring_expenses", "Could not load recurring expenses.");
+}
+
+export async function saveRecurringExpense(env, payload = {}, actor = {}) {
+  const headers = serviceHeaders(env);
+  const subtotal = roundMoney(payload.subtotal_cad || 0);
+  const tax = roundMoney(payload.tax_cad || 0);
+  const row = {
+    vendor_name: cleanTextValue(payload.vendor_name) || "Vendor",
+    memo: cleanTextValue(payload.memo) || null,
+    expense_account_code: cleanTextValue(payload.expense_account_code) || "shop_supplies",
+    payment_account_code: cleanTextValue(payload.payment_account_code) || "cash",
+    posting_mode: cleanTextValue(payload.posting_mode) || "cash",
+    subtotal_cad: subtotal,
+    tax_cad: tax,
+    total_cad: roundMoney(subtotal + tax),
+    cadence: cleanTextValue(payload.cadence) || "monthly",
+    next_due_date: cleanTextValue(payload.next_due_date) || new Date().toISOString().slice(0, 10),
+    auto_post: !!payload.auto_post,
+    is_active: payload.is_active == null ? true : !!payload.is_active,
+    notes: cleanTextValue(payload.notes) || null,
+    updated_by_name: actor.name || null,
+    updated_by_staff_user_id: actor.staffUserId || null
+  };
+  if (row.subtotal_cad <= 0) throw new Error("Recurring expense amount must be greater than zero.");
+  const templateId = cleanTextValue(payload.id);
+  if (!templateId) {
+    row.created_by_name = actor.name || null;
+    row.created_by_staff_user_id = actor.staffUserId || null;
+  }
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/accounting_recurring_expenses${templateId ? `?id=eq.${encodeURIComponent(templateId)}` : ""}`, {
+    method: templateId ? "PATCH" : "POST",
+    headers: { ...headers, Prefer: "return=representation" },
+    body: JSON.stringify(templateId ? row : [row])
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    if (isMissingTableText(text, "accounting_recurring_expenses")) throw new Error("Run the 2026-04-27 accounting workflow migration before saving recurring expenses.");
+    throw new Error(`Could not save recurring expense. ${text}`);
+  }
+  const rows = await res.json().catch(() => []);
+  return Array.isArray(rows) ? rows[0] : rows;
+}
+
+export async function postRecurringExpenseTemplate(env, { templateId, entryDate = null, actorName = null, actorStaffUserId = null } = {}) {
+  const templates = await listRecurringExpenses(env, { activeOnly: false });
+  const template = (templates || []).find((row) => String(row.id || "") === String(templateId || ""));
+  if (!template) throw new Error("Recurring expense template not found.");
+  if (template.is_active === false) throw new Error("Recurring expense template is inactive.");
+
+  const postDate = cleanTextValue(entryDate) || cleanTextValue(template.next_due_date) || new Date().toISOString().slice(0, 10);
+  const total = roundMoney(template.total_cad || (Number(template.subtotal_cad || 0) + Number(template.tax_cad || 0)));
+  const mode = String(template.posting_mode || "cash");
+  const paymentAccount = cleanTextValue(template.payment_account_code) || (mode === "payable" ? "accounts_payable" : "cash");
+  const memo = cleanTextValue(template.memo) || `Recurring expense: ${template.vendor_name || "Vendor"}`;
+
+  const posted = await postJournalEntry(env, {
+    entry_date: postDate,
+    entry_type: mode === "payable" ? "vendor_bill" : "expense",
+    status: "posted",
+    reference_type: "recurring_expense_template",
+    reference_id: template.id,
+    payee_name: template.vendor_name || null,
+    vendor_name: template.vendor_name || null,
+    memo,
+    subtotal_cad: roundMoney(template.subtotal_cad || 0),
+    tax_cad: roundMoney(template.tax_cad || 0),
+    total_cad: total,
+    due_date: mode === "payable" ? postDate : null,
+    paid_at: mode === "cash" ? new Date().toISOString() : null,
+    created_by_name: actorName,
+    last_recorded_by_name: actorName,
+    created_by_staff_user_id: actorStaffUserId,
+    last_recorded_by_staff_user_id: actorStaffUserId
+  }, [
+    {
+      account_code: cleanTextValue(template.expense_account_code) || "shop_supplies",
+      direction: "debit",
+      amount_cad: roundMoney(template.subtotal_cad || 0),
+      memo
+    },
+    ...(roundMoney(template.tax_cad || 0) > 0 ? [{
+      account_code: "sales_tax_payable",
+      direction: "debit",
+      amount_cad: roundMoney(template.tax_cad || 0),
+      memo: "Input tax / tax component"
+    }] : []),
+    {
+      account_code: paymentAccount,
+      direction: "credit",
+      amount_cad: total,
+      memo
+    }
+  ]);
+
+  const nextDueDate = advanceCadenceDate(postDate, cleanTextValue(template.cadence) || "monthly");
+  await saveRecurringExpense(env, {
+    id: template.id,
+    vendor_name: template.vendor_name,
+    memo: template.memo,
+    expense_account_code: template.expense_account_code,
+    payment_account_code: template.payment_account_code,
+    posting_mode: template.posting_mode,
+    subtotal_cad: template.subtotal_cad,
+    tax_cad: template.tax_cad,
+    cadence: template.cadence,
+    next_due_date: nextDueDate,
+    auto_post: template.auto_post,
+    is_active: template.is_active,
+    notes: template.notes
+  }, actorName || actorStaffUserId ? { name: actorName, staffUserId: actorStaffUserId } : {});
+
+  const patchRes = await fetch(`${env.SUPABASE_URL}/rest/v1/accounting_recurring_expenses?id=eq.${encodeURIComponent(template.id)}`, {
+    method: "PATCH",
+    headers: { ...headers, Prefer: "return=representation" },
+    body: JSON.stringify({
+      last_posted_at: new Date().toISOString(),
+      last_posted_entry_id: posted.entry?.id || null
+    })
+  });
+  if (!patchRes.ok) {
+    const text = await patchRes.text();
+    if (!isMissingTableText(text, "accounting_recurring_expenses")) throw new Error(`Recurring expense posted, but template could not be updated. ${text}`);
+  }
+
+  return { template_id: template.id, next_due_date: nextDueDate, entry: posted.entry, lines: posted.lines };
+}
+
+export async function buildBankReconciliationSnapshot(env, { month, year, accountCode = "cash" } = {}) {
+  const { start, nextMonth } = monthRange(month, year);
+  const rows = await loadPostedLineRows(env, { startDate: start, endDateExclusive: nextMonth, accountCode });
+  const monthActivity = roundMoney(rows.reduce((sum, row) => sum + signedAmountForRow(row).signed_amount_cad, 0));
+  const endingBookBalance = await loadAccountBalanceThroughDate(env, accountCode, nextMonth);
+  const recs = await listBankReconciliations(env, { month, year, accountCode });
+  const latest = Array.isArray(recs) && recs.length ? recs[0] : null;
+  return {
+    month,
+    year,
+    account_code: accountCode,
+    period_start: start,
+    period_end_exclusive: nextMonth,
+    entry_count: rows.length,
+    month_activity_cad: monthActivity,
+    ending_book_balance_cad: endingBookBalance,
+    latest_reconciliation: latest || null
+  };
+}
+
+export async function listBankReconciliations(env, { month, year, accountCode = null } = {}) {
+  let url = `${env.SUPABASE_URL}/rest/v1/accounting_bank_reconciliations?select=*&order=period_end.desc,created_at.desc&limit=60`;
+  if (month && year) {
+    const { start, nextMonth } = monthRange(month, year);
+    url += `&period_start=eq.${encodeURIComponent(start)}&period_end=eq.${encodeURIComponent(addDays(nextMonth, -1))}`;
+  }
+  if (accountCode) url += `&account_code=eq.${encodeURIComponent(accountCode)}`;
+  return await fetchRowsWithMissingTableFallback(env, url, "accounting_bank_reconciliations", "Could not load bank reconciliations.");
+}
+
+export async function saveBankReconciliation(env, payload = {}, actor = {}) {
+  const headers = serviceHeaders(env);
+  const month = Number(payload.month || 0);
+  const year = Number(payload.year || 0);
+  const accountCode = cleanTextValue(payload.account_code) || "cash";
+  const snapshot = await buildBankReconciliationSnapshot(env, { month, year, accountCode });
+  const statementEnding = roundMoney(payload.statement_ending_balance_cad || 0);
+  const row = {
+    account_code: accountCode,
+    period_start: snapshot.period_start,
+    period_end: addDays(snapshot.period_end_exclusive, -1),
+    statement_ending_balance_cad: statementEnding,
+    calculated_book_balance_cad: roundMoney(snapshot.ending_book_balance_cad || 0),
+    difference_cad: roundMoney(statementEnding - Number(snapshot.ending_book_balance_cad || 0)),
+    outstanding_count: Number(payload.outstanding_count || 0),
+    cleared_journal_entry_ids: Array.isArray(payload.cleared_journal_entry_ids) ? payload.cleared_journal_entry_ids : parseDelimitedValues(payload.cleared_journal_entry_ids || payload.cleared_entry_ids || ""),
+    status: cleanTextValue(payload.status) || "draft",
+    notes: cleanTextValue(payload.notes) || null,
+    reconciled_by_name: actor.name || null,
+    reconciled_by_staff_user_id: actor.staffUserId || null
+  };
+  const recId = cleanTextValue(payload.id);
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/accounting_bank_reconciliations${recId ? `?id=eq.${encodeURIComponent(recId)}` : ""}`, {
+    method: recId ? "PATCH" : "POST",
+    headers: { ...headers, Prefer: "return=representation" },
+    body: JSON.stringify(recId ? row : [row])
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    if (isMissingTableText(text, "accounting_bank_reconciliations")) throw new Error("Run the 2026-04-27 accounting workflow migration before saving bank reconciliations.");
+    throw new Error(`Could not save bank reconciliation. ${text}`);
+  }
+  const rows = await res.json().catch(() => []);
+  return Array.isArray(rows) ? rows[0] : rows;
+}
+
+export async function buildPayrollPayoutReconciliationReport(env, { month, year } = {}) {
+  const runs = await loadPayrollRuns(env, { month, year });
+  const recs = await listPayrollPayoutReconciliations(env, { month, year });
+  const recMap = new Map((recs || []).map((row) => [String(row.payroll_run_id || ""), row]));
+  const rows = runs.map((run) => {
+    const rec = recMap.get(String(run.id || "")) || null;
+    const expected = roundMoney(run.total_gross_cad || 0);
+    const paid = roundMoney(rec?.paid_gross_cad || 0);
+    return {
+      payroll_run_id: run.id,
+      period_start: run.period_start || null,
+      period_end: run.period_end || null,
+      status: rec?.status || "pending",
+      payout_date: rec?.payout_date || null,
+      payment_account_code: rec?.payment_account_code || "cash",
+      expected_gross_cad: expected,
+      paid_gross_cad: paid,
+      difference_cad: roundMoney(paid - expected),
+      note: rec?.note || run.note || null,
+      accounting_entry_id: rec?.accounting_entry_id || run.accounting_entry_id || null
+    };
+  });
+  return {
+    month,
+    year,
+    totals: {
+      run_count: rows.length,
+      expected_gross_cad: roundMoney(rows.reduce((sum, row) => sum + Number(row.expected_gross_cad || 0), 0)),
+      paid_gross_cad: roundMoney(rows.reduce((sum, row) => sum + Number(row.paid_gross_cad || 0), 0)),
+      difference_cad: roundMoney(rows.reduce((sum, row) => sum + Number(row.difference_cad || 0), 0)),
+      reconciled_count: rows.filter((row) => ["reconciled", "paid"].includes(String(row.status || ""))).length
+    },
+    rows
+  };
+}
+
+export async function listPayrollPayoutReconciliations(env, { month, year } = {}) {
+  let url = `${env.SUPABASE_URL}/rest/v1/accounting_payroll_payout_reconciliations?select=*&order=payout_date.desc,created_at.desc&limit=120`;
+  if (month && year) {
+    const { start, nextMonth } = monthRange(month, year);
+    url += `&payout_date=gte.${encodeURIComponent(start)}&payout_date=lt.${encodeURIComponent(nextMonth)}`;
+  }
+  return await fetchRowsWithMissingTableFallback(env, url, "accounting_payroll_payout_reconciliations", "Could not load payroll payout reconciliations.");
+}
+
+export async function savePayrollPayoutReconciliation(env, payload = {}, actor = {}) {
+  const headers = serviceHeaders(env);
+  const runId = cleanTextValue(payload.payroll_run_id);
+  if (!runId) throw new Error("A payroll run is required.");
+  const runs = await loadPayrollRuns(env, {});
+  const run = (runs || []).find((row) => String(row.id || "") === runId);
+  if (!run) throw new Error("Payroll run not found.");
+
+  const expected = roundMoney(run.total_gross_cad || 0);
+  const paid = roundMoney(payload.paid_gross_cad || expected);
+  const row = {
+    payroll_run_id: runId,
+    payout_date: cleanTextValue(payload.payout_date) || new Date().toISOString().slice(0, 10),
+    payment_account_code: cleanTextValue(payload.payment_account_code) || "cash",
+    expected_gross_cad: expected,
+    paid_gross_cad: paid,
+    difference_cad: roundMoney(paid - expected),
+    status: cleanTextValue(payload.status) || "reconciled",
+    note: cleanTextValue(payload.note) || null,
+    accounting_entry_id: cleanTextValue(payload.accounting_entry_id) || run.accounting_entry_id || null,
+    reconciled_by_name: actor.name || null,
+    reconciled_by_staff_user_id: actor.staffUserId || null
+  };
+  const recId = cleanTextValue(payload.id);
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/accounting_payroll_payout_reconciliations${recId ? `?id=eq.${encodeURIComponent(recId)}` : ""}`, {
+    method: recId ? "PATCH" : "POST",
+    headers: { ...headers, Prefer: "return=representation" },
+    body: JSON.stringify(recId ? row : [row])
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    if (isMissingTableText(text, "accounting_payroll_payout_reconciliations")) throw new Error("Run the 2026-04-27 accounting workflow migration before saving payroll payout reconciliations.");
+    throw new Error(`Could not save payroll payout reconciliation. ${text}`);
+  }
+  const rows = await res.json().catch(() => []);
+  return Array.isArray(rows) ? rows[0] : rows;
+}
+
+export async function listPeriodCloses(env, { year = null } = {}) {
+  let url = `${env.SUPABASE_URL}/rest/v1/accounting_period_closes?select=*&order=month_start.desc&limit=36`;
+  if (year) {
+    url += `&month_start=gte.${encodeURIComponent(`${year}-01-01`)}&month_start=lt.${encodeURIComponent(`${Number(year) + 1}-01-01`)}`;
+  }
+  return await fetchRowsWithMissingTableFallback(env, url, "accounting_period_closes", "Could not load period close workflow.");
+}
+
+export async function savePeriodClose(env, payload = {}, actor = {}) {
+  const headers = serviceHeaders(env);
+  const month = Number(payload.month || 0);
+  const year = Number(payload.year || 0);
+  const monthStart = payload.month_start || (year && month ? `${year}-${String(month).padStart(2, "0")}-01` : null);
+  if (!monthStart) throw new Error("month/year is required.");
+  const status = cleanTextValue(payload.status) || "review";
+  const row = {
+    month_start: monthStart,
+    status,
+    notes: cleanTextValue(payload.notes) || null,
+    checklist: payload.checklist && typeof payload.checklist === "object" ? payload.checklist : null,
+    locked_at: ["locked", "closed"].includes(status) ? new Date().toISOString() : null,
+    locked_by_name: ["locked", "closed"].includes(status) ? (actor.name || null) : null,
+    locked_by_staff_user_id: ["locked", "closed"].includes(status) ? (actor.staffUserId || null) : null
+  };
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/accounting_period_closes?month_start=eq.${encodeURIComponent(monthStart)}`, {
+    method: "PATCH",
+    headers: { ...headers, Prefer: "return=representation", "Content-Type": "application/json" },
+    body: JSON.stringify(row)
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    if (isMissingTableText(text, "accounting_period_closes")) throw new Error("Run the 2026-04-27 accounting workflow migration before saving the accountant lock / close workflow.");
+    throw new Error(`Could not save period close workflow. ${text}`);
+  }
+  let rows = await res.json().catch(() => []);
+  if (!Array.isArray(rows) || !rows.length) {
+    const createRes = await fetch(`${env.SUPABASE_URL}/rest/v1/accounting_period_closes`, {
+      method: "POST",
+      headers: { ...headers, Prefer: "return=representation", "Content-Type": "application/json" },
+      body: JSON.stringify([row])
+    });
+    if (!createRes.ok) {
+      const text = await createRes.text();
+      if (isMissingTableText(text, "accounting_period_closes")) throw new Error("Run the 2026-04-27 accounting workflow migration before saving the accountant lock / close workflow.");
+      throw new Error(`Could not save period close workflow. ${text}`);
+    }
+    rows = await createRes.json().catch(() => []);
+  }
+  return Array.isArray(rows) ? rows[0] : rows;
+}
+
+async function assertPeriodWritable(env, entryDate) {
+  const dateValue = cleanTextValue(entryDate) || new Date().toISOString().slice(0, 10);
+  const monthStart = `${dateValue.slice(0, 7)}-01`;
+  const rows = await listPeriodCloses(env, {});
+  const match = (rows || []).find((row) => String(row.month_start || "") === monthStart);
+  const status = String(match?.status || "open").toLowerCase();
+  if (status === "locked" || status === "closed") {
+    throw new Error(`The accounting period ${monthStart} is ${status}. Reopen it before posting new entries.`);
+  }
+}
+
+async function loadPayrollRuns(env, { month = null, year = null } = {}) {
+  let url = `${env.SUPABASE_URL}/rest/v1/staff_payroll_runs?select=id,period_start,period_end,status,total_gross_cad,total_hours,accounting_entry_id,note,posted_at&order=period_end.desc&limit=120`;
+  if (month && year) {
+    const { start, nextMonth } = monthRange(month, year);
+    url += `&period_end=gte.${encodeURIComponent(start)}&period_end=lt.${encodeURIComponent(nextMonth)}`;
+  }
+  return await fetchRowsWithMissingTableFallback(env, url, "staff_payroll_runs", "Could not load payroll runs.");
+}
+
+async function fetchRowsWithMissingTableFallback(env, url, tableHint, errorPrefix) {
+  const headers = serviceHeaders(env);
+  const res = await fetch(url, { headers });
+  if (res.ok) return await res.json().catch(() => []);
+  const text = await res.text();
+  if (isMissingTableText(text, tableHint)) return [];
+  throw new Error(`${errorPrefix} ${text}`);
+}
+
+function isMissingTableText(text, tableHint) {
+  const low = String(text || "").toLowerCase();
+  const hint = String(tableHint || "").toLowerCase();
+  return (
+    low.includes(`relation "${hint}" does not exist`) ||
+    low.includes(`relation '${hint}' does not exist`) ||
+    (low.includes("could not find the table") && low.includes(hint)) ||
+    (low.includes("schema cache") && low.includes(hint)) ||
+    low.includes("42p01")
+  );
+}
+
+function cleanTextValue(value) {
+  return String(value == null ? "" : value).trim();
+}
+
+function parseDelimitedValues(value) {
+  return String(value || "")
+    .split(/[\n,|]/g)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function advanceCadenceDate(dateString, cadence) {
+  const base = new Date(`${dateString}T00:00:00Z`);
+  const next = new Date(base);
+  const key = String(cadence || "monthly").toLowerCase();
+  if (key === "weekly") next.setUTCDate(next.getUTCDate() + 7);
+  else if (key === "quarterly") next.setUTCMonth(next.getUTCMonth() + 3);
+  else if (key === "yearly" || key === "annual") next.setUTCFullYear(next.getUTCFullYear() + 1);
+  else next.setUTCMonth(next.getUTCMonth() + 1);
+  return next.toISOString().slice(0, 10);
 }
