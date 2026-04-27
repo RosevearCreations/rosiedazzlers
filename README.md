@@ -413,3 +413,9 @@ Pass 28 sync — 2026-04-20
 - Added four town-focused landing pages for local visibility.
 - Stabilized embedded booking height handling on the pricing page.
 
+
+
+Latest pass highlights: pricing embed height stabilization, bundled reviews fallback asset, and year-end accounting package reporting/export for admin-accounting.
+
+
+The accounting workspace now covers operational ledger, payables, remittance, statements, profitability, and a year-end package intended to speed CRA/ontario-friendly tax prep handoff.

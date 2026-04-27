@@ -60,3 +60,9 @@ This pass continued the public pricing/SEO work by moving the vehicle size guide
 - Added: Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, and Port Dover location pages.
 - No schema migration required in this pass.
 
+
+
+This build adds a stable /pricing embedded planner height, bundled review-proof fallback art, and a year-end accounting package/export path for Ontario-friendly bookkeeping handoff.
+
+
+No schema migration is required in this pass.

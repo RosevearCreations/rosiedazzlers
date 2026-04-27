@@ -865,3 +865,6 @@ create index if not exists customer_profiles_maintenance_last_service_at_idx on 
 -- 2026-04-20 no-DDL note: booking overflow polish, maintenance conversion from complete detail, fleet handoff path.
 
 -- Pass note 2026-04-21: added customer vehicle media, garage-display overrides, next-service mileage tracking, booking mileage capture, gallery slider groundwork, and geolocation arrival groundwork.
+
+
+-- 2026-04-25 no-DDL pass: pricing embed stabilization, bundled review-proof fallback, and year-end accounting reporting/export built on existing accounting tables.

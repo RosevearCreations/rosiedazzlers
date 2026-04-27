@@ -407,3 +407,9 @@ Pass 28 sync — 2026-04-20
 - Verify /pricing no longer keeps expanding below the vehicle-identification / booking-embed section.
 - Verify the four new town pages render one H1 each and load recent work/review proof correctly.
 
+
+
+Pass focus: pricing-page spacing/overflow, missing review image fallback, and year-end accounting package reporting.
+
+
+Smoke-check after deploy: /pricing, /book, /admin-accounting, and home-page review-proof blocks.
