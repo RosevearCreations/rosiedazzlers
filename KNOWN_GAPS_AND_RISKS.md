@@ -678,3 +678,9 @@ Pass 28 sync — 2026-04-20
 - Pricing page embed height is now clamped to stop runaway growth, but live deployed testing after cache clear is still required.
 - Town pages are live in the codebase, but they still need continued content enrichment, reviews, and recent-work freshness over time.
 
+
+
+Resolved in this pass: pricing embed runaway height on /pricing was clamped to a stable iframe viewport; broken Rosie Dazzlers reviews image now has a bundled local fallback; accounting now includes a year-end package/report export path.
+
+
+Open accounting risks: this remains an operational bookkeeping layer, not professional tax advice; source receipts/invoices and GST/HST working papers must still be retained and reviewed before filing.

@@ -543,3 +543,11 @@ Pass 28 sync — 2026-04-20
 - Completed: added town-focused landing pages for Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, and Port Dover.
 - Next best steps remain: keep folder-backed clean routes as baseline, keep recent work/review proof visible on entry pages, and connect Google-side reporting later through Search Console and Business Profile after internal rollups are stable.
 
+
+
+Next best steps now include pricing-page embed height control, a bundled reviews-proof fallback image, and a year-end accounting package for Ontario-friendly tax prep.
+
+
+- Keep the folder-backed clean-route model as the live baseline.
+- Continue building out town-focused pages and keep recent work / review proof blocks visible.
+- Expand accounting from operational ledger into a full year-end handoff workflow with CRA-friendly exports, HST tracking, payables, receivables, and owner-draw visibility.

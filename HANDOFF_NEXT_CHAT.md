@@ -60,3 +60,11 @@ Rosie Dazzlers is a role-aware detailing operations platform with booking, depos
 3. Keep the folder-backed clean-route approach as the live baseline.
 4. Connect Google-side reporting later through Search Console and Business Profile once internal analytics rollups are stable.
 
+
+
+Next chat should continue from the folder-backed clean-route baseline, the town-page/local-proof SEO direction, and the expanded accounting backbone that now includes year-end package reporting.
+
+
+- Verify the live /pricing iframe no longer leaves a large dead gap between vehicle details and package selection.
+- Verify the bundled reviews fallback appears on home/proof sections if the remote review image is missing.
+- Next accounting pass: add invoice/bill document attachment support and bank-reconciliation workflow on top of the new year-end package.

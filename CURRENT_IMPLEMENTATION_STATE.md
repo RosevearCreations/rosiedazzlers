@@ -423,3 +423,9 @@ Pass 28 sync — 2026-04-20
 - Public visibility layer now includes special-service landing pages plus four town-focused landing pages.
 - Pricing keeps the folder-backed route model and now has safer iframe sizing to prevent infinite growth while the embedded booking planner updates.
 
+
+
+Current public-state note: /pricing now uses a clamped embedded planner viewport instead of unconstrained growth, and review-proof graphics now fall back to a bundled local SVG if the remote banner is unavailable.
+
+
+Current accounting-state note: admin-accounting now includes a year-end tax prep package with monthly trend, expense buckets, HST activity, owner draws, receivables, payables, and export support.
