@@ -803,3 +803,151 @@ function csvSafe(value) {
   const str = String(value ?? "");
   return `"${str.replace(/"/g, '""')}"`;
 }
+
+
+export async function buildYearEndReport(env, { year }) {
+  const monthly = [];
+  const expenseBuckets = {};
+  const revenueBuckets = {};
+  const totals = {
+    revenue_cad: 0,
+    expense_cad: 0,
+    net_income_cad: 0,
+    hst_collected_cad: 0,
+    hst_debits_cad: 0,
+    hst_net_activity_cad: 0,
+    owner_draw_cad: 0,
+    owner_equity_delta_cad: 0
+  };
+
+  for (let month = 1; month <= 12; month += 1) {
+    const [pnl, tax, owner] = await Promise.all([
+      buildMonthlyReport(env, { month, year }),
+      buildTaxReport(env, { month, year }),
+      buildOwnerEquityReport(env, { month, year })
+    ]);
+    const revenue = roundMoney(pnl?.totals?.revenue || 0);
+    const expense = roundMoney(pnl?.totals?.expense || 0);
+    const netIncome = roundMoney(pnl?.totals?.net_income || (revenue - expense));
+    const hstCollected = roundMoney(tax?.collected_tax_cad || 0);
+    const hstDebits = roundMoney(tax?.tax_account_debits_cad || 0);
+    const hstNet = roundMoney(tax?.net_tax_payable_cad || 0);
+    const ownerDraw = roundMoney(Math.abs(owner?.owner_draw_cad || 0));
+    const ownerEquityDelta = roundMoney(owner?.owner_equity_delta_cad || 0);
+
+    totals.revenue_cad = roundMoney(totals.revenue_cad + revenue);
+    totals.expense_cad = roundMoney(totals.expense_cad + expense);
+    totals.net_income_cad = roundMoney(totals.net_income_cad + netIncome);
+    totals.hst_collected_cad = roundMoney(totals.hst_collected_cad + hstCollected);
+    totals.hst_debits_cad = roundMoney(totals.hst_debits_cad + hstDebits);
+    totals.hst_net_activity_cad = roundMoney(totals.hst_net_activity_cad + hstNet);
+    totals.owner_draw_cad = roundMoney(totals.owner_draw_cad + ownerDraw);
+    totals.owner_equity_delta_cad = roundMoney(totals.owner_equity_delta_cad + ownerEquityDelta);
+
+    for (const row of pnl?.by_account || []) {
+      const type = String(row?.account_type || '');
+      const target = type === 'expense' ? expenseBuckets : (type === 'revenue' ? revenueBuckets : null);
+      if (!target) continue;
+      const key = row.account_code;
+      target[key] ||= { account_code: key, label: row.label || key, amount_cad: 0 };
+      target[key].amount_cad = roundMoney(target[key].amount_cad + Number(row.amount_cad || 0));
+    }
+
+    monthly.push({
+      month,
+      month_label: `${year}-${String(month).padStart(2, '0')}`,
+      revenue_cad: revenue,
+      expense_cad: expense,
+      net_income_cad: netIncome,
+      hst_collected_cad: hstCollected,
+      hst_debits_cad: hstDebits,
+      hst_net_activity_cad: hstNet,
+      owner_draw_cad: ownerDraw
+    });
+  }
+
+  const [balanceSheet, receivablesAging, payables] = await Promise.all([
+    buildBalanceSheetReport(env, { month: 12, year }),
+    buildReceivablesAgingReport(env, { month: 12, year }),
+    listPayables(env, { status: 'all' })
+  ]);
+
+  const openPayables = payables.filter((row) => ['open', 'partial'].includes(String(row.payment_status || '')));
+  const openPayablesCad = roundMoney(openPayables.reduce((sum, row) => sum + Number(row.balance_due_cad || 0), 0));
+  const assetRows = balanceSheet?.sections?.assets || [];
+  const liabilityRows = balanceSheet?.sections?.liabilities || [];
+  const equityRows = balanceSheet?.sections?.equity || [];
+  const cashRow = assetRows.find((row) => String(row.account_code) === 'cash');
+  const taxPayableRow = liabilityRows.find((row) => String(row.account_code) === 'sales_tax_payable');
+
+  return {
+    year,
+    jurisdiction: 'Ontario / Canada',
+    reporting_basis_note: 'Operational bookkeeping summary for CRA-friendly handoff. Keep source invoices, settlement support, and GST/HST working papers with this package.',
+    monthly,
+    totals: {
+      ...totals,
+      year_end_cash_cad: roundMoney(cashRow?.amount_cad || 0),
+      year_end_sales_tax_payable_cad: roundMoney(taxPayableRow?.amount_cad || 0),
+      year_end_receivables_cad: roundMoney(receivablesAging?.totals?.total_balance_cad || 0),
+      year_end_open_payables_cad: openPayablesCad,
+      year_end_total_assets_cad: roundMoney(balanceSheet?.totals?.assets_cad || 0),
+      year_end_total_liabilities_cad: roundMoney(balanceSheet?.totals?.liabilities_cad || 0),
+      year_end_total_equity_cad: roundMoney(balanceSheet?.totals?.equity_total_cad || 0)
+    },
+    expense_categories: Object.values(expenseBuckets).sort((a, b) => Number(b.amount_cad || 0) - Number(a.amount_cad || 0)),
+    revenue_categories: Object.values(revenueBuckets).sort((a, b) => Number(b.amount_cad || 0) - Number(a.amount_cad || 0)),
+    snapshots: {
+      balance_sheet: balanceSheet,
+      receivables_aging: receivablesAging,
+      open_payables: openPayables.slice(0, 250),
+      equity_accounts: equityRows
+    },
+    tax_prep_notes: [
+      'Keep invoices, receipts, settlement support, and bank/payment evidence for each posted entry.',
+      'GST/HST returns need support for sales collected, ITCs claimed, and remittances posted.',
+      'CRA generally requires records to be kept for six years from the end of the last tax year they relate to.'
+    ]
+  };
+}
+
+export async function buildYearEndPackageExport(env, { year }) {
+  const report = await buildYearEndReport(env, { year });
+  const lines = [];
+  lines.push([csvSafe('section'), csvSafe('label'), csvSafe('value')].join(','));
+  const totals = report?.totals || {};
+  [
+    ['summary', 'Year', year],
+    ['summary', 'Jurisdiction', report?.jurisdiction || 'Ontario / Canada'],
+    ['summary', 'Revenue', totals.revenue_cad || 0],
+    ['summary', 'Expense', totals.expense_cad || 0],
+    ['summary', 'Net income', totals.net_income_cad || 0],
+    ['summary', 'HST collected', totals.hst_collected_cad || 0],
+    ['summary', 'HST debits / ITCs', totals.hst_debits_cad || 0],
+    ['summary', 'HST net activity', totals.hst_net_activity_cad || 0],
+    ['summary', 'Owner draw', totals.owner_draw_cad || 0],
+    ['summary', 'Year-end cash', totals.year_end_cash_cad || 0],
+    ['summary', 'Year-end receivables', totals.year_end_receivables_cad || 0],
+    ['summary', 'Year-end open payables', totals.year_end_open_payables_cad || 0],
+    ['summary', 'Year-end sales tax payable', totals.year_end_sales_tax_payable_cad || 0]
+  ].forEach((row) => lines.push(row.map(csvSafe).join(',')));
+
+  lines.push([csvSafe('monthly'), csvSafe('month'), csvSafe('revenue_cad'), csvSafe('expense_cad'), csvSafe('net_income_cad'), csvSafe('hst_collected_cad'), csvSafe('hst_debits_cad'), csvSafe('hst_net_activity_cad'), csvSafe('owner_draw_cad')].join(','));
+  for (const row of report.monthly || []) {
+    lines.push([
+      csvSafe('monthly'), csvSafe(row.month_label), csvSafe(row.revenue_cad || 0), csvSafe(row.expense_cad || 0), csvSafe(row.net_income_cad || 0),
+      csvSafe(row.hst_collected_cad || 0), csvSafe(row.hst_debits_cad || 0), csvSafe(row.hst_net_activity_cad || 0), csvSafe(row.owner_draw_cad || 0)
+    ].join(','));
+  }
+
+  lines.push([csvSafe('expense_categories'), csvSafe('account_code'), csvSafe('label'), csvSafe('amount_cad')].join(','));
+  for (const row of report.expense_categories || []) lines.push([csvSafe('expense_categories'), csvSafe(row.account_code), csvSafe(row.label), csvSafe(row.amount_cad || 0)].join(','));
+
+  lines.push([csvSafe('revenue_categories'), csvSafe('account_code'), csvSafe('label'), csvSafe('amount_cad')].join(','));
+  for (const row of report.revenue_categories || []) lines.push([csvSafe('revenue_categories'), csvSafe(row.account_code), csvSafe(row.label), csvSafe(row.amount_cad || 0)].join(','));
+
+  lines.push([csvSafe('notes'), csvSafe('tax_prep_note'), csvSafe('')].join(','));
+  for (const note of report.tax_prep_notes || []) lines.push([csvSafe('notes'), csvSafe(note), csvSafe('')].join(','));
+  return lines.join('
+');
+}
