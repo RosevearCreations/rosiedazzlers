@@ -318,3 +318,6 @@ Pass 28 sync — 2026-04-20
 - New backend/admin reporting files: `functions/api/_lib/analytics-rollups.js`, `functions/api/admin/analytics_rollups_refresh.js`, and the updated `functions/api/admin/analytics_overview.js`.
 - New SQL migration: `sql/2026-04-24_site_activity_rollups.sql`.
 - New local-search planning doc: `LOCAL_VISIBILITY_REVIEW_2026-04-24.md`.
+
+## 2026-04-27 repo guide note
+New admin/accounting workflow endpoints were added under `functions/api/admin/` for documents, recurring expenses, bank reconciliation, payroll payout reconciliation, and period close. The related schema migration is `sql/2026-04-27_accounting_workflow_foundation.sql`.

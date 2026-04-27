@@ -66,3 +66,17 @@ This build adds a stable /pricing embedded planner height, bundled review-proof 
 
 
 No schema migration is required in this pass.
+
+## 2026-04-27 handoff status
+Completed in this pass:
+- fixed the missing Rosie Dazzlers reviews image on pricing/local proof sections by hard-wiring the bundled fallback asset
+- added accounting workflow foundation tables + admin UI for:
+  - bank reconciliation
+  - vendor / invoice / bill document links
+  - recurring expenses
+  - payroll payout reconciliation
+  - accountant lock / close workflow
+- added period-lock enforcement to journal posting
+
+Important next move:
+- run `sql/2026-04-27_accounting_workflow_foundation.sql` before using the new accounting workflow sections live

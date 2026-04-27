@@ -68,3 +68,6 @@ Next chat should continue from the folder-backed clean-route baseline, the town-
 - Verify the live /pricing iframe no longer leaves a large dead gap between vehicle details and package selection.
 - Verify the bundled reviews fallback appears on home/proof sections if the remote review image is missing.
 - Next accounting pass: add invoice/bill document attachment support and bank-reconciliation workflow on top of the new year-end package.
+
+## Carry-forward after 2026-04-27
+Keep the folder-backed clean-route model as the live baseline. On Rosie Dazzlers, the strongest next admin/back-office steps are now: direct accounting document uploads, vendor defaults/directory, deeper bank matching, payroll deduction detail, and broader period-lock enforcement. On the public side, keep recent work, review proof, and local town/service freshness visible on the main entry pages.

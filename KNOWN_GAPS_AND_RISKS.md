@@ -684,3 +684,10 @@ Resolved in this pass: pricing embed runaway height on /pricing was clamped to a
 
 
 Open accounting risks: this remains an operational bookkeeping layer, not professional tax advice; source receipts/invoices and GST/HST working papers must still be retained and reviewed before filing.
+
+## 2026-04-27 gaps / risks update
+- The new accounting document workflow stores links/paths only; direct binary upload and retrieval governance are still a next step.
+- Bank reconciliation is now real but still summary-first; it does not yet do per-entry matching against statement lines.
+- Payroll payout reconciliation compares expected vs paid gross, but not yet statutory deductions or net-pay remittance detail.
+- Period lock / close now blocks new journal posting when a month is locked/closed, but other future accounting write paths should continue to be brought under the same control.
+- The accounting workflow foundation requires `sql/2026-04-27_accounting_workflow_foundation.sql` before the new sections can persist data.

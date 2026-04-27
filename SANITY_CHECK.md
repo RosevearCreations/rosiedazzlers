@@ -413,3 +413,13 @@ Pass focus: pricing-page spacing/overflow, missing review image fallback, and ye
 
 
 Smoke-check after deploy: /pricing, /book, /admin-accounting, and home-page review-proof blocks.
+
+## 2026-04-27 sanity note
+- Functions syntax should be checked after deploy for the new accounting modules:
+  - `functions/api/_lib/accounting-gl.js`
+  - `functions/api/admin/accounting_documents.js`
+  - `functions/api/admin/accounting_recurring_expenses.js`
+  - `functions/api/admin/accounting_bank_reconciliation.js`
+  - `functions/api/admin/accounting_payroll_payout_reconciliation.js`
+  - `functions/api/admin/accounting_period_close.js`
+- Run the new SQL migration before opening the new accounting sections in production.

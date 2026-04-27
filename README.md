@@ -419,3 +419,8 @@ Latest pass highlights: pricing embed height stabilization, bundled reviews fall
 
 
 The accounting workspace now covers operational ledger, payables, remittance, statements, profitability, and a year-end package intended to speed CRA/ontario-friendly tax prep handoff.
+
+## Pass sync — 2026-04-27
+- Fixed the public review-proof image by hard-wiring the bundled Rosie Dazzlers reviews fallback on pricing and related local/service proof blocks.
+- Extended the accounting workspace beyond reporting into operational workflow foundations: bank reconciliation, receipt/bill document links, recurring expenses, payroll payout reconciliation, and accountant period lock / close control.
+- Added a new SQL migration: `sql/2026-04-27_accounting_workflow_foundation.sql`.

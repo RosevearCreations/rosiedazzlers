@@ -354,3 +354,5 @@ Pass 28 sync — 2026-04-20
 ## 2026-04-25 operational note
 The current live-baseline priorities are: folder-backed clean routes, visible recent-work/review proof on public entry pages, admin scheduling usability, and later Google-side reporting after internal rollups stabilize.
 
+## 2026-04-27 project brain update
+Rosie Dazzlers now has a first real accounting workflow foundation sitting under the existing ledger/reporting layer. The next strongest accounting build should deepen document uploads, vendor defaults, and entry-level reconciliation rather than starting over with a different accounting structure.
