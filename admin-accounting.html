@@ -143,7 +143,7 @@
               </label>
               <button class="btn primary" type="submit">Refresh</button>
             </form>
-            <p class="mini" style="margin-top:10px">Use the month selector for P&amp;L, balance-sheet, cash-flow, and tax reporting. Booking accounting records still refresh from the live operational ledger.</p>
+            <p class="mini" style="margin-top:10px">Use the month selector for P&amp;L, balance-sheet, cash-flow, and tax reporting. The selected year also drives the year-end package below for Ontario/CRA-friendly handoff. Booking accounting records still refresh from the live operational ledger.</p>
           </article>
 
           <section class="summary-cards">
@@ -390,6 +390,27 @@
             </form>
           </article>
 
+
+
+<article class="panel stack">
+  <div class="row wrap" style="justify-content:space-between;align-items:end">
+    <div>
+      <h2 style="margin:0 0 6px">Year-end tax prep package</h2>
+      <p class="mini" style="margin:0">Ontario-friendly year summary for accountant handoff: annual revenue, expense categories, HST activity, receivables, payables, owner draws, and month-by-month trend.</p>
+    </div>
+    <div class="tag" id="yearEndPeriod">—</div>
+  </div>
+  <div class="table-lite" id="yearEndSummary"></div>
+  <div class="admin-grid-2">
+    <div class="report-scroll"><div class="table-lite" id="yearEndMonths"></div></div>
+    <div class="report-scroll"><div class="table-lite" id="yearEndExpenses"></div></div>
+  </div>
+  <div class="mini" id="yearEndNotes">This package is meant to speed up bookkeeping handoff and tax prep, not replace the source records CRA may ask for.</div>
+  <div class="row wrap" style="gap:10px">
+    <button class="btn ghost" type="button" data-export="year_end_package">Export year-end package</button>
+  </div>
+</article>
+
           <article class="panel stack">
             <div class="row wrap" style="justify-content:space-between;align-items:end">
               <div>
@@ -429,7 +450,8 @@
         owner: null,
         recordSummary: null,
         payables: [],
-        monthEndChecklist: null
+        monthEndChecklist: null,
+        yearEnd: null
       };
 
       function qs(selector, root) { return (root || document).querySelector(selector); }
@@ -662,7 +684,45 @@
           return '<div class="table-lite__row"><span>' + esc(row.customer_name || 'Customer') + '<div class="mini">' + esc(row.service_date || '') + (row.package_code ? ' · ' + esc(row.package_code) : '') + (row.booking_id ? ' · ' + esc(row.booking_id) : '') + '</div></span><span>' + esc(money(row.estimated_contribution_after_labor_cad || row.estimated_net_after_overhead_cad || 0)) + '<div class="mini">Revenue ' + esc(money(row.recognized_revenue_cad || 0)) + ' · COGS ' + esc(money(row.direct_cogs_cad || 0)) + ' · Labor ' + esc(money(row.estimated_direct_labor_cad || 0)) + ' · Overhead ' + esc(money(row.allocated_overhead_cad || 0)) + ' · Net ' + esc(money(row.estimated_net_after_overhead_cad || 0)) + '</div></span></div>';
         }).join('') || '<div class="mini">No booking profitability rows found for this month.</div>';
       }
-      function renderInventoryCosts(report) {
+
+function renderYearEnd(report) {
+  var summary = qs('#yearEndSummary');
+  var monthsWrap = qs('#yearEndMonths');
+  var expensesWrap = qs('#yearEndExpenses');
+  if (!report) {
+    qs('#yearEndPeriod').textContent = '—';
+    summary.innerHTML = '<div class="mini">No year-end package loaded yet.</div>';
+    monthsWrap.innerHTML = '';
+    expensesWrap.innerHTML = '';
+    return;
+  }
+  qs('#yearEndPeriod').textContent = String(report.year || selectedYear());
+  qs('#yearEndNotes').textContent = report.reporting_basis_note || 'Operational year-end summary for accountant handoff.';
+  var totals = report.totals || {};
+  summary.innerHTML = [
+    ['Revenue', money(totals.revenue_cad || 0)],
+    ['Expense', money(totals.expense_cad || 0)],
+    ['Net income', money(totals.net_income_cad || 0)],
+    ['HST collected', money(totals.hst_collected_cad || 0)],
+    ['HST debits / ITCs', money(totals.hst_debits_cad || 0)],
+    ['Year-end tax payable', money(totals.year_end_sales_tax_payable_cad || 0)],
+    ['Year-end receivables', money(totals.year_end_receivables_cad || 0)],
+    ['Open payables', money(totals.year_end_open_payables_cad || 0)],
+    ['Owner draw', money(totals.owner_draw_cad || 0)],
+    ['Year-end cash', money(totals.year_end_cash_cad || 0)]
+  ].map(function (row) {
+    return '<div class="table-lite__row"><span>' + esc(row[0]) + '</span><span>' + esc(row[1]) + '</span></div>';
+  }).join('');
+  monthsWrap.innerHTML = (report.monthly || []).map(function (row) {
+    return '<div class="table-lite__row"><span>' + esc(row.month_label || row.month) + '</span><span>' + esc(money(row.net_income_cad || 0)) + '<div class="mini">Revenue ' + esc(money(row.revenue_cad || 0)) + ' · Expense ' + esc(money(row.expense_cad || 0)) + ' · HST ' + esc(money(row.hst_net_activity_cad || 0)) + '</div></span></div>';
+  }).join('') || '<div class="mini">No monthly year-end rows found.</div>';
+  expensesWrap.innerHTML = (report.expense_categories || []).slice(0, 18).map(function (row) {
+    return '<div class="table-lite__row"><span>' + esc(row.label || row.account_code) + '<div class="mini">' + esc(row.account_code || '') + '</div></span><span>' + esc(money(row.amount_cad || 0)) + '</span></div>';
+  }).join('') || '<div class="mini">No expense categories found yet.</div>';
+}
+
+function renderInventoryCosts(report) {
+
         var summary = qs('#inventoryCostSummary');
         var missing = qs('#inventoryCostMissing');
         if (!report) {
@@ -867,6 +927,11 @@
         state.payables = Array.isArray(out.payables) ? out.payables : [];
         renderPayables(state.payables);
       }
+      async function loadYearEnd() {
+        var out = await apiJson('/api/admin/accounting_year_end_report?year=' + selectedYear());
+        state.yearEnd = out.report || null;
+        renderYearEnd(state.yearEnd);
+      }
       async function loadReports() {
         var month = selectedMonth();
         var year = selectedYear();
@@ -898,7 +963,7 @@
       }
       async function refreshAll() {
         setStatus('Refreshing accounting workspace…');
-        await Promise.all([loadRecords(), loadPayables(), loadReports(), loadMonthEndChecklist(), loadPricingWindow()]);
+        await Promise.all([loadRecords(), loadPayables(), loadReports(), loadYearEnd(), loadMonthEndChecklist(), loadPricingWindow()]);
         renderSummaryCards();
         setStatus('Accounting workspace refreshed.', 'success');
       }
