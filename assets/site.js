@@ -5,7 +5,7 @@ const DATA_URL = "/api/pricing_catalog_public";
 const BRAND = {
   logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
   banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
-  reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png"
+  reviews: "/assets/brand/rosie-reviews-fallback.svg"
 };
 
 const CONTACT = {
@@ -162,7 +162,7 @@ export function setBrandImages() {
   if (banner) banner.src = BRAND.banner;
 
   const reviews = document.querySelector("[data-reviews]");
-  if (reviews) reviews.src = BRAND.reviews;
+  if (reviews) { reviews.src = BRAND.reviews; reviews.onerror = () => { reviews.onerror = null; reviews.src = "/assets/brand/rosie-reviews-fallback.svg"; }; }
 }
 
 export function setFooter() {

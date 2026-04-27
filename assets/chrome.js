@@ -8,7 +8,7 @@ const BRAND = {
   name: "Rosie Dazzlers",
   logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
   banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
-  reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png",
+  reviews: "/assets/brand/rosie-reviews-fallback.svg",
   footerLogo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
 };
 
@@ -149,6 +149,7 @@ function ensureReviewsPanel() {
   if (directImg && directImg.tagName && directImg.tagName.toLowerCase() === "img") {
     directImg.src = BRAND.reviews;
     directImg.alt = "Rosie Dazzlers reviews";
+    directImg.onerror = function(){ this.onerror = null; this.src = "/assets/brand/rosie-reviews-fallback.svg"; };
     directImg.loading = "lazy";
     directImg.style.display = "block";
     directImg.style.width = "100%";
@@ -166,6 +167,7 @@ function ensureReviewsPanel() {
     wrapTarget.innerHTML = `
       <img
         src="${BRAND.reviews}"
+        onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.svg'"
         alt="Rosie Dazzlers reviews"
         loading="lazy"
         style="display:block;width:100%;height:auto;object-fit:contain"
@@ -200,6 +202,7 @@ function ensureReviewsPanel() {
     >
       <img
         src="${BRAND.reviews}"
+        onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.svg'"
         alt="Rosie Dazzlers reviews"
         loading="lazy"
         style="display:block;width:100%;max-width:980px;height:auto;object-fit:contain"
