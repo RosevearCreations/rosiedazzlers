@@ -162,3 +162,5 @@ Pass 28 sync — 2026-04-20
 ## 2026-04-25 note
 Use DEVELOPMENT_ROADMAP.md, KNOWN_GAPS_AND_RISKS.md, CURRENT_IMPLEMENTATION_STATE.md, HANDOFF_NEXT_CHAT.md, and NEW_CHAT_STATUS.md first for the newest pass details.
 
+## 2026-04-27 index note
+Use `NEW_CHAT_STATUS.md`, `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `SUPABASE_SCHEMA.sql` first when handing off the new accounting workflow foundation pass.

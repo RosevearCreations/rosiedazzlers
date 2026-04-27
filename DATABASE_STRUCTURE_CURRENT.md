@@ -426,3 +426,12 @@ This pass added three analytics reporting tables: `public.site_activity_rollups`
 ## 2026-04-25 note
 No schema changes this pass. Admin range blocking uses the existing date_blocks(blocked_date, reason) and slot_blocks(blocked_date, slot, reason) tables.
 
+## 2026-04-27 accounting workflow schema update
+New schema objects introduced in this pass:
+- `accounting_documents`
+- `accounting_recurring_expenses`
+- `accounting_bank_reconciliations`
+- `accounting_payroll_payout_reconciliations`
+- `accounting_period_closes`
+
+These support receipt/bill/invoice links, recurring expense templates, monthly bank reconciliation records, payroll payout reconciliation records, and month lock/close status.

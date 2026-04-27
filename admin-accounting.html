@@ -32,6 +32,10 @@
     .pricing-window__tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
     .pricing-tier{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
     .pricing-tier strong{display:block;font-size:1.2rem;margin-top:6px}
+
+    .doc-card,.recurring-card{border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;background:rgba(255,255,255,.03)}
+    .doc-card a{word-break:break-word}
+    .warning-text{color:#fde68a}
     #filterForm,
     #entryForm .admin-grid-3,
     #entryForm .admin-grid-2,
@@ -411,6 +415,284 @@
   </div>
 </article>
 
+
+
+          <section class="admin-grid-2">
+            <article class="panel stack">
+              <div>
+                <h2 style="margin:0 0 6px">Bank reconciliation</h2>
+                <p class="mini" style="margin:0">Save the month’s statement balance, compare it to the book balance, and keep a running record of reconciliation differences.</p>
+              </div>
+              <form id="bankReconForm" class="stack">
+                <div class="admin-grid-3">
+                  <label>
+                    Bank / cash account
+                    <select id="bankReconAccount" data-account-role="payment"></select>
+                  </label>
+                  <label>
+                    Statement ending balance
+                    <input id="bankReconStatementBalance" type="number" step="0.01" value="0.00" />
+                  </label>
+                  <label>
+                    Outstanding items count
+                    <input id="bankReconOutstandingCount" type="number" min="0" step="1" value="0" />
+                  </label>
+                </div>
+                <div class="admin-grid-2">
+                  <label>
+                    Status
+                    <select id="bankReconStatus">
+                      <option value="draft">Draft</option>
+                      <option value="review">In review</option>
+                      <option value="reconciled">Reconciled</option>
+                      <option value="locked">Locked</option>
+                    </select>
+                  </label>
+                  <label>
+                    Cleared journal entry ids (optional)
+                    <input id="bankReconClearedIds" placeholder="uuid, uuid, uuid" />
+                  </label>
+                </div>
+                <label>
+                  Notes
+                  <textarea id="bankReconNotes" rows="3" placeholder="Statement exceptions, uncleared items, bank fees, or deposit timing notes."></textarea>
+                </label>
+                <div class="row wrap" style="justify-content:space-between;align-items:center">
+                  <div class="mini" id="bankReconMeta">No reconciliation snapshot loaded yet.</div>
+                  <button class="btn primary" type="submit">Save reconciliation</button>
+                </div>
+              </form>
+              <div class="table-lite" id="bankReconSummary"></div>
+              <div class="report-scroll"><div class="table-lite" id="bankReconRows"></div></div>
+            </article>
+
+            <article class="panel stack">
+              <div>
+                <h2 style="margin:0 0 6px">Payroll payout reconciliation</h2>
+                <p class="mini" style="margin:0">Compare posted payroll runs to actual payout totals so wage runs, payout timing, and variances are visible before year-end.</p>
+              </div>
+              <form id="payrollPayoutForm" class="stack">
+                <div class="admin-grid-3">
+                  <label>
+                    Payroll run
+                    <select id="payrollRunSelect"></select>
+                  </label>
+                  <label>
+                    Payout date
+                    <input id="payrollPayoutDate" type="date" />
+                  </label>
+                  <label>
+                    Paid gross amount
+                    <input id="payrollPayoutAmount" type="number" step="0.01" value="0.00" />
+                  </label>
+                </div>
+                <div class="admin-grid-3">
+                  <label>
+                    Payment account
+                    <select id="payrollPayoutAccount" data-account-role="payment"></select>
+                  </label>
+                  <label>
+                    Status
+                    <select id="payrollPayoutStatus">
+                      <option value="review">In review</option>
+                      <option value="reconciled">Reconciled</option>
+                      <option value="paid">Paid</option>
+                    </select>
+                  </label>
+                  <label>
+                    Linked accounting entry id (optional)
+                    <input id="payrollPayoutEntryId" placeholder="Optional journal entry uuid" />
+                  </label>
+                </div>
+                <label>
+                  Notes
+                  <textarea id="payrollPayoutNote" rows="3" placeholder="Variance reason, payout batch note, or missing transfer note."></textarea>
+                </label>
+                <div class="row wrap" style="justify-content:space-between;align-items:center">
+                  <div class="mini" id="payrollPayoutMeta">No payroll payout report loaded yet.</div>
+                  <button class="btn primary" type="submit">Save payout reconciliation</button>
+                </div>
+              </form>
+              <div class="table-lite" id="payrollPayoutSummary"></div>
+              <div class="report-scroll"><div class="table-lite" id="payrollPayoutRows"></div></div>
+            </article>
+          </section>
+
+          <section class="admin-grid-2">
+            <article class="panel stack">
+              <div>
+                <h2 style="margin:0 0 6px">Recurring expenses</h2>
+                <p class="mini" style="margin:0">Save repeating bills once, then post them into the journal when they come due.</p>
+              </div>
+              <form id="recurringExpenseForm" class="stack">
+                <div class="admin-grid-3">
+                  <label>
+                    Vendor
+                    <input id="recurringVendor" placeholder="Vendor name" />
+                  </label>
+                  <label>
+                    Next due date
+                    <input id="recurringDueDate" type="date" />
+                  </label>
+                  <label>
+                    Cadence
+                    <select id="recurringCadence">
+                      <option value="weekly">Weekly</option>
+                      <option value="monthly" selected>Monthly</option>
+                      <option value="quarterly">Quarterly</option>
+                      <option value="yearly">Yearly</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="admin-grid-3">
+                  <label>
+                    Posting mode
+                    <select id="recurringPostingMode">
+                      <option value="cash">Paid now</option>
+                      <option value="payable">Vendor bill / payable</option>
+                    </select>
+                  </label>
+                  <label>
+                    Amount before tax
+                    <input id="recurringAmount" type="number" step="0.01" value="0.00" />
+                  </label>
+                  <label>
+                    Tax amount
+                    <input id="recurringTax" type="number" step="0.01" value="0.00" />
+                  </label>
+                </div>
+                <div class="admin-grid-2">
+                  <label>
+                    Expense account
+                    <select id="recurringExpenseAccount" data-account-role="expense"></select>
+                  </label>
+                  <label>
+                    Payment account
+                    <select id="recurringPaymentAccount" data-account-role="payment"></select>
+                  </label>
+                </div>
+                <label>
+                  Notes / memo
+                  <textarea id="recurringMemo" rows="3" placeholder="Phone, software, insurance, rent, chemical restock plan, etc."></textarea>
+                </label>
+                <div class="row wrap" style="justify-content:space-between;align-items:center">
+                  <div class="mini" id="recurringExpenseMeta">No recurring expense templates loaded yet.</div>
+                  <button class="btn primary" type="submit">Save recurring template</button>
+                </div>
+              </form>
+              <div class="report-scroll"><div id="recurringExpenseRows" class="stack"></div></div>
+            </article>
+
+            <article class="panel stack">
+              <div>
+                <h2 style="margin:0 0 6px">Vendor / invoice / bill documents</h2>
+                <p class="mini" style="margin:0">Store URLs or storage paths for receipts, vendor bills, statements, invoices, and other accounting support documents.</p>
+              </div>
+              <form id="documentLinkForm" class="stack">
+                <div class="admin-grid-3">
+                  <label>
+                    Related type
+                    <select id="documentRelatedType">
+                      <option value="journal_entry">Journal entry</option>
+                      <option value="payable">Payable / vendor bill</option>
+                      <option value="recurring_expense">Recurring expense</option>
+                      <option value="payroll_run">Payroll run</option>
+                      <option value="period_close">Period close</option>
+                      <option value="vendor">Vendor</option>
+                    </select>
+                  </label>
+                  <label>
+                    Related id
+                    <input id="documentRelatedId" placeholder="Entry id, payroll run id, vendor name, etc." />
+                  </label>
+                  <label>
+                    Document kind
+                    <select id="documentKind">
+                      <option value="receipt">Receipt</option>
+                      <option value="invoice">Invoice</option>
+                      <option value="bill">Vendor bill</option>
+                      <option value="statement">Statement</option>
+                      <option value="attachment">Attachment</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="admin-grid-2">
+                  <label>
+                    Title
+                    <input id="documentTitle" placeholder="April fuel receipt" />
+                  </label>
+                  <label>
+                    File URL or storage path
+                    <input id="documentUrl" placeholder="https://... or storage/path.pdf" />
+                  </label>
+                </div>
+                <label>
+                  Notes
+                  <textarea id="documentNotes" rows="3" placeholder="Optional note about the document, vendor, or filing status."></textarea>
+                </label>
+                <div class="row wrap" style="justify-content:space-between;align-items:center">
+                  <div class="mini" id="documentMeta">No accounting documents loaded yet.</div>
+                  <button class="btn primary" type="submit">Save document link</button>
+                </div>
+              </form>
+              <div class="report-scroll"><div class="table-lite" id="documentRows"></div></div>
+            </article>
+          </section>
+
+          <section class="admin-grid-2">
+            <article class="panel stack">
+              <div>
+                <h2 style="margin:0 0 6px">Accountant lock / close workflow</h2>
+                <p class="mini" style="margin:0">Mark a month as review, locked, or closed. New journal posting into locked/closed months is blocked until you reopen the period.</p>
+              </div>
+              <form id="periodCloseForm" class="stack">
+                <div class="admin-grid-3">
+                  <label>
+                    Month
+                    <input id="periodCloseMonthLabel" type="text" readonly />
+                  </label>
+                  <label>
+                    Status
+                    <select id="periodCloseStatus">
+                      <option value="open">Open</option>
+                      <option value="review">In review</option>
+                      <option value="locked">Locked</option>
+                      <option value="closed">Closed</option>
+                    </select>
+                  </label>
+                  <label>
+                    Sync checklist
+                    <select id="periodCloseChecklistSync">
+                      <option value="inherit">Use month-end checklist</option>
+                      <option value="blank">Save without checklist snapshot</option>
+                    </select>
+                  </label>
+                </div>
+                <label>
+                  Notes
+                  <textarea id="periodCloseNotes" rows="3" placeholder="Accountant handoff, missing bank statement, late payroll transfer, etc."></textarea>
+                </label>
+                <div class="row wrap" style="justify-content:space-between;align-items:center">
+                  <div class="mini" id="periodCloseMeta">No period-close workflow record loaded yet.</div>
+                  <button class="btn primary" type="submit">Save period status</button>
+                </div>
+              </form>
+              <div class="report-scroll"><div class="table-lite" id="periodCloseRows"></div></div>
+            </article>
+            <article class="panel stack">
+              <div>
+                <h2 style="margin:0 0 6px">What this pass now covers</h2>
+                <p class="mini" style="margin:0">This begins the strongest next accounting layer on top of the existing ledger instead of leaving it as a year-end-only summary.</p>
+              </div>
+              <div class="table-lite">
+                <div class="table-lite__row"><span>Bank reconciliation</span><span>Monthly statement vs book balance</span></div>
+                <div class="table-lite__row"><span>Document support</span><span>Receipt / bill / statement links</span></div>
+                <div class="table-lite__row"><span>Recurring expenses</span><span>Reusable monthly / quarterly templates</span></div>
+                <div class="table-lite__row"><span>Payroll payout reconciliation</span><span>Expected vs paid gross tracking</span></div>
+                <div class="table-lite__row"><span>Period lock / close</span><span>Posting blocked on locked months</span></div>
+              </div>
+            </article>
+          </section>
           <article class="panel stack">
             <div class="row wrap" style="justify-content:space-between;align-items:end">
               <div>
@@ -451,7 +733,12 @@
         recordSummary: null,
         payables: [],
         monthEndChecklist: null,
-        yearEnd: null
+        yearEnd: null,
+        bankReconciliation: null,
+        payrollPayouts: null,
+        recurringExpenses: [],
+        accountingDocuments: [],
+        periodCloses: []
       };
 
       function qs(selector, root) { return (root || document).querySelector(selector); }
@@ -472,6 +759,13 @@
         });
       }
       function todayIso() { return new Date().toISOString().slice(0, 10); }
+
+      function currentMonthStart() {
+        return selectedYear() + '-' + String(selectedMonth()).padStart(2, '0') + '-01';
+      }
+      function monthLabel() {
+        return selectedYear() + '-' + String(selectedMonth()).padStart(2, '0');
+      }
       function selectedMonth() { return Number(qs("#monthSelect").value || new Date().getMonth() + 1); }
       function selectedYear() { return Number(qs("#yearSelect").value || new Date().getFullYear()); }
       function selectedPayableStatus() { return String(qs("#payableStatusFilter").value || "open"); }
@@ -721,6 +1015,99 @@ function renderYearEnd(report) {
   }).join('') || '<div class="mini">No expense categories found yet.</div>';
 }
 
+
+      function renderDocuments(items) {
+        var wrap = qs('#documentRows');
+        items = Array.isArray(items) ? items : [];
+        qs('#documentMeta').textContent = items.length ? (items.length + ' document links loaded') : 'No accounting documents loaded yet.';
+        wrap.innerHTML = items.length ? items.map(function (row) {
+          var href = row.file_url || row.storage_path || '';
+          return '<div class="doc-card"><div class="row wrap" style="justify-content:space-between;gap:10px"><div><strong>' + esc(row.title || 'Document') + '</strong><div class="mini">' + esc((row.document_kind || 'attachment') + ' · ' + (row.related_type || 'journal_entry') + (row.related_id ? ' · ' + row.related_id : '')) + '</div></div><div class="mini">' + esc(new Date(row.created_at || Date.now()).toLocaleString()) + '</div></div>' + (href ? '<div class="mini" style="margin-top:10px"><a href="' + esc(href) + '" target="_blank" rel="noopener">' + esc(href) + '</a></div>' : '') + (row.notes ? '<div class="mini" style="margin-top:8px">' + esc(row.notes) + '</div>' : '') + '</div>';
+        }).join('') : '<div class="mini">No accounting documents saved yet.</div>';
+      }
+      function renderRecurringExpenses(items) {
+        var wrap = qs('#recurringExpenseRows');
+        items = Array.isArray(items) ? items : [];
+        qs('#recurringExpenseMeta').textContent = items.length ? (items.length + ' recurring templates loaded') : 'No recurring expense templates loaded yet.';
+        wrap.innerHTML = items.length ? items.map(function (row) {
+          return '<article class="recurring-card"><div class="row wrap" style="justify-content:space-between;gap:10px"><div><div class="kicker">' + esc(row.cadence || 'monthly') + ' · ' + esc(row.posting_mode || 'cash') + (row.is_active === false ? ' · inactive' : '') + '</div><h3 style="margin:6px 0">' + esc(row.vendor_name || 'Vendor') + '</h3><div class="mini">Due ' + esc(row.next_due_date || '') + ' · ' + esc(money(row.total_cad || 0)) + '</div></div><div class="tag">' + esc(row.expense_account_code || 'shop_supplies') + '</div></div>' + (row.memo ? '<div class="mini" style="margin-top:10px">' + esc(row.memo) + '</div>' : '') + '<div class="row wrap" style="justify-content:space-between;align-items:center;margin-top:12px"><div class="mini">Last posted ' + esc(row.last_posted_at ? new Date(row.last_posted_at).toLocaleString() : 'never') + '</div><button class="btn ghost recurring-post-now" type="button" data-template-id="' + esc(row.id || '') + '">Post due now</button></div></article>';
+        }).join('') : '<div class="mini">No recurring templates saved yet.</div>';
+        qsa('.recurring-post-now', wrap).forEach(function (button) {
+          button.addEventListener('click', async function () {
+            try {
+              setStatus('Posting recurring expense…');
+              await apiJson('/api/admin/accounting_recurring_expenses', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'post_now', id: button.getAttribute('data-template-id'), entry_date: todayIso() })
+              });
+              setStatus('Recurring expense posted.', 'success');
+              await refreshAll();
+            } catch (err) {
+              setStatus(err && err.message ? err.message : 'Could not post recurring expense.', 'error');
+            }
+          });
+        });
+      }
+      function renderBankReconciliation(payload) {
+        var summary = qs('#bankReconSummary');
+        var rowsWrap = qs('#bankReconRows');
+        var meta = qs('#bankReconMeta');
+        var snapshot = payload && payload.snapshot ? payload.snapshot : null;
+        var rows = payload && Array.isArray(payload.reconciliations) ? payload.reconciliations : [];
+        if (!snapshot) {
+          meta.textContent = 'No reconciliation snapshot loaded yet.';
+          summary.innerHTML = '<div class="mini">No bank reconciliation data loaded.</div>';
+          rowsWrap.innerHTML = '';
+          return;
+        }
+        meta.textContent = 'Working month ' + esc(monthLabel()) + ' · ' + esc(snapshot.account_code || 'cash');
+        summary.innerHTML = [
+          ['Ending book balance', money(snapshot.ending_book_balance_cad || 0)],
+          ['Month activity', money(snapshot.month_activity_cad || 0)],
+          ['Cash entries', String(snapshot.entry_count || 0)],
+          ['Latest difference', money(snapshot.latest_reconciliation && snapshot.latest_reconciliation.difference_cad || 0)]
+        ].map(function (row) { return '<div class="table-lite__row"><span>' + esc(row[0]) + '</span><span>' + esc(row[1]) + '</span></div>'; }).join('');
+        rowsWrap.innerHTML = rows.length ? rows.map(function (row) {
+          return '<div class="table-lite__row"><span>' + esc(row.period_start || '') + ' to ' + esc(row.period_end || '') + '<div class="mini">' + esc(row.status || 'draft') + (row.notes ? ' · ' + esc(row.notes) : '') + '</div></span><span>' + esc(money(row.statement_ending_balance_cad || 0)) + '<div class="mini">Δ ' + esc(money(row.difference_cad || 0)) + '</div></span></div>';
+        }).join('') : '<div class="mini">No reconciliation rows saved yet.</div>';
+      }
+      function renderPayrollPayouts(report) {
+        var summary = qs('#payrollPayoutSummary');
+        var rowsWrap = qs('#payrollPayoutRows');
+        var select = qs('#payrollRunSelect');
+        report = report || { totals: {}, rows: [] };
+        var rows = Array.isArray(report.rows) ? report.rows : [];
+        qs('#payrollPayoutMeta').textContent = rows.length ? (rows.length + ' payroll runs in period') : 'No payroll payout report loaded yet.';
+        select.innerHTML = rows.length ? rows.map(function (row) {
+          return '<option value="' + esc(row.payroll_run_id || '') + '">' + esc((row.period_start || '') + ' to ' + (row.period_end || '')) + ' · ' + money(row.expected_gross_cad || 0) + '</option>';
+        }).join('') : '<option value="">No payroll runs</option>';
+        summary.innerHTML = [
+          ['Expected gross', money(report.totals && report.totals.expected_gross_cad || 0)],
+          ['Paid gross', money(report.totals && report.totals.paid_gross_cad || 0)],
+          ['Difference', money(report.totals && report.totals.difference_cad || 0)],
+          ['Reconciled runs', String(report.totals && report.totals.reconciled_count || 0)]
+        ].map(function (row) { return '<div class="table-lite__row"><span>' + esc(row[0]) + '</span><span>' + esc(row[1]) + '</span></div>'; }).join('');
+        rowsWrap.innerHTML = rows.length ? rows.map(function (row) {
+          var cls = Math.abs(Number(row.difference_cad || 0)) > 0.01 ? 'warning-text' : '';
+          return '<div class="table-lite__row"><span>' + esc((row.period_start || '') + ' to ' + (row.period_end || '')) + '<div class="mini">' + esc(row.status || 'pending') + (row.payout_date ? ' · ' + esc(row.payout_date) : '') + '</div></span><span class="' + cls + '">' + esc(money(row.paid_gross_cad || 0)) + '<div class="mini">Expected ' + esc(money(row.expected_gross_cad || 0)) + ' · Δ ' + esc(money(row.difference_cad || 0)) + '</div></span></div>';
+        }).join('') : '<div class="mini">No payroll runs found for this month.</div>';
+        if (rows.length) {
+          qs('#payrollPayoutAmount').value = Number(rows[0].expected_gross_cad || 0).toFixed(2);
+        }
+      }
+      function renderPeriodCloses(periods) {
+        var wrap = qs('#periodCloseRows');
+        periods = Array.isArray(periods) ? periods : [];
+        var current = periods.find(function (row) { return String(row.month_start || '') === currentMonthStart(); }) || null;
+        qs('#periodCloseMonthLabel').value = monthLabel();
+        qs('#periodCloseStatus').value = current && current.status ? current.status : 'open';
+        qs('#periodCloseNotes').value = current && current.notes ? current.notes : '';
+        qs('#periodCloseMeta').textContent = current ? ('Current month is ' + current.status + (current.locked_at ? ' · ' + new Date(current.locked_at).toLocaleString() : '')) : 'No period-close workflow record loaded yet.';
+        wrap.innerHTML = periods.length ? periods.map(function (row) {
+          return '<div class="table-lite__row"><span>' + esc(row.month_start || '') + '<div class="mini">' + esc(row.notes || '') + '</div></span><span>' + esc(row.status || 'open') + '</span></div>';
+        }).join('') : '<div class="mini">No period-close workflow rows saved yet.</div>';
+      }
 function renderInventoryCosts(report) {
 
         var summary = qs('#inventoryCostSummary');
@@ -910,6 +1297,63 @@ function renderInventoryCosts(report) {
         qs('#sumMissingCosts').textContent = String(inventory.totals && inventory.totals.missing_cost_items || 0);
         qs('#sumCostCoverage').textContent = String(inventory.totals && inventory.totals.cost_coverage_pct || 0) + '% coverage';
       }
+
+      async function loadDocuments() {
+        try {
+          var out = await apiJson('/api/admin/accounting_documents?limit=30');
+          state.accountingDocuments = Array.isArray(out.documents) ? out.documents : [];
+          renderDocuments(state.accountingDocuments);
+        } catch (err) {
+          state.accountingDocuments = [];
+          renderDocuments([]);
+          qs('#documentMeta').textContent = err && err.message ? err.message : 'Could not load accounting documents.';
+        }
+      }
+      async function loadRecurringExpenses() {
+        try {
+          var out = await apiJson('/api/admin/accounting_recurring_expenses');
+          state.recurringExpenses = Array.isArray(out.items) ? out.items : [];
+          renderRecurringExpenses(state.recurringExpenses);
+        } catch (err) {
+          state.recurringExpenses = [];
+          renderRecurringExpenses([]);
+          qs('#recurringExpenseMeta').textContent = err && err.message ? err.message : 'Could not load recurring expenses.';
+        }
+      }
+      async function loadBankReconciliation() {
+        try {
+          var accountCode = qs('#bankReconAccount').value || 'cash';
+          var out = await apiJson('/api/admin/accounting_bank_reconciliation?month=' + selectedMonth() + '&year=' + selectedYear() + '&account_code=' + encodeURIComponent(accountCode));
+          state.bankReconciliation = { snapshot: out.snapshot || null, reconciliations: out.reconciliations || [] };
+          renderBankReconciliation(state.bankReconciliation);
+        } catch (err) {
+          state.bankReconciliation = null;
+          renderBankReconciliation(null);
+          qs('#bankReconMeta').textContent = err && err.message ? err.message : 'Could not load bank reconciliation.';
+        }
+      }
+      async function loadPayrollPayouts() {
+        try {
+          var out = await apiJson('/api/admin/accounting_payroll_payout_reconciliation?month=' + selectedMonth() + '&year=' + selectedYear());
+          state.payrollPayouts = out.report || null;
+          renderPayrollPayouts(state.payrollPayouts || { totals: {}, rows: [] });
+        } catch (err) {
+          state.payrollPayouts = null;
+          renderPayrollPayouts({ totals: {}, rows: [] });
+          qs('#payrollPayoutMeta').textContent = err && err.message ? err.message : 'Could not load payroll payout reconciliation.';
+        }
+      }
+      async function loadPeriodCloses() {
+        try {
+          var out = await apiJson('/api/admin/accounting_period_close?year=' + selectedYear());
+          state.periodCloses = Array.isArray(out.periods) ? out.periods : [];
+          renderPeriodCloses(state.periodCloses);
+        } catch (err) {
+          state.periodCloses = [];
+          renderPeriodCloses([]);
+          qs('#periodCloseMeta').textContent = err && err.message ? err.message : 'Could not load period-close workflow.';
+        }
+      }
       async function loadAccounts() {
         var out = await apiJson('/api/admin/accounting_accounts_list');
         state.accounts = Array.isArray(out.accounts) ? out.accounts : [];
@@ -963,7 +1407,19 @@ function renderInventoryCosts(report) {
       }
       async function refreshAll() {
         setStatus('Refreshing accounting workspace…');
-        await Promise.all([loadRecords(), loadPayables(), loadReports(), loadYearEnd(), loadMonthEndChecklist(), loadPricingWindow()]);
+        await Promise.all([
+          loadRecords(),
+          loadPayables(),
+          loadReports(),
+          loadYearEnd(),
+          loadMonthEndChecklist(),
+          loadPricingWindow(),
+          loadDocuments(),
+          loadRecurringExpenses(),
+          loadBankReconciliation(),
+          loadPayrollPayouts(),
+          loadPeriodCloses()
+        ]);
         renderSummaryCards();
         setStatus('Accounting workspace refreshed.', 'success');
       }

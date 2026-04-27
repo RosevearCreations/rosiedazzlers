@@ -429,3 +429,8 @@ Current public-state note: /pricing now uses a clamped embedded planner viewport
 
 
 Current accounting-state note: admin-accounting now includes a year-end tax prep package with monthly trend, expense buckets, HST activity, owner draws, receivables, payables, and export support.
+
+## 2026-04-27 state update
+- Public proof blocks now use a bundled reviews fallback image directly, so the pricing-page review proof no longer depends on a missing remote asset.
+- Admin Accounting now has live sections for bank reconciliation, accounting document links, recurring expenses, payroll payout reconciliation, and period-close status tracking.
+- Posting into locked or closed accounting months is now blocked at journal-entry time once the new migration is applied.

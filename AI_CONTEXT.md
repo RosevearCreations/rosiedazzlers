@@ -551,3 +551,5 @@ Pass 28 sync — 2026-04-20
 ## 2026-04-25 context refresh
 Recent pass highlights: admin block time frame save + calendar, pricing embed-height stabilization, package/add-on card overflow hardening, and new town-focused landing pages.
 
+## Pass sync — 2026-04-27
+The accounting direction has moved from month-end/year-end reporting only into workflow foundations: bank reconciliation, accounting document links, recurring expenses, payroll payout reconciliation, and period lock / close status. The pricing-page review-proof image was also fixed by using the bundled fallback asset directly.

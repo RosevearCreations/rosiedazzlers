@@ -551,3 +551,11 @@ Next best steps now include pricing-page embed height control, a bundled reviews
 - Keep the folder-backed clean-route model as the live baseline.
 - Continue building out town-focused pages and keep recent work / review proof blocks visible.
 - Expand accounting from operational ledger into a full year-end handoff workflow with CRA-friendly exports, HST tracking, payables, receivables, and owner-draw visibility.
+
+## Next best steps after the 2026-04-27 accounting workflow pass
+1. Add true upload-to-storage support for accounting documents so receipts, invoices, and statements can be uploaded directly instead of linked by URL/path only.
+2. Add vendor directory + vendor defaults (payment terms, default expense account, contact info) and wire recurring templates to vendor records.
+3. Expand bank reconciliation from statement-vs-book summary into cleared-entry matching and unreconciled-item carry-forward.
+4. Add payroll net-pay / source-deduction detail once payroll withholding rules are introduced.
+5. Enforce period lock/close across every accounting-related write path, not only journal posting.
+6. Add accountant package export for year-end source-document index and reconciliation status.
