@@ -80,3 +80,8 @@ Completed in this pass:
 
 Important next move:
 - run `sql/2026-04-27_accounting_workflow_foundation.sql` before using the new accounting workflow sections live
+
+## 2026-04-28 status
+- Latest pass rebuilt from the newest uploaded source zip.
+- Added accounting vendor defaults, document upload support, reconciliation/payroll detail expansion, broader period lock enforcement, add-on dependency validation, and stronger landing-page content.
+- New migration: `sql/2026-04-28_accounting_vendor_uploads_and_dependency_rules.sql`.

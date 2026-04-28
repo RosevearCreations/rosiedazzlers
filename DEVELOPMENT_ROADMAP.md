@@ -559,3 +559,7 @@ Next best steps now include pricing-page embed height control, a bundled reviews
 4. Add payroll net-pay / source-deduction detail once payroll withholding rules are introduced.
 5. Enforce period lock/close across every accounting-related write path, not only journal posting.
 6. Add accountant package export for year-end source-document index and reconciliation status.
+
+## 2026-04-28 pass update
+- Completed: vendor directory defaults, direct accounting document upload path, deeper bank reconciliation entry matching, payroll deduction/net-pay reconciliation detail, broader period lock enforcement across more accounting write paths, add-on dependency rules in booking/checkout, and stronger special-service/town landing page content.
+- Next strongest steps: direct file browsing/replacement for uploaded accounting documents, vendor autofill across recurring/manual entry flows, deeper cleared/uncleared reconciliation summaries, payroll deduction category breakout, and admin-side visual editing for all add-on dependency relationships.

@@ -435,3 +435,6 @@ New schema objects introduced in this pass:
 - `accounting_period_closes`
 
 These support receipt/bill/invoice links, recurring expense templates, monthly bank reconciliation records, payroll payout reconciliation records, and month lock/close status.
+
+## 2026-04-28 schema sync
+Accounting now expects `accounting_vendors`, additional metadata columns on `accounting_documents`, reconciliation match columns on `accounting_bank_reconciliations`, and extra net-pay/deduction fields on `accounting_payroll_payout_reconciliations`. Add-on dependency rules remain JSON-catalog based in this pass.

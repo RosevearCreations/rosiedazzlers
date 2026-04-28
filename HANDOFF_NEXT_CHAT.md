@@ -71,3 +71,6 @@ Next chat should continue from the folder-backed clean-route baseline, the town-
 
 ## Carry-forward after 2026-04-27
 Keep the folder-backed clean-route model as the live baseline. On Rosie Dazzlers, the strongest next admin/back-office steps are now: direct accounting document uploads, vendor defaults/directory, deeper bank matching, payroll deduction detail, and broader period-lock enforcement. On the public side, keep recent work, review proof, and local town/service freshness visible on the main entry pages.
+
+## 2026-04-28 handoff note
+Baseline now includes: vendor directory defaults, direct upload accounting docs, deeper bank reconciliation matching storage, payroll deduction/net-pay reconciliation fields, add-on dependency rules in booking + checkout, and stronger special-service/town landing pages. Run `sql/2026-04-28_accounting_vendor_uploads_and_dependency_rules.sql` before using the new accounting fields.
