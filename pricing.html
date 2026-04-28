@@ -13,12 +13,21 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mobile Detailing Prices in Oxford & Norfolk Counties | Rosie Dazzlers</title>
-  <meta name="description" content="See Rosie Dazzlers pricing for mobile detailing packages and add-ons across Oxford County and Norfolk County, including Tillsonburg, Woodstock, Simcoe, Delhi, and Port Dover." />
+  <title>Mobile Auto Detailing Prices in Oxford & Norfolk Counties | Rosie Dazzlers</title>
+  <meta name="description" content="See Rosie Dazzlers mobile auto detailing prices for Oxford County and Norfolk County, then use the live booking planner for availability, service zones, add-ons, and deposit-ready totals." />
   <link rel="canonical" href="https://rosiedazzlers.ca/pricing" />
-  <meta property="og:title" content="Detailing Pricing | Rosie Dazzlers Norfolk & Oxford" />
+  <meta property="og:title" content="Mobile Auto Detailing Pricing | Rosie Dazzlers" />
   <meta property="og:description" content="Transparent Rosie Dazzlers pricing for premium wash, basic detail, complete detail, interior detail, exterior detail, and add-ons." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260311d" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260425visibility1" />
+  <script type="application/ld+json" id="pricingSchema">
+  {
+    "@context": "https://schema.org",
+    "@type": "AutoDetailing",
+    "name": "Rosie Dazzlers Mobile Auto Detailing",
+    "url": "https://rosiedazzlers.ca/pricing",
+    "areaServed": ["Oxford County, Ontario", "Norfolk County, Ontario"]
+  }
+  </script>
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
@@ -54,6 +63,21 @@
     .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
     .tag.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
     .mini{font-size:.92rem}
+
+    .booking-lead{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
+    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;height:1220px;min-height:1220px;max-height:1220px}
+    .booking-embed-frame{display:block;width:100%;height:1220px;min-height:1220px;max-height:1220px;border:0;background:transparent;overflow:auto}
+    .booking-side{display:grid;gap:12px}
+    .planner-note{margin-top:12px}
+    .benefits{display:grid;gap:8px;padding-left:18px;margin:0}
+    .quote-cta{display:flex;gap:10px;flex-wrap:wrap}
+    .planner-summary{display:grid;gap:10px;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03)}
+    .planner-summary .line{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:8px}
+    .planner-summary .line:last-child{border-bottom:0;padding-bottom:0}
+    .planner-summary .stack{display:grid;gap:4px}
+    .planner-summary .value{font-weight:700;text-align:right}
+    .planner-summary .list{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.maintenance-box{display:grid;gap:10px;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03)}.maintenance-box .field{display:grid;gap:6px}.maintenance-box input,.maintenance-box textarea{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;background:rgba(255,255,255,.04);color:#f8fafc}.maintenance-box textarea{min-height:92px;resize:vertical}.maintenance-box .note{font-size:.9rem;color:rgba(234,242,255,.62)} .maintenance-box[aria-disabled="true"]{opacity:.78} 
+    @media (max-width:980px){ .booking-lead{grid-template-columns:1fr} .booking-embed-shell{height:1480px;min-height:1480px;max-height:1480px} .booking-embed-frame{height:1480px;min-height:1480px;max-height:1480px} }
   </style>
 </head>
 
@@ -72,7 +96,7 @@
 
   <div class="container">
     <div class="panel">
-      <h1 style="margin:0 0 6px">Pricing</h1>
+      <h1 style="margin:0 0 6px">Mobile auto detailing prices</h1>
       <p class="kicker" style="margin:0">
         Transparent pricing, deposit required to lock your appointment.
       </p>
@@ -86,7 +110,7 @@
       <div class="panel chart-wrap">
         <h2 style="margin-top:0">Vehicle Price Chart</h2>
         <img class="img chart-preview" data-chart-key="Vehicle Price Chart 2025" alt="Vehicle Price Chart 2025" src="" />
-        <div class="chart-note">Hover to enlarge on desktop. Tap to open on mobile.</div>
+        <div class="chart-note">Generated live from the current pricing catalog when available. Hover to enlarge on desktop. Tap to open on mobile.</div>
       </div>
 
       <div class="panel chart-wrap">
@@ -100,7 +124,94 @@
       <div class="panel chart-wrap">
         <h2 style="margin-top:0">Vehicle Size Chart</h2>
         <img class="img chart-preview" data-chart-key="Vehicle Size Chart" alt="Vehicle Size Chart" src="" />
-        <div class="chart-note">Hover to enlarge on desktop. Tap to open on mobile.</div>
+        <div class="chart-note">Generated live from the current size guide. Hover to enlarge on desktop. Tap to open on mobile.</div>
+      </div>
+    </div>
+
+
+    <div class="section grid2">
+      <div class="panel">
+        <h2 style="margin-top:0">Booking-led self-serve</h2>
+        <p class="muted" id="quoteTeaserCopy">Start with the same live booking planner used on the booking page so you keep the exact location restrictions, public requirements, 21-day availability windows, next/previous date browsing, vehicle matching, and add-on logic.</p>
+        <div class="row" style="margin-top:12px">
+          <a class="btn primary" href="#booking-planner">Start with booking</a>
+          <a class="btn ghost" href="/services">Compare services</a>
+          <a class="btn ghost" href="/maintenance-plan">Recurring plan interest</a>
+        </div>
+      </div>
+      <div class="panel">
+        <h2 style="margin-top:0" id="membershipPlanName">Recurring clean direction</h2>
+        <p class="muted" id="membershipTeaserCopy">A maintenance-plan layer is being prepared so repeat clients can stay on a predictable clean cycle with easier follow-up booking and steadier scheduling.</p>
+        <div class="tag ok" id="membershipCycleTag">Planned recurring-clean support</div>
+        <div class="row" style="margin-top:12px">
+          <a class="btn ghost" id="membershipPlanBtn" href="/maintenance-plan">See recurring-plan details</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="booking-planner">
+      <div class="panel">
+        <div class="row" style="justify-content:space-between;align-items:flex-start">
+          <div>
+            <h2 style="margin:0">Start with the live booking planner</h2>
+            <p class="muted mini" id="bookingLeadCopy">The self-serve path now begins with the same booking interface used on /book, so you keep the exact location restrictions, 21-day availability windows, next/previous date browsing, slot availability, vehicle matching, package selection, and add-on logic.</p>
+          </div>
+          <span class="tag ok" id="bookingLeadTag">Booking-led self-serve</span>
+        </div>
+        <div class="notice planner-note" id="bookingEmbedHelper">Exact totals, deposits, public requirements, travel restrictions, and live availability are all shown inside the booking planner below.</div>
+        <div class="booking-lead" style="margin-top:14px">
+          <div class="booking-embed-shell">
+            <iframe id="bookingPlannerFrame" class="booking-embed-frame" title="Rosie Dazzlers booking planner" loading="lazy" src="/book?embed=1"></iframe>
+          </div>
+          <div class="booking-side">
+            <div class="panel" style="background:rgba(255,255,255,.02)">
+              <h3 style="margin-top:0">Why this is the first step now</h3>
+              <ul class="benefits">
+                <li>See service-area restrictions and public requirements before choosing a slot.</li>
+                <li>Browse availability in 21-day windows with next/previous controls.</li>
+                <li>Match the vehicle, package, and add-ons using the same live booking rules.</li>
+                <li>Move straight into deposit-ready checkout without switching to a separate quote tool.</li>
+              </ul>
+            </div>
+            <div class="planner-summary" id="bookingPlannerSummary">
+              <div class="line"><span>Planner step</span><strong class="value" id="plannerStepValue">Step 1 — Date &amp; vehicle</strong></div>
+              <div class="line"><span>Date / time</span><strong class="value" id="plannerDateValue">Choose a date and available slot</strong></div>
+              <div class="line"><span>Service area</span><strong class="value" id="plannerAreaValue">Choose a town or service zone</strong></div>
+              <div class="line"><span>Vehicle</span><strong class="value" id="plannerVehicleValue">Match the vehicle before choosing the package</strong></div>
+              <div class="line"><span>Package</span><strong class="value" id="plannerPackageValue">Package not chosen yet</strong></div>
+              <div class="line"><span>Add-ons</span><div class="value list" id="plannerAddonsValue"><span class="tag">No add-ons yet</span></div></div>
+              <div class="line"><span>Estimated total</span><strong class="value" id="plannerSubtotalValue">Package required</strong></div>
+              <div class="line"><span>Deposit</span><strong class="value" id="plannerDepositValue">—</strong></div>
+              <div class="mini muted" id="plannerSummaryHelper">The summary updates live as the embedded booking planner changes.</div>
+            </div>
+            <div class="maintenance-box" id="maintenanceInterestBox" aria-disabled="true">
+              <div class="row" style="justify-content:space-between;align-items:flex-start">
+                <div>
+                  <strong>Maintenance schedule interest</strong>
+                  <div class="note" id="maintenanceEligibilityText">Choose the Complete Detail package first. We only offer reduced maintenance pricing after a full Complete Detail has been completed and recorded in service history.</div>
+                </div>
+                <span class="tag" id="maintenanceEligibilityTag">Complete Detail required</span>
+              </div>
+              <div class="field"><label for="maintName">Your name</label><input id="maintName" placeholder="Full name" /></div>
+              <div class="field"><label for="maintEmail">Email</label><input id="maintEmail" type="email" placeholder="you@example.com" /></div>
+              <div class="field"><label for="maintPhone">Phone</label><input id="maintPhone" placeholder="Optional phone" /></div>
+              <div class="field"><label for="maintPostal">Postal code</label><input id="maintPostal" placeholder="N0J 1S0" /></div>
+              <div class="field"><label for="maintNotes">Notes</label><textarea id="maintNotes" placeholder="Tell us how many vehicles you want to keep on a repeating maintenance schedule. We will confirm eligibility after your first complete detail is finished."></textarea></div>
+              <div class="row">
+                <button class="btn" type="button" id="maintInterestBtn">Join maintenance interest list</button>
+                <a class="btn ghost" href="/maintenance-plan">See recurring plan details</a>
+              </div>
+              <div class="note" id="maintStatus">Maintenance-plan interest is captured separately from booking so regular reduced pricing is only offered after the first full complete detail is done.</div>
+            </div>
+            <div class="quote-cta">
+              <a class="btn primary" id="bookingPlannerContinueLink" href="/book">Continue in the full booking page</a>
+              <button class="btn ghost" type="button" id="copyPlannerLinkBtn">Copy booking link</button>
+              <a class="btn ghost" href="/services">Compare services</a>
+            </div>
+            <div class="mini muted" id="plannerLinkStatus">Use the live planner first, then copy or open the exact booking path you built.</div>
+            <div class="mini muted">The planner below is the same booking workflow, inserted here so pricing stays visible while customers work through the real restrictions, timing, and package logic.</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -140,6 +251,42 @@
       </div>
     </div>
 
+
+    
+<section class="section panel">
+  <h2 style="margin-top:0">Town-focused detailing pages</h2>
+  <p class="muted">These pages keep the folder-backed route approach and give the strongest service-area towns their own local wording, review proof, and recent-work support.</p>
+  <div class="local-town-grid" style="margin-top:12px">
+    <article class="local-town-card"><h3>Tillsonburg</h3><p class="muted">Dedicated page for local booking intent, travel wording, and detailing service questions.</p><a class="btn ghost small" href="/tillsonburg-auto-detailing">Open page</a></article>
+    <article class="local-town-card"><h3>Woodstock / Ingersoll</h3><p class="muted">Combined page for nearby Oxford County bookings, route questions, and local detailing visibility.</p><a class="btn ghost small" href="/woodstock-ingersoll-auto-detailing">Open page</a></article>
+    <article class="local-town-card"><h3>Simcoe / Delhi</h3><p class="muted">Combined page for Norfolk-side detailing demand, travel guidance, and local trust signals.</p><a class="btn ghost small" href="/simcoe-delhi-auto-detailing">Open page</a></article>
+    <article class="local-town-card"><h3>Port Dover</h3><p class="muted">Dedicated page for shoreline-area service intent, local wording, and proof of current work.</p><a class="btn ghost small" href="/port-dover-auto-detailing">Open page</a></article>
+  </div>
+</section>
+
+<section class="section panel">
+      <h2 style="margin-top:0">High-intent service pages</h2>
+      <p class="muted">These dedicated pages are now the clearest place to target special-service searches while still feeding into the same booking and contact flow.</p>
+      <div class="service-link-grid" style="margin-top:12px">
+        <article class="service-link-card"><h3>Ceramic coating</h3><a class="btn ghost small" href="/ceramic-coating">Open page</a></article>
+        <article class="service-link-card"><h3>Pet hair removal</h3><a class="btn ghost small" href="/pet-hair-removal">Open page</a></article>
+        <article class="service-link-card"><h3>Odor removal</h3><a class="btn ghost small" href="/odor-removal">Open page</a></article>
+        <article class="service-link-card"><h3>Headlight restoration</h3><a class="btn ghost small" href="/headlight-restoration">Open page</a></article>
+        <article class="service-link-card"><h3>Paint correction</h3><a class="btn ghost small" href="/paint-correction">Open page</a></article>
+      </div>
+    </section>
+
+    <section class="section panel">
+      <h2 style="margin-top:0">Recent work and local proof</h2>
+      <p class="muted">Pricing converts better when visitors can immediately see recent jobs, review proof, and the towns you actually serve.</p>
+      <div data-recent-work-mount style="margin-top:12px"></div>
+      <div class="hr"></div>
+      <div class="proof-grid">
+        <article class="proof-card"><h3>Review proof</h3><img data-reviews src="/assets/brand/rosie-reviews-fallback.svg" alt="Rosie Dazzlers reviews" class="proof-media" /></article>
+        <article class="proof-card"><h3>Common service areas</h3><p class="muted">Tillsonburg, Woodstock, Ingersoll, Norwich, Simcoe, Delhi, Courtland, Port Dover, and nearby Oxford / Norfolk communities.</p><div class="cta-row" style="margin-top:10px"><a class="btn ghost small" href="/gallery">Gallery</a><a class="btn ghost small" href="/contact">Ask about travel</a></div></article>
+      </div>
+    </section>
+
     <div class="footer" data-footer></div>
   </div>
 
@@ -159,12 +306,21 @@
       money,
       escapeHtml,
       chartUrl,
-      publicRequirements
-    } from "/assets/pricing-catalog-client.js?v=20260412pass12";
+      publicRequirements,
+      buildLivePricingChartDataUri,
+      buildLiveServiceDetailsChartDataUri,
+      buildLiveVehicleSizeChartDataUri,
+      buildPricingOfferCatalogSchema,
+      applyJsonLdScript
+    } from "/assets/pricing-catalog-client.js?v=20260423livecharts2";
+    import { renderRecentWorkMounts } from "/assets/recent-work.js";
+    import { loadGrowthSettings } from "/assets/growth-settings.js";
 
     const FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const qs = (s)=>document.querySelector(s);
     let chartMap = new Map();
+    renderRecentWorkMounts(3);
+    let plannerState = null;
 
     function qsAll(s){ return Array.from(document.querySelectorAll(s)); }
     function openChart(title, src){
@@ -196,6 +352,158 @@
         : `<span class="tag">Driveway required</span><span class="tag">Customer provides power + water</span>`;
     }
 
+
+    function renderBookingPlanner(growth){
+      const quoteCfg = growth.quote_booking_settings || {};
+      const membershipCfg = growth.membership_plan_settings || {};
+      const frame = qs('#bookingPlannerFrame');
+      const params = new URLSearchParams(window.location.search);
+      const bookingParams = new URLSearchParams();
+      bookingParams.set('embed', '1');
+      ['package', 'size', 'area', 'date', 'slot', 'addons'].forEach((key) => {
+        const value = params.get(key);
+        if (value) bookingParams.set(key, value);
+      });
+      if (frame) {
+        frame.src = `/book?${bookingParams.toString()}`;
+      }
+
+      qs('#quoteTeaserCopy').textContent = quoteCfg.teaser_text || 'Start with the same live booking planner used on the booking page so you keep the exact location restrictions, public requirements, 21-day availability windows, next/previous date browsing, vehicle matching, and add-on logic.';
+      qs('#bookingLeadCopy').textContent = quoteCfg.teaser_text || qs('#bookingLeadCopy').textContent;
+      qs('#bookingLeadTag').textContent = quoteCfg.show_exact_total ? 'Booking-led self-serve' : 'Guided booking planner';
+      qs('#bookingEmbedHelper').textContent = quoteCfg.show_exact_total
+        ? 'Exact totals, deposits, public requirements, travel restrictions, and live availability are all shown inside the booking planner below.'
+        : 'Use the booking planner below to work through the live restrictions, availability windows, package logic, and add-ons before checkout.';
+      qs('#membershipPlanName').textContent = membershipCfg.plan_name || 'Maintenance plan direction';
+      qs('#membershipTeaserCopy').textContent = membershipCfg.teaser || qs('#membershipTeaserCopy').textContent;
+      qs('#membershipCycleTag').textContent = membershipCfg.cycle_label || 'Planned recurring-clean support';
+      qs('#membershipPlanBtn').textContent = membershipCfg.waitlist_enabled === false ? 'See recurring-plan details' : 'See recurring-clean options';
+    }
+
+    function setPlannerLinkStatus(message){
+      const box = qs('#plannerLinkStatus');
+      if (box) box.textContent = message || '';
+    }
+
+
+    function plannerEligibleForMaintenance(state){
+      return String(state?.package_code || '').trim().toLowerCase() === 'complete_detail';
+    }
+
+    function renderMaintenanceInterest(state){
+      const eligible = plannerEligibleForMaintenance(state);
+      const box = qs('#maintenanceInterestBox');
+      const tag = qs('#maintenanceEligibilityTag');
+      const text = qs('#maintenanceEligibilityText');
+      const btn = qs('#maintInterestBtn');
+      if (!box || !tag || !text || !btn) return;
+      box.setAttribute('aria-disabled', eligible ? 'false' : 'true');
+      tag.textContent = eligible ? 'Eligible after first full detail' : 'Complete Detail required';
+      text.textContent = eligible
+        ? 'You selected Complete Detail. We can capture your maintenance-plan interest now and confirm reduced recurring pricing once that first full detail has been completed.'
+        : 'Choose the Complete Detail package first. We only offer reduced maintenance pricing after a full Complete Detail has been completed and recorded in service history.';
+      btn.disabled = !eligible;
+    }
+
+    async function submitMaintenanceInterest(){
+      const eligible = plannerEligibleForMaintenance(plannerState);
+      if (!eligible) {
+        qs('#maintStatus').textContent = 'Choose Complete Detail in the planner first. Maintenance-plan pricing only opens after the first full complete detail.';
+        return;
+      }
+      const payload = {
+        full_name: qs('#maintName').value.trim(),
+        email: qs('#maintEmail').value.trim(),
+        phone: qs('#maintPhone').value.trim(),
+        postal_code: qs('#maintPostal').value.trim(),
+        preferred_cycle: 'Maintenance after complete detail',
+        source_url: location.pathname + '#booking-planner',
+        vehicle_count: plannerState?.vehicle_size ? 1 : 1,
+        notes: [
+          'Submitted from pricing planner.',
+          plannerState?.booking_url ? `Booking path: ${new URL(plannerState.booking_url, window.location.origin).href}` : '',
+          plannerState?.service_area_label ? `Area: ${plannerState.service_area_label}` : '',
+          plannerState?.vehicle_label ? `Vehicle: ${plannerState.vehicle_label}` : '',
+          plannerState?.package_name ? `Selected package: ${plannerState.package_name}` : '',
+          qs('#maintNotes').value.trim()
+        ].filter(Boolean).join(' | ')
+      };
+      const res = await fetch('/api/membership_interest_create', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const out = await res.json().catch(()=>null);
+      if (!res.ok || !out?.ok) {
+        qs('#maintStatus').textContent = out?.error || 'Could not save maintenance-plan interest.';
+        return;
+      }
+      qs('#maintStatus').textContent = 'Maintenance-plan interest saved. We will only move this into a regular reduced-price schedule after the first full complete detail is completed.';
+      qs('#maintInterestBtn').disabled = true;
+    }
+
+    async function copyPlannerLink(){
+      const url = plannerState?.booking_url ? new URL(plannerState.booking_url, window.location.origin).href : new URL('/book', window.location.origin).href;
+      try {
+        if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(url);
+        else {
+          const helper = document.createElement('textarea'); helper.value = url; document.body.appendChild(helper); helper.select(); document.execCommand('copy'); helper.remove();
+        }
+        setPlannerLinkStatus('Booking link copied. You can paste this exact planner path into an email, text, or browser tab.');
+      } catch (err) {
+        setPlannerLinkStatus('Could not copy automatically. Use the full booking button to keep this plan instead.');
+      }
+    }
+
+    function renderPlannerSummary(state){
+      const addonsBox = qs('#plannerAddonsValue');
+      qs('#plannerStepValue').textContent = state?.current_step_title ? `${state.current_step_title}` : 'Step 1 — Date & vehicle';
+      qs('#plannerDateValue').textContent = state?.selected_date ? `${state.selected_date}${state?.selected_slot ? ` · ${state.selected_slot}` : ''}` : 'Choose a date and available slot';
+      qs('#plannerAreaValue').textContent = state?.service_area_label || 'Choose a town or service zone';
+      qs('#plannerVehicleValue').textContent = state?.vehicle_label || 'Match the vehicle before choosing the package';
+      qs('#plannerPackageValue').textContent = state?.package_name ? `${state.package_name}${state?.vehicle_size ? ` · ${state.vehicle_size}` : ''}` : 'Package not chosen yet';
+      addonsBox.innerHTML = state?.addon_names?.length
+        ? state.addon_names.map((name) => `<span class="tag">${escapeHtml(name)}</span>`).join('')
+        : '<span class="tag">No add-ons yet</span>';
+      qs('#plannerSubtotalValue').textContent = state?.package_name ? money(Number(state.subtotal_cad || 0)) : 'Package required';
+      qs('#plannerDepositValue').textContent = state?.deposit_cad != null ? money(Number(state.deposit_cad || 0)) : '—';
+      qs('#plannerSummaryHelper').textContent = state?.quote_only
+        ? 'Some selected add-ons are quote-only and will be confirmed separately in the booking flow.'
+        : 'The summary updates live as the embedded booking planner changes.';
+      const link = qs('#bookingPlannerContinueLink');
+      if (link) link.href = state?.booking_url || '/book';
+      renderMaintenanceInterest(state);
+      setPlannerLinkStatus(state?.booking_url ? 'This summary can open or copy the exact booking path you have built so far.' : 'Use the live planner first, then copy or open the exact booking path you built.');
+    }
+
+    function wireBookingPlannerFrame(){
+      const frame = qs('#bookingPlannerFrame');
+      if (!frame) return;
+      window.addEventListener('message', (event) => {
+        const payload = event.data || {};
+        if (payload.type === 'rd-book-embed-size') {
+          const measured = Number(payload.height || 0);
+          const mobile = window.innerWidth <= 980;
+          const minHeight = mobile ? 1220 : 980;
+          const maxHeight = mobile ? 1480 : 1220;
+          const nextHeight = Math.min(maxHeight, Math.max(minHeight, Math.round(measured) + 12));
+          const currentHeight = parseInt(frame.style.height || frame.getAttribute('height') || '0', 10) || 0;
+          const shell = frame.closest('.booking-embed-shell');
+          if (Number.isFinite(nextHeight) && Math.abs(nextHeight - currentHeight) >= 12) {
+            frame.style.height = `${nextHeight}px`;
+            frame.style.minHeight = `${nextHeight}px`;
+            frame.style.maxHeight = `${nextHeight}px`;
+            if (shell) {
+              shell.style.height = `${nextHeight}px`;
+              shell.style.minHeight = `${nextHeight}px`;
+              shell.style.maxHeight = `${nextHeight}px`;
+            }
+          }
+          return;
+        }
+        if (payload.type === 'rd-book-embed-state') {
+          plannerState = payload.state || null;
+          renderPlannerSummary(plannerState);
+        }
+      });
+    }
+
     function renderRows(pkgs){
       const tb = qs("#rows");
       tb.innerHTML = "";
@@ -212,9 +520,9 @@
             <div><strong>${escapeHtml(p.name || p.code)}</strong></div>
             <div class="muted mini">${escapeHtml(p.subtitle || "")}</div>
           </td>
-          <td>${small!=null ? money(small) : "—"} <a class="btn small ghost" href="/book?pkg=${encodeURIComponent(p.code)}&size=small">Book</a></td>
-          <td>${mid!=null ? money(mid) : "—"} <a class="btn small ghost" href="/book?pkg=${encodeURIComponent(p.code)}&size=mid">Book</a></td>
-          <td>${over!=null ? money(over) : "—"} <a class="btn small ghost" href="/book?pkg=${encodeURIComponent(p.code)}&size=oversize">Book</a></td>
+          <td>${small!=null ? money(small) : "—"} <a class="btn small ghost" href="/book?package=${encodeURIComponent(p.code)}&size=small">Book</a></td>
+          <td>${mid!=null ? money(mid) : "—"} <a class="btn small ghost" href="/book?package=${encodeURIComponent(p.code)}&size=mid">Book</a></td>
+          <td>${over!=null ? money(over) : "—"} <a class="btn small ghost" href="/book?package=${encodeURIComponent(p.code)}&size=oversize">Book</a></td>
           <td><span class="tag ok">${money(p.deposit_cad || 0)}</span></td>
         `;
         tb.appendChild(tr);
@@ -222,15 +530,27 @@
     }
 
     try {
-      const data = await loadPricingCatalogClient({ fallbackUrl: FALLBACK_URL });
-      renderRequirementTags(data);
-      chartMap = new Map([
-        ["Vehicle Price Chart 2025", chartUrl(data, "Vehicle Price Chart 2025")],
-        ["Package Service Details Chart", chartUrl(data, "Package Service Details Chart")],
-        ["Vehicle Size Chart", chartUrl(data, "Vehicle Size Chart")]
+      const [data, growth] = await Promise.all([
+        loadPricingCatalogClient({ fallbackUrl: FALLBACK_URL }),
+        loadGrowthSettings()
       ]);
+      renderRequirementTags(data);
+      const liveVehiclePriceChart = buildLivePricingChartDataUri(data) || chartUrl(data, "Vehicle Price Chart 2025");
+      const liveServiceDetailsChart = buildLiveServiceDetailsChartDataUri(data) || chartUrl(data, "Package Service Details Chart");
+      const liveVehicleSizeChart = buildLiveVehicleSizeChartDataUri(data) || chartUrl(data, "Vehicle Size Chart");
+      chartMap = new Map([
+        ["Vehicle Price Chart 2025", liveVehiclePriceChart],
+        ["Package Service Details Chart", liveServiceDetailsChart],
+        ["Vehicle Size Chart", liveVehicleSizeChart]
+      ]);
+      applyJsonLdScript('pricingSchema', buildPricingOfferCatalogSchema(data, 'https://rosiedazzlers.ca/pricing'));
       wireCharts();
       renderRows(Array.isArray(data?.packages) ? data.packages : []);
+      renderBookingPlanner(growth);
+      renderPlannerSummary(plannerState);
+      wireBookingPlannerFrame();
+      qs('#copyPlannerLinkBtn')?.addEventListener('click', copyPlannerLink);
+      qs('#maintInterestBtn')?.addEventListener('click', submitMaintenanceInterest);
       if (data._source && data._source !== "api") {
         const box = qs("#loadErr");
         box.style.display = "block";

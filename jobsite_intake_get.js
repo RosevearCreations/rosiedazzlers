@@ -1,5 +1,4 @@
 import { requireStaffAccess, serviceHeaders, json, isUuid } from "../_lib/staff-auth.js";
-import { attachCrewAssignments, loadCrewAssignmentsMap } from "../_lib/crew-assignments.js";
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -20,8 +19,6 @@ export async function onRequestPost(context) {
     if (!intakeRes.ok) return json({ error: `Could not load intake. ${await intakeRes.text()}` }, 500);
     const intakeRows = await intakeRes.json().catch(() => []);
     const intake = Array.isArray(intakeRows) ? intakeRows[0] || null : null;
-    const crewResult = await loadCrewAssignmentsMap(env, [booking.id]);
-    const bookingWithCrew = attachCrewAssignments([booking], crewResult.map)[0] || booking;
-    return json({ ok: true, actor: { id: access.actor?.id || null, full_name: access.actor?.full_name || null, email: access.actor?.email || null }, booking: bookingWithCrew, intake, crew_warning: crewResult.warning || null });
+    return json({ ok: true, actor: { id: access.actor?.id || null, full_name: access.actor?.full_name || null, email: access.actor?.email || null }, booking, intake });
   } catch (err) { return json({ error: err && err.message ? err.message : "Unexpected server error." }, 500); }
 }
