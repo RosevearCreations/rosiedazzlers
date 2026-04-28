@@ -4,11 +4,7 @@
     login: "/api/client/auth_login",
     me: "/api/client/auth_me",
     logout: "/api/client/auth_logout",
-    updateProfile: "/api/client/profile_update",
-    forgotPassword: "/api/client/auth_forgot_password",
-    resetPassword: "/api/client/auth_reset_password",
-    resendVerification: "/api/client/auth_resend_verification",
-    verifyEmail: "/api/client/auth_verify_email"
+    updateProfile: "/api/client/profile_update"
   };
 
   const state = { customer: null, authenticated: false, loaded: false };
@@ -65,34 +61,6 @@
     return { authenticated: false, customer: null };
   }
 
-
-  async function forgotPassword({ email }) {
-    const result = await requestJson(API.forgotPassword, { method: "POST", body: JSON.stringify({ email }) });
-    if (!result.ok) throw new Error((result.data && result.data.error) || "Could not send password reset.");
-    return result.data || { ok: true };
-  }
-
-  async function resetPassword({ token, password }) {
-    const result = await requestJson(API.resetPassword, { method: "POST", body: JSON.stringify({ token, password }) });
-    if (!result.ok) throw new Error((result.data && result.data.error) || "Could not reset password.");
-    state.customer = result.data && result.data.customer ? result.data.customer : state.customer;
-    state.authenticated = !!state.customer;
-    state.loaded = true;
-    return result.data || { ok: true };
-  }
-
-  async function resendVerification({ email }) {
-    const result = await requestJson(API.resendVerification, { method: "POST", body: JSON.stringify({ email }) });
-    if (!result.ok) throw new Error((result.data && result.data.error) || "Could not resend verification.");
-    return result.data || { ok: true };
-  }
-
-  async function verifyEmail({ token }) {
-    const result = await requestJson(API.verifyEmail, { method: "POST", body: JSON.stringify({ token }) });
-    if (!result.ok) throw new Error((result.data && result.data.error) || "Could not verify email.");
-    return result.data || { ok: true };
-  }
-
   async function updateProfile(payload) {
     const result = await requestJson(API.updateProfile, { method: "POST", body: JSON.stringify(payload) });
     if (!result.ok) throw new Error((result.data && result.data.error) || "Profile update failed.");
@@ -106,5 +74,5 @@
   function isAuthenticated() { return state.authenticated === true; }
   function getState() { return { loaded: state.loaded, authenticated: state.authenticated, customer: state.customer }; }
 
-  globalScope.ClientAuth = { API, loadCurrentCustomer, signUp, signIn, signOut, forgotPassword, resetPassword, resendVerification, verifyEmail, updateProfile, getCustomer, isAuthenticated, getState };
+  globalScope.ClientAuth = { API, loadCurrentCustomer, signUp, signIn, signOut, updateProfile, getCustomer, isAuthenticated, getState };
 })(window);

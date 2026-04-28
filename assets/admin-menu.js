@@ -51,13 +51,6 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-blocks")
     },
     {
-      key: "admin-assign",
-      label: "Assign Crew",
-      href: "/admin-assign.html",
-      description: "Lead + crew scheduling",
-      visible: () => globalScope.AdminAuth.canAccessPage("admin-assign")
-    },
-    {
       key: "admin-progress",
       label: "Progress",
       href: "/admin-progress.html",
@@ -89,16 +82,9 @@
     {
       key: "admin-app",
       label: "App Management",
-      href: "/admin-app",
+      href: "/admin-app.html",
       description: "Roles, screens, feature access",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-app")
-    },
-    {
-      key: "admin-catalog",
-      label: "Inventory",
-      href: "/admin-catalog.html",
-      description: "Inventory, reorder, add items",
-      visible: () => globalScope.AdminAuth.canAccessPage("admin-catalog")
     },
     {
       key: "admin-customers",
@@ -107,28 +93,6 @@
       description: "Profiles and tiers",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-customers")
     },
-    {
-      key: "admin-notifications",
-      label: "Notifications",
-      href: "/admin-notifications.html",
-      description: "Queued notices and hooks",
-      visible: () => globalScope.AdminAuth.canAccessPage("admin-notifications")
-    },
-    {
-      key: "admin-recovery",
-      label: "Recovery",
-      href: "/admin-recovery.html",
-      description: "Templates, previews, audit",
-      visible: () => globalScope.AdminAuth.canAccessPage("admin-recovery")
-    },
-    {
-      key: "admin-analytics",
-      label: "Analytics",
-      href: "/admin-analytics.html",
-      description: "Visitors, referrers, abandoned checkouts",
-      visible: () => globalScope.AdminAuth.canAccessPage("admin-analytics")
-    },
-
     {
       key: "admin-promos",
       label: "Promos",

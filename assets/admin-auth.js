@@ -166,34 +166,12 @@
     }
   }
 
-  function normalizePageKey(pageKey) {
-    switch (String(pageKey || "").trim()) {
-      case "catalog":
-        return "admin-catalog";
-      case "upload":
-        return "admin-upload";
-      case "progress":
-        return "admin-progress";
-      case "admin-account":
-        return "account";
-      default:
-        return String(pageKey || "").trim();
-    }
-  }
-
   function canAccessPage(pageKey) {
     const actor = state.actor;
     if (!actor) return false;
-
-    const normalizedPageKey = normalizePageKey(pageKey);
-
-    if (normalizedPageKey === "account") {
-      return true;
-    }
-
     if (actor.is_admin === true) return true;
 
-    switch (normalizedPageKey) {
+    switch (String(pageKey || "")) {
       case "admin":
       case "admin-booking":
         return hasCapability("can_manage_bookings");
@@ -225,46 +203,8 @@
       case "admin-app":
         return actor.is_admin === true || hasCapability("can_manage_staff");
 
-      case "admin-catalog":
-        return actor.is_admin === true || hasCapability("can_manage_staff");
-
-      case "admin-upload":
-        return (
-          hasCapability("can_manage_bookings") ||
-          hasCapability("can_manage_progress") ||
-          actor.is_senior_detailer === true ||
-          actor.is_detailer === true
-        );
-
-      case "detailer-jobs":
-        return (
-          hasCapability("can_manage_bookings") ||
-          hasCapability("can_manage_progress") ||
-          actor.is_senior_detailer === true ||
-          actor.is_detailer === true
-        );
-
-      case "admin-accounting":
-        return actor.is_admin === true || hasCapability("can_manage_staff");
-
-      case "admin-assign":
-        return actor.is_admin === true || hasCapability("can_manage_bookings") || hasCapability("can_manage_staff");
-
-      case "admin-recovery":
-        return actor.is_admin === true || hasCapability("can_manage_staff");
-
       case "admin-customers":
         return hasCapability("can_manage_bookings");
-
-      case "admin-notifications":
-        return (
-          hasCapability("can_manage_bookings") ||
-          hasCapability("can_manage_progress") ||
-          hasCapability("can_manage_staff")
-        );
-
-      case "admin-analytics":
-        return actor.is_admin === true || hasCapability("can_manage_staff");
 
       case "admin-promos":
         return hasCapability("can_manage_promos");
@@ -275,14 +215,12 @@
   }
 
   async function requireAuth({
-    redirectTo = "/admin-login.html",
+    redirectTo = "/admin-login",
     pageKey = null
   } = {}) {
     if (!state.loaded) {
       await loadCurrentActor();
     }
-
-    const normalizedPageKey = normalizePageKey(pageKey);
 
     if (!state.authenticated || !state.actor) {
       redirectWithReturn(redirectTo);
@@ -292,7 +230,7 @@
       };
     }
 
-    if (normalizedPageKey && !canAccessPage(normalizedPageKey)) {
+    if (pageKey && !canAccessPage(pageKey)) {
       redirectToSafeHome();
       return {
         ok: false,
@@ -314,10 +252,10 @@
   }
 
   function redirectToSafeHome() {
-    window.location.replace("/admin.html");
+    window.location.replace("/admin");
   }
 
-  function readNextUrl(fallback = "/admin.html") {
+  function readNextUrl(fallback = "/admin") {
     const params = new URLSearchParams(window.location.search);
     const next = params.get("next");
     if (!next) return fallback;
@@ -357,7 +295,7 @@
     const pageNodes = root.querySelectorAll("[data-page-access]");
     pageNodes.forEach((node) => {
       const pageKey = node.getAttribute("data-page-access");
-      node.hidden = !canAccessPage(normalizePageKey(pageKey));
+      node.hidden = !canAccessPage(pageKey);
     });
   }
 
@@ -415,7 +353,6 @@
     applyVisibility,
     renderActorText,
     readNextUrl,
-    humanizeRole,
-    normalizePageKey
+    humanizeRole
   };
 })(window);

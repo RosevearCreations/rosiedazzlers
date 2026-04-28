@@ -8,7 +8,7 @@ const BRAND = {
   name: "Rosie Dazzlers",
   logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
   banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
-  reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png",
+  reviews: "/assets/brand/rosie-reviews-fallback.svg",
   footerLogo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
 };
 
@@ -27,6 +27,7 @@ const DEFAULT_NAV_LINKS = [
   ["/pricing", "Pricing"],
   ["/gear", "Gear"],
   ["/consumables", "Consumables"],
+  ["/gallery", "Gallery"],
   ["/about", "About"],
   ["/contact", "Contact"],
   ["/book", "Book"],
@@ -148,6 +149,7 @@ function ensureReviewsPanel() {
   if (directImg && directImg.tagName && directImg.tagName.toLowerCase() === "img") {
     directImg.src = BRAND.reviews;
     directImg.alt = "Rosie Dazzlers reviews";
+    directImg.onerror = function(){ this.onerror = null; this.src = "/assets/brand/rosie-reviews-fallback.svg"; };
     directImg.loading = "lazy";
     directImg.style.display = "block";
     directImg.style.width = "100%";
@@ -165,6 +167,7 @@ function ensureReviewsPanel() {
     wrapTarget.innerHTML = `
       <img
         src="${BRAND.reviews}"
+        onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.svg'"
         alt="Rosie Dazzlers reviews"
         loading="lazy"
         style="display:block;width:100%;height:auto;object-fit:contain"
@@ -199,6 +202,7 @@ function ensureReviewsPanel() {
     >
       <img
         src="${BRAND.reviews}"
+        onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.svg'"
         alt="Rosie Dazzlers reviews"
         loading="lazy"
         style="display:block;width:100%;max-width:980px;height:auto;object-fit:contain"
@@ -631,12 +635,13 @@ function ensureManifest(){
 
 
 function ensurePublicAnalytics(){
-  if (document.querySelector('script[data-rosie-analytics="1"]')) return;
-  const script = document.createElement('script');
-  script.src = '/assets/public-analytics.js?v=20260411analytics2';
-  script.defer = true;
-  script.dataset.rosieAnalytics = '1';
-  document.head.appendChild(script);
+  const head=document.head||document.querySelector("head");
+  if(!head || head.querySelector('script[data-public-analytics-bootstrap]')) return;
+  const script=document.createElement('script');
+  script.src='/assets/public-analytics.js';
+  script.defer=true;
+  script.dataset.publicAnalyticsBootstrap='true';
+  head.appendChild(script);
 }
 
 function initChrome() {

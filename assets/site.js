@@ -1,9 +1,11 @@
-import { loadPricingCatalogClient, money as formatMoney, packageImageForSize as sharedPackageImageForSize, addonPrimaryImage as sharedAddonPrimaryImage, addonFallbackImage as sharedAddonFallbackImage, addonDisplay as sharedAddonDisplay } from "/assets/pricing-catalog-client.js?v=20260412pass12";
+import { packageImageForSize as sharedPackageImageForSize } from "/assets/pricing-catalog-client.js";
+
+const DATA_URL = "/api/pricing_catalog_public";
 
 const BRAND = {
   logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
   banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
-  reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png"
+  reviews: "/assets/brand/rosie-reviews-fallback.svg"
 };
 
 const CONTACT = {
@@ -61,12 +63,17 @@ let _servicesData = null;
 
 async function loadServicesData() {
   if (_servicesData) return _servicesData;
-  _servicesData = await loadPricingCatalogClient({ fallbackUrl: "/data/rosie_services_pricing_and_packages.json?v=20260412pass12" });
+  const res = await fetch(`${DATA_URL}?v=20260301e`, { cache: "no-store" });
+  if (!res.ok) throw new Error(`Could not load ${DATA_URL}`);
+  _servicesData = await res.json();
   return _servicesData;
 }
 
 function money(value) {
-  return formatMoney(value);
+  return new Intl.NumberFormat("en-CA", {
+    style: "currency",
+    currency: "CAD"
+  }).format(Number(value || 0));
 }
 
 function getPackageByCode(data, code) {
@@ -78,21 +85,26 @@ function packagePrice(pkg, size) {
 }
 
 function packageImageForSize(pkg, size) {
-  return sharedPackageImageForSize(pkg, size);
+  return sharedPackageImageForSize(pkg, size) || pkg?.images_by_size?.[size] || "";
 }
 
-function addonImageForCode(addonOrCode) {
-  const addon = addonOrCode && typeof addonOrCode === "object" ? addonOrCode : { code: addonOrCode };
-  return sharedAddonPrimaryImage(addon) || ADDON_MEDIA[addon.code] || LOCAL_ADDON_FALLBACKS[addon.code] || '/assets/addons/generic_addon.svg';
+function addonImageForCode(code) {
+  return ADDON_MEDIA[code] || LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.svg';
 }
 
-function addonFallbackForCode(addonOrCode) {
-  const addon = addonOrCode && typeof addonOrCode === "object" ? addonOrCode : { code: addonOrCode };
-  return sharedAddonFallbackImage(addon) || LOCAL_ADDON_FALLBACKS[addon.code] || '/assets/addons/generic_addon.svg';
+function addonFallbackForCode(code) {
+  return LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.svg';
 }
 
 function addonDisplay(addon, size) {
-  return sharedAddonDisplay(addon, size);
+  if (addon.quote_required === true) {
+    if (addon.prices_cad?.[size] != null) return `From ${money(addon.prices_cad[size])} · Quote required`;
+    if (addon.price_cad != null) return `From ${money(addon.price_cad)} · Quote required`;
+    return "Quote required";
+  }
+  if (addon.prices_cad?.[size] != null) return money(addon.prices_cad[size]);
+  if (addon.price_cad != null) return money(addon.price_cad);
+  return "Quote required";
 }
 
 function addonCharge(addon, size) {
@@ -150,7 +162,7 @@ export function setBrandImages() {
   if (banner) banner.src = BRAND.banner;
 
   const reviews = document.querySelector("[data-reviews]");
-  if (reviews) reviews.src = BRAND.reviews;
+  if (reviews) { reviews.src = BRAND.reviews; reviews.onerror = () => { reviews.onerror = null; reviews.src = "/assets/brand/rosie-reviews-fallback.svg"; }; }
 }
 
 export function setFooter() {
@@ -302,7 +314,7 @@ function renderAddons(cardsEl, data, size) {
   cardsEl.innerHTML = "";
 
   for (const addon of data.addons || []) {
-    const img = addonImageForCode(addon);
+    const img = addonImageForCode(addon.code);
     const display = addonDisplay(addon, size);
 
     const tags = [];
@@ -314,7 +326,7 @@ function renderAddons(cardsEl, data, size) {
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `
-      ${img ? `<img class="img" loading="lazy" src="${img}" alt="${addon.name}" data-fallback="${addonFallbackForCode(addon)}" onerror="if(this.dataset.fallback && this.src!==this.dataset.fallback){this.src=this.dataset.fallback}else{this.style.display='none'}">` : ""}
+      ${img ? `<img class="img" loading="lazy" src="${img}" alt="${addon.name}" data-fallback="${addonFallbackForCode(addon.code)}" onerror="if(this.dataset.fallback && this.src!==this.dataset.fallback){this.src=this.dataset.fallback}else{this.style.display='none'}">` : ""}
       <h3>${addon.name}</h3>
       <p class="kicker">${display}</p>
       ${tags.length ? `<div class="hr"></div><div>${tags.join(" ")}</div>` : ""}
