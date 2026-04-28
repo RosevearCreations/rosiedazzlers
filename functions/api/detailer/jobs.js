@@ -8,7 +8,7 @@ export async function onRequestGet(context) {
   const actor = access.actor;
   const params = new URL(request.url).searchParams;
   const jobStatus = String(params.get("job_status") || "").trim();
-  let url = `${env.SUPABASE_URL}/rest/v1/bookings?select=id,service_date,start_slot,status,job_status,current_workflow_stage,detailer_response_status,detailer_response_reason,customer_name,customer_email,package_code,vehicle_size,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,progress_token,progress_enabled,notes&order=service_date.asc,start_slot.asc`;
+  let url = `${env.SUPABASE_URL}/rest/v1/bookings?select=id,service_date,start_slot,status,job_status,current_workflow_stage,detailer_response_status,detailer_response_reason,customer_name,customer_email,package_code,vehicle_size,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,progress_token,progress_enabled,notes,trusted_service_latitude,trusted_service_longitude,trusted_service_coordinate_source,trusted_service_coordinate_status,trusted_service_coordinate_label,trusted_service_geofence_radius_m,arrival_device_latitude,arrival_device_longitude,arrival_geofence_status,arrival_distance_m,arrival_geofence_checked_at&order=service_date.asc,start_slot.asc`;
   if (!(actor.is_admin || actor.can_manage_bookings)) {
     const ors = [];
     const crewBookingIds = await loadCrewBookingIds(env, actor);
