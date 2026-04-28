@@ -434,3 +434,6 @@ Current accounting-state note: admin-accounting now includes a year-end tax prep
 - Public proof blocks now use a bundled reviews fallback image directly, so the pricing-page review proof no longer depends on a missing remote asset.
 - Admin Accounting now has live sections for bank reconciliation, accounting document links, recurring expenses, payroll payout reconciliation, and period-close status tracking.
 - Posting into locked or closed accounting months is now blocked at journal-entry time once the new migration is applied.
+
+## 2026-04-28 implementation update
+The accounting workspace now includes vendor defaults, direct accounting document upload support, richer bank reconciliation persistence, expanded payroll payout reconciliation detail, and broader locked-period enforcement. Booking and checkout now enforce add-on dependency rules from the pricing catalog.

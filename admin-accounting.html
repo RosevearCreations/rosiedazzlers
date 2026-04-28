@@ -33,7 +33,7 @@
     .pricing-tier{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
     .pricing-tier strong{display:block;font-size:1.2rem;margin-top:6px}
 
-    .doc-card,.recurring-card{border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;background:rgba(255,255,255,.03)}
+    .doc-card,.recurring-card,.vendor-card{border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;background:rgba(255,255,255,.03)}
     .doc-card a{word-break:break-word}
     .warning-text{color:#fde68a}
     #filterForm,
@@ -585,8 +585,37 @@
 
             <article class="panel stack">
               <div>
+                <h2 style="margin:0 0 6px">Accounting vendor defaults</h2>
+                <p class="mini" style="margin:0">Save vendor defaults so recurring expenses, bills, and document filing can reuse the right expense account, payment account, and posting mode.</p>
+              </div>
+              <form id="vendorForm" class="stack">
+                <div class="admin-grid-3">
+                  <label>Vendor name<input id="vendorName" placeholder="Supplier or contractor name" /></label>
+                  <label>Default expense account<select id="vendorExpenseAccount" data-account-role="expense"></select></label>
+                  <label>Default payment account<select id="vendorPaymentAccount" data-account-role="payment"></select></label>
+                </div>
+                <div class="admin-grid-3">
+                  <label>Posting mode<select id="vendorPostingMode"><option value="cash">Cash expense</option><option value="payable">Vendor bill / payable</option></select></label>
+                  <label>Payment terms (days)<input id="vendorTermsDays" type="number" min="0" step="1" value="30" /></label>
+                  <label>Contact email<input id="vendorContactEmail" type="email" placeholder="Optional email" /></label>
+                </div>
+                <div class="admin-grid-2">
+                  <label>Contact name<input id="vendorContactName" placeholder="Optional contact" /></label>
+                  <label>Contact phone<input id="vendorContactPhone" placeholder="Optional phone" /></label>
+                </div>
+                <label>Vendor notes<textarea id="vendorNotes" rows="3" placeholder="Chemicals, towels, insurance, fuel, mobile repair, parts, etc."></textarea></label>
+                <div class="row wrap" style="justify-content:space-between;align-items:center">
+                  <div class="mini" id="vendorMeta">No vendors loaded yet.</div>
+                  <button class="btn primary" type="submit">Save vendor default</button>
+                </div>
+              </form>
+              <div class="report-scroll"><div id="vendorRows" class="stack"></div></div>
+            </article>
+
+            <article class="panel stack">
+              <div>
                 <h2 style="margin:0 0 6px">Vendor / invoice / bill documents</h2>
-                <p class="mini" style="margin:0">Store URLs or storage paths for receipts, vendor bills, statements, invoices, and other accounting support documents.</p>
+                <p class="mini" style="margin:0">Store uploaded files, public URLs, or storage paths for receipts, vendor bills, statements, invoices, and other accounting support documents.</p>
               </div>
               <form id="documentLinkForm" class="stack">
                 <div class="admin-grid-3">
@@ -622,9 +651,30 @@
                     <input id="documentTitle" placeholder="April fuel receipt" />
                   </label>
                   <label>
-                    File URL or storage path
-                    <input id="documentUrl" placeholder="https://... or storage/path.pdf" />
+                    Vendor name
+                    <input id="documentVendorName" placeholder="Optional vendor" />
                   </label>
+                </div>
+                <div class="admin-grid-3">
+                  <label>
+                    Document date
+                    <input id="documentDate" type="date" />
+                  </label>
+                  <label>
+                    Document number
+                    <input id="documentNumber" placeholder="Invoice / receipt number" />
+                  </label>
+                  <label>
+                    File URL or storage path
+                    <input id="documentUrl" placeholder="Uploaded path or https://..." />
+                  </label>
+                </div>
+                <div class="admin-grid-2">
+                  <label>
+                    Upload file directly
+                    <input id="documentUploadFile" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.csv,.xlsx,.docx" />
+                  </label>
+                  <div class="row wrap" style="align-items:end"><button class="btn" type="button" id="documentUploadBtn">Upload selected file</button><div class="mini" id="documentUploadMeta">No file uploaded yet.</div></div>
                 </div>
                 <label>
                   Notes
@@ -632,7 +682,7 @@
                 </label>
                 <div class="row wrap" style="justify-content:space-between;align-items:center">
                   <div class="mini" id="documentMeta">No accounting documents loaded yet.</div>
-                  <button class="btn primary" type="submit">Save document link</button>
+                  <button class="btn primary" type="submit">Save accounting document</button>
                 </div>
               </form>
               <div class="report-scroll"><div class="table-lite" id="documentRows"></div></div>
@@ -738,6 +788,7 @@
         payrollPayouts: null,
         recurringExpenses: [],
         accountingDocuments: [],
+        accountingVendors: [],
         periodCloses: []
       };
 
@@ -1022,8 +1073,16 @@ function renderYearEnd(report) {
         qs('#documentMeta').textContent = items.length ? (items.length + ' document links loaded') : 'No accounting documents loaded yet.';
         wrap.innerHTML = items.length ? items.map(function (row) {
           var href = row.file_url || row.storage_path || '';
-          return '<div class="doc-card"><div class="row wrap" style="justify-content:space-between;gap:10px"><div><strong>' + esc(row.title || 'Document') + '</strong><div class="mini">' + esc((row.document_kind || 'attachment') + ' · ' + (row.related_type || 'journal_entry') + (row.related_id ? ' · ' + row.related_id : '')) + '</div></div><div class="mini">' + esc(new Date(row.created_at || Date.now()).toLocaleString()) + '</div></div>' + (href ? '<div class="mini" style="margin-top:10px"><a href="' + esc(href) + '" target="_blank" rel="noopener">' + esc(href) + '</a></div>' : '') + (row.notes ? '<div class="mini" style="margin-top:8px">' + esc(row.notes) + '</div>' : '') + '</div>';
+          return '<div class="doc-card"><div class="row wrap" style="justify-content:space-between;gap:10px"><div><strong>' + esc(row.title || 'Document') + '</strong><div class="mini">' + esc((row.document_kind || 'attachment') + ' · ' + (row.related_type || 'journal_entry') + (row.related_id ? ' · ' + row.related_id : '')) + '</div></div><div class="mini">' + esc(new Date(row.created_at || Date.now()).toLocaleString()) + '</div></div>' + (row.vendor_name ? '<div class="mini" style="margin-top:8px">Vendor: ' + esc(row.vendor_name) + (row.document_date ? ' · ' + esc(row.document_date) : '') + (row.document_number ? ' · #' + esc(row.document_number) : '') + '</div>' : '') + (href ? '<div class="mini" style="margin-top:10px"><a href="' + esc(href) + '" target="_blank" rel="noopener">' + esc(row.file_name || href) + '</a></div>' : '') + (row.notes ? '<div class="mini" style="margin-top:8px">' + esc(row.notes) + '</div>' : '') + '</div>';
         }).join('') : '<div class="mini">No accounting documents saved yet.</div>';
+      }
+      function renderVendors(items) {
+        var wrap = qs('#vendorRows');
+        items = Array.isArray(items) ? items : [];
+        qs('#vendorMeta').textContent = items.length ? (items.length + ' vendors loaded') : 'No vendors loaded yet.';
+        wrap.innerHTML = items.length ? items.map(function (row) {
+          return '<article class="vendor-card"><div class="row wrap" style="justify-content:space-between;gap:10px"><div><strong>' + esc(row.vendor_name || 'Vendor') + '</strong><div class="mini">' + esc((row.default_posting_mode || 'cash') + ' · ' + (row.default_expense_account_code || 'shop_supplies') + ' · ' + (row.default_payment_account_code || 'cash')) + '</div></div><div class="tag">' + esc((row.payment_terms_days == null ? 'terms n/a' : row.payment_terms_days + ' days')) + '</div></div>' + ((row.contact_name || row.contact_email || row.contact_phone) ? '<div class="mini" style="margin-top:8px">' + esc([row.contact_name, row.contact_email, row.contact_phone].filter(Boolean).join(' · ')) + '</div>' : '') + (row.vendor_notes ? '<div class="mini" style="margin-top:8px">' + esc(row.vendor_notes) + '</div>' : '') + '</article>';
+        }).join('') : '<div class="mini">No vendors saved yet.</div>';
       }
       function renderRecurringExpenses(items) {
         var wrap = qs('#recurringExpenseRows');
@@ -1298,6 +1357,17 @@ function renderInventoryCosts(report) {
         qs('#sumCostCoverage').textContent = String(inventory.totals && inventory.totals.cost_coverage_pct || 0) + '% coverage';
       }
 
+      async function loadVendors() {
+        try {
+          var out = await apiJson('/api/admin/accounting_vendors');
+          state.accountingVendors = Array.isArray(out.vendors) ? out.vendors : [];
+          renderVendors(state.accountingVendors);
+        } catch (err) {
+          state.accountingVendors = [];
+          renderVendors([]);
+          qs('#vendorMeta').textContent = err && err.message ? err.message : 'Could not load vendors.';
+        }
+      }
       async function loadDocuments() {
         try {
           var out = await apiJson('/api/admin/accounting_documents?limit=30');
@@ -1414,6 +1484,7 @@ function renderInventoryCosts(report) {
           loadYearEnd(),
           loadMonthEndChecklist(),
           loadPricingWindow(),
+          loadVendors(),
           loadDocuments(),
           loadRecurringExpenses(),
           loadBankReconciliation(),
@@ -1501,6 +1572,58 @@ function renderInventoryCosts(report) {
             if (type === 'payables') url += '&status=' + encodeURIComponent(selectedPayableStatus());
             window.location.href = url;
           });
+        });
+
+
+        qs('#bankReconForm').addEventListener('submit', async function (event) {
+          event.preventDefault();
+          var payload = { month: selectedMonth(), year: selectedYear(), account_code: qs('#bankReconAccount').value || 'cash', statement_ending_balance_cad: Number(qs('#bankReconEndingBalance').value || 0), status: qs('#bankReconStatus').value || 'draft', notes: qs('#bankReconNotes').value.trim() };
+          try { setStatus('Saving bank reconciliation…'); await apiJson('/api/admin/accounting_bank_reconciliation', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) }); setStatus('Bank reconciliation saved.', 'success'); await refreshAll(); } catch (err) { setStatus(err && err.message ? err.message : 'Could not save bank reconciliation.', 'error'); }
+        });
+
+        qs('#payrollPayoutForm').addEventListener('submit', async function (event) {
+          event.preventDefault();
+          var payload = { payroll_run_id: qs('#payrollRunSelect').value, payout_date: qs('#payrollPayoutDate').value || todayIso(), paid_gross_cad: Number(qs('#payrollPayoutAmount').value || 0), payment_account_code: qs('#payrollPayoutAccount').value || 'cash', status: qs('#payrollPayoutStatus').value || 'reconciled', accounting_entry_id: qs('#payrollPayoutEntryId').value.trim(), note: qs('#payrollPayoutNote').value.trim() };
+          try { setStatus('Saving payroll payout reconciliation…'); await apiJson('/api/admin/accounting_payroll_payout_reconciliation', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) }); setStatus('Payroll payout reconciliation saved.', 'success'); await refreshAll(); } catch (err) { setStatus(err && err.message ? err.message : 'Could not save payroll payout reconciliation.', 'error'); }
+        });
+
+        qs('#recurringExpenseForm').addEventListener('submit', async function (event) {
+          event.preventDefault();
+          var payload = { vendor_name: qs('#recurringVendor').value.trim(), next_due_date: qs('#recurringDueDate').value || todayIso(), cadence: qs('#recurringCadence').value || 'monthly', posting_mode: qs('#recurringPostingMode').value || 'cash', subtotal_cad: Number(qs('#recurringAmount').value || 0), tax_cad: Number(qs('#recurringTax').value || 0), expense_account_code: qs('#recurringExpenseAccount').value || 'shop_supplies', payment_account_code: qs('#recurringPaymentAccount').value || 'cash', memo: qs('#recurringMemo').value.trim(), is_active: true };
+          try { setStatus('Saving recurring expense…'); await apiJson('/api/admin/accounting_recurring_expenses', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) }); qs('#recurringAmount').value = '0.00'; qs('#recurringTax').value = '0.00'; setStatus('Recurring expense template saved.', 'success'); await refreshAll(); } catch (err) { setStatus(err && err.message ? err.message : 'Could not save recurring expense.', 'error'); }
+        });
+
+        qs('#vendorForm').addEventListener('submit', async function (event) {
+          event.preventDefault();
+          var payload = { vendor_name: qs('#vendorName').value.trim(), default_expense_account_code: qs('#vendorExpenseAccount').value || 'shop_supplies', default_payment_account_code: qs('#vendorPaymentAccount').value || 'cash', default_posting_mode: qs('#vendorPostingMode').value || 'cash', payment_terms_days: Number(qs('#vendorTermsDays').value || 0), contact_name: qs('#vendorContactName').value.trim(), contact_email: qs('#vendorContactEmail').value.trim(), contact_phone: qs('#vendorContactPhone').value.trim(), vendor_notes: qs('#vendorNotes').value.trim(), is_active: true };
+          try { setStatus('Saving vendor defaults…'); await apiJson('/api/admin/accounting_vendors', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) }); setStatus('Vendor defaults saved.', 'success'); await loadVendors(); } catch (err) { setStatus(err && err.message ? err.message : 'Could not save vendor.', 'error'); }
+        });
+
+        qs('#documentUploadBtn').addEventListener('click', async function () {
+          var file = qs('#documentUploadFile').files && qs('#documentUploadFile').files[0];
+          if (!file) { qs('#documentUploadMeta').textContent = 'Choose a file first.'; return; }
+          try {
+            qs('#documentUploadMeta').textContent = 'Requesting upload URL…';
+            var out = await apiJson('/api/admin/accounting_document_upload_url', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ filename: file.name, content_type: file.type || 'application/octet-stream', file_size_bytes: file.size }) });
+            var put = await fetch(out.upload_url, { method:'PUT', headers:{ 'Content-Type': file.type || 'application/octet-stream' }, body: file });
+            if (!put.ok) throw new Error('Upload failed.');
+            qs('#documentUrl').value = out.public_url || out.storage_path || out.path || '';
+            qs('#documentUploadMeta').textContent = 'Uploaded ' + file.name;
+          } catch (err) { qs('#documentUploadMeta').textContent = err && err.message ? err.message : 'Could not upload file.'; }
+        });
+
+        qs('#documentLinkForm').addEventListener('submit', async function (event) {
+          event.preventDefault();
+          var file = qs('#documentUploadFile').files && qs('#documentUploadFile').files[0];
+          var currentUrl = qs('#documentUrl').value.trim();
+          var payload = { related_type: qs('#documentRelatedType').value || 'journal_entry', related_id: qs('#documentRelatedId').value.trim(), document_kind: qs('#documentKind').value || 'attachment', title: qs('#documentTitle').value.trim(), vendor_name: qs('#documentVendorName').value.trim(), document_date: qs('#documentDate').value || null, document_number: qs('#documentNumber').value.trim(), file_url: currentUrl, storage_path: /^https?:/i.test(currentUrl) ? null : currentUrl, file_name: file ? file.name : null, mime_type: file ? file.type : null, size_bytes: file ? file.size : null, notes: qs('#documentNotes').value.trim() };
+          try { setStatus('Saving accounting document…'); await apiJson('/api/admin/accounting_documents', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) }); setStatus('Accounting document saved.', 'success'); await loadDocuments(); } catch (err) { setStatus(err && err.message ? err.message : 'Could not save accounting document.', 'error'); }
+        });
+
+        qs('#periodCloseForm').addEventListener('submit', async function (event) {
+          event.preventDefault();
+          var payload = { month: selectedMonth(), year: selectedYear(), status: qs('#periodCloseStatus').value || 'review', notes: qs('#periodCloseNotes').value.trim(), checklist: qs('#periodCloseChecklistSync').value === 'inherit' ? (state.monthEndChecklist || {}) : null };
+          try { setStatus('Saving period-close workflow…'); await apiJson('/api/admin/accounting_period_close', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) }); setStatus('Period-close workflow saved.', 'success'); await loadPeriodCloses(); } catch (err) { setStatus(err && err.message ? err.message : 'Could not save period-close workflow.', 'error'); }
         });
 
         qs('#monthEndChecklistForm').addEventListener('submit', async function (event) {
