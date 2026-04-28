@@ -28,7 +28,7 @@
     .card > .muted + .feature-note,.card > h2 + .feature-note{margin-top:-2px}
     .feature-note{margin:0 0 14px;color:#9fb0c8;font-size:.95rem;line-height:1.5}
     .feature-list{margin:0;padding-left:18px;color:#c3d2e6;display:grid;gap:6px}
-    .admin-menu-slot:empty{display:none}
+    .admin-menu-slot:empty{display:none}.chart-helper-preview{padding:10px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);overflow:auto}.chart-helper-preview img{display:block;max-width:100%;height:auto;border-radius:12px}
     @media(max-width:1200px){.catalog-row.package,.catalog-row.addon,.catalog-row.service-area,.pricing-grid-4,.pricing-grid-5{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:980px){.span-6,.span-4,.span-8{grid-column:span 12}.app-layout{grid-template-columns:1fr}.menu-col{position:static}}
     @media(max-width:720px){.catalog-row.package,.catalog-row.addon,.catalog-row.service-area,.catalog-row.requirement,.pricing-grid-4,.pricing-grid-5{grid-template-columns:1fr}}
@@ -76,6 +76,7 @@
           <article class="intro-card"><h3>Pricing source of truth</h3><p>Manage packages, add-ons, service areas, travel tiers, and price controls from one place used by booking, pricing, services, and checkout.</p></article>
           <article class="intro-card"><h3>Customer documents</h3><p>Set the wording used in order confirmations, invoices, and printable gift certificates so the office output stays consistent.</p></article>
           <article class="intro-card"><h3>Public social blocks</h3><p>Store the latest five social links per platform so the home and videos pages stay current without hand-editing those pages.</p></article>
+          <article class="intro-card"><h3>Next growth layer</h3><p>Use this screen to shape booking-led self-serve flows, scheduled e-gift delivery, and recurring maintenance-plan offers before they are pushed deeper into checkout and follow-up flows.</p></article>
         </section>
 
     <section class="grid">
@@ -108,6 +109,60 @@
         <div class="checkrow"><input id="flag_two_sided_thread_controls_enabled" type="checkbox"><label for="flag_two_sided_thread_controls_enabled">Two-sided thread controls enabled</label></div>
         <div class="checkrow"><input id="flag_low_stock_alerts_enabled" type="checkbox"><label for="flag_low_stock_alerts_enabled">Low-stock alerts enabled</label></div>
         <div class="actions"><button class="btn" type="button" id="saveFlagsBtn">Save feature flags</button></div>
+      </article>
+
+
+      <article class="card span-6">
+        <h2>Booking-Led Self-Serve &amp; Booking</h2>
+        <p class="feature-note">Make the quote result more prominent so customers can move from vehicle details to an exact or near-exact booking total with less back-and-forth.</p>
+        <div class="checkrow"><input id="quote_prominent_cta" type="checkbox"><label for="quote_prominent_cta">Show a stronger “Build my quote” call to action on public pages</label></div>
+        <div class="checkrow"><input id="quote_show_exact_total" type="checkbox"><label for="quote_show_exact_total">Show package + add-on total early once the vehicle and service choices are known</label></div>
+        <div class="checkrow"><input id="quote_show_time_expectation" type="checkbox"><label for="quote_show_time_expectation">Show estimated site-time ranges beside package choices</label></div>
+        <div class="field"><label for="quote_teaser_text">Quote teaser text</label><textarea id="quote_teaser_text" placeholder="Choose your vehicle, package, and add-ons to see your expected total before checkout."></textarea></div>
+        <div class="actions"><button class="btn" type="button" id="saveQuoteSettingsBtn">Save quote settings</button></div>
+      </article>
+
+      <article class="card span-6">
+        <h2>Scheduled E-Gift Delivery</h2>
+        <p class="feature-note">Prepare the gift workflow for scheduled delivery, recipient naming, and office review instead of one-time plain printable gifts only.</p>
+        <div class="checkrow"><input id="gift_delivery_enabled" type="checkbox"><label for="gift_delivery_enabled">Enable recipient name and scheduled delivery fields on gift checkout</label></div>
+        <div class="checkrow"><input id="gift_delivery_automation_enabled" type="checkbox"><label for="gift_delivery_automation_enabled">Automatically send due e-gifts when their scheduled date arrives</label></div>
+        <div class="checkrow"><input id="gift_delivery_manual_review" type="checkbox"><label for="gift_delivery_manual_review">Hold scheduled gifts for office review before send</label></div>
+        <div class="checkrow"><input id="gift_delivery_send_copy_to_purchaser" type="checkbox"><label for="gift_delivery_send_copy_to_purchaser">Send a delivery confirmation copy to the purchaser</label></div>
+        <div class="subgrid">
+          <div class="field"><label for="gift_delivery_send_hour">Default send hour (24h)</label><input id="gift_delivery_send_hour" type="number" min="0" max="23" step="1"></div>
+          <div class="field"><label for="gift_delivery_timezone">Time zone label</label><input id="gift_delivery_timezone" placeholder="America/Toronto"></div>
+        </div>
+        <div class="field"><label for="gift_delivery_default_message">Default e-gift helper text</label><textarea id="gift_delivery_default_message" placeholder="Choose a recipient, add a message, and pick the day you want us to send the gift."></textarea></div>
+        <div class="actions"><button class="btn" type="button" id="saveGiftDeliverySettingsBtn">Save e-gift settings</button><button class="btn ghost" type="button" id="runGiftDeliveryProcessBtn">Run due gift deliveries now</button></div>
+      </article>
+
+      <article class="card span-12">
+        <h2>Maintenance &amp; Membership Plans</h2>
+        <p class="feature-note">Use this section to shape recurring-clean offers that support repeat local customers, smoother scheduling, and predictable follow-up revenue.</p>
+        <div class="subgrid">
+          <div class="checkrow"><input id="membership_enabled" type="checkbox"><label for="membership_enabled">Show a maintenance-plan teaser on public pages</label></div>
+          <div class="checkrow"><input id="membership_waitlist_enabled" type="checkbox"><label for="membership_waitlist_enabled">Use a waitlist / interest CTA before taking recurring plan orders</label></div>
+          <div class="checkrow"><input id="membership_reminder_enabled" type="checkbox"><label for="membership_reminder_enabled">Send reminder-first recurring maintenance nudges</label></div>
+        </div>
+        <div class="subgrid">
+          <div class="field"><label for="membership_name">Plan name</label><input id="membership_name" placeholder="Maintain Your Shine Plan"></div>
+          <div class="field"><label for="membership_cycle">Cycle label</label><input id="membership_cycle" placeholder="Every 4 or 8 weeks"></div>
+        </div>
+        <div class="field"><label for="membership_teaser">Public teaser</label><textarea id="membership_teaser" placeholder="Keep your vehicle on a repeating clean schedule with priority reminders and simpler rebooking."></textarea></div>
+        <div class="field"><label for="membership_benefits">Benefits (one per line)</label><textarea id="membership_benefits" placeholder="Priority reminder before your preferred date&#10;Faster rebooking using your saved vehicle&#10;Cleaner predictable maintenance cycle"></textarea></div>
+        <div class="subgrid">
+          <div class="field"><label for="membership_reminder_subject">Reminder email subject</label><input id="membership_reminder_subject" placeholder="It may be time to book your next Rosie Dazzlers clean"></div>
+          <div class="field"><label for="membership_reminder_intro">Reminder intro</label><textarea id="membership_reminder_intro" placeholder="Use the booking-led planner to pick your next clean while your preferred timing is still open."></textarea></div>
+        </div>
+        <div class="actions"><button class="btn" type="button" id="saveMembershipSettingsBtn">Save maintenance plan settings</button><button class="btn ghost" type="button" id="runMembershipReminderProcessBtn">Run due reminders now</button><a class="btn" href="/maintenance-plan" target="_blank" rel="noopener">Open the public maintenance page</a></div>
+      </article>
+
+      <article class="card span-12">
+        <h2>Recurring reminder candidates</h2>
+        <p class="feature-note">These rows are now built from real completed booking history, not only the public interest list. Use them to see who is due for a reminder based on the last completed clean, the inferred repeat cycle, and the current reminder status.</p>
+        <div class="actions" style="margin-bottom:12px"><button class="btn" type="button" id="reloadMembershipInterestBtn">Reload reminder candidates</button></div>
+        <div id="membershipInterestList" class="stack-sm"></div>
       </article>
 
       <article class="card span-12">
@@ -172,6 +227,20 @@
             <button class="btn" type="button" id="applyPricingJsonBtn">Apply JSON to editor</button>
             <button class="btn" type="button" id="syncPricingJsonBtn">Refresh JSON from editor</button>
           </div>
+          <div class="panel-lite stack-sm" style="margin-top:12px">
+            <div class="section-label">Live chart helper</div>
+            <p class="note">Preview or download live SVG chart files from the catalog currently shown in this editor. Use Refresh JSON from editor first when you have changed form fields but have not saved yet.</p>
+            <div class="actions">
+              <select id="liveChartType" aria-label="Live chart type">
+                <option value="prices">Vehicle price chart</option>
+                <option value="details">Package service details chart</option>
+                <option value="sizes">Vehicle size guide</option>
+              </select>
+              <button class="btn" type="button" id="liveChartPreviewBtn">Preview chart</button>
+              <button class="btn" type="button" id="liveChartDownloadBtn">Download SVG</button>
+            </div>
+            <div id="liveChartPreviewWrap" class="chart-helper-preview" hidden><img id="liveChartPreviewImg" alt="Live chart preview" /></div>
+          </div>
         </details>
 
         <div class="actions" style="margin-top:14px">
@@ -202,6 +271,18 @@
           <button class="btn" type="button" id="reloadSocialFeedsBtn">Reload social feed JSON</button>
           <button class="btn" type="button" id="resetSocialFeedsBtn">Reset to template</button>
           <button class="btn primary" type="button" id="saveSocialFeedsBtn">Save social feeds</button>
+        </div>
+      </article>
+
+      <article class="card span-6">
+        <h2>Before / after gallery manager</h2>
+        <p class="feature-note">Maintain the public before/after slider gallery here instead of editing a sample JSON file.</p>
+        <p class="muted">Each row can use paired images or paired videos. Only customer-approved media should be published here.</p>
+        <div class="field"><label for="before_after_gallery_json">Gallery JSON</label><textarea id="before_after_gallery_json" spellcheck="false" placeholder='{"items":[{"title":"Interior refresh","before_url":"","after_url":""}]}'></textarea></div>
+        <div class="actions">
+          <button class="btn" type="button" id="reloadBeforeAfterGalleryBtn">Reload gallery JSON</button>
+          <button class="btn" type="button" id="resetBeforeAfterGalleryBtn">Reset to template</button>
+          <button class="btn primary" type="button" id="saveBeforeAfterGalleryBtn">Save gallery</button>
         </div>
       </article>
 
@@ -361,9 +442,80 @@
     if (!parsed || typeof parsed !== 'object') throw new Error('Social feed JSON must be a JSON object.');
     return normalizeSocialFeeds(parsed);
   }
+  function beforeAfterGalleryDefaults(){
+    return {
+      items: [
+        {
+          title: 'Interior refresh',
+          location: 'Tillsonburg, ON',
+          before_kind: 'image',
+          before_url: 'https://assets.rosiedazzlers.ca/brand/CarPrice2025.PNG',
+          after_kind: 'image',
+          after_url: 'https://assets.rosiedazzlers.ca/brand/CarPriceDetails2025.PNG',
+          note: 'Replace this sample pair with customer-approved work.',
+          consent_status: 'sample'
+        }
+      ]
+    };
+  }
+  function normalizeBeforeAfterGallery(value){
+    var src = value && typeof value === 'object' ? cloneValue(value) : cloneValue(beforeAfterGalleryDefaults());
+    var items = Array.isArray(src.items) ? src.items : [];
+    src.items = items.map(function(item){
+      return {
+        title: String(item && item.title || 'Detail result'),
+        location: String(item && item.location || 'Oxford / Norfolk Counties'),
+        before_kind: String(item && item.before_kind || 'image').toLowerCase() === 'video' ? 'video' : 'image',
+        before_url: String(item && item.before_url || ''),
+        after_kind: String(item && item.after_kind || 'image').toLowerCase() === 'video' ? 'video' : 'image',
+        after_url: String(item && item.after_url || ''),
+        note: String(item && item.note || ''),
+        consent_status: String(item && item.consent_status || ''),
+        customer_name: String(item && item.customer_name || ''),
+        vehicle_label: String(item && item.vehicle_label || '')
+      };
+    }).filter(function(item){ return item.before_url || item.after_url || item.title; });
+    if (!src.items.length) src.items = cloneValue(beforeAfterGalleryDefaults().items);
+    return src;
+  }
+  function setBeforeAfterGalleryEditor(value){
+    byId('before_after_gallery_json').value = JSON.stringify(normalizeBeforeAfterGallery(value), null, 2);
+  }
+  function readBeforeAfterGalleryEditor(){
+    var raw = byId('before_after_gallery_json').value || '{}';
+    var parsed;
+    try { parsed = JSON.parse(raw); } catch { throw new Error('Before / after gallery JSON is invalid.'); }
+    if (!parsed || typeof parsed !== 'object') throw new Error('Before / after gallery JSON must be a JSON object.');
+    return normalizeBeforeAfterGallery(parsed);
+  }
   function readVisibility(){ return { customer_detailer_notes: byId('vis_customer_detailer_notes').checked, customer_admin_notes_admin_only: byId('vis_customer_admin_notes').checked, detailer_admin_notes_admin_only: byId('vis_detailer_admin_notes').checked }; }
   function readScheduling(){ return { manual_schedule_admin_only: byId('manual_schedule_admin_only').checked, blocking_admin_only: byId('blocking_admin_only').checked, notes: byId('manual_schedule_notes').value || '' }; }
   function readFlags(){ return { live_updates_default: byId('flag_live_updates_default').checked, customer_chat_enabled: byId('flag_customer_chat_enabled').checked, picture_first_observations: byId('flag_picture_first_observations').checked, tier_discount_badges: byId('flag_tier_discount_badges').checked, annotation_moderation_enabled: byId('flag_annotation_moderation_enabled').checked, two_sided_thread_controls_enabled: byId('flag_two_sided_thread_controls_enabled').checked, low_stock_alerts_enabled: byId('flag_low_stock_alerts_enabled').checked }; }
+  function quoteSettingsDefaults(){ return { prominent_cta: true, show_exact_total: true, show_time_expectation: true, teaser_text: 'Choose your vehicle, package, and add-ons to see your expected total before checkout.' }; }
+  function readQuoteSettings(){ return { prominent_cta: byId('quote_prominent_cta').checked, show_exact_total: byId('quote_show_exact_total').checked, show_time_expectation: byId('quote_show_time_expectation').checked, teaser_text: byId('quote_teaser_text').value || quoteSettingsDefaults().teaser_text }; }
+  function giftDeliveryDefaults(){ return { enabled: true, manual_review: false, automation_enabled: true, default_message: 'Choose a recipient, add a message, and pick the day you want us to send the gift.', default_send_hour_local: 9, timezone_label: 'America/Toronto', send_copy_to_purchaser: true }; }
+  function readGiftDeliverySettings(){ return { enabled: byId('gift_delivery_enabled').checked, manual_review: byId('gift_delivery_manual_review').checked, automation_enabled: byId('gift_delivery_automation_enabled').checked, send_copy_to_purchaser: byId('gift_delivery_send_copy_to_purchaser').checked, default_send_hour_local: Number(byId('gift_delivery_send_hour').value || giftDeliveryDefaults().default_send_hour_local), timezone_label: byId('gift_delivery_timezone').value || giftDeliveryDefaults().timezone_label, default_message: byId('gift_delivery_default_message').value || giftDeliveryDefaults().default_message }; }
+  function membershipPlanDefaults(){ return { enabled: false, waitlist_enabled: true, plan_name: 'Maintain Your Shine Plan', cycle_label: 'Every 4 or 8 weeks', teaser: 'Keep your vehicle on a repeating clean schedule with priority reminders and simpler rebooking.', benefits: ['Priority reminder before your preferred date','Faster rebooking using your saved vehicle','Cleaner predictable maintenance cycle'], reminder_enabled: true, reminder_channel: 'email', reminder_subject: 'It may be time to book your next Rosie Dazzlers clean', reminder_intro: 'Use the booking-led planner to pick your next clean while your preferred timing is still open.', reminder_send_hour_local: 9, timezone_label: 'America/Toronto' }; }
+  function readMembershipPlanSettings(){ return { enabled: byId('membership_enabled').checked, waitlist_enabled: byId('membership_waitlist_enabled').checked, reminder_enabled: byId('membership_reminder_enabled').checked, plan_name: byId('membership_name').value || membershipPlanDefaults().plan_name, cycle_label: byId('membership_cycle').value || membershipPlanDefaults().cycle_label, teaser: byId('membership_teaser').value || membershipPlanDefaults().teaser, benefits: (byId('membership_benefits').value || '').split(/\n+/).map(function (row) { return row.trim(); }).filter(Boolean), reminder_subject: byId('membership_reminder_subject').value || membershipPlanDefaults().reminder_subject, reminder_intro: byId('membership_reminder_intro').value || membershipPlanDefaults().reminder_intro, reminder_channel: 'email', reminder_send_hour_local: membershipPlanDefaults().reminder_send_hour_local, timezone_label: membershipPlanDefaults().timezone_label }; }
+  function renderMembershipInterestList(rows){
+    var host = byId('membershipInterestList');
+    if (!host) return;
+    var list = Array.isArray(rows) ? rows : [];
+    if (!list.length) { host.innerHTML = '<div class="catalog-empty">No recurring reminder candidates yet.</div>'; return; }
+    host.innerHTML = list.map(function (row) {
+      var lastService = row && row.last_service_at ? new Date(row.last_service_at).toLocaleDateString('en-CA', { month:'short', day:'numeric', year:'numeric' }) : 'Unknown';
+      var nextReminder = row && row.next_reminder_at ? new Date(row.next_reminder_at).toLocaleDateString('en-CA', { month:'short', day:'numeric', year:'numeric' }) : 'TBD';
+      var dueBadge = row && row.due ? '<span class="tag warn">Due now</span>' : '<span class="tag ok">Waiting</span>';
+      var bookingLink = row && row.booking_url ? '<div style="margin-top:10px"><a class="btn ghost small" href="' + escapeHtml(row.booking_url) + '" target="_blank" rel="noopener">Open booking path</a></div>' : '';
+      return '<div class="panel-lite"><div class="section-head"><strong>' + escapeHtml(row.full_name || 'Recurring reminder candidate') + '</strong><span class="note">' + dueBadge + '</span></div><div class="subgrid"><div class="stack-sm"><div><strong>Email:</strong> ' + escapeHtml(row.email || '—') + '</div><div><strong>Phone:</strong> ' + escapeHtml(row.phone || '—') + '</div><div><strong>Last service:</strong> ' + escapeHtml(lastService) + '</div></div><div class="stack-sm"><div><strong>Cycle:</strong> ' + escapeHtml(row.cycle_label || '—') + '</div><div><strong>Completed bookings:</strong> ' + escapeHtml(row.booking_count == null ? '—' : row.booking_count) + '</div><div><strong>Next reminder:</strong> ' + escapeHtml(nextReminder) + '</div></div></div><div class="subgrid" style="margin-top:10px"><div class="stack-sm"><div><strong>Last package:</strong> ' + escapeHtml(row.latest_package_code || '—') + '</div><div><strong>Last area:</strong> ' + escapeHtml(row.latest_service_area || '—') + '</div></div><div class="stack-sm"><div><strong>Reminder status:</strong> ' + escapeHtml(row.reminder_status || row.due_reason || 'pending') + '</div><div><strong>Last reminder:</strong> ' + escapeHtml(row.last_reminder_at ? new Date(row.last_reminder_at).toLocaleDateString('en-CA', { month:'short', day:'numeric', year:'numeric' }) : '—') + '</div></div></div>' + bookingLink + '</div>';
+    }).join('');
+  }
+  async function loadMembershipInterest(){
+    var res = await fetch('/api/admin/membership_interest_list', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 10 }) });
+    var out = await res.json().catch(function(){ return null; });
+    if (!res.ok) throw new Error(out?.error || 'Could not load recurring reminder candidates.');
+    renderMembershipInterestList(out?.requests || []);
+  }
   function readModeration(){ return { annotation_customer_visibility_default: byId('mod_annotation_customer_visibility_default').checked, comment_customer_visibility_default: byId('mod_comment_customer_visibility_default').checked, client_reply_depth_limit: Number(byId('mod_client_reply_depth_limit').value || 4), staff_reply_depth_limit: Number(byId('mod_staff_reply_depth_limit').value || 8), allow_client_annotation_replies: byId('mod_allow_client_annotation_replies').checked, allow_staff_hide_without_delete: byId('mod_allow_staff_hide_without_delete').checked }; }
   function readRecoveryTemplates(){ return { abandoned_checkout_subject: byId('recovery_subject').value || '', abandoned_checkout_body_text: byId('recovery_body_text').value || '', abandoned_checkout_body_html: byId('recovery_body_html').value || '' }; }
   function readRecoveryRules(){ return { abandoned_recovery_enabled: byId('recovery_enabled').checked, minimum_page_events: Number(byId('recovery_min_events').value || 0), require_email: true, cooldown_hours: Number(byId('recovery_cooldown_hours').value || 24), default_recovery_channel: byId('recovery_default_channel').value || 'email' }; }
@@ -690,6 +842,9 @@
     const visibility = applySetting(s.visibility_matrix);
     const scheduling = applySetting(s.manual_scheduling_rules);
     const flags = applySetting(s.feature_flags);
+    const quoteSettings = applySetting(s.quote_booking_settings, quoteSettingsDefaults());
+    const giftDeliverySettings = applySetting(s.gift_delivery_settings, giftDeliveryDefaults());
+    const membershipPlanSettings = applySetting(s.membership_plan_settings, membershipPlanDefaults());
     const moderation = applySetting(s.moderation_rules);
     const recoveryTemplates = applySetting(s.recovery_templates);
     const recoveryRules = applySetting(s.recovery_rules);
@@ -697,6 +852,7 @@
     const pricingCatalog = applySetting(s.pricing_catalog, null);
     const documentTemplates = applySetting(s.document_templates, documentTemplatesDefaults());
     const socialFeeds = applySetting(s.social_feeds, socialFeedsDefaults());
+    const beforeAfterGallery = applySetting(s.before_after_gallery, beforeAfterGalleryDefaults());
 
     byId('vis_customer_detailer_notes').checked = !!visibility.customer_detailer_notes;
     byId('vis_customer_admin_notes').checked = visibility.customer_admin_notes_admin_only !== false;
@@ -712,6 +868,29 @@
     byId('flag_annotation_moderation_enabled').checked = flags.annotation_moderation_enabled !== false;
     byId('flag_two_sided_thread_controls_enabled').checked = flags.two_sided_thread_controls_enabled !== false;
     byId('flag_low_stock_alerts_enabled').checked = flags.low_stock_alerts_enabled !== false;
+
+    byId('quote_prominent_cta').checked = quoteSettings.prominent_cta !== false;
+    byId('quote_show_exact_total').checked = quoteSettings.show_exact_total !== false;
+    byId('quote_show_time_expectation').checked = quoteSettings.show_time_expectation !== false;
+    byId('quote_teaser_text').value = quoteSettings.teaser_text || quoteSettingsDefaults().teaser_text;
+
+    byId('gift_delivery_enabled').checked = giftDeliverySettings.enabled !== false;
+    byId('gift_delivery_manual_review').checked = giftDeliverySettings.manual_review !== false;
+    byId('gift_delivery_automation_enabled').checked = giftDeliverySettings.automation_enabled !== false;
+    byId('gift_delivery_send_copy_to_purchaser').checked = giftDeliverySettings.send_copy_to_purchaser !== false;
+    byId('gift_delivery_send_hour').value = Number(giftDeliverySettings.default_send_hour_local || giftDeliveryDefaults().default_send_hour_local);
+    byId('gift_delivery_timezone').value = giftDeliverySettings.timezone_label || giftDeliveryDefaults().timezone_label;
+    byId('gift_delivery_default_message').value = giftDeliverySettings.default_message || giftDeliveryDefaults().default_message;
+
+    byId('membership_enabled').checked = !!membershipPlanSettings.enabled;
+    byId('membership_waitlist_enabled').checked = membershipPlanSettings.waitlist_enabled !== false;
+    byId('membership_reminder_enabled').checked = membershipPlanSettings.reminder_enabled !== false;
+    byId('membership_name').value = membershipPlanSettings.plan_name || membershipPlanDefaults().plan_name;
+    byId('membership_cycle').value = membershipPlanSettings.cycle_label || membershipPlanDefaults().cycle_label;
+    byId('membership_teaser').value = membershipPlanSettings.teaser || membershipPlanDefaults().teaser;
+    byId('membership_benefits').value = Array.isArray(membershipPlanSettings.benefits) ? membershipPlanSettings.benefits.join('\n') : membershipPlanDefaults().benefits.join('\n');
+    byId('membership_reminder_subject').value = membershipPlanSettings.reminder_subject || membershipPlanDefaults().reminder_subject;
+    byId('membership_reminder_intro').value = membershipPlanSettings.reminder_intro || membershipPlanDefaults().reminder_intro;
 
     byId('mod_annotation_customer_visibility_default').checked = moderation.annotation_customer_visibility_default !== false;
     byId('mod_comment_customer_visibility_default').checked = moderation.comment_customer_visibility_default !== false;
@@ -740,9 +919,20 @@
     byId('doc_invoice_footer').value = documentTemplates.invoice_footer || '';
     byId('doc_gift_footer').value = documentTemplates.gift_footer || '';
     setSocialFeedsEditor(socialFeeds);
+    setBeforeAfterGalleryEditor(beforeAfterGallery);
     await loadPricingCatalogEditor(pricingCatalog);
+    await loadMembershipInterest().catch(function(){ renderMembershipInterestList([]); });
   }
   function byId(id){ return document.getElementById(id); }
+  function bindById(id, eventName, handler){
+    const node = byId(id);
+    if (!node) {
+      console.warn('admin-app missing element for event binding:', id, eventName);
+      return null;
+    }
+    node.addEventListener(eventName, handler);
+    return node;
+  }
   async function previewRecovery(sendTest){
     const res = await fetch('/api/admin/recovery_message_preview', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ channel: byId('preview_channel').value, customer_name: byId('preview_customer_name').value, customer_email: byId('preview_customer_email').value, recipient_phone: byId('preview_recipient_phone').value, test_recipient: byId('preview_test_recipient').value, recovery_url: byId('preview_recovery_url').value, send_test: sendTest === true }) });
     const out = await res.json().catch(() => null);
@@ -757,56 +947,137 @@
   }
 
   ['travel_charge_urban','travel_charge_township','travel_charge_hamlet','travel_charge_coastal','travel_charge_rural','travel_charge_out_of_zone'].forEach(function (id) {
-    byId(id).addEventListener('input', function () {
+    bindById(id, 'input', function () {
       var key = id.replace('travel_charge_', '');
       pricingCatalogState.booking_rules.travel_pricing[key] = moneyNum(byId(id).value, 0);
       syncPricingEditorToJson();
     });
   });
-  byId('travel_charge_notes').addEventListener('input', function () {
+  bindById('travel_charge_notes', 'input', function () {
     pricingCatalogState.booking_rules.travel_pricing.notes = byId('travel_charge_notes').value || '';
     syncPricingEditorToJson();
   });
-  byId('price_control_fuel').addEventListener('input', function () { pricingCatalogState.booking_rules.price_controls.fuel_surcharge_cad = moneyNum(byId('price_control_fuel').value, 0); syncPricingEditorToJson(); });
-  byId('price_control_material').addEventListener('input', function () { pricingCatalogState.booking_rules.price_controls.material_surcharge_cad = moneyNum(byId('price_control_material').value, 0); syncPricingEditorToJson(); });
-  byId('price_control_minimum').addEventListener('input', function () { pricingCatalogState.booking_rules.price_controls.minimum_callout_cad = moneyNum(byId('price_control_minimum').value, 0); syncPricingEditorToJson(); });
-  byId('price_control_tax').addEventListener('input', function () { pricingCatalogState.booking_rules.price_controls.tax_rate_percent = moneyNum(byId('price_control_tax').value, 0); syncPricingEditorToJson(); });
-  byId('addPackageBtn').addEventListener('click', function () {
+  bindById('price_control_fuel', 'input', function () { pricingCatalogState.booking_rules.price_controls.fuel_surcharge_cad = moneyNum(byId('price_control_fuel').value, 0); syncPricingEditorToJson(); });
+  bindById('price_control_material', 'input', function () { pricingCatalogState.booking_rules.price_controls.material_surcharge_cad = moneyNum(byId('price_control_material').value, 0); syncPricingEditorToJson(); });
+  bindById('price_control_minimum', 'input', function () { pricingCatalogState.booking_rules.price_controls.minimum_callout_cad = moneyNum(byId('price_control_minimum').value, 0); syncPricingEditorToJson(); });
+  bindById('price_control_tax', 'input', function () { pricingCatalogState.booking_rules.price_controls.tax_rate_percent = moneyNum(byId('price_control_tax').value, 0); syncPricingEditorToJson(); });
+  bindById('addPackageBtn', 'click', function () {
     pricingCatalogState.packages.push({ code: 'new_package', name: 'New Package', subtitle: '', prices_cad: { small: 0, mid: 0, oversize: 0 }, deposit_cad: 0, images_by_size: {}, included_services: [], notes: [] });
     syncPricingEditorToJson(); renderPricingDashboard();
   });
-  byId('addAddonBtn').addEventListener('click', function () {
+  bindById('addAddonBtn', 'click', function () {
     pricingCatalogState.addons.push({ code: 'new_addon', name: 'New Add-on', category: '', type: '', prices_cad: { small: 0, mid: 0, oversize: 0 }, price_cad: 0, quote_required: false, image_url: '', image_fallback_url: '', notes: [] });
     syncPricingEditorToJson(); renderPricingDashboard();
   });
-  byId('addServiceAreaBtn').addEventListener('click', function () {
+  bindById('addServiceAreaBtn', 'click', function () {
     pricingCatalogState.service_areas.push({ county: '', label: 'New Service Area', value: 'New Service Area', municipality: '', zone: '', travel_tier: 'township', area_type: '', bylaw_note: '', parking_rule: '', noise_rule: '', water_rule: '', access_rule: '', official_links: [] });
     syncPricingEditorToJson(); renderPricingDashboard();
   });
-  byId('addRequirementBtn').addEventListener('click', function () {
+  bindById('addRequirementBtn', 'click', function () {
     pricingCatalogState.public_requirements.push('New public requirement');
     pricingCatalogState.booking_rules.public_requirements = pricingCatalogState.public_requirements.slice();
     syncPricingEditorToJson(); renderPricingDashboard();
   });
-  byId('applyPricingJsonBtn').addEventListener('click', function () { try { setPricingCatalogState(readPricingCatalog()); setShellStatus('Pricing JSON applied to the structured editor.', 'success'); } catch (err) { setShellStatus(err?.message || 'Could not apply pricing JSON.', 'error'); } });
-  byId('syncPricingJsonBtn').addEventListener('click', function () { syncPricingEditorToJson(); setShellStatus('Raw pricing JSON refreshed from the structured editor.', 'success'); });
-  byId('saveVisibilityBtn').addEventListener('click', async ()=>{ try{ await saveSetting('visibility_matrix', readVisibility(), 'Visibility settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save visibility settings.', 'error'); } });
-  byId('saveSchedulingBtn').addEventListener('click', async ()=>{ try{ await saveSetting('manual_scheduling_rules', readScheduling(), 'Scheduling policy saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save scheduling policy.', 'error'); } });
-  byId('saveFlagsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('feature_flags', readFlags(), 'Feature flags saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save feature flags.', 'error'); } });
-  byId('saveModerationBtn').addEventListener('click', async ()=>{ try{ await saveSetting('moderation_rules', readModeration(), 'Moderation defaults saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save moderation defaults.', 'error'); } });
-  byId('saveRecoveryBtn').addEventListener('click', async ()=>{ try{ await saveSetting('recovery_templates', readRecoveryTemplates(), 'Recovery templates saved.'); await saveSetting('recovery_rules', readRecoveryRules(), 'Recovery rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save recovery settings.', 'error'); } });
-  byId('saveProviderRulesBtn').addEventListener('click', async ()=>{ try{ await saveSetting('recovery_provider_rules', readProviderRules(), 'Recovery provider rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save provider rules.', 'error'); } });
-  byId('saveDocumentTemplatesBtn').addEventListener('click', async ()=>{ try{ await saveSetting('document_templates', readDocumentTemplates(), 'Document templates saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save document templates.', 'error'); } });
-  byId('reloadSocialFeedsBtn').addEventListener('click', async ()=>{ try{ const res = await fetch('/api/social_feed_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load social feed JSON.'); setSocialFeedsEditor(out?.social_feeds || socialFeedsDefaults()); setShellStatus(out?.warning ? `Social feed JSON reloaded with fallback defaults. ${out.warning}` : 'Social feed JSON reloaded.', out?.warning ? 'warning' : 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload social feed JSON.', 'error'); } });
-  byId('resetSocialFeedsBtn').addEventListener('click', ()=>{ setSocialFeedsEditor(socialFeedsDefaults()); setShellStatus('Social feed editor reset to the template structure.', 'success'); });
-  byId('saveSocialFeedsBtn').addEventListener('click', async ()=>{ try{ await saveSetting('social_feeds', readSocialFeedsEditor(), 'Social feeds saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save social feeds.', 'error'); } });
-  byId('reloadPricingCatalogBtn').addEventListener('click', async ()=>{ try{ await loadPricingCatalogEditor(null); setShellStatus('Pricing catalog reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload pricing catalog.', 'error'); } });
-  byId('savePricingCatalogBtn').addEventListener('click', async ()=>{ try{ syncPricingEditorToJson(); await saveSetting('pricing_catalog', pricingCatalogState, 'Pricing catalog saved. Booking, pricing, services, checkout, and pricing controls now share this source.'); } catch(err){ setShellStatus(err?.message || 'Could not save pricing catalog.', 'error'); } });
-  byId('previewRecoveryBtn').addEventListener('click', async ()=>{ try{ await previewRecovery(false); setShellStatus('Recovery preview generated.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not build recovery preview.', 'error'); } });
-  byId('sendTestRecoveryBtn').addEventListener('click', async ()=>{ try{ await previewRecovery(true); } catch(err){ setShellStatus(err?.message || 'Could not send recovery test.', 'error'); } });
+  bindById('applyPricingJsonBtn', 'click', function () { try { setPricingCatalogState(readPricingCatalog()); setShellStatus('Pricing JSON applied to the structured editor.', 'success'); } catch (err) { setShellStatus(err?.message || 'Could not apply pricing JSON.', 'error'); } });
+  bindById('syncPricingJsonBtn', 'click', function () { syncPricingEditorToJson(); setShellStatus('Raw pricing JSON refreshed from the structured editor.', 'success'); });
+  bindById('saveVisibilityBtn', 'click', async ()=>{ try{ await saveSetting('visibility_matrix', readVisibility(), 'Visibility settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save visibility settings.', 'error'); } });
+  bindById('saveSchedulingBtn', 'click', async ()=>{ try{ await saveSetting('manual_scheduling_rules', readScheduling(), 'Scheduling policy saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save scheduling policy.', 'error'); } });
+  bindById('saveFlagsBtn', 'click', async ()=>{ try{ await saveSetting('feature_flags', readFlags(), 'Feature flags saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save feature flags.', 'error'); } });
+  bindById('saveQuoteSettingsBtn', 'click', async ()=>{ try{ await saveSetting('quote_booking_settings', readQuoteSettings(), 'Booking-led self-serve settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save booking-led self-serve settings.', 'error'); } });
+  bindById('saveGiftDeliverySettingsBtn', 'click', async ()=>{ try{ await saveSetting('gift_delivery_settings', readGiftDeliverySettings(), 'E-gift delivery settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save e-gift settings.', 'error'); } });
+  bindById('runGiftDeliveryProcessBtn', 'click', async ()=>{ try{ const res = await fetch('/api/gifts/scheduled_delivery_process', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 50 }) }); const out = await res.json().catch(()=>null); if(!res.ok) throw new Error(out?.error || 'Could not run gift delivery automation.'); setShellStatus('Gift delivery automation scanned ' + (out?.scanned || 0) + ' gifts and processed ' + (out?.processed || 0) + '.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not run gift delivery automation.', 'error'); } });
+  bindById('saveMembershipSettingsBtn', 'click', async ()=>{ try{ await saveSetting('membership_plan_settings', readMembershipPlanSettings(), 'Maintenance plan settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save maintenance plan settings.', 'error'); } });
+  bindById('runMembershipReminderProcessBtn', 'click', async ()=>{ try{ const res = await fetch('/api/membership_reminders_process', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 50 }) }); const out = await res.json().catch(()=>null); if(!res.ok) throw new Error(out?.error || 'Could not run maintenance reminders.'); await loadMembershipInterest().catch(function(){}); setShellStatus('Maintenance reminders scanned ' + (out?.scanned || 0) + ' customers and processed ' + (out?.processed || 0) + '.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not run maintenance reminders.', 'error'); } });
+  bindById('reloadMembershipInterestBtn', 'click', async ()=>{ try{ await loadMembershipInterest(); setShellStatus('Recurring reminder candidates reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload recurring reminder candidates.', 'error'); } });
+  bindById('saveModerationBtn', 'click', async ()=>{ try{ await saveSetting('moderation_rules', readModeration(), 'Moderation defaults saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save moderation defaults.', 'error'); } });
+  bindById('saveRecoveryBtn', 'click', async ()=>{ try{ await saveSetting('recovery_templates', readRecoveryTemplates(), 'Recovery templates saved.'); await saveSetting('recovery_rules', readRecoveryRules(), 'Recovery rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save recovery settings.', 'error'); } });
+  bindById('saveProviderRulesBtn', 'click', async ()=>{ try{ await saveSetting('recovery_provider_rules', readProviderRules(), 'Recovery provider rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save provider rules.', 'error'); } });
+  bindById('saveDocumentTemplatesBtn', 'click', async ()=>{ try{ await saveSetting('document_templates', readDocumentTemplates(), 'Document templates saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save document templates.', 'error'); } });
+  bindById('reloadSocialFeedsBtn', 'click', async ()=>{ try{ const res = await fetch('/api/social_feed_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load social feed JSON.'); setSocialFeedsEditor(out?.social_feeds || socialFeedsDefaults()); setShellStatus(out?.warning ? `Social feed JSON reloaded with fallback defaults. ${out.warning}` : 'Social feed JSON reloaded.', out?.warning ? 'warning' : 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload social feed JSON.', 'error'); } });
+  bindById('resetSocialFeedsBtn', 'click', ()=>{ setSocialFeedsEditor(socialFeedsDefaults()); setShellStatus('Social feed editor reset to the template structure.', 'success'); });
+  bindById('saveSocialFeedsBtn', 'click', async ()=>{ try{ await saveSetting('social_feeds', readSocialFeedsEditor(), 'Social feeds saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save social feeds.', 'error'); } });
+  bindById('reloadBeforeAfterGalleryBtn', 'click', async ()=>{ try{ const res = await fetch('/api/before_after_gallery_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load before / after gallery JSON.'); setBeforeAfterGalleryEditor(out || beforeAfterGalleryDefaults()); setShellStatus(out?.warning ? `Before / after gallery reloaded with fallback defaults. ${out.warning}` : 'Before / after gallery reloaded.', out?.warning ? 'warning' : 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload before / after gallery JSON.', 'error'); } });
+  bindById('resetBeforeAfterGalleryBtn', 'click', ()=>{ setBeforeAfterGalleryEditor(beforeAfterGalleryDefaults()); setShellStatus('Before / after gallery editor reset to the template structure.', 'success'); });
+  bindById('saveBeforeAfterGalleryBtn', 'click', async ()=>{ try{ await saveSetting('before_after_gallery', readBeforeAfterGalleryEditor(), 'Before / after gallery saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save before / after gallery.', 'error'); } });
+  bindById('reloadPricingCatalogBtn', 'click', async ()=>{ try{ await loadPricingCatalogEditor(null); setShellStatus('Pricing catalog reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload pricing catalog.', 'error'); } });
+  bindById('savePricingCatalogBtn', 'click', async ()=>{ try{ syncPricingEditorToJson(); await saveSetting('pricing_catalog', pricingCatalogState, 'Pricing catalog saved. Booking, pricing, services, checkout, and pricing controls now share this source.'); } catch(err){ setShellStatus(err?.message || 'Could not save pricing catalog.', 'error'); } });
+  bindById('previewRecoveryBtn', 'click', async ()=>{ try{ await previewRecovery(false); setShellStatus('Recovery preview generated.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not build recovery preview.', 'error'); } });
+  bindById('sendTestRecoveryBtn', 'click', async ()=>{ try{ await previewRecovery(true); } catch(err){ setShellStatus(err?.message || 'Could not send recovery test.', 'error'); } });
 
   window.AdminPageInit.init({ pageKey:'admin-app', onReady: async ()=>{ try { await loadSettings(); } catch(err){ setShellStatus(err?.message || 'Could not initialize app management.', 'error'); } } });
 })();
+</script>
+
+<script type="module">
+  import {
+    buildLivePricingChartSvg,
+    buildLiveServiceDetailsChartSvg,
+    buildLiveVehicleSizeChartSvg
+  } from "/assets/pricing-catalog-client.js?v=20260423livecharts2";
+
+  const chartBuilders = {
+    prices: { filename: 'rosie-vehicle-price-chart.svg', build: buildLivePricingChartSvg },
+    details: { filename: 'rosie-package-service-details-chart.svg', build: buildLiveServiceDetailsChartSvg },
+    sizes: { filename: 'rosie-vehicle-size-guide.svg', build: buildLiveVehicleSizeChartSvg }
+  };
+
+  function currentCatalogForChart(){
+    const raw = document.getElementById('pricing_catalog_json')?.value || '{}';
+    try { return JSON.parse(raw); }
+    catch (err) { throw new Error('Pricing catalog JSON is not valid yet. Refresh JSON from editor or fix the raw JSON before generating charts.'); }
+  }
+
+  function chartSelection(){
+    const key = document.getElementById('liveChartType')?.value || 'prices';
+    return chartBuilders[key] || chartBuilders.prices;
+  }
+
+  function setLocalChartStatus(message, state){
+    const box = document.querySelector('[data-admin-shell-status]');
+    if (!box) return;
+    box.hidden = false;
+    box.textContent = message;
+    if (state) box.dataset.state = state;
+  }
+
+  function makeSvgBlobUrl(svg){
+    return URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }));
+  }
+
+  document.getElementById('liveChartPreviewBtn')?.addEventListener('click', () => {
+    try {
+      const selected = chartSelection();
+      const svg = selected.build(currentCatalogForChart());
+      const img = document.getElementById('liveChartPreviewImg');
+      const wrap = document.getElementById('liveChartPreviewWrap');
+      if (img.dataset.objectUrl) URL.revokeObjectURL(img.dataset.objectUrl);
+      const url = makeSvgBlobUrl(svg);
+      img.dataset.objectUrl = url;
+      img.src = url;
+      wrap.hidden = false;
+      setLocalChartStatus('Live chart preview generated from the current editor JSON.', 'success');
+    } catch (err) {
+      setLocalChartStatus(err?.message || 'Could not generate live chart preview.', 'error');
+    }
+  });
+
+  document.getElementById('liveChartDownloadBtn')?.addEventListener('click', () => {
+    try {
+      const selected = chartSelection();
+      const svg = selected.build(currentCatalogForChart());
+      const url = makeSvgBlobUrl(svg);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = selected.filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setLocalChartStatus('Live SVG chart downloaded from the current editor JSON.', 'success');
+    } catch (err) {
+      setLocalChartStatus(err?.message || 'Could not download live chart.', 'error');
+    }
+  });
 </script>
 </body>
 </html>

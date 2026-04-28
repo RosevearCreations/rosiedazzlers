@@ -41,18 +41,25 @@
     }
   </style>
 </head>
-<body>
-  <div class="nav">
+<body data-page="admin-assign">
+  <header class="nav">
     <div class="nav-inner">
-      <a class="brand" href="/">
+      <a class="brand" href="/admin.html">
         <img data-logo alt="Rosie Dazzlers logo" />
-        <strong>Rosie Dazzlers</strong>
+        <strong>Rosie Dazzlers Admin</strong>
       </a>
-      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
-      <div class="nav-links" id="navLinks"></div>
-      <a class="btn primary" href="/admin.html">Admin</a>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button>
+      <nav class="nav-links" id="navLinks">
+        <a href="/admin.html">Dashboard</a>
+        <a href="/admin-booking.html">Bookings</a>
+        <a href="/admin-assign.html">Assign Crew</a>
+        <a href="/admin-staff.html">Staff</a>
+        <a href="/admin-payroll.html">Crew Time &amp; Payroll</a>
+        <a href="/admin-accounting.html">Accounting</a>
+        <a href="/">Public Site</a>
+      </nav>
     </div>
-  </div>
+  </header>
 
   <div class="container">
     <div class="panel">

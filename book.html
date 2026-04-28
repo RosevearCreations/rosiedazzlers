@@ -29,6 +29,8 @@
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .grid2 > *, .grid3 > *{min-width:0}
+    input, select, textarea{min-width:0}
     .muted{color:rgba(234,242,255,.72)}
     .mini{font-size:.92rem}
     .summary-box{display:grid;gap:8px}
@@ -43,7 +45,7 @@
     .slot-row .btn.active{background:linear-gradient(135deg,var(--accent),#2b5bff);border-color:rgba(77,119,255,.55);color:#fff!important}
     .requirements-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
     .requirements-grid label{display:flex;gap:10px;align-items:flex-start;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;background:rgba(255,255,255,.03)}
-    .package-note{min-height:44px}
+    .package-note{min-height:44px;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
     .mobile-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
     .page-kicker{margin:0;color:rgba(234,242,255,.72)}
     .field-error{color:#ffb4b4;font-size:.95rem;margin-top:8px}
@@ -83,24 +85,29 @@
     .wizard-nav{display:flex;gap:10px;flex-wrap:wrap}
     .wizard-nav .btn{min-width:120px}
     .vehicle-option{
-      display:flex;flex-direction:column;align-items:flex-start;gap:4px;width:100%;
+      display:flex;flex-direction:column;align-items:flex-start;gap:4px;width:100%;min-width:0;overflow:hidden;
       border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px;background:rgba(255,255,255,.04)
     }
+    .vehicle-option strong,.vehicle-option span{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
     .vehicle-option.active{outline:2px solid #4d77ff}
-    .service-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .service-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:stretch}
     .service-card{
-      display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:1px solid rgba(255,255,255,.08);
-      border-radius:18px;padding:12px;background:rgba(255,255,255,.04);text-align:left
+      display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:1px solid rgba(255,255,255,.08);min-width:0;overflow:hidden;
+      border-radius:18px;padding:12px;background:rgba(255,255,255,.04);text-align:left;width:100%;min-height:100%;box-sizing:border-box
     }
+    .service-card strong,.service-card span{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
     .service-card.active{outline:2px solid #4d77ff}
-    .service-card img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px}
+    .service-card > *, .addon-card > *{max-width:100%;min-width:0}
+    .service-card .row, .addon-card .row{width:100%;max-width:100%;min-width:0}
+    .service-card img{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;display:block;flex:0 0 auto}
     .addon-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .addon-card{
-      display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:1px solid rgba(255,255,255,.08);
-      border-radius:18px;padding:12px;background:rgba(255,255,255,.04);text-align:left
+      display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:1px solid rgba(255,255,255,.08);min-width:0;overflow:hidden;
+      border-radius:18px;padding:12px;background:rgba(255,255,255,.04);text-align:left;width:100%;min-height:100%;box-sizing:border-box
     }
+    .addon-card strong,.addon-card span{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
     .addon-card.active{outline:2px solid #4d77ff}
-    .addon-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px}
+    .addon-thumb{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;display:block;flex:0 0 auto}
     .tag{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;font-size:.88rem;font-weight:700}
     .tag.ok{background:rgba(36,195,107,.15);color:#d7ffe8}
     .tag.warn{background:rgba(255,176,32,.18);color:#ffe6b3}
@@ -112,6 +119,15 @@
     .modal{width:min(980px,100%);background:#0d1526;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px}
     .modalHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
     .modal img{width:100%;height:auto;display:block;border-radius:14px}
+    body.is-embed .nav,
+    body.is-embed .footer{display:none}
+    body.is-embed{background:transparent}
+    body.is-embed main.container{max-width:1280px;padding-top:0}
+    body.is-embed .wizard-top{margin-top:0}
+    body.is-embed .wizard-top .step-head .row a[href="/pricing"]{display:none}
+    body.is-embed .wizard-shell{padding-bottom:0}
+    body.is-embed .panel, body.is-embed .card, body.is-embed .service-card, body.is-embed .addon-card{overflow:hidden}
+    body.is-embed .service-card strong, body.is-embed .service-card span, body.is-embed .addon-card strong, body.is-embed .addon-card span{display:block;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
     .sr-only{position:absolute;left:-9999px;opacity:0;pointer-events:none}
     @media (max-width:980px){
       .grid2,.grid3,.requirements-grid,.service-area-grid{grid-template-columns:1fr}
@@ -256,6 +272,10 @@
           <input id="veh_color" type="text" placeholder="Black, silver, blue" />
         </div>
         <div>
+          <label for="veh_mileage">Current mileage (km)</label>
+          <input id="veh_mileage" type="number" min="0" step="1" placeholder="Optional" />
+        </div>
+        <div>
           <label for="vehicle_size">Vehicle size</label>
           <select id="vehicle_size">
             <option value="">Select size</option>
@@ -297,6 +317,7 @@
       </div>
 
       <div id="sizeHint" class="notice" style="display:none;margin-top:12px"></div>
+      <div id="vehicleServiceHint" class="notice" style="display:none;margin-top:12px"></div>
       <div id="step1Error" class="field-error"></div>
     </section>
 
@@ -452,6 +473,8 @@
 
     const qs = (s) => document.querySelector(s);
     const qsa = (s) => [...document.querySelectorAll(s)];
+    const pageParams = new URLSearchParams(window.location.search);
+    const embedMode = ["1", "true", "yes"].includes(String(pageParams.get("embed") || "").toLowerCase());
 
     const steps = [
       { title:"Step 1", subtitle:"Date & vehicle" },
@@ -470,7 +493,8 @@
       garageVehicles: [],
       availabilityCache: new Map(),
       availabilityOffset: 0,
-      vehicleCatalog: { years: [], makes: [], models: [] }
+      vehicleCatalog: { years: [], makes: [], models: [] },
+      activeGarageVehicleId: null
     };
 
     const DEFAULT_AVAILABILITY_WINDOW_DAYS = 21;
@@ -497,6 +521,137 @@
       if (img) img.removeAttribute("src");
       if (back) back.style.display = "none";
     }
+
+    function applyEmbedMode() {
+      if (!embedMode) return;
+      document.body.classList.add("is-embed");
+      const title = qs("#wizardTop h1");
+      const kicker = qs("#wizardTop .page-kicker");
+      if (title) title.textContent = "Start your self-serve booking";
+      if (kicker) kicker.textContent = "Use the live booking planner below to see location restrictions, 21-day availability windows, exact package/add-on choices, and deposit-ready booking details before checkout.";
+    }
+
+    function postEmbedHeight() {
+      if (!embedMode || window.parent === window) return;
+      const shell = document.querySelector("main.container") || document.querySelector(".wizard-shell") || document.body;
+      const rawHeight = Math.max(
+        shell ? shell.scrollHeight : 0,
+        shell ? shell.offsetHeight : 0,
+        980
+      );
+      const height = Math.min(window.innerWidth <= 980 ? 1600 : 1280, rawHeight);
+      window.parent.postMessage({ type: "rd-book-embed-size", height }, "*");
+    }
+
+    function buildEmbedBookingUrl() {
+      const params = new URLSearchParams();
+      params.set('embed', '1');
+      if (state.selectedPackageCode) params.set('package', state.selectedPackageCode);
+      if (selectedSize()) params.set('size', selectedSize());
+      if (qs('#service_area').value) params.set('area', qs('#service_area').value);
+      if (selectedDate()) params.set('date', selectedDate());
+      if (state.selectedSlotChoice) params.set('slot', state.selectedSlotChoice);
+      if (state.addons.size) params.set('addons', Array.from(state.addons).join(','));
+      if (qs('#gift_code')?.value?.trim()) params.set('gift_code', qs('#gift_code').value.trim());
+      return `/book?${params.toString()}`;
+    }
+
+    function buildEmbedState() {
+      const pkg = selectedPackage();
+      const totals = computeTotals();
+      const area = findServiceArea(state.pricing || {}, qs('#service_area').value);
+      const addonRows = selectedAddons();
+      return {
+        current_step: state.currentStep,
+        current_step_title: steps[state.currentStep - 1]?.title || `Step ${state.currentStep}`,
+        selected_date: selectedDate() || null,
+        selected_slot: state.selectedSlotChoice || null,
+        service_area: qs('#service_area').value || null,
+        service_area_label: area?.label || qs('#service_area').selectedOptions?.[0]?.textContent || qs('#service_area').value || null,
+        local_rules_label: area?.municipality || null,
+        vehicle_label: [qs('#veh_year').value, qs('#veh_make').value, qs('#veh_model').value, qs('#veh_color').value].filter(Boolean).join(' · ') || null,
+        vehicle_size: selectedSize() || null,
+        package_code: state.selectedPackageCode || null,
+        package_name: pkg?.name || null,
+        addon_codes: addonRows.map((addon) => addon.code),
+        addon_names: addonRows.map((addon) => addon.name),
+        quote_only: totals.quoteOnly,
+        subtotal_cad: totals.subtotal || 0,
+        deposit_cad: totals.deposit || 0,
+        booking_url: buildEmbedBookingUrl()
+      };
+    }
+
+    function postEmbedState() {
+      if (!embedMode || window.parent === window) return;
+      window.parent.postMessage({ type: 'rd-book-embed-state', state: buildEmbedState() }, '*');
+    }
+
+    function wireEmbedResize() {
+      if (!embedMode) return;
+      const send = () => window.requestAnimationFrame(postEmbedHeight);
+      window.addEventListener("load", send);
+      window.addEventListener("resize", send);
+      if ("ResizeObserver" in window) {
+        const observer = new ResizeObserver(send);
+        if (document.body) observer.observe(document.body);
+        if (document.documentElement) observer.observe(document.documentElement);
+      }
+    }
+
+    function applyInitialPrefill() {
+      const size = String(pageParams.get("size") || "").trim().toLowerCase();
+      const packageCode = String(pageParams.get("package") || "").trim();
+      const serviceArea = String(pageParams.get("area") || "").trim();
+      const pickedDate = String(pageParams.get("date") || "").trim();
+      const pickedSlot = String(pageParams.get("slot") || "").trim().toUpperCase();
+      const addonCodes = String(pageParams.get("addons") || "")
+        .split(",")
+        .map((row) => row.trim())
+        .filter(Boolean);
+      const giftCode = String(pageParams.get("gift_code") || "").trim();
+
+      if (["small", "mid", "oversize"].includes(size)) {
+        qs("#vehicle_size").value = size;
+      }
+
+      if (serviceArea && [...qs("#service_area").options].some((opt) => opt.value === serviceArea)) {
+        qs("#service_area").value = serviceArea;
+      }
+
+      if (/^\d{4}-\d{2}-\d{2}$/.test(pickedDate)) {
+        qs("#service_date").value = pickedDate;
+        const diff = Math.max(0, Math.floor((new Date(`${pickedDate}T12:00:00`) - startOfLocalDay()) / 86400000));
+        const windowDays = availabilityWindowDays();
+        state.availabilityOffset = Math.floor(diff / windowDays) * windowDays;
+      }
+
+      if (["AM", "PM", "FULL"].includes(pickedSlot)) {
+        state.selectedSlotChoice = pickedSlot;
+      }
+
+      if ((state.pricing?.packages || []).some((pkg) => pkg.code === packageCode)) {
+        state.selectedPackageCode = packageCode;
+      }
+
+      state.addons.clear();
+      addonCodes.forEach((code) => {
+        if ((state.pricing?.addons || []).some((addon) => addon.code === code)) {
+          state.addons.add(code);
+        }
+      });
+
+      if (giftCode && qs('#gift_code')) {
+        qs('#gift_code').value = giftCode;
+      }
+
+      updateServiceAreaNote();
+      updateSizeHint();
+      postEmbedState();
+    }
+
+    applyEmbedMode();
+    wireEmbedResize();
 
     qs("#modalCloseBtn").addEventListener("click", closeModal);
     qs("#modalBack").addEventListener("click", (event) => {
@@ -702,6 +857,7 @@
       if (state.currentStep === 4) renderReviewVehicle();
       if (state.currentStep === 5) renderFinalSummary();
       analyticsTrack("booking_step_view", { step_number: state.currentStep });
+      postEmbedState();
     }
 
     qs("#prevStepBtn").addEventListener("click", () => gotoStep(state.currentStep - 1));
@@ -739,6 +895,7 @@
       renderAddons();
       renderReviewVehicle();
       renderFinalSummary();
+      renderVehicleServiceHint();
     }
 
     async function loadGarageVehicles() {
@@ -776,10 +933,12 @@
             const vehicle = state.garageVehicles[Number(btn.getAttribute("data-garage-index"))];
             if (!vehicle) return;
             qsa("[data-garage-index]").forEach((node) => node.classList.remove("active"));
+            state.activeGarageVehicleId = vehicle.id || null;
             btn.classList.add("active");
             qs("#veh_year").value = vehicle.model_year || "";
             qs("#veh_make").value = vehicle.make || "";
             qs("#veh_color").value = vehicle.color || "";
+            qs("#veh_mileage").value = vehicle.mileage_km || "";
             qs("#vehicle_size").value = vehicle.vehicle_size || "";
             qs("#veh_category").value = vehicle.vehicle_category || "";
             qs("#veh_body").value = vehicle.body_style || "";
@@ -1094,6 +1253,17 @@
       };
     }
 
+    function renderVehicleServiceHint() {
+      const hint = qs('#vehicleServiceHint');
+      const saved = state.garageVehicles.find((v)=> normalizeChoice(v.id) === normalizeChoice(state.activeGarageVehicleId)) || null;
+      const nextDue = saved?.next_cleaning_due_at || '';
+      const nextMileage = saved?.next_service_mileage_km || '';
+      if (!saved || (!nextDue && !nextMileage)) { hint.style.display='none'; return; }
+      hint.style.display='block';
+      hint.className='notice';
+      hint.textContent = `Garage record: ${nextDue ? `next scheduled ${nextDue}` : 'no next date set'}${nextMileage ? ` • next service mileage ${nextMileage} km` : ''}.`;
+    }
+
     function renderReviewVehicle() {
       const area = findServiceArea(state.pricing || {}, qs("#service_area").value);
       const rows = [
@@ -1102,6 +1272,7 @@
         ["Service area", qs("#service_area").value || "Not chosen"],
         ["Local rules", area?.municipality || "Pending zone selection"],
         ["Vehicle", [qs("#veh_year").value, qs("#veh_make").value, qs("#veh_model").value, qs("#veh_color").value].filter(Boolean).join(" · ") || "Vehicle details incomplete"],
+        ["Mileage", qs('#veh_mileage').value ? `${qs('#veh_mileage').value} km` : 'Optional / not entered'],
         ["Vehicle size", selectedSize() || "Not chosen"],
         ["Category", qs("#veh_category").value || "Not chosen"]
       ];
@@ -1124,6 +1295,7 @@
         ["Quote-only extras", totals.quoteOnly ? "Some selected extras are quote-required and will be confirmed separately." : "None"]
       ];
       qs("#finalSummary").innerHTML = rows.map(([label, value]) => `<div class="summary-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
+      postEmbedState();
     }
 
     async function validateStep(step) {
@@ -1204,7 +1376,8 @@
           photo_url: qs("#veh_photo").value.trim() || null,
           body_style: qs("#veh_body").value || null,
           category: qs("#veh_category").value || null,
-          color: qs("#veh_color").value.trim() || null
+          color: qs("#veh_color").value.trim() || null,
+          mileage: qs('#veh_mileage').value || null
         },
         special_notes: qs("#special_notes").value.trim() || null,
         ack_driveway: true,
@@ -1263,6 +1436,8 @@
         loadAvailabilityWindow()
       ]);
 
+      applyInitialPrefill();
+
       if (!selectedDate()) {
         qs("#service_date").value = toIsoLocal(startOfLocalDay());
       }
@@ -1273,7 +1448,9 @@
       renderAddons();
       renderReviewVehicle();
       renderFinalSummary();
+      renderVehicleServiceHint();
       gotoStep(1);
+      postEmbedHeight();
     } catch (err) {
       showStatus(`Failed to load booking data: ${err.message || err}`, "bad");
     }
