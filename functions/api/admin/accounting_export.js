@@ -7,7 +7,8 @@ import {
   buildPayablesExport,
   buildInventoryCostExport,
   buildReceivablesAgingExport,
-  buildOperationalProfitabilityExport
+  buildOperationalProfitabilityExport,
+  buildYearEndPackageExport
 } from "../_lib/accounting-gl.js";
 
 export async function onRequestOptions() { return new Response('', { status: 204, headers: corsHeaders() }); }
@@ -46,6 +47,9 @@ export async function onRequestGet({ request, env }) {
     } else if (type === 'operational_profitability' || type === 'profitability') {
       csv = await buildOperationalProfitabilityExport(env, { month, year });
       filename = `rosie-operational-profitability-${year}-${String(month).padStart(2, '0')}.csv`;
+    } else if (type === 'year_end_package' || type === 'year_end') {
+      csv = await buildYearEndPackageExport(env, { year });
+      filename = `rosie-year-end-package-${year}.csv`;
     } else {
       csv = await buildGeneralLedgerExport(env, { month, year });
     }
