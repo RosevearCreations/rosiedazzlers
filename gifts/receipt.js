@@ -68,6 +68,10 @@ export async function onRequestPost({ request, env }) {
         purchaser_email: r.purchaser_email ?? null,
         recipient_email: r.recipient_email ?? null,
         recipient_name: r.recipient_name ?? null,
+        sender_name: r.purchase_context?.gift_delivery?.sender_name ?? null,
+        delivery_date: r.purchase_context?.gift_delivery?.delivery_date ?? null,
+        gift_message: r.purchase_context?.gift_delivery?.gift_message ?? null,
+        delivery_status: r.purchase_context?.gift_delivery?.delivery_status ?? null,
       })),
     });
   } catch (e) {
@@ -128,7 +132,7 @@ async function supaFindGiftCertsForSession(SUPABASE_URL, SERVICE_KEY, sessionId,
 
   const url =
     `${SUPABASE_URL}/rest/v1/gift_certificates` +
-    `?select=code,sku,type,currency,package_code,vehicle_size,face_value_cents,remaining_cents,expires_at,purchaser_email,recipient_email,recipient_name` +
+    `?select=code,sku,type,currency,package_code,vehicle_size,face_value_cents,remaining_cents,expires_at,purchaser_email,recipient_email,recipient_name,purchase_context` +
     `&stripe_session_id=eq.${encodeURIComponent(sessionId)}` +
     `&or=${or}` +
     `&order=created_at.asc`;

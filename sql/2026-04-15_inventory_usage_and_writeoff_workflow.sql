@@ -1,0 +1,4 @@
+-- April 15, 2026 inventory usage and write-off workflow
+-- Existing schema already allows movement_type values used in this pass.
+-- Apply only if your environment is missing the catalog stock action endpoint code.
+-- No DDL is required for this pass.

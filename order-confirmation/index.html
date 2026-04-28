@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Order Confirmation | Rosie Dazzlers</title>
+  <meta name="description" content="Rosie Dazzlers booking confirmation document." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .doc-shell{max-width:920px;margin:24px auto;padding:0 16px}
+    .doc-sheet{background:linear-gradient(180deg,#f7f5ee 0%, #ffffff 100%); color:#111827; border:1px solid rgba(15,23,42,.10); border-radius:22px; padding:26px; box-shadow:0 18px 40px rgba(15,23,42,.16)}
+    .doc-head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start}
+    .doc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .doc-card{padding:14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
+    .doc-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+    .doc-row:last-child{border-bottom:0}
+    .doc-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    @media print {.doc-actions,.nav{display:none !important}.doc-shell{max-width:none;margin:0;padding:0}.doc-sheet{border:0;border-radius:0;padding:0;background:#fff;color:#000}.doc-card,.doc-row{background:#fff;color:#000}}
+    @media (max-width:800px){.doc-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <main class="doc-shell">
+    <div id="docStatus" class="notice">Loading order confirmation…</div>
+    <article id="docRoot" class="doc-sheet" hidden>
+      <div class="doc-head">
+        <div>
+          <div class="badge">Rosie Dazzlers</div>
+          <h1 style="margin:10px 0 6px">Order confirmation</h1>
+          <p id="docIntro" class="muted" style="margin:0"></p>
+        </div>
+        <div class="doc-card" style="min-width:240px">
+          <div class="kicker">Document</div>
+          <strong id="docNumber">—</strong>
+          <div class="mini" id="docIssued">—</div>
+        </div>
+      </div>
+      <div class="doc-grid" style="margin-top:18px">
+        <section class="doc-card"><h2 style="margin-top:0">Booking</h2><div id="bookingRows"></div></section>
+        <section class="doc-card"><h2 style="margin-top:0">Vehicle & location</h2><div id="vehicleRows"></div></section>
+      </div>
+      <section class="doc-card" style="margin-top:16px">
+        <h2 style="margin-top:0">Included service</h2>
+        <div id="serviceRows"></div>
+      </section>
+      <div class="doc-actions">
+        <button class="btn primary" type="button" onclick="window.print()">Print confirmation</button>
+        <a id="invoiceLink" class="btn ghost" href="#">Open invoice / summary</a>
+      </div>
+    </article>
+  </main>
+  <script type="module">
+    const qs=(s)=>document.querySelector(s);
+    const esc=(v)=>String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+    const money=(c)=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format((Number(c||0))/100);
+    async function boot(){
+      const url=new URL(location.href); const token=String(url.searchParams.get('token')||'').trim();
+      if(!token){ qs('#docStatus').className='notice bad'; qs('#docStatus').textContent='Missing token.'; return; }
+      const res=await fetch(`/api/document_booking_public?token=${encodeURIComponent(token)}`,{cache:'no-store'});
+      const out=await res.json().catch(()=>null);
+      if(!res.ok||!out?.document){ qs('#docStatus').className='notice bad'; qs('#docStatus').textContent=out?.error||'Could not load booking confirmation.'; return; }
+      const d=out.document;
+      qs('#docStatus').hidden=true; qs('#docRoot').hidden=false;
+      qs('#docIntro').textContent=d.company?.templates?.confirmation_intro||'Thank you for booking Rosie Dazzlers.';
+      qs('#docNumber').textContent=`Booking ${d.booking?.id||'—'}`;
+      qs('#docIssued').textContent=`Prepared ${d.booking?.created_at ? new Date(d.booking.created_at).toLocaleString('en-CA') : 'today'}`;
+      qs('#invoiceLink').href=d.documents?.invoice_url||'#';
+      qs('#bookingRows').innerHTML=[
+        ['Customer', d.booking?.customer_name||'—'],
+        ['Email', d.booking?.customer_email||'—'],
+        ['Phone', d.booking?.customer_phone||'—'],
+        ['Service date', d.booking?.service_date||'—'],
+        ['Time', d.booking?.slot_label||d.booking?.start_slot||'—'],
+        ['Package', d.package?.name||'—'],
+        ['Estimated total', money(d.summary?.effective_total_cents||0)],
+        ['Deposit due / paid', money(d.summary?.deposit_cents||0)]
+      ].map(([l,v])=>`<div class="doc-row"><span>${esc(l)}</span><strong>${esc(v)}</strong></div>`).join('');
+      qs('#vehicleRows').innerHTML=[
+        ['Vehicle', d.vehicle?.label||'—'],
+        ['Size', d.vehicle?.size||'—'],
+        ['Body style', d.vehicle?.body_style||'—'],
+        ['Service area', d.booking?.service_area_label||'—'],
+        ['Address', [d.booking?.address_line1,d.booking?.address_line2,d.booking?.city,d.booking?.postal_code].filter(Boolean).join(', ')||'—'],
+        ['Notes', d.booking?.notes||'None recorded']
+      ].map(([l,v])=>`<div class="doc-row"><span>${esc(l)}</span><strong>${esc(v)}</strong></div>`).join('');
+      const included=Array.isArray(d.package?.included_services)?d.package.included_services:[];
+      qs('#serviceRows').innerHTML=included.length?included.map((row)=>`<div class="doc-row"><span>${esc(row.name||'Service item')}</span><strong>${esc(row.optional_condition_note||'Included')}</strong></div>`).join(''):'<div class="doc-row"><span>Included services</span><strong>See package summary</strong></div>';
+    }
+    boot().catch((err)=>{qs('#docStatus').className='notice bad'; qs('#docStatus').textContent=err?.message||'Could not load booking confirmation.';});
+  </script>
+</body>
+</html>

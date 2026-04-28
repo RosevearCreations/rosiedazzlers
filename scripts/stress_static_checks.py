@@ -9,7 +9,8 @@ from html.parser import HTMLParser
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PUBLIC_PAGES = [
-    'index.html','about.html','services.html','pricing.html','book.html','contact.html','privacy.html','terms.html','videos.html','gear.html','consumables.html','gifts.html','complete.html','waiver.html','progress.html','login.html','my-account.html'
+    'index.html','about.html','services.html','pricing.html','book.html','contact.html','privacy.html','terms.html','videos.html','gear.html','consumables.html','gifts.html','complete.html','waiver.html','progress.html','login.html','my-account.html',
+    'ceramic-coating/index.html','pet-hair-removal/index.html','odor-removal/index.html','headlight-restoration/index.html','paint-correction/index.html','tillsonburg-auto-detailing/index.html','woodstock-ingersoll-auto-detailing/index.html','simcoe-delhi-auto-detailing/index.html','port-dover-auto-detailing/index.html'
 ]
 CHECK_JS = [
     'assets/admin-auth.js',
@@ -22,7 +23,14 @@ CHECK_JS = [
     'functions/api/admin/recovery_templates.js',
     'functions/api/admin/recovery_preview.js',
     'functions/api/recovery_audit_list.js',
+    'functions/api/_lib/analytics-rollups.js',
+    'functions/api/admin/analytics_overview.js',
+    'functions/api/admin/analytics_rollups_refresh.js',
+    'assets/recent-work.js',
 ]
+
+CORE_LOCAL_SEO_PAGES = ['index.html', 'services.html', 'pricing.html', 'about.html', 'contact.html', 'ceramic-coating/index.html', 'pet-hair-removal/index.html', 'odor-removal/index.html', 'headlight-restoration/index.html', 'paint-correction/index.html', 'tillsonburg-auto-detailing/index.html', 'woodstock-ingersoll-auto-detailing/index.html', 'simcoe-delhi-auto-detailing/index.html', 'port-dover-auto-detailing/index.html']
+
 CHECK_HTML = [
     'admin-progress.html',
     'admin-live.html',
@@ -33,6 +41,8 @@ CHECK_HTML = [
     'admin-promos.html',
     'admin-jobsite.html',
     'admin-app.html',
+    'admin-accounting.html',
+    'admin-analytics.html',
     'detailer-jobs.html',
     'book.html',
     'services.html'
@@ -91,6 +101,19 @@ def check_public_h1():
             fail(f"{rel} has {count} H1 tags")
 
 
+def check_public_seo_basics():
+    for rel in CORE_LOCAL_SEO_PAGES:
+        path = ROOT / rel
+        if not path.exists():
+            continue
+        text = path.read_text(encoding='utf-8', errors='ignore')
+        for needle in ('<title>', 'meta name="description"', 'rel="canonical"'):
+            if needle not in text:
+                fail(f"{rel} missing required SEO basic: {needle}")
+        if 'application/ld+json' not in text:
+            fail(f"{rel} missing JSON-LD structured data")
+
+
 def check_catalog_media_coverage():
     data = json.loads((ROOT / 'data/rosie_services_pricing_and_packages.json').read_text())
     missing = []
@@ -120,10 +143,32 @@ def check_route_collisions():
         sibling_dir = ROOT / html_path.relative_to(ROOT).with_suffix('')
         idx = sibling_dir / 'index.html'
         if idx.exists():
-            collisions.append(f"{html_path.relative_to(ROOT)} <-> {idx.relative_to(ROOT)}")
+            src = html_path.read_text(encoding='utf-8', errors='ignore')
+            dup = idx.read_text(encoding='utf-8', errors='ignore')
+            if src != dup:
+                collisions.append(f"{html_path.relative_to(ROOT)} <-> {idx.relative_to(ROOT)}")
     if collisions:
-        fail("route collisions detected: " + "; ".join(collisions))
+        fail("route collisions detected with non-identical wrapper pages: " + "; ".join(collisions))
 
+
+def check_redirect_rules():
+    redirects = (ROOT / '_redirects').read_text(encoding='utf-8', errors='ignore')
+    risky = [
+        '/services/ /services 301',
+        '/pricing/ /pricing 301',
+        '/services /services.html 200',
+        '/pricing /pricing.html 200'
+    ]
+    for needle in risky:
+        if needle in redirects:
+            fail(f'_redirects still contains route rule not allowed in wrapper-backed mode: {needle}')
+    required_wrappers = [
+        'services/index.html', 'pricing/index.html', 'about/index.html', 'contact/index.html', 'book/index.html',
+        'gallery/index.html', 'gifts/index.html', 'videos/index.html', 'maintenance-plan/index.html', 'tillsonburg-auto-detailing/index.html', 'woodstock-ingersoll-auto-detailing/index.html', 'simcoe-delhi-auto-detailing/index.html', 'port-dover-auto-detailing/index.html'
+    ]
+    for rel in required_wrappers:
+        if not (ROOT / rel).exists():
+            fail(f'missing wrapper-backed route page: {rel}')
 def check_public_catalog_helper_usage():
     helper = (ROOT / 'assets/pricing-catalog-client.js').read_text()
     if 'loadPricingCatalogClient' not in helper or 'normalizePricingCatalog' not in helper:
@@ -191,6 +236,7 @@ def main():
             run_node_check(path)
     check_inline_scripts()
     check_public_h1()
+    check_public_seo_basics()
     check_catalog_media_coverage()
     check_temp_artifacts()
     check_route_collisions()
@@ -198,6 +244,7 @@ def main():
     check_public_analytics_hook()
     check_booking_contract()
     check_admin_shell_pages()
+    check_redirect_rules()
     print('PASS: static stress checks completed')
 
 if __name__ == '__main__':

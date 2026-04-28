@@ -1,0 +1,1 @@
+-- No DDL in this pass. Public self-serve direction shifted from a pricing-page quote builder back to an embedded booking-led planner so the live booking restrictions, 21-day availability windows, and deposit-ready flow stay in one source of truth.

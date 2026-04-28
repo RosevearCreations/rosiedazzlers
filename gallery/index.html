@@ -1,0 +1,24 @@
+
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Before and After Detailing Gallery in Oxford & Norfolk Counties | Rosie Dazzlers</title>
+  <meta name="description" content="See Rosie Dazzlers before and after auto detailing transformations for vehicles in Oxford County and Norfolk County with an interactive comparison gallery." />
+  <link rel="canonical" href="https://rosiedazzlers.ca/gallery" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .compare-grid{display:grid;gap:18px}.compare-card{padding:18px;border-radius:20px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+    .compare-stage{position:relative;aspect-ratio:16/10;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.04)}
+    .compare-stage img,.compare-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.compare-before{clip-path: inset(0 calc(100% - var(--split,50%)) 0 0)}
+    .compare-handle{position:absolute;top:0;bottom:0;left:var(--split,50%);width:2px;background:#fff;box-shadow:0 0 0 999px rgba(255,255,255,.03)}
+    .compare-range{width:100%;margin-top:12px}
+  </style>
+</head><body>
+<header class="nav"><div class="nav-inner"><a class="brand" href="/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a><button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false">Menu</button><div id="navLinks" class="nav-links"></div><a class="btn primary" href="/book">Book now</a></div></header>
+<main class="container"><section class="section"><div class="hero"><div><div class="badge">Transformation Gallery</div><h1>Before and after detailing gallery</h1><p>Slide left to right to compare before and after results. This gallery now reads from App Management so staff can maintain paired photos or videos without editing site files.</p></div></div></section><section class="section"><div id="galleryList" class="compare-grid"><div class="panel">Loading gallery…</div></div></section></main><footer class="footer container" data-footer></footer>
+<script src="/assets/chrome.js"></script>
+<script>
+(async function(){ const host=document.querySelector('#galleryList'); function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); } try{ const res=await fetch('/api/before_after_gallery_public',{cache:'no-store'}); const data=await res.json().catch(()=>({items:[]})); const items=Array.isArray(data.items)?data.items:[]; if(!items.length){ host.innerHTML='<div class="panel">No gallery comparisons added yet.</div>'; return; } host.innerHTML=items.map((item,idx)=>`<article class="compare-card"><div class="section-head"><div><h2 style="margin:0">${esc(item.title||'Detail result')}</h2><p class="muted" style="margin:6px 0 0">${esc(item.location||'Oxford / Norfolk Counties')}</p></div><span class="badge">${esc(item.consent_status || 'Interactive slider')}</span></div><div class="compare-stage" data-stage="${idx}" style="--split:50%">${(item.after_kind||'image')==='video'?`<video class="compare-after" src="${esc(item.after_url||'')}" controls preload="metadata"></video>`:`<img class="compare-after" src="${esc(item.after_url||'')}" alt="After detailing">`}${(item.before_kind||'image')==='video'?`<video class="compare-before" src="${esc(item.before_url||'')}" controls preload="metadata"></video>`:`<img class="compare-before" src="${esc(item.before_url||'')}" alt="Before detailing">`}<div class="compare-handle"></div></div><input class="compare-range" type="range" min="0" max="100" value="50" data-range="${idx}" /><p class="muted">${esc(item.note||'')}</p></article>`).join(''); document.querySelectorAll('[data-range]').forEach(r=>r.addEventListener('input',()=>{ const stage=document.querySelector(`[data-stage="${r.dataset.range}"]`); if(stage) stage.style.setProperty('--split', `${r.value}%`); })); } catch(err){ host.innerHTML='<div class="panel">Could not load the gallery right now.</div>'; } })();
+</script>
+</body></html>

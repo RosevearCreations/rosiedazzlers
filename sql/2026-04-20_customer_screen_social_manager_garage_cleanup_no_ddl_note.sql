@@ -1,0 +1,8 @@
+-- 2026-04-20_customer_screen_social_manager_garage_cleanup_no_ddl_note.sql
+-- No schema changes were required for this pass.
+-- This pass focused on:
+-- 1) replacing raw JSON rendering in admin-customers with readable cards and a garage-bay view,
+-- 2) replacing the raw social-feed manager with a structured editor while keeping advanced JSON in a collapsed block,
+-- 3) gating maintenance-plan interest behind Complete Detail selection in the booking-led pricing planner,
+-- 4) refining customer-facing print/email presentation,
+-- 5) renaming clearly obsolete duplicate documentation files by appending Old.
