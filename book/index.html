@@ -1184,6 +1184,13 @@
       });
     }
 
+    function addonRequirementError(addon, packageCode) {
+      const required = Array.isArray(addon && addon.requires_package_codes_any) ? addon.requires_package_codes_any.filter(Boolean) : [];
+      if (!required.length) return "";
+      if (required.includes(String(packageCode || ""))) return "";
+      return addon.requirement_note || (addon.name + " requires a qualifying package first.");
+    }
+
     function addonDisplayPrice(addon) {
       const size = selectedSize();
       if (addon.quote_required) return "Quote required";
@@ -1198,12 +1205,15 @@
       wrap.innerHTML = addons.map((addon) => {
         const src = addon.image_url || addonPrimaryImage(addon.code);
         const fallback = addon.image_fallback_url || addonFallbackImage(addon.code);
-        return `<button class="addon-card ${state.addons.has(addon.code) ? "active" : ""}" type="button" data-addon="${escapeHtml(addon.code)}">
+        const requirementError = addonRequirementError(addon, state.selectedPackageCode);
+        const requirementText = requirementError || (addon.requirement_note || "");
+        return `<button class="addon-card ${state.addons.has(addon.code) ? "active" : ""} ${requirementError ? "disabled-choice" : ""}" type="button" data-addon="${escapeHtml(addon.code)}" ${requirementError ? 'data-addon-disabled="true"' : ''}>
           <img class="addon-thumb" src="${escapeHtml(src)}" data-fallback="${escapeHtml(fallback)}" alt="${escapeHtml(addon.name)}" loading="lazy" />
           <strong>${escapeHtml(addon.name)}</strong>
           <span class="muted mini">${escapeHtml(addon.category || "")}${addon.type ? ` · ${escapeHtml(addon.type)}` : ""}</span>
           <span class="tag ${addon.quote_required ? "warn" : "ok"}">${escapeHtml(addonDisplayPrice(addon))}</span>
           <span class="muted mini">${escapeHtml((addon.notes || []).join(" • "))}</span>
+          <span class="muted mini">${escapeHtml(requirementText || (addon.standalone_allowed ? "Standalone allowed" : ""))}</span>
         </button>`;
       }).join("");
 
@@ -1220,6 +1230,10 @@
 
       qsa("[data-addon]").forEach((btn) => {
         btn.addEventListener("click", () => {
+          if (btn.getAttribute("data-addon-disabled") === "true") {
+            showStatus(btn.querySelector('.muted.mini:last-of-type')?.textContent || 'This add-on requires a different main package first.');
+            return;
+          }
           const code = btn.getAttribute("data-addon");
           if (state.addons.has(code)) state.addons.delete(code);
           else state.addons.add(code);
@@ -1292,7 +1306,8 @@
         ["Add-ons", selectedAddons().length ? selectedAddons().map((addon) => addon.name).join(", ") : "None"],
         ["Estimated subtotal", totals.subtotal ? money(totals.subtotal) : "Package required"],
         ["Deposit due now", money(totals.deposit)],
-        ["Quote-only extras", totals.quoteOnly ? "Some selected extras are quote-required and will be confirmed separately." : "None"]
+        ["Quote-only extras", totals.quoteOnly ? "Some selected extras are quote-required and will be confirmed separately." : "None"],
+        ["Add-on requirements", selectedAddons().map(function (addon) { return addonRequirementError(addon, state.selectedPackageCode) || addon.requirement_note; }).filter(Boolean).join(" • ") || "None"]
       ];
       qs("#finalSummary").innerHTML = rows.map(([label, value]) => `<div class="summary-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
       postEmbedState();
@@ -1317,6 +1332,8 @@
       }
 
       if (step === 3) {
+        var invalid = selectedAddons().find(function (addon) { return !!addonRequirementError(addon, state.selectedPackageCode); });
+        if (invalid) return showFieldError(3, addonRequirementError(invalid, state.selectedPackageCode));
         return true;
       }
 
