@@ -101,6 +101,41 @@ function normalizeAddons(rows) {
   }).filter(Boolean);
 }
 
+function hasRows(value) {
+  return Array.isArray(value) && value.length > 0;
+}
+
+function mergeRowsByCode(primaryRows, fallbackRows) {
+  const fallbackMap = new Map((Array.isArray(fallbackRows) ? fallbackRows : []).map((row) => [String(row?.code || row?.value || row?.label || ""), row]));
+  const primaryList = Array.isArray(primaryRows) ? primaryRows : [];
+  const merged = primaryList.map((row) => {
+    const key = String(row?.code || row?.value || row?.label || "");
+    const fallbackRow = fallbackMap.get(key);
+    if (!fallbackRow) return row;
+    return {
+      ...fallbackRow,
+      ...row,
+      prices_cad: row?.prices_cad && typeof row.prices_cad === "object"
+        ? { ...(fallbackRow?.prices_cad || {}), ...row.prices_cad }
+        : (fallbackRow?.prices_cad || row?.prices_cad),
+      images_by_size: row?.images_by_size && typeof row.images_by_size === "object"
+        ? { ...(fallbackRow?.images_by_size || {}), ...row.images_by_size }
+        : (fallbackRow?.images_by_size || row?.images_by_size),
+      included_services: hasRows(row?.included_services) ? row.included_services : fallbackRow?.included_services,
+      notes: hasRows(row?.notes) ? row.notes : fallbackRow?.notes,
+      official_links: hasRows(row?.official_links) ? row.official_links : fallbackRow?.official_links,
+      requires_package_codes_any: hasRows(row?.requires_package_codes_any) ? row.requires_package_codes_any : (fallbackRow?.requires_package_codes_any || [])
+    };
+  });
+  const seen = new Set(merged.map((row) => String(row?.code || row?.value || row?.label || "")).filter(Boolean));
+  for (const row of Array.isArray(fallbackRows) ? fallbackRows : []) {
+    const key = String(row?.code || row?.value || row?.label || "");
+    if (key && seen.has(key)) continue;
+    merged.push(row);
+  }
+  return merged;
+}
+
 function normalizeServiceAreas(rows) {
   return (Array.isArray(rows) ? rows : []).map((row) => {
     const officialLinks = Array.isArray(row?.official_links) ? row.official_links : [];
@@ -167,10 +202,10 @@ function mergeCatalog(primary, fallback) {
     ...fallback,
     ...primary,
     charts: Array.isArray(primary?.charts) && primary.charts.length ? primary.charts : fallback?.charts,
-    packages: Array.isArray(primary?.packages) && primary.packages.length ? primary.packages : fallback?.packages,
-    addons: Array.isArray(primary?.addons) && primary.addons.length ? primary.addons : fallback?.addons,
+    packages: Array.isArray(primary?.packages) && primary.packages.length ? mergeRowsByCode(primary.packages, fallback?.packages) : fallback?.packages,
+    addons: Array.isArray(primary?.addons) && primary.addons.length ? mergeRowsByCode(primary.addons, fallback?.addons) : fallback?.addons,
     service_matrix: Array.isArray(primary?.service_matrix) && primary.service_matrix.length ? primary.service_matrix : fallback?.service_matrix,
-    service_areas: Array.isArray(primary?.service_areas) && primary.service_areas.length ? primary.service_areas : fallback?.service_areas,
+    service_areas: Array.isArray(primary?.service_areas) && primary.service_areas.length ? mergeRowsByCode(primary.service_areas, fallback?.service_areas) : fallback?.service_areas,
     booking_rules: {
       ...(fallback?.booking_rules || {}),
       ...(primary?.booking_rules || {})

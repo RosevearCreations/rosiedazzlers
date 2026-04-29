@@ -28,6 +28,13 @@ function money(value) {
   return Number.isFinite(n) ? new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 }).format(n) : null;
 }
 
+
+function renderOfficialLinks(links) {
+  const rows = Array.isArray(links) ? links.filter((item) => item && item.url) : [];
+  if (!rows.length) return '';
+  return `<ul class="muted-list">${rows.map((item) => `<li><a href="${escapeHtml(item.url)}" target="_blank" rel="noopener">${escapeHtml(item.label || item.url)}</a></li>`).join("")}</ul>`;
+}
+
 function addonPriceSummary(addon) {
   if (!addon) return "";
   const sizeMap = addon.prices_cad && typeof addon.prices_cad === "object" ? addon.prices_cad : {};
@@ -49,7 +56,10 @@ function pageTemplate(page, pricing, slug) {
   const process = Array.isArray(page.process) ? page.process : [];
   const equipment = Array.isArray(page.equipment) ? page.equipment : [];
   const highlights = Array.isArray(page.highlights) ? page.highlights : [];
+  const thingsToKnow = Array.isArray(page.things_to_know) ? page.things_to_know : [];
+  const officialLinks = Array.isArray(page.official_links) ? page.official_links : [];
   const priceSummary = addonPriceSummary(addon);
+  const heroImage = addon?.image_url || addon?.image_fallback_url || '/assets/brand/rosie-reviews-fallback.svg';
   return `
   <main class="container">
     <section class="hero">
@@ -69,6 +79,7 @@ function pageTemplate(page, pricing, slug) {
         </div>
       </div>
       <aside class="panel">
+        ${page.type === 'addon' ? `<img src="${escapeHtml(heroImage)}" alt="${escapeHtml(page.name || page.hero_title || 'Service image')}" class="proof-media" style="margin-bottom:12px" />` : ''}
         <h2 style="margin-top:0">What to expect</h2>
         <p class="muted">${escapeHtml(priceSummary || "Review the process, scope, and booking fit before choosing this page’s service path.")}</p>
         <div class="hr"></div>
@@ -97,6 +108,11 @@ function pageTemplate(page, pricing, slug) {
         <ul class="muted-list">${equipment.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
       </article>
     </section>
+
+    ${(thingsToKnow.length || officialLinks.length) ? `<section class="section proof-grid">
+      ${thingsToKnow.length ? `<article class="proof-card"><h2 style="margin-top:0">Things to know before booking</h2><ul class="muted-list">${thingsToKnow.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></article>` : ''}
+      ${officialLinks.length ? `<article class="proof-card"><h2 style="margin-top:0">Official local links</h2>${renderOfficialLinks(officialLinks)}</article>` : ''}
+    </section>` : ''}
 
     <section class="section panel">
       <h2 style="margin-top:0">Recent work and review proof</h2>

@@ -107,6 +107,8 @@
     }
     .addon-card strong,.addon-card span{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
     .addon-card.active{outline:2px solid #4d77ff}
+    .addon-card.disabled{opacity:.6;filter:saturate(.75);cursor:not-allowed;border-color:rgba(255,255,255,.08)}
+    .addon-card.disabled .tag{opacity:.85}
     .addon-thumb{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;display:block;flex:0 0 auto}
     .tag{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;font-size:.88rem;font-weight:700}
     .tag.ok{background:rgba(36,195,107,.15);color:#d7ffe8}
@@ -1177,10 +1179,33 @@
       qsa("[data-package]").forEach((btn) => {
         btn.addEventListener("click", () => {
           state.selectedPackageCode = btn.getAttribute("data-package");
+          pruneInvalidSelectedAddons();
           analyticsTrack("booking_package_pick", { package_code: state.selectedPackageCode, vehicle_size: selectedSize() || null });
           renderPackages();
+          renderAddons();
           renderFinalSummary();
         });
+      });
+    }
+
+    function addonAllowedForPackage(addon, packageCode) {
+      const allowed = Array.isArray(addon?.requires_package_codes_any)
+        ? addon.requires_package_codes_any.map((row) => String(row || "").trim()).filter(Boolean)
+        : [];
+      if (addon?.standalone_allowed === true) return true;
+      if (!allowed.length) return true;
+      return allowed.includes(String(packageCode || "").trim());
+    }
+
+    function addonRequirementText(addon) {
+      return String(addon?.requirement_note || "").trim() || "Requires a different base package first.";
+    }
+
+    function pruneInvalidSelectedAddons() {
+      const packageCode = selectedPackage()?.code || "";
+      Array.from(state.addons).forEach((code) => {
+        const addon = (state.pricing?.addons || []).find((row) => row.code === code);
+        if (addon && !addonAllowedForPackage(addon, packageCode)) state.addons.delete(code);
       });
     }
 
@@ -1195,15 +1220,21 @@
     function renderAddons() {
       const wrap = qs("#addonsBox");
       const addons = state.pricing?.addons || [];
+      const packageCode = selectedPackage()?.code || "";
+      pruneInvalidSelectedAddons();
       wrap.innerHTML = addons.map((addon) => {
         const src = addon.image_url || addonPrimaryImage(addon.code);
         const fallback = addon.image_fallback_url || addonFallbackImage(addon.code);
-        return `<button class="addon-card ${state.addons.has(addon.code) ? "active" : ""}" type="button" data-addon="${escapeHtml(addon.code)}">
+        const allowed = addonAllowedForPackage(addon, packageCode);
+        const noteParts = [];
+        if (Array.isArray(addon.notes) && addon.notes.length) noteParts.push((addon.notes || []).join(" • "));
+        if (!allowed) noteParts.push(addonRequirementText(addon));
+        return `<button class="addon-card ${state.addons.has(addon.code) ? "active" : ""} ${allowed ? "" : "disabled"}" type="button" data-addon="${escapeHtml(addon.code)}" ${allowed ? "" : "data-disabled=1"}>
           <img class="addon-thumb" src="${escapeHtml(src)}" data-fallback="${escapeHtml(fallback)}" alt="${escapeHtml(addon.name)}" loading="lazy" />
           <strong>${escapeHtml(addon.name)}</strong>
           <span class="muted mini">${escapeHtml(addon.category || "")}${addon.type ? ` · ${escapeHtml(addon.type)}` : ""}</span>
-          <span class="tag ${addon.quote_required ? "warn" : "ok"}">${escapeHtml(addonDisplayPrice(addon))}</span>
-          <span class="muted mini">${escapeHtml((addon.notes || []).join(" • "))}</span>
+          <span class="tag ${addon.quote_required ? "warn" : (allowed ? "ok" : "warn")}">${escapeHtml(addonDisplayPrice(addon))}</span>
+          <span class="muted mini">${escapeHtml(noteParts.join(" • "))}</span>
         </button>`;
       }).join("");
 
@@ -1220,6 +1251,12 @@
 
       qsa("[data-addon]").forEach((btn) => {
         btn.addEventListener("click", () => {
+          if (btn.hasAttribute("data-disabled")) {
+            const code = btn.getAttribute("data-addon");
+            const addon = (state.pricing?.addons || []).find((row) => row.code === code);
+            showStatus(addonRequirementText(addon), "bad");
+            return;
+          }
           const code = btn.getAttribute("data-addon");
           if (state.addons.has(code)) state.addons.delete(code);
           else state.addons.add(code);
