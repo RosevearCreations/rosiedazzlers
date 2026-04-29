@@ -1,3 +1,6 @@
+<!-- refreshed 2026-04-25: block-range town-page pass -->
+> Documentation synchronized April 23, 2026: live vehicle-size SVG guide, App Management chart preview/download helper, no-DDL schema sync, and continued public SEO/static-check direction.
+
 > Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## 2026-04-13 Pass 14 Sync
@@ -28,8 +31,11 @@ Pass sync: April 17, 2026 — pricing now restores the booking page as the first
 - 2026-04-17 pass26: extended booking-led self-serve with live embedded planner summaries on pricing and service-gift redemption preview, plus richer gift delivery metadata (sender name, preferred send date, message) through checkout, webhook, receipt, and printable certificate.
 
 ### April 17, 2026 pass27 note
-- moved the next public growth step forward with a new `/maintenance-plan` page, recurring-plan interest capture, admin visibility for recent interest requests, and stronger booking-link carry-forward from the live embedded planner.
+- moved the next public growth step forward with a new `/maintenance-plan` page, recurring-plan waitlist capture, admin visibility for recurring reminder candidates, and stronger booking-link carry-forward from the live embedded planner.
 
+
+
+<!-- pass29-sync: customer-history recurring maintenance reminders -->
 
 
 <!-- pass31-sync: booking overflow polish, maintenance conversion from complete detail, fleet handoff path -->
@@ -41,4 +47,11 @@ Pass sync: April 17, 2026 — pricing now restores the booking page as the first
 
 - reviewed during the merchandising / SEO / geofence refinement pass
 - no file-specific workflow changes were required beyond the centralized roadmap, schema, repo-guide, and handoff updates
+
+## Pass 27 sync — 2026-04-24
+- Fixed the `/api/admin/block_date` and `/api/admin/block_slot` save paths so they work with the current legacy `date_blocks(blocked_date)` and `slot_blocks(blocked_date, slot)` schema instead of writing non-existent `updated_at` columns.
+- Added shared admin shell CSS for `.app-shell`, `.surface-grid-2`, `.toolbar-wrap`, and `.pill-grid`, which repairs the stretched internal menu layout on `admin-live.html` and moves `admin-blocks.html` into the same left-menu shell pattern.
+- Tightened form-control CSS so admin date inputs, text boxes, and wrapped button rows stop overlapping; `admin-accounting.html` now uses more resilient auto-fit grids for filter, entry, and remittance controls.
+- Expanded analytics reporting so `admin-analytics.html` now shows daily, weekly, monthly, and yearly traffic rollups with CSV export buttons, all generated from `site_activity_events` without adding a new reporting table in this pass.
+- No new database migration was required in this pass. `SUPABASE_SCHEMA.sql` was refreshed to document that schedule blocks still use the legacy `blocked_date` / `slot` shape and that analytics reports are computed from `site_activity_events` at request time.
 

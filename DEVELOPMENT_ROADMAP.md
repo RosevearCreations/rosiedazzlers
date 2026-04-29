@@ -560,13 +560,4 @@ Next best steps now include pricing-page embed height control, a bundled reviews
 5. Enforce period lock/close across every accounting-related write path, not only journal posting.
 6. Add accountant package export for year-end source-document index and reconciliation status.
 
-## 2026-04-28 pass update
-- Completed: vendor directory defaults, direct accounting document upload path, deeper bank reconciliation entry matching, payroll deduction/net-pay reconciliation detail, broader period lock enforcement across more accounting write paths, add-on dependency rules in booking/checkout, and stronger special-service/town landing page content.
-- Next strongest steps: direct file browsing/replacement for uploaded accounting documents, vendor autofill across recurring/manual entry flows, deeper cleared/uncleared reconciliation summaries, payroll deduction category breakout, and admin-side visual editing for all add-on dependency relationships.
-
-## April 28, 2026 add-on media / dependency UI / landing-page depth pass
-- Restored add-on cards to the original Rosie packages R2 image files as the primary `image_url` values, while keeping bundled local fallback assets in place.
-- Re-expanded add-on dependency handling so dependent add-ons continue to require qualifying main packages, while true standalone services such as engine cleaning remain allowed.
-- App Management pricing now exposes add-on-to-package dependency mapping as package checkboxes instead of only a raw comma list, which supports one-to-one, one-to-many, and many-to-one relationships more clearly for office use.
-- Special-service landing pages and town-focused landing pages were rebuilt into fuller pages with process, equipment/workflow, reasons the page exists, proof blocks, and FAQ content instead of thin placeholders.
-- Engine cleaning pricing remains explicit in the bundled pricing catalog (`small 59 / mid 69 / oversize 79`) and should now be inherited more safely when older app settings are missing fields because package/add-on fallback merging now happens by code.
+- Expand landing-page builder to support service-area-level internal-link modules and media blocks.

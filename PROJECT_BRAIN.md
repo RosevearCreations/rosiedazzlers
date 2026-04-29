@@ -356,10 +356,3 @@ The current live-baseline priorities are: folder-backed clean routes, visible re
 
 ## 2026-04-27 project brain update
 Rosie Dazzlers now has a first real accounting workflow foundation sitting under the existing ledger/reporting layer. The next strongest accounting build should deepen document uploads, vendor defaults, and entry-level reconciliation rather than starting over with a different accounting structure.
-
-## April 28, 2026 add-on media / dependency UI / landing-page depth pass
-- Restored add-on cards to the original Rosie packages R2 image files as the primary `image_url` values, while keeping bundled local fallback assets in place.
-- Re-expanded add-on dependency handling so dependent add-ons continue to require qualifying main packages, while true standalone services such as engine cleaning remain allowed.
-- App Management pricing now exposes add-on-to-package dependency mapping as package checkboxes instead of only a raw comma list, which supports one-to-one, one-to-many, and many-to-one relationships more clearly for office use.
-- Special-service landing pages and town-focused landing pages were rebuilt into fuller pages with process, equipment/workflow, reasons the page exists, proof blocks, and FAQ content instead of thin placeholders.
-- Engine cleaning pricing remains explicit in the bundled pricing catalog (`small 59 / mid 69 / oversize 79`) and should now be inherited more safely when older app settings are missing fields because package/add-on fallback merging now happens by code.
