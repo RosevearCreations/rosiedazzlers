@@ -5,7 +5,6 @@
 // - validates gift codes and records gift metadata for later reconciliation
 
 import { loadPricingCatalog } from "./_lib/pricing-catalog.js";
-import { resolveTrustedBookingLocation, buildTrustedLocationPatch } from "./_lib/booking-location.js";
 
 export async function onRequestOptions() {
   return corsResponse("", 204);
@@ -53,19 +52,6 @@ export async function onRequestPost({ request, env }) {
     const resolvedServiceCounty = String(serviceAreaMeta?.county || serviceAreaMeta?.value || serviceAreaRaw || "").trim() || null;
     const resolvedServiceMunicipality = String(serviceAreaMeta?.municipality || serviceAreaMeta?.county || serviceAreaRaw || "").trim() || null;
     const resolvedServiceZone = String(serviceAreaMeta?.zone || serviceAreaMeta?.label || serviceAreaRaw || "").trim() || null;
-    const trustedServiceLocation = await resolveTrustedBookingLocation({
-      env,
-      bookingLike: {
-        service_area: serviceAreaRaw,
-        service_area_county: resolvedServiceCounty,
-        service_area_municipality: resolvedServiceMunicipality,
-        address_line1: body.address_line1,
-        address_line2: body.address_line2,
-        city: body.city,
-        postal_code: body.postal_code
-      },
-      serviceAreaMeta
-    });
     const pkg = pricing.package_map[String(body.package_code || "")];
     if (!pkg) return corsJson({ error: "Unknown package_code" }, 400);
 
@@ -80,8 +66,6 @@ export async function onRequestPost({ request, env }) {
     for (const code of addonCodes) {
       const addon = pricing.addon_map[code];
       if (!addon) continue;
-      const requirementError = addonRequirementError(addon, pkg.code);
-      if (requirementError) return corsJson({ error: requirementError, addon_code: code }, 400);
       const addonCad = addon.prices_cad?.[vehicleSize];
       const cents = Number.isFinite(addonCad) ? Math.round(addonCad * 100) : null;
       const item = { code, label: addon.name, cents, quote_required: addon.quote_required === true };
@@ -201,7 +185,6 @@ export async function onRequestPost({ request, env }) {
       service_area_county: resolvedServiceCounty,
       service_area_municipality: resolvedServiceMunicipality,
       service_area_zone: resolvedServiceZone,
-      ...buildTrustedLocationPatch(trustedServiceLocation),
       package_code: pkg.code,
       vehicle_size: vehicleSize,
       customer_name: body.customer_name,
@@ -363,10 +346,3 @@ function safeJson(text) { try { return JSON.parse(text); } catch { return null; 
 function corsJson(data, status = 200) { return new Response(JSON.stringify(data, null, 2), { status, headers: { "Content-Type": "application/json; charset=utf-8", ...corsHeaders() } }); }
 function corsResponse(body = "", status = 200) { return new Response(body, { status, headers: corsHeaders() }); }
 function corsHeaders() { return { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type", "Cache-Control": "no-store" }; }
-
-function addonRequirementError(addon, packageCode) {
-  const required = Array.isArray(addon?.requires_package_codes_any) ? addon.requires_package_codes_any.filter(Boolean) : [];
-  if (!required.length) return null;
-  if (required.includes(String(packageCode || ""))) return null;
-  return addon.requirement_note || `The add-on ${addon.name || addon.code || "selected"} requires a qualifying package first.`;
-}
