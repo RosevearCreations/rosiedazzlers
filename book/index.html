@@ -99,7 +99,7 @@
     .service-card.active{outline:2px solid #4d77ff}
     .service-card > *, .addon-card > *{max-width:100%;min-width:0}
     .service-card .row, .addon-card .row{width:100%;max-width:100%;min-width:0}
-    .service-card img{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;display:block;flex:0 0 auto}
+    .service-card img{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:contain;border-radius:14px;display:block;flex:0 0 auto;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
     .addon-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .addon-card{
       display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:1px solid rgba(255,255,255,.08);min-width:0;overflow:hidden;
@@ -107,8 +107,8 @@
     }
     .addon-card strong,.addon-card span{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
     .addon-card.active{outline:2px solid #4d77ff}
-    .addon-thumb{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;display:block;flex:0 0 auto}
-    .tag{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;font-size:.88rem;font-weight:700}
+    .addon-thumb{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:contain;border-radius:14px;display:block;flex:0 0 auto;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
+    .tag{display:inline-flex;align-items:center;align-self:flex-start;width:fit-content;max-width:100%;white-space:normal;overflow-wrap:anywhere;padding:6px 10px;border-radius:999px;font-size:.88rem;font-weight:700}
     .tag.ok{background:rgba(36,195,107,.15);color:#d7ffe8}
     .tag.warn{background:rgba(255,176,32,.18);color:#ffe6b3}
     .service-area-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
