@@ -74,3 +74,10 @@ Keep the folder-backed clean-route model as the live baseline. On Rosie Dazzlers
 
 ## 2026-04-28 handoff note
 Baseline now includes: vendor directory defaults, direct upload accounting docs, deeper bank reconciliation matching storage, payroll deduction/net-pay reconciliation fields, add-on dependency rules in booking + checkout, and stronger special-service/town landing pages. Run `sql/2026-04-28_accounting_vendor_uploads_and_dependency_rules.sql` before using the new accounting fields.
+
+## April 28, 2026 add-on media / dependency UI / landing-page depth pass
+- Restored add-on cards to the original Rosie packages R2 image files as the primary `image_url` values, while keeping bundled local fallback assets in place.
+- Re-expanded add-on dependency handling so dependent add-ons continue to require qualifying main packages, while true standalone services such as engine cleaning remain allowed.
+- App Management pricing now exposes add-on-to-package dependency mapping as package checkboxes instead of only a raw comma list, which supports one-to-one, one-to-many, and many-to-one relationships more clearly for office use.
+- Special-service landing pages and town-focused landing pages were rebuilt into fuller pages with process, equipment/workflow, reasons the page exists, proof blocks, and FAQ content instead of thin placeholders.
+- Engine cleaning pricing remains explicit in the bundled pricing catalog (`small 59 / mid 69 / oversize 79`) and should now be inherited more safely when older app settings are missing fields because package/add-on fallback merging now happens by code.
