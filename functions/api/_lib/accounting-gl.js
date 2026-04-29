@@ -1402,6 +1402,10 @@ export async function saveAccountingDocument(env, payload = {}, actor = {}) {
     related_id: cleanTextValue(payload.related_id) || null,
     document_kind: cleanTextValue(payload.document_kind) || "attachment",
     title: cleanTextValue(payload.title) || "Untitled document",
+    vendor_name: cleanTextValue(payload.vendor_name) || null,
+    document_number: cleanTextValue(payload.document_number) || null,
+    document_date: cleanTextValue(payload.document_date) || null,
+    file_name: cleanTextValue(payload.file_name) || null,
     file_url: cleanTextValue(payload.file_url) || null,
     storage_path: cleanTextValue(payload.storage_path) || null,
     mime_type: cleanTextValue(payload.mime_type) || null,
@@ -1426,6 +1430,48 @@ export async function saveAccountingDocument(env, payload = {}, actor = {}) {
   return Array.isArray(rows) ? rows[0] : rows;
 }
 
+
+export async function listAccountingVendors(env, { activeOnly = false } = {}) {
+  let url = `${env.SUPABASE_URL}/rest/v1/accounting_vendors?select=*&order=vendor_name.asc&limit=250`;
+  if (activeOnly) url += `&is_active=eq.true`;
+  return await fetchRowsWithMissingTableFallback(env, url, "accounting_vendors", "Could not load vendors.");
+}
+
+export async function saveAccountingVendor(env, payload = {}, actor = {}) {
+  const headers = serviceHeaders(env);
+  const row = {
+    vendor_name: cleanTextValue(payload.vendor_name) || "Vendor",
+    default_expense_account_code: cleanTextValue(payload.default_expense_account_code) || "shop_supplies",
+    default_payment_account_code: cleanTextValue(payload.default_payment_account_code) || "cash",
+    default_posting_mode: cleanTextValue(payload.default_posting_mode) || "cash",
+    payment_terms_days: payload.payment_terms_days == null || payload.payment_terms_days === "" ? null : Number(payload.payment_terms_days || 0),
+    contact_name: cleanTextValue(payload.contact_name) || null,
+    contact_email: cleanTextValue(payload.contact_email) || null,
+    contact_phone: cleanTextValue(payload.contact_phone) || null,
+    vendor_notes: cleanTextValue(payload.vendor_notes) || null,
+    is_active: payload.is_active == null ? true : !!payload.is_active,
+    updated_by_name: actor.name || null,
+    updated_by_staff_user_id: actor.staffUserId || null
+  };
+  const vendorId = cleanTextValue(payload.id);
+  if (!vendorId) {
+    row.created_by_name = actor.name || null;
+    row.created_by_staff_user_id = actor.staffUserId || null;
+  }
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/accounting_vendors${vendorId ? `?id=eq.${encodeURIComponent(vendorId)}` : ""}`, {
+    method: vendorId ? "PATCH" : "POST",
+    headers: { ...headers, Prefer: "return=representation" },
+    body: JSON.stringify(vendorId ? row : [row])
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    if (isMissingTableText(text, "accounting_vendors")) throw new Error("Run the 2026-04-28 accounting expansion migration before saving vendors.");
+    throw new Error(`Could not save vendor. ${text}`);
+  }
+  const rows = await res.json().catch(() => []);
+  return Array.isArray(rows) ? rows[0] : rows;
+}
+
 export async function listRecurringExpenses(env, { activeOnly = false } = {}) {
   let url = `${env.SUPABASE_URL}/rest/v1/accounting_recurring_expenses?select=*&order=next_due_date.asc,created_at.desc&limit=250`;
   if (activeOnly) url += `&is_active=eq.true`;
@@ -1434,6 +1480,7 @@ export async function listRecurringExpenses(env, { activeOnly = false } = {}) {
 
 export async function saveRecurringExpense(env, payload = {}, actor = {}) {
   const headers = serviceHeaders(env);
+  await assertPeriodWritable(env, payload.next_due_date || new Date().toISOString().slice(0, 10));
   const subtotal = roundMoney(payload.subtotal_cad || 0);
   const tax = roundMoney(payload.tax_cad || 0);
   const row = {
@@ -1573,7 +1620,15 @@ export async function buildBankReconciliationSnapshot(env, { month, year, accoun
     entry_count: rows.length,
     month_activity_cad: monthActivity,
     ending_book_balance_cad: endingBookBalance,
-    latest_reconciliation: latest || null
+    latest_reconciliation: latest || null,
+    entries: rows.map((row) => ({
+      entry_id: row.entry_id || row.entry?.id || null,
+      entry_date: row.entry?.entry_date || null,
+      entry_type: row.entry?.entry_type || null,
+      memo: row.memo || row.entry?.memo || null,
+      amount_cad: signedAmountForRow(row).signed_amount_cad,
+      direction: row.direction || null
+    }))
   };
 }
 
@@ -1594,6 +1649,8 @@ export async function saveBankReconciliation(env, payload = {}, actor = {}) {
   const accountCode = cleanTextValue(payload.account_code) || "cash";
   const snapshot = await buildBankReconciliationSnapshot(env, { month, year, accountCode });
   const statementEnding = roundMoney(payload.statement_ending_balance_cad || 0);
+  await assertPeriodWritable(env, snapshot.period_end_exclusive);
+  const matchedEntryIds = Array.isArray(payload.matched_entry_ids) ? payload.matched_entry_ids : parseDelimitedValues(payload.matched_entry_ids || payload.cleared_journal_entry_ids || payload.cleared_entry_ids || "");
   const row = {
     account_code: accountCode,
     period_start: snapshot.period_start,
@@ -1602,7 +1659,9 @@ export async function saveBankReconciliation(env, payload = {}, actor = {}) {
     calculated_book_balance_cad: roundMoney(snapshot.ending_book_balance_cad || 0),
     difference_cad: roundMoney(statementEnding - Number(snapshot.ending_book_balance_cad || 0)),
     outstanding_count: Number(payload.outstanding_count || 0),
-    cleared_journal_entry_ids: Array.isArray(payload.cleared_journal_entry_ids) ? payload.cleared_journal_entry_ids : parseDelimitedValues(payload.cleared_journal_entry_ids || payload.cleared_entry_ids || ""),
+    cleared_journal_entry_ids: matchedEntryIds,
+    matched_entry_ids: matchedEntryIds,
+    matched_count: matchedEntryIds.length,
     status: cleanTextValue(payload.status) || "draft",
     notes: cleanTextValue(payload.notes) || null,
     reconciled_by_name: actor.name || null,
@@ -1630,7 +1689,10 @@ export async function buildPayrollPayoutReconciliationReport(env, { month, year 
   const rows = runs.map((run) => {
     const rec = recMap.get(String(run.id || "")) || null;
     const expected = roundMoney(run.total_gross_cad || 0);
+    const expectedDeductions = roundMoney(run.total_deductions_cad || 0);
+    const expectedNet = roundMoney((run.total_net_pay_cad != null ? run.total_net_pay_cad : (expected - expectedDeductions)) || 0);
     const paid = roundMoney(rec?.paid_gross_cad || 0);
+    const paidNet = roundMoney(rec?.paid_net_pay_cad || 0);
     return {
       payroll_run_id: run.id,
       period_start: run.period_start || null,
@@ -1639,7 +1701,13 @@ export async function buildPayrollPayoutReconciliationReport(env, { month, year 
       payout_date: rec?.payout_date || null,
       payment_account_code: rec?.payment_account_code || "cash",
       expected_gross_cad: expected,
+      expected_deductions_cad: expectedDeductions,
+      expected_net_pay_cad: expectedNet,
       paid_gross_cad: paid,
+      paid_net_pay_cad: paidNet,
+      source_deductions_remitted_cad: roundMoney(rec?.source_deductions_remitted_cad || 0),
+      gross_difference_cad: roundMoney(paid - expected),
+      net_difference_cad: roundMoney(paidNet - expectedNet),
       difference_cad: roundMoney(paid - expected),
       note: rec?.note || run.note || null,
       accounting_entry_id: rec?.accounting_entry_id || run.accounting_entry_id || null
@@ -1651,7 +1719,11 @@ export async function buildPayrollPayoutReconciliationReport(env, { month, year 
     totals: {
       run_count: rows.length,
       expected_gross_cad: roundMoney(rows.reduce((sum, row) => sum + Number(row.expected_gross_cad || 0), 0)),
+      expected_deductions_cad: roundMoney(rows.reduce((sum, row) => sum + Number(row.expected_deductions_cad || 0), 0)),
+      expected_net_pay_cad: roundMoney(rows.reduce((sum, row) => sum + Number(row.expected_net_pay_cad || 0), 0)),
       paid_gross_cad: roundMoney(rows.reduce((sum, row) => sum + Number(row.paid_gross_cad || 0), 0)),
+      paid_net_pay_cad: roundMoney(rows.reduce((sum, row) => sum + Number(row.paid_net_pay_cad || 0), 0)),
+      source_deductions_remitted_cad: roundMoney(rows.reduce((sum, row) => sum + Number(row.source_deductions_remitted_cad || 0), 0)),
       difference_cad: roundMoney(rows.reduce((sum, row) => sum + Number(row.difference_cad || 0), 0)),
       reconciled_count: rows.filter((row) => ["reconciled", "paid"].includes(String(row.status || ""))).length
     },
@@ -1676,15 +1748,25 @@ export async function savePayrollPayoutReconciliation(env, payload = {}, actor =
   const run = (runs || []).find((row) => String(row.id || "") === runId);
   if (!run) throw new Error("Payroll run not found.");
 
+  const payoutDate = cleanTextValue(payload.payout_date) || new Date().toISOString().slice(0, 10);
+  await assertPeriodWritable(env, payoutDate);
   const expected = roundMoney(run.total_gross_cad || 0);
+  const expectedDeductions = roundMoney(run.total_deductions_cad || payload.expected_deductions_cad || 0);
+  const expectedNet = roundMoney((run.total_net_pay_cad != null ? run.total_net_pay_cad : (expected - expectedDeductions)) || 0);
   const paid = roundMoney(payload.paid_gross_cad || expected);
+  const paidNet = roundMoney(payload.paid_net_pay_cad || payload.net_pay_cad || expectedNet);
   const row = {
     payroll_run_id: runId,
-    payout_date: cleanTextValue(payload.payout_date) || new Date().toISOString().slice(0, 10),
+    payout_date: payoutDate,
     payment_account_code: cleanTextValue(payload.payment_account_code) || "cash",
     expected_gross_cad: expected,
+    expected_deductions_cad: expectedDeductions,
+    expected_net_pay_cad: expectedNet,
     paid_gross_cad: paid,
+    paid_net_pay_cad: paidNet,
+    source_deductions_remitted_cad: roundMoney(payload.source_deductions_remitted_cad || 0),
     difference_cad: roundMoney(paid - expected),
+    net_difference_cad: roundMoney(paidNet - expectedNet),
     status: cleanTextValue(payload.status) || "reconciled",
     note: cleanTextValue(payload.note) || null,
     accounting_entry_id: cleanTextValue(payload.accounting_entry_id) || run.accounting_entry_id || null,

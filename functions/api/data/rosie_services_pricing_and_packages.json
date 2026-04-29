@@ -329,12 +329,19 @@
       "quote_required": false,
       "source": "interpreted_pricing",
       "notes": [
-        "Add-on service not included in any package"
+        "Add-on service not included in any package",
+        "Requires exterior or complete detail first."
       ],
       "category": "paint correction",
       "type": "surface prep",
-      "image_url": "/assets/addons/full_clay_treatment.png",
-      "image_fallback_url": "/assets/addons/full_clay_treatment.svg"
+      "image_url": "https://assets.rosiedazzlers.ca/packages/full_clay_treatment.png",
+      "image_fallback_url": "/assets/addons/full_clay_treatment.png",
+      "standalone_allowed": false,
+      "requires_package_codes_any": [
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "requirement_note": "Requires an exterior or complete detailing package first."
     },
     {
       "code": "two_stage_polish",
@@ -347,12 +354,19 @@
       "quote_required": true,
       "source": "interpreted_pricing",
       "notes": [
-        "Quote required because paint condition varies"
+        "Quote required because paint condition varies",
+        "Requires exterior or complete detail first."
       ],
       "category": "paint correction",
       "type": "machine polishing",
-      "image_url": "/assets/addons/two_stage_polish.png",
-      "image_fallback_url": "/assets/addons/two_stage_polish.svg"
+      "image_url": "https://assets.rosiedazzlers.ca/packages/two_stage_polish.png",
+      "image_fallback_url": "/assets/addons/two_stage_polish.png",
+      "standalone_allowed": false,
+      "requires_package_codes_any": [
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "requirement_note": "Requires an exterior or complete detailing package first."
     },
     {
       "code": "high_grade_paint_sealant",
@@ -366,11 +380,18 @@
       "source": "interpreted_pricing",
       "category": "paint protection",
       "type": "sealant",
-      "image_url": "/assets/addons/high_grade_paint_sealant.png",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/high_grade_paint_sealant.png",
       "notes": [
-        "Longer-lasting gloss"
+        "Longer-lasting gloss",
+        "Requires exterior or complete detail first."
       ],
-      "image_fallback_url": "/assets/addons/high_grade_paint_sealant.svg"
+      "image_fallback_url": "/assets/addons/high_grade_paint_sealant.png",
+      "standalone_allowed": false,
+      "requires_package_codes_any": [
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "requirement_note": "Requires an exterior or complete detailing package first."
     },
     {
       "code": "uv_protectant_applied_on_interior_panels",
@@ -384,11 +405,17 @@
       "source": "interpreted_pricing",
       "category": "interior protection",
       "type": "uv protectant",
-      "image_url": "/assets/addons/uv_protectant_applied_on_interior_panels.png",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/uv_protectant_applied_on_interior_panels.png",
       "notes": [
-        "Interior panel dressing"
+        "Interior panel dressing",
+        "Requires complete detail first."
       ],
-      "image_fallback_url": "/assets/addons/uv_protectant_applied_on_interior_panels.svg"
+      "image_fallback_url": "/assets/addons/uv_protectant_applied_on_interior_panels.png",
+      "standalone_allowed": false,
+      "requires_package_codes_any": [
+        "complete_detail"
+      ],
+      "requirement_note": "Requires a complete detail so both the interior and exterior glass can be properly cleaned first."
     },
     {
       "code": "de_ionizing_treatment",
@@ -400,20 +427,33 @@
       },
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "/assets/addons/de_ionizing_treatment.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png",
       "category": "odor treatment",
       "type": "de-ionizing",
-      "image_fallback_url": "/assets/addons/de_ionizing_treatment.svg"
+      "image_fallback_url": "/assets/addons/de_ionizing_treatment.svg",
+      "standalone_allowed": false,
+      "requires_package_codes_any": [
+        "interior_detail",
+        "complete_detail"
+      ],
+      "requirement_note": "Requires an interior or complete detail so odor-source surfaces can be cleaned first.",
+      "notes": [
+        "Requires interior or complete detail first."
+      ]
     },
     {
       "code": "de_badging",
       "name": "De-Badging",
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "/assets/addons/de_badging.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
       "category": "appearance modifications",
       "type": "badge removal",
-      "image_fallback_url": "/assets/addons/de_badging.svg"
+      "image_fallback_url": "/assets/addons/de_badging.svg",
+      "standalone_allowed": true,
+      "requires_package_codes_any": [],
+      "requirement_note": "",
+      "notes": []
     },
     {
       "code": "engine_cleaning",
@@ -421,10 +461,21 @@
       "price_cad": 59,
       "quote_required": false,
       "source": "package_asset",
-      "image_url": "/assets/addons/engine_cleaning.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
       "category": "engine bay",
       "type": "cleaning",
-      "image_fallback_url": "/assets/addons/engine_cleaning.svg"
+      "image_fallback_url": "/assets/addons/engine_cleaning.svg",
+      "standalone_allowed": true,
+      "requires_package_codes_any": [],
+      "requirement_note": "Can be booked as a standalone add-on when safe engine-bay access is available.",
+      "prices_cad": {
+        "small": 59,
+        "mid": 69,
+        "oversize": 79
+      },
+      "notes": [
+        "Standalone service allowed."
+      ]
     },
     {
       "code": "external_ceramic_coating",
@@ -433,12 +484,19 @@
       "quote_required": true,
       "source": "package_asset",
       "notes": [
-        "Starting price only"
+        "Starting price only",
+        "Requires exterior or complete detail first."
       ],
-      "image_url": "/assets/addons/external_ceramic_coating.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
       "category": "paint protection",
       "type": "ceramic coating",
-      "image_fallback_url": "/assets/addons/external_ceramic_coating.svg"
+      "image_fallback_url": "/assets/addons/external_ceramic_coating.svg",
+      "standalone_allowed": false,
+      "requires_package_codes_any": [
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "requirement_note": "Requires an exterior or complete detailing package first."
     },
     {
       "code": "external_graphene_fine_finish",
@@ -447,12 +505,19 @@
       "quote_required": true,
       "source": "package_asset",
       "notes": [
-        "Starting price only"
+        "Starting price only",
+        "Requires exterior or complete detail first."
       ],
-      "image_url": "/assets/addons/external_graphene_fine_finish.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png",
       "category": "paint protection",
       "type": "graphene finish",
-      "image_fallback_url": "/assets/addons/external_graphene_fine_finish.svg"
+      "image_fallback_url": "/assets/addons/external_graphene_fine_finish.svg",
+      "standalone_allowed": false,
+      "requires_package_codes_any": [
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "requirement_note": "Requires an exterior or complete detailing package first."
     },
     {
       "code": "external_wax",
@@ -464,30 +529,47 @@
       },
       "quote_required": false,
       "source": "package_asset",
-      "image_url": "/assets/addons/external_wax.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png",
       "category": "paint protection",
       "type": "wax",
-      "image_fallback_url": "/assets/addons/external_wax.svg"
+      "image_fallback_url": "/assets/addons/external_wax.svg",
+      "standalone_allowed": false,
+      "requires_package_codes_any": [
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "requirement_note": "Requires an exterior or complete detailing package first.",
+      "notes": [
+        "Requires exterior or complete detail first."
+      ]
     },
     {
       "code": "vinyl_wrapping",
       "name": "Vinyl Wrapping",
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "/assets/addons/vinyl_wrapping.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
       "category": "appearance modifications",
       "type": "vinyl wrapping",
-      "image_fallback_url": "/assets/addons/vinyl_wrapping.svg"
+      "image_fallback_url": "/assets/addons/vinyl_wrapping.svg",
+      "standalone_allowed": true,
+      "requires_package_codes_any": [],
+      "requirement_note": "",
+      "notes": []
     },
     {
       "code": "window_tinting",
       "name": "Window Tinting",
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "/assets/addons/window_tinting.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png",
       "category": "glass services",
       "type": "window tinting",
-      "image_fallback_url": "/assets/addons/window_tinting.svg"
+      "image_fallback_url": "/assets/addons/window_tinting.svg",
+      "standalone_allowed": true,
+      "requires_package_codes_any": [],
+      "requirement_note": "",
+      "notes": []
     }
   ]
 }
