@@ -1013,3 +1013,10 @@ alter table if exists public.accounting_payroll_payout_reconciliations
   add column if not exists paid_net_pay_cad numeric(12,2) not null default 0,
   add column if not exists source_deductions_remitted_cad numeric(12,2) not null default 0,
   add column if not exists net_difference_cad numeric(12,2) not null default 0;
+
+
+-- April 28, 2026 add-on media / dependency UI / landing-page depth pass
+-- Restored add-on cards to the original Rosie packages R2 image files as primary image_url values, with bundled local fallback assets preserved.
+-- App Management pricing now supports clearer add-on-to-package dependency mapping in the UI.
+-- Special-service landing pages and town-focused landing pages were expanded into fuller content pages.
+-- No DDL change was required for this pass; the current schema still supports the dependency rules through the pricing catalog payload.
