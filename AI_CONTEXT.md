@@ -553,3 +553,6 @@ Recent pass highlights: admin block time frame save + calendar, pricing embed-he
 
 ## Pass sync — 2026-04-27
 The accounting direction has moved from month-end/year-end reporting only into workflow foundations: bank reconciliation, accounting document links, recurring expenses, payroll payout reconciliation, and period lock / close status. The pricing-page review-proof image was also fixed by using the bundled fallback asset directly.
+
+
+- 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.
