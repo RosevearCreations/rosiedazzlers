@@ -74,7 +74,7 @@ export async function onRequestPost(context) {
       ),
       fetch(
         `${env.SUPABASE_URL}/rest/v1/job_time_entries` +
-          `?select=id,booking_id,minutes,note,entry_type,staff_user_id,staff_name,created_at` +
+          `?select=id,booking_id,minutes,note,entry_type,staff_user_id,created_at` +
           `&booking_id=eq.${encodeURIComponent(booking_id)}` +
           `&order=created_at.desc`,
         { headers }
@@ -130,7 +130,7 @@ export async function onRequestPost(context) {
           note: row.note || null,
           entry_type: row.entry_type || null,
           staff_user_id: row.staff_user_id || null,
-          staff_name: row.staff_name || null,
+          staff_name: row.staff_name || row.staff_user_id || null,
           created_at: row.created_at || null
         }))
       })
@@ -164,7 +164,7 @@ function summarizeTime(entries) {
   for (const row of entries) {
     const minutes = Number(row.minutes || 0);
     const entryType = String(row.entry_type || "work");
-    const staffName = String(row.staff_name || "Unknown");
+    const staffName = String(row.staff_name || row.staff_user_id || "Unknown");
 
     totals.entry_count += 1;
     totals.total_minutes += minutes;
