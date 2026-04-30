@@ -98,6 +98,7 @@ function resolveRelatedProducts(page, productCatalog) {
 }
 
 function heroMediaForPage(page, addon, relatedProducts) {
+  if (page?.hero_image_url) return page.hero_image_url;
   if (addon?.image_url) return addon.image_url;
   if (addon?.image_fallback_url) return addon.image_fallback_url;
   const firstProduct = (relatedProducts || []).find((item) => item.image_url);
@@ -123,6 +124,7 @@ function pageTemplate(page, pricing, slug, productCatalog) {
   const priceSummary = addonPriceSummary(addon);
   const relatedProducts = resolveRelatedProducts(page, productCatalog);
   const heroImage = heroMediaForPage(page, addon, relatedProducts);
+  const galleryImages = Array.isArray(page.gallery_images) ? page.gallery_images.filter(Boolean).slice(0, 6) : [];
 
   return `
   <main class="container">
@@ -207,6 +209,21 @@ function pageTemplate(page, pricing, slug, productCatalog) {
             <article class="service-link-card">
               <h3>${escapeHtml(item.label || "Official source")}</h3>
               <a class="btn ghost small" href="${escapeHtml(item.url)}" rel="noopener" target="_blank">Open source</a>
+            </article>
+          `).join("")}
+        </div>
+      </section>
+    ` : ""}
+
+
+    ${galleryImages.length ? `
+      <section class="section panel">
+        <h2 style="margin-top:0">Service photos and visual examples</h2>
+        <p class="muted">Use this area for real before/after or process photos. You can update the image URLs from App Management when you have better page-specific visuals.</p>
+        <div class="service-link-grid" style="margin-top:12px">
+          ${galleryImages.map((url) => `
+            <article class="service-link-card">
+              <img src="${escapeHtml(url)}" alt="${escapeHtml(page.name || slug)}" class="proof-media" />
             </article>
           `).join("")}
         </div>
