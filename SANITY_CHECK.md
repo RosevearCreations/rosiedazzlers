@@ -430,3 +430,8 @@ Smoke-check after deploy: /pricing, /book, /admin-accounting, and home-page revi
 ## 2026-04-30 sanity note
 - Static checks should now include the newly added folder-backed service pages.
 - Confirm these routes after deploy: /graphene-finish, /full-clay-treatment, /engine-cleaning, /high-grade-paint-sealant, /uv-protectant, /exterior-wax, /de-ionizing-treatment.
+
+## 2026-04-30 image/landing sanity pass
+- Synced pricing catalog fallback image URLs across both catalog JSON copies.
+- Services and Pricing now share a combined image-backed add-on / special-detail button section.
+- Booking planner iframe height caps were raised to reduce inner scrollbars on Services and Pricing.

@@ -55,13 +55,13 @@
     .tag.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
     .mini{font-size:.92rem}
     .booking-lead{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
-    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;height:1220px;min-height:1220px;max-height:1220px}
-    .booking-embed-frame{display:block;width:100%;height:1220px;min-height:1220px;max-height:1220px;border:0;background:transparent;overflow:auto}
+    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;height:1720px;min-height:1720px;max-height:2600px}
+    .booking-embed-frame{display:block;width:100%;height:1720px;min-height:1720px;max-height:2600px;border:0;background:transparent;overflow:hidden}
     .booking-side{display:grid;gap:12px}
     @media (max-width:980px){
       .booking-lead{grid-template-columns:1fr}
-      .booking-embed-shell{height:1480px;min-height:1480px;max-height:1480px}
-      .booking-embed-frame{height:1480px;min-height:1480px;max-height:1480px}
+      .booking-embed-shell{height:2120px;min-height:2120px;max-height:3200px}
+      .booking-embed-frame{height:2120px;min-height:2120px;max-height:3200px}
     }
 
     .landing-button-grid{
@@ -83,6 +83,8 @@
     }
     .landing-button-card h3{margin:0;font-size:1rem}
     .landing-button-card p{margin:0;color:rgba(234,242,255,.68);font-size:.92rem}
+    .landing-button-image{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);margin-bottom:10px}
+
     .landing-subgroup{
       margin-top:14px;
       padding-top:14px;
@@ -211,104 +213,8 @@
 
     <section class="section panel">
       <h2 style="margin-top:0">Add-ons &amp; special detailing pages</h2>
-      <p class="muted">This is now one combined section. Use these buttons for service-specific education, process details, products used, expectations, and booking fit.</p>
-
-      <div class="landing-subgroup">
-        <h3 style="margin:0">Add-on pages</h3>
-        <div class="landing-button-grid">
-          <article class="landing-button-card">
-            <h3>Full Clay Treatment</h3>
-            <p>Decontamination, bonded-surface cleanup, and prep before protection work.</p>
-            <a class="btn ghost small" href="/full-clay-treatment">Open page</a>
-          </article>
-          <article class="landing-button-card">
-            <h3>Two Stage Polish</h3>
-            <p>Inspection-led polishing page for heavier correction and gloss recovery work.</p>
-            <a class="btn ghost small" href="/two-stage-polish">Open page</a>
-          </article>
-          <article class="landing-button-card">
-            <h3>High Grade Paint Sealant</h3>
-            <p>Paint-protection page for customers comparing sealant versus other exterior finishes.</p>
-            <a class="btn ghost small" href="/high-grade-paint-sealant">Open page</a>
-          </article>
-          <article class="landing-button-card">
-            <h3>UV Protectant</h3>
-            <p>Interior trim protection page with prep requirements and realistic use cases.</p>
-            <a class="btn ghost small" href="/uv-protectant">Open page</a>
-          </article>
-          <article class="landing-button-card">
-            <h3>De-Ionizing Treatment</h3>
-            <p>Water-spot and mineral-control page with treatment and rinse-planning context.</p>
-            <a class="btn ghost small" href="/de-ionizing-treatment">Open page</a>
-          </article>
-          <article class="landing-button-card">
-            <h3>De-Badging</h3>
-            <p>Badge removal, adhesive cleanup, and finish-correction planning.</p>
-            <a class="btn ghost small" href="/de-badging">Open page</a>
-          </article>
-          <article class="landing-button-card">
-            <h3>Engine Cleaning</h3>
-            <p>Engine-bay detailing page with access, safety, and condition guidance.</p>
-            <a class="btn ghost small" href="/engine-cleaning">Open page</a>
-          </article>
-          <article class="landing-button-card">
-            <h3>External Ceramic Coating</h3>
-            <p>Exterior-only coating add-on page with prep and quote expectations.</p>
-            <a class="btn ghost small" href="/external-ceramic-coating">Open page</a>
-          </article>
-          <article class="landing-button-card">
-            <h3>Graphene Finish</h3>
-            <p>Graphene-finish page with product transparency and prep requirements.</p>
-            <a class="btn ghost small" href="/graphene-finish">Open page</a>
-          </article>
-          <article class="landing-button-card">
-            <h3>Exterior Wax</h3>
-            <p>Wax page for customers comparing shorter-term shine versus coating paths.</p>
-            <a class="btn ghost small" href="/exterior-wax">Open page</a>
-          </article>
-          <article class="landing-button-card">
-            <h3>Vinyl Wrapping</h3>
-            <p>Vinyl wrap support page with prep, limitations, and protection notes.</p>
-            <a class="btn ghost small" href="/vinyl-wrapping">Open page</a>
-          </article>
-          <article class="landing-button-card">
-            <h3>Window Tinting</h3>
-            <p>Window tint page with prep, inspection, and follow-up expectations.</p>
-            <a class="btn ghost small" href="/window-tinting">Open page</a>
-          </article>
-        </div>
-      </div>
-
-      <div class="landing-subgroup">
-        <h3 style="margin:0">Special detailing pages</h3>
-        <div class="landing-button-grid">
-          <article class="landing-button-card">
-            <h3>Ceramic Coating</h3>
-            <p>Dedicated search-facing coating page with process, products, and prep guidance.</p>
-            <a class="btn ghost small" href="/ceramic-coating">Open page</a>
-          </article>
-          <article class="landing-button-card">
-            <h3>Pet Hair Removal</h3>
-            <p>Interior recovery page for embedded pet hair, dander, and cleanup expectations.</p>
-            <a class="btn ghost small" href="/pet-hair-removal">Open page</a>
-          </article>
-          <article class="landing-button-card">
-            <h3>Odor Removal</h3>
-            <p>Odor source-cleaning and inspection-led service explanation page.</p>
-            <a class="btn ghost small" href="/odor-removal">Open page</a>
-          </article>
-          <article class="landing-button-card">
-            <h3>Headlight Restoration</h3>
-            <p>Clarity recovery page for cloudy or oxidized lenses.</p>
-            <a class="btn ghost small" href="/headlight-restoration">Open page</a>
-          </article>
-          <article class="landing-button-card">
-            <h3>Paint Correction</h3>
-            <p>Inspection-led correction page for swirls, haze, gloss recovery, and expectations.</p>
-            <a class="btn ghost small" href="/paint-correction">Open page</a>
-          </article>
-        </div>
-      </div>
+      <p class="muted">Use these image-backed buttons to open the dedicated add-on and special-detail pages. Each page explains the process, products used, booking fit, and things to know before you book.</p>
+      <div id="landingServiceButtons" class="landing-button-grid" style="margin-top:12px"></div>
     </section>
 
     <section class="section panel">
@@ -386,6 +292,53 @@
       applyJsonLdScript
     } from "/assets/pricing-catalog-client.js?v=20260430pricingfix1";
     import { renderRecentWorkMounts } from "/assets/recent-work.js";
+    const IMAGE_BASE = "https://assets.rosiedazzlers.ca/packages/";
+    const ADDON_IMAGE_FILES = {
+      full_clay_treatment: "full_clay_treatment.png",
+      two_stage_polish: "two_stage_polish.png",
+      high_grade_paint_sealant: "high_grade_paint_sealant.png",
+      uv_protectant_applied_on_interior_panels: "uv_protectant_applied_on_interior_panels.png",
+      de_ionizing_treatment: "De-Ionizing Vehicle Add on service.png",
+      de_badging: "DeBadgingAddonService.png",
+      engine_cleaning: "Engine Cleaning add on service.png",
+      external_ceramic_coating: "External Ceramic coating add on service.png",
+      external_graphene_fine_finish: "External Graphene Fine finish add on service.png",
+      external_wax: "External Wax add on service.png",
+      vinyl_wrapping: "Vinyl Wrapping add on service.png",
+      window_tinting: "Window Tinting add on service.png"
+    };
+    function addonImageForCard(addon, page){
+      const code = String(addon?.code || page?.related_code || '').trim();
+      const dataUrl = String(addon?.image_url || '').trim();
+      if (dataUrl) return dataUrl;
+      const hero = String(page?.hero_image_url || '').trim();
+      if (hero) return hero;
+      const file = ADDON_IMAGE_FILES[code];
+      return file ? (IMAGE_BASE + encodeURIComponent(file)) : '/assets/addons/generic_addon.svg';
+    }
+    function landingButtonDescription(page, addon){
+      return String(page?.hero_intro || addon?.requirement_note || addon?.notes?.[0] || 'Open this page for process, products used, booking fit, and service notes.').trim();
+    }
+    function buildLandingButtonCard(page, addon){
+      const title = String(page?.name || page?.hero_title || addon?.name || page?.slug || 'Service page');
+      const href = '/' + String(page?.slug || '').replace(/^\//,'');
+      const image = addonImageForCard(addon, page);
+      return `
+        <article class="landing-button-card">
+          <img class="landing-button-image" src="${escapeHtml(image)}" alt="${escapeHtml(title)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/assets/addons/generic_addon.svg'">
+          <h3>${escapeHtml(title)}</h3>
+          <p>${escapeHtml(landingButtonDescription(page, addon))}</p>
+          <a class="btn ghost small" href="${escapeHtml(href)}">Open page</a>
+        </article>`;
+    }
+    function renderLandingServiceButtons(pricingData, landingData){
+      const mount = qs('#landingServiceButtons');
+      if (!mount) return;
+      const pages = Object.values((landingData && landingData.pages) || {}).filter((page)=> page && page.enabled !== false && ['addon','special-service','special'].includes(String(page.type || page.nav_group || '').trim()) || (page && page.nav_group === 'special-service'));
+      const addonMap = Object.fromEntries(((pricingData && pricingData.addons) || []).map((addon)=> [String(addon.code || '').trim(), addon]));
+      const sorted = pages.sort((a,b)=> String(a.name || a.hero_title || a.slug).localeCompare(String(b.name || b.hero_title || b.slug)));
+      mount.innerHTML = sorted.map((page)=> buildLandingButtonCard(page, addonMap[String(page.related_code || '').trim()] || null)).join('');
+    }
 
     const FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260430pricingfix1";
     const qs = (s)=>document.querySelector(s);
@@ -455,11 +408,42 @@
       return chartUrl(data, title) || fallback;
     }
 
+    
+    function wireBookingPlannerFrame(){
+      const frame = qs('#bookingPlannerFrame');
+      if (!frame) return;
+      window.addEventListener('message', (event) => {
+        const payload = event.data || {};
+        if (payload.type === 'rd-book-embed-size') {
+          const measured = Number(payload.height || 0);
+          const mobile = window.innerWidth <= 980;
+          const minHeight = mobile ? 1720 : 1320;
+          const maxHeight = mobile ? 3200 : 2600;
+          const nextHeight = Math.min(maxHeight, Math.max(minHeight, Math.round(measured) + 16));
+          const currentHeight = parseInt(frame.style.height || frame.getAttribute('height') || '0', 10) || 0;
+          const shell = frame.closest('.booking-embed-shell');
+          if (Number.isFinite(nextHeight) && Math.abs(nextHeight - currentHeight) >= 12) {
+            frame.style.height = `${nextHeight}px`;
+            frame.style.minHeight = `${nextHeight}px`;
+            frame.style.maxHeight = `${nextHeight}px`;
+            if (shell) {
+              shell.style.height = `${nextHeight}px`;
+              shell.style.minHeight = `${nextHeight}px`;
+              shell.style.maxHeight = `${nextHeight}px`;
+            }
+          }
+        }
+      });
+    }
+
     async function main(){
       try{
         const data = await loadPricingCatalogClient({ fallbackUrl: FALLBACK_URL });
+        const landingData = await fetch("/api/landing_pages_public", { cache: "no-store" }).then((r)=> r.ok ? r.json() : { pages:{} }).catch(()=>({ pages:{} }));
         renderRequirementTags(data);
+        wireBookingPlannerFrame();
         renderTable(data.packages || []);
+        renderLandingServiceButtons(data, landingData);
         chartMap = new Map([
           ["Vehicle Price Chart 2025", chartSource(data, "Vehicle Price Chart 2025", "/assets/brand/CarPrice2025.PNG")],
           ["Package Service Details Chart", chartSource(data, "Package Service Details Chart", "/assets/brand/CarPriceDetails2025.PNG")],

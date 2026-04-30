@@ -427,3 +427,4 @@ The accounting workspace now covers operational ledger, payables, remittance, st
 
 ## Latest pass note
 The 2026-04-30 pass expanded the landing-page system into product-linked money pages for multiple add-on services, added more folder-backed service routes, and enriched town pages with more practical local information.
+- See `IMAGES.md` for the current image inventory, required missing image types, and which Admin App interface controls each image slot.

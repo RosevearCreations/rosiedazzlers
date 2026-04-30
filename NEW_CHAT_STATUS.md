@@ -92,3 +92,10 @@ Important next move:
 - Finished: linked consumables into add-on landing pages, expanded the current add-on pages into fuller money pages, created additional folder-backed add-on pages, and upgraded the landing-page renderer plus admin builder to support products / official links / things-to-know fields.
 - Finished: expanded town pages with stronger local-value notes and official-source sections.
 - Remaining: landing-page gallery management, richer Search Console / GBP reporting integration, and a reusable DB-backed add-on-to-product relationship system.
+
+## 2026-04-30 image and landing pass
+- Restored real add-on images in the pricing catalog fallback and live page buttons.
+- Combined add-ons and special detailing pages into one image-backed button section on Services and Pricing.
+- Removed the stray add-on section below the town pages on Pricing.
+- Increased embedded booking panel heights and message-handled resize limits on Services and Pricing to reduce internal scrollbars.
+- Added IMAGES.md documenting where images are needed and which Admin App editor controls them.

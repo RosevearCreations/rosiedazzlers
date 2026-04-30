@@ -701,3 +701,8 @@ Open accounting risks: this remains an operational bookkeeping layer, not profes
 - Product links on landing pages are now content-driven, but the relationship is still stored inside landing page content rather than a dedicated database join table.
 - New folder-backed add-on routes were created for the strongest next service pages, but admin-created /landing/ pages are still not auto-written into sitemap.xml.
 - Real before/after media for each add-on money page is still the highest-value unfinished content gap.
+
+## Current known gaps after the image/landing pass
+- Some add-on landing pages still rely on branded service graphics or linked product images until real finished-vehicle photos are supplied.
+- Landing page media is still URL-driven in Admin App rather than file-upload-driven.
+- New admin-created /landing/ pages are not automatically written into sitemap.xml yet.

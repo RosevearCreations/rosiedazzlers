@@ -167,3 +167,4 @@ Use `NEW_CHAT_STATUS.md`, `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, a
 
 ## 2026-04-30 doc note
 - Roadmap / handoff docs were refreshed for the product-linked landing-page pass.
+- `IMAGES.md` — image inventory, page image needs, and which Admin App editor controls each image slot.

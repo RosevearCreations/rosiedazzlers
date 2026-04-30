@@ -570,3 +570,9 @@ Next best steps now include pricing-page embed height control, a bundled reviews
 - Completed: kept folder-backed landing pages as the strongest SEO baseline while still using the shared landing content system.
 - Next strongest steps: connect landing pages to per-page galleries in admin, add dedicated add-on hero/result photos, and expand consumable-to-service linking from page-level content into a reusable admin relationship picker.
 - Next strongest steps: expose landing-page performance in Search Console review workflow and add sitemap automation for new admin-created /landing/ slugs.
+
+## Highest-value next steps after the image/landing pass
+1. Replace placeholder or product-only visuals on add-on money pages with real before/after vehicle results.
+2. Add gallery management for landing pages through Admin App with upload-backed media selection instead of pasted URLs only.
+3. Add automatic sitemap inclusion for any new admin-created landing page slugs.
+4. Expand Search Console review workflow so each add-on and town page can be reviewed by URL.
