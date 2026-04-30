@@ -693,3 +693,6 @@ Open accounting risks: this remains an operational bookkeeping layer, not profes
 - The accounting workflow foundation requires `sql/2026-04-27_accounting_workflow_foundation.sql` before the new sections can persist data.
 
 - Dynamic /landing/<slug> pages are not yet added automatically to sitemap.xml; known folder-backed pages remain in the static sitemap.
+
+
+- 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.

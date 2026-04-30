@@ -84,3 +84,6 @@ Important next move:
 - Added admin-managed landing page builder with dropdown editors for add-ons and location pages.
 - Added generic clean-route landing page support under /landing/<slug> via a single non-looping rewrite.
 - Existing special-service and town pages now render from landing-page content settings so their copy can be maintained from App Management.
+
+
+- 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.
