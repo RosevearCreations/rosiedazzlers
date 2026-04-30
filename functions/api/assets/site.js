@@ -24,18 +24,18 @@ const HOVER_MEDIA = {
 };
 
 const ADDON_IMAGE_FILES = {
-  full_clay_treatment: 'full_clay_treatment.png',
-  two_stage_polish: 'two_stage_polish.png',
-  high_grade_paint_sealant: 'high_grade_paint_sealant.png',
-  uv_protectant_applied_on_interior_panels: 'uv_protectant_applied_on_interior_panels.png',
-  de_ionizing_treatment: 'De-Ionizing Vehicle Add on service.png',
-  de_badging: 'DeBadgingAddonService.png',
-  engine_cleaning: 'Engine Cleaning add on service.png',
-  external_ceramic_coating: 'External Ceramic coating add on service.png',
-  external_graphene_fine_finish: 'External Graphene Fine finish add on service.png',
-  external_wax: 'External Wax add on service.png',
-  vinyl_wrapping: 'Vinyl Wrapping add on service.png',
-  window_tinting: 'Window Tinting add on service.png'
+  full_clay_treatment: '/assets/addons/full_clay_treatment.png',
+  two_stage_polish: '/assets/addons/two_stage_polish.png',
+  high_grade_paint_sealant: '/assets/addons/high_grade_paint_sealant.png',
+  uv_protectant_applied_on_interior_panels: '/assets/addons/uv_protectant_applied_on_interior_panels.png',
+  de_ionizing_treatment: 'https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png',
+  de_badging: 'https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png',
+  engine_cleaning: 'https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png',
+  external_ceramic_coating: 'https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png',
+  external_graphene_fine_finish: 'https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png',
+  external_wax: 'https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png',
+  vinyl_wrapping: 'https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png',
+  window_tinting: 'https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png'
 };
 
 const ADDON_MEDIA = Object.fromEntries(
@@ -47,14 +47,14 @@ const LOCAL_ADDON_FALLBACKS = {
   two_stage_polish: '/assets/addons/two_stage_polish.png',
   high_grade_paint_sealant: '/assets/addons/high_grade_paint_sealant.png',
   uv_protectant_applied_on_interior_panels: '/assets/addons/uv_protectant_applied_on_interior_panels.png',
-  de_ionizing_treatment: '/assets/addons/de_ionizing_treatment.svg',
-  de_badging: '/assets/addons/de_badging.svg',
-  engine_cleaning: '/assets/addons/engine_cleaning.svg',
-  external_ceramic_coating: '/assets/addons/external_ceramic_coating.svg',
-  external_graphene_fine_finish: '/assets/addons/external_graphene_fine_finish.svg',
-  external_wax: '/assets/addons/external_wax.svg',
-  vinyl_wrapping: '/assets/addons/vinyl_wrapping.svg',
-  window_tinting: '/assets/addons/window_tinting.svg'
+  de_ionizing_treatment: 'https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png',
+  de_badging: 'https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png',
+  engine_cleaning: 'https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png',
+  external_ceramic_coating: 'https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png',
+  external_graphene_fine_finish: 'https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png',
+  external_wax: 'https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png',
+  vinyl_wrapping: 'https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png',
+  window_tinting: 'https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png'
 };
 
 let _servicesData = null;
