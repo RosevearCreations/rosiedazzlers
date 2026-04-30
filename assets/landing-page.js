@@ -47,6 +47,40 @@ function normalizeProductName(value) {
   return cleanText(value).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
 
+function normalizeProductRefs(value) {
+  return (Array.isArray(value) ? value : []).map((item) => ({
+    name: cleanText(item?.name || item?.title),
+    role: cleanText(item?.role),
+    note: cleanText(item?.note),
+    image_url: cleanText(item?.image_url)
+  })).filter((item) => item.name || item.image_url);
+}
+
+function findProductByName(products, name) {
+  const target = normalizeProductName(name);
+  if (!target) return null;
+
+  return products.find((item) => normalizeProductName(item?.name || item?.title) === target) ||
+    products.find((item) => normalizeProductName(item?.name || item?.title).includes(target)) ||
+    products.find((item) => target.includes(normalizeProductName(item?.name || item?.title))) ||
+    null;
+}
+
+function resolveRelatedProducts(page, productCatalog) {
+  const refs = normalizeProductRefs(page?.related_products);
+  const items = Array.isArray(productCatalog) ? productCatalog : [];
+  return refs.map((ref) => {
+    const product = ref.name ? (findProductByName(items, ref.name) || {}) : {};
+    return {
+      name: ref.name || product.name || product.title || "Related product",
+      role: ref.role,
+      note: ref.note,
+      image_url: ref.image_url || product.r2_url || product.image_url || "",
+      source_kind: product.source_kind || product.type || "product"
+    };
+  }).filter((item) => item.name || item.image_url);
+}
+
 function addonPriceSummary(addon) {
   if (!addon) return "";
   const sizeMap = addon.prices_cad && typeof addon.prices_cad === "object" ? addon.prices_cad : {};
@@ -66,43 +100,44 @@ function addonPriceSummary(addon) {
   return "";
 }
 
-function normalizeProductRefs(value) {
-  return (Array.isArray(value) ? value : []).map((item) => ({
-    name: cleanText(item?.name || item?.title),
-    role: cleanText(item?.role),
-    note: cleanText(item?.note)
-  })).filter((item) => item.name);
-}
-
-function findProductByName(products, name) {
-  const target = normalizeProductName(name);
-  if (!target) return null;
-  return products.find((item) => normalizeProductName(item?.name || item?.title) === target) ||
-    products.find((item) => normalizeProductName(item?.name || item?.title).includes(target)) ||
-    null;
-}
-
-function resolveRelatedProducts(page, productCatalog) {
-  const refs = normalizeProductRefs(page?.related_products);
-  const items = Array.isArray(productCatalog) ? productCatalog : [];
-  return refs.map((ref) => {
-    const product = findProductByName(items, ref.name) || {};
-    return {
-      name: ref.name,
-      role: ref.role,
-      note: ref.note,
-      image_url: product.r2_url || product.image_url || "",
-      source_kind: product.source_kind || product.type || "product"
-    };
-  });
-}
-
 function heroMediaForPage(page, addon, relatedProducts) {
   if (page?.hero_image_url) return page.hero_image_url;
+  if (addon?.image_url && !String(addon.image_url).toLowerCase().endsWith(".svg")) return addon.image_url;
+
+  const firstProduct = (relatedProducts || []).find((item) => item.image_url);
+  if (firstProduct?.image_url) return firstProduct.image_url;
+
   if (addon?.image_url) return addon.image_url;
   if (addon?.image_fallback_url) return addon.image_fallback_url;
-  const firstProduct = (relatedProducts || []).find((item) => item.image_url);
-  return firstProduct?.image_url || "/assets/brand/rosie-reviews-fallback.svg";
+  return "/assets/brand/rosie-reviews-fallback.svg";
+}
+
+function galleryMarkup(page, relatedProducts) {
+  const gallery = Array.isArray(page?.gallery_image_urls) ? page.gallery_image_urls.filter(Boolean) : [];
+  const productImages = (relatedProducts || []).map((item) => item.image_url).filter(Boolean);
+  const all = [...gallery, ...productImages].filter(Boolean);
+  if (!all.length) return "";
+
+  const unique = [];
+  const seen = new Set();
+  for (const src of all) {
+    if (seen.has(src)) continue;
+    seen.add(src);
+    unique.push(src);
+  }
+
+  return `
+    <section class="section panel">
+      <h2 style="margin-top:0">Service and product visuals</h2>
+      <div class="service-link-grid" style="margin-top:12px">
+        ${unique.slice(0, 8).map((src) => `
+          <article class="service-link-card">
+            <img src="${escapeHtml(src)}" alt="Rosie Dazzlers service visual" class="proof-media" />
+          </article>
+        `).join("")}
+      </div>
+    </section>
+  `;
 }
 
 function pageTemplate(page, pricing, slug, productCatalog) {
@@ -121,10 +156,9 @@ function pageTemplate(page, pricing, slug, productCatalog) {
   const highlights = Array.isArray(page.highlights) ? page.highlights : [];
   const thingsToKnow = Array.isArray(page.things_to_know) ? page.things_to_know : [];
   const officialLinks = Array.isArray(page.official_links) ? page.official_links : [];
-  const priceSummary = addonPriceSummary(addon);
   const relatedProducts = resolveRelatedProducts(page, productCatalog);
+  const priceSummary = addonPriceSummary(addon);
   const heroImage = heroMediaForPage(page, addon, relatedProducts);
-  const galleryImages = Array.isArray(page.gallery_images) ? page.gallery_images.filter(Boolean).slice(0, 6) : [];
 
   return `
   <main class="container">
@@ -136,9 +170,7 @@ function pageTemplate(page, pricing, slug, productCatalog) {
         <div class="badges">
           <span class="badge">Mobile service</span>
           <span class="badge">Oxford & Norfolk Counties</span>
-          ${addon
-            ? `<span class="badge">${escapeHtml(addon.quote_required ? "Quote required" : "Bookable add-on")}</span>`
-            : `<span class="badge">Local service page</span>`}
+          ${addon ? `<span class="badge">${escapeHtml(addon.quote_required ? "Quote required" : "Bookable add-on")}</span>` : `<span class="badge">Local service page</span>`}
         </div>
         <div class="cta-row" style="margin-top:14px">
           <a class="btn primary" href="/book">Book now</a>
@@ -180,19 +212,21 @@ function pageTemplate(page, pricing, slug, productCatalog) {
     ${relatedProducts.length ? `
       <section class="section panel">
         <h2 style="margin-top:0">Products we use for this service</h2>
-        <p class="muted">These consumables and support products make the page more specific and help explain why the add-on behaves the way it does in a real workflow.</p>
+        <p class="muted">These are the real consumables or support products currently linked to this service page.</p>
         <div class="service-link-grid" style="margin-top:12px">
           ${relatedProducts.map((item) => `
             <article class="service-link-card">
               ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}" class="proof-media" style="margin-bottom:10px" />` : ``}
               <h3>${escapeHtml(item.name)}</h3>
               ${item.role ? `<div class="badge" style="margin-bottom:8px">${escapeHtml(item.role)}</div>` : ``}
-              ${item.note ? `<p class="muted">${escapeHtml(item.note)}</p>` : `<p class="muted">Real product linked from your consumables catalog.</p>`}
+              ${item.note ? `<p class="muted">${escapeHtml(item.note)}</p>` : `<p class="muted">Linked from your consumables catalog.</p>`}
             </article>
           `).join("")}
         </div>
       </section>
     ` : ""}
+
+    ${galleryMarkup(page, relatedProducts)}
 
     ${thingsToKnow.length ? `
       <section class="section panel">
@@ -209,21 +243,6 @@ function pageTemplate(page, pricing, slug, productCatalog) {
             <article class="service-link-card">
               <h3>${escapeHtml(item.label || "Official source")}</h3>
               <a class="btn ghost small" href="${escapeHtml(item.url)}" rel="noopener" target="_blank">Open source</a>
-            </article>
-          `).join("")}
-        </div>
-      </section>
-    ` : ""}
-
-
-    ${galleryImages.length ? `
-      <section class="section panel">
-        <h2 style="margin-top:0">Service photos and visual examples</h2>
-        <p class="muted">Use this area for real before/after or process photos. You can update the image URLs from App Management when you have better page-specific visuals.</p>
-        <div class="service-link-grid" style="margin-top:12px">
-          ${galleryImages.map((url) => `
-            <article class="service-link-card">
-              <img src="${escapeHtml(url)}" alt="${escapeHtml(page.name || slug)}" class="proof-media" />
             </article>
           `).join("")}
         </div>
@@ -287,7 +306,6 @@ function pageTemplate(page, pricing, slug, productCatalog) {
 
 async function renderLandingPage() {
   const slug = slugFromPath();
-
   const [landingPages, pricing, productCatalog] = await Promise.all([
     fetchJson("/api/landing_pages_public"),
     fetchJson("/api/pricing_catalog_public"),
@@ -317,7 +335,6 @@ async function renderLandingPage() {
   }
 
   if (page.meta_title) document.title = page.meta_title;
-
   const meta = document.querySelector('meta[name="description"]');
   if (meta && page.meta_description) meta.setAttribute("content", page.meta_description);
 
