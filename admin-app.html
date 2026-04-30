@@ -207,7 +207,14 @@
 
         <div class="catalog-section">
           <div class="section-head"><h3>Add-ons</h3><div class="actions"><button class="btn" type="button" id="addAddonBtn">Add add-on</button></div></div>
-          <div class="catalog-table-wrap"><div id="addonTable" class="catalog-table"></div></div>
+          <p class="feature-note">Choose one add-on at a time to keep the screen clean. You can set prices, images, notes, and package requirements without showing the whole add-on list at once.</p>
+          <div class="addon-editor">
+            <label class="field">
+              <span>Select add-on to edit</span>
+              <select id="addonEditorSelect"></select>
+            </label>
+            <div id="addonEditorPanel" class="panel-lite"></div>
+          </div>
         </div>
 
         <div class="catalog-section">
@@ -704,10 +711,8 @@
   function setLandingPagesState(value){ landingPagesState = ensureLandingPagesShape(value); renderLandingBuilder(); }
   function landingArrayToText(value){ return normalizeLandingArray(value).join('\n'); }
   function landingFaqToText(value){ return normalizeLandingFaq(value).map(function(item){ return item.q + ' || ' + item.a; }).join('\n'); }
-  function landingLinksToText(value){ return normalizeLandingLinks(value).map(function(item){ return [item.label || '', item.url || '', item.note || ''].join(' || '); }).join('\n'); }
   function landingTextToArray(value){ return String(value || '').split(/\r?\n/).map(function(line){ return line.trim(); }).filter(Boolean); }
   function landingTextToFaq(value){ return String(value || '').split(/\r?\n/).map(function(line){ var parts = line.split('||'); return { q: String(parts[0] || '').trim(), a: String(parts.slice(1).join('||') || '').trim() }; }).filter(function(item){ return item.q && item.a; }); }
-  function landingTextToLinks(value){ return String(value || '').split(/\r?\n/).map(function(line){ var parts = line.split('||'); return { label: String(parts[0] || '').trim(), url: String(parts[1] || '').trim(), note: String(parts.slice(2).join('||') || '').trim() }; }).filter(function(item){ return item.label && item.url; }); }
   function slugify(value){ return String(value || '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').replace(/-{2,}/g, '-'); }
   function addonLandingEntry(code){ var slug = Object.keys(landingPagesState.pages).find(function(key){ return landingPagesState.pages[key] && landingPagesState.pages[key].type === 'addon' && String(landingPagesState.pages[key].related_code || '') === String(code || ''); }); return slug ? landingPagesState.pages[slug] : null; }
   function locationLandingOptions(){ return Object.keys(landingPagesState.pages).filter(function(slug){ return landingPagesState.pages[slug] && landingPagesState.pages[slug].type === 'location'; }).sort(); }
@@ -790,6 +795,7 @@
     setLandingPagesState(out);
   }
   var pricingCatalogState = pricingCatalogDefaults();
+  var selectedAddonCode = '';
   function setPricingCatalogEditor(value){ byId('pricing_catalog_json').value = JSON.stringify(ensurePricingCatalogShape(value), null, 2); }
   function setPricingCatalogState(value){ pricingCatalogState = ensurePricingCatalogShape(value); setPricingCatalogEditor(pricingCatalogState); renderPricingDashboard(); }
   function readPricingCatalog(){
@@ -843,7 +849,7 @@
     byId('price_control_tax').value = Number(catalog.booking_rules.price_controls.tax_rate_percent || 0).toFixed(2);
 
     byId('packageTable').innerHTML = renderPackageRows(catalog.packages);
-    byId('addonTable').innerHTML = renderAddonRows(catalog.addons);
+    renderAddonEditor(catalog.addons, catalog.packages);
     byId('serviceAreaTable').innerHTML = renderServiceAreaRows(catalog.service_areas);
     byId('requirementList').innerHTML = renderRequirementRows(catalog.public_requirements);
     bindPricingCatalogRowInputs();
@@ -870,22 +876,50 @@
       '</div>';
     }).join('');
   }
-  function renderAddonRows(rows){
-    if (!rows.length) return '<div class="catalog-empty">No add-ons yet.</div>';
-    return rows.map(function (addon, index) {
-      return '<div class="catalog-row addon">' +
-        '<div class="catalog-row__head">Code</div><div class="catalog-row__head">Name</div><div class="catalog-row__head">Category</div><div class="catalog-row__head">Type</div><div class="catalog-row__head">Small</div><div class="catalog-row__head">Mid</div><div class="catalog-row__head">Oversize / exotic</div><div class="catalog-row__head">Quote?</div><div></div>' +
-        '<label class="field"><input data-addon-field="code" data-addon-index="' + index + '" value="' + escapeHtml(addon.code || '') + '"></label>' +
-        '<label class="field"><input data-addon-field="name" data-addon-index="' + index + '" value="' + escapeHtml(addon.name || '') + '"></label>' +
-        '<label class="field"><input data-addon-field="category" data-addon-index="' + index + '" value="' + escapeHtml(addon.category || '') + '"></label>' +
-        '<label class="field"><input data-addon-field="type" data-addon-index="' + index + '" value="' + escapeHtml(addon.type || '') + '"></label>' +
-        '<label class="field"><input type="number" step="0.01" data-addon-field="prices_cad.small" data-addon-index="' + index + '" value="' + escapeHtml(String(addon.prices_cad.small ?? 0)) + '"></label>' +
-        '<label class="field"><input type="number" step="0.01" data-addon-field="prices_cad.mid" data-addon-index="' + index + '" value="' + escapeHtml(String(addon.prices_cad.mid ?? 0)) + '"></label>' +
-        '<label class="field"><input type="number" step="0.01" data-addon-field="prices_cad.oversize" data-addon-index="' + index + '" value="' + escapeHtml(String(addon.prices_cad.oversize ?? 0)) + '"></label>' +
-        '<label class="checkrow inline-check"><input type="checkbox" data-addon-field="quote_required" data-addon-index="' + index + '" ' + (addon.quote_required ? 'checked' : '') + '><span>Quote</span></label>' +
-        '<button class="btn" type="button" data-delete-addon="' + index + '">Delete</button>' +
-      '</div>';
+  function renderAddonEditor(rows, packages){
+    rows = Array.isArray(rows) ? rows : [];
+    packages = Array.isArray(packages) ? packages : [];
+    var select = byId('addonEditorSelect');
+    if (!select) return;
+    var options = rows.map(function(addon){
+      return '<option value="' + escapeHtml(addon.code || '') + '">' + escapeHtml(addon.name || addon.code || 'Add-on') + '</option>';
     }).join('');
+    select.innerHTML = options || '<option value="">No add-ons loaded</option>';
+    if (!selectedAddonCode && rows.length) selectedAddonCode = rows[0].code;
+    if (selectedAddonCode && rows.some(function(addon){ return addon.code === selectedAddonCode; })) select.value = selectedAddonCode;
+    if (!select.value && rows.length) select.value = rows[0].code;
+    selectedAddonCode = select.value || '';
+
+    var index = rows.findIndex(function(addon){ return addon.code === selectedAddonCode; });
+    if (index < 0) {
+      byId('addonEditorPanel').innerHTML = '<div class="catalog-empty">No add-on selected.</div>';
+      return;
+    }
+
+    var addon = rows[index];
+    var pkgChecks = packages.map(function(pkg){
+      var checked = Array.isArray(addon.requires_package_codes_any) && addon.requires_package_codes_any.includes(pkg.code);
+      return '<label class="checkrow"><input type="checkbox" data-addon-requires-pkg="' + escapeHtml(pkg.code) + '" ' + (checked ? 'checked' : '') + '><span>' + escapeHtml(pkg.name || pkg.code) + '</span></label>';
+    }).join('');
+
+    byId('addonEditorPanel').innerHTML =
+      '<div class="addon-editor-grid">' +
+        '<label class="field"><span>Code</span><input data-addon-editor-field="code" value="' + escapeHtml(addon.code || '') + '"></label>' +
+        '<label class="field"><span>Name</span><input data-addon-editor-field="name" value="' + escapeHtml(addon.name || '') + '"></label>' +
+        '<label class="field"><span>Category</span><input data-addon-editor-field="category" value="' + escapeHtml(addon.category || '') + '"></label>' +
+        '<label class="field"><span>Type</span><input data-addon-editor-field="type" value="' + escapeHtml(addon.type || '') + '"></label>' +
+        '<label class="field"><span>Small</span><input type="number" step="0.01" data-addon-editor-field="prices_cad.small" value="' + escapeHtml(String(addon.prices_cad.small ?? 0)) + '"></label>' +
+        '<label class="field"><span>Mid</span><input type="number" step="0.01" data-addon-editor-field="prices_cad.mid" value="' + escapeHtml(String(addon.prices_cad.mid ?? 0)) + '"></label>' +
+        '<label class="field"><span>Oversize / exotic</span><input type="number" step="0.01" data-addon-editor-field="prices_cad.oversize" value="' + escapeHtml(String(addon.prices_cad.oversize ?? 0)) + '"></label>' +
+        '<label class="field"><span>Primary image URL</span><input data-addon-editor-field="image_url" value="' + escapeHtml(addon.image_url || '') + '"></label>' +
+        '<label class="field"><span>Fallback image URL</span><input data-addon-editor-field="image_fallback_url" value="' + escapeHtml(addon.image_fallback_url || '') + '"></label>' +
+      '</div>' +
+      '<div class="checkrow"><input id="addon_editor_quote_required" type="checkbox" data-addon-editor-field="quote_required" ' + (addon.quote_required ? 'checked' : '') + '><label for="addon_editor_quote_required">Quote required</label></div>' +
+      '<div class="checkrow"><input id="addon_editor_standalone_allowed" type="checkbox" data-addon-editor-field="standalone_allowed" ' + (addon.standalone_allowed ? 'checked' : '') + '><label for="addon_editor_standalone_allowed">Standalone allowed</label></div>' +
+      '<div class="field"><label for="addon_requirement_note">Requirement note shown on booking</label><textarea id="addon_requirement_note" data-addon-editor-field="requirement_note">' + escapeHtml(addon.requirement_note || '') + '</textarea></div>' +
+      '<div class="field"><label for="addon_notes_lines">Notes (one line per point)</label><textarea id="addon_notes_lines" data-addon-editor-notes>' + escapeHtml(Array.isArray(addon.notes) ? addon.notes.join('\n') : '') + '</textarea></div>' +
+      '<div class="panel-lite stack-sm"><div class="section-label">Allowed main packages</div><div class="pill-note">Use this to set one-to-one, one-to-many, or many-to-one rules. Leave standalone on for add-ons that can be booked by themselves.</div><div class="addon-dependency-grid">' + pkgChecks + '</div></div>' +
+      '<div class="actions"><button class="btn" type="button" data-delete-addon="' + index + '">Delete add-on</button></div>';
   }
   function renderServiceAreaRows(rows){
     if (!rows.length) return '<div class="catalog-empty">No service areas yet.</div>';
@@ -928,15 +962,40 @@
         renderPricingDashboard();
       });
     });
-    qsa('[data-addon-index]').forEach(function (input) {
+    var addonSelect = byId('addonEditorSelect');
+    if (addonSelect) {
+      addonSelect.addEventListener('change', function () {
+        selectedAddonCode = addonSelect.value || '';
+        renderPricingDashboard();
+      });
+    }
+    qsa('[data-addon-editor-field]').forEach(function (input) {
       var eventName = input.type === 'checkbox' ? 'change' : 'input';
       input.addEventListener(eventName, function () {
-        var index = Number(input.getAttribute('data-addon-index'));
-        var field = input.getAttribute('data-addon-field');
+        var index = pricingCatalogState.addons.findIndex(function (row) { return row.code === selectedAddonCode; });
+        if (index < 0) return;
+        var field = input.getAttribute('data-addon-editor-field');
         var value = input.type === 'checkbox' ? input.checked : (input.type === 'number' ? moneyNum(input.value, 0) : input.value);
         setNestedValue(pricingCatalogState.addons[index], field, value);
         syncPricingEditorToJson();
         renderPricingDashboard();
+      });
+    });
+    qsa('[data-addon-editor-notes]').forEach(function (input) {
+      input.addEventListener('input', function () {
+        var index = pricingCatalogState.addons.findIndex(function (row) { return row.code === selectedAddonCode; });
+        if (index < 0) return;
+        pricingCatalogState.addons[index].notes = String(input.value || '').split(/\r?\n/).map(function (row) { return row.trim(); }).filter(Boolean);
+        syncPricingEditorToJson();
+      });
+    });
+    qsa('[data-addon-requires-pkg]').forEach(function (input) {
+      input.addEventListener('change', function () {
+        var index = pricingCatalogState.addons.findIndex(function (row) { return row.code === selectedAddonCode; });
+        if (index < 0) return;
+        var selected = qsa('[data-addon-requires-pkg]').filter(function (row) { return row.checked; }).map(function (row) { return row.getAttribute('data-addon-requires-pkg'); });
+        pricingCatalogState.addons[index].requires_package_codes_any = selected;
+        syncPricingEditorToJson();
       });
     });
     qsa('[data-area-index]').forEach(function (input) {
@@ -967,7 +1026,14 @@
       button.addEventListener('click', function () { pricingCatalogState.packages.splice(Number(button.getAttribute('data-delete-package')), 1); syncPricingEditorToJson(); renderPricingDashboard(); });
     });
     qsa('[data-delete-addon]').forEach(function (button) {
-      button.addEventListener('click', function () { pricingCatalogState.addons.splice(Number(button.getAttribute('data-delete-addon')), 1); syncPricingEditorToJson(); renderPricingDashboard(); });
+      button.addEventListener('click', function () {
+        var index = Number(button.getAttribute('data-delete-addon'));
+        var removed = pricingCatalogState.addons[index] || null;
+        pricingCatalogState.addons.splice(index, 1);
+        if (removed && removed.code === selectedAddonCode) selectedAddonCode = pricingCatalogState.addons[0] ? pricingCatalogState.addons[0].code : '';
+        syncPricingEditorToJson();
+        renderPricingDashboard();
+      });
     });
     qsa('[data-delete-area]').forEach(function (button) {
       button.addEventListener('click', function () { pricingCatalogState.service_areas.splice(Number(button.getAttribute('data-delete-area')), 1); syncPricingEditorToJson(); renderPricingDashboard(); });
@@ -1117,8 +1183,11 @@
     syncPricingEditorToJson(); renderPricingDashboard();
   });
   bindById('addAddonBtn', 'click', function () {
-    pricingCatalogState.addons.push({ code: 'new_addon', name: 'New Add-on', category: '', type: '', prices_cad: { small: 0, mid: 0, oversize: 0 }, price_cad: 0, quote_required: false, image_url: '', image_fallback_url: '', notes: [] });
-    syncPricingEditorToJson(); renderPricingDashboard();
+    var nextAddon = { code: 'new_addon', name: 'New Add-on', category: '', type: '', prices_cad: { small: 0, mid: 0, oversize: 0 }, price_cad: 0, quote_required: false, standalone_allowed: false, requires_package_codes_any: [], requirement_note: '', image_url: '', image_fallback_url: '', notes: [] };
+    pricingCatalogState.addons.push(nextAddon);
+    selectedAddonCode = nextAddon.code;
+    syncPricingEditorToJson();
+    renderPricingDashboard();
   });
   bindById('addServiceAreaBtn', 'click', function () {
     pricingCatalogState.service_areas.push({ county: '', label: 'New Service Area', value: 'New Service Area', municipality: '', zone: '', travel_tier: 'township', area_type: '', bylaw_note: '', parking_rule: '', noise_rule: '', water_rule: '', access_rule: '', official_links: [] });
