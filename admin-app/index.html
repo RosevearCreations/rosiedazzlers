@@ -702,6 +702,8 @@
     source.things_to_know = normalizeLandingArray(source.things_to_know);
     source.official_links = normalizeLandingLinks(source.official_links);
     source.related_products = normalizeLandingProductRefs(source.related_products);
+    source.hero_image_url = String(source.hero_image_url || '').trim();
+    source.gallery_images = normalizeLandingArray(source.gallery_images);
     source.faq = normalizeLandingFaq(source.faq);
     return source;
   }
@@ -744,6 +746,8 @@
       '<div class="field"><label for="' + prefix + '_things_to_know">Things to know / avoid (one line per point)</label><textarea id="' + prefix + '_things_to_know">' + escapeHtml(landingArrayToText(page.things_to_know)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_official_links">Official links using Label || URL</label><textarea id="' + prefix + '_official_links">' + escapeHtml(landingLinksToText(page.official_links)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_related_products">Related products using Product name || Role || Note</label><textarea id="' + prefix + '_related_products">' + escapeHtml(landingProductRefsToText(page.related_products)) + '</textarea></div>' +
+      '<div class="field"><label for="' + prefix + '_hero_image_url">Hero image URL (optional override)</label><input id="' + prefix + '_hero_image_url" value="' + escapeHtml(page.hero_image_url || '') + '" placeholder="https://..."></div>' +
+      '<div class="field"><label for="' + prefix + '_gallery_images">Gallery images (one URL per line)</label><textarea id="' + prefix + '_gallery_images">' + escapeHtml(landingArrayToText(page.gallery_images)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_faq">FAQ lines using Question || Answer</label><textarea id="' + prefix + '_faq">' + escapeHtml(landingFaqToText(page.faq)) + '</textarea></div>';
   }
   function readLandingEditor(prefix, seed){
@@ -764,6 +768,8 @@
       things_to_know: landingTextToArray(byId(prefix + '_things_to_know').value || ''),
       official_links: landingTextToLinks(byId(prefix + '_official_links').value || ''),
       related_products: landingTextToProductRefs(byId(prefix + '_related_products').value || ''),
+      hero_image_url: byId(prefix + '_hero_image_url').value || '',
+      gallery_images: landingTextToArray(byId(prefix + '_gallery_images').value || ''),
       faq: landingTextToFaq(byId(prefix + '_faq').value || '')
     }, seed || {});
   }
