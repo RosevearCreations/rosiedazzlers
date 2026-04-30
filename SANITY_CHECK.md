@@ -423,3 +423,6 @@ Smoke-check after deploy: /pricing, /book, /admin-accounting, and home-page revi
   - `functions/api/admin/accounting_payroll_payout_reconciliation.js`
   - `functions/api/admin/accounting_period_close.js`
 - Run the new SQL migration before opening the new accounting sections in production.
+
+
+- 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.
