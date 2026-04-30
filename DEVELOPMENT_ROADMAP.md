@@ -576,3 +576,6 @@ Next best steps now include pricing-page embed height control, a bundled reviews
 2. Add gallery management for landing pages through Admin App with upload-backed media selection instead of pasted URLs only.
 3. Add automatic sitemap inclusion for any new admin-created landing page slugs.
 4. Expand Search Console review workflow so each add-on and town page can be reviewed by URL.
+
+- Next strongest platform move after the April 30, 2026 repair pass: move catalog seed data out of JSON fallback and into a real synced inventory import so Admin Catalog starts from persistent DB-backed consumables/gear instead of a read-only local fallback.
+- Continue moving public page media, add-on images, result videos, and landing-page hero/gallery images into Admin App-managed settings so fewer values stay hard-coded in templates.

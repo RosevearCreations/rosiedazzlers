@@ -435,3 +435,5 @@ Smoke-check after deploy: /pricing, /book, /admin-accounting, and home-page revi
 - Synced pricing catalog fallback image URLs across both catalog JSON copies.
 - Services and Pricing now share a combined image-backed add-on / special-detail button section.
 - Booking planner iframe height caps were raised to reduce inner scrollbars on Services and Pricing.
+
+- April 30, 2026 sanity pass: public pricing page no longer relies on an undefined `landingData` variable, embedded booking pages use the new split Step 1 layout in embed mode only, Admin Catalog has a local-catalog fallback instead of a blank inventory table, and payroll helper queries no longer select the missing `job_time_entries.staff_name` column.

@@ -99,3 +99,5 @@ Important next move:
 - Removed the stray add-on section below the town pages on Pricing.
 - Increased embedded booking panel heights and message-handled resize limits on Services and Pricing to reduce internal scrollbars.
 - Added IMAGES.md documenting where images are needed and which Admin App editor controls them.
+
+- Latest repair pass fixed the `/pricing` landingData crash, reduced embedded booking height on Services/Pricing by splitting Step 1 into two columns, improved the mobile nav to a wrapped two-column dropdown, added seeded consumables/gear fallback to Admin Catalog, and patched payroll time queries to stop requesting the missing `job_time_entries.staff_name` column.

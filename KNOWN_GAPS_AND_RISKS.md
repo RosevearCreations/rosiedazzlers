@@ -706,3 +706,6 @@ Open accounting risks: this remains an operational bookkeeping layer, not profes
 - Some add-on landing pages still rely on branded service graphics or linked product images until real finished-vehicle photos are supplied.
 - Landing page media is still URL-driven in Admin App rather than file-upload-driven.
 - New admin-created /landing/ pages are not automatically written into sitemap.xml yet.
+
+- Admin Catalog now shows a seeded fallback from `rosie_products_catalog.json` and `systems_catalog.json` when the DB inventory is empty or unavailable. This avoids a blank screen, but it is still not a substitute for a proper DB import workflow.
+- Embedded `/book?embed=1` now uses a split Step 1 layout to reduce height on Services and Pricing. Re-check after future booking-form changes because DOM structure changes could require the embed-only layout script to be updated.
