@@ -439,3 +439,8 @@ Current accounting-state note: admin-accounting now includes a year-end tax prep
 - Landing pages now support related products, official links, things-to-know sections, richer FAQ blocks, and shared product-driven rendering through assets/landing-page.js.
 - Folder-backed special-service pages now include ceramic coating, pet hair removal, odor removal, headlight restoration, paint correction, graphene finish, full clay treatment, engine cleaning, high grade paint sealant, UV protectant, exterior wax, and de-ionizing treatment.
 - Town-focused pages remain folder-backed and now include stronger local-value content and official-link sections.
+
+## Add-on media and landing state
+- Add-on cards and add-on landing heroes now prefer pricing-catalog image_url values.
+- Services and Pricing use one combined image-backed landing button section for add-ons and special detailing pages.
+- Town landing pages remain separate below that section.

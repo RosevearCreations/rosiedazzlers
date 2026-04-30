@@ -558,3 +558,7 @@ The accounting direction has moved from month-end/year-end reporting only into w
 - 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.
 
 > Refreshed during the 2026-04-30 product-linked landing-page pass.
+
+## Latest pass notes
+- Real add-on image URLs are now the preferred source in the pricing catalog data and should be edited through Admin App rather than hard-coded into page templates.
+- IMAGES.md explains where each image type belongs and which Admin App editor controls it.
