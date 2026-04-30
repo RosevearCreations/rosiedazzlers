@@ -562,3 +562,5 @@ The accounting direction has moved from month-end/year-end reporting only into w
 ## Latest pass notes
 - Real add-on image URLs are now the preferred source in the pricing catalog data and should be edited through Admin App rather than hard-coded into page templates.
 - IMAGES.md explains where each image type belongs and which Admin App editor controls it.
+
+- Current repo behavior after the latest repair pass: `/pricing` and `/services` embed `/book?embed=1`, but embed mode now rewrites Step 1 into two columns so the iframe can be shorter while leaving the full `/book` page unchanged. Admin Catalog falls back to the local consumables/gear JSON catalogs if DB inventory is empty.

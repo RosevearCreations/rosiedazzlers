@@ -444,3 +444,5 @@ Current accounting-state note: admin-accounting now includes a year-end tax prep
 - Add-on cards and add-on landing heroes now prefer pricing-catalog image_url values.
 - Services and Pricing use one combined image-backed landing button section for add-ons and special detailing pages.
 - Town landing pages remain separate below that section.
+
+- April 30, 2026 repair pass: fixed `/pricing` crash caused by an undefined `landingData` variable, reduced the embedded booking height by splitting Step 1 into a two-column embed-only layout, added seeded fallback visibility for consumables/gear in Admin Inventory when DB rows are empty, and patched payroll/time endpoints to stop requesting the missing `job_time_entries.staff_name` column.
