@@ -232,7 +232,7 @@ async function loadBookingsInRange(env, range) {
 }
 
 async function loadAllTimeEntries(env) {
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/job_time_entries?select=id,booking_id,staff_user_id,staff_name,minutes,entry_type,event_time,created_at,note&order=created_at.asc&limit=10000`, { headers: serviceHeaders(env) });
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/job_time_entries?select=id,booking_id,staff_user_id,minutes,entry_type,event_time,created_at,note&order=created_at.asc&limit=10000`, { headers: serviceHeaders(env) });
   if (!res.ok) throw new Error(`Could not load job time entries. ${await res.text()}`);
   return await res.json().catch(() => []);
 }

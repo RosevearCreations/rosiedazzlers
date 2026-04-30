@@ -131,6 +131,15 @@
     body.is-embed .panel, body.is-embed .card, body.is-embed .service-card, body.is-embed .addon-card{overflow:hidden}
     body.is-embed .service-card strong, body.is-embed .service-card span, body.is-embed .addon-card strong, body.is-embed .addon-card span{display:block;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
     .sr-only{position:absolute;left:-9999px;opacity:0;pointer-events:none}
+
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid{display:grid;grid-template-columns:minmax(360px,1.05fr) minmax(340px,.95fr);gap:16px;align-items:start;margin-top:12px}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid > .panel-group{display:grid;gap:12px;min-width:0}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .grid2,
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .grid3,
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .service-area-grid{grid-template-columns:1fr}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .step-head{margin-bottom:0}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .hr{margin:0}
+    @media (max-width:980px){body.is-embed .wizard-step[data-step="1"] .embed-step1-grid{grid-template-columns:1fr}}
     @media (max-width:980px){
       .grid2,.grid3,.requirements-grid,.service-area-grid{grid-template-columns:1fr}
       .preferred-date-field,.date-input-wrap{max-width:100%;width:100%}
@@ -531,6 +540,36 @@
       const kicker = qs("#wizardTop .page-kicker");
       if (title) title.textContent = "Start your self-serve booking";
       if (kicker) kicker.textContent = "Use the live booking planner below to see location restrictions, 21-day availability windows, exact package/add-on choices, and deposit-ready booking details before checkout.";
+      setupEmbedStepOneLayout();
+    }
+    function setupEmbedStepOneLayout() {
+      if (!embedMode) return;
+      const step = document.querySelector('.wizard-step[data-step="1"]');
+      if (!step || step.querySelector('.embed-step1-grid')) return;
+      const groups = Array.from(step.children);
+      const serviceArea = groups.find((el)=> el.classList && el.classList.contains('service-area-grid'));
+      if (!serviceArea) return;
+      const hr = groups.find((el)=> el.classList && el.classList.contains('hr'));
+      const secondHeadIndex = hr ? groups.index(hr)+1 : -1;
+      const secondHead = secondHeadIndex>0 ? groups[secondHeadIndex] : null;
+      const primary = document.createElement('div');
+      primary.className = 'panel-group';
+      const secondary = document.createElement('div');
+      secondary.className = 'panel-group';
+      const wrapper = document.createElement('div');
+      wrapper.className = 'embed-step1-grid';
+      wrapper.append(primary, secondary);
+      const primaryNodes=[];
+      const secondaryNodes=[];
+      let seenVehicle=false;
+      for (const el of groups.slice(groups.index(serviceArea))) {
+        if (el === hr) continue;
+        if (el === secondHead) { seenVehicle=true; secondaryNodes.push(el); continue; }
+        if (!seenVehicle) primaryNodes.push(el); else secondaryNodes.push(el);
+      }
+      primaryNodes.forEach((el)=> primary.appendChild(el));
+      secondaryNodes.forEach((el)=> secondary.appendChild(el));
+      step.appendChild(wrapper);
     }
 
     function postEmbedHeight() {
@@ -541,7 +580,7 @@
         shell ? shell.offsetHeight : 0,
         980
       );
-      const height = Math.min(window.innerWidth <= 980 ? 1600 : 1280, rawHeight);
+      const height = Math.min(window.innerWidth <= 980 ? 1380 : 1120, rawHeight);
       window.parent.postMessage({ type: "rd-book-embed-size", height }, "*");
     }
 
@@ -901,6 +940,7 @@
     }
 
     async function loadGarageVehicles() {
+      if (embedMode) return;
       try {
         const res = await fetch("/api/client/dashboard", { credentials:"include", cache:"no-store" });
         const out = await res.json().catch(() => null);
