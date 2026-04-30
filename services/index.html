@@ -1,71 +1,100 @@
-<!-- /services.html
-     REPLACE ENTIRE FILE
-
-     Purpose:
-     - Root services page (matches your /services route)
-     - Restores a hero banner at the top
-     - Renders package cards + hover/tap carousel:
-         [main package image for selected size] -> Interior Detail -> Exterior Detail -> Car Size Chart
-     - Renders add-ons with images (where available)
-     - Uses the shared theme + shared nav/footer via /assets/chrome.js
--->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mobile Auto Detailing Services in Oxford & Norfolk Counties | Rosie Dazzlers</title>
-  <meta name="description" content="Explore Rosie Dazzlers mobile auto detailing services in Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi, Port Dover, and nearby Oxford and Norfolk County communities, then check live availability and book online." />
-  <link rel="canonical" href="https://rosiedazzlers.ca/services" />
-  <meta property="og:title" content="Mobile Auto Detailing Services | Rosie Dazzlers" />
-  <meta property="og:description" content="See Rosie Dazzlers detailing packages, what is included, add-ons, and service options for small, mid-size, and oversized vehicles." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260425visibility1" />
-  <script type="application/ld+json" id="servicesSchema">
+  <title>Mobile Auto Detailing Prices in Oxford & Norfolk Counties | Rosie Dazzlers</title>
+  <meta name="description" content="See Rosie Dazzlers mobile auto detailing prices for Oxford County and Norfolk County, then use the live booking planner for availability, service zones, add-ons, and deposit-ready totals." />
+  <link rel="canonical" href="https://rosiedazzlers.ca/pricing" />
+  <meta property="og:title" content="Mobile Auto Detailing Pricing | Rosie Dazzlers" />
+  <meta property="og:description" content="Transparent Rosie Dazzlers pricing for premium wash, basic detail, complete detail, interior detail, exterior detail, add-ons, and special detailing pages." />
+  <link rel="stylesheet" href="/assets/site.css?v=20260430pricingfix1" />
+  <script type="application/ld+json" id="pricingSchema">
   {
     "@context": "https://schema.org",
     "@type": "AutoDetailing",
     "name": "Rosie Dazzlers Mobile Auto Detailing",
-    "url": "https://rosiedazzlers.ca/services",
+    "url": "https://rosiedazzlers.ca/pricing",
     "areaServed": ["Oxford County, Ontario", "Norfolk County, Ontario"]
   }
   </script>
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    @media (max-width:1100px){ .grid3{grid-template-columns:repeat(2,1fr)} }
-    @media (max-width:980px){ .grid2,.grid3{grid-template-columns:1fr} }
+    @media (max-width:980px){ .grid2{grid-template-columns:1fr} }
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .muted{color:rgba(234,242,255,.62)}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-
-    .cardImg{
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.10);vertical-align:top}
+    th{color:rgba(234,242,255,.70);font-weight:600;text-align:left}
+    .img{
       width:100%;
-      aspect-ratio:16/10;
-      object-fit:cover;
+      height:auto;
       border-radius:16px;
       border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.04);
+      cursor:zoom-in;
+      transition:transform .18s ease, box-shadow .18s ease;
+      transform-origin:center center;
     }
+    @media (hover:hover){
+      .img:hover{
+        transform:scale(1.48);
+        position:relative;
+        z-index:3;
+        box-shadow:0 18px 44px rgba(0,0,0,.42);
+      }
+    }
+    .chart-wrap{overflow:visible}
+    .chart-note{margin-top:8px;color:rgba(234,242,255,.62);font-size:.92rem}
+    .modalBack{position:fixed; inset:0; background:rgba(0,0,0,.72); display:none; align-items:center; justify-content:center; z-index:9999; padding:18px;}
+    .modal{max-width:1200px; width:100%; border:1px solid rgba(255,255,255,.12); background:rgba(10,14,24,.96); border-radius:18px; padding:14px;}
+    .modal img{width:100%; height:auto; border-radius:14px; border:1px solid rgba(255,255,255,.10)}
+    .modalHead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
     .tag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-size:.9rem}
     .tag.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
     .tag.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
     .mini{font-size:.92rem}
+    .booking-lead{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
+    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;height:1220px;min-height:1220px;max-height:1220px}
+    .booking-embed-frame{display:block;width:100%;height:1220px;min-height:1220px;max-height:1220px;border:0;background:transparent;overflow:auto}
+    .booking-side{display:grid;gap:12px}
+    @media (max-width:980px){
+      .booking-lead{grid-template-columns:1fr}
+      .booking-embed-shell{height:1480px;min-height:1480px;max-height:1480px}
+      .booking-embed-frame{height:1480px;min-height:1480px;max-height:1480px}
+    }
 
-    .service-size-field{min-width:180px;max-width:220px}
-    .service-size-field span{font-size:.9rem;line-height:1.2}
-    .service-size-field select{min-height:42px;padding:8px 12px}
-    .addon-grid .panel,.package-grid .panel{min-width:0}
-    ul.tight{margin:8px 0 0 18px;padding:0}
-    ul.tight li{margin:4px 0}
-
-    /* Modal */
-    .modalBack{position:fixed; inset:0; background:rgba(0,0,0,.70); display:none; align-items:center; justify-content:center; z-index:9999; padding:18px;}
-    .modal{max-width:1100px; width:100%; border:1px solid rgba(255,255,255,.12); background:rgba(10,14,24,.96); border-radius:18px; padding:14px;}
-    .modal img{width:100%; height:auto; border-radius:14px; border:1px solid rgba(255,255,255,.10)}
-    .modalHead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
+    .landing-button-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+      margin-top:14px;
+    }
+    @media (max-width:1100px){ .landing-button-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+    @media (max-width:720px){ .landing-button-grid{grid-template-columns:1fr;} }
+    .landing-button-card{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      padding:14px;
+      display:grid;
+      gap:10px;
+      align-content:start;
+    }
+    .landing-button-card h3{margin:0;font-size:1rem}
+    .landing-button-card p{margin:0;color:rgba(234,242,255,.68);font-size:.92rem}
+    .landing-subgroup{
+      margin-top:14px;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+    .landing-subgroup:first-of-type{
+      margin-top:0;
+      padding-top:0;
+      border-top:0;
+    }
   </style>
 </head>
-
 <body>
   <div class="nav">
     <div class="nav-inner">
@@ -81,105 +110,237 @@
 
   <div class="container">
     <div class="panel">
-      <img data-banner alt="Rosie Dazzlers banner"
-           style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)" />
-
-      <h1 style="margin:14px 0 6px">Mobile auto detailing services</h1>
+      <h1 style="margin:0 0 6px">Mobile auto detailing prices</h1>
       <p class="kicker" style="margin:0">
-        Clear packages with optional add-ons. We come to you across <strong>Norfolk</strong> & <strong>Oxford</strong> Counties.
+        Transparent pricing, live booking availability, and direct paths into package, add-on, and special-detail service pages.
       </p>
-
       <div class="section row" id="publicRequirementTags" style="margin-top:12px"></div>
-
-      <div class="hr"></div>
-
-      <div class="row">
-        <label class="service-size-field" style="display:flex;flex-direction:column;gap:6px">
-          <span class="muted">Vehicle size</span>
-          <select id="sizeSel">
-            <option value="small">Small</option>
-            <option value="mid">Mid-sized</option>
-            <option value="oversize">Over-size / Exotic</option>
-          </select>
-        </label>
-
-        <div class="row" style="align-items:flex-end">
-          <button class="btn ghost" id="openSizeChartBtn" type="button">Open size chart</button>
-          <button class="btn ghost" id="openPriceChartBtn" type="button">Open price chart</button>
-          <button class="btn ghost" id="openDetailsChartBtn" type="button">Open details chart</button>
-          <a class="btn ghost" href="/pricing">Pricing page</a>
-        </div>
-      </div>
-
       <div id="loadErr" class="notice bad" style="display:none;margin-top:12px"></div>
     </div>
 
-    <div class="section panel">
-      <h2 style="margin-top:0">See exact live availability before checkout</h2>
-      <p class="muted">Use the same booking-led planner to check 21-day date windows, service-area restrictions, add-ons, and deposit-ready totals before you commit.</p>
-      <div class="row" style="margin-top:12px">
-        <a class="btn primary" href="/pricing#booking-planner">Open the live booking planner</a>
-        <a class="btn ghost" href="/book">Go to full booking</a>
-        <a class="btn ghost" href="/maintenance-plan">Recurring-plan interest</a>
+    <div class="section grid2">
+      <div class="panel chart-wrap">
+        <h2 style="margin-top:0">Vehicle Price Chart</h2>
+        <img class="img chart-preview" data-chart-key="Vehicle Price Chart 2025" alt="Vehicle Price Chart 2025" src="" />
+        <div class="chart-note">Generated live from the current pricing catalog when available. Hover to enlarge on desktop. Tap to open on mobile.</div>
+      </div>
+
+      <div class="panel chart-wrap">
+        <h2 style="margin-top:0">Package Service Details</h2>
+        <img class="img chart-preview" data-chart-key="Package Service Details Chart" alt="Package Service Details Chart" src="" />
+        <div class="chart-note">Hover to enlarge on desktop. Tap to open on mobile.</div>
       </div>
     </div>
 
     <div class="section">
-      <div class="grid3" id="pkgGrid"></div>
-    </div>
-
-    <div class="section panel">
-      <h2 style="margin-top:0">Add-ons</h2>
-      <p class="muted mini" style="margin-top:6px">
-        Some add-ons are <strong>quote required</strong> (requested online, priced after inspection).
-      </p>
-      <div class="grid3" id="addonGrid" style="margin-top:12px"></div>
-
-      <div class="hr"></div>
-
-      <h2 style="margin-top:0">Gift Certificates</h2>
-      <p class="muted mini" style="margin-top:6px">
-        Gifts are a separate system from booking. Buy a service gift or dollar amount gift and redeem it later with a code.
-      </p>
-      <div class="row" style="margin-top:10px">
-        <a class="btn primary" href="/gifts">Buy a gift certificate</a>
-        <a class="btn ghost" href="/book">Book with a gift code</a>
+      <div class="panel chart-wrap">
+        <h2 style="margin-top:0">Vehicle Size Chart</h2>
+        <img class="img chart-preview" data-chart-key="Vehicle Size Chart" alt="Vehicle Size Chart" src="" />
+        <div class="chart-note">Generated live from the current size guide. Hover to enlarge on desktop. Tap to open on mobile.</div>
       </div>
     </div>
 
-    <div class="section panel">
-      <h2 style="margin-top:0">Special detailing landing pages</h2>
-      <p class="muted">These pages target the specific services people search for most often instead of forcing everything through one broad services page.</p>
-      <div class="service-link-grid" style="margin-top:12px">
-        <article class="service-link-card"><h3>Ceramic coating</h3><p class="muted">Protection, gloss, and coating preparation.</p><a class="btn ghost small" href="/ceramic-coating">Open page</a></article>
-        <article class="service-link-card"><h3>Pet hair removal</h3><p class="muted">Embedded pet hair, fabric cleanup, and interior recovery.</p><a class="btn ghost small" href="/pet-hair-removal">Open page</a></article>
-        <article class="service-link-card"><h3>Odor removal</h3><p class="muted">Source-focused interior deodorizing and treatment planning.</p><a class="btn ghost small" href="/odor-removal">Open page</a></article>
-        <article class="service-link-card"><h3>Headlight restoration</h3><p class="muted">Cloudy lens cleanup and clarity recovery.</p><a class="btn ghost small" href="/headlight-restoration">Open page</a></article>
-        <article class="service-link-card"><h3>Paint correction</h3><p class="muted">Swirl reduction, gloss recovery, and inspection-led quoting.</p><a class="btn ghost small" href="/paint-correction">Open page</a></article>
-        <article class="service-link-card"><h3>Graphene finish</h3><p class="muted">Prep-led finish page tied to qualifying exterior packages.</p><a class="btn ghost small" href="/graphene-finish">Open page</a></article>
-        <article class="service-link-card"><h3>Full clay treatment</h3><p class="muted">Bonded-contamination removal and prep before protection.</p><a class="btn ghost small" href="/full-clay-treatment">Open page</a></article>
-        <article class="service-link-card"><h3>Engine cleaning</h3><p class="muted">Stand-alone engine-bay service with workflow and caution notes.</p><a class="btn ghost small" href="/engine-cleaning">Open page</a></article>
-        <article class="service-link-card"><h3>High grade paint sealant</h3><p class="muted">Practical protection upgrade between wax and coating-level paths.</p><a class="btn ghost small" href="/high-grade-paint-sealant">Open page</a></article>
-        <article class="service-link-card"><h3>UV protectant</h3><p class="muted">Interior panel protectant page with prep and package-fit notes.</p><a class="btn ghost small" href="/uv-protectant">Open page</a></article>
-        <article class="service-link-card"><h3>Exterior wax</h3><p class="muted">Classic gloss and protection page with prep and comparison notes.</p><a class="btn ghost small" href="/exterior-wax">Open page</a></article>
-        <article class="service-link-card"><h3>De-ionizing treatment</h3><p class="muted">Water-management support page for cleaner rinse and finish stages.</p><a class="btn ghost small" href="/de-ionizing-treatment">Open page</a></article>
+    <div class="section" id="booking-planner">
+      <div class="panel">
+        <div class="row" style="justify-content:space-between;align-items:flex-start">
+          <div>
+            <h2 style="margin:0">Start with the live booking planner</h2>
+            <p class="muted mini">The self-serve path begins here so customers keep the same service-area restrictions, date browsing, slot availability, package logic, and add-on rules used on the booking page.</p>
+          </div>
+          <span class="tag ok">Booking-led self-serve</span>
+        </div>
+        <div class="booking-lead" style="margin-top:14px">
+          <div class="booking-embed-shell">
+            <iframe id="bookingPlannerFrame" class="booking-embed-frame" title="Rosie Dazzlers booking planner" loading="lazy" src="/book?embed=1"></iframe>
+          </div>
+          <div class="booking-side">
+            <div class="panel" style="background:rgba(255,255,255,.02)">
+              <h3 style="margin-top:0">Why this is the first step now</h3>
+              <ul style="margin:0;padding-left:18px;display:grid;gap:8px">
+                <li>See service-area restrictions before choosing a slot.</li>
+                <li>Browse live date windows and available times.</li>
+                <li>Match vehicle, package, and allowed add-ons in one flow.</li>
+                <li>Move directly into deposit-ready checkout.</li>
+              </ul>
+            </div>
+            <div class="panel" style="background:rgba(255,255,255,.02)">
+              <h3 style="margin-top:0">Need help choosing?</h3>
+              <p class="muted">Use the add-on and special-detail buttons below if you need more explanation before booking. Those pages are now the main service-education pages instead of duplicate pricing boxes.</p>
+              <div class="row" style="margin-top:10px">
+                <a class="btn primary" href="/book">Open full booking</a>
+                <a class="btn ghost" href="/services">Compare services</a>
+                <a class="btn ghost" href="/contact">Ask a question</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="panel">
+        <div class="row" style="justify-content:space-between">
+          <h2 style="margin:0">Packages</h2>
+          <div class="muted mini">Click “Book” to prefill package + size.</div>
+        </div>
+        <div class="hr"></div>
+        <div style="overflow:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Package</th>
+                <th>Small</th>
+                <th>Mid</th>
+                <th>Over-size</th>
+                <th>Deposit</th>
+              </tr>
+            </thead>
+            <tbody id="rows">
+              <tr><td colspan="5" class="muted">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hr"></div>
+        <div class="row">
+          <a class="btn primary" href="/book">Book now</a>
+          <a class="btn ghost" href="/services">What’s included</a>
+          <a class="btn ghost" href="/gifts">Gift certificates</a>
+        </div>
       </div>
     </div>
 
     <section class="section panel">
-      <h2 style="margin:0 0 10px">Town-focused detailing pages</h2>
-      <p class="muted">These location pages keep the folder-backed clean-route baseline while giving your strongest service towns clearer local wording, recent work, and review proof.</p>
-      <div class="local-town-grid" style="margin-top:12px">
-        <article class="local-town-card"><h3>Tillsonburg</h3><p class="muted">Local page for the core home-base service area.</p><a class="btn ghost small" href="/tillsonburg-auto-detailing">Open page</a></article>
-        <article class="local-town-card"><h3>Woodstock / Ingersoll</h3><p class="muted">Oxford County route-focused page for frequent travel questions.</p><a class="btn ghost small" href="/woodstock-ingersoll-auto-detailing">Open page</a></article>
-        <article class="local-town-card"><h3>Simcoe / Delhi</h3><p class="muted">Norfolk-side page with travel and booking wording for that cluster.</p><a class="btn ghost small" href="/simcoe-delhi-auto-detailing">Open page</a></article>
-        <article class="local-town-card"><h3>Port Dover</h3><p class="muted">Dedicated page for Port Dover detailing visibility and booking intent.</p><a class="btn ghost small" href="/port-dover-auto-detailing">Open page</a></article>
+      <h2 style="margin-top:0">Add-ons &amp; special detailing pages</h2>
+      <p class="muted">This is now one combined section. Use these buttons for service-specific education, process details, products used, expectations, and booking fit.</p>
+
+      <div class="landing-subgroup">
+        <h3 style="margin:0">Add-on pages</h3>
+        <div class="landing-button-grid">
+          <article class="landing-button-card">
+            <h3>Full Clay Treatment</h3>
+            <p>Decontamination, bonded-surface cleanup, and prep before protection work.</p>
+            <a class="btn ghost small" href="/full-clay-treatment">Open page</a>
+          </article>
+          <article class="landing-button-card">
+            <h3>Two Stage Polish</h3>
+            <p>Inspection-led polishing page for heavier correction and gloss recovery work.</p>
+            <a class="btn ghost small" href="/two-stage-polish">Open page</a>
+          </article>
+          <article class="landing-button-card">
+            <h3>High Grade Paint Sealant</h3>
+            <p>Paint-protection page for customers comparing sealant versus other exterior finishes.</p>
+            <a class="btn ghost small" href="/high-grade-paint-sealant">Open page</a>
+          </article>
+          <article class="landing-button-card">
+            <h3>UV Protectant</h3>
+            <p>Interior trim protection page with prep requirements and realistic use cases.</p>
+            <a class="btn ghost small" href="/uv-protectant">Open page</a>
+          </article>
+          <article class="landing-button-card">
+            <h3>De-Ionizing Treatment</h3>
+            <p>Water-spot and mineral-control page with treatment and rinse-planning context.</p>
+            <a class="btn ghost small" href="/de-ionizing-treatment">Open page</a>
+          </article>
+          <article class="landing-button-card">
+            <h3>De-Badging</h3>
+            <p>Badge removal, adhesive cleanup, and finish-correction planning.</p>
+            <a class="btn ghost small" href="/de-badging">Open page</a>
+          </article>
+          <article class="landing-button-card">
+            <h3>Engine Cleaning</h3>
+            <p>Engine-bay detailing page with access, safety, and condition guidance.</p>
+            <a class="btn ghost small" href="/engine-cleaning">Open page</a>
+          </article>
+          <article class="landing-button-card">
+            <h3>External Ceramic Coating</h3>
+            <p>Exterior-only coating add-on page with prep and quote expectations.</p>
+            <a class="btn ghost small" href="/external-ceramic-coating">Open page</a>
+          </article>
+          <article class="landing-button-card">
+            <h3>Graphene Finish</h3>
+            <p>Graphene-finish page with product transparency and prep requirements.</p>
+            <a class="btn ghost small" href="/graphene-finish">Open page</a>
+          </article>
+          <article class="landing-button-card">
+            <h3>Exterior Wax</h3>
+            <p>Wax page for customers comparing shorter-term shine versus coating paths.</p>
+            <a class="btn ghost small" href="/exterior-wax">Open page</a>
+          </article>
+          <article class="landing-button-card">
+            <h3>Vinyl Wrapping</h3>
+            <p>Vinyl wrap support page with prep, limitations, and protection notes.</p>
+            <a class="btn ghost small" href="/vinyl-wrapping">Open page</a>
+          </article>
+          <article class="landing-button-card">
+            <h3>Window Tinting</h3>
+            <p>Window tint page with prep, inspection, and follow-up expectations.</p>
+            <a class="btn ghost small" href="/window-tinting">Open page</a>
+          </article>
+        </div>
+      </div>
+
+      <div class="landing-subgroup">
+        <h3 style="margin:0">Special detailing pages</h3>
+        <div class="landing-button-grid">
+          <article class="landing-button-card">
+            <h3>Ceramic Coating</h3>
+            <p>Dedicated search-facing coating page with process, products, and prep guidance.</p>
+            <a class="btn ghost small" href="/ceramic-coating">Open page</a>
+          </article>
+          <article class="landing-button-card">
+            <h3>Pet Hair Removal</h3>
+            <p>Interior recovery page for embedded pet hair, dander, and cleanup expectations.</p>
+            <a class="btn ghost small" href="/pet-hair-removal">Open page</a>
+          </article>
+          <article class="landing-button-card">
+            <h3>Odor Removal</h3>
+            <p>Odor source-cleaning and inspection-led service explanation page.</p>
+            <a class="btn ghost small" href="/odor-removal">Open page</a>
+          </article>
+          <article class="landing-button-card">
+            <h3>Headlight Restoration</h3>
+            <p>Clarity recovery page for cloudy or oxidized lenses.</p>
+            <a class="btn ghost small" href="/headlight-restoration">Open page</a>
+          </article>
+          <article class="landing-button-card">
+            <h3>Paint Correction</h3>
+            <p>Inspection-led correction page for swirls, haze, gloss recovery, and expectations.</p>
+            <a class="btn ghost small" href="/paint-correction">Open page</a>
+          </article>
+        </div>
       </div>
     </section>
 
-    <div class="section panel">
-      <h2 style="margin-top:0">Recent work, reviews, and local service areas</h2>
-      <p class="muted">Show current work and clear service-area wording close to the booking CTA so local visitors do not have to dig for proof or location details.</p>
+    <section class="section panel">
+      <h2 style="margin-top:0">Town-focused detailing pages</h2>
+      <p class="muted">These pages keep the folder-backed route approach and give the strongest service-area towns their own local wording, review proof, and recent-work support.</p>
+      <div class="landing-button-grid">
+        <article class="landing-button-card">
+          <h3>Tillsonburg</h3>
+          <p>Dedicated page for local booking intent, travel wording, municipal notes, and detailing questions.</p>
+          <a class="btn ghost small" href="/tillsonburg-auto-detailing">Open page</a>
+        </article>
+        <article class="landing-button-card">
+          <h3>Woodstock / Ingersoll</h3>
+          <p>Combined page for nearby Oxford County bookings, route questions, and local detailing visibility.</p>
+          <a class="btn ghost small" href="/woodstock-ingersoll-auto-detailing">Open page</a>
+        </article>
+        <article class="landing-button-card">
+          <h3>Simcoe / Delhi</h3>
+          <p>Combined page for Norfolk-side detailing demand, travel guidance, and local trust signals.</p>
+          <a class="btn ghost small" href="/simcoe-delhi-auto-detailing">Open page</a>
+        </article>
+        <article class="landing-button-card">
+          <h3>Port Dover</h3>
+          <p>Dedicated page for shoreline-area service intent, local wording, and proof of current work.</p>
+          <a class="btn ghost small" href="/port-dover-auto-detailing">Open page</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section panel">
+      <h2 style="margin-top:0">Recent work and local proof</h2>
+      <p class="muted">Pricing converts better when visitors can immediately see recent jobs, review proof, and the towns you actually serve.</p>
       <div data-recent-work-mount style="margin-top:12px"></div>
       <div class="hr"></div>
       <div class="proof-grid">
@@ -188,34 +349,26 @@
           <img data-reviews src="/assets/brand/rosie-reviews-fallback.svg" alt="Rosie Dazzlers reviews" class="proof-media" />
         </article>
         <article class="proof-card">
-          <h3>Strongest service-area wording</h3>
-          <p class="muted">Tillsonburg, Woodstock, Ingersoll, Norwich, Simcoe, Delhi, Courtland, Port Dover, and nearby Oxford / Norfolk County communities.</p>
+          <h3>Common service areas</h3>
+          <p class="muted">Tillsonburg, Woodstock, Ingersoll, Norwich, Simcoe, Delhi, Courtland, Port Dover, and nearby Oxford / Norfolk communities.</p>
           <div class="cta-row" style="margin-top:10px">
-            <a class="btn ghost small" href="/pricing#booking-planner">Check live availability</a>
-            <a class="btn ghost small" href="/contact">Ask about your town</a>
+            <a class="btn ghost small" href="/gallery">Gallery</a>
+            <a class="btn ghost small" href="/contact">Ask about travel</a>
           </div>
         </article>
-        <article class="service-link-card"><h3>Graphene finish</h3><p class="muted">Prep-led finish page tied to qualifying exterior packages.</p><a class="btn ghost small" href="/graphene-finish">Open page</a></article>
-        <article class="service-link-card"><h3>Full clay treatment</h3><p class="muted">Bonded-contamination removal and prep before protection.</p><a class="btn ghost small" href="/full-clay-treatment">Open page</a></article>
-        <article class="service-link-card"><h3>Engine cleaning</h3><p class="muted">Stand-alone engine-bay service with workflow and caution notes.</p><a class="btn ghost small" href="/engine-cleaning">Open page</a></article>
-        <article class="service-link-card"><h3>High grade paint sealant</h3><p class="muted">Practical protection upgrade between wax and coating-level paths.</p><a class="btn ghost small" href="/high-grade-paint-sealant">Open page</a></article>
-        <article class="service-link-card"><h3>UV protectant</h3><p class="muted">Interior panel protectant page with prep and package-fit notes.</p><a class="btn ghost small" href="/uv-protectant">Open page</a></article>
-        <article class="service-link-card"><h3>Exterior wax</h3><p class="muted">Classic gloss and protection page with prep and comparison notes.</p><a class="btn ghost small" href="/exterior-wax">Open page</a></article>
-        <article class="service-link-card"><h3>De-ionizing treatment</h3><p class="muted">Water-management support page for cleaner rinse and finish stages.</p><a class="btn ghost small" href="/de-ionizing-treatment">Open page</a></article>
       </div>
-    </div>
+    </section>
 
     <div class="footer" data-footer></div>
   </div>
 
-  <!-- MODAL -->
-  <div class="modalBack" id="modalBack" role="dialog" aria-modal="true">
+  <div class="modalBack" id="chartModalBack" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modalHead">
-        <strong id="modalTitle">Preview</strong>
-        <button class="btn ghost" id="modalCloseBtn" type="button">Close</button>
+        <strong id="chartModalTitle">Chart Preview</strong>
+        <button class="btn ghost" id="chartModalCloseBtn" type="button">Close</button>
       </div>
-      <img id="modalImg" alt="Preview image" />
+      <img id="chartModalImg" alt="Chart preview" />
     </div>
   </div>
 
@@ -224,256 +377,117 @@
       loadPricingCatalogClient,
       money,
       escapeHtml,
-      addonPrimaryImage,
-      addonFallbackImage,
       chartUrl,
+      publicRequirements,
       buildLivePricingChartDataUri,
       buildLiveServiceDetailsChartDataUri,
       buildLiveVehicleSizeChartDataUri,
-      buildServicesCatalogSchema,
+      buildPricingOfferCatalogSchema,
       applyJsonLdScript
-    } from "/assets/pricing-catalog-client.js?v=20260423livecharts2";
+    } from "/assets/pricing-catalog-client.js?v=20260430pricingfix1";
     import { renderRecentWorkMounts } from "/assets/recent-work.js";
 
-    const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
-    const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
-    const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages";
-
+    const FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260430pricingfix1";
     const qs = (s)=>document.querySelector(s);
+    const qsAll = (s)=>Array.from(document.querySelectorAll(s));
+    let chartMap = new Map();
 
-    async function loadCatalog(){
-      return await loadPricingCatalogClient({ fallbackUrl: DATA_FALLBACK_URL });
+    function openChart(title, src){
+      qs("#chartModalTitle").textContent = title || "Chart Preview";
+      qs("#chartModalImg").src = src || "";
+      qs("#chartModalBack").style.display = "flex";
     }
 
-    function openModal(title,imgUrl){
-      qs("#modalTitle").textContent = title;
-      qs("#modalImg").src = imgUrl;
-      qs("#modalBack").style.display = "flex";
+    function closeChart(){
+      qs("#chartModalBack").style.display = "none";
+      qs("#chartModalImg").src = "";
     }
-    function closeModal(){ qs("#modalBack").style.display="none"; qs("#modalImg").src=""; }
-    qs("#modalCloseBtn").addEventListener("click", closeModal);
-    qs("#modalBack").addEventListener("click",(e)=>{ if(e.target.id==="modalBack") closeModal(); });
 
-    function liveChartSource(title, fallback){
-      if (!data) return fallback;
+    function wireCharts(){
+      qsAll(".chart-preview").forEach((img)=>{
+        const key = img.getAttribute("data-chart-key") || img.alt || "";
+        const src = chartMap.get(key) || "";
+        if (src) img.src = src;
+        img.addEventListener("click", ()=> openChart(key || img.alt, img.src));
+      });
+      qs("#chartModalCloseBtn")?.addEventListener("click", closeChart);
+      qs("#chartModalBack")?.addEventListener("click", (e)=>{ if (e.target.id === "chartModalBack") closeChart(); });
+    }
+
+    function renderRequirementTags(data){
+      const box = qs("#publicRequirementTags");
+      const requirements = publicRequirements(data);
+      box.innerHTML = requirements.length
+        ? requirements.map((row)=> `<span class="tag">${escapeHtml(row)}</span>`).join("")
+        : `<span class="tag">Driveway required</span><span class="tag">Customer provides power + water</span>`;
+    }
+
+    function renderTable(packages){
+      const rows = Array.isArray(packages) ? packages : [];
+      const tbody = qs("#rows");
+      tbody.innerHTML = rows.length ? rows.map((pkg)=>{
+        const small = pkg.prices_cad?.small != null ? money(pkg.prices_cad.small) : "—";
+        const mid = pkg.prices_cad?.mid != null ? money(pkg.prices_cad.mid) : "—";
+        const over = pkg.prices_cad?.oversize != null ? money(pkg.prices_cad.oversize) : "—";
+        const dep = pkg.deposit_cad != null ? money(pkg.deposit_cad) : "—";
+        return `
+          <tr>
+            <td>
+              <strong>${escapeHtml(pkg.name || "")}</strong>
+              ${pkg.subtitle ? `<div class="muted mini">${escapeHtml(pkg.subtitle)}</div>` : ""}
+              <div style="margin-top:8px">
+                <a class="btn ghost small" href="/book?pkg=${encodeURIComponent(pkg.code || "")}&size=small">Book</a>
+              </div>
+            </td>
+            <td>${small}</td>
+            <td>${mid}</td>
+            <td>${over}</td>
+            <td>${dep}</td>
+          </tr>
+        `;
+      }).join("") : `<tr><td colspan="5" class="muted">No packages found.</td></tr>`;
+    }
+
+    function chartSource(data, title, fallback){
       if (title === "Vehicle Price Chart 2025") return buildLivePricingChartDataUri(data) || chartUrl(data, title) || fallback;
       if (title === "Package Service Details Chart") return buildLiveServiceDetailsChartDataUri(data) || chartUrl(data, title) || fallback;
       if (title === "Vehicle Size Chart") return buildLiveVehicleSizeChartDataUri(data) || chartUrl(data, title) || fallback;
       return chartUrl(data, title) || fallback;
     }
 
-    function openCatalogChart(title, fallback){
-      openModal(title, liveChartSource(title, fallback));
-    }
-
-    qs("#openSizeChartBtn").addEventListener("click",()=> openCatalogChart("Vehicle Size Chart", `${PACKAGES_BASE}/CarSizeChart.PNG`));
-    qs("#openPriceChartBtn").addEventListener("click",()=> openCatalogChart("Vehicle Price Chart 2025", `${BRAND_BASE}/CarPrice2025.PNG`));
-    qs("#openDetailsChartBtn").addEventListener("click",()=> openCatalogChart("Package Service Details Chart", `${BRAND_BASE}/CarPriceDetails2025.PNG`));
-
-    function encodeFile(name){
-      return encodeURIComponent(name).replace(/%2F/g,"/");
-    }
-    function imgUrlFromFilename(filename){
-      return `${PACKAGES_BASE}/${encodeFile(filename)}`;
-    }
-
-    const HOVER_EXTRA_IMAGES = [
-      imgUrlFromFilename("Interior Detail.png"),
-      imgUrlFromFilename("Exterior Detail.png"),
-      `${PACKAGES_BASE}/CarSizeChart.PNG`,
-    ];
-
-    const ADDON_IMAGE_FILES = {
-      de_ionizing_treatment: "De-Ionizing Vehicle Add on service.png",
-      de_badging: "DeBadgingAddonService.png",
-      engine_cleaning: "Engine Cleaning add on service.png",
-      external_ceramic_coating: "External Ceramic coating add on service.png",
-      external_graphene_fine_finish: "External Graphene Fine finish add on service.png",
-      external_wax: "External Wax add on service.png",
-      vinyl_wrapping: "Vinyl Wrapping add on service.png",
-      window_tinting: "Window Tinting add on service.png",
-      full_clay_treatment: "full_clay_treatment.png",
-      two_stage_polish: "two_stage_polish.png",
-      high_grade_paint_sealant: "high_grade_paint_sealant.png",
-      uv_protectant_applied_on_interior_panels: "uv_protectant_applied_on_interior_panels.png",
-    };
-    const ADDON_IMAGES = Object.fromEntries(Object.entries(ADDON_IMAGE_FILES).map(([code, file]) => [code, imgUrlFromFilename(file)]));
-    function addonFallback(code){
-      const addon = (data?.addons || []).find((row) => row?.code === String(code || "").trim()) || { code };
-      return addonFallbackImage(addon) || `/assets/addons/${String(code || "").trim()}.png`;
-    }
-
-    function sizeKey(){ return qs("#sizeSel").value; }
-
-    function attachHoverCarousel(imgEl, getImagesFn){
-      let timer = null;
-      let idx = 0;
-      const INTERVAL = 1600;
-
-      const setImg = (url)=>{
-        imgEl.dataset.activeUrl = url;
-        imgEl.src = url;
-      };
-
-      const start = ()=>{
-        const imgs = getImagesFn();
-        if (!imgs.length) return;
-        idx = 0;
-        setImg(imgs[idx]);
-        timer = setInterval(()=>{
-          idx = (idx + 1) % imgs.length;
-          setImg(imgs[idx]);
-        }, INTERVAL);
-      };
-
-      const stop = ()=>{
-        if (timer) clearInterval(timer);
-        timer = null;
-        const imgs = getImagesFn();
-        if (imgs.length) setImg(imgs[0]);
-      };
-
-      imgEl.addEventListener("mouseenter", start);
-      imgEl.addEventListener("mouseleave", stop);
-      imgEl.addEventListener("click", ()=>{ if (timer) stop(); else start(); });
-    }
-
-    function buildPackageCard(pkg){
-      const sz = sizeKey();
-      const mainImg = pkg.images_by_size?.[sz] || "";
-      const price = pkg.prices_cad?.[sz];
-
-      const el = document.createElement("div");
-      el.className = "panel";
-
-      const inc = Array.isArray(pkg.included_services) ? pkg.included_services : [];
-      const incList = inc.slice(0, 9).map(s=>`<li>${escapeHtml(s.name || "")}</li>`).join("");
-
-      const getImages = ()=>[mainImg, ...HOVER_EXTRA_IMAGES].filter(Boolean);
-
-      el.innerHTML = `
-        <img class="cardImg" alt="${escapeHtml(pkg.name)}" />
-        <div style="margin-top:10px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
-          <div>
-            <h3 style="margin:0">${escapeHtml(pkg.name)}</h3>
-            <div class="muted mini">${escapeHtml(pkg.subtitle || "")}</div>
-          </div>
-          <div style="text-align:right">
-            <div class="tag ok">${price!=null ? money(price) : "$—"}</div>
-            <div class="tag" style="margin-top:6px">Deposit ${money(pkg.deposit_cad || 0)}</div>
-          </div>
-        </div>
-
-        <div class="hr"></div>
-
-        <div class="muted mini"><strong>Included:</strong></div>
-        <ul class="tight">${incList || "<li>(details coming soon)</li>"}</ul>
-
-        <div class="row" style="margin-top:12px;justify-content:space-between">
-          <a class="btn primary" href="/book?pkg=${encodeURIComponent(pkg.code)}&size=${encodeURIComponent(sz)}">Book this</a>
-          <span class="muted mini">Hover/tap image: Interior / Exterior / Size Chart</span>
-        </div>
-      `;
-
-      const img = el.querySelector("img");
-      img.src = mainImg;
-      img.loading = "lazy";
-      img.decoding = "async";
-      img.onerror = ()=>{ img.style.display = "none"; };
-
-      attachHoverCarousel(img, getImages);
-
-      return el;
-    }
-
-    function buildAddonCard(addon){
-      const imageUrl = addonPrimaryImage(addon) || ADDON_IMAGES[addon.code] || null;
-      const fallbackUrl = addonFallback(addon.code);
-
-      const el = document.createElement("div");
-      el.className = "panel";
-
-      const price =
-        addon.quote_required ? null :
-        (addon.prices_cad?.[sizeKey()] ?? addon.price_cad ?? null);
-
-      const badge = addon.quote_required
-        ? `<span class="tag warn">Quote required</span>`
-        : `<span class="tag ok">${price != null ? money(price) : "$—"}</span>`;
-
-      el.innerHTML = `
-        ${imageUrl ? `<img class="cardImg" alt="${escapeHtml(addon.name)}" />` : ``}
-        <div style="margin-top:${imageUrl ? "10px":"0"};display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
-          <div>
-            <h3 style="margin:0">${escapeHtml(addon.name)}</h3>
-          </div>
-          <div style="text-align:right">${badge}</div>
-        </div>
-        <div class="muted mini" style="margin-top:10px">
-          ${addon.quote_required ? "Requested online, priced after inspection." : "Optional add-on service."}
-        </div>
-      `;
-
-      const imgEl = el.querySelector("img");
-      if (imgEl){
-        imgEl.src = imageUrl;
-        imgEl.loading = "lazy";
-        imgEl.decoding = "async";
-        imgEl.onerror = ()=>{
-          if (fallbackUrl && imgEl.src !== new URL(fallbackUrl, window.location.origin).href) {
-            imgEl.src = fallbackUrl;
-            return;
-          }
-          imgEl.style.display = "none";
-        };
+    async function main(){
+      try{
+        const data = await loadPricingCatalogClient({ fallbackUrl: FALLBACK_URL });
+        renderRequirementTags(data);
+        renderTable(data.packages || []);
+        chartMap = new Map([
+          ["Vehicle Price Chart 2025", chartSource(data, "Vehicle Price Chart 2025", "/assets/brand/CarPrice2025.PNG")],
+          ["Package Service Details Chart", chartSource(data, "Package Service Details Chart", "/assets/brand/CarPriceDetails2025.PNG")],
+          ["Vehicle Size Chart", chartSource(data, "Vehicle Size Chart", "https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG")]
+        ]);
+        wireCharts();
+        applyJsonLdScript("pricingSchema", buildPricingOfferCatalogSchema(data, "https://rosiedazzlers.ca/pricing"));
+        if (data._source && data._source !== "api") {
+          const err = qs("#loadErr");
+          err.style.display = "block";
+          err.className = "notice";
+          err.textContent = data._fallback_error
+            ? `Using bundled pricing fallback. ${data._fallback_error}`
+            : "Using bundled pricing fallback.";
+        }
+      } catch (e) {
+        const err = qs("#loadErr");
+        err.style.display = "block";
+        err.textContent = `Failed to load pricing data: ${e.message || e}`;
       }
-
-      return el;
-    }
-
-    function renderAll(data){
-      const pkgGrid = qs("#pkgGrid");
-      const addonGrid = qs("#addonGrid");
-      pkgGrid.innerHTML = "";
-      addonGrid.innerHTML = "";
-
-      const packages = Array.isArray(data?.packages) ? data.packages : [];
-      const addons = Array.isArray(data?.addons) ? data.addons : [];
-
-      pkgGrid.className = "grid3 package-grid";
-      addonGrid.className = "grid3 addon-grid";
-      for (const p of packages) pkgGrid.appendChild(buildPackageCard(p));
-      for (const a of addons) addonGrid.appendChild(buildAddonCard(a));
-    }
-
-    let data = null;
-
-    try {
-      data = await loadCatalog();
-      renderAll(data);
-      applyJsonLdScript("servicesSchema", buildServicesCatalogSchema(data, "https://rosiedazzlers.ca/services"));
-      qs("#sizeSel").addEventListener("change", ()=> renderAll(data));
-      if (data._source && data._source !== "api") {
-        qs("#loadErr").style.display = "block";
-        qs("#loadErr").className = "notice";
-        qs("#loadErr").textContent = data._fallback_error ? `Using bundled pricing fallback. ${data._fallback_error}` : "Using bundled pricing fallback.";
-      }
-    } catch (e) {
-      qs("#loadErr").style.display = "block";
-      qs("#loadErr").textContent = `Failed to load services data: ${e.message || e}`;
-    }
-
-    (function fromQuery(){
       renderRecentWorkMounts(3);
-      const p = new URLSearchParams(location.search);
-      const size = (p.get("size") || "").trim();
-      if (["small","mid","oversize"].includes(size)) {
-        qs("#sizeSel").value = size;
-        if (data) renderAll(data);
-      }
-    })();
-  </script>
+    }
 
-  <script type="module" src="/assets/chrome.js?v=20260311j"></script>
+    qs("#chartModalCloseBtn")?.addEventListener("click", closeChart);
+    qs("#chartModalBack")?.addEventListener("click", (e)=>{ if (e.target.id === "chartModalBack") closeChart(); });
+
+    main();
+  </script>
+  <script type="module" src="/assets/chrome.js?v=20260430pricingfix1"></script>
 </body>
 </html>
