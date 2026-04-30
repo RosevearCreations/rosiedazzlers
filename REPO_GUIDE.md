@@ -321,3 +321,6 @@ Pass 28 sync — 2026-04-20
 
 ## 2026-04-27 repo guide note
 New admin/accounting workflow endpoints were added under `functions/api/admin/` for documents, recurring expenses, bank reconciliation, payroll payout reconciliation, and period close. The related schema migration is `sql/2026-04-27_accounting_workflow_foundation.sql`.
+
+## 2026-04-30 repo note
+- New folder-backed service routes were added for graphene-finish, full-clay-treatment, engine-cleaning, high-grade-paint-sealant, uv-protectant, exterior-wax, and de-ionizing-treatment.

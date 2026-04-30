@@ -424,3 +424,6 @@ The accounting workspace now covers operational ledger, payables, remittance, st
 - Fixed the public review-proof image by hard-wiring the bundled Rosie Dazzlers reviews fallback on pricing and related local/service proof blocks.
 - Extended the accounting workspace beyond reporting into operational workflow foundations: bank reconciliation, receipt/bill document links, recurring expenses, payroll payout reconciliation, and accountant period lock / close control.
 - Added a new SQL migration: `sql/2026-04-27_accounting_workflow_foundation.sql`.
+
+## Latest pass note
+The 2026-04-30 pass expanded the landing-page system into product-linked money pages for multiple add-on services, added more folder-backed service routes, and enriched town pages with more practical local information.

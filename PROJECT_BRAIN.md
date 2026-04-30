@@ -356,3 +356,6 @@ The current live-baseline priorities are: folder-backed clean routes, visible re
 
 ## 2026-04-27 project brain update
 Rosie Dazzlers now has a first real accounting workflow foundation sitting under the existing ledger/reporting layer. The next strongest accounting build should deepen document uploads, vendor defaults, and entry-level reconciliation rather than starting over with a different accounting structure.
+
+## 2026-04-30 memory update
+- The site now uses landing pages as money pages for add-on services, with linked consumables shown directly on the pages to make the service explanations more specific and conversion-oriented.

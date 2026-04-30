@@ -179,3 +179,4 @@ Pass 28 sync — 2026-04-20
 - Added the first town-focused location pages.
 - Stabilized pricing embed behavior.
 
+> Refreshed during the 2026-04-30 product-linked landing-page pass.

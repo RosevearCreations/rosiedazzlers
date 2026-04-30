@@ -426,3 +426,7 @@ Smoke-check after deploy: /pricing, /book, /admin-accounting, and home-page revi
 
 
 - 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.
+
+## 2026-04-30 sanity note
+- Static checks should now include the newly added folder-backed service pages.
+- Confirm these routes after deploy: /graphene-finish, /full-clay-treatment, /engine-cleaning, /high-grade-paint-sealant, /uv-protectant, /exterior-wax, /de-ionizing-treatment.
