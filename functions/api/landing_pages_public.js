@@ -83,7 +83,7 @@ const ADDON_PAGES = {
     related_code: "full_clay_treatment",
     name: "Full Clay Treatment",
     hero_intro: "A clay treatment removes bonded contamination that regular washing leaves behind, helping the paint feel smoother and preparing the surface for wax, sealant, graphene, or ceramic-style protection.",
-    hero_image_url: "/assets/addons/full_clay_treatment.png",
+    hero_image_url: "https://assets.rosiedazzlers.ca/packages/full_clay_treatment.png",
     reasons_page_exists: [
       "Customers often search for clay bar treatment as its own service because they can feel or see contamination even after normal washing.",
       "This page explains why clay is usually a prep step, not a final finish by itself.",
@@ -127,6 +127,7 @@ const ADDON_PAGES = {
     slug: "two-stage-polish",
     related_code: "two_stage_polish",
     name: "Two Stage Polish",
+    hero_image_url: "https://assets.rosiedazzlers.ca/packages/two_stage_polish.png",
     hero_intro: "A two-stage polish is for vehicles that need a heavier correction pass followed by a refining pass, usually because the paint has deeper swirls, haze, or neglected gloss.",
     reasons_page_exists: [
       "This service needs its own page because customers often confuse polishing, paint correction, wax, and ceramic finishing.",
@@ -169,7 +170,7 @@ const ADDON_PAGES = {
     related_code: "high_grade_paint_sealant",
     name: "High Grade Paint Sealant",
     hero_intro: "A paint sealant is a protection-focused exterior finishing step for customers who want stronger durability than a simple shine product, without stepping into a full ceramic-style workflow.",
-    hero_image_url: "/assets/addons/high_grade_paint_sealant.png",
+    hero_image_url: "https://assets.rosiedazzlers.ca/packages/high_grade_paint_sealant.png",
     reasons_page_exists: [
       "This page exists because sealant is often misunderstood as being identical to wax or coating when it is really its own protection choice."
     ],
@@ -210,7 +211,7 @@ const ADDON_PAGES = {
     related_code: "uv_protectant_applied_on_interior_panels",
     name: "UV Protectant",
     hero_intro: "Interior UV protectant helps support vinyl, plastic, and trim after the inside has been properly cleaned. It is a finishing step, not a substitute for full cleaning.",
-    hero_image_url: "/assets/addons/uv_protectant_applied_on_interior_panels.png",
+    hero_image_url: "https://assets.rosiedazzlers.ca/packages/uv_protectant_applied_on_interior_panels.png",
     reasons_page_exists: [
       "Customers often assume protectant can be applied over dirty trim. This page explains why prep matters.",
       "The page also clarifies why this add-on depends on the right base service."
@@ -251,6 +252,7 @@ const ADDON_PAGES = {
     slug: "de-ionizing-treatment",
     related_code: "de_ionizing_treatment",
     name: "De-Ionizing Treatment",
+    hero_image_url: "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png",
     hero_intro: "A de-ionizing treatment is used where mineral-heavy water, spotting, or rinse quality matter. It helps improve the wash and rinse path when water quality is part of the problem.",
     reasons_page_exists: [
       "Customers do not always understand that water quality can affect the finish and spotting risk after a wash.",
@@ -290,6 +292,7 @@ const ADDON_PAGES = {
     slug: "de-badging",
     related_code: "de_badging",
     name: "De-Badging",
+    hero_image_url: "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
     hero_intro: "De-badging removes vehicle badges and adhesive safely, then follows with cleanup and finish recovery where needed so the panel does not look half-finished.",
     reasons_page_exists: [
       "Badge removal sounds simple, but adhesive cleanup and finish recovery are what usually make the difference in the final result."
@@ -329,6 +332,7 @@ const ADDON_PAGES = {
     slug: "engine-cleaning",
     related_code: "engine_cleaning",
     name: "Engine Cleaning",
+    hero_image_url: "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
     hero_intro: "Engine cleaning focuses on safer engine-bay presentation and cleanup, with inspection-led judgment around condition, age, and how aggressive the cleaning path should be.",
     reasons_page_exists: [
       "Engine-bay work needs its own page because it raises different concerns than paint or interior detailing."
@@ -370,7 +374,7 @@ const ADDON_PAGES = {
     related_code: "external_ceramic_coating",
     name: "External Ceramic Coating",
     hero_intro: "External ceramic coating is a coating-focused add-on page for customers who want exterior protection and cleaner maintenance behaviour after the paint has been properly prepared.",
-    hero_image_url: "/assets/addons/external_ceramic_coating.svg",
+    hero_image_url: "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
     reasons_page_exists: [
       "This page separates the actual add-on from the broader search-facing ceramic coating page.",
       "It explains why prep quality matters more than simply applying a product."
@@ -410,6 +414,7 @@ const ADDON_PAGES = {
     slug: "graphene-finish",
     related_code: "external_graphene_fine_finish",
     name: "Graphene Finish",
+    hero_image_url: "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png",
     hero_intro: "A graphene finish is an exterior protection path for customers who want strong gloss behaviour and a more serious prep-and-protection workflow than a basic shine upgrade.",
     reasons_page_exists: [
       "Graphene is searched as its own service, so it needs a page that explains prep, products, and realistic expectations."
@@ -449,6 +454,7 @@ const ADDON_PAGES = {
     slug: "exterior-wax",
     related_code: "external_wax",
     name: "Exterior Wax",
+    hero_image_url: "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png",
     hero_intro: "Exterior wax is the simpler protection path for customers who want shine and short-term finish support after the paint has been properly cleaned.",
     reasons_page_exists: [
       "Wax is still a common customer search, so it deserves a page that clearly explains where it fits beside sealant, graphene, and ceramic options."
@@ -487,6 +493,7 @@ const ADDON_PAGES = {
     slug: "vinyl-wrapping",
     related_code: "vinyl_wrapping",
     name: "Vinyl Wrapping",
+    hero_image_url: "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
     hero_intro: "Vinyl wrapping needs a page that explains prep, material handling, and how the surface condition underneath the wrap affects the final result.",
     reasons_page_exists: [
       "Wrapping is not just another add-on; it needs material and prep explanation."
@@ -525,6 +532,7 @@ const ADDON_PAGES = {
     slug: "window-tinting",
     related_code: "window_tinting",
     name: "Window Tinting",
+    hero_image_url: "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png",
     hero_intro: "Window tinting needs a page that explains glass prep, inspection, and the difference between quick menu thinking and proper tint workflow planning.",
     reasons_page_exists: [
       "Customers search window tinting as its own service topic, so it should not be buried in a generic pricing list."
