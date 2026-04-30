@@ -1,4 +1,6 @@
 import { serviceHeaders } from "./_lib/staff-auth.js";
+import fallbackPricingCatalog from "./data/rosie_services_pricing_and_packages.json";
+import fallbackProductCatalog from "./data/rosie_products_catalog.json";
 
 const DEFAULT_LANDING_PAGES = {
   pages: {
@@ -1092,7 +1094,386 @@ const LANDING_PAGE_EXPANSIONS = {
     }
   }
 };
-const SYSTEM_LANDING_PAGES = mergeLandingPages(DEFAULT_LANDING_PAGES, LANDING_PAGE_EXPANSIONS);
+const ADDON_LANDING_PAGE_TEMPLATES = {
+  "de-badging": {
+    "related_code": "de_badging",
+    "name": "De-badging",
+    "meta_title": "De-Badging Service in Oxford & Norfolk Counties | Rosie Dazzlers",
+    "meta_description": "Learn how Rosie Dazzlers approaches de-badging, adhesive removal, residue cleanup, paint-safe finishing, and why this service is usually inspection-led before booking.",
+    "hero_title": "De-badging service",
+    "hero_intro": "De-badging removes emblems, dealer stickers, and leftover adhesive safely so the panel looks cleaner without leaving obvious residue or unnecessary damage behind.",
+    "reasons_page_exists": [
+      "Customers search for badge removal as its own service because they want a cleaner look without trying risky DIY scraping at home.",
+      "This page explains why de-badging is more than pulling off a logo — adhesive, age, paint condition, and leftover ghosting all matter.",
+      "It also gives local customers a clear explanation before they request a quote or pair the service with polishing and protection."
+    ],
+    "process": [
+      "Inspect the badge, adhesive condition, panel age, and paint sensitivity before removing anything.",
+      "Soften and lift the badge or decal carefully, then remove leftover adhesive without rushing into harsh scraping.",
+      "Clean and refine the panel so residue, haze, or sticky areas are not left behind.",
+      "Explain whether follow-up polishing or protection is recommended because older badges can leave visible paint contrast behind."
+    ],
+    "equipment": [
+      "adhesive-removal chemicals used in controlled amounts",
+      "plastic-safe trim tools and residue-lifting workflow",
+      "microfiber, panel-safe cleaners, and paint-finishing support",
+      "inspection lighting to check for ghosting, haze, or leftover residue"
+    ],
+    "highlights": [
+      "Best for customers removing dealer branding, old model badges, or unwanted emblems.",
+      "Often pairs well with exterior detailing or polishing because badge removal can reveal a cleaner panel that still needs refinement.",
+      "Quote-led when the badge age, adhesive load, or paint condition suggests more careful labour."
+    ],
+    "things_to_know": [
+      "Older badges can leave a visible paint shadow because the surrounding panel has aged differently.",
+      "Adhesive residue can take longer than the actual badge removal itself.",
+      "Paint condition matters — a weak or previously repainted panel deserves extra caution."
+    ],
+    "faq": [
+      {
+        "q": "Can de-badging be done without harming the paint?",
+        "a": "Often yes, but the answer depends on adhesive age, panel condition, and whether the paint has prior damage or repaint history."
+      },
+      {
+        "q": "Why might polishing be recommended afterward?",
+        "a": "Because once the badge is gone, leftover haze, adhesive marks, or paint contrast can be easier to see."
+      },
+      {
+        "q": "Is this always a stand-alone service?",
+        "a": "Not always. It can stand alone, but many customers pair it with exterior cleaning or polishing so the panel looks finished afterwards."
+      }
+    ],
+    "related_products": [
+      {
+        "name": "Adams Tar Remover",
+        "role": "adhesive cleanup support",
+        "note": "Useful for breaking down sticky badge residue after the emblem has been lifted."
+      },
+      {
+        "name": "Car Pro Tar X",
+        "role": "residue removal support",
+        "note": "Helps with stubborn leftover adhesive and tar-like residue in controlled paint-safe cleanup work."
+      },
+      {
+        "name": "3 DScratch Remover",
+        "role": "refinement support",
+        "note": "Useful when the panel needs light finishing after badge removal exposes haze or older marks."
+      }
+    ]
+  },
+  "two-stage-polish": {
+    "related_code": "two_stage_polish",
+    "name": "Two stage polish",
+    "meta_title": "Two Stage Polish Service in Oxford & Norfolk Counties | Rosie Dazzlers",
+    "meta_description": "Learn how Rosie Dazzlers approaches two-stage polishing, when cutting and refining make sense, what products support the workflow, and why inspection matters before defect-removal work.",
+    "hero_title": "Two stage polish service",
+    "hero_intro": "Two-stage polishing is a more deliberate defect-reduction service for paint that needs both a stronger correction step and a separate refining step before protection is applied.",
+    "reasons_page_exists": [
+      "Customers often hear “polish” used as a vague term, but a two-stage polish is a very specific correction workflow.",
+      "This page explains when a heavier cut and a second finishing step make sense instead of a lighter one-step improvement.",
+      "It also helps customers understand why this service is typically quote-led and tied to paint condition rather than promised as a flat universal fix."
+    ],
+    "process": [
+      "Inspect the paint under proper light and decide whether the vehicle really needs a two-stage correction path.",
+      "Wash and decontaminate the exterior so polishing is done on a clean, honest surface.",
+      "Use a stronger first stage to reduce swirls, oxidation, or heavier defects, then refine with a second stage for better gloss and clarity.",
+      "Protect the finish after polishing and explain maintenance expectations so the result lasts longer."
+    ],
+    "equipment": [
+      "dual-action polishers, pads, compounds, and refinement-stage polishes",
+      "wash, decontamination, and panel-prep workflow",
+      "inspection lighting and masking materials",
+      "microfiber and protection-stage products after correction"
+    ],
+    "highlights": [
+      "Best for vehicles with more visible swirls, haze, oxidation, or tired gloss than a light polish would realistically solve.",
+      "Usually paired with ceramic, graphene, sealant, or wax because the corrected finish should be protected afterward.",
+      "Quote-led because defect depth, paint condition, and vehicle size all change the labour."
+    ],
+    "things_to_know": [
+      "Two-stage polishing is more involved than a simple gloss enhancement.",
+      "Not every defect can be removed safely if it is too deep in the paint.",
+      "The better the correction goal, the more important good washing habits become afterward."
+    ],
+    "faq": [
+      {
+        "q": "How is a two-stage polish different from a one-stage polish?",
+        "a": "A two-stage polish uses a stronger correction step first and a separate refining step after that, which usually takes more labour but can deliver a better finish on tougher paint."
+      },
+      {
+        "q": "Does every vehicle need two stages?",
+        "a": "No. Some vehicles only need a lighter refinement. Inspection matters so the service matches the real paint condition."
+      },
+      {
+        "q": "Can it be booked online without discussion?",
+        "a": "It is usually quote-led because paint condition and finish expectations change the actual workload."
+      }
+    ],
+    "related_products": [
+      {
+        "name": "3 DScratch Remover",
+        "role": "correction support",
+        "note": "Useful in the heavier defect-reduction stage where the paint needs more than a simple finishing product."
+      },
+      {
+        "name": "Chemical Guys Clay Luber",
+        "role": "prep support",
+        "note": "Used during decontamination prep so polishing is not performed over bonded contamination."
+      },
+      {
+        "name": "DIYDetail Ceramic Gloss",
+        "role": "post-polish protection support",
+        "note": "Helpful after refining when the finish is ready for gloss support and ongoing care."
+      }
+    ]
+  },
+  "external-ceramic-coating": {
+    "related_code": "external_ceramic_coating",
+    "name": "External ceramic coating",
+    "meta_title": "External Ceramic Coating Service | Rosie Dazzlers",
+    "meta_description": "Exterior ceramic coating information, including prep, decontamination, polishing decisions, products used, and why the coating stage depends on a properly detailed surface first.",
+    "hero_title": "External ceramic coating service",
+    "hero_intro": "Exterior ceramic coating is a prep-driven protection service. The coating matters, but the real quality of the result depends on how well the paint is washed, decontaminated, and refined before application.",
+    "reasons_page_exists": [
+      "Customers often search for ceramic coating as a stand-alone purchase when the real service is prep plus protection together.",
+      "This page explains the exterior-only coating path in plain language so customers understand why coating is not chosen by itself without proper prep.",
+      "It also gives Rosie Dazzlers a clearer landing page for exterior-coating intent than a generic package page alone."
+    ],
+    "process": [
+      "Inspect paint condition and explain whether polishing, correction, or refinement is recommended before coating.",
+      "Wash and decontaminate the surface thoroughly so the coating is not applied over fallout, residue, or neglected paint.",
+      "Apply the ceramic product in controlled sections, level the coating properly, and protect the finish during cure timing.",
+      "Explain ongoing maintenance so the coated finish keeps performing the way the customer expects."
+    ],
+    "equipment": [
+      "panel-prep chemicals, decontamination support, and wash-safe workflow",
+      "dual-action polishing support when refinement is needed before coating",
+      "ceramic applicators, leveling towels, and controlled section-by-section application",
+      "inspection lighting and microfiber-safe final finishing materials"
+    ],
+    "highlights": [
+      "Best for customers who want stronger wash behaviour and longer-term protection after exterior prep has been handled properly.",
+      "Usually connected to exterior or complete detailing because the paint must be made coating-ready first.",
+      "High-intent local SEO topic because ceramic coating is one of the most searched detailing upgrades."
+    ],
+    "things_to_know": [
+      "Ceramic coating does not fix neglected paint by itself.",
+      "If the paint is swirled, oxidized, or contaminated, those problems usually need to be addressed first.",
+      "The better the prep, the better the coating feels in real ownership after the appointment."
+    ],
+    "faq": [
+      {
+        "q": "Can ceramic coating be booked by itself?",
+        "a": "Not usually. The vehicle still needs proper washing and preparation before the coating stage is worthwhile."
+      },
+      {
+        "q": "How is this different from wax?",
+        "a": "Ceramic coating is a different protection path with different prep, behaviour, and maintenance expectations than a shorter-term wax step."
+      },
+      {
+        "q": "Why does paint condition affect the quote?",
+        "a": "Because defect level, vehicle size, and prep needs all change how much work happens before the coating is applied."
+      }
+    ],
+    "related_products": [
+      {
+        "name": "10 HCeramic Coating",
+        "role": "main coating product",
+        "note": "Used when a stronger ceramic-style protection path fits the paint and service goal."
+      },
+      {
+        "name": "DIYDetail Ceramic Gloss",
+        "role": "ceramic support / maintenance product",
+        "note": "Helpful for gloss support and coating-friendly maintenance behaviour after prep."
+      },
+      {
+        "name": "Turtle Wax 53409 Hybrid Solutions Ceramic Spray Coating, Incredible Shine & Protection for Car Paint, Extreme Water Beading, Safe for Cars, Trucks, Motorcycles, RV's & More, 16 oz.",
+        "role": "ceramic protection support",
+        "note": "Useful in practical ceramic-style protection workflows and ongoing care discussions."
+      }
+    ]
+  },
+  "vinyl-wrapping": {
+    "related_code": "vinyl_wrapping",
+    "name": "Vinyl wrapping",
+    "meta_title": "Vinyl Wrapping Preparation and Service Information | Rosie Dazzlers",
+    "meta_description": "Learn how Rosie Dazzlers approaches vinyl wrapping requests, panel prep, realistic scope, tools, and when wrapping jobs require inspection or a more specialized planning path.",
+    "hero_title": "Vinyl wrapping service information",
+    "hero_intro": "Vinyl wrapping depends heavily on surface prep, panel shape, edges, and finish condition. This page explains the practical workflow, why some jobs are quote-led, and what customers should understand before choosing a wrap-based service.",
+    "reasons_page_exists": [
+      "Customers often ask about wrap work as if it behaves like a quick add-on, when the real job depends on prep, panel shape, and surface condition.",
+      "This page gives Rosie Dazzlers a cleaner explanation of what wrapping involves before anyone assumes it is the same as a wash or coating upgrade.",
+      "It also helps the site target wrap-related questions while keeping booking expectations realistic."
+    ],
+    "process": [
+      "Inspect the panel condition, shape, trim edges, and overall scope so the wrap plan matches the real surface.",
+      "Clean and prepare the surface thoroughly because dirt, oils, or old residue reduce wrap quality and longevity.",
+      "Measure, position, and apply the vinyl carefully while managing edges, curves, and finish alignment.",
+      "Check edges and finish quality, then explain aftercare so the wrap keeps looking its best."
+    ],
+    "equipment": [
+      "surface-prep workflow, degreasing support, and careful panel cleaning",
+      "wrap tools, squeegees, trim-safe handling, and edge management",
+      "microfiber, inspection lighting, and controlled finishing workflow",
+      "protective materials for surrounding trim and paint-safe access"
+    ],
+    "highlights": [
+      "Useful for customers wanting a visual change, accent work, or selected wrapped areas rather than a full repaint path.",
+      "Best treated as an inspection-led service because edges, trim, and panel condition all matter.",
+      "A strong page topic because wrap-related questions often need more explanation than a normal detailing package page provides."
+    ],
+    "things_to_know": [
+      "Wrapping is highly surface-dependent. Contaminated or damaged panels create weaker wrap results.",
+      "Some jobs are better suited to specialist planning than instant online booking.",
+      "Aftercare matters: aggressive washing, edge lifting, or harsh chemicals can shorten wrap life."
+    ],
+    "faq": [
+      {
+        "q": "Can vinyl wrapping be booked instantly like a normal add-on?",
+        "a": "Usually it is better handled as an inspection-led service because panel shape, edge complexity, and scope all affect the job."
+      },
+      {
+        "q": "Why talk so much about prep?",
+        "a": "Because vinyl only behaves well when the surface underneath is properly cleaned and ready for adhesion."
+      },
+      {
+        "q": "Is wrap care different from normal washing?",
+        "a": "Yes. Wraps benefit from gentler care and attention to edges and finish-safe cleaning habits."
+      }
+    ],
+    "related_products": [
+      {
+        "name": "Pro Vinyl Wrap Kit",
+        "role": "main wrap workflow kit",
+        "note": "Directly tied to wrap installation and practical handling for vinyl work."
+      },
+      {
+        "name": "Autofiber Scrub Ninja Interior Scrubbing Sponge (5”x 3”) for Leather, Plastic, Vinyl and Upholstery Cleaning (Black Gray)",
+        "role": "prep support",
+        "note": "Useful where vinyl-safe prep and cleaning is needed before wrap work or related trim prep."
+      }
+    ]
+  },
+  "window-tinting": {
+    "related_code": "window_tinting",
+    "name": "Window tinting",
+    "meta_title": "Window Tinting Service Information | Rosie Dazzlers",
+    "meta_description": "Learn how Rosie Dazzlers approaches window tinting requests, glass prep, inspection, realistic quoting, and what customers should know before booking tint work.",
+    "hero_title": "Window tinting service information",
+    "hero_intro": "Window tinting depends on clean glass, material choice, and careful installation. This page explains the workflow, what to expect, and why tint work is usually inspection-led rather than treated like a quick online add-on.",
+    "reasons_page_exists": [
+      "Customers search directly for tinting, but many do not realize how much clean glass prep and installation skill matter.",
+      "This page gives Rosie Dazzlers a clearer explanation of tint work, scope, and expectations before people assume it is a simple instant upgrade.",
+      "It also creates a landing page that can support local tinting intent while keeping the booking path realistic."
+    ],
+    "process": [
+      "Inspect the vehicle glass, legal considerations, and the requested tint scope before confirming the work plan.",
+      "Clean the glass thoroughly because residue or contamination will affect the final finish and adhesion.",
+      "Install the tint carefully while managing edges, fit, and final appearance.",
+      "Explain cure time, aftercare, and what the customer should avoid immediately after installation."
+    ],
+    "equipment": [
+      "glass-prep workflow and contamination-free cleaning",
+      "installation tools, squeegees, and trim-safe handling",
+      "lighting and close visual checks for bubbles, edges, and finish quality",
+      "aftercare guidance for cure time and early maintenance"
+    ],
+    "highlights": [
+      "Useful for customers wanting heat, glare, or privacy improvement with a cleaner finished look.",
+      "Best handled as a quote-led or inspection-led service because tint scope and film choice change the labour.",
+      "A strong search topic that benefits from a dedicated page instead of being buried inside a generic add-on list."
+    ],
+    "things_to_know": [
+      "Fresh tint needs cure time and should not be disturbed immediately after installation.",
+      "Proper glass cleaning is one of the biggest factors in the final look.",
+      "Tint services can involve legal and visibility considerations depending on the vehicle and chosen darkness."
+    ],
+    "faq": [
+      {
+        "q": "Why is tinting not treated like a normal click-and-go add-on?",
+        "a": "Because glass condition, tint scope, and film choice all change the labour and planning involved."
+      },
+      {
+        "q": "Does the glass really need special prep first?",
+        "a": "Yes. Clean, contamination-free glass is one of the most important parts of a good tint result."
+      },
+      {
+        "q": "Can I use the windows normally right away?",
+        "a": "New tint usually needs cure time, so customers should follow aftercare instructions before rolling windows repeatedly."
+      }
+    ],
+    "related_products": []
+  }
+};
+
+
+const PRICING_CATALOG_DEFAULT = fallbackPricingCatalog && typeof fallbackPricingCatalog === "object" ? fallbackPricingCatalog : {};
+const PRODUCT_CATALOG_DEFAULT = Array.isArray(fallbackProductCatalog) ? fallbackProductCatalog : [];
+
+const ADDON_LANDING_PAGE_MAP = {
+  full_clay_treatment: "full-clay-treatment",
+  two_stage_polish: "two-stage-polish",
+  high_grade_paint_sealant: "high-grade-paint-sealant",
+  uv_protectant_applied_on_interior_panels: "uv-protectant",
+  de_ionizing_treatment: "de-ionizing-treatment",
+  de_badging: "de-badging",
+  engine_cleaning: "engine-cleaning",
+  external_ceramic_coating: "external-ceramic-coating",
+  external_graphene_fine_finish: "graphene-finish",
+  external_wax: "exterior-wax",
+  vinyl_wrapping: "vinyl-wrapping",
+  window_tinting: "window-tinting"
+};
+
+const GENERATED_ADDON_LANDING_PAGES = buildGeneratedAddonPages();
+
+function buildGeneratedAddonPages() {
+  const pages = {};
+  const addons = Array.isArray(PRICING_CATALOG_DEFAULT?.addons) ? PRICING_CATALOG_DEFAULT.addons : [];
+  for (const addon of addons) {
+    const code = String(addon?.code || "").trim();
+    if (!code) continue;
+    const slug = ADDON_LANDING_PAGE_MAP[code] || String(code).trim().replace(/_/g, "-");
+    const template = ADDON_LANDING_PAGE_TEMPLATES[slug] || {};
+    const addonName = String(addon?.name || template.name || code).trim();
+    pages[slug] = {
+      type: "addon",
+      related_code: code,
+      enabled: true,
+      slug,
+      nav_group: template.nav_group || "addon-service",
+      name: template.name || addonName,
+      meta_title: template.meta_title || `${addonName} | Rosie Dazzlers`,
+      meta_description: template.meta_description || template.hero_intro || `${addonName} service information for Rosie Dazzlers customers in Oxford and Norfolk Counties.`,
+      badge: template.badge || "Add-on landing page",
+      hero_title: template.hero_title || addonName,
+      hero_intro: template.hero_intro || `${addonName} service information, process, tools, booking fit, and practical expectations.`,
+      reasons_page_exists: template.reasons_page_exists || [
+        `${addonName} is a service people search for directly, so it deserves a clearer page than a generic add-on row.`,
+        `This page explains how ${addonName.toLowerCase()} fits into a real detailing workflow before someone books or requests a quote.`,
+        `It also gives Rosie Dazzlers a stronger local destination for service-specific search intent.`
+      ],
+      process: template.process || [],
+      equipment: template.equipment || [],
+      highlights: template.highlights || [],
+      things_to_know: template.things_to_know || [],
+      official_links: template.official_links || [],
+      faq: template.faq || [],
+      related_products: normalizeProductRefList(template.related_products || [])
+    };
+  }
+  return { pages };
+}
+
+function normalizeProductRefList(rows) {
+  return (Array.isArray(rows) ? rows : []).map((row) => ({
+    name: String(row?.name || "").trim(),
+    role: String(row?.role || "").trim(),
+    note: String(row?.note || "").trim()
+  })).filter((row) => row.name);
+}
+
+const SYSTEM_LANDING_PAGES = mergeLandingPages(mergeLandingPages(DEFAULT_LANDING_PAGES, LANDING_PAGE_EXPANSIONS), GENERATED_ADDON_LANDING_PAGES);
 
 export async function onRequestGet({ env }) {
   try {
@@ -1150,6 +1531,8 @@ function normalizePage(page) {
     things_to_know: normalizeStringArray(page?.things_to_know),
     official_links: normalizeLinkArray(page?.official_links),
     related_products: normalizeProductRefs(page?.related_products),
+    hero_image_url: String(page?.hero_image_url || "").trim(),
+    gallery_images: normalizeStringArray(page?.gallery_images),
     faq: faq.map((item) => ({ q: String(item?.q || "").trim(), a: String(item?.a || "").trim() })).filter((item) => item.q && item.a)
   };
 }
