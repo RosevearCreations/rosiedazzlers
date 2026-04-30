@@ -66,6 +66,11 @@ export async function onRequestPost({ request, env }) {
     for (const code of addonCodes) {
       const addon = pricing.addon_map[code];
       if (!addon) continue;
+      const requiredPackages = Array.isArray(addon.requires_package_codes_any) ? addon.requires_package_codes_any.map((v) => String(v || "").trim()).filter(Boolean) : [];
+      const standaloneAllowed = addon.standalone_allowed === true;
+      if (requiredPackages.length && !standaloneAllowed && !requiredPackages.includes(pkg.code)) {
+        return corsJson({ error: addon.requirement_note || `${addon.name} requires a different base package first.` }, 400);
+      }
       const addonCad = addon.prices_cad?.[vehicleSize];
       const cents = Number.isFinite(addonCad) ? Math.round(addonCad * 100) : null;
       const item = { code, label: addon.name, cents, quote_required: addon.quote_required === true };

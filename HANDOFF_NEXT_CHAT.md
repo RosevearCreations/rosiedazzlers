@@ -71,3 +71,6 @@ Next chat should continue from the folder-backed clean-route baseline, the town-
 
 ## Carry-forward after 2026-04-27
 Keep the folder-backed clean-route model as the live baseline. On Rosie Dazzlers, the strongest next admin/back-office steps are now: direct accounting document uploads, vendor defaults/directory, deeper bank matching, payroll deduction detail, and broader period-lock enforcement. On the public side, keep recent work, review proof, and local town/service freshness visible on the main entry pages.
+
+
+- 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.

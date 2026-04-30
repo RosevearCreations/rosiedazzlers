@@ -559,3 +559,8 @@ Next best steps now include pricing-page embed height control, a bundled reviews
 4. Add payroll net-pay / source-deduction detail once payroll withholding rules are introduced.
 5. Enforce period lock/close across every accounting-related write path, not only journal posting.
 6. Add accountant package export for year-end source-document index and reconciliation status.
+
+- Expand landing-page builder to support service-area-level internal-link modules and media blocks.
+
+
+- 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.
