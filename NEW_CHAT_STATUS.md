@@ -87,3 +87,8 @@ Important next move:
 
 
 - 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.
+
+## 2026-04-30 pass status
+- Finished: linked consumables into add-on landing pages, expanded the current add-on pages into fuller money pages, created additional folder-backed add-on pages, and upgraded the landing-page renderer plus admin builder to support products / official links / things-to-know fields.
+- Finished: expanded town pages with stronger local-value notes and official-source sections.
+- Remaining: landing-page gallery management, richer Search Console / GBP reporting integration, and a reusable DB-backed add-on-to-product relationship system.

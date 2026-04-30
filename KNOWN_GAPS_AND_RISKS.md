@@ -696,3 +696,8 @@ Open accounting risks: this remains an operational bookkeeping layer, not profes
 
 
 - 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.
+
+## 2026-04-30 add-on landing gaps
+- Product links on landing pages are now content-driven, but the relationship is still stored inside landing page content rather than a dedicated database join table.
+- New folder-backed add-on routes were created for the strongest next service pages, but admin-created /landing/ pages are still not auto-written into sitemap.xml.
+- Real before/after media for each add-on money page is still the highest-value unfinished content gap.

@@ -435,3 +435,5 @@ New schema objects introduced in this pass:
 - `accounting_period_closes`
 
 These support receipt/bill/invoice links, recurring expense templates, monthly bank reconciliation records, payroll payout reconciliation records, and month lock/close status.
+
+> Refreshed during the 2026-04-30 product-linked landing-page pass.

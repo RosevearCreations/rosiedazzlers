@@ -164,3 +164,6 @@ Use DEVELOPMENT_ROADMAP.md, KNOWN_GAPS_AND_RISKS.md, CURRENT_IMPLEMENTATION_STAT
 
 ## 2026-04-27 index note
 Use `NEW_CHAT_STATUS.md`, `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `SUPABASE_SCHEMA.sql` first when handing off the new accounting workflow foundation pass.
+
+## 2026-04-30 doc note
+- Roadmap / handoff docs were refreshed for the product-linked landing-page pass.

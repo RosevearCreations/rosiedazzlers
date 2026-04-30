@@ -74,3 +74,7 @@ Keep the folder-backed clean-route model as the live baseline. On Rosie Dazzlers
 
 
 - 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.
+
+## 2026-04-30 handoff
+- The strongest next pass is landing-page media depth: add real before/after image blocks per add-on page and per-town gallery support in the admin landing builder.
+- The next backend step after that is a dedicated landing-service-products join model so consumables can be mapped in admin without storing the relationship only inside landing page content.

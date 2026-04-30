@@ -434,3 +434,8 @@ Current accounting-state note: admin-accounting now includes a year-end tax prep
 - Public proof blocks now use a bundled reviews fallback image directly, so the pricing-page review proof no longer depends on a missing remote asset.
 - Admin Accounting now has live sections for bank reconciliation, accounting document links, recurring expenses, payroll payout reconciliation, and period-close status tracking.
 - Posting into locked or closed accounting months is now blocked at journal-entry time once the new migration is applied.
+
+## 2026-04-30 landing content state
+- Landing pages now support related products, official links, things-to-know sections, richer FAQ blocks, and shared product-driven rendering through assets/landing-page.js.
+- Folder-backed special-service pages now include ceramic coating, pet hair removal, odor removal, headlight restoration, paint correction, graphene finish, full clay treatment, engine cleaning, high grade paint sealant, UV protectant, exterior wax, and de-ionizing treatment.
+- Town-focused pages remain folder-backed and now include stronger local-value content and official-link sections.

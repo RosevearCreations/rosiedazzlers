@@ -564,3 +564,9 @@ Next best steps now include pricing-page embed height control, a bundled reviews
 
 
 - 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.
+
+## 2026-04-30 add-on money-page pass
+- Completed: added product-linked money pages for existing and new add-on landing pages, expanded town pages with stronger local-value sections, and extended the admin landing builder with related products / official links / things-to-know fields.
+- Completed: kept folder-backed landing pages as the strongest SEO baseline while still using the shared landing content system.
+- Next strongest steps: connect landing pages to per-page galleries in admin, add dedicated add-on hero/result photos, and expand consumable-to-service linking from page-level content into a reusable admin relationship picker.
+- Next strongest steps: expose landing-page performance in Search Console review workflow and add sitemap automation for new admin-created /landing/ slugs.

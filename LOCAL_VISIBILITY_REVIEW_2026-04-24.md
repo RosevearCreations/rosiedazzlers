@@ -164,3 +164,4 @@ Still the next best visibility steps after deploy:
 - Added the first town-focused landing pages to support stronger local service-area visibility.
 - Kept recent work and review proof visible on the main public entry pages and the new town pages.
 
+> Refreshed during the 2026-04-30 product-linked landing-page pass.
