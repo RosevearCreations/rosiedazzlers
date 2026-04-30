@@ -65,8 +65,8 @@
     .mini{font-size:.92rem}
 
     .booking-lead{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
-    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;height:1720px;min-height:1720px;max-height:2600px}
-    .booking-embed-frame{display:block;width:100%;height:1720px;min-height:1720px;max-height:2600px;border:0;background:transparent;overflow:hidden}
+    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;height:1180px;min-height:1180px;max-height:1800px}
+    .booking-embed-frame{display:block;width:100%;height:1180px;min-height:1180px;max-height:1800px;border:0;background:transparent;overflow:hidden}
     .booking-side{display:grid;gap:12px}
     .planner-note{margin-top:12px}
     .benefits{display:grid;gap:8px;padding-left:18px;margin:0}
@@ -77,7 +77,7 @@
     .planner-summary .stack{display:grid;gap:4px}
     .planner-summary .value{font-weight:700;text-align:right}
     .planner-summary .list{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.maintenance-box{display:grid;gap:10px;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03)}.maintenance-box .field{display:grid;gap:6px}.maintenance-box input,.maintenance-box textarea{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;background:rgba(255,255,255,.04);color:#f8fafc}.maintenance-box textarea{min-height:92px;resize:vertical}.maintenance-box .note{font-size:.9rem;color:rgba(234,242,255,.62)} .maintenance-box[aria-disabled="true"]{opacity:.78} 
-    @media (max-width:980px){ .booking-lead{grid-template-columns:1fr} .booking-embed-shell{height:2120px;min-height:2120px;max-height:3200px} .booking-embed-frame{height:2120px;min-height:2120px;max-height:3200px} }
+    @media (max-width:980px){ .booking-lead{grid-template-columns:1fr} .booking-embed-shell{height:1380px;min-height:1380px;max-height:2100px} .booking-embed-frame{height:1380px;min-height:1380px;max-height:2100px} }
   </style>
 </head>
 
@@ -522,8 +522,8 @@
         if (payload.type === 'rd-book-embed-size') {
           const measured = Number(payload.height || 0);
           const mobile = window.innerWidth <= 980;
-          const minHeight = mobile ? 1720 : 1320;
-          const maxHeight = mobile ? 3200 : 2600;
+          const minHeight = mobile ? 1360 : 1080;
+          const maxHeight = mobile ? 2100 : 1800;
           const nextHeight = Math.min(maxHeight, Math.max(minHeight, Math.round(measured) + 12));
           const currentHeight = parseInt(frame.style.height || frame.getAttribute('height') || '0', 10) || 0;
           const shell = frame.closest('.booking-embed-shell');
@@ -572,9 +572,10 @@
     }
 
     try {
-      const [data, growth] = await Promise.all([
+      const [data, growth, landingData] = await Promise.all([
         loadPricingCatalogClient({ fallbackUrl: FALLBACK_URL }),
-        loadGrowthSettings()
+        loadGrowthSettings(),
+        fetch("/api/landing_pages_public", { cache: "no-store" }).then((r)=> r.ok ? r.json() : { pages:{} }).catch(()=>({ pages:{} }))
       ]);
       renderRequirementTags(data);
       const liveVehiclePriceChart = buildLivePricingChartDataUri(data) || chartUrl(data, "Vehicle Price Chart 2025");
