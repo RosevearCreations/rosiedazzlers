@@ -556,3 +556,5 @@ The accounting direction has moved from month-end/year-end reporting only into w
 
 
 - 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.
+
+> Refreshed during the 2026-04-30 product-linked landing-page pass.
