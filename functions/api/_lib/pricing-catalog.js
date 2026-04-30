@@ -1,5 +1,5 @@
 import { serviceHeaders } from "./staff-session.js";
-import fallbackCatalog from "../data/rosie_services_pricing_and_packages.json" with { type: "json" };
+import fallbackCatalog from "../data/rosie_services_pricing_and_packages.json";
 
 const LOCAL_CHART_URLS = {
   "CarPrice2025.PNG": "/assets/brand/CarPrice2025.PNG",
