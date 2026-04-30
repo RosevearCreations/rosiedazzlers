@@ -970,3 +970,5 @@ create table if not exists public.accounting_period_closes (
 create index if not exists accounting_period_closes_status_idx on public.accounting_period_closes (status, month_start desc);
 
 -- Pass sync 2026-04-27: pricing review-proof image fallback hard-wired on public proof cards, and the accounting workspace now includes foundational workflows for receipts/documents, recurring expenses, bank reconciliation, payroll payout reconciliation, and accountant period lock / close control.
+
+-- 2026-04-29 pass: landing page content, add-on image merge safety, and admin add-on dependency/editor refinements.
