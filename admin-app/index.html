@@ -699,6 +699,9 @@
     source.process = normalizeLandingArray(source.process);
     source.equipment = normalizeLandingArray(source.equipment);
     source.highlights = normalizeLandingArray(source.highlights);
+    source.things_to_know = normalizeLandingArray(source.things_to_know);
+    source.official_links = normalizeLandingLinks(source.official_links);
+    source.related_products = normalizeLandingProductRefs(source.related_products);
     source.faq = normalizeLandingFaq(source.faq);
     return source;
   }
@@ -711,14 +714,20 @@
   function setLandingPagesState(value){ landingPagesState = ensureLandingPagesShape(value); renderLandingBuilder(); }
   function landingArrayToText(value){ return normalizeLandingArray(value).join('\n'); }
   function landingFaqToText(value){ return normalizeLandingFaq(value).map(function(item){ return item.q + ' || ' + item.a; }).join('\n'); }
+  function normalizeLandingLinks(value){ return (Array.isArray(value) ? value : []).map(function(item){ return { label: String(item && item.label || '').trim(), url: String(item && item.url || '').trim() }; }).filter(function(item){ return item.label && item.url; }); }
+  function normalizeLandingProductRefs(value){ return (Array.isArray(value) ? value : []).map(function(item){ return { name: String(item && item.name || '').trim(), role: String(item && item.role || '').trim(), note: String(item && item.note || '').trim() }; }).filter(function(item){ return item.name; }); }
+  function landingLinksToText(value){ return normalizeLandingLinks(value).map(function(item){ return item.label + ' || ' + item.url; }).join('\n'); }
+  function landingProductRefsToText(value){ return normalizeLandingProductRefs(value).map(function(item){ return [item.name || '', item.role || '', item.note || ''].join(' || '); }).join('\n'); }
   function landingTextToArray(value){ return String(value || '').split(/\r?\n/).map(function(line){ return line.trim(); }).filter(Boolean); }
   function landingTextToFaq(value){ return String(value || '').split(/\r?\n/).map(function(line){ var parts = line.split('||'); return { q: String(parts[0] || '').trim(), a: String(parts.slice(1).join('||') || '').trim() }; }).filter(function(item){ return item.q && item.a; }); }
+  function landingTextToLinks(value){ return String(value || '').split(/\r?\n/).map(function(line){ var parts = line.split('||'); return { label: String(parts[0] || '').trim(), url: String(parts.slice(1).join('||') || '').trim() }; }).filter(function(item){ return item.label && item.url; }); }
+  function landingTextToProductRefs(value){ return String(value || '').split(/\r?\n/).map(function(line){ var parts = line.split('||'); return { name: String(parts[0] || '').trim(), role: String(parts[1] || '').trim(), note: String(parts.slice(2).join('||') || '').trim() }; }).filter(function(item){ return item.name; }); }
   function slugify(value){ return String(value || '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').replace(/-{2,}/g, '-'); }
   function addonLandingEntry(code){ var slug = Object.keys(landingPagesState.pages).find(function(key){ return landingPagesState.pages[key] && landingPagesState.pages[key].type === 'addon' && String(landingPagesState.pages[key].related_code || '') === String(code || ''); }); return slug ? landingPagesState.pages[slug] : null; }
   function locationLandingOptions(){ return Object.keys(landingPagesState.pages).filter(function(slug){ return landingPagesState.pages[slug] && landingPagesState.pages[slug].type === 'location'; }).sort(); }
   function buildLandingEditorHtml(page, prefix){
     page = normalizeLandingPage(page || {}, {});
-    var url = page.slug ? ((page.type === 'addon' || page.type === 'location') && ['ceramic-coating','pet-hair-removal','odor-removal','headlight-restoration','paint-correction','tillsonburg-auto-detailing','woodstock-ingersoll-auto-detailing','simcoe-delhi-auto-detailing','port-dover-auto-detailing'].includes(page.slug) ? '/' + page.slug : '/landing/' + page.slug) : '';
+    var url = page.slug ? ((page.type === 'addon' || page.type === 'location') && ['ceramic-coating','pet-hair-removal','odor-removal','headlight-restoration','paint-correction','graphene-finish','full-clay-treatment','engine-cleaning','high-grade-paint-sealant','uv-protectant','exterior-wax','de-ionizing-treatment','tillsonburg-auto-detailing','woodstock-ingersoll-auto-detailing','simcoe-delhi-auto-detailing','port-dover-auto-detailing'].includes(page.slug) ? '/' + page.slug : '/landing/' + page.slug) : '';
     return '<div class="checkrow"><input id="' + prefix + '_enabled" type="checkbox" ' + (page.enabled ? 'checked' : '') + '><label for="' + prefix + '_enabled">Landing page enabled</label></div>' +
       '<div class="field"><label for="' + prefix + '_slug">Slug</label><input id="' + prefix + '_slug" value="' + escapeHtml(page.slug || '') + '" placeholder="my-new-landing-page"></div>' +
       '<div class="note">Preview path: ' + escapeHtml(url || '/landing/your-slug') + '</div>' +
@@ -732,6 +741,9 @@
       '<div class="field"><label for="' + prefix + '_process">Process (one line per step)</label><textarea id="' + prefix + '_process">' + escapeHtml(landingArrayToText(page.process)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_equipment">Equipment / workflow (one line per point)</label><textarea id="' + prefix + '_equipment">' + escapeHtml(landingArrayToText(page.equipment)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_highlights">Best fit / highlights (one line per point)</label><textarea id="' + prefix + '_highlights">' + escapeHtml(landingArrayToText(page.highlights)) + '</textarea></div>' +
+      '<div class="field"><label for="' + prefix + '_things_to_know">Things to know / avoid (one line per point)</label><textarea id="' + prefix + '_things_to_know">' + escapeHtml(landingArrayToText(page.things_to_know)) + '</textarea></div>' +
+      '<div class="field"><label for="' + prefix + '_official_links">Official links using Label || URL</label><textarea id="' + prefix + '_official_links">' + escapeHtml(landingLinksToText(page.official_links)) + '</textarea></div>' +
+      '<div class="field"><label for="' + prefix + '_related_products">Related products using Product name || Role || Note</label><textarea id="' + prefix + '_related_products">' + escapeHtml(landingProductRefsToText(page.related_products)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_faq">FAQ lines using Question || Answer</label><textarea id="' + prefix + '_faq">' + escapeHtml(landingFaqToText(page.faq)) + '</textarea></div>';
   }
   function readLandingEditor(prefix, seed){
@@ -749,6 +761,9 @@
       process: landingTextToArray(byId(prefix + '_process').value || ''),
       equipment: landingTextToArray(byId(prefix + '_equipment').value || ''),
       highlights: landingTextToArray(byId(prefix + '_highlights').value || ''),
+      things_to_know: landingTextToArray(byId(prefix + '_things_to_know').value || ''),
+      official_links: landingTextToLinks(byId(prefix + '_official_links').value || ''),
+      related_products: landingTextToProductRefs(byId(prefix + '_related_products').value || ''),
       faq: landingTextToFaq(byId(prefix + '_faq').value || '')
     }, seed || {});
   }
