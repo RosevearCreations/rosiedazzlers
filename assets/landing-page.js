@@ -39,13 +39,17 @@ function hasPositiveMoney(value) {
   return Number.isFinite(n) && n > 0;
 }
 
+function cleanText(value) {
+  return String(value ?? "").trim();
+}
+
+function normalizeProductName(value) {
+  return cleanText(value).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
 function addonPriceSummary(addon) {
   if (!addon) return "";
-
-  const sizeMap = addon.prices_cad && typeof addon.prices_cad === "object"
-    ? addon.prices_cad
-    : {};
-
+  const sizeMap = addon.prices_cad && typeof addon.prices_cad === "object" ? addon.prices_cad : {};
   const parts = [];
   if (hasPositiveMoney(sizeMap.small)) parts.push(`Small ${money(sizeMap.small)}`);
   if (hasPositiveMoney(sizeMap.mid)) parts.push(`Mid ${money(sizeMap.mid)}`);
@@ -62,25 +66,67 @@ function addonPriceSummary(addon) {
   return "";
 }
 
-function pageTemplate(page, pricing, slug) {
+function normalizeProductRefs(value) {
+  return (Array.isArray(value) ? value : []).map((item) => ({
+    name: cleanText(item?.name || item?.title),
+    role: cleanText(item?.role),
+    note: cleanText(item?.note)
+  })).filter((item) => item.name);
+}
+
+function findProductByName(products, name) {
+  const target = normalizeProductName(name);
+  if (!target) return null;
+  return products.find((item) => normalizeProductName(item?.name || item?.title) === target) ||
+    products.find((item) => normalizeProductName(item?.name || item?.title).includes(target)) ||
+    null;
+}
+
+function resolveRelatedProducts(page, productCatalog) {
+  const refs = normalizeProductRefs(page?.related_products);
+  const items = Array.isArray(productCatalog) ? productCatalog : [];
+  return refs.map((ref) => {
+    const product = findProductByName(items, ref.name) || {};
+    return {
+      name: ref.name,
+      role: ref.role,
+      note: ref.note,
+      image_url: product.r2_url || product.image_url || "",
+      source_kind: product.source_kind || product.type || "product"
+    };
+  });
+}
+
+function heroMediaForPage(page, addon, relatedProducts) {
+  if (addon?.image_url) return addon.image_url;
+  if (addon?.image_fallback_url) return addon.image_fallback_url;
+  const firstProduct = (relatedProducts || []).find((item) => item.image_url);
+  return firstProduct?.image_url || "/assets/brand/rosie-reviews-fallback.svg";
+}
+
+function pageTemplate(page, pricing, slug, productCatalog) {
   const addon = page.related_code
     ? (pricing.addons || []).find((row) => row.code === page.related_code)
     : null;
 
   const related = Object.values((window.__landingPages || {}).pages || {})
     .filter((row) => row && row.enabled !== false && row.slug !== slug && row.nav_group === page.nav_group)
-    .slice(0, 6);
+    .slice(0, 8);
 
   const faq = Array.isArray(page.faq) ? page.faq : [];
   const reasons = Array.isArray(page.reasons_page_exists) ? page.reasons_page_exists : [];
   const process = Array.isArray(page.process) ? page.process : [];
   const equipment = Array.isArray(page.equipment) ? page.equipment : [];
   const highlights = Array.isArray(page.highlights) ? page.highlights : [];
+  const thingsToKnow = Array.isArray(page.things_to_know) ? page.things_to_know : [];
+  const officialLinks = Array.isArray(page.official_links) ? page.official_links : [];
   const priceSummary = addonPriceSummary(addon);
+  const relatedProducts = resolveRelatedProducts(page, productCatalog);
+  const heroImage = heroMediaForPage(page, addon, relatedProducts);
 
   return `
   <main class="container">
-    <section class="hero">
+    <section class="hero hero-split">
       <div>
         <div class="badge">${escapeHtml(page.badge || "Landing page")}</div>
         <h1>${escapeHtml(page.hero_title || page.name || "Landing page")}</h1>
@@ -98,7 +144,8 @@ function pageTemplate(page, pricing, slug) {
           <a class="btn ghost" href="/services">All services</a>
         </div>
       </div>
-      <aside class="panel">
+      <aside class="panel hero-sidecard">
+        <img src="${escapeHtml(heroImage)}" alt="${escapeHtml(page.name || page.hero_title || slug)}" class="proof-media" style="margin-bottom:10px" />
         <h2 style="margin-top:0">What to expect</h2>
         <p class="muted">${escapeHtml(priceSummary || "Review the process, scope, and booking fit before choosing this page’s service path.")}</p>
         <div class="hr"></div>
@@ -128,6 +175,44 @@ function pageTemplate(page, pricing, slug) {
       </article>
     </section>
 
+    ${relatedProducts.length ? `
+      <section class="section panel">
+        <h2 style="margin-top:0">Products we use for this service</h2>
+        <p class="muted">These consumables and support products make the page more specific and help explain why the add-on behaves the way it does in a real workflow.</p>
+        <div class="service-link-grid" style="margin-top:12px">
+          ${relatedProducts.map((item) => `
+            <article class="service-link-card">
+              ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}" class="proof-media" style="margin-bottom:10px" />` : ``}
+              <h3>${escapeHtml(item.name)}</h3>
+              ${item.role ? `<div class="badge" style="margin-bottom:8px">${escapeHtml(item.role)}</div>` : ``}
+              ${item.note ? `<p class="muted">${escapeHtml(item.note)}</p>` : `<p class="muted">Real product linked from your consumables catalog.</p>`}
+            </article>
+          `).join("")}
+        </div>
+      </section>
+    ` : ""}
+
+    ${thingsToKnow.length ? `
+      <section class="section panel">
+        <h2 style="margin-top:0">Things to know, avoid, and plan for</h2>
+        <ul class="muted-list">${thingsToKnow.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+      </section>
+    ` : ""}
+
+    ${officialLinks.length ? `
+      <section class="section panel">
+        <h2 style="margin-top:0">Helpful official sources and local references</h2>
+        <div class="service-link-grid" style="margin-top:12px">
+          ${officialLinks.map((item) => `
+            <article class="service-link-card">
+              <h3>${escapeHtml(item.label || "Official source")}</h3>
+              <a class="btn ghost small" href="${escapeHtml(item.url)}" rel="noopener" target="_blank">Open source</a>
+            </article>
+          `).join("")}
+        </div>
+      </section>
+    ` : ""}
+
     <section class="section panel">
       <h2 style="margin-top:0">Recent work and review proof</h2>
       <p class="muted">Keep visible proof close to the booking CTA so visitors can confirm the business is active before they contact you.</p>
@@ -142,8 +227,8 @@ function pageTemplate(page, pricing, slug) {
           <h3>Booking fit</h3>
           <p class="muted">${escapeHtml(
             addon?.quote_required
-              ? "This service is requested online first and finalized after inspection because condition and scope can change the labor and product path."
-              : "Use the live booking planner to compare package fit, vehicle size, and add-on eligibility."
+              ? "This service is requested online first and finalized after inspection because condition, labour, and prep needs can change the product path."
+              : "Use the live booking planner to compare package fit, vehicle size, and add-on eligibility before you lock in a booking."
           )}</p>
           <div class="cta-row" style="margin-top:10px">
             <a class="btn ghost small" href="/contact">Ask a question</a>
@@ -186,9 +271,10 @@ function pageTemplate(page, pricing, slug) {
 async function renderLandingPage() {
   const slug = slugFromPath();
 
-  const [landingPages, pricing] = await Promise.all([
+  const [landingPages, pricing, productCatalog] = await Promise.all([
     fetchJson("/api/landing_pages_public"),
-    fetchJson("/api/pricing_catalog_public")
+    fetchJson("/api/pricing_catalog_public"),
+    fetchJson("/data/rosie_products_catalog.json")
   ]);
 
   window.__landingPages = landingPages || { pages: {} };
@@ -232,7 +318,7 @@ async function renderLandingPage() {
     );
   }
 
-  document.getElementById("landingMount").innerHTML = pageTemplate(page, pricing || {}, slug);
+  document.getElementById("landingMount").innerHTML = pageTemplate(page, pricing || {}, slug, productCatalog || []);
   renderRecentWorkMounts(3);
 }
 
