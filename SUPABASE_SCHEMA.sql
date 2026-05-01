@@ -974,3 +974,6 @@ create index if not exists accounting_period_closes_status_idx on public.account
 -- 2026-04-29 pass: landing page content, add-on image merge safety, and admin add-on dependency/editor refinements.
 
 -- 2026-04-30 pass note: no new SQL migration required for the product-linked landing-page expansion; this pass extended shared landing content, folder-backed routes, and documentation only.
+
+
+-- 2026-05-01 booking embed/media pass: no DDL change. Latest required payroll compatibility DDL remains sql/2026-04-30_job_time_entries_minutes_compatibility.sql.
