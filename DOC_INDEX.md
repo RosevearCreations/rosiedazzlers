@@ -168,3 +168,10 @@ Use `NEW_CHAT_STATUS.md`, `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, a
 ## 2026-04-30 doc note
 - Roadmap / handoff docs were refreshed for the product-linked landing-page pass.
 - `IMAGES.md` — image inventory, page image needs, and which Admin App editor controls each image slot.
+
+---
+
+## Build 124 Documentation Sync — 2026-05-01
+
+This documentation file was reviewed during the Build 124 pass. The current patch focuses on Services/Pricing booking embed clipping, embedded calendar/date-box rendering, add-on and consumable image containment, table/card overflow guards, internal link checks, one-H1 verification, shared media-base migration, and compatibility fallbacks for older `job_time_entries` tables without `minutes`.
+
