@@ -709,3 +709,11 @@ Open accounting risks: this remains an operational bookkeeping layer, not profes
 
 - Admin Catalog now shows a seeded fallback from `rosie_products_catalog.json` and `systems_catalog.json` when the DB inventory is empty or unavailable. This avoids a blank screen, but it is still not a substitute for a proper DB import workflow.
 - Embedded `/book?embed=1` now uses a split Step 1 layout to reduce height on Services and Pricing. Re-check after future booking-form changes because DOM structure changes could require the embed-only layout script to be updated.
+
+
+## 2026-04-30 Services / pricing planner and payroll compatibility patch
+- Reduced the embedded booking planner's fixed iframe height on Services and Pricing, added dynamic resize handling, and set the iframe to eager/no-scroll so the booking calendar does not leave a long empty scrollbar.
+- Changed the booking availability window to render the date range immediately, show "Checking availability…" date pills, fetch the 21-day window in parallel with a timeout, and fall back to disabled/unavailable pills instead of staying on "Loading availability window…".
+- Restored the missing pricing-page lower-section card CSS for add-on/service buttons, town cards, and local-proof blocks.
+- Hardened payroll summary loading when the live database is missing `job_time_entries.minutes`; event-based work timers continue to summarize, manual minute rows default to `0` until the SQL patch is applied.
+- Added `sql/2026-04-30_job_time_entries_minutes_compatibility.sql` to bring older databases up to the current job time entry schema.

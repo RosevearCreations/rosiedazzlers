@@ -428,3 +428,11 @@ The accounting workspace now covers operational ledger, payables, remittance, st
 ## Latest pass note
 The 2026-04-30 pass expanded the landing-page system into product-linked money pages for multiple add-on services, added more folder-backed service routes, and enriched town pages with more practical local information.
 - See `IMAGES.md` for the current image inventory, required missing image types, and which Admin App interface controls each image slot.
+
+
+## 2026-04-30 Services / pricing planner and payroll compatibility patch
+- Reduced the embedded booking planner's fixed iframe height on Services and Pricing, added dynamic resize handling, and set the iframe to eager/no-scroll so the booking calendar does not leave a long empty scrollbar.
+- Changed the booking availability window to render the date range immediately, show "Checking availability…" date pills, fetch the 21-day window in parallel with a timeout, and fall back to disabled/unavailable pills instead of staying on "Loading availability window…".
+- Restored the missing pricing-page lower-section card CSS for add-on/service buttons, town cards, and local-proof blocks.
+- Hardened payroll summary loading when the live database is missing `job_time_entries.minutes`; event-based work timers continue to summarize, manual minute rows default to `0` until the SQL patch is applied.
+- Added `sql/2026-04-30_job_time_entries_minutes_compatibility.sql` to bring older databases up to the current job time entry schema.

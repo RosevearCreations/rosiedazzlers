@@ -437,3 +437,11 @@ Smoke-check after deploy: /pricing, /book, /admin-accounting, and home-page revi
 - Booking planner iframe height caps were raised to reduce inner scrollbars on Services and Pricing.
 
 - April 30, 2026 sanity pass: public pricing page no longer relies on an undefined `landingData` variable, embedded booking pages use the new split Step 1 layout in embed mode only, Admin Catalog has a local-catalog fallback instead of a blank inventory table, and payroll helper queries no longer select the missing `job_time_entries.staff_name` column.
+
+
+## 2026-04-30 Services / pricing planner and payroll compatibility patch
+- Reduced the embedded booking planner's fixed iframe height on Services and Pricing, added dynamic resize handling, and set the iframe to eager/no-scroll so the booking calendar does not leave a long empty scrollbar.
+- Changed the booking availability window to render the date range immediately, show "Checking availability…" date pills, fetch the 21-day window in parallel with a timeout, and fall back to disabled/unavailable pills instead of staying on "Loading availability window…".
+- Restored the missing pricing-page lower-section card CSS for add-on/service buttons, town cards, and local-proof blocks.
+- Hardened payroll summary loading when the live database is missing `job_time_entries.minutes`; event-based work timers continue to summarize, manual minute rows default to `0` until the SQL patch is applied.
+- Added `sql/2026-04-30_job_time_entries_minutes_compatibility.sql` to bring older databases up to the current job time entry schema.

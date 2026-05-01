@@ -55,13 +55,13 @@
     .tag.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
     .mini{font-size:.92rem}
     .booking-lead{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
-    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;height:1180px;min-height:1180px;max-height:1800px}
-    .booking-embed-frame{display:block;width:100%;height:1180px;min-height:1180px;max-height:1800px;border:0;background:transparent;overflow:hidden}
+    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;height:960px;min-height:720px;max-height:1650px;transition:height .18s ease}
+    .booking-embed-frame{display:block;width:100%;height:960px;min-height:720px;max-height:1650px;border:0;background:transparent;overflow:hidden}
     .booking-side{display:grid;gap:12px}
     @media (max-width:980px){
       .booking-lead{grid-template-columns:1fr}
-      .booking-embed-shell{height:1380px;min-height:1380px;max-height:2100px}
-      .booking-embed-frame{height:1380px;min-height:1380px;max-height:2100px}
+      .booking-embed-shell{height:1160px;min-height:940px;max-height:1900px}
+      .booking-embed-frame{height:1160px;min-height:940px;max-height:1900px}
     }
 
     .landing-button-grid{
@@ -153,7 +153,7 @@
         </div>
         <div class="booking-lead" style="margin-top:14px">
           <div class="booking-embed-shell">
-            <iframe id="bookingPlannerFrame" class="booking-embed-frame" title="Rosie Dazzlers booking planner" loading="lazy" src="/book?embed=1"></iframe>
+            <iframe id="bookingPlannerFrame" class="booking-embed-frame" title="Rosie Dazzlers booking planner" loading="eager" scrolling="no" src="/book?embed=1"></iframe>
           </div>
           <div class="booking-side">
             <div class="panel" style="background:rgba(255,255,255,.02)">
@@ -412,29 +412,41 @@
     function wireBookingPlannerFrame(){
       const frame = qs('#bookingPlannerFrame');
       if (!frame) return;
+      const applyHeight = (height) => {
+        const measured = Number(height || 0);
+        if (!Number.isFinite(measured) || measured <= 0) return;
+        const mobile = window.innerWidth <= 980;
+        const minHeight = mobile ? 940 : 720;
+        const maxHeight = mobile ? 1900 : 1650;
+        const nextHeight = Math.min(maxHeight, Math.max(minHeight, Math.round(measured) + 8));
+        const currentHeight = parseInt(frame.style.height || frame.getAttribute('height') || '0', 10) || 0;
+        const shell = frame.closest('.booking-embed-shell');
+        if (Math.abs(nextHeight - currentHeight) >= 8) {
+          frame.style.height = `${nextHeight}px`;
+          frame.style.minHeight = `${Math.min(nextHeight, minHeight)}px`;
+          frame.style.maxHeight = `${maxHeight}px`;
+          if (shell) {
+            shell.style.height = `${nextHeight}px`;
+            shell.style.minHeight = `${Math.min(nextHeight, minHeight)}px`;
+            shell.style.maxHeight = `${maxHeight}px`;
+          }
+        }
+      };
+      frame.addEventListener('load', () => applyHeight(window.innerWidth <= 980 ? 1160 : 960));
+      window.addEventListener('resize', () => applyHeight(parseInt(frame.style.height || frame.getAttribute('height') || '0', 10)));
       window.addEventListener('message', (event) => {
         const payload = event.data || {};
         if (payload.type === 'rd-book-embed-size') {
-          const measured = Number(payload.height || 0);
-          const mobile = window.innerWidth <= 980;
-          const minHeight = mobile ? 1360 : 1080;
-          const maxHeight = mobile ? 2100 : 1800;
-          const nextHeight = Math.min(maxHeight, Math.max(minHeight, Math.round(measured) + 16));
-          const currentHeight = parseInt(frame.style.height || frame.getAttribute('height') || '0', 10) || 0;
-          const shell = frame.closest('.booking-embed-shell');
-          if (Number.isFinite(nextHeight) && Math.abs(nextHeight - currentHeight) >= 12) {
-            frame.style.height = `${nextHeight}px`;
-            frame.style.minHeight = `${nextHeight}px`;
-            frame.style.maxHeight = `${nextHeight}px`;
-            if (shell) {
-              shell.style.height = `${nextHeight}px`;
-              shell.style.minHeight = `${nextHeight}px`;
-              shell.style.maxHeight = `${nextHeight}px`;
-            }
-          }
+          applyHeight(payload.height);
+          return;
+        }
+        if (payload.type === 'rd-book-embed-state' && typeof renderPlannerSummary === 'function') {
+          plannerState = payload.state || null;
+          renderPlannerSummary(plannerState);
         }
       });
     }
+
 
     async function main(){
       try{

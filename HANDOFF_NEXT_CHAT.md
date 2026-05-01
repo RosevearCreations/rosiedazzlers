@@ -78,3 +78,11 @@ Keep the folder-backed clean-route model as the live baseline. On Rosie Dazzlers
 ## 2026-04-30 handoff
 - The strongest next pass is landing-page media depth: add real before/after image blocks per add-on page and per-town gallery support in the admin landing builder.
 - The next backend step after that is a dedicated landing-service-products join model so consumables can be mapped in admin without storing the relationship only inside landing page content.
+
+
+## 2026-04-30 Services / pricing planner and payroll compatibility patch
+- Reduced the embedded booking planner's fixed iframe height on Services and Pricing, added dynamic resize handling, and set the iframe to eager/no-scroll so the booking calendar does not leave a long empty scrollbar.
+- Changed the booking availability window to render the date range immediately, show "Checking availability…" date pills, fetch the 21-day window in parallel with a timeout, and fall back to disabled/unavailable pills instead of staying on "Loading availability window…".
+- Restored the missing pricing-page lower-section card CSS for add-on/service buttons, town cards, and local-proof blocks.
+- Hardened payroll summary loading when the live database is missing `job_time_entries.minutes`; event-based work timers continue to summarize, manual minute rows default to `0` until the SQL patch is applied.
+- Added `sql/2026-04-30_job_time_entries_minutes_compatibility.sql` to bring older databases up to the current job time entry schema.

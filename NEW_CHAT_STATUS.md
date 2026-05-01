@@ -101,3 +101,11 @@ Important next move:
 - Added IMAGES.md documenting where images are needed and which Admin App editor controls them.
 
 - Latest repair pass fixed the `/pricing` landingData crash, reduced embedded booking height on Services/Pricing by splitting Step 1 into two columns, improved the mobile nav to a wrapped two-column dropdown, added seeded consumables/gear fallback to Admin Catalog, and patched payroll time queries to stop requesting the missing `job_time_entries.staff_name` column.
+
+
+## 2026-04-30 Services / pricing planner and payroll compatibility patch
+- Reduced the embedded booking planner's fixed iframe height on Services and Pricing, added dynamic resize handling, and set the iframe to eager/no-scroll so the booking calendar does not leave a long empty scrollbar.
+- Changed the booking availability window to render the date range immediately, show "Checking availability…" date pills, fetch the 21-day window in parallel with a timeout, and fall back to disabled/unavailable pills instead of staying on "Loading availability window…".
+- Restored the missing pricing-page lower-section card CSS for add-on/service buttons, town cards, and local-proof blocks.
+- Hardened payroll summary loading when the live database is missing `job_time_entries.minutes`; event-based work timers continue to summarize, manual minute rows default to `0` until the SQL patch is applied.
+- Added `sql/2026-04-30_job_time_entries_minutes_compatibility.sql` to bring older databases up to the current job time entry schema.
