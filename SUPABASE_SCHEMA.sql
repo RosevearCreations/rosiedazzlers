@@ -980,3 +980,6 @@ create index if not exists accounting_period_closes_status_idx on public.account
 
 -- 2026-05-01 Build 125 booking embed console patch: no DDL change.
 -- The Services/Pricing iframe error was front-end JavaScript only; see sql/2026-05-01_build125_booking_embed_indexof_no_ddl_note.sql.
+
+-- Build 126 compact vehicle embed repair — 2026-05-01
+-- Front-end-only layout pass. Services/Pricing now render the embedded booking planner full-width, and /book?embed=1 keeps vehicle fields in compact two/three-column rows. No schema change required.
