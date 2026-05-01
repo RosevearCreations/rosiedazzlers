@@ -68,3 +68,19 @@ function applyVisibilityFilter(items, filterValue) {
   if (filterValue === "customer") return rows.filter((row) => !["internal","hidden","removed"].includes(norm(row.visibility || row.thread_status)));
   return rows;
 }
+
+
+async function fetchTimeEntriesWithMinutesFallback(env, headers, booking_id) {
+  const base = `${env.SUPABASE_URL}/rest/v1/job_time_entries`;
+  const filter = `booking_id=eq.${encodeURIComponent(booking_id)}&order=created_at.desc`;
+  const primary = await fetch(`${base}?select=id,booking_id,minutes,note,entry_type,staff_user_id,staff_name,created_at&${filter}`, { headers });
+  if (primary.ok || !(await isMissingMinutesResponse(primary))) return primary;
+  return await fetch(`${base}?select=id,booking_id,note,entry_type,staff_user_id,staff_name,created_at&${filter}`, { headers });
+}
+
+async function isMissingMinutesResponse(res) {
+  const clone = res.clone();
+  const text = await clone.text().catch(() => "");
+  const s = String(text || "").toLowerCase();
+  return s.includes("job_time_entries.minutes") || (s.includes("minutes") && s.includes("does not exist")) || (s.includes("pgrst204") && s.includes("minutes"));
+}

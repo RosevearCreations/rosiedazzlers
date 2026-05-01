@@ -42,3 +42,9 @@ Pass sync: April 17, 2026 — pricing now restores the booking page as the first
 - reviewed during the merchandising / SEO / geofence refinement pass
 - no file-specific workflow changes were required beyond the centralized roadmap, schema, repo-guide, and handoff updates
 
+---
+
+## Build 124 Documentation Sync — 2026-05-01
+
+This documentation file was reviewed during the Build 124 pass. The current patch focuses on Services/Pricing booking embed clipping, embedded calendar/date-box rendering, add-on and consumable image containment, table/card overflow guards, internal link checks, one-H1 verification, shared media-base migration, and compatibility fallbacks for older `job_time_entries` tables without `minutes`.
+
