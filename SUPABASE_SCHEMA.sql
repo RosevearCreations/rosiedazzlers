@@ -977,3 +977,6 @@ create index if not exists accounting_period_closes_status_idx on public.account
 
 
 -- 2026-05-01 booking embed/media pass: no DDL change. Latest required payroll compatibility DDL remains sql/2026-04-30_job_time_entries_minutes_compatibility.sql.
+
+-- 2026-05-01 Build 125 booking embed console patch: no DDL change.
+-- The Services/Pricing iframe error was front-end JavaScript only; see sql/2026-05-01_build125_booking_embed_indexof_no_ddl_note.sql.
