@@ -123,8 +123,10 @@
     .modal img{width:100%;height:auto;display:block;border-radius:14px}
     body.is-embed .nav,
     body.is-embed .footer{display:none}
-    body.is-embed{background:transparent}
-    body.is-embed main.container{max-width:1280px;padding-top:0}
+    html.is-embed-root, body.is-embed{background:transparent}
+    html.is-embed-root{overflow:hidden}
+    body.is-embed{overflow:hidden}
+    body.is-embed main.container{max-width:1280px;padding-top:0;padding-bottom:0}
     body.is-embed .wizard-top{margin-top:0}
     body.is-embed .wizard-top .step-head .row a[href="/pricing"]{display:none}
     body.is-embed .wizard-shell{padding-bottom:0}
@@ -535,6 +537,7 @@
 
     function applyEmbedMode() {
       if (!embedMode) return;
+      document.documentElement.classList.add("is-embed-root");
       document.body.classList.add("is-embed");
       const title = qs("#wizardTop h1");
       const kicker = qs("#wizardTop .page-kicker");
@@ -578,9 +581,12 @@
       const rawHeight = Math.max(
         shell ? shell.scrollHeight : 0,
         shell ? shell.offsetHeight : 0,
-        980
+        document.body ? document.body.scrollHeight : 0,
+        document.documentElement ? document.documentElement.scrollHeight : 0,
+        window.innerWidth <= 980 ? 940 : 720
       );
-      const height = Math.min(window.innerWidth <= 980 ? 1380 : 1120, rawHeight);
+      const maxHeight = window.innerWidth <= 980 ? 1900 : 1650;
+      const height = Math.min(maxHeight, Math.max(window.innerWidth <= 980 ? 940 : 720, rawHeight));
       window.parent.postMessage({ type: "rd-book-embed-size", height }, "*");
     }
 
@@ -937,6 +943,7 @@
       renderReviewVehicle();
       renderFinalSummary();
       renderVehicleServiceHint();
+      postEmbedHeight();
     }
 
     async function loadGarageVehicles() {
@@ -1063,15 +1070,19 @@
     async function fetchAvailability(date) {
       if (!date) return null;
       if (state.availabilityCache.has(date)) return state.availabilityCache.get(date);
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), 5500);
       try {
-        const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache:"no-store" });
+        const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache:"no-store", signal: controller.signal });
         const out = await res.json().catch(() => null);
         if (!res.ok || !out?.ok) throw new Error(out?.error || "Could not load availability.");
         state.availabilityCache.set(date, out);
         return out;
-      } catch {
-        state.availabilityCache.set(date, null);
-        return null;
+      } catch (err) {
+        state.availabilityCache.set(date, { ok:false, date, blocked:true, AM:false, PM:false, error: err?.name === "AbortError" ? "Availability request timed out." : "Availability unavailable." });
+        return state.availabilityCache.get(date);
+      } finally {
+        window.clearTimeout(timer);
       }
     }
 
@@ -1084,34 +1095,45 @@
 
     async function loadAvailabilityWindow() {
       const start = addDaysLocal(startOfLocalDay(), state.availabilityOffset);
-      const items = [];
-
       const windowDays = availabilityWindowDays();
-
-      for (let i = 0; i < windowDays; i++) {
-        const d = addDaysLocal(start, i);
-        const iso = toIsoLocal(d);
-        const out = await fetchAvailability(iso);
-        items.push({ iso, out, status: availabilityStatus(out) });
-      }
-
       const end = addDaysLocal(start, windowDays - 1);
-      qs("#availabilityWindowLabel").textContent = `${start.toLocaleDateString("en-CA", { month:"short", day:"numeric" })} to ${end.toLocaleDateString("en-CA", { month:"short", day:"numeric", year:"numeric" })}`;
+      const label = `${start.toLocaleDateString("en-CA", { month:"short", day:"numeric" })} to ${end.toLocaleDateString("en-CA", { month:"short", day:"numeric", year:"numeric" })}`;
+      const labelNode = qs("#availabilityWindowLabel");
+      const datesNode = qs("#availableDates");
+      if (labelNode) labelNode.textContent = label;
       qs("#availabilityPrevBtn").disabled = state.availabilityOffset === 0;
 
-      qs("#availableDates").innerHTML = items.map((item) => {
-        const dt = new Date(`${item.iso}T12:00:00`);
+      const dateRows = Array.from({ length: windowDays }, (_, i) => {
+        const d = addDaysLocal(start, i);
+        const iso = toIsoLocal(d);
+        const dt = new Date(`${iso}T12:00:00`);
         const label = dt.toLocaleDateString("en-CA", { weekday:"short", month:"short", day:"numeric" });
-        const out = item.out || {};
-        const desc = item.status === "open"
-          ? "AM open · PM open"
-          : item.status === "partial"
-            ? `AM ${out.AM ? "open" : "booked"} · PM ${out.PM ? "open" : "booked"}`
-            : out.blocked ? `Unavailable · ${out.reason || "blocked"}` : "Unavailable · booked";
-        const disabled = item.status === "closed" ? "disabled" : "";
-        const selected = item.iso === selectedDate() ? "is-selected" : "";
-        return `<button class="date-pill is-${item.status} ${selected}" type="button" data-date-pill="${item.iso}" ${disabled}><strong>${label}</strong><span>${escapeHtml(desc)}</span></button>`;
-      }).join("");
+        return { iso, label };
+      });
+
+      if (datesNode) {
+        datesNode.innerHTML = dateRows.map((item) => `<button class="date-pill is-loading" type="button" disabled><strong>${item.label}</strong><span>Checking availability…</span></button>`).join("");
+      }
+      postEmbedHeight();
+
+      const items = await Promise.all(dateRows.map(async (item) => {
+        const out = await fetchAvailability(item.iso);
+        return { ...item, out, status: availabilityStatus(out) };
+      }));
+
+      if (datesNode) {
+        datesNode.innerHTML = items.map((item) => {
+          const out = item.out || {};
+          const desc = item.status === "open"
+            ? "AM open · PM open"
+            : item.status === "partial"
+              ? `AM ${out.AM ? "open" : "booked"} · PM ${out.PM ? "open" : "booked"}`
+              : out.error ? `Unavailable · ${out.error}` : out.blocked ? `Unavailable · ${out.reason || "blocked"}` : "Unavailable · booked";
+          const disabled = item.status === "closed" ? "disabled" : "";
+          const selected = item.iso === selectedDate() ? "is-selected" : "";
+          return `<button class="date-pill is-${item.status} ${selected}" type="button" data-date-pill="${item.iso}" ${disabled}><strong>${item.label}</strong><span>${escapeHtml(desc)}</span></button>`;
+        }).join("");
+      }
 
       qsa("[data-date-pill]").forEach((btn) => {
         btn.addEventListener("click", async () => {
@@ -1125,8 +1147,9 @@
 
       if (!selectedDate()) {
         const firstOpen = items.find((item) => item.status !== "closed");
-        if (firstOpen) qs("#service_date").value = firstOpen.iso;
+        qs("#service_date").value = firstOpen ? firstOpen.iso : toIsoLocal(startOfLocalDay());
       }
+      postEmbedHeight();
     }
 
     async function refreshAvailability() {
@@ -1526,6 +1549,7 @@
       renderReviewVehicle();
       renderFinalSummary();
       renderVehicleServiceHint();
+      postEmbedHeight();
       gotoStep(1);
       postEmbedHeight();
     } catch (err) {

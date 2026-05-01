@@ -564,3 +564,11 @@ The accounting direction has moved from month-end/year-end reporting only into w
 - IMAGES.md explains where each image type belongs and which Admin App editor controls it.
 
 - Current repo behavior after the latest repair pass: `/pricing` and `/services` embed `/book?embed=1`, but embed mode now rewrites Step 1 into two columns so the iframe can be shorter while leaving the full `/book` page unchanged. Admin Catalog falls back to the local consumables/gear JSON catalogs if DB inventory is empty.
+
+
+## 2026-04-30 Services / pricing planner and payroll compatibility patch
+- Reduced the embedded booking planner's fixed iframe height on Services and Pricing, added dynamic resize handling, and set the iframe to eager/no-scroll so the booking calendar does not leave a long empty scrollbar.
+- Changed the booking availability window to render the date range immediately, show "Checking availability…" date pills, fetch the 21-day window in parallel with a timeout, and fall back to disabled/unavailable pills instead of staying on "Loading availability window…".
+- Restored the missing pricing-page lower-section card CSS for add-on/service buttons, town cards, and local-proof blocks.
+- Hardened payroll summary loading when the live database is missing `job_time_entries.minutes`; event-based work timers continue to summarize, manual minute rows default to `0` until the SQL patch is applied.
+- Added `sql/2026-04-30_job_time_entries_minutes_compatibility.sql` to bring older databases up to the current job time entry schema.
