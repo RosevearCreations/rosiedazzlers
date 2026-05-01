@@ -8,7 +8,7 @@
   <link rel="canonical" href="https://rosiedazzlers.ca/services" />
   <meta property="og:title" content="Mobile Auto Detailing Services | Rosie Dazzlers" />
   <meta property="og:description" content="Transparent Rosie Dazzlers pricing for premium wash, basic detail, complete detail, interior detail, exterior detail, add-ons, and special detailing pages." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260501embedmedia1" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260501compactvehicle1" />
   <script type="application/ld+json" id="pricingSchema">
   {
     "@context": "https://schema.org",
@@ -54,14 +54,14 @@
     .tag.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
     .tag.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
     .mini{font-size:.92rem}
-    .booking-lead{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
-    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;height:1320px;min-height:1120px;max-height:2450px;transition:height .18s ease}
-    .booking-embed-frame{display:block;width:100%;height:1320px;min-height:1120px;max-height:2450px;border:0;background:transparent;overflow:hidden}
+    .booking-lead{display:grid;grid-template-columns:1fr;gap:14px;align-items:start}
+    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;height:1180px;min-height:980px;max-height:2450px;transition:height .18s ease}
+    .booking-embed-frame{display:block;width:100%;height:1180px;min-height:980px;max-height:2450px;border:0;background:transparent;overflow:hidden}
     .booking-side{display:grid;gap:12px}
     @media (max-width:980px){
       .booking-lead{grid-template-columns:1fr}
-      .booking-embed-shell{height:1560px;min-height:1280px;max-height:2700px}
-      .booking-embed-frame{height:1560px;min-height:1280px;max-height:2700px}
+      .booking-embed-shell{height:1460px;min-height:1220px;max-height:2700px}
+      .booking-embed-frame{height:1460px;min-height:1220px;max-height:2700px}
     }
 
     .landing-button-grid{
@@ -153,7 +153,7 @@
         </div>
         <div class="booking-lead" style="margin-top:14px">
           <div class="booking-embed-shell">
-            <iframe id="bookingPlannerFrame" class="booking-embed-frame" title="Rosie Dazzlers booking planner" loading="eager" scrolling="no" src="/book?embed=1"></iframe>
+            <iframe id="bookingPlannerFrame" class="booking-embed-frame" title="Rosie Dazzlers booking planner" loading="eager" scrolling="no" src="/book?embed=1&view=compact-vehicle"></iframe>
           </div>
           <div class="booking-side">
             <div class="panel" style="background:rgba(255,255,255,.02)">
@@ -417,7 +417,7 @@
         const measured = Number(height || 0);
         if (!Number.isFinite(measured) || measured <= 0) return;
         const mobile = window.innerWidth <= 980;
-        const minHeight = mobile ? 1280 : 1120;
+        const minHeight = mobile ? 1220 : 980;
         const maxHeight = mobile ? 2700 : 2450;
         const nextHeight = Math.min(maxHeight, Math.max(minHeight, Math.round(measured) + 16));
         const currentHeight = parseInt(frame.style.height || frame.getAttribute('height') || '0', 10) || 0;
@@ -433,8 +433,8 @@
           }
         }
       };
-      frame.addEventListener('load', () => applyHeight(window.innerWidth <= 980 ? 1560 : 1320));
-      window.setTimeout(() => applyHeight(window.innerWidth <= 980 ? 1560 : 1320), 900);
+      frame.addEventListener('load', () => applyHeight(window.innerWidth <= 980 ? 1460 : 1180));
+      window.setTimeout(() => applyHeight(window.innerWidth <= 980 ? 1460 : 1180), 900);
       window.addEventListener('resize', () => applyHeight(parseInt(frame.style.height || frame.getAttribute('height') || '0', 10)));
       window.addEventListener('message', (event) => {
         const payload = event.data || {};
