@@ -555,32 +555,44 @@
     }
     function setupEmbedStepOneLayout() {
       if (!embedMode) return;
-      const step = document.querySelector('.wizard-step[data-step="1"]');
-      if (!step || step.querySelector('.embed-step1-grid')) return;
-      const groups = Array.from(step.children);
-      const serviceArea = groups.find((el)=> el.classList && el.classList.contains('service-area-grid'));
-      if (!serviceArea) return;
-      const hr = groups.find((el)=> el.classList && el.classList.contains('hr'));
-      const secondHeadIndex = hr ? groups.index(hr)+1 : -1;
-      const secondHead = secondHeadIndex>0 ? groups[secondHeadIndex] : null;
-      const primary = document.createElement('div');
-      primary.className = 'panel-group';
-      const secondary = document.createElement('div');
-      secondary.className = 'panel-group';
-      const wrapper = document.createElement('div');
-      wrapper.className = 'embed-step1-grid';
-      wrapper.append(primary, secondary);
-      const primaryNodes=[];
-      const secondaryNodes=[];
-      let seenVehicle=false;
-      for (const el of groups.slice(groups.index(serviceArea))) {
-        if (el === hr) continue;
-        if (el === secondHead) { seenVehicle=true; secondaryNodes.push(el); continue; }
-        if (!seenVehicle) primaryNodes.push(el); else secondaryNodes.push(el);
+      try {
+        const step = document.querySelector('.wizard-step[data-step="1"]');
+        if (!step || step.querySelector('.embed-step1-grid')) return;
+
+        const childNodes = Array.from(step.children || []);
+        const serviceArea = childNodes.find((el)=> el.classList && el.classList.contains('service-area-grid'));
+        const serviceAreaIndex = serviceArea ? childNodes.indexOf(serviceArea) : -1;
+        if (!serviceArea || serviceAreaIndex < 0) return;
+
+        const hr = childNodes.find((el)=> el.classList && el.classList.contains('hr'));
+        const hrIndex = hr ? childNodes.indexOf(hr) : -1;
+        const secondHead = hrIndex >= 0 ? childNodes[hrIndex + 1] || null : null;
+
+        const primary = document.createElement('div');
+        primary.className = 'panel-group';
+        const secondary = document.createElement('div');
+        secondary.className = 'panel-group';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'embed-step1-grid';
+        wrapper.append(primary, secondary);
+
+        const primaryNodes=[];
+        const secondaryNodes=[];
+        let seenVehicle=false;
+        for (const el of childNodes.slice(serviceAreaIndex)) {
+          if (el === hr) continue;
+          if (el === secondHead) { seenVehicle=true; secondaryNodes.push(el); continue; }
+          if (!seenVehicle) primaryNodes.push(el); else secondaryNodes.push(el);
+        }
+        if (!primaryNodes.length && !secondaryNodes.length) return;
+        primaryNodes.forEach((el)=> primary.appendChild(el));
+        secondaryNodes.forEach((el)=> secondary.appendChild(el));
+        step.appendChild(wrapper);
+      } catch (err) {
+        console.warn('Booking embed Step 1 layout fallback skipped.', err);
+      } finally {
+        setTimeout(postEmbedHeight, 0);
       }
-      primaryNodes.forEach((el)=> primary.appendChild(el));
-      secondaryNodes.forEach((el)=> secondary.appendChild(el));
-      step.appendChild(wrapper);
     }
 
     function postEmbedHeight() {
