@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mobile Auto Detailing Prices in Oxford & Norfolk Counties | Rosie Dazzlers</title>
-  <meta name="description" content="See Rosie Dazzlers mobile auto detailing prices for Oxford County and Norfolk County, then use the live booking planner for availability, service zones, add-ons, and deposit-ready totals." />
-  <link rel="canonical" href="https://rosiedazzlers.ca/pricing" />
-  <meta property="og:title" content="Mobile Auto Detailing Pricing | Rosie Dazzlers" />
+  <title>Mobile Auto Detailing Services in Oxford & Norfolk Counties | Rosie Dazzlers</title>
+  <meta name="description" content="Explore Rosie Dazzlers mobile auto detailing services for Oxford County and Norfolk County, including packages, add-ons, special-detail pages, and live booking availability." />
+  <link rel="canonical" href="https://rosiedazzlers.ca/services" />
+  <meta property="og:title" content="Mobile Auto Detailing Services | Rosie Dazzlers" />
   <meta property="og:description" content="Transparent Rosie Dazzlers pricing for premium wash, basic detail, complete detail, interior detail, exterior detail, add-ons, and special detailing pages." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260430pricingfix1" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260501embedmedia1" />
   <script type="application/ld+json" id="pricingSchema">
   {
     "@context": "https://schema.org",
     "@type": "AutoDetailing",
     "name": "Rosie Dazzlers Mobile Auto Detailing",
-    "url": "https://rosiedazzlers.ca/pricing",
+    "url": "https://rosiedazzlers.ca/services",
     "areaServed": ["Oxford County, Ontario", "Norfolk County, Ontario"]
   }
   </script>
@@ -55,13 +55,13 @@
     .tag.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
     .mini{font-size:.92rem}
     .booking-lead{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
-    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;height:960px;min-height:720px;max-height:1650px;transition:height .18s ease}
-    .booking-embed-frame{display:block;width:100%;height:960px;min-height:720px;max-height:1650px;border:0;background:transparent;overflow:hidden}
+    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;height:1320px;min-height:1120px;max-height:2450px;transition:height .18s ease}
+    .booking-embed-frame{display:block;width:100%;height:1320px;min-height:1120px;max-height:2450px;border:0;background:transparent;overflow:hidden}
     .booking-side{display:grid;gap:12px}
     @media (max-width:980px){
       .booking-lead{grid-template-columns:1fr}
-      .booking-embed-shell{height:1160px;min-height:940px;max-height:1900px}
-      .booking-embed-frame{height:1160px;min-height:940px;max-height:1900px}
+      .booking-embed-shell{height:1560px;min-height:1280px;max-height:2700px}
+      .booking-embed-frame{height:1560px;min-height:1280px;max-height:2700px}
     }
 
     .landing-button-grid{
@@ -83,7 +83,7 @@
     }
     .landing-button-card h3{margin:0;font-size:1rem}
     .landing-button-card p{margin:0;color:rgba(234,242,255,.68);font-size:.92rem}
-    .landing-button-image{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);margin-bottom:10px}
+    .landing-button-image{width:100%;aspect-ratio:16/10;object-fit:contain;object-position:center center;padding:8px;box-sizing:border-box;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);margin-bottom:10px}
 
     .landing-subgroup{
       margin-top:14px;
@@ -112,7 +112,7 @@
 
   <div class="container">
     <div class="panel">
-      <h1 style="margin:0 0 6px">Mobile auto detailing prices</h1>
+      <h1 style="margin:0 0 6px">Mobile auto detailing services</h1>
       <p class="kicker" style="margin:0">
         Transparent pricing, live booking availability, and direct paths into package, add-on, and special-detail service pages.
       </p>
@@ -292,7 +292,8 @@
       applyJsonLdScript
     } from "/assets/pricing-catalog-client.js?v=20260430pricingfix1";
     import { renderRecentWorkMounts } from "/assets/recent-work.js";
-    const IMAGE_BASE = "https://assets.rosiedazzlers.ca/packages/";
+    const IMAGE_BASE = window.RD_ASSET_BASES?.packages || "https://assets.rosiedazzlers.ca/packages/";
+    const assetFile = (base, filename) => `${String(base || "").replace(/\/$/, "")}/${encodeURIComponent(filename)}`;
     const ADDON_IMAGE_FILES = {
       full_clay_treatment: "full_clay_treatment.png",
       two_stage_polish: "two_stage_polish.png",
@@ -314,7 +315,7 @@
       const hero = String(page?.hero_image_url || '').trim();
       if (hero) return hero;
       const file = ADDON_IMAGE_FILES[code];
-      return file ? (IMAGE_BASE + encodeURIComponent(file)) : '/assets/addons/generic_addon.svg';
+      return file ? assetFile(IMAGE_BASE, file) : '/assets/addons/generic_addon.svg';
     }
     function landingButtonDescription(page, addon){
       return String(page?.hero_intro || addon?.requirement_note || addon?.notes?.[0] || 'Open this page for process, products used, booking fit, and service notes.').trim();
@@ -416,9 +417,9 @@
         const measured = Number(height || 0);
         if (!Number.isFinite(measured) || measured <= 0) return;
         const mobile = window.innerWidth <= 980;
-        const minHeight = mobile ? 940 : 720;
-        const maxHeight = mobile ? 1900 : 1650;
-        const nextHeight = Math.min(maxHeight, Math.max(minHeight, Math.round(measured) + 8));
+        const minHeight = mobile ? 1280 : 1120;
+        const maxHeight = mobile ? 2700 : 2450;
+        const nextHeight = Math.min(maxHeight, Math.max(minHeight, Math.round(measured) + 16));
         const currentHeight = parseInt(frame.style.height || frame.getAttribute('height') || '0', 10) || 0;
         const shell = frame.closest('.booking-embed-shell');
         if (Math.abs(nextHeight - currentHeight) >= 8) {
@@ -432,7 +433,8 @@
           }
         }
       };
-      frame.addEventListener('load', () => applyHeight(window.innerWidth <= 980 ? 1160 : 960));
+      frame.addEventListener('load', () => applyHeight(window.innerWidth <= 980 ? 1560 : 1320));
+      window.setTimeout(() => applyHeight(window.innerWidth <= 980 ? 1560 : 1320), 900);
       window.addEventListener('resize', () => applyHeight(parseInt(frame.style.height || frame.getAttribute('height') || '0', 10)));
       window.addEventListener('message', (event) => {
         const payload = event.data || {};
@@ -459,7 +461,7 @@
         chartMap = new Map([
           ["Vehicle Price Chart 2025", chartSource(data, "Vehicle Price Chart 2025", "/assets/brand/CarPrice2025.PNG")],
           ["Package Service Details Chart", chartSource(data, "Package Service Details Chart", "/assets/brand/CarPriceDetails2025.PNG")],
-          ["Vehicle Size Chart", chartSource(data, "Vehicle Size Chart", "https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG")]
+          ["Vehicle Size Chart", chartSource(data, "Vehicle Size Chart", assetFile(IMAGE_BASE, "CarSizeChart.PNG"))]
         ]);
         wireCharts();
         applyJsonLdScript("pricingSchema", buildPricingOfferCatalogSchema(data, "https://rosiedazzlers.ca/pricing"));

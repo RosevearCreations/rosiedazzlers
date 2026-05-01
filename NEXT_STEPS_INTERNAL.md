@@ -271,3 +271,10 @@ Pass 28 sync — 2026-04-20
 - Restored the missing pricing-page lower-section card CSS for add-on/service buttons, town cards, and local-proof blocks.
 - Hardened payroll summary loading when the live database is missing `job_time_entries.minutes`; event-based work timers continue to summarize, manual minute rows default to `0` until the SQL patch is applied.
 - Added `sql/2026-04-30_job_time_entries_minutes_compatibility.sql` to bring older databases up to the current job time entry schema.
+
+---
+
+## Build 124 Documentation Sync — 2026-05-01
+
+This documentation file was reviewed during the Build 124 pass. The current patch focuses on Services/Pricing booking embed clipping, embedded calendar/date-box rendering, add-on and consumable image containment, table/card overflow guards, internal link checks, one-H1 verification, shared media-base migration, and compatibility fallbacks for older `job_time_entries` tables without `minutes`.
+

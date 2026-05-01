@@ -56,3 +56,10 @@ Pass sync: April 17, 2026 — pricing now restores the booking page as the first
 - No new database migration was required in this pass. `SUPABASE_SCHEMA.sql` was refreshed to document that schedule blocks still use the legacy `blocked_date` / `slot` shape and that analytics reports are computed from `site_activity_events` at request time.
 
 > Refreshed during the 2026-04-30 product-linked landing-page pass.
+
+---
+
+## Build 124 Documentation Sync — 2026-05-01
+
+This documentation file was reviewed during the Build 124 pass. The current patch focuses on Services/Pricing booking embed clipping, embedded calendar/date-box rendering, add-on and consumable image containment, table/card overflow guards, internal link checks, one-H1 verification, shared media-base migration, and compatibility fallbacks for older `job_time_entries` tables without `minutes`.
+

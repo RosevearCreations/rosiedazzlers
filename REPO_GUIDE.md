@@ -324,3 +324,10 @@ New admin/accounting workflow endpoints were added under `functions/api/admin/` 
 
 ## 2026-04-30 repo note
 - New folder-backed service routes were added for graphene-finish, full-clay-treatment, engine-cleaning, high-grade-paint-sealant, uv-protectant, exterior-wax, and de-ionizing-treatment.
+
+---
+
+## Build 124 Documentation Sync — 2026-05-01
+
+This documentation file was reviewed during the Build 124 pass. The current patch focuses on Services/Pricing booking embed clipping, embedded calendar/date-box rendering, add-on and consumable image containment, table/card overflow guards, internal link checks, one-H1 verification, shared media-base migration, and compatibility fallbacks for older `job_time_entries` tables without `minutes`.
+

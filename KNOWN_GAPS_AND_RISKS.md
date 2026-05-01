@@ -717,3 +717,26 @@ Open accounting risks: this remains an operational bookkeeping layer, not profes
 - Restored the missing pricing-page lower-section card CSS for add-on/service buttons, town cards, and local-proof blocks.
 - Hardened payroll summary loading when the live database is missing `job_time_entries.minutes`; event-based work timers continue to summarize, manual minute rows default to `0` until the SQL patch is applied.
 - Added `sql/2026-04-30_job_time_entries_minutes_compatibility.sql` to bring older databases up to the current job time entry schema.
+
+## 2026-05-01 Build 124 pass — booking embed, media sizing, and CSS/link hardening
+
+- Repaired the Services and Pricing embedded booking planner cutoff by compacting the embedded Step 1 calendar layout, raising the dynamic iframe resize ceiling, and adding a timed resize fallback if the postMessage height event is delayed.
+- Availability now has a stronger startup path because vehicle make/model API failures fall back to manual-entry datalists instead of stopping the date-window render.
+- Reset add-on and consumable image presentation to `object-fit: contain` with centered positioning so uploaded product/add-on art is not cropped or zoomed inside cards.
+- Added global CSS guards for tables, cards, panels, and media so long labels/links wrap instead of pushing outside their boxes.
+- Corrected the Services page title/canonical/schema wording so `/services` is treated as a services page, not a duplicate pricing page.
+- Added shared media-base support through `window.RD_ASSET_BASES` and continued migration away from page-specific hard-coded image URL constants.
+- Internal HTML link scan completed with no missing root-relative page links found in this build.
+- H1 check completed for exposed HTML pages; pages remain within the one-H1 rule.
+- Schema note added: no new DDL in this pass; keep the 2026-04-30 job time entries minutes compatibility SQL applied for payroll/manual-minute completeness.
+
+### Additional 2026-05-01 admin fallback note
+
+- Added extra job-time compatibility fallbacks for dashboard and jobsite detail endpoints. If a live database has not applied the `job_time_entries.minutes` compatibility patch yet, those screens now avoid hard-failing and can still summarize event-pair work_start/work_stop durations where available.
+
+---
+
+## Build 124 Documentation Sync — 2026-05-01
+
+This documentation file was reviewed during the Build 124 pass. The current patch focuses on Services/Pricing booking embed clipping, embedded calendar/date-box rendering, add-on and consumable image containment, table/card overflow guards, internal link checks, one-H1 verification, shared media-base migration, and compatibility fallbacks for older `job_time_entries` tables without `minutes`.
+
