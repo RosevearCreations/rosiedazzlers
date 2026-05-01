@@ -9,7 +9,7 @@
   <meta property="og:title" content="Book Mobile Auto Detailing | Rosie Dazzlers" />
   <meta property="og:description" content="Choose your date, town, vehicle, package, add-ons, and deposit payment for mobile detailing across Oxford and Norfolk communities." />
   <meta name="robots" content="index,follow" />
-  <link rel="stylesheet" href="/assets/site.css?v=20260501bookingembed1" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260501embedvehiclecompact1" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -134,22 +134,31 @@
     body.is-embed .service-card strong, body.is-embed .service-card span, body.is-embed .addon-card strong, body.is-embed .addon-card span{display:block;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
     .sr-only{position:absolute;left:-9999px;opacity:0;pointer-events:none}
 
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid{display:grid;grid-template-columns:minmax(360px,1.05fr) minmax(340px,.95fr);gap:16px;align-items:start;margin-top:12px}
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid > .panel-group{display:grid;gap:12px;min-width:0}
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .grid2,
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .grid3,
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .service-area-grid{grid-template-columns:1fr}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid{display:grid;grid-template-columns:minmax(420px,.96fr) minmax(520px,1.04fr);gap:14px;align-items:start;margin-top:10px}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid > .panel-group{display:grid;gap:10px;min-width:0}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .service-area-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column .grid3{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 10px;margin-top:8px!important}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column .grid2{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;margin-top:8px!important}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column .step-head{margin-bottom:0;gap:8px}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column .step-head a[href="/login"]{display:none}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column h3{margin:0 0 2px;font-size:1.02rem}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column p.muted{font-size:.88rem;line-height:1.32;margin:0}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column label{font-size:.82rem;margin-bottom:4px}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column input,
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column select{min-height:40px;padding:8px 10px;font-size:.92rem}
+    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column #garagePickerWrap{display:none!important}
     body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .step-head{margin-bottom:0}
     body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .hr{margin:0}
     body.is-embed .calendar-toolbar{gap:8px;margin-top:6px}
-    body.is-embed .calendar-strip{grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:7px}
-    body.is-embed .date-pill{min-height:62px;padding:8px;border-radius:12px;font-size:.86rem;gap:3px}
+    body.is-embed .calendar-strip{grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:7px}
+    body.is-embed .date-pill{min-height:60px;padding:8px;border-radius:12px;font-size:.84rem;gap:3px}
     body.is-embed .date-pill strong, body.is-embed .date-pill span{line-height:1.2}
     body.is-embed .booking-legend{gap:8px;margin-top:6px}
-    body.is-embed .service-area-panel{font-size:.9rem}
+    body.is-embed .service-area-panel{font-size:.88rem;line-height:1.35}
     body.is-embed .slot-row{gap:8px}
     body.is-embed .service-card img, body.is-embed .addon-thumb{aspect-ratio:16/9;max-height:138px;object-fit:contain;object-position:center center;padding:8px;background:rgba(255,255,255,.03)}
-    @media (max-width:980px){body.is-embed .wizard-step[data-step="1"] .embed-step1-grid{grid-template-columns:1fr} body.is-embed .calendar-strip{grid-template-columns:repeat(auto-fit,minmax(128px,1fr))}}
+    @media (max-width:1180px){body.is-embed .wizard-step[data-step="1"] .embed-step1-grid{grid-template-columns:1fr} body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column .grid3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media (max-width:760px){body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .service-area-grid, body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column .grid3, body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column .grid2{grid-template-columns:1fr} body.is-embed .calendar-strip{grid-template-columns:repeat(auto-fit,minmax(128px,1fr))}}
     @media (max-width:980px){
       .grid2,.grid3,.requirements-grid,.service-area-grid{grid-template-columns:1fr}
       .preferred-date-field,.date-input-wrap{max-width:100%;width:100%}
@@ -484,9 +493,9 @@
       packageImageForSize as sharedPackageImageForSize,
       packagePrice as sharedPackagePrice,
       chartUrl
-    } from "/assets/pricing-catalog-client.js?v=20260501bookingembed1";
+    } from "/assets/pricing-catalog-client.js?v=20260501embedvehiclecompact1";
 
-    const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260501bookingembed1";
+    const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260501embedvehiclecompact1";
     const VEHICLE_MAKES_URL = "/api/vehicle_makes";
     const VEHICLE_MODELS_URL = "/api/vehicle_models";
     const BRAND_BASE = window.RD_ASSET_BASES?.brand || "https://assets.rosiedazzlers.ca/brand";
@@ -569,9 +578,9 @@
         const secondHead = hrIndex >= 0 ? childNodes[hrIndex + 1] || null : null;
 
         const primary = document.createElement('div');
-        primary.className = 'panel-group';
+        primary.className = 'panel-group embed-date-column';
         const secondary = document.createElement('div');
-        secondary.className = 'panel-group';
+        secondary.className = 'panel-group embed-vehicle-column';
         const wrapper = document.createElement('div');
         wrapper.className = 'embed-step1-grid';
         wrapper.append(primary, secondary);
@@ -1608,6 +1617,6 @@
     }
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260501bookingembed1"></script>
+  <script type="module" src="/assets/chrome.js?v=20260501embedvehiclecompact1"></script>
 </body>
 </html>
