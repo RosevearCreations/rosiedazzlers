@@ -232,9 +232,35 @@ async function loadBookingsInRange(env, range) {
 }
 
 async function loadAllTimeEntries(env) {
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/job_time_entries?select=id,booking_id,staff_user_id,minutes,entry_type,event_time,created_at,note&order=created_at.asc&limit=10000`, { headers: serviceHeaders(env) });
-  if (!res.ok) throw new Error(`Could not load job time entries. ${await res.text()}`);
-  return await res.json().catch(() => []);
+  const headers = serviceHeaders(env);
+  const withMinutesUrl = `${env.SUPABASE_URL}/rest/v1/job_time_entries?select=id,booking_id,staff_user_id,staff_name,minutes,entry_type,event_time,created_at,note&order=created_at.asc&limit=10000`;
+  const res = await fetch(withMinutesUrl, { headers });
+  if (res.ok) return normalizeTimeEntryRows(await res.json().catch(() => []), false);
+
+  const text = await res.text();
+  if (!isMissingJobTimeMinutesError(text)) {
+    throw new Error(`Could not load job time entries. ${text}`);
+  }
+
+  // Compatibility path for live databases that were created before the manual minutes column was added.
+  // Event-based time still works from work_start/work_stop rows; manual minute rows show as 0 until the SQL patch is applied.
+  const fallbackUrl = `${env.SUPABASE_URL}/rest/v1/job_time_entries?select=id,booking_id,staff_user_id,staff_name,entry_type,event_time,created_at,note&order=created_at.asc&limit=10000`;
+  const fallbackRes = await fetch(fallbackUrl, { headers });
+  if (!fallbackRes.ok) throw new Error(`Could not load job time entries. ${await fallbackRes.text()}`);
+  return normalizeTimeEntryRows(await fallbackRes.json().catch(() => []), true);
+}
+
+function normalizeTimeEntryRows(rows, minutesMissing = false) {
+  return (Array.isArray(rows) ? rows : []).map((row) => ({
+    ...row,
+    minutes: Number(row?.minutes || 0),
+    minutes_column_missing: minutesMissing === true
+  }));
+}
+
+function isMissingJobTimeMinutesError(text) {
+  const s = String(text || "").toLowerCase();
+  return s.includes("job_time_entries.minutes") || (s.includes("minutes") && s.includes("does not exist")) || (s.includes("pgrst204") && s.includes("minutes"));
 }
 
 async function loadAvailabilityBlocks(env, range) {
