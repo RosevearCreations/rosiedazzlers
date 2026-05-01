@@ -176,3 +176,15 @@ export function money(cents) {
     currency: "CAD",
   }).format((cents || 0) / 100);
 }
+
+
+// Browser global used by older inline page scripts while media URL generation is migrated out of hard-coded page constants.
+if (typeof window !== "undefined") {
+  window.RD_ASSET_BASES = window.RD_ASSET_BASES || {
+    root: ASSETS_BASE,
+    brand: `${ASSETS_BASE}/${PATHS.brand}`,
+    packages: `${ASSETS_BASE}/${PATHS.packages}`,
+    products: `${ASSETS_BASE}/${PATHS.products}`,
+    systems: `${ASSETS_BASE}/${PATHS.systems}`
+  };
+}

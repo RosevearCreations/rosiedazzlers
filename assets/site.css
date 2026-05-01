@@ -898,3 +898,14 @@ input.search-input:-webkit-autofill:focus {
 .landing-button-image{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);margin-bottom:10px}
 @media (max-width:1100px){.landing-button-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:720px){.landing-button-grid{grid-template-columns:1fr}}
+
+
+/* 2026-05-01 build hardening: prevent card/table overflow and stop add-on/consumable media from looking zoomed-in. */
+.panel,.card,.landing-button-card,.service-card,.addon-card,.proof-card{min-width:0;overflow-wrap:anywhere}
+table{max-width:100%;table-layout:auto}
+th,td{overflow-wrap:anywhere;word-break:break-word}
+.cardImg,.landing-button-image,.service-card img,.addon-thumb{object-fit:contain!important;object-position:center center!important;background:rgba(255,255,255,.035)}
+.cardImg{max-height:220px;padding:10px;box-sizing:border-box}
+.landing-button-image{padding:8px;box-sizing:border-box}
+.booking-embed-shell,.booking-embed-frame{max-width:100%}
+@media (max-width:720px){table{font-size:.92rem}.table-scroll,div[style*="overflow:auto"]{max-width:100%;overflow-x:auto}}

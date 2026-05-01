@@ -15,7 +15,7 @@ const CONTACT = {
 };
 
 // Base URL for package media in R2 (filenames include spaces)
-const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages/";
+const PACKAGES_BASE = `${(window.RD_ASSET_BASES?.packages || "https://assets.rosiedazzlers.ca/packages/").replace(/\/$/, "")}/`;
 const pkgFile = (filename) => encodeURI(`${PACKAGES_BASE}${filename}`);
 
 // Hover/rotation images shown on package cards (these filenames MUST match R2 exactly)

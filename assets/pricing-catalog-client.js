@@ -1,10 +1,14 @@
 // /assets/pricing-catalog-client.js
 // Shared client-side pricing catalog loader and normalizer for public Rosie Dazzlers pages.
 
+export const R2_ASSETS_BASE = "https://assets.rosiedazzlers.ca";
+export const R2_PATHS = { brand: "brand", packages: "packages", products: "products", systems: "systems" };
+export function assetUrl(folder, filename) { return `${R2_ASSETS_BASE}/${folder}/${encodeURIComponent(filename)}`.replaceAll("%2F", "/"); }
+
 const DEFAULT_CHARTS = [
   { filename: "CarPrice2025.PNG", title: "Vehicle Price Chart 2025", r2_url: "/assets/brand/CarPrice2025.PNG" },
   { filename: "CarPriceDetails2025.PNG", title: "Package Service Details Chart", r2_url: "/assets/brand/CarPriceDetails2025.PNG" },
-  { filename: "CarSizeChart.PNG", title: "Vehicle Size Chart", r2_url: "https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG" }
+  { filename: "CarSizeChart.PNG", title: "Vehicle Size Chart", r2_url: assetUrl(R2_PATHS.packages, "CarSizeChart.PNG") }
 ];
 
 const LOCAL_CHART_URLS = {
