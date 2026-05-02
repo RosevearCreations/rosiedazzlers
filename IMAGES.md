@@ -145,3 +145,145 @@ No new database DDL was required in this pass. Schema tracking was updated with 
 This file was reviewed during the Build 126 Services/Pricing booking embed repair pass. The active fix gives the embedded `/book?embed=1` planner full-width space on Services and Pricing, removes the embed-only override that stacked every vehicle field one-per-line, and restores compact two/three-column vehicle rows similar to the full Book page. The vehicle inputs/selects now use smaller embedded padding, the login/garage prompt is hidden inside the embed to save height, and the iframe default/fallback height was retuned so the full Step 1 vehicle section is visible without reintroducing the long empty scrollbar.
 
 No database DDL was required. Schema tracking was updated with `sql/2026-05-01_build126_embed_vehicle_compact_no_ddl_note.sql`. Continue to keep Services/Pricing as booking-led local SEO pages with one clear H1, Oxford/Norfolk wording, compact card/table overflow guards, and shared media-base handling instead of page-level hardcoded image/video URLs.
+
+## Build 127 image requirements, sizes, update paths, and switch-out steps
+
+Use this section as the working image checklist for Rosie Dazzlers. The public site should prefer the admin/catalog JSON values first, then fall back to bundled `/assets/...` images only when the DB/R2 image is missing.
+
+### General upload rules
+
+| Image type | Recommended size | Minimum useful size | Format | Notes |
+|---|---:|---:|---|---|
+| Add-on/service card image | 1600 x 1000 px | 1200 x 750 px | PNG, JPG, WebP, SVG | 16:10 works best. Leave safe padding around the subject so it does not look zoomed in. |
+| Booking package/add-on thumbnail | 1200 x 900 px | 900 x 675 px | PNG, JPG, WebP, SVG | 4:3 works well inside the booking cards. The site uses `object-fit: contain` so the full image should show. |
+| Before/after gallery pair | 1600 x 1000 px each | 1200 x 750 px each | JPG, PNG, WebP, MP4 for video | Before and after should be the same angle, same crop, same orientation. This gives the slider a clean 50/50 split. |
+| Home recent-work slider | Uses the first 1-3 gallery entries | Same as gallery | JPG, PNG, WebP, MP4 | Pulled from the same `before_after_gallery` setting used by `/gallery`. |
+| Vehicle/chart images | 1600 px wide or larger | 1200 px wide | PNG preferred | Keep text large enough for phones. Charts can still open in a larger modal. |
+| Consumable/product images | 1200 x 900 px | 900 x 675 px | JPG, PNG, WebP | Use product-on-clean-background photos when possible. |
+| Logo/brand marks | SVG or 1000 x 1000 px PNG | 512 x 512 px | SVG/PNG | Transparent background preferred. |
+| Videos | 1080p landscape | 720p landscape | MP4 | Keep short and compressed for page speed. Use poster images later if needed. |
+
+### Where each image is controlled
+
+| Area | Main control location | Fallback file location | How to switch out |
+|---|---|---|---|
+| Add-on cards on Services/Pricing | Admin App → Pricing Catalog → Add-ons → `Primary image URL` | `/assets/addons/*.png` or SVG | Upload image to R2, paste the public URL into `image_url`, save pricing catalog. |
+| Booking add-on thumbnails | Same add-on `image_url` and `image_fallback_url` | `/assets/addons/generic_addon.svg` | Same as above. The booking page now contains the image instead of cropping/zooming it. |
+| Dedicated add-on landing page hero | Admin App → Landing Page Builder → `Hero image URL` | Add-on image from pricing catalog | Paste the page-specific hero URL if the landing page needs a different image than the add-on card. |
+| Landing page gallery images | Admin App → Landing Page Builder → `Gallery images`, one URL per line | None | Add one image URL per line. Keep images same ratio where possible. |
+| Home “Recent work and visible proof” | Admin App → Before/After Gallery JSON | `/data/before_after_gallery.json` | Add approved paired before/after images. The home page uses a 50% slider by default. |
+| Public `/gallery` page | Same Before/After Gallery JSON | `/data/before_after_gallery.json` | Same entries as home page; this page shows the full list. |
+| Vehicle price/detail/size charts | Pricing catalog `charts` or generated live chart fallback | `/assets/brand/CarPrice2025.PNG`, `/assets/brand/CarPriceDetails2025.PNG`, `/assets/brand/CarSizeChart.PNG` | Replace chart assets or update chart URLs in the catalog when the generated chart is not enough. |
+| Consumables page images | Catalog/admin inventory item `img` field | None | Add/update the consumable item image URL in the catalog source. |
+
+### Add-on image fields
+
+Each add-on can carry both a primary image and a local fallback:
+
+```json
+{
+  "code": "full_clay_treatment",
+  "name": "Full Clay Treatment",
+  "prices_cad": { "small": 79, "mid": 99, "oversize": 129 },
+  "quote_required": false,
+  "standalone_allowed": false,
+  "requires_package_codes_any": ["complete_detail", "exterior_detail"],
+  "requirement_note": "Best added to an exterior or complete detail.",
+  "image_url": "https://assets.rosiedazzlers.ca/packages/full_clay_treatment.png",
+  "image_fallback_url": "/assets/addons/full_clay_treatment.png",
+  "notes": ["Removes bonded contamination before protection."]
+}
+```
+
+Use `image_url` for the public R2 image. Use `image_fallback_url` for a bundled local file that still works if the R2 image is missing or renamed.
+
+### Before/after gallery JSON format
+
+The gallery is an object with an `items` array. To add a 2nd or 3rd gallery comparison, add another object inside the same `items` array, separated by commas. Do **not** create `items2` or another top-level block.
+
+```json
+{
+  "items": [
+    {
+      "title": "Engine Cleaner",
+      "location": "Tillsonburg, ON",
+      "before_kind": "image",
+      "before_url": "https://assets.rosiedazzlers.ca/CarPhotos/MitsubishiLancerEngineDirty.PNG",
+      "after_kind": "image",
+      "after_url": "https://assets.rosiedazzlers.ca/CarPhotos/MitsubishiLancerEngineClean.PNG",
+      "note": "We love to clean engines.",
+      "consent_status": "Engines",
+      "customer_name": "",
+      "vehicle_label": "2015 Mitsubishi"
+    },
+    {
+      "title": "Interior Before and After",
+      "location": "Woodstock, ON",
+      "before_kind": "image",
+      "before_url": "https://assets.rosiedazzlers.ca/CarPhotos/interior-before.jpg",
+      "after_kind": "image",
+      "after_url": "https://assets.rosiedazzlers.ca/CarPhotos/interior-after.jpg",
+      "note": "Matched angle interior cleanup with customer-approved photos.",
+      "consent_status": "Approved for public gallery",
+      "customer_name": "",
+      "vehicle_label": "SUV interior"
+    },
+    {
+      "title": "Exterior Gloss Refresh",
+      "location": "Simcoe, ON",
+      "before_kind": "image",
+      "before_url": "https://assets.rosiedazzlers.ca/CarPhotos/exterior-before.jpg",
+      "after_kind": "image",
+      "after_url": "https://assets.rosiedazzlers.ca/CarPhotos/exterior-after.jpg",
+      "note": "Use the same camera angle for the cleanest 50% slider comparison.",
+      "consent_status": "Approved for public gallery",
+      "customer_name": "",
+      "vehicle_label": "Sedan exterior"
+    }
+  ]
+}
+```
+
+For video comparisons, set `before_kind` or `after_kind` to `video` and use an MP4 URL:
+
+```json
+{
+  "title": "Pet Hair Removal Clip",
+  "location": "Norfolk County, ON",
+  "before_kind": "video",
+  "before_url": "https://assets.rosiedazzlers.ca/gallery/pet-hair-before.mp4",
+  "after_kind": "video",
+  "after_url": "https://assets.rosiedazzlers.ca/gallery/pet-hair-after.mp4",
+  "note": "Short customer-approved clips work in the same slider area.",
+  "consent_status": "Approved for public gallery",
+  "customer_name": "",
+  "vehicle_label": "Rear seat fabric"
+}
+```
+
+### Best practice for before/after pairs
+
+1. Take the before and after from the same distance and angle.
+2. Keep both files the same width/height and orientation.
+3. Avoid mixing portrait and landscape in the same comparison.
+4. Use clear file names, for example `mitsubishi-engine-before.png` and `mitsubishi-engine-after.png`.
+5. Confirm customer approval before adding identifiable vehicles, plates, faces, homes, or addresses.
+6. Use `customer_name` as blank unless the customer specifically wants their name shown later.
+
+### R2 switch-out workflow
+
+1. Upload the new image/video to the correct R2 folder.
+2. Copy the public URL from the R2 custom domain, preferably `https://assets.rosiedazzlers.ca/...`.
+3. Paste the URL into the correct admin field or JSON value.
+4. Save in Admin App.
+5. Open the public page in a private/incognito window and hard refresh.
+6. Confirm the image is contained inside the card and does not appear zoomed/cropped.
+7. If the R2 file name changes, update both the admin value and any fallback documentation notes.
+
+### Current Build 127 image/CSS behaviour
+
+- Add-on, service-card, landing-button, and consumable images are forced to `object-fit: contain` to stop the blown-up zoom effect.
+- Home recent work now uses the same before/after slider style as the gallery, with the default split set to 50%.
+- Services and Pricing add-on cards show default prices and include both **Add to booking** and **Open page** actions.
+- The add-on editor now shows the saved image URL fields, fallback image, package relationship, standalone setting, and rule summary when an existing add-on is selected.
+

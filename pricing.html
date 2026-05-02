@@ -99,7 +99,7 @@
     .planner-summary .stack{display:grid;gap:4px}
     .planner-summary .value{font-weight:700;text-align:right}
     .planner-summary .list{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.maintenance-box{display:grid;gap:10px;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03)}.maintenance-box .field{display:grid;gap:6px}.maintenance-box input,.maintenance-box textarea{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;background:rgba(255,255,255,.04);color:#f8fafc}.maintenance-box textarea{min-height:92px;resize:vertical}.maintenance-box .note{font-size:.9rem;color:rgba(234,242,255,.62)} .maintenance-box[aria-disabled="true"]{opacity:.78} 
-    @media (max-width:980px){ .booking-lead{grid-template-columns:1fr} .booking-embed-shell{height:1460px;min-height:1220px;max-height:2700px} .booking-embed-frame{height:1460px;min-height:1220px;max-height:2700px} }
+    @media (max-width:980px){ .booking-lead{grid-template-columns:1fr} .booking-embed-shell{height:1460px;min-height:1220px;max-height:1950px} .booking-embed-frame{height:1460px;min-height:1220px;max-height:1950px} }
   </style>
 </head>
 
@@ -183,7 +183,7 @@
         <div class="notice planner-note" id="bookingEmbedHelper">Exact totals, deposits, public requirements, travel restrictions, and live availability are all shown inside the booking planner below.</div>
         <div class="booking-lead" style="margin-top:14px">
           <div class="booking-embed-shell">
-            <iframe id="bookingPlannerFrame" class="booking-embed-frame" title="Rosie Dazzlers booking planner" loading="eager" scrolling="no" src="/book?embed=1&view=compact-vehicle"></iframe>
+            <iframe id="bookingPlannerFrame" class="booking-embed-frame" title="Rosie Dazzlers booking planner" loading="eager" scrolling="no" src="/book?embed=1&view=compact-vehicle&max=1950"></iframe>
           </div>
           <div class="booking-side">
             <div class="panel" style="background:rgba(255,255,255,.02)">
@@ -329,8 +329,8 @@
       buildLiveVehicleSizeChartDataUri,
       buildPricingOfferCatalogSchema,
       applyJsonLdScript
-    } from "/assets/pricing-catalog-client.js?v=20260423livecharts2";
-    import { renderRecentWorkMounts } from "/assets/recent-work.js";
+    } from "/assets/pricing-catalog-client.js?v=20260501build127";
+    import { renderRecentWorkMounts } from "/assets/recent-work.js?v=20260501build127";
     const IMAGE_BASE = window.RD_ASSET_BASES?.packages || "https://assets.rosiedazzlers.ca/packages/";
     const assetFile = (base, filename) => `${String(base || "").replace(/\/$/, "")}/${encodeURIComponent(filename)}`;
     const ADDON_IMAGE_FILES = {
@@ -359,6 +359,21 @@
     function landingButtonDescription(page, addon){
       return String(page?.hero_intro || addon?.requirement_note || addon?.notes?.[0] || 'Open this page for process, products used, booking fit, and service notes.').trim();
     }
+    function addonDefaultPriceText(addon){
+      if (!addon) return '';
+      if (addon.quote_required) return 'Default price: quote required';
+      const prices = addon.prices_cad || {};
+      const parts = [];
+      if (prices.small != null) parts.push(`Small ${money(prices.small)}`);
+      if (prices.mid != null) parts.push(`Mid ${money(prices.mid)}`);
+      if (prices.oversize != null) parts.push(`Oversize ${money(prices.oversize)}`);
+      if (!parts.length && addon.price_cad != null) parts.push(money(addon.price_cad));
+      return parts.length ? `Default price: ${parts.join(' · ')}` : '';
+    }
+    function addonBookingUrl(addon){
+      const code = String(addon?.code || '').trim();
+      return code ? `/book?addons=${encodeURIComponent(code)}` : '/book';
+    }
     function buildLandingButtonCard(page, addon){
       const title = String(page?.name || page?.hero_title || addon?.name || page?.slug || 'Service page');
       const href = '/' + String(page?.slug || '').replace(/^\//,'');
@@ -368,7 +383,11 @@
           <img class="landing-button-image" src="${escapeHtml(image)}" alt="${escapeHtml(title)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/assets/addons/generic_addon.svg'">
           <h3>${escapeHtml(title)}</h3>
           <p>${escapeHtml(landingButtonDescription(page, addon))}</p>
-          <a class="btn ghost small" href="${escapeHtml(href)}">Open page</a>
+          ${addonDefaultPriceText(addon) ? `<div class="tag ok">${escapeHtml(addonDefaultPriceText(addon))}</div>` : ''}
+          <div class="row" style="margin-top:auto">
+            <a class="btn primary small" href="${escapeHtml(addonBookingUrl(addon))}">Add to booking</a>
+            <a class="btn ghost small" href="${escapeHtml(href)}">Open page</a>
+          </div>
         </article>`;
     }
     function renderLandingServiceButtons(pricingData, landingData){
@@ -381,7 +400,7 @@
     }
     import { loadGrowthSettings } from "/assets/growth-settings.js";
 
-    const FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
+    const FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260501build127";
     const qs = (s)=>document.querySelector(s);
     let chartMap = new Map();
     renderRecentWorkMounts(3);
@@ -545,7 +564,7 @@
         if (!Number.isFinite(measured) || measured <= 0) return;
         const mobile = window.innerWidth <= 980;
         const minHeight = mobile ? 1220 : 980;
-        const maxHeight = mobile ? 2700 : 2450;
+        const maxHeight = 1950;
         const nextHeight = Math.min(maxHeight, Math.max(minHeight, Math.round(measured) + 16));
         const currentHeight = parseInt(frame.style.height || frame.getAttribute('height') || '0', 10) || 0;
         const shell = frame.closest('.booking-embed-shell');

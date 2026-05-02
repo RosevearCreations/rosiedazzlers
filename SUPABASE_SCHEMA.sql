@@ -983,3 +983,5 @@ create index if not exists accounting_period_closes_status_idx on public.account
 
 -- Build 126 compact vehicle embed repair — 2026-05-01
 -- Front-end-only layout pass. Services/Pricing now render the embedded booking planner full-width, and /book?embed=1 keeps vehicle fields in compact two/three-column rows. No schema change required.
+
+-- 2026-05-01 Build 127: UI/admin/content patch only. See sql/2026-05-01_build127_ui_gallery_embed_admin_no_ddl_note.sql.

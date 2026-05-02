@@ -469,3 +469,15 @@ No new database DDL was required in this pass. Schema tracking was updated with 
 This file was reviewed during the Build 126 Services/Pricing booking embed repair pass. The active fix gives the embedded `/book?embed=1` planner full-width space on Services and Pricing, removes the embed-only override that stacked every vehicle field one-per-line, and restores compact two/three-column vehicle rows similar to the full Book page. The vehicle inputs/selects now use smaller embedded padding, the login/garage prompt is hidden inside the embed to save height, and the iframe default/fallback height was retuned so the full Step 1 vehicle section is visible without reintroducing the long empty scrollbar.
 
 No database DDL was required. Schema tracking was updated with `sql/2026-05-01_build126_embed_vehicle_compact_no_ddl_note.sql`. Continue to keep Services/Pricing as booking-led local SEO pages with one clear H1, Oxford/Norfolk wording, compact card/table overflow guards, and shared media-base handling instead of page-level hardcoded image/video URLs.
+
+## Build 127 update — embed cap, admin add-ons, gallery image guidance
+
+- Capped the Services/Pricing booking iframe shell and frame to 1950px so Step 1 no longer expands to the previous 2450px height.
+- Added bundled service-area fallback rows for Oxford County and Norfolk County so the booking location dropdown is not empty if the DB setting is missing service areas.
+- Fixed Admin App select/dropdown readability on dark screens.
+- Improved the Admin App add-on editor so selecting an existing add-on shows image URLs, fallback image, default prices, standalone/package relationship, and the one-to-one / one-to-many / general rule summary.
+- Fixed the Landing Page Builder dropdown refresh so changing the selected add-on/location keeps the selected item and updates the text boxes instead of snapping back to the first option.
+- Reworked the home page “Recent work and visible proof” block into a before/after slider using the existing before_after_gallery content, defaulted to a 50% split.
+- Services and Pricing add-on cards now show default price text and include both Add to booking and Open page actions.
+- Expanded IMAGES.md with image sizes, upload/switch-out workflow, add-on image fields, and multi-entry before/after gallery JSON examples.
+- Added SQL no-DDL note: sql/2026-05-01_build127_ui_gallery_embed_admin_no_ddl_note.sql.
