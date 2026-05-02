@@ -489,5 +489,130 @@
       "type": "window tinting",
       "image_fallback_url": "/assets/addons/window_tinting.svg"
     }
-  ]
+  ],
+  "service_areas": [
+    {
+      "county": "Oxford County",
+      "label": "Tillsonburg, Oxford County",
+      "value": "Tillsonburg, Oxford County",
+      "municipality": "Tillsonburg",
+      "zone": "South Oxford",
+      "travel_tier": "urban",
+      "area_type": "primary",
+      "bylaw_note": "Primary local service area. Confirm driveway access, water, power, and parking before arrival.",
+      "parking_rule": "Driveway or safe off-street parking preferred.",
+      "noise_rule": "Use normal daytime work hours when possible.",
+      "water_rule": "Customer water access may be required for wash/detail packages.",
+      "access_rule": "Vehicle should be accessible with room to open all doors.",
+      "official_links": []
+    },
+    {
+      "county": "Oxford County",
+      "label": "Ingersoll, Oxford County",
+      "value": "Ingersoll, Oxford County",
+      "municipality": "Ingersoll",
+      "zone": "Oxford County",
+      "travel_tier": "township",
+      "area_type": "town",
+      "bylaw_note": "Confirm driveway/parking access and travel timing before dispatch.",
+      "parking_rule": "Off-street parking preferred.",
+      "noise_rule": "Avoid unnecessary early/late noise.",
+      "water_rule": "Customer water access may be required.",
+      "access_rule": "Vehicle must be reachable by the mobile setup.",
+      "official_links": []
+    },
+    {
+      "county": "Oxford County",
+      "label": "Woodstock, Oxford County",
+      "value": "Woodstock, Oxford County",
+      "municipality": "Woodstock",
+      "zone": "Oxford County",
+      "travel_tier": "township",
+      "area_type": "city",
+      "bylaw_note": "Confirm parking/access before booking mobile work.",
+      "parking_rule": "Driveway or private parking preferred.",
+      "noise_rule": "Respect local neighbourhood timing.",
+      "water_rule": "Customer water access may be required.",
+      "access_rule": "Allow safe hose/cord routing.",
+      "official_links": []
+    },
+    {
+      "county": "Oxford County",
+      "label": "Norwich / Otterville, Oxford County",
+      "value": "Norwich / Otterville, Oxford County",
+      "municipality": "Norwich",
+      "zone": "Rural Oxford",
+      "travel_tier": "rural",
+      "area_type": "rural",
+      "bylaw_note": "Rural route timing and travel charges may apply.",
+      "parking_rule": "Safe level work area preferred.",
+      "noise_rule": "Normal daytime work hours preferred.",
+      "water_rule": "Customer water access may be required.",
+      "access_rule": "Confirm lane/access width for mobile equipment.",
+      "official_links": []
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Simcoe, Norfolk County",
+      "value": "Simcoe, Norfolk County",
+      "municipality": "Simcoe",
+      "zone": "Norfolk County",
+      "travel_tier": "township",
+      "area_type": "town",
+      "bylaw_note": "Confirm mobile work access, parking, water, and power before dispatch.",
+      "parking_rule": "Private driveway/work area preferred.",
+      "noise_rule": "Avoid early/late noise where possible.",
+      "water_rule": "Customer water access may be required.",
+      "access_rule": "Vehicle should be unlocked/available at appointment time.",
+      "official_links": []
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Delhi, Norfolk County",
+      "value": "Delhi, Norfolk County",
+      "municipality": "Delhi",
+      "zone": "Norfolk County",
+      "travel_tier": "township",
+      "area_type": "town",
+      "bylaw_note": "Confirm travel window and service access before booking.",
+      "parking_rule": "Off-street parking preferred.",
+      "noise_rule": "Normal daytime work hours preferred.",
+      "water_rule": "Customer water access may be required.",
+      "access_rule": "Confirm safe room around the vehicle.",
+      "official_links": []
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Port Dover, Norfolk County",
+      "value": "Port Dover, Norfolk County",
+      "municipality": "Port Dover",
+      "zone": "Coastal Norfolk",
+      "travel_tier": "coastal",
+      "area_type": "coastal",
+      "bylaw_note": "Coastal travel timing and weather may affect mobile detailing.",
+      "parking_rule": "Driveway/private parking preferred.",
+      "noise_rule": "Respect residential/tourist-area timing.",
+      "water_rule": "Customer water access may be required.",
+      "access_rule": "Confirm clear access around vehicle.",
+      "official_links": []
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Courtland / Langton, Norfolk County",
+      "value": "Courtland / Langton, Norfolk County",
+      "municipality": "Courtland / Langton",
+      "zone": "Rural Norfolk",
+      "travel_tier": "rural",
+      "area_type": "rural",
+      "bylaw_note": "Rural travel charges and access checks may apply.",
+      "parking_rule": "Safe level work area preferred.",
+      "noise_rule": "Normal daytime work hours preferred.",
+      "water_rule": "Customer water access may be required.",
+      "access_rule": "Confirm driveway/yard access for mobile setup.",
+      "official_links": []
+    }
+  ],
+  "booking_rules": {
+    "default_service_area": "Tillsonburg, Oxford County"
+  }
 }
