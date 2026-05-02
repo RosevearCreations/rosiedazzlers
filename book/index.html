@@ -493,9 +493,9 @@
       packageImageForSize as sharedPackageImageForSize,
       packagePrice as sharedPackagePrice,
       chartUrl
-    } from "/assets/pricing-catalog-client.js?v=20260501embedvehiclecompact1";
+    } from "/assets/pricing-catalog-client.js?v=20260501build127";
 
-    const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260501embedvehiclecompact1";
+    const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260501build127";
     const VEHICLE_MAKES_URL = "/api/vehicle_makes";
     const VEHICLE_MODELS_URL = "/api/vehicle_models";
     const BRAND_BASE = window.RD_ASSET_BASES?.brand || "https://assets.rosiedazzlers.ca/brand";
@@ -614,7 +614,8 @@
         document.documentElement ? document.documentElement.scrollHeight : 0,
         window.innerWidth <= 980 ? 940 : 720
       );
-      const maxHeight = window.innerWidth <= 980 ? 2700 : 2450;
+      const requestedMax = Number(pageParams.get("max") || 0);
+      const maxHeight = Number.isFinite(requestedMax) && requestedMax > 0 ? Math.min(1950, requestedMax) : (window.innerWidth <= 980 ? 2700 : 2450);
       const height = Math.min(maxHeight, Math.max(window.innerWidth <= 980 ? 1120 : 920, rawHeight));
       window.parent.postMessage({ type: "rd-book-embed-size", height }, "*");
     }

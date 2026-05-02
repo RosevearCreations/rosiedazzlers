@@ -14,14 +14,33 @@ async function loadGallery() {
   return out.items;
 }
 
-function renderMedia(item) {
-  const afterKind = String(item?.after_kind || 'image').toLowerCase() === 'video' ? 'video' : 'image';
-  const afterUrl = String(item?.after_url || '').trim();
-  if (!afterUrl) return '<div class="recent-work-media"></div>';
-  if (afterKind === 'video') {
-    return `<video class="recent-work-media" src="${esc(afterUrl)}" muted playsinline controls preload="metadata"></video>`;
-  }
-  return `<img class="recent-work-media" src="${esc(afterUrl)}" alt="${esc(item?.title || 'Recent detailing result')}">`;
+function mediaMarkup(item, side) {
+  const kind = String(item?.[`${side}_kind`] || 'image').toLowerCase() === 'video' ? 'video' : 'image';
+  const url = String(item?.[`${side}_url`] || '').trim();
+  const label = side === 'before' ? 'Before detailing' : 'After detailing';
+  if (!url) return `<div class="recent-work-${side} recent-work-empty" aria-label="${label}"></div>`;
+  if (kind === 'video') return `<video class="recent-work-${side}" src="${esc(url)}" muted playsinline controls preload="metadata"></video>`;
+  return `<img class="recent-work-${side}" src="${esc(url)}" alt="${esc(label + ' - ' + (item?.title || 'recent work'))}">`;
+}
+
+function renderBeforeAfterSlider(item, idx) {
+  return `<div class="recent-work-compare" data-recent-work-stage="${idx}" style="--split:50%">
+    ${mediaMarkup(item, 'after')}
+    ${mediaMarkup(item, 'before')}
+    <span class="recent-work-label before">Before</span>
+    <span class="recent-work-label after">After</span>
+    <span class="recent-work-handle" aria-hidden="true"></span>
+  </div>
+  <input class="recent-work-range" type="range" min="0" max="100" value="50" data-recent-work-range="${idx}" aria-label="Slide to compare before and after image" />`;
+}
+
+function wireRecentWorkSliders(root = document) {
+  [...root.querySelectorAll('[data-recent-work-range]')].forEach((range) => {
+    range.addEventListener('input', () => {
+      const stage = root.querySelector(`[data-recent-work-stage="${range.dataset.recentWorkRange}"]`);
+      if (stage) stage.style.setProperty('--split', `${range.value}%`);
+    });
+  });
 }
 
 export async function renderRecentWorkMounts(limit = 3) {
@@ -29,9 +48,9 @@ export async function renderRecentWorkMounts(limit = 3) {
   if (!mounts.length) return;
   try {
     const items = (await loadGallery()).slice(0, Math.max(1, Number(limit || 3)));
-    const html = items.length ? `<div class="recent-work-grid">${items.map((item) => `
+    const html = items.length ? `<div class="recent-work-grid">${items.map((item, idx) => `
       <article class="recent-work-card">
-        ${renderMedia(item)}
+        ${renderBeforeAfterSlider(item, idx)}
         <h3>${esc(item?.title || 'Detail result')}</h3>
         <p class="section-kicker">${esc(item?.location || 'Oxford / Norfolk Counties')}</p>
         <p class="muted">${esc(item?.note || 'View more before/after work in the public gallery.')}</p>
@@ -41,7 +60,7 @@ export async function renderRecentWorkMounts(limit = 3) {
         </div>
       </article>
     `).join('')}</div>` : '<div class="notice soft">Add more approved before/after comparisons in App Management to strengthen public proof.</div>';
-    mounts.forEach((mount) => { mount.innerHTML = html; });
+    mounts.forEach((mount) => { mount.innerHTML = html; wireRecentWorkSliders(mount); });
   } catch (err) {
     mounts.forEach((mount) => { mount.innerHTML = `<div class="notice">${esc(err?.message || 'Could not load recent work.')}</div>`; });
   }

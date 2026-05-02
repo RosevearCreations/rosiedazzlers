@@ -1,4 +1,4 @@
-import { renderRecentWorkMounts } from "/assets/recent-work.js";
+import { renderRecentWorkMounts } from "/assets/recent-work.js?v=20260501build127";
 
 async function fetchJson(url) {
   const res = await fetch(url, { cache: "no-store" });
@@ -113,7 +113,8 @@ function heroMediaForPage(page, addon, relatedProducts) {
 }
 
 function galleryMarkup(page, relatedProducts) {
-  const gallery = Array.isArray(page?.gallery_image_urls) ? page.gallery_image_urls.filter(Boolean) : [];
+  const gallerySource = Array.isArray(page?.gallery_image_urls) ? page.gallery_image_urls : (Array.isArray(page?.gallery_images) ? page.gallery_images : []);
+  const gallery = gallerySource.filter(Boolean);
   const productImages = (relatedProducts || []).map((item) => item.image_url).filter(Boolean);
   const all = [...gallery, ...productImages].filter(Boolean);
   if (!all.length) return "";

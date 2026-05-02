@@ -13,7 +13,7 @@
     .btn.primary{background:#7c3aed;border-color:#7c3aed}.status{padding:12px 14px;border-radius:12px;margin-bottom:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09)}
     .status[data-state="success"]{border-color:rgba(34,197,94,.35)} .status[data-state="error"]{border-color:rgba(248,113,113,.35)}
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{grid-column:span 12;padding:18px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
-    .card h2,.card h3{margin:0 0 12px}.field{display:grid;gap:6px;margin-bottom:10px}.field input,.field textarea,.field select{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;background:rgba(255,255,255,.04);color:#f8fafc}
+    .card h2,.card h3{margin:0 0 12px}.field{display:grid;gap:6px;margin-bottom:10px}.field input,.field textarea,.field select{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;background:rgba(255,255,255,.04);color:#f8fafc}.field select,.addon-editor select,#addonEditorSelect,#landing_addon_select,#landing_location_select{background:#0f172a;color:#f8fafc}.field select option,#addonEditorSelect option,#landing_addon_select option,#landing_location_select option{background:#ffffff;color:#111827}.addon-rule-summary{display:grid;gap:8px;margin:10px 0;padding:12px;border-radius:14px;background:rgba(77,119,255,.10);border:1px solid rgba(77,119,255,.24)}.addon-rule-summary strong{color:#f8fbff}.addon-preview-img{display:block;width:100%;max-width:420px;max-height:220px;object-fit:contain;object-position:center center;padding:10px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.10)}
     .field textarea{min-height:110px;resize:vertical}.checkrow{display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;align-items:start;margin:8px 0}.checkrow input{justify-self:end;margin-top:2px}.checkrow label,.checkrow span{display:block;text-align:left;line-height:1.45}.checkrow.inline-check{display:flex;gap:10px;align-items:center}.checkrow.inline-check input{justify-self:auto;margin-top:0}.actions{display:flex;gap:10px;flex-wrap:wrap}.muted{color:#9fb0c8;font-size:.94rem}
     .preview{white-space:pre-wrap;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);min-height:82px}
     .subgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.note{font-size:.92rem;color:#9fb0c8}.panel-lite{padding:14px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}.stack-sm{display:grid;gap:10px}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.section-head h3{margin:0}.section-label{font-size:.82rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#9fb0c8}.pricing-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}.pricing-summary .stat{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}.pricing-summary .stat strong{display:block;font-size:1.35rem;margin-top:6px}.pricing-grid-4,.pricing-grid-5{display:grid;gap:10px}.pricing-grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}.pricing-grid-5{grid-template-columns:repeat(5,minmax(0,1fr))}.field.compact span{font-size:.82rem;color:#9fb0c8}.catalog-section{margin-top:18px}.catalog-table-wrap{overflow:auto}.catalog-table{display:grid;gap:8px}.catalog-row{display:grid;gap:8px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);align-items:end}.catalog-row.package{grid-template-columns:1.1fr 1.2fr 1fr .8fr .8fr .8fr .8fr auto}.catalog-row.addon{grid-template-columns:1fr 1.2fr .9fr .9fr .8fr .8fr .8fr .8fr auto}.catalog-row.service-area{grid-template-columns:1fr 1.1fr 1.1fr .9fr .9fr .8fr auto}.catalog-row.requirement{grid-template-columns:minmax(0,1fr) auto}.catalog-row__head{font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9fb0c8}.catalog-row .field{margin-bottom:0}.catalog-row button{align-self:center}.catalog-empty{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.12);color:#9fb0c8}
@@ -652,6 +652,9 @@
         },
         price_cad: moneyNum(addon && addon.price_cad, 0),
         quote_required: addon && addon.quote_required === true,
+        standalone_allowed: addon && addon.standalone_allowed === true,
+        requires_package_codes_any: Array.isArray(addon && addon.requires_package_codes_any) ? addon.requires_package_codes_any.map(function(row){ return String(row || '').trim(); }).filter(Boolean) : [],
+        requirement_note: addon && addon.requirement_note || '',
         image_url: addon && addon.image_url || '',
         image_fallback_url: addon && addon.image_fallback_url || '',
         notes: Array.isArray(addon && addon.notes) ? addon.notes : []
@@ -703,7 +706,8 @@
     source.official_links = normalizeLandingLinks(source.official_links);
     source.related_products = normalizeLandingProductRefs(source.related_products);
     source.hero_image_url = String(source.hero_image_url || '').trim();
-    source.gallery_images = normalizeLandingArray(source.gallery_images);
+    source.gallery_images = normalizeLandingArray(source.gallery_images || source.gallery_image_urls);
+    source.gallery_image_urls = source.gallery_images.slice();
     source.faq = normalizeLandingFaq(source.faq);
     return source;
   }
@@ -770,13 +774,16 @@
       related_products: landingTextToProductRefs(byId(prefix + '_related_products').value || ''),
       hero_image_url: byId(prefix + '_hero_image_url').value || '',
       gallery_images: landingTextToArray(byId(prefix + '_gallery_images').value || ''),
+      gallery_image_urls: landingTextToArray(byId(prefix + '_gallery_images').value || ''),
       faq: landingTextToFaq(byId(prefix + '_faq').value || '')
     }, seed || {});
   }
   function renderLandingBuilder(){
     var addonSelect = byId('landing_addon_select');
+    var previousAddonCode = addonSelect ? addonSelect.value : '';
     var addonOptions = (pricingCatalogState.addons || []).map(function(addon){ var page = addonLandingEntry(addon.code); return '<option value="' + escapeHtml(addon.code) + '">' + escapeHtml(addon.name || addon.code) + (page ? ' — landing ready' : '') + '</option>'; }).join('');
     addonSelect.innerHTML = addonOptions || '<option value="">No add-ons loaded</option>';
+    if (previousAddonCode && Array.from(addonSelect.options).some(function(opt){ return opt.value === previousAddonCode; })) addonSelect.value = previousAddonCode;
     if (!addonSelect.value && addonSelect.options.length) addonSelect.value = addonSelect.options[0].value;
     var addonCode = addonSelect.value || '';
     var addon = (pricingCatalogState.addons || []).find(function(row){ return row.code === addonCode; }) || null;
@@ -785,8 +792,10 @@
     byId('landing_addon_editor').innerHTML = buildLandingEditorHtml(addonPage, 'landing_addon');
 
     var locationSelect = byId('landing_location_select');
+    var previousLocationSlug = locationSelect ? locationSelect.value : '';
     var locationOpts = locationLandingOptions().map(function(slug){ var page = landingPagesState.pages[slug]; return '<option value="' + escapeHtml(slug) + '">' + escapeHtml(page.name || slug) + '</option>'; }).join('');
     locationSelect.innerHTML = locationOpts || '<option value="">No location pages yet</option>';
+    if (previousLocationSlug && Array.from(locationSelect.options).some(function(opt){ return opt.value === previousLocationSlug; })) locationSelect.value = previousLocationSlug;
     if (!locationSelect.value && locationSelect.options.length) locationSelect.value = locationSelect.options[0].value;
     var locationSlug = locationSelect.value || '';
     var locationPage = landingPagesState.pages[locationSlug] || normalizeLandingPage({ type: 'location', nav_group: 'town', badge: 'Town-focused detailing page', slug: '', name: '', hero_title: '', meta_title: '', meta_description: '' }, {});
@@ -897,6 +906,25 @@
       '</div>';
     }).join('');
   }
+  function describeAddonRelation(addon, packages){
+    var allowed = Array.isArray(addon && addon.requires_package_codes_any) ? addon.requires_package_codes_any.filter(Boolean) : [];
+    var packageNames = allowed.map(function(code){ var pkg = (packages || []).find(function(row){ return row.code === code; }); return pkg ? (pkg.name || pkg.code) : code; });
+    if (addon && addon.standalone_allowed === true && !allowed.length) return 'Standalone add-on: can be booked without a main package.';
+    if (addon && addon.standalone_allowed === true && allowed.length) return 'Standalone + package-aware: can be booked alone, and is also tied to ' + packageNames.length + ' package option(s).';
+    if (allowed.length === 1) return 'One add-on to one package rule: only allowed with ' + packageNames[0] + '.';
+    if (allowed.length > 1) return 'One add-on to many package rule: allowed with ' + packageNames.join(', ') + '.';
+    return 'Many-to-one/general rule: no package restriction saved, so this add-on is available with any selected package.';
+  }
+  function addonPriceSummary(addon){
+    var prices = addon && addon.prices_cad ? addon.prices_cad : {};
+    var parts = ['small','mid','oversize'].map(function(size){
+      var label = size === 'oversize' ? 'oversize/exotic' : size;
+      var value = prices[size];
+      return label + ': ' + (value == null || value === '' ? '—' : '$' + Number(value || 0).toFixed(2));
+    });
+    if (addon && addon.quote_required) parts.push('quote required');
+    return parts.join(' • ');
+  }
   function renderAddonEditor(rows, packages){
     rows = Array.isArray(rows) ? rows : [];
     packages = Array.isArray(packages) ? packages : [];
@@ -924,6 +952,8 @@
     }).join('');
 
     byId('addonEditorPanel').innerHTML =
+      '<div class="addon-rule-summary"><strong>Saved rule:</strong><span>' + escapeHtml(describeAddonRelation(addon, packages)) + '</span><span>' + escapeHtml(addonPriceSummary(addon)) + '</span></div>' +
+      (addon.image_url || addon.image_fallback_url ? '<img class="addon-preview-img" src="' + escapeHtml(addon.image_url || addon.image_fallback_url) + '" alt="' + escapeHtml(addon.name || 'Add-on preview') + '" onerror="this.onerror=null;this.src=&quot;/assets/addons/generic_addon.svg&quot;">' : '') +
       '<div class="addon-editor-grid">' +
         '<label class="field"><span>Code</span><input data-addon-editor-field="code" value="' + escapeHtml(addon.code || '') + '"></label>' +
         '<label class="field"><span>Name</span><input data-addon-editor-field="name" value="' + escapeHtml(addon.name || '') + '"></label>' +
@@ -980,7 +1010,6 @@
         var value = input.type === 'number' ? moneyNum(input.value, 0) : input.value;
         setNestedValue(pricingCatalogState.packages[index], field, value);
         syncPricingEditorToJson();
-        renderPricingDashboard();
       });
     });
     var addonSelect = byId('addonEditorSelect');
@@ -997,9 +1026,10 @@
         if (index < 0) return;
         var field = input.getAttribute('data-addon-editor-field');
         var value = input.type === 'checkbox' ? input.checked : (input.type === 'number' ? moneyNum(input.value, 0) : input.value);
+        var oldCode = pricingCatalogState.addons[index].code;
         setNestedValue(pricingCatalogState.addons[index], field, value);
+        if (field === 'code') selectedAddonCode = pricingCatalogState.addons[index].code || oldCode || selectedAddonCode;
         syncPricingEditorToJson();
-        renderPricingDashboard();
       });
     });
     qsa('[data-addon-editor-notes]').forEach(function (input) {
