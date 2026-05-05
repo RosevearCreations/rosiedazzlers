@@ -581,14 +581,11 @@ export function applyJsonLdScript(scriptId, payload) {
 }
 
 export function addonDisplay(addon, size) {
-  if (addon?.quote_required === true) {
-    if (addon?.prices_cad?.[size] != null) return `From ${money(addon.prices_cad[size])} · Quote required`;
-    if (addon?.price_cad != null) return `From ${money(addon.price_cad)} · Quote required`;
-    return "Quote required";
-  }
-  if (addon?.prices_cad?.[size] != null) return money(addon.prices_cad[size]);
-  if (addon?.price_cad != null) return money(addon.price_cad);
-  return "$—";
+  const sizePrice = Number(addon?.prices_cad?.[size]);
+  const basePrice = Number(addon?.price_cad);
+  const price = Number.isFinite(sizePrice) && sizePrice > 0 ? sizePrice : (Number.isFinite(basePrice) && basePrice > 0 ? basePrice : null);
+  if (addon?.quote_required === true) return price != null ? `From ${money(price)} · Quote required` : "Quote required";
+  return price != null ? money(price) : "Quote required";
 }
 
 export function bookingRules(catalog) {

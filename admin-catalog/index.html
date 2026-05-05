@@ -8,18 +8,30 @@
   <meta name="description" content="Inventory, reorders, receiving, ratings, and usage workflow for Rosie Dazzlers gear and consumables." />
   <link rel="stylesheet" href="/assets/site.css"/>
   <style>
-    .grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+    .grid2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(340px,.9fr);gap:16px;align-items:start}
     .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .stack{display:grid;gap:12px}
     .mini{font-size:.92rem;color:rgba(234,242,255,.72)}
     .danger-note{color:#fecaca}
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,.08);vertical-align:top;text-align:left}
+    table{width:100%;border-collapse:collapse;table-layout:fixed}
+    th,td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.08);vertical-align:middle;text-align:left;line-height:1.25}
+    th:nth-child(1),td:nth-child(1){width:32%}
+    th:nth-child(2),td:nth-child(2){width:22%}
+    th:nth-child(3),td:nth-child(3){width:12%}
+    th:nth-child(4),td:nth-child(4){width:14%}
+    th:nth-child(5),td:nth-child(5){width:20%}
+    td strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    td .mini{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    td .row{gap:6px;align-items:center}
+    td .btn{padding:7px 9px;min-height:34px}
+    article.panel{align-self:start}
+    #itemForm{align-content:start}
+    #itemForm .grid3{grid-template-columns:repeat(2,minmax(0,1fr))}
     .toolbar input,.toolbar select{min-width:180px}
     .table-wrap{overflow:auto}
     .pill{display:inline-flex;padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-size:12px}
-    @media(max-width:980px){.grid2,.grid3{grid-template-columns:1fr}}
+    @media(max-width:980px){.grid2,.grid3,#itemForm .grid3{grid-template-columns:1fr}.inventory-editor-panel{position:static}}
   </style>
 </head>
 <body>
@@ -49,7 +61,7 @@
       <div class="table-wrap"><table><thead><tr><th>Item</th><th>Stock / Cost</th><th>Rating</th><th>Reuse</th><th>Action</th></tr></thead><tbody id="invBody"><tr><td colspan="5">Loading…</td></tr></tbody></table></div>
     </article>
 
-    <article class="panel stack">
+    <article class="panel stack inventory-editor-panel">
       <h2 style="margin:0">Edit inventory item</h2>
       <form id="itemForm" class="stack">
         <div class="grid3">

@@ -96,6 +96,8 @@
       border-radius:18px;padding:12px;background:rgba(255,255,255,.04);text-align:left;width:100%;min-height:100%;box-sizing:border-box
     }
     .service-card strong,.service-card span{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
+    .service-card strong{color:#fff}
+    .service-card .package-note{color:rgba(234,242,255,.84)}
     .service-card.active{outline:2px solid #4d77ff}
     .service-card > *, .addon-card > *{max-width:100%;min-width:0}
     .service-card .row, .addon-card .row{width:100%;max-width:100%;min-width:0}
@@ -1335,12 +1337,24 @@
       });
     }
 
+    function positiveMoneyValue(value) {
+      const n = Number(value);
+      return Number.isFinite(n) && n > 0 ? n : null;
+    }
+
+    function addonBillableCad(addon, size) {
+      if (!addon || addon.quote_required === true) return null;
+      const sizePrice = positiveMoneyValue(addon.prices_cad && addon.prices_cad[size]);
+      if (sizePrice != null) return sizePrice;
+      const basePrice = positiveMoneyValue(addon.price_cad);
+      return basePrice != null ? basePrice : null;
+    }
+
     function addonDisplayPrice(addon) {
       const size = selectedSize();
-      if (addon.quote_required) return "Quote required";
-      if (addon.prices_cad && addon.prices_cad[size] != null) return money(addon.prices_cad[size]);
-      if (addon.price_cad != null) return money(addon.price_cad);
-      return "Included in quote";
+      const billable = addonBillableCad(addon, size);
+      if (billable != null) return money(billable);
+      return "Quote required";
     }
 
     function renderAddons() {
@@ -1404,9 +1418,9 @@
       let quoteOnly = false;
 
       selectedAddons().forEach((addon) => {
-        if (addon.quote_required) quoteOnly = true;
-        else if (addon.prices_cad && addon.prices_cad[size] != null) subtotal += Number(addon.prices_cad[size] || 0);
-        else if (addon.price_cad != null) subtotal += Number(addon.price_cad || 0);
+        const addonCad = addonBillableCad(addon, size);
+        if (addonCad == null) quoteOnly = true;
+        else subtotal += addonCad;
       });
 
       return {
@@ -1566,7 +1580,10 @@
           body: JSON.stringify(payload)
         });
         const out = await res.json().catch(() => null);
-        if (!res.ok || !out?.ok || !out?.checkout_url) throw new Error(out?.error || "Checkout failed.");
+        if (!res.ok || !out?.ok || !out?.checkout_url) {
+          const detailText = out?.details ? ` Details: ${String(out.details).slice(0, 320)}` : "";
+          throw new Error((out?.error || "Checkout failed.") + detailText);
+        }
         analyticsTrack("checkout_redirect", { booking_id: out.booking_id || null, provider:"stripe" });
         location.href = out.checkout_url;
       } catch (err) {

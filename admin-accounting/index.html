@@ -89,7 +89,9 @@
     #remitForm input[type="date"],
     #filterForm input[type="date"],
     #monthEndChecklistForm input[type="date"],
-    input[type="date"]{max-width:220px;width:100%;border-radius:14px;min-height:44px;justify-self:start}
+    input[type="date"]{appearance:auto;-webkit-appearance:auto;max-width:190px;width:100%;min-width:150px;border-radius:12px;min-height:42px;height:42px;line-height:1.2;justify-self:start;padding:9px 12px}
+    input[type="date"]::-webkit-date-and-time-value{min-height:auto;text-align:left}
+    input[type="date"]::-webkit-calendar-picker-indicator{width:18px;height:18px;margin-left:4px;padding:0;opacity:.9}
     @media (max-width: 980px){
       .admin-grid-2,.admin-grid-3{grid-template-columns:1fr}
       #filterForm,
