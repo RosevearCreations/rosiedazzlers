@@ -681,6 +681,14 @@
   }
 
   function landingPagesDefaults(){ return { pages: {} }; }
+  function defaultLocationLandingPages(){
+    return {
+      'tillsonburg-auto-detailing': { type:'location', enabled:true, slug:'tillsonburg-auto-detailing', nav_group:'town', name:'Tillsonburg auto detailing', badge:'Town-focused detailing page', hero_title:'Mobile auto detailing in Tillsonburg', meta_title:'Mobile Auto Detailing in Tillsonburg | Rosie Dazzlers', meta_description:'Tillsonburg mobile auto detailing for driveway service, package booking, local proof, and practical service-area guidance.', hero_intro:'A focused Tillsonburg page helps local customers find the closest mobile detailing service path and understand driveway, water, and scheduling expectations.', reasons_page_exists:['Town-first searchers often convert better when the page clearly matches the place they searched.','Keeps Tillsonburg wording prominent without creating extra H1 confusion on broader service pages.'], process:['Confirm driveway access and the chosen package.','Use the booking planner to reserve a date and vehicle size.','Show recent work, reviews, and local service guidance near the booking call-to-action.'], equipment:['mobile detailing setup','booking planner and live pricing tools','local proof and review blocks'], highlights:['Best fit for Tillsonburg-area searches.','Useful for customers who want service-area confirmation before booking.'], things_to_know:['Confirm driveway access, power, water, and parking before arrival.','Seasonal water and parking rules can change, so official links should be checked and updated.'], official_links:[{label:'Tillsonburg municipal website',url:'https://www.tillsonburg.ca/'}], related_products:[], gallery_images:[], gallery_image_urls:[], faq:[{q:'Why give Tillsonburg its own page?',a:'Because town-specific search intent is clearer and easier to match than a broad county-only page.'}] },
+      'woodstock-ingersoll-auto-detailing': { type:'location', enabled:true, slug:'woodstock-ingersoll-auto-detailing', nav_group:'town', name:'Woodstock / Ingersoll auto detailing', badge:'Town-focused detailing page', hero_title:'Mobile auto detailing in Woodstock and Ingersoll', meta_title:'Mobile Auto Detailing in Woodstock & Ingersoll | Rosie Dazzlers', meta_description:'Oxford County mobile auto detailing page for Woodstock and Ingersoll customers with booking, travel, and local service guidance.', hero_intro:'This page gives Woodstock and Ingersoll customers a clearer Oxford County service path than a generic county mention.', reasons_page_exists:['Supports Oxford County search intent with clear town names in the editor and page copy.','Keeps future local proof and before/after work easy to manage from the Admin App.'], process:['Confirm the town/service zone.','Choose package and add-ons through the booking planner.','Keep customer-facing proof and service notes updated.'], equipment:['mobile detailing setup','booking planner','local proof blocks'], highlights:['Targets Woodstock and Ingersoll search language.','Good place for local before/after proof and review snippets.'], things_to_know:['Confirm access, parking, power, and water before dispatch.'], official_links:[{label:'City of Woodstock',url:'https://www.cityofwoodstock.ca/'},{label:'Town of Ingersoll',url:'https://www.ingersoll.ca/'}], related_products:[], gallery_images:[], gallery_image_urls:[], faq:[{q:'Can this page use its own images?',a:'Yes. Add one image URL per line in the gallery field or use a hero image override.'}] },
+      'simcoe-delhi-auto-detailing': { type:'location', enabled:true, slug:'simcoe-delhi-auto-detailing', nav_group:'town', name:'Simcoe / Delhi auto detailing', badge:'Town-focused detailing page', hero_title:'Mobile auto detailing in Simcoe and Delhi', meta_title:'Mobile Auto Detailing in Simcoe & Delhi | Rosie Dazzlers', meta_description:'Norfolk County mobile auto detailing page for Simcoe and Delhi customers with package booking and service-area guidance.', hero_intro:'A focused Norfolk County location page helps Simcoe and Delhi customers understand the mobile detailing process before booking.', reasons_page_exists:['Matches Norfolk County searches that include Simcoe or Delhi.','Gives local proof and service-area notes a dedicated home.'], process:['Confirm service zone and driveway access.','Choose a package and add-ons.','Use local proof and before/after content to build confidence.'], equipment:['mobile detailing setup','booking planner','local proof blocks'], highlights:['Targets Simcoe and Delhi search terms.','Useful for Norfolk County booking confidence.'], things_to_know:['Confirm parking, access, power, and water before arrival.'], official_links:[{label:'Norfolk County',url:'https://www.norfolkcounty.ca/'}], related_products:[], gallery_images:[], gallery_image_urls:[], faq:[{q:'Can this page be edited later?',a:'Yes. Use Admin App → Landing pages → Location landing pages.'}] },
+      'port-dover-auto-detailing': { type:'location', enabled:true, slug:'port-dover-auto-detailing', nav_group:'town', name:'Port Dover auto detailing', badge:'Town-focused detailing page', hero_title:'Mobile auto detailing in Port Dover', meta_title:'Mobile Auto Detailing in Port Dover | Rosie Dazzlers', meta_description:'Port Dover mobile auto detailing page with booking, package, and service-area guidance for Norfolk County customers.', hero_intro:'A Port Dover page helps customers near the lakefront and surrounding Norfolk County areas find the right mobile detailing booking path.', reasons_page_exists:['Matches Port Dover local search language.','Provides a home for town-specific work examples and service notes.'], process:['Confirm access and service zone.','Choose the package and add-ons.','Keep proof images and FAQs current.'], equipment:['mobile detailing setup','booking planner','local proof blocks'], highlights:['Targets Port Dover-area customers.','Good for seasonal and driveway-access guidance.'], things_to_know:['Confirm parking and access before arrival, especially during busier seasonal periods.'], official_links:[{label:'Norfolk County',url:'https://www.norfolkcounty.ca/'}], related_products:[], gallery_images:[], gallery_image_urls:[], faq:[{q:'What image size should be used?',a:'Use a 1600×1000 hero image or a 1200×800 proof image when possible.'}] }
+    };
+  }
   function cloneJson(value){ return JSON.parse(JSON.stringify(value)); }
   var landingPagesState = landingPagesDefaults();
   function normalizeLandingFaq(value){ return (Array.isArray(value) ? value : []).map(function(item){ return { q: String(item && item.q || '').trim(), a: String(item && item.a || '').trim() }; }).filter(function(item){ return item.q && item.a; }); }
@@ -712,7 +720,8 @@
     return source;
   }
   function ensureLandingPagesShape(value){
-    var pages = value && value.pages && typeof value.pages === 'object' ? value.pages : {};
+    var incoming = value && value.pages && typeof value.pages === 'object' ? value.pages : {};
+    var pages = Object.assign({}, defaultLocationLandingPages(), incoming);
     var next = { pages: {} };
     Object.keys(pages).forEach(function(slug){ next.pages[slug] = normalizeLandingPage(pages[slug], { slug: slug }); });
     return next;
@@ -917,12 +926,15 @@
   }
   function addonPriceSummary(addon){
     var prices = addon && addon.prices_cad ? addon.prices_cad : {};
+    var hasPositivePrice = false;
     var parts = ['small','mid','oversize'].map(function(size){
       var label = size === 'oversize' ? 'oversize/exotic' : size;
-      var value = prices[size];
-      return label + ': ' + (value == null || value === '' ? '—' : '$' + Number(value || 0).toFixed(2));
+      var value = Number(prices[size]);
+      if (Number.isFinite(value) && value > 0) { hasPositivePrice = true; return label + ': $' + value.toFixed(2); }
+      return label + ': quote required';
     });
     if (addon && addon.quote_required) parts.push('quote required');
+    else if (!hasPositivePrice && !(Number(addon && addon.price_cad) > 0)) parts.push('quote required');
     return parts.join(' • ');
   }
   function renderAddonEditor(rows, packages){
