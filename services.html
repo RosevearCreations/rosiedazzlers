@@ -322,14 +322,14 @@
     }
     function addonDefaultPriceText(addon){
       if (!addon) return '';
-      if (addon.quote_required) return 'Default price: quote required';
       const prices = addon.prices_cad || {};
       const parts = [];
-      if (prices.small != null) parts.push(`Small ${money(prices.small)}`);
-      if (prices.mid != null) parts.push(`Mid ${money(prices.mid)}`);
-      if (prices.oversize != null) parts.push(`Oversize ${money(prices.oversize)}`);
-      if (!parts.length && addon.price_cad != null) parts.push(money(addon.price_cad));
-      return parts.length ? `Default price: ${parts.join(' · ')}` : '';
+      if (Number(prices.small) > 0) parts.push(`Small ${money(prices.small)}`);
+      if (Number(prices.mid) > 0) parts.push(`Mid ${money(prices.mid)}`);
+      if (Number(prices.oversize) > 0) parts.push(`Oversize ${money(prices.oversize)}`);
+      if (!parts.length && Number(addon.price_cad) > 0) parts.push(money(addon.price_cad));
+      if (addon.quote_required || !parts.length) return parts.length ? `Default price: from ${parts.join(' · ')} · quote required` : 'Default price: quote required';
+      return `Default price: ${parts.join(' · ')}`;
     }
     function addonBookingUrl(addon){
       const code = String(addon?.code || '').trim();

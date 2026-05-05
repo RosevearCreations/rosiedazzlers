@@ -287,3 +287,22 @@ For video comparisons, set `before_kind` or `after_kind` to `video` and use an M
 - Services and Pricing add-on cards show default prices and include both **Add to booking** and **Open page** actions.
 - The add-on editor now shows the saved image URL fields, fallback image, package relationship, standalone setting, and rule summary when an existing add-on is selected.
 
+
+
+## Build 128 image/content admin notes
+
+- Location landing-page images can be edited in **Admin App → Landing pages → Location landing pages**. If the saved setting is empty, the editor now seeds Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, and Port Dover drafts so the dropdown is not blank.
+- For a location hero image, use a 1600×1000 JPG/PNG/WebP where possible. Paste the final R2/public URL into **Hero image URL**.
+- For gallery/proof images, use one URL per line in **Gallery images**. A good default is 1200×800 or larger, landscape or square.
+- Add-on cards now treat missing or zero prices as **Quote required** instead of showing `$0.00`. Update the actual catalog price in the pricing catalog when an add-on should be charged online.
+
+
+## Build 128 admin/catalog/checkout/local SEO pass - 2026-05-01
+
+- Fixed Admin App location landing-page dropdowns by seeding editable town/location drafts when the saved `landing_pages` setting is empty. This keeps local SEO pages visible in the builder and ready for Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, and Port Dover edits.
+- Compact Admin Catalog inventory tables and pinned the Edit inventory item form to the top of its panel so long inventory lists do not stretch the editor down the page.
+- Updated booking checkout to retry safely when optional modern booking columns are missing in Supabase, reducing customer-facing 500 failures while preserving full data when the latest migrations are present.
+- Adjusted Step 2 service-card title contrast so package names stay readable on dark cards.
+- Normalized zero/missing add-on prices to show Quote required instead of $0.00.
+- Stabilized Admin Accounting date inputs so P&L, Balance Sheet, and other date filters appear as consistent rectangular fields.
+- SEO hygiene kept: local town wording remains prominent, public pages should keep one clear H1, and future content updates should continue building proof/review/gallery blocks around Norfolk and Oxford County searches.
