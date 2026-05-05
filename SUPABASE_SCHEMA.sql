@@ -985,3 +985,7 @@ create index if not exists accounting_period_closes_status_idx on public.account
 -- Front-end-only layout pass. Services/Pricing now render the embedded booking planner full-width, and /book?embed=1 keeps vehicle fields in compact two/three-column rows. No schema change required.
 
 -- 2026-05-01 Build 127: UI/admin/content patch only. See sql/2026-05-01_build127_ui_gallery_embed_admin_no_ddl_note.sql.
+
+
+-- Build 128 note (2026-05-01): checkout now includes a legacy-column fallback for bookings when optional service-area, vehicle, or geofence columns are missing from the live Supabase schema cache. Keep the earlier booking service-area, vehicle, and geofence migrations applied for full reporting fidelity.
+-- Build 128 also compacted Admin Catalog inventory tables/editor layout, restored Admin App location landing-page seed listings, normalized quote-required display for zero-priced add-ons, and stabilized Admin Accounting date inputs.
