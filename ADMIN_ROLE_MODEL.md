@@ -482,3 +482,11 @@ No database DDL was required. Schema tracking was updated with `sql/2026-05-01_b
 - Normalized zero/missing add-on prices to show Quote required instead of $0.00.
 - Stabilized Admin Accounting date inputs so P&L, Balance Sheet, and other date filters appear as consistent rectangular fields.
 - SEO hygiene kept: local town wording remains prominent, public pages should keep one clear H1, and future content updates should continue building proof/review/gallery blocks around Norfolk and Oxford County searches.
+
+## Build 129 update — Admin Catalog inventory reload after save
+
+- Fixed the Admin Catalog inventory workflow so saving one edited item no longer hides the rest of the local seeded inventory list.
+- The inventory page now merges saved database rows with remaining local catalog fallback rows until the full catalog is migrated into `catalog_inventory_items`.
+- After saving an individual inventory item, the full inventory list reloads and the saved item remains in the editor so the next item can be selected immediately.
+- `catalog_inventory_save.js` now attempts to preserve cost, SKU, purchase date, estimated jobs per unit, sort order, subcategory, and reuse policy, with a compatibility fallback for older schemas that are missing optional columns.
+- SEO/CSS habit remains unchanged: public pages should keep one clear H1, local wording in titles/headings, and compact admin tables that do not stretch rows unnecessarily.

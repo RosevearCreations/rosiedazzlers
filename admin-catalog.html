@@ -181,6 +181,27 @@
       return [];
     }
   }
+  function mergeInventoryWithSeed(dbItems, seedItems){
+    const saved = Array.isArray(dbItems) ? dbItems.filter(Boolean) : [];
+    const seeded = Array.isArray(seedItems) ? seedItems.filter(Boolean) : [];
+    const seen = new Set(saved.map((item)=>String(item.item_key || '').toLowerCase()).filter(Boolean));
+    const missingSeeds = seeded.filter((item)=>{
+      const key = String(item.item_key || '').toLowerCase();
+      return key && !seen.has(key);
+    });
+    return [...saved, ...missingSeeds];
+  }
+  function currentInventoryStateMessage(dbItems, seedItems){
+    const savedCount = Array.isArray(dbItems) ? dbItems.length : 0;
+    const seedCount = Array.isArray(seedItems) ? seedItems.length : 0;
+    if(savedCount && seedCount && savedCount < seedCount){
+      return `Showing ${savedCount} saved inventory item${savedCount===1?'':'s'} plus ${seedCount-savedCount} local catalog fallback draft${seedCount-savedCount===1?'':'s'}. Save each draft once to fully move it into the inventory database.`;
+    }
+    if(!savedCount && seedCount){
+      return 'Inventory table is empty, so the local consumables and gear catalogs are shown as editable fallback drafts.';
+    }
+    return '';
+  }
   function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g,(m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function show(msg,kind=''){ const el=qs('#status'); el.style.display='block'; el.className='notice '+(kind||''); el.textContent=msg; }
   function hide(){ qs('#status').style.display='none'; }
@@ -209,7 +230,28 @@
     document.querySelectorAll('[data-edit-low]').forEach((btn)=>btn.addEventListener('click',()=>fillForm(inventory.find((x)=>String(x.item_key)===String(btn.dataset.editLow)) || null)));
     document.querySelectorAll('[data-low-reorder]').forEach((btn)=>btn.addEventListener('click', ()=>createReorder(btn.dataset.lowReorder)));
   }
-  async function loadInventory(){ hide(); const r=await getJson('/api/admin/catalog_inventory_list'); if(!r.ok||!r.out?.ok){ inventory = await loadCatalogSeed(); lowStock=[]; fillUsageItems(); renderInventory(); renderLowStock(); show('Inventory API unavailable. Showing seeded consumables and gear from the local catalogs instead.',''); return; } inventory=Array.isArray(r.out.items)?r.out.items:[]; lowStock=Array.isArray(r.out.low_stock)?r.out.low_stock:[]; if(!inventory.length){ inventory = await loadCatalogSeed(); show('Inventory table was empty, so the local consumables and gear catalogs are shown as a seeded fallback view.',''); } fillUsageItems(); renderInventory(); renderLowStock(); }
+  async function loadInventory(){
+    hide();
+    const seedItems = await loadCatalogSeed();
+    const r=await getJson('/api/admin/catalog_inventory_list');
+    if(!r.ok||!r.out?.ok){
+      inventory = seedItems;
+      lowStock=[];
+      fillUsageItems();
+      renderInventory();
+      renderLowStock();
+      show('Inventory API unavailable. Showing seeded consumables and gear from the local catalogs instead.','');
+      return;
+    }
+    const dbItems=Array.isArray(r.out.items)?r.out.items:[];
+    inventory=mergeInventoryWithSeed(dbItems, seedItems);
+    lowStock=inventory.filter((item)=>String(item.reuse_policy || 'reorder') !== 'never_reuse' && Number(item.qty_on_hand || 0) <= Number(item.reorder_point || 0));
+    fillUsageItems();
+    renderInventory();
+    renderLowStock();
+    const msg=currentInventoryStateMessage(dbItems, seedItems);
+    if(msg) show(msg,'');
+  }
   async function loadMovements(){ const r=await getJson('/api/admin/catalog_usage_list'); if(!r.ok||!r.out?.ok){ qs('#moveBody').innerHTML=`<tr><td colspan="4">${(r.out&&r.out.error)||'Could not load movement history.'}</td></tr>`; return; } movements=Array.isArray(r.out.movements)?r.out.movements:[]; renderMovements(); }
   async function loadLowStock(){ const r=await getJson('/api/admin/catalog_low_stock_list'); if(!r.ok||!r.out?.ok){ qs('#lowBody').innerHTML=`<tr><td colspan="4">${(r.out&&r.out.error)||'Could not load low-stock list.'}</td></tr>`; return; } lowStock=Array.isArray(r.out.items)?r.out.items:[]; renderLowStock(); }
   async function loadOrders(){ const status=qs('#orderStatus').value; const url='/api/admin/catalog_purchase_orders_list'+(status?`?status=${encodeURIComponent(status)}`:''); const r=await getJson(url); if(!r.ok||!r.out?.ok){ qs('#orderBody').innerHTML=`<tr><td colspan="4">${(r.out&&r.out.error)||'Could not load orders.'}</td></tr>`; return; } const orders=Array.isArray(r.out.orders)?r.out.orders:[]; const due=Array.isArray(r.out.reminder_due)?r.out.reminder_due:[]; qs('#orderSummary').textContent=`${orders.length} orders · ${due.length} reminders due`; qs('#orderBody').innerHTML=orders.map((po)=>`<tr><td><strong>${esc(po.item_name || po.item_key || 'Order')}</strong><div class="mini">${esc(po.vendor_name || '')} · qty ${esc(po.qty_ordered)}</div>${po.purchase_url?`<div class="mini"><a href="${esc(po.purchase_url)}" target="_blank" rel="noopener">Purchase link</a></div>`:''}</td><td>${esc(po.status)}</td><td>${po.reminder_at ? esc(new Date(po.reminder_at).toLocaleString()) : '<span class="mini">None</span>'}</td><td><div class="row">${['requested','ordered'].includes(po.status) ? `<button class="btn ghost" data-status="ordered" data-id="${po.id}">Mark ordered</button>` : ''}${['requested','ordered'].includes(po.status) ? `<button class="btn ghost" data-status="received" data-id="${po.id}">Mark received</button>` : ''}${po.status !== 'cancelled' && po.status !== 'received' ? `<button class="btn ghost" data-status="cancelled" data-id="${po.id}">Cancel</button>` : ''}</div></td></tr>`).join('') || '<tr><td colspan="4">No purchase orders found.</td></tr>';
@@ -218,7 +260,18 @@
   hardenTextInput(qs('#invSearch'),'inventory-query'); hardenTextInput(qs('#moveSearch'),'movement-query');
   qs('#reloadBtn').addEventListener('click', loadInventory); qs('#reloadOrdersBtn').addEventListener('click', loadOrders); qs('#reloadMovesBtn').addEventListener('click', loadMovements); qs('#reloadLowBtn').addEventListener('click', loadLowStock); qs('#itemType').addEventListener('change', renderInventory); qs('#invSearch').addEventListener('input', renderInventory); qs('#invSort').addEventListener('change', renderInventory); qs('#moveSearch').addEventListener('input', renderMovements); qs('#moveType').addEventListener('change', renderMovements); qs('#orderStatus').addEventListener('change', loadOrders); qs('#newItemBtn').addEventListener('click', ()=>fillForm(null)); qs('#clearFormBtn').addEventListener('click', ()=>fillForm(null)); qs('#usageResetBtn').addEventListener('click', ()=>{ qs('#usageBookingId').value=''; qs('#usageItemKey').value=''; qs('#usageQty').value='1'; qs('#usageNote').value=''; });
   qs('#amazonParseBtn').addEventListener('click', ()=>{ const parsed=parseAmazonDraft(qs('#formAmazon').value); if(!parsed) return show('Paste a valid Amazon product link first.','bad'); if(!qs('#formName').value.trim()) qs('#formName').value=parsed.name; if(!qs('#formItemKey').value.trim()) qs('#formItemKey').value=parsed.key; if(!qs('#formVendor').value.trim()) qs('#formVendor').value='Amazon'; show('Draft name and item key filled from Amazon link. Review before saving.','ok'); });
-  qs('#itemForm').addEventListener('submit', async(e)=>{ e.preventDefault(); const payload={ item_key: qs('#formItemKey').value.trim(), item_type: qs('#formItemType').value, name: qs('#formName').value.trim(), category: qs('#formCategory').value.trim(), subcategory: qs('#formSubcategory').value.trim(), preferred_vendor: qs('#formVendor').value.trim(), vendor_sku: qs('#formVendorSku').value.trim(), unit_label: qs('#formUnit').value.trim(), qty_on_hand: Number(qs('#formQty').value||0), reorder_point: Number(qs('#formReorderPoint').value||0), reorder_qty: Number(qs('#formReorderQty').value||0), cost_cad: qs('#formCostCad').value === '' ? null : Number(qs('#formCostCad').value||0), rating_value: qs('#formRating').value, rating_count: Number(qs('#formRatingCount').value||0), sort_key: Number(qs('#formSortKey').value||0), purchase_date: qs('#formPurchaseDate').value || null, estimated_jobs_per_unit: Number(qs('#formEstimatedJobs').value||0), reuse_policy: qs('#formReuse').value, amazon_url: qs('#formAmazon').value.trim(), image_url: qs('#formImage').value.trim(), is_public: qs('#formIsPublic').checked, is_active: qs('#formIsActive').checked, notes: qs('#formNotes').value.trim() }; const x=await postJson('/api/admin/catalog_inventory_save', payload); if(!x.ok||!x.out?.ok) return show((x.out&&x.out.error)||'Could not save inventory item.','bad'); show('Inventory item saved.','ok'); fillForm(x.out.item||null); loadInventory(); loadLowStock(); });
+  qs('#itemForm').addEventListener('submit', async(e)=>{
+    e.preventDefault();
+    const payload={ item_key: qs('#formItemKey').value.trim(), item_type: qs('#formItemType').value, name: qs('#formName').value.trim(), category: qs('#formCategory').value.trim(), subcategory: qs('#formSubcategory').value.trim(), preferred_vendor: qs('#formVendor').value.trim(), vendor_sku: qs('#formVendorSku').value.trim(), unit_label: qs('#formUnit').value.trim(), qty_on_hand: Number(qs('#formQty').value||0), reorder_point: Number(qs('#formReorderPoint').value||0), reorder_qty: Number(qs('#formReorderQty').value||0), cost_cad: qs('#formCostCad').value === '' ? null : Number(qs('#formCostCad').value||0), rating_value: qs('#formRating').value, rating_count: Number(qs('#formRatingCount').value||0), sort_key: Number(qs('#formSortKey').value||0), purchase_date: qs('#formPurchaseDate').value || null, estimated_jobs_per_unit: Number(qs('#formEstimatedJobs').value||0), reuse_policy: qs('#formReuse').value, amazon_url: qs('#formAmazon').value.trim(), image_url: qs('#formImage').value.trim(), is_public: qs('#formIsPublic').checked, is_active: qs('#formIsActive').checked, notes: qs('#formNotes').value.trim() };
+    const savedKey = payload.item_key;
+    const x=await postJson('/api/admin/catalog_inventory_save', payload);
+    if(!x.ok||!x.out?.ok) return show((x.out&&x.out.error)||'Could not save inventory item.','bad');
+    await loadInventory();
+    const saved = inventory.find((item)=>String(item.item_key)===String(savedKey)) || x.out.item || null;
+    fillForm(saved);
+    await Promise.allSettled([loadLowStock(), loadOrders(), loadMovements()]);
+    show('Inventory item saved. The full inventory list has been reloaded so you can edit the next item.','ok');
+  });
   qs('#usageForm').addEventListener('submit', async(e)=>{ e.preventDefault(); const payload={ booking_id: qs('#usageBookingId').value.trim(), item_key: qs('#usageItemKey').value, qty_used: Number(qs('#usageQty').value||0), note: qs('#usageNote').value.trim() }; const x=await postJson('/api/admin/catalog_usage_add', payload); if(!x.ok||!x.out?.ok) return show((x.out&&x.out.error)||'Could not record usage.','bad'); show('Inventory usage recorded.','ok'); qs('#usageQty').value='1'; qs('#usageNote').value=''; loadInventory(); loadLowStock(); loadMovements(); });
   window.AdminShell.boot({ pageKey:'admin-catalog', onReady: async ({actor:current}) => { actor=current||null; const box=qs('#actorBox'); if(actor){ box.style.display='block'; box.textContent=`Signed in as ${actor.full_name || actor.email || 'staff'} (${actor.role_code || 'staff'})`; } fillForm(null); loadInventory(); loadMovements(); loadLowStock(); loadOrders(); } });
 })();
