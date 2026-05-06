@@ -989,3 +989,7 @@ create index if not exists accounting_period_closes_status_idx on public.account
 
 -- Build 128 note (2026-05-01): checkout now includes a legacy-column fallback for bookings when optional service-area, vehicle, or geofence columns are missing from the live Supabase schema cache. Keep the earlier booking service-area, vehicle, and geofence migrations applied for full reporting fidelity.
 -- Build 128 also compacted Admin Catalog inventory tables/editor layout, restored Admin App location landing-page seed listings, normalized quote-required display for zero-priced add-ons, and stabilized Admin Accounting date inputs.
+
+-- Build 129 note (2026-05-05): Admin Catalog inventory save now reloads the full merged inventory view after saving one item.
+-- No DDL required. If the local catalog has not been fully migrated to catalog_inventory_items yet, the UI shows DB-saved rows plus local seeded fallback rows.
+-- catalog_inventory_save.js now writes optional inventory fields when present and strips only missing optional columns for older Supabase schemas.
