@@ -470,3 +470,5 @@ This documentation file was reviewed during the Build 124 pass. The current patc
 - Normalized zero/missing add-on prices to show Quote required instead of $0.00.
 - Stabilized Admin Accounting date inputs so P&L, Balance Sheet, and other date filters appear as consistent rectangular fields.
 - SEO hygiene kept: local town wording remains prominent, public pages should keep one clear H1, and future content updates should continue building proof/review/gallery blocks around Norfolk and Oxford County searches.
+
+<!-- Build 130 sync 2026-05-06: reviewed during sanity-check/admin image/accounting roadmap pass; keep one-H1, local SEO clarity, CSS overflow, image fallback, and schema handoff discipline. -->
