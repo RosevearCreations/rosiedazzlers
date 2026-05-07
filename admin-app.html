@@ -738,11 +738,29 @@
   function landingTextToLinks(value){ return String(value || '').split(/\r?\n/).map(function(line){ var parts = line.split('||'); return { label: String(parts[0] || '').trim(), url: String(parts.slice(1).join('||') || '').trim() }; }).filter(function(item){ return item.label && item.url; }); }
   function landingTextToProductRefs(value){ return String(value || '').split(/\r?\n/).map(function(line){ var parts = line.split('||'); return { name: String(parts[0] || '').trim(), role: String(parts[1] || '').trim(), note: String(parts.slice(2).join('||') || '').trim() }; }).filter(function(item){ return item.name; }); }
   function slugify(value){ return String(value || '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').replace(/-{2,}/g, '-'); }
+  function addonCatalogImageUrl(addon){
+    return String((addon && (addon.image_url || addon.image_fallback_url || addon.hero_image_url || addon.media_url)) || '').trim();
+  }
   function addonLandingEntry(code){ var slug = Object.keys(landingPagesState.pages).find(function(key){ return landingPagesState.pages[key] && landingPagesState.pages[key].type === 'addon' && String(landingPagesState.pages[key].related_code || '') === String(code || ''); }); return slug ? landingPagesState.pages[slug] : null; }
+  function withAddonImageFallback(page, addon){
+    var next = normalizeLandingPage(page || {}, {});
+    var currentImage = addonCatalogImageUrl(addon);
+    if (currentImage) {
+      next.source_catalog_image_url = currentImage;
+      if (!next.hero_image_url) next.hero_image_url = currentImage;
+      if (!Array.isArray(next.gallery_images) || !next.gallery_images.length) {
+        next.gallery_images = [currentImage];
+        next.gallery_image_urls = [currentImage];
+      }
+    }
+    return next;
+  }
   function locationLandingOptions(){ return Object.keys(landingPagesState.pages).filter(function(slug){ return landingPagesState.pages[slug] && landingPagesState.pages[slug].type === 'location'; }).sort(); }
   function buildLandingEditorHtml(page, prefix){
     page = normalizeLandingPage(page || {}, {});
     var url = page.slug ? ((page.type === 'addon' || page.type === 'location') && ['ceramic-coating','pet-hair-removal','odor-removal','headlight-restoration','paint-correction','graphene-finish','full-clay-treatment','engine-cleaning','high-grade-paint-sealant','uv-protectant','exterior-wax','de-ionizing-treatment','tillsonburg-auto-detailing','woodstock-ingersoll-auto-detailing','simcoe-delhi-auto-detailing','port-dover-auto-detailing'].includes(page.slug) ? '/' + page.slug : '/landing/' + page.slug) : '';
+    var currentImage = String(page.hero_image_url || page.source_catalog_image_url || (Array.isArray(page.gallery_images) && page.gallery_images[0]) || '').trim();
+    var previewBlock = currentImage ? '<div class="panel-lite stack-sm"><div class="section-label">Current image loaded</div><img class="addon-preview-img" src="' + escapeHtml(currentImage) + '" alt="' + escapeHtml(page.name || 'Landing page image preview') + '" onerror="this.onerror=null;this.src=&quot;/assets/addons/generic_addon.svg&quot;"><div class="note">This is the image currently available to this landing editor. Replace the Hero image URL below to switch it out; leave it blank only if you want the public page to fall back to catalog media.</div></div>' : '<div class="catalog-empty">No image URL is currently attached to this page or its add-on catalog record.</div>';
     return '<div class="checkrow"><input id="' + prefix + '_enabled" type="checkbox" ' + (page.enabled ? 'checked' : '') + '><label for="' + prefix + '_enabled">Landing page enabled</label></div>' +
       '<div class="field"><label for="' + prefix + '_slug">Slug</label><input id="' + prefix + '_slug" value="' + escapeHtml(page.slug || '') + '" placeholder="my-new-landing-page"></div>' +
       '<div class="note">Preview path: ' + escapeHtml(url || '/landing/your-slug') + '</div>' +
@@ -759,6 +777,7 @@
       '<div class="field"><label for="' + prefix + '_things_to_know">Things to know / avoid (one line per point)</label><textarea id="' + prefix + '_things_to_know">' + escapeHtml(landingArrayToText(page.things_to_know)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_official_links">Official links using Label || URL</label><textarea id="' + prefix + '_official_links">' + escapeHtml(landingLinksToText(page.official_links)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_related_products">Related products using Product name || Role || Note</label><textarea id="' + prefix + '_related_products">' + escapeHtml(landingProductRefsToText(page.related_products)) + '</textarea></div>' +
+      previewBlock +
       '<div class="field"><label for="' + prefix + '_hero_image_url">Hero image URL (optional override)</label><input id="' + prefix + '_hero_image_url" value="' + escapeHtml(page.hero_image_url || '') + '" placeholder="https://..."></div>' +
       '<div class="field"><label for="' + prefix + '_gallery_images">Gallery images (one URL per line)</label><textarea id="' + prefix + '_gallery_images">' + escapeHtml(landingArrayToText(page.gallery_images)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_faq">FAQ lines using Question || Answer</label><textarea id="' + prefix + '_faq">' + escapeHtml(landingFaqToText(page.faq)) + '</textarea></div>';
@@ -796,7 +815,7 @@
     if (!addonSelect.value && addonSelect.options.length) addonSelect.value = addonSelect.options[0].value;
     var addonCode = addonSelect.value || '';
     var addon = (pricingCatalogState.addons || []).find(function(row){ return row.code === addonCode; }) || null;
-    var addonPage = addonLandingEntry(addonCode) || normalizeLandingPage({ type: 'addon', related_code: addonCode, nav_group: 'special-service', badge: 'Special service landing page', slug: slugify((addon && addon.name) || addonCode), name: addon && addon.name || addonCode, hero_title: addon && addon.name || addonCode, meta_title: addon ? ((addon.name || addon.code) + ' | Rosie Dazzlers') : '', meta_description: addon && addon.notes && addon.notes.length ? addon.notes.join(' ') : '' }, {});
+    var addonPage = withAddonImageFallback(addonLandingEntry(addonCode) || { type: 'addon', related_code: addonCode, nav_group: 'special-service', badge: 'Special service landing page', slug: slugify((addon && addon.name) || addonCode), name: addon && addon.name || addonCode, hero_title: addon && addon.name || addonCode, meta_title: addon ? ((addon.name || addon.code) + ' | Rosie Dazzlers') : '', meta_description: addon && addon.notes && addon.notes.length ? addon.notes.join(' ') : '' }, addon);
     byId('landing_addon_editor').dataset.currentCode = addonCode;
     byId('landing_addon_editor').innerHTML = buildLandingEditorHtml(addonPage, 'landing_addon');
 
@@ -813,7 +832,8 @@
   }
   function saveCurrentLandingEditorsToState(){
     var addonCode = byId('landing_addon_editor').dataset.currentCode || byId('landing_addon_select').value || '';
-    var addonSeed = addonLandingEntry(addonCode) || { type: 'addon', related_code: addonCode, nav_group: 'special-service', badge: 'Special service landing page' };
+    var addonForSeed = (pricingCatalogState.addons || []).find(function(row){ return row.code === addonCode; }) || null;
+    var addonSeed = withAddonImageFallback(addonLandingEntry(addonCode) || { type: 'addon', related_code: addonCode, nav_group: 'special-service', badge: 'Special service landing page' }, addonForSeed);
     var addonPage = readLandingEditor('landing_addon', addonSeed);
     addonPage.related_code = addonCode; addonPage.type = 'addon'; addonPage.nav_group = 'special-service';
     if (addonPage.slug) landingPagesState.pages[addonPage.slug] = addonPage;
@@ -1285,7 +1305,7 @@
   bindById('reloadPricingCatalogBtn', 'click', async ()=>{ try{ await loadPricingCatalogEditor(null); setShellStatus('Pricing catalog reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload pricing catalog.', 'error'); } });
   bindById('landing_addon_select', 'change', function(){ saveCurrentLandingEditorsToState(); renderLandingBuilder(); });
   bindById('landing_location_select', 'change', function(){ saveCurrentLandingEditorsToState(); renderLandingBuilder(); });
-  bindById('landing_addon_create_btn', 'click', function(){ var code = byId('landing_addon_select').value || ''; var addon = (pricingCatalogState.addons || []).find(function(row){ return row.code === code; }) || { code: code, name: code }; var slug = slugify(addon.name || addon.code); landingPagesState.pages[slug] = normalizeLandingPage({ type: 'addon', related_code: code, enabled: true, slug: slug, nav_group: 'special-service', name: addon.name || addon.code, badge: 'Special service landing page', hero_title: addon.name || addon.code, meta_title: (addon.name || addon.code) + ' | Rosie Dazzlers', meta_description: Array.isArray(addon.notes) ? addon.notes.join(' ') : '' }, {}); renderLandingBuilder(); setShellStatus('Add-on landing draft created for ' + (addon.name || addon.code) + '.', 'success'); });
+  bindById('landing_addon_create_btn', 'click', function(){ var code = byId('landing_addon_select').value || ''; var addon = (pricingCatalogState.addons || []).find(function(row){ return row.code === code; }) || { code: code, name: code }; var slug = slugify(addon.name || addon.code); var currentImage = addonCatalogImageUrl(addon); landingPagesState.pages[slug] = withAddonImageFallback({ type: 'addon', related_code: code, enabled: true, slug: slug, nav_group: 'special-service', name: addon.name || addon.code, badge: 'Special service landing page', hero_title: addon.name || addon.code, meta_title: (addon.name || addon.code) + ' | Rosie Dazzlers', meta_description: Array.isArray(addon.notes) ? addon.notes.join(' ') : '', hero_image_url: currentImage, gallery_images: currentImage ? [currentImage] : [], gallery_image_urls: currentImage ? [currentImage] : [] }, addon); renderLandingBuilder(); setShellStatus('Add-on landing draft created for ' + (addon.name || addon.code) + '.', 'success'); });
   bindById('landing_location_create_btn', 'click', function(){ saveCurrentLandingEditorsToState(); var label = prompt('New location page name (example: Norwich auto detailing)'); if (!label) return; var slug = slugify(label); landingPagesState.pages[slug] = normalizeLandingPage({ type: 'location', enabled: true, slug: slug, nav_group: 'town', name: label, badge: 'Town-focused detailing page', hero_title: label, meta_title: label + ' | Rosie Dazzlers' }, {}); renderLandingBuilder(); byId('landing_location_select').value = slug; renderLandingBuilder(); setShellStatus('Location landing draft created for ' + label + '.', 'success'); });
   bindById('reloadLandingPagesBtn', 'click', async ()=>{ try{ await loadLandingPagesEditor(null); setShellStatus('Landing pages reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload landing pages.', 'error'); } });
   bindById('saveLandingPagesBtn', 'click', async ()=>{ try{ saveCurrentLandingEditorsToState(); await saveSetting('landing_pages', landingPagesState, 'Landing pages saved. Known pages and generic /landing/ routes now use this content.'); } catch(err){ setShellStatus(err?.message || 'Could not save landing pages.', 'error'); } });
