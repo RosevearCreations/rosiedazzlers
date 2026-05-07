@@ -993,3 +993,10 @@ create index if not exists accounting_period_closes_status_idx on public.account
 -- Build 129 note (2026-05-05): Admin Catalog inventory save now reloads the full merged inventory view after saving one item.
 -- No DDL required. If the local catalog has not been fully migrated to catalog_inventory_items yet, the UI shows DB-saved rows plus local seeded fallback rows.
 -- catalog_inventory_save.js now writes optional inventory fields when present and strips only missing optional columns for older Supabase schemas.
+
+-- 2026-05-06 Build 130 sanity-check/admin image pass note:
+-- No required DDL change in this pass. Admin App now fills add-on/special-detail landing editor images
+-- from the current pricing-catalog add-on image when no landing-specific hero/gallery image is saved.
+-- Next accounting schema targets remain document attachments, bank reconciliation imports/matches,
+-- inventory/COGS posting support, stricter period locks, and accountant-ready export metadata.
+
