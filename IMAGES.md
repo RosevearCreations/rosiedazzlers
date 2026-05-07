@@ -314,3 +314,17 @@ For video comparisons, set `before_kind` or `after_kind` to `video` and use an M
 - After saving an individual inventory item, the full inventory list reloads and the saved item remains in the editor so the next item can be selected immediately.
 - `catalog_inventory_save.js` now attempts to preserve cost, SKU, purchase date, estimated jobs per unit, sort order, subcategory, and reuse policy, with a compatibility fallback for older schemas that are missing optional columns.
 - SEO/CSS habit remains unchanged: public pages should keep one clear H1, local wording in titles/headings, and compact admin tables that do not stretch rows unnecessarily.
+
+## Build 130 add-on landing image editor note — 2026-05-06
+
+Admin App → Add-ons & special detailing pages now pulls the current add-on catalog image into the landing-page editor when no page-specific hero/gallery image has been saved. The editor shows a preview block above the Hero image URL field.
+
+How to switch an add-on/special-detail landing image:
+1. Update the add-on's Primary image URL in the Pricing source-of-truth add-on editor if the same image should be used everywhere.
+2. Or paste a page-specific URL into Landing Page Builder → Hero image URL if only that landing page needs a different image.
+3. Add extra page gallery URLs one per line in Gallery images.
+4. Save Landing Pages after changing landing-page content, or Save Pricing Catalog after changing the add-on catalog image.
+
+Recommended image sizes remain 1600×1000 for landing hero images, 1200×800 for proof/gallery images, and 1200×900 or square-safe images for card artwork. Use descriptive filenames and alt-friendly content because these images support both conversion trust and local search clarity.
+
+<!-- Build 130 sync 2026-05-06: reviewed during sanity-check/admin image/accounting roadmap pass; keep one-H1, local SEO clarity, CSS overflow, image fallback, and schema handoff discipline. -->

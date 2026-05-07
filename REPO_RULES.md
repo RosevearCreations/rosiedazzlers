@@ -385,3 +385,5 @@ No database DDL was required. Schema tracking was updated with `sql/2026-05-01_b
 - After saving an individual inventory item, the full inventory list reloads and the saved item remains in the editor so the next item can be selected immediately.
 - `catalog_inventory_save.js` now attempts to preserve cost, SKU, purchase date, estimated jobs per unit, sort order, subcategory, and reuse policy, with a compatibility fallback for older schemas that are missing optional columns.
 - SEO/CSS habit remains unchanged: public pages should keep one clear H1, local wording in titles/headings, and compact admin tables that do not stretch rows unnecessarily.
+
+<!-- Build 130 sync 2026-05-06: reviewed during sanity-check/admin image/accounting roadmap pass; keep one-H1, local SEO clarity, CSS overflow, image fallback, and schema handoff discipline. -->

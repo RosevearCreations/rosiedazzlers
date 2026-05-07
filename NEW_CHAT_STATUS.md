@@ -177,3 +177,36 @@ No database DDL was required. Schema tracking was updated with `sql/2026-05-01_b
 - After saving an individual inventory item, the full inventory list reloads and the saved item remains in the editor so the next item can be selected immediately.
 - `catalog_inventory_save.js` now attempts to preserve cost, SKU, purchase date, estimated jobs per unit, sort order, subcategory, and reuse policy, with a compatibility fallback for older schemas that are missing optional columns.
 - SEO/CSS habit remains unchanged: public pages should keep one clear H1, local wording in titles/headings, and compact admin tables that do not stretch rows unnecessarily.
+
+## Build 130 sanity-check pass — 2026-05-06
+
+This pass fixed the Admin App add-on/special-detail landing editor so selecting an existing add-on now brings in the current catalog image as the default hero/gallery media when the landing page has no page-specific image saved. The editor also shows a visible current-image preview so the image URL can be copied, replaced, or left as the catalog fallback.
+
+### Next 20 value-added steps
+1. Finish DB-backed media management so add-on, service, gallery, proof, package, and landing-page images can be selected from approved media records instead of pasted URLs.
+2. Add a media replacement workflow with upload, preview, crop score, alt text, consent status, and publish/unpublish controls.
+3. Move remaining duplicated JSON seed data into either DB tables or a generated DB-backed JSON manifest so public pages and admin screens read the same source.
+4. Add a landing-page performance checklist per town/service page: title, one H1, meta description, local wording, proof image, FAQ, CTA, and sitemap status.
+5. Add sitemap automation for admin-created `/landing/` pages and known clean-route service pages.
+6. Add Search Console / Business Profile review fields in Admin App so impressions, clicks, calls, and local proof updates can be logged per page.
+7. Finish service-area/location controls with service coordinates, travel tier, parking/access notes, and customer-facing fallback text.
+8. Add admin-managed before/after galleries per landing page, not only a single shared gallery JSON setting.
+9. Add booking abandonment and quote follow-up triggers tied to selected package/add-ons and customer location.
+10. Add a customer vehicle garage so repeat customers do not retype vehicle details every booking.
+11. Add add-on dependency explanations on public add-on cards so quote-only, package-only, and standalone rules are clear before checkout.
+12. Add mobile-first admin quick-edit screens for the most common actions: update image, update price, update landing copy, update inventory quantity.
+13. Add stronger checkout diagnostics: save failed payload metadata to an admin-visible error log without storing sensitive payment data.
+14. Add a booking review queue for jobs that are quote-required, outside service area, weather-sensitive, or missing access details.
+15. Add inventory-to-service costing rules so consumables can automatically estimate material cost per package/add-on.
+16. Add purchase receiving and stock adjustment audit trails for consumables and shop supplies.
+17. Add vendor defaults and preferred supplier fields for each inventory/consumable record.
+18. Add analytics rollups for service pages, add-on pages, gallery views, booking starts, booking completions, and checkout failures.
+19. Add a month-end operations dashboard combining bookings, payroll, inventory usage, tax, payables, receivables, and profit by package.
+20. Add deployment QA automation that checks one H1, broken internal links, CSS overflow risk, required image fallbacks, and admin route availability each build.
+
+### Backend accounting sanity check
+Covered foundations: chart/account list, journal entry storage, P&L and balance sheet reporting, tax/remittance reporting, payables settlement, owner/equity reporting, GL CSV export, payroll-run accounting posting, booking profitability views, month-end checklist records, and year-end handoff direction.
+
+High-value accounting gaps to close next: direct receipt/invoice/statement uploads, bank-statement import and matching, Stripe/PayPal fee reconciliation, HST/GST remittance packet export, AR aging tied to unpaid bookings/invoices, AP aging tied to vendor bills, inventory/COGS posting from consumable usage, payroll deduction/liability breakdowns, period-lock enforcement across every accounting write path, accountant-ready export bundle with GIFI mapping notes, and a clear close checklist that blocks year-end completion until missing documents/reconciliations are resolved.
+
+<!-- Build 130 sync 2026-05-06: reviewed during sanity-check/admin image/accounting roadmap pass; keep one-H1, local SEO clarity, CSS overflow, image fallback, and schema handoff discipline. -->
