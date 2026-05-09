@@ -333,8 +333,8 @@
       ],
       "category": "paint correction",
       "type": "surface prep",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/full_clay_treatment.png",
-      "image_fallback_url": "/assets/addons/full_clay_treatment.png"
+      "image_url": "/assets/addons/full_clay_treatment.png",
+      "image_fallback_url": "/assets/addons/full_clay_treatment.svg"
     },
     {
       "code": "two_stage_polish",
@@ -351,8 +351,8 @@
       ],
       "category": "paint correction",
       "type": "machine polishing",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/two_stage_polish.png",
-      "image_fallback_url": "/assets/addons/two_stage_polish.png"
+      "image_url": "/assets/addons/two_stage_polish.png",
+      "image_fallback_url": "/assets/addons/two_stage_polish.svg"
     },
     {
       "code": "high_grade_paint_sealant",
@@ -366,11 +366,11 @@
       "source": "interpreted_pricing",
       "category": "paint protection",
       "type": "sealant",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/high_grade_paint_sealant.png",
+      "image_url": "/assets/addons/high_grade_paint_sealant.png",
       "notes": [
         "Longer-lasting gloss"
       ],
-      "image_fallback_url": "/assets/addons/high_grade_paint_sealant.png"
+      "image_fallback_url": "/assets/addons/high_grade_paint_sealant.svg"
     },
     {
       "code": "uv_protectant_applied_on_interior_panels",
@@ -384,11 +384,11 @@
       "source": "interpreted_pricing",
       "category": "interior protection",
       "type": "uv protectant",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/uv_protectant_applied_on_interior_panels.png",
+      "image_url": "/assets/addons/uv_protectant_applied_on_interior_panels.png",
       "notes": [
         "Interior panel dressing"
       ],
-      "image_fallback_url": "/assets/addons/uv_protectant_applied_on_interior_panels.png"
+      "image_fallback_url": "/assets/addons/uv_protectant_applied_on_interior_panels.svg"
     },
     {
       "code": "de_ionizing_treatment",
@@ -400,7 +400,7 @@
       },
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png",
+      "image_url": "/assets/addons/de_ionizing_treatment.svg",
       "category": "odor treatment",
       "type": "de-ionizing",
       "image_fallback_url": "/assets/addons/de_ionizing_treatment.svg"
@@ -410,7 +410,7 @@
       "name": "De-Badging",
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
+      "image_url": "/assets/addons/de_badging.svg",
       "category": "appearance modifications",
       "type": "badge removal",
       "image_fallback_url": "/assets/addons/de_badging.svg"
@@ -421,7 +421,7 @@
       "price_cad": 59,
       "quote_required": false,
       "source": "package_asset",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
+      "image_url": "/assets/addons/engine_cleaning.svg",
       "category": "engine bay",
       "type": "cleaning",
       "image_fallback_url": "/assets/addons/engine_cleaning.svg"
@@ -435,7 +435,7 @@
       "notes": [
         "Starting price only"
       ],
-      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
+      "image_url": "/assets/addons/external_ceramic_coating.svg",
       "category": "paint protection",
       "type": "ceramic coating",
       "image_fallback_url": "/assets/addons/external_ceramic_coating.svg"
@@ -449,7 +449,7 @@
       "notes": [
         "Starting price only"
       ],
-      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png",
+      "image_url": "/assets/addons/external_graphene_fine_finish.svg",
       "category": "paint protection",
       "type": "graphene finish",
       "image_fallback_url": "/assets/addons/external_graphene_fine_finish.svg"
@@ -464,7 +464,7 @@
       },
       "quote_required": false,
       "source": "package_asset",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png",
+      "image_url": "/assets/addons/external_wax.svg",
       "category": "paint protection",
       "type": "wax",
       "image_fallback_url": "/assets/addons/external_wax.svg"
@@ -474,7 +474,7 @@
       "name": "Vinyl Wrapping",
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
+      "image_url": "/assets/addons/vinyl_wrapping.svg",
       "category": "appearance modifications",
       "type": "vinyl wrapping",
       "image_fallback_url": "/assets/addons/vinyl_wrapping.svg"
@@ -484,135 +484,10 @@
       "name": "Window Tinting",
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png",
+      "image_url": "/assets/addons/window_tinting.svg",
       "category": "glass services",
       "type": "window tinting",
       "image_fallback_url": "/assets/addons/window_tinting.svg"
     }
-  ],
-  "service_areas": [
-    {
-      "county": "Oxford County",
-      "label": "Tillsonburg, Oxford County",
-      "value": "Tillsonburg, Oxford County",
-      "municipality": "Tillsonburg",
-      "zone": "South Oxford",
-      "travel_tier": "urban",
-      "area_type": "primary",
-      "bylaw_note": "Primary local service area. Confirm driveway access, water, power, and parking before arrival.",
-      "parking_rule": "Driveway or safe off-street parking preferred.",
-      "noise_rule": "Use normal daytime work hours when possible.",
-      "water_rule": "Customer water access may be required for wash/detail packages.",
-      "access_rule": "Vehicle should be accessible with room to open all doors.",
-      "official_links": []
-    },
-    {
-      "county": "Oxford County",
-      "label": "Ingersoll, Oxford County",
-      "value": "Ingersoll, Oxford County",
-      "municipality": "Ingersoll",
-      "zone": "Oxford County",
-      "travel_tier": "township",
-      "area_type": "town",
-      "bylaw_note": "Confirm driveway/parking access and travel timing before dispatch.",
-      "parking_rule": "Off-street parking preferred.",
-      "noise_rule": "Avoid unnecessary early/late noise.",
-      "water_rule": "Customer water access may be required.",
-      "access_rule": "Vehicle must be reachable by the mobile setup.",
-      "official_links": []
-    },
-    {
-      "county": "Oxford County",
-      "label": "Woodstock, Oxford County",
-      "value": "Woodstock, Oxford County",
-      "municipality": "Woodstock",
-      "zone": "Oxford County",
-      "travel_tier": "township",
-      "area_type": "city",
-      "bylaw_note": "Confirm parking/access before booking mobile work.",
-      "parking_rule": "Driveway or private parking preferred.",
-      "noise_rule": "Respect local neighbourhood timing.",
-      "water_rule": "Customer water access may be required.",
-      "access_rule": "Allow safe hose/cord routing.",
-      "official_links": []
-    },
-    {
-      "county": "Oxford County",
-      "label": "Norwich / Otterville, Oxford County",
-      "value": "Norwich / Otterville, Oxford County",
-      "municipality": "Norwich",
-      "zone": "Rural Oxford",
-      "travel_tier": "rural",
-      "area_type": "rural",
-      "bylaw_note": "Rural route timing and travel charges may apply.",
-      "parking_rule": "Safe level work area preferred.",
-      "noise_rule": "Normal daytime work hours preferred.",
-      "water_rule": "Customer water access may be required.",
-      "access_rule": "Confirm lane/access width for mobile equipment.",
-      "official_links": []
-    },
-    {
-      "county": "Norfolk County",
-      "label": "Simcoe, Norfolk County",
-      "value": "Simcoe, Norfolk County",
-      "municipality": "Simcoe",
-      "zone": "Norfolk County",
-      "travel_tier": "township",
-      "area_type": "town",
-      "bylaw_note": "Confirm mobile work access, parking, water, and power before dispatch.",
-      "parking_rule": "Private driveway/work area preferred.",
-      "noise_rule": "Avoid early/late noise where possible.",
-      "water_rule": "Customer water access may be required.",
-      "access_rule": "Vehicle should be unlocked/available at appointment time.",
-      "official_links": []
-    },
-    {
-      "county": "Norfolk County",
-      "label": "Delhi, Norfolk County",
-      "value": "Delhi, Norfolk County",
-      "municipality": "Delhi",
-      "zone": "Norfolk County",
-      "travel_tier": "township",
-      "area_type": "town",
-      "bylaw_note": "Confirm travel window and service access before booking.",
-      "parking_rule": "Off-street parking preferred.",
-      "noise_rule": "Normal daytime work hours preferred.",
-      "water_rule": "Customer water access may be required.",
-      "access_rule": "Confirm safe room around the vehicle.",
-      "official_links": []
-    },
-    {
-      "county": "Norfolk County",
-      "label": "Port Dover, Norfolk County",
-      "value": "Port Dover, Norfolk County",
-      "municipality": "Port Dover",
-      "zone": "Coastal Norfolk",
-      "travel_tier": "coastal",
-      "area_type": "coastal",
-      "bylaw_note": "Coastal travel timing and weather may affect mobile detailing.",
-      "parking_rule": "Driveway/private parking preferred.",
-      "noise_rule": "Respect residential/tourist-area timing.",
-      "water_rule": "Customer water access may be required.",
-      "access_rule": "Confirm clear access around vehicle.",
-      "official_links": []
-    },
-    {
-      "county": "Norfolk County",
-      "label": "Courtland / Langton, Norfolk County",
-      "value": "Courtland / Langton, Norfolk County",
-      "municipality": "Courtland / Langton",
-      "zone": "Rural Norfolk",
-      "travel_tier": "rural",
-      "area_type": "rural",
-      "bylaw_note": "Rural travel charges and access checks may apply.",
-      "parking_rule": "Safe level work area preferred.",
-      "noise_rule": "Normal daytime work hours preferred.",
-      "water_rule": "Customer water access may be required.",
-      "access_rule": "Confirm driveway/yard access for mobile setup.",
-      "official_links": []
-    }
-  ],
-  "booking_rules": {
-    "default_service_area": "Tillsonburg, Oxford County"
-  }
+  ]
 }
