@@ -587,7 +587,21 @@
   }
   function cleanTextValue(value){ return String(value == null ? '' : value).trim(); }
   function hasTextValue(value){ return cleanTextValue(value).length > 0; }
-  function firstAddonMediaUrl(addon){ return cleanTextValue(addon && addon.image_url) || cleanTextValue(addon && addon.image_fallback_url) || ''; }
+  function isSvgMediaUrl(value){ return /\.svg(?:[?#]|$)/i.test(cleanTextValue(value)); }
+  function preferPhotoMediaUrl(currentValue, fallbackValue){
+    var current = cleanTextValue(currentValue);
+    var fallback = cleanTextValue(fallbackValue);
+    if (!current) return fallback;
+    if (isSvgMediaUrl(current) && fallback && !isSvgMediaUrl(fallback)) return fallback;
+    return current;
+  }
+  function firstAddonMediaUrl(addon){
+    var primary = cleanTextValue(addon && addon.image_url);
+    var fallback = cleanTextValue(addon && addon.image_fallback_url);
+    if (primary && !isSvgMediaUrl(primary)) return primary;
+    if (fallback && !isSvgMediaUrl(fallback)) return fallback;
+    return primary || fallback || '';
+  }
   async function fetchBundledPricingCatalog(){
     try {
       const res = await fetch('/data/rosie_services_pricing_and_packages.json', { credentials:'include', cache:'no-store' });
@@ -608,8 +622,8 @@
       var fallbackAddon = fallbackAddons.get(String(addon && addon.code || '')) || null;
       if (!fallbackAddon) return addon;
       var hydrated = Object.assign({}, addon);
-      if (!hasTextValue(hydrated.image_url)) hydrated.image_url = cleanTextValue(fallbackAddon.image_url);
-      if (!hasTextValue(hydrated.image_fallback_url)) hydrated.image_fallback_url = cleanTextValue(fallbackAddon.image_fallback_url);
+      hydrated.image_url = preferPhotoMediaUrl(hydrated.image_url, fallbackAddon.image_url);
+      hydrated.image_fallback_url = preferPhotoMediaUrl(hydrated.image_fallback_url, fallbackAddon.image_fallback_url);
       if (!hasTextValue(hydrated.category)) hydrated.category = cleanTextValue(fallbackAddon.category);
       if (!hasTextValue(hydrated.type)) hydrated.type = cleanTextValue(fallbackAddon.type);
       if (!hasTextValue(hydrated.requirement_note)) hydrated.requirement_note = cleanTextValue(fallbackAddon.requirement_note);
@@ -750,6 +764,7 @@
   function setLandingPagesState(value){ landingPagesState = ensureLandingPagesShape(value); renderLandingBuilder(); }
   function landingArrayToText(value){ return normalizeLandingArray(value).join('\n'); }
   function landingFaqToText(value){ return normalizeLandingFaq(value).map(function(item){ return item.q + ' || ' + item.a; }).join('\n'); }
+  function landingLinksToText(value){ return (Array.isArray(value) ? value : []).map(function(item){ return String(item && item.label || 'Official source').trim() + ' || ' + String(item && item.url || '').trim(); }).filter(function(line){ return line.replace(/^[^|]*\|\|/, '').trim(); }).join('\n'); }
   function landingTextToArray(value){ return String(value || '').split(/\r?\n/).map(function(line){ return line.trim(); }).filter(Boolean); }
   function landingTextToFaq(value){ return String(value || '').split(/\r?\n/).map(function(line){ var parts = line.split('||'); return { q: String(parts[0] || '').trim(), a: String(parts.slice(1).join('||') || '').trim() }; }).filter(function(item){ return item.q && item.a; }); }
   function landingTextToLinks(value){ return String(value || '').split(/\r?\n/).map(function(line){ var parts = line.split('||'); return { label: String(parts[0] || 'Official source').trim(), url: String(parts.slice(1).join('||') || '').trim() }; }).filter(function(item){ return item.url; }); }
@@ -973,7 +988,7 @@
         '<label class="field"><span>Primary image URL</span><input data-addon-editor-field="image_url" value="' + escapeHtml(addon.image_url || '') + '"></label>' +
         '<label class="field"><span>Fallback image URL</span><input data-addon-editor-field="image_fallback_url" value="' + escapeHtml(addon.image_fallback_url || '') + '"></label>' +
       '</div>' +
-      '<div class="panel-lite addon-image-preview">' + previewHtml + '<div class="stack-sm"><div class="section-label">Current image loaded</div><div class="pill-note">This preview uses the saved primary image first, then the fallback image. Leave the URLs alone to keep the current picture, or replace either URL and save the pricing catalog.</div><div class="link-lines">Primary: ' + escapeHtml(addon.image_url || '—') + '<br>Fallback: ' + escapeHtml(addon.image_fallback_url || '—') + '</div></div></div>' +
+      '<div class="panel-lite addon-image-preview">' + previewHtml + '<div class="stack-sm"><div class="section-label">Current image loaded</div><div class="pill-note">This preview prefers the saved PNG/JPG/R2 photo image first, then uses the SVG outline only as a fallback. Leave the URLs alone to keep the current picture, or replace either URL and save the pricing catalog.</div><div class="link-lines">Primary: ' + escapeHtml(addon.image_url || '—') + '<br>Fallback: ' + escapeHtml(addon.image_fallback_url || '—') + '</div></div></div>' +
       '<div class="checkrow"><input id="addon_editor_quote_required" type="checkbox" data-addon-editor-field="quote_required" ' + (addon.quote_required ? 'checked' : '') + '><label for="addon_editor_quote_required">Quote required</label></div>' +
       '<div class="checkrow"><input id="addon_editor_standalone_allowed" type="checkbox" data-addon-editor-field="standalone_allowed" ' + (addon.standalone_allowed ? 'checked' : '') + '><label for="addon_editor_standalone_allowed">Standalone allowed</label></div>' +
       '<div class="field"><label for="addon_requirement_note">Requirement note shown on booking</label><textarea id="addon_requirement_note" data-addon-editor-field="requirement_note">' + escapeHtml(addon.requirement_note || '') + '</textarea></div>' +

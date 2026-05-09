@@ -558,3 +558,4 @@ The accounting direction has moved from month-end/year-end reporting only into w
 - 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.
 
 <!-- Build 132 sync 2026-05-08: admin add-on image hydration, current-image preview, fallback media merge, no-DDL schema note, SEO/H1/CSS/media discipline reviewed. -->
+<!-- Build 133 sync 2026-05-08: fixed Admin App add-on image hydration to prefer real PNG/R2 photos over SVG outlines, restored landingLinksToText helper, kept dev-branch workflow, and recorded no-DDL schema note. -->
