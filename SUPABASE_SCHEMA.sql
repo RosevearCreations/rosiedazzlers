@@ -980,3 +980,5 @@ create index if not exists accounting_period_closes_status_idx on public.account
 - No database DDL is required; schema tracking note added at `sql/2026-05-08_build132_admin_addon_media_hydration_note.sql`.
 - Continue the local SEO discipline: one clear H1 per exposed public page, locally relevant wording, visible proof/review media, and no broken asset paths.
 - Restored missing `assets/landing-page.js` because landing pages were still referencing it during the static link check.
+
+-- Build 133 note: admin add-on PNG/R2 image hydration and landingLinksToText repair are frontend/data fallback changes only; no database DDL required. See sql/2026-05-08_build133_admin_addon_png_hydration_no_ddl_note.sql.

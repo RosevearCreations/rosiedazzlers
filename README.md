@@ -431,3 +431,4 @@ The accounting workspace now covers operational ledger, payables, remittance, st
 - Public pricing catalog merge logic now prevents blank saved media fields from masking fallback/default add-on images.
 - No database DDL is required; schema tracking note added at `sql/2026-05-08_build132_admin_addon_media_hydration_note.sql`.
 - Continue the local SEO discipline: one clear H1 per exposed public page, locally relevant wording, visible proof/review media, and no broken asset paths.
+<!-- Build 133 sync 2026-05-08: fixed Admin App add-on image hydration to prefer real PNG/R2 photos over SVG outlines, restored landingLinksToText helper, kept dev-branch workflow, and recorded no-DDL schema note. -->

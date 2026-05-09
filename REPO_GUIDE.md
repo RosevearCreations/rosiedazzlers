@@ -323,3 +323,4 @@ Pass 28 sync — 2026-04-20
 New admin/accounting workflow endpoints were added under `functions/api/admin/` for documents, recurring expenses, bank reconciliation, payroll payout reconciliation, and period close. The related schema migration is `sql/2026-04-27_accounting_workflow_foundation.sql`.
 
 <!-- Build 132 sync 2026-05-08: admin add-on image hydration, current-image preview, fallback media merge, no-DDL schema note, SEO/H1/CSS/media discipline reviewed. -->
+<!-- Build 133 sync 2026-05-08: fixed Admin App add-on image hydration to prefer real PNG/R2 photos over SVG outlines, restored landingLinksToText helper, kept dev-branch workflow, and recorded no-DDL schema note. -->
