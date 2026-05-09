@@ -107,3 +107,15 @@ To add a second or third gallery item, add another object inside the same `items
 - Keep `image_fallback_url` as the backup image. SVG outline files are acceptable here, but they should not replace the original service PNG in the primary image field.
 - To switch an add-on picture: open Admin App → Add-ons → select the add-on → replace **Primary image URL** with the new R2/public image URL → leave fallback in place → save pricing catalog.
 <!-- Build 134 sync 2026-05-08: admin add-on save button, populated editor suggestions, landing-page media fields, local SEO metadata/structured-data, sitemap refresh, and no-DDL schema handoff reviewed. -->
+
+
+## Build 135 — Admin App landing dropdowns, service-area fallback, and inventory merge repair
+- Fixed Admin App landing page dropdowns so selecting an add-on or location preserves the selected value and refreshes the editor fields for that specific record.
+- Service areas and travel tiers now merge from the bundled pricing catalog fallback when the saved pricing catalog is empty or incomplete; the remote tier is included and travel charge editing now binds the remote field.
+- Added a customizable dropdown option library in Admin App for add-on categories/types, inventory categories, inventory subcategories/colours, vendors, units, service tiers, and service zones.
+- Reworked Admin Catalog so saved DB rows merge with bundled consumables and gear from `/data/rosie_products_catalog.json` and `/data/systems_catalog.json`; editing two items no longer hides the rest of the fallback catalog.
+- Admin Catalog now labels each row as Saved DB item or Bundled fallback and provides browser-saved inventory dropdown suggestions for category, type/colour, vendor, unit, and image URL helpers.
+- SEO/local-search discipline continues: one H1 per exposed page, stronger local service/town wording, crawlable landing-page content, and clean structured handoff docs remain part of every pass.
+
+
+<!-- Build 135 sync 2026-05-08: admin landing dropdown refresh, service-area fallback, inventory fallback merge, customizable option suggestions, one-H1/local SEO/schema handoff review. -->
