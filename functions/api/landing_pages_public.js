@@ -1524,6 +1524,9 @@ function normalizePage(page) {
     badge: String(page?.badge || "Service landing page").trim(),
     hero_title: String(page?.hero_title || page?.name || "Landing page").trim(),
     hero_intro: String(page?.hero_intro || "").trim(),
+    hero_image_url: String(page?.hero_image_url || "").trim(),
+    gallery_image_urls: normalizeStringArray(page?.gallery_image_urls || page?.gallery_urls || page?.gallery_images),
+    related_products: normalizeProductArray(page?.related_products),
     reasons_page_exists: normalizeStringArray(page?.reasons_page_exists),
     process: normalizeStringArray(page?.process),
     equipment: normalizeStringArray(page?.equipment),
@@ -1546,6 +1549,15 @@ function normalizeLinkArray(value) {
     label: String(item?.label || item?.url || "Official source").trim(),
     url: String(item?.url || "").trim()
   })).filter((item) => item.url);
+}
+
+function normalizeProductArray(value) {
+  return (Array.isArray(value) ? value : []).map((item) => ({
+    name: String(item?.name || item?.title || "").trim(),
+    role: String(item?.role || "").trim(),
+    note: String(item?.note || "").trim(),
+    image_url: String(item?.image_url || "").trim()
+  })).filter((item) => item.name || item.image_url);
 }
 
 function normalizeProductRefs(value) {
