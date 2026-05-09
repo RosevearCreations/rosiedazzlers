@@ -982,3 +982,7 @@ create index if not exists accounting_period_closes_status_idx on public.account
 - Restored missing `assets/landing-page.js` because landing pages were still referencing it during the static link check.
 
 -- Build 133 note: admin add-on PNG/R2 image hydration and landingLinksToText repair are frontend/data fallback changes only; no database DDL required. See sql/2026-05-08_build133_admin_addon_png_hydration_no_ddl_note.sql.
+
+-- Build 134 sync 2026-05-08:
+-- No DDL required. Admin add-on save button, populated editor suggestions, landing-page media fields, public landing API normalization, static landing metadata, structured data, and sitemap refresh are frontend/API/docs updates only.
+-- Future DDL to consider only if media fields need relational storage instead of app_management_settings JSON: landing_page_media, landing_page_related_products, and editor suggestion dictionaries.
