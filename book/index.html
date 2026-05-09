@@ -9,7 +9,7 @@
   <meta property="og:title" content="Book Mobile Auto Detailing | Rosie Dazzlers" />
   <meta property="og:description" content="Choose your date, town, vehicle, package, add-ons, and deposit payment for mobile detailing across Oxford and Norfolk communities." />
   <meta name="robots" content="index,follow" />
-  <link rel="stylesheet" href="/assets/site.css?v=20260501embedvehiclecompact1" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260412bookfix1" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -96,12 +96,10 @@
       border-radius:18px;padding:12px;background:rgba(255,255,255,.04);text-align:left;width:100%;min-height:100%;box-sizing:border-box
     }
     .service-card strong,.service-card span{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
-    .service-card strong{color:#fff}
-    .service-card .package-note{color:rgba(234,242,255,.84)}
     .service-card.active{outline:2px solid #4d77ff}
     .service-card > *, .addon-card > *{max-width:100%;min-width:0}
     .service-card .row, .addon-card .row{width:100%;max-width:100%;min-width:0}
-    .service-card img{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:contain;object-position:center center;max-height:170px;padding:8px;border-radius:14px;display:block;flex:0 0 auto;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);box-sizing:border-box}
+    .service-card img{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;display:block;flex:0 0 auto}
     .addon-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .addon-card{
       display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:1px solid rgba(255,255,255,.08);min-width:0;overflow:hidden;
@@ -109,9 +107,7 @@
     }
     .addon-card strong,.addon-card span{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
     .addon-card.active{outline:2px solid #4d77ff}
-    .addon-card.disabled{opacity:.6;filter:saturate(.75);cursor:not-allowed;border-color:rgba(255,255,255,.08)}
-    .addon-card.disabled .tag{opacity:.85}
-    .addon-thumb{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:contain;object-position:center center;max-height:170px;padding:8px;border-radius:14px;display:block;flex:0 0 auto;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);box-sizing:border-box}
+    .addon-thumb{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;display:block;flex:0 0 auto}
     .tag{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;font-size:.88rem;font-weight:700}
     .tag.ok{background:rgba(36,195,107,.15);color:#d7ffe8}
     .tag.warn{background:rgba(255,176,32,.18);color:#ffe6b3}
@@ -125,42 +121,14 @@
     .modal img{width:100%;height:auto;display:block;border-radius:14px}
     body.is-embed .nav,
     body.is-embed .footer{display:none}
-    html.is-embed-root, body.is-embed{background:transparent}
-    html.is-embed-root{overflow:hidden}
-    body.is-embed{overflow:hidden}
-    body.is-embed main.container{max-width:1280px;padding-top:0;padding-bottom:0}
+    body.is-embed{background:transparent}
+    body.is-embed main.container{max-width:1280px;padding-top:0}
     body.is-embed .wizard-top{margin-top:0}
     body.is-embed .wizard-top .step-head .row a[href="/pricing"]{display:none}
     body.is-embed .wizard-shell{padding-bottom:0}
     body.is-embed .panel, body.is-embed .card, body.is-embed .service-card, body.is-embed .addon-card{overflow:hidden}
     body.is-embed .service-card strong, body.is-embed .service-card span, body.is-embed .addon-card strong, body.is-embed .addon-card span{display:block;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
     .sr-only{position:absolute;left:-9999px;opacity:0;pointer-events:none}
-
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid{display:grid;grid-template-columns:minmax(420px,.96fr) minmax(520px,1.04fr);gap:14px;align-items:start;margin-top:10px}
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid > .panel-group{display:grid;gap:10px;min-width:0}
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .service-area-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column .grid3{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 10px;margin-top:8px!important}
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column .grid2{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;margin-top:8px!important}
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column .step-head{margin-bottom:0;gap:8px}
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column .step-head a[href="/login"]{display:none}
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column h3{margin:0 0 2px;font-size:1.02rem}
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column p.muted{font-size:.88rem;line-height:1.32;margin:0}
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column label{font-size:.82rem;margin-bottom:4px}
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column input,
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column select{min-height:40px;padding:8px 10px;font-size:.92rem}
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column #garagePickerWrap{display:none!important}
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .step-head{margin-bottom:0}
-    body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .hr{margin:0}
-    body.is-embed .calendar-toolbar{gap:8px;margin-top:6px}
-    body.is-embed .calendar-strip{grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:7px}
-    body.is-embed .date-pill{min-height:60px;padding:8px;border-radius:12px;font-size:.84rem;gap:3px}
-    body.is-embed .date-pill strong, body.is-embed .date-pill span{line-height:1.2}
-    body.is-embed .booking-legend{gap:8px;margin-top:6px}
-    body.is-embed .service-area-panel{font-size:.88rem;line-height:1.35}
-    body.is-embed .slot-row{gap:8px}
-    body.is-embed .service-card img, body.is-embed .addon-thumb{aspect-ratio:16/9;max-height:138px;object-fit:contain;object-position:center center;padding:8px;background:rgba(255,255,255,.03)}
-    @media (max-width:1180px){body.is-embed .wizard-step[data-step="1"] .embed-step1-grid{grid-template-columns:1fr} body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column .grid3{grid-template-columns:repeat(3,minmax(0,1fr))}}
-    @media (max-width:760px){body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .service-area-grid, body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column .grid3, body.is-embed .wizard-step[data-step="1"] .embed-step1-grid .embed-vehicle-column .grid2{grid-template-columns:1fr} body.is-embed .calendar-strip{grid-template-columns:repeat(auto-fit,minmax(128px,1fr))}}
     @media (max-width:980px){
       .grid2,.grid3,.requirements-grid,.service-area-grid{grid-template-columns:1fr}
       .preferred-date-field,.date-input-wrap{max-width:100%;width:100%}
@@ -495,13 +463,13 @@
       packageImageForSize as sharedPackageImageForSize,
       packagePrice as sharedPackagePrice,
       chartUrl
-    } from "/assets/pricing-catalog-client.js?v=20260501build127";
+    } from "/assets/pricing-catalog-client.js?v=20260412pass12";
 
-    const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260501build127";
+    const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const VEHICLE_MAKES_URL = "/api/vehicle_makes";
     const VEHICLE_MODELS_URL = "/api/vehicle_models";
-    const BRAND_BASE = window.RD_ASSET_BASES?.brand || "https://assets.rosiedazzlers.ca/brand";
-    const PACKAGE_BASE = `${(window.RD_ASSET_BASES?.packages || "https://assets.rosiedazzlers.ca/packages/").replace(/\/$/, "")}/`;
+    const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
+    const PACKAGE_BASE = "https://assets.rosiedazzlers.ca/packages/";
 
     const qs = (s) => document.querySelector(s);
     const qsa = (s) => [...document.querySelectorAll(s)];
@@ -556,54 +524,11 @@
 
     function applyEmbedMode() {
       if (!embedMode) return;
-      document.documentElement.classList.add("is-embed-root");
       document.body.classList.add("is-embed");
       const title = qs("#wizardTop h1");
       const kicker = qs("#wizardTop .page-kicker");
       if (title) title.textContent = "Start your self-serve booking";
       if (kicker) kicker.textContent = "Use the live booking planner below to see location restrictions, 21-day availability windows, exact package/add-on choices, and deposit-ready booking details before checkout.";
-      setupEmbedStepOneLayout();
-    }
-    function setupEmbedStepOneLayout() {
-      if (!embedMode) return;
-      try {
-        const step = document.querySelector('.wizard-step[data-step="1"]');
-        if (!step || step.querySelector('.embed-step1-grid')) return;
-
-        const childNodes = Array.from(step.children || []);
-        const serviceArea = childNodes.find((el)=> el.classList && el.classList.contains('service-area-grid'));
-        const serviceAreaIndex = serviceArea ? childNodes.indexOf(serviceArea) : -1;
-        if (!serviceArea || serviceAreaIndex < 0) return;
-
-        const hr = childNodes.find((el)=> el.classList && el.classList.contains('hr'));
-        const hrIndex = hr ? childNodes.indexOf(hr) : -1;
-        const secondHead = hrIndex >= 0 ? childNodes[hrIndex + 1] || null : null;
-
-        const primary = document.createElement('div');
-        primary.className = 'panel-group embed-date-column';
-        const secondary = document.createElement('div');
-        secondary.className = 'panel-group embed-vehicle-column';
-        const wrapper = document.createElement('div');
-        wrapper.className = 'embed-step1-grid';
-        wrapper.append(primary, secondary);
-
-        const primaryNodes=[];
-        const secondaryNodes=[];
-        let seenVehicle=false;
-        for (const el of childNodes.slice(serviceAreaIndex)) {
-          if (el === hr) continue;
-          if (el === secondHead) { seenVehicle=true; secondaryNodes.push(el); continue; }
-          if (!seenVehicle) primaryNodes.push(el); else secondaryNodes.push(el);
-        }
-        if (!primaryNodes.length && !secondaryNodes.length) return;
-        primaryNodes.forEach((el)=> primary.appendChild(el));
-        secondaryNodes.forEach((el)=> secondary.appendChild(el));
-        step.appendChild(wrapper);
-      } catch (err) {
-        console.warn('Booking embed Step 1 layout fallback skipped.', err);
-      } finally {
-        setTimeout(postEmbedHeight, 0);
-      }
     }
 
     function postEmbedHeight() {
@@ -612,13 +537,9 @@
       const rawHeight = Math.max(
         shell ? shell.scrollHeight : 0,
         shell ? shell.offsetHeight : 0,
-        document.body ? document.body.scrollHeight : 0,
-        document.documentElement ? document.documentElement.scrollHeight : 0,
-        window.innerWidth <= 980 ? 940 : 720
+        980
       );
-      const requestedMax = Number(pageParams.get("max") || 0);
-      const maxHeight = Number.isFinite(requestedMax) && requestedMax > 0 ? Math.min(1950, requestedMax) : (window.innerWidth <= 980 ? 2700 : 2450);
-      const height = Math.min(maxHeight, Math.max(window.innerWidth <= 980 ? 1120 : 920, rawHeight));
+      const height = Math.min(window.innerWidth <= 980 ? 1600 : 1280, rawHeight);
       window.parent.postMessage({ type: "rd-book-embed-size", height }, "*");
     }
 
@@ -975,11 +896,9 @@
       renderReviewVehicle();
       renderFinalSummary();
       renderVehicleServiceHint();
-      postEmbedHeight();
     }
 
     async function loadGarageVehicles() {
-      if (embedMode) return;
       try {
         const res = await fetch("/api/client/dashboard", { credentials:"include", cache:"no-store" });
         const out = await res.json().catch(() => null);
@@ -1033,40 +952,14 @@
       } catch {}
     }
 
-    function fallbackVehicleYears() {
-      const current = new Date().getFullYear() + 1;
-      return Array.from({ length: 45 }, (_, i) => String(current - i));
-    }
-
-    function fallbackVehicleMakes() {
-      return ["Acura", "Audi", "BMW", "Buick", "Cadillac", "Chevrolet", "Chrysler", "Dodge", "Ford", "GMC", "Honda", "Hyundai", "Jeep", "Kia", "Lexus", "Lincoln", "Mazda", "Mercedes-Benz", "Mitsubishi", "Nissan", "Ram", "Subaru", "Tesla", "Toyota", "Volkswagen", "Volvo"];
-    }
-
-    function applyVehicleCatalogFallback(reason = "") {
-      state.vehicleCatalog.years = fallbackVehicleYears();
-      state.vehicleCatalog.makes = fallbackVehicleMakes();
+    async function loadVehicleMakes() {
+      const out = await fetchJsonStrict(VEHICLE_MAKES_URL);
+      state.vehicleCatalog.years = Array.isArray(out.years) ? out.years.map(String) : [];
+      state.vehicleCatalog.makes = Array.isArray(out.makes) ? out.makes.map((row) => String(row.make || "").trim()).filter(Boolean) : [];
       state.vehicleCatalog.models = [];
       setDatalistOptions("#veh_year_list", state.vehicleCatalog.years);
       setDatalistOptions("#veh_make_list", state.vehicleCatalog.makes);
       setDatalistOptions("#veh_model_list", []);
-      const note = reason ? ` Vehicle catalog fallback active: ${reason}` : " Vehicle catalog fallback active.";
-      qs("#veh_model").placeholder = "Type model manually";
-      if (!embedMode) console.warn(note);
-    }
-
-    async function loadVehicleMakes() {
-      try {
-        const out = await fetchJsonStrict(VEHICLE_MAKES_URL);
-        state.vehicleCatalog.years = Array.isArray(out.years) ? out.years.map(String) : [];
-        state.vehicleCatalog.makes = Array.isArray(out.makes) ? out.makes.map((row) => String(row.make || "").trim()).filter(Boolean) : [];
-        state.vehicleCatalog.models = [];
-        if (!state.vehicleCatalog.years.length || !state.vehicleCatalog.makes.length) throw new Error("vehicle catalog response was empty");
-        setDatalistOptions("#veh_year_list", state.vehicleCatalog.years);
-        setDatalistOptions("#veh_make_list", state.vehicleCatalog.makes);
-        setDatalistOptions("#veh_model_list", []);
-      } catch (err) {
-        applyVehicleCatalogFallback(err?.message || "API unavailable");
-      }
     }
 
     async function loadVehicleModels() {
@@ -1077,22 +970,15 @@
       if (!choiceExists(state.vehicleCatalog.years, year) || !choiceExists(state.vehicleCatalog.makes, make)) {
         state.vehicleCatalog.models = [];
         setDatalistOptions("#veh_model_list", []);
-        if (!embedMode) modelInput.placeholder = "Type model manually";
+        modelInput.value = "";
         return;
       }
 
       modelInput.placeholder = "Loading models…";
-      try {
-        const out = await fetchJsonStrict(`${VEHICLE_MODELS_URL}?year=${encodeURIComponent(year)}&make=${encodeURIComponent(make)}`);
-        state.vehicleCatalog.models = Array.isArray(out.models) ? out.models : [];
-        setDatalistOptions("#veh_model_list", state.vehicleCatalog.models.map((row) => row.model).filter(Boolean));
-        modelInput.placeholder = state.vehicleCatalog.models.length ? "Start typing model" : "Type model manually";
-      } catch (err) {
-        state.vehicleCatalog.models = [];
-        setDatalistOptions("#veh_model_list", []);
-        modelInput.placeholder = "Type model manually";
-        if (!embedMode) console.warn("Vehicle model fallback active:", err?.message || err);
-      }
+      const out = await fetchJsonStrict(`${VEHICLE_MODELS_URL}?year=${encodeURIComponent(year)}&make=${encodeURIComponent(make)}`);
+      state.vehicleCatalog.models = Array.isArray(out.models) ? out.models : [];
+      setDatalistOptions("#veh_model_list", state.vehicleCatalog.models.map((row) => row.model).filter(Boolean));
+      modelInput.placeholder = "Start typing model";
     }
 
     function applyVehicleModelMetadata() {
@@ -1135,19 +1021,15 @@
     async function fetchAvailability(date) {
       if (!date) return null;
       if (state.availabilityCache.has(date)) return state.availabilityCache.get(date);
-      const controller = new AbortController();
-      const timer = window.setTimeout(() => controller.abort(), 5500);
       try {
-        const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache:"no-store", signal: controller.signal });
+        const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache:"no-store" });
         const out = await res.json().catch(() => null);
         if (!res.ok || !out?.ok) throw new Error(out?.error || "Could not load availability.");
         state.availabilityCache.set(date, out);
         return out;
-      } catch (err) {
-        state.availabilityCache.set(date, { ok:false, date, blocked:true, AM:false, PM:false, error: err?.name === "AbortError" ? "Availability request timed out." : "Availability unavailable." });
-        return state.availabilityCache.get(date);
-      } finally {
-        window.clearTimeout(timer);
+      } catch {
+        state.availabilityCache.set(date, null);
+        return null;
       }
     }
 
@@ -1160,45 +1042,34 @@
 
     async function loadAvailabilityWindow() {
       const start = addDaysLocal(startOfLocalDay(), state.availabilityOffset);
-      const windowDays = availabilityWindowDays();
-      const end = addDaysLocal(start, windowDays - 1);
-      const label = `${start.toLocaleDateString("en-CA", { month:"short", day:"numeric" })} to ${end.toLocaleDateString("en-CA", { month:"short", day:"numeric", year:"numeric" })}`;
-      const labelNode = qs("#availabilityWindowLabel");
-      const datesNode = qs("#availableDates");
-      if (labelNode) labelNode.textContent = label;
-      qs("#availabilityPrevBtn").disabled = state.availabilityOffset === 0;
+      const items = [];
 
-      const dateRows = Array.from({ length: windowDays }, (_, i) => {
+      const windowDays = availabilityWindowDays();
+
+      for (let i = 0; i < windowDays; i++) {
         const d = addDaysLocal(start, i);
         const iso = toIsoLocal(d);
-        const dt = new Date(`${iso}T12:00:00`);
+        const out = await fetchAvailability(iso);
+        items.push({ iso, out, status: availabilityStatus(out) });
+      }
+
+      const end = addDaysLocal(start, windowDays - 1);
+      qs("#availabilityWindowLabel").textContent = `${start.toLocaleDateString("en-CA", { month:"short", day:"numeric" })} to ${end.toLocaleDateString("en-CA", { month:"short", day:"numeric", year:"numeric" })}`;
+      qs("#availabilityPrevBtn").disabled = state.availabilityOffset === 0;
+
+      qs("#availableDates").innerHTML = items.map((item) => {
+        const dt = new Date(`${item.iso}T12:00:00`);
         const label = dt.toLocaleDateString("en-CA", { weekday:"short", month:"short", day:"numeric" });
-        return { iso, label };
-      });
-
-      if (datesNode) {
-        datesNode.innerHTML = dateRows.map((item) => `<button class="date-pill is-loading" type="button" disabled><strong>${item.label}</strong><span>Checking availability…</span></button>`).join("");
-      }
-      postEmbedHeight();
-
-      const items = await Promise.all(dateRows.map(async (item) => {
-        const out = await fetchAvailability(item.iso);
-        return { ...item, out, status: availabilityStatus(out) };
-      }));
-
-      if (datesNode) {
-        datesNode.innerHTML = items.map((item) => {
-          const out = item.out || {};
-          const desc = item.status === "open"
-            ? "AM open · PM open"
-            : item.status === "partial"
-              ? `AM ${out.AM ? "open" : "booked"} · PM ${out.PM ? "open" : "booked"}`
-              : out.error ? `Unavailable · ${out.error}` : out.blocked ? `Unavailable · ${out.reason || "blocked"}` : "Unavailable · booked";
-          const disabled = item.status === "closed" ? "disabled" : "";
-          const selected = item.iso === selectedDate() ? "is-selected" : "";
-          return `<button class="date-pill is-${item.status} ${selected}" type="button" data-date-pill="${item.iso}" ${disabled}><strong>${item.label}</strong><span>${escapeHtml(desc)}</span></button>`;
-        }).join("");
-      }
+        const out = item.out || {};
+        const desc = item.status === "open"
+          ? "AM open · PM open"
+          : item.status === "partial"
+            ? `AM ${out.AM ? "open" : "booked"} · PM ${out.PM ? "open" : "booked"}`
+            : out.blocked ? `Unavailable · ${out.reason || "blocked"}` : "Unavailable · booked";
+        const disabled = item.status === "closed" ? "disabled" : "";
+        const selected = item.iso === selectedDate() ? "is-selected" : "";
+        return `<button class="date-pill is-${item.status} ${selected}" type="button" data-date-pill="${item.iso}" ${disabled}><strong>${label}</strong><span>${escapeHtml(desc)}</span></button>`;
+      }).join("");
 
       qsa("[data-date-pill]").forEach((btn) => {
         btn.addEventListener("click", async () => {
@@ -1212,9 +1083,8 @@
 
       if (!selectedDate()) {
         const firstOpen = items.find((item) => item.status !== "closed");
-        qs("#service_date").value = firstOpen ? firstOpen.iso : toIsoLocal(startOfLocalDay());
+        if (firstOpen) qs("#service_date").value = firstOpen.iso;
       }
-      postEmbedHeight();
     }
 
     async function refreshAvailability() {
@@ -1307,74 +1177,33 @@
       qsa("[data-package]").forEach((btn) => {
         btn.addEventListener("click", () => {
           state.selectedPackageCode = btn.getAttribute("data-package");
-          pruneInvalidSelectedAddons();
           analyticsTrack("booking_package_pick", { package_code: state.selectedPackageCode, vehicle_size: selectedSize() || null });
           renderPackages();
-          renderAddons();
           renderFinalSummary();
         });
       });
     }
 
-    function addonAllowedForPackage(addon, packageCode) {
-      const allowed = Array.isArray(addon?.requires_package_codes_any)
-        ? addon.requires_package_codes_any.map((row) => String(row || "").trim()).filter(Boolean)
-        : [];
-      if (addon?.standalone_allowed === true) return true;
-      if (!allowed.length) return true;
-      return allowed.includes(String(packageCode || "").trim());
-    }
-
-    function addonRequirementText(addon) {
-      return String(addon?.requirement_note || "").trim() || "Requires a different base package first.";
-    }
-
-    function pruneInvalidSelectedAddons() {
-      const packageCode = selectedPackage()?.code || "";
-      Array.from(state.addons).forEach((code) => {
-        const addon = (state.pricing?.addons || []).find((row) => row.code === code);
-        if (addon && !addonAllowedForPackage(addon, packageCode)) state.addons.delete(code);
-      });
-    }
-
-    function positiveMoneyValue(value) {
-      const n = Number(value);
-      return Number.isFinite(n) && n > 0 ? n : null;
-    }
-
-    function addonBillableCad(addon, size) {
-      if (!addon || addon.quote_required === true) return null;
-      const sizePrice = positiveMoneyValue(addon.prices_cad && addon.prices_cad[size]);
-      if (sizePrice != null) return sizePrice;
-      const basePrice = positiveMoneyValue(addon.price_cad);
-      return basePrice != null ? basePrice : null;
-    }
-
     function addonDisplayPrice(addon) {
       const size = selectedSize();
-      const billable = addonBillableCad(addon, size);
-      if (billable != null) return money(billable);
-      return "Quote required";
+      if (addon.quote_required) return "Quote required";
+      if (addon.prices_cad && addon.prices_cad[size] != null) return money(addon.prices_cad[size]);
+      if (addon.price_cad != null) return money(addon.price_cad);
+      return "Included in quote";
     }
 
     function renderAddons() {
       const wrap = qs("#addonsBox");
       const addons = state.pricing?.addons || [];
-      const packageCode = selectedPackage()?.code || "";
-      pruneInvalidSelectedAddons();
       wrap.innerHTML = addons.map((addon) => {
         const src = addon.image_url || addonPrimaryImage(addon.code);
         const fallback = addon.image_fallback_url || addonFallbackImage(addon.code);
-        const allowed = addonAllowedForPackage(addon, packageCode);
-        const noteParts = [];
-        if (Array.isArray(addon.notes) && addon.notes.length) noteParts.push((addon.notes || []).join(" • "));
-        if (!allowed) noteParts.push(addonRequirementText(addon));
-        return `<button class="addon-card ${state.addons.has(addon.code) ? "active" : ""} ${allowed ? "" : "disabled"}" type="button" data-addon="${escapeHtml(addon.code)}" ${allowed ? "" : "data-disabled=1"}>
+        return `<button class="addon-card ${state.addons.has(addon.code) ? "active" : ""}" type="button" data-addon="${escapeHtml(addon.code)}">
           <img class="addon-thumb" src="${escapeHtml(src)}" data-fallback="${escapeHtml(fallback)}" alt="${escapeHtml(addon.name)}" loading="lazy" />
           <strong>${escapeHtml(addon.name)}</strong>
           <span class="muted mini">${escapeHtml(addon.category || "")}${addon.type ? ` · ${escapeHtml(addon.type)}` : ""}</span>
-          <span class="tag ${addon.quote_required ? "warn" : (allowed ? "ok" : "warn")}">${escapeHtml(addonDisplayPrice(addon))}</span>
-          <span class="muted mini">${escapeHtml(noteParts.join(" • "))}</span>
+          <span class="tag ${addon.quote_required ? "warn" : "ok"}">${escapeHtml(addonDisplayPrice(addon))}</span>
+          <span class="muted mini">${escapeHtml((addon.notes || []).join(" • "))}</span>
         </button>`;
       }).join("");
 
@@ -1391,12 +1220,6 @@
 
       qsa("[data-addon]").forEach((btn) => {
         btn.addEventListener("click", () => {
-          if (btn.hasAttribute("data-disabled")) {
-            const code = btn.getAttribute("data-addon");
-            const addon = (state.pricing?.addons || []).find((row) => row.code === code);
-            showStatus(addonRequirementText(addon), "bad");
-            return;
-          }
           const code = btn.getAttribute("data-addon");
           if (state.addons.has(code)) state.addons.delete(code);
           else state.addons.add(code);
@@ -1418,9 +1241,9 @@
       let quoteOnly = false;
 
       selectedAddons().forEach((addon) => {
-        const addonCad = addonBillableCad(addon, size);
-        if (addonCad == null) quoteOnly = true;
-        else subtotal += addonCad;
+        if (addon.quote_required) quoteOnly = true;
+        else if (addon.prices_cad && addon.prices_cad[size] != null) subtotal += Number(addon.prices_cad[size] || 0);
+        else if (addon.price_cad != null) subtotal += Number(addon.price_cad || 0);
       });
 
       return {
@@ -1580,10 +1403,7 @@
           body: JSON.stringify(payload)
         });
         const out = await res.json().catch(() => null);
-        if (!res.ok || !out?.ok || !out?.checkout_url) {
-          const detailText = out?.details ? ` Details: ${String(out.details).slice(0, 320)}` : "";
-          throw new Error((out?.error || "Checkout failed.") + detailText);
-        }
+        if (!res.ok || !out?.ok || !out?.checkout_url) throw new Error(out?.error || "Checkout failed.");
         analyticsTrack("checkout_redirect", { booking_id: out.booking_id || null, provider:"stripe" });
         location.href = out.checkout_url;
       } catch (err) {
@@ -1608,11 +1428,13 @@
       state.pricing = await loadPricingData();
       renderServiceAreas();
       syncBookingRuleLabels();
-      qs("#openSizeChartBtn").addEventListener("click", () => openModal("Vehicle size chart", chartUrl(state.pricing || {}, "Vehicle Size Chart") || `${PACKAGE_BASE}CarSizeChart.PNG`));
+      qs("#openSizeChartBtn").addEventListener("click", () => openModal("Vehicle size chart", chartUrl(state.pricing || {}, "Vehicle Size Chart") || `${BRAND_BASE}/CarSizeChart.PNG`));
       qs("#openPriceChartBtn").addEventListener("click", () => openModal("Vehicle price chart", chartUrl(state.pricing || {}, "Vehicle Price Chart 2025") || `/assets/brand/CarPrice2025.PNG`));
-      await loadVehicleMakes();
-      loadGarageVehicles().catch(() => null);
-      await loadAvailabilityWindow();
+      await Promise.all([
+        loadVehicleMakes(),
+        loadGarageVehicles(),
+        loadAvailabilityWindow()
+      ]);
 
       applyInitialPrefill();
 
@@ -1627,7 +1449,6 @@
       renderReviewVehicle();
       renderFinalSummary();
       renderVehicleServiceHint();
-      postEmbedHeight();
       gotoStep(1);
       postEmbedHeight();
     } catch (err) {
@@ -1635,6 +1456,6 @@
     }
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260501embedvehiclecompact1"></script>
+  <script type="module" src="/assets/chrome.js?v=20260412bookfix1"></script>
 </body>
 </html>

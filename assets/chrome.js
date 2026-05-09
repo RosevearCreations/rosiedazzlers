@@ -4,14 +4,6 @@
    BRAND / NAV / FOOTER
    ========================= */
 
-window.RD_ASSET_BASES = window.RD_ASSET_BASES || {
-  root: "https://assets.rosiedazzlers.ca",
-  brand: "https://assets.rosiedazzlers.ca/brand",
-  packages: "https://assets.rosiedazzlers.ca/packages",
-  products: "https://assets.rosiedazzlers.ca/products",
-  systems: "https://assets.rosiedazzlers.ca/systems"
-};
-
 const BRAND = {
   name: "Rosie Dazzlers",
   logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
@@ -346,7 +338,7 @@ function setFooter() {
    PACKAGE CARD HOVER ROTATION
    ========================= */
 
-const PACKAGES_BASE = `${(window.RD_ASSET_BASES?.packages || "https://assets.rosiedazzlers.ca/packages/").replace(/\/$/, "")}/`;
+const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages/";
 
 const STATIC_HOVER_FILES = [
   "Exterior Detail.png",

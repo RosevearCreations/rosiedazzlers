@@ -641,24 +641,18 @@ textarea:focus {
   .nav-links {
     display: none;
     width: 100%;
-    gap: 8px;
+    flex-direction: column;
+    gap: 6px;
     padding: 10px;
     margin-top: 8px;
     border: 1px solid rgba(255,255,255,.12);
     border-radius: 14px;
     background: rgba(7,11,16,.92);
   }
-  .nav-links a{display:block;width:100%;padding:10px 12px;background:rgba(255,255,255,.03)}
 
   .nav-links.open {
-    display: grid;
-    grid-template-columns: repeat(2,minmax(0,1fr));
-    align-items: stretch;
+    display: flex;
   }
-  .nav-inner > a.btn.primary{width:auto}
-}
-@media (max-width:560px){
-  .nav-links.open{grid-template-columns:1fr}
 }
 
 .footer-grid {
@@ -884,40 +878,3 @@ input.search-input:-webkit-autofill:focus {
 .proof-card > *, .service-link-card > *, .local-town-card > *, .recent-work-card > *{max-width:100%}
 .service-link-card .btn,.local-town-card .btn,.proof-card .btn{margin-top:auto;align-self:flex-start}
 @media (max-width:840px){.block-calendar-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.block-calendar-grid--head{display:none}.block-day{min-height:82px}}
-
-/* Landing pages */
-.proof-media{width:100%;max-width:100%;border-radius:14px;display:block;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
-.muted-list{display:grid;gap:10px;padding-left:18px;color:var(--muted)}
-.faq-list{display:grid;gap:12px}.faq-item{border:1px solid var(--border);border-radius:14px;padding:12px;background:rgba(255,255,255,.03)}.faq-item summary{cursor:pointer;font-weight:700}.service-link-grid,.local-town-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.service-link-card,.local-town-card,.proof-card{border:1px solid var(--border);border-radius:16px;padding:14px;background:rgba(255,255,255,.03);min-width:0;overflow:hidden}.proof-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}.hero .badge+.badge{margin-left:8px}
-
-/* Booking/pricing landing button cards */
-.landing-button-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
-.landing-button-card{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.03);padding:14px;display:grid;gap:10px;align-content:start;min-width:0;overflow:hidden}
-.landing-button-card h3{margin:0;font-size:1rem}
-.landing-button-card p{margin:0;color:var(--muted);font-size:.92rem}
-.landing-button-image{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);margin-bottom:10px}
-@media (max-width:1100px){.landing-button-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:720px){.landing-button-grid{grid-template-columns:1fr}}
-
-
-/* 2026-05-01 build hardening: prevent card/table overflow and stop add-on/consumable media from looking zoomed-in. */
-.panel,.card,.landing-button-card,.service-card,.addon-card,.proof-card{min-width:0;overflow-wrap:anywhere}
-table{max-width:100%;table-layout:auto}
-th,td{overflow-wrap:anywhere;word-break:break-word}
-.cardImg,.landing-button-image,.service-card img,.addon-thumb{object-fit:contain!important;object-position:center center!important;background:rgba(255,255,255,.035)}
-.cardImg{max-height:220px;padding:10px;box-sizing:border-box}
-.landing-button-image{padding:8px;box-sizing:border-box}
-.booking-embed-shell,.booking-embed-frame{max-width:100%}
-@media (max-width:720px){table{font-size:.92rem}.table-scroll,div[style*="overflow:auto"]{max-width:100%;overflow-x:auto}}
-
-
-/* 2026-05-01 Build 127: before/after recent-work slider and safer image containment. */
-.recent-work-compare{position:relative;width:100%;aspect-ratio:16/10;overflow:hidden;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);--split:50%}
-.recent-work-compare img,.recent-work-compare video,.recent-work-before,.recent-work-after{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;background:rgba(255,255,255,.035)}
-.recent-work-before{clip-path:inset(0 calc(100% - var(--split,50%)) 0 0);z-index:2}.recent-work-after{z-index:1}
-.recent-work-handle{position:absolute;top:0;bottom:0;left:var(--split,50%);z-index:3;width:2px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
-.recent-work-handle::before{content:'';position:absolute;top:50%;left:50%;width:34px;height:34px;border-radius:999px;transform:translate(-50%,-50%);background:rgba(8,17,31,.82);border:1px solid rgba(255,255,255,.72)}
-.recent-work-label{position:absolute;top:10px;z-index:4;padding:4px 8px;border-radius:999px;background:rgba(8,17,31,.74);border:1px solid rgba(255,255,255,.16);font-size:.78rem;font-weight:700}.recent-work-label.before{left:10px}.recent-work-label.after{right:10px}
-.recent-work-range{width:100%;margin:10px 0 4px}.recent-work-empty{background:repeating-linear-gradient(45deg, rgba(255,255,255,.04), rgba(255,255,255,.04) 10px, rgba(255,255,255,.08) 10px, rgba(255,255,255,.08) 20px)}
-.cardImg,.landing-button-image,.service-card img,.addon-thumb{object-fit:contain!important;object-position:center center!important;background:rgba(255,255,255,.035)}
-.table-wrap,table,.panel,.card,.landing-button-card,.recent-work-card{max-width:100%;overflow-wrap:anywhere;word-break:normal}.catalog-table-wrap,.table-wrap{overflow-x:auto}

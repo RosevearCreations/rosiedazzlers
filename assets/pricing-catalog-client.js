@@ -1,14 +1,10 @@
 // /assets/pricing-catalog-client.js
 // Shared client-side pricing catalog loader and normalizer for public Rosie Dazzlers pages.
 
-export const R2_ASSETS_BASE = "https://assets.rosiedazzlers.ca";
-export const R2_PATHS = { brand: "brand", packages: "packages", products: "products", systems: "systems" };
-export function assetUrl(folder, filename) { return `${R2_ASSETS_BASE}/${folder}/${encodeURIComponent(filename)}`.replaceAll("%2F", "/"); }
-
 const DEFAULT_CHARTS = [
   { filename: "CarPrice2025.PNG", title: "Vehicle Price Chart 2025", r2_url: "/assets/brand/CarPrice2025.PNG" },
   { filename: "CarPriceDetails2025.PNG", title: "Package Service Details Chart", r2_url: "/assets/brand/CarPriceDetails2025.PNG" },
-  { filename: "CarSizeChart.PNG", title: "Vehicle Size Chart", r2_url: assetUrl(R2_PATHS.packages, "CarSizeChart.PNG") }
+  { filename: "CarSizeChart.PNG", title: "Vehicle Size Chart", r2_url: "https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG" }
 ];
 
 const LOCAL_CHART_URLS = {
@@ -105,41 +101,6 @@ function normalizeAddons(rows) {
   }).filter(Boolean);
 }
 
-function hasRows(value) {
-  return Array.isArray(value) && value.length > 0;
-}
-
-function mergeRowsByCode(primaryRows, fallbackRows) {
-  const fallbackMap = new Map((Array.isArray(fallbackRows) ? fallbackRows : []).map((row) => [String(row?.code || row?.value || row?.label || ""), row]));
-  const primaryList = Array.isArray(primaryRows) ? primaryRows : [];
-  const merged = primaryList.map((row) => {
-    const key = String(row?.code || row?.value || row?.label || "");
-    const fallbackRow = fallbackMap.get(key);
-    if (!fallbackRow) return row;
-    return {
-      ...fallbackRow,
-      ...row,
-      prices_cad: row?.prices_cad && typeof row.prices_cad === "object"
-        ? { ...(fallbackRow?.prices_cad || {}), ...row.prices_cad }
-        : (fallbackRow?.prices_cad || row?.prices_cad),
-      images_by_size: row?.images_by_size && typeof row.images_by_size === "object"
-        ? { ...(fallbackRow?.images_by_size || {}), ...row.images_by_size }
-        : (fallbackRow?.images_by_size || row?.images_by_size),
-      included_services: hasRows(row?.included_services) ? row.included_services : fallbackRow?.included_services,
-      notes: hasRows(row?.notes) ? row.notes : fallbackRow?.notes,
-      official_links: hasRows(row?.official_links) ? row.official_links : fallbackRow?.official_links,
-      requires_package_codes_any: hasRows(row?.requires_package_codes_any) ? row.requires_package_codes_any : (fallbackRow?.requires_package_codes_any || [])
-    };
-  });
-  const seen = new Set(merged.map((row) => String(row?.code || row?.value || row?.label || "")).filter(Boolean));
-  for (const row of Array.isArray(fallbackRows) ? fallbackRows : []) {
-    const key = String(row?.code || row?.value || row?.label || "");
-    if (key && seen.has(key)) continue;
-    merged.push(row);
-  }
-  return merged;
-}
-
 function normalizeServiceAreas(rows) {
   return (Array.isArray(rows) ? rows : []).map((row) => {
     const officialLinks = Array.isArray(row?.official_links) ? row.official_links : [];
@@ -206,10 +167,10 @@ function mergeCatalog(primary, fallback) {
     ...fallback,
     ...primary,
     charts: Array.isArray(primary?.charts) && primary.charts.length ? primary.charts : fallback?.charts,
-    packages: Array.isArray(primary?.packages) && primary.packages.length ? mergeRowsByCode(primary.packages, fallback?.packages) : fallback?.packages,
-    addons: Array.isArray(primary?.addons) && primary.addons.length ? mergeRowsByCode(primary.addons, fallback?.addons) : fallback?.addons,
+    packages: Array.isArray(primary?.packages) && primary.packages.length ? primary.packages : fallback?.packages,
+    addons: Array.isArray(primary?.addons) && primary.addons.length ? primary.addons : fallback?.addons,
     service_matrix: Array.isArray(primary?.service_matrix) && primary.service_matrix.length ? primary.service_matrix : fallback?.service_matrix,
-    service_areas: Array.isArray(primary?.service_areas) && primary.service_areas.length ? mergeRowsByCode(primary.service_areas, fallback?.service_areas) : fallback?.service_areas,
+    service_areas: Array.isArray(primary?.service_areas) && primary.service_areas.length ? primary.service_areas : fallback?.service_areas,
     booking_rules: {
       ...(fallback?.booking_rules || {}),
       ...(primary?.booking_rules || {})
@@ -581,11 +542,14 @@ export function applyJsonLdScript(scriptId, payload) {
 }
 
 export function addonDisplay(addon, size) {
-  const sizePrice = Number(addon?.prices_cad?.[size]);
-  const basePrice = Number(addon?.price_cad);
-  const price = Number.isFinite(sizePrice) && sizePrice > 0 ? sizePrice : (Number.isFinite(basePrice) && basePrice > 0 ? basePrice : null);
-  if (addon?.quote_required === true) return price != null ? `From ${money(price)} · Quote required` : "Quote required";
-  return price != null ? money(price) : "Quote required";
+  if (addon?.quote_required === true) {
+    if (addon?.prices_cad?.[size] != null) return `From ${money(addon.prices_cad[size])} · Quote required`;
+    if (addon?.price_cad != null) return `From ${money(addon.price_cad)} · Quote required`;
+    return "Quote required";
+  }
+  if (addon?.prices_cad?.[size] != null) return money(addon.prices_cad[size]);
+  if (addon?.price_cad != null) return money(addon.price_cad);
+  return "$—";
 }
 
 export function bookingRules(catalog) {

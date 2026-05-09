@@ -15,7 +15,7 @@ const CONTACT = {
 };
 
 // Base URL for package media in R2 (filenames include spaces)
-const PACKAGES_BASE = `${(window.RD_ASSET_BASES?.packages || "https://assets.rosiedazzlers.ca/packages/").replace(/\/$/, "")}/`;
+const PACKAGES_BASE = "https://assets.rosiedazzlers.ca/packages/";
 const pkgFile = (filename) => encodeURI(`${PACKAGES_BASE}${filename}`);
 
 // Hover/rotation images shown on package cards (these filenames MUST match R2 exactly)
@@ -96,24 +96,22 @@ function addonFallbackForCode(code) {
   return LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.svg';
 }
 
-function addonPositivePrice(addon, size) {
-  const sizePrice = Number(addon?.prices_cad?.[size]);
-  if (Number.isFinite(sizePrice) && sizePrice > 0) return sizePrice;
-  const basePrice = Number(addon?.price_cad);
-  if (Number.isFinite(basePrice) && basePrice > 0) return basePrice;
-  return null;
-}
-
 function addonDisplay(addon, size) {
-  const price = addonPositivePrice(addon, size);
-  if (addon?.quote_required === true) return price != null ? `From ${money(price)} · Quote required` : "Quote required";
-  return price != null ? money(price) : "Quote required";
+  if (addon.quote_required === true) {
+    if (addon.prices_cad?.[size] != null) return `From ${money(addon.prices_cad[size])} · Quote required`;
+    if (addon.price_cad != null) return `From ${money(addon.price_cad)} · Quote required`;
+    return "Quote required";
+  }
+  if (addon.prices_cad?.[size] != null) return money(addon.prices_cad[size]);
+  if (addon.price_cad != null) return money(addon.price_cad);
+  return "Quote required";
 }
 
 function addonCharge(addon, size) {
   if (!addon || addon.quote_required === true) return 0;
-  const price = addonPositivePrice(addon, size);
-  return price != null ? price : 0;
+  if (addon.prices_cad?.[size] != null) return Number(addon.prices_cad[size]);
+  if (addon.price_cad != null) return Number(addon.price_cad);
+  return 0;
 }
 
 function calcDeposit(pkg) {
