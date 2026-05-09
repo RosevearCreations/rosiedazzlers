@@ -1,3 +1,14 @@
+
+## Build 134 — Admin add-on save, local SEO, and populated-editor pass (2026-05-08)
+- Added a dedicated **Update / save add-on** action beside **Delete add-on** in Admin App so one add-on can be edited and saved without scrolling to the global catalog save button.
+- Extended the add-on editor with populated suggestions for category, type, and existing image URLs while preserving PNG/JPG/R2 images ahead of SVG fallbacks.
+- Extended the landing-page editor with hero image URL, gallery image URLs, and related product/media fields so service and town pages can be improved without editing raw JSON.
+- Kept location landing pages populated in Admin App by merging saved landing-page settings with the public fallback pages from `/api/landing_pages_public`.
+- Preserved new landing media fields through the public landing-page API normalization path.
+- Strengthened search visibility groundwork by replacing placeholder static landing-page titles/descriptions, adding richer Service structured data, adding dynamic FAQ/Breadcrumb/Service JSON-LD, and expanding `sitemap.xml` with lastmod/changefreq/priority plus missing service routes.
+- Improved Admin Catalog editing by adding populated datalist suggestions for inventory keys, names, categories, subcategories, vendors, SKUs, units, purchase URLs, and image URLs; colour/finish words are now included in subcategory suggestions for supplies and visual items.
+- CSS/search hygiene remains in scope: no public page should have more than one H1, local town/service wording should stay prominent, and links should remain crawlable anchors.
+
 # Rosie Dazzlers Image and Media Guide
 
 Last synchronized: Build 132, May 8, 2026.
@@ -95,3 +106,4 @@ To add a second or third gallery item, add another object inside the same `items
 - Keep `image_url` as the preferred customer-facing image. This should normally be the R2/package PNG or JPG, for example `https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png`.
 - Keep `image_fallback_url` as the backup image. SVG outline files are acceptable here, but they should not replace the original service PNG in the primary image field.
 - To switch an add-on picture: open Admin App → Add-ons → select the add-on → replace **Primary image URL** with the new R2/public image URL → leave fallback in place → save pricing catalog.
+<!-- Build 134 sync 2026-05-08: admin add-on save button, populated editor suggestions, landing-page media fields, local SEO metadata/structured-data, sitemap refresh, and no-DDL schema handoff reviewed. -->
