@@ -973,30 +973,10 @@ create index if not exists accounting_period_closes_status_idx on public.account
 
 -- 2026-04-29 pass: landing page content, add-on image merge safety, and admin add-on dependency/editor refinements.
 
--- 2026-04-30 pass note: no new SQL migration required for the product-linked landing-page expansion; this pass extended shared landing content, folder-backed routes, and documentation only.
-
-
--- 2026-05-01 booking embed/media pass: no DDL change. Latest required payroll compatibility DDL remains sql/2026-04-30_job_time_entries_minutes_compatibility.sql.
-
--- 2026-05-01 Build 125 booking embed console patch: no DDL change.
--- The Services/Pricing iframe error was front-end JavaScript only; see sql/2026-05-01_build125_booking_embed_indexof_no_ddl_note.sql.
-
--- Build 126 compact vehicle embed repair — 2026-05-01
--- Front-end-only layout pass. Services/Pricing now render the embedded booking planner full-width, and /book?embed=1 keeps vehicle fields in compact two/three-column rows. No schema change required.
-
--- 2026-05-01 Build 127: UI/admin/content patch only. See sql/2026-05-01_build127_ui_gallery_embed_admin_no_ddl_note.sql.
-
-
--- Build 128 note (2026-05-01): checkout now includes a legacy-column fallback for bookings when optional service-area, vehicle, or geofence columns are missing from the live Supabase schema cache. Keep the earlier booking service-area, vehicle, and geofence migrations applied for full reporting fidelity.
--- Build 128 also compacted Admin Catalog inventory tables/editor layout, restored Admin App location landing-page seed listings, normalized quote-required display for zero-priced add-ons, and stabilized Admin Accounting date inputs.
-
--- Build 129 note (2026-05-05): Admin Catalog inventory save now reloads the full merged inventory view after saving one item.
--- No DDL required. If the local catalog has not been fully migrated to catalog_inventory_items yet, the UI shows DB-saved rows plus local seeded fallback rows.
--- catalog_inventory_save.js now writes optional inventory fields when present and strips only missing optional columns for older Supabase schemas.
-
--- 2026-05-06 Build 130 sanity-check/admin image pass note:
--- No required DDL change in this pass. Admin App now fills add-on/special-detail landing editor images
--- from the current pricing-catalog add-on image when no landing-specific hero/gallery image is saved.
--- Next accounting schema targets remain document attachments, bank reconciliation imports/matches,
--- inventory/COGS posting support, stricter period locks, and accountant-ready export metadata.
-
+## Build 132 — Admin add-on image hydration repair (May 8, 2026)
+- Admin App add-on selection now hydrates blank saved `image_url` and `image_fallback_url` fields from the bundled default pricing catalog by matching add-on `code`.
+- The selected add-on editor now shows a Current image loaded preview so the existing picture can be kept or replaced deliberately.
+- Public pricing catalog merge logic now prevents blank saved media fields from masking fallback/default add-on images.
+- No database DDL is required; schema tracking note added at `sql/2026-05-08_build132_admin_addon_media_hydration_note.sql`.
+- Continue the local SEO discipline: one clear H1 per exposed public page, locally relevant wording, visible proof/review media, and no broken asset paths.
+- Restored missing `assets/landing-page.js` because landing pages were still referencing it during the static link check.
