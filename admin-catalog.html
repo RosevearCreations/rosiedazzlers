@@ -54,26 +54,28 @@
       <form id="itemForm" class="stack">
         <div class="grid3">
           <label>Type<select id="formItemType"><option value="tool">Tool</option><option value="consumable">Consumable</option></select></label>
-          <label>Item key<input id="formItemKey" required /></label>
-          <label>Name<input id="formName" required /></label>
-          <label>Category<input id="formCategory" placeholder="cleaning liquids, buckets, towels" /></label>
-          <label>Type / subcategory<input id="formSubcategory" placeholder="chemicals, linens, scrubbers" /></label>
-          <label>Preferred vendor<input id="formVendor" /></label>
-          <label>Unit label<input id="formUnit" placeholder="bottle, pad, piece" /></label>
+          <label>Item key<input id="formItemKey" list="inventoryKeyOptions" required /></label>
+          <label>Name<input id="formName" list="inventoryNameOptions" required /></label>
+          <label>Category<input id="formCategory" list="inventoryCategoryOptions" placeholder="cleaning liquids, buckets, towels" /></label>
+          <label>Type / subcategory<input id="formSubcategory" list="inventorySubcategoryOptions" placeholder="chemicals, linens, scrubbers" /></label>
+          <label>Preferred vendor<input id="formVendor" list="inventoryVendorOptions" /></label>
+          <label>Unit label<input id="formUnit" list="inventoryUnitOptions" placeholder="bottle, pad, piece" /></label>
           <label>Qty on hand<input id="formQty" type="number" step="0.01" /></label>
           <label>Reorder point<input id="formReorderPoint" type="number" step="0.01" /></label>
           <label>Reorder qty<input id="formReorderQty" type="number" step="0.01" /></label>
           <label>Unit cost (CAD)<input id="formCostCad" type="number" step="0.01" min="0" /></label>
-          <label>Vendor SKU<input id="formVendorSku" /></label>
+          <label>Vendor SKU<input id="formVendorSku" list="inventoryVendorSkuOptions" /></label>
           <label>Rating<input id="formRating" type="number" step="0.1" min="0" max="5" /></label>
           <label>Rating count<input id="formRatingCount" type="number" step="1" min="0" /></label>
           <label>Saved sort order<input id="formSortKey" type="number" step="1" /></label>
           <label>Purchase date<input id="formPurchaseDate" type="date" /></label>
           <label>Estimated jobs / unit<input id="formEstimatedJobs" type="number" step="0.1" min="0" /></label>
           <label>Reuse policy<select id="formReuse"><option value="reorder">Reorder / reusable</option><option value="single_use">Single-use</option><option value="never_reuse">Never reuse / do not reorder</option></select></label>
-          <label>Amazon / purchase URL<input id="formAmazon" placeholder="Paste the Amazon product link" /></label>
-          <label>Image URL<input id="formImage" /></label>
+          <label>Amazon / purchase URL<input id="formAmazon" list="inventoryPurchaseUrlOptions" placeholder="Paste the Amazon product link" /></label>
+          <label>Image URL<input id="formImage" list="inventoryImageOptions" /></label>
         </div>
+        <div id="inventoryDatalists" hidden></div>
+        <div class="mini">Text fields now learn from existing saved inventory plus common detailing terms, including categories, vendors, units, image URLs, and colour/finish words in the subcategory suggestions.</div>
         <div class="row"><button class="btn ghost" id="amazonParseBtn" type="button">Fill from Amazon link</button><span class="mini">Parses the Amazon link slug into a draft name and item key so you can add a new item faster.</span></div>
         <div class="check-grid spread-checks">
           <label class="checkbox"><input id="formIsPublic" type="checkbox" checked /><span>Visible on public site</span></label>
@@ -134,6 +136,31 @@
   function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g,(m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function show(msg,kind=''){ const el=qs('#status'); el.style.display='block'; el.className='notice '+(kind||''); el.textContent=msg; }
   function hide(){ qs('#status').style.display='none'; }
+  function cleanText(value){ return String(value == null ? '' : value).trim(); }
+  function uniqueValues(getter, extras=[]){
+    const seen = new Set();
+    return [...extras, ...inventory.map(getter)].map(cleanText).filter((value)=>{
+      if (!value || seen.has(value.toLowerCase())) return false;
+      seen.add(value.toLowerCase());
+      return true;
+    }).sort((a,b)=>a.localeCompare(b));
+  }
+  function datalist(id, values){ return `<datalist id="${esc(id)}">${values.map((value)=>`<option value="${esc(value)}"></option>`).join('')}</datalist>`; }
+  function renderInventoryDatalists(){
+    const mount = qs('#inventoryDatalists');
+    if (!mount) return;
+    mount.innerHTML = [
+      datalist('inventoryKeyOptions', uniqueValues((item)=>item.item_key)),
+      datalist('inventoryNameOptions', uniqueValues((item)=>item.name)),
+      datalist('inventoryCategoryOptions', uniqueValues((item)=>item.category, ['cleaning liquids','interior cleaners','paint protection','microfiber towels','pads and polishers','brushes','buckets and wash tools','safety gear','shop supplies','marketing materials'])),
+      datalist('inventorySubcategoryOptions', uniqueValues((item)=>item.subcategory, ['chemicals','linens','scrubbers','sprayers','polishing pads','clay media','glass care','engine bay','interior protection','exterior protection','black','white','grey','blue','red','green','yellow','clear','assorted colours','matte finish','gloss finish'])),
+      datalist('inventoryVendorOptions', uniqueValues((item)=>item.preferred_vendor, ['Amazon','Canadian Tire','Costco','Home Depot','Princess Auto','Walmart','Uline','Local supplier'])),
+      datalist('inventoryVendorSkuOptions', uniqueValues((item)=>item.vendor_sku)),
+      datalist('inventoryUnitOptions', uniqueValues((item)=>item.unit_label, ['bottle','jug','litre','gallon','pad','piece','pack','roll','box','pair','kit','towel','brush'])),
+      datalist('inventoryPurchaseUrlOptions', uniqueValues((item)=>item.amazon_url)),
+      datalist('inventoryImageOptions', uniqueValues((item)=>item.image_url))
+    ].join('');
+  }
   function headers(json=true){ const h = json ? {'Content-Type':'application/json'} : {}; if(actor?.email) h['x-staff-email']=actor.email; return h; }
   async function getJson(url){ const r=await fetch(url,{credentials:'include',headers:headers(false)}); return { ok:r.ok, status:r.status, out:await r.json().catch(()=>null) }; }
   async function postJson(url,payload){ const r=await fetch(url,{method:'POST',credentials:'include',headers:headers(true),body:JSON.stringify(payload)}); return { ok:r.ok, status:r.status, out:await r.json().catch(()=>null) }; }
@@ -159,7 +186,7 @@
     document.querySelectorAll('[data-edit-low]').forEach((btn)=>btn.addEventListener('click',()=>fillForm(inventory.find((x)=>String(x.item_key)===String(btn.dataset.editLow)) || null)));
     document.querySelectorAll('[data-low-reorder]').forEach((btn)=>btn.addEventListener('click', ()=>createReorder(btn.dataset.lowReorder)));
   }
-  async function loadInventory(){ hide(); const r=await getJson('/api/admin/catalog_inventory_list'); if(!r.ok||!r.out?.ok){ qs('#invBody').innerHTML=`<tr><td colspan="5">${(r.out&&r.out.error)||'Could not load inventory.'}</td></tr>`; return; } inventory=Array.isArray(r.out.items)?r.out.items:[]; fillUsageItems(); renderInventory(); lowStock=Array.isArray(r.out.low_stock)?r.out.low_stock:[]; renderLowStock(); }
+  async function loadInventory(){ hide(); const r=await getJson('/api/admin/catalog_inventory_list'); if(!r.ok||!r.out?.ok){ qs('#invBody').innerHTML=`<tr><td colspan="5">${(r.out&&r.out.error)||'Could not load inventory.'}</td></tr>`; return; } inventory=Array.isArray(r.out.items)?r.out.items:[]; renderInventoryDatalists(); fillUsageItems(); renderInventory(); lowStock=Array.isArray(r.out.low_stock)?r.out.low_stock:[]; renderLowStock(); }
   async function loadMovements(){ const r=await getJson('/api/admin/catalog_usage_list'); if(!r.ok||!r.out?.ok){ qs('#moveBody').innerHTML=`<tr><td colspan="4">${(r.out&&r.out.error)||'Could not load movement history.'}</td></tr>`; return; } movements=Array.isArray(r.out.movements)?r.out.movements:[]; renderMovements(); }
   async function loadLowStock(){ const r=await getJson('/api/admin/catalog_low_stock_list'); if(!r.ok||!r.out?.ok){ qs('#lowBody').innerHTML=`<tr><td colspan="4">${(r.out&&r.out.error)||'Could not load low-stock list.'}</td></tr>`; return; } lowStock=Array.isArray(r.out.items)?r.out.items:[]; renderLowStock(); }
   async function loadOrders(){ const status=qs('#orderStatus').value; const url='/api/admin/catalog_purchase_orders_list'+(status?`?status=${encodeURIComponent(status)}`:''); const r=await getJson(url); if(!r.ok||!r.out?.ok){ qs('#orderBody').innerHTML=`<tr><td colspan="4">${(r.out&&r.out.error)||'Could not load orders.'}</td></tr>`; return; } const orders=Array.isArray(r.out.orders)?r.out.orders:[]; const due=Array.isArray(r.out.reminder_due)?r.out.reminder_due:[]; qs('#orderSummary').textContent=`${orders.length} orders · ${due.length} reminders due`; qs('#orderBody').innerHTML=orders.map((po)=>`<tr><td><strong>${esc(po.item_name || po.item_key || 'Order')}</strong><div class="mini">${esc(po.vendor_name || '')} · qty ${esc(po.qty_ordered)}</div>${po.purchase_url?`<div class="mini"><a href="${esc(po.purchase_url)}" target="_blank" rel="noopener">Purchase link</a></div>`:''}</td><td>${esc(po.status)}</td><td>${po.reminder_at ? esc(new Date(po.reminder_at).toLocaleString()) : '<span class="mini">None</span>'}</td><td><div class="row">${['requested','ordered'].includes(po.status) ? `<button class="btn ghost" data-status="ordered" data-id="${po.id}">Mark ordered</button>` : ''}${['requested','ordered'].includes(po.status) ? `<button class="btn ghost" data-status="received" data-id="${po.id}">Mark received</button>` : ''}${po.status !== 'cancelled' && po.status !== 'received' ? `<button class="btn ghost" data-status="cancelled" data-id="${po.id}">Cancel</button>` : ''}</div></td></tr>`).join('') || '<tr><td colspan="4">No purchase orders found.</td></tr>';
