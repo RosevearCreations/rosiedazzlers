@@ -602,6 +602,26 @@
     if (fallback && !isSvgMediaUrl(fallback)) return fallback;
     return primary || fallback || '';
   }
+  function uniqueTextValues(rows, getter, extras){
+    var seen = new Set();
+    return (Array.isArray(extras) ? extras : []).concat((Array.isArray(rows) ? rows : []).map(getter)).map(cleanTextValue).filter(function(value){
+      if (!value || seen.has(value.toLowerCase())) return false;
+      seen.add(value.toLowerCase());
+      return true;
+    }).sort(function(a, b){ return a.localeCompare(b); });
+  }
+  function renderDatalist(id, values){
+    return '<datalist id="' + escapeHtml(id) + '">' + (values || []).map(function(value){ return '<option value="' + escapeHtml(value) + '"></option>'; }).join('') + '</datalist>';
+  }
+  function addonSuggestionDatalists(rows){
+    return renderDatalist('addonCategoryOptions', uniqueTextValues(rows, function(row){ return row && row.category; }, [
+      'paint correction', 'paint protection', 'interior protection', 'odor treatment', 'engine bay', 'glass services', 'appearance modifications', 'seasonal protection'
+    ])) +
+    renderDatalist('addonTypeOptions', uniqueTextValues(rows, function(row){ return row && row.type; }, [
+      'add-on', 'quote-led add-on', 'standalone service', 'package-required service', 'inspection-required service'
+    ])) +
+    renderDatalist('addonImageUrlOptions', uniqueTextValues(rows, function(row){ return firstAddonMediaUrl(row); }, []));
+  }
   async function fetchBundledPricingCatalog(){
     try {
       const res = await fetch('/data/rosie_services_pricing_and_packages.json', { credentials:'include', cache:'no-store' });
@@ -746,6 +766,14 @@
     source.badge = String(source.badge || 'Landing page').trim();
     source.hero_title = String(source.hero_title || source.name || '').trim();
     source.hero_intro = String(source.hero_intro || '').trim();
+    source.hero_image_url = String(source.hero_image_url || '').trim();
+    source.gallery_image_urls = normalizeLandingArray(source.gallery_image_urls || source.gallery_urls || source.gallery_images);
+    source.related_products = (Array.isArray(source.related_products) ? source.related_products : []).map(function(item){ return {
+      name: String(item && (item.name || item.title) || '').trim(),
+      role: String(item && item.role || '').trim(),
+      note: String(item && item.note || '').trim(),
+      image_url: String(item && item.image_url || '').trim()
+    }; }).filter(function(item){ return item.name || item.image_url; });
     source.reasons_page_exists = normalizeLandingArray(source.reasons_page_exists);
     source.process = normalizeLandingArray(source.process);
     source.equipment = normalizeLandingArray(source.equipment);
@@ -765,9 +793,11 @@
   function landingArrayToText(value){ return normalizeLandingArray(value).join('\n'); }
   function landingFaqToText(value){ return normalizeLandingFaq(value).map(function(item){ return item.q + ' || ' + item.a; }).join('\n'); }
   function landingLinksToText(value){ return (Array.isArray(value) ? value : []).map(function(item){ return String(item && item.label || 'Official source').trim() + ' || ' + String(item && item.url || '').trim(); }).filter(function(line){ return line.replace(/^[^|]*\|\|/, '').trim(); }).join('\n'); }
+  function landingProductsToText(value){ return (Array.isArray(value) ? value : []).map(function(item){ return [item && item.name || '', item && item.role || '', item && item.note || '', item && item.image_url || ''].map(function(part){ return String(part || '').trim(); }).join(' || '); }).filter(function(line){ return line.replace(/\|/g, '').trim(); }).join('\n'); }
   function landingTextToArray(value){ return String(value || '').split(/\r?\n/).map(function(line){ return line.trim(); }).filter(Boolean); }
   function landingTextToFaq(value){ return String(value || '').split(/\r?\n/).map(function(line){ var parts = line.split('||'); return { q: String(parts[0] || '').trim(), a: String(parts.slice(1).join('||') || '').trim() }; }).filter(function(item){ return item.q && item.a; }); }
   function landingTextToLinks(value){ return String(value || '').split(/\r?\n/).map(function(line){ var parts = line.split('||'); return { label: String(parts[0] || 'Official source').trim(), url: String(parts.slice(1).join('||') || '').trim() }; }).filter(function(item){ return item.url; }); }
+  function landingTextToProducts(value){ return String(value || '').split(/\r?\n/).map(function(line){ var parts = line.split('||'); return { name: String(parts[0] || '').trim(), role: String(parts[1] || '').trim(), note: String(parts[2] || '').trim(), image_url: String(parts.slice(3).join('||') || '').trim() }; }).filter(function(item){ return item.name || item.image_url; }); }
   function slugify(value){ return String(value || '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').replace(/-{2,}/g, '-'); }
   function addonLandingEntry(code){ var slug = Object.keys(landingPagesState.pages).find(function(key){ return landingPagesState.pages[key] && landingPagesState.pages[key].type === 'addon' && String(landingPagesState.pages[key].related_code || '') === String(code || ''); }); return slug ? landingPagesState.pages[slug] : null; }
   function locationLandingOptions(){ return Object.keys(landingPagesState.pages).filter(function(slug){ return landingPagesState.pages[slug] && landingPagesState.pages[slug].type === 'location'; }).sort(); }
@@ -783,6 +813,10 @@
       '<div class="field"><label for="' + prefix + '_badge">Badge</label><input id="' + prefix + '_badge" value="' + escapeHtml(page.badge || '') + '"></div>' +
       '<div class="field"><label for="' + prefix + '_hero_title">Hero title</label><input id="' + prefix + '_hero_title" value="' + escapeHtml(page.hero_title || '') + '"></div>' +
       '<div class="field"><label for="' + prefix + '_hero_intro">Hero intro</label><textarea id="' + prefix + '_hero_intro">' + escapeHtml(page.hero_intro || '') + '</textarea></div>' +
+      renderDatalist(prefix + '_image_options', uniqueTextValues(pricingCatalogState.addons, function(row){ return firstAddonMediaUrl(row); }, [])) +
+      '<div class="field"><label for="' + prefix + '_hero_image_url">Hero image URL</label><input list="' + prefix + '_image_options" id="' + prefix + '_hero_image_url" value="' + escapeHtml(page.hero_image_url || '') + '" placeholder="Use the current add-on PNG/R2 image or paste a new image URL"></div>' +
+      '<div class="field"><label for="' + prefix + '_gallery_image_urls">Gallery image URLs (one per line)</label><textarea class="link-lines" id="' + prefix + '_gallery_image_urls">' + escapeHtml(landingArrayToText(page.gallery_image_urls)) + '</textarea></div>' +
+      '<div class="field"><label for="' + prefix + '_related_products">Related products using Name || Role || Note || Image URL</label><textarea class="link-lines" id="' + prefix + '_related_products">' + escapeHtml(landingProductsToText(page.related_products)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_reasons">Why this page exists (one line per point)</label><textarea id="' + prefix + '_reasons">' + escapeHtml(landingArrayToText(page.reasons_page_exists)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_process">Process (one line per step)</label><textarea id="' + prefix + '_process">' + escapeHtml(landingArrayToText(page.process)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_equipment">Equipment / workflow (one line per point)</label><textarea id="' + prefix + '_equipment">' + escapeHtml(landingArrayToText(page.equipment)) + '</textarea></div>' +
@@ -802,6 +836,9 @@
       badge: byId(prefix + '_badge').value || '',
       hero_title: byId(prefix + '_hero_title').value || '',
       hero_intro: byId(prefix + '_hero_intro').value || '',
+      hero_image_url: byId(prefix + '_hero_image_url').value || '',
+      gallery_image_urls: landingTextToArray(byId(prefix + '_gallery_image_urls').value || ''),
+      related_products: landingTextToProducts(byId(prefix + '_related_products').value || ''),
       reasons_page_exists: landingTextToArray(byId(prefix + '_reasons').value || ''),
       process: landingTextToArray(byId(prefix + '_process').value || ''),
       equipment: landingTextToArray(byId(prefix + '_equipment').value || ''),
@@ -847,11 +884,15 @@
     if (locationSeedSlug && locationSeedSlug !== locationPage.slug) delete landingPagesState.pages[locationSeedSlug];
   }
   async function loadLandingPagesEditor(savedSetting){
-    if (savedSetting && typeof savedSetting === 'object') { setLandingPagesState(savedSetting); return; }
-    const res = await fetch('/api/landing_pages_public', { credentials:'include', cache:'no-store' });
-    const out = await res.json().catch(()=>null);
-    if (!res.ok || !out) throw new Error(out?.error || 'Could not load landing pages.');
-    setLandingPagesState(out);
+    const res = await fetch('/api/landing_pages_public', { credentials:'include', cache:'no-store' }).catch(function(){ return null; });
+    const out = res ? await res.json().catch(function(){ return null; }) : null;
+    const fallback = res && res.ok && out ? ensureLandingPagesShape(out) : landingPagesDefaults();
+    if (savedSetting && typeof savedSetting === 'object') {
+      var saved = ensureLandingPagesShape(savedSetting);
+      setLandingPagesState({ pages: Object.assign({}, fallback.pages || {}, saved.pages || {}) });
+      return;
+    }
+    setLandingPagesState(fallback);
   }
   var pricingCatalogState = pricingCatalogDefaults();
   function setPricingCatalogEditor(value){ byId('pricing_catalog_json').value = JSON.stringify(ensurePricingCatalogShape(value), null, 2); }
@@ -980,21 +1021,22 @@
       '<div class="addon-editor-grid">' +
         '<label class="field"><span>Code</span><input data-addon-editor-field="code" value="' + escapeHtml(addon.code || '') + '"></label>' +
         '<label class="field"><span>Name</span><input data-addon-editor-field="name" value="' + escapeHtml(addon.name || '') + '"></label>' +
-        '<label class="field"><span>Category</span><input data-addon-editor-field="category" value="' + escapeHtml(addon.category || '') + '"></label>' +
-        '<label class="field"><span>Type</span><input data-addon-editor-field="type" value="' + escapeHtml(addon.type || '') + '"></label>' +
+        '<label class="field"><span>Category</span><input list="addonCategoryOptions" data-addon-editor-field="category" value="' + escapeHtml(addon.category || '') + '"></label>' +
+        '<label class="field"><span>Type</span><input list="addonTypeOptions" data-addon-editor-field="type" value="' + escapeHtml(addon.type || '') + '"></label>' +
         '<label class="field"><span>Small</span><input type="number" step="0.01" data-addon-editor-field="prices_cad.small" value="' + escapeHtml(String(addon.prices_cad.small ?? 0)) + '"></label>' +
         '<label class="field"><span>Mid</span><input type="number" step="0.01" data-addon-editor-field="prices_cad.mid" value="' + escapeHtml(String(addon.prices_cad.mid ?? 0)) + '"></label>' +
         '<label class="field"><span>Oversize / exotic</span><input type="number" step="0.01" data-addon-editor-field="prices_cad.oversize" value="' + escapeHtml(String(addon.prices_cad.oversize ?? 0)) + '"></label>' +
-        '<label class="field"><span>Primary image URL</span><input data-addon-editor-field="image_url" value="' + escapeHtml(addon.image_url || '') + '"></label>' +
-        '<label class="field"><span>Fallback image URL</span><input data-addon-editor-field="image_fallback_url" value="' + escapeHtml(addon.image_fallback_url || '') + '"></label>' +
+        '<label class="field"><span>Primary image URL</span><input list="addonImageUrlOptions" data-addon-editor-field="image_url" value="' + escapeHtml(addon.image_url || '') + '"></label>' +
+        '<label class="field"><span>Fallback image URL</span><input list="addonImageUrlOptions" data-addon-editor-field="image_fallback_url" value="' + escapeHtml(addon.image_fallback_url || '') + '"></label>' +
       '</div>' +
+      addonSuggestionDatalists(rows) +
       '<div class="panel-lite addon-image-preview">' + previewHtml + '<div class="stack-sm"><div class="section-label">Current image loaded</div><div class="pill-note">This preview prefers the saved PNG/JPG/R2 photo image first, then uses the SVG outline only as a fallback. Leave the URLs alone to keep the current picture, or replace either URL and save the pricing catalog.</div><div class="link-lines">Primary: ' + escapeHtml(addon.image_url || '—') + '<br>Fallback: ' + escapeHtml(addon.image_fallback_url || '—') + '</div></div></div>' +
       '<div class="checkrow"><input id="addon_editor_quote_required" type="checkbox" data-addon-editor-field="quote_required" ' + (addon.quote_required ? 'checked' : '') + '><label for="addon_editor_quote_required">Quote required</label></div>' +
       '<div class="checkrow"><input id="addon_editor_standalone_allowed" type="checkbox" data-addon-editor-field="standalone_allowed" ' + (addon.standalone_allowed ? 'checked' : '') + '><label for="addon_editor_standalone_allowed">Standalone allowed</label></div>' +
       '<div class="field"><label for="addon_requirement_note">Requirement note shown on booking</label><textarea id="addon_requirement_note" data-addon-editor-field="requirement_note">' + escapeHtml(addon.requirement_note || '') + '</textarea></div>' +
       '<div class="field"><label for="addon_notes_lines">Notes (one line per point)</label><textarea id="addon_notes_lines" data-addon-editor-notes>' + escapeHtml(Array.isArray(addon.notes) ? addon.notes.join('\n') : '') + '</textarea></div>' +
       '<div class="panel-lite stack-sm"><div class="section-label">Allowed main packages</div><div class="pill-note">Use this to set one-to-one, one-to-many, or many-to-one rules. Leave standalone on for add-ons that can be booked by themselves.</div><div class="addon-dependency-grid">' + pkgChecks + '</div></div>' +
-      '<div class="actions"><button class="btn" type="button" data-delete-addon="' + index + '">Delete add-on</button></div>';
+      '<div class="actions"><button class="btn primary" type="button" data-save-addon="' + index + '">Update / save add-on</button><button class="btn" type="button" data-delete-addon="' + index + '">Delete add-on</button></div>';
   }
 
   function renderServiceAreaRows(rows){
@@ -1105,6 +1147,20 @@
     });
     qsa('[data-delete-package]').forEach(function (button) {
       button.addEventListener('click', function () { pricingCatalogState.packages.splice(Number(button.getAttribute('data-delete-package')), 1); syncPricingEditorToJson(); renderPricingDashboard(); });
+    });
+    qsa('[data-save-addon]').forEach(function (button) {
+      button.addEventListener('click', async function () {
+        var index = Number(button.getAttribute('data-save-addon'));
+        var addon = pricingCatalogState.addons[index] || null;
+        if (!addon) { setShellStatus('No add-on is selected to save.', 'error'); return; }
+        try {
+          syncPricingEditorToJson();
+          await saveSetting('pricing_catalog', pricingCatalogState, 'Add-on saved: ' + (addon.name || addon.code || 'selected add-on') + '.');
+          renderPricingDashboard();
+        } catch (err) {
+          setShellStatus(err && err.message ? err.message : 'Could not save the selected add-on.', 'error');
+        }
+      });
     });
     qsa('[data-delete-addon]').forEach(function (button) {
       button.addEventListener('click', function () { pricingCatalogState.addons.splice(Number(button.getAttribute('data-delete-addon')), 1); syncPricingEditorToJson(); renderPricingDashboard(); });
@@ -1297,7 +1353,7 @@
   bindById('reloadPricingCatalogBtn', 'click', async ()=>{ try{ await loadPricingCatalogEditor(null); setShellStatus('Pricing catalog reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload pricing catalog.', 'error'); } });
   bindById('landing_addon_select', 'change', function(){ saveCurrentLandingEditorsToState(); renderLandingBuilder(); });
   bindById('landing_location_select', 'change', function(){ saveCurrentLandingEditorsToState(); renderLandingBuilder(); });
-  bindById('landing_addon_create_btn', 'click', function(){ var code = byId('landing_addon_select').value || ''; var addon = (pricingCatalogState.addons || []).find(function(row){ return row.code === code; }) || { code: code, name: code }; var slug = slugify(addon.name || addon.code); var addonImage = firstAddonMediaUrl(addon); landingPagesState.pages[slug] = normalizeLandingPage({ type: 'addon', related_code: code, enabled: true, slug: slug, nav_group: 'special-service', name: addon.name || addon.code, badge: 'Special service landing page', hero_title: addon.name || addon.code, hero_image_url: addonImage, gallery_urls: addonImage ? [addonImage] : [], meta_title: (addon.name || addon.code) + ' | Rosie Dazzlers', meta_description: Array.isArray(addon.notes) ? addon.notes.join(' ') : '' }, {}); renderLandingBuilder(); setShellStatus('Add-on landing draft created for ' + (addon.name || addon.code) + '.', 'success'); });
+  bindById('landing_addon_create_btn', 'click', function(){ var code = byId('landing_addon_select').value || ''; var addon = (pricingCatalogState.addons || []).find(function(row){ return row.code === code; }) || { code: code, name: code }; var slug = slugify(addon.name || addon.code); var addonImage = firstAddonMediaUrl(addon); landingPagesState.pages[slug] = normalizeLandingPage({ type: 'addon', related_code: code, enabled: true, slug: slug, nav_group: 'special-service', name: addon.name || addon.code, badge: 'Special service landing page', hero_title: addon.name || addon.code, hero_image_url: addonImage, gallery_image_urls: addonImage ? [addonImage] : [], meta_title: (addon.name || addon.code) + ' | Rosie Dazzlers', meta_description: Array.isArray(addon.notes) ? addon.notes.join(' ') : '' }, {}); renderLandingBuilder(); setShellStatus('Add-on landing draft created for ' + (addon.name || addon.code) + '.', 'success'); });
   bindById('landing_location_create_btn', 'click', function(){ saveCurrentLandingEditorsToState(); var label = prompt('New location page name (example: Norwich auto detailing)'); if (!label) return; var slug = slugify(label); landingPagesState.pages[slug] = normalizeLandingPage({ type: 'location', enabled: true, slug: slug, nav_group: 'town', name: label, badge: 'Town-focused detailing page', hero_title: label, meta_title: label + ' | Rosie Dazzlers' }, {}); renderLandingBuilder(); byId('landing_location_select').value = slug; renderLandingBuilder(); setShellStatus('Location landing draft created for ' + label + '.', 'success'); });
   bindById('reloadLandingPagesBtn', 'click', async ()=>{ try{ await loadLandingPagesEditor(null); setShellStatus('Landing pages reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload landing pages.', 'error'); } });
   bindById('saveLandingPagesBtn', 'click', async ()=>{ try{ saveCurrentLandingEditorsToState(); await saveSetting('landing_pages', landingPagesState, 'Landing pages saved. Known pages and generic /landing/ routes now use this content.'); } catch(err){ setShellStatus(err?.message || 'Could not save landing pages.', 'error'); } });
