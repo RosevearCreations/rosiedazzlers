@@ -88,3 +88,10 @@ To add a second or third gallery item, add another object inside the same `items
 
 <!-- Build 132 sync 2026-05-08: admin add-on image hydration, current-image preview, fallback media merge, no-DDL schema note, SEO/H1/CSS/media discipline reviewed. -->
 - Restored missing `assets/landing-page.js` because landing pages were still referencing it during the static link check.
+<!-- Build 133 sync 2026-05-08: fixed Admin App add-on image hydration to prefer real PNG/R2 photos over SVG outlines, restored landingLinksToText helper, kept dev-branch workflow, and recorded no-DDL schema note. -->
+
+## Build 133 add-on image editor note
+- The Admin App add-on editor should show the real photo-style PNG/JPG/R2 image in **Current image loaded** whenever one exists.
+- Keep `image_url` as the preferred customer-facing image. This should normally be the R2/package PNG or JPG, for example `https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png`.
+- Keep `image_fallback_url` as the backup image. SVG outline files are acceptable here, but they should not replace the original service PNG in the primary image field.
+- To switch an add-on picture: open Admin App → Add-ons → select the add-on → replace **Primary image URL** with the new R2/public image URL → leave fallback in place → save pricing catalog.

@@ -437,3 +437,4 @@ New schema objects introduced in this pass:
 These support receipt/bill/invoice links, recurring expense templates, monthly bank reconciliation records, payroll payout reconciliation records, and month lock/close status.
 
 <!-- Build 132 sync 2026-05-08: admin add-on image hydration, current-image preview, fallback media merge, no-DDL schema note, SEO/H1/CSS/media discipline reviewed. -->
+<!-- Build 133 sync 2026-05-08: fixed Admin App add-on image hydration to prefer real PNG/R2 photos over SVG outlines, restored landingLinksToText helper, kept dev-branch workflow, and recorded no-DDL schema note. -->
