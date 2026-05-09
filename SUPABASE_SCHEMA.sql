@@ -986,3 +986,7 @@ create index if not exists accounting_period_closes_status_idx on public.account
 -- Build 134 sync 2026-05-08:
 -- No DDL required. Admin add-on save button, populated editor suggestions, landing-page media fields, public landing API normalization, static landing metadata, structured data, and sitemap refresh are frontend/API/docs updates only.
 -- Future DDL to consider only if media fields need relational storage instead of app_management_settings JSON: landing_page_media, landing_page_related_products, and editor suggestion dictionaries.
+
+
+-- Build 135 admin landing / inventory option repair note
+-- No DDL required for this pass. catalog_dropdown_options is stored through the existing app_settings mechanism; Admin Catalog merges saved rows with bundled gear/consumable JSON fallback.

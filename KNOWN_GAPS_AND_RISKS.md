@@ -717,3 +717,15 @@ Open accounting risks: this remains an operational bookkeeping layer, not profes
 - Restored missing `assets/landing-page.js` because landing pages were still referencing it during the static link check.
 <!-- Build 133 sync 2026-05-08: fixed Admin App add-on image hydration to prefer real PNG/R2 photos over SVG outlines, restored landingLinksToText helper, kept dev-branch workflow, and recorded no-DDL schema note. -->
 <!-- Build 134 sync 2026-05-08: admin add-on save button, populated editor suggestions, landing-page media fields, local SEO metadata/structured-data, sitemap refresh, and no-DDL schema handoff reviewed. -->
+
+
+## Build 135 — Admin App landing dropdowns, service-area fallback, and inventory merge repair
+- Fixed Admin App landing page dropdowns so selecting an add-on or location preserves the selected value and refreshes the editor fields for that specific record.
+- Service areas and travel tiers now merge from the bundled pricing catalog fallback when the saved pricing catalog is empty or incomplete; the remote tier is included and travel charge editing now binds the remote field.
+- Added a customizable dropdown option library in Admin App for add-on categories/types, inventory categories, inventory subcategories/colours, vendors, units, service tiers, and service zones.
+- Reworked Admin Catalog so saved DB rows merge with bundled consumables and gear from `/data/rosie_products_catalog.json` and `/data/systems_catalog.json`; editing two items no longer hides the rest of the fallback catalog.
+- Admin Catalog now labels each row as Saved DB item or Bundled fallback and provides browser-saved inventory dropdown suggestions for category, type/colour, vendor, unit, and image URL helpers.
+- SEO/local-search discipline continues: one H1 per exposed page, stronger local service/town wording, crawlable landing-page content, and clean structured handoff docs remain part of every pass.
+
+
+<!-- Build 135 sync 2026-05-08: admin landing dropdown refresh, service-area fallback, inventory fallback merge, customizable option suggestions, one-H1/local SEO/schema handoff review. -->
