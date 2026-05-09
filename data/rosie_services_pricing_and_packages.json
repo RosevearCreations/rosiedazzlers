@@ -489,5 +489,97 @@
       "type": "window tinting",
       "image_fallback_url": "/assets/addons/window_tinting.svg"
     }
+  ],
+  "service_areas": [
+    {
+      "county": "Oxford County",
+      "label": "Tillsonburg, ON",
+      "value": "Tillsonburg, ON",
+      "municipality": "Tillsonburg",
+      "zone": "Tillsonburg",
+      "travel_tier": "urban",
+      "area_type": "town",
+      "bylaw_note": "Core service town and strongest local SEO target.",
+      "parking_rule": "Driveway or safe curbside access required.",
+      "noise_rule": "Confirm quiet hours if working near neighbours.",
+      "water_rule": "Customer water/power preferred unless arranged.",
+      "access_rule": "Mobile detailing access must be safe and legal.",
+      "official_links": []
+    },
+    {
+      "county": "Oxford County",
+      "label": "Ingersoll / Woodstock, ON",
+      "value": "Ingersoll / Woodstock, ON",
+      "municipality": "Ingersoll / Woodstock",
+      "zone": "Woodstock / Ingersoll",
+      "travel_tier": "township",
+      "area_type": "township",
+      "bylaw_note": "Oxford County expansion area.",
+      "parking_rule": "Driveway preferred.",
+      "noise_rule": "Follow local residential noise expectations.",
+      "water_rule": "Customer water/power preferred unless arranged.",
+      "access_rule": "Confirm service location before arrival.",
+      "official_links": []
+    },
+    {
+      "county": "Oxford County",
+      "label": "Norwich / Otterville, ON",
+      "value": "Norwich / Otterville, ON",
+      "municipality": "Norwich / Otterville",
+      "zone": "Norwich / Otterville",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "bylaw_note": "Nearby hamlet/rural service area.",
+      "parking_rule": "Level driveway or work area required.",
+      "noise_rule": "Confirm timing for rural/residential work.",
+      "water_rule": "Customer water/power preferred unless arranged.",
+      "access_rule": "Confirm directions and parking access.",
+      "official_links": []
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Simcoe / Delhi, ON",
+      "value": "Simcoe / Delhi, ON",
+      "municipality": "Simcoe / Delhi",
+      "zone": "Simcoe / Delhi",
+      "travel_tier": "rural",
+      "area_type": "township",
+      "bylaw_note": "Norfolk County service area.",
+      "parking_rule": "Driveway or safe private work area required.",
+      "noise_rule": "Confirm timing around residential areas.",
+      "water_rule": "Customer water/power preferred unless arranged.",
+      "access_rule": "Confirm service location and access notes.",
+      "official_links": []
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Port Dover, ON",
+      "value": "Port Dover, ON",
+      "municipality": "Port Dover",
+      "zone": "Port Dover",
+      "travel_tier": "coastal",
+      "area_type": "coastal",
+      "bylaw_note": "Coastal/tourism area with seasonal timing considerations.",
+      "parking_rule": "Driveway or safe legal parking required.",
+      "noise_rule": "Confirm timing around busy seasonal areas.",
+      "water_rule": "Customer water/power preferred unless arranged.",
+      "access_rule": "Confirm access before arrival.",
+      "official_links": []
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Courtland / Langton, ON",
+      "value": "Courtland / Langton, ON",
+      "municipality": "Courtland / Langton",
+      "zone": "Courtland / Langton",
+      "travel_tier": "remote",
+      "area_type": "rural",
+      "bylaw_note": "Extended rural service area; quote may be needed.",
+      "parking_rule": "Safe work area required.",
+      "noise_rule": "Confirm timing before travel.",
+      "water_rule": "Customer water/power preferred unless arranged.",
+      "access_rule": "Confirm directions and driveway access.",
+      "official_links": []
+    }
   ]
 }
