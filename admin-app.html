@@ -33,7 +33,10 @@
     @media(max-width:980px){.span-6,.span-4,.span-8{grid-column:span 12}.app-layout{grid-template-columns:1fr}.menu-col{position:static}}
     @media(max-width:720px){.catalog-row.package,.catalog-row.addon,.catalog-row.service-area,.catalog-row.requirement,.pricing-grid-4,.pricing-grid-5{grid-template-columns:1fr}}
     @media(max-width:900px){.subgrid{grid-template-columns:1fr}}
-  </style>
+    .catalog-option-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+  @media(max-width:1100px){.catalog-option-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:720px){.catalog-option-grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 <main class="shell">
@@ -553,13 +556,23 @@
   function readRecoveryTemplates(){ return { abandoned_checkout_subject: byId('recovery_subject').value || '', abandoned_checkout_body_text: byId('recovery_body_text').value || '', abandoned_checkout_body_html: byId('recovery_body_html').value || '' }; }
   function readRecoveryRules(){ return { abandoned_recovery_enabled: byId('recovery_enabled').checked, minimum_page_events: Number(byId('recovery_min_events').value || 0), require_email: true, cooldown_hours: Number(byId('recovery_cooldown_hours').value || 24), default_recovery_channel: byId('recovery_default_channel').value || 'email' }; }
   function readProviderRules(){ return { email: { enabled: byId('provider_email_enabled').checked, provider_key: byId('provider_email_key').value || 'default_email', recovery_webhook_url: byId('provider_email_webhook').value || '', send_test_to: byId('provider_email_test_to').value || '' }, sms: { enabled: byId('provider_sms_enabled').checked, provider_key: byId('provider_sms_key').value || 'default_sms', recovery_webhook_url: byId('provider_sms_webhook').value || '', send_test_to: byId('provider_sms_test_to').value || '' } }; }
+  function serviceAreaDefaults(){
+    return [
+      { county:'Oxford County', label:'Tillsonburg, ON', value:'Tillsonburg, ON', municipality:'Tillsonburg', zone:'Tillsonburg', travel_tier:'urban', area_type:'town', bylaw_note:'Core service town and strongest local SEO target.', parking_rule:'Driveway or safe curbside access required.', noise_rule:'Confirm quiet hours if working near neighbours.', water_rule:'Customer water/power preferred unless arranged.', access_rule:'Mobile detailing access must be safe and legal.', official_links:[] },
+      { county:'Oxford County', label:'Ingersoll / Woodstock, ON', value:'Ingersoll / Woodstock, ON', municipality:'Ingersoll / Woodstock', zone:'Woodstock / Ingersoll', travel_tier:'township', area_type:'township', bylaw_note:'Oxford County expansion area.', parking_rule:'Driveway preferred.', noise_rule:'Follow local residential noise expectations.', water_rule:'Customer water/power preferred unless arranged.', access_rule:'Confirm service location before arrival.', official_links:[] },
+      { county:'Oxford County', label:'Norwich / Otterville, ON', value:'Norwich / Otterville, ON', municipality:'Norwich / Otterville', zone:'Norwich / Otterville', travel_tier:'hamlet', area_type:'hamlet', bylaw_note:'Nearby hamlet/rural service area.', parking_rule:'Level driveway or work area required.', noise_rule:'Confirm timing for rural/residential work.', water_rule:'Customer water/power preferred unless arranged.', access_rule:'Confirm directions and parking access.', official_links:[] },
+      { county:'Norfolk County', label:'Simcoe / Delhi, ON', value:'Simcoe / Delhi, ON', municipality:'Simcoe / Delhi', zone:'Simcoe / Delhi', travel_tier:'rural', area_type:'township', bylaw_note:'Norfolk County service area.', parking_rule:'Driveway or safe private work area required.', noise_rule:'Confirm timing around residential areas.', water_rule:'Customer water/power preferred unless arranged.', access_rule:'Confirm service location and access notes.', official_links:[] },
+      { county:'Norfolk County', label:'Port Dover, ON', value:'Port Dover, ON', municipality:'Port Dover', zone:'Port Dover', travel_tier:'coastal', area_type:'coastal', bylaw_note:'Coastal/tourism area with seasonal timing considerations.', parking_rule:'Driveway or safe legal parking required.', noise_rule:'Confirm timing around busy seasonal areas.', water_rule:'Customer water/power preferred unless arranged.', access_rule:'Confirm access before arrival.', official_links:[] },
+      { county:'Norfolk County', label:'Courtland / Langton, ON', value:'Courtland / Langton, ON', municipality:'Courtland / Langton', zone:'Courtland / Langton', travel_tier:'remote', area_type:'rural', bylaw_note:'Extended rural service area; quote may be needed.', parking_rule:'Safe work area required.', noise_rule:'Confirm timing before travel.', water_rule:'Customer water/power preferred unless arranged.', access_rule:'Confirm directions and driveway access.', official_links:[] }
+    ];
+  }
   function pricingCatalogDefaults(){
     return {
       charts: [],
       packages: [],
       service_matrix: [],
       addons: [],
-      service_areas: [],
+      service_areas: serviceAreaDefaults(),
       booking_rules: {
         availability_window_days: 21,
         default_service_area: 'Tillsonburg, Oxford County',
@@ -613,13 +626,52 @@
   function renderDatalist(id, values){
     return '<datalist id="' + escapeHtml(id) + '">' + (values || []).map(function(value){ return '<option value="' + escapeHtml(value) + '"></option>'; }).join('') + '</datalist>';
   }
+  function catalogDropdownOptionsDefaults(){
+    return {
+      addon_categories: ['paint correction','paint protection','interior protection','odor treatment','engine bay','glass services','appearance modifications','seasonal protection'],
+      addon_types: ['add-on','quote-led add-on','standalone service','package-required service','inspection-required service'],
+      inventory_categories: ['cleaning liquids','interior cleaners','paint protection','microfiber towels','pads and polishers','brushes','buckets and wash tools','safety gear','shop supplies','marketing materials'],
+      inventory_subcategories: ['chemicals','linens','scrubbers','sprayers','polishing pads','clay media','glass care','engine bay','interior protection','exterior protection','black','white','grey','blue','red','green','yellow','clear','assorted colours','matte finish','gloss finish'],
+      inventory_vendors: ['Amazon','Canadian Tire','Costco','Home Depot','Princess Auto','Walmart','Uline','Local supplier'],
+      inventory_units: ['bottle','jug','litre','gallon','pad','piece','pack','roll','box','pair','kit','towel','brush'],
+      service_tiers: ['urban','township','hamlet','coastal','rural','remote','out_of_zone'],
+      service_zones: ['Tillsonburg','Oxford County','Norfolk County','Woodstock / Ingersoll','Simcoe / Delhi','Port Dover','Courtland / Langton']
+    };
+  }
+  var catalogDropdownOptionsState = catalogDropdownOptionsDefaults();
+  function optionLinesToArray(value){ return String(value || '').split(/\r?\n/).map(function(line){ return line.trim(); }).filter(Boolean); }
+  function normalizeCatalogDropdownOptions(value){
+    var defaults = catalogDropdownOptionsDefaults();
+    var src = value && typeof value === 'object' ? value : {};
+    var out = {};
+    Object.keys(defaults).forEach(function(key){
+      out[key] = uniqueTextValues([], function(){ return ''; }, (Array.isArray(src[key]) ? src[key] : []).concat(defaults[key]));
+    });
+    return out;
+  }
+  function setCatalogDropdownOptionsEditor(value){
+    catalogDropdownOptionsState = normalizeCatalogDropdownOptions(value);
+    var map = {
+      dropdown_addon_categories: 'addon_categories',
+      dropdown_addon_types: 'addon_types',
+      dropdown_inventory_categories: 'inventory_categories',
+      dropdown_inventory_subcategories: 'inventory_subcategories',
+      dropdown_inventory_vendors: 'inventory_vendors',
+      dropdown_inventory_units: 'inventory_units',
+      dropdown_service_tiers: 'service_tiers',
+      dropdown_service_zones: 'service_zones'
+    };
+    Object.keys(map).forEach(function(id){ if (byId(id)) byId(id).value = catalogDropdownOptionsState[map[id]].join('\n'); });
+  }
+  function readCatalogDropdownOptionsEditor(){
+    var current = catalogDropdownOptionsDefaults();
+    var map = { addon_categories:'dropdown_addon_categories', addon_types:'dropdown_addon_types', inventory_categories:'dropdown_inventory_categories', inventory_subcategories:'dropdown_inventory_subcategories', inventory_vendors:'dropdown_inventory_vendors', inventory_units:'dropdown_inventory_units', service_tiers:'dropdown_service_tiers', service_zones:'dropdown_service_zones' };
+    Object.keys(map).forEach(function(key){ var el = byId(map[key]); current[key] = optionLinesToArray(el ? el.value : '').concat(catalogDropdownOptionsDefaults()[key]); });
+    return normalizeCatalogDropdownOptions(current);
+  }
   function addonSuggestionDatalists(rows){
-    return renderDatalist('addonCategoryOptions', uniqueTextValues(rows, function(row){ return row && row.category; }, [
-      'paint correction', 'paint protection', 'interior protection', 'odor treatment', 'engine bay', 'glass services', 'appearance modifications', 'seasonal protection'
-    ])) +
-    renderDatalist('addonTypeOptions', uniqueTextValues(rows, function(row){ return row && row.type; }, [
-      'add-on', 'quote-led add-on', 'standalone service', 'package-required service', 'inspection-required service'
-    ])) +
+    return renderDatalist('addonCategoryOptions', uniqueTextValues(rows, function(row){ return row && row.category; }, catalogDropdownOptionsState.addon_categories)) +
+    renderDatalist('addonTypeOptions', uniqueTextValues(rows, function(row){ return row && row.type; }, catalogDropdownOptionsState.addon_types)) +
     renderDatalist('addonImageUrlOptions', uniqueTextValues(rows, function(row){ return firstAddonMediaUrl(row); }, []));
   }
   async function fetchBundledPricingCatalog(){
@@ -653,6 +705,13 @@
       if (!Number(hydrated.price_cad) && Number(fallbackAddon.price_cad)) hydrated.price_cad = Number(fallbackAddon.price_cad);
       return hydrated;
     });
+    if ((!Array.isArray(shaped.service_areas) || !shaped.service_areas.length) && Array.isArray(fallback.service_areas) && fallback.service_areas.length) {
+      shaped.service_areas = fallback.service_areas.map(function(row){ return Object.assign({}, row); });
+    }
+    if ((!Array.isArray(shaped.public_requirements) || !shaped.public_requirements.length) && Array.isArray(fallback.public_requirements) && fallback.public_requirements.length) {
+      shaped.public_requirements = fallback.public_requirements.slice();
+      shaped.booking_rules.public_requirements = shaped.public_requirements.slice();
+    }
     return shaped;
   }
   function ensurePricingCatalogShape(value){
@@ -662,7 +721,7 @@
     catalog.service_matrix = Array.isArray(catalog.service_matrix) ? catalog.service_matrix : [];
     catalog.packages = Array.isArray(catalog.packages) ? catalog.packages : [];
     catalog.addons = Array.isArray(catalog.addons) ? catalog.addons : [];
-    catalog.service_areas = Array.isArray(catalog.service_areas) ? catalog.service_areas : [];
+    catalog.service_areas = Array.isArray(catalog.service_areas) && catalog.service_areas.length ? catalog.service_areas : serviceAreaDefaults();
     catalog.booking_rules = catalog.booking_rules && typeof catalog.booking_rules === 'object' ? catalog.booking_rules : {};
     catalog.booking_rules.slot_labels = catalog.booking_rules.slot_labels && typeof catalog.booking_rules.slot_labels === 'object' ? catalog.booking_rules.slot_labels : {};
     catalog.booking_rules.travel_pricing = catalog.booking_rules.travel_pricing && typeof catalog.booking_rules.travel_pricing === 'object' ? catalog.booking_rules.travel_pricing : {};
@@ -734,7 +793,7 @@
         value: row && row.value || row && row.label || ('Service Area ' + (index + 1)),
         municipality: row && row.municipality || '',
         zone: row && row.zone || '',
-        travel_tier: row && row.travel_tier || 'standard',
+        travel_tier: row && row.travel_tier || 'township',
         area_type: row && row.area_type || '',
         bylaw_note: row && row.bylaw_note || '',
         parking_rule: row && row.parking_rule || '',
@@ -848,20 +907,25 @@
       faq: landingTextToFaq(byId(prefix + '_faq').value || '')
     }, seed || {});
   }
-  function renderLandingBuilder(){
+  function renderLandingBuilder(preferredAddonCode, preferredLocationSlug){
     var addonSelect = byId('landing_addon_select');
+    var previousAddon = preferredAddonCode || (addonSelect && addonSelect.value) || byId('landing_addon_editor')?.dataset?.currentCode || '';
     var addonOptions = (pricingCatalogState.addons || []).map(function(addon){ var page = addonLandingEntry(addon.code); return '<option value="' + escapeHtml(addon.code) + '">' + escapeHtml(addon.name || addon.code) + (page ? ' — landing ready' : '') + '</option>'; }).join('');
     addonSelect.innerHTML = addonOptions || '<option value="">No add-ons loaded</option>';
+    if (previousAddon && Array.prototype.some.call(addonSelect.options, function(opt){ return opt.value === previousAddon; })) addonSelect.value = previousAddon;
     if (!addonSelect.value && addonSelect.options.length) addonSelect.value = addonSelect.options[0].value;
     var addonCode = addonSelect.value || '';
     var addon = (pricingCatalogState.addons || []).find(function(row){ return row.code === addonCode; }) || null;
-    var addonPage = addonLandingEntry(addonCode) || normalizeLandingPage({ type: 'addon', related_code: addonCode, nav_group: 'special-service', badge: 'Special service landing page', slug: slugify((addon && addon.name) || addonCode), name: addon && addon.name || addonCode, hero_title: addon && addon.name || addonCode, meta_title: addon ? ((addon.name || addon.code) + ' | Rosie Dazzlers') : '', meta_description: addon && addon.notes && addon.notes.length ? addon.notes.join(' ') : '' }, {});
+    var addonImage = addon ? firstAddonMediaUrl(addon) : '';
+    var addonPage = addonLandingEntry(addonCode) || normalizeLandingPage({ type: 'addon', related_code: addonCode, nav_group: 'special-service', badge: 'Special service landing page', slug: slugify((addon && addon.name) || addonCode), name: addon && addon.name || addonCode, hero_title: addon && addon.name || addonCode, hero_image_url: addonImage, gallery_image_urls: addonImage ? [addonImage] : [], meta_title: addon ? ((addon.name || addon.code) + ' | Rosie Dazzlers') : '', meta_description: addon && addon.notes && addon.notes.length ? addon.notes.join(' ') : '' }, {});
     byId('landing_addon_editor').dataset.currentCode = addonCode;
     byId('landing_addon_editor').innerHTML = buildLandingEditorHtml(addonPage, 'landing_addon');
 
     var locationSelect = byId('landing_location_select');
+    var previousLocation = preferredLocationSlug || (locationSelect && locationSelect.value) || byId('landing_location_editor')?.dataset?.currentSlug || '';
     var locationOpts = locationLandingOptions().map(function(slug){ var page = landingPagesState.pages[slug]; return '<option value="' + escapeHtml(slug) + '">' + escapeHtml(page.name || slug) + '</option>'; }).join('');
     locationSelect.innerHTML = locationOpts || '<option value="">No location pages yet</option>';
+    if (previousLocation && Array.prototype.some.call(locationSelect.options, function(opt){ return opt.value === previousLocation; })) locationSelect.value = previousLocation;
     if (!locationSelect.value && locationSelect.options.length) locationSelect.value = locationSelect.options[0].value;
     var locationSlug = locationSelect.value || '';
     var locationPage = landingPagesState.pages[locationSlug] || normalizeLandingPage({ type: 'location', nav_group: 'town', badge: 'Town-focused detailing page', slug: '', name: '', hero_title: '', meta_title: '', meta_description: '' }, {});
@@ -1040,16 +1104,20 @@
   }
 
   function renderServiceAreaRows(rows){
-    if (!rows.length) return '<div class="catalog-empty">No service areas yet.</div>';
-    return rows.map(function (row, index) {
+    if (!rows.length) return '<div class="catalog-empty">No service areas yet. Use Add service area or reload the bundled pricing fallback.</div>';
+    var tierOptions = uniqueTextValues(rows, function(row){ return row && row.travel_tier; }, catalogDropdownOptionsState.service_tiers);
+    var zoneOptions = uniqueTextValues(rows, function(row){ return row && row.zone; }, catalogDropdownOptionsState.service_zones);
+    var tierDatalist = renderDatalist('serviceTierOptions', tierOptions);
+    var zoneDatalist = renderDatalist('serviceZoneOptions', zoneOptions);
+    return tierDatalist + zoneDatalist + rows.map(function (row, index) {
       return '<div class="catalog-row service-area">' +
         '<div class="catalog-row__head">County</div><div class="catalog-row__head">Label</div><div class="catalog-row__head">Value</div><div class="catalog-row__head">Municipality</div><div class="catalog-row__head">Zone</div><div class="catalog-row__head">Tier</div><div></div>' +
-        '<label class="field"><input data-area-field="county" data-area-index="' + index + '" value="' + escapeHtml(row.county || '') + '"></label>' +
+        '<label class="field"><input list="serviceZoneOptions" data-area-field="county" data-area-index="' + index + '" value="' + escapeHtml(row.county || '') + '"></label>' +
         '<label class="field"><input data-area-field="label" data-area-index="' + index + '" value="' + escapeHtml(row.label || '') + '"></label>' +
         '<label class="field"><input data-area-field="value" data-area-index="' + index + '" value="' + escapeHtml(row.value || '') + '"></label>' +
         '<label class="field"><input data-area-field="municipality" data-area-index="' + index + '" value="' + escapeHtml(row.municipality || '') + '"></label>' +
-        '<label class="field"><input data-area-field="zone" data-area-index="' + index + '" value="' + escapeHtml(row.zone || '') + '"></label>' +
-        '<label class="field"><select data-area-field="travel_tier" data-area-index="' + index + '"><option value="urban" ' + (row.travel_tier==='urban'?'selected':'') + '>urban</option><option value="township" ' + (row.travel_tier==='township'?'selected':'') + '>township</option><option value="hamlet" ' + (row.travel_tier==='hamlet'?'selected':'') + '>hamlet</option><option value="coastal" ' + (row.travel_tier==='coastal'?'selected':'') + '>coastal</option><option value="rural" ' + (row.travel_tier==='rural'?'selected':'') + '>rural</option><option value="out_of_zone" ' + (row.travel_tier==='out_of_zone'?'selected':'') + '>out_of_zone</option></select></label>' +
+        '<label class="field"><input list="serviceZoneOptions" data-area-field="zone" data-area-index="' + index + '" value="' + escapeHtml(row.zone || '') + '"></label>' +
+        '<label class="field"><input list="serviceTierOptions" data-area-field="travel_tier" data-area-index="' + index + '" value="' + escapeHtml(row.travel_tier || 'township') + '"></label>' +
         '<button class="btn" type="button" data-delete-area="' + index + '">Delete</button>' +
       '</div>';
     }).join('');
@@ -1203,6 +1271,9 @@
     const socialFeeds = applySetting(s.social_feeds, socialFeedsDefaults());
     const beforeAfterGallery = applySetting(s.before_after_gallery, beforeAfterGalleryDefaults());
     const landingPages = applySetting(s.landing_pages, landingPagesDefaults());
+    const catalogDropdownOptions = applySetting(s.catalog_dropdown_options, catalogDropdownOptionsDefaults());
+
+    setCatalogDropdownOptionsEditor(catalogDropdownOptions);
 
     byId('vis_customer_detailer_notes').checked = !!visibility.customer_detailer_notes;
     byId('vis_customer_admin_notes').checked = visibility.customer_admin_notes_admin_only !== false;
@@ -1297,7 +1368,7 @@
     }
   }
 
-  ['travel_charge_urban','travel_charge_township','travel_charge_hamlet','travel_charge_coastal','travel_charge_rural','travel_charge_out_of_zone'].forEach(function (id) {
+  ['travel_charge_urban','travel_charge_township','travel_charge_hamlet','travel_charge_coastal','travel_charge_rural','travel_charge_remote','travel_charge_out_of_zone'].forEach(function (id) {
     bindById(id, 'input', function () {
       var key = id.replace('travel_charge_', '');
       pricingCatalogState.booking_rules.travel_pricing[key] = moneyNum(byId(id).value, 0);
@@ -1350,10 +1421,11 @@
   bindById('reloadBeforeAfterGalleryBtn', 'click', async ()=>{ try{ const res = await fetch('/api/before_after_gallery_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load before / after gallery JSON.'); setBeforeAfterGalleryEditor(out || beforeAfterGalleryDefaults()); setShellStatus(out?.warning ? `Before / after gallery reloaded with fallback defaults. ${out.warning}` : 'Before / after gallery reloaded.', out?.warning ? 'warning' : 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload before / after gallery JSON.', 'error'); } });
   bindById('resetBeforeAfterGalleryBtn', 'click', ()=>{ setBeforeAfterGalleryEditor(beforeAfterGalleryDefaults()); setShellStatus('Before / after gallery editor reset to the template structure.', 'success'); });
   bindById('saveBeforeAfterGalleryBtn', 'click', async ()=>{ try{ await saveSetting('before_after_gallery', readBeforeAfterGalleryEditor(), 'Before / after gallery saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save before / after gallery.', 'error'); } });
+  bindById('saveCatalogDropdownOptionsBtn', 'click', async ()=>{ try{ const value = readCatalogDropdownOptionsEditor(); setCatalogDropdownOptionsEditor(value); await saveSetting('catalog_dropdown_options', value, 'Dropdown option library saved. Admin App and Admin Catalog can now use these suggestions.'); renderPricingDashboard(); } catch(err){ setShellStatus(err?.message || 'Could not save dropdown option library.', 'error'); } });
   bindById('reloadPricingCatalogBtn', 'click', async ()=>{ try{ await loadPricingCatalogEditor(null); setShellStatus('Pricing catalog reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload pricing catalog.', 'error'); } });
-  bindById('landing_addon_select', 'change', function(){ saveCurrentLandingEditorsToState(); renderLandingBuilder(); });
-  bindById('landing_location_select', 'change', function(){ saveCurrentLandingEditorsToState(); renderLandingBuilder(); });
-  bindById('landing_addon_create_btn', 'click', function(){ var code = byId('landing_addon_select').value || ''; var addon = (pricingCatalogState.addons || []).find(function(row){ return row.code === code; }) || { code: code, name: code }; var slug = slugify(addon.name || addon.code); var addonImage = firstAddonMediaUrl(addon); landingPagesState.pages[slug] = normalizeLandingPage({ type: 'addon', related_code: code, enabled: true, slug: slug, nav_group: 'special-service', name: addon.name || addon.code, badge: 'Special service landing page', hero_title: addon.name || addon.code, hero_image_url: addonImage, gallery_image_urls: addonImage ? [addonImage] : [], meta_title: (addon.name || addon.code) + ' | Rosie Dazzlers', meta_description: Array.isArray(addon.notes) ? addon.notes.join(' ') : '' }, {}); renderLandingBuilder(); setShellStatus('Add-on landing draft created for ' + (addon.name || addon.code) + '.', 'success'); });
+  bindById('landing_addon_select', 'change', function(){ var nextAddon = this.value || ''; var currentLocation = byId('landing_location_select') ? byId('landing_location_select').value : ''; saveCurrentLandingEditorsToState(); renderLandingBuilder(nextAddon, currentLocation); });
+  bindById('landing_location_select', 'change', function(){ var nextLocation = this.value || ''; var currentAddon = byId('landing_addon_select') ? byId('landing_addon_select').value : ''; saveCurrentLandingEditorsToState(); renderLandingBuilder(currentAddon, nextLocation); });
+  bindById('landing_addon_create_btn', 'click', function(){ var code = byId('landing_addon_select').value || ''; var addon = (pricingCatalogState.addons || []).find(function(row){ return row.code === code; }) || { code: code, name: code }; var slug = slugify(addon.name || addon.code); var addonImage = firstAddonMediaUrl(addon); landingPagesState.pages[slug] = normalizeLandingPage({ type: 'addon', related_code: code, enabled: true, slug: slug, nav_group: 'special-service', name: addon.name || addon.code, badge: 'Special service landing page', hero_title: addon.name || addon.code, hero_image_url: addonImage, gallery_image_urls: addonImage ? [addonImage] : [], meta_title: (addon.name || addon.code) + ' | Rosie Dazzlers', meta_description: Array.isArray(addon.notes) ? addon.notes.join(' ') : '' }, {}); renderLandingBuilder(code, byId('landing_location_select') ? byId('landing_location_select').value : ''); setShellStatus('Add-on landing draft created for ' + (addon.name || addon.code) + '.', 'success'); });
   bindById('landing_location_create_btn', 'click', function(){ saveCurrentLandingEditorsToState(); var label = prompt('New location page name (example: Norwich auto detailing)'); if (!label) return; var slug = slugify(label); landingPagesState.pages[slug] = normalizeLandingPage({ type: 'location', enabled: true, slug: slug, nav_group: 'town', name: label, badge: 'Town-focused detailing page', hero_title: label, meta_title: label + ' | Rosie Dazzlers' }, {}); renderLandingBuilder(); byId('landing_location_select').value = slug; renderLandingBuilder(); setShellStatus('Location landing draft created for ' + label + '.', 'success'); });
   bindById('reloadLandingPagesBtn', 'click', async ()=>{ try{ await loadLandingPagesEditor(null); setShellStatus('Landing pages reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload landing pages.', 'error'); } });
   bindById('saveLandingPagesBtn', 'click', async ()=>{ try{ saveCurrentLandingEditorsToState(); await saveSetting('landing_pages', landingPagesState, 'Landing pages saved. Known pages and generic /landing/ routes now use this content.'); } catch(err){ setShellStatus(err?.message || 'Could not save landing pages.', 'error'); } });
