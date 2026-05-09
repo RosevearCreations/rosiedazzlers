@@ -17,7 +17,7 @@ export async function onRequestPost(context) {
     const [bookingRes, intakeRes, timeRes, updatesRes, mediaRes, signoffRes, commentsRes, annRes] = await Promise.all([
       fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,created_at,updated_at,service_date,start_slot,status,job_status,customer_name,customer_email,customer_phone,package_code,vehicle_size,price_total_cents,deposit_cents,notes,progress_enabled,progress_token,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,customer_profile_id,customer_tier_code&id=eq.${encodeURIComponent(booking_id)}&limit=1`, { headers }),
       fetch(`${env.SUPABASE_URL}/rest/v1/jobsite_intake?select=id,booking_id,pre_existing_condition,valuables,pre_job_checklist,owner_notes,acknowledgement_notes,intake_complete,updated_by_staff_user_id,updated_by_staff_name,created_at,updated_at&booking_id=eq.${encodeURIComponent(booking_id)}&limit=1`, { headers }),
-      fetch(`${env.SUPABASE_URL}/rest/v1/job_time_entries?select=id,booking_id,minutes,note,entry_type,staff_user_id,created_at&booking_id=eq.${encodeURIComponent(booking_id)}&order=created_at.desc`, { headers }),
+      fetch(`${env.SUPABASE_URL}/rest/v1/job_time_entries?select=id,booking_id,minutes,note,entry_type,staff_user_id,staff_name,created_at&booking_id=eq.${encodeURIComponent(booking_id)}&order=created_at.desc`, { headers }),
       fetch(`${env.SUPABASE_URL}/rest/v1/job_updates?select=id,booking_id,created_at,created_by,note,visibility&booking_id=eq.${encodeURIComponent(booking_id)}&order=created_at.desc`, { headers }),
       fetch(`${env.SUPABASE_URL}/rest/v1/job_media?select=id,booking_id,media_url,media_type,caption,visibility,sort_order,uploaded_by_staff_user_id,uploaded_by_staff_name,created_at&booking_id=eq.${encodeURIComponent(booking_id)}&order=sort_order.asc,created_at.desc`, { headers }),
       fetch(`${env.SUPABASE_URL}/rest/v1/job_signoffs?select=id,booking_id,customer_name,signature_data_url,approval_notes,signed_at,updated_by_staff_user_id,updated_by_staff_name,created_at,updated_at&booking_id=eq.${encodeURIComponent(booking_id)}&limit=1`, { headers }),
@@ -59,19 +59,3 @@ export async function onRequestGet(){ return withCors(methodNotAllowed()); }
 function summarizeTime(entries){ const totals={ total_minutes:0, work_minutes:0, travel_minutes:0, setup_minutes:0, cleanup_minutes:0, pause_minutes:0 }; for(const row of entries||[]){ const m=Number(row.minutes||0); totals.total_minutes += m; const k=String(row.entry_type||'').toLowerCase(); if(k==='work') totals.work_minutes+=m; else if(k==='travel') totals.travel_minutes+=m; else if(k==='setup') totals.setup_minutes+=m; else if(k==='cleanup') totals.cleanup_minutes+=m; else if(k==='pause') totals.pause_minutes+=m; } return totals; }
 function corsHeaders(){ return {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"POST,OPTIONS","Access-Control-Allow-Headers":"Content-Type, x-admin-password, x-staff-email, x-staff-user-id","Cache-Control":"no-store"}; }
 function withCors(response){ const headers=new Headers(response.headers||{}); for(const [k,v] of Object.entries(corsHeaders())) headers.set(k,v); return new Response(response.body,{status:response.status,statusText:response.statusText,headers}); }
-
-
-async function fetchTimeEntriesWithMinutesFallback(env, headers, booking_id) {
-  const base = `${env.SUPABASE_URL}/rest/v1/job_time_entries`;
-  const filter = `booking_id=eq.${encodeURIComponent(booking_id)}&order=created_at.desc`;
-  const primary = await fetch(`${base}?select=id,booking_id,minutes,note,entry_type,staff_user_id,staff_name,created_at&${filter}`, { headers });
-  if (primary.ok || !(await isMissingMinutesResponse(primary))) return primary;
-  return await fetch(`${base}?select=id,booking_id,note,entry_type,staff_user_id,staff_name,created_at&${filter}`, { headers });
-}
-
-async function isMissingMinutesResponse(res) {
-  const clone = res.clone();
-  const text = await clone.text().catch(() => "");
-  const s = String(text || "").toLowerCase();
-  return s.includes("job_time_entries.minutes") || (s.includes("minutes") && s.includes("does not exist")) || (s.includes("pgrst204") && s.includes("minutes"));
-}
