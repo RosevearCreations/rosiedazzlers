@@ -18,7 +18,7 @@
   <link rel="canonical" href="https://rosiedazzlers.ca/pricing" />
   <meta property="og:title" content="Mobile Auto Detailing Pricing | Rosie Dazzlers" />
   <meta property="og:description" content="Transparent Rosie Dazzlers pricing for premium wash, basic detail, complete detail, interior detail, exterior detail, and add-ons." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260501compactvehicle1" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260425visibility1" />
   <script type="application/ld+json" id="pricingSchema">
   {
     "@context": "https://schema.org",
@@ -64,32 +64,10 @@
     .tag.ok{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
     .mini{font-size:.92rem}
 
-    .booking-lead{display:grid;grid-template-columns:1fr;gap:14px;align-items:start}
-    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;height:1180px;min-height:980px;max-height:1950px;transition:height .18s ease}
-    .booking-embed-frame{display:block;width:100%;height:1180px;min-height:980px;max-height:1950px;border:0;background:transparent;overflow:hidden}
+    .booking-lead{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
+    .booking-embed-shell{border:1px solid rgba(255,255,255,.10);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.03);position:relative;height:1220px;min-height:1220px;max-height:1220px}
+    .booking-embed-frame{display:block;width:100%;height:1220px;min-height:1220px;max-height:1220px;border:0;background:transparent;overflow:auto}
     .booking-side{display:grid;gap:12px}
-    .landing-button-grid{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:12px;
-      margin-top:14px;
-    }
-    @media (max-width:1100px){ .landing-button-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
-    @media (max-width:720px){ .landing-button-grid{grid-template-columns:1fr;} }
-    .landing-button-card{
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:16px;
-      background:rgba(255,255,255,.03);
-      padding:14px;
-      display:grid;
-      gap:10px;
-      align-content:start;
-      min-width:0;
-      overflow:hidden;
-    }
-    .landing-button-card h3{margin:0;font-size:1rem}
-    .landing-button-card p{margin:0;color:rgba(234,242,255,.68);font-size:.92rem}
-    .landing-button-image{width:100%;aspect-ratio:16/10;object-fit:contain;object-position:center center;padding:8px;box-sizing:border-box;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);margin-bottom:10px}
     .planner-note{margin-top:12px}
     .benefits{display:grid;gap:8px;padding-left:18px;margin:0}
     .quote-cta{display:flex;gap:10px;flex-wrap:wrap}
@@ -99,7 +77,7 @@
     .planner-summary .stack{display:grid;gap:4px}
     .planner-summary .value{font-weight:700;text-align:right}
     .planner-summary .list{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.maintenance-box{display:grid;gap:10px;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03)}.maintenance-box .field{display:grid;gap:6px}.maintenance-box input,.maintenance-box textarea{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;background:rgba(255,255,255,.04);color:#f8fafc}.maintenance-box textarea{min-height:92px;resize:vertical}.maintenance-box .note{font-size:.9rem;color:rgba(234,242,255,.62)} .maintenance-box[aria-disabled="true"]{opacity:.78} 
-    @media (max-width:980px){ .booking-lead{grid-template-columns:1fr} .booking-embed-shell{height:1460px;min-height:1220px;max-height:1950px} .booking-embed-frame{height:1460px;min-height:1220px;max-height:1950px} }
+    @media (max-width:980px){ .booking-lead{grid-template-columns:1fr} .booking-embed-shell{height:1480px;min-height:1480px;max-height:1480px} .booking-embed-frame{height:1480px;min-height:1480px;max-height:1480px} }
   </style>
 </head>
 
@@ -183,7 +161,7 @@
         <div class="notice planner-note" id="bookingEmbedHelper">Exact totals, deposits, public requirements, travel restrictions, and live availability are all shown inside the booking planner below.</div>
         <div class="booking-lead" style="margin-top:14px">
           <div class="booking-embed-shell">
-            <iframe id="bookingPlannerFrame" class="booking-embed-frame" title="Rosie Dazzlers booking planner" loading="eager" scrolling="no" src="/book?embed=1&view=compact-vehicle&max=1950"></iframe>
+            <iframe id="bookingPlannerFrame" class="booking-embed-frame" title="Rosie Dazzlers booking planner" loading="lazy" src="/book?embed=1"></iframe>
           </div>
           <div class="booking-side">
             <div class="panel" style="background:rgba(255,255,255,.02)">
@@ -276,12 +254,6 @@
 
     
 <section class="section panel">
-  <h2 style="margin-top:0">Add-ons &amp; special detailing pages</h2>
-  <p class="muted">Use these image-backed buttons to open the dedicated add-on and special-detail pages. Each page explains the process, products used, booking fit, and things to know before you book.</p>
-  <div id="landingServiceButtons" class="landing-button-grid" style="margin-top:12px"></div>
-</section>
-
-<section class="section panel">
   <h2 style="margin-top:0">Town-focused detailing pages</h2>
   <p class="muted">These pages keep the folder-backed route approach and give the strongest service-area towns their own local wording, review proof, and recent-work support.</p>
   <div class="local-town-grid" style="margin-top:12px">
@@ -292,6 +264,17 @@
   </div>
 </section>
 
+<section class="section panel">
+      <h2 style="margin-top:0">High-intent service pages</h2>
+      <p class="muted">These dedicated pages are now the clearest place to target special-service searches while still feeding into the same booking and contact flow.</p>
+      <div class="service-link-grid" style="margin-top:12px">
+        <article class="service-link-card"><h3>Ceramic coating</h3><a class="btn ghost small" href="/ceramic-coating">Open page</a></article>
+        <article class="service-link-card"><h3>Pet hair removal</h3><a class="btn ghost small" href="/pet-hair-removal">Open page</a></article>
+        <article class="service-link-card"><h3>Odor removal</h3><a class="btn ghost small" href="/odor-removal">Open page</a></article>
+        <article class="service-link-card"><h3>Headlight restoration</h3><a class="btn ghost small" href="/headlight-restoration">Open page</a></article>
+        <article class="service-link-card"><h3>Paint correction</h3><a class="btn ghost small" href="/paint-correction">Open page</a></article>
+      </div>
+    </section>
 
     <section class="section panel">
       <h2 style="margin-top:0">Recent work and local proof</h2>
@@ -329,78 +312,11 @@
       buildLiveVehicleSizeChartDataUri,
       buildPricingOfferCatalogSchema,
       applyJsonLdScript
-    } from "/assets/pricing-catalog-client.js?v=20260501build127";
-    import { renderRecentWorkMounts } from "/assets/recent-work.js?v=20260501build127";
-    const IMAGE_BASE = window.RD_ASSET_BASES?.packages || "https://assets.rosiedazzlers.ca/packages/";
-    const assetFile = (base, filename) => `${String(base || "").replace(/\/$/, "")}/${encodeURIComponent(filename)}`;
-    const ADDON_IMAGE_FILES = {
-      full_clay_treatment: "full_clay_treatment.png",
-      two_stage_polish: "two_stage_polish.png",
-      high_grade_paint_sealant: "high_grade_paint_sealant.png",
-      uv_protectant_applied_on_interior_panels: "uv_protectant_applied_on_interior_panels.png",
-      de_ionizing_treatment: "De-Ionizing Vehicle Add on service.png",
-      de_badging: "DeBadgingAddonService.png",
-      engine_cleaning: "Engine Cleaning add on service.png",
-      external_ceramic_coating: "External Ceramic coating add on service.png",
-      external_graphene_fine_finish: "External Graphene Fine finish add on service.png",
-      external_wax: "External Wax add on service.png",
-      vinyl_wrapping: "Vinyl Wrapping add on service.png",
-      window_tinting: "Window Tinting add on service.png"
-    };
-    function addonImageForCard(addon, page){
-      const code = String(addon?.code || page?.related_code || '').trim();
-      const dataUrl = String(addon?.image_url || '').trim();
-      if (dataUrl) return dataUrl;
-      const hero = String(page?.hero_image_url || '').trim();
-      if (hero) return hero;
-      const file = ADDON_IMAGE_FILES[code];
-      return file ? assetFile(IMAGE_BASE, file) : '/assets/addons/generic_addon.svg';
-    }
-    function landingButtonDescription(page, addon){
-      return String(page?.hero_intro || addon?.requirement_note || addon?.notes?.[0] || 'Open this page for process, products used, booking fit, and service notes.').trim();
-    }
-    function addonDefaultPriceText(addon){
-      if (!addon) return '';
-      const prices = addon.prices_cad || {};
-      const parts = [];
-      if (Number(prices.small) > 0) parts.push(`Small ${money(prices.small)}`);
-      if (Number(prices.mid) > 0) parts.push(`Mid ${money(prices.mid)}`);
-      if (Number(prices.oversize) > 0) parts.push(`Oversize ${money(prices.oversize)}`);
-      if (!parts.length && Number(addon.price_cad) > 0) parts.push(money(addon.price_cad));
-      if (addon.quote_required || !parts.length) return parts.length ? `Default price: from ${parts.join(' · ')} · quote required` : 'Default price: quote required';
-      return `Default price: ${parts.join(' · ')}`;
-    }
-    function addonBookingUrl(addon){
-      const code = String(addon?.code || '').trim();
-      return code ? `/book?addons=${encodeURIComponent(code)}` : '/book';
-    }
-    function buildLandingButtonCard(page, addon){
-      const title = String(page?.name || page?.hero_title || addon?.name || page?.slug || 'Service page');
-      const href = '/' + String(page?.slug || '').replace(/^\//,'');
-      const image = addonImageForCard(addon, page);
-      return `
-        <article class="landing-button-card">
-          <img class="landing-button-image" src="${escapeHtml(image)}" alt="${escapeHtml(title)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/assets/addons/generic_addon.svg'">
-          <h3>${escapeHtml(title)}</h3>
-          <p>${escapeHtml(landingButtonDescription(page, addon))}</p>
-          ${addonDefaultPriceText(addon) ? `<div class="tag ok">${escapeHtml(addonDefaultPriceText(addon))}</div>` : ''}
-          <div class="row" style="margin-top:auto">
-            <a class="btn primary small" href="${escapeHtml(addonBookingUrl(addon))}">Add to booking</a>
-            <a class="btn ghost small" href="${escapeHtml(href)}">Open page</a>
-          </div>
-        </article>`;
-    }
-    function renderLandingServiceButtons(pricingData, landingData){
-      const mount = qs('#landingServiceButtons');
-      if (!mount) return;
-      const pages = Object.values((landingData && landingData.pages) || {}).filter((page)=> page && page.enabled !== false && ['addon','special-service','special'].includes(String(page.type || page.nav_group || '').trim()) || (page && page.nav_group === 'special-service'));
-      const addonMap = Object.fromEntries(((pricingData && pricingData.addons) || []).map((addon)=> [String(addon.code || '').trim(), addon]));
-      const sorted = pages.sort((a,b)=> String(a.name || a.hero_title || a.slug).localeCompare(String(b.name || b.hero_title || b.slug)));
-      mount.innerHTML = sorted.map((page)=> buildLandingButtonCard(page, addonMap[String(page.related_code || '').trim()] || null)).join('');
-    }
+    } from "/assets/pricing-catalog-client.js?v=20260423livecharts2";
+    import { renderRecentWorkMounts } from "/assets/recent-work.js";
     import { loadGrowthSettings } from "/assets/growth-settings.js";
 
-    const FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260501build127";
+    const FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const qs = (s)=>document.querySelector(s);
     let chartMap = new Map();
     renderRecentWorkMounts(3);
@@ -559,42 +475,34 @@
     function wireBookingPlannerFrame(){
       const frame = qs('#bookingPlannerFrame');
       if (!frame) return;
-      const applyHeight = (height) => {
-        const measured = Number(height || 0);
-        if (!Number.isFinite(measured) || measured <= 0) return;
-        const mobile = window.innerWidth <= 980;
-        const minHeight = mobile ? 1220 : 980;
-        const maxHeight = 1950;
-        const nextHeight = Math.min(maxHeight, Math.max(minHeight, Math.round(measured) + 16));
-        const currentHeight = parseInt(frame.style.height || frame.getAttribute('height') || '0', 10) || 0;
-        const shell = frame.closest('.booking-embed-shell');
-        if (Math.abs(nextHeight - currentHeight) >= 8) {
-          frame.style.height = `${nextHeight}px`;
-          frame.style.minHeight = `${Math.min(nextHeight, minHeight)}px`;
-          frame.style.maxHeight = `${maxHeight}px`;
-          if (shell) {
-            shell.style.height = `${nextHeight}px`;
-            shell.style.minHeight = `${Math.min(nextHeight, minHeight)}px`;
-            shell.style.maxHeight = `${maxHeight}px`;
-          }
-        }
-      };
-      frame.addEventListener('load', () => applyHeight(window.innerWidth <= 980 ? 1460 : 1180));
-      window.setTimeout(() => applyHeight(window.innerWidth <= 980 ? 1460 : 1180), 900);
-      window.addEventListener('resize', () => applyHeight(parseInt(frame.style.height || frame.getAttribute('height') || '0', 10)));
       window.addEventListener('message', (event) => {
         const payload = event.data || {};
         if (payload.type === 'rd-book-embed-size') {
-          applyHeight(payload.height);
+          const measured = Number(payload.height || 0);
+          const mobile = window.innerWidth <= 980;
+          const minHeight = mobile ? 1220 : 980;
+          const maxHeight = mobile ? 1480 : 1220;
+          const nextHeight = Math.min(maxHeight, Math.max(minHeight, Math.round(measured) + 12));
+          const currentHeight = parseInt(frame.style.height || frame.getAttribute('height') || '0', 10) || 0;
+          const shell = frame.closest('.booking-embed-shell');
+          if (Number.isFinite(nextHeight) && Math.abs(nextHeight - currentHeight) >= 12) {
+            frame.style.height = `${nextHeight}px`;
+            frame.style.minHeight = `${nextHeight}px`;
+            frame.style.maxHeight = `${nextHeight}px`;
+            if (shell) {
+              shell.style.height = `${nextHeight}px`;
+              shell.style.minHeight = `${nextHeight}px`;
+              shell.style.maxHeight = `${nextHeight}px`;
+            }
+          }
           return;
         }
-        if (payload.type === 'rd-book-embed-state' && typeof renderPlannerSummary === 'function') {
+        if (payload.type === 'rd-book-embed-state') {
           plannerState = payload.state || null;
           renderPlannerSummary(plannerState);
         }
       });
     }
-
 
     function renderRows(pkgs){
       const tb = qs("#rows");
@@ -622,10 +530,9 @@
     }
 
     try {
-      const [data, growth, landingData] = await Promise.all([
+      const [data, growth] = await Promise.all([
         loadPricingCatalogClient({ fallbackUrl: FALLBACK_URL }),
-        loadGrowthSettings(),
-        fetch("/api/landing_pages_public", { cache: "no-store" }).then((r)=> r.ok ? r.json() : { pages:{} }).catch(()=>({ pages:{} }))
+        loadGrowthSettings()
       ]);
       renderRequirementTags(data);
       const liveVehiclePriceChart = buildLivePricingChartDataUri(data) || chartUrl(data, "Vehicle Price Chart 2025");
@@ -639,7 +546,6 @@
       applyJsonLdScript('pricingSchema', buildPricingOfferCatalogSchema(data, 'https://rosiedazzlers.ca/pricing'));
       wireCharts();
       renderRows(Array.isArray(data?.packages) ? data.packages : []);
-        renderLandingServiceButtons(data, landingData);
       renderBookingPlanner(growth);
       renderPlannerSummary(plannerState);
       wireBookingPlannerFrame();
