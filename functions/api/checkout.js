@@ -85,10 +85,9 @@ export async function onRequestPost({ request, env }) {
       if (requiredPackages.length && !standaloneAllowed && !requiredPackages.includes(pkg.code)) {
         return corsJson({ error: addon.requirement_note || `${addon.name} requires a different base package first.` }, 400);
       }
-      const addonCadRaw = addon.prices_cad?.[vehicleSize] ?? addon.price_cad;
-      const addonCad = Number(addonCadRaw);
-      const cents = Number.isFinite(addonCad) && addonCad > 0 && addon.quote_required !== true ? Math.round(addonCad * 100) : null;
-      const item = { code, label: addon.name, cents, quote_required: addon.quote_required === true || cents == null };
+      const addonCad = addon.prices_cad?.[vehicleSize];
+      const cents = Number.isFinite(addonCad) ? Math.round(addonCad * 100) : null;
+      const item = { code, label: addon.name, cents, quote_required: addon.quote_required === true };
       addonsChosen.push(item);
       if (item.quote_required || cents == null) quoteAddonsChosen.push(item.label);
       else addonsTotalCents += cents;
@@ -232,15 +231,9 @@ export async function onRequestPost({ request, env }) {
       vehicle_photo_url: String(vehicle.photo_url || "").trim() || null
     };
 
-    const insertAttempt = await insertBookingWithColumnFallback(supa, bookingPayload);
-    if (!insertAttempt.result.ok) {
-      return corsJson({ error: "Could not create booking.", details: insertAttempt.result.raw, removed_columns: insertAttempt.removedColumns }, 500);
-    }
-    if (insertAttempt.removedColumns.length) {
-      notes.push(`Booking was saved with legacy-column fallback. Removed optional columns: ${insertAttempt.removedColumns.join(", ")}.`);
-      await supa("PATCH", `/rest/v1/bookings?id=eq.${encodeURIComponent((Array.isArray(insertAttempt.result.data) ? insertAttempt.result.data[0]?.id : "") || "")}`, { notes: notes.join(" ") || null }).catch?.(()=>null);
-    }
-    const booking = Array.isArray(insertAttempt.result.data) ? insertAttempt.result.data[0] || null : null;
+    const insertBooking = await supa("POST", `/rest/v1/bookings`, [bookingPayload]);
+    if (!insertBooking.ok) return corsJson({ error: "Could not create booking.", details: insertBooking.raw }, 500);
+    const booking = Array.isArray(insertBooking.data) ? insertBooking.data[0] || null : null;
     if (!booking?.id) return corsJson({ error: "Booking could not be created." }, 500);
 
     if (payableDepositCents === 0) {
@@ -271,62 +264,6 @@ export async function onRequestPost({ request, env }) {
   } catch (err) {
     return corsJson({ error: err && err.message ? err.message : "Unexpected server error." }, 500);
   }
-}
-
-function missingBookingColumn(raw) {
-  const text = String(raw || "");
-  const patterns = [
-    /Could not find the ['\"]([^'\"]+)['\"] column/i,
-    /column ['\"]?([a-zA-Z0-9_]+)['\"]? of relation ['\"]?bookings['\"]? does not exist/i,
-    /record contains column ['\"]?([a-zA-Z0-9_]+)['\"]?/i
-  ];
-  for (const pattern of patterns) {
-    const match = text.match(pattern);
-    if (match && match[1]) return match[1];
-  }
-  return null;
-}
-
-function legacyBookingPayload(payload, removedColumns) {
-  const next = { ...payload };
-  const optionalModernColumns = [
-    "service_area_county", "service_area_municipality", "service_area_zone",
-    "trusted_service_latitude", "trusted_service_longitude", "trusted_service_coordinate_source",
-    "trusted_service_coordinate_status", "trusted_service_coordinate_label", "trusted_service_coordinate_resolved_at",
-    "trusted_service_geofence_radius_m", "arrival_device_latitude", "arrival_device_longitude",
-    "arrival_geofence_status", "arrival_distance_m", "arrival_geofence_checked_at",
-    "vehicle_year", "vehicle_make", "vehicle_model", "vehicle_body_style", "vehicle_category",
-    "vehicle_plate", "vehicle_mileage_km", "vehicle_photo_url"
-  ];
-  for (const key of optionalModernColumns) {
-    if (key in next) {
-      delete next[key];
-      removedColumns.add(key);
-    }
-  }
-  return next;
-}
-
-async function insertBookingWithColumnFallback(supa, bookingPayload) {
-  const removedColumns = new Set();
-  let payload = { ...bookingPayload };
-  for (let attempt = 0; attempt < 40; attempt += 1) {
-    const result = await supa("POST", `/rest/v1/bookings`, [payload]);
-    if (result.ok) return { result, removedColumns: Array.from(removedColumns) };
-    const missing = missingBookingColumn(result.raw);
-    if (missing && Object.prototype.hasOwnProperty.call(payload, missing)) {
-      delete payload[missing];
-      removedColumns.add(missing);
-      continue;
-    }
-    if (attempt === 0 && /PGRST204|schema cache|column/i.test(String(result.raw || ""))) {
-      payload = legacyBookingPayload(payload, removedColumns);
-      continue;
-    }
-    return { result, removedColumns: Array.from(removedColumns) };
-  }
-  const result = await supa("POST", `/rest/v1/bookings`, [payload]);
-  return { result, removedColumns: Array.from(removedColumns) };
 }
 
 async function createStripeSession({ env, request, booking, body, payableDepositCents, gift, giftRedeemedCents }) {

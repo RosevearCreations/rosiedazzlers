@@ -267,45 +267,13 @@ async function loadIntakeMap(env, headers, bookingIds) {
 }
 
 async function loadTimeMap(env, headers, bookingIds) {
-  const idList = encodeIdList(bookingIds);
-  if (!idList) return new Map();
-  let rows = await fetchRows(
-    `${env.SUPABASE_URL}/rest/v1/job_time_entries?select=booking_id,minutes&booking_id=in.(${idList})`,
+  const rows = await fetchRows(
+    `${env.SUPABASE_URL}/rest/v1/job_time_entries?select=booking_id,minutes&booking_id=in.(${encodeIdList(bookingIds)})`,
     headers
   );
-  if (!rows.length) {
-    rows = await fetchRows(
-      `${env.SUPABASE_URL}/rest/v1/job_time_entries?select=booking_id,entry_type,event_time,created_at&booking_id=in.(${idList})&order=created_at.asc`,
-      headers
-    );
-  }
   const map = new Map();
-  const events = new Map();
   for (const row of rows) {
-    const bookingId = row.booking_id;
-    if (!bookingId) continue;
-    const manual = Number(row.minutes || 0);
-    if (manual > 0) {
-      map.set(bookingId, (map.get(bookingId) || 0) + manual);
-      continue;
-    }
-    const type = String(row.entry_type || '').toLowerCase();
-    if ((type === 'work_start' || type === 'work_stop') && (row.event_time || row.created_at)) {
-      if (!events.has(bookingId)) events.set(bookingId, []);
-      events.get(bookingId).push(row);
-    }
-  }
-  for (const [bookingId, list] of events.entries()) {
-    let active = null;
-    let total = 0;
-    for (const row of list.sort((a,b)=>Date.parse(a.event_time || a.created_at || 0)-Date.parse(b.event_time || b.created_at || 0))) {
-      const t = Date.parse(row.event_time || row.created_at || '');
-      if (!Number.isFinite(t)) continue;
-      const type = String(row.entry_type || '').toLowerCase();
-      if (type === 'work_start') active = t;
-      if (type === 'work_stop' && active) { total += Math.max(0, t - active) / 60000; active = null; }
-    }
-    if (total > 0) map.set(bookingId, (map.get(bookingId) || 0) + Math.round(total));
+    map.set(row.booking_id, (map.get(row.booking_id) || 0) + Number(row.minutes || 0));
   }
   return map;
 }
