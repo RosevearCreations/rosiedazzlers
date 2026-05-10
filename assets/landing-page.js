@@ -305,6 +305,62 @@ function pageTemplate(page, pricing, slug, productCatalog) {
   </main>`;
 }
 
+
+function upsertJsonLd(id, data) {
+  let script = document.getElementById(id);
+  if (!script) {
+    script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = id;
+    document.head.appendChild(script);
+  }
+  script.textContent = JSON.stringify(data, null, 2);
+}
+
+function updateLandingStructuredData(page, addon, slug) {
+  const title = page?.meta_title || page?.hero_title || page?.name || "Rosie Dazzlers landing page";
+  const description = page?.meta_description || page?.hero_intro || "Rosie Dazzlers mobile auto detailing information page.";
+  const url = `${location.origin}/${slug}`;
+  const faqs = Array.isArray(page?.faq) ? page.faq.filter((item) => item?.q && item?.a) : [];
+
+  upsertJsonLd("landing-service-jsonld", {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": page?.name || page?.hero_title || title,
+    "serviceType": addon ? (addon.name || "Auto detailing add-on") : "Mobile auto detailing",
+    "description": description,
+    "url": url,
+    "provider": {
+      "@type": "LocalBusiness",
+      "name": "Rosie Dazzlers Mobile Auto Detailing",
+      "url": `${location.origin}/`,
+      "areaServed": ["Oxford County, Ontario", "Norfolk County, Ontario"]
+    },
+    "areaServed": ["Tillsonburg, Ontario", "Woodstock, Ontario", "Ingersoll, Ontario", "Simcoe, Ontario", "Delhi, Ontario", "Port Dover, Ontario", "Oxford County, Ontario", "Norfolk County, Ontario"]
+  });
+
+  upsertJsonLd("landing-breadcrumb-jsonld", {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": `${location.origin}/` },
+      { "@type": "ListItem", "position": 2, "name": page?.name || title, "item": url }
+    ]
+  });
+
+  if (faqs.length) {
+    upsertJsonLd("landing-faq-jsonld", {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.slice(0, 8).map((item) => ({
+        "@type": "Question",
+        "name": cleanText(item.q),
+        "acceptedAnswer": { "@type": "Answer", "text": cleanText(item.a) }
+      }))
+    });
+  }
+}
+
 async function renderLandingPage() {
   const slug = slugFromPath();
   const [landingPages, pricing, productCatalog] = await Promise.all([
@@ -354,6 +410,8 @@ async function renderLandingPage() {
   }
 
   document.getElementById("landingMount").innerHTML = pageTemplate(page, pricing || {}, slug, productCatalog || []);
+  const addon = page.related_code ? ((pricing?.addons || []).find((row) => row.code === page.related_code) || null) : null;
+  updateLandingStructuredData(page, addon, slug);
   renderRecentWorkMounts(3);
 }
 
