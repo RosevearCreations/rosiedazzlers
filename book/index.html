@@ -128,6 +128,8 @@
     body.is-embed .wizard-shell{padding-bottom:0}
     body.is-embed .panel, body.is-embed .card, body.is-embed .service-card, body.is-embed .addon-card{overflow:hidden}
     body.is-embed .service-card strong, body.is-embed .service-card span, body.is-embed .addon-card strong, body.is-embed .addon-card span{display:block;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
+    .step-bottom-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)}
+    body.is-embed .step-bottom-actions{position:sticky;bottom:0;z-index:6;background:linear-gradient(180deg,rgba(13,21,38,.86),rgba(13,21,38,.98));padding:10px 0 0}
     .sr-only{position:absolute;left:-9999px;opacity:0;pointer-events:none}
     @media (max-width:980px){
       .grid2,.grid3,.requirements-grid,.service-area-grid{grid-template-columns:1fr}
@@ -319,6 +321,9 @@
       <div id="sizeHint" class="notice" style="display:none;margin-top:12px"></div>
       <div id="vehicleServiceHint" class="notice" style="display:none;margin-top:12px"></div>
       <div id="step1Error" class="field-error"></div>
+      <div class="step-bottom-actions">
+        <button class="btn primary step-next-inline" type="button" data-inline-next-step="1">Go to Step 2 — Choose service</button>
+      </div>
     </section>
 
     <section class="section panel wizard-card wizard-step" data-step="2" hidden>
@@ -864,6 +869,13 @@
     qs("#nextStepBtn").addEventListener("click", async () => {
       const ok = await validateStep(state.currentStep);
       if (ok) gotoStep(state.currentStep + 1);
+    });
+    qsa("[data-inline-next-step]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const fromStep = Number(button.getAttribute("data-inline-next-step") || state.currentStep || 1);
+        const ok = await validateStep(fromStep);
+        if (ok) gotoStep(fromStep + 1);
+      });
     });
 
     function recommendedSize() {
