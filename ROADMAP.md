@@ -1,3 +1,12 @@
+
+## Build 136 admin catalog, accounting, reviews, and pricing planner polish — 2026-05-09
+- Admin Catalog inventory names are now clickable edit controls, so staff do not need to scroll horizontally to reach the edit button.
+- Admin Catalog edit form was compacted and aligned to the top of the inventory workflow so long tables do not stretch the right-side editor thousands of pixels down the page.
+- Fixed the pricing-control window failure caused by `LOCAL_CHART_URLS` being referenced without a server-side helper constant in the pricing catalog API normalizer.
+- Home page now carries five temporary sample review cards until the live review API is connected.
+- Pricing page embedded booking planner now has a taller left-side iframe and Step 1 includes a bottom “Go to Step 2” action so users can continue without scrolling back to the top.
+- Continued SEO hygiene: one clear H1 per exposed page, stronger local proof/review content, crawlable service/town links, and cleaner mobile booking progression.
+
 <!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 23, 2026: live vehicle-size SVG guide, App Management chart preview/download helper, no-DDL schema sync, and continued public SEO/static-check direction.
 

@@ -64,3 +64,5 @@ Pass sync: April 17, 2026 — pricing now restores the booking page as the first
 
 
 <!-- Build 135 sync 2026-05-08: admin landing dropdown refresh, service-area fallback, inventory fallback merge, customizable option suggestions, one-H1/local SEO/schema handoff review. -->
+
+<!-- Build 136 sync 2026-05-09: admin catalog click-to-edit, accounting pricing-window helper, sample reviews, pricing embed continuation, CSS/H1/link checks. -->
