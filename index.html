@@ -52,6 +52,12 @@
     }
   
     .social-feed-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.social-feed-card{border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px;background:rgba(255,255,255,.03)}.social-feed-card h3{margin:0 0 8px}.social-feed-card p{margin:0 0 10px;color:var(--muted)}.social-feed-items{display:grid;gap:8px}.social-feed-item{display:block;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);text-decoration:none;color:inherit}.social-feed-item strong{display:block}.social-feed-item span{display:block;margin-top:4px;color:var(--muted);font-size:.92rem}
+  
+    .sample-review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:12px}
+    .sample-review-card{border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:12px;background:rgba(255,255,255,.035)}
+    .sample-review-card .stars{color:#fde68a;font-weight:800;letter-spacing:.04em}
+    .sample-review-card blockquote{margin:8px 0;color:rgba(248,250,252,.92);line-height:1.45}
+    .sample-review-card footer{color:rgba(234,242,255,.66);font-size:.92rem}
   </style>
 </head>
 
@@ -115,10 +121,15 @@
 
       <div class="panel">
         <h2 style="margin:0 0 10px">Reviews</h2>
-        <p class="help">We’ll keep adding before/after galleries next.</p>
+        <p class="help">Sample customer-style reviews are shown until the live review API is connected.</p>
         <div class="hr"></div>
-        <img data-reviews alt="Rosie Dazzlers reviews"
-             style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)" />
+        <div class="sample-review-grid" aria-label="Sample Rosie Dazzlers customer reviews">
+          <article class="sample-review-card"><div class="stars">★★★★★</div><blockquote>“Our SUV had winter salt in every corner. The interior detail made it feel fresh again, especially the mats and door jambs.”</blockquote><footer>— Melissa R., Tillsonburg · SUV interior detail</footer></article>
+          <article class="sample-review-card"><div class="stars">★★★★★</div><blockquote>“The engine bay cleaning was exactly what we wanted before selling the car. It looked cared for without being overdone.”</blockquote><footer>— Jason K., Woodstock · Engine cleaning</footer></article>
+          <article class="sample-review-card"><div class="stars">★★★★★</div><blockquote>“Pet hair was our biggest problem. They took the time to work through the seats and cargo area and the car finally looked presentable again.”</blockquote><footer>— Amanda P., Ingersoll · Pet hair removal</footer></article>
+          <article class="sample-review-card"><div class="stars">★★★★★</div><blockquote>“The clay treatment and sealant brought the paint back to a smooth shine. Water beads much better now after washing.”</blockquote><footer>— Trevor M., Simcoe · Clay treatment + sealant</footer></article>
+          <article class="sample-review-card"><div class="stars">★★★★★</div><blockquote>“We booked a complete detail before a family trip. The van smelled cleaner, the glass was spotless, and the kids noticed first.”</blockquote><footer>— Rachel D., Delhi · Complete detail</footer></article>
+        </div>
       </div>
     </div>
 

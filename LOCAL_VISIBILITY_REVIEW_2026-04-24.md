@@ -164,3 +164,4 @@ Still the next best visibility steps after deploy:
 - Added the first town-focused landing pages to support stronger local service-area visibility.
 - Kept recent work and review proof visible on the main public entry pages and the new town pages.
 
+<!-- Build 137 sync 2026-05-09: local SEO targets, inventory fallback, media/image documentation, CSS/H1/static-link checks, and schema handoff were reviewed. -->

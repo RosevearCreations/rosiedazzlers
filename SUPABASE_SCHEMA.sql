@@ -972,3 +972,8 @@ create index if not exists accounting_period_closes_status_idx on public.account
 -- Pass sync 2026-04-27: pricing review-proof image fallback hard-wired on public proof cards, and the accounting workspace now includes foundational workflows for receipts/documents, recurring expenses, bank reconciliation, payroll payout reconciliation, and accountant period lock / close control.
 
 -- 2026-04-29 pass: landing page content, add-on image merge safety, and admin add-on dependency/editor refinements.
+
+-- Build 137 synchronization note — 2026-05-09
+-- Local SEO, admin inventory fallback, image/media documentation, and static-check coverage were refreshed.
+-- No database DDL was added in this pass; see sql/2026-05-09_build137_local_seo_inventory_media_no_ddl_note.sql.
+-- Continue using app_management_settings as the source for shared pricing, landing pages, and admin dropdown option libraries; JSON files remain bundled fallback sources.

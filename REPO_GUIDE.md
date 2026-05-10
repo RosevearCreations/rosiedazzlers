@@ -321,3 +321,5 @@ Pass 28 sync — 2026-04-20
 
 ## 2026-04-27 repo guide note
 New admin/accounting workflow endpoints were added under `functions/api/admin/` for documents, recurring expenses, bank reconciliation, payroll payout reconciliation, and period close. The related schema migration is `sql/2026-04-27_accounting_workflow_foundation.sql`.
+
+<!-- Build 137 sync 2026-05-09: local SEO targets, inventory fallback, media/image documentation, CSS/H1/static-link checks, and schema handoff were reviewed. -->

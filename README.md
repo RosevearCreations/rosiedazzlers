@@ -424,3 +424,15 @@ The accounting workspace now covers operational ledger, payables, remittance, st
 - Fixed the public review-proof image by hard-wiring the bundled Rosie Dazzlers reviews fallback on pricing and related local/service proof blocks.
 - Extended the accounting workspace beyond reporting into operational workflow foundations: bank reconciliation, receipt/bill document links, recurring expenses, payroll payout reconciliation, and accountant period lock / close control.
 - Added a new SQL migration: `sql/2026-04-27_accounting_workflow_foundation.sql`.
+
+## Build 137 — local SEO, admin inventory fallback, and media handoff pass
+- Restored the recent dev-branch Admin App fixes into this uploaded build, including `landingLinksToText`, the add-on image preview that prefers real PNG/JPG/R2 images over SVG fallback art, and the **Update / save add-on** button.
+- Restored Admin Catalog inventory fallback merging so edited DB items do not hide bundled gear/consumables that still need to be saved. Inventory item names are clickable edit controls and the right-side editor is compact/sticky instead of stretching down the page.
+- Added `data/local_seo_targets.json` and `scripts/local_seo_audit.py` so the priority town/service pages are checked for titles, descriptions, canonical links, sitemap coverage, and target wording during every pass.
+- Refreshed static fallback titles/descriptions/H1 shells for the major service and town landing pages so crawlers and users see useful wording even before JavaScript finishes rendering.
+- Rebuilt `sitemap.xml` with `lastmod`, `changefreq`, and `priority` values for core service, booking, town, and proof pages.
+- Added `data/sample_reviews.json` for the five temporary homepage-style reviews until the real review API is connected. These are display placeholders only and should not be emitted as structured review schema.
+- Added/expanded `IMAGES.md` with required image sizes, source-of-truth paths, and replacement steps for add-ons, packages, before/after work, inventory images, and landing-page media.
+- Schema update: no DDL required; see `sql/2026-05-09_build137_local_seo_inventory_media_no_ddl_note.sql`.
+
+<!-- Build 137 sync 2026-05-09: local SEO targets, inventory fallback, media/image documentation, CSS/H1/static-link checks, and schema handoff were reviewed. -->
