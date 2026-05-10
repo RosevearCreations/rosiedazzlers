@@ -49,3 +49,4 @@ Pass 28 sync — 2026-04-20
 - reviewed during the merchandising / SEO / geofence refinement pass
 - no file-specific workflow changes were required beyond the centralized roadmap, schema, repo-guide, and handoff updates
 
+<!-- Build 137 sync 2026-05-09: local SEO targets, inventory fallback, media/image documentation, CSS/H1/static-link checks, and schema handoff were reviewed. -->
