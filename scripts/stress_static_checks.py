@@ -229,6 +229,15 @@ def check_inline_scripts():
                 tmp.unlink(missing_ok=True)
 
 
+
+def check_local_seo_audit_script():
+    audit = ROOT / 'scripts' / 'local_seo_audit.py'
+    if not audit.exists():
+        fail('scripts/local_seo_audit.py is missing')
+    result = subprocess.run([sys.executable, str(audit)], capture_output=True, text=True)
+    if result.returncode != 0:
+        fail('local SEO audit failed: ' + (result.stdout.strip() or result.stderr.strip()))
+
 def main():
     for rel in CHECK_JS:
         path = ROOT / rel
@@ -245,6 +254,7 @@ def main():
     check_booking_contract()
     check_admin_shell_pages()
     check_redirect_rules()
+    check_local_seo_audit_script()
     print('PASS: static stress checks completed')
 
 if __name__ == '__main__':
