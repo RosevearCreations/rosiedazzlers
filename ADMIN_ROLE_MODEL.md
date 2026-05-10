@@ -449,3 +449,4 @@ Pass 28 sync — 2026-04-20
 - Expanded analytics reporting so `admin-analytics.html` now shows daily, weekly, monthly, and yearly traffic rollups with CSV export buttons, all generated from `site_activity_events` without adding a new reporting table in this pass.
 - No new database migration was required in this pass. `SUPABASE_SCHEMA.sql` was refreshed to document that schedule blocks still use the legacy `blocked_date` / `slot` shape and that analytics reports are computed from `site_activity_events` at request time.
 
+<!-- Build 137 sync 2026-05-09: local SEO targets, inventory fallback, media/image documentation, CSS/H1/static-link checks, and schema handoff were reviewed. -->
