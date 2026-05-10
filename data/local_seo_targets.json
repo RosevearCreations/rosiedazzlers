@@ -1,0 +1,85 @@
+{
+  "generated_for_build": "137",
+  "purpose": "Central checklist for local-search work we can control: clear titles, local wording, service/town routes, internal links, proof, and review freshness.",
+  "primary_service_area": [
+    "Tillsonburg",
+    "Oxford County",
+    "Norfolk County"
+  ],
+  "priority_town_pages": [
+    {
+      "slug": "tillsonburg-auto-detailing",
+      "route": "/tillsonburg-auto-detailing/",
+      "target_phrase": "mobile auto detailing Tillsonburg",
+      "county": "Oxford County",
+      "status": "live folder route"
+    },
+    {
+      "slug": "woodstock-ingersoll-auto-detailing",
+      "route": "/woodstock-ingersoll-auto-detailing/",
+      "target_phrase": "mobile auto detailing Woodstock Ingersoll",
+      "county": "Oxford County",
+      "status": "live folder route"
+    },
+    {
+      "slug": "simcoe-delhi-auto-detailing",
+      "route": "/simcoe-delhi-auto-detailing/",
+      "target_phrase": "mobile auto detailing Simcoe Delhi",
+      "county": "Norfolk County",
+      "status": "live folder route"
+    },
+    {
+      "slug": "port-dover-auto-detailing",
+      "route": "/port-dover-auto-detailing/",
+      "target_phrase": "mobile auto detailing Port Dover",
+      "county": "Norfolk County",
+      "status": "live folder route"
+    }
+  ],
+  "priority_service_pages": [
+    {
+      "slug": "ceramic-coating",
+      "route": "/ceramic-coating/",
+      "target_phrase": "ceramic coating Oxford Norfolk County",
+      "intent": "paint protection quote lead"
+    },
+    {
+      "slug": "paint-correction",
+      "route": "/paint-correction/",
+      "target_phrase": "paint correction Oxford Norfolk County",
+      "intent": "swirl/oxidation quote lead"
+    },
+    {
+      "slug": "pet-hair-removal",
+      "route": "/pet-hair-removal/",
+      "target_phrase": "pet hair removal car detailing",
+      "intent": "interior add-on"
+    },
+    {
+      "slug": "odor-removal",
+      "route": "/odor-removal/",
+      "target_phrase": "vehicle odor removal detailing",
+      "intent": "interior/deodorizing add-on"
+    },
+    {
+      "slug": "headlight-restoration",
+      "route": "/headlight-restoration/",
+      "target_phrase": "headlight restoration mobile detailing",
+      "intent": "standalone add-on"
+    }
+  ],
+  "controlled_ranking_inputs": [
+    "Unique title and meta description per public route.",
+    "One clear H1 on exposed pages.",
+    "Town, county, service, booking, proof, and review wording in visible content.",
+    "Internal links between services, pricing, gallery, booking, and town pages.",
+    "Fresh before/after images and real reviews as they become available.",
+    "Complete Google Business Profile service list and matching service-area wording."
+  ],
+  "next_manual_steps": [
+    "Replace sample reviews with verified reviews once the review API is connected.",
+    "Add one recent before/after job to each priority town page every few months.",
+    "Use Search Console to watch impressions, click-through rate, and average position per town/service page.",
+    "Keep business name, phone, service area, and package wording consistent with Google Business Profile."
+  ]
+}

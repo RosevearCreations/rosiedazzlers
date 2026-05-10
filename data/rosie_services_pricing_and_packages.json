@@ -333,8 +333,8 @@
       ],
       "category": "paint correction",
       "type": "surface prep",
-      "image_url": "/assets/addons/full_clay_treatment.png",
-      "image_fallback_url": "/assets/addons/full_clay_treatment.svg"
+      "image_url": "https://assets.rosiedazzlers.ca/packages/full_clay_treatment.png",
+      "image_fallback_url": "/assets/addons/full_clay_treatment.png"
     },
     {
       "code": "two_stage_polish",
@@ -351,8 +351,8 @@
       ],
       "category": "paint correction",
       "type": "machine polishing",
-      "image_url": "/assets/addons/two_stage_polish.png",
-      "image_fallback_url": "/assets/addons/two_stage_polish.svg"
+      "image_url": "https://assets.rosiedazzlers.ca/packages/two_stage_polish.png",
+      "image_fallback_url": "/assets/addons/two_stage_polish.png"
     },
     {
       "code": "high_grade_paint_sealant",
@@ -366,11 +366,11 @@
       "source": "interpreted_pricing",
       "category": "paint protection",
       "type": "sealant",
-      "image_url": "/assets/addons/high_grade_paint_sealant.png",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/high_grade_paint_sealant.png",
       "notes": [
         "Longer-lasting gloss"
       ],
-      "image_fallback_url": "/assets/addons/high_grade_paint_sealant.svg"
+      "image_fallback_url": "/assets/addons/high_grade_paint_sealant.png"
     },
     {
       "code": "uv_protectant_applied_on_interior_panels",
@@ -384,11 +384,11 @@
       "source": "interpreted_pricing",
       "category": "interior protection",
       "type": "uv protectant",
-      "image_url": "/assets/addons/uv_protectant_applied_on_interior_panels.png",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/uv_protectant_applied_on_interior_panels.png",
       "notes": [
         "Interior panel dressing"
       ],
-      "image_fallback_url": "/assets/addons/uv_protectant_applied_on_interior_panels.svg"
+      "image_fallback_url": "/assets/addons/uv_protectant_applied_on_interior_panels.png"
     },
     {
       "code": "de_ionizing_treatment",
@@ -400,7 +400,7 @@
       },
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "/assets/addons/de_ionizing_treatment.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png",
       "category": "odor treatment",
       "type": "de-ionizing",
       "image_fallback_url": "/assets/addons/de_ionizing_treatment.svg"
@@ -410,7 +410,7 @@
       "name": "De-Badging",
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "/assets/addons/de_badging.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
       "category": "appearance modifications",
       "type": "badge removal",
       "image_fallback_url": "/assets/addons/de_badging.svg"
@@ -421,7 +421,7 @@
       "price_cad": 59,
       "quote_required": false,
       "source": "package_asset",
-      "image_url": "/assets/addons/engine_cleaning.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
       "category": "engine bay",
       "type": "cleaning",
       "image_fallback_url": "/assets/addons/engine_cleaning.svg"
@@ -435,7 +435,7 @@
       "notes": [
         "Starting price only"
       ],
-      "image_url": "/assets/addons/external_ceramic_coating.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
       "category": "paint protection",
       "type": "ceramic coating",
       "image_fallback_url": "/assets/addons/external_ceramic_coating.svg"
@@ -449,7 +449,7 @@
       "notes": [
         "Starting price only"
       ],
-      "image_url": "/assets/addons/external_graphene_fine_finish.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png",
       "category": "paint protection",
       "type": "graphene finish",
       "image_fallback_url": "/assets/addons/external_graphene_fine_finish.svg"
@@ -464,7 +464,7 @@
       },
       "quote_required": false,
       "source": "package_asset",
-      "image_url": "/assets/addons/external_wax.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png",
       "category": "paint protection",
       "type": "wax",
       "image_fallback_url": "/assets/addons/external_wax.svg"
@@ -474,7 +474,7 @@
       "name": "Vinyl Wrapping",
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "/assets/addons/vinyl_wrapping.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
       "category": "appearance modifications",
       "type": "vinyl wrapping",
       "image_fallback_url": "/assets/addons/vinyl_wrapping.svg"
@@ -484,10 +484,102 @@
       "name": "Window Tinting",
       "quote_required": true,
       "source": "package_asset",
-      "image_url": "/assets/addons/window_tinting.svg",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png",
       "category": "glass services",
       "type": "window tinting",
       "image_fallback_url": "/assets/addons/window_tinting.svg"
+    }
+  ],
+  "service_areas": [
+    {
+      "county": "Oxford County",
+      "label": "Tillsonburg, ON",
+      "value": "Tillsonburg, ON",
+      "municipality": "Tillsonburg",
+      "zone": "Tillsonburg",
+      "travel_tier": "urban",
+      "area_type": "town",
+      "bylaw_note": "Core service town and strongest local SEO target.",
+      "parking_rule": "Driveway or safe curbside access required.",
+      "noise_rule": "Confirm quiet hours if working near neighbours.",
+      "water_rule": "Customer water/power preferred unless arranged.",
+      "access_rule": "Mobile detailing access must be safe and legal.",
+      "official_links": []
+    },
+    {
+      "county": "Oxford County",
+      "label": "Ingersoll / Woodstock, ON",
+      "value": "Ingersoll / Woodstock, ON",
+      "municipality": "Ingersoll / Woodstock",
+      "zone": "Woodstock / Ingersoll",
+      "travel_tier": "township",
+      "area_type": "township",
+      "bylaw_note": "Oxford County expansion area.",
+      "parking_rule": "Driveway preferred.",
+      "noise_rule": "Follow local residential noise expectations.",
+      "water_rule": "Customer water/power preferred unless arranged.",
+      "access_rule": "Confirm service location before arrival.",
+      "official_links": []
+    },
+    {
+      "county": "Oxford County",
+      "label": "Norwich / Otterville, ON",
+      "value": "Norwich / Otterville, ON",
+      "municipality": "Norwich / Otterville",
+      "zone": "Norwich / Otterville",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "bylaw_note": "Nearby hamlet/rural service area.",
+      "parking_rule": "Level driveway or work area required.",
+      "noise_rule": "Confirm timing for rural/residential work.",
+      "water_rule": "Customer water/power preferred unless arranged.",
+      "access_rule": "Confirm directions and parking access.",
+      "official_links": []
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Simcoe / Delhi, ON",
+      "value": "Simcoe / Delhi, ON",
+      "municipality": "Simcoe / Delhi",
+      "zone": "Simcoe / Delhi",
+      "travel_tier": "rural",
+      "area_type": "township",
+      "bylaw_note": "Norfolk County service area.",
+      "parking_rule": "Driveway or safe private work area required.",
+      "noise_rule": "Confirm timing around residential areas.",
+      "water_rule": "Customer water/power preferred unless arranged.",
+      "access_rule": "Confirm service location and access notes.",
+      "official_links": []
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Port Dover, ON",
+      "value": "Port Dover, ON",
+      "municipality": "Port Dover",
+      "zone": "Port Dover",
+      "travel_tier": "coastal",
+      "area_type": "coastal",
+      "bylaw_note": "Coastal/tourism area with seasonal timing considerations.",
+      "parking_rule": "Driveway or safe legal parking required.",
+      "noise_rule": "Confirm timing around busy seasonal areas.",
+      "water_rule": "Customer water/power preferred unless arranged.",
+      "access_rule": "Confirm access before arrival.",
+      "official_links": []
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Courtland / Langton, ON",
+      "value": "Courtland / Langton, ON",
+      "municipality": "Courtland / Langton",
+      "zone": "Courtland / Langton",
+      "travel_tier": "remote",
+      "area_type": "rural",
+      "bylaw_note": "Extended rural service area; quote may be needed.",
+      "parking_rule": "Safe work area required.",
+      "noise_rule": "Confirm timing before travel.",
+      "water_rule": "Customer water/power preferred unless arranged.",
+      "access_rule": "Confirm directions and driveway access.",
+      "official_links": []
     }
   ]
 }
