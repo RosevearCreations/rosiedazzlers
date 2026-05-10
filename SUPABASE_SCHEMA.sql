@@ -990,3 +990,5 @@ create index if not exists accounting_period_closes_status_idx on public.account
 
 -- Build 135 admin landing / inventory option repair note
 -- No DDL required for this pass. catalog_dropdown_options is stored through the existing app_settings mechanism; Admin Catalog merges saved rows with bundled gear/consumable JSON fallback.
+
+-- Build 136 no-DDL note (2026-05-09): admin catalog click-to-edit, accounting pricing-window helper, sample homepage reviews, and pricing embedded booking continuation polish. See sql/2026-05-09_build136_admin_catalog_pricing_reviews_no_ddl_note.sql.
