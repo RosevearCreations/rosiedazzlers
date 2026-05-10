@@ -8,7 +8,8 @@ const FALLBACK_CATALOG = {"charts": [{"filename": "CarPrice2025.PNG", "title": "
 
 const LOCAL_CHART_URLS = {
   "CarPrice2025.PNG": "/assets/brand/CarPrice2025.PNG",
-  "CarPriceDetails2025.PNG": "/assets/brand/CarPriceDetails2025.PNG"
+  "CarPriceDetails2025.PNG": "/assets/brand/CarPriceDetails2025.PNG",
+  "CarSizeChart.PNG": "https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG"
 };
 
 const DEFAULT_BOOKING_RULES = {
