@@ -1,130 +1,24 @@
+# New Chat Status
 
-## Build 136 admin catalog, accounting, reviews, and pricing planner polish — 2026-05-09
-- Admin Catalog inventory names are now clickable edit controls, so staff do not need to scroll horizontally to reach the edit button.
-- Admin Catalog edit form was compacted and aligned to the top of the inventory workflow so long tables do not stretch the right-side editor thousands of pixels down the page.
-- Fixed the pricing-control window failure caused by `LOCAL_CHART_URLS` being referenced without a server-side helper constant in the pricing catalog API normalizer.
-- Home page now carries five temporary sample review cards until the live review API is connected.
-- Pricing page embedded booking planner now has a taller left-side iframe and Step 1 includes a bottom “Go to Step 2” action so users can continue without scrolling back to the top.
-- Continued SEO hygiene: one clear H1 per exposed page, stronger local proof/review content, crawlable service/town links, and cleaner mobile booking progression.
+**Current package:** corrected dev cleanup build 139  
+**Date:** 2026-05-10
 
+## What changed last
 
-## Build 134 — Admin add-on save, local SEO, and populated-editor pass (2026-05-08)
-- Added a dedicated **Update / save add-on** action beside **Delete add-on** in Admin App so one add-on can be edited and saved without scrolling to the global catalog save button.
-- Extended the add-on editor with populated suggestions for category, type, and existing image URLs while preserving PNG/JPG/R2 images ahead of SVG fallbacks.
-- Extended the landing-page editor with hero image URL, gallery image URLs, and related product/media fields so service and town pages can be improved without editing raw JSON.
-- Kept location landing pages populated in Admin App by merging saved landing-page settings with the public fallback pages from `/api/landing_pages_public`.
-- Preserved new landing media fields through the public landing-page API normalization path.
-- Strengthened search visibility groundwork by replacing placeholder static landing-page titles/descriptions, adding richer Service structured data, adding dynamic FAQ/Breadcrumb/Service JSON-LD, and expanding `sitemap.xml` with lastmod/changefreq/priority plus missing service routes.
-- Improved Admin Catalog editing by adding populated datalist suggestions for inventory keys, names, categories, subcategories, vendors, SKUs, units, purchase URLs, and image URLs; colour/finish words are now included in subcategory suggestions for supplies and visual items.
-- CSS/search hygiene remains in scope: no public page should have more than one H1, local town/service wording should stay prominent, and links should remain crawlable anchors.
+The wrong package was replaced with the corrected dev package. The cleanup pass was reapplied to that package:
 
-<!-- refreshed 2026-04-25: block-range town-page pass -->
-> Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
+- old Markdown archived,
+- active docs refreshed,
+- root API duplicates removed,
+- membership reminder endpoint moved into `functions/api/`,
+- schema/no-DDL notes updated.
 
-## April 25, 2026 route hardening + landing-page visibility pass
-- Replaced the fragile clean-route dependency on `_redirects` with real folder-backed `index.html` route pages for the main public and admin screens to prevent recurring Cloudflare Pages redirect loops.
-- Added dedicated landing pages for ceramic coating, pet hair removal, odor removal, headlight restoration, and paint correction.
-- Added reusable recent-work proof mounts from the public before/after gallery and surfaced review proof / service-area wording more prominently on home, services, pricing, and the new landing pages.
-- Updated `sitemap.xml`, smoke/static checks, and the Markdown handoff set so the next chat starts from the live route-fix + visibility-expansion state.
-- No database DDL was added in this pass; `SUPABASE_SCHEMA.sql` was synchronized as a no-DDL documentation refresh.
+## Next best work
 
-## Marked next best steps
-- Keep the folder-backed clean-route approach as the live deployment baseline unless a future router replaces it completely.
-- Build town-focused landing pages next for the strongest search towns first: Tillsonburg, Woodstock / Ingersoll, Simcoe / Delhi, and Port Dover.
-- Keep recent work, review proof, and social freshness visible on the public entry pages so new visitors see current activity before they contact or book.
-- Connect Google Search Console and Google Business Profile performance metrics later as a separate reporting layer once the internal rollups are stable.
-- Treat analytics rollup totals as operational counts when summed across buckets until a true cross-window de-duplication strategy is added.
+Start with the first items in `DEVELOPMENT_ROADMAP.md`, especially admin dropdown option libraries, Admin Catalog polish, shared media library, and admin-managed landing/gallery content.
+## Extra route sanity applied
 
-# NEW CHAT STATUS
+- Synced `admin/index.html` from `admin.html`.
+- Synced `book/index.html` from `book.html`.
+- This removed non-identical clean-route wrapper collisions found during static stress checks.
 
-This pass continued the public pricing/SEO work by moving the vehicle size guide into the same live SVG system and adding an App Management preview/download helper for staff.
-
-## What changed
-
-- /pricing now renders the price chart, package-details chart, and vehicle size guide as live SVG tables from the shared pricing helper
-- /services now opens live SVG chart renders for price, package details, and vehicle size guide in the preview modal
-- App Management now includes a Live chart helper inside Advanced raw catalog JSON so staff can preview/download the current editor JSON as SVG charts
-- assets/pricing-catalog-client.js now owns reusable helpers for live price, details, and vehicle-size SVG generation plus pricing/services JSON-LD payloads
-- packaged PNG chart assets remain useful as emergency references/fallbacks, but the public pricing/size-chart direction is now live-generated first
-- docs and schema notes were refreshed as a no-DDL pass
-
-## What did not change
-
-- no new tables or columns were added
-- book.html was left untouched
-- vehicle-media scoring/crop-editor work was not reopened in this pass
-
-## Current strongest next steps
-
-- manually test the App Management SVG preview/download helper after deploy
-- continue route-by-route structured-data validation after deploy using live rendered pages
-- continue the vehicle-media crop/editor hardening path separately from pricing/public SEO work
-- keep polishing mobile admin layout where dense pricing rows still stack tightly on small screens
-
-> Last synchronized: April 23, 2026. Reviewed during the live vehicle-size guide, App Management chart helper, SEO/static-check carry-forward, and docs/schema synchronization pass.
-
-## Pass 27 sync — 2026-04-24
-- Latest pass finished: admin schedule block save error repaired, admin form/menu CSS drift reduced, and analytics expanded into a real reporting page with daily/weekly/monthly/yearly traffic exports.
-- No DB migration to run in this pass.
-- Best next chat focus: deployed visual QA for accounting/blocks/live screens, then optional report scheduling / rollup storage if raw analytics volume grows.
-
-## Pass 28 sync — 2026-04-24
-- Latest pass finished: analytics rollup foundation added, rollup refresh endpoint added, live-route loop fix prepared for `/services` and `/pricing`, and a competitor/local visibility review was added to the docs.
-- DB migration to run in this pass: `sql/2026-04-24_site_activity_rollups.sql`.
-- Best next chat focus: deploy/verify clean routes, refresh rollups, then build the first service-specific and town-specific local landing sections.
-
-## 2026-04-25 pass summary
-- Fixed: block page can now block a whole time frame at once.
-- Fixed: block page includes a calendar-style availability display.
-- Fixed: pricing page embedded planner no longer grows without limit in the codebase.
-- Added: Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, and Port Dover location pages.
-- No schema migration required in this pass.
-
-
-
-This build adds a stable /pricing embedded planner height, bundled review-proof fallback art, and a year-end accounting package/export path for Ontario-friendly bookkeeping handoff.
-
-
-No schema migration is required in this pass.
-
-## 2026-04-27 handoff status
-Completed in this pass:
-- fixed the missing Rosie Dazzlers reviews image on pricing/local proof sections by hard-wiring the bundled fallback asset
-- added accounting workflow foundation tables + admin UI for:
-  - bank reconciliation
-  - vendor / invoice / bill document links
-  - recurring expenses
-  - payroll payout reconciliation
-  - accountant lock / close workflow
-- added period-lock enforcement to journal posting
-
-Important next move:
-- run `sql/2026-04-27_accounting_workflow_foundation.sql` before using the new accounting workflow sections live
-
-- Added admin-managed landing page builder with dropdown editors for add-ons and location pages.
-- Added generic clean-route landing page support under /landing/<slug> via a single non-looping rewrite.
-- Existing special-service and town pages now render from landing-page content settings so their copy can be maintained from App Management.
-
-
-- 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.
-
-## Build 132 — Admin add-on image hydration repair (May 8, 2026)
-- Admin App add-on selection now hydrates blank saved `image_url` and `image_fallback_url` fields from the bundled default pricing catalog by matching add-on `code`.
-- The selected add-on editor now shows a Current image loaded preview so the existing picture can be kept or replaced deliberately.
-- Public pricing catalog merge logic now prevents blank saved media fields from masking fallback/default add-on images.
-- No database DDL is required; schema tracking note added at `sql/2026-05-08_build132_admin_addon_media_hydration_note.sql`.
-- Continue the local SEO discipline: one clear H1 per exposed public page, locally relevant wording, visible proof/review media, and no broken asset paths.
-<!-- Build 133 sync 2026-05-08: fixed Admin App add-on image hydration to prefer real PNG/R2 photos over SVG outlines, restored landingLinksToText helper, kept dev-branch workflow, and recorded no-DDL schema note. -->
-<!-- Build 134 sync 2026-05-08: admin add-on save button, populated editor suggestions, landing-page media fields, local SEO metadata/structured-data, sitemap refresh, and no-DDL schema handoff reviewed. -->
-
-
-## Build 135 — Admin App landing dropdowns, service-area fallback, and inventory merge repair
-- Fixed Admin App landing page dropdowns so selecting an add-on or location preserves the selected value and refreshes the editor fields for that specific record.
-- Service areas and travel tiers now merge from the bundled pricing catalog fallback when the saved pricing catalog is empty or incomplete; the remote tier is included and travel charge editing now binds the remote field.
-- Added a customizable dropdown option library in Admin App for add-on categories/types, inventory categories, inventory subcategories/colours, vendors, units, service tiers, and service zones.
-- Reworked Admin Catalog so saved DB rows merge with bundled consumables and gear from `/data/rosie_products_catalog.json` and `/data/systems_catalog.json`; editing two items no longer hides the rest of the fallback catalog.
-- Admin Catalog now labels each row as Saved DB item or Bundled fallback and provides browser-saved inventory dropdown suggestions for category, type/colour, vendor, unit, and image URL helpers.
-- SEO/local-search discipline continues: one H1 per exposed page, stronger local service/town wording, crawlable landing-page content, and clean structured handoff docs remain part of every pass.
-
-
-<!-- Build 135 sync 2026-05-08: admin landing dropdown refresh, service-area fallback, inventory fallback merge, customizable option suggestions, one-H1/local SEO/schema handoff review. -->

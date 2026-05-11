@@ -1,77 +1,32 @@
+# Images and Media Guide
 
-## Build 136 admin catalog, accounting, reviews, and pricing planner polish — 2026-05-09
-- Admin Catalog inventory names are now clickable edit controls, so staff do not need to scroll horizontally to reach the edit button.
-- Admin Catalog edit form was compacted and aligned to the top of the inventory workflow so long tables do not stretch the right-side editor thousands of pixels down the page.
-- Fixed the pricing-control window failure caused by `LOCAL_CHART_URLS` being referenced without a server-side helper constant in the pricing catalog API normalizer.
-- Home page now carries five temporary sample review cards until the live review API is connected.
-- Pricing page embedded booking planner now has a taller left-side iframe and Step 1 includes a bottom “Go to Step 2” action so users can continue without scrolling back to the top.
-- Continued SEO hygiene: one clear H1 per exposed page, stronger local proof/review content, crawlable service/town links, and cleaner mobile booking progression.
+**Reset date:** 2026-05-10
 
+## General sizes
 
-## Build 134 — Admin add-on save, local SEO, and populated-editor pass (2026-05-08)
-- Added a dedicated **Update / save add-on** action beside **Delete add-on** in Admin App so one add-on can be edited and saved without scrolling to the global catalog save button.
-- Extended the add-on editor with populated suggestions for category, type, and existing image URLs while preserving PNG/JPG/R2 images ahead of SVG fallbacks.
-- Extended the landing-page editor with hero image URL, gallery image URLs, and related product/media fields so service and town pages can be improved without editing raw JSON.
-- Kept location landing pages populated in Admin App by merging saved landing-page settings with the public fallback pages from `/api/landing_pages_public`.
-- Preserved new landing media fields through the public landing-page API normalization path.
-- Strengthened search visibility groundwork by replacing placeholder static landing-page titles/descriptions, adding richer Service structured data, adding dynamic FAQ/Breadcrumb/Service JSON-LD, and expanding `sitemap.xml` with lastmod/changefreq/priority plus missing service routes.
-- Improved Admin Catalog editing by adding populated datalist suggestions for inventory keys, names, categories, subcategories, vendors, SKUs, units, purchase URLs, and image URLs; colour/finish words are now included in subcategory suggestions for supplies and visual items.
-- CSS/search hygiene remains in scope: no public page should have more than one H1, local town/service wording should stay prominent, and links should remain crawlable anchors.
+- Hero/banner images: 1600×900 or larger, landscape.
+- Service/add-on cards: 1200×900 or 1200×1200.
+- Before/after gallery pairs: same orientation and similar crop; 1200px wide minimum preferred.
+- Gear/consumable product cards: 1200×1200 square preferred.
+- Review/proof images: 1200×900 landscape or 1200×1200 square.
+- Logos/icons/SVG outlines: use only when an illustrative placeholder is intended, not as the primary real service image.
 
-# Rosie Dazzlers Image and Media Guide
+## Add-on images
 
-Last synchronized: Build 132, May 8, 2026.
+Add-ons should prefer real PNG/JPG/R2 image URLs as the primary image. SVG outlines are acceptable as fallback only.
 
-## Add-on service images
+Admin editors should show:
 
-Add-on service images are used on the public Services/Pricing surfaces, booking add-on cards, and the Admin App add-on editor.
+- current image preview,
+- primary image URL,
+- fallback image URL,
+- alt text,
+- recommended dimensions,
+- keep/replace choice.
 
-Recommended size:
-- 1200 x 900 px minimum for add-on cards.
-- 1600 x 1200 px preferred for future landing pages.
-- PNG or JPG for detailed artwork.
-- SVG is acceptable for simple fallback illustrations.
-- Keep important text/logos away from the outer 10% edge so mobile cards do not crop key details.
+## Before/after gallery JSON format
 
-Where the current default URLs live:
-- Main static fallback catalog: `data/rosie_services_pricing_and_packages.json`
-- Functions/API fallback catalog: `functions/api/data/rosie_services_pricing_and_packages.json`
-- Saved live catalog, when edited in Admin App: `app_management_settings` key `pricing_catalog`
-
-Fields to use per add-on:
-- `image_url`: the preferred/current image. This can be an R2 URL such as `https://assets.rosiedazzlers.ca/packages/example.png` or a local bundled path such as `/assets/addons/example.png`.
-- `image_fallback_url`: backup image used if the primary image is blank or fails.
-
-How to keep the existing image:
-1. Open Admin App.
-2. Go to Pricing source of truth > Add-ons.
-3. Select one add-on.
-4. Confirm the **Current image loaded** preview is correct.
-5. Leave `Primary image URL` and `Fallback image URL` unchanged.
-6. Save the pricing catalog.
-
-How to switch out an add-on image:
-1. Upload the new image to the correct Cloudflare R2 folder, preferably the public packages/add-ons area already used by the site.
-2. Copy the final public URL.
-3. In Admin App > Add-ons, select the add-on.
-4. Paste the new URL into `Primary image URL`.
-5. Keep the older image in `Fallback image URL` until the new image is confirmed live.
-6. Save the pricing catalog.
-7. Check Services, Pricing, and Book add-on cards.
-
-Build 132 fix note:
-- If a saved add-on has prices but blank image fields, Admin App now pulls the image URLs back in from the bundled default catalog by matching the add-on `code`.
-- The public pricing catalog merge also prevents blank saved media values from hiding default fallback media.
-
-## Before/after gallery media
-
-Recommended size:
-- 1600 x 1200 px preferred.
-- 1200 x 900 px minimum.
-- Use matched before/after framing when possible.
-- Video clips should be short, compressed, and hosted through the same public asset system.
-
-Example with multiple gallery entries:
+Use one object per gallery item inside the same `items` array:
 
 ```json
 {
@@ -89,13 +44,13 @@ Example with multiple gallery entries:
       "vehicle_label": "2015 Mitsubishi"
     },
     {
-      "title": "Interior Refresh",
-      "location": "Ingersoll, ON",
+      "title": "Pet Hair Interior Detail",
+      "location": "Woodstock, ON",
       "before_kind": "image",
-      "before_url": "https://assets.rosiedazzlers.ca/CarPhotos/interior-before.jpg",
+      "before_url": "https://assets.rosiedazzlers.ca/gallery/pet-hair-before.jpg",
       "after_kind": "image",
-      "after_url": "https://assets.rosiedazzlers.ca/CarPhotos/interior-after.jpg",
-      "note": "Interior cleanup proof photo.",
+      "after_url": "https://assets.rosiedazzlers.ca/gallery/pet-hair-after.jpg",
+      "note": "Interior pet hair removal proof.",
       "consent_status": "Approved",
       "customer_name": "",
       "vehicle_label": "SUV interior"
@@ -104,27 +59,8 @@ Example with multiple gallery entries:
 }
 ```
 
-To add a second or third gallery item, add another object inside the same `items` array and separate entries with commas. Do not create `items2` or a second top-level section.
+Do not create `items2` or a second top-level array.
 
-<!-- Build 132 sync 2026-05-08: admin add-on image hydration, current-image preview, fallback media merge, no-DDL schema note, SEO/H1/CSS/media discipline reviewed. -->
-- Restored missing `assets/landing-page.js` because landing pages were still referencing it during the static link check.
-<!-- Build 133 sync 2026-05-08: fixed Admin App add-on image hydration to prefer real PNG/R2 photos over SVG outlines, restored landingLinksToText helper, kept dev-branch workflow, and recorded no-DDL schema note. -->
+## Long-term media direction
 
-## Build 133 add-on image editor note
-- The Admin App add-on editor should show the real photo-style PNG/JPG/R2 image in **Current image loaded** whenever one exists.
-- Keep `image_url` as the preferred customer-facing image. This should normally be the R2/package PNG or JPG, for example `https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png`.
-- Keep `image_fallback_url` as the backup image. SVG outline files are acceptable here, but they should not replace the original service PNG in the primary image field.
-- To switch an add-on picture: open Admin App → Add-ons → select the add-on → replace **Primary image URL** with the new R2/public image URL → leave fallback in place → save pricing catalog.
-<!-- Build 134 sync 2026-05-08: admin add-on save button, populated editor suggestions, landing-page media fields, local SEO metadata/structured-data, sitemap refresh, and no-DDL schema handoff reviewed. -->
-
-
-## Build 135 — Admin App landing dropdowns, service-area fallback, and inventory merge repair
-- Fixed Admin App landing page dropdowns so selecting an add-on or location preserves the selected value and refreshes the editor fields for that specific record.
-- Service areas and travel tiers now merge from the bundled pricing catalog fallback when the saved pricing catalog is empty or incomplete; the remote tier is included and travel charge editing now binds the remote field.
-- Added a customizable dropdown option library in Admin App for add-on categories/types, inventory categories, inventory subcategories/colours, vendors, units, service tiers, and service zones.
-- Reworked Admin Catalog so saved DB rows merge with bundled consumables and gear from `/data/rosie_products_catalog.json` and `/data/systems_catalog.json`; editing two items no longer hides the rest of the fallback catalog.
-- Admin Catalog now labels each row as Saved DB item or Bundled fallback and provides browser-saved inventory dropdown suggestions for category, type/colour, vendor, unit, and image URL helpers.
-- SEO/local-search discipline continues: one H1 per exposed page, stronger local service/town wording, crawlable landing-page content, and clean structured handoff docs remain part of every pass.
-
-
-<!-- Build 135 sync 2026-05-08: admin landing dropdown refresh, service-area fallback, inventory fallback merge, customizable option suggestions, one-H1/local SEO/schema handoff review. -->
+Move images/videos into a shared DB-backed media library so add-ons, landing pages, gallery entries, services, gear, and consumables all reuse one media source.

@@ -1,3 +1,9 @@
+-- Build 139 corrected dev cleanup synchronization — 2026-05-10
+-- No DDL changes in this pass.
+-- Documentation was archived/reset and root-level duplicate API JavaScript was removed from the corrected dev package.
+-- The valid API function source remains functions/api/ and functions/api/admin/.
+-- See sql/2026-05-10_build139_corrected_dev_cleanup_no_ddl_note.sql for the cleanup note.
+
 -- 2026-04-25 note: no DDL change in this pass; admin range blocking continues to use date_blocks(blocked_date, reason) and slot_blocks(blocked_date, slot, reason).
 -- Schema synchronization note: April 25, 2026 — no new DDL in this pass. Docs refreshed for folder-backed routes, special-service landing pages, recent-work proof mounts, and unchanged analytics rollup schema.
 -- April 23, 2026 live vehicle-size guide + chart helper pass.
