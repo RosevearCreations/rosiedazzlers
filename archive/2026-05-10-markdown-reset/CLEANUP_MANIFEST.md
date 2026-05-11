@@ -1,0 +1,177 @@
+# Cleanup Manifest — Build 139
+
+Date: 2026-05-10
+
+This archive contains copies of the root Markdown files that existed before the corrected dev cleanup reset. Active docs were rewritten at repo root as a smaller current set.
+
+## Archived Markdown count
+
+26
+
+## Active Markdown kept at root
+
+- `README.md`
+- `DEVELOPMENT_ROADMAP.md`
+- `KNOWN_GAPS_AND_RISKS.md`
+- `SANITY_CHECK.md`
+- `HANDOFF_NEXT_CHAT.md`
+- `NEW_CHAT_STATUS.md`
+- `CURRENT_IMPLEMENTATION_STATE.md`
+- `PROJECT_BRAIN.md`
+- `REPO_GUIDE.md`
+- `IMAGES.md`
+- `DOC_INDEX.md`
+
+## Root API JavaScript removed from root
+
+- `abandoned_orders_list.js`
+- `abandoned_recovery_enqueue.js`
+- `accounting_accounts_list.js`
+- `accounting_entry_save.js`
+- `accounting_export.js`
+- `accounting_list.js`
+- `accounting_month_end_checklist.js`
+- `accounting_owner_report.js`
+- `accounting_payable_settle.js`
+- `accounting_payables_list.js`
+- `accounting_remittance_post.js`
+- `accounting_report.js`
+- `accounting_statement_report.js`
+- `accounting_tax_report.js`
+- `analytics_overview.js`
+- `app_settings_get.js`
+- `app_settings_save.js`
+- `assign.js`
+- `assign_booking.js`
+- `auth_bootstrap_admin_password.js`
+- `auth_change_my_password.js`
+- `auth_login.js`
+- `auth_logout.js`
+- `auth_me.js`
+- `auth_set_password.js`
+- `availability.js`
+- `before_after_gallery_public.js`
+- `block_date.js`
+- `block_slot.js`
+- `blocks.js`
+- `blocks_list.js`
+- `blocks_save.js`
+- `booking_assignment_map.js`
+- `booking_availability.js`
+- `booking_cancel.js`
+- `booking_complete.js`
+- `booking_confirm.js`
+- `booking_customer_link.js`
+- `booking_detail.js`
+- `booking_finance.js`
+- `booking_form_data.js`
+- `booking_save.js`
+- `booking_update.js`
+- `bookings.js`
+- `bookings_delete.js`
+- `bookings_search.js`
+- `catalog_inventory_list.js`
+- `catalog_inventory_save.js`
+- `catalog_items_get.js`
+- `catalog_items_save.js`
+- `catalog_low_stock_list.js`
+- `catalog_public.js`
+- `catalog_purchase_order_remind.js`
+- `catalog_purchase_order_update.js`
+- `catalog_purchase_orders_list.js`
+- `catalog_reorder_request.js`
+- `catalog_stock_action.js`
+- `catalog_usage_add.js`
+- `catalog_usage_list.js`
+- `checkout.js`
+- `customer_profiles_list.js`
+- `customer_profiles_save.js`
+- `customer_tiers_delete.js`
+- `customer_tiers_list.js`
+- `customer_tiers_save.js`
+- `customers_delete.js`
+- `customers_detail.js`
+- `customers_list.js`
+- `customers_save.js`
+- `dashboard_summary.js`
+- `day_schedule.js`
+- `document_booking_public.js`
+- `growth_settings_public.js`
+- `health.js`
+- `job_completion_detail.js`
+- `job_completion_save.js`
+- `job_time_entries_get.js`
+- `job_time_entry_post.js`
+- `job_time_summary_get.js`
+- `jobsite_delete.js`
+- `jobsite_detail.js`
+- `jobsite_intake_get.js`
+- `jobsite_intake_save.js`
+- `jobsite_list.js`
+- `jobsite_save.js`
+- `landing_pages_public.js`
+- `live_list.js`
+- `media_delete.js`
+- `media_list.js`
+- `media_save.js`
+- `membership_interest_create.js`
+- `membership_reminders_process.js`
+- `notifications_list.js`
+- `notifications_process.js`
+- `observation_annotation_moderate.js`
+- `observation_annotation_post.js`
+- `override_log_list.js`
+- `payroll_run_save.js`
+- `payroll_summary.js`
+- `pricing_catalog_public.js`
+- `progress_comment_moderate.js`
+- `progress_comment_post.js`
+- `progress_delete.js`
+- `progress_detail.js`
+- `progress_enable.js`
+- `progress_list.js`
+- `progress_list_public.js`
+- `progress_media_post.js`
+- `progress_moderate.js`
+- `progress_post.js`
+- `progress_upload_url.js`
+- `promo_create.js`
+- `promo_disable.js`
+- `promo_list.js`
+- `promos_delete.js`
+- `promos_detail.js`
+- `promos_save.js`
+- `promos_toggle_active.js`
+- `recovery_audit_list.js`
+- `recovery_message_preview.js`
+- `recovery_preview.js`
+- `recovery_templates.js`
+- `signoff_delete.js`
+- `signoff_list.js`
+- `signoff_save.js`
+- `social_feed_public.js`
+- `staff_assignable_list.js`
+- `staff_detail.js`
+- `staff_list.js`
+- `staff_me.js`
+- `staff_save.js`
+- `staff_toggle_active.js`
+- `time_delete.js`
+- `time_list.js`
+- `time_save.js`
+- `unblock_date.js`
+- `unblock_slot.js`
+- `vehicle_makes.js`
+- `vehicle_models.js`
+
+## Notes
+
+- `service-worker.js` remains at root because it is a public browser/service worker asset.
+- Cloudflare Pages Functions remain under `functions/api/` and `functions/api/admin/`.
+- This pass is a cleanup/no-DDL pass.
+
+## Route wrapper sync
+
+- `admin/index.html` was synchronized to `admin.html`.
+- `book/index.html` was synchronized to `book.html`.
+- This keeps clean-route folder pages from drifting away from their root-page equivalents.
