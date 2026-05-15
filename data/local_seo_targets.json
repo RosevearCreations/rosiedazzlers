@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-10",
+  "updated_at": "2026-05-14",
   "primary_region": "Oxford County and Norfolk County, Ontario",
   "core_terms": [
     "mobile auto detailing",
@@ -63,5 +63,51 @@
     "service wording",
     "crawlable internal links",
     "JSON-LD where useful"
+  ],
+  "service_area_coverage": {
+    "counties": [
+      "Oxford County",
+      "Norfolk County"
+    ],
+    "fallback_behavior": "Typed towns not specifically listed resolve to Other Oxford County location or Other Norfolk County location when a county is known; otherwise staff confirm before dispatch.",
+    "water_rule_source_file": "/data/service_area_rules.json"
+  },
+  "future_town_pages": [
+    {
+      "slug": "norwich-otterville-auto-detailing",
+      "towns": [
+        "Norwich",
+        "Otterville",
+        "Springford"
+      ],
+      "priority": 3
+    },
+    {
+      "slug": "zorra-thamesford-embro-auto-detailing",
+      "towns": [
+        "Thamesford",
+        "Embro",
+        "Hickson"
+      ],
+      "priority": 4
+    },
+    {
+      "slug": "port-rowan-turkey-point-auto-detailing",
+      "towns": [
+        "Port Rowan",
+        "Turkey Point",
+        "St. Williams"
+      ],
+      "priority": 4
+    },
+    {
+      "slug": "waterford-vittoria-auto-detailing",
+      "towns": [
+        "Waterford",
+        "Vittoria",
+        "Boston"
+      ],
+      "priority": 4
+    }
   ]
 }
