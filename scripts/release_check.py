@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import json
+import pathlib
+import subprocess
+import sys
+import xml.etree.ElementTree as ET
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+
+def run(cmd: list[str]) -> None:
+    print("+", " ".join(cmd))
+    result = subprocess.run(cmd, cwd=ROOT, text=True)
+    if result.returncode != 0:
+        sys.exit(result.returncode)
+
+def validate_json() -> None:
+    for path in sorted((ROOT / "data").glob("*.json")):
+        json.loads(path.read_text(encoding="utf-8"))
+    print("PASS: data JSON parsed")
+
+def validate_xml() -> None:
+    ET.parse(ROOT / "sitemap.xml")
+    print("PASS: sitemap XML parsed")
+
+def main() -> None:
+    validate_json()
+    validate_xml()
+    run([sys.executable, "scripts/stress_static_checks.py"])
+    run([sys.executable, "scripts/local_seo_audit.py"])
+    print("PASS: release checklist completed")
+
+if __name__ == "__main__":
+    main()

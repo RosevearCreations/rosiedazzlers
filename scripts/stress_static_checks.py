@@ -27,6 +27,8 @@ CHECK_JS = [
     'functions/api/admin/analytics_overview.js',
     'functions/api/admin/analytics_rollups_refresh.js',
     'assets/recent-work.js',
+    'assets/reviews.js',
+    'functions/api/reviews_public.js',
 ]
 
 CORE_LOCAL_SEO_PAGES = ['index.html', 'services.html', 'pricing.html', 'about.html', 'contact.html', 'ceramic-coating/index.html', 'pet-hair-removal/index.html', 'odor-removal/index.html', 'headlight-restoration/index.html', 'paint-correction/index.html', 'tillsonburg-auto-detailing/index.html', 'woodstock-ingersoll-auto-detailing/index.html', 'simcoe-delhi-auto-detailing/index.html', 'port-dover-auto-detailing/index.html']
@@ -229,6 +231,19 @@ def check_inline_scripts():
                 tmp.unlink(missing_ok=True)
 
 
+def check_data_contract_files():
+    required = [
+        'data/admin_option_libraries.json',
+        'data/local_seo_targets.json',
+        'data/media_library_seed.json',
+        'data/sample_reviews.json'
+    ]
+    for rel in required:
+        path = ROOT / rel
+        if not path.exists():
+            fail(f'missing data contract file: {rel}')
+        json.loads(path.read_text(encoding='utf-8'))
+
 def main():
     for rel in CHECK_JS:
         path = ROOT / rel
@@ -239,6 +254,7 @@ def main():
     check_public_seo_basics()
     check_catalog_media_coverage()
     check_temp_artifacts()
+    check_data_contract_files()
     check_route_collisions()
     check_public_catalog_helper_usage()
     check_public_analytics_hook()
