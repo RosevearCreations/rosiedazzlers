@@ -1,0 +1,67 @@
+{
+  "updated_at": "2026-05-10",
+  "primary_region": "Oxford County and Norfolk County, Ontario",
+  "core_terms": [
+    "mobile auto detailing",
+    "car detailing",
+    "interior detailing",
+    "mobile car wash",
+    "ceramic coating",
+    "pet hair removal",
+    "engine cleaning",
+    "headlight restoration",
+    "paint correction"
+  ],
+  "town_pages": [
+    {
+      "slug": "tillsonburg-auto-detailing",
+      "towns": [
+        "Tillsonburg"
+      ],
+      "priority": 1
+    },
+    {
+      "slug": "woodstock-ingersoll-auto-detailing",
+      "towns": [
+        "Woodstock",
+        "Ingersoll"
+      ],
+      "priority": 2
+    },
+    {
+      "slug": "simcoe-delhi-auto-detailing",
+      "towns": [
+        "Simcoe",
+        "Delhi"
+      ],
+      "priority": 2
+    },
+    {
+      "slug": "port-dover-auto-detailing",
+      "towns": [
+        "Port Dover"
+      ],
+      "priority": 3
+    }
+  ],
+  "service_pages": [
+    "ceramic-coating",
+    "pet-hair-removal",
+    "odor-removal",
+    "headlight-restoration",
+    "paint-correction",
+    "services",
+    "pricing",
+    "book"
+  ],
+  "required_checks": [
+    "single H1",
+    "title",
+    "description",
+    "canonical",
+    "local town wording",
+    "service wording",
+    "crawlable internal links",
+    "JSON-LD where useful"
+  ]
+}
