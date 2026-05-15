@@ -1,31 +1,35 @@
-# Current Implementation State — Build 140
+# Current Implementation State — Build 141
 
 **Updated:** 2026-05-14
 
 ## Public site
 
-The public site includes home, services, pricing, booking, contact, gallery, gifts, gear, consumables, maintenance-plan, service landing pages, and town landing pages. Build 140 added a formal local SEO target file, a local SEO audit script, and dynamic review-proof loading with safe sample fallback.
+The site remains a Cloudflare Pages + Supabase + R2 mobile auto-detailing platform for Oxford County and Norfolk County. Build 141 expands the service-area model so booking and local SEO can work with Norfolk/Oxford counties, their municipalities/communities, and county-level water-rule fallbacks.
 
 ## Booking
 
-The booking flow remains the main conversion path. Services and Pricing can embed the booking planner. Keep Step 1 compact, keep the bottom next-step action, and keep checkout schema fallbacks until all Supabase migrations are confirmed.
+The booking service-area field is now typeable. Customers can choose from the datalist or type a town/service zone. Exact matches load town rules; Oxford/Norfolk county matches load county defaults; unknown towns prompt staff confirmation before dispatch.
 
 ## Admin App
 
-Admin App controls pricing/add-ons, landing pages, growth settings, document templates, membership settings, dropdown option libraries, and media-related fields. The next major step is a real media-library and option-library editor backed by Supabase/app settings.
+Admin App pricing/service-area editing now includes editable county, town/label, booking value, municipality, zone, travel tier, by-law note, water reminder, parking/access reminder, and noise reminder fields.
 
-## Admin Catalog
+## Data
 
-Admin Catalog manages gear, consumables, systems, inventory, low stock, vendor data, usage, reorder actions, and receiving. It must keep showing saved DB rows plus bundled fallback rows so editing one item does not hide unsaved catalog items.
+Important service-area files:
 
-## Media and proof
+- `data/service_area_rules.json` — shared service-area/water-rule seed and source notes.
+- `data/rosie_services_pricing_and_packages.json` — active public pricing/booking fallback catalog.
+- `data/admin_option_libraries.json` — dropdown/typeahead libraries for towns, tiers, categories, vendors, units, and sorting options.
+- `data/local_seo_targets.json` — local SEO targets and future town-page suggestions.
 
-Build 140 added media-library seed data, review fallback JSON, a public reviews API, and `assets/reviews.js`. The next step is replacing sample reviews and gallery JSON with admin-managed DB content.
+## Next focus
 
-## Accounting
+Move the service-area/rules seed into Supabase, complete the option-library editor, build the next town landing pages, and connect dispatch/checkout validation to postal code or address resolution.
 
-Accounting includes GL-style records, payables, remittance/report screens, monthly checklist concepts, payroll/time entry support, and export paths. It still needs payment application, reconciliation matching, journal validation, close locks, and accountant export packaging.
+<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->
 
-## Data direction
 
-Move stable business data into Supabase/app settings once admin editors are reliable. Keep JSON bundled as fallback for public resilience.
+## Build 141 cleanup note
+
+Root-level duplicate API JavaScript files were removed again; valid API handlers remain under `functions/api/` and `functions/api/admin/`, while `service-worker.js` remains at the public root.

@@ -35,3 +35,5 @@ For each admin image field, aim for:
 
 - `data/media_library_seed.json` documents media groups and recommended sizes.
 - `sql/2026-05-10_build140_value_add_roadmap_foundations.sql` adds the optional `app_media_library` table.
+
+<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->

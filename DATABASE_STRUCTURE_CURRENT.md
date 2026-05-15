@@ -19,3 +19,5 @@ Until the migration is applied and editors are finished, the app still uses:
 - `app_management_settings.review_proof`
 - `app_management_settings.media_library`
 - bundled JSON files in `data/`
+
+<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->

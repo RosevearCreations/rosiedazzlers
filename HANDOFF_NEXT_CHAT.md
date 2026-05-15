@@ -22,3 +22,5 @@ Run `sql/2026-05-10_build140_value_add_roadmap_foundations.sql` in Supabase dev,
 ## Branch rule
 
 Use `dev`.
+
+<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->

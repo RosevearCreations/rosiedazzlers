@@ -9,3 +9,5 @@ Use this file to orient future ChatGPT/Copilot work.
 - Next priority: run the Build 140 SQL migration, then build media-library and option-library admin editors.
 - Always update Markdown and `SUPABASE_SCHEMA.sql` when changing the app.
 - Always check for one H1 per public page.
+
+<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->

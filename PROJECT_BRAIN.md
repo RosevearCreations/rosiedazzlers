@@ -17,3 +17,5 @@ Rosie Dazzlers is both a public local-service website and an operations app. The
 ## Build 140 direction
 
 The project now has formal fallback data contracts for dropdowns, media, reviews, and local SEO. The next step is adding real admin editors and migrating content into DB-backed workflows.
+
+<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->

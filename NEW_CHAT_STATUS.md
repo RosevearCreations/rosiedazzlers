@@ -20,3 +20,5 @@ Current build focus: moving Rosie Dazzlers from repeated UI patching toward a cl
 3. Build option-library editor.
 4. Migrate gallery/review proof into DB-managed content.
 5. Continue accounting close workflow.
+
+<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->

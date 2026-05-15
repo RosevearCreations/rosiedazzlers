@@ -1,50 +1,34 @@
-# Sanity Check — Build 140
+# Sanity Check — Build 141
 
-**Package:** `rosiedazzlers-dev(136).zip`  
+**Package:** `rosiedazzlers-dev(137).zip`  
 **Updated:** 2026-05-14
 
-## Completed in this pass
+## Completed
 
-- Admin option-library foundation added through `data/admin_option_libraries.json` and `catalog_dropdown_options` app-setting loading.
-- DB-first option storage path enabled by adding `catalog_dropdown_options`, `landing_pages`, `review_proof`, and `media_library` to app settings fetch endpoints.
-- Admin Catalog inventory workflow kept merged with bundled gear/consumables fallback instead of hiding unsaved items after DB edits.
-- Admin Catalog dropdowns now fall back to bundled option libraries when Supabase settings are unavailable.
-- Shared media-library seed added in `data/media_library_seed.json`.
-- Optional `app_media_library` SQL foundation added for DB-backed reusable image/video records.
-- Optional `app_option_libraries` SQL foundation added for reusable admin dropdown libraries.
-- Optional `app_content_entries` SQL foundation added for reviews, gallery entries, and reusable content blocks.
-- Review-proof fallback data moved into `data/sample_reviews.json`.
-- Public review API foundation added at `/api/reviews_public` with DB/app-setting fallback.
-- Homepage review block now has a dynamic `data-review-proof-mount` rendered by `/assets/reviews.js`.
-- Local SEO target contract added in `data/local_seo_targets.json`.
-- Local SEO audit script added in `scripts/local_seo_audit.py`.
-- Release checklist script added in `scripts/release_check.py`.
-- Static stress checks now validate the new data contracts and review scripts.
-- Sitemap `lastmod` values refreshed for this pass.
-- Clean-route wrapper files synced from their matching root HTML files.
-- Root-level duplicate API JavaScript files removed; valid Pages Functions remain under `functions/api/`.
-- Markdown set cleaned by archiving older/duplicate root docs and refreshing active docs.
-- Schema documentation updated with the Build 140 DB-foundation migration and next implementation direction.
+- Restored Norfolk County and Oxford County service-area coverage.
+- Added many individual towns/communities and county fallback rows.
+- Added `/data/service_area_rules.json`.
+- Made booking service-area entry typeable with a datalist.
+- Added county fallback rule resolution in `assets/pricing-catalog-client.js`.
+- Added editable Admin App service-area fields for water reminders and local by-law notes.
+- Updated pricing catalog fallback JSON and admin dropdown option libraries.
+- Updated local SEO target data for broader service-area coverage.
+- Synced `/book/` and `/admin-app/` clean-route copies.
+- Updated Markdown and schema notes.
 
-## Files added
+## Checks to keep running
 
-- `data/admin_option_libraries.json`
-- `data/local_seo_targets.json`
-- `data/media_library_seed.json`
-- `data/sample_reviews.json`
-- `assets/reviews.js`
-- `functions/api/reviews_public.js`
-- `scripts/local_seo_audit.py`
-- `scripts/release_check.py`
-- `sql/2026-05-10_build140_value_add_roadmap_foundations.sql`
+- One H1 per exposed public page.
+- Static internal links are valid.
+- JSON files parse.
+- Main JS modules parse.
+- Booking still loads service areas when Supabase settings are unavailable.
+- Admin App can save pricing catalog/service-area rows after editing.
+- Official county water pages should be rechecked before dispatch when conditions are dry or restrictions change.
 
-## Cleanup
+<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->
 
-- Older/duplicate Markdown was archived to `archive/2026-05-14-build140-markdown-snapshot/`.
-- Root-level duplicate API JavaScript files were removed.
-- `service-worker.js` remains at root because it is a valid public browser file.
-- Clean-route wrappers were synced from root HTML pages.
 
-## Deployment reminder
+## Build 141 cleanup note
 
-Use `dev` as the working branch. Do not merge to `main` unless explicitly requested.
+Root-level duplicate API JavaScript files were removed again; valid API handlers remain under `functions/api/` and `functions/api/admin/`, while `service-worker.js` remains at the public root.

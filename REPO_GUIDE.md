@@ -20,3 +20,5 @@
 - Root-level duplicate API endpoint `.js` files.
 - Multiple H1 tags on exposed public pages.
 - Hardcoded one-off image URLs when a catalog/media-library source exists.
+
+<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->
