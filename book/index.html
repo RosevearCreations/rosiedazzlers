@@ -198,9 +198,11 @@
 
         <div>
           <label for="service_area">Service area</label>
-          <select id="service_area">
-            <option value="">Loading service areas…</option>
-          </select>
+          <input id="service_area" list="service_area_options" placeholder="Start typing a town, county, or service zone…" autocomplete="off" />
+          <datalist id="service_area_options">
+            <option value="Tillsonburg, ON"></option>
+          </datalist>
+          <div class="hint mini">Type any Oxford or Norfolk town. If there is no town-specific rule, we default to the county water-use reminder.</div>
           <div id="serviceAreaPanel" class="service-area-panel" style="margin-top:8px">
             <div id="serviceAreaNote" class="notice mini">Choose the closest town or service zone so we can apply the right travel, parking, and local bylaw rules before dispatch.</div>
             <ul id="serviceAreaRules">
@@ -622,7 +624,7 @@
         qs("#vehicle_size").value = size;
       }
 
-      if (serviceArea && [...qs("#service_area").options].some((opt) => opt.value === serviceArea)) {
+      if (serviceArea) {
         qs("#service_area").value = serviceArea;
       }
 
@@ -781,37 +783,40 @@
     function renderServiceAreas(rowsOverride = null) {
       const rows = Array.isArray(rowsOverride) && rowsOverride.length ? rowsOverride : configuredServiceAreas();
       const safeRows = Array.isArray(rows) && rows.length ? rows : [];
-      const grouped = safeRows.reduce((acc, row) => {
-        const county = row?.county || "Service area";
-        (acc[county] ||= []).push(row);
-        return acc;
-      }, {});
-      const select = qs("#service_area");
-      const prior = select.value;
+      const datalist = qs("#service_area_options");
+      const field = qs("#service_area");
+      const prior = field.value;
       if (!safeRows.length) {
-        select.innerHTML = `<option value="">No service areas loaded</option>`;
+        datalist.innerHTML = `<option value="Other Oxford County location"></option><option value="Other Norfolk County location"></option>`;
+        field.placeholder = "Type your town or county…";
         updateServiceAreaNote();
         return;
       }
-      select.innerHTML = `<option value="">Choose your town or service zone</option>` + Object.entries(grouped).map(([county, countyRows]) => {
-        const options = countyRows.map((row) => `<option value="${escapeHtml(row.value || row.label)}">${escapeHtml(row.label || row.value)}</option>`).join("");
-        return `<optgroup label="${escapeHtml(county)}">${options}</optgroup>`;
+      datalist.innerHTML = safeRows.map((row) => {
+        const value = row.value || row.label || row.municipality || "";
+        const label = [row.county, row.travel_tier].filter(Boolean).join(" · ");
+        return `<option value="${escapeHtml(value)}" label="${escapeHtml(label)}"></option>`;
       }).join("");
-      const preferred = prior || activeBookingRules().default_service_area || "";
-      if ([...select.options].some((opt) => opt.value === preferred)) select.value = preferred;
+      const preferred = prior || activeBookingRules().default_service_area || "Tillsonburg, ON";
+      field.value = preferred;
       updateServiceAreaNote();
     }
 
     function updateServiceAreaNote() {
-      const selected = findServiceArea(state.pricing || {}, qs("#service_area").value);
+      const typedServiceArea = qs("#service_area").value;
+      const selected = findServiceArea(state.pricing || {}, typedServiceArea);
       const note = qs("#serviceAreaNote");
       const rules = qs("#serviceAreaRules");
       const links = qs("#serviceAreaLinks");
 
       if (!selected) {
-        note.className = "notice mini";
-        note.textContent = "Choose the closest town or service zone so we can apply the right travel, parking, and local bylaw rules before dispatch.";
-        rules.innerHTML = "<li>Select a town or zone to load parking, noise, runoff, and access reminders.</li>";
+        note.className = typedServiceArea ? "notice warn mini" : "notice mini";
+        note.textContent = typedServiceArea
+          ? "Custom service area entered. We will confirm the town/county before dispatch and use the closest county water-use reminder as the fallback."
+          : "Choose or type the closest town, county, or service zone so we can apply the right travel, parking, and local bylaw rules before dispatch.";
+        rules.innerHTML = typedServiceArea
+          ? "<li>Staff should confirm whether this address is in Oxford County or Norfolk County before final dispatch.</li>"
+          : "<li>Select or type a town or zone to load parking, noise, runoff, and access reminders.</li>";
         links.innerHTML = "";
         return;
       }
@@ -1404,7 +1409,7 @@
         start_slot,
         duration_slots,
         service_area: qs("#service_area").value,
-        service_area_label: qs("#service_area").selectedOptions?.[0]?.textContent || qs("#service_area").value,
+        service_area_label: qs("#service_area").value,
         service_area_meta: findServiceArea(state.pricing || {}, qs("#service_area").value) || null,
         package_code: state.selectedPackageCode,
         vehicle_size: selectedSize(),
@@ -1463,11 +1468,13 @@
       }
     });
 
-    qs("#service_area").addEventListener("change", () => {
-      updateServiceAreaNote();
-      analyticsTrack("booking_service_area_pick", { service_area: qs("#service_area").value || null });
-      renderReviewVehicle();
-      renderFinalSummary();
+    ["input", "change"].forEach((eventName) => {
+      qs("#service_area").addEventListener(eventName, () => {
+        updateServiceAreaNote();
+        analyticsTrack("booking_service_area_pick", { service_area: qs("#service_area").value || null });
+        renderReviewVehicle();
+        renderFinalSummary();
+      });
     });
 
     renderServiceAreas(configuredServiceAreas());

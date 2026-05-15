@@ -14,7 +14,7 @@ const LOCAL_CHART_URLS = {
 
 export const DEFAULT_BOOKING_RULES = {
   availability_window_days: 21,
-  default_service_area: "Tillsonburg, Oxford County",
+  default_service_area: "Tillsonburg, ON",
   hold_minutes: 30,
   slot_labels: {
     AM: "AM half day",
@@ -162,6 +162,29 @@ export function normalizePricingCatalog(raw) {
   };
 }
 
+
+function mergeServiceAreas(primaryRows, fallbackRows) {
+  const merged = [];
+  const byKey = new Map();
+  const add = (row, preferExisting = false) => {
+    if (!row || typeof row !== "object") return;
+    const key = String(row.value || row.label || row.municipality || "").trim().toLowerCase();
+    if (!key) return;
+    if (!byKey.has(key)) {
+      const copy = { ...row };
+      byKey.set(key, copy);
+      merged.push(copy);
+      return;
+    }
+    if (!preferExisting) {
+      Object.assign(byKey.get(key), row);
+    }
+  };
+  (Array.isArray(fallbackRows) ? fallbackRows : []).forEach((row) => add(row, true));
+  (Array.isArray(primaryRows) ? primaryRows : []).forEach((row) => add(row, false));
+  return merged;
+}
+
 function mergeCatalog(primary, fallback) {
   return normalizePricingCatalog({
     ...fallback,
@@ -170,7 +193,7 @@ function mergeCatalog(primary, fallback) {
     packages: Array.isArray(primary?.packages) && primary.packages.length ? primary.packages : fallback?.packages,
     addons: Array.isArray(primary?.addons) && primary.addons.length ? primary.addons : fallback?.addons,
     service_matrix: Array.isArray(primary?.service_matrix) && primary.service_matrix.length ? primary.service_matrix : fallback?.service_matrix,
-    service_areas: Array.isArray(primary?.service_areas) && primary.service_areas.length ? primary.service_areas : fallback?.service_areas,
+    service_areas: mergeServiceAreas(primary?.service_areas, fallback?.service_areas),
     booking_rules: {
       ...(fallback?.booking_rules || {}),
       ...(primary?.booking_rules || {})
@@ -209,7 +232,7 @@ export async function loadPricingCatalogClient({
   const needsFallback = !apiCatalog
     || !Array.isArray(apiCatalog.packages) || !apiCatalog.packages.length
     || !Array.isArray(apiCatalog.addons) || !apiCatalog.addons.length
-    || !Array.isArray(apiCatalog.service_areas) || !apiCatalog.service_areas.length
+    || !Array.isArray(apiCatalog.service_areas) || apiCatalog.service_areas.length < 20
     || !Array.isArray(apiCatalog.charts) || !apiCatalog.charts.length;
 
   if (!needsFallback) {
@@ -566,8 +589,22 @@ export function serviceAreaRows(catalog) {
 }
 
 export function findServiceArea(catalog, value) {
-  const needle = String(value || "").trim().toLowerCase();
-  return serviceAreaRows(catalog).find((row) => [row?.value, row?.label].some((entry) => String(entry || "").trim().toLowerCase() === needle)) || null;
+  const raw = String(value || "").trim();
+  const needle = raw.toLowerCase();
+  const rows = serviceAreaRows(catalog);
+  if (!needle) return null;
+  const exact = rows.find((row) => [row?.value, row?.label, row?.municipality, row?.zone, ...(Array.isArray(row?.aliases) ? row.aliases : [])]
+    .some((entry) => String(entry || "").trim().toLowerCase() === needle));
+  if (exact) return exact;
+  const contains = rows.find((row) => [row?.value, row?.label, row?.municipality, row?.zone, ...(Array.isArray(row?.aliases) ? row.aliases : [])]
+    .some((entry) => {
+      const text = String(entry || "").trim().toLowerCase();
+      return text && (needle.includes(text) || text.includes(needle));
+    }));
+  if (contains) return contains;
+  if (needle.includes("norfolk")) return rows.find((row) => String(row?.county || "").toLowerCase() === "norfolk county" && /other norfolk/i.test(String(row?.label || ""))) || rows.find((row) => String(row?.county || "").toLowerCase() === "norfolk county") || null;
+  if (needle.includes("oxford")) return rows.find((row) => String(row?.county || "").toLowerCase() === "oxford county" && /other oxford/i.test(String(row?.label || ""))) || rows.find((row) => String(row?.county || "").toLowerCase() === "oxford county") || null;
+  return null;
 }
 
 export function chartUrl(catalog, key) {
