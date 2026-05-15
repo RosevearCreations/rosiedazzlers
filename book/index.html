@@ -198,11 +198,8 @@
 
         <div>
           <label for="service_area">Service area</label>
-          <input id="service_area" list="service_area_options" placeholder="Start typing a town, county, or service zone…" autocomplete="off" />
-          <datalist id="service_area_options">
-            <option value="Tillsonburg, ON"></option>
-          </datalist>
-          <div class="hint mini">Type any Oxford or Norfolk town. If there is no town-specific rule, we default to the county water-use reminder.</div>
+          <input id="service_area" list="service_area_options" autocomplete="off" placeholder="Start typing a town, county, or service zone…" />
+          <datalist id="service_area_options"></datalist>
           <div id="serviceAreaPanel" class="service-area-panel" style="margin-top:8px">
             <div id="serviceAreaNote" class="notice mini">Choose the closest town or service zone so we can apply the right travel, parking, and local bylaw rules before dispatch.</div>
             <ul id="serviceAreaRules">
@@ -576,7 +573,7 @@
         selected_date: selectedDate() || null,
         selected_slot: state.selectedSlotChoice || null,
         service_area: qs('#service_area').value || null,
-        service_area_label: area?.label || qs('#service_area').selectedOptions?.[0]?.textContent || qs('#service_area').value || null,
+        service_area_label: area?.label || qs('#service_area').value || null,
         local_rules_label: area?.municipality || null,
         vehicle_label: [qs('#veh_year').value, qs('#veh_make').value, qs('#veh_model').value, qs('#veh_color').value].filter(Boolean).join(' · ') || null,
         vehicle_size: selectedSize() || null,
@@ -780,59 +777,202 @@
       return await loadPricingCatalogClient({ fallbackUrl: DATA_FALLBACK_URL, credentials: "include" });
     }
 
+    function serviceAreaDisplayValue(row) {
+      return String(row?.value || row?.label || row?.municipality || row?.zone || "").trim();
+    }
+
+    function serviceAreaCountyFallbackRows() {
+      return [
+        {
+          county: "Oxford County",
+          label: "Other Oxford County location",
+          value: "Other Oxford County location",
+          municipality: "Oxford County",
+          zone: "Oxford County",
+          travel_tier: "quote_required",
+          bylaw_note: "Oxford County fallback for towns or rural addresses not listed by name.",
+          parking_rule: "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+          noise_rule: "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+          water_rule: "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+          access_rule: "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+          official_links: [
+            {
+              label: "Oxford County water conservation",
+              url: "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+            }
+          ]
+        },
+        {
+          county: "Norfolk County",
+          label: "Other Norfolk County location",
+          value: "Other Norfolk County location",
+          municipality: "Norfolk County",
+          zone: "Norfolk County",
+          travel_tier: "quote_required",
+          bylaw_note: "Norfolk County fallback for towns or rural addresses not listed by name.",
+          parking_rule: "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+          noise_rule: "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+          water_rule: "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+          access_rule: "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+          official_links: [
+            {
+              label: "Norfolk County watering restrictions",
+              url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+            }
+          ]
+        }
+      ];
+    }
+
+    function normalizeServiceAreaOptionRows(rows) {
+      const merged = [];
+      const seen = new Set();
+
+      const addRow = (row) => {
+        if (!row || typeof row !== "object") return;
+        const value = serviceAreaDisplayValue(row);
+        if (!value) return;
+        const key = value.toLowerCase();
+        if (seen.has(key)) return;
+        seen.add(key);
+        merged.push({
+          ...row,
+          value,
+          label: String(row.label || value).trim(),
+          county: String(row.county || "").trim(),
+          municipality: String(row.municipality || "").trim(),
+          zone: String(row.zone || "").trim(),
+          travel_tier: String(row.travel_tier || row.tier || "").trim()
+        });
+      };
+
+      serviceAreaCountyFallbackRows().forEach(addRow);
+      (Array.isArray(rows) ? rows : []).forEach(addRow);
+
+      return merged.sort((a, b) => {
+        const aLabel = serviceAreaDisplayValue(a).toLowerCase();
+        const bLabel = serviceAreaDisplayValue(b).toLowerCase();
+        const aCounty = String(a.county || "").toLowerCase();
+        const bCounty = String(b.county || "").toLowerCase();
+        if (aLabel.startsWith("other ")) return -1;
+        if (bLabel.startsWith("other ")) return 1;
+        if (aCounty !== bCounty) return aCounty.localeCompare(bCounty);
+        return aLabel.localeCompare(bLabel);
+      });
+    }
+
     function renderServiceAreas(rowsOverride = null) {
-      const rows = Array.isArray(rowsOverride) && rowsOverride.length ? rowsOverride : configuredServiceAreas();
-      const safeRows = Array.isArray(rows) && rows.length ? rows : [];
       const datalist = qs("#service_area_options");
       const field = qs("#service_area");
-      const prior = field.value;
-      if (!safeRows.length) {
-        datalist.innerHTML = `<option value="Other Oxford County location"></option><option value="Other Norfolk County location"></option>`;
-        field.placeholder = "Type your town or county…";
-        updateServiceAreaNote();
-        return;
-      }
-      datalist.innerHTML = safeRows.map((row) => {
-        const value = row.value || row.label || row.municipality || "";
-        const label = [row.county, row.travel_tier].filter(Boolean).join(" · ");
-        return `<option value="${escapeHtml(value)}" label="${escapeHtml(label)}"></option>`;
+      if (!datalist || !field) return;
+
+      const currentValue = String(field.value || "").trim();
+      const rows = normalizeServiceAreaOptionRows(
+        Array.isArray(rowsOverride) && rowsOverride.length
+          ? rowsOverride
+          : configuredServiceAreas()
+      );
+
+      datalist.innerHTML = rows.map((row) => {
+        const value = serviceAreaDisplayValue(row);
+        const labelParts = [
+          row.county,
+          row.municipality && row.municipality !== value ? row.municipality : "",
+          row.travel_tier ? `tier: ${row.travel_tier}` : ""
+        ].filter(Boolean);
+        return `<option value="${escapeHtml(value)}" label="${escapeHtml(labelParts.join(" · "))}"></option>`;
       }).join("");
-      const preferred = prior || activeBookingRules().default_service_area || "Tillsonburg, ON";
-      field.value = preferred;
+
+      // Do not auto-fill Tillsonburg here. Datalist dropdowns filter to the current input value.
+      if (!currentValue) field.value = "";
+      field.placeholder = "Start typing a town, county, or service zone…";
+      field.setAttribute("autocomplete", "off");
+
       updateServiceAreaNote();
     }
 
+    function findCountyFallbackForTypedArea(value) {
+      const text = String(value || "").trim().toLowerCase();
+      if (!text) return null;
+
+      const rows = serviceAreaCountyFallbackRows();
+      if (text.includes("oxford")) return rows.find((row) => row.county === "Oxford County") || null;
+      if (text.includes("norfolk")) return rows.find((row) => row.county === "Norfolk County") || null;
+
+      const oxfordHints = [
+        "tillsonburg", "woodstock", "ingersoll", "norwich", "otterville", "burgessville",
+        "springford", "ostrand", "sweaburg", "beachville", "embro", "tavistock",
+        "drumbo", "princeton", "plattsville", "thorndale", "hickson", "kintore",
+        "mount elgin", "brownsville", "salford", "innerkip"
+      ];
+      const norfolkHints = [
+        "simcoe", "delhi", "port dover", "waterford", "port rowan", "langton",
+        "courtland", "teeterville", "windham centre", "walsh", "turkey point",
+        "vittoria", "st williams", "st. williams", "lynedoch", "la salette",
+        "clear creek", "long point", "port ryerse"
+      ];
+
+      if (oxfordHints.some((town) => text.includes(town))) return rows.find((row) => row.county === "Oxford County") || null;
+      if (norfolkHints.some((town) => text.includes(town))) return rows.find((row) => row.county === "Norfolk County") || null;
+      return null;
+    }
+
+    function selectedServiceAreaMeta() {
+      const value = qs("#service_area")?.value || "";
+      return findServiceArea(state.pricing || {}, value) || findCountyFallbackForTypedArea(value) || null;
+    }
+
     function updateServiceAreaNote() {
-      const typedServiceArea = qs("#service_area").value;
-      const selected = findServiceArea(state.pricing || {}, typedServiceArea);
+      const field = qs("#service_area");
       const note = qs("#serviceAreaNote");
       const rules = qs("#serviceAreaRules");
       const links = qs("#serviceAreaLinks");
+      if (!field || !note || !rules || !links) return;
 
-      if (!selected) {
-        note.className = typedServiceArea ? "notice warn mini" : "notice mini";
-        note.textContent = typedServiceArea
-          ? "Custom service area entered. We will confirm the town/county before dispatch and use the closest county water-use reminder as the fallback."
-          : "Choose or type the closest town, county, or service zone so we can apply the right travel, parking, and local bylaw rules before dispatch.";
-        rules.innerHTML = typedServiceArea
-          ? "<li>Staff should confirm whether this address is in Oxford County or Norfolk County before final dispatch.</li>"
-          : "<li>Select or type a town or zone to load parking, noise, runoff, and access reminders.</li>";
+      const typedServiceArea = String(field.value || "").trim();
+      const exactMatch = findServiceArea(state.pricing || {}, typedServiceArea);
+      const selected = exactMatch || findCountyFallbackForTypedArea(typedServiceArea);
+
+      if (!typedServiceArea) {
+        note.className = "notice mini";
+        note.textContent = "Choose or type the closest town, county, or service zone so we can apply travel, parking, water-use, and local bylaw reminders before dispatch.";
+        rules.innerHTML = "<li>Start typing to choose from the full Oxford County and Norfolk County service list.</li>";
         links.innerHTML = "";
         return;
       }
 
+      if (!selected) {
+        note.className = "notice warn mini";
+        note.textContent = "Custom service area entered. We will confirm the town/county before dispatch and apply the closest county water-use reminder when possible.";
+        rules.innerHTML = "<li>Staff should confirm whether this address is in Oxford County, Norfolk County, or outside the normal service zone before final dispatch.</li>";
+        links.innerHTML = "";
+        renderReviewVehicle();
+        renderFinalSummary();
+        return;
+      }
+
       note.className = "notice warn mini";
-      note.textContent = selected.bylaw_note || `${selected.label || selected.value} selected.`;
+      note.textContent = exactMatch
+        ? (selected.bylaw_note || `${selected.label || selected.value} selected.`)
+        : `${typedServiceArea} was matched to ${selected.county || "the closest county"} fallback rules. Staff should confirm before dispatch.`;
+
       const ruleItems = [
         selected.parking_rule,
         selected.noise_rule,
         selected.water_rule,
         selected.access_rule
       ].filter(Boolean);
-      rules.innerHTML = ruleItems.map((item) => `<li>${escapeHtml(item)}</li>`).join("") || "<li>No extra rules found for this zone.</li>";
+      rules.innerHTML = ruleItems.length
+        ? ruleItems.map((item) => `<li>${escapeHtml(item)}</li>`).join("")
+        : "<li>No extra rules found for this zone.</li>";
 
       const linkRows = Array.isArray(selected.official_links) ? selected.official_links : [];
-      links.innerHTML = linkRows.map((row) => `<a class="btn ghost small" href="${escapeHtml(row.url || "#")}" target="_blank" rel="noopener">${escapeHtml(row.label || "Official source")}</a>`).join("");
+      links.innerHTML = linkRows.map((row) => {
+        const url = String(row.url || "").trim();
+        const label = String(row.label || "Official source").trim();
+        if (!url) return "";
+        return `<a class="btn ghost small" href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(label)}</a>`;
+      }).join("");
 
       renderReviewVehicle();
       renderFinalSummary();
@@ -1409,8 +1549,8 @@
         start_slot,
         duration_slots,
         service_area: qs("#service_area").value,
-        service_area_label: qs("#service_area").value,
-        service_area_meta: findServiceArea(state.pricing || {}, qs("#service_area").value) || null,
+        service_area_label: (findServiceArea(state.pricing || {}, qs("#service_area").value) || findCountyFallbackForTypedArea(qs("#service_area").value))?.label || qs("#service_area").value,
+        service_area_meta: findServiceArea(state.pricing || {}, qs("#service_area").value) || findCountyFallbackForTypedArea(qs("#service_area").value) || null,
         package_code: state.selectedPackageCode,
         vehicle_size: selectedSize(),
         customer_name: qs("#customer_name").value.trim(),
@@ -1468,13 +1608,18 @@
       }
     });
 
-    ["input", "change"].forEach((eventName) => {
-      qs("#service_area").addEventListener(eventName, () => {
-        updateServiceAreaNote();
-        analyticsTrack("booking_service_area_pick", { service_area: qs("#service_area").value || null });
-        renderReviewVehicle();
-        renderFinalSummary();
-      });
+    qs("#service_area").addEventListener("input", () => {
+      updateServiceAreaNote();
+      analyticsTrack("booking_service_area_type", { service_area: qs("#service_area").value || null });
+      renderReviewVehicle();
+      renderFinalSummary();
+    });
+
+    qs("#service_area").addEventListener("change", () => {
+      updateServiceAreaNote();
+      analyticsTrack("booking_service_area_pick", { service_area: qs("#service_area").value || null });
+      renderReviewVehicle();
+      renderFinalSummary();
     });
 
     renderServiceAreas(configuredServiceAreas());
