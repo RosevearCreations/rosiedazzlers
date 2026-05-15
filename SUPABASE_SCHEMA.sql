@@ -1,3 +1,8 @@
+-- Build 140 value-add roadmap foundations — 2026-05-10
+-- Adds optional DB-first foundation tables in sql/2026-05-10_build140_value_add_roadmap_foundations.sql:
+-- app_option_libraries, app_media_library, and app_content_entries.
+-- Runtime still falls back to bundled JSON and app_management_settings until these tables are deployed and populated.
+
 -- Build 139 corrected dev cleanup synchronization — 2026-05-10
 -- No DDL changes in this pass.
 -- Documentation was archived/reset and root-level duplicate API JavaScript was removed from the corrected dev package.

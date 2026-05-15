@@ -1,66 +1,37 @@
-# Images and Media Guide
+# Images and Media Guide — Build 140
 
-**Reset date:** 2026-05-10
+**Updated:** 2026-05-14
 
-## General sizes
+## Current image source order
 
-- Hero/banner images: 1600×900 or larger, landscape.
-- Service/add-on cards: 1200×900 or 1200×1200.
-- Before/after gallery pairs: same orientation and similar crop; 1200px wide minimum preferred.
-- Gear/consumable product cards: 1200×1200 square preferred.
-- Review/proof images: 1200×900 landscape or 1200×1200 square.
-- Logos/icons/SVG outlines: use only when an illustrative placeholder is intended, not as the primary real service image.
+1. Supabase media library (`app_media_library`) once the Build 140 SQL is applied and editors are built.
+2. App settings / Admin App fields.
+3. Bundled catalog JSON in `data/`.
+4. R2 public URLs.
+5. Local SVG/PNG fallback assets.
 
-## Add-on images
+## Recommended sizes
 
-Add-ons should prefer real PNG/JPG/R2 image URLs as the primary image. SVG outlines are acceptable as fallback only.
+- Home hero: 1600×900.
+- Before/after pair: 1200×900 or 1600×1200, matched angle.
+- Add-on card: 1200×800 landscape.
+- Gallery thumbnail: 800×800 square or 1200×900 landscape.
+- Inventory item: 1000×1000 square.
+- Social preview: 1200×630.
 
-Admin editors should show:
+## Replacement workflow
 
-- current image preview,
-- primary image URL,
-- fallback image URL,
-- alt text,
-- recommended dimensions,
-- keep/replace choice.
+For each admin image field, aim for:
 
-## Before/after gallery JSON format
+- Current image preview.
+- Primary image URL.
+- Fallback image URL.
+- Alt text.
+- Caption/usage note.
+- Recommended size note.
+- Keep/replace choice.
 
-Use one object per gallery item inside the same `items` array:
+## New Build 140 files
 
-```json
-{
-  "items": [
-    {
-      "title": "Engine Cleaner",
-      "location": "Tillsonburg, ON",
-      "before_kind": "image",
-      "before_url": "https://assets.rosiedazzlers.ca/CarPhotos/MitsubishiLancerEngineDirty.PNG",
-      "after_kind": "image",
-      "after_url": "https://assets.rosiedazzlers.ca/CarPhotos/MitsubishiLancerEngineClean.PNG",
-      "note": "We love to clean engines.",
-      "consent_status": "Engines",
-      "customer_name": "",
-      "vehicle_label": "2015 Mitsubishi"
-    },
-    {
-      "title": "Pet Hair Interior Detail",
-      "location": "Woodstock, ON",
-      "before_kind": "image",
-      "before_url": "https://assets.rosiedazzlers.ca/gallery/pet-hair-before.jpg",
-      "after_kind": "image",
-      "after_url": "https://assets.rosiedazzlers.ca/gallery/pet-hair-after.jpg",
-      "note": "Interior pet hair removal proof.",
-      "consent_status": "Approved",
-      "customer_name": "",
-      "vehicle_label": "SUV interior"
-    }
-  ]
-}
-```
-
-Do not create `items2` or a second top-level array.
-
-## Long-term media direction
-
-Move images/videos into a shared DB-backed media library so add-ons, landing pages, gallery entries, services, gear, and consumables all reuse one media source.
+- `data/media_library_seed.json` documents media groups and recommended sizes.
+- `sql/2026-05-10_build140_value_add_roadmap_foundations.sql` adds the optional `app_media_library` table.

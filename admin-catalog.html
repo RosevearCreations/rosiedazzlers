@@ -217,25 +217,42 @@
   async function getJson(url){ const r=await fetch(url,{credentials:'include',headers:headers(false)}); return { ok:r.ok, status:r.status, out:await r.json().catch(()=>null) }; }
   async function postJson(url,payload){ const r=await fetch(url,{method:'POST',credentials:'include',headers:headers(true),body:JSON.stringify(payload)}); return { ok:r.ok, status:r.status, out:await r.json().catch(()=>null) }; }
   async function loadSharedInventoryOptions(){
+    const stored = readStoredInventoryOptions();
+    let shared = {};
     try {
       const r=await postJson('/api/admin/app_settings_get', {});
-      const raw=r?.out?.settings?.catalog_dropdown_options;
+      const raw=r?.out?.settings?.catalog_dropdown_options?.value || r?.out?.settings?.catalog_dropdown_options;
       const value=typeof raw==='string' ? JSON.parse(raw) : raw;
-      const shared={
+      shared={
         categories:value?.inventory_categories || [],
         subcategories:value?.inventory_subcategories || [],
         vendors:value?.inventory_vendors || [],
         units:value?.inventory_units || [],
-        itemTypes:['tool','consumable'],
-        imageUrls:value?.imageUrls || []
+        itemTypes:value?.inventory_item_types || ['tool','consumable'],
+        imageUrls:value?.imageUrls || value?.image_url_helpers || []
       };
-      const merged=normalizeInventoryOptions(Object.assign({}, readStoredInventoryOptions(), shared));
-      localStorage.setItem(optionStorageKey, JSON.stringify(merged));
-      setInventoryOptionsEditor(merged);
     } catch(err){
-      console.warn('Could not load shared catalog dropdown options; using browser/default options.', err);
-      setInventoryOptionsEditor(currentInventoryOptions());
+      console.warn('Could not load DB catalog dropdown options; trying bundled fallback.', err);
     }
+    try {
+      const fallbackRes = await fetch('/data/admin_option_libraries.json', { credentials:'include', cache:'no-store' });
+      const fallback = await fallbackRes.json().catch(()=>null);
+      if (fallback && typeof fallback === 'object') {
+        shared = {
+          categories: mergeOptionArrays(shared.categories || [], fallback.inventory_categories || []),
+          subcategories: mergeOptionArrays(shared.subcategories || [], fallback.inventory_subcategories || []),
+          vendors: mergeOptionArrays(shared.vendors || [], fallback.inventory_vendors || []),
+          units: mergeOptionArrays(shared.units || [], fallback.inventory_units || []),
+          itemTypes: mergeOptionArrays(shared.itemTypes || [], ['tool','consumable','system'], fallback.inventory_item_types || []),
+          imageUrls: mergeOptionArrays(shared.imageUrls || [], fallback.image_url_helpers || [])
+        };
+      }
+    } catch(err){
+      console.warn('Could not load bundled catalog dropdown options; using browser/default options.', err);
+    }
+    const merged=normalizeInventoryOptions(Object.assign({}, stored, shared));
+    localStorage.setItem(optionStorageKey, JSON.stringify(merged));
+    setInventoryOptionsEditor(merged);
   }
   async function saveSharedInventoryOptions(value){
     const payload={

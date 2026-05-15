@@ -1,36 +1,24 @@
-# Handoff for Next Chat
+# Handoff Next Chat — Build 140
 
-We are working from the corrected dev package after the Markdown/archive cleanup pass.
+**Updated:** 2026-05-14
 
 ## Start here
 
-1. Confirm the branch/package is based on `dev`.
-2. Read `SANITY_CHECK.md`.
-3. Use `DEVELOPMENT_ROADMAP.md` for the next 20 steps.
-4. Use `KNOWN_GAPS_AND_RISKS.md` to avoid reopening known problems.
-5. Keep `SUPABASE_SCHEMA.sql` and `sql/` notes synchronized with every pass.
+The corrected package for this pass is Build 140. It completed the prior 20-step roadmap as a practical foundation pass and created the next 20-step roadmap in `DEVELOPMENT_ROADMAP.md`.
 
-## Current priority
+## Most important changes
 
-Continue making the admin system feel like a real app:
+- Added shared option-library, media-library, review-proof, and local SEO data contracts.
+- Added public review API fallback and homepage review renderer.
+- Added local SEO and release-check scripts.
+- Added optional Supabase migration for DB-first option/media/content foundations.
+- Removed root-level duplicate API JavaScript files.
+- Archived duplicate/older Markdown and refreshed active docs.
 
-- Admin App editable dropdown option libraries.
-- Admin Catalog gear/consumables inventory workflow.
-- Media/image replacement workflow.
-- Admin-managed landing pages and gallery entries.
-- Accounting close and export workflow.
-- Booking/checkout fallbacks and error handling.
+## Next best step
 
-## Standing rules
+Run `sql/2026-05-10_build140_value_add_roadmap_foundations.sql` in Supabase dev, then build the Admin App panels that read/write the new option and media foundations.
 
-- One H1 per exposed public page.
-- Update Markdown every pass.
-- Update schema notes every pass.
-- Keep local SEO language visible and natural.
-- Preserve DB fallback behavior until migrations are confirmed.
-## Extra route sanity applied
+## Branch rule
 
-- Synced `admin/index.html` from `admin.html`.
-- Synced `book/index.html` from `book.html`.
-- This removed non-identical clean-route wrapper collisions found during static stress checks.
-
+Use `dev`.

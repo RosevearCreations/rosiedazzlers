@@ -1,38 +1,55 @@
-# Rosie Dazzlers — Dev Build Handoff
+# Rosie Dazzlers — Mobile Auto Detailing Platform
 
-**Last reset:** 2026-05-10  
 **Active branch:** `dev`  
-**Build pass:** 139 corrected-package cleanup
+**Build pass:** 140  
+**Updated:** 2026-05-14
 
-Rosie Dazzlers is a mobile auto-detailing website and operations app for Norfolk and Oxford County. The repo contains public marketing pages, booking flows, admin tools, inventory/catalog workflows, accounting screens, media management, and Cloudflare Pages Functions backed by Supabase.
+Rosie Dazzlers is a Cloudflare Pages + Supabase + R2 mobile auto-detailing website and operations app for Oxford County and Norfolk County, Ontario.
 
-## What this reset did
+## Build 140 highlight
 
-- Applied the cleanup pass to the corrected `rosiedazzlers-dev(135).zip` package.
-- Archived the older Markdown set under `archive/2026-05-10-markdown-reset/`.
-- Rebuilt the active Markdown files as a smaller, clearer working set.
-- Removed misplaced root-level API JavaScript duplicates; live API files belong under `functions/api/`.
-- Preserved `service-worker.js` at root because it is a public browser asset.
-- Moved `membership_reminders_process.js` into `functions/api/` so `/api/membership_reminders_process` remains deployable.
-- Added a no-DDL schema note for this cleanup pass.
+This pass completed the prior 20-step roadmap as a foundation pass: shared dropdown option contracts, media-library seed data, review-proof API fallback, local SEO target/audit scripts, release checklist script, schema foundations, duplicate-root-file cleanup, wrapper sync, and fresh Markdown documentation.
 
-## Current source-of-truth files
+## Main customer flows
 
-Read these first in a new chat or development pass:
+- Home: `/`
+- Services: `/services`
+- Pricing and booking planner: `/pricing`
+- Booking: `/book`
+- Gallery: `/gallery`
+- Gifts: `/gifts`
+- Gear and consumables: `/gear`, `/consumables`
+- Town landing pages: Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, Port Dover
+- Service landing pages: ceramic coating, pet hair removal, odor removal, headlight restoration, paint correction
 
-1. `SANITY_CHECK.md`
-2. `DEVELOPMENT_ROADMAP.md`
-3. `KNOWN_GAPS_AND_RISKS.md`
-4. `CURRENT_IMPLEMENTATION_STATE.md`
-5. `PROJECT_BRAIN.md`
-6. `REPO_GUIDE.md`
-7. `IMAGES.md`
-8. `SUPABASE_SCHEMA.sql`
+## Main admin flows
 
-## Operating rules
+- Admin App: `/admin-app`
+- Admin Catalog: `/admin-catalog`
+- Admin Accounting: `/admin-accounting`
+- Admin Booking/Blocks/Assign/Payroll/Analytics/Customers/Staff
 
-- Keep `dev` as the working branch unless explicitly told otherwise.
-- Every build pass must update Markdown and schema notes.
-- Public pages should have no more than one H1.
-- Keep local SEO wording clear: mobile auto detailing, interior detailing, ceramic coating, paint correction, pet hair removal, engine cleaning, Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi, Port Dover, Norfolk County, and Oxford County.
-- Keep JSON as a bundled fallback, but prefer DB-backed/admin-managed sources where the workflow is stable.
+## Source-of-truth docs
+
+Read these first:
+
+- `DEVELOPMENT_ROADMAP.md`
+- `KNOWN_GAPS_AND_RISKS.md`
+- `SANITY_CHECK.md`
+- `CURRENT_IMPLEMENTATION_STATE.md`
+- `PROJECT_BRAIN.md`
+- `REPO_GUIDE.md`
+- `IMAGES.md`
+- `SUPABASE_SCHEMA.sql`
+
+## Release check
+
+Before deployment, run:
+
+```bash
+python scripts/release_check.py
+```
+
+## Branch rule
+
+Use `dev` as the active source of truth. Do not merge to `main` unless explicitly requested.

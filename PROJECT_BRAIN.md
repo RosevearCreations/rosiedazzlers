@@ -1,20 +1,19 @@
 # Project Brain — Rosie Dazzlers
 
-Rosie Dazzlers is both a public mobile auto-detailing website and an operations platform. The goal is not only to look polished, but to support real booking, customer history, staff/admin workflow, inventory, media, accounting, and local search visibility.
+**Updated:** 2026-05-14  
+**Build:** 140
 
-## Core themes
+Rosie Dazzlers is both a public local-service website and an operations app. The current direction is to keep the public site reliable while moving admin-managed data from scattered JSON into Supabase/app settings.
 
-- Local search visibility for Oxford and Norfolk County.
-- Strong public trust through reviews, before/after proof, service-area clarity, and real process images.
-- Booking-first customer flow with clear service/package selection.
-- Admin-first content editing so the site can be maintained without editing code.
-- DB-backed app workflows with JSON fallback for resilience.
-- Practical bookkeeping/accounting handoff, not unsupported filing claims.
+## Permanent rules
 
-## Important habits
+- Work from `dev`.
+- Keep public pages to one H1.
+- Keep town/service search wording prominent.
+- Keep JSON fallback until DB editors are proven.
+- Keep root public assets separate from Cloudflare Functions under `functions/api/`.
+- Keep Markdown and schema notes synchronized every pass.
 
-- Keep changes small enough to test.
-- Preserve working routes.
-- Keep CSS from drifting.
-- Avoid duplicate sources of truth where possible.
-- Document every pass.
+## Build 140 direction
+
+The project now has formal fallback data contracts for dropdowns, media, reviews, and local SEO. The next step is adding real admin editors and migrating content into DB-backed workflows.

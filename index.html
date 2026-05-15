@@ -123,13 +123,13 @@
         <h2 style="margin:0 0 10px">Reviews</h2>
         <p class="help">Sample customer-style reviews are shown until the live review API is connected.</p>
         <div class="hr"></div>
-        <div class="sample-review-grid" aria-label="Sample Rosie Dazzlers customer reviews">
+        <div data-review-proof-mount><div class="sample-review-grid" aria-label="Sample Rosie Dazzlers customer reviews">
           <article class="sample-review-card"><div class="stars">★★★★★</div><blockquote>“Our SUV had winter salt in every corner. The interior detail made it feel fresh again, especially the mats and door jambs.”</blockquote><footer>— Melissa R., Tillsonburg · SUV interior detail</footer></article>
           <article class="sample-review-card"><div class="stars">★★★★★</div><blockquote>“The engine bay cleaning was exactly what we wanted before selling the car. It looked cared for without being overdone.”</blockquote><footer>— Jason K., Woodstock · Engine cleaning</footer></article>
           <article class="sample-review-card"><div class="stars">★★★★★</div><blockquote>“Pet hair was our biggest problem. They took the time to work through the seats and cargo area and the car finally looked presentable again.”</blockquote><footer>— Amanda P., Ingersoll · Pet hair removal</footer></article>
           <article class="sample-review-card"><div class="stars">★★★★★</div><blockquote>“The clay treatment and sealant brought the paint back to a smooth shine. Water beads much better now after washing.”</blockquote><footer>— Trevor M., Simcoe · Clay treatment + sealant</footer></article>
           <article class="sample-review-card"><div class="stars">★★★★★</div><blockquote>“We booked a complete detail before a family trip. The van smelled cleaner, the glass was spotless, and the kids noticed first.”</blockquote><footer>— Rachel D., Delhi · Complete detail</footer></article>
-        </div>
+        </div></div>
       </div>
     </div>
 
@@ -220,8 +220,10 @@
   <script type="module">
     import { renderSocialFeedMounts } from "/assets/social-feed.js";
     import { renderRecentWorkMounts } from "/assets/recent-work.js";
+    import { renderReviewProofMounts } from "/assets/reviews.js";
     renderSocialFeedMounts();
     renderRecentWorkMounts(3);
+    renderReviewProofMounts(5);
   </script>
 
   <script type="module" src="/assets/chrome.js?v=20260311i"></script>

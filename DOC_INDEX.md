@@ -1,18 +1,22 @@
-# Documentation Index
+# Documentation Index — Build 140
 
-Active current docs:
+## Current active docs
 
-- `README.md` — project overview and cleanup summary.
-- `SANITY_CHECK.md` — latest sanity/build state.
-- `DEVELOPMENT_ROADMAP.md` — next 20 steps.
-- `KNOWN_GAPS_AND_RISKS.md` — active risks and watch list.
-- `CURRENT_IMPLEMENTATION_STATE.md` — current feature state.
-- `PROJECT_BRAIN.md` — project direction and habits.
-- `REPO_GUIDE.md` — repo layout and file rules.
-- `IMAGES.md` — media sizes, replacement guidance, and gallery format.
-- `HANDOFF_NEXT_CHAT.md` — next-chat handoff.
-- `NEW_CHAT_STATUS.md` — compact status for a fresh conversation.
+- `README.md`
+- `DEVELOPMENT_ROADMAP.md`
+- `KNOWN_GAPS_AND_RISKS.md`
+- `SANITY_CHECK.md`
+- `HANDOFF_NEXT_CHAT.md`
+- `NEW_CHAT_STATUS.md`
+- `CURRENT_IMPLEMENTATION_STATE.md`
+- `PROJECT_BRAIN.md`
+- `REPO_GUIDE.md`
+- `REPO_RULES.md`
+- `AI_CONTEXT.md`
+- `DATABASE_STRUCTURE_CURRENT.md`
+- `IMAGES.md`
+- `SUPABASE_SCHEMA.sql`
 
-Archived docs:
+## Archived docs
 
-- `archive/2026-05-10-markdown-reset/`
+Older duplicate Markdown was copied into `archive/2026-05-14-build140-markdown-snapshot/`.
