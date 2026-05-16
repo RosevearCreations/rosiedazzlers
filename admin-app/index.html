@@ -174,6 +174,28 @@
         <div id="membershipInterestList" class="stack-sm"></div>
       </article>
 
+
+
+      <article class="card span-12" id="catalogDropdownOptionsCard">
+        <h2>Dropdown option library</h2>
+        <p class="feature-note">Edit the reusable dropdown suggestions used by Admin App and Admin Catalog. Add one option per line. These lists help sort consumables, gear, add-ons, colours, vendors, units, service tiers, service zones, and county fallbacks without hard-coding every field into a page.</p>
+        <div class="catalog-option-grid">
+          <label class="field"><span>Add-on categories</span><textarea id="dropdown_addon_categories" placeholder="paint protection&#10;interior protection"></textarea></label>
+          <label class="field"><span>Add-on types</span><textarea id="dropdown_addon_types" placeholder="standalone service&#10;quote-led add-on"></textarea></label>
+          <label class="field"><span>Inventory categories</span><textarea id="dropdown_inventory_categories" placeholder="cleaning liquids&#10;microfiber towels"></textarea></label>
+          <label class="field"><span>Subcategories / colours / finishes</span><textarea id="dropdown_inventory_subcategories" placeholder="chemicals&#10;black&#10;gloss finish"></textarea></label>
+          <label class="field"><span>Vendors</span><textarea id="dropdown_inventory_vendors" placeholder="Amazon&#10;Canadian Tire"></textarea></label>
+          <label class="field"><span>Units</span><textarea id="dropdown_inventory_units" placeholder="bottle&#10;pack&#10;kit"></textarea></label>
+          <label class="field"><span>Service travel tiers</span><textarea id="dropdown_service_tiers" placeholder="urban&#10;township&#10;quote_required"></textarea></label>
+          <label class="field"><span>Service zones / towns</span><textarea id="dropdown_service_zones" placeholder="Tillsonburg, ON&#10;Simcoe, ON&#10;Other Oxford County location"></textarea></label>
+          <label class="field"><span>Service counties</span><textarea id="dropdown_service_counties" placeholder="Oxford County&#10;Norfolk County"></textarea></label>
+        </div>
+        <div class="actions" style="margin-top:14px">
+          <button class="btn primary" type="button" id="saveCatalogDropdownOptionsBtn">Save dropdown options</button>
+        </div>
+        <div class="note">These options are saved as <code>catalog_dropdown_options</code>. Future admin screens should read this list first, then fall back to bundled defaults if the database setting is not available.</div>
+      </article>
+
       <article class="card span-12">
         <h2>Pricing Control Center</h2>
         <p class="feature-note">This is the single entry point for price changes, travel charges, package edits, add-ons, and service-area pricing logic. The booking screen is stable and should stay untouched.</p>
@@ -2211,7 +2233,7 @@
   }
   function readCatalogDropdownOptionsEditor(){
     var current = catalogDropdownOptionsDefaults();
-    var map = { addon_categories:'dropdown_addon_categories', addon_types:'dropdown_addon_types', inventory_categories:'dropdown_inventory_categories', inventory_subcategories:'dropdown_inventory_subcategories', inventory_vendors:'dropdown_inventory_vendors', inventory_units:'dropdown_inventory_units', service_tiers:'dropdown_service_tiers', service_zones:'dropdown_service_zones' };
+    var map = { addon_categories:'dropdown_addon_categories', addon_types:'dropdown_addon_types', inventory_categories:'dropdown_inventory_categories', inventory_subcategories:'dropdown_inventory_subcategories', inventory_vendors:'dropdown_inventory_vendors', inventory_units:'dropdown_inventory_units', service_tiers:'dropdown_service_tiers', service_zones:'dropdown_service_zones', service_counties:'dropdown_service_counties' };
     Object.keys(map).forEach(function(key){ var el = byId(map[key]); current[key] = optionLinesToArray(el ? el.value : '').concat(catalogDropdownOptionsDefaults()[key]); });
     return normalizeCatalogDropdownOptions(current);
   }
@@ -2231,6 +2253,41 @@
       return null;
     }
   }
+
+  function serviceAreaMergeKey(row){
+    var value = cleanTextValue(row && (row.value || row.label || row.municipality || row.zone));
+    var county = cleanTextValue(row && row.county);
+    var municipality = cleanTextValue(row && row.municipality);
+    var zone = cleanTextValue(row && row.zone);
+    return (value || [county, municipality, zone].filter(Boolean).join(' | ')).toLowerCase();
+  }
+  function mergeServiceAreaRows(currentRows, fallbackRows){
+    var map = new Map();
+    function put(row, preferExisting){
+      if (!row || typeof row !== 'object') return;
+      var key = serviceAreaMergeKey(row);
+      if (!key) return;
+      var existing = map.get(key);
+      if (!existing) {
+        map.set(key, Object.assign({}, row));
+        return;
+      }
+      map.set(key, preferExisting ? Object.assign({}, row, existing) : Object.assign({}, existing, row));
+    }
+    (Array.isArray(fallbackRows) ? fallbackRows : []).forEach(function(row){ put(row, false); });
+    (Array.isArray(currentRows) ? currentRows : []).forEach(function(row){ put(row, false); });
+    return Array.from(map.values()).sort(function(a, b){
+      var ac = cleanTextValue(a && a.county).toLowerCase();
+      var bc = cleanTextValue(b && b.county).toLowerCase();
+      var av = cleanTextValue(a && (a.label || a.value || a.municipality || a.zone)).toLowerCase();
+      var bv = cleanTextValue(b && (b.label || b.value || b.municipality || b.zone)).toLowerCase();
+      if (av.indexOf('other ') === 0 && bv.indexOf('other ') !== 0) return -1;
+      if (bv.indexOf('other ') === 0 && av.indexOf('other ') !== 0) return 1;
+      if (ac !== bc) return ac.localeCompare(bc);
+      return av.localeCompare(bv);
+    });
+  }
+
   function hydratePricingCatalogFromDefaultMedia(catalog, fallbackCatalog){
     var shaped = ensurePricingCatalogShape(catalog);
     if (!fallbackCatalog || typeof fallbackCatalog !== 'object') return shaped;
