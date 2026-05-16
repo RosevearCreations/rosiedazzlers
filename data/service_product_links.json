@@ -1,0 +1,63 @@
+{
+  "generated_for_build": "145",
+  "links": [
+    {
+      "service_slug": "engine-cleaning",
+      "service_name": "Engine Cleaning",
+      "recommended_item_keywords": [
+        "engine",
+        "degreaser",
+        "brush",
+        "microfiber",
+        "pressure washer"
+      ],
+      "public_story": "Shows the products and tools commonly used for safe engine-bay cleaning."
+    },
+    {
+      "service_slug": "pet-hair-removal",
+      "service_name": "Pet Hair Removal",
+      "recommended_item_keywords": [
+        "pet",
+        "hair",
+        "brush",
+        "vacuum",
+        "rubber"
+      ],
+      "public_story": "Connects pet-hair jobs to the brushes, vacuums, and interior-safe tools used."
+    },
+    {
+      "service_slug": "ceramic-coating",
+      "service_name": "Ceramic Coating",
+      "recommended_item_keywords": [
+        "ceramic",
+        "coating",
+        "panel prep",
+        "microfiber",
+        "applicator"
+      ],
+      "public_story": "Explains coating prep and application supplies for trust-building content."
+    },
+    {
+      "service_slug": "clay-treatment",
+      "service_name": "Clay Treatment",
+      "recommended_item_keywords": [
+        "clay",
+        "lubricant",
+        "paint",
+        "microfiber"
+      ],
+      "public_story": "Links clay treatment pages to decontamination supplies and before/after proof."
+    },
+    {
+      "service_slug": "odor-removal",
+      "service_name": "Odor Removal",
+      "recommended_item_keywords": [
+        "odor",
+        "enzyme",
+        "interior",
+        "extractor"
+      ],
+      "public_story": "Supports local searches for smell, smoke, and interior cleaning problems."
+    }
+  ]
+}

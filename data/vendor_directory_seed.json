@@ -1,0 +1,14 @@
+{
+  "generated_for_build": "145",
+  "vendors": [
+    {
+      "vendor_name": "Amazon",
+      "item_count": 149,
+      "item_types": [
+        "consumable",
+        "tool"
+      ],
+      "notes": "Seeded from bundled catalog; replace with real vendor/payable record when known."
+    }
+  ]
+}
