@@ -1,16 +1,13 @@
-# Repository Guide — Build 143
-
-**Branch:** `dev`
+# Repo Guide — Build 145
 
 ## Important folders
 
-- `functions/api/` — Cloudflare Pages Functions.
-- `assets/` — shared browser JavaScript/CSS helpers.
-- `data/` — deploy-safe JSON fallback data.
-- `scripts/` — release checks and data validation helpers.
-- `sql/` — Supabase migrations and no-DDL tracking notes.
-- `archive/` — historical docs and retired files.
+- `functions/api/` — valid Cloudflare Pages Functions.
+- `data/` — bundled fallback catalog, service-area, SEO, media, review, and import seed data.
+- `scripts/` — release, SEO, catalog, and schema sanity checks.
+- `sql/` — Supabase migrations/notes.
+- `archive/` — historical Markdown snapshots.
 
-## Public catalog rule
+## Current cleanup rule
 
-During migration, public catalog pages must merge DB rows with bundled JSON fallback rows. Do not replace the whole public catalog with the DB response until full import and validation are complete.
+Root-level API `.js` files are invalid and should not return. The only root-level JavaScript file should be `service-worker.js`.

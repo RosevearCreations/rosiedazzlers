@@ -1,9 +1,19 @@
-# New Chat Status — Build 143
+# New Chat Status — Build 145
 
-The latest build fixes the Consumables page showing only two items by merging DB rows with bundled fallback catalog rows.
+## Start here
 
-## Continue next
+The current build has moved the catalog workflow closer to a real app backend. Admin Catalog can preview/import bundled consumables and gear into DB rows, score media/data completeness, and bulk toggle selected saved rows.
 
-- Finish DB-first consumables/gear import workflow.
-- Keep public pages using JSON fallback until the DB import is complete and verified.
-- Keep local SEO, one-H1 checks, and static release checks on every pass.
+## Immediate next move
+
+Run:
+
+`sql/2026-05-15_build145_catalog_db_import_admin_workflows.sql`
+
+Then test importing 5–10 bundled rows from Admin Catalog before importing all 149 bundled rows.
+
+## Watch points
+
+- If Supabase is missing optional columns, inventory save strips unsupported optional fields and still saves the core row.
+- Public consumables/gear must continue merging bundled fallback rows with DB rows until DB import is complete.
+- Keep all public pages to one H1.

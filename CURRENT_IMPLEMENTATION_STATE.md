@@ -1,28 +1,23 @@
-# Current Implementation State — Build 143
+# Current Implementation State — Build 145
 
 **Updated:** 2026-05-15
 
 ## Public website
 
-- Booking, pricing, services, review proof, add-on imagery, service-area rules, and local landing pages are active.
-- Booking service areas support typeable towns plus a full picker for Oxford and Norfolk communities.
-- Public Consumables and Gear pages now merge DB rows with bundled fallback catalogs so partial DB imports do not hide unedited items.
-- Consumables fallback source: `data/rosie_products_catalog.json`.
-- Gear/tools fallback source: `data/systems_catalog.json`.
+- Booking, services, pricing, review proof, service-area rules, town landing pages, consumables, and gear pages are active.
+- Consumables and gear merge bundled fallback JSON with DB rows so partial DB imports do not hide unedited rows.
+- Service-area selection supports Oxford/Norfolk towns, typeable custom towns, and county fallback water-rule reminders.
+- Local SEO checks validate page titles, H1 count, sitemap, and target town/service routes.
 
 ## Admin/backend
 
-- Admin App and Admin Catalog continue moving toward DB-first editable data.
-- Catalog DB rows may exist for edited items only; public pages now handle that partial migration safely.
-- Full DB import/management for consumables and gear remains a next step.
+- Admin Catalog now includes import preview, selected import, quality scoring, public/private batch controls, and mobile stock adjustment.
+- Inventory save supports receipt URL, assigned station, service tags, and compatibility fallback when optional DB columns are missing.
+- New optional APIs: `catalog_bulk_import` and `catalog_bulk_visibility`.
+- New optional SQL foundation adds import batches, vendor directory, receipts, gear assignments, and service-product links.
 
-## Release checks
+## Current source-of-truth status
 
-- `scripts/release_check.py`
-- `scripts/stress_static_checks.py`
-- `scripts/local_seo_audit.py`
-- `scripts/catalog_fallback_check.py`
-
-## Schema state
-
-Build 143 is a no-DDL pass. It adds fallback-merge behavior and a schema note only.
+- DB rows override bundled rows when item keys match.
+- Bundled JSON remains required fallback until the import workflow is proven.
+- Markdown has been refreshed for Build 145 and older root Markdown was archived into `archive/2026-05-15-build145-markdown-snapshot`.

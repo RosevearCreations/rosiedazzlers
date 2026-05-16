@@ -1,39 +1,30 @@
 # Rosie Dazzlers — Mobile Auto Detailing Platform
 
 **Active branch:** `dev`  
-**Build pass:** 143  
-**Updated:** 2026-05-15
+**Last synchronized:** 2026-05-15 — Build 145
 
-Rosie Dazzlers is a Cloudflare Pages + Supabase + R2 mobile auto-detailing website and operations app for Oxford County and Norfolk County, Ontario.
+Rosie Dazzlers is a Cloudflare Pages + Supabase + R2 site/app for mobile auto detailing in Oxford County and Norfolk County, Ontario.
 
-## Build 143 highlight
+## Build 145 focus
 
-Build 143 fixes the public Consumables catalog so partial DB edits no longer hide the bundled fallback catalog. Public Consumables and Gear now merge Supabase catalog rows over their JSON fallback sources, which lets saved DB edits appear while the rest of the default catalog remains visible.
+- Admin Catalog DB import workflow for bundled consumables and gear.
+- Catalog quality scoring and missing-data reporting.
+- Bulk public/private and active/inactive inventory controls.
+- Mobile quick stock adjustment.
+- Optional DB foundations for vendor directory, receipts, assignments, and service-product links.
+- Continued one-H1, local SEO, sitemap, and fallback discipline.
 
-## Current working rules
+## Core docs
 
-- Keep `dev` as the active working branch.
-- Keep public pages crawlable, local, and simple.
-- Keep only one H1 on exposed public pages.
-- Keep Cloudflare Pages Functions under `functions/api/`.
-- Keep JSON as a deploy-safe fallback until each area is fully DB-backed.
-- Move business-editable data into Supabase/app settings when the workflow is mature enough.
+- `DEVELOPMENT_ROADMAP.md`
+- `KNOWN_GAPS_AND_RISKS.md`
+- `CURRENT_IMPLEMENTATION_STATE.md`
+- `SANITY_CHECK.md`
+- `IMAGES.md`
+- `SUPABASE_SCHEMA.sql`
 
-## Key folders
+## Release check
 
-- `functions/api/` — Cloudflare Pages Functions.
-- `assets/` — shared browser JavaScript and CSS helpers.
-- `data/` — fallback JSON catalogs and local SEO/service-area data.
-- `scripts/` — release, SEO, static, and catalog checks.
-- `sql/` — Supabase migrations and no-DDL tracking notes.
-- `archive/` — older snapshots and retired docs.
-
-## Checks for this pass
-
-- Public catalog fallback check.
-- Static stress checks.
-- Local SEO audit.
-- JSON/XML parsing.
-- JavaScript syntax checks.
-- One-H1 public page check.
-- Root-level duplicate API JavaScript was removed again; valid handlers remain under `functions/api/`.
+```bash
+python scripts/release_check.py
+```

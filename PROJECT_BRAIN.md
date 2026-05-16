@@ -1,23 +1,18 @@
-# Project Brain — Build 143
+# Project Brain — Build 145
 
-Rosie Dazzlers is moving from a brochure site into an operations app. Keep the customer-facing site simple, local, and crawlable while moving editable business rules into Admin App and Supabase.
+Rosie Dazzlers is moving from static/catalog JSON toward a DB-first operational app while keeping JSON fallback safety.
 
-## Build 143 principle
+## Current principle
 
-Partial DB migration must never make the public site look empty. If only two consumables are saved in Supabase, the public Consumables page must still show the full bundled fallback catalog until the full import is complete.
+Do not retire bundled JSON until:
 
-## Current source-of-truth pattern
+1. DB import is complete.
+2. Admin editing is proven.
+3. Public catalog pages still show full content.
+4. Release checks pass.
+5. The fallback/retirement path is documented.
 
-- Supabase/app settings are preferred for edited records.
-- JSON remains the fallback source.
-- Public pages should merge the two during migration.
-- DB rows override matching fallback rows.
-- Fallback rows stay visible until intentionally retired.
+## Build 145 app direction
 
-## Keep doing
-
-- Local SEO wording on titles/H1s.
-- One clear H1 per exposed page.
-- Robust fallbacks for public pages.
-- Fresh Markdown/schema notes every pass.
-- Release scripts that catch regressions.
+- Catalog import, quality scoring, bulk toggles, receipt fields, assigned station fields, service tags, vendor seed, and service-product links are now the main operational path.
+- SEO work stays tied to useful local content, static crawlable pages, visible proof, reviews, and Google Business Profile prominence.

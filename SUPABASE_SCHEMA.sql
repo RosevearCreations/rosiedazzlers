@@ -1,3 +1,10 @@
+-- Build 145 catalog DB import/admin backend workflow — 2026-05-15
+-- Adds optional DB-first catalog migration foundations in sql/2026-05-15_build145_catalog_db_import_admin_workflows.sql:
+-- catalog_import_batches, catalog_import_batch_rows, vendor_directory, catalog_item_receipts,
+-- catalog_item_assignments, service_product_links, and optional catalog_inventory_items fields
+-- receipt_url, assigned_station, service_tags, last_counted_at, and public_badge.
+-- Runtime remains fallback-safe: public pages still merge bundled JSON with DB rows until import is complete.
+
 -- Build 142 service-area DB/admin/SEO value pass — 2026-05-15
 -- Added optional public.service_area_rules table in sql/2026-05-15_build142_service_area_db_admin_seo_value_pass.sql.
 -- Public runtime remains fallback-safe: /api/service_area_rules_public reads service_area_rules first, then app_management_settings.service_area_rules, while bundled JSON remains the customer-facing fallback.

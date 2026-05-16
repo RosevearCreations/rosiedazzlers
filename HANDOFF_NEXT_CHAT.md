@@ -1,19 +1,19 @@
-# Handoff Next Chat — Build 143
+# Handoff Next Chat — Build 145
 
-Start from `dev` and this package. The latest pass fixed the public catalog fallback merge issue where Consumables showed only two DB-edited items instead of the full catalog.
+## Start here
 
-## What changed
+The current build has moved the catalog workflow closer to a real app backend. Admin Catalog can preview/import bundled consumables and gear into DB rows, score media/data completeness, and bulk toggle selected saved rows.
 
-- `consumables.html` and `consumables/index.html` merge DB rows over bundled fallback rows.
-- `gear.html` and `gear/index.html` received the same safety pattern.
-- Added `scripts/catalog_fallback_check.py`.
-- Wired the catalog fallback check into `scripts/release_check.py`.
-- Added a no-DDL schema tracking note.
+## Immediate next move
 
-## Highest-priority next work
+Run:
 
-1. Add Admin Catalog bulk import from bundled JSON to Supabase.
-2. Add duplicate matching by item key/name/image URL before import.
-3. Add import review screen for gear and consumables.
-4. Add one-click “publish to public catalog” controls.
-5. Add inventory image completeness scoring.
+`sql/2026-05-15_build145_catalog_db_import_admin_workflows.sql`
+
+Then test importing 5–10 bundled rows from Admin Catalog before importing all 149 bundled rows.
+
+## Watch points
+
+- If Supabase is missing optional columns, inventory save strips unsupported optional fields and still saves the core row.
+- Public consumables/gear must continue merging bundled fallback rows with DB rows until DB import is complete.
+- Keep all public pages to one H1.
