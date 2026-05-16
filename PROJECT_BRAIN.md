@@ -16,3 +16,5 @@ Do not retire bundled JSON until:
 
 - Catalog import, quality scoring, bulk toggles, receipt fields, assigned station fields, service tags, vendor seed, and service-product links are now the main operational path.
 - SEO work stays tied to useful local content, static crawlable pages, visible proof, reviews, and Google Business Profile prominence.
+
+<!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->

@@ -1,59 +1,60 @@
-# Development Roadmap — Build 145
+# Development Roadmap — Build 146
 
 **Updated:** 2026-05-15  
 **Target branch:** `dev`  
-**Pass focus:** catalog DB migration, admin workflow depth, local SEO support, and backend-app maturity.
+**Pass focus:** Amazon Business CSV matching, catalog enrichment, DB-first inventory maturity, and local SEO discipline.
 
-## Build 145 completed 20-step pass
+## Build 146 completed 20-step pass
 
-1. Added Admin Catalog DB import preview for bundled consumables and gear.
-2. Added create/review/skip decision logic before catalog import.
-3. Added duplicate warning logic using normalized name and image URL.
-4. Added selected-row import flow from bundled fallback rows into saved DB rows.
-5. Added bulk visibility controls for selected inventory rows.
-6. Added bulk active/inactive controls for selected inventory rows.
-7. Added public/saved source badges and public/private status badges.
-8. Added item quality/completeness scoring in Admin Catalog.
-9. Added image/cost/category completeness summary in the catalog workbench.
-10. Added generated catalog quality report data.
-11. Added generated import preview/profile data.
-12. Added mobile quick stock adjustment workflow using the existing stock-action endpoint.
-13. Added receipt/bill URL field to the inventory editor.
-14. Added assigned station/vehicle/bin field to the inventory editor.
-15. Added service tags field to support service-to-product linking.
-16. Added compatibility-safe inventory save fallbacks for optional newer DB columns.
-17. Added bulk visibility API endpoint.
-18. Added bulk import API endpoint for future DB-first migration.
-19. Added vendor directory seed data from catalog sources.
-20. Added service-to-product link seed data and release checks.
+1. Processed the Amazon Business CSV against the bundled consumables and gear catalogs.
+2. Added `scripts/amazon_catalog_match.py` so the match can be regenerated from a private CSV without hand-editing.
+3. Generated `data/amazon_catalog_matches.json` with sanitized match suggestions for each catalog item.
+4. Generated `data/amazon_inventory_enrichment_preview.json` for DB import/edit workflows.
+5. Generated `data/amazon_inventory_match_review.csv` for easier manual review outside the app.
+6. Pulled ASIN-derived Amazon links for matched rows.
+7. Pulled unit purchase price, quantity total, net total, seller, brand, category, UNSPSC, model, and part-number fields where available.
+8. Added match confidence statuses: strong, review, and unmatched/manual.
+9. Added top Amazon suggestions for each catalog row so weaker matches are still reviewable instead of discarded.
+10. Added privacy trimming so generated data excludes payment identifiers, account emails, receiver emails, and full seller addresses.
+11. Added an Admin Catalog Amazon CSV match review panel.
+12. Added Admin Catalog filters for strong, review, unmatched, and all Amazon matches.
+13. Added one-click load into the inventory editor from an Amazon match.
+14. Added selected-match save into the existing inventory save endpoint.
+15. Extended inventory save/import payload support for optional Amazon enrichment columns.
+16. Added schema migration for optional `amazon_*` catalog inventory fields.
+17. Added release check coverage for Amazon match outputs and privacy guardrails.
+18. Kept the public consumables/gear fallback merge intact so DB-only rows cannot hide bundled inventory again.
+19. Updated schema and Markdown handoff files for the Amazon CSV enrichment workflow.
+20. Preserved local SEO/H1/release-check discipline while adding the backend catalog data pipeline.
 
 ## Next logical 20 steps
 
-1. Run the Build 145 SQL in Supabase dev, then test catalog import on a small selected batch first.
-2. Create an Admin Catalog import-history screen backed by catalog_import_batches and catalog_import_batch_rows.
-3. Add a real vendor directory editor with vendor contact/payment fields and linkage from inventory rows.
-4. Add receipt upload/storage through R2 instead of only receipt URL entry.
-5. Add a one-click 'attach receipt to item' action from purchase order receive flow.
-6. Add product cost history per item so price changes do not overwrite older purchase costs.
-7. Add service-product public sections on service landing pages using service_product_links.
-8. Add job-completion product usage presets by service package.
-9. Add gear assignment dashboard by detailer, vehicle, bin, or trailer.
-10. Add mobile stock count mode with barcode/QR-friendly item lookup.
-11. Add low-stock notifications for selected vendors/categories.
-12. Add reorder forecast based on products used per booking and estimated jobs per unit.
-13. Add admin option-library database endpoint for categories, colours, vendors, units, and service tags.
-14. Add sortable admin dropdown manager for inventory and landing-page option libraries.
-15. Add missing-image work queue with upload/replace links.
-16. Add public catalog 'used by this service' cross-links for SEO and trust.
-17. Add Search Console reporting placeholders for top local queries and town landing pages.
-18. Add review-proof manager so sample reviews can be replaced by API reviews safely.
-19. Add release check that confirms active Markdown docs are fresh and archived docs are not accidentally used.
-20. After DB import is proven, mark JSON catalogs as fallback-only and document the retirement path.
+1. Run `sql/2026-05-15_build145_catalog_db_import_admin_workflows.sql` in Supabase dev if not already applied.
+2. Run `sql/2026-05-15_build146_amazon_csv_catalog_matching.sql` in Supabase dev.
+3. In Admin Catalog, load Amazon matches and import only the strong matches first.
+4. Review the `review` matches one at a time, comparing item name, image, ASIN title, and seller before saving.
+5. Build an Amazon match override table so corrected manual matches are remembered instead of recalculated every import.
+6. Add an Admin Catalog button to upload the Amazon CSV privately instead of generating the match JSON outside the browser.
+7. Move Amazon match output out of static `/data` and behind an authenticated admin API once private upload exists.
+8. Add import-batch history for Amazon CSV saves so every bulk save can be traced and rolled back.
+9. Add per-item cost history so current unit cost does not overwrite older purchase costs.
+10. Add receipt/invoice attachment upload to R2 and link it to matched Amazon rows.
+11. Link vendor directory entries to Amazon sellers and non-Amazon suppliers.
+12. Add duplicate resolution for rows with the same ASIN but different catalog names.
+13. Add item quantity reconciliation so catalog stock counts can be adjusted independently from historical purchased quantity.
+14. Add service usage presets that consume matched consumables by package/service type.
+15. Add low-stock forecast based on matched purchase sizes and estimated jobs per unit.
+16. Add public “products we use” proof blocks to relevant service landing pages using service-product links.
+17. Add Google Search Console / Business Profile reporting placeholders for town and service landing performance.
+18. Continue replacing sample reviews with real review API data while keeping sample fallback content.
+19. Keep cleaning admin CSS/table overflow after every new workflow because Admin Catalog is now dense.
+20. Once the DB import path is stable, document JSON catalogs as fallback-only and begin retiring manual JSON edits.
 
 ## SEO discipline to keep every pass
 
 - Keep one clear H1 on each exposed public page.
-- Keep local terms in page titles, meta descriptions, H1s, service copy, and internal links.
-- Keep town/service landing pages crawlable with static fallback content before JavaScript runs.
-- Keep sitemap, canonical links, and structured data aligned.
-- Keep Google Business Profile, reviews, prominence signals, and visible proof work separate from code-only SEO.
+- Use real local search phrases in titles, descriptions, H1s, static fallback copy, and internal links.
+- Keep Oxford County, Norfolk County, and municipality names visible where they help relevance.
+- Keep public proof visible: reviews, before/after work, service pages, and product/process transparency.
+- Keep sitemap, canonical links, structured data, and release checks aligned.
+- Remember that SEO improves clarity and relevance, but search engines do not guarantee first-place placement.

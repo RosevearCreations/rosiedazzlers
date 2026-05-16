@@ -16,3 +16,5 @@ The catalog inventory table may contain only edited/imported rows. Public pages 
 ## Related SQL note
 
 - `sql/2026-05-15_build143_public_catalog_fallback_merge_no_ddl_note.sql`
+
+<!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->

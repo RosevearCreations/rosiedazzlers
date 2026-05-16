@@ -20,3 +20,5 @@
 18. Add SEO landing links from consumables/gear to related services.
 19. Add release test that fails when public consumables count falls below the bundled fallback count.
 20. Move mature catalog option lists from JSON into Supabase app settings.
+
+<!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->

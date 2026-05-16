@@ -1,24 +1,27 @@
-# Known Gaps and Risks — Build 145
+# Known Gaps and Risks — Build 146
 
 **Updated:** 2026-05-15
 
 ## Reduced in this pass
 
-- Admin Catalog now has a DB import preview and selected-row import workflow for bundled consumables and gear.
-- Public catalog pages still stay safe because bundled JSON and DB rows are merged until the DB import is complete.
-- Optional newer inventory fields are compatibility-safe; the save endpoint strips unsupported optional columns if the live DB has not been migrated yet.
-- Bulk public/private and active/inactive controls are available for saved rows.
-- Catalog quality reporting now highlights missing cost, generic categories, and missing media.
+- Amazon Business CSV rows are now matched against bundled consumables and gear.
+- Matching pulls ASIN links, unit cost, quantity, seller, brand, category, UNSPSC, and related purchase metadata into review files.
+- Admin Catalog now has an Amazon CSV match review panel so strong matches can be saved and review matches can be checked one at a time.
+- Inventory save and bulk import APIs accept optional Amazon enrichment fields with compatibility fallbacks.
+- Release checks now validate Amazon match outputs and check that generated public files do not include obvious private payment/account fields.
+- Public catalog fallback merging remains in place, so partial DB imports will not hide unedited bundled gear/consumables.
 
 ## Still open
 
-1. Run `sql/2026-05-15_build145_catalog_db_import_admin_workflows.sql` in Supabase dev.
-2. Import catalog rows in small batches and verify DB/API/public-page behaviour before importing everything.
-3. Build import-history screens from the new import batch tables.
-4. Replace receipt URL fields with real R2 upload/attachment support.
-5. Add a vendor directory editor and link vendors to payables/accounting.
-6. Add service-product links to public service pages for trust and local SEO.
-7. Replace sample reviews with real review API data when the provider is connected.
-8. Keep county water rules reviewed before dry-weather dispatch.
-9. Continue checking CSS/table overflow because admin pages are dense and drift easily.
-10. Search ranking is not guaranteed; the app can only improve relevance, crawlability, review proof, and prominence signals.
+1. Run the Build 145 and Build 146 SQL migrations in Supabase dev.
+2. Import strong Amazon matches in small batches first.
+3. Manually review medium-confidence matches before saving.
+4. Build an authenticated private CSV upload flow so the Amazon source CSV never needs to live in the deploy package.
+5. Move generated Amazon match outputs behind an admin API once private upload exists.
+6. Add cost history and receipt attachments so accounting has stronger audit support.
+7. Add match override memory for corrected manual matches.
+8. Add vendor directory linking for Amazon sellers and other suppliers.
+9. Add duplicate ASIN resolution for cases where multiple catalog items point at one Amazon product.
+10. Continue testing CSS/table overflow on Admin Catalog because it is now a dense app-like workflow.
+11. Continue validating local SEO/H1/sitemap/structured data during every build pass.
+12. Search ranking is not guaranteed; code can improve relevance, crawlability, proof, and prominence support, but not force first place.

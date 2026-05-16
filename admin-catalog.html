@@ -48,6 +48,8 @@
     .catalog-review table{margin:0}
     .catalog-select-col{width:42px;text-align:center}
     .mobile-stock-card{border:1px dashed rgba(125,163,255,.35);border-radius:16px;padding:12px;background:rgba(125,163,255,.06)}
+    .amazon-status-strong{color:#bbf7d0}.amazon-status-review{color:#fde68a}.amazon-status-unmatched{color:#fecaca}
+    .amazon-title{display:block;max-width:560px;overflow-wrap:anywhere}
     @media(max-width:980px){.catalog-workbench{grid-template-columns:1fr}.bulk-tools{align-items:stretch}.bulk-tools .btn,.bulk-tools select,.bulk-tools input{width:100%}}
     @media(max-width:980px){.grid2,.grid3,.option-grid,#itemForm .grid3{grid-template-columns:1fr}.table-wrap table{table-layout:auto}}
   </style>
@@ -127,6 +129,45 @@
       <table class="table-compact">
         <thead><tr><th class="catalog-select-col"><input id="toggleImportChecks" type="checkbox" checked /></th><th>Decision</th><th>Item</th><th>Quality</th><th>Reason</th></tr></thead>
         <tbody id="importPreviewBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section panel stack" id="amazonCsvMatchPanel">
+    <div class="row" style="justify-content:space-between;align-items:flex-start">
+      <div>
+        <h2 style="margin:0">Amazon CSV match review</h2>
+        <p class="mini" style="margin:.35rem 0 0">Review the Amazon Business CSV matches for tools and consumables. Strong matches can fill purchase links, unit cost, quantity, vendor SKU/ASIN, seller, brand, and purchase date. Review matches should be checked against the item image/name before saving.</p>
+      </div>
+      <span class="pill">Build 146 CSV helper</span>
+    </div>
+    <div class="catalog-workbench">
+      <div class="catalog-card">
+        <strong>Match summary</strong>
+        <div class="mini" id="amazonMatchSummary">Load matches to review Amazon CSV purchase data.</div>
+        <div class="bulk-tools" style="margin-top:8px">
+          <button class="btn" id="loadAmazonMatchesBtn" type="button">Load Amazon matches</button>
+          <button class="btn primary" id="importAmazonMatchesBtn" type="button">Save selected matches</button>
+        </div>
+      </div>
+      <div class="catalog-card">
+        <strong>Review filter</strong>
+        <label style="display:grid;gap:5px">Status<select id="amazonMatchStatusFilter"><option value="strong">Strong matches</option><option value="review">Needs review</option><option value="unmatched">Unmatched suggestions</option><option value="all">All</option></select></label>
+        <p class="mini" style="margin:.5rem 0 0">Use strong matches first, then review the rest one at a time.</p>
+      </div>
+      <div class="catalog-card">
+        <strong>Privacy note</strong>
+        <p class="mini" id="amazonPrivacyNote" style="margin:.35rem 0 0">The deployed match file omits account emails, payment identifiers, and full seller addresses. Keep the original CSV out of public deployments.</p>
+      </div>
+      <div class="catalog-card">
+        <strong>Manual workflow</strong>
+        <p class="mini" style="margin:.35rem 0 0">Click <em>Open in editor</em> to populate the right-side form, then adjust category, stock, station, notes, and save normally.</p>
+      </div>
+    </div>
+    <div class="catalog-review" id="amazonMatchBox" style="display:none;margin-top:12px">
+      <table class="table-compact">
+        <thead><tr><th class="catalog-select-col"><input id="toggleAmazonChecks" type="checkbox" /></th><th>Catalog item</th><th>Amazon match</th><th>Cost / Qty</th><th>Action</th></tr></thead>
+        <tbody id="amazonMatchBody"></tbody>
       </table>
     </div>
   </section>
@@ -230,7 +271,7 @@
 <script>
 (function(){
   const qs=(s)=>document.querySelector(s);
-  let actor=null, inventory=[], movements=[], lowStock=[], savedInventoryItems=[], bundledFallbackItems=[], importPreviewRows=[];
+  let actor=null, inventory=[], movements=[], lowStock=[], savedInventoryItems=[], bundledFallbackItems=[], importPreviewRows=[], amazonMatchRows=[];
   const optionStorageKey='rosie_inventory_dropdown_options_v2';
   function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g,(m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function show(msg,kind=''){ const el=qs('#status'); el.style.display='block'; el.className='notice '+(kind||''); el.textContent=msg; }
@@ -387,6 +428,94 @@
     if(el) el.textContent=`Average completeness ${avg}% · ${missingImages} missing images · ${missingCost} missing cost · ${fallbackOnly} bundled-only rows`;
     const meter=qs('#catalogQualityMeter'); if(meter) meter.style.width=`${avg}%`;
   }
+  function amazonStatusClass(status){ return status === 'strong' ? 'amazon-status-strong' : status === 'review' ? 'amazon-status-review' : 'amazon-status-unmatched'; }
+  async function loadAmazonMatches(){
+    try {
+      const res = await fetch('/data/amazon_catalog_matches.json', { credentials:'include', cache:'no-store' });
+      const out = await res.json().catch(()=>null);
+      if(!res.ok || !out || !Array.isArray(out.matches)) throw new Error('Amazon match file was not available.');
+      amazonMatchRows = out.matches;
+      const summary = out.summary || {};
+      const note = qs('#amazonPrivacyNote');
+      if(note && summary.privacy_note) note.textContent = summary.privacy_note;
+      renderAmazonMatches(summary);
+      show(`Amazon CSV matches loaded: ${amazonMatchRows.length} catalog rows, ${summary.auto_apply_count || 0} strong, ${summary.review_count || 0} review.`, 'ok');
+    } catch(err) {
+      amazonMatchRows = [];
+      renderAmazonMatches({});
+      show(`Could not load Amazon CSV matches: ${err.message || err}`, 'bad');
+    }
+  }
+  function renderAmazonMatches(summary={}){
+    const filter = qs('#amazonMatchStatusFilter')?.value || 'strong';
+    const counts = amazonMatchRows.reduce((acc,row)=>{ acc[row.match_status]=(acc[row.match_status]||0)+1; return acc; },{});
+    const shown = amazonMatchRows.filter((row)=>filter === 'all' || row.match_status === filter);
+    const summaryEl = qs('#amazonMatchSummary');
+    if(summaryEl) summaryEl.textContent = amazonMatchRows.length
+      ? `${amazonMatchRows.length} rows · ${counts.strong||0} strong · ${counts.review||0} review · ${counts.unmatched||0} unmatched · ${summary.unique_amazon_products || 'many'} unique Amazon products`
+      : 'No Amazon match data loaded yet.';
+    const box = qs('#amazonMatchBox'); if(box) box.style.display = amazonMatchRows.length ? 'block' : 'none';
+    const body = qs('#amazonMatchBody');
+    if(!body) return;
+    body.innerHTML = shown.map((row)=>{
+      const idx = amazonMatchRows.indexOf(row);
+      const a = row.amazon || {};
+      const checked = row.match_status === 'strong' ? 'checked' : '';
+      const disabled = row.match_status === 'unmatched' ? 'disabled title="Unmatched rows need manual review first"' : '';
+      const cost = a.purchase_ppu != null ? `${Number(a.purchase_ppu).toFixed(2)} ${esc(a.currency || 'CAD')}` : 'No price';
+      const qty = a.quantity_total != null ? esc(a.quantity_total) : '0';
+      return `<tr><td class="catalog-select-col"><input class="amazon-row-check" type="checkbox" data-amazon-idx="${idx}" ${checked} ${disabled}></td><td><strong>${esc(row.catalog_name)}</strong><div class="mini">${esc(row.item_key)} · ${esc(row.catalog_type)} · ${esc(row.catalog_category||'')}</div><span class="pill ${amazonStatusClass(row.match_status)}">${esc(row.match_status)} ${esc(row.match_score)}</span></td><td><span class="amazon-title">${esc(a.title || '')}</span><div class="mini">ASIN ${esc(a.asin || '')} · ${esc(a.seller_name || '')} · ${esc(a.brand || '')}</div>${a.amazon_url?`<div class="mini"><a href="${esc(a.amazon_url)}" target="_blank" rel="noopener">Open Amazon link</a></div>`:''}</td><td><strong>${esc(cost)}</strong><div class="mini">CSV qty ${qty} · latest ${esc(a.order_date || '')}</div><div class="mini">Net total ${a.item_net_total != null ? esc(Number(a.item_net_total).toFixed(2)) : '—'}</div></td><td><button class="btn ghost" type="button" data-amazon-edit="${idx}">Open in editor</button></td></tr>`;
+    }).join('') || '<tr><td colspan="5">No rows match this filter.</td></tr>';
+    document.querySelectorAll('[data-amazon-edit]').forEach((btn)=>btn.addEventListener('click', ()=>openAmazonMatchInEditor(Number(btn.dataset.amazonEdit))));
+  }
+  function amazonMatchToInventoryPayload(match){
+    const existing = inventory.find((item)=>String(item.item_key) === String(match.item_key)) || bundledFallbackItems.find((item)=>String(item.item_key) === String(match.item_key)) || null;
+    const base = existing ? makeImportPayload(existing) : { item_key:match.item_key, item_type:match.catalog_type, name:match.catalog_name, category:match.catalog_category || 'general', unit_label:'each', qty_on_hand:0, reorder_point:0, reorder_qty:1, reuse_policy:'reorder', is_public:true, is_active:true };
+    const a = match.amazon || {};
+    const noteParts = [base.notes || '', `Amazon CSV ${match.match_status} match score ${match.match_score}`, a.asin ? `ASIN ${a.asin}` : '', a.seller_name ? `Seller ${a.seller_name}` : '', a.amazon_category ? `Amazon category ${a.amazon_category}` : ''].filter(Boolean);
+    return {
+      ...base,
+      amazon_url: a.amazon_url || base.amazon_url || '',
+      cost_cad: a.purchase_ppu != null ? Number(a.purchase_ppu) : base.cost_cad,
+      qty_on_hand: a.quantity_total != null && Number(a.quantity_total) > 0 ? Number(a.quantity_total) : Number(base.qty_on_hand || 0),
+      preferred_vendor: 'Amazon',
+      vendor_sku: a.asin || base.vendor_sku || a.part_number || a.model_number || '',
+      purchase_date: a.order_date ? String(a.order_date).replaceAll('/','-') : base.purchase_date,
+      image_url: base.image_url || match.catalog_image_url || '',
+      amazon_asin: a.asin || '',
+      amazon_title: a.title || '',
+      amazon_match_status: match.match_status || '',
+      amazon_match_score: match.match_score || 0,
+      amazon_seller_name: a.seller_name || '',
+      amazon_brand: a.brand || '',
+      amazon_category: a.amazon_category || '',
+      amazon_quantity_total: a.quantity_total || 0,
+      amazon_net_total_cents: a.item_net_total != null ? Math.round(Number(a.item_net_total) * 100) : null,
+      notes: noteParts.join(' | ')
+    };
+  }
+  function openAmazonMatchInEditor(index){
+    const match = amazonMatchRows[index];
+    if(!match) return show('Amazon match row was not found.', 'bad');
+    const payload = amazonMatchToInventoryPayload(match);
+    fillForm({ ...payload, cost_cents: payload.cost_cad != null ? Math.round(Number(payload.cost_cad)*100) : null });
+    qs('#itemForm')?.scrollIntoView({behavior:'smooth', block:'start'});
+    show(`Loaded Amazon ${match.match_status} match into the editor. Review before saving.`, match.match_status === 'strong' ? 'ok' : 'bad');
+  }
+  async function importSelectedAmazonMatches(){
+    const selected = [...document.querySelectorAll('.amazon-row-check:checked')].map((el)=>amazonMatchRows[Number(el.dataset.amazonIdx)]).filter(Boolean);
+    if(!selected.length) return show('Select at least one Amazon match first.', 'bad');
+    const reviewCount = selected.filter((row)=>row.match_status !== 'strong').length;
+    if(reviewCount && !confirm(`${reviewCount} selected rows are review/unmatched. Continue after checking them?`)) return;
+    let ok=0, failed=0;
+    for(const match of selected){
+      const res = await postJson('/api/admin/catalog_inventory_save', amazonMatchToInventoryPayload(match));
+      if(res.ok && res.out?.ok) ok++; else failed++;
+    }
+    show(`Amazon match save finished: ${ok} saved, ${failed} failed. Reloading inventory…`, failed ? 'bad' : 'ok');
+    await loadInventory();
+  }
+
   function makeImportPayload(item){
     return {
       item_key:item.item_key, item_type:item.item_type, name:item.name, category:item.category || 'general', subcategory:item.subcategory || '',
@@ -559,6 +688,10 @@
   qs('#resetInventoryOptionsBtn')?.addEventListener('click', ()=>{ localStorage.removeItem(optionStorageKey); setInventoryOptionsEditor(inventoryOptionDefaults()); renderInventoryDatalists(); show('Inventory dropdown suggestions reset to detailing defaults.', 'ok'); });
   qs('#reloadBtn').addEventListener('click', loadInventory); qs('#reloadOrdersBtn').addEventListener('click', loadOrders); qs('#reloadMovesBtn').addEventListener('click', loadMovements); qs('#reloadLowBtn').addEventListener('click', loadLowStock); qs('#itemType').addEventListener('change', renderInventory); qs('#invSearch').addEventListener('input', renderInventory); qs('#invSort').addEventListener('change', renderInventory); qs('#moveSearch').addEventListener('input', renderMovements); qs('#moveType').addEventListener('change', renderMovements); qs('#orderStatus').addEventListener('change', loadOrders); qs('#newItemBtn').addEventListener('click', ()=>fillForm(null)); qs('#clearFormBtn').addEventListener('click', ()=>fillForm(null)); qs('#usageResetBtn').addEventListener('click', ()=>{ qs('#usageBookingId').value=''; qs('#usageItemKey').value=''; qs('#usageQty').value='1'; qs('#usageNote').value=''; });
   
+  qs('#loadAmazonMatchesBtn')?.addEventListener('click', loadAmazonMatches);
+  qs('#amazonMatchStatusFilter')?.addEventListener('change', ()=>renderAmazonMatches());
+  qs('#toggleAmazonChecks')?.addEventListener('change', (event)=>{ document.querySelectorAll('.amazon-row-check:not(:disabled)').forEach((box)=>{ box.checked=event.target.checked; }); });
+  qs('#importAmazonMatchesBtn')?.addEventListener('click', importSelectedAmazonMatches);
   qs('#previewCatalogImportBtn')?.addEventListener('click', renderImportPreview);
   qs('#runCatalogImportBtn')?.addEventListener('click', importSelectedCatalogRows);
   qs('#toggleImportChecks')?.addEventListener('change', (event)=>{ document.querySelectorAll('.import-row-check').forEach((box)=>{ box.checked=event.target.checked; }); });

@@ -1,23 +1,22 @@
-# Images and Media Guide — Build 145
+# Images and Media Notes — Build 146
 
-## Public catalog images
+**Updated:** 2026-05-15
 
-- Consumables fallback source: `data/rosie_products_catalog.json`
-- Gear/tools fallback source: `data/systems_catalog.json`
-- Preferred public image size: 1200×800 or larger, landscape or square.
-- Public cards use `object-fit: contain` to avoid cropped/zoomed product photos.
-- Run `python scripts/catalog_quality_report.py` to refresh `data/catalog_quality_report.json`.
+## Current media direction
 
-## Admin Catalog media workflow
+- Product and gear images still come from bundled catalog data and R2/public asset URLs.
+- Amazon CSV matching does not replace item images automatically.
+- Admin Catalog uses Amazon matches for purchase metadata: ASIN, purchase link, cost, quantity, seller, brand, and category.
+- Keep the existing catalog image if it is a real shop/product image.
+- Only replace an image if the current image is wrong, missing, or a temporary placeholder.
 
-1. Open `/admin-catalog`.
-2. Click an item name.
-3. Review the Image URL.
-4. Add receipt/bill URL if available.
-5. Add service tags if the item supports a public service page.
-6. Save the item.
-7. Use quality score and missing-image report to find weak rows.
+## Recommended image sizes
 
-## Future R2 direction
+- Product/consumable cards: 1200 × 1200 px preferred, square or landscape.
+- Gear/tool cards: 1200 × 900 px or 1200 × 1200 px preferred.
+- Before/after gallery: 1600 × 1000 px preferred, matching before/after aspect ratios.
+- Hero/landing pages: 1920 × 1080 px preferred.
 
-Receipt files and product images should move to an authenticated upload workflow later. For now, URLs are stored as text fields and the bundled JSON remains the fallback source.
+## Amazon match workflow
+
+Amazon ASIN links can help us identify the correct item, but images should stay under our own R2/public asset control where possible. Do not hotlink Amazon product images unless we have explicit permission and a stable media plan.

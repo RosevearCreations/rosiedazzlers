@@ -1,23 +1,22 @@
-# Current Implementation State — Build 145
+# Current Implementation State — Build 146
 
 **Updated:** 2026-05-15
 
-## Public website
+## Current build focus
 
-- Booking, services, pricing, review proof, service-area rules, town landing pages, consumables, and gear pages are active.
-- Consumables and gear merge bundled fallback JSON with DB rows so partial DB imports do not hide unedited rows.
-- Service-area selection supports Oxford/Norfolk towns, typeable custom towns, and county fallback water-rule reminders.
-- Local SEO checks validate page titles, H1 count, sitemap, and target town/service routes.
+Build 146 adds an Amazon Business CSV enrichment workflow for Rosie Dazzlers inventory. The app can now compare the Amazon order export against bundled gear/consumables, generate sanitized match data, review confidence levels in Admin Catalog, and save selected Amazon purchase fields into DB-backed inventory rows.
 
-## Admin/backend
+## Important current files
 
-- Admin Catalog now includes import preview, selected import, quality scoring, public/private batch controls, and mobile stock adjustment.
-- Inventory save supports receipt URL, assigned station, service tags, and compatibility fallback when optional DB columns are missing.
-- New optional APIs: `catalog_bulk_import` and `catalog_bulk_visibility`.
-- New optional SQL foundation adds import batches, vendor directory, receipts, gear assignments, and service-product links.
+- `scripts/amazon_catalog_match.py` — regenerates Amazon match outputs from a private CSV.
+- `data/amazon_catalog_matches.json` — sanitized match review data.
+- `data/amazon_inventory_enrichment_preview.json` — import/edit payload preview for matched rows.
+- `data/amazon_inventory_match_review.csv` — flat review file for manual checking.
+- `admin-catalog.html` — includes the Amazon CSV match review panel.
+- `functions/api/admin/catalog_inventory_save.js` — accepts optional Amazon enrichment fields.
+- `functions/api/admin/catalog_bulk_import.js` — accepts optional Amazon enrichment fields.
+- `sql/2026-05-15_build146_amazon_csv_catalog_matching.sql` — optional DB columns/indexes for Amazon match metadata.
 
-## Current source-of-truth status
+## Deployment posture
 
-- DB rows override bundled rows when item keys match.
-- Bundled JSON remains required fallback until the import workflow is proven.
-- Markdown has been refreshed for Build 145 and older root Markdown was archived into `archive/2026-05-15-build145-markdown-snapshot`.
+The original Amazon CSV should not be deployed. The generated JSON/CSV outputs are sanitized to avoid payment identifiers, account emails, receiver emails, and full seller addresses. For stronger privacy, the next step is a private admin upload/API workflow.

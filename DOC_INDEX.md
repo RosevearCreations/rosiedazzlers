@@ -10,3 +10,5 @@ Read in this order:
 6. `IMAGES.md`
 7. `SUPABASE_SCHEMA.sql`
 8. `HANDOFF_NEXT_CHAT.md`
+
+<!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->
