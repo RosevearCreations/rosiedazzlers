@@ -1,23 +1,18 @@
-# Database Structure Current — Build 140
+# Database Structure Current — Build 143
 
-Build 140 adds optional DB-first foundation tables in:
+Build 143 does not add DDL.
 
-`sql/2026-05-10_build140_value_add_roadmap_foundations.sql`
+## Catalog migration state
 
-## New optional foundations
+The catalog inventory table may contain only edited/imported rows. Public pages must not treat partial DB rows as the full catalog until a complete import is done.
 
-- `app_option_libraries` — reusable dropdown libraries.
-- `app_media_library` — reusable media records for services, add-ons, gallery, reviews, inventory, and landing pages.
-- `app_content_entries` — reusable content entries for gallery, reviews, landing sections, FAQs, and proof blocks.
+## Current safe pattern
 
-## Existing app-settings fallback
+- Public pages load bundled fallback JSON.
+- Public pages load Supabase catalog rows.
+- Matching DB rows override fallback rows.
+- Non-imported fallback rows remain visible.
 
-Until the migration is applied and editors are finished, the app still uses:
+## Related SQL note
 
-- `app_management_settings.catalog_dropdown_options`
-- `app_management_settings.landing_pages`
-- `app_management_settings.review_proof`
-- `app_management_settings.media_library`
-- bundled JSON files in `data/`
-
-<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->
+- `sql/2026-05-15_build143_public_catalog_fallback_merge_no_ddl_note.sql`

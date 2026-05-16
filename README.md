@@ -1,46 +1,39 @@
 # Rosie Dazzlers — Mobile Auto Detailing Platform
 
 **Active branch:** `dev`  
-**Build pass:** 142  
+**Build pass:** 143  
 **Updated:** 2026-05-15
 
 Rosie Dazzlers is a Cloudflare Pages + Supabase + R2 mobile auto-detailing website and operations app for Oxford County and Norfolk County, Ontario.
 
-## Build 142 highlight
+## Build 143 highlight
 
-Build 142 moves service-area handling closer to a real app workflow. The booking form now keeps the service area typeable while also offering a full town picker, city/postal validation, county fallback rules, and clearer water/power setup handling. Service-area rules now have a DB-first migration and public/admin API foundation while bundled JSON remains the safe fallback.
+Build 143 fixes the public Consumables catalog so partial DB edits no longer hide the bundled fallback catalog. Public Consumables and Gear now merge Supabase catalog rows over their JSON fallback sources, which lets saved DB edits appear while the rest of the default catalog remains visible.
 
-## Main customer flows
+## Current working rules
 
-- Home: `/`
-- Services: `/services`
-- Pricing and booking planner: `/pricing`
-- Booking: `/book`
-- Gallery/reviews/proof: `/gallery` plus homepage review proof
-- Gifts: `/gifts`
-- Gear and consumables: `/gear`, `/consumables`
-- Service landing pages: ceramic coating, pet hair removal, odor removal, headlight restoration, paint correction
-- Town/area landing pages: Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, Port Dover, Norwich/Otterville, Zorra/Thamesford/Embro, Waterford/Vittoria, Port Rowan/Turkey Point
+- Keep `dev` as the active working branch.
+- Keep public pages crawlable, local, and simple.
+- Keep only one H1 on exposed public pages.
+- Keep Cloudflare Pages Functions under `functions/api/`.
+- Keep JSON as a deploy-safe fallback until each area is fully DB-backed.
+- Move business-editable data into Supabase/app settings when the workflow is mature enough.
 
-## Main admin flows
+## Key folders
 
-- Admin App: `/admin-app`
-- Admin Catalog: `/admin-catalog`
-- Admin Accounting: `/admin-accounting`
-- Admin Booking/Blocks/Assign/Payroll/Analytics/Customers/Staff
+- `functions/api/` — Cloudflare Pages Functions.
+- `assets/` — shared browser JavaScript and CSS helpers.
+- `data/` — fallback JSON catalogs and local SEO/service-area data.
+- `scripts/` — release, SEO, static, and catalog checks.
+- `sql/` — Supabase migrations and no-DDL tracking notes.
+- `archive/` — older snapshots and retired docs.
 
-## Source-of-truth files
+## Checks for this pass
 
-- `DEVELOPMENT_ROADMAP.md`
-- `KNOWN_GAPS_AND_RISKS.md`
-- `CURRENT_IMPLEMENTATION_STATE.md`
-- `SANITY_CHECK.md`
-- `SUPABASE_SCHEMA.sql`
-- `data/service_area_rules.json`
-- `data/rosie_services_pricing_and_packages.json`
-- `data/admin_option_libraries.json`
-- `data/local_seo_targets.json`
-
-## Branch rule
-
-Use `dev` as the active source of truth unless explicitly told otherwise.
+- Public catalog fallback check.
+- Static stress checks.
+- Local SEO audit.
+- JSON/XML parsing.
+- JavaScript syntax checks.
+- One-H1 public page check.
+- Root-level duplicate API JavaScript was removed again; valid handlers remain under `functions/api/`.

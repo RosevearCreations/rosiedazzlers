@@ -1,11 +1,17 @@
-# AI Context — Build 142
+# AI Context — Build 143
 
-Rosie Dazzlers is using the `dev` branch as the source of truth. The user wants every build pass to update Markdown, schema notes, SEO/local search hygiene, one-H1 checks, CSS drift checks, and DB-first migration direction.
+The user works on Rosie Dazzlers on the `dev` branch. Every build pass should update Markdown/schema notes, keep public pages to one H1, check CSS/static links, and move toward DB-first app behavior while preserving JSON fallback.
 
-Current focus:
-- service-area rules and county water restrictions,
-- booking/customer mobile usability,
-- Admin App editing systems,
-- Admin Catalog inventory workflows,
-- accounting close/export polish,
-- local SEO pages and proof/reviews.
+## Latest fix
+
+Consumables showed only two items because the public page stopped at the DB/API result. The DB currently had only two edited/imported rows. Build 143 changed Consumables and Gear to merge DB rows over bundled fallback JSON rows.
+
+## Important files
+
+- `consumables.html`
+- `consumables/index.html`
+- `gear.html`
+- `gear/index.html`
+- `data/rosie_products_catalog.json`
+- `data/systems_catalog.json`
+- `scripts/catalog_fallback_check.py`

@@ -1,22 +1,22 @@
-# Next Steps Internal — Build 142
+# Next Steps Internal — Build 143
 
-1. Connect Admin App service-area editor directly to `/api/admin/service_area_rules` with load/save/import/export buttons.
-2. Run the new `service_area_rules` migration in Supabase dev and seed it from `data/service_area_rules.json`.
-3. Add a postal-code to county/town resolver for Norfolk/Oxford so typed addresses resolve before checkout.
-4. Add per-service-area travel fee, minimum package, and quote-required thresholds to booking totals.
-5. Add active water-restriction dispatch banners when appointment dates fall inside May–September rule windows.
-6. Add a staff dispatch checklist that highlights water/power, driveway slope, parking, bylaw, and customer access risks.
-7. Move sample reviews into a DB/app-setting approval workflow with source, date, town, service, and publish status.
-8. Add per-town proof blocks that can prefer approved reviews/photos for the town page being viewed.
-9. Finish DB-backed media library management for R2 images/videos, alt text, crop notes, page usage, and first-image scoring.
-10. Add Admin Catalog saved/bundled filters and quick edit drawers for consumables, gear, systems, and service supplies.
-11. Connect inventory usage-per-service to completed jobs so product costs roll into job profitability.
-12. Add vendor purchase history import/reconciliation for inventory items and consumables.
-13. Complete accounting payment application and invoice/receipt matching.
-14. Complete accounting reconciliation matching with manual review queues.
-15. Complete tax/remittance review screens with lock/reopen month controls.
-16. Build accountant export packaging with CSVs, receipt links, GL detail, tax summary, and close checklist status.
-17. Add Search Console and Google Business Profile metric placeholders into Admin Analytics.
-18. Add mobile admin shortcuts for receive inventory, upload photos, edit service areas, and complete jobsite checklist items.
-19. Add release automation that blocks deployments on broken links, multiple H1s, missing canonical tags, blank titles, or invalid sitemap entries.
-20. Create the next batch of local service/town pages based on real booking/search demand after the new pages are indexed.
+1. Build a DB import screen for `data/rosie_products_catalog.json`.
+2. Build a DB import screen for `data/systems_catalog.json`.
+3. Match catalog rows by `item_key`, title/name, filename/path, and image URL.
+4. Let staff review duplicates before import.
+5. Add “publish/unpublish” status for public catalog items.
+6. Add inventory media completeness scoring.
+7. Add category/type option manager shared between Admin App and Admin Catalog.
+8. Add public catalog source badges for DB-edited versus bundled fallback items.
+9. Add low-stock bulk review from the merged catalog.
+10. Add mobile inventory adjustment form.
+11. Add receipt/photo attachment to catalog purchases.
+12. Add vendor directory linkage for catalog items.
+13. Add purchase URL and Amazon query review.
+14. Add consumable usage by booking/job.
+15. Add gear assignment by vehicle/detailer.
+16. Add reorder reminder thresholds.
+17. Add public trust notes explaining favourite products and why they are used.
+18. Add SEO landing links from consumables/gear to related services.
+19. Add release test that fails when public consumables count falls below the bundled fallback count.
+20. Move mature catalog option lists from JSON into Supabase app settings.

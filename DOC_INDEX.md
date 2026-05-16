@@ -1,4 +1,4 @@
-# Documentation Index — Build 140
+# Documentation Index — Build 143
 
 ## Current active docs
 
@@ -13,12 +13,10 @@
 - `REPO_GUIDE.md`
 - `REPO_RULES.md`
 - `AI_CONTEXT.md`
-- `DATABASE_STRUCTURE_CURRENT.md`
 - `IMAGES.md`
-- `SUPABASE_SCHEMA.sql`
+- `DATABASE_STRUCTURE_CURRENT.md`
+- `NEXT_STEPS_INTERNAL.md`
 
-## Archived docs
+## Latest note
 
-Older duplicate Markdown was copied into `archive/2026-05-14-build140-markdown-snapshot/`.
-
-<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->
+Build 143 fixed public catalog fallback merging for Consumables and Gear and added `scripts/catalog_fallback_check.py`.

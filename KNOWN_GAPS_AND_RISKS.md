@@ -1,23 +1,18 @@
-# Known Gaps and Risks — Build 142
+# Known Gaps and Risks — Build 143
 
 **Updated:** 2026-05-15
 
 ## Active gaps
 
-1. `service_area_rules` is optional until the Supabase migration is run and seeded.
-2. Water restrictions can change; staff should verify county pages before dispatch during dry weather or active restriction windows.
-3. Typed towns still need confirmation when the town does not exactly match the known Oxford/Norfolk service-area list.
-4. The Admin App editor still needs a full connected load/save/import/export UI for `service_area_rules`.
-5. Town pages have static crawlable shells, but they still need more real local proof, photos, and approved reviews.
-6. Reviews are still sample/fallback proof until the review approval workflow is connected.
-7. Media library management is not fully DB-backed yet.
-8. Inventory usage is not fully tied to completed jobs and accounting profitability yet.
-9. Accounting remains operational bookkeeping support, not finished filing software.
-10. Search ranking is not guaranteed; local relevance, distance, prominence, page quality, proof, and Google Business Profile consistency still matter.
+1. Catalog inventory is only partially DB-backed. Public pages now merge fallback JSON with DB rows, but the full import/save workflow still needs completion.
+2. Consumables and gear need admin-side bulk import, duplicate matching, and review tools before JSON can be retired.
+3. Service-area rules are optional until the Supabase migration is run and seeded.
+4. Water restrictions can change; staff should verify county pages before dispatch during dry weather or active restriction windows.
+5. Search ranking is not guaranteed; the site can only improve crawlability, local relevance, page quality, reviews, and prominence signals.
 
-## Risk reduced in Build 142
+## Build 143 risk reduction
 
-- The service-area dropdown no longer depends only on native datalist behavior.
-- Booking can carry county/water-rule/travel-tier metadata into checkout.
-- New DB/API foundations allow service-area rules to move out of fragile static JSON later.
-- More town pages are crawlable with one clear H1 and local wording.
+- Fixed the public catalog partial-import risk where two edited DB rows could hide the full consumables fallback list.
+- Added a release check to make sure public catalog pages keep fallback-merge helpers.
+- Kept no-DDL compatibility for the current Supabase state.
+- Root-level duplicate API JavaScript was removed again; valid handlers remain under `functions/api/`.

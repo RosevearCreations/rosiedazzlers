@@ -1,22 +1,28 @@
-# Current Implementation State — Build 142
+# Current Implementation State — Build 143
 
 **Updated:** 2026-05-15
 
 ## Public website
 
-- Booking, pricing, services, review proof, add-on imagery, and local landing pages are active.
+- Booking, pricing, services, review proof, add-on imagery, service-area rules, and local landing pages are active.
 - Booking service areas support typeable towns plus a full picker for Oxford and Norfolk communities.
-- Public service-area rules load through `/api/service_area_rules_public` when available and fall back to bundled JSON.
-- Local SEO targets and sitemap now include the newest town pages.
+- Public Consumables and Gear pages now merge DB rows with bundled fallback catalogs so partial DB imports do not hide unedited items.
+- Consumables fallback source: `data/rosie_products_catalog.json`.
+- Gear/tools fallback source: `data/systems_catalog.json`.
 
-## Admin/app backend
+## Admin/backend
 
-- Admin App remains the main settings/editor surface.
-- Admin Catalog supports DB rows merged with bundled fallback inventory.
-- Admin Accounting has operational bookkeeping/reporting coverage but still needs final close/export polish.
-- New service-area admin endpoint exists at `/api/admin/service_area_rules`, but the UI still needs to be wired directly to it.
+- Admin App and Admin Catalog continue moving toward DB-first editable data.
+- Catalog DB rows may exist for edited items only; public pages now handle that partial migration safely.
+- Full DB import/management for consumables and gear remains a next step.
 
-## Data/source-of-truth direction
+## Release checks
 
-- JSON remains the safe deploy fallback.
-- Supabase should become canonical for service-area rules, option libraries, media library, reviews, inventory usage, and accounting workflows as each migration is verified.
+- `scripts/release_check.py`
+- `scripts/stress_static_checks.py`
+- `scripts/local_seo_audit.py`
+- `scripts/catalog_fallback_check.py`
+
+## Schema state
+
+Build 143 is a no-DDL pass. It adds fallback-merge behavior and a schema note only.

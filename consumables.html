@@ -37,7 +37,67 @@
     function hardenTextInput(el){ if(!el) return; const wipe=()=>{ if(/@/.test(el.value||'')) el.value=''; }; const unlock=()=>{ el.removeAttribute('readonly'); wipe(); }; el.value=''; el.setAttribute('autocomplete','new-password'); el.setAttribute('autocapitalize','none'); el.setAttribute('autocorrect','off'); el.setAttribute('spellcheck','false'); el.setAttribute('data-lpignore','true'); el.setAttribute('data-1p-ignore','true'); el.setAttribute('data-form-type','other'); setTimeout(wipe,25); setTimeout(wipe,250); window.addEventListener('pageshow', wipe); el.addEventListener('focus', unlock, { once:true }); el.addEventListener('pointerdown', unlock, { once:true }); el.addEventListener('input', wipe); el.addEventListener('keydown', wipe); }
     function fillSelect(id, values, label){ const sel=qs(id); const list=[...new Set(values.filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b))); sel.innerHTML=`<option value="">All ${label}</option>`+list.map(v=>`<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join(''); }
     function render(list){ const q=(qs('#q').value||'').trim().toLowerCase(); const cat=qs('#cat').value||''; const type=qs('#typeFilter').value||''; const mode=qs('#sort').value; let out=list.filter(it=>(!cat||it.category===cat)&&(!type||it.type===type)&&(!q||`${it.title} ${it.category} ${it.type} ${it.vendor} ${it.notes}`.toLowerCase().includes(q))); out=[...out]; if(mode==='title_asc') out.sort((a,b)=>a.title.localeCompare(b.title)); if(mode==='title_desc') out.sort((a,b)=>b.title.localeCompare(a.title)); if(mode==='category_asc') out.sort((a,b)=>(a.category||'').localeCompare(b.category||'')||(a.type||'').localeCompare(b.type||'')||a.title.localeCompare(b.title)); if(mode==='stock_desc') out.sort((a,b)=>Number(b.qty_on_hand||0)-Number(a.qty_on_hand||0)); if(mode==='stock_asc') out.sort((a,b)=>Number(a.qty_on_hand||0)-Number(b.qty_on_hand||0)); if(mode==='rating_desc') out.sort((a,b)=>Number(b.rating_value||0)-Number(a.rating_value||0)); if(mode==='vendor_asc') out.sort((a,b)=>(a.vendor||'').localeCompare(b.vendor||'')||a.title.localeCompare(b.title)); if(mode==='custom_asc') out.sort((a,b)=>Number(a.sort_key||0)-Number(b.sort_key||0)||a.title.localeCompare(b.title)); qs('#status').style.display='block'; qs('#status').className='notice'; qs('#status').textContent=`Showing ${out.length} consumables`; const grid=qs('#grid'); grid.innerHTML=out.map(it=>`<div class="panel">${it.img?`<img class="cardImg" alt="${escapeHtml(it.title)}" src="${escapeHtml(it.img)}" loading="lazy" decoding="async" onerror="this.style.display='none'" />`:''}<div style="margin-top:${it.img?'10px':'0'}"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap"><div><h2 style="margin:0;font-size:1.1rem">${escapeHtml(it.title)}</h2><div class="muted mini">${escapeHtml(it.category)}</div></div><div class="row"><span class="tag">${escapeHtml(it.category)}</span>${it.type?`<span class="tag">${escapeHtml(it.type)}</span>`:''}</div></div>${it.vendor?`<div class="muted mini" style="margin-top:4px">Manufacturer: ${escapeHtml(it.vendor)} ${it.vendorTag?`<span class=\"tag\" style=\"margin-left:6px\">${escapeHtml(it.vendorTag)}</span>`:''}</div>`:''}${it.notes?`<div class="muted mini" style="margin-top:6px">${escapeHtml(it.notes)}</div>`:''}${it.rating_value!=null?`<div class="muted mini" style="margin-top:6px">Rated ${escapeHtml(Number(it.rating_value).toFixed(1))}/5${it.rating_count?` from ${escapeHtml(it.rating_count)}`:''}</div>`:''}${it.qty_on_hand!=null?`<div class="muted mini" style="margin-top:4px">Stock: ${escapeHtml(it.qty_on_hand)} ${escapeHtml(it.unit_label||'')}</div>`:''}<div class="row" style="margin-top:12px"><a class="btn primary" href="${escapeHtml(it.amazon)}" target="_blank" rel="noopener">Amazon search</a></div></div></div>`).join('') || '<div class="notice warn">No consumables match the current filters.</div>'; }
-    async function loadCatalog(){ try{const dbRes=await fetch(DB_URL,{cache:'no-store'}); const dbJson=await dbRes.json(); if(dbRes.ok&&dbJson?.ok&&Array.isArray(dbJson.items)&&dbJson.items.length) return dbJson.items;}catch{} let lastErr=null; for(const u of CANDIDATE_JSON){ try{const d=await fetchJsonStrict(`${u}?v=${Date.now()}`); if(Array.isArray(d)&&d.length) return d;}catch(e){lastErr=e;} } throw lastErr||new Error('No JSON source worked.'); }
+
+    function rawCatalogKey(it){
+      const parts = [
+        it.item_key, it.id, it.filename, it.path, it.r2_url, it.image_url, it.amazon_url,
+        it.title, it.name
+      ].filter(Boolean).map(v => String(v).trim().toLowerCase());
+      return parts.find(Boolean) || "";
+    }
+    function arrayFromCatalogPayload(payload){
+      if (Array.isArray(payload)) return payload;
+      if (Array.isArray(payload?.items)) return payload.items;
+      if (Array.isArray(payload?.products)) return payload.products;
+      if (Array.isArray(payload?.data)) return payload.data;
+      return [];
+    }
+    function mergeCatalogRows(fallbackRows, dbRows){
+      const map = new Map();
+      const add = (row, source) => {
+        if (!row || typeof row !== "object") return;
+        const key = rawCatalogKey(row) || `${String(row.title || row.name || "").toLowerCase()}|${String(row.category || "").toLowerCase()}`;
+        if (!key) return;
+        const existing = map.get(key) || {};
+        map.set(key, source === "database" ? { ...existing, ...row, _source: source } : { ...row, ...existing, _source: existing._source || source });
+      };
+      (Array.isArray(fallbackRows) ? fallbackRows : []).forEach(row => add(row, "bundled"));
+      (Array.isArray(dbRows) ? dbRows : []).forEach(row => add(row, "database"));
+      return [...map.values()];
+    }
+    async function loadBundledCatalog(){
+      let all = [];
+      let lastErr = null;
+      for(const u of CANDIDATE_JSON){
+        try{
+          const payload = await fetchJsonStrict(`${u}?v=${Date.now()}`);
+          const rows = arrayFromCatalogPayload(payload);
+          if(rows.length) all = all.concat(rows);
+        }catch(e){
+          lastErr = e;
+        }
+      }
+      if(all.length) return all;
+      throw lastErr || new Error("No bundled consumables catalog source worked.");
+    }
+    async function loadDatabaseCatalog(){
+      try{
+        const dbRes = await fetch(DB_URL,{cache:'no-store'});
+        const dbJson = await dbRes.json();
+        if(dbRes.ok && dbJson?.ok && Array.isArray(dbJson.items)) return dbJson.items;
+      }catch{}
+      return [];
+    }
+    async function loadCatalog(){
+      const [bundled, database] = await Promise.all([
+        loadBundledCatalog().catch(() => []),
+        loadDatabaseCatalog()
+      ]);
+      const merged = mergeCatalogRows(bundled, database);
+      if(merged.length) return merged;
+      return await loadBundledCatalog();
+    }
+
     hardenTextInput(qs('#q'));
     try{ const raw=await loadCatalog(); const list=raw.map(normalizeItem).filter(x=>x.title); fillSelect('#cat', list.map(x=>x.category), 'categories'); fillSelect('#typeFilter', list.map(x=>x.type), 'types'); render(list); ['q','cat','typeFilter','sort'].forEach(id=>qs('#'+id).addEventListener(id==='q'?'input':'change',()=>render(list))); qs('#clearBtn').addEventListener('click',()=>{qs('#q').value='';qs('#cat').value='';qs('#typeFilter').value='';qs('#sort').value='title_asc';render(list);}); }catch(e){ qs('#status').style.display='block'; qs('#status').className='notice bad'; qs('#status').textContent=`Consumables catalog failed to load: ${e.message||e}`; qs('#grid').innerHTML='<div class="notice bad">Upload a valid products catalog JSON or restore the public DB inventory feed.</div>'; }
   </script>

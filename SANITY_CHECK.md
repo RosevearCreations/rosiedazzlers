@@ -1,25 +1,28 @@
-# Sanity Check — Build 142
+# Sanity Check — Build 143
 
-**Package base:** `rosiedazzlers-dev(138).zip`  
+**Package base:** `rosiedazzlers-dev(139).zip`  
 **Updated:** 2026-05-15
 
-## Completed checks planned for this package
+## Issue fixed
 
-- Zip integrity.
-- JSON parsing.
-- XML sitemap parsing.
-- JavaScript syntax checks for patched public/admin/API files.
-- Static stress checks.
-- Local SEO audit.
-- Release check.
-- Confirm no exposed public HTML page has more than one H1.
-- Confirm root `.js` files only contain `service-worker.js`.
+The Consumables page was showing only two items because the public page trusted the DB/API response as soon as it found any rows. Since only two items had been edited/imported, the bundled catalog was hidden.
 
-## Manual checks after deploy
+## Fix
 
-1. Open `/book` and click **Show all towns** in Service Area.
-2. Type a town such as `Norwich`, `Waterford`, or `Port Rowan` and confirm county/water-rule notes appear.
-3. Enter a city and postal code and confirm warnings behave sensibly.
-4. Check `/pricing#booking-planner` and `/services` embedded booking panels.
-5. Open new town pages and confirm each has one clear H1 and booking links.
-6. Run the new Supabase migration in dev before relying on DB-first service-area rules.
+- Consumables now loads bundled JSON and DB rows.
+- Gear now uses the same safer merge pattern.
+- DB rows override matching bundled rows.
+- Bundled rows remain visible when they have not yet been saved to the DB.
+
+## Checks to run
+
+- `python scripts/release_check.py`
+- `python scripts/catalog_fallback_check.py`
+- Browser check `/consumables`
+- Browser check `/gear`
+
+## Expected result
+
+- Consumables should show the full bundled catalog plus DB-edited rows.
+- Gear should show the full bundled catalog plus DB-edited rows.
+- Root-level duplicate API JavaScript was removed again; valid handlers remain under `functions/api/`.

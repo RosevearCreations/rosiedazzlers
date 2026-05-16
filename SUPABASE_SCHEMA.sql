@@ -1019,3 +1019,5 @@ create index if not exists accounting_period_closes_status_idx on public.account
 --   create a canonical service_area_rules table or app_settings key and let JSON remain fallback.
 
 -- Root duplicate API files were removed again in Build 141; no DDL needed.
+
+-- Build 143 note (2026-05-15): no DDL. Public consumables/gear pages now merge Supabase catalog rows over bundled JSON fallbacks so partial DB imports do not hide the rest of the catalog.

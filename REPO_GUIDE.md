@@ -1,4 +1,4 @@
-# Repository Guide — Build 142
+# Repository Guide — Build 143
 
 **Branch:** `dev`
 
@@ -7,9 +7,10 @@
 - `functions/api/` — Cloudflare Pages Functions.
 - `assets/` — shared browser JavaScript/CSS helpers.
 - `data/` — deploy-safe JSON fallback data.
+- `scripts/` — release checks and data validation helpers.
 - `sql/` — Supabase migrations and no-DDL tracking notes.
-- `archive/` — historical Markdown snapshots.
+- `archive/` — historical docs and retired files.
 
-## Current rule
+## Public catalog rule
 
-Do not place API handler `.js` files at the repository root. Root JavaScript should only contain valid public browser assets such as `service-worker.js`.
+During migration, public catalog pages must merge DB rows with bundled JSON fallback rows. Do not replace the whole public catalog with the DB response until full import and validation are complete.

@@ -25,3 +25,5 @@
 4. Keep alt text plain and descriptive.
 5. Prefer PNG/JPG primary URLs for real photos. Use SVG only for safe fallback or icon/outline purposes.
 6. Re-run static/release checks before deployment.
+
+<!-- Build 143 sync 2026-05-15: public Consumables/Gear now merge DB catalog rows with bundled fallback catalogs so partial DB imports do not hide unedited items. -->
