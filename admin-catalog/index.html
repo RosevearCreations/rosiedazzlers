@@ -34,6 +34,21 @@
     #itemForm textarea{min-height:78px;max-height:130px;resize:vertical}
     #itemForm .check-grid{gap:8px}
     .grid2 > .panel{align-self:start;min-width:0}
+
+    .catalog-workbench{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .catalog-card{border:1px solid rgba(255,255,255,.1);border-radius:16px;background:rgba(255,255,255,.035);padding:12px;min-width:0}
+    .catalog-card strong{display:block;margin-bottom:4px}
+    .bulk-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .quality-meter{height:8px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:6px}
+    .quality-meter span{display:block;height:100%;background:linear-gradient(90deg,#f59e0b,#34d399);width:0%}
+    .quality-warn{color:#fde68a}
+    .quality-bad{color:#fecaca}
+    .quality-good{color:#bbf7d0}
+    .catalog-review{max-height:360px;overflow:auto;border:1px solid rgba(255,255,255,.08);border-radius:14px}
+    .catalog-review table{margin:0}
+    .catalog-select-col{width:42px;text-align:center}
+    .mobile-stock-card{border:1px dashed rgba(125,163,255,.35);border-radius:16px;padding:12px;background:rgba(125,163,255,.06)}
+    @media(max-width:980px){.catalog-workbench{grid-template-columns:1fr}.bulk-tools{align-items:stretch}.bulk-tools .btn,.bulk-tools select,.bulk-tools input{width:100%}}
     @media(max-width:980px){.grid2,.grid3,.option-grid,#itemForm .grid3{grid-template-columns:1fr}.table-wrap table{table-layout:auto}}
   </style>
 </head>
@@ -64,6 +79,58 @@
     </details>
   </section>
 
+
+  <section class="section panel stack" id="catalogDbImportPanel">
+    <div class="row" style="justify-content:space-between;align-items:flex-start">
+      <div>
+        <h2 style="margin:0">Catalog DB import, quality, and bulk controls</h2>
+        <p class="mini" style="margin:.35rem 0 0">Use this to move bundled consumables/gear into the database safely. Preview first, then import selected fallback rows. Saved DB rows stay the source of truth and bundled rows remain as backup until the DB import is complete.</p>
+      </div>
+      <span class="pill">Build 145 workflow</span>
+    </div>
+    <div class="catalog-workbench">
+      <div class="catalog-card">
+        <strong>DB import preview</strong>
+        <div class="mini" id="importPreviewSummary">Load inventory to calculate create/update/skip decisions.</div>
+        <div class="bulk-tools" style="margin-top:8px">
+          <button class="btn" id="previewCatalogImportBtn" type="button">Preview import</button>
+          <button class="btn primary" id="runCatalogImportBtn" type="button">Import selected</button>
+        </div>
+      </div>
+      <div class="catalog-card">
+        <strong>Bulk visibility</strong>
+        <div class="mini">Select rows in the table, then publish/hide or activate/deactivate them in batches.</div>
+        <div class="bulk-tools" style="margin-top:8px">
+          <button class="btn ghost" id="bulkPublicBtn" type="button">Make public</button>
+          <button class="btn ghost" id="bulkPrivateBtn" type="button">Hide public</button>
+          <button class="btn ghost" id="bulkActiveBtn" type="button">Activate</button>
+          <button class="btn ghost" id="bulkInactiveBtn" type="button">Deactivate</button>
+        </div>
+      </div>
+      <div class="catalog-card">
+        <strong>Image completeness</strong>
+        <div class="mini" id="catalogQualitySummary">Image and catalog completeness will appear after inventory loads.</div>
+        <div class="quality-meter"><span id="catalogQualityMeter"></span></div>
+      </div>
+      <div class="catalog-card mobile-stock-card">
+        <strong>Mobile quick stock adjustment</strong>
+        <div class="grid3" style="margin-top:8px">
+          <label>Item<select id="quickStockItem"><option value="">Select item</option></select></label>
+          <label>Action<select id="quickStockAction"><option value="adjust_up">Add stock</option><option value="adjust_down">Reduce stock</option><option value="finished">Finished/consumed</option><option value="defective">Defective</option><option value="write_off">Write-off</option></select></label>
+          <label>Qty<input id="quickStockQty" type="number" min="0.01" step="0.01" value="1" /></label>
+        </div>
+        <label style="display:grid;gap:5px;margin-top:8px">Note<input id="quickStockNote" placeholder="Reason or receipt note" /></label>
+        <button class="btn" id="quickStockBtn" type="button" style="margin-top:8px">Apply stock change</button>
+      </div>
+    </div>
+    <div class="catalog-review" id="importPreviewBox" style="display:none;margin-top:12px">
+      <table class="table-compact">
+        <thead><tr><th class="catalog-select-col"><input id="toggleImportChecks" type="checkbox" checked /></th><th>Decision</th><th>Item</th><th>Quality</th><th>Reason</th></tr></thead>
+        <tbody id="importPreviewBody"></tbody>
+      </table>
+    </div>
+  </section>
+
   <section class="section grid2">
     <article class="panel stack">
       <div class="row toolbar">
@@ -74,7 +141,7 @@
         <select id="invSort"><option value="updated_desc">Sort: Updated</option><option value="name_asc">Sort: Name</option><option value="stock_asc">Sort: Stock low→high</option><option value="rating_desc">Sort: Rating</option><option value="sort_key_asc">Sort: Saved order</option></select>
       </div>
       <div class="mini" id="invSummary"></div>
-      <div class="table-wrap"><table><thead><tr><th>Item</th><th>Stock / Cost</th><th>Rating</th><th>Reuse</th><th>Action</th></tr></thead><tbody id="invBody"><tr><td colspan="5">Loading…</td></tr></tbody></table></div>
+      <div class="table-wrap"><table><thead><tr><th class="catalog-select-col"><input id="selectVisibleInventory" type="checkbox" title="Select visible rows" /></th><th>Item</th><th>Stock / Cost</th><th>Rating</th><th>Reuse</th><th>Action</th></tr></thead><tbody id="invBody"><tr><td colspan="5">Loading…</td></tr></tbody></table></div>
     </article>
 
     <article class="panel stack">
@@ -101,6 +168,9 @@
           <label>Reuse policy<select id="formReuse"><option value="reorder">Reorder / reusable</option><option value="single_use">Single-use</option><option value="never_reuse">Never reuse / do not reorder</option></select></label>
           <label>Amazon / purchase URL<input id="formAmazon" list="inventoryPurchaseUrlOptions" placeholder="Paste the Amazon product link" /></label>
           <label>Image URL<input id="formImage" list="inventoryImageOptions" /></label>
+          <label>Receipt / bill URL<input id="formReceiptUrl" list="inventoryPurchaseUrlOptions" placeholder="Receipt, invoice, or statement URL" /></label>
+          <label>Assigned station / vehicle<input id="formAssignedStation" placeholder="Van 1, garage shelf, trailer bin" /></label>
+          <label>Linked services / tags<input id="formServiceTags" placeholder="engine cleaning, pet hair, ceramic coating" /></label>
         </div>
         <div id="inventoryDatalists" hidden></div>
         <div class="mini">Text fields now learn from existing saved inventory plus common detailing terms, including categories, vendors, units, image URLs, and colour/finish words in the subcategory suggestions.</div>
@@ -160,7 +230,7 @@
 <script>
 (function(){
   const qs=(s)=>document.querySelector(s);
-  let actor=null, inventory=[], movements=[], lowStock=[], savedInventoryItems=[];
+  let actor=null, inventory=[], movements=[], lowStock=[], savedInventoryItems=[], bundledFallbackItems=[], importPreviewRows=[];
   const optionStorageKey='rosie_inventory_dropdown_options_v2';
   function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g,(m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function show(msg,kind=''){ const el=qs('#status'); el.style.display='block'; el.className='notice '+(kind||''); el.textContent=msg; }
@@ -274,14 +344,133 @@
     qs('#formUnit').value=item?.unit_label||''; qs('#formQty').value=item?.qty_on_hand ?? 0; qs('#formReorderPoint').value=item?.reorder_point ?? 0;
     qs('#formReorderQty').value=item?.reorder_qty ?? 0; qs('#formCostCad').value=item?.cost_cents != null ? Number(item.cost_cents || 0) / 100 : ''; qs('#formVendorSku').value=item?.vendor_sku || ''; qs('#formRating').value=item?.rating_value ?? ''; qs('#formRatingCount').value=item?.rating_count ?? 0;
     qs('#formSortKey').value=item?.sort_key ?? 0; qs('#formPurchaseDate').value=(item?.purchase_date||'').slice(0,10); qs('#formEstimatedJobs').value=item?.estimated_jobs_per_unit ?? 0; qs('#formReuse').value=item?.reuse_policy||'reorder'; qs('#formAmazon').value=item?.amazon_url||'';
-    qs('#formImage').value=item?.image_url||''; qs('#formIsPublic').checked=item?.is_public !== false; qs('#formIsActive').checked=item?.is_active !== false; qs('#formNotes').value=item?.notes||'';
+    qs('#formImage').value=item?.image_url||''; qs('#formReceiptUrl').value=item?.receipt_url || item?.bill_url || ''; qs('#formAssignedStation').value=item?.assigned_station || item?.station_label || ''; qs('#formServiceTags').value=Array.isArray(item?.service_tags) ? item.service_tags.join(', ') : (item?.service_tags || item?.service_link_tags || '');
+    qs('#formIsPublic').checked=item?.is_public !== false; qs('#formIsActive').checked=item?.is_active !== false; qs('#formNotes').value=item?.notes||'';
   }
-  function fillUsageItems(){ const sel=qs('#usageItemKey'); sel.innerHTML='<option value="">Select inventory item</option>'+inventory.map((item)=>`<option value="${esc(item.item_key)}">${esc(item.name)} (${esc(item.item_type||'')})</option>`).join(''); }
+  function fillUsageItems(){
+    const options='<option value="">Select inventory item</option>'+inventory.map((item)=>`<option value="${esc(item.item_key)}">${esc(item.name)} (${esc(item.item_type||'')})</option>`).join('');
+    const usageSel=qs('#usageItemKey'); if(usageSel) usageSel.innerHTML=options;
+    const quickSel=qs('#quickStockItem'); if(quickSel) quickSel.innerHTML=options;
+  }
+
+  function itemQualityScore(item){
+    let score=0;
+    if(item?.image_url) score+=25;
+    if(item?.name && String(item.name).length>=6) score+=10;
+    if(item?.category) score+=10;
+    if(item?.subcategory) score+=8;
+    if(item?.preferred_vendor) score+=8;
+    if(item?.cost_cents!=null && Number(item.cost_cents)>0) score+=15;
+    if(item?.amazon_url) score+=8;
+    if(item?.reorder_point!=null && Number(item.reorder_point)>=0) score+=6;
+    if(item?.unit_label) score+=5;
+    if(item?.service_tags || item?.service_link_tags) score+=5;
+    return Math.max(0, Math.min(100, score));
+  }
+  function itemQualityClass(score){ return score >= 75 ? 'quality-good' : score >= 45 ? 'quality-warn' : 'quality-bad'; }
+  function duplicateSignature(item){
+    const name=String(item?.name||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+    const image=String(item?.image_url||'').toLowerCase().split('?')[0];
+    return `${name}::${image}`;
+  }
+  function selectedInventoryKeys(){
+    return [...document.querySelectorAll('.inventory-row-check:checked')].map((el)=>el.value).filter(Boolean);
+  }
+  function refreshQualitySummary(){
+    const rows=inventory || [];
+    const scores=rows.map(itemQualityScore);
+    const avg=scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : 0;
+    const missingImages=rows.filter((item)=>!item.image_url).length;
+    const missingCost=rows.filter((item)=>!(Number(item.cost_cents||0)>0)).length;
+    const fallbackOnly=rows.filter((item)=>item._source==='fallback').length;
+    const el=qs('#catalogQualitySummary');
+    if(el) el.textContent=`Average completeness ${avg}% · ${missingImages} missing images · ${missingCost} missing cost · ${fallbackOnly} bundled-only rows`;
+    const meter=qs('#catalogQualityMeter'); if(meter) meter.style.width=`${avg}%`;
+  }
+  function makeImportPayload(item){
+    return {
+      item_key:item.item_key, item_type:item.item_type, name:item.name, category:item.category || 'general', subcategory:item.subcategory || '',
+      preferred_vendor:item.preferred_vendor || '', vendor_sku:item.vendor_sku || '', unit_label:item.unit_label || 'each',
+      qty_on_hand:Number(item.qty_on_hand || 0), reorder_point:Number(item.reorder_point || 0), reorder_qty:Number(item.reorder_qty || 1),
+      cost_cad:item.cost_cents!=null && Number(item.cost_cents)>0 ? Number(item.cost_cents)/100 : null,
+      rating_value:item.rating_value ?? '', rating_count:Number(item.rating_count || 0), sort_key:Number(item.sort_key || 9999),
+      purchase_date:item.purchase_date || null, estimated_jobs_per_unit:Number(item.estimated_jobs_per_unit || 0),
+      reuse_policy:item.reuse_policy || 'reorder', amazon_url:item.amazon_url || '', image_url:item.image_url || '',
+      receipt_url:item.receipt_url || '', assigned_station:item.assigned_station || '', service_tags:item.service_tags || '',
+      is_public:item.is_public !== false, is_active:item.is_active !== false, notes:item.notes || ''
+    };
+  }
+  function buildImportPreview(){
+    const savedByKey=new Map((savedInventoryItems||[]).map((item)=>[String(item.item_key), item]));
+    const savedSignatures=new Map((savedInventoryItems||[]).map((item)=>[duplicateSignature(item), item]));
+    importPreviewRows=(bundledFallbackItems||[]).map((item)=>{
+      const exact=savedByKey.get(String(item.item_key));
+      const duplicate=savedSignatures.get(duplicateSignature(item));
+      let decision='create';
+      let reason='Bundled item is not saved in DB yet.';
+      if(exact){ decision='skip'; reason='Already saved by item key.'; }
+      else if(duplicate){ decision='review'; reason=`Possible duplicate of saved item: ${duplicate.name || duplicate.item_key}`; }
+      const score=itemQualityScore(item);
+      return { ...item, decision, reason, score, selected: decision==='create' };
+    });
+    return importPreviewRows;
+  }
+  function renderImportPreview(){
+    const rows=buildImportPreview();
+    const counts=rows.reduce((acc,row)=>{ acc[row.decision]=(acc[row.decision]||0)+1; return acc; }, {});
+    const summary=qs('#importPreviewSummary');
+    if(summary) summary.textContent=`${rows.length} bundled rows · ${counts.create||0} create · ${counts.review||0} review · ${counts.skip||0} skip`;
+    const box=qs('#importPreviewBox'); if(box) box.style.display='block';
+    const body=qs('#importPreviewBody');
+    if(body) body.innerHTML=rows.map((row,idx)=>`<tr><td class="catalog-select-col">${row.decision==='skip' ? '' : `<input class="import-row-check" type="checkbox" data-import-idx="${idx}" ${row.selected?'checked':''}>`}</td><td><span class="pill">${esc(row.decision)}</span></td><td><strong>${esc(row.name)}</strong><div class="mini">${esc(row.item_key)} · ${esc(row.item_type)} · ${esc(row.category||'')}</div></td><td><span class="${itemQualityClass(row.score)}">${row.score}%</span><div class="quality-meter"><span style="width:${row.score}%"></span></div></td><td class="mini">${esc(row.reason)}</td></tr>`).join('') || '<tr><td colspan="5">No bundled rows found.</td></tr>';
+  }
+  async function importSelectedCatalogRows(){
+    const checked=[...document.querySelectorAll('.import-row-check:checked')].map((el)=>importPreviewRows[Number(el.dataset.importIdx)]).filter(Boolean);
+    if(!checked.length) return show('Select at least one bundled row to import.', 'bad');
+    let ok=0, failed=0;
+    for(const item of checked){
+      const res=await postJson('/api/admin/catalog_inventory_save', makeImportPayload(item));
+      if(res.ok && res.out?.ok) ok++; else failed++;
+    }
+    show(`Import finished: ${ok} saved, ${failed} failed. Reloading inventory…`, failed ? 'bad' : 'ok');
+    await loadInventory();
+    renderImportPreview();
+  }
+  async function bulkSetVisibility(values){
+    const keys=selectedInventoryKeys();
+    if(!keys.length) return show('Select at least one visible row first.', 'bad');
+    const x=await postJson('/api/admin/catalog_bulk_visibility', { item_keys: keys, ...values });
+    if(!x.ok || !x.out?.ok) return show((x.out&&x.out.error)||'Bulk update failed. Save fallback rows first, then try again.', 'bad');
+    show(`Bulk update complete: ${x.out.updated || 0} rows changed.`, 'ok');
+    await loadInventory();
+  }
+  async function applyQuickStock(){
+    const item_key=qs('#quickStockItem')?.value || '';
+    const action_type=qs('#quickStockAction')?.value || 'adjust_up';
+    const qty=Number(qs('#quickStockQty')?.value || 0);
+    const note=qs('#quickStockNote')?.value || '';
+    if(!item_key || !(qty>0)) return show('Choose an item and quantity first.', 'bad');
+    const x=await postJson('/api/admin/catalog_stock_action', { item_key, action_type, qty, note });
+    if(!x.ok || !x.out?.ok) return show((x.out&&x.out.error)||'Could not apply stock adjustment. Make sure the item is saved to DB first.', 'bad');
+    show('Stock adjustment saved and movement history updated.', 'ok');
+    qs('#quickStockNote').value='';
+    await loadInventory(); await loadMovements(); await loadLowStock();
+  }
   function applyInventoryFilters(items){ const q=(qs('#invSearch').value||'').trim().toLowerCase(); const type=qs('#itemType').value||''; const mode=qs('#invSort').value; let out=items.filter((item)=>!type || item.item_type===type).filter((item)=>!q || `${item.name} ${item.item_key} ${item.category||''} ${item.subcategory||''} ${item.preferred_vendor||''}`.toLowerCase().includes(q)); out=[...out]; if(mode==='name_asc') out.sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''))); if(mode==='stock_asc') out.sort((a,b)=>Number(a.qty_on_hand||0)-Number(b.qty_on_hand||0)); if(mode==='rating_desc') out.sort((a,b)=>Number(b.rating_value||0)-Number(a.rating_value||0)); if(mode==='sort_key_asc') out.sort((a,b)=>Number(a.sort_key||0)-Number(b.sort_key||0)||String(a.name||'').localeCompare(String(b.name||''))); return out; }
   async function createReorder(itemKey){ const item=inventory.find((x)=>String(x.item_key)===String(itemKey)); const reminderAt=new Date(Date.now()+3*24*60*60*1000).toISOString(); const x=await postJson('/api/admin/catalog_reorder_request',{ item_key: itemKey, status:'requested', reminder_at: reminderAt, qty_ordered: item?.reorder_qty || 1, vendor_name: item?.preferred_vendor || '', purchase_url: item?.amazon_url || '' }); if(!x.ok||!x.out?.ok) return show((x.out&&x.out.error)||'Could not create reorder.','bad'); show('Reorder request created.','ok'); loadInventory(); loadLowStock(); loadOrders(); }
-  function renderInventory(){ const items=applyInventoryFilters(inventory); const savedCount=items.filter((item)=>item._source==='saved').length; const fallbackCount=items.filter((item)=>item._source==='fallback').length; qs('#invSummary').textContent=`${items.length} items shown · ${savedCount} saved · ${fallbackCount} bundled gear/consumable fallback`; qs('#invBody').innerHTML=items.map((item)=>`<tr><td><button class="inventory-name-edit" type="button" data-edit="${esc(item.item_key)}" title="Edit ${esc(item.name)}">${esc(item.name)}</button><div class="mini">${esc(item.item_key)} · ${esc(item.item_type||'')} · ${esc(item.category||'')}</div>${item.subcategory?`<div class="mini">Type: ${esc(item.subcategory)}</div>`:''}${item.preferred_vendor?`<div class="mini">Vendor: ${esc(item.preferred_vendor)}</div>`:''}${item.vendor_sku?`<div class="mini">SKU: ${esc(item.vendor_sku)}</div>`:''}<span class="source-pill ${item._source==='saved'?'saved':'fallback'}">${item._source==='saved'?'Saved DB item':'Bundled fallback — save to edit stock'}</span></td><td>${esc(item.qty_on_hand)} ${esc(item.unit_label||'')}<div class="mini">RP ${esc(item.reorder_point)} / RQ ${esc(item.reorder_qty)}</div>${item.cost_cents!=null&&Number(item.cost_cents)>0?`<div class="mini">Cost: ${esc((Number(item.cost_cents)/100).toFixed(2))} CAD</div>`:`<div class="mini danger-note">Missing unit cost</div>`}${item.purchase_date?`<div class="mini">Bought: ${esc(String(item.purchase_date).slice(0,10))}</div>`:''}${item.estimated_jobs_per_unit?`<div class="mini">Est. jobs/unit: ${esc(item.estimated_jobs_per_unit)}</div>`:''}</td><td>${item.rating_value!=null?`${esc(item.rating_value)} / 5 <span class="mini">(${esc(item.rating_count)})</span>`:'—'}</td><td>${esc(item.reuse_policy||'reorder')}</td><td><div class="row"><button class="btn ghost" data-edit="${esc(item.item_key)}">Edit</button>${String(item.reuse_policy||'reorder')!=='never_reuse' ? `<button class="btn ghost" data-reorder="${esc(item.item_key)}">Reorder</button>` : `<span class="pill">No reorder</span>`}</div></td></tr>`).join('') || '<tr><td colspan="5">No inventory items found.</td></tr>';
+  function renderInventory(){
+    const items=applyInventoryFilters(inventory);
+    const savedCount=items.filter((item)=>item._source==='saved').length;
+    const fallbackCount=items.filter((item)=>item._source==='fallback').length;
+    qs('#invSummary').textContent=`${items.length} items shown · ${savedCount} saved · ${fallbackCount} bundled gear/consumable fallback`;
+    qs('#invBody').innerHTML=items.map((item)=>{
+      const score=itemQualityScore(item);
+      return `<tr><td class="catalog-select-col"><input class="inventory-row-check" type="checkbox" value="${esc(item.item_key)}" ${item._source==='fallback'?'title="Save/import fallback row before DB-only bulk updates"':''}></td><td><button class="inventory-name-edit" type="button" data-edit="${esc(item.item_key)}" title="Edit ${esc(item.name)}">${esc(item.name)}</button><div class="mini">${esc(item.item_key)} · ${esc(item.item_type||'')} · ${esc(item.category||'')}</div>${item.subcategory?`<div class="mini">Type: ${esc(item.subcategory)}</div>`:''}${item.preferred_vendor?`<div class="mini">Vendor: ${esc(item.preferred_vendor)}</div>`:''}${item.vendor_sku?`<div class="mini">SKU: ${esc(item.vendor_sku)}</div>`:''}<span class="source-pill ${item._source==='saved'?'saved':'fallback'}">${item._source==='saved'?'Saved DB item':'Bundled fallback — save/import to edit stock'}</span>${item.is_public===false?'<span class="source-pill fallback">Hidden from public</span>':'<span class="source-pill saved">Public</span>'}</td><td>${esc(item.qty_on_hand)} ${esc(item.unit_label||'')}<div class="mini">RP ${esc(item.reorder_point)} / RQ ${esc(item.reorder_qty)}</div>${item.cost_cents!=null&&Number(item.cost_cents)>0?`<div class="mini">Cost: ${esc((Number(item.cost_cents)/100).toFixed(2))} CAD</div>`:`<div class="mini danger-note">Missing unit cost</div>`}${item.purchase_date?`<div class="mini">Bought: ${esc(String(item.purchase_date).slice(0,10))}</div>`:''}${item.estimated_jobs_per_unit?`<div class="mini">Est. jobs/unit: ${esc(item.estimated_jobs_per_unit)}</div>`:''}</td><td><span class="${itemQualityClass(score)}">${score}%</span><div class="quality-meter"><span style="width:${score}%"></span></div>${item.image_url?'<div class="mini quality-good">Image set</div>':'<div class="mini quality-bad">Missing image</div>'}</td><td>${esc(item.reuse_policy||'reorder')}</td><td><div class="row"><button class="btn ghost" data-edit="${esc(item.item_key)}">Edit</button>${String(item.reuse_policy||'reorder')!=='never_reuse' ? `<button class="btn ghost" data-reorder="${esc(item.item_key)}">Reorder</button>` : `<span class="pill">No reorder</span>`}</div></td></tr>`;
+    }).join('') || '<tr><td colspan="6">No inventory items found.</td></tr>';
     document.querySelectorAll('[data-edit]').forEach((btn)=>btn.addEventListener('click',()=>{ const item=inventory.find((x)=>String(x.item_key)===String(btn.dataset.edit)) || null; fillForm(item); qs('#formName')?.focus({preventScroll:true}); document.querySelector('#itemForm')?.scrollIntoView({behavior:'smooth', block:'start'}); }));
     document.querySelectorAll('[data-reorder]').forEach((btn)=>btn.addEventListener('click', ()=>createReorder(btn.dataset.reorder)));
+    qs('#selectVisibleInventory')?.addEventListener('change', (event)=>{ document.querySelectorAll('.inventory-row-check').forEach((box)=>{ box.checked=event.target.checked; }); });
+    refreshQualitySummary();
   }
   function renderMovements(){ const q=(qs('#moveSearch').value||'').trim().toLowerCase(); const type=qs('#moveType').value||''; const rows=movements.filter((m)=>!type || String(m.movement_type||'')===type).filter((m)=>!q || `${m.item_key||''} ${m.note||''} ${m.actor_name||''} ${m.booking_id||''}`.toLowerCase().includes(q)); qs('#moveSummary').textContent=`${rows.length} movements shown`; qs('#moveBody').innerHTML=rows.map((m)=>`<tr><td>${esc(new Date(m.created_at||Date.now()).toLocaleString())}<div class="mini">${esc(m.movement_type||'')}</div></td><td><strong>${esc(m.item_key||'')}</strong><div class="mini">${esc(m.item_name||'')}</div></td><td>${esc(m.qty_delta)}<div class="mini">${esc(m.previous_qty)} → ${esc(m.new_qty)}</div></td><td>${m.booking_id?`<div class="mini">Booking: ${esc(m.booking_id)}</div>`:''}<div class="mini">${esc(m.actor_name||'')}</div>${m.note?`<div class="mini">${esc(m.note)}</div>`:''}</td></tr>`).join('') || '<tr><td colspan="4">No movement history found.</td></tr>'; }
   function renderLowStock(){ qs('#lowSummary').textContent=`${lowStock.length} low-stock items`; qs('#lowBody').innerHTML=lowStock.map((item)=>`<tr><td><strong>${esc(item.name)}</strong><div class="mini">${esc(item.item_key)} · ${esc(item.item_type||'')} · ${esc(item.category||'')}</div>${item.subcategory?`<div class="mini">Type: ${esc(item.subcategory)}</div>`:''}</td><td>${esc(item.qty_on_hand)} ${esc(item.unit_label||'')}</td><td>${esc(item.reorder_point)}<div class="mini">Suggested reorder ${esc(item.reorder_qty||1)}</div></td><td><div class="row"><button class="btn ghost" data-edit-low="${esc(item.item_key)}">Edit</button>${String(item.reuse_policy||'reorder')!=='never_reuse'?`<button class="btn ghost" data-low-reorder="${esc(item.item_key)}">Create reorder</button>`:`<span class="pill">No reorder</span>`}</div></td></tr>`).join('') || '<tr><td colspan="4">No low-stock items right now.</td></tr>';
@@ -315,6 +504,9 @@
       image_url: row?.image_url || row?.r2_url || (Array.isArray(row?.img_candidates) ? row.img_candidates[0] : '') || '',
       is_public: row?.is_public !== false,
       is_active: row?.is_active !== false,
+      receipt_url: row?.receipt_url || row?.bill_url || '',
+      assigned_station: row?.assigned_station || '',
+      service_tags: Array.isArray(row?.service_tags) ? row.service_tags.join(', ') : (row?.service_tags || row?.service_link_tags || ''),
       notes: row?.notes || '',
       _source: 'fallback'
     };
@@ -344,14 +536,15 @@
   async function loadInventory(){
     hide();
     const [r, fallbackRows] = await Promise.all([getJson('/api/admin/catalog_inventory_list'), fetchLocalInventoryFallback()]);
+    bundledFallbackItems = Array.isArray(fallbackRows) ? fallbackRows : [];
     if(!r.ok||!r.out?.ok){
       inventory=mergeInventoryWithFallback([], fallbackRows);
-      renderInventoryDatalists(); fillUsageItems(); renderInventory(); lowStock=[]; renderLowStock();
+      renderInventoryDatalists(); fillUsageItems(); renderInventory(); refreshQualitySummary(); lowStock=[]; renderLowStock();
       return show(((r.out&&r.out.error)||'Could not load saved inventory from the database.') + ' Showing bundled gear/consumables fallback so we can still edit and save items.', 'bad');
     }
     savedInventoryItems=Array.isArray(r.out.items)?r.out.items:[];
     inventory=mergeInventoryWithFallback(savedInventoryItems, fallbackRows);
-    renderInventoryDatalists(); fillUsageItems(); renderInventory();
+    renderInventoryDatalists(); fillUsageItems(); renderInventory(); refreshQualitySummary();
     lowStock=Array.isArray(r.out.low_stock)&&r.out.low_stock.length ? r.out.low_stock : computeLowStockItems(savedInventoryItems);
     renderLowStock();
   }
@@ -365,8 +558,17 @@
   qs('#saveInventoryOptionsBtn')?.addEventListener('click', async ()=>{ const value=readInventoryOptionsEditor(); localStorage.setItem(optionStorageKey, JSON.stringify(value)); setInventoryOptionsEditor(value); renderInventoryDatalists(); const saved=await saveSharedInventoryOptions(value).catch(()=>null); show(saved?.ok && saved?.out?.ok ? 'Inventory dropdown suggestions saved to shared app settings and this browser.' : 'Inventory dropdown suggestions saved in this browser. Shared save was not available.', saved?.ok && saved?.out?.ok ? 'ok' : 'bad'); });
   qs('#resetInventoryOptionsBtn')?.addEventListener('click', ()=>{ localStorage.removeItem(optionStorageKey); setInventoryOptionsEditor(inventoryOptionDefaults()); renderInventoryDatalists(); show('Inventory dropdown suggestions reset to detailing defaults.', 'ok'); });
   qs('#reloadBtn').addEventListener('click', loadInventory); qs('#reloadOrdersBtn').addEventListener('click', loadOrders); qs('#reloadMovesBtn').addEventListener('click', loadMovements); qs('#reloadLowBtn').addEventListener('click', loadLowStock); qs('#itemType').addEventListener('change', renderInventory); qs('#invSearch').addEventListener('input', renderInventory); qs('#invSort').addEventListener('change', renderInventory); qs('#moveSearch').addEventListener('input', renderMovements); qs('#moveType').addEventListener('change', renderMovements); qs('#orderStatus').addEventListener('change', loadOrders); qs('#newItemBtn').addEventListener('click', ()=>fillForm(null)); qs('#clearFormBtn').addEventListener('click', ()=>fillForm(null)); qs('#usageResetBtn').addEventListener('click', ()=>{ qs('#usageBookingId').value=''; qs('#usageItemKey').value=''; qs('#usageQty').value='1'; qs('#usageNote').value=''; });
+  
+  qs('#previewCatalogImportBtn')?.addEventListener('click', renderImportPreview);
+  qs('#runCatalogImportBtn')?.addEventListener('click', importSelectedCatalogRows);
+  qs('#toggleImportChecks')?.addEventListener('change', (event)=>{ document.querySelectorAll('.import-row-check').forEach((box)=>{ box.checked=event.target.checked; }); });
+  qs('#bulkPublicBtn')?.addEventListener('click', ()=>bulkSetVisibility({ is_public:true }));
+  qs('#bulkPrivateBtn')?.addEventListener('click', ()=>bulkSetVisibility({ is_public:false }));
+  qs('#bulkActiveBtn')?.addEventListener('click', ()=>bulkSetVisibility({ is_active:true }));
+  qs('#bulkInactiveBtn')?.addEventListener('click', ()=>bulkSetVisibility({ is_active:false }));
+  qs('#quickStockBtn')?.addEventListener('click', applyQuickStock);
   qs('#amazonParseBtn').addEventListener('click', ()=>{ const parsed=parseAmazonDraft(qs('#formAmazon').value); if(!parsed) return show('Paste a valid Amazon product link first.','bad'); if(!qs('#formName').value.trim()) qs('#formName').value=parsed.name; if(!qs('#formItemKey').value.trim()) qs('#formItemKey').value=parsed.key; if(!qs('#formVendor').value.trim()) qs('#formVendor').value='Amazon'; show('Draft name and item key filled from Amazon link. Review before saving.','ok'); });
-  qs('#itemForm').addEventListener('submit', async(e)=>{ e.preventDefault(); const payload={ item_key: qs('#formItemKey').value.trim(), item_type: qs('#formItemType').value, name: qs('#formName').value.trim(), category: qs('#formCategory').value.trim(), subcategory: qs('#formSubcategory').value.trim(), preferred_vendor: qs('#formVendor').value.trim(), vendor_sku: qs('#formVendorSku').value.trim(), unit_label: qs('#formUnit').value.trim(), qty_on_hand: Number(qs('#formQty').value||0), reorder_point: Number(qs('#formReorderPoint').value||0), reorder_qty: Number(qs('#formReorderQty').value||0), cost_cad: qs('#formCostCad').value === '' ? null : Number(qs('#formCostCad').value||0), rating_value: qs('#formRating').value, rating_count: Number(qs('#formRatingCount').value||0), sort_key: Number(qs('#formSortKey').value||0), purchase_date: qs('#formPurchaseDate').value || null, estimated_jobs_per_unit: Number(qs('#formEstimatedJobs').value||0), reuse_policy: qs('#formReuse').value, amazon_url: qs('#formAmazon').value.trim(), image_url: qs('#formImage').value.trim(), is_public: qs('#formIsPublic').checked, is_active: qs('#formIsActive').checked, notes: qs('#formNotes').value.trim() }; const x=await postJson('/api/admin/catalog_inventory_save', payload); if(!x.ok||!x.out?.ok) return show((x.out&&x.out.error)||'Could not save inventory item.','bad'); show('Inventory item saved.','ok'); fillForm(x.out.item||null); loadInventory(); loadLowStock(); });
+  qs('#itemForm').addEventListener('submit', async(e)=>{ e.preventDefault(); const payload={ item_key: qs('#formItemKey').value.trim(), item_type: qs('#formItemType').value, name: qs('#formName').value.trim(), category: qs('#formCategory').value.trim(), subcategory: qs('#formSubcategory').value.trim(), preferred_vendor: qs('#formVendor').value.trim(), vendor_sku: qs('#formVendorSku').value.trim(), unit_label: qs('#formUnit').value.trim(), qty_on_hand: Number(qs('#formQty').value||0), reorder_point: Number(qs('#formReorderPoint').value||0), reorder_qty: Number(qs('#formReorderQty').value||0), cost_cad: qs('#formCostCad').value === '' ? null : Number(qs('#formCostCad').value||0), rating_value: qs('#formRating').value, rating_count: Number(qs('#formRatingCount').value||0), sort_key: Number(qs('#formSortKey').value||0), purchase_date: qs('#formPurchaseDate').value || null, estimated_jobs_per_unit: Number(qs('#formEstimatedJobs').value||0), reuse_policy: qs('#formReuse').value, amazon_url: qs('#formAmazon').value.trim(), image_url: qs('#formImage').value.trim(), receipt_url: qs('#formReceiptUrl').value.trim(), assigned_station: qs('#formAssignedStation').value.trim(), service_tags: qs('#formServiceTags').value.trim(), is_public: qs('#formIsPublic').checked, is_active: qs('#formIsActive').checked, notes: qs('#formNotes').value.trim() }; const x=await postJson('/api/admin/catalog_inventory_save', payload); if(!x.ok||!x.out?.ok) return show((x.out&&x.out.error)||'Could not save inventory item.','bad'); show('Inventory item saved.','ok'); fillForm(x.out.item||null); loadInventory(); loadLowStock(); });
   qs('#usageForm').addEventListener('submit', async(e)=>{ e.preventDefault(); const payload={ booking_id: qs('#usageBookingId').value.trim(), item_key: qs('#usageItemKey').value, qty_used: Number(qs('#usageQty').value||0), note: qs('#usageNote').value.trim() }; const x=await postJson('/api/admin/catalog_usage_add', payload); if(!x.ok||!x.out?.ok) return show((x.out&&x.out.error)||'Could not record usage.','bad'); show('Inventory usage recorded.','ok'); qs('#usageQty').value='1'; qs('#usageNote').value=''; loadInventory(); loadLowStock(); loadMovements(); });
   window.AdminShell.boot({ pageKey:'admin-catalog', onReady: async ({actor:current}) => { actor=current||null; const box=qs('#actorBox'); if(actor){ box.style.display='block'; box.textContent=`Signed in as ${actor.full_name || actor.email || 'staff'} (${actor.role_code || 'staff'})`; } await loadSharedInventoryOptions(); fillForm(null); loadInventory(); loadMovements(); loadLowStock(); loadOrders(); } });
 })();
