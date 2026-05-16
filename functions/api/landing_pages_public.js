@@ -434,6 +434,191 @@ const DEFAULT_LANDING_PAGES = {
         {"q":"Why give Port Dover its own page?","a":"Because town-first local searches often perform better when the page clearly matches the place the customer typed into search."},
         {"q":"Why mention parking on a detailing page?","a":"Because seasonal paid parking and waterfront traffic can affect how practical curbside or near-shore service access is on busy days."}
       ]
+    },
+    "norwich-otterville-auto-detailing": {
+      type: "location",
+      enabled: true,
+      slug: "norwich-otterville-auto-detailing",
+      nav_group: "town",
+      name: "Norwich, Otterville auto detailing",
+      meta_title: "Mobile Auto Detailing in Norwich & Otterville | Rosie Dazzlers",
+      meta_description: "Mobile auto detailing for Norwich, Otterville, and nearby Oxford County communities with driveway setup notes, water-use reminders, and booking guidance.",
+      badge: "Town-focused detailing page",
+      hero_title: "Mobile auto detailing in Norwich and Otterville",
+      hero_intro: "Norwich and Otterville customers often need clear mobile-service expectations for rural driveways, water access, and travel timing before booking.",
+      reasons_page_exists: [
+        "Customers often search by town first, not only by county.",
+        "A dedicated page gives search engines and customers clearer local relevance for Norwich, Otterville.",
+        "The page explains mobile setup requirements, water-use reminders, travel expectations, and booking steps before the customer starts checkout."
+      ],
+      highlights: [
+        "Town-first mobile auto detailing page for Oxford County.",
+        "Links the customer back to pricing, services, and the booking planner.",
+        "Adds crawlable local wording without creating multiple H1s on the public page."
+      ],
+      process: [
+        "Confirm the service address, driveway access, water/power availability, and vehicle size.",
+        "Apply the correct county water-use reminder and travel tier before dispatch.",
+        "Route the customer into the same booking planner so availability and package pricing remain consistent.",
+        "Use approved review/gallery proof as it becomes available for the area."
+      ],
+      equipment: [
+        "mobile detailing setup sized for driveway work",
+        "current package and add-on catalog",
+        "county water-rule reminders",
+        "photo/review proof blocks as approved content grows"
+      ],
+      things_to_know: [
+        "Oxford County’s summer water conservation program runs May 1 to September 30 and can affect outdoor hose use by address/day and time window.",
+        "If a town or rural address is not listed exactly, staff should confirm whether it falls under Oxford County or Norfolk County before final dispatch.",
+        "Customers should confirm safe parking, power, water access, and any site-specific access limits before appointment day."
+      ],
+      official_links: [
+        { label: "Oxford County water conservation", url: "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/" }
+      ],
+      faq: [
+        {"q":"Do you service Norwich, Otterville?","a":"This page is built for Norwich, Otterville and nearby Oxford County addresses. Final booking still depends on route, access, and availability."},
+        {"q":"Why do you mention water-use rules?","a":"Mobile exterior detailing can involve outdoor water use, so county restrictions and customer-supplied water access should be checked before dispatch."}
+      ]
+    },
+    "zorra-thamesford-embro-auto-detailing": {
+      type: "location",
+      enabled: true,
+      slug: "zorra-thamesford-embro-auto-detailing",
+      nav_group: "town",
+      name: "Zorra, Thamesford, Embro auto detailing",
+      meta_title: "Mobile Auto Detailing in Zorra, Thamesford & Embro | Rosie Dazzlers",
+      meta_description: "Mobile auto detailing for Zorra, Thamesford, Embro, and nearby Oxford County route areas with package guidance and local setup reminders.",
+      badge: "Town-focused detailing page",
+      hero_title: "Mobile auto detailing in Zorra, Thamesford, and Embro",
+      hero_intro: "This page supports smaller Oxford County communities where customers still search by town and need to know mobile detailing can be routed to them.",
+      reasons_page_exists: [
+        "Customers often search by town first, not only by county.",
+        "A dedicated page gives search engines and customers clearer local relevance for Zorra, Thamesford, Embro.",
+        "The page explains mobile setup requirements, water-use reminders, travel expectations, and booking steps before the customer starts checkout."
+      ],
+      highlights: [
+        "Town-first mobile auto detailing page for Oxford County.",
+        "Links the customer back to pricing, services, and the booking planner.",
+        "Adds crawlable local wording without creating multiple H1s on the public page."
+      ],
+      process: [
+        "Confirm the service address, driveway access, water/power availability, and vehicle size.",
+        "Apply the correct county water-use reminder and travel tier before dispatch.",
+        "Route the customer into the same booking planner so availability and package pricing remain consistent.",
+        "Use approved review/gallery proof as it becomes available for the area."
+      ],
+      equipment: [
+        "mobile detailing setup sized for driveway work",
+        "current package and add-on catalog",
+        "county water-rule reminders",
+        "photo/review proof blocks as approved content grows"
+      ],
+      things_to_know: [
+        "Oxford County’s summer water conservation program runs May 1 to September 30 and can affect driveway exterior work by address/day and time window.",
+        "If a town or rural address is not listed exactly, staff should confirm whether it falls under Oxford County or Norfolk County before final dispatch.",
+        "Customers should confirm safe parking, power, water access, and any site-specific access limits before appointment day."
+      ],
+      official_links: [
+        { label: "Oxford County water conservation", url: "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/" }
+      ],
+      faq: [
+        {"q":"Do you service Zorra, Thamesford, Embro?","a":"This page is built for Zorra, Thamesford, Embro and nearby Oxford County addresses. Final booking still depends on route, access, and availability."},
+        {"q":"Why do you mention water-use rules?","a":"Mobile exterior detailing can involve outdoor water use, so county restrictions and customer-supplied water access should be checked before dispatch."}
+      ]
+    },
+    "waterford-vittoria-auto-detailing": {
+      type: "location",
+      enabled: true,
+      slug: "waterford-vittoria-auto-detailing",
+      nav_group: "town",
+      name: "Waterford, Vittoria auto detailing",
+      meta_title: "Mobile Auto Detailing in Waterford & Vittoria | Rosie Dazzlers",
+      meta_description: "Mobile auto detailing for Waterford, Vittoria, and nearby Norfolk County communities with local booking guidance and seasonal water-use reminders.",
+      badge: "Town-focused detailing page",
+      hero_title: "Mobile auto detailing in Waterford and Vittoria",
+      hero_intro: "Waterford and Vittoria customers benefit from town-specific service pages because rural access, driveway setup, and summer water-use windows can affect scheduling.",
+      reasons_page_exists: [
+        "Customers often search by town first, not only by county.",
+        "A dedicated page gives search engines and customers clearer local relevance for Waterford, Vittoria.",
+        "The page explains mobile setup requirements, water-use reminders, travel expectations, and booking steps before the customer starts checkout."
+      ],
+      highlights: [
+        "Town-first mobile auto detailing page for Norfolk County.",
+        "Links the customer back to pricing, services, and the booking planner.",
+        "Adds crawlable local wording without creating multiple H1s on the public page."
+      ],
+      process: [
+        "Confirm the service address, driveway access, water/power availability, and vehicle size.",
+        "Apply the correct county water-use reminder and travel tier before dispatch.",
+        "Route the customer into the same booking planner so availability and package pricing remain consistent.",
+        "Use approved review/gallery proof as it becomes available for the area."
+      ],
+      equipment: [
+        "mobile detailing setup sized for driveway work",
+        "current package and add-on catalog",
+        "county water-rule reminders",
+        "photo/review proof blocks as approved content grows"
+      ],
+      things_to_know: [
+        "Norfolk County watering restrictions run May 15 to September 15 with morning/evening time windows and odd/even address days.",
+        "If a town or rural address is not listed exactly, staff should confirm whether it falls under Oxford County or Norfolk County before final dispatch.",
+        "Customers should confirm safe parking, power, water access, and any site-specific access limits before appointment day."
+      ],
+      official_links: [
+        { label: "Norfolk County watering restrictions", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/" }
+      ],
+      faq: [
+        {"q":"Do you service Waterford, Vittoria?","a":"This page is built for Waterford, Vittoria and nearby Norfolk County addresses. Final booking still depends on route, access, and availability."},
+        {"q":"Why do you mention water-use rules?","a":"Mobile exterior detailing can involve outdoor water use, so county restrictions and customer-supplied water access should be checked before dispatch."}
+      ]
+    },
+    "port-rowan-turkey-point-auto-detailing": {
+      type: "location",
+      enabled: true,
+      slug: "port-rowan-turkey-point-auto-detailing",
+      nav_group: "town",
+      name: "Port Rowan, Turkey Point auto detailing",
+      meta_title: "Mobile Auto Detailing in Port Rowan & Turkey Point | Rosie Dazzlers",
+      meta_description: "Mobile auto detailing for Port Rowan, Turkey Point, and nearby Norfolk County coastal communities with seasonal access and water-use guidance.",
+      badge: "Town-focused detailing page",
+      hero_title: "Mobile auto detailing in Port Rowan and Turkey Point",
+      hero_intro: "This local page supports coastal Norfolk searches where seasonal traffic, access, and parking can change the best appointment plan.",
+      reasons_page_exists: [
+        "Customers often search by town first, not only by county.",
+        "A dedicated page gives search engines and customers clearer local relevance for Port Rowan, Turkey Point.",
+        "The page explains mobile setup requirements, water-use reminders, travel expectations, and booking steps before the customer starts checkout."
+      ],
+      highlights: [
+        "Town-first mobile auto detailing page for Norfolk County.",
+        "Links the customer back to pricing, services, and the booking planner.",
+        "Adds crawlable local wording without creating multiple H1s on the public page."
+      ],
+      process: [
+        "Confirm the service address, driveway access, water/power availability, and vehicle size.",
+        "Apply the correct county water-use reminder and travel tier before dispatch.",
+        "Route the customer into the same booking planner so availability and package pricing remain consistent.",
+        "Use approved review/gallery proof as it becomes available for the area."
+      ],
+      equipment: [
+        "mobile detailing setup sized for driveway work",
+        "current package and add-on catalog",
+        "county water-rule reminders",
+        "photo/review proof blocks as approved content grows"
+      ],
+      things_to_know: [
+        "Norfolk County watering restrictions run May 15 to September 15 with morning/evening time windows and odd/even address days.",
+        "If a town or rural address is not listed exactly, staff should confirm whether it falls under Oxford County or Norfolk County before final dispatch.",
+        "Customers should confirm safe parking, power, water access, and any site-specific access limits before appointment day."
+      ],
+      official_links: [
+        { label: "Norfolk County watering restrictions", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/" },
+        { label: "Norfolk parking", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/roads-parking-and-traffic/parking/" }
+      ],
+      faq: [
+        {"q":"Do you service Port Rowan, Turkey Point?","a":"This page is built for Port Rowan, Turkey Point and nearby Norfolk County addresses. Final booking still depends on route, access, and availability."},
+        {"q":"Why do you mention water-use rules?","a":"Mobile exterior detailing can involve outdoor water use, so county restrictions and customer-supplied water access should be checked before dispatch."}
+      ]
     }
   }
 };
