@@ -30,6 +30,10 @@ def main() -> None:
     run([sys.executable, "scripts/stress_static_checks.py"])
     run([sys.executable, "scripts/local_seo_audit.py"])
     run([sys.executable, "scripts/catalog_fallback_check.py"])
+    run([sys.executable, "scripts/service_area_rules_check.py"])
+    run([sys.executable, "scripts/catalog_quality_report.py"])
+    run([sys.executable, "scripts/catalog_import_preview.py"])
+    run([sys.executable, "scripts/service_product_links_check.py"])
     print("PASS: release checklist completed")
 
 if __name__ == "__main__":
