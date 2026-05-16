@@ -10,7 +10,7 @@ from html.parser import HTMLParser
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PUBLIC_PAGES = [
     'index.html','about.html','services.html','pricing.html','book.html','contact.html','privacy.html','terms.html','videos.html','gear.html','consumables.html','gifts.html','complete.html','waiver.html','progress.html','login.html','my-account.html',
-    'ceramic-coating/index.html','pet-hair-removal/index.html','odor-removal/index.html','headlight-restoration/index.html','paint-correction/index.html','tillsonburg-auto-detailing/index.html','woodstock-ingersoll-auto-detailing/index.html','simcoe-delhi-auto-detailing/index.html','port-dover-auto-detailing/index.html'
+    'ceramic-coating/index.html','pet-hair-removal/index.html','odor-removal/index.html','headlight-restoration/index.html','paint-correction/index.html','tillsonburg-auto-detailing/index.html','woodstock-ingersoll-auto-detailing/index.html','simcoe-delhi-auto-detailing/index.html','port-dover-auto-detailing/index.html','norwich-otterville-auto-detailing/index.html','zorra-thamesford-embro-auto-detailing/index.html','waterford-vittoria-auto-detailing/index.html','port-rowan-turkey-point-auto-detailing/index.html'
 ]
 CHECK_JS = [
     'assets/admin-auth.js',
