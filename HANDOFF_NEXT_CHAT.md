@@ -1,21 +1,17 @@
-# Handoff Next Chat — Build 145
+# New Chat Status — Build 147
 
-## Start here
+Use this package as the current dev baseline.
 
-The current build has moved the catalog workflow closer to a real app backend. Admin Catalog can preview/import bundled consumables and gear into DB rows, score media/data completeness, and bulk toggle selected saved rows.
+## Latest fixes
 
-## Immediate next move
+- Fixed Admin App `mergeServiceAreaRows` runtime error.
+- Added missing dropdown option save button and editor panel.
+- Improved mobile main menu into a compact expandable layout.
+- Added mobile menu release check.
+- Removed root duplicate API JS files again.
 
-Run:
+## Next focus
 
-`sql/2026-05-15_build145_catalog_db_import_admin_workflows.sql`
+Run/apply pending SQL migrations in dev, then continue DB-first dropdown/service-area/catalog workflows and private Amazon CSV upload.
 
-Then test importing 5–10 bundled rows from Admin Catalog before importing all 149 bundled rows.
-
-## Watch points
-
-- If Supabase is missing optional columns, inventory save strips unsupported optional fields and still saves the core row.
-- Public consumables/gear must continue merging bundled fallback rows with DB rows until DB import is complete.
-- Keep all public pages to one H1.
-
-<!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->
+<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->

@@ -1,22 +1,19 @@
-# Images and Media Notes — Build 146
+# Images and Media — Build 147
 
-**Updated:** 2026-05-15
+**Updated:** 2026-05-16
 
-## Current media direction
+No image-size rule changed in this pass. Continue using the current media workflow:
 
-- Product and gear images still come from bundled catalog data and R2/public asset URLs.
-- Amazon CSV matching does not replace item images automatically.
-- Admin Catalog uses Amazon matches for purchase metadata: ASIN, purchase link, cost, quantity, seller, brand, and category.
-- Keep the existing catalog image if it is a real shop/product image.
-- Only replace an image if the current image is wrong, missing, or a temporary placeholder.
+- Add-on/service images: prefer PNG/JPG/WebP primary images; keep SVGs as fallback or line-art only.
+- Public proof/review/before-after images: use clear landscape or square images, ideally at least 1200px wide.
+- Inventory/catalog item images: store R2/public URLs in the catalog, then use local bundled data only as fallback.
+- First public product/service images should avoid tight cropping and should use `object-fit: contain` where the full item matters.
+- Admin App dropdown/media changes in this pass do not change the required upload sizes.
 
-## Recommended image sizes
+Future image work:
 
-- Product/consumable cards: 1200 × 1200 px preferred, square or landscape.
-- Gear/tool cards: 1200 × 900 px or 1200 × 1200 px preferred.
-- Before/after gallery: 1600 × 1000 px preferred, matching before/after aspect ratios.
-- Hero/landing pages: 1920 × 1080 px preferred.
+1. Move media library entries into DB once the admin media workflow is stable.
+2. Add image score warnings before saving public images.
+3. Add dedicated before/after media consent status to the DB-backed gallery workflow.
 
-## Amazon match workflow
-
-Amazon ASIN links can help us identify the correct item, but images should stay under our own R2/public asset control where possible. Do not hotlink Amazon product images unless we have explicit permission and a stable media plan.
+<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->

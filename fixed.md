@@ -49,3 +49,5 @@ Pass sync: April 17, 2026 — pricing now restores the booking page as the first
 <!-- Build 143 sync 2026-05-15: public Consumables/Gear now merge DB catalog rows with bundled fallback catalogs so partial DB imports do not hide unedited items. -->
 
 <!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->
+
+<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->

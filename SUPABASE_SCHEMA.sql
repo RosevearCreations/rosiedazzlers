@@ -1031,3 +1031,8 @@ create index if not exists accounting_period_closes_status_idx on public.account
 
 
 -- Build 146: Amazon Business CSV matching supports optional catalog_inventory_items amazon_* enrichment columns.
+
+-- Build 147 schema sync (2026-05-16)
+-- No DDL in this pass.
+-- Admin App now exposes the catalog_dropdown_options app-setting editor in the UI.
+-- Future DB candidate: move dropdown option libraries from app_settings JSON into normalized admin_dropdown_options rows after workflow validation.

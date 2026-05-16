@@ -1,32 +1,20 @@
-# Rosie Dazzlers — Mobile Auto Detailing Platform
+# Rosie Dazzlers — Build 147
 
-**Active branch:** `dev`  
-**Last synchronized:** 2026-05-15 — Build 145
+**Updated:** 2026-05-16
 
-Rosie Dazzlers is a Cloudflare Pages + Supabase + R2 site/app for mobile auto detailing in Oxford County and Norfolk County, Ontario.
+Cloudflare Pages + Pages Functions + Supabase platform for Rosie Dazzlers Mobile Auto Detailing.
 
-## Build 145 focus
+## Current branch rule
 
-- Admin Catalog DB import workflow for bundled consumables and gear.
-- Catalog quality scoring and missing-data reporting.
-- Bulk public/private and active/inactive inventory controls.
-- Mobile quick stock adjustment.
-- Optional DB foundations for vendor directory, receipts, assignments, and service-product links.
-- Continued one-H1, local SEO, sitemap, and fallback discipline.
+Use `dev` as the active source of truth unless explicitly told otherwise.
 
-## Core docs
+## Latest pass
 
-- `DEVELOPMENT_ROADMAP.md`
-- `KNOWN_GAPS_AND_RISKS.md`
-- `CURRENT_IMPLEMENTATION_STATE.md`
-- `SANITY_CHECK.md`
-- `IMAGES.md`
-- `SUPABASE_SCHEMA.sql`
+- Admin App stability repair.
+- Compact expandable mobile navigation.
+- Dropdown option library made visible/editable.
+- Release checks and docs/schema refreshed.
 
-## Release check
+Read first: `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `CURRENT_IMPLEMENTATION_STATE.md`, `SANITY_CHECK.md`, and `SUPABASE_SCHEMA.sql`.
 
-```bash
-python scripts/release_check.py
-```
-
-<!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->
+<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->

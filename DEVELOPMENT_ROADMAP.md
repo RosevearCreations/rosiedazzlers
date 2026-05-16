@@ -1,60 +1,62 @@
-# Development Roadmap — Build 146
+# Development Roadmap — Build 147
 
-**Updated:** 2026-05-15  
+**Updated:** 2026-05-16  
 **Target branch:** `dev`  
-**Pass focus:** Amazon Business CSV matching, catalog enrichment, DB-first inventory maturity, and local SEO discipline.
+**Pass focus:** Admin App stability, reusable dropdown options, compact mobile navigation, release checks, and continued local SEO discipline.
 
-## Build 146 completed 20-step pass
+## Build 147 completed 20-step pass
 
-1. Processed the Amazon Business CSV against the bundled consumables and gear catalogs.
-2. Added `scripts/amazon_catalog_match.py` so the match can be regenerated from a private CSV without hand-editing.
-3. Generated `data/amazon_catalog_matches.json` with sanitized match suggestions for each catalog item.
-4. Generated `data/amazon_inventory_enrichment_preview.json` for DB import/edit workflows.
-5. Generated `data/amazon_inventory_match_review.csv` for easier manual review outside the app.
-6. Pulled ASIN-derived Amazon links for matched rows.
-7. Pulled unit purchase price, quantity total, net total, seller, brand, category, UNSPSC, model, and part-number fields where available.
-8. Added match confidence statuses: strong, review, and unmatched/manual.
-9. Added top Amazon suggestions for each catalog row so weaker matches are still reviewable instead of discarded.
-10. Added privacy trimming so generated data excludes payment identifiers, account emails, receiver emails, and full seller addresses.
-11. Added an Admin Catalog Amazon CSV match review panel.
-12. Added Admin Catalog filters for strong, review, unmatched, and all Amazon matches.
-13. Added one-click load into the inventory editor from an Amazon match.
-14. Added selected-match save into the existing inventory save endpoint.
-15. Extended inventory save/import payload support for optional Amazon enrichment columns.
-16. Added schema migration for optional `amazon_*` catalog inventory fields.
-17. Added release check coverage for Amazon match outputs and privacy guardrails.
-18. Kept the public consumables/gear fallback merge intact so DB-only rows cannot hide bundled inventory again.
-19. Updated schema and Markdown handoff files for the Amazon CSV enrichment workflow.
-20. Preserved local SEO/H1/release-check discipline while adding the backend catalog data pipeline.
+1. Fixed the Admin App runtime error `mergeServiceAreaRows is not defined`.
+2. Added a safe `mergeServiceAreaRows()` helper that merges DB/app-setting service areas with bundled fallback service areas.
+3. Preserved saved service-area edits while filling missing water-rule, county, tier, and by-law fields from fallback data.
+4. Added a visible **Dropdown option library** panel to Admin App.
+5. Added the missing `saveCatalogDropdownOptionsBtn` element so the console no longer reports a missing event target.
+6. Added editable dropdown textareas for add-on categories, add-on types, inventory categories, inventory subcategories/colours, vendors, units, service tiers, service zones, and service counties.
+7. Updated Admin App dropdown option reading so `service_counties` is saved along with the other option lists.
+8. Kept dropdown options DB/app-setting first with bundled defaults as fallback.
+9. Reworked the public mobile navigation into a compact expandable menu instead of a long always-visible list.
+10. Added outside-click, Escape-key, link-click, and desktop-resize closing behavior for the mobile menu.
+11. Added two-column compact mobile menu cards, with a one-column fallback for very narrow screens.
+12. Added mobile handling for the account widget so it scrolls horizontally instead of forcing a tall page header.
+13. Kept the public Book button full-width on mobile for clearer conversion flow.
+14. Added `scripts/mobile_nav_check.py` to protect the compact menu behavior in future releases.
+15. Wired the mobile navigation check into `scripts/release_check.py`.
+16. Removed root-level duplicate API JavaScript files again; the real API handlers remain under `functions/api/`.
+17. Left `service-worker.js` at root because it is a valid public browser asset.
+18. Continued SEO/H1 discipline by running static public-page checks.
+19. Updated schema notes and Markdown handoff files for the Admin App/mobile navigation pass.
+20. Replaced the roadmap with the next logical 20 steps below.
 
 ## Next logical 20 steps
 
-1. Run `sql/2026-05-15_build145_catalog_db_import_admin_workflows.sql` in Supabase dev if not already applied.
-2. Run `sql/2026-05-15_build146_amazon_csv_catalog_matching.sql` in Supabase dev.
-3. In Admin Catalog, load Amazon matches and import only the strong matches first.
-4. Review the `review` matches one at a time, comparing item name, image, ASIN title, and seller before saving.
-5. Build an Amazon match override table so corrected manual matches are remembered instead of recalculated every import.
-6. Add an Admin Catalog button to upload the Amazon CSV privately instead of generating the match JSON outside the browser.
-7. Move Amazon match output out of static `/data` and behind an authenticated admin API once private upload exists.
-8. Add import-batch history for Amazon CSV saves so every bulk save can be traced and rolled back.
-9. Add per-item cost history so current unit cost does not overwrite older purchase costs.
-10. Add receipt/invoice attachment upload to R2 and link it to matched Amazon rows.
-11. Link vendor directory entries to Amazon sellers and non-Amazon suppliers.
-12. Add duplicate resolution for rows with the same ASIN but different catalog names.
-13. Add item quantity reconciliation so catalog stock counts can be adjusted independently from historical purchased quantity.
-14. Add service usage presets that consume matched consumables by package/service type.
-15. Add low-stock forecast based on matched purchase sizes and estimated jobs per unit.
-16. Add public “products we use” proof blocks to relevant service landing pages using service-product links.
-17. Add Google Search Console / Business Profile reporting placeholders for town and service landing performance.
-18. Continue replacing sample reviews with real review API data while keeping sample fallback content.
-19. Keep cleaning admin CSS/table overflow after every new workflow because Admin Catalog is now dense.
-20. Once the DB import path is stable, document JSON catalogs as fallback-only and begin retiring manual JSON edits.
+1. Apply the pending Supabase migrations in dev in order: Build 140 foundations, Build 142 service-area rules, Build 145 catalog import workflows, and Build 146 Amazon matching.
+2. Test Admin App on phone width after deploy: open/close menu, save dropdown options, edit service areas, and reload pricing catalog.
+3. Test public mobile navigation on Home, Services, Pricing, Book, Gear, Consumables, Gallery, and Contact.
+4. Create an Admin App service-area rules screen backed by `service_area_rules`, not only the pricing catalog JSON.
+5. Move catalog dropdown options from app-setting JSON into a DB table once the editing flow is stable.
+6. Add a reusable admin dropdown-options API so Admin App and Admin Catalog share the same options without duplicating JS.
+7. Add validation to prevent empty dropdown option saves from wiping useful bundled defaults.
+8. Add an Admin Catalog private Amazon CSV upload endpoint so future Amazon files do not need to be committed into `/data`.
+9. Move Amazon match review data behind authenticated admin APIs after the upload endpoint exists.
+10. Import strong Amazon matches in small batches and review medium-confidence matches manually.
+11. Add cost-history records so new Amazon purchases do not overwrite older item costs.
+12. Add receipt/statement upload to R2 and link receipts to Amazon/cost-history rows.
+13. Build vendor directory links for Amazon sellers and non-Amazon suppliers.
+14. Add service usage presets that estimate consumables used by package, add-on, vehicle size, and condition.
+15. Add low-stock forecasts using estimated jobs per unit and recent booking/service usage.
+16. Add public service/product proof blocks to landing pages using `data/service_product_links.json`.
+17. Replace sample reviews with live review API data when the external review source is ready.
+18. Add Search Console / Business Profile metric placeholders for town/service landing pages.
+19. Continue reducing static JSON to fallback-only once DB workflows are proven.
+20. Keep release checks strict: one H1, no broken internal links, local SEO target coverage, catalog fallback counts, service-area rules, and mobile menu guardrails.
 
 ## SEO discipline to keep every pass
 
-- Keep one clear H1 on each exposed public page.
-- Use real local search phrases in titles, descriptions, H1s, static fallback copy, and internal links.
-- Keep Oxford County, Norfolk County, and municipality names visible where they help relevance.
-- Keep public proof visible: reviews, before/after work, service pages, and product/process transparency.
+- Keep one clear H1 on every exposed public page.
+- Use search phrases people actually type in page titles, descriptions, headings, static fallback text, and internal links.
+- Keep Oxford County, Norfolk County, and municipality names visible where they support relevance.
+- Keep proof visible: reviews, before/after work, real products/process notes, service pages, and town pages.
 - Keep sitemap, canonical links, structured data, and release checks aligned.
-- Remember that SEO improves clarity and relevance, but search engines do not guarantee first-place placement.
+- SEO work improves crawlability, relevance, and trust signals; it cannot guarantee first-place ranking.
+
+<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->

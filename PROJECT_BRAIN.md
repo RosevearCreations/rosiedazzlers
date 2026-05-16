@@ -1,20 +1,9 @@
-# Project Brain — Build 145
+# Project Brain — Build 147
 
-Rosie Dazzlers is moving from static/catalog JSON toward a DB-first operational app while keeping JSON fallback safety.
+Rosie Dazzlers should keep moving toward a real mobile-friendly operations app while staying strong for local search in Oxford County and Norfolk County.
 
-## Current principle
+This pass focused on two pain points: Admin App console errors and mobile menu usability. The practical rule going forward is simple: every admin editor needs visible controls for the JS that binds to it, and every public mobile page needs a compact navigation pattern that does not turn into a tall list.
 
-Do not retire bundled JSON until:
+Keep using `dev` as the working branch. Keep JSON as fallback and move editable data to Supabase only after the admin workflow is stable.
 
-1. DB import is complete.
-2. Admin editing is proven.
-3. Public catalog pages still show full content.
-4. Release checks pass.
-5. The fallback/retirement path is documented.
-
-## Build 145 app direction
-
-- Catalog import, quality scoring, bulk toggles, receipt fields, assigned station fields, service tags, vendor seed, and service-product links are now the main operational path.
-- SEO work stays tied to useful local content, static crawlable pages, visible proof, reviews, and Google Business Profile prominence.
-
-<!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->
+<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->

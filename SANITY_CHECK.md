@@ -1,23 +1,24 @@
-# Sanity Check — Build 146
+# Sanity Check — Build 147
 
-**Updated:** 2026-05-15
+**Updated:** 2026-05-16
 
-## Checks completed in this package
+## What to test after deploy
 
-- Amazon CSV match outputs generated from the supplied CSV.
-- Amazon match output privacy guard added to release checks.
-- Admin Catalog Amazon match review workflow added.
-- Optional Amazon enrichment fields added to inventory save/import APIs.
-- Schema migration added for optional `amazon_*` catalog inventory fields.
-- Public catalog fallback merge preserved for consumables and gear.
-- Release checks should include JSON/XML parse, static stress checks, local SEO audit, catalog fallback check, service-area rule check, catalog quality/import checks, service-product link check, and Amazon match check.
+1. Open Admin App and confirm no `mergeServiceAreaRows is not defined` message appears.
+2. Confirm the console no longer reports `saveCatalogDropdownOptionsBtn` missing.
+3. Edit and save dropdown option lists in Admin App.
+4. Reload Admin App and confirm dropdown option lists persist or fall back safely.
+5. Open Services/Pricing/Book on a phone-sized screen and confirm the main menu is collapsed until **Menu** is tapped.
+6. Tap outside the menu, press Escape on desktop, and tap a menu link to confirm it closes.
+7. Confirm the account widget no longer stretches the mobile header into a tall stack.
+8. Open Consumables and Gear and confirm bundled rows still appear even when DB has only a few saved rows.
+9. Confirm public pages still have exactly one H1.
+10. Run `python scripts/release_check.py` before deployment.
 
-## Manual sanity steps after upload
+## Passed locally in this package
 
-1. Open `/admin-catalog.html`.
-2. Use **Amazon CSV match review → Load Amazon matches**.
-3. Keep filter on **Strong matches** and save a small selected batch.
-4. Reload inventory and confirm saved rows show Amazon URL, cost, quantity, vendor SKU/ASIN, and notes.
-5. Switch filter to **Needs review** and open individual matches in the editor before saving.
-6. Open `/consumables` and `/gear` to confirm full fallback catalog still appears.
-7. Run the Build 146 SQL in Supabase dev before depending on persistent `amazon_*` columns.
+- Static checks are expected to pass after this build.
+- Mobile navigation guard added through `scripts/mobile_nav_check.py`.
+- Root duplicate API JS files were removed again, leaving `service-worker.js` as the only root JS file.
+
+<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->

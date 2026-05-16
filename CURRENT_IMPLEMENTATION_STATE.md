@@ -1,22 +1,23 @@
-# Current Implementation State — Build 146
+# Current Implementation State — Build 147
 
-**Updated:** 2026-05-15
+**Updated:** 2026-05-16
 
-## Current build focus
+Rosie Dazzlers is currently a Cloudflare Pages + Pages Functions + Supabase platform with public booking, pricing, service, gear, consumables, gallery, review/proof, service-area, and admin workflows.
 
-Build 146 adds an Amazon Business CSV enrichment workflow for Rosie Dazzlers inventory. The app can now compare the Amazon order export against bundled gear/consumables, generate sanitized match data, review confidence levels in Admin Catalog, and save selected Amazon purchase fields into DB-backed inventory rows.
+## Current pass state
 
-## Important current files
+- Admin App now includes a real dropdown option library panel.
+- Admin App service-area hydration is guarded by `mergeServiceAreaRows()` so saved settings and bundled county/town fallback data can merge safely.
+- Public mobile navigation now uses a compact expandable menu with outside-click and Escape close support.
+- Public catalog fallback merging remains important: DB rows override bundled rows, but partial DB imports must not hide unedited gear/consumables.
+- Root JS should remain limited to `service-worker.js`; API files belong under `functions/api/`.
 
-- `scripts/amazon_catalog_match.py` — regenerates Amazon match outputs from a private CSV.
-- `data/amazon_catalog_matches.json` — sanitized match review data.
-- `data/amazon_inventory_enrichment_preview.json` — import/edit payload preview for matched rows.
-- `data/amazon_inventory_match_review.csv` — flat review file for manual checking.
-- `admin-catalog.html` — includes the Amazon CSV match review panel.
-- `functions/api/admin/catalog_inventory_save.js` — accepts optional Amazon enrichment fields.
-- `functions/api/admin/catalog_bulk_import.js` — accepts optional Amazon enrichment fields.
-- `sql/2026-05-15_build146_amazon_csv_catalog_matching.sql` — optional DB columns/indexes for Amazon match metadata.
+## Active source-of-truth direction
 
-## Deployment posture
+- DB-first for editable business data.
+- JSON as bundled fallback for public reliability and offline/static testing.
+- Admin App for site/app settings and pricing controls.
+- Admin Catalog for consumables, gear, Amazon match review, stock, vendors, and future cost history.
+- Release checks must continue catching H1, link, catalog fallback, service-area, Amazon-match, and mobile-navigation regressions.
 
-The original Amazon CSV should not be deployed. The generated JSON/CSV outputs are sanitized to avoid payment identifiers, account emails, receiver emails, and full seller addresses. For stronger privacy, the next step is a private admin upload/API workflow.
+<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->
