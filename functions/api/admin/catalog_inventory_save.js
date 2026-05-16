@@ -36,6 +36,15 @@ export async function onRequestPost(context) {
       is_active: body?.is_active !== false,
       receipt_url: String(body?.receipt_url || body?.bill_url || "").trim() || null,
       assigned_station: String(body?.assigned_station || body?.station_label || "").trim() || null,
+      amazon_asin: String(body?.amazon_asin || "").trim() || null,
+      amazon_title: String(body?.amazon_title || "").trim() || null,
+      amazon_match_status: String(body?.amazon_match_status || "").trim() || null,
+      amazon_match_score: body?.amazon_match_score == null || body?.amazon_match_score === "" ? null : Number(body.amazon_match_score),
+      amazon_seller_name: String(body?.amazon_seller_name || "").trim() || null,
+      amazon_brand: String(body?.amazon_brand || "").trim() || null,
+      amazon_category: String(body?.amazon_category || "").trim() || null,
+      amazon_quantity_total: body?.amazon_quantity_total == null || body?.amazon_quantity_total === "" ? null : Number(body.amazon_quantity_total),
+      amazon_net_total_cents: body?.amazon_net_total_cents == null || body?.amazon_net_total_cents === "" ? null : Number(body.amazon_net_total_cents),
       service_tags: normalizeTags(body?.service_tags || body?.service_link_tags),
       updated_at: new Date().toISOString()
     };
@@ -92,7 +101,7 @@ function detectMissingColumn(text) {
     const match = value.match(pattern);
     if (match?.[1]) return match[1];
   }
-  for (const key of ["receipt_url", "assigned_station", "service_tags", "estimated_jobs_per_unit", "purchase_date", "vendor_sku", "sort_key", "reuse_policy", "is_public", "is_active"]) {
+  for (const key of ["amazon_asin", "amazon_title", "amazon_match_status", "amazon_match_score", "amazon_seller_name", "amazon_brand", "amazon_category", "amazon_quantity_total", "amazon_net_total_cents", "receipt_url", "assigned_station", "service_tags", "estimated_jobs_per_unit", "purchase_date", "vendor_sku", "sort_key", "reuse_policy", "is_public", "is_active"]) {
     if (value.includes(key)) return key;
   }
   return null;

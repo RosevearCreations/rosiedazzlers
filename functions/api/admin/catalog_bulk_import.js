@@ -56,6 +56,15 @@ function normalizeRow(row, now) {
     is_active: row?.is_active !== false,
     receipt_url: String(row?.receipt_url || row?.bill_url || "").trim() || null,
     assigned_station: String(row?.assigned_station || "").trim() || null,
+    amazon_asin: String(row?.amazon_asin || "").trim() || null,
+    amazon_title: String(row?.amazon_title || "").trim() || null,
+    amazon_match_status: String(row?.amazon_match_status || "").trim() || null,
+    amazon_match_score: row?.amazon_match_score == null || row?.amazon_match_score === "" ? null : Number(row.amazon_match_score),
+    amazon_seller_name: String(row?.amazon_seller_name || "").trim() || null,
+    amazon_brand: String(row?.amazon_brand || "").trim() || null,
+    amazon_category: String(row?.amazon_category || "").trim() || null,
+    amazon_quantity_total: row?.amazon_quantity_total == null || row?.amazon_quantity_total === "" ? null : Number(row.amazon_quantity_total),
+    amazon_net_total_cents: row?.amazon_net_total_cents == null || row?.amazon_net_total_cents === "" ? null : Number(row.amazon_net_total_cents),
     service_tags: normalizeTags(row?.service_tags || row?.service_link_tags),
     updated_at: now
   };
@@ -92,7 +101,7 @@ async function safeBulkUpsert(env, payload) {
 
 function detectMissingColumn(text) {
   const value = String(text || "");
-  for (const key of ["receipt_url", "assigned_station", "service_tags", "estimated_jobs_per_unit", "purchase_date", "vendor_sku", "sort_key", "reuse_policy", "is_public", "is_active"]) {
+  for (const key of ["amazon_asin", "amazon_title", "amazon_match_status", "amazon_match_score", "amazon_seller_name", "amazon_brand", "amazon_category", "amazon_quantity_total", "amazon_net_total_cents", "receipt_url", "assigned_station", "service_tags", "estimated_jobs_per_unit", "purchase_date", "vendor_sku", "sort_key", "reuse_policy", "is_public", "is_active"]) {
     if (value.includes(key)) return key;
   }
   const match = value.match(/['"]([a-zA-Z0-9_]+)['"] column/i) || value.match(/column ["']?([a-zA-Z0-9_]+)["']? .*does not exist/i);
