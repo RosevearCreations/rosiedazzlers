@@ -216,9 +216,22 @@ export async function fetchJsonStrict(url, options = {}) {
   return parsed;
 }
 
+
+async function loadServiceAreaRulesPublic(url, credentials) {
+  if (!url) return [];
+  try {
+    const payload = await fetchJsonStrict(url, { credentials });
+    const rows = Array.isArray(payload?.service_areas) ? payload.service_areas : Array.isArray(payload?.items) ? payload.items : [];
+    return normalizeServiceAreas(rows);
+  } catch {
+    return [];
+  }
+}
+
 export async function loadPricingCatalogClient({
   apiUrl = "/api/pricing_catalog_public",
   fallbackUrl = "/data/rosie_services_pricing_and_packages.json",
+  serviceAreaRulesUrl = "/api/service_area_rules_public",
   credentials = "same-origin"
 } = {}) {
   let apiCatalog = null;
@@ -246,7 +259,16 @@ export async function loadPricingCatalogClient({
   }
 
   const fallbackCatalog = normalizePricingCatalog(await fetchJsonStrict(fallbackUrl, { credentials }));
+  const serviceAreaRules = await loadServiceAreaRulesPublic(serviceAreaRulesUrl, credentials);
+  if (serviceAreaRules.length) {
+    fallbackCatalog.service_areas = mergeServiceAreas(serviceAreaRules, fallbackCatalog.service_areas);
+  }
+
   const merged = apiCatalog ? mergeCatalog(apiCatalog, fallbackCatalog) : fallbackCatalog;
+  if (serviceAreaRules.length) {
+    merged.service_areas = mergeServiceAreas(serviceAreaRules, merged.service_areas);
+    merged._service_area_rules_source = "service_area_rules_public";
+  }
   merged._source = apiCatalog ? "api_merged_with_bundled_fallback" : "bundled_json_fallback";
   merged._fallback_error = apiError?.message || null;
   return merged;
@@ -591,19 +613,35 @@ export function serviceAreaRows(catalog) {
 export function findServiceArea(catalog, value) {
   const raw = String(value || "").trim();
   const needle = raw.toLowerCase();
+  const needleTown = needle.replace(/,\s*on$/i, "").trim();
   const rows = serviceAreaRows(catalog);
   if (!needle) return null;
-  const exact = rows.find((row) => [row?.value, row?.label, row?.municipality, row?.zone, ...(Array.isArray(row?.aliases) ? row.aliases : [])]
-    .some((entry) => String(entry || "").trim().toLowerCase() === needle));
+
+  const rowEntries = (row) => [row?.value, row?.label, row?.municipality, row?.zone, row?.county, ...(Array.isArray(row?.aliases) ? row.aliases : [])]
+    .map((entry) => String(entry || "").trim())
+    .filter(Boolean);
+
+  const exact = rows.find((row) => rowEntries(row).some((entry) => {
+    const text = entry.toLowerCase();
+    const town = text.replace(/,\s*on$/i, "").trim();
+    return text === needle || town === needleTown;
+  }));
   if (exact) return exact;
-  const contains = rows.find((row) => [row?.value, row?.label, row?.municipality, row?.zone, ...(Array.isArray(row?.aliases) ? row.aliases : [])]
-    .some((entry) => {
-      const text = String(entry || "").trim().toLowerCase();
-      return text && (needle.includes(text) || text.includes(needle));
-    }));
+
+  const contains = rows.find((row) => rowEntries(row).some((entry) => {
+    const text = entry.toLowerCase();
+    const town = text.replace(/,\s*on$/i, "").trim();
+    return town && (needleTown.includes(town) || town.includes(needleTown));
+  }));
   if (contains) return contains;
-  if (needle.includes("norfolk")) return rows.find((row) => String(row?.county || "").toLowerCase() === "norfolk county" && /other norfolk/i.test(String(row?.label || ""))) || rows.find((row) => String(row?.county || "").toLowerCase() === "norfolk county") || null;
-  if (needle.includes("oxford")) return rows.find((row) => String(row?.county || "").toLowerCase() === "oxford county" && /other oxford/i.test(String(row?.label || ""))) || rows.find((row) => String(row?.county || "").toLowerCase() === "oxford county") || null;
+
+  const countyFallback = (county, pattern) =>
+    rows.find((row) => String(row?.county || "").toLowerCase() === county && pattern.test(String(row?.label || "")))
+    || rows.find((row) => String(row?.county || "").toLowerCase() === county)
+    || null;
+
+  if (needle.includes("norfolk")) return countyFallback("norfolk county", /other norfolk/i);
+  if (needle.includes("oxford")) return countyFallback("oxford county", /other oxford/i);
   return null;
 }
 

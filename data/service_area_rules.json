@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-05-14",
-  "purpose": "Shared county/municipality service-area and water-rule fallback seed for booking, Admin App, and local SEO pages.",
+  "updated_at": "2026-05-15",
+  "purpose": "Shared county/municipality service-area and water-rule fallback seed for booking, Admin App, public API fallback, and local SEO pages.",
   "fallback_behavior": "If a specific town has no override, use the county default water rule. If a customer types a town not in the list, resolve to Other Oxford County location or Other Norfolk County location when the typed text contains that county; otherwise ask staff to confirm.",
   "sources": [
     {
@@ -25,12 +25,13 @@
         "Oxford County",
         "Other Oxford",
         "Oxford rural",
-        "Oxford"
+        "Oxford",
+        "Other Oxford County location"
       ],
       "bylaw_note": "Oxford County fallback for typed towns or rural addresses not yet listed by name.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -55,12 +56,13 @@
         "Norfolk County",
         "Other Norfolk",
         "Norfolk rural",
-        "Norfolk"
+        "Norfolk",
+        "Other Norfolk County location"
       ],
       "bylaw_note": "Norfolk County fallback for typed towns or rural addresses not yet listed by name.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -88,7 +90,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -116,7 +118,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -144,7 +146,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -172,7 +174,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -200,7 +202,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -228,7 +230,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -256,7 +258,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -284,7 +286,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -312,7 +314,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -340,7 +342,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -368,7 +370,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -396,7 +398,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -424,7 +426,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -452,7 +454,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -480,7 +482,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -508,7 +510,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -536,7 +538,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -564,7 +566,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -592,7 +594,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -620,7 +622,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -648,7 +650,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -676,7 +678,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -704,7 +706,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -732,7 +734,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -760,7 +762,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -788,7 +790,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -816,7 +818,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -844,7 +846,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -872,7 +874,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -900,7 +902,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -928,7 +930,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -956,7 +958,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -984,7 +986,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1012,7 +1014,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1040,7 +1042,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1068,7 +1070,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1096,7 +1098,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1124,7 +1126,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1152,7 +1154,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1180,7 +1182,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1208,7 +1210,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1236,7 +1238,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1264,7 +1266,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1292,7 +1294,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1320,7 +1322,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1348,7 +1350,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1376,7 +1378,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1404,7 +1406,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1432,7 +1434,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1460,7 +1462,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1488,7 +1490,7 @@
       "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1516,7 +1518,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1544,7 +1546,7 @@
       "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
       "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
       "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-      "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
       "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
       "official_links": [
         {
@@ -1557,5 +1559,6 @@
         }
       ]
     }
-  ]
+  ],
+  "verified_sources_at": "2026-05-15"
 }

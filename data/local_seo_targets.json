@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-14",
+  "updated_at": "2026-05-15",
   "primary_region": "Oxford County and Norfolk County, Ontario",
   "core_terms": [
     "mobile auto detailing",
@@ -42,6 +42,39 @@
         "Port Dover"
       ],
       "priority": 3
+    },
+    {
+      "slug": "norwich-otterville-auto-detailing",
+      "towns": [
+        "Norwich",
+        "Otterville"
+      ],
+      "priority": 4
+    },
+    {
+      "slug": "zorra-thamesford-embro-auto-detailing",
+      "towns": [
+        "Zorra",
+        "Thamesford",
+        "Embro"
+      ],
+      "priority": 5
+    },
+    {
+      "slug": "waterford-vittoria-auto-detailing",
+      "towns": [
+        "Waterford",
+        "Vittoria"
+      ],
+      "priority": 6
+    },
+    {
+      "slug": "port-rowan-turkey-point-auto-detailing",
+      "towns": [
+        "Port Rowan",
+        "Turkey Point"
+      ],
+      "priority": 7
     }
   ],
   "service_pages": [

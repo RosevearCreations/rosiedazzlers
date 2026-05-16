@@ -61,6 +61,23 @@
     }
     .date-picker-button:hover{background:rgba(255,255,255,.18)}
     #service_area{min-width:0;width:100%}
+
+    .service-area-input-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}
+    @media(max-width:720px){.service-area-input-row{grid-template-columns:1fr}.service-area-input-row .btn{width:100%;justify-content:center}}
+    .service-area-picker{
+      display:none;margin-top:8px;padding:10px;border:1px solid rgba(255,255,255,.12);border-radius:16px;
+      background:rgba(15,23,42,.82);box-shadow:0 14px 36px rgba(0,0,0,.22)
+    }
+    .service-area-picker.open{display:block}
+    .service-area-picker-head{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+    .service-area-picker-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;max-height:300px;overflow:auto;padding-right:4px}
+    .service-area-choice{
+      border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(255,255,255,.08);color:#fff;
+      text-align:left;padding:9px 10px;cursor:pointer;min-height:58px
+    }
+    .service-area-choice:hover,.service-area-choice:focus{background:rgba(77,119,255,.22);outline:2px solid rgba(109,168,255,.45)}
+    .service-area-choice strong{display:block;font-size:.95rem}
+    .service-area-choice span{display:block;color:rgba(234,242,255,.72);font-size:.82rem;margin-top:2px}
     .booking-legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
     .booking-legend span{display:inline-flex;align-items:center;gap:6px;font-size:.9rem;color:rgba(248,250,252,.92)}
     .booking-legend i{display:inline-block;width:12px;height:12px;border-radius:999px}
@@ -198,8 +215,18 @@
 
         <div>
           <label for="service_area">Service area</label>
-          <input id="service_area" list="service_area_options" autocomplete="off" placeholder="Start typing a town, county, or service zone…" />
+          <div class="service-area-input-row">
+            <input id="service_area" list="service_area_options" autocomplete="off" placeholder="Start typing a town, county, or service zone…" />
+            <button class="btn ghost small" id="showServiceAreasBtn" type="button">Show all towns</button>
+          </div>
           <datalist id="service_area_options"></datalist>
+          <div id="serviceAreaPicker" class="service-area-picker" aria-live="polite">
+            <div class="service-area-picker-head">
+              <strong>Oxford and Norfolk service areas</strong>
+              <button class="btn ghost small" id="hideServiceAreasBtn" type="button">Hide list</button>
+            </div>
+            <div id="serviceAreaPickerGrid" class="service-area-picker-grid"></div>
+          </div>
           <div id="serviceAreaPanel" class="service-area-panel" style="margin-top:8px">
             <div id="serviceAreaNote" class="notice mini">Choose the closest town or service zone so we can apply the right travel, parking, and local bylaw rules before dispatch.</div>
             <ul id="serviceAreaRules">
@@ -372,6 +399,7 @@
       <div class="requirements-grid" style="margin-top:16px">
         <label><input id="ack_driveway" type="checkbox" /><span><strong>Driveway required</strong><br>We need safe working space at the vehicle.</span></label>
         <label><input id="ack_power_water" type="checkbox" /><span><strong>Customer provides power and water</strong><br>Extra fees can apply if either is unavailable.</span></label>
+        <label><input id="need_mobile_water_power" type="checkbox" /><span><strong>Quote bringing water/power</strong><br>Check this if the site may not have hose or power access; staff will confirm extra setup fees.</span></label>
         <label><input id="ack_bylaw" type="checkbox" /><span><strong>Environmental / bylaw responsibility acknowledged</strong><br>Customer confirms any local bylaw requirements.</span></label>
         <label><input id="ack_cancellation" type="checkbox" /><span><strong>Deposit and weather rescheduling policy acknowledged</strong><br>Unsafe weather or site conditions can require rescheduling.</span></label>
       </div>
@@ -424,13 +452,15 @@
       <div class="grid2" style="margin-top:12px">
         <div>
           <label for="city">City</label>
-          <input id="city" type="text" />
+          <input id="city" type="text" list="city_options" autocomplete="address-level2" placeholder="Town or municipality" />
+          <datalist id="city_options"></datalist>
         </div>
         <div>
           <label for="postal_code">Postal code</label>
           <input id="postal_code" type="text" placeholder="N0E 1W0" />
         </div>
       </div>
+      <div id="addressAreaWarning" class="notice mini" style="display:none;margin-top:10px"></div>
 
       <div class="hr"></div>
       <div id="finalSummary" class="summary-box"></div>
@@ -873,6 +903,8 @@
           : configuredServiceAreas()
       );
 
+      state.serviceAreaRows = rows;
+
       datalist.innerHTML = rows.map((row) => {
         const value = serviceAreaDisplayValue(row);
         const labelParts = [
@@ -883,12 +915,129 @@
         return `<option value="${escapeHtml(value)}" label="${escapeHtml(labelParts.join(" · "))}"></option>`;
       }).join("");
 
-      // Do not auto-fill Tillsonburg here. Datalist dropdowns filter to the current input value.
+      /*
+        Do not auto-fill Tillsonburg here.
+        Native datalist dropdowns filter against the current typed value, so a pre-filled
+        default makes the menu look like only one town exists.
+      */
       if (!currentValue) field.value = "";
       field.placeholder = "Start typing a town, county, or service zone…";
       field.setAttribute("autocomplete", "off");
 
+      renderCityOptions(rows);
+      renderServiceAreaPicker(rows, { showAll: false });
       updateServiceAreaNote();
+    }
+
+    function renderCityOptions(rows = state.serviceAreaRows || []) {
+      const cityList = qs("#city_options");
+      if (!cityList) return;
+      const seen = new Set();
+      const values = [];
+      rows.forEach((row) => {
+        [row.label, row.value, row.municipality].forEach((value) => {
+          const clean = String(value || "").replace(/\s*,\s*ON$/i, "").trim();
+          if (!clean || clean.toLowerCase().startsWith("other ")) return;
+          const key = clean.toLowerCase();
+          if (seen.has(key)) return;
+          seen.add(key);
+          values.push(clean);
+        });
+      });
+      cityList.innerHTML = values.sort((a, b) => a.localeCompare(b)).map((value) => `<option value="${escapeHtml(value)}"></option>`).join("");
+    }
+
+    function renderServiceAreaPicker(rows = state.serviceAreaRows || [], options = {}) {
+      const picker = qs("#serviceAreaPicker");
+      const grid = qs("#serviceAreaPickerGrid");
+      const field = qs("#service_area");
+      if (!picker || !grid || !field) return;
+
+      const term = options.showAll ? "" : String(field.value || "").trim().toLowerCase();
+      const filtered = rows.filter((row) => {
+        if (!term) return true;
+        const haystack = [
+          row.label,
+          row.value,
+          row.county,
+          row.municipality,
+          row.zone,
+          ...(Array.isArray(row.aliases) ? row.aliases : [])
+        ].join(" ").toLowerCase();
+        return haystack.includes(term);
+      });
+
+      const displayRows = (filtered.length ? filtered : rows).slice(0, 120);
+      grid.innerHTML = displayRows.map((row) => {
+        const value = serviceAreaDisplayValue(row);
+        const meta = [row.county, row.municipality && row.municipality !== value ? row.municipality : "", row.travel_tier ? `tier: ${row.travel_tier}` : ""].filter(Boolean).join(" · ");
+        return `<button class="service-area-choice" type="button" data-service-area-choice="${escapeHtml(value)}"><strong>${escapeHtml(value)}</strong><span>${escapeHtml(meta || "Service area")}</span></button>`;
+      }).join("");
+
+      qsa("[data-service-area-choice]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const value = btn.getAttribute("data-service-area-choice") || "";
+          field.value = value;
+          const city = qs("#city");
+          const chosen = (state.serviceAreaRows || []).find((row) => serviceAreaDisplayValue(row) === value);
+          if (city && !city.value.trim() && chosen && !String(chosen.label || "").toLowerCase().startsWith("other ")) {
+            city.value = String(chosen.label || chosen.municipality || value).replace(/\s*,\s*ON$/i, "").trim();
+          }
+          picker.classList.remove("open");
+          updateServiceAreaNote();
+          renderReviewVehicle();
+          renderFinalSummary();
+        });
+      });
+    }
+
+    function showServiceAreaPicker(showAll = true) {
+      const picker = qs("#serviceAreaPicker");
+      if (!picker) return;
+      renderServiceAreaPicker(state.serviceAreaRows || normalizeServiceAreaOptionRows(configuredServiceAreas()), { showAll });
+      picker.classList.add("open");
+    }
+
+    function hideServiceAreaPicker() {
+      qs("#serviceAreaPicker")?.classList.remove("open");
+    }
+
+    function validateCanadianPostalCode(value) {
+      const clean = String(value || "").trim().toUpperCase();
+      if (!clean) return true;
+      return /^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/.test(clean);
+    }
+
+    function updateAddressAreaWarning() {
+      const warning = qs("#addressAreaWarning");
+      if (!warning) return;
+      const city = String(qs("#city")?.value || "").trim();
+      const serviceArea = String(qs("#service_area")?.value || "").trim();
+      const postal = String(qs("#postal_code")?.value || "").trim();
+      const resolved = selectedServiceAreaMeta();
+
+      const messages = [];
+      if (postal && !validateCanadianPostalCode(postal)) {
+        messages.push("Postal code format looks unusual. Please use a Canadian format like N4G 1A1.");
+      }
+      if (city && serviceArea && resolved) {
+        const haystack = [resolved.label, resolved.value, resolved.municipality, resolved.county, ...(Array.isArray(resolved.aliases) ? resolved.aliases : [])].join(" ").toLowerCase();
+        if (!haystack.includes(city.toLowerCase()) && !String(serviceArea).toLowerCase().includes(city.toLowerCase())) {
+          messages.push("City and service area do not appear to match exactly. Staff will confirm the county/travel tier before dispatch.");
+        }
+      }
+      if (serviceArea && !resolved) {
+        messages.push("Custom service area entered. Staff should confirm Oxford/Norfolk county coverage before final scheduling.");
+      }
+
+      if (!messages.length) {
+        warning.style.display = "none";
+        warning.textContent = "";
+        return;
+      }
+      warning.style.display = "block";
+      warning.className = "notice warn mini";
+      warning.textContent = messages.join(" ");
     }
 
     function findCountyFallbackForTypedArea(value) {
@@ -938,6 +1087,7 @@
         note.textContent = "Choose or type the closest town, county, or service zone so we can apply travel, parking, water-use, and local bylaw reminders before dispatch.";
         rules.innerHTML = "<li>Start typing to choose from the full Oxford County and Norfolk County service list.</li>";
         links.innerHTML = "";
+        updateAddressAreaWarning();
         return;
       }
 
@@ -946,6 +1096,7 @@
         note.textContent = "Custom service area entered. We will confirm the town/county before dispatch and apply the closest county water-use reminder when possible.";
         rules.innerHTML = "<li>Staff should confirm whether this address is in Oxford County, Norfolk County, or outside the normal service zone before final dispatch.</li>";
         links.innerHTML = "";
+        updateAddressAreaWarning();
         renderReviewVehicle();
         renderFinalSummary();
         return;
@@ -1459,12 +1610,13 @@
     }
 
     function renderReviewVehicle() {
-      const area = findServiceArea(state.pricing || {}, qs("#service_area").value);
+      const area = selectedServiceAreaMeta();
       const rows = [
         ["Date", selectedDate() || "Not chosen"],
         ["Time", state.selectedSlotChoice || "Not chosen"],
         ["Service area", qs("#service_area").value || "Not chosen"],
-        ["Local rules", area?.municipality || "Pending zone selection"],
+        ["County / local rules", area?.county ? `${area.county}${area.municipality ? " · " + area.municipality : ""}` : "Pending zone selection"],
+        ["Water/power setup", qs("#need_mobile_water_power")?.checked ? "Quote staff-supplied water/power setup" : "Customer provides water and power"],
         ["Vehicle", [qs("#veh_year").value, qs("#veh_make").value, qs("#veh_model").value, qs("#veh_color").value].filter(Boolean).join(" · ") || "Vehicle details incomplete"],
         ["Mileage", qs('#veh_mileage').value ? `${qs('#veh_mileage').value} km` : 'Optional / not entered'],
         ["Vehicle size", selectedSize() || "Not chosen"],
@@ -1476,12 +1628,13 @@
     function renderFinalSummary() {
       const pkg = selectedPackage();
       const totals = computeTotals();
-      const area = findServiceArea(state.pricing || {}, qs("#service_area").value);
+      const area = selectedServiceAreaMeta();
       const rows = [
         ["Date", selectedDate() || "Not chosen"],
         ["Time", state.selectedSlotChoice || "Not chosen"],
         ["Service area", qs("#service_area").value || "Not chosen"],
-        ["Local rules", area?.municipality || "Pending zone selection"],
+        ["County / local rules", area?.county ? `${area.county}${area.municipality ? " · " + area.municipality : ""}` : "Pending zone selection"],
+        ["Water/power setup", qs("#need_mobile_water_power")?.checked ? "Quote staff-supplied water/power setup" : "Customer provides water and power"],
         ["Package", pkg ? `${pkg.name} (${selectedSize() || "size pending"})` : "Not chosen"],
         ["Add-ons", selectedAddons().length ? selectedAddons().map((addon) => addon.name).join(", ") : "None"],
         ["Estimated subtotal", totals.subtotal ? money(totals.subtotal) : "Package required"],
@@ -1525,6 +1678,7 @@
         if (!qs("#customer_name").value.trim()) return showFieldError(5, "Enter your full name.");
         if (!qs("#customer_email").value.trim()) return showFieldError(5, "Enter your email address.");
         if (!qs("#address_line1").value.trim()) return showFieldError(5, "Enter the service address.");
+        if (!validateCanadianPostalCode(qs("#postal_code").value)) return showFieldError(5, "Check the postal code format or leave it blank until staff confirm it.");
         return true;
       }
 
@@ -1549,8 +1703,12 @@
         start_slot,
         duration_slots,
         service_area: qs("#service_area").value,
-        service_area_label: (findServiceArea(state.pricing || {}, qs("#service_area").value) || findCountyFallbackForTypedArea(qs("#service_area").value))?.label || qs("#service_area").value,
-        service_area_meta: findServiceArea(state.pricing || {}, qs("#service_area").value) || findCountyFallbackForTypedArea(qs("#service_area").value) || null,
+        service_area_label: selectedServiceAreaMeta()?.label || qs("#service_area").value,
+        service_area_county: selectedServiceAreaMeta()?.county || null,
+        service_area_municipality: selectedServiceAreaMeta()?.municipality || null,
+        service_area_travel_tier: selectedServiceAreaMeta()?.travel_tier || null,
+        service_area_water_rule: selectedServiceAreaMeta()?.water_rule || null,
+        service_area_meta: selectedServiceAreaMeta(),
         package_code: state.selectedPackageCode,
         vehicle_size: selectedSize(),
         customer_name: qs("#customer_name").value.trim(),
@@ -1576,6 +1734,7 @@
         special_notes: qs("#special_notes").value.trim() || null,
         ack_driveway: true,
         ack_power_water: true,
+        need_mobile_water_power_quote: qs("#need_mobile_water_power")?.checked === true,
         ack_bylaw: true,
         ack_cancellation: true
       };
@@ -1621,6 +1780,17 @@
       renderReviewVehicle();
       renderFinalSummary();
     });
+
+    qs("#showServiceAreasBtn")?.addEventListener("click", () => showServiceAreaPicker(true));
+    qs("#hideServiceAreasBtn")?.addEventListener("click", () => hideServiceAreaPicker());
+    qs("#service_area").addEventListener("focus", () => showServiceAreaPicker(!qs("#service_area").value.trim()));
+    qs("#city")?.addEventListener("input", () => updateAddressAreaWarning());
+    qs("#postal_code")?.addEventListener("input", () => updateAddressAreaWarning());
+    qs("#need_mobile_water_power")?.addEventListener("change", () => {
+      renderReviewVehicle();
+      renderFinalSummary();
+    });
+
 
     renderServiceAreas(configuredServiceAreas());
     syncBookingRuleLabels();
