@@ -42,3 +42,4 @@ Pass sync: April 17, 2026 — pricing now restores the booking page as the first
 - reviewed during the merchandising / SEO / geofence refinement pass
 - no file-specific workflow changes were required beyond the centralized roadmap, schema, repo-guide, and handoff updates
 
+<!-- Build 145 sync 2026-05-15: reviewed during catalog DB import/admin workflow/local SEO pass. Active release discipline remains one-H1, local wording, fallback safety, and schema/Markdown synchronization. -->
