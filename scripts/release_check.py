@@ -29,6 +29,7 @@ def main() -> None:
     validate_xml()
     run([sys.executable, "scripts/stress_static_checks.py"])
     run([sys.executable, "scripts/local_seo_audit.py"])
+    run([sys.executable, "scripts/catalog_fallback_check.py"])
     print("PASS: release checklist completed")
 
 if __name__ == "__main__":
