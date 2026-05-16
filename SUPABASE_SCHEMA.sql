@@ -1,3 +1,9 @@
+-- Build 142 service-area DB/admin/SEO value pass — 2026-05-15
+-- Added optional public.service_area_rules table in sql/2026-05-15_build142_service_area_db_admin_seo_value_pass.sql.
+-- Public runtime remains fallback-safe: /api/service_area_rules_public reads service_area_rules first, then app_management_settings.service_area_rules, while bundled JSON remains the customer-facing fallback.
+-- Admin endpoint added at functions/api/admin/service_area_rules.js for future DB/app-setting service-area editing.
+-- SEO/docs/schema synchronized with one-H1 and local Oxford/Norfolk service-area discipline.
+
 -- Build 140 value-add roadmap foundations — 2026-05-10
 -- Adds optional DB-first foundation tables in sql/2026-05-10_build140_value_add_roadmap_foundations.sql:
 -- app_option_libraries, app_media_library, and app_content_entries.

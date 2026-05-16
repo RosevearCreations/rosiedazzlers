@@ -1,24 +1,15 @@
-# Repo Guide — Build 140
+# Repository Guide — Build 142
+
+**Branch:** `dev`
 
 ## Important folders
 
 - `functions/api/` — Cloudflare Pages Functions.
-- `functions/api/admin/` — admin/staff Pages Functions.
-- `assets/` — public browser JavaScript and shared frontend helpers.
-- `data/` — bundled public/admin fallback JSON.
-- `sql/` — Supabase migrations and schema notes.
-- `archive/` — old documentation snapshots.
+- `assets/` — shared browser JavaScript/CSS helpers.
+- `data/` — deploy-safe JSON fallback data.
+- `sql/` — Supabase migrations and no-DDL tracking notes.
+- `archive/` — historical Markdown snapshots.
 
-## Important scripts
+## Current rule
 
-- `scripts/stress_static_checks.py`
-- `scripts/local_seo_audit.py`
-- `scripts/release_check.py`
-
-## Do not re-add
-
-- Root-level duplicate API endpoint `.js` files.
-- Multiple H1 tags on exposed public pages.
-- Hardcoded one-off image URLs when a catalog/media-library source exists.
-
-<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->
+Do not place API handler `.js` files at the repository root. Root JavaScript should only contain valid public browser assets such as `service-worker.js`.

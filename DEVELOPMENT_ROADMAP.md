@@ -1,64 +1,54 @@
-# Development Roadmap — Build 141
+# Development Roadmap — Build 142
 
-**Updated:** 2026-05-14  
-**Target branch:** `dev`  
-**Purpose:** Track the latest completed value pass and the next 20 logical steps for the Rosie Dazzlers website/app backend.
+**Updated:** 2026-05-15  
+**Target branch:** `dev`
 
-## Build 141 completed pass
+## Build 142 completed pass
 
-This pass focused on restoring the fuller Norfolk/Oxford service-area behavior from earlier builds and making the booking/admin service-area workflow safer for real mobile detailing operations.
-
-1. Restored a broad Oxford County and Norfolk County service-area seed with county defaults plus individual towns/communities.
-2. Added `/data/service_area_rules.json` as a shared JSON source for county/municipality rules, water-use reminders, official source links, and fallback behavior.
-3. Updated `/data/rosie_services_pricing_and_packages.json` so the booking catalog has the expanded service-area rows instead of only a few grouped areas.
-4. Added Oxford County water-conservation reminders to service-area rows: May 1–September 30 program, even/odd watering days, residential/commercial watering windows, and current-status verification.
-5. Added Norfolk County watering-restriction reminders to service-area rows: May 15–September 15, allowed time windows, odd/even address schedule, and current-status verification.
-6. Added county-level fallback rows: `Other Oxford County location` and `Other Norfolk County location`.
-7. Made the customer booking service-area control typeable with a datalist instead of a rigid select-only dropdown.
-8. Added typed-town fallback handling in the shared pricing-catalog client so exact towns, aliases, and county fallback rows can resolve cleanly.
-9. Updated Admin App service-area editing so county, town/label, municipality, zone, tier, by-law notes, water reminders, parking, and noise/access notes are editable in one place.
-10. Expanded service-area dropdown option libraries with the Oxford and Norfolk towns/communities now used by the booking catalog.
-11. Updated local SEO target data to track service-area coverage and future town-page expansion opportunities.
-12. Synced clean-route copies for `/book/` and `/admin-app/` so the folder-backed routes match the patched root pages.
-13. Added schema tracking for the new JSON-first service-area/water-rule foundation.
-14. Kept the DB-first direction clear: JSON remains the public fallback now, while Supabase app settings or a future `service_area_rules` table can become canonical later.
-15. Kept SEO discipline in scope: one H1 per exposed page, local town/county wording, crawlable pages, and structured service-area language.
-16. Preserved fallback-first error handling so missing app settings should not blank the booking area list.
-17. Added staff-facing notes that typed unknown towns require county confirmation before dispatch.
-18. Reduced missed-location risk by allowing staff/customers to type towns not yet listed while still preserving fallback handling.
-19. Updated the Markdown handoff files and schema notes for the pass.
-20. Re-ran static/link/H1/JSON/JS checks before packaging.
+1. Made the booking service-area control safer by adding a full clickable town picker beside the typeable datalist.
+2. Kept the service-area input empty by default so native datalist filtering does not hide all towns behind Tillsonburg.
+3. Added city/town datalist suggestions from the same service-area rows used by booking.
+4. Added basic Canadian postal-code validation before checkout.
+5. Added a city/service-area mismatch warning so staff can confirm county and travel tier before dispatch.
+6. Added explicit service-area county, municipality, travel tier, water-rule, and metadata fields to the checkout payload.
+7. Added a quote flag for cases where Rosie Dazzlers may need to bring water/power or confirm special setup.
+8. Updated booking review and final summary to show county/local rule resolution and water/power setup status.
+9. Verified and refreshed Oxford County water-rule text from the current official county water-conservation page.
+10. Verified and refreshed Norfolk County watering-restriction text from the current official county page.
+11. Added `/api/service_area_rules_public` so public pages can read DB/app-setting service-area rows before falling back to bundled JSON.
+12. Added `/api/admin/service_area_rules` so service-area rules can be saved through an authenticated admin path later.
+13. Added optional DB-first `service_area_rules` table migration for county/town/water-rule/parking/access/travel-tier rows.
+14. Added a service-area JSON-to-SQL seed helper script for moving the bundled rules into Supabase.
+15. Updated the shared pricing-catalog client to merge public service-area API rows with bundled pricing JSON.
+16. Improved shared service-area matching so typed towns match aliases, town names without `, ON`, county names, or fallback county rows.
+17. Added four new town-focused landing-page shells and API content entries for Norwich/Otterville, Zorra/Thamesford/Embro, Waterford/Vittoria, and Port Rowan/Turkey Point.
+18. Updated local SEO target data and sitemap entries for the new town landing pages.
+19. Removed root-level duplicate API JavaScript files again, leaving the valid public `service-worker.js` at root and real API handlers under `functions/api/`.
+20. Archived the old root Markdown set and rebuilt active Markdown as a fresh concise Build 142 handoff set.
 
 ## Next logical 20 steps
 
-1. Create a DB-backed `service_area_rules` table and admin endpoint so JSON is only the deploy-safe fallback.
-2. Add a full Admin App service-area manager with search, duplicate detection, and bulk import/export.
-3. Add a county/town resolver that can map typed towns to counties without staff guessing.
-4. Add address/postal-code validation before checkout so service area, travel tier, and county water rules are resolved earlier.
-5. Add a dispatch checklist warning when a booking is inside an active water restriction window.
-6. Add a “bring our own water/power” quote flag that automatically adjusts booking requirements.
-7. Add per-location travel fee overrides and quote-required thresholds.
-8. Build new town landing pages for Norwich/Otterville, Zorra/Thamesford/Embro, Waterford/Vittoria, and Port Rowan/Turkey Point.
-9. Add structured data per town/service landing page, including service area and local business coverage.
-10. Create a reusable proof/review block per town page using approved review/sample data until API reviews are live.
-11. Move review proof from sample JSON into DB/app settings with approval status and source tracking.
-12. Finish the media-library editor for R2 images/videos with alt text, crop notes, first-image scoring, and page usage.
-13. Build the full option-library editor so categories, types, colours, vendors, units, towns, and tiers are maintained from Admin App.
-14. Add Admin Catalog filters for saved vs bundled fallback items, low stock, vendor, category, colour, and consumable/gear type.
-15. Add inventory “usage per service” tracking tied to completed jobs.
-16. Finish accounting close workflow: payment application, reconciliation matching, journal validation, tax/remittance review, and accountant export bundle.
-17. Add stronger checkout diagnostics that save safe failure context for admin review without exposing customer secrets.
-18. Add Search Console / Google Business Profile reporting placeholders so public search performance can be tracked beside internal analytics.
-19. Add release automation that fails the build if a public page has multiple H1s, blank meta, missing canonical, or broken internal links.
-20. Add mobile admin shortcuts for service-area edits, inventory receive, photo upload, and jobsite checklist completion.
+1. Connect Admin App service-area editor directly to `/api/admin/service_area_rules` with load/save/import/export buttons.
+2. Run the new `service_area_rules` migration in Supabase dev and seed it from `data/service_area_rules.json`.
+3. Add a postal-code to county/town resolver for Norfolk/Oxford so typed addresses resolve before checkout.
+4. Add per-service-area travel fee, minimum package, and quote-required thresholds to booking totals.
+5. Add active water-restriction dispatch banners when appointment dates fall inside May–September rule windows.
+6. Add a staff dispatch checklist that highlights water/power, driveway slope, parking, bylaw, and customer access risks.
+7. Move sample reviews into a DB/app-setting approval workflow with source, date, town, service, and publish status.
+8. Add per-town proof blocks that can prefer approved reviews/photos for the town page being viewed.
+9. Finish DB-backed media library management for R2 images/videos, alt text, crop notes, page usage, and first-image scoring.
+10. Add Admin Catalog saved/bundled filters and quick edit drawers for consumables, gear, systems, and service supplies.
+11. Connect inventory usage-per-service to completed jobs so product costs roll into job profitability.
+12. Add vendor purchase history import/reconciliation for inventory items and consumables.
+13. Complete accounting payment application and invoice/receipt matching.
+14. Complete accounting reconciliation matching with manual review queues.
+15. Complete tax/remittance review screens with lock/reopen month controls.
+16. Build accountant export packaging with CSVs, receipt links, GL detail, tax summary, and close checklist status.
+17. Add Search Console and Google Business Profile metric placeholders into Admin Analytics.
+18. Add mobile admin shortcuts for receive inventory, upload photos, edit service areas, and complete jobsite checklist items.
+19. Add release automation that blocks deployments on broken links, multiple H1s, missing canonical tags, blank titles, or invalid sitemap entries.
+20. Create the next batch of local service/town pages based on real booking/search demand after the new pages are indexed.
 
 ## SEO operating rule
 
-No pass can guarantee top search placement. Continue improving the parts under our control: descriptive titles, one clear H1, local service/town wording, useful proof/reviews, crawlable internal links, accurate sitemap, fast mobile pages, and current Google Business Profile presence.
-
-<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->
-
-
-## Build 141 cleanup note
-
-Root-level duplicate API JavaScript files were removed again; valid API handlers remain under `functions/api/` and `functions/api/admin/`, while `service-worker.js` remains at the public root.
+No pass can guarantee top search placement. Continue improving the parts under our control: descriptive titles, one clear H1, local service/town wording, useful proof/reviews, crawlable internal links, accurate sitemap, fast mobile pages, and consistent Google Business Profile presence.

@@ -1,13 +1,11 @@
-# AI Context — Build 140
+# AI Context — Build 142
 
-Use this file to orient future ChatGPT/Copilot work.
+Rosie Dazzlers is using the `dev` branch as the source of truth. The user wants every build pass to update Markdown, schema notes, SEO/local search hygiene, one-H1 checks, CSS drift checks, and DB-first migration direction.
 
-- Branch: `dev`.
-- Do not commit to `main` unless explicitly requested.
-- Public local SEO focus: Oxford County and Norfolk County mobile auto detailing.
-- Current build completed a 20-step foundation pass for dropdowns, media, reviews, local SEO checks, release checks, docs, and schema.
-- Next priority: run the Build 140 SQL migration, then build media-library and option-library admin editors.
-- Always update Markdown and `SUPABASE_SCHEMA.sql` when changing the app.
-- Always check for one H1 per public page.
-
-<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->
+Current focus:
+- service-area rules and county water restrictions,
+- booking/customer mobile usability,
+- Admin App editing systems,
+- Admin Catalog inventory workflows,
+- accounting close/export polish,
+- local SEO pages and proof/reviews.

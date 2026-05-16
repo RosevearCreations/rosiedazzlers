@@ -1,26 +1,16 @@
-# Handoff Next Chat — Build 140
+# Handoff Next Chat — Build 142
 
-**Updated:** 2026-05-14
+Start from `dev` and this package. The latest pass completed service-area picker repair, county water-rule verification, DB/API foundation for service-area rules, four more town landing pages, and a fresh documentation/schema update.
 
-## Start here
+## Highest-priority next work
 
-The corrected package for this pass is Build 140. It completed the prior 20-step roadmap as a practical foundation pass and created the next 20-step roadmap in `DEVELOPMENT_ROADMAP.md`.
-
-## Most important changes
-
-- Added shared option-library, media-library, review-proof, and local SEO data contracts.
-- Added public review API fallback and homepage review renderer.
-- Added local SEO and release-check scripts.
-- Added optional Supabase migration for DB-first option/media/content foundations.
-- Removed root-level duplicate API JavaScript files.
-- Archived duplicate/older Markdown and refreshed active docs.
-
-## Next best step
-
-Run `sql/2026-05-10_build140_value_add_roadmap_foundations.sql` in Supabase dev, then build the Admin App panels that read/write the new option and media foundations.
-
-## Branch rule
-
-Use `dev`.
-
-<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->
+1. Connect Admin App service-area editor directly to `/api/admin/service_area_rules` with load/save/import/export buttons.
+2. Run the new `service_area_rules` migration in Supabase dev and seed it from `data/service_area_rules.json`.
+3. Add a postal-code to county/town resolver for Norfolk/Oxford so typed addresses resolve before checkout.
+4. Add per-service-area travel fee, minimum package, and quote-required thresholds to booking totals.
+5. Add active water-restriction dispatch banners when appointment dates fall inside May–September rule windows.
+6. Add a staff dispatch checklist that highlights water/power, driveway slope, parking, bylaw, and customer access risks.
+7. Move sample reviews into a DB/app-setting approval workflow with source, date, town, service, and publish status.
+8. Add per-town proof blocks that can prefer approved reviews/photos for the town page being viewed.
+9. Finish DB-backed media library management for R2 images/videos, alt text, crop notes, page usage, and first-image scoring.
+10. Add Admin Catalog saved/bundled filters and quick edit drawers for consumables, gear, systems, and service supplies.

@@ -1,39 +1,27 @@
-# Images and Media Guide — Build 140
+# Images and Media Guide — Build 142
 
-**Updated:** 2026-05-14
+**Updated:** 2026-05-15
 
-## Current image source order
+## Main image sizes
 
-1. Supabase media library (`app_media_library`) once the Build 140 SQL is applied and editors are built.
-2. App settings / Admin App fields.
-3. Bundled catalog JSON in `data/`.
-4. R2 public URLs.
-5. Local SVG/PNG fallback assets.
+- Hero/service images: 1600×900 or larger, landscape preferred.
+- Before/after gallery images: 1200×900 or larger, matching angles when possible.
+- Add-on cards: 1200×800 or larger, avoid tight crops; use PNG/JPG as primary and SVG only as fallback.
+- Product/consumable images: 1200×1200 square preferred.
+- Review/proof images: 1200×900 or larger.
 
-## Recommended sizes
+## Current source-of-truth locations
 
-- Home hero: 1600×900.
-- Before/after pair: 1200×900 or 1600×1200, matched angle.
-- Add-on card: 1200×800 landscape.
-- Gallery thumbnail: 800×800 square or 1200×900 landscape.
-- Inventory item: 1000×1000 square.
-- Social preview: 1200×630.
+- Pricing/add-on image URLs: `data/rosie_services_pricing_and_packages.json`
+- Media seed/fallback: `data/media_library_seed.json` if present
+- Gallery/proof samples: gallery JSON plus review/sample files
+- Service/town page imagery: landing page settings/API content first, then fallback images
 
 ## Replacement workflow
 
-For each admin image field, aim for:
-
-- Current image preview.
-- Primary image URL.
-- Fallback image URL.
-- Alt text.
-- Caption/usage note.
-- Recommended size note.
-- Keep/replace choice.
-
-## New Build 140 files
-
-- `data/media_library_seed.json` documents media groups and recommended sizes.
-- `sql/2026-05-10_build140_value_add_roadmap_foundations.sql` adds the optional `app_media_library` table.
-
-<!-- Build 141 sync 2026-05-14: reviewed during Norfolk/Oxford service-area, water-rule fallback, typeable booking location, local SEO, and docs/schema pass. -->
+1. Upload the image/video to R2.
+2. Copy the public URL.
+3. Update the relevant Admin App field or JSON fallback.
+4. Keep alt text plain and descriptive.
+5. Prefer PNG/JPG primary URLs for real photos. Use SVG only for safe fallback or icon/outline purposes.
+6. Re-run static/release checks before deployment.
