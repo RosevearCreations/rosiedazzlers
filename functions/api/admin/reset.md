@@ -50,3 +50,5 @@ Pass 28 sync — 2026-04-20
 - no file-specific workflow changes were required beyond the centralized roadmap, schema, repo-guide, and handoff updates
 
 <!-- Build 145 sync 2026-05-15: reviewed during catalog DB import/admin workflow/local SEO pass. Active release discipline remains one-H1, local wording, fallback safety, and schema/Markdown synchronization. -->
+
+<!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->
