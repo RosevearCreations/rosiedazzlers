@@ -37,6 +37,7 @@ def main() -> None:
     run([sys.executable, "scripts/amazon_match_check.py"])
     run([sys.executable, "scripts/mobile_nav_check.py"])
     run([sys.executable, "scripts/landing_photo_check.py"])
+    run([sys.executable, "scripts/admin_app_editor_check.py"])
     print("PASS: release checklist completed")
 
 if __name__ == "__main__":
