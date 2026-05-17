@@ -1036,3 +1036,9 @@ create index if not exists accounting_period_closes_status_idx on public.account
 -- No DDL in this pass.
 -- Admin App now exposes the catalog_dropdown_options app-setting editor in the UI.
 -- Future DB candidate: move dropdown option libraries from app_settings JSON into normalized admin_dropdown_options rows after workflow validation.
+
+
+-- Build 148 schema sync (2026-05-16)
+-- Landing-page regional photos and add-on process/photo fields are currently stored in landing-page JSON/app settings and fallback files.
+-- No DDL was required in Build 148; see sql/2026-05-16_build148_landing_photos_addon_pages_no_ddl_note.sql.
+-- Future DB direction: landing_pages, media_library, and landing_page_media tables with draft/publish and source/consent metadata.

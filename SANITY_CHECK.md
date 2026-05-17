@@ -1,24 +1,33 @@
-# Sanity Check — Build 147
+# Sanity Check — Build 148
 
 **Updated:** 2026-05-16
 
-## What to test after deploy
+## Completed this pass
 
-1. Open Admin App and confirm no `mergeServiceAreaRows is not defined` message appears.
-2. Confirm the console no longer reports `saveCatalogDropdownOptionsBtn` missing.
-3. Edit and save dropdown option lists in Admin App.
-4. Reload Admin App and confirm dropdown option lists persist or fall back safely.
-5. Open Services/Pricing/Book on a phone-sized screen and confirm the main menu is collapsed until **Menu** is tapped.
-6. Tap outside the menu, press Escape on desktop, and tap a menu link to confirm it closes.
-7. Confirm the account widget no longer stretches the mobile header into a tall stack.
-8. Open Consumables and Gear and confirm bundled rows still appear even when DB has only a few saved rows.
-9. Confirm public pages still have exactly one H1.
-10. Run `python scripts/release_check.py` before deployment.
+- Added regional photos to all current location landing pages.
+- Added photo captions and source URLs for location landing pages.
+- Added fallback add-on landing-page photo/process/details.
+- Added Admin App fields to update landing photo/caption/source details.
+- Added landing-photo release validation.
+- Updated Markdown and schema notes.
+- Removed recurring invalid root API duplicates.
 
-## Passed locally in this package
+## Checks to run before deployment
 
-- Static checks are expected to pass after this build.
-- Mobile navigation guard added through `scripts/mobile_nav_check.py`.
-- Root duplicate API JS files were removed again, leaving `service-worker.js` as the only root JS file.
+```bash
+python scripts/release_check.py
+```
 
-<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->
+Also test manually:
+
+1. Open `/tillsonburg-auto-detailing/` and confirm the regional photo appears.
+2. Open `/port-dover-auto-detailing/` and confirm the regional photo/caption appears.
+3. Open `/ceramic-coating/` and confirm the add-on process/details/photo sections appear.
+4. Open Admin App → Landing pages and confirm hero image, gallery, caption, and source fields can be edited.
+5. Open the mobile menu on a phone width and confirm it is compact/expandable.
+6. Confirm no public page has more than one visible H1.
+7. Confirm `/consumables` still shows the full fallback catalog, not just edited DB rows.
+
+## SQL reminders
+
+Apply recent SQL migrations to Supabase dev in order when ready. Build 148 itself adds a no-DDL tracking note only.

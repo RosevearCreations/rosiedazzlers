@@ -1,19 +1,73 @@
-# Images and Media — Build 147
+# Images and Media — Build 148
 
 **Updated:** 2026-05-16
 
-No image-size rule changed in this pass. Continue using the current media workflow:
+## Landing-page image requirements
 
-- Add-on/service images: prefer PNG/JPG/WebP primary images; keep SVGs as fallback or line-art only.
-- Public proof/review/before-after images: use clear landscape or square images, ideally at least 1200px wide.
-- Inventory/catalog item images: store R2/public URLs in the catalog, then use local bundled data only as fallback.
-- First public product/service images should avoid tight cropping and should use `object-fit: contain` where the full item matters.
-- Admin App dropdown/media changes in this pass do not change the required upload sizes.
+### Location landing pages
 
-Future image work:
+Each location landing page should have:
 
-1. Move media library entries into DB once the admin media workflow is stable.
-2. Add image score warnings before saving public images.
-3. Add dedicated before/after media consent status to the DB-backed gallery workflow.
+- **Hero/regional image:** 1600×900 preferred, 1200px wide minimum.
+- **Shape:** landscape is preferred so the image works on desktop and mobile.
+- **Alt/caption:** describe the town/region, not just “photo.”
+- **Source:** store where the photo came from.
+- **Replacement plan:** external regional placeholders should be replaced with Rosie-owned/R2-hosted local photos when we have them.
 
-<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->
+Current seeded file:
+
+- `data/landing_regional_photos.json`
+
+Current editable fields used by Admin App and landing-page API:
+
+- `hero_image_url`
+- `gallery_image_urls`
+- `region_photo_caption`
+- `region_photo_source`
+- `region_photo_source_url`
+
+Current location photo placeholders are credited external regional photos. They are useful for layout and local relevance now, but Rosie-owned photos should replace them before heavy marketing.
+
+### Add-on landing pages
+
+Each add-on landing page should have:
+
+- **Hero image:** current add-on PNG/JPG/WebP from the pricing catalog where possible.
+- **Gallery images:** optional process/detail images, one URL per line.
+- **Process section:** at least 3–4 plain-language steps.
+- **Why this page exists:** explain why the service deserves its own page instead of only appearing as an add-on row.
+- **Things to know:** quote requirements, package requirements, limits, and aftercare.
+- **Related products/tools:** product name, role, note, and optional image URL.
+
+Recommended add-on image size:
+
+- 1200×900 or 1200×1200 preferred.
+- Use `object-fit: contain` where showing the whole product/tool matters.
+- Use `object-fit: cover` only for regional/lifestyle hero photos.
+
+## Updating or switching out an image
+
+1. Upload the image to the correct R2/public asset folder.
+2. Copy the public image URL.
+3. Open Admin App → Landing pages.
+4. Select the location or add-on page.
+5. Paste the URL into **Hero / regional image URL**.
+6. Add/update the caption and source fields.
+7. Add optional gallery URLs, one per line.
+8. Save the landing-page settings.
+9. Test the public route and mobile view.
+10. Run `python scripts/release_check.py`.
+
+## Future media-library direction
+
+Move image records into DB with:
+
+- file URL
+- owner/source
+- license/source status
+- alt text
+- caption
+- consent status
+- related location/service
+- upload/replacement history
+- image score

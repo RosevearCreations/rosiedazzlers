@@ -1,27 +1,29 @@
-# Known Gaps and Risks — Build 147
+# Known Gaps and Risks — Build 148
 
 **Updated:** 2026-05-16
 
 ## Reduced in this pass
 
-- Admin App no longer fails on `mergeServiceAreaRows is not defined`.
-- Admin App no longer binds to a missing `saveCatalogDropdownOptionsBtn` because the dropdown option library panel now exists.
-- Service-area data can be merged from saved catalog settings plus bundled defaults without losing county/water-rule fallback details.
-- Public mobile navigation is now compact and expandable instead of appearing as a long list on small screens.
-- Release checks now include a compact mobile-navigation guard.
-- Root duplicate API files were removed again so deployment surface stays cleaner.
+- Location landing pages now have regional photo fields, static `og:image`, and no-JS fallback photo markup.
+- Dynamic landing pages now render a credited regional/service photo rather than only generic text.
+- Add-on landing pages now have default photo/process/highlight/detail fields even when a custom page template has not been written yet.
+- Admin App can edit landing hero image URL, gallery image URLs, photo caption, photo source, and source URL.
+- Release checks now include `scripts/landing_photo_check.py`.
+- Root-level duplicate API `.js` files were removed again, leaving `service-worker.js` as the only valid public root JS file.
 
 ## Still open
 
-1. Pending Supabase migrations must still be applied in the dev database.
-2. The dropdown option library is still stored as an app setting; a DB table will be cleaner once the workflow is proven.
-3. Service-area rules are partly available as JSON/fallback and partly as DB/API foundations; the Admin App should eventually edit the dedicated DB table directly.
-4. Amazon CSV matching is still generated from a local CSV workflow; the next step is private admin upload.
-5. Amazon match outputs should move behind authenticated admin APIs before production use.
-6. Cost history and receipt attachments are still needed for stronger accounting audit support.
-7. Admin Catalog remains dense and needs mobile testing after each new workflow.
-8. Sample reviews remain placeholders until the real review API is connected.
-9. Search ranking is not guaranteed; we can improve relevance, crawlability, structured data, proof, and local prominence support only.
-10. Continue validating one H1, local wording, sitemap coverage, structured data, and CSS overflow every pass.
+1. External regional photos are placeholders and should be replaced with Rosie-owned/R2-hosted photos over time.
+2. Photo licensing/source tracking is currently stored as landing-page JSON fields, not a full DB media table.
+3. The Admin App still needs a proper media picker/uploader so we are not pasting URLs by hand.
+4. Location and add-on landing pages need a completeness score before publishing.
+5. Reviews and before/after proof are still not fully tied to towns/service areas.
+6. Search Console and Google Business Profile reporting are not yet connected.
+7. Supabase migrations from recent builds still need to be applied in dev before DB-first workflows can fully replace JSON fallback flows.
+8. Water-rule and service-area data has DB/API foundations, but the full admin CRUD workflow still needs final polish.
+9. Some static landing pages still rely on the dynamic renderer for the richer content after the initial fallback block.
+10. We should continue checking mobile layout because CSS drift has been a recurring issue.
 
-<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->
+## Safety note
+
+Do not remove JSON fallback files until the DB import/admin workflow has proven stable in dev. The fallback files are still protecting public pages from partial DB data.

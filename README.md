@@ -1,20 +1,23 @@
-# Rosie Dazzlers — Build 147
+# Rosie Dazzlers — Build 148
 
-**Updated:** 2026-05-16
+**Updated:** 2026-05-16  
+**Active branch target:** `dev`
 
-Cloudflare Pages + Pages Functions + Supabase platform for Rosie Dazzlers Mobile Auto Detailing.
+This build focuses on location landing-page photos, add-on landing-page media/process completeness, local SEO clarity, and release checks.
 
-## Current branch rule
+## Highlights
 
-Use `dev` as the active source of truth unless explicitly told otherwise.
+- Location landing pages now include seeded regional photos, captions, source URLs, static `og:image`, and fallback markup.
+- Add-on landing pages now support hero image, gallery, process, equipment/workflow, reasons, highlights, FAQ, and related products.
+- Admin App landing editors now include photo caption/source fields.
+- Release checks now include landing-photo validation.
+- Root-level duplicate API files have been removed again; real Pages Functions remain under `functions/api/`.
 
-## Latest pass
+## Read next
 
-- Admin App stability repair.
-- Compact expandable mobile navigation.
-- Dropdown option library made visible/editable.
-- Release checks and docs/schema refreshed.
-
-Read first: `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `CURRENT_IMPLEMENTATION_STATE.md`, `SANITY_CHECK.md`, and `SUPABASE_SCHEMA.sql`.
-
-<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->
+- `DEVELOPMENT_ROADMAP.md`
+- `KNOWN_GAPS_AND_RISKS.md`
+- `CURRENT_IMPLEMENTATION_STATE.md`
+- `SANITY_CHECK.md`
+- `IMAGES.md`
+- `SUPABASE_SCHEMA.sql`

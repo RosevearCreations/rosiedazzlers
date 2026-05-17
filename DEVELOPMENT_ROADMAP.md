@@ -1,62 +1,59 @@
-# Development Roadmap — Build 147
+# Development Roadmap — Build 148
 
 **Updated:** 2026-05-16  
 **Target branch:** `dev`  
-**Pass focus:** Admin App stability, reusable dropdown options, compact mobile navigation, release checks, and continued local SEO discipline.
+**Pass focus:** Location landing photos, add-on landing-page media/process completeness, local SEO clarity, and release checks.
 
-## Build 147 completed 20-step pass
+## Build 148 completed 20-step pass
 
-1. Fixed the Admin App runtime error `mergeServiceAreaRows is not defined`.
-2. Added a safe `mergeServiceAreaRows()` helper that merges DB/app-setting service areas with bundled fallback service areas.
-3. Preserved saved service-area edits while filling missing water-rule, county, tier, and by-law fields from fallback data.
-4. Added a visible **Dropdown option library** panel to Admin App.
-5. Added the missing `saveCatalogDropdownOptionsBtn` element so the console no longer reports a missing event target.
-6. Added editable dropdown textareas for add-on categories, add-on types, inventory categories, inventory subcategories/colours, vendors, units, service tiers, service zones, and service counties.
-7. Updated Admin App dropdown option reading so `service_counties` is saved along with the other option lists.
-8. Kept dropdown options DB/app-setting first with bundled defaults as fallback.
-9. Reworked the public mobile navigation into a compact expandable menu instead of a long always-visible list.
-10. Added outside-click, Escape-key, link-click, and desktop-resize closing behavior for the mobile menu.
-11. Added two-column compact mobile menu cards, with a one-column fallback for very narrow screens.
-12. Added mobile handling for the account widget so it scrolls horizontally instead of forcing a tall page header.
-13. Kept the public Book button full-width on mobile for clearer conversion flow.
-14. Added `scripts/mobile_nav_check.py` to protect the compact menu behavior in future releases.
-15. Wired the mobile navigation check into `scripts/release_check.py`.
-16. Removed root-level duplicate API JavaScript files again; the real API handlers remain under `functions/api/`.
-17. Left `service-worker.js` at root because it is a valid public browser asset.
-18. Continued SEO/H1 discipline by running static public-page checks.
-19. Updated schema notes and Markdown handoff files for the Admin App/mobile navigation pass.
-20. Replaced the roadmap with the next logical 20 steps below.
+1. Added a regional-photo source map for every current location landing page.
+2. Added region photo URLs, captions, source names, and source URLs to `data/landing_regional_photos.json`.
+3. Added region photo references into `data/local_seo_targets.json` so local SEO and landing media stay aligned.
+4. Updated town/location landing defaults so each location page has a hero/regional image.
+5. Added static `og:image` metadata to location landing pages.
+6. Added static regional-photo fallback markup to location pages so crawlers and no-JS visitors still see the region photo.
+7. Updated `assets/landing-page.js` so dynamic landing pages render a credited regional/service figure.
+8. Changed the landing-page heading from a generic reason block to page-specific wording: location pages explain why that location has its own page, and add-on pages explain why that service has its own page.
+9. Added fallback reason/process copy so landing pages do not render empty explanation sections.
+10. Updated generated add-on landing pages so every add-on can have a photo, gallery seed, process, equipment/workflow, highlights, and things-to-know even when no hand-written template exists.
+11. Made generated add-on landing pages prefer the add-on PNG/JPG/R2 image as the page photo.
+12. Added Admin App fields for landing-page photo caption, photo credit/source, and source URL.
+13. Kept existing Admin App hero image and gallery fields so add-on pages can keep or replace the current add-on photo.
+14. Extended Admin App known direct landing-page paths to include the newer town pages.
+15. Added CSS for credited landing-page regional photos.
+16. Added `scripts/landing_photo_check.py`.
+17. Wired landing-photo validation into `scripts/release_check.py`.
+18. Removed the recurring invalid root-level duplicate API files again while keeping `service-worker.js`.
+19. Updated schema/docs to record that landing media is currently stored in landing-page JSON/app settings, with DB media-library migration still planned.
+20. Kept the local SEO habit: one H1, region wording, crawlable town pages, structured data, and clear customer reasons for each location/add-on page.
 
 ## Next logical 20 steps
 
-1. Apply the pending Supabase migrations in dev in order: Build 140 foundations, Build 142 service-area rules, Build 145 catalog import workflows, and Build 146 Amazon matching.
-2. Test Admin App on phone width after deploy: open/close menu, save dropdown options, edit service areas, and reload pricing catalog.
-3. Test public mobile navigation on Home, Services, Pricing, Book, Gear, Consumables, Gallery, and Contact.
-4. Create an Admin App service-area rules screen backed by `service_area_rules`, not only the pricing catalog JSON.
-5. Move catalog dropdown options from app-setting JSON into a DB table once the editing flow is stable.
-6. Add a reusable admin dropdown-options API so Admin App and Admin Catalog share the same options without duplicating JS.
-7. Add validation to prevent empty dropdown option saves from wiping useful bundled defaults.
-8. Add an Admin Catalog private Amazon CSV upload endpoint so future Amazon files do not need to be committed into `/data`.
-9. Move Amazon match review data behind authenticated admin APIs after the upload endpoint exists.
-10. Import strong Amazon matches in small batches and review medium-confidence matches manually.
-11. Add cost-history records so new Amazon purchases do not overwrite older item costs.
-12. Add receipt/statement upload to R2 and link receipts to Amazon/cost-history rows.
-13. Build vendor directory links for Amazon sellers and non-Amazon suppliers.
-14. Add service usage presets that estimate consumables used by package, add-on, vehicle size, and condition.
-15. Add low-stock forecasts using estimated jobs per unit and recent booking/service usage.
-16. Add public service/product proof blocks to landing pages using `data/service_product_links.json`.
-17. Replace sample reviews with live review API data when the external review source is ready.
-18. Add Search Console / Business Profile metric placeholders for town/service landing pages.
-19. Continue reducing static JSON to fallback-only once DB workflows are proven.
-20. Keep release checks strict: one H1, no broken internal links, local SEO target coverage, catalog fallback counts, service-area rules, and mobile menu guardrails.
+1. Move landing-page definitions out of app-setting JSON into a DB-backed `landing_pages` table with versioning and publish/draft status.
+2. Create an Admin App media picker that reads from the future media library instead of pasting URLs manually.
+3. Add upload/replace buttons for landing hero image, regional image, gallery images, and add-on process photos.
+4. Replace external regional-photo placeholders with Rosie-owned or properly licensed R2-hosted photos for each town route.
+5. Add per-location photo alt text, consent/source status, and replacement history.
+6. Add a location landing page preview button in Admin App that opens the exact route in a new tab.
+7. Add a landing-page completeness score covering title, description, H1, photo, caption, reasons, process, FAQ, links, and CTA.
+8. Add DB-backed review proof by service area so town pages can show relevant local reviews automatically.
+9. Add before/after gallery filtering by town, county, service type, and consent status.
+10. Add automatic internal links from service pages to the most relevant town pages.
+11. Add automatic internal links from town pages to the best matching special-service landing pages.
+12. Add Google Business Profile tracking fields to distinguish website local pages from GBP-driven traffic.
+13. Add Search Console import/reporting fields when API access is ready.
+14. Add structured-data validation script for Service, FAQ, Breadcrumb, ImageObject, and LocalBusiness JSON-LD.
+15. Add per-page canonical/slug collision checks for all generated and static landing pages.
+16. Add a no-index safeguard for unpublished landing pages and admin preview routes.
+17. Add mobile screenshot/layout smoke tests for landing pages, booking, services, pricing, and admin app.
+18. Finish service-area DB admin CRUD so county water rules can be edited without changing JSON.
+19. Add booking dispatch checklist prompts based on selected town water rule, access rule, and parking note.
+20. Create a monthly local SEO review workflow: ranking terms, page freshness, photos needing replacement, reviews, and service proof updates.
 
-## SEO discipline to keep every pass
+## SEO operating rule
 
-- Keep one clear H1 on every exposed public page.
-- Use search phrases people actually type in page titles, descriptions, headings, static fallback text, and internal links.
-- Keep Oxford County, Norfolk County, and municipality names visible where they support relevance.
-- Keep proof visible: reviews, before/after work, real products/process notes, service pages, and town pages.
-- Keep sitemap, canonical links, structured data, and release checks aligned.
-- SEO work improves crawlability, relevance, and trust signals; it cannot guarantee first-place ranking.
+We keep improving the items we can control: useful page titles, one clear H1 per exposed page, locally specific wording, crawlable internal links, visible proof/reviews, properly described photos, and structured data where it fits. Search placement is still not guaranteed because local ranking also depends on distance, relevance, prominence, reviews, competition, and searcher location.
 
-<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->
+## DB/source-of-truth direction
+
+Landing-page media is now supported in JSON/app-setting fields and checked by release scripts. The next larger migration should move landing pages, media records, photo sources, and publish status into DB tables after the editing workflow is stable.

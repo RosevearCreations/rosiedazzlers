@@ -1,23 +1,32 @@
-# Current Implementation State — Build 147
+# Current Implementation State — Build 148
 
 **Updated:** 2026-05-16
 
-Rosie Dazzlers is currently a Cloudflare Pages + Pages Functions + Supabase platform with public booking, pricing, service, gear, consumables, gallery, review/proof, service-area, and admin workflows.
+The current dev build is a Cloudflare Pages + Pages Functions + Supabase + R2-backed Rosie Dazzlers platform. Public pages still use JSON fallback files so the website works even when DB settings are incomplete.
 
-## Current pass state
+## Public site state
 
-- Admin App now includes a real dropdown option library panel.
-- Admin App service-area hydration is guarded by `mergeServiceAreaRows()` so saved settings and bundled county/town fallback data can merge safely.
-- Public mobile navigation now uses a compact expandable menu with outside-click and Escape close support.
-- Public catalog fallback merging remains important: DB rows override bundled rows, but partial DB imports must not hide unedited gear/consumables.
-- Root JS should remain limited to `service-worker.js`; API files belong under `functions/api/`.
+- Public pages use one-H1 checks and static release checks.
+- Mobile navigation is compact and expandable.
+- Booking supports a typeable service-area picker with Oxford/Norfolk fallback rules.
+- Services/pricing/catalog pages use fallback merging so partial DB edits do not hide bundled content.
+- Location landing pages now include regional photos, photo captions/source fields, and static `og:image` values.
+- Add-on landing pages now support photo, gallery, detailed process, equipment/workflow, reasons, highlights, FAQ, and related product references.
 
-## Active source-of-truth direction
+## Admin App state
 
-- DB-first for editable business data.
-- JSON as bundled fallback for public reliability and offline/static testing.
-- Admin App for site/app settings and pricing controls.
-- Admin Catalog for consumables, gear, Amazon match review, stock, vendors, and future cost history.
-- Release checks must continue catching H1, link, catalog fallback, service-area, Amazon-match, and mobile-navigation regressions.
+- Admin App can edit pricing, add-ons, landing pages, dropdown option libraries, service areas, and media URLs.
+- Add-on landing editors support hero image, gallery URLs, related products, page reasons, process, and source/credit metadata.
+- Location landing editors support regional photo fields and local-service reasons.
+- Full DB-backed media management is still a next-step item.
 
-<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->
+## Backend/accounting/catalog state
+
+- Catalog import/matching foundations exist for bundled inventory and Amazon CSV enrichment.
+- Consumables/gear public pages merge DB rows with bundled fallback rows.
+- Accounting foundations exist, but month-end/export/reconciliation flows still need further hardening.
+- Service-area rules have JSON fallback plus API/DB migration foundations.
+
+## Current release-check expectations
+
+Run `scripts/release_check.py` before deploy. It validates JSON/XML, static checks, local SEO, catalog fallback counts, service-area rules, Amazon matching, mobile nav, and landing regional photos.
