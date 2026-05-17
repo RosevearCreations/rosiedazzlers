@@ -12,6 +12,16 @@
     .actorline{display:flex;gap:8px;margin:4px 0}.actorlabel{font-weight:700;color:#9fb0c8}.logout-btn,.btn{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:#f8fbff;border-radius:12px;padding:10px 14px;cursor:pointer}
     .btn.primary{background:#7c3aed;border-color:#7c3aed}.status{padding:12px 14px;border-radius:12px;margin-bottom:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09)}
     .status[data-state="success"]{border-color:rgba(34,197,94,.35)} .status[data-state="error"]{border-color:rgba(248,113,113,.35)}
+    .btn.saved,.btn.just-saved{background:#16a34a !important;border-color:#22c55e !important;color:#ffffff !important;box-shadow:0 0 0 3px rgba(34,197,94,.18)}
+    .save-feedback-pill{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(34,197,94,.35);background:rgba(34,197,94,.12);color:#bbf7d0;border-radius:999px;padding:6px 10px;font-size:.84rem;font-weight:800}
+    .service-area-picker-card{display:grid;gap:12px;padding:14px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08)}
+    .service-area-editor-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .service-area-editor-grid .wide{grid-column:1/-1}
+    .service-area-editor-grid textarea{min-height:64px;max-height:120px;resize:vertical;line-height:1.35}
+    .service-area-editor-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+    .service-area-editor-summary .stat{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08)}
+    @media(max-width:980px){.service-area-editor-grid{grid-template-columns:1fr}.service-area-editor-grid .wide{grid-column:auto}}
+    
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{grid-column:span 12;padding:18px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
     .card h2,.card h3{margin:0 0 12px}.field{display:grid;gap:6px;margin-bottom:10px}.field input,.field textarea,.field select{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;background:rgba(255,255,255,.04);color:#f8fafc}
     .field textarea{min-height:110px;resize:vertical}.checkrow{display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;align-items:start;margin:8px 0}.checkrow input{justify-self:end;margin-top:2px}.checkrow label,.checkrow span{display:block;text-align:left;line-height:1.45}.checkrow.inline-check{display:flex;gap:10px;align-items:center}.checkrow.inline-check input{justify-self:auto;margin-top:0}.actions{display:flex;gap:10px;flex-wrap:wrap}.muted{color:#9fb0c8;font-size:.94rem}
@@ -36,13 +46,7 @@
     .catalog-option-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
   @media(max-width:1100px){.catalog-option-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media(max-width:720px){.catalog-option-grid{grid-template-columns:1fr}}
-
-    .catalog-row.service-area-expanded{grid-template-columns:1fr 1.2fr 1.2fr 1fr 1fr .8fr auto;align-items:start}
-    .catalog-row.service-area-expanded .service-area-wide{grid-column:span 3}
-    .catalog-row.service-area-expanded textarea{min-height:58px;max-height:90px;resize:vertical;line-height:1.35}
-    @media (max-width: 980px){.catalog-row.service-area-expanded{grid-template-columns:1fr}.catalog-row.service-area-expanded .service-area-wide{grid-column:auto}}
-
-  </style>
+</style>
 </head>
 <body>
 <main class="shell">
@@ -246,8 +250,14 @@
         </div>
 
         <div class="catalog-section">
-          <div class="section-head"><h3>Service areas and travel tiers</h3><div class="actions"><button class="btn" type="button" id="addServiceAreaBtn">Add service area</button></div></div>
-          <div class="catalog-table-wrap"><div id="serviceAreaTable" class="catalog-table"></div></div>
+          <div class="section-head">
+            <div>
+              <h3>Service areas and travel tiers</h3>
+              <p class="note">Choose one service area at a time. This keeps the editor short even when Oxford/Norfolk towns and water-rule notes grow.</p>
+            </div>
+            <div class="actions"><button class="btn" type="button" id="addServiceAreaBtn">Add service area</button></div>
+          </div>
+          <div id="serviceAreaTable" class="service-area-picker-card"></div>
         </div>
 
         <div class="catalog-section">
@@ -436,11 +446,28 @@
     node.textContent = message || '';
     node.dataset.state = type || '';
   }
+  function flashSavedButton(button, label) {
+    if (!button || !button.classList) return;
+    const originalText = button.dataset.originalText || button.textContent || '';
+    button.dataset.originalText = originalText;
+    button.classList.add('just-saved', 'saved');
+    button.textContent = label || 'Saved';
+    button.setAttribute('aria-live', 'polite');
+    window.clearTimeout(button._savedFlashTimer);
+    button._savedFlashTimer = window.setTimeout(function () {
+      button.classList.remove('just-saved', 'saved');
+      button.textContent = button.dataset.originalText || originalText;
+    }, 2600);
+  }
   async function saveSetting(key, value, successText) {
+    const activeButton = document.activeElement && document.activeElement.closest ? document.activeElement.closest('button') : null;
     const res = await fetch('/api/admin/app_settings_save', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ key, value }) });
     const out = await res.json().catch(() => null);
     if (!res.ok) throw new Error(out?.error || 'Could not save settings.');
     setShellStatus(successText, 'success');
+    if (activeButton && (/save/i.test(activeButton.id || '') || /save/i.test(activeButton.textContent || '') || activeButton.hasAttribute('data-save-addon') || activeButton.id === 'saveSelectedServiceAreaBtn')) {
+      flashSavedButton(activeButton, 'Saved ✓');
+    }
     return out;
   }
   function applySetting(setting, fallback={}){ return setting && typeof setting.value === 'object' ? setting.value : fallback; }
@@ -2413,6 +2440,7 @@
   function cloneJson(value){ return JSON.parse(JSON.stringify(value)); }
   var landingPagesState = landingPagesDefaults();
   var selectedAddonCode = '';
+  var selectedServiceAreaIndex = 0;
   function normalizeLandingFaq(value){ return (Array.isArray(value) ? value : []).map(function(item){ return { q: String(item && item.q || '').trim(), a: String(item && item.a || '').trim() }; }).filter(function(item){ return item.q && item.a; }); }
   function normalizeLandingArray(value){ return (Array.isArray(value) ? value : []).map(function(item){ return String(item || '').trim(); }).filter(Boolean); }
   function normalizeLandingPage(page, fallback){
@@ -2714,30 +2742,65 @@
       '<div class="actions"><button class="btn primary" type="button" data-save-addon="' + index + '">Update / save add-on</button><button class="btn" type="button" data-delete-addon="' + index + '">Delete add-on</button></div>';
   }
 
+  function serviceAreaLabel(row, index) {
+    var label = cleanTextValue(row && (row.label || row.value || row.municipality || row.zone));
+    var county = cleanTextValue(row && row.county);
+    var tier = cleanTextValue(row && row.travel_tier);
+    return (label || ('Service area ' + (index + 1))) + (county ? ' · ' + county : '') + (tier ? ' · ' + tier : '');
+  }
+  function ensureSelectedServiceAreaIndex(rows) {
+    if (!Array.isArray(rows) || !rows.length) {
+      selectedServiceAreaIndex = 0;
+      return 0;
+    }
+    selectedServiceAreaIndex = Number(selectedServiceAreaIndex);
+    if (!Number.isFinite(selectedServiceAreaIndex) || selectedServiceAreaIndex < 0) selectedServiceAreaIndex = 0;
+    if (selectedServiceAreaIndex >= rows.length) selectedServiceAreaIndex = rows.length - 1;
+    return selectedServiceAreaIndex;
+  }
   function renderServiceAreaRows(rows){
+    rows = Array.isArray(rows) ? rows : [];
     if (!rows.length) return '<div class="catalog-empty">No service areas yet. Use Add service area or reload the bundled pricing fallback.</div>';
-    var tierOptions = uniqueTextValues(rows, function(row){ return row && row.travel_tier; }, catalogDropdownOptionsState.service_tiers);
-    var zoneOptions = uniqueTextValues(rows, function(row){ return row && row.zone; }, catalogDropdownOptionsState.service_zones);
-    var countyOptions = uniqueTextValues(rows, function(row){ return row && row.county; }, catalogDropdownOptionsState.service_counties || ['Oxford County','Norfolk County']);
+    var selectedIndex = ensureSelectedServiceAreaIndex(rows);
+    var row = rows[selectedIndex] || {};
+    var tierOptions = uniqueTextValues(rows, function(area){ return area && area.travel_tier; }, catalogDropdownOptionsState.service_tiers);
+    var zoneOptions = uniqueTextValues(rows, function(area){ return area && area.zone; }, catalogDropdownOptionsState.service_zones);
+    var countyOptions = uniqueTextValues(rows, function(area){ return area && area.county; }, catalogDropdownOptionsState.service_counties || ['Oxford County','Norfolk County']);
     var tierDatalist = renderDatalist('serviceTierOptions', tierOptions);
     var zoneDatalist = renderDatalist('serviceZoneOptions', zoneOptions);
     var countyDatalist = renderDatalist('serviceCountyOptions', countyOptions);
-    return countyDatalist + tierDatalist + zoneDatalist + rows.map(function (row, index) {
-      return '<div class="catalog-row service-area service-area-expanded">' +
-        '<div class="catalog-row__head">County</div><div class="catalog-row__head">Town / label</div><div class="catalog-row__head">Booking value</div><div class="catalog-row__head">Municipality</div><div class="catalog-row__head">Zone</div><div class="catalog-row__head">Tier</div><div></div>' +
-        '<label class="field"><input list="serviceCountyOptions" data-area-field="county" data-area-index="' + index + '" value="' + escapeHtml(row.county || '') + '"></label>' +
-        '<label class="field"><input list="serviceZoneOptions" data-area-field="label" data-area-index="' + index + '" value="' + escapeHtml(row.label || '') + '"></label>' +
-        '<label class="field"><input list="serviceZoneOptions" data-area-field="value" data-area-index="' + index + '" value="' + escapeHtml(row.value || '') + '"></label>' +
-        '<label class="field"><input list="serviceZoneOptions" data-area-field="municipality" data-area-index="' + index + '" value="' + escapeHtml(row.municipality || '') + '"></label>' +
-        '<label class="field"><input list="serviceZoneOptions" data-area-field="zone" data-area-index="' + index + '" value="' + escapeHtml(row.zone || '') + '"></label>' +
-        '<label class="field"><input list="serviceTierOptions" data-area-field="travel_tier" data-area-index="' + index + '" value="' + escapeHtml(row.travel_tier || 'township') + '"></label>' +
-        '<button class="btn" type="button" data-delete-area="' + index + '">Delete</button>' +
-        '<label class="field service-area-wide"><span>County / by-law note</span><textarea rows="2" data-area-field="bylaw_note" data-area-index="' + index + '">' + escapeHtml(row.bylaw_note || '') + '</textarea></label>' +
-        '<label class="field service-area-wide"><span>Water restrictions / water-use reminder</span><textarea rows="2" data-area-field="water_rule" data-area-index="' + index + '">' + escapeHtml(row.water_rule || '') + '</textarea></label>' +
-        '<label class="field service-area-wide"><span>Parking/access reminder</span><textarea rows="2" data-area-field="parking_rule" data-area-index="' + index + '">' + escapeHtml(row.parking_rule || '') + '</textarea></label>' +
-        '<label class="field service-area-wide"><span>Noise / arrival reminder</span><textarea rows="2" data-area-field="noise_rule" data-area-index="' + index + '">' + escapeHtml(row.noise_rule || '') + '</textarea></label>' +
-      '</div>';
+    var areaOptions = rows.map(function(area, index) {
+      return '<option value="' + index + '"' + (index === selectedIndex ? ' selected' : '') + '>' + escapeHtml(serviceAreaLabel(area, index)) + '</option>';
     }).join('');
+    var oxfordCount = rows.filter(function(area){ return /oxford/i.test(String(area && area.county || '')); }).length;
+    var norfolkCount = rows.filter(function(area){ return /norfolk/i.test(String(area && area.county || '')); }).length;
+    return countyDatalist + tierDatalist + zoneDatalist +
+      '<div class="service-area-editor-summary">' +
+        '<div class="stat"><strong>' + rows.length + '</strong><span class="note">service-area rows</span></div>' +
+        '<div class="stat"><strong>' + oxfordCount + '</strong><span class="note">Oxford rows</span></div>' +
+        '<div class="stat"><strong>' + norfolkCount + '</strong><span class="note">Norfolk rows</span></div>' +
+        '<div class="stat"><strong>' + escapeHtml(row.travel_tier || 'quote_required') + '</strong><span class="note">selected travel tier</span></div>' +
+      '</div>' +
+      '<div class="actions" style="align-items:end">' +
+        '<label class="field" style="min-width:min(100%,520px);flex:1"><span>Select service area to edit</span><select id="serviceAreaEditorSelect" aria-label="Choose service area or travel tier to edit">' + areaOptions + '</select></label>' +
+        '<button class="btn primary" type="button" id="saveSelectedServiceAreaBtn">Save selected service area</button>' +
+        '<button class="btn" type="button" id="duplicateSelectedServiceAreaBtn">Duplicate</button>' +
+        '<button class="btn" type="button" id="deleteSelectedServiceAreaBtn">Delete selected</button>' +
+      '</div>' +
+      '<div class="service-area-editor-grid">' +
+        '<label class="field"><span>County</span><input list="serviceCountyOptions" data-area-editor-field="county" value="' + escapeHtml(row.county || '') + '"></label>' +
+        '<label class="field"><span>Town / label</span><input list="serviceZoneOptions" data-area-editor-field="label" value="' + escapeHtml(row.label || '') + '"></label>' +
+        '<label class="field"><span>Booking value</span><input list="serviceZoneOptions" data-area-editor-field="value" value="' + escapeHtml(row.value || '') + '"></label>' +
+        '<label class="field"><span>Municipality</span><input list="serviceZoneOptions" data-area-editor-field="municipality" value="' + escapeHtml(row.municipality || '') + '"></label>' +
+        '<label class="field"><span>Zone</span><input list="serviceZoneOptions" data-area-editor-field="zone" value="' + escapeHtml(row.zone || '') + '"></label>' +
+        '<label class="field"><span>Travel tier</span><input list="serviceTierOptions" data-area-editor-field="travel_tier" value="' + escapeHtml(row.travel_tier || 'quote_required') + '"></label>' +
+        '<label class="field"><span>Area type</span><input data-area-editor-field="area_type" value="' + escapeHtml(row.area_type || '') + '" placeholder="town, county-fallback, rural, custom"></label>' +
+        '<label class="field wide"><span>County / by-law note</span><textarea rows="2" data-area-editor-field="bylaw_note">' + escapeHtml(row.bylaw_note || '') + '</textarea></label>' +
+        '<label class="field wide"><span>Water restrictions / water-use reminder</span><textarea rows="2" data-area-editor-field="water_rule">' + escapeHtml(row.water_rule || '') + '</textarea></label>' +
+        '<label class="field wide"><span>Parking/access reminder</span><textarea rows="2" data-area-editor-field="parking_rule">' + escapeHtml(row.parking_rule || '') + '</textarea></label>' +
+        '<label class="field wide"><span>Noise / arrival reminder</span><textarea rows="2" data-area-editor-field="noise_rule">' + escapeHtml(row.noise_rule || '') + '</textarea></label>' +
+        '<label class="field wide"><span>Access / setup reminder</span><textarea rows="2" data-area-editor-field="access_rule">' + escapeHtml(row.access_rule || '') + '</textarea></label>' +
+      '</div>';
   }
   function renderRequirementRows(rows){
     if (!rows.length) return '<div class="catalog-empty">No public requirements yet.</div>';
@@ -2806,22 +2869,76 @@
         syncPricingEditorToJson();
       });
     });
-    qsa('[data-area-index]').forEach(function (input) {
-      input.addEventListener('input', function () {
-        var index = Number(input.getAttribute('data-area-index'));
-        var field = input.getAttribute('data-area-field');
-        setNestedValue(pricingCatalogState.service_areas[index], field, input.value);
-        syncPricingEditorToJson();
+    var serviceAreaSelect = byId('serviceAreaEditorSelect');
+    if (serviceAreaSelect) {
+      serviceAreaSelect.addEventListener('change', function () {
+        selectedServiceAreaIndex = Number(serviceAreaSelect.value || 0);
         renderPricingDashboard();
       });
+    }
+    qsa('[data-area-editor-field]').forEach(function (input) {
+      var eventName = input.tagName === 'SELECT' ? 'change' : 'input';
+      input.addEventListener(eventName, function () {
+        var rows = Array.isArray(pricingCatalogState.service_areas) ? pricingCatalogState.service_areas : [];
+        var index = ensureSelectedServiceAreaIndex(rows);
+        if (!rows[index]) return;
+        var field = input.getAttribute('data-area-editor-field');
+        setNestedValue(rows[index], field, input.value);
+        if ((field === 'label' || field === 'value') && !rows[index].value) rows[index].value = input.value;
+        pricingCatalogState.service_areas = rows;
+        syncPricingEditorToJson();
+      });
       input.addEventListener('change', function () {
-        var index = Number(input.getAttribute('data-area-index'));
-        var field = input.getAttribute('data-area-field');
-        setNestedValue(pricingCatalogState.service_areas[index], field, input.value);
+        var rows = Array.isArray(pricingCatalogState.service_areas) ? pricingCatalogState.service_areas : [];
+        var index = ensureSelectedServiceAreaIndex(rows);
+        if (!rows[index]) return;
+        var field = input.getAttribute('data-area-editor-field');
+        setNestedValue(rows[index], field, input.value);
+        pricingCatalogState.service_areas = rows;
         syncPricingEditorToJson();
         renderPricingDashboard();
       });
     });
+    var saveSelectedServiceAreaBtn = byId('saveSelectedServiceAreaBtn');
+    if (saveSelectedServiceAreaBtn) {
+      saveSelectedServiceAreaBtn.addEventListener('click', async function () {
+        try {
+          syncPricingEditorToJson();
+          await saveSetting('pricing_catalog', pricingCatalogState, 'Selected service area saved. Booking, pricing, services, and checkout now use this travel/water-rule row.');
+          renderPricingDashboard();
+        } catch (err) {
+          setShellStatus(err && err.message ? err.message : 'Could not save the selected service area.', 'error');
+        }
+      });
+    }
+    var duplicateSelectedServiceAreaBtn = byId('duplicateSelectedServiceAreaBtn');
+    if (duplicateSelectedServiceAreaBtn) {
+      duplicateSelectedServiceAreaBtn.addEventListener('click', function () {
+        var rows = Array.isArray(pricingCatalogState.service_areas) ? pricingCatalogState.service_areas : [];
+        var index = ensureSelectedServiceAreaIndex(rows);
+        var clone = JSON.parse(JSON.stringify(rows[index] || {}));
+        clone.label = (clone.label || clone.value || 'Service Area') + ' copy';
+        clone.value = clone.label;
+        rows.splice(index + 1, 0, clone);
+        selectedServiceAreaIndex = index + 1;
+        pricingCatalogState.service_areas = rows;
+        syncPricingEditorToJson();
+        renderPricingDashboard();
+      });
+    }
+    var deleteSelectedServiceAreaBtn = byId('deleteSelectedServiceAreaBtn');
+    if (deleteSelectedServiceAreaBtn) {
+      deleteSelectedServiceAreaBtn.addEventListener('click', function () {
+        var rows = Array.isArray(pricingCatalogState.service_areas) ? pricingCatalogState.service_areas : [];
+        if (!rows.length) return;
+        var index = ensureSelectedServiceAreaIndex(rows);
+        rows.splice(index, 1);
+        selectedServiceAreaIndex = Math.max(0, index - 1);
+        pricingCatalogState.service_areas = rows;
+        syncPricingEditorToJson();
+        renderPricingDashboard();
+      });
+    }
     qsa('[data-requirement-index]').forEach(function (input) {
       input.addEventListener('input', function () {
         var index = Number(input.getAttribute('data-requirement-index'));
@@ -2849,9 +2966,6 @@
     });
     qsa('[data-delete-addon]').forEach(function (button) {
       button.addEventListener('click', function () { pricingCatalogState.addons.splice(Number(button.getAttribute('data-delete-addon')), 1); syncPricingEditorToJson(); renderPricingDashboard(); });
-    });
-    qsa('[data-delete-area]').forEach(function (button) {
-      button.addEventListener('click', function () { pricingCatalogState.service_areas.splice(Number(button.getAttribute('data-delete-area')), 1); syncPricingEditorToJson(); renderPricingDashboard(); });
     });
     qsa('[data-delete-requirement]').forEach(function (button) {
       button.addEventListener('click', function () { pricingCatalogState.public_requirements.splice(Number(button.getAttribute('data-delete-requirement')), 1); pricingCatalogState.booking_rules.public_requirements = pricingCatalogState.public_requirements.slice(); syncPricingEditorToJson(); renderPricingDashboard(); });
@@ -3010,6 +3124,7 @@
   });
   bindById('addServiceAreaBtn', 'click', function () {
     pricingCatalogState.service_areas.push({ county: 'Oxford County', label: 'New Service Area', value: 'New Service Area', municipality: '', zone: '', travel_tier: 'quote_required', area_type: 'custom', bylaw_note: 'Custom service area. If there is no local override, default to the selected county rule.', parking_rule: 'Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.', noise_rule: 'Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.', water_rule: 'Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.', access_rule: 'Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.', official_links: [] });
+    selectedServiceAreaIndex = pricingCatalogState.service_areas.length - 1;
     syncPricingEditorToJson(); renderPricingDashboard();
   });
   bindById('addRequirementBtn', 'click', function () {

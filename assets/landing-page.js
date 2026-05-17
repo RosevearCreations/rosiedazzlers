@@ -133,7 +133,7 @@ function galleryMarkup(page, relatedProducts) {
       <div class="service-link-grid" style="margin-top:12px">
         ${unique.slice(0, 8).map((src) => `
           <article class="service-link-card">
-            <img src="${escapeHtml(src)}" alt="Rosie Dazzlers service visual" class="proof-media" />
+            <img src="${escapeHtml(src)}" alt="Rosie Dazzlers service visual" class="proof-media" loading="lazy" onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.svg';" />
           </article>
         `).join("")}
       </div>
@@ -200,7 +200,7 @@ function pageTemplate(page, pricing, slug, productCatalog) {
       </div>
       <aside class="panel hero-sidecard">
         <figure class="landing-region-photo">
-          <img src="${escapeHtml(heroImage)}" alt="${escapeHtml(page.name || page.hero_title || slug)}" class="proof-media" />
+          <img src="${escapeHtml(heroImage)}" alt="${escapeHtml(page.name || page.hero_title || slug)}" class="proof-media" loading="lazy" onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.svg';" />
           ${photoCaption || photoSource ? `<figcaption>${escapeHtml(photoCaption || "Regional/service photo")}${photoSourceUrl ? ` <a href="${escapeHtml(photoSourceUrl)}" target="_blank" rel="noopener">${escapeHtml(photoSource || "source")}</a>` : (photoSource ? ` ${escapeHtml(photoSource)}` : "")}</figcaption>` : ""}
         </figure>
         <h2 style="margin-top:0">What to expect</h2>
@@ -239,7 +239,7 @@ function pageTemplate(page, pricing, slug, productCatalog) {
         <div class="service-link-grid" style="margin-top:12px">
           ${relatedProducts.map((item) => `
             <article class="service-link-card">
-              ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}" class="proof-media" style="margin-bottom:10px" />` : ``}
+              ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}" class="proof-media" style="margin-bottom:10px" loading="lazy" onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.svg';" />` : ``}
               <h3>${escapeHtml(item.name)}</h3>
               ${item.role ? `<div class="badge" style="margin-bottom:8px">${escapeHtml(item.role)}</div>` : ``}
               ${item.note ? `<p class="muted">${escapeHtml(item.note)}</p>` : `<p class="muted">Linked from your consumables catalog.</p>`}
