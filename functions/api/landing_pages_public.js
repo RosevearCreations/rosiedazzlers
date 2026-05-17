@@ -245,6 +245,10 @@ const DEFAULT_LANDING_PAGES = {
       badge: "Town-focused detailing page",
       hero_title: "Mobile auto detailing in Tillsonburg",
       hero_intro: "This page exists so Tillsonburg-area customers can find local mobile-detailing guidance, seasonal municipal reminders, and current proof of work without digging through broader county pages first.",
+      hero_image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Tillsonburgskyline.jpg",
+      region_photo_caption: "Tillsonburg regional photo used to help local visitors recognize the service-area page.",
+      region_photo_source: "Wikimedia Commons / Tillsonburg page",
+      region_photo_source_url: "https://en.wikipedia.org/wiki/Tillsonburg",
       reasons_page_exists: [
         "Town pages improve relevance when people search by place name first instead of brand name first.",
         "They answer practical local questions that matter to mobile service: driveway access, watering rules, parking restrictions, and timing considerations.",
@@ -296,6 +300,10 @@ const DEFAULT_LANDING_PAGES = {
       badge: "Town-focused detailing page",
       hero_title: "Mobile auto detailing in Woodstock and Ingersoll",
       hero_intro: "This page gives Woodstock and Ingersoll visitors a clearer local service entry point, with package guidance, recent proof, and practical town-level notes that matter for mobile work.",
+      hero_image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/City%20Hall%20Woodstock%20Ontario%201.jpg",
+      region_photo_caption: "Woodstock City Hall photo representing the Woodstock and Ingersoll service corridor.",
+      region_photo_source: "Wikimedia Commons / Woodstock, Ontario page",
+      region_photo_source_url: "https://en.wikipedia.org/wiki/Woodstock,_Ontario",
       reasons_page_exists: [
         "Woodstock and Ingersoll searchers often use town-plus-service queries rather than brand-first queries.",
         "A combined page helps keep local wording, booking guidance, and proof visible for one of the strongest Oxford County zones.",
@@ -346,6 +354,10 @@ const DEFAULT_LANDING_PAGES = {
       badge: "Town-focused detailing page",
       hero_title: "Mobile auto detailing in Simcoe and Delhi",
       hero_intro: "This page is built for Norfolk County visitors who search by Simcoe or Delhi first and want stronger local service context, proof, and practical mobile-detailing guidance before they book.",
+      hero_image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Governor%20Simcoe%20Square%20Simcoe%20Ontario.jpg",
+      region_photo_caption: "Governor Simcoe Square photo representing the Simcoe and Delhi Norfolk County service area.",
+      region_photo_source: "Wikimedia Commons / Simcoe, Ontario page",
+      region_photo_source_url: "https://en.wikipedia.org/wiki/Simcoe,_Ontario",
       reasons_page_exists: [
         "Simcoe and Delhi are clear local search anchors within the Norfolk side of the service area.",
         "This page gives those customers a stronger local explanation instead of pushing them straight onto a broad county page.",
@@ -396,6 +408,10 @@ const DEFAULT_LANDING_PAGES = {
       badge: "Town-focused detailing page",
       hero_title: "Mobile auto detailing in Port Dover",
       hero_intro: "Port Dover deserves its own page because coastal and seasonal traffic patterns make local search intent and customer questions feel different from broader inland service pages.",
+      hero_image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Boats%20moored%20at%20Port%20Dover%2C%20Ontario.jpg",
+      region_photo_caption: "Port Dover harbour photo representing the coastal Norfolk County service area.",
+      region_photo_source: "Wikimedia Commons / Port Dover page",
+      region_photo_source_url: "https://en.wikipedia.org/wiki/Port_Dover",
       reasons_page_exists: [
         "Port Dover searchers often want stronger location confirmation and trust signals before they book.",
         "This page lets you explain local fit, mobile expectations, and proof-of-work with more relevance for the area.",
@@ -446,6 +462,10 @@ const DEFAULT_LANDING_PAGES = {
       badge: "Town-focused detailing page",
       hero_title: "Mobile auto detailing in Norwich and Otterville",
       hero_intro: "Norwich and Otterville customers often need clear mobile-service expectations for rural driveways, water access, and travel timing before booking.",
+      hero_image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Norwich%20post%20office%20and%20clock%20tower.JPG",
+      region_photo_caption: "Norwich clock tower photo representing Norwich, Otterville, and nearby Oxford County communities.",
+      region_photo_source: "Wikimedia Commons / Norwich, Ontario page",
+      region_photo_source_url: "https://en.wikipedia.org/wiki/Norwich,_Ontario",
       reasons_page_exists: [
         "Customers often search by town first, not only by county.",
         "A dedicated page gives search engines and customers clearer local relevance for Norwich, Otterville.",
@@ -492,6 +512,10 @@ const DEFAULT_LANDING_PAGES = {
       badge: "Town-focused detailing page",
       hero_title: "Mobile auto detailing in Zorra, Thamesford, and Embro",
       hero_intro: "This page supports smaller Oxford County communities where customers still search by town and need to know mobile detailing can be routed to them.",
+      hero_image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Embro%20ON.JPG",
+      region_photo_caption: "Embro photo representing the Zorra, Thamesford, and Embro rural service area.",
+      region_photo_source: "Wikimedia Commons / Zorra page",
+      region_photo_source_url: "https://en.wikipedia.org/wiki/Zorra",
       reasons_page_exists: [
         "Customers often search by town first, not only by county.",
         "A dedicated page gives search engines and customers clearer local relevance for Zorra, Thamesford, Embro.",
@@ -538,6 +562,10 @@ const DEFAULT_LANDING_PAGES = {
       badge: "Town-focused detailing page",
       hero_title: "Mobile auto detailing in Waterford and Vittoria",
       hero_intro: "Waterford and Vittoria customers benefit from town-specific service pages because rural access, driveway setup, and summer water-use windows can affect scheduling.",
+      hero_image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Waterford%20Old%20Town%20Hall%20-%20Waterford%2C%20ON.jpg",
+      region_photo_caption: "Waterford Old Town Hall photo representing Waterford, Vittoria, and nearby Norfolk County communities.",
+      region_photo_source: "Wikimedia Commons / Waterford, Ontario page",
+      region_photo_source_url: "https://en.wikipedia.org/wiki/Waterford,_Ontario",
       reasons_page_exists: [
         "Customers often search by town first, not only by county.",
         "A dedicated page gives search engines and customers clearer local relevance for Waterford, Vittoria.",
@@ -584,6 +612,10 @@ const DEFAULT_LANDING_PAGES = {
       badge: "Town-focused detailing page",
       hero_title: "Mobile auto detailing in Port Rowan and Turkey Point",
       hero_intro: "This local page supports coastal Norfolk searches where seasonal traffic, access, and parking can change the best appointment plan.",
+      hero_image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Lighthouse%20and%20docks%2C%20Port%20Rowan%2C%20ON.jpg",
+      region_photo_caption: "Port Rowan waterfront photo representing Port Rowan, Turkey Point, and nearby Long Point-area service calls.",
+      region_photo_source: "Wikimedia Commons / Port Rowan page",
+      region_photo_source_url: "https://en.wikipedia.org/wiki/Port_Rowan",
       reasons_page_exists: [
         "Customers often search by town first, not only by county.",
         "A dedicated page gives search engines and customers clearer local relevance for Port Rowan, Turkey Point.",
@@ -1612,6 +1644,55 @@ const ADDON_LANDING_PAGE_MAP = {
 
 const GENERATED_ADDON_LANDING_PAGES = buildGeneratedAddonPages();
 
+
+function firstAddonImageUrl(addon) {
+  const primary = String(addon?.image_url || "").trim();
+  const fallback = String(addon?.image_fallback_url || "").trim();
+  if (primary && !primary.toLowerCase().endsWith(".svg")) return primary;
+  return primary || fallback || "";
+}
+
+function defaultAddonLandingProcess(addonName) {
+  const name = String(addonName || "this add-on").trim();
+  return [
+    `Confirm whether ${name.toLowerCase()} can be done as a focused add-on or should be paired with a larger package.`,
+    "Inspect the affected surfaces and explain any limits before work begins.",
+    "Complete the needed prep, cleaning, agitation, treatment, or protection steps using product-safe methods.",
+    "Review the result, aftercare notes, and any follow-up recommendation before the vehicle leaves the workflow."
+  ];
+}
+
+function defaultAddonLandingEquipment(addonName) {
+  const name = String(addonName || "the service").trim();
+  return [
+    `products and tools matched to ${name.toLowerCase()} rather than a one-size-fits-all shortcut`,
+    "inspection lighting, microfiber, brushes, pads, towels, or applicators as needed",
+    "package-specific cleaning/protection products from the current shop catalog",
+    "customer notes so scope, limits, and quote requirements stay visible"
+  ];
+}
+
+function defaultAddonLandingHighlights(addonName) {
+  const name = String(addonName || "this add-on").trim();
+  return [
+    `${name} has its own page because customers often search for this exact problem or service by name.`,
+    "The page explains when the add-on is standalone, package-dependent, or quote-led.",
+    "It gives local search engines a clear, service-specific page instead of hiding the answer inside a long package list.",
+    "It helps customers understand the process before they reach checkout or request a quote."
+  ];
+}
+
+function defaultAddonThingsToKnow(addonName) {
+  const name = String(addonName || "this add-on").trim();
+  return [
+    `${name} may depend on vehicle condition, surface material, access, weather, and the selected main package.`,
+    "Photos help, but inspection may still change the final recommendation.",
+    "Zero-dollar or missing prices should be treated as Quote required, not as a free service.",
+    "The landing page should stay honest about limits, prep steps, and aftercare."
+  ];
+}
+
+
 function buildGeneratedAddonPages() {
   const pages = {};
   const addons = Array.isArray(PRICING_CATALOG_DEFAULT?.addons) ? PRICING_CATALOG_DEFAULT.addons : [];
@@ -1632,16 +1713,18 @@ function buildGeneratedAddonPages() {
       meta_description: template.meta_description || template.hero_intro || `${addonName} service information for Rosie Dazzlers customers in Oxford and Norfolk Counties.`,
       badge: template.badge || "Add-on landing page",
       hero_title: template.hero_title || addonName,
-      hero_intro: template.hero_intro || `${addonName} service information, process, tools, booking fit, and practical expectations.`,
+      hero_intro: template.hero_intro || `${addonName} service information, process, tools, booking fit, and practical expectations for Oxford and Norfolk County vehicles.`,
+      hero_image_url: template.hero_image_url || firstAddonImageUrl(addon),
+      gallery_image_urls: template.gallery_image_urls || (firstAddonImageUrl(addon) ? [firstAddonImageUrl(addon)] : []),
       reasons_page_exists: template.reasons_page_exists || [
         `${addonName} is a service people search for directly, so it deserves a clearer page than a generic add-on row.`,
         `This page explains how ${addonName.toLowerCase()} fits into a real detailing workflow before someone books or requests a quote.`,
         `It also gives Rosie Dazzlers a stronger local destination for service-specific search intent.`
       ],
-      process: template.process || [],
-      equipment: template.equipment || [],
-      highlights: template.highlights || [],
-      things_to_know: template.things_to_know || [],
+      process: template.process || defaultAddonLandingProcess(addonName),
+      equipment: template.equipment || defaultAddonLandingEquipment(addonName),
+      highlights: template.highlights || defaultAddonLandingHighlights(addonName),
+      things_to_know: template.things_to_know || defaultAddonThingsToKnow(addonName),
       official_links: template.official_links || [],
       faq: template.faq || [],
       related_products: normalizeProductRefList(template.related_products || [])
@@ -1710,6 +1793,9 @@ function normalizePage(page) {
     hero_title: String(page?.hero_title || page?.name || "Landing page").trim(),
     hero_intro: String(page?.hero_intro || "").trim(),
     hero_image_url: String(page?.hero_image_url || "").trim(),
+    region_photo_caption: String(page?.region_photo_caption || "").trim(),
+    region_photo_source: String(page?.region_photo_source || "").trim(),
+    region_photo_source_url: String(page?.region_photo_source_url || "").trim(),
     gallery_image_urls: normalizeStringArray(page?.gallery_image_urls || page?.gallery_urls || page?.gallery_images),
     related_products: normalizeProductArray(page?.related_products),
     reasons_page_exists: normalizeStringArray(page?.reasons_page_exists),
@@ -1720,6 +1806,9 @@ function normalizePage(page) {
     official_links: normalizeLinkArray(page?.official_links),
     related_products: normalizeProductRefs(page?.related_products),
     hero_image_url: String(page?.hero_image_url || "").trim(),
+    region_photo_caption: String(page?.region_photo_caption || "").trim(),
+    region_photo_source: String(page?.region_photo_source || "").trim(),
+    region_photo_source_url: String(page?.region_photo_source_url || "").trim(),
     gallery_images: normalizeStringArray(page?.gallery_images),
     faq: faq.map((item) => ({ q: String(item?.q || "").trim(), a: String(item?.a || "").trim() })).filter((item) => item.q && item.a)
   };
