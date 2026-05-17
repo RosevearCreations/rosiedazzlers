@@ -151,8 +151,23 @@ function pageTemplate(page, pricing, slug, productCatalog) {
     .slice(0, 8);
 
   const faq = Array.isArray(page.faq) ? page.faq : [];
-  const reasons = Array.isArray(page.reasons_page_exists) ? page.reasons_page_exists : [];
-  const process = Array.isArray(page.process) ? page.process : [];
+  const reasons = (Array.isArray(page.reasons_page_exists) ? page.reasons_page_exists : []).length
+    ? page.reasons_page_exists
+    : [
+      page.type === "location"
+        ? "This location page exists because local customers often search by town name first and need a page that talks about their service area directly."
+        : "This add-on page exists because customers often search for this exact service or problem before they compare full packages.",
+      "It keeps process, expectations, pricing/quote guidance, and booking links together instead of burying them inside a long catalog.",
+      "It gives search engines clearer page focus while still keeping one honest customer path into booking."
+    ];
+  const process = (Array.isArray(page.process) ? page.process : []).length
+    ? page.process
+    : [
+      "Confirm fit, scope, service area, and any quote requirements before the job is treated as ready.",
+      "Inspect the vehicle or local setup notes so expectations are realistic.",
+      "Complete the needed package, add-on, prep, treatment, or proof workflow using the current Rosie Dazzlers process.",
+      "Review the result, aftercare notes, and next booking path with the customer."
+    ];
   const equipment = Array.isArray(page.equipment) ? page.equipment : [];
   const highlights = Array.isArray(page.highlights) ? page.highlights : [];
   const thingsToKnow = Array.isArray(page.things_to_know) ? page.things_to_know : [];
@@ -160,6 +175,10 @@ function pageTemplate(page, pricing, slug, productCatalog) {
   const relatedProducts = resolveRelatedProducts(page, productCatalog);
   const priceSummary = addonPriceSummary(addon);
   const heroImage = heroMediaForPage(page, addon, relatedProducts);
+  const photoCaption = cleanText(page.region_photo_caption || (page.type === "location" ? "Regional photo included so this local landing page feels tied to the area, not just copied from a generic service page." : ""));
+  const photoSource = cleanText(page.region_photo_source);
+  const photoSourceUrl = cleanText(page.region_photo_source_url);
+  const whyHeading = page.type === "location" ? "Why this location has its own page" : "Why this service has its own page";
 
   return `
   <main class="container">
@@ -180,7 +199,10 @@ function pageTemplate(page, pricing, slug, productCatalog) {
         </div>
       </div>
       <aside class="panel hero-sidecard">
-        <img src="${escapeHtml(heroImage)}" alt="${escapeHtml(page.name || page.hero_title || slug)}" class="proof-media" style="margin-bottom:10px" />
+        <figure class="landing-region-photo">
+          <img src="${escapeHtml(heroImage)}" alt="${escapeHtml(page.name || page.hero_title || slug)}" class="proof-media" />
+          ${photoCaption || photoSource ? `<figcaption>${escapeHtml(photoCaption || "Regional/service photo")}${photoSourceUrl ? ` <a href="${escapeHtml(photoSourceUrl)}" target="_blank" rel="noopener">${escapeHtml(photoSource || "source")}</a>` : (photoSource ? ` ${escapeHtml(photoSource)}` : "")}</figcaption>` : ""}
+        </figure>
         <h2 style="margin-top:0">What to expect</h2>
         <p class="muted">${escapeHtml(priceSummary || "Review the process, scope, and booking fit before choosing this page’s service path.")}</p>
         <div class="hr"></div>
@@ -190,7 +212,7 @@ function pageTemplate(page, pricing, slug, productCatalog) {
 
     <section class="section proof-grid">
       <article class="proof-card">
-        <h2 style="margin-top:0">Why this page exists</h2>
+        <h2 style="margin-top:0">${escapeHtml(whyHeading)}</h2>
         <ul class="muted-list">${reasons.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
       </article>
       <article class="proof-card">

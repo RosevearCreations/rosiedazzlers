@@ -978,3 +978,28 @@ input.search-input:-webkit-autofill:focus {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Build 148 landing media polish */
+.landing-region-photo{
+  margin:0 0 12px;
+}
+.landing-region-photo .proof-media{
+  width:100%;
+  max-height:360px;
+  object-fit:cover;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.04);
+}
+.landing-region-photo figcaption{
+  margin-top:8px;
+  font-size:.82rem;
+  line-height:1.35;
+  color:#9fb0c8;
+}
+.landing-region-photo figcaption a{
+  color:#c4b5fd;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}

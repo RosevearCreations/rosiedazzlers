@@ -2429,6 +2429,9 @@
     source.hero_title = String(source.hero_title || source.name || '').trim();
     source.hero_intro = String(source.hero_intro || '').trim();
     source.hero_image_url = String(source.hero_image_url || '').trim();
+    source.region_photo_caption = String(source.region_photo_caption || '').trim();
+    source.region_photo_source = String(source.region_photo_source || '').trim();
+    source.region_photo_source_url = String(source.region_photo_source_url || '').trim();
     source.gallery_image_urls = normalizeLandingArray(source.gallery_image_urls || source.gallery_urls || source.gallery_images);
     source.related_products = (Array.isArray(source.related_products) ? source.related_products : []).map(function(item){ return {
       name: String(item && (item.name || item.title) || '').trim(),
@@ -2465,7 +2468,7 @@
   function locationLandingOptions(){ return Object.keys(landingPagesState.pages).filter(function(slug){ return landingPagesState.pages[slug] && landingPagesState.pages[slug].type === 'location'; }).sort(); }
   function buildLandingEditorHtml(page, prefix){
     page = normalizeLandingPage(page || {}, {});
-    var url = page.slug ? ((page.type === 'addon' || page.type === 'location') && ['ceramic-coating','pet-hair-removal','odor-removal','headlight-restoration','paint-correction','tillsonburg-auto-detailing','woodstock-ingersoll-auto-detailing','simcoe-delhi-auto-detailing','port-dover-auto-detailing'].includes(page.slug) ? '/' + page.slug : '/landing/' + page.slug) : '';
+    var url = page.slug ? ((page.type === 'addon' || page.type === 'location') && ['ceramic-coating','pet-hair-removal','odor-removal','headlight-restoration','paint-correction','tillsonburg-auto-detailing','woodstock-ingersoll-auto-detailing','simcoe-delhi-auto-detailing','port-dover-auto-detailing','norwich-otterville-auto-detailing','zorra-thamesford-embro-auto-detailing','waterford-vittoria-auto-detailing','port-rowan-turkey-point-auto-detailing'].includes(page.slug) ? '/' + page.slug : '/landing/' + page.slug) : '';
     return '<div class="checkrow"><input id="' + prefix + '_enabled" type="checkbox" ' + (page.enabled ? 'checked' : '') + '><label for="' + prefix + '_enabled">Landing page enabled</label></div>' +
       '<div class="field"><label for="' + prefix + '_slug">Slug</label><input id="' + prefix + '_slug" value="' + escapeHtml(page.slug || '') + '" placeholder="my-new-landing-page"></div>' +
       '<div class="note">Preview path: ' + escapeHtml(url || '/landing/your-slug') + '</div>' +
@@ -2476,7 +2479,9 @@
       '<div class="field"><label for="' + prefix + '_hero_title">Hero title</label><input id="' + prefix + '_hero_title" value="' + escapeHtml(page.hero_title || '') + '"></div>' +
       '<div class="field"><label for="' + prefix + '_hero_intro">Hero intro</label><textarea id="' + prefix + '_hero_intro">' + escapeHtml(page.hero_intro || '') + '</textarea></div>' +
       renderDatalist(prefix + '_image_options', uniqueTextValues(pricingCatalogState.addons, function(row){ return firstAddonMediaUrl(row); }, [])) +
-      '<div class="field"><label for="' + prefix + '_hero_image_url">Hero image URL</label><input list="' + prefix + '_image_options" id="' + prefix + '_hero_image_url" value="' + escapeHtml(page.hero_image_url || '') + '" placeholder="Use the current add-on PNG/R2 image or paste a new image URL"></div>' +
+      '<div class="field"><label for="' + prefix + '_hero_image_url">Hero / regional image URL</label><input list="' + prefix + '_image_options" id="' + prefix + '_hero_image_url" value="' + escapeHtml(page.hero_image_url || '') + '" placeholder="Use a Rosie-owned/R2 image, add-on PNG, or a credited regional photo URL"></div>' +
+      '<div class="field"><label for="' + prefix + '_region_photo_caption">Photo caption / why this image fits</label><textarea id="' + prefix + '_region_photo_caption">' + escapeHtml(page.region_photo_caption || '') + '</textarea></div>' +
+      '<div class="grid2"><div class="field"><label for="' + prefix + '_region_photo_source">Photo source / credit</label><input id="' + prefix + '_region_photo_source" value="' + escapeHtml(page.region_photo_source || '') + '"></div><div class="field"><label for="' + prefix + '_region_photo_source_url">Photo source URL</label><input id="' + prefix + '_region_photo_source_url" value="' + escapeHtml(page.region_photo_source_url || '') + '"></div></div>' +
       '<div class="field"><label for="' + prefix + '_gallery_image_urls">Gallery image URLs (one per line)</label><textarea class="link-lines" id="' + prefix + '_gallery_image_urls">' + escapeHtml(landingArrayToText(page.gallery_image_urls)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_related_products">Related products using Name || Role || Note || Image URL</label><textarea class="link-lines" id="' + prefix + '_related_products">' + escapeHtml(landingProductsToText(page.related_products)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_reasons">Why this page exists (one line per point)</label><textarea id="' + prefix + '_reasons">' + escapeHtml(landingArrayToText(page.reasons_page_exists)) + '</textarea></div>' +
@@ -2499,6 +2504,9 @@
       hero_title: byId(prefix + '_hero_title').value || '',
       hero_intro: byId(prefix + '_hero_intro').value || '',
       hero_image_url: byId(prefix + '_hero_image_url').value || '',
+      region_photo_caption: byId(prefix + '_region_photo_caption').value || '',
+      region_photo_source: byId(prefix + '_region_photo_source').value || '',
+      region_photo_source_url: byId(prefix + '_region_photo_source_url').value || '',
       gallery_image_urls: landingTextToArray(byId(prefix + '_gallery_image_urls').value || ''),
       related_products: landingTextToProducts(byId(prefix + '_related_products').value || ''),
       reasons_page_exists: landingTextToArray(byId(prefix + '_reasons').value || ''),
