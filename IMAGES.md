@@ -71,3 +71,13 @@ Move image records into DB with:
 - related location/service
 - upload/replacement history
 - image score
+
+
+## Build 149 landing image reliability update
+
+- Tillsonburg now uses a direct Wikimedia upload URL instead of the fragile `Special:FilePath` URL that could show as a missing image.
+- Landing-page dynamic images now include a browser fallback to `/assets/brand/rosie-reviews-fallback.svg` when an external image fails.
+- Recommended long-term fix: replace all external regional placeholders with Rosie-owned photos in R2 and enter those URLs in Admin App → Landing page builder.
+- Location hero/regional images should remain landscape, ideally 1600×900 or at least 1200px wide.
+
+<!-- Build 149 sync 2026-05-17: reviewed during Admin App service-area dropdown editor, save-feedback, Tillsonburg image fallback, local SEO/H1/CSS/release-check pass. -->

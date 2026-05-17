@@ -1,16 +1,15 @@
-# Sanity Check — Build 148
+# Sanity Check — Build 149
 
-**Updated:** 2026-05-16
+**Updated:** 2026-05-17
 
 ## Completed this pass
 
-- Added regional photos to all current location landing pages.
-- Added photo captions and source URLs for location landing pages.
-- Added fallback add-on landing-page photo/process/details.
-- Added Admin App fields to update landing photo/caption/source details.
-- Added landing-photo release validation.
-- Updated Markdown and schema notes.
-- Removed recurring invalid root API duplicates.
+- Replaced the long Service areas/travel tiers editor with a compact dropdown editor.
+- Added Save/Duplicate/Delete controls for the selected service-area row.
+- Added button-level save confirmation in Admin App.
+- Repaired Tillsonburg landing image handling and added missing-image fallbacks.
+- Added `scripts/admin_app_editor_check.py`.
+- Updated active Markdown and schema notes.
 
 ## Checks to run before deployment
 
@@ -18,16 +17,15 @@
 python scripts/release_check.py
 ```
 
-Also test manually:
+Manual checks:
 
-1. Open `/tillsonburg-auto-detailing/` and confirm the regional photo appears.
-2. Open `/port-dover-auto-detailing/` and confirm the regional photo/caption appears.
-3. Open `/ceramic-coating/` and confirm the add-on process/details/photo sections appear.
-4. Open Admin App → Landing pages and confirm hero image, gallery, caption, and source fields can be edited.
-5. Open the mobile menu on a phone width and confirm it is compact/expandable.
-6. Confirm no public page has more than one visible H1.
-7. Confirm `/consumables` still shows the full fallback catalog, not just edited DB rows.
+1. Open Admin App → Pricing source of truth → Service areas and travel tiers.
+2. Confirm the section is a dropdown editor, not a long list of all towns.
+3. Pick several service areas and confirm the fields change.
+4. Edit one water-rule note and click **Save selected service area**; confirm the button changes to `Saved ✓`.
+5. Open `/tillsonburg-auto-detailing/` and confirm the image appears or falls back gracefully.
+6. Save Landing pages and Pricing catalog; confirm the buttons give visible save feedback.
+7. Check mobile menu at phone width.
+8. Confirm `/consumables` still shows the full fallback catalog.
 
-## SQL reminders
-
-Apply recent SQL migrations to Supabase dev in order when ready. Build 148 itself adds a no-DDL tracking note only.
+<!-- Build 149 sync 2026-05-17: reviewed during Admin App service-area dropdown editor, save-feedback, Tillsonburg image fallback, local SEO/H1/CSS/release-check pass. -->

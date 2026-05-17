@@ -21,3 +21,5 @@ This build focuses on location landing-page photos, add-on landing-page media/pr
 - `SANITY_CHECK.md`
 - `IMAGES.md`
 - `SUPABASE_SCHEMA.sql`
+
+<!-- Build 149 sync 2026-05-17: reviewed during Admin App service-area dropdown editor, save-feedback, Tillsonburg image fallback, local SEO/H1/CSS/release-check pass. -->
