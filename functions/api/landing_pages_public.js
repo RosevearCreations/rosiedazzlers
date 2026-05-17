@@ -245,7 +245,7 @@ const DEFAULT_LANDING_PAGES = {
       badge: "Town-focused detailing page",
       hero_title: "Mobile auto detailing in Tillsonburg",
       hero_intro: "This page exists so Tillsonburg-area customers can find local mobile-detailing guidance, seasonal municipal reminders, and current proof of work without digging through broader county pages first.",
-      hero_image_url: "https://commons.wikimedia.org/wiki/Special:FilePath/Tillsonburgskyline.jpg",
+      hero_image_url: "https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Tillsonburgskyline.jpg/800px-Tillsonburgskyline.jpg",
       region_photo_caption: "Tillsonburg regional photo used to help local visitors recognize the service-area page.",
       region_photo_source: "Wikimedia Commons / Tillsonburg page",
       region_photo_source_url: "https://en.wikipedia.org/wiki/Tillsonburg",
