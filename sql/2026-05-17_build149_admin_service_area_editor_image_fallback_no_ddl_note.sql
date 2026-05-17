@@ -1,0 +1,7 @@
+-- Build 149 Admin App service-area editor and landing image fallback note
+-- Date: 2026-05-17
+-- No database DDL is required for this pass.
+-- Frontend/admin changes:
+--   - Service areas/travel tiers editor is now a compact selected-row dropdown editor.
+--   - Admin App save buttons now provide green Saved feedback after successful saves.
+--   - Tillsonburg landing image URL and landing image fallback handling were hardened.
