@@ -1,15 +1,11 @@
-# Project Brain — Build 147
+# Project Brain — Build 151
 
-Rosie Dazzlers should keep moving toward a real mobile-friendly operations app while staying strong for local search in Oxford County and Norfolk County.
+**Updated:** 2026-05-18
 
-This pass focused on two pain points: Admin App console errors and mobile menu usability. The practical rule going forward is simple: every admin editor needs visible controls for the JS that binds to it, and every public mobile page needs a compact navigation pattern that does not turn into a tall list.
+Rosie Dazzlers is a Cloudflare Pages + Functions site with Supabase-backed admin workflows and bundled JSON fallbacks for deploy safety.
 
-Keep using `dev` as the working branch. Keep JSON as fallback and move editable data to Supabase only after the admin workflow is stable.
+Current priority: keep Admin Catalog inventory reliable while moving product/tool images from JSON-only fallback toward a DB-backed `app_media_library` and future R2 upload workflow.
 
-<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->
+Release habit: every pass updates Markdown/schema docs, runs SEO/H1/static checks, watches CSS drift, and keeps fallback/error handling visible instead of silently failing.
 
-<!-- Build 148 sync 2026-05-16: reviewed during landing photo/add-on page process/local SEO pass. Active details are in DEVELOPMENT_ROADMAP.md, KNOWN_GAPS_AND_RISKS.md, CURRENT_IMPLEMENTATION_STATE.md, SANITY_CHECK.md, and IMAGES.md. -->
-
-<!-- Build 149 sync 2026-05-17: reviewed during Admin App service-area dropdown editor, save-feedback, Tillsonburg image fallback, local SEO/H1/CSS/release-check pass. -->
-
-<!-- Build 150 sync 2026-05-17: Admin Catalog image picker/fallback repair; saved DB rows with blank image_url no longer mask bundled consumables/tools images; schema/docs/release checks updated. -->
+<!-- Build 151 sync 2026-05-18 -->

@@ -1,34 +1,46 @@
-# Sanity Check — Build 150
+# Sanity Check — Build 151
 
-**Updated:** 2026-05-17
+**Updated:** 2026-05-18
 
-## Completed this pass
-
-- Repaired Admin Catalog inventory image fallback merging.
-- Added selected product-image preview in the inventory editor.
-- Added existing bundled image picker and image search.
-- Added one-click matching bundled image restore.
-- Added inventory image picker release check.
-- Added Build 150 SQL migration and synchronized `SUPABASE_SCHEMA.sql`.
-- Updated active Markdown handoff files.
-
-## Checks to run before deployment
+## Release checks to run
 
 ```bash
 python scripts/release_check.py
 ```
 
-Manual checks:
+Build 151 release check coverage includes:
 
-1. Open Admin Catalog / Inventory Workflow.
-2. Edit a saved DB inventory row that previously said **Missing image**.
-3. Confirm a matching bundled consumables/tools image appears in the preview or can be loaded by **Use matching bundled image**.
-4. Click **Pick existing image**, search by product name, and select a thumbnail.
-5. Save the inventory item and reload the page.
-6. Confirm the saved row shows **Image set** and no longer appears as a missing-image problem.
-7. Confirm mobile width shows a usable two-column image picker.
-8. Confirm `/consumables` and `/gear` still show the full fallback catalog.
-9. Confirm public pages still have no more than one H1 each.
-10. Confirm `/admin-catalog/` and `/admin-catalog.html` both use the same updated editor.
+- JSON parsing under `data/`
+- `sitemap.xml` parsing
+- static page/link checks
+- local SEO/H1 audit
+- catalog fallback merge checks
+- service-area rule checks
+- catalog quality report
+- catalog DB import preview
+- service/product link checks
+- Amazon catalog match checks
+- mobile navigation checks
+- landing-photo checks
+- Admin App editor checks
+- inventory image picker/fallback checks
+- media-library picker / repair / duplicate / health-scan checks
 
-<!-- Build 150 sync 2026-05-17: reviewed during Admin Catalog image picker/fallback repair, schema synchronization, release checks, and local SEO/H1 discipline pass. -->
+## Manual smoke tests after deploy
+
+1. Open Admin Catalog while signed in as staff/admin.
+2. Confirm inventory loads even if `/api/admin/catalog_inventory_list` falls back or returns partial DB rows.
+3. Edit a saved DB item that previously had a blank image and confirm the fallback-matched image appears.
+4. Open **Pick existing image** and confirm bundled images plus media-library rows appear when available.
+5. Select a fallback-matched row and click **Repair selected images**.
+6. Reload and confirm the image remains saved on the row.
+7. Click **Scan visible images** and confirm failed images are reported without breaking the page.
+8. Confirm duplicate-image warnings are informational and do not block editing.
+9. Check Home, Services, Pricing, Book, Gear, Consumables, Gallery, and Contact for one H1 and normal CSS layout.
+10. Confirm clean routes do not create redirect loops.
+
+## Known deploy caution
+
+`app_media_library` may not be populated on dev yet. That is okay. Admin Catalog should still work through app settings and bundled JSON/R2 fallbacks.
+
+<!-- Build 151 sync 2026-05-18 -->

@@ -1,21 +1,30 @@
-# Repo Guide — Build 145
+# Repo Guide — Build 151
 
-## Important folders
+**Updated:** 2026-05-18
 
-- `functions/api/` — valid Cloudflare Pages Functions.
-- `data/` — bundled fallback catalog, service-area, SEO, media, review, and import seed data.
-- `scripts/` — release, SEO, catalog, and schema sanity checks.
-- `sql/` — Supabase migrations/notes.
-- `archive/` — historical Markdown snapshots.
+## Main areas
 
-## Current cleanup rule
+- Public pages: root HTML files plus folder-backed `index.html` routes.
+- Admin pages: `admin-*.html` plus matching folder-backed routes.
+- Cloudflare Functions: `functions/api/**`.
+- Shared admin/runtime scripts: `assets/**` and `_lib/**`.
+- Data fallbacks: `data/**`.
+- SQL migrations: `sql/**`.
+- Release checks: `scripts/**`.
+- Active docs: root Markdown files listed in `DOC_INDEX.md`.
 
-Root-level API `.js` files are invalid and should not return. The only root-level JavaScript file should be `service-worker.js`.
+## Build 151 rule
 
-<!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->
+When changing Admin Catalog, keep the root and folder-backed page copies synchronized:
 
-<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->
+- `admin-catalog.html`
+- `admin-catalog/index.html`
 
-<!-- Build 148 sync 2026-05-16: reviewed during landing photo/add-on page process/local SEO pass. Active details are in DEVELOPMENT_ROADMAP.md, KNOWN_GAPS_AND_RISKS.md, CURRENT_IMPLEMENTATION_STATE.md, SANITY_CHECK.md, and IMAGES.md. -->
+When changing schema or database-facing behavior, update:
 
-<!-- Build 149 sync 2026-05-17: reviewed during Admin App service-area dropdown editor, save-feedback, Tillsonburg image fallback, local SEO/H1/CSS/release-check pass. -->
+- `SUPABASE_SCHEMA.sql`
+- a dated migration or no-DDL note under `sql/`
+- `DATABASE_STRUCTURE_CURRENT.md`
+- roadmap/gaps/sanity handoff docs
+
+<!-- Build 151 sync 2026-05-18 -->

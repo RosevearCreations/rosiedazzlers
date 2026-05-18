@@ -1,17 +1,24 @@
-# New Chat Status — Build 150
+# Handoff Next Chat — Build 151
 
-Use this package as the current dev baseline.
+**Updated:** 2026-05-18
 
-## Latest fixes
+Current build: **Build 151**.
 
-- Repaired Admin Catalog inventory image fallback merging.
-- Added existing product/tool image picker to the inventory editor.
-- Added selected-image preview and one-click **Use matching bundled image** action.
-- Updated release checks with inventory image picker/fallback validation.
-- Added Build 150 SQL migration and synchronized canonical schema/docs.
+## What changed last
 
-## Next focus
+Admin Catalog now has a media-library-aware image picker foundation, selected-row fallback image repair, duplicate image diagnostics, and browser image health scanning. A new staff-protected endpoint, `/api/admin/media_library_list`, reads `app_media_library` when available and falls back to `app_management_settings.media_library`.
 
-Apply the Build 150 SQL migration in Supabase dev, then test a saved inventory DB row that previously showed **Missing image**. After that, move toward a full DB/R2 media library picker, bulk image repair, receipt uploads, and inventory/accounting closeout controls.
+## First things to test next
 
-<!-- Build 150 sync 2026-05-17: Admin Catalog image picker/fallback repair, schema synchronization, release checks, and local SEO/H1 discipline. -->
+1. Apply Build 150 and Build 151 SQL migrations in Supabase dev.
+2. Open Admin Catalog on the deployed dev URL.
+3. Confirm existing fallback-matched images still appear.
+4. Open **Pick existing image** and confirm images are searchable.
+5. Select rows and test **Repair selected images**.
+6. Run **Scan visible images** and review any failed URLs.
+
+## Next coding direction
+
+Seed `app_media_library` from R2 product/tool folders, then add direct R2 upload and editable image metadata from Admin Catalog.
+
+<!-- Build 151 sync 2026-05-18 -->

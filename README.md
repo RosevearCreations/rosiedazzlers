@@ -1,28 +1,41 @@
-# Rosie Dazzlers — Build 150
+# Rosie Dazzlers Dev Build — Build 151
 
-**Updated:** 2026-05-17  
-**Active branch target:** `dev`
+**Updated:** 2026-05-18
 
-This build focuses on Admin Catalog inventory image repair: saved DB rows no longer hide matching bundled consumables/tools images, and the inventory editor now has a preview plus existing-image picker.
+This ZIP is the current dev baseline for Rosie Dazzlers.
 
-## Highlights
+## Build 151 focus
 
-- Admin Catalog inventory merge now hydrates blank saved `image_url` fields from matching bundled fallback rows.
-- Inventory editor now has image preview, **Use matching bundled image**, **Pick existing image**, thumbnail search, and **Clear image** controls.
-- Inventory image URL suggestions now include bundled consumables/tools image URLs.
-- Release checks now include `scripts/inventory_image_picker_check.py`.
-- `SUPABASE_SCHEMA.sql` and `sql/2026-05-17_build150_inventory_image_picker_and_fallback.sql` document the latest inventory/image fields.
-- Local SEO habits remain active: one H1 per public page, clear title/meta wording, local Oxford/Norfolk language, and crawlable routes.
+- Admin Catalog inventory media-library picker foundation.
+- Staff-protected `/api/admin/media_library_list` endpoint.
+- Selected-row image repair for fallback-matched inventory images.
+- Duplicate image diagnostics.
+- Browser image health scan for visible inventory rows.
+- Schema and Markdown synchronization.
+- Continued SEO/H1/CSS release checks.
 
-## Read next
+## Important files
 
+- `admin-catalog.html`
+- `admin-catalog/index.html`
+- `functions/api/admin/media_library_list.js`
+- `scripts/media_library_picker_check.py`
+- `scripts/inventory_image_picker_check.py`
+- `scripts/release_check.py`
+- `sql/2026-05-18_build151_media_library_inventory_image_workflow.sql`
+- `SUPABASE_SCHEMA.sql`
 - `DEVELOPMENT_ROADMAP.md`
 - `KNOWN_GAPS_AND_RISKS.md`
-- `CURRENT_IMPLEMENTATION_STATE.md`
 - `SANITY_CHECK.md`
-- `IMAGES.md`
-- `DATABASE_STRUCTURE_CURRENT.md`
-- `SUPABASE_SCHEMA.sql`
-- `HANDOFF_NEXT_CHAT.md`
 
-<!-- Build 150 sync 2026-05-17: reviewed during Admin Catalog image picker/fallback repair, schema synchronization, release checks, and local SEO/H1 discipline pass. -->
+## Release check
+
+```bash
+python scripts/release_check.py
+```
+
+## Deploy note
+
+Apply SQL migrations in order. If `app_media_library` is not seeded yet, Admin Catalog should keep working from app settings and bundled product/tool image fallbacks.
+
+<!-- Build 151 sync 2026-05-18 -->

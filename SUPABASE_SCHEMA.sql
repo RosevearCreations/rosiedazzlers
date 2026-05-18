@@ -1057,3 +1057,30 @@ create index if not exists idx_catalog_inventory_items_image_url on public.catal
 create index if not exists idx_catalog_inventory_items_service_tags on public.catalog_inventory_items using gin(service_tags);
 create index if not exists catalog_inventory_items_amazon_asin_idx on public.catalog_inventory_items(amazon_asin);
 create index if not exists catalog_inventory_items_amazon_match_status_idx on public.catalog_inventory_items(amazon_match_status);
+
+-- Build 151 media-library inventory image workflow (2026-05-18)
+-- Admin Catalog can now read app_media_library through /api/admin/media_library_list,
+-- while still falling back to app_management_settings.media_library and bundled JSON/R2 product images.
+create table if not exists public.app_media_library (
+  id uuid primary key default gen_random_uuid(),
+  media_key text not null unique,
+  label text not null,
+  media_type text not null default 'image',
+  media_url text not null,
+  fallback_url text,
+  alt_text text,
+  caption text,
+  group_key text,
+  usage_contexts text[] not null default array[]::text[],
+  recommended_size text,
+  source_status text not null default 'active',
+  sort_order integer not null default 0,
+  updated_at timestamptz not null default now(),
+  updated_by text
+);
+create index if not exists idx_app_media_library_group_key on public.app_media_library(group_key);
+create index if not exists idx_app_media_library_usage_contexts on public.app_media_library using gin(usage_contexts);
+create index if not exists idx_app_media_library_source_status on public.app_media_library(source_status);
+create index if not exists idx_app_media_library_media_type on public.app_media_library(media_type);
+create index if not exists idx_app_media_library_inventory_images on public.app_media_library(group_key, sort_order) where source_status <> 'archived' and media_type in ('image', 'photo');
+-- Build 151 also adds client-side duplicate image diagnostics, visible-image health scanning, and a bulk selected-row image repair action; those are frontend/API workflow updates over the existing inventory schema.

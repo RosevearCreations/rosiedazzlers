@@ -1,16 +1,14 @@
-# Repo Rules — Build 145
+# Repo Rules — Build 151
 
-1. Work from `dev` unless explicitly told otherwise.
-2. Keep Cloudflare Functions under `functions/api/`.
-3. Keep one H1 per exposed public page.
-4. Update Markdown and `SUPABASE_SCHEMA.sql` every build pass.
-5. Do not retire JSON catalogs until DB import and public fallback checks are proven.
-6. Run `python scripts/release_check.py` before packaging.
+**Updated:** 2026-05-18
 
-<!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->
+1. Keep public pages to one clear H1.
+2. Keep local SEO wording in titles, meta descriptions, headings, and visible copy.
+3. Do not remove JSON fallbacks until the matching DB editor/import/rollback flow is stable.
+4. Keep root and folder-backed route copies synchronized.
+5. Update Markdown and schema files on every build pass.
+6. Prefer robust fallbacks and visible staff-facing errors over silent failures.
+7. Run `python scripts/release_check.py` before packaging a ZIP.
+8. For inventory media, prefer `app_media_library` plus R2 URLs, but keep bundled image fallback working.
 
-<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->
-
-<!-- Build 148 sync 2026-05-16: reviewed during landing photo/add-on page process/local SEO pass. Active details are in DEVELOPMENT_ROADMAP.md, KNOWN_GAPS_AND_RISKS.md, CURRENT_IMPLEMENTATION_STATE.md, SANITY_CHECK.md, and IMAGES.md. -->
-
-<!-- Build 149 sync 2026-05-17: reviewed during Admin App service-area dropdown editor, save-feedback, Tillsonburg image fallback, local SEO/H1/CSS/release-check pass. -->
+<!-- Build 151 sync 2026-05-18 -->
