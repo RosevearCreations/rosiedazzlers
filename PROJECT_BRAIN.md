@@ -11,3 +11,5 @@ Keep using `dev` as the working branch. Keep JSON as fallback and move editable 
 <!-- Build 148 sync 2026-05-16: reviewed during landing photo/add-on page process/local SEO pass. Active details are in DEVELOPMENT_ROADMAP.md, KNOWN_GAPS_AND_RISKS.md, CURRENT_IMPLEMENTATION_STATE.md, SANITY_CHECK.md, and IMAGES.md. -->
 
 <!-- Build 149 sync 2026-05-17: reviewed during Admin App service-area dropdown editor, save-feedback, Tillsonburg image fallback, local SEO/H1/CSS/release-check pass. -->
+
+<!-- Build 150 sync 2026-05-17: Admin Catalog image picker/fallback repair; saved DB rows with blank image_url no longer mask bundled consumables/tools images; schema/docs/release checks updated. -->

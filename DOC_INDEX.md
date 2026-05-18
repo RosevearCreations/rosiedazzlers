@@ -1,4 +1,4 @@
-# Documentation Index — Build 145
+# Documentation Index — Build 150
 
 Read in this order:
 
@@ -8,13 +8,12 @@ Read in this order:
 4. `KNOWN_GAPS_AND_RISKS.md`
 5. `SANITY_CHECK.md`
 6. `IMAGES.md`
-7. `SUPABASE_SCHEMA.sql`
-8. `HANDOFF_NEXT_CHAT.md`
+7. `DATABASE_STRUCTURE_CURRENT.md`
+8. `SUPABASE_SCHEMA.sql`
+9. `HANDOFF_NEXT_CHAT.md`
 
-<!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->
+Important Build 150 SQL note:
 
-<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->
+- `sql/2026-05-17_build150_inventory_image_picker_and_fallback.sql`
 
-<!-- Build 148 sync 2026-05-16: reviewed during landing photo/add-on page process/local SEO pass. Active details are in DEVELOPMENT_ROADMAP.md, KNOWN_GAPS_AND_RISKS.md, CURRENT_IMPLEMENTATION_STATE.md, SANITY_CHECK.md, and IMAGES.md. -->
-
-<!-- Build 149 sync 2026-05-17: reviewed during Admin App service-area dropdown editor, save-feedback, Tillsonburg image fallback, local SEO/H1/CSS/release-check pass. -->
+<!-- Build 150 sync 2026-05-17: reviewed during Admin Catalog image picker/fallback repair, schema synchronization, release checks, and local SEO/H1 discipline pass. -->

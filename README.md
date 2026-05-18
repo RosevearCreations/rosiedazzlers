@@ -1,17 +1,18 @@
-# Rosie Dazzlers — Build 148
+# Rosie Dazzlers — Build 150
 
-**Updated:** 2026-05-16  
+**Updated:** 2026-05-17  
 **Active branch target:** `dev`
 
-This build focuses on location landing-page photos, add-on landing-page media/process completeness, local SEO clarity, and release checks.
+This build focuses on Admin Catalog inventory image repair: saved DB rows no longer hide matching bundled consumables/tools images, and the inventory editor now has a preview plus existing-image picker.
 
 ## Highlights
 
-- Location landing pages now include seeded regional photos, captions, source URLs, static `og:image`, and fallback markup.
-- Add-on landing pages now support hero image, gallery, process, equipment/workflow, reasons, highlights, FAQ, and related products.
-- Admin App landing editors now include photo caption/source fields.
-- Release checks now include landing-photo validation.
-- Root-level duplicate API files have been removed again; real Pages Functions remain under `functions/api/`.
+- Admin Catalog inventory merge now hydrates blank saved `image_url` fields from matching bundled fallback rows.
+- Inventory editor now has image preview, **Use matching bundled image**, **Pick existing image**, thumbnail search, and **Clear image** controls.
+- Inventory image URL suggestions now include bundled consumables/tools image URLs.
+- Release checks now include `scripts/inventory_image_picker_check.py`.
+- `SUPABASE_SCHEMA.sql` and `sql/2026-05-17_build150_inventory_image_picker_and_fallback.sql` document the latest inventory/image fields.
+- Local SEO habits remain active: one H1 per public page, clear title/meta wording, local Oxford/Norfolk language, and crawlable routes.
 
 ## Read next
 
@@ -20,6 +21,8 @@ This build focuses on location landing-page photos, add-on landing-page media/pr
 - `CURRENT_IMPLEMENTATION_STATE.md`
 - `SANITY_CHECK.md`
 - `IMAGES.md`
+- `DATABASE_STRUCTURE_CURRENT.md`
 - `SUPABASE_SCHEMA.sql`
+- `HANDOFF_NEXT_CHAT.md`
 
-<!-- Build 149 sync 2026-05-17: reviewed during Admin App service-area dropdown editor, save-feedback, Tillsonburg image fallback, local SEO/H1/CSS/release-check pass. -->
+<!-- Build 150 sync 2026-05-17: reviewed during Admin Catalog image picker/fallback repair, schema synchronization, release checks, and local SEO/H1 discipline pass. -->

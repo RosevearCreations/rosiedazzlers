@@ -81,3 +81,23 @@ Move image records into DB with:
 - Location hero/regional images should remain landscape, ideally 1600×900 or at least 1200px wide.
 
 <!-- Build 149 sync 2026-05-17: reviewed during Admin App service-area dropdown editor, save-feedback, Tillsonburg image fallback, local SEO/H1/CSS/release-check pass. -->
+
+## Build 150 inventory product-image picker update
+
+Admin Catalog now supports product/tool image picking inside **Inventory Workflow → Edit inventory item**.
+
+Current behavior:
+
+- Saved DB inventory rows with blank `image_url` are hydrated in the UI from the matching bundled consumables/tools image.
+- The editor shows a selected-image preview.
+- **Use matching bundled image** fills the product image from `data/rosie_products_catalog.json` or `data/systems_catalog.json` when the item key/name matches.
+- **Pick existing image** opens a searchable thumbnail picker from existing consumables/tools images and saved helper URLs.
+- Saving the item persists the selected image URL to the DB row when the deployed schema supports `image_url`.
+
+Recommended product/tool image direction:
+
+- Keep using Rosie-owned/R2-hosted product images where possible.
+- Use descriptive filenames and alt/source metadata when the future DB media library is added.
+- Next DB media step: migrate image records into a searchable media table with source, consent, title, alt text, caption, and replacement history.
+
+<!-- Build 150 sync 2026-05-17: Admin Catalog image picker/fallback repair. -->

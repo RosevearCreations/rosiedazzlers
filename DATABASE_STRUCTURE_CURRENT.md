@@ -1,26 +1,43 @@
-# Database Structure Current — Build 143
+# Database Structure Current — Build 150
 
-Build 143 does not add DDL.
+**Updated:** 2026-05-17
 
 ## Catalog migration state
 
-The catalog inventory table may contain only edited/imported rows. Public pages must not treat partial DB rows as the full catalog until a complete import is done.
+The catalog inventory table may contain only edited/imported rows. Public pages and Admin Catalog must not treat partial DB rows as the full catalog until a complete import is done.
 
 ## Current safe pattern
 
 - Public pages load bundled fallback JSON.
 - Public pages load Supabase catalog rows.
-- Matching DB rows override fallback rows.
+- Matching DB rows override fallback rows for saved fields.
+- Blank saved image fields must not mask bundled fallback images.
 - Non-imported fallback rows remain visible.
 
-## Related SQL note
+## Build 150 inventory/image fields
 
-- `sql/2026-05-15_build143_public_catalog_fallback_merge_no_ddl_note.sql`
+`catalog_inventory_items` now tracks the current editor fields in the canonical schema:
 
-<!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->
+- `image_url`
+- `receipt_url`
+- `assigned_station`
+- `service_tags`
+- `last_counted_at`
+- `public_badge`
+- `amazon_asin`
+- `amazon_title`
+- `amazon_match_status`
+- `amazon_match_score`
+- `amazon_seller_name`
+- `amazon_brand`
+- `amazon_category`
+- `amazon_quantity_total`
+- `amazon_net_total_cents`
 
-<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->
+## Related SQL notes
 
-<!-- Build 148 sync 2026-05-16: reviewed during landing photo/add-on page process/local SEO pass. Active details are in DEVELOPMENT_ROADMAP.md, KNOWN_GAPS_AND_RISKS.md, CURRENT_IMPLEMENTATION_STATE.md, SANITY_CHECK.md, and IMAGES.md. -->
+- `sql/2026-05-17_build150_inventory_image_picker_and_fallback.sql`
+- `sql/2026-05-15_build145_catalog_db_import_admin_workflows.sql`
+- `sql/2026-05-15_build146_amazon_csv_catalog_matching.sql`
 
-<!-- Build 149 sync 2026-05-17: reviewed during Admin App service-area dropdown editor, save-feedback, Tillsonburg image fallback, local SEO/H1/CSS/release-check pass. -->
+<!-- Build 150 sync 2026-05-17: reviewed during Admin Catalog image picker/fallback repair, schema synchronization, release checks, and local SEO/H1 discipline pass. -->

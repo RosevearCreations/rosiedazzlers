@@ -1,21 +1,17 @@
-# New Chat Status — Build 147
+# New Chat Status — Build 150
 
 Use this package as the current dev baseline.
 
 ## Latest fixes
 
-- Fixed Admin App `mergeServiceAreaRows` runtime error.
-- Added missing dropdown option save button and editor panel.
-- Improved mobile main menu into a compact expandable layout.
-- Added mobile menu release check.
-- Removed root duplicate API JS files again.
+- Repaired Admin Catalog inventory image fallback merging.
+- Added existing product/tool image picker to the inventory editor.
+- Added selected-image preview and one-click **Use matching bundled image** action.
+- Updated release checks with inventory image picker/fallback validation.
+- Added Build 150 SQL migration and synchronized canonical schema/docs.
 
 ## Next focus
 
-Run/apply pending SQL migrations in dev, then continue DB-first dropdown/service-area/catalog workflows and private Amazon CSV upload.
+Apply the Build 150 SQL migration in Supabase dev, then test a saved inventory DB row that previously showed **Missing image**. After that, move toward a full DB/R2 media library picker, bulk image repair, receipt uploads, and inventory/accounting closeout controls.
 
-<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->
-
-<!-- Build 148 sync 2026-05-16: reviewed during landing photo/add-on page process/local SEO pass. Active details are in DEVELOPMENT_ROADMAP.md, KNOWN_GAPS_AND_RISKS.md, CURRENT_IMPLEMENTATION_STATE.md, SANITY_CHECK.md, and IMAGES.md. -->
-
-<!-- Build 149 sync 2026-05-17: reviewed during Admin App service-area dropdown editor, save-feedback, Tillsonburg image fallback, local SEO/H1/CSS/release-check pass. -->
+<!-- Build 150 sync 2026-05-17: Admin Catalog image picker/fallback repair, schema synchronization, release checks, and local SEO/H1 discipline. -->
