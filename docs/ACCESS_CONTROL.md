@@ -457,3 +457,10 @@ Pass 28 sync — 2026-04-20
 <!-- Build 145 sync 2026-05-15: reviewed during catalog DB import/admin workflow/local SEO pass. Active release discipline remains one-H1, local wording, fallback safety, and schema/Markdown synchronization. -->
 
 <!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->
+
+---
+
+## Build 151 synchronization note
+
+Updated 2026-05-18: active implementation moved to Admin Catalog media-library image picker support, selected-row image repair, duplicate-image diagnostics, browser image-health scan, `app_media_library` schema tracking, and continued local SEO/H1/CSS release discipline. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `SANITY_CHECK.md` for the current working plan.
+
