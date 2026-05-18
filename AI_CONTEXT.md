@@ -1,29 +1,23 @@
-# AI Context — Build 145
+# AI Context — Rosie Dazzlers Build 151
 
-Use this file to continue the project in a future chat.
+**Updated:** 2026-05-18
 
-## Latest completed work
+Current branch baseline is Build 151.
 
-Build 145 added Admin Catalog import/quality/bulk controls and optional DB foundations for catalog import, vendor directory, receipts, assignments, and service-product links.
+Key context for future AI/code work:
 
-## Next best task
+- Admin Catalog inventory uses DB-first rows from `catalog_inventory_items` with bundled JSON fallback.
+- Build 150 fixed blank DB images masking bundled fallback images.
+- Build 151 added `/api/admin/media_library_list`, media-library picker support, selected-row image repair, duplicate-image diagnostics, and browser image health scan.
+- Keep `admin-catalog.html` and `admin-catalog/index.html` synchronized.
+- Keep `SUPABASE_SCHEMA.sql` and `sql/*.sql` synchronized with every schema-related update.
+- Keep `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `SANITY_CHECK.md`, and handoff docs updated every pass.
+- Continue one-H1-per-exposed-page checks, local SEO wording, CSS layout checks, and redirect-loop avoidance.
 
-Apply the Build 145 SQL in Supabase dev, then test the Admin Catalog import preview/import workflow on a small set of consumables and tools.
+Important release command:
 
-## User priorities
+```bash
+python scripts/release_check.py
+```
 
-- Local SEO for Oxford County and Norfolk County.
-- One H1 per public page.
-- Robust fallback handling.
-- Admin editing systems that feel like a real app.
-- DB-first migration only when safe and reversible.
-
-<!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->
-
-<!-- Build 147 sync 2026-05-16: Admin App mergeServiceAreaRows repair, dropdown option editor, compact mobile navigation, release-check guardrails, root API duplicate cleanup, local SEO/H1 discipline. -->
-
-<!-- Build 148 sync 2026-05-16: reviewed during landing photo/add-on page process/local SEO pass. Active details are in DEVELOPMENT_ROADMAP.md, KNOWN_GAPS_AND_RISKS.md, CURRENT_IMPLEMENTATION_STATE.md, SANITY_CHECK.md, and IMAGES.md. -->
-
-<!-- Build 149 sync 2026-05-17: reviewed during Admin App service-area dropdown editor, save-feedback, Tillsonburg image fallback, local SEO/H1/CSS/release-check pass. -->
-
-<!-- Build 150 sync 2026-05-17: Admin Catalog image picker/fallback repair; saved DB rows with blank image_url no longer mask bundled consumables/tools images; schema/docs/release checks updated. -->
+<!-- Build 151 sync 2026-05-18 -->
