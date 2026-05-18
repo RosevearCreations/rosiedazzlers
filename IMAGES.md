@@ -1,103 +1,54 @@
-# Images and Media — Build 148
+# Images and Media Workflow — Build 151
 
-**Updated:** 2026-05-16
+**Updated:** 2026-05-18
 
-## Landing-page image requirements
+## Inventory product/tool images
 
-### Location landing pages
+Admin Catalog now has a layered image workflow:
 
-Each location landing page should have:
+1. Saved `catalog_inventory_items.image_url` is preferred when present.
+2. If a saved DB row has a blank image, Admin Catalog hydrates from the matching bundled consumables/tools row.
+3. The editor shows a selected image preview.
+4. **Use matching bundled image** restores the best bundled fallback image.
+5. **Pick existing image** searches DB media-library rows, app-setting media rows, bundled product/tool rows, saved DB rows, and helper image URLs.
+6. **Repair selected images** can persist fallback-matched images onto selected inventory rows.
+7. **Scan visible images** browser-checks visible image URLs and flags failed loads.
+8. Duplicate image groups are counted and flagged for review.
 
-- **Hero/regional image:** 1600×900 preferred, 1200px wide minimum.
-- **Shape:** landscape is preferred so the image works on desktop and mobile.
-- **Alt/caption:** describe the town/region, not just “photo.”
-- **Source:** store where the photo came from.
-- **Replacement plan:** external regional placeholders should be replaced with Rosie-owned/R2-hosted local photos when we have them.
+## Media-library direction
 
-Current seeded file:
+Build 151 adds `/api/admin/media_library_list`, which reads from:
 
-- `data/landing_regional_photos.json`
+1. `app_media_library` when available.
+2. `app_management_settings.media_library` as compatibility fallback.
+3. Bundled/R2 product-tool JSON images in Admin Catalog as the final fallback.
 
-Current editable fields used by Admin App and landing-page API:
+Recommended inventory image records should use:
 
-- `hero_image_url`
-- `gallery_image_urls`
-- `region_photo_caption`
-- `region_photo_source`
-- `region_photo_source_url`
+- `group_key`: `products`
+- `usage_contexts`: include `inventory_item`
+- `media_type`: `image`
+- `media_url`: public R2 URL
+- `alt_text`: plain description of the item
+- `caption`: optional staff/public note
+- `source_status`: `active`
 
-Current location photo placeholders are credited external regional photos. They are useful for layout and local relevance now, but Rosie-owned photos should replace them before heavy marketing.
+## Current image scoring habit
 
-### Add-on landing pages
+Keep using practical image standards:
 
-Each add-on landing page should have:
+- Prefer square or landscape product images.
+- Use clear alt text.
+- Prefer Rosie-owned/R2-hosted images.
+- Avoid broken URLs and huge uncompressed files.
+- Track source/consent where images are used for public proof or customer work.
 
-- **Hero image:** current add-on PNG/JPG/WebP from the pricing catalog where possible.
-- **Gallery images:** optional process/detail images, one URL per line.
-- **Process section:** at least 3–4 plain-language steps.
-- **Why this page exists:** explain why the service deserves its own page instead of only appearing as an add-on row.
-- **Things to know:** quote requirements, package requirements, limits, and aftercare.
-- **Related products/tools:** product name, role, note, and optional image URL.
+## Next image work
 
-Recommended add-on image size:
+- Seed `app_media_library` from R2 folders.
+- Add direct upload-to-R2 from Admin Catalog.
+- Add editable alt/caption/source/preferred-public-image metadata.
+- Add server-side image health reports.
+- Add duplicate-image approval for intentional multipacks/shared tool images.
 
-- 1200×900 or 1200×1200 preferred.
-- Use `object-fit: contain` where showing the whole product/tool matters.
-- Use `object-fit: cover` only for regional/lifestyle hero photos.
-
-## Updating or switching out an image
-
-1. Upload the image to the correct R2/public asset folder.
-2. Copy the public image URL.
-3. Open Admin App → Landing pages.
-4. Select the location or add-on page.
-5. Paste the URL into **Hero / regional image URL**.
-6. Add/update the caption and source fields.
-7. Add optional gallery URLs, one per line.
-8. Save the landing-page settings.
-9. Test the public route and mobile view.
-10. Run `python scripts/release_check.py`.
-
-## Future media-library direction
-
-Move image records into DB with:
-
-- file URL
-- owner/source
-- license/source status
-- alt text
-- caption
-- consent status
-- related location/service
-- upload/replacement history
-- image score
-
-
-## Build 149 landing image reliability update
-
-- Tillsonburg now uses a direct Wikimedia upload URL instead of the fragile `Special:FilePath` URL that could show as a missing image.
-- Landing-page dynamic images now include a browser fallback to `/assets/brand/rosie-reviews-fallback.svg` when an external image fails.
-- Recommended long-term fix: replace all external regional placeholders with Rosie-owned photos in R2 and enter those URLs in Admin App → Landing page builder.
-- Location hero/regional images should remain landscape, ideally 1600×900 or at least 1200px wide.
-
-<!-- Build 149 sync 2026-05-17: reviewed during Admin App service-area dropdown editor, save-feedback, Tillsonburg image fallback, local SEO/H1/CSS/release-check pass. -->
-
-## Build 150 inventory product-image picker update
-
-Admin Catalog now supports product/tool image picking inside **Inventory Workflow → Edit inventory item**.
-
-Current behavior:
-
-- Saved DB inventory rows with blank `image_url` are hydrated in the UI from the matching bundled consumables/tools image.
-- The editor shows a selected-image preview.
-- **Use matching bundled image** fills the product image from `data/rosie_products_catalog.json` or `data/systems_catalog.json` when the item key/name matches.
-- **Pick existing image** opens a searchable thumbnail picker from existing consumables/tools images and saved helper URLs.
-- Saving the item persists the selected image URL to the DB row when the deployed schema supports `image_url`.
-
-Recommended product/tool image direction:
-
-- Keep using Rosie-owned/R2-hosted product images where possible.
-- Use descriptive filenames and alt/source metadata when the future DB media library is added.
-- Next DB media step: migrate image records into a searchable media table with source, consent, title, alt text, caption, and replacement history.
-
-<!-- Build 150 sync 2026-05-17: Admin Catalog image picker/fallback repair. -->
+<!-- Build 151 sync 2026-05-18 -->

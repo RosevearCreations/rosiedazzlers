@@ -203,3 +203,10 @@ Pass 28 sync — 2026-04-20
 <!-- Build 149 sync 2026-05-17: reviewed during Admin App service-area dropdown editor, save-feedback, Tillsonburg image fallback, local SEO/H1/CSS/release-check pass. -->
 
 <!-- Build 150 sync 2026-05-17: Admin Catalog image picker/fallback repair; saved DB rows with blank image_url no longer mask bundled consumables/tools images; schema/docs/release checks updated. -->
+
+---
+
+## Build 151 synchronization note
+
+Updated 2026-05-18: active implementation moved to Admin Catalog media-library image picker support, selected-row image repair, duplicate-image diagnostics, browser image-health scan, `app_media_library` schema tracking, and continued local SEO/H1/CSS release discipline. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `SANITY_CHECK.md` for the current working plan.
+

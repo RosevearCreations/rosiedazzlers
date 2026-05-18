@@ -1,43 +1,53 @@
-# Database Structure Current — Build 150
+# Database Structure Current — Build 151
 
-**Updated:** 2026-05-17
+**Updated:** 2026-05-18
 
-## Catalog migration state
+## Inventory/media tables in active use
 
-The catalog inventory table may contain only edited/imported rows. Public pages and Admin Catalog must not treat partial DB rows as the full catalog until a complete import is done.
+### `catalog_inventory_items`
 
-## Current safe pattern
+Current inventory source of truth for saved tools and consumables. Important fields include:
 
-- Public pages load bundled fallback JSON.
-- Public pages load Supabase catalog rows.
-- Matching DB rows override fallback rows for saved fields.
-- Blank saved image fields must not mask bundled fallback images.
-- Non-imported fallback rows remain visible.
+- `item_key`, `item_type`, `name`, `category`, `subcategory`
+- `image_url`, `amazon_url`, Amazon match enrichment fields
+- `qty_on_hand`, `reorder_point`, `reorder_qty`, `unit_label`, `cost_cents`
+- `preferred_vendor`, `vendor_sku`, `receipt_url`, `assigned_station`
+- `service_tags`, `reuse_policy`, `is_public`, `is_active`
 
-## Build 150 inventory/image fields
+### `catalog_inventory_movements`
 
-`catalog_inventory_items` now tracks the current editor fields in the canonical schema:
+Tracks stock usage, manual adjustments, waste/write-off actions, and booking-linked inventory movement.
 
-- `image_url`
-- `receipt_url`
-- `assigned_station`
-- `service_tags`
-- `last_counted_at`
-- `public_badge`
-- `amazon_asin`
-- `amazon_title`
-- `amazon_match_status`
-- `amazon_match_score`
-- `amazon_seller_name`
-- `amazon_brand`
-- `amazon_category`
-- `amazon_quantity_total`
-- `amazon_net_total_cents`
+### `catalog_purchase_orders`
 
-## Related SQL notes
+Tracks reorder requests, ordered/received status, reminder dates, purchase URL, vendor, quantity, and receive lifecycle.
 
-- `sql/2026-05-17_build150_inventory_image_picker_and_fallback.sql`
-- `sql/2026-05-15_build145_catalog_db_import_admin_workflows.sql`
-- `sql/2026-05-15_build146_amazon_csv_catalog_matching.sql`
+### `app_media_library`
 
-<!-- Build 150 sync 2026-05-17: reviewed during Admin Catalog image picker/fallback repair, schema synchronization, release checks, and local SEO/H1 discipline pass. -->
+Build 151 DB-backed shared media-library target. Used by `/api/admin/media_library_list` and Admin Catalog image picker when available.
+
+Important fields:
+
+- `media_key`, `label`, `media_type`, `media_url`, `fallback_url`
+- `alt_text`, `caption`, `group_key`, `usage_contexts`
+- `recommended_size`, `source_status`, `sort_order`, `updated_at`, `updated_by`
+
+## Fallback order
+
+1. Saved DB rows in `catalog_inventory_items`.
+2. `app_media_library` rows for picker/search if available.
+3. `app_management_settings.media_library` rows if the table is not populated yet.
+4. Bundled JSON product/tool rows from `data/rosie_products_catalog.json` and `data/systems_catalog.json`.
+5. Browser-local helper image URLs.
+
+## Build 151 migration
+
+Apply:
+
+```sql
+sql/2026-05-18_build151_media_library_inventory_image_workflow.sql
+```
+
+This migration is non-destructive and safe to apply before the media library is populated.
+
+<!-- Build 151 sync 2026-05-18 -->

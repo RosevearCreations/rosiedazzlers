@@ -1,38 +1,34 @@
-# Current Implementation State — Build 150
+# Current Implementation State — Build 151
 
-**Updated:** 2026-05-17
+**Updated:** 2026-05-18
 
-The current dev build is a Cloudflare Pages + Pages Functions + Supabase + R2-backed Rosie Dazzlers platform with JSON fallbacks for public pages and admin workflows.
+## Current baseline
 
-## Public site
+Build 151 continues from Build 150 and keeps `rosiedazzlers-dev` as the working dev branch baseline.
 
-- Public pages are checked for one H1 per exposed page.
-- Mobile navigation is compact and expandable.
-- Booking supports a typeable service-area picker with Oxford/Norfolk county fallback rules.
-- Consumables and gear pages merge DB rows with bundled fallback catalog rows.
-- Location landing pages support regional photos, captions, sources, `og:image`, and missing-image fallback handling.
-- Add-on landing pages support hero photos, gallery images, detailed process sections, equipment/workflow sections, reasons, highlights, FAQ, and related products.
+The current focus is the Admin Catalog inventory workflow. Build 150 repaired fallback image hydration for saved DB rows with blank `image_url`. Build 151 extends that into a stronger image workflow with a media-library read endpoint, selected-row image repair, duplicate-image diagnostics, and browser image health scanning.
 
-## Admin App
+## What is working now
 
-- Service areas and travel tiers are edited one row at a time through a dropdown editor.
-- Admin App save actions show visible green `Saved ✓` feedback plus the existing status message.
-- Landing page builder can edit hero image URL, gallery URLs, captions, source names, and source URLs.
-- Add-on, dropdown option, pricing, landing page, and catalog workflows remain fallback-safe while DB/API foundations grow in parallel.
+- Public pages continue to follow the one-H1 release discipline and local SEO checks.
+- Admin Catalog lists saved DB inventory rows over bundled consumables/tools fallback rows.
+- Blank saved DB image fields hydrate from matching bundled consumables/tools images.
+- The inventory editor has image preview, matching bundled image restore, existing-image picker, and clear-image controls.
+- The existing-image picker now includes media-library rows when available.
+- Selected rows can be repaired/imported so fallback-matched images are saved back to DB.
+- Visible inventory images can be browser-scanned for failed loads.
+- Duplicate image groups are counted and flagged.
+- Release checks include static checks, local SEO/H1 audit, catalog fallback checks, Amazon matching, mobile nav, Admin App editor, inventory picker, and media-library picker guards.
 
-## Admin Catalog / Inventory Workflow
+## Current schema state
 
-- Inventory rows merge saved DB data with bundled consumables/tools fallback rows.
-- Saved DB rows with blank `image_url` now inherit the matching bundled image for display and quality scoring.
-- The inventory editor includes a product-image preview, matching-image restore button, and searchable existing-image picker.
-- Image suggestions include saved helper URLs plus bundled consumables/tools image URLs.
-- A new release check validates image picker markers and bundled fallback image coverage.
+- `catalog_inventory_items` is the DB source of truth for saved tools/consumables.
+- Bundled JSON remains the fallback source for public and admin continuity.
+- `app_media_library` is now documented as the DB-backed shared image source for inventory images, landing-page proof, add-ons, and future R2 uploads.
+- Build 151 adds/guards indexes for media-library group, usage contexts, status, and image lookup.
 
-## Backend/catalog/accounting
+## Deploy caution
 
-- Catalog import/matching foundations exist for bundled inventory and Amazon CSV enrichment.
-- Build 150 schema tracking includes inventory receipt URLs, assigned station, service tags, public badge, count timestamp, and Amazon match fields.
-- Service-area DB/API foundations exist but need Supabase migration testing.
-- Accounting foundations exist, but month-end close, reconciliation, inventory valuation, and accountant export workflows remain major roadmap focus.
+Apply migrations in order and smoke-test Admin Catalog after deploy. If `app_media_library` is not present or not seeded yet, the UI should continue to work from app settings and bundled JSON/R2 fallbacks.
 
-<!-- Build 150 sync 2026-05-17: reviewed during Admin Catalog image picker/fallback repair, schema synchronization, release checks, and local SEO/H1 discipline pass. -->
+<!-- Build 151 sync 2026-05-18 -->

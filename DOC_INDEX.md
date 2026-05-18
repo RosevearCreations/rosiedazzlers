@@ -1,19 +1,25 @@
-# Documentation Index — Build 150
+# Documentation Index — Build 151
 
-Read in this order:
+**Updated:** 2026-05-18
 
-1. `README.md`
-2. `CURRENT_IMPLEMENTATION_STATE.md`
-3. `DEVELOPMENT_ROADMAP.md`
-4. `KNOWN_GAPS_AND_RISKS.md`
-5. `SANITY_CHECK.md`
-6. `IMAGES.md`
-7. `DATABASE_STRUCTURE_CURRENT.md`
-8. `SUPABASE_SCHEMA.sql`
-9. `HANDOFF_NEXT_CHAT.md`
+## Active handoff docs
 
-Important Build 150 SQL note:
+- `README.md` — current build summary and release command.
+- `DEVELOPMENT_ROADMAP.md` / `ROADMAP.md` — completed Build 151 work and next 20 steps.
+- `KNOWN_GAPS_AND_RISKS.md` — current open risks.
+- `CURRENT_IMPLEMENTATION_STATE.md` — current app state.
+- `DATABASE_STRUCTURE_CURRENT.md` — current schema notes.
+- `SANITY_CHECK.md` — release and manual smoke checks.
+- `IMAGES.md` — current image/media workflow.
+- `HANDOFF_NEXT_CHAT.md` / `NEW_CHAT_STATUS.md` — compact continuation notes.
+- `NEXT_STEPS_INTERNAL.md` — next implementation checklist.
 
-- `sql/2026-05-17_build150_inventory_image_picker_and_fallback.sql`
+## Current Build 151 implementation files
 
-<!-- Build 150 sync 2026-05-17: reviewed during Admin Catalog image picker/fallback repair, schema synchronization, release checks, and local SEO/H1 discipline pass. -->
+- `admin-catalog.html`
+- `admin-catalog/index.html`
+- `functions/api/admin/media_library_list.js`
+- `scripts/media_library_picker_check.py`
+- `sql/2026-05-18_build151_media_library_inventory_image_workflow.sql`
+
+<!-- Build 151 sync 2026-05-18 -->
