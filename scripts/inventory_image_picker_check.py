@@ -12,6 +12,9 @@ REQUIRED_MARKERS = [
     'id="useMatchingImageBtn"',
     'function collectImageCandidates',
     'function findMatchingBundledImage',
+    'id="scanImageHealthBtn"',
+    'id="bulkRepairImagesBtn"',
+    'function findMatchingBundledImageForItem',
     'normalized._image_from_fallback=true',
     'findMatchingBundledImage()?.url',
 ]
