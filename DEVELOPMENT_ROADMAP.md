@@ -1,11 +1,11 @@
-# Development Roadmap — Build 153
+# Development Roadmap — Build 155
 
 **Updated:** 2026-05-18  
 **Target branch:** `dev`  
 **Pass focus:** Cloudflare Pages Functions deploy hotfix, media-library endpoint syntax repair, duplicate landing-page key cleanup, release-check hardening, schema/docs synchronization, and continued SEO/H1/CSS release discipline.
 
 
-## Build 153 completed deployment hotfix pass
+## Build 155 completed deployment hotfix pass
 
 1. Reviewed the Cloudflare Pages deploy log and confirmed the blocking error was an unterminated regular expression in `functions/api/admin/media_library_list.js`.
 2. Repaired `normalizeList()` so comma/newline splitting uses an esbuild-safe `/[\n,]/` expression instead of a literal newline inside the regex character class.
@@ -18,7 +18,7 @@
 9. The new checker guards `landing_pages_public.js` against duplicate `normalizePage()` object keys.
 10. Wired the new Cloudflare Pages Functions deploy-safety checker into `scripts/release_check.py`.
 11. Re-ran the full release checklist after the deploy hotfix.
-12. Updated Markdown and schema tracking notes so Build 153 is documented as the current baseline.
+12. Updated Markdown and schema tracking notes so Build 155 is documented as the current baseline.
 
 ## Build 151 completed 20-step pass
 
@@ -66,24 +66,24 @@
 19. Add mobile detailer job closeout that records consumables/tools used, photos/videos, customer sign-off, and follow-up notes.
 20. Keep every release pass checking one H1 per exposed page, local title/meta clarity, structured data, CSS drift, and stable redirects.
 
-<!-- Build 153 sync 2026-05-18: Cloudflare Pages Functions deploy hotfix, media-library endpoint regex repair, landing-page duplicate-key cleanup, release-check hardening, schema sync, and local SEO/H1 discipline pass. -->
+<!-- Build 155 sync 2026-05-18: Cloudflare Pages Functions deploy hotfix, media-library endpoint regex repair, landing-page duplicate-key cleanup, release-check hardening, schema sync, and local SEO/H1 discipline pass. -->
 
-## Build 153 completed deployment repair pass
+## Build 155 completed deployment repair pass
 
 1. Repaired root `/functions/api/*.js` import paths from `../_lib/...` to `./_lib/...` so Cloudflare Pages Functions can resolve helpers.
 2. Preserved valid nested admin imports and mirrored helper libraries as a defensive fallback for legacy flat route files.
 3. Confirmed `functions/api/admin/media_library_list.js` no longer contains the esbuild-breaking regex newline issue.
 4. Confirmed `functions/api/landing_pages_public.js` normalizePage no longer has duplicate object keys.
-5. Added a no-DDL migration note for Build 153.
+5. Added a no-DDL migration note for Build 155.
 6. Hardened `scripts/cloudflare_pages_functions_check.py` to check relative import resolution before packaging.
 7. Ran the Cloudflare deploy-safety check successfully across 499 JavaScript files.
 8. Ran Node syntax checks successfully across 384 Functions JavaScript files.
 9. Kept the Build 151 inventory media picker/fallback workflow unchanged.
-10. Updated active Markdown and schema notes for Build 153.
+10. Updated active Markdown and schema notes for Build 155.
 
-## Next 20 recommended steps after Build 153
+## Next 20 recommended steps after Build 155
 
-1. Deploy Build 153 to Cloudflare Pages and confirm the Functions compile finishes cleanly.
+1. Deploy Build 155 to Cloudflare Pages and confirm the Functions compile finishes cleanly.
 2. If any Cloudflare log remains, fix only the exact named file before starting new features.
 3. Apply Build 150 and Build 151 SQL migrations in Supabase dev if not already applied.
 4. Seed `app_media_library` from current R2 tool, consumable, add-on, and service-image folders.
@@ -104,9 +104,59 @@
 19. Continue CSS drift checks on public and admin pages after each feature pass.
 20. Re-run the full release check after the deploy hotfix is confirmed.
 
-## Build 154 Cloudflare stale root function shim hotfix - 2026-05-19
+## Build 155 Cloudflare stale root function shim hotfix - 2026-05-19
 
-Cloudflare still saw older flat `/functions/api/*.js` route files after GitHub web uploads, because uploading ZIP contents does not reliably delete older files from the branch. Build 154 intentionally includes compatibility shim files for the stale flat routes listed in the Cloudflare deploy log. Each shim re-exports the active `/functions/api/admin/*.js` implementation and prevents Pages Functions bundling failures while preserving the newer admin route implementation.
+Cloudflare still saw older flat `/functions/api/*.js` route files after GitHub web uploads, because uploading ZIP contents does not reliably delete older files from the branch. Build 155 intentionally includes compatibility shim files for the stale flat routes listed in the Cloudflare deploy log. Each shim re-exports the active `/functions/api/admin/*.js` implementation and prevents Pages Functions bundling failures while preserving the newer admin route implementation.
 
-Next step: after Build 154 deploys cleanly, optionally remove the compatibility shims in a clean-branch/orphan rebuild so only the intended folder-backed route files remain.
+Next step: after Build 155 deploys cleanly, optionally remove the compatibility shims in a clean-branch/orphan rebuild so only the intended folder-backed route files remain.
+
+
+
+## Build 155 completed 20-step pass - 2026-05-18
+
+1. Used the latest uploaded Build 147 ZIP as the active baseline for this pass.
+2. Rechecked the Cloudflare Pages Functions route tree before adding any new feature work.
+3. Found four remaining root `/functions/api/*.js` files still importing `../_lib/...` from the wrong level.
+4. Repaired `functions/api/blocks_range_save.js` to import helpers through `./_lib/...`.
+5. Repaired `functions/api/catalog_amazon_matches.js` to import helpers through `./_lib/...`.
+6. Repaired `functions/api/catalog_bulk_import.js` to import helpers through `./_lib/...`.
+7. Repaired `functions/api/catalog_bulk_visibility.js` to import helpers through `./_lib/...`.
+8. Confirmed nested `/functions/api/admin/*.js` imports were left alone because `../_lib/...` is correct from the admin folder.
+9. Kept the Build 154 stale-route compatibility shims in place for older flat route files left behind by GitHub web uploads.
+10. Added `scripts/stale_root_function_shims_check.py` into the normal `scripts/release_check.py` flow so bad root imports fail before upload.
+11. Tightened `scripts/cloudflare_pages_functions_check.py` to focus on Cloudflare Functions JavaScript instead of every root/static JavaScript copy.
+12. Added a per-file timeout guard around `node --check` inside the Cloudflare deploy-safety checker.
+13. Updated `scripts/release_check.py` so Python check scripts can run in-process, avoiding nested subprocess hangs seen in the sandbox.
+14. Re-ran the Cloudflare deploy-safety check and confirmed 405 Functions JavaScript files pass.
+15. Re-ran the stale root function import guard and confirmed no root `/functions/api/*.js` file still imports parent `_lib` helpers.
+16. Re-ran the local SEO/H1 audit to keep the one-H1 and local title/meta discipline active.
+17. Re-ran inventory image picker checks and confirmed all 149 bundled fallback inventory rows still have image coverage.
+18. Re-ran the media-library picker check to keep selected image repair, duplicate diagnostics, and health scan markers covered.
+19. Added a Build 155 no-DDL SQL note and synchronized `SUPABASE_SCHEMA.sql`.
+20. Updated active Markdown handoff, roadmap, known gaps, sanity, and implementation-state docs for the next upload.
+
+
+## Next 20 recommended steps after Build 155
+
+1. Upload Build 155 to the `dev` branch and confirm Cloudflare Pages Functions compile cleanly.
+2. If Cloudflare still fails, fix only the exact file named in the new deploy log before starting feature work.
+3. After a clean deploy, use a clean/orphan branch upload to remove any stale GitHub web-upload leftovers permanently.
+4. Apply Build 150 and Build 151 SQL migrations in Supabase dev if they have not already been applied.
+5. Confirm `/api/admin/media_library_list?usage_context=inventory_item` returns either DB media rows or a safe warning fallback.
+6. Seed `app_media_library` from existing R2 tool, consumable, add-on, landing, and service-image folders.
+7. Add an Admin Media Library screen for label, alt text, caption, usage context, group key, source status, and sort order.
+8. Add direct R2 image upload from the Admin Catalog image picker.
+9. Add bulk image repair for all fallback-matched rows, not only selected/visible rows.
+10. Add a server-side broken-image report for catalog, services, add-ons, gallery, and landing pages.
+11. Add image alt-text quality scoring to Admin Catalog save validation.
+12. Add service/town landing-page media assignment from the shared media library.
+13. Convert before/after gallery sample JSON into an admin-managed DB content set.
+14. Add receipt/bill attachment workflow for inventory purchases and accounting entries.
+15. Link booking completion consumables/tools used to inventory movement and accounting COGS posting.
+16. Add monthly inventory count sessions with variance approval and lock/reopen controls.
+17. Connect vendor directory editing between Admin Catalog and Accounting.
+18. Add Search Console and Google Business Profile reporting panels once credentials/API access are ready.
+19. Continue town/service page improvements for Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi, Port Dover, Norfolk, and Oxford searches.
+20. Keep every release pass checking Cloudflare Functions, one H1 per exposed page, local title/meta clarity, CSS drift, stable redirects, and inventory/media fallback safety.
+
 

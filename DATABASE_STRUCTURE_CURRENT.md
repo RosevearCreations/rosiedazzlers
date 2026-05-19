@@ -1,4 +1,4 @@
-# Database Structure Current — Build 153
+# Database Structure Current — Build 155
 
 **Updated:** 2026-05-18
 
@@ -50,12 +50,20 @@ sql/2026-05-18_build151_media_library_inventory_image_workflow.sql
 
 This migration is non-destructive and safe to apply before the media library is populated.
 
-## Build 153 schema note
+## Build 155 schema note
 
-Build 153 is a deploy hotfix and release-check hardening pass. It does not add or change database tables. The current schema remains Build 151 plus the Build 150 inventory image indexes.
+Build 155 is a deploy hotfix and release-check hardening pass. It does not add or change database tables. The current schema remains Build 151 plus the Build 150 inventory image indexes.
 
-<!-- Build 153 sync 2026-05-18 -->
+<!-- Build 155 sync 2026-05-18 -->
 
-## Build 153 schema note
+## Build 155 schema note
 
-Build 153 has no database DDL. The schema remains the Build 151 media-library baseline plus Build 150 inventory image indexes. This pass only repairs Cloudflare Pages Functions import resolution and deploy checks.
+Build 155 has no database DDL. The schema remains the Build 151 media-library baseline plus Build 150 inventory image indexes. This pass only repairs Cloudflare Pages Functions import resolution and deploy checks.
+
+
+## Build 155 Cloudflare root import release-check hotfix - 2026-05-18
+
+Build 155 repairs the remaining root Cloudflare Pages Function import paths that could still break deployment after Build 154. Four root `/functions/api/*.js` files still used `../_lib/...`; root routes must use `./_lib/...`. Build 155 fixes those files, keeps the stale-route shims, wires the stale-root import guard into the release checklist, and updates the release runner so the full check can complete in this sandbox.
+
+No database shape changed in Build 155. Active DB baseline remains Build 150 inventory image indexes plus Build 151 `app_media_library`.
+
