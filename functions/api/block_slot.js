@@ -16,8 +16,8 @@ export async function onRequestPost({ request, env }) {
     });
     if (!access.ok) return withCors(access.response);
 
-    const blocked_date = String(body.blocked_date || "").trim();
-    const slot = String(body.slot || "").trim().toUpperCase();
+    const blocked_date = String(body.blocked_date || body.block_date || "").trim();
+    const slot = String(body.slot || body.slot_code || "").trim().toUpperCase();
     const reason = body.reason ? String(body.reason).trim() : null;
     if (!/^\d{4}-\d{2}-\d{2}$/.test(blocked_date)) return withCors(json({ ok: false, error: "blocked_date must be YYYY-MM-DD" }, 400));
     if (!["AM", "PM"].includes(slot)) return withCors(json({ ok: false, error: "slot must be AM or PM" }, 400));
@@ -26,7 +26,7 @@ export async function onRequestPost({ request, env }) {
     const res = await fetch(`${env.SUPABASE_URL}/rest/v1/slot_blocks?on_conflict=blocked_date,slot`, {
       method: "POST",
       headers: { ...serviceHeaders(env), Accept: "application/json", Prefer: "resolution=merge-duplicates,return=representation" },
-      body: JSON.stringify([{ blocked_date, slot, reason, updated_at: new Date().toISOString() }]),
+      body: JSON.stringify([{ blocked_date, slot, reason }]),
     });
     const text = await res.text();
     const data = safeJson(text);

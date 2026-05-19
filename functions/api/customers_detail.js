@@ -1,3 +1,4 @@
+
 import { requireStaffAccess, serviceHeaders, json, methodNotAllowed, isUuid } from "../_lib/staff-auth.js";
 export async function onRequestOptions(){ return new Response("", { status:204, headers:corsHeaders() }); }
 export async function onRequestPost(context){
@@ -14,18 +15,20 @@ export async function onRequestPost(context){
     if (!profileRes.ok) return withCors(json({ error:`Could not load customer profile. ${await profileRes.text()}` },500));
     const profileRows = await profileRes.json().catch(() => []); const profile = Array.isArray(profileRows)? profileRows[0] || null : null; if(!profile) return withCors(json({ error:'Customer profile not found.' },404));
     const email = String(profile.email || profile.customer_email || '').trim().toLowerCase(); const phone = String(profile.phone || profile.customer_phone || '').trim(); const tierCode = profile.tier_code ? String(profile.tier_code) : null;
-    const [tierRes, bookingsRes, vehiclesRes, giftsRes, redemptionsRes] = await Promise.all([
+    const [tierRes, bookingsRes, vehiclesRes, vehicleMediaRes, giftsRes, redemptionsRes] = await Promise.all([
       tierCode ? fetch(`${env.SUPABASE_URL}/rest/v1/customer_tiers?select=*&code=eq.${encodeURIComponent(tierCode)}&limit=1`, { headers }) : Promise.resolve(null),
       fetch(buildBookingsUrl(env, { email, phone }), { headers }),
       fetch(`${env.SUPABASE_URL}/rest/v1/customer_vehicles?select=*&customer_profile_id=eq.${encodeURIComponent(customer_profile_id)}&order=display_order.asc,created_at.desc`, { headers }).catch(() => null),
+      fetch(`${env.SUPABASE_URL}/rest/v1/customer_vehicle_media?select=*&customer_profile_id=eq.${encodeURIComponent(customer_profile_id)}&order=is_deleted.asc,is_primary.desc,created_at.desc`, { headers }).catch(() => null),
       fetch(`${env.SUPABASE_URL}/rest/v1/gift_certificates?select=*&or=(purchaser_email.eq.${encodeURIComponent(email)},recipient_email.eq.${encodeURIComponent(email)})&order=created_at.desc`, { headers }).catch(() => null),
       fetch(`${env.SUPABASE_URL}/rest/v1/gift_certificate_redemptions?select=id,gift_certificate_id,booking_id,amount_cents,created_at,notes,gift_certificate:gift_certificates(code,purchaser_email,recipient_email)&order=created_at.desc`, { headers }).catch(() => null)
     ]);
     if (tierRes && !tierRes.ok) return withCors(json({ error:`Could not load customer tier. ${await tierRes.text()}` },500));
     if (!bookingsRes.ok) return withCors(json({ error:`Could not load related bookings. ${await bookingsRes.text()}` },500));
-    const tierRows = tierRes ? await tierRes.json().catch(() => []) : []; const bookingRows = await bookingsRes.json().catch(() => []); const vehiclesRows = vehiclesRes && vehiclesRes.ok ? await vehiclesRes.json().catch(() => []) : []; const giftRows = giftsRes && giftsRes.ok ? await giftsRes.json().catch(() => []) : []; const redemptionRows = redemptionsRes && redemptionsRes.ok ? await redemptionsRes.json().catch(() => []) : [];
+    const tierRows = tierRes ? await tierRes.json().catch(() => []) : []; const bookingRows = await bookingsRes.json().catch(() => []); const vehiclesRows = vehiclesRes && vehiclesRes.ok ? await vehiclesRes.json().catch(() => []) : []; const vehicleMediaRows = vehicleMediaRes && vehicleMediaRes.ok ? await vehicleMediaRes.json().catch(() => []) : []; const giftRows = giftsRes && giftsRes.ok ? await giftsRes.json().catch(() => []) : []; const redemptionRows = redemptionsRes && redemptionsRes.ok ? await redemptionsRes.json().catch(() => []) : [];
     const tier = Array.isArray(tierRows)? tierRows[0] || null : null; const bookings=Array.isArray(bookingRows)?bookingRows:[]; const summary=summarizeBookings(bookings); const redemptions = Array.isArray(redemptionRows)? redemptionRows.filter((row)=>{ const g=row.gift_certificate || {}; return String(g.purchaser_email||'').toLowerCase()===email || String(g.recipient_email||'').toLowerCase()===email; }):[];
-    return withCors(json({ ok:true, actor:{ id:access.actor.id||null, full_name:access.actor.full_name||null, email:access.actor.email||null, role_code:access.actor.role_code||null }, customer_profile: profile, customer_tier: tier, booking_summary: summary, bookings, vehicles: Array.isArray(vehiclesRows)?vehiclesRows:[], gift_certificates: Array.isArray(giftRows)?giftRows:[], redemptions }));
+    const vehicles = Array.isArray(vehiclesRows)?vehiclesRows.map(v => ({ ...v, media: Array.isArray(vehicleMediaRows)?vehicleMediaRows.filter(m => String(m.vehicle_id) === String(v.id)) : [] })) : [];
+    return withCors(json({ ok:true, actor:{ id:access.actor.id||null, full_name:access.actor.full_name||null, email:access.actor.email||null, role_code:access.actor.role_code||null }, customer_profile: profile, customer_tier: tier, booking_summary: summary, bookings, vehicles, vehicle_media: Array.isArray(vehicleMediaRows)?vehicleMediaRows:[], gift_certificates: Array.isArray(giftRows)?giftRows:[], redemptions }));
   } catch (err) { return withCors(json({ error: err?.message || 'Unexpected server error.' },500)); }
 }
 export async function onRequestGet(){ return withCors(methodNotAllowed()); }

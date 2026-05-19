@@ -1,24 +1,6 @@
 // functions/api/admin/customers_list.js
 //
 // Role-aware customer list endpoint.
-//
-// What this file does:
-// - keeps current ADMIN_PASSWORD bridge protection
-// - requires staff identity/capability through staff_users
-// - allows admin / booking managers to load customer admin data
-// - returns customer_profiles, customer_tiers, and recent booking summary data
-// - supports optional active tier filtering
-//
-// Supported request body:
-// {
-//   tier_code?: "gold",
-//   limit?: 100
-// }
-//
-// Request headers supported:
-// - x-admin-password: required
-// - x-staff-email: recommended during transition
-// - x-staff-user-id: optional alternative
 
 import {
   requireStaffAccess,
@@ -114,9 +96,15 @@ export async function onRequestPost(context) {
             id: row.id,
             created_at: row.created_at || null,
             updated_at: row.updated_at || null,
-            customer_name: row.customer_name || null,
-            customer_email: row.customer_email || null,
-            customer_phone: row.customer_phone || null,
+
+            full_name: row.full_name || null,
+            email: row.email || null,
+            phone: row.phone || null,
+
+            customer_name: row.full_name || null,
+            customer_email: row.email || null,
+            customer_phone: row.phone || null,
+
             tier_code: row.tier_code || null,
             notes: row.notes || null,
             booking_count: summary.booking_count,
@@ -147,7 +135,7 @@ export async function onRequestGet() {
 function buildCustomerProfilesUrl(env, { tierCode, limit }) {
   let url =
     `${env.SUPABASE_URL}/rest/v1/customer_profiles` +
-    `?select=id,created_at,updated_at,customer_name,customer_email,customer_phone,tier_code,notes` +
+    `?select=id,created_at,updated_at,full_name,email,phone,tier_code,notes` +
     `&order=updated_at.desc,created_at.desc` +
     `&limit=${encodeURIComponent(String(limit))}`;
 
@@ -161,8 +149,8 @@ function buildCustomerProfilesUrl(env, { tierCode, limit }) {
 async function loadBookingSummaryMap(env, headers, profiles) {
   const keys = profiles
     .map((row) => ({
-      email: String(row.customer_email || "").trim().toLowerCase(),
-      phone: String(row.customer_phone || "").trim()
+      email: String(row.email || "").trim().toLowerCase(),
+      phone: String(row.phone || "").trim()
     }))
     .filter((row) => row.email || row.phone);
 
@@ -230,11 +218,11 @@ async function loadBookingSummaryMap(env, headers, profiles) {
   const profileMap = new Map();
 
   for (const profile of profiles) {
-    const emailKey = profile.customer_email
-      ? `email:${String(profile.customer_email).trim().toLowerCase()}`
+    const emailKey = profile.email
+      ? `email:${String(profile.email).trim().toLowerCase()}`
       : null;
-    const phoneKey = profile.customer_phone
-      ? `phone:${String(profile.customer_phone).trim()}`
+    const phoneKey = profile.phone
+      ? `phone:${String(profile.phone).trim()}`
       : null;
 
     const emailSummary = emailKey ? map.get(emailKey) : null;
@@ -261,8 +249,8 @@ function mergeSummaries(a, b) {
 }
 
 function profileKey(row) {
-  const email = String(row.customer_email || "").trim().toLowerCase();
-  const phone = String(row.customer_phone || "").trim();
+  const email = String(row.email || "").trim().toLowerCase();
+  const phone = String(row.phone || "").trim();
   return email ? `email:${email}` : `phone:${phone}`;
 }
 

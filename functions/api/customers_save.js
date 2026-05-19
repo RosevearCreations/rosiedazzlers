@@ -1,29 +1,6 @@
 // functions/api/admin/customers_save.js
 //
 // Role-aware customer save endpoint.
-//
-// What this file does:
-// - keeps current ADMIN_PASSWORD bridge protection
-// - requires manage_bookings capability
-// - creates new customer_profiles rows
-// - updates existing customer_profiles rows
-// - supports customer tier assignment
-// - keeps field handling additive and conservative
-//
-// Supported request body:
-// {
-//   id?: "uuid",
-//   customer_name: "Jane Doe",
-//   customer_email?: "jane@example.com",
-//   customer_phone?: "555-123-4567",
-//   tier_code?: "gold",
-//   notes?: "Prefers early morning appointments"
-// }
-//
-// Request headers supported:
-// - x-admin-password: required
-// - x-staff-email: recommended during transition
-// - x-staff-user-id: optional alternative
 
 import {
   requireStaffAccess,
@@ -81,9 +58,9 @@ export async function onRequestPost(context) {
       }
 
       const patch = {
-        customer_name: payload.customer_name,
-        customer_email: payload.customer_email,
-        customer_phone: payload.customer_phone,
+        full_name: payload.customer_name,
+        email: payload.customer_email,
+        phone: payload.customer_phone,
         tier_code: payload.tier_code,
         notes: payload.notes,
         updated_at: new Date().toISOString()
@@ -107,20 +84,22 @@ export async function onRequestPost(context) {
       }
 
       const rows = await res.json().catch(() => []);
+      const row = Array.isArray(rows) ? rows[0] || null : null;
+
       return withCors(
         json({
           ok: true,
           mode: "update",
           message: "Customer profile updated.",
-          customer_profile: Array.isArray(rows) ? rows[0] || null : null
+          customer_profile: mapCustomerProfile(row)
         })
       );
     }
 
     const createPayload = {
-      customer_name: payload.customer_name,
-      customer_email: payload.customer_email,
-      customer_phone: payload.customer_phone,
+      full_name: payload.customer_name,
+      email: payload.customer_email,
+      phone: payload.customer_phone,
       tier_code: payload.tier_code,
       notes: payload.notes
     };
@@ -140,12 +119,14 @@ export async function onRequestPost(context) {
     }
 
     const rows = await res.json().catch(() => []);
+    const row = Array.isArray(rows) ? rows[0] || null : null;
+
     return withCors(
       json({
         ok: true,
         mode: "create",
         message: "Customer profile created.",
-        customer_profile: Array.isArray(rows) ? rows[0] || null : null
+        customer_profile: mapCustomerProfile(row)
       })
     );
   } catch (err) {
@@ -182,8 +163,8 @@ function normalizeCustomerPayload(body) {
     return { ok: false, error: "customer_name is required." };
   }
 
-  if (!customer_email && !customer_phone) {
-    return { ok: false, error: "At least customer_email or customer_phone is required." };
+  if (!customer_email) {
+    return { ok: false, error: "customer_email is required." };
   }
 
   if (body.customer_email && !customer_email) {
@@ -214,7 +195,7 @@ function normalizeCustomerPayload(body) {
 async function findCustomerById(env, headers, id) {
   const res = await fetch(
     `${env.SUPABASE_URL}/rest/v1/customer_profiles` +
-      `?select=id,customer_name` +
+      `?select=id,full_name,email` +
       `&id=eq.${encodeURIComponent(id)}` +
       `&limit=1`,
     { headers }
@@ -271,6 +252,23 @@ async function findTierByCode(env, headers, code) {
   return { ok: true, row };
 }
 
+function mapCustomerProfile(row) {
+  if (!row) return null;
+
+  return {
+    ...row,
+    customer_name: row.full_name || null,
+    customer_email: row.email || null,
+    customer_phone: row.phone || null
+  };
+}
+
+function cleanTierCode(value) {
+  const s = cleanText(value);
+  if (!s) return null;
+  return /^[a-z0-9_-]{1,50}$/i.test(s) ? s : null;
+}
+
 function cleanEmail(value) {
   const s = String(value || "").trim().toLowerCase();
   if (!s) return null;
@@ -280,17 +278,7 @@ function cleanEmail(value) {
 function cleanPhone(value) {
   const s = String(value || "").trim();
   if (!s) return null;
-
-  const digits = s.replace(/[^\d+]/g, "");
-  if (digits.length < 7 || digits.length > 20) return null;
-
-  return s;
-}
-
-function cleanTierCode(value) {
-  const s = cleanText(value);
-  if (!s) return null;
-  return /^[a-z0-9_-]{1,50}$/i.test(s) ? s : null;
+  return s.length >= 7 ? s : null;
 }
 
 function corsHeaders() {
