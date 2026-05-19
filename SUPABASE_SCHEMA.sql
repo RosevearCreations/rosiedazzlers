@@ -1091,3 +1091,4 @@ create index if not exists idx_app_media_library_inventory_images on public.app_
 -- removed duplicate landing_pages_public normalizePage keys, and added deploy-safety release checks.
 -- Active DB baseline remains Build 150 inventory image indexes plus Build 151 app_media_library.
 -- Build 153 schema sync note: no DDL changes. Cloudflare Pages Functions import-path hotfix only.
+-- Build 154 note: no schema shape change; Cloudflare Pages Function shim hotfix only.

@@ -26,3 +26,10 @@ Deploy Build 153, confirm Cloudflare Pages Functions compile cleanly, then seed 
 ## Build 153 handoff note
 
 Current build: **Build 153**. Deploy this ZIP next. It specifically repairs the Cloudflare Pages Functions unresolved `_lib` import errors that appeared after the regex fix. The next confirmation target is a clean Cloudflare Functions upload/compile.
+
+## Build 154 Cloudflare stale root function shim hotfix - 2026-05-19
+
+Cloudflare still saw older flat `/functions/api/*.js` route files after GitHub web uploads, because uploading ZIP contents does not reliably delete older files from the branch. Build 154 intentionally includes compatibility shim files for the stale flat routes listed in the Cloudflare deploy log. Each shim re-exports the active `/functions/api/admin/*.js` implementation and prevents Pages Functions bundling failures while preserving the newer admin route implementation.
+
+Next step: after Build 154 deploys cleanly, optionally remove the compatibility shims in a clean-branch/orphan rebuild so only the intended folder-backed route files remain.
+
