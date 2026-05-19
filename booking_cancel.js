@@ -36,7 +36,7 @@ import {
   isUuid,
   cleanText,
   toBoolean
-} from "../_lib/staff-auth.js";
+} from "./_lib/staff-auth.js";
 
 export async function onRequestOptions() {
   return new Response("", {
