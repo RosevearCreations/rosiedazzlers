@@ -1,7 +1,7 @@
 
-import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "../_lib/staff-auth.js";
-import { loadFeatureFlags } from "../_lib/app-settings.js";
-import { dispatchNotificationThroughProvider } from "../_lib/provider-dispatch.js";
+import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "./_lib/staff-auth.js";
+import { loadFeatureFlags } from "./_lib/app-settings.js";
+import { dispatchNotificationThroughProvider } from "./_lib/provider-dispatch.js";
 
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 
@@ -10,7 +10,7 @@ export async function onRequestPost(context) {
   try {
     const body = await request.json().catch(() => ({}));
     const flags = await loadFeatureFlags(env);
-    const access = await requireStaffAccess({ request, env, body, capability: "manage_staff", allowLegacyAdminFallback: true });
+    const access = await requireStaffAccess({ request, env, body, capability: "manage_staff", allowLegacyAdminFallback: false });
     if (!access.ok) return withCors(access.response);
 
     if (flags.notifications_retry_enabled === false) {

@@ -1,5 +1,5 @@
 
-import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "../_lib/staff-auth.js";
+import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "./_lib/staff-auth.js";
 
 export async function onRequestOptions() {
   return new Response("", { status: 204, headers: corsHeaders() });
@@ -14,7 +14,7 @@ export async function onRequestPost(context) {
       env,
       body,
       capability: "manage_progress",
-      allowLegacyAdminFallback: true
+      allowLegacyAdminFallback: false
     });
     if (!access.ok) return withCors(access.response);
 

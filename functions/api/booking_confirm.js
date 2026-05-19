@@ -1,6 +1,6 @@
-// functions/api/admin/booking_confirm.js
+// functions/api/booking_confirm.js
 //
-// Role-aware booking confirm / unconfirm endpoint.
+// Public/admin booking confirm endpoint used by the Pages Functions build.
 //
 // What this file does:
 // - keeps current ADMIN_PASSWORD bridge protection
@@ -8,6 +8,7 @@
 // - confirms a booking by setting status/job_status consistently
 // - can return a booking to pending when needed
 // - optionally stamps confirmed_at when confirming
+// - queues an order-confirmation notification when confirming
 //
 // Supported request body:
 // {
@@ -31,8 +32,8 @@ import {
   methodNotAllowed,
   isUuid,
   toBoolean
-} from "../_lib/staff-auth.js";
-import { queueOrderConfirmationNotification } from "../_lib/booking-documents.js";
+} from "./_lib/staff-auth.js";
+import { queueOrderConfirmationNotification } from "./_lib/booking-documents.js";
 
 export async function onRequestOptions() {
   return new Response("", {
@@ -113,7 +114,9 @@ export async function onRequestPost(context) {
 
     const rows = await res.json().catch(() => []);
     const row = Array.isArray(rows) ? rows[0] || null : null;
-    const notification = confirmed ? await queueOrderConfirmationNotification(env, booking_id, "admin_booking_confirm") : null;
+    const notification = confirmed
+      ? await queueOrderConfirmationNotification(env, booking_id, "admin_booking_confirm")
+      : null;
 
     return withCors(
       json({

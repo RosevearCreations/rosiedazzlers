@@ -1804,11 +1804,6 @@ function normalizePage(page) {
     highlights: normalizeStringArray(page?.highlights),
     things_to_know: normalizeStringArray(page?.things_to_know),
     official_links: normalizeLinkArray(page?.official_links),
-    related_products: normalizeProductRefs(page?.related_products),
-    hero_image_url: String(page?.hero_image_url || "").trim(),
-    region_photo_caption: String(page?.region_photo_caption || "").trim(),
-    region_photo_source: String(page?.region_photo_source || "").trim(),
-    region_photo_source_url: String(page?.region_photo_source_url || "").trim(),
     gallery_images: normalizeStringArray(page?.gallery_images),
     faq: faq.map((item) => ({ q: String(item?.q || "").trim(), a: String(item?.a || "").trim() })).filter((item) => item.q && item.a)
   };
@@ -1834,13 +1829,6 @@ function normalizeProductArray(value) {
   })).filter((item) => item.name || item.image_url);
 }
 
-function normalizeProductRefs(value) {
-  return (Array.isArray(value) ? value : []).map((item) => ({
-    name: String(item?.name || item?.title || "").trim(),
-    role: String(item?.role || "").trim(),
-    note: String(item?.note || "").trim()
-  })).filter((item) => item.name);
-}
 
 function cloneLandingPages(payload) {
   const raw = JSON.parse(JSON.stringify(payload || SYSTEM_LANDING_PAGES));
