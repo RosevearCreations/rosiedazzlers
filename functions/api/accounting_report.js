@@ -1,8 +1,8 @@
 // Build 154 stale-route compatibility shim.
-// Active implementation: functions/api/admin/accounting_payroll_payout_reconciliation.js.
+// Active implementation: functions/api/admin/accounting_report.js.
 // This root file overwrites older flat routes left behind by GitHub web uploads.
 
-import * as adminRoute from "./admin/accounting_payroll_payout_reconciliation.js";
+import * as adminRoute from "./admin/accounting_report.js";
 
 function methodNotAvailable() {
   return new Response(JSON.stringify({ ok: false, error: "Route method is not available here. Use the admin route." }), {
