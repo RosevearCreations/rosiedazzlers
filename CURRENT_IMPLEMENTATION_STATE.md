@@ -1,12 +1,12 @@
-# Current Implementation State — Build 151
+# Current Implementation State — Build 153
 
 **Updated:** 2026-05-18
 
 ## Current baseline
 
-Build 151 continues from Build 150 and keeps `rosiedazzlers-dev` as the working dev branch baseline.
+Build 153 continues from Build 151 and keeps `rosiedazzlers-dev` as the working dev branch baseline.
 
-The current focus is the Admin Catalog inventory workflow. Build 150 repaired fallback image hydration for saved DB rows with blank `image_url`. Build 151 extends that into a stronger image workflow with a media-library read endpoint, selected-row image repair, duplicate-image diagnostics, and browser image health scanning.
+The current focus is the Admin Catalog inventory workflow plus deploy stability. Build 150 repaired fallback image hydration for saved DB rows with blank `image_url`. Build 151 extended that into a stronger image workflow with a media-library read endpoint, selected-row image repair, duplicate-image diagnostics, and browser image health scanning. Build 153 repairs the Cloudflare Pages Functions deploy blocker and adds release checks to catch that class of issue before upload.
 
 ## What is working now
 
@@ -18,7 +18,7 @@ The current focus is the Admin Catalog inventory workflow. Build 150 repaired fa
 - Selected rows can be repaired/imported so fallback-matched images are saved back to DB.
 - Visible inventory images can be browser-scanned for failed loads.
 - Duplicate image groups are counted and flagged.
-- Release checks include static checks, local SEO/H1 audit, catalog fallback checks, Amazon matching, mobile nav, Admin App editor, inventory picker, and media-library picker guards.
+- Release checks include Cloudflare Pages Functions deploy-safety checks, static checks, local SEO/H1 audit, catalog fallback checks, Amazon matching, mobile nav, Admin App editor, inventory picker, and media-library picker guards.
 
 ## Current schema state
 
@@ -31,4 +31,8 @@ The current focus is the Admin Catalog inventory workflow. Build 150 repaired fa
 
 Apply migrations in order and smoke-test Admin Catalog after deploy. If `app_media_library` is not present or not seeded yet, the UI should continue to work from app settings and bundled JSON/R2 fallbacks.
 
-<!-- Build 151 sync 2026-05-18 -->
+<!-- Build 153 sync 2026-05-18 -->
+
+## Build 153 deployment hotfix status
+
+Build 153 is a Cloudflare deploy-repair pass. It keeps the Build 151/152 inventory media workflow intact, fixes unresolved `_lib` imports reported by Cloudflare Pages Functions, keeps the `media_library_list` regex repair, and keeps `landing_pages_public.js` normalized without duplicate keys. No data workflow or database shape changed.

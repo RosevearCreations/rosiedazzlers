@@ -1,4 +1,4 @@
-import { requireStaffAccess, serviceHeaders, json, methodNotAllowed, isUuid } from "../_lib/staff-auth.js";
+import { requireStaffAccess, serviceHeaders, json, methodNotAllowed, isUuid } from "./_lib/staff-auth.js";
 
 export async function onRequestOptions(){ return new Response('', { status:204, headers:corsHeaders() }); }
 export async function onRequestPost(context){

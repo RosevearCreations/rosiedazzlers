@@ -1,4 +1,4 @@
-# Database Structure Current — Build 151
+# Database Structure Current — Build 153
 
 **Updated:** 2026-05-18
 
@@ -50,4 +50,12 @@ sql/2026-05-18_build151_media_library_inventory_image_workflow.sql
 
 This migration is non-destructive and safe to apply before the media library is populated.
 
-<!-- Build 151 sync 2026-05-18 -->
+## Build 153 schema note
+
+Build 153 is a deploy hotfix and release-check hardening pass. It does not add or change database tables. The current schema remains Build 151 plus the Build 150 inventory image indexes.
+
+<!-- Build 153 sync 2026-05-18 -->
+
+## Build 153 schema note
+
+Build 153 has no database DDL. The schema remains the Build 151 media-library baseline plus Build 150 inventory image indexes. This pass only repairs Cloudflare Pages Functions import resolution and deploy checks.

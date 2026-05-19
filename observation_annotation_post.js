@@ -1,6 +1,6 @@
-import { requireStaffAccess, serviceHeaders, json, methodNotAllowed, isUuid } from "../_lib/staff-auth.js";
-import { loadFeatureFlags } from "../_lib/app-settings.js";
-import { maybeQueueCustomerNotification } from "../_lib/notification-hooks.js";
+import { requireStaffAccess, serviceHeaders, json, methodNotAllowed, isUuid } from "./_lib/staff-auth.js";
+import { loadFeatureFlags } from "./_lib/app-settings.js";
+import { maybeQueueCustomerNotification } from "./_lib/notification-hooks.js";
 
 export async function onRequestOptions() {
   return new Response("", { status: 204, headers: corsHeaders() });

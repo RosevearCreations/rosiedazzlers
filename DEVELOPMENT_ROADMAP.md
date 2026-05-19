@@ -1,8 +1,24 @@
-# Development Roadmap — Build 151
+# Development Roadmap — Build 153
 
 **Updated:** 2026-05-18  
 **Target branch:** `dev`  
-**Pass focus:** Inventory media-library picker foundation, selected-row image repair, duplicate-image diagnostics, browser image health scan, schema/docs synchronization, and continued SEO/H1/CSS release discipline.
+**Pass focus:** Cloudflare Pages Functions deploy hotfix, media-library endpoint syntax repair, duplicate landing-page key cleanup, release-check hardening, schema/docs synchronization, and continued SEO/H1/CSS release discipline.
+
+
+## Build 153 completed deployment hotfix pass
+
+1. Reviewed the Cloudflare Pages deploy log and confirmed the blocking error was an unterminated regular expression in `functions/api/admin/media_library_list.js`.
+2. Repaired `normalizeList()` so comma/newline splitting uses an esbuild-safe `/[\n,]/` expression instead of a literal newline inside the regex character class.
+3. Reviewed Cloudflare warnings in `functions/api/landing_pages_public.js`.
+4. Removed duplicate `related_products` normalization from `normalizePage()` while keeping the richer image-capable product normalization.
+5. Removed duplicate `hero_image_url`, `region_photo_caption`, `region_photo_source`, and `region_photo_source_url` keys from the same object literal.
+6. Removed the now-unused `normalizeProductRefs()` helper to avoid future confusion between two product reference shapes.
+7. Added `scripts/cloudflare_pages_functions_check.py` to catch deploy-only JavaScript issues before upload.
+8. The new checker runs `node --check` across project JavaScript files and also catches literal-newline regex character classes that Cloudflare/esbuild can reject.
+9. The new checker guards `landing_pages_public.js` against duplicate `normalizePage()` object keys.
+10. Wired the new Cloudflare Pages Functions deploy-safety checker into `scripts/release_check.py`.
+11. Re-ran the full release checklist after the deploy hotfix.
+12. Updated Markdown and schema tracking notes so Build 153 is documented as the current baseline.
 
 ## Build 151 completed 20-step pass
 
@@ -50,4 +66,40 @@
 19. Add mobile detailer job closeout that records consumables/tools used, photos/videos, customer sign-off, and follow-up notes.
 20. Keep every release pass checking one H1 per exposed page, local title/meta clarity, structured data, CSS drift, and stable redirects.
 
-<!-- Build 151 sync 2026-05-18: media-library inventory image workflow, selected-row image repair, duplicate diagnostics, image health scan, schema sync, and local SEO/H1 discipline pass. -->
+<!-- Build 153 sync 2026-05-18: Cloudflare Pages Functions deploy hotfix, media-library endpoint regex repair, landing-page duplicate-key cleanup, release-check hardening, schema sync, and local SEO/H1 discipline pass. -->
+
+## Build 153 completed deployment repair pass
+
+1. Repaired root `/functions/api/*.js` import paths from `../_lib/...` to `./_lib/...` so Cloudflare Pages Functions can resolve helpers.
+2. Preserved valid nested admin imports and mirrored helper libraries as a defensive fallback for legacy flat route files.
+3. Confirmed `functions/api/admin/media_library_list.js` no longer contains the esbuild-breaking regex newline issue.
+4. Confirmed `functions/api/landing_pages_public.js` normalizePage no longer has duplicate object keys.
+5. Added a no-DDL migration note for Build 153.
+6. Hardened `scripts/cloudflare_pages_functions_check.py` to check relative import resolution before packaging.
+7. Ran the Cloudflare deploy-safety check successfully across 499 JavaScript files.
+8. Ran Node syntax checks successfully across 384 Functions JavaScript files.
+9. Kept the Build 151 inventory media picker/fallback workflow unchanged.
+10. Updated active Markdown and schema notes for Build 153.
+
+## Next 20 recommended steps after Build 153
+
+1. Deploy Build 153 to Cloudflare Pages and confirm the Functions compile finishes cleanly.
+2. If any Cloudflare log remains, fix only the exact named file before starting new features.
+3. Apply Build 150 and Build 151 SQL migrations in Supabase dev if not already applied.
+4. Seed `app_media_library` from current R2 tool, consumable, add-on, and service-image folders.
+5. Add an Admin Media Library screen to edit label, alt text, usage context, source status, and sort order.
+6. Add direct R2 upload from Admin Catalog image picker.
+7. Add bulk image repair for all inventory rows, not only visible selected rows.
+8. Add a missing/duplicate/broken image dashboard for catalog, services, add-ons, and landing pages.
+9. Add image alt-text quality scoring to Admin Catalog save validation.
+10. Add local-service landing page smoke tests for title, meta, H1, locality terms, and canonical links.
+11. Add deployed smoke checks for `/api/admin/media_library_list` and key Admin Catalog endpoints.
+12. Move legacy flat root API JavaScript copies out of the live root once Cloudflare deploy is stable.
+13. Keep `service-worker.js` as the only intentional root JavaScript file unless a page explicitly loads another root script.
+14. Add a repo-cleanliness check that flags duplicate API route files outside `/functions`.
+15. Add admin UI messaging when media library DB tables are unavailable and fallbacks are being used.
+16. Add inventory/product image history so changed images can be reverted.
+17. Add service-area/town page image assignment from the shared media library.
+18. Continue one-H1 checks on every exposed page.
+19. Continue CSS drift checks on public and admin pages after each feature pass.
+20. Re-run the full release check after the deploy hotfix is confirmed.

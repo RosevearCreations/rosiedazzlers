@@ -1,15 +1,18 @@
-# Known Gaps and Risks — Build 151
+# Known Gaps and Risks — Build 153
 
 **Updated:** 2026-05-18
 
 ## Reduced in this pass
 
+- Cloudflare Pages Functions deploy blocker from Build 151 was repaired in `/api/admin/media_library_list`.
+- Duplicate object-key warnings in `landing_pages_public.js` were cleaned up.
+- Release checks now include a Cloudflare Pages Functions deploy-safety guard for JavaScript syntax, esbuild-sensitive regexes, and duplicate landing-page normalization keys.
 - Admin Catalog now has a media-library-aware image picker path through `/api/admin/media_library_list`.
 - The picker can search DB media rows, app-setting media rows, bundled consumables/tools fallback rows, saved DB inventory rows, and helper image URLs.
 - Staff can select inventory rows and use **Repair selected images** to persist fallback-matched images instead of only seeing temporary UI hydration.
 - Browser-side **Scan visible images** can flag image URLs that fail to load during the current admin session.
 - Duplicate-image groups are counted in the quality summary and shown on affected rows.
-- Release checks now guard the media-library picker, selected image repair, duplicate diagnostics, image health scan, and endpoint markers.
+- Release checks now guard the Cloudflare deploy hotfix, media-library picker, selected image repair, duplicate diagnostics, image health scan, and endpoint markers.
 - Schema tracking now includes the Build 151 `app_media_library` table/index baseline.
 
 ## Still open
@@ -25,6 +28,12 @@
 9. Reviews, before/after proof, and inventory/tool stories are not yet automatically filtered by town/service page.
 10. Inventory/accounting still needs stock-count sessions, variance review, receipt attachment, and lockable month-end inventory valuation.
 11. Search Console and Google Business Profile reporting are not yet connected.
-12. Some historical Markdown snapshots remain for traceability, but active docs are the Build 151 working handoff source.
+12. Some historical Markdown snapshots remain for traceability, but active docs are the Build 153 working handoff source.
 
-<!-- Build 151 sync 2026-05-18: reviewed during inventory/media image workflow pass. -->
+<!-- Build 153 sync 2026-05-18: reviewed during Cloudflare deploy hotfix and inventory/media image workflow pass. -->
+
+## Build 153 known risks update
+
+- Build 153 should resolve the Cloudflare unresolved `_lib` import errors by correcting root API import paths and hardening release checks.
+- Deploy still needs to be confirmed on Cloudflare Pages because the previous failure happened during Cloudflare's Functions bundling step.
+- Legacy flat root API JavaScript copies still exist for compatibility in this ZIP, but they should be retired after a clean deploy confirms `/functions/api` is the only needed route source.

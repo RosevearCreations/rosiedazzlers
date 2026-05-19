@@ -1,12 +1,12 @@
-# Handoff Next Chat — Build 151
+# Handoff Next Chat — Build 153
 
 **Updated:** 2026-05-18
 
-Current build: **Build 151**.
+Current build: **Build 153**.
 
 ## What changed last
 
-Admin Catalog now has a media-library-aware image picker foundation, selected-row fallback image repair, duplicate image diagnostics, and browser image health scanning. A new staff-protected endpoint, `/api/admin/media_library_list`, reads `app_media_library` when available and falls back to `app_management_settings.media_library`.
+Build 153 repairs the Cloudflare Pages Functions deploy blocker in `/api/admin/media_library_list`, cleans duplicate landing-page public API object keys, and keeps the Build 151 media-library-aware image picker, selected-row fallback image repair, duplicate image diagnostics, and browser image health scanning.
 
 ## First things to test next
 
@@ -19,6 +19,10 @@ Admin Catalog now has a media-library-aware image picker foundation, selected-ro
 
 ## Next coding direction
 
-Seed `app_media_library` from R2 product/tool folders, then add direct R2 upload and editable image metadata from Admin Catalog.
+Deploy Build 153, confirm Cloudflare Pages Functions compile cleanly, then seed `app_media_library` from R2 product/tool folders and add direct R2 upload plus editable image metadata from Admin Catalog.
 
-<!-- Build 151 sync 2026-05-18 -->
+<!-- Build 153 sync 2026-05-18 -->
+
+## Build 153 handoff note
+
+Current build: **Build 153**. Deploy this ZIP next. It specifically repairs the Cloudflare Pages Functions unresolved `_lib` import errors that appeared after the regex fix. The next confirmation target is a clean Cloudflare Functions upload/compile.

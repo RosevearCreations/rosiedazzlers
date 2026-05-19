@@ -1,4 +1,4 @@
-# Images and Media Workflow — Build 151
+# Images and Media Workflow — Build 153
 
 **Updated:** 2026-05-18
 
@@ -17,7 +17,7 @@ Admin Catalog now has a layered image workflow:
 
 ## Media-library direction
 
-Build 151 adds `/api/admin/media_library_list`, which reads from:
+Build 151/152 uses `/api/admin/media_library_list`, which reads from:
 
 1. `app_media_library` when available.
 2. `app_management_settings.media_library` as compatibility fallback.
@@ -51,4 +51,8 @@ Keep using practical image standards:
 - Add server-side image health reports.
 - Add duplicate-image approval for intentional multipacks/shared tool images.
 
-<!-- Build 151 sync 2026-05-18 -->
+<!-- Build 153 sync 2026-05-18 -->
+
+## Build 153 media workflow note
+
+No image workflow behavior changed in Build 153. The Build 151/152 media-library picker, fallback image hydration, selected-row image repair, duplicate-image warnings, and visible image scan remain the active design. This pass only repairs deploy packaging/import stability around those endpoints.

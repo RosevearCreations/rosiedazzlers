@@ -1,7 +1,7 @@
 
-import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "../_lib/staff-auth.js";
-import { loadFeatureFlags } from "../_lib/app-settings.js";
-import { dispatchNotificationThroughProvider } from "../_lib/provider-dispatch.js";
+import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "./_lib/staff-auth.js";
+import { loadFeatureFlags } from "./_lib/app-settings.js";
+import { dispatchNotificationThroughProvider } from "./_lib/provider-dispatch.js";
 
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 
