@@ -103,3 +103,10 @@
 18. Continue one-H1 checks on every exposed page.
 19. Continue CSS drift checks on public and admin pages after each feature pass.
 20. Re-run the full release check after the deploy hotfix is confirmed.
+
+## Build 154 Cloudflare stale root function shim hotfix - 2026-05-19
+
+Cloudflare still saw older flat `/functions/api/*.js` route files after GitHub web uploads, because uploading ZIP contents does not reliably delete older files from the branch. Build 154 intentionally includes compatibility shim files for the stale flat routes listed in the Cloudflare deploy log. Each shim re-exports the active `/functions/api/admin/*.js` implementation and prevents Pages Functions bundling failures while preserving the newer admin route implementation.
+
+Next step: after Build 154 deploys cleanly, optionally remove the compatibility shims in a clean-branch/orphan rebuild so only the intended folder-backed route files remain.
+

@@ -36,3 +36,10 @@ Apply migrations in order and smoke-test Admin Catalog after deploy. If `app_med
 ## Build 153 deployment hotfix status
 
 Build 153 is a Cloudflare deploy-repair pass. It keeps the Build 151/152 inventory media workflow intact, fixes unresolved `_lib` imports reported by Cloudflare Pages Functions, keeps the `media_library_list` regex repair, and keeps `landing_pages_public.js` normalized without duplicate keys. No data workflow or database shape changed.
+
+## Build 154 Cloudflare stale root function shim hotfix - 2026-05-19
+
+Cloudflare still saw older flat `/functions/api/*.js` route files after GitHub web uploads, because uploading ZIP contents does not reliably delete older files from the branch. Build 154 intentionally includes compatibility shim files for the stale flat routes listed in the Cloudflare deploy log. Each shim re-exports the active `/functions/api/admin/*.js` implementation and prevents Pages Functions bundling failures while preserving the newer admin route implementation.
+
+Next step: after Build 154 deploys cleanly, optionally remove the compatibility shims in a clean-branch/orphan rebuild so only the intended folder-backed route files remain.
+
