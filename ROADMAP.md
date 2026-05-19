@@ -1,8 +1,24 @@
-# Development Roadmap — Build 151
+# Development Roadmap — Build 153
 
 **Updated:** 2026-05-18  
 **Target branch:** `dev`  
-**Pass focus:** Inventory media-library picker foundation, selected-row image repair, duplicate-image diagnostics, browser image health scan, schema/docs synchronization, and continued SEO/H1/CSS release discipline.
+**Pass focus:** Cloudflare Pages Functions deploy hotfix, media-library endpoint syntax repair, duplicate landing-page key cleanup, release-check hardening, schema/docs synchronization, and continued SEO/H1/CSS release discipline.
+
+
+## Build 153 completed deployment hotfix pass
+
+1. Reviewed the Cloudflare Pages deploy log and confirmed the blocking error was an unterminated regular expression in `functions/api/admin/media_library_list.js`.
+2. Repaired `normalizeList()` so comma/newline splitting uses an esbuild-safe `/[\n,]/` expression instead of a literal newline inside the regex character class.
+3. Reviewed Cloudflare warnings in `functions/api/landing_pages_public.js`.
+4. Removed duplicate `related_products` normalization from `normalizePage()` while keeping the richer image-capable product normalization.
+5. Removed duplicate `hero_image_url`, `region_photo_caption`, `region_photo_source`, and `region_photo_source_url` keys from the same object literal.
+6. Removed the now-unused `normalizeProductRefs()` helper to avoid future confusion between two product reference shapes.
+7. Added `scripts/cloudflare_pages_functions_check.py` to catch deploy-only JavaScript issues before upload.
+8. The new checker runs `node --check` across project JavaScript files and also catches literal-newline regex character classes that Cloudflare/esbuild can reject.
+9. The new checker guards `landing_pages_public.js` against duplicate `normalizePage()` object keys.
+10. Wired the new Cloudflare Pages Functions deploy-safety checker into `scripts/release_check.py`.
+11. Re-ran the full release checklist after the deploy hotfix.
+12. Updated Markdown and schema tracking notes so Build 153 is documented as the current baseline.
 
 ## Build 151 completed 20-step pass
 
@@ -50,4 +66,8 @@
 19. Add mobile detailer job closeout that records consumables/tools used, photos/videos, customer sign-off, and follow-up notes.
 20. Keep every release pass checking one H1 per exposed page, local title/meta clarity, structured data, CSS drift, and stable redirects.
 
-<!-- Build 151 sync 2026-05-18: media-library inventory image workflow, selected-row image repair, duplicate diagnostics, image health scan, schema sync, and local SEO/H1 discipline pass. -->
+<!-- Build 153 sync 2026-05-18: Cloudflare Pages Functions deploy hotfix, media-library endpoint regex repair, landing-page duplicate-key cleanup, release-check hardening, schema sync, and local SEO/H1 discipline pass. -->
+
+## Build 153 roadmap note
+
+Build 153 is a deploy-stability pass. After confirming a clean Cloudflare deploy, continue with media-library seeding, direct R2 upload, bulk image repair, image health dashboards, and local SEO/H1 release checks.

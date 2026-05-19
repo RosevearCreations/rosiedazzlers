@@ -1,4 +1,4 @@
-# Sanity Check — Build 151
+# Sanity Check — Build 153
 
 **Updated:** 2026-05-18
 
@@ -8,10 +8,11 @@
 python scripts/release_check.py
 ```
 
-Build 151 release check coverage includes:
+Build 153 release check coverage includes:
 
 - JSON parsing under `data/`
 - `sitemap.xml` parsing
+- Cloudflare Pages Functions deploy-safety checks
 - static page/link checks
 - local SEO/H1 audit
 - catalog fallback merge checks
@@ -41,6 +42,14 @@ Build 151 release check coverage includes:
 
 ## Known deploy caution
 
-`app_media_library` may not be populated on dev yet. That is okay. Admin Catalog should still work through app settings and bundled JSON/R2 fallbacks.
+`app_media_library` may not be populated on dev yet. That is okay. Admin Catalog should still work through app settings and bundled JSON/R2 fallbacks. Build 153 also specifically guards the prior Cloudflare deploy failure in `media_library_list.js` and duplicate landing-page object-key warnings.
 
-<!-- Build 151 sync 2026-05-18 -->
+<!-- Build 153 sync 2026-05-18 -->
+
+## Build 153 sanity check
+
+- PASS: `scripts/cloudflare_pages_functions_check.py` completed successfully across 499 JavaScript files.
+- PASS: Node syntax checks completed successfully across 384 Functions JavaScript files.
+- PASS: relative import resolution check found no unresolved local JavaScript imports.
+- PASS: no esbuild-sensitive literal newline regex issue found in media-library route files.
+- PASS: landing page normalizePage duplicate-key check is clean.

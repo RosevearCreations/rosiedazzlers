@@ -1084,3 +1084,10 @@ create index if not exists idx_app_media_library_source_status on public.app_med
 create index if not exists idx_app_media_library_media_type on public.app_media_library(media_type);
 create index if not exists idx_app_media_library_inventory_images on public.app_media_library(group_key, sort_order) where source_status <> 'archived' and media_type in ('image', 'photo');
 -- Build 151 also adds client-side duplicate image diagnostics, visible-image health scanning, and a bulk selected-row image repair action; those are frontend/API workflow updates over the existing inventory schema.
+
+
+-- Build 153 deploy hotfix note (2026-05-18)
+-- No DDL change. Repaired Cloudflare Pages Functions JavaScript in /api/admin/media_library_list,
+-- removed duplicate landing_pages_public normalizePage keys, and added deploy-safety release checks.
+-- Active DB baseline remains Build 150 inventory image indexes plus Build 151 app_media_library.
+-- Build 153 schema sync note: no DDL changes. Cloudflare Pages Functions import-path hotfix only.

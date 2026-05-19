@@ -1,4 +1,4 @@
-# Repo Guide — Build 151
+# Repo Guide — Build 152
 
 **Updated:** 2026-05-18
 
@@ -13,7 +13,7 @@
 - Release checks: `scripts/**`.
 - Active docs: root Markdown files listed in `DOC_INDEX.md`.
 
-## Build 151 rule
+## Build 152 rule
 
 When changing Admin Catalog, keep the root and folder-backed page copies synchronized:
 
@@ -27,4 +27,8 @@ When changing schema or database-facing behavior, update:
 - `DATABASE_STRUCTURE_CURRENT.md`
 - roadmap/gaps/sanity handoff docs
 
-<!-- Build 151 sync 2026-05-18 -->
+<!-- Build 152 sync 2026-05-18 -->
+
+## Build 153 synchronization note
+
+Reviewed during the 2026-05-19 Cloudflare Pages Functions import-path hotfix. No document-specific workflow change was required here; active handoff, roadmap, sanity, and schema docs carry the detailed Build 153 notes.
