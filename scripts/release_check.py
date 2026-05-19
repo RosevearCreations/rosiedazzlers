@@ -27,6 +27,7 @@ def validate_xml() -> None:
 def main() -> None:
     validate_json()
     validate_xml()
+    run([sys.executable, "scripts/cloudflare_pages_functions_check.py"])
     run([sys.executable, "scripts/stress_static_checks.py"])
     run([sys.executable, "scripts/local_seo_audit.py"])
     run([sys.executable, "scripts/catalog_fallback_check.py"])
