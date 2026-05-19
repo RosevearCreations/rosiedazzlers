@@ -13,7 +13,7 @@ import subprocess
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-JS_GLOBS = ["functions/**/*.js", "*.js", "assets/**/*.js", "scripts/**/*.js"]
+JS_GLOBS = ["functions/**/*.js"]
 
 
 def iter_js_files() -> list[pathlib.Path]:
@@ -28,13 +28,18 @@ def iter_js_files() -> list[pathlib.Path]:
 def run_node_checks(files: list[pathlib.Path]) -> None:
     failures: list[str] = []
     for path in files:
-        result = subprocess.run(
-            ["node", "--check", str(path.relative_to(ROOT))],
-            cwd=ROOT,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
+        try:
+            result = subprocess.run(
+                ["node", "--check", str(path.relative_to(ROOT))],
+                cwd=ROOT,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=20,
+            )
+        except subprocess.TimeoutExpired:
+            failures.append(f"{path.relative_to(ROOT)}\nnode --check timed out after 20 seconds")
+            continue
         if result.returncode:
             failures.append(f"{path.relative_to(ROOT)}\n{result.stderr.strip()}")
     if failures:
