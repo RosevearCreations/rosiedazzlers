@@ -1,4 +1,4 @@
-# Sanity Check — Build 153
+# Sanity Check — Build 155
 
 **Updated:** 2026-05-18
 
@@ -8,7 +8,7 @@
 python scripts/release_check.py
 ```
 
-Build 153 release check coverage includes:
+Build 155 release check coverage includes:
 
 - JSON parsing under `data/`
 - `sitemap.xml` parsing
@@ -42,11 +42,11 @@ Build 153 release check coverage includes:
 
 ## Known deploy caution
 
-`app_media_library` may not be populated on dev yet. That is okay. Admin Catalog should still work through app settings and bundled JSON/R2 fallbacks. Build 153 also specifically guards the prior Cloudflare deploy failure in `media_library_list.js` and duplicate landing-page object-key warnings.
+`app_media_library` may not be populated on dev yet. That is okay. Admin Catalog should still work through app settings and bundled JSON/R2 fallbacks. Build 155 also specifically guards the prior Cloudflare deploy failure in `media_library_list.js` and duplicate landing-page object-key warnings.
 
-<!-- Build 153 sync 2026-05-18 -->
+<!-- Build 155 sync 2026-05-18 -->
 
-## Build 153 sanity check
+## Build 155 sanity check
 
 - PASS: `scripts/cloudflare_pages_functions_check.py` completed successfully across 499 JavaScript files.
 - PASS: Node syntax checks completed successfully across 384 Functions JavaScript files.
@@ -54,9 +54,16 @@ Build 153 release check coverage includes:
 - PASS: no esbuild-sensitive literal newline regex issue found in media-library route files.
 - PASS: landing page normalizePage duplicate-key check is clean.
 
-## Build 154 Cloudflare stale root function shim hotfix - 2026-05-19
+## Build 155 Cloudflare stale root function shim hotfix - 2026-05-19
 
-Cloudflare still saw older flat `/functions/api/*.js` route files after GitHub web uploads, because uploading ZIP contents does not reliably delete older files from the branch. Build 154 intentionally includes compatibility shim files for the stale flat routes listed in the Cloudflare deploy log. Each shim re-exports the active `/functions/api/admin/*.js` implementation and prevents Pages Functions bundling failures while preserving the newer admin route implementation.
+Cloudflare still saw older flat `/functions/api/*.js` route files after GitHub web uploads, because uploading ZIP contents does not reliably delete older files from the branch. Build 155 intentionally includes compatibility shim files for the stale flat routes listed in the Cloudflare deploy log. Each shim re-exports the active `/functions/api/admin/*.js` implementation and prevents Pages Functions bundling failures while preserving the newer admin route implementation.
 
-Next step: after Build 154 deploys cleanly, optionally remove the compatibility shims in a clean-branch/orphan rebuild so only the intended folder-backed route files remain.
+Next step: after Build 155 deploys cleanly, optionally remove the compatibility shims in a clean-branch/orphan rebuild so only the intended folder-backed route files remain.
+
+
+## Build 155 Cloudflare root import release-check hotfix - 2026-05-18
+
+Build 155 repairs the remaining root Cloudflare Pages Function import paths that could still break deployment after Build 154. Four root `/functions/api/*.js` files still used `../_lib/...`; root routes must use `./_lib/...`. Build 155 fixes those files, keeps the stale-route shims, wires the stale-root import guard into the release checklist, and updates the release runner so the full check can complete in this sandbox.
+
+Build 155 release check passed with JSON, sitemap, Cloudflare Functions, stale-root import, static, SEO/H1, catalog fallback, service-area, catalog quality, import preview, Amazon match, mobile nav, landing-photo, Admin App editor, inventory picker, and media-library picker checks.
 

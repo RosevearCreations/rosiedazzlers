@@ -1092,3 +1092,7 @@ create index if not exists idx_app_media_library_inventory_images on public.app_
 -- Active DB baseline remains Build 150 inventory image indexes plus Build 151 app_media_library.
 -- Build 153 schema sync note: no DDL changes. Cloudflare Pages Functions import-path hotfix only.
 -- Build 154 note: no schema shape change; Cloudflare Pages Function shim hotfix only.
+
+-- Build 155 note (2026-05-18): no schema shape change.
+-- Repaired remaining root Cloudflare Pages Function import paths and hardened release checks.
+-- Active DB baseline remains Build 150 inventory image indexes plus Build 151 app_media_library.

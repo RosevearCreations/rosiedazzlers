@@ -1,4 +1,4 @@
-# Known Gaps and Risks — Build 153
+# Known Gaps and Risks — Build 155
 
 **Updated:** 2026-05-18
 
@@ -28,19 +28,26 @@
 9. Reviews, before/after proof, and inventory/tool stories are not yet automatically filtered by town/service page.
 10. Inventory/accounting still needs stock-count sessions, variance review, receipt attachment, and lockable month-end inventory valuation.
 11. Search Console and Google Business Profile reporting are not yet connected.
-12. Some historical Markdown snapshots remain for traceability, but active docs are the Build 153 working handoff source.
+12. Some historical Markdown snapshots remain for traceability, but active docs are the Build 155 working handoff source.
 
-<!-- Build 153 sync 2026-05-18: reviewed during Cloudflare deploy hotfix and inventory/media image workflow pass. -->
+<!-- Build 155 sync 2026-05-18: reviewed during Cloudflare deploy hotfix and inventory/media image workflow pass. -->
 
-## Build 153 known risks update
+## Build 155 known risks update
 
-- Build 153 should resolve the Cloudflare unresolved `_lib` import errors by correcting root API import paths and hardening release checks.
+- Build 155 should resolve the Cloudflare unresolved `_lib` import errors by correcting root API import paths and hardening release checks.
 - Deploy still needs to be confirmed on Cloudflare Pages because the previous failure happened during Cloudflare's Functions bundling step.
 - Legacy flat root API JavaScript copies still exist for compatibility in this ZIP, but they should be retired after a clean deploy confirms `/functions/api` is the only needed route source.
 
-## Build 154 Cloudflare stale root function shim hotfix - 2026-05-19
+## Build 155 Cloudflare stale root function shim hotfix - 2026-05-19
 
-Cloudflare still saw older flat `/functions/api/*.js` route files after GitHub web uploads, because uploading ZIP contents does not reliably delete older files from the branch. Build 154 intentionally includes compatibility shim files for the stale flat routes listed in the Cloudflare deploy log. Each shim re-exports the active `/functions/api/admin/*.js` implementation and prevents Pages Functions bundling failures while preserving the newer admin route implementation.
+Cloudflare still saw older flat `/functions/api/*.js` route files after GitHub web uploads, because uploading ZIP contents does not reliably delete older files from the branch. Build 155 intentionally includes compatibility shim files for the stale flat routes listed in the Cloudflare deploy log. Each shim re-exports the active `/functions/api/admin/*.js` implementation and prevents Pages Functions bundling failures while preserving the newer admin route implementation.
 
-Next step: after Build 154 deploys cleanly, optionally remove the compatibility shims in a clean-branch/orphan rebuild so only the intended folder-backed route files remain.
+Next step: after Build 155 deploys cleanly, optionally remove the compatibility shims in a clean-branch/orphan rebuild so only the intended folder-backed route files remain.
+
+
+## Build 155 Cloudflare root import release-check hotfix - 2026-05-18
+
+Build 155 repairs the remaining root Cloudflare Pages Function import paths that could still break deployment after Build 154. Four root `/functions/api/*.js` files still used `../_lib/...`; root routes must use `./_lib/...`. Build 155 fixes those files, keeps the stale-route shims, wires the stale-root import guard into the release checklist, and updates the release runner so the full check can complete in this sandbox.
+
+Remaining risk: GitHub web uploads can leave older files in the branch. Build 155 guards the import pattern, but the cleanest long-term fix is still a clean/orphan branch replacement after a successful deploy.
 
