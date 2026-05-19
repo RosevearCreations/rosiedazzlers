@@ -1,26 +1,18 @@
-import { requireStaffAccess, json, cleanText, isUuid, methodNotAllowed } from "../_lib/staff-auth.js";
-import { loadCrewAssignmentsMap } from "../_lib/crew-assignments.js";
+// Build 154 stale-route compatibility shim.
+// Active implementation: functions/api/admin/booking_assignment_map.js.
+// This root file overwrites older flat routes left behind by GitHub web uploads.
 
-export async function onRequestPost(context) {
-  const { request, env } = context;
-  try {
-    const body = await request.json().catch(() => ({}));
-    const access = await requireStaffAccess({ request, env, body, capability: "manage_bookings", allowLegacyAdminFallback: true });
-    if (!access.ok) return access.response;
+import * as adminRoute from "./admin/booking_assignment_map.js";
 
-    const bookingIds = Array.isArray(body.booking_ids)
-      ? body.booking_ids.map((value) => cleanText(value)).filter((value) => isUuid(value))
-      : [];
-
-    if (!bookingIds.length) {
-      return json({ ok: true, assignments_by_booking: {}, warning: null });
-    }
-
-    const mapResult = await loadCrewAssignmentsMap(env, bookingIds);
-    return json({ ok: true, assignments_by_booking: mapResult.map, warning: mapResult.warning || null });
-  } catch (err) {
-    return json({ error: err && err.message ? err.message : "Unexpected server error." }, 500);
-  }
+function methodNotAvailable() {
+  return new Response(JSON.stringify({ ok: false, error: "Route method is not available here. Use the admin route." }), {
+    status: 405,
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-store" }
+  });
 }
 
-export const onRequestGet = methodNotAllowed;
+export const onRequestOptions = adminRoute.onRequestOptions || methodNotAvailable;
+export const onRequestGet = adminRoute.onRequestGet || methodNotAvailable;
+export const onRequestPost = adminRoute.onRequestPost || methodNotAvailable;
+export const onRequestPut = adminRoute.onRequestPut || methodNotAvailable;
+export const onRequestDelete = adminRoute.onRequestDelete || methodNotAvailable;
