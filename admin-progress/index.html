@@ -108,6 +108,29 @@
         </div>
       </section>
 
+
+      <section class="section surface-grid-2">
+        <div class="panel">
+          <h2>Social sharing drafts</h2>
+          <p class="kicker">Create reviewable drafts for Facebook, Instagram, X, TikTok, Google Business Profile, LinkedIn, YouTube Shorts, or manual posting when you post job updates or media. Direct API publishing can be connected after each platform app/token is approved.</p>
+          <label class="check-row" style="margin-top:12px"><input id="socialDraftEnabled" type="checkbox" /> Create social drafts after posting update/media</label>
+          <div class="grid" style="gap:8px;margin-top:12px">
+            <label class="check-row"><input type="checkbox" name="socialPlatform" value="facebook" checked /> Facebook</label>
+            <label class="check-row"><input type="checkbox" name="socialPlatform" value="instagram" checked /> Instagram</label>
+            <label class="check-row"><input type="checkbox" name="socialPlatform" value="x" /> X</label>
+            <label class="check-row"><input type="checkbox" name="socialPlatform" value="tiktok" /> TikTok</label>
+            <label class="check-row"><input type="checkbox" name="socialPlatform" value="google_business_profile" /> Google Business Profile</label>
+          </div>
+          <label style="margin-top:12px">Hashtags<input id="socialHashtags" type="text" value="RosieDazzlers, AutoDetailing, SouthernOntario" /></label>
+          <p class="kicker" style="margin-top:10px">Drafts stay internal until reviewed or manually marked posted from the Social Queue.</p>
+          <div style="margin-top:12px"><a class="btn ghost" href="/admin-social.html">Open Social Queue</a></div>
+        </div>
+        <div class="panel">
+          <h2>Social drafts for this booking</h2>
+          <div id="socialPostsList" class="grid" style="margin-top:12px"><div class="notice">No booking loaded yet.</div></div>
+        </div>
+      </section>
+
       <section class="section surface-grid-2">
         <div class="panel">
           <h2>Updates</h2>
@@ -296,6 +319,59 @@
         </article>`).join('');
     }
 
+
+    function selectedSocialPlatforms() {
+      return Array.from(document.querySelectorAll('input[name="socialPlatform"]:checked')).map((el) => el.value);
+    }
+
+    function socialHashtags() {
+      return String(qs('#socialHashtags')?.value || '')
+        .split(/[\n,]+/)
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    async function createSocialDraft({ sourceType, sourceId, summary, mediaUrls = [] }) {
+      if (!qs('#socialDraftEnabled')?.checked) return null;
+      const platforms = selectedSocialPlatforms();
+      if (!platforms.length) return null;
+      return requestJson('/api/admin/social_post_create', {
+        method: 'POST',
+        body: {
+          token: currentToken,
+          booking_id: currentBookingId,
+          source_type: sourceType,
+          source_id: sourceId || null,
+          summary,
+          media_urls: mediaUrls,
+          platforms,
+          hashtags: socialHashtags()
+        }
+      });
+    }
+
+    function renderSocialPosts(data) {
+      const wrap = qs('#socialPostsList');
+      if (!wrap) return;
+      const posts = Array.isArray(data.social_posts) ? data.social_posts : [];
+      if (data.social_warning) {
+        wrap.innerHTML = `<div class="notice warn">Social queue needs the Build 156 SQL migration before drafts can be saved.</div>`;
+        return;
+      }
+      if (!posts.length) {
+        wrap.innerHTML = '<div class="notice">No social drafts created for this booking yet.</div>';
+        return;
+      }
+      wrap.innerHTML = posts.map((post) => `
+        <article class="card">
+          <div class="kicker">${escapeHtml(formatDateTime(post.created_at))} · ${escapeHtml(post.platform || 'platform')} · ${escapeHtml(post.status || 'draft')}</div>
+          <p>${escapeHtml(post.post_text || '')}</p>
+          ${Array.isArray(post.media_urls) && post.media_urls.length ? `<div class="kicker">Media: ${escapeHtml(post.media_urls.length)} item(s)</div>` : ''}
+          ${post.external_post_url ? `<p><a href="${escapeHtml(post.external_post_url)}" target="_blank" rel="noopener">View posted item</a></p>` : ''}
+          ${post.last_error ? `<div class="notice bad">${escapeHtml(post.last_error)}</div>` : ''}
+        </article>`).join('');
+    }
+
     function renderSignoffs(data) {
       const wrap = qs('#signoffsList');
       const signoffs = Array.isArray(data.signoffs) ? data.signoffs : [];
@@ -338,6 +414,7 @@
       renderUpdates(data);
       renderMedia(data);
       renderSignoffs(data);
+      renderSocialPosts(data);
       await loadUsageHistory();
       authReady(true);
       if (data.crew_warning) setNotice(`Progress loaded. ${data.crew_warning}`, 'warn');
@@ -416,10 +493,12 @@
         if (!createdBy || !note) return setNotice('Created by and update note are required.', 'bad');
         try {
           setNotice('Posting update…');
-          await postUpdate(token, createdBy, note, visibility);
+          const result = await postUpdate(token, createdBy, note, visibility);
+          const updateId = result && result.update ? result.update.id : null;
+          await createSocialDraft({ sourceType: 'progress_update', sourceId: updateId, summary: note });
           qs('#updateNote').value = '';
           await reloadCurrent();
-          setNotice('Update posted.', 'ok');
+          setNotice(qs('#socialDraftEnabled')?.checked ? 'Update posted and social draft(s) queued.' : 'Update posted.', 'ok');
         } catch (err) {
           setNotice(err.message || 'Could not post update.', 'bad');
         }
@@ -437,11 +516,13 @@
         if (!createdBy || !mediaUrl) return setNotice('Posted by and media URL are required.', 'bad');
         try {
           setNotice('Attaching media…');
-          await postMedia(token, createdBy, kind, caption, mediaUrl, visibility);
+          const result = await postMedia(token, createdBy, kind, caption, mediaUrl, visibility);
+          const mediaId = result && result.media ? result.media.id : null;
+          await createSocialDraft({ sourceType: 'progress_media', sourceId: mediaId, summary: caption || 'Rosie Dazzlers job photo update.', mediaUrls: [mediaUrl] });
           qs('#mediaCaption').value = '';
           qs('#mediaUrl').value = '';
           await reloadCurrent();
-          setNotice('Media attached.', 'ok');
+          setNotice(qs('#socialDraftEnabled')?.checked ? 'Media attached and social draft(s) queued.' : 'Media attached.', 'ok');
         } catch (err) {
           setNotice(err.message || 'Could not attach media.', 'bad');
         }
