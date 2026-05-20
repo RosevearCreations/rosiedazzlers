@@ -1,4 +1,8 @@
-# Database Structure Current — Build 155
+# Database Structure Current — Build 157
+
+
+**Build 157 update — 2026-05-19:** Social progress publishing bridge added. Admin Progress can automatically create social drafts and optionally attempt approved API/webhook posting. Admin Social Queue now supports Publish/API, Send webhook, Copy text/media, Ready, Mark posted, and Skip. No DDL is required beyond Build 156; Build 157 adds `sql/2026-05-19_build157_social_api_publish_bridge_no_ddl_note.sql`.
+
 
 **Updated:** 2026-05-18
 

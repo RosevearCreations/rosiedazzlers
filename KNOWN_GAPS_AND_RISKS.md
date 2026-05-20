@@ -1,4 +1,25 @@
-# Known Gaps and Risks — Build 155
+# Known Gaps and Risks — Build 157
+
+
+**Updated:** 2026-05-19
+
+## Reduced in Build 157
+
+- Social posts are no longer only passive drafts: Admin Social Queue now has `Publish/API`, `Send webhook`, and `Copy text/media` actions.
+- Admin Progress can now create social drafts automatically after job/crafting progress updates or media posts.
+- Admin Progress can optionally attempt approved platform API/webhook publishing immediately after draft creation.
+- Direct API attempts are guarded: X, Facebook Page, and Instagram Business need configured tokens; unsupported platforms fail safely to webhook/manual flow.
+- The root `/admin-progress.html` and `/admin-social.html` files were synchronized with their folder `index.html` versions to reduce stale-route drift.
+- Release checks now require Build 157 social publishing bridge markers.
+
+## Still open after Build 157
+
+- TikTok, Google Business Profile, LinkedIn, and YouTube Shorts still need final approved platform apps/OAuth flows before true direct posting.
+- X image upload is not wired yet; Build 157 posts text/progress links through X and keeps images available for manual/webhook flow.
+- Facebook and Instagram publishing require public media URLs and valid Meta page/account tokens.
+- Webhook automation needs the destination service configured in Cloudflare Pages environment variables.
+- Customer privacy review for license plates/faces/addresses still needs a dedicated checklist before auto-publish is made default.
+
 
 **Updated:** 2026-05-18
 

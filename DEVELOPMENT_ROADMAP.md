@@ -1,4 +1,57 @@
-# Development Roadmap — Build 155
+# Development Roadmap — Build 157
+
+
+**Updated:** 2026-05-19  
+**Target branch:** `dev`  
+**Pass focus:** Social publishing bridge for job/crafting progress posts, safer API/webhook dispatch, Admin Progress immediate social draft/publish controls, Admin Social Queue copy/API buttons, schema/doc synchronization, and continued SEO/H1/CSS release discipline.
+
+## Build 157 completed — social progress publishing bridge
+
+1. Kept the Build 156 social queue as the base instead of bypassing review controls.
+2. Added a platform publish helper at `functions/api/_lib/social-platform-dispatch.js`.
+3. Added approved API publish attempts for X text posts using the X v2 create-post endpoint.
+4. Added Facebook Page API publish attempts for text posts and public image URLs.
+5. Added Instagram Business publish attempts using media container creation plus publish.
+6. Kept TikTok, Google Business Profile, LinkedIn, YouTube Shorts, and unsupported networks on webhook/manual fallback until each platform OAuth/app review is complete.
+7. Added optional `SOCIAL_DISPATCH_WEBHOOK_SECRET` header support for automation tools.
+8. Added `Publish/API` action inside Admin Social Queue.
+9. Kept `Send webhook`, `Copy text/media`, `Mark posted`, `Ready`, and `Skip` fallbacks.
+10. Expanded readiness display for X, Facebook Page, Instagram Business, TikTok, LinkedIn, YouTube/Google, queue DB, and webhook bridge.
+11. Added copy-to-clipboard support for draft captions and media URLs.
+12. Added Admin Progress checkbox to create social drafts automatically after progress updates/media.
+13. Added Admin Progress checkbox to attempt approved API/webhook push immediately after draft creation.
+14. Synced `/admin-progress.html` with `/admin-progress/index.html` so the public route is not stale.
+15. Synced `/admin-social.html` with `/admin-social/index.html`.
+16. Updated release checks so Build 157 social markers are required.
+17. Updated Cloudflare Pages Functions check to syntax-check the new publish helper.
+18. Added Build 157 SQL no-DDL note documenting required environment variables.
+19. Updated `SUPABASE_SCHEMA.sql` with the Build 157 no-DDL note.
+20. Kept local SEO/H1 guard active so exposed pages continue to have one clear main heading.
+
+## Next 20 value-added steps after Build 157
+
+1. Add a secure Admin Settings screen for platform connection status without showing secrets.
+2. Add per-platform caption templates, including short X text and longer Facebook/Instagram text.
+3. Add per-platform image/video requirements and warnings before publishing.
+4. Add a draft preview mode that shows how the post will look on each platform.
+5. Add batch-publish selected drafts from the Social Queue.
+6. Add scheduled publishing windows by platform and local audience timing.
+7. Add a reusable hashtag library for towns, services, and seasonal campaigns.
+8. Add before/after carousel support for Facebook and Instagram where supported.
+9. Add a Make/Zapier/webhook recipe guide for TikTok, Google Business Profile, LinkedIn, and YouTube Shorts.
+10. Add platform response permalink repair when APIs return IDs but not URLs.
+11. Add automatic retry rules for temporary API errors and rate limits.
+12. Add an approval role so staff can draft while owners approve/publish.
+13. Add customer privacy flags so license plates, faces, and addresses are blocked before posting.
+14. Add media scoring checks for social-safe size, format, and orientation.
+15. Add alt text/caption fields for accessibility and local SEO.
+16. Add social performance tracking fields for reach, clicks, and conversions.
+17. Add a recent-work public gallery fed from approved social/job posts.
+18. Add town-specific posting templates for Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi, Port Dover, Oxford County, and Norfolk County.
+19. Add a rollback/unpublish checklist for posts published by mistake.
+20. Add a monthly content calendar tied to bookings, seasonal services, and local promotions.
+
+
 
 **Updated:** 2026-05-18  
 **Target branch:** `dev`  
