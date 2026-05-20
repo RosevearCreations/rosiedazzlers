@@ -1,54 +1,60 @@
 # Social Platform Publishing Plan
 
-## Build 156 status
+## Build 157 status
 
-Build 156 adds the first safe layer for sending job photos and progress summaries outward: a reviewable social queue. Staff can create social drafts from Admin Progress when posting customer updates or media, then review and manage those drafts in Admin Social Queue.
+Build 157 extends the Build 156 review queue into a safer publishing bridge. When staff post job or crafting-process photos and summaries in Admin Progress, they can now create social drafts automatically and optionally try approved API/webhook publishing right away.
 
-The system now supports draft records for Facebook, Instagram, X, TikTok, Google Business Profile, LinkedIn, YouTube Shorts, and manual copy/paste posting. Direct API publishing is intentionally staged behind credentials, platform approvals, and human review because each platform has different account, token, app-review, media, and rate-limit rules.
+Admin Social Queue now supports:
 
-## Current workflow
+- `Publish/API` for configured direct API attempts.
+- `Send webhook` for Make, Zapier, Buffer, Metricool, or another automation bridge.
+- `Copy text/media` for manual posting anywhere.
+- `Mark posted`, `Ready`, and `Skip` for audit-friendly review.
 
-1. Load a booking in Admin Progress.
-2. Post a progress update or attach job media.
-3. Enable **Create social drafts after posting update/media**.
-4. Choose platforms.
-5. Save the update/media.
-6. Review drafts in Admin Social Queue.
-7. Mark a draft ready, posted, skipped, failed, or send it to an optional webhook.
+## Direct/API support added
 
-## Why this is safer than direct auto-posting first
+Build 157 can attempt direct publishing for:
 
-The queue avoids accidental customer/privacy issues, gives staff a chance to clean up captions, and prevents unapproved photos from being pushed straight to public platforms. It also works before platform API credentials are approved.
+- X text posts through the X API.
+- Facebook Page text/photo posts through the Meta Graph API.
+- Instagram Business image/video media publishing through the Meta Graph API.
 
-## Direct-posting readiness
+The code intentionally keeps TikTok, Google Business Profile, LinkedIn, YouTube Shorts, and any unsupported platform on webhook/manual fallback until their app review, OAuth, and posting requirements are fully approved.
 
-Direct posting can be added after credentials are available:
+## Cloudflare Pages environment variables
 
-- X: requires an authenticated token that can create posts.
-- Facebook/Instagram: requires Meta app configuration, Page/Instagram Business connection, permissions, and access tokens.
-- TikTok: requires Content Posting API access, approved scopes, creator authorization, and media that meets TikTok requirements.
-- Google Business Profile: should be treated as a local proof/recent-work workflow once the Google business integration path is confirmed.
+Recommended variables:
 
-## Build 156 database tables
+```text
+X_ACCESS_TOKEN
+FACEBOOK_PAGE_ID
+FACEBOOK_PAGE_ACCESS_TOKEN
+INSTAGRAM_BUSINESS_ACCOUNT_ID
+INSTAGRAM_ACCESS_TOKEN
+META_PAGE_ACCESS_TOKEN
+META_GRAPH_VERSION
+SOCIAL_DISPATCH_WEBHOOK_URL
+SOCIAL_DISPATCH_WEBHOOK_SECRET
+```
 
-- `social_channels`
-- `social_post_queue`
-- `social_dispatch_attempts`
+Only configure the variables for platforms that are approved and ready. The readiness panel shows whether each connection appears configured without exposing secret values.
 
-Run `sql/2026-05-19_build156_social_progress_dispatch_queue.sql` before using the live queue in production.
+## Safe workflow
 
-## Environment variables planned for future direct dispatch
+1. Staff posts a progress update or media URL in Admin Progress.
+2. If social drafts are enabled, the system creates one draft per selected platform.
+3. If immediate push is enabled, the system attempts API/webhook dispatch.
+4. If dispatch fails or a platform is not wired, the draft remains visible in Admin Social Queue.
+5. Staff can copy, webhook, mark posted, or skip the draft.
 
-- `SOCIAL_DISPATCH_WEBHOOK_URL` for a generic automation bridge.
-- `X_ACCESS_TOKEN` or `X_BEARER_TOKEN` for future X posting support.
-- `META_PAGE_ACCESS_TOKEN` or `FACEBOOK_PAGE_ACCESS_TOKEN` for future Meta posting support.
-- `INSTAGRAM_ACCESS_TOKEN` for future Instagram publishing support.
-- `TIKTOK_ACCESS_TOKEN` for future TikTok direct posting support.
+## Why this approach
 
-## Next implementation direction
+This avoids accidental public posting while still making it possible to push progress content outward when credentials and approvals are ready. It also keeps a database audit trail in `social_post_queue` and `social_dispatch_attempts`.
 
-The next pass should add OAuth/token storage policy, a platform approval checklist, per-platform caption length/media rules, and direct publishing adapters one platform at a time. Facebook/Instagram should likely come first because detail photos are a natural fit, followed by Google Business Profile for local trust, then TikTok/YouTube Shorts for vertical video.
+## Next improvements
 
-## Build 156 sync note - social progress publishing
-
-Build 156 adds a reviewable social publishing foundation. Admin Progress can now create internal social drafts from job updates/media, Admin Social Queue can review and mark those drafts, and the schema now includes `social_channels`, `social_post_queue`, and `social_dispatch_attempts`. Direct posting to X, Facebook, Instagram, TikTok, Google Business Profile, and other platforms is possible later after the required platform credentials, app approvals, and consent/compliance checks are in place.
+- Per-platform templates and length warnings.
+- Batch publish selected drafts.
+- Scheduled publishing windows.
+- Privacy checklist for license plates, faces, and addresses.
+- Webhook recipe guide for TikTok, Google Business Profile, LinkedIn, and YouTube Shorts.

@@ -1,4 +1,19 @@
-# Rosie Dazzlers Dev Build — Build 155
+# Rosie Dazzlers Dev Build — Build 157
+
+
+**Updated:** 2026-05-19
+
+## Build 157 focus
+
+- Social publishing bridge for job/crafting process photos and summaries.
+- Admin Progress can create social drafts after update/media posts.
+- Optional immediate API/webhook publishing attempt after draft creation.
+- Admin Social Queue now includes Publish/API, Send webhook, Copy text/media, Mark posted, Ready, and Skip actions.
+- X, Facebook Page, and Instagram Business API attempts are wired behind environment variables.
+- TikTok, Google Business Profile, LinkedIn, YouTube Shorts, and unsupported platforms remain safe webhook/manual fallbacks.
+- SEO/H1 and Cloudflare Pages Functions release checks remain active.
+
+
 
 **Updated:** 2026-05-18
 

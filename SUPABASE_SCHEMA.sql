@@ -1164,3 +1164,11 @@ values
   ('manual', 'Manual Copy/Paste', 'manual', 'Fallback channel for any platform without a direct API connection yet.')
 on conflict (platform, display_name) do nothing;
 
+
+
+-- ---------------------------------------------------------------------------
+-- Build 157 social API publish bridge note (2026-05-19)
+-- ---------------------------------------------------------------------------
+-- No DDL change is required beyond Build 156. Build 157 uses social_channels,
+-- social_post_queue, and social_dispatch_attempts to attempt approved API/webhook
+-- publishing for job progress photos and summaries, while retaining manual fallback.
