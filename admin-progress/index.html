@@ -112,8 +112,9 @@
       <section class="section surface-grid-2">
         <div class="panel">
           <h2>Social sharing drafts</h2>
-          <p class="kicker">Create reviewable drafts for Facebook, Instagram, X, TikTok, Google Business Profile, LinkedIn, YouTube Shorts, or manual posting when you post job updates or media. Direct API publishing can be connected after each platform app/token is approved.</p>
-          <label class="check-row" style="margin-top:12px"><input id="socialDraftEnabled" type="checkbox" /> Create social drafts after posting update/media</label>
+          <p class="kicker">Create reviewable drafts for Facebook, Instagram, X, TikTok, Google Business Profile, LinkedIn, YouTube Shorts, or manual posting when you post job updates or media. Approved API publishing can be attempted immediately for X, Facebook Page, and Instagram Business when platform tokens are configured; other platforms use webhook/manual fallback.</p>
+          <label class="check-row" style="margin-top:12px"><input id="socialDraftEnabled" type="checkbox" checked /> Create social drafts after posting update/media</label>
+          <label class="check-row"><input id="socialAutoPublishEnabled" type="checkbox" /> Try approved API/webhook push immediately after draft creation</label>
           <div class="grid" style="gap:8px;margin-top:12px">
             <label class="check-row"><input type="checkbox" name="socialPlatform" value="facebook" checked /> Facebook</label>
             <label class="check-row"><input type="checkbox" name="socialPlatform" value="instagram" checked /> Instagram</label>
@@ -122,7 +123,7 @@
             <label class="check-row"><input type="checkbox" name="socialPlatform" value="google_business_profile" /> Google Business Profile</label>
           </div>
           <label style="margin-top:12px">Hashtags<input id="socialHashtags" type="text" value="RosieDazzlers, AutoDetailing, SouthernOntario" /></label>
-          <p class="kicker" style="margin-top:10px">Drafts stay internal until reviewed or manually marked posted from the Social Queue.</p>
+          <p class="kicker" style="margin-top:10px">Drafts stay internal unless the immediate push option is enabled or you publish/webhook them from the Social Queue.</p>
           <div style="margin-top:12px"><a class="btn ghost" href="/admin-social.html">Open Social Queue</a></div>
         </div>
         <div class="panel">
@@ -350,6 +351,25 @@
       });
     }
 
+    async function dispatchSocialDrafts(draftResult) {
+      if (!qs('#socialAutoPublishEnabled')?.checked) return null;
+      const drafts = Array.isArray(draftResult?.drafts) ? draftResult.drafts : [];
+      const pushed = [];
+      for (const draft of drafts) {
+        if (!draft?.id) continue;
+        try {
+          const result = await requestJson('/api/admin/social_post_dispatch', {
+            method: 'POST',
+            body: { id: draft.id, action: 'publish_api' }
+          });
+          pushed.push({ id: draft.id, platform: draft.platform, ok: result.ok !== false, message: result.message || '' });
+        } catch (err) {
+          pushed.push({ id: draft.id, platform: draft.platform, ok: false, message: err.message || 'Dispatch failed.' });
+        }
+      }
+      return pushed;
+    }
+
     function renderSocialPosts(data) {
       const wrap = qs('#socialPostsList');
       if (!wrap) return;
@@ -495,10 +515,16 @@
           setNotice('Posting update…');
           const result = await postUpdate(token, createdBy, note, visibility);
           const updateId = result && result.update ? result.update.id : null;
-          await createSocialDraft({ sourceType: 'progress_update', sourceId: updateId, summary: note });
+          const draftResult = await createSocialDraft({ sourceType: 'progress_update', sourceId: updateId, summary: note });
+          const pushed = await dispatchSocialDrafts(draftResult);
           qs('#updateNote').value = '';
           await reloadCurrent();
-          setNotice(qs('#socialDraftEnabled')?.checked ? 'Update posted and social draft(s) queued.' : 'Update posted.', 'ok');
+          if (pushed && pushed.length) {
+            const okCount = pushed.filter((item) => item.ok).length;
+            setNotice(`Update posted, social drafts queued, and ${okCount}/${pushed.length} publish attempt(s) completed.`, okCount ? 'ok' : 'warn');
+          } else {
+            setNotice(qs('#socialDraftEnabled')?.checked ? 'Update posted and social draft(s) queued.' : 'Update posted.', 'ok');
+          }
         } catch (err) {
           setNotice(err.message || 'Could not post update.', 'bad');
         }
@@ -518,11 +544,17 @@
           setNotice('Attaching media…');
           const result = await postMedia(token, createdBy, kind, caption, mediaUrl, visibility);
           const mediaId = result && result.media ? result.media.id : null;
-          await createSocialDraft({ sourceType: 'progress_media', sourceId: mediaId, summary: caption || 'Rosie Dazzlers job photo update.', mediaUrls: [mediaUrl] });
+          const draftResult = await createSocialDraft({ sourceType: 'progress_media', sourceId: mediaId, summary: caption || 'Rosie Dazzlers job photo update.', mediaUrls: [mediaUrl] });
+          const pushed = await dispatchSocialDrafts(draftResult);
           qs('#mediaCaption').value = '';
           qs('#mediaUrl').value = '';
           await reloadCurrent();
-          setNotice(qs('#socialDraftEnabled')?.checked ? 'Media attached and social draft(s) queued.' : 'Media attached.', 'ok');
+          if (pushed && pushed.length) {
+            const okCount = pushed.filter((item) => item.ok).length;
+            setNotice(`Media attached, social drafts queued, and ${okCount}/${pushed.length} publish attempt(s) completed.`, okCount ? 'ok' : 'warn');
+          } else {
+            setNotice(qs('#socialDraftEnabled')?.checked ? 'Media attached and social draft(s) queued.' : 'Media attached.', 'ok');
+          }
         } catch (err) {
           setNotice(err.message || 'Could not attach media.', 'bad');
         }
