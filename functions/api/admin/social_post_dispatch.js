@@ -1,5 +1,6 @@
 import { requireStaffAccess, serviceHeaders, json, methodNotAllowed, isUuid } from "../_lib/staff-auth.js";
 import { withSocialCors, socialCorsHeaders } from "../_lib/social-dispatch.js";
+import { attemptPlatformPublish, publishViaWebhook } from "../_lib/social-platform-dispatch.js";
 
 const STATUS_BY_ACTION = {
   mark_ready: "ready",
@@ -34,7 +35,11 @@ export async function onRequestPost(context) {
     if (!post) return withSocialCors(json({ ok: false, error: "Social post was not found." }, 404));
 
     if (action === "send_webhook") {
-      return withSocialCors(await sendWebhook({ env, post, actor }));
+      return withSocialCors(await handleWebhookDispatch({ env, post, actor }));
+    }
+
+    if (action === "publish_api") {
+      return withSocialCors(await handleApiPublish({ env, post, actor }));
     }
 
     const status = STATUS_BY_ACTION[action];
@@ -68,6 +73,70 @@ export async function onRequestPost(context) {
   }
 }
 
+async function handleApiPublish({ env, post, actor }) {
+  const result = await attemptPlatformPublish({ env, post, actor });
+  const status = result.ok ? "posted" : (result.status || "failed");
+
+  const patch = {
+    status,
+    updated_at: new Date().toISOString(),
+    posted_at: result.ok ? new Date().toISOString() : post.posted_at || null,
+    external_post_id: result.external_post_id || post.external_post_id || null,
+    external_post_url: result.external_post_url || post.external_post_url || null,
+    last_error: result.ok ? null : String(result.error || "Platform publish failed.").slice(0, 500),
+    attempt_count: Number(post.attempt_count || 0) + 1
+  };
+
+  const updated = await updateSocialPost(env, post.id, patch);
+
+  await logAttempt(env, {
+    social_post_id: post.id,
+    platform: post.platform,
+    status,
+    request_summary: { action: "publish_api", actor: actor.full_name || actor.email || "Staff" },
+    response_summary: result.response_summary || {},
+    error_message: patch.last_error
+  });
+
+  return json({
+    ok: !!result.ok,
+    post: updated,
+    message: result.ok ? "Platform publish completed." : "Platform publish did not complete. The draft remains available for manual/webhook posting.",
+    detail: result.error || null
+  }, result.ok || result.unsupported ? 200 : 400);
+}
+
+async function handleWebhookDispatch({ env, post, actor }) {
+  const result = await publishViaWebhook({ env, post, actor, reason: "Manual Send webhook action from Social Queue." });
+  const status = result.ok ? "posted" : "failed";
+
+  const updated = await updateSocialPost(env, post.id, {
+    status,
+    updated_at: new Date().toISOString(),
+    posted_at: result.ok ? new Date().toISOString() : post.posted_at || null,
+    external_post_id: result.external_post_id || post.external_post_id || null,
+    external_post_url: result.external_post_url || post.external_post_url || null,
+    attempt_count: Number(post.attempt_count || 0) + 1,
+    last_error: result.ok ? null : String(result.error || "Webhook dispatch failed.").slice(0, 500)
+  });
+
+  await logAttempt(env, {
+    social_post_id: post.id,
+    platform: post.platform,
+    status,
+    request_summary: { action: "send_webhook", actor: actor.full_name || actor.email || "Staff" },
+    response_summary: result.response_summary || {},
+    error_message: result.ok ? null : String(result.error || "Webhook dispatch failed.").slice(0, 500)
+  });
+
+  return json({
+    ok: !!result.ok,
+    post: updated,
+    message: result.ok ? "Webhook dispatch completed." : "Webhook dispatch failed.",
+    detail: result.error || null
+  }, result.ok ? 200 : 400);
+}
+
 async function loadSocialPost(env, id) {
   const res = await fetch(`${env.SUPABASE_URL}/rest/v1/social_post_queue?select=*&id=eq.${encodeURIComponent(id)}&limit=1`, { headers: serviceHeaders(env) });
   if (!res.ok) return null;
@@ -84,44 +153,6 @@ async function updateSocialPost(env, id, patch) {
   if (!res.ok) throw new Error(`Could not update social post. ${await res.text()}`);
   const rows = await res.json().catch(() => []);
   return Array.isArray(rows) ? rows[0] || null : null;
-}
-
-async function sendWebhook({ env, post, actor }) {
-  if (!env.SOCIAL_DISPATCH_WEBHOOK_URL) {
-    await updateSocialPost(env, post.id, {
-      status: "failed",
-      updated_at: new Date().toISOString(),
-      last_error: "SOCIAL_DISPATCH_WEBHOOK_URL is not configured."
-    });
-    return json({ ok: false, error: "SOCIAL_DISPATCH_WEBHOOK_URL is not configured. The post remains available for manual publishing." }, 400);
-  }
-
-  const response = await fetch(env.SOCIAL_DISPATCH_WEBHOOK_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ post, actor: { id: actor.id || null, name: actor.full_name || actor.email || "Staff" } })
-  });
-
-  const text = await response.text().catch(() => "");
-  const status = response.ok ? "posted" : "failed";
-  const updated = await updateSocialPost(env, post.id, {
-    status,
-    updated_at: new Date().toISOString(),
-    posted_at: response.ok ? new Date().toISOString() : post.posted_at || null,
-    attempt_count: Number(post.attempt_count || 0) + 1,
-    last_error: response.ok ? null : text.slice(0, 500)
-  });
-
-  await logAttempt(env, {
-    social_post_id: post.id,
-    platform: post.platform,
-    status,
-    request_summary: { webhook: true },
-    response_summary: { status: response.status, body: text.slice(0, 500) },
-    error_message: response.ok ? null : text.slice(0, 500)
-  });
-
-  return json({ ok: response.ok, post: updated, message: response.ok ? "Webhook dispatch completed." : "Webhook dispatch failed.", response_status: response.status });
 }
 
 async function logAttempt(env, payload) {
