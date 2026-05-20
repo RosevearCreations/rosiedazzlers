@@ -67,3 +67,8 @@ Build 155 repairs the remaining root Cloudflare Pages Function import paths that
 
 No database shape changed in Build 155. Active DB baseline remains Build 150 inventory image indexes plus Build 151 `app_media_library`.
 
+## Build 156 sync note - social progress publishing
+
+Build 156 adds a reviewable social publishing foundation. Admin Progress can now create internal social drafts from job updates/media, Admin Social Queue can review and mark those drafts, and the schema now includes `social_channels`, `social_post_queue`, and `social_dispatch_attempts`. Direct posting to X, Facebook, Instagram, TikTok, Google Business Profile, and other platforms is possible later after the required platform credentials, app approvals, and consent/compliance checks are in place.
+
+Database note: run `sql/2026-05-19_build156_social_progress_dispatch_queue.sql` before relying on live social queue writes.

@@ -29,3 +29,9 @@
 ## Build 153 documentation note
 
 Build 153 documentation updates are focused on Cloudflare deploy repair: import-path hotfix, no-DDL schema note, deploy-safety checks, and next-step handoff after clean deployment.
+
+## Build 156 sync note - social progress publishing
+
+Build 156 adds a reviewable social publishing foundation. Admin Progress can now create internal social drafts from job updates/media, Admin Social Queue can review and mark those drafts, and the schema now includes `social_channels`, `social_post_queue`, and `social_dispatch_attempts`. Direct posting to X, Facebook, Instagram, TikTok, Google Business Profile, and other platforms is possible later after the required platform credentials, app approvals, and consent/compliance checks are in place.
+
+New document: `SOCIAL_PLATFORM_PUBLISHING.md`.
