@@ -56,3 +56,7 @@ Keep using practical image standards:
 ## Build 153 media workflow note
 
 No image workflow behavior changed in Build 153. The Build 151/152 media-library picker, fallback image hydration, selected-row image repair, duplicate-image warnings, and visible image scan remain the active design. This pass only repairs deploy packaging/import stability around those endpoints.
+
+## Build 156 sync note - social progress publishing
+
+Build 156 adds a reviewable social publishing foundation. Admin Progress can now create internal social drafts from job updates/media, Admin Social Queue can review and mark those drafts, and the schema now includes `social_channels`, `social_post_queue`, and `social_dispatch_attempts`. Direct posting to X, Facebook, Instagram, TikTok, Google Business Profile, and other platforms is possible later after the required platform credentials, app approvals, and consent/compliance checks are in place.

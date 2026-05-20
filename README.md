@@ -61,3 +61,6 @@ Build 155 repairs the remaining root Cloudflare Pages Function import paths that
 
 Important Build 155 files: `functions/api/blocks_range_save.js`, `functions/api/catalog_amazon_matches.js`, `functions/api/catalog_bulk_import.js`, `functions/api/catalog_bulk_visibility.js`, `scripts/cloudflare_pages_functions_check.py`, `scripts/stale_root_function_shims_check.py`, `scripts/release_check.py`, and `sql/2026-05-18_build155_cloudflare_root_import_release_check_no_ddl_note.sql`.
 
+## Build 156 sync note - social progress publishing
+
+Build 156 adds a reviewable social publishing foundation. Admin Progress can now create internal social drafts from job updates/media, Admin Social Queue can review and mark those drafts, and the schema now includes `social_channels`, `social_post_queue`, and `social_dispatch_attempts`. Direct posting to X, Facebook, Instagram, TikTok, Google Business Profile, and other platforms is possible later after the required platform credentials, app approvals, and consent/compliance checks are in place.

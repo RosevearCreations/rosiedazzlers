@@ -71,3 +71,50 @@
 ## Build 153 roadmap note
 
 Build 153 is a deploy-stability pass. After confirming a clean Cloudflare deploy, continue with media-library seeding, direct R2 upload, bulk image repair, image health dashboards, and local SEO/H1 release checks.
+
+## Build 156 completed work - social progress publishing foundation
+
+1. Added a reviewable social queue for job progress photos and summaries.
+2. Added Admin Progress controls to create social drafts after posting updates.
+3. Added Admin Progress controls to create social drafts after attaching job media.
+4. Added per-platform draft selection for Facebook, Instagram, X, TikTok, and Google Business Profile.
+5. Added default local hashtags for Rosie Dazzlers job proof posts.
+6. Added Admin Social Queue page for reviewing drafts.
+7. Added manual social draft creation for content not tied to a booking.
+8. Added social post status workflow: draft, ready, posted, failed, skipped.
+9. Added optional webhook dispatch action for future automation bridge tools.
+10. Added platform readiness display without exposing credentials.
+11. Added `social_post_queue` schema for staged publishing.
+12. Added `social_channels` schema for platform/channel setup.
+13. Added `social_dispatch_attempts` schema for audit history.
+14. Added booking event logging when drafts are created from job progress.
+15. Added social draft loading into Admin Progress for the current booking.
+16. Fixed missing `resolveBookingIdByToken` runtime helper in progress update routes.
+17. Hardened progress media posting with consistent CORS and auth fallback handling.
+18. Added social workflow release checks.
+19. Added Cloudflare Pages Functions static/import checks for this pass.
+20. Re-checked one-H1-per-page behavior after adding Admin Social Queue.
+
+
+## Next 20 value-added steps after Build 156
+
+1. Run the Build 156 social queue SQL migration in Supabase.
+2. Add a Social Queue card to staff role training notes so detailers know drafts are not public posts yet.
+3. Decide the first direct-post platform: recommended order is Facebook/Instagram, Google Business Profile, X, TikTok, then YouTube Shorts.
+4. Add per-platform caption length warnings and media-count warnings.
+5. Add a privacy checklist before any customer vehicle/photo can be marked ready.
+6. Add license-plate blur/cover reminder fields to the media workflow.
+7. Add customer consent flags for public before/after use.
+8. Add a reusable caption template library for job type, vehicle size, service area, and upsell language.
+9. Add platform-specific hashtag presets for local SEO and discovery.
+10. Add OAuth setup notes and token rotation guidance for each social platform.
+11. Add a direct Meta/Facebook Page adapter after the app permissions are approved.
+12. Add an Instagram Business publishing adapter after Meta media-container requirements are confirmed.
+13. Add a Google Business Profile recent-work publishing path after the Google account scope is finalized.
+14. Add a TikTok direct-post adapter only after app review and creator authorization are confirmed.
+15. Add a queue calendar so posts can be scheduled by day/time.
+16. Add duplicate-content warnings when the same photo/caption is queued twice.
+17. Add analytics fields for clicked progress links and posted platform URLs.
+18. Add customer-friendly public gallery promotion rules from approved job media.
+19. Add fallback export buttons: copy caption, download media list, and open platform composer.
+20. Add social performance notes back into the booking/customer history for future marketing decisions.
