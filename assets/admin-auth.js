@@ -182,6 +182,9 @@
       case "admin-progress":
         return hasCapability("can_manage_progress") || actor.is_senior_detailer === true || actor.is_detailer === true;
 
+      case "admin-social":
+        return hasCapability("can_manage_progress") || hasCapability("can_manage_bookings");
+
       case "admin-jobsite":
         return (
           hasCapability("can_manage_bookings") ||

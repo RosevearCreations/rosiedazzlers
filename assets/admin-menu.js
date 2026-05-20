@@ -58,6 +58,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-progress")
     },
     {
+      key: "admin-social",
+      label: "Social Queue",
+      href: "/admin-social.html",
+      description: "Review job photos for social posting",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-social")
+    },
+    {
       key: "admin-jobsite",
       label: "Jobsite",
       href: "/admin-jobsite.html",
