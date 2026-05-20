@@ -152,14 +152,19 @@ export async function appendSocialBookingEvent({ env, bookingId, actorName, even
 }
 
 export function socialReadiness(env) {
+  const facebookReady = !!((env?.FACEBOOK_PAGE_ID || env?.META_FACEBOOK_PAGE_ID) && (env?.FACEBOOK_PAGE_ACCESS_TOKEN || env?.META_PAGE_ACCESS_TOKEN));
+  const instagramReady = !!((env?.INSTAGRAM_BUSINESS_ACCOUNT_ID || env?.INSTAGRAM_IG_USER_ID || env?.META_INSTAGRAM_BUSINESS_ACCOUNT_ID) && (env?.INSTAGRAM_ACCESS_TOKEN || env?.META_PAGE_ACCESS_TOKEN || env?.FACEBOOK_PAGE_ACCESS_TOKEN));
   return {
     queue_ready: !!(env?.SUPABASE_URL && env?.SUPABASE_SERVICE_ROLE_KEY),
     webhook_ready: !!env?.SOCIAL_DISPATCH_WEBHOOK_URL,
-    x_ready: !!(env?.X_ACCESS_TOKEN || env?.X_BEARER_TOKEN),
-    meta_ready: !!(env?.META_PAGE_ACCESS_TOKEN || env?.FACEBOOK_PAGE_ACCESS_TOKEN),
-    instagram_ready: !!(env?.INSTAGRAM_ACCESS_TOKEN || env?.META_PAGE_ACCESS_TOKEN),
-    tiktok_ready: !!env?.TIKTOK_ACCESS_TOKEN,
-    note: "Build 156 creates reviewable social drafts and optional webhook dispatch. Direct platform API posting still needs approved platform apps, tokens, and platform-specific compliance review."
+    x_ready: !!(env?.X_ACCESS_TOKEN || env?.X_USER_ACCESS_TOKEN || env?.X_BEARER_TOKEN),
+    facebook_ready: facebookReady,
+    meta_ready: facebookReady || instagramReady,
+    instagram_ready: instagramReady,
+    tiktok_ready: !!(env?.TIKTOK_ACCESS_TOKEN && env?.TIKTOK_CLIENT_KEY),
+    linkedin_ready: !!(env?.LINKEDIN_ACCESS_TOKEN && env?.LINKEDIN_AUTHOR_URN),
+    youtube_ready: !!(env?.YOUTUBE_ACCESS_TOKEN || env?.GOOGLE_OAUTH_ACCESS_TOKEN),
+    note: "Build 157 can attempt approved direct API publishing for X text posts, Facebook Page posts/photos, and Instagram Business media. TikTok, Google Business Profile, LinkedIn, YouTube Shorts, and any unsupported account can still use the webhook/manual fallback until each platform app is approved."
   };
 }
 
