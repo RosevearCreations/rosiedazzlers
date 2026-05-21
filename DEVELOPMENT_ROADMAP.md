@@ -1,3 +1,58 @@
+# Build 159 update — Social templates, scheduling, duplicate warnings, and manual posted-link capture
+
+**Updated:** 2026-05-20  
+**Current build:** Build 159
+
+Build 159 continues the social publishing workflow by making Admin Social Queue easier to use day-to-day. It adds reusable caption/hashtag pickers, planned publish timing, duplicate draft warnings, posted-link capture, and schema support for future social metrics snapshots while keeping the Build 158 human review gates in place.
+
+## Completed in Build 159
+
+1. Reviewed Build 158 Development Roadmap and Known Gaps before selecting the next social workflow items.
+2. Added `functions/api/admin/social_templates_list.js` as a staff-protected template/preset endpoint.
+3. Added root shim `functions/api/social_templates_list.js` for compatibility with flat Cloudflare routes.
+4. Added DB-first reading from `social_caption_templates`.
+5. Added DB-first reading from `social_hashtag_presets`.
+6. Added built-in fallback caption templates when the DB tables are not migrated yet.
+7. Added built-in fallback hashtag presets when the DB tables are not migrated yet.
+8. Added a caption template picker to Admin Social Queue.
+9. Added a hashtag preset picker to Admin Social Queue.
+10. Added a planned publish time input for manual social drafts.
+11. Passed `scheduled_for` into new manual social drafts.
+12. Added planned/unscheduled queue filters.
+13. Added visible planned-time badges on draft cards.
+14. Added duplicate draft grouping in the visible queue using `duplicate_signature`.
+15. Added duplicate warning cards so repeated platform/caption/first-media drafts are easier to spot.
+16. Added posted URL and platform post ID prompts when staff use **Mark posted**.
+17. Kept **Publish/API** blocked by the Build 158 consent/privacy review gate.
+18. Added `sql/2026-05-20_build159_social_templates_schedule_duplicate_metrics.sql`.
+19. Added schema support for duplicate review status, social metrics JSON, and `social_post_metrics_snapshots`.
+20. Updated release checks, Markdown, schema notes, and the social publishing guide for Build 159.
+
+## Next 20 value-added steps after Build 159
+
+1. Apply Build 156, Build 158, and Build 159 SQL migrations in order if they are not already applied.
+2. Smoke-test manual draft creation with a caption template and hashtag preset.
+3. Smoke-test planned publish time filtering in Admin Social Queue.
+4. Smoke-test duplicate warnings by creating two similar draft rows.
+5. Add editable draft text inside Admin Social Queue before approval.
+6. Add an approval role so detailers can draft while owners approve/publish.
+7. Add customer-facing consent capture on booking/progress pages.
+8. Add license-plate/face/address blur status to each media row.
+9. Add a crop/blur reminder panel before drafts with vehicle photos can be approved.
+10. Add a calendar view for scheduled social posts.
+11. Add retry scheduling for failed API/webhook attempts.
+12. Add a social performance entry form using `social_post_metrics_snapshots`.
+13. Add dashboard rollups for posted count, failed count, and platform coverage.
+14. Add town-specific caption templates for Woodstock, Ingersoll, Simcoe, Delhi, and Port Dover.
+15. Add platform preview cards for Facebook, Instagram, X, TikTok, Google Business Profile, LinkedIn, and YouTube Shorts.
+16. Add automatic public-gallery promotion only from approved/posted rows.
+17. Add webhook signing verification examples for Make, Zapier, and n8n.
+18. Add a clean-branch/orphan upload plan after Cloudflare deploy is stable.
+19. Add Search Console and Google Business Profile reporting notes into the admin analytics roadmap.
+20. Continue SEO/H1/CSS drift checks on every release pass.
+
+---
+
 # Build 158 update — Social review gates and local caption templates
 
 **Updated:** 2026-05-20  
