@@ -63,6 +63,7 @@ def main() -> int:
         "functions/api/progress_",
         "functions/api/_lib/social-dispatch.js",
         "functions/api/_lib/social-platform-dispatch.js",
+        "functions/api/_lib/social-compliance.js",
     )
     critical_files = [path for path in js_files if path.relative_to(ROOT).as_posix().startswith(critical_patterns)]
     for path in critical_files:
