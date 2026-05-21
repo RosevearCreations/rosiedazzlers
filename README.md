@@ -134,3 +134,13 @@ Important Build 155 files: `functions/api/blocks_range_save.js`, `functions/api/
 ## Build 156 sync note - social progress publishing
 
 Build 156 adds a reviewable social publishing foundation. Admin Progress can now create internal social drafts from job updates/media, Admin Social Queue can review and mark those drafts, and the schema now includes `social_channels`, `social_post_queue`, and `social_dispatch_attempts`. Direct posting to X, Facebook, Instagram, TikTok, Google Business Profile, and other platforms is possible later after the required platform credentials, app approvals, and consent/compliance checks are in place.
+
+
+## Build 159 sync — social queue usability and release discipline
+
+- Added caption/hashtag DB picker support for Admin Social Queue.
+- Added planned publish time for manual drafts and schedule filtering.
+- Added duplicate draft warnings using `duplicate_signature`.
+- Added manual posted URL and platform post ID capture.
+- Added `social_post_metrics_snapshots` schema support for future reporting.
+- Release checks now require the Build 159 social template/schedule markers.

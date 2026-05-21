@@ -1182,3 +1182,7 @@ on conflict (platform, display_name) do nothing;
 -- compliance_note, caption_template_key, local_hashtag_set, and duplicate_signature.
 -- Build 158 also adds social_caption_templates and social_hashtag_presets for reusable local captions.
 -- Apply sql/2026-05-20_build158_social_review_gates_and_templates.sql after the Build 156 social queue migration.
+
+-- Build 159 sync note - Social templates, scheduling helpers, duplicate review, and metrics snapshots
+-- Apply sql/2026-05-20_build159_social_templates_schedule_duplicate_metrics.sql after Build 156 and Build 158 social migrations.
+-- Adds duplicate review helper fields, social_metrics jsonb, social_post_metrics_snapshots, and additional caption/hashtag seeds.

@@ -1,3 +1,31 @@
+# Known Gaps and Risks — Build 159
+
+**Updated:** 2026-05-20
+
+## Reduced in Build 159
+
+- Admin Social Queue now loads reusable caption templates and hashtag presets from the DB when available.
+- Built-in fallback templates keep the page usable before the Build 158/159 SQL migrations are applied.
+- Manual drafts can now include a planned publish time and can be filtered by planned/unscheduled status.
+- Duplicate draft warnings are visible when the same platform/caption/first-media signature appears more than once in the current queue view.
+- Staff can capture a posted URL and optional platform post ID when marking a manual post as posted.
+- Build 159 schema support adds duplicate review helpers and optional social metrics snapshots for future reporting.
+
+## Still open after Build 159
+
+1. Build 156, Build 158, and Build 159 SQL migrations must be applied in order on Supabase before all social fields are available.
+2. Direct API posting still depends on platform credentials, scopes, and platform approval.
+3. TikTok, Google Business Profile, LinkedIn, and YouTube Shorts remain safer as webhook/manual flows until the account/app approval paths are confirmed.
+4. Draft text cannot yet be edited inline after creation.
+5. Scheduled publish times are stored and visible, but there is no automated scheduler worker yet.
+6. Duplicate warnings are advisory only; they do not yet block approval or provide an ignore/approve-as-intentional workflow.
+7. Customer-facing consent capture still needs to be wired into the booking/progress experience.
+8. Media crop/blur confirmation is still checklist-based, not image-analysis based.
+9. Social metrics snapshots have schema support, but the admin data-entry/reporting UI still needs to be added.
+10. A clean branch/orphan upload is still the cleanest way to permanently remove stale GitHub files left behind by web uploads.
+
+---
+
 # Build 158 update — Social review gates and local caption templates
 
 **Updated:** 2026-05-20  

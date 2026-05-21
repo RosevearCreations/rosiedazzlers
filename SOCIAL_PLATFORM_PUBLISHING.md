@@ -1,3 +1,36 @@
+# Social Platform Publishing — Build 159
+
+**Updated:** 2026-05-20
+
+Build 159 keeps Rosie Dazzlers social publishing review-first. Job/crafting photos and summaries can become internal drafts, but API publishing still requires the Build 158 review gate: customer/public-use consent, plate/privacy review, and no private customer information in the caption.
+
+## Current workflow
+
+1. Admin Progress can create draft social posts from job/crafting updates.
+2. Admin Social Queue can create manual drafts.
+3. Staff can choose a caption template and hashtag preset.
+4. Staff can add a planned publish time.
+5. The queue shows planned-time badges and duplicate warnings.
+6. Staff must approve the review checklist before API publishing.
+7. Staff can use API publishing, webhook publishing, manual copy/paste, or mark-posted URL capture.
+
+## Platform status
+
+- X: direct text publish path exists when credentials are configured.
+- Facebook Page: direct text/photo path exists when Meta Page credentials are configured.
+- Instagram Business: direct media container + publish path exists when Meta credentials and public media URLs are configured.
+- TikTok, Google Business Profile, LinkedIn, and YouTube Shorts: keep on webhook/manual fallback until app approvals and OAuth flows are finalized.
+
+## Build 159 additions
+
+- `social_templates_list` endpoint for caption and hashtag options.
+- Caption template picker.
+- Hashtag preset picker.
+- Planned publish time.
+- Duplicate warnings using `duplicate_signature`.
+- Posted URL and optional platform ID capture for manual posts.
+- SQL support for social metrics snapshots.
+
 # Build 158 update — Social review gates and local caption templates
 
 **Updated:** 2026-05-20  

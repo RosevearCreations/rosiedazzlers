@@ -101,3 +101,13 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 18. Add customer-friendly public gallery promotion rules from approved job media.
 19. Add fallback export buttons: copy caption, download media list, and open platform composer.
 20. Add social performance notes back into the booking/customer history for future marketing decisions.
+
+
+## Build 159 sync — social queue usability and release discipline
+
+- Added caption/hashtag DB picker support for Admin Social Queue.
+- Added planned publish time for manual drafts and schedule filtering.
+- Added duplicate draft warnings using `duplicate_signature`.
+- Added manual posted URL and platform post ID capture.
+- Added `social_post_metrics_snapshots` schema support for future reporting.
+- Release checks now require the Build 159 social template/schedule markers.
