@@ -1,4 +1,5 @@
 import { serviceHeaders, cleanText, isUuid } from "./staff-auth.js";
+import { stripSocialComplianceFields } from "./social-compliance.js";
 
 export const SOCIAL_PLATFORMS = [
   "facebook",
@@ -115,6 +116,27 @@ export function buildDefaultSocialText({ summary, booking, publicUrl, hashtags }
 export async function insertSocialPostDrafts({ env, posts }) {
   if (!Array.isArray(posts) || !posts.length) return { ok: true, rows: [] };
 
+  const first = await insertSocialPostsOnce({ env, posts });
+  if (first.ok) return first;
+
+  // Build 158 adds optional review/compliance columns. If the migration has not
+  // been applied yet, keep the social queue usable by retrying without those
+  // optional fields and surfacing the original schema warning to the caller.
+  if (/column|schema cache|platform_warnings|review_status|customer_consent_confirmed|duplicate_signature/i.test(first.error || "")) {
+    const fallbackPosts = posts.map(stripSocialComplianceFields);
+    const fallback = await insertSocialPostsOnce({ env, posts: fallbackPosts });
+    if (fallback.ok) {
+      return {
+        ...fallback,
+        warning: "Saved draft without Build 158 compliance fields. Run the Build 158 SQL migration to enable review gates."
+      };
+    }
+  }
+
+  return first;
+}
+
+async function insertSocialPostsOnce({ env, posts }) {
   const res = await fetch(`${env.SUPABASE_URL}/rest/v1/social_post_queue`, {
     method: "POST",
     headers: { ...serviceHeaders(env), Prefer: "return=representation" },
@@ -164,7 +186,7 @@ export function socialReadiness(env) {
     tiktok_ready: !!(env?.TIKTOK_ACCESS_TOKEN && env?.TIKTOK_CLIENT_KEY),
     linkedin_ready: !!(env?.LINKEDIN_ACCESS_TOKEN && env?.LINKEDIN_AUTHOR_URN),
     youtube_ready: !!(env?.YOUTUBE_ACCESS_TOKEN || env?.GOOGLE_OAUTH_ACCESS_TOKEN),
-    note: "Build 157 can attempt approved direct API publishing for X text posts, Facebook Page posts/photos, and Instagram Business media. TikTok, Google Business Profile, LinkedIn, YouTube Shorts, and any unsupported account can still use the webhook/manual fallback until each platform app is approved."
+    note: "Build 158 keeps the review queue first: API publishing requires a ready/approved draft plus customer consent, plate/privacy review, and private-info checks. X, Facebook Page, and Instagram Business direct attempts are supported when credentials are configured; other platforms can use webhook/manual fallback."
   };
 }
 
