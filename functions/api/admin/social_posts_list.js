@@ -68,6 +68,9 @@ async function loadSocialRows({ env, input, bookingId, select }) {
   if (bookingId) params.set("booking_id", `eq.${bookingId}`);
   if (input.platform) params.set("platform", `eq.${String(input.platform).trim().toLowerCase()}`);
   if (input.status) params.set("status", `eq.${String(input.status).trim().toLowerCase()}`);
+  const schedule = String(input.schedule || "").trim().toLowerCase();
+  if (schedule === "planned") params.set("scheduled_for", "not.is.null");
+  if (schedule === "unscheduled") params.set("scheduled_for", "is.null");
 
   const res = await fetch(`${env.SUPABASE_URL}/rest/v1/social_post_queue?${params.toString()}`, { headers: serviceHeaders(env) });
   if (!res.ok) return { ok: false, error: await res.text().catch(() => "Could not load social posts.") };
