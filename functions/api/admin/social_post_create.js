@@ -11,6 +11,7 @@ import {
   withSocialCors,
   socialCorsHeaders
 } from "../_lib/social-dispatch.js";
+import { buildSocialComplianceDraft } from "../_lib/social-compliance.js";
 
 export async function onRequestOptions() {
   return new Response("", { status: 204, headers: socialCorsHeaders() });
@@ -64,20 +65,42 @@ export async function onRequestPost(context) {
     const sourceId = isUuid(String(body.source_id || "")) ? String(body.source_id).trim() : null;
     const scheduledFor = cleanText(body.scheduled_for);
 
-    const drafts = platforms.map((platform) => ({
-      booking_id: bookingId || null,
-      source_type: sourceType,
-      source_id: sourceId,
-      platform,
-      status: "draft",
-      post_text: postText,
-      media_urls: mediaUrls,
-      public_url: publicUrl,
-      hashtags: Array.isArray(body.hashtags) ? body.hashtags : ["RosieDazzlers", "AutoDetailing", "SouthernOntario"],
-      created_by_staff_user_id: actor.id || null,
-      created_by_name: actor.full_name || actor.email || cleanText(body.created_by) || "Staff",
-      scheduled_for: scheduledFor || null
-    }));
+    const drafts = platforms.map((platform) => {
+      const compliance = buildSocialComplianceDraft({
+        platform,
+        postText,
+        mediaUrls,
+        publicUrl,
+        input: {
+          ...body,
+          hashtags: Array.isArray(body.hashtags) ? body.hashtags : ["RosieDazzlers", "AutoDetailing", "SouthernOntario"]
+        }
+      });
+
+      return {
+        booking_id: bookingId || null,
+        source_type: sourceType,
+        source_id: sourceId,
+        platform,
+        status: "draft",
+        post_text: postText,
+        media_urls: mediaUrls,
+        public_url: publicUrl,
+        hashtags: Array.isArray(body.hashtags) ? body.hashtags : ["RosieDazzlers", "AutoDetailing", "SouthernOntario"],
+        created_by_staff_user_id: actor.id || null,
+        created_by_name: actor.full_name || actor.email || cleanText(body.created_by) || "Staff",
+        scheduled_for: scheduledFor || null,
+        review_status: compliance.review_status,
+        customer_consent_confirmed: compliance.customer_consent_confirmed,
+        plate_privacy_confirmed: compliance.plate_privacy_confirmed,
+        no_private_info_confirmed: compliance.no_private_info_confirmed,
+        platform_warnings: compliance.platform_warnings,
+        compliance_note: compliance.compliance_note || null,
+        caption_template_key: compliance.caption_template_key || null,
+        local_hashtag_set: compliance.local_hashtag_set,
+        duplicate_signature: compliance.duplicate_signature
+      };
+    });
 
     const inserted = await insertSocialPostDrafts({ env, posts: drafts });
     if (!inserted.ok) {
@@ -96,7 +119,7 @@ export async function onRequestPost(context) {
       payload: { platforms, source_type: sourceType, source_id: sourceId, social_post_ids: inserted.rows.map((row) => row.id).filter(Boolean) }
     });
 
-    return withSocialCors(json({ ok: true, drafts: inserted.rows, count: inserted.rows.length }));
+    return withSocialCors(json({ ok: true, drafts: inserted.rows, count: inserted.rows.length, warning: inserted.warning || null }));
   } catch (err) {
     return withSocialCors(json({ ok: false, error: err?.message || "Unexpected social draft error." }, 500));
   }

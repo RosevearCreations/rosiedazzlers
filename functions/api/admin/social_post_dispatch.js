@@ -1,6 +1,7 @@
 import { requireStaffAccess, serviceHeaders, json, methodNotAllowed, isUuid } from "../_lib/staff-auth.js";
 import { withSocialCors, socialCorsHeaders } from "../_lib/social-dispatch.js";
 import { attemptPlatformPublish, publishViaWebhook } from "../_lib/social-platform-dispatch.js";
+import { assertSocialPostPublishable, buildApprovalPatch, stripSocialComplianceFields } from "../_lib/social-compliance.js";
 
 const STATUS_BY_ACTION = {
   mark_ready: "ready",
@@ -33,6 +34,10 @@ export async function onRequestPost(context) {
 
     const post = await loadSocialPost(env, id);
     if (!post) return withSocialCors(json({ ok: false, error: "Social post was not found." }, 404));
+
+    if (action === "approve_ready") {
+      return withSocialCors(await handleApproveReady({ env, post, actor, body }));
+    }
 
     if (action === "send_webhook") {
       return withSocialCors(await handleWebhookDispatch({ env, post, actor }));
@@ -73,7 +78,59 @@ export async function onRequestPost(context) {
   }
 }
 
+async function handleApproveReady({ env, post, actor, body }) {
+  const patch = buildApprovalPatch({ post, actor, input: body });
+  let updated;
+  try {
+    updated = await updateSocialPost(env, post.id, patch);
+  } catch (err) {
+    if (/column|schema cache|review_status|platform_warnings|duplicate_signature/i.test(err?.message || "")) {
+      const fallbackPatch = stripSocialComplianceFields(patch);
+      fallbackPatch.status = "ready";
+      fallbackPatch.updated_at = new Date().toISOString();
+      fallbackPatch.last_error = null;
+      updated = await updateSocialPost(env, post.id, fallbackPatch);
+      return json({
+        ok: true,
+        post: updated,
+        message: "Draft marked ready. Run the Build 158 SQL migration to store the full consent/privacy review checklist.",
+        warning: "Build 158 compliance columns are not available yet."
+      });
+    }
+    throw err;
+  }
+
+  await logAttempt(env, {
+    social_post_id: post.id,
+    platform: post.platform,
+    status: updated?.status || patch.status,
+    request_summary: { action: "approve_ready", actor: actor.full_name || actor.email || "Staff" },
+    response_summary: { review_status: patch.review_status, warning_count: Array.isArray(patch.platform_warnings) ? patch.platform_warnings.length : 0 },
+    error_message: patch.last_error || null
+  });
+
+  return json({
+    ok: updated?.status === "ready",
+    post: updated,
+    message: updated?.status === "ready" ? "Social draft approved and marked ready." : "Review warnings remain. Resolve them before publishing.",
+    detail: patch.last_error || null
+  }, updated?.status === "ready" ? 200 : 400);
+}
+
 async function handleApiPublish({ env, post, actor }) {
+  const publishable = assertSocialPostPublishable(post);
+  if (!publishable.ok) {
+    await logAttempt(env, {
+      social_post_id: post.id,
+      platform: post.platform,
+      status: "blocked",
+      request_summary: { action: "publish_api", actor: actor.full_name || actor.email || "Staff" },
+      response_summary: { blocked_by: "build158_social_review_gate" },
+      error_message: publishable.error
+    });
+    return json({ ok: false, post, message: "Social post needs review before API publishing.", detail: publishable.error }, 400);
+  }
+
   const result = await attemptPlatformPublish({ env, post, actor });
   const status = result.ok ? "posted" : (result.status || "failed");
 
