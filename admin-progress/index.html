@@ -123,7 +123,13 @@
             <label class="check-row"><input type="checkbox" name="socialPlatform" value="google_business_profile" /> Google Business Profile</label>
           </div>
           <label style="margin-top:12px">Hashtags<input id="socialHashtags" type="text" value="RosieDazzlers, AutoDetailing, SouthernOntario" /></label>
-          <p class="kicker" style="margin-top:10px">Drafts stay internal unless the immediate push option is enabled or you publish/webhook them from the Social Queue.</p>
+          <div class="notice" style="margin-top:12px">
+            <strong>Social review checklist</strong>
+            <label class="check-row"><input id="socialConsentConfirmed" type="checkbox" /> Customer/public-use consent confirmed for any job photo or video.</label>
+            <label class="check-row"><input id="socialPlatePrivacyConfirmed" type="checkbox" /> Plates, faces, addresses, and private identifiers are hidden or approved.</label>
+            <label class="check-row"><input id="socialNoPrivateInfoConfirmed" type="checkbox" checked /> Caption has no private customer details.</label>
+          </div>
+          <p class="kicker" style="margin-top:10px">Drafts stay internal unless approved and the immediate push option is enabled or you publish/webhook them from the Social Queue.</p>
           <div style="margin-top:12px"><a class="btn ghost" href="/admin-social.html">Open Social Queue</a></div>
         </div>
         <div class="panel">
@@ -332,6 +338,15 @@
         .filter(Boolean);
     }
 
+    function socialReviewChecklist() {
+      return {
+        customer_consent_confirmed: !!qs('#socialConsentConfirmed')?.checked,
+        plate_privacy_confirmed: !!qs('#socialPlatePrivacyConfirmed')?.checked,
+        no_private_info_confirmed: !!qs('#socialNoPrivateInfoConfirmed')?.checked,
+        compliance_note: 'Checklist captured from Admin Progress while creating the draft.'
+      };
+    }
+
     async function createSocialDraft({ sourceType, sourceId, summary, mediaUrls = [] }) {
       if (!qs('#socialDraftEnabled')?.checked) return null;
       const platforms = selectedSocialPlatforms();
@@ -346,7 +361,8 @@
           summary,
           media_urls: mediaUrls,
           platforms,
-          hashtags: socialHashtags()
+          hashtags: socialHashtags(),
+          ...socialReviewChecklist()
         }
       });
     }
@@ -358,6 +374,10 @@
       for (const draft of drafts) {
         if (!draft?.id) continue;
         try {
+          await requestJson('/api/admin/social_post_dispatch', {
+            method: 'POST',
+            body: { id: draft.id, action: 'approve_ready', ...socialReviewChecklist() }
+          });
           const result = await requestJson('/api/admin/social_post_dispatch', {
             method: 'POST',
             body: { id: draft.id, action: 'publish_api' }

@@ -8,7 +8,7 @@
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
   <style>
-    .social-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:end}.social-toolbar label{min-width:180px}.post-preview{white-space:pre-wrap}.platform-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 9px;background:rgba(96,165,250,.14);border:1px solid rgba(96,165,250,.24);font-size:.82rem}.readiness-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.readiness-item{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+    .social-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:end}.social-toolbar label{min-width:180px}.post-preview{white-space:pre-wrap}.platform-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 9px;background:rgba(96,165,250,.14);border:1px solid rgba(96,165,250,.24);font-size:.82rem}.readiness-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.readiness-item{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}.review-list{margin:10px 0 0;padding-left:18px}.review-list li{margin:4px 0}.review-list .blocking{color:#fecaca}.review-list .hint{color:#bfdbfe}.compliance-badge{display:inline-flex;border-radius:999px;padding:3px 8px;border:1px solid rgba(255,255,255,.18);font-size:.78rem;margin-left:6px}
   </style>
 </head>
 <body data-page="admin-social">
@@ -55,6 +55,13 @@
           <form id="manualDraftForm" class="form">
             <label>Post text<textarea id="manualText" rows="4" placeholder="Write a draft caption..." required></textarea></label>
             <label>Media URLs<textarea id="manualMediaUrls" rows="3" placeholder="Optional. One URL per line."></textarea></label>
+            <div class="notice">
+              <strong>Publish review checklist</strong>
+              <label class="check-row"><input id="manualConsent" type="checkbox" /> Customer/public-use consent is confirmed for any job photos or videos.</label>
+              <label class="check-row"><input id="manualPlatePrivacy" type="checkbox" /> Plates, faces, addresses, and private identifiers have been hidden or approved.</label>
+              <label class="check-row"><input id="manualPrivateInfo" type="checkbox" checked /> Caption has no private customer details, address, phone, payment, or complaint notes.</label>
+            </div>
+            <label>Review note<input id="manualComplianceNote" placeholder="Optional internal note, e.g. plate cropped out and customer approved." /></label>
             <div class="grid" style="gap:8px">
               <label class="check-row"><input type="checkbox" name="manualPlatform" value="facebook" checked /> Facebook</label>
               <label class="check-row"><input type="checkbox" name="manualPlatform" value="instagram" checked /> Instagram</label>
@@ -128,6 +135,21 @@
       renderReadiness(data.readiness);
     }
 
+    function warningList(post) {
+      const warnings = Array.isArray(post.platform_warnings) ? post.platform_warnings : [];
+      if (!warnings.length) return '';
+      return `<ul class="review-list">${warnings.map((item) => `<li class="${item.blocking ? 'blocking' : 'hint'}">${escapeHtml(item.message || item.code || 'Review warning')}</li>`).join('')}</ul>`;
+    }
+
+    function reviewSummary(post) {
+      const parts = [];
+      if (post.review_status) parts.push(`Review: ${post.review_status}`);
+      if (post.customer_consent_confirmed === true) parts.push('Consent OK');
+      if (post.plate_privacy_confirmed === true) parts.push('Privacy OK');
+      if (post.no_private_info_confirmed === true) parts.push('Caption OK');
+      return parts.length ? `<div class="kicker">${parts.map(escapeHtml).join(' · ')}</div>` : '<div class="kicker">Review checklist not stored yet.</div>';
+    }
+
     async function loadPosts() {
       const params = new URLSearchParams();
       const status = qs('#statusFilter').value;
@@ -148,18 +170,23 @@
         const media = Array.isArray(post.media_urls) ? post.media_urls : [];
         const firstImage = media.find((url) => /\.(png|jpe?g|webp|gif)(\?|$)/i.test(url));
         const copyPayload = `${post.post_text || ''}${media.length ? `\n\nMedia:\n${media.join('\n')}` : ''}`.trim();
+        const warnings = Array.isArray(post.platform_warnings) ? post.platform_warnings : [];
+        const hasBlocking = warnings.some((item) => item && item.blocking);
+        const readyLabel = hasBlocking ? 'Review needed' : 'Approve & ready';
         return `<article class="card">
           <div class="kicker">${escapeHtml(formatDateTime(post.created_at))} · Attempts: ${escapeHtml(post.attempt_count || 0)}</div>
-          <h3><span class="platform-pill">${escapeHtml(post.platform || 'manual')}</span> ${escapeHtml(post.status || 'draft')}</h3>
+          <h3><span class="platform-pill">${escapeHtml(post.platform || 'manual')}</span> ${escapeHtml(post.status || 'draft')} ${post.review_status ? `<span class="compliance-badge">${escapeHtml(post.review_status)}</span>` : ''}</h3>
           ${firstImage ? `<img class="img" loading="lazy" src="${escapeHtml(firstImage)}" alt="Social media draft image" onerror="this.style.display='none'">` : ''}
           <p class="post-preview">${escapeHtml(post.post_text || '')}</p>
           ${media.length ? `<div class="kicker">Media URLs: ${media.length}</div>` : ''}
+          ${reviewSummary(post)}
+          ${warningList(post)}
           ${post.public_url ? `<p><a href="${escapeHtml(post.public_url)}" target="_blank" rel="noopener">Progress link</a></p>` : ''}
           ${post.external_post_url ? `<p><a href="${escapeHtml(post.external_post_url)}" target="_blank" rel="noopener">Posted link</a></p>` : ''}
           ${post.last_error ? `<div class="notice bad">${escapeHtml(post.last_error)}</div>` : ''}
           <div class="hr"></div>
           <div class="toolbar-wrap">
-            <button class="btn ghost" type="button" data-action="mark_ready" data-id="${escapeHtml(post.id)}">Ready</button>
+            <button class="btn ghost" type="button" data-action="approve_ready" data-id="${escapeHtml(post.id)}">${escapeHtml(readyLabel)}</button>
             <button class="btn ghost" type="button" data-action="publish_api" data-id="${escapeHtml(post.id)}">Publish/API</button>
             <button class="btn ghost" type="button" data-action="send_webhook" data-id="${escapeHtml(post.id)}">Send webhook</button>
             <button class="btn ghost" type="button" data-copy-text="${escapeHtml(copyPayload)}">Copy text/media</button>
@@ -171,7 +198,14 @@
     }
 
     async function updatePost(id, action) {
-      return requestJson('/api/admin/social_post_dispatch', { method:'POST', body:{ id, action } });
+      const body = { id, action };
+      if (action === 'approve_ready') {
+        body.customer_consent_confirmed = true;
+        body.plate_privacy_confirmed = true;
+        body.no_private_info_confirmed = true;
+        body.compliance_note = 'Approved from Admin Social Queue review.';
+      }
+      return requestJson('/api/admin/social_post_dispatch', { method:'POST', body });
     }
 
     async function createManualDraft() {
@@ -179,9 +213,22 @@
       const platforms = selectedManualPlatforms();
       if (!text) throw new Error('Post text is required.');
       if (!platforms.length) throw new Error('Choose at least one platform.');
-      await requestJson('/api/admin/social_post_create', { method:'POST', body:{ source_type:'manual', summary:text, media_urls:mediaUrlList(), platforms } });
+      await requestJson('/api/admin/social_post_create', { method:'POST', body:{
+        source_type:'manual',
+        summary:text,
+        media_urls:mediaUrlList(),
+        platforms,
+        customer_consent_confirmed: qs('#manualConsent').checked,
+        plate_privacy_confirmed: qs('#manualPlatePrivacy').checked,
+        no_private_info_confirmed: qs('#manualPrivateInfo').checked,
+        compliance_note: qs('#manualComplianceNote').value.trim()
+      } });
       qs('#manualText').value = '';
       qs('#manualMediaUrls').value = '';
+      qs('#manualConsent').checked = false;
+      qs('#manualPlatePrivacy').checked = false;
+      qs('#manualPrivateInfo').checked = true;
+      qs('#manualComplianceNote').value = '';
     }
 
     async function boot() {
