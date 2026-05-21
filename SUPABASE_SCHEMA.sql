@@ -1172,3 +1172,13 @@ on conflict (platform, display_name) do nothing;
 -- No DDL change is required beyond Build 156. Build 157 uses social_channels,
 -- social_post_queue, and social_dispatch_attempts to attempt approved API/webhook
 -- publishing for job progress photos and summaries, while retaining manual fallback.
+
+
+
+-- Build 158 schema sync note - 2026-05-20
+-- Social progress publishing now includes review/compliance gate columns on public.social_post_queue:
+-- review_status, customer_consent_confirmed, plate_privacy_confirmed,
+-- no_private_info_confirmed, platform_warnings, approved_at, approved_by_name,
+-- compliance_note, caption_template_key, local_hashtag_set, and duplicate_signature.
+-- Build 158 also adds social_caption_templates and social_hashtag_presets for reusable local captions.
+-- Apply sql/2026-05-20_build158_social_review_gates_and_templates.sql after the Build 156 social queue migration.
