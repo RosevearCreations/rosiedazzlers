@@ -1,3 +1,30 @@
+# Build 163 known gaps and risks update
+
+**Updated:** 2026-05-21  
+**Current build:** Build 163
+
+Build 163 reduces the staff-side risk created by Build 162 note-only intake capture. Checkout can now write the optional condition/photo/media-consent fields directly when migrations are applied, and Admin Booking now surfaces the intake/consent review in its own panel. The main remaining risk is that the new optional fields must be migrated before reporting/editing can rely on them fully.
+
+## Reduced in Build 163
+
+- Admin Booking no longer relies only on buried notes for condition-helper and media-consent review.
+- Checkout has fallback-safe optional-field insertion, so the booking flow should not break if the new columns are not live yet.
+- Staff can quickly see whether a customer requested a photo estimate.
+- Staff can see media-use preference before using job photos publicly or socially.
+- Schema now has planning fields for photo-estimate, condition-review, and media-privacy workflows.
+
+## Still open after Build 163
+
+1. Apply the Build 162 migration and then the Build 163 migration.
+2. Add admin edit controls for the new intake/review status fields.
+3. Add real customer photo upload/lead capture before checkout.
+4. Add per-media privacy review fields/actions for plates, faces, addresses, and blur/crop.
+5. Enforce gallery/social eligibility using consent + privacy-review status.
+6. Expand FAQ, proof filtering, specials, gift-card merchandising, and DB-first public content management.
+7. Continue clean/orphan branch planning once deploy stability is confirmed.
+
+---
+
 # Build 162 known gaps and risks update
 
 **Updated:** 2026-05-21  

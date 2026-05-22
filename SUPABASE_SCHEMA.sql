@@ -1199,3 +1199,23 @@ on conflict (platform, display_name) do nothing;
 -- media-consent preference. Checkout currently appends those details into booking
 -- notes for backwards compatibility; these optional columns prepare the DB for a
 -- later admin/reporting pass that stores the values directly.
+
+
+-- ---------------------------------------------------------------------------
+-- Build 163 schema sync note — booking intake admin review
+-- ---------------------------------------------------------------------------
+-- Apply after Build 162:
+--   sql/2026-05-21_build163_booking_intake_admin_review.sql
+--
+-- Adds optional staff workflow fields on public.bookings:
+--   photo_estimate_status
+--   condition_review_status
+--   media_privacy_status
+--   plate_privacy_reviewed
+--   face_privacy_reviewed
+--   address_privacy_reviewed
+--   blur_crop_needed
+--   blur_crop_complete
+--
+-- The application remains fallback-safe before this migration is applied.
+
