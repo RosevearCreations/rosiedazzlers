@@ -115,6 +115,17 @@
     .booking-choice-card .btn{align-self:flex-start;margin-top:auto}
     .photo-estimate-guide{border:1px solid rgba(77,119,255,.28);border-radius:18px;background:rgba(77,119,255,.10);padding:14px;margin-top:12px}
     .photo-estimate-guide ul{margin:.5rem 0 0;padding-left:1.1rem}
+    .condition-recommender{border:1px solid rgba(36,195,107,.30);border-radius:18px;background:rgba(36,195,107,.08);padding:14px;margin-top:12px}
+    .condition-recommender h3{margin:.1rem 0 .35rem}
+    .condition-chip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:10px}
+    .condition-chip{display:flex;gap:8px;align-items:flex-start;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:10px;background:rgba(255,255,255,.05);cursor:pointer}
+    .condition-chip input{margin-top:3px;flex:0 0 auto}
+    .condition-chip span{font-size:.92rem;color:rgba(234,242,255,.86);line-height:1.35}
+    .recommendation-output{display:none;border:1px solid rgba(77,119,255,.25);border-radius:14px;background:rgba(77,119,255,.10);padding:12px;margin-top:12px}
+    .recommendation-output.show{display:block}
+    .media-consent-grid{display:grid;gap:8px;margin-top:8px}
+    .media-consent-grid label{display:flex;gap:9px;align-items:flex-start;border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px;background:rgba(255,255,255,.04)}
+    .media-consent-grid input{margin-top:3px;flex:0 0 auto}
     .package-alias{font-weight:800;color:rgba(255,255,255,.96)}
     .service-card{
       display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:1px solid rgba(255,255,255,.08);min-width:0;overflow:hidden;
@@ -405,6 +416,35 @@
           </article>
         </div>
       </div>
+      <div class="condition-recommender" id="bookingConditionRecommender">
+        <div class="badges">
+          <span class="badge">Condition helper</span>
+          <span class="badge">Photo estimate friendly</span>
+          <span class="badge">Optional</span>
+        </div>
+        <h3>Tell us what the vehicle needs</h3>
+        <p class="muted" style="margin:0">Pick what applies and we will suggest the closest package, useful add-ons, and notes for staff review. This keeps the choice simple without locking you in.</p>
+        <div class="condition-chip-grid" aria-label="Vehicle condition choices">
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="maintained_interior" /><span>Mostly maintained interior: dust, crumbs, mats, glass, light wipe-down</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="maintained_exterior" /><span>Mostly maintained exterior: wash, wheels, glass, light shine</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="pet_hair" /><span>Pet hair, fur in carpets/seats, or extra vacuum detail</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="salt_stains" /><span>Salt stains, winter mats, carpet marks, or floor buildup</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="odor" /><span>Odour concern, spills, smoke, food smell, or unknown smell source</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="stains_shampoo" /><span>Seat/carpet stains, shampoo/extraction questions, or cargo-area mess</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="paint_swirls" /><span>Swirls, dull paint, scratches, oxidation, or polishing question</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="protection" /><span>Wax, sealant, ceramic spray, coating prep, or longer protection</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="headlights" /><span>Cloudy headlights or exterior detail question</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="full_reset" /><span>Best all-around reset: family vehicle, resale prep, or not sure</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="work_truck" /><span>Work truck, farm vehicle, fleet vehicle, or multiple vehicles</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="photo_quote" /><span>I want a photo-based quote before final recommendation</span></label>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary small" type="button" id="conditionRecommendBtn">Recommend package</button>
+          <button class="btn ghost small" type="button" id="conditionClearBtn">Clear helper</button>
+        </div>
+        <div class="recommendation-output" id="conditionRecommendationResult"></div>
+      </div>
+
       <div id="packageCards" class="service-card-grid" style="margin-top:12px"></div>
       <div id="step2Error" class="field-error"></div>
     </section>
@@ -465,7 +505,21 @@
               <li>Driver seat, passenger seat, carpets, mats, and cargo area</li>
               <li>Close-up of pet hair, salt stains, odour source, scratches, oxidation, or coating concerns</li>
             </ul>
+            <label class="condition-chip" style="margin-top:10px">
+              <input id="photo_estimate_requested" type="checkbox" />
+              <span>Please treat this as a photo-estimate / quote-review booking before final service confirmation.</span>
+            </label>
           </div>
+        </div>
+      </div>
+
+      <div class="photo-estimate-guide" id="bookingMediaConsentGuide">
+        <strong>Photo and public-use preference</strong>
+        <p class="mini muted" style="margin:6px 0 0">Estimate photos are for quoting and job planning by default. Public gallery or social use should only happen after customer permission and staff privacy review.</p>
+        <div class="media-consent-grid">
+          <label><input type="radio" name="media_consent_preference" value="estimate_only" checked /><span><strong>Estimate use only</strong><br><span class="mini muted">Use my photos for quote/job planning, not public posts.</span></span></label>
+          <label><input type="radio" name="media_consent_preference" value="ask_first" /><span><strong>Ask me first</strong><br><span class="mini muted">You may ask later about before/after gallery or social use.</span></span></label>
+          <label><input type="radio" name="media_consent_preference" value="public_after_review" /><span><strong>Public use may be okay after review</strong><br><span class="mini muted">Staff must still remove/avoid plates, faces, addresses, paperwork, and private identifiers before any post.</span></span></label>
         </div>
       </div>
 
@@ -579,6 +633,10 @@
       selectedPackageCode: "",
       selectedSlotChoice: "",
       addons: new Set(),
+      conditionFlags: new Set(),
+      conditionRecommendationSummary: "",
+      photoEstimateRequested: false,
+      mediaConsentPreference: "estimate_only",
       garageVehicles: [],
       availabilityCache: new Map(),
       availabilityOffset: 0,
@@ -592,6 +650,138 @@
       try {
         window.dispatchEvent(new CustomEvent("rd:analytics", { detail: { event, ...detail } }));
       } catch {}
+    }
+
+    const CONDITION_LABELS = {
+      maintained_interior: "Mostly maintained interior",
+      maintained_exterior: "Mostly maintained exterior",
+      pet_hair: "Pet hair",
+      salt_stains: "Salt stains",
+      odor: "Odour concern",
+      stains_shampoo: "Stains or shampoo/extraction question",
+      paint_swirls: "Paint swirls/dull paint/scratches",
+      protection: "Wax/sealant/coating protection",
+      headlights: "Cloudy headlights",
+      full_reset: "Full reset",
+      work_truck: "Work truck/fleet/multiple vehicles",
+      photo_quote: "Photo quote requested"
+    };
+
+    function selectedConditionFlags() {
+      const flags = qsa("[data-condition-flag]:checked").map((node) => node.getAttribute("data-condition-flag")).filter(Boolean);
+      state.conditionFlags = new Set(flags);
+      state.photoEstimateRequested = flags.includes("photo_quote") || qs("#photo_estimate_requested")?.checked === true;
+      return flags;
+    }
+
+    function conditionFlagLabels(flags = selectedConditionFlags()) {
+      return flags.map((flag) => CONDITION_LABELS[flag] || flag).filter(Boolean);
+    }
+
+    function buildConditionRecommendation(flags = selectedConditionFlags()) {
+      const set = new Set(flags);
+      const notes = [];
+      const addonCodes = [];
+      let packageCode = "complete_detail";
+      let headline = "Full Detail is the safest starting point.";
+
+      if (set.has("maintained_exterior") && !set.has("maintained_interior") && flags.length === 1) {
+        packageCode = "premium_wash";
+        headline = "Premium Wash looks like the closest fit.";
+      } else if (set.has("maintained_interior") && !set.has("maintained_exterior") && flags.length === 1) {
+        packageCode = "basic_detail";
+        headline = "Basic Detail / Express Interior Refresh looks like the closest fit.";
+      } else if (["pet_hair", "salt_stains", "odor", "stains_shampoo"].some((flag) => set.has(flag))) {
+        packageCode = "interior_detail";
+        headline = "Interior Detail is the best starting point for this condition.";
+      } else if (["paint_swirls", "protection", "headlights"].some((flag) => set.has(flag))) {
+        packageCode = "exterior_detail";
+        headline = "Exterior Detail is the best starting point for paint/protection questions.";
+      }
+
+      if (set.has("full_reset") || (set.has("maintained_interior") && set.has("maintained_exterior"))) {
+        packageCode = "complete_detail";
+        headline = "Complete Detail / Full Detail is the best all-around reset.";
+      }
+      if (set.has("work_truck")) notes.push("Work truck/fleet/multiple vehicle note: staff should confirm access, timing, soil level, and whether this should become a quote or recurring-plan lead.");
+      if (set.has("photo_quote")) notes.push("Customer asked for photo-based quote review before final recommendation.");
+      if (set.has("pet_hair")) notes.push("Pet hair noted; staff should confirm severity and whether extra labour/quote handling is needed.");
+      if (set.has("salt_stains")) notes.push("Salt staining noted; staff should review mats/carpets and quote deeper extraction if needed.");
+      if (set.has("odor")) notes.push("Odour concern noted; staff should identify source before promising removal.");
+      if (set.has("stains_shampoo")) notes.push("Seat/carpet stain or shampoo/extraction question noted; photos recommended.");
+      if (set.has("paint_swirls")) addonCodes.push("two_stage_polish");
+      if (set.has("protection")) addonCodes.push("high_grade_paint_sealant");
+      if (set.has("paint_swirls") || set.has("protection")) addonCodes.push("full_clay_treatment");
+      if (set.has("headlights")) notes.push("Headlight haze noted; staff should inspect and quote if restoration is needed.");
+
+      return { packageCode, headline, addonCodes: [...new Set(addonCodes)], notes };
+    }
+
+    function appendBookingNote(text) {
+      const notes = qs("#special_notes");
+      if (!notes || !text) return;
+      const existing = notes.value.trim();
+      if (existing.includes(text)) return;
+      notes.value = existing ? `${existing}\n\n${text}` : text;
+    }
+
+    function renderConditionRecommendation(result, flags = selectedConditionFlags()) {
+      const box = qs("#conditionRecommendationResult");
+      if (!box) return;
+      if (!flags.length) {
+        box.classList.remove("show");
+        box.innerHTML = "";
+        return;
+      }
+      const pkg = (state.pricing?.packages || []).find((row) => row.code === result.packageCode);
+      const addonRows = result.addonCodes
+        .map((code) => (state.pricing?.addons || []).find((addon) => addon.code === code))
+        .filter(Boolean);
+      box.classList.add("show");
+      box.innerHTML = `<strong>${escapeHtml(result.headline)}</strong>
+        <div class="mini muted" style="margin-top:6px">Selected condition flags: ${escapeHtml(conditionFlagLabels(flags).join(", "))}</div>
+        <div class="mini muted" style="margin-top:6px">Recommended package: <strong>${escapeHtml(pkg?.display_alias || pkg?.name || result.packageCode)}</strong></div>
+        ${addonRows.length ? `<div class="mini muted" style="margin-top:6px">Suggested add-ons to review: ${escapeHtml(addonRows.map((addon) => addon.name).join(", "))}</div>` : ""}
+        ${result.notes.length ? `<ul class="mini muted">${result.notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>` : ""}`;
+    }
+
+    function applyConditionRecommendation() {
+      const flags = selectedConditionFlags();
+      if (!flags.length) {
+        renderConditionRecommendation({ packageCode: "", headline: "", addonCodes: [], notes: [] }, flags);
+        showStatus("Choose at least one vehicle condition first.", "warn");
+        return;
+      }
+      const result = buildConditionRecommendation(flags);
+      const packageExists = (state.pricing?.packages || []).some((pkg) => pkg.code === result.packageCode);
+      if (packageExists) state.selectedPackageCode = result.packageCode;
+      for (const code of result.addonCodes) {
+        const addon = (state.pricing?.addons || []).find((row) => row.code === code);
+        if (addon && addonAllowedForPackage(addon, state.selectedPackageCode)) state.addons.add(code);
+      }
+      state.photoEstimateRequested = flags.includes("photo_quote") || ["pet_hair", "salt_stains", "odor", "stains_shampoo", "paint_swirls", "headlights", "work_truck"].some((flag) => flags.includes(flag));
+      const photoBox = qs("#photo_estimate_requested");
+      if (photoBox && state.photoEstimateRequested) photoBox.checked = true;
+      state.conditionRecommendationSummary = `${result.headline} Flags: ${conditionFlagLabels(flags).join(", ")}. ${result.notes.join(" ")}`.trim();
+      appendBookingNote(`Condition helper: ${state.conditionRecommendationSummary}`);
+      if (state.photoEstimateRequested) appendBookingNote("Photo estimate requested: please review linked/attached photos before final package/add-on confirmation.");
+      renderConditionRecommendation(result, flags);
+      pruneInvalidSelectedAddons();
+      renderPackages();
+      renderAddons();
+      renderFinalSummary();
+      showStatus("Condition helper applied. Review the selected package, add-ons, and notes before checkout.", "ok");
+      analyticsTrack("booking_condition_recommendation_apply", { package_code: state.selectedPackageCode || null, flags });
+    }
+
+    function clearConditionRecommendation() {
+      qsa("[data-condition-flag]").forEach((node) => { node.checked = false; });
+      state.conditionFlags.clear();
+      state.conditionRecommendationSummary = "";
+      state.photoEstimateRequested = qs("#photo_estimate_requested")?.checked === true;
+      renderConditionRecommendation({ packageCode: "", headline: "", addonCodes: [], notes: [] }, []);
+      showStatus("Condition helper cleared. Your selected package/add-ons were left unchanged.", "warn");
+      analyticsTrack("booking_condition_recommendation_clear", {});
     }
 
     function openModal(title, src) {
@@ -773,6 +963,25 @@
         analyticsTrack("booking_photo_estimate_jump", {});
         notes?.focus();
       });
+    });
+
+    qs("#conditionRecommendBtn")?.addEventListener("click", applyConditionRecommendation);
+    qs("#conditionClearBtn")?.addEventListener("click", clearConditionRecommendation);
+    qsa("[data-condition-flag]").forEach((node) => {
+      node.addEventListener("change", () => {
+        selectedConditionFlags();
+        renderConditionRecommendation(buildConditionRecommendation(), selectedConditionFlags());
+      });
+    });
+    qsa("input[name='media_consent_preference']").forEach((node) => {
+      node.addEventListener("change", () => {
+        state.mediaConsentPreference = qs("input[name='media_consent_preference']:checked")?.value || "estimate_only";
+        analyticsTrack("booking_media_consent_preference", { preference: state.mediaConsentPreference });
+      });
+    });
+    qs("#photo_estimate_requested")?.addEventListener("change", () => {
+      state.photoEstimateRequested = qs("#photo_estimate_requested")?.checked === true;
+      analyticsTrack("booking_photo_estimate_requested", { requested: state.photoEstimateRequested });
     });
 
     qs("#serviceDatePickerBtn").addEventListener("click", () => {
@@ -1815,6 +2024,11 @@
           mileage: qs('#veh_mileage').value || null
         },
         special_notes: qs("#special_notes").value.trim() || null,
+        condition_flags: conditionFlagLabels(selectedConditionFlags()),
+        condition_flag_codes: Array.from(state.conditionFlags),
+        condition_recommendation: state.conditionRecommendationSummary || null,
+        photo_estimate_requested: qs("#photo_estimate_requested")?.checked === true || state.photoEstimateRequested === true,
+        media_consent_preference: qs("input[name='media_consent_preference']:checked")?.value || state.mediaConsentPreference || "estimate_only",
         ack_driveway: true,
         ack_power_water: true,
         need_mobile_water_power_quote: qs("#need_mobile_water_power")?.checked === true,
