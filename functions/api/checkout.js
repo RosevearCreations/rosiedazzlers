@@ -199,12 +199,14 @@ export async function onRequestPost({ request, env }) {
     if (customerNotes) notes.push(`Customer notes: ${customerNotes}`);
     const conditionLabels = Array.isArray(body.condition_flags) ? body.condition_flags.map((row) => String(row || "").trim()).filter(Boolean) : [];
     const conditionCodes = Array.isArray(body.condition_flag_codes) ? body.condition_flag_codes.map((row) => String(row || "").trim()).filter(Boolean) : [];
+    const conditionFlagRows = buildConditionFlagRows(conditionLabels, conditionCodes);
     if (conditionLabels.length) notes.push(`Condition helper flags: ${conditionLabels.join(", ")}`);
     else if (conditionCodes.length) notes.push(`Condition helper codes: ${conditionCodes.join(", ")}`);
     const conditionRecommendation = String(body.condition_recommendation || "").trim();
     if (conditionRecommendation) notes.push(`Condition helper recommendation: ${conditionRecommendation}`);
-    if (body.photo_estimate_requested === true) notes.push("Photo estimate requested before final package/add-on confirmation.");
-    const mediaConsentPreference = String(body.media_consent_preference || "estimate_only").trim() || "estimate_only";
+    const photoEstimateRequested = body.photo_estimate_requested === true;
+    if (photoEstimateRequested) notes.push("Photo estimate requested before final package/add-on confirmation.");
+    const mediaConsentPreference = normalizeMediaConsentPreference(body.media_consent_preference);
     notes.push(`Media/photo consent preference: ${mediaConsentPreference}`);
 
     const bookingPayload = {
@@ -239,10 +241,17 @@ export async function onRequestPost({ request, env }) {
       vehicle_category: String(vehicle.category || '').trim() || null,
       vehicle_plate: String(vehicle.plate || '').trim() || null,
       vehicle_mileage_km: Number.isFinite(Number(vehicle.mileage)) ? Number(vehicle.mileage) : null,
-      vehicle_photo_url: String(vehicle.photo_url || "").trim() || null
+      vehicle_photo_url: String(vehicle.photo_url || "").trim() || null,
+      condition_flags: conditionFlagRows,
+      condition_recommendation: conditionRecommendation || null,
+      photo_estimate_requested: photoEstimateRequested,
+      media_consent_preference: mediaConsentPreference,
+      photo_estimate_status: photoEstimateRequested ? "requested" : "not_requested",
+      condition_review_status: conditionFlagRows.length || conditionRecommendation ? "needs_review" : "not_needed",
+      media_privacy_status: mediaConsentPreference === "public_after_review" ? "needs_review" : "not_needed"
     };
 
-    const insertBooking = await supa("POST", `/rest/v1/bookings`, [bookingPayload]);
+    const insertBooking = await insertBookingWithOptionalFields(supa, bookingPayload);
     if (!insertBooking.ok) return corsJson({ error: "Could not create booking.", details: insertBooking.raw }, 500);
     const booking = Array.isArray(insertBooking.data) ? insertBooking.data[0] || null : null;
     if (!booking?.id) return corsJson({ error: "Booking could not be created." }, 500);
@@ -275,6 +284,73 @@ export async function onRequestPost({ request, env }) {
   } catch (err) {
     return corsJson({ error: err && err.message ? err.message : "Unexpected server error." }, 500);
   }
+}
+
+function buildConditionFlagRows(labels, codes) {
+  const max = Math.max(labels.length, codes.length);
+  const rows = [];
+  for (let index = 0; index < max; index += 1) {
+    const label = String(labels[index] || "").trim();
+    const code = String(codes[index] || "").trim();
+    if (!label && !code) continue;
+    rows.push({
+      code: code || slugifyConditionFlag(label),
+      label: label || code.replaceAll("_", " ")
+    });
+  }
+  return rows;
+}
+
+function slugifyConditionFlag(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 80) || "condition";
+}
+
+function normalizeMediaConsentPreference(value) {
+  const raw = String(value || "estimate_only").trim().toLowerCase();
+  if (["estimate_only", "ask_first", "public_after_review"].includes(raw)) return raw;
+  if (raw.includes("public")) return "public_after_review";
+  if (raw.includes("ask")) return "ask_first";
+  return "estimate_only";
+}
+
+const OPTIONAL_BOOKING_INTAKE_FIELDS = [
+  "condition_flags",
+  "condition_recommendation",
+  "photo_estimate_requested",
+  "media_consent_preference",
+  "photo_estimate_status",
+  "condition_review_status",
+  "media_privacy_status"
+];
+
+async function insertBookingWithOptionalFields(supa, bookingPayload) {
+  const first = await supa("POST", `/rest/v1/bookings`, [bookingPayload]);
+  if (first.ok || !looksLikeMissingOptionalBookingColumn(first.raw)) return first;
+
+  const fallbackPayload = { ...bookingPayload };
+  for (const key of OPTIONAL_BOOKING_INTAKE_FIELDS) delete fallbackPayload[key];
+
+  const retry = await supa("POST", `/rest/v1/bookings`, [fallbackPayload]);
+  if (retry.ok) {
+    retry.optional_field_fallback = true;
+    retry.optional_field_error = first.raw;
+  }
+  return retry;
+}
+
+function looksLikeMissingOptionalBookingColumn(raw) {
+  const text = String(raw || "").toLowerCase();
+  if (!text) return false;
+  return OPTIONAL_BOOKING_INTAKE_FIELDS.some((field) =>
+    text.includes(field.toLowerCase()) &&
+    (text.includes("column") || text.includes("schema cache") || text.includes("could not find") || text.includes("42703"))
+  );
 }
 
 async function createStripeSession({ env, request, booking, body, payableDepositCents, gift, giftRedeemedCents }) {
