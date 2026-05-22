@@ -1,3 +1,61 @@
+# Build 161 update — Conversion path service chooser and photo-estimate guidance
+
+**Updated:** 2026-05-21  
+**Current build:** Build 161  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
+
+Build 161 continues the competitor sanity-check direction from Build 160. The focus is not a new back-office module; it is the public conversion path. Visitors now get clearer package aliases, a Booking Step 2 service chooser, and stronger photo-estimate guidance on Booking and Contact while the existing pricing codes remain stable for admin, checkout, and data compatibility.
+
+## Completed in Build 161
+
+1. Reviewed `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETITOR_SANITY_CHECK.md` before continuing.
+2. Kept `DEVELOPMENT_ROADMAP.md` as the implementation source of truth.
+3. Recreated `COMPETITOR.md` and `COMPETETOR.md` aliases that were missing from the uploaded ZIP.
+4. Added customer-facing package aliases to the pricing catalog without changing stable package codes.
+5. Added `display_alias`, `customer_goal`, `service_level`, `best_for`, `recommendation_tags`, `photo_estimate_recommended`, and `chooser_prompt` metadata to each package.
+6. Synced enriched package metadata into `data/rosie_services_pricing_and_packages.json`.
+7. Synced enriched package metadata into `functions/api/data/rosie_services_pricing_and_packages.json`.
+8. Regenerated the inline `FALLBACK_CATALOG` in `functions/api/_lib/pricing-catalog.js` so DB fallback responses include the new metadata.
+9. Added a booking-page service chooser to Step 2.
+10. Added quick buttons for exterior wash, interior refresh, interior detail, full detail, exterior detail, and photo-estimate notes.
+11. Added package-card display of aliases and customer goals in the booking flow.
+12. Added a Step 4 photo-estimate checklist for condition photos.
+13. Added analytics events for package recommendation clicks and photo-estimate jumps.
+14. Added a Contact-page photo-estimate panel with an email CTA and booking CTA.
+15. Synced root and folder copies for `/book`, `/contact`, and `/services`.
+16. Added `scripts/conversion_path_check.py` to protect the competitor-aligned conversion path.
+17. Wired the new conversion-path check into `scripts/release_check.py`.
+18. Added a Build 161 no-DDL SQL note.
+19. Updated `SUPABASE_SCHEMA.sql` with Build 161 no-schema-change notes.
+20. Re-ran release, Cloudflare, social workflow, competitor roadmap, conversion path, inline script, and SEO/H1 checks.
+
+
+## Next 20 value-added steps after Build 161
+
+1. Deploy Build 161 and confirm the Cloudflare Pages build stays clean.
+2. Smoke-test Booking Step 2 on mobile and desktop to confirm the chooser buttons select the expected packages.
+3. Smoke-test Booking Step 4 to confirm the photo-estimate checklist reads well on mobile.
+4. Apply any pending SQL migrations through Build 159 if they are not already applied.
+5. Copy the enriched package metadata into the DB-managed `app_management_settings.pricing_catalog` once the live DB catalog is updated.
+6. Add a condition-based recommendation engine using vehicle size, interior/exterior concern, pet hair, odour, salt, paint condition, and quote/photo flags.
+7. Add a small public “send photos” form or uploader that can attach estimate media to a lead or draft booking.
+8. Add customer-facing consent capture for public gallery and social before/after use.
+9. Add media privacy fields for plate reviewed, face reviewed, address reviewed, blur/crop required, and blur/crop complete.
+10. Add FAQ blocks to Paint Correction, Ceramic Coating, Pet Hair Removal, Odor Removal, Headlight Restoration, and Services.
+11. Add admin-managed specials cards for salt cleanup, multi-vehicle, senior-friendly, fleet/work truck, and headlight refresh offers.
+12. Improve gift-card merchandising with Interior Detail, Full Detail, and custom amount gift-card cards.
+13. Add proof/recent-work filtering by service and town.
+14. Add admin placement controls for reviews and recent work on service/town pages.
+15. Start moving high-change service/add-on/specials/FAQ/proof content toward DB-first admin-managed records.
+16. Add Search Console and Google Business Profile reporting notes to admin analytics.
+17. Add social performance entry and reporting using `social_post_metrics_snapshots`.
+18. Add platform preview cards in Admin Social Queue.
+19. Prepare a clean/orphan branch replacement after deploy stability so old GitHub web-upload leftovers are removed.
+20. Keep using `DEVELOPMENT_ROADMAP.md` as the source of truth and keep older roadmap files as history/reference only.
+
+
+---
+
 # Build 160 update — Competitor sanity check and roadmap reset
 
 **Updated:** 2026-05-21  

@@ -1,3 +1,9 @@
+# Build 161 competitor sanity-check follow-up
+
+Build 161 implements the next conversion-path step from the Build 160 sanity check: clearer package aliases, a Booking service chooser, and stronger photo-estimate guidance. The remaining competitor-aligned priorities are condition-based recommendations, photo upload/lead capture, consent/privacy workflow, FAQ/proof expansion, and DB-first service content.
+
+---
+
 # Competitor Sanity Check — Build 160
 
 **Updated:** 2026-05-21  

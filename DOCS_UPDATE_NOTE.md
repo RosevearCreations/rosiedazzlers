@@ -1,3 +1,11 @@
+# Build 161 sync — DOCS_UPDATE_NOTE.md
+
+**Updated:** 2026-05-21
+
+The current website/app now has competitor-aligned service chooser coverage on Services and Booking, clearer public package aliases, and a Contact-page photo-estimate path. Build 161 is a no-DDL pass; the new package metadata is JSON/catalog content and should be copied into the DB-managed pricing catalog when the live catalog is refreshed.
+
+---
+
 <!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 23, 2026: live vehicle-size SVG guide, App Management chart preview/download helper, no-DDL schema sync, and continued public SEO/static-check direction.
 

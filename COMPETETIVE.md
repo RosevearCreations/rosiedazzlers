@@ -749,3 +749,10 @@ Highest priority gaps from this document are now:
 5. Add service/town-filtered proof, reviews, and recent work.
 6. Add customer consent and media privacy checks before public/social promotion.
 7. Move high-change service/add-on/specials/FAQ copy toward DB-first admin management.
+
+---
+
+## Build 161 sync note
+
+Build 161 keeps `DEVELOPMENT_ROADMAP.md` as the source of truth and advances the competitor-aligned conversion path with Booking service chooser guidance, package aliases, and photo-estimate CTAs.
+

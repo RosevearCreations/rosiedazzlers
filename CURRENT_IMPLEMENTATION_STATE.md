@@ -1,3 +1,11 @@
+# Build 161 sync — CURRENT_IMPLEMENTATION_STATE.md
+
+**Updated:** 2026-05-21
+
+The current website/app now has competitor-aligned service chooser coverage on Services and Booking, clearer public package aliases, and a Contact-page photo-estimate path. Build 161 is a no-DDL pass; the new package metadata is JSON/catalog content and should be copied into the DB-managed pricing catalog when the live catalog is refreshed.
+
+---
+
 # Build 160 sync — competitor sanity and roadmap reset
 
 **Updated:** 2026-05-21  

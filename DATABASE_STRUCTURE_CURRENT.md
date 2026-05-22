@@ -1,3 +1,11 @@
+# Build 161 database/schema note
+
+**Updated:** 2026-05-21
+
+No DDL was added in Build 161. The package aliases and recommendation fields are content metadata in the pricing catalog. When the DB-first catalog is refreshed, carry these fields into `app_management_settings.pricing_catalog`; no table migration is required for this pass.
+
+---
+
 # Build 158 update — Social review gates and local caption templates
 
 **Updated:** 2026-05-20  

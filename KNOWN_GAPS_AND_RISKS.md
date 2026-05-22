@@ -1,3 +1,12 @@
+# Build 161 known gaps and risks update
+
+**Updated:** 2026-05-21  
+**Current build:** Build 161
+
+Build 161 closes part of the competitor-aligned conversion gap by adding package aliases, Booking Step 2 service chooser guidance, and stronger photo-estimate CTAs. Remaining high-priority gaps are the true condition-based recommender, customer-facing photo upload/lead capture, consent capture, media privacy review fields, FAQ expansion, proof filtering, DB-first service content, and clean/orphan branch replacement after deploy stability.
+
+---
+
 # Known Gaps and Risks — Build 160 competitor sanity reset
 
 **Updated:** 2026-05-21  
