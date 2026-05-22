@@ -1,3 +1,80 @@
+# Build 160 update — Competitor sanity check and roadmap reset
+
+**Updated:** 2026-05-21  
+**Current build:** Build 160  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`  
+**Competitor/service source reviewed:** `COMPETETIVE.md`
+
+Build 160 pauses feature expansion long enough to sanity-check the current Rosie Dazzlers website/app against the competitor/service roadmap. The conclusion is that the project already has a strong technical foundation — local pages, service pages, booking/pricing, gallery/recent work, admin workflows, social queue, accounting/admin systems, image/media tooling, and release checks — but the public conversion path still needs to be simplified so visitors can choose the right detail, send photos, see proof, and book or request a quote with less confusion.
+
+## Build 160 competitor sanity check — current state vs target
+
+| Competitor roadmap target | Current website/app state | Status | Next action |
+| --- | --- | --- | --- |
+| Clear local homepage hero and local wording | Homepage targets Oxford/Norfolk and major towns. | Strong | Keep tuning local wording and proof placement each pass. |
+| Sticky CTAs: Book, Quote, Call/Text, Send Photos | Book CTAs exist; photo-estimate and call/text CTAs need stronger repeated placement. | Partial | Add a consistent CTA strip to Services, Booking, Contact, and landing pages. |
+| Strong service hub | Services page has packages, add-ons, proof, town pages, and links to special pages. | Partial | Add a decision guide and package recommender. Build 160 adds the Services decision guide. |
+| Package selector | Pricing/booking has vehicle size, packages, add-ons, and availability. | Partial | Add condition-based recommendations and public photo estimate prompts. |
+| Service package cards | Existing package codes are Premium Wash, Basic Detail, Complete Detail, Interior Detail, Exterior Detail. | Partial | Add customer-facing aliases/tier labels without breaking existing pricing codes. |
+| Add-ons | Add-ons exist and many have dedicated pages/images. | Strong/partial | Add compatibility rules, FAQ, and stronger admin-managed copy. |
+| Specials | Admin promos exist, but public specials are not yet competitor-level. | Partial | Add specials/promos content blocks for salt cleanup, multi-vehicle, senior-friendly, fleet, and headlight offers. |
+| Gift cards | Gift system exists. | Partial | Add service-specific gift-card merchandising. |
+| Reviews/proof/before-after | Gallery, recent work, review fallback, and local pages exist. | Partial | Filter proof by town/service and make placements admin-managed. |
+| Ceramic coating education | Dedicated ceramic page exists. | Partial | Add richer FAQ, maintenance instructions, and prep expectations. |
+| Paint correction education | Dedicated paint correction page exists. | Partial | Add staged service tier details, before/after proof, and FAQ. |
+| Interior vs deep interior clarity | Packages exist, but public distinction can be clearer. | Partial | Add plain-language service chooser and booking recommender logic. |
+| Admin service controls | Admin app controls exist across services/catalog/settings/social. | Partial | Move more static page copy and specials into DB-first admin-managed content. |
+| Social proof/publishing | Social Queue has drafts, review gates, templates, scheduling, duplicate warnings, and API/webhook attempts. | Strong/partial | Add consent capture, media privacy status, platform previews, and metrics. |
+| Local SEO reporting | SEO/H1 checks exist; Search Console/GBP reporting not connected. | Partial | Add reporting notes and future dashboard hooks. |
+
+## Completed in Build 160
+
+1. Reviewed `COMPETETIVE.md` end-to-end as the desired website/app direction.
+2. Compared the competitor/service roadmap against the current public pages, admin pages, data files, and social workflow.
+3. Classified each major competitor target as strong, partial, or missing.
+4. Identified the highest-conversion gap: visitors need a simpler “which service should we choose?” path before package cards.
+5. Identified the highest-local-SEO gap: reviews/recent work/proof should become town- and service-aware.
+6. Identified the highest-admin gap: high-change service/add-on/specials copy still needs DB-first management.
+7. Identified the highest-safety gap: consent capture and media privacy/blur status must be completed before public/social automation scales.
+8. Identified the highest-repo-cleanup gap: GitHub web uploads can leave stale files, so a clean/orphan branch replacement remains important.
+9. Added `COMPETITOR_SANITY_CHECK.md` as the full current-vs-target audit.
+10. Added `COMPETITOR.md` and `COMPETETOR.md` aliases so future chats can find the competitor roadmap despite spelling variations.
+11. Updated this `DEVELOPMENT_ROADMAP.md` as the implementation source of truth.
+12. Updated `KNOWN_GAPS_AND_RISKS.md` with competitor-aligned remaining risks.
+13. Updated `CURRENT_IMPLEMENTATION_STATE.md`, `SANITY_CHECK.md`, `README.md`, `NEW_CHAT_STATUS.md`, and `HANDOFF_NEXT_CHAT.md` with Build 160 status.
+14. Added a no-DDL SQL note for Build 160.
+15. Added `scripts/competitor_roadmap_check.py`.
+16. Added the competitor roadmap check to `scripts/release_check.py`.
+17. Added a Services-page decision guide with practical package direction for maintenance, daily-use interiors, exterior gloss, paint correction/ceramic, fleet, and gifts.
+18. Added stronger Services-page photo-estimate and quote CTAs.
+19. Synced root `/services.html` and folder `/services/index.html`.
+20. Re-ran release checks including Cloudflare, social workflow, competitor roadmap, and SEO/H1 checks.
+
+## Next 20 value-added steps after Build 160
+
+1. Deploy Build 160 and confirm the Cloudflare Pages build stays clean.
+2. Apply pending SQL migrations through Build 159 if any are still missing.
+3. Smoke-test Services page on desktop and mobile to confirm the new decision guide improves clarity.
+4. Add the same decision guidance to Booking as a step-by-step recommendation panel.
+5. Add package display aliases: Express Interior Refresh, Full Interior Detail, Interior Detail Pro, Exterior Wash & Protect, Full Detail, Paint Enhancement, Paint Correction Quote, Ceramic Protection Quote.
+6. Add a photo-estimate prompt to Booking and Contact with examples of the 2–6 photos customers should send.
+7. Build a simple recommendation engine using vehicle type, service type, condition, add-ons, and photos.
+8. Add FAQ blocks to Paint Correction, Ceramic Coating, Pet Hair Removal, Odor Removal, Headlight Restoration, and Services.
+9. Add admin-managed specials/promos blocks for seasonal salt cleanup, multi-vehicle, senior-friendly, fleet/work truck, and headlight refresh offers.
+10. Improve gift-card merchandising with Interior Detail, Full Detail, and custom amount gift cards.
+11. Add customer-facing consent capture for public/social before-and-after use.
+12. Add media privacy fields for plate/face/address review and blur/crop completion.
+13. Add admin proof-placement controls so staff can choose which reviews/recent work appear on each town/service page.
+14. Filter gallery/recent work by town, service, add-on, and vehicle type where data is available.
+15. Move high-change service, add-on, specials, FAQ, and proof content toward DB-first admin management.
+16. Add Search Console and Google Business Profile reporting notes to admin analytics.
+17. Add social performance entry and dashboard rollups using `social_post_metrics_snapshots`.
+18. Add social platform preview cards before publishing.
+19. Prepare a clean/orphan branch replacement plan once deploy stability is confirmed.
+20. Keep this file as the top implementation source of truth; use older roadmap files only as history.
+
+---
+
 # Build 159 update — Social templates, scheduling, duplicate warnings, and manual posted-link capture
 
 **Updated:** 2026-05-20  

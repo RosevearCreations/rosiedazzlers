@@ -733,3 +733,19 @@ Every exposed public page should continue to enforce:
 - No broken service links
 
 - My main recommendation: do not just add more pages. Add the service pages, but also connect them to the booking app, admin editor, image system, FAQ blocks, schema, gallery, and quote logic so the site becomes easier to manage and better at turning visitors into bookings.
+
+---
+
+## Build 160 sanity-check note
+
+Build 160 reviewed this competitor/service roadmap against the current Rosie Dazzlers website/app. The implementation source of truth is now `DEVELOPMENT_ROADMAP.md`, with the detailed audit captured in `COMPETITOR_SANITY_CHECK.md`.
+
+Highest priority gaps from this document are now:
+
+1. Make the service hub easier to choose from before showing package cards.
+2. Add package aliases that match how customers search and compare services.
+3. Strengthen photo-estimate CTAs in Services, Booking, and Contact.
+4. Add condition-based booking recommendations.
+5. Add service/town-filtered proof, reviews, and recent work.
+6. Add customer consent and media privacy checks before public/social promotion.
+7. Move high-change service/add-on/specials/FAQ copy toward DB-first admin management.

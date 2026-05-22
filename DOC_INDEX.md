@@ -1,3 +1,11 @@
+# Build 160 doc-index note
+
+**Updated:** 2026-05-21
+
+Planning source of truth: `DEVELOPMENT_ROADMAP.md`. Competitor/service reference: `COMPETETIVE.md`. Build 160 audit: `COMPETITOR_SANITY_CHECK.md`. Aliases were added as `COMPETITOR.md` and `COMPETETOR.md` so future chats can find the file even if the name is typed differently.
+
+---
+
 # Documentation Index — Build 153
 
 **Updated:** 2026-05-18
