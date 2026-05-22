@@ -70,6 +70,12 @@
           <h2>Selected booking tools</h2>
           <div id="selectedBookingTools" class="kicker">Choose a booking to view tools.</div>
         </div>
+
+        <div class="panel">
+          <h2>Estimate intake & media consent</h2>
+          <p class="kicker">Staff review panel for the public booking condition helper, photo-estimate request, and customer media-use preference.</p>
+          <div id="bookingIntakeReview" class="notice mini">Choose a booking to review intake and consent details.</div>
+        </div>
       </div>
     </section>
 
@@ -421,6 +427,121 @@
       }
     }
 
+    function normalizeConditionFlags(value) {
+      if (Array.isArray(value)) {
+        return value.map((item) => {
+          if (item && typeof item === "object") return String(item.label || item.code || "").trim();
+          return String(item || "").trim();
+        }).filter(Boolean);
+      }
+      if (typeof value === "string" && value.trim()) {
+        try {
+          const parsed = JSON.parse(value);
+          return normalizeConditionFlags(parsed);
+        } catch {
+          return value.split(",").map((item) => item.trim()).filter(Boolean);
+        }
+      }
+      return [];
+    }
+
+    function escapeRegExp(value) {
+      return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function extractNotesField(notes, label, nextLabels = []) {
+      const text = String(notes || "");
+      if (!text) return "";
+      const escaped = escapeRegExp(label);
+      const next = nextLabels.length
+        ? `(?:\\s+(?:${nextLabels.map(escapeRegExp).join("|")}):|$)`
+        : "$";
+      const pattern = new RegExp(`${escaped}:\\s*([\\s\\S]*?)${next}`, "i");
+      const match = text.match(pattern);
+      return match ? String(match[1] || "").trim() : "";
+    }
+
+    function normalizeConsentLabel(value) {
+      const raw = String(value || "").trim();
+      if (!raw) return "Not captured";
+      if (raw === "estimate_only") return "Estimate use only";
+      if (raw === "ask_first") return "Ask customer first";
+      if (raw === "public_after_review") return "Public/social may be okay after staff privacy review";
+      return raw;
+    }
+
+    function readBookingIntakeReview(booking) {
+      const notes = String(booking?.notes || "");
+      let flags = normalizeConditionFlags(booking?.condition_flags);
+      if (!flags.length) {
+        const fromNotes = extractNotesField(notes, "Condition helper flags", [
+          "Condition helper recommendation",
+          "Photo estimate requested before final package/add-on confirmation.",
+          "Media/photo consent preference"
+        ]);
+        flags = fromNotes ? fromNotes.split(",").map((item) => item.trim()).filter(Boolean) : [];
+      }
+
+      let recommendation = String(booking?.condition_recommendation || "").trim();
+      if (!recommendation) {
+        recommendation = extractNotesField(notes, "Condition helper recommendation", [
+          "Photo estimate requested before final package/add-on confirmation.",
+          "Media/photo consent preference"
+        ]);
+      }
+
+      const photoRequested = booking?.photo_estimate_requested === true || /Photo estimate requested before final package\/add-on confirmation\./i.test(notes);
+      let consent = String(booking?.media_consent_preference || "").trim();
+      if (!consent) {
+        consent = extractNotesField(notes, "Media/photo consent preference", []);
+      }
+
+      return {
+        flags,
+        recommendation,
+        photoRequested,
+        consent,
+        photoStatus: String(booking?.photo_estimate_status || (photoRequested ? "requested" : "not_requested")).trim(),
+        conditionReviewStatus: String(booking?.condition_review_status || (flags.length || recommendation ? "needs_review" : "not_needed")).trim(),
+        mediaPrivacyStatus: String(booking?.media_privacy_status || (consent === "public_after_review" ? "needs_review" : "not_needed")).trim(),
+        plateReviewed: booking?.plate_privacy_reviewed === true,
+        faceReviewed: booking?.face_privacy_reviewed === true,
+        addressReviewed: booking?.address_privacy_reviewed === true,
+        blurCropNeeded: booking?.blur_crop_needed === true,
+        blurCropComplete: booking?.blur_crop_complete === true
+      };
+    }
+
+    function renderBookingIntakeReview() {
+      const node = document.querySelector("#bookingIntakeReview");
+      if (!node) return;
+      if (!currentBooking) {
+        node.textContent = "Choose a booking to review intake and consent details.";
+        return;
+      }
+
+      const intake = readBookingIntakeReview(currentBooking);
+      const flagsHtml = intake.flags.length
+        ? intake.flags.map((flag) => `<span class="badge">${escapeHtml(flag)}</span>`).join(" ")
+        : `<span class="kicker">No condition-helper flags captured.</span>`;
+      const privacyBits = [
+        `Plate reviewed: ${intake.plateReviewed ? "yes" : "not yet"}`,
+        `Face reviewed: ${intake.faceReviewed ? "yes" : "not yet"}`,
+        `Address reviewed: ${intake.addressReviewed ? "yes" : "not yet"}`,
+        `Blur/crop: ${intake.blurCropNeeded ? (intake.blurCropComplete ? "complete" : "needed") : "not flagged"}`
+      ];
+
+      node.innerHTML = `
+        <div><strong>Photo estimate:</strong> ${intake.photoRequested ? "requested" : "not requested"} <span class="badge">${escapeHtml(intake.photoStatus || "not_requested")}</span></div>
+        <div style="margin-top:8px"><strong>Condition review:</strong> <span class="badge">${escapeHtml(intake.conditionReviewStatus || "not_needed")}</span></div>
+        <div style="margin-top:8px"><strong>Customer media preference:</strong> ${escapeHtml(normalizeConsentLabel(intake.consent))}</div>
+        <div style="margin-top:8px"><strong>Media privacy status:</strong> <span class="badge">${escapeHtml(intake.mediaPrivacyStatus || "not_needed")}</span></div>
+        <div style="margin-top:8px"><strong>Condition flags:</strong><br>${flagsHtml}</div>
+        ${intake.recommendation ? `<div style="margin-top:8px"><strong>Recommendation shown:</strong><br>${escapeHtml(intake.recommendation)}</div>` : ""}
+        <div style="margin-top:8px" class="kicker">${privacyBits.map(escapeHtml).join(" · ")}</div>
+      `;
+    }
+
     function renderSelectedBooking() {
       const title = document.querySelector("#bookingTitle");
       const meta = document.querySelector("#bookingMeta");
@@ -436,6 +557,7 @@
         statusBtn.disabled = true;
         assignBtn.disabled = true;
         refreshSelectedBookingFinance();
+        renderBookingIntakeReview();
         return;
       }
 
@@ -465,6 +587,7 @@
 
       statusBtn.disabled = false;
       assignBtn.disabled = false;
+      renderBookingIntakeReview();
       refreshSelectedBookingFinance();
     }
 
