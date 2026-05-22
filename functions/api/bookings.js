@@ -89,7 +89,10 @@ const OPTIONAL_BOOKING_INTAKE_SELECT = [
   "face_privacy_reviewed",
   "address_privacy_reviewed",
   "blur_crop_needed",
-  "blur_crop_complete"
+  "blur_crop_complete",
+  "intake_review_note",
+  "intake_reviewed_at",
+  "intake_reviewed_by"
 ];
 
 async function loadBookingsWithOptionalIntakeFields(env) {
