@@ -1188,3 +1188,7 @@ on conflict (platform, display_name) do nothing;
 -- Adds duplicate review helper fields, social_metrics jsonb, social_post_metrics_snapshots, and additional caption/hashtag seeds.
 -- Build 160 sync note - competitor sanity check and roadmap reset
 -- No schema shape change. Build 160 added planning/docs checks and Services-page conversion guidance.
+
+
+-- Build 161 conversion path / service chooser: no DDL.
+-- Package display aliases and photo-estimate guidance are catalog/content metadata, not schema changes.

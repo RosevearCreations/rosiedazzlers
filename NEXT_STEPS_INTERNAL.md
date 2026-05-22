@@ -89,3 +89,10 @@
 - Added manual posted URL and platform post ID capture.
 - Added `social_post_metrics_snapshots` schema support for future reporting.
 - Release checks now require the Build 159 social template/schedule markers.
+
+---
+
+## Build 161 sync note
+
+Build 161 keeps `DEVELOPMENT_ROADMAP.md` as the source of truth and advances the competitor-aligned conversion path with Booking service chooser guidance, package aliases, and photo-estimate CTAs.
+

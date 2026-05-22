@@ -146,3 +146,10 @@ This avoids accidental public posting while still making it possible to push pro
 - Scheduled publishing windows.
 - Privacy checklist for license plates, faces, and addresses.
 - Webhook recipe guide for TikTok, Google Business Profile, LinkedIn, and YouTube Shorts.
+
+---
+
+## Build 161 sync note
+
+Build 161 keeps `DEVELOPMENT_ROADMAP.md` as the source of truth and advances the competitor-aligned conversion path with Booking service chooser guidance, package aliases, and photo-estimate CTAs.
+
