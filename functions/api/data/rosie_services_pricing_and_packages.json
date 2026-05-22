@@ -52,7 +52,19 @@
       "notes": [
         "Quick exterior-focused clean",
         "Main image changes with vehicle size"
-      ]
+      ],
+      "display_alias": "Exterior Wash & Protect",
+      "customer_goal": "Quick exterior refresh",
+      "service_level": "maintenance",
+      "best_for": "A maintained vehicle that mainly needs a clean exterior, glass, wheels, and a tidy dash reset.",
+      "recommendation_tags": [
+        "quick refresh",
+        "exterior",
+        "maintenance",
+        "budget friendly"
+      ],
+      "photo_estimate_recommended": false,
+      "chooser_prompt": "Choose this when the outside needs a tidy reset but the interior is already in decent shape."
     },
     {
       "code": "basic_detail",
@@ -93,7 +105,19 @@
       "notes": [
         "Quick interior-focused package",
         "Main image changes with vehicle size"
-      ]
+      ],
+      "display_alias": "Express Interior Refresh",
+      "customer_goal": "Quick interior reset",
+      "service_level": "refresh",
+      "best_for": "Light daily-use interior dust, crumbs, glass, seats, and mats when deep shampoo is not the main goal.",
+      "recommendation_tags": [
+        "interior",
+        "quick clean",
+        "daily driver",
+        "maintenance"
+      ],
+      "photo_estimate_recommended": false,
+      "chooser_prompt": "Choose this when the cabin needs a tidy reset, not a full stain or odour recovery."
     },
     {
       "code": "complete_detail",
@@ -144,7 +168,19 @@
       "notes": [
         "Best all-around package",
         "Main image changes with vehicle size"
-      ]
+      ],
+      "display_alias": "Full Detail",
+      "customer_goal": "Interior and exterior reset",
+      "service_level": "full detail",
+      "best_for": "The safest all-around choice when both the inside and outside need attention or the customer is unsure.",
+      "recommendation_tags": [
+        "best all around",
+        "inside and outside",
+        "family vehicle",
+        "pre-sale"
+      ],
+      "photo_estimate_recommended": true,
+      "chooser_prompt": "Choose this when you want the best all-around detail or the vehicle has mixed interior and exterior needs."
     },
     {
       "code": "interior_detail",
@@ -186,7 +222,20 @@
       "notes": [
         "Interior-only full detailing package",
         "Main image changes with vehicle size"
-      ]
+      ],
+      "display_alias": "Full Interior Detail",
+      "customer_goal": "Deep interior clean",
+      "service_level": "deep interior",
+      "best_for": "Seats, carpets, mats, cargo areas, salt, kid messes, pet hair, odours, or interior-only recovery.",
+      "recommendation_tags": [
+        "interior",
+        "deep clean",
+        "pet hair",
+        "salt",
+        "odour"
+      ],
+      "photo_estimate_recommended": true,
+      "chooser_prompt": "Choose this when the inside is the problem area and shampoo or deeper interior work may be needed."
     },
     {
       "code": "exterior_detail",
@@ -220,7 +269,20 @@
       "notes": [
         "Exterior-only full detailing package",
         "Main image changes with vehicle size"
-      ]
+      ],
+      "display_alias": "Exterior Detail & Protection Prep",
+      "customer_goal": "Exterior gloss and prep",
+      "service_level": "exterior detail",
+      "best_for": "Paint, trim, wheels, glass, road film, surface prep, gloss, wax/sealant, clay, or coating-prep discussions.",
+      "recommendation_tags": [
+        "exterior",
+        "paint prep",
+        "gloss",
+        "sealant",
+        "clay"
+      ],
+      "photo_estimate_recommended": true,
+      "chooser_prompt": "Choose this when the outside finish, protection, or paint prep is the main goal."
     }
   ],
   "service_matrix": [
