@@ -7,7 +7,85 @@ Improve the Rosie Dazzlers website and app so visitors can quickly understand wh
 The website should act as a local service hub for mobile auto detailing in Southern Ontario, with special focus on Oxford County, Norfolk County, Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi, Port Dover, and surrounding service areas.
 
 ---
+# Wash Me Now Takeaways for Rosie Dazzlers
 
+## Add or Improve
+
+1. Add a clear homepage hero:
+   "Mobile Auto Detailing in Tillsonburg, Oxford County & Norfolk County"
+
+2. Add sticky CTA buttons:
+   - Book Now
+   - Get Quote
+   - Call/Text
+   - Send Photos for Estimate
+
+3. Build a better service package selector:
+   - Vehicle type
+   - Service type
+   - Vehicle condition
+   - Add-ons
+   - Photo upload
+   - Quote/booking request
+
+4. Add service package cards:
+   - Express Interior Refresh
+   - Full Interior Detail
+   - Interior Detail Pro
+   - Exterior Wash & Protect
+   - Full Detail
+   - Paint Enhancement
+   - Paint Correction Quote
+   - Ceramic Protection Quote
+
+5. Add add-ons:
+   - Pet Hair Removal
+   - Odor Treatment
+   - Salt Stain Treatment
+   - Headlight Restoration
+   - Engine Bay Cleaning
+   - Clay Treatment
+   - Paint Sealant
+   - Ceramic Spray Protection
+   - UV Interior Protectant
+   - Glass Coating
+   - Trim Restoration
+
+6. Add specials:
+   - Spring Salt Cleanup
+   - Multi-Vehicle Same-Address Discount
+   - Senior-Friendly Offer
+   - Fleet/Work Truck Same-Location Quote
+   - Headlight Refresh Add-On Special
+
+7. Add gift cards:
+   - Interior Detail Gift Card
+   - Full Detail Gift Card
+   - Custom Amount Gift Card
+
+8. Add proof sections:
+   - Real reviews
+   - Before/after gallery
+   - Town/service area served
+   - Photos of work
+   - Clear expectations
+
+9. Add ceramic coating page:
+   - What it does
+   - What it does not do
+   - Why prep matters
+   - Package tiers
+   - FAQ
+   - Maintenance tips
+
+10. Add practical SEO blog posts:
+   - Ontario road salt cleanup
+   - Pet hair removal
+   - Smoke odor removal
+   - Coffee stain cleanup
+   - UV interior protection
+   - Ceramic coating vs wax
+   - How often to detail your car
 ## Key Ideas to Add or Improve
 
 ### 1. Create a Stronger Service Hub
