@@ -1,3 +1,11 @@
+# Build 163 sync — booking intake admin review
+
+**Updated:** 2026-05-21
+
+Build 163 adds fallback-safe direct booking intake field storage and a staff-facing Admin Booking panel for estimate intake, condition-helper recommendations, media-consent preference, and privacy-review status hints. Continue from `DEVELOPMENT_ROADMAP.md`, which remains the source of truth.
+
+---
+
 # Handoff — Build 162
 
 Current build: Build 162. The public booking flow now includes a condition-based helper and media-consent preference. Treat `DEVELOPMENT_ROADMAP.md` as the source of truth. Recommended next pass: apply/use the Build 162 DB columns, expose the fields in admin booking detail, then add real estimate photo upload and privacy review fields.

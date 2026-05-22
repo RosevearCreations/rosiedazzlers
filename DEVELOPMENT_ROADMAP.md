@@ -1,3 +1,59 @@
+# Build 163 update — Admin booking intake review and optional direct field storage
+
+**Updated:** 2026-05-21  
+**Current build:** Build 163  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
+
+Build 163 continues the Build 160–162 competitor conversion path. Build 162 helped customers explain vehicle condition and media-use preference during booking; Build 163 makes that information easier for staff to see and prepares direct database storage when the optional migrations are applied. The admin booking screen now has a dedicated estimate-intake and media-consent review panel instead of forcing staff to hunt through general booking notes.
+
+## Completed in Build 163
+
+1. Reviewed `DEVELOPMENT_ROADMAP.md` and `KNOWN_GAPS_AND_RISKS.md` before implementation.
+2. Kept `DEVELOPMENT_ROADMAP.md` as the implementation source of truth.
+3. Updated checkout to write condition helper flags into `bookings.condition_flags` when the Build 162 migration is available.
+4. Updated checkout to write `condition_recommendation` when the field is available.
+5. Updated checkout to write `photo_estimate_requested` when the field is available.
+6. Updated checkout to write `media_consent_preference` when the field is available.
+7. Added checkout-safe fallback so bookings still succeed if the optional intake columns have not been migrated yet.
+8. Added `photo_estimate_status`, `condition_review_status`, and `media_privacy_status` planning fields.
+9. Added privacy-review planning fields for plate, face, address, blur/crop needed, and blur/crop complete.
+10. Added `sql/2026-05-21_build163_booking_intake_admin_review.sql`.
+11. Updated the admin bookings API to try the new intake/privacy fields first.
+12. Added admin bookings API fallback to the older select list if the optional columns are not deployed yet.
+13. Added a new Admin Booking panel: `Estimate intake & media consent`.
+14. The new panel displays photo-estimate request status.
+15. The new panel displays condition-helper flags and recommendation summary.
+16. The new panel displays customer media-use preference.
+17. The new panel displays privacy-review status hints for plates, faces, addresses, and blur/crop.
+18. The admin panel can read either direct DB fields or the Build 162 note fallback.
+19. Added `scripts/booking_intake_admin_review_check.py`.
+20. Wired the Build 163 guard into `scripts/release_check.py`.
+
+## Next several value-added steps after Build 163
+
+1. Deploy Build 163 and confirm Admin Booking shows the estimate-intake panel on mobile and desktop.
+2. Run the Build 162 migration, then run `sql/2026-05-21_build163_booking_intake_admin_review.sql`.
+3. Add admin edit controls so staff can update photo-estimate status, condition-review status, and media-privacy status.
+4. Add true customer photo upload/lead capture before checkout, using Supabase Storage signed upload URLs.
+5. Add media privacy review actions directly to each job photo/video: plate reviewed, face reviewed, address reviewed, blur/crop needed, blur/crop complete.
+6. Add a gallery/social eligibility filter that only shows media with customer permission and completed privacy review.
+7. Add a photo-estimate lead inbox so incomplete bookings with uploaded media can become quotes or draft bookings.
+8. Add FAQ blocks to Paint Correction, Ceramic Coating, Pet Hair Removal, Odor Removal, Headlight Restoration, Services, and Pricing.
+9. Add town/service-aware proof filtering for Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, Port Dover, Oxford County, and Norfolk County.
+10. Add admin-managed specials/promos for salt cleanup, multi-vehicle, senior-friendly, work truck/fleet, and headlight refresh.
+11. Add stronger service-specific gift card cards for Interior Detail, Full Detail, and custom amounts.
+12. Move high-change service, add-on, specials, FAQ, proof, and testimonial content toward DB-first admin-managed records.
+13. Add Search Console and Google Business Profile tracking notes into admin analytics.
+14. Add social-platform preview cards for Facebook, Instagram, X, TikTok, Google Business Profile, LinkedIn, YouTube Shorts, and manual copy/paste.
+15. Add scheduled social publish worker/retry controls after platform credentials and approvals are ready.
+16. Add caption/media scoring for Google Business Profile-style local proof posts.
+17. Add accessibility review for the booking condition helper and Admin Booking intake panel.
+18. Add conversion tracking events for photo-estimate requests, condition-helper use, and booking completion.
+19. Prepare a clean/orphan branch replacement after deploy stability so old GitHub web-upload leftovers are removed.
+20. Keep this roadmap as the source of truth and keep older roadmap/gap files as historical support only.
+
+---
+
 # Build 162 update — Condition-based booking helper, photo-estimate intent, and media-consent preference
 
 **Updated:** 2026-05-21  

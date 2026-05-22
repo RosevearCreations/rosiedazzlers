@@ -1,3 +1,11 @@
+# Build 163 sync — booking intake admin review
+
+**Updated:** 2026-05-21
+
+Build 163 adds fallback-safe direct booking intake field storage and a staff-facing Admin Booking panel for estimate intake, condition-helper recommendations, media-consent preference, and privacy-review status hints. Continue from `DEVELOPMENT_ROADMAP.md`, which remains the source of truth.
+
+---
+
 # Build 162 document index note
 
 Primary planning source: `DEVELOPMENT_ROADMAP.md`. Build 162 also touches `KNOWN_GAPS_AND_RISKS.md`, `CURRENT_IMPLEMENTATION_STATE.md`, `SANITY_CHECK.md`, `SUPABASE_SCHEMA.sql`, and `sql/2026-05-21_build162_booking_condition_recommender_and_consent.sql`.
