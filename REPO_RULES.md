@@ -1,3 +1,11 @@
+# Build 164 sync — booking intake review fields
+
+**Updated:** 2026-05-22
+
+Build 164 adds optional booking review fields through `sql/2026-05-22_build164_booking_intake_review_actions.sql`: `intake_review_note`, `intake_reviewed_at`, and `intake_reviewed_by`. These support the Admin Booking photo-estimate, condition-review, and media/privacy review action controls. The workflow remains fallback-safe before migration by appending staff review status to booking notes.
+
+---
+
 # Repo Rules — Build 155
 
 **Updated:** 2026-05-18

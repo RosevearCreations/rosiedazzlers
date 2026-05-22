@@ -1,3 +1,32 @@
+# Build 164 known gaps and risks update
+
+**Updated:** 2026-05-22  
+**Current build:** Build 164
+
+Build 164 reduces the staff workflow gap from Build 163 by adding Admin Booking controls for photo-estimate status, condition review status, media/privacy status, privacy checklist flags, blur/crop flags, and a staff review note. The admin action is fallback-safe, but direct reporting still depends on the Build 162, Build 163, and Build 164 migrations being applied.
+
+## Reduced in Build 164
+
+- Staff can now save intake-review statuses instead of only viewing intake details.
+- Photo-estimate, condition, and media/privacy review workflows now have a clear admin action path.
+- Privacy checklist flags can be stored for plates, faces, addresses/private identifiers, blur/crop needed, and blur/crop complete.
+- Staff review notes can be stored directly when the Build 164 migration is applied.
+- If optional columns are not migrated yet, the review action is appended to booking notes instead of breaking the admin workflow.
+
+## Still open after Build 164
+
+1. Apply the Build 162 migration, then Build 163, then Apply the Build 164 migration.
+2. Confirm the live Supabase schema cache sees the new optional booking fields.
+3. Add true customer photo upload/lead capture before checkout.
+4. Add media-level privacy review actions for individual job photos/videos.
+5. Enforce gallery/social eligibility from consent, privacy review, and blur/crop completion.
+6. Add staff quote-building tools from customer photo estimates and condition flags.
+7. Add automated customer messages for photo-estimate received and quote-ready states.
+8. Continue migrating scattered public service content into DB-managed admin content.
+9. Continue clean/orphan branch planning to prevent stale GitHub files from surviving web uploads.
+
+---
+
 # Build 163 known gaps and risks update
 
 **Updated:** 2026-05-21  

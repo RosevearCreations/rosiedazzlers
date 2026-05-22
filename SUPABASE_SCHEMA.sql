@@ -1219,3 +1219,9 @@ on conflict (platform, display_name) do nothing;
 --
 -- The application remains fallback-safe before this migration is applied.
 
+
+
+-- Build 164 sync note (2026-05-22): booking intake review actions
+-- Apply sql/2026-05-22_build164_booking_intake_review_actions.sql after Build 162 and Build 163.
+-- Adds optional bookings.intake_review_note, bookings.intake_reviewed_at,
+-- and bookings.intake_reviewed_by for staff photo-estimate/condition/media privacy review actions.
