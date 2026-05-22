@@ -1,3 +1,59 @@
+# Build 164 update — Admin booking intake review actions
+
+**Updated:** 2026-05-22  
+**Current build:** Build 164  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
+
+Build 164 continues the competitor/conversion-path work after Builds 160–163. Build 163 made booking condition, photo-estimate, and media-consent details visible to staff; Build 164 adds staff action controls so those details can be reviewed, marked, and documented from Admin Booking. The workflow is fallback-safe: if the optional direct columns are not migrated yet, the action is appended to booking notes instead of breaking the admin screen.
+
+## Completed in Build 164
+
+1. Reviewed `DEVELOPMENT_ROADMAP.md` and `KNOWN_GAPS_AND_RISKS.md` before implementation.
+2. Kept `DEVELOPMENT_ROADMAP.md` as the implementation source of truth.
+3. Added Admin Booking intake review controls for photo-estimate status.
+4. Added Admin Booking intake review controls for condition-review status.
+5. Added Admin Booking intake review controls for media/privacy status.
+6. Added staff checkboxes for license plate review, face review, address/private-identifier review, blur/crop needed, and blur/crop complete.
+7. Added a staff intake-review note field.
+8. Added `set_intake_review` support to `/api/admin/booking_update`.
+9. Synced the root compatibility route `/api/booking_update`.
+10. Added allowed-value validation for photo, condition, and media/privacy statuses.
+11. Added direct booking updates for review statuses and privacy flags when the Build 162/163/164 migrations are live.
+12. Added direct booking updates for `intake_review_note`, `intake_reviewed_at`, and `intake_reviewed_by` when Build 164 migration is live.
+13. Added fallback behavior that appends the review action to booking notes if optional intake columns are missing.
+14. Added booking-event logging for staff intake review changes.
+15. Added optional fields to the Admin Booking list select so saved review notes and review timestamps can display.
+16. Synced `/admin-booking.html` and `/admin-booking/index.html`.
+17. Added `sql/2026-05-22_build164_booking_intake_review_actions.sql`.
+18. Updated `SUPABASE_SCHEMA.sql` with the Build 164 schema note.
+19. Added `scripts/booking_intake_review_actions_check.py`.
+20. Wired the Build 164 guard into `scripts/release_check.py`.
+
+## Next several value-added steps after Build 164
+
+1. Deploy Build 164 and confirm Admin Booking can save intake review status fields.
+2. Apply SQL migrations in order: Build 162, Build 163, then Build 164.
+3. Add real customer photo upload/lead capture before checkout so photo estimates can include customer images.
+4. Add media-level privacy review actions on each uploaded job photo/video, not only at the booking level.
+5. Enforce gallery/social eligibility from consent + media privacy status + blur/crop completion.
+6. Add a staff “quote from photos” workflow that can convert a photo-estimate booking into a proposed package/add-on set.
+7. Add customer notification templates for photo-estimate received, quote ready, and privacy/media approval request.
+8. Move public service FAQs/proof blocks from scattered JSON/HTML into DB-managed admin content where possible.
+9. Add proof filtering by service type, town, vehicle type, and consent/privacy status.
+10. Add a gift-card/specials merchandising path after the booking conversion path is stable.
+11. Add town/service landing-page proof blocks using only approved public media.
+12. Add analytics for service chooser usage, condition-helper selections, quote-first starts, and booking conversions.
+13. Add abandoned booking recovery that references the chosen package/condition flags without exposing private details.
+14. Add booking-intake dashboard filters: photo estimate requested, needs condition review, needs media review, ready for quote.
+15. Continue CSS drift checks on Booking, Admin Booking, Services, Contact, and Admin Social.
+16. Continue one-H1 and local title/meta checks every pass.
+17. Continue Cloudflare Pages Function import/syntax checks every pass.
+18. Plan a clean/orphan branch refresh after deploy stability is confirmed so stale files cannot remain in GitHub.
+19. Keep `COMPETITOR_SANITY_CHECK.md` aligned with this roadmap after each conversion-path pass.
+20. Keep `KNOWN_GAPS_AND_RISKS.md` focused on active risks, not historical build notes.
+
+---
+
 # Build 163 update — Admin booking intake review and optional direct field storage
 
 **Updated:** 2026-05-21  

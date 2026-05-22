@@ -1,3 +1,11 @@
+# Build 164 sync — Admin booking intake review actions
+
+**Updated:** 2026-05-22
+
+Build 164 adds staff action controls to Admin Booking for photo-estimate status, condition-review status, media/privacy status, privacy checklist flags, blur/crop flags, and a staff intake-review note. The action writes directly to optional booking fields when the Build 162/163/164 migrations are applied and falls back to booking notes if the optional columns are not live yet. Continue from `DEVELOPMENT_ROADMAP.md`, which remains the source of truth.
+
+---
+
 # Build 163 sync — booking intake admin review
 
 **Updated:** 2026-05-21
