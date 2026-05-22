@@ -13,10 +13,9 @@ export async function onRequestPost(context) {
     if (!access.ok) return access.response;
 
     if (!bookingId) {
-      const listUrl = `${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,customer_name,customer_email,service_date,start_slot,duration_slots,service_area,service_area_county,service_area_municipality,service_area_zone,package_code,vehicle_size,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,progress_enabled,progress_token,created_at,trusted_service_latitude,trusted_service_longitude,trusted_service_coordinate_source,trusted_service_coordinate_status,trusted_service_coordinate_label,trusted_service_geofence_radius_m,arrival_device_latitude,arrival_device_longitude,arrival_geofence_status,arrival_distance_m,arrival_geofence_checked_at&order=service_date.asc,created_at.desc`;
-      const listRes = await fetch(listUrl, { headers: serviceHeaders(env) });
-      if (!listRes.ok) return json({ error: `Could not load bookings. ${await listRes.text()}` }, 500);
-      const bookings = await listRes.json().catch(() => []);
+      const listResult = await loadBookingsWithOptionalIntakeFields(env);
+      if (!listResult.ok) return json({ error: listResult.error }, 500);
+      const bookings = listResult.bookings;
       const safeBookings = Array.isArray(bookings) ? bookings : [];
       const crewResult = await loadCrewAssignmentsMap(env, safeBookings.map((row) => row?.id));
       return json({
@@ -49,4 +48,86 @@ export async function onRequestPost(context) {
   } catch (err) {
     return json({ error: err && err.message ? err.message : "Unexpected server error." }, 500);
   }
+}
+
+
+const BASE_BOOKING_LIST_SELECT = [
+  "id",
+  "status",
+  "job_status",
+  "customer_name",
+  "customer_email",
+  "service_date",
+  "start_slot",
+  "duration_slots",
+  "service_area",
+  "service_area_county",
+  "service_area_municipality",
+  "service_area_zone",
+  "package_code",
+  "vehicle_size",
+  "assigned_to",
+  "assigned_staff_user_id",
+  "assigned_staff_email",
+  "assigned_staff_name",
+  "progress_enabled",
+  "progress_token",
+  "created_at",
+  "notes",
+  "trusted_service_latitude",
+  "trusted_service_longitude",
+  "trusted_service_coordinate_source",
+  "trusted_service_coordinate_status",
+  "trusted_service_coordinate_label",
+  "trusted_service_geofence_radius_m",
+  "arrival_device_latitude",
+  "arrival_device_longitude",
+  "arrival_geofence_status",
+  "arrival_distance_m",
+  "arrival_geofence_checked_at"
+];
+
+const OPTIONAL_BOOKING_INTAKE_SELECT = [
+  "condition_flags",
+  "condition_recommendation",
+  "photo_estimate_requested",
+  "media_consent_preference",
+  "media_consent_reviewed_at",
+  "photo_estimate_status",
+  "condition_review_status",
+  "media_privacy_status",
+  "plate_privacy_reviewed",
+  "face_privacy_reviewed",
+  "address_privacy_reviewed",
+  "blur_crop_needed",
+  "blur_crop_complete"
+];
+
+async function loadBookingsWithOptionalIntakeFields(env) {
+  const baseUrl = `${env.SUPABASE_URL}/rest/v1/bookings`;
+  const extendedSelect = BASE_BOOKING_LIST_SELECT.concat(OPTIONAL_BOOKING_INTAKE_SELECT).join(",");
+  const baseSelect = BASE_BOOKING_LIST_SELECT.join(",");
+  const order = "service_date.asc,created_at.desc";
+
+  let res = await fetch(`${baseUrl}?select=${encodeURIComponent(extendedSelect)}&order=${encodeURIComponent(order)}`, { headers: serviceHeaders(env) });
+  let text = await res.text();
+
+  if (!res.ok && looksLikeMissingOptionalIntakeColumn(text)) {
+    res = await fetch(`${baseUrl}?select=${encodeURIComponent(baseSelect)}&order=${encodeURIComponent(order)}`, { headers: serviceHeaders(env) });
+    text = await res.text();
+  }
+
+  if (!res.ok) return { ok: false, error: `Could not load bookings. ${text}` };
+
+  let rows = [];
+  try { rows = text ? JSON.parse(text) : []; } catch {}
+  return { ok: true, bookings: Array.isArray(rows) ? rows : [] };
+}
+
+function looksLikeMissingOptionalIntakeColumn(raw) {
+  const text = String(raw || "").toLowerCase();
+  return OPTIONAL_BOOKING_INTAKE_SELECT.some((field) =>
+    text.includes(field.toLowerCase()) &&
+    (text.includes("column") || text.includes("schema cache") || text.includes("could not find") || text.includes("42703"))
+  );
 }
