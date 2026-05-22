@@ -12,6 +12,7 @@ CHECKS = [
     [sys.executable, "scripts/social_dispatch_workflow_check.py"],
     [sys.executable, "scripts/competitor_roadmap_check.py"],
     [sys.executable, "scripts/conversion_path_check.py"],
+    [sys.executable, "scripts/booking_condition_recommender_check.py"],
     [sys.executable, "scripts/seo_h1_check.py"],
 ]
 
