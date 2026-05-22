@@ -75,6 +75,58 @@
           <h2>Estimate intake & media consent</h2>
           <p class="kicker">Staff review panel for the public booking condition helper, photo-estimate request, and customer media-use preference.</p>
           <div id="bookingIntakeReview" class="notice mini">Choose a booking to review intake and consent details.</div>
+
+          <form id="intakeReviewForm" class="form" style="margin-top:12px">
+            <label>
+              Photo-estimate status
+              <select id="photoEstimateStatus" name="photoEstimateStatus">
+                <option value="not_requested">not requested</option>
+                <option value="requested">requested</option>
+                <option value="reviewing">reviewing</option>
+                <option value="quote_needed">quote needed</option>
+                <option value="quoted">quoted</option>
+                <option value="not_needed">not needed</option>
+              </select>
+            </label>
+
+            <label>
+              Condition review status
+              <select id="conditionReviewStatus" name="conditionReviewStatus">
+                <option value="not_needed">not needed</option>
+                <option value="needs_review">needs review</option>
+                <option value="reviewing">reviewing</option>
+                <option value="reviewed">reviewed</option>
+              </select>
+            </label>
+
+            <label>
+              Media/privacy status
+              <select id="mediaPrivacyStatus" name="mediaPrivacyStatus">
+                <option value="not_needed">not needed</option>
+                <option value="needs_review">needs review</option>
+                <option value="reviewing">reviewing</option>
+                <option value="approved_for_public_use">approved for public use</option>
+                <option value="blocked_private_only">blocked / private only</option>
+              </select>
+            </label>
+
+            <div class="grid2">
+              <label class="checkline"><input id="platePrivacyReviewed" type="checkbox" /> Plates reviewed</label>
+              <label class="checkline"><input id="facePrivacyReviewed" type="checkbox" /> Faces reviewed</label>
+              <label class="checkline"><input id="addressPrivacyReviewed" type="checkbox" /> Address/private identifiers reviewed</label>
+              <label class="checkline"><input id="blurCropNeeded" type="checkbox" /> Blur/crop needed</label>
+              <label class="checkline"><input id="blurCropComplete" type="checkbox" /> Blur/crop complete</label>
+            </div>
+
+            <label>
+              Staff intake review note
+              <textarea id="intakeReviewNote" rows="3" placeholder="Example: Quote sent after reviewing pet hair and salt stains. Plates checked before public use."></textarea>
+            </label>
+
+            <div>
+              <button id="intakeReviewBtn" class="btn primary" type="submit" disabled>Save intake review</button>
+            </div>
+          </form>
         </div>
       </div>
     </section>
@@ -285,6 +337,24 @@
 
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Could not update booking status.");
+      return data;
+    }
+
+    async function updateBookingIntakeReview(bookingId, payload) {
+      const res = await fetch("/api/admin/booking_update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify(Object.assign({
+          booking_id: bookingId,
+          action: "set_intake_review"
+        }, payload))
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.ok === false) throw new Error(data.error || data.details || "Could not update intake review.");
       return data;
     }
 
@@ -508,7 +578,69 @@
         faceReviewed: booking?.face_privacy_reviewed === true,
         addressReviewed: booking?.address_privacy_reviewed === true,
         blurCropNeeded: booking?.blur_crop_needed === true,
-        blurCropComplete: booking?.blur_crop_complete === true
+        blurCropComplete: booking?.blur_crop_complete === true,
+        intakeReviewNote: String(booking?.intake_review_note || extractNotesField(notes, "Staff intake review status", []) || "").trim(),
+        intakeReviewedAt: String(booking?.intake_reviewed_at || "").trim(),
+        intakeReviewedBy: String(booking?.intake_reviewed_by || "").trim()
+      };
+    }
+
+    function setSelectValue(selector, value, fallback = "") {
+      const node = document.querySelector(selector);
+      if (!node) return;
+      const wanted = String(value || fallback || "").trim();
+      const hasOption = Array.from(node.options || []).some((option) => option.value === wanted);
+      node.value = hasOption ? wanted : fallback;
+    }
+
+    function setCheckboxValue(selector, value) {
+      const node = document.querySelector(selector);
+      if (node) node.checked = value === true;
+    }
+
+    function setIntakeReviewFormEnabled(enabled) {
+      [
+        "#photoEstimateStatus",
+        "#conditionReviewStatus",
+        "#mediaPrivacyStatus",
+        "#platePrivacyReviewed",
+        "#facePrivacyReviewed",
+        "#addressPrivacyReviewed",
+        "#blurCropNeeded",
+        "#blurCropComplete",
+        "#intakeReviewNote",
+        "#intakeReviewBtn"
+      ].forEach((selector) => {
+        const node = document.querySelector(selector);
+        if (node) node.disabled = !enabled;
+      });
+    }
+
+    function populateIntakeReviewForm(intake) {
+      setSelectValue("#photoEstimateStatus", intake.photoStatus, intake.photoRequested ? "requested" : "not_requested");
+      setSelectValue("#conditionReviewStatus", intake.conditionReviewStatus, intake.flags.length || intake.recommendation ? "needs_review" : "not_needed");
+      setSelectValue("#mediaPrivacyStatus", intake.mediaPrivacyStatus, intake.consent === "public_after_review" ? "needs_review" : "not_needed");
+      setCheckboxValue("#platePrivacyReviewed", intake.plateReviewed);
+      setCheckboxValue("#facePrivacyReviewed", intake.faceReviewed);
+      setCheckboxValue("#addressPrivacyReviewed", intake.addressReviewed);
+      setCheckboxValue("#blurCropNeeded", intake.blurCropNeeded);
+      setCheckboxValue("#blurCropComplete", intake.blurCropComplete);
+      const note = document.querySelector("#intakeReviewNote");
+      if (note && !note.matches(":focus")) note.value = "";
+      setIntakeReviewFormEnabled(Boolean(currentBooking?.id));
+    }
+
+    function readIntakeReviewFormPayload() {
+      return {
+        photo_estimate_status: document.querySelector("#photoEstimateStatus")?.value || "not_requested",
+        condition_review_status: document.querySelector("#conditionReviewStatus")?.value || "not_needed",
+        media_privacy_status: document.querySelector("#mediaPrivacyStatus")?.value || "not_needed",
+        plate_privacy_reviewed: document.querySelector("#platePrivacyReviewed")?.checked === true,
+        face_privacy_reviewed: document.querySelector("#facePrivacyReviewed")?.checked === true,
+        address_privacy_reviewed: document.querySelector("#addressPrivacyReviewed")?.checked === true,
+        blur_crop_needed: document.querySelector("#blurCropNeeded")?.checked === true,
+        blur_crop_complete: document.querySelector("#blurCropComplete")?.checked === true,
+        intake_review_note: document.querySelector("#intakeReviewNote")?.value || ""
       };
     }
 
@@ -517,6 +649,7 @@
       if (!node) return;
       if (!currentBooking) {
         node.textContent = "Choose a booking to review intake and consent details.";
+        setIntakeReviewFormEnabled(false);
         return;
       }
 
@@ -538,8 +671,12 @@
         <div style="margin-top:8px"><strong>Media privacy status:</strong> <span class="badge">${escapeHtml(intake.mediaPrivacyStatus || "not_needed")}</span></div>
         <div style="margin-top:8px"><strong>Condition flags:</strong><br>${flagsHtml}</div>
         ${intake.recommendation ? `<div style="margin-top:8px"><strong>Recommendation shown:</strong><br>${escapeHtml(intake.recommendation)}</div>` : ""}
+        ${intake.intakeReviewNote ? `<div style="margin-top:8px"><strong>Latest staff review note:</strong><br>${escapeHtml(intake.intakeReviewNote)}</div>` : ""}
+        ${intake.intakeReviewedAt ? `<div style="margin-top:8px" class="kicker">Last intake review: ${escapeHtml(intake.intakeReviewedAt)}</div>` : ""}
         <div style="margin-top:8px" class="kicker">${privacyBits.map(escapeHtml).join(" · ")}</div>
       `;
+
+      populateIntakeReviewForm(intake);
     }
 
     function renderSelectedBooking() {
@@ -724,6 +861,25 @@
           setNotice("Booking assignment updated.", "ok");
         } catch (err) {
           setNotice(err.message || "Could not update assignment.", "bad");
+        }
+      });
+
+      document.querySelector("#intakeReviewForm")?.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (!currentBooking?.id) {
+          setNotice("Choose a booking first.", "bad");
+          return;
+        }
+
+        try {
+          setNotice("Saving intake review…");
+          const result = await updateBookingIntakeReview(currentBooking.id, readIntakeReviewFormPayload());
+          await refreshBookings();
+          const warning = result.warning ? ` ${result.warning}` : "";
+          setNotice(`Intake review saved.${warning}`, result.warning ? "ok" : "ok");
+        } catch (err) {
+          setNotice(err.message || "Could not save intake review.", "bad");
         }
       });
 
