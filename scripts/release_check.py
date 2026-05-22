@@ -14,6 +14,7 @@ CHECKS = [
     [sys.executable, "scripts/conversion_path_check.py"],
     [sys.executable, "scripts/booking_condition_recommender_check.py"],
     [sys.executable, "scripts/booking_intake_admin_review_check.py"],
+    [sys.executable, "scripts/booking_intake_review_actions_check.py"],
     [sys.executable, "scripts/seo_h1_check.py"],
 ]
 
