@@ -1,3 +1,9 @@
+# Build 162 AI context update
+
+Use `DEVELOPMENT_ROADMAP.md` as the source of truth. Build 162 added the public booking condition helper, photo-estimate intent, and media-consent preference. Continue SEO/H1 checks, Markdown/schema sync, Cloudflare Functions checks, and competitor-aligned conversion improvements each pass.
+
+---
+
 # Build 161 sync — AI_CONTEXT.md
 
 **Updated:** 2026-05-21

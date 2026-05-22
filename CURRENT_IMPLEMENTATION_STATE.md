@@ -1,3 +1,11 @@
+# Build 162 current implementation state
+
+**Updated:** 2026-05-21
+
+Build 162 adds the first true condition-based booking helper. The public booking flow now captures vehicle condition flags, recommends a package/add-on path, stores the recommendation in checkout notes, captures photo-estimate intent, and records media-consent preference wording for estimate-only / ask-first / public-after-review use.
+
+---
+
 # Build 161 sync — CURRENT_IMPLEMENTATION_STATE.md
 
 **Updated:** 2026-05-21

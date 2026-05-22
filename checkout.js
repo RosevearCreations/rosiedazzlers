@@ -195,6 +195,17 @@ export async function onRequestPost({ request, env }) {
     if (giftCode) notes.push(`Gift code provided: ${giftCode}`);
     if (giftRedeemedCents > 0) notes.push(`Gift redeemed against deposit: ${(giftRedeemedCents/100).toFixed(2)} CAD.`);
     if (quoteAddonsChosen.length) notes.push(`Quote add-ons requested: ${quoteAddonsChosen.join(", ")}`);
+    const customerNotes = String(body.special_notes || "").trim();
+    if (customerNotes) notes.push(`Customer notes: ${customerNotes}`);
+    const conditionLabels = Array.isArray(body.condition_flags) ? body.condition_flags.map((row) => String(row || "").trim()).filter(Boolean) : [];
+    const conditionCodes = Array.isArray(body.condition_flag_codes) ? body.condition_flag_codes.map((row) => String(row || "").trim()).filter(Boolean) : [];
+    if (conditionLabels.length) notes.push(`Condition helper flags: ${conditionLabels.join(", ")}`);
+    else if (conditionCodes.length) notes.push(`Condition helper codes: ${conditionCodes.join(", ")}`);
+    const conditionRecommendation = String(body.condition_recommendation || "").trim();
+    if (conditionRecommendation) notes.push(`Condition helper recommendation: ${conditionRecommendation}`);
+    if (body.photo_estimate_requested === true) notes.push("Photo estimate requested before final package/add-on confirmation.");
+    const mediaConsentPreference = String(body.media_consent_preference || "estimate_only").trim() || "estimate_only";
+    notes.push(`Media/photo consent preference: ${mediaConsentPreference}`);
 
     const bookingPayload = {
       service_date: body.service_date,

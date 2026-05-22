@@ -1,3 +1,59 @@
+# Build 162 update — Condition-based booking helper, photo-estimate intent, and media-consent preference
+
+**Updated:** 2026-05-21  
+**Current build:** Build 162  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
+
+Build 162 continues the Build 160/161 competitor sanity direction. The public booking flow now moves beyond static package aliases by adding a condition-based booking helper. Customers can select what they see — pet hair, salt, odour, stains, paint swirls, protection questions, headlights, work trucks, or photo-quote needs — and the page suggests a package, eligible add-ons, and staff-review notes. The same pass adds photo-estimate intent capture and a clear media-consent preference so estimate photos do not become public/social proof without permission and staff privacy review.
+
+## Completed in Build 162
+
+1. Reviewed `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and the Build 160/161 competitor conversion priorities before implementation.
+2. Kept `DEVELOPMENT_ROADMAP.md` as the implementation source of truth.
+3. Added a Booking Step 2 condition-based booking helper beneath the quick service chooser.
+4. Added condition flags for maintained interior, maintained exterior, pet hair, salt stains, odour, stains/shampoo, paint swirls, protection, headlights, full reset, work truck/fleet, and photo quote.
+5. Added `Recommend package` and `Clear helper` controls.
+6. Added recommendation logic that maps interior-heavy conditions to Interior Detail, exterior/paint concerns to Exterior Detail, maintained-only cases to Basic Detail or Premium Wash, and full-reset cases to Complete Detail.
+7. Added optional add-on suggestions for paint/protection conditions where existing add-ons allow it.
+8. Added recommendation output explaining the selected flags, package, add-ons, and staff-review notes.
+9. Appended condition helper details into the customer notes field so staff can see why a package was suggested.
+10. Added photo-estimate intent capture in Booking Step 4.
+11. Added customer media-consent preference options: estimate only, ask first, or possible public use after staff privacy review.
+12. Added booking analytics events for condition helper apply/clear, photo-estimate request, and media-consent preference.
+13. Updated checkout payload handling to preserve customer notes, condition flags, condition recommendation, photo-estimate request, and media-consent preference in booking notes.
+14. Kept checkout backwards-compatible by writing the new public-intake details into existing notes even before the optional SQL migration is applied.
+15. Added optional DB planning fields for direct storage of condition flags, recommendation, photo-estimate request, and media-consent preference.
+16. Added `sql/2026-05-21_build162_booking_condition_recommender_and_consent.sql`.
+17. Updated `SUPABASE_SCHEMA.sql` with Build 162 schema-sync notes.
+18. Added `scripts/booking_condition_recommender_check.py`.
+19. Wired the new Build 162 guard into `scripts/release_check.py`.
+20. Synced `/book.html` and `/book/index.html`, and updated Markdown docs and handoff notes.
+
+## Next several value-added steps after Build 162
+
+1. Deploy Build 162 and smoke-test the Booking Step 2 condition helper on mobile and desktop.
+2. Run `sql/2026-05-21_build162_booking_condition_recommender_and_consent.sql` after confirming prior migrations are applied.
+3. Update checkout/booking insert logic to write the new condition and media-consent fields directly once the migration is live.
+4. Add an admin booking-detail panel that displays condition helper flags, recommendation summary, photo-estimate status, and media-consent preference separately from general notes.
+5. Add a customer-facing photo upload/lead form that stores estimate media before checkout, not just a photo link.
+6. Add staff privacy workflow fields for plate reviewed, face reviewed, address reviewed, blur/crop needed, and blur/crop complete.
+7. Add public gallery/social eligibility filters that only allow consented and privacy-reviewed media.
+8. Add service-page FAQ blocks for Paint Correction, Ceramic Coating, Pet Hair Removal, Odor Removal, Headlight Restoration, and Services.
+9. Add proof/recent-work filtering by town and service so Oxford/Norfolk pages can show more relevant examples.
+10. Add admin-managed specials cards for seasonal salt cleanup, multi-vehicle, senior-friendly, fleet/work truck, and headlight refresh offers.
+11. Add service-specific gift-card merchandising for Interior Detail, Full Detail, and custom amounts.
+12. Move high-change service, add-on, specials, FAQ, and proof content toward DB-first admin-managed records.
+13. Add Search Console and Google Business Profile reporting notes to admin analytics.
+14. Add social performance entry/reporting using `social_post_metrics_snapshots`.
+15. Add platform preview cards in Admin Social Queue for Facebook, Instagram, X, TikTok, Google Business Profile, and manual copy/paste.
+16. Add scheduled publish worker/retry rules for planned social posts once platform credentials and approvals are ready.
+17. Improve Contact page estimate handling so photo-estimate inquiries can become draft bookings or leads.
+18. Add accessibility review for the new recommender chips and booking step controls.
+19. Prepare a clean/orphan branch replacement after deploy stability so stale GitHub web-upload leftovers are removed permanently.
+20. Keep `DEVELOPMENT_ROADMAP.md` as the source of truth and keep older roadmap files as history/reference only.
+
+---
+
 # Build 161 update — Conversion path service chooser and photo-estimate guidance
 
 **Updated:** 2026-05-21  

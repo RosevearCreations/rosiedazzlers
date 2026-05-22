@@ -1,3 +1,9 @@
+# Build 162 document index note
+
+Primary planning source: `DEVELOPMENT_ROADMAP.md`. Build 162 also touches `KNOWN_GAPS_AND_RISKS.md`, `CURRENT_IMPLEMENTATION_STATE.md`, `SANITY_CHECK.md`, `SUPABASE_SCHEMA.sql`, and `sql/2026-05-21_build162_booking_condition_recommender_and_consent.sql`.
+
+---
+
 # Build 161 sync — DOC_INDEX.md
 
 **Updated:** 2026-05-21
