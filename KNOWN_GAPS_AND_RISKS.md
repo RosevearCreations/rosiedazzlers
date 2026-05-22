@@ -1,3 +1,36 @@
+# Known Gaps and Risks — Build 160 competitor sanity reset
+
+**Updated:** 2026-05-21  
+**Current build:** Build 160
+
+## Reduced in Build 160
+
+- The competitor/service roadmap in `COMPETETIVE.md` has now been sanity-checked against the current website/app.
+- `DEVELOPMENT_ROADMAP.md` has been reset as the top implementation source of truth.
+- A new `COMPETITOR_SANITY_CHECK.md` captures current state, target state, priority ranking, completed steps, and next steps.
+- Services page now includes a plain-language decision guide before visitors reach package cards.
+- Services page now includes a stronger photo-estimate / quote CTA.
+- Release checks now include a competitor-roadmap guard so the key planning documents and Services decision-guide markers do not drift away silently.
+
+## Still open after Build 160
+
+1. Package display aliases still need to be added so customer-facing tiers match the competitor roadmap while preserving current pricing codes.
+2. Booking still needs condition-based package recommendations.
+3. Booking and Contact still need a more obvious photo-estimate upload/request path.
+4. Customer consent capture for public/social use is not finished yet.
+5. Media privacy status for plates, faces, addresses, and blur/crop completion is not finished yet.
+6. Specials/promos need stronger public merchandising and admin-managed content blocks.
+7. Gift cards exist, but service-specific gift-card merchandising still needs improvement.
+8. FAQ blocks need to be expanded across the highest-value service pages.
+9. Proof/reviews/recent work are not yet automatically filtered by town and service.
+10. High-change service/add-on/specials/FAQ copy still needs to move toward DB-first admin management.
+11. Search Console and Google Business Profile reporting are not connected into admin analytics yet.
+12. Social metrics snapshots have schema support, but staff entry/dashboard rollups still need completion.
+13. Clean/orphan branch replacement remains recommended after deploy stability because GitHub web uploads can leave stale files.
+14. Older Markdown files remain for history, but future planning should start from `DEVELOPMENT_ROADMAP.md`.
+
+---
+
 # Known Gaps and Risks — Build 159
 
 **Updated:** 2026-05-20

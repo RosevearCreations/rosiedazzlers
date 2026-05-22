@@ -1186,3 +1186,5 @@ on conflict (platform, display_name) do nothing;
 -- Build 159 sync note - Social templates, scheduling helpers, duplicate review, and metrics snapshots
 -- Apply sql/2026-05-20_build159_social_templates_schedule_duplicate_metrics.sql after Build 156 and Build 158 social migrations.
 -- Adds duplicate review helper fields, social_metrics jsonb, social_post_metrics_snapshots, and additional caption/hashtag seeds.
+-- Build 160 sync note - competitor sanity check and roadmap reset
+-- No schema shape change. Build 160 added planning/docs checks and Services-page conversion guidance.
