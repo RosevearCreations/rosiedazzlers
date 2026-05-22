@@ -1,3 +1,31 @@
+# Build 162 known gaps and risks update
+
+**Updated:** 2026-05-21  
+**Current build:** Build 162
+
+Build 162 reduces the public conversion gap by adding a condition-based booking helper, photo-estimate intent capture, and media-consent preference. The workflow still needs direct DB field writes after migration, admin display panels, true media upload, privacy/blur/crop tracking, proof filtering, FAQ expansion, and DB-first public content management.
+
+## Reduced in Build 162
+
+- Booking now has a condition helper that recommends a package and eligible add-ons from customer-selected conditions.
+- Photo-estimate intent is now captured in the public booking flow.
+- Media-consent preference is now explicit before photos are used for public proof or social posts.
+- Checkout preserves customer notes and the new recommender details in booking notes for backwards compatibility.
+- Optional schema fields are prepared for later direct reporting/storage.
+
+## Still open after Build 162
+
+1. Apply the Build 162 optional SQL migration before storing condition/media fields directly.
+2. Update booking insert/admin detail screens to use the new columns once applied.
+3. Customer-facing photo upload/lead capture is still link/notes based and needs real storage.
+4. Plate/face/address blur/crop tracking remains a future privacy workflow.
+5. Public gallery/social eligibility still needs consent + privacy-review gating.
+6. FAQ/proof/specials/gift-card conversion content still needs expansion.
+7. High-change content should continue moving toward DB-first admin-managed records.
+8. Clean/orphan branch replacement remains recommended after deploy stability.
+
+---
+
 # Build 161 known gaps and risks update
 
 **Updated:** 2026-05-21  

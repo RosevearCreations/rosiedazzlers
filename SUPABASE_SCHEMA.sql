@@ -1192,3 +1192,10 @@ on conflict (platform, display_name) do nothing;
 
 -- Build 161 conversion path / service chooser: no DDL.
 -- Package display aliases and photo-estimate guidance are catalog/content metadata, not schema changes.
+
+-- Build 162 booking condition recommender / media consent sync note
+-- Apply sql/2026-05-21_build162_booking_condition_recommender_and_consent.sql after Build 161.
+-- The booking UI now captures condition helper flags, photo-estimate intent, and
+-- media-consent preference. Checkout currently appends those details into booking
+-- notes for backwards compatibility; these optional columns prepare the DB for a
+-- later admin/reporting pass that stores the values directly.

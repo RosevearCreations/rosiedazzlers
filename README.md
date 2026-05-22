@@ -1,3 +1,9 @@
+# Build 162 note — booking condition helper
+
+Build 162 adds a booking condition helper, photo-estimate request flag, and media-consent preference in the public booking flow. Run the Build 162 SQL migration after prior migrations if direct DB fields are desired; checkout remains safe before that migration because it writes the new intake details into existing booking notes.
+
+---
+
 # Build 161 sync — README.md
 
 **Updated:** 2026-05-21

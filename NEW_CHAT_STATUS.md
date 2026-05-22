@@ -1,3 +1,9 @@
+# New chat status — Build 162
+
+Build 162 is the current baseline. It adds the booking condition helper, photo-estimate request capture, and media-consent preference. Next work should continue from `DEVELOPMENT_ROADMAP.md`, especially admin display of condition fields, real photo upload/lead capture, privacy review tracking, FAQ/proof expansion, and DB-first content migration.
+
+---
+
 # Build 161 sync — NEW_CHAT_STATUS.md
 
 **Updated:** 2026-05-21

@@ -1,3 +1,9 @@
+# Handoff — Build 162
+
+Current build: Build 162. The public booking flow now includes a condition-based helper and media-consent preference. Treat `DEVELOPMENT_ROADMAP.md` as the source of truth. Recommended next pass: apply/use the Build 162 DB columns, expose the fields in admin booking detail, then add real estimate photo upload and privacy review fields.
+
+---
+
 # Build 161 sync — HANDOFF_NEXT_CHAT.md
 
 **Updated:** 2026-05-21

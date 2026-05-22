@@ -1,3 +1,11 @@
+# Build 162 sync — condition helper and consent path
+
+**Updated:** 2026-05-21
+
+The public conversion path now has the next competitor-aligned layer: customers can use a condition helper instead of guessing package names. Checkout remains backwards-compatible by preserving condition helper details and media-consent preference in booking notes. A Build 162 SQL migration prepares optional direct DB fields for a later admin/reporting pass.
+
+---
+
 # Build 161 sync — SANITY_CHECK.md
 
 **Updated:** 2026-05-21
