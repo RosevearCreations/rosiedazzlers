@@ -550,6 +550,294 @@
       "category": "glass services",
       "type": "window tinting",
       "image_fallback_url": "/assets/addons/window_tinting.svg"
+    },
+    {
+      "code": "pet_hair_removal",
+      "name": "Pet Hair Removal",
+      "prices_cad": {
+        "small": 49,
+        "mid": 69,
+        "oversize": 89
+      },
+      "quote_required": false,
+      "category": "interior",
+      "type": "deep cleaning",
+      "notes": [
+        "Recommended when pet hair is embedded in carpets, seats, cargo areas, or mats.",
+        "Final price may change for severe buildup."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/pet_hair_removal.png",
+      "image_fallback_url": "/assets/addons/pet_hair_removal.png",
+      "service_compatibility": [
+        "interior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 45,
+      "customer_goal": "Remove embedded pet hair"
+    },
+    {
+      "code": "odor_treatment",
+      "name": "Odor Treatment",
+      "prices_cad": {
+        "small": 59,
+        "mid": 79,
+        "oversize": 99
+      },
+      "quote_required": false,
+      "category": "interior",
+      "type": "odor help",
+      "notes": [
+        "Best for smoke, food, pet, musty, or unknown odour concerns after source cleaning.",
+        "Severe or biohazard odours may require inspection or referral."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/odor_treatment.png",
+      "image_fallback_url": "/assets/addons/odor_treatment.png",
+      "service_compatibility": [
+        "interior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 45,
+      "customer_goal": "Reduce or remove stubborn odours"
+    },
+    {
+      "code": "seat_shampoo",
+      "name": "Seat Shampoo",
+      "prices_cad": {
+        "small": 49,
+        "mid": 69,
+        "oversize": 89
+      },
+      "quote_required": false,
+      "category": "interior",
+      "type": "fabric extraction",
+      "notes": [
+        "Greatly improves many fabric stains and spills, but some permanent staining may remain."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/seat_shampoo.png",
+      "image_fallback_url": "/assets/addons/seat_shampoo.png",
+      "service_compatibility": [
+        "interior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 45,
+      "customer_goal": "Clean fabric seats and spills"
+    },
+    {
+      "code": "carpet_shampoo",
+      "name": "Carpet Shampoo",
+      "prices_cad": {
+        "small": 49,
+        "mid": 69,
+        "oversize": 89
+      },
+      "quote_required": false,
+      "category": "interior",
+      "type": "carpet extraction",
+      "notes": [
+        "Recommended for salt, coffee, kids, pets, cargo dirt, and winter buildup.",
+        "Heavy salt may require multiple passes."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/carpet_shampoo.png",
+      "image_fallback_url": "/assets/addons/carpet_shampoo.png",
+      "service_compatibility": [
+        "interior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 45,
+      "customer_goal": "Clean carpets, mats, and cargo areas"
+    },
+    {
+      "code": "salt_stain_treatment",
+      "name": "Salt Stain Treatment",
+      "prices_cad": {
+        "small": 39,
+        "mid": 59,
+        "oversize": 79
+      },
+      "quote_required": false,
+      "category": "interior",
+      "type": "seasonal cleanup",
+      "notes": [
+        "Local Ontario winter add-on for white salt staining on mats, carpets, and lower panels.",
+        "Some older salt staining may only improve, not fully disappear."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/salt_stain_treatment.png",
+      "image_fallback_url": "/assets/addons/salt_stain_treatment.png",
+      "service_compatibility": [
+        "interior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 35,
+      "customer_goal": "Clean Ontario winter salt stains"
+    },
+    {
+      "code": "headlight_restoration_addon",
+      "name": "Headlight Restoration",
+      "prices_cad": {
+        "small": 89,
+        "mid": 99,
+        "oversize": 119
+      },
+      "quote_required": false,
+      "category": "exterior",
+      "type": "safety and clarity",
+      "notes": [
+        "Improves cloudy, yellowed, or oxidized headlight lenses where the lens is restorable.",
+        "Cracked, wet, or failing lenses may need replacement."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/headlight_restoration.png",
+      "image_fallback_url": "/assets/addons/headlight_restoration.png",
+      "service_compatibility": [
+        "premium_wash",
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 60,
+      "customer_goal": "Improve headlight clarity"
+    },
+    {
+      "code": "windshield_ceramic_coating",
+      "name": "Windshield Ceramic Coating",
+      "prices_cad": {
+        "small": 49,
+        "mid": 59,
+        "oversize": 69
+      },
+      "quote_required": false,
+      "category": "exterior",
+      "type": "glass coating",
+      "notes": [
+        "Adds hydrophobic protection to exterior glass after cleaning and prep.",
+        "Best after exterior detail or glass polishing when needed."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/windshield_ceramic_coating.png",
+      "image_fallback_url": "/assets/addons/windshield_ceramic_coating.png",
+      "service_compatibility": [
+        "premium_wash",
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 30,
+      "customer_goal": "Make windshield cleaning easier"
+    },
+    {
+      "code": "ceramic_spray_wax",
+      "name": "Ceramic Spray Protection",
+      "prices_cad": {
+        "small": 49,
+        "mid": 69,
+        "oversize": 89
+      },
+      "quote_required": false,
+      "category": "exterior",
+      "type": "paint protection",
+      "notes": [
+        "Entry-level gloss and water-beading protection after an exterior wash/detail.",
+        "Not the same as a multi-year ceramic coating."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/ceramic_spray_wax.png",
+      "image_fallback_url": "/assets/addons/ceramic_spray_wax.png",
+      "service_compatibility": [
+        "premium_wash",
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 30,
+      "customer_goal": "Add quick gloss and protection"
+    },
+    {
+      "code": "trim_restoration",
+      "name": "Trim Restoration",
+      "prices_cad": {
+        "small": 49,
+        "mid": 69,
+        "oversize": 89
+      },
+      "quote_required": false,
+      "category": "exterior",
+      "type": "plastic trim",
+      "notes": [
+        "Improves faded exterior plastic trim where the material is still restorable."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/trim_restoration.png",
+      "image_fallback_url": "/assets/addons/trim_restoration.png",
+      "service_compatibility": [
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 45,
+      "customer_goal": "Improve faded exterior trim"
+    },
+    {
+      "code": "bug_tar_removal",
+      "name": "Bug and Tar Removal",
+      "prices_cad": {
+        "small": 39,
+        "mid": 59,
+        "oversize": 79
+      },
+      "quote_required": false,
+      "category": "exterior",
+      "type": "contamination removal",
+      "notes": [
+        "Helps remove bug residue, tar spotting, sap-like contamination, and stuck-on road grime before protection."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/bug_tar_removal.png",
+      "image_fallback_url": "/assets/addons/bug_tar_removal.png",
+      "service_compatibility": [
+        "premium_wash",
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 35,
+      "customer_goal": "Remove stuck-on road grime"
+    },
+    {
+      "code": "truck_box_wash",
+      "name": "Truck Box Wash",
+      "prices_cad": {
+        "small": 0,
+        "mid": 0,
+        "oversize": 49
+      },
+      "quote_required": true,
+      "category": "fleet",
+      "type": "truck utility cleanup",
+      "notes": [
+        "Quote path for pickup beds, work trucks, contractor vehicles, farm trucks, and cargo use.",
+        "Loose debris and hazardous materials must be removed before service."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/truck_box_wash.png",
+      "image_fallback_url": "/assets/addons/truck_box_wash.png",
+      "service_compatibility": [
+        "fleet",
+        "complete_detail",
+        "exterior_detail"
+      ],
+      "time_added_minutes": 45,
+      "customer_goal": "Clean pickup/work truck cargo area"
+    },
+    {
+      "code": "fleet_vehicle_add_on",
+      "name": "Fleet Vehicle Add-On",
+      "prices_cad": {
+        "small": 0,
+        "mid": 0,
+        "oversize": 0
+      },
+      "quote_required": true,
+      "category": "fleet",
+      "type": "commercial scheduling",
+      "notes": [
+        "For multiple vehicles at one location, work trucks, company cars, and recurring business cleanup."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/fleet_vehicle_add_on.png",
+      "image_fallback_url": "/assets/addons/fleet_vehicle_add_on.png",
+      "service_compatibility": [
+        "fleet"
+      ],
+      "time_added_minutes": 0,
+      "customer_goal": "Quote multiple vehicles at one location"
     }
   ],
   "service_areas": [
