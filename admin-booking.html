@@ -540,6 +540,24 @@
       return raw;
     }
 
+    function normalizePhotoEstimateLinks(value, notes = "") {
+      const rawItems = Array.isArray(value)
+        ? value
+        : String(value || "").split(/[\n,|]+/);
+      let items = rawItems.map((item) => String(item || "").trim()).filter(Boolean);
+      if (!items.length && notes) {
+        const fromNotes = extractNotesField(notes, "Photo estimate links", ["Media/photo consent preference", "Staff intake review status"]);
+        items = String(fromNotes || "").split(/\s*\|\s*|[\n,]+/).map((item) => item.trim()).filter(Boolean);
+      }
+      const seen = new Set();
+      return items.filter((item) => {
+        const key = item.toLowerCase();
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      }).slice(0, 12);
+    }
+
     function readBookingIntakeReview(booking) {
       const notes = String(booking?.notes || "");
       let flags = normalizeConditionFlags(booking?.condition_flags);
@@ -560,7 +578,8 @@
         ]);
       }
 
-      const photoRequested = booking?.photo_estimate_requested === true || /Photo estimate requested before final package\/add-on confirmation\./i.test(notes);
+      const photoLinks = normalizePhotoEstimateLinks(booking?.photo_estimate_links, notes);
+      const photoRequested = booking?.photo_estimate_requested === true || photoLinks.length > 0 || /Photo estimate requested before final package\/add-on confirmation\./i.test(notes);
       let consent = String(booking?.media_consent_preference || "").trim();
       if (!consent) {
         consent = extractNotesField(notes, "Media/photo consent preference", []);
@@ -570,6 +589,7 @@
         flags,
         recommendation,
         photoRequested,
+        photoLinks,
         consent,
         photoStatus: String(booking?.photo_estimate_status || (photoRequested ? "requested" : "not_requested")).trim(),
         conditionReviewStatus: String(booking?.condition_review_status || (flags.length || recommendation ? "needs_review" : "not_needed")).trim(),
@@ -666,6 +686,7 @@
 
       node.innerHTML = `
         <div><strong>Photo estimate:</strong> ${intake.photoRequested ? "requested" : "not requested"} <span class="badge">${escapeHtml(intake.photoStatus || "not_requested")}</span></div>
+        ${intake.photoLinks.length ? `<div style="margin-top:8px"><strong>Photo/media links:</strong><br>${intake.photoLinks.map((link) => `<a href="${escapeHtml(link)}" target="_blank" rel="noopener">${escapeHtml(link)}</a>`).join("<br>")}</div>` : ""}
         <div style="margin-top:8px"><strong>Condition review:</strong> <span class="badge">${escapeHtml(intake.conditionReviewStatus || "not_needed")}</span></div>
         <div style="margin-top:8px"><strong>Customer media preference:</strong> ${escapeHtml(normalizeConsentLabel(intake.consent))}</div>
         <div style="margin-top:8px"><strong>Media privacy status:</strong> <span class="badge">${escapeHtml(intake.mediaPrivacyStatus || "not_needed")}</span></div>
