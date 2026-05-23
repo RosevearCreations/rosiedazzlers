@@ -1,3 +1,27 @@
+# Build 165 known gaps and risks update
+
+**Updated:** 2026-05-22  
+**Current build:** Build 165
+
+Build 165 reduces the quote-first conversion gap by letting customers paste photo-estimate links before checkout. The links are included in booking notes immediately and can be stored directly in `bookings.photo_estimate_links` after the Build 165 migration is applied.
+
+## Reduced in Build 165
+
+- Photo-estimate customers no longer have to rely on free-form notes only.
+- Submitted photo/media links are visible in Admin Booking's intake/media consent panel.
+- Checkout stays fallback-safe before the new optional column is live.
+- Release checks now verify the booking-page, checkout, admin-booking, SQL, and roadmap markers for this workflow.
+
+## Remaining risks
+
+- Direct customer file upload still needs a follow-up pass; Build 165 captures share links, not uploaded files.
+- Staff still need a quote-building workflow that turns reviewed photos into recommended packages/add-ons.
+- Media-level privacy review is still booking-level plus staff checklist; each individual photo/video should get its own privacy status later.
+- Social/gallery eligibility should eventually require both consent and per-media privacy approval.
+- The Build 162, 163, 164, and 165 migrations should be applied in order before relying on direct reporting fields.
+
+---
+
 # Build 164 known gaps and risks update
 
 **Updated:** 2026-05-22  

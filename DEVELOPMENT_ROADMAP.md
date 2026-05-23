@@ -1,3 +1,59 @@
+# Build 165 update — Booking photo-estimate link capture
+
+**Updated:** 2026-05-22  
+**Current build:** Build 165  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
+
+Build 165 continues the conversion-path work from Builds 160–164. The public booking flow now lets customers paste photo/media share links before checkout, marks the booking as photo-estimate reviewable when links are present, stores the links directly when the Build 165 migration is applied, and still falls back to booking notes if the optional database column is not live yet. Admin Booking now surfaces the submitted links in the intake/media consent panel so staff can open them while quoting or privacy-reviewing the job.
+
+## Completed in Build 165
+
+1. Reviewed `DEVELOPMENT_ROADMAP.md` and `KNOWN_GAPS_AND_RISKS.md` before implementation.
+2. Kept `DEVELOPMENT_ROADMAP.md` as the implementation source of truth.
+3. Added a customer-facing `Photo estimate links` field to Booking Step 4.
+4. Added duplicate-safe parsing for pasted Google Drive, Dropbox, iCloud, Facebook, or other media links.
+5. Auto-checks the photo-estimate request flag when customers paste photo/media links.
+6. Added photo-estimate link count to the final booking summary.
+7. Sends `photo_estimate_links` through checkout.
+8. Checkout now treats link submissions as photo-estimate requests even when the checkbox was missed.
+9. Checkout stores the links in booking notes for fallback-safe staff review.
+10. Checkout writes `photo_estimate_links` directly when the optional Build 165 column is live.
+11. Added `photo_estimate_links` to the optional booking-field fallback list so checkout does not break before migration.
+12. Added `photo_estimate_links` to admin booking-list optional selects.
+13. Admin Booking intake review panel now shows submitted photo/media links as clickable staff review links.
+14. Added Build 165 SQL migration for `bookings.photo_estimate_links`.
+15. Added a GIN index for future reporting/filtering of photo-estimate link data.
+16. Updated `SUPABASE_SCHEMA.sql`.
+17. Added release guard `scripts/booking_photo_estimate_links_check.py`.
+18. Added the new guard to `scripts/release_check.py`.
+19. Re-ran SEO/H1, Cloudflare, social, conversion, booking-intake, and release checks.
+20. Updated active Markdown files so Build 165 status and next steps are documented.
+
+## Next several value-added steps after Build 165
+
+1. Deploy Build 165 and apply SQL migrations in order: Build 162, Build 163, Build 164, then Build 165.
+2. Confirm public booking saves photo-estimate links into notes before migration and into `photo_estimate_links` after migration.
+3. Add a direct public upload flow for customers who do not want to use third-party share links.
+4. Add staff quote-building actions that convert photo-estimate review into a proposed package/add-on set.
+5. Add media-level privacy review records for each uploaded or linked job photo/video.
+6. Enforce gallery/social eligibility from booking consent plus media-level privacy status.
+7. Add Admin Booking filters for photo-estimate links present, quote needed, media review needed, and blur/crop needed.
+8. Add customer notification templates for photo estimate received, quote ready, and media/privacy approval request.
+9. Add approved-photo proof blocks to town/service landing pages.
+10. Move more service FAQ/proof content into DB-managed admin content where possible.
+11. Add analytics for photo-estimate link submissions and quote-first conversion rate.
+12. Add abandoned booking recovery that references the selected package and quote-first intent without exposing private details.
+13. Add optional customer portal upload/edit for estimate media after booking is created.
+14. Add reminder workflow for staff when a photo-estimate request has not been reviewed within the target window.
+15. Continue CSS drift checks on Booking, Admin Booking, Services, Contact, and Admin Social.
+16. Continue one-H1 and local title/meta checks every pass.
+17. Continue Cloudflare Pages Function import/syntax checks every pass.
+18. Plan a clean/orphan branch refresh after deploy stability is confirmed so stale GitHub files cannot keep reappearing.
+19. Keep `COMPETITOR_SANITY_CHECK.md` aligned with this roadmap after each conversion-path pass.
+20. Keep `KNOWN_GAPS_AND_RISKS.md` focused on active risks and next decisions, not old completed build notes.
+
+---
+
 # Build 164 update — Admin booking intake review actions
 
 **Updated:** 2026-05-22  

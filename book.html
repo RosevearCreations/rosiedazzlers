@@ -505,6 +505,9 @@
               <li>Driver seat, passenger seat, carpets, mats, and cargo area</li>
               <li>Close-up of pet hair, salt stains, odour source, scratches, oxidation, or coating concerns</li>
             </ul>
+            <label for="photo_estimate_links" style="margin-top:10px">Photo estimate links (optional)</label>
+            <textarea id="photo_estimate_links" rows="3" placeholder="Paste Google Drive, Dropbox, iCloud, Facebook, or other share links here — one per line."></textarea>
+            <div class="mini muted" id="photoEstimateLinkHelp" style="margin-top:6px">Links are saved with the booking notes and, after migration, stored for staff quote review.</div>
             <label class="condition-chip" style="margin-top:10px">
               <input id="photo_estimate_requested" type="checkbox" />
               <span>Please treat this as a photo-estimate / quote-review booking before final service confirmation.</span>
@@ -723,6 +726,28 @@
       const existing = notes.value.trim();
       if (existing.includes(text)) return;
       notes.value = existing ? `${existing}\n\n${text}` : text;
+    }
+
+    function parsePhotoEstimateLinks() {
+      const raw = qs("#photo_estimate_links")?.value || "";
+      return raw
+        .split(/[\n,]+/)
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .filter((item, index, all) => all.indexOf(item) === index)
+        .slice(0, 12);
+    }
+
+    function renderPhotoEstimateLinkHelp() {
+      const help = qs("#photoEstimateLinkHelp");
+      if (!help) return;
+      const links = parsePhotoEstimateLinks();
+      const requested = qs("#photo_estimate_requested")?.checked === true || state.photoEstimateRequested === true;
+      help.textContent = links.length
+        ? `${links.length} photo/media link${links.length === 1 ? "" : "s"} will be attached to the estimate intake for staff review.`
+        : requested
+          ? "Add share links if we should quote from photos. You can still submit without links and staff can request them later."
+          : "Links are saved with the booking notes and, after migration, stored for staff quote review.";
     }
 
     function renderConditionRecommendation(result, flags = selectedConditionFlags()) {
@@ -1931,7 +1956,8 @@
         ["Add-ons", selectedAddons().length ? selectedAddons().map((addon) => addon.name).join(", ") : "None"],
         ["Estimated subtotal", totals.subtotal ? money(totals.subtotal) : "Package required"],
         ["Deposit due now", money(totals.deposit)],
-        ["Quote-only extras", totals.quoteOnly ? "Some selected extras are quote-required and will be confirmed separately." : "None"]
+        ["Quote-only extras", totals.quoteOnly ? "Some selected extras are quote-required and will be confirmed separately." : "None"],
+        ["Photo estimate", (qs("#photo_estimate_requested")?.checked || state.photoEstimateRequested || parsePhotoEstimateLinks().length) ? `Requested/reviewable${parsePhotoEstimateLinks().length ? ` · ${parsePhotoEstimateLinks().length} link(s)` : ""}` : "Not requested"]
       ];
       qs("#finalSummary").innerHTML = rows.map(([label, value]) => `<div class="summary-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
       postEmbedState();
@@ -2027,7 +2053,8 @@
         condition_flags: conditionFlagLabels(selectedConditionFlags()),
         condition_flag_codes: Array.from(state.conditionFlags),
         condition_recommendation: state.conditionRecommendationSummary || null,
-        photo_estimate_requested: qs("#photo_estimate_requested")?.checked === true || state.photoEstimateRequested === true,
+        photo_estimate_requested: qs("#photo_estimate_requested")?.checked === true || state.photoEstimateRequested === true || parsePhotoEstimateLinks().length > 0,
+        photo_estimate_links: parsePhotoEstimateLinks(),
         media_consent_preference: qs("input[name='media_consent_preference']:checked")?.value || state.mediaConsentPreference || "estimate_only",
         ack_driveway: true,
         ack_power_water: true,
@@ -2085,6 +2112,22 @@
     qs("#postal_code")?.addEventListener("input", () => updateAddressAreaWarning());
     qs("#need_mobile_water_power")?.addEventListener("change", () => {
       renderReviewVehicle();
+      renderFinalSummary();
+    });
+
+    qs("#photo_estimate_requested")?.addEventListener("change", () => {
+      state.photoEstimateRequested = qs("#photo_estimate_requested")?.checked === true;
+      renderPhotoEstimateLinkHelp();
+      renderFinalSummary();
+    });
+
+    qs("#photo_estimate_links")?.addEventListener("input", () => {
+      if (parsePhotoEstimateLinks().length) {
+        state.photoEstimateRequested = true;
+        const photoBox = qs("#photo_estimate_requested");
+        if (photoBox) photoBox.checked = true;
+      }
+      renderPhotoEstimateLinkHelp();
       renderFinalSummary();
     });
 

@@ -1,3 +1,11 @@
+# Build 165 sync — Booking photo-estimate link capture
+
+**Updated:** 2026-05-22
+
+Build 165 adds optional `public.bookings.photo_estimate_links` jsonb storage plus a public Booking Step 4 photo-estimate link field, sends the links through checkout, stores them in notes as a fallback, writes to optional `bookings.photo_estimate_links` when migrated, and shows clickable links in Admin Booking intake review. Continue from `DEVELOPMENT_ROADMAP.md`, which remains the source of truth.
+
+---
+
 # Build 164 sync — booking intake review fields
 
 **Updated:** 2026-05-22
