@@ -16,6 +16,7 @@ CHECKS = [
     [sys.executable, "scripts/booking_intake_admin_review_check.py"],
     [sys.executable, "scripts/booking_intake_review_actions_check.py"],
     [sys.executable, "scripts/booking_photo_estimate_links_check.py"],
+    [sys.executable, "scripts/competetive_completion_check.py"],
     [sys.executable, "scripts/seo_h1_check.py"],
 ]
 
