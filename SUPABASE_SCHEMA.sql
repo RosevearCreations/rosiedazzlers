@@ -1,3 +1,8 @@
+-- Build 165 schema sync — booking photo-estimate link capture
+-- Optional bookings.photo_estimate_links jsonb column added by:
+-- sql/2026-05-22_build165_booking_photo_estimate_link_capture.sql
+-- Checkout remains fallback-safe by also writing submitted links into booking notes.
+
 -- Build 150 inventory image picker/fallback sync — 2026-05-17
 -- Adds Admin Catalog image picker support and the matching schema migration in sql/2026-05-17_build150_inventory_image_picker_and_fallback.sql.
 -- Saved DB inventory rows now preserve/accept image_url and optional receipt/station/service/Amazon fields while UI merge logic prevents blank DB images from masking bundled consumables/tools images.
