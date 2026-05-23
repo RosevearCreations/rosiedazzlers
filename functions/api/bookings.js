@@ -80,6 +80,7 @@ const OPTIONAL_BOOKING_INTAKE_SELECT = [
   "condition_flags",
   "condition_recommendation",
   "photo_estimate_requested",
+  "photo_estimate_links",
   "media_consent_preference",
   "media_consent_reviewed_at",
   "photo_estimate_status",

@@ -204,8 +204,10 @@ export async function onRequestPost({ request, env }) {
     else if (conditionCodes.length) notes.push(`Condition helper codes: ${conditionCodes.join(", ")}`);
     const conditionRecommendation = String(body.condition_recommendation || "").trim();
     if (conditionRecommendation) notes.push(`Condition helper recommendation: ${conditionRecommendation}`);
-    const photoEstimateRequested = body.photo_estimate_requested === true;
+    const photoEstimateLinks = normalizePhotoEstimateLinks(body.photo_estimate_links || body.photo_estimate_media_links || body.photo_links);
+    const photoEstimateRequested = body.photo_estimate_requested === true || photoEstimateLinks.length > 0;
     if (photoEstimateRequested) notes.push("Photo estimate requested before final package/add-on confirmation.");
+    if (photoEstimateLinks.length) notes.push(`Photo estimate links: ${photoEstimateLinks.join(" | ")}`);
     const mediaConsentPreference = normalizeMediaConsentPreference(body.media_consent_preference);
     notes.push(`Media/photo consent preference: ${mediaConsentPreference}`);
 
@@ -245,6 +247,7 @@ export async function onRequestPost({ request, env }) {
       condition_flags: conditionFlagRows,
       condition_recommendation: conditionRecommendation || null,
       photo_estimate_requested: photoEstimateRequested,
+      photo_estimate_links: photoEstimateLinks,
       media_consent_preference: mediaConsentPreference,
       photo_estimate_status: photoEstimateRequested ? "requested" : "not_requested",
       condition_review_status: conditionFlagRows.length || conditionRecommendation ? "needs_review" : "not_needed",
@@ -319,10 +322,29 @@ function normalizeMediaConsentPreference(value) {
   return "estimate_only";
 }
 
+function normalizePhotoEstimateLinks(value) {
+  const items = Array.isArray(value)
+    ? value
+    : String(value || "")
+        .split(/[\n,|]+/);
+  const seen = new Set();
+  return items
+    .map((item) => String(item || "").trim())
+    .filter(Boolean)
+    .filter((item) => {
+      const key = item.toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .slice(0, 12);
+}
+
 const OPTIONAL_BOOKING_INTAKE_FIELDS = [
   "condition_flags",
   "condition_recommendation",
   "photo_estimate_requested",
+  "photo_estimate_links",
   "media_consent_preference",
   "photo_estimate_status",
   "condition_review_status",
