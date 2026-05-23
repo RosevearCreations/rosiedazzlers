@@ -1,3 +1,9 @@
+# Build 167 update
+
+Build 167 handoff: continue with Admin Leads, upload review, quote builder, DB-managed content, and service/town proof filtering. DEVELOPMENT_ROADMAP.md remains the source of truth.
+
+---
+
 # Build 166 handoff
 
 **Updated:** 2026-05-23

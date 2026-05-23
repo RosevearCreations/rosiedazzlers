@@ -1,3 +1,9 @@
+# Build 167 update
+
+Build 167 sanity check: competitor matrix public foundations now include direct upload foundation, structured lead forms, schema foundations, and one-H1/Cloudflare/release guards.
+
+---
+
 # Build 166 sanity check update
 
 **Updated:** 2026-05-23

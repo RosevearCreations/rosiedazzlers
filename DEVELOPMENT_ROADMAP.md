@@ -1,3 +1,55 @@
+# Build 167 update — COMPETETIVE completion matrix follow-up
+
+**Updated:** 2026-05-23  
+**Current build:** Build 167  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
+
+Build 167 attempts to complete the remaining immediately-actionable items in `COMPETETIVE_COMPLETION_MATRIX.md`. The pass adds a direct photo/video estimate upload foundation, structured public lead capture for fleet and maintenance, FAQPage/Breadcrumb schema foundations, and a formal release guard so these competitor-matrix improvements stay visible.
+
+## Completed in Build 167
+
+1. Re-read `COMPETETIVE_COMPLETION_MATRIX.md`, `DEVELOPMENT_ROADMAP.md`, and `KNOWN_GAPS_AND_RISKS.md`.
+2. Kept this file as the source of truth.
+3. Added public endpoint `/api/public_lead_submit`.
+4. Added public endpoint `/api/public_photo_estimate_upload_url`.
+5. Added optional direct upload UI to Booking Step 4.
+6. Added upload status/fallback messaging when direct upload is not enabled.
+7. Added automatic append of uploaded estimate media links into `photo_estimate_links`.
+8. Added structured fleet quote form to `/fleet`.
+9. Added structured fleet quote form to `/fleet/index.html`.
+10. Added structured maintenance interest form to `/maintenance`.
+11. Added structured maintenance interest form to `/maintenance/index.html`.
+12. Added FAQPage schema foundations to competitor-route public pages.
+13. Added BreadcrumbList schema foundations to competitor-route public pages and starter education articles.
+14. Added SQL migration `2026-05-23_build167_competetive_matrix_leads_upload_schema.sql`.
+15. Added `public_inquiry_leads` schema for fleet/maintenance/public lead capture.
+16. Added `photo_estimate_uploads` schema for optional public estimate-upload auditing.
+17. Updated `COMPETETIVE_COMPLETION_MATRIX.md` with new completion status.
+18. Updated `KNOWN_GAPS_AND_RISKS.md` with Build 167 risks and reduced gaps.
+19. Updated schema documentation and handoff docs.
+20. Added `scripts/competetive_matrix_build167_check.py` and wired it into release checks.
+21. Re-ran release checks, Cloudflare Functions checks, inline-script checks, and one-H1 validation.
+
+## Next several steps after Build 167
+
+1. Run the Build 167 SQL migration in Supabase.
+2. Decide whether to enable direct uploads by setting `PUBLIC_PHOTO_ESTIMATE_UPLOADS_ENABLED=true`.
+3. Configure `PHOTO_ESTIMATE_BUCKET` / `JOB_MEDIA_BUCKET` and a safe public media base URL if direct uploads should return public links.
+4. Add an Admin Leads screen for `public_inquiry_leads`.
+5. Add staff actions to convert a public lead into a booking, quote, or follow-up task.
+6. Add Admin Photo Estimate Uploads review for `photo_estimate_uploads`.
+7. Link direct uploaded media to booking intake after checkout when customer details match.
+8. Add DB-managed editing for services, specials, FAQs, and education snippets.
+9. Add service/town-aware proof filtering for gallery and recent work.
+10. Add quote-builder workflow from booking intake, photo links/uploads, condition flags, package recommendation, and add-ons.
+11. Add media-level privacy records for every uploaded or progress photo/video.
+12. Enforce gallery/social publishing eligibility from consent, privacy approval, and blur/crop completion.
+13. Add analytics for lead form submit, upload start, upload success/failure, and quote conversion.
+14. Add more local education pages from the competitor roadmap.
+15. Continue CSS drift, one-H1, title/meta, Cloudflare import, and fallback checks every pass.
+
+---
+
 # Build 166 update — COMPETETIVE.md completion pass
 
 **Updated:** 2026-05-23  

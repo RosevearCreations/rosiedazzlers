@@ -1,3 +1,9 @@
+# Build 167 update
+
+Build 167 status: start from rosiedazzlers_DEV_BUILD167_competetive_matrix_leads_uploads_schema.zip. Run Build 167 SQL before relying on public lead capture, and enable direct uploads only after storage/privacy settings are confirmed.
+
+---
+
 # Build 166 new chat status
 
 **Updated:** 2026-05-23

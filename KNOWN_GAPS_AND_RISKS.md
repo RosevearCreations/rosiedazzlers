@@ -1,3 +1,30 @@
+# Build 167 known gaps and risks update
+
+**Updated:** 2026-05-23  
+**Current build:** Build 167
+
+Build 167 reduces the remaining competitor-completion gap by adding structured fleet/maintenance lead capture, optional direct quote-photo upload foundation, public FAQPage/Breadcrumb schema foundations, and a release guard for the updated completion matrix.
+
+## Reduced in Build 167
+
+- Direct customer upload now has a safe env-gated foundation instead of only shared photo links.
+- Fleet quote interest is now captured with a structured public form.
+- Maintenance plan interest is now captured with a structured public form.
+- Public lead capture now has an SQL-backed table.
+- Optional quote-photo uploads now have an audit table for later privacy/media review.
+- FAQPage and BreadcrumbList schema foundations are now present on public competitor routes.
+- `COMPETETIVE_COMPLETION_MATRIX.md` now distinguishes complete public foundations from still-open admin/backend workflow.
+
+## Remaining risks
+
+- Direct uploads should stay disabled until storage bucket, public base URL, size limits, and privacy workflow are confirmed.
+- Lead forms require the Build 167 SQL migration before saving into Supabase.
+- There is not yet an Admin Leads screen to triage `public_inquiry_leads`.
+- Uploaded estimate media is appended to booking links, but uploaded media still needs admin review and booking-linking workflow.
+- Service/town proof filtering, quote builder, DB-managed content editing, and gallery/social eligibility automation remain the next major admin/backend tasks.
+
+---
+
 # Build 166 known gaps and risks update
 
 **Updated:** 2026-05-23  

@@ -1,3 +1,9 @@
+# Build 167 update
+
+Build 167 note: Adds public fleet/maintenance lead forms, optional quote-photo upload foundation, FAQPage/Breadcrumb schema foundations, and SQL for public_inquiry_leads/photo_estimate_uploads.
+
+---
+
 # Build 166 README update
 
 **Updated:** 2026-05-23

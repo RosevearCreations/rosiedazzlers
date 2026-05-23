@@ -1234,3 +1234,12 @@ on conflict (platform, display_name) do nothing;
 -- Apply sql/2026-05-22_build164_booking_intake_review_actions.sql after Build 162 and Build 163.
 -- Adds optional bookings.intake_review_note, bookings.intake_reviewed_at,
 -- and bookings.intake_reviewed_by for staff photo-estimate/condition/media privacy review actions.
+
+
+-- ---------------------------------------------------------------------------
+-- Build 167 note — COMPETETIVE completion matrix structured lead/upload schema
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-23_build167_competetive_matrix_leads_upload_schema.sql.
+-- Adds public.public_inquiry_leads for structured fleet/maintenance/public inquiry
+-- capture and public.photo_estimate_uploads for optional quote-photo upload audit.
+-- Direct public upload remains env-gated by PUBLIC_PHOTO_ESTIMATE_UPLOADS_ENABLED=true.
