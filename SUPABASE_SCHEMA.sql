@@ -1,3 +1,7 @@
+-- Build 166 note (2026-05-23): no schema shape change.
+-- Public routes and catalog fallback metadata were updated for COMPETETIVE.md completion.
+-- See sql/2026-05-23_build166_competetive_completion_public_routes_no_ddl_note.sql.
+
 -- Build 165 schema sync — booking photo-estimate link capture
 -- Optional bookings.photo_estimate_links jsonb column added by:
 -- sql/2026-05-22_build165_booking_photo_estimate_link_capture.sql
