@@ -25,10 +25,10 @@ const SOCIALS = [
 const DEFAULT_NAV_LINKS = [
   ["/services", "Services"],
   ["/pricing", "Pricing"],
-  ["/gear", "Gear"],
-  ["/consumables", "Consumables"],
+  ["/specials", "Specials"],
   ["/gallery", "Gallery"],
-  ["/about", "About"],
+  ["/gift-cards", "Gift Cards"],
+  ["/fleet", "Fleet"],
   ["/contact", "Contact"],
   ["/book", "Book"],
 ];
@@ -672,6 +672,61 @@ function ensurePublicAnalytics(){
   head.appendChild(script);
 }
 
+function ensureStickyConversionCta() {
+  if (document.querySelector("#rosieStickyCtaBar")) return;
+  const path = normalizePath(location.pathname);
+  if (path.startsWith("/admin") || ["/login", "/my-account", "/complete", "/invoice"].includes(path)) return;
+
+  const style = document.createElement("style");
+  style.dataset.rosieStickyCta = "true";
+  style.textContent = `
+    #rosieStickyCtaBar{
+      position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;
+      display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;
+      padding:10px;border-radius:18px;border:1px solid rgba(255,255,255,.14);
+      background:rgba(15,23,42,.92);backdrop-filter:blur(14px);
+      box-shadow:0 18px 45px rgba(0,0,0,.35);
+    }
+    #rosieStickyCtaBar a{
+      text-decoration:none;border-radius:999px;padding:9px 12px;font-weight:800;font-size:.9rem;
+      border:1px solid rgba(255,255,255,.16);color:#eaf2ff;background:rgba(255,255,255,.07);
+      white-space:nowrap;
+    }
+    #rosieStickyCtaBar a.primary{background:linear-gradient(135deg,#f97316,#facc15);color:#111827;border-color:transparent;}
+    #rosieStickyCtaBar a.photo{background:rgba(34,197,94,.16);border-color:rgba(34,197,94,.45);}
+    #rosieStickyCtaBar button{
+      border:0;background:transparent;color:rgba(234,242,255,.72);font-weight:900;cursor:pointer;padding:6px 8px;
+    }
+    @media (min-width:980px){
+      #rosieStickyCtaBar{left:auto;right:18px;bottom:18px;max-width:540px}
+    }
+    @media (max-width:520px){
+      #rosieStickyCtaBar{left:8px;right:8px;bottom:8px}
+      #rosieStickyCtaBar a{font-size:.82rem;padding:8px 9px}
+    }
+    body{padding-bottom:86px;}
+  `;
+  document.head.appendChild(style);
+
+  const bar = document.createElement("div");
+  bar.id = "rosieStickyCtaBar";
+  bar.setAttribute("aria-label", "Quick booking and estimate links");
+  bar.innerHTML = `
+    <a class="primary" href="/book">Book now</a>
+    <a class="photo" href="/book?estimate=photos">Send photos for estimate</a>
+    <a href="/contact">Call / text</a>
+    <a href="/specials">Specials</a>
+    <button type="button" aria-label="Hide quick links">×</button>
+  `;
+  bar.querySelector("button").addEventListener("click", () => {
+    bar.remove();
+    style.remove();
+    document.body.style.paddingBottom = "";
+  });
+  document.body.appendChild(bar);
+}
+
+
 function initChrome() {
   ensureManifest();
   ensureNavLinks();
@@ -684,6 +739,7 @@ function initChrome() {
   initAccountWidget();
   initInstallPrompt();
   ensurePublicAnalytics();
+  ensureStickyConversionCta();
 
   attachRotators("#homePackages");
   attachRotators("#packageCards");
