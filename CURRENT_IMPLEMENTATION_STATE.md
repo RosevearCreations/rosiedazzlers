@@ -1,3 +1,9 @@
+# Build 167 update
+
+Build 167 implementation state: public fleet and maintenance lead forms, env-gated direct quote-photo upload foundation, FAQPage/Breadcrumb schema foundations, Build 167 SQL, and release guard are now included.
+
+---
+
 # Build 166 implementation state update
 
 **Updated:** 2026-05-23

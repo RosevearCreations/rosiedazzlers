@@ -1,3 +1,9 @@
+# Build 167 update
+
+Build 167 sanity note: the public competitor journey now includes structured quote/maintenance forms and direct upload foundation; remaining gaps are admin leads, quote builder, media review, DB content, and proof filtering.
+
+---
+
 # Build 166 sync — COMPETETIVE.md completion pass
 
 **Updated:** 2026-05-23

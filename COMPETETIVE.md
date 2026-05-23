@@ -1,3 +1,9 @@
+# Build 167 update
+
+Build 167 completion pass: remaining public-actionable competitor items now include structured fleet/maintenance lead forms, optional direct photo estimate upload foundation, and FAQ/Breadcrumb schema foundations.
+
+---
+
 # Rosie Dazzlers Website and App Service Roadmap
 
 ## Main Goal

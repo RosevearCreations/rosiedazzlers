@@ -1,3 +1,9 @@
+# Build 167 update
+
+Build 167 alias note: see COMPETETIVE.md and COMPETETIVE_COMPLETION_MATRIX.md for the current competitor-roadmap completion status.
+
+---
+
 # Rosie Dazzlers Website and App Service Roadmap
 
 ## Main Goal

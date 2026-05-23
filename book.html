@@ -507,7 +507,10 @@
             </ul>
             <label for="photo_estimate_links" style="margin-top:10px">Photo estimate links (optional)</label>
             <textarea id="photo_estimate_links" rows="3" placeholder="Paste Google Drive, Dropbox, iCloud, Facebook, or other share links here — one per line."></textarea>
-            <div class="mini muted" id="photoEstimateLinkHelp" style="margin-top:6px">Links are saved with the booking notes and, after migration, stored for staff quote review.</div>
+            <div class="mini muted" id="photoEstimateLinkHelp" style="margin-top:6px">Links and uploaded estimate media are saved with booking notes and, after migration, stored for staff quote review.</div>
+            <label for="photo_estimate_files" style="margin-top:10px">Upload estimate photos/videos (optional)</label>
+            <input id="photo_estimate_files" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,video/mp4,video/quicktime,video/webm" multiple />
+            <div class="mini muted" id="photoEstimateUploadStatus" style="margin-top:6px">Direct upload is optional. If uploads are not enabled yet, paste shared photo links above.</div>
             <label class="condition-chip" style="margin-top:10px">
               <input id="photo_estimate_requested" type="checkbox" />
               <span>Please treat this as a photo-estimate / quote-review booking before final service confirmation.</span>
@@ -639,6 +642,7 @@
       conditionFlags: new Set(),
       conditionRecommendationSummary: "",
       photoEstimateRequested: false,
+      uploadedPhotoEstimateLinks: [],
       mediaConsentPreference: "estimate_only",
       garageVehicles: [],
       availabilityCache: new Map(),
@@ -738,6 +742,69 @@
         .slice(0, 12);
     }
 
+    function appendPhotoEstimateLinks(links) {
+      const field = qs("#photo_estimate_links");
+      if (!field) return;
+      const merged = [...parsePhotoEstimateLinks(), ...links.map((link) => String(link || "").trim()).filter(Boolean)]
+        .filter((item, index, all) => all.indexOf(item) === index)
+        .slice(0, 12);
+      field.value = merged.join("\n");
+      state.uploadedPhotoEstimateLinks = merged;
+      state.photoEstimateRequested = true;
+      const photoBox = qs("#photo_estimate_requested");
+      if (photoBox) photoBox.checked = true;
+      renderPhotoEstimateLinkHelp();
+      renderFinalSummary();
+    }
+
+    function setPhotoEstimateUploadStatus(message, tone = "muted") {
+      const box = qs("#photoEstimateUploadStatus");
+      if (!box) return;
+      box.textContent = message;
+      box.className = tone === "error" ? "mini field-error" : tone === "ok" ? "mini notice ok" : "mini muted";
+    }
+
+    async function uploadPhotoEstimateFiles(files) {
+      const selected = Array.from(files || []).slice(0, 8);
+      if (!selected.length) return;
+      setPhotoEstimateUploadStatus(`Preparing ${selected.length} estimate upload${selected.length === 1 ? "" : "s"}…`);
+      const uploaded = [];
+      for (const file of selected) {
+        try {
+          const signRes = await fetch("/api/public_photo_estimate_upload_url", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              filename: file.name,
+              content_type: file.type || "image/jpeg",
+              file_size_bytes: file.size || 0,
+              customer_name: qs("#customer_name")?.value || "",
+              customer_email: qs("#customer_email")?.value || ""
+            })
+          });
+          const sign = await signRes.json().catch(() => null);
+          if (!signRes.ok || !sign?.ok || !sign.upload_url) {
+            throw new Error(sign?.error || "Upload link could not be prepared.");
+          }
+          const putRes = await fetch(sign.upload_url, {
+            method: sign.method || "PUT",
+            headers: { "Content-Type": file.type || "application/octet-stream" },
+            body: file
+          });
+          if (!putRes.ok) throw new Error(`Upload failed for ${file.name}.`);
+          uploaded.push(sign.public_url || sign.media_url || sign.object_path);
+          setPhotoEstimateUploadStatus(`Uploaded ${uploaded.length}/${selected.length} estimate file${selected.length === 1 ? "" : "s"}…`, "ok");
+        } catch (err) {
+          setPhotoEstimateUploadStatus(`${err?.message || err} Paste a shared photo link instead if needed.`, "error");
+          break;
+        }
+      }
+      if (uploaded.length) {
+        appendPhotoEstimateLinks(uploaded);
+        setPhotoEstimateUploadStatus(`${uploaded.length} uploaded estimate file${uploaded.length === 1 ? "" : "s"} added to the booking intake.`, "ok");
+      }
+    }
+
     function renderPhotoEstimateLinkHelp() {
       const help = qs("#photoEstimateLinkHelp");
       if (!help) return;
@@ -747,7 +814,7 @@
         ? `${links.length} photo/media link${links.length === 1 ? "" : "s"} will be attached to the estimate intake for staff review.`
         : requested
           ? "Add share links if we should quote from photos. You can still submit without links and staff can request them later."
-          : "Links are saved with the booking notes and, after migration, stored for staff quote review.";
+          : "Links and uploaded estimate media are saved with booking notes and, after migration, stored for staff quote review.";
     }
 
     function renderConditionRecommendation(result, flags = selectedConditionFlags()) {
@@ -2129,6 +2196,11 @@
       }
       renderPhotoEstimateLinkHelp();
       renderFinalSummary();
+    });
+
+    qs("#photo_estimate_files")?.addEventListener("change", async (event) => {
+      await uploadPhotoEstimateFiles(event.target.files);
+      event.target.value = "";
     });
 
 
