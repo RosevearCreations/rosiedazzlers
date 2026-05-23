@@ -1,3 +1,31 @@
+# Build 166 known gaps and risks update
+
+**Updated:** 2026-05-23  
+**Current build:** Build 166
+
+Build 166 reduces the public-facing competitor-roadmap gap by adding the missing public entry routes for specials, gift cards, fleet/commercial work, maintenance plans, and customer education. It also expands add-on coverage and documents the remaining backend/admin work in `COMPETETIVE_COMPLETION_MATRIX.md`.
+
+## Reduced in Build 166
+
+- Specials are no longer only a roadmap idea; `/specials` now exists.
+- Gift cards now have a customer-friendly `/gift-cards` guide in addition to the existing gift system.
+- Fleet/commercial quoting now has `/fleet` as a plain-language entry point.
+- Maintenance-plan messaging now has `/maintenance` as a public guide tied to the existing interest flow.
+- Customer education now has `/blog` and starter articles.
+- Add-on coverage now better matches the competitor roadmap.
+- Sticky CTAs now keep Book, Send photos, Call/text, and Specials close to users.
+
+## Remaining risks
+
+- These new pages are static/public foundations; high-change content should still move into DB/admin management.
+- Direct upload is still not complete; Build 165 share-link capture remains the current safe route.
+- Gallery proof still needs service/town filtering and approval controls.
+- Quote building from photo estimates still needs a staff workflow.
+- Per-media privacy review is still needed before automatic public gallery/social eligibility.
+
+
+---
+
 # Build 165 known gaps and risks update
 
 **Updated:** 2026-05-22  

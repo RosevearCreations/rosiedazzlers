@@ -1,3 +1,57 @@
+# Build 166 update — COMPETETIVE.md completion pass
+
+**Updated:** 2026-05-23  
+**Current build:** Build 166  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
+
+Build 166 completes a broad public-facing pass against `COMPETETIVE.md`. It adds missing customer entry routes for specials, gift cards, fleet/commercial work, maintenance plans, and education articles; expands the add-on catalog; adds a global sticky conversion CTA; updates the Services hub and homepage route choices; and documents the remaining backend/admin work in `COMPETETIVE_COMPLETION_MATRIX.md`.
+
+## Completed in Build 166
+
+1. Re-read `COMPETETIVE.md`, `DEVELOPMENT_ROADMAP.md`, and `KNOWN_GAPS_AND_RISKS.md`.
+2. Kept this file as the implementation source of truth.
+3. Added `COMPETETIVE_COMPLETION_MATRIX.md`.
+4. Updated `COMPETETIVE.md` with a Build 166 completion-pass note.
+5. Synced `COMPETITOR.md` and `COMPETETOR.md` aliases.
+6. Added a global sticky conversion CTA bar through `assets/chrome.js`.
+7. Updated default nav links to include Specials, Gift Cards, and Fleet.
+8. Added public `/specials` and `/specials/index.html`.
+9. Added public `/gift-cards` and `/gift-cards/index.html`.
+10. Added public `/fleet` and `/fleet/index.html`.
+11. Added public `/maintenance` and `/maintenance/index.html`.
+12. Added public `/blog` help hub.
+13. Added education pages for Ontario road salt cleanup, pet hair removal, ceramic coating vs wax, paint correction basics, and preparing for mobile detailing.
+14. Expanded bundled add-ons in the pricing catalog and Functions fallback catalog.
+15. Synced catalog JSON in `/data` and `/functions/api/data`.
+16. Updated Services with a full competitor-aligned service hub.
+17. Updated Homepage with a clearer choose-the-easiest-path CTA section.
+18. Updated sitemap entries for the new public routes.
+19. Added `scripts/competetive_completion_check.py`.
+20. Added the new guard to `scripts/release_check.py`.
+21. Added Build 166 no-DDL SQL note and schema documentation.
+22. Re-ran release checks and one-H1 validation.
+
+## Next several steps after Build 166
+
+1. Deploy Build 166 and verify the new routes: `/specials`, `/gift-cards`, `/fleet`, `/maintenance`, and `/blog`.
+2. Add direct customer file upload to complement photo/media share links.
+3. Add a quote-builder screen that turns reviewed photo estimates into package/add-on proposals.
+4. Add service/town-aware proof filters for gallery and recent work.
+5. Add media-level privacy records for each job photo/video.
+6. Enforce gallery/social eligibility from consent, privacy status, and blur/crop completion.
+7. Move specials, gift cards, service FAQs, and education snippets into DB/admin-managed content.
+8. Add FAQPage and BreadcrumbList schema generation for public service/help pages.
+9. Add structured fleet and maintenance lead forms.
+10. Add analytics for sticky CTA clicks, photo-estimate starts, special-page visits, and quote-first conversion.
+11. Add more education articles from `COMPETETIVE.md`, including coffee stains, UV protection, and how often to detail.
+12. Add real review/proof mapping when service/town proof items are approved.
+13. Continue CSS drift checks on Services, Booking, Contact, Admin Booking, Admin Social, and new public pages.
+14. Continue one-H1/title/meta/local wording checks every pass.
+15. Continue Cloudflare deploy safety checks to avoid stale function/import problems.
+
+
+---
+
 # Build 165 update — Booking photo-estimate link capture
 
 **Updated:** 2026-05-22  

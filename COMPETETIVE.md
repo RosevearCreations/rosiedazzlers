@@ -756,3 +756,32 @@ Highest priority gaps from this document are now:
 
 Build 161 keeps `DEVELOPMENT_ROADMAP.md` as the source of truth and advances the competitor-aligned conversion path with Booking service chooser guidance, package aliases, and photo-estimate CTAs.
 
+
+
+---
+
+## Build 166 completion pass
+
+Build 166 attempts to complete the public-facing portions of this roadmap as far as possible without risky credential-dependent integrations. The detailed status table now lives in `COMPETETIVE_COMPLETION_MATRIX.md`.
+
+Completed or improved in this pass:
+
+- Global sticky CTA bar: Book now, Send photos for estimate, Call/text, Specials.
+- Public `/specials` route for seasonal and quote-starter offers.
+- Public `/gift-cards` route tied to the existing gift certificate system.
+- Public `/fleet` route for fleet/commercial quote intake.
+- Public `/maintenance` route tied to the existing maintenance-plan interest flow.
+- Public `/blog` help hub plus starter education pages.
+- Expanded bundled add-on catalog for pet hair, odour, shampoo, salt, headlight, glass coating, ceramic spray, trim, bug/tar, truck box, and fleet add-ons.
+- Services hub now links core services, specials, gifts, fleet, maintenance, and education content.
+- Homepage now gives visitors a clearer path to book, send photos, view specials, buy gift cards, or ask about fleet work.
+- Sitemap updated for new public routes.
+- Release check now includes a competitor completion guard.
+
+Still open:
+
+- Direct customer file upload beyond pasted share links.
+- DB-first service/special/FAQ management.
+- Service/town-aware proof filtering.
+- Quote-builder workflow from photo estimates.
+- Per-media privacy review records before gallery/social publishing.

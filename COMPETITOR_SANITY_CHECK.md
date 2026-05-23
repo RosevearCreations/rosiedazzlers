@@ -1,3 +1,12 @@
+# Build 166 sync — COMPETETIVE.md completion pass
+
+**Updated:** 2026-05-23
+
+Build 166 attempts to complete the public-facing items from `COMPETETIVE.md` by adding public routes for specials, gift cards, fleet, maintenance, and education, expanding the add-on catalog, adding sticky CTAs, updating Services/Homepage routing, and documenting status in `COMPETETIVE_COMPLETION_MATRIX.md`. `DEVELOPMENT_ROADMAP.md` remains the source of truth.
+
+
+---
+
 # Build 165 sync — Booking photo-estimate link capture
 
 **Updated:** 2026-05-22
