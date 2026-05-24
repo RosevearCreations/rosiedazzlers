@@ -1,3 +1,11 @@
+# Build 168 docs index update
+
+**Updated:** 2026-05-23
+
+Build 168 docs: see `DEVELOPMENT_ROADMAP.md` and `COMPETETIVE_COMPLETION_MATRIX.md` for the Admin Leads/photo-estimate review status; see `sql/2026-05-23_build168_admin_leads_photo_review.sql` for schema additions. Main new route: `/admin-leads`.
+
+---
+
 # Build 167 update
 
 Build 167 docs: see DEVELOPMENT_ROADMAP.md and COMPETETIVE_COMPLETION_MATRIX.md for the competitor-matrix completion status; see sql/2026-05-23_build167_competetive_matrix_leads_upload_schema.sql for schema additions.

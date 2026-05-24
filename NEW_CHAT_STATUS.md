@@ -1,29 +1,26 @@
-# Build 168 current implementation state
+# New chat status — Build 168
 
 **Updated:** 2026-05-23
 
-Build 168 adds a protected Admin Leads & Photo Estimates workflow on top of the Build 167 public lead/upload foundation. The site now has public fleet/maintenance lead capture, direct upload foundations, and a staff-facing triage screen with protected list/save endpoints.
+Latest build is Build 168. It adds Admin Leads & Photo Estimates so the Build 167 public lead/upload capture has a staff review home.
 
-Active new route: `/admin-leads.html` and `/admin-leads/index.html`.
+Start the next chat from these priorities:
 
-Active new endpoints:
-
-- `/api/admin/public_inquiry_leads_list`
-- `/api/admin/public_inquiry_leads_save`
-- `/api/admin/photo_estimate_uploads_list`
-- `/api/admin/photo_estimate_uploads_save`
-
-Apply Build 167 SQL first, then Build 168 SQL. Without the SQL, the screen remains protected and shows migration hints instead of silently failing.
+1. Apply Build 167 SQL and Build 168 SQL in Supabase.
+2. Test `/admin-leads.html` with one public fleet lead and one maintenance lead.
+3. Add lead-to-booking or lead-to-quote conversion action.
+4. Add the quote-builder workflow from photo estimates, condition flags, and add-ons.
+5. Keep one-H1/title/meta/local wording/CSS drift checks running every pass.
 
 ---
 
 # Build 167 update
 
-Build 167 implementation state: public fleet and maintenance lead forms, env-gated direct quote-photo upload foundation, FAQPage/Breadcrumb schema foundations, Build 167 SQL, and release guard are now included.
+Build 167 status: start from rosiedazzlers_DEV_BUILD167_competetive_matrix_leads_uploads_schema.zip. Run Build 167 SQL before relying on public lead capture, and enable direct uploads only after storage/privacy settings are confirmed.
 
 ---
 
-# Build 166 implementation state update
+# Build 166 new chat status
 
 **Updated:** 2026-05-23
 
@@ -56,15 +53,13 @@ Build 163 adds fallback-safe direct booking intake field storage and a staff-fac
 
 ---
 
-# Build 162 current implementation state
+# New chat status — Build 162
 
-**Updated:** 2026-05-21
-
-Build 162 adds the first true condition-based booking helper. The public booking flow now captures vehicle condition flags, recommends a package/add-on path, stores the recommendation in checkout notes, captures photo-estimate intent, and records media-consent preference wording for estimate-only / ask-first / public-after-review use.
+Build 162 is the current baseline. It adds the booking condition helper, photo-estimate request capture, and media-consent preference. Next work should continue from `DEVELOPMENT_ROADMAP.md`, especially admin display of condition fields, real photo upload/lead capture, privacy review tracking, FAQ/proof expansion, and DB-first content migration.
 
 ---
 
-# Build 161 sync — CURRENT_IMPLEMENTATION_STATE.md
+# Build 161 sync — NEW_CHAT_STATUS.md
 
 **Updated:** 2026-05-21
 
@@ -138,7 +133,7 @@ Build 158 continues the Build 156/157 social publishing workflow and makes it sa
 
 ---
 
-# Current Implementation State — Build 158
+# Handoff Next Chat — Build 158
 
 
 **Build 157 update — 2026-05-19:** Social progress publishing bridge added. Admin Progress can automatically create social drafts and optionally attempt approved API/webhook posting. Admin Social Queue now supports Publish/API, Send webhook, Copy text/media, Ready, Mark posted, and Skip. No DDL is required beyond Build 156; Build 157 adds `sql/2026-05-19_build157_social_api_publish_bridge_no_ddl_note.sql`.
@@ -146,40 +141,30 @@ Build 158 continues the Build 156/157 social publishing workflow and makes it sa
 
 **Updated:** 2026-05-18
 
-## Current baseline
+Current build: **Build 158**.
 
-Build 155 continues from Build 151 and keeps `rosiedazzlers-dev` as the working dev branch baseline.
+## What changed last
 
-The current focus is the Admin Catalog inventory workflow plus deploy stability. Build 150 repaired fallback image hydration for saved DB rows with blank `image_url`. Build 151 extended that into a stronger image workflow with a media-library read endpoint, selected-row image repair, duplicate-image diagnostics, and browser image health scanning. Build 155 repairs the Cloudflare Pages Functions deploy blocker and adds release checks to catch that class of issue before upload.
+Build 155 repairs the Cloudflare Pages Functions deploy blocker in `/api/admin/media_library_list`, cleans duplicate landing-page public API object keys, and keeps the Build 151 media-library-aware image picker, selected-row fallback image repair, duplicate image diagnostics, and browser image health scanning.
 
-## What is working now
+## First things to test next
 
-- Public pages continue to follow the one-H1 release discipline and local SEO checks.
-- Admin Catalog lists saved DB inventory rows over bundled consumables/tools fallback rows.
-- Blank saved DB image fields hydrate from matching bundled consumables/tools images.
-- The inventory editor has image preview, matching bundled image restore, existing-image picker, and clear-image controls.
-- The existing-image picker now includes media-library rows when available.
-- Selected rows can be repaired/imported so fallback-matched images are saved back to DB.
-- Visible inventory images can be browser-scanned for failed loads.
-- Duplicate image groups are counted and flagged.
-- Release checks include Cloudflare Pages Functions deploy-safety checks, static checks, local SEO/H1 audit, catalog fallback checks, Amazon matching, mobile nav, Admin App editor, inventory picker, and media-library picker guards.
+1. Apply Build 150 and Build 151 SQL migrations in Supabase dev.
+2. Open Admin Catalog on the deployed dev URL.
+3. Confirm existing fallback-matched images still appear.
+4. Open **Pick existing image** and confirm images are searchable.
+5. Select rows and test **Repair selected images**.
+6. Run **Scan visible images** and review any failed URLs.
 
-## Current schema state
+## Next coding direction
 
-- `catalog_inventory_items` is the DB source of truth for saved tools/consumables.
-- Bundled JSON remains the fallback source for public and admin continuity.
-- `app_media_library` is now documented as the DB-backed shared image source for inventory images, landing-page proof, add-ons, and future R2 uploads.
-- Build 151 adds/guards indexes for media-library group, usage contexts, status, and image lookup.
-
-## Deploy caution
-
-Apply migrations in order and smoke-test Admin Catalog after deploy. If `app_media_library` is not present or not seeded yet, the UI should continue to work from app settings and bundled JSON/R2 fallbacks.
+Deploy Build 155, confirm Cloudflare Pages Functions compile cleanly, then seed `app_media_library` from R2 product/tool folders and add direct R2 upload plus editable image metadata from Admin Catalog.
 
 <!-- Build 155 sync 2026-05-18 -->
 
-## Build 155 deployment hotfix status
+## Build 155 handoff note
 
-Build 155 is a Cloudflare deploy-repair pass. It keeps the Build 151/152 inventory media workflow intact, fixes unresolved `_lib` imports reported by Cloudflare Pages Functions, keeps the `media_library_list` regex repair, and keeps `landing_pages_public.js` normalized without duplicate keys. No data workflow or database shape changed.
+Current build: **Build 158**. Deploy this ZIP next. It specifically repairs the Cloudflare Pages Functions unresolved `_lib` import errors that appeared after the regex fix. The next confirmation target is a clean Cloudflare Functions upload/compile.
 
 ## Build 155 Cloudflare stale root function shim hotfix - 2026-05-19
 
@@ -192,11 +177,35 @@ Next step: after Build 155 deploys cleanly, optionally remove the compatibility 
 
 Build 155 repairs the remaining root Cloudflare Pages Function import paths that could still break deployment after Build 154. Four root `/functions/api/*.js` files still used `../_lib/...`; root routes must use `./_lib/...`. Build 155 fixes those files, keeps the stale-route shims, wires the stale-root import guard into the release checklist, and updates the release runner so the full check can complete in this sandbox.
 
-Current state: deploy hardening is the immediate priority; inventory image fallback, media-library picker, duplicate-image diagnostics, and browser image health scanning remain intact.
+Next chat should first review the latest Cloudflare deploy result. If deploy is clean, move into media-library seeding, direct R2 upload, and admin-managed before/after gallery content.
 
 ## Build 156 sync note - social progress publishing
 
 Build 156 adds a reviewable social publishing foundation. Admin Progress can now create internal social drafts from job updates/media, Admin Social Queue can review and mark those drafts, and the schema now includes `social_channels`, `social_post_queue`, and `social_dispatch_attempts`. Direct posting to X, Facebook, Instagram, TikTok, Google Business Profile, and other platforms is possible later after the required platform credentials, app approvals, and consent/compliance checks are in place.
+
+
+## Next 20 value-added steps after Build 156
+
+1. Run the Build 156 social queue SQL migration in Supabase.
+2. Add a Social Queue card to staff role training notes so detailers know drafts are not public posts yet.
+3. Decide the first direct-post platform: recommended order is Facebook/Instagram, Google Business Profile, X, TikTok, then YouTube Shorts.
+4. Add per-platform caption length warnings and media-count warnings.
+5. Add a privacy checklist before any customer vehicle/photo can be marked ready.
+6. Add license-plate blur/cover reminder fields to the media workflow.
+7. Add customer consent flags for public before/after use.
+8. Add a reusable caption template library for job type, vehicle size, service area, and upsell language.
+9. Add platform-specific hashtag presets for local SEO and discovery.
+10. Add OAuth setup notes and token rotation guidance for each social platform.
+11. Add a direct Meta/Facebook Page adapter after the app permissions are approved.
+12. Add an Instagram Business publishing adapter after Meta media-container requirements are confirmed.
+13. Add a Google Business Profile recent-work publishing path after the Google account scope is finalized.
+14. Add a TikTok direct-post adapter only after app review and creator authorization are confirmed.
+15. Add a queue calendar so posts can be scheduled by day/time.
+16. Add duplicate-content warnings when the same photo/caption is queued twice.
+17. Add analytics fields for clicked progress links and posted platform URLs.
+18. Add customer-friendly public gallery promotion rules from approved job media.
+19. Add fallback export buttons: copy caption, download media list, and open platform composer.
+20. Add social performance notes back into the booking/customer history for future marketing decisions.
 
 ## Build 159 sync — social queue usability and release discipline
 

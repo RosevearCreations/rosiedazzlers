@@ -1,3 +1,28 @@
+# Handoff for next chat — Build 168
+
+**Updated:** 2026-05-23
+
+Build 168 completed the Admin Leads and Photo Estimate Review foundation. Use `DEVELOPMENT_ROADMAP.md` as the source of truth.
+
+Important files changed:
+
+- `admin-leads.html`
+- `admin-leads/index.html`
+- `assets/admin-auth.js`
+- `assets/admin-menu.js`
+- `admin.html`
+- `admin/index.html`
+- `functions/api/admin/public_inquiry_leads_list.js`
+- `functions/api/admin/public_inquiry_leads_save.js`
+- `functions/api/admin/photo_estimate_uploads_list.js`
+- `functions/api/admin/photo_estimate_uploads_save.js`
+- `sql/2026-05-23_build168_admin_leads_photo_review.sql`
+- `scripts/admin_leads_build168_check.py`
+
+Next best build: create the quote-builder/conversion action from a public lead or uploaded photo estimate.
+
+---
+
 # Build 167 update
 
 Build 167 handoff: continue with Admin Leads, upload review, quote builder, DB-managed content, and service/town proof filtering. DEVELOPMENT_ROADMAP.md remains the source of truth.

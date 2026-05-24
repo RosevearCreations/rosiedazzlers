@@ -1,3 +1,69 @@
+# COMPETETIVE.md Completion Matrix — Build 168
+
+**Updated:** 2026-05-23  
+**Baseline:** `rosiedazzlers-dev(165).zip`  
+**Roadmap authority:** `DEVELOPMENT_ROADMAP.md`
+
+Build 168 focuses on completing the operational side of the Build 167 public lead/upload work. The competitor roadmap is now represented across the public journey and has a staff review path for the most important quote-first handoffs. The matrix is not “done forever,” but the urgent missing pieces are now mostly admin workflow depth rather than missing public pages.
+
+## Build 168 completion changes
+
+| Matrix area | Build 168 status | Details |
+| --- | --- | --- |
+| Admin Leads | Added | New `/admin-leads` screen lets staff search/filter public leads and update status, notes, and converted booking UUID. |
+| Lead conversion notes | Improved | Public leads can now be marked contacted, quoted, converted, closed, or spam instead of sitting as raw database rows. |
+| Photo upload review | Added | New upload review panel lists `photo_estimate_uploads`, links media, and tracks status/privacy review. |
+| Lead/photo review endpoints | Added | Four protected admin endpoints now list/save public leads and photo estimate uploads. |
+| Media privacy workflow | Improved | Upload rows can be marked pending review, approved private, approved public, needs blur, or rejected. |
+| Photo review schema | Added | Build 168 SQL adds `staff_note`, `privacy_note`, `reviewed_at`, and `reviewed_by_staff_user_id` to `photo_estimate_uploads`. |
+| Fallback/error handling | Improved | Admin pages and endpoints provide migration hints if the Build 167/168 SQL is not live yet. |
+| Matrix/release enforcement | Improved | Added a Build 168 release guard so Admin Leads, endpoints, SQL, docs, and schema markers stay present. |
+
+## Updated completion status after Build 168
+
+| COMPETETIVE.md area | Current status | Notes |
+| --- | --- | --- |
+| Clear local homepage hero | Mostly complete | Homepage route choices and sticky CTA exist; keep measuring conversion. |
+| Sticky CTA buttons | Complete | Global sticky CTA remains active. |
+| Better service/package selector | Mostly complete | Booking chooser, condition helper, photo links/uploads, and admin intake/review paths are present. |
+| Service package cards | Mostly complete | Package aliases and add-on guidance are improved; next step is DB-managed content editing. |
+| Add-on cards | Improved | Catalog coverage is broad; next step is real proof/examples per add-on. |
+| Specials | Complete public foundation | Static `/specials` exists; admin-managed specials remain next. |
+| Gift cards | Complete public foundation | Static guide exists and links to gift workflow. |
+| Proof sections | Partial | Recent work/gallery exist; service/town-aware proof filtering remains open. |
+| Ceramic coating page | Mostly complete | Existing page plus education support; deeper FAQ/proof automation remains next. |
+| Paint correction page | Mostly complete | Existing page plus education support; real proof/result examples remain next. |
+| Interior/basic vs deep distinction | Mostly complete | Service chooser and condition helper explain the difference. |
+| High-value add-ons | Improved | More competitor-aligned add-ons are bundled. |
+| Booking flow | Mostly complete | Direct upload foundation, share links, condition helper, consent, and admin review are present. |
+| Admin service controls | Partial | Admin catalog/media workflows exist; public service/special/FAQ content still needs a DB-managed editor. |
+| Schema/local SEO support | Improved | One-H1 checks continue; FAQPage/Breadcrumb foundations exist on competitor routes. |
+| Conversion blocks | Improved | Homepage, Services, sticky CTA, specials, gifts, fleet, maintenance, and education interlink. |
+| Maintenance plans | Complete public foundation | Public route, lead form, and staff triage path now exist. |
+| Fleet/commercial | Complete public foundation | Public route, lead form, and staff triage path now exist. |
+| Gallery system | Partial | Needs service/town filtering, proof approval, and media privacy eligibility. |
+| Customer education content | Complete starter foundation | Blog hub and starter articles exist; add more practical local guides over time. |
+| Pricing display strategy | Mostly complete | Quote-safe language and add-on expansion exist; analytics-driven improvements remain next. |
+
+## Still open after Build 168
+
+1. Apply Build 167 and Build 168 SQL before relying on live Admin Leads data.
+2. Add one-click conversion from public lead to draft booking or draft quote.
+3. Add a quote-builder screen that turns lead details, photo links/uploads, and condition flags into package/add-on proposals.
+4. Add DB-managed service, special, FAQ, and education content editing.
+5. Add service/town-aware proof filtering for gallery and recent work.
+6. Enforce gallery/social publishing eligibility from consent + media privacy review + blur/crop completion.
+7. Add automated FAQPage/Breadcrumb generation from DB content once the CMS layer is live.
+8. Add analytics for public lead form submits, upload attempts/failures, Admin Leads status changes, and quote-first conversion.
+
+## Build 168 decision
+
+The `COMPETETIVE.md` roadmap is now substantially complete as a public/customer journey plus staff triage foundation. The next pass should shift from “complete the competitor matrix” to “turn captured leads/photos into quotes, bookings, proof, and measurable conversion reporting.”
+
+<!-- Lead/photo review -->
+
+---
+
 # COMPETETIVE.md Completion Matrix — Build 167
 
 **Updated:** 2026-05-23  

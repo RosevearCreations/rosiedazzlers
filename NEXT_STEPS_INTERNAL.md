@@ -1,3 +1,14 @@
+# Build 168 internal next steps
+
+1. Apply `sql/2026-05-23_build167_competetive_matrix_leads_upload_schema.sql`.
+2. Apply `sql/2026-05-23_build168_admin_leads_photo_review.sql`.
+3. Test `/admin-leads.html` with one fleet lead and one maintenance lead.
+4. Add lead-to-quote/booking conversion action.
+5. Add quote-builder from photo estimates, condition flags, package recommendations, and add-ons.
+6. Continue local SEO, CSS drift, one-H1, Cloudflare import, and fallback checks every pass.
+
+---
+
 # Next Steps Internal — Build 153
 
 **Updated:** 2026-05-18

@@ -172,3 +172,17 @@ Database note: run `sql/2026-05-19_build156_social_progress_dispatch_queue.sql` 
 - Added manual posted URL and platform post ID capture.
 - Added `social_post_metrics_snapshots` schema support for future reporting.
 - Release checks now require the Build 159 social template/schedule markers.
+
+## Build 168 sync — Admin Leads and Photo Estimate Review
+
+Build 168 adds an internal review layer over the Build 167 public lead and upload tables.
+
+Apply:
+
+```sql
+sql/2026-05-23_build168_admin_leads_photo_review.sql
+```
+
+This migration extends `photo_estimate_uploads` with `staff_note`, `privacy_note`, `reviewed_at`, and `reviewed_by_staff_user_id`. These fields support the new `/admin-leads` screen, where staff can review public quote-photo uploads, mark privacy status, link media to a lead or booking UUID, and keep internal follow-up notes.
+
+The screen and endpoints are fallback-safe: if Build 167/168 SQL has not been applied, staff see a migration hint rather than a broken page.

@@ -1,3 +1,9 @@
+# Documentation update note — Build 168
+
+Build 168 documentation is synced across roadmap, gaps, competitive matrix, schema notes, implementation state, project brain, and handoff files. The main new workflow is `/admin-leads` for public leads and photo-estimate upload review.
+
+---
+
 # Build 161 sync — DOCS_UPDATE_NOTE.md
 
 **Updated:** 2026-05-21
