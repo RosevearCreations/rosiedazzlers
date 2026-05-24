@@ -45,9 +45,10 @@
 
   async function signIn({ email, password }) {
     const result = await requestJson(API.login, { method: "POST", body: JSON.stringify({ email, password }) });
-    if (!result.ok) throw new Error((result.data && result.data.error) || "Sign-in failed.");
+    if (!result.ok || (result.data && result.data.ok === false)) throw new Error((result.data && result.data.error) || "Sign-in failed.");
     state.customer = result.data && result.data.customer ? result.data.customer : null;
     state.authenticated = !!state.customer;
+    if (!state.authenticated) throw new Error((result.data && result.data.error) || "Sign-in failed.");
     state.loaded = true;
     return { authenticated: state.authenticated, customer: state.customer };
   }
