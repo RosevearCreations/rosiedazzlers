@@ -1,42 +1,89 @@
-# Build 164 sync — booking intake review fields
+# Repo Rules — Devil n Dove
 
-**Updated:** 2026-05-22
+## Build 139 rule reminder
 
-Build 164 adds optional booking review fields through `sql/2026-05-22_build164_booking_intake_review_actions.sql`: `intake_review_note`, `intake_reviewed_at`, and `intake_reviewed_by`. These support the Admin Booking photo-estimate, condition-review, and media/privacy review action controls. The workflow remains fallback-safe before migration by appending staff review status to booking notes.
+Never commit social platform access tokens, page tokens, OAuth refresh tokens, app secrets, or API keys. Social publisher credentials belong only in Cloudflare environment variables. Keep generated social captions and public post URLs in D1; keep secrets out of D1 and public files.
 
----
+# Repo Rules
 
-# Repo Rules — Build 155
+## Build 137 rule reminder
 
-**Updated:** 2026-05-18
+Search Console CSV exports, Amazon order CSVs, and generated review queues are private working data. Do not place them under public `/data/`. Public pages still require exactly one H1, a clear title, and a meta description.
 
-1. Keep public pages to one clear H1.
-2. Keep local SEO wording in titles, meta descriptions, headings, and visible copy.
-3. Do not remove JSON fallbacks until the matching DB editor/import/rollback flow is stable.
-4. Keep root and folder-backed route copies synchronized.
-5. Update Markdown and schema files on every build pass.
-6. Prefer robust fallbacks and visible staff-facing errors over silent failures.
-7. Run `python scripts/release_check.py` before packaging a ZIP; this now includes Cloudflare Pages Functions deploy-safety checks.
-8. For inventory media, prefer `app_media_library` plus R2 URLs, but keep bundled image fallback working.
+## Build 135 rule reminder
 
-<!-- Build 155 sync 2026-05-18 -->
-
-## Build 155 repo rule update
-
-Cloudflare Pages Functions route files must use relative helper imports that resolve from their actual folder. Root `/functions/api/*.js` files must use `./_lib/...`; nested route files may use the correct relative path for their folder. The deploy-safety script now checks this before packaging.
+When changing product media or product editor workflows, update `/admin/products/`, Operations diagnostics, schema notes, and Markdown together. Do not place private Amazon/order CSV reports under public `/data/`.
 
 
-## Build 155 Cloudflare root import release-check hotfix - 2026-05-18
+Current sync: 2026-05-18 — Build 137 Search Console filtering, safe batch revert, and private SEO opportunity action queue.
 
-Build 155 repairs the remaining root Cloudflare Pages Function import paths that could still break deployment after Build 154. Four root `/functions/api/*.js` files still used `../_lib/...`; root routes must use `./_lib/...`. Build 155 fixes those files, keeps the stale-route shims, wires the stale-root import guard into the release checklist, and updates the release runner so the full check can complete in this sandbox.
+## Required rules for future passes
+1. Update Markdown when code/schema changes.
+2. Update schema references when D1 tables, columns, indexes, or constraints change.
+3. Keep one H1 per exposed public/admin HTML page.
+4. Run JavaScript syntax checks before ZIP handoff.
+5. Keep private import/accounting data out of public `/data/` paths.
+6. Prefer D1 for operational truth; keep JSON as fallback/seed/export until migrated.
+7. Store money as integer cents in D1 and show dollars in the UI.
+8. Do not overwrite inventory costs blindly; use review and cost history where possible.
+9. Do not claim tax/accountant readiness until reconciliation, close, HST review, and export validation are complete.
+10. Keep retired files in `/archive/` and active files in predictable paths.
 
-## Build 156 sync note - social progress publishing
+## Deployment rules
+- Apply `database_upgrade_current_pass.sql` before relying on new D1-backed admin panels.
+- Record applied SQL in the Migration Ledger.
+- Run Release Sanity before declaring a build ready.
+- Re-run Tools/Supplies inventory sync after catalog JSON/D1 changes.
 
-Build 156 adds a reviewable social publishing foundation. Admin Progress can now create internal social drafts from job updates/media, Admin Social Queue can review and mark those drafts, and the schema now includes `social_channels`, `social_post_queue`, and `social_dispatch_attempts`. Direct posting to X, Facebook, Instagram, TikTok, Google Business Profile, and other platforms is possible later after the required platform credentials, app approvals, and consent/compliance checks are in place.
+## Build 125 note
 
----
+Build 125 keeps Amazon order/cost data private, adds admin review/apply controls for Amazon staging rows, records inventory cost history, expands reconciliation and journal guardrails, and adds local-intent SEO pages plus `sitemap.xml`. Keep schema files and active Markdown updated on every pass.
 
-## Build 161 sync note
+## Runtime incident review rule - Build 126
 
-Build 161 keeps `DEVELOPMENT_ROADMAP.md` as the source of truth and advances the competitor-aligned conversion path with Booking service chooser guidance, package aliases, and photo-estimate CTAs.
+Do not clear Release Sanity runtime warnings by marking everything resolved blindly. Group incidents first, fix the recurring endpoint or schema drift, then resolve only the rows tied to the fixed cause. Use `ignored` only for known harmless stale incidents.
 
+## Build 128 rule addition
+
+Public storefront endpoints must not hard-reference optional D1 columns. If a column may not exist on the deployed D1 database, verify it before building SQL and provide a safe default in the response payload.
+
+## Build 129 repo rule additions
+
+- Do not add private Amazon order/cost CSVs or match reports under public static folders such as `/data/`.
+- New D1-sensitive endpoints should either verify optional columns before use or degrade safely with a clear runtime incident.
+- Any new admin import workflow must be review-first and must update Markdown plus schema references in the same pass.
+
+## Build 130 rule reminder
+
+Before referencing a newer D1 column from a public endpoint, confirm it exists. Public pages should degrade safely instead of creating repeated runtime incidents.
+
+## Build 131 repo rule update
+
+Do not add private Amazon order exports, match reports, cost reports, or transaction CSV/XLSX files under public `/data/`. Use private D1 staging/admin import tools instead. Before deploy, run the local predeploy sanity script or equivalent checks for H1/meta, CSS drift, local references, and public-data privacy.
+
+## Build 132 rule addition
+
+For mobile navigation, keep the shared menu compact and grouped. Avoid adding more always-visible top-level mobile links; place secondary links inside grouped expandable sections so phone screens do not become a long menu wall.
+
+## Build 133 note
+
+Build 133 rule reminder: do not expose private Amazon/order CSV files under public `/data/`; Search Console imports should go to D1 staging tables, not public JSON.
+
+
+## Build 134 note
+
+This pass fixes the Product editor draft workflow: drafts require only name/type, image upload is available from the editor when R2 media storage is configured, create-product failures return JSON instead of HTML 500 pages, and the create endpoint adapts to live D1 product/media/SEO columns.
+## Build 138 social posting rules
+
+- Social posting remains review-first. Queue, review, copy/manual-post, then record the public post URL.
+- Do not store Facebook, Instagram, TikTok, X, YouTube, Pinterest, or other platform secrets in Markdown, JSON, D1 public tables, or front-end JavaScript.
+- Future direct API posting must use Cloudflare environment variables for secrets, platform OAuth diagnostics, and explicit admin approval before any publish action.
+
+
+## Build 142 update — Competitive roadmap completed and tracked
+
+- Completed `COMPETITIVE.md` as the active competitive strategy for Devil n Dove, covering positioning, homepage/product-page improvements, mobile UX, local SEO, social workflow, marketplace readiness, product media, trust, and accounting/margin direction.
+- Added Operations > Competitive Roadmap so the highest-value items from the document can be seeded into D1, assigned a status, and reviewed during Release Sanity.
+- Added `competitive_opportunities` and `competitive_opportunity_events` schema support.
+- Added `/data/site/competitive-opportunities.json` as a public-safe roadmap seed file; it contains strategy/action metadata only and no private costs, orders, or customer data.
+- Next direction: connect competitive opportunities to product readiness, SEO action completion, social analytics, testimonials, custom requests, and marketplace export checks.

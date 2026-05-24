@@ -1,389 +1,231 @@
-# Build 167 known gaps and risks update
+# Known Gaps and Risks — Devil n Dove
+
+## Build 140 update — social scheduling and dry-run risks
+
+- Dry run previews do not guarantee that a platform will accept the final API request; they are a safety preview before live publishing.
+- Future-scheduled posts are blocked from API publishing early, but the queue is not yet a background scheduler. Someone still needs to run/trigger publishing after the scheduled time.
+- Duplicate/repost warnings are based on a practical signature of caption, images, platforms, and link. Review before clearing because similar posts may still be intentional.
+- Media warnings are URL-level checks only. Full platform media validation for aspect ratio, duration, file size, and rights still needs deeper platform-specific work.
+- TikTok and YouTube remain manual/review-first until app approvals, OAuth upload handling, and media rules are fully configured.
+
+
+## Build 139 update — social API publishing risks
+
+- Social posting is now review-first plus API-capable, but credentials must be stored only in Cloudflare environment variables.
+- Facebook, Instagram, X, and Pinterest can attempt publishing only when their required credentials are present.
+- TikTok and YouTube remain manual/copy-ready in this pass because they require more involved upload flows and platform approval.
+- The first live social tests should be done one platform at a time with harmless test captions and images.
+- API failures are expected during setup and should be reviewed in Social Posting Queue attempts and Runtime Incidents instead of treated as storefront failures.
+
+# Known Gaps and Risks
+
+## Build 137 known gaps and risk updates
+
+- Search Console SEO actions are recommendations only. Do not apply generated titles, meta descriptions, H1 wording, or internal links without checking the actual page intent.
+- Batch delete/revert removes staged Search Console rows for that import batch. It does not change public pages, product records, or sitemap rows.
+- Large Search Console imports can still grow D1 quickly. Test with a small CSV and use filters before importing a full export.
+- The SEO action list now needs an export/share workflow and a current-title/current-meta comparison before it becomes a full SEO production queue.
+- Product/media/accounting gaps remain: product SEO bulk tooling, media library attach/detach, Amazon bulk approval safeguards, payment application, HST review, period close/lock, and accountant export packaging.
+
+## Build 135 known gaps and risk updates
+
+- Product uploads now have a public URL fallback and diagnostics, but the best long-term setup is still to configure `PRODUCT_MEDIA_PUBLIC_BASE_URL=https://assets.devilndove.com` in Cloudflare so the setting is explicit.
+- The Product editor checklist is a guidance layer; it does not replace final admin review before publishing.
+- The reusable image picker uses existing `media_assets` rows. Older images pasted directly into product URL fields may not appear in the picker until they are imported into `media_assets`.
+- Product Image Health samples the first missing-image and weak-alt rows, so large catalogs should still be repaired in batches.
+- Edit-mode uploads now attach to the loaded product, but unassigned uploads from earlier tests may still need manual linking or cleanup.
+
+
+Current sync: 2026-05-18 — Build 137 Search Console filtering, safe batch revert, and private SEO opportunity action queue.
+
+
+## Build 134 product editor risk update
+
+- The Product editor now supports true draft creation with only product name and product type required.
+- SEO title, SEO description, price, category, featured image, and external listing URL are publish-readiness fields, not draft blockers.
+- `/api/admin/create-product` now returns JSON on server failure and records `admin_products/create_product_failed` runtime incidents instead of allowing an HTML 500 page to produce `Unexpected token '<'` in the browser.
+- The inline image uploader depends on the R2 media bucket binding and public media base URL. If those bindings are missing, the form still supports pasted image URLs and the API will return a readable JSON error.
+- Remaining risk: existing-product edit mode still needs the same inline uploader workflow; use the Product Images panel or pasted URLs until that is added.
+
+## Highest-priority gaps still open
+1. The accounting backend is stronger, but it is still not a finished tax-filing system.
+2. `database_upgrade_current_pass.sql` still needs to be applied in Cloudflare D1 after deployment and recorded in the migration ledger.
+3. Amazon purchase review exists, but only obvious/safe rows should be approved first until more real-world review confidence is built.
+4. Amazon CSV loading still needs a proper admin import screen; current staging assumes rows are already loaded into `amazon_purchase_import_staging`.
+5. Cost history now exists, but inventory valuation reports still need beginning balance, additions, usage, write-offs, and ending balance logic.
+6. Reconciliation exceptions now have queue statuses, but need export, attachment links, and stronger accountant review reporting.
+7. Payment application screens still need to connect orders, deposits, payouts, refunds, fees, gift cards, and journals.
+8. Journal validation/posting exists for monthly balance checks, but full auto-generation and close controls remain open.
+9. HST/sales-tax review screens still need final worksheet/export behaviour before accountant handoff.
+10. Accountant export still needs one packaged export with ledgers, statements, taxes, attachments, and unresolved notes.
+11. Some catalog/product areas still use JSON as a bridge while D1 becomes the long-term source of truth.
+12. Product variants/options are not complete enough for a full ecommerce app.
+13. Media management still needs retire/replace/broken-link lifecycle controls.
+14. Local SEO pages have been added, but they need real photos, product links, internal links from relevant pages, and performance monitoring.
+15. Fuzzy Amazon matching can still be wrong when product titles are generic.
+
+## Current guardrails
+- Keep one H1 per exposed HTML page.
+- Update Markdown and schema files on every code pass.
+- Prefer D1 for authoritative operational data.
+- Keep JSON only as fallback, seed, export, or static catalog bridge until migrated.
+- Store money in cents in D1, but display dollars in admin forms.
+- Treat current owned tools/supplies as at least 1 stock unit unless manually retired.
+- Use package math for consumables: for example, 1 package can equal 100 sheets.
+- Keep Amazon order details, costs, and review spreadsheets private; do not deploy raw order reports under public `/data/` paths.
+- Review Amazon matches before applying costs; do not mass-approve weak or generic title matches.
+- Run Release Sanity and D1 count checks after every deployment.
+
+## Recently reduced risks
+- Added `/api/admin/amazon-purchase-review` so private Amazon purchase staging rows can be reviewed from the admin instead of spreadsheets only.
+- Added the Amazon purchase review queue UI to `/admin/catalog/` with search, status filters, approve/apply, hold, and reject controls.
+- Added approved Amazon purchase application that updates linked inventory unit cost, supplier name, ASIN/supplier SKU, Amazon URL, and notes.
+- Added `site_item_inventory_cost_history` so Amazon-approved costs and manual cost changes create history rows instead of silently overwriting the latest cost.
+- Added inventory cost-history recording during Tools/Supplies catalog sync when a synced unit cost changes.
+- Added cost-history recording for manual site-item inventory create/update and bulk cost update workflows.
+- Improved the Tools/Supplies inventory sync result panel so inserted, updated, failed, Amazon URL, unit-cost, stock-default, match-status, and cost-history counts are visible after sync.
+- Hardened Amazon purchase review schema creation with runtime-safe staging-table migrations for applied inventory, applied cost-history, review user, and applied timestamp fields.
+- Hardened Amazon purchase review inventory access with runtime-safe inventory column backfills for older D1 tables.
+- Added audit entries for Amazon purchase review decisions so approve/hold/reject actions are traceable.
+- Expanded reconciliation exceptions with assign-to-user, accountant review flag, resolve, reopen, and richer status handling.
+- Added reconciliation exception queue controls in the Accounting import UI for assign, manual review, accountant review, resolve, reopen, ignore, and notes.
+- Added journal-period validation that checks monthly debit/credit balance before posting.
+- Added journal posting metadata and posting guardrails so unbalanced monthly journals are blocked before being marked posted.
+- Added Accounting report buttons for validating and posting the selected month’s journal entries.
+- Added six local-intent SEO landing pages for handmade jewelry, polymer clay earrings, custom gifts, laser engraving projects, vintage finds, and workshop-made gifts in Ontario/Southern Ontario.
+- Added `sitemap.xml` so the new public local-intent pages and existing public pages have a clean crawl map.
+- Added shared-footer local search links so the new local-intent pages are internally linked from public pages.
+- Added CSS for local-intent cards, related-page links, and mobile-friendly local page calls to action.
+- Updated active schema files and Markdown files, then ran syntax/H1/meta/link sanity checks for the new build.
+
+## Build 126 runtime warning follow-up
 
-**Updated:** 2026-05-23  
-**Current build:** Build 167
+- The Release Sanity warning for recent runtime errors is now actionable from `/admin/operations/` through the new Security / Runtime Incidents panel.
+- The warning should not be treated as a deploy blocker by itself; it means unresolved `error` or `critical` incidents were logged in the last 7 days.
+- Main risk: if the same scope/code/endpoint group repeats, the underlying API or schema drift still needs a code or D1 fix.
+- Resolved or ignored rows are excluded from the warning, so do not mark rows closed until the recurring cause has been reviewed.
 
-Build 167 reduces the remaining competitor-completion gap by adding structured fleet/maintenance lead capture, optional direct quote-photo upload foundation, public FAQPage/Breadcrumb schema foundations, and a release guard for the updated completion matrix.
 
-## Reduced in Build 167
+## Build 127 runtime incident follow-up
 
-- Direct customer upload now has a safe env-gated foundation instead of only shared photo links.
-- Fleet quote interest is now captured with a structured public form.
-- Maintenance plan interest is now captured with a structured public form.
-- Public lead capture now has an SQL-backed table.
-- Optional quote-photo uploads now have an audit table for later privacy/media review.
-- FAQPage and BreadcrumbList schema foundations are now present on public competitor routes.
-- `COMPETETIVE_COMPLETION_MATRIX.md` now distinguishes complete public foundations from still-open admin/backend workflow.
+- The `/api/products` runtime incident group was caused by schema drift assumptions in the public products endpoint.
+- A key example is `COALESCE(tc.rate_percent, tc.tax_rate, 0)`: D1/SQLite still fails when `tc.rate_percent` does not exist, even if `tc.tax_rate` does.
+- Build 127 reduces this risk by inspecting table columns before building SQL and by using a schema-adaptive product-only fallback.
+- Remaining risk: if the live `products` table itself is missing or unreadable, `/api/products` will still return a safe empty result and log an incident.
+- After deployment, old `/api/products` incident rows should be marked resolved only after fresh requests stop creating new rows.
 
-## Remaining risks
+## Build 128 products API follow-up
 
-- Direct uploads should stay disabled until storage bucket, public base URL, size limits, and privacy workflow are confirmed.
-- Lead forms require the Build 167 SQL migration before saving into Supabase.
-- There is not yet an Admin Leads screen to triage `public_inquiry_leads`.
-- Uploaded estimate media is appended to booking links, but uploaded media still needs admin review and booking-linking workflow.
-- Service/town proof filtering, quote builder, DB-managed content editing, and gallery/social eligibility automation remain the next major admin/backend tasks.
+- Build 127 still allowed `p.merchandise_origin` to leak into a live `/api/products` query on the deployed D1 schema.
+- Build 128 treats `PRAGMA table_info` as helpful but not authoritative; optional columns are now verified with a direct `SELECT column FROM table LIMIT 0` test before being referenced.
+- The public product list fallback now avoids all newer optional storefront fields and supplies safe defaults instead.
+- `/api/product-detail` was also hardened because product detail used several of the same newer product, tax, and SEO columns.
+- Remaining risk: if the live `products` table lacks required basics like `slug`, `product_id`, or `name`, public product results may still be empty or product detail may return a schema-unavailable response.
+- Long-term fix: apply/verify the full product schema migration so merchandise origin, sale channel, external listing fields, condition/era/sourcing notes, and current tax fields exist in D1.
 
----
 
-# Build 166 known gaps and risks update
+## Build 129 reduced risks
 
-**Updated:** 2026-05-23  
-**Current build:** Build 166
+- Added a visible D1 Schema Drift Report so missing live D1 columns can be found before public APIs fail.
+- Added Public API Health checks for shop/product/catalog endpoints after deployment.
+- Release Sanity now includes a product schema drift snapshot and `/api/products` health check.
+- Runtime incidents can now be cleaned up only after they are resolved/ignored and old enough to be safe to remove.
+- Amazon CSV rows can now be imported into private D1 staging from admin rather than placing private import files in public static folders.
+- Amazon review rows now explain match confidence using status, score, ASIN presence, inventory link, and available unit cost.
 
-Build 166 reduces the public-facing competitor-roadmap gap by adding the missing public entry routes for specials, gift cards, fleet/commercial work, maintenance plans, and customer education. It also expands add-on coverage and documents the remaining backend/admin work in `COMPETETIVE_COMPLETION_MATRIX.md`.
+## Build 129 remaining risks
 
-## Reduced in Build 166
+- The Amazon CSV import is intentionally simple and review-first; it still needs duplicate detection before large imports.
+- Amazon staging import does not automatically match new rows to inventory yet unless the CSV already includes inventory keys.
+- Public API Health depends on the deployed host being reachable from the Worker runtime; if fetch self is blocked/noisy, use direct browser checks too.
+- Schema Drift Report lists missing columns but does not run migrations automatically.
+- Runtime incident cleanup permanently deletes old resolved/ignored records, so export important history first if needed.
 
-- Specials are no longer only a roadmap idea; `/specials` now exists.
-- Gift cards now have a customer-friendly `/gift-cards` guide in addition to the existing gift system.
-- Fleet/commercial quoting now has `/fleet` as a plain-language entry point.
-- Maintenance-plan messaging now has `/maintenance` as a public guide tied to the existing interest flow.
-- Customer education now has `/blog` and starter articles.
-- Add-on coverage now better matches the competitor roadmap.
-- Sticky CTAs now keep Book, Send photos, Call/text, and Specials close to users.
+## Build 130 products API risk update
 
-## Remaining risks
+- The `/api/products` incident count increased again after the prior compatibility patch, which proved the endpoint still had a path that could reference optional product columns or log incidents before a successful lower-tier fallback.
+- Build 130 removes candidate optional columns from the verified SQL column set and adds a final `SELECT *` fallback that filters in JavaScript. This is intentionally less fancy but much harder for schema drift to break.
+- The only time `/api/products` should now log a new error incident is when every product query tier fails, including `SELECT * FROM products`.
+- If the endpoint returns `summary.authority: "d1_select_star_fallback"`, the storefront is protected, but D1 schema cleanup is still recommended.
+- Old `/api/products` incidents should remain open until a fresh deploy is verified, then they can be marked resolved.
 
-- These new pages are static/public foundations; high-change content should still move into DB/admin management.
-- Direct upload is still not complete; Build 165 share-link capture remains the current safe route.
-- Gallery proof still needs service/town filtering and approval controls.
-- Quote building from photo estimates still needs a staff workflow.
-- Per-media privacy review is still needed before automatic public gallery/social eligibility.
+## Build 131 known gaps and risk updates
 
+- Storefront Schema Repair can add safe missing columns, but it does not replace the need for a reviewed full D1 migration history. Use it as a compatibility repair, then record/confirm the migration ledger.
+- `/api/products` should no longer be allowed to sit at `authority: "error"`. If the endpoint falls back to `d1_select_star_fallback`, the public storefront is protected but schema cleanup is still recommended.
+- Product rows may still need value backfills after columns are added: `merchandise_origin`, `sale_channel`, `currency`, `requires_shipping`, `status`, and image fields should be reviewed before relying on filters.
+- The new local predeploy sanity script catches obvious public data leaks, but private Amazon order/cost files still must not be placed under `/data/` or other public static folders.
+- Public API Health now checks more endpoints, but it cannot validate real buyer checkout success; payment/provider tests remain a separate workflow.
+- Next risk to reduce: product schema value backfill and product structured-data checks so richer shop filters and SEO can move from fallback-safe to fully intentional.
 
----
+## Build 132 known gaps and risk updates
 
-# Build 165 known gaps and risks update
+- The mobile main menu is now grouped and expandable, but it still needs a real-phone pass after deployment because mobile browser address bars and font scaling can affect drawer height.
+- If an old cached `/js/main.js` or `/css/styles.css` remains in the browser, the menu may still look like the older long list. Hard refresh or clear site cache before judging the deployed result.
+- The mobile drawer is a code/CSS fix only. No D1 schema change is required, but the Build 132 marker should still be recorded so the release ledger remains complete.
+- Admin department shortcut buttons now scroll horizontally on small screens; future work should add a dedicated admin mobile command palette if the admin page count keeps growing.
+- The next major risk is still D1/product schema drift and accounting workflow completeness, not the menu itself.
 
-**Updated:** 2026-05-22  
-**Current build:** Build 165
+## Build 133 known gaps and risk updates
 
-Build 165 reduces the quote-first conversion gap by letting customers paste photo-estimate links before checkout. The links are included in booking notes immediately and can be stored directly in `bookings.photo_estimate_links` after the Build 165 migration is applied.
+- Structured Data Health is a diagnostic layer, not a guarantee that Google will show rich results. It helps catch missing/invalid JSON-LD and Product-readiness fields before pages are submitted or crawled.
+- Live Sitemap Preview does not overwrite the static `sitemap.xml` yet. It gives a live D1 product URL preview so the next pass can decide whether to regenerate static XML or move to a dynamic sitemap route.
+- Storefront Value Backfill is intentionally conservative. It fills blank defaults and creates missing `product_seo` placeholder rows, but it does not invent product descriptions, prices, or images.
+- Search Console tables are staging-only. The actual CSV import screen and charts are still pending.
+- The mobile menu should remain compact from Build 132, but deployed phones should still be checked after cache clears.
 
-## Reduced in Build 165
+## Build 136 known gaps and risk updates
 
-- Photo-estimate customers no longer have to rely on free-form notes only.
-- Submitted photo/media links are visible in Admin Booking's intake/media consent panel.
-- Checkout stays fallback-safe before the new optional column is live.
-- Release checks now verify the booking-page, checkout, admin-booking, SQL, and roadmap markers for this workflow.
+- Search Console CSV import is manual and staging-only. It does not connect to Google Search Console directly and should be tested with a small export first.
+- Imported Search Console rows can accumulate quickly. A delete/revert batch action and date filters should be added before large recurring imports.
+- SEO opportunity rows are hints, not automatic edits. Review the actual page intent before changing titles, meta descriptions, H1 wording, or internal links.
+- The Search Console staging tables are private D1 tables. Do not place Search Console CSV exports under public `/data/` folders.
+- The next highest SEO value is turning imported opportunities into a simple page-level action list with suggested title/meta/internal-link improvements.
 
-## Remaining risks
 
-- Direct customer file upload still needs a follow-up pass; Build 165 captures share links, not uploaded files.
-- Staff still need a quote-building workflow that turns reviewed photos into recommended packages/add-ons.
-- Media-level privacy review is still booking-level plus staff checklist; each individual photo/video should get its own privacy status later.
-- Social/gallery eligibility should eventually require both consent and per-media privacy approval.
-- The Build 162, 163, 164, and 165 migrations should be applied in order before relying on direct reporting fields.
+## Build 138 update — social posting queue risk posture
 
----
+- Social posting is now review-first and manual/copy-ready, not blind auto-posting.
+- Direct API posting remains a known future gap because Facebook/Instagram/TikTok/X require platform apps, OAuth tokens, scopes, and in some cases app review or paid API access.
+- Platform secrets must stay in Cloudflare environment variables, not D1, Markdown, JSON, or public site files.
+- Next risk-reduction step: add per-platform connection diagnostics before any live API publish action is enabled.
 
-# Build 164 known gaps and risks update
 
-**Updated:** 2026-05-22  
-**Current build:** Build 164
+## Build 141 update — social queue gaps moved forward
 
-Build 164 reduces the staff workflow gap from Build 163 by adding Admin Booking controls for photo-estimate status, condition review status, media/privacy status, privacy checklist flags, blur/crop flags, and a staff review note. The admin action is fallback-safe, but direct reporting still depends on the Build 162, Build 163, and Build 164 migrations being applied.
+Completed: the social queue now has reusable caption templates, a compact content calendar summary, content pillars, calls to action, and UTM-tagged links for review-first crafting/process posts.
 
-## Reduced in Build 164
+Remaining gaps:
+- Social caption templates are seeded by code and not yet fully editable from an admin template editor.
+- TikTok and YouTube remain manual/review-first until their upload flows, permissions, media rules, and app approvals are configured.
+- Social API credentials must stay in Cloudflare environment variables only; do not store tokens in D1, Markdown, JSON, or public files.
+- UTM links are generated, but analytics rollups from those UTM campaigns still need a reporting panel.
+- Customer/job-media privacy controls still need a dedicated “do not post” guard before job/customer images can be selected for social posts.
 
-- Staff can now save intake-review statuses instead of only viewing intake details.
-- Photo-estimate, condition, and media/privacy review workflows now have a clear admin action path.
-- Privacy checklist flags can be stored for plates, faces, addresses/private identifiers, blur/crop needed, and blur/crop complete.
-- Staff review notes can be stored directly when the Build 164 migration is applied.
-- If optional columns are not migrated yet, the review action is appended to booking notes instead of breaking the admin workflow.
 
-## Still open after Build 164
+## Build 142 update — Competitive roadmap completed and tracked
 
-1. Apply the Build 162 migration, then Build 163, then Apply the Build 164 migration.
-2. Confirm the live Supabase schema cache sees the new optional booking fields.
-3. Add true customer photo upload/lead capture before checkout.
-4. Add media-level privacy review actions for individual job photos/videos.
-5. Enforce gallery/social eligibility from consent, privacy review, and blur/crop completion.
-6. Add staff quote-building tools from customer photo estimates and condition flags.
-7. Add automated customer messages for photo-estimate received and quote-ready states.
-8. Continue migrating scattered public service content into DB-managed admin content.
-9. Continue clean/orphan branch planning to prevent stale GitHub files from surviving web uploads.
+- Completed `COMPETITIVE.md` as the active competitive strategy for Devil n Dove, covering positioning, homepage/product-page improvements, mobile UX, local SEO, social workflow, marketplace readiness, product media, trust, and accounting/margin direction.
+- Added Operations > Competitive Roadmap so the highest-value items from the document can be seeded into D1, assigned a status, and reviewed during Release Sanity.
+- Added `competitive_opportunities` and `competitive_opportunity_events` schema support.
+- Added `/data/site/competitive-opportunities.json` as a public-safe roadmap seed file; it contains strategy/action metadata only and no private costs, orders, or customer data.
+- Next direction: connect competitive opportunities to product readiness, SEO action completion, social analytics, testimonials, custom requests, and marketplace export checks.
 
----
 
-# Build 163 known gaps and risks update
+## Build 142 competitive roadmap risks
 
-**Updated:** 2026-05-21  
-**Current build:** Build 163
+- `COMPETITIVE.md` is now more complete, but it is still a strategy document. Public page copy, product rendering, media requirements, and admin workflows need to be implemented step by step.
+- Operations > Competitive Roadmap seeds strategy items into D1, but marking an item `done` should only happen after the related public/admin behavior is verified.
+- The public-safe `data/site/competitive-opportunities.json` must remain strategy-only. Do not place competitor scraping exports, private costs, Amazon order rows, customer names, or platform credentials in public data folders.
+- Social platform directions remain review-first. Direct posting still depends on platform credentials, scopes, app review, and platform-specific media rules.
+- X API cost/rate-limit changes can make API publishing less practical than manual/copy mode; keep manual posting as a fallback.
+- Competitive tracking should not distract from accounting completeness: payment application, HST review, close controls, and accountant export remain important business-risk items.
 
-Build 163 reduces the staff-side risk created by Build 162 note-only intake capture. Checkout can now write the optional condition/photo/media-consent fields directly when migrations are applied, and Admin Booking now surfaces the intake/consent review in its own panel. The main remaining risk is that the new optional fields must be migrated before reporting/editing can rely on them fully.
 
-## Reduced in Build 163
+## Build 143 update — social privacy guard risks reduced
 
-- Admin Booking no longer relies only on buried notes for condition-helper and media-consent review.
-- Checkout has fallback-safe optional-field insertion, so the booking flow should not break if the new columns are not live yet.
-- Staff can quickly see whether a customer requested a photo estimate.
-- Staff can see media-use preference before using job photos publicly or socially.
-- Schema now has planning fields for photo-estimate, condition-review, and media-privacy workflows.
-
-## Still open after Build 163
-
-1. Apply the Build 162 migration and then the Build 163 migration.
-2. Add admin edit controls for the new intake/review status fields.
-3. Add real customer photo upload/lead capture before checkout.
-4. Add per-media privacy review fields/actions for plates, faces, addresses, and blur/crop.
-5. Enforce gallery/social eligibility using consent + privacy-review status.
-6. Expand FAQ, proof filtering, specials, gift-card merchandising, and DB-first public content management.
-7. Continue clean/orphan branch planning once deploy stability is confirmed.
-
----
-
-# Build 162 known gaps and risks update
-
-**Updated:** 2026-05-21  
-**Current build:** Build 162
-
-Build 162 reduces the public conversion gap by adding a condition-based booking helper, photo-estimate intent capture, and media-consent preference. The workflow still needs direct DB field writes after migration, admin display panels, true media upload, privacy/blur/crop tracking, proof filtering, FAQ expansion, and DB-first public content management.
-
-## Reduced in Build 162
-
-- Booking now has a condition helper that recommends a package and eligible add-ons from customer-selected conditions.
-- Photo-estimate intent is now captured in the public booking flow.
-- Media-consent preference is now explicit before photos are used for public proof or social posts.
-- Checkout preserves customer notes and the new recommender details in booking notes for backwards compatibility.
-- Optional schema fields are prepared for later direct reporting/storage.
-
-## Still open after Build 162
-
-1. Apply the Build 162 optional SQL migration before storing condition/media fields directly.
-2. Update booking insert/admin detail screens to use the new columns once applied.
-3. Customer-facing photo upload/lead capture is still link/notes based and needs real storage.
-4. Plate/face/address blur/crop tracking remains a future privacy workflow.
-5. Public gallery/social eligibility still needs consent + privacy-review gating.
-6. FAQ/proof/specials/gift-card conversion content still needs expansion.
-7. High-change content should continue moving toward DB-first admin-managed records.
-8. Clean/orphan branch replacement remains recommended after deploy stability.
-
----
-
-# Build 161 known gaps and risks update
-
-**Updated:** 2026-05-21  
-**Current build:** Build 161
-
-Build 161 closes part of the competitor-aligned conversion gap by adding package aliases, Booking Step 2 service chooser guidance, and stronger photo-estimate CTAs. Remaining high-priority gaps are the true condition-based recommender, customer-facing photo upload/lead capture, consent capture, media privacy review fields, FAQ expansion, proof filtering, DB-first service content, and clean/orphan branch replacement after deploy stability.
-
----
-
-# Known Gaps and Risks — Build 160 competitor sanity reset
-
-**Updated:** 2026-05-21  
-**Current build:** Build 160
-
-## Reduced in Build 160
-
-- The competitor/service roadmap in `COMPETETIVE.md` has now been sanity-checked against the current website/app.
-- `DEVELOPMENT_ROADMAP.md` has been reset as the top implementation source of truth.
-- A new `COMPETITOR_SANITY_CHECK.md` captures current state, target state, priority ranking, completed steps, and next steps.
-- Services page now includes a plain-language decision guide before visitors reach package cards.
-- Services page now includes a stronger photo-estimate / quote CTA.
-- Release checks now include a competitor-roadmap guard so the key planning documents and Services decision-guide markers do not drift away silently.
-
-## Still open after Build 160
-
-1. Package display aliases still need to be added so customer-facing tiers match the competitor roadmap while preserving current pricing codes.
-2. Booking still needs condition-based package recommendations.
-3. Booking and Contact still need a more obvious photo-estimate upload/request path.
-4. Customer consent capture for public/social use is not finished yet.
-5. Media privacy status for plates, faces, addresses, and blur/crop completion is not finished yet.
-6. Specials/promos need stronger public merchandising and admin-managed content blocks.
-7. Gift cards exist, but service-specific gift-card merchandising still needs improvement.
-8. FAQ blocks need to be expanded across the highest-value service pages.
-9. Proof/reviews/recent work are not yet automatically filtered by town and service.
-10. High-change service/add-on/specials/FAQ copy still needs to move toward DB-first admin management.
-11. Search Console and Google Business Profile reporting are not connected into admin analytics yet.
-12. Social metrics snapshots have schema support, but staff entry/dashboard rollups still need completion.
-13. Clean/orphan branch replacement remains recommended after deploy stability because GitHub web uploads can leave stale files.
-14. Older Markdown files remain for history, but future planning should start from `DEVELOPMENT_ROADMAP.md`.
-
----
-
-# Known Gaps and Risks — Build 159
-
-**Updated:** 2026-05-20
-
-## Reduced in Build 159
-
-- Admin Social Queue now loads reusable caption templates and hashtag presets from the DB when available.
-- Built-in fallback templates keep the page usable before the Build 158/159 SQL migrations are applied.
-- Manual drafts can now include a planned publish time and can be filtered by planned/unscheduled status.
-- Duplicate draft warnings are visible when the same platform/caption/first-media signature appears more than once in the current queue view.
-- Staff can capture a posted URL and optional platform post ID when marking a manual post as posted.
-- Build 159 schema support adds duplicate review helpers and optional social metrics snapshots for future reporting.
-
-## Still open after Build 159
-
-1. Build 156, Build 158, and Build 159 SQL migrations must be applied in order on Supabase before all social fields are available.
-2. Direct API posting still depends on platform credentials, scopes, and platform approval.
-3. TikTok, Google Business Profile, LinkedIn, and YouTube Shorts remain safer as webhook/manual flows until the account/app approval paths are confirmed.
-4. Draft text cannot yet be edited inline after creation.
-5. Scheduled publish times are stored and visible, but there is no automated scheduler worker yet.
-6. Duplicate warnings are advisory only; they do not yet block approval or provide an ignore/approve-as-intentional workflow.
-7. Customer-facing consent capture still needs to be wired into the booking/progress experience.
-8. Media crop/blur confirmation is still checklist-based, not image-analysis based.
-9. Social metrics snapshots have schema support, but the admin data-entry/reporting UI still needs to be added.
-10. A clean branch/orphan upload is still the cleanest way to permanently remove stale GitHub files left behind by web uploads.
-
----
-
-# Build 158 update — Social review gates and local caption templates
-
-**Updated:** 2026-05-20  
-**Current build:** Build 158
-
-Build 158 continues the Build 156/157 social publishing workflow and makes it safer before any job/crafting-progress photo or summary is pushed to X, Facebook, Instagram, TikTok, Google Business Profile, or manual/webhook channels.
-
-## Completed in Build 158
-
-1. Added `functions/api/_lib/social-compliance.js`.
-2. Added customer/public-use consent checks for social drafts.
-3. Added license plate, face, address, and private-identifier review checks.
-4. Added no-private-customer-info caption review.
-5. Added platform warning generation for X length, Instagram media requirements, TikTok media requirements, Facebook media recommendations, and Google Business Profile local wording hints.
-6. Added `Approve & ready` review action in Admin Social Queue.
-7. Blocked direct `Publish/API` unless a draft is marked ready and the review gate passes.
-8. Added fallback-safe inserts if the Build 158 SQL migration has not been applied yet.
-9. Added fallback-safe social queue reads when new review columns do not exist yet.
-10. Added review checklist controls to Admin Social Queue manual draft creation.
-11. Added review checklist controls to Admin Progress social draft creation.
-12. Updated immediate push workflow to approve-ready first, then publish only if the review gate passes.
-13. Added review badges and platform warning display to Admin Social Queue cards.
-14. Added `social_caption_templates` table.
-15. Added `social_hashtag_presets` table.
-16. Seeded local caption templates for Southern Ontario, Oxford County, Norfolk County, and Tillsonburg-style posts.
-17. Seeded local hashtag presets for Rosie Dazzlers local discovery.
-18. Added `duplicate_signature` on queued posts to support future duplicate-content warnings.
-19. Updated social workflow release checks for Build 158 markers.
-20. Updated Markdown and schema notes for the new social review gate.
-
-## Next 20 value-added steps after Build 158
-
-1. Apply the Build 156 social queue migration if it has not already been run.
-2. Apply `sql/2026-05-20_build158_social_review_gates_and_templates.sql`.
-3. Test Admin Progress with one internal job update and one media URL.
-4. Confirm a draft is created with platform warnings in Admin Social Queue.
-5. Confirm `Publish/API` is blocked until `Approve & ready` is clicked.
-6. Add a duplicate-content warning in the Admin Social Queue UI using `duplicate_signature`.
-7. Add a template picker that loads `social_caption_templates` from the DB.
-8. Add a hashtag preset picker that loads `social_hashtag_presets` from the DB.
-9. Add a scheduler calendar for planned posting times.
-10. Add a posted URL capture form for manual posts.
-11. Add customer-facing consent capture on the booking/progress flow.
-12. Add media-crop/blur status fields for license plates and private identifiers.
-13. Add staff training notes explaining that drafts are not public until approved/published.
-14. Add platform-specific preview cards for Facebook, Instagram, X, TikTok, Google Business Profile, and manual.
-15. Add basic post analytics fields: clicks, views, likes, comments, shares, and last checked time.
-16. Add webhook payload signing/verification documentation for Make/Zapier/n8n bridges.
-17. Add scheduled retry rules for failed webhook/API attempts.
-18. Add a public gallery promotion workflow that only uses approved social media rows.
-19. Add Google Business Profile post/manual workflow notes once the account flow is finalized.
-20. After deploy is stable, consider a clean-branch/orphan upload to remove stale GitHub files that web upload does not delete.
-
----
-
-# Known Gaps and Risks — Build 157
-
-
-**Updated:** 2026-05-19
-
-## Reduced in Build 157
-
-- Social posts are no longer only passive drafts: Admin Social Queue now has `Publish/API`, `Send webhook`, and `Copy text/media` actions.
-- Admin Progress can now create social drafts automatically after job/crafting progress updates or media posts.
-- Admin Progress can optionally attempt approved platform API/webhook publishing immediately after draft creation.
-- Direct API attempts are guarded: X, Facebook Page, and Instagram Business need configured tokens; unsupported platforms fail safely to webhook/manual flow.
-- The root `/admin-progress.html` and `/admin-social.html` files were synchronized with their folder `index.html` versions to reduce stale-route drift.
-- Release checks now require Build 157 social publishing bridge markers.
-
-## Still open after Build 157
-
-- TikTok, Google Business Profile, LinkedIn, and YouTube Shorts still need final approved platform apps/OAuth flows before true direct posting.
-- X image upload is not wired yet; Build 157 posts text/progress links through X and keeps images available for manual/webhook flow.
-- Facebook and Instagram publishing require public media URLs and valid Meta page/account tokens.
-- Webhook automation needs the destination service configured in Cloudflare Pages environment variables.
-- Customer privacy review for license plates/faces/addresses still needs a dedicated checklist before auto-publish is made default.
-
-
-**Updated:** 2026-05-18
-
-## Reduced in this pass
-
-- Cloudflare Pages Functions deploy blocker from Build 151 was repaired in `/api/admin/media_library_list`.
-- Duplicate object-key warnings in `landing_pages_public.js` were cleaned up.
-- Release checks now include a Cloudflare Pages Functions deploy-safety guard for JavaScript syntax, esbuild-sensitive regexes, and duplicate landing-page normalization keys.
-- Admin Catalog now has a media-library-aware image picker path through `/api/admin/media_library_list`.
-- The picker can search DB media rows, app-setting media rows, bundled consumables/tools fallback rows, saved DB inventory rows, and helper image URLs.
-- Staff can select inventory rows and use **Repair selected images** to persist fallback-matched images instead of only seeing temporary UI hydration.
-- Browser-side **Scan visible images** can flag image URLs that fail to load during the current admin session.
-- Duplicate-image groups are counted in the quality summary and shown on affected rows.
-- Release checks now guard the Cloudflare deploy hotfix, media-library picker, selected image repair, duplicate diagnostics, image health scan, and endpoint markers.
-- Schema tracking now includes the Build 151 `app_media_library` table/index baseline.
-
-## Still open
-
-1. The media-library endpoint can read `app_media_library`, but the table still needs to be seeded from the actual R2 product/tool folders.
-2. Admin Catalog can pick existing media URLs, but it does not yet upload new files directly to R2.
-3. Browser image scans are useful for staff checks, but they are not a scheduled/server-side 404 monitor yet.
-4. Duplicate-image warnings do not yet have an approval/ignore list for intentional duplicate tools, multipacks, or shared product photos.
-5. `Repair selected images` is intentionally conservative; a fuller review screen is still needed for repairing all fallback-matched rows at once.
-6. Existing DB rows with blank images are hydrated visually, but the URL is only persisted after save or selected repair.
-7. Supabase dev still needs the Build 150 and Build 151 SQL migrations applied and smoke-tested.
-8. External location photos are still placeholders and should be replaced with Rosie-owned/R2-hosted images.
-9. Reviews, before/after proof, and inventory/tool stories are not yet automatically filtered by town/service page.
-10. Inventory/accounting still needs stock-count sessions, variance review, receipt attachment, and lockable month-end inventory valuation.
-11. Search Console and Google Business Profile reporting are not yet connected.
-12. Some historical Markdown snapshots remain for traceability, but active docs are the Build 155 working handoff source.
-
-<!-- Build 155 sync 2026-05-18: reviewed during Cloudflare deploy hotfix and inventory/media image workflow pass. -->
-
-## Build 155 known risks update
-
-- Build 155 should resolve the Cloudflare unresolved `_lib` import errors by correcting root API import paths and hardening release checks.
-- Deploy still needs to be confirmed on Cloudflare Pages because the previous failure happened during Cloudflare's Functions bundling step.
-- Legacy flat root API JavaScript copies still exist for compatibility in this ZIP, but they should be retired after a clean deploy confirms `/functions/api` is the only needed route source.
-
-## Build 155 Cloudflare stale root function shim hotfix - 2026-05-19
-
-Cloudflare still saw older flat `/functions/api/*.js` route files after GitHub web uploads, because uploading ZIP contents does not reliably delete older files from the branch. Build 155 intentionally includes compatibility shim files for the stale flat routes listed in the Cloudflare deploy log. Each shim re-exports the active `/functions/api/admin/*.js` implementation and prevents Pages Functions bundling failures while preserving the newer admin route implementation.
-
-Next step: after Build 155 deploys cleanly, optionally remove the compatibility shims in a clean-branch/orphan rebuild so only the intended folder-backed route files remain.
-
-
-## Build 155 Cloudflare root import release-check hotfix - 2026-05-18
-
-Build 155 repairs the remaining root Cloudflare Pages Function import paths that could still break deployment after Build 154. Four root `/functions/api/*.js` files still used `../_lib/...`; root routes must use `./_lib/...`. Build 155 fixes those files, keeps the stale-route shims, wires the stale-root import guard into the release checklist, and updates the release runner so the full check can complete in this sandbox.
-
-Remaining risk: GitHub web uploads can leave older files in the branch. Build 155 guards the import pattern, but the cleanest long-term fix is still a clean/orphan branch replacement after a successful deploy.
-
-## Build 156 sync note - social progress publishing
-
-Build 156 adds a reviewable social publishing foundation. Admin Progress can now create internal social drafts from job updates/media, Admin Social Queue can review and mark those drafts, and the schema now includes `social_channels`, `social_post_queue`, and `social_dispatch_attempts`. Direct posting to X, Facebook, Instagram, TikTok, Google Business Profile, and other platforms is possible later after the required platform credentials, app approvals, and consent/compliance checks are in place.
-
-
-## Next 20 value-added steps after Build 156
-
-1. Run the Build 156 social queue SQL migration in Supabase.
-2. Add a Social Queue card to staff role training notes so detailers know drafts are not public posts yet.
-3. Decide the first direct-post platform: recommended order is Facebook/Instagram, Google Business Profile, X, TikTok, then YouTube Shorts.
-4. Add per-platform caption length warnings and media-count warnings.
-5. Add a privacy checklist before any customer vehicle/photo can be marked ready.
-6. Add license-plate blur/cover reminder fields to the media workflow.
-7. Add customer consent flags for public before/after use.
-8. Add a reusable caption template library for job type, vehicle size, service area, and upsell language.
-9. Add platform-specific hashtag presets for local SEO and discovery.
-10. Add OAuth setup notes and token rotation guidance for each social platform.
-11. Add a direct Meta/Facebook Page adapter after the app permissions are approved.
-12. Add an Instagram Business publishing adapter after Meta media-container requirements are confirmed.
-13. Add a Google Business Profile recent-work publishing path after the Google account scope is finalized.
-14. Add a TikTok direct-post adapter only after app review and creator authorization are confirmed.
-15. Add a queue calendar so posts can be scheduled by day/time.
-16. Add duplicate-content warnings when the same photo/caption is queued twice.
-17. Add analytics fields for clicked progress links and posted platform URLs.
-18. Add customer-friendly public gallery promotion rules from approved job media.
-19. Add fallback export buttons: copy caption, download media list, and open platform composer.
-20. Add social performance notes back into the booking/customer history for future marketing decisions.
+- Reduced risk of accidental public posting of customer details, private workshop background information, visible bystanders, or overly personal captions.
+- Social API publishing now blocks unless the queue item is privacy-approved or marked as product-only/no-private-media.
+- Default privacy rules are seeded in D1 and visible in Operations > Social Media Privacy Guard.
+- Remaining risk: this is an admin review workflow, not image-recognition. Someone still needs to inspect the media before approving it.
+- Next risk reduction: add customer/job consent records and connect media assets to a “safe for social” flag.

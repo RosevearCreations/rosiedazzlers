@@ -1,210 +1,174 @@
-# Build 167 update
+# Devil n Dove Site
 
-Build 167 note: Adds public fleet/maintenance lead forms, optional quote-photo upload foundation, FAQPage/Breadcrumb schema foundations, and SQL for public_inquiry_leads/photo_estimate_uploads.
+## Build 140 note
 
----
+This build strengthens the Social Posting Queue for crafting/job process updates. It adds dry-run payload previews, scheduling, per-platform captions, duplicate/repost warnings, media-quality warnings, and Release Sanity coverage before API publishing. Use dry run first; credentials still belong only in Cloudflare environment variables.
 
-# Build 166 README update
 
-**Updated:** 2026-05-23
+## Build 139 note
 
-Build 166 attempts to complete the public-facing items from `COMPETETIVE.md` by adding public routes for specials, gift cards, fleet, maintenance, and education, expanding the add-on catalog, adding sticky CTAs, updating Services/Homepage routing, and documenting status in `COMPETETIVE_COMPLETION_MATRIX.md`. `DEVELOPMENT_ROADMAP.md` remains the source of truth.
+This build adds a review-first social publisher workflow. Admins can queue crafting/job photos and summaries, approve them, and then attempt API publishing to configured platforms. The site still works in manual/copy mode when no platform credentials are present.
 
+## Build 137 update
 
----
+This build adds safer Search Console SEO workflow tools in Operations: filtered Search Console summaries, import batch delete/revert, and private SEO opportunity actions. These tools help review page/query opportunities before editing public titles, meta descriptions, headings, or internal links. Apply/record `database_upgrade_current_pass.sql` after deploying.
 
-# Build 165 sync — Booking photo-estimate link capture
+## Build 135 update
 
-**Updated:** 2026-05-22
+Admin product media workflow now includes Media/R2 Diagnostics, Product Image Health, a Product editor readiness checklist, reusable image picker, and edit-mode upload attachment. Run the Operations diagnostics after deployment before bulk product work.
 
-Build 165 adds a public Booking Step 4 photo-estimate link field, sends the links through checkout, stores them in notes as a fallback, writes to optional `bookings.photo_estimate_links` when migrated, and shows clickable links in Admin Booking intake review. Continue from `DEVELOPMENT_ROADMAP.md`, which remains the source of truth.
 
----
+Current sync: 2026-05-18 — Build 137 Search Console filtering, safe batch revert, and private SEO opportunity action queue.
 
-# Build 164 sync — Admin booking intake review actions
+## Active purpose
+This repository powers the Devil n Dove public storefront, admin app, member area, catalog tools, accounting workflow, and Cloudflare Pages Functions backend.
 
-**Updated:** 2026-05-22
+## Active structure
+- `/functions/api/` — active Cloudflare Pages Functions API surface.
+- `/public/js/` — browser-side admin/member/storefront scripts.
+- `/admin/*/index.html` — admin department pages.
+- `/data/` — approved JSON fallbacks/import sources that have not yet fully moved to D1.
+- `/database_*.sql` — schema references and migration support.
+- `/archive/` — retired historical files and snapshots.
 
-Build 164 adds staff action controls to Admin Booking for photo-estimate status, condition-review status, media/privacy status, privacy checklist flags, blur/crop flags, and a staff intake-review note. The action writes directly to optional booking fields when the Build 162/163/164 migrations are applied and falls back to booking notes if the optional columns are not live yet. Continue from `DEVELOPMENT_ROADMAP.md`, which remains the source of truth.
+## What changed in this build
+- Added an admin D1 migration ledger API so applied SQL files can be recorded instead of guessed.
+- Added the Operations-page Migration Ledger panel for marking SQL files applied, skipped, failed, or pending review.
+- Added an admin release-sanity API that checks public pages, H1/title/meta status, catalog/inventory counts, journal balance, reconciliation exceptions, runtime incidents, and migration status.
+- Added the Operations-page Release Sanity panel so pre-deploy checks can be run from the browser.
+- Expanded the database sanity API with critical checks, index checks, catalog-vs-inventory counts, journal-balance checks, and migration ledger summary.
+- Improved the Accounting Backend sanity UI so failures and supporting details are visible instead of hidden in raw JSON.
+- Added schema support for the schema_migration_ledger table across the active SQL reference files and the current-pass migration.
+- Added statement provider profile storage for bank, PayPal, Stripe, Square, Etsy, and manual CSV mappings.
+- Added an Accounting-page Provider Profiles UI to seed, view, and edit statement import mappings.
+- Updated statement import APIs so provider profiles are available to the import screen and seeded when missing.
+- Allowed the manual CSV provider as a first-class statement-import provider.
+- Added reconciliation match confidence buckets for imported statement totals: exact, likely, partial, and manual_review.
+- Improved statement-import auto-match detail JSON so confidence, bucket, imported row count, and difference are recorded for later review.
+- Mapped inventory movement aliases into schema-safe movement names while preserving the original name in the movement note.
+- Kept Tools/Supplies manual inventory creation from saving blank or zero on-hand quantities; current owned items default to at least 1.
+- Added unit_cost_dollars to inventory API responses so admin screens can show 33.99 while D1 stores 3399 cents.
+- Added a quick D1 inventory stock/unit fix SQL file for existing rows, including package math such as 1 DTF package = 100 sheets.
+- Updated movement CHECK constraints in active schema files so older and newer movement names are represented consistently.
+- Refined admin CSS for status pills, sanity panels, and mobile-friendly migration forms.
+- Ran syntax and public-page sanity checks: 238 JavaScript files passed node --check, and exposed HTML pages had one H1 plus title/meta description.
 
----
+## Deploy order
+1. Deploy the ZIP.
+2. Apply `database_upgrade_current_pass.sql` to D1.
+3. Mark the migration in `/admin/operations/`.
+4. Run Release Sanity in `/admin/operations/`.
+5. Run Tools/Supplies inventory sync in `/admin/catalog/`.
+6. Verify Accounting Provider Profiles in `/admin/accounting/`.
 
-# Build 163 sync — booking intake admin review
+## Important active docs
+- `DEVELOPMENT_ROADMAP.md` — completed 20 and next 20 logical steps.
+- `KNOWN_GAPS_AND_RISKS.md` — current risks and guardrails.
+- `SANITY_HEALTH_CHECK.md` — checks for each build.
+- `DATABASE_SCHEMA_REFERENCE.md` — schema and migration notes.
+- `REPO_BASE_GUIDE.md` — current repo map.
+- `REPO_RULES.md` — rules for future passes.
+- `LOCAL_SEO_PLAYBOOK.md` — search/local visibility guidance.
+- `AI_CONTEXT.md` and `NEW_CHAT_STATUS.md` — handoff notes for a fresh chat.
 
-**Updated:** 2026-05-21
+## Private import safety
+Amazon transaction CSVs, review spreadsheets, and private purchase reports must not be deployed in public `/data/` paths. Import approved rows through admin/D1 workflows only.
+## Build 125 update
 
-Build 163 adds fallback-safe direct booking intake field storage and a staff-facing Admin Booking panel for estimate intake, condition-helper recommendations, media-consent preference, and privacy-review status hints. Continue from `DEVELOPMENT_ROADMAP.md`, which remains the source of truth.
+Build 125 adds the Amazon purchase review/apply workflow, inventory cost history, reconciliation exception queue controls, journal validation/posting guardrails, six local-intent SEO pages, sitemap generation, and updated schema/Markdown files. After deployment, apply `database_upgrade_current_pass.sql`, mark the migration in `/admin/operations/`, and run Tools/Supplies sync from `/admin/catalog/`.
 
----
+## Build 126 hotfix
 
-# Build 162 note — booking condition helper
+Build 126 adds an Operations-page runtime incident review panel. Release Sanity warnings for recent runtime errors can now be investigated from the admin UI, grouped by severity/scope/code/endpoint, and reviewed with statuses so fixed or ignored rows stop keeping the warning active.
 
-Build 162 adds a booking condition helper, photo-estimate request flag, and media-consent preference in the public booking flow. Run the Build 162 SQL migration after prior migrations if direct DB fields are desired; checkout remains safe before that migration because it writes the new intake details into existing booking notes.
 
----
+## Build 127 hotfix
 
-# Build 161 sync — README.md
+Build 127 hardens the public products API against D1 schema drift. Deploy it when Release Sanity shows repeated `/api/products` incidents such as `products_primary_query_failed` and `products_fallback_query_failed`.
 
-**Updated:** 2026-05-21
+## Build 128 deploy note
 
-The current website/app now has competitor-aligned service chooser coverage on Services and Booking, clearer public package aliases, and a Contact-page photo-estimate path. Build 161 is a no-DDL pass; the new package metadata is JSON/catalog content and should be copied into the DB-managed pricing catalog when the live catalog is refreshed.
+Build 128 is a code-only compatibility hotfix for older or partially migrated D1 product schemas. Deploy it if `/api/products` returns a safe empty response with an error such as `no such column: p.merchandise_origin`. After deployment, open `/api/products` and confirm the response is no longer `authority: "error"`.
 
----
 
-# Build 160 sync — competitor sanity and roadmap reset
+## Build 129 operator notes
 
-**Updated:** 2026-05-21  
-**Current build:** Build 160
+After deploying this build, use `/admin/operations/` to run Schema Drift, Public API Health, Runtime Incidents, Migration Ledger, and Release Sanity. Use `/admin/catalog/` for Tools/Supplies sync, Amazon CSV staging import, and Amazon purchase review/apply.
 
-Build 160 reviewed `COMPETETIVE.md` against the current website/app and reset `DEVELOPMENT_ROADMAP.md` as the top implementation source of truth. The project is strong on local pages, services/pricing/booking, gallery/recent work, admin workflows, social queue, and release checks. The next priority is public conversion clarity: service chooser guidance, package aliases, photo-estimate CTAs, FAQ/proof expansion, consent/media privacy gates, and DB-first admin content management.
+## Build 130 note
 
-Key Build 160 files: `DEVELOPMENT_ROADMAP.md`, `COMPETITOR_SANITY_CHECK.md`, `COMPETETIVE.md`, `KNOWN_GAPS_AND_RISKS.md`, `services.html`, `services/index.html`, `scripts/competitor_roadmap_check.py`, and `sql/2026-05-21_build160_competitor_sanity_roadmap_no_ddl_note.sql`.
+Build 130 is a public catalog resilience hotfix. It keeps the storefront usable when optional product columns are missing from D1 by falling back from adaptive SQL to product-only SQL and finally to a `SELECT *` product read with JavaScript filtering.
 
----
+## Build 131 deploy note
 
-# Build 158 update — Social review gates and local caption templates
+Build 131 adds Operations > Storefront Schema Repair, expanded Public API Health, and a local predeploy sanity script. After deploying, run `/admin/operations/` checks in this order: Storefront Schema Repair, Public API Health, Runtime Incidents, Migration Ledger, then Release Sanity.
 
-**Updated:** 2026-05-20  
-**Current build:** Build 158
+## Build 132 release note
 
-Build 158 continues the Build 156/157 social publishing workflow and makes it safer before any job/crafting-progress photo or summary is pushed to X, Facebook, Instagram, TikTok, Google Business Profile, or manual/webhook channels.
+Build 132 improves the public mobile header/menu. The hamburger drawer now uses grouped expandable sections, quick Shop/Search/Cart buttons, better phone sizing, safer focus/close behavior, and mobile admin shortcut polish. Run `python scripts/predeploy_sanity_check.py .` before deploying.
 
-## Completed in Build 158
+## Build 133 release note
 
-1. Added `functions/api/_lib/social-compliance.js`.
-2. Added customer/public-use consent checks for social drafts.
-3. Added license plate, face, address, and private-identifier review checks.
-4. Added no-private-customer-info caption review.
-5. Added platform warning generation for X length, Instagram media requirements, TikTok media requirements, Facebook media recommendations, and Google Business Profile local wording hints.
-6. Added `Approve & ready` review action in Admin Social Queue.
-7. Blocked direct `Publish/API` unless a draft is marked ready and the review gate passes.
-8. Added fallback-safe inserts if the Build 158 SQL migration has not been applied yet.
-9. Added fallback-safe social queue reads when new review columns do not exist yet.
-10. Added review checklist controls to Admin Social Queue manual draft creation.
-11. Added review checklist controls to Admin Progress social draft creation.
-12. Updated immediate push workflow to approve-ready first, then publish only if the review gate passes.
-13. Added review badges and platform warning display to Admin Social Queue cards.
-14. Added `social_caption_templates` table.
-15. Added `social_hashtag_presets` table.
-16. Seeded local caption templates for Southern Ontario, Oxford County, Norfolk County, and Tillsonburg-style posts.
-17. Seeded local hashtag presets for Rosie Dazzlers local discovery.
-18. Added `duplicate_signature` on queued posts to support future duplicate-content warnings.
-19. Updated social workflow release checks for Build 158 markers.
-20. Updated Markdown and schema notes for the new social review gate.
+Build 133 adds Operations panels for Structured Data Health, Storefront Value Backfill, and Live Sitemap Preview while preserving the compact grouped mobile menu from Build 132. After deploying, apply/record `database_upgrade_current_pass.sql`, then run the Operations checks and apply safe storefront value backfill only after reviewing the inspect report.
 
-## Next 20 value-added steps after Build 158
 
-1. Apply the Build 156 social queue migration if it has not already been run.
-2. Apply `sql/2026-05-20_build158_social_review_gates_and_templates.sql`.
-3. Test Admin Progress with one internal job update and one media URL.
-4. Confirm a draft is created with platform warnings in Admin Social Queue.
-5. Confirm `Publish/API` is blocked until `Approve & ready` is clicked.
-6. Add a duplicate-content warning in the Admin Social Queue UI using `duplicate_signature`.
-7. Add a template picker that loads `social_caption_templates` from the DB.
-8. Add a hashtag preset picker that loads `social_hashtag_presets` from the DB.
-9. Add a scheduler calendar for planned posting times.
-10. Add a posted URL capture form for manual posts.
-11. Add customer-facing consent capture on the booking/progress flow.
-12. Add media-crop/blur status fields for license plates and private identifiers.
-13. Add staff training notes explaining that drafts are not public until approved/published.
-14. Add platform-specific preview cards for Facebook, Instagram, X, TikTok, Google Business Profile, and manual.
-15. Add basic post analytics fields: clicks, views, likes, comments, shares, and last checked time.
-16. Add webhook payload signing/verification documentation for Make/Zapier/n8n bridges.
-17. Add scheduled retry rules for failed webhook/API attempts.
-18. Add a public gallery promotion workflow that only uses approved social media rows.
-19. Add Google Business Profile post/manual workflow notes once the account flow is finalized.
-20. After deploy is stable, consider a clean-branch/orphan upload to remove stale GitHub files that web upload does not delete.
+## Build 134 note
 
----
+This pass fixes the Product editor draft workflow: drafts require only name/type, image upload is available from the editor when R2 media storage is configured, create-product failures return JSON instead of HTML 500 pages, and the create endpoint adapts to live D1 product/media/SEO columns.
 
-# Rosie Dazzlers Dev Build — Build 157
+## Build 136 status — 2026-05-18
 
+- Added Operations > Search Console CSV Import.
+- Added `/api/admin/search-console-import` for private D1 staging of Search Console CSV exports.
+- Added top-page and SEO-opportunity summaries for manual title/meta/internal-link review.
+- Added Release Sanity coverage and current-pass SQL table/index self-healing for the Search Console staging tables.
+- Keep Search Console CSV exports private; do not store them in public `/data/`.
 
-**Updated:** 2026-05-19
+Next deployment checks: apply/record `database_upgrade_current_pass.sql`, open `/admin/operations/`, import a tiny Search Console CSV sample, then run Release Sanity and Public API Health.
 
-## Build 157 focus
 
-- Social publishing bridge for job/crafting process photos and summaries.
-- Admin Progress can create social drafts after update/media posts.
-- Optional immediate API/webhook publishing attempt after draft creation.
-- Admin Social Queue now includes Publish/API, Send webhook, Copy text/media, Mark posted, Ready, and Skip actions.
-- X, Facebook Page, and Instagram Business API attempts are wired behind environment variables.
-- TikTok, Google Business Profile, LinkedIn, YouTube Shorts, and unsupported platforms remain safe webhook/manual fallbacks.
-- SEO/H1 and Cloudflare Pages Functions release checks remain active.
+## Build 138 highlight
 
+Operations now includes a Social Posting Queue for review-first job/process photo captions and manual publishing records across Facebook, Instagram, TikTok, X, YouTube, and Pinterest.
 
+## Build 141 note
 
-**Updated:** 2026-05-18
+Operations now includes a stronger Social Posting Queue for crafting/process photos and summaries. It supports reusable caption templates, template previews, UTM-tagged related links, a small content calendar, dry runs, scheduling, duplicate warnings, and manual/API publishing records. API publishing still requires platform credentials in Cloudflare environment variables and should be tested one platform at a time.
 
-This ZIP is the current dev baseline for Rosie Dazzlers.
 
-## Build 155 focus
+## Build 142 update — Competitive roadmap completed and tracked
 
-- Cloudflare Pages Functions deploy hotfix for `media_library_list.js`.
-- Landing page public API duplicate object-key cleanup.
-- Release-check hardening for deploy-only JavaScript issues.
-- Admin Catalog inventory media-library picker foundation.
-- Staff-protected `/api/admin/media_library_list` endpoint.
-- Selected-row image repair for fallback-matched inventory images.
-- Duplicate image diagnostics.
-- Browser image health scan for visible inventory rows.
-- Schema and Markdown synchronization.
-- Continued SEO/H1/CSS release checks.
+- Completed `COMPETITIVE.md` as the active competitive strategy for Devil n Dove, covering positioning, homepage/product-page improvements, mobile UX, local SEO, social workflow, marketplace readiness, product media, trust, and accounting/margin direction.
+- Added Operations > Competitive Roadmap so the highest-value items from the document can be seeded into D1, assigned a status, and reviewed during Release Sanity.
+- Added `competitive_opportunities` and `competitive_opportunity_events` schema support.
+- Added `/data/site/competitive-opportunities.json` as a public-safe roadmap seed file; it contains strategy/action metadata only and no private costs, orders, or customer data.
+- Next direction: connect competitive opportunities to product readiness, SEO action completion, social analytics, testimonials, custom requests, and marketplace export checks.
 
-## Important files
 
-- `admin-catalog.html`
-- `admin-catalog/index.html`
-- `functions/api/admin/media_library_list.js`
-- `scripts/media_library_picker_check.py`
-- `scripts/cloudflare_pages_functions_check.py`
-- `scripts/inventory_image_picker_check.py`
-- `scripts/release_check.py`
-- `sql/2026-05-18_build151_media_library_inventory_image_workflow.sql`
-- `SUPABASE_SCHEMA.sql`
-- `DEVELOPMENT_ROADMAP.md`
-- `KNOWN_GAPS_AND_RISKS.md`
-- `SANITY_CHECK.md`
+## Build 143 — Social Media Privacy Guard + Competitive Execution
 
-## Release check
+Completed in this pass:
 
-```bash
-python scripts/release_check.py
-```
+1. Added Operations > Social Media Privacy Guard.
+2. Added `/api/admin/social-media-privacy-guard`.
+3. Added `social_media_privacy_rules` and `social_post_privacy_reviews` schema support.
+4. Added default rules for customer/private identifiers, workshop background leaks, product-only media, personal wording review, and visible children/visitors.
+5. Added privacy columns to `social_post_queue` through runtime-safe self-healing.
+6. Blocked API publishing from Social Posting Queue until the queued post is privacy-approved or marked no-private-media.
+7. Added Release Sanity checks for the Social Media Privacy Guard endpoint and open posts needing privacy review.
+8. Expanded `COMPETITIVE.md` with competitive execution details, product-page direction, social calendar, trust/privacy posture, marketplace direction, accounting/margin priorities, and immediate/next/later implementation waves.
+9. Expanded `data/site/competitive-opportunities.json` with social privacy, product story, and local trust block opportunities.
+10. Updated schema files and active Markdown handoff docs.
 
-## Deploy note
+Next strongest directions:
 
-Apply SQL migrations in order. If `app_media_library` is not seeded yet, Admin Catalog should keep working from app settings and bundled product/tool image fallbacks. Build 155 should also avoid the prior Cloudflare deploy regex failure.
-
-<!-- Build 155 sync 2026-05-18 -->
-
-## Build 155 focus
-
-Build 155 is a Cloudflare Pages Functions deploy hotfix. It repairs unresolved `_lib` imports in root API route files, preserves the media-library image workflow from Build 151/152, keeps the duplicate landing-page key cleanup, and adds import-resolution checking to the deploy-safety script. No database DDL is required.
-
-## Build 155 Cloudflare stale root function shim hotfix - 2026-05-19
-
-Cloudflare still saw older flat `/functions/api/*.js` route files after GitHub web uploads, because uploading ZIP contents does not reliably delete older files from the branch. Build 155 intentionally includes compatibility shim files for the stale flat routes listed in the Cloudflare deploy log. Each shim re-exports the active `/functions/api/admin/*.js` implementation and prevents Pages Functions bundling failures while preserving the newer admin route implementation.
-
-Next step: after Build 155 deploys cleanly, optionally remove the compatibility shims in a clean-branch/orphan rebuild so only the intended folder-backed route files remain.
-
-
-## Build 155 Cloudflare root import release-check hotfix - 2026-05-18
-
-Build 155 repairs the remaining root Cloudflare Pages Function import paths that could still break deployment after Build 154. Four root `/functions/api/*.js` files still used `../_lib/...`; root routes must use `./_lib/...`. Build 155 fixes those files, keeps the stale-route shims, wires the stale-root import guard into the release checklist, and updates the release runner so the full check can complete in this sandbox.
-
-Important Build 155 files: `functions/api/blocks_range_save.js`, `functions/api/catalog_amazon_matches.js`, `functions/api/catalog_bulk_import.js`, `functions/api/catalog_bulk_visibility.js`, `scripts/cloudflare_pages_functions_check.py`, `scripts/stale_root_function_shims_check.py`, `scripts/release_check.py`, and `sql/2026-05-18_build155_cloudflare_root_import_release_check_no_ddl_note.sql`.
-
-## Build 156 sync note - social progress publishing
-
-Build 156 adds a reviewable social publishing foundation. Admin Progress can now create internal social drafts from job updates/media, Admin Social Queue can review and mark those drafts, and the schema now includes `social_channels`, `social_post_queue`, and `social_dispatch_attempts`. Direct posting to X, Facebook, Instagram, TikTok, Google Business Profile, and other platforms is possible later after the required platform credentials, app approvals, and consent/compliance checks are in place.
-
-
-## Build 159 sync — social queue usability and release discipline
-
-- Added caption/hashtag DB picker support for Admin Social Queue.
-- Added planned publish time for manual drafts and schedule filtering.
-- Added duplicate draft warnings using `duplicate_signature`.
-- Added manual posted URL and platform post ID capture.
-- Added `social_post_metrics_snapshots` schema support for future reporting.
-- Release checks now require the Build 159 social template/schedule markers.
+1. Render product-story blocks publicly on product detail pages.
+2. Add a reusable local trust block to Home, About, Shop, Contact, product, and local pages.
+3. Add “post this product” from Product editor into Social Posting Queue.
+4. Add admin-editable caption templates.
+5. Add social analytics rollups from UTM links and manual/API post URLs.
+6. Add product media role checklist: main/detail/scale/process/packaging/video.
+7. Add customer media consent records for job/customer-specific posts.
+8. Add testimonials/review approval workflow.
+9. Add marketplace export readiness checks.
+10. Continue payment application, HST review, period close, and accountant export packaging.
