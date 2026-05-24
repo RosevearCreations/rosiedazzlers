@@ -1243,3 +1243,13 @@ on conflict (platform, display_name) do nothing;
 -- Adds public.public_inquiry_leads for structured fleet/maintenance/public inquiry
 -- capture and public.photo_estimate_uploads for optional quote-photo upload audit.
 -- Direct public upload remains env-gated by PUBLIC_PHOTO_ESTIMATE_UPLOADS_ENABLED=true.
+
+-- ---------------------------------------------------------------------------
+-- Build 168 note — Admin Leads and Photo Estimate Review
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-23_build168_admin_leads_photo_review.sql.
+-- Adds review fields to public.photo_estimate_uploads for /admin-leads:
+-- staff_note, privacy_note, reviewed_at, reviewed_by_staff_user_id.
+-- Build 168 also adds admin endpoints to list/save public_inquiry_leads and
+-- photo_estimate_uploads, with fallback messaging when the Build 167/168 SQL
+-- has not been applied yet.

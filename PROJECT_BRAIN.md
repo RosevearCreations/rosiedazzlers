@@ -1,3 +1,15 @@
+# Project Brain — Build 168
+
+**Updated:** 2026-05-23
+
+Rosie Dazzlers now has a competitor-roadmap public journey and an internal lead/photo-estimate review foundation. Build 168 adds `/admin-leads` for public inquiries and quote-photo uploads, protected by the existing staff booking-management permission model.
+
+The safest next value step is a quote-builder/conversion workflow: select a lead or photo estimate, choose package/add-ons, generate quote notes, and optionally create/link a booking.
+
+Release habit remains: update Markdown/schema docs every pass, run release checks, keep no more than one H1 per public page, and continue local SEO wording based on Google guidance around clear titles/headings and local relevance.
+
+---
+
 # Build 164 sync — booking intake review fields
 
 **Updated:** 2026-05-22

@@ -1,3 +1,13 @@
+# Build 168 roadmap sync
+
+**Updated:** 2026-05-23
+
+Current priority moved from completing the public competitor matrix to turning public leads and quote-photo uploads into staff-reviewed quotes/bookings. `DEVELOPMENT_ROADMAP.md` is still the source of truth.
+
+Next highest-value work: lead-to-quote/booking conversion, quote-builder, service/town proof filtering, DB-managed public content, and media privacy eligibility automation.
+
+---
+
 # Build 161 sync — ROADMAP.md
 
 **Updated:** 2026-05-21
