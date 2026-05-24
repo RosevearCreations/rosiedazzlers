@@ -88,7 +88,7 @@
       })
     });
 
-    if (!result.ok) {
+    if (!result.ok || (result.data && result.data.ok === false)) {
       throw new Error(
         (result.data && result.data.error) || "Sign-in failed."
       );
@@ -96,6 +96,10 @@
 
     state.actor = result.data && result.data.actor ? result.data.actor : null;
     state.authenticated = !!state.actor;
+
+    if (!state.authenticated) {
+      throw new Error((result.data && result.data.error) || "Sign-in failed.");
+    }
     state.loaded = true;
 
     return {
