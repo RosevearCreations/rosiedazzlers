@@ -20,7 +20,7 @@ import {
   rotateStaffSession,
   appendSetCookie,
   buildClearSessionCookie
-} from "../_lib/staff-session.js";
+} from "./_lib/staff-session.js";
 
 export async function onRequestOptions() {
   return new Response("", {
