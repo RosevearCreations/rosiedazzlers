@@ -11,7 +11,7 @@
     .admin-status{margin-bottom:16px;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);color:#e5e7eb}.admin-status[data-state="error"]{background:rgba(220,38,38,.12);border-color:rgba(248,113,113,.25);color:#fecaca}.admin-status[data-state="success"]{background:rgba(22,163,74,.12);border-color:rgba(74,222,128,.25);color:#bbf7d0}
     .admin-topbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:flex-start}.actorcard{min-width:260px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px 18px;box-shadow:0 14px 35px rgba(0,0,0,.22)}.actorline{margin:4px 0}.actorlabel{color:#93c5fd;font-weight:700;margin-right:6px}
     .lead-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin:0 0 14px}.lead-toolbar label{display:grid;gap:5px;min-width:150px}.lead-toolbar input,.lead-toolbar select,.lead-card textarea{width:100%;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(15,23,42,.92);color:#f8fafc;padding:10px}.lead-card{display:grid;gap:12px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);padding:16px;margin:12px 0}.lead-card__head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}.lead-card__title{margin:0}.lead-meta{display:flex;flex-wrap:wrap;gap:8px;color:#cbd5e1;font-size:.92rem}.pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 9px;background:rgba(59,130,246,.16);border:1px solid rgba(96,165,250,.22);font-size:.84rem;color:#dbeafe}.pill.warn{background:rgba(245,158,11,.15);border-color:rgba(251,191,36,.25);color:#fde68a}.pill.good{background:rgba(22,163,74,.15);border-color:rgba(74,222,128,.25);color:#bbf7d0}.pill.bad{background:rgba(220,38,38,.14);border-color:rgba(248,113,113,.25);color:#fecaca}
-    .lead-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.lead-field{padding:10px 12px;border-radius:12px;background:rgba(15,23,42,.36);border:1px solid rgba(255,255,255,.06)}.lead-field strong{display:block;color:#93c5fd;margin-bottom:3px}.lead-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;align-items:end}.links-list{display:grid;gap:6px;margin:8px 0 0}.links-list a{overflow-wrap:anywhere}.muted{color:#94a3b8}.danger-note{color:#fecaca}.two-col{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}@media(min-width:1050px){.two-col{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+    .lead-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.lead-field{padding:10px 12px;border-radius:12px;background:rgba(15,23,42,.36);border:1px solid rgba(255,255,255,.06)}.lead-field strong{display:block;color:#93c5fd;margin-bottom:3px}.lead-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;align-items:end}.links-list{display:grid;gap:6px;margin:8px 0 0}.links-list a{overflow-wrap:anywhere}.quote-preview{display:none;grid-column:1/-1;margin-top:8px}.quote-preview.is-open{display:grid;gap:8px}.quote-preview textarea{min-height:220px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;white-space:pre-wrap}.muted{color:#94a3b8}.danger-note{color:#fecaca}.two-col{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}@media(min-width:1050px){.two-col{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
   </style>
 </head>
 <body data-page="admin-leads">
@@ -144,7 +144,7 @@
             <label>Status<select data-lead-status><option value="new">New</option><option value="reviewing">Reviewing</option><option value="contacted">Contacted</option><option value="quoted">Quoted</option><option value="converted">Converted</option><option value="closed">Closed</option><option value="spam">Spam</option></select></label>
             <label>Converted booking UUID<input data-lead-booking value="${esc(row.converted_booking_id || '')}" placeholder="optional booking id" /></label>
             <label style="grid-column:1/-1">Staff note<textarea data-lead-note rows="2" placeholder="follow-up notes">${esc(row.staff_note || '')}</textarea></label>
-            <button class="btn primary" type="button" data-save-lead>Save lead</button>
+            <button class="btn primary" type="button" data-save-lead>Save lead</button><button class="btn ghost" type="button" data-quote-lead>Build quote starter</button><div class="quote-preview" data-quote-preview><label>Copy-ready quote starter<textarea readonly data-quote-output></textarea></label><button class="btn ghost small" type="button" data-copy-quote>Copy quote text</button></div>
           </div>
         </article>`;
       }
@@ -155,6 +155,28 @@
           card.querySelector('[data-save-lead]')?.addEventListener('click', async()=>{
             try{setStatus('', ''); await api('/api/admin/public_inquiry_leads_save',{id:card.dataset.leadId,status:select.value,converted_booking_id:card.querySelector('[data-lead-booking]').value,staff_note:card.querySelector('[data-lead-note]').value}); setStatus('Lead updated.','success'); await loadLeads();}
             catch(err){setStatus(err.message || 'Could not save lead.','error');}
+          });
+          card.querySelector('[data-quote-lead]')?.addEventListener('click', async()=>{
+            const preview = card.querySelector('[data-quote-preview]');
+            const output = card.querySelector('[data-quote-output]');
+            try{
+              setStatus('', '');
+              if(output) output.value = 'Building quote starter…';
+              if(preview) preview.classList.add('is-open');
+              const data = await api('/api/admin/lead_quote_preview',{id:card.dataset.leadId});
+              if(output) output.value = data?.quote?.copy_text || 'No quote preview returned.';
+              const warnings = Array.isArray(data?.warnings) && data.warnings.length ? ' Warning: '+data.warnings.join(' ') : '';
+              setStatus('Quote starter built. Review pricing before sending.'+warnings,'success');
+            }catch(err){
+              if(output) output.value = '';
+              setStatus(err.message || 'Could not build quote starter.','error');
+            }
+          });
+          card.querySelector('[data-copy-quote]')?.addEventListener('click', async()=>{
+            const output = card.querySelector('[data-quote-output]');
+            if(!output || !output.value){setStatus('Build the quote starter first.','error');return;}
+            try{await navigator.clipboard.writeText(output.value);setStatus('Quote starter copied.','success');}
+            catch{output.focus();output.select();setStatus('Quote starter selected. Press Ctrl+C to copy.','success');}
           });
         });
       }
