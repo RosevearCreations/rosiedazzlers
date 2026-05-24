@@ -21,13 +21,13 @@
 
 import {
   getCurrentStaffSession
-} from "../_lib/staff-session.js";
+} from "./_lib/staff-session.js";
 import {
   serviceHeaders,
   json,
   methodNotAllowed,
   cleanText
-} from "../_lib/staff-auth.js";
+} from "./_lib/staff-auth.js";
 
 export async function onRequestOptions() {
   return new Response("", {

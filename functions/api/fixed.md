@@ -42,4 +42,11 @@ Pass sync: April 17, 2026 — pricing now restores the booking page as the first
 - reviewed during the merchandising / SEO / geofence refinement pass
 - no file-specific workflow changes were required beyond the centralized roadmap, schema, repo-guide, and handoff updates
 
-<!-- Build 137 sync 2026-05-09: local SEO targets, inventory fallback, media/image documentation, CSS/H1/static-link checks, and schema handoff were reviewed. -->
+<!-- Build 145 sync 2026-05-15: reviewed during catalog DB import/admin workflow/local SEO pass. Active release discipline remains one-H1, local wording, fallback safety, and schema/Markdown synchronization. -->
+
+<!-- Build 146 sync 2026-05-15: Amazon CSV catalog matching/enrichment pass; docs/schema reviewed; keep one-H1, local SEO, CSS overflow, privacy-safe generated data, and DB-first inventory migration discipline. -->
+
+## Build 152 synchronization note
+
+Reviewed during the 2026-05-18 Cloudflare Pages Functions deploy hotfix. No content-specific workflow change was required here; active handoff/schema docs carry the detailed Build 152 notes.
+

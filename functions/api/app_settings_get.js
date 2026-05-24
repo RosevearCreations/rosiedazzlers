@@ -1,5 +1,5 @@
 
-import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "../_lib/staff-auth.js";
+import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "./_lib/staff-auth.js";
 
 export async function onRequestOptions() {
   return new Response("", { status: 204, headers: corsHeaders() });
@@ -29,8 +29,13 @@ export async function onRequestPost(context) {
       "recovery_provider_rules",
       "moderation_rules",
       "pricing_catalog",
+      "catalog_dropdown_options",
+      "landing_pages",
+      "review_proof",
+      "media_library",
       "document_templates",
-      "social_feeds"
+      "social_feeds",
+      "before_after_gallery"
     ];
 
     const out = {};

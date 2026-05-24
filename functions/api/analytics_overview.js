@@ -1,5 +1,5 @@
-import { requireStaffAccess, json, methodNotAllowed, serviceHeaders } from "../_lib/staff-auth.js";
-import { loadAppSettings } from "../_lib/app-settings.js";
+import { requireStaffAccess, json, methodNotAllowed, serviceHeaders } from "./_lib/staff-auth.js";
+import { loadAppSettings } from "./_lib/app-settings.js";
 
 export async function onRequestOptions(){return new Response("",{status:204,headers:corsHeaders()});}
 
