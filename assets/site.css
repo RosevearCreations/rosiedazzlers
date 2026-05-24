@@ -1003,3 +1003,10 @@ input.search-input:-webkit-autofill:focus {
   text-decoration:underline;
   text-underline-offset:3px;
 }
+
+
+/* Build 172 FAQ content/accessibility helpers */
+.eyebrow{margin:0 0 8px;color:rgba(147,197,253,.96);font-weight:900;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.faq-hero{align-items:start}.faq-search{display:grid;gap:8px}.faq-search label{font-weight:900}.faq-search input{width:100%;min-height:44px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(15,23,42,.78);color:rgba(248,250,252,.96);padding:10px 12px}.faq-list{display:grid;gap:10px}.faq-card{border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(255,255,255,.035);overflow:hidden}.faq-question{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;border:0;background:transparent;color:rgba(248,250,252,.96);padding:14px 16px;font-weight:900;cursor:pointer}.faq-question span:first-child{line-height:1.35}.faq-question span[aria-hidden="true"]{font-size:1.4rem;color:rgba(147,197,253,.96)}.faq-answer{padding:0 16px 16px}.faq-answer p{margin:0 0 12px;color:rgba(226,232,240,.78);line-height:1.65}.faq-access-paths .service-link-card{min-height:100%}
+@media(max-width:880px){.faq-hero{grid-template-columns:1fr}.hero-actions .btn{width:100%}.faq-question{padding:13px 14px}}
