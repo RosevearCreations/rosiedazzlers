@@ -1,6 +1,0 @@
--- Build 152 Cloudflare deploy hotfix / no-DDL note — 2026-05-18
--- This pass does not change database shape.
--- It repairs the Cloudflare Pages Functions compile failure in functions/api/admin/media_library_list.js,
--- removes duplicate object keys from functions/api/landing_pages_public.js,
--- and adds scripts/cloudflare_pages_functions_check.py to release checks.
--- Active schema remains Build 150 inventory image indexes plus Build 151 app_media_library.
