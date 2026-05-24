@@ -1,0 +1,35 @@
+{
+  "generated_for_build": "145",
+  "sources": [
+    {
+      "kind": "consumable",
+      "path": "data/rosie_products_catalog.json",
+      "expected_rows": 106,
+      "target_table": "catalog_inventory_items"
+    },
+    {
+      "kind": "tool",
+      "path": "data/systems_catalog.json",
+      "expected_rows": 43,
+      "target_table": "catalog_inventory_items"
+    }
+  ],
+  "matching_rules": [
+    "item_key exact match",
+    "normalized name + image URL duplicate warning",
+    "filename/path/image URL fallback identity"
+  ],
+  "review_decisions": [
+    "create",
+    "update",
+    "skip",
+    "review"
+  ],
+  "safe_order": [
+    "preview import",
+    "select create rows",
+    "import selected",
+    "review duplicate warnings",
+    "bulk publish only after saved rows are verified"
+  ]
+}

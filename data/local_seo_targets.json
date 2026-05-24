@@ -1,85 +1,171 @@
 {
-  "generated_for_build": "137",
-  "purpose": "Central checklist for local-search work we can control: clear titles, local wording, service/town routes, internal links, proof, and review freshness.",
-  "primary_service_area": [
-    "Tillsonburg",
-    "Oxford County",
-    "Norfolk County"
+  "updated_at": "2026-05-16",
+  "primary_region": "Oxford County and Norfolk County, Ontario",
+  "core_terms": [
+    "mobile auto detailing",
+    "car detailing",
+    "interior detailing",
+    "mobile car wash",
+    "ceramic coating",
+    "pet hair removal",
+    "engine cleaning",
+    "headlight restoration",
+    "paint correction"
   ],
-  "priority_town_pages": [
+  "town_pages": [
     {
       "slug": "tillsonburg-auto-detailing",
-      "route": "/tillsonburg-auto-detailing/",
-      "target_phrase": "mobile auto detailing Tillsonburg",
-      "county": "Oxford County",
-      "status": "live folder route"
+      "towns": [
+        "Tillsonburg"
+      ],
+      "priority": 1,
+      "region_photo_url": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Tillsonburgskyline.jpg/800px-Tillsonburgskyline.jpg",
+      "region_photo_caption": "Tillsonburg regional photo used to help local visitors recognize the service-area page.",
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Tillsonburg"
     },
     {
       "slug": "woodstock-ingersoll-auto-detailing",
-      "route": "/woodstock-ingersoll-auto-detailing/",
-      "target_phrase": "mobile auto detailing Woodstock Ingersoll",
-      "county": "Oxford County",
-      "status": "live folder route"
+      "towns": [
+        "Woodstock",
+        "Ingersoll"
+      ],
+      "priority": 2,
+      "region_photo_url": "https://commons.wikimedia.org/wiki/Special:FilePath/City%20Hall%20Woodstock%20Ontario%201.jpg",
+      "region_photo_caption": "Woodstock City Hall photo representing the Woodstock and Ingersoll service corridor.",
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Woodstock,_Ontario"
     },
     {
       "slug": "simcoe-delhi-auto-detailing",
-      "route": "/simcoe-delhi-auto-detailing/",
-      "target_phrase": "mobile auto detailing Simcoe Delhi",
-      "county": "Norfolk County",
-      "status": "live folder route"
+      "towns": [
+        "Simcoe",
+        "Delhi"
+      ],
+      "priority": 2,
+      "region_photo_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Governor%20Simcoe%20Square%20Simcoe%20Ontario.jpg",
+      "region_photo_caption": "Governor Simcoe Square photo representing the Simcoe and Delhi Norfolk County service area.",
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Simcoe,_Ontario"
     },
     {
       "slug": "port-dover-auto-detailing",
-      "route": "/port-dover-auto-detailing/",
-      "target_phrase": "mobile auto detailing Port Dover",
-      "county": "Norfolk County",
-      "status": "live folder route"
+      "towns": [
+        "Port Dover"
+      ],
+      "priority": 3,
+      "region_photo_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Boats%20moored%20at%20Port%20Dover%2C%20Ontario.jpg",
+      "region_photo_caption": "Port Dover harbour photo representing the coastal Norfolk County service area.",
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Port_Dover"
+    },
+    {
+      "slug": "norwich-otterville-auto-detailing",
+      "towns": [
+        "Norwich",
+        "Otterville"
+      ],
+      "priority": 4,
+      "region_photo_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Norwich%20post%20office%20and%20clock%20tower.JPG",
+      "region_photo_caption": "Norwich clock tower photo representing Norwich, Otterville, and nearby Oxford County communities.",
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Norwich,_Ontario"
+    },
+    {
+      "slug": "zorra-thamesford-embro-auto-detailing",
+      "towns": [
+        "Zorra",
+        "Thamesford",
+        "Embro"
+      ],
+      "priority": 5,
+      "region_photo_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Embro%20ON.JPG",
+      "region_photo_caption": "Embro photo representing the Zorra, Thamesford, and Embro rural service area.",
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Zorra"
+    },
+    {
+      "slug": "waterford-vittoria-auto-detailing",
+      "towns": [
+        "Waterford",
+        "Vittoria"
+      ],
+      "priority": 6,
+      "region_photo_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Waterford%20Old%20Town%20Hall%20-%20Waterford%2C%20ON.jpg",
+      "region_photo_caption": "Waterford Old Town Hall photo representing Waterford, Vittoria, and nearby Norfolk County communities.",
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Waterford,_Ontario"
+    },
+    {
+      "slug": "port-rowan-turkey-point-auto-detailing",
+      "towns": [
+        "Port Rowan",
+        "Turkey Point"
+      ],
+      "priority": 7,
+      "region_photo_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Lighthouse%20and%20docks%2C%20Port%20Rowan%2C%20ON.jpg",
+      "region_photo_caption": "Port Rowan waterfront photo representing Port Rowan, Turkey Point, and nearby Long Point-area service calls.",
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Port_Rowan"
     }
   ],
-  "priority_service_pages": [
+  "service_pages": [
+    "ceramic-coating",
+    "pet-hair-removal",
+    "odor-removal",
+    "headlight-restoration",
+    "paint-correction",
+    "services",
+    "pricing",
+    "book"
+  ],
+  "required_checks": [
+    "single H1",
+    "title",
+    "description",
+    "canonical",
+    "local town wording",
+    "service wording",
+    "crawlable internal links",
+    "JSON-LD where useful"
+  ],
+  "service_area_coverage": {
+    "counties": [
+      "Oxford County",
+      "Norfolk County"
+    ],
+    "fallback_behavior": "Typed towns not specifically listed resolve to Other Oxford County location or Other Norfolk County location when a county is known; otherwise staff confirm before dispatch.",
+    "water_rule_source_file": "/data/service_area_rules.json"
+  },
+  "future_town_pages": [
     {
-      "slug": "ceramic-coating",
-      "route": "/ceramic-coating/",
-      "target_phrase": "ceramic coating Oxford Norfolk County",
-      "intent": "paint protection quote lead"
+      "slug": "norwich-otterville-auto-detailing",
+      "towns": [
+        "Norwich",
+        "Otterville",
+        "Springford"
+      ],
+      "priority": 3
     },
     {
-      "slug": "paint-correction",
-      "route": "/paint-correction/",
-      "target_phrase": "paint correction Oxford Norfolk County",
-      "intent": "swirl/oxidation quote lead"
+      "slug": "zorra-thamesford-embro-auto-detailing",
+      "towns": [
+        "Thamesford",
+        "Embro",
+        "Hickson"
+      ],
+      "priority": 4
     },
     {
-      "slug": "pet-hair-removal",
-      "route": "/pet-hair-removal/",
-      "target_phrase": "pet hair removal car detailing",
-      "intent": "interior add-on"
+      "slug": "port-rowan-turkey-point-auto-detailing",
+      "towns": [
+        "Port Rowan",
+        "Turkey Point",
+        "St. Williams"
+      ],
+      "priority": 4
     },
     {
-      "slug": "odor-removal",
-      "route": "/odor-removal/",
-      "target_phrase": "vehicle odor removal detailing",
-      "intent": "interior/deodorizing add-on"
-    },
-    {
-      "slug": "headlight-restoration",
-      "route": "/headlight-restoration/",
-      "target_phrase": "headlight restoration mobile detailing",
-      "intent": "standalone add-on"
+      "slug": "waterford-vittoria-auto-detailing",
+      "towns": [
+        "Waterford",
+        "Vittoria",
+        "Boston"
+      ],
+      "priority": 4
     }
   ],
-  "controlled_ranking_inputs": [
-    "Unique title and meta description per public route.",
-    "One clear H1 on exposed pages.",
-    "Town, county, service, booking, proof, and review wording in visible content.",
-    "Internal links between services, pricing, gallery, booking, and town pages.",
-    "Fresh before/after images and real reviews as they become available.",
-    "Complete Google Business Profile service list and matching service-area wording."
-  ],
-  "next_manual_steps": [
-    "Replace sample reviews with verified reviews once the review API is connected.",
-    "Add one recent before/after job to each priority town page every few months.",
-    "Use Search Console to watch impressions, click-through rate, and average position per town/service page.",
-    "Keep business name, phone, service area, and package wording consistent with Google Business Profile."
-  ]
+  "regional_photo_source_file": "/data/landing_regional_photos.json"
 }

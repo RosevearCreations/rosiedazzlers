@@ -1,40 +1,41 @@
 {
-  "source_note": "Temporary display samples until the live review API is connected. Do not mark these as structured review schema.",
+  "updated_at": "2026-05-10",
+  "source_status": "temporary_sample_until_review_api_connected",
   "items": [
     {
-      "stars": 5,
+      "rating": 5,
       "name": "Melissa R.",
-      "location": "Tillsonburg",
+      "location": "Tillsonburg, ON",
       "service": "SUV interior detail",
-      "text": "Our SUV had winter salt in every corner. The interior detail made it feel fresh again, especially the mats and door jambs."
+      "quote": "Our SUV had winter salt in every corner. The interior detail made it feel fresh again, especially the mats and door jambs."
     },
     {
-      "stars": 5,
+      "rating": 5,
       "name": "Jason K.",
-      "location": "Woodstock",
+      "location": "Woodstock, ON",
       "service": "Engine cleaning",
-      "text": "The engine bay cleaning was exactly what we wanted before selling the car. It looked cared for without being overdone."
+      "quote": "The engine bay cleaning was exactly what we wanted before selling the car. It looked cared for without being overdone."
     },
     {
-      "stars": 5,
+      "rating": 5,
       "name": "Amanda P.",
-      "location": "Ingersoll",
+      "location": "Ingersoll, ON",
       "service": "Pet hair removal",
-      "text": "Pet hair was our biggest problem. They worked through the seats and cargo area and the car finally looked presentable again."
+      "quote": "Pet hair was our biggest problem. They took the time to work through the seats and cargo area and the car finally looked presentable again."
     },
     {
-      "stars": 5,
+      "rating": 5,
       "name": "Trevor M.",
-      "location": "Simcoe",
+      "location": "Simcoe, ON",
       "service": "Clay treatment and sealant",
-      "text": "The clay treatment and sealant brought the paint back to a smooth shine. Water beads much better now after washing."
+      "quote": "The clay treatment and sealant brought the paint back to a smooth shine. Water beads much better now after washing."
     },
     {
-      "stars": 5,
+      "rating": 5,
       "name": "Rachel D.",
-      "location": "Delhi",
+      "location": "Delhi, ON",
       "service": "Complete detail",
-      "text": "We booked a complete detail before a family trip. The van smelled cleaner, the glass was spotless, and the kids noticed first."
+      "quote": "We booked a complete detail before a family trip. The van smelled cleaner, the glass was spotless, and the kids noticed first."
     }
   ]
 }
