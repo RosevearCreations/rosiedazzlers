@@ -22,6 +22,7 @@ CHECKS = [
     [sys.executable, "scripts/auth_analytics_build169_check.py"],
     [sys.executable, "scripts/client_dashboard_build170_check.py"],
     [sys.executable, "scripts/lead_quote_preview_build171_check.py"],
+    [sys.executable, "scripts/public_faq_content_build172_check.py"],
     [sys.executable, "scripts/seo_h1_check.py"],
 ]
 
