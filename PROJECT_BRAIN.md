@@ -139,3 +139,8 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 - Added manual posted URL and platform post ID capture.
 - Added `social_post_metrics_snapshots` schema support for future reporting.
 - Release checks now require the Build 159 social template/schedule markers.
+
+## Build 169 project memory
+
+Auth and analytics are now intentionally fallback-safe during page boot. Do not reintroduce hard 500 responses for public account-widget checks or analytics ingest; only protected write/action endpoints should fail closed. Login remains secure and still requires valid Supabase staff/customer records and session tables.
+

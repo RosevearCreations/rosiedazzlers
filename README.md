@@ -214,3 +214,8 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 - Added manual posted URL and platform post ID capture.
 - Added `social_post_metrics_snapshots` schema support for future reporting.
 - Release checks now require the Build 159 social template/schedule markers.
+
+## Build 169 deployment note
+
+This build repairs live auth/API 500 behavior seen on `/login` and `/admin-leads.html`. Deploy the files, then verify Cloudflare Pages has `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` set. Confirm the Supabase auth/session tables exist before testing staff/client login. `auth_me` and analytics should now return safe JSON fallbacks instead of browser-visible 500s.
+Build 169 adds `scripts/auth_analytics_build169_check.py` and wires it into `scripts/release_check.py`.

@@ -1,3 +1,7 @@
+-- Build 169 auth/API fallback sync — 2026-05-23
+-- No destructive schema change. Runtime auth_me and analytics now fail open instead of returning browser-visible 500s when Supabase config or tables are temporarily unavailable.
+-- Staff/client auth still require Supabase storage for successful login. Confirm staff_auth_sessions, customer_auth_sessions, staff_users, customer_profiles, and site_activity_events are applied.
+
 -- Build 166 note (2026-05-23): no schema shape change.
 -- Public routes and catalog fallback metadata were updated for COMPETETIVE.md completion.
 -- See sql/2026-05-23_build166_competetive_completion_public_routes_no_ddl_note.sql.
@@ -61,7 +65,7 @@
 -- March 29, 2026 sync note: no new tables were required for this pass; this refresh mainly extends signed-in staff session coverage, reduces shared-password-only endpoint usage, and improves actor attribution in time/intake/media/booking flows.
 -- 
 -- 
-> Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
+-- Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
 
 -- Last synchronized: March 27, 2026. Reviewed during the booking wizard sticky-fix, two-way active-job communication pass, and docs/schema refresh.
 -- March 27, 2026 mobile booking + account widget pass: no new DDL required; booking flow, account widget, and customer progress filtering changed application behavior only.
@@ -126,6 +130,34 @@ create table if not exists public.staff_users (
   tips_payout_notes text null,
   supervisor_staff_user_id uuid null references public.staff_users(id) on delete set null
 );
+
+create table if not exists public.staff_auth_sessions (
+  id uuid primary key default gen_random_uuid(),
+  staff_user_id uuid not null references public.staff_users(id) on delete cascade,
+  token_hash text not null unique,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  expires_at timestamptz not null,
+  revoked_at timestamptz null,
+  last_seen_at timestamptz null,
+  ip_address text null,
+  user_agent text null
+);
+
+create index if not exists idx_staff_auth_sessions_staff_user_id
+  on public.staff_auth_sessions (staff_user_id);
+
+create index if not exists idx_staff_auth_sessions_expires_at
+  on public.staff_auth_sessions (expires_at);
+
+create index if not exists idx_staff_auth_sessions_revoked_at
+  on public.staff_auth_sessions (revoked_at);
+
+create index if not exists idx_staff_auth_sessions_last_seen_at
+  on public.staff_auth_sessions (last_seen_at);
+
+create index if not exists idx_staff_auth_sessions_staff_active
+  on public.staff_auth_sessions (staff_user_id, revoked_at, expires_at);
 
 create table if not exists public.bookings (
   id uuid primary key default gen_random_uuid(),
