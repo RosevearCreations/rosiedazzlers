@@ -12,6 +12,16 @@
     .actorline{display:flex;gap:8px;margin:4px 0}.actorlabel{font-weight:700;color:#9fb0c8}.logout-btn,.btn{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:#f8fbff;border-radius:12px;padding:10px 14px;cursor:pointer}
     .btn.primary{background:#7c3aed;border-color:#7c3aed}.status{padding:12px 14px;border-radius:12px;margin-bottom:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09)}
     .status[data-state="success"]{border-color:rgba(34,197,94,.35)} .status[data-state="error"]{border-color:rgba(248,113,113,.35)}
+    .btn.saved,.btn.just-saved{background:#16a34a !important;border-color:#22c55e !important;color:#ffffff !important;box-shadow:0 0 0 3px rgba(34,197,94,.18)}
+    .save-feedback-pill{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(34,197,94,.35);background:rgba(34,197,94,.12);color:#bbf7d0;border-radius:999px;padding:6px 10px;font-size:.84rem;font-weight:800}
+    .service-area-picker-card{display:grid;gap:12px;padding:14px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08)}
+    .service-area-editor-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .service-area-editor-grid .wide{grid-column:1/-1}
+    .service-area-editor-grid textarea{min-height:64px;max-height:120px;resize:vertical;line-height:1.35}
+    .service-area-editor-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+    .service-area-editor-summary .stat{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08)}
+    @media(max-width:980px){.service-area-editor-grid{grid-template-columns:1fr}.service-area-editor-grid .wide{grid-column:auto}}
+    
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{grid-column:span 12;padding:18px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
     .card h2,.card h3{margin:0 0 12px}.field{display:grid;gap:6px;margin-bottom:10px}.field input,.field textarea,.field select{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;background:rgba(255,255,255,.04);color:#f8fafc}
     .field textarea{min-height:110px;resize:vertical}.checkrow{display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;align-items:start;margin:8px 0}.checkrow input{justify-self:end;margin-top:2px}.checkrow label,.checkrow span{display:block;text-align:left;line-height:1.45}.checkrow.inline-check{display:flex;gap:10px;align-items:center}.checkrow.inline-check input{justify-self:auto;margin-top:0}.actions{display:flex;gap:10px;flex-wrap:wrap}.muted{color:#9fb0c8;font-size:.94rem}
@@ -168,6 +178,28 @@
         <div id="membershipInterestList" class="stack-sm"></div>
       </article>
 
+
+
+      <article class="card span-12" id="catalogDropdownOptionsCard">
+        <h2>Dropdown option library</h2>
+        <p class="feature-note">Edit the reusable dropdown suggestions used by Admin App and Admin Catalog. Add one option per line. These lists help sort consumables, gear, add-ons, colours, vendors, units, service tiers, service zones, and county fallbacks without hard-coding every field into a page.</p>
+        <div class="catalog-option-grid">
+          <label class="field"><span>Add-on categories</span><textarea id="dropdown_addon_categories" placeholder="paint protection&#10;interior protection"></textarea></label>
+          <label class="field"><span>Add-on types</span><textarea id="dropdown_addon_types" placeholder="standalone service&#10;quote-led add-on"></textarea></label>
+          <label class="field"><span>Inventory categories</span><textarea id="dropdown_inventory_categories" placeholder="cleaning liquids&#10;microfiber towels"></textarea></label>
+          <label class="field"><span>Subcategories / colours / finishes</span><textarea id="dropdown_inventory_subcategories" placeholder="chemicals&#10;black&#10;gloss finish"></textarea></label>
+          <label class="field"><span>Vendors</span><textarea id="dropdown_inventory_vendors" placeholder="Amazon&#10;Canadian Tire"></textarea></label>
+          <label class="field"><span>Units</span><textarea id="dropdown_inventory_units" placeholder="bottle&#10;pack&#10;kit"></textarea></label>
+          <label class="field"><span>Service travel tiers</span><textarea id="dropdown_service_tiers" placeholder="urban&#10;township&#10;quote_required"></textarea></label>
+          <label class="field"><span>Service zones / towns</span><textarea id="dropdown_service_zones" placeholder="Tillsonburg, ON&#10;Simcoe, ON&#10;Other Oxford County location"></textarea></label>
+          <label class="field"><span>Service counties</span><textarea id="dropdown_service_counties" placeholder="Oxford County&#10;Norfolk County"></textarea></label>
+        </div>
+        <div class="actions" style="margin-top:14px">
+          <button class="btn primary" type="button" id="saveCatalogDropdownOptionsBtn">Save dropdown options</button>
+        </div>
+        <div class="note">These options are saved as <code>catalog_dropdown_options</code>. Future admin screens should read this list first, then fall back to bundled defaults if the database setting is not available.</div>
+      </article>
+
       <article class="card span-12">
         <h2>Pricing Control Center</h2>
         <p class="feature-note">This is the single entry point for price changes, travel charges, package edits, add-ons, and service-area pricing logic. The booking screen is stable and should stay untouched.</p>
@@ -218,8 +250,14 @@
         </div>
 
         <div class="catalog-section">
-          <div class="section-head"><h3>Service areas and travel tiers</h3><div class="actions"><button class="btn" type="button" id="addServiceAreaBtn">Add service area</button></div></div>
-          <div class="catalog-table-wrap"><div id="serviceAreaTable" class="catalog-table"></div></div>
+          <div class="section-head">
+            <div>
+              <h3>Service areas and travel tiers</h3>
+              <p class="note">Choose one service area at a time. This keeps the editor short even when Oxford/Norfolk towns and water-rule notes grow.</p>
+            </div>
+            <div class="actions"><button class="btn" type="button" id="addServiceAreaBtn">Add service area</button></div>
+          </div>
+          <div id="serviceAreaTable" class="service-area-picker-card"></div>
         </div>
 
         <div class="catalog-section">
@@ -408,11 +446,28 @@
     node.textContent = message || '';
     node.dataset.state = type || '';
   }
+  function flashSavedButton(button, label) {
+    if (!button || !button.classList) return;
+    const originalText = button.dataset.originalText || button.textContent || '';
+    button.dataset.originalText = originalText;
+    button.classList.add('just-saved', 'saved');
+    button.textContent = label || 'Saved';
+    button.setAttribute('aria-live', 'polite');
+    window.clearTimeout(button._savedFlashTimer);
+    button._savedFlashTimer = window.setTimeout(function () {
+      button.classList.remove('just-saved', 'saved');
+      button.textContent = button.dataset.originalText || originalText;
+    }, 2600);
+  }
   async function saveSetting(key, value, successText) {
+    const activeButton = document.activeElement && document.activeElement.closest ? document.activeElement.closest('button') : null;
     const res = await fetch('/api/admin/app_settings_save', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ key, value }) });
     const out = await res.json().catch(() => null);
     if (!res.ok) throw new Error(out?.error || 'Could not save settings.');
     setShellStatus(successText, 'success');
+    if (activeButton && (/save/i.test(activeButton.id || '') || /save/i.test(activeButton.textContent || '') || activeButton.hasAttribute('data-save-addon') || activeButton.id === 'saveSelectedServiceAreaBtn')) {
+      flashSavedButton(activeButton, 'Saved ✓');
+    }
     return out;
   }
   function applySetting(setting, fallback={}){ return setting && typeof setting.value === 'object' ? setting.value : fallback; }
@@ -558,13 +613,1551 @@
   function readProviderRules(){ return { email: { enabled: byId('provider_email_enabled').checked, provider_key: byId('provider_email_key').value || 'default_email', recovery_webhook_url: byId('provider_email_webhook').value || '', send_test_to: byId('provider_email_test_to').value || '' }, sms: { enabled: byId('provider_sms_enabled').checked, provider_key: byId('provider_sms_key').value || 'default_sms', recovery_webhook_url: byId('provider_sms_webhook').value || '', send_test_to: byId('provider_sms_test_to').value || '' } }; }
   function serviceAreaDefaults(){
     return [
-      { county:'Oxford County', label:'Tillsonburg, ON', value:'Tillsonburg, ON', municipality:'Tillsonburg', zone:'Tillsonburg', travel_tier:'urban', area_type:'town', bylaw_note:'Core service town and strongest local SEO target.', parking_rule:'Driveway or safe curbside access required.', noise_rule:'Confirm quiet hours if working near neighbours.', water_rule:'Customer water/power preferred unless arranged.', access_rule:'Mobile detailing access must be safe and legal.', official_links:[] },
-      { county:'Oxford County', label:'Ingersoll / Woodstock, ON', value:'Ingersoll / Woodstock, ON', municipality:'Ingersoll / Woodstock', zone:'Woodstock / Ingersoll', travel_tier:'township', area_type:'township', bylaw_note:'Oxford County expansion area.', parking_rule:'Driveway preferred.', noise_rule:'Follow local residential noise expectations.', water_rule:'Customer water/power preferred unless arranged.', access_rule:'Confirm service location before arrival.', official_links:[] },
-      { county:'Oxford County', label:'Norwich / Otterville, ON', value:'Norwich / Otterville, ON', municipality:'Norwich / Otterville', zone:'Norwich / Otterville', travel_tier:'hamlet', area_type:'hamlet', bylaw_note:'Nearby hamlet/rural service area.', parking_rule:'Level driveway or work area required.', noise_rule:'Confirm timing for rural/residential work.', water_rule:'Customer water/power preferred unless arranged.', access_rule:'Confirm directions and parking access.', official_links:[] },
-      { county:'Norfolk County', label:'Simcoe / Delhi, ON', value:'Simcoe / Delhi, ON', municipality:'Simcoe / Delhi', zone:'Simcoe / Delhi', travel_tier:'rural', area_type:'township', bylaw_note:'Norfolk County service area.', parking_rule:'Driveway or safe private work area required.', noise_rule:'Confirm timing around residential areas.', water_rule:'Customer water/power preferred unless arranged.', access_rule:'Confirm service location and access notes.', official_links:[] },
-      { county:'Norfolk County', label:'Port Dover, ON', value:'Port Dover, ON', municipality:'Port Dover', zone:'Port Dover', travel_tier:'coastal', area_type:'coastal', bylaw_note:'Coastal/tourism area with seasonal timing considerations.', parking_rule:'Driveway or safe legal parking required.', noise_rule:'Confirm timing around busy seasonal areas.', water_rule:'Customer water/power preferred unless arranged.', access_rule:'Confirm access before arrival.', official_links:[] },
-      { county:'Norfolk County', label:'Courtland / Langton, ON', value:'Courtland / Langton, ON', municipality:'Courtland / Langton', zone:'Courtland / Langton', travel_tier:'remote', area_type:'rural', bylaw_note:'Extended rural service area; quote may be needed.', parking_rule:'Safe work area required.', noise_rule:'Confirm timing before travel.', water_rule:'Customer water/power preferred unless arranged.', access_rule:'Confirm directions and driveway access.', official_links:[] }
-    ];
+      {
+            "county": "Oxford County",
+            "label": "Other Oxford County location",
+            "value": "Other Oxford County location",
+            "municipality": "Oxford County",
+            "zone": "Oxford County",
+            "travel_tier": "quote_required",
+            "area_type": "county",
+            "aliases": [
+                  "Oxford County",
+                  "Other Oxford",
+                  "Oxford rural",
+                  "Oxford"
+            ],
+            "bylaw_note": "Oxford County fallback for typed towns or rural addresses not yet listed by name.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Other Norfolk County location",
+            "value": "Other Norfolk County location",
+            "municipality": "Norfolk County",
+            "zone": "Norfolk County",
+            "travel_tier": "quote_required",
+            "area_type": "county",
+            "aliases": [
+                  "Norfolk County",
+                  "Other Norfolk",
+                  "Norfolk rural",
+                  "Norfolk"
+            ],
+            "bylaw_note": "Norfolk County fallback for typed towns or rural addresses not yet listed by name.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Tillsonburg, ON",
+            "value": "Tillsonburg, ON",
+            "municipality": "Tillsonburg",
+            "zone": "Tillsonburg",
+            "travel_tier": "urban",
+            "area_type": "town",
+            "aliases": [
+                  "Tillsonburg",
+                  "Tillsonburg"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Woodstock, ON",
+            "value": "Woodstock, ON",
+            "municipality": "Woodstock",
+            "zone": "Woodstock",
+            "travel_tier": "urban",
+            "area_type": "town",
+            "aliases": [
+                  "Woodstock",
+                  "Woodstock"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Ingersoll, ON",
+            "value": "Ingersoll, ON",
+            "municipality": "Ingersoll",
+            "zone": "Ingersoll",
+            "travel_tier": "urban",
+            "area_type": "town",
+            "aliases": [
+                  "Ingersoll",
+                  "Ingersoll"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Beachville, ON",
+            "value": "Beachville, ON",
+            "municipality": "Beachville",
+            "zone": "Beachville",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Beachville",
+                  "Beachville"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Bright, ON",
+            "value": "Bright, ON",
+            "municipality": "Bright",
+            "zone": "Bright",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Bright",
+                  "Bright"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Brownsville, ON",
+            "value": "Brownsville, ON",
+            "municipality": "Brownsville",
+            "zone": "Brownsville",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Brownsville",
+                  "Brownsville"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Dereham Centre, ON",
+            "value": "Dereham Centre, ON",
+            "municipality": "Dereham Centre",
+            "zone": "Dereham Centre",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Dereham Centre",
+                  "Dereham Centre"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Drumbo, ON",
+            "value": "Drumbo, ON",
+            "municipality": "Drumbo",
+            "zone": "Drumbo",
+            "travel_tier": "town",
+            "area_type": "town",
+            "aliases": [
+                  "Drumbo",
+                  "Drumbo"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Princeton, ON",
+            "value": "Princeton, ON",
+            "municipality": "Princeton",
+            "zone": "Princeton",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Princeton",
+                  "Princeton"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Embro, ON",
+            "value": "Embro, ON",
+            "municipality": "Embro",
+            "zone": "Embro",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Embro",
+                  "Embro"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Hickson, ON",
+            "value": "Hickson, ON",
+            "municipality": "Hickson",
+            "zone": "Hickson",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Hickson",
+                  "Hickson"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Innerkip, ON",
+            "value": "Innerkip, ON",
+            "municipality": "Innerkip",
+            "zone": "Innerkip",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Innerkip",
+                  "Innerkip"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Lakeside, ON",
+            "value": "Lakeside, ON",
+            "municipality": "Lakeside",
+            "zone": "Lakeside",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Lakeside",
+                  "Lakeside"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Mount Elgin, ON",
+            "value": "Mount Elgin, ON",
+            "municipality": "Mount Elgin",
+            "zone": "Mount Elgin",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Mount Elgin",
+                  "Mount Elgin"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Norwich, ON",
+            "value": "Norwich, ON",
+            "municipality": "Norwich",
+            "zone": "Norwich",
+            "travel_tier": "town",
+            "area_type": "town",
+            "aliases": [
+                  "Norwich",
+                  "Norwich"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Otterville, ON",
+            "value": "Otterville, ON",
+            "municipality": "Otterville",
+            "zone": "Otterville",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Otterville",
+                  "Otterville"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Springford, ON",
+            "value": "Springford, ON",
+            "municipality": "Springford",
+            "zone": "Springford",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Springford",
+                  "Springford"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Sweaburg, ON",
+            "value": "Sweaburg, ON",
+            "municipality": "Sweaburg",
+            "zone": "Sweaburg",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Sweaburg",
+                  "Sweaburg"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Plattsville, ON",
+            "value": "Plattsville, ON",
+            "municipality": "Plattsville",
+            "zone": "Plattsville",
+            "travel_tier": "town",
+            "area_type": "town",
+            "aliases": [
+                  "Plattsville",
+                  "Plattsville"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Tavistock, ON",
+            "value": "Tavistock, ON",
+            "municipality": "Tavistock",
+            "zone": "Tavistock",
+            "travel_tier": "town",
+            "area_type": "town",
+            "aliases": [
+                  "Tavistock",
+                  "Tavistock"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Thamesford, ON",
+            "value": "Thamesford, ON",
+            "municipality": "Thamesford",
+            "zone": "Thamesford",
+            "travel_tier": "town",
+            "area_type": "town",
+            "aliases": [
+                  "Thamesford",
+                  "Thamesford"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Salford, ON",
+            "value": "Salford, ON",
+            "municipality": "Salford",
+            "zone": "Salford",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Salford",
+                  "Salford"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Foldens, ON",
+            "value": "Foldens, ON",
+            "municipality": "Foldens",
+            "zone": "Foldens",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Foldens",
+                  "Foldens"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Ostrander, ON",
+            "value": "Ostrander, ON",
+            "municipality": "Ostrander",
+            "zone": "Ostrander",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Ostrander",
+                  "Ostrander"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Simcoe, ON",
+            "value": "Simcoe, ON",
+            "municipality": "Simcoe",
+            "zone": "Simcoe",
+            "travel_tier": "town",
+            "area_type": "town",
+            "aliases": [
+                  "Simcoe",
+                  "Simcoe"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Delhi, ON",
+            "value": "Delhi, ON",
+            "municipality": "Delhi",
+            "zone": "Delhi",
+            "travel_tier": "town",
+            "area_type": "town",
+            "aliases": [
+                  "Delhi",
+                  "Delhi"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Port Dover, ON",
+            "value": "Port Dover, ON",
+            "municipality": "Port Dover",
+            "zone": "Port Dover",
+            "travel_tier": "town",
+            "area_type": "town",
+            "aliases": [
+                  "Port Dover",
+                  "Port Dover"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Waterford, ON",
+            "value": "Waterford, ON",
+            "municipality": "Waterford",
+            "zone": "Waterford",
+            "travel_tier": "town",
+            "area_type": "town",
+            "aliases": [
+                  "Waterford",
+                  "Waterford"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Port Rowan, ON",
+            "value": "Port Rowan, ON",
+            "municipality": "Port Rowan",
+            "zone": "Port Rowan",
+            "travel_tier": "coastal",
+            "area_type": "coastal",
+            "aliases": [
+                  "Port Rowan",
+                  "Port Rowan"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Langton, ON",
+            "value": "Langton, ON",
+            "municipality": "Langton",
+            "zone": "Langton",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Langton",
+                  "Langton"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Courtland, ON",
+            "value": "Courtland, ON",
+            "municipality": "Courtland",
+            "zone": "Courtland",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Courtland",
+                  "Courtland"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Vittoria, ON",
+            "value": "Vittoria, ON",
+            "municipality": "Vittoria",
+            "zone": "Vittoria",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Vittoria",
+                  "Vittoria"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Walsh, ON",
+            "value": "Walsh, ON",
+            "municipality": "Walsh",
+            "zone": "Walsh",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Walsh",
+                  "Walsh"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "St. Williams, ON",
+            "value": "St. Williams, ON",
+            "municipality": "St. Williams",
+            "zone": "St. Williams",
+            "travel_tier": "coastal",
+            "area_type": "coastal",
+            "aliases": [
+                  "St. Williams",
+                  "St. Williams"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Turkey Point, ON",
+            "value": "Turkey Point, ON",
+            "municipality": "Turkey Point",
+            "zone": "Turkey Point",
+            "travel_tier": "coastal",
+            "area_type": "coastal",
+            "aliases": [
+                  "Turkey Point",
+                  "Turkey Point"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Boston, ON",
+            "value": "Boston, ON",
+            "municipality": "Boston",
+            "zone": "Boston",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Boston",
+                  "Boston"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Teeterville, ON",
+            "value": "Teeterville, ON",
+            "municipality": "Teeterville",
+            "zone": "Teeterville",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Teeterville",
+                  "Teeterville"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Vanessa, ON",
+            "value": "Vanessa, ON",
+            "municipality": "Vanessa",
+            "zone": "Vanessa",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Vanessa",
+                  "Vanessa"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Lynedoch, ON",
+            "value": "Lynedoch, ON",
+            "municipality": "Lynedoch",
+            "zone": "Lynedoch",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Lynedoch",
+                  "Lynedoch"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Bill's Corners, ON",
+            "value": "Bill's Corners, ON",
+            "municipality": "Bill's Corners",
+            "zone": "Bill's Corners",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Bill's Corners",
+                  "Bill's Corners"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Renton, ON",
+            "value": "Renton, ON",
+            "municipality": "Renton",
+            "zone": "Renton",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Renton",
+                  "Renton"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Nixon, ON",
+            "value": "Nixon, ON",
+            "municipality": "Nixon",
+            "zone": "Nixon",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Nixon",
+                  "Nixon"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Bloomsburg, ON",
+            "value": "Bloomsburg, ON",
+            "municipality": "Bloomsburg",
+            "zone": "Bloomsburg",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Bloomsburg",
+                  "Bloomsburg"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Townsend, ON",
+            "value": "Townsend, ON",
+            "municipality": "Townsend",
+            "zone": "Townsend",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Townsend",
+                  "Townsend"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Port Ryerse, ON",
+            "value": "Port Ryerse, ON",
+            "municipality": "Port Ryerse",
+            "zone": "Port Ryerse",
+            "travel_tier": "coastal",
+            "area_type": "coastal",
+            "aliases": [
+                  "Port Ryerse",
+                  "Port Ryerse"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "La Salette, ON",
+            "value": "La Salette, ON",
+            "municipality": "La Salette",
+            "zone": "La Salette",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "La Salette",
+                  "La Salette"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Windham Centre, ON",
+            "value": "Windham Centre, ON",
+            "municipality": "Windham Centre",
+            "zone": "Windham Centre",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Windham Centre",
+                  "Windham Centre"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Walsingham, ON",
+            "value": "Walsingham, ON",
+            "municipality": "Walsingham",
+            "zone": "Walsingham",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Walsingham",
+                  "Walsingham"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Fairground, ON",
+            "value": "Fairground, ON",
+            "municipality": "Fairground",
+            "zone": "Fairground",
+            "travel_tier": "rural",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Fairground",
+                  "Fairground"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Woodstock / Ingersoll, ON",
+            "value": "Woodstock / Ingersoll, ON",
+            "municipality": "Woodstock / Ingersoll",
+            "zone": "Woodstock / Ingersoll",
+            "travel_tier": "township",
+            "area_type": "township",
+            "aliases": [
+                  "Woodstock / Ingersoll",
+                  "Ingersoll / Woodstock"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Oxford County",
+            "label": "Norwich / Otterville, ON",
+            "value": "Norwich / Otterville, ON",
+            "municipality": "Norwich / Otterville",
+            "zone": "Norwich / Otterville",
+            "travel_tier": "hamlet",
+            "area_type": "hamlet",
+            "aliases": [
+                  "Norwich / Otterville",
+                  "Norwich / Otterville"
+            ],
+            "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Oxford County water conservation",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+                  },
+                  {
+                        "label": "Oxford County water and wastewater",
+                        "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Simcoe / Delhi, ON",
+            "value": "Simcoe / Delhi, ON",
+            "municipality": "Simcoe / Delhi",
+            "zone": "Simcoe / Delhi",
+            "travel_tier": "township",
+            "area_type": "township",
+            "aliases": [
+                  "Simcoe / Delhi",
+                  "Simcoe / Delhi"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      },
+      {
+            "county": "Norfolk County",
+            "label": "Courtland / Langton, ON",
+            "value": "Courtland / Langton, ON",
+            "municipality": "Courtland / Langton",
+            "zone": "Courtland / Langton",
+            "travel_tier": "remote",
+            "area_type": "rural",
+            "aliases": [
+                  "Courtland / Langton",
+                  "Courtland / Langton"
+            ],
+            "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+            "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+            "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+            "water_rule": "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+            "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+            "official_links": [
+                  {
+                        "label": "Norfolk County watering restrictions",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+                  },
+                  {
+                        "label": "Norfolk County water and wastewater",
+                        "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+                  }
+            ]
+      }
+];
   }
   function pricingCatalogDefaults(){
     return {
@@ -634,8 +2227,9 @@
       inventory_subcategories: ['chemicals','linens','scrubbers','sprayers','polishing pads','clay media','glass care','engine bay','interior protection','exterior protection','black','white','grey','blue','red','green','yellow','clear','assorted colours','matte finish','gloss finish'],
       inventory_vendors: ['Amazon','Canadian Tire','Costco','Home Depot','Princess Auto','Walmart','Uline','Local supplier'],
       inventory_units: ['bottle','jug','litre','gallon','pad','piece','pack','roll','box','pair','kit','towel','brush'],
-      service_tiers: ['urban','township','hamlet','coastal','rural','remote','out_of_zone'],
-      service_zones: ['Tillsonburg','Oxford County','Norfolk County','Woodstock / Ingersoll','Simcoe / Delhi','Port Dover','Courtland / Langton']
+      service_tiers: ["urban", "town", "township", "hamlet", "coastal", "rural", "remote", "out_of_zone", "quote_required"],
+      service_zones: ["Other Oxford County location", "Oxford County", "Other Norfolk County location", "Norfolk County", "Tillsonburg, ON", "Tillsonburg", "Woodstock, ON", "Woodstock", "Ingersoll, ON", "Ingersoll", "Beachville, ON", "Beachville", "Bright, ON", "Bright", "Brownsville, ON", "Brownsville", "Dereham Centre, ON", "Dereham Centre", "Drumbo, ON", "Drumbo", "Princeton, ON", "Princeton", "Embro, ON", "Embro", "Hickson, ON", "Hickson", "Innerkip, ON", "Innerkip", "Lakeside, ON", "Lakeside", "Mount Elgin, ON", "Mount Elgin", "Norwich, ON", "Norwich", "Otterville, ON", "Otterville", "Springford, ON", "Springford", "Sweaburg, ON", "Sweaburg", "Plattsville, ON", "Plattsville", "Tavistock, ON", "Tavistock", "Thamesford, ON", "Thamesford", "Salford, ON", "Salford", "Foldens, ON", "Foldens", "Ostrander, ON", "Ostrander", "Simcoe, ON", "Simcoe", "Delhi, ON", "Delhi", "Port Dover, ON", "Port Dover", "Waterford, ON", "Waterford", "Port Rowan, ON", "Port Rowan", "Langton, ON", "Langton", "Courtland, ON", "Courtland", "Vittoria, ON", "Vittoria", "Walsh, ON", "Walsh", "St. Williams, ON", "St. Williams", "Turkey Point, ON", "Turkey Point", "Boston, ON", "Boston", "Teeterville, ON", "Teeterville", "Vanessa, ON", "Vanessa", "Lynedoch, ON", "Lynedoch", "Bill's Corners, ON", "Bill's Corners", "Renton, ON", "Renton", "Nixon, ON", "Nixon", "Bloomsburg, ON", "Bloomsburg", "Townsend, ON", "Townsend", "Port Ryerse, ON", "Port Ryerse", "La Salette, ON", "La Salette", "Windham Centre, ON", "Windham Centre", "Walsingham, ON", "Walsingham", "Fairground, ON", "Fairground", "Woodstock / Ingersoll, ON", "Woodstock / Ingersoll", "Norwich / Otterville, ON", "Norwich / Otterville", "Simcoe / Delhi, ON", "Simcoe / Delhi", "Courtland / Langton, ON", "Courtland / Langton"],
+      service_counties: ['Oxford County','Norfolk County']
     };
   }
   var catalogDropdownOptionsState = catalogDropdownOptionsDefaults();
@@ -659,13 +2253,14 @@
       dropdown_inventory_vendors: 'inventory_vendors',
       dropdown_inventory_units: 'inventory_units',
       dropdown_service_tiers: 'service_tiers',
-      dropdown_service_zones: 'service_zones'
+      dropdown_service_zones: 'service_zones',
+      dropdown_service_counties: 'service_counties'
     };
     Object.keys(map).forEach(function(id){ if (byId(id)) byId(id).value = catalogDropdownOptionsState[map[id]].join('\n'); });
   }
   function readCatalogDropdownOptionsEditor(){
     var current = catalogDropdownOptionsDefaults();
-    var map = { addon_categories:'dropdown_addon_categories', addon_types:'dropdown_addon_types', inventory_categories:'dropdown_inventory_categories', inventory_subcategories:'dropdown_inventory_subcategories', inventory_vendors:'dropdown_inventory_vendors', inventory_units:'dropdown_inventory_units', service_tiers:'dropdown_service_tiers', service_zones:'dropdown_service_zones' };
+    var map = { addon_categories:'dropdown_addon_categories', addon_types:'dropdown_addon_types', inventory_categories:'dropdown_inventory_categories', inventory_subcategories:'dropdown_inventory_subcategories', inventory_vendors:'dropdown_inventory_vendors', inventory_units:'dropdown_inventory_units', service_tiers:'dropdown_service_tiers', service_zones:'dropdown_service_zones', service_counties:'dropdown_service_counties' };
     Object.keys(map).forEach(function(key){ var el = byId(map[key]); current[key] = optionLinesToArray(el ? el.value : '').concat(catalogDropdownOptionsDefaults()[key]); });
     return normalizeCatalogDropdownOptions(current);
   }
@@ -685,6 +2280,41 @@
       return null;
     }
   }
+
+  function serviceAreaMergeKey(row){
+    var value = cleanTextValue(row && (row.value || row.label || row.municipality || row.zone));
+    var county = cleanTextValue(row && row.county);
+    var municipality = cleanTextValue(row && row.municipality);
+    var zone = cleanTextValue(row && row.zone);
+    return (value || [county, municipality, zone].filter(Boolean).join(' | ')).toLowerCase();
+  }
+  function mergeServiceAreaRows(currentRows, fallbackRows){
+    var map = new Map();
+    function put(row, preferExisting){
+      if (!row || typeof row !== 'object') return;
+      var key = serviceAreaMergeKey(row);
+      if (!key) return;
+      var existing = map.get(key);
+      if (!existing) {
+        map.set(key, Object.assign({}, row));
+        return;
+      }
+      map.set(key, preferExisting ? Object.assign({}, row, existing) : Object.assign({}, existing, row));
+    }
+    (Array.isArray(fallbackRows) ? fallbackRows : []).forEach(function(row){ put(row, false); });
+    (Array.isArray(currentRows) ? currentRows : []).forEach(function(row){ put(row, false); });
+    return Array.from(map.values()).sort(function(a, b){
+      var ac = cleanTextValue(a && a.county).toLowerCase();
+      var bc = cleanTextValue(b && b.county).toLowerCase();
+      var av = cleanTextValue(a && (a.label || a.value || a.municipality || a.zone)).toLowerCase();
+      var bv = cleanTextValue(b && (b.label || b.value || b.municipality || b.zone)).toLowerCase();
+      if (av.indexOf('other ') === 0 && bv.indexOf('other ') !== 0) return -1;
+      if (bv.indexOf('other ') === 0 && av.indexOf('other ') !== 0) return 1;
+      if (ac !== bc) return ac.localeCompare(bc);
+      return av.localeCompare(bv);
+    });
+  }
+
   function hydratePricingCatalogFromDefaultMedia(catalog, fallbackCatalog){
     var shaped = ensurePricingCatalogShape(catalog);
     if (!fallbackCatalog || typeof fallbackCatalog !== 'object') return shaped;
@@ -705,8 +2335,8 @@
       if (!Number(hydrated.price_cad) && Number(fallbackAddon.price_cad)) hydrated.price_cad = Number(fallbackAddon.price_cad);
       return hydrated;
     });
-    if ((!Array.isArray(shaped.service_areas) || !shaped.service_areas.length) && Array.isArray(fallback.service_areas) && fallback.service_areas.length) {
-      shaped.service_areas = fallback.service_areas.map(function(row){ return Object.assign({}, row); });
+    if (Array.isArray(fallback.service_areas) && fallback.service_areas.length) {
+      shaped.service_areas = mergeServiceAreaRows(shaped.service_areas, fallback.service_areas);
     }
     if ((!Array.isArray(shaped.public_requirements) || !shaped.public_requirements.length) && Array.isArray(fallback.public_requirements) && fallback.public_requirements.length) {
       shaped.public_requirements = fallback.public_requirements.slice();
@@ -810,6 +2440,7 @@
   function cloneJson(value){ return JSON.parse(JSON.stringify(value)); }
   var landingPagesState = landingPagesDefaults();
   var selectedAddonCode = '';
+  var selectedServiceAreaIndex = 0;
   function normalizeLandingFaq(value){ return (Array.isArray(value) ? value : []).map(function(item){ return { q: String(item && item.q || '').trim(), a: String(item && item.a || '').trim() }; }).filter(function(item){ return item.q && item.a; }); }
   function normalizeLandingArray(value){ return (Array.isArray(value) ? value : []).map(function(item){ return String(item || '').trim(); }).filter(Boolean); }
   function normalizeLandingPage(page, fallback){
@@ -826,6 +2457,9 @@
     source.hero_title = String(source.hero_title || source.name || '').trim();
     source.hero_intro = String(source.hero_intro || '').trim();
     source.hero_image_url = String(source.hero_image_url || '').trim();
+    source.region_photo_caption = String(source.region_photo_caption || '').trim();
+    source.region_photo_source = String(source.region_photo_source || '').trim();
+    source.region_photo_source_url = String(source.region_photo_source_url || '').trim();
     source.gallery_image_urls = normalizeLandingArray(source.gallery_image_urls || source.gallery_urls || source.gallery_images);
     source.related_products = (Array.isArray(source.related_products) ? source.related_products : []).map(function(item){ return {
       name: String(item && (item.name || item.title) || '').trim(),
@@ -862,7 +2496,7 @@
   function locationLandingOptions(){ return Object.keys(landingPagesState.pages).filter(function(slug){ return landingPagesState.pages[slug] && landingPagesState.pages[slug].type === 'location'; }).sort(); }
   function buildLandingEditorHtml(page, prefix){
     page = normalizeLandingPage(page || {}, {});
-    var url = page.slug ? ((page.type === 'addon' || page.type === 'location') && ['ceramic-coating','pet-hair-removal','odor-removal','headlight-restoration','paint-correction','tillsonburg-auto-detailing','woodstock-ingersoll-auto-detailing','simcoe-delhi-auto-detailing','port-dover-auto-detailing'].includes(page.slug) ? '/' + page.slug : '/landing/' + page.slug) : '';
+    var url = page.slug ? ((page.type === 'addon' || page.type === 'location') && ['ceramic-coating','pet-hair-removal','odor-removal','headlight-restoration','paint-correction','tillsonburg-auto-detailing','woodstock-ingersoll-auto-detailing','simcoe-delhi-auto-detailing','port-dover-auto-detailing','norwich-otterville-auto-detailing','zorra-thamesford-embro-auto-detailing','waterford-vittoria-auto-detailing','port-rowan-turkey-point-auto-detailing'].includes(page.slug) ? '/' + page.slug : '/landing/' + page.slug) : '';
     return '<div class="checkrow"><input id="' + prefix + '_enabled" type="checkbox" ' + (page.enabled ? 'checked' : '') + '><label for="' + prefix + '_enabled">Landing page enabled</label></div>' +
       '<div class="field"><label for="' + prefix + '_slug">Slug</label><input id="' + prefix + '_slug" value="' + escapeHtml(page.slug || '') + '" placeholder="my-new-landing-page"></div>' +
       '<div class="note">Preview path: ' + escapeHtml(url || '/landing/your-slug') + '</div>' +
@@ -873,7 +2507,9 @@
       '<div class="field"><label for="' + prefix + '_hero_title">Hero title</label><input id="' + prefix + '_hero_title" value="' + escapeHtml(page.hero_title || '') + '"></div>' +
       '<div class="field"><label for="' + prefix + '_hero_intro">Hero intro</label><textarea id="' + prefix + '_hero_intro">' + escapeHtml(page.hero_intro || '') + '</textarea></div>' +
       renderDatalist(prefix + '_image_options', uniqueTextValues(pricingCatalogState.addons, function(row){ return firstAddonMediaUrl(row); }, [])) +
-      '<div class="field"><label for="' + prefix + '_hero_image_url">Hero image URL</label><input list="' + prefix + '_image_options" id="' + prefix + '_hero_image_url" value="' + escapeHtml(page.hero_image_url || '') + '" placeholder="Use the current add-on PNG/R2 image or paste a new image URL"></div>' +
+      '<div class="field"><label for="' + prefix + '_hero_image_url">Hero / regional image URL</label><input list="' + prefix + '_image_options" id="' + prefix + '_hero_image_url" value="' + escapeHtml(page.hero_image_url || '') + '" placeholder="Use a Rosie-owned/R2 image, add-on PNG, or a credited regional photo URL"></div>' +
+      '<div class="field"><label for="' + prefix + '_region_photo_caption">Photo caption / why this image fits</label><textarea id="' + prefix + '_region_photo_caption">' + escapeHtml(page.region_photo_caption || '') + '</textarea></div>' +
+      '<div class="grid2"><div class="field"><label for="' + prefix + '_region_photo_source">Photo source / credit</label><input id="' + prefix + '_region_photo_source" value="' + escapeHtml(page.region_photo_source || '') + '"></div><div class="field"><label for="' + prefix + '_region_photo_source_url">Photo source URL</label><input id="' + prefix + '_region_photo_source_url" value="' + escapeHtml(page.region_photo_source_url || '') + '"></div></div>' +
       '<div class="field"><label for="' + prefix + '_gallery_image_urls">Gallery image URLs (one per line)</label><textarea class="link-lines" id="' + prefix + '_gallery_image_urls">' + escapeHtml(landingArrayToText(page.gallery_image_urls)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_related_products">Related products using Name || Role || Note || Image URL</label><textarea class="link-lines" id="' + prefix + '_related_products">' + escapeHtml(landingProductsToText(page.related_products)) + '</textarea></div>' +
       '<div class="field"><label for="' + prefix + '_reasons">Why this page exists (one line per point)</label><textarea id="' + prefix + '_reasons">' + escapeHtml(landingArrayToText(page.reasons_page_exists)) + '</textarea></div>' +
@@ -896,6 +2532,9 @@
       hero_title: byId(prefix + '_hero_title').value || '',
       hero_intro: byId(prefix + '_hero_intro').value || '',
       hero_image_url: byId(prefix + '_hero_image_url').value || '',
+      region_photo_caption: byId(prefix + '_region_photo_caption').value || '',
+      region_photo_source: byId(prefix + '_region_photo_source').value || '',
+      region_photo_source_url: byId(prefix + '_region_photo_source_url').value || '',
       gallery_image_urls: landingTextToArray(byId(prefix + '_gallery_image_urls').value || ''),
       related_products: landingTextToProducts(byId(prefix + '_related_products').value || ''),
       reasons_page_exists: landingTextToArray(byId(prefix + '_reasons').value || ''),
@@ -1103,24 +2742,65 @@
       '<div class="actions"><button class="btn primary" type="button" data-save-addon="' + index + '">Update / save add-on</button><button class="btn" type="button" data-delete-addon="' + index + '">Delete add-on</button></div>';
   }
 
+  function serviceAreaLabel(row, index) {
+    var label = cleanTextValue(row && (row.label || row.value || row.municipality || row.zone));
+    var county = cleanTextValue(row && row.county);
+    var tier = cleanTextValue(row && row.travel_tier);
+    return (label || ('Service area ' + (index + 1))) + (county ? ' · ' + county : '') + (tier ? ' · ' + tier : '');
+  }
+  function ensureSelectedServiceAreaIndex(rows) {
+    if (!Array.isArray(rows) || !rows.length) {
+      selectedServiceAreaIndex = 0;
+      return 0;
+    }
+    selectedServiceAreaIndex = Number(selectedServiceAreaIndex);
+    if (!Number.isFinite(selectedServiceAreaIndex) || selectedServiceAreaIndex < 0) selectedServiceAreaIndex = 0;
+    if (selectedServiceAreaIndex >= rows.length) selectedServiceAreaIndex = rows.length - 1;
+    return selectedServiceAreaIndex;
+  }
   function renderServiceAreaRows(rows){
+    rows = Array.isArray(rows) ? rows : [];
     if (!rows.length) return '<div class="catalog-empty">No service areas yet. Use Add service area or reload the bundled pricing fallback.</div>';
-    var tierOptions = uniqueTextValues(rows, function(row){ return row && row.travel_tier; }, catalogDropdownOptionsState.service_tiers);
-    var zoneOptions = uniqueTextValues(rows, function(row){ return row && row.zone; }, catalogDropdownOptionsState.service_zones);
+    var selectedIndex = ensureSelectedServiceAreaIndex(rows);
+    var row = rows[selectedIndex] || {};
+    var tierOptions = uniqueTextValues(rows, function(area){ return area && area.travel_tier; }, catalogDropdownOptionsState.service_tiers);
+    var zoneOptions = uniqueTextValues(rows, function(area){ return area && area.zone; }, catalogDropdownOptionsState.service_zones);
+    var countyOptions = uniqueTextValues(rows, function(area){ return area && area.county; }, catalogDropdownOptionsState.service_counties || ['Oxford County','Norfolk County']);
     var tierDatalist = renderDatalist('serviceTierOptions', tierOptions);
     var zoneDatalist = renderDatalist('serviceZoneOptions', zoneOptions);
-    return tierDatalist + zoneDatalist + rows.map(function (row, index) {
-      return '<div class="catalog-row service-area">' +
-        '<div class="catalog-row__head">County</div><div class="catalog-row__head">Label</div><div class="catalog-row__head">Value</div><div class="catalog-row__head">Municipality</div><div class="catalog-row__head">Zone</div><div class="catalog-row__head">Tier</div><div></div>' +
-        '<label class="field"><input list="serviceZoneOptions" data-area-field="county" data-area-index="' + index + '" value="' + escapeHtml(row.county || '') + '"></label>' +
-        '<label class="field"><input data-area-field="label" data-area-index="' + index + '" value="' + escapeHtml(row.label || '') + '"></label>' +
-        '<label class="field"><input data-area-field="value" data-area-index="' + index + '" value="' + escapeHtml(row.value || '') + '"></label>' +
-        '<label class="field"><input data-area-field="municipality" data-area-index="' + index + '" value="' + escapeHtml(row.municipality || '') + '"></label>' +
-        '<label class="field"><input list="serviceZoneOptions" data-area-field="zone" data-area-index="' + index + '" value="' + escapeHtml(row.zone || '') + '"></label>' +
-        '<label class="field"><input list="serviceTierOptions" data-area-field="travel_tier" data-area-index="' + index + '" value="' + escapeHtml(row.travel_tier || 'township') + '"></label>' +
-        '<button class="btn" type="button" data-delete-area="' + index + '">Delete</button>' +
-      '</div>';
+    var countyDatalist = renderDatalist('serviceCountyOptions', countyOptions);
+    var areaOptions = rows.map(function(area, index) {
+      return '<option value="' + index + '"' + (index === selectedIndex ? ' selected' : '') + '>' + escapeHtml(serviceAreaLabel(area, index)) + '</option>';
     }).join('');
+    var oxfordCount = rows.filter(function(area){ return /oxford/i.test(String(area && area.county || '')); }).length;
+    var norfolkCount = rows.filter(function(area){ return /norfolk/i.test(String(area && area.county || '')); }).length;
+    return countyDatalist + tierDatalist + zoneDatalist +
+      '<div class="service-area-editor-summary">' +
+        '<div class="stat"><strong>' + rows.length + '</strong><span class="note">service-area rows</span></div>' +
+        '<div class="stat"><strong>' + oxfordCount + '</strong><span class="note">Oxford rows</span></div>' +
+        '<div class="stat"><strong>' + norfolkCount + '</strong><span class="note">Norfolk rows</span></div>' +
+        '<div class="stat"><strong>' + escapeHtml(row.travel_tier || 'quote_required') + '</strong><span class="note">selected travel tier</span></div>' +
+      '</div>' +
+      '<div class="actions" style="align-items:end">' +
+        '<label class="field" style="min-width:min(100%,520px);flex:1"><span>Select service area to edit</span><select id="serviceAreaEditorSelect" aria-label="Choose service area or travel tier to edit">' + areaOptions + '</select></label>' +
+        '<button class="btn primary" type="button" id="saveSelectedServiceAreaBtn">Save selected service area</button>' +
+        '<button class="btn" type="button" id="duplicateSelectedServiceAreaBtn">Duplicate</button>' +
+        '<button class="btn" type="button" id="deleteSelectedServiceAreaBtn">Delete selected</button>' +
+      '</div>' +
+      '<div class="service-area-editor-grid">' +
+        '<label class="field"><span>County</span><input list="serviceCountyOptions" data-area-editor-field="county" value="' + escapeHtml(row.county || '') + '"></label>' +
+        '<label class="field"><span>Town / label</span><input list="serviceZoneOptions" data-area-editor-field="label" value="' + escapeHtml(row.label || '') + '"></label>' +
+        '<label class="field"><span>Booking value</span><input list="serviceZoneOptions" data-area-editor-field="value" value="' + escapeHtml(row.value || '') + '"></label>' +
+        '<label class="field"><span>Municipality</span><input list="serviceZoneOptions" data-area-editor-field="municipality" value="' + escapeHtml(row.municipality || '') + '"></label>' +
+        '<label class="field"><span>Zone</span><input list="serviceZoneOptions" data-area-editor-field="zone" value="' + escapeHtml(row.zone || '') + '"></label>' +
+        '<label class="field"><span>Travel tier</span><input list="serviceTierOptions" data-area-editor-field="travel_tier" value="' + escapeHtml(row.travel_tier || 'quote_required') + '"></label>' +
+        '<label class="field"><span>Area type</span><input data-area-editor-field="area_type" value="' + escapeHtml(row.area_type || '') + '" placeholder="town, county-fallback, rural, custom"></label>' +
+        '<label class="field wide"><span>County / by-law note</span><textarea rows="2" data-area-editor-field="bylaw_note">' + escapeHtml(row.bylaw_note || '') + '</textarea></label>' +
+        '<label class="field wide"><span>Water restrictions / water-use reminder</span><textarea rows="2" data-area-editor-field="water_rule">' + escapeHtml(row.water_rule || '') + '</textarea></label>' +
+        '<label class="field wide"><span>Parking/access reminder</span><textarea rows="2" data-area-editor-field="parking_rule">' + escapeHtml(row.parking_rule || '') + '</textarea></label>' +
+        '<label class="field wide"><span>Noise / arrival reminder</span><textarea rows="2" data-area-editor-field="noise_rule">' + escapeHtml(row.noise_rule || '') + '</textarea></label>' +
+        '<label class="field wide"><span>Access / setup reminder</span><textarea rows="2" data-area-editor-field="access_rule">' + escapeHtml(row.access_rule || '') + '</textarea></label>' +
+      '</div>';
   }
   function renderRequirementRows(rows){
     if (!rows.length) return '<div class="catalog-empty">No public requirements yet.</div>';
@@ -1189,22 +2869,76 @@
         syncPricingEditorToJson();
       });
     });
-    qsa('[data-area-index]').forEach(function (input) {
-      input.addEventListener('input', function () {
-        var index = Number(input.getAttribute('data-area-index'));
-        var field = input.getAttribute('data-area-field');
-        setNestedValue(pricingCatalogState.service_areas[index], field, input.value);
-        syncPricingEditorToJson();
+    var serviceAreaSelect = byId('serviceAreaEditorSelect');
+    if (serviceAreaSelect) {
+      serviceAreaSelect.addEventListener('change', function () {
+        selectedServiceAreaIndex = Number(serviceAreaSelect.value || 0);
         renderPricingDashboard();
       });
+    }
+    qsa('[data-area-editor-field]').forEach(function (input) {
+      var eventName = input.tagName === 'SELECT' ? 'change' : 'input';
+      input.addEventListener(eventName, function () {
+        var rows = Array.isArray(pricingCatalogState.service_areas) ? pricingCatalogState.service_areas : [];
+        var index = ensureSelectedServiceAreaIndex(rows);
+        if (!rows[index]) return;
+        var field = input.getAttribute('data-area-editor-field');
+        setNestedValue(rows[index], field, input.value);
+        if ((field === 'label' || field === 'value') && !rows[index].value) rows[index].value = input.value;
+        pricingCatalogState.service_areas = rows;
+        syncPricingEditorToJson();
+      });
       input.addEventListener('change', function () {
-        var index = Number(input.getAttribute('data-area-index'));
-        var field = input.getAttribute('data-area-field');
-        setNestedValue(pricingCatalogState.service_areas[index], field, input.value);
+        var rows = Array.isArray(pricingCatalogState.service_areas) ? pricingCatalogState.service_areas : [];
+        var index = ensureSelectedServiceAreaIndex(rows);
+        if (!rows[index]) return;
+        var field = input.getAttribute('data-area-editor-field');
+        setNestedValue(rows[index], field, input.value);
+        pricingCatalogState.service_areas = rows;
         syncPricingEditorToJson();
         renderPricingDashboard();
       });
     });
+    var saveSelectedServiceAreaBtn = byId('saveSelectedServiceAreaBtn');
+    if (saveSelectedServiceAreaBtn) {
+      saveSelectedServiceAreaBtn.addEventListener('click', async function () {
+        try {
+          syncPricingEditorToJson();
+          await saveSetting('pricing_catalog', pricingCatalogState, 'Selected service area saved. Booking, pricing, services, and checkout now use this travel/water-rule row.');
+          renderPricingDashboard();
+        } catch (err) {
+          setShellStatus(err && err.message ? err.message : 'Could not save the selected service area.', 'error');
+        }
+      });
+    }
+    var duplicateSelectedServiceAreaBtn = byId('duplicateSelectedServiceAreaBtn');
+    if (duplicateSelectedServiceAreaBtn) {
+      duplicateSelectedServiceAreaBtn.addEventListener('click', function () {
+        var rows = Array.isArray(pricingCatalogState.service_areas) ? pricingCatalogState.service_areas : [];
+        var index = ensureSelectedServiceAreaIndex(rows);
+        var clone = JSON.parse(JSON.stringify(rows[index] || {}));
+        clone.label = (clone.label || clone.value || 'Service Area') + ' copy';
+        clone.value = clone.label;
+        rows.splice(index + 1, 0, clone);
+        selectedServiceAreaIndex = index + 1;
+        pricingCatalogState.service_areas = rows;
+        syncPricingEditorToJson();
+        renderPricingDashboard();
+      });
+    }
+    var deleteSelectedServiceAreaBtn = byId('deleteSelectedServiceAreaBtn');
+    if (deleteSelectedServiceAreaBtn) {
+      deleteSelectedServiceAreaBtn.addEventListener('click', function () {
+        var rows = Array.isArray(pricingCatalogState.service_areas) ? pricingCatalogState.service_areas : [];
+        if (!rows.length) return;
+        var index = ensureSelectedServiceAreaIndex(rows);
+        rows.splice(index, 1);
+        selectedServiceAreaIndex = Math.max(0, index - 1);
+        pricingCatalogState.service_areas = rows;
+        syncPricingEditorToJson();
+        renderPricingDashboard();
+      });
+    }
     qsa('[data-requirement-index]').forEach(function (input) {
       input.addEventListener('input', function () {
         var index = Number(input.getAttribute('data-requirement-index'));
@@ -1232,9 +2966,6 @@
     });
     qsa('[data-delete-addon]').forEach(function (button) {
       button.addEventListener('click', function () { pricingCatalogState.addons.splice(Number(button.getAttribute('data-delete-addon')), 1); syncPricingEditorToJson(); renderPricingDashboard(); });
-    });
-    qsa('[data-delete-area]').forEach(function (button) {
-      button.addEventListener('click', function () { pricingCatalogState.service_areas.splice(Number(button.getAttribute('data-delete-area')), 1); syncPricingEditorToJson(); renderPricingDashboard(); });
     });
     qsa('[data-delete-requirement]').forEach(function (button) {
       button.addEventListener('click', function () { pricingCatalogState.public_requirements.splice(Number(button.getAttribute('data-delete-requirement')), 1); pricingCatalogState.booking_rules.public_requirements = pricingCatalogState.public_requirements.slice(); syncPricingEditorToJson(); renderPricingDashboard(); });
@@ -1392,7 +3123,8 @@
     syncPricingEditorToJson(); renderPricingDashboard();
   });
   bindById('addServiceAreaBtn', 'click', function () {
-    pricingCatalogState.service_areas.push({ county: '', label: 'New Service Area', value: 'New Service Area', municipality: '', zone: '', travel_tier: 'township', area_type: '', bylaw_note: '', parking_rule: '', noise_rule: '', water_rule: '', access_rule: '', official_links: [] });
+    pricingCatalogState.service_areas.push({ county: 'Oxford County', label: 'New Service Area', value: 'New Service Area', municipality: '', zone: '', travel_tier: 'quote_required', area_type: 'custom', bylaw_note: 'Custom service area. If there is no local override, default to the selected county rule.', parking_rule: 'Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.', noise_rule: 'Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.', water_rule: 'Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.', access_rule: 'Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.', official_links: [] });
+    selectedServiceAreaIndex = pricingCatalogState.service_areas.length - 1;
     syncPricingEditorToJson(); renderPricingDashboard();
   });
   bindById('addRequirementBtn', 'click', function () {

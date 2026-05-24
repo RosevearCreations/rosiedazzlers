@@ -61,6 +61,23 @@
     }
     .date-picker-button:hover{background:rgba(255,255,255,.18)}
     #service_area{min-width:0;width:100%}
+
+    .service-area-input-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}
+    @media(max-width:720px){.service-area-input-row{grid-template-columns:1fr}.service-area-input-row .btn{width:100%;justify-content:center}}
+    .service-area-picker{
+      display:none;margin-top:8px;padding:10px;border:1px solid rgba(255,255,255,.12);border-radius:16px;
+      background:rgba(15,23,42,.82);box-shadow:0 14px 36px rgba(0,0,0,.22)
+    }
+    .service-area-picker.open{display:block}
+    .service-area-picker-head{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+    .service-area-picker-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;max-height:300px;overflow:auto;padding-right:4px}
+    .service-area-choice{
+      border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(255,255,255,.08);color:#fff;
+      text-align:left;padding:9px 10px;cursor:pointer;min-height:58px
+    }
+    .service-area-choice:hover,.service-area-choice:focus{background:rgba(77,119,255,.22);outline:2px solid rgba(109,168,255,.45)}
+    .service-area-choice strong{display:block;font-size:.95rem}
+    .service-area-choice span{display:block;color:rgba(234,242,255,.72);font-size:.82rem;margin-top:2px}
     .booking-legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
     .booking-legend span{display:inline-flex;align-items:center;gap:6px;font-size:.9rem;color:rgba(248,250,252,.92)}
     .booking-legend i{display:inline-block;width:12px;height:12px;border-radius:999px}
@@ -91,6 +108,25 @@
     .vehicle-option strong,.vehicle-option span{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
     .vehicle-option.active{outline:2px solid #4d77ff}
     .service-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:stretch}
+    .booking-choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:12px}
+    .booking-choice-card{border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:14px;background:rgba(255,255,255,.04);display:flex;flex-direction:column;gap:8px}
+    .booking-choice-card h3{margin:0;font-size:1.02rem}
+    .booking-choice-card p{margin:0;color:rgba(234,242,255,.76);font-size:.94rem}
+    .booking-choice-card .btn{align-self:flex-start;margin-top:auto}
+    .photo-estimate-guide{border:1px solid rgba(77,119,255,.28);border-radius:18px;background:rgba(77,119,255,.10);padding:14px;margin-top:12px}
+    .photo-estimate-guide ul{margin:.5rem 0 0;padding-left:1.1rem}
+    .condition-recommender{border:1px solid rgba(36,195,107,.30);border-radius:18px;background:rgba(36,195,107,.08);padding:14px;margin-top:12px}
+    .condition-recommender h3{margin:.1rem 0 .35rem}
+    .condition-chip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:10px}
+    .condition-chip{display:flex;gap:8px;align-items:flex-start;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:10px;background:rgba(255,255,255,.05);cursor:pointer}
+    .condition-chip input{margin-top:3px;flex:0 0 auto}
+    .condition-chip span{font-size:.92rem;color:rgba(234,242,255,.86);line-height:1.35}
+    .recommendation-output{display:none;border:1px solid rgba(77,119,255,.25);border-radius:14px;background:rgba(77,119,255,.10);padding:12px;margin-top:12px}
+    .recommendation-output.show{display:block}
+    .media-consent-grid{display:grid;gap:8px;margin-top:8px}
+    .media-consent-grid label{display:flex;gap:9px;align-items:flex-start;border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px;background:rgba(255,255,255,.04)}
+    .media-consent-grid input{margin-top:3px;flex:0 0 auto}
+    .package-alias{font-weight:800;color:rgba(255,255,255,.96)}
     .service-card{
       display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:1px solid rgba(255,255,255,.08);min-width:0;overflow:hidden;
       border-radius:18px;padding:12px;background:rgba(255,255,255,.04);text-align:left;width:100%;min-height:100%;box-sizing:border-box
@@ -198,9 +234,18 @@
 
         <div>
           <label for="service_area">Service area</label>
-          <select id="service_area">
-            <option value="">Loading service areas…</option>
-          </select>
+          <div class="service-area-input-row">
+            <input id="service_area" list="service_area_options" autocomplete="off" placeholder="Start typing a town, county, or service zone…" />
+            <button class="btn ghost small" id="showServiceAreasBtn" type="button">Show all towns</button>
+          </div>
+          <datalist id="service_area_options"></datalist>
+          <div id="serviceAreaPicker" class="service-area-picker" aria-live="polite">
+            <div class="service-area-picker-head">
+              <strong>Oxford and Norfolk service areas</strong>
+              <button class="btn ghost small" id="hideServiceAreasBtn" type="button">Hide list</button>
+            </div>
+            <div id="serviceAreaPickerGrid" class="service-area-picker-grid"></div>
+          </div>
           <div id="serviceAreaPanel" class="service-area-panel" style="margin-top:8px">
             <div id="serviceAreaNote" class="notice mini">Choose the closest town or service zone so we can apply the right travel, parking, and local bylaw rules before dispatch.</div>
             <ul id="serviceAreaRules">
@@ -335,6 +380,71 @@
           <p class="muted">Packages are shown using the price for the vehicle size you selected.</p>
         </div>
       </div>
+      <div class="photo-estimate-guide" id="bookingServiceChooser">
+        <strong>Not sure which one to pick?</strong>
+        <p class="muted" style="margin:6px 0 0">Start with the result you want. These quick choices select the closest package, and we can still adjust after photos or notes.</p>
+        <div class="booking-choice-grid">
+          <article class="booking-choice-card">
+            <h3>Quick exterior cleanup</h3>
+            <p>For maintained vehicles that mostly need exterior wash, glass, wheels, and a light dash reset.</p>
+            <button class="btn ghost small" type="button" data-package-suggest="premium_wash">Choose Exterior Wash</button>
+          </article>
+          <article class="booking-choice-card">
+            <h3>Quick interior refresh</h3>
+            <p>For dust, crumbs, windows, mats, and a basic cabin tidy without deeper shampoo work.</p>
+            <button class="btn ghost small" type="button" data-package-suggest="basic_detail">Choose Interior Refresh</button>
+          </article>
+          <article class="booking-choice-card">
+            <h3>Interior mess, pets, salt, or odour</h3>
+            <p>For deeper seats, carpets, mats, cargo areas, salt marks, pet hair, and interior recovery.</p>
+            <button class="btn ghost small" type="button" data-package-suggest="interior_detail">Choose Interior Detail</button>
+          </article>
+          <article class="booking-choice-card">
+            <h3>Best all-around reset</h3>
+            <p>For a full inside/outside reset, pre-sale cleanup, family vehicles, or when you are unsure.</p>
+            <button class="btn ghost small" type="button" data-package-suggest="complete_detail">Choose Full Detail</button>
+          </article>
+          <article class="booking-choice-card">
+            <h3>Exterior gloss or protection prep</h3>
+            <p>For paint, trim, wheels, road film, clay, sealant, wax, paint correction, or coating-prep talks.</p>
+            <button class="btn ghost small" type="button" data-package-suggest="exterior_detail">Choose Exterior Detail</button>
+          </article>
+          <article class="booking-choice-card">
+            <h3>Quote first from photos</h3>
+            <p>Send 2–6 photos if there are stains, pet hair, oxidation, headlights, paint defects, or coating questions.</p>
+            <button class="btn ghost small" type="button" data-jump-notes="photos">Add photo notes</button>
+          </article>
+        </div>
+      </div>
+      <div class="condition-recommender" id="bookingConditionRecommender">
+        <div class="badges">
+          <span class="badge">Condition helper</span>
+          <span class="badge">Photo estimate friendly</span>
+          <span class="badge">Optional</span>
+        </div>
+        <h3>Tell us what the vehicle needs</h3>
+        <p class="muted" style="margin:0">Pick what applies and we will suggest the closest package, useful add-ons, and notes for staff review. This keeps the choice simple without locking you in.</p>
+        <div class="condition-chip-grid" aria-label="Vehicle condition choices">
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="maintained_interior" /><span>Mostly maintained interior: dust, crumbs, mats, glass, light wipe-down</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="maintained_exterior" /><span>Mostly maintained exterior: wash, wheels, glass, light shine</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="pet_hair" /><span>Pet hair, fur in carpets/seats, or extra vacuum detail</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="salt_stains" /><span>Salt stains, winter mats, carpet marks, or floor buildup</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="odor" /><span>Odour concern, spills, smoke, food smell, or unknown smell source</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="stains_shampoo" /><span>Seat/carpet stains, shampoo/extraction questions, or cargo-area mess</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="paint_swirls" /><span>Swirls, dull paint, scratches, oxidation, or polishing question</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="protection" /><span>Wax, sealant, ceramic spray, coating prep, or longer protection</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="headlights" /><span>Cloudy headlights or exterior detail question</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="full_reset" /><span>Best all-around reset: family vehicle, resale prep, or not sure</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="work_truck" /><span>Work truck, farm vehicle, fleet vehicle, or multiple vehicles</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="photo_quote" /><span>I want a photo-based quote before final recommendation</span></label>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary small" type="button" id="conditionRecommendBtn">Recommend package</button>
+          <button class="btn ghost small" type="button" id="conditionClearBtn">Clear helper</button>
+        </div>
+        <div class="recommendation-output" id="conditionRecommendationResult"></div>
+      </div>
+
       <div id="packageCards" class="service-card-grid" style="margin-top:12px"></div>
       <div id="step2Error" class="field-error"></div>
     </section>
@@ -373,6 +483,7 @@
       <div class="requirements-grid" style="margin-top:16px">
         <label><input id="ack_driveway" type="checkbox" /><span><strong>Driveway required</strong><br>We need safe working space at the vehicle.</span></label>
         <label><input id="ack_power_water" type="checkbox" /><span><strong>Customer provides power and water</strong><br>Extra fees can apply if either is unavailable.</span></label>
+        <label><input id="need_mobile_water_power" type="checkbox" /><span><strong>Quote bringing water/power</strong><br>Check this if the site may not have hose or power access; staff will confirm extra setup fees.</span></label>
         <label><input id="ack_bylaw" type="checkbox" /><span><strong>Environmental / bylaw responsibility acknowledged</strong><br>Customer confirms any local bylaw requirements.</span></label>
         <label><input id="ack_cancellation" type="checkbox" /><span><strong>Deposit and weather rescheduling policy acknowledged</strong><br>Unsafe weather or site conditions can require rescheduling.</span></label>
       </div>
@@ -386,6 +497,35 @@
           <label for="veh_photo">Vehicle photo link (optional)</label>
           <input id="veh_photo" type="url" placeholder="https://..." />
           <div class="mini muted" style="margin-top:6px">Helpful for size verification and planning, but not required.</div>
+          <div class="photo-estimate-guide">
+            <strong>Photo estimate checklist</strong>
+            <div class="mini muted" style="margin-top:6px">For quotes, attach or link 2–6 clear photos when possible:</div>
+            <ul class="mini muted">
+              <li>Front and rear exterior, especially paint or headlight issues</li>
+              <li>Driver seat, passenger seat, carpets, mats, and cargo area</li>
+              <li>Close-up of pet hair, salt stains, odour source, scratches, oxidation, or coating concerns</li>
+            </ul>
+            <label for="photo_estimate_links" style="margin-top:10px">Photo estimate links (optional)</label>
+            <textarea id="photo_estimate_links" rows="3" placeholder="Paste Google Drive, Dropbox, iCloud, Facebook, or other share links here — one per line."></textarea>
+            <div class="mini muted" id="photoEstimateLinkHelp" style="margin-top:6px">Links and uploaded estimate media are saved with booking notes and, after migration, stored for staff quote review.</div>
+            <label for="photo_estimate_files" style="margin-top:10px">Upload estimate photos/videos (optional)</label>
+            <input id="photo_estimate_files" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,video/mp4,video/quicktime,video/webm" multiple />
+            <div class="mini muted" id="photoEstimateUploadStatus" style="margin-top:6px">Direct upload is optional. If uploads are not enabled yet, paste shared photo links above.</div>
+            <label class="condition-chip" style="margin-top:10px">
+              <input id="photo_estimate_requested" type="checkbox" />
+              <span>Please treat this as a photo-estimate / quote-review booking before final service confirmation.</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-estimate-guide" id="bookingMediaConsentGuide">
+        <strong>Photo and public-use preference</strong>
+        <p class="mini muted" style="margin:6px 0 0">Estimate photos are for quoting and job planning by default. Public gallery or social use should only happen after customer permission and staff privacy review.</p>
+        <div class="media-consent-grid">
+          <label><input type="radio" name="media_consent_preference" value="estimate_only" checked /><span><strong>Estimate use only</strong><br><span class="mini muted">Use my photos for quote/job planning, not public posts.</span></span></label>
+          <label><input type="radio" name="media_consent_preference" value="ask_first" /><span><strong>Ask me first</strong><br><span class="mini muted">You may ask later about before/after gallery or social use.</span></span></label>
+          <label><input type="radio" name="media_consent_preference" value="public_after_review" /><span><strong>Public use may be okay after review</strong><br><span class="mini muted">Staff must still remove/avoid plates, faces, addresses, paperwork, and private identifiers before any post.</span></span></label>
         </div>
       </div>
 
@@ -425,13 +565,15 @@
       <div class="grid2" style="margin-top:12px">
         <div>
           <label for="city">City</label>
-          <input id="city" type="text" />
+          <input id="city" type="text" list="city_options" autocomplete="address-level2" placeholder="Town or municipality" />
+          <datalist id="city_options"></datalist>
         </div>
         <div>
           <label for="postal_code">Postal code</label>
           <input id="postal_code" type="text" placeholder="N0E 1W0" />
         </div>
       </div>
+      <div id="addressAreaWarning" class="notice mini" style="display:none;margin-top:10px"></div>
 
       <div class="hr"></div>
       <div id="finalSummary" class="summary-box"></div>
@@ -497,6 +639,11 @@
       selectedPackageCode: "",
       selectedSlotChoice: "",
       addons: new Set(),
+      conditionFlags: new Set(),
+      conditionRecommendationSummary: "",
+      photoEstimateRequested: false,
+      uploadedPhotoEstimateLinks: [],
+      mediaConsentPreference: "estimate_only",
       garageVehicles: [],
       availabilityCache: new Map(),
       availabilityOffset: 0,
@@ -510,6 +657,223 @@
       try {
         window.dispatchEvent(new CustomEvent("rd:analytics", { detail: { event, ...detail } }));
       } catch {}
+    }
+
+    const CONDITION_LABELS = {
+      maintained_interior: "Mostly maintained interior",
+      maintained_exterior: "Mostly maintained exterior",
+      pet_hair: "Pet hair",
+      salt_stains: "Salt stains",
+      odor: "Odour concern",
+      stains_shampoo: "Stains or shampoo/extraction question",
+      paint_swirls: "Paint swirls/dull paint/scratches",
+      protection: "Wax/sealant/coating protection",
+      headlights: "Cloudy headlights",
+      full_reset: "Full reset",
+      work_truck: "Work truck/fleet/multiple vehicles",
+      photo_quote: "Photo quote requested"
+    };
+
+    function selectedConditionFlags() {
+      const flags = qsa("[data-condition-flag]:checked").map((node) => node.getAttribute("data-condition-flag")).filter(Boolean);
+      state.conditionFlags = new Set(flags);
+      state.photoEstimateRequested = flags.includes("photo_quote") || qs("#photo_estimate_requested")?.checked === true;
+      return flags;
+    }
+
+    function conditionFlagLabels(flags = selectedConditionFlags()) {
+      return flags.map((flag) => CONDITION_LABELS[flag] || flag).filter(Boolean);
+    }
+
+    function buildConditionRecommendation(flags = selectedConditionFlags()) {
+      const set = new Set(flags);
+      const notes = [];
+      const addonCodes = [];
+      let packageCode = "complete_detail";
+      let headline = "Full Detail is the safest starting point.";
+
+      if (set.has("maintained_exterior") && !set.has("maintained_interior") && flags.length === 1) {
+        packageCode = "premium_wash";
+        headline = "Premium Wash looks like the closest fit.";
+      } else if (set.has("maintained_interior") && !set.has("maintained_exterior") && flags.length === 1) {
+        packageCode = "basic_detail";
+        headline = "Basic Detail / Express Interior Refresh looks like the closest fit.";
+      } else if (["pet_hair", "salt_stains", "odor", "stains_shampoo"].some((flag) => set.has(flag))) {
+        packageCode = "interior_detail";
+        headline = "Interior Detail is the best starting point for this condition.";
+      } else if (["paint_swirls", "protection", "headlights"].some((flag) => set.has(flag))) {
+        packageCode = "exterior_detail";
+        headline = "Exterior Detail is the best starting point for paint/protection questions.";
+      }
+
+      if (set.has("full_reset") || (set.has("maintained_interior") && set.has("maintained_exterior"))) {
+        packageCode = "complete_detail";
+        headline = "Complete Detail / Full Detail is the best all-around reset.";
+      }
+      if (set.has("work_truck")) notes.push("Work truck/fleet/multiple vehicle note: staff should confirm access, timing, soil level, and whether this should become a quote or recurring-plan lead.");
+      if (set.has("photo_quote")) notes.push("Customer asked for photo-based quote review before final recommendation.");
+      if (set.has("pet_hair")) notes.push("Pet hair noted; staff should confirm severity and whether extra labour/quote handling is needed.");
+      if (set.has("salt_stains")) notes.push("Salt staining noted; staff should review mats/carpets and quote deeper extraction if needed.");
+      if (set.has("odor")) notes.push("Odour concern noted; staff should identify source before promising removal.");
+      if (set.has("stains_shampoo")) notes.push("Seat/carpet stain or shampoo/extraction question noted; photos recommended.");
+      if (set.has("paint_swirls")) addonCodes.push("two_stage_polish");
+      if (set.has("protection")) addonCodes.push("high_grade_paint_sealant");
+      if (set.has("paint_swirls") || set.has("protection")) addonCodes.push("full_clay_treatment");
+      if (set.has("headlights")) notes.push("Headlight haze noted; staff should inspect and quote if restoration is needed.");
+
+      return { packageCode, headline, addonCodes: [...new Set(addonCodes)], notes };
+    }
+
+    function appendBookingNote(text) {
+      const notes = qs("#special_notes");
+      if (!notes || !text) return;
+      const existing = notes.value.trim();
+      if (existing.includes(text)) return;
+      notes.value = existing ? `${existing}\n\n${text}` : text;
+    }
+
+    function parsePhotoEstimateLinks() {
+      const raw = qs("#photo_estimate_links")?.value || "";
+      return raw
+        .split(/[\n,]+/)
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .filter((item, index, all) => all.indexOf(item) === index)
+        .slice(0, 12);
+    }
+
+    function appendPhotoEstimateLinks(links) {
+      const field = qs("#photo_estimate_links");
+      if (!field) return;
+      const merged = [...parsePhotoEstimateLinks(), ...links.map((link) => String(link || "").trim()).filter(Boolean)]
+        .filter((item, index, all) => all.indexOf(item) === index)
+        .slice(0, 12);
+      field.value = merged.join("\n");
+      state.uploadedPhotoEstimateLinks = merged;
+      state.photoEstimateRequested = true;
+      const photoBox = qs("#photo_estimate_requested");
+      if (photoBox) photoBox.checked = true;
+      renderPhotoEstimateLinkHelp();
+      renderFinalSummary();
+    }
+
+    function setPhotoEstimateUploadStatus(message, tone = "muted") {
+      const box = qs("#photoEstimateUploadStatus");
+      if (!box) return;
+      box.textContent = message;
+      box.className = tone === "error" ? "mini field-error" : tone === "ok" ? "mini notice ok" : "mini muted";
+    }
+
+    async function uploadPhotoEstimateFiles(files) {
+      const selected = Array.from(files || []).slice(0, 8);
+      if (!selected.length) return;
+      setPhotoEstimateUploadStatus(`Preparing ${selected.length} estimate upload${selected.length === 1 ? "" : "s"}…`);
+      const uploaded = [];
+      for (const file of selected) {
+        try {
+          const signRes = await fetch("/api/public_photo_estimate_upload_url", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              filename: file.name,
+              content_type: file.type || "image/jpeg",
+              file_size_bytes: file.size || 0,
+              customer_name: qs("#customer_name")?.value || "",
+              customer_email: qs("#customer_email")?.value || ""
+            })
+          });
+          const sign = await signRes.json().catch(() => null);
+          if (!signRes.ok || !sign?.ok || !sign.upload_url) {
+            throw new Error(sign?.error || "Upload link could not be prepared.");
+          }
+          const putRes = await fetch(sign.upload_url, {
+            method: sign.method || "PUT",
+            headers: { "Content-Type": file.type || "application/octet-stream" },
+            body: file
+          });
+          if (!putRes.ok) throw new Error(`Upload failed for ${file.name}.`);
+          uploaded.push(sign.public_url || sign.media_url || sign.object_path);
+          setPhotoEstimateUploadStatus(`Uploaded ${uploaded.length}/${selected.length} estimate file${selected.length === 1 ? "" : "s"}…`, "ok");
+        } catch (err) {
+          setPhotoEstimateUploadStatus(`${err?.message || err} Paste a shared photo link instead if needed.`, "error");
+          break;
+        }
+      }
+      if (uploaded.length) {
+        appendPhotoEstimateLinks(uploaded);
+        setPhotoEstimateUploadStatus(`${uploaded.length} uploaded estimate file${uploaded.length === 1 ? "" : "s"} added to the booking intake.`, "ok");
+      }
+    }
+
+    function renderPhotoEstimateLinkHelp() {
+      const help = qs("#photoEstimateLinkHelp");
+      if (!help) return;
+      const links = parsePhotoEstimateLinks();
+      const requested = qs("#photo_estimate_requested")?.checked === true || state.photoEstimateRequested === true;
+      help.textContent = links.length
+        ? `${links.length} photo/media link${links.length === 1 ? "" : "s"} will be attached to the estimate intake for staff review.`
+        : requested
+          ? "Add share links if we should quote from photos. You can still submit without links and staff can request them later."
+          : "Links and uploaded estimate media are saved with booking notes and, after migration, stored for staff quote review.";
+    }
+
+    function renderConditionRecommendation(result, flags = selectedConditionFlags()) {
+      const box = qs("#conditionRecommendationResult");
+      if (!box) return;
+      if (!flags.length) {
+        box.classList.remove("show");
+        box.innerHTML = "";
+        return;
+      }
+      const pkg = (state.pricing?.packages || []).find((row) => row.code === result.packageCode);
+      const addonRows = result.addonCodes
+        .map((code) => (state.pricing?.addons || []).find((addon) => addon.code === code))
+        .filter(Boolean);
+      box.classList.add("show");
+      box.innerHTML = `<strong>${escapeHtml(result.headline)}</strong>
+        <div class="mini muted" style="margin-top:6px">Selected condition flags: ${escapeHtml(conditionFlagLabels(flags).join(", "))}</div>
+        <div class="mini muted" style="margin-top:6px">Recommended package: <strong>${escapeHtml(pkg?.display_alias || pkg?.name || result.packageCode)}</strong></div>
+        ${addonRows.length ? `<div class="mini muted" style="margin-top:6px">Suggested add-ons to review: ${escapeHtml(addonRows.map((addon) => addon.name).join(", "))}</div>` : ""}
+        ${result.notes.length ? `<ul class="mini muted">${result.notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>` : ""}`;
+    }
+
+    function applyConditionRecommendation() {
+      const flags = selectedConditionFlags();
+      if (!flags.length) {
+        renderConditionRecommendation({ packageCode: "", headline: "", addonCodes: [], notes: [] }, flags);
+        showStatus("Choose at least one vehicle condition first.", "warn");
+        return;
+      }
+      const result = buildConditionRecommendation(flags);
+      const packageExists = (state.pricing?.packages || []).some((pkg) => pkg.code === result.packageCode);
+      if (packageExists) state.selectedPackageCode = result.packageCode;
+      for (const code of result.addonCodes) {
+        const addon = (state.pricing?.addons || []).find((row) => row.code === code);
+        if (addon && addonAllowedForPackage(addon, state.selectedPackageCode)) state.addons.add(code);
+      }
+      state.photoEstimateRequested = flags.includes("photo_quote") || ["pet_hair", "salt_stains", "odor", "stains_shampoo", "paint_swirls", "headlights", "work_truck"].some((flag) => flags.includes(flag));
+      const photoBox = qs("#photo_estimate_requested");
+      if (photoBox && state.photoEstimateRequested) photoBox.checked = true;
+      state.conditionRecommendationSummary = `${result.headline} Flags: ${conditionFlagLabels(flags).join(", ")}. ${result.notes.join(" ")}`.trim();
+      appendBookingNote(`Condition helper: ${state.conditionRecommendationSummary}`);
+      if (state.photoEstimateRequested) appendBookingNote("Photo estimate requested: please review linked/attached photos before final package/add-on confirmation.");
+      renderConditionRecommendation(result, flags);
+      pruneInvalidSelectedAddons();
+      renderPackages();
+      renderAddons();
+      renderFinalSummary();
+      showStatus("Condition helper applied. Review the selected package, add-ons, and notes before checkout.", "ok");
+      analyticsTrack("booking_condition_recommendation_apply", { package_code: state.selectedPackageCode || null, flags });
+    }
+
+    function clearConditionRecommendation() {
+      qsa("[data-condition-flag]").forEach((node) => { node.checked = false; });
+      state.conditionFlags.clear();
+      state.conditionRecommendationSummary = "";
+      state.photoEstimateRequested = qs("#photo_estimate_requested")?.checked === true;
+      renderConditionRecommendation({ packageCode: "", headline: "", addonCodes: [], notes: [] }, []);
+      showStatus("Condition helper cleared. Your selected package/add-ons were left unchanged.", "warn");
+      analyticsTrack("booking_condition_recommendation_clear", {});
     }
 
     function openModal(title, src) {
@@ -574,7 +938,7 @@
         selected_date: selectedDate() || null,
         selected_slot: state.selectedSlotChoice || null,
         service_area: qs('#service_area').value || null,
-        service_area_label: area?.label || qs('#service_area').selectedOptions?.[0]?.textContent || qs('#service_area').value || null,
+        service_area_label: area?.label || qs('#service_area').value || null,
         local_rules_label: area?.municipality || null,
         vehicle_label: [qs('#veh_year').value, qs('#veh_make').value, qs('#veh_model').value, qs('#veh_color').value].filter(Boolean).join(' · ') || null,
         vehicle_size: selectedSize() || null,
@@ -622,7 +986,7 @@
         qs("#vehicle_size").value = size;
       }
 
-      if (serviceArea && [...qs("#service_area").options].some((opt) => opt.value === serviceArea)) {
+      if (serviceArea) {
         qs("#service_area").value = serviceArea;
       }
 
@@ -663,6 +1027,53 @@
     qs("#modalCloseBtn").addEventListener("click", closeModal);
     qs("#modalBack").addEventListener("click", (event) => {
       if (event.target === qs("#modalBack")) closeModal();
+    });
+
+    qsa("[data-package-suggest]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const code = btn.getAttribute("data-package-suggest") || "";
+        if (!(state.pricing?.packages || []).some((pkg) => pkg.code === code)) return;
+        state.selectedPackageCode = code;
+        pruneInvalidSelectedAddons();
+        renderPackages();
+        renderAddons();
+        renderFinalSummary();
+        showStatus("Recommended package selected. You can still change it before checkout.", "ok");
+        analyticsTrack("booking_package_recommendation_click", { package_code: code });
+      });
+    });
+
+    qsa("[data-jump-notes]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state.currentStep = 4;
+        renderStep();
+        const notes = qs("#special_notes");
+        if (notes && !notes.value.trim()) {
+          notes.value = "Photo estimate requested: please review attached/linked photos for condition, package fit, and add-ons.";
+        }
+        showStatus("Add a photo link or notes here, then continue when ready.", "warn");
+        analyticsTrack("booking_photo_estimate_jump", {});
+        notes?.focus();
+      });
+    });
+
+    qs("#conditionRecommendBtn")?.addEventListener("click", applyConditionRecommendation);
+    qs("#conditionClearBtn")?.addEventListener("click", clearConditionRecommendation);
+    qsa("[data-condition-flag]").forEach((node) => {
+      node.addEventListener("change", () => {
+        selectedConditionFlags();
+        renderConditionRecommendation(buildConditionRecommendation(), selectedConditionFlags());
+      });
+    });
+    qsa("input[name='media_consent_preference']").forEach((node) => {
+      node.addEventListener("change", () => {
+        state.mediaConsentPreference = qs("input[name='media_consent_preference']:checked")?.value || "estimate_only";
+        analyticsTrack("booking_media_consent_preference", { preference: state.mediaConsentPreference });
+      });
+    });
+    qs("#photo_estimate_requested")?.addEventListener("change", () => {
+      state.photoEstimateRequested = qs("#photo_estimate_requested")?.checked === true;
+      analyticsTrack("booking_photo_estimate_requested", { requested: state.photoEstimateRequested });
     });
 
     qs("#serviceDatePickerBtn").addEventListener("click", () => {
@@ -778,56 +1189,323 @@
       return await loadPricingCatalogClient({ fallbackUrl: DATA_FALLBACK_URL, credentials: "include" });
     }
 
+    function serviceAreaDisplayValue(row) {
+      return String(row?.value || row?.label || row?.municipality || row?.zone || "").trim();
+    }
+
+    function serviceAreaCountyFallbackRows() {
+      return [
+        {
+          county: "Oxford County",
+          label: "Other Oxford County location",
+          value: "Other Oxford County location",
+          municipality: "Oxford County",
+          zone: "Oxford County",
+          travel_tier: "quote_required",
+          bylaw_note: "Oxford County fallback for towns or rural addresses not listed by name.",
+          parking_rule: "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+          noise_rule: "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+          water_rule: "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
+          access_rule: "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+          official_links: [
+            {
+              label: "Oxford County water conservation",
+              url: "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+            }
+          ]
+        },
+        {
+          county: "Norfolk County",
+          label: "Other Norfolk County location",
+          value: "Other Norfolk County location",
+          municipality: "Norfolk County",
+          zone: "Norfolk County",
+          travel_tier: "quote_required",
+          bylaw_note: "Norfolk County fallback for towns or rural addresses not listed by name.",
+          parking_rule: "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+          noise_rule: "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+          water_rule: "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
+          access_rule: "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+          official_links: [
+            {
+              label: "Norfolk County watering restrictions",
+              url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+            }
+          ]
+        }
+      ];
+    }
+
+    function normalizeServiceAreaOptionRows(rows) {
+      const merged = [];
+      const seen = new Set();
+
+      const addRow = (row) => {
+        if (!row || typeof row !== "object") return;
+        const value = serviceAreaDisplayValue(row);
+        if (!value) return;
+        const key = value.toLowerCase();
+        if (seen.has(key)) return;
+        seen.add(key);
+        merged.push({
+          ...row,
+          value,
+          label: String(row.label || value).trim(),
+          county: String(row.county || "").trim(),
+          municipality: String(row.municipality || "").trim(),
+          zone: String(row.zone || "").trim(),
+          travel_tier: String(row.travel_tier || row.tier || "").trim()
+        });
+      };
+
+      serviceAreaCountyFallbackRows().forEach(addRow);
+      (Array.isArray(rows) ? rows : []).forEach(addRow);
+
+      return merged.sort((a, b) => {
+        const aLabel = serviceAreaDisplayValue(a).toLowerCase();
+        const bLabel = serviceAreaDisplayValue(b).toLowerCase();
+        const aCounty = String(a.county || "").toLowerCase();
+        const bCounty = String(b.county || "").toLowerCase();
+        if (aLabel.startsWith("other ")) return -1;
+        if (bLabel.startsWith("other ")) return 1;
+        if (aCounty !== bCounty) return aCounty.localeCompare(bCounty);
+        return aLabel.localeCompare(bLabel);
+      });
+    }
+
     function renderServiceAreas(rowsOverride = null) {
-      const rows = Array.isArray(rowsOverride) && rowsOverride.length ? rowsOverride : configuredServiceAreas();
-      const safeRows = Array.isArray(rows) && rows.length ? rows : [];
-      const grouped = safeRows.reduce((acc, row) => {
-        const county = row?.county || "Service area";
-        (acc[county] ||= []).push(row);
-        return acc;
-      }, {});
-      const select = qs("#service_area");
-      const prior = select.value;
-      if (!safeRows.length) {
-        select.innerHTML = `<option value="">No service areas loaded</option>`;
-        updateServiceAreaNote();
-        return;
-      }
-      select.innerHTML = `<option value="">Choose your town or service zone</option>` + Object.entries(grouped).map(([county, countyRows]) => {
-        const options = countyRows.map((row) => `<option value="${escapeHtml(row.value || row.label)}">${escapeHtml(row.label || row.value)}</option>`).join("");
-        return `<optgroup label="${escapeHtml(county)}">${options}</optgroup>`;
+      const datalist = qs("#service_area_options");
+      const field = qs("#service_area");
+      if (!datalist || !field) return;
+
+      const currentValue = String(field.value || "").trim();
+      const rows = normalizeServiceAreaOptionRows(
+        Array.isArray(rowsOverride) && rowsOverride.length
+          ? rowsOverride
+          : configuredServiceAreas()
+      );
+
+      state.serviceAreaRows = rows;
+
+      datalist.innerHTML = rows.map((row) => {
+        const value = serviceAreaDisplayValue(row);
+        const labelParts = [
+          row.county,
+          row.municipality && row.municipality !== value ? row.municipality : "",
+          row.travel_tier ? `tier: ${row.travel_tier}` : ""
+        ].filter(Boolean);
+        return `<option value="${escapeHtml(value)}" label="${escapeHtml(labelParts.join(" · "))}"></option>`;
       }).join("");
-      const preferred = prior || activeBookingRules().default_service_area || "";
-      if ([...select.options].some((opt) => opt.value === preferred)) select.value = preferred;
+
+      /*
+        Do not auto-fill Tillsonburg here.
+        Native datalist dropdowns filter against the current typed value, so a pre-filled
+        default makes the menu look like only one town exists.
+      */
+      if (!currentValue) field.value = "";
+      field.placeholder = "Start typing a town, county, or service zone…";
+      field.setAttribute("autocomplete", "off");
+
+      renderCityOptions(rows);
+      renderServiceAreaPicker(rows, { showAll: false });
       updateServiceAreaNote();
     }
 
+    function renderCityOptions(rows = state.serviceAreaRows || []) {
+      const cityList = qs("#city_options");
+      if (!cityList) return;
+      const seen = new Set();
+      const values = [];
+      rows.forEach((row) => {
+        [row.label, row.value, row.municipality].forEach((value) => {
+          const clean = String(value || "").replace(/\s*,\s*ON$/i, "").trim();
+          if (!clean || clean.toLowerCase().startsWith("other ")) return;
+          const key = clean.toLowerCase();
+          if (seen.has(key)) return;
+          seen.add(key);
+          values.push(clean);
+        });
+      });
+      cityList.innerHTML = values.sort((a, b) => a.localeCompare(b)).map((value) => `<option value="${escapeHtml(value)}"></option>`).join("");
+    }
+
+    function renderServiceAreaPicker(rows = state.serviceAreaRows || [], options = {}) {
+      const picker = qs("#serviceAreaPicker");
+      const grid = qs("#serviceAreaPickerGrid");
+      const field = qs("#service_area");
+      if (!picker || !grid || !field) return;
+
+      const term = options.showAll ? "" : String(field.value || "").trim().toLowerCase();
+      const filtered = rows.filter((row) => {
+        if (!term) return true;
+        const haystack = [
+          row.label,
+          row.value,
+          row.county,
+          row.municipality,
+          row.zone,
+          ...(Array.isArray(row.aliases) ? row.aliases : [])
+        ].join(" ").toLowerCase();
+        return haystack.includes(term);
+      });
+
+      const displayRows = (filtered.length ? filtered : rows).slice(0, 120);
+      grid.innerHTML = displayRows.map((row) => {
+        const value = serviceAreaDisplayValue(row);
+        const meta = [row.county, row.municipality && row.municipality !== value ? row.municipality : "", row.travel_tier ? `tier: ${row.travel_tier}` : ""].filter(Boolean).join(" · ");
+        return `<button class="service-area-choice" type="button" data-service-area-choice="${escapeHtml(value)}"><strong>${escapeHtml(value)}</strong><span>${escapeHtml(meta || "Service area")}</span></button>`;
+      }).join("");
+
+      qsa("[data-service-area-choice]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const value = btn.getAttribute("data-service-area-choice") || "";
+          field.value = value;
+          const city = qs("#city");
+          const chosen = (state.serviceAreaRows || []).find((row) => serviceAreaDisplayValue(row) === value);
+          if (city && !city.value.trim() && chosen && !String(chosen.label || "").toLowerCase().startsWith("other ")) {
+            city.value = String(chosen.label || chosen.municipality || value).replace(/\s*,\s*ON$/i, "").trim();
+          }
+          picker.classList.remove("open");
+          updateServiceAreaNote();
+          renderReviewVehicle();
+          renderFinalSummary();
+        });
+      });
+    }
+
+    function showServiceAreaPicker(showAll = true) {
+      const picker = qs("#serviceAreaPicker");
+      if (!picker) return;
+      renderServiceAreaPicker(state.serviceAreaRows || normalizeServiceAreaOptionRows(configuredServiceAreas()), { showAll });
+      picker.classList.add("open");
+    }
+
+    function hideServiceAreaPicker() {
+      qs("#serviceAreaPicker")?.classList.remove("open");
+    }
+
+    function validateCanadianPostalCode(value) {
+      const clean = String(value || "").trim().toUpperCase();
+      if (!clean) return true;
+      return /^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/.test(clean);
+    }
+
+    function updateAddressAreaWarning() {
+      const warning = qs("#addressAreaWarning");
+      if (!warning) return;
+      const city = String(qs("#city")?.value || "").trim();
+      const serviceArea = String(qs("#service_area")?.value || "").trim();
+      const postal = String(qs("#postal_code")?.value || "").trim();
+      const resolved = selectedServiceAreaMeta();
+
+      const messages = [];
+      if (postal && !validateCanadianPostalCode(postal)) {
+        messages.push("Postal code format looks unusual. Please use a Canadian format like N4G 1A1.");
+      }
+      if (city && serviceArea && resolved) {
+        const haystack = [resolved.label, resolved.value, resolved.municipality, resolved.county, ...(Array.isArray(resolved.aliases) ? resolved.aliases : [])].join(" ").toLowerCase();
+        if (!haystack.includes(city.toLowerCase()) && !String(serviceArea).toLowerCase().includes(city.toLowerCase())) {
+          messages.push("City and service area do not appear to match exactly. Staff will confirm the county/travel tier before dispatch.");
+        }
+      }
+      if (serviceArea && !resolved) {
+        messages.push("Custom service area entered. Staff should confirm Oxford/Norfolk county coverage before final scheduling.");
+      }
+
+      if (!messages.length) {
+        warning.style.display = "none";
+        warning.textContent = "";
+        return;
+      }
+      warning.style.display = "block";
+      warning.className = "notice warn mini";
+      warning.textContent = messages.join(" ");
+    }
+
+    function findCountyFallbackForTypedArea(value) {
+      const text = String(value || "").trim().toLowerCase();
+      if (!text) return null;
+
+      const rows = serviceAreaCountyFallbackRows();
+      if (text.includes("oxford")) return rows.find((row) => row.county === "Oxford County") || null;
+      if (text.includes("norfolk")) return rows.find((row) => row.county === "Norfolk County") || null;
+
+      const oxfordHints = [
+        "tillsonburg", "woodstock", "ingersoll", "norwich", "otterville", "burgessville",
+        "springford", "ostrand", "sweaburg", "beachville", "embro", "tavistock",
+        "drumbo", "princeton", "plattsville", "thorndale", "hickson", "kintore",
+        "mount elgin", "brownsville", "salford", "innerkip"
+      ];
+      const norfolkHints = [
+        "simcoe", "delhi", "port dover", "waterford", "port rowan", "langton",
+        "courtland", "teeterville", "windham centre", "walsh", "turkey point",
+        "vittoria", "st williams", "st. williams", "lynedoch", "la salette",
+        "clear creek", "long point", "port ryerse"
+      ];
+
+      if (oxfordHints.some((town) => text.includes(town))) return rows.find((row) => row.county === "Oxford County") || null;
+      if (norfolkHints.some((town) => text.includes(town))) return rows.find((row) => row.county === "Norfolk County") || null;
+      return null;
+    }
+
+    function selectedServiceAreaMeta() {
+      const value = qs("#service_area")?.value || "";
+      return findServiceArea(state.pricing || {}, value) || findCountyFallbackForTypedArea(value) || null;
+    }
+
     function updateServiceAreaNote() {
-      const selected = findServiceArea(state.pricing || {}, qs("#service_area").value);
+      const field = qs("#service_area");
       const note = qs("#serviceAreaNote");
       const rules = qs("#serviceAreaRules");
       const links = qs("#serviceAreaLinks");
+      if (!field || !note || !rules || !links) return;
+
+      const typedServiceArea = String(field.value || "").trim();
+      const exactMatch = findServiceArea(state.pricing || {}, typedServiceArea);
+      const selected = exactMatch || findCountyFallbackForTypedArea(typedServiceArea);
+
+      if (!typedServiceArea) {
+        note.className = "notice mini";
+        note.textContent = "Choose or type the closest town, county, or service zone so we can apply travel, parking, water-use, and local bylaw reminders before dispatch.";
+        rules.innerHTML = "<li>Start typing to choose from the full Oxford County and Norfolk County service list.</li>";
+        links.innerHTML = "";
+        updateAddressAreaWarning();
+        return;
+      }
 
       if (!selected) {
-        note.className = "notice mini";
-        note.textContent = "Choose the closest town or service zone so we can apply the right travel, parking, and local bylaw rules before dispatch.";
-        rules.innerHTML = "<li>Select a town or zone to load parking, noise, runoff, and access reminders.</li>";
+        note.className = "notice warn mini";
+        note.textContent = "Custom service area entered. We will confirm the town/county before dispatch and apply the closest county water-use reminder when possible.";
+        rules.innerHTML = "<li>Staff should confirm whether this address is in Oxford County, Norfolk County, or outside the normal service zone before final dispatch.</li>";
         links.innerHTML = "";
+        updateAddressAreaWarning();
+        renderReviewVehicle();
+        renderFinalSummary();
         return;
       }
 
       note.className = "notice warn mini";
-      note.textContent = selected.bylaw_note || `${selected.label || selected.value} selected.`;
+      note.textContent = exactMatch
+        ? (selected.bylaw_note || `${selected.label || selected.value} selected.`)
+        : `${typedServiceArea} was matched to ${selected.county || "the closest county"} fallback rules. Staff should confirm before dispatch.`;
+
       const ruleItems = [
         selected.parking_rule,
         selected.noise_rule,
         selected.water_rule,
         selected.access_rule
       ].filter(Boolean);
-      rules.innerHTML = ruleItems.map((item) => `<li>${escapeHtml(item)}</li>`).join("") || "<li>No extra rules found for this zone.</li>";
+      rules.innerHTML = ruleItems.length
+        ? ruleItems.map((item) => `<li>${escapeHtml(item)}</li>`).join("")
+        : "<li>No extra rules found for this zone.</li>";
 
       const linkRows = Array.isArray(selected.official_links) ? selected.official_links : [];
-      links.innerHTML = linkRows.map((row) => `<a class="btn ghost small" href="${escapeHtml(row.url || "#")}" target="_blank" rel="noopener">${escapeHtml(row.label || "Official source")}</a>`).join("");
+      links.innerHTML = linkRows.map((row) => {
+        const url = String(row.url || "").trim();
+        const label = String(row.label || "Official source").trim();
+        if (!url) return "";
+        return `<a class="btn ghost small" href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(label)}</a>`;
+      }).join("");
 
       renderReviewVehicle();
       renderFinalSummary();
@@ -1182,7 +1860,9 @@
         return `<button class="service-card ${state.selectedPackageCode === pkg.code ? "active" : ""}" type="button" data-package="${escapeHtml(pkg.code)}">
           <img src="${escapeHtml(img)}" alt="${escapeHtml(pkg.name)}" loading="lazy" />
           <strong>${escapeHtml(pkg.name)}</strong>
-          <span class="muted package-note">${escapeHtml(pkg.subtitle || "")}</span>
+          ${pkg.display_alias ? `<span class="package-alias">${escapeHtml(pkg.display_alias)}</span>` : ""}
+          <span class="muted package-note">${escapeHtml(pkg.best_for || pkg.subtitle || "")}</span>
+          ${pkg.customer_goal ? `<span class="tag warn">${escapeHtml(pkg.customer_goal)}</span>` : ""}
           <span class="tag ok">${price != null ? money(price) : "Choose size first"}</span>
           <span class="muted mini">Deposit ${money(pkg.deposit_cad || 0)}</span>
         </button>`;
@@ -1314,12 +1994,13 @@
     }
 
     function renderReviewVehicle() {
-      const area = findServiceArea(state.pricing || {}, qs("#service_area").value);
+      const area = selectedServiceAreaMeta();
       const rows = [
         ["Date", selectedDate() || "Not chosen"],
         ["Time", state.selectedSlotChoice || "Not chosen"],
         ["Service area", qs("#service_area").value || "Not chosen"],
-        ["Local rules", area?.municipality || "Pending zone selection"],
+        ["County / local rules", area?.county ? `${area.county}${area.municipality ? " · " + area.municipality : ""}` : "Pending zone selection"],
+        ["Water/power setup", qs("#need_mobile_water_power")?.checked ? "Quote staff-supplied water/power setup" : "Customer provides water and power"],
         ["Vehicle", [qs("#veh_year").value, qs("#veh_make").value, qs("#veh_model").value, qs("#veh_color").value].filter(Boolean).join(" · ") || "Vehicle details incomplete"],
         ["Mileage", qs('#veh_mileage').value ? `${qs('#veh_mileage').value} km` : 'Optional / not entered'],
         ["Vehicle size", selectedSize() || "Not chosen"],
@@ -1331,17 +2012,19 @@
     function renderFinalSummary() {
       const pkg = selectedPackage();
       const totals = computeTotals();
-      const area = findServiceArea(state.pricing || {}, qs("#service_area").value);
+      const area = selectedServiceAreaMeta();
       const rows = [
         ["Date", selectedDate() || "Not chosen"],
         ["Time", state.selectedSlotChoice || "Not chosen"],
         ["Service area", qs("#service_area").value || "Not chosen"],
-        ["Local rules", area?.municipality || "Pending zone selection"],
+        ["County / local rules", area?.county ? `${area.county}${area.municipality ? " · " + area.municipality : ""}` : "Pending zone selection"],
+        ["Water/power setup", qs("#need_mobile_water_power")?.checked ? "Quote staff-supplied water/power setup" : "Customer provides water and power"],
         ["Package", pkg ? `${pkg.name} (${selectedSize() || "size pending"})` : "Not chosen"],
         ["Add-ons", selectedAddons().length ? selectedAddons().map((addon) => addon.name).join(", ") : "None"],
         ["Estimated subtotal", totals.subtotal ? money(totals.subtotal) : "Package required"],
         ["Deposit due now", money(totals.deposit)],
-        ["Quote-only extras", totals.quoteOnly ? "Some selected extras are quote-required and will be confirmed separately." : "None"]
+        ["Quote-only extras", totals.quoteOnly ? "Some selected extras are quote-required and will be confirmed separately." : "None"],
+        ["Photo estimate", (qs("#photo_estimate_requested")?.checked || state.photoEstimateRequested || parsePhotoEstimateLinks().length) ? `Requested/reviewable${parsePhotoEstimateLinks().length ? ` · ${parsePhotoEstimateLinks().length} link(s)` : ""}` : "Not requested"]
       ];
       qs("#finalSummary").innerHTML = rows.map(([label, value]) => `<div class="summary-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
       postEmbedState();
@@ -1380,6 +2063,7 @@
         if (!qs("#customer_name").value.trim()) return showFieldError(5, "Enter your full name.");
         if (!qs("#customer_email").value.trim()) return showFieldError(5, "Enter your email address.");
         if (!qs("#address_line1").value.trim()) return showFieldError(5, "Enter the service address.");
+        if (!validateCanadianPostalCode(qs("#postal_code").value)) return showFieldError(5, "Check the postal code format or leave it blank until staff confirm it.");
         return true;
       }
 
@@ -1404,8 +2088,12 @@
         start_slot,
         duration_slots,
         service_area: qs("#service_area").value,
-        service_area_label: qs("#service_area").selectedOptions?.[0]?.textContent || qs("#service_area").value,
-        service_area_meta: findServiceArea(state.pricing || {}, qs("#service_area").value) || null,
+        service_area_label: selectedServiceAreaMeta()?.label || qs("#service_area").value,
+        service_area_county: selectedServiceAreaMeta()?.county || null,
+        service_area_municipality: selectedServiceAreaMeta()?.municipality || null,
+        service_area_travel_tier: selectedServiceAreaMeta()?.travel_tier || null,
+        service_area_water_rule: selectedServiceAreaMeta()?.water_rule || null,
+        service_area_meta: selectedServiceAreaMeta(),
         package_code: state.selectedPackageCode,
         vehicle_size: selectedSize(),
         customer_name: qs("#customer_name").value.trim(),
@@ -1429,8 +2117,15 @@
           mileage: qs('#veh_mileage').value || null
         },
         special_notes: qs("#special_notes").value.trim() || null,
+        condition_flags: conditionFlagLabels(selectedConditionFlags()),
+        condition_flag_codes: Array.from(state.conditionFlags),
+        condition_recommendation: state.conditionRecommendationSummary || null,
+        photo_estimate_requested: qs("#photo_estimate_requested")?.checked === true || state.photoEstimateRequested === true || parsePhotoEstimateLinks().length > 0,
+        photo_estimate_links: parsePhotoEstimateLinks(),
+        media_consent_preference: qs("input[name='media_consent_preference']:checked")?.value || state.mediaConsentPreference || "estimate_only",
         ack_driveway: true,
         ack_power_water: true,
+        need_mobile_water_power_quote: qs("#need_mobile_water_power")?.checked === true,
         ack_bylaw: true,
         ack_cancellation: true
       };
@@ -1463,12 +2158,51 @@
       }
     });
 
+    qs("#service_area").addEventListener("input", () => {
+      updateServiceAreaNote();
+      analyticsTrack("booking_service_area_type", { service_area: qs("#service_area").value || null });
+      renderReviewVehicle();
+      renderFinalSummary();
+    });
+
     qs("#service_area").addEventListener("change", () => {
       updateServiceAreaNote();
       analyticsTrack("booking_service_area_pick", { service_area: qs("#service_area").value || null });
       renderReviewVehicle();
       renderFinalSummary();
     });
+
+    qs("#showServiceAreasBtn")?.addEventListener("click", () => showServiceAreaPicker(true));
+    qs("#hideServiceAreasBtn")?.addEventListener("click", () => hideServiceAreaPicker());
+    qs("#service_area").addEventListener("focus", () => showServiceAreaPicker(!qs("#service_area").value.trim()));
+    qs("#city")?.addEventListener("input", () => updateAddressAreaWarning());
+    qs("#postal_code")?.addEventListener("input", () => updateAddressAreaWarning());
+    qs("#need_mobile_water_power")?.addEventListener("change", () => {
+      renderReviewVehicle();
+      renderFinalSummary();
+    });
+
+    qs("#photo_estimate_requested")?.addEventListener("change", () => {
+      state.photoEstimateRequested = qs("#photo_estimate_requested")?.checked === true;
+      renderPhotoEstimateLinkHelp();
+      renderFinalSummary();
+    });
+
+    qs("#photo_estimate_links")?.addEventListener("input", () => {
+      if (parsePhotoEstimateLinks().length) {
+        state.photoEstimateRequested = true;
+        const photoBox = qs("#photo_estimate_requested");
+        if (photoBox) photoBox.checked = true;
+      }
+      renderPhotoEstimateLinkHelp();
+      renderFinalSummary();
+    });
+
+    qs("#photo_estimate_files")?.addEventListener("change", async (event) => {
+      await uploadPhotoEstimateFiles(event.target.files);
+      event.target.value = "";
+    });
+
 
     renderServiceAreas(configuredServiceAreas());
     syncBookingRuleLabels();
