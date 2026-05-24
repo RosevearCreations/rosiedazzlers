@@ -54,7 +54,7 @@ export async function queueOrderConfirmationNotification(env, bookingId, source 
     ].join("\n");
 
     const bodyHtml = `
-      <div style="font-family:Arial,sans-serif;background:#f4efe3;padding:24px;"><div style="max-width:680px;margin:0 auto;background:#ffffff;border:1px solid #e5e7eb;border-radius:18px;overflow:hidden;box-shadow:0 14px 34px rgba(15,23,42,.12);"><div style="padding:22px 24px;background:linear-gradient(135deg,#0f172a,#1d4ed8);color:#fff;"><div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.82;">Rosie Dazzlers</div><h1 style="margin:8px 0 0;font-size:28px;">Booking confirmation</h1></div><div style="padding:24px; color:#111827; line-height:1.55;">
+      <h1>Booking confirmation</h1>
       <p>${escapeHtml(DEFAULT_TEMPLATES.confirmation_intro)}</p>
       <p><strong>Customer:</strong> ${escapeHtml(payload.booking.customer_name || "Customer")}</p>
       <p><strong>Service date:</strong> ${escapeHtml(payload.booking.service_date || "TBD")}</p>
@@ -64,7 +64,7 @@ export async function queueOrderConfirmationNotification(env, bookingId, source 
       <p><strong>Service area:</strong> ${escapeHtml(payload.booking.service_area_label)}</p>
       <p><strong>Deposit due / paid:</strong> ${escapeHtml(formatMoney(payload.summary.deposit_cents))}</p>
       <p><strong>Estimated total:</strong> ${escapeHtml(formatMoney(payload.summary.effective_total_cents))}</p>
-      <p style="margin-top:20px;"><a style="display:inline-block;padding:11px 16px;border-radius:12px;background:#1d4ed8;color:#fff;text-decoration:none;font-weight:700;" href="${payload.documents.confirmation_url}">Open order confirmation</a></p><p><a href="${payload.documents.invoice_url}">Open invoice / summary</a></p><p style="margin-top:20px;font-size:13px;color:#6b7280;">This email is part of your Rosie Dazzlers service record and matches the printable confirmation and invoice in your customer paperwork.</p></div></div></div>
+      <p><a href="${payload.documents.confirmation_url}">Open order confirmation</a><br><a href="${payload.documents.invoice_url}">Open invoice / summary</a></p>
     `;
 
     const row = {
