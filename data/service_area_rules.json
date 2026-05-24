@@ -1,0 +1,1564 @@
+{
+  "updated_at": "2026-05-15",
+  "purpose": "Shared county/municipality service-area and water-rule fallback seed for booking, Admin App, public API fallback, and local SEO pages.",
+  "fallback_behavior": "If a specific town has no override, use the county default water rule. If a customer types a town not in the list, resolve to Other Oxford County location or Other Norfolk County location when the typed text contains that county; otherwise ask staff to confirm.",
+  "sources": [
+    {
+      "label": "Oxford County water conservation",
+      "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+    },
+    {
+      "label": "Norfolk County watering restrictions",
+      "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+    }
+  ],
+  "service_areas": [
+    {
+      "county": "Oxford County",
+      "label": "Other Oxford County location",
+      "value": "Other Oxford County location",
+      "municipality": "Oxford County",
+      "zone": "Oxford County",
+      "travel_tier": "quote_required",
+      "area_type": "county",
+      "aliases": [
+        "Oxford County",
+        "Other Oxford",
+        "Oxford rural",
+        "Oxford",
+        "Other Oxford County location"
+      ],
+      "bylaw_note": "Oxford County fallback for typed towns or rural addresses not yet listed by name.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Other Norfolk County location",
+      "value": "Other Norfolk County location",
+      "municipality": "Norfolk County",
+      "zone": "Norfolk County",
+      "travel_tier": "quote_required",
+      "area_type": "county",
+      "aliases": [
+        "Norfolk County",
+        "Other Norfolk",
+        "Norfolk rural",
+        "Norfolk",
+        "Other Norfolk County location"
+      ],
+      "bylaw_note": "Norfolk County fallback for typed towns or rural addresses not yet listed by name.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Tillsonburg, ON",
+      "value": "Tillsonburg, ON",
+      "municipality": "Tillsonburg",
+      "zone": "Tillsonburg",
+      "travel_tier": "urban",
+      "area_type": "town",
+      "aliases": [
+        "Tillsonburg",
+        "Tillsonburg"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Woodstock, ON",
+      "value": "Woodstock, ON",
+      "municipality": "Woodstock",
+      "zone": "Woodstock",
+      "travel_tier": "urban",
+      "area_type": "town",
+      "aliases": [
+        "Woodstock",
+        "Woodstock"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Ingersoll, ON",
+      "value": "Ingersoll, ON",
+      "municipality": "Ingersoll",
+      "zone": "Ingersoll",
+      "travel_tier": "urban",
+      "area_type": "town",
+      "aliases": [
+        "Ingersoll",
+        "Ingersoll"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Beachville, ON",
+      "value": "Beachville, ON",
+      "municipality": "Beachville",
+      "zone": "Beachville",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Beachville",
+        "Beachville"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Bright, ON",
+      "value": "Bright, ON",
+      "municipality": "Bright",
+      "zone": "Bright",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Bright",
+        "Bright"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Brownsville, ON",
+      "value": "Brownsville, ON",
+      "municipality": "Brownsville",
+      "zone": "Brownsville",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Brownsville",
+        "Brownsville"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Dereham Centre, ON",
+      "value": "Dereham Centre, ON",
+      "municipality": "Dereham Centre",
+      "zone": "Dereham Centre",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Dereham Centre",
+        "Dereham Centre"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Drumbo, ON",
+      "value": "Drumbo, ON",
+      "municipality": "Drumbo",
+      "zone": "Drumbo",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Drumbo",
+        "Drumbo"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Princeton, ON",
+      "value": "Princeton, ON",
+      "municipality": "Princeton",
+      "zone": "Princeton",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Princeton",
+        "Princeton"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Embro, ON",
+      "value": "Embro, ON",
+      "municipality": "Embro",
+      "zone": "Embro",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Embro",
+        "Embro"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Hickson, ON",
+      "value": "Hickson, ON",
+      "municipality": "Hickson",
+      "zone": "Hickson",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Hickson",
+        "Hickson"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Innerkip, ON",
+      "value": "Innerkip, ON",
+      "municipality": "Innerkip",
+      "zone": "Innerkip",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Innerkip",
+        "Innerkip"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Lakeside, ON",
+      "value": "Lakeside, ON",
+      "municipality": "Lakeside",
+      "zone": "Lakeside",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Lakeside",
+        "Lakeside"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Mount Elgin, ON",
+      "value": "Mount Elgin, ON",
+      "municipality": "Mount Elgin",
+      "zone": "Mount Elgin",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Mount Elgin",
+        "Mount Elgin"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Norwich, ON",
+      "value": "Norwich, ON",
+      "municipality": "Norwich",
+      "zone": "Norwich",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Norwich",
+        "Norwich"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Otterville, ON",
+      "value": "Otterville, ON",
+      "municipality": "Otterville",
+      "zone": "Otterville",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Otterville",
+        "Otterville"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Springford, ON",
+      "value": "Springford, ON",
+      "municipality": "Springford",
+      "zone": "Springford",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Springford",
+        "Springford"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Sweaburg, ON",
+      "value": "Sweaburg, ON",
+      "municipality": "Sweaburg",
+      "zone": "Sweaburg",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Sweaburg",
+        "Sweaburg"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Plattsville, ON",
+      "value": "Plattsville, ON",
+      "municipality": "Plattsville",
+      "zone": "Plattsville",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Plattsville",
+        "Plattsville"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Tavistock, ON",
+      "value": "Tavistock, ON",
+      "municipality": "Tavistock",
+      "zone": "Tavistock",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Tavistock",
+        "Tavistock"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Thamesford, ON",
+      "value": "Thamesford, ON",
+      "municipality": "Thamesford",
+      "zone": "Thamesford",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Thamesford",
+        "Thamesford"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Salford, ON",
+      "value": "Salford, ON",
+      "municipality": "Salford",
+      "zone": "Salford",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Salford",
+        "Salford"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Foldens, ON",
+      "value": "Foldens, ON",
+      "municipality": "Foldens",
+      "zone": "Foldens",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Foldens",
+        "Foldens"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Ostrander, ON",
+      "value": "Ostrander, ON",
+      "municipality": "Ostrander",
+      "zone": "Ostrander",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Ostrander",
+        "Ostrander"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Simcoe, ON",
+      "value": "Simcoe, ON",
+      "municipality": "Simcoe",
+      "zone": "Simcoe",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Simcoe",
+        "Simcoe"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Delhi, ON",
+      "value": "Delhi, ON",
+      "municipality": "Delhi",
+      "zone": "Delhi",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Delhi",
+        "Delhi"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Port Dover, ON",
+      "value": "Port Dover, ON",
+      "municipality": "Port Dover",
+      "zone": "Port Dover",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Port Dover",
+        "Port Dover"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Waterford, ON",
+      "value": "Waterford, ON",
+      "municipality": "Waterford",
+      "zone": "Waterford",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Waterford",
+        "Waterford"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Port Rowan, ON",
+      "value": "Port Rowan, ON",
+      "municipality": "Port Rowan",
+      "zone": "Port Rowan",
+      "travel_tier": "coastal",
+      "area_type": "coastal",
+      "aliases": [
+        "Port Rowan",
+        "Port Rowan"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Langton, ON",
+      "value": "Langton, ON",
+      "municipality": "Langton",
+      "zone": "Langton",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Langton",
+        "Langton"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Courtland, ON",
+      "value": "Courtland, ON",
+      "municipality": "Courtland",
+      "zone": "Courtland",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Courtland",
+        "Courtland"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Vittoria, ON",
+      "value": "Vittoria, ON",
+      "municipality": "Vittoria",
+      "zone": "Vittoria",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Vittoria",
+        "Vittoria"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Walsh, ON",
+      "value": "Walsh, ON",
+      "municipality": "Walsh",
+      "zone": "Walsh",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Walsh",
+        "Walsh"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "St. Williams, ON",
+      "value": "St. Williams, ON",
+      "municipality": "St. Williams",
+      "zone": "St. Williams",
+      "travel_tier": "coastal",
+      "area_type": "coastal",
+      "aliases": [
+        "St. Williams",
+        "St. Williams"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Turkey Point, ON",
+      "value": "Turkey Point, ON",
+      "municipality": "Turkey Point",
+      "zone": "Turkey Point",
+      "travel_tier": "coastal",
+      "area_type": "coastal",
+      "aliases": [
+        "Turkey Point",
+        "Turkey Point"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Boston, ON",
+      "value": "Boston, ON",
+      "municipality": "Boston",
+      "zone": "Boston",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Boston",
+        "Boston"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Teeterville, ON",
+      "value": "Teeterville, ON",
+      "municipality": "Teeterville",
+      "zone": "Teeterville",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Teeterville",
+        "Teeterville"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Vanessa, ON",
+      "value": "Vanessa, ON",
+      "municipality": "Vanessa",
+      "zone": "Vanessa",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Vanessa",
+        "Vanessa"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Lynedoch, ON",
+      "value": "Lynedoch, ON",
+      "municipality": "Lynedoch",
+      "zone": "Lynedoch",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Lynedoch",
+        "Lynedoch"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Bill's Corners, ON",
+      "value": "Bill's Corners, ON",
+      "municipality": "Bill's Corners",
+      "zone": "Bill's Corners",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Bill's Corners",
+        "Bill's Corners"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Renton, ON",
+      "value": "Renton, ON",
+      "municipality": "Renton",
+      "zone": "Renton",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Renton",
+        "Renton"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Nixon, ON",
+      "value": "Nixon, ON",
+      "municipality": "Nixon",
+      "zone": "Nixon",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Nixon",
+        "Nixon"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Bloomsburg, ON",
+      "value": "Bloomsburg, ON",
+      "municipality": "Bloomsburg",
+      "zone": "Bloomsburg",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Bloomsburg",
+        "Bloomsburg"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Townsend, ON",
+      "value": "Townsend, ON",
+      "municipality": "Townsend",
+      "zone": "Townsend",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Townsend",
+        "Townsend"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Port Ryerse, ON",
+      "value": "Port Ryerse, ON",
+      "municipality": "Port Ryerse",
+      "zone": "Port Ryerse",
+      "travel_tier": "coastal",
+      "area_type": "coastal",
+      "aliases": [
+        "Port Ryerse",
+        "Port Ryerse"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "La Salette, ON",
+      "value": "La Salette, ON",
+      "municipality": "La Salette",
+      "zone": "La Salette",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "La Salette",
+        "La Salette"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Windham Centre, ON",
+      "value": "Windham Centre, ON",
+      "municipality": "Windham Centre",
+      "zone": "Windham Centre",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Windham Centre",
+        "Windham Centre"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Walsingham, ON",
+      "value": "Walsingham, ON",
+      "municipality": "Walsingham",
+      "zone": "Walsingham",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Walsingham",
+        "Walsingham"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Fairground, ON",
+      "value": "Fairground, ON",
+      "municipality": "Fairground",
+      "zone": "Fairground",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Fairground",
+        "Fairground"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Woodstock / Ingersoll, ON",
+      "value": "Woodstock / Ingersoll, ON",
+      "municipality": "Woodstock / Ingersoll",
+      "zone": "Woodstock / Ingersoll",
+      "travel_tier": "township",
+      "area_type": "township",
+      "aliases": [
+        "Woodstock / Ingersoll",
+        "Ingersoll / Woodstock"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Norwich / Otterville, ON",
+      "value": "Norwich / Otterville, ON",
+      "municipality": "Norwich / Otterville",
+      "zone": "Norwich / Otterville",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Norwich / Otterville",
+        "Norwich / Otterville"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: May 1–September 30 outdoor water use by hose/attachment follows the County water conservation program. Every-other-day communities water by address parity (even-numbered addresses on even days; odd-numbered addresses on odd days). Residential watering hours are 6–9 a.m. or 6–9 p.m.; commercial hours are 8–10 a.m. or 3–5 p.m. Some communities may move to one-day-per-week schedules, so staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Simcoe / Delhi, ON",
+      "value": "Simcoe / Delhi, ON",
+      "municipality": "Simcoe / Delhi",
+      "zone": "Simcoe / Delhi",
+      "travel_tier": "township",
+      "area_type": "township",
+      "aliases": [
+        "Simcoe / Delhi",
+        "Simcoe / Delhi"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Courtland / Langton, ON",
+      "value": "Courtland / Langton, ON",
+      "municipality": "Courtland / Langton",
+      "zone": "Courtland / Langton",
+      "travel_tier": "remote",
+      "area_type": "rural",
+      "aliases": [
+        "Courtland / Langton",
+        "Courtland / Langton"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Norfolk County: May 15–September 15 outdoor water use is limited to 9:00–11:00 a.m. and 7:00–10:00 p.m. Odd-numbered houses water on odd calendar days and even-numbered houses water on even calendar days. Staff should check current County notices before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ]
+    }
+  ],
+  "verified_sources_at": "2026-05-15"
+}
