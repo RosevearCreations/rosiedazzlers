@@ -32,6 +32,10 @@ export async function onRequestPost(context) {
       "recovery_provider_rules",
       "moderation_rules",
       "pricing_catalog",
+      "catalog_dropdown_options",
+      "landing_pages",
+      "review_proof",
+      "media_library",
       "document_templates",
       "social_feeds",
       "before_after_gallery"
