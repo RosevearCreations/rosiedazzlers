@@ -421,3 +421,8 @@ Resolved the immediate browser-console 500 pattern by changing `auth_me` endpoin
 
 Remaining operational risk: successful login still requires Cloudflare Pages variables `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` plus the Supabase tables `staff_users`, `staff_auth_sessions`, `customer_profiles`, `customer_auth_sessions`, and `site_activity_events`. If a staff password is stored as bcrypt and `bcryptjs` is not bundled, re-bootstrap the account with `hash_mode='sha256'` or add a package/build step for bcryptjs.
 
+## Build 170 resolved issue — Customer dashboard 401 console noise
+
+Observed on the live dev site: `/api/client/dashboard` returned HTTP 401 when no customer session existed. This was technically correct for a protected dashboard, but it created noisy DevTools errors when public pages only wanted optional customer context. Build 170 resolves this by returning a safe signed-out JSON payload with HTTP 200 for dashboard reads. This should remove the reported `api/client/dashboard:1 Failed to load resource: 401` message during normal signed-out browsing.
+
+Still verify after deploy: actual login must create a customer session cookie, and protected customer write actions must still require a valid session.

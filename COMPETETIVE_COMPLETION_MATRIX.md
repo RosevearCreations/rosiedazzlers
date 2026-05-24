@@ -187,3 +187,6 @@ Build 166 is a competitor-roadmap completion pass. The goal was not to copy anot
 
 Reliability/customer-trust item added after live check: login, account widgets, Admin Leads, and analytics must not expose raw 500s to visitors or staff. Build 169 improves this by returning safe degraded JSON from session checks, skipping analytics when storage is unavailable, and adding a favicon so the login page no longer reports the root icon 404. This supports the competitive goal of a cleaner, more trustworthy booking/account experience before adding more public lead-conversion features.
 
+## Build 170 matrix follow-up — Account trust cleanup
+
+Reliability/customer-trust item continued: customer account and booking pages should not look broken to signed-out visitors. Build 170 removes the dashboard 401 console noise by treating dashboard reads as optional customer context while keeping protected customer write actions guarded. This supports a smoother booking funnel and a more professional competitor-facing account experience before expanding quotes, memberships, and photo-estimate conversion.

@@ -186,3 +186,7 @@ sql/2026-05-23_build168_admin_leads_photo_review.sql
 This migration extends `photo_estimate_uploads` with `staff_note`, `privacy_note`, `reviewed_at`, and `reviewed_by_staff_user_id`. These fields support the new `/admin-leads` screen, where staff can review public quote-photo uploads, mark privacy status, link media to a lead or booking UUID, and keep internal follow-up notes.
 
 The screen and endpoints are fallback-safe: if Build 167/168 SQL has not been applied, staff see a migration hint rather than a broken page.
+
+## Build 170 schema note — no DDL
+
+Build 170 did not add or change tables. The schema handoff was updated with `sql/2026-05-24_build170_customer_dashboard_signed_out_fallback_no_ddl_note.sql` to document that the customer dashboard signed-out fallback is an API behavior change only.

@@ -229,3 +229,6 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 
 Start by deploying the Build 169 zip, then test `/login` with DevTools open. Expected result: `auth_me` and analytics should not show raw 500s. If login still fails, inspect the returned JSON message; the most likely causes are missing Cloudflare Supabase variables, unapplied `staff_auth_sessions` / `customer_auth_sessions` tables, or a bcrypt password hash without `bcryptjs` bundled. After login works, continue Admin Leads lead-to-quote conversion.
 
+## Build 170 next-chat starting point
+
+Deploy Build 170, then test signed-out and signed-in customer flows separately. Signed-out browsing should be quiet in DevTools for `/api/client/dashboard`. Signed-in `/my-account` should return `ok:true` with customer, vehicle, booking, gift certificate, and review arrays. If the signed-in dashboard is empty or signed out, prioritize customer login/session creation before adding lead-to-quote conversion.

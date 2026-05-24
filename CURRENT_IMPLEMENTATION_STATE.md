@@ -211,3 +211,6 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 
 The `/login` page and `/admin-leads.html` no longer depend on fragile auth/session checks returning perfect Supabase responses during page boot. Staff and client `auth_me` APIs now treat storage/config failures as signed-out/degraded states, public analytics fails open, and login errors are returned as readable JSON. This protects public pages and admin shells from console-flooding 500s while preserving secure session-based login for real authenticated access.
 
+## Build 170 current state — Optional customer dashboard context
+
+The customer dashboard endpoint now behaves as optional context for public flows. Signed-out visitors receive a clean JSON response instead of a failed network resource, while signed-in customers still receive dashboard data when session storage and Supabase are available. This supports the booking page garage-prefill workflow without making signed-out browsing look broken.

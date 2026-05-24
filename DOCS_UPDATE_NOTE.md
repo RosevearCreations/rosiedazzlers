@@ -240,3 +240,7 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 
 Documented the auth/API fallback repair, added the no-DDL SQL note, synchronized `SUPABASE_SCHEMA.sql` with `staff_auth_sessions`, and captured the remaining deployment checks for Cloudflare Pages variables and Supabase auth/session tables.
 Build 169 adds `scripts/auth_analytics_build169_check.py` and wires it into `scripts/release_check.py`.
+
+## Build 170 docs update
+
+Build 170 documentation records the customer dashboard 401 cleanup. Schema tracking was updated with a no-DDL SQL note because this pass changes endpoint behavior only. `scripts/client_dashboard_build170_check.py` was added and included in `scripts/release_check.py`.

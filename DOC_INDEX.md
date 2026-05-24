@@ -107,3 +107,5 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 
 New document: `SOCIAL_PLATFORM_PUBLISHING.md`.
 - Build 169 auth/API fallback repair is documented across README, DEVELOPMENT_ROADMAP, KNOWN_GAPS_AND_RISKS, CURRENT_IMPLEMENTATION_STATE, NEW_CHAT_STATUS, HANDOFF_NEXT_CHAT, SANITY_CHECK, and `sql/2026-05-23_build169_auth_analytics_fallback_no_ddl_note.sql`.
+
+- Build 170 customer dashboard signed-out fallback is documented across README, DEVELOPMENT_ROADMAP, KNOWN_GAPS_AND_RISKS, CURRENT_IMPLEMENTATION_STATE, NEW_CHAT_STATUS, HANDOFF_NEXT_CHAT, SANITY_CHECK, and `sql/2026-05-24_build170_customer_dashboard_signed_out_fallback_no_ddl_note.sql`.

@@ -883,3 +883,13 @@ Completed after live testing showed `/api/admin/auth_me`, `/api/client/auth_me`,
 
 Next roadmap focus: apply/verify auth tables and environment variables in Cloudflare Pages, then add lead-to-quote conversion on top of the now-stable Admin Leads screen.
 
+## Build 170 — Customer dashboard signed-out fallback repair (2026-05-24)
+
+Live testing showed `/api/client/dashboard` still returned a browser-visible 401 when the booking/account UI checked for saved garage/customer data without a valid customer session. Build 170 changes the customer dashboard read endpoint to return a safe signed-out payload instead of a failed resource:
+
+- `ok:false`, `authenticated:false`, `signed_out:true`, `code:"not_authenticated"` for normal signed-out visitors.
+- Safe degraded JSON for missing Supabase dashboard/session storage.
+- Empty arrays for bookings, vehicles, media, gift certificates, redemptions, and reviews so public helpers can stop quietly.
+- Existing customer write endpoints remain protected and can still reject unauthenticated writes.
+
+Next roadmap action: once login/session creation is confirmed on Preview and Production, continue lead-to-draft-quote conversion from the Build 168 Admin Leads screen.
