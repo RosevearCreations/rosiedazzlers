@@ -1,3 +1,10 @@
+# Build 171 project brain update
+
+**Updated:** 2026-05-24
+
+Rosie Dazzlers now has the start of a full public inquiry → staff review → quote handoff path. Build 171 adds quote-starter generation inside Admin Leads. It is intentionally copy-ready and staff-reviewed rather than auto-sent, because service area, access, condition, quote-required add-ons, and media privacy still need human confirmation.
+
+---
 # Project Brain — Build 168
 
 **Updated:** 2026-05-23

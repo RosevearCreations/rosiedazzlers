@@ -1,3 +1,10 @@
+# Build 171 documentation sync note
+
+**Updated:** 2026-05-24
+
+This Markdown file was reviewed during the Build 171 pass. Current source of truth remains `DEVELOPMENT_ROADMAP.md`. Build 171 adds the Admin Leads quote-starter workflow and no new DDL.
+
+---
 > Last synchronized: April 14, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
 
 ## 2026-04-13 Pass 14 Sync

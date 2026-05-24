@@ -1,3 +1,10 @@
+# Build 171 handoff for next chat
+
+**Updated:** 2026-05-24
+
+Use `/admin-leads.html` as the current operations hub for public leads and quote-photo uploads. Build 171 added `/api/admin/lead_quote_preview` and a **Build quote starter** UI action. The next pass should make the quote starter persistent: save quote drafts, add package/add-on price suggestions from the pricing catalog, and add one-click lead → draft booking conversion.
+
+---
 # Handoff for next chat — Build 168
 
 **Updated:** 2026-05-23

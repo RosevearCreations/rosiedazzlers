@@ -1,3 +1,16 @@
+# Build 171 database/schema sync — Admin Leads quote preview
+
+**Updated:** 2026-05-24
+
+Build 171 does not add tables or columns. The new quote-starter endpoint reads existing `public.public_inquiry_leads` and linked `public.photo_estimate_uploads` rows created by Build 167/168. A no-DDL note was added at `sql/2026-05-24_build171_admin_lead_quote_preview_no_ddl_note.sql`, and `SUPABASE_SCHEMA.sql` now includes Build 169, Build 170, and Build 171 sync notes.
+
+Required live-data order remains:
+
+1. `sql/2026-05-23_build167_competetive_matrix_leads_upload_schema.sql`
+2. `sql/2026-05-23_build168_admin_leads_photo_review.sql`
+3. `sql/2026-05-24_build171_admin_lead_quote_preview_no_ddl_note.sql` — documentation note only
+
+---
 # Build 165 sync — Booking photo-estimate link capture
 
 **Updated:** 2026-05-22

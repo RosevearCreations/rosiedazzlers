@@ -1,3 +1,40 @@
+# Build 171 update — Admin lead quote starter and service-key fallback polish
+
+**Updated:** 2026-05-24  
+**Current build:** Build 171  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
+
+Build 171 completes the next practical step after Admin Leads: staff can now generate a copy-ready quote starter from a public lead without waiting for the full quote-builder/booking-conversion system. This helps turn fleet, maintenance, specials, gift-card, general, and photo-estimate leads into consistent staff-reviewed follow-up text while keeping privacy warnings visible.
+
+## Completed in Build 171
+
+1. Added staff-protected `/api/admin/lead_quote_preview`.
+2. Added **Build quote starter** action to `/admin-leads.html` and `/admin-leads/index.html`.
+3. Quote starter reads `public_inquiry_leads` plus linked `photo_estimate_uploads`.
+4. Quote starter includes contact details, vehicle/cadence clues, customer message, photo links, linked upload summaries, privacy warnings, suggested next step, and staff checklist.
+5. Added copy-to-clipboard support with a manual Ctrl+C fallback.
+6. Added topic-aware recommendations for fleet, maintenance, gift cards, specials, photo estimates, condition-heavy interiors, and paint/coating work.
+7. Kept the workflow no-DDL and fallback-safe before optional Build 168 upload note columns are present.
+8. Tightened Admin Leads/upload API configuration checks so Supabase service-key aliases match the Build 169 auth/session fallback work.
+9. Added `sql/2026-05-24_build171_admin_lead_quote_preview_no_ddl_note.sql`.
+10. Added `scripts/lead_quote_preview_build171_check.py` and wired it into `scripts/release_check.py`.
+11. Re-ran Cloudflare Functions syntax/static checks, Build 160–171 release guards, and one-H1 validation.
+12. Updated all Markdown handoff/planning files and `SUPABASE_SCHEMA.sql`.
+
+## Next several steps after Build 171
+
+1. Deploy this build and test `/admin-leads.html` with one lead that has no upload and one lead with linked uploads.
+2. Apply Build 167 SQL and Build 168 SQL if not already applied.
+3. Add one-click **lead → draft booking** creation.
+4. Add persistent quote/proposal drafts so the quote starter can be saved, revised, and sent later.
+5. Add package/add-on price suggestions from the live pricing catalog into the quote starter.
+6. Add analytics events for quote starter generation, copy action, lead status change, and lead conversion.
+7. Add service/town-aware proof filtering for gallery and recent work.
+8. Move specials, FAQs, service copy, and education snippets into DB-managed admin content.
+9. Enforce gallery/social eligibility from consent + privacy review + blur/crop completion.
+10. Continue CSS drift, one-H1, title/meta, local wording, Cloudflare import, schema, and fallback checks every pass.
+
+---
 # Build 168 update — Admin Leads and photo estimate review
 
 **Updated:** 2026-05-23  

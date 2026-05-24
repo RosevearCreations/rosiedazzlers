@@ -1,3 +1,27 @@
+# Build 171 known gaps and risks update
+
+**Updated:** 2026-05-24  
+**Current build:** Build 171
+
+Build 171 reduces the Admin Leads conversion gap by adding a quote-starter action. Staff can now transform a lead into consistent internal quote follow-up copy, but it still does not create a real booking, invoice, saved proposal, or customer-facing message automatically.
+
+## Reduced in Build 171
+
+- Admin Leads can build a quote starter from each public lead.
+- Linked uploads and customer-provided photo/share links are included in the quote context.
+- Privacy warnings are surfaced before staff use uploaded media publicly.
+- Service-key alias checks are more consistent across lead/upload endpoints.
+- A Build 171 release guard now requires the endpoint, UI action, SQL note, schema note, and docs markers.
+
+## Remaining risks
+
+- Build 167 SQL must exist before `public_inquiry_leads` and `photo_estimate_uploads` can store live data.
+- Build 168 SQL is still needed for upload staff/privacy notes and reviewer tracking.
+- The quote starter is copy-ready text only; it is not a persistent quote object yet.
+- Staff must still manually verify pricing, service area, photos, water/power/parking access, and any quote-required add-ons before sending a customer message.
+- Lead-to-booking conversion, saved quote drafts, DB-managed public content, service/town proof filtering, and media eligibility automation remain next major work.
+
+---
 # Build 168 known gaps and risks update
 
 **Updated:** 2026-05-23  

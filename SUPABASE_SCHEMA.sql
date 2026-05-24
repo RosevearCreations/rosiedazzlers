@@ -1286,3 +1286,30 @@ on conflict (platform, display_name) do nothing;
 -- Build 168 also adds admin endpoints to list/save public_inquiry_leads and
 -- photo_estimate_uploads, with fallback messaging when the Build 167/168 SQL
 -- has not been applied yet.
+
+-- ---------------------------------------------------------------------------
+-- Build 169 note — auth/analytics graceful fallback
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-23_build169_auth_analytics_fallback_no_ddl_note.sql.
+-- No new DDL is required for the fallback behavior. The code now returns signed-out
+-- JSON from auth_me endpoints and skips analytics ingestion when storage/config is
+-- unavailable instead of exposing raw browser 500s. staff_auth_sessions must exist
+-- for staff login sessions.
+
+-- ---------------------------------------------------------------------------
+-- Build 170 note — customer dashboard signed-out fallback
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-24_build170_customer_dashboard_signed_out_fallback_no_ddl_note.sql.
+-- No new DDL is required. The customer dashboard endpoint now treats unsigned
+-- customer context as optional and returns a signed_out JSON payload instead of 401
+-- noise when public pages check dashboard context before login.
+
+-- ---------------------------------------------------------------------------
+-- Build 171 note — Admin Leads quote preview
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-24_build171_admin_lead_quote_preview_no_ddl_note.sql.
+-- No new DDL is required. The staff-protected /api/admin/lead_quote_preview endpoint
+-- reads public_inquiry_leads plus linked photo_estimate_uploads to generate a
+-- copy-ready internal quote starter. It depends on Build 167/168 tables for live
+-- data and stays fallback-safe if optional Build 168 upload review-note columns are
+-- not applied yet.

@@ -1,3 +1,10 @@
+# Build 171 documentation sync note
+
+**Updated:** 2026-05-24
+
+This Markdown file was reviewed during the Build 171 pass. Current source of truth remains `DEVELOPMENT_ROADMAP.md`. Build 171 adds the Admin Leads quote-starter workflow and no new DDL.
+
+---
 # Images and Media Workflow — Build 153
 
 **Updated:** 2026-05-18

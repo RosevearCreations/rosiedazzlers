@@ -1,3 +1,10 @@
+# Build 171 new chat status
+
+**Updated:** 2026-05-24
+
+Current build: Build 171. Latest completed change: Admin Leads now has a **Build quote starter** action that calls `/api/admin/lead_quote_preview` and generates copy-ready internal quote text from the selected lead and linked uploads. Continue with lead-to-booking conversion, saved quote/proposal drafts, catalog-backed pricing suggestions, proof filtering, DB-managed service content, and media eligibility automation.
+
+---
 # New chat status — Build 168
 
 **Updated:** 2026-05-23

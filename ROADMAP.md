@@ -1,3 +1,10 @@
+# Build 171 roadmap sync
+
+**Updated:** 2026-05-24
+
+Current priority moved from raw public lead review to lead-to-quote conversion. Build 171 adds a copy-ready quote starter; the next highest-value work is persistent quote drafts, one-click lead-to-booking creation, catalog-backed price suggestions, service/town proof filtering, DB-managed public content, and privacy-gated gallery/social publishing.
+
+---
 # Build 168 roadmap sync
 
 **Updated:** 2026-05-23

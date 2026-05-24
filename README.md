@@ -1,3 +1,10 @@
+# Rosie Dazzlers Build 171 note — Admin lead quote starter
+
+**Updated:** 2026-05-24
+
+Build 171 continues the public-lead/photo-estimate workflow by adding a protected Admin Leads quote-starter action. Staff can open `/admin-leads.html`, click **Build quote starter** on a public lead, and receive copy-ready internal quote text built from the lead, customer message, photo/share links, linked uploads, privacy status, and staff checklist. No new DDL is required for this pass; apply Build 167 and Build 168 SQL for live lead/upload data.
+
+---
 # Rosie Dazzlers Build 168 note
 
 Build 168 adds the protected Admin Leads & Photo Estimates workflow for reviewing `public_inquiry_leads` and `photo_estimate_uploads`. Apply Build 167 SQL, then Build 168 SQL before relying on live lead/upload data.

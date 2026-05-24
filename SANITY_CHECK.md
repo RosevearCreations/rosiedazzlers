@@ -1,3 +1,12 @@
+# Build 171 sanity check
+
+**Updated:** 2026-05-24
+
+Build 171 sanity result: Admin Leads now has a quote-starter bridge, the lead/upload endpoints share the service-key alias pattern from the auth fallback work, no new DDL is required, and release guards cover Cloudflare syntax, social workflow, competitor roadmap, Builds 160–171, and one-H1 validation.
+
+Next sanity targets: test real staff login, real lead quote-starter generation, linked upload privacy warnings, and lead status transitions after deploy.
+
+---
 # Build 168 sanity check update
 
 **Updated:** 2026-05-23

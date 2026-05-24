@@ -1,3 +1,8 @@
+# Documentation update note — Build 171
+
+Build 171 documentation is synced across roadmap, gaps, competitive matrix, schema notes, implementation state, project brain, handoff files, and all Markdown files. The main new workflow is the Admin Leads quote starter, powered by `/api/admin/lead_quote_preview`, with no new DDL.
+
+---
 # Documentation update note — Build 168
 
 Build 168 documentation is synced across roadmap, gaps, competitive matrix, schema notes, implementation state, project brain, and handoff files. The main new workflow is `/admin-leads` for public leads and photo-estimate upload review.

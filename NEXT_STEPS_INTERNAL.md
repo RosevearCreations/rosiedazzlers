@@ -1,3 +1,19 @@
+# Build 171 internal next steps
+
+**Updated:** 2026-05-24
+
+1. Deploy Build 171 and open `/admin-leads.html` as a staff user.
+2. Generate one quote starter from a lead with no uploads and one with linked uploads.
+3. Confirm quote starter text includes customer message, photo/share links, upload privacy warnings, and staff checklist.
+4. Add persistent quote/proposal drafts.
+5. Add one-click public lead → draft booking conversion.
+6. Add catalog-backed package/add-on price suggestions.
+7. Add service/town proof filters and privacy-gated gallery publishing.
+8. Move static public service/special/FAQ/education content into DB-managed admin controls.
+9. Add analytics events for quote starter generated/copied/converted.
+10. Continue one-H1, local SEO wording, CSS drift, schema docs, and fallback checks every pass.
+
+---
 # Build 168 internal next steps
 
 1. Apply `sql/2026-05-23_build167_competetive_matrix_leads_upload_schema.sql`.

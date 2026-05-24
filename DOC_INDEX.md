@@ -1,3 +1,17 @@
+# Build 171 documentation index update
+
+**Updated:** 2026-05-24
+
+Primary current docs after Build 171:
+
+- `DEVELOPMENT_ROADMAP.md` — source of truth and next steps.
+- `KNOWN_GAPS_AND_RISKS.md` — current risks and reduced risks.
+- `COMPETETIVE_COMPLETION_MATRIX.md` — competitor/completion matrix, now updated through Build 171.
+- `CURRENT_IMPLEMENTATION_STATE.md` — active files and implementation state.
+- `DATABASE_STRUCTURE_CURRENT.md` and `SUPABASE_SCHEMA.sql` — schema/SQL sync notes.
+- `HANDOFF_NEXT_CHAT.md` and `NEW_CHAT_STATUS.md` — fresh-chat continuation notes.
+
+---
 # Build 168 docs index update
 
 **Updated:** 2026-05-23
