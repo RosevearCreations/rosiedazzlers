@@ -19,14 +19,15 @@ CHECKS = [
     [sys.executable, "scripts/competetive_completion_check.py"],
     [sys.executable, "scripts/competetive_matrix_build167_check.py"],
     [sys.executable, "scripts/admin_leads_build168_check.py"],
+    [sys.executable, "scripts/auth_analytics_build169_check.py"],
     [sys.executable, "scripts/seo_h1_check.py"],
 ]
 
 
 def main() -> int:
     for cmd in CHECKS:
-        print("Running", " ".join(cmd))
-        proc = subprocess.run(cmd, cwd=ROOT)
+        print("Running", " ".join(cmd), flush=True)
+        proc = subprocess.run(cmd, cwd=ROOT, timeout=90)
         if proc.returncode != 0:
             return proc.returncode
     print("Release check passed.")
