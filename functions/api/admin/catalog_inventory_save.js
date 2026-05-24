@@ -1,6 +1,7 @@
 import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
 
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
+
 export async function onRequestPost(context) {
   const { request, env } = context;
   try {
@@ -33,12 +34,38 @@ export async function onRequestPost(context) {
       notes: String(body?.notes || "").trim() || null,
       is_public: body?.is_public !== false,
       is_active: body?.is_active !== false,
+      receipt_url: String(body?.receipt_url || body?.bill_url || "").trim() || null,
+      assigned_station: String(body?.assigned_station || body?.station_label || "").trim() || null,
+      amazon_asin: String(body?.amazon_asin || "").trim() || null,
+      amazon_title: String(body?.amazon_title || "").trim() || null,
+      amazon_match_status: String(body?.amazon_match_status || "").trim() || null,
+      amazon_match_score: body?.amazon_match_score == null || body?.amazon_match_score === "" ? null : Number(body.amazon_match_score),
+      amazon_seller_name: String(body?.amazon_seller_name || "").trim() || null,
+      amazon_brand: String(body?.amazon_brand || "").trim() || null,
+      amazon_category: String(body?.amazon_category || "").trim() || null,
+      amazon_quantity_total: body?.amazon_quantity_total == null || body?.amazon_quantity_total === "" ? null : Number(body.amazon_quantity_total),
+      amazon_net_total_cents: body?.amazon_net_total_cents == null || body?.amazon_net_total_cents === "" ? null : Number(body.amazon_net_total_cents),
+      service_tags: normalizeTags(body?.service_tags || body?.service_link_tags),
       updated_at: new Date().toISOString()
     };
 
     if (!payload.item_key || !payload.name || !["tool", "consumable"].includes(payload.item_type)) return withCors(json({ error: "Missing required fields." }, 400));
     if (!["reorder", "single_use", "never_reuse"].includes(payload.reuse_policy)) return withCors(json({ error: "Invalid reuse policy." }, 400));
 
+    const result = await safeUpsertInventory(env, payload);
+    if (!result.ok) return withCors(json({ error: result.error, stripped_columns: result.strippedColumns || [] }, 500));
+    return withCors(json({ ok: true, item: result.item, stripped_columns: result.strippedColumns || [] }));
+  } catch (err) {
+    return withCors(json({ error: String(err) }, 500));
+  }
+}
+
+export async function onRequestGet() { return withCors(methodNotAllowed()); }
+
+async function safeUpsertInventory(env, payload) {
+  const strippedColumns = [];
+  let current = { ...payload };
+  for (let attempt = 0; attempt < 8; attempt += 1) {
     const res = await fetch(`${env.SUPABASE_URL}/rest/v1/catalog_inventory_items?on_conflict=item_key`, {
       method: "POST",
       headers: {
@@ -47,15 +74,45 @@ export async function onRequestPost(context) {
         "Content-Type": "application/json",
         Prefer: "resolution=merge-duplicates,return=representation"
       },
-      body: JSON.stringify([payload])
+      body: JSON.stringify([current])
     });
-    if (!res.ok) return withCors(json({ error: await res.text() }, 500));
-    return withCors(json({ ok: true, item: (await res.json().catch(() => []))?.[0] || null }));
-  } catch (err) {
-    return withCors(json({ error: String(err) }, 500));
+    if (res.ok) return { ok: true, item: (await res.json().catch(() => []))?.[0] || null, strippedColumns };
+    const text = await res.text();
+    const missing = detectMissingColumn(text);
+    if (missing && Object.prototype.hasOwnProperty.call(current, missing)) {
+      delete current[missing];
+      strippedColumns.push(missing);
+      continue;
+    }
+    return { ok: false, error: text, strippedColumns };
   }
+  return { ok: false, error: "Could not save inventory item after compatibility retries.", strippedColumns };
 }
-export async function onRequestGet() { return withCors(methodNotAllowed()); }
+
+function detectMissingColumn(text) {
+  const value = String(text || "");
+  const patterns = [
+    /column ["']?([a-zA-Z0-9_]+)["']? (?:of relation )?(?:does not exist|is missing)/i,
+    /Could not find the ['"]([a-zA-Z0-9_]+)['"] column/i,
+    /schema cache.*['"]([a-zA-Z0-9_]+)['"]/i,
+    /PGRST204.*['"]([a-zA-Z0-9_]+)['"]/i
+  ];
+  for (const pattern of patterns) {
+    const match = value.match(pattern);
+    if (match?.[1]) return match[1];
+  }
+  for (const key of ["amazon_asin", "amazon_title", "amazon_match_status", "amazon_match_score", "amazon_seller_name", "amazon_brand", "amazon_category", "amazon_quantity_total", "amazon_net_total_cents", "receipt_url", "assigned_station", "service_tags", "estimated_jobs_per_unit", "purchase_date", "vendor_sku", "sort_key", "reuse_policy", "is_public", "is_active"]) {
+    if (value.includes(key)) return key;
+  }
+  return null;
+}
+
+function normalizeTags(value) {
+  if (Array.isArray(value)) return value.map((v) => String(v || "").trim()).filter(Boolean);
+  const list = String(value || "").split(/[,\n]/).map((v) => v.trim()).filter(Boolean);
+  return list.length ? list : null;
+}
+
 function corsHeaders() { return { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type, x-admin-password, x-staff-email, x-staff-user-id", "Cache-Control": "no-store" }; }
 function withCors(response) { const headers = new Headers(response.headers || {}); for (const [k, v] of Object.entries(corsHeaders())) headers.set(k, v); return new Response(response.body, { status: response.status, statusText: response.statusText, headers }); }
 function toNum(v) { if (v === null || v === undefined || v === "") return null; const n = Number(v); return Number.isFinite(n) ? n : null; }
