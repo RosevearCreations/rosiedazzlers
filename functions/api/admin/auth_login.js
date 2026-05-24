@@ -1,5 +1,44 @@
 // functions/api/admin/auth_login.js
-// Staff login endpoint with schema/config diagnostics that do not throw raw 500s.
+//
+// Staff login endpoint.
+//
+// What this file does:
+// - accepts staff email + password
+// - validates credentials against staff_users
+// - requires active staff account
+// - creates a secure session cookie using staff-session helpers
+// - returns current actor summary for admin/detailer UI bootstrapping
+//
+// Expected env vars:
+// - SUPABASE_URL
+// - SUPABASE_SERVICE_ROLE_KEY
+// - STAFF_SESSION_SECRET
+//
+// Expected staff_users columns for this phase:
+// - id
+// - full_name
+// - email
+// - role_code
+// - is_active
+// - password_hash
+// - can_override_lower_entries
+// - can_manage_bookings
+// - can_manage_blocks
+// - can_manage_progress
+// - can_manage_promos
+// - can_manage_staff
+//
+// Supported request body:
+// {
+//   email: "staff@example.com",
+//   password: "plain text password for now"
+// }
+//
+// Notes:
+// - password verification supports bcrypt style hashes when available
+// - if bcrypt verification is unavailable, this file falls back to a plain
+//   sha-256 check only if the stored hash is prefixed with "sha256:"
+// - if your repo already uses a different hash format, adjust verifyPassword()
 
 import {
   createStaffSession,
@@ -8,132 +47,169 @@ import {
 } from "../_lib/staff-session.js";
 
 export async function onRequestOptions() {
-  return new Response("", { status: 204, headers: corsHeaders() });
+  return new Response("", {
+    status: 204,
+    headers: corsHeaders()
+  });
 }
 
 export async function onRequestPost(context) {
   const { request, env } = context;
-  const authEnv = normalizeEnv(env);
 
   try {
-    if (!hasSupabaseConfig(authEnv)) {
-      return withCors(json(loginError("Staff sign-in is not configured yet. Check SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in Cloudflare Pages.")));
+    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY ) {
+      return withCors(json({ error: "Server configuration is incomplete." }, 500));
     }
 
     const body = await request.json().catch(() => ({}));
     const email = cleanEmail(body.email);
     const password = String(body.password || "");
 
-    if (!email) return withCors(json(loginError("Valid email is required.")));
-    if (!password) return withCors(json(loginError("Password is required.")));
+    if (!email) {
+      return withCors(json({ error: "Valid email is required." }, 400));
+    }
 
-    const staffUser = await loadStaffUserByEmail(authEnv, email);
-    if (!staffUser) return withCors(json(loginError("Invalid email or password.")));
-    if (staffUser.is_active !== true) return withCors(json(loginError("This staff account is inactive.")));
-    if (!staffUser.password_hash) return withCors(json(loginError("This staff account cannot sign in yet.")));
+    if (!password) {
+      return withCors(json({ error: "Password is required." }, 400));
+    }
+
+    const staffUser = await loadStaffUserByEmail(env, email);
+
+    if (!staffUser) {
+      return withCors(json({ error: "Invalid email or password." }, 401));
+    }
+
+    if (staffUser.is_active !== true) {
+      return withCors(json({ error: "This staff account is inactive." }, 403));
+    }
+
+    if (!staffUser.password_hash) {
+      return withCors(json({ error: "This staff account cannot sign in yet." }, 403));
+    }
 
     const passwordOk = await verifyPassword(password, staffUser.password_hash);
-    if (!passwordOk.ok) return withCors(json(loginError(passwordOk.publicMessage || "Invalid email or password.", passwordOk.diagnostic)));
-    if (passwordOk.match !== true) return withCors(json(loginError("Invalid email or password.")));
+    if (!passwordOk) {
+      return withCors(json({ error: "Invalid email or password." }, 401));
+    }
 
-    const created = await createStaffSession({ env: authEnv, staffUser, request });
+    const created = await createStaffSession({
+      env,
+      staffUser,
+      request
+    });
 
-    let headers = jsonHeaders();
+    let headers = new Headers({
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store"
+    });
+
     headers = appendSetCookie(headers, created.cookie);
     headers = applyCors(headers);
 
     return new Response(
-      JSON.stringify({ ok: true, message: "Signed in.", actor: formatActor(staffUser) }, null, 2),
-      { status: 200, headers }
+      JSON.stringify(
+        {
+          ok: true,
+          message: "Signed in.",
+          actor: formatActor(staffUser)
+        },
+        null,
+        2
+      ),
+      {
+        status: 200,
+        headers
+      }
     );
   } catch (err) {
-    return withCors(json(loginError(
-      "Staff sign-in is temporarily unavailable. Check the Supabase auth tables, staff_users columns, and Cloudflare environment variables.",
-      safeError(err)
-    )));
+    return withCors(
+      json(
+        {
+          error: err && err.message ? err.message : "Unexpected server error."
+        },
+        500
+      )
+    );
   }
 }
 
 export async function onRequestGet() {
-  return withCors(json({ ok: false, error: "Method not allowed." }, 405));
+  return withCors(methodNotAllowed());
 }
+
+/* ---------------- data access ---------------- */
 
 async function loadStaffUserByEmail(env, email) {
-  const extendedSelect =
-    "id,created_at,updated_at,full_name,email,role_code,is_active,password_hash," +
-    "can_override_lower_entries,can_manage_bookings,can_manage_blocks,can_manage_progress,can_manage_promos,can_manage_staff,notes";
-  const minimalSelect = "id,created_at,updated_at,full_name,email,role_code,is_active,password_hash,notes";
-
-  const first = await fetchStaffUser(env, email, extendedSelect);
-  if (first.ok) return normalizeStaffRow(first.row);
-
-  const second = await fetchStaffUser(env, email, minimalSelect);
-  if (second.ok) return normalizeStaffRow(second.row);
-
-  throw new Error(first.error || second.error || "Could not load staff account.");
-}
-
-async function fetchStaffUser(env, email, select) {
   const res = await fetch(
-    `${env.SUPABASE_URL}/rest/v1/staff_users?select=${encodeURIComponent(select)}&email=eq.${encodeURIComponent(email)}&limit=1`,
-    { headers: serviceHeaders(env) }
+    `${env.SUPABASE_URL}/rest/v1/staff_users` +
+      `?select=id,created_at,updated_at,full_name,email,role_code,is_active,password_hash,` +
+      `can_override_lower_entries,can_manage_bookings,can_manage_blocks,can_manage_progress,can_manage_promos,can_manage_staff,notes` +
+      `&email=eq.${encodeURIComponent(email)}` +
+      `&limit=1`,
+    {
+      headers: serviceHeaders(env)
+    }
   );
-  if (!res.ok) return { ok: false, error: `Could not load staff account. ${await res.text()}` };
-  const rows = await res.json().catch(() => []);
-  return { ok: true, row: Array.isArray(rows) ? rows[0] || null : null };
-}
 
-function normalizeStaffRow(row) {
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Could not load staff account. ${text}`);
+  }
+
+  const rows = await res.json().catch(() => []);
+  const row = Array.isArray(rows) ? rows[0] || null : null;
   if (!row) return null;
-  const roleCode = String(row.role_code || "").trim();
-  const isAdmin = roleCode === "admin";
+
   return {
     id: row.id || null,
     created_at: row.created_at || null,
     updated_at: row.updated_at || null,
     full_name: row.full_name || null,
     email: row.email || null,
-    role_code: roleCode || null,
+    role_code: row.role_code || null,
     is_active: row.is_active === true,
     password_hash: row.password_hash || null,
-    can_override_lower_entries: isAdmin || row.can_override_lower_entries === true,
-    can_manage_bookings: isAdmin || row.can_manage_bookings === true,
-    can_manage_blocks: isAdmin || row.can_manage_blocks === true,
-    can_manage_progress: isAdmin || row.can_manage_progress === true,
-    can_manage_promos: isAdmin || row.can_manage_promos === true,
-    can_manage_staff: isAdmin || row.can_manage_staff === true,
-    notes: row.notes || null,
-    is_admin: isAdmin,
-    is_senior_detailer: roleCode === "senior_detailer",
-    is_detailer: roleCode === "detailer"
+    can_override_lower_entries: row.can_override_lower_entries === true,
+    can_manage_bookings: row.can_manage_bookings === true,
+    can_manage_blocks: row.can_manage_blocks === true,
+    can_manage_progress: row.can_manage_progress === true,
+    can_manage_promos: row.can_manage_promos === true,
+    can_manage_staff: row.can_manage_staff === true,
+    notes: row.notes || null
   };
 }
 
+/* ---------------- password verification ---------------- */
+
 async function verifyPassword(password, storedHash) {
   const value = String(storedHash || "");
-  if (!value) return { ok: true, match: false };
+  if (!value) return false;
 
+  // Lightweight fallback path.
   if (value.startsWith("sha256:")) {
     const expected = value.slice("sha256:".length);
     const actual = await sha256Hex(password);
-    return { ok: true, match: safeEqual(actual, expected) };
+    return safeEqual(actual, expected);
   }
 
+  // bcrypt / $2a$ / $2b$ / $2y$ path if bcrypt lib is available in runtime
   if (/^\$2[aby]\$\d{2}\$/.test(value)) {
     const bcrypt = await loadBcrypt();
     if (!bcrypt) {
-      return {
-        ok: false,
-        match: false,
-        publicMessage: "This account uses a bcrypt password hash, but bcryptjs is not bundled in this Pages build. Re-bootstrap this account with hash_mode=sha256 or add bcryptjs to the build.",
-        diagnostic: "bcryptjs dynamic import failed"
-      };
+      throw new Error(
+        "Password hash uses bcrypt but bcrypt is not available in this runtime yet."
+      );
     }
-    return { ok: true, match: !!(await bcrypt.compare(password, value)) };
+
+    return !!(await bcrypt.compare(password, value));
   }
 
-  if (value.startsWith("plain:")) return { ok: true, match: safeEqual(password, value.slice("plain:".length)) };
-  return { ok: true, match: false };
+  // Optional direct equality fallback for temporary bootstrap accounts.
+  if (value.startsWith("plain:")) {
+    return safeEqual(password, value.slice("plain:".length));
+  }
+
+  return false;
 }
 
 async function loadBcrypt() {
@@ -148,17 +224,23 @@ async function loadBcrypt() {
 async function sha256Hex(input) {
   const data = new TextEncoder().encode(String(input || ""));
   const hash = await crypto.subtle.digest("SHA-256", data);
-  return [...new Uint8Array(hash)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  const bytes = new Uint8Array(hash);
+  return [...bytes].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 function safeEqual(a, b) {
   const x = String(a || "");
   const y = String(b || "");
   if (x.length !== y.length) return false;
+
   let out = 0;
-  for (let i = 0; i < x.length; i++) out |= x.charCodeAt(i) ^ y.charCodeAt(i);
+  for (let i = 0; i < x.length; i += 1) {
+    out |= x.charCodeAt(i) ^ y.charCodeAt(i);
+  }
   return out === 0;
 }
+
+/* ---------------- response formatting ---------------- */
 
 function formatActor(staffUser) {
   return {
@@ -167,9 +249,9 @@ function formatActor(staffUser) {
     email: staffUser.email || null,
     role_code: staffUser.role_code || null,
     is_active: staffUser.is_active === true,
-    is_admin: staffUser.is_admin === true,
-    is_senior_detailer: staffUser.is_senior_detailer === true,
-    is_detailer: staffUser.is_detailer === true,
+    is_admin: String(staffUser.role_code || "") === "admin",
+    is_senior_detailer: String(staffUser.role_code || "") === "senior_detailer",
+    is_detailer: String(staffUser.role_code || "") === "detailer",
     capabilities: {
       can_override_lower_entries: staffUser.can_override_lower_entries === true,
       can_manage_bookings: staffUser.can_manage_bookings === true,
@@ -181,45 +263,26 @@ function formatActor(staffUser) {
   };
 }
 
-function loginError(error, diagnostic = null) {
-  const out = { ok: false, error };
-  if (diagnostic) out.diagnostic = diagnostic;
-  return out;
+/* ---------------- helpers ---------------- */
+
+function cleanEmail(value) {
+  const s = String(value || "").trim().toLowerCase();
+  if (!s) return null;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s) ? s : null;
 }
 
-function normalizeEnv(env) {
-  return new Proxy(env || {}, {
-    get(target, prop) {
-      if (prop === "SUPABASE_SERVICE_ROLE_KEY") return getSupabaseServiceRoleKey(target);
-      return target[prop];
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data, null, 2), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store"
     }
   });
 }
 
-function hasSupabaseConfig(env) {
-  return !!(env?.SUPABASE_URL && getSupabaseServiceRoleKey(env));
-}
-
-function getSupabaseServiceRoleKey(env) {
-  return env?.SUPABASE_SERVICE_ROLE_KEY || env?.SUPABASE_SERVICE_KEY || env?.SUPABASE_SERVICE_ROLE || env?.SUPABASE_SECRET_KEY || "";
-}
-
-function cleanEmail(value) {
-  const s = String(value || "").trim().toLowerCase();
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s) ? s : null;
-}
-
-function safeError(err) {
-  const raw = err?.message || String(err || "Unexpected server error.");
-  return raw.replace(/Bearer\s+[A-Za-z0-9._\-]+/g, "Bearer [redacted]").slice(0, 700);
-}
-
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), { status, headers: jsonHeaders() });
-}
-
-function jsonHeaders() {
-  return new Headers({ "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
+function methodNotAllowed() {
+  return json({ error: "Method not allowed." }, 405);
 }
 
 function corsHeaders() {
@@ -233,10 +296,20 @@ function corsHeaders() {
 
 function applyCors(headers) {
   const out = headers instanceof Headers ? new Headers(headers) : new Headers(headers || {});
-  for (const [key, value] of Object.entries(corsHeaders())) if (!out.has(key)) out.set(key, value);
+  const extras = corsHeaders();
+
+  for (const [key, value] of Object.entries(extras)) {
+    if (!out.has(key)) out.set(key, value);
+  }
+
   return out;
 }
 
 function withCors(response) {
-  return new Response(response.body, { status: response.status, statusText: response.statusText, headers: applyCors(response.headers || {}) });
+  const headers = applyCors(response.headers || {});
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers
+  });
 }
