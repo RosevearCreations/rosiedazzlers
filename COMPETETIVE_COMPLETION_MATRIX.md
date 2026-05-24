@@ -182,3 +182,8 @@ Build 166 is a competitor-roadmap completion pass. The goal was not to copy anot
 ## Build 166 decision
 
 `COMPETETIVE.md` is now substantially represented in the website/app. Remaining work is no longer “add the missing public pages” as much as “make the public pages DB-managed, measurable, and tied into quoting, proof, and privacy workflows.”
+
+## Build 169 matrix follow-up — Reliability polish
+
+Reliability/customer-trust item added after live check: login, account widgets, Admin Leads, and analytics must not expose raw 500s to visitors or staff. Build 169 improves this by returning safe degraded JSON from session checks, skipping analytics when storage is unavailable, and adding a favicon so the login page no longer reports the root icon 404. This supports the competitive goal of a cleaner, more trustworthy booking/account experience before adding more public lead-conversion features.
+

@@ -206,3 +206,8 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 - Added manual posted URL and platform post ID capture.
 - Added `social_post_metrics_snapshots` schema support for future reporting.
 - Release checks now require the Build 159 social template/schedule markers.
+
+## Build 169 current state — Login/API hardening
+
+The `/login` page and `/admin-leads.html` no longer depend on fragile auth/session checks returning perfect Supabase responses during page boot. Staff and client `auth_me` APIs now treat storage/config failures as signed-out/degraded states, public analytics fails open, and login errors are returned as readable JSON. This protects public pages and admin shells from console-flooding 500s while preserving secure session-based login for real authenticated access.
+

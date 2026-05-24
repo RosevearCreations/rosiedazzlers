@@ -414,3 +414,10 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 18. Add customer-friendly public gallery promotion rules from approved job media.
 19. Add fallback export buttons: copy caption, download media list, and open platform composer.
 20. Add social performance notes back into the booking/customer history for future marketing decisions.
+
+## Build 169 resolved issue — Auth/analytics 500 noise on login and Admin Leads
+
+Resolved the immediate browser-console 500 pattern by changing `auth_me` endpoints and analytics ingest to return safe JSON fallbacks when Supabase config, session tables, or analytics tables are unavailable. Login endpoints now return application-level JSON errors instead of raw 500s for missing config, schema drift, or unavailable password-hash support.
+
+Remaining operational risk: successful login still requires Cloudflare Pages variables `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` plus the Supabase tables `staff_users`, `staff_auth_sessions`, `customer_profiles`, `customer_auth_sessions`, and `site_activity_events`. If a staff password is stored as bcrypt and `bcryptjs` is not bundled, re-bootstrap the account with `hash_mode='sha256'` or add a package/build step for bcryptjs.
+

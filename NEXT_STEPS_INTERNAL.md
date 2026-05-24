@@ -107,3 +107,11 @@
 
 Build 161 keeps `DEVELOPMENT_ROADMAP.md` as the source of truth and advances the competitor-aligned conversion path with Booking service chooser guidance, package aliases, and photo-estimate CTAs.
 
+## Build 169 immediate next steps
+
+1. Deploy Build 169.
+2. Confirm Cloudflare Pages variables: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and preferred session secrets.
+3. Confirm Supabase tables: `staff_users`, `staff_auth_sessions`, `customer_profiles`, `customer_auth_sessions`, `site_activity_events`.
+4. If login returns a bcrypt warning, re-bootstrap the admin password using `hash_mode='sha256'` or add `bcryptjs` bundling.
+5. Resume Admin Leads lead-to-quote conversion once login is stable.
+

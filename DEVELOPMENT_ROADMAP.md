@@ -876,3 +876,10 @@ Next step: after Build 155 deploys cleanly, optionally remove the compatibility 
 18. Add customer-friendly public gallery promotion rules from approved job media.
 19. Add fallback export buttons: copy caption, download media list, and open platform composer.
 20. Add social performance notes back into the booking/customer history for future marketing decisions.
+
+## Build 169 — Auth/API 500 fallback repair (2026-05-23)
+
+Completed after live testing showed `/api/admin/auth_me`, `/api/client/auth_me`, `/api/analytics/ingest`, `/api/client/auth_login`, and `/api/admin/auth_login` returning browser-visible 500s on `/login` and `/admin-leads.html`. This pass hardened the shared auth/session endpoints so identity checks fail open as signed-out/degraded JSON instead of breaking page load, while actual login remains protected by Supabase staff/customer records. Analytics ingestion now skips safely when storage is unavailable. A root `favicon.ico` was added to remove the browser 404.
+
+Next roadmap focus: apply/verify auth tables and environment variables in Cloudflare Pages, then add lead-to-quote conversion on top of the now-stable Admin Leads screen.
+

@@ -235,3 +235,8 @@ Reviewed during the 2026-05-19 Cloudflare Pages Functions import-path hotfix. No
 ## Build 156 sync note - social progress publishing
 
 Build 156 adds a reviewable social publishing foundation. Admin Progress can now create internal social drafts from job updates/media, Admin Social Queue can review and mark those drafts, and the schema now includes `social_channels`, `social_post_queue`, and `social_dispatch_attempts`. Direct posting to X, Facebook, Instagram, TikTok, Google Business Profile, and other platforms is possible later after the required platform credentials, app approvals, and consent/compliance checks are in place.
+
+## Build 169 docs update
+
+Documented the auth/API fallback repair, added the no-DDL SQL note, synchronized `SUPABASE_SCHEMA.sql` with `staff_auth_sessions`, and captured the remaining deployment checks for Cloudflare Pages variables and Supabase auth/session tables.
+Build 169 adds `scripts/auth_analytics_build169_check.py` and wires it into `scripts/release_check.py`.

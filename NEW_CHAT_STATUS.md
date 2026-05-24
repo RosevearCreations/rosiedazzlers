@@ -215,3 +215,8 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 - Added manual posted URL and platform post ID capture.
 - Added `social_post_metrics_snapshots` schema support for future reporting.
 - Release checks now require the Build 159 social template/schedule markers.
+
+## Build 169 handoff note
+
+Latest repair pass addresses the live `/login` and `/admin-leads.html` console errors: admin/client `auth_me`, analytics ingest, and admin/client login endpoints were hardened against raw 500s. Root `favicon.ico` was added. Next chat should verify Cloudflare environment variables and Supabase auth/session tables before testing staff login and Admin Leads data review.
+

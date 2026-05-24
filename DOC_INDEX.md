@@ -106,3 +106,4 @@ Build 153 documentation updates are focused on Cloudflare deploy repair: import-
 Build 156 adds a reviewable social publishing foundation. Admin Progress can now create internal social drafts from job updates/media, Admin Social Queue can review and mark those drafts, and the schema now includes `social_channels`, `social_post_queue`, and `social_dispatch_attempts`. Direct posting to X, Facebook, Instagram, TikTok, Google Business Profile, and other platforms is possible later after the required platform credentials, app approvals, and consent/compliance checks are in place.
 
 New document: `SOCIAL_PLATFORM_PUBLISHING.md`.
+- Build 169 auth/API fallback repair is documented across README, DEVELOPMENT_ROADMAP, KNOWN_GAPS_AND_RISKS, CURRENT_IMPLEMENTATION_STATE, NEW_CHAT_STATUS, HANDOFF_NEXT_CHAT, SANITY_CHECK, and `sql/2026-05-23_build169_auth_analytics_fallback_no_ddl_note.sql`.

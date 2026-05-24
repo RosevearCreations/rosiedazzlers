@@ -224,3 +224,8 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 - Added manual posted URL and platform post ID capture.
 - Added `social_post_metrics_snapshots` schema support for future reporting.
 - Release checks now require the Build 159 social template/schedule markers.
+
+## Build 169 next-chat starting point
+
+Start by deploying the Build 169 zip, then test `/login` with DevTools open. Expected result: `auth_me` and analytics should not show raw 500s. If login still fails, inspect the returned JSON message; the most likely causes are missing Cloudflare Supabase variables, unapplied `staff_auth_sessions` / `customer_auth_sessions` tables, or a bcrypt password hash without `bcryptjs` bundled. After login works, continue Admin Leads lead-to-quote conversion.
+
