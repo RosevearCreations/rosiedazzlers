@@ -10,11 +10,10 @@ export function getCustomerSessionCookieName() {
 }
 
 export function serviceHeaders(env) {
-  const serviceKey = getSupabaseServiceRoleKey(env);
-  if (!serviceKey) throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY.");
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY.");
   return {
-    apikey: serviceKey,
-    Authorization: `Bearer ${serviceKey}`,
+    apikey: env.SUPABASE_SERVICE_ROLE_KEY,
+    Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
     "Content-Type": "application/json"
   };
 }
@@ -182,6 +181,5 @@ function shouldRotateSession(session) {
 }
 function getClientIp(request) { return request.headers.get("cf-connecting-ip") || request.headers.get("x-forwarded-for") || null; }
 function getUserAgent(request) { return request.headers.get("user-agent") || null; }
-function getSessionSecret(env) { return env.CUSTOMER_SESSION_SECRET || env.ADMIN_PASSWORD || getSupabaseServiceRoleKey(env) || "rosiedazzlers-session-fallback"; }
-function assertSessionEnv(env) { if (!env?.SUPABASE_URL) throw new Error("Missing SUPABASE_URL."); if (!getSupabaseServiceRoleKey(env)) throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY."); }
-function getSupabaseServiceRoleKey(env) { return env?.SUPABASE_SERVICE_ROLE_KEY || env?.SUPABASE_SERVICE_KEY || env?.SUPABASE_SERVICE_ROLE || env?.SUPABASE_SECRET_KEY || ""; }
+function getSessionSecret(env) { return env.CUSTOMER_SESSION_SECRET || env.ADMIN_PASSWORD || env.SUPABASE_SERVICE_ROLE_KEY || "rosiedazzlers-session-fallback"; }
+function assertSessionEnv(env) { if (!env?.SUPABASE_URL) throw new Error("Missing SUPABASE_URL."); if (!env?.SUPABASE_SERVICE_ROLE_KEY) throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY."); }

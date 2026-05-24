@@ -26,14 +26,13 @@ export function getStaffSessionCookieName() {
 }
 
 export function serviceHeaders(env) {
-  const serviceKey = getSupabaseServiceRoleKey(env);
-  if (!serviceKey) {
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) {
     throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY.");
   }
 
   return {
-    apikey: serviceKey,
-    Authorization: `Bearer ${serviceKey}`,
+    apikey: env.SUPABASE_SERVICE_ROLE_KEY,
+    Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
     "Content-Type": "application/json"
   };
 }
@@ -332,7 +331,7 @@ async function makeOpaqueSessionToken(env, staffUserId) {
 function getSessionSecret(env) {
   return (
     env.STAFF_SESSION_SECRET ||
-    getSupabaseServiceRoleKey(env) ||
+    env.SUPABASE_SERVICE_ROLE_KEY ||
     env.ADMIN_PASSWORD ||
     "rosie-dev-fallback-staff-secret"
   );
@@ -398,17 +397,7 @@ function assertSessionEnv(env) {
     throw new Error("Missing SUPABASE_URL.");
   }
 
-  if (!getSupabaseServiceRoleKey(env)) {
+  if (!env || !env.SUPABASE_SERVICE_ROLE_KEY) {
     throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY.");
   }
-}
-
-function getSupabaseServiceRoleKey(env) {
-  return (
-    env?.SUPABASE_SERVICE_ROLE_KEY ||
-    env?.SUPABASE_SERVICE_KEY ||
-    env?.SUPABASE_SERVICE_ROLE ||
-    env?.SUPABASE_SECRET_KEY ||
-    ""
-  );
 }

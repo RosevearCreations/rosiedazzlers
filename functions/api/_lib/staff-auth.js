@@ -408,7 +408,7 @@ export async function insertOverrideLog({
   change_summary = null
 }) {
   try {
-    if (!env.SUPABASE_URL || !getSupabaseServiceRoleKey(env)) return null;
+    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return null;
     if (!source_table) return null;
 
     const payload = {
@@ -506,10 +506,9 @@ function checkAdminPassword(request, env) {
 /* ---------------- shared exports used by many endpoints ---------------- */
 
 export function serviceHeaders(env) {
-  const serviceKey = getSupabaseServiceRoleKey(env);
   return {
-    apikey: serviceKey,
-    Authorization: `Bearer ${serviceKey}`,
+    apikey: env.SUPABASE_SERVICE_ROLE_KEY,
+    Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
     "Content-Type": "application/json"
   };
 }
@@ -591,13 +590,9 @@ function assertBaseEnv(env) {
     throw new Error("Missing SUPABASE_URL.");
   }
 
-  if (!getSupabaseServiceRoleKey(env)) {
+  if (!env || !env.SUPABASE_SERVICE_ROLE_KEY) {
     throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY.");
   }
-}
-
-function getSupabaseServiceRoleKey(env) {
-  return env?.SUPABASE_SERVICE_ROLE_KEY || env?.SUPABASE_SERVICE_KEY || env?.SUPABASE_SERVICE_ROLE || env?.SUPABASE_SECRET_KEY || "";
 }
 
 
