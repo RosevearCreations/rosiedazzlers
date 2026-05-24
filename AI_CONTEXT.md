@@ -1,3 +1,10 @@
+# Build 171 AI context update
+
+**Updated:** 2026-05-24
+
+Continue from Build 171. Admin Leads can now generate copy-ready quote starter text through `/api/admin/lead_quote_preview`. Treat this as a bridge toward saved quote/proposal drafts and lead-to-booking conversion. Preserve the rule that every build updates Markdown and schema notes, checks one-H1 public pages, and keeps fallbacks graceful.
+
+---
 # Build 167 update
 
 Build 167 context: COMPETETIVE_COMPLETION_MATRIX.md was advanced with structured public lead capture, optional direct quote-photo upload foundation, FAQPage/Breadcrumb schema foundations, and a Build 167 release check.

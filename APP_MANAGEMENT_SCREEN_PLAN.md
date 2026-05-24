@@ -1,3 +1,10 @@
+# Build 171 documentation sync note
+
+**Updated:** 2026-05-24
+
+This Markdown file was reviewed during the Build 171 pass. Current source of truth remains `DEVELOPMENT_ROADMAP.md`. Build 171 adds the Admin Leads quote-starter workflow and no new DDL.
+
+---
 <!-- refreshed 2026-04-25: block-range town-page pass -->
 > Documentation synchronized April 23, 2026: live vehicle-size SVG guide, App Management chart preview/download helper, no-DDL schema sync, and continued public SEO/static-check direction.
 
