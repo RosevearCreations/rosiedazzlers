@@ -1,87 +1,103 @@
-<!doctype html>
+<!-- File: /login/index.html -->
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Client or Staff Login | Rosie Dazzlers</title>
-  <link rel="canonical" href="https://www.rosiedazzlers.ca/login" />
-  <meta name="description" content="Sign in to your Rosie Dazzlers client account, or use the same page to reach staff tools when you are part of the Rosie Dazzlers team." />
-  <meta name="robots" content="noindex,follow" />
-  <link rel="stylesheet" href="/assets/site.css" />
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Login | Devil n Dove</title>
+<link href="/css/styles.css" rel="stylesheet"/>
+<link href="/assets/mark.png" rel="icon" type="image/png"/>
+<link href="https://devilndove.com/login/" rel="canonical"/><meta content="Login page for Devil n Dove members and admin users." name="description"/><meta content="noindex,follow" name="robots"/><meta content="Devil n Dove" property="og:site_name"/><meta content="website" property="og:type"/><meta content="Login | Devil n Dove" property="og:title"/><meta content="Login page for Devil n Dove members and admin users." property="og:description"/><meta content="https://devilndove.com/login/" property="og:url"/><meta content="https://devilndove.com/assets/logo-clear.png" property="og:image"/><meta content="summary_large_image" name="twitter:card"/><meta content="Login | Devil n Dove" name="twitter:title"/><meta content="Login page for Devil n Dove members and admin users." name="twitter:description"/><meta content="https://devilndove.com/assets/logo-clear.png" name="twitter:image"/><script id="pageStructuredData" type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Login","url":"https://devilndove.com/login/","description":"Login page for Devil n Dove members and admin users.","isPartOf":{"@type":"WebSite","name":"Devil n Dove","url":"https://devilndove.com/"}}</script></head>
 <body>
-  <div class="nav"><div class="nav-inner"><a class="brand" href="/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a><div class="nav-links" id="navLinks"></div><a class="btn primary" href="/book">Book now</a></div></div>
-  <div class="container">
-    <div class="grid cards" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:start;">
-      <section class="panel">
-        <h1 style="margin-top:0">Client or Staff Login</h1>
-        <p class="muted">Customers can sign in to view bookings and gifts. Staff can also use this page and will be sent to the admin tools automatically.</p>
-        <form id="loginForm">
-          <div class="field"><label for="loginEmail">Email</label><input id="loginEmail" type="email" required autocomplete="username" /></div>
-          <div class="field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" required autocomplete="current-password" /></div>
-          <button class="btn primary" id="loginBtn" type="submit">Sign In</button>
-          <div id="loginStatus" class="muted" style="margin-top:12px"></div>
-        </form>
-        <div class="hr"></div>
-        <p class="muted" style="margin:0">Staff tip: if you are already signed in as staff, your public account widget will also show an Admin shortcut.</p>
-      </section>
-      <section class="panel">
-        <h2 style="margin-top:0">Create Client Account</h2>
-        <p class="muted">Create a customer login with your most important profile details.</p>
-        <form id="signupForm">
-          <div class="field"><label for="signupName">Full Name</label><input id="signupName" required autocomplete="name" /></div>
-          <div class="field"><label for="signupEmail">Email</label><input id="signupEmail" type="email" required autocomplete="email" /></div>
-          <div class="field"><label for="signupPhone">Phone</label><input id="signupPhone" autocomplete="tel" /></div>
-          <div class="field"><label for="signupPassword">Password</label><input id="signupPassword" type="password" required minlength="8" autocomplete="new-password" /></div>
-          <div class="field"><label for="signupAddress1">Address</label><input id="signupAddress1" autocomplete="street-address" /></div>
-          <div class="field"><label for="signupCity">City</label><input id="signupCity" autocomplete="address-level2" /></div>
-          <div class="field"><label for="signupProvince">Province</label><input id="signupProvince" value="ON" autocomplete="address-level1" /></div>
-          <div class="field"><label for="signupPostal">Postal Code</label><input id="signupPostal" autocomplete="postal-code" /></div>
-          <div class="field"><label for="signupVehicleNotes">Vehicle Details</label><textarea id="signupVehicleNotes"></textarea></div>
-          <button class="btn primary" id="signupBtn" type="submit">Create Account</button>
-          <div id="signupStatus" class="muted" style="margin-top:12px"></div>
-        </form>
-      </section>
-    </div>
-    <div class="footer" data-footer></div>
-  </div>
-  <script src="/assets/client-auth.js"></script>
-  <script src="/assets/admin-auth.js"></script>
-  <script type="module" src="/assets/chrome.js"></script>
-  <script>
-    const loginForm = document.getElementById('loginForm');
-    const signupForm = document.getElementById('signupForm');
-    function status(el, msg, ok=false){ el.textContent = msg || ''; el.style.color = ok ? '#86efac' : '#fca5a5'; }
-    function nextUrl(fallback){ const u=new URL(location.href); const n=u.searchParams.get('next'); if(!n || !n.startsWith('/') || n.startsWith('//')) return fallback; return n; }
-
-    async function signInWithFallback(email, password){
-      try {
-        const client = await window.ClientAuth.signIn({ email, password });
-        return { kind: 'client', result: client, redirect: nextUrl('/my-account') };
-      } catch (clientErr) {
-        try {
-          const staff = await window.AdminAuth.signIn({ email, password });
-          return { kind: 'staff', result: staff, redirect: nextUrl('/admin') };
-        } catch (staffErr) {
-          throw new Error((clientErr && clientErr.message) || (staffErr && staffErr.message) || 'Login failed.');
-        }
-      }
-    }
-
-    loginForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const out=document.getElementById('loginStatus');
-      status(out,'');
-      try {
-        const email = document.getElementById('loginEmail').value.trim();
-        const password = document.getElementById('loginPassword').value;
-        const auth = await signInWithFallback(email, password);
-        status(out, auth.kind === 'staff' ? 'Staff login accepted. Redirecting…' : 'Signed in. Redirecting…', true);
-        setTimeout(()=>location.replace(auth.redirect),300);
-      } catch(err){ status(out, err.message || 'Login failed.'); }
-    });
-
-    signupForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const out=document.getElementById('signupStatus'); status(out,''); try { await window.ClientAuth.signUp({ full_name: document.getElementById('signupName').value.trim(), email: document.getElementById('signupEmail').value.trim(), phone: document.getElementById('signupPhone').value.trim(), password: document.getElementById('signupPassword').value, address_line1: document.getElementById('signupAddress1').value.trim(), city: document.getElementById('signupCity').value.trim(), province: document.getElementById('signupProvince').value.trim(), postal_code: document.getElementById('signupPostal').value.trim(), vehicle_notes: document.getElementById('signupVehicleNotes').value.trim() }); status(out,'Account created. Redirecting...',true); setTimeout(()=>location.replace('/my-account'),300); } catch(err){ status(out, err.message || 'Sign-up failed.'); } });
-  </script>
+<div class="container">
+<div class="nav">
+<div class="brand">
+<img alt="Devil n Dove logo" src="/assets/logo-clear.png"/>
+<div>
+<div style="font-weight:800;letter-spacing:.2px;line-height:1.1">Devil n Dove</div>
+<div class="small">Login</div>
+</div>
+</div>
+<div class="links">
+<a href="/">Home</a>
+<a href="/gallery/">Gallery</a>
+<a href="/creations/">Creations</a>
+<a href="/tools/">Tools</a>
+<a href="/supplies/">Supplies</a>
+<a href="/shop/">Shop</a>
+<a href="/cart/">Cart</a>
+<a data-show-when-logged-in="" href="/members/" style="display:none">Members</a>
+<a data-show-when-admin="" href="/admin/" style="display:none">Admin</a>
+<a data-show-when-logged-out="" href="/register/" style="display:none">Register</a>
+<span class="small" data-show-when-logged-in="" style="display:none">
+          Hi, <span data-nav-user-name="">Member</span>
+</span>
+<button class="btn" data-nav-logout="" data-show-when-logged-in="" style="display:none" type="button">
+          Logout
+        </button>
+</div>
+</div>
+<div class="hero">
+<div>
+<h1>Login</h1>
+<p>
+          Sign in to access your member account, orders, downloads, and account tools.
+        </p>
+</div>
+</div>
+<div class="grid cols-2" style="gap:18px">
+<div class="card">
+<h2 style="margin-top:0">Sign In</h2>
+<p class="small" style="margin-top:0">
+          Use your Devil n Dove account email and password.
+        </p>
+<form class="grid" id="loginForm" style="gap:12px">
+<div>
+<label class="small" for="loginEmail">Email</label>
+<input autocomplete="email" id="loginEmail" name="email" required="" type="email"/>
+</div>
+<div>
+<label class="small" for="loginPassword">Password</label>
+<input autocomplete="current-password" id="loginPassword" name="password" required="" type="password"/>
+</div>
+<div class="small" id="loginMessage" style="display:none"></div>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<button class="btn" id="loginSubmitButton" type="submit">
+              Login
+            </button>
+<a class="btn" href="/register/">Create Account</a>
+</div>
+<div class="small">Forgot something? <a href="/account-help/index.html?mode=password">Forgot password</a> • <a href="/account-help/index.html?mode=email">Forgot email</a></div></form>
+</div>
+<div class="card">
+<h2 style="margin-top:0">Account Access</h2>
+<div class="small" style="display:grid;gap:10px">
+<div>Members can view their orders, downloads, and account details.</div>
+<div>Admins can access the protected store, orders, payments, and security dashboard.</div>
+<div>Your session is checked before protected pages are shown.</div>
+</div>
+<div class="card" style="margin-top:14px">
+<h3 style="margin-top:0">Need an account?</h3>
+<p class="small" style="margin:0 0 10px 0">
+            Create an account to save access to your orders and future digital downloads.
+          </p>
+<a class="btn" href="/register/">Go to Registration</a>
+</div>
+<div class="card" style="margin-top:14px">
+<h3 style="margin-top:0">Continue Shopping</h3>
+<p class="small" style="margin:0 0 10px 0">
+            You can still browse the store and build a cart before signing in.
+          </p>
+<a class="btn" href="/shop/">Back to Shop</a>
+</div>
+</div>
+</div>
+<div class="footer card" style="margin-top:18px"></div>
+</div>
+<script src="/js/main.js"></script>
+<script src="/public/js/auth.js"></script>
+<script src="/public/js/site-auth-ui.js"></script>
+<script src="/public/js/login.js"></script>
 </body>
 </html>
