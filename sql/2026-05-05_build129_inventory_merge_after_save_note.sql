@@ -1,0 +1,5 @@
+-- 2026-05-05_build129_inventory_merge_after_save_note.sql
+-- No DDL required for this patch.
+-- Build 129 updates the Admin Catalog inventory workflow so saved DB inventory rows are merged with local seeded catalog fallback rows.
+-- This prevents the inventory screen from shrinking to only one saved row after the first local catalog item is edited and saved.
+-- catalog_inventory_save.js also now preserves cost_cents, vendor_sku, purchase_date, estimated_jobs_per_unit, sort_key, subcategory, and reuse_policy when those columns exist, with a compatibility fallback for older schemas.
