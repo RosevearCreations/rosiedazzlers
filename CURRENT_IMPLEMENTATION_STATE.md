@@ -1,3 +1,20 @@
+# Build 171 current implementation state
+
+**Updated:** 2026-05-24
+
+The current app now includes public lead capture, Admin Leads triage, photo/video estimate upload review, auth/dashboard graceful fallbacks, and a staff quote-starter bridge. The newest active workflow is **Build quote starter** on `/admin-leads.html`, powered by `/api/admin/lead_quote_preview`.
+
+Active Build 171 files:
+
+- `functions/api/admin/lead_quote_preview.js`
+- `admin-leads.html`
+- `admin-leads/index.html`
+- `scripts/lead_quote_preview_build171_check.py`
+- `sql/2026-05-24_build171_admin_lead_quote_preview_no_ddl_note.sql`
+
+No Build 171 DDL is required. Build 167/168 SQL remains required for live lead/upload data.
+
+---
 # Build 168 current implementation state
 
 **Updated:** 2026-05-23

@@ -1,3 +1,10 @@
+# Build 171 documentation sync note
+
+**Updated:** 2026-05-24
+
+This Markdown file was reviewed during the Build 171 pass. Current source of truth remains `DEVELOPMENT_ROADMAP.md`. Build 171 adds the Admin Leads quote-starter workflow and no new DDL.
+
+---
 # Build 167 update
 
 Build 167 alias note: see COMPETETIVE.md and COMPETETIVE_COMPLETION_MATRIX.md for the current competitor-roadmap completion status.

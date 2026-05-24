@@ -1,3 +1,63 @@
+# COMPETETIVE.md Completion Matrix — Build 171
+
+**Updated:** 2026-05-24  
+**Baseline:** `rosiedazzlers-dev(166).zip`  
+**Roadmap authority:** `DEVELOPMENT_ROADMAP.md`
+
+Build 171 moves the competitor-completion matrix one step past capture/review and into quote follow-up. The public pages and lead tables already exist; this pass gives staff a practical quote-starter bridge so public inquiries, photo-estimate requests, fleet requests, maintenance plans, specials, and gift-card questions can become consistent staff-reviewed quote copy.
+
+## Build 171 completion changes
+
+| Matrix area | Build 171 status | Details |
+| --- | --- | --- |
+| Lead-to-quote workflow | Improved | Admin Leads now has a **Build quote starter** action for each public lead. |
+| Quote-builder foundation | Added starter | New `/api/admin/lead_quote_preview` returns copy-ready internal quote text without adding new DDL. |
+| Photo-estimate review | Improved | Linked uploads are summarized in the quote starter with privacy status warnings. |
+| Fleet/maintenance lead handling | Improved | Topic-aware quote next steps now mention cadence, vehicle count, logistics, and first-visit/test-detail review. |
+| Privacy/compliance workflow | Improved | Quote starter repeats pending/needs-blur/rejected media warnings before staff reuse customer media. |
+| Fallback/error handling | Improved | Lead/upload admin endpoints now accept the same Supabase service-key aliases as the auth/session fallback helpers. |
+| Release enforcement | Improved | Added a Build 171 guard to keep the quote endpoint, UI action, SQL note, schema note, and docs markers present. |
+
+## Updated completion status after Build 171
+
+| COMPETETIVE.md area | Current status | Notes |
+| --- | --- | --- |
+| Clear local homepage hero | Mostly complete | Homepage route choices and sticky CTA exist; keep measuring conversion. |
+| Sticky CTA buttons | Complete | Global sticky CTA remains active. |
+| Better service/package selector | Mostly complete | Booking chooser, condition helper, photo links/uploads, admin intake/review, and quote-starter handoff are present. |
+| Service package cards | Mostly complete | Package aliases and add-on guidance are improved; next step is DB-managed editing and quote-aware pricing suggestions. |
+| Add-on cards | Improved | Catalog coverage is broad; proof/examples and quote-starter price suggestions remain next. |
+| Specials | Complete public foundation | Static `/specials` exists and can create leads; admin-managed specials remain next. |
+| Gift cards | Complete public foundation | Static guide exists and links to gift workflow; quote starter now handles gift-card leads. |
+| Proof sections | Partial | Recent work/gallery exist; service/town-aware proof filtering remains open. |
+| Ceramic coating page | Mostly complete | Existing page plus education support; deeper FAQ/proof/schema automation remains next. |
+| Paint correction page | Mostly complete | Existing page plus education support; real proof/result examples remain next. |
+| Interior/basic vs deep distinction | Mostly complete | Service chooser, condition helper, and quote starter explain condition-heavy paths. |
+| High-value add-ons | Improved | More competitor-aligned add-ons are bundled; quote-required add-on pricing still needs staff validation. |
+| Booking flow | Mostly complete | Direct upload foundation, share links, condition helper, consent, admin review, and quote starter are present. |
+| Admin service controls | Partial | Admin catalog/media workflows exist; public service/special/FAQ content still needs a DB-managed editor. |
+| Schema/local SEO support | Improved | One-H1 checks continue; FAQPage/Breadcrumb foundations exist on competitor routes. |
+| Conversion blocks | Improved | Homepage, Services, sticky CTA, specials, gifts, fleet, maintenance, education, leads, and quote starter now interlink. |
+| Maintenance plans | Complete public foundation | Public route, structured lead form, and quote starter support exist. |
+| Fleet/commercial | Complete public foundation | Public route, structured lead form, and quote starter support exist. |
+| Gallery system | Partial | Needs service/town filtering, proof approval, and media privacy eligibility. |
+| Customer education content | Complete starter foundation | Blog hub and starter articles exist; add more practical local guides over time. |
+| Pricing display strategy | Mostly complete | Quote-safe language is present; analytics-driven tuning and catalog-backed quote suggestions remain next. |
+
+## Still open after Build 171
+
+1. Add one-click lead → draft booking creation.
+2. Add persistent quote/proposal drafts and quote revision history.
+3. Add catalog-backed package/add-on price suggestions to quote starter.
+4. Add service/town-aware proof filtering for gallery and recent work.
+5. Add DB-managed service, special, FAQ, and education editing.
+6. Enforce gallery/social eligibility from consent + privacy review + blur/crop completion.
+7. Add analytics for quote starter generated, copied, status changed, and converted.
+8. Add automated FAQPage/Breadcrumb generation from DB content once the CMS layer is live.
+9. Keep direct uploads disabled until storage, limits, and privacy workflow are confirmed live.
+10. Continue one-H1, title/meta, local wording, fallback, and CSS drift checks every pass.
+
+---
 # COMPETETIVE.md Completion Matrix — Build 168
 
 **Updated:** 2026-05-23  
