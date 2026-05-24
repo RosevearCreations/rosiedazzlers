@@ -1,3 +1,40 @@
+-- Build 166 note (2026-05-23): no schema shape change.
+-- Public routes and catalog fallback metadata were updated for COMPETETIVE.md completion.
+-- See sql/2026-05-23_build166_competetive_completion_public_routes_no_ddl_note.sql.
+
+-- Build 165 schema sync — booking photo-estimate link capture
+-- Optional bookings.photo_estimate_links jsonb column added by:
+-- sql/2026-05-22_build165_booking_photo_estimate_link_capture.sql
+-- Checkout remains fallback-safe by also writing submitted links into booking notes.
+
+-- Build 150 inventory image picker/fallback sync — 2026-05-17
+-- Adds Admin Catalog image picker support and the matching schema migration in sql/2026-05-17_build150_inventory_image_picker_and_fallback.sql.
+-- Saved DB inventory rows now preserve/accept image_url and optional receipt/station/service/Amazon fields while UI merge logic prevents blank DB images from masking bundled consumables/tools images.
+
+-- Build 145 catalog DB import/admin backend workflow — 2026-05-15
+-- Adds optional DB-first catalog migration foundations in sql/2026-05-15_build145_catalog_db_import_admin_workflows.sql:
+-- catalog_import_batches, catalog_import_batch_rows, vendor_directory, catalog_item_receipts,
+-- catalog_item_assignments, service_product_links, and optional catalog_inventory_items fields
+-- receipt_url, assigned_station, service_tags, last_counted_at, and public_badge.
+-- Runtime remains fallback-safe: public pages still merge bundled JSON with DB rows until import is complete.
+
+-- Build 142 service-area DB/admin/SEO value pass — 2026-05-15
+-- Added optional public.service_area_rules table in sql/2026-05-15_build142_service_area_db_admin_seo_value_pass.sql.
+-- Public runtime remains fallback-safe: /api/service_area_rules_public reads service_area_rules first, then app_management_settings.service_area_rules, while bundled JSON remains the customer-facing fallback.
+-- Admin endpoint added at functions/api/admin/service_area_rules.js for future DB/app-setting service-area editing.
+-- SEO/docs/schema synchronized with one-H1 and local Oxford/Norfolk service-area discipline.
+
+-- Build 140 value-add roadmap foundations — 2026-05-10
+-- Adds optional DB-first foundation tables in sql/2026-05-10_build140_value_add_roadmap_foundations.sql:
+-- app_option_libraries, app_media_library, and app_content_entries.
+-- Runtime still falls back to bundled JSON and app_management_settings until these tables are deployed and populated.
+
+-- Build 139 corrected dev cleanup synchronization — 2026-05-10
+-- No DDL changes in this pass.
+-- Documentation was archived/reset and root-level duplicate API JavaScript was removed from the corrected dev package.
+-- The valid API function source remains functions/api/ and functions/api/admin/.
+-- See sql/2026-05-10_build139_corrected_dev_cleanup_no_ddl_note.sql for the cleanup note.
+
 -- 2026-04-25 note: no DDL change in this pass; admin range blocking continues to use date_blocks(blocked_date, reason) and slot_blocks(blocked_date, slot, reason).
 -- Schema synchronization note: April 25, 2026 — no new DDL in this pass. Docs refreshed for folder-backed routes, special-service landing pages, recent-work proof mounts, and unchanged analytics rollup schema.
 -- April 23, 2026 live vehicle-size guide + chart helper pass.
@@ -215,14 +252,14 @@ create table if not exists public.staff_availability_blocks (
   created_by_name text null,
   created_by_staff_user_id uuid null references public.staff_users(id) on delete set null
 );
-create table if not exists public.promo_codes (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), code text not null unique, active boolean not null default true, is_active boolean not null default true, discount_type text null, discount_percent numeric(6,2) null, discount_cents integer null, percent_off numeric(6,2) null, amount_off_cents integer null, starts_at timestamptz null, ends_at timestamptz null, starts_on date null, ends_on date null, max_uses integer null, uses integer not null default 0, notes text null);
+create table if not exists public.promo_codes (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), code text not null unique, active boolean not null default true, is_active boolean not null default true, discount_type text null, discount_percent numeric(6,2) null, discount_cents integer null, percent_off numeric(6,2) null, amount_off_cents integer null, starts_at timestamptz null, ends_at timestamptz null, starts_on date null, ends_on date null, max_uses integer null, uses integer not null default 0, notes text null, amazon_asin text null, amazon_title text null, amazon_match_status text null, amazon_match_score numeric(6,3) null, amazon_seller_name text null, amazon_brand text null, amazon_category text null, amazon_quantity_total numeric(12,2) null, amazon_net_total_cents integer null);
 create table if not exists public.gift_products (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), sku text not null unique, type text not null check (type in ('service','open','fixed_amount')), package_code text null, vehicle_size text null, face_value_cents integer not null default 0, currency text not null default 'CAD', is_active boolean not null default true, title text null, description text null);
 create table if not exists public.gift_certificates (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), code text not null unique, type text not null check (type in ('service','open','fixed_amount')), status text not null default 'active', currency text not null default 'CAD', package_code text null, vehicle_size text null, original_value_cents integer not null default 0, remaining_cents integer not null default 0, purchaser_email text null, recipient_name text null, recipient_email text null, stripe_session_id text null, redeemed_at timestamptz null, expires_at timestamptz null, notes text null);
 create table if not exists public.job_updates (id uuid primary key default gen_random_uuid(), booking_id uuid not null references public.bookings(id) on delete cascade, created_at timestamptz not null default now(), updated_at timestamptz not null default now(), created_by text not null, note text not null, visibility text not null default 'customer' check (visibility in ('customer','internal')), parent_update_id uuid null references public.job_updates(id) on delete cascade, thread_status text not null default 'visible' check (thread_status in ('visible','hidden','internal_only','pinned')), moderated_at timestamptz null, moderated_by_name text null, moderation_reason text null, staff_user_id uuid null);
 create table if not exists public.job_media (id uuid primary key default gen_random_uuid(), booking_id uuid not null references public.bookings(id) on delete cascade, created_at timestamptz not null default now(), updated_at timestamptz not null default now(), created_by text not null, kind text not null check (kind in ('photo','video')), caption text null, media_url text not null, visibility text not null default 'customer' check (visibility in ('customer','internal')), thread_status text not null default 'visible' check (thread_status in ('visible','hidden','internal_only','pinned')), moderated_at timestamptz null, moderated_by_name text null, moderation_reason text null, staff_user_id uuid null);
 create table if not exists public.job_signoffs (id uuid primary key default gen_random_uuid(), booking_id uuid not null references public.bookings(id) on delete cascade, created_at timestamptz not null default now(), signed_at timestamptz not null default now(), signer_type text not null check (signer_type in ('customer','staff')), signer_name text not null, signer_email text null, notes text null, user_agent text null, staff_user_id uuid null);
 create table if not exists public.recovery_message_templates (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), template_key text not null unique, channel text not null check (channel in ('email','sms')), provider text not null default 'manual', is_active boolean not null default true, subject_template text null, body_template text not null, variables jsonb not null default '[]'::jsonb, rules jsonb not null default '{}'::jsonb, notes text null);
-create table if not exists public.catalog_inventory_items (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), item_key text not null unique, item_type text not null check (item_type in ('tool','consumable')), name text not null, category text null, subcategory text null, description text null, image_url text null, amazon_url text null, is_public boolean not null default true, is_active boolean not null default true, qty_on_hand numeric(12,2) not null default 0, reorder_point numeric(12,2) not null default 0, reorder_qty numeric(12,2) not null default 0, unit_label text null, cost_cents integer null, preferred_vendor text null, vendor_sku text null, rating_value numeric(3,2) null, rating_count integer not null default 0, sort_key integer not null default 0, reuse_policy text not null default 'reorder' check (reuse_policy in ('reorder','single_use','never_reuse')), purchase_date date null, estimated_jobs_per_unit numeric(12,2) null, notes text null);
+create table if not exists public.catalog_inventory_items (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), item_key text not null unique, item_type text not null check (item_type in ('tool','consumable')), name text not null, category text null, subcategory text null, description text null, image_url text null, amazon_url text null, is_public boolean not null default true, is_active boolean not null default true, qty_on_hand numeric(12,2) not null default 0, reorder_point numeric(12,2) not null default 0, reorder_qty numeric(12,2) not null default 0, unit_label text null, cost_cents integer null, preferred_vendor text null, vendor_sku text null, rating_value numeric(3,2) null, rating_count integer not null default 0, sort_key integer not null default 0, reuse_policy text not null default 'reorder' check (reuse_policy in ('reorder','single_use','never_reuse')), purchase_date date null, estimated_jobs_per_unit numeric(12,2) null, receipt_url text null, assigned_station text null, service_tags text[] null, last_counted_at timestamptz null, public_badge text null, amazon_asin text null, amazon_title text null, amazon_match_status text null, amazon_match_score numeric(6,3) null, amazon_seller_name text null, amazon_brand text null, amazon_category text null, amazon_quantity_total numeric(12,2) null, amazon_net_total_cents integer null, notes text null);
 create table if not exists public.catalog_low_stock_alerts (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), item_id uuid not null references public.catalog_inventory_items(id) on delete cascade, item_key text null, qty_snapshot numeric(12,2) null, reorder_point_snapshot numeric(12,2) null, is_resolved boolean not null default false, resolved_at timestamptz null, resolved_by_name text null, resolution_notes text null);
 create table if not exists public.catalog_purchase_orders (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), item_id uuid null references public.catalog_inventory_items(id) on delete set null, item_key text null, item_name text null, vendor_name text null, qty_ordered numeric(12,2) not null default 0, unit_cost_cents integer null, status text not null default 'draft' check (status in ('draft','requested','ordered','received','cancelled')), reminder_at timestamptz null, reminder_sent_at timestamptz null, reminder_last_channel text null, ordered_at timestamptz null, received_at timestamptz null, purchase_url text null, note text null);
 
@@ -973,7 +1010,246 @@ create index if not exists accounting_period_closes_status_idx on public.account
 
 -- 2026-04-29 pass: landing page content, add-on image merge safety, and admin add-on dependency/editor refinements.
 
--- Build 137 synchronization note — 2026-05-09
--- Local SEO, admin inventory fallback, image/media documentation, and static-check coverage were refreshed.
--- No database DDL was added in this pass; see sql/2026-05-09_build137_local_seo_inventory_media_no_ddl_note.sql.
--- Continue using app_management_settings as the source for shared pricing, landing pages, and admin dropdown option libraries; JSON files remain bundled fallback sources.
+## Build 132 — Admin add-on image hydration repair (May 8, 2026)
+- Admin App add-on selection now hydrates blank saved `image_url` and `image_fallback_url` fields from the bundled default pricing catalog by matching add-on `code`.
+- The selected add-on editor now shows a Current image loaded preview so the existing picture can be kept or replaced deliberately.
+- Public pricing catalog merge logic now prevents blank saved media fields from masking fallback/default add-on images.
+- No database DDL is required; schema tracking note added at `sql/2026-05-08_build132_admin_addon_media_hydration_note.sql`.
+- Continue the local SEO discipline: one clear H1 per exposed public page, locally relevant wording, visible proof/review media, and no broken asset paths.
+- Restored missing `assets/landing-page.js` because landing pages were still referencing it during the static link check.
+
+-- Build 133 note: admin add-on PNG/R2 image hydration and landingLinksToText repair are frontend/data fallback changes only; no database DDL required. See sql/2026-05-08_build133_admin_addon_png_hydration_no_ddl_note.sql.
+
+-- Build 134 sync 2026-05-08:
+-- No DDL required. Admin add-on save button, populated editor suggestions, landing-page media fields, public landing API normalization, static landing metadata, structured data, and sitemap refresh are frontend/API/docs updates only.
+-- Future DDL to consider only if media fields need relational storage instead of app_management_settings JSON: landing_page_media, landing_page_related_products, and editor suggestion dictionaries.
+
+
+-- Build 135 admin landing / inventory option repair note
+-- No DDL required for this pass. catalog_dropdown_options is stored through the existing app_settings mechanism; Admin Catalog merges saved rows with bundled gear/consumable JSON fallback.
+
+-- Build 136 no-DDL note (2026-05-09): admin catalog click-to-edit, accounting pricing-window helper, sample homepage reviews, and pricing embedded booking continuation polish. See sql/2026-05-09_build136_admin_catalog_pricing_reviews_no_ddl_note.sql.
+
+-- Build 141 service-area/water-rule fallback note (2026-05-14)
+-- This pass is JSON-first and deploy-safe:
+--   data/service_area_rules.json now seeds Oxford County and Norfolk County towns,
+--   county fallback water-use reminders, and official links.
+--   data/rosie_services_pricing_and_packages.json includes expanded service_areas.
+-- Future DB-first step:
+--   create a canonical service_area_rules table or app_settings key and let JSON remain fallback.
+
+-- Root duplicate API files were removed again in Build 141; no DDL needed.
+
+-- Build 143 note (2026-05-15): no DDL. Public consumables/gear pages now merge Supabase catalog rows over bundled JSON fallbacks so partial DB imports do not hide the rest of the catalog.
+
+
+-- Build 146: Amazon Business CSV matching supports optional catalog_inventory_items amazon_* enrichment columns.
+
+-- Build 147 schema sync (2026-05-16)
+-- No DDL in this pass.
+-- Admin App now exposes the catalog_dropdown_options app-setting editor in the UI.
+-- Future DB candidate: move dropdown option libraries from app_settings JSON into normalized admin_dropdown_options rows after workflow validation.
+
+
+-- Build 148 schema sync (2026-05-16)
+-- Landing-page regional photos and add-on process/photo fields are currently stored in landing-page JSON/app settings and fallback files.
+-- No DDL was required in Build 148; see sql/2026-05-16_build148_landing_photos_addon_pages_no_ddl_note.sql.
+-- Future DB direction: landing_pages, media_library, and landing_page_media tables with draft/publish and source/consent metadata.
+
+-- Build 149 note (2026-05-17): no database DDL required.
+-- Admin App service areas/travel tiers were converted from a long row list into a compact selected-row editor.
+-- Landing image fallback handling was improved in frontend/static files only.
+
+
+-- Build 150 inventory image picker indexes
+create index if not exists idx_catalog_inventory_items_image_url on public.catalog_inventory_items(image_url) where image_url is not null and image_url <> '';
+create index if not exists idx_catalog_inventory_items_service_tags on public.catalog_inventory_items using gin(service_tags);
+create index if not exists catalog_inventory_items_amazon_asin_idx on public.catalog_inventory_items(amazon_asin);
+create index if not exists catalog_inventory_items_amazon_match_status_idx on public.catalog_inventory_items(amazon_match_status);
+
+-- Build 151 media-library inventory image workflow (2026-05-18)
+-- Admin Catalog can now read app_media_library through /api/admin/media_library_list,
+-- while still falling back to app_management_settings.media_library and bundled JSON/R2 product images.
+create table if not exists public.app_media_library (
+  id uuid primary key default gen_random_uuid(),
+  media_key text not null unique,
+  label text not null,
+  media_type text not null default 'image',
+  media_url text not null,
+  fallback_url text,
+  alt_text text,
+  caption text,
+  group_key text,
+  usage_contexts text[] not null default array[]::text[],
+  recommended_size text,
+  source_status text not null default 'active',
+  sort_order integer not null default 0,
+  updated_at timestamptz not null default now(),
+  updated_by text
+);
+create index if not exists idx_app_media_library_group_key on public.app_media_library(group_key);
+create index if not exists idx_app_media_library_usage_contexts on public.app_media_library using gin(usage_contexts);
+create index if not exists idx_app_media_library_source_status on public.app_media_library(source_status);
+create index if not exists idx_app_media_library_media_type on public.app_media_library(media_type);
+create index if not exists idx_app_media_library_inventory_images on public.app_media_library(group_key, sort_order) where source_status <> 'archived' and media_type in ('image', 'photo');
+-- Build 151 also adds client-side duplicate image diagnostics, visible-image health scanning, and a bulk selected-row image repair action; those are frontend/API workflow updates over the existing inventory schema.
+
+
+-- Build 153 deploy hotfix note (2026-05-18)
+-- No DDL change. Repaired Cloudflare Pages Functions JavaScript in /api/admin/media_library_list,
+-- removed duplicate landing_pages_public normalizePage keys, and added deploy-safety release checks.
+-- Active DB baseline remains Build 150 inventory image indexes plus Build 151 app_media_library.
+-- Build 153 schema sync note: no DDL changes. Cloudflare Pages Functions import-path hotfix only.
+-- Build 154 note: no schema shape change; Cloudflare Pages Function shim hotfix only.
+
+-- Build 155 note (2026-05-18): no schema shape change.
+-- Repaired remaining root Cloudflare Pages Function import paths and hardened release checks.
+-- Active DB baseline remains Build 150 inventory image indexes plus Build 151 app_media_library.
+
+-- Build 156 - Social progress dispatch queue
+-- Purpose: stage Rosie Dazzlers job progress photos/summaries for reviewable social posting.
+-- This migration is safe to run more than once in Supabase SQL Editor.
+
+create table if not exists public.social_channels (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  platform text not null check (platform in ('facebook','instagram','x','tiktok','google_business_profile','linkedin','youtube_shorts','manual')),
+  display_name text not null,
+  handle text null,
+  is_enabled boolean not null default true,
+  dispatch_mode text not null default 'draft' check (dispatch_mode in ('draft','manual','webhook','api')),
+  notes text null,
+  unique (platform, display_name)
+);
+
+create table if not exists public.social_post_queue (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  booking_id uuid null references public.bookings(id) on delete set null,
+  source_type text not null default 'manual',
+  source_id uuid null,
+  platform text not null check (platform in ('facebook','instagram','x','tiktok','google_business_profile','linkedin','youtube_shorts','manual')),
+  status text not null default 'draft' check (status in ('draft','ready','posted','failed','skipped')),
+  post_text text not null,
+  media_urls jsonb not null default '[]'::jsonb,
+  public_url text null,
+  hashtags text[] not null default '{}'::text[],
+  created_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  created_by_name text null,
+  scheduled_for timestamptz null,
+  posted_at timestamptz null,
+  external_post_id text null,
+  external_post_url text null,
+  last_error text null,
+  attempt_count integer not null default 0
+);
+
+create table if not exists public.social_dispatch_attempts (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  social_post_id uuid not null references public.social_post_queue(id) on delete cascade,
+  platform text not null,
+  status text not null,
+  request_summary jsonb not null default '{}'::jsonb,
+  response_summary jsonb not null default '{}'::jsonb,
+  error_message text null
+);
+
+create index if not exists idx_social_post_queue_booking_id on public.social_post_queue(booking_id);
+create index if not exists idx_social_post_queue_status on public.social_post_queue(status);
+create index if not exists idx_social_post_queue_platform on public.social_post_queue(platform);
+create index if not exists idx_social_post_queue_scheduled_for on public.social_post_queue(scheduled_for);
+create index if not exists idx_social_dispatch_attempts_post_id on public.social_dispatch_attempts(social_post_id);
+
+insert into public.social_channels (platform, display_name, dispatch_mode, notes)
+values
+  ('facebook', 'Facebook Page', 'draft', 'Stage job photos/summaries for page review before API/webhook posting.'),
+  ('instagram', 'Instagram Business', 'draft', 'Stage photo/video captions for Meta content publishing once credentials are approved.'),
+  ('x', 'X', 'draft', 'Stage short text/photo posts before X API or manual publishing.'),
+  ('tiktok', 'TikTok', 'draft', 'Stage vertical video/photo posts; direct posting requires TikTok approval and creator authorization.'),
+  ('google_business_profile', 'Google Business Profile', 'draft', 'Stage local proof/recent-work posts for manual or future profile publishing.'),
+  ('manual', 'Manual Copy/Paste', 'manual', 'Fallback channel for any platform without a direct API connection yet.')
+on conflict (platform, display_name) do nothing;
+
+
+
+-- ---------------------------------------------------------------------------
+-- Build 157 social API publish bridge note (2026-05-19)
+-- ---------------------------------------------------------------------------
+-- No DDL change is required beyond Build 156. Build 157 uses social_channels,
+-- social_post_queue, and social_dispatch_attempts to attempt approved API/webhook
+-- publishing for job progress photos and summaries, while retaining manual fallback.
+
+
+
+-- Build 158 schema sync note - 2026-05-20
+-- Social progress publishing now includes review/compliance gate columns on public.social_post_queue:
+-- review_status, customer_consent_confirmed, plate_privacy_confirmed,
+-- no_private_info_confirmed, platform_warnings, approved_at, approved_by_name,
+-- compliance_note, caption_template_key, local_hashtag_set, and duplicate_signature.
+-- Build 158 also adds social_caption_templates and social_hashtag_presets for reusable local captions.
+-- Apply sql/2026-05-20_build158_social_review_gates_and_templates.sql after the Build 156 social queue migration.
+
+-- Build 159 sync note - Social templates, scheduling helpers, duplicate review, and metrics snapshots
+-- Apply sql/2026-05-20_build159_social_templates_schedule_duplicate_metrics.sql after Build 156 and Build 158 social migrations.
+-- Adds duplicate review helper fields, social_metrics jsonb, social_post_metrics_snapshots, and additional caption/hashtag seeds.
+-- Build 160 sync note - competitor sanity check and roadmap reset
+-- No schema shape change. Build 160 added planning/docs checks and Services-page conversion guidance.
+
+
+-- Build 161 conversion path / service chooser: no DDL.
+-- Package display aliases and photo-estimate guidance are catalog/content metadata, not schema changes.
+
+-- Build 162 booking condition recommender / media consent sync note
+-- Apply sql/2026-05-21_build162_booking_condition_recommender_and_consent.sql after Build 161.
+-- The booking UI now captures condition helper flags, photo-estimate intent, and
+-- media-consent preference. Checkout currently appends those details into booking
+-- notes for backwards compatibility; these optional columns prepare the DB for a
+-- later admin/reporting pass that stores the values directly.
+
+
+-- ---------------------------------------------------------------------------
+-- Build 163 schema sync note — booking intake admin review
+-- ---------------------------------------------------------------------------
+-- Apply after Build 162:
+--   sql/2026-05-21_build163_booking_intake_admin_review.sql
+--
+-- Adds optional staff workflow fields on public.bookings:
+--   photo_estimate_status
+--   condition_review_status
+--   media_privacy_status
+--   plate_privacy_reviewed
+--   face_privacy_reviewed
+--   address_privacy_reviewed
+--   blur_crop_needed
+--   blur_crop_complete
+--
+-- The application remains fallback-safe before this migration is applied.
+
+
+
+-- Build 164 sync note (2026-05-22): booking intake review actions
+-- Apply sql/2026-05-22_build164_booking_intake_review_actions.sql after Build 162 and Build 163.
+-- Adds optional bookings.intake_review_note, bookings.intake_reviewed_at,
+-- and bookings.intake_reviewed_by for staff photo-estimate/condition/media privacy review actions.
+
+
+-- ---------------------------------------------------------------------------
+-- Build 167 note — COMPETETIVE completion matrix structured lead/upload schema
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-23_build167_competetive_matrix_leads_upload_schema.sql.
+-- Adds public.public_inquiry_leads for structured fleet/maintenance/public inquiry
+-- capture and public.photo_estimate_uploads for optional quote-photo upload audit.
+-- Direct public upload remains env-gated by PUBLIC_PHOTO_ESTIMATE_UPLOADS_ENABLED=true.
+
+-- ---------------------------------------------------------------------------
+-- Build 168 note — Admin Leads and Photo Estimate Review
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-23_build168_admin_leads_photo_review.sql.
+-- Adds review fields to public.photo_estimate_uploads for /admin-leads:
+-- staff_note, privacy_note, reviewed_at, reviewed_by_staff_user_id.
+-- Build 168 also adds admin endpoints to list/save public_inquiry_leads and
+-- photo_estimate_uploads, with fallback messaging when the Build 167/168 SQL
+-- has not been applied yet.

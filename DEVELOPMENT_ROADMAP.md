@@ -1,578 +1,878 @@
-<!-- refreshed 2026-04-25: block-range town-page pass -->
-> Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
+# Build 168 update — Admin Leads and photo estimate review
 
-## April 25, 2026 route hardening + landing-page visibility pass
-- Replaced the fragile clean-route dependency on `_redirects` with real folder-backed `index.html` route pages for the main public and admin screens to prevent recurring Cloudflare Pages redirect loops.
-- Added dedicated landing pages for ceramic coating, pet hair removal, odor removal, headlight restoration, and paint correction.
-- Added reusable recent-work proof mounts from the public before/after gallery and surfaced review proof / service-area wording more prominently on home, services, pricing, and the new landing pages.
-- Updated `sitemap.xml`, smoke/static checks, and the Markdown handoff set so the next chat starts from the live route-fix + visibility-expansion state.
-- No database DDL was added in this pass; `SUPABASE_SCHEMA.sql` was synchronized as a no-DDL documentation refresh.
+**Updated:** 2026-05-23  
+**Current build:** Build 168  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
 
-## Marked next best steps
-- Keep the folder-backed clean-route approach as the live deployment baseline unless a future router replaces it completely.
-- Build town-focused landing pages next for the strongest search towns first: Tillsonburg, Woodstock / Ingersoll, Simcoe / Delhi, and Port Dover.
-- Keep recent work, review proof, and social freshness visible on the public entry pages so new visitors see current activity before they contact or book.
-- Connect Google Search Console and Google Business Profile performance metrics later as a separate reporting layer once the internal rollups are stable.
-- Treat analytics rollup totals as operational counts when summed across buckets until a true cross-window de-duplication strategy is added.
+Build 168 completes the next immediately-actionable items from `COMPETETIVE_COMPLETION_MATRIX.md`: the public lead and direct-upload foundations from Build 167 now have an internal Admin Leads screen, staff review endpoints, privacy-status controls, and release checks. This closes the largest remaining “capture exists but staff cannot triage it” gap without waiting for a full CMS or quote-builder rebuild.
 
-## April 23, 2026 live vehicle-size guide + chart helper pass
-- Added live SVG vehicle size guide generation beside the existing live price and package-details charts.
-- /pricing and /services now prefer live chart renders for price, details, and size guidance, with packaged image assets retained only as fallback/reference.
-- App Management now has a staff-facing helper to preview/download SVG charts from the current pricing editor JSON.
-- No database DDL was added in this pass; schema docs were synchronized to state that the change is frontend/helper logic only.
-- Next: deploy-test the admin chart helper, validate structured data on rendered pages, and continue the vehicle-media crop/editor hardening path.
+## Completed in Build 168
 
-> Last synchronized: April 22, 2026. Reviewed during the live SVG pricing-chart, structured-data local SEO, static-check hardening, and docs/schema synchronization pass.
+1. Added protected `/admin-leads.html` and `/admin-leads/index.html`.
+2. Added a dashboard card and top-nav link for Leads & Photo Estimates.
+3. Added `admin-leads` permission handling to `assets/admin-auth.js` using the existing booking-management permission model.
+4. Added `Leads & Estimates` to the shared admin menu.
+5. Added `/api/admin/public_inquiry_leads_list` to search/filter structured public leads.
+6. Added `/api/admin/public_inquiry_leads_save` to update lead status, staff notes, and converted booking UUID.
+7. Added `/api/admin/photo_estimate_uploads_list` to search/filter direct quote-photo/video uploads.
+8. Added `/api/admin/photo_estimate_uploads_save` to update upload status, privacy status, lead/booking links, and staff/privacy notes.
+9. Added fallback-safe migration hints when Build 167/168 SQL has not been applied.
+10. Added SQL migration `2026-05-23_build168_admin_leads_photo_review.sql`.
+11. Extended `photo_estimate_uploads` planning schema with `staff_note`, `privacy_note`, `reviewed_at`, and `reviewed_by_staff_user_id`.
+12. Updated `SUPABASE_SCHEMA.sql` and `DATABASE_STRUCTURE_CURRENT.md` with Build 168 schema notes.
+13. Updated `COMPETETIVE_COMPLETION_MATRIX.md` so Admin Leads, lead conversion notes, and photo upload review are no longer listed as completely missing.
+14. Added release guard `scripts/admin_leads_build168_check.py`.
+15. Wired the Build 168 guard into `scripts/release_check.py`.
+16. Re-ran Cloudflare Functions static checks, Build 160-168 release guards, and one-H1 validation.
 
-## April 22, 2026 live chart + structured-data pass
-Completed in this pass:
-- moved the main package pricing chart and package-details chart off legacy static-image-first behavior and onto live SVG rendering from the canonical pricing catalog
-- kept packaged images as fallback/reference only
-- extended local structured-data coverage on the main local-search public pages
-- hardened `scripts/stress_static_checks.py` so core public SEO basics are verified alongside H1 and syntax checks
+## Next several steps after Build 168
 
-Next highest-value roadmap items after this pass:
-- deploy-test and polish the App Management helper that previews/downloads live SVG charts
-- keep extending structured-data coverage route by route, especially home/booking/gifts once the wording is finalized
-- continue the customer vehicle crop-editor/upload hardening path without reopening unrelated booking work
-
-> Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
-
-## April 15, 2026 generated pricing-chart asset pass
-Completed in this pass:
-- generated new `CarPrice2025.PNG` and `CarPriceDetails2025.PNG` from the canonical bundled pricing catalog
-- rewired chart fallbacks and default chart URLs to local `/assets/brand` assets instead of hard-coded external brand-image paths
-- added `scripts/generate_pricing_chart_images.py` so future legacy chart refreshes can be rebuilt from the pricing source instead of manually redrawing screenshots
-- refreshed Markdown and schema notes to match the current repo state
-
-Next highest-value roadmap items after this pass:
-- move the remaining legacy price-chart dependency off static PNGs and toward live HTML or SVG rendering from the current pricing catalog
-- decide whether App Management should expose a chart-regenerate/download helper for office staff
-- continue public-page SEO tightening and mobile admin polish without altering the locked booking screen
-
-
-# Rosie Dazzlers — Development Roadmap
-
-## April 14, 2026 admin-app pricing clarity pass
-Completed in this pass:
-- aligned the non-catalog checkbox rows in `admin-app.html` so the checkbox column and label column stay visually consistent
-- preserved the add-on quote checkbox layout that was already working well
-- clarified package reporting so App Management now shows package families separately from size-priced entries
-- relabeled the package pricing columns to `Oversize / exotic` where the current catalog intentionally shares that price path
-- refreshed Markdown and schema notes to match the current repo state
-
-Next highest-value roadmap items after this pass:
-- keep App Management as the single entry point for package, add-on, service-area, and travel-charge changes
-- decide whether exotic pricing should stay coupled to oversize or be promoted to a distinct canonical price column in a future schema/catalog pass
-- continue office-document polish, especially refund / credit memo output and live notification delivery verification
-
-
-## April 13, 2026 build-stability + social feed API pass
-Completed in this pass:
-- added the missing `/api/social_feed_public` endpoint used by the home page, videos page, and App Management reload button
-- kept `book.html` stable and unchanged by design
-- kept `_redirects` as the complete current route compatibility layer
-- removed duplicate GL actor keys from `functions/api/_lib/accounting-gl.js` so Pages builds stop surfacing avoidable warnings
-- refreshed Markdown and schema notes to match the current repo state
-
-Next highest-value roadmap items after this pass:
-- manually verify the public social blocks on `/` and `/videos` after deploy with live App Management data
-- keep moving pricing, travel, and package governance through the App Management control center only
-- add a dedicated credit memo / refund document so office adjustments have a printable companion record
-- continue route-by-route public SEO tightening with the booking screen left locked unless a production bug forces a repair
-
-
-## April 12, 2026 canonical pricing/source-of-truth pass
-Completed in this pass:
-- finish the public canonical pricing contract so booking, services, pricing, checkout, and shared public helpers all read the same normalized catalog shape
-- preserve charts, service areas, booking rules, and public requirements through `/api/pricing_catalog_public`
-- repair checkout service-area dimension resolution so county / municipality / zone are saved from the live catalog rather than undefined locals
-- remove duplicate clean-route wrapper folders and keep only trailing-slash compatibility redirects
-- rerun and pass `python3 scripts/stress_static_checks.py` after the cleanup
-
-Next highest-value roadmap items after this pass:
-- extend canonical pricing/service-area labels into any remaining admin analytics/report summaries
-- add comparison/smoke coverage that intentionally validates partial app-setting catalog payloads against bundled fallback merge rules
-- continue the session-first admin migration and mobile upload hardening
-
-## April 11 booking + analytics pass
-- repaired booking form layout drift so public boxes stop colliding on phone/tablet/laptop widths
-- strengthened date input contrast and kept the 21-day availability view, now with previous/next paging windows
-- upgraded service-area records from simple labels to structured county/municipality/zone/bylaw guidance metadata
-- next target: finish town-level admin reporting and live post-deploy checks against the production build
-
-
-This is the practical implementation order for the `dev` branch after the March 25, 2026 documentation and UI refresh.
+1. Apply Build 167 SQL, then apply Build 168 SQL in Supabase.
+2. Open `/admin-leads.html` after deploy and confirm public leads load for staff with booking-management access.
+3. Submit one test fleet form and one maintenance form, then mark each through new → contacted → quoted/converted.
+4. If enabling direct uploads, configure `PUBLIC_PHOTO_ESTIMATE_UPLOADS_ENABLED=true`, bucket env vars, public media base URL, and upload-size limits.
+5. Add a true quote-builder action that creates a quote/package recommendation from lead details, photo links/uploads, condition flags, and add-ons.
+6. Add a one-click conversion action from public lead → draft booking or draft quote.
+7. Add service/town-aware proof filtering for gallery and recent work.
+8. Move specials, service FAQ, education snippets, and service/package public copy into DB-managed admin content.
+9. Enforce gallery/social publishing eligibility from customer consent + upload/media privacy status + blur/crop completion.
+10. Add analytics events for public lead submit, Admin Leads status changes, upload review actions, and quote conversion.
+11. Continue CSS drift, one-H1, title/meta, local wording, Cloudflare imports, and fallback checks every pass.
 
 ---
 
-## Immediate priorities
+# Build 167 update — COMPETETIVE completion matrix follow-up
 
-### 1) Real staff auth/session completion
-Finish the transition away from shared-password dependence.
-- moved forward again: blocks, promos, staff, and jobsite now initialize through the shared signed-in admin shell first
-- keep the legacy bridge only where the endpoint still genuinely needs it
-- continue retiring bridge-only endpoints once deployed route checks stay clean
-- resolved actor trusted across all internal screens
+**Updated:** 2026-05-23  
+**Current build:** Build 167  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
 
-### 2) Staff identity consistency cleanup
-Ensure the same actor model is used across:
-- jobsite intake
-- progress updates
-- media
-- comments / annotations
-- time entries
-- signoff / assignment
+Build 167 attempts to complete the remaining immediately-actionable items in `COMPETETIVE_COMPLETION_MATRIX.md`. The pass adds a direct photo/video estimate upload foundation, structured public lead capture for fleet and maintenance, FAQPage/Breadcrumb schema foundations, and a formal release guard so these competitor-matrix improvements stay visible.
 
-### 3) Gift redemption polish
-Booking checkout is much better, but still needs:
-- consistent customer-facing gift balance messaging
-- account-side gift checker/history
-- final webhook-safe reconciliation review
+## Completed in Build 167
 
-### 4) Canonical pricing and add-ons
-Continue removing pricing drift.
-- booking checkout
-- admin reporting references
-- future invoices / summaries
-- tests against `data/rosie_services_pricing_and_packages.json`
+1. Re-read `COMPETETIVE_COMPLETION_MATRIX.md`, `DEVELOPMENT_ROADMAP.md`, and `KNOWN_GAPS_AND_RISKS.md`.
+2. Kept this file as the source of truth.
+3. Added public endpoint `/api/public_lead_submit`.
+4. Added public endpoint `/api/public_photo_estimate_upload_url`.
+5. Added optional direct upload UI to Booking Step 4.
+6. Added upload status/fallback messaging when direct upload is not enabled.
+7. Added automatic append of uploaded estimate media links into `photo_estimate_links`.
+8. Added structured fleet quote form to `/fleet`.
+9. Added structured fleet quote form to `/fleet/index.html`.
+10. Added structured maintenance interest form to `/maintenance`.
+11. Added structured maintenance interest form to `/maintenance/index.html`.
+12. Added FAQPage schema foundations to competitor-route public pages.
+13. Added BreadcrumbList schema foundations to competitor-route public pages and starter education articles.
+14. Added SQL migration `2026-05-23_build167_competetive_matrix_leads_upload_schema.sql`.
+15. Added `public_inquiry_leads` schema for fleet/maintenance/public lead capture.
+16. Added `photo_estimate_uploads` schema for optional public estimate-upload auditing.
+17. Updated `COMPETETIVE_COMPLETION_MATRIX.md` with new completion status.
+18. Updated `KNOWN_GAPS_AND_RISKS.md` with Build 167 risks and reduced gaps.
+19. Updated schema documentation and handoff docs.
+20. Added `scripts/competetive_matrix_build167_check.py` and wired it into release checks.
+21. Re-ran release checks, Cloudflare Functions checks, inline-script checks, and one-H1 validation.
 
-### 5) Mobile upload completion
-Complete direct upload flow.
-- signed upload URLs or direct storage flow
-- mobile-friendly jobsite/progress upload UX
-- save media cleanly into operational tables
+## Next several steps after Build 167
+
+1. Run the Build 167 SQL migration in Supabase.
+2. Decide whether to enable direct uploads by setting `PUBLIC_PHOTO_ESTIMATE_UPLOADS_ENABLED=true`.
+3. Configure `PHOTO_ESTIMATE_BUCKET` / `JOB_MEDIA_BUCKET` and a safe public media base URL if direct uploads should return public links.
+4. Add an Admin Leads screen for `public_inquiry_leads`.
+5. Add staff actions to convert a public lead into a booking, quote, or follow-up task.
+6. Add Admin Photo Estimate Uploads review for `photo_estimate_uploads`.
+7. Link direct uploaded media to booking intake after checkout when customer details match.
+8. Add DB-managed editing for services, specials, FAQs, and education snippets.
+9. Add service/town-aware proof filtering for gallery and recent work.
+10. Add quote-builder workflow from booking intake, photo links/uploads, condition flags, package recommendation, and add-ons.
+11. Add media-level privacy records for every uploaded or progress photo/video.
+12. Enforce gallery/social publishing eligibility from consent, privacy approval, and blur/crop completion.
+13. Add analytics for lead form submit, upload start, upload success/failure, and quote conversion.
+14. Add more local education pages from the competitor roadmap.
+15. Continue CSS drift, one-H1, title/meta, Cloudflare import, and fallback checks every pass.
 
 ---
 
-## Secondary priorities
+# Build 166 update — COMPETETIVE.md completion pass
+
+**Updated:** 2026-05-23  
+**Current build:** Build 166  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
+
+Build 166 completes a broad public-facing pass against `COMPETETIVE.md`. It adds missing customer entry routes for specials, gift cards, fleet/commercial work, maintenance plans, and education articles; expands the add-on catalog; adds a global sticky conversion CTA; updates the Services hub and homepage route choices; and documents the remaining backend/admin work in `COMPETETIVE_COMPLETION_MATRIX.md`.
+
+## Completed in Build 166
+
+1. Re-read `COMPETETIVE.md`, `DEVELOPMENT_ROADMAP.md`, and `KNOWN_GAPS_AND_RISKS.md`.
+2. Kept this file as the implementation source of truth.
+3. Added `COMPETETIVE_COMPLETION_MATRIX.md`.
+4. Updated `COMPETETIVE.md` with a Build 166 completion-pass note.
+5. Synced `COMPETITOR.md` and `COMPETETOR.md` aliases.
+6. Added a global sticky conversion CTA bar through `assets/chrome.js`.
+7. Updated default nav links to include Specials, Gift Cards, and Fleet.
+8. Added public `/specials` and `/specials/index.html`.
+9. Added public `/gift-cards` and `/gift-cards/index.html`.
+10. Added public `/fleet` and `/fleet/index.html`.
+11. Added public `/maintenance` and `/maintenance/index.html`.
+12. Added public `/blog` help hub.
+13. Added education pages for Ontario road salt cleanup, pet hair removal, ceramic coating vs wax, paint correction basics, and preparing for mobile detailing.
+14. Expanded bundled add-ons in the pricing catalog and Functions fallback catalog.
+15. Synced catalog JSON in `/data` and `/functions/api/data`.
+16. Updated Services with a full competitor-aligned service hub.
+17. Updated Homepage with a clearer choose-the-easiest-path CTA section.
+18. Updated sitemap entries for the new public routes.
+19. Added `scripts/competetive_completion_check.py`.
+20. Added the new guard to `scripts/release_check.py`.
+21. Added Build 166 no-DDL SQL note and schema documentation.
+22. Re-ran release checks and one-H1 validation.
+
+## Next several steps after Build 166
+
+1. Deploy Build 166 and verify the new routes: `/specials`, `/gift-cards`, `/fleet`, `/maintenance`, and `/blog`.
+2. Add direct customer file upload to complement photo/media share links.
+3. Add a quote-builder screen that turns reviewed photo estimates into package/add-on proposals.
+4. Add service/town-aware proof filters for gallery and recent work.
+5. Add media-level privacy records for each job photo/video.
+6. Enforce gallery/social eligibility from consent, privacy status, and blur/crop completion.
+7. Move specials, gift cards, service FAQs, and education snippets into DB/admin-managed content.
+8. Add FAQPage and BreadcrumbList schema generation for public service/help pages.
+9. Add structured fleet and maintenance lead forms.
+10. Add analytics for sticky CTA clicks, photo-estimate starts, special-page visits, and quote-first conversion.
+11. Add more education articles from `COMPETETIVE.md`, including coffee stains, UV protection, and how often to detail.
+12. Add real review/proof mapping when service/town proof items are approved.
+13. Continue CSS drift checks on Services, Booking, Contact, Admin Booking, Admin Social, and new public pages.
+14. Continue one-H1/title/meta/local wording checks every pass.
+15. Continue Cloudflare deploy safety checks to avoid stale function/import problems.
 
-### 6) Recovery operations hardening
-- moved forward: recent recovery audit visibility now exists directly on the Recovery screen
-- provider-backed send logging
-- retry/test history visibility
-- provider-specific template/rule validation
-- optional recovery audit trail in admin
-
-### 7) Catalog purchasing workflow
-- reorder reminders
-- ordered / received / cancelled states surfaced clearly
-- low-stock alert resolution flow
-- optional vendor reminder notifications
-
-### 8) Internal shell cohesion
-- moved forward: older recovery/live/progress screens now use the shared internal app shell
-- unify admin/detailer navigation
-- reduce screen-to-screen fragmentation
-- improve field/mobile usage
-
-### 9) Route and endpoint cleanup
-- moved forward: duplicate clean-route folders were removed again from the current build before packaging
-- verify dev Pages clean routes live before each larger pass
-- retire duplicate/legacy endpoint patterns
-- document preferred replacements clearly
-
-### 10) Ongoing SEO pass
-On every build:
-- review page title/H1/meta
-- keep admin/token/private pages noindex
-- continue public support-page cleanup
-- maintain sitemap/robots consistency
-
-
-## Newly moved forward
-
-- recovery/admin live/admin progress now behave as session-first internal app screens instead of password-first screens
-- recovery now exposes recent audit visibility directly in the admin UI
-- internal menu cohesion is better because Assign Crew and Recovery are now in the shared internal menu
-- added a reusable static stress-check script for H1, add-on coverage, and script syntax coverage
-
-- public/client login flow now hands off to staff auth when the credentials belong to staff
-- public account widget now recognizes staff sessions as well as customer sessions
-- admin dashboard has a live analytics summary surface again
-- analytics view has stronger historical + live monitoring detail
-
-
-## March 25, 2026 update
-- moved forward: canonical pricing now has a DB-backed setting source with JSON fallback
-- moved forward: mobile-friendly direct upload page now uses the signed-in staff session
-- moved forward: purchase-order receive/cancel workflow now exists in admin catalog
-- move up next: finish the same session-aware conversion on the remaining legacy admin endpoints and screens
-
-
-### March 25, 2026 pass note
-This doc was refreshed during the vehicle catalog, progress-session, layout, and public catalog filter pass. The repo now includes NHTSA-backed vehicle make/model endpoints, a DB cache table for vehicle catalog rows, progress moderation/enable session upgrades, and public search/filter cleanup on Gear and Consumables.
-
-
-## Newly moved forward (2026-03-26)
-- Admin-side gear/consumables editing for rating, stock, reorder rules, vendor, category, and saved order.
-- Receive/close purchase workflow now updates inventory quantities.
-- My Account vehicle editor upgraded to live year/make/model lookups.
-- Book page booking-data error fixed.
-
-## Move up next
-- Remove the final legacy fallback flags from the remaining admin endpoints now that the env gate is in place.
-- Continue moving public catalog content from JSON fallback into DB-first inventory content.
-- Add structured-data coverage route by route after the remaining content cleanup pass.
-
-
-## March 26, 2026 inventory/review/layout pass
-- Added DB-backed inventory movement logging for adjustments, receive events, and detail-product usage.
-- Added after-detail checklist persistence for keys/water/power/debrief and suggested next-service cadence.
-- Extended customer garage vehicles with next-cleaning due date, interval days, and auto-schedule preference.
-- Added in-app customer review capture plus a Google review handoff link.
-- Hardened Gear/Consumables search inputs against browser email autofill and expanded sorting/filter controls.
-- Updated logo references to use brand/untitled.png.
-- Continue removing legacy admin-password fallback and continue route-by-route SEO cleanup with one H1 per exposed page.
-
-
-## March 26, 2026 search/inventory/admin UX pass
-- Continued DB-first inventory work by extending public sorting/filtering and admin movement-history visibility.
-- Added booking-level product usage recording UI in admin progress and admin catalog.
-- Continued session-aware progress tooling so signed-in staff can work without depending on the fallback password on newer flows.
-- Continued local SEO work for Norfolk County and Oxford County with structured-data and page-metadata cleanup.
-- Move up next: gift/account polish, final legacy fallback removal, broader structured-data coverage route by route, and a fuller purchase reminder lifecycle.
-
-## March 26, 2026 booking/catalog/local SEO pass
-- moved forward: booking add-on images now come from the canonical pricing/add-on JSON source instead of a separate page-only map.
-- moved forward: admin catalog now has a stronger low-stock and reorder candidate surface plus Amazon-link draft intake.
-- moved forward: public catalog filters now expose category/type sorting more clearly.
-- move up next: finish the detailer-side products-used picker polish and continue DB-first replacement of remaining JSON fallback content.
-
-
-## March 26, 2026 customer-flow and advanced inventory pass
-- fixed booking add-on image sizing so package assets no longer blow out the add-ons grid.
-- continued customer journey coverage by surfacing account/feed/signoff entry points more clearly and exposing checklist + products-used data on customer-facing progress/completion pages.
-- extended inventory admin for purchase date and estimated jobs-per-unit so the team can track longevity of bulk supplies and hardware.
-- continued DB-first inventory direction while keeping one-H1 public pages and local SEO focus on Oxford County and Norfolk County.
-
-
-## March 27, 2026 booking wizard + detailer workflow pass
-- moved forward: booking now has a visible 5-step wizard flow for date/slot, main service, add-ons, vehicle verification, and final review/payment.
-- moved forward: add-on imagery now uses local packaged assets so the remaining missing cards no longer render blank.
-- moved forward: detailer jobs now have a dedicated signed-in screen for accept/decline, dispatch, arrival, start/pause/resume, and complete-to-billing actions.
-- moved forward: customer progress now shows a clearer workflow timeline in addition to photos, comments, signoff, checklist, and products used.
-- move up next: final legacy fallback removal, customer-facing checklist/signoff history in My Account, invoice/receipt design, and fuller notification delivery wiring.
-
-## March 27, 2026 mobile booking + public account widget pass
-- moved forward: booking now uses a more phone-friendly wizard with step validation, quick available-date choices, and smoother scroll behavior.
-- moved forward: public site chrome now shows a real login / create account / garage / admin widget depending on the resolved session.
-- moved forward: customer progress feed now filters out internal-only updates so admin/detailer private notes stay private.
-- move up next: finish session-only cleanup on the last legacy admin screens, complete end-to-end notification delivery, and continue DB-first inventory consolidation.
-
-
-## March 27, 2026 wizard cleanup + two-way communication pass
-- moved forward: booking wizard header is now non-sticky so step fields remain reachable on mobile.
-- moved forward: step transitions now scroll to the active content panel instead of the wizard header.
-- moved forward: customer progress now supports customer-posted live messages through the progress token path.
-- moved forward: detailer jobs now supports posting customer-visible updates and internal staff notes directly from the assigned-jobs screen.
-- move up next: notification fan-out for new notes, richer customer history in My Account, and final removal of shared-password compatibility on the oldest internal screens.
-
-
-## 2026-03-28 late pass moved forward
-- Stabilize deploy/build path by finishing the shared staff auth helper normalization.
-- Continue admin UX polish with persistent return navigation and cleaner loading states.
-- Continue route-by-route visual QA for asset path drift, contrast drift, and mobile layout regressions.
-
-## Roadmap movement — March 29, 2026
-- Advanced the auth/session completion track by converting another batch of admin endpoints away from direct shared-password-only checks.
-- Advanced the identity-consistency track by using the resolved signed-in actor in time/intake/media and booking-event flows.
-- Advanced UI cohesion by making Bookings, Blocks, and Staff pages load from the real staff session instead of requiring a password-first flow.
-- Move up next: remaining legacy-only admin endpoints (`bookings/assign/blocks` companion actions, intake edge routes, and any pages still hard-coded around `x-admin-password`) plus notification delivery and upload hardening.
-
-
-## March 29, 2026 gift / upload / endpoint pass
-- moved more admin endpoints off direct shared-password checks and onto session-aware `requireStaffAccess`, including customer-profile tooling, booking customer linking, and unblock date/slot actions.
-- improved customer gift/account polish by adding dashboard gift summary totals and a signed-in gift balance checker on My Account.
-- hardened the signed upload endpoint with media-type and file-size validation plus customer-visible/public-url handling guidance.
-- continued DB-first cleanup and doc/schema synchronization for the current dev build.
-
-
-## March 29, 2026 promo / blocks / purchase reminder pass
-- promo list/create/disable and block date/slot actions now prefer signed-in staff session access through the shared role-aware auth helper instead of direct shared-password checks.
-- booking_update and assign now log actor-attributed booking events while using the resolved current staff actor.
-- purchase-order reminder lifecycle moved forward with reminder logging fields, a reminder action endpoint, and overdue reminder reporting in the purchase-order list endpoint.
-- this reduced more of the old/new endpoint overlap and shared-password bridge risk, but did not fully eliminate every remaining legacy-only admin path yet.
-
-
-## April 7, 2026 membership / mobile / deploy hardening pass
-- Standardized the four missing Services add-on images onto local bundled asset paths and added real PNG copies so the service cards stop depending on fragile external image URLs.
-- Added route-safe admin folder entry points and stronger Pages Functions helper shims so Cloudflare deploys are less sensitive to mixed helper import paths.
-- Moved customer segmentation toward a scalable membership model by seeding Bronze, Silver, and Gold tiers and making new customer creation default to Bronze instead of a legacy placeholder tier.
-- Continued mobile-fit and CSS hardening by tightening service-card/select sizing, overlap handling, and installable-app support through a shared install prompt + service worker path.
-
-
-## April 8, 2026 admin route stabilization pass
-- Repaired the current build by standardizing active admin navigation back to direct `.html` routes instead of mixed pretty-route/admin-folder assumptions.
-- Restored the shared admin shell from the richer canonical copy so pages that call `window.AdminShell.boot(...)` load again.
-- Removed duplicate clean-route wrapper folders for `/admin`, `/admin-catalog`, `/admin-accounting`, `/services`, and `/pricing`; `_redirects` remains the working compatibility layer.
-
-
-## April 8, 2026 accounting settlement / tax / export pass
-- moved forward: payable settlement flow now exists through Admin Accounting so open vendor bills can be partially or fully settled into Cash while reducing Accounts Payable.
-- moved forward: tax remittance reporting now has a dedicated reporting endpoint and Admin Accounting summary card built from the Sales Tax Payable account activity for the selected month.
-- moved forward: owner draw / equity reporting now has a dedicated reporting endpoint and Admin Accounting summary card so owner withdrawals and equity movement are easier to review month over month.
-- moved forward: inventory cost linkage into COGS now begins at the product-usage step; when an inventory item has `cost_cents`, recording usage on a booking can create a journal entry that debits Cost of Goods Sold and credits Inventory & Supplies.
-- moved forward: deeper accounting exports now include a general-ledger CSV export for the selected month from Admin Accounting.
-- move up next: payable settlement history UX polish, remittance posting workflow, balance-sheet style reporting, and stronger inventory cost completeness coverage for items that still do not have `cost_cents` populated.
-
-## April 8, 2026 accounting access and admin workflow pass
-- Accounting access is now surfaced directly in the Admin dashboard, shared admin menu, and shared return toolbar so office-side accounting work is no longer hidden behind direct URL knowledge alone.
-- This pass moves the roadmap and known gaps forward again by improving internal shell cohesion and operational discoverability without changing the underlying accounting schema.
-- Suggested next mobile/operations features: quick expense entry from phone with receipt photo attachment, vendor quick-add during payable entry, and a month-end checklist panel for settlement, remittance, and report export.
-
-<!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->
-
-
-## April 9, 2026 accounting screen syntax fix
-- Fixed a JavaScript syntax error in `admin-accounting.html` that prevented the Accounting screen from booting past the “Loading Accounting Records” state.
-- Continued docs/schema synchronization for the current build.
-
-## April 9, 2026 accounting reporting / remittance / cost coverage pass
-- moved forward: Admin Accounting is no longer only a record list; it now acts as a working monthly accounting workspace with P&L, balance sheet, cash flow, remittance posting, settlement history, and export coverage.
-- moved forward: inventory-cost completeness is now operationally fixable because inventory save now persists unit cost, vendor SKU, purchase date, and estimated jobs per unit from the admin form.
-- moved forward: stronger exports now include profit-and-loss, balance-sheet, cash-flow, payables, and missing-inventory-cost CSV outputs in addition to general ledger export.
-- moved forward: local-search hygiene improved again through production robots/sitemap cleanup and home-page structured data.
-- move up next: accounts-receivable workflow depth, month-end checklist UI, vendor quick-add during bill entry, and full reconciliation/statement polish tied to consistent staff session handling.
-
-
-## April 9, 2026 accounting + auth convergence pass
-- moved forward: internal auth/session cohesion improved by normalizing page access keys for My Account, Inventory, Upload, Accounting, and Detailer Jobs screens.
-- moved forward: Accounting now includes receivables aging and an estimated booking profitability view/export.
-- moved forward: accounting journal entries now store optional staff-user actor ids for cleaner audit trails and future reconciliation.
-- move up next: finish the same actor-id normalization on remaining non-accounting operational tables and route handlers.
-
-
-## April 9, 2026 add-on image restore / month-end checklist / assignment identity pass
-- moved forward: the four custom add-on cards now prefer the canonical Rosie packages R2 assets again, with bundled fallbacks so the images do not disappear if the remote asset is missing.
-- moved forward: booking assignment now has a stronger path toward actor normalization because admin assignment screens can send `assigned_staff_user_id`, `assigned_staff_email`, and `assigned_staff_name` instead of only `assigned_to`.
-- moved forward: Admin Accounting now has a real month-end checklist panel backed by DB persistence, which makes settlement/remittance/export close work easier to track from one office-side screen.
-- moved forward: progress media now records `staff_user_id`, closing one more non-accounting identity gap.
-- move up next: extend the same resolved staff-user-id pattern into the remaining live/jobsite/progress compatibility screens that still expose manual fallback labels more heavily than structured assignment.
-
-## April 10, 2026 pass moved forward
-- moved forward: add-on imagery is now canonicalized again through shared JSON + R2-first media, reducing service-page/booking-page drift.
-- moved forward: booking assignment can now support a lead plus additional crew members through `booking_staff_assignments`, while keeping the existing single-assignee booking fields in sync.
-- moved forward: detailer work-scope checks now recognize crew membership, not just the single lead assignment.
-- moved forward: internal assignment UI is more app-like on phone/tablet and has stronger fallbacks when media or crew tables are missing.
-- move up next: extend crew-aware summaries and filters across the rest of live ops, jobsite, time, media, and dashboard views so the whole internal shell matches the new scheduling model.
-
-- Immediate stability pass completed on 2026-04-11: route-collision hotfix for Cloudflare Pages, 404 page restored, and future deploys should keep one deploy artifact per clean route before broader feature work resumes.
-
-
-Route hotfix sync reviewed on 2026-04-11.
-
-## April 11, 2026 route safety + crew summary pass
-- moved forward: removed duplicate clean-route folder outputs again so this build stays aligned with the Pages route hotfix structure
-- moved forward: booking, progress, live monitor, jobsite, and detailer jobs now carry crew summary / lead + crew context more consistently
-- moved forward: admin runtime now handles request timeouts and non-JSON/text error responses more gracefully for internal app screens
-- moved forward: static stress checks now fail when temporary check artifacts or route-collision outputs are present
-- moved forward: static stress checks now also cover the repaired public catalog-helper path after the April 12 canonical pricing/source-of-truth pass
-- move up next: continue true session-first cleanup on jobsite/time/media screens and then do deployed route-by-route verification after publish
-
-## 2026-04-11 pass 9 sync
-- Booking flow now uses a clearer service-area selector with town-level choices across Oxford and Norfolk communities.
-- Booking availability shows open, partial, and unavailable dates in the next 21-day snapshot, and the date picker contrast was tightened for dark mode.
-- Year / Make / Model on booking is now typeable with datalist-assisted lookup and validation against the existing vehicle catalog.
-- Public analytics was deepened with richer action tracking, viewport/session details, and location/device enrichment stored inside event payloads.
-- Route-collision folders and temporary check artifacts were removed again to keep Pages routing stable.
-### Added in pass 9
-- Booking UI polish for mobile and tablet overlap issues.
-- Town-level service-area precision for Oxford / Norfolk bookings.
-- Booking analytics depth for actions, clicks, scroll, viewport, and inferred location/device detail.
-- Next strongest step: carry the same precise service-area data into pricing/services copy blocks and into admin booking filters.
-
-## 2026-04-11 pass 11 sync note
-- Tightened the booking preferred-date control so it no longer stretches wider than needed and added a visible white picker button.
-- Public booking, services, and pricing pages now read the canonical pricing catalog API first and only fall back to bundled JSON if the API is unavailable.
-- App Management now includes a pricing catalog editor so package prices, included services, add-ons, service-area rules, and chart links can be maintained from one source of truth.
-- No schema shape change landed in this pass; `SUPABASE_SCHEMA.sql` was refreshed to note the pricing-catalog consolidation and booking UI tightening work.
-### Pass 11 follow-through
-- Move the new pricing catalog editor from raw JSON only to a safer form-driven package/add-on editor in App Management.
-- Add catalog validation warnings before save (duplicate codes, missing service-area fields, missing image URLs, missing price maps).
-- Add a booking-page preview inside Admin App Management so pricing/inclusion changes can be checked before they reach the public booking flow.
-- Continue tightening public booking CSS around the remaining summary/review rows on narrow phone widths.
-
-> Pass update 2026-04-12: Re-synced the current uploaded build to the latest safe route structure. Removed duplicate clean-route folders that were reintroducing Cloudflare Pages redirect loops, preserved the newer booking experience already present in `book.html`, refreshed the deployed booking smoke check to recognize the shared `chrome.js` analytics bootstrap, and cleaned the login form autocomplete attributes. Immediate next step after deploy: verify `/`, `/services`, `/pricing`, `/book`, and `/admin` on the active branch before resuming larger feature work.
-
-## April 12, 2026 pricing control center / booking lock / redirects complete pass
-
-- Marked the public booking screen as **stable** for the current phase. Continue testing it, but do not alter its UX or flow during pricing/admin work unless a production break forces a hotfix.
-- Marked `_redirects` as **working and complete** for the current safe route structure. Keep redirects stable and avoid reintroducing duplicate folder wrappers or route-collision experiments.
-- Moved pricing administration forward from a raw JSON-only box to a stronger **Pricing Control Center** in `admin-app.html`.
-- Added structured controls for package prices, deposits, add-ons, service-area travel tiers, public requirements, travel charges, and shared pricing-control values.
-- Added an **Accounting pricing window** in `admin-accounting.html` so office-side users can review the current pricing scope without splitting the editing surface across multiple admin screens.
-- Re-synced the canonical pricing helper again so service areas, booking rules, public requirements, travel-pricing controls, and price-control values stay available through the shared catalog path.
-
-### Move up next
-- Wire travel-charge controls into checkout totals only after office review confirms the tiers and wording.
-- Replace the remaining advanced JSON-only parts of pricing maintenance, especially chart rows, deep package service inclusions, and richer service-area notes, with dedicated form controls.
-- Add pricing change history / audit notes inside App Management so office-side edits are easier to reconcile later.
-
-## 2026-04-13 Pass 14 Sync
-- Booking screen remains stable and should not be altered in future passes unless a critical bug appears.
-- `_redirects` is working and treated as complete for the current route layout.
-- Pricing/packages/add-ons/service areas/travel charges continue to flow through the App Management pricing control center as the preferred single entry point.
-- This pass added office-facing finance adjustments for discounts/refunds plus customer-facing document work for order confirmation, invoice / summary, gift certificate printing, and social feed management.
-
-## Pass 14 roadmap update
-### Completed this pass
-- Lock booking screen and treat it as stable.
-- Treat `_redirects` as working/complete.
-- Keep pricing changes flowing through one preferred entry point in App Management.
-- Add office discount/refund adjustment workflow on the selected-booking screen.
-- Add printable order confirmation, invoice / service summary, and gift certificate documents.
-- Add central social-feed management plus public rendering hooks for the latest five links per platform.
-
-### Next recommended steps
-- Connect queued order-confirmation notifications to the live outbound provider so they actually send without manual intervention.
-- Apply travel-charge controls directly in checkout math once office values are fully approved.
-- Add a dedicated refund/credit memo print template for bookkeeping and customer-service handoffs.
-- Expand admin accounting exports so discounts/refunds can be filtered by reason code and date range.
-- Add a lightweight admin helper for updating the latest five social links per platform without editing raw JSON.
 
 ---
 
-## Pass sync — 2026-04-14 (pass 16)
+# Build 165 update — Booking photo-estimate link capture
 
-- Booking screen remains locked and stable.
-- `_redirects` remains the working route layer and includes the admin-app trailing-slash compatibility line.
-- App Management was repaired in this pass: the page now restores its missing helper functions, shows a proper internal menu mount, includes clearer feature descriptions, and exposes document/social defaults without crashing.
-- Admin navigation now includes a visible path to App Management from the dashboard, shared admin menu, and return bar.
-- No new database table or column changes were introduced in this pass; schema files were refreshed to reflect a no-DDL stability/documentation pass.
-- Strongest next steps remain the single-entry pricing/accounting workflow, refund-credit memo document polish, and provider-tested email sending.
+**Updated:** 2026-05-22  
+**Current build:** Build 165  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
 
-> Pass sync April 15, 2026: generated local price-chart PNG assets from the canonical bundled pricing catalog, rewired chart fallbacks to `/assets/brand`, added a regeneration script, and refreshed docs/schema notes for the legacy price-image carry-forward pass.
+Build 165 continues the conversion-path work from Builds 160–164. The public booking flow now lets customers paste photo/media share links before checkout, marks the booking as photo-estimate reviewable when links are present, stores the links directly when the Build 165 migration is applied, and still falls back to booking notes if the optional database column is not live yet. Admin Booking now surfaces the submitted links in the intake/media consent panel so staff can open them while quoting or privacy-reviewing the job.
 
-Update note — 2026-04-16 pass20: Added explicit admin route wrappers for social feed and vehicle catalog endpoints to stop Pages Function import-resolution failures on /api/admin routes. Booking remains stable; no schema DDL change in this pass.
+## Completed in Build 165
 
-## April 16, 2026 crew time / payroll pass
-- moved forward: added `admin-payroll.html` so office/admin users can review crew availability, logged hours, workload flags, payroll estimates, and service-time trends in one screen.
-- moved forward: added `staff_availability_blocks`, `staff_payroll_runs`, and `staff_payroll_run_lines` to the documented schema and created admin endpoints to list/save/delete availability blocks and save payroll runs.
-- moved forward: payroll runs can optionally post a journal entry into accounting using payroll expense / wages payable account codes when those accounts are available.
-- moved forward: staff records now carry pay schedule, hourly rate, max hours per day/week, payroll enabled flag, preferred work-hours notes, and payroll notes from the staff editor.
-- moved forward: service-time insight reporting now shows average site time by package and average job time when an add-on is present, helping operations estimate invoicing/service effort more realistically.
-- move up next: connect staff availability warnings directly into `admin-assign.html` row-by-row so overloaded or unavailable crew members are flagged before saving assignments, and decide whether payroll payout settlement should get its own payable/settlement screen or stay inside accounting.
-- Pass sync 2026-04-16 (pass 21): added crew time/payroll workflow, staff availability blocks, payroll runs + accounting-post option, staff pay/work-cap settings, and service-time insight reporting; booking screen remains stable.
+1. Reviewed `DEVELOPMENT_ROADMAP.md` and `KNOWN_GAPS_AND_RISKS.md` before implementation.
+2. Kept `DEVELOPMENT_ROADMAP.md` as the implementation source of truth.
+3. Added a customer-facing `Photo estimate links` field to Booking Step 4.
+4. Added duplicate-safe parsing for pasted Google Drive, Dropbox, iCloud, Facebook, or other media links.
+5. Auto-checks the photo-estimate request flag when customers paste photo/media links.
+6. Added photo-estimate link count to the final booking summary.
+7. Sends `photo_estimate_links` through checkout.
+8. Checkout now treats link submissions as photo-estimate requests even when the checkbox was missed.
+9. Checkout stores the links in booking notes for fallback-safe staff review.
+10. Checkout writes `photo_estimate_links` directly when the optional Build 165 column is live.
+11. Added `photo_estimate_links` to the optional booking-field fallback list so checkout does not break before migration.
+12. Added `photo_estimate_links` to admin booking-list optional selects.
+13. Admin Booking intake review panel now shows submitted photo/media links as clickable staff review links.
+14. Added Build 165 SQL migration for `bookings.photo_estimate_links`.
+15. Added a GIN index for future reporting/filtering of photo-estimate link data.
+16. Updated `SUPABASE_SCHEMA.sql`.
+17. Added release guard `scripts/booking_photo_estimate_links_check.py`.
+18. Added the new guard to `scripts/release_check.py`.
+19. Re-ran SEO/H1, Cloudflare, social, conversion, booking-intake, and release checks.
+20. Updated active Markdown files so Build 165 status and next steps are documented.
 
-- Pass 22 sync: fixed admin-accounting date/input layout, moved admin-staff to a left-side internal menu layout, normalized admin login redirects to .html, and added clean admin route rewrites for payroll/staff/accounting/app/login.
+## Next several value-added steps after Build 165
 
-## April 16, 2026 admin-nav and growth-direction pass
+1. Deploy Build 165 and apply SQL migrations in order: Build 162, Build 163, Build 164, then Build 165.
+2. Confirm public booking saves photo-estimate links into notes before migration and into `photo_estimate_links` after migration.
+3. Add a direct public upload flow for customers who do not want to use third-party share links.
+4. Add staff quote-building actions that convert photo-estimate review into a proposed package/add-on set.
+5. Add media-level privacy review records for each uploaded or linked job photo/video.
+6. Enforce gallery/social eligibility from booking consent plus media-level privacy status.
+7. Add Admin Booking filters for photo-estimate links present, quote needed, media review needed, and blur/crop needed.
+8. Add customer notification templates for photo estimate received, quote ready, and media/privacy approval request.
+9. Add approved-photo proof blocks to town/service landing pages.
+10. Move more service FAQ/proof content into DB-managed admin content where possible.
+11. Add analytics for photo-estimate link submissions and quote-first conversion rate.
+12. Add abandoned booking recovery that references the selected package and quote-first intent without exposing private details.
+13. Add optional customer portal upload/edit for estimate media after booking is created.
+14. Add reminder workflow for staff when a photo-estimate request has not been reviewed within the target window.
+15. Continue CSS drift checks on Booking, Admin Booking, Services, Contact, and Admin Social.
+16. Continue one-H1 and local title/meta checks every pass.
+17. Continue Cloudflare Pages Function import/syntax checks every pass.
+18. Plan a clean/orphan branch refresh after deploy stability is confirmed so stale GitHub files cannot keep reappearing.
+19. Keep `COMPETITOR_SANITY_CHECK.md` aligned with this roadmap after each conversion-path pass.
+20. Keep `KNOWN_GAPS_AND_RISKS.md` focused on active risks and next decisions, not old completed build notes.
 
-- standardized the top admin navigation so pages that boot through the shared admin shell now overwrite incomplete page-level nav link lists with one consistent internal menu bar plus account/logout controls.
-- added new App Management sections for:
-  - stronger self-serve quote + booking emphasis
-  - scheduled e-gift delivery settings
-  - maintenance / membership plan settings
-- extended app settings loading so those three new settings keys are part of the shared office configuration pull.
-- moved the public direction forward with:
-  - stronger quote-first CTA messaging on the home and pricing pages
-  - richer gift checkout inputs for recipient name and preferred send date
-  - gift checkout metadata capture for recipient name, preferred send date, and gift message
-- no schema DDL change was required for this pass; this was a workflow/settings/UI pass.
+---
 
-- Make the quote result more prominent and reusable across pricing, booking, and follow-up flows.
-- Turn scheduled e-gift delivery from collected metadata into actual timed send automation plus recipient-facing confirmation.
-- Build the maintenance / membership layer on top of the current booking, pricing, gift, and follow-up foundations.
+# Build 164 update — Admin booking intake review actions
 
-Pass sync: April 16, 2026 — top admin navigation standardized, app-management growth settings added, booking-led self-serve direction restored, and gift checkout now collects recipient name plus preferred send date.
+**Updated:** 2026-05-22  
+**Current build:** Build 164  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
+
+Build 164 continues the competitor/conversion-path work after Builds 160–163. Build 163 made booking condition, photo-estimate, and media-consent details visible to staff; Build 164 adds staff action controls so those details can be reviewed, marked, and documented from Admin Booking. The workflow is fallback-safe: if the optional direct columns are not migrated yet, the action is appended to booking notes instead of breaking the admin screen.
+
+## Completed in Build 164
+
+1. Reviewed `DEVELOPMENT_ROADMAP.md` and `KNOWN_GAPS_AND_RISKS.md` before implementation.
+2. Kept `DEVELOPMENT_ROADMAP.md` as the implementation source of truth.
+3. Added Admin Booking intake review controls for photo-estimate status.
+4. Added Admin Booking intake review controls for condition-review status.
+5. Added Admin Booking intake review controls for media/privacy status.
+6. Added staff checkboxes for license plate review, face review, address/private-identifier review, blur/crop needed, and blur/crop complete.
+7. Added a staff intake-review note field.
+8. Added `set_intake_review` support to `/api/admin/booking_update`.
+9. Synced the root compatibility route `/api/booking_update`.
+10. Added allowed-value validation for photo, condition, and media/privacy statuses.
+11. Added direct booking updates for review statuses and privacy flags when the Build 162/163/164 migrations are live.
+12. Added direct booking updates for `intake_review_note`, `intake_reviewed_at`, and `intake_reviewed_by` when Build 164 migration is live.
+13. Added fallback behavior that appends the review action to booking notes if optional intake columns are missing.
+14. Added booking-event logging for staff intake review changes.
+15. Added optional fields to the Admin Booking list select so saved review notes and review timestamps can display.
+16. Synced `/admin-booking.html` and `/admin-booking/index.html`.
+17. Added `sql/2026-05-22_build164_booking_intake_review_actions.sql`.
+18. Updated `SUPABASE_SCHEMA.sql` with the Build 164 schema note.
+19. Added `scripts/booking_intake_review_actions_check.py`.
+20. Wired the Build 164 guard into `scripts/release_check.py`.
+
+## Next several value-added steps after Build 164
+
+1. Deploy Build 164 and confirm Admin Booking can save intake review status fields.
+2. Apply SQL migrations in order: Build 162, Build 163, then Build 164.
+3. Add real customer photo upload/lead capture before checkout so photo estimates can include customer images.
+4. Add media-level privacy review actions on each uploaded job photo/video, not only at the booking level.
+5. Enforce gallery/social eligibility from consent + media privacy status + blur/crop completion.
+6. Add a staff “quote from photos” workflow that can convert a photo-estimate booking into a proposed package/add-on set.
+7. Add customer notification templates for photo-estimate received, quote ready, and privacy/media approval request.
+8. Move public service FAQs/proof blocks from scattered JSON/HTML into DB-managed admin content where possible.
+9. Add proof filtering by service type, town, vehicle type, and consent/privacy status.
+10. Add a gift-card/specials merchandising path after the booking conversion path is stable.
+11. Add town/service landing-page proof blocks using only approved public media.
+12. Add analytics for service chooser usage, condition-helper selections, quote-first starts, and booking conversions.
+13. Add abandoned booking recovery that references the chosen package/condition flags without exposing private details.
+14. Add booking-intake dashboard filters: photo estimate requested, needs condition review, needs media review, ready for quote.
+15. Continue CSS drift checks on Booking, Admin Booking, Services, Contact, and Admin Social.
+16. Continue one-H1 and local title/meta checks every pass.
+17. Continue Cloudflare Pages Function import/syntax checks every pass.
+18. Plan a clean/orphan branch refresh after deploy stability is confirmed so stale files cannot remain in GitHub.
+19. Keep `COMPETITOR_SANITY_CHECK.md` aligned with this roadmap after each conversion-path pass.
+20. Keep `KNOWN_GAPS_AND_RISKS.md` focused on active risks, not historical build notes.
 
 ---
 
-## Pass 24 Sync — 2026-04-17
+# Build 163 update — Admin booking intake review and optional direct field storage
 
-This pass focused on three areas:
-- normalized the shared top admin navigation and repaired the off-pattern `admin-assign` header so the top menu matches the other admin screens more closely
-- shifted the public self-serve direction back to a booking-led planner on the pricing page by embedding the live booking experience so customers keep the exact service-area restrictions, 21-day availability windows, slot logic, and booking aesthetics instead of using a separate quote-builder path
-- continued the scheduled e-gift direction by exposing public growth settings, improving the gift message/send-date experience, and adding live recipient/delivery preview boxes on the gifts page
+**Updated:** 2026-05-21  
+**Current build:** Build 163  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
 
-Schema impact for this pass: no new tables or columns. Existing `app_management_settings` is reused for public quote, e-gift, and membership display settings.
+Build 163 continues the Build 160–162 competitor conversion path. Build 162 helped customers explain vehicle condition and media-use preference during booking; Build 163 makes that information easier for staff to see and prepares direct database storage when the optional migrations are applied. The admin booking screen now has a dedicated estimate-intake and media-consent review panel instead of forcing staff to hunt through general booking notes.
 
-Pass sync: April 17, 2026 — pricing now restores the booking page as the first self-serve step by embedding the live booking planner on /pricing so service-area restrictions, 21-day availability windows, add-on logic, and booking aesthetics stay in one source of truth.
-- 2026-04-17 pass26: extended booking-led self-serve with live embedded planner summaries on pricing and service-gift redemption preview, plus richer gift delivery metadata (sender name, preferred send date, message) through checkout, webhook, receipt, and printable certificate.
+## Completed in Build 163
 
-### April 17, 2026 pass27 note
-- moved the next public growth step forward with a new `/maintenance-plan` page, recurring-plan waitlist capture, admin visibility for recurring reminder candidates, and stronger booking-link carry-forward from the live embedded planner.
+1. Reviewed `DEVELOPMENT_ROADMAP.md` and `KNOWN_GAPS_AND_RISKS.md` before implementation.
+2. Kept `DEVELOPMENT_ROADMAP.md` as the implementation source of truth.
+3. Updated checkout to write condition helper flags into `bookings.condition_flags` when the Build 162 migration is available.
+4. Updated checkout to write `condition_recommendation` when the field is available.
+5. Updated checkout to write `photo_estimate_requested` when the field is available.
+6. Updated checkout to write `media_consent_preference` when the field is available.
+7. Added checkout-safe fallback so bookings still succeed if the optional intake columns have not been migrated yet.
+8. Added `photo_estimate_status`, `condition_review_status`, and `media_privacy_status` planning fields.
+9. Added privacy-review planning fields for plate, face, address, blur/crop needed, and blur/crop complete.
+10. Added `sql/2026-05-21_build163_booking_intake_admin_review.sql`.
+11. Updated the admin bookings API to try the new intake/privacy fields first.
+12. Added admin bookings API fallback to the older select list if the optional columns are not deployed yet.
+13. Added a new Admin Booking panel: `Estimate intake & media consent`.
+14. The new panel displays photo-estimate request status.
+15. The new panel displays condition-helper flags and recommendation summary.
+16. The new panel displays customer media-use preference.
+17. The new panel displays privacy-review status hints for plates, faces, addresses, and blur/crop.
+18. The admin panel can read either direct DB fields or the Build 162 note fallback.
+19. Added `scripts/booking_intake_admin_review_check.py`.
+20. Wired the Build 163 guard into `scripts/release_check.py`.
+
+## Next several value-added steps after Build 163
+
+1. Deploy Build 163 and confirm Admin Booking shows the estimate-intake panel on mobile and desktop.
+2. Run the Build 162 migration, then run `sql/2026-05-21_build163_booking_intake_admin_review.sql`.
+3. Add admin edit controls so staff can update photo-estimate status, condition-review status, and media-privacy status.
+4. Add true customer photo upload/lead capture before checkout, using Supabase Storage signed upload URLs.
+5. Add media privacy review actions directly to each job photo/video: plate reviewed, face reviewed, address reviewed, blur/crop needed, blur/crop complete.
+6. Add a gallery/social eligibility filter that only shows media with customer permission and completed privacy review.
+7. Add a photo-estimate lead inbox so incomplete bookings with uploaded media can become quotes or draft bookings.
+8. Add FAQ blocks to Paint Correction, Ceramic Coating, Pet Hair Removal, Odor Removal, Headlight Restoration, Services, and Pricing.
+9. Add town/service-aware proof filtering for Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, Port Dover, Oxford County, and Norfolk County.
+10. Add admin-managed specials/promos for salt cleanup, multi-vehicle, senior-friendly, work truck/fleet, and headlight refresh.
+11. Add stronger service-specific gift card cards for Interior Detail, Full Detail, and custom amounts.
+12. Move high-change service, add-on, specials, FAQ, proof, and testimonial content toward DB-first admin-managed records.
+13. Add Search Console and Google Business Profile tracking notes into admin analytics.
+14. Add social-platform preview cards for Facebook, Instagram, X, TikTok, Google Business Profile, LinkedIn, YouTube Shorts, and manual copy/paste.
+15. Add scheduled social publish worker/retry controls after platform credentials and approvals are ready.
+16. Add caption/media scoring for Google Business Profile-style local proof posts.
+17. Add accessibility review for the booking condition helper and Admin Booking intake panel.
+18. Add conversion tracking events for photo-estimate requests, condition-helper use, and booking completion.
+19. Prepare a clean/orphan branch replacement after deploy stability so old GitHub web-upload leftovers are removed.
+20. Keep this roadmap as the source of truth and keep older roadmap/gap files as historical support only.
 
 ---
-Pass 28 sync — 2026-04-20
-- Continued the booking-led self-serve direction instead of replacing it with a separate quote-only tool.
-- Added scheduled e-gift delivery automation groundwork and live processor routes, plus printable gift lookup by code.
-- Moved recurring maintenance reminders from interest-list based to customer-history based, so reminder timing now keys off completed bookings and real last-service dates while the interest list stays available for demand tracking.
-- Strengthened visible live-booking / availability prompts and refreshed the documentation/schema trail for this pass.
+
+# Build 162 update — Condition-based booking helper, photo-estimate intent, and media-consent preference
+
+**Updated:** 2026-05-21  
+**Current build:** Build 162  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
+
+Build 162 continues the Build 160/161 competitor sanity direction. The public booking flow now moves beyond static package aliases by adding a condition-based booking helper. Customers can select what they see — pet hair, salt, odour, stains, paint swirls, protection questions, headlights, work trucks, or photo-quote needs — and the page suggests a package, eligible add-ons, and staff-review notes. The same pass adds photo-estimate intent capture and a clear media-consent preference so estimate photos do not become public/social proof without permission and staff privacy review.
+
+## Completed in Build 162
+
+1. Reviewed `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and the Build 160/161 competitor conversion priorities before implementation.
+2. Kept `DEVELOPMENT_ROADMAP.md` as the implementation source of truth.
+3. Added a Booking Step 2 condition-based booking helper beneath the quick service chooser.
+4. Added condition flags for maintained interior, maintained exterior, pet hair, salt stains, odour, stains/shampoo, paint swirls, protection, headlights, full reset, work truck/fleet, and photo quote.
+5. Added `Recommend package` and `Clear helper` controls.
+6. Added recommendation logic that maps interior-heavy conditions to Interior Detail, exterior/paint concerns to Exterior Detail, maintained-only cases to Basic Detail or Premium Wash, and full-reset cases to Complete Detail.
+7. Added optional add-on suggestions for paint/protection conditions where existing add-ons allow it.
+8. Added recommendation output explaining the selected flags, package, add-ons, and staff-review notes.
+9. Appended condition helper details into the customer notes field so staff can see why a package was suggested.
+10. Added photo-estimate intent capture in Booking Step 4.
+11. Added customer media-consent preference options: estimate only, ask first, or possible public use after staff privacy review.
+12. Added booking analytics events for condition helper apply/clear, photo-estimate request, and media-consent preference.
+13. Updated checkout payload handling to preserve customer notes, condition flags, condition recommendation, photo-estimate request, and media-consent preference in booking notes.
+14. Kept checkout backwards-compatible by writing the new public-intake details into existing notes even before the optional SQL migration is applied.
+15. Added optional DB planning fields for direct storage of condition flags, recommendation, photo-estimate request, and media-consent preference.
+16. Added `sql/2026-05-21_build162_booking_condition_recommender_and_consent.sql`.
+17. Updated `SUPABASE_SCHEMA.sql` with Build 162 schema-sync notes.
+18. Added `scripts/booking_condition_recommender_check.py`.
+19. Wired the new Build 162 guard into `scripts/release_check.py`.
+20. Synced `/book.html` and `/book/index.html`, and updated Markdown docs and handoff notes.
+
+## Next several value-added steps after Build 162
+
+1. Deploy Build 162 and smoke-test the Booking Step 2 condition helper on mobile and desktop.
+2. Run `sql/2026-05-21_build162_booking_condition_recommender_and_consent.sql` after confirming prior migrations are applied.
+3. Update checkout/booking insert logic to write the new condition and media-consent fields directly once the migration is live.
+4. Add an admin booking-detail panel that displays condition helper flags, recommendation summary, photo-estimate status, and media-consent preference separately from general notes.
+5. Add a customer-facing photo upload/lead form that stores estimate media before checkout, not just a photo link.
+6. Add staff privacy workflow fields for plate reviewed, face reviewed, address reviewed, blur/crop needed, and blur/crop complete.
+7. Add public gallery/social eligibility filters that only allow consented and privacy-reviewed media.
+8. Add service-page FAQ blocks for Paint Correction, Ceramic Coating, Pet Hair Removal, Odor Removal, Headlight Restoration, and Services.
+9. Add proof/recent-work filtering by town and service so Oxford/Norfolk pages can show more relevant examples.
+10. Add admin-managed specials cards for seasonal salt cleanup, multi-vehicle, senior-friendly, fleet/work truck, and headlight refresh offers.
+11. Add service-specific gift-card merchandising for Interior Detail, Full Detail, and custom amounts.
+12. Move high-change service, add-on, specials, FAQ, and proof content toward DB-first admin-managed records.
+13. Add Search Console and Google Business Profile reporting notes to admin analytics.
+14. Add social performance entry/reporting using `social_post_metrics_snapshots`.
+15. Add platform preview cards in Admin Social Queue for Facebook, Instagram, X, TikTok, Google Business Profile, and manual copy/paste.
+16. Add scheduled publish worker/retry rules for planned social posts once platform credentials and approvals are ready.
+17. Improve Contact page estimate handling so photo-estimate inquiries can become draft bookings or leads.
+18. Add accessibility review for the new recommender chips and booking step controls.
+19. Prepare a clean/orphan branch replacement after deploy stability so stale GitHub web-upload leftovers are removed permanently.
+20. Keep `DEVELOPMENT_ROADMAP.md` as the source of truth and keep older roadmap files as history/reference only.
+
+---
+
+# Build 161 update — Conversion path service chooser and photo-estimate guidance
+
+**Updated:** 2026-05-21  
+**Current build:** Build 161  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`
+
+Build 161 continues the competitor sanity-check direction from Build 160. The focus is not a new back-office module; it is the public conversion path. Visitors now get clearer package aliases, a Booking Step 2 service chooser, and stronger photo-estimate guidance on Booking and Contact while the existing pricing codes remain stable for admin, checkout, and data compatibility.
+
+## Completed in Build 161
+
+1. Reviewed `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETITOR_SANITY_CHECK.md` before continuing.
+2. Kept `DEVELOPMENT_ROADMAP.md` as the implementation source of truth.
+3. Recreated `COMPETITOR.md` and `COMPETETOR.md` aliases that were missing from the uploaded ZIP.
+4. Added customer-facing package aliases to the pricing catalog without changing stable package codes.
+5. Added `display_alias`, `customer_goal`, `service_level`, `best_for`, `recommendation_tags`, `photo_estimate_recommended`, and `chooser_prompt` metadata to each package.
+6. Synced enriched package metadata into `data/rosie_services_pricing_and_packages.json`.
+7. Synced enriched package metadata into `functions/api/data/rosie_services_pricing_and_packages.json`.
+8. Regenerated the inline `FALLBACK_CATALOG` in `functions/api/_lib/pricing-catalog.js` so DB fallback responses include the new metadata.
+9. Added a booking-page service chooser to Step 2.
+10. Added quick buttons for exterior wash, interior refresh, interior detail, full detail, exterior detail, and photo-estimate notes.
+11. Added package-card display of aliases and customer goals in the booking flow.
+12. Added a Step 4 photo-estimate checklist for condition photos.
+13. Added analytics events for package recommendation clicks and photo-estimate jumps.
+14. Added a Contact-page photo-estimate panel with an email CTA and booking CTA.
+15. Synced root and folder copies for `/book`, `/contact`, and `/services`.
+16. Added `scripts/conversion_path_check.py` to protect the competitor-aligned conversion path.
+17. Wired the new conversion-path check into `scripts/release_check.py`.
+18. Added a Build 161 no-DDL SQL note.
+19. Updated `SUPABASE_SCHEMA.sql` with Build 161 no-schema-change notes.
+20. Re-ran release, Cloudflare, social workflow, competitor roadmap, conversion path, inline script, and SEO/H1 checks.
 
 
-<!-- pass29-sync: customer-history recurring maintenance reminders -->
+## Next 20 value-added steps after Build 161
+
+1. Deploy Build 161 and confirm the Cloudflare Pages build stays clean.
+2. Smoke-test Booking Step 2 on mobile and desktop to confirm the chooser buttons select the expected packages.
+3. Smoke-test Booking Step 4 to confirm the photo-estimate checklist reads well on mobile.
+4. Apply any pending SQL migrations through Build 159 if they are not already applied.
+5. Copy the enriched package metadata into the DB-managed `app_management_settings.pricing_catalog` once the live DB catalog is updated.
+6. Add a condition-based recommendation engine using vehicle size, interior/exterior concern, pet hair, odour, salt, paint condition, and quote/photo flags.
+7. Add a small public “send photos” form or uploader that can attach estimate media to a lead or draft booking.
+8. Add customer-facing consent capture for public gallery and social before/after use.
+9. Add media privacy fields for plate reviewed, face reviewed, address reviewed, blur/crop required, and blur/crop complete.
+10. Add FAQ blocks to Paint Correction, Ceramic Coating, Pet Hair Removal, Odor Removal, Headlight Restoration, and Services.
+11. Add admin-managed specials cards for salt cleanup, multi-vehicle, senior-friendly, fleet/work truck, and headlight refresh offers.
+12. Improve gift-card merchandising with Interior Detail, Full Detail, and custom amount gift-card cards.
+13. Add proof/recent-work filtering by service and town.
+14. Add admin placement controls for reviews and recent work on service/town pages.
+15. Start moving high-change service/add-on/specials/FAQ/proof content toward DB-first admin-managed records.
+16. Add Search Console and Google Business Profile reporting notes to admin analytics.
+17. Add social performance entry and reporting using `social_post_metrics_snapshots`.
+18. Add platform preview cards in Admin Social Queue.
+19. Prepare a clean/orphan branch replacement after deploy stability so old GitHub web-upload leftovers are removed.
+20. Keep using `DEVELOPMENT_ROADMAP.md` as the source of truth and keep older roadmap files as history/reference only.
 
 
-> Pass sync April 20, 2026: customer screen raw JSON blocks were replaced with readable summaries and a visual garage layout, App Management social feeds gained a structured editor with the raw JSON moved into an advanced block, booking-led maintenance interest now requires Complete Detail selection before schedule interest capture, and customer-facing print/email correspondence styling was refined.
+---
+
+# Build 160 update — Competitor sanity check and roadmap reset
+
+**Updated:** 2026-05-21  
+**Current build:** Build 160  
+**Primary source of truth:** This file, `DEVELOPMENT_ROADMAP.md`  
+**Competitor/service source reviewed:** `COMPETETIVE.md`
+
+Build 160 pauses feature expansion long enough to sanity-check the current Rosie Dazzlers website/app against the competitor/service roadmap. The conclusion is that the project already has a strong technical foundation — local pages, service pages, booking/pricing, gallery/recent work, admin workflows, social queue, accounting/admin systems, image/media tooling, and release checks — but the public conversion path still needs to be simplified so visitors can choose the right detail, send photos, see proof, and book or request a quote with less confusion.
+
+## Build 160 competitor sanity check — current state vs target
+
+| Competitor roadmap target | Current website/app state | Status | Next action |
+| --- | --- | --- | --- |
+| Clear local homepage hero and local wording | Homepage targets Oxford/Norfolk and major towns. | Strong | Keep tuning local wording and proof placement each pass. |
+| Sticky CTAs: Book, Quote, Call/Text, Send Photos | Book CTAs exist; photo-estimate and call/text CTAs need stronger repeated placement. | Partial | Add a consistent CTA strip to Services, Booking, Contact, and landing pages. |
+| Strong service hub | Services page has packages, add-ons, proof, town pages, and links to special pages. | Partial | Add a decision guide and package recommender. Build 160 adds the Services decision guide. |
+| Package selector | Pricing/booking has vehicle size, packages, add-ons, and availability. | Partial | Add condition-based recommendations and public photo estimate prompts. |
+| Service package cards | Existing package codes are Premium Wash, Basic Detail, Complete Detail, Interior Detail, Exterior Detail. | Partial | Add customer-facing aliases/tier labels without breaking existing pricing codes. |
+| Add-ons | Add-ons exist and many have dedicated pages/images. | Strong/partial | Add compatibility rules, FAQ, and stronger admin-managed copy. |
+| Specials | Admin promos exist, but public specials are not yet competitor-level. | Partial | Add specials/promos content blocks for salt cleanup, multi-vehicle, senior-friendly, fleet, and headlight offers. |
+| Gift cards | Gift system exists. | Partial | Add service-specific gift-card merchandising. |
+| Reviews/proof/before-after | Gallery, recent work, review fallback, and local pages exist. | Partial | Filter proof by town/service and make placements admin-managed. |
+| Ceramic coating education | Dedicated ceramic page exists. | Partial | Add richer FAQ, maintenance instructions, and prep expectations. |
+| Paint correction education | Dedicated paint correction page exists. | Partial | Add staged service tier details, before/after proof, and FAQ. |
+| Interior vs deep interior clarity | Packages exist, but public distinction can be clearer. | Partial | Add plain-language service chooser and booking recommender logic. |
+| Admin service controls | Admin app controls exist across services/catalog/settings/social. | Partial | Move more static page copy and specials into DB-first admin-managed content. |
+| Social proof/publishing | Social Queue has drafts, review gates, templates, scheduling, duplicate warnings, and API/webhook attempts. | Strong/partial | Add consent capture, media privacy status, platform previews, and metrics. |
+| Local SEO reporting | SEO/H1 checks exist; Search Console/GBP reporting not connected. | Partial | Add reporting notes and future dashboard hooks. |
+
+## Completed in Build 160
+
+1. Reviewed `COMPETETIVE.md` end-to-end as the desired website/app direction.
+2. Compared the competitor/service roadmap against the current public pages, admin pages, data files, and social workflow.
+3. Classified each major competitor target as strong, partial, or missing.
+4. Identified the highest-conversion gap: visitors need a simpler “which service should we choose?” path before package cards.
+5. Identified the highest-local-SEO gap: reviews/recent work/proof should become town- and service-aware.
+6. Identified the highest-admin gap: high-change service/add-on/specials copy still needs DB-first management.
+7. Identified the highest-safety gap: consent capture and media privacy/blur status must be completed before public/social automation scales.
+8. Identified the highest-repo-cleanup gap: GitHub web uploads can leave stale files, so a clean/orphan branch replacement remains important.
+9. Added `COMPETITOR_SANITY_CHECK.md` as the full current-vs-target audit.
+10. Added `COMPETITOR.md` and `COMPETETOR.md` aliases so future chats can find the competitor roadmap despite spelling variations.
+11. Updated this `DEVELOPMENT_ROADMAP.md` as the implementation source of truth.
+12. Updated `KNOWN_GAPS_AND_RISKS.md` with competitor-aligned remaining risks.
+13. Updated `CURRENT_IMPLEMENTATION_STATE.md`, `SANITY_CHECK.md`, `README.md`, `NEW_CHAT_STATUS.md`, and `HANDOFF_NEXT_CHAT.md` with Build 160 status.
+14. Added a no-DDL SQL note for Build 160.
+15. Added `scripts/competitor_roadmap_check.py`.
+16. Added the competitor roadmap check to `scripts/release_check.py`.
+17. Added a Services-page decision guide with practical package direction for maintenance, daily-use interiors, exterior gloss, paint correction/ceramic, fleet, and gifts.
+18. Added stronger Services-page photo-estimate and quote CTAs.
+19. Synced root `/services.html` and folder `/services/index.html`.
+20. Re-ran release checks including Cloudflare, social workflow, competitor roadmap, and SEO/H1 checks.
+
+## Next 20 value-added steps after Build 160
+
+1. Deploy Build 160 and confirm the Cloudflare Pages build stays clean.
+2. Apply pending SQL migrations through Build 159 if any are still missing.
+3. Smoke-test Services page on desktop and mobile to confirm the new decision guide improves clarity.
+4. Add the same decision guidance to Booking as a step-by-step recommendation panel.
+5. Add package display aliases: Express Interior Refresh, Full Interior Detail, Interior Detail Pro, Exterior Wash & Protect, Full Detail, Paint Enhancement, Paint Correction Quote, Ceramic Protection Quote.
+6. Add a photo-estimate prompt to Booking and Contact with examples of the 2–6 photos customers should send.
+7. Build a simple recommendation engine using vehicle type, service type, condition, add-ons, and photos.
+8. Add FAQ blocks to Paint Correction, Ceramic Coating, Pet Hair Removal, Odor Removal, Headlight Restoration, and Services.
+9. Add admin-managed specials/promos blocks for seasonal salt cleanup, multi-vehicle, senior-friendly, fleet/work truck, and headlight refresh offers.
+10. Improve gift-card merchandising with Interior Detail, Full Detail, and custom amount gift cards.
+11. Add customer-facing consent capture for public/social before-and-after use.
+12. Add media privacy fields for plate/face/address review and blur/crop completion.
+13. Add admin proof-placement controls so staff can choose which reviews/recent work appear on each town/service page.
+14. Filter gallery/recent work by town, service, add-on, and vehicle type where data is available.
+15. Move high-change service, add-on, specials, FAQ, and proof content toward DB-first admin management.
+16. Add Search Console and Google Business Profile reporting notes to admin analytics.
+17. Add social performance entry and dashboard rollups using `social_post_metrics_snapshots`.
+18. Add social platform preview cards before publishing.
+19. Prepare a clean/orphan branch replacement plan once deploy stability is confirmed.
+20. Keep this file as the top implementation source of truth; use older roadmap files only as history.
+
+---
+
+# Build 159 update — Social templates, scheduling, duplicate warnings, and manual posted-link capture
+
+**Updated:** 2026-05-20  
+**Current build:** Build 159
+
+Build 159 continues the social publishing workflow by making Admin Social Queue easier to use day-to-day. It adds reusable caption/hashtag pickers, planned publish timing, duplicate draft warnings, posted-link capture, and schema support for future social metrics snapshots while keeping the Build 158 human review gates in place.
+
+## Completed in Build 159
+
+1. Reviewed Build 158 Development Roadmap and Known Gaps before selecting the next social workflow items.
+2. Added `functions/api/admin/social_templates_list.js` as a staff-protected template/preset endpoint.
+3. Added root shim `functions/api/social_templates_list.js` for compatibility with flat Cloudflare routes.
+4. Added DB-first reading from `social_caption_templates`.
+5. Added DB-first reading from `social_hashtag_presets`.
+6. Added built-in fallback caption templates when the DB tables are not migrated yet.
+7. Added built-in fallback hashtag presets when the DB tables are not migrated yet.
+8. Added a caption template picker to Admin Social Queue.
+9. Added a hashtag preset picker to Admin Social Queue.
+10. Added a planned publish time input for manual social drafts.
+11. Passed `scheduled_for` into new manual social drafts.
+12. Added planned/unscheduled queue filters.
+13. Added visible planned-time badges on draft cards.
+14. Added duplicate draft grouping in the visible queue using `duplicate_signature`.
+15. Added duplicate warning cards so repeated platform/caption/first-media drafts are easier to spot.
+16. Added posted URL and platform post ID prompts when staff use **Mark posted**.
+17. Kept **Publish/API** blocked by the Build 158 consent/privacy review gate.
+18. Added `sql/2026-05-20_build159_social_templates_schedule_duplicate_metrics.sql`.
+19. Added schema support for duplicate review status, social metrics JSON, and `social_post_metrics_snapshots`.
+20. Updated release checks, Markdown, schema notes, and the social publishing guide for Build 159.
+
+## Next 20 value-added steps after Build 159
+
+1. Apply Build 156, Build 158, and Build 159 SQL migrations in order if they are not already applied.
+2. Smoke-test manual draft creation with a caption template and hashtag preset.
+3. Smoke-test planned publish time filtering in Admin Social Queue.
+4. Smoke-test duplicate warnings by creating two similar draft rows.
+5. Add editable draft text inside Admin Social Queue before approval.
+6. Add an approval role so detailers can draft while owners approve/publish.
+7. Add customer-facing consent capture on booking/progress pages.
+8. Add license-plate/face/address blur status to each media row.
+9. Add a crop/blur reminder panel before drafts with vehicle photos can be approved.
+10. Add a calendar view for scheduled social posts.
+11. Add retry scheduling for failed API/webhook attempts.
+12. Add a social performance entry form using `social_post_metrics_snapshots`.
+13. Add dashboard rollups for posted count, failed count, and platform coverage.
+14. Add town-specific caption templates for Woodstock, Ingersoll, Simcoe, Delhi, and Port Dover.
+15. Add platform preview cards for Facebook, Instagram, X, TikTok, Google Business Profile, LinkedIn, and YouTube Shorts.
+16. Add automatic public-gallery promotion only from approved/posted rows.
+17. Add webhook signing verification examples for Make, Zapier, and n8n.
+18. Add a clean-branch/orphan upload plan after Cloudflare deploy is stable.
+19. Add Search Console and Google Business Profile reporting notes into the admin analytics roadmap.
+20. Continue SEO/H1/CSS drift checks on every release pass.
+
+---
+
+# Build 158 update — Social review gates and local caption templates
+
+**Updated:** 2026-05-20  
+**Current build:** Build 158
+
+Build 158 continues the Build 156/157 social publishing workflow and makes it safer before any job/crafting-progress photo or summary is pushed to X, Facebook, Instagram, TikTok, Google Business Profile, or manual/webhook channels.
+
+## Completed in Build 158
+
+1. Added `functions/api/_lib/social-compliance.js`.
+2. Added customer/public-use consent checks for social drafts.
+3. Added license plate, face, address, and private-identifier review checks.
+4. Added no-private-customer-info caption review.
+5. Added platform warning generation for X length, Instagram media requirements, TikTok media requirements, Facebook media recommendations, and Google Business Profile local wording hints.
+6. Added `Approve & ready` review action in Admin Social Queue.
+7. Blocked direct `Publish/API` unless a draft is marked ready and the review gate passes.
+8. Added fallback-safe inserts if the Build 158 SQL migration has not been applied yet.
+9. Added fallback-safe social queue reads when new review columns do not exist yet.
+10. Added review checklist controls to Admin Social Queue manual draft creation.
+11. Added review checklist controls to Admin Progress social draft creation.
+12. Updated immediate push workflow to approve-ready first, then publish only if the review gate passes.
+13. Added review badges and platform warning display to Admin Social Queue cards.
+14. Added `social_caption_templates` table.
+15. Added `social_hashtag_presets` table.
+16. Seeded local caption templates for Southern Ontario, Oxford County, Norfolk County, and Tillsonburg-style posts.
+17. Seeded local hashtag presets for Rosie Dazzlers local discovery.
+18. Added `duplicate_signature` on queued posts to support future duplicate-content warnings.
+19. Updated social workflow release checks for Build 158 markers.
+20. Updated Markdown and schema notes for the new social review gate.
+
+## Next 20 value-added steps after Build 158
+
+1. Apply the Build 156 social queue migration if it has not already been run.
+2. Apply `sql/2026-05-20_build158_social_review_gates_and_templates.sql`.
+3. Test Admin Progress with one internal job update and one media URL.
+4. Confirm a draft is created with platform warnings in Admin Social Queue.
+5. Confirm `Publish/API` is blocked until `Approve & ready` is clicked.
+6. Add a duplicate-content warning in the Admin Social Queue UI using `duplicate_signature`.
+7. Add a template picker that loads `social_caption_templates` from the DB.
+8. Add a hashtag preset picker that loads `social_hashtag_presets` from the DB.
+9. Add a scheduler calendar for planned posting times.
+10. Add a posted URL capture form for manual posts.
+11. Add customer-facing consent capture on the booking/progress flow.
+12. Add media-crop/blur status fields for license plates and private identifiers.
+13. Add staff training notes explaining that drafts are not public until approved/published.
+14. Add platform-specific preview cards for Facebook, Instagram, X, TikTok, Google Business Profile, and manual.
+15. Add basic post analytics fields: clicks, views, likes, comments, shares, and last checked time.
+16. Add webhook payload signing/verification documentation for Make/Zapier/n8n bridges.
+17. Add scheduled retry rules for failed webhook/API attempts.
+18. Add a public gallery promotion workflow that only uses approved social media rows.
+19. Add Google Business Profile post/manual workflow notes once the account flow is finalized.
+20. After deploy is stable, consider a clean-branch/orphan upload to remove stale GitHub files that web upload does not delete.
+
+---
+
+# Development Roadmap — Build 157
 
 
-<!-- pass31-sync: booking overflow polish, maintenance conversion from complete detail, fleet handoff path -->
-> Pass sync April 20, 2026: booking vehicle inputs and service cards were tightened to prevent text overflow, My Account now uses a real garage-bay view plus a fleet handoff path after 6 vehicles, and maintenance conversion now begins only after a completed Complete Detail with repeat-booking guidance tied to actual service history.
+**Updated:** 2026-05-19  
+**Target branch:** `dev`  
+**Pass focus:** Social publishing bridge for job/crafting progress posts, safer API/webhook dispatch, Admin Progress immediate social draft/publish controls, Admin Social Queue copy/API buttons, schema/doc synchronization, and continued SEO/H1/CSS release discipline.
 
-> Pass sync April 21, 2026: added mileage and next-service mileage capture, customer vehicle image/video library groundwork, garage-bay photo support, a public before/after slider gallery, admin vehicle-media override/delete tools, and detailer arrival geolocation capture groundwork.
+## Build 157 completed — social progress publishing bridge
 
-## 2026-04-22 merchandising pass — local image scoring / SEO / geofence refinement
+1. Kept the Build 156 social queue as the base instead of bypassing review controls.
+2. Added a platform publish helper at `functions/api/_lib/social-platform-dispatch.js`.
+3. Added approved API publish attempts for X text posts using the X v2 create-post endpoint.
+4. Added Facebook Page API publish attempts for text posts and public image URLs.
+5. Added Instagram Business publish attempts using media container creation plus publish.
+6. Kept TikTok, Google Business Profile, LinkedIn, YouTube Shorts, and unsupported networks on webhook/manual fallback until each platform OAuth/app review is complete.
+7. Added optional `SOCIAL_DISPATCH_WEBHOOK_SECRET` header support for automation tools.
+8. Added `Publish/API` action inside Admin Social Queue.
+9. Kept `Send webhook`, `Copy text/media`, `Mark posted`, `Ready`, and `Skip` fallbacks.
+10. Expanded readiness display for X, Facebook Page, Instagram Business, TikTok, LinkedIn, YouTube/Google, queue DB, and webhook bridge.
+11. Added copy-to-clipboard support for draft captions and media URLs.
+12. Added Admin Progress checkbox to create social drafts automatically after progress updates/media.
+13. Added Admin Progress checkbox to attempt approved API/webhook push immediately after draft creation.
+14. Synced `/admin-progress.html` with `/admin-progress/index.html` so the public route is not stale.
+15. Synced `/admin-social.html` with `/admin-social/index.html`.
+16. Updated release checks so Build 157 social markers are required.
+17. Updated Cloudflare Pages Functions check to syntax-check the new publish helper.
+18. Added Build 157 SQL no-DDL note documenting required environment variables.
+19. Updated `SUPABASE_SCHEMA.sql` with the Build 157 no-DDL note.
+20. Kept local SEO/H1 guard active so exposed pages continue to have one clear main heading.
 
-- upgraded customer vehicle media from the older rule-only score into a stronger local merchandising score that now blends file presence, dimensions, orientation, alt text, crop history, brightness, contrast, sharpness, background consistency, subject fill, duplicate-angle penalty, and a later-image lifestyle bonus
-- `my-account.html` now analyzes images in-browser before upload using EXIF-aware decode, local canvas sampling, and preview guidance so customers get stronger front-end feedback before save
-- the upload preview now shows a local preflight summary with background, subject fill, sharpness, brightness, contrast, and duplicate-angle hints while still allowing videos to remain a manual-review media type
-- `functions/api/client/vehicle_media_save.js` now persists `media_analysis` and passes existing rows into `functions/api/_lib/vehicle-media-scoring.js` so duplicate-angle penalties can be applied at save time too
-- `functions/api/_lib/booking-location.js` now prefers explicit service-area coordinates when they exist in the pricing/service-area metadata, then falls back to local service-area lookup keys and county fallback centroids
-- public SEO copy was tightened again on `services.html`, `pricing.html`, `contact.html`, and `gallery.html` with clearer local-search wording while preserving a single H1 per exposed page
-- schema/migration sync for this pass lives in `sql/2026-04-22_vehicle_media_merchandising_score.sql`, `sql/2026-04-21_vehicle_media_gallery_geofence.sql`, and `SUPABASE_SCHEMA.sql`
-- next-step direction is still the same operational split: local scoring + EXIF-aware orientation + guide-led framing now, optional cloud smart-assist later only if you want object recognition or damage-style analysis
+## Next 20 value-added steps after Build 157
 
-## Pass 27 sync — 2026-04-24
-- Completed this pass: repaired legacy date-block save compatibility, fixed the stretched admin menu/layout drift on `admin-live.html` and `admin-blocks.html`, cleaned up admin date/text input sizing in `admin-accounting.html`, and expanded `admin-analytics.html` into a real reporting workspace with daily/weekly/monthly/yearly rollups and CSV exports.
-- The next highest-value reporting step is optional pre-aggregation once traffic volume grows beyond comfortable raw-query reads. If `site_activity_events` regularly exceeds ~25k rows inside the selected window, add nightly rollup tables/materialized views and keep the current on-demand endpoint as a fallback.
-- The next strongest admin polish step is device testing of the accounting and booking-control screens on narrow laptop and tablet widths so any remaining control crowding can be removed with exact screenshots instead of guesswork.
-- The next strongest workflow step is scheduled report delivery: queue daily/weekly/monthly CSV snapshots for office review and accountant handoff using the new report payloads already returned by `/api/admin/analytics_overview`.
-
-## April 24, 2026 next roadmap direction
-- deploy and verify the new clean-route rewrites for `/services` and `/pricing` on production
-- run and validate the new analytics rollup tables + refresh endpoint
-- start public review-proof work and the first service-specific landing pages (ceramic coating, pet hair, odour removal)
-- begin town-level local SEO sections/pages for Tillsonburg, Woodstock, Simcoe, Delhi, and Port Dover
-
-## 2026-04-25 pass
-- Completed: admin block page now supports blocking a whole date range at once, plus an in-page calendar view that marks available dates green, full blocked dates red, and partial slot blocks amber.
-- Completed: pricing page embed growth was capped and stabilized to stop the endless-scroll behavior below the vehicle-identification area.
-- Completed: tighter card/iframe overflow handling for embedded package and add-on cards.
-- Completed: added town-focused landing pages for Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, and Port Dover.
-- Next best steps remain: keep folder-backed clean routes as baseline, keep recent work/review proof visible on entry pages, and connect Google-side reporting later through Search Console and Business Profile after internal rollups are stable.
-
-
-
-Next best steps now include pricing-page embed height control, a bundled reviews-proof fallback image, and a year-end accounting package for Ontario-friendly tax prep.
-
-
-- Keep the folder-backed clean-route model as the live baseline.
-- Continue building out town-focused pages and keep recent work / review proof blocks visible.
-- Expand accounting from operational ledger into a full year-end handoff workflow with CRA-friendly exports, HST tracking, payables, receivables, and owner-draw visibility.
-
-## Next best steps after the 2026-04-27 accounting workflow pass
-1. Add true upload-to-storage support for accounting documents so receipts, invoices, and statements can be uploaded directly instead of linked by URL/path only.
-2. Add vendor directory + vendor defaults (payment terms, default expense account, contact info) and wire recurring templates to vendor records.
-3. Expand bank reconciliation from statement-vs-book summary into cleared-entry matching and unreconciled-item carry-forward.
-4. Add payroll net-pay / source-deduction detail once payroll withholding rules are introduced.
-5. Enforce period lock/close across every accounting-related write path, not only journal posting.
-6. Add accountant package export for year-end source-document index and reconciliation status.
-
-- Expand landing-page builder to support service-area-level internal-link modules and media blocks.
+1. Add a secure Admin Settings screen for platform connection status without showing secrets.
+2. Add per-platform caption templates, including short X text and longer Facebook/Instagram text.
+3. Add per-platform image/video requirements and warnings before publishing.
+4. Add a draft preview mode that shows how the post will look on each platform.
+5. Add batch-publish selected drafts from the Social Queue.
+6. Add scheduled publishing windows by platform and local audience timing.
+7. Add a reusable hashtag library for towns, services, and seasonal campaigns.
+8. Add before/after carousel support for Facebook and Instagram where supported.
+9. Add a Make/Zapier/webhook recipe guide for TikTok, Google Business Profile, LinkedIn, and YouTube Shorts.
+10. Add platform response permalink repair when APIs return IDs but not URLs.
+11. Add automatic retry rules for temporary API errors and rate limits.
+12. Add an approval role so staff can draft while owners approve/publish.
+13. Add customer privacy flags so license plates, faces, and addresses are blocked before posting.
+14. Add media scoring checks for social-safe size, format, and orientation.
+15. Add alt text/caption fields for accessibility and local SEO.
+16. Add social performance tracking fields for reach, clicks, and conversions.
+17. Add a recent-work public gallery fed from approved social/job posts.
+18. Add town-specific posting templates for Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi, Port Dover, Oxford County, and Norfolk County.
+19. Add a rollback/unpublish checklist for posts published by mistake.
+20. Add a monthly content calendar tied to bookings, seasonal services, and local promotions.
 
 
-- 2026-04-29 pass: restored add-on image merge safety, kept add-on editor in single-dropdown mode, and expanded town/add-on landing pages with stronger local facts, official links, and service process content.
 
-## Build 137 — local SEO, admin inventory fallback, and media handoff pass
-- Restored the recent dev-branch Admin App fixes into this uploaded build, including `landingLinksToText`, the add-on image preview that prefers real PNG/JPG/R2 images over SVG fallback art, and the **Update / save add-on** button.
-- Restored Admin Catalog inventory fallback merging so edited DB items do not hide bundled gear/consumables that still need to be saved. Inventory item names are clickable edit controls and the right-side editor is compact/sticky instead of stretching down the page.
-- Added `data/local_seo_targets.json` and `scripts/local_seo_audit.py` so the priority town/service pages are checked for titles, descriptions, canonical links, sitemap coverage, and target wording during every pass.
-- Refreshed static fallback titles/descriptions/H1 shells for the major service and town landing pages so crawlers and users see useful wording even before JavaScript finishes rendering.
-- Rebuilt `sitemap.xml` with `lastmod`, `changefreq`, and `priority` values for core service, booking, town, and proof pages.
-- Added `data/sample_reviews.json` for the five temporary homepage-style reviews until the real review API is connected. These are display placeholders only and should not be emitted as structured review schema.
-- Added/expanded `IMAGES.md` with required image sizes, source-of-truth paths, and replacement steps for add-ons, packages, before/after work, inventory images, and landing-page media.
-- Schema update: no DDL required; see `sql/2026-05-09_build137_local_seo_inventory_media_no_ddl_note.sql`.
+**Updated:** 2026-05-18  
+**Target branch:** `dev`  
+**Pass focus:** Cloudflare Pages Functions deploy hotfix, media-library endpoint syntax repair, duplicate landing-page key cleanup, release-check hardening, schema/docs synchronization, and continued SEO/H1/CSS release discipline.
 
-<!-- Build 137 sync 2026-05-09: local SEO targets, inventory fallback, media/image documentation, CSS/H1/static-link checks, and schema handoff were reviewed. -->
+
+## Build 155 completed deployment hotfix pass
+
+1. Reviewed the Cloudflare Pages deploy log and confirmed the blocking error was an unterminated regular expression in `functions/api/admin/media_library_list.js`.
+2. Repaired `normalizeList()` so comma/newline splitting uses an esbuild-safe `/[\n,]/` expression instead of a literal newline inside the regex character class.
+3. Reviewed Cloudflare warnings in `functions/api/landing_pages_public.js`.
+4. Removed duplicate `related_products` normalization from `normalizePage()` while keeping the richer image-capable product normalization.
+5. Removed duplicate `hero_image_url`, `region_photo_caption`, `region_photo_source`, and `region_photo_source_url` keys from the same object literal.
+6. Removed the now-unused `normalizeProductRefs()` helper to avoid future confusion between two product reference shapes.
+7. Added `scripts/cloudflare_pages_functions_check.py` to catch deploy-only JavaScript issues before upload.
+8. The new checker runs `node --check` across project JavaScript files and also catches literal-newline regex character classes that Cloudflare/esbuild can reject.
+9. The new checker guards `landing_pages_public.js` against duplicate `normalizePage()` object keys.
+10. Wired the new Cloudflare Pages Functions deploy-safety checker into `scripts/release_check.py`.
+11. Re-ran the full release checklist after the deploy hotfix.
+12. Updated Markdown and schema tracking notes so Build 155 is documented as the current baseline.
+
+## Build 151 completed 20-step pass
+
+1. Reviewed the Build 150 roadmap and known gaps before selecting the next inventory/media workflow items.
+2. Added `/api/admin/media_library_list` as a staff-protected media-library read endpoint for Admin Catalog.
+3. Made the new media-library endpoint DB-first against `app_media_library`.
+4. Added fallback reading from `app_management_settings.media_library` if the DB media table is not available yet.
+5. Kept the endpoint deploy-safe by returning warnings instead of breaking the page when optional media-library storage is missing.
+6. Updated Admin Catalog image candidate collection so media rows can use `media_url`, `fallback_url`, `public_url`, or `url` in addition to existing inventory image fields.
+7. Updated the existing image picker so it now searches media-library rows, bundled consumables/tools rows, saved DB rows, and saved helper URLs together.
+8. Added media-library count visibility to the Admin Catalog image completeness summary.
+9. Added **Repair selected images** to persist matched fallback images onto selected saved/fallback inventory rows.
+10. Made selected image repair import selected bundled fallback rows when they are not yet saved to DB.
+11. Protected existing deliberate DB images by skipping saved rows that already have a non-fallback image.
+12. Added **Scan visible images** to browser-check up to 100 visible inventory image URLs.
+13. Added per-row image health messages after a scan, showing whether an image passed or failed browser loading.
+14. Added duplicate-image group detection to the inventory quality summary.
+15. Added per-row duplicate-image warnings where multiple inventory rows use the same image URL.
+16. Preserved the Build 150 fallback merge fix so blank DB `image_url` values still hydrate from matching bundled consumables/tools images.
+17. Added `scripts/media_library_picker_check.py` to guard the new media picker, image repair, duplicate diagnostics, and image health markers.
+18. Wired the new checker into `scripts/release_check.py` and expanded the inventory picker guard markers.
+19. Added `sql/2026-05-18_build151_media_library_inventory_image_workflow.sql` and synchronized `SUPABASE_SCHEMA.sql`.
+20. Updated the active Markdown handoff, roadmap, gaps, schema, image, and sanity documents for Build 151.
+
+## Next logical 20 steps
+
+1. Apply the Build 150 and Build 151 SQL migrations in Supabase dev, then confirm `catalog_inventory_items` and `app_media_library` are present.
+2. Smoke-test `/api/admin/media_library_list?usage_context=inventory_item` on the deployed dev URL while signed in as admin/staff.
+3. Seed `app_media_library` from the current R2 product/tool image folders with `group_key='products'` and `usage_contexts` containing `inventory_item`.
+4. Add an Admin Catalog **Upload image to R2** flow so new product/tool images do not require manual URL pasting.
+5. Add editable image metadata in the picker: alt text, caption, source/consent, preferred public image, and recommended size.
+6. Add a **Repair all fallback-matched images** review screen so staff can persist safe image fixes without selecting rows one by one.
+7. Add a server-side image URL health report so 404/timeout checks can run without depending on browser scans.
+8. Add a duplicate-image review screen where staff can mark duplicates as intentional multipack/shared-image cases.
+9. Connect media rows to towns, services, reviews, and before/after gallery proof for stronger local landing pages.
+10. Convert the before/after gallery from sample JSON into an admin-managed `app_content_entries` or dedicated DB content set.
+11. Add receipt/bill attachment workflows to inventory purchases and accounting entries.
+12. Link booking completion consumable usage to inventory movement and accounting COGS posting.
+13. Add monthly inventory count sessions with variance approval and lock/reopen controls.
+14. Connect vendor directory editing between Admin Catalog and Accounting so purchases, receipts, and reorders share one source.
+15. Add Search Console and Google Business Profile reporting panels once credentials/API access are ready.
+16. Continue town/service page improvements for Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi, Port Dover, and Norfolk/Oxford searches.
+17. Replace remaining external/location placeholder photos with Rosie-owned R2-hosted local proof images.
+18. Expand API fallback/error banners so staff can tell when the UI is using DB, app-setting, or bundled JSON fallbacks.
+19. Add mobile detailer job closeout that records consumables/tools used, photos/videos, customer sign-off, and follow-up notes.
+20. Keep every release pass checking one H1 per exposed page, local title/meta clarity, structured data, CSS drift, and stable redirects.
+
+<!-- Build 155 sync 2026-05-18: Cloudflare Pages Functions deploy hotfix, media-library endpoint regex repair, landing-page duplicate-key cleanup, release-check hardening, schema sync, and local SEO/H1 discipline pass. -->
+
+## Build 155 completed deployment repair pass
+
+1. Repaired root `/functions/api/*.js` import paths from `../_lib/...` to `./_lib/...` so Cloudflare Pages Functions can resolve helpers.
+2. Preserved valid nested admin imports and mirrored helper libraries as a defensive fallback for legacy flat route files.
+3. Confirmed `functions/api/admin/media_library_list.js` no longer contains the esbuild-breaking regex newline issue.
+4. Confirmed `functions/api/landing_pages_public.js` normalizePage no longer has duplicate object keys.
+5. Added a no-DDL migration note for Build 155.
+6. Hardened `scripts/cloudflare_pages_functions_check.py` to check relative import resolution before packaging.
+7. Ran the Cloudflare deploy-safety check successfully across 499 JavaScript files.
+8. Ran Node syntax checks successfully across 384 Functions JavaScript files.
+9. Kept the Build 151 inventory media picker/fallback workflow unchanged.
+10. Updated active Markdown and schema notes for Build 155.
+
+## Next 20 recommended steps after Build 155
+
+1. Deploy Build 155 to Cloudflare Pages and confirm the Functions compile finishes cleanly.
+2. If any Cloudflare log remains, fix only the exact named file before starting new features.
+3. Apply Build 150 and Build 151 SQL migrations in Supabase dev if not already applied.
+4. Seed `app_media_library` from current R2 tool, consumable, add-on, and service-image folders.
+5. Add an Admin Media Library screen to edit label, alt text, usage context, source status, and sort order.
+6. Add direct R2 upload from Admin Catalog image picker.
+7. Add bulk image repair for all inventory rows, not only visible selected rows.
+8. Add a missing/duplicate/broken image dashboard for catalog, services, add-ons, and landing pages.
+9. Add image alt-text quality scoring to Admin Catalog save validation.
+10. Add local-service landing page smoke tests for title, meta, H1, locality terms, and canonical links.
+11. Add deployed smoke checks for `/api/admin/media_library_list` and key Admin Catalog endpoints.
+12. Move legacy flat root API JavaScript copies out of the live root once Cloudflare deploy is stable.
+13. Keep `service-worker.js` as the only intentional root JavaScript file unless a page explicitly loads another root script.
+14. Add a repo-cleanliness check that flags duplicate API route files outside `/functions`.
+15. Add admin UI messaging when media library DB tables are unavailable and fallbacks are being used.
+16. Add inventory/product image history so changed images can be reverted.
+17. Add service-area/town page image assignment from the shared media library.
+18. Continue one-H1 checks on every exposed page.
+19. Continue CSS drift checks on public and admin pages after each feature pass.
+20. Re-run the full release check after the deploy hotfix is confirmed.
+
+## Build 155 Cloudflare stale root function shim hotfix - 2026-05-19
+
+Cloudflare still saw older flat `/functions/api/*.js` route files after GitHub web uploads, because uploading ZIP contents does not reliably delete older files from the branch. Build 155 intentionally includes compatibility shim files for the stale flat routes listed in the Cloudflare deploy log. Each shim re-exports the active `/functions/api/admin/*.js` implementation and prevents Pages Functions bundling failures while preserving the newer admin route implementation.
+
+Next step: after Build 155 deploys cleanly, optionally remove the compatibility shims in a clean-branch/orphan rebuild so only the intended folder-backed route files remain.
+
+
+
+## Build 155 completed 20-step pass - 2026-05-18
+
+1. Used the latest uploaded Build 147 ZIP as the active baseline for this pass.
+2. Rechecked the Cloudflare Pages Functions route tree before adding any new feature work.
+3. Found four remaining root `/functions/api/*.js` files still importing `../_lib/...` from the wrong level.
+4. Repaired `functions/api/blocks_range_save.js` to import helpers through `./_lib/...`.
+5. Repaired `functions/api/catalog_amazon_matches.js` to import helpers through `./_lib/...`.
+6. Repaired `functions/api/catalog_bulk_import.js` to import helpers through `./_lib/...`.
+7. Repaired `functions/api/catalog_bulk_visibility.js` to import helpers through `./_lib/...`.
+8. Confirmed nested `/functions/api/admin/*.js` imports were left alone because `../_lib/...` is correct from the admin folder.
+9. Kept the Build 154 stale-route compatibility shims in place for older flat route files left behind by GitHub web uploads.
+10. Added `scripts/stale_root_function_shims_check.py` into the normal `scripts/release_check.py` flow so bad root imports fail before upload.
+11. Tightened `scripts/cloudflare_pages_functions_check.py` to focus on Cloudflare Functions JavaScript instead of every root/static JavaScript copy.
+12. Added a per-file timeout guard around `node --check` inside the Cloudflare deploy-safety checker.
+13. Updated `scripts/release_check.py` so Python check scripts can run in-process, avoiding nested subprocess hangs seen in the sandbox.
+14. Re-ran the Cloudflare deploy-safety check and confirmed 405 Functions JavaScript files pass.
+15. Re-ran the stale root function import guard and confirmed no root `/functions/api/*.js` file still imports parent `_lib` helpers.
+16. Re-ran the local SEO/H1 audit to keep the one-H1 and local title/meta discipline active.
+17. Re-ran inventory image picker checks and confirmed all 149 bundled fallback inventory rows still have image coverage.
+18. Re-ran the media-library picker check to keep selected image repair, duplicate diagnostics, and health scan markers covered.
+19. Added a Build 155 no-DDL SQL note and synchronized `SUPABASE_SCHEMA.sql`.
+20. Updated active Markdown handoff, roadmap, known gaps, sanity, and implementation-state docs for the next upload.
+
+
+## Next 20 recommended steps after Build 155
+
+1. Upload Build 155 to the `dev` branch and confirm Cloudflare Pages Functions compile cleanly.
+2. If Cloudflare still fails, fix only the exact file named in the new deploy log before starting feature work.
+3. After a clean deploy, use a clean/orphan branch upload to remove any stale GitHub web-upload leftovers permanently.
+4. Apply Build 150 and Build 151 SQL migrations in Supabase dev if they have not already been applied.
+5. Confirm `/api/admin/media_library_list?usage_context=inventory_item` returns either DB media rows or a safe warning fallback.
+6. Seed `app_media_library` from existing R2 tool, consumable, add-on, landing, and service-image folders.
+7. Add an Admin Media Library screen for label, alt text, caption, usage context, group key, source status, and sort order.
+8. Add direct R2 image upload from the Admin Catalog image picker.
+9. Add bulk image repair for all fallback-matched rows, not only selected/visible rows.
+10. Add a server-side broken-image report for catalog, services, add-ons, gallery, and landing pages.
+11. Add image alt-text quality scoring to Admin Catalog save validation.
+12. Add service/town landing-page media assignment from the shared media library.
+13. Convert before/after gallery sample JSON into an admin-managed DB content set.
+14. Add receipt/bill attachment workflow for inventory purchases and accounting entries.
+15. Link booking completion consumables/tools used to inventory movement and accounting COGS posting.
+16. Add monthly inventory count sessions with variance approval and lock/reopen controls.
+17. Connect vendor directory editing between Admin Catalog and Accounting.
+18. Add Search Console and Google Business Profile reporting panels once credentials/API access are ready.
+19. Continue town/service page improvements for Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi, Port Dover, Norfolk, and Oxford searches.
+20. Keep every release pass checking Cloudflare Functions, one H1 per exposed page, local title/meta clarity, CSS drift, stable redirects, and inventory/media fallback safety.
+
+## Build 156 completed work - social progress publishing foundation
+
+1. Added a reviewable social queue for job progress photos and summaries.
+2. Added Admin Progress controls to create social drafts after posting updates.
+3. Added Admin Progress controls to create social drafts after attaching job media.
+4. Added per-platform draft selection for Facebook, Instagram, X, TikTok, and Google Business Profile.
+5. Added default local hashtags for Rosie Dazzlers job proof posts.
+6. Added Admin Social Queue page for reviewing drafts.
+7. Added manual social draft creation for content not tied to a booking.
+8. Added social post status workflow: draft, ready, posted, failed, skipped.
+9. Added optional webhook dispatch action for future automation bridge tools.
+10. Added platform readiness display without exposing credentials.
+11. Added `social_post_queue` schema for staged publishing.
+12. Added `social_channels` schema for platform/channel setup.
+13. Added `social_dispatch_attempts` schema for audit history.
+14. Added booking event logging when drafts are created from job progress.
+15. Added social draft loading into Admin Progress for the current booking.
+16. Fixed missing `resolveBookingIdByToken` runtime helper in progress update routes.
+17. Hardened progress media posting with consistent CORS and auth fallback handling.
+18. Added social workflow release checks.
+19. Added Cloudflare Pages Functions static/import checks for this pass.
+20. Re-checked one-H1-per-page behavior after adding Admin Social Queue.
+
+
+## Next 20 value-added steps after Build 156
+
+1. Run the Build 156 social queue SQL migration in Supabase.
+2. Add a Social Queue card to staff role training notes so detailers know drafts are not public posts yet.
+3. Decide the first direct-post platform: recommended order is Facebook/Instagram, Google Business Profile, X, TikTok, then YouTube Shorts.
+4. Add per-platform caption length warnings and media-count warnings.
+5. Add a privacy checklist before any customer vehicle/photo can be marked ready.
+6. Add license-plate blur/cover reminder fields to the media workflow.
+7. Add customer consent flags for public before/after use.
+8. Add a reusable caption template library for job type, vehicle size, service area, and upsell language.
+9. Add platform-specific hashtag presets for local SEO and discovery.
+10. Add OAuth setup notes and token rotation guidance for each social platform.
+11. Add a direct Meta/Facebook Page adapter after the app permissions are approved.
+12. Add an Instagram Business publishing adapter after Meta media-container requirements are confirmed.
+13. Add a Google Business Profile recent-work publishing path after the Google account scope is finalized.
+14. Add a TikTok direct-post adapter only after app review and creator authorization are confirmed.
+15. Add a queue calendar so posts can be scheduled by day/time.
+16. Add duplicate-content warnings when the same photo/caption is queued twice.
+17. Add analytics fields for clicked progress links and posted platform URLs.
+18. Add customer-friendly public gallery promotion rules from approved job media.
+19. Add fallback export buttons: copy caption, download media list, and open platform composer.
+20. Add social performance notes back into the booking/customer history for future marketing decisions.

@@ -1,370 +1,141 @@
-<!-- refreshed 2026-04-25: block-range town-page pass -->
-> Documentation synchronized April 25, 2026: folder-backed clean-route repair, special-service landing pages, recent-work public proof blocks, sitemap refresh, and roadmap/handoff updates added.
+# Project Brain — Build 168
 
-## April 25, 2026 route hardening + landing-page visibility pass
-- Replaced the fragile clean-route dependency on `_redirects` with real folder-backed `index.html` route pages for the main public and admin screens to prevent recurring Cloudflare Pages redirect loops.
-- Added dedicated landing pages for ceramic coating, pet hair removal, odor removal, headlight restoration, and paint correction.
-- Added reusable recent-work proof mounts from the public before/after gallery and surfaced review proof / service-area wording more prominently on home, services, pricing, and the new landing pages.
-- Updated `sitemap.xml`, smoke/static checks, and the Markdown handoff set so the next chat starts from the live route-fix + visibility-expansion state.
-- No database DDL was added in this pass; `SUPABASE_SCHEMA.sql` was synchronized as a no-DDL documentation refresh.
+**Updated:** 2026-05-23
 
-## Marked next best steps
-- Keep the folder-backed clean-route approach as the live deployment baseline unless a future router replaces it completely.
-- Build town-focused landing pages next for the strongest search towns first: Tillsonburg, Woodstock / Ingersoll, Simcoe / Delhi, and Port Dover.
-- Keep recent work, review proof, and social freshness visible on the public entry pages so new visitors see current activity before they contact or book.
-- Connect Google Search Console and Google Business Profile performance metrics later as a separate reporting layer once the internal rollups are stable.
-- Treat analytics rollup totals as operational counts when summed across buckets until a true cross-window de-duplication strategy is added.
+Rosie Dazzlers now has a competitor-roadmap public journey and an internal lead/photo-estimate review foundation. Build 168 adds `/admin-leads` for public inquiries and quote-photo uploads, protected by the existing staff booking-management permission model.
 
-## April 23, 2026 live vehicle-size guide + chart helper pass
-- Added live SVG vehicle size guide generation beside the existing live price and package-details charts.
-- /pricing and /services now prefer live chart renders for price, details, and size guidance, with packaged image assets retained only as fallback/reference.
-- App Management now has a staff-facing helper to preview/download SVG charts from the current pricing editor JSON.
-- No database DDL was added in this pass; schema docs were synchronized to state that the change is frontend/helper logic only.
-- Next: deploy-test the admin chart helper, validate structured data on rendered pages, and continue the vehicle-media crop/editor hardening path.
+The safest next value step is a quote-builder/conversion workflow: select a lead or photo estimate, choose package/add-ons, generate quote notes, and optionally create/link a booking.
 
-> Last synchronized: April 22, 2026. Reviewed during the live SVG pricing-chart, structured-data local SEO, static-check hardening, and docs/schema synchronization pass.
-
-## April 22, 2026 quick context
-- Canonical pricing is now not only the source of truth for booking/services/pricing logic; it also renders the main pricing charts live on `/pricing` and in the services modal helpers.
-- The long-term drift risk is reduced for the two main package charts, but the size chart is still a packaged asset and App Management still does not expose a live export/download helper yet.
-- Structured-data coverage is now present on the key local-search public pages and is part of the static check discipline.
-
-> Last synchronized: April 16, 2026. Reviewed during the App Management checkbox-alignment repair, package family/size-price clarification pass, pricing catalog UI polish, and docs/schema synchronization pass.
-
-## April 15, 2026 quick context
-- Legacy pricing charts now live in the repo under `/assets/brand/CarPrice2025.PNG` and `/assets/brand/CarPriceDetails2025.PNG`.
-- Regeneration script: `scripts/generate_pricing_chart_images.py`.
-- Current limitation: App Management can still outpace these static PNGs unless they are regenerated after pricing edits.
-
-
-# Rosie Dazzlers — Project Brain
-
-## April 14, 2026 pass memory
-- App Management is the single office entry point for pricing/package governance.
-- Checkbox rows were cleaned up for readability.
-- Package reporting now separates family count from size-price count.
-- Oversize and exotic are still a shared pricing column in the canonical catalog.
-
-
-## Current guardrails after the April 13, 2026 pass
-- Do not alter `book.html` unless there is a direct production defect.
-- Treat `_redirects` as complete for the current route model.
-- Use App Management as the preferred single entry point for pricing/package/add-on/service-area/travel updates.
-- Public social blocks now depend on `functions/api/social_feed_public.js` plus the `social_feeds` setting in App Management.
-
-
-## April 12 mental-model update
-The public pricing contract is now explicit: booking, services, pricing, checkout, shared site helpers, and Admin App Management all revolve around the same canonical pricing catalog shape (packages, add-ons, charts, service areas, booking rules, and public requirements) with bundled JSON only as fallback.
-
-
-This is the compact mental model for the `dev` branch.
+Release habit remains: update Markdown/schema docs every pass, run release checks, keep no more than one H1 per public page, and continue local SEO wording based on Google guidance around clear titles/headings and local relevance.
 
 ---
 
-## Last synchronized
-- March 25, 2026
-- Reflects recovery template persistence, provider preview/testing foundations, DB-backed public catalog work, low-stock/reorder foundation, and deeper progress/jobsite moderation UI.
+# Build 164 sync — booking intake review fields
+
+**Updated:** 2026-05-22
+
+Build 164 adds optional booking review fields through `sql/2026-05-22_build164_booking_intake_review_actions.sql`: `intake_review_note`, `intake_reviewed_at`, and `intake_reviewed_by`. These support the Admin Booking photo-estimate, condition-review, and media/privacy review action controls. The workflow remains fallback-safe before migration by appending staff review status to booking notes.
 
 ---
 
-## What the system is
-Rosie Dazzlers is a mobile detailing operations platform for Southern Ontario service work. It combines:
-- a public marketing site
-- booking and deposit checkout
-- gift certificate sales and redemption support
-- customer progress tracking
-- internal booking/jobsite/admin workflows
-- inventory/catalog management for tools and consumables
-- recovery and notification foundations
+# Build 161 sync — PROJECT_BRAIN.md
+
+**Updated:** 2026-05-21
+
+The current website/app now has competitor-aligned service chooser coverage on Services and Booking, clearer public package aliases, and a Contact-page photo-estimate path. Build 161 is a no-DDL pass; the new package metadata is JSON/catalog content and should be copied into the DB-managed pricing catalog when the live catalog is refreshed.
 
 ---
 
-## Main operational pillars
-### 1) Booking and payments
-- bookings stored in Supabase
-- Stripe deposit checkout is active
-- PayPal deposit path exists
-- promo + gift validation are part of checkout logic
-- pricing now prefers `app_management_settings.pricing_catalog`, with the bundled JSON file as fallback
-- booking windows, slot labels, public requirement text, and service-area dispatch rules should now be treated as catalog-owned values rather than page-local constants
+# Build 158 update — Social review gates and local caption templates
 
-### 2) Customer progress
-- token-based progress is the preferred model
-- job updates, media, signoff, comments, and annotations are the future-safe direction
-- public progress pages must remain noindex/non-searchable
+**Updated:** 2026-05-20  
+**Current build:** Build 158
 
-### 3) Jobsite workflow
-- pre-inspection intake
-- time tracking
-- work notes/media
-- owner acknowledgement
-- moderation-aware comments and annotations
+Build 158 continues the Build 156/157 social publishing workflow and makes it safer before any job/crafting-progress photo or summary is pushed to X, Facebook, Instagram, TikTok, Google Business Profile, or manual/webhook channels.
 
-### 4) Staff/admin workflow
-- shared password bridge still exists
-- role-aware capability model exists
-- real session-auth remains the major unfinished security transition
-- internal pages should become more shell-consistent and mobile-friendly
+## Completed in Build 158
 
-### 5) Catalog / inventory workflow
-- public gear/consumables can read DB inventory first, then JSON fallback
-- ratings, low-stock alerts, and reorder requests now have a stronger foundation
-- full purchasing receive/close workflow is still pending
+1. Added `functions/api/_lib/social-compliance.js`.
+2. Added customer/public-use consent checks for social drafts.
+3. Added license plate, face, address, and private-identifier review checks.
+4. Added no-private-customer-info caption review.
+5. Added platform warning generation for X length, Instagram media requirements, TikTok media requirements, Facebook media recommendations, and Google Business Profile local wording hints.
+6. Added `Approve & ready` review action in Admin Social Queue.
+7. Blocked direct `Publish/API` unless a draft is marked ready and the review gate passes.
+8. Added fallback-safe inserts if the Build 158 SQL migration has not been applied yet.
+9. Added fallback-safe social queue reads when new review columns do not exist yet.
+10. Added review checklist controls to Admin Social Queue manual draft creation.
+11. Added review checklist controls to Admin Progress social draft creation.
+12. Updated immediate push workflow to approve-ready first, then publish only if the review gate passes.
+13. Added review badges and platform warning display to Admin Social Queue cards.
+14. Added `social_caption_templates` table.
+15. Added `social_hashtag_presets` table.
+16. Seeded local caption templates for Southern Ontario, Oxford County, Norfolk County, and Tillsonburg-style posts.
+17. Seeded local hashtag presets for Rosie Dazzlers local discovery.
+18. Added `duplicate_signature` on queued posts to support future duplicate-content warnings.
+19. Updated social workflow release checks for Build 158 markers.
+20. Updated Markdown and schema notes for the new social review gate.
 
-### 6) Recovery / notifications
-- provider-specific rules exist in app settings
-- preview/testing endpoints exist
-- persisted recovery templates exist
-- true provider-backed production dispatch and logging still need hardening
+## Next 20 value-added steps after Build 158
 
----
-
-## Security model direction
-Current state:
-- transitional `ADMIN_PASSWORD`
-- role-aware access helpers
-- partial actor resolution
-
-Target state:
-- real staff login/session
-- backend trust in resolved current actor
-- capability-based admin/detailer/customer separation
-- bridge reduced to compatibility only
-
----
-
-## SEO rule
-Every pass should consider:
-- title/H1/meta alignment
-- canonical/noindex rules
-- protected/admin/token pages excluded from indexing
-- public service/support pages kept consistent
+1. Apply the Build 156 social queue migration if it has not already been run.
+2. Apply `sql/2026-05-20_build158_social_review_gates_and_templates.sql`.
+3. Test Admin Progress with one internal job update and one media URL.
+4. Confirm a draft is created with platform warnings in Admin Social Queue.
+5. Confirm `Publish/API` is blocked until `Approve & ready` is clicked.
+6. Add a duplicate-content warning in the Admin Social Queue UI using `duplicate_signature`.
+7. Add a template picker that loads `social_caption_templates` from the DB.
+8. Add a hashtag preset picker that loads `social_hashtag_presets` from the DB.
+9. Add a scheduler calendar for planned posting times.
+10. Add a posted URL capture form for manual posts.
+11. Add customer-facing consent capture on the booking/progress flow.
+12. Add media-crop/blur status fields for license plates and private identifiers.
+13. Add staff training notes explaining that drafts are not public until approved/published.
+14. Add platform-specific preview cards for Facebook, Instagram, X, TikTok, Google Business Profile, and manual.
+15. Add basic post analytics fields: clicks, views, likes, comments, shares, and last checked time.
+16. Add webhook payload signing/verification documentation for Make/Zapier/n8n bridges.
+17. Add scheduled retry rules for failed webhook/API attempts.
+18. Add a public gallery promotion workflow that only uses approved social media rows.
+19. Add Google Business Profile post/manual workflow notes once the account flow is finalized.
+20. After deploy is stable, consider a clean-branch/orphan upload to remove stale GitHub files that web upload does not delete.
 
 ---
 
-## One-line project summary
-The hard part now is not adding isolated features — it is keeping booking, staff identity, moderation, pricing, recovery, inventory, and documentation consistent while the platform grows.
+# Project Brain — Build 155
 
-## March 25, 2026 mental-model update
-- the preferred internal auth path is now session-first on more recovery, catalog, and progress/upload endpoints
-- the preferred pricing path is now DB settings first, JSON fallback second
-- the preferred field-media path is signed upload + media save instead of pasted URLs
+**Updated:** 2026-05-18
 
+Rosie Dazzlers is a Cloudflare Pages + Functions site with Supabase-backed admin workflows and bundled JSON fallbacks for deploy safety.
 
-### March 25, 2026 pass note
-This doc was refreshed during the vehicle catalog, progress-session, layout, and public catalog filter pass. The repo now includes NHTSA-backed vehicle make/model endpoints, a DB cache table for vehicle catalog rows, progress moderation/enable session upgrades, and public search/filter cleanup on Gear and Consumables.
+Current priority: keep Admin Catalog inventory reliable while moving product/tool images from JSON-only fallback toward a DB-backed `app_media_library` and future R2 upload workflow, while keeping Cloudflare Pages Functions deploy checks strict enough to catch build-only syntax issues.
 
-## March 27, 2026 pass memory
-- Booking wizard was reworked for mobile use and clearer per-step validation.
-- Public chrome now has a session-aware account widget.
-- Customer progress now hides internal-only updates by filtering existing visibility data.
+Release habit: every pass updates Markdown/schema docs, runs SEO/H1/static checks, watches CSS drift, and keeps fallback/error handling visible instead of silently failing.
 
+<!-- Build 155 sync 2026-05-18 -->
+
+## Build 155 memory note
+
+Build 155 repairs the Cloudflare Pages Functions unresolved helper import issue that appeared after the Build 152 regex fix. The inventory/media image workflow remains unchanged; the priority is now to confirm a clean Cloudflare deploy before adding new features.
 
 
-## April 7, 2026 membership / mobile / deploy hardening pass
-- Standardized the four missing Services add-on images onto local bundled asset paths and added real PNG copies so the service cards stop depending on fragile external image URLs.
-- Added route-safe admin folder entry points and stronger Pages Functions helper shims so Cloudflare deploys are less sensitive to mixed helper import paths.
-- Moved customer segmentation toward a scalable membership model by seeding Bronze, Silver, and Gold tiers and making new customer creation default to Bronze instead of a legacy placeholder tier.
-- Continued mobile-fit and CSS hardening by tightening service-card/select sizing, overlap handling, and installable-app support through a shared install prompt + service worker path.
+## Build 155 Cloudflare root import release-check hotfix - 2026-05-18
+
+Build 155 repairs the remaining root Cloudflare Pages Function import paths that could still break deployment after Build 154. Four root `/functions/api/*.js` files still used `../_lib/...`; root routes must use `./_lib/...`. Build 155 fixes those files, keeps the stale-route shims, wires the stale-root import guard into the release checklist, and updates the release runner so the full check can complete in this sandbox.
+
+## Build 156 sync note - social progress publishing
+
+Build 156 adds a reviewable social publishing foundation. Admin Progress can now create internal social drafts from job updates/media, Admin Social Queue can review and mark those drafts, and the schema now includes `social_channels`, `social_post_queue`, and `social_dispatch_attempts`. Direct posting to X, Facebook, Instagram, TikTok, Google Business Profile, and other platforms is possible later after the required platform credentials, app approvals, and consent/compliance checks are in place.
 
 
-## April 8, 2026 admin route stabilization pass
-- Repaired the current build by standardizing active admin navigation back to direct `.html` routes instead of mixed pretty-route/admin-folder assumptions.
-- Restored the shared admin shell from the richer canonical copy so pages that call `window.AdminShell.boot(...)` load again.
-- Removed duplicate clean-route wrapper folders for `/admin`, `/admin-catalog`, `/admin-accounting`, `/services`, and `/pricing`; `_redirects` remains the working compatibility layer.
+## Next 20 value-added steps after Build 156
+
+1. Run the Build 156 social queue SQL migration in Supabase.
+2. Add a Social Queue card to staff role training notes so detailers know drafts are not public posts yet.
+3. Decide the first direct-post platform: recommended order is Facebook/Instagram, Google Business Profile, X, TikTok, then YouTube Shorts.
+4. Add per-platform caption length warnings and media-count warnings.
+5. Add a privacy checklist before any customer vehicle/photo can be marked ready.
+6. Add license-plate blur/cover reminder fields to the media workflow.
+7. Add customer consent flags for public before/after use.
+8. Add a reusable caption template library for job type, vehicle size, service area, and upsell language.
+9. Add platform-specific hashtag presets for local SEO and discovery.
+10. Add OAuth setup notes and token rotation guidance for each social platform.
+11. Add a direct Meta/Facebook Page adapter after the app permissions are approved.
+12. Add an Instagram Business publishing adapter after Meta media-container requirements are confirmed.
+13. Add a Google Business Profile recent-work publishing path after the Google account scope is finalized.
+14. Add a TikTok direct-post adapter only after app review and creator authorization are confirmed.
+15. Add a queue calendar so posts can be scheduled by day/time.
+16. Add duplicate-content warnings when the same photo/caption is queued twice.
+17. Add analytics fields for clicked progress links and posted platform URLs.
+18. Add customer-friendly public gallery promotion rules from approved job media.
+19. Add fallback export buttons: copy caption, download media list, and open platform composer.
+20. Add social performance notes back into the booking/customer history for future marketing decisions.
 
 
-## April 8, 2026 accounting memory
-Rosie Dazzlers now has a lightweight internal accounting backend with chart of accounts, journal entries/lines, booking-linked invoice records, payable settlement, tax-payable reporting, owner draw/equity reporting, and GL export. Inventory usage can begin posting COGS when unit cost data exists.
+## Build 159 sync — social queue usability and release discipline
 
-## April 8, 2026 accounting access and admin workflow pass
-- Accounting access is now surfaced directly in the Admin dashboard, shared admin menu, and shared return toolbar so office-side accounting work is no longer hidden behind direct URL knowledge alone.
-- This pass moves the roadmap and known gaps forward again by improving internal shell cohesion and operational discoverability without changing the underlying accounting schema.
-- Suggested next mobile/operations features: quick expense entry from phone with receipt photo attachment, vendor quick-add during payable entry, and a month-end checklist panel for settlement, remittance, and report export.
-
-<!-- Last synchronized: April 8, 2026. Reviewed during the accounting access/admin dashboard/menu pass. -->
-
-
-## April 9, 2026 accounting screen syntax fix
-- Fixed a JavaScript syntax error in `admin-accounting.html` that prevented the Accounting screen from booting past the “Loading Accounting Records” state.
-- Continued docs/schema synchronization for the current build.
-
-## April 9, 2026 accounting reporting / remittance / cost coverage memory
-- Admin Accounting is now intended to be the office-side monthly accounting workspace, not just a booking-ledger viewer.
-- The strongest new flow is: review month -> inspect P&L / balance sheet / cash flow -> settle vendor bills -> post remittance -> export CSVs -> clean missing inventory costs.
-- Inventory-cost completeness is now tied directly to admin catalog editing because the save path now persists unit cost and related vendor metadata.
-
-
-## April 9, 2026 brain note
-The accounting area is now becoming the office-side operational hub: receivables follow-up, vendor settlements, remittance, month-end statements, stronger exports, and rough profitability all sit in one place. Treat the profitability view as directional operational reporting until deeper labor/overhead costing is finished.
-
-
-## April 9, 2026 pass snapshot
-- Restored the four custom add-on service images to use the Rosie packages R2 path first, with local fallback assets preserved.
-- Added DB-backed month-end checklist persistence for Accounting.
-- Strengthened booking assignment identity by preferring assignable staff records instead of free-typed names alone.
-- Continued actor normalization by storing `staff_user_id` on progress media posts.
-
-## April 10, 2026 mental-model update
-- Booking assignment is no longer just a single `assigned_*` tuple on the booking row. The booking row still holds the lead for compatibility, but the real crew model now lives in `booking_staff_assignments`.
-- Add-on imagery should now be treated as data, not page-specific decoration: each add-on in the pricing/add-on JSON carries its preferred R2 image plus local fallback.
-
-- 2026-04-11 operational note: keep one physical output per clean public/admin route on Cloudflare Pages. Do not ship both `route.html` and `route/index.html` for the same path.
-
-
-Route hotfix sync reviewed on 2026-04-11.
-
-## April 11, 2026 project-brain note
-Current focus remains: preserve stable Pages routing while continuing the session-first internal app transition. This pass reduced route-risk again, strengthened crew context across operational screens, and improved internal request/error handling without changing schema shape.
-
-## 2026-04-11 pass 9 sync
-- Booking flow now uses a clearer service-area selector with town-level choices across Oxford and Norfolk communities.
-- Booking availability shows open, partial, and unavailable dates in the next 21-day snapshot, and the date picker contrast was tightened for dark mode.
-- Year / Make / Model on booking is now typeable with datalist-assisted lookup and validation against the existing vehicle catalog.
-- Public analytics was deepened with richer action tracking, viewport/session details, and location/device enrichment stored inside event payloads.
-- Route-collision folders and temporary check artifacts were removed again to keep Pages routing stable.
-### Pass 9 brain update
-- Booking is now the heaviest public conversion surface and is being treated as a first-class app screen.
-- Service-area precision and analytics depth are both now tied to the same conversion flow.
-
-## 2026-04-11 pass 11 sync note
-- Tightened the booking preferred-date control so it no longer stretches wider than needed and added a visible white picker button.
-- Public booking, services, and pricing pages now read the canonical pricing catalog API first and only fall back to bundled JSON if the API is unavailable.
-- App Management now includes a pricing catalog editor so package prices, included services, add-ons, service-area rules, and chart links can be maintained from one source of truth.
-- No schema shape change landed in this pass; `SUPABASE_SCHEMA.sql` was refreshed to note the pricing-catalog consolidation and booking UI tightening work.
-
-> Pass update 2026-04-12: Re-synced the current uploaded build to the latest safe route structure. Removed duplicate clean-route folders that were reintroducing Cloudflare Pages redirect loops, preserved the newer booking experience already present in `book.html`, refreshed the deployed booking smoke check to recognize the shared `chrome.js` analytics bootstrap, and cleaned the login form autocomplete attributes. Immediate next step after deploy: verify `/`, `/services`, `/pricing`, `/book`, and `/admin` on the active branch before resuming larger feature work.
-
-## Current pass anchor — April 12, 2026
-- Treat `book.html` as stable. Do not redesign or rework the booking flow during pricing/admin passes unless a real regression appears.
-- Treat `_redirects` as working and complete.
-- Use `admin-app.html` as the single preferred pricing entry point.
-- Use `admin-accounting.html` as the accounting-side pricing review surface.
-- Keep the canonical pricing helper synchronized whenever pricing/admin work changes the catalog contract.
-
-## 2026-04-13 Pass 14 Sync
-- Booking screen remains stable and should not be altered in future passes unless a critical bug appears.
-- `_redirects` is working and treated as complete for the current route layout.
-- Pricing/packages/add-ons/service areas/travel charges continue to flow through the App Management pricing control center as the preferred single entry point.
-- This pass added office-facing finance adjustments for discounts/refunds plus customer-facing document work for order confirmation, invoice / summary, gift certificate printing, and social feed management.
-
-## Pass 14 quick brain refresh
-- Booking UI is stable and locked.
-- `_redirects` is finished.
-- One preferred pricing entry point: App Management pricing control center.
-- One preferred office adjustment point: Admin Bookings finance section.
-- Customer documents now exist for confirmation, invoice / summary, and printable gift certificates.
-- Social content display now expects the latest five links per platform from central settings.
-
----
-
-## Pass sync — 2026-04-14 (pass 16)
-
-- Booking screen remains locked and stable.
-- `_redirects` remains the working route layer and includes the admin-app trailing-slash compatibility line.
-- App Management was repaired in this pass: the page now restores its missing helper functions, shows a proper internal menu mount, includes clearer feature descriptions, and exposes document/social defaults without crashing.
-- Admin navigation now includes a visible path to App Management from the dashboard, shared admin menu, and return bar.
-- No new database table or column changes were introduced in this pass; schema files were refreshed to reflect a no-DDL stability/documentation pass.
-- Strongest next steps remain the single-entry pricing/accounting workflow, refund-credit memo document polish, and provider-tested email sending.
-
-> Pass sync April 15, 2026: generated local price-chart PNG assets from the canonical bundled pricing catalog, rewired chart fallbacks to `/assets/brand`, added a regeneration script, and refreshed docs/schema notes for the legacy price-image carry-forward pass.
-
-Update note — 2026-04-16 pass20: Added explicit admin route wrappers for social feed and vehicle catalog endpoints to stop Pages Function import-resolution failures on /api/admin routes. Booking remains stable; no schema DDL change in this pass.
-
-## Current high-value internal ops areas
-- Booking screen is stable and should not be altered casually.
-- App Management remains the pricing/document/source-of-truth office screen.
-- Crew Time & Payroll is now the office screen for staff availability, workload limits, logged hours, payroll draft/post actions, and service-time insight review.
-- Pass sync 2026-04-16 (pass 21): added crew time/payroll workflow, staff availability blocks, payroll runs + accounting-post option, staff pay/work-cap settings, and service-time insight reporting; booking screen remains stable.
-
-- Pass 22 sync: fixed admin-accounting date/input layout, moved admin-staff to a left-side internal menu layout, normalized admin login redirects to .html, and added clean admin route rewrites for payroll/staff/accounting/app/login.
-
-## April 16, 2026 admin-nav and growth-direction pass
-
-- standardized the top admin navigation so pages that boot through the shared admin shell now overwrite incomplete page-level nav link lists with one consistent internal menu bar plus account/logout controls.
-- added new App Management sections for:
-  - stronger self-serve quote + booking emphasis
-  - scheduled e-gift delivery settings
-  - maintenance / membership plan settings
-- extended app settings loading so those three new settings keys are part of the shared office configuration pull.
-- moved the public direction forward with:
-  - stronger quote-first CTA messaging on the home and pricing pages
-  - richer gift checkout inputs for recipient name and preferred send date
-  - gift checkout metadata capture for recipient name, preferred send date, and gift message
-- no schema DDL change was required for this pass; this was a workflow/settings/UI pass.
-
-Pass sync: April 16, 2026 — top admin navigation standardized, app-management growth settings added, booking-led self-serve direction restored, and gift checkout now collects recipient name plus preferred send date.
-
----
-
-## Pass 24 Sync — 2026-04-17
-
-This pass focused on three areas:
-- normalized the shared top admin navigation and repaired the off-pattern `admin-assign` header so the top menu matches the other admin screens more closely
-- shifted the public self-serve direction back to a booking-led planner on the pricing page by embedding the live booking experience so customers keep the exact service-area restrictions, 21-day availability windows, slot logic, and booking aesthetics instead of using a separate quote-builder path
-- continued the scheduled e-gift direction by exposing public growth settings, improving the gift message/send-date experience, and adding live recipient/delivery preview boxes on the gifts page
-
-Schema impact for this pass: no new tables or columns. Existing `app_management_settings` is reused for public quote, e-gift, and membership display settings.
-
-Pass sync: April 17, 2026 — pricing now restores the booking page as the first self-serve step by embedding the live booking planner on /pricing so service-area restrictions, 21-day availability windows, add-on logic, and booking aesthetics stay in one source of truth.
-- 2026-04-17 pass26: extended booking-led self-serve with live embedded planner summaries on pricing and service-gift redemption preview, plus richer gift delivery metadata (sender name, preferred send date, message) through checkout, webhook, receipt, and printable certificate.
-
-### April 17, 2026 pass27 note
-- moved the next public growth step forward with a new `/maintenance-plan` page, recurring-plan waitlist capture, admin visibility for recurring reminder candidates, and stronger booking-link carry-forward from the live embedded planner.
-
----
-Pass 28 sync — 2026-04-20
-- Continued the booking-led self-serve direction instead of replacing it with a separate quote-only tool.
-- Added scheduled e-gift delivery automation groundwork and live processor routes, plus printable gift lookup by code.
-- Moved recurring maintenance reminders from interest-list based to customer-history based, so reminder timing now keys off completed bookings and real last-service dates while the interest list stays available for demand tracking.
-- Strengthened visible live-booking / availability prompts and refreshed the documentation/schema trail for this pass.
-
-
-<!-- pass29-sync: customer-history recurring maintenance reminders -->
-
-
-> Pass sync April 20, 2026: customer screen raw JSON blocks were replaced with readable summaries and a visual garage layout, App Management social feeds gained a structured editor with the raw JSON moved into an advanced block, booking-led maintenance interest now requires Complete Detail selection before schedule interest capture, and customer-facing print/email correspondence styling was refined.
-
-
-<!-- pass31-sync: booking overflow polish, maintenance conversion from complete detail, fleet handoff path -->
-> Pass sync April 20, 2026: booking vehicle inputs and service cards were tightened to prevent text overflow, My Account now uses a real garage-bay view plus a fleet handoff path after 6 vehicles, and maintenance conversion now begins only after a completed Complete Detail with repeat-booking guidance tied to actual service history.
-
-> Pass sync April 21, 2026: added mileage and next-service mileage capture, customer vehicle image/video library groundwork, garage-bay photo support, a public before/after slider gallery, admin vehicle-media override/delete tools, and detailer arrival geolocation capture groundwork.
-
-## 2026-04-22 merchandising pass — local image scoring / SEO / geofence refinement
-
-- upgraded customer vehicle media from the older rule-only score into a stronger local merchandising score that now blends file presence, dimensions, orientation, alt text, crop history, brightness, contrast, sharpness, background consistency, subject fill, duplicate-angle penalty, and a later-image lifestyle bonus
-- `my-account.html` now analyzes images in-browser before upload using EXIF-aware decode, local canvas sampling, and preview guidance so customers get stronger front-end feedback before save
-- the upload preview now shows a local preflight summary with background, subject fill, sharpness, brightness, contrast, and duplicate-angle hints while still allowing videos to remain a manual-review media type
-- `functions/api/client/vehicle_media_save.js` now persists `media_analysis` and passes existing rows into `functions/api/_lib/vehicle-media-scoring.js` so duplicate-angle penalties can be applied at save time too
-- `functions/api/_lib/booking-location.js` now prefers explicit service-area coordinates when they exist in the pricing/service-area metadata, then falls back to local service-area lookup keys and county fallback centroids
-- public SEO copy was tightened again on `services.html`, `pricing.html`, `contact.html`, and `gallery.html` with clearer local-search wording while preserving a single H1 per exposed page
-- schema/migration sync for this pass lives in `sql/2026-04-22_vehicle_media_merchandising_score.sql`, `sql/2026-04-21_vehicle_media_gallery_geofence.sql`, and `SUPABASE_SCHEMA.sql`
-- next-step direction is still the same operational split: local scoring + EXIF-aware orientation + guide-led framing now, optional cloud smart-assist later only if you want object recognition or damage-style analysis
-
-## Pass 27 sync — 2026-04-24
-- Remember: the current canonical schedule schema is still `date_blocks(blocked_date)` plus `slot_blocks(blocked_date, slot)`. Compatibility endpoints now normalize around that shape instead of trying to write newer fields that do not exist yet.
-- The analytics page is now the office reporting surface. It exposes grouped daily/weekly/monthly/yearly traffic rollups from `site_activity_events` and CSV exports without a separate reporting table.
-
-## April 24, 2026 quick context
-- Admin analytics now has a rollup storage path for scale: refresh endpoint + rollup-backed overview + raw fallback.
-- Production route sanity matters right now because `/services` and `/pricing` were seen looping before the clean-route rewrite.
-- The next valuable growth work is content/reputation/local proof, not another generic design pass. Read `LOCAL_VISIBILITY_REVIEW_2026-04-24.md`.
-
-## 2026-04-25 operational note
-The current live-baseline priorities are: folder-backed clean routes, visible recent-work/review proof on public entry pages, admin scheduling usability, and later Google-side reporting after internal rollups stabilize.
-
-## 2026-04-27 project brain update
-Rosie Dazzlers now has a first real accounting workflow foundation sitting under the existing ledger/reporting layer. The next strongest accounting build should deepen document uploads, vendor defaults, and entry-level reconciliation rather than starting over with a different accounting structure.
-
-## Build 137 — local SEO, admin inventory fallback, and media handoff pass
-- Restored the recent dev-branch Admin App fixes into this uploaded build, including `landingLinksToText`, the add-on image preview that prefers real PNG/JPG/R2 images over SVG fallback art, and the **Update / save add-on** button.
-- Restored Admin Catalog inventory fallback merging so edited DB items do not hide bundled gear/consumables that still need to be saved. Inventory item names are clickable edit controls and the right-side editor is compact/sticky instead of stretching down the page.
-- Added `data/local_seo_targets.json` and `scripts/local_seo_audit.py` so the priority town/service pages are checked for titles, descriptions, canonical links, sitemap coverage, and target wording during every pass.
-- Refreshed static fallback titles/descriptions/H1 shells for the major service and town landing pages so crawlers and users see useful wording even before JavaScript finishes rendering.
-- Rebuilt `sitemap.xml` with `lastmod`, `changefreq`, and `priority` values for core service, booking, town, and proof pages.
-- Added `data/sample_reviews.json` for the five temporary homepage-style reviews until the real review API is connected. These are display placeholders only and should not be emitted as structured review schema.
-- Added/expanded `IMAGES.md` with required image sizes, source-of-truth paths, and replacement steps for add-ons, packages, before/after work, inventory images, and landing-page media.
-- Schema update: no DDL required; see `sql/2026-05-09_build137_local_seo_inventory_media_no_ddl_note.sql`.
-
-<!-- Build 137 sync 2026-05-09: local SEO targets, inventory fallback, media/image documentation, CSS/H1/static-link checks, and schema handoff were reviewed. -->
+- Added caption/hashtag DB picker support for Admin Social Queue.
+- Added planned publish time for manual drafts and schedule filtering.
+- Added duplicate draft warnings using `duplicate_signature`.
+- Added manual posted URL and platform post ID capture.
+- Added `social_post_metrics_snapshots` schema support for future reporting.
+- Release checks now require the Build 159 social template/schedule markers.

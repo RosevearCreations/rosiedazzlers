@@ -1,83 +1,69 @@
-# Rosie Dazzlers Image and Media Guide
+# Images and Media Workflow — Build 153
 
-_Last updated: Build 137 — May 9, 2026_
+**Updated:** 2026-05-18
 
-This file is the working checklist for image sizes, where each image is used, and how to replace it without hardcoding new URLs into individual pages.
+## Inventory product/tool images
 
-## General rules
+Admin Catalog now has a layered image workflow:
 
-- Prefer Cloudflare R2 URLs for production media: `https://assets.rosiedazzlers.ca/...`.
-- Keep bundled local files only as fallbacks, examples, or emergency offline assets.
-- Use PNG or JPG for real service/product photos. SVG is useful for simple placeholders or diagrams, but it should not be the primary add-on image when a real PNG/JPG exists.
-- Use descriptive alt text that says what the customer sees, for example: `Clean engine bay after Rosie Dazzlers engine cleaning`.
-- Avoid stretched or cropped service images by using `object-fit: contain` for add-on/product windows and `object-fit: cover` only for hero/proof cards where cropping is acceptable.
+1. Saved `catalog_inventory_items.image_url` is preferred when present.
+2. If a saved DB row has a blank image, Admin Catalog hydrates from the matching bundled consumables/tools row.
+3. The editor shows a selected image preview.
+4. **Use matching bundled image** restores the best bundled fallback image.
+5. **Pick existing image** searches DB media-library rows, app-setting media rows, bundled product/tool rows, saved DB rows, and helper image URLs.
+6. **Repair selected images** can persist fallback-matched images onto selected inventory rows.
+7. **Scan visible images** browser-checks visible image URLs and flags failed loads.
+8. Duplicate image groups are counted and flagged for review.
 
-## Required public image groups
+## Media-library direction
 
-| Image group | Recommended size | Source of truth | How to update |
-| --- | ---: | --- | --- |
-| Brand/logo images | 512×512 or larger PNG/SVG | `assets/brand/` and shared chrome | Replace the file or update the shared brand reference in `assets/chrome.js`/site config. |
-| Package images | 1200×900 or 1600×1200 PNG/JPG | `data/rosie_services_pricing_and_packages.json` package `images_by_size` | Edit in Admin App pricing catalog, then save. Keep small/mid/oversize paths complete. |
-| Add-on images | 1200×900 PNG/JPG preferred | pricing catalog add-on `image_url`; fallback in `image_fallback_url` | Admin App → Add-ons → select add-on → keep or replace the primary/fallback URL → Update / save add-on → Save pricing catalog. |
-| Before/after gallery | 1200×900 minimum; same aspect pair | `data/before_after_gallery.json` until DB/admin-managed gallery is finished | Add more objects inside the same `items` array; each object needs `before_url` and `after_url`. |
-| Recent work proof | 1200×900 or larger | before/after gallery and future review/media API | Add approved gallery items and keep customer consent notes filled. |
-| Inventory/product images | 1000×1000 square preferred | Admin Catalog item `image_url` / bundled product JSON fallback | Admin Catalog → click item name → update Image URL → save item. |
-| Town/service landing media | 1200×900 hero; optional gallery images | Admin App landing page editor | Select landing page, edit hero/gallery URLs, save landing pages. |
+Build 151/152 uses `/api/admin/media_library_list`, which reads from:
 
-## Switching an add-on image
+1. `app_media_library` when available.
+2. `app_management_settings.media_library` as compatibility fallback.
+3. Bundled/R2 product-tool JSON images in Admin Catalog as the final fallback.
 
-1. Upload the new PNG/JPG to R2, ideally under `packages/` or a clear `addons/` folder.
-2. Open Admin App → Add-ons.
-3. Select the add-on to edit.
-4. Confirm the **Current image loaded** preview.
-5. Paste the new primary image URL into **Primary image URL**.
-6. Leave the fallback URL in place unless the bundled fallback also needs replacing.
-7. Click **Update / save add-on**.
-8. Click the pricing catalog save button for the whole catalog.
-9. Check `/services`, `/pricing`, and the related landing page.
+Recommended inventory image records should use:
 
-## Before/after gallery format
+- `group_key`: `products`
+- `usage_contexts`: include `inventory_item`
+- `media_type`: `image`
+- `media_url`: public R2 URL
+- `alt_text`: plain description of the item
+- `caption`: optional staff/public note
+- `source_status`: `active`
 
-Add each new gallery entry as another object inside the same `items` array:
+## Current image scoring habit
 
-```json
-{
-  "items": [
-    {
-      "title": "Engine Cleaner",
-      "location": "Tillsonburg, ON",
-      "before_kind": "image",
-      "before_url": "https://assets.rosiedazzlers.ca/CarPhotos/MitsubishiLancerEngineDirty.PNG",
-      "after_kind": "image",
-      "after_url": "https://assets.rosiedazzlers.ca/CarPhotos/MitsubishiLancerEngineClean.PNG",
-      "note": "We love to clean engines.",
-      "consent_status": "Engines",
-      "customer_name": "",
-      "vehicle_label": "2015 Mitsubishi"
-    },
-    {
-      "title": "Pet Hair Interior Reset",
-      "location": "Ingersoll, ON",
-      "before_kind": "image",
-      "before_url": "https://assets.rosiedazzlers.ca/CarPhotos/example-before-2.jpg",
-      "after_kind": "image",
-      "after_url": "https://assets.rosiedazzlers.ca/CarPhotos/example-after-2.jpg",
-      "note": "Embedded cargo-area hair removal and interior refresh.",
-      "consent_status": "Approved for website",
-      "customer_name": "",
-      "vehicle_label": "Family SUV"
-    }
-  ]
-}
-```
+Keep using practical image standards:
 
-Do not create `items2`, `gallery2`, or a second JSON root. Just add another comma-separated object inside `items`.
+- Prefer square or landscape product images.
+- Use clear alt text.
+- Prefer Rosie-owned/R2-hosted images.
+- Avoid broken URLs and huge uncompressed files.
+- Track source/consent where images are used for public proof or customer work.
 
-## Open improvements
+## Next image work
 
-- Replace temporary sample reviews with verified review API content.
-- Finish DB/admin-managed gallery storage so `data/before_after_gallery.json` becomes fallback only.
-- Add upload helpers so staff can send media straight to R2 without pasting URLs manually.
-- Use the image completeness score for gallery and first-image checks before publishing.
+- Seed `app_media_library` from R2 folders.
+- Add direct upload-to-R2 from Admin Catalog.
+- Add editable alt/caption/source/preferred-public-image metadata.
+- Add server-side image health reports.
+- Add duplicate-image approval for intentional multipacks/shared tool images.
 
-<!-- Build 137 sync 2026-05-09: local SEO targets, inventory fallback, media/image documentation, CSS/H1/static-link checks, and schema handoff were reviewed. -->
+<!-- Build 153 sync 2026-05-18 -->
+
+## Build 153 media workflow note
+
+No image workflow behavior changed in Build 153. The Build 151/152 media-library picker, fallback image hydration, selected-row image repair, duplicate-image warnings, and visible image scan remain the active design. This pass only repairs deploy packaging/import stability around those endpoints.
+
+## Build 156 sync note - social progress publishing
+
+Build 156 adds a reviewable social publishing foundation. Admin Progress can now create internal social drafts from job updates/media, Admin Social Queue can review and mark those drafts, and the schema now includes `social_channels`, `social_post_queue`, and `social_dispatch_attempts`. Direct posting to X, Facebook, Instagram, TikTok, Google Business Profile, and other platforms is possible later after the required platform credentials, app approvals, and consent/compliance checks are in place.
+
+---
+
+## Build 161 sync note
+
+Build 161 keeps `DEVELOPMENT_ROADMAP.md` as the source of truth and advances the competitor-aligned conversion path with Booking service chooser guidance, package aliases, and photo-estimate CTAs.
+

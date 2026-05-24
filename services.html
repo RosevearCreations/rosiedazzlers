@@ -54,6 +54,15 @@
     .service-size-field{min-width:180px;max-width:220px}
     .service-size-field span{font-size:.9rem;line-height:1.2}
     .service-size-field select{min-height:42px;padding:8px 12px}
+
+    .decision-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width:1100px){ .decision-grid{grid-template-columns:repeat(2,1fr)} }
+    @media (max-width:760px){ .decision-grid{grid-template-columns:1fr} }
+    .decision-card{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.045);border-radius:16px;padding:14px;min-height:100%}
+    .decision-card h3{margin:0 0 6px;font-size:1.02rem}
+    .decision-card p{margin:0;color:rgba(234,242,255,.68);font-size:.94rem}
+    .decision-card .row{margin-top:10px}
+    .quote-strip{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px solid rgba(56,189,248,.25);background:linear-gradient(135deg,rgba(56,189,248,.12),rgba(255,255,255,.04));border-radius:16px;padding:14px}
     .addon-grid .panel,.package-grid .panel{min-width:0}
     ul.tight{margin:8px 0 0 18px;padding:0}
     ul.tight li{margin:4px 0}
@@ -123,6 +132,67 @@
         <a class="btn ghost" href="/maintenance-plan">Recurring-plan interest</a>
       </div>
     </div>
+
+
+    <section class="section panel" id="service-decision-guide">
+      <h2 style="margin-top:0">Which service should we choose?</h2>
+      <p class="muted">Start with the problem you want solved. This keeps the booking choice simpler and helps us recommend the right package, add-on, or quote path.</p>
+      <!-- Full Detail alias note: Build 161 keeps pricing codes stable while adding clearer customer-facing service aliases. -->
+      <div class="decision-grid" style="margin-top:12px">
+        <article class="decision-card">
+          <h3>Maintained vehicle, quick refresh</h3>
+          <p>Choose a basic interior or premium wash when the vehicle is already cared for and needs a clean reset.</p>
+          <div class="row"><a class="btn ghost small" href="/book?service=maintenance">Book maintenance</a></div>
+        </article>
+        <article class="decision-card">
+          <h3>Daily-use interior, kids, pets, or salt</h3>
+          <p>Start with Interior Detail or Complete Detail, then add pet hair, odor, salt stain, or shampoo help if needed.</p>
+          <div class="row"><a class="btn ghost small" href="/pet-hair-removal">Pet hair help</a><a class="btn ghost small" href="/odor-removal">Odor help</a></div>
+        </article>
+        <article class="decision-card">
+          <h3>Exterior gloss and protection</h3>
+          <p>Start with Exterior Detail, then add clay treatment, high-grade sealant, ceramic spray, or glass protection.</p>
+          <div class="row"><a class="btn ghost small" href="/full-clay-treatment">Clay treatment</a><a class="btn ghost small" href="/high-grade-paint-sealant">Paint sealant</a></div>
+        </article>
+        <article class="decision-card">
+          <h3>Swirls, dull paint, or coating prep</h3>
+          <p>Use Paint Correction or Ceramic Coating quote paths when the finish needs inspection, polishing, or protection planning.</p>
+          <div class="row"><a class="btn ghost small" href="/paint-correction">Paint correction</a><a class="btn ghost small" href="/ceramic-coating">Ceramic coating</a></div>
+        </article>
+        <article class="decision-card">
+          <h3>Multiple vehicles or work trucks</h3>
+          <p>Use the fleet and maintenance paths for same-location vehicles, recurring work, and commercial scheduling questions.</p>
+          <div class="row"><a class="btn ghost small" href="/fleet-pricing">Fleet quote</a><a class="btn ghost small" href="/maintenance-plan">Maintenance plan</a></div>
+        </article>
+        <article class="decision-card">
+          <h3>Not sure? Send photos first</h3>
+          <p>Photos help us spot pet hair, stains, salt, oxidation, headlights, and coating-prep needs before we estimate.</p>
+          <div class="row"><a class="btn ghost small" href="/book?estimate=photos">Start estimate</a><a class="btn ghost small" href="/contact">Ask us</a></div>
+        </article>
+      </div>
+      <div class="quote-strip" style="margin-top:14px">
+        <div>
+          <strong>Photo estimate tip:</strong>
+          <span class="muted"> Send 2–6 clear photos of seats, carpets, cargo area, exterior paint, problem spots, or headlights.</span>
+        </div>
+        <div class="row"><a class="btn primary" href="/book?estimate=photos">Send photos for estimate</a><a class="btn ghost" href="/contact">Call/text or ask a question</a></div>
+      </div>
+    </section>
+
+
+    <section class="section panel" id="competitor-service-hub">
+      <h2 style="margin-top:0">Full service hub</h2>
+      <p class="muted">This hub connects the competitor-roadmap priorities into one customer-friendly route: core services, quote-first work, specials, gifts, fleet, maintenance, and help articles.</p>
+      <div class="service-link-grid" style="margin-top:12px">
+        <article class="service-link-card"><h3>Interior and deep cleaning</h3><p class="muted">Interior detail, pet hair, odour, salt, shampoo, stains, and daily-use reset.</p><a class="btn ghost small" href="/book?condition=interior">Get interior guidance</a></article>
+        <article class="service-link-card"><h3>Exterior and paint care</h3><p class="muted">Wash, clay, sealant, ceramic spray, paint correction, coating prep, and glass protection.</p><a class="btn ghost small" href="/paint-correction">Paint correction</a></article>
+        <article class="service-link-card"><h3>Specials</h3><p class="muted">Spring salt cleanup, same-address multi-vehicle service, senior-friendly help, and headlight refresh offers.</p><a class="btn ghost small" href="/specials">View specials</a></article>
+        <article class="service-link-card"><h3>Gift cards</h3><p class="muted">Interior detail, full detail, and custom amount gift-card paths.</p><a class="btn ghost small" href="/gift-cards">Gift card guide</a></article>
+        <article class="service-link-card"><h3>Fleet and work trucks</h3><p class="muted">Small business fleets, contractor vehicles, truck boxes, and recurring same-location work.</p><a class="btn ghost small" href="/fleet">Fleet quote</a></article>
+        <article class="service-link-card"><h3>Maintenance plans</h3><p class="muted">Monthly maintenance, seasonal reset, and recurring cleanup interest.</p><a class="btn ghost small" href="/maintenance">Maintenance guide</a></article>
+        <article class="service-link-card"><h3>Helpful guides</h3><p class="muted">Road salt, ceramic coating, paint correction, pet hair, and prep education.</p><a class="btn ghost small" href="/blog">Read guides</a></article>
+      </div>
+    </section>
 
     <div class="section">
       <div class="grid3" id="pkgGrid"></div>
