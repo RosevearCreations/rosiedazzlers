@@ -136,3 +136,7 @@ Build 153 is a deploy-stability pass. After confirming a clean Cloudflare deploy
 18. Add customer-friendly public gallery promotion rules from approved job media.
 19. Add fallback export buttons: copy caption, download media list, and open platform composer.
 20. Add social performance notes back into the booking/customer history for future marketing decisions.
+
+## Build 170 roadmap note
+
+Customer dashboard reads are now safe for signed-out visitors. Continue by confirming customer login/session creation on Preview and Production, then return to the value-add roadmap: lead-to-quote conversion, quote-builder output, service/town landing proof, and admin-managed public content.

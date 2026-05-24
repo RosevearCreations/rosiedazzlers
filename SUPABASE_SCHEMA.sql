@@ -1,3 +1,4 @@
+-- Build 170 customer dashboard signed-out fallback sync — 2026-05-24
 -- Build 169 auth/API fallback sync — 2026-05-23
 -- No destructive schema change. Runtime auth_me and analytics now fail open instead of returning browser-visible 500s when Supabase config or tables are temporarily unavailable.
 -- Staff/client auth still require Supabase storage for successful login. Confirm staff_auth_sessions, customer_auth_sessions, staff_users, customer_profiles, and site_activity_events are applied.

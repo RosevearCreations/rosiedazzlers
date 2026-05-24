@@ -252,3 +252,10 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 - Attempt staff login. If it fails, read the JSON error and check Cloudflare Supabase variables, auth/session tables, and password hash mode.
 - Re-test `/admin-leads.html` after staff login succeeds.
 Build 169 adds `scripts/auth_analytics_build169_check.py` and wires it into `scripts/release_check.py`.
+
+## Build 170 sanity check
+
+- Confirmed the remaining reported console error was `/api/client/dashboard` returning 401 for signed-out optional context.
+- Updated customer dashboard endpoint to return signed-out/degraded JSON with HTTP 200.
+- Added a Build 170 release guard and a no-DDL SQL note.
+- Next live test: `/login`, `/book`, and `/my-account` with DevTools open.

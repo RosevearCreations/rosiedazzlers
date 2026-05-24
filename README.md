@@ -219,3 +219,9 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 
 This build repairs live auth/API 500 behavior seen on `/login` and `/admin-leads.html`. Deploy the files, then verify Cloudflare Pages has `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` set. Confirm the Supabase auth/session tables exist before testing staff/client login. `auth_me` and analytics should now return safe JSON fallbacks instead of browser-visible 500s.
 Build 169 adds `scripts/auth_analytics_build169_check.py` and wires it into `scripts/release_check.py`.
+
+## Build 170 deployment note
+
+Build 170 repairs the remaining signed-out customer dashboard console noise found after Build 169. `/api/client/dashboard` now returns a safe HTTP 200 JSON payload with `ok:false`, `authenticated:false`, and `code:"not_authenticated"` when no valid customer session exists. This keeps public booking/account helpers from reporting a failed network resource while preserving authorization on protected customer write endpoints.
+
+Build 170 adds `scripts/client_dashboard_build170_check.py` and wires it into `scripts/release_check.py`. No database DDL is required; see `sql/2026-05-24_build170_customer_dashboard_signed_out_fallback_no_ddl_note.sql`.

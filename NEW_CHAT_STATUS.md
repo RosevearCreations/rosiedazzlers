@@ -220,3 +220,6 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 
 Latest repair pass addresses the live `/login` and `/admin-leads.html` console errors: admin/client `auth_me`, analytics ingest, and admin/client login endpoints were hardened against raw 500s. Root `favicon.ico` was added. Next chat should verify Cloudflare environment variables and Supabase auth/session tables before testing staff login and Admin Leads data review.
 
+## Build 170 handoff note
+
+Start the next pass by deploying Build 170 and checking DevTools on `/login`, `/book`, and `/my-account`. Expected result: `/api/client/dashboard` should no longer show a 401 failed-resource message when signed out. It should return a JSON payload with `ok:false` and `code:"not_authenticated"`. If customer login succeeds but `/my-account` still shows signed out, inspect customer session cookie creation and the `customer_auth_sessions` table next.

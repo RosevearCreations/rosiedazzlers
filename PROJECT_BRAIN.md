@@ -144,3 +144,6 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 
 Auth and analytics are now intentionally fallback-safe during page boot. Do not reintroduce hard 500 responses for public account-widget checks or analytics ingest; only protected write/action endpoints should fail closed. Login remains secure and still requires valid Supabase staff/customer records and session tables.
 
+## Build 170 project memory
+
+The live dev site showed that `/api/client/dashboard` still produced a 401 failed-resource console message when signed out. Treat customer dashboard reads as optional public context: no customer session should return HTTP 200 with `ok:false`, `authenticated:false`, and `code:"not_authenticated"`. Protected customer write endpoints should continue to require a valid customer session.

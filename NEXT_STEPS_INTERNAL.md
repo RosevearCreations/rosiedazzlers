@@ -115,3 +115,10 @@ Build 161 keeps `DEVELOPMENT_ROADMAP.md` as the source of truth and advances the
 4. If login returns a bcrypt warning, re-bootstrap the admin password using `hash_mode='sha256'` or add `bcryptjs` bundling.
 5. Resume Admin Leads lead-to-quote conversion once login is stable.
 
+## Build 170 immediate next steps
+
+1. Deploy Build 170.
+2. Open `/login`, `/book`, and `/my-account` signed out and confirm `/api/client/dashboard` does not report a 401 failed resource.
+3. Sign in as a test customer and confirm `/api/client/dashboard` returns `ok:true`.
+4. If signed-in dashboard still returns `not_authenticated`, inspect `CUSTOMER_SESSION_SECRET`, `customer_auth_sessions`, and cookie creation from `/api/client/auth_login`.
+5. Resume Admin Leads lead-to-draft-quote conversion once customer session flow is quiet.
