@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+"""Rosie Dazzlers release smoke checks."""
+from __future__ import annotations
+
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+CHECKS = [
+    [sys.executable, "scripts/cloudflare_pages_functions_check.py"],
+    [sys.executable, "scripts/social_dispatch_workflow_check.py"],
+    [sys.executable, "scripts/competitor_roadmap_check.py"],
+    [sys.executable, "scripts/conversion_path_check.py"],
+    [sys.executable, "scripts/booking_condition_recommender_check.py"],
+    [sys.executable, "scripts/booking_intake_admin_review_check.py"],
+    [sys.executable, "scripts/booking_intake_review_actions_check.py"],
+    [sys.executable, "scripts/booking_photo_estimate_links_check.py"],
+    [sys.executable, "scripts/competetive_completion_check.py"],
+    [sys.executable, "scripts/competetive_matrix_build167_check.py"],
+    [sys.executable, "scripts/admin_leads_build168_check.py"],
+    [sys.executable, "scripts/seo_h1_check.py"],
+]
+
+
+def main() -> int:
+    for cmd in CHECKS:
+        print("Running", " ".join(cmd))
+        proc = subprocess.run(cmd, cwd=ROOT)
+        if proc.returncode != 0:
+            return proc.returncode
+    print("Release check passed.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
