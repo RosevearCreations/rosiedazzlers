@@ -44,6 +44,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-booking")
     },
     {
+      key: "admin-leads",
+      label: "Leads & Estimates",
+      href: "/admin-leads.html",
+      description: "Public leads and quote photo uploads",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-leads")
+    },
+    {
       key: "admin-blocks",
       label: "Blocks",
       href: "/admin-blocks.html",
@@ -56,6 +63,13 @@
       href: "/admin-progress.html",
       description: "Customer progress updates",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-progress")
+    },
+    {
+      key: "admin-social",
+      label: "Social Queue",
+      href: "/admin-social.html",
+      description: "Review job photos for social posting",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-social")
     },
     {
       key: "admin-jobsite",

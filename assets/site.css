@@ -878,3 +878,128 @@ input.search-input:-webkit-autofill:focus {
 .proof-card > *, .service-link-card > *, .local-town-card > *, .recent-work-card > *{max-width:100%}
 .service-link-card .btn,.local-town-card .btn,.proof-card .btn{margin-top:auto;align-self:flex-start}
 @media (max-width:840px){.block-calendar-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.block-calendar-grid--head{display:none}.block-day{min-height:82px}}
+
+
+/* Build 147: compact expandable mobile navigation */
+@media (max-width: 880px) {
+  .nav {
+    overflow: visible;
+  }
+
+  .nav-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .brand {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .brand strong {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nav-toggle {
+    display: inline-flex !important;
+    grid-column: 2;
+    justify-self: end;
+    min-height: 40px;
+  }
+
+  .nav-links {
+    grid-column: 1 / -1;
+    display: none;
+    width: 100%;
+    max-height: min(70vh, 520px);
+    overflow: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 10px;
+    margin-top: 4px;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 16px;
+    background: rgba(7,11,16,.97);
+    box-shadow: 0 18px 38px rgba(0,0,0,.42);
+  }
+
+  .nav-links.open {
+    display: grid;
+  }
+
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 10px 8px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,.08);
+    background: rgba(255,255,255,.04);
+    overflow-wrap: anywhere;
+  }
+
+  .nav-inner > a.btn.primary,
+  .nav-inner > .btn.primary,
+  #installAppBtn {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 40px;
+  }
+
+  .account-widget {
+    grid-column: 1 / -1;
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .account-widget-inner {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    min-width: max-content;
+  }
+
+  .account-chip,
+  .account-widget .btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 420px) {
+  .nav-links {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* Build 148 landing media polish */
+.landing-region-photo{
+  margin:0 0 12px;
+}
+.landing-region-photo .proof-media{
+  width:100%;
+  max-height:360px;
+  object-fit:cover;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.04);
+}
+.landing-region-photo figcaption{
+  margin-top:8px;
+  font-size:.82rem;
+  line-height:1.35;
+  color:#9fb0c8;
+}
+.landing-region-photo figcaption a{
+  color:#c4b5fd;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}

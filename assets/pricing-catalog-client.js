@@ -14,7 +14,7 @@ const LOCAL_CHART_URLS = {
 
 export const DEFAULT_BOOKING_RULES = {
   availability_window_days: 21,
-  default_service_area: "Tillsonburg, Oxford County",
+  default_service_area: "Tillsonburg, ON",
   hold_minutes: 30,
   slot_labels: {
     AM: "AM half day",
@@ -162,6 +162,29 @@ export function normalizePricingCatalog(raw) {
   };
 }
 
+
+function mergeServiceAreas(primaryRows, fallbackRows) {
+  const merged = [];
+  const byKey = new Map();
+  const add = (row, preferExisting = false) => {
+    if (!row || typeof row !== "object") return;
+    const key = String(row.value || row.label || row.municipality || "").trim().toLowerCase();
+    if (!key) return;
+    if (!byKey.has(key)) {
+      const copy = { ...row };
+      byKey.set(key, copy);
+      merged.push(copy);
+      return;
+    }
+    if (!preferExisting) {
+      Object.assign(byKey.get(key), row);
+    }
+  };
+  (Array.isArray(fallbackRows) ? fallbackRows : []).forEach((row) => add(row, true));
+  (Array.isArray(primaryRows) ? primaryRows : []).forEach((row) => add(row, false));
+  return merged;
+}
+
 function mergeCatalog(primary, fallback) {
   return normalizePricingCatalog({
     ...fallback,
@@ -170,7 +193,7 @@ function mergeCatalog(primary, fallback) {
     packages: Array.isArray(primary?.packages) && primary.packages.length ? primary.packages : fallback?.packages,
     addons: Array.isArray(primary?.addons) && primary.addons.length ? primary.addons : fallback?.addons,
     service_matrix: Array.isArray(primary?.service_matrix) && primary.service_matrix.length ? primary.service_matrix : fallback?.service_matrix,
-    service_areas: Array.isArray(primary?.service_areas) && primary.service_areas.length ? primary.service_areas : fallback?.service_areas,
+    service_areas: mergeServiceAreas(primary?.service_areas, fallback?.service_areas),
     booking_rules: {
       ...(fallback?.booking_rules || {}),
       ...(primary?.booking_rules || {})
@@ -193,9 +216,22 @@ export async function fetchJsonStrict(url, options = {}) {
   return parsed;
 }
 
+
+async function loadServiceAreaRulesPublic(url, credentials) {
+  if (!url) return [];
+  try {
+    const payload = await fetchJsonStrict(url, { credentials });
+    const rows = Array.isArray(payload?.service_areas) ? payload.service_areas : Array.isArray(payload?.items) ? payload.items : [];
+    return normalizeServiceAreas(rows);
+  } catch {
+    return [];
+  }
+}
+
 export async function loadPricingCatalogClient({
   apiUrl = "/api/pricing_catalog_public",
   fallbackUrl = "/data/rosie_services_pricing_and_packages.json",
+  serviceAreaRulesUrl = "/api/service_area_rules_public",
   credentials = "same-origin"
 } = {}) {
   let apiCatalog = null;
@@ -209,7 +245,7 @@ export async function loadPricingCatalogClient({
   const needsFallback = !apiCatalog
     || !Array.isArray(apiCatalog.packages) || !apiCatalog.packages.length
     || !Array.isArray(apiCatalog.addons) || !apiCatalog.addons.length
-    || !Array.isArray(apiCatalog.service_areas) || !apiCatalog.service_areas.length
+    || !Array.isArray(apiCatalog.service_areas) || apiCatalog.service_areas.length < 20
     || !Array.isArray(apiCatalog.charts) || !apiCatalog.charts.length;
 
   if (!needsFallback) {
@@ -223,7 +259,16 @@ export async function loadPricingCatalogClient({
   }
 
   const fallbackCatalog = normalizePricingCatalog(await fetchJsonStrict(fallbackUrl, { credentials }));
+  const serviceAreaRules = await loadServiceAreaRulesPublic(serviceAreaRulesUrl, credentials);
+  if (serviceAreaRules.length) {
+    fallbackCatalog.service_areas = mergeServiceAreas(serviceAreaRules, fallbackCatalog.service_areas);
+  }
+
   const merged = apiCatalog ? mergeCatalog(apiCatalog, fallbackCatalog) : fallbackCatalog;
+  if (serviceAreaRules.length) {
+    merged.service_areas = mergeServiceAreas(serviceAreaRules, merged.service_areas);
+    merged._service_area_rules_source = "service_area_rules_public";
+  }
   merged._source = apiCatalog ? "api_merged_with_bundled_fallback" : "bundled_json_fallback";
   merged._fallback_error = apiError?.message || null;
   return merged;
@@ -566,8 +611,38 @@ export function serviceAreaRows(catalog) {
 }
 
 export function findServiceArea(catalog, value) {
-  const needle = String(value || "").trim().toLowerCase();
-  return serviceAreaRows(catalog).find((row) => [row?.value, row?.label].some((entry) => String(entry || "").trim().toLowerCase() === needle)) || null;
+  const raw = String(value || "").trim();
+  const needle = raw.toLowerCase();
+  const needleTown = needle.replace(/,\s*on$/i, "").trim();
+  const rows = serviceAreaRows(catalog);
+  if (!needle) return null;
+
+  const rowEntries = (row) => [row?.value, row?.label, row?.municipality, row?.zone, row?.county, ...(Array.isArray(row?.aliases) ? row.aliases : [])]
+    .map((entry) => String(entry || "").trim())
+    .filter(Boolean);
+
+  const exact = rows.find((row) => rowEntries(row).some((entry) => {
+    const text = entry.toLowerCase();
+    const town = text.replace(/,\s*on$/i, "").trim();
+    return text === needle || town === needleTown;
+  }));
+  if (exact) return exact;
+
+  const contains = rows.find((row) => rowEntries(row).some((entry) => {
+    const text = entry.toLowerCase();
+    const town = text.replace(/,\s*on$/i, "").trim();
+    return town && (needleTown.includes(town) || town.includes(needleTown));
+  }));
+  if (contains) return contains;
+
+  const countyFallback = (county, pattern) =>
+    rows.find((row) => String(row?.county || "").toLowerCase() === county && pattern.test(String(row?.label || "")))
+    || rows.find((row) => String(row?.county || "").toLowerCase() === county)
+    || null;
+
+  if (needle.includes("norfolk")) return countyFallback("norfolk county", /other norfolk/i);
+  if (needle.includes("oxford")) return countyFallback("oxford county", /other oxford/i);
+  return null;
 }
 
 export function chartUrl(catalog, key) {
