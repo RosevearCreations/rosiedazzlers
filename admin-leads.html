@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Leads & Photo Estimates | Rosie Dazzlers Admin</title>
+  <meta name="description" content="Review public Rosie Dazzlers leads, quote requests, and photo-estimate uploads." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .admin-status{margin-bottom:16px;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);color:#e5e7eb}.admin-status[data-state="error"]{background:rgba(220,38,38,.12);border-color:rgba(248,113,113,.25);color:#fecaca}.admin-status[data-state="success"]{background:rgba(22,163,74,.12);border-color:rgba(74,222,128,.25);color:#bbf7d0}
+    .admin-topbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:flex-start}.actorcard{min-width:260px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px 18px;box-shadow:0 14px 35px rgba(0,0,0,.22)}.actorline{margin:4px 0}.actorlabel{color:#93c5fd;font-weight:700;margin-right:6px}
+    .lead-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin:0 0 14px}.lead-toolbar label{display:grid;gap:5px;min-width:150px}.lead-toolbar input,.lead-toolbar select,.lead-card textarea{width:100%;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(15,23,42,.92);color:#f8fafc;padding:10px}.lead-card{display:grid;gap:12px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);padding:16px;margin:12px 0}.lead-card__head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}.lead-card__title{margin:0}.lead-meta{display:flex;flex-wrap:wrap;gap:8px;color:#cbd5e1;font-size:.92rem}.pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 9px;background:rgba(59,130,246,.16);border:1px solid rgba(96,165,250,.22);font-size:.84rem;color:#dbeafe}.pill.warn{background:rgba(245,158,11,.15);border-color:rgba(251,191,36,.25);color:#fde68a}.pill.good{background:rgba(22,163,74,.15);border-color:rgba(74,222,128,.25);color:#bbf7d0}.pill.bad{background:rgba(220,38,38,.14);border-color:rgba(248,113,113,.25);color:#fecaca}
+    .lead-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.lead-field{padding:10px 12px;border-radius:12px;background:rgba(15,23,42,.36);border:1px solid rgba(255,255,255,.06)}.lead-field strong{display:block;color:#93c5fd;margin-bottom:3px}.lead-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;align-items:end}.links-list{display:grid;gap:6px;margin:8px 0 0}.links-list a{overflow-wrap:anywhere}.muted{color:#94a3b8}.danger-note{color:#fecaca}.two-col{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}@media(min-width:1050px){.two-col{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+  </style>
+</head>
+<body data-page="admin-leads">
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/admin.html">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers Admin</strong>
+      </a>
+      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button>
+      <nav id="navLinks" class="nav-links">
+        <a href="/admin.html">Dashboard</a>
+        <a href="/admin-booking.html">Bookings</a>
+        <a href="/admin-leads.html">Leads</a>
+        <a href="/admin-progress.html">Progress</a>
+        <a href="/admin-social.html">Social Queue</a>
+        <a href="/admin-analytics.html">Analytics</a>
+        <a href="/admin-accounting.html">Accounting</a>
+        <a href="/admin-app">App Management</a>
+        <a href="/book.html">Public Site</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="admin-status" data-admin-shell-status hidden></div>
+    <div class="admin-status" data-page-status hidden></div>
+    <div data-admin-shell-loading class="section"><div class="panel">Loading leads and photo estimates…</div></div>
+    <div data-admin-shell-ready hidden>
+      <section class="section">
+        <div class="panel admin-topbar">
+          <div>
+            <div class="badge">Admin Leads</div>
+            <h1 style="margin:10px 0 6px">Public leads & photo estimates</h1>
+            <p class="kicker" style="margin:0;max-width:860px">Review fleet, maintenance, specials, gift-card, and quote-first leads. Link uploaded estimate media to a lead or booking, then mark privacy status before using any photo publicly.</p>
+          </div>
+          <section class="actorcard" aria-label="Signed in staff">
+            <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
+            <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
+            <div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+              <a class="btn ghost" href="/admin-account.html">Settings</a>
+              <button class="btn primary" type="button" data-admin-logout>Sign Out</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="section two-col">
+        <article class="panel">
+          <h2 style="margin-top:0">Structured public leads</h2>
+          <p class="muted">Shows records from <code>public_inquiry_leads</code>. Use statuses to keep quote-first requests from getting lost.</p>
+          <div class="lead-toolbar">
+            <label>Search<input id="leadSearch" type="search" placeholder="name, email, town, message" /></label>
+            <label>Status<select id="leadStatus"><option value="all">All</option><option value="new">New</option><option value="reviewing">Reviewing</option><option value="contacted">Contacted</option><option value="quoted">Quoted</option><option value="converted">Converted</option><option value="closed">Closed</option><option value="spam">Spam</option></select></label>
+            <label>Topic<select id="leadTopic"><option value="all">All</option><option value="fleet">Fleet</option><option value="maintenance">Maintenance</option><option value="gift_card">Gift card</option><option value="special">Special</option><option value="photo_estimate">Photo estimate</option><option value="general">General</option></select></label>
+            <button class="btn primary" type="button" id="leadRefresh">Refresh</button>
+          </div>
+          <div id="leadList" class="lead-list"><div class="muted">Loading leads…</div></div>
+        </article>
+
+        <article class="panel">
+          <h2 style="margin-top:0">Photo/video estimate uploads</h2>
+          <p class="muted">Shows records from <code>photo_estimate_uploads</code>. Keep privacy review separate from booking/quote status.</p>
+          <div class="lead-toolbar">
+            <label>Search<input id="uploadSearch" type="search" placeholder="file, customer, path" /></label>
+            <label>Status<select id="uploadStatus"><option value="all">All</option><option value="signed">Signed</option><option value="uploaded">Uploaded</option><option value="linked">Linked</option><option value="reviewed">Reviewed</option><option value="rejected">Rejected</option><option value="expired">Expired</option></select></label>
+            <label>Privacy<select id="uploadPrivacy"><option value="all">All</option><option value="pending_review">Pending</option><option value="approved_private">Approved private</option><option value="approved_public">Approved public</option><option value="needs_blur">Needs blur</option><option value="rejected">Rejected</option></select></label>
+            <button class="btn primary" type="button" id="uploadRefresh">Refresh</button>
+          </div>
+          <div id="uploadList" class="lead-list"><div class="muted">Loading uploads…</div></div>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer container" data-footer></footer>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/chrome.js"></script>
+  <script>
+    (function(){
+      const els = {
+        status: document.querySelector('[data-page-status]'),
+        leadList: document.getElementById('leadList'),
+        leadSearch: document.getElementById('leadSearch'),
+        leadStatus: document.getElementById('leadStatus'),
+        leadTopic: document.getElementById('leadTopic'),
+        leadRefresh: document.getElementById('leadRefresh'),
+        uploadList: document.getElementById('uploadList'),
+        uploadSearch: document.getElementById('uploadSearch'),
+        uploadStatus: document.getElementById('uploadStatus'),
+        uploadPrivacy: document.getElementById('uploadPrivacy'),
+        uploadRefresh: document.getElementById('uploadRefresh')
+      };
+      function esc(v){return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+      function setStatus(message,type){els.status.hidden=!message;els.status.textContent=message||'';els.status.dataset.state=type||'';}
+      async function api(url, body){
+        const res = await fetch(url,{method:'POST',credentials:'include',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify(body||{})});
+        const data = await res.json().catch(()=>null);
+        if(!res.ok || (data && data.ok===false)){throw new Error((data && (data.error || data.migration_hint)) || 'Request failed.');}
+        return data || {};
+      }
+      function badge(value,type){return `<span class="pill ${type||''}">${esc(human(value))}</span>`;}
+      function human(value){return String(value||'').replace(/_/g,' ').replace(/\b\w/g,(m)=>m.toUpperCase()) || '—';}
+      function dateText(value){if(!value)return '—'; try{return new Date(value).toLocaleString();}catch{return value;}}
+      function linksHtml(value){
+        const arr = Array.isArray(value) ? value : [];
+        if(!arr.length)return '<span class="muted">No links attached.</span>';
+        return `<div class="links-list">${arr.map((link)=>`<a href="${esc(link)}" target="_blank" rel="noopener">${esc(link)}</a>`).join('')}</div>`;
+      }
+      async function loadLeads(){
+        els.leadList.innerHTML = '<div class="muted">Loading leads…</div>';
+        const data = await api('/api/admin/public_inquiry_leads_list',{q:els.leadSearch.value,status:els.leadStatus.value,topic:els.leadTopic.value,limit:50});
+        const rows = data.leads || [];
+        if(!rows.length){els.leadList.innerHTML='<div class="muted">No matching public leads yet.</div>';return;}
+        els.leadList.innerHTML = rows.map(renderLead).join('');
+        bindLeadActions();
+      }
+      function renderLead(row){
+        const tone = row.status === 'converted' ? 'good' : row.status === 'spam' ? 'bad' : row.status === 'new' ? 'warn' : '';
+        return `<article class="lead-card" data-lead-id="${esc(row.id)}">
+          <div class="lead-card__head"><div><h3 class="lead-card__title">${esc(row.full_name || 'Unnamed lead')}</h3><div class="lead-meta">${badge(row.topic)}${badge(row.status,tone)}<span>${esc(dateText(row.created_at))}</span></div></div><a class="btn ghost small" href="mailto:${esc(row.email||'')}">Email</a></div>
+          <div class="lead-grid">
+            <div class="lead-field"><strong>Email</strong>${esc(row.email || '—')}</div><div class="lead-field"><strong>Phone</strong>${esc(row.phone || '—')}</div><div class="lead-field"><strong>Area</strong>${esc(row.service_area || '—')}</div><div class="lead-field"><strong>Vehicles/Cadence</strong>${esc(row.vehicle_count || '—')} / ${esc(row.preferred_cadence || '—')}</div>
+          </div>
+          <div class="lead-field"><strong>Message</strong>${esc(row.message || '—')}</div>
+          <div class="lead-field"><strong>Photo/share links</strong>${linksHtml(row.photo_estimate_links)}</div>
+          <div class="lead-actions">
+            <label>Status<select data-lead-status><option value="new">New</option><option value="reviewing">Reviewing</option><option value="contacted">Contacted</option><option value="quoted">Quoted</option><option value="converted">Converted</option><option value="closed">Closed</option><option value="spam">Spam</option></select></label>
+            <label>Converted booking UUID<input data-lead-booking value="${esc(row.converted_booking_id || '')}" placeholder="optional booking id" /></label>
+            <label style="grid-column:1/-1">Staff note<textarea data-lead-note rows="2" placeholder="follow-up notes">${esc(row.staff_note || '')}</textarea></label>
+            <button class="btn primary" type="button" data-save-lead>Save lead</button>
+          </div>
+        </article>`;
+      }
+      function bindLeadActions(){
+        document.querySelectorAll('[data-lead-id]').forEach((card)=>{
+          const rowStatus = card.querySelector('.pill:nth-of-type(2)')?.textContent?.toLowerCase().replace(/ /g,'_') || 'reviewing';
+          const select = card.querySelector('[data-lead-status]'); if(select) select.value = rowStatus;
+          card.querySelector('[data-save-lead]')?.addEventListener('click', async()=>{
+            try{setStatus('', ''); await api('/api/admin/public_inquiry_leads_save',{id:card.dataset.leadId,status:select.value,converted_booking_id:card.querySelector('[data-lead-booking]').value,staff_note:card.querySelector('[data-lead-note]').value}); setStatus('Lead updated.','success'); await loadLeads();}
+            catch(err){setStatus(err.message || 'Could not save lead.','error');}
+          });
+        });
+      }
+      async function loadUploads(){
+        els.uploadList.innerHTML = '<div class="muted">Loading uploads…</div>';
+        const data = await api('/api/admin/photo_estimate_uploads_list',{q:els.uploadSearch.value,status:els.uploadStatus.value,privacy_status:els.uploadPrivacy.value,limit:50});
+        const rows = data.uploads || [];
+        if(!data.extended_review_fields_ready){setStatus('Photo uploads loaded, but Build 168 review-note fields are not applied yet. Apply the Build 168 SQL for full notes/reviewer tracking.','error');}
+        if(!rows.length){els.uploadList.innerHTML='<div class="muted">No matching photo/video uploads yet.</div>';return;}
+        els.uploadList.innerHTML = rows.map(renderUpload).join('');
+        bindUploadActions();
+      }
+      function renderUpload(row){
+        const privacyTone = row.privacy_status === 'approved_public' ? 'good' : row.privacy_status === 'rejected' ? 'bad' : row.privacy_status === 'needs_blur' ? 'warn' : '';
+        const media = row.media_url ? `<a href="${esc(row.media_url)}" target="_blank" rel="noopener">Open media</a>` : '<span class="muted">No public URL.</span>';
+        return `<article class="lead-card" data-upload-id="${esc(row.id)}">
+          <div class="lead-card__head"><div><h3 class="lead-card__title">${esc(row.filename || row.object_path || 'Upload')}</h3><div class="lead-meta">${badge(row.status)}${badge(row.privacy_status,privacyTone)}<span>${esc(dateText(row.created_at))}</span></div></div>${media}</div>
+          <div class="lead-grid"><div class="lead-field"><strong>Customer</strong>${esc(row.customer_name || '—')}<br>${esc(row.customer_email || '—')}</div><div class="lead-field"><strong>Type/Size</strong>${esc(row.content_type || '—')}<br>${Number(row.file_size_bytes||0).toLocaleString()} bytes</div><div class="lead-field"><strong>Storage</strong>${esc(row.bucket || '—')}<br><span class="muted">${esc(row.object_path || '—')}</span></div><div class="lead-field"><strong>Linked</strong>Lead: ${esc(row.lead_id || '—')}<br>Booking: ${esc(row.booking_id || '—')}</div></div>
+          <div class="lead-actions">
+            <label>Status<select data-upload-status><option value="signed">Signed</option><option value="uploaded">Uploaded</option><option value="linked">Linked</option><option value="reviewed">Reviewed</option><option value="rejected">Rejected</option><option value="expired">Expired</option></select></label>
+            <label>Privacy<select data-upload-privacy><option value="pending_review">Pending review</option><option value="approved_private">Approved private</option><option value="approved_public">Approved public</option><option value="needs_blur">Needs blur/crop</option><option value="rejected">Rejected</option></select></label>
+            <label>Lead UUID<input data-upload-lead value="${esc(row.lead_id || '')}" placeholder="optional lead id" /></label>
+            <label>Booking UUID<input data-upload-booking value="${esc(row.booking_id || '')}" placeholder="optional booking id" /></label>
+            <label style="grid-column:1/-1">Privacy note<textarea data-upload-privacy-note rows="2" placeholder="blur/crop/approval notes">${esc(row.privacy_note || '')}</textarea></label>
+            <label style="grid-column:1/-1">Staff note<textarea data-upload-note rows="2" placeholder="quote or follow-up notes">${esc(row.staff_note || '')}</textarea></label>
+            <button class="btn primary" type="button" data-save-upload>Save upload review</button>
+          </div>
+        </article>`;
+      }
+      function bindUploadActions(){
+        document.querySelectorAll('[data-upload-id]').forEach((card)=>{
+          const pills = card.querySelectorAll('.pill');
+          const status = pills[0]?.textContent?.toLowerCase().replace(/ /g,'_') || 'reviewed';
+          const privacy = pills[1]?.textContent?.toLowerCase().replace(/ /g,'_') || 'pending_review';
+          const statusSelect = card.querySelector('[data-upload-status]'); if(statusSelect) statusSelect.value = status;
+          const privacySelect = card.querySelector('[data-upload-privacy]'); if(privacySelect) privacySelect.value = privacy;
+          card.querySelector('[data-save-upload]')?.addEventListener('click', async()=>{
+            try{setStatus('', ''); await api('/api/admin/photo_estimate_uploads_save',{id:card.dataset.uploadId,status:statusSelect.value,privacy_status:privacySelect.value,lead_id:card.querySelector('[data-upload-lead]').value,booking_id:card.querySelector('[data-upload-booking]').value,privacy_note:card.querySelector('[data-upload-privacy-note]').value,staff_note:card.querySelector('[data-upload-note]').value}); setStatus('Upload review updated.','success'); await loadUploads();}
+            catch(err){setStatus(err.message || 'Could not save upload review.','error');}
+          });
+        });
+      }
+      function debounce(fn){let t=null;return function(){clearTimeout(t);t=setTimeout(fn,350);};}
+      window.AdminShell.boot({pageKey:'admin-leads',onReady:async()=>{
+        els.leadRefresh.addEventListener('click',()=>loadLeads().catch((err)=>setStatus(err.message,'error')));
+        els.uploadRefresh.addEventListener('click',()=>loadUploads().catch((err)=>setStatus(err.message,'error')));
+        ['input','change'].forEach((eventName)=>{
+          els.leadSearch.addEventListener(eventName,debounce(()=>loadLeads().catch((err)=>setStatus(err.message,'error'))));
+          els.uploadSearch.addEventListener(eventName,debounce(()=>loadUploads().catch((err)=>setStatus(err.message,'error'))));
+        });
+        [els.leadStatus,els.leadTopic].forEach((node)=>node.addEventListener('change',()=>loadLeads().catch((err)=>setStatus(err.message,'error'))));
+        [els.uploadStatus,els.uploadPrivacy].forEach((node)=>node.addEventListener('change',()=>loadUploads().catch((err)=>setStatus(err.message,'error'))));
+        await Promise.all([loadLeads().catch((err)=>{els.leadList.innerHTML='<div class="danger-note">'+esc(err.message)+'</div>';}),loadUploads().catch((err)=>{els.uploadList.innerHTML='<div class="danger-note">'+esc(err.message)+'</div>';})]);
+      }});
+    })();
+  </script>
+</body>
+</html>

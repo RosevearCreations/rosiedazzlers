@@ -1,0 +1,3 @@
+# Folder-backed routes remain the live baseline.
+# Generic admin-created landing pages use a single non-looping rewrite.
+/landing/* /landing/index.html 200
