@@ -1,3 +1,37 @@
+# Build 173 update — Admin Content Center and Help Articles access pass
+
+**Updated:** 2026-05-24  
+**Current build:** Build 173  
+**Primary source of truth:** `DEVELOPMENT_ROADMAP.md`
+
+Build 173 continues from the Build 172 FAQ/content-access foundation by adding a protected Admin Content Center and expanding the public Help Articles page. FAQ entries now have an admin editor path (`/admin-content.html`) using the existing Build 172 `public_faq_entries` table, and the public site now exposes Help Articles from the main navigation, footer, FAQ access section, and homepage CTA path.
+
+## Completed in Build 173
+
+1. Added `/admin-content.html` and `/admin-content/index.html`.
+2. Added protected FAQ editor APIs: `/api/admin/content_faqs_list` and `/api/admin/content_faqs_save`.
+3. Updated Admin Dashboard, shared admin menu, and staff page-access helpers so Content Center is accessible to admins, promo managers, and staff managers.
+4. Expanded `/blog` and `/blog/index.html` from a thin placeholder into a Help Articles hub with article cards, quick paths, ItemList schema, and customer-facing guidance.
+5. Added public Help link to the main navigation and footer through `assets/chrome.js`.
+6. Added homepage and FAQ access links to Help Articles.
+7. Added `sql/2026-05-24_build173_admin_content_faq_editor_no_ddl_note.sql`.
+8. Updated `SUPABASE_SCHEMA.sql` and `DATABASE_STRUCTURE_CURRENT.md` with the Build 173 no-DDL schema bridge.
+9. Added `scripts/admin_content_build173_check.py` and wired it into `scripts/release_check.py`.
+10. Re-ran the one-H1 check and release checks.
+
+## Active next steps after Build 173
+
+1. Apply the Build 172 FAQ SQL before using live FAQ saves from Admin Content Center.
+2. Browser-test `/admin-content.html` after staff login.
+3. Add persistent quote/proposal drafts from the Build 171 quote starter.
+4. Add one-click lead → draft booking/quote conversion.
+5. Extend Admin Content Center to Specials, service blurbs, education/help articles, and homepage support blocks.
+6. Add service/town-aware proof filtering for gallery and recent work.
+7. Enforce media privacy approval before any gallery/social use.
+
+---
+> Build 173 documentation sync (2026-05-24): Admin Content Center, FAQ editor APIs, expanded Help Articles access/content, public Help nav link, and schema no-DDL note were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `COMPETETIVE_COMPLETION_MATRIX.md`, and `SANITY_CHECK.md` for the active plan.
+
 > Build 172 documentation sync (2026-05-24): public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
 
 # Build 172 update — Public FAQ content and page-access cleanup

@@ -1,3 +1,19 @@
+> Build 173 documentation sync (2026-05-24): Admin Content Center, FAQ editor APIs, expanded Help Articles access/content, public Help nav link, and schema no-DDL note were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `COMPETETIVE_COMPLETION_MATRIX.md`, and `SANITY_CHECK.md` for the active plan.
+
+# Build 173 database/schema sync — Admin Content Center FAQ editor bridge
+
+**Updated:** 2026-05-24
+
+Build 173 does not create a new table. It adds a protected Admin Content Center at `/admin-content.html` that edits the existing Build 172 table `public.public_faq_entries` through `/api/admin/content_faqs_list` and `/api/admin/content_faqs_save`.
+
+Live editing requires this migration first:
+
+1. `sql/2026-05-24_build172_public_faq_content_foundation.sql`
+2. `sql/2026-05-24_build173_admin_content_faq_editor_no_ddl_note.sql` — documentation/sync note only
+
+The editor remains fallback-aware: if Supabase configuration or the FAQ table is unavailable, staff can still load and review the static public FAQ fallback, but saving requires the Build 172 table.
+
+---
 > Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
 
 # Build 172 database/schema sync — public FAQ content foundation

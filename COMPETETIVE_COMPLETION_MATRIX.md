@@ -1,3 +1,36 @@
+# COMPETETIVE.md Completion Matrix — Build 173
+
+**Updated:** 2026-05-24  
+**Baseline:** latest uploaded `rosiedazzlers-dev(168).zip`  
+**Roadmap authority:** `DEVELOPMENT_ROADMAP.md`
+
+Build 173 closes more of the content/access gap by adding an Admin Content Center for FAQ rows and expanding the public Help Articles hub.
+
+## Updated completion status after Build 173
+
+| COMPETETIVE.md area | Current status | Build 173 notes |
+| --- | --- | --- |
+| FAQ/help content | Complete public foundation + admin FAQ editor | `/faq` exists, `/api/public_faqs` exists, and `/admin-content.html` can manage DB FAQ entries after Build 172 SQL. |
+| Help articles / education | Improved public foundation | `/blog` is now a real Help Articles hub with article cards and quick paths. Individual article routes already exist. |
+| New-page access paths | Improved | FAQ, Help, Specials, Gift Cards, Fleet, Maintenance, and key service/town pages are exposed through nav/footer/sitemap/relevant cards. |
+| Admin-managed content | Partial | FAQ editor is complete as a first step. Specials, services, homepage blocks, and help article editors remain open. |
+| Lead capture pages | Complete public foundation | Fleet, maintenance, specials, gift-card, and photo-estimate paths exist. |
+| Quote starter | Partial workflow | Build 171 quote starter exists, but persistent proposal drafts remain open. |
+| Proof sections | Partial | Gallery/recent-work filtering by service and town remains open. |
+| Media privacy | Partial | Admin review flags exist, but public gallery/social enforcement still needs full automation. |
+| Analytics | Partial | Analytics fallback exists, but FAQ/help/lead/quote conversion reporting remains open. |
+
+## Remaining competitive gap priority
+
+1. Persistent quote/proposal drafts.
+2. Lead → draft booking/quote conversion.
+3. Admin Content expansion to specials, service blurbs, help articles, and homepage support cards.
+4. Gallery/recent-work proof filtering by town and service.
+5. Privacy-approved media pipeline before public gallery/social use.
+
+---
+> Build 173 documentation sync (2026-05-24): Admin Content Center, FAQ editor APIs, expanded Help Articles access/content, public Help nav link, and schema no-DDL note were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `COMPETETIVE_COMPLETION_MATRIX.md`, and `SANITY_CHECK.md` for the active plan.
+
 > Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
 
 # COMPETETIVE.md Completion Matrix — Build 172
