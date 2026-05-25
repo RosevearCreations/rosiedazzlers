@@ -402,3 +402,16 @@ Reliability/customer-trust item continued: customer account and booking pages sh
 
 ---
 > Build 174 documentation sync (2026-05-24): persistent quote/proposal drafts were added to Admin Leads with save/load APIs, SQL table foundation, schema notes, and release guard coverage. Quote starters remain copy-ready before the SQL is applied, but saved drafts require sql/2026-05-24_build174_quote_proposal_drafts.sql.
+
+
+## COMPETETIVE.md Completion Matrix — Build 175
+
+| Area | Build 175 status |
+| --- | --- |
+| Lead → draft booking/quote conversion | Added safe conversion draft table and Admin Leads button. |
+| Catalog-backed package/add-on price suggestions | Added Admin Leads pricing suggestions from the live pricing catalog/fallback catalog. |
+| Quote draft status workflow | Added status controls for saved quote/proposal drafts. |
+| Admin Content expansion beyond FAQ | Added generic content blocks for specials, service blurbs, homepage cards, help articles, trust proof, fleet, and maintenance. |
+| Service/town proof filtering | Added public gallery service and town filters. |
+| Media privacy before public reuse | Public gallery now filters out pending/private/rejected/needs-blur media unless sample/approved-public. |
+| FAQ/help/lead/quote conversion analytics | Added admin conversion funnel summary endpoint. |
