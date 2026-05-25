@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 174 note:
+- Adds quote/proposal draft guard for Admin Leads persistent draft workflow.
+
 Build 173 note:
 - Run Python checks in-process with runpy instead of spawning a new Python
   interpreter for every guard. This avoids intermittent sandbox/CI startup
@@ -31,6 +34,7 @@ CHECKS = [
     "scripts/lead_quote_preview_build171_check.py",
     "scripts/public_faq_content_build172_check.py",
     "scripts/admin_content_build173_check.py",
+    "scripts/quote_proposal_drafts_build174_check.py",
     "scripts/seo_h1_check.py",
 ]
 
