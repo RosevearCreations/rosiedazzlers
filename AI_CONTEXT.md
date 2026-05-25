@@ -1,3 +1,12 @@
+# Rosie Dazzlers Build 173 note — Admin Content Center and Help Articles access
+
+**Updated:** 2026-05-24
+
+Build 173 adds a protected Admin Content Center at `/admin-content.html` for FAQ editing, with new protected endpoints `/api/admin/content_faqs_list` and `/api/admin/content_faqs_save`. It also expands `/blog` into a real Help Articles hub and exposes it from the public navigation as **Help**. This pass requires no new database table, but live FAQ saves require the Build 172 `public_faq_entries` SQL migration.
+
+---
+> Build 173 documentation sync (2026-05-24): Admin Content Center, FAQ editor APIs, expanded Help Articles access/content, public Help nav link, and schema no-DDL note were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `COMPETETIVE_COMPLETION_MATRIX.md`, and `SANITY_CHECK.md` for the active plan.
+
 > Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
 
 # Build 171 AI context update
