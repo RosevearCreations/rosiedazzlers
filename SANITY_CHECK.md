@@ -1,3 +1,26 @@
+> Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
+
+# Build 172 sanity check
+
+**Updated:** 2026-05-24
+
+## Passed locally this pass
+
+- `/faq.html` and `/faq/index.html` were added with one H1 each.
+- FAQ links were added to global nav/footer and key public pages.
+- FAQ schema, breadcrumb schema, sitemap, API fallback, JSON seed, SQL migration, and release guard are present.
+- `COMPETETIVE_COMPLETION_MATRIX.md` now marks FAQ/help content as a complete public foundation.
+
+## Outstanding after this pass
+
+1. Deploy and browser-test `/faq` plus homepage, Services, Pricing, and Contact access paths.
+2. Apply Build 172 SQL only when ready for DB-managed FAQ rows.
+3. Build Admin Content editor next.
+4. Build persistent quote/proposal draft workflow next.
+5. Build lead conversion to draft booking/quote next.
+6. Continue proof/gallery/privacy automation.
+
+---
 # Build 171 sanity check
 
 **Updated:** 2026-05-24

@@ -1313,3 +1313,12 @@ on conflict (platform, display_name) do nothing;
 -- copy-ready internal quote starter. It depends on Build 167/168 tables for live
 -- data and stays fallback-safe if optional Build 168 upload review-note columns are
 -- not applied yet.
+
+
+-- ---------------------------------------------------------------------------
+-- Build 172 note — Public FAQ content foundation
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-24_build172_public_faq_content_foundation.sql.
+-- Adds public.public_faq_entries as the DB-managed content target for the new
+-- /faq route and /api/public_faqs endpoint. The FAQ page and endpoint remain
+-- fallback-safe before this migration by using static Build 172 seed content.
