@@ -1,3 +1,27 @@
+# Build 173 known gaps and risks — Admin Content Center and Help Articles access
+
+**Updated:** 2026-05-24
+
+## Closed or reduced in Build 173
+
+- FAQ/help content now has a protected admin editing path at `/admin-content.html`.
+- Staff can list, edit, create, hide, and sort FAQ entries through `/api/admin/content_faqs_list` and `/api/admin/content_faqs_save` once the Build 172 FAQ table is applied.
+- The Help Articles page is no longer thin. It now explains road salt, pet hair, coating/protection, paint correction, mobile-detailing preparation, photo-estimate triggers, gift cards, fleet, specials, and maintenance paths.
+- Help Articles are now easier to discover because `assets/chrome.js` links `/blog` from the main navigation as **Help** and from the footer.
+
+## Still outstanding
+
+1. Apply Build 172 SQL before relying on live FAQ saves.
+2. Extend Admin Content Center beyond FAQ entries to specials, service page blurbs, help articles, and education cards.
+3. Add persistent quote/proposal draft records.
+4. Add lead → booking/quote conversion.
+5. Add service/town-aware gallery and recent-work filtering.
+6. Add media privacy enforcement before gallery/social use.
+7. Add analytics to measure FAQ/help article views, lead starts, quote starts, and booking conversions.
+
+---
+> Build 173 documentation sync (2026-05-24): Admin Content Center, FAQ editor APIs, expanded Help Articles access/content, public Help nav link, and schema no-DDL note were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `COMPETETIVE_COMPLETION_MATRIX.md`, and `SANITY_CHECK.md` for the active plan.
+
 > Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
 
 # Build 172 known gaps and risks — FAQ/content-access pass

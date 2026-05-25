@@ -1,3 +1,15 @@
+# Build 173 next steps
+
+1. Deploy Build 173 and test `/blog`, `/faq`, `/admin-content.html`, and Admin Dashboard.
+2. Apply Build 172 SQL before saving FAQ rows in Admin Content Center.
+3. Extend Admin Content Center to specials, services, education/help articles, and homepage support content.
+4. Build persistent quote/proposal drafts.
+5. Add one-click lead → booking/quote conversion.
+6. Add town/service proof filtering and media privacy enforcement.
+
+---
+> Build 173 documentation sync (2026-05-24): Admin Content Center, FAQ editor APIs, expanded Help Articles access/content, public Help nav link, and schema no-DDL note were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `COMPETETIVE_COMPLETION_MATRIX.md`, and `SANITY_CHECK.md` for the active plan.
+
 > Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
 
 # Build 171 roadmap sync

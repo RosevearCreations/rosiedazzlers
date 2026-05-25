@@ -1,3 +1,16 @@
+-- Build 173 note — Admin Content Center FAQ editor bridge (2026-05-24)
+-- No new DDL is required in Build 173.
+-- The protected Admin Content Center uses existing public.public_faq_entries from Build 172.
+-- New endpoints:
+--   functions/api/admin/content_faqs_list.js
+--   functions/api/admin/content_faqs_save.js
+-- Route:
+--   /admin-content.html and /admin-content/
+-- Required live-data order:
+--   1. sql/2026-05-24_build172_public_faq_content_foundation.sql
+--   2. sql/2026-05-24_build173_admin_content_faq_editor_no_ddl_note.sql
+
+---
 -- Build 170 customer dashboard signed-out fallback sync — 2026-05-24
 -- Build 169 auth/API fallback sync — 2026-05-23
 -- No destructive schema change. Runtime auth_me and analytics now fail open instead of returning browser-visible 500s when Supabase config or tables are temporarily unavailable.

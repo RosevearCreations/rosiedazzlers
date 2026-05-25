@@ -1,3 +1,30 @@
+# Build 173 sanity check
+
+**Updated:** 2026-05-24
+
+## Passed locally this pass
+
+- `/admin-content.html` and `/admin-content/index.html` were added with one H1 each.
+- Admin Content Center is linked from Admin Dashboard and shared admin menu.
+- `/api/admin/content_faqs_list` and `/api/admin/content_faqs_save` were added.
+- Public `/blog` Help Articles page was expanded and linked from main navigation/footer.
+- FAQ access section now points to Help Articles.
+- `SUPABASE_SCHEMA.sql` and `DATABASE_STRUCTURE_CURRENT.md` include the Build 173 no-DDL note.
+- Release guard `scripts/admin_content_build173_check.py` was added and wired into `scripts/release_check.py`.
+
+## Outstanding after this pass
+
+1. Deploy and browser-test `/admin-content.html` after staff login.
+2. Apply Build 172 FAQ SQL before expecting FAQ saves to persist.
+3. Add Content Center editing for specials, service blurbs, education/help article content, and homepage support cards.
+4. Build persistent quote/proposal drafts.
+5. Build lead-to-booking conversion.
+6. Add service/town proof filtering.
+7. Enforce privacy review before public media reuse.
+
+---
+> Build 173 documentation sync (2026-05-24): Admin Content Center, FAQ editor APIs, expanded Help Articles access/content, public Help nav link, and schema no-DDL note were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `COMPETETIVE_COMPLETION_MATRIX.md`, and `SANITY_CHECK.md` for the active plan.
+
 > Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
 
 # Build 172 sanity check

@@ -1,3 +1,12 @@
+# Build 173 handoff — next chat starting point
+
+**Updated:** 2026-05-24
+
+Start from Build 173. The next best work is to test `/admin-content.html`, apply the Build 172 FAQ SQL if not already applied, then extend Admin Content Center beyond FAQ to Specials, service blurbs, education/help articles, and homepage support cards. After that, return to persistent quote/proposal drafts and lead → booking conversion.
+
+---
+> Build 173 documentation sync (2026-05-24): Admin Content Center, FAQ editor APIs, expanded Help Articles access/content, public Help nav link, and schema no-DDL note were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `COMPETETIVE_COMPLETION_MATRIX.md`, and `SANITY_CHECK.md` for the active plan.
+
 > Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
 
 # Build 171 new chat status
