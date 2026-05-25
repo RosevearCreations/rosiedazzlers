@@ -51,6 +51,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-leads")
     },
     {
+      key: "admin-content",
+      label: "Content Center",
+      href: "/admin-content.html",
+      description: "FAQ and public help content",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-content")
+    },
+    {
       key: "admin-blocks",
       label: "Blocks",
       href: "/admin-blocks.html",

@@ -29,6 +29,7 @@ const DEFAULT_NAV_LINKS = [
   ["/gallery", "Gallery"],
   ["/gift-cards", "Gift Cards"],
   ["/fleet", "Fleet"],
+  ["/blog", "Help"],
   ["/faq", "FAQ"],
   ["/contact", "Contact"],
   ["/book", "Book"],
@@ -325,6 +326,7 @@ function setFooter() {
         <a href="/services">Services</a>
         <a href="/pricing">Pricing</a>
         <a href="/specials">Specials</a>
+        <a href="/blog">Help Articles</a>
         <a href="/faq">FAQ</a>
         <a href="/book">Book</a>
         <a href="/gear">Gear</a>

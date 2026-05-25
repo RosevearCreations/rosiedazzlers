@@ -211,6 +211,9 @@
       case "admin-app":
         return actor.is_admin === true || hasCapability("can_manage_staff");
 
+      case "admin-content":
+        return actor.is_admin === true || hasCapability("can_manage_promos") || hasCapability("can_manage_staff");
+
       case "admin-customers":
         return hasCapability("can_manage_bookings");
 
