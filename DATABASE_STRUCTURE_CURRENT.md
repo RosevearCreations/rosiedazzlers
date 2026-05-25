@@ -253,3 +253,14 @@ Fallback behavior:
 
 ---
 > Build 174 documentation sync (2026-05-24): persistent quote/proposal drafts were added to Admin Leads with save/load APIs, SQL table foundation, schema notes, and release guard coverage. Quote starters remain copy-ready before the SQL is applied, but saved drafts require sql/2026-05-24_build174_quote_proposal_drafts.sql.
+
+## Build 175 — lead conversion/content/gallery/analytics schema sync
+
+Build 175 adds two DB-managed foundations:
+
+- `public.lead_conversion_drafts` — stores safe lead → draft booking/quote conversion records before staff creates a real scheduled booking.
+- `public.site_content_blocks` — stores reusable admin-managed content for specials, service blurbs, homepage cards, help articles, trust/proof blocks, fleet copy, and maintenance copy.
+
+Build 175 also documents the public gallery privacy rule: before/after media should only be returned publicly when consent/privacy status is `approved_public`, `customer_approved_public`, `public`, `approved`, or when the item is explicitly marked `sample`. Pending, private, rejected, or needs-blur media is filtered out before public reuse.
+
+Apply `sql/2026-05-25_build175_lead_conversion_content_gallery_analytics.sql` after the Build 174 quote draft migration.

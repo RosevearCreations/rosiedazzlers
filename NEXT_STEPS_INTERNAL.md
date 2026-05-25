@@ -193,3 +193,12 @@ Build 161 keeps `DEVELOPMENT_ROADMAP.md` as the source of truth and advances the
 
 ---
 > Build 174 documentation sync (2026-05-24): persistent quote/proposal drafts were added to Admin Leads with save/load APIs, SQL table foundation, schema notes, and release guard coverage. Quote starters remain copy-ready before the SQL is applied, but saved drafts require sql/2026-05-24_build174_quote_proposal_drafts.sql.
+
+
+## Build 175 next steps
+
+1. Apply `sql/2026-05-25_build175_lead_conversion_content_gallery_analytics.sql` after Build 174 SQL.
+2. Test Admin Leads: build quote starter, load pricing suggestions, save draft, update draft status, create conversion draft.
+3. Add the next endpoint that turns a reviewed conversion draft into a real booking row only after date/address/access/price are confirmed.
+4. Add App Management validation warnings for public gallery items that are missing approved-public privacy status.
+5. Add dashboard cards that consume `/api/admin/conversion_funnel_summary`.

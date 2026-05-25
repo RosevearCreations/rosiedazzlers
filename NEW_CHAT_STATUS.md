@@ -282,3 +282,14 @@ Start the next pass by deploying Build 170 and checking DevTools on `/login`, `/
 
 ---
 > Build 174 documentation sync (2026-05-24): persistent quote/proposal drafts were added to Admin Leads with save/load APIs, SQL table foundation, schema notes, and release guard coverage. Quote starters remain copy-ready before the SQL is applied, but saved drafts require sql/2026-05-24_build174_quote_proposal_drafts.sql.
+
+
+## Build 175 update — lead conversion, pricing suggestions, content expansion, gallery privacy, and analytics
+
+- Added safe lead → draft booking/quote conversion using `public.lead_conversion_drafts` instead of creating live scheduled bookings too early.
+- Added catalog-backed package/add-on price suggestions for Admin Leads from the current pricing catalog.
+- Added quote draft status workflow controls: draft, needs review, ready to send, sent, accepted, declined, archived.
+- Expanded Admin Content Center beyond FAQ with reusable content blocks for specials, service blurbs, homepage cards, help articles, trust proof, fleet, and maintenance copy.
+- Added service/town filtering for the public before/after gallery and enforced public reuse only for approved-public/sample media.
+- Added FAQ/help/lead/quote conversion analytics summary endpoint for admin reporting.
+- Added SQL/schema sync in `sql/2026-05-25_build175_lead_conversion_content_gallery_analytics.sql`.

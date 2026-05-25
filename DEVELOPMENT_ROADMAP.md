@@ -1035,3 +1035,8 @@ Next roadmap action: once login/session creation is confirmed on Preview and Pro
 
 ---
 > Build 174 documentation sync (2026-05-24): persistent quote/proposal drafts were added to Admin Leads with save/load APIs, SQL table foundation, schema notes, and release guard coverage. Quote starters remain copy-ready before the SQL is applied, but saved drafts require sql/2026-05-24_build174_quote_proposal_drafts.sql.
+
+
+## Build 175 update — next roadmap items moved forward
+
+Completed foundations for the listed outstanding items: lead → draft booking/quote conversion, catalog-backed package/add-on price suggestions, quote draft status workflow, Admin Content expansion beyond FAQ, gallery service/town proof filtering, media privacy enforcement before public reuse, and FAQ/help/lead/quote conversion analytics. Next work should turn conversion drafts into one-click real booking creation once staff confirms date, address, access, vehicle size, and final price.

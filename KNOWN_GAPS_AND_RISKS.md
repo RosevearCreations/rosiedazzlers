@@ -532,3 +532,8 @@ Still verify after deploy: actual login must create a customer session cookie, a
 
 ---
 > Build 174 documentation sync (2026-05-24): persistent quote/proposal drafts were added to Admin Leads with save/load APIs, SQL table foundation, schema notes, and release guard coverage. Quote starters remain copy-ready before the SQL is applied, but saved drafts require sql/2026-05-24_build174_quote_proposal_drafts.sql.
+
+
+## Build 175 known gaps
+
+The new lead conversion draft workflow is intentionally safer than creating a live booking automatically. A real booking should still require staff confirmation of date, slot, address, water/power access, vehicle size, package, add-ons, and final price. Media privacy is now enforced on the public gallery API, but App Management still needs stronger UI validation so pending/private/rejected gallery items are easier to spot before save.
