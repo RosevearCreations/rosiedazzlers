@@ -1,3 +1,70 @@
+# Build 174 update — Admin Leads quote/proposal drafts
+
+**Updated:** 2026-05-24  
+**Current build:** Build 174  
+**Primary source of truth:** `DEVELOPMENT_ROADMAP.md`
+
+Build 174 completes the next open competitive-matrix item after the quote starter: staff can now save generated quote starter text as a persistent quote/proposal draft from `/admin-leads.html`. This moves the workflow from copy-only follow-up toward a real quote pipeline while staying fallback-safe if the new table has not been applied yet.
+
+## Completed in Build 174
+
+1. Added `/api/admin/quote_proposal_drafts_save` for staff-protected quote/proposal draft creation and updates.
+2. Added `/api/admin/quote_proposal_drafts_list` for staff-protected draft lookup by lead, booking, status, search, or id.
+3. Updated `/admin-leads.html` and `/admin-leads/index.html` with **Save quote draft** and **Load drafts** actions on each public lead.
+4. Added persistent draft display directly under the lead card so staff can see saved follow-up text before contacting a customer.
+5. Added migration-safe fallback messages when the new draft table has not been applied yet.
+6. Added SQL migration `sql/2026-05-24_build174_quote_proposal_drafts.sql`.
+7. Updated `SUPABASE_SCHEMA.sql` and `DATABASE_STRUCTURE_CURRENT.md` with the quote/proposal draft table plan.
+8. Added release guard `scripts/quote_proposal_drafts_build174_check.py` and wired it into `scripts/release_check.py`.
+9. Re-ran Cloudflare Functions checks, one-H1 validation, and release checks.
+
+## Active next steps after Build 174
+
+1. Apply `sql/2026-05-24_build174_quote_proposal_drafts.sql` after the Build 167/168 lead SQL.
+2. Browser-test `/admin-leads.html` by building a quote starter, saving it as a draft, and loading it again.
+3. Add draft status controls for `needs_review`, `ready_to_send`, `sent`, `accepted`, and `declined`.
+4. Add one-click lead → draft booking/quote conversion.
+5. Add package/add-on price suggestions from the live pricing catalog.
+6. Extend Admin Content Center to specials, service blurbs, homepage cards, and help articles.
+7. Add service/town-aware proof filtering and media privacy enforcement before public gallery/social use.
+
+---
+
+# COMPETETIVE.md Completion Matrix — Build 174
+
+**Updated:** 2026-05-24  
+**Baseline:** latest uploaded `rosiedazzlers-dev(169).zip`  
+**Roadmap authority:** `DEVELOPMENT_ROADMAP.md`
+
+Build 174 closes the copy-only quote-starter gap by adding persistent quote/proposal drafts to Admin Leads. Public lead capture, photo-estimate review, quote starter generation, FAQ/help content, and FAQ admin editing are now connected to a stronger follow-up workflow.
+
+## Updated completion status after Build 174
+
+| COMPETETIVE.md area | Current status | Build 174 notes |
+| --- | --- | --- |
+| FAQ/help content | Complete public foundation + admin FAQ editor | `/faq`, `/api/public_faqs`, and `/admin-content.html` FAQ editing are present after Build 172 SQL. |
+| Help articles / education | Improved public foundation | `/blog` Help Articles hub and starter article routes exist. Admin editing remains next. |
+| New-page access paths | Improved | FAQ, Help, Specials, Gift Cards, Fleet, Maintenance, and key services are linked through nav/footer/sitemap/relevant cards. |
+| Lead capture pages | Complete public foundation | Fleet, maintenance, specials, gift-card, and photo-estimate lead paths exist. |
+| Admin Leads / triage | Improved | Staff can list, search, update, and note public leads and uploads. |
+| Quote starter | Improved | Build 171 copy-ready quote starter remains available from each public lead. |
+| Persistent quote/proposal drafts | Added foundation | Build 174 adds save/load APIs, SQL table, and Admin Leads UI actions. Full send/approval workflow remains next. |
+| Admin-managed content | Partial | FAQ editor exists; specials, services, homepage blocks, and help article editors remain open. |
+| Proof sections | Partial | Gallery/recent-work filtering by service and town remains open. |
+| Media privacy | Partial | Review statuses exist; public gallery/social enforcement still needs automation. |
+| Analytics | Partial | Analytics fallback exists; FAQ/help/lead/quote conversion reporting remains open. |
+
+## Remaining competitive gap priority after Build 174
+
+1. Add one-click lead → draft booking/quote conversion.
+2. Add catalog-backed package/add-on price suggestions inside saved quote drafts.
+3. Add quote draft status controls, sent/accepted/declined tracking, and follow-up reminders.
+4. Extend Admin Content Center to specials, service blurbs, help articles, and homepage support cards.
+5. Add gallery/recent-work proof filtering by town and service.
+6. Enforce privacy-approved media pipeline before public gallery/social use.
+7. Add analytics for FAQ searches, quote draft saves, quote follow-ups, and lead conversions.
+
+---
 # COMPETETIVE.md Completion Matrix — Build 173
 
 **Updated:** 2026-05-24  
@@ -332,3 +399,6 @@ Reliability/customer-trust item added after live check: login, account widgets, 
 ## Build 170 matrix follow-up — Account trust cleanup
 
 Reliability/customer-trust item continued: customer account and booking pages should not look broken to signed-out visitors. Build 170 removes the dashboard 401 console noise by treating dashboard reads as optional customer context while keeping protected customer write actions guarded. This supports a smoother booking funnel and a more professional competitor-facing account experience before expanding quotes, memberships, and photo-estimate conversion.
+
+---
+> Build 174 documentation sync (2026-05-24): persistent quote/proposal drafts were added to Admin Leads with save/load APIs, SQL table foundation, schema notes, and release guard coverage. Quote starters remain copy-ready before the SQL is applied, but saved drafts require sql/2026-05-24_build174_quote_proposal_drafts.sql.

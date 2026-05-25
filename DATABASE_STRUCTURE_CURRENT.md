@@ -232,3 +232,24 @@ The screen and endpoints are fallback-safe: if Build 167/168 SQL has not been ap
 ## Build 170 schema note — no DDL
 
 Build 170 did not add or change tables. The schema handoff was updated with `sql/2026-05-24_build170_customer_dashboard_signed_out_fallback_no_ddl_note.sql` to document that the customer dashboard signed-out fallback is an API behavior change only.
+
+---
+
+## Build 174 — quote/proposal drafts
+
+Build 174 adds the planning/live schema target `public.quote_proposal_drafts` through `sql/2026-05-24_build174_quote_proposal_drafts.sql`.
+
+Purpose:
+
+- Save generated Admin Leads quote starters as persistent drafts.
+- Tie a draft to `lead_id`, `booking_id`, or both.
+- Track status such as `draft`, `needs_review`, `ready_to_send`, `sent`, `accepted`, `declined`, and `archived`.
+- Preserve body text, pricing notes, staff/internal notes, follow-up date, sent date, customer name/email, and staff creator/updater ids.
+
+Fallback behavior:
+
+- `/admin-leads.html` can still build and copy quote starter text before this SQL is applied.
+- Saving/loading persistent quote drafts returns a migration hint until the table exists.
+
+---
+> Build 174 documentation sync (2026-05-24): persistent quote/proposal drafts were added to Admin Leads with save/load APIs, SQL table foundation, schema notes, and release guard coverage. Quote starters remain copy-ready before the SQL is applied, but saved drafts require sql/2026-05-24_build174_quote_proposal_drafts.sql.

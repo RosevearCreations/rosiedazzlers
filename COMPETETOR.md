@@ -802,3 +802,6 @@ Still open:
 - Service/town-aware proof filtering.
 - Quote-builder workflow from photo estimates.
 - Per-media privacy review records before gallery/social publishing.
+
+---
+> Build 174 documentation sync (2026-05-24): persistent quote/proposal drafts were added to Admin Leads with save/load APIs, SQL table foundation, schema notes, and release guard coverage. Quote starters remain copy-ready before the SQL is applied, but saved drafts require sql/2026-05-24_build174_quote_proposal_drafts.sql.

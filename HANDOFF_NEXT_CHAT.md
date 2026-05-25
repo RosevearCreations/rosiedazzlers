@@ -1,3 +1,34 @@
+# Build 174 update — Admin Leads quote/proposal drafts
+
+**Updated:** 2026-05-24  
+**Current build:** Build 174  
+**Primary source of truth:** `DEVELOPMENT_ROADMAP.md`
+
+Build 174 completes the next open competitive-matrix item after the quote starter: staff can now save generated quote starter text as a persistent quote/proposal draft from `/admin-leads.html`. This moves the workflow from copy-only follow-up toward a real quote pipeline while staying fallback-safe if the new table has not been applied yet.
+
+## Completed in Build 174
+
+1. Added `/api/admin/quote_proposal_drafts_save` for staff-protected quote/proposal draft creation and updates.
+2. Added `/api/admin/quote_proposal_drafts_list` for staff-protected draft lookup by lead, booking, status, search, or id.
+3. Updated `/admin-leads.html` and `/admin-leads/index.html` with **Save quote draft** and **Load drafts** actions on each public lead.
+4. Added persistent draft display directly under the lead card so staff can see saved follow-up text before contacting a customer.
+5. Added migration-safe fallback messages when the new draft table has not been applied yet.
+6. Added SQL migration `sql/2026-05-24_build174_quote_proposal_drafts.sql`.
+7. Updated `SUPABASE_SCHEMA.sql` and `DATABASE_STRUCTURE_CURRENT.md` with the quote/proposal draft table plan.
+8. Added release guard `scripts/quote_proposal_drafts_build174_check.py` and wired it into `scripts/release_check.py`.
+9. Re-ran Cloudflare Functions checks, one-H1 validation, and release checks.
+
+## Active next steps after Build 174
+
+1. Apply `sql/2026-05-24_build174_quote_proposal_drafts.sql` after the Build 167/168 lead SQL.
+2. Browser-test `/admin-leads.html` by building a quote starter, saving it as a draft, and loading it again.
+3. Add draft status controls for `needs_review`, `ready_to_send`, `sent`, `accepted`, and `declined`.
+4. Add one-click lead → draft booking/quote conversion.
+5. Add package/add-on price suggestions from the live pricing catalog.
+6. Extend Admin Content Center to specials, service blurbs, homepage cards, and help articles.
+7. Add service/town-aware proof filtering and media privacy enforcement before public gallery/social use.
+
+---
 # Build 173 handoff — next chat starting point
 
 **Updated:** 2026-05-24
@@ -258,3 +289,5 @@ Deploy Build 170, then test signed-out and signed-in customer flows separately. 
 - New FAQ DB/API foundation: `public_faq_entries`, `/api/public_faqs`, `data/site_faqs.json`.
 - Next recommended build: Admin Content editor for FAQ/special/service/education copy, then persistent quotes and lead conversion.
 
+---
+> Build 174 documentation sync (2026-05-24): persistent quote/proposal drafts were added to Admin Leads with save/load APIs, SQL table foundation, schema notes, and release guard coverage. Quote starters remain copy-ready before the SQL is applied, but saved drafts require sql/2026-05-24_build174_quote_proposal_drafts.sql.
