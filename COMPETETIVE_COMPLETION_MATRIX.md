@@ -1,3 +1,52 @@
+> Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
+
+# COMPETETIVE.md Completion Matrix — Build 172
+
+**Updated:** 2026-05-24  
+**Baseline:** latest uploaded `rosiedazzlers-dev(167).zip`  
+**Roadmap authority:** `DEVELOPMENT_ROADMAP.md`
+
+Build 172 focuses on the customer help/content-access gap that remained after the lead and quote-starter work. The site now has a full FAQ/help route, schema, access links, sitemap inclusion, and a DB-managed content foundation.
+
+## Updated completion status after Build 172
+
+| COMPETETIVE.md area | Current status | Build 172 notes |
+| --- | --- | --- |
+| Clear local homepage hero | Mostly complete | Homepage now links customers to FAQ for objections/questions before booking. |
+| Sticky CTA buttons | Complete | Existing sticky CTA remains active. |
+| Better service/package selector | Mostly complete | FAQ supports package decision-making and quote-first guidance. |
+| Service package cards | Mostly complete | Still needs admin-managed public copy. |
+| Add-on cards | Improved | FAQ explains heavy-condition add-ons and photo-estimate triggers. |
+| Specials | Complete public foundation | Static page exists; admin-managed specials remain next. |
+| Gift cards | Complete public foundation | FAQ answers gift-card use and links to gift-card path. |
+| Proof sections | Partial | Service/town-aware proof filtering remains open. |
+| Ceramic coating page | Mostly complete | FAQ links to coating/paint review expectations; deeper proof remains next. |
+| Paint correction page | Mostly complete | FAQ reinforces inspection-led quoting. |
+| Interior/basic vs deep distinction | Mostly complete | FAQ now explains standard vs heavy interior work. |
+| High-value add-ons | Improved | FAQ covers pet hair, odour, salt, work trucks, coating, correction, and estimates. |
+| Booking flow | Mostly complete | FAQ is linked from the public flow and helps decide direct booking vs photo estimate. |
+| Admin service controls | Partial | Build 172 adds DB target for FAQ entries; editor is still outstanding. |
+| Schema/local SEO support | Improved | `/faq` has FAQPage and BreadcrumbList schema, one H1, sitemap entry, title/meta, and local wording. |
+| Conversion blocks | Improved | FAQ is linked from homepage, nav, footer, Services, Pricing, Contact, and booking/photo CTAs. |
+| Maintenance plans | Complete public foundation | FAQ includes maintenance/fleet quote expectations. |
+| Fleet/commercial | Complete public foundation | FAQ includes fleet quote expectations. |
+| Gallery system | Partial | Needs filtering and media privacy enforcement. |
+| Customer education content | Improved | FAQ joins the blog/help article foundation. |
+| FAQ/help content | Complete public foundation | New `/faq` route, content, schema, API fallback, JSON seed, and DB table migration added. |
+| Pricing display strategy | Mostly complete | FAQ explains why final price may require condition review. |
+
+## Still open after Build 172
+
+1. Admin-managed FAQ/special/service/education content editor.
+2. Persistent quote/proposal drafts from the Build 171 quote starter.
+3. One-click public lead → booking/quote conversion.
+4. Price suggestions from live package/add-on catalog inside quote preview.
+5. Gallery/recent-work proof filtering by town and service.
+6. Media privacy approval enforcement before public gallery/social reuse.
+7. Analytics for FAQ views/searches, lead status changes, quote copy, and conversion.
+8. Continued CSS drift and release-check coverage as pages grow.
+
+---
 # COMPETETIVE.md Completion Matrix — Build 171
 
 **Updated:** 2026-05-24  

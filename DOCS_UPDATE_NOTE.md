@@ -1,3 +1,5 @@
+> Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
+
 # Documentation update note — Build 171
 
 Build 171 documentation is synced across roadmap, gaps, competitive matrix, schema notes, implementation state, project brain, handoff files, and all Markdown files. The main new workflow is the Admin Leads quote starter, powered by `/api/admin/lead_quote_preview`, with no new DDL.
@@ -249,3 +251,11 @@ Build 169 adds `scripts/auth_analytics_build169_check.py` and wires it into `scr
 ## Build 170 docs update
 
 Build 170 documentation records the customer dashboard 401 cleanup. Schema tracking was updated with a no-DDL SQL note because this pass changes endpoint behavior only. `scripts/client_dashboard_build170_check.py` was added and included in `scripts/release_check.py`.
+
+## Build 172 handoff note
+
+- New customer FAQ/help route: `/faq` and `/faq/index.html`.
+- Access paths: top nav, footer, homepage, Services, Pricing, Contact, and sitemap.
+- New FAQ DB/API foundation: `public_faq_entries`, `/api/public_faqs`, `data/site_faqs.json`.
+- Next recommended build: Admin Content editor for FAQ/special/service/education copy, then persistent quotes and lead conversion.
+

@@ -1,3 +1,40 @@
+> Build 172 documentation sync (2026-05-24): public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
+
+# Build 172 update — Public FAQ content and page-access cleanup
+
+**Updated:** 2026-05-24  
+**Current build:** Build 172  
+**Primary source of truth:** `DEVELOPMENT_ROADMAP.md`
+
+Build 172 answers the open question about new pages: `/faq` is now a real public help page with content, FAQPage/Breadcrumb schema, search/filter behaviour, clear CTA paths, and links from the top navigation, footer, homepage, Services, Pricing, Contact, and sitemap. This pass also starts moving duplicated FAQ/help copy toward DB-managed content through `public_faq_entries` and `/api/public_faqs`, while keeping static fallback content so the page works before the SQL is applied.
+
+## Completed in Build 172
+
+1. Added `/faq.html` and `/faq/index.html` with mobile-detailing FAQ content for booking, service areas, pricing, photos, privacy, gift cards, fleet, and maintenance.
+2. Added visible explanation of how FAQ and newer public pages are accessed.
+3. Added FAQPage JSON-LD and BreadcrumbList JSON-LD to the FAQ page.
+4. Added `/api/public_faqs` with DB-first read and static fallback.
+5. Added `data/site_faqs.json` as the static FAQ seed/fallback dataset.
+6. Added SQL migration `sql/2026-05-24_build172_public_faq_content_foundation.sql` for `public.public_faq_entries`.
+7. Added `/faq` to the public top navigation and footer, plus access links from homepage, Services, Pricing, and Contact.
+8. Added FAQ/access CSS helpers to `assets/site.css`.
+9. Added `/faq/` to `sitemap.xml`.
+10. Updated schema notes in `SUPABASE_SCHEMA.sql` and `DATABASE_STRUCTURE_CURRENT.md`.
+11. Added release guard `scripts/public_faq_content_build172_check.py` and wired it into `scripts/release_check.py`.
+12. Continued one-H1, local wording, title/meta clarity, fallback handling, and public conversion-path discipline.
+
+## Next several steps after Build 172
+
+1. Deploy Build 172 and open `/faq`, `/services`, `/pricing`, `/contact`, and `/` to confirm the new FAQ links are visible.
+2. Apply `sql/2026-05-24_build172_public_faq_content_foundation.sql` after Build 167/168 lead migrations if FAQ content should be DB-managed.
+3. Add an Admin Content screen for FAQ, specials, service blurbs, and education snippets.
+4. Add persistent quote/proposal drafts from the Build 171 quote starter.
+5. Add one-click lead → draft booking/quote conversion.
+6. Add service/town proof filtering for Gallery and Recent Work.
+7. Add media privacy eligibility enforcement for gallery/social publishing.
+8. Keep updating `COMPETETIVE_COMPLETION_MATRIX.md` until the remaining items are admin-managed rather than static.
+
+---
 # Build 171 update — Admin lead quote starter and service-key fallback polish
 
 **Updated:** 2026-05-24  

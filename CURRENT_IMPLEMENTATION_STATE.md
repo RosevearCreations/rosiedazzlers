@@ -1,3 +1,5 @@
+> Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
+
 # Build 171 current implementation state
 
 **Updated:** 2026-05-24
@@ -231,3 +233,11 @@ The `/login` page and `/admin-leads.html` no longer depend on fragile auth/sessi
 ## Build 170 current state — Optional customer dashboard context
 
 The customer dashboard endpoint now behaves as optional context for public flows. Signed-out visitors receive a clean JSON response instead of a failed network resource, while signed-in customers still receive dashboard data when session storage and Supabase are available. This supports the booking page garage-prefill workflow without making signed-out browsing look broken.
+
+## Build 172 handoff note
+
+- New customer FAQ/help route: `/faq` and `/faq/index.html`.
+- Access paths: top nav, footer, homepage, Services, Pricing, Contact, and sitemap.
+- New FAQ DB/API foundation: `public_faq_entries`, `/api/public_faqs`, `data/site_faqs.json`.
+- Next recommended build: Admin Content editor for FAQ/special/service/education copy, then persistent quotes and lead conversion.
+

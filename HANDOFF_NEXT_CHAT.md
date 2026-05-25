@@ -1,3 +1,5 @@
+> Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
+
 # Build 171 handoff for next chat
 
 **Updated:** 2026-05-24
@@ -239,3 +241,11 @@ Start by deploying the Build 169 zip, then test `/login` with DevTools open. Exp
 ## Build 170 next-chat starting point
 
 Deploy Build 170, then test signed-out and signed-in customer flows separately. Signed-out browsing should be quiet in DevTools for `/api/client/dashboard`. Signed-in `/my-account` should return `ok:true` with customer, vehicle, booking, gift certificate, and review arrays. If the signed-in dashboard is empty or signed out, prioritize customer login/session creation before adding lead-to-quote conversion.
+
+## Build 172 handoff note
+
+- New customer FAQ/help route: `/faq` and `/faq/index.html`.
+- Access paths: top nav, footer, homepage, Services, Pricing, Contact, and sitemap.
+- New FAQ DB/API foundation: `public_faq_entries`, `/api/public_faqs`, `data/site_faqs.json`.
+- Next recommended build: Admin Content editor for FAQ/special/service/education copy, then persistent quotes and lead conversion.
+

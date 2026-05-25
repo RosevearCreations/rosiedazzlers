@@ -1,3 +1,5 @@
+> Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
+
 # Rosie Dazzlers Build 171 note — Admin lead quote starter
 
 **Updated:** 2026-05-24
@@ -232,3 +234,11 @@ Build 169 adds `scripts/auth_analytics_build169_check.py` and wires it into `scr
 Build 170 repairs the remaining signed-out customer dashboard console noise found after Build 169. `/api/client/dashboard` now returns a safe HTTP 200 JSON payload with `ok:false`, `authenticated:false`, and `code:"not_authenticated"` when no valid customer session exists. This keeps public booking/account helpers from reporting a failed network resource while preserving authorization on protected customer write endpoints.
 
 Build 170 adds `scripts/client_dashboard_build170_check.py` and wires it into `scripts/release_check.py`. No database DDL is required; see `sql/2026-05-24_build170_customer_dashboard_signed_out_fallback_no_ddl_note.sql`.
+
+## Build 172 handoff note
+
+- New customer FAQ/help route: `/faq` and `/faq/index.html`.
+- Access paths: top nav, footer, homepage, Services, Pricing, Contact, and sitemap.
+- New FAQ DB/API foundation: `public_faq_entries`, `/api/public_faqs`, `data/site_faqs.json`.
+- Next recommended build: Admin Content editor for FAQ/special/service/education copy, then persistent quotes and lead conversion.
+

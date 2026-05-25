@@ -1,3 +1,27 @@
+> Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
+
+# Build 172 known gaps and risks — FAQ/content-access pass
+
+**Updated:** 2026-05-24
+
+## Closed or reduced in Build 172
+
+- The FAQ route is no longer just a roadmap item. `/faq` and `/faq/index.html` now have real customer-facing content.
+- New public pages are easier to discover because FAQ is linked from navigation, footer, homepage, Services, Pricing, Contact, and sitemap.
+- FAQ/help content now has a DB target (`public_faq_entries`) and a fallback API (`/api/public_faqs`), reducing future duplicate static-copy drift.
+- FAQPage and BreadcrumbList schema are present on the new FAQ page.
+
+## Still outstanding
+
+1. Apply Build 172 SQL before expecting FAQ content to come from Supabase.
+2. Build an Admin Content editor for FAQ, specials, services, and education content.
+3. Add persistent quote/proposal draft records and send/review workflow.
+4. Add lead → booking/quote conversion and status analytics.
+5. Add service/town-aware gallery/recent-work filtering.
+6. Enforce per-media privacy review before public gallery or social reuse.
+7. Continue testing auth/session fallback after every deploy because missing env vars still prevent successful login, even though the console no longer hard-fails.
+
+---
 # Build 171 known gaps and risks update
 
 **Updated:** 2026-05-24  

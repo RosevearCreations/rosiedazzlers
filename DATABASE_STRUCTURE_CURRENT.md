@@ -1,3 +1,16 @@
+> Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
+
+# Build 172 database/schema sync — public FAQ content foundation
+
+**Updated:** 2026-05-24
+
+Build 172 adds `sql/2026-05-24_build172_public_faq_content_foundation.sql`, which creates `public.public_faq_entries` as the future DB-managed source for the new `/faq` page and `/api/public_faqs` endpoint.
+
+The page and endpoint remain fallback-safe before migration: static FAQ content is embedded in `/faq` and mirrored in `data/site_faqs.json`, while `/api/public_faqs` returns a `static_fallback` payload if Supabase config, the table, or rows are unavailable.
+
+Apply after any pending Build 167/168 lead/upload migrations if the project is ready to move FAQ/help content into Supabase.
+
+---
 # Build 171 database/schema sync — Admin Leads quote preview
 
 **Updated:** 2026-05-24

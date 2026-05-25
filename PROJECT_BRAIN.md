@@ -1,3 +1,5 @@
+> Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
+
 # Build 171 project brain update
 
 **Updated:** 2026-05-24
@@ -154,3 +156,11 @@ Auth and analytics are now intentionally fallback-safe during page boot. Do not 
 ## Build 170 project memory
 
 The live dev site showed that `/api/client/dashboard` still produced a 401 failed-resource console message when signed out. Treat customer dashboard reads as optional public context: no customer session should return HTTP 200 with `ok:false`, `authenticated:false`, and `code:"not_authenticated"`. Protected customer write endpoints should continue to require a valid customer session.
+
+## Build 172 handoff note
+
+- New customer FAQ/help route: `/faq` and `/faq/index.html`.
+- Access paths: top nav, footer, homepage, Services, Pricing, Contact, and sitemap.
+- New FAQ DB/API foundation: `public_faq_entries`, `/api/public_faqs`, `data/site_faqs.json`.
+- Next recommended build: Admin Content editor for FAQ/special/service/education copy, then persistent quotes and lead conversion.
+
