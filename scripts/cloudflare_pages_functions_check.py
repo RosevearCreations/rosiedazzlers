@@ -65,6 +65,7 @@ def main() -> int:
         "functions/api/_lib/social-platform-dispatch.js",
         "functions/api/_lib/social-compliance.js",
         "functions/api/admin/auth_",
+        "functions/api/admin/content_",
         "functions/api/client/auth_",
         "functions/api/auth_",
         "functions/api/analytics/ingest.js",
