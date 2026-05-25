@@ -1335,3 +1335,12 @@ on conflict (platform, display_name) do nothing;
 -- Adds public.public_faq_entries as the DB-managed content target for the new
 -- /faq route and /api/public_faqs endpoint. The FAQ page and endpoint remain
 -- fallback-safe before this migration by using static Build 172 seed content.
+
+-- ---------------------------------------------------------------------------
+-- Build 174 note — quote/proposal draft foundation
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-24_build174_quote_proposal_drafts.sql.
+-- Adds public.quote_proposal_drafts so /admin-leads can save generated quote
+-- starters as persistent staff drafts tied to a public lead and/or booking.
+-- The page remains copy-only before this migration, but saved drafts require
+-- the table and Supabase service-role access.
