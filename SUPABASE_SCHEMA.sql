@@ -1344,3 +1344,50 @@ on conflict (platform, display_name) do nothing;
 -- starters as persistent staff drafts tied to a public lead and/or booking.
 -- The page remains copy-only before this migration, but saved drafts require
 -- the table and Supabase service-role access.
+
+-- Build 175 note — lead conversion drafts, expanded content blocks, gallery/privacy filtering, and conversion analytics.
+-- See sql/2026-05-25_build175_lead_conversion_content_gallery_analytics.sql.
+-- Adds public.lead_conversion_drafts so Admin Leads can create a safe draft booking/quote conversion record before a real booking is scheduled.
+-- Adds public.site_content_blocks so Admin Content can manage specials, service blurbs, homepage cards, help article starters, trust proof, fleet copy, and maintenance copy.
+-- Public gallery filtering now expects approved public consent/privacy fields before before/after media is reused publicly.
+create table if not exists public.lead_conversion_drafts (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  lead_id uuid not null references public.public_inquiry_leads(id) on delete cascade,
+  quote_proposal_draft_id uuid null references public.quote_proposal_drafts(id) on delete set null,
+  status text not null default 'draft_booking',
+  customer_name text null,
+  customer_email text null,
+  customer_phone text null,
+  service_area text null,
+  vehicle_count integer not null default 1,
+  preferred_cadence text null,
+  proposed_package_code text null,
+  proposed_vehicle_size text null,
+  proposed_booking jsonb not null default '{}'::jsonb,
+  proposed_quote jsonb not null default '{}'::jsonb,
+  internal_note text null,
+  next_action text null,
+  created_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  updated_by_staff_user_id uuid null references public.staff_users(id) on delete set null
+);
+
+create table if not exists public.site_content_blocks (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  content_type text not null,
+  placement text not null default 'general',
+  slug text not null,
+  title text not null,
+  summary text null,
+  body text null,
+  cta_label text null,
+  cta_href text null,
+  image_url text null,
+  sort_order integer not null default 100,
+  is_active boolean not null default true,
+  metadata jsonb not null default '{}'::jsonb,
+  unique (content_type, placement, slug)
+);

@@ -352,3 +352,8 @@ Build 169 adds `scripts/auth_analytics_build169_check.py` and wires it into `scr
 
 ---
 > Build 174 documentation sync (2026-05-24): persistent quote/proposal drafts were added to Admin Leads with save/load APIs, SQL table foundation, schema notes, and release guard coverage. Quote starters remain copy-ready before the SQL is applied, but saved drafts require sql/2026-05-24_build174_quote_proposal_drafts.sql.
+
+
+## Build 175 sanity check — conversion_content_gallery_analytics
+
+Build 175 adds a broad but safe foundation pass: quote/pricing/conversion tools in Admin Leads, expanded content-block editing in Admin Content, privacy-enforced gallery filtering by service/town, and admin conversion analytics. The release guard is `scripts/build175_conversion_content_gallery_analytics_check.py` and it is included in `scripts/release_check.py`.
