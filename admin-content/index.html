@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Content Center | Rosie Dazzlers Admin</title>
+  <meta name="description" content="Manage Rosie Dazzlers public FAQ and help content." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .admin-status{margin-bottom:16px;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);color:#e5e7eb}
+    .admin-status[data-state="error"]{background:rgba(220,38,38,.12);border-color:rgba(248,113,113,.25);color:#fecaca}
+    .admin-status[data-state="success"]{background:rgba(22,163,74,.12);border-color:rgba(74,222,128,.25);color:#bbf7d0}
+    .admin-topbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:flex-start}
+    .actorcard{min-width:260px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px 18px;box-shadow:0 14px 35px rgba(0,0,0,.22)}
+    .actorline{margin:4px 0}.actorlabel{color:#93c5fd;font-weight:700;margin-right:6px}
+    .content-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+    @media(min-width:1080px){.content-grid{grid-template-columns:minmax(360px,.8fr) minmax(0,1.2fr)}}
+    .content-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin:0 0 14px}
+    .content-toolbar label,.faq-editor label{display:grid;gap:5px}
+    .content-toolbar input,.content-toolbar select,.faq-editor input,.faq-editor select,.faq-editor textarea{width:100%;box-sizing:border-box;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(15,23,42,.92);color:#f8fafc;padding:10px}
+    .faq-editor{display:grid;gap:10px}
+    .faq-editor textarea{min-height:110px;resize:vertical;line-height:1.45}
+    .faq-editor .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+    .faq-list{display:grid;gap:12px}
+    .faq-admin-card{border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);padding:15px;display:grid;gap:10px}
+    .faq-admin-card h3{margin:0}.faq-meta{display:flex;flex-wrap:wrap;gap:8px;color:#cbd5e1;font-size:.9rem}
+    .pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 9px;background:rgba(59,130,246,.16);border:1px solid rgba(96,165,250,.22);font-size:.84rem;color:#dbeafe}
+    .pill.good{background:rgba(22,163,74,.15);border-color:rgba(74,222,128,.25);color:#bbf7d0}.pill.warn{background:rgba(245,158,11,.15);border-color:rgba(251,191,36,.25);color:#fde68a}
+    .muted{color:#94a3b8}.small-note{font-size:.9rem;color:#cbd5e1}.button-row{display:flex;flex-wrap:wrap;gap:10px}.danger-note{color:#fecaca}
+    .page-map{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:12px}
+    .page-map article{border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(15,23,42,.35);padding:13px}
+    .page-map h3{margin:0 0 6px}
+  </style>
+</head>
+<body data-page="admin-content" data-build173="admin-content-faq-editor">
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/admin.html">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers Admin</strong>
+      </a>
+      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button>
+      <nav id="navLinks" class="nav-links">
+        <a href="/admin.html">Dashboard</a>
+        <a href="/admin-booking.html">Bookings</a>
+        <a href="/admin-leads.html">Leads</a>
+        <a href="/admin-content.html">Content</a>
+        <a href="/admin-progress.html">Progress</a>
+        <a href="/admin-social.html">Social Queue</a>
+        <a href="/admin-analytics.html">Analytics</a>
+        <a href="/admin-accounting.html">Accounting</a>
+        <a href="/admin-app">App Management</a>
+        <a href="/book.html">Public Site</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="admin-status" data-admin-shell-status hidden></div>
+    <div class="admin-status" data-page-status hidden></div>
+    <div data-admin-shell-loading class="section"><div class="panel">Loading content editor…</div></div>
+
+    <div data-admin-shell-ready hidden>
+      <section class="section">
+        <div class="panel admin-topbar">
+          <div>
+            <div class="badge">Admin Content</div>
+            <h1 style="margin:10px 0 6px">Content Center</h1>
+            <p class="kicker" style="margin:0;max-width:880px">Manage public FAQ/help content from one protected page. Build 173 starts with FAQ entries because those were the newest public page gap and already have a DB-first fallback API.</p>
+          </div>
+          <section class="actorcard" aria-label="Signed in staff">
+            <div class="actorline"><span class="actorlabel">Signed in:</span><span data-actor-name></span></div>
+            <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
+            <div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div>
+            <button class="btn ghost small" type="button" data-admin-logout>Sign out</button>
+          </section>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="panel">
+          <h2>How the new public pages are accessed</h2>
+          <p class="muted">These routes should stay visible from crawlable links, not only buttons hidden inside JavaScript. The public navigation now includes Help Articles and FAQ, the footer links to Help Articles and FAQ, and the FAQ page explains where Specials, Gift Cards, Fleet, Maintenance, Blog, and town/service pages are found.</p>
+          <div class="page-map">
+            <article><h3>FAQ</h3><p class="muted">Main nav, footer, homepage, Services, Pricing, Contact.</p><a class="btn ghost small" href="/faq" target="_blank" rel="noopener">Open FAQ</a></article>
+            <article><h3>Help Articles</h3><p class="muted">Main nav Help link, footer Help articles, FAQ page, and sitemap.</p><a class="btn ghost small" href="/blog" target="_blank" rel="noopener">Open Help</a></article>
+            <article><h3>Lead pages</h3><p class="muted">Specials, Gift Cards, Fleet, and Maintenance are linked from navigation, homepage CTAs, service cards, FAQ, and sitemap.</p><a class="btn ghost small" href="/specials" target="_blank" rel="noopener">Open Specials</a></article>
+            <article><h3>Admin editing</h3><p class="muted">FAQ entries can be edited here after the Build 172 FAQ SQL is applied.</p><button class="btn ghost small" type="button" data-scroll-editor>Edit FAQ</button></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section content-grid" id="faq-editor">
+        <div class="panel">
+          <h2>FAQ editor</h2>
+          <p class="muted">Save common customer questions here so the public FAQ can move away from duplicated static HTML over time. If Supabase is not migrated yet, use “Load static fallback” to review the current live fallback entries.</p>
+          <form class="faq-editor" data-faq-form>
+            <input type="hidden" data-field="id" />
+            <label>Category
+              <input data-field="category" placeholder="Booking and service area" required />
+            </label>
+            <label>Question
+              <input data-field="question" placeholder="What should customers know?" required />
+            </label>
+            <label>Answer
+              <textarea data-field="answer" placeholder="Write the short, customer-friendly answer…" required></textarea>
+            </label>
+            <div class="row">
+              <label>CTA label
+                <input data-field="cta_label" placeholder="View pricing" />
+              </label>
+              <label>CTA href
+                <input data-field="cta_href" placeholder="/pricing" />
+              </label>
+            </div>
+            <div class="row">
+              <label>Sort order
+                <input data-field="sort_order" type="number" step="1" min="0" value="100" />
+              </label>
+              <label>Source key
+                <input data-field="source_key" placeholder="optional-stable-key" />
+              </label>
+              <label>Active
+                <select data-field="is_active">
+                  <option value="true">Published / active</option>
+                  <option value="false">Hidden / draft</option>
+                </select>
+              </label>
+            </div>
+            <div class="button-row">
+              <button class="btn primary" type="submit">Save FAQ entry</button>
+              <button class="btn ghost" type="button" data-new-faq>New entry</button>
+              <button class="btn ghost" type="button" data-load-static>Load static fallback</button>
+            </div>
+            <p class="small-note">Live DB editing needs `sql/2026-05-24_build172_public_faq_content_foundation.sql` applied. Build 173 adds this admin editor without requiring a new table.</p>
+          </form>
+        </div>
+
+        <div class="panel">
+          <div class="content-toolbar">
+            <label>Search FAQ
+              <input data-faq-search type="search" placeholder="pet hair, pricing, fleet…" />
+            </label>
+            <label>Status
+              <select data-faq-status>
+                <option value="all">All</option>
+                <option value="active">Active only</option>
+                <option value="hidden">Hidden only</option>
+              </select>
+            </label>
+            <button class="btn ghost" type="button" data-refresh-faqs>Refresh</button>
+          </div>
+          <div class="admin-status" data-faq-message hidden></div>
+          <div class="faq-list" data-faq-list>
+            <div class="muted">FAQ entries will load after staff auth completes.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div data-footer></div>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/chrome.js?v=20260524build173" defer></script>
+  <script>
+    (function(){
+      const els = {
+        pageStatus: document.querySelector('[data-page-status]'),
+        form: document.querySelector('[data-faq-form]'),
+        list: document.querySelector('[data-faq-list]'),
+        message: document.querySelector('[data-faq-message]'),
+        search: document.querySelector('[data-faq-search]'),
+        status: document.querySelector('[data-faq-status]'),
+        refresh: document.querySelector('[data-refresh-faqs]'),
+        newBtn: document.querySelector('[data-new-faq]'),
+        staticBtn: document.querySelector('[data-load-static]'),
+        scrollBtn: document.querySelector('[data-scroll-editor]')
+      };
+      let faqRows = [];
+
+      function esc(value){
+        return String(value ?? '').replace(/[&<>"']/g, function(ch){
+          return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
+        });
+      }
+      function setStatus(message, type){
+        if(!els.pageStatus) return;
+        els.pageStatus.textContent = message || '';
+        els.pageStatus.dataset.state = type || '';
+        els.pageStatus.hidden = !message;
+      }
+      function setMessage(message, type){
+        if(!els.message) return;
+        els.message.textContent = message || '';
+        els.message.dataset.state = type || '';
+        els.message.hidden = !message;
+      }
+      async function api(url, body){
+        const res = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          cache: 'no-store',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(body || {})
+        });
+        const data = await res.json().catch(function(){ return null; });
+        if(!res.ok || !data || data.ok === false){
+          throw new Error((data && (data.error || data.migration_hint)) || 'Request failed.');
+        }
+        return data;
+      }
+      function field(name){
+        return els.form.querySelector('[data-field="'+name+'"]');
+      }
+      function formPayload(){
+        return {
+          id: field('id').value.trim() || null,
+          category: field('category').value.trim(),
+          question: field('question').value.trim(),
+          answer: field('answer').value.trim(),
+          cta_label: field('cta_label').value.trim(),
+          cta_href: field('cta_href').value.trim(),
+          sort_order: Number(field('sort_order').value || 0),
+          source_key: field('source_key').value.trim(),
+          is_active: field('is_active').value === 'true'
+        };
+      }
+      function clearForm(){
+        els.form.reset();
+        field('id').value = '';
+        field('sort_order').value = '100';
+        field('is_active').value = 'true';
+        field('category').focus();
+      }
+      function fillForm(row){
+        field('id').value = row.id || '';
+        field('category').value = row.category || '';
+        field('question').value = row.question || '';
+        field('answer').value = row.answer || '';
+        field('cta_label').value = row.cta_label || '';
+        field('cta_href').value = row.cta_href || '';
+        field('sort_order').value = row.sort_order ?? 100;
+        field('source_key').value = row.source_key || '';
+        field('is_active').value = row.is_active === false ? 'false' : 'true';
+        document.getElementById('faq-editor')?.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+      function applyFilters(rows){
+        const q = (els.search.value || '').trim().toLowerCase();
+        const status = els.status.value || 'all';
+        return rows.filter(function(row){
+          const active = row.is_active !== false;
+          if(status === 'active' && !active) return false;
+          if(status === 'hidden' && active) return false;
+          if(q){
+            const text = [row.category,row.question,row.answer,row.cta_label,row.cta_href].join(' ').toLowerCase();
+            if(text.indexOf(q) === -1) return false;
+          }
+          return true;
+        });
+      }
+      function renderRows(rows){
+        const filtered = applyFilters(rows);
+        if(!filtered.length){
+          els.list.innerHTML = '<div class="muted">No FAQ entries match the current filter.</div>';
+          return;
+        }
+        els.list.innerHTML = filtered.map(function(row, index){
+          const active = row.is_active !== false;
+          return `<article class="faq-admin-card" data-row-index="${index}">
+            <div class="faq-meta">
+              <span class="pill ${active ? 'good' : 'warn'}">${active ? 'Active' : 'Hidden'}</span>
+              <span class="pill">${esc(row.category || 'General')}</span>
+              <span class="pill">Sort ${esc(row.sort_order ?? '')}</span>
+              ${row.source === 'static_fallback' ? '<span class="pill warn">Static fallback</span>' : ''}
+            </div>
+            <h3>${esc(row.question || 'Untitled question')}</h3>
+            <p class="muted">${esc(row.answer || '').slice(0, 320)}${String(row.answer || '').length > 320 ? '…' : ''}</p>
+            <div class="button-row">
+              <button class="btn ghost small" type="button" data-edit-faq="${index}">Edit</button>
+              ${row.cta_href ? `<a class="btn ghost small" href="${esc(row.cta_href)}" target="_blank" rel="noopener">${esc(row.cta_label || 'Open CTA')}</a>` : ''}
+            </div>
+          </article>`;
+        }).join('');
+        els.list.querySelectorAll('[data-edit-faq]').forEach(function(btn){
+          btn.addEventListener('click', function(){
+            const row = filtered[Number(btn.dataset.editFaq)];
+            if(row) fillForm(row);
+          });
+        });
+      }
+      async function loadFaqs(){
+        setMessage('Loading FAQ entries…','');
+        try{
+          const data = await api('/api/admin/content_faqs_list', {
+            q: els.search.value,
+            status: els.status.value,
+            limit: 150
+          });
+          faqRows = Array.isArray(data.items) ? data.items : [];
+          renderRows(faqRows);
+          setMessage(data.source === 'db' ? 'FAQ entries loaded from Supabase.' : 'Static fallback loaded. Apply Build 172 SQL for DB editing.', data.source === 'db' ? 'success' : 'error');
+        }catch(err){
+          setMessage(err.message || 'Could not load FAQ entries.', 'error');
+          els.list.innerHTML = '<div class="danger-note">'+esc(err.message || 'Could not load FAQ entries.')+'</div>';
+        }
+      }
+      async function loadStaticFallback(){
+        setMessage('Loading public fallback entries…','');
+        try{
+          const res = await fetch('/api/public_faqs', { cache:'no-store' });
+          const data = await res.json().catch(function(){ return null; });
+          if(!data || !Array.isArray(data.items)) throw new Error('Could not load public FAQ fallback.');
+          faqRows = data.items.map(function(row, index){ return {...row, id:'', sort_order: row.sort_order ?? ((index + 1) * 10), is_active:true, source:'static_fallback'}; });
+          renderRows(faqRows);
+          setMessage('Static public FAQ fallback loaded for review/copying.', 'success');
+        }catch(err){ setMessage(err.message || 'Could not load fallback FAQ entries.', 'error'); }
+      }
+      els.form.addEventListener('submit', async function(event){
+        event.preventDefault();
+        try{
+          setStatus('', '');
+          const payload = formPayload();
+          if(!payload.category || !payload.question || !payload.answer) throw new Error('Category, question, and answer are required.');
+          const data = await api('/api/admin/content_faqs_save', payload);
+          setStatus(data.created ? 'FAQ entry created.' : 'FAQ entry updated.', 'success');
+          clearForm();
+          await loadFaqs();
+        }catch(err){
+          setStatus(err.message || 'Could not save FAQ entry.', 'error');
+        }
+      });
+      els.refresh.addEventListener('click', loadFaqs);
+      els.newBtn.addEventListener('click', clearForm);
+      els.staticBtn.addEventListener('click', loadStaticFallback);
+      els.scrollBtn?.addEventListener('click', function(){ document.getElementById('faq-editor')?.scrollIntoView({behavior:'smooth'}); });
+      let t=null;
+      function delayedLoad(){ clearTimeout(t); t=setTimeout(loadFaqs, 350); }
+      els.search.addEventListener('input', delayedLoad);
+      els.status.addEventListener('change', loadFaqs);
+
+      window.AdminShell.boot({
+        pageKey:'admin-content',
+        onReady: async function(){ await loadFaqs(); }
+      });
+    })();
+  </script>
+</body>
+</html>
