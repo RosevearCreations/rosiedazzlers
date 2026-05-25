@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 175 note:
+- Adds lead conversion drafts, catalog-backed pricing suggestions, quote status controls, expanded content blocks, gallery privacy/town/service filters, and conversion analytics guard.
+
 Build 174 note:
 - Adds quote/proposal draft guard for Admin Leads persistent draft workflow.
 
@@ -35,6 +38,7 @@ CHECKS = [
     "scripts/public_faq_content_build172_check.py",
     "scripts/admin_content_build173_check.py",
     "scripts/quote_proposal_drafts_build174_check.py",
+    "scripts/build175_conversion_content_gallery_analytics_check.py",
     "scripts/seo_h1_check.py",
 ]
 
