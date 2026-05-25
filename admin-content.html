@@ -33,7 +33,7 @@
     .page-map h3{margin:0 0 6px}
   </style>
 </head>
-<body data-page="admin-content" data-build173="admin-content-faq-editor">
+<body data-page="admin-content" data-build173="admin-content-faq-editor" data-build175="admin-content-expanded-blocks">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -67,7 +67,7 @@
           <div>
             <div class="badge">Admin Content</div>
             <h1 style="margin:10px 0 6px">Content Center</h1>
-            <p class="kicker" style="margin:0;max-width:880px">Manage public FAQ/help content from one protected page. Build 173 starts with FAQ entries because those were the newest public page gap and already have a DB-first fallback API.</p>
+            <p class="kicker" style="margin:0;max-width:880px">Manage public FAQ, specials, service blurbs, homepage cards, and help article content from one protected page. Build 175 expands beyond FAQ into reusable site content blocks for specials, service blurbs, homepage cards, help articles, trust proof, fleet, and maintenance content.</p>
           </div>
           <section class="actorcard" aria-label="Signed in staff">
             <div class="actorline"><span class="actorlabel">Signed in:</span><span data-actor-name></span></div>
@@ -155,6 +155,57 @@
           <div class="faq-list" data-faq-list>
             <div class="muted">FAQ entries will load after staff auth completes.</div>
           </div>
+        </div>
+      </section>
+
+      <section class="section content-grid" id="content-block-editor" data-build175-content-blocks>
+        <div class="panel">
+          <h2>Reusable content blocks</h2>
+          <p class="muted">Use this for Specials, service blurbs, homepage cards, help article starters, trust proof, fleet copy, and maintenance copy. These records give us a DB-managed path away from duplicated static page text.</p>
+          <form class="faq-editor" data-block-form>
+            <input type="hidden" data-block-field="id" />
+            <div class="row">
+              <label>Content type
+                <select data-block-field="content_type">
+                  <option value="special">Special</option>
+                  <option value="service_blurb">Service blurb</option>
+                  <option value="homepage_card">Homepage card</option>
+                  <option value="help_article">Help article</option>
+                  <option value="trust_proof">Trust/proof</option>
+                  <option value="fleet">Fleet</option>
+                  <option value="maintenance">Maintenance</option>
+                </select>
+              </label>
+              <label>Placement
+                <input data-block-field="placement" placeholder="home_feature, specials_page, help_hub" value="home_feature" />
+              </label>
+              <label>Slug
+                <input data-block-field="slug" placeholder="optional-stable-slug" />
+              </label>
+            </div>
+            <label>Title<input data-block-field="title" placeholder="Short public heading" required /></label>
+            <label>Summary<textarea data-block-field="summary" rows="3" placeholder="Short card or teaser copy"></textarea></label>
+            <label>Body<textarea data-block-field="body" rows="5" placeholder="Longer page/help copy"></textarea></label>
+            <div class="row">
+              <label>CTA label<input data-block-field="cta_label" placeholder="Book now" /></label>
+              <label>CTA href<input data-block-field="cta_href" placeholder="/book" /></label>
+              <label>Image URL<input data-block-field="image_url" placeholder="optional image URL" /></label>
+            </div>
+            <div class="row">
+              <label>Sort order<input data-block-field="sort_order" type="number" value="100" /></label>
+              <label>Active<select data-block-field="is_active"><option value="true">Published / active</option><option value="false">Hidden / draft</option></select></label>
+            </div>
+            <div class="button-row"><button class="btn primary" type="submit">Save content block</button><button class="btn ghost" type="button" data-new-block>New block</button><button class="btn ghost" type="button" data-refresh-blocks>Refresh blocks</button></div>
+            <p class="small-note">Live saving needs `sql/2026-05-25_build175_lead_conversion_content_gallery_analytics.sql` applied. Public reads can use `/api/public_content_blocks` with static fallback until then.</p>
+          </form>
+        </div>
+        <div class="panel">
+          <div class="content-toolbar">
+            <label>Search blocks<input data-block-search type="search" placeholder="special, salt, homepage…" /></label>
+            <label>Type<select data-block-type><option value="all">All</option><option value="special">Specials</option><option value="service_blurb">Service blurbs</option><option value="homepage_card">Homepage cards</option><option value="help_article">Help articles</option><option value="trust_proof">Trust proof</option><option value="fleet">Fleet</option><option value="maintenance">Maintenance</option></select></label>
+          </div>
+          <div class="admin-status" data-block-message hidden></div>
+          <div class="faq-list" data-block-list><div class="muted">Content blocks load after staff auth completes.</div></div>
         </div>
       </section>
     </div>
@@ -345,6 +396,30 @@
         onReady: async function(){ await loadFaqs(); }
       });
     })();
+
+      (function(){
+        const form = document.querySelector('[data-block-form]');
+        const list = document.querySelector('[data-block-list]');
+        const message = document.querySelector('[data-block-message]');
+        const search = document.querySelector('[data-block-search]');
+        const type = document.querySelector('[data-block-type]');
+        const refresh = document.querySelector('[data-refresh-blocks]');
+        const newBtn = document.querySelector('[data-new-block]');
+        if(!form || !list) return;
+        let rows = [];
+        function f(name){ return form.querySelector('[data-block-field="'+name+'"]'); }
+        function esc(value){ return String(value ?? '').replace(/[&<>"']/g, function(ch){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]; }); }
+        function setBlockMessage(text,typeName){ if(!message)return; message.textContent=text||''; message.dataset.state=typeName||''; message.hidden=!text; }
+        async function blockApi(url, body){ const res = await fetch(url,{method:'POST',credentials:'include',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify(body||{})}); const data=await res.json().catch(()=>null); if(!res.ok || !data || data.ok===false) throw new Error((data&&(data.error||data.migration_hint))||'Request failed.'); return data; }
+        function payload(){ return { id:f('id').value.trim()||null, content_type:f('content_type').value, placement:f('placement').value.trim(), slug:f('slug').value.trim(), title:f('title').value.trim(), summary:f('summary').value.trim(), body:f('body').value.trim(), cta_label:f('cta_label').value.trim(), cta_href:f('cta_href').value.trim(), image_url:f('image_url').value.trim(), sort_order:Number(f('sort_order').value||100), is_active:f('is_active').value==='true' }; }
+        function clear(){ form.reset(); f('id').value=''; f('placement').value='home_feature'; f('sort_order').value='100'; f('is_active').value='true'; }
+        function fill(row){ f('id').value=row.id||''; f('content_type').value=row.content_type||'service_blurb'; f('placement').value=row.placement||'home_feature'; f('slug').value=row.slug||''; f('title').value=row.title||''; f('summary').value=row.summary||''; f('body').value=row.body||''; f('cta_label').value=row.cta_label||''; f('cta_href').value=row.cta_href||''; f('image_url').value=row.image_url||''; f('sort_order').value=row.sort_order??100; f('is_active').value=row.is_active===false?'false':'true'; document.getElementById('content-block-editor')?.scrollIntoView({behavior:'smooth'}); }
+        function render(){ const q=(search.value||'').toLowerCase(); const t=type.value||'all'; const filtered=rows.filter(r=>(t==='all'||r.content_type===t)).filter(r=>!q||[r.title,r.summary,r.body,r.slug,r.placement].join(' ').toLowerCase().includes(q)); if(!filtered.length){ list.innerHTML='<div class="muted">No content blocks match this filter.</div>'; return;} list.innerHTML=filtered.map((row,index)=>`<article class="faq-admin-card"><div class="faq-meta"><span class="pill">${esc(row.content_type||'block')}</span><span class="pill">${esc(row.placement||'general')}</span><span class="pill ${row.is_active===false?'warn':'good'}">${row.is_active===false?'Hidden':'Active'}</span></div><h3>${esc(row.title||'Untitled block')}</h3><p class="muted">${esc(row.summary||row.body||'').slice(0,300)}</p><div class="button-row"><button class="btn ghost small" type="button" data-edit-block="${index}">Edit</button>${row.cta_href?`<a class="btn ghost small" href="${esc(row.cta_href)}" target="_blank" rel="noopener">${esc(row.cta_label||'Open')}</a>`:''}</div></article>`).join(''); list.querySelectorAll('[data-edit-block]').forEach(btn=>btn.addEventListener('click',()=>fill(filtered[Number(btn.dataset.editBlock)]))); }
+        async function load(){ setBlockMessage('Loading content blocks…',''); try{ const data=await blockApi('/api/admin/content_blocks_list',{q:search.value,content_type:type.value,limit:150}); rows=Array.isArray(data.items)?data.items:[]; render(); setBlockMessage(data.table_ready===false?'Static fallback blocks loaded. Apply Build 175 SQL for live editing.':'Content blocks loaded.','success'); }catch(err){ setBlockMessage(err.message||'Could not load content blocks.','error'); } }
+        form.addEventListener('submit',async(event)=>{ event.preventDefault(); try{ const data=await blockApi('/api/admin/content_blocks_save',payload()); setBlockMessage(data.created?'Content block created.':'Content block updated.','success'); clear(); await load(); }catch(err){ setBlockMessage(err.message||'Could not save content block.','error'); } });
+        refresh?.addEventListener('click',load); newBtn?.addEventListener('click',clear); search?.addEventListener('input',()=>setTimeout(load,250)); type?.addEventListener('change',load);
+        window.addEventListener('load',()=>setTimeout(load,600));
+      })();
   </script>
 </body>
 </html>
