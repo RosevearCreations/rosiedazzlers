@@ -7,7 +7,13 @@
       "before_url": "https://assets.rosiedazzlers.ca/brand/CarPrice2025.PNG",
       "after_kind": "image",
       "after_url": "https://assets.rosiedazzlers.ca/brand/CarPriceDetails2025.PNG",
-      "note": "Replace these sample images with real customer-approved before/after work."
+      "note": "Replace these sample images with real customer-approved before/after work.",
+      "town": "Tillsonburg",
+      "town_slug": "tillsonburg",
+      "service": "Interior detailing",
+      "service_slug": "interior-detailing",
+      "consent_status": "sample",
+      "media_privacy_status": "approved_public"
     },
     {
       "title": "Exterior wash and gloss",
@@ -16,7 +22,13 @@
       "before_url": "https://assets.rosiedazzlers.ca/brand/CarSizeChart.PNG",
       "after_kind": "image",
       "after_url": "https://assets.rosiedazzlers.ca/brand/CarPrice2025.PNG",
-      "note": "Use paired images of the same angle for the best slider effect."
+      "note": "Use paired images of the same angle for the best slider effect.",
+      "town": "Woodstock",
+      "town_slug": "woodstock",
+      "service": "Exterior detailing",
+      "service_slug": "exterior-detailing",
+      "consent_status": "sample",
+      "media_privacy_status": "approved_public"
     }
   ]
 }
