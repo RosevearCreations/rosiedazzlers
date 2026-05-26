@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 178 note:
+- Adds conversion status saving, final price review saving, live public content block rendering, social/media privacy badges, and local proof recommendations.
+
 Build 177 note:
 - Adds dedicated conversion draft review queue, final price reconciliation, and local SEO proof reporting.
 
@@ -47,6 +50,7 @@ CHECKS = [
     "scripts/build175_conversion_content_gallery_analytics_check.py",
     "scripts/build176_conversion_booking_privacy_dashboard_check.py",
     "scripts/build177_conversion_review_price_local_proof_check.py",
+    "scripts/build178_status_price_content_privacy_check.py",
     "scripts/seo_h1_check.py",
 ]
 
