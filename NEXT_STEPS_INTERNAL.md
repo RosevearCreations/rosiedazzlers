@@ -202,3 +202,19 @@ Build 161 keeps `DEVELOPMENT_ROADMAP.md` as the source of truth and advances the
 3. Add the next endpoint that turns a reviewed conversion draft into a real booking row only after date/address/access/price are confirmed.
 4. Add App Management validation warnings for public gallery items that are missing approved-public privacy status.
 5. Add dashboard cards that consume `/api/admin/conversion_funnel_summary`.
+
+## Build 176 Update — conversion-to-booking, dashboard cards, and privacy warnings
+
+- Added a reviewed conversion draft → real booking workflow so Admin Leads can create a live booking only after staff confirms service date, AM/PM slot, address, package, vehicle size, customer name, and customer email.
+- Added Admin Analytics cards for FAQ/help/lead/quote conversion summary using `/api/admin/conversion_funnel_summary`.
+- Added App Management media privacy readiness warnings using `/api/admin/media_privacy_review_summary` so gallery/social reuse is checked before publishing.
+- Preserved the one-H1 exposed-page rule and kept local SEO wording/access paths focused on Oxford/Norfolk service discovery.
+- Added Build 176 SQL/schema notes for `lead_conversion_drafts.converted_booking_id` and `lead_conversion_drafts.converted_at`.
+
+### Build 176 next steps
+
+1. Apply Build 176 SQL after Build 175.
+2. Test one full flow from public lead to quote draft to conversion draft to live booking.
+3. Add a dedicated conversion-draft review queue.
+4. Add final quote total reconciliation before booking creation.
+5. Add privacy badges directly beside gallery/social publish actions.

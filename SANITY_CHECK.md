@@ -357,3 +357,18 @@ Build 169 adds `scripts/auth_analytics_build169_check.py` and wires it into `scr
 ## Build 175 sanity check — conversion_content_gallery_analytics
 
 Build 175 adds a broad but safe foundation pass: quote/pricing/conversion tools in Admin Leads, expanded content-block editing in Admin Content, privacy-enforced gallery filtering by service/town, and admin conversion analytics. The release guard is `scripts/build175_conversion_content_gallery_analytics_check.py` and it is included in `scripts/release_check.py`.
+
+## Build 176 Update — conversion-to-booking, dashboard cards, and privacy warnings
+
+- Added a reviewed conversion draft → real booking workflow so Admin Leads can create a live booking only after staff confirms service date, AM/PM slot, address, package, vehicle size, customer name, and customer email.
+- Added Admin Analytics cards for FAQ/help/lead/quote conversion summary using `/api/admin/conversion_funnel_summary`.
+- Added App Management media privacy readiness warnings using `/api/admin/media_privacy_review_summary` so gallery/social reuse is checked before publishing.
+- Preserved the one-H1 exposed-page rule and kept local SEO wording/access paths focused on Oxford/Norfolk service discovery.
+- Added Build 176 SQL/schema notes for `lead_conversion_drafts.converted_booking_id` and `lead_conversion_drafts.converted_at`.
+
+### Build 176 sanity check
+
+- Admin Leads now supports lead → quote starter → quote draft → conversion draft → real booking.
+- Admin Analytics now surfaces FAQ/help/lead/quote conversion summary.
+- Admin App now includes a media privacy readiness check before public gallery/social reuse.
+- Exposed pages still pass the one-H1 rule.

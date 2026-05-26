@@ -295,3 +295,15 @@ Build 170 adds `scripts/client_dashboard_build170_check.py` and wires it into `s
 - Added service/town filtering for the public before/after gallery and enforced public reuse only for approved-public/sample media.
 - Added FAQ/help/lead/quote conversion analytics summary endpoint for admin reporting.
 - Added SQL/schema sync in `sql/2026-05-25_build175_lead_conversion_content_gallery_analytics.sql`.
+
+## Build 176 Update — conversion-to-booking, dashboard cards, and privacy warnings
+
+- Added a reviewed conversion draft → real booking workflow so Admin Leads can create a live booking only after staff confirms service date, AM/PM slot, address, package, vehicle size, customer name, and customer email.
+- Added Admin Analytics cards for FAQ/help/lead/quote conversion summary using `/api/admin/conversion_funnel_summary`.
+- Added App Management media privacy readiness warnings using `/api/admin/media_privacy_review_summary` so gallery/social reuse is checked before publishing.
+- Preserved the one-H1 exposed-page rule and kept local SEO wording/access paths focused on Oxford/Norfolk service discovery.
+- Added Build 176 SQL/schema notes for `lead_conversion_drafts.converted_booking_id` and `lead_conversion_drafts.converted_at`.
+
+### Build 176 release note
+
+Build 176 adds the next operations bridge: Admin Leads can now turn reviewed conversion drafts into live booking rows after required details are confirmed. Admin Analytics includes conversion summary cards, and Admin App warns about gallery/upload media that is not public-ready.

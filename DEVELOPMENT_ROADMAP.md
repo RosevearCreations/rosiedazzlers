@@ -1040,3 +1040,17 @@ Next roadmap action: once login/session creation is confirmed on Preview and Pro
 ## Build 175 update — next roadmap items moved forward
 
 Completed foundations for the listed outstanding items: lead → draft booking/quote conversion, catalog-backed package/add-on price suggestions, quote draft status workflow, Admin Content expansion beyond FAQ, gallery service/town proof filtering, media privacy enforcement before public reuse, and FAQ/help/lead/quote conversion analytics. Next work should turn conversion drafts into one-click real booking creation once staff confirms date, address, access, vehicle size, and final price.
+
+## Build 176 Update — conversion-to-booking, dashboard cards, and privacy warnings
+
+- Added a reviewed conversion draft → real booking workflow so Admin Leads can create a live booking only after staff confirms service date, AM/PM slot, address, package, vehicle size, customer name, and customer email.
+- Added Admin Analytics cards for FAQ/help/lead/quote conversion summary using `/api/admin/conversion_funnel_summary`.
+- Added App Management media privacy readiness warnings using `/api/admin/media_privacy_review_summary` so gallery/social reuse is checked before publishing.
+- Preserved the one-H1 exposed-page rule and kept local SEO wording/access paths focused on Oxford/Norfolk service discovery.
+- Added Build 176 SQL/schema notes for `lead_conversion_drafts.converted_booking_id` and `lead_conversion_drafts.converted_at`.
+
+### Build 176 update
+
+Completed the next step after Build 175: reviewed conversion drafts can now become real booking rows from Admin Leads, but only after required final booking details are confirmed. Admin Analytics now shows lead/quote conversion summary cards, and App Management now warns when gallery or uploaded media is not public-ready.
+
+Next roadmap focus: add a fuller booking review screen for conversion drafts, improve pricing-to-final-total reconciliation, and add visible admin badges wherever content/media is blocked by privacy state.

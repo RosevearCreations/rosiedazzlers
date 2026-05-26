@@ -1391,3 +1391,15 @@ create table if not exists public.site_content_blocks (
   metadata jsonb not null default '{}'::jsonb,
   unique (content_type, placement, slug)
 );
+
+-- ---------------------------------------------------------------------------
+-- Build 176 note — reviewed conversion draft to real booking and privacy/dashboard warnings
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-25_build176_conversion_to_booking_dashboard_privacy.sql.
+-- Adds optional converted_booking_id and converted_at fields to public.lead_conversion_drafts
+-- so Admin Leads can trace a reviewed conversion draft to the live public.bookings row.
+-- No new table is required. The live booking is only created by /api/admin/lead_conversion_create_booking
+-- after staff confirms date, AM/PM slot, address, package, vehicle size, customer name, and email.
+alter table public.lead_conversion_drafts
+  add column if not exists converted_booking_id uuid null references public.bookings(id) on delete set null,
+  add column if not exists converted_at timestamptz null;
