@@ -1,3 +1,4 @@
+-- Build 178 note: no new DDL; /api/admin/lead_conversion_status_save and /api/admin/lead_conversion_price_review_save use Build 175 lead_conversion_drafts and Build 177 final_price_review/final_price_status/final_price_total_cents/final_deposit_cents/final_price_reviewed_at fields.
 -- Build 173 note — Admin Content Center FAQ editor bridge (2026-05-24)
 -- No new DDL is required in Build 173.
 -- The protected Admin Content Center uses existing public.public_faq_entries from Build 172.
