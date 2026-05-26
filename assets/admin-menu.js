@@ -51,6 +51,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-leads")
     },
     {
+      key: "admin-conversions",
+      label: "Conversion Queue",
+      href: "/admin-conversions.html",
+      description: "Review conversion drafts and create confirmed bookings",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-conversions")
+    },
+    {
       key: "admin-content",
       label: "Content Center",
       href: "/admin-content.html",
