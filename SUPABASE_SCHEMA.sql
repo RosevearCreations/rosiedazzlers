@@ -1403,3 +1403,18 @@ create table if not exists public.site_content_blocks (
 alter table public.lead_conversion_drafts
   add column if not exists converted_booking_id uuid null references public.bookings(id) on delete set null,
   add column if not exists converted_at timestamptz null;
+
+-- ---------------------------------------------------------------------------
+-- Build 177 note — conversion review queue, final price reconciliation, and local proof reporting
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-25_build177_conversion_review_price_local_proof.sql.
+-- Adds optional final-price review fields to public.lead_conversion_drafts so
+-- staff can keep a catalog-backed price reconciliation attached to the reviewed
+-- draft before creating a real booking. Build 177 also adds /admin-conversions,
+-- /api/admin/lead_conversion_price_reconcile, and /api/admin/local_seo_proof_report.
+alter table public.lead_conversion_drafts
+  add column if not exists final_price_review jsonb not null default '{}'::jsonb,
+  add column if not exists final_price_status text not null default 'needs_review',
+  add column if not exists final_price_total_cents integer null,
+  add column if not exists final_deposit_cents integer null,
+  add column if not exists final_price_reviewed_at timestamptz null;

@@ -1,3 +1,45 @@
+# Build 177 update — Conversion Review Queue, Price Reconciliation & Local Proof Reporting
+
+**Updated:** 2026-05-25  
+**Current build:** Build 177  
+**Primary source of truth:** `DEVELOPMENT_ROADMAP.md`
+
+Build 177 closes the next workflow gap after Build 176 by adding a dedicated `/admin-conversions.html` review queue. Staff can now review all lead conversion drafts in one place, reconcile final package/add-on/travel/HST pricing from the pricing catalog, confirm the required booking fields, and create a live booking only after the draft is ready. Build 177 also adds local SEO proof reporting that counts only privacy-approved before/after examples by town and service.
+
+## Completed in Build 177
+
+1. Added `/admin-conversions.html` and `/admin-conversions/` as a protected conversion-draft review queue.
+2. Added `/api/admin/lead_conversion_price_reconcile` for catalog-backed package/add-on/travel/HST/deposit review before booking creation.
+3. Added `/api/admin/local_seo_proof_report` for privacy-approved town/service proof coverage reporting.
+4. Updated Admin Analytics with a **Local SEO proof coverage** card.
+5. Updated public Gallery cards with clearer consent/privacy badges.
+6. Added optional final-price review fields to `public.lead_conversion_drafts` via `sql/2026-05-25_build177_conversion_review_price_local_proof.sql`.
+7. Updated Admin Dashboard, Admin Menu, Admin Shell, and Admin Leads access paths so the Conversion Queue is easy to find.
+8. Updated `SUPABASE_SCHEMA.sql`, `DATABASE_STRUCTURE_CURRENT.md`, and release guards.
+
+## Updated completion status after Build 177
+
+| COMPETETIVE.md area | Current status | Build 177 notes |
+| --- | --- | --- |
+| Lead → booking workflow | Stronger foundation | Dedicated review queue now separates draft review from the lead card UI. |
+| Final price reconciliation | Added foundation | Catalog-backed package/add-on/travel/HST review is available before creating a real booking. |
+| Quote/booking status workflow | Improved | Conversion drafts can be filtered/reviewed before becoming live booking rows. |
+| Admin-managed content | Partial but improved | FAQ and reusable content blocks exist; page-specific live rendering remains next. |
+| Service/town proof reporting | Added foundation | Analytics now reports approved proof coverage by target town/service. |
+| Media privacy enforcement | Improved | Public Gallery shows consent/privacy badges and still filters non-approved media. |
+| Conversion analytics | Improved | Lead/quote summary exists and local proof coverage was added to Admin Analytics. |
+
+## Remaining competitive gap priority after Build 177
+
+1. Save final price reconciliation payloads directly from `/admin-conversions.html` before booking creation.
+2. Add a dedicated conversion-draft status update endpoint for `needs_review`, `ready_to_book`, `converted`, and `closed`.
+3. Add visible privacy badges beside every admin gallery/social publish action, not only public gallery and App Management warnings.
+4. Render Admin Content Center blocks live on public Specials, service, homepage, fleet, maintenance, and Help pages.
+5. Add town/service proof dashboards that recommend the next local page or gallery item to create.
+6. Add customer-facing quote/proposal send and acceptance tracking.
+
+---
+
 # Build 174 update — Admin Leads quote/proposal drafts
 
 **Updated:** 2026-05-24  
@@ -552,3 +594,4 @@ The new lead conversion draft workflow is intentionally safer than creating a li
 - The conversion draft screen is functional but still basic; a dedicated conversion review queue would be cleaner than working only from each lead card.
 - Media privacy warnings now exist in App Management, but the warning state is not yet shown directly beside every social/gallery publishing button.
 - Pricing suggestions still require staff judgement before the final invoice/booking amount is confirmed.
+> Build 177 documentation sync (2026-05-25): added protected conversion-draft review queue, catalog-backed final price reconciliation, local SEO proof coverage reporting, public gallery privacy badges, SQL/schema notes, and release guard coverage.
