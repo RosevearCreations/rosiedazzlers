@@ -264,3 +264,20 @@ Build 175 adds two DB-managed foundations:
 Build 175 also documents the public gallery privacy rule: before/after media should only be returned publicly when consent/privacy status is `approved_public`, `customer_approved_public`, `public`, `approved`, or when the item is explicitly marked `sample`. Pending, private, rejected, or needs-blur media is filtered out before public reuse.
 
 Apply `sql/2026-05-25_build175_lead_conversion_content_gallery_analytics.sql` after the Build 174 quote draft migration.
+
+## Build 176 Update — conversion-to-booking, dashboard cards, and privacy warnings
+
+- Added a reviewed conversion draft → real booking workflow so Admin Leads can create a live booking only after staff confirms service date, AM/PM slot, address, package, vehicle size, customer name, and customer email.
+- Added Admin Analytics cards for FAQ/help/lead/quote conversion summary using `/api/admin/conversion_funnel_summary`.
+- Added App Management media privacy readiness warnings using `/api/admin/media_privacy_review_summary` so gallery/social reuse is checked before publishing.
+- Preserved the one-H1 exposed-page rule and kept local SEO wording/access paths focused on Oxford/Norfolk service discovery.
+- Added Build 176 SQL/schema notes for `lead_conversion_drafts.converted_booking_id` and `lead_conversion_drafts.converted_at`.
+
+### Build 176 — conversion-to-booking/schema sync
+
+Build 176 extends `public.lead_conversion_drafts` with:
+
+- `converted_booking_id uuid null references public.bookings(id) on delete set null`
+- `converted_at timestamptz null`
+
+This lets `/api/admin/lead_conversion_create_booking` trace a reviewed lead conversion draft to the final live booking row. The endpoint still requires staff confirmation for service date, AM/PM slot, address, package, vehicle size, customer name, and customer email before inserting into `public.bookings`.

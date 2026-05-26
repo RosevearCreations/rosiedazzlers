@@ -195,7 +195,7 @@
     }
   </style>
 </head>
-<body>
+<body data-build176="conversion-funnel-dashboard">
   <main class="shell">
     <div class="loading" data-admin-shell-loading>Loading analytics...</div>
     <div data-admin-shell-ready hidden>
@@ -319,6 +319,11 @@
         </article>
 
         <article class="card card--half">
+          <h2>Lead/quote conversion summary</h2>
+          <div id="conversion-funnel-summary" class="list"></div>
+        </article>
+
+        <article class="card card--half">
           <h2>Checkout state mix</h2>
           <div id="checkout-states" class="list"></div>
         </article>
@@ -379,7 +384,8 @@
         weekly: document.getElementById("weekly-traffic"),
         monthly: document.getElementById("monthly-traffic"),
         yearly: document.getElementById("yearly-traffic"),
-        checkoutStates: document.getElementById("checkout-states")
+        checkoutStates: document.getElementById("checkout-states"),
+        conversionSummary: document.getElementById("conversion-funnel-summary")
       };
 
       let abandonedRows = [];
@@ -457,7 +463,7 @@
 
       async function load() {
         const days = Number(els.days.value || 30);
-        const [analyticsRes, abandonedRes] = await Promise.all([
+        const [analyticsRes, abandonedRes, conversionRes] = await Promise.all([
           fetch("/api/admin/analytics_overview", {
             method: "POST",
             credentials: "include",
@@ -469,11 +475,18 @@
             credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ days })
+          }),
+          fetch("/api/admin/conversion_funnel_summary", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ days })
           })
         ]);
 
         const analytics = await analyticsRes.json().catch(() => null);
         const abandoned = await abandonedRes.json().catch(() => null);
+        const conversion = await conversionRes.json().catch(() => null);
 
         if (!analyticsRes.ok) throw new Error(analytics?.error || "Could not load analytics.");
         if (!abandonedRes.ok) throw new Error(abandoned?.error || "Could not load abandoned orders.");
@@ -532,6 +545,16 @@
           ? Object.entries(analytics.funnel).map(([label, count]) => ({ label: label.replaceAll("_", " "), count }))
           : [];
         renderList(els.funnel, funnelRows, (row) => `<strong>${esc(row.label)}</strong><div class="muted">${Number(row.count || 0)} events</div>`, "No funnel data yet.");
+
+        const conversionSummary = conversion?.summary || {};
+        const conversionRows = [
+          { label: "FAQ views", count: conversionSummary.faq_views || 0, note: "public FAQ interest" },
+          { label: "Help views", count: conversionSummary.help_views || 0, note: "help/article interest" },
+          { label: "Public leads", count: conversionSummary.public_leads || 0, note: "structured inquiry rows" },
+          { label: "Quote drafts", count: conversionSummary.quote_drafts || 0, note: `${Number(conversionSummary.lead_to_quote_draft_rate || 0)}% lead → quote draft` },
+          { label: "Conversion drafts", count: conversionSummary.lead_conversion_drafts || 0, note: `${Number(conversionSummary.lead_to_conversion_draft_rate || 0)}% lead → conversion draft` }
+        ];
+        renderList(els.conversionSummary, conversionRows, (row) => `<strong>${esc(row.label)}</strong><div class="muted">${Number(row.count || 0)} • ${esc(row.note || "")}</div>`, "No lead/quote conversion summary yet.");
         renderList(els.checkoutStates, analytics.checkout_states || [], (row) => `<strong>${esc(row.label)}</strong><div class="muted">${Number(row.count || 0)} events</div>`, "No checkout-state data yet.");
         renderList(
           els.recentActions,

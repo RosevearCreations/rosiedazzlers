@@ -415,3 +415,18 @@ Reliability/customer-trust item continued: customer account and booking pages sh
 | Service/town proof filtering | Added public gallery service and town filters. |
 | Media privacy before public reuse | Public gallery now filters out pending/private/rejected/needs-blur media unless sample/approved-public. |
 | FAQ/help/lead/quote conversion analytics | Added admin conversion funnel summary endpoint. |
+
+## Build 176 Update — conversion-to-booking, dashboard cards, and privacy warnings
+
+- Added a reviewed conversion draft → real booking workflow so Admin Leads can create a live booking only after staff confirms service date, AM/PM slot, address, package, vehicle size, customer name, and customer email.
+- Added Admin Analytics cards for FAQ/help/lead/quote conversion summary using `/api/admin/conversion_funnel_summary`.
+- Added App Management media privacy readiness warnings using `/api/admin/media_privacy_review_summary` so gallery/social reuse is checked before publishing.
+- Preserved the one-H1 exposed-page rule and kept local SEO wording/access paths focused on Oxford/Norfolk service discovery.
+- Added Build 176 SQL/schema notes for `lead_conversion_drafts.converted_booking_id` and `lead_conversion_drafts.converted_at`.
+
+### Build 176 matrix update
+
+- Reviewed conversion draft → real booking: added foundation.
+- Conversion analytics dashboard cards: added foundation.
+- App Management media privacy warning check: added foundation.
+- Still needs polish: full conversion review queue, final price reconciliation, privacy badges beside every publish action, and deeper local proof reporting by town/service.
