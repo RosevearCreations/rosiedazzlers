@@ -273,3 +273,6 @@ Build 161 keeps `DEVELOPMENT_ROADMAP.md` as the source of truth and advances the
 - Preserved the one-H1 exposed-page rule and kept local SEO wording/access paths focused on Oxford/Norfolk service discovery.
 - Added Build 176 SQL/schema notes for `lead_conversion_drafts.converted_booking_id` and `lead_conversion_drafts.converted_at`.
 > Build 177 documentation sync (2026-05-25): added protected conversion-draft review queue, catalog-backed final price reconciliation, local SEO proof coverage reporting, public gallery privacy badges, SQL/schema notes, and release guard coverage.
+
+
+> Build 178 documentation sync (2026-05-25): conversion status saves, saved final price reviews, public content rendering, privacy badges, and proof recommendation work were reflected in the active docs/schema notes.
