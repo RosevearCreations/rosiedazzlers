@@ -1,4 +1,4 @@
-// Build 176 — list reviewable lead conversion drafts for Admin Leads.
+// Build 178 — list reviewable lead conversion drafts for Admin Leads and Conversion Queue.
 import { requireStaffAccess, json, serviceHeaders, cleanText, isUuid, methodNotAllowed } from "../_lib/staff-auth.js";
 
 const SELECT = [
@@ -20,6 +20,11 @@ const SELECT = [
   "proposed_quote",
   "internal_note",
   "next_action",
+  "final_price_review",
+  "final_price_status",
+  "final_price_total_cents",
+  "final_deposit_cents",
+  "final_price_reviewed_at",
   "created_at",
   "updated_at"
 ];

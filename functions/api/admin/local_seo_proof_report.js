@@ -1,4 +1,4 @@
-// Build 177 — local SEO proof coverage report from privacy-approved gallery evidence.
+// Build 177 / Build 178 — local SEO proof coverage report plus next proof recommendations from privacy-approved gallery evidence.
 import { requireStaffAccess, json, serviceHeaders, methodNotAllowed } from "../_lib/staff-auth.js";
 
 const TARGET_TOWNS = ["Tillsonburg", "Woodstock", "Ingersoll", "Simcoe", "Delhi", "Port Dover", "Norwich", "Aylmer"];
@@ -22,6 +22,7 @@ export async function onRequestPost({ request, env }) {
     const services = coverageRows(TARGET_SERVICES, approved, "service");
     const strongest_towns = topRows(approved, "town");
     const strongest_services = topRows(approved, "service");
+    const proof_recommendations = buildProofRecommendations(towns, services, approved);
 
     return withCors(json({
       ok: true,
@@ -38,6 +39,7 @@ export async function onRequestPost({ request, env }) {
       services,
       strongest_towns,
       strongest_services,
+      proof_recommendations,
       privacy_rule: "Only sample or approved-public/customer-approved-public media counts as local proof. Pending/private/needs-blur/rejected items are excluded.",
       recommendation: "Prioritize before/after proof for target town + service combinations that have zero approved public examples, then link those examples from service and town pages."
     }));
@@ -78,6 +80,23 @@ function isPublicApproved(item) {
   if (["rejected", "private", "approved_private", "pending", "pending_review", "needs_blur"].includes(consent)) return false;
   if (["rejected", "approved_private", "pending_review", "needs_blur"].includes(privacy)) return false;
   return ["approved_public", "customer_approved_public", "public", "approved"].includes(consent) || ["approved_public", "customer_approved_public", "public"].includes(privacy);
+}
+
+function buildProofRecommendations(towns, services, approved) {
+  const missingTowns = towns.filter((row) => row.count === 0).map((row) => row.label);
+  const missingServices = services.filter((row) => row.count === 0).map((row) => row.label);
+  const pairs = [];
+  for (const town of missingTowns.slice(0, 6)) {
+    const service = missingServices[pairs.length % Math.max(1, missingServices.length)] || services.find((row) => row.count < 2)?.label || "Complete detail";
+    pairs.push({ town, service, priority: "high", recommendation: `Create or approve one before/after gallery item for ${town} + ${service}, then link it from the related town and service pages.` });
+  }
+  if (!pairs.length) {
+    const service = services.find((row) => row.count < 2);
+    const town = towns.find((row) => row.count < 2);
+    if (town || service) pairs.push({ town: town?.label || "highest-value town", service: service?.label || "highest-value service", priority: "medium", recommendation: "Add a second approved public example so local proof is not dependent on a single media item." });
+  }
+  if (!pairs.length && approved.length) pairs.push({ town: "All priority towns", service: "All priority services", priority: "maintenance", recommendation: "Keep adding fresh seasonal proof and rotate older examples into service/town pages." });
+  return pairs;
 }
 
 function coverageRows(targets, approved, key) {
