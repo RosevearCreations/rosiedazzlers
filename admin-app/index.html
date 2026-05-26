@@ -48,7 +48,7 @@
   @media(max-width:720px){.catalog-option-grid{grid-template-columns:1fr}}
 </style>
 </head>
-<body>
+<body data-build176="media-privacy-review-warnings">
 <main class="shell">
   <div class="loading" data-admin-shell-loading>Loading app management...</div>
   <div data-admin-shell-ready hidden>
@@ -358,6 +358,12 @@
           <button class="btn" type="button" id="resetBeforeAfterGalleryBtn">Reset to template</button>
           <button class="btn primary" type="button" id="saveBeforeAfterGalleryBtn">Save gallery</button>
         </div>
+        <div class="panel-lite stack-sm" id="mediaPrivacyReviewSummary" style="margin-top:14px">
+          <strong>Media privacy readiness</strong>
+          <p class="muted">Run this before publishing gallery/social proof. It warns when gallery rows or photo-estimate uploads are missing approved-public privacy status.</p>
+          <div id="mediaPrivacyReviewSummaryBody" class="note">Not checked yet.</div>
+          <div class="actions" style="margin-top:10px"><button class="btn ghost" type="button" id="reloadMediaPrivacySummaryBtn">Check media privacy readiness</button></div>
+        </div>
       </article>
 
       <article class="card span-6">
@@ -578,6 +584,25 @@
     try { parsed = JSON.parse(raw); } catch { throw new Error('Before / after gallery JSON is invalid.'); }
     if (!parsed || typeof parsed !== 'object') throw new Error('Before / after gallery JSON must be a JSON object.');
     return normalizeBeforeAfterGallery(parsed);
+  }
+  function renderMediaPrivacySummary(summary){
+    var body = byId('mediaPrivacyReviewSummaryBody');
+    if (!body) return;
+    summary = summary || {};
+    var warnings = Array.isArray(summary.warnings) ? summary.warnings : [];
+    var uploadWarnings = Array.isArray(summary.upload_warnings) ? summary.upload_warnings : [];
+    var warningHtml = warnings.concat(uploadWarnings).slice(0, 12).map(function(row){
+      return '<li><strong>' + escapeHtml(row.title || row.source || 'Media item') + '</strong> — ' + escapeHtml(row.reason || row.privacy_status || row.media_privacy_status || 'needs review') + '</li>';
+    }).join('');
+    body.innerHTML = '<div class="subgrid"><div><strong>Gallery ready:</strong> ' + escapeHtml(summary.gallery_ready || 0) + ' / ' + escapeHtml(summary.gallery_items || 0) + '</div><div><strong>Gallery needing review:</strong> ' + escapeHtml(summary.gallery_needs_review || 0) + '</div><div><strong>Uploads checked:</strong> ' + escapeHtml(summary.upload_records_checked || 0) + '</div><div><strong>Uploads not public-ready:</strong> ' + escapeHtml(summary.uploads_not_public_ready || 0) + '</div></div>' + (warningHtml ? '<ul style="margin:10px 0 0;padding-left:20px">' + warningHtml + '</ul>' : '<p class="note" style="margin-top:10px">No privacy warnings in the checked rows.</p>');
+  }
+  async function loadMediaPrivacySummary(){
+    var res = await fetch('/api/admin/media_privacy_review_summary', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 100 }) });
+    var out = await res.json().catch(function(){ return null; });
+    if (!res.ok) throw new Error(out?.error || 'Could not load media privacy readiness summary.');
+    renderMediaPrivacySummary(out?.summary || {});
+    if (out?.summary?.gallery_needs_review || out?.summary?.uploads_not_public_ready) setShellStatus('Media privacy warnings found. Review before public gallery/social reuse.', 'warning');
+    else setShellStatus('Media privacy readiness check passed for the sampled rows.', 'success');
   }
   function readVisibility(){ return { customer_detailer_notes: byId('vis_customer_detailer_notes').checked, customer_admin_notes_admin_only: byId('vis_customer_admin_notes').checked, detailer_admin_notes_admin_only: byId('vis_detailer_admin_notes').checked }; }
   function readScheduling(){ return { manual_schedule_admin_only: byId('manual_schedule_admin_only').checked, blocking_admin_only: byId('blocking_admin_only').checked, notes: byId('manual_schedule_notes').value || '' }; }
@@ -3152,7 +3177,8 @@
   bindById('saveSocialFeedsBtn', 'click', async ()=>{ try{ await saveSetting('social_feeds', readSocialFeedsEditor(), 'Social feeds saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save social feeds.', 'error'); } });
   bindById('reloadBeforeAfterGalleryBtn', 'click', async ()=>{ try{ const res = await fetch('/api/before_after_gallery_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load before / after gallery JSON.'); setBeforeAfterGalleryEditor(out || beforeAfterGalleryDefaults()); setShellStatus(out?.warning ? `Before / after gallery reloaded with fallback defaults. ${out.warning}` : 'Before / after gallery reloaded.', out?.warning ? 'warning' : 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload before / after gallery JSON.', 'error'); } });
   bindById('resetBeforeAfterGalleryBtn', 'click', ()=>{ setBeforeAfterGalleryEditor(beforeAfterGalleryDefaults()); setShellStatus('Before / after gallery editor reset to the template structure.', 'success'); });
-  bindById('saveBeforeAfterGalleryBtn', 'click', async ()=>{ try{ await saveSetting('before_after_gallery', readBeforeAfterGalleryEditor(), 'Before / after gallery saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save before / after gallery.', 'error'); } });
+  bindById('saveBeforeAfterGalleryBtn', 'click', async ()=>{ try{ await saveSetting('before_after_gallery', readBeforeAfterGalleryEditor(), 'Before / after gallery saved.'); await loadMediaPrivacySummary().catch(function(){}); } catch(err){ setShellStatus(err?.message || 'Could not save before / after gallery.', 'error'); } });
+  bindById('reloadMediaPrivacySummaryBtn', 'click', async ()=>{ try{ await loadMediaPrivacySummary(); } catch(err){ setShellStatus(err?.message || 'Could not load media privacy readiness summary.', 'error'); } });
   bindById('saveCatalogDropdownOptionsBtn', 'click', async ()=>{ try{ const value = readCatalogDropdownOptionsEditor(); setCatalogDropdownOptionsEditor(value); await saveSetting('catalog_dropdown_options', value, 'Dropdown option library saved. Admin App and Admin Catalog can now use these suggestions.'); renderPricingDashboard(); } catch(err){ setShellStatus(err?.message || 'Could not save dropdown option library.', 'error'); } });
   bindById('reloadPricingCatalogBtn', 'click', async ()=>{ try{ await loadPricingCatalogEditor(null); setShellStatus('Pricing catalog reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload pricing catalog.', 'error'); } });
   bindById('landing_addon_select', 'change', function(){ var nextAddon = this.value || ''; var currentLocation = byId('landing_location_select') ? byId('landing_location_select').value : ''; saveCurrentLandingEditorsToState(); renderLandingBuilder(nextAddon, currentLocation); });
@@ -3165,7 +3191,7 @@
   bindById('previewRecoveryBtn', 'click', async ()=>{ try{ await previewRecovery(false); setShellStatus('Recovery preview generated.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not build recovery preview.', 'error'); } });
   bindById('sendTestRecoveryBtn', 'click', async ()=>{ try{ await previewRecovery(true); } catch(err){ setShellStatus(err?.message || 'Could not send recovery test.', 'error'); } });
 
-  window.AdminPageInit.init({ pageKey:'admin-app', onReady: async ()=>{ try { await loadSettings(); } catch(err){ setShellStatus(err?.message || 'Could not initialize app management.', 'error'); } } });
+  window.AdminPageInit.init({ pageKey:'admin-app', onReady: async ()=>{ try { await loadSettings(); await loadMediaPrivacySummary().catch(function(){}); } catch(err){ setShellStatus(err?.message || 'Could not initialize app management.', 'error'); } } });
 })();
 </script>
 
