@@ -51,7 +51,7 @@ export async function onRequestPost({ request, env }) {
     if (!created) throw new Error("Booking insert returned no row.");
 
     await Promise.all([
-      patchConversion(env, conversion.id, created.id, access.actor).catch(() => null),
+      patchConversion(env, conversion.id, created.id, access.actor, bookingPayload).catch(() => null),
       patchLead(env, conversion.lead_id, created.id).catch(() => null),
       patchQuoteDraft(env, conversion.quote_proposal_draft_id).catch(() => null),
       insertBookingEvent(env, created.id, access.actor, conversion.id).catch(() => null)
@@ -149,8 +149,18 @@ async function insertBooking(env, payload) {
   return Array.isArray(data) ? data[0] || null : data;
 }
 
-async function patchConversion(env, conversionId, bookingId, actor) {
-  const patch = { status: "converted", converted_booking_id: bookingId, converted_at: new Date().toISOString(), updated_at: new Date().toISOString() };
+async function patchConversion(env, conversionId, bookingId, actor, bookingPayload = {}) {
+  const patch = {
+    status: "converted",
+    converted_booking_id: bookingId,
+    converted_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    final_price_status: "ready_to_book",
+    final_price_total_cents: Number(bookingPayload.price_total_cents || 0) || null,
+    final_deposit_cents: Number(bookingPayload.deposit_cents || 0) || null,
+    final_price_reviewed_at: new Date().toISOString(),
+    final_price_review: { source: "booking_creation", package_code: bookingPayload.package_code || null, vehicle_size: bookingPayload.vehicle_size || null, addons: bookingPayload.addons || [], price_total_cents: bookingPayload.price_total_cents || 0, deposit_cents: bookingPayload.deposit_cents || 0 }
+  };
   if (actor?.id && isUuid(actor.id)) patch.updated_by_staff_user_id = actor.id;
   await fetch(`${env.SUPABASE_URL}/rest/v1/lead_conversion_drafts?id=eq.${encodeURIComponent(conversionId)}`, { method: "PATCH", headers: { ...serviceHeaders(env), "Content-Type": "application/json" }, body: JSON.stringify(patch) });
 }
