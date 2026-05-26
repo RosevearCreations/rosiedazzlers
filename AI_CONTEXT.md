@@ -1,3 +1,40 @@
+# Build 178 update — Status Saves, Saved Price Reviews, Public Content Rendering & Privacy Badges
+
+**Current build:** Build 178  
+**Date:** 2026-05-25
+
+Build 178 closes the next operational gaps after Build 177 by adding conversion-draft status saving, saved final price reviews, live rendering of Admin Content Center blocks on public pages, media privacy readiness badges in the Social Queue/App Management flow, and deeper local SEO proof recommendations. No new DDL is required; this pass depends on the Build 175 content/conversion tables and Build 177 final-price review fields.
+
+## Completed in Build 178
+
+1. Added `/api/admin/lead_conversion_status_save` so staff can move conversion drafts through `draft_booking`, `needs_review`, `ready_to_book`, `converted`, and `closed`.
+2. Added `/api/admin/lead_conversion_price_review_save` so catalog reconciliation results can be saved before booking creation.
+3. Updated `/admin-conversions.html` with Save Status and Save Price Review controls.
+4. Added `/assets/public-content-blocks.js` and live public content mounts on Home, Services, Specials, Fleet, Maintenance, and Help pages.
+5. Added Social Queue media privacy readiness badges using the existing media privacy summary endpoint.
+6. Expanded local SEO proof reporting with concrete next-proof recommendations by town/service.
+7. Added a Build 178 release guard and no-DDL SQL note.
+
+## Updated completion status after Build 178
+
+| Area | Status | Build 178 notes |
+| --- | --- | --- |
+| Conversion draft status workflow | Stronger foundation | Status can now be saved without creating a booking. |
+| Final price reconciliation | Stronger foundation | Reconciliation can be saved before booking creation. |
+| Admin Content public rendering | Added foundation | DB/fallback content blocks can now render on public pages. |
+| Media privacy before reuse | Stronger foundation | Social/Admin flows now show privacy readiness reminders. |
+| Local SEO proof reporting | Stronger foundation | Report now recommends next town/service proof to create. |
+
+## Remaining priority after Build 178
+
+1. Add a fuller conversion-draft detail page with audit history.
+2. Render saved content blocks into exact page sections rather than only generic cards.
+3. Add admin approval gates that block publish/API actions unless consent and privacy statuses are approved.
+4. Turn proof recommendations into assignable content/media tasks.
+5. Add quote/proposal email delivery and customer acceptance tracking.
+
+---
+
 # Build 177 update — Conversion Review Queue, Price Reconciliation & Local Proof Reporting
 
 **Updated:** 2026-05-25  
@@ -312,3 +349,6 @@ Build 156 adds a reviewable social publishing foundation. Admin Progress can now
 - Preserved the one-H1 exposed-page rule and kept local SEO wording/access paths focused on Oxford/Norfolk service discovery.
 - Added Build 176 SQL/schema notes for `lead_conversion_drafts.converted_booking_id` and `lead_conversion_drafts.converted_at`.
 > Build 177 documentation sync (2026-05-25): added protected conversion-draft review queue, catalog-backed final price reconciliation, local SEO proof coverage reporting, public gallery privacy badges, SQL/schema notes, and release guard coverage.
+
+
+> Build 178 documentation sync (2026-05-25): added conversion status saving, saved final price reviews, public content block rendering, media privacy badges, proof recommendations, schema note, and release guard coverage.
