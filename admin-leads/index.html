@@ -14,7 +14,7 @@
     .lead-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.lead-field{padding:10px 12px;border-radius:12px;background:rgba(15,23,42,.36);border:1px solid rgba(255,255,255,.06)}.lead-field strong{display:block;color:#93c5fd;margin-bottom:3px}.lead-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;align-items:end}.links-list{display:grid;gap:6px;margin:8px 0 0}.links-list a{overflow-wrap:anywhere}.quote-preview{display:none;grid-column:1/-1;margin-top:8px}.quote-preview.is-open{display:grid;gap:8px}.quote-preview textarea{min-height:220px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;white-space:pre-wrap}.quote-drafts,.conversion-drafts{display:none;grid-column:1/-1;gap:8px;margin-top:8px}.quote-drafts.is-open,.conversion-drafts.is-open{display:grid}.quote-draft,.conversion-draft{border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(15,23,42,.38);padding:10px}.quote-draft__head,.conversion-draft__head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}.quote-draft pre,.conversion-draft pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:180px;overflow:auto;margin:8px 0 0;color:#dbeafe}.booking-create-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px}.booking-create-grid label{display:grid;gap:4px}.booking-create-grid input,.booking-create-grid select{width:100%;border-radius:10px;border:1px solid rgba(255,255,255,.16);background:rgba(15,23,42,.92);color:#f8fafc;padding:8px}.muted{color:#94a3b8}.danger-note{color:#fecaca}.two-col{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}@media(min-width:1050px){.two-col{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
   </style>
 </head>
-<body data-page="admin-leads" data-build175="lead-conversion-pricing-status" data-build176="conversion-to-booking-dashboard-privacy">
+<body data-page="admin-leads" data-build175="lead-conversion-pricing-status" data-build176="conversion-to-booking-dashboard-privacy" data-build177="conversion-queue-link">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -46,13 +46,14 @@
           <div>
             <div class="badge">Admin Leads</div>
             <h1 style="margin:10px 0 6px">Public leads & photo estimates</h1>
-            <p class="kicker" style="margin:0;max-width:860px">Review fleet, maintenance, specials, gift-card, and quote-first leads. Link uploaded estimate media to a lead or booking, mark privacy status before using photos publicly, then save quote/proposal drafts, update quote statuses, load catalog-backed pricing suggestions, create safe conversion drafts, and turn reviewed conversion drafts into real booking rows only after date/address/price are confirmed.</p>
+            <p class="kicker" style="margin:0;max-width:860px">Review fleet, maintenance, specials, gift-card, and quote-first leads. Link uploaded estimate media to a lead or booking, mark privacy status before using photos publicly, then save quote/proposal drafts, update quote statuses, load catalog-backed pricing suggestions, create safe conversion drafts, and use the dedicated Conversion Queue to reconcile price before creating real booking rows.</p>
           </div>
           <section class="actorcard" aria-label="Signed in staff">
             <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
             <div class="actorline"><span class="actorlabel">Role:</span><span data-actor-role></span></div>
             <div class="actorline"><span class="actorlabel">Email:</span><span data-actor-email></span></div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+              <a class="btn ghost" href="/admin-conversions.html">Conversion Queue</a>
               <a class="btn ghost" href="/admin-account.html">Settings</a>
               <button class="btn primary" type="button" data-admin-logout>Sign Out</button>
             </div>

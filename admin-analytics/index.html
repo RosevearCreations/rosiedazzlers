@@ -195,7 +195,7 @@
     }
   </style>
 </head>
-<body data-build176="conversion-funnel-dashboard">
+<body data-build176="conversion-funnel-dashboard" data-build177="local-seo-proof-report">
   <main class="shell">
     <div class="loading" data-admin-shell-loading>Loading analytics...</div>
     <div data-admin-shell-ready hidden>
@@ -323,6 +323,12 @@
           <div id="conversion-funnel-summary" class="list"></div>
         </article>
 
+        <article class="card card--half" data-build177="local-seo-proof-summary">
+          <h2>Local SEO proof coverage</h2>
+          <p class="muted">Counts only privacy-approved before/after gallery proof by service and town.</p>
+          <div id="local-seo-proof-summary" class="list"></div>
+        </article>
+
         <article class="card card--half">
           <h2>Checkout state mix</h2>
           <div id="checkout-states" class="list"></div>
@@ -385,7 +391,8 @@
         monthly: document.getElementById("monthly-traffic"),
         yearly: document.getElementById("yearly-traffic"),
         checkoutStates: document.getElementById("checkout-states"),
-        conversionSummary: document.getElementById("conversion-funnel-summary")
+        conversionSummary: document.getElementById("conversion-funnel-summary"),
+        localSeoProof: document.getElementById("local-seo-proof-summary")
       };
 
       let abandonedRows = [];
@@ -463,7 +470,7 @@
 
       async function load() {
         const days = Number(els.days.value || 30);
-        const [analyticsRes, abandonedRes, conversionRes] = await Promise.all([
+        const [analyticsRes, abandonedRes, conversionRes, localSeoRes] = await Promise.all([
           fetch("/api/admin/analytics_overview", {
             method: "POST",
             credentials: "include",
@@ -481,12 +488,19 @@
             credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ days })
+          }),
+          fetch("/api/admin/local_seo_proof_report", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ days })
           })
         ]);
 
         const analytics = await analyticsRes.json().catch(() => null);
         const abandoned = await abandonedRes.json().catch(() => null);
         const conversion = await conversionRes.json().catch(() => null);
+        const localSeo = await localSeoRes.json().catch(() => null);
 
         if (!analyticsRes.ok) throw new Error(analytics?.error || "Could not load analytics.");
         if (!abandonedRes.ok) throw new Error(abandoned?.error || "Could not load abandoned orders.");
@@ -555,6 +569,15 @@
           { label: "Conversion drafts", count: conversionSummary.lead_conversion_drafts || 0, note: `${Number(conversionSummary.lead_to_conversion_draft_rate || 0)}% lead → conversion draft` }
         ];
         renderList(els.conversionSummary, conversionRows, (row) => `<strong>${esc(row.label)}</strong><div class="muted">${Number(row.count || 0)} • ${esc(row.note || "")}</div>`, "No lead/quote conversion summary yet.");
+
+        const seoSummary = localSeo?.summary || {};
+        const seoRows = [
+          { label: "Approved proof items", count: seoSummary.approved_public_items || 0, note: `${Number(seoSummary.blocked_private_or_pending_items || 0)} private/pending blocked` },
+          { label: "Towns with proof", count: seoSummary.towns_with_proof || 0, note: `of ${Number(seoSummary.target_towns || 0)} target towns` },
+          { label: "Services with proof", count: seoSummary.services_with_proof || 0, note: `of ${Number(seoSummary.target_services || 0)} target services` },
+          { label: "Next proof gap", count: "", note: seoSummary.next_best_gap || "Add approved local examples" }
+        ];
+        renderList(els.localSeoProof, seoRows, (row) => `<strong>${esc(row.label)}</strong><div class="muted">${row.count === "" ? "" : Number(row.count || 0) + " • "}${esc(row.note || "")}</div>`, "No local proof coverage yet.");
         renderList(els.checkoutStates, analytics.checkout_states || [], (row) => `<strong>${esc(row.label)}</strong><div class="muted">${Number(row.count || 0)} events</div>`, "No checkout-state data yet.");
         renderList(
           els.recentActions,
