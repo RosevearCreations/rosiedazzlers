@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 176 note:
+- Adds reviewed conversion-draft to real booking creation, analytics dashboard cards, and media privacy warning guard.
+
 Build 175 note:
 - Adds lead conversion drafts, catalog-backed pricing suggestions, quote status controls, expanded content blocks, gallery privacy/town/service filters, and conversion analytics guard.
 
@@ -39,6 +42,7 @@ CHECKS = [
     "scripts/admin_content_build173_check.py",
     "scripts/quote_proposal_drafts_build174_check.py",
     "scripts/build175_conversion_content_gallery_analytics_check.py",
+    "scripts/build176_conversion_booking_privacy_dashboard_check.py",
     "scripts/seo_h1_check.py",
 ]
 
