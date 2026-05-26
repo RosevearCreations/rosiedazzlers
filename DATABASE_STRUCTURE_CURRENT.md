@@ -281,3 +281,18 @@ Build 176 extends `public.lead_conversion_drafts` with:
 - `converted_at timestamptz null`
 
 This lets `/api/admin/lead_conversion_create_booking` trace a reviewed lead conversion draft to the final live booking row. The endpoint still requires staff confirmation for service date, AM/PM slot, address, package, vehicle size, customer name, and customer email before inserting into `public.bookings`.
+
+## Build 177 — conversion review queue, price reconciliation, and local proof reporting
+
+Build 177 adds a dedicated `/admin-conversions.html` review queue for lead conversion drafts. Staff can load all draft booking/quote conversions, reconcile package/add-on/travel/HST pricing from the pricing catalog, confirm booking-ready fields, and then create a live booking through the existing reviewed conversion workflow.
+
+Apply `sql/2026-05-25_build177_conversion_review_price_local_proof.sql` after Build 175 and Build 176 SQL. It extends `public.lead_conversion_drafts` with optional final price review fields:
+
+- `final_price_review jsonb`
+- `final_price_status text`
+- `final_price_total_cents integer`
+- `final_deposit_cents integer`
+- `final_price_reviewed_at timestamptz`
+
+Build 177 also adds `/api/admin/local_seo_proof_report`, which counts only privacy-approved before/after proof by service and town for local SEO planning. This report is surfaced on Admin Analytics and does not require a new table.
+> Build 177 documentation sync (2026-05-25): added protected conversion-draft review queue, catalog-backed final price reconciliation, local SEO proof coverage reporting, public gallery privacy badges, SQL/schema notes, and release guard coverage.
