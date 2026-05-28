@@ -1,4 +1,4 @@
-// Build 179 — list quote/proposal drafts with delivery and acceptance tracking for Admin Leads.
+// Build 179 / Build 180 — list quote/proposal drafts with delivery, acceptance, and deposit tracking for Admin Leads.
 import { requireStaffAccess, json, serviceHeaders, cleanText, isUuid, methodNotAllowed } from "../_lib/staff-auth.js";
 
 const DRAFT_SELECT = [
@@ -24,6 +24,12 @@ const DRAFT_SELECT = [
   "declined_at",
   "responded_at",
   "customer_response_note",
+  "deposit_request_status",
+  "deposit_requested_at",
+  "deposit_paid_at",
+  "final_booking_confirmed_at",
+  "final_booking_id",
+  "latest_deposit_payment_request_id",
   "created_by_staff_user_id",
   "updated_by_staff_user_id",
   "created_at",
