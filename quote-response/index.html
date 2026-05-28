@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quote Response | Rosie Dazzlers Mobile Auto Detailing</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="description" content="Secure customer quote response page for Rosie Dazzlers Mobile Auto Detailing." />
+  <link rel="canonical" href="https://rosiedazzlers.ca/quote-response" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .quote-response-shell{max-width:760px;margin:0 auto;padding:44px 18px}.quote-response-card{border:1px solid rgba(255,255,255,.12);border-radius:22px;background:rgba(15,23,42,.84);box-shadow:0 20px 50px rgba(0,0,0,.24);padding:24px}.quote-response-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.quote-response-card textarea{min-height:120px}.status-box{margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}.status-box[data-state="success"]{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3)}.status-box[data-state="error"]{background:rgba(239,68,68,.12);border-color:rgba(248,113,113,.32)}
+  </style>
+</head>
+<body data-build179="quote-proposal-response-page">
+  <main class="quote-response-shell">
+    <section class="quote-response-card">
+      <p class="eyebrow">Rosie Dazzlers quote response</p>
+      <h1>Review your quote response</h1>
+      <p class="lead">Use this page to accept or decline the quote/proposal link we sent. We will still confirm final schedule details before any work is booked.</p>
+      <label>Optional note for Rosie Dazzlers
+        <textarea id="responseNote" placeholder="Example: We accept, but morning works best. Or: please adjust the package before we approve."></textarea>
+      </label>
+      <div class="quote-response-actions">
+        <button class="btn primary" id="acceptQuoteBtn" type="button">Accept quote</button>
+        <button class="btn ghost" id="declineQuoteBtn" type="button">Decline quote</button>
+        <a class="btn ghost" href="/contact.html">Contact us instead</a>
+      </div>
+      <div class="status-box" id="quoteResponseStatus">Waiting for your response.</div>
+    </section>
+  </main>
+  <script>
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      const draftId = params.get('draft_id') || '';
+      const token = params.get('token') || '';
+      const note = document.getElementById('responseNote');
+      const status = document.getElementById('quoteResponseStatus');
+      function setStatus(message,state){status.textContent=message;status.dataset.state=state||'';}
+      async function respond(action){
+        if(!draftId || !token){setStatus('This response link is missing its secure quote token. Please contact Rosie Dazzlers for a fresh link.','error');return;}
+        setStatus('Saving your quote response…','');
+        try{
+          const res = await fetch('/api/quote_proposal_respond',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({draft_id:draftId,token,action,note:note.value||''})});
+          const data = await res.json().catch(()=>({}));
+          if(!res.ok || data.ok===false) throw new Error(data.error || 'Could not save your response.');
+          setStatus(data.message || 'Your response was saved. Thank you.','success');
+        }catch(err){setStatus(err.message || 'Could not save your response. Please contact Rosie Dazzlers.','error');}
+      }
+      document.getElementById('acceptQuoteBtn').addEventListener('click',()=>respond('accepted'));
+      document.getElementById('declineQuoteBtn').addEventListener('click',()=>respond('declined'));
+    })();
+  </script>
+</body>
+</html>
