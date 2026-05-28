@@ -527,3 +527,18 @@ Build 179 adds hard social publish blocking before webhook/API/manual posted act
 - Quote acceptance: Admin Leads can prepare/send quote proposals, create customer response links, and track accepted/declined responses.
 - Still outstanding: hard blocking should be extended to any future social/provider endpoints, proof tasks should become calendar/work assignments, and quote acceptance should trigger booking deposit/final confirmation flows.
 
+---
+
+### Build 180 update — accepted quote deposit/payment request and final booking confirmation
+
+Build 180 connects the accepted quote workflow to a safer payment-request foundation. Staff can create a tracked deposit/payment request from an accepted quote/proposal draft, share the private `/quote-payment.html` customer page, mark deposits paid from Admin Leads, and link or confirm the final booking when a booking row is available. Schema tracking was updated for `public.quote_deposit_payment_requests` and the quote/conversion deposit status fields.
+
+## Build 180 competitive completion update
+
+| Capability | Build 180 status | Notes |
+| --- | --- | --- |
+| Accepted quote → deposit/payment request | Foundation added | Admin Leads can create a tracked deposit/payment request after quote acceptance. |
+| Customer payment-review page | Foundation added | `/quote-payment.html` is private/noindex and reads request details through a secure token. |
+| Deposit paid → booking confirmation | Foundation added | Staff can mark the request paid and confirm/link a booking when a booking row is available. |
+| Provider-verified payment automation | Still outstanding | Next build should connect Stripe/PayPal webhook verification to `quote_deposit_payment_requests`. |
+

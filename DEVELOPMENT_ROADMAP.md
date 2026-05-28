@@ -1148,3 +1148,21 @@ Build 179 adds hard social publish blocking before webhook/API/manual posted act
 
 Completed foundations for hard social publish blocking, local proof task assignment, and quote/proposal delivery acceptance tracking. Next roadmap priority is turning accepted quotes into deposit/payment and customer booking confirmation steps.
 
+---
+
+### Build 180 update — accepted quote deposit/payment request and final booking confirmation
+
+Build 180 connects the accepted quote workflow to a safer payment-request foundation. Staff can create a tracked deposit/payment request from an accepted quote/proposal draft, share the private `/quote-payment.html` customer page, mark deposits paid from Admin Leads, and link or confirm the final booking when a booking row is available. Schema tracking was updated for `public.quote_deposit_payment_requests` and the quote/conversion deposit status fields.
+
+## Build 180 roadmap progress
+
+Completed foundation: accepted quote → deposit/payment request → final booking confirmation tracking.
+
+New/changed pieces:
+- `/api/admin/quote_deposit_request_create` creates a deposit/payment request from an accepted quote draft.
+- `/quote-payment.html` gives the customer a private, noindex review/payment page.
+- `/api/admin/quote_deposit_request_mark_paid` lets staff record manual/verified deposit payment and confirm a linked booking when available.
+- `/api/admin/quote_deposit_requests_list` lets Admin Leads reload deposit/payment request history per quote.
+
+Next roadmap item: connect provider webhooks or return verification into the same request table so Stripe/PayPal payments can mark requests paid automatically instead of staff-only confirmation.
+
