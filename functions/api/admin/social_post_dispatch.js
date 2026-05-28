@@ -1,3 +1,4 @@
+// Build 179 — hard-block publish/webhook/manual posted actions until social privacy review is approved.
 import { requireStaffAccess, serviceHeaders, json, methodNotAllowed, isUuid } from "../_lib/staff-auth.js";
 import { withSocialCors, socialCorsHeaders } from "../_lib/social-dispatch.js";
 import { attemptPlatformPublish, publishViaWebhook } from "../_lib/social-platform-dispatch.js";
@@ -57,6 +58,8 @@ export async function onRequestPost(context) {
     };
 
     if (status === "posted") {
+      const gate = await blockPublishIfNotReady({ env, post, actor, action: "mark_posted" });
+      if (gate) return withSocialCors(gate);
       patch.posted_at = new Date().toISOString();
       patch.external_post_id = String(body.external_post_id || post.external_post_id || "").trim() || null;
       patch.external_post_url = String(body.external_post_url || post.external_post_url || "").trim() || null;
@@ -76,6 +79,27 @@ export async function onRequestPost(context) {
   } catch (err) {
     return withSocialCors(json({ ok: false, error: err?.message || "Could not update social post." }, 500));
   }
+}
+
+
+async function blockPublishIfNotReady({ env, post, actor, action }) {
+  const publishable = assertSocialPostPublishable(post);
+  if (publishable.ok) return null;
+  await logAttempt(env, {
+    social_post_id: post.id,
+    platform: post.platform,
+    status: "blocked",
+    request_summary: { action, actor: actor.full_name || actor.email || "Staff" },
+    response_summary: { blocked_by: "build179_hard_privacy_publish_gate" },
+    error_message: publishable.error
+  });
+  return json({
+    ok: false,
+    post,
+    message: "Publishing is blocked until the social draft is approved and media/privacy checks are confirmed.",
+    detail: publishable.error,
+    blocked_by: "build179_hard_privacy_publish_gate"
+  }, 400);
 }
 
 async function handleApproveReady({ env, post, actor, body }) {
@@ -118,18 +142,8 @@ async function handleApproveReady({ env, post, actor, body }) {
 }
 
 async function handleApiPublish({ env, post, actor }) {
-  const publishable = assertSocialPostPublishable(post);
-  if (!publishable.ok) {
-    await logAttempt(env, {
-      social_post_id: post.id,
-      platform: post.platform,
-      status: "blocked",
-      request_summary: { action: "publish_api", actor: actor.full_name || actor.email || "Staff" },
-      response_summary: { blocked_by: "build158_social_review_gate" },
-      error_message: publishable.error
-    });
-    return json({ ok: false, post, message: "Social post needs review before API publishing.", detail: publishable.error }, 400);
-  }
+  const gate = await blockPublishIfNotReady({ env, post, actor, action: "publish_api" });
+  if (gate) return gate;
 
   const result = await attemptPlatformPublish({ env, post, actor });
   const status = result.ok ? "posted" : (result.status || "failed");
@@ -164,6 +178,9 @@ async function handleApiPublish({ env, post, actor }) {
 }
 
 async function handleWebhookDispatch({ env, post, actor }) {
+  const gate = await blockPublishIfNotReady({ env, post, actor, action: "send_webhook" });
+  if (gate) return gate;
+
   const result = await publishViaWebhook({ env, post, actor, reason: "Manual Send webhook action from Social Queue." });
   const status = result.ok ? "posted" : "failed";
 

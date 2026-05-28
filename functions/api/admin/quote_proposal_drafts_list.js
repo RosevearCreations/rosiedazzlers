@@ -1,4 +1,4 @@
-// Build 174 — list quote/proposal drafts for Admin Leads.
+// Build 179 — list quote/proposal drafts with delivery and acceptance tracking for Admin Leads.
 import { requireStaffAccess, json, serviceHeaders, cleanText, isUuid, methodNotAllowed } from "../_lib/staff-auth.js";
 
 const DRAFT_SELECT = [
@@ -15,6 +15,15 @@ const DRAFT_SELECT = [
   "source",
   "follow_up_at",
   "sent_at",
+  "delivery_status",
+  "delivery_to_email",
+  "delivery_subject",
+  "delivered_at",
+  "acceptance_status",
+  "accepted_at",
+  "declined_at",
+  "responded_at",
+  "customer_response_note",
   "created_by_staff_user_id",
   "updated_by_staff_user_id",
   "created_at",
