@@ -14,7 +14,7 @@
     .lead-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.lead-field{padding:10px 12px;border-radius:12px;background:rgba(15,23,42,.36);border:1px solid rgba(255,255,255,.06)}.lead-field strong{display:block;color:#93c5fd;margin-bottom:3px}.lead-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;align-items:end}.links-list{display:grid;gap:6px;margin:8px 0 0}.links-list a{overflow-wrap:anywhere}.quote-preview{display:none;grid-column:1/-1;margin-top:8px}.quote-preview.is-open{display:grid;gap:8px}.quote-preview textarea{min-height:220px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;white-space:pre-wrap}.quote-drafts,.conversion-drafts{display:none;grid-column:1/-1;gap:8px;margin-top:8px}.quote-drafts.is-open,.conversion-drafts.is-open{display:grid}.quote-draft,.conversion-draft{border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(15,23,42,.38);padding:10px}.quote-draft__head,.conversion-draft__head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}.quote-draft pre,.conversion-draft pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:180px;overflow:auto;margin:8px 0 0;color:#dbeafe}.booking-create-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px}.booking-create-grid label{display:grid;gap:4px}.booking-create-grid input,.booking-create-grid select{width:100%;border-radius:10px;border:1px solid rgba(255,255,255,.16);background:rgba(15,23,42,.92);color:#f8fafc;padding:8px}.muted{color:#94a3b8}.danger-note{color:#fecaca}.two-col{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}@media(min-width:1050px){.two-col{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
   </style>
 </head>
-<body data-page="admin-leads" data-build175="lead-conversion-pricing-status" data-build176="conversion-to-booking-dashboard-privacy" data-build177="conversion-queue-link">
+<body data-page="admin-leads" data-build175="lead-conversion-pricing-status" data-build176="conversion-to-booking-dashboard-privacy" data-build177="conversion-queue-link" data-build179="quote-delivery-acceptance">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -266,7 +266,10 @@
         const status = row.status || 'draft';
         const when = row.updated_at || row.created_at || '';
         const body = row.body || '';
-        return `<article class="quote-draft" data-draft-id="${esc(row.id || '')}"><div class="quote-draft__head"><strong>${esc(title)}</strong><span class="pill">${esc(status.replace(/_/g,' '))}</span></div><div class="muted">Updated ${esc(dateText(when))}${row.follow_up_at ? ' • Follow up '+esc(dateText(row.follow_up_at)) : ''}</div><pre>${esc(body.slice(0,1800))}${body.length>1800?'…':''}</pre><input type="hidden" data-draft-title value="${esc(title)}" /><textarea hidden data-draft-body>${esc(body)}</textarea><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin-top:8px"><label>Status<select data-draft-status><option value="draft">Draft</option><option value="needs_review">Needs review</option><option value="ready_to_send">Ready to send</option><option value="sent">Sent</option><option value="accepted">Accepted</option><option value="declined">Declined</option><option value="archived">Archived</option></select></label><button class="btn ghost small" type="button" data-use-draft>Use in quote editor</button><button class="btn primary small" type="button" data-save-draft-status>Save status</button><button class="btn ghost small" type="button" data-convert-draft>Convert draft</button></div></article>`;
+        const delivery = row.delivery_status || 'not delivered';
+        const acceptance = row.acceptance_status || 'awaiting setup';
+        const email = row.delivery_to_email || row.customer_email || '';
+        return `<article class="quote-draft" data-draft-id="${esc(row.id || '')}" data-draft-email="${esc(email)}"><div class="quote-draft__head"><strong>${esc(title)}</strong><span><span class="pill">${esc(status.replace(/_/g,' '))}</span><span class="pill">Delivery: ${esc(delivery.replace(/_/g,' '))}</span><span class="pill">Response: ${esc(acceptance.replace(/_/g,' '))}</span></span></div><div class="muted">Updated ${esc(dateText(when))}${row.follow_up_at ? ' • Follow up '+esc(dateText(row.follow_up_at)) : ''}${row.delivered_at ? ' • Delivered '+esc(dateText(row.delivered_at)) : ''}${row.responded_at ? ' • Responded '+esc(dateText(row.responded_at)) : ''}</div>${row.customer_response_note ? `<div class="lead-field"><strong>Customer response note</strong>${esc(row.customer_response_note)}</div>` : ''}<pre>${esc(body.slice(0,1800))}${body.length>1800?'…':''}</pre><input type="hidden" data-draft-title value="${esc(title)}" /><textarea hidden data-draft-body>${esc(body)}</textarea><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin-top:8px"><label>Status<select data-draft-status><option value="draft">Draft</option><option value="needs_review">Needs review</option><option value="ready_to_send">Ready to send</option><option value="sent">Sent</option><option value="accepted">Accepted</option><option value="declined">Declined</option><option value="archived">Archived</option></select></label><label>Send to<input data-delivery-email value="${esc(email)}" placeholder="customer@email.ca" /></label><button class="btn ghost small" type="button" data-use-draft>Use in quote editor</button><button class="btn primary small" type="button" data-save-draft-status>Save status</button><button class="btn ghost small" type="button" data-deliver-draft>Prepare/send email</button><button class="btn ghost small" type="button" data-convert-draft>Convert draft</button></div><div class="muted" data-delivery-result></div></article>`;
       }
       function bindDraftActions(card){
         card.querySelectorAll('[data-draft-id]').forEach((draft)=>{
@@ -287,6 +290,16 @@
               setStatus('Quote draft status updated.','success');
               await loadDraftsForLead(card);
             }catch(err){setStatus(err.message || 'Could not update quote draft status.','error');}
+          });
+          draft.querySelector('[data-deliver-draft]')?.addEventListener('click',async()=>{
+            try{
+              const email = draft.querySelector('[data-delivery-email]')?.value || draft.dataset.draftEmail || card.dataset.leadEmail || '';
+              const data = await api('/api/admin/quote_proposal_deliver',{draft_id:draft.dataset.draftId,recipient_email:email});
+              const result = draft.querySelector('[data-delivery-result]');
+              if(result) result.textContent = data.acceptance_url ? `Customer response link: ${data.acceptance_url}` : (data.message || 'Quote delivery prepared.');
+              setStatus(data.email_sent ? 'Quote/proposal email sent.' : 'Quote/proposal prepared. Copy/send manually if no email provider is configured.','success');
+              await loadDraftsForLead(card);
+            }catch(err){setStatus(err.message || 'Could not prepare quote delivery. Apply Build 179 SQL first.','error');}
           });
           draft.querySelector('[data-convert-draft]')?.addEventListener('click',async()=>{
             try{

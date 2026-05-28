@@ -195,7 +195,7 @@
     }
   </style>
 </head>
-<body data-build176="conversion-funnel-dashboard" data-build177="local-seo-proof-report">
+<body data-build176="conversion-funnel-dashboard" data-build177="local-seo-proof-report" data-build179="local-proof-tasking">
   <main class="shell">
     <div class="loading" data-admin-shell-loading>Loading analytics...</div>
     <div data-admin-shell-ready hidden>
@@ -323,10 +323,14 @@
           <div id="conversion-funnel-summary" class="list"></div>
         </article>
 
-        <article class="card card--half" data-build177="local-seo-proof-summary">
+        <article class="card card--half" data-build177="local-seo-proof-summary" data-build179="local-proof-tasking">
           <h2>Local SEO proof coverage</h2>
-          <p class="muted">Counts only privacy-approved before/after gallery proof by service and town.</p>
+          <p class="muted">Counts only privacy-approved before/after gallery proof by service and town. Build 179 can turn recommendations into assignable media/content tasks.</p>
           <div id="local-seo-proof-summary" class="list"></div>
+          <h3>Recommended proof tasks</h3>
+          <div id="local-seo-proof-recommendations" class="list"></div>
+          <h3>Open proof tasks</h3>
+          <div id="local-seo-proof-tasks" class="list"></div>
         </article>
 
         <article class="card card--half">
@@ -392,7 +396,9 @@
         yearly: document.getElementById("yearly-traffic"),
         checkoutStates: document.getElementById("checkout-states"),
         conversionSummary: document.getElementById("conversion-funnel-summary"),
-        localSeoProof: document.getElementById("local-seo-proof-summary")
+        localSeoProof: document.getElementById("local-seo-proof-summary"),
+        localSeoRecommendations: document.getElementById("local-seo-proof-recommendations"),
+        localSeoTasks: document.getElementById("local-seo-proof-tasks")
       };
 
       let abandonedRows = [];
@@ -456,6 +462,31 @@
         setTimeout(() => URL.revokeObjectURL(url), 2000);
       }
 
+
+      function bindProofTaskButtons() {
+        document.querySelectorAll('[data-proof-task]').forEach((button) => {
+          button.addEventListener('click', async () => {
+            try {
+              const recommendation = JSON.parse(button.getAttribute('data-proof-task') || '{}');
+              button.disabled = true;
+              const res = await fetch('/api/admin/local_seo_proof_tasks_save', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ recommendation })
+              });
+              const data = await res.json().catch(() => ({}));
+              if (!res.ok || data.ok === false) throw new Error(data.error || data.migration_hint || 'Could not create proof task.');
+              setShellStatus('Local SEO proof task created.', 'success');
+              await load();
+            } catch (err) {
+              button.disabled = false;
+              setShellStatus(err.message || 'Could not create proof task.', 'error');
+            }
+          });
+        });
+      }
+
       function renderTrafficList(node, rows, empty) {
         renderList(
           node,
@@ -470,7 +501,7 @@
 
       async function load() {
         const days = Number(els.days.value || 30);
-        const [analyticsRes, abandonedRes, conversionRes, localSeoRes] = await Promise.all([
+        const [analyticsRes, abandonedRes, conversionRes, localSeoRes, proofTasksRes] = await Promise.all([
           fetch("/api/admin/analytics_overview", {
             method: "POST",
             credentials: "include",
@@ -494,6 +525,12 @@
             credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ days })
+          }),
+          fetch("/api/admin/local_seo_proof_tasks_list", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "all", limit: 12 })
           })
         ]);
 
@@ -501,6 +538,7 @@
         const abandoned = await abandonedRes.json().catch(() => null);
         const conversion = await conversionRes.json().catch(() => null);
         const localSeo = await localSeoRes.json().catch(() => null);
+        const proofTasks = await proofTasksRes.json().catch(() => null);
 
         if (!analyticsRes.ok) throw new Error(analytics?.error || "Could not load analytics.");
         if (!abandonedRes.ok) throw new Error(abandoned?.error || "Could not load abandoned orders.");
@@ -578,6 +616,19 @@
           { label: "Next proof gap", count: "", note: seoSummary.next_best_gap || "Add approved local examples" }
         ];
         renderList(els.localSeoProof, seoRows, (row) => `<strong>${esc(row.label)}</strong><div class="muted">${row.count === "" ? "" : Number(row.count || 0) + " • "}${esc(row.note || "")}</div>`, "No local proof coverage yet.");
+        renderList(
+          els.localSeoRecommendations,
+          localSeo?.proof_recommendations || [],
+          (row) => `<strong>${esc([row.town,row.service].filter(Boolean).join(' + ') || 'Proof recommendation')}</strong><div class="muted">${esc(row.recommendation || '')}</div><button class="btn ghost" type="button" data-proof-task='${esc(JSON.stringify(row))}'>Create task</button>`,
+          "No proof recommendations yet."
+        );
+        bindProofTaskButtons();
+        renderList(
+          els.localSeoTasks,
+          proofTasks?.tasks || [],
+          (row) => `<strong>${esc(row.title || 'Proof task')}</strong><div class="muted">${esc([row.town,row.service,row.priority,row.status].filter(Boolean).join(' • '))}</div><div class="muted">${esc(row.description || '')}</div>`,
+          proofTasks?.table_ready === false ? "Apply Build 179 SQL to save proof tasks." : "No open proof tasks yet."
+        );
         renderList(els.checkoutStates, analytics.checkout_states || [], (row) => `<strong>${esc(row.label)}</strong><div class="muted">${Number(row.count || 0)} events</div>`, "No checkout-state data yet.");
         renderList(
           els.recentActions,
