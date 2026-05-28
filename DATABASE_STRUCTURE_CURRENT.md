@@ -336,3 +336,27 @@ Build 177 also adds `/api/admin/local_seo_proof_report`, which counts only priva
 
 
 > Build 178 documentation sync (2026-05-25): added conversion status saving, saved final price reviews, public content block rendering, media privacy badges, proof recommendations, schema note, and release guard coverage.
+
+## Build 179 — Publish Privacy Blocking, Proof Tasks, Quote Delivery Tracking
+
+Build 179 adds `sql/2026-05-26_build179_publish_block_tasks_quote_acceptance.sql`.
+
+New/extended data targets:
+
+- `public.local_seo_proof_tasks` for assignable town/service local proof tasks created from local SEO proof recommendations.
+- `public.quote_proposal_drafts.delivery_status`, `delivery_to_email`, `delivery_subject`, `delivery_message`, `delivered_at`.
+- `public.quote_proposal_drafts.acceptance_token_hash`, `acceptance_status`, `accepted_at`, `declined_at`, `responded_at`, and `customer_response_note`.
+
+Runtime behavior:
+
+- Social Queue webhook/API/manual posted actions now hard-block unless the draft is ready and privacy/consent review is confirmed.
+- Admin Analytics can turn local proof recommendations into tasks.
+- Admin Leads can prepare/send a quote/proposal delivery and create a customer acceptance/decline link.
+- `/quote-response.html` records accepted/declined responses through `/api/quote_proposal_respond`.
+
+---
+
+## Build 179 documentation sync — publish blocking, proof tasks, quote acceptance
+
+Build 179 adds hard social publish blocking before webhook/API/manual posted actions, assignable local SEO proof tasks from proof recommendations, and customer-facing quote/proposal delivery plus accept/decline tracking. Schema tracking now points to `sql/2026-05-26_build179_publish_block_tasks_quote_acceptance.sql`. The one-H1 SEO rule, local service/town wording, and fallback-safe API pattern remain required on every pass.
+

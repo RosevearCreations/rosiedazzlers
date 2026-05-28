@@ -513,3 +513,17 @@ Reliability/customer-trust item continued: customer account and booking pages sh
 
 
 > Build 178 documentation sync (2026-05-25): added conversion status saving, saved final price reviews, public content block rendering, media privacy badges, proof recommendations, schema note, and release guard coverage.
+
+---
+
+## Build 179 documentation sync — publish blocking, proof tasks, quote acceptance
+
+Build 179 adds hard social publish blocking before webhook/API/manual posted actions, assignable local SEO proof tasks from proof recommendations, and customer-facing quote/proposal delivery plus accept/decline tracking. Schema tracking now points to `sql/2026-05-26_build179_publish_block_tasks_quote_acceptance.sql`. The one-H1 SEO rule, local service/town wording, and fallback-safe API pattern remain required on every pass.
+
+### Build 179 update — hard social publish, proof tasking, quote acceptance
+
+- Hard social publish blocking: added a Build 179 privacy gate before webhook/API/manual posted actions so drafts cannot be published until ready status and media/privacy confirmations are present.
+- Local proof recommendations: Admin Analytics can now create assignable local proof tasks for town/service gaps.
+- Quote acceptance: Admin Leads can prepare/send quote proposals, create customer response links, and track accepted/declined responses.
+- Still outstanding: hard blocking should be extended to any future social/provider endpoints, proof tasks should become calendar/work assignments, and quote acceptance should trigger booking deposit/final confirmation flows.
+

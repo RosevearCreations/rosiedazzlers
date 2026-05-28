@@ -635,3 +635,14 @@ The new lead conversion draft workflow is intentionally safer than creating a li
 
 
 > Build 178 documentation sync (2026-05-25): added conversion status saving, saved final price reviews, public content block rendering, media privacy badges, proof recommendations, schema note, and release guard coverage.
+
+---
+
+## Build 179 documentation sync — publish blocking, proof tasks, quote acceptance
+
+Build 179 adds hard social publish blocking before webhook/API/manual posted actions, assignable local SEO proof tasks from proof recommendations, and customer-facing quote/proposal delivery plus accept/decline tracking. Schema tracking now points to `sql/2026-05-26_build179_publish_block_tasks_quote_acceptance.sql`. The one-H1 SEO rule, local service/town wording, and fallback-safe API pattern remain required on every pass.
+
+### Build 179 risk update
+
+Reduced risk: social webhook/API/manual posted actions now hard-block if a draft has not passed readiness/privacy review. Remaining risk: any future publish provider must reuse the same gate. Quote acceptance now has token tracking, but payment/deposit and final schedule confirmation remain outstanding.
+
