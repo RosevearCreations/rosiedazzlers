@@ -530,3 +530,10 @@ Build 161 keeps `DEVELOPMENT_ROADMAP.md` as the source of truth and advances the
 
 
 > Build 178 documentation sync (2026-05-25): conversion status saves, saved final price reviews, public content rendering, privacy badges, and proof recommendation work were reflected in the active docs/schema notes.
+
+---
+
+## Build 179 documentation sync — publish blocking, proof tasks, quote acceptance
+
+Build 179 adds hard social publish blocking before webhook/API/manual posted actions, assignable local SEO proof tasks from proof recommendations, and customer-facing quote/proposal delivery plus accept/decline tracking. Schema tracking now points to `sql/2026-05-26_build179_publish_block_tasks_quote_acceptance.sql`. The one-H1 SEO rule, local service/town wording, and fallback-safe API pattern remain required on every pass.
+
