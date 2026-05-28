@@ -1429,3 +1429,13 @@ alter table public.lead_conversion_drafts
   add column if not exists final_price_total_cents integer null,
   add column if not exists final_deposit_cents integer null,
   add column if not exists final_price_reviewed_at timestamptz null;
+
+-- ---------------------------------------------------------------------------
+-- Build 180 note — accepted quote deposit/payment requests and final booking confirmation
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-26_build180_quote_deposit_booking_confirmation.sql.
+-- Adds public.quote_deposit_payment_requests so accepted quote/proposal drafts
+-- can generate a tracked deposit/payment request. Staff can mark a request paid,
+-- link/confirm the final booking, and keep the accepted quote → deposit → booking
+-- chain visible in Admin Leads. Public customer access uses /quote-payment.html
+-- and /api/quote_deposit_request with a secure token.

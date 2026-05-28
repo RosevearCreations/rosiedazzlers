@@ -646,3 +646,19 @@ Build 179 adds hard social publish blocking before webhook/API/manual posted act
 
 Reduced risk: social webhook/API/manual posted actions now hard-block if a draft has not passed readiness/privacy review. Remaining risk: any future publish provider must reuse the same gate. Quote acceptance now has token tracking, but payment/deposit and final schedule confirmation remain outstanding.
 
+---
+
+### Build 180 update — accepted quote deposit/payment request and final booking confirmation
+
+Build 180 connects the accepted quote workflow to a safer payment-request foundation. Staff can create a tracked deposit/payment request from an accepted quote/proposal draft, share the private `/quote-payment.html` customer page, mark deposits paid from Admin Leads, and link or confirm the final booking when a booking row is available. Schema tracking was updated for `public.quote_deposit_payment_requests` and the quote/conversion deposit status fields.
+
+## Build 180 gaps and risks
+
+Reduced risk:
+- Accepted quotes no longer stop at customer acceptance; they now have a tracked deposit/payment request path.
+- The public payment page is marked `noindex,nofollow` so customer-specific quote/payment links are not meant for search indexing.
+
+Still a gap:
+- Stripe checkout creation is supported when `STRIPE_SECRET_KEY` is configured, but automatic paid-status webhook reconciliation for this new quote deposit table is still outstanding.
+- Staff can manually mark deposits paid; provider-verified payment confirmation should be added next before relying fully on automated checkout.
+

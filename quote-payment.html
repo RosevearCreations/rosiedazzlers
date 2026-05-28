@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Secure Quote Deposit Request | Rosie Dazzlers</title>
+  <meta name="description" content="Review a secure Rosie Dazzlers quote deposit request and payment instructions." />
+  <link rel="canonical" href="https://rosiedazzlers.ca/quote-payment.html" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .payment-shell{max-width:920px;margin:0 auto;padding:clamp(24px,4vw,52px) 18px}.payment-card{background:rgba(15,23,42,.84);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:clamp(20px,4vw,34px);box-shadow:0 24px 60px rgba(15,23,42,.24)}.payment-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:20px 0}.payment-meta div{border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(255,255,255,.04);padding:12px}.payment-meta strong{display:block;color:#93c5fd;margin-bottom:4px}.quote-body{white-space:pre-wrap;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(255,255,255,.05);padding:14px;max-height:340px;overflow:auto}.status{border-radius:16px;padding:12px 14px;margin:16px 0}.status.good{background:rgba(34,197,94,.16);border:1px solid rgba(34,197,94,.35)}.status.warn{background:rgba(251,191,36,.16);border:1px solid rgba(251,191,36,.35)}.status.bad{background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.35)}
+  </style>
+</head>
+<body data-page="quote-payment" data-build180="quote-deposit-payment-request">
+  <div data-site-chrome></div>
+  <main class="payment-shell">
+    <section class="payment-card">
+      <p class="kicker">Secure quote deposit</p>
+      <h1>Review your Rosie Dazzlers deposit request</h1>
+      <p class="muted">This page is private to your quote link. It is not listed in search engines.</p>
+      <div id="paymentStatus" class="status warn">Loading your secure payment request…</div>
+      <div id="paymentContent" hidden></div>
+    </section>
+  </main>
+  <script src="/assets/chrome.js" defer></script>
+  <script src="/assets/public-analytics.js" defer></script>
+  <script>
+    (function(){
+      const status=document.getElementById('paymentStatus');
+      const content=document.getElementById('paymentContent');
+      const params=new URLSearchParams(location.search);
+      function esc(v){return String(v??'').replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+      function money(cents){return '$'+(Number(cents||0)/100).toFixed(2)+' CAD';}
+      function setStatus(msg,type){status.textContent=msg;status.className='status '+(type||'warn');}
+      async function load(){
+        const requestId=params.get('request_id')||params.get('id')||'';
+        const token=params.get('token')||'';
+        if(!requestId){setStatus('This payment link is missing a request id. Please ask Rosie Dazzlers for a fresh link.','bad');return;}
+        const apiUrl='/api/quote_deposit_request?request_id='+encodeURIComponent(requestId)+(token?'&token='+encodeURIComponent(token):'')+(params.get('payment')?'&payment='+encodeURIComponent(params.get('payment')):'');
+        const res=await fetch(apiUrl,{credentials:'omit'});
+        const data=await res.json().catch(()=>({}));
+        if(!res.ok||data.ok===false){setStatus(data.error||'Could not load this payment request.','bad');return;}
+        const req=data.payment_request||{};const quote=data.quote||{};
+        if(req.payment_status==='paid'){setStatus('Deposit recorded. Rosie Dazzlers will confirm the final booking details.','good');}
+        else if(data.payment_returned){setStatus('Payment provider returned to this page. Rosie Dazzlers will verify and confirm the booking.','warn');}
+        else{setStatus('Please review the quote deposit details below.','warn');}
+        const button=req.checkout_url?`<p><a class="btn primary" href="${esc(req.checkout_url)}" rel="noopener">Open secure payment option</a></p>`:'<p class="muted">No online checkout link is attached yet. Rosie Dazzlers may collect this deposit by manual method and mark it paid from the office.</p>';
+        content.hidden=false;
+        content.innerHTML=`<div class="payment-meta"><div><strong>Amount requested</strong>${esc(money(req.amount_cents))}</div><div><strong>Status</strong>${esc((req.payment_status||req.status||'pending').replace(/_/g,' '))}</div><div><strong>Provider</strong>${esc(req.provider||'manual')}</div><div><strong>Requested</strong>${esc(req.requested_at||'')}</div></div>${button}<h2>${esc(quote.title||'Quote/proposal')}</h2><div class="quote-body">${esc(quote.body||'Quote details were prepared by Rosie Dazzlers.')}</div>${quote.pricing_note?`<h2>Pricing note</h2><div class="quote-body">${esc(quote.pricing_note)}</div>`:''}${req.public_note?`<p>${esc(req.public_note)}</p>`:''}`;
+      }
+      load().catch((err)=>setStatus(err.message||'Unexpected payment request error.','bad'));
+    })();
+  </script>
+</body>
+</html>

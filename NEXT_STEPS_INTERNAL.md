@@ -316,3 +316,17 @@ Build 179 adds hard social publish blocking before webhook/API/manual posted act
 4. Prepare one quote delivery link from Admin Leads and respond through `/quote-response.html`.
 5. Next build: accepted quote → deposit/payment request → final booking confirmation.
 
+---
+
+### Build 180 update — accepted quote deposit/payment request and final booking confirmation
+
+Build 180 connects the accepted quote workflow to a safer payment-request foundation. Staff can create a tracked deposit/payment request from an accepted quote/proposal draft, share the private `/quote-payment.html` customer page, mark deposits paid from Admin Leads, and link or confirm the final booking when a booking row is available. Schema tracking was updated for `public.quote_deposit_payment_requests` and the quote/conversion deposit status fields.
+
+## Build 180 next steps
+
+1. Apply `sql/2026-05-26_build180_quote_deposit_booking_confirmation.sql` after Build 179 SQL.
+2. Test Admin Leads: accepted quote draft → create deposit request → load deposit requests → mark paid.
+3. Test `/quote-payment.html` with a generated secure request URL.
+4. Add provider webhook reconciliation for quote deposit requests.
+5. Add customer-facing final booking confirmation email after payment is verified.
+

@@ -466,3 +466,21 @@ Build 179 adds hard social publish blocking before webhook/API/manual posted act
 
 Verify Social Queue publish/webhook/manual posted actions refuse unapproved media drafts, Admin Analytics can create local proof tasks, Admin Leads can prepare quote delivery links, and `/quote-response.html` records accepted/declined responses after Build 179 SQL is applied.
 
+---
+
+### Build 180 update — accepted quote deposit/payment request and final booking confirmation
+
+Build 180 connects the accepted quote workflow to a safer payment-request foundation. Staff can create a tracked deposit/payment request from an accepted quote/proposal draft, share the private `/quote-payment.html` customer page, mark deposits paid from Admin Leads, and link or confirm the final booking when a booking row is available. Schema tracking was updated for `public.quote_deposit_payment_requests` and the quote/conversion deposit status fields.
+
+## Build 180 sanity check
+
+The customer quote chain now has these stages:
+
+1. Staff prepares quote/proposal draft.
+2. Customer accepts or declines through `/quote-response.html`.
+3. Staff creates a deposit/payment request from the accepted draft.
+4. Customer reviews the private `/quote-payment.html` request.
+5. Staff records/links paid deposit and confirms the final booking when a booking exists.
+
+Still outstanding: automate provider-confirmed paid status through payment webhooks.
+
