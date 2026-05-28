@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 180 note:
+- Connects accepted quote drafts to deposit/payment requests and final booking confirmation tracking.
+
 Build 179 note:
 - Adds hard social publish blocking, local proof tasking, and quote delivery/acceptance tracking.
 
@@ -55,6 +58,7 @@ CHECKS = [
     "scripts/build177_conversion_review_price_local_proof_check.py",
     "scripts/build178_status_price_content_privacy_check.py",
     "scripts/build179_publish_block_tasks_quote_acceptance_check.py",
+    "scripts/build180_quote_deposit_booking_confirmation_check.py",
     "scripts/seo_h1_check.py",
 ]
 
