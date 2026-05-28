@@ -1,3 +1,13 @@
+-- Build 179 note — hard social publish blocking, local proof tasks, and quote acceptance tracking (2026-05-26)
+-- New migration: sql/2026-05-26_build179_publish_block_tasks_quote_acceptance.sql
+-- Adds public.local_seo_proof_tasks and optional quote_proposal_drafts delivery/acceptance fields.
+-- Runtime endpoints:
+--   functions/api/admin/local_seo_proof_tasks_save.js
+--   functions/api/admin/local_seo_proof_tasks_list.js
+--   functions/api/admin/quote_proposal_deliver.js
+--   functions/api/quote_proposal_respond.js
+-- Hard publish blocking is enforced in functions/api/admin/social_post_dispatch.js before webhook/API/manual posted actions.
+
 -- Build 178 note: no new DDL; /api/admin/lead_conversion_status_save and /api/admin/lead_conversion_price_review_save use Build 175 lead_conversion_drafts and Build 177 final_price_review/final_price_status/final_price_total_cents/final_deposit_cents/final_price_reviewed_at fields.
 -- Build 173 note — Admin Content Center FAQ editor bridge (2026-05-24)
 -- No new DDL is required in Build 173.
