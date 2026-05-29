@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 181 note:
+- Adds verified Stripe/PayPal webhook settlement for quote deposit/payment requests.
+
 Build 180 note:
 - Connects accepted quote drafts to deposit/payment requests and final booking confirmation tracking.
 
@@ -59,6 +62,7 @@ CHECKS = [
     "scripts/build178_status_price_content_privacy_check.py",
     "scripts/build179_publish_block_tasks_quote_acceptance_check.py",
     "scripts/build180_quote_deposit_booking_confirmation_check.py",
+    "scripts/build181_payment_webhook_quote_deposits_check.py",
     "scripts/seo_h1_check.py",
 ]
 
