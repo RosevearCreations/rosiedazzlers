@@ -14,7 +14,7 @@
     .lead-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.lead-field{padding:10px 12px;border-radius:12px;background:rgba(15,23,42,.36);border:1px solid rgba(255,255,255,.06)}.lead-field strong{display:block;color:#93c5fd;margin-bottom:3px}.lead-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;align-items:end}.links-list{display:grid;gap:6px;margin:8px 0 0}.links-list a{overflow-wrap:anywhere}.quote-preview{display:none;grid-column:1/-1;margin-top:8px}.quote-preview.is-open{display:grid;gap:8px}.quote-preview textarea{min-height:220px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;white-space:pre-wrap}.quote-drafts,.conversion-drafts{display:none;grid-column:1/-1;gap:8px;margin-top:8px}.quote-drafts.is-open,.conversion-drafts.is-open{display:grid}.quote-draft,.conversion-draft{border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(15,23,42,.38);padding:10px}.quote-draft__head,.conversion-draft__head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}.quote-draft pre,.conversion-draft pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:180px;overflow:auto;margin:8px 0 0;color:#dbeafe}.booking-create-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px}.booking-create-grid label{display:grid;gap:4px}.booking-create-grid input,.booking-create-grid select{width:100%;border-radius:10px;border:1px solid rgba(255,255,255,.16);background:rgba(15,23,42,.92);color:#f8fafc;padding:8px}.muted{color:#94a3b8}.danger-note{color:#fecaca}.two-col{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}@media(min-width:1050px){.two-col{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
   </style>
 </head>
-<body data-page="admin-leads" data-build175="lead-conversion-pricing-status" data-build176="conversion-to-booking-dashboard-privacy" data-build177="conversion-queue-link" data-build179="quote-delivery-acceptance" data-build180="quote-deposit-booking-confirmation">
+<body data-page="admin-leads" data-build175="lead-conversion-pricing-status" data-build176="conversion-to-booking-dashboard-privacy" data-build177="conversion-queue-link" data-build179="quote-delivery-acceptance" data-build180="quote-deposit-booking-confirmation" data-build181="payment-webhook-verification">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -46,7 +46,7 @@
           <div>
             <div class="badge">Admin Leads</div>
             <h1 style="margin:10px 0 6px">Public leads & photo estimates</h1>
-            <p class="kicker" style="margin:0;max-width:860px">Review fleet, maintenance, specials, gift-card, and quote-first leads. Link uploaded estimate media to a lead or booking, mark privacy status before using photos publicly, then save quote/proposal drafts, update quote statuses, load catalog-backed pricing suggestions, create safe conversion drafts, use the dedicated Conversion Queue to reconcile price before creating real booking rows, and create deposit/payment requests after accepted quote drafts.</p>
+            <p class="kicker" style="margin:0;max-width:860px">Review fleet, maintenance, specials, gift-card, and quote-first leads. Link uploaded estimate media to a lead or booking, mark privacy status before using photos publicly, then save quote/proposal drafts, update quote statuses, load catalog-backed pricing suggestions, create safe conversion drafts, use the dedicated Conversion Queue to reconcile price before creating real booking rows, and create Stripe/PayPal/manual deposit requests after accepted quote drafts. Verified provider webhooks can mark deposits paid automatically.</p>
           </div>
           <section class="actorcard" aria-label="Signed in staff">
             <div class="actorline"><span class="actorlabel">Name:</span><span data-actor-name></span></div>
@@ -305,8 +305,10 @@
             try{
               const amount = prompt('Deposit amount in CAD for this accepted quote?', '50.00');
               if(amount === null) return;
+              const providerChoice = (prompt('Payment provider? Type stripe, paypal, or manual.', 'stripe') || 'manual').trim().toLowerCase();
+              const provider = ['stripe','paypal','manual'].includes(providerChoice) ? providerChoice : 'manual';
               const email = draft.querySelector('[data-delivery-email]')?.value || draft.dataset.draftEmail || card.dataset.leadEmail || '';
-              const data = await api('/api/admin/quote_deposit_request_create',{quote_proposal_draft_id:draft.dataset.draftId,lead_id:card.dataset.leadId,customer_email:email,deposit_amount:amount});
+              const data = await api('/api/admin/quote_deposit_request_create',{quote_proposal_draft_id:draft.dataset.draftId,lead_id:card.dataset.leadId,customer_email:email,deposit_amount:amount,provider});
               const result = draft.querySelector('[data-delivery-result]');
               if(result) result.textContent = data.checkout_url ? `Deposit/payment link: ${data.checkout_url}` : (data.public_payment_url ? `Deposit/payment page: ${data.public_payment_url}` : 'Deposit request created.');
               setStatus('Deposit/payment request created for accepted quote.','success');
@@ -337,7 +339,7 @@
             try{
               const ref = prompt('Payment reference or note?', 'manual deposit confirmed');
               if(ref === null) return;
-              const data = await api('/api/admin/quote_deposit_request_mark_paid',{payment_request_id:item.dataset.paymentRequestId,payment_reference:ref,payment_method:'manual'});
+              const data = await api('/api/admin/quote_deposit_request_mark_paid',{payment_request_id:item.dataset.paymentRequestId,payment_reference:ref,payment_method:'manual_staff'});
               setStatus(data.booking_confirmed ? 'Deposit recorded and booking confirmed/linked.' : 'Deposit recorded. Create or link a booking to finish confirmation.','success');
               await loadDepositRequestsForDraft(draft);
             }catch(err){setStatus(err.message || 'Could not mark deposit paid.','error');}
@@ -348,7 +350,7 @@
         const status = row.payment_status || row.status || 'pending';
         const url = row.checkout_url || row.public_payment_url || '';
         const paid = status === 'paid' || row.paid_at;
-        return `<article class="quote-draft" data-payment-request-id="${esc(row.id || '')}"><div class="quote-draft__head"><strong>${esc(money(row.amount_cents))}</strong><span><span class="pill ${paid?'good':'warn'}">${esc(String(status).replace(/_/g,' '))}</span><span class="pill">${esc(row.provider || 'manual')}</span></span></div><div class="muted">Requested ${esc(dateText(row.requested_at || row.created_at || ''))}${row.paid_at?' • Paid '+esc(dateText(row.paid_at)):''}${row.booking_confirmed_at?' • Booking confirmed '+esc(dateText(row.booking_confirmed_at)):''}</div>${url?`<p><a href="${esc(url)}" target="_blank" rel="noopener">Open payment link</a></p>`:''}<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost small" type="button" data-mark-paid ${paid?'disabled':''}>Mark deposit paid</button>${row.confirmed_booking_id?`<span class="pill good">Booking ${esc(row.confirmed_booking_id)}</span>`:''}</div></article>`;
+        return `<article class="quote-draft" data-payment-request-id="${esc(row.id || '')}"><div class="quote-draft__head"><strong>${esc(money(row.amount_cents))}</strong><span><span class="pill ${paid?'good':'warn'}">${esc(String(status).replace(/_/g,' '))}</span><span class="pill">${esc(row.provider || 'manual')}</span><span class="pill">${esc((row.provider_status || 'awaiting provider').replace(/_/g,' '))}</span></span></div><div class="muted">Requested ${esc(dateText(row.requested_at || row.created_at || ''))}${row.paid_at?' • Paid '+esc(dateText(row.paid_at)):''}${row.booking_confirmed_at?' • Booking confirmed '+esc(dateText(row.booking_confirmed_at)):''}</div>${url?`<p><a href="${esc(url)}" target="_blank" rel="noopener">Open payment link</a></p>`:''}<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost small" type="button" data-mark-paid ${paid?'disabled':''}>Mark deposit paid</button>${row.confirmed_booking_id?`<span class="pill good">Booking ${esc(row.confirmed_booking_id)}</span>`:''}</div></article>`;
       }
       function money(cents){return '$'+(Number(cents||0)/100).toFixed(2)+' CAD';}
 

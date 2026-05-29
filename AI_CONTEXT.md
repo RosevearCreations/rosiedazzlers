@@ -1,3 +1,7 @@
+# Build 181 handoff note — verified provider quote deposits
+
+Build 181 adds verified Stripe/PayPal webhook settlement for accepted quote deposit/payment requests. Apply `sql/2026-05-26_build181_payment_webhooks_quote_deposits.sql` after Build 180, then test Stripe Checkout metadata settlement and PayPal verified capture settlement through `quote_deposit_payment_requests`.
+
 # Build 178 update — Status Saves, Saved Price Reviews, Public Content Rendering & Privacy Badges
 
 **Current build:** Build 178  
@@ -364,4 +368,6 @@ Build 179 adds hard social publish blocking before webhook/API/manual posted act
 ### Build 180 update — accepted quote deposit/payment request and final booking confirmation
 
 Build 180 connects the accepted quote workflow to a safer payment-request foundation. Staff can create a tracked deposit/payment request from an accepted quote/proposal draft, share the private `/quote-payment.html` customer page, mark deposits paid from Admin Leads, and link or confirm the final booking when a booking row is available. Schema tracking was updated for `public.quote_deposit_payment_requests` and the quote/conversion deposit status fields.
+---
 
+> Build 181 documentation sync (2026-05-26): Added verified Stripe/PayPal webhook settlement for `quote_deposit_payment_requests`, PayPal quote-deposit order/capture support, automatic deposit-paid updates, booking confirmation linking, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard and local service/town wording rules remain required on every pass.

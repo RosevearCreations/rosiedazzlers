@@ -1,3 +1,32 @@
+# Build 181 schema update — verified quote deposit webhooks
+
+Build 181 adds provider-verification audit fields to `public.quote_deposit_payment_requests` so Stripe and PayPal events can settle accepted quote deposits automatically. Apply `sql/2026-05-26_build181_payment_webhooks_quote_deposits.sql` after Build 180.
+
+## Updated table: `public.quote_deposit_payment_requests`
+
+New optional fields:
+
+- `webhook_verified_at timestamptz`
+- `webhook_processed_at timestamptz`
+- `provider_event_id text`
+- `provider_event_type text`
+- `provider_payment_intent_id text`
+- `provider_order_id text`
+- `provider_capture_id text`
+- `provider_payload jsonb`
+
+The provider check is updated to allow:
+
+- `manual`
+- `stripe`
+- `paypal`
+
+Runtime behavior:
+
+- Stripe `checkout.session.completed` with `quote_deposit_payment_request_id` metadata marks the matching request paid.
+- PayPal verified `PAYMENT.CAPTURE.COMPLETED` or `PAYMENT.SALE.COMPLETED` events mark the matching request paid.
+- When a linked booking exists, settlement confirms the booking and writes a booking finance deposit event.
+
 # Build 178 update — Status Saves, Saved Price Reviews, Public Content Rendering & Privacy Badges
 
 **Current build:** Build 178  
@@ -380,4 +409,6 @@ Extended tables:
 Migration file:
 
 - `sql/2026-05-26_build180_quote_deposit_booking_confirmation.sql`
+---
 
+> Build 181 documentation sync (2026-05-26): Added verified Stripe/PayPal webhook settlement for `quote_deposit_payment_requests`, PayPal quote-deposit order/capture support, automatic deposit-paid updates, booking confirmation linking, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard and local service/town wording rules remain required on every pass.

@@ -1,3 +1,26 @@
+# Build 181 roadmap update — verified provider deposits
+
+**Updated:** 2026-05-26
+
+Build 181 completes the next requested workflow step: accepted quote deposits can now be settled automatically by verified Stripe/PayPal provider events instead of staff-only manual confirmation. Stripe Checkout metadata, PayPal webhook verification, and the private quote-payment PayPal return capture all update the same `quote_deposit_payment_requests` table.
+
+## Completed in Build 181
+
+1. Added shared quote deposit settlement helper at `functions/api/_lib/quote-deposit-payments.js`.
+2. Updated `/api/stripe/webhook` to verify raw Stripe signatures and mark matching quote deposit requests paid when `quote_deposit_payment_request_id` metadata is present.
+3. Added `/api/paypal/webhook` to verify PayPal webhook signatures using `PAYPAL_WEBHOOK_ID` and settle completed capture/sale events.
+4. Added `/api/paypal/capture-quote-deposit` so the private customer payment page can capture approved PayPal orders and settle the same deposit request.
+5. Extended quote deposit request creation so staff can choose `stripe`, `paypal`, or `manual`.
+6. Added Build 181 SQL/schema tracking for provider audit fields and PayPal provider support.
+
+## Next roadmap items
+
+1. Add provider webhook event history with retry/replay and failure reason display.
+2. Add customer receipt/booking-confirmation delivery after verified deposit.
+3. Add refund/partial refund tracking connected to quote deposit requests.
+4. Add final-balance invoice/payment request after job completion.
+5. Add accounting journal candidates for deposits, HST, processor fees, and revenue recognition.
+
 # Build 178 update — Status Saves, Saved Price Reviews, Public Content Rendering & Privacy Badges
 
 **Current build:** Build 178  
@@ -1165,4 +1188,6 @@ New/changed pieces:
 - `/api/admin/quote_deposit_requests_list` lets Admin Leads reload deposit/payment request history per quote.
 
 Next roadmap item: connect provider webhooks or return verification into the same request table so Stripe/PayPal payments can mark requests paid automatically instead of staff-only confirmation.
+---
 
+> Build 181 documentation sync (2026-05-26): Added verified Stripe/PayPal webhook settlement for `quote_deposit_payment_requests`, PayPal quote-deposit order/capture support, automatic deposit-paid updates, booking confirmation linking, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard and local service/town wording rules remain required on every pass.
