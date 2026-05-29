@@ -474,4 +474,6 @@ Reviewed during the 2026-05-18 Cloudflare Pages Functions deploy hotfix. No cont
 ### Build 180 update — accepted quote deposit/payment request and final booking confirmation
 
 Build 180 connects the accepted quote workflow to a tracked deposit/payment request and final booking confirmation foundation. Staff can create a deposit request from an accepted quote, share the private `/quote-payment.html` page, record deposits paid, and link/confirm the final booking when available.
+---
 
+> Build 181 documentation sync (2026-05-26): Added verified Stripe/PayPal webhook settlement for `quote_deposit_payment_requests`, PayPal quote-deposit order/capture support, automatic deposit-paid updates, booking confirmation linking, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard and local service/town wording rules remain required on every pass.
