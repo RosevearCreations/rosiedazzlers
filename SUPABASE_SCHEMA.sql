@@ -1439,3 +1439,12 @@ alter table public.lead_conversion_drafts
 -- link/confirm the final booking, and keep the accepted quote → deposit → booking
 -- chain visible in Admin Leads. Public customer access uses /quote-payment.html
 -- and /api/quote_deposit_request with a secure token.
+
+
+-- Build 181 note — verified provider webhooks for quote deposits.
+-- See sql/2026-05-26_build181_payment_webhooks_quote_deposits.sql.
+-- quote_deposit_payment_requests now supports provider in ('manual','stripe','paypal') plus:
+-- webhook_verified_at, webhook_processed_at, provider_event_id, provider_event_type,
+-- provider_payment_intent_id, provider_order_id, provider_capture_id, provider_payload.
+-- Stripe checkout.session.completed and PayPal PAYMENT.CAPTURE.COMPLETED / PAYMENT.SALE.COMPLETED
+-- can settle quote_deposit_payment_requests automatically after signature verification.
