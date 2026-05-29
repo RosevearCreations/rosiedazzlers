@@ -41,7 +41,7 @@ export async function onRequestPost({ request, env }) {
     const amountCents = moneyToCents(body.amount_cents ?? body.deposit_cents ?? body.deposit_amount ?? conversion?.final_deposit_cents ?? proposedBooking.deposit_cents ?? proposedBooking.deposit_amount);
     if (!(amountCents > 0)) return withCors(json({ ok: false, error: "Deposit amount must be greater than zero." }, 400));
 
-    const provider = normalizeProvider(body.provider || (env.STRIPE_SECRET_KEY ? "stripe" : "manual"));
+    const provider = normalizeProvider(body.provider || (env.STRIPE_SECRET_KEY ? "stripe" : (hasPayPalConfig(env) ? "paypal" : "manual")));
     const token = makeToken();
     const tokenHash = await sha256Hex(token);
     const origin = siteOrigin(request, env);
@@ -76,17 +76,24 @@ export async function onRequestPost({ request, env }) {
     let checkout = null;
     let checkoutUrl = paymentUrl;
     let providerStatus = "manual";
+    let externalCheckoutId = null;
 
     if (provider === "stripe" && env.STRIPE_SECRET_KEY) {
       checkout = await createStripeCheckoutSession({ env, request, paymentRequest: requestRow, draft, amountCents, customerEmail, paymentUrl });
       checkoutUrl = checkout.url || paymentUrl;
+      externalCheckoutId = checkout.id || null;
       providerStatus = "stripe_checkout_created";
+    } else if (provider === "paypal" && hasPayPalConfig(env)) {
+      checkout = await createPayPalOrder({ env, paymentRequest: requestRow, draft, amountCents, paymentUrl });
+      checkoutUrl = checkout.approve_url || paymentUrl;
+      externalCheckoutId = checkout.id || null;
+      providerStatus = "paypal_order_created";
     }
 
     const patch = {
       public_payment_url: paymentUrl,
       checkout_url: checkoutUrl,
-      external_checkout_id: checkout?.id || null,
+      external_checkout_id: externalCheckoutId,
       provider_status: providerStatus,
       updated_at: new Date().toISOString()
     };
@@ -102,11 +109,12 @@ export async function onRequestPost({ request, env }) {
       public_payment_url: paymentUrl,
       checkout_url: checkoutUrl,
       provider,
-      stripe_created: !!checkout?.id,
-      next_step: checkout?.url ? "Send the Stripe checkout link/customer payment page to the customer." : "Send the secure payment page or record manual deposit payment from the admin screen."
+      stripe_created: provider === "stripe" && !!checkout?.id,
+      paypal_created: provider === "paypal" && !!checkout?.id,
+      next_step: checkoutUrl && checkoutUrl !== paymentUrl ? "Send the provider checkout link/customer payment page to the customer. The verified webhook can mark the deposit paid automatically." : "Send the secure payment page or record manual deposit payment from the admin screen."
     }));
   } catch (err) {
-    return withCors(json({ ok: false, error: err?.message || "Could not create deposit/payment request.", migration_hint: "Apply sql/2026-05-26_build180_quote_deposit_booking_confirmation.sql before using accepted quote deposits." }, 500));
+    return withCors(json({ ok: false, error: err?.message || "Could not create deposit/payment request.", migration_hint: "Apply Build 180 SQL first, then Build 181 SQL before using PayPal/verified provider deposits." }, 500));
   }
 }
 
@@ -168,6 +176,7 @@ async function createStripeCheckoutSession({ env, request, paymentRequest, draft
   form.set("metadata[quote_deposit_payment_request_id]", paymentRequest.id);
   form.set("metadata[quote_proposal_draft_id]", draft.id);
   form.set("metadata[payment_provider]", "stripe");
+  form.set("metadata[purpose]", "quote_deposit");
 
   const res = await fetch("https://api.stripe.com/v1/checkout/sessions", { method: "POST", headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`, "Content-Type": "application/x-www-form-urlencoded" }, body: form.toString() });
   const text = await res.text();
@@ -176,7 +185,58 @@ async function createStripeCheckoutSession({ env, request, paymentRequest, draft
   return data;
 }
 
-function normalizeProvider(value) { const text = String(value || "manual").trim().toLowerCase(); return text === "stripe" ? "stripe" : "manual"; }
+async function createPayPalOrder({ env, paymentRequest, draft, amountCents, paymentUrl }) {
+  const tokenResult = await getPayPalAccessToken(env);
+  if (!tokenResult.ok) throw new Error(tokenResult.error || "Could not get PayPal access token.");
+  const amount = (Number(amountCents || 0) / 100).toFixed(2);
+  const customId = encodeURIComponent(JSON.stringify({ quote_deposit_payment_request_id: paymentRequest.id, quote_proposal_draft_id: draft.id, purpose: "quote_deposit" }));
+  const payload = {
+    intent: "CAPTURE",
+    purchase_units: [{
+      reference_id: paymentRequest.id,
+      custom_id: customId,
+      description: `${draft.title || "Rosie Dazzlers quote"} deposit`,
+      amount: { currency_code: "CAD", value: amount }
+    }],
+    application_context: {
+      brand_name: "Rosie Dazzlers",
+      landing_page: "NO_PREFERENCE",
+      user_action: "PAY_NOW",
+      return_url: `${paymentUrl}&paypal_return=1`,
+      cancel_url: `${paymentUrl}&paypal_cancelled=1`
+    }
+  };
+  const res = await fetch(`${paypalBase(env)}/v2/checkout/orders`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${tokenResult.token}`, "Content-Type": "application/json", Prefer: "return=representation" },
+    body: JSON.stringify(payload)
+  });
+  const text = await res.text();
+  const data = safeJson(text);
+  if (!res.ok || !data?.id) throw new Error(`PayPal error creating quote deposit order. ${text}`);
+  const approve = Array.isArray(data.links) ? data.links.find((link) => String(link.rel || "").toLowerCase() === "approve") : null;
+  return { ...data, approve_url: approve?.href || null };
+}
+
+async function getPayPalAccessToken(env) {
+  const clientId = String(env.PAYPAL_CLIENT_ID || "").trim();
+  const clientSecret = String(env.PAYPAL_CLIENT_SECRET || env.PAYPAL_SECRET || "").trim();
+  if (!clientId || !clientSecret) return { ok: false, error: "Missing PayPal client credentials." };
+  const auth = btoa(`${clientId}:${clientSecret}`);
+  const res = await fetch(`${paypalBase(env)}/v1/oauth2/token`, {
+    method: "POST",
+    headers: { Authorization: `Basic ${auth}`, "Content-Type": "application/x-www-form-urlencoded" },
+    body: "grant_type=client_credentials"
+  });
+  const text = await res.text();
+  const data = safeJson(text);
+  if (!res.ok || !data?.access_token) return { ok: false, error: "Could not obtain PayPal access token.", details: data };
+  return { ok: true, token: data.access_token };
+}
+
+function paypalBase(env) { return String(env.PAYPAL_API_BASE || "").trim() || "https://api-m.paypal.com"; }
+function hasPayPalConfig(env) { return !!(env?.PAYPAL_CLIENT_ID && (env?.PAYPAL_CLIENT_SECRET || env?.PAYPAL_SECRET)); }
+function normalizeProvider(value) { const text = String(value || "manual").trim().toLowerCase(); return text === "stripe" || text === "paypal" ? text : "manual"; }
 function moneyToCents(value) { if (value === null || value === undefined || value === "") return 0; const raw = Number(value); if (!Number.isFinite(raw) || raw < 0) return 0; return Math.round(raw > 9999 ? raw : raw * 100); }
 function siteOrigin(request, env) { const configured = cleanText(env?.SITE_ORIGIN || env?.PUBLIC_SITE_ORIGIN); if (configured) return configured.replace(/\/+$/, ""); const url = new URL(request.url); return `${url.protocol}//${url.host}`; }
 function makeToken() { const bytes = new Uint8Array(32); crypto.getRandomValues(bytes); return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join(""); }
