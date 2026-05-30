@@ -490,3 +490,9 @@ Still outstanding: automate provider-confirmed paid status through payment webho
 ---
 
 > Build 181 documentation sync (2026-05-26): Added verified Stripe/PayPal webhook settlement for `quote_deposit_payment_requests`, PayPal quote-deposit order/capture support, automatic deposit-paid updates, booking confirmation linking, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard and local service/town wording rules remain required on every pass.
+
+> Build 182 documentation sync (2026-05-26): Added quote-deposit webhook event history, verified-event replay controls, customer receipt email queueing, manual/provider refund and partial-refund tracking, `/admin-payments.html`, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard, local service/town wording, fallback-safe APIs, and Markdown/schema synchronization remain required on every pass.
+
+## Build 182 sanity check
+
+Payment flow now covers accepted quote → deposit request → provider verified paid status → receipt email queue → booking confirmation link when a booking exists. It also covers webhook history, verified replay, and refund/partial-refund tracking. Remaining payment work is direct provider refund initiation, payment reconciliation export, and delivery-status dashboards for queued receipt/refund emails.

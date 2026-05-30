@@ -1448,3 +1448,68 @@ alter table public.lead_conversion_drafts
 -- provider_payment_intent_id, provider_order_id, provider_capture_id, provider_payload.
 -- Stripe checkout.session.completed and PayPal PAYMENT.CAPTURE.COMPLETED / PAYMENT.SALE.COMPLETED
 -- can settle quote_deposit_payment_requests automatically after signature verification.
+
+-- ---------------------------------------------------------------------------
+-- Build 182 note — webhook history, replay, receipt email queueing, refund tracking
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-26_build182_webhook_history_receipts_refunds.sql.
+-- Adds public.quote_payment_webhook_events for verified/ignored/failed/replayed
+-- Stripe/PayPal quote-deposit event history, plus public.quote_deposit_refund_records
+-- for full and partial refund tracking. Extends public.quote_deposit_payment_requests
+-- with refund and receipt email fields so provider webhooks and staff controls can
+-- leave an auditable trail.
+
+create table if not exists public.quote_payment_webhook_events (
+  id uuid primary key default gen_random_uuid(),
+  provider text not null,
+  provider_event_id text not null,
+  provider_event_type text not null,
+  quote_deposit_payment_request_id uuid null references public.quote_deposit_payment_requests(id) on delete set null,
+  booking_id uuid null,
+  payment_reference text null,
+  status text not null default 'received',
+  replay_status text not null default 'not_replayed',
+  replay_count integer not null default 0,
+  last_replayed_at timestamptz null,
+  last_error text null,
+  raw_payload jsonb null,
+  processed_payload jsonb null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint quote_payment_webhook_events_unique_provider_event unique (provider, provider_event_id)
+);
+
+create table if not exists public.quote_deposit_refund_records (
+  id uuid primary key default gen_random_uuid(),
+  quote_deposit_payment_request_id uuid not null references public.quote_deposit_payment_requests(id) on delete cascade,
+  quote_proposal_draft_id uuid null references public.quote_proposal_drafts(id) on delete set null,
+  lead_id uuid null references public.public_inquiry_leads(id) on delete set null,
+  booking_id uuid null,
+  provider text not null default 'manual',
+  provider_refund_id text null,
+  provider_event_id text null,
+  provider_event_type text null,
+  refund_status text not null default 'succeeded',
+  refund_amount_cents integer not null default 0,
+  currency text not null default 'CAD',
+  reason text null,
+  provider_payload jsonb null,
+  refunded_at timestamptz null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint quote_deposit_refund_records_unique_provider_refund unique (provider, provider_refund_id)
+);
+
+alter table public.quote_deposit_payment_requests
+  add column if not exists refunded_amount_cents integer not null default 0,
+  add column if not exists refund_status text null,
+  add column if not exists latest_refund_id uuid null references public.quote_deposit_refund_records(id) on delete set null,
+  add column if not exists latest_refund_at timestamptz null,
+  add column if not exists receipt_email_status text null,
+  add column if not exists receipt_email_queued_at timestamptz null,
+  add column if not exists receipt_notification_event_id uuid null;
+
+alter table public.quote_proposal_drafts
+  add column if not exists deposit_receipt_status text null,
+  add column if not exists latest_refund_status text null,
+  add column if not exists refunded_amount_cents integer not null default 0;
