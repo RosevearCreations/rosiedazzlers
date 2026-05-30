@@ -412,3 +412,29 @@ Migration file:
 ---
 
 > Build 181 documentation sync (2026-05-26): Added verified Stripe/PayPal webhook settlement for `quote_deposit_payment_requests`, PayPal quote-deposit order/capture support, automatic deposit-paid updates, booking confirmation linking, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard and local service/town wording rules remain required on every pass.
+
+## Build 182 — Webhook history, replay, receipt emails, and refunds
+
+Build 182 adds `sql/2026-05-26_build182_webhook_history_receipts_refunds.sql`.
+
+New tables:
+
+- `public.quote_payment_webhook_events` — stores verified, ignored, failed, settled, refund-recorded, and replayed Stripe/PayPal quote-deposit webhook events.
+- `public.quote_deposit_refund_records` — stores manual/provider refund and partial-refund records tied back to `quote_deposit_payment_requests`.
+
+Extended tables:
+
+- `public.quote_deposit_payment_requests` — adds refund totals/status, latest refund link, and receipt email queue tracking.
+- `public.quote_proposal_drafts` — adds receipt/refund summary fields for quote/proposal visibility.
+
+Runtime additions:
+
+- `/api/admin/payment_webhook_events_list`
+- `/api/admin/payment_webhook_event_replay`
+- `/api/admin/quote_deposit_refunds_list`
+- `/api/admin/quote_deposit_refund_save`
+- `/admin-payments.html`
+
+Stripe and PayPal webhooks now record event history, queue customer receipt emails after verified settlement, and track refund/partial-refund events when provider refund webhooks arrive. Staff can also record manual refund tracking from the Payments page.
+
+> Build 182 documentation sync (2026-05-26): Added quote-deposit webhook event history, verified-event replay controls, customer receipt email queueing, manual/provider refund and partial-refund tracking, `/admin-payments.html`, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard, local service/town wording, fallback-safe APIs, and Markdown/schema synchronization remain required on every pass.

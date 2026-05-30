@@ -570,3 +570,17 @@ Build 180 connects the accepted quote workflow to a safer payment-request founda
 ---
 
 > Build 181 documentation sync (2026-05-26): Added verified Stripe/PayPal webhook settlement for `quote_deposit_payment_requests`, PayPal quote-deposit order/capture support, automatic deposit-paid updates, booking confirmation linking, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard and local service/town wording rules remain required on every pass.
+
+> Build 182 documentation sync (2026-05-26): Added quote-deposit webhook event history, verified-event replay controls, customer receipt email queueing, manual/provider refund and partial-refund tracking, `/admin-payments.html`, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard, local service/town wording, fallback-safe APIs, and Markdown/schema synchronization remain required on every pass.
+
+## Build 182 matrix update — payment reliability and refund controls
+
+| Capability | Build 182 status | Notes |
+|---|---:|---|
+| Webhook event history | Foundation complete | Stripe/PayPal quote-deposit events are stored in `quote_payment_webhook_events` with provider id, type, status, replay status, processed payload, and error trail. |
+| Retry/replay controls | Foundation complete | `/admin-payments.html` can replay stored verified settlement/refund events through `/api/admin/payment_webhook_event_replay`; unverified/failed events are blocked from blind replay. |
+| Customer receipt emails | Foundation complete | Verified deposit settlement and staff manual mark-paid now queue `quote_deposit_receipt_email` notification events. |
+| Refund/partial-refund tracking | Foundation complete | Provider refund webhooks and staff manual refund records write to `quote_deposit_refund_records` and update quote deposit refund totals/status. |
+| Payment operations page | Foundation complete | `/admin-payments.html` gives staff a central place to review events, replay verified events, inspect deposit requests, and record refunds. |
+| Automatic provider refund creation | Still outstanding | Build 182 tracks refunds after provider events or manual staff entry; it does not yet initiate refunds directly through Stripe/PayPal APIs. |
+| Customer receipt delivery provider | Still outstanding | Receipt/refund emails are queued in `notification_events`; delivery still depends on the configured notification provider dispatch workflow. |

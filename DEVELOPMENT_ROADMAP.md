@@ -1191,3 +1191,16 @@ Next roadmap item: connect provider webhooks or return verification into the sam
 ---
 
 > Build 181 documentation sync (2026-05-26): Added verified Stripe/PayPal webhook settlement for `quote_deposit_payment_requests`, PayPal quote-deposit order/capture support, automatic deposit-paid updates, booking confirmation linking, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard and local service/town wording rules remain required on every pass.
+
+> Build 182 documentation sync (2026-05-26): Added quote-deposit webhook event history, verified-event replay controls, customer receipt email queueing, manual/provider refund and partial-refund tracking, `/admin-payments.html`, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard, local service/town wording, fallback-safe APIs, and Markdown/schema synchronization remain required on every pass.
+
+## Build 182 completed — payment reliability pass
+
+Completed the next payment-system reliability step: provider webhook event history, replay controls for verified events, queued customer receipt emails, and refund/partial-refund tracking. This gives the quote-deposit workflow an audit trail instead of only relying on the current payment request row.
+
+Next best payment steps:
+
+1. Add direct Stripe/PayPal refund initiation from Admin Payments with staff confirmation and reason codes.
+2. Add receipt/refund delivery status cards that read from `notification_events`.
+3. Add payment reconciliation export rows for accountant review.
+4. Add dashboard warnings for unverified/failed webhook events that need staff review.
