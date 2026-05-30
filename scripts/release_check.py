@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 182 note:
+- Adds webhook event history, verified replay controls, receipt emails, and refund/partial-refund tracking.
+
 Build 181 note:
 - Adds verified Stripe/PayPal webhook settlement for quote deposit/payment requests.
 
@@ -63,6 +66,7 @@ CHECKS = [
     "scripts/build179_publish_block_tasks_quote_acceptance_check.py",
     "scripts/build180_quote_deposit_booking_confirmation_check.py",
     "scripts/build181_payment_webhook_quote_deposits_check.py",
+    "scripts/build182_webhook_history_receipts_refunds_check.py",
     "scripts/seo_h1_check.py",
 ]
 
