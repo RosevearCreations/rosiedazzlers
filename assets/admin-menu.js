@@ -58,6 +58,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-conversions")
     },
     {
+      key: "admin-payments",
+      label: "Payments",
+      href: "/admin-payments.html",
+      description: "Webhook history, receipt queueing, and refund tracking",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-payments")
+    },
+    {
       key: "admin-content",
       label: "Content Center",
       href: "/admin-content.html",
