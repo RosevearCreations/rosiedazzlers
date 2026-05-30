@@ -1,5 +1,6 @@
 // Build 180 — staff records a quote deposit as paid and confirms/links booking when possible.
 import { requireStaffAccess, json, serviceHeaders, cleanText, isUuid, methodNotAllowed } from "../_lib/staff-auth.js";
+import { queueQuoteDepositReceiptEmail } from "../_lib/quote-payment-events.js";
 
 const SELECT = [
   "id", "quote_proposal_draft_id", "lead_id", "lead_conversion_draft_id", "booking_id", "confirmed_booking_id",
@@ -47,7 +48,9 @@ export async function onRequestPost({ request, env }) {
       confirmedBookingId ? confirmBooking(env, confirmedBookingId, row, { paidAmountCents, paymentMethod, paymentReference, actor: access.actor }).catch(() => null) : null
     ]);
 
-    return withCors(json({ ok: true, payment_request: updated, booking_confirmed: !!confirmedBookingId, booking_id: confirmedBookingId, next_step: confirmedBookingId ? "Deposit recorded and booking confirmation linked." : "Deposit recorded. Create or link the final booking to complete confirmation." }));
+    const receipt = await queueQuoteDepositReceiptEmail(env, updated, { paidAmountCents, provider: paymentMethod, paymentReference }).catch((err) => ({ ok: false, error: err?.message || "Could not queue receipt email." }));
+
+    return withCors(json({ ok: true, payment_request: updated, receipt_email: receipt, booking_confirmed: !!confirmedBookingId, booking_id: confirmedBookingId, next_step: confirmedBookingId ? "Deposit recorded, receipt queued, and booking confirmation linked." : "Deposit recorded and receipt queued. Create or link the final booking to complete confirmation." }));
   } catch (err) {
     return withCors(json({ ok: false, error: err?.message || "Could not mark deposit request paid.", migration_hint: "Apply sql/2026-05-26_build180_quote_deposit_booking_confirmation.sql before confirming quote deposits." }, 500));
   }

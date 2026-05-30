@@ -1,10 +1,10 @@
-// Build 180 — list quote deposit/payment requests for admin follow-up.
+// Build 182 — admin list for quote payment webhook event history.
 import { requireStaffAccess, json, serviceHeaders, cleanText, isUuid, methodNotAllowed } from "../_lib/staff-auth.js";
 
 const SELECT = [
-  "id", "quote_proposal_draft_id", "lead_id", "lead_conversion_draft_id", "booking_id", "confirmed_booking_id",
-  "status", "payment_status", "provider", "provider_status", "amount_cents", "currency", "customer_name", "customer_email",
-  "public_payment_url", "checkout_url", "external_checkout_id", "payment_reference", "provider_event_id", "provider_status", "refunded_amount_cents", "refund_status", "latest_refund_at", "receipt_email_status", "receipt_email_queued_at", "public_note", "internal_note", "requested_at", "paid_at", "booking_confirmed_at", "created_at", "updated_at"
+  "id", "provider", "provider_event_id", "provider_event_type", "quote_deposit_payment_request_id", "booking_id",
+  "payment_reference", "status", "replay_status", "replay_count", "last_replayed_at", "last_error",
+  "processed_payload", "created_at", "updated_at"
 ].join(",");
 
 export async function onRequestPost({ request, env }) {
@@ -12,30 +12,28 @@ export async function onRequestPost({ request, env }) {
     const body = await request.json().catch(() => ({}));
     const access = await requireStaffAccess({ request, env, body, capability: "manage_bookings", allowLegacyAdminFallback: true });
     if (!access.ok) return withCors(access.response);
-    if (!hasSupabaseConfig(env)) return withCors(json({ ok: true, table_ready: false, requests: [], warning: "Supabase env vars are not configured.", migration_hint: "Apply Build 180 SQL before listing quote deposit requests." }));
+    if (!hasSupabaseConfig(env)) return withCors(json({ ok: true, table_ready: false, events: [], warning: "Supabase env vars are not configured." }));
 
     const params = new URLSearchParams();
     params.set("select", SELECT);
-    params.set("order", "updated_at.desc");
-    params.set("limit", String(clampInt(body.limit, 1, 100, 25)));
-    const fields = ["id", "quote_proposal_draft_id", "lead_id", "lead_conversion_draft_id", "booking_id"];
-    for (const field of fields) {
-      const value = cleanText(body[field] || (field === "quote_proposal_draft_id" ? body.draft_id : ""));
-      if (value && isUuid(value)) params.set(field, `eq.${value}`);
-    }
+    params.set("order", "created_at.desc");
+    params.set("limit", String(clampInt(body.limit, 1, 200, 50)));
+    const provider = cleanText(body.provider);
     const status = cleanText(body.status);
+    const requestId = cleanText(body.quote_deposit_payment_request_id || body.payment_request_id);
+    if (provider && provider !== "all") params.set("provider", `eq.${provider}`);
     if (status && status !== "all") params.set("status", `eq.${status}`);
+    if (isUuid(requestId)) params.set("quote_deposit_payment_request_id", `eq.${requestId}`);
 
-    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/quote_deposit_payment_requests?${params.toString()}`, { headers: serviceHeaders(env) });
+    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/quote_payment_webhook_events?${params.toString()}`, { headers: serviceHeaders(env) });
     const text = await res.text();
     const data = safeJson(text);
-    if (!res.ok) return withCors(json({ ok: true, table_ready: false, requests: [], warning: extractSupabaseError(data, text, "Could not load quote deposit requests."), migration_hint: "Apply sql/2026-05-26_build180_quote_deposit_booking_confirmation.sql." }));
-    return withCors(json({ ok: true, table_ready: true, requests: Array.isArray(data) ? data : [] }));
+    if (!res.ok) return withCors(json({ ok: true, table_ready: false, events: [], warning: extractSupabaseError(data, text, "Could not load webhook event history."), migration_hint: "Apply sql/2026-05-26_build182_webhook_history_receipts_refunds.sql." }));
+    return withCors(json({ ok: true, table_ready: true, events: Array.isArray(data) ? data : [] }));
   } catch (err) {
-    return withCors(json({ ok: true, table_ready: false, requests: [], warning: err?.message || "Could not load quote deposit requests.", migration_hint: "Apply Build 180 SQL before listing quote deposit requests." }));
+    return withCors(json({ ok: true, table_ready: false, events: [], warning: err?.message || "Could not load webhook event history." }));
   }
 }
-
 export async function onRequestGet(context) { return onRequestPost(context); }
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 export async function onRequestPut() { return withCors(methodNotAllowed()); }
