@@ -438,3 +438,13 @@ Runtime additions:
 Stripe and PayPal webhooks now record event history, queue customer receipt emails after verified settlement, and track refund/partial-refund events when provider refund webhooks arrive. Staff can also record manual refund tracking from the Payments page.
 
 > Build 182 documentation sync (2026-05-26): Added quote-deposit webhook event history, verified-event replay controls, customer receipt email queueing, manual/provider refund and partial-refund tracking, `/admin-payments.html`, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard, local service/town wording, fallback-safe APIs, and Markdown/schema synchronization remain required on every pass.
+
+---
+
+## Build 183 documentation sync — direct refunds, reconciliation export, webhook warnings, and image requirements
+
+Build 183 adds direct Stripe/PayPal refund initiation from Admin Payments, a payment reconciliation CSV export, dashboard/payment-page warnings for failed or unverified webhook events, and a cleared/rebuilt `IMAGES.md` with missing image/video requirements and upload methods. This build is no-DDL and depends on the Build 180–182 payment tables. SEO/H1, local service/town wording, fallback-safe APIs, schema tracking, and Markdown synchronization remain required on every pass.
+
+## Build 183 schema note
+
+Build 183 adds no new tables or columns. It uses existing Build 180–182 payment structures: `quote_deposit_payment_requests`, `quote_payment_webhook_events`, and `quote_deposit_refund_records`. SQL note: `sql/2026-05-30_build183_direct_refunds_reconciliation_images_no_ddl_note.sql`.

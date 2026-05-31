@@ -1204,3 +1204,22 @@ Next best payment steps:
 2. Add receipt/refund delivery status cards that read from `notification_events`.
 3. Add payment reconciliation export rows for accountant review.
 4. Add dashboard warnings for unverified/failed webhook events that need staff review.
+
+---
+
+## Build 183 documentation sync — direct refunds, reconciliation export, webhook warnings, and image requirements
+
+Build 183 adds direct Stripe/PayPal refund initiation from Admin Payments, a payment reconciliation CSV export, dashboard/payment-page warnings for failed or unverified webhook events, and a cleared/rebuilt `IMAGES.md` with missing image/video requirements and upload methods. This build is no-DDL and depends on the Build 180–182 payment tables. SEO/H1, local service/town wording, fallback-safe APIs, schema tracking, and Markdown synchronization remain required on every pass.
+
+### Build 183 completed
+
+- Added direct provider refund initiation for quote deposit/payment requests using Stripe Refunds and PayPal captured-payment refunds.
+- Added payment reconciliation CSV export from deposit requests, refunds, and webhook events.
+- Added dashboard warnings for failed/unverified webhook events so payment issues surface outside the Payments page.
+- Cleared and rebuilt `IMAGES.md` with missing add-on, package, regional, gallery, and video media requirements plus upload methods.
+
+### Next payment/media direction
+
+1. Add provider refund status polling so pending refunds can refresh automatically.
+2. Add accountant-ready payment export packaging with HST/GST allocation.
+3. Add image-health scanning against the R2 public asset domain and show missing-image warnings in Admin App.

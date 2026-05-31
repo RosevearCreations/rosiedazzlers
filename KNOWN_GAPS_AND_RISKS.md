@@ -696,3 +696,16 @@ Still a gap:
 - Receipt and refund emails are queued, but final delivery still depends on `notification_events` provider dispatch being configured and running.
 - Replay is intentionally conservative: unverified and failed webhook rows are visible but not blindly replayed.
 - Payment reconciliation exports should be added next so deposits, refunds, and quote/payment request status can be reviewed with accounting close.
+
+---
+
+## Build 183 documentation sync — direct refunds, reconciliation export, webhook warnings, and image requirements
+
+Build 183 adds direct Stripe/PayPal refund initiation from Admin Payments, a payment reconciliation CSV export, dashboard/payment-page warnings for failed or unverified webhook events, and a cleared/rebuilt `IMAGES.md` with missing image/video requirements and upload methods. This build is no-DDL and depends on the Build 180–182 payment tables. SEO/H1, local service/town wording, fallback-safe APIs, schema tracking, and Markdown synchronization remain required on every pass.
+
+### Build 183 updated gaps
+
+- Direct refund initiation exists for Stripe/PayPal, but provider webhook follow-up and pending-refund status polling still need a stronger reconciliation loop.
+- Payment reconciliation export is CSV-ready, but accountant packaging and tax allocation exports are still separate outstanding accounting work.
+- `IMAGES.md` now identifies missing media, but the actual real photos/videos still need to be uploaded and reviewed.
+- R2 image health still needs a server-side checker so missing public URLs can be detected automatically instead of manually reviewed.

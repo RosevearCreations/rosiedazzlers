@@ -584,3 +584,20 @@ Build 180 connects the accepted quote workflow to a safer payment-request founda
 | Payment operations page | Foundation complete | `/admin-payments.html` gives staff a central place to review events, replay verified events, inspect deposit requests, and record refunds. |
 | Automatic provider refund creation | Still outstanding | Build 182 tracks refunds after provider events or manual staff entry; it does not yet initiate refunds directly through Stripe/PayPal APIs. |
 | Customer receipt delivery provider | Still outstanding | Receipt/refund emails are queued in `notification_events`; delivery still depends on the configured notification provider dispatch workflow. |
+
+---
+
+## Build 183 documentation sync — direct refunds, reconciliation export, webhook warnings, and image requirements
+
+Build 183 adds direct Stripe/PayPal refund initiation from Admin Payments, a payment reconciliation CSV export, dashboard/payment-page warnings for failed or unverified webhook events, and a cleared/rebuilt `IMAGES.md` with missing image/video requirements and upload methods. This build is no-DDL and depends on the Build 180–182 payment tables. SEO/H1, local service/town wording, fallback-safe APIs, schema tracking, and Markdown synchronization remain required on every pass.
+
+## Build 183 matrix update — payment reliability and media readiness
+
+| Capability | Build 183 status | Notes |
+|---|---|---|
+| Direct Stripe/PayPal refund initiation | Foundation added | Admin Payments can initiate provider refunds and records the refund locally. |
+| Payment reconciliation export | Foundation added | CSV export covers deposit requests, refund records, and webhook audit rows. |
+| Failed/unverified webhook dashboard warnings | Foundation added | Dashboard and Admin Payments can surface payment webhook warnings. |
+| Image/video missing-media inventory | Updated | `IMAGES.md` was cleared/rebuilt with missing add-on, package, regional, gallery, and video requirements. |
+| R2 image health automation | Outstanding | Next step: build public URL scanner and Admin App warning card. |
+| Accountant-ready payment export package | Outstanding | Next step: tie payment export to HST/GST/accounting close package. |

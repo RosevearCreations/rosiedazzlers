@@ -1,122 +1,147 @@
-> Build 173 documentation sync (2026-05-24): Admin Content Center, FAQ editor APIs, expanded Help Articles access/content, public Help nav link, and schema no-DDL note were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `COMPETETIVE_COMPLETION_MATRIX.md`, and `SANITY_CHECK.md` for the active plan.
+# Rosie Dazzlers Image and Video Requirements — Build 183
 
-> Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
+**Updated:** 2026-05-30  
+**Purpose:** This file was cleared and rebuilt to show exactly which images/videos still need to be supplied so the public site, booking flow, admin review screens, gallery, and local SEO pages can be reviewed with real media instead of placeholders.
 
-# Build 171 documentation sync note
+## Current media source rules
 
-**Updated:** 2026-05-24
+- Public asset base: `https://assets.rosiedazzlers.ca/`
+- Cloudflare R2 folders currently expected by the app: `brand/`, `packages/`, `CarPhotos/`, `landing-pages/`, `videos/`, `products/`, and `Systems/`.
+- Add-on and package images should be Rosie-owned, AI-created for Rosie Dazzlers, or properly licensed.
+- Customer vehicle photos/videos must not be reused publicly until `consent_status` and `media_privacy_status` are approved for public use.
+- Avoid visible license plates, house numbers, faces, children, private addresses, or customer-identifying details unless they are blurred and approved.
 
-This Markdown file was reviewed during the Build 171 pass. Current source of truth remains `DEVELOPMENT_ROADMAP.md`. Build 171 adds the Admin Leads quote-starter workflow and no new DDL.
+## Upload methods
 
----
-# Images and Media Workflow — Build 153
+### Method A — Cloudflare R2 direct upload for public site assets
 
-**Updated:** 2026-05-18
+Use this for package images, add-on images, service-page images, local landing images, gallery proof images, and videos.
 
-## Inventory product/tool images
+1. Open Cloudflare dashboard.
+2. Go to **R2** → the Rosie Dazzlers public assets bucket.
+3. Upload the file into the exact folder/key listed below, such as `packages/pet_hair_removal.png`.
+4. Confirm the public URL loads at `https://assets.rosiedazzlers.ca/<folder>/<filename>`.
+5. If the filename changes, update `data/rosie_services_pricing_and_packages.json`, `functions/api/data/rosie_services_pricing_and_packages.json`, or the Admin App pricing catalog row.
+6. Redeploy Pages after JSON changes. R2-only uploads do not require a redeploy if the URL path stays the same.
 
-Admin Catalog now has a layered image workflow:
+### Method B — Admin App / Content Center URL update
 
-1. Saved `catalog_inventory_items.image_url` is preferred when present.
-2. If a saved DB row has a blank image, Admin Catalog hydrates from the matching bundled consumables/tools row.
-3. The editor shows a selected image preview.
-4. **Use matching bundled image** restores the best bundled fallback image.
-5. **Pick existing image** searches DB media-library rows, app-setting media rows, bundled product/tool rows, saved DB rows, and helper image URLs.
-6. **Repair selected images** can persist fallback-matched images onto selected inventory rows.
-7. **Scan visible images** browser-checks visible image URLs and flags failed loads.
-8. Duplicate image groups are counted and flagged for review.
+Use this when the image already exists at a public URL and the app only needs to point to it.
 
-## Media-library direction
+1. Open `/admin-app.html` or `/admin-content.html`.
+2. Paste the public R2 image URL into the matching service/add-on/content block image field.
+3. Save.
+4. Refresh the public page and confirm the preview loads.
 
-Build 151/152 uses `/api/admin/media_library_list`, which reads from:
+### Method C — Job/customer media upload
 
-1. `app_media_library` when available.
-2. `app_management_settings.media_library` as compatibility fallback.
-3. Bundled/R2 product-tool JSON images in Admin Catalog as the final fallback.
+Use this for customer proof photos/videos that need consent/privacy review.
 
-Recommended inventory image records should use:
+1. Use the booking/progress/photo-estimate upload flow.
+2. Review the media in Admin Leads, App Management, or the gallery workflow.
+3. Set consent/privacy to public-ready only after approval.
+4. Only approved-public/sample media appears in public gallery and social workflows.
 
-- `group_key`: `products`
-- `usage_contexts`: include `inventory_item`
-- `media_type`: `image`
-- `media_url`: public R2 URL
-- `alt_text`: plain description of the item
-- `caption`: optional staff/public note
-- `source_status`: `active`
+## Required image/video standards
 
-## Current image scoring habit
+| Use | Minimum size | Preferred size | Format | Notes |
+|---|---:|---:|---|---|
+| Add-on cards | 1200×800 | 1600×1067 | PNG/WebP/JPG | Landscape; clear service concept; no private customer data. |
+| Package cards | 1200×800 | 1600×900 | PNG/WebP/JPG | Match vehicle size where possible: small/mid/oversize. |
+| Before/after gallery | 1200×900 each | 1600×1200 each | WebP/JPG | Same angle, same vehicle area, approved-public consent. |
+| Regional landing hero | 1200×675 | 1600×900 | WebP/JPG | Local scenery, service vehicle, or recognizable service-area image. |
+| Homepage hero | 1600×900 | 1920×1080 | WebP/JPG | Rosie Dazzlers branded/service image. |
+| Social preview | 1200×630 | 1200×630 | WebP/JPG/PNG | Good for Facebook/Google/social cards. |
+| Video proof | 720p | 1080p | MP4/WebM | Keep short clips; blur plates/faces/addresses. |
 
-Keep using practical image standards:
+## Critical missing local add-on fallback photos
 
-- Prefer square or landscape product images.
-- Use clear alt text.
-- Prefer Rosie-owned/R2-hosted images.
-- Avoid broken URLs and huge uncompressed files.
-- Track source/consent where images are used for public proof or customer work.
+These are referenced as local fallback paths in the pricing catalog but the files are not currently present in the zip. Upload the R2 image to the listed `packages/` key and optionally add the same image to the matching local fallback path before packaging.
 
-## Next image work
+| Missing local fallback | Add-on/service | Expected public R2 key | Required size | Action |
+|---|---|---|---|---|
+| `assets/addons/pet_hair_removal.png` | Pet Hair Removal | `https://assets.rosiedazzlers.ca/packages/pet_hair_removal.png` | 1200×800 landscape PNG/WebP/JPG | Missing local fallback; upload real photo/art and update Admin App pricing catalog if filename changes. |
+| `assets/addons/odor_treatment.png` | Odor Treatment | `https://assets.rosiedazzlers.ca/packages/odor_treatment.png` | 1200×800 landscape PNG/WebP/JPG | Missing local fallback; upload real photo/art and update Admin App pricing catalog if filename changes. |
+| `assets/addons/seat_shampoo.png` | Seat Shampoo | `https://assets.rosiedazzlers.ca/packages/seat_shampoo.png` | 1200×800 landscape PNG/WebP/JPG | Missing local fallback; upload real photo/art and update Admin App pricing catalog if filename changes. |
+| `assets/addons/carpet_shampoo.png` | Carpet Shampoo | `https://assets.rosiedazzlers.ca/packages/carpet_shampoo.png` | 1200×800 landscape PNG/WebP/JPG | Missing local fallback; upload real photo/art and update Admin App pricing catalog if filename changes. |
+| `assets/addons/salt_stain_treatment.png` | Salt Stain Treatment | `https://assets.rosiedazzlers.ca/packages/salt_stain_treatment.png` | 1200×800 landscape PNG/WebP/JPG | Missing local fallback; upload real photo/art and update Admin App pricing catalog if filename changes. |
+| `assets/addons/headlight_restoration.png` | Headlight Restoration | `https://assets.rosiedazzlers.ca/packages/headlight_restoration.png` | 1200×800 landscape PNG/WebP/JPG | Missing local fallback; upload real photo/art and update Admin App pricing catalog if filename changes. |
+| `assets/addons/windshield_ceramic_coating.png` | Windshield Ceramic Coating | `https://assets.rosiedazzlers.ca/packages/windshield_ceramic_coating.png` | 1200×800 landscape PNG/WebP/JPG | Missing local fallback; upload real photo/art and update Admin App pricing catalog if filename changes. |
+| `assets/addons/ceramic_spray_wax.png` | Ceramic Spray Protection | `https://assets.rosiedazzlers.ca/packages/ceramic_spray_wax.png` | 1200×800 landscape PNG/WebP/JPG | Missing local fallback; upload real photo/art and update Admin App pricing catalog if filename changes. |
+| `assets/addons/trim_restoration.png` | Trim Restoration | `https://assets.rosiedazzlers.ca/packages/trim_restoration.png` | 1200×800 landscape PNG/WebP/JPG | Missing local fallback; upload real photo/art and update Admin App pricing catalog if filename changes. |
+| `assets/addons/bug_tar_removal.png` | Bug and Tar Removal | `https://assets.rosiedazzlers.ca/packages/bug_tar_removal.png` | 1200×800 landscape PNG/WebP/JPG | Missing local fallback; upload real photo/art and update Admin App pricing catalog if filename changes. |
+| `assets/addons/truck_box_wash.png` | Truck Box Wash | `https://assets.rosiedazzlers.ca/packages/truck_box_wash.png` | 1200×800 landscape PNG/WebP/JPG | Missing local fallback; upload real photo/art and update Admin App pricing catalog if filename changes. |
+| `assets/addons/fleet_vehicle_add_on.png` | Fleet Vehicle Add-On | `https://assets.rosiedazzlers.ca/packages/fleet_vehicle_add_on.png` | 1200×800 landscape PNG/WebP/JPG | Missing local fallback; upload real photo/art and update Admin App pricing catalog if filename changes. |
 
-- Seed `app_media_library` from R2 folders.
-- Add direct upload-to-R2 from Admin Catalog.
-- Add editable alt/caption/source/preferred-public-image metadata.
-- Add server-side image health reports.
-- Add duplicate-image approval for intentional multipacks/shared tool images.
+## Package images to verify in R2
 
-<!-- Build 153 sync 2026-05-18 -->
+These package images are referenced from `data/rosie_services_pricing_and_packages.json`. They are not bundled in the local zip, so verify each one exists under the R2 custom domain before reviewing the booking/package UI.
 
-## Build 153 media workflow note
+| R2 key | Package card | Required size | Action |
+|---|---|---|---|
+| `packages/PremiumExternalWash.png` | Premium Wash small | 1600×900 or 1200×800 landscape | Verify in R2; these are referenced by package cards and chooser imagery. |
+| `packages/PremiumExternalWashMidSize.png` | Premium Wash mid-size | 1600×900 or 1200×800 landscape | Verify in R2; these are referenced by package cards and chooser imagery. |
+| `packages/PremiumExternalWashLargeSizeExotic.png` | Premium Wash oversize/exotic | 1600×900 or 1200×800 landscape | Verify in R2; these are referenced by package cards and chooser imagery. |
+| `packages/BasicInteriorDetailSmallSize.png` | Basic Detail small | 1600×900 or 1200×800 landscape | Verify in R2; these are referenced by package cards and chooser imagery. |
+| `packages/BasicInteriorDetailMidSize.png` | Basic Detail mid-size | 1600×900 or 1200×800 landscape | Verify in R2; these are referenced by package cards and chooser imagery. |
+| `packages/BasicInteriorDetailExotics.png` | Basic Detail oversize/exotic | 1600×900 or 1200×800 landscape | Verify in R2; these are referenced by package cards and chooser imagery. |
+| `packages/CompleteDetailSmallCars.png` | Complete Detail small | 1600×900 or 1200×800 landscape | Verify in R2; these are referenced by package cards and chooser imagery. |
+| `packages/CompleteDetailMidSizelCars.png` | Complete Detail mid-size | 1600×900 or 1200×800 landscape | Verify in R2; these are referenced by package cards and chooser imagery. |
+| `packages/CompleteDetailOverSizeExoticCars.png` | Complete Detail oversize/exotic | 1600×900 or 1200×800 landscape | Verify in R2; these are referenced by package cards and chooser imagery. |
+| `packages/FullInteriorDetailSmallCars.png` | Interior Detail small | 1600×900 or 1200×800 landscape | Verify in R2; these are referenced by package cards and chooser imagery. |
+| `packages/FullInteriorDetailMidSuvCars.png` | Interior Detail mid-size/SUV | 1600×900 or 1200×800 landscape | Verify in R2; these are referenced by package cards and chooser imagery. |
+| `packages/FullInteriorDetailLargeExoticCars.png` | Interior Detail oversize/exotic | 1600×900 or 1200×800 landscape | Verify in R2; these are referenced by package cards and chooser imagery. |
+| `packages/FullExteriorDetailSmallSizeCars.png` | Exterior Detail small | 1600×900 or 1200×800 landscape | Verify in R2; these are referenced by package cards and chooser imagery. |
+| `packages/FullExteriorDetailMidSizeCars.png` | Exterior Detail mid-size | 1600×900 or 1200×800 landscape | Verify in R2; these are referenced by package cards and chooser imagery. |
+| `packages/FullExteriorDetailLargeExoticCars.png` | Exterior Detail oversize/exotic | 1600×900 or 1200×800 landscape | Verify in R2; these are referenced by package cards and chooser imagery. |
 
-No image workflow behavior changed in Build 153. The Build 151/152 media-library picker, fallback image hydration, selected-row image repair, duplicate-image warnings, and visible image scan remain the active design. This pass only repairs deploy packaging/import stability around those endpoints.
+## Regional landing images to replace
 
-## Build 156 sync note - social progress publishing
+`data/landing_regional_photos.json` still uses external/Wikimedia placeholder URLs. Replace these with Rosie-owned or properly licensed images so local pages are not dependent on external files and look like our own brand.
 
-Build 156 adds a reviewable social publishing foundation. Admin Progress can now create internal social drafts from job updates/media, Admin Social Queue can review and mark those drafts, and the schema now includes `social_channels`, `social_post_queue`, and `social_dispatch_attempts`. Direct posting to X, Facebook, Instagram, TikTok, Google Business Profile, and other platforms is possible later after the required platform credentials, app approvals, and consent/compliance checks are in place.
+| Recommended R2 key | Page | Required size | Action |
+|---|---|---|---|
+| `landing-pages/tillsonburg-auto-detailing-hero.webp` | Tillsonburg service-area hero | 1600×900 landscape WebP/JPG | Replace current external placeholder with Rosie-owned or properly licensed local image. |
+| `landing-pages/woodstock-ingersoll-auto-detailing-hero.webp` | Woodstock/Ingersoll service-area hero | 1600×900 landscape WebP/JPG | Replace current external placeholder with Rosie-owned or properly licensed local image. |
+| `landing-pages/simcoe-delhi-auto-detailing-hero.webp` | Simcoe/Delhi service-area hero | 1600×900 landscape WebP/JPG | Replace current external placeholder with Rosie-owned or properly licensed local image. |
+| `landing-pages/port-dover-auto-detailing-hero.webp` | Port Dover service-area hero | 1600×900 landscape WebP/JPG | Replace current external placeholder with Rosie-owned or properly licensed local image. |
+| `landing-pages/norwich-otterville-auto-detailing-hero.webp` | Norwich/Otterville service-area hero | 1600×900 landscape WebP/JPG | Replace current external placeholder with Rosie-owned or properly licensed local image. |
+| `landing-pages/zorra-thamesford-embro-auto-detailing-hero.webp` | Zorra/Thamesford/Embro service-area hero | 1600×900 landscape WebP/JPG | Replace current external placeholder with Rosie-owned or properly licensed local image. |
+| `landing-pages/waterford-vittoria-auto-detailing-hero.webp` | Waterford/Vittoria service-area hero | 1600×900 landscape WebP/JPG | Replace current external placeholder with Rosie-owned or properly licensed local image. |
+| `landing-pages/port-rowan-turkey-point-auto-detailing-hero.webp` | Port Rowan/Turkey Point service-area hero | 1600×900 landscape WebP/JPG | Replace current external placeholder with Rosie-owned or properly licensed local image. |
 
----
+## Gallery proof still needed
 
-## Build 161 sync note
+The current bundled `data/before_after_gallery.json` contains sample/placeholder image pairs based on pricing-chart assets. Add real approved-public proof pairs for:
 
-Build 161 keeps `DEVELOPMENT_ROADMAP.md` as the source of truth and advances the competitor-aligned conversion path with Booking service chooser guidance, package aliases, and photo-estimate CTAs.
+| Town/service proof | Needed media | Upload path suggestion | Privacy requirement |
+|---|---|---|---|
+| Tillsonburg interior detailing | Before and after same angle | `CarPhotos/tillsonburg-interior-before.webp` and `CarPhotos/tillsonburg-interior-after.webp` | `consent_status=approved_public`, `media_privacy_status=approved_public` |
+| Woodstock/Ingersoll exterior detailing | Before and after same angle | `CarPhotos/woodstock-exterior-before.webp` and `CarPhotos/woodstock-exterior-after.webp` | Approved public use |
+| Simcoe/Delhi pet hair removal | Before and after same seat/cargo area | `CarPhotos/simcoe-pet-hair-before.webp` and `CarPhotos/simcoe-pet-hair-after.webp` | Approved public use |
+| Port Dover ceramic/exterior protection | Paint/gloss/protection proof | `CarPhotos/port-dover-ceramic-before.webp` and `CarPhotos/port-dover-ceramic-after.webp` | Approved public use |
 
----
-> Build 174 documentation sync (2026-05-24): persistent quote/proposal drafts were added to Admin Leads with save/load APIs, SQL table foundation, schema notes, and release guard coverage. Quote starters remain copy-ready before the SQL is applied, but saved drafts require sql/2026-05-24_build174_quote_proposal_drafts.sql.
+## Video assets still needed
 
+No public proof videos are currently bundled for the app review. Recommended first videos:
 
-## Build 175 update — lead conversion, pricing suggestions, content expansion, gallery privacy, and analytics
+| Video | Suggested R2 key | Size/format | Use |
+|---|---|---|---|
+| Mobile setup/water/power overview | `videos/mobile-detailing-setup.mp4` | 1080p MP4, under 25 MB preferred | Homepage/help/booking trust block |
+| Interior detailing short clip | `videos/interior-detailing-process.mp4` | 1080p MP4 | Help article/social proof |
+| Exterior wash/protection short clip | `videos/exterior-wash-protection.mp4` | 1080p MP4 | Services/gallery/social |
+| Pet hair removal proof clip | `videos/pet-hair-removal-proof.mp4` | 1080p MP4 | Add-on page/help/social |
 
-- Added safe lead → draft booking/quote conversion using `public.lead_conversion_drafts` instead of creating live scheduled bookings too early.
-- Added catalog-backed package/add-on price suggestions for Admin Leads from the current pricing catalog.
-- Added quote draft status workflow controls: draft, needs review, ready to send, sent, accepted, declined, archived.
-- Expanded Admin Content Center beyond FAQ with reusable content blocks for specials, service blurbs, homepage cards, help articles, trust proof, fleet, and maintenance copy.
-- Added service/town filtering for the public before/after gallery and enforced public reuse only for approved-public/sample media.
-- Added FAQ/help/lead/quote conversion analytics summary endpoint for admin reporting.
-- Added SQL/schema sync in `sql/2026-05-25_build175_lead_conversion_content_gallery_analytics.sql`.
+## After upload checklist
 
-## Build 176 Update — conversion-to-booking, dashboard cards, and privacy warnings
+1. Open the public URL for each uploaded file and confirm it loads.
+2. Open `/pricing`, `/services`, `/gallery`, `/faq`, `/blog`, `/admin-app.html`, and `/admin-content.html`.
+3. Confirm images do not stretch, crop badly, or disappear on mobile.
+4. Check that every customer media item has consent/privacy status before public reuse.
+5. Run the release H1/SEO check before packaging.
 
-- Added a reviewed conversion draft → real booking workflow so Admin Leads can create a live booking only after staff confirms service date, AM/PM slot, address, package, vehicle size, customer name, and customer email.
-- Added Admin Analytics cards for FAQ/help/lead/quote conversion summary using `/api/admin/conversion_funnel_summary`.
-- Added App Management media privacy readiness warnings using `/api/admin/media_privacy_review_summary` so gallery/social reuse is checked before publishing.
-- Preserved the one-H1 exposed-page rule and kept local SEO wording/access paths focused on Oxford/Norfolk service discovery.
-- Added Build 176 SQL/schema notes for `lead_conversion_drafts.converted_booking_id` and `lead_conversion_drafts.converted_at`.
-> Build 177 documentation sync (2026-05-25): added protected conversion-draft review queue, catalog-backed final price reconciliation, local SEO proof coverage reporting, public gallery privacy badges, SQL/schema notes, and release guard coverage.
+## Build 183 data file
 
+The machine-readable version of this list is stored at:
 
-> Build 178 documentation sync (2026-05-25): conversion status saves, saved final price reviews, public content rendering, privacy badges, and proof recommendation work were reflected in the active docs/schema notes.
-
----
-
-## Build 179 documentation sync — publish blocking, proof tasks, quote acceptance
-
-Build 179 adds hard social publish blocking before webhook/API/manual posted actions, assignable local SEO proof tasks from proof recommendations, and customer-facing quote/proposal delivery plus accept/decline tracking. Schema tracking now points to `sql/2026-05-26_build179_publish_block_tasks_quote_acceptance.sql`. The one-H1 SEO rule, local service/town wording, and fallback-safe API pattern remain required on every pass.
-
----
-
-### Build 180 update — accepted quote deposit/payment request and final booking confirmation
-
-Build 180 connects the accepted quote workflow to a safer payment-request foundation. Staff can create a tracked deposit/payment request from an accepted quote/proposal draft, share the private `/quote-payment.html` customer page, mark deposits paid from Admin Leads, and link or confirm the final booking when a booking row is available. Schema tracking was updated for `public.quote_deposit_payment_requests` and the quote/conversion deposit status fields.
----
-
-> Build 181 documentation sync (2026-05-26): Added verified Stripe/PayPal webhook settlement for `quote_deposit_payment_requests`, PayPal quote-deposit order/capture support, automatic deposit-paid updates, booking confirmation linking, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard and local service/town wording rules remain required on every pass.
-
-> Build 182 documentation sync (2026-05-26): Added quote-deposit webhook event history, verified-event replay controls, customer receipt email queueing, manual/provider refund and partial-refund tracking, `/admin-payments.html`, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard, local service/town wording, fallback-safe APIs, and Markdown/schema synchronization remain required on every pass.
+`data/image_requirements_build183.json`
