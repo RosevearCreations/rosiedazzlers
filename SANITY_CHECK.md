@@ -496,3 +496,13 @@ Still outstanding: automate provider-confirmed paid status through payment webho
 ## Build 182 sanity check
 
 Payment flow now covers accepted quote → deposit request → provider verified paid status → receipt email queue → booking confirmation link when a booking exists. It also covers webhook history, verified replay, and refund/partial-refund tracking. Remaining payment work is direct provider refund initiation, payment reconciliation export, and delivery-status dashboards for queued receipt/refund emails.
+
+---
+
+## Build 183 documentation sync — direct refunds, reconciliation export, webhook warnings, and image requirements
+
+Build 183 adds direct Stripe/PayPal refund initiation from Admin Payments, a payment reconciliation CSV export, dashboard/payment-page warnings for failed or unverified webhook events, and a cleared/rebuilt `IMAGES.md` with missing image/video requirements and upload methods. This build is no-DDL and depends on the Build 180–182 payment tables. SEO/H1, local service/town wording, fallback-safe APIs, schema tracking, and Markdown synchronization remain required on every pass.
+
+## Build 183 sanity check
+
+Payment operations now cover accepted quote deposit requests, provider webhooks, receipt/refund email queueing, provider refund initiation, refund records, replay controls, warning summaries, and CSV reconciliation export. Media readiness is clearer because `IMAGES.md` now lists missing add-on fallback images, package images to verify, regional placeholders to replace, gallery proof pairs needed, and first proof videos to capture/upload.

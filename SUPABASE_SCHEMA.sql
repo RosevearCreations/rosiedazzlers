@@ -1513,3 +1513,9 @@ alter table public.quote_proposal_drafts
   add column if not exists deposit_receipt_status text null,
   add column if not exists latest_refund_status text null,
   add column if not exists refunded_amount_cents integer not null default 0;
+
+
+-- Build 183 note (2026-05-30): no DDL required. Direct Stripe/PayPal refund initiation,
+-- payment reconciliation export, webhook warning summaries, and image-requirements tracking
+-- use existing Build 180–182 payment tables and documentation/data files.
+-- See sql/2026-05-30_build183_direct_refunds_reconciliation_images_no_ddl_note.sql.
