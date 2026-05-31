@@ -17,10 +17,10 @@
     .kpi-box{padding:14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
     .kpi-box strong{display:block;font-size:1.35rem}
     .summary-list{display:grid;gap:10px}.summary-item{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
-    .muted{color:#94a3b8}
+    .muted{color:#94a3b8}.warning-panel{border-radius:16px;border:1px solid rgba(251,191,36,.28);background:rgba(245,158,11,.10);padding:14px;margin-top:14px}.warning-panel[data-state="ok"]{border-color:rgba(74,222,128,.28);background:rgba(22,163,74,.10)}.warning-row{padding:10px;border-radius:12px;background:rgba(15,23,42,.35);border:1px solid rgba(255,255,255,.06);margin-top:8px}
   </style>
 </head>
-<body data-page="admin">
+<body data-page="admin" data-build183="webhook-warning-dashboard">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -81,6 +81,13 @@
       <section class="section">
         <div class="kpi-grid" id="dashboardKpis">
           <div class="kpi-box"><div class="muted">Loading live stats…</div><strong>—</strong></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="panel">
+          <h2 style="margin-top:0">Payment webhook warnings</h2>
+          <div id="paymentWebhookWarnings" class="warning-panel" data-state="loading">Loading payment webhook warning summary…</div>
         </div>
       </section>
 
@@ -209,6 +216,13 @@
       </section>
 
       <section class="section">
+        <div class="panel">
+          <h2 style="margin-top:0">Payment webhook warnings</h2>
+          <div id="paymentWebhookWarnings" class="warning-panel" data-state="loading">Loading payment webhook warning summary…</div>
+        </div>
+      </section>
+
+      <section class="section">
         <div class="grid cards">
           <article class="card">
             <h2 style="margin-top:0">Live website monitoring</h2>
@@ -233,7 +247,8 @@
       const els = {
         kpis: document.getElementById('dashboardKpis'),
         live: document.getElementById('dashboardLive'),
-        daily: document.getElementById('dashboardDaily')
+        daily: document.getElementById('dashboardDaily'),
+        paymentWarnings: document.getElementById('paymentWebhookWarnings')
       };
       function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
       function setShellStatus(message,type){document.querySelectorAll('[data-admin-shell-status]').forEach((node)=>{node.hidden=!message;node.textContent=message||'';node.dataset.state=type||'';});}
@@ -251,6 +266,16 @@
         if(!rows || !rows.length){ node.innerHTML = `<div class="summary-item muted">${empty}</div>`; return; }
         rows.forEach((row)=>{ const div=document.createElement('div'); div.className='summary-item'; div.innerHTML=formatter(row); node.appendChild(div); });
       }
+      async function loadPaymentWebhookWarnings(){
+        if(!els.paymentWarnings) return;
+        const res = await fetch('/api/admin/payment_webhook_warnings_summary', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 80 })});
+        const data = await res.json().catch(()=>null);
+        if(!res.ok) throw new Error((data && data.error) || 'Could not load payment webhook warnings.');
+        if(!data || !data.table_ready){ els.paymentWarnings.dataset.state='warn'; els.paymentWarnings.innerHTML = `<strong>Webhook warnings unavailable.</strong><div class="muted">${esc((data&&data.warning)||'Apply Build 182 SQL before warnings are available.')}</div>`; return; }
+        els.paymentWarnings.dataset.state = data.warning_count ? 'warn' : 'ok';
+        const rows = (data.warnings||[]).slice(0,3).map((r)=>`<div class="warning-row"><strong>${esc(r.provider)} · ${esc(r.provider_event_type)}</strong><div class="muted">${esc(r.status)} / replay ${esc(r.replay_status||'not_replayed')} · ${esc(r.created_at||'')}</div>${r.last_error?`<div class="muted">${esc(r.last_error)}</div>`:''}</div>`).join('');
+        els.paymentWarnings.innerHTML = `<strong>${data.warning_count?`${Number(data.warning_count)} payment webhook warning(s) need review`:'No recent failed or unverified payment webhooks'}</strong><div class="muted">${esc(data.next_step||'')}</div>${rows}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-payments.html">Open Payments</a></div>`;
+      }
       async function loadDashboardAnalytics(){
         const res = await fetch('/api/admin/analytics_overview', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ days: 14 })});
         const data = await res.json().catch(()=>null);
@@ -259,7 +284,7 @@
         renderList(els.live, (data.live_online_sessions||[]).slice(0,5), (r)=>`<strong>${esc(r.country || 'Unknown')}</strong><div class="muted">${esc((r.path||[]).join(' → '))}</div><div class="muted">Seen: ${esc(r.ended_at || '')}</div>`, 'No live visitors right now.');
         renderList(els.daily, (data.daily_traffic||[]).slice(-7).reverse(), (r)=>`<strong>${esc(r.day)}</strong><div class="muted">${Number(r.page_views||0)} page views • ${Number(r.unique_visitors||0)} visitors • ${Number(r.abandoned_sessions||0)} abandoned</div>`, 'No daily traffic summary yet.');
       }
-      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ try { await loadDashboardAnalytics(); } catch (err) { setShellStatus(err?.message || 'Could not load dashboard analytics.', 'error'); } } });
+      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ try { await Promise.all([loadDashboardAnalytics(), loadPaymentWebhookWarnings()]); } catch (err) { setShellStatus(err?.message || 'Could not load dashboard analytics.', 'error'); } } });
     })();
   </script>
 </body>
