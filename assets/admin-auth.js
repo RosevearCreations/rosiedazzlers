@@ -181,6 +181,7 @@
       case "admin-leads":
       case "admin-conversions":
       case "admin-payments":
+      case "admin-media-health":
         return hasCapability("can_manage_bookings");
 
       case "admin-blocks":

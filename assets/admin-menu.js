@@ -64,6 +64,14 @@
       description: "Webhook history, receipt queueing, and refund tracking",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-payments")
     },
+
+    {
+      key: "admin-media-health",
+      label: "Media Health",
+      href: "/admin-media-health.html",
+      description: "Missing image/video checks and R2 upload review",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-media-health")
+    },
     {
       key: "admin-content",
       label: "Content Center",
