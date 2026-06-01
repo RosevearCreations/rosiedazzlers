@@ -71,6 +71,7 @@ CHECKS = [
     "scripts/build181_payment_webhook_quote_deposits_check.py",
     "scripts/build182_webhook_history_receipts_refunds_check.py",
     "scripts/build183_direct_refunds_reconciliation_images_check.py",
+    "scripts/build184_twenty_step_ops_media_payment_check.py",
     "scripts/seo_h1_check.py",
 ]
 
