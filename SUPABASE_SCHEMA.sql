@@ -1519,3 +1519,7 @@ alter table public.quote_proposal_drafts
 -- payment reconciliation export, webhook warning summaries, and image-requirements tracking
 -- use existing Build 180–182 payment tables and documentation/data files.
 -- See sql/2026-05-30_build183_direct_refunds_reconciliation_images_no_ddl_note.sql.
+
+-- Build 184 note (2026-06-01): no DDL required. Payment refund polling, receipt requeueing,
+-- accountant payment export, and media health scanning use existing Build 180-182 payment tables
+-- plus data/image_requirements_build184.json. See sql/2026-06-01_build184_twenty_step_ops_media_payment_no_ddl_note.sql.

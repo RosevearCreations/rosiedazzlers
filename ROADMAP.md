@@ -1,3 +1,59 @@
+
+# Build 184 update — 20-step operations, media, and payment hardening
+
+**Updated:** 2026-06-01  
+**Build:** 184
+
+Build 184 completes the requested next-20 pass by tightening the payment/refund operations, improving image/media readiness review, and documenting the next operational bundle. This pass is intentionally no-DDL: it uses the existing Build 180–182 payment tables and the Build 183 image requirements foundation.
+
+## Build 184 — 20 completed items
+
+1. Added `/admin-media-health.html` and `/admin-media-health/` so staff can review missing required photos/videos from a protected admin page.
+2. Added `/api/admin/media_asset_health_scan` to scan required public R2/media URLs and return missing/not-public files with upload keys.
+3. Added `data/image_requirements_build184.json` as the machine-readable source for required app, add-on, landing, gallery, and proof images.
+4. Added the Media Health page to the shared Admin Menu.
+5. Added Media Health access rules to `assets/admin-auth.js`.
+6. Added a Media Health card to the Admin Dashboard.
+7. Added `/api/admin/payment_refund_status_poll` so staff can poll Stripe/PayPal refund status and refresh local refund rows.
+8. Added `/api/admin/payment_receipt_resend` so staff can requeue a customer quote-deposit receipt email from a payment request.
+9. Added `/api/admin/payment_accountant_package_export` for an accountant-style payment CSV with Ontario HST allocation estimates.
+10. Added an **Export accountant package** button to Admin Payments.
+11. Added **Resend receipt** controls to quote deposit/payment request cards.
+12. Added **Poll provider status** controls to refund record cards.
+13. Kept manual refund records, provider refund initiation, webhook settlement, and replay controls on one Payments page for easier review.
+14. Added `sql/2026-06-01_build184_twenty_step_ops_media_payment_no_ddl_note.sql` to document the no-DDL Build 184 schema status.
+15. Updated `SUPABASE_SCHEMA.sql` with Build 184 operational notes.
+16. Updated `DATABASE_STRUCTURE_CURRENT.md` with the Build 184 no-DDL dependency summary.
+17. Updated `IMAGES.md` with the Admin Media Health scan workflow and upload review method.
+18. Updated `COMPETETIVE_COMPLETION_MATRIX.md` to reflect Build 184 media/payment/accounting hardening.
+19. Added `scripts/build184_twenty_step_ops_media_payment_check.py` and wired it into the release check chain.
+20. Re-ran the one-H1 and release guard path so exposed public pages still use one clear H1.
+
+## Next 20 steps after Build 184
+
+1. Deploy Build 184 and test `/admin-media-health.html` against live R2 assets.
+2. Upload the missing add-on images listed in `IMAGES.md`, then re-run the Media Health scan.
+3. Replace regional landing placeholders with Rosie-owned images for Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, Port Dover, Norwich/Otterville, and Waterford/Vittoria.
+4. Capture the first four approved-public before/after gallery proof sets by town/service.
+5. Add real image dimension validation instead of URL-only health checks.
+6. Add R2 signed upload URLs for admin media replacement so uploads can happen from the app instead of the Cloudflare dashboard only.
+7. Add a media task status table so missing-image items can be assigned, marked uploaded, reviewed, and approved.
+8. Add provider refund polling for payment requests without refund rows, not only existing refund records.
+9. Add scheduled retry checks for pending Stripe/PayPal refunds.
+10. Add payment reconciliation variance warnings for paid amount vs. quote/deposit amount.
+11. Add processor fee capture and estimated net payout fields to the payment export.
+12. Add HST/GST allocation review screens before accountant export is considered final.
+13. Add failed receipt email retry controls and visible notification-event status on Admin Payments.
+14. Add customer-facing receipt PDF/download links.
+15. Add final-balance invoice/payment requests after job completion.
+16. Add payment application to final invoices, deposits, refunds, and tips.
+17. Add month-end payment close checklist tied to reconciled provider exports.
+18. Add dashboard warnings for missing images on high-traffic public pages.
+19. Add Search Console/local SEO task cards tied to missing service/town proof content.
+20. Add a consolidated accountant export package that bundles payment CSV, refund CSV, journal candidates, HST summary, and close checklist.
+
+---
+
 # Build 181 handoff note — verified provider quote deposits
 
 Build 181 adds verified Stripe/PayPal webhook settlement for accepted quote deposit/payment requests. Apply `sql/2026-05-26_build181_payment_webhooks_quote_deposits.sql` after Build 180, then test Stripe Checkout metadata settlement and PayPal verified capture settlement through `quote_deposit_payment_requests`.
