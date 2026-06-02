@@ -73,6 +73,27 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-media-health")
     },
     {
+      key: "admin-tax-review",
+      label: "Tax Review",
+      href: "/admin-tax-review.html",
+      description: "HST/GST payment review",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-tax-review")
+    },
+    {
+      key: "admin-close",
+      label: "Month-End Close",
+      href: "/admin-close.html",
+      description: "Payment close checklist",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-close")
+    },
+    {
+      key: "admin-seo-tasks",
+      label: "SEO Tasks",
+      href: "/admin-seo-tasks.html",
+      description: "Search Console and local proof tasks",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-seo-tasks")
+    },
+    {
       key: "admin-content",
       label: "Content Center",
       href: "/admin-content.html",

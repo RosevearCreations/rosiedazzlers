@@ -182,6 +182,9 @@
       case "admin-conversions":
       case "admin-payments":
       case "admin-media-health":
+      case "admin-tax-review":
+      case "admin-close":
+      case "admin-seo-tasks":
         return hasCapability("can_manage_bookings");
 
       case "admin-blocks":
