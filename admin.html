@@ -20,7 +20,7 @@
     .muted{color:#94a3b8}.warning-panel{border-radius:16px;border:1px solid rgba(251,191,36,.28);background:rgba(245,158,11,.10);padding:14px;margin-top:14px}.warning-panel[data-state="ok"]{border-color:rgba(74,222,128,.28);background:rgba(22,163,74,.10)}.warning-row{padding:10px;border-radius:12px;background:rgba(15,23,42,.35);border:1px solid rgba(255,255,255,.06);margin-top:8px}
   </style>
 </head>
-<body data-page="admin" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard">
+<body data-page="admin" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -38,6 +38,9 @@
         <a href="/admin-leads.html">Leads</a>
         <a href="/admin-conversions.html">Conversions</a>
         <a href="/admin-payments.html">Payments</a>
+        <a href="/admin-tax-review.html">Tax Review</a>
+        <a href="/admin-close.html">Close</a>
+        <a href="/admin-seo-tasks.html">SEO Tasks</a>
         <a href="/admin-content.html">Content</a>
         <a href="/admin-blocks.html">Blocks</a>
         <a href="/admin-progress.html">Progress</a>
@@ -88,6 +91,8 @@
         <div class="panel">
           <h2 style="margin-top:0">Payment webhook warnings</h2>
           <div id="paymentWebhookWarnings" class="warning-panel" data-state="loading">Loading payment webhook warning summary…</div>
+          <h2 style="margin-top:18px">Build 185 operations warnings</h2>
+          <div id="build185OpsWarnings" class="warning-panel" data-state="loading">Loading media/payment operations warnings…</div>
         </div>
       </section>
 
@@ -126,6 +131,27 @@
             <p>Scan required R2 images/videos, verify missing local proof assets, and follow the refreshed IMAGES.md upload checklist.</p>
             <div class="hr"></div>
             <a class="btn primary" href="/admin-media-health.html">Open Media Health</a>
+          </article>
+
+          <article class="card" data-build185="hst-gst-review-card">
+            <h3>HST/GST Review</h3>
+            <p>Review tax-included payments, refunds, and estimated Ontario HST before month-end export.</p>
+            <div class="hr"></div>
+            <a class="btn primary" href="/admin-tax-review.html">Open Tax Review</a>
+          </article>
+
+          <article class="card" data-build185="month-end-close-card">
+            <h3>Month-End Close</h3>
+            <p>Work through the payment close checklist, receipt retries, refund checks, and accountant export steps.</p>
+            <div class="hr"></div>
+            <a class="btn primary" href="/admin-close.html">Open Close Checklist</a>
+          </article>
+
+          <article class="card" data-build185="seo-task-card">
+            <h3>Local SEO Tasks</h3>
+            <p>Create Search Console and local proof tasks for town/service content, gallery proof, and missing media.</p>
+            <div class="hr"></div>
+            <a class="btn primary" href="/admin-seo-tasks.html">Open SEO Tasks</a>
           </article>
 
           <article class="card">
@@ -255,7 +281,8 @@
         kpis: document.getElementById('dashboardKpis'),
         live: document.getElementById('dashboardLive'),
         daily: document.getElementById('dashboardDaily'),
-        paymentWarnings: document.getElementById('paymentWebhookWarnings')
+        paymentWarnings: document.getElementById('paymentWebhookWarnings'),
+        opsWarnings: document.getElementById('build185OpsWarnings')
       };
       function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
       function setShellStatus(message,type){document.querySelectorAll('[data-admin-shell-status]').forEach((node)=>{node.hidden=!message;node.textContent=message||'';node.dataset.state=type||'';});}
@@ -283,6 +310,22 @@
         const rows = (data.warnings||[]).slice(0,3).map((r)=>`<div class="warning-row"><strong>${esc(r.provider)} · ${esc(r.provider_event_type)}</strong><div class="muted">${esc(r.status)} / replay ${esc(r.replay_status||'not_replayed')} · ${esc(r.created_at||'')}</div>${r.last_error?`<div class="muted">${esc(r.last_error)}</div>`:''}</div>`).join('');
         els.paymentWarnings.innerHTML = `<strong>${data.warning_count?`${Number(data.warning_count)} payment webhook warning(s) need review`:'No recent failed or unverified payment webhooks'}</strong><div class="muted">${esc(data.next_step||'')}</div>${rows}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-payments.html">Open Payments</a></div>`;
       }
+      async function loadBuild185OpsWarnings(){
+        if(!els.opsWarnings) return;
+        const [media, variance, receipts] = await Promise.all([
+          fetch('/api/admin/media_asset_health_scan',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({limit:80})}).then(r=>r.json()).catch(()=>null),
+          fetch('/api/admin/payment_variance_summary',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({})}).then(r=>r.json()).catch(()=>null),
+          fetch('/api/admin/payment_receipt_retry_queue',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({})}).then(r=>r.json()).catch(()=>null)
+        ]);
+        const missing = Number(media?.missing_count||0);
+        const small = Number(media?.undersized_count||0);
+        const variances = Number(variance?.warning_count||0);
+        const receiptRetries = Number(receipts?.retry_count||0);
+        const total = missing + small + variances + receiptRetries;
+        els.opsWarnings.dataset.state = total ? 'warn' : 'ok';
+        els.opsWarnings.innerHTML = `<strong>${total?`${total} operations warning(s) need review`:'No Build 185 media/payment warnings found'}</strong><div class="muted">Missing images: ${missing} • Undersized images: ${small} • Payment variances: ${variances} • Receipt retries: ${receiptRetries}</div><div style="margin-top:10px"><a class="btn ghost small" href="/admin-media-health.html">Media Health</a> <a class="btn ghost small" href="/admin-payments.html">Payments</a> <a class="btn ghost small" href="/admin-close.html">Close Checklist</a></div>`;
+      }
+
       async function loadDashboardAnalytics(){
         const res = await fetch('/api/admin/analytics_overview', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ days: 14 })});
         const data = await res.json().catch(()=>null);
@@ -291,7 +334,7 @@
         renderList(els.live, (data.live_online_sessions||[]).slice(0,5), (r)=>`<strong>${esc(r.country || 'Unknown')}</strong><div class="muted">${esc((r.path||[]).join(' → '))}</div><div class="muted">Seen: ${esc(r.ended_at || '')}</div>`, 'No live visitors right now.');
         renderList(els.daily, (data.daily_traffic||[]).slice(-7).reverse(), (r)=>`<strong>${esc(r.day)}</strong><div class="muted">${Number(r.page_views||0)} page views • ${Number(r.unique_visitors||0)} visitors • ${Number(r.abandoned_sessions||0)} abandoned</div>`, 'No daily traffic summary yet.');
       }
-      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ try { await Promise.all([loadDashboardAnalytics(), loadPaymentWebhookWarnings()]); } catch (err) { setShellStatus(err?.message || 'Could not load dashboard analytics.', 'error'); } } });
+      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ try { await Promise.all([loadDashboardAnalytics(), loadPaymentWebhookWarnings(), loadBuild185OpsWarnings()]); } catch (err) { setShellStatus(err?.message || 'Could not load dashboard analytics.', 'error'); } } });
     })();
   </script>
 </body>
