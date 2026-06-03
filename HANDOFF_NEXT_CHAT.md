@@ -535,3 +535,56 @@ Latest build: Build 183. Focus areas completed: direct provider refunds, payment
 18. Add variance approvals so resolved warnings stop showing on the dashboard.
 19. Add Search Console API import for query/page data if credentials are configured.
 20. Build the full accountant package zip with separate CSVs, PDF receipts, close checklist, HST summary, and journal candidates.
+
+---
+
+## Build 186 - verified water restrictions and next-20 planning sync (2026-06-02)
+
+Build 186 corrected the service-area water-use guidance after source verification. Oxford County / Tillsonburg now uses the May 1-September 30 rule under Oxford County By-law No. 4193-2002: outdoor water use by hose or attachment, including vehicle washing and power washing, follows address parity, with residential hours of 6:00-9:00 a.m. or 6:00-9:00 p.m. and commercial/industrial hours of 8:00-10:00 a.m. or 3:00-5:00 p.m. Norfolk County now uses the May 15-September 15 Water Restriction By-law rule: 9:00-11:00 a.m. and 7:00-10:00 p.m., with odd/even house-number days and the first-24-hours sod exemption note.
+
+Updated runtime/content areas: `data/service_area_rules.json`, `data/water_restriction_rules_build186.json`, booking fallbacks, Admin App service-area defaults, landing page content, `functions/api/water_restrictions_public.js`, `functions/api/admin/water_restrictions_audit.js`, and the Build 186 release guard.
+
+Completed next-20 items for this pass:
+1. Verified Tillsonburg/Oxford County water restrictions from the official Tillsonburg and Oxford pages.
+2. Verified Norfolk County watering restrictions from the official Norfolk County page.
+3. Corrected all Oxford County service-area rows in `data/service_area_rules.json`.
+4. Corrected all Norfolk County service-area rows in `data/service_area_rules.json`.
+5. Added the Tillsonburg water-restriction page as an official source for Tillsonburg rows.
+6. Added `data/water_restriction_rules_build186.json` as a compact verified rule source.
+7. Corrected booking fallback water rules in `book.html`.
+8. Synced the `/book/` mirror.
+9. Corrected Admin App default service-area water rules in `admin-app.html`.
+10. Synced the `/admin-app/` mirror.
+11. Corrected water wording in root landing-page public content.
+12. Corrected water wording in the Functions landing-page public content copy.
+13. Added `/api/water_restrictions_public` as a public safe fallback endpoint.
+14. Added `/api/admin/water_restrictions_audit` as a staff DB audit endpoint.
+15. Added a no-DDL SQL note for Build 186.
+16. Updated `SUPABASE_SCHEMA.sql` with the Build 186 schema/data note.
+17. Updated `DATABASE_STRUCTURE_CURRENT.md` with the water-rule data dependency note.
+18. Updated `COMPETETIVE_COMPLETION_MATRIX.md` with water-rule accuracy progress.
+19. Added `scripts/build186_verified_water_restrictions_check.py`.
+20. Wired the Build 186 guard into `scripts/release_check.py`.
+
+Next 20 steps to move toward:
+1. Deploy Build 186.
+2. Re-import/resave `data/service_area_rules.json` into Supabase if the `service_area_rules` table is live.
+3. Test `/api/water_restrictions_public` for Oxford County and Norfolk County.
+4. Test `/api/admin/water_restrictions_audit` while signed in as admin.
+5. Check `/book` and confirm the selected service-area rules show the corrected wording.
+6. Check `/admin-app` and confirm service-area defaults show the corrected wording.
+7. Add an Admin App button to import bundled service-area rules into Supabase.
+8. Add a visual warning when the DB service-area rules are older than bundled fallback rules.
+9. Add a scheduled or manual source-verification checklist for municipal rule pages.
+10. Add a public FAQ item explaining water-use timing for mobile detailing.
+11. Add booking-time validation that reminds staff when a requested appointment conflicts with local water-use windows.
+12. Add a customer-facing note that Rosie Dazzlers can bring water/power when needed, but municipal rules still need checking.
+13. Add per-town temporary notice overrides for drought/emergency restrictions.
+14. Add a service-area rule version field in Supabase.
+15. Add admin change history for service-area rule edits.
+16. Add local SEO copy snippets that mention the accurate county rules without over-promising availability.
+17. Add a quick “Can we do exterior work at this time?” helper for staff dispatch.
+18. Continue payment/tax work from Build 185: processor-fee imports and HST/GST review.
+19. Continue media work from Build 185: R2 direct uploads, media approval transitions, and missing-media warnings.
+20. Continue accountant export work: HST summary, journal candidates, receipts, and close checklist packaging.
+

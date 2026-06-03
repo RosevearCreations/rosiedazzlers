@@ -1533,3 +1533,10 @@ alter table public.quote_proposal_drafts
 -- payment_applications, month_end_close_checklists, and local_seo_task_cards.
 -- Build 185 also upgrades Media Health to validate PNG/JPEG/WebP dimensions, adds an admin R2 upload endpoint,
 -- adds HST/GST review and month-end close screens, and expands accountant/payment exports.
+
+
+-- Build 186 verified water restrictions (2026-06-02)
+-- No DDL required. The bundled service-area fallback and water-rule source files were updated:
+-- - data/service_area_rules.json
+-- - data/water_restriction_rules_build186.json
+-- If public.service_area_rules is the active DB source, import/resave the updated rows so DB and bundled fallback match.
