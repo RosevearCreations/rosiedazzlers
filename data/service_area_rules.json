@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-06-02",
-  "purpose": "Shared county/municipality service-area and verified water-rule fallback seed for booking, Admin App, public API fallback, and local SEO pages.",
+  "updated_at": "2026-06-03",
+  "purpose": "Shared county/municipality service-area and verified water-rule fallback seed for booking, Admin App, public API fallback, local SEO pages, and static town-page water-use notes.",
   "fallback_behavior": "If a specific town has no separate local override, use the verified county water-use rule. If a customer types a town not in the list, resolve to Other Oxford County location or Other Norfolk County location when the county is known; otherwise ask staff to confirm before dispatch.",
   "sources": [
     {
@@ -1566,7 +1566,37 @@
           "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
         }
       ]
+    },
+    {
+      "county": "Oxford County",
+      "label": "Zorra Township, ON",
+      "value": "Zorra Township, ON",
+      "municipality": "Zorra",
+      "zone": "Zorra Township",
+      "travel_tier": "rural",
+      "area_type": "township",
+      "aliases": [
+        "Zorra",
+        "Zorra Township"
+      ],
+      "bylaw_note": "Oxford County service area. Use the verified May 1–September 30 Oxford County outdoor water-use rule for exterior work that uses a hose or attachment.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "water_rule": "Oxford County: restrictions are in effect May 1–September 30 under Oxford County By-law No. 4193-2002. Outdoor water use by hose or attachment, including washing vehicles and power washing, is allowed every other day by address parity: even-numbered addresses on even-numbered days and odd-numbered addresses on odd-numbered days. Allowed hours are residential 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial 8:00–10:00 a.m. or 3:00–5:00 p.m. Confirm the current municipal/county notice before dispatch.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ]
     }
   ],
-  "verified_sources_at": "2026-06-02"
+  "verified_sources_at": "2026-06-02",
+  "build": "187",
+  "local_page_water_rules_synced_at": "2026-06-03"
 }

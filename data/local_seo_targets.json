@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-02",
+  "updated_at": "2026-06-03",
   "primary_region": "Oxford County and Norfolk County, Ontario",
   "core_terms": [
     "mobile auto detailing",
@@ -21,7 +21,18 @@
       "priority": 1,
       "region_photo_url": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Tillsonburgskyline.jpg/800px-Tillsonburgskyline.jpg",
       "region_photo_caption": "Tillsonburg regional photo used to help local visitors recognize the service-area page.",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Tillsonburg"
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Tillsonburg",
+      "verified_water_rule_summary": "Oxford County outdoor water-use reminder: May 1 to September 30, outdoor water use by hose or attachment, including vehicle washing and power washing, follows address parity. Even-numbered addresses use even-numbered days; odd-numbered addresses use odd-numbered days. Residential windows are 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial windows are 8:00–10:00 a.m. or 3:00–5:00 p.m. Confirm current municipal/county notices before exterior work.",
+      "verified_water_rule_sources": [
+        {
+          "label": "Town of Tillsonburg water restrictions",
+          "url": "https://www.tillsonburg.ca/living-here/water-and-wastewater/water-restrictions/"
+        },
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        }
+      ]
     },
     {
       "slug": "woodstock-ingersoll-auto-detailing",
@@ -32,7 +43,18 @@
       "priority": 2,
       "region_photo_url": "https://commons.wikimedia.org/wiki/Special:FilePath/City%20Hall%20Woodstock%20Ontario%201.jpg",
       "region_photo_caption": "Woodstock City Hall photo representing the Woodstock and Ingersoll service corridor.",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Woodstock,_Ontario"
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Woodstock,_Ontario",
+      "verified_water_rule_summary": "Woodstock/Ingersoll Oxford County outdoor water-use reminder: May 1 to September 30, outdoor water use by hose or attachment, including vehicle washing and power washing, follows address parity. Even-numbered addresses use even-numbered days; odd-numbered addresses use odd-numbered days. Residential windows are 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial windows are 8:00–10:00 a.m. or 3:00–5:00 p.m. Confirm current municipal/county notices before exterior work.",
+      "verified_water_rule_sources": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "City of Woodstock watering restrictions",
+          "url": "https://www.cityofwoodstock.ca/living-in-woodstock/water-and-utilities/water/watering-restrictions-and-conservation/"
+        }
+      ]
     },
     {
       "slug": "simcoe-delhi-auto-detailing",
@@ -43,7 +65,14 @@
       "priority": 2,
       "region_photo_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Governor%20Simcoe%20Square%20Simcoe%20Ontario.jpg",
       "region_photo_caption": "Governor Simcoe Square photo representing the Simcoe and Delhi Norfolk County service area.",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Simcoe,_Ontario"
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Simcoe,_Ontario",
+      "verified_water_rule_summary": "Simcoe/Delhi Norfolk County outdoor water-use reminder: May 15 to September 15, outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m.; odd-numbered houses use odd calendar days and even-numbered houses use even calendar days. Confirm current County notices before exterior work.",
+      "verified_water_rule_sources": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        }
+      ]
     },
     {
       "slug": "port-dover-auto-detailing",
@@ -53,7 +82,14 @@
       "priority": 3,
       "region_photo_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Boats%20moored%20at%20Port%20Dover%2C%20Ontario.jpg",
       "region_photo_caption": "Port Dover harbour photo representing the coastal Norfolk County service area.",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Port_Dover"
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Port_Dover",
+      "verified_water_rule_summary": "Port Dover Norfolk County outdoor water-use reminder: May 15 to September 15, outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m.; odd-numbered houses use odd calendar days and even-numbered houses use even calendar days. Confirm current County notices before exterior work.",
+      "verified_water_rule_sources": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        }
+      ]
     },
     {
       "slug": "norwich-otterville-auto-detailing",
@@ -64,7 +100,14 @@
       "priority": 4,
       "region_photo_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Norwich%20post%20office%20and%20clock%20tower.JPG",
       "region_photo_caption": "Norwich clock tower photo representing Norwich, Otterville, and nearby Oxford County communities.",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Norwich,_Ontario"
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Norwich,_Ontario",
+      "verified_water_rule_summary": "Norwich/Otterville Oxford County outdoor water-use reminder: May 1 to September 30, outdoor water use by hose or attachment, including vehicle washing and power washing, follows address parity. Even-numbered addresses use even-numbered days; odd-numbered addresses use odd-numbered days. Residential windows are 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial windows are 8:00–10:00 a.m. or 3:00–5:00 p.m. Confirm current municipal/county notices before exterior work.",
+      "verified_water_rule_sources": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        }
+      ]
     },
     {
       "slug": "zorra-thamesford-embro-auto-detailing",
@@ -76,7 +119,14 @@
       "priority": 5,
       "region_photo_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Embro%20ON.JPG",
       "region_photo_caption": "Embro photo representing the Zorra, Thamesford, and Embro rural service area.",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Zorra"
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Zorra",
+      "verified_water_rule_summary": "Zorra/Thamesford/Embro Oxford County outdoor water-use reminder: May 1 to September 30, outdoor water use by hose or attachment, including vehicle washing and power washing, follows address parity. Even-numbered addresses use even-numbered days; odd-numbered addresses use odd-numbered days. Residential windows are 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial windows are 8:00–10:00 a.m. or 3:00–5:00 p.m. Confirm current municipal/county notices before exterior work.",
+      "verified_water_rule_sources": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        }
+      ]
     },
     {
       "slug": "waterford-vittoria-auto-detailing",
@@ -87,7 +137,14 @@
       "priority": 6,
       "region_photo_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Waterford%20Old%20Town%20Hall%20-%20Waterford%2C%20ON.jpg",
       "region_photo_caption": "Waterford Old Town Hall photo representing Waterford, Vittoria, and nearby Norfolk County communities.",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Waterford,_Ontario"
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Waterford,_Ontario",
+      "verified_water_rule_summary": "Waterford/Vittoria Norfolk County outdoor water-use reminder: May 15 to September 15, outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m.; odd-numbered houses use odd calendar days and even-numbered houses use even calendar days. Confirm current County notices before exterior work.",
+      "verified_water_rule_sources": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        }
+      ]
     },
     {
       "slug": "port-rowan-turkey-point-auto-detailing",
@@ -98,7 +155,14 @@
       "priority": 7,
       "region_photo_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Lighthouse%20and%20docks%2C%20Port%20Rowan%2C%20ON.jpg",
       "region_photo_caption": "Port Rowan waterfront photo representing Port Rowan, Turkey Point, and nearby Long Point-area service calls.",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Port_Rowan"
+      "region_photo_source_url": "https://en.wikipedia.org/wiki/Port_Rowan",
+      "verified_water_rule_summary": "Port Rowan/Turkey Point Norfolk County outdoor water-use reminder: May 15 to September 15, outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m.; odd-numbered houses use odd calendar days and even-numbered houses use even calendar days. Confirm current County notices before exterior work.",
+      "verified_water_rule_sources": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        }
+      ]
     }
   ],
   "service_pages": [
@@ -168,5 +232,6 @@
       "priority": 4
     }
   ],
-  "regional_photo_source_file": "/data/landing_regional_photos.json"
+  "regional_photo_source_file": "/data/landing_regional_photos.json",
+  "build": "187"
 }
