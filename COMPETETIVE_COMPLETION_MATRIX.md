@@ -657,3 +657,55 @@ Build 183 adds direct Stripe/PayPal refund initiation from Admin Payments, a pay
 | Image/video missing-media inventory | Updated | `IMAGES.md` was cleared/rebuilt with missing add-on, package, regional, gallery, and video requirements. |
 | R2 image health automation | Outstanding | Next step: build public URL scanner and Admin App warning card. |
 | Accountant-ready payment export package | Outstanding | Next step: tie payment export to HST/GST/accounting close package. |
+
+
+## Build 185 — Next 20 completed foundations
+
+1. Added real image dimension validation to Media Health for PNG/JPEG/WebP files.
+2. Added admin R2 upload endpoint with size validation and safe allowed folders.
+3. Added DB-backed media task workflow with JSON fallback.
+4. Added `public.media_asset_tasks` SQL foundation.
+5. Added refund retry scan endpoint for pending/failed provider refunds.
+6. Added payment variance warning summary.
+7. Added processor-fee capture endpoint and Admin Payments fee field.
+8. Added HST/GST review screen and tax summary endpoint.
+9. Added receipt retry queue endpoint.
+10. Added customer receipt HTML/download endpoint.
+11. Added final-balance payment request tables and APIs.
+12. Added payment application tables and APIs for deposits/invoices/refunds.
+13. Added month-end close checklist table/API/screen.
+14. Added dashboard warnings for missing media, undersized media, payment variances, and receipt retries.
+15. Added Search Console/local SEO task card table/APIs/screen.
+16. Added consolidated full accountant export endpoint.
+17. Added processor-fee fields to `quote_deposit_payment_requests`.
+18. Added `data/image_requirements_build185.json` for scan/task fallback.
+19. Rebuilt `IMAGES.md` with exact upload keys, sizes, requirements, and methods.
+20. Added Build 185 release guard and schema/docs synchronization.
+
+## Next 20 recommended steps after Build 185
+
+1. Deploy Build 185.
+2. Apply `sql/2026-06-02_build185_next_twenty_ops_foundations.sql`.
+3. Configure the Cloudflare Pages R2 bucket binding for admin uploads.
+4. Upload the 12 missing add-on images listed in `IMAGES.md`.
+5. Replace the eight regional placeholder hero images with Rosie-owned photos.
+6. Test `/admin-media-health.html` upload, scan, and task creation.
+7. Add R2 signed/direct browser upload support for larger video files.
+8. Add media approval status transitions: assigned → uploaded → reviewed → approved_public.
+9. Add automatic image alt-text suggestions from the media task label/category/town.
+10. Add a public-page missing-media warning badge beside affected page links.
+11. Test processor-fee capture on real Stripe and PayPal sandbox transactions.
+12. Add automatic processor-fee import from Stripe balance transactions and PayPal captures.
+13. Test `/admin-tax-review.html` and confirm HST assumptions with the accountant.
+14. Test `/admin-close.html` for a month-end payment close dry run.
+15. Add final-balance payment checkout links for Stripe and PayPal.
+16. Add customer-facing final invoice/receipt PDF generation.
+17. Add payment application posting into journal candidates.
+18. Add variance approvals so resolved warnings stop showing on the dashboard.
+19. Add Search Console API import for query/page data if credentials are configured.
+20. Build the full accountant package zip with separate CSVs, PDF receipts, close checklist, HST summary, and journal candidates.
+
+
+## Build 185 matrix update
+
+Marked next-20 operational foundations as added: media dimension validation, R2 upload foundation, media tasks, refund retry scanning, payment variance warnings, processor fees, HST/GST review, receipt retry queue, customer receipt download, final balance requests, payment applications, month-end close checklist, local SEO task cards, missing-media dashboard warnings, and consolidated accountant export.
