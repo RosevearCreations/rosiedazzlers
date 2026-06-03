@@ -272,7 +272,7 @@ const DEFAULT_LANDING_PAGES = {
         "water- and power-aware workflow habits for residential service stops"
       ],
       things_to_know: [
-        "Tillsonburg outdoor water restrictions run from May 1 to September 30 and Oxford rules limit outside water use by odd/even day scheduling.",
+        "Tillsonburg/Oxford outdoor water restrictions run May 1 to September 30: even-numbered addresses use even-numbered days, odd-numbered addresses use odd-numbered days, with residential windows of 6:00–9:00 a.m. or 6:00–9:00 p.m. and commercial/industrial windows of 8:00–10:00 a.m. or 3:00–5:00 p.m.",
         "Tillsonburg winter parking restrictions prohibit overnight street parking from November 15 to March 31 between 2 a.m. and 6 a.m., which matters for early drop-offs or street-side service plans.",
         "Ontario Time-of-Use electricity is generally cheapest evenings, weekends, and holidays, so customers planning heavy vacuum or power-supported driveway service sometimes prefer off-peak windows.",
         "Hydrant and watermain flushing can temporarily cause cloudy or discoloured water in town, so customers sometimes prefer to reschedule exterior work if that is happening on their street."
@@ -327,7 +327,7 @@ const DEFAULT_LANDING_PAGES = {
         "water-aware and access-aware setup notes for Oxford County properties"
       ],
       things_to_know: [
-        "Woodstock follows Oxford outside-water restrictions, including residential 6–9 a.m. and 6–9 p.m. windows and commercial 8–10 a.m. and 3–5 p.m. windows on odd/even days.",
+        "Woodstock and Ingersoll follow Oxford County outside-water restrictions: May 1–September 30, even-numbered addresses use even-numbered days and odd-numbered addresses use odd-numbered days, with residential windows of 6:00–9:00 a.m. or 6:00–9:00 p.m. and commercial/industrial windows of 8:00–10:00 a.m. or 3:00–5:00 p.m.",
         "Ingersoll parking and permit rules can matter if a customer expects curbside service rather than driveway-based service.",
         "Ontario Time-of-Use pricing still makes evening, weekend, and holiday windows the lower-cost periods for households on TOU plans.",
         "For larger jobs, driveway access, electrical access, and water-use timing can affect the most practical appointment window."
@@ -381,7 +381,7 @@ const DEFAULT_LANDING_PAGES = {
         "water- and access-aware workflow planning for Norfolk County service calls"
       ],
       things_to_know: [
-        "Norfolk County watering restrictions in urban areas such as Simcoe and Delhi run from May 15 to September 15, generally from 9–11 a.m. and 7–10 p.m. on odd/even address days.",
+        "Norfolk County watering restrictions in areas such as Simcoe and Delhi run May 15–September 15: outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m., with odd-numbered houses on odd calendar days and even-numbered houses on even calendar days.",
         "Norfolk municipal parking information notes free municipal lots in Delhi and broader parking regulations that may matter when a customer does not have driveway space.",
         "Ontario household electricity plans still make evenings, weekends, and holidays the cheapest TOU periods for many customers using household power during service.",
         "Mobile detailing works best when driveway access and hose / outlet expectations are clear in advance."
@@ -435,7 +435,7 @@ const DEFAULT_LANDING_PAGES = {
         "coastal-area service planning notes for seasonal traffic and access conditions"
       ],
       things_to_know: [
-        "Norfolk County’s summer watering restrictions still apply in Port Dover from May 15 to September 15, generally using 9–11 a.m. and 7–10 p.m. windows on odd/even address days.",
+        "Norfolk County’s summer watering restrictions apply in Port Dover from May 15 to September 15: outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m., with odd-numbered houses on odd calendar days and even-numbered houses on even calendar days.",
         "Port Dover also has seasonal paid parking zones and resident permit options in Norfolk’s paid-parking areas, which can matter for shoreline or curbside appointments.",
         "Ontario Time-of-Use electricity still makes evenings, weekends, and holidays the lower-cost household periods for customers on TOU plans.",
         "Seasonal traffic and event-day congestion can change the most practical mobile appointment windows near the waterfront."
@@ -489,7 +489,7 @@ const DEFAULT_LANDING_PAGES = {
         "photo/review proof blocks as approved content grows"
       ],
       things_to_know: [
-        "Oxford County’s summer water conservation program runs May 1 to September 30 and can affect outdoor hose use by address/day and time window.",
+        "Oxford County’s summer water conservation program runs May 1 to September 30 and affects outdoor hose/attachment use by address parity and time window: residential 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial 8:00–10:00 a.m. or 3:00–5:00 p.m.",
         "If a town or rural address is not listed exactly, staff should confirm whether it falls under Oxford County or Norfolk County before final dispatch.",
         "Customers should confirm safe parking, power, water access, and any site-specific access limits before appointment day."
       ],
@@ -539,7 +539,7 @@ const DEFAULT_LANDING_PAGES = {
         "photo/review proof blocks as approved content grows"
       ],
       things_to_know: [
-        "Oxford County’s summer water conservation program runs May 1 to September 30 and can affect driveway exterior work by address/day and time window.",
+        "Oxford County’s summer water conservation program runs May 1 to September 30 and can affect driveway exterior work by address parity and time window: residential 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial 8:00–10:00 a.m. or 3:00–5:00 p.m.",
         "If a town or rural address is not listed exactly, staff should confirm whether it falls under Oxford County or Norfolk County before final dispatch.",
         "Customers should confirm safe parking, power, water access, and any site-specific access limits before appointment day."
       ],
@@ -589,7 +589,7 @@ const DEFAULT_LANDING_PAGES = {
         "photo/review proof blocks as approved content grows"
       ],
       things_to_know: [
-        "Norfolk County watering restrictions run May 15 to September 15 with morning/evening time windows and odd/even address days.",
+        "Norfolk County watering restrictions run May 15 to September 15 with outdoor water use allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m., on odd/even house-number days.",
         "If a town or rural address is not listed exactly, staff should confirm whether it falls under Oxford County or Norfolk County before final dispatch.",
         "Customers should confirm safe parking, power, water access, and any site-specific access limits before appointment day."
       ],
@@ -639,7 +639,7 @@ const DEFAULT_LANDING_PAGES = {
         "photo/review proof blocks as approved content grows"
       ],
       things_to_know: [
-        "Norfolk County watering restrictions run May 15 to September 15 with morning/evening time windows and odd/even address days.",
+        "Norfolk County watering restrictions run May 15 to September 15 with outdoor water use allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m., on odd/even house-number days.",
         "If a town or rural address is not listed exactly, staff should confirm whether it falls under Oxford County or Norfolk County before final dispatch.",
         "Customers should confirm safe parking, power, water access, and any site-specific access limits before appointment day."
       ],
@@ -1280,7 +1280,7 @@ const LANDING_PAGE_EXPANSIONS = {
         "Use the page over time to grow place-based visibility with more local photos, reviews, and service examples."
       ],
       "things_to_know": [
-        "Tillsonburg outdoor water restrictions run from May 1 to September 30, with separate even/odd-day windows that can matter for driveway-based exterior work.",
+        "Tillsonburg outdoor water restrictions run May 1 to September 30: even-numbered addresses use even-numbered days, odd-numbered addresses use odd-numbered days, with residential windows of 6:00–9:00 a.m. or 6:00–9:00 p.m. and commercial/industrial windows of 8:00–10:00 a.m. or 3:00–5:00 p.m.",
         "Tillsonburg winter overnight street parking restrictions typically run from November 15 to March 31 between 2 a.m. and 6 a.m., which can matter for on-street vehicles.",
         "Ontario Time-of-Use electricity pricing keeps evenings, weekends, and holidays as lower-cost periods for many customers using household power during a mobile service.",
         "A strong town page should give practical local setup information, not just repeat the same generic service copy."
