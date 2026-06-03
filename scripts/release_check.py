@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 186 note:
+- Corrects Oxford/Tillsonburg and Norfolk water-restriction rules across data, booking/Admin App fallbacks, and local landing content.
+
 Build 183 note:
 - Adds direct provider refunds, payment reconciliation export, webhook warnings, and image requirements refresh.
 
@@ -73,6 +76,7 @@ CHECKS = [
     "scripts/build183_direct_refunds_reconciliation_images_check.py",
     "scripts/build184_twenty_step_ops_media_payment_check.py",
     "scripts/build185_next_twenty_ops_foundations_check.py",
+    "scripts/build186_verified_water_restrictions_check.py",
     "scripts/seo_h1_check.py",
 ]
 
