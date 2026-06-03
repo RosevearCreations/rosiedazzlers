@@ -43,6 +43,31 @@ function cleanText(value) {
   return String(value ?? "").trim();
 }
 
+// Build 187: derived verified water-use note for local pages.
+function waterNoteForPage(page, thingsToKnow) {
+  if (!page || page.type !== "location") return "";
+  const explicit = cleanText(page.water_restriction_note || page.verified_water_rule_summary);
+  if (explicit) return explicit;
+  return (Array.isArray(thingsToKnow) ? thingsToKnow : []).find((item) => {
+    const text = cleanText(item).toLowerCase();
+    return text.includes("water") && (
+      text.includes("restriction") ||
+      text.includes("outdoor") ||
+      text.includes("watering") ||
+      text.includes("hose")
+    );
+  }) || "";
+}
+
+function waterSourcesForPage(page, officialLinks) {
+  const explicit = Array.isArray(page?.water_restriction_sources) ? page.water_restriction_sources : [];
+  const links = explicit.length ? explicit : (Array.isArray(officialLinks) ? officialLinks : []).filter((item) => {
+    const text = `${cleanText(item?.label)} ${cleanText(item?.url)}`.toLowerCase();
+    return text.includes("water") || text.includes("watering") || text.includes("conservation") || text.includes("restriction");
+  });
+  return links.slice(0, 4);
+}
+
 function normalizeProductName(value) {
   return cleanText(value).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
@@ -172,6 +197,8 @@ function pageTemplate(page, pricing, slug, productCatalog) {
   const highlights = Array.isArray(page.highlights) ? page.highlights : [];
   const thingsToKnow = Array.isArray(page.things_to_know) ? page.things_to_know : [];
   const officialLinks = Array.isArray(page.official_links) ? page.official_links : [];
+  const waterNote = waterNoteForPage(page, thingsToKnow);
+  const waterSources = waterSourcesForPage(page, officialLinks);
   const relatedProducts = resolveRelatedProducts(page, productCatalog);
   const priceSummary = addonPriceSummary(addon);
   const heroImage = heroMediaForPage(page, addon, relatedProducts);
@@ -246,6 +273,16 @@ function pageTemplate(page, pricing, slug, productCatalog) {
             </article>
           `).join("")}
         </div>
+      </section>
+    ` : ""}
+
+    ${waterNote ? `
+      <section class="section panel local-water-note" aria-label="Verified local water-use reminder">
+        <p class="eyebrow">Verified local water-use reminder</p>
+        <h2 style="margin-top:0">Water-use timing for exterior detailing</h2>
+        <p>${escapeHtml(waterNote)}</p>
+        <p class="muted">We still confirm current municipal or county notices before dispatch, especially during drought or emergency restrictions.</p>
+        ${waterSources.length ? `<div class="source-list">${waterSources.map((item) => `<a href="${escapeHtml(item.url)}" rel="noopener" target="_blank">${escapeHtml(item.label || "Official water-use source")}</a>`).join("")}</div>` : ``}
       </section>
     ` : ""}
 
