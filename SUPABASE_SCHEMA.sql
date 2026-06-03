@@ -1523,3 +1523,13 @@ alter table public.quote_proposal_drafts
 -- Build 184 note (2026-06-01): no DDL required. Payment refund polling, receipt requeueing,
 -- accountant payment export, and media health scanning use existing Build 180-182 payment tables
 -- plus data/image_requirements_build184.json. See sql/2026-06-01_build184_twenty_step_ops_media_payment_no_ddl_note.sql.
+
+
+-- ---------------------------------------------------------------------------
+-- Build 185 note — next 20 operational foundations
+-- ---------------------------------------------------------------------------
+-- See sql/2026-06-02_build185_next_twenty_ops_foundations.sql.
+-- Adds DB-backed media_asset_tasks, processor-fee capture fields, final_balance_payment_requests,
+-- payment_applications, month_end_close_checklists, and local_seo_task_cards.
+-- Build 185 also upgrades Media Health to validate PNG/JPEG/WebP dimensions, adds an admin R2 upload endpoint,
+-- adds HST/GST review and month-end close screens, and expands accountant/payment exports.
