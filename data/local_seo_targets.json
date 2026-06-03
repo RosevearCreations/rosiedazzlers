@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-16",
+  "updated_at": "2026-06-02",
   "primary_region": "Oxford County and Norfolk County, Ontario",
   "core_terms": [
     "mobile auto detailing",
@@ -127,7 +127,8 @@
       "Norfolk County"
     ],
     "fallback_behavior": "Typed towns not specifically listed resolve to Other Oxford County location or Other Norfolk County location when a county is known; otherwise staff confirm before dispatch.",
-    "water_rule_source_file": "/data/service_area_rules.json"
+    "water_rule_source_file": "/data/service_area_rules.json",
+    "water_rule_verified_sources_file": "/data/water_restriction_rules_build186.json"
   },
   "future_town_pages": [
     {
