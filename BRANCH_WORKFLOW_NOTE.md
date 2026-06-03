@@ -470,3 +470,12 @@ Next 20 steps to move toward:
 19. Continue media work from Build 185: R2 direct uploads, media approval transitions, and missing-media warnings.
 20. Continue accountant export work: HST summary, journal candidates, receipts, and close checklist packaging.
 
+
+## Build 187 Sync — Verified Local Page Water Rules (2026-06-03)
+
+- Reverified Oxford/Tillsonburg, Woodstock/Oxford, and Norfolk water-use restrictions from official public sources.
+- Corrected the static town landing-page shell so `/tillsonburg-auto-detailing/` and every other local page shows the water-use note even before client-side rendering.
+- Added server-side landing-page enforcement so stale Admin App/DB landing-page rows cannot hide the corrected water-rule note.
+- Added `data/water_restriction_rules_build187.json`, updated service-area/local SEO data, and added a no-DDL SQL note.
+- Added a Build 187 release guard to check every local page for the correct Oxford/Norfolk water-rule language.
+
