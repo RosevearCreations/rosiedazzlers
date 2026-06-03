@@ -1540,3 +1540,6 @@ alter table public.quote_proposal_drafts
 -- - data/service_area_rules.json
 -- - data/water_restriction_rules_build186.json
 -- If public.service_area_rules is the active DB source, import/resave the updated rows so DB and bundled fallback match.
+
+
+-- Build 187 local-page water-rule visibility note: no new DDL. Re-import service_area_rules/app_management landing page settings after deployment so DB content matches the verified Oxford/Norfolk water rules displayed on static town landing pages.

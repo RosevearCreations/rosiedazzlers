@@ -662,3 +662,60 @@ Next 20 steps to move toward:
 19. Continue media work from Build 185: R2 direct uploads, media approval transitions, and missing-media warnings.
 20. Continue accountant export work: HST summary, journal candidates, receipts, and close checklist packaging.
 
+
+## Build 187 Sync — Verified Local Page Water Rules (2026-06-03)
+
+- Reverified Oxford/Tillsonburg, Woodstock/Oxford, and Norfolk water-use restrictions from official public sources.
+- Corrected the static town landing-page shell so `/tillsonburg-auto-detailing/` and every other local page shows the water-use note even before client-side rendering.
+- Added server-side landing-page enforcement so stale Admin App/DB landing-page rows cannot hide the corrected water-rule note.
+- Added `data/water_restriction_rules_build187.json`, updated service-area/local SEO data, and added a no-DDL SQL note.
+- Added a Build 187 release guard to check every local page for the correct Oxford/Norfolk water-rule language.
+
+
+## Build 187 Completed Next 20
+
+1. Reverified Tillsonburg/Oxford water restrictions from the official Town of Tillsonburg page.
+2. Reverified Oxford County water-conservation communities and hours from the official Oxford County page.
+3. Reverified City of Woodstock outdoor water-use wording from the official Woodstock page.
+4. Reverified Norfolk County watering restrictions from the official Norfolk County page.
+5. Added `data/water_restriction_rules_build187.json`.
+6. Synced `data/water_restriction_rules_build186.json` so older fallback references are not stale.
+7. Added Zorra Township to `data/service_area_rules.json` with the verified Oxford County water rule.
+8. Added verified water-rule summaries to `data/local_seo_targets.json`.
+9. Added static visible water-rule sections to all eight local town landing pages.
+10. Updated `/tillsonburg-auto-detailing/` so the corrected Tillsonburg/Oxford rule is visible without waiting for JavaScript.
+11. Updated `/woodstock-ingersoll-auto-detailing/` with Woodstock/Oxford verified rule wording.
+12. Updated `/norwich-otterville-auto-detailing/` with Oxford verified rule wording.
+13. Updated `/zorra-thamesford-embro-auto-detailing/` with Oxford verified rule wording.
+14. Updated all Norfolk local pages with Norfolk May 15–September 15 odd/even and time-window wording.
+15. Updated `assets/landing-page.js` to render a dedicated local water-use reminder card.
+16. Updated `landing_pages_public.js` and `functions/api/landing_pages_public.js` to enforce verified local water rules over stale DB landing-page values.
+17. Updated `/api/water_restrictions_public` to Build 187 fallback data.
+18. Added CSS for local water-rule cards.
+19. Added `sql/2026-06-03_build187_local_page_water_rules_no_ddl_note.sql`.
+20. Added and wired `scripts/build187_local_page_water_rules_check.py`.
+
+
+## Build 187 Next 20 To Move Toward
+
+1. Deploy Build 187.
+2. Hard refresh `/tillsonburg-auto-detailing/` and confirm the static water-use note appears.
+3. Test `/api/landing_pages_public` for `tillsonburg-auto-detailing`.
+4. Test `/api/water_restrictions_public?slug=tillsonburg-auto-detailing`.
+5. Re-import the bundled service-area rules into Supabase if live DB rows are used.
+6. Add an Admin App “sync verified service-area rules” button.
+7. Add DB row version warnings when DB service-area rules are older than bundled fallback rules.
+8. Add booking-time warnings when exterior work conflicts with a customer’s local water-use window.
+9. Add address parity helper: even/odd address + date = “allowed/not allowed.”
+10. Add staff “Can we use customer water at this time?” helper.
+11. Add emergency/drought override rows by county/town.
+12. Add municipal-source recheck reminders before each May water-restriction season.
+13. Add Search Console/local SEO task cards for all town pages.
+14. Add local proof cards to each town page once real before/after photos are uploaded.
+15. Replace Wikimedia/placeholder region photos with Rosie-owned local photos.
+16. Add Admin Media Health warnings beside local pages that still use placeholder photos.
+17. Continue R2 signed/direct uploads for larger video files.
+18. Continue processor-fee imports and HST/GST review.
+19. Continue final balance invoice/payment request work.
+20. Continue accountant export packaging with HST summary, journal candidates, receipts, and close checklist.
+
