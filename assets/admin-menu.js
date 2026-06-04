@@ -73,6 +73,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-media-health")
     },
     {
+      key: "admin-water-rules",
+      label: "Water Rules",
+      href: "/admin-water-rules.html",
+      description: "Editable municipal water-use reminders",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-water-rules")
+    },
+    {
       key: "admin-tax-review",
       label: "Tax Review",
       href: "/admin-tax-review.html",

@@ -43,6 +43,74 @@ function cleanText(value) {
   return String(value ?? "").trim();
 }
 
+async function loadWaterRuleForSlug(slug) {
+  if (!slug) return null;
+
+  try {
+    const payload = await fetchJson(`/api/water_restrictions_public?slug=${encodeURIComponent(slug)}`);
+    if (payload?.match) return payload.match;
+  } catch {
+    // Fall through to the bundled editable JSON fallback.
+  }
+
+  try {
+    const payload = await fetchJson("/data/water_restriction_rules.json");
+    const direct = payload?.local_page_rules?.[slug];
+    if (direct) return direct;
+
+    const rule = (Array.isArray(payload?.rules) ? payload.rules : []).find((item) =>
+      (Array.isArray(item?.local_pages) ? item.local_pages : []).includes(slug)
+    );
+    return rule || null;
+  } catch {
+    return null;
+  }
+}
+
+function applyWaterRuleToPage(page, match) {
+  if (!page || !match) return page;
+
+  const note = cleanText(match.rule_summary || match.water_rule || match.note);
+  const sources = Array.isArray(match.sources)
+    ? match.sources
+    : Array.isArray(match.verified_sources)
+      ? match.verified_sources
+      : [];
+
+  if (note) {
+    page.water_restriction_note = note;
+    const current = Array.isArray(page.things_to_know) ? page.things_to_know : [];
+    page.things_to_know = [
+      note,
+      ...current.filter((item) => {
+        const text = cleanText(item).toLowerCase();
+        return !(text.includes("water") && (
+          text.includes("restriction") ||
+          text.includes("watering") ||
+          text.includes("hose") ||
+          text.includes("outdoor")
+        ));
+      })
+    ].slice(0, 8);
+  }
+
+  if (sources.length) {
+    page.water_restriction_sources = sources;
+    const currentLinks = Array.isArray(page.official_links) ? page.official_links : [];
+    const seen = new Set(currentLinks.map((item) => cleanText(item?.url)).filter(Boolean));
+    page.official_links = currentLinks.concat(
+      sources.filter((item) => {
+        const url = cleanText(item?.url);
+        if (!url || seen.has(url)) return false;
+        seen.add(url);
+        return true;
+      })
+    );
+  }
+
+  return page;
+}
+
 // Build 187: derived verified water-use note for local pages.
 function waterNoteForPage(page, thingsToKnow) {
   if (!page || page.type !== "location") return "";
@@ -422,14 +490,15 @@ function updateLandingStructuredData(page, addon, slug) {
 
 async function renderLandingPage() {
   const slug = slugFromPath();
-  const [landingPages, pricing, productCatalog] = await Promise.all([
+  const [landingPages, pricing, productCatalog, waterRule] = await Promise.all([
     fetchJson("/api/landing_pages_public"),
     fetchJson("/api/pricing_catalog_public"),
-    fetchJson("/data/rosie_products_catalog.json")
+    fetchJson("/data/rosie_products_catalog.json"),
+    loadWaterRuleForSlug(slug)
   ]);
 
   window.__landingPages = landingPages || { pages: {} };
-  const page = landingPages?.pages?.[slug];
+  const page = applyWaterRuleToPage(landingPages?.pages?.[slug], waterRule);
 
   if (!page || page.enabled === false) {
     document.getElementById("landingMount").innerHTML = `

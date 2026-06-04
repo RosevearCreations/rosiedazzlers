@@ -215,6 +215,7 @@
       case "admin-staff":
         return actor.is_admin === true || hasCapability("can_manage_staff");
       case "admin-app":
+      case "admin-water-rules":
         return actor.is_admin === true || hasCapability("can_manage_staff");
 
       case "admin-content":

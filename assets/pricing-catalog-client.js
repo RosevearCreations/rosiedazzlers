@@ -114,6 +114,7 @@ function normalizeServiceAreas(rows) {
       bylaw_note: String(row?.bylaw_note || "").trim() || null,
       parking_rule: String(row?.parking_rule || "").trim() || null,
       noise_rule: String(row?.noise_rule || "").trim() || null,
+      water_rule_key: String(row?.water_rule_key || "").trim() || null,
       water_rule: String(row?.water_rule || "").trim() || null,
       access_rule: String(row?.access_rule || "").trim() || null,
       official_links: officialLinks.map((link) => ({
@@ -242,13 +243,18 @@ export async function loadPricingCatalogClient({
     apiError = err;
   }
 
+  const serviceAreaRules = await loadServiceAreaRulesPublic(serviceAreaRulesUrl, credentials);
+
   const needsFallback = !apiCatalog
     || !Array.isArray(apiCatalog.packages) || !apiCatalog.packages.length
     || !Array.isArray(apiCatalog.addons) || !apiCatalog.addons.length
-    || !Array.isArray(apiCatalog.service_areas) || apiCatalog.service_areas.length < 20
     || !Array.isArray(apiCatalog.charts) || !apiCatalog.charts.length;
 
   if (!needsFallback) {
+    if (serviceAreaRules.length) {
+      apiCatalog.service_areas = mergeServiceAreas(serviceAreaRules, apiCatalog.service_areas);
+      apiCatalog._service_area_rules_source = "service_area_rules_public";
+    }
     if (apiError) {
       apiCatalog._source = "api_with_partial_fallback";
       apiCatalog._fallback_error = apiError?.message || null;
@@ -259,7 +265,6 @@ export async function loadPricingCatalogClient({
   }
 
   const fallbackCatalog = normalizePricingCatalog(await fetchJsonStrict(fallbackUrl, { credentials }));
-  const serviceAreaRules = await loadServiceAreaRulesPublic(serviceAreaRulesUrl, credentials);
   if (serviceAreaRules.length) {
     fallbackCatalog.service_areas = mergeServiceAreas(serviceAreaRules, fallbackCatalog.service_areas);
   }
