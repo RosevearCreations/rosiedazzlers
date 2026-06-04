@@ -78,6 +78,7 @@ CHECKS = [
     "scripts/build185_next_twenty_ops_foundations_check.py",
     "scripts/build186_verified_water_restrictions_check.py",
     "scripts/build187_local_page_water_rules_check.py",
+    "scripts/build188_editable_water_rules_hardcoding_audit_check.py",
     "scripts/seo_h1_check.py",
 ]
 
