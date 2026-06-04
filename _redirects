@@ -1,3 +1,2 @@
 # Folder-backed routes remain the live baseline.
-# Generic admin-created landing pages use a single non-looping rewrite.
-/landing/* /landing/index.html 200
+# Build 188 removed the invalid /landing/* rewrite because Cloudflare detected an infinite loop.

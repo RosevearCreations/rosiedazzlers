@@ -8,10 +8,10 @@
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
   <style>
-    .social-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:end}.social-toolbar label{min-width:180px}.post-preview{white-space:pre-wrap}.platform-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 9px;background:rgba(96,165,250,.14);border:1px solid rgba(96,165,250,.24);font-size:.82rem}.readiness-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.readiness-item{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}.review-list{margin:10px 0 0;padding-left:18px}.review-list li{margin:4px 0}.review-list .blocking{color:#fecaca}.review-list .hint{color:#bfdbfe}.compliance-badge{display:inline-flex;border-radius:999px;padding:3px 8px;border:1px solid rgba(255,255,255,.18);font-size:.78rem;margin-left:6px}.duplicate-warning{border-color:rgba(251,191,36,.42);background:rgba(251,191,36,.1)}.template-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.scheduled-pill{display:inline-flex;border-radius:999px;padding:3px 8px;background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.28);font-size:.78rem}
+    .social-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:end}.social-toolbar label{min-width:180px}.post-preview{white-space:pre-wrap}.platform-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 9px;background:rgba(96,165,250,.14);border:1px solid rgba(96,165,250,.24);font-size:.82rem}.readiness-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.readiness-item{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}.review-list{margin:10px 0 0;padding-left:18px}.review-list li{margin:4px 0}.review-list .blocking{color:#fecaca}.review-list .hint{color:#bfdbfe}.compliance-badge{display:inline-flex;border-radius:999px;padding:3px 8px;border:1px solid rgba(255,255,255,.18);font-size:.78rem;margin-left:6px}.duplicate-warning{border-color:rgba(251,191,36,.42);background:rgba(251,191,36,.1)}.template-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.scheduled-pill{display:inline-flex;border-radius:999px;padding:3px 8px;background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.28);font-size:.78rem}.privacy-ready{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.1)}.privacy-blocked{border-color:rgba(248,113,113,.38);background:rgba(248,113,113,.1)}
   </style>
 </head>
-<body data-page="admin-social">
+<body data-page="admin-social" data-build178="social-privacy-readiness-badges">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers Admin</strong></a>
@@ -47,6 +47,15 @@
 
       <section class="section">
         <div id="pageNotice" class="notice" data-admin-shell-status>Ready.</div>
+      </section>
+
+
+      <section class="section" data-build178="social-privacy-summary">
+        <div class="panel">
+          <h2>Media privacy readiness before publishing</h2>
+          <p class="muted">Use this before marking social posts ready or publishing/API dispatch. Pending, private, needs-blur, rejected, or missing consent media should not be reused publicly.</p>
+          <div id="socialPrivacyBox" class="readiness-grid"><div class="notice">Loading media privacy readiness…</div></div>
+        </div>
       </section>
 
       <section class="section">
@@ -109,6 +118,7 @@
     let actor = null;
     let captionTemplates = [];
     let hashtagPresets = [];
+    let privacySummary = null;
 
     function qs(selector){ return document.querySelector(selector); }
     function escapeHtml(value){ return String(value ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
@@ -127,6 +137,21 @@
       const result = await runtime.requestJson(url, options);
       if (!result.ok) throw new Error(runtime.normalizeError(result, 'Request failed.'));
       return result.data || {};
+    }
+
+    function renderPrivacySummary(summary){
+      privacySummary = summary || null;
+      const box = qs('#socialPrivacyBox');
+      if(!box) return;
+      if(!summary){ box.innerHTML = '<div class="notice warn">Privacy readiness unavailable.</div>'; return; }
+      const blocked = Number(summary.gallery_needs_review || 0) + Number(summary.uploads_not_public_ready || 0);
+      const stateClass = blocked ? 'privacy-blocked' : 'privacy-ready';
+      const warningList = [...(summary.warnings||[]), ...(summary.upload_warnings||[])].slice(0,5).map((w)=>`<li>${escapeHtml(w.title || w.source || 'Media item')} — ${escapeHtml(w.reason || w.privacy_status || 'review needed')}</li>`).join('');
+      box.innerHTML = `<div class="readiness-item ${stateClass}"><strong>Public-ready gallery</strong><div class="kicker">${escapeHtml(summary.gallery_ready || 0)} ready / ${escapeHtml(summary.gallery_items || 0)} checked</div></div><div class="readiness-item ${stateClass}"><strong>Uploads needing review</strong><div class="kicker">${escapeHtml(summary.uploads_not_public_ready || 0)} of ${escapeHtml(summary.upload_records_checked || 0)}</div></div><div class="readiness-item ${stateClass}"><strong>Publish guidance</strong><div class="kicker">${blocked ? 'Review media before public reuse.' : 'No current media privacy blockers found.'}</div></div>${warningList?`<ul class="review-list" style="grid-column:1/-1">${warningList}</ul>`:''}`;
+    }
+    async function loadPrivacySummary(){
+      const data = await requestJson('/api/admin/media_privacy_review_summary', { method:'POST', body:{} });
+      renderPrivacySummary(data.summary || data);
     }
 
     function renderReadiness(readiness) {
@@ -171,6 +196,7 @@
       if (post.review_status) parts.push(`Review: ${post.review_status}`);
       if (post.customer_consent_confirmed === true) parts.push('Consent OK');
       if (post.plate_privacy_confirmed === true) parts.push('Privacy OK');
+      if (post.customer_consent_confirmed !== true || post.plate_privacy_confirmed !== true) parts.push('Media privacy review needed');
       if (post.no_private_info_confirmed === true) parts.push('Caption OK');
       return parts.length ? `<div class="kicker">${parts.map(escapeHtml).join(' · ')}</div>` : '<div class="kicker">Review checklist not stored yet.</div>';
     }
@@ -206,7 +232,8 @@
         const hasBlocking = warnings.some((item) => item && item.blocking);
         const isDuplicate = post.duplicate_signature && duplicateCounts.get(post.duplicate_signature) > 1;
         const isPlanned = !!post.scheduled_for;
-        const readyLabel = hasBlocking ? 'Review needed' : 'Approve & ready';
+        const privacyReady = post.customer_consent_confirmed === true && post.plate_privacy_confirmed === true && post.no_private_info_confirmed === true;
+        const readyLabel = hasBlocking || !privacyReady ? 'Review needed' : 'Approve & ready';
         return `<article class="card ${isDuplicate ? 'duplicate-warning' : ''}">
           <div class="kicker">${escapeHtml(formatDateTime(post.created_at))} · Attempts: ${escapeHtml(post.attempt_count || 0)}</div>
           <h3><span class="platform-pill">${escapeHtml(post.platform || 'manual')}</span> ${escapeHtml(post.status || 'draft')} ${post.review_status ? `<span class="compliance-badge">${escapeHtml(post.review_status)}</span>` : ''}</h3>
@@ -218,6 +245,7 @@
           ${Array.isArray(post.local_hashtag_set) && post.local_hashtag_set.length ? `<div class="kicker">Hashtags: ${escapeHtml(post.local_hashtag_set.map((tag)=>`#${String(tag).replace(/^#/, '')}`).join(' '))}</div>` : ''}
           ${isDuplicate ? `<div class="notice warn">Possible duplicate draft: same platform/caption/first media appears ${duplicateCounts.get(post.duplicate_signature)} times in this view.</div>` : ''}
           ${reviewSummary(post)}
+          <div class="compliance-badge ${post.customer_consent_confirmed===true && post.plate_privacy_confirmed===true ? 'privacy-ready' : 'privacy-blocked'}">${post.customer_consent_confirmed===true && post.plate_privacy_confirmed===true ? 'Public media approved' : 'Media privacy not fully approved'}</div>
           ${warningList(post)}
           ${post.public_url ? `<p><a href="${escapeHtml(post.public_url)}" target="_blank" rel="noopener">Progress link</a></p>` : ''}
           ${post.external_post_url ? `<p><a href="${escapeHtml(post.external_post_url)}" target="_blank" rel="noopener">Posted link</a></p>` : ''}
@@ -342,7 +370,7 @@
         }
       });
 
-      try { await loadReadiness(); await loadTemplateOptions(); await loadPosts(); setNotice('Social queue loaded.', 'ok'); } catch (err) { setNotice(err.message || 'Could not load social queue.', 'bad'); }
+      try { await loadReadiness(); await loadPrivacySummary(); await loadTemplateOptions(); await loadPosts(); setNotice('Social queue loaded.', 'ok'); } catch (err) { setNotice(err.message || 'Could not load social queue.', 'bad'); }
     }
 
     boot().catch((err) => setNotice(err.message || 'Could not start social queue.', 'bad'));
