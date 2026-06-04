@@ -141,3 +141,10 @@ Next 20 steps to move toward:
 
 Build 188 replaces hard-coded municipal water-rule wording with a DB-first editable authority and one stable JSON fallback. The immediate `landing_pages_public.js` Worker startup crash is fixed without reintroducing mutable rule text into JavaScript. See `EDITABLE_CONTENT_SANITY_CHECK.md` and `data/editable_content_registry_build188.json` for the broader hard-coding audit.
 
+
+
+---
+
+## Build 189 — Editable site settings and hard-coding reduction (2026-06-04)
+
+Build 189 adds the DB-first / JSON-fallback editable-settings foundation for landing-page fallback content, business profile, policies, document templates, hours/holidays, navigation/footer, option libraries, analytics labels, and media requirements. See `/admin-site-settings.html`, `/api/admin/editable_site_settings`, `/api/site_settings_public`, and `sql/2026-06-04_build189_editable_site_settings_foundation.sql`.
