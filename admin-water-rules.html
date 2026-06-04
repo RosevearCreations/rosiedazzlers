@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Water Rules | Rosie Dazzlers Admin</title>
+  <meta name="description" content="Manage editable municipal water-use reminders for Rosie Dazzlers service areas and local pages." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .admin-status{margin-bottom:16px;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);color:#e5e7eb}
+    .admin-status[data-state="error"]{background:rgba(220,38,38,.12);border-color:rgba(248,113,113,.25);color:#fecaca}
+    .admin-status[data-state="success"]{background:rgba(22,163,74,.12);border-color:rgba(74,222,128,.25);color:#bbf7d0}
+    .editor-grid{display:grid;gap:18px}
+    @media(min-width:1050px){.editor-grid{grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr)}}
+    textarea{width:100%;box-sizing:border-box;min-height:560px;resize:vertical;border-radius:14px;border:1px solid rgba(255,255,255,.15);background:rgba(15,23,42,.95);color:#f8fafc;padding:14px;font:14px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace}
+    .button-row{display:flex;flex-wrap:wrap;gap:10px}.muted{color:#94a3b8}.rule-list{display:grid;gap:12px}.rule-card{border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:14px;background:rgba(255,255,255,.04)}.rule-card h3{margin:0 0 8px}.rule-card p{margin:6px 0}.pill{display:inline-flex;border-radius:999px;padding:4px 9px;background:rgba(59,130,246,.16);border:1px solid rgba(96,165,250,.24);font-size:.84rem;color:#dbeafe}
+  </style>
+</head>
+<body data-page="admin-water-rules" data-build188="editable-water-rules">
+  <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers Admin</strong></a><nav class="nav-links"><a href="/admin.html">Dashboard</a><a href="/admin-app.html">App Management</a><a href="/admin-content.html">Content</a><a href="/book.html">Public Site</a></nav></div></header>
+  <main class="container">
+    <div class="admin-status" data-admin-shell-status hidden></div>
+    <div class="admin-status" data-page-status hidden></div>
+    <div data-admin-shell-loading class="section"><div class="panel">Loading editable water rules…</div></div>
+    <div data-admin-shell-ready hidden>
+      <section class="section"><div class="panel"><div class="badge">Build 188 editable authority</div><h1 style="margin:10px 0 6px">Water Restriction Rules</h1><p class="kicker" style="margin:0;max-width:900px">Edit the municipal/county water-use reminders used by local pages, booking guidance, service-area rules, and dispatch review. The database is preferred; <code>data/water_restriction_rules.json</code> remains the deploy-safe fallback.</p></div></section>
+      <section class="section editor-grid">
+        <div class="panel">
+          <h2>Editable JSON payload</h2>
+          <p class="muted">Routine changes should be saved here after the Build 188 SQL is applied. After verifying an official source, keep the bundled fallback JSON synchronized in the next deployment.</p>
+          <textarea data-water-json spellcheck="false" aria-label="Water restriction rules JSON"></textarea>
+          <div class="button-row" style="margin-top:12px"><button class="btn primary" type="button" data-save-water>Save water rules</button><button class="btn ghost" type="button" data-reload-water>Reload</button><button class="btn ghost" type="button" data-format-water>Format JSON</button><a class="btn ghost" href="/api/water_restrictions_public" target="_blank" rel="noopener">Open public API</a></div>
+        </div>
+        <div class="panel"><h2>Rule preview</h2><div class="rule-list" data-rule-list><div class="muted">Rules will appear after loading.</div></div><hr /><h2>Hard-coding audit</h2><p class="muted">Build 188 identified mutable content domains that should be edited without changing application code.</p><a class="btn ghost" href="/api/admin/editable_content_audit" target="_blank" rel="noopener">Open editable-content audit</a></div>
+      </section>
+    </div>
+  </main>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/chrome.js" defer></script>
+  <script>
+  (function(){
+    const jsonBox=document.querySelector('[data-water-json]');
+    const list=document.querySelector('[data-rule-list]');
+    const status=document.querySelector('[data-page-status]');
+    const saveBtn=document.querySelector('[data-save-water]');
+    const reloadBtn=document.querySelector('[data-reload-water]');
+    const formatBtn=document.querySelector('[data-format-water]');
+    function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+    function setStatus(text,state){status.textContent=text||'';status.dataset.state=state||'';status.hidden=!text;}
+    function render(payload){const rows=Array.isArray(payload?.rules)?payload.rules:[];if(!rows.length){list.innerHTML='<div class="muted">No rules found.</div>';return;}list.innerHTML=rows.map(row=>`<article class="rule-card"><span class="pill">${esc(row.key||'rule')}</span><h3>${esc(row.label||row.county||'Water rule')}</h3><p>${esc(row.rule_summary||'No summary')}</p><p class="muted">Verified: ${esc(row.verified_at||'not recorded')} • Next review: ${esc(row.next_review_at||'not set')}</p></article>`).join('');}
+    async function request(url,options){const res=await fetch(url,{credentials:'include',cache:'no-store',...(options||{})});const data=await res.json().catch(()=>null);if(!res.ok||!data||data.ok===false)throw new Error((data&&(data.error||data.warning))||'Request failed.');return data;}
+    async function load(){setStatus('Loading editable water rules…','');try{const data=await request('/api/admin/water_restriction_rules');const payload={updated_at:data.updated_at,version:data.version,authority_order:data.authority_order,purpose:data.purpose,fallback_behavior:data.fallback_behavior,review_policy:data.review_policy,rules:data.rules,local_page_rules:data.local_page_rules};jsonBox.value=JSON.stringify(payload,null,2);render(payload);setStatus(`Loaded from ${data.source_status||'editable authority'}.`,'success');}catch(err){setStatus(err.message||'Could not load water rules.','error');}}
+    function parse(){const payload=JSON.parse(jsonBox.value||'{}');if(!Array.isArray(payload.rules)||!payload.rules.length)throw new Error('At least one rule is required.');return payload;}
+    saveBtn.addEventListener('click',async()=>{try{const payload=parse();setStatus('Saving water rules…','');const data=await request('/api/admin/water_restriction_rules',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({water_restriction_rules:payload})});render(data);setStatus(`Saved to ${(data.saved_to||[]).join(', ')||'editable authority'}.`,'success');}catch(err){setStatus(err.message||'Could not save water rules.','error');}});
+    reloadBtn.addEventListener('click',load);formatBtn.addEventListener('click',()=>{try{const payload=parse();jsonBox.value=JSON.stringify(payload,null,2);render(payload);setStatus('JSON formatted.','success');}catch(err){setStatus(err.message||'Invalid JSON.','error');}});
+    window.AdminShell.boot({pageKey:'admin-water-rules',onReady:load});
+  })();
+  </script>
+</body>
+</html>
