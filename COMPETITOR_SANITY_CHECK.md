@@ -404,3 +404,54 @@ Next 20 steps to move toward:
 
 Build 188 replaces hard-coded municipal water-rule wording with a DB-first editable authority and one stable JSON fallback. The immediate `landing_pages_public.js` Worker startup crash is fixed without reintroducing mutable rule text into JavaScript. See `EDITABLE_CONTENT_SANITY_CHECK.md` and `data/editable_content_registry_build188.json` for the broader hard-coding audit.
 
+
+
+---
+
+## Build 189 — Editable site settings and hard-coding reduction (2026-06-04)
+
+This pass moves the next high-priority mutable content/configuration domains out of hard-coded JavaScript and into DB-first app-management settings with stable JSON fallbacks. Completed items:
+
+1. Extracted large default landing-page fallback content from `functions/api/landing_pages_public.js` into `data/landing_pages_content.json`.
+2. Added `functions/api/data/landing_pages_content.json` so Cloudflare Functions can import the same stable fallback.
+3. Moved add-on landing-page templates out of JavaScript into the landing-page content fallback.
+4. Added editable `business_profile` fallback data for identity, contact, social links, and structured-data values.
+5. Added editable `site_policies` fallback data for deposit, cancellation, refund, driveway, water, power, and media privacy copy.
+6. Added editable `document_templates` fallback data for notification, receipt, refund, quote, proposal, invoice, and confirmation templates.
+7. Added editable `business_hours_holidays` fallback data for hours, closure days, and availability notes.
+8. Added editable `navigation_footer` fallback data for top navigation and footer links.
+9. Exposed dropdown/option libraries through the editable settings registry.
+10. Added editable `analytics_event_registry` fallback data for analytics event keys and display labels.
+11. Added stable `data/media_requirements.json` as the long-term media requirement fallback.
+12. Added shared `functions/api/_lib/editable-settings.js` for DB-first / JSON-fallback setting loading.
+13. Added protected `/api/admin/editable_site_settings` for staff editing.
+14. Added public `/api/site_settings_public` for safe front-end consumption.
+15. Added `/admin-site-settings.html` and `/admin-site-settings/` as the protected editor bridge.
+16. Added Admin Menu and Admin Auth access for the new editor page.
+17. Added `sql/2026-06-04_build189_editable_site_settings_foundation.sql`.
+18. Updated `SUPABASE_SCHEMA.sql` and `DATABASE_STRUCTURE_CURRENT.md`.
+19. Updated `EDITABLE_CONTENT_SANITY_CHECK.md` and `data/editable_content_registry_build188.json`.
+20. Added `scripts/build189_editable_site_settings_check.py` and wired it into `scripts/release_check.py`.
+
+Next 20 steps after Build 189:
+
+1. Deploy Build 189.
+2. Apply `sql/2026-06-04_build189_editable_site_settings_foundation.sql`.
+3. Open `/admin-site-settings.html` and verify all editable domains load.
+4. Save one small test edit to `business_profile`.
+5. Save one small test edit to `site_policies`.
+6. Sync the full landing-page fallback payload into `app_management_settings.landing_pages_content` only after reviewing size/performance.
+7. Move live landing-page editor controls from raw JSON into a structured form.
+8. Render public business profile values into structured data and page footer from `/api/site_settings_public`.
+9. Render editable navigation/footer links from `navigation_footer`.
+10. Wire editable policies into booking, FAQ, quote, and payment pages.
+11. Wire document templates into quote delivery, deposit receipts, refund notices, invoices, and final confirmations.
+12. Add business-hours and holiday-closure checks to booking availability.
+13. Replace scattered hard-coded dropdown values with `option_libraries`.
+14. Add analytics event validation against `analytics_event_registry`.
+15. Replace build-specific media requirement checks with stable `media_requirements`.
+16. Add a one-click “sync bundled JSON into DB setting” control for each editable domain.
+17. Add setting version history or audit events.
+18. Add field-level validation for each editable setting.
+19. Add a public settings cache/version badge in Admin Diagnostics.
+20. Continue moving remaining large inline page/content objects into DB-managed content blocks.
