@@ -1590,3 +1590,17 @@ create index if not exists idx_water_restriction_rules_next_review
 
 create index if not exists idx_service_area_rules_water_rule_key
   on public.service_area_rules (water_rule_key);
+
+-- Build 189 editable site settings sync — 2026-06-04
+-- Migration: sql/2026-06-04_build189_editable_site_settings_foundation.sql
+-- Mutable content/configuration moved toward DB-first app_management_settings rows with stable JSON fallbacks:
+--   business_profile, site_policies, document_templates, business_hours_holidays,
+--   navigation_footer, option_libraries, analytics_event_registry, media_requirements,
+--   landing_pages_content.
+-- Runtime/admin endpoints:
+--   /api/site_settings_public
+--   /api/admin/editable_site_settings
+-- Admin screen:
+--   /admin-site-settings.html
+-- Large landing-page fallback objects were extracted from functions/api/landing_pages_public.js
+-- into data/landing_pages_content.json and functions/api/data/landing_pages_content.json.
