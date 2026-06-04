@@ -38,7 +38,22 @@ export async function onRequestPost(context) {
       "media_library",
       "document_templates",
       "social_feeds",
-      "before_after_gallery"
+      "before_after_gallery",
+      "business_profile",
+      "site_policies",
+      "document_templates",
+      "business_hours_holidays",
+      "navigation_footer",
+      "option_libraries",
+      "analytics_event_registry",
+      "media_requirements",
+      "landing_pages_content",
+      "notification_templates",
+      "receipt_templates",
+      "refund_templates",
+      "quote_templates",
+      "proposal_templates",
+      "invoice_templates"
     ];
 
     const out = {};
