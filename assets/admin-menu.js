@@ -79,6 +79,14 @@
       description: "Editable municipal water-use reminders",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-water-rules")
     },
+
+    {
+      key: "admin-site-settings",
+      label: "Editable Settings",
+      href: "/admin-site-settings.html",
+      description: "Business profile, policies, templates, navigation, analytics labels, and media requirements",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-site-settings")
+    },
     {
       key: "admin-tax-review",
       label: "Tax Review",
