@@ -1,9 +1,11 @@
 // File: /functions/api/admin/water_restrictions_audit.js
-// Build 186: Staff-only audit of service-area water-rule readiness with safe fallback.
+// Build 187: Staff-only audit of service-area water-rule readiness with safe fallback.
 
 import { requireStaffAccess } from './_lib/staff-auth.js';
 
 const OXFORD_RULE_PHRASE = 'May 1–September 30 under Oxford County By-law No. 4193-2002';
+const OXFORD_LOCAL_PAGE_PHRASE = 'Residential windows are 6:00–9:00 a.m. or 6:00–9:00 p.m.';
+const NORFOLK_LOCAL_PAGE_PHRASE = '9:00–11:00 a.m. and 7:00–10:00 p.m.';
 const NORFOLK_RULE_PHRASE = 'May 15–September 15 under the Water Restriction By-law';
 
 function json(data, status = 200) {
