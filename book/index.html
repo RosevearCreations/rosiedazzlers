@@ -1194,6 +1194,15 @@
     }
 
     function serviceAreaCountyFallbackRows() {
+      const rows = Array.isArray(state.pricing?.service_areas) ? state.pricing.service_areas : [];
+      const countyRows = rows.filter((row) => {
+        const areaType = String(row?.area_type || "").trim().toLowerCase();
+        const value = serviceAreaDisplayValue(row).toLowerCase();
+        return areaType === "county" || value.startsWith("other oxford") || value.startsWith("other norfolk");
+      });
+
+      if (countyRows.length) return countyRows;
+
       return [
         {
           county: "Oxford County",
@@ -1202,17 +1211,13 @@
           municipality: "Oxford County",
           zone: "Oxford County",
           travel_tier: "quote_required",
-          bylaw_note: "Oxford County fallback for towns or rural addresses not listed by name.",
+          area_type: "county",
+          water_rule_key: "oxford-county-seasonal",
+          bylaw_note: "Oxford County fallback. Current water-use wording is loaded from the editable water-restriction authority.",
           parking_rule: "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
           noise_rule: "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-          water_rule: "Oxford County default: May 1–September 30 outdoor hose/attachment use follows the County water conservation program. Even-numbered addresses water on even days, odd-numbered addresses water on odd days, with residential hours of 6–9 a.m. or 6–9 p.m.; check current County notices before dispatch.",
           access_rule: "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
-          official_links: [
-            {
-              label: "Oxford County water conservation",
-              url: "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
-            }
-          ]
+          official_links: []
         },
         {
           county: "Norfolk County",
@@ -1221,17 +1226,13 @@
           municipality: "Norfolk County",
           zone: "Norfolk County",
           travel_tier: "quote_required",
-          bylaw_note: "Norfolk County fallback for towns or rural addresses not listed by name.",
+          area_type: "county",
+          water_rule_key: "norfolk-county-seasonal",
+          bylaw_note: "Norfolk County fallback. Current water-use wording is loaded from the editable water-restriction authority.",
           parking_rule: "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
           noise_rule: "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
-          water_rule: "Norfolk County default: May 15–September 15 outdoor water use is limited to 9–11 a.m. and 7–10 p.m.; odd-numbered addresses use odd calendar days and even-numbered addresses use even calendar days; check current County notices before dispatch.",
           access_rule: "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
-          official_links: [
-            {
-              label: "Norfolk County watering restrictions",
-              url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
-            }
-          ]
+          official_links: []
         }
       ];
     }

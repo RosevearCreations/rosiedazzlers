@@ -1,0 +1,456 @@
+{
+  "build": "188",
+  "updated_at": "2026-06-04",
+  "purpose": "Architectural sanity check for mutable business content and configuration that should be editable without changing application code.",
+  "total_domains_audited": 40,
+  "domains_recommended_editable": 35,
+  "domains_that_should_remain_controlled": 5,
+  "editable_status_counts": {
+    "db_with_file_fallback": 10,
+    "partial_hardcoded": 16,
+    "db_managed": 7,
+    "file_managed": 2
+  },
+  "entries": [
+    {
+      "domain": "Water restriction rules",
+      "should_be_editable": true,
+      "recommended_authority": "public.water_restriction_rules",
+      "fallback_file": "data/water_restriction_rules.json",
+      "current_status": "db_with_file_fallback",
+      "priority": "critical",
+      "notes": "Build 188 removes mutable municipal rule wording from landing-page JavaScript."
+    },
+    {
+      "domain": "Service area, travel tier, parking, noise, and access rules",
+      "should_be_editable": true,
+      "recommended_authority": "public.service_area_rules",
+      "fallback_file": "data/service_area_rules.json",
+      "current_status": "db_with_file_fallback",
+      "priority": "critical",
+      "notes": "Rows reference water_rule_key instead of duplicating rule text."
+    },
+    {
+      "domain": "Pricing packages",
+      "should_be_editable": true,
+      "recommended_authority": "app_management_settings.pricing_catalog",
+      "fallback_file": "data/rosie_services_pricing_and_packages.json",
+      "current_status": "db_with_file_fallback",
+      "priority": "critical",
+      "notes": "Build 188 removes the giant inline JavaScript catalog fallback."
+    },
+    {
+      "domain": "Add-ons and package dependencies",
+      "should_be_editable": true,
+      "recommended_authority": "app_management_settings.pricing_catalog",
+      "fallback_file": "data/rosie_services_pricing_and_packages.json",
+      "current_status": "db_with_file_fallback",
+      "priority": "critical",
+      "notes": "Names, prices, images, requirements, and quote flags change over time."
+    },
+    {
+      "domain": "Booking availability rules and slot labels",
+      "should_be_editable": true,
+      "recommended_authority": "booking_rules / app_management_settings",
+      "fallback_file": "data/rosie_services_pricing_and_packages.json",
+      "current_status": "db_with_file_fallback",
+      "priority": "high",
+      "notes": "Availability windows, holds, and slot labels are operational settings."
+    },
+    {
+      "domain": "Public booking requirements",
+      "should_be_editable": true,
+      "recommended_authority": "app_management_settings.pricing_catalog.booking_rules",
+      "fallback_file": "data/rosie_services_pricing_and_packages.json",
+      "current_status": "db_with_file_fallback",
+      "priority": "high",
+      "notes": "Driveway, water, power, and access wording should not require code edits."
+    },
+    {
+      "domain": "Travel pricing and callout controls",
+      "should_be_editable": true,
+      "recommended_authority": "app_management_settings.pricing_catalog.booking_rules.travel_pricing",
+      "fallback_file": "data/rosie_services_pricing_and_packages.json",
+      "current_status": "db_with_file_fallback",
+      "priority": "high",
+      "notes": "Travel charges and out-of-zone logic are business settings."
+    },
+    {
+      "domain": "Tax rate, fuel surcharge, material surcharge, and minimum callout",
+      "should_be_editable": true,
+      "recommended_authority": "app_management_settings.pricing_catalog.booking_rules.price_controls",
+      "fallback_file": "data/rosie_services_pricing_and_packages.json",
+      "current_status": "db_with_file_fallback",
+      "priority": "high",
+      "notes": "Financial controls must be editable with audit review."
+    },
+    {
+      "domain": "Deposit, cancellation, rescheduling, and refund policy copy",
+      "should_be_editable": true,
+      "recommended_authority": "site_content_blocks / app_management_settings",
+      "fallback_file": "data/site_content_blocks.json",
+      "current_status": "partial_hardcoded",
+      "priority": "high",
+      "notes": "Policy wording appears in several public and booking contexts."
+    },
+    {
+      "domain": "Landing page content",
+      "should_be_editable": true,
+      "recommended_authority": "app_management_settings.landing_pages",
+      "fallback_file": "data/landing_pages.json",
+      "current_status": "partial_hardcoded",
+      "priority": "critical",
+      "notes": "Large default landing-page objects remain in JavaScript and should be migrated to a JSON fallback."
+    },
+    {
+      "domain": "Town/local SEO page content",
+      "should_be_editable": true,
+      "recommended_authority": "app_management_settings.landing_pages / local_seo_task_cards",
+      "fallback_file": "data/local_seo_targets.json",
+      "current_status": "partial_hardcoded",
+      "priority": "critical",
+      "notes": "Town descriptions, proof needs, and local notes change as evidence grows."
+    },
+    {
+      "domain": "Page titles, meta descriptions, canonical and schema content",
+      "should_be_editable": true,
+      "recommended_authority": "landing_pages / content blocks / page SEO settings",
+      "fallback_file": "data/local_seo_targets.json",
+      "current_status": "partial_hardcoded",
+      "priority": "high",
+      "notes": "SEO content needs review without editing HTML on every page."
+    },
+    {
+      "domain": "FAQ entries",
+      "should_be_editable": true,
+      "recommended_authority": "public.public_faq_entries",
+      "fallback_file": "data/site_faqs.json",
+      "current_status": "db_with_file_fallback",
+      "priority": "high",
+      "notes": "Already has DB and fallback foundation."
+    },
+    {
+      "domain": "Help articles and education content",
+      "should_be_editable": true,
+      "recommended_authority": "public.site_content_blocks",
+      "fallback_file": "data/site_content_blocks.json",
+      "current_status": "partial_hardcoded",
+      "priority": "high",
+      "notes": "Help hub content is still partly static."
+    },
+    {
+      "domain": "Homepage cards and calls to action",
+      "should_be_editable": true,
+      "recommended_authority": "public.site_content_blocks",
+      "fallback_file": "data/site_content_blocks.json",
+      "current_status": "db_managed",
+      "priority": "medium",
+      "notes": "Reusable content-block foundation exists."
+    },
+    {
+      "domain": "Service blurbs",
+      "should_be_editable": true,
+      "recommended_authority": "public.site_content_blocks",
+      "fallback_file": "data/site_content_blocks.json",
+      "current_status": "db_managed",
+      "priority": "medium",
+      "notes": "Reusable content-block foundation exists."
+    },
+    {
+      "domain": "Specials and promotions",
+      "should_be_editable": true,
+      "recommended_authority": "public.site_content_blocks / promotions table",
+      "fallback_file": "data/site_content_blocks.json",
+      "current_status": "db_managed",
+      "priority": "high",
+      "notes": "Dates, offers, and availability change frequently."
+    },
+    {
+      "domain": "Gift card content and settings",
+      "should_be_editable": true,
+      "recommended_authority": "public.site_content_blocks / app_management_settings",
+      "fallback_file": "data/site_content_blocks.json",
+      "current_status": "partial_hardcoded",
+      "priority": "medium",
+      "notes": "Amounts, wording, and redemption guidance should be editable."
+    },
+    {
+      "domain": "Fleet and maintenance plan content",
+      "should_be_editable": true,
+      "recommended_authority": "public.site_content_blocks",
+      "fallback_file": "data/site_content_blocks.json",
+      "current_status": "db_managed",
+      "priority": "medium",
+      "notes": "Reusable content-block foundation exists."
+    },
+    {
+      "domain": "Trust, review, and testimonial blocks",
+      "should_be_editable": true,
+      "recommended_authority": "trust_block_items / approved review records",
+      "fallback_file": "none",
+      "current_status": "db_managed",
+      "priority": "high",
+      "notes": "Public reuse must remain consent and privacy gated."
+    },
+    {
+      "domain": "Gallery and local proof media",
+      "should_be_editable": true,
+      "recommended_authority": "before_after_gallery / media records",
+      "fallback_file": "data/before_after_gallery.json",
+      "current_status": "db_with_file_fallback",
+      "priority": "high",
+      "notes": "Service, town, consent, and privacy metadata should travel with each asset."
+    },
+    {
+      "domain": "Media privacy and consent status",
+      "should_be_editable": true,
+      "recommended_authority": "media consent records / gallery records",
+      "fallback_file": "none",
+      "current_status": "db_managed",
+      "priority": "critical",
+      "notes": "Must be enforced before gallery or social reuse."
+    },
+    {
+      "domain": "Image and video requirements",
+      "should_be_editable": true,
+      "recommended_authority": "media_asset_tasks / app management settings",
+      "fallback_file": "data/image_requirements_build185.json",
+      "current_status": "file_managed",
+      "priority": "medium",
+      "notes": "Build-specific file should eventually become a stable fallback plus DB tasks."
+    },
+    {
+      "domain": "Notification templates",
+      "should_be_editable": true,
+      "recommended_authority": "notification_templates",
+      "fallback_file": "none",
+      "current_status": "partial_hardcoded",
+      "priority": "high",
+      "notes": "Booking, lead, reminder, and operational messages should be editable."
+    },
+    {
+      "domain": "Receipt and refund email templates",
+      "should_be_editable": true,
+      "recommended_authority": "notification_templates",
+      "fallback_file": "none",
+      "current_status": "partial_hardcoded",
+      "priority": "high",
+      "notes": "Payment communication should not require code changes."
+    },
+    {
+      "domain": "Social caption templates",
+      "should_be_editable": true,
+      "recommended_authority": "social_caption_templates",
+      "fallback_file": "none",
+      "current_status": "partial_hardcoded",
+      "priority": "medium",
+      "notes": "Template editing and approval workflow remain incomplete."
+    },
+    {
+      "domain": "Business identity, contact details, service area summary, and social links",
+      "should_be_editable": true,
+      "recommended_authority": "app_management_settings.business_profile",
+      "fallback_file": "data/business_profile.json",
+      "current_status": "partial_hardcoded",
+      "priority": "critical",
+      "notes": "Business details appear in structured data, headers, footers, and landing-page scripts."
+    },
+    {
+      "domain": "Business hours, holiday closures, and seasonal availability",
+      "should_be_editable": true,
+      "recommended_authority": "app_management_settings.business_hours",
+      "fallback_file": "data/business_hours.json",
+      "current_status": "partial_hardcoded",
+      "priority": "high",
+      "notes": "Hours and closures change without a code release."
+    },
+    {
+      "domain": "Navigation and footer labels/links",
+      "should_be_editable": true,
+      "recommended_authority": "app_management_settings.site_navigation",
+      "fallback_file": "data/site_navigation.json",
+      "current_status": "partial_hardcoded",
+      "priority": "medium",
+      "notes": "The shared chrome script still controls many public links."
+    },
+    {
+      "domain": "Admin dropdown option libraries",
+      "should_be_editable": true,
+      "recommended_authority": "app_management_settings.option_libraries",
+      "fallback_file": "data/option_libraries.json",
+      "current_status": "partial_hardcoded",
+      "priority": "medium",
+      "notes": "Lead, quote, booking, content, and accounting options should stay consistent."
+    },
+    {
+      "domain": "Accounting mappings and HST/GST review settings",
+      "should_be_editable": true,
+      "recommended_authority": "accounting mapping tables / app settings",
+      "fallback_file": "none",
+      "current_status": "db_managed",
+      "priority": "high",
+      "notes": "Mappings and review settings should be auditable."
+    },
+    {
+      "domain": "Customer quote, proposal, invoice, and receipt templates",
+      "should_be_editable": true,
+      "recommended_authority": "notification_templates / document_templates",
+      "fallback_file": "none",
+      "current_status": "partial_hardcoded",
+      "priority": "high",
+      "notes": "Customer-facing documents need editable wording and branding."
+    },
+    {
+      "domain": "Lead intake topics, condition options, and recommendation copy",
+      "should_be_editable": true,
+      "recommended_authority": "app_management_settings.intake_options",
+      "fallback_file": "data/intake_options.json",
+      "current_status": "partial_hardcoded",
+      "priority": "medium",
+      "notes": "Intake choices and recommendations evolve with services."
+    },
+    {
+      "domain": "Analytics event definitions and conversion labels",
+      "should_be_editable": true,
+      "recommended_authority": "app_management_settings.analytics_event_definitions",
+      "fallback_file": "data/analytics_event_definitions.json",
+      "current_status": "partial_hardcoded",
+      "priority": "medium",
+      "notes": "Reporting labels should be consistent across pages and dashboards."
+    },
+    {
+      "domain": "Vendor directory and service/product reference links",
+      "should_be_editable": true,
+      "recommended_authority": "vendor_directory / product catalog",
+      "fallback_file": "data/vendor_directory.json",
+      "current_status": "file_managed",
+      "priority": "low",
+      "notes": "External references and vendor details change over time."
+    },
+    {
+      "domain": "API keys, payment secrets, session secrets, and R2 credentials",
+      "should_be_editable": false,
+      "recommended_authority": "Cloudflare environment variables / secrets",
+      "fallback_file": "none",
+      "current_status": "environment_only_by_design",
+      "priority": "critical",
+      "notes": "Secrets must never be stored in public JSON or editable content tables."
+    },
+    {
+      "domain": "Authentication and authorization enforcement",
+      "should_be_editable": false,
+      "recommended_authority": "code plus staff capability records",
+      "fallback_file": "none",
+      "current_status": "code_controlled_by_design",
+      "priority": "critical",
+      "notes": "Role labels may be editable, but permission enforcement must remain code/schema controlled."
+    },
+    {
+      "domain": "Database schema and migrations",
+      "should_be_editable": false,
+      "recommended_authority": "version-controlled SQL migrations",
+      "fallback_file": "none",
+      "current_status": "code_controlled_by_design",
+      "priority": "critical",
+      "notes": "Schema changes require review and deployment, not content editing."
+    },
+    {
+      "domain": "Webhook signature verification and payment settlement logic",
+      "should_be_editable": false,
+      "recommended_authority": "code plus environment secrets",
+      "fallback_file": "none",
+      "current_status": "code_controlled_by_design",
+      "priority": "critical",
+      "notes": "Security-critical payment logic must not be content editable."
+    },
+    {
+      "domain": "Append-only audit history and financial event records",
+      "should_be_editable": false,
+      "recommended_authority": "append-only database records",
+      "fallback_file": "none",
+      "current_status": "database_controlled_by_design",
+      "priority": "critical",
+      "notes": "Corrections should be new events, not edits that erase history."
+    }
+  ],
+  "domains": [
+    {
+      "key": "landing_pages_content",
+      "title": "Large default landing-page fallback content",
+      "should_be_editable": true,
+      "authority": "app_management_settings.landing_pages_content + data/landing_pages_content.json",
+      "build189_status": "foundation_added",
+      "notes": "Build 189 extracted large JS content object"
+    },
+    {
+      "key": "business_profile",
+      "title": "Business identity/contact/social/structured data",
+      "should_be_editable": true,
+      "authority": "app_management_settings.business_profile + data/business_profile.json",
+      "build189_status": "foundation_added",
+      "notes": "Editable business profile foundation"
+    },
+    {
+      "key": "site_policies",
+      "title": "Deposit/cancellation/refund/driveway/water/power/media policy copy",
+      "should_be_editable": true,
+      "authority": "app_management_settings.site_policies + data/site_policies.json",
+      "build189_status": "foundation_added",
+      "notes": "Editable policy-copy foundation"
+    },
+    {
+      "key": "document_templates",
+      "title": "Notifications/receipts/refunds/quotes/proposals/invoices",
+      "should_be_editable": true,
+      "authority": "app_management_settings.document_templates + data/document_templates.json",
+      "build189_status": "foundation_added",
+      "notes": "Editable template foundation"
+    },
+    {
+      "key": "business_hours_holidays",
+      "title": "Business hours and holiday closures",
+      "should_be_editable": true,
+      "authority": "app_management_settings.business_hours_holidays + data/business_hours_holidays.json",
+      "build189_status": "foundation_added",
+      "notes": "Editable hours/holiday foundation"
+    },
+    {
+      "key": "navigation_footer",
+      "title": "Navigation and footer links",
+      "should_be_editable": true,
+      "authority": "app_management_settings.navigation_footer + data/navigation_footer.json",
+      "build189_status": "foundation_added",
+      "notes": "Editable navigation/footer foundation"
+    },
+    {
+      "key": "option_libraries",
+      "title": "Dropdown option libraries",
+      "should_be_editable": true,
+      "authority": "app_management_settings.option_libraries + data/admin_option_libraries.json",
+      "build189_status": "foundation_added",
+      "notes": "Editable dropdown/library foundation"
+    },
+    {
+      "key": "analytics_event_registry",
+      "title": "Analytics event keys and labels",
+      "should_be_editable": true,
+      "authority": "app_management_settings.analytics_event_registry + data/analytics_event_registry.json",
+      "build189_status": "foundation_added",
+      "notes": "Editable analytics registry foundation"
+    },
+    {
+      "key": "media_requirements",
+      "title": "Stable media requirements and task seed",
+      "should_be_editable": true,
+      "authority": "app_management_settings.media_requirements + data/media_requirements.json",
+      "build189_status": "foundation_added",
+      "notes": "Stable media fallback replacing build-specific direction"
+    }
+  ],
+  "build189_summary": {
+    "updated_at": "2026-06-04",
+    "editable_domains_added": 9,
+    "admin_page": "/admin-site-settings.html",
+    "api": "/api/admin/editable_site_settings"
+  }
+}

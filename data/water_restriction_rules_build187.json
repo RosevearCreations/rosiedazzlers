@@ -1,0 +1,6 @@
+{
+  "deprecated": true,
+  "build": "187",
+  "replaced_by": "/data/water_restriction_rules.json",
+  "note": "Build 188 retired this build-specific duplicate. Edit the stable fallback file or public.water_restriction_rules instead."
+}

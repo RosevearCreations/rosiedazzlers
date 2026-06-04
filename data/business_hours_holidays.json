@@ -1,0 +1,17 @@
+{
+  "version": "189.0.0",
+  "updated_at": "2026-06-04",
+  "source": "bundled_json_fallback",
+  "timezone": "America/Toronto",
+  "hours": {
+    "monday": "By appointment",
+    "tuesday": "By appointment",
+    "wednesday": "By appointment",
+    "thursday": "By appointment",
+    "friday": "By appointment",
+    "saturday": "By appointment",
+    "sunday": "Limited / by appointment"
+  },
+  "holiday_closures": [],
+  "notes": "Mobile detailing availability depends on weather, driveway access, staff capacity, municipal restrictions, and service scope."
+}

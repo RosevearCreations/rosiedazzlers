@@ -1,0 +1,262 @@
+{
+  "build": "183",
+  "updated_at": "2026-05-30",
+  "public_asset_base": "https://assets.rosiedazzlers.ca/",
+  "requirements": {
+    "addon_card": "1200x800 landscape PNG/WebP/JPG, under 500 KB preferred",
+    "package_card": "1600x900 or 1200x800 landscape, under 700 KB preferred",
+    "before_after_pair": "matched angle before/after, 1200x900 minimum, approved_public consent",
+    "regional_hero": "1600x900 landscape WebP/JPG, Rosie-owned or properly licensed",
+    "video": "MP4/WebM, 1080p landscape or vertical social crop, under 25 MB for site preview"
+  },
+  "missing_local_addon_fallbacks": [
+    {
+      "filename": "pet_hair_removal.png",
+      "label": "Pet Hair Removal",
+      "r2_key": "packages/pet_hair_removal.png",
+      "local_fallback_path": "assets/addons/pet_hair_removal.png",
+      "status": "missing local fallback; upload real R2 package image and optionally add matching local fallback"
+    },
+    {
+      "filename": "odor_treatment.png",
+      "label": "Odor Treatment",
+      "r2_key": "packages/odor_treatment.png",
+      "local_fallback_path": "assets/addons/odor_treatment.png",
+      "status": "missing local fallback; upload real R2 package image and optionally add matching local fallback"
+    },
+    {
+      "filename": "seat_shampoo.png",
+      "label": "Seat Shampoo",
+      "r2_key": "packages/seat_shampoo.png",
+      "local_fallback_path": "assets/addons/seat_shampoo.png",
+      "status": "missing local fallback; upload real R2 package image and optionally add matching local fallback"
+    },
+    {
+      "filename": "carpet_shampoo.png",
+      "label": "Carpet Shampoo",
+      "r2_key": "packages/carpet_shampoo.png",
+      "local_fallback_path": "assets/addons/carpet_shampoo.png",
+      "status": "missing local fallback; upload real R2 package image and optionally add matching local fallback"
+    },
+    {
+      "filename": "salt_stain_treatment.png",
+      "label": "Salt Stain Treatment",
+      "r2_key": "packages/salt_stain_treatment.png",
+      "local_fallback_path": "assets/addons/salt_stain_treatment.png",
+      "status": "missing local fallback; upload real R2 package image and optionally add matching local fallback"
+    },
+    {
+      "filename": "headlight_restoration.png",
+      "label": "Headlight Restoration",
+      "r2_key": "packages/headlight_restoration.png",
+      "local_fallback_path": "assets/addons/headlight_restoration.png",
+      "status": "missing local fallback; upload real R2 package image and optionally add matching local fallback"
+    },
+    {
+      "filename": "windshield_ceramic_coating.png",
+      "label": "Windshield Ceramic Coating",
+      "r2_key": "packages/windshield_ceramic_coating.png",
+      "local_fallback_path": "assets/addons/windshield_ceramic_coating.png",
+      "status": "missing local fallback; upload real R2 package image and optionally add matching local fallback"
+    },
+    {
+      "filename": "ceramic_spray_wax.png",
+      "label": "Ceramic Spray Protection",
+      "r2_key": "packages/ceramic_spray_wax.png",
+      "local_fallback_path": "assets/addons/ceramic_spray_wax.png",
+      "status": "missing local fallback; upload real R2 package image and optionally add matching local fallback"
+    },
+    {
+      "filename": "trim_restoration.png",
+      "label": "Trim Restoration",
+      "r2_key": "packages/trim_restoration.png",
+      "local_fallback_path": "assets/addons/trim_restoration.png",
+      "status": "missing local fallback; upload real R2 package image and optionally add matching local fallback"
+    },
+    {
+      "filename": "bug_tar_removal.png",
+      "label": "Bug and Tar Removal",
+      "r2_key": "packages/bug_tar_removal.png",
+      "local_fallback_path": "assets/addons/bug_tar_removal.png",
+      "status": "missing local fallback; upload real R2 package image and optionally add matching local fallback"
+    },
+    {
+      "filename": "truck_box_wash.png",
+      "label": "Truck Box Wash",
+      "r2_key": "packages/truck_box_wash.png",
+      "local_fallback_path": "assets/addons/truck_box_wash.png",
+      "status": "missing local fallback; upload real R2 package image and optionally add matching local fallback"
+    },
+    {
+      "filename": "fleet_vehicle_add_on.png",
+      "label": "Fleet Vehicle Add-On",
+      "r2_key": "packages/fleet_vehicle_add_on.png",
+      "local_fallback_path": "assets/addons/fleet_vehicle_add_on.png",
+      "status": "missing local fallback; upload real R2 package image and optionally add matching local fallback"
+    }
+  ],
+  "package_images_to_verify": [
+    {
+      "filename": "PremiumExternalWash.png",
+      "label": "Premium Wash small",
+      "r2_key": "packages/PremiumExternalWash.png",
+      "status": "referenced from pricing catalog; verify present in R2 custom domain"
+    },
+    {
+      "filename": "PremiumExternalWashMidSize.png",
+      "label": "Premium Wash mid-size",
+      "r2_key": "packages/PremiumExternalWashMidSize.png",
+      "status": "referenced from pricing catalog; verify present in R2 custom domain"
+    },
+    {
+      "filename": "PremiumExternalWashLargeSizeExotic.png",
+      "label": "Premium Wash oversize/exotic",
+      "r2_key": "packages/PremiumExternalWashLargeSizeExotic.png",
+      "status": "referenced from pricing catalog; verify present in R2 custom domain"
+    },
+    {
+      "filename": "BasicInteriorDetailSmallSize.png",
+      "label": "Basic Detail small",
+      "r2_key": "packages/BasicInteriorDetailSmallSize.png",
+      "status": "referenced from pricing catalog; verify present in R2 custom domain"
+    },
+    {
+      "filename": "BasicInteriorDetailMidSize.png",
+      "label": "Basic Detail mid-size",
+      "r2_key": "packages/BasicInteriorDetailMidSize.png",
+      "status": "referenced from pricing catalog; verify present in R2 custom domain"
+    },
+    {
+      "filename": "BasicInteriorDetailExotics.png",
+      "label": "Basic Detail oversize/exotic",
+      "r2_key": "packages/BasicInteriorDetailExotics.png",
+      "status": "referenced from pricing catalog; verify present in R2 custom domain"
+    },
+    {
+      "filename": "CompleteDetailSmallCars.png",
+      "label": "Complete Detail small",
+      "r2_key": "packages/CompleteDetailSmallCars.png",
+      "status": "referenced from pricing catalog; verify present in R2 custom domain"
+    },
+    {
+      "filename": "CompleteDetailMidSizelCars.png",
+      "label": "Complete Detail mid-size",
+      "r2_key": "packages/CompleteDetailMidSizelCars.png",
+      "status": "referenced from pricing catalog; verify present in R2 custom domain"
+    },
+    {
+      "filename": "CompleteDetailOverSizeExoticCars.png",
+      "label": "Complete Detail oversize/exotic",
+      "r2_key": "packages/CompleteDetailOverSizeExoticCars.png",
+      "status": "referenced from pricing catalog; verify present in R2 custom domain"
+    },
+    {
+      "filename": "FullInteriorDetailSmallCars.png",
+      "label": "Interior Detail small",
+      "r2_key": "packages/FullInteriorDetailSmallCars.png",
+      "status": "referenced from pricing catalog; verify present in R2 custom domain"
+    },
+    {
+      "filename": "FullInteriorDetailMidSuvCars.png",
+      "label": "Interior Detail mid-size/SUV",
+      "r2_key": "packages/FullInteriorDetailMidSuvCars.png",
+      "status": "referenced from pricing catalog; verify present in R2 custom domain"
+    },
+    {
+      "filename": "FullInteriorDetailLargeExoticCars.png",
+      "label": "Interior Detail oversize/exotic",
+      "r2_key": "packages/FullInteriorDetailLargeExoticCars.png",
+      "status": "referenced from pricing catalog; verify present in R2 custom domain"
+    },
+    {
+      "filename": "FullExteriorDetailSmallSizeCars.png",
+      "label": "Exterior Detail small",
+      "r2_key": "packages/FullExteriorDetailSmallSizeCars.png",
+      "status": "referenced from pricing catalog; verify present in R2 custom domain"
+    },
+    {
+      "filename": "FullExteriorDetailMidSizeCars.png",
+      "label": "Exterior Detail mid-size",
+      "r2_key": "packages/FullExteriorDetailMidSizeCars.png",
+      "status": "referenced from pricing catalog; verify present in R2 custom domain"
+    },
+    {
+      "filename": "FullExteriorDetailLargeExoticCars.png",
+      "label": "Exterior Detail oversize/exotic",
+      "r2_key": "packages/FullExteriorDetailLargeExoticCars.png",
+      "status": "referenced from pricing catalog; verify present in R2 custom domain"
+    }
+  ],
+  "regional_images_to_replace": [
+    {
+      "filename": "tillsonburg-auto-detailing-hero.webp",
+      "label": "Tillsonburg service-area hero",
+      "r2_key": "landing-pages/tillsonburg-auto-detailing-hero.webp",
+      "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
+    },
+    {
+      "filename": "woodstock-ingersoll-auto-detailing-hero.webp",
+      "label": "Woodstock/Ingersoll service-area hero",
+      "r2_key": "landing-pages/woodstock-ingersoll-auto-detailing-hero.webp",
+      "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
+    },
+    {
+      "filename": "simcoe-delhi-auto-detailing-hero.webp",
+      "label": "Simcoe/Delhi service-area hero",
+      "r2_key": "landing-pages/simcoe-delhi-auto-detailing-hero.webp",
+      "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
+    },
+    {
+      "filename": "port-dover-auto-detailing-hero.webp",
+      "label": "Port Dover service-area hero",
+      "r2_key": "landing-pages/port-dover-auto-detailing-hero.webp",
+      "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
+    },
+    {
+      "filename": "norwich-otterville-auto-detailing-hero.webp",
+      "label": "Norwich/Otterville service-area hero",
+      "r2_key": "landing-pages/norwich-otterville-auto-detailing-hero.webp",
+      "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
+    },
+    {
+      "filename": "zorra-thamesford-embro-auto-detailing-hero.webp",
+      "label": "Zorra/Thamesford/Embro service-area hero",
+      "r2_key": "landing-pages/zorra-thamesford-embro-auto-detailing-hero.webp",
+      "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
+    },
+    {
+      "filename": "waterford-vittoria-auto-detailing-hero.webp",
+      "label": "Waterford/Vittoria service-area hero",
+      "r2_key": "landing-pages/waterford-vittoria-auto-detailing-hero.webp",
+      "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
+    },
+    {
+      "filename": "port-rowan-turkey-point-auto-detailing-hero.webp",
+      "label": "Port Rowan/Turkey Point service-area hero",
+      "r2_key": "landing-pages/port-rowan-turkey-point-auto-detailing-hero.webp",
+      "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
+    }
+  ],
+  "gallery_proof_needed": [
+    {
+      "town": "Tillsonburg",
+      "service": "Interior detailing",
+      "needed": "real before/after pair replacing pricing-chart placeholder"
+    },
+    {
+      "town": "Woodstock/Ingersoll",
+      "service": "Exterior detailing",
+      "needed": "real before/after pair replacing pricing-chart placeholder"
+    },
+    {
+      "town": "Simcoe/Delhi",
+      "service": "Pet hair removal",
+      "needed": "approved public proof pair"
+    },
+    {
+      "town": "Port Dover",
+      "service": "Ceramic coating or exterior protection",
+      "needed": "approved public proof pair"
+    }
+  ]
+}

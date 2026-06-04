@@ -1,0 +1,65 @@
+{
+  "version": "189.0.0",
+  "updated_at": "2026-06-04",
+  "source": "bundled_json_fallback",
+  "navigation": [
+    {
+      "label": "Home",
+      "href": "/"
+    },
+    {
+      "label": "Services",
+      "href": "/services.html"
+    },
+    {
+      "label": "Pricing",
+      "href": "/pricing.html"
+    },
+    {
+      "label": "Book",
+      "href": "/book.html"
+    },
+    {
+      "label": "FAQ",
+      "href": "/faq.html"
+    },
+    {
+      "label": "Help",
+      "href": "/blog.html"
+    },
+    {
+      "label": "Gallery",
+      "href": "/gallery.html"
+    },
+    {
+      "label": "Contact",
+      "href": "/contact.html"
+    }
+  ],
+  "footer_links": [
+    {
+      "label": "Services",
+      "href": "/services.html"
+    },
+    {
+      "label": "Pricing",
+      "href": "/pricing.html"
+    },
+    {
+      "label": "Fleet",
+      "href": "/fleet.html"
+    },
+    {
+      "label": "Maintenance",
+      "href": "/maintenance.html"
+    },
+    {
+      "label": "Gift Cards",
+      "href": "/gift-cards.html"
+    },
+    {
+      "label": "FAQ",
+      "href": "/faq.html"
+    }
+  ]
+}

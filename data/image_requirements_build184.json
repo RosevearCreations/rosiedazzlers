@@ -1,0 +1,162 @@
+{
+  "build": "184",
+  "updated_at": "2026-06-01",
+  "public_asset_base": "https://assets.rosiedazzlers.ca/",
+  "purpose": "Build 184 health-scan source of truth for admin media checks and IMAGES.md upload review.",
+  "required_assets": [
+    {
+      "label": "Pet Hair Removal",
+      "category": "addon",
+      "r2_key": "packages/pet_hair_removal.png",
+      "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 pet_hair_removal.png"
+    },
+    {
+      "label": "Odor Treatment",
+      "category": "addon",
+      "r2_key": "packages/odor_treatment.png",
+      "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 odor_treatment.png"
+    },
+    {
+      "label": "Seat Shampoo",
+      "category": "addon",
+      "r2_key": "packages/seat_shampoo.png",
+      "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 seat_shampoo.png"
+    },
+    {
+      "label": "Carpet Shampoo",
+      "category": "addon",
+      "r2_key": "packages/carpet_shampoo.png",
+      "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 carpet_shampoo.png"
+    },
+    {
+      "label": "Salt Stain Treatment",
+      "category": "addon",
+      "r2_key": "packages/salt_stain_treatment.png",
+      "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 salt_stain_treatment.png"
+    },
+    {
+      "label": "Headlight Restoration",
+      "category": "addon",
+      "r2_key": "packages/headlight_restoration.png",
+      "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 headlight_restoration.png"
+    },
+    {
+      "label": "Windshield Ceramic Coating",
+      "category": "addon",
+      "r2_key": "packages/windshield_ceramic_coating.png",
+      "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 windshield_ceramic_coating.png"
+    },
+    {
+      "label": "Ceramic Spray Protection",
+      "category": "addon",
+      "r2_key": "packages/ceramic_spray_wax.png",
+      "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 ceramic_spray_wax.png"
+    },
+    {
+      "label": "Trim Restoration",
+      "category": "addon",
+      "r2_key": "packages/trim_restoration.png",
+      "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 trim_restoration.png"
+    },
+    {
+      "label": "Bug and Tar Removal",
+      "category": "addon",
+      "r2_key": "packages/bug_tar_removal.png",
+      "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 bug_tar_removal.png"
+    },
+    {
+      "label": "Truck Box Wash",
+      "category": "addon",
+      "r2_key": "packages/truck_box_wash.png",
+      "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 truck_box_wash.png"
+    },
+    {
+      "label": "Fleet Vehicle Add-On",
+      "category": "addon",
+      "r2_key": "packages/fleet_vehicle_add_on.png",
+      "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 fleet_vehicle_add_on.png"
+    },
+    {
+      "label": "Tillsonburg local hero",
+      "category": "regional",
+      "r2_key": "landing-pages/tillsonburg-auto-detailing.webp",
+      "required_size": "1600x900 preferred landscape WebP/JPG",
+      "upload_method": "Cloudflare R2 \u2192 landing-pages \u2192 tillsonburg-auto-detailing.webp"
+    },
+    {
+      "label": "Woodstock/Ingersoll local hero",
+      "category": "regional",
+      "r2_key": "landing-pages/woodstock-ingersoll-auto-detailing.webp",
+      "required_size": "1600x900 preferred landscape WebP/JPG",
+      "upload_method": "Cloudflare R2 \u2192 landing-pages \u2192 woodstock-ingersoll-auto-detailing.webp"
+    },
+    {
+      "label": "Simcoe/Delhi local hero",
+      "category": "regional",
+      "r2_key": "landing-pages/simcoe-delhi-auto-detailing.webp",
+      "required_size": "1600x900 preferred landscape WebP/JPG",
+      "upload_method": "Cloudflare R2 \u2192 landing-pages \u2192 simcoe-delhi-auto-detailing.webp"
+    },
+    {
+      "label": "Port Dover local hero",
+      "category": "regional",
+      "r2_key": "landing-pages/port-dover-auto-detailing.webp",
+      "required_size": "1600x900 preferred landscape WebP/JPG",
+      "upload_method": "Cloudflare R2 \u2192 landing-pages \u2192 port-dover-auto-detailing.webp"
+    },
+    {
+      "label": "Norwich/Otterville local hero",
+      "category": "regional",
+      "r2_key": "landing-pages/norwich-otterville-auto-detailing.webp",
+      "required_size": "1600x900 preferred landscape WebP/JPG",
+      "upload_method": "Cloudflare R2 \u2192 landing-pages \u2192 norwich-otterville-auto-detailing.webp"
+    },
+    {
+      "label": "Waterford/Vittoria local hero",
+      "category": "regional",
+      "r2_key": "landing-pages/waterford-vittoria-auto-detailing.webp",
+      "required_size": "1600x900 preferred landscape WebP/JPG",
+      "upload_method": "Cloudflare R2 \u2192 landing-pages \u2192 waterford-vittoria-auto-detailing.webp"
+    },
+    {
+      "label": "Tillsonburg interior before/after proof",
+      "category": "gallery_proof",
+      "r2_key": "CarPhotos/tillsonburg-interior-proof-before.webp",
+      "required_size": "1200x900 minimum; pair with matching after image; approved_public only",
+      "upload_method": "Cloudflare R2 \u2192 CarPhotos/tillsonburg-interior-proof-before.webp"
+    },
+    {
+      "label": "Woodstock exterior before/after proof",
+      "category": "gallery_proof",
+      "r2_key": "CarPhotos/woodstock-exterior-proof-before.webp",
+      "required_size": "1200x900 minimum; pair with matching after image; approved_public only",
+      "upload_method": "Cloudflare R2 \u2192 CarPhotos/woodstock-exterior-proof-before.webp"
+    },
+    {
+      "label": "Simcoe pet hair proof",
+      "category": "gallery_proof",
+      "r2_key": "CarPhotos/simcoe-pet-hair-proof-before.webp",
+      "required_size": "1200x900 minimum; pair with matching after image; approved_public only",
+      "upload_method": "Cloudflare R2 \u2192 CarPhotos/simcoe-pet-hair-proof-before.webp"
+    },
+    {
+      "label": "Port Dover ceramic/exterior proof",
+      "category": "gallery_proof",
+      "r2_key": "CarPhotos/port-dover-ceramic-proof-before.webp",
+      "required_size": "1200x900 minimum; pair with matching after image; approved_public only",
+      "upload_method": "Cloudflare R2 \u2192 CarPhotos/port-dover-ceramic-proof-before.webp"
+    }
+  ]
+}
