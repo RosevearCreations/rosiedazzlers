@@ -51,6 +51,71 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-leads")
     },
     {
+      key: "admin-conversions",
+      label: "Conversion Queue",
+      href: "/admin-conversions.html",
+      description: "Review conversion drafts and create confirmed bookings",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-conversions")
+    },
+    {
+      key: "admin-payments",
+      label: "Payments",
+      href: "/admin-payments.html",
+      description: "Webhook history, receipt queueing, and refund tracking",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-payments")
+    },
+
+    {
+      key: "admin-media-health",
+      label: "Media Health",
+      href: "/admin-media-health.html",
+      description: "Missing image/video checks and R2 upload review",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-media-health")
+    },
+    {
+      key: "admin-water-rules",
+      label: "Water Rules",
+      href: "/admin-water-rules.html",
+      description: "Editable municipal water-use reminders",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-water-rules")
+    },
+
+    {
+      key: "admin-site-settings",
+      label: "Editable Settings",
+      href: "/admin-site-settings.html",
+      description: "Business profile, policies, templates, navigation, analytics labels, and media requirements",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-site-settings")
+    },
+    {
+      key: "admin-tax-review",
+      label: "Tax Review",
+      href: "/admin-tax-review.html",
+      description: "HST/GST payment review",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-tax-review")
+    },
+    {
+      key: "admin-close",
+      label: "Month-End Close",
+      href: "/admin-close.html",
+      description: "Payment close checklist",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-close")
+    },
+    {
+      key: "admin-seo-tasks",
+      label: "SEO Tasks",
+      href: "/admin-seo-tasks.html",
+      description: "Search Console and local proof tasks",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-seo-tasks")
+    },
+    {
+      key: "admin-content",
+      label: "Content Center",
+      href: "/admin-content.html",
+      description: "FAQ and public help content",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-content")
+    },
+    {
       key: "admin-blocks",
       label: "Blocks",
       href: "/admin-blocks.html",

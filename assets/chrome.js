@@ -29,6 +29,8 @@ const DEFAULT_NAV_LINKS = [
   ["/gallery", "Gallery"],
   ["/gift-cards", "Gift Cards"],
   ["/fleet", "Fleet"],
+  ["/blog", "Help"],
+  ["/faq", "FAQ"],
   ["/contact", "Contact"],
   ["/book", "Book"],
 ];
@@ -323,6 +325,9 @@ function setFooter() {
         <div class="footer-title">Explore</div>
         <a href="/services">Services</a>
         <a href="/pricing">Pricing</a>
+        <a href="/specials">Specials</a>
+        <a href="/blog">Help Articles</a>
+        <a href="/faq">FAQ</a>
         <a href="/book">Book</a>
         <a href="/gear">Gear</a>
         <a href="/consumables">Consumables</a>
@@ -331,6 +336,7 @@ function setFooter() {
       <div class="footer-col">
         <div class="footer-title">Company</div>
         <a href="/about">About</a>
+        <a href="/blog">Help articles</a>
         <a href="/contact">Contact</a>
 
         <div class="footer-title" style="margin-top:12px">Social</div>

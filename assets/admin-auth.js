@@ -88,7 +88,7 @@
       })
     });
 
-    if (!result.ok) {
+    if (!result.ok || (result.data && result.data.ok === false)) {
       throw new Error(
         (result.data && result.data.error) || "Sign-in failed."
       );
@@ -96,6 +96,10 @@
 
     state.actor = result.data && result.data.actor ? result.data.actor : null;
     state.authenticated = !!state.actor;
+
+    if (!state.authenticated) {
+      throw new Error((result.data && result.data.error) || "Sign-in failed.");
+    }
     state.loaded = true;
 
     return {
@@ -175,6 +179,12 @@
       case "admin":
       case "admin-booking":
       case "admin-leads":
+      case "admin-conversions":
+      case "admin-payments":
+      case "admin-media-health":
+      case "admin-tax-review":
+      case "admin-close":
+      case "admin-seo-tasks":
         return hasCapability("can_manage_bookings");
 
       case "admin-blocks":
@@ -205,7 +215,12 @@
       case "admin-staff":
         return actor.is_admin === true || hasCapability("can_manage_staff");
       case "admin-app":
+      case "admin-water-rules":
+      case "admin-site-settings":
         return actor.is_admin === true || hasCapability("can_manage_staff");
+
+      case "admin-content":
+        return actor.is_admin === true || hasCapability("can_manage_promos") || hasCapability("can_manage_staff");
 
       case "admin-customers":
         return hasCapability("can_manage_bookings");
