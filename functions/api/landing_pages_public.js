@@ -1743,6 +1743,91 @@ function normalizeProductRefList(rows) {
 
 const SYSTEM_LANDING_PAGES = mergeLandingPages(mergeLandingPages(DEFAULT_LANDING_PAGES, LANDING_PAGE_EXPANSIONS), GENERATED_ADDON_LANDING_PAGES);
 
+// Build 187 verified local water-rule enforcement.
+// These notes intentionally override stale DB landing-page content for the town pages until
+// the Admin App re-imports the current verified service-area rules.
+const VERIFIED_LOCAL_WATER_RULES = {
+  "tillsonburg-auto-detailing": {
+    note: "Oxford County outdoor water-use reminder: May 1 to September 30, outdoor water use by hose or attachment, including vehicle washing and power washing, follows address parity. Even-numbered addresses use even-numbered days; odd-numbered addresses use odd-numbered days. Residential windows are 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial windows are 8:00–10:00 a.m. or 3:00–5:00 p.m. Confirm current municipal/county notices before exterior work.",
+    sources: [
+      { label: "Town of Tillsonburg water restrictions", url: "https://www.tillsonburg.ca/living-here/water-and-wastewater/water-restrictions/" },
+      { label: "Oxford County water conservation", url: "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/" }
+    ]
+  },
+  "woodstock-ingersoll-auto-detailing": {
+    note: "Woodstock/Ingersoll Oxford County outdoor water-use reminder: May 1 to September 30, outdoor water use by hose or attachment, including vehicle washing and power washing, follows address parity. Even-numbered addresses use even-numbered days; odd-numbered addresses use odd-numbered days. Residential windows are 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial windows are 8:00–10:00 a.m. or 3:00–5:00 p.m. Confirm current municipal/county notices before exterior work.",
+    sources: [
+      { label: "Oxford County water conservation", url: "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/" },
+      { label: "City of Woodstock watering restrictions", url: "https://www.cityofwoodstock.ca/living-in-woodstock/water-and-utilities/water/watering-restrictions-and-conservation/" }
+    ]
+  },
+  "norwich-otterville-auto-detailing": {
+    note: "Norwich/Otterville Oxford County outdoor water-use reminder: May 1 to September 30, outdoor water use by hose or attachment, including vehicle washing and power washing, follows address parity. Even-numbered addresses use even-numbered days; odd-numbered addresses use odd-numbered days. Residential windows are 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial windows are 8:00–10:00 a.m. or 3:00–5:00 p.m. Confirm current municipal/county notices before exterior work.",
+    sources: [
+      { label: "Oxford County water conservation", url: "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/" }
+    ]
+  },
+  "zorra-thamesford-embro-auto-detailing": {
+    note: "Zorra/Thamesford/Embro Oxford County outdoor water-use reminder: May 1 to September 30, outdoor water use by hose or attachment, including vehicle washing and power washing, follows address parity. Even-numbered addresses use even-numbered days; odd-numbered addresses use odd-numbered days. Residential windows are 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial windows are 8:00–10:00 a.m. or 3:00–5:00 p.m. Confirm current municipal/county notices before exterior work.",
+    sources: [
+      { label: "Oxford County water conservation", url: "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/" }
+    ]
+  },
+  "simcoe-delhi-auto-detailing": {
+    note: "Simcoe/Delhi Norfolk County outdoor water-use reminder: May 15 to September 15, outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m.; odd-numbered houses use odd calendar days and even-numbered houses use even calendar days. Confirm current County notices before exterior work.",
+    sources: [
+      { label: "Norfolk County watering restrictions", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/" }
+    ]
+  },
+  "port-dover-auto-detailing": {
+    note: "Port Dover Norfolk County outdoor water-use reminder: May 15 to September 15, outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m.; odd-numbered houses use odd calendar days and even-numbered houses use even calendar days. Confirm current County notices before exterior work.",
+    sources: [
+      { label: "Norfolk County watering restrictions", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/" }
+    ]
+  },
+  "waterford-vittoria-auto-detailing": {
+    note: "Waterford/Vittoria Norfolk County outdoor water-use reminder: May 15 to September 15, outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m.; odd-numbered houses use odd calendar days and even-numbered houses use even calendar days. Confirm current County notices before exterior work.",
+    sources: [
+      { label: "Norfolk County watering restrictions", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/" }
+    ]
+  },
+  "port-rowan-turkey-point-auto-detailing": {
+    note: "Port Rowan/Turkey Point Norfolk County outdoor water-use reminder: May 15 to September 15, outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m.; odd-numbered houses use odd calendar days and even-numbered houses use even calendar days. Confirm current County notices before exterior work.",
+    sources: [
+      { label: "Norfolk County watering restrictions", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/" }
+    ]
+  }
+};
+
+function applyVerifiedLocalWaterRules(payload) {
+  if (!payload || !payload.pages || typeof payload.pages !== "object") return payload;
+  for (const [slug, rule] of Object.entries(VERIFIED_LOCAL_WATER_RULES)) {
+    const page = payload.pages[slug];
+    if (!page) continue;
+    page.water_restriction_note = rule.note;
+    page.water_restriction_sources = rule.sources;
+    const currentThings = Array.isArray(page.things_to_know) ? page.things_to_know : [];
+    const filteredThings = currentThings.filter((item) => {
+      const text = String(item || "").toLowerCase();
+      return !(text.includes("water") && (text.includes("restriction") || text.includes("watering") || text.includes("hose") || text.includes("outdoor")));
+    });
+    page.things_to_know = [rule.note, ...filteredThings].slice(0, 8);
+    const currentLinks = Array.isArray(page.official_links) ? page.official_links : [];
+    const linkUrls = new Set(currentLinks.map((item) => String(item?.url || "").trim()).filter(Boolean));
+    for (const source of rule.sources) {
+      if (!linkUrls.has(source.url)) currentLinks.push(source);
+    }
+    page.official_links = currentLinks;
+  }
+  payload.verified_local_water_rules = {
+    build: "187",
+    updated_at: "2026-06-03",
+    note: "Town landing pages have server-enforced verified water-use notes so stale Admin App/DB landing page content cannot hide corrected municipal restrictions."
+  };
+  return payload;
+}
+
+
 export async function onRequestGet({ env }) {
   try {
     const landingPages = await loadLandingPages(env);
@@ -1766,7 +1851,7 @@ async function loadLandingPages(env) {
   if (!res.ok) return fallback;
   const rows = await res.json().catch(() => []);
   const row = Array.isArray(rows) ? rows[0] || null : null;
-  return mergeLandingPages(fallback, row?.value);
+  return applyVerifiedLocalWaterRules(mergeLandingPages(fallback, row?.value));
 }
 
 function mergeLandingPages(fallback, candidate) {
@@ -1775,7 +1860,7 @@ function mergeLandingPages(fallback, candidate) {
   for (const [slug, page] of Object.entries(pages)) {
     base.pages[slug] = normalizePage({ ...(base.pages[slug] || {}), ...(page || {}), slug });
   }
-  return base;
+  return applyVerifiedLocalWaterRules(base);
 }
 
 function normalizePage(page) {
@@ -1803,6 +1888,8 @@ function normalizePage(page) {
     equipment: normalizeStringArray(page?.equipment),
     highlights: normalizeStringArray(page?.highlights),
     things_to_know: normalizeStringArray(page?.things_to_know),
+    water_restriction_note: String(page?.water_restriction_note || page?.verified_water_rule_summary || "").trim(),
+    water_restriction_sources: normalizeLinkArray(page?.water_restriction_sources || []),
     official_links: normalizeLinkArray(page?.official_links),
     gallery_images: normalizeStringArray(page?.gallery_images),
     faq: faq.map((item) => ({ q: String(item?.q || "").trim(), a: String(item?.a || "").trim() })).filter((item) => item.q && item.a)
@@ -1835,7 +1922,7 @@ function cloneLandingPages(payload) {
   const pages = raw.pages && typeof raw.pages === "object" ? raw.pages : {};
   for (const [slug, page] of Object.entries(pages)) pages[slug] = normalizePage({ ...page, slug });
   raw.pages = pages;
-  return raw;
+  return applyVerifiedLocalWaterRules(raw);
 }
 
 function json(data, status = 200) {
