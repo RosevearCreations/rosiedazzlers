@@ -1,0 +1,37 @@
+{
+  "version": "189.0.0",
+  "updated_at": "2026-06-04",
+  "source": "bundled_json_fallback",
+  "business": {
+    "name": "Rosie Dazzlers Mobile Auto Detailing",
+    "short_name": "Rosie Dazzlers",
+    "legal_name": "Rosie Dazzlers",
+    "service_area": "Oxford County and Norfolk County, Ontario",
+    "primary_location": "Tillsonburg, Ontario",
+    "website": "https://rosiedazzlers.ca",
+    "assets_base_url": "https://assets.rosiedazzlers.ca/",
+    "logo_url": "https://assets.rosiedazzlers.ca/brand/RosieDazzlersLogo.png",
+    "description": "Mobile auto detailing for Oxford County and Norfolk County customers, with package, quote, gift-card, fleet, and maintenance workflows.",
+    "social_links": [],
+    "contact": {
+      "public_email": "",
+      "public_phone": "",
+      "booking_url": "/book.html",
+      "contact_url": "/contact.html"
+    },
+    "structured_data": {
+      "@type": "LocalBusiness",
+      "priceRange": "$$",
+      "areaServed": [
+        "Oxford County",
+        "Norfolk County",
+        "Tillsonburg",
+        "Woodstock",
+        "Ingersoll",
+        "Simcoe",
+        "Delhi",
+        "Port Dover"
+      ]
+    }
+  }
+}

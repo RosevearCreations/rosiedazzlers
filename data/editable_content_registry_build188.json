@@ -372,5 +372,85 @@
       "priority": "critical",
       "notes": "Corrections should be new events, not edits that erase history."
     }
-  ]
+  ],
+  "domains": [
+    {
+      "key": "landing_pages_content",
+      "title": "Large default landing-page fallback content",
+      "should_be_editable": true,
+      "authority": "app_management_settings.landing_pages_content + data/landing_pages_content.json",
+      "build189_status": "foundation_added",
+      "notes": "Build 189 extracted large JS content object"
+    },
+    {
+      "key": "business_profile",
+      "title": "Business identity/contact/social/structured data",
+      "should_be_editable": true,
+      "authority": "app_management_settings.business_profile + data/business_profile.json",
+      "build189_status": "foundation_added",
+      "notes": "Editable business profile foundation"
+    },
+    {
+      "key": "site_policies",
+      "title": "Deposit/cancellation/refund/driveway/water/power/media policy copy",
+      "should_be_editable": true,
+      "authority": "app_management_settings.site_policies + data/site_policies.json",
+      "build189_status": "foundation_added",
+      "notes": "Editable policy-copy foundation"
+    },
+    {
+      "key": "document_templates",
+      "title": "Notifications/receipts/refunds/quotes/proposals/invoices",
+      "should_be_editable": true,
+      "authority": "app_management_settings.document_templates + data/document_templates.json",
+      "build189_status": "foundation_added",
+      "notes": "Editable template foundation"
+    },
+    {
+      "key": "business_hours_holidays",
+      "title": "Business hours and holiday closures",
+      "should_be_editable": true,
+      "authority": "app_management_settings.business_hours_holidays + data/business_hours_holidays.json",
+      "build189_status": "foundation_added",
+      "notes": "Editable hours/holiday foundation"
+    },
+    {
+      "key": "navigation_footer",
+      "title": "Navigation and footer links",
+      "should_be_editable": true,
+      "authority": "app_management_settings.navigation_footer + data/navigation_footer.json",
+      "build189_status": "foundation_added",
+      "notes": "Editable navigation/footer foundation"
+    },
+    {
+      "key": "option_libraries",
+      "title": "Dropdown option libraries",
+      "should_be_editable": true,
+      "authority": "app_management_settings.option_libraries + data/admin_option_libraries.json",
+      "build189_status": "foundation_added",
+      "notes": "Editable dropdown/library foundation"
+    },
+    {
+      "key": "analytics_event_registry",
+      "title": "Analytics event keys and labels",
+      "should_be_editable": true,
+      "authority": "app_management_settings.analytics_event_registry + data/analytics_event_registry.json",
+      "build189_status": "foundation_added",
+      "notes": "Editable analytics registry foundation"
+    },
+    {
+      "key": "media_requirements",
+      "title": "Stable media requirements and task seed",
+      "should_be_editable": true,
+      "authority": "app_management_settings.media_requirements + data/media_requirements.json",
+      "build189_status": "foundation_added",
+      "notes": "Stable media fallback replacing build-specific direction"
+    }
+  ],
+  "build189_summary": {
+    "updated_at": "2026-06-04",
+    "editable_domains_added": 9,
+    "admin_page": "/admin-site-settings.html",
+    "api": "/api/admin/editable_site_settings"
+  }
 }

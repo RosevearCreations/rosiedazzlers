@@ -1,0 +1,49 @@
+{
+  "version": "189.0.0",
+  "updated_at": "2026-06-04",
+  "source": "bundled_json_fallback",
+  "events": [
+    {
+      "key": "page_view",
+      "label": "Page view",
+      "category": "traffic",
+      "is_active": true
+    },
+    {
+      "key": "faq_view",
+      "label": "FAQ view",
+      "category": "content",
+      "is_active": true
+    },
+    {
+      "key": "help_article_view",
+      "label": "Help article view",
+      "category": "content",
+      "is_active": true
+    },
+    {
+      "key": "lead_submit",
+      "label": "Lead submitted",
+      "category": "conversion",
+      "is_active": true
+    },
+    {
+      "key": "quote_draft_created",
+      "label": "Quote draft created",
+      "category": "conversion",
+      "is_active": true
+    },
+    {
+      "key": "deposit_request_created",
+      "label": "Deposit request created",
+      "category": "payment",
+      "is_active": true
+    },
+    {
+      "key": "payment_completed",
+      "label": "Payment completed",
+      "category": "payment",
+      "is_active": true
+    }
+  ]
+}
