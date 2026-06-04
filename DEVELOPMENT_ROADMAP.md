@@ -1436,3 +1436,41 @@ Next 20 steps to move toward:
 19. Continue final balance invoice/payment request work.
 20. Continue accountant export packaging with HST summary, journal candidates, receipts, and close checklist.
 
+## Build 188 documentation sync — 2026-06-04
+
+Build 188 replaces hard-coded municipal water-rule wording with a DB-first editable authority and one stable JSON fallback. The immediate `landing_pages_public.js` Worker startup crash is fixed without reintroducing mutable rule text into JavaScript. See `EDITABLE_CONTENT_SANITY_CHECK.md` and `data/editable_content_registry_build188.json` for the broader hard-coding audit.
+
+## Build 188 completed roadmap items
+
+1. Fixed the `landing_pages_public.js` module-initialization crash without hard-coding water rules.
+2. Added DB-first `water_restriction_rules` authority with stable JSON fallback.
+3. Added protected Water Rules admin editor.
+4. Changed service-area rows to reference `water_rule_key` instead of duplicated rule text.
+5. Updated booking, local landing pages, service-area APIs, and dispatch audit to derive water wording at runtime.
+6. Removed giant inline pricing-catalog JSON from three JavaScript loaders.
+7. Removed Cloudflare’s invalid `/landing/*` redirect-loop rule.
+8. Added a 40-domain editable-content hard-coding audit.
+9. Added Build 188 SQL, schema notes, release guard, and documentation sync.
+
+### Next 20 roadmap steps
+
+1. Apply the Build 188 SQL and save the bundled water rules through `/admin-water-rules.html`.
+2. Add a one-click “sync bundled fallback to DB” action with preview/diff.
+3. Add database rule-version and stale-review warnings.
+4. Add temporary emergency/drought override rows with start/end dates.
+5. Add booking-time water-window conflict warnings using address parity and appointment time.
+6. Add a staff “Can exterior work use customer water now?” helper.
+7. Move the large default landing-page objects from JavaScript into `data/landing_pages.json`.
+8. Move business identity, contact details, social links, and structured-data values into one business-profile setting.
+9. Move deposits, cancellations, rescheduling, refund, driveway, water, and power policy copy into editable content.
+10. Finish notification template management for booking, lead, payment, and operational emails.
+11. Finish quote, proposal, invoice, receipt, and refund document templates.
+12. Add editable social caption templates and approval workflow.
+13. Add editable business hours, holiday closures, and seasonal availability.
+14. Add editable navigation/footer links and labels.
+15. Add one option-library authority for lead, booking, quote, content, and accounting dropdowns.
+16. Move analytics event labels/definitions into an editable registry.
+17. Replace build-specific media requirement files with a stable fallback plus DB tasks.
+18. Add hard-coded-content release checks for business identity and policy copy.
+19. Add a content-authority dashboard showing DB/file/code ownership and stale fallbacks.
+20. Continue local SEO proof, Search Console, payment, accounting, and media workflow improvements.

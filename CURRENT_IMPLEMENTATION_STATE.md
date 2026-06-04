@@ -633,3 +633,16 @@ Next 20 steps to move toward:
 19. Continue final balance invoice/payment request work.
 20. Continue accountant export packaging with HST summary, journal candidates, receipts, and close checklist.
 
+## Build 188 documentation sync — 2026-06-04
+
+Build 188 replaces hard-coded municipal water-rule wording with a DB-first editable authority and one stable JSON fallback. The immediate `landing_pages_public.js` Worker startup crash is fixed without reintroducing mutable rule text into JavaScript. See `EDITABLE_CONTENT_SANITY_CHECK.md` and `data/editable_content_registry_build188.json` for the broader hard-coding audit.
+
+## Build 188 current implementation state
+
+- Water restrictions are DB-first and editable through `/admin-water-rules.html`.
+- `data/water_restriction_rules.json` is the single stable deploy fallback.
+- `public.water_restriction_rules` is the preferred runtime authority after the Build 188 SQL is applied.
+- Service-area rows use `water_rule_key`; public/admin service-area APIs derive the current wording.
+- Local landing pages fetch the current rule from `/api/water_restrictions_public`.
+- Pricing-catalog loaders import the bundled JSON fallback instead of embedding it inline.
+- `EDITABLE_CONTENT_SANITY_CHECK.md` documents 40 audited content/configuration domains.

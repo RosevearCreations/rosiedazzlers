@@ -632,3 +632,21 @@ Relevant bundled data:
 - `data/water_restriction_rules_build187.json`
 - `data/service_area_rules.json`
 - `data/local_seo_targets.json`
+
+## Build 188 documentation sync — 2026-06-04
+
+Build 188 replaces hard-coded municipal water-rule wording with a DB-first editable authority and one stable JSON fallback. The immediate `landing_pages_public.js` Worker startup crash is fixed without reintroducing mutable rule text into JavaScript. See `EDITABLE_CONTENT_SANITY_CHECK.md` and `data/editable_content_registry_build188.json` for the broader hard-coding audit.
+
+## Build 188 database/content authority update
+
+New preferred table: `public.water_restriction_rules`
+
+New service-area reference column: `public.service_area_rules.water_rule_key`
+
+Authority order:
+
+1. `public.water_restriction_rules`
+2. `app_management_settings.water_restriction_rules`
+3. `data/water_restriction_rules.json`
+
+The Build 188 migration seeds Oxford County and Norfolk County rules as editable rows and updates existing Oxford/Norfolk service-area rows with the appropriate key. Full mutable rule text should not be stored in `service_area_rules.water_rule` going forward.

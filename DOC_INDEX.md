@@ -469,3 +469,13 @@ Next 20 steps to move toward:
 - Added `data/water_restriction_rules_build187.json`, updated service-area/local SEO data, and added a no-DDL SQL note.
 - Added a Build 187 release guard to check every local page for the correct Oxford/Norfolk water-rule language.
 
+## Build 188 documentation sync — 2026-06-04
+
+Build 188 replaces hard-coded municipal water-rule wording with a DB-first editable authority and one stable JSON fallback. The immediate `landing_pages_public.js` Worker startup crash is fixed without reintroducing mutable rule text into JavaScript. See `EDITABLE_CONTENT_SANITY_CHECK.md` and `data/editable_content_registry_build188.json` for the broader hard-coding audit.
+
+## Build 188 documentation additions
+
+- `EDITABLE_CONTENT_SANITY_CHECK.md` — architectural audit of mutable content/configuration.
+- `data/editable_content_registry_build188.json` — machine-readable content authority registry.
+- `data/water_restriction_rules.json` — stable deploy fallback for editable water rules.
+- `sql/2026-06-04_build188_editable_water_rules_hardcoding_audit.sql` — DB-first water-rule authority.
