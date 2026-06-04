@@ -1,6 +1,12 @@
 import { serviceHeaders } from "./_lib/staff-auth.js";
 import fallbackPricingCatalog from "./data/rosie_services_pricing_and_packages.json";
 import fallbackProductCatalog from "./data/rosie_products_catalog.json";
+import fallbackWaterRestrictionRules from "./data/water_restriction_rules.json";
+import {
+  applyWaterRestrictionRulesToLandingPages,
+  loadEditableWaterRestrictionRules,
+  normalizeWaterRestrictionPayload
+} from "./_lib/water-restrictions.js";
 
 const DEFAULT_LANDING_PAGES = {
   pages: {
@@ -272,13 +278,12 @@ const DEFAULT_LANDING_PAGES = {
         "water- and power-aware workflow habits for residential service stops"
       ],
       things_to_know: [
-        "Tillsonburg/Oxford outdoor water restrictions run May 1 to September 30: even-numbered addresses use even-numbered days, odd-numbered addresses use odd-numbered days, with residential windows of 6:00–9:00 a.m. or 6:00–9:00 p.m. and commercial/industrial windows of 8:00–10:00 a.m. or 3:00–5:00 p.m.",
+        "Current outdoor water-use timing is loaded from the editable water-restriction authority and should be confirmed against official municipal or county notices before exterior work.",
         "Tillsonburg winter parking restrictions prohibit overnight street parking from November 15 to March 31 between 2 a.m. and 6 a.m., which matters for early drop-offs or street-side service plans.",
         "Ontario Time-of-Use electricity is generally cheapest evenings, weekends, and holidays, so customers planning heavy vacuum or power-supported driveway service sometimes prefer off-peak windows.",
         "Hydrant and watermain flushing can temporarily cause cloudy or discoloured water in town, so customers sometimes prefer to reschedule exterior work if that is happening on their street."
       ],
       official_links: [
-        { label: "Tillsonburg water restrictions", url: "https://www.tillsonburg.ca/living-here/water-and-wastewater/water-restrictions/" },
         { label: "Tillsonburg parking and parking tickets", url: "https://www.tillsonburg.ca/living-here/parking-and-parking-tickets/" },
         { label: "Tillsonburg by-law enforcement", url: "https://www.tillsonburg.ca/living-here/by-law-enforcement/" },
         { label: "Ontario electricity rates", url: "https://www.oeb.ca/consumer-information-and-protection/electricity-rates" }
@@ -327,13 +332,12 @@ const DEFAULT_LANDING_PAGES = {
         "water-aware and access-aware setup notes for Oxford County properties"
       ],
       things_to_know: [
-        "Woodstock and Ingersoll follow Oxford County outside-water restrictions: May 1–September 30, even-numbered addresses use even-numbered days and odd-numbered addresses use odd-numbered days, with residential windows of 6:00–9:00 a.m. or 6:00–9:00 p.m. and commercial/industrial windows of 8:00–10:00 a.m. or 3:00–5:00 p.m.",
+        "Current outdoor water-use timing is loaded from the editable water-restriction authority and should be confirmed against official municipal or county notices before exterior work.",
         "Ingersoll parking and permit rules can matter if a customer expects curbside service rather than driveway-based service.",
         "Ontario Time-of-Use pricing still makes evening, weekend, and holiday windows the lower-cost periods for households on TOU plans.",
         "For larger jobs, driveway access, electrical access, and water-use timing can affect the most practical appointment window."
       ],
       official_links: [
-        { label: "Woodstock watering restrictions", url: "https://www.cityofwoodstock.ca/living-in-woodstock/water-and-utilities/water/watering-restrictions-and-conservation/" },
         { label: "Woodstock water information", url: "https://www.cityofwoodstock.ca/living-in-woodstock/water-and-utilities/water/" },
         { label: "Ingersoll parking information", url: "https://www.ingersoll.ca/residential-services/parking-information/" },
         { label: "Ontario electricity rates", url: "https://www.oeb.ca/consumer-information-and-protection/electricity-rates" }
@@ -381,13 +385,12 @@ const DEFAULT_LANDING_PAGES = {
         "water- and access-aware workflow planning for Norfolk County service calls"
       ],
       things_to_know: [
-        "Norfolk County watering restrictions in areas such as Simcoe and Delhi run May 15–September 15: outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m., with odd-numbered houses on odd calendar days and even-numbered houses on even calendar days.",
+        "Current outdoor water-use timing is loaded from the editable water-restriction authority and should be confirmed against official municipal or county notices before exterior work.",
         "Norfolk municipal parking information notes free municipal lots in Delhi and broader parking regulations that may matter when a customer does not have driveway space.",
         "Ontario household electricity plans still make evenings, weekends, and holidays the cheapest TOU periods for many customers using household power during service.",
         "Mobile detailing works best when driveway access and hose / outlet expectations are clear in advance."
       ],
       official_links: [
-        { label: "Norfolk watering restrictions", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/" },
         { label: "Norfolk watering by-law", url: "https://www.norfolkcounty.ca/council-administration-and-government/by-laws-and-policies/by-law-directory/watering-restrictions-by-law/" },
         { label: "Norfolk parking", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/roads-parking-and-traffic/parking/" },
         { label: "Ontario electricity rates", url: "https://www.oeb.ca/consumer-information-and-protection/electricity-rates" }
@@ -435,13 +438,12 @@ const DEFAULT_LANDING_PAGES = {
         "coastal-area service planning notes for seasonal traffic and access conditions"
       ],
       things_to_know: [
-        "Norfolk County’s summer watering restrictions apply in Port Dover from May 15 to September 15: outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m., with odd-numbered houses on odd calendar days and even-numbered houses on even calendar days.",
+        "Current outdoor water-use timing is loaded from the editable water-restriction authority and should be confirmed against official municipal or county notices before exterior work.",
         "Port Dover also has seasonal paid parking zones and resident permit options in Norfolk’s paid-parking areas, which can matter for shoreline or curbside appointments.",
         "Ontario Time-of-Use electricity still makes evenings, weekends, and holidays the lower-cost household periods for customers on TOU plans.",
         "Seasonal traffic and event-day congestion can change the most practical mobile appointment windows near the waterfront."
       ],
       official_links: [
-        { label: "Norfolk watering restrictions", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/" },
         { label: "Norfolk parking", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/roads-parking-and-traffic/parking/" },
         { label: "Norfolk paid parking", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/roads-parking-and-traffic/parking/paid-parking/" },
         { label: "Ontario electricity rates", url: "https://www.oeb.ca/consumer-information-and-protection/electricity-rates" }
@@ -489,7 +491,7 @@ const DEFAULT_LANDING_PAGES = {
         "photo/review proof blocks as approved content grows"
       ],
       things_to_know: [
-        "Oxford County’s summer water conservation program runs May 1 to September 30 and affects outdoor hose/attachment use by address parity and time window: residential 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial 8:00–10:00 a.m. or 3:00–5:00 p.m.",
+        "Current outdoor water-use timing is loaded from the editable water-restriction authority and should be confirmed against official municipal or county notices before exterior work.",
         "If a town or rural address is not listed exactly, staff should confirm whether it falls under Oxford County or Norfolk County before final dispatch.",
         "Customers should confirm safe parking, power, water access, and any site-specific access limits before appointment day."
       ],
@@ -539,7 +541,7 @@ const DEFAULT_LANDING_PAGES = {
         "photo/review proof blocks as approved content grows"
       ],
       things_to_know: [
-        "Oxford County’s summer water conservation program runs May 1 to September 30 and can affect driveway exterior work by address parity and time window: residential 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial 8:00–10:00 a.m. or 3:00–5:00 p.m.",
+        "Current outdoor water-use timing is loaded from the editable water-restriction authority and should be confirmed against official municipal or county notices before exterior work.",
         "If a town or rural address is not listed exactly, staff should confirm whether it falls under Oxford County or Norfolk County before final dispatch.",
         "Customers should confirm safe parking, power, water access, and any site-specific access limits before appointment day."
       ],
@@ -589,12 +591,11 @@ const DEFAULT_LANDING_PAGES = {
         "photo/review proof blocks as approved content grows"
       ],
       things_to_know: [
-        "Norfolk County watering restrictions run May 15 to September 15 with outdoor water use allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m., on odd/even house-number days.",
+        "Current outdoor water-use timing is loaded from the editable water-restriction authority and should be confirmed against official municipal or county notices before exterior work.",
         "If a town or rural address is not listed exactly, staff should confirm whether it falls under Oxford County or Norfolk County before final dispatch.",
         "Customers should confirm safe parking, power, water access, and any site-specific access limits before appointment day."
       ],
       official_links: [
-        { label: "Norfolk County watering restrictions", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/" }
       ],
       faq: [
         {"q":"Do you service Waterford, Vittoria?","a":"This page is built for Waterford, Vittoria and nearby Norfolk County addresses. Final booking still depends on route, access, and availability."},
@@ -639,12 +640,11 @@ const DEFAULT_LANDING_PAGES = {
         "photo/review proof blocks as approved content grows"
       ],
       things_to_know: [
-        "Norfolk County watering restrictions run May 15 to September 15 with outdoor water use allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m., on odd/even house-number days.",
+        "Current outdoor water-use timing is loaded from the editable water-restriction authority and should be confirmed against official municipal or county notices before exterior work.",
         "If a town or rural address is not listed exactly, staff should confirm whether it falls under Oxford County or Norfolk County before final dispatch.",
         "Customers should confirm safe parking, power, water access, and any site-specific access limits before appointment day."
       ],
       official_links: [
-        { label: "Norfolk County watering restrictions", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/" },
         { label: "Norfolk parking", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/roads-parking-and-traffic/parking/" }
       ],
       faq: [
@@ -1280,7 +1280,7 @@ const LANDING_PAGE_EXPANSIONS = {
         "Use the page over time to grow place-based visibility with more local photos, reviews, and service examples."
       ],
       "things_to_know": [
-        "Tillsonburg outdoor water restrictions run May 1 to September 30: even-numbered addresses use even-numbered days, odd-numbered addresses use odd-numbered days, with residential windows of 6:00–9:00 a.m. or 6:00–9:00 p.m. and commercial/industrial windows of 8:00–10:00 a.m. or 3:00–5:00 p.m.",
+        "Current outdoor water-use timing is loaded from the editable water-restriction authority and should be confirmed against official municipal or county notices before exterior work.",
         "Tillsonburg winter overnight street parking restrictions typically run from November 15 to March 31 between 2 a.m. and 6 a.m., which can matter for on-street vehicles.",
         "Ontario Time-of-Use electricity pricing keeps evenings, weekends, and holidays as lower-cost periods for many customers using household power during a mobile service.",
         "A strong town page should give practical local setup information, not just repeat the same generic service copy."
@@ -1741,92 +1741,13 @@ function normalizeProductRefList(rows) {
   })).filter((row) => row.name);
 }
 
-const SYSTEM_LANDING_PAGES = mergeLandingPages(mergeLandingPages(DEFAULT_LANDING_PAGES, LANDING_PAGE_EXPANSIONS), GENERATED_ADDON_LANDING_PAGES);
-
-// Build 187 verified local water-rule enforcement.
-// These notes intentionally override stale DB landing-page content for the town pages until
-// the Admin App re-imports the current verified service-area rules.
-const VERIFIED_LOCAL_WATER_RULES = {
-  "tillsonburg-auto-detailing": {
-    note: "Oxford County outdoor water-use reminder: May 1 to September 30, outdoor water use by hose or attachment, including vehicle washing and power washing, follows address parity. Even-numbered addresses use even-numbered days; odd-numbered addresses use odd-numbered days. Residential windows are 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial windows are 8:00–10:00 a.m. or 3:00–5:00 p.m. Confirm current municipal/county notices before exterior work.",
-    sources: [
-      { label: "Town of Tillsonburg water restrictions", url: "https://www.tillsonburg.ca/living-here/water-and-wastewater/water-restrictions/" },
-      { label: "Oxford County water conservation", url: "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/" }
-    ]
-  },
-  "woodstock-ingersoll-auto-detailing": {
-    note: "Woodstock/Ingersoll Oxford County outdoor water-use reminder: May 1 to September 30, outdoor water use by hose or attachment, including vehicle washing and power washing, follows address parity. Even-numbered addresses use even-numbered days; odd-numbered addresses use odd-numbered days. Residential windows are 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial windows are 8:00–10:00 a.m. or 3:00–5:00 p.m. Confirm current municipal/county notices before exterior work.",
-    sources: [
-      { label: "Oxford County water conservation", url: "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/" },
-      { label: "City of Woodstock watering restrictions", url: "https://www.cityofwoodstock.ca/living-in-woodstock/water-and-utilities/water/watering-restrictions-and-conservation/" }
-    ]
-  },
-  "norwich-otterville-auto-detailing": {
-    note: "Norwich/Otterville Oxford County outdoor water-use reminder: May 1 to September 30, outdoor water use by hose or attachment, including vehicle washing and power washing, follows address parity. Even-numbered addresses use even-numbered days; odd-numbered addresses use odd-numbered days. Residential windows are 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial windows are 8:00–10:00 a.m. or 3:00–5:00 p.m. Confirm current municipal/county notices before exterior work.",
-    sources: [
-      { label: "Oxford County water conservation", url: "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/" }
-    ]
-  },
-  "zorra-thamesford-embro-auto-detailing": {
-    note: "Zorra/Thamesford/Embro Oxford County outdoor water-use reminder: May 1 to September 30, outdoor water use by hose or attachment, including vehicle washing and power washing, follows address parity. Even-numbered addresses use even-numbered days; odd-numbered addresses use odd-numbered days. Residential windows are 6:00–9:00 a.m. or 6:00–9:00 p.m.; commercial/industrial windows are 8:00–10:00 a.m. or 3:00–5:00 p.m. Confirm current municipal/county notices before exterior work.",
-    sources: [
-      { label: "Oxford County water conservation", url: "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/" }
-    ]
-  },
-  "simcoe-delhi-auto-detailing": {
-    note: "Simcoe/Delhi Norfolk County outdoor water-use reminder: May 15 to September 15, outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m.; odd-numbered houses use odd calendar days and even-numbered houses use even calendar days. Confirm current County notices before exterior work.",
-    sources: [
-      { label: "Norfolk County watering restrictions", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/" }
-    ]
-  },
-  "port-dover-auto-detailing": {
-    note: "Port Dover Norfolk County outdoor water-use reminder: May 15 to September 15, outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m.; odd-numbered houses use odd calendar days and even-numbered houses use even calendar days. Confirm current County notices before exterior work.",
-    sources: [
-      { label: "Norfolk County watering restrictions", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/" }
-    ]
-  },
-  "waterford-vittoria-auto-detailing": {
-    note: "Waterford/Vittoria Norfolk County outdoor water-use reminder: May 15 to September 15, outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m.; odd-numbered houses use odd calendar days and even-numbered houses use even calendar days. Confirm current County notices before exterior work.",
-    sources: [
-      { label: "Norfolk County watering restrictions", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/" }
-    ]
-  },
-  "port-rowan-turkey-point-auto-detailing": {
-    note: "Port Rowan/Turkey Point Norfolk County outdoor water-use reminder: May 15 to September 15, outdoor water use is allowed only 9:00–11:00 a.m. and 7:00–10:00 p.m.; odd-numbered houses use odd calendar days and even-numbered houses use even calendar days. Confirm current County notices before exterior work.",
-    sources: [
-      { label: "Norfolk County watering restrictions", url: "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/" }
-    ]
-  }
-};
-
-function applyVerifiedLocalWaterRules(payload) {
-  if (!payload || !payload.pages || typeof payload.pages !== "object") return payload;
-  for (const [slug, rule] of Object.entries(VERIFIED_LOCAL_WATER_RULES)) {
-    const page = payload.pages[slug];
-    if (!page) continue;
-    page.water_restriction_note = rule.note;
-    page.water_restriction_sources = rule.sources;
-    const currentThings = Array.isArray(page.things_to_know) ? page.things_to_know : [];
-    const filteredThings = currentThings.filter((item) => {
-      const text = String(item || "").toLowerCase();
-      return !(text.includes("water") && (text.includes("restriction") || text.includes("watering") || text.includes("hose") || text.includes("outdoor")));
-    });
-    page.things_to_know = [rule.note, ...filteredThings].slice(0, 8);
-    const currentLinks = Array.isArray(page.official_links) ? page.official_links : [];
-    const linkUrls = new Set(currentLinks.map((item) => String(item?.url || "").trim()).filter(Boolean));
-    for (const source of rule.sources) {
-      if (!linkUrls.has(source.url)) currentLinks.push(source);
-    }
-    page.official_links = currentLinks;
-  }
-  payload.verified_local_water_rules = {
-    build: "187",
-    updated_at: "2026-06-03",
-    note: "Town landing pages have server-enforced verified water-use notes so stale Admin App/DB landing page content cannot hide corrected municipal restrictions."
-  };
-  return payload;
-}
-
+const SYSTEM_LANDING_PAGES = applyWaterRestrictionRulesToLandingPages(
+  mergeLandingPages(
+    mergeLandingPages(DEFAULT_LANDING_PAGES, LANDING_PAGE_EXPANSIONS),
+    GENERATED_ADDON_LANDING_PAGES
+  ),
+  normalizeWaterRestrictionPayload(fallbackWaterRestrictionRules, "bundled_json_fallback")
+);
 
 export async function onRequestGet({ env }) {
   try {
@@ -1843,15 +1764,25 @@ export async function onRequestOptions() {
 
 async function loadLandingPages(env) {
   const fallback = cloneLandingPages(SYSTEM_LANDING_PAGES);
-  if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY) return fallback;
+  const waterRules = await loadEditableWaterRestrictionRules(env, fallbackWaterRestrictionRules);
+
+  if (!env?.SUPABASE_URL) {
+    return applyWaterRestrictionRulesToLandingPages(fallback, waterRules);
+  }
+
   const res = await fetch(
     `${env.SUPABASE_URL}/rest/v1/app_management_settings?select=value,updated_at&key=eq.landing_pages&limit=1`,
     { headers: serviceHeaders(env) }
   );
-  if (!res.ok) return fallback;
+
+  if (!res.ok) {
+    return applyWaterRestrictionRulesToLandingPages(fallback, waterRules);
+  }
+
   const rows = await res.json().catch(() => []);
   const row = Array.isArray(rows) ? rows[0] || null : null;
-  return applyVerifiedLocalWaterRules(mergeLandingPages(fallback, row?.value));
+  const merged = mergeLandingPages(fallback, row?.value);
+  return applyWaterRestrictionRulesToLandingPages(merged, waterRules);
 }
 
 function mergeLandingPages(fallback, candidate) {
@@ -1860,7 +1791,7 @@ function mergeLandingPages(fallback, candidate) {
   for (const [slug, page] of Object.entries(pages)) {
     base.pages[slug] = normalizePage({ ...(base.pages[slug] || {}), ...(page || {}), slug });
   }
-  return applyVerifiedLocalWaterRules(base);
+  return base;
 }
 
 function normalizePage(page) {
@@ -1922,7 +1853,7 @@ function cloneLandingPages(payload) {
   const pages = raw.pages && typeof raw.pages === "object" ? raw.pages : {};
   for (const [slug, page] of Object.entries(pages)) pages[slug] = normalizePage({ ...page, slug });
   raw.pages = pages;
-  return applyVerifiedLocalWaterRules(raw);
+  return raw;
 }
 
 function json(data, status = 200) {

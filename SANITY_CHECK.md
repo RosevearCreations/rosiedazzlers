@@ -719,3 +719,25 @@ Next 20 steps to move toward:
 19. Continue final balance invoice/payment request work.
 20. Continue accountant export packaging with HST summary, journal candidates, receipts, and close checklist.
 
+## Build 188 documentation sync — 2026-06-04
+
+Build 188 replaces hard-coded municipal water-rule wording with a DB-first editable authority and one stable JSON fallback. The immediate `landing_pages_public.js` Worker startup crash is fixed without reintroducing mutable rule text into JavaScript. See `EDITABLE_CONTENT_SANITY_CHECK.md` and `data/editable_content_registry_build188.json` for the broader hard-coding audit.
+
+## Build 188 sanity check
+
+### What was wrong
+
+`functions/api/landing_pages_public.js` attempted to apply a hard-coded water-rule object during module initialization before that object was ready. More importantly, municipal rules were duplicated across JavaScript, HTML, booking fallbacks, service-area data, and pricing-catalog fallbacks.
+
+### What is now correct
+
+- One editable DB-first water-rule authority exists.
+- One stable JSON fallback exists.
+- JavaScript contains loader/merging logic, not mutable municipal wording.
+- Service-area rows reference rule keys instead of copying full rule text.
+- The Cloudflare Pages Functions build succeeds.
+- The invalid `_redirects` loop rule is removed.
+
+### Hard-coding audit result
+
+40 domains were audited. 35 should be editable; 5 should remain controlled by secrets, reviewed code, schema migrations, or append-only records.

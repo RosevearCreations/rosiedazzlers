@@ -1543,3 +1543,50 @@ alter table public.quote_proposal_drafts
 
 
 -- Build 187 local-page water-rule visibility note: no new DDL. Re-import service_area_rules/app_management landing page settings after deployment so DB content matches the verified Oxford/Norfolk water rules displayed on static town landing pages.
+
+-- ============================================================================
+-- Build 188 — editable water-restriction authority and hard-coding audit
+-- Source migration: sql/2026-06-04_build188_editable_water_rules_hardcoding_audit.sql
+-- Mutable municipal water-rule wording should be edited in this table or the
+-- app_management_settings.water_restriction_rules payload. The stable bundled
+-- fallback is data/water_restriction_rules.json.
+-- ============================================================================
+
+create table if not exists public.water_restriction_rules (
+  id uuid primary key default gen_random_uuid(),
+  key text not null unique,
+  label text not null,
+  county text,
+  effective_dates text,
+  effective_start text,
+  effective_end text,
+  rule_summary text,
+  address_rule text,
+  residential_hours jsonb not null default '[]'::jsonb,
+  commercial_industrial_hours jsonb not null default '[]'::jsonb,
+  applies_to text,
+  verified_sources jsonb not null default '[]'::jsonb,
+  local_pages jsonb not null default '[]'::jsonb,
+  towns jsonb not null default '[]'::jsonb,
+  local_page_rules jsonb not null default '{}'::jsonb,
+  source_summary text,
+  verified_at date,
+  next_review_at date,
+  version text,
+  sort_order integer not null default 0,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.service_area_rules
+  add column if not exists water_rule_key text;
+
+create index if not exists idx_water_restriction_rules_active_county
+  on public.water_restriction_rules (is_active, county, sort_order);
+
+create index if not exists idx_water_restriction_rules_next_review
+  on public.water_restriction_rules (next_review_at);
+
+create index if not exists idx_service_area_rules_water_rule_key
+  on public.service_area_rules (water_rule_key);

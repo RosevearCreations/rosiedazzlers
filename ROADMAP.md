@@ -496,3 +496,10 @@ Next 20 steps to move toward:
 - Added `data/water_restriction_rules_build187.json`, updated service-area/local SEO data, and added a no-DDL SQL note.
 - Added a Build 187 release guard to check every local page for the correct Oxford/Norfolk water-rule language.
 
+## Build 188 documentation sync — 2026-06-04
+
+Build 188 replaces hard-coded municipal water-rule wording with a DB-first editable authority and one stable JSON fallback. The immediate `landing_pages_public.js` Worker startup crash is fixed without reintroducing mutable rule text into JavaScript. See `EDITABLE_CONTENT_SANITY_CHECK.md` and `data/editable_content_registry_build188.json` for the broader hard-coding audit.
+
+## Build 188 roadmap direction
+
+Continue the DB/file authority pattern beyond water rules. The next strongest migrations are landing-page defaults, business profile/contact details, policy copy, notification/document templates, business hours, navigation/footer settings, dropdown option libraries, and analytics event definitions.

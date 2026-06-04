@@ -922,3 +922,21 @@ Next 20 steps to move toward:
 19. Continue final balance invoice/payment request work.
 20. Continue accountant export packaging with HST summary, journal candidates, receipts, and close checklist.
 
+## Build 188 documentation sync — 2026-06-04
+
+Build 188 replaces hard-coded municipal water-rule wording with a DB-first editable authority and one stable JSON fallback. The immediate `landing_pages_public.js` Worker startup crash is fixed without reintroducing mutable rule text into JavaScript. See `EDITABLE_CONTENT_SANITY_CHECK.md` and `data/editable_content_registry_build188.json` for the broader hard-coding audit.
+
+## Build 188 hard-coding risks and remaining gaps
+
+- **Resolved:** mutable water-rule text no longer lives in `landing_pages_public.js`; this also removes the Worker startup crash caused by initialization order.
+- **Resolved:** service-area rows no longer store duplicate `water_rule` text; they use `water_rule_key`.
+- **Resolved:** pricing-catalog loaders no longer embed a giant inline mutable catalog object.
+- **Remaining high risk:** large landing-page default objects are still stored in JavaScript and can drift from DB content.
+- **Remaining high risk:** business identity/contact/structured-data values are still repeated in several files.
+- **Remaining high risk:** policy copy and notification/document templates are still partly hard-coded.
+- **Operational risk:** DB edits must be synchronized back to stable fallback files during a reviewed deployment so outages do not return stale content.
+- **Deployment risk removed:** `_redirects` no longer contains the `/landing/* /landing/index.html 200` infinite-loop rule.
+
+### Cloudflare Functions build warnings still outstanding
+
+The Build 188 Functions bundle compiles successfully, but Wrangler still reports pre-existing wrapper warnings where some public API bridge files reference `onRequestPut`, `onRequestDelete`, or `onRequestOptions` exports that their admin route does not provide. These warnings are not the Build 187/188 startup failure, but they should be cleaned up in a future pass so real deployment warnings are easier to spot.

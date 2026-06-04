@@ -552,3 +552,10 @@ Next 20 steps to move toward:
 19. Continue final balance invoice/payment request work.
 20. Continue accountant export packaging with HST summary, journal candidates, receipts, and close checklist.
 
+## Build 188 documentation sync — 2026-06-04
+
+Build 188 replaces hard-coded municipal water-rule wording with a DB-first editable authority and one stable JSON fallback. The immediate `landing_pages_public.js` Worker startup crash is fixed without reintroducing mutable rule text into JavaScript. See `EDITABLE_CONTENT_SANITY_CHECK.md` and `data/editable_content_registry_build188.json` for the broader hard-coding audit.
+
+## Build 188 architecture rule
+
+Mutable business facts belong in a database setting/table or a stable fallback file, not inside JavaScript. Water restrictions are the reference pattern: DB-first, app-setting fallback, stable JSON deploy fallback, runtime enrichment by key, and release checks that reject copied rule text in code.

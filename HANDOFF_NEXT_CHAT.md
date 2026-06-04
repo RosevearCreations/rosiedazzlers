@@ -645,3 +645,10 @@ Next 20 steps to move toward:
 19. Continue final balance invoice/payment request work.
 20. Continue accountant export packaging with HST summary, journal candidates, receipts, and close checklist.
 
+## Build 188 documentation sync — 2026-06-04
+
+Build 188 replaces hard-coded municipal water-rule wording with a DB-first editable authority and one stable JSON fallback. The immediate `landing_pages_public.js` Worker startup crash is fixed without reintroducing mutable rule text into JavaScript. See `EDITABLE_CONTENT_SANITY_CHECK.md` and `data/editable_content_registry_build188.json` for the broader hard-coding audit.
+
+## Build 188 handoff
+
+Start by deploying Build 188 and applying `sql/2026-06-04_build188_editable_water_rules_hardcoding_audit.sql`. Then test `/admin-water-rules.html`, `/api/water_restrictions_public`, `/api/service_area_rules_public`, and `/tillsonburg-auto-detailing/`. The next architectural priority is moving default landing-page content and business-profile details out of JavaScript.

@@ -565,3 +565,29 @@ Next 20 steps to move toward:
 19. Continue final balance invoice/payment request work.
 20. Continue accountant export packaging with HST summary, journal candidates, receipts, and close checklist.
 
+## Build 188 documentation sync — 2026-06-04
+
+Build 188 replaces hard-coded municipal water-rule wording with a DB-first editable authority and one stable JSON fallback. The immediate `landing_pages_public.js` Worker startup crash is fixed without reintroducing mutable rule text into JavaScript. See `EDITABLE_CONTENT_SANITY_CHECK.md` and `data/editable_content_registry_build188.json` for the broader hard-coding audit.
+
+## Build 188 next 20 internal steps
+
+1. Apply Build 188 SQL.
+2. Open `/admin-water-rules.html` and save/reload both county rules.
+3. Re-save service-area rows so `water_rule_key` is present in live DB data.
+4. Test `/api/water_restrictions_public?slug=tillsonburg-auto-detailing`.
+5. Test `/api/service_area_rules_public`.
+6. Test `/tillsonburg-auto-detailing/` with JS enabled and disabled.
+7. Add DB-vs-fallback diff preview.
+8. Add stale verification/review warnings.
+9. Add temporary emergency override model.
+10. Add address parity/time-window helper.
+11. Move landing page defaults into stable JSON.
+12. Move business profile data into one editable authority.
+13. Migrate policy copy.
+14. Migrate notification templates.
+15. Migrate customer document templates.
+16. Add option-library authority.
+17. Add navigation/footer settings.
+18. Add analytics event registry.
+19. Add content-authority health dashboard.
+20. Continue local proof, payment, accounting, and media tasks.
