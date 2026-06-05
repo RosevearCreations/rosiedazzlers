@@ -50,8 +50,8 @@ export async function onRequestGet(context) {
 
 export async function onRequestPost({ request, env }) {
   try {
-    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
-      return withCors(json({ ok: false, error: "Server configuration is incomplete." }, 500));
+    if (!hasSupabaseConfig(env)) {
+      return withCors(json({ ok: false, error: "Server configuration is incomplete. Check SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY/SUPABASE_SERVICE_KEY." }, 500));
     }
 
     const body = request.method === "GET" ? queryBody(request) : await request.json().catch(() => ({}));
@@ -163,6 +163,15 @@ function extractSupabaseError(data, text, fallback) {
   if (data && data.message) return data.message;
   if (typeof text === "string" && text.trim()) return text.slice(0, 300);
   return fallback;
+}
+
+
+function hasSupabaseConfig(env) {
+  return !!(env?.SUPABASE_URL && getSupabaseServiceRoleKey(env));
+}
+
+function getSupabaseServiceRoleKey(env) {
+  return env?.SUPABASE_SERVICE_ROLE_KEY || env?.SUPABASE_SERVICE_KEY || env?.SUPABASE_SERVICE_ROLE || env?.SUPABASE_SECRET_KEY || "";
 }
 
 function corsHeaders() {
