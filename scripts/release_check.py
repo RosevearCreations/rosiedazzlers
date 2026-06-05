@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 190 note:
+- Adds live rendering for editable site settings, validation, sync controls, and setting history.
+
 Build 186 note:
 - Corrects Oxford/Tillsonburg and Norfolk water-restriction rules across data, booking/Admin App fallbacks, and local landing content.
 
@@ -80,6 +83,7 @@ CHECKS = [
     "scripts/build187_local_page_water_rules_check.py",
     "scripts/build188_editable_water_rules_hardcoding_audit_check.py",
     "scripts/build189_editable_site_settings_check.py",
+    "scripts/build190_editable_settings_live_rendering_check.py",
     "scripts/seo_h1_check.py",
 ]
 
