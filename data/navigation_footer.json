@@ -1,65 +1,194 @@
 {
-  "version": "189.0.0",
+  "version": "190.0.0",
   "updated_at": "2026-06-04",
   "source": "bundled_json_fallback",
   "navigation": [
     {
-      "label": "Home",
-      "href": "/"
-    },
-    {
       "label": "Services",
-      "href": "/services.html"
+      "href": "/services"
     },
     {
       "label": "Pricing",
-      "href": "/pricing.html"
+      "href": "/pricing"
     },
     {
-      "label": "Book",
-      "href": "/book.html"
-    },
-    {
-      "label": "FAQ",
-      "href": "/faq.html"
-    },
-    {
-      "label": "Help",
-      "href": "/blog.html"
+      "label": "Specials",
+      "href": "/specials"
     },
     {
       "label": "Gallery",
-      "href": "/gallery.html"
+      "href": "/gallery"
+    },
+    {
+      "label": "Gift Cards",
+      "href": "/gift-cards"
+    },
+    {
+      "label": "Fleet",
+      "href": "/fleet"
+    },
+    {
+      "label": "Help",
+      "href": "/blog"
+    },
+    {
+      "label": "FAQ",
+      "href": "/faq"
     },
     {
       "label": "Contact",
-      "href": "/contact.html"
+      "href": "/contact"
+    },
+    {
+      "label": "Book",
+      "href": "/book"
     }
   ],
   "footer_links": [
     {
       "label": "Services",
-      "href": "/services.html"
+      "href": "/services"
     },
     {
       "label": "Pricing",
-      "href": "/pricing.html"
+      "href": "/pricing"
     },
     {
-      "label": "Fleet",
-      "href": "/fleet.html"
+      "label": "Specials",
+      "href": "/specials"
     },
     {
-      "label": "Maintenance",
-      "href": "/maintenance.html"
-    },
-    {
-      "label": "Gift Cards",
-      "href": "/gift-cards.html"
+      "label": "Help Articles",
+      "href": "/blog"
     },
     {
       "label": "FAQ",
-      "href": "/faq.html"
+      "href": "/faq"
+    },
+    {
+      "label": "Book",
+      "href": "/book"
+    },
+    {
+      "label": "Gear",
+      "href": "/gear"
+    },
+    {
+      "label": "Consumables",
+      "href": "/consumables"
+    },
+    {
+      "label": "About",
+      "href": "/about"
+    },
+    {
+      "label": "Gallery",
+      "href": "/gallery"
+    },
+    {
+      "label": "Contact",
+      "href": "/contact"
+    },
+    {
+      "label": "Fleet",
+      "href": "/fleet"
+    },
+    {
+      "label": "Maintenance",
+      "href": "/maintenance"
+    },
+    {
+      "label": "Terms",
+      "href": "/terms"
+    },
+    {
+      "label": "Privacy",
+      "href": "/privacy"
+    },
+    {
+      "label": "Waiver",
+      "href": "/waiver"
+    }
+  ],
+  "footer_groups": [
+    {
+      "title": "Explore",
+      "links": [
+        {
+          "label": "Services",
+          "href": "/services"
+        },
+        {
+          "label": "Pricing",
+          "href": "/pricing"
+        },
+        {
+          "label": "Specials",
+          "href": "/specials"
+        },
+        {
+          "label": "Help Articles",
+          "href": "/blog"
+        },
+        {
+          "label": "FAQ",
+          "href": "/faq"
+        },
+        {
+          "label": "Book",
+          "href": "/book"
+        },
+        {
+          "label": "Gear",
+          "href": "/gear"
+        },
+        {
+          "label": "Consumables",
+          "href": "/consumables"
+        }
+      ]
+    },
+    {
+      "title": "Company",
+      "links": [
+        {
+          "label": "About",
+          "href": "/about"
+        },
+        {
+          "label": "Gallery",
+          "href": "/gallery"
+        },
+        {
+          "label": "Contact",
+          "href": "/contact"
+        },
+        {
+          "label": "Fleet",
+          "href": "/fleet"
+        },
+        {
+          "label": "Maintenance",
+          "href": "/maintenance"
+        }
+      ]
+    },
+    {
+      "title": "Policies",
+      "links": [
+        {
+          "label": "Terms",
+          "href": "/terms"
+        },
+        {
+          "label": "Privacy",
+          "href": "/privacy"
+        },
+        {
+          "label": "Waiver",
+          "href": "/waiver"
+        }
+      ]
     }
   ]
 }

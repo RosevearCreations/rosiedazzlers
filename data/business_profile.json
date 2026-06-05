@@ -1,5 +1,5 @@
 {
-  "version": "189.0.0",
+  "version": "190.0.0",
   "updated_at": "2026-06-04",
   "source": "bundled_json_fallback",
   "business": {
@@ -10,28 +10,101 @@
     "primary_location": "Tillsonburg, Ontario",
     "website": "https://rosiedazzlers.ca",
     "assets_base_url": "https://assets.rosiedazzlers.ca/",
-    "logo_url": "https://assets.rosiedazzlers.ca/brand/RosieDazzlersLogo.png",
+    "logo_url": "https://assets.rosiedazzlers.ca/brand/Untitled.png",
     "description": "Mobile auto detailing for Oxford County and Norfolk County customers, with package, quote, gift-card, fleet, and maintenance workflows.",
-    "social_links": [],
+    "social_links": [
+      {
+        "label": "TikTok",
+        "url": "https://www.tiktok.com/@rosiedazzler"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/rosiedazzlers/"
+      },
+      {
+        "label": "Facebook",
+        "url": "https://www.facebook.com/rosiedazzlers"
+      },
+      {
+        "label": "YouTube",
+        "url": "https://www.youtube.com/@rosiedazzlers"
+      },
+      {
+        "label": "Twitch",
+        "url": "https://www.twitch.tv/rosiedazzlers/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/RosieDazzlers"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/rosiedazzlers/"
+      }
+    ],
     "contact": {
-      "public_email": "",
-      "public_phone": "",
+      "public_email": "info@rosiedazzlers.ca",
+      "backup_email": "rosiedazzlers@gmail.com",
+      "public_phone": "226-752-7613",
       "booking_url": "/book.html",
       "contact_url": "/contact.html"
     },
     "structured_data": {
-      "@type": "LocalBusiness",
+      "@context": "https://schema.org",
+      "@type": "AutoDetailing",
+      "name": "Rosie Dazzlers Mobile Auto Detailing",
+      "url": "https://rosiedazzlers.ca/",
+      "image": "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
+      "telephone": "+1-226-752-7613",
       "priceRange": "$$",
       "areaServed": [
-        "Oxford County",
-        "Norfolk County",
-        "Tillsonburg",
-        "Woodstock",
-        "Ingersoll",
-        "Simcoe",
-        "Delhi",
-        "Port Dover"
+        {
+          "@type": "AdministrativeArea",
+          "name": "Oxford County, Ontario"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Norfolk County, Ontario"
+        },
+        {
+          "@type": "City",
+          "name": "Tillsonburg, Ontario"
+        },
+        {
+          "@type": "City",
+          "name": "Woodstock, Ontario"
+        },
+        {
+          "@type": "City",
+          "name": "Ingersoll, Ontario"
+        },
+        {
+          "@type": "City",
+          "name": "Simcoe, Ontario"
+        },
+        {
+          "@type": "City",
+          "name": "Port Dover, Ontario"
+        }
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressRegion": "ON",
+        "addressCountry": "CA"
+      },
+      "sameAs": [
+        "https://www.tiktok.com/@rosiedazzler",
+        "https://www.instagram.com/rosiedazzlers/",
+        "https://www.facebook.com/rosiedazzlers",
+        "https://www.youtube.com/@rosiedazzlers",
+        "https://www.twitch.tv/rosiedazzlers/",
+        "https://x.com/RosieDazzlers",
+        "https://www.linkedin.com/in/rosiedazzlers/"
       ]
-    }
+    },
+    "banner_url": "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
+    "reviews_image_url": "/assets/brand/rosie-reviews-fallback.svg",
+    "footer_logo_url": "https://assets.rosiedazzlers.ca/brand/Untitled.png",
+    "tagline": "Mobile Auto Detailing for Oxford & Norfolk Counties"
   }
 }
