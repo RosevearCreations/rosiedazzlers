@@ -1,0 +1,14 @@
+-- Build 171 — Admin Leads quote preview / quote-starter workflow
+-- No DDL is required for this pass.
+--
+-- Build 171 adds the staff-protected endpoint:
+--   /api/admin/lead_quote_preview
+--
+-- It reads public.public_inquiry_leads and any linked public.photo_estimate_uploads
+-- to produce a copy-ready internal quote starter for staff review. The workflow uses
+-- the existing Build 167/168 lead and upload tables and remains fallback-safe when
+-- optional Build 168 upload review-note columns are not yet applied.
+--
+-- Required prior migrations for live data:
+--   sql/2026-05-23_build167_competetive_matrix_leads_upload_schema.sql
+--   sql/2026-05-23_build168_admin_leads_photo_review.sql

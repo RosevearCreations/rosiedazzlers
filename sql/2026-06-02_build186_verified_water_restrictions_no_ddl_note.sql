@@ -1,0 +1,13 @@
+-- Build 186 verified water-restriction accuracy pass
+-- No DDL required. This build updates bundled JSON/HTML fallbacks and docs so
+-- Oxford County/Tillsonburg and Norfolk County water-use reminders match the
+-- current public municipal/county pages checked on 2026-06-02.
+--
+-- Updated sources:
+-- - data/service_area_rules.json
+-- - data/water_restriction_rules_build186.json
+-- - booking/Admin App embedded fallbacks
+--
+-- If public.service_area_rules is already live in Supabase, re-save/import the
+-- updated rows from data/service_area_rules.json through Admin App/API so the DB
+-- source matches the bundled fallback.
