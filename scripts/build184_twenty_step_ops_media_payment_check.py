@@ -11,7 +11,7 @@ checks = {
   "functions/api/admin/payment_refund_status_poll.js": ["Build 184", "pollStripeRefund", "pollPayPalRefund"],
   "functions/api/admin/payment_receipt_resend.js": ["queueQuoteDepositReceiptEmail"],
   "functions/api/admin/payment_accountant_package_export.js": ["HST_RATE", "accountant-payment-package"],
-  "functions/api/admin/media_asset_health_scan.js": ["Build 184", "image_requirements_build184.json"],
+  "functions/api/admin/media_asset_health_scan.js": ["Build 184", "data/media_requirements.json"],
   "data/image_requirements_build184.json": ["\"build\": \"184\"", "required_assets"],
   "sql/2026-06-01_build184_twenty_step_ops_media_payment_no_ddl_note.sql": ["Build 184"],
   "IMAGES.md": ["Build 184", "Admin Media Health"],

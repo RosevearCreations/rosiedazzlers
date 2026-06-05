@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 191 note:
+- Hardens AdminAuth helpers, Admin Site Settings, policy/template rendering, analytics validation, and stable media requirements.
+
 Build 190 note:
 - Adds live rendering for editable site settings, validation, sync controls, and setting history.
 
@@ -84,6 +87,7 @@ CHECKS = [
     "scripts/build188_editable_water_rules_hardcoding_audit_check.py",
     "scripts/build189_editable_site_settings_check.py",
     "scripts/build190_editable_settings_live_rendering_check.py",
+    "scripts/build191_editable_settings_hardening_check.py",
     "scripts/seo_h1_check.py",
 ]
 
