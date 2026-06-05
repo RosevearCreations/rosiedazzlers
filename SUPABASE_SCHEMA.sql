@@ -1604,3 +1604,12 @@ create index if not exists idx_service_area_rules_water_rule_key
 --   /admin-site-settings.html
 -- Large landing-page fallback objects were extracted from functions/api/landing_pages_public.js
 -- into data/landing_pages_content.json and functions/api/data/landing_pages_content.json.
+
+
+-- Build 190: app_management_setting_history supports editable-site-setting version history.
+CREATE TABLE IF NOT EXISTS public.app_management_setting_history (
+  history_id bigserial PRIMARY KEY,
+  key text NOT NULL,
+  value jsonb NOT NULL DEFAULT '{}'::jsonb,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
