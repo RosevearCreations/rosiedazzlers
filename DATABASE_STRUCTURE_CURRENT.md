@@ -1,3 +1,167 @@
+
+# Build 184 update — 20-step operations, media, and payment hardening
+
+**Updated:** 2026-06-01  
+**Build:** 184
+
+Build 184 completes the requested next-20 pass by tightening the payment/refund operations, improving image/media readiness review, and documenting the next operational bundle. This pass is intentionally no-DDL: it uses the existing Build 180–182 payment tables and the Build 183 image requirements foundation.
+
+## Build 184 — 20 completed items
+
+1. Added `/admin-media-health.html` and `/admin-media-health/` so staff can review missing required photos/videos from a protected admin page.
+2. Added `/api/admin/media_asset_health_scan` to scan required public R2/media URLs and return missing/not-public files with upload keys.
+3. Added `data/image_requirements_build184.json` as the machine-readable source for required app, add-on, landing, gallery, and proof images.
+4. Added the Media Health page to the shared Admin Menu.
+5. Added Media Health access rules to `assets/admin-auth.js`.
+6. Added a Media Health card to the Admin Dashboard.
+7. Added `/api/admin/payment_refund_status_poll` so staff can poll Stripe/PayPal refund status and refresh local refund rows.
+8. Added `/api/admin/payment_receipt_resend` so staff can requeue a customer quote-deposit receipt email from a payment request.
+9. Added `/api/admin/payment_accountant_package_export` for an accountant-style payment CSV with Ontario HST allocation estimates.
+10. Added an **Export accountant package** button to Admin Payments.
+11. Added **Resend receipt** controls to quote deposit/payment request cards.
+12. Added **Poll provider status** controls to refund record cards.
+13. Kept manual refund records, provider refund initiation, webhook settlement, and replay controls on one Payments page for easier review.
+14. Added `sql/2026-06-01_build184_twenty_step_ops_media_payment_no_ddl_note.sql` to document the no-DDL Build 184 schema status.
+15. Updated `SUPABASE_SCHEMA.sql` with Build 184 operational notes.
+16. Updated `DATABASE_STRUCTURE_CURRENT.md` with the Build 184 no-DDL dependency summary.
+17. Updated `IMAGES.md` with the Admin Media Health scan workflow and upload review method.
+18. Updated `COMPETETIVE_COMPLETION_MATRIX.md` to reflect Build 184 media/payment/accounting hardening.
+19. Added `scripts/build184_twenty_step_ops_media_payment_check.py` and wired it into the release check chain.
+20. Re-ran the one-H1 and release guard path so exposed public pages still use one clear H1.
+
+## Next 20 steps after Build 184
+
+1. Deploy Build 184 and test `/admin-media-health.html` against live R2 assets.
+2. Upload the missing add-on images listed in `IMAGES.md`, then re-run the Media Health scan.
+3. Replace regional landing placeholders with Rosie-owned images for Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, Port Dover, Norwich/Otterville, and Waterford/Vittoria.
+4. Capture the first four approved-public before/after gallery proof sets by town/service.
+5. Add real image dimension validation instead of URL-only health checks.
+6. Add R2 signed upload URLs for admin media replacement so uploads can happen from the app instead of the Cloudflare dashboard only.
+7. Add a media task status table so missing-image items can be assigned, marked uploaded, reviewed, and approved.
+8. Add provider refund polling for payment requests without refund rows, not only existing refund records.
+9. Add scheduled retry checks for pending Stripe/PayPal refunds.
+10. Add payment reconciliation variance warnings for paid amount vs. quote/deposit amount.
+11. Add processor fee capture and estimated net payout fields to the payment export.
+12. Add HST/GST allocation review screens before accountant export is considered final.
+13. Add failed receipt email retry controls and visible notification-event status on Admin Payments.
+14. Add customer-facing receipt PDF/download links.
+15. Add final-balance invoice/payment requests after job completion.
+16. Add payment application to final invoices, deposits, refunds, and tips.
+17. Add month-end payment close checklist tied to reconciled provider exports.
+18. Add dashboard warnings for missing images on high-traffic public pages.
+19. Add Search Console/local SEO task cards tied to missing service/town proof content.
+20. Add a consolidated accountant export package that bundles payment CSV, refund CSV, journal candidates, HST summary, and close checklist.
+
+---
+
+# Build 181 schema update — verified quote deposit webhooks
+
+Build 181 adds provider-verification audit fields to `public.quote_deposit_payment_requests` so Stripe and PayPal events can settle accepted quote deposits automatically. Apply `sql/2026-05-26_build181_payment_webhooks_quote_deposits.sql` after Build 180.
+
+## Updated table: `public.quote_deposit_payment_requests`
+
+New optional fields:
+
+- `webhook_verified_at timestamptz`
+- `webhook_processed_at timestamptz`
+- `provider_event_id text`
+- `provider_event_type text`
+- `provider_payment_intent_id text`
+- `provider_order_id text`
+- `provider_capture_id text`
+- `provider_payload jsonb`
+
+The provider check is updated to allow:
+
+- `manual`
+- `stripe`
+- `paypal`
+
+Runtime behavior:
+
+- Stripe `checkout.session.completed` with `quote_deposit_payment_request_id` metadata marks the matching request paid.
+- PayPal verified `PAYMENT.CAPTURE.COMPLETED` or `PAYMENT.SALE.COMPLETED` events mark the matching request paid.
+- When a linked booking exists, settlement confirms the booking and writes a booking finance deposit event.
+
+# Build 178 update — Status Saves, Saved Price Reviews, Public Content Rendering & Privacy Badges
+
+**Current build:** Build 178  
+**Date:** 2026-05-25
+
+Build 178 saved price review foundation closes the next operational gaps after Build 177 by adding conversion-draft status saving, saved final price reviews, live rendering of Admin Content Center blocks on public pages, media privacy readiness badges in the Social Queue/App Management flow, and deeper local SEO proof recommendations. No new DDL is required; this pass depends on the Build 175 content/conversion tables and Build 177 final-price review fields.
+
+## Completed in Build 178
+
+1. Added `/api/admin/lead_conversion_status_save` so staff can move conversion drafts through `draft_booking`, `needs_review`, `ready_to_book`, `converted`, and `closed`.
+2. Added `/api/admin/lead_conversion_price_review_save` so catalog reconciliation results can be saved before booking creation.
+3. Updated `/admin-conversions.html` with Save Status and Save Price Review controls.
+4. Added `/assets/public-content-blocks.js` and live public content mounts on Home, Services, Specials, Fleet, Maintenance, and Help pages.
+5. Added Social Queue media privacy readiness badges using the existing media privacy summary endpoint.
+6. Expanded local SEO proof reporting with concrete next-proof recommendations by town/service.
+7. Added a Build 178 release guard and no-DDL SQL note.
+
+## Updated completion status after Build 178
+
+| Area | Status | Build 178 notes |
+| --- | --- | --- |
+| Conversion draft status workflow | Stronger foundation | Status can now be saved without creating a booking. |
+| Final price reconciliation | Stronger foundation | Reconciliation can be saved before booking creation. |
+| Admin Content public rendering | Added foundation | DB/fallback content blocks can now render on public pages. |
+| Media privacy before reuse | Stronger foundation | Social/Admin flows now show privacy readiness reminders. |
+| Local SEO proof reporting | Stronger foundation | Report now recommends next town/service proof to create. |
+
+## Remaining priority after Build 178
+
+1. Add a fuller conversion-draft detail page with audit history.
+2. Render saved content blocks into exact page sections rather than only generic cards.
+3. Add admin approval gates that block publish/API actions unless consent and privacy statuses are approved.
+4. Turn proof recommendations into assignable content/media tasks.
+5. Add quote/proposal email delivery and customer acceptance tracking.
+
+---
+
+> Build 173 documentation sync (2026-05-24): Admin Content Center, FAQ editor APIs, expanded Help Articles access/content, public Help nav link, and schema no-DDL note were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `COMPETETIVE_COMPLETION_MATRIX.md`, and `SANITY_CHECK.md` for the active plan.
+
+# Build 173 database/schema sync — Admin Content Center FAQ editor bridge
+
+**Updated:** 2026-05-24
+
+Build 173 does not create a new table. It adds a protected Admin Content Center at `/admin-content.html` that edits the existing Build 172 table `public.public_faq_entries` through `/api/admin/content_faqs_list` and `/api/admin/content_faqs_save`.
+
+Live editing requires this migration first:
+
+1. `sql/2026-05-24_build172_public_faq_content_foundation.sql`
+2. `sql/2026-05-24_build173_admin_content_faq_editor_no_ddl_note.sql` — documentation/sync note only
+
+The editor remains fallback-aware: if Supabase configuration or the FAQ table is unavailable, staff can still load and review the static public FAQ fallback, but saving requires the Build 172 table.
+
+---
+> Build 172 documentation sync (2026-05-24): Public FAQ page/content access, `/api/public_faqs`, `public_faq_entries` SQL foundation, sitemap/nav/footer links, and competitive-matrix status were updated. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `COMPETETIVE_COMPLETION_MATRIX.md` for the active plan.
+
+# Build 172 database/schema sync — public FAQ content foundation
+
+**Updated:** 2026-05-24
+
+Build 172 adds `sql/2026-05-24_build172_public_faq_content_foundation.sql`, which creates `public.public_faq_entries` as the future DB-managed source for the new `/faq` page and `/api/public_faqs` endpoint.
+
+The page and endpoint remain fallback-safe before migration: static FAQ content is embedded in `/faq` and mirrored in `data/site_faqs.json`, while `/api/public_faqs` returns a `static_fallback` payload if Supabase config, the table, or rows are unavailable.
+
+Apply after any pending Build 167/168 lead/upload migrations if the project is ready to move FAQ/help content into Supabase.
+
+---
+# Build 171 database/schema sync — Admin Leads quote preview
+
+**Updated:** 2026-05-24
+
+Build 171 does not add tables or columns. The new quote-starter endpoint reads existing `public.public_inquiry_leads` and linked `public.photo_estimate_uploads` rows created by Build 167/168. A no-DDL note was added at `sql/2026-05-24_build171_admin_lead_quote_preview_no_ddl_note.sql`, and `SUPABASE_SCHEMA.sql` now includes Build 169, Build 170, and Build 171 sync notes.
+
+Required live-data order remains:
+
+1. `sql/2026-05-23_build167_competetive_matrix_leads_upload_schema.sql`
+2. `sql/2026-05-23_build168_admin_leads_photo_review.sql`
+3. `sql/2026-05-24_build171_admin_lead_quote_preview_no_ddl_note.sql` — documentation note only
+
+---
 # Build 165 sync — Booking photo-estimate link capture
 
 **Updated:** 2026-05-22
@@ -186,3 +350,354 @@ sql/2026-05-23_build168_admin_leads_photo_review.sql
 This migration extends `photo_estimate_uploads` with `staff_note`, `privacy_note`, `reviewed_at`, and `reviewed_by_staff_user_id`. These fields support the new `/admin-leads` screen, where staff can review public quote-photo uploads, mark privacy status, link media to a lead or booking UUID, and keep internal follow-up notes.
 
 The screen and endpoints are fallback-safe: if Build 167/168 SQL has not been applied, staff see a migration hint rather than a broken page.
+
+## Build 170 schema note — no DDL
+
+Build 170 did not add or change tables. The schema handoff was updated with `sql/2026-05-24_build170_customer_dashboard_signed_out_fallback_no_ddl_note.sql` to document that the customer dashboard signed-out fallback is an API behavior change only.
+
+---
+
+## Build 174 — quote/proposal drafts
+
+Build 174 adds the planning/live schema target `public.quote_proposal_drafts` through `sql/2026-05-24_build174_quote_proposal_drafts.sql`.
+
+Purpose:
+
+- Save generated Admin Leads quote starters as persistent drafts.
+- Tie a draft to `lead_id`, `booking_id`, or both.
+- Track status such as `draft`, `needs_review`, `ready_to_send`, `sent`, `accepted`, `declined`, and `archived`.
+- Preserve body text, pricing notes, staff/internal notes, follow-up date, sent date, customer name/email, and staff creator/updater ids.
+
+Fallback behavior:
+
+- `/admin-leads.html` can still build and copy quote starter text before this SQL is applied.
+- Saving/loading persistent quote drafts returns a migration hint until the table exists.
+
+---
+> Build 174 documentation sync (2026-05-24): persistent quote/proposal drafts were added to Admin Leads with save/load APIs, SQL table foundation, schema notes, and release guard coverage. Quote starters remain copy-ready before the SQL is applied, but saved drafts require sql/2026-05-24_build174_quote_proposal_drafts.sql.
+
+## Build 175 — lead conversion/content/gallery/analytics schema sync
+
+Build 175 adds two DB-managed foundations:
+
+- `public.lead_conversion_drafts` — stores safe lead → draft booking/quote conversion records before staff creates a real scheduled booking.
+- `public.site_content_blocks` — stores reusable admin-managed content for specials, service blurbs, homepage cards, help articles, trust/proof blocks, fleet copy, and maintenance copy.
+
+Build 175 also documents the public gallery privacy rule: before/after media should only be returned publicly when consent/privacy status is `approved_public`, `customer_approved_public`, `public`, `approved`, or when the item is explicitly marked `sample`. Pending, private, rejected, or needs-blur media is filtered out before public reuse.
+
+Apply `sql/2026-05-25_build175_lead_conversion_content_gallery_analytics.sql` after the Build 174 quote draft migration.
+
+## Build 176 Update — conversion-to-booking, dashboard cards, and privacy warnings
+
+- Added a reviewed conversion draft → real booking workflow so Admin Leads can create a live booking only after staff confirms service date, AM/PM slot, address, package, vehicle size, customer name, and customer email.
+- Added Admin Analytics cards for FAQ/help/lead/quote conversion summary using `/api/admin/conversion_funnel_summary`.
+- Added App Management media privacy readiness warnings using `/api/admin/media_privacy_review_summary` so gallery/social reuse is checked before publishing.
+- Preserved the one-H1 exposed-page rule and kept local SEO wording/access paths focused on Oxford/Norfolk service discovery.
+- Added Build 176 SQL/schema notes for `lead_conversion_drafts.converted_booking_id` and `lead_conversion_drafts.converted_at`.
+
+### Build 176 — conversion-to-booking/schema sync
+
+Build 176 extends `public.lead_conversion_drafts` with:
+
+- `converted_booking_id uuid null references public.bookings(id) on delete set null`
+- `converted_at timestamptz null`
+
+This lets `/api/admin/lead_conversion_create_booking` trace a reviewed lead conversion draft to the final live booking row. The endpoint still requires staff confirmation for service date, AM/PM slot, address, package, vehicle size, customer name, and customer email before inserting into `public.bookings`.
+
+## Build 177 — conversion review queue, price reconciliation, and local proof reporting
+
+Build 177 adds a dedicated `/admin-conversions.html` review queue for lead conversion drafts. Staff can load all draft booking/quote conversions, reconcile package/add-on/travel/HST pricing from the pricing catalog, confirm booking-ready fields, and then create a live booking through the existing reviewed conversion workflow.
+
+Apply `sql/2026-05-25_build177_conversion_review_price_local_proof.sql` after Build 175 and Build 176 SQL. It extends `public.lead_conversion_drafts` with optional final price review fields:
+
+- `final_price_review jsonb`
+- `final_price_status text`
+- `final_price_total_cents integer`
+- `final_deposit_cents integer`
+- `final_price_reviewed_at timestamptz`
+
+Build 177 also adds `/api/admin/local_seo_proof_report`, which counts only privacy-approved before/after proof by service and town for local SEO planning. This report is surfaced on Admin Analytics and does not require a new table.
+> Build 177 documentation sync (2026-05-25): added protected conversion-draft review queue, catalog-backed final price reconciliation, local SEO proof coverage reporting, public gallery privacy badges, SQL/schema notes, and release guard coverage.
+
+
+> Build 178 documentation sync (2026-05-25): added conversion status saving, saved final price reviews, public content block rendering, media privacy badges, proof recommendations, schema note, and release guard coverage.
+
+## Build 179 — Publish Privacy Blocking, Proof Tasks, Quote Delivery Tracking
+
+Build 179 adds `sql/2026-05-26_build179_publish_block_tasks_quote_acceptance.sql`.
+
+New/extended data targets:
+
+- `public.local_seo_proof_tasks` for assignable town/service local proof tasks created from local SEO proof recommendations.
+- `public.quote_proposal_drafts.delivery_status`, `delivery_to_email`, `delivery_subject`, `delivery_message`, `delivered_at`.
+- `public.quote_proposal_drafts.acceptance_token_hash`, `acceptance_status`, `accepted_at`, `declined_at`, `responded_at`, and `customer_response_note`.
+
+Runtime behavior:
+
+- Social Queue webhook/API/manual posted actions now hard-block unless the draft is ready and privacy/consent review is confirmed.
+- Admin Analytics can turn local proof recommendations into tasks.
+- Admin Leads can prepare/send a quote/proposal delivery and create a customer acceptance/decline link.
+- `/quote-response.html` records accepted/declined responses through `/api/quote_proposal_respond`.
+
+---
+
+## Build 179 documentation sync — publish blocking, proof tasks, quote acceptance
+
+Build 179 adds hard social publish blocking before webhook/API/manual posted actions, assignable local SEO proof tasks from proof recommendations, and customer-facing quote/proposal delivery plus accept/decline tracking. Schema tracking now points to `sql/2026-05-26_build179_publish_block_tasks_quote_acceptance.sql`. The one-H1 SEO rule, local service/town wording, and fallback-safe API pattern remain required on every pass.
+
+---
+
+### Build 180 update — accepted quote deposit/payment request and final booking confirmation
+
+Build 180 connects the accepted quote workflow to a safer payment-request foundation. Staff can create a tracked deposit/payment request from an accepted quote/proposal draft, share the private `/quote-payment.html` customer page, mark deposits paid from Admin Leads, and link or confirm the final booking when a booking row is available. Schema tracking was updated for `public.quote_deposit_payment_requests` and the quote/conversion deposit status fields.
+
+## Build 180 schema update
+
+New table:
+
+- `public.quote_deposit_payment_requests` — tracks accepted quote deposit/payment requests, secure public payment URLs, optional checkout links, payment status, paid timestamp, and final booking confirmation link.
+
+Extended tables:
+
+- `public.quote_proposal_drafts` — adds deposit request status/timestamps, latest deposit request id, and final booking confirmation fields.
+- `public.lead_conversion_drafts` — adds `latest_deposit_payment_request_id` for quote/conversion traceability.
+
+Migration file:
+
+- `sql/2026-05-26_build180_quote_deposit_booking_confirmation.sql`
+---
+
+> Build 181 documentation sync (2026-05-26): Added verified Stripe/PayPal webhook settlement for `quote_deposit_payment_requests`, PayPal quote-deposit order/capture support, automatic deposit-paid updates, booking confirmation linking, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard and local service/town wording rules remain required on every pass.
+
+## Build 182 — Webhook history, replay, receipt emails, and refunds
+
+Build 182 adds `sql/2026-05-26_build182_webhook_history_receipts_refunds.sql`.
+
+New tables:
+
+- `public.quote_payment_webhook_events` — stores verified, ignored, failed, settled, refund-recorded, and replayed Stripe/PayPal quote-deposit webhook events.
+- `public.quote_deposit_refund_records` — stores manual/provider refund and partial-refund records tied back to `quote_deposit_payment_requests`.
+
+Extended tables:
+
+- `public.quote_deposit_payment_requests` — adds refund totals/status, latest refund link, and receipt email queue tracking.
+- `public.quote_proposal_drafts` — adds receipt/refund summary fields for quote/proposal visibility.
+
+Runtime additions:
+
+- `/api/admin/payment_webhook_events_list`
+- `/api/admin/payment_webhook_event_replay`
+- `/api/admin/quote_deposit_refunds_list`
+- `/api/admin/quote_deposit_refund_save`
+- `/admin-payments.html`
+
+Stripe and PayPal webhooks now record event history, queue customer receipt emails after verified settlement, and track refund/partial-refund events when provider refund webhooks arrive. Staff can also record manual refund tracking from the Payments page.
+
+> Build 182 documentation sync (2026-05-26): Added quote-deposit webhook event history, verified-event replay controls, customer receipt email queueing, manual/provider refund and partial-refund tracking, `/admin-payments.html`, SQL/schema tracking, and release guard coverage. The one-H1 SEO guard, local service/town wording, fallback-safe APIs, and Markdown/schema synchronization remain required on every pass.
+
+---
+
+## Build 183 documentation sync — direct refunds, reconciliation export, webhook warnings, and image requirements
+
+Build 183 adds direct Stripe/PayPal refund initiation from Admin Payments, a payment reconciliation CSV export, dashboard/payment-page warnings for failed or unverified webhook events, and a cleared/rebuilt `IMAGES.md` with missing image/video requirements and upload methods. This build is no-DDL and depends on the Build 180–182 payment tables. SEO/H1, local service/town wording, fallback-safe APIs, schema tracking, and Markdown synchronization remain required on every pass.
+
+## Build 183 schema note
+
+Build 183 adds no new tables or columns. It uses existing Build 180–182 payment structures: `quote_deposit_payment_requests`, `quote_payment_webhook_events`, and `quote_deposit_refund_records`. SQL note: `sql/2026-05-30_build183_direct_refunds_reconciliation_images_no_ddl_note.sql`.
+
+
+-- ---------------------------------------------------------------------------
+-- Build 185 note — next 20 operational foundations
+-- ---------------------------------------------------------------------------
+-- See sql/2026-06-02_build185_next_twenty_ops_foundations.sql.
+-- Adds DB-backed media_asset_tasks, processor-fee capture fields, final_balance_payment_requests,
+-- payment_applications, month_end_close_checklists, and local_seo_task_cards.
+-- Build 185 also upgrades Media Health to validate PNG/JPEG/WebP dimensions, adds an admin R2 upload endpoint,
+-- adds HST/GST review and month-end close screens, and expands accountant/payment exports.
+
+
+## Build 185 — Next 20 completed foundations
+
+1. Added real image dimension validation to Media Health for PNG/JPEG/WebP files.
+2. Added admin R2 upload endpoint with size validation and safe allowed folders.
+3. Added DB-backed media task workflow with JSON fallback.
+4. Added `public.media_asset_tasks` SQL foundation.
+5. Added refund retry scan endpoint for pending/failed provider refunds.
+6. Added payment variance warning summary.
+7. Added processor-fee capture endpoint and Admin Payments fee field.
+8. Added HST/GST review screen and tax summary endpoint.
+9. Added receipt retry queue endpoint.
+10. Added customer receipt HTML/download endpoint.
+11. Added final-balance payment request tables and APIs.
+12. Added payment application tables and APIs for deposits/invoices/refunds.
+13. Added month-end close checklist table/API/screen.
+14. Added dashboard warnings for missing media, undersized media, payment variances, and receipt retries.
+15. Added Search Console/local SEO task card table/APIs/screen.
+16. Added consolidated full accountant export endpoint.
+17. Added processor-fee fields to `quote_deposit_payment_requests`.
+18. Added `data/image_requirements_build185.json` for scan/task fallback.
+19. Rebuilt `IMAGES.md` with exact upload keys, sizes, requirements, and methods.
+20. Added Build 185 release guard and schema/docs synchronization.
+
+## Next 20 recommended steps after Build 185
+
+1. Deploy Build 185.
+2. Apply `sql/2026-06-02_build185_next_twenty_ops_foundations.sql`.
+3. Configure the Cloudflare Pages R2 bucket binding for admin uploads.
+4. Upload the 12 missing add-on images listed in `IMAGES.md`.
+5. Replace the eight regional placeholder hero images with Rosie-owned photos.
+6. Test `/admin-media-health.html` upload, scan, and task creation.
+7. Add R2 signed/direct browser upload support for larger video files.
+8. Add media approval status transitions: assigned → uploaded → reviewed → approved_public.
+9. Add automatic image alt-text suggestions from the media task label/category/town.
+10. Add a public-page missing-media warning badge beside affected page links.
+11. Test processor-fee capture on real Stripe and PayPal sandbox transactions.
+12. Add automatic processor-fee import from Stripe balance transactions and PayPal captures.
+13. Test `/admin-tax-review.html` and confirm HST assumptions with the accountant.
+14. Test `/admin-close.html` for a month-end payment close dry run.
+15. Add final-balance payment checkout links for Stripe and PayPal.
+16. Add customer-facing final invoice/receipt PDF generation.
+17. Add payment application posting into journal candidates.
+18. Add variance approvals so resolved warnings stop showing on the dashboard.
+19. Add Search Console API import for query/page data if credentials are configured.
+20. Build the full accountant package zip with separate CSVs, PDF receipts, close checklist, HST summary, and journal candidates.
+
+---
+
+## Build 186 - verified water restrictions and next-20 planning sync (2026-06-02)
+
+Build 186 corrected the service-area water-use guidance after source verification. Oxford County / Tillsonburg now uses the May 1-September 30 rule under Oxford County By-law No. 4193-2002: outdoor water use by hose or attachment, including vehicle washing and power washing, follows address parity, with residential hours of 6:00-9:00 a.m. or 6:00-9:00 p.m. and commercial/industrial hours of 8:00-10:00 a.m. or 3:00-5:00 p.m. Norfolk County now uses the May 15-September 15 Water Restriction By-law rule: 9:00-11:00 a.m. and 7:00-10:00 p.m., with odd/even house-number days and the first-24-hours sod exemption note.
+
+Updated runtime/content areas: `data/service_area_rules.json`, `data/water_restriction_rules_build186.json`, booking fallbacks, Admin App service-area defaults, landing page content, `functions/api/water_restrictions_public.js`, `functions/api/admin/water_restrictions_audit.js`, and the Build 186 release guard.
+
+Completed next-20 items for this pass:
+1. Verified Tillsonburg/Oxford County water restrictions from the official Tillsonburg and Oxford pages.
+2. Verified Norfolk County watering restrictions from the official Norfolk County page.
+3. Corrected all Oxford County service-area rows in `data/service_area_rules.json`.
+4. Corrected all Norfolk County service-area rows in `data/service_area_rules.json`.
+5. Added the Tillsonburg water-restriction page as an official source for Tillsonburg rows.
+6. Added `data/water_restriction_rules_build186.json` as a compact verified rule source.
+7. Corrected booking fallback water rules in `book.html`.
+8. Synced the `/book/` mirror.
+9. Corrected Admin App default service-area water rules in `admin-app.html`.
+10. Synced the `/admin-app/` mirror.
+11. Corrected water wording in root landing-page public content.
+12. Corrected water wording in the Functions landing-page public content copy.
+13. Added `/api/water_restrictions_public` as a public safe fallback endpoint.
+14. Added `/api/admin/water_restrictions_audit` as a staff DB audit endpoint.
+15. Added a no-DDL SQL note for Build 186.
+16. Updated `SUPABASE_SCHEMA.sql` with the Build 186 schema/data note.
+17. Updated `DATABASE_STRUCTURE_CURRENT.md` with the water-rule data dependency note.
+18. Updated `COMPETETIVE_COMPLETION_MATRIX.md` with water-rule accuracy progress.
+19. Added `scripts/build186_verified_water_restrictions_check.py`.
+20. Wired the Build 186 guard into `scripts/release_check.py`.
+
+Next 20 steps to move toward:
+1. Deploy Build 186.
+2. Re-import/resave `data/service_area_rules.json` into Supabase if the `service_area_rules` table is live.
+3. Test `/api/water_restrictions_public` for Oxford County and Norfolk County.
+4. Test `/api/admin/water_restrictions_audit` while signed in as admin.
+5. Check `/book` and confirm the selected service-area rules show the corrected wording.
+6. Check `/admin-app` and confirm service-area defaults show the corrected wording.
+7. Add an Admin App button to import bundled service-area rules into Supabase.
+8. Add a visual warning when the DB service-area rules are older than bundled fallback rules.
+9. Add a scheduled or manual source-verification checklist for municipal rule pages.
+10. Add a public FAQ item explaining water-use timing for mobile detailing.
+11. Add booking-time validation that reminds staff when a requested appointment conflicts with local water-use windows.
+12. Add a customer-facing note that Rosie Dazzlers can bring water/power when needed, but municipal rules still need checking.
+13. Add per-town temporary notice overrides for drought/emergency restrictions.
+14. Add a service-area rule version field in Supabase.
+15. Add admin change history for service-area rule edits.
+16. Add local SEO copy snippets that mention the accurate county rules without over-promising availability.
+17. Add a quick “Can we do exterior work at this time?” helper for staff dispatch.
+18. Continue payment/tax work from Build 185: processor-fee imports and HST/GST review.
+19. Continue media work from Build 185: R2 direct uploads, media approval transitions, and missing-media warnings.
+20. Continue accountant export work: HST summary, journal candidates, receipts, and close checklist packaging.
+
+
+## Build 187 Sync — Verified Local Page Water Rules (2026-06-03)
+
+- Reverified Oxford/Tillsonburg, Woodstock/Oxford, and Norfolk water-use restrictions from official public sources.
+- Corrected the static town landing-page shell so `/tillsonburg-auto-detailing/` and every other local page shows the water-use note even before client-side rendering.
+- Added server-side landing-page enforcement so stale Admin App/DB landing-page rows cannot hide the corrected water-rule note.
+- Added `data/water_restriction_rules_build187.json`, updated service-area/local SEO data, and added a no-DDL SQL note.
+- Added a Build 187 release guard to check every local page for the correct Oxford/Norfolk water-rule language.
+
+
+## Build 187 Schema/Data Note
+
+No new database table is required. The data sync requirement is operational: after deployment, re-import the bundled `data/service_area_rules.json` and landing-page settings if Supabase rows are used so DB content does not override the corrected static/API fallback water rules.
+
+Relevant bundled data:
+- `data/water_restriction_rules_build187.json`
+- `data/service_area_rules.json`
+- `data/local_seo_targets.json`
+
+## Build 188 documentation sync — 2026-06-04
+
+Build 188 replaces hard-coded municipal water-rule wording with a DB-first editable authority and one stable JSON fallback. The immediate `landing_pages_public.js` Worker startup crash is fixed without reintroducing mutable rule text into JavaScript. See `EDITABLE_CONTENT_SANITY_CHECK.md` and `data/editable_content_registry_build188.json` for the broader hard-coding audit.
+
+## Build 188 database/content authority update
+
+New preferred table: `public.water_restriction_rules`
+
+New service-area reference column: `public.service_area_rules.water_rule_key`
+
+Authority order:
+
+1. `public.water_restriction_rules`
+2. `app_management_settings.water_restriction_rules`
+3. `data/water_restriction_rules.json`
+
+The Build 188 migration seeds Oxford County and Norfolk County rules as editable rows and updates existing Oxford/Norfolk service-area rows with the appropriate key. Full mutable rule text should not be stored in `service_area_rules.water_rule` going forward.
+
+
+---
+
+## Build 189 — Editable site settings and hard-coding reduction (2026-06-04)
+
+This pass moves the next high-priority mutable content/configuration domains out of hard-coded JavaScript and into DB-first app-management settings with stable JSON fallbacks. Completed items:
+
+1. Extracted large default landing-page fallback content from `functions/api/landing_pages_public.js` into `data/landing_pages_content.json`.
+2. Added `functions/api/data/landing_pages_content.json` so Cloudflare Functions can import the same stable fallback.
+3. Moved add-on landing-page templates out of JavaScript into the landing-page content fallback.
+4. Added editable `business_profile` fallback data for identity, contact, social links, and structured-data values.
+5. Added editable `site_policies` fallback data for deposit, cancellation, refund, driveway, water, power, and media privacy copy.
+6. Added editable `document_templates` fallback data for notification, receipt, refund, quote, proposal, invoice, and confirmation templates.
+7. Added editable `business_hours_holidays` fallback data for hours, closure days, and availability notes.
+8. Added editable `navigation_footer` fallback data for top navigation and footer links.
+9. Exposed dropdown/option libraries through the editable settings registry.
+10. Added editable `analytics_event_registry` fallback data for analytics event keys and display labels.
+11. Added stable `data/media_requirements.json` as the long-term media requirement fallback.
+12. Added shared `functions/api/_lib/editable-settings.js` for DB-first / JSON-fallback setting loading.
+13. Added protected `/api/admin/editable_site_settings` for staff editing.
+14. Added public `/api/site_settings_public` for safe front-end consumption.
+15. Added `/admin-site-settings.html` and `/admin-site-settings/` as the protected editor bridge.
+16. Added Admin Menu and Admin Auth access for the new editor page.
+17. Added `sql/2026-06-04_build189_editable_site_settings_foundation.sql`.
+18. Updated `SUPABASE_SCHEMA.sql` and `DATABASE_STRUCTURE_CURRENT.md`.
+19. Updated `EDITABLE_CONTENT_SANITY_CHECK.md` and `data/editable_content_registry_build188.json`.
+20. Added `scripts/build189_editable_site_settings_check.py` and wired it into `scripts/release_check.py`.
+
+Next 20 steps after Build 189:
+
+1. Deploy Build 189.
+2. Apply `sql/2026-06-04_build189_editable_site_settings_foundation.sql`.
+3. Open `/admin-site-settings.html` and verify all editable domains load.
+4. Save one small test edit to `business_profile`.
+5. Save one small test edit to `site_policies`.
+6. Sync the full landing-page fallback payload into `app_management_settings.landing_pages_content` only after reviewing size/performance.
+7. Move live landing-page editor controls from raw JSON into a structured form.
+8. Render public business profile values into structured data and page footer from `/api/site_settings_public`.
+9. Render editable navigation/footer links from `navigation_footer`.
+10. Wire editable policies into booking, FAQ, quote, and payment pages.
+11. Wire document templates into quote delivery, deposit receipts, refund notices, invoices, and final confirmations.
+12. Add business-hours and holiday-closure checks to booking availability.
+13. Replace scattered hard-coded dropdown values with `option_libraries`.
+14. Add analytics event validation against `analytics_event_registry`.
+15. Replace build-specific media requirement checks with stable `media_requirements`.
+16. Add a one-click “sync bundled JSON into DB setting” control for each editable domain.
+17. Add setting version history or audit events.
+18. Add field-level validation for each editable setting.
+19. Add a public settings cache/version badge in Admin Diagnostics.
+20. Continue moving remaining large inline page/content objects into DB-managed content blocks.

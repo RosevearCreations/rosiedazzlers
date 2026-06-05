@@ -38,7 +38,7 @@ export async function onRequestPost({ request, env }) {
 
     const get = await supa(
       "GET",
-      `/rest/v1/bookings?select=id,progress_token,progress_enabled,job_status,service_date,package_code,vehicle_size,status&id=eq.${encodeURIComponent(booking_id)}&limit=1`,
+      `/rest/v1/bookings?select=id,progress_token,progress_enabled,job_status,service_date,package_code,vehicle_size,status,notes&id=eq.${encodeURIComponent(booking_id)}&limit=1`,
       null,
       "return=representation"
     );
@@ -78,9 +78,62 @@ export async function onRequestPost({ request, env }) {
       eventNote = "Customer progress link regenerated.";
     }
 
+    if (action === "set_intake_review") {
+      const allowedPhotoStatuses = ["not_requested", "requested", "reviewing", "quote_needed", "quoted", "not_needed"];
+      const allowedConditionStatuses = ["not_needed", "needs_review", "reviewing", "reviewed"];
+      const allowedPrivacyStatuses = ["not_needed", "needs_review", "reviewing", "approved_for_public_use", "blocked_private_only"];
+
+      const photoStatus = cleanChoice(body.photo_estimate_status, allowedPhotoStatuses, "not_requested");
+      const conditionStatus = cleanChoice(body.condition_review_status, allowedConditionStatuses, "not_needed");
+      const privacyStatus = cleanChoice(body.media_privacy_status, allowedPrivacyStatuses, "not_needed");
+      const reviewNote = cleanText(body.intake_review_note).slice(0, 1500);
+
+      patchPayload = {
+        photo_estimate_status: photoStatus,
+        condition_review_status: conditionStatus,
+        media_privacy_status: privacyStatus,
+        plate_privacy_reviewed: body.plate_privacy_reviewed === true,
+        face_privacy_reviewed: body.face_privacy_reviewed === true,
+        address_privacy_reviewed: body.address_privacy_reviewed === true,
+        blur_crop_needed: body.blur_crop_needed === true,
+        blur_crop_complete: body.blur_crop_complete === true,
+        intake_review_note: reviewNote || null,
+        intake_reviewed_at: now,
+        intake_reviewed_by: access.actor?.id || null,
+        updated_at: now
+      };
+
+      if (privacyStatus === "approved_for_public_use" || privacyStatus === "blocked_private_only") {
+        patchPayload.media_consent_reviewed_at = now;
+      }
+
+      eventType = "booking_intake_review_updated";
+      eventNote = [
+        `Photo estimate=${photoStatus}`,
+        `Condition review=${conditionStatus}`,
+        `Media privacy=${privacyStatus}`,
+        patchPayload.blur_crop_needed ? "Blur/crop needed" : "",
+        patchPayload.blur_crop_complete ? "Blur/crop complete" : "",
+        reviewNote ? `Note: ${reviewNote}` : ""
+      ].filter(Boolean).join("; ");
+    }
+
     if (!patchPayload) return corsJson({ ok: false, error: "Unknown action" }, 400);
 
-    const upd = await supa("PATCH", `/rest/v1/bookings?id=eq.${encodeURIComponent(booking_id)}`, patchPayload, "return=representation");
+    let upd = await supa("PATCH", `/rest/v1/bookings?id=eq.${encodeURIComponent(booking_id)}`, patchPayload, "return=representation");
+    let usedIntakeFallback = false;
+
+    if (!upd.ok && action === "set_intake_review" && looksLikeMissingOptionalIntakeColumn(upd.raw)) {
+      usedIntakeFallback = true;
+      const fallbackNotes = appendIntakeReviewFallbackNote(booking.notes, eventNote, now, access.actor);
+      upd = await supa(
+        "PATCH",
+        `/rest/v1/bookings?id=eq.${encodeURIComponent(booking_id)}`,
+        { notes: fallbackNotes, updated_at: now },
+        "return=representation"
+      );
+    }
+
     if (!upd.ok) return corsJson({ ok: false, error: "Supabase update failed (bookings)", details: upd }, 502);
 
     const row = Array.isArray(upd.data) ? upd.data[0] : upd.data;
@@ -110,7 +163,13 @@ export async function onRequestPost({ request, env }) {
       complete_url: `${origin}/complete?token=${encodeURIComponent(token)}`,
     } : null;
 
-    return corsJson({ ok: true, row, links, actor: access.actor.full_name || access.actor.email || "Staff" });
+    return corsJson({
+      ok: true,
+      row,
+      links,
+      actor: access.actor.full_name || access.actor.email || "Staff",
+      warning: usedIntakeFallback ? "Optional intake-review columns are not migrated yet, so the review was appended to booking notes." : null
+    });
   } catch (e) {
     return corsJson({ ok: false, error: "Server error", details: String(e) }, 500);
   }
@@ -123,6 +182,39 @@ async function readJson(request) {
 }
 function safeJson(text) {
   try { return JSON.parse(text); } catch { return { raw: text }; }
+}
+function cleanChoice(value, allowed, fallback) {
+  const text = cleanText(value);
+  return allowed.includes(text) ? text : fallback;
+}
+function looksLikeMissingOptionalIntakeColumn(raw) {
+  const text = String(raw || "").toLowerCase();
+  const fields = [
+    "photo_estimate_status",
+    "condition_review_status",
+    "media_privacy_status",
+    "plate_privacy_reviewed",
+    "face_privacy_reviewed",
+    "address_privacy_reviewed",
+    "blur_crop_needed",
+    "blur_crop_complete",
+    "intake_review_note",
+    "intake_reviewed_at",
+    "intake_reviewed_by",
+    "media_consent_reviewed_at"
+  ];
+  return fields.some((field) => text.includes(field)) &&
+    (text.includes("column") || text.includes("schema cache") || text.includes("could not find") || text.includes("42703"));
+}
+function appendIntakeReviewFallbackNote(existingNotes, eventNote, reviewedAt, actor) {
+  const actorLabel = cleanText(actor?.full_name || actor?.email || "Staff");
+  const line = [
+    "Staff intake review status",
+    reviewedAt,
+    actorLabel,
+    eventNote
+  ].filter(Boolean).join(" — ");
+  return [cleanText(existingNotes), line].filter(Boolean).join("\n\n");
 }
 function corsHeaders() {
   return {
