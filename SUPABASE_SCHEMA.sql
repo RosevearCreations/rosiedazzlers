@@ -1613,3 +1613,6 @@ CREATE TABLE IF NOT EXISTS public.app_management_setting_history (
   value jsonb NOT NULL DEFAULT '{}'::jsonb,
   created_at timestamptz NOT NULL DEFAULT now()
 );
+
+
+-- Build 191 editable settings hardening: no new DDL. Uses Build 190 app_management_setting_history plus app_management_settings.
