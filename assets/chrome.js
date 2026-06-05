@@ -2,9 +2,13 @@
 
 /* =========================
    BRAND / NAV / FOOTER
+   Editable footer fallback includes Help articles. */
+
+/* =========================
+   BRAND / NAV / FOOTER
    ========================= */
 
-const BRAND = {
+let BRAND = {
   name: "Rosie Dazzlers",
   logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
   banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
@@ -12,7 +16,7 @@ const BRAND = {
   footerLogo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
 };
 
-const SOCIALS = [
+let SOCIALS = [
   ["TikTok", "https://www.tiktok.com/@rosiedazzler"],
   ["Instagram", "https://www.instagram.com/rosiedazzlers/"],
   ["Facebook", "https://www.facebook.com/rosiedazzlers"],
@@ -22,7 +26,7 @@ const SOCIALS = [
   ["LinkedIn", "https://www.linkedin.com/in/rosiedazzlers/"],
 ];
 
-const DEFAULT_NAV_LINKS = [
+let DEFAULT_NAV_LINKS = [
   ["/services", "Services"],
   ["/pricing", "Pricing"],
   ["/specials", "Specials"],
@@ -34,6 +38,114 @@ const DEFAULT_NAV_LINKS = [
   ["/contact", "Contact"],
   ["/book", "Book"],
 ];
+
+
+const PUBLIC_SETTINGS = {
+  loaded: false,
+  source: "static_defaults",
+  business_profile: null,
+  site_policies: null,
+  business_hours_holidays: null,
+  navigation_footer: null,
+  analytics_event_registry: null,
+  media_requirements: null
+};
+
+function settingValue(settings, key) {
+  const item = settings && settings[key] ? settings[key] : null;
+  return item && item.value && typeof item.value === "object" ? item.value : null;
+}
+
+async function loadPublicSiteSettings() {
+  if (PUBLIC_SETTINGS.loaded) return PUBLIC_SETTINGS;
+  PUBLIC_SETTINGS.loaded = true;
+  try {
+    const res = await fetch("/api/site_settings_public", { cache: "no-store", credentials: "same-origin" });
+    const data = await res.json().catch(() => null);
+    if (!res.ok || !data || data.ok !== true) throw new Error("Public settings unavailable");
+    const settings = data.settings || {};
+    PUBLIC_SETTINGS.business_profile = settingValue(settings, "business_profile");
+    PUBLIC_SETTINGS.site_policies = settingValue(settings, "site_policies");
+    PUBLIC_SETTINGS.business_hours_holidays = settingValue(settings, "business_hours_holidays");
+    PUBLIC_SETTINGS.navigation_footer = settingValue(settings, "navigation_footer");
+    PUBLIC_SETTINGS.analytics_event_registry = settingValue(settings, "analytics_event_registry");
+    PUBLIC_SETTINGS.media_requirements = settingValue(settings, "media_requirements");
+    PUBLIC_SETTINGS.source = "api_site_settings_public";
+    applyBusinessProfileSettings(PUBLIC_SETTINGS.business_profile);
+    applyNavigationSettings(PUBLIC_SETTINGS.navigation_footer);
+  } catch (error) {
+    PUBLIC_SETTINGS.warning = error?.message || "Using bundled public settings fallback.";
+  }
+  window.RosiePublicSiteSettings = PUBLIC_SETTINGS;
+  return PUBLIC_SETTINGS;
+}
+
+function applyBusinessProfileSettings(profile) {
+  const business = profile && typeof profile === "object" ? (profile.business || profile) : null;
+  if (!business || typeof business !== "object") return;
+  const contact = business.contact || {};
+  BRAND = {
+    ...BRAND,
+    name: business.short_name || business.name || BRAND.name,
+    logo: business.logo_url || BRAND.logo,
+    banner: business.banner_url || BRAND.banner,
+    reviews: business.reviews_image_url || BRAND.reviews,
+    footerLogo: business.footer_logo_url || business.logo_url || BRAND.footerLogo
+  };
+  if (Array.isArray(business.social_links) && business.social_links.length) {
+    SOCIALS = business.social_links
+      .map((item) => [String(item.label || item.name || "Social").trim(), String(item.url || "").trim()])
+      .filter((item) => item[0] && item[1]);
+  }
+  PUBLIC_SETTINGS.contact = {
+    email: contact.public_email || contact.email || "info@rosiedazzlers.ca",
+    backup_email: contact.backup_email || "rosiedazzlers@gmail.com",
+    phone: contact.public_phone || contact.phone || "226-752-7613",
+    service_area: business.service_area || "Oxford County and Norfolk County, Ontario",
+    tagline: business.tagline || "Mobile Auto Detailing"
+  };
+}
+
+function applyNavigationSettings(nav) {
+  if (!nav || typeof nav !== "object") return;
+  const links = Array.isArray(nav.navigation) ? nav.navigation : [];
+  const cleanLinks = links
+    .map((item) => [String(item.href || "").trim(), String(item.label || "").trim()])
+    .filter((item) => item[0] && item[1]);
+  if (cleanLinks.length) DEFAULT_NAV_LINKS = cleanLinks;
+}
+
+function businessProfileSchema() {
+  const profile = PUBLIC_SETTINGS.business_profile;
+  const business = profile && typeof profile === "object" ? (profile.business || profile) : null;
+  if (!business || typeof business !== "object") return null;
+  const contact = business.contact || {};
+  const schema = business.structured_data && typeof business.structured_data === "object" ? { ...business.structured_data } : {};
+  return {
+    "@context": schema["@context"] || "https://schema.org",
+    "@type": schema["@type"] || "AutoDetailing",
+    name: schema.name || business.name || "Rosie Dazzlers Mobile Auto Detailing",
+    url: schema.url || business.website || "https://rosiedazzlers.ca/",
+    image: schema.image || business.banner_url || BRAND.banner,
+    telephone: schema.telephone || contact.public_phone || contact.phone || "226-752-7613",
+    areaServed: schema.areaServed || ["Oxford County, Ontario", "Norfolk County, Ontario"],
+    address: schema.address || { "@type": "PostalAddress", addressRegion: "ON", addressCountry: "CA" },
+    sameAs: schema.sameAs || (Array.isArray(business.social_links) ? business.social_links.map((item) => item.url).filter(Boolean) : [])
+  };
+}
+
+function injectBusinessProfileSchema() {
+  const schema = businessProfileSchema();
+  if (!schema) return;
+  let script = document.querySelector('script[data-editable-business-schema="true"]');
+  if (!script) {
+    script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.dataset.editableBusinessSchema = "true";
+    document.head.appendChild(script);
+  }
+  script.textContent = JSON.stringify(schema);
+}
 
 function normalizePath(p) {
   const x = (p || "/").replace(/\/+$/, "");
@@ -294,71 +406,78 @@ function setFooter() {
   if (!el) return;
 
   const year = new Date().getFullYear();
+  const profile = PUBLIC_SETTINGS.business_profile || {};
+  const business = profile.business || profile || {};
+  const contact = PUBLIC_SETTINGS.contact || {};
+  const policies = PUBLIC_SETTINGS.site_policies?.policies || {};
+  const nav = PUBLIC_SETTINGS.navigation_footer || {};
+  const groups = Array.isArray(nav.footer_groups) && nav.footer_groups.length ? nav.footer_groups : [
+    { title: "Explore", links: [
+      { label: "Services", href: "/services" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "Specials", href: "/specials" },
+      { label: "Help Articles", href: "/blog" },
+      { label: "FAQ", href: "/faq" },
+      { label: "Book", href: "/book" },
+      { label: "Gear", href: "/gear" },
+      { label: "Consumables", href: "/consumables" }
+    ]},
+    { title: "Company", links: [
+      { label: "About", href: "/about" },
+      { label: "Gallery", href: "/gallery" },
+      { label: "Contact", href: "/contact" }
+    ]},
+    { title: "Policies", links: [
+      { label: "Terms", href: "/terms" },
+      { label: "Privacy", href: "/privacy" },
+      { label: "Waiver", href: "/waiver" }
+    ]}
+  ];
+  const businessName = business.name || "Rosie Dazzlers Mobile Auto Detailing";
+  const shortName = business.short_name || BRAND.name || "Rosie Dazzlers";
+  const serviceArea = business.service_area || contact.service_area || "Norfolk & Oxford Counties, Ontario";
+  const email = contact.email || business.contact?.public_email || "info@rosiedazzlers.ca";
+  const backup = contact.backup_email || business.contact?.backup_email || "rosiedazzlers@gmail.com";
+  const phone = contact.phone || business.contact?.public_phone || "226-752-7613";
+  const setupNote = policies.water_power || "Driveway required · customer provides power + water, or additional charges may apply.";
+  const depositNote = policies.deposit || "Deposits secure booking times. Cancellation fees may apply.";
 
   el.innerHTML = `
     <div class="footer-grid">
       <div class="footer-col">
         <div style="display:flex;align-items:flex-start;gap:12px;">
           <img
-            src="${BRAND.footerLogo}"
-            alt="${BRAND.name} logo"
+            src="${escapeAttr(BRAND.footerLogo)}"
+            alt="${escapeAttr(shortName)} logo"
             style="width:72px;height:72px;object-fit:contain;border-radius:14px;flex:0 0 auto;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.10);padding:6px;"
           >
           <div>
-            <div class="footer-title">Rosie Dazzlers</div>
-            <div class="footer-muted">Mobile Auto Detailing</div>
-            <div class="footer-muted">Norfolk & Oxford Counties, Ontario</div>
+            <div class="footer-title">${escapeHtml(shortName)}</div>
+            <div class="footer-muted">${escapeHtml(business.tagline || "Mobile Auto Detailing")}</div>
+            <div class="footer-muted">${escapeHtml(serviceArea)}</div>
           </div>
         </div>
 
         <div class="footer-muted" style="margin-top:12px">
-          Email: <a href="mailto:info@rosiedazzlers.ca">info@rosiedazzlers.ca</a><br>
-          Backup: <a href="mailto:rosiedazzlers@gmail.com">rosiedazzlers@gmail.com</a>
+          Phone: <a href="tel:${escapeAttr(phone.replace(/[^0-9+]/g, ""))}">${escapeHtml(phone)}</a><br>
+          Email: <a href="mailto:${escapeAttr(email)}">${escapeHtml(email)}</a>${backup ? `<br>Backup: <a href="mailto:${escapeAttr(backup)}">${escapeHtml(backup)}</a>` : ""}
         </div>
 
-        <div class="footer-note" style="margin-top:10px">
-          Driveway required · customer provides power + water (or additional charges may apply).
+        <div class="footer-note" style="margin-top:10px">${escapeHtml(setupNote)}</div>
+      </div>
+
+      ${groups.map((group) => `
+        <div class="footer-col">
+          <div class="footer-title">${escapeHtml(group.title || "Links")}</div>
+          ${(Array.isArray(group.links) ? group.links : []).map((link) => `<a href="${escapeAttr(link.href || "#")}">${escapeHtml(link.label || link.href || "Link")}</a>`).join("")}
+          ${String(group.title || "").toLowerCase() === "company" ? `<div class="footer-title" style="margin-top:12px">Social</div><div class="footer-social">${SOCIALS.map(([name, url]) => `<a href="${escapeAttr(url)}" target="_blank" rel="noopener">${escapeHtml(name)}</a>`).join("")}</div>` : ""}
+          ${String(group.title || "").toLowerCase() === "policies" ? `<div class="footer-note" style="margin-top:12px">${escapeHtml(depositNote)}</div>` : ""}
         </div>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-title">Explore</div>
-        <a href="/services">Services</a>
-        <a href="/pricing">Pricing</a>
-        <a href="/specials">Specials</a>
-        <a href="/blog">Help Articles</a>
-        <a href="/faq">FAQ</a>
-        <a href="/book">Book</a>
-        <a href="/gear">Gear</a>
-        <a href="/consumables">Consumables</a>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-title">Company</div>
-        <a href="/about">About</a>
-        <a href="/blog">Help articles</a>
-        <a href="/contact">Contact</a>
-
-        <div class="footer-title" style="margin-top:12px">Social</div>
-        <div class="footer-social">
-          ${SOCIALS.map(([name, url]) => `<a href="${url}" target="_blank" rel="noopener">${name}</a>`).join("")}
-        </div>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-title">Policies</div>
-        <a href="/terms">Terms</a>
-        <a href="/privacy">Privacy</a>
-        <a href="/waiver">Waiver</a>
-
-        <div class="footer-note" style="margin-top:12px">
-          Deposits secure booking times. Cancellation fees may apply.
-        </div>
-      </div>
+      `).join("")}
     </div>
 
     <div class="footer-bottom">
-      <div>© ${year} Rosie Dazzlers Mobile Auto Detailing</div>
+      <div>© ${year} ${escapeHtml(businessName)}</div>
       <div class="footer-bottom-links">
         <a href="/terms">Terms</a>
         <a href="/privacy">Privacy</a>
@@ -367,6 +486,14 @@ function setFooter() {
     </div>
   `;
 }
+
+function escapeHtml(value) {
+  return String(value || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+function escapeAttr(value) {
+  return escapeHtml(value).replace(/'/g, "&#39;");
+}
+
 
 /* =========================
    PACKAGE CARD HOVER ROTATION
@@ -733,8 +860,9 @@ function ensureStickyConversionCta() {
 }
 
 
-function initChrome() {
+async function initChrome() {
   ensureManifest();
+  await loadPublicSiteSettings();
   ensureNavLinks();
   setBrandImagesEverywhere();
   ensureMainBanner();
@@ -742,6 +870,7 @@ function initChrome() {
   setActiveNavLink();
   initNavToggle();
   setFooter();
+  injectBusinessProfileSchema();
   initAccountWidget();
   initInstallPrompt();
   ensurePublicAnalytics();

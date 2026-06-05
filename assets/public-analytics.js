@@ -7,7 +7,26 @@
     cart: 'rosie_analytics_last_cart',
     maxScroll: 'rosie_analytics_max_scroll'
   };
-  const state = { pageStartedAt: Date.now(), lastHeartbeatAt: 0, started: false, lastTrackedScroll: 0 };
+  const state = { pageStartedAt: Date.now(), lastHeartbeatAt: 0, started: false, lastTrackedScroll: 0, registryLoaded: false, eventRegistry: {} };
+
+  async function loadEventRegistry() {
+    if (state.registryLoaded) return state.eventRegistry;
+    state.registryLoaded = true;
+    try {
+      const res = await fetch('/api/site_settings_public?key=analytics_event_registry', { cache: 'no-store' });
+      const data = await res.json().catch(() => null);
+      const value = data?.settings?.analytics_event_registry?.value || {};
+      const events = Array.isArray(value.events) ? value.events : [];
+      state.eventRegistry = Object.fromEntries(events.filter((event) => event && event.is_active !== false).map((event) => [String(event.key || '').trim(), event]));
+    } catch {}
+    return state.eventRegistry;
+  }
+
+  function registryMeta(event_type) {
+    const item = state.eventRegistry && state.eventRegistry[event_type] ? state.eventRegistry[event_type] : null;
+    if (!item) return {};
+    return { event_label: item.label || event_type, event_category: item.category || '' };
+  }
 
   function uuid() {
     if (globalScope.crypto?.randomUUID) return globalScope.crypto.randomUUID();
@@ -67,7 +86,7 @@
       screen: `${globalScope.screen?.width || 0}x${globalScope.screen?.height || 0}`,
       source: new URLSearchParams(location.search).get('utm_source') || '',
       campaign: new URLSearchParams(location.search).get('utm_campaign') || '',
-      payload: basicPayload(payload),
+      payload: basicPayload({ ...registryMeta(event_type), ...payload }),
       ...extra
     };
     try {
@@ -124,6 +143,7 @@
   }
   function start() {
     if (state.started) return;
+    loadEventRegistry();
     state.started = true;
     setLocal(STORAGE.startedAt, String(Date.now()));
     post('page_view', { path: location.pathname, search: location.search, hash: location.hash || '' });
