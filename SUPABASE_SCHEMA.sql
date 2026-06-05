@@ -1,3 +1,32 @@
+-- Build 179 note — hard social publish blocking, local proof tasks, and quote acceptance tracking (2026-05-26)
+-- New migration: sql/2026-05-26_build179_publish_block_tasks_quote_acceptance.sql
+-- Adds public.local_seo_proof_tasks and optional quote_proposal_drafts delivery/acceptance fields.
+-- Runtime endpoints:
+--   functions/api/admin/local_seo_proof_tasks_save.js
+--   functions/api/admin/local_seo_proof_tasks_list.js
+--   functions/api/admin/quote_proposal_deliver.js
+--   functions/api/quote_proposal_respond.js
+-- Hard publish blocking is enforced in functions/api/admin/social_post_dispatch.js before webhook/API/manual posted actions.
+
+-- Build 178 note: no new DDL; /api/admin/lead_conversion_status_save and /api/admin/lead_conversion_price_review_save use Build 175 lead_conversion_drafts and Build 177 final_price_review/final_price_status/final_price_total_cents/final_deposit_cents/final_price_reviewed_at fields.
+-- Build 173 note — Admin Content Center FAQ editor bridge (2026-05-24)
+-- No new DDL is required in Build 173.
+-- The protected Admin Content Center uses existing public.public_faq_entries from Build 172.
+-- New endpoints:
+--   functions/api/admin/content_faqs_list.js
+--   functions/api/admin/content_faqs_save.js
+-- Route:
+--   /admin-content.html and /admin-content/
+-- Required live-data order:
+--   1. sql/2026-05-24_build172_public_faq_content_foundation.sql
+--   2. sql/2026-05-24_build173_admin_content_faq_editor_no_ddl_note.sql
+
+---
+-- Build 170 customer dashboard signed-out fallback sync — 2026-05-24
+-- Build 169 auth/API fallback sync — 2026-05-23
+-- No destructive schema change. Runtime auth_me and analytics now fail open instead of returning browser-visible 500s when Supabase config or tables are temporarily unavailable.
+-- Staff/client auth still require Supabase storage for successful login. Confirm staff_auth_sessions, customer_auth_sessions, staff_users, customer_profiles, and site_activity_events are applied.
+
 -- Build 166 note (2026-05-23): no schema shape change.
 -- Public routes and catalog fallback metadata were updated for COMPETETIVE.md completion.
 -- See sql/2026-05-23_build166_competetive_completion_public_routes_no_ddl_note.sql.
@@ -61,7 +90,7 @@
 -- March 29, 2026 sync note: no new tables were required for this pass; this refresh mainly extends signed-in staff session coverage, reduces shared-password-only endpoint usage, and improves actor attribution in time/intake/media/booking flows.
 -- 
 -- 
-> Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
+-- Last synchronized: March 28, 2026. Reviewed during the pricing chart zoom/modal, manufacturer callout, local SEO metadata, and current-build synchronization pass.
 
 -- Last synchronized: March 27, 2026. Reviewed during the booking wizard sticky-fix, two-way active-job communication pass, and docs/schema refresh.
 -- March 27, 2026 mobile booking + account widget pass: no new DDL required; booking flow, account widget, and customer progress filtering changed application behavior only.
@@ -126,6 +155,34 @@ create table if not exists public.staff_users (
   tips_payout_notes text null,
   supervisor_staff_user_id uuid null references public.staff_users(id) on delete set null
 );
+
+create table if not exists public.staff_auth_sessions (
+  id uuid primary key default gen_random_uuid(),
+  staff_user_id uuid not null references public.staff_users(id) on delete cascade,
+  token_hash text not null unique,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  expires_at timestamptz not null,
+  revoked_at timestamptz null,
+  last_seen_at timestamptz null,
+  ip_address text null,
+  user_agent text null
+);
+
+create index if not exists idx_staff_auth_sessions_staff_user_id
+  on public.staff_auth_sessions (staff_user_id);
+
+create index if not exists idx_staff_auth_sessions_expires_at
+  on public.staff_auth_sessions (expires_at);
+
+create index if not exists idx_staff_auth_sessions_revoked_at
+  on public.staff_auth_sessions (revoked_at);
+
+create index if not exists idx_staff_auth_sessions_last_seen_at
+  on public.staff_auth_sessions (last_seen_at);
+
+create index if not exists idx_staff_auth_sessions_staff_active
+  on public.staff_auth_sessions (staff_user_id, revoked_at, expires_at);
 
 create table if not exists public.bookings (
   id uuid primary key default gen_random_uuid(),
@@ -1253,3 +1310,297 @@ on conflict (platform, display_name) do nothing;
 -- Build 168 also adds admin endpoints to list/save public_inquiry_leads and
 -- photo_estimate_uploads, with fallback messaging when the Build 167/168 SQL
 -- has not been applied yet.
+
+-- ---------------------------------------------------------------------------
+-- Build 169 note — auth/analytics graceful fallback
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-23_build169_auth_analytics_fallback_no_ddl_note.sql.
+-- No new DDL is required for the fallback behavior. The code now returns signed-out
+-- JSON from auth_me endpoints and skips analytics ingestion when storage/config is
+-- unavailable instead of exposing raw browser 500s. staff_auth_sessions must exist
+-- for staff login sessions.
+
+-- ---------------------------------------------------------------------------
+-- Build 170 note — customer dashboard signed-out fallback
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-24_build170_customer_dashboard_signed_out_fallback_no_ddl_note.sql.
+-- No new DDL is required. The customer dashboard endpoint now treats unsigned
+-- customer context as optional and returns a signed_out JSON payload instead of 401
+-- noise when public pages check dashboard context before login.
+
+-- ---------------------------------------------------------------------------
+-- Build 171 note — Admin Leads quote preview
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-24_build171_admin_lead_quote_preview_no_ddl_note.sql.
+-- No new DDL is required. The staff-protected /api/admin/lead_quote_preview endpoint
+-- reads public_inquiry_leads plus linked photo_estimate_uploads to generate a
+-- copy-ready internal quote starter. It depends on Build 167/168 tables for live
+-- data and stays fallback-safe if optional Build 168 upload review-note columns are
+-- not applied yet.
+
+
+-- ---------------------------------------------------------------------------
+-- Build 172 note — Public FAQ content foundation
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-24_build172_public_faq_content_foundation.sql.
+-- Adds public.public_faq_entries as the DB-managed content target for the new
+-- /faq route and /api/public_faqs endpoint. The FAQ page and endpoint remain
+-- fallback-safe before this migration by using static Build 172 seed content.
+
+-- ---------------------------------------------------------------------------
+-- Build 174 note — quote/proposal draft foundation
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-24_build174_quote_proposal_drafts.sql.
+-- Adds public.quote_proposal_drafts so /admin-leads can save generated quote
+-- starters as persistent staff drafts tied to a public lead and/or booking.
+-- The page remains copy-only before this migration, but saved drafts require
+-- the table and Supabase service-role access.
+
+-- Build 175 note — lead conversion drafts, expanded content blocks, gallery/privacy filtering, and conversion analytics.
+-- See sql/2026-05-25_build175_lead_conversion_content_gallery_analytics.sql.
+-- Adds public.lead_conversion_drafts so Admin Leads can create a safe draft booking/quote conversion record before a real booking is scheduled.
+-- Adds public.site_content_blocks so Admin Content can manage specials, service blurbs, homepage cards, help article starters, trust proof, fleet copy, and maintenance copy.
+-- Public gallery filtering now expects approved public consent/privacy fields before before/after media is reused publicly.
+create table if not exists public.lead_conversion_drafts (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  lead_id uuid not null references public.public_inquiry_leads(id) on delete cascade,
+  quote_proposal_draft_id uuid null references public.quote_proposal_drafts(id) on delete set null,
+  status text not null default 'draft_booking',
+  customer_name text null,
+  customer_email text null,
+  customer_phone text null,
+  service_area text null,
+  vehicle_count integer not null default 1,
+  preferred_cadence text null,
+  proposed_package_code text null,
+  proposed_vehicle_size text null,
+  proposed_booking jsonb not null default '{}'::jsonb,
+  proposed_quote jsonb not null default '{}'::jsonb,
+  internal_note text null,
+  next_action text null,
+  created_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  updated_by_staff_user_id uuid null references public.staff_users(id) on delete set null
+);
+
+create table if not exists public.site_content_blocks (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  content_type text not null,
+  placement text not null default 'general',
+  slug text not null,
+  title text not null,
+  summary text null,
+  body text null,
+  cta_label text null,
+  cta_href text null,
+  image_url text null,
+  sort_order integer not null default 100,
+  is_active boolean not null default true,
+  metadata jsonb not null default '{}'::jsonb,
+  unique (content_type, placement, slug)
+);
+
+-- ---------------------------------------------------------------------------
+-- Build 176 note — reviewed conversion draft to real booking and privacy/dashboard warnings
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-25_build176_conversion_to_booking_dashboard_privacy.sql.
+-- Adds optional converted_booking_id and converted_at fields to public.lead_conversion_drafts
+-- so Admin Leads can trace a reviewed conversion draft to the live public.bookings row.
+-- No new table is required. The live booking is only created by /api/admin/lead_conversion_create_booking
+-- after staff confirms date, AM/PM slot, address, package, vehicle size, customer name, and email.
+alter table public.lead_conversion_drafts
+  add column if not exists converted_booking_id uuid null references public.bookings(id) on delete set null,
+  add column if not exists converted_at timestamptz null;
+
+-- ---------------------------------------------------------------------------
+-- Build 177 note — conversion review queue, final price reconciliation, and local proof reporting
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-25_build177_conversion_review_price_local_proof.sql.
+-- Adds optional final-price review fields to public.lead_conversion_drafts so
+-- staff can keep a catalog-backed price reconciliation attached to the reviewed
+-- draft before creating a real booking. Build 177 also adds /admin-conversions,
+-- /api/admin/lead_conversion_price_reconcile, and /api/admin/local_seo_proof_report.
+alter table public.lead_conversion_drafts
+  add column if not exists final_price_review jsonb not null default '{}'::jsonb,
+  add column if not exists final_price_status text not null default 'needs_review',
+  add column if not exists final_price_total_cents integer null,
+  add column if not exists final_deposit_cents integer null,
+  add column if not exists final_price_reviewed_at timestamptz null;
+
+-- ---------------------------------------------------------------------------
+-- Build 180 note — accepted quote deposit/payment requests and final booking confirmation
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-26_build180_quote_deposit_booking_confirmation.sql.
+-- Adds public.quote_deposit_payment_requests so accepted quote/proposal drafts
+-- can generate a tracked deposit/payment request. Staff can mark a request paid,
+-- link/confirm the final booking, and keep the accepted quote → deposit → booking
+-- chain visible in Admin Leads. Public customer access uses /quote-payment.html
+-- and /api/quote_deposit_request with a secure token.
+
+
+-- Build 181 note — verified provider webhooks for quote deposits.
+-- See sql/2026-05-26_build181_payment_webhooks_quote_deposits.sql.
+-- quote_deposit_payment_requests now supports provider in ('manual','stripe','paypal') plus:
+-- webhook_verified_at, webhook_processed_at, provider_event_id, provider_event_type,
+-- provider_payment_intent_id, provider_order_id, provider_capture_id, provider_payload.
+-- Stripe checkout.session.completed and PayPal PAYMENT.CAPTURE.COMPLETED / PAYMENT.SALE.COMPLETED
+-- can settle quote_deposit_payment_requests automatically after signature verification.
+
+-- ---------------------------------------------------------------------------
+-- Build 182 note — webhook history, replay, receipt email queueing, refund tracking
+-- ---------------------------------------------------------------------------
+-- See sql/2026-05-26_build182_webhook_history_receipts_refunds.sql.
+-- Adds public.quote_payment_webhook_events for verified/ignored/failed/replayed
+-- Stripe/PayPal quote-deposit event history, plus public.quote_deposit_refund_records
+-- for full and partial refund tracking. Extends public.quote_deposit_payment_requests
+-- with refund and receipt email fields so provider webhooks and staff controls can
+-- leave an auditable trail.
+
+create table if not exists public.quote_payment_webhook_events (
+  id uuid primary key default gen_random_uuid(),
+  provider text not null,
+  provider_event_id text not null,
+  provider_event_type text not null,
+  quote_deposit_payment_request_id uuid null references public.quote_deposit_payment_requests(id) on delete set null,
+  booking_id uuid null,
+  payment_reference text null,
+  status text not null default 'received',
+  replay_status text not null default 'not_replayed',
+  replay_count integer not null default 0,
+  last_replayed_at timestamptz null,
+  last_error text null,
+  raw_payload jsonb null,
+  processed_payload jsonb null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint quote_payment_webhook_events_unique_provider_event unique (provider, provider_event_id)
+);
+
+create table if not exists public.quote_deposit_refund_records (
+  id uuid primary key default gen_random_uuid(),
+  quote_deposit_payment_request_id uuid not null references public.quote_deposit_payment_requests(id) on delete cascade,
+  quote_proposal_draft_id uuid null references public.quote_proposal_drafts(id) on delete set null,
+  lead_id uuid null references public.public_inquiry_leads(id) on delete set null,
+  booking_id uuid null,
+  provider text not null default 'manual',
+  provider_refund_id text null,
+  provider_event_id text null,
+  provider_event_type text null,
+  refund_status text not null default 'succeeded',
+  refund_amount_cents integer not null default 0,
+  currency text not null default 'CAD',
+  reason text null,
+  provider_payload jsonb null,
+  refunded_at timestamptz null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint quote_deposit_refund_records_unique_provider_refund unique (provider, provider_refund_id)
+);
+
+alter table public.quote_deposit_payment_requests
+  add column if not exists refunded_amount_cents integer not null default 0,
+  add column if not exists refund_status text null,
+  add column if not exists latest_refund_id uuid null references public.quote_deposit_refund_records(id) on delete set null,
+  add column if not exists latest_refund_at timestamptz null,
+  add column if not exists receipt_email_status text null,
+  add column if not exists receipt_email_queued_at timestamptz null,
+  add column if not exists receipt_notification_event_id uuid null;
+
+alter table public.quote_proposal_drafts
+  add column if not exists deposit_receipt_status text null,
+  add column if not exists latest_refund_status text null,
+  add column if not exists refunded_amount_cents integer not null default 0;
+
+
+-- Build 183 note (2026-05-30): no DDL required. Direct Stripe/PayPal refund initiation,
+-- payment reconciliation export, webhook warning summaries, and image-requirements tracking
+-- use existing Build 180–182 payment tables and documentation/data files.
+-- See sql/2026-05-30_build183_direct_refunds_reconciliation_images_no_ddl_note.sql.
+
+-- Build 184 note (2026-06-01): no DDL required. Payment refund polling, receipt requeueing,
+-- accountant payment export, and media health scanning use existing Build 180-182 payment tables
+-- plus data/image_requirements_build184.json. See sql/2026-06-01_build184_twenty_step_ops_media_payment_no_ddl_note.sql.
+
+
+-- ---------------------------------------------------------------------------
+-- Build 185 note — next 20 operational foundations
+-- ---------------------------------------------------------------------------
+-- See sql/2026-06-02_build185_next_twenty_ops_foundations.sql.
+-- Adds DB-backed media_asset_tasks, processor-fee capture fields, final_balance_payment_requests,
+-- payment_applications, month_end_close_checklists, and local_seo_task_cards.
+-- Build 185 also upgrades Media Health to validate PNG/JPEG/WebP dimensions, adds an admin R2 upload endpoint,
+-- adds HST/GST review and month-end close screens, and expands accountant/payment exports.
+
+
+-- Build 186 verified water restrictions (2026-06-02)
+-- No DDL required. The bundled service-area fallback and water-rule source files were updated:
+-- - data/service_area_rules.json
+-- - data/water_restriction_rules_build186.json
+-- If public.service_area_rules is the active DB source, import/resave the updated rows so DB and bundled fallback match.
+
+
+-- Build 187 local-page water-rule visibility note: no new DDL. Re-import service_area_rules/app_management landing page settings after deployment so DB content matches the verified Oxford/Norfolk water rules displayed on static town landing pages.
+
+-- ============================================================================
+-- Build 188 — editable water-restriction authority and hard-coding audit
+-- Source migration: sql/2026-06-04_build188_editable_water_rules_hardcoding_audit.sql
+-- Mutable municipal water-rule wording should be edited in this table or the
+-- app_management_settings.water_restriction_rules payload. The stable bundled
+-- fallback is data/water_restriction_rules.json.
+-- ============================================================================
+
+create table if not exists public.water_restriction_rules (
+  id uuid primary key default gen_random_uuid(),
+  key text not null unique,
+  label text not null,
+  county text,
+  effective_dates text,
+  effective_start text,
+  effective_end text,
+  rule_summary text,
+  address_rule text,
+  residential_hours jsonb not null default '[]'::jsonb,
+  commercial_industrial_hours jsonb not null default '[]'::jsonb,
+  applies_to text,
+  verified_sources jsonb not null default '[]'::jsonb,
+  local_pages jsonb not null default '[]'::jsonb,
+  towns jsonb not null default '[]'::jsonb,
+  local_page_rules jsonb not null default '{}'::jsonb,
+  source_summary text,
+  verified_at date,
+  next_review_at date,
+  version text,
+  sort_order integer not null default 0,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.service_area_rules
+  add column if not exists water_rule_key text;
+
+create index if not exists idx_water_restriction_rules_active_county
+  on public.water_restriction_rules (is_active, county, sort_order);
+
+create index if not exists idx_water_restriction_rules_next_review
+  on public.water_restriction_rules (next_review_at);
+
+create index if not exists idx_service_area_rules_water_rule_key
+  on public.service_area_rules (water_rule_key);
+
+-- Build 189 editable site settings sync — 2026-06-04
+-- Migration: sql/2026-06-04_build189_editable_site_settings_foundation.sql
+-- Mutable content/configuration moved toward DB-first app_management_settings rows with stable JSON fallbacks:
+--   business_profile, site_policies, document_templates, business_hours_holidays,
+--   navigation_footer, option_libraries, analytics_event_registry, media_requirements,
+--   landing_pages_content.
+-- Runtime/admin endpoints:
+--   /api/site_settings_public
+--   /api/admin/editable_site_settings
+-- Admin screen:
+--   /admin-site-settings.html
+-- Large landing-page fallback objects were extracted from functions/api/landing_pages_public.js
+-- into data/landing_pages_content.json and functions/api/data/landing_pages_content.json.
