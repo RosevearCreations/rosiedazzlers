@@ -71,10 +71,11 @@ export const DEFAULT_APP_SETTINGS = {
 };
 
 export async function loadAppSettings(env, keys = ['visibility_matrix','manual_scheduling_rules','feature_flags']) {
-  if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY) return structuredClone(DEFAULT_APP_SETTINGS);
+  const serviceKey = getSupabaseServiceRoleKey(env);
+  if (!env?.SUPABASE_URL || !serviceKey) return structuredClone(DEFAULT_APP_SETTINGS);
   const headers = {
-    apikey: env.SUPABASE_SERVICE_ROLE_KEY,
-    Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+    apikey: serviceKey,
+    Authorization: `Bearer ${serviceKey}`,
     'Content-Type': 'application/json'
   };
   const out = structuredClone(DEFAULT_APP_SETTINGS);
@@ -102,4 +103,8 @@ export async function loadRecoverySettings(env) {
 export async function loadFeatureFlags(env) {
   const settings = await loadAppSettings(env, ['feature_flags']);
   return settings.feature_flags || structuredClone(DEFAULT_APP_SETTINGS.feature_flags);
+}
+
+function getSupabaseServiceRoleKey(env) {
+  return env?.SUPABASE_SERVICE_ROLE_KEY || env?.SUPABASE_SERVICE_KEY || env?.SUPABASE_SERVICE_ROLE || env?.SUPABASE_SECRET_KEY || '';
 }
