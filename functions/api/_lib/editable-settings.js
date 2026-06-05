@@ -83,12 +83,59 @@ export async function loadEditableSetting(env, key, options = {}) {
   }
 }
 
+
+export function listEditableFallbackKeys() {
+  return Object.keys(EDITABLE_SETTING_FALLBACKS).sort();
+}
+
+export function validateEditableSetting(key, value) {
+  const normalized = normalizeSettingKey(key);
+  const errors = [];
+  const payload = value && typeof value === "object" ? value : {};
+  if (!ADMIN_SETTING_KEYS.has(normalized)) errors.push(`Unknown or blocked setting key: ${normalized}`);
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) errors.push("Setting payload must be a JSON object.");
+  if (normalized === "business_profile") {
+    const business = payload.business || payload;
+    if (!business.name && !business.short_name) errors.push("business_profile should include business.name or business.short_name.");
+    if (!business.contact) errors.push("business_profile should include business.contact.");
+  }
+  if (normalized === "navigation_footer") {
+    if (!Array.isArray(payload.navigation)) errors.push("navigation_footer should include a navigation array.");
+  }
+  if (normalized === "site_policies") {
+    if (!payload.policies || typeof payload.policies !== "object") errors.push("site_policies should include a policies object.");
+  }
+  if (normalized === "analytics_event_registry") {
+    if (!Array.isArray(payload.events)) errors.push("analytics_event_registry should include an events array.");
+  }
+  if (normalized === "media_requirements") {
+    if (!Array.isArray(payload.required_assets)) errors.push("media_requirements should include a required_assets array.");
+  }
+  return { ok: errors.length === 0, key: normalized, errors };
+}
+
+async function recordSettingHistory(env, key, value, headers = {}) {
+  if (!env?.SUPABASE_URL) return null;
+  try {
+    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/app_management_setting_history`, {
+      method: "POST",
+      headers: { ...headers, Prefer: "return=minimal", "Content-Type": "application/json" },
+      body: JSON.stringify([{ key, value, created_at: new Date().toISOString() }])
+    });
+    if (!res.ok) return null;
+    return true;
+  } catch { return null; }
+}
+
 export async function saveEditableSetting(env, key, value, headers = {}) {
   const normalized = normalizeSettingKey(key);
   if (!normalized) throw new Error("Missing setting key.");
   if (!ADMIN_SETTING_KEYS.has(normalized)) throw new Error(`Setting key is not allowed: ${normalized}`);
   if (!env?.SUPABASE_URL) throw new Error("Supabase is not configured. Edit the bundled JSON fallback or configure Supabase first.");
   const payload = value && typeof value === "object" ? value : {};
+  const validation = validateEditableSetting(normalized, payload);
+  if (!validation.ok) throw new Error(validation.errors.join(" "));
+  await recordSettingHistory(env, normalized, payload, headers);
   const res = await fetch(`${env.SUPABASE_URL}/rest/v1/app_management_settings?on_conflict=key`, {
     method: "POST",
     headers: {
