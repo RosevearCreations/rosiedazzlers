@@ -7,7 +7,7 @@
       "category": "addon",
       "r2_key": "packages/pet_hair_removal.png",
       "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
-      "upload_method": "Cloudflare R2 → packages → pet_hair_removal.png",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 pet_hair_removal.png",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
@@ -17,7 +17,7 @@
       "category": "addon",
       "r2_key": "packages/odor_treatment.png",
       "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
-      "upload_method": "Cloudflare R2 → packages → odor_treatment.png",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 odor_treatment.png",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
@@ -27,7 +27,7 @@
       "category": "addon",
       "r2_key": "packages/seat_shampoo.png",
       "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
-      "upload_method": "Cloudflare R2 → packages → seat_shampoo.png",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 seat_shampoo.png",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
@@ -37,7 +37,7 @@
       "category": "addon",
       "r2_key": "packages/carpet_shampoo.png",
       "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
-      "upload_method": "Cloudflare R2 → packages → carpet_shampoo.png",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 carpet_shampoo.png",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
@@ -47,7 +47,7 @@
       "category": "addon",
       "r2_key": "packages/salt_stain_treatment.png",
       "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
-      "upload_method": "Cloudflare R2 → packages → salt_stain_treatment.png",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 salt_stain_treatment.png",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
@@ -57,7 +57,7 @@
       "category": "addon",
       "r2_key": "packages/headlight_restoration.png",
       "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
-      "upload_method": "Cloudflare R2 → packages → headlight_restoration.png",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 headlight_restoration.png",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
@@ -67,7 +67,7 @@
       "category": "addon",
       "r2_key": "packages/windshield_ceramic_coating.png",
       "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
-      "upload_method": "Cloudflare R2 → packages → windshield_ceramic_coating.png",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 windshield_ceramic_coating.png",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
@@ -77,7 +77,7 @@
       "category": "addon",
       "r2_key": "packages/ceramic_spray_wax.png",
       "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
-      "upload_method": "Cloudflare R2 → packages → ceramic_spray_wax.png",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 ceramic_spray_wax.png",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
@@ -87,7 +87,7 @@
       "category": "addon",
       "r2_key": "packages/trim_restoration.png",
       "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
-      "upload_method": "Cloudflare R2 → packages → trim_restoration.png",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 trim_restoration.png",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
@@ -97,7 +97,7 @@
       "category": "addon",
       "r2_key": "packages/bug_tar_removal.png",
       "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
-      "upload_method": "Cloudflare R2 → packages → bug_tar_removal.png",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 bug_tar_removal.png",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
@@ -107,7 +107,7 @@
       "category": "addon",
       "r2_key": "packages/truck_box_wash.png",
       "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
-      "upload_method": "Cloudflare R2 → packages → truck_box_wash.png",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 truck_box_wash.png",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
@@ -117,7 +117,7 @@
       "category": "addon",
       "r2_key": "packages/fleet_vehicle_add_on.png",
       "required_size": "1200x800 minimum; 1600x1067 preferred landscape",
-      "upload_method": "Cloudflare R2 → packages → fleet_vehicle_add_on.png",
+      "upload_method": "Cloudflare R2 \u2192 packages \u2192 fleet_vehicle_add_on.png",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
@@ -127,7 +127,7 @@
       "category": "regional",
       "r2_key": "landing-pages/tillsonburg-auto-detailing.webp",
       "required_size": "1600x900 preferred landscape WebP/JPG",
-      "upload_method": "Cloudflare R2 → landing-pages → tillsonburg-auto-detailing.webp",
+      "upload_method": "Cloudflare R2 \u2192 landing-pages \u2192 tillsonburg-auto-detailing.webp",
       "required_width": 1600,
       "required_height": 900,
       "build": "185"
@@ -137,7 +137,7 @@
       "category": "regional",
       "r2_key": "landing-pages/woodstock-ingersoll-auto-detailing.webp",
       "required_size": "1600x900 preferred landscape WebP/JPG",
-      "upload_method": "Cloudflare R2 → landing-pages → woodstock-ingersoll-auto-detailing.webp",
+      "upload_method": "Cloudflare R2 \u2192 landing-pages \u2192 woodstock-ingersoll-auto-detailing.webp",
       "required_width": 1600,
       "required_height": 900,
       "build": "185"
@@ -147,7 +147,7 @@
       "category": "regional",
       "r2_key": "landing-pages/simcoe-delhi-auto-detailing.webp",
       "required_size": "1600x900 preferred landscape WebP/JPG",
-      "upload_method": "Cloudflare R2 → landing-pages → simcoe-delhi-auto-detailing.webp",
+      "upload_method": "Cloudflare R2 \u2192 landing-pages \u2192 simcoe-delhi-auto-detailing.webp",
       "required_width": 1600,
       "required_height": 900,
       "build": "185"
@@ -157,7 +157,7 @@
       "category": "regional",
       "r2_key": "landing-pages/port-dover-auto-detailing.webp",
       "required_size": "1600x900 preferred landscape WebP/JPG",
-      "upload_method": "Cloudflare R2 → landing-pages → port-dover-auto-detailing.webp",
+      "upload_method": "Cloudflare R2 \u2192 landing-pages \u2192 port-dover-auto-detailing.webp",
       "required_width": 1600,
       "required_height": 900,
       "build": "185"
@@ -167,7 +167,7 @@
       "category": "regional",
       "r2_key": "landing-pages/norwich-otterville-auto-detailing.webp",
       "required_size": "1600x900 preferred landscape WebP/JPG",
-      "upload_method": "Cloudflare R2 → landing-pages → norwich-otterville-auto-detailing.webp",
+      "upload_method": "Cloudflare R2 \u2192 landing-pages \u2192 norwich-otterville-auto-detailing.webp",
       "required_width": 1600,
       "required_height": 900,
       "build": "185"
@@ -177,7 +177,7 @@
       "category": "regional",
       "r2_key": "landing-pages/waterford-vittoria-auto-detailing.webp",
       "required_size": "1600x900 preferred landscape WebP/JPG",
-      "upload_method": "Cloudflare R2 → landing-pages → waterford-vittoria-auto-detailing.webp",
+      "upload_method": "Cloudflare R2 \u2192 landing-pages \u2192 waterford-vittoria-auto-detailing.webp",
       "required_width": 1600,
       "required_height": 900,
       "build": "185"
@@ -187,7 +187,7 @@
       "category": "gallery_proof",
       "r2_key": "CarPhotos/tillsonburg-interior-proof-before.webp",
       "required_size": "1200x900 minimum; pair with matching after image; approved_public only",
-      "upload_method": "Cloudflare R2 → CarPhotos/tillsonburg-interior-proof-before.webp",
+      "upload_method": "Cloudflare R2 \u2192 CarPhotos/tillsonburg-interior-proof-before.webp",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
@@ -197,7 +197,7 @@
       "category": "gallery_proof",
       "r2_key": "CarPhotos/woodstock-exterior-proof-before.webp",
       "required_size": "1200x900 minimum; pair with matching after image; approved_public only",
-      "upload_method": "Cloudflare R2 → CarPhotos/woodstock-exterior-proof-before.webp",
+      "upload_method": "Cloudflare R2 \u2192 CarPhotos/woodstock-exterior-proof-before.webp",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
@@ -207,7 +207,7 @@
       "category": "gallery_proof",
       "r2_key": "CarPhotos/simcoe-pet-hair-proof-before.webp",
       "required_size": "1200x900 minimum; pair with matching after image; approved_public only",
-      "upload_method": "Cloudflare R2 → CarPhotos/simcoe-pet-hair-proof-before.webp",
+      "upload_method": "Cloudflare R2 \u2192 CarPhotos/simcoe-pet-hair-proof-before.webp",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
@@ -217,14 +217,14 @@
       "category": "gallery_proof",
       "r2_key": "CarPhotos/port-dover-ceramic-proof-before.webp",
       "required_size": "1200x900 minimum; pair with matching after image; approved_public only",
-      "upload_method": "Cloudflare R2 → CarPhotos/port-dover-ceramic-proof-before.webp",
+      "upload_method": "Cloudflare R2 \u2192 CarPhotos/port-dover-ceramic-proof-before.webp",
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
     }
   ],
-  "version": "189.0.0",
-  "updated_at": "2026-06-04",
+  "version": "191.0.0",
+  "updated_at": "2026-06-05",
   "source": "stable_bundled_json_fallback",
   "notes": "Stable fallback for DB-managed media requirements/tasks."
 }
