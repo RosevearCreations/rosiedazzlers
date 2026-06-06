@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 194 note:
+- Adds editable-setting JSON diff/preview tools, analytics registry quick-add, option-library dropdown hydration, and route-copy parity guards.
+
 Build 193 note:
 - Fixes /api/admin/social_templates_list null-filter 500s, adds social-template UI fallback handling, and adds editable-setting validation schemas/token/link warnings.
 
@@ -93,6 +96,7 @@ CHECKS = [
     "scripts/build191_editable_settings_hardening_check.py",
         "scripts/build192_editable_operations_completion_check.py",
     "scripts/build193_social_templates_and_validation_check.py",
+    "scripts/build194_diff_preview_option_libraries_check.py",
     "scripts/seo_h1_check.py",
 ]
 
