@@ -46,6 +46,7 @@ import {
   isUuid,
   toBoolean
 } from "../_lib/staff-auth.js";
+import { loadEditableSetting } from "../_lib/editable-settings.js";
 
 export async function onRequestOptions() {
   return new Response("", {
@@ -80,6 +81,7 @@ export async function onRequestPost(context) {
     }
 
     const payload = normalized.payload;
+    const businessHoursWarning = await buildBusinessHoursWarning(env, headers, payload.service_date, payload.start_slot);
 
     const resolvedAssignment = await resolveAssignment(env, headers, {
       assigned_staff_user_id: payload.assigned_staff_user_id,
@@ -144,6 +146,7 @@ export async function onRequestPost(context) {
           ok: true,
           mode: "update",
           message: "Booking updated.",
+          business_hours_warning: businessHoursWarning,
           booking: Array.isArray(rows) ? rows[0] || null : null
         })
       );
@@ -194,6 +197,7 @@ export async function onRequestPost(context) {
         ok: true,
         mode: "create",
         message: "Booking created.",
+        business_hours_warning: businessHoursWarning,
         booking: Array.isArray(rows) ? rows[0] || null : null
       })
     );
@@ -333,6 +337,43 @@ async function findBookingById(env, headers, id) {
   }
 
   return { ok: true, row };
+}
+
+
+async function buildBusinessHoursWarning(env, headers, serviceDate, startSlot) {
+  if (!serviceDate) return null;
+  try {
+    const loaded = await loadEditableSetting(env, "business_hours_holidays", { headers });
+    const value = loaded?.value && typeof loaded.value === "object" ? loaded.value : {};
+    const closures = Array.isArray(value.holiday_closures) ? value.holiday_closures : [];
+    const closure = closures.find((item) => {
+      const raw = String(item?.date || item?.day || item?.closure_date || "").slice(0, 10);
+      return raw === serviceDate;
+    }) || null;
+    const day = dayKeyForDate(serviceDate);
+    const hoursLabel = value.hours && typeof value.hours === "object" ? String(value.hours[day] || "By appointment") : "By appointment";
+    const closedByHours = /\bclosed\b/i.test(hoursLabel);
+    if (!closure && !closedByHours) {
+      return { ok: true, date: serviceDate, slot: startSlot || null, source_status: loaded?.source_status || loaded?.source || "fallback" };
+    }
+    return {
+      ok: false,
+      date: serviceDate,
+      slot: startSlot || null,
+      code: closure ? "holiday_closure" : "business_hours_closed",
+      warning: closure ? (closure.reason || closure.label || "This date is marked closed in holiday closures.") : `Business hours for ${day} are marked as ${hoursLabel}.`,
+      closure,
+      hours_label: closure ? (closure.label || closure.reason || "Closed") : hoursLabel,
+      source_status: loaded?.source_status || loaded?.source || "fallback"
+    };
+  } catch (error) {
+    return { ok: null, date: serviceDate, slot: startSlot || null, code: "business_hours_check_unavailable", warning: String(error?.message || error) };
+  }
+}
+
+function dayKeyForDate(dateText) {
+  try { return new Date(`${dateText}T12:00:00`).toLocaleDateString("en-CA", { weekday:"long" }).toLowerCase(); }
+  catch { return "unknown"; }
 }
 
 /* ---------------- assignment helpers ---------------- */
