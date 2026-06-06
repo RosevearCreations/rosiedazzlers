@@ -88,6 +88,7 @@ CHECKS = [
     "scripts/build189_editable_site_settings_check.py",
     "scripts/build190_editable_settings_live_rendering_check.py",
     "scripts/build191_editable_settings_hardening_check.py",
+        "scripts/build192_editable_operations_completion_check.py",
     "scripts/seo_h1_check.py",
 ]
 
