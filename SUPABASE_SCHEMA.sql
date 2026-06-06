@@ -1623,3 +1623,9 @@ CREATE TABLE IF NOT EXISTS public.app_management_setting_history (
 -- structured editable-domain editors, direct restore-from-history controls, media
 -- requirement sync/restore controls, analytics registry warning checks, dynamic
 -- policy/template rendering, and business-hours/holiday booking warnings.
+
+-- Build 193 social templates and editable-setting validation note (2026-06-05)
+-- No new DDL is required. Build 193 reuses app_management_settings and
+-- app_management_setting_history for editable settings, and keeps optional
+-- social_caption_templates/social_hashtag_presets as DB-first sources with
+-- built-in fallback templates when those optional tables are not ready.

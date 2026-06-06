@@ -673,3 +673,9 @@ Build 190 continues the editable-content migration by rendering public business 
 - Added Build 191 release guard.
 
 <!-- Build 192 documentation sync: editable-domain editors, restore-from-history UI, business-hours booking warnings, dynamic policies/templates, analytics registry warnings, media requirement sync/restore, and fallback diagnostics were reviewed on 2026-06-05. -->
+
+---
+
+## Build 193 docs update
+
+Core Markdown, SQL notes, schema status, release guards, and handoff notes were updated for the Admin Social template endpoint hotfix and editable-setting validation schema pass.

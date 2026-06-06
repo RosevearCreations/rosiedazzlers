@@ -630,3 +630,9 @@ Build 190 continues the editable-content migration by rendering public business 
 - Added Build 191 release guard.
 
 <!-- Build 192 documentation sync: editable-domain editors, restore-from-history UI, business-hours booking warnings, dynamic policies/templates, analytics registry warnings, media requirement sync/restore, and fallback diagnostics were reviewed on 2026-06-05. -->
+
+---
+
+## Build 193 project memory
+
+Admin Social template options are DB-first but must never break manual drafting. `/api/admin/social_templates_list` now safely handles omitted filters and null fallback row fields. Editable settings now have bundled validation schemas and warn about unsupported template tokens and navigation/footer link problems before save.

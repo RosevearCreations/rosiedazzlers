@@ -185,3 +185,10 @@ Build 190 continues the editable-content migration by rendering public business 
 ## Build 192 editable-content sanity update — 2026-06-05
 
 Editable content now covers structured editor helpers, direct history restore, media requirement sync/restore, dynamic policy copy on booking/payment pages, rendered invoice and appointment confirmation templates, analytics registry warnings, and dashboard fallback diagnostics. Remaining editable-content work should focus on per-field schema validation, preview/diff tools, and wider option-library dropdown adoption.
+
+---
+
+## Build 193 documentation sync — 2026-06-05
+
+This Markdown file was included in the Build 193 documentation sync. Build 193 fixes the Admin Social template-list 500, adds social-template fallback UI handling, strengthens editable-setting validation schemas, preserves the one-H1 SEO guard, and records that no new Supabase DDL is required for this pass.
+

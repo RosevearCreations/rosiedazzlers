@@ -668,3 +668,9 @@ Build 190 continues the editable-content migration by rendering public business 
 ## Build 192 status — 2026-06-05
 
 Build 192 is an editable-operations completion pass. It does not add DDL. It wires existing editable settings/history into the Admin UI, booking availability, payment/customer copy, invoice/confirmation rendering, analytics warnings, media requirements, and dashboard diagnostics.
+
+---
+
+## Build 193 status
+
+Build 193 is the current handoff build. It addresses the reported Admin Social template endpoint 500 and strengthens editable-setting validation. No Supabase DDL is required beyond the existing Build 189/190 app-management settings tables.

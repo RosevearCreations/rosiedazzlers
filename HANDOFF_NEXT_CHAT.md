@@ -725,3 +725,9 @@ Build 190 continues the editable-content migration by rendering public business 
 ## Build 192 handoff — 2026-06-05
 
 Latest build work added structured editors for every editable domain, restore-from-history controls, booking business-hours/holiday conflict warnings, dynamic site policy and document-template rendering, option-library dropdown loading, analytics registry warnings, media requirement sync/restore controls, and dashboard diagnostics for fallback-backed settings. Start the next pass with schema validation per editor, template test-send controls, JSON diff previews, and wider option-library adoption.
+
+---
+
+## Build 193 handoff
+
+Latest pass fixed the Admin Social `api/admin/social_templates_list` 500, added social-template UI fallback handling, and added editable-setting validation schema support. Next strongest pass should add visual diffs, one-click unknown analytics event registry insertion, more option-library dropdowns across admin screens, and test-send controls for customer document/email templates.

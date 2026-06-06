@@ -1030,3 +1030,23 @@ Build 190 continues the editable-content migration by rendering public business 
 - Option-library dropdown usage has started in Admin App and still needs to be expanded everywhere options are typed manually.
 - Template rendering is live for invoice/appointment confirmation payloads, but test-send controls and PDF/export packaging are still future steps.
 - Business-hours conflict checks currently treat closed-day/holiday closures as blockers; exact sub-day hour windows are still future work.
+
+---
+
+## Build 193 gap update — 2026-06-05
+
+### Resolved or reduced
+
+- The reported `/api/admin/social_templates_list` 500 was traced to optional fields being lowercased before null checks. Build 193 normalizes omitted query parameters and fallback row fields safely.
+- Admin Social now continues to load even if social template options are temporarily unavailable; manual drafting remains usable and the page shows a clear warning.
+- Editable settings now have a bundled validation schema file and stronger required-path checks before saves.
+- Navigation/footer link issues and unknown document-template tokens now appear as warnings before save.
+- The structured document-template editor now includes an inline token reference so invoice, confirmation, receipt, refund, quote, and proposal copy can be edited more safely.
+
+### Still open
+
+- Validation is now stronger, but it is still lightweight. It does not yet provide a visual JSON diff or a full JSON Schema implementation.
+- Force-sync exists, but staff should only use it after reviewing DB-versus-fallback differences because it intentionally replaces the DB-backed value.
+- Admin Analytics can warn about unknown events, but it still needs one-click registry insertion.
+- Template rendering is available, but test-send controls and invoice PDF/export packaging are still future work.
+- Business-hours checks still focus on closed-day/holiday conflicts; exact partial-day scheduling windows remain a future enhancement.
