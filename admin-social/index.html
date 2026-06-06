@@ -11,7 +11,7 @@
     .social-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:end}.social-toolbar label{min-width:180px}.post-preview{white-space:pre-wrap}.platform-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 9px;background:rgba(96,165,250,.14);border:1px solid rgba(96,165,250,.24);font-size:.82rem}.readiness-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.readiness-item{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}.review-list{margin:10px 0 0;padding-left:18px}.review-list li{margin:4px 0}.review-list .blocking{color:#fecaca}.review-list .hint{color:#bfdbfe}.compliance-badge{display:inline-flex;border-radius:999px;padding:3px 8px;border:1px solid rgba(255,255,255,.18);font-size:.78rem;margin-left:6px}.duplicate-warning{border-color:rgba(251,191,36,.42);background:rgba(251,191,36,.1)}.template-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.scheduled-pill{display:inline-flex;border-radius:999px;padding:3px 8px;background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.28);font-size:.78rem}.privacy-ready{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.1)}.privacy-blocked{border-color:rgba(248,113,113,.38);background:rgba(248,113,113,.1)}
   </style>
 </head>
-<body data-page="admin-social" data-build178="social-privacy-readiness-badges">
+<body data-page="admin-social" data-build178="social-privacy-readiness-badges" data-build193="social-template-endpoint-hotfix">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers Admin</strong></a>
@@ -67,6 +67,7 @@
               <label>Hashtag preset<select id="hashtagPresetSelect"><option value="">Default hashtags</option></select></label>
               <label>Planned publish time<input id="manualScheduledFor" type="datetime-local" /></label>
             </div>
+            <div id="templateOptionsNotice" class="notice" data-build193="social-template-fallback-warning" hidden></div>
             <label>Post text<textarea id="manualText" rows="4" placeholder="Write a draft caption..." required></textarea></label>
             <label>Hashtags<input id="manualHashtags" placeholder="RosieDazzlers, AutoDetailing, SouthernOntario" value="RosieDazzlers, AutoDetailing, SouthernOntario" /></label>
             <label>Media URLs<textarea id="manualMediaUrls" rows="3" placeholder="Optional. One URL per line."></textarea></label>
@@ -175,14 +176,36 @@
       renderReadiness(data.readiness);
     }
 
-    async function loadTemplateOptions() {
-      const data = await requestJson('/api/admin/social_templates_list');
-      captionTemplates = Array.isArray(data.caption_templates) ? data.caption_templates : [];
-      hashtagPresets = Array.isArray(data.hashtag_presets) ? data.hashtag_presets : [];
+    function renderTemplateOptionSelects() {
       const templateSelect = qs('#captionTemplateSelect');
       const presetSelect = qs('#hashtagPresetSelect');
       templateSelect.innerHTML = '<option value="">Write from scratch</option>' + captionTemplates.map((item) => `<option value="${escapeHtml(item.template_key || '')}">${escapeHtml(item.display_name || item.template_key || 'Template')}</option>`).join('');
       presetSelect.innerHTML = '<option value="">Default hashtags</option>' + hashtagPresets.map((item) => `<option value="${escapeHtml(item.preset_key || '')}">${escapeHtml(item.display_name || item.preset_key || 'Preset')}</option>`).join('');
+    }
+
+    function setTemplateOptionsNotice(message, kind = '') {
+      const box = qs('#templateOptionsNotice');
+      if (!box) return;
+      if (!message) { box.hidden = true; box.textContent = ''; box.className = 'notice'; return; }
+      box.hidden = false;
+      box.className = kind ? `notice ${kind}` : 'notice';
+      box.textContent = message;
+    }
+
+    async function loadTemplateOptions() {
+      try {
+        const data = await requestJson('/api/admin/social_templates_list');
+        captionTemplates = Array.isArray(data.caption_templates) ? data.caption_templates : [];
+        hashtagPresets = Array.isArray(data.hashtag_presets) ? data.hashtag_presets : [];
+        renderTemplateOptionSelects();
+        const warnings = Array.isArray(data.warnings) ? data.warnings.filter(Boolean) : [];
+        setTemplateOptionsNotice(warnings.length ? `Using social template fallback: ${warnings.join(' ')}` : '', warnings.length ? 'warn' : '');
+      } catch (error) {
+        captionTemplates = [];
+        hashtagPresets = [];
+        renderTemplateOptionSelects();
+        setTemplateOptionsNotice(error.message || 'Social template options could not be loaded. Manual draft writing still works.', 'warn');
+      }
     }
 
     function warningList(post) {
