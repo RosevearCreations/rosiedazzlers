@@ -181,3 +181,7 @@ Build 190 continues the editable-content migration by rendering public business 
 - Added analytics ingest validation against the editable analytics event registry.
 - Switched Media Health JSON fallback from build-specific image requirement files to stable `data/media_requirements.json`.
 - Added Build 191 release guard.
+
+## Build 192 editable-content sanity update — 2026-06-05
+
+Editable content now covers structured editor helpers, direct history restore, media requirement sync/restore, dynamic policy copy on booking/payment pages, rendered invoice and appointment confirmation templates, analytics registry warnings, and dashboard fallback diagnostics. Remaining editable-content work should focus on per-field schema validation, preview/diff tools, and wider option-library dropdown adoption.

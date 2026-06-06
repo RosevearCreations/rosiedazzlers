@@ -548,3 +548,7 @@ Build 190 continues the editable-content migration by rendering public business 
 - Added analytics ingest validation against the editable analytics event registry.
 - Switched Media Health JSON fallback from build-specific image requirement files to stable `data/media_requirements.json`.
 - Added Build 191 release guard.
+
+## Build 192 documentation sync — 2026-06-05
+
+Primary references updated for Build 192: `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `CURRENT_IMPLEMENTATION_STATE.md`, `DATABASE_STRUCTURE_CURRENT.md`, `SUPABASE_SCHEMA.sql`, `EDITABLE_CONTENT_SANITY_CHECK.md`, `SANITY_CHECK.md`, `HANDOFF_NEXT_CHAT.md`, and `NEW_CHAT_STATUS.md`. The SQL note is `sql/2026-06-05_build192_editable_operations_completion_no_ddl_note.sql`.

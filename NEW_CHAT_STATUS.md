@@ -664,3 +664,7 @@ Build 190 continues the editable-content migration by rendering public business 
 - Added analytics ingest validation against the editable analytics event registry.
 - Switched Media Health JSON fallback from build-specific image requirement files to stable `data/media_requirements.json`.
 - Added Build 191 release guard.
+
+## Build 192 status — 2026-06-05
+
+Build 192 is an editable-operations completion pass. It does not add DDL. It wires existing editable settings/history into the Admin UI, booking availability, payment/customer copy, invoice/confirmation rendering, analytics warnings, media requirements, and dashboard diagnostics.

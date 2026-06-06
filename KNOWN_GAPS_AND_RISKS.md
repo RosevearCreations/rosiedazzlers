@@ -1009,3 +1009,24 @@ Build 190 continues the editable-content migration by rendering public business 
 - Added analytics ingest validation against the editable analytics event registry.
 - Switched Media Health JSON fallback from build-specific image requirement files to stable `data/media_requirements.json`.
 - Added Build 191 release guard.
+
+## Build 192 gap update — 2026-06-05
+
+### Resolved or reduced
+
+- Editable settings now have structured editor helpers across all editable domains instead of only partial business/navigation helpers.
+- Restore-from-history is now available directly in the Editable Site Settings UI and the Media Health media-requirements section.
+- Public booking availability now receives business-hours/holiday conflict information and the booking wizard disables closed dates/slots accordingly.
+- Admin booking saves now return business-hours warning details when staff create or update a booking on a closed/holiday date.
+- Invoice and appointment confirmation copy now renders from editable document templates where available.
+- Quote payment and booking requirement copy are now connected to editable site policies instead of being fully hard-coded.
+- Admin Analytics now warns on unknown raw event names that are missing from the editable analytics registry.
+- Admin Dashboard now shows fallback-backed editable setting diagnostics.
+
+### Still open
+
+- Structured editors still need per-field schema validation, JSON diff views, and stronger role scoping by domain.
+- Admin booking warnings are returned by the API, but each admin UI that creates bookings should display those warning payloads beside the save result.
+- Option-library dropdown usage has started in Admin App and still needs to be expanded everywhere options are typed manually.
+- Template rendering is live for invoice/appointment confirmation payloads, but test-send controls and PDF/export packaging are still future steps.
+- Business-hours conflict checks currently treat closed-day/holiday closures as blockers; exact sub-day hour windows are still future work.

@@ -719,3 +719,7 @@ Build 190 continues the editable-content migration by rendering public business 
 - Added analytics ingest validation against the editable analytics event registry.
 - Switched Media Health JSON fallback from build-specific image requirement files to stable `data/media_requirements.json`.
 - Added Build 191 release guard.
+
+## Build 192 schema status — 2026-06-05
+
+No new database tables or columns are required for Build 192. The pass deliberately reuses the existing `app_management_settings` and `app_management_setting_history` schema for structured editable-domain editors, direct restore-from-history controls, media requirement sync/restore controls, analytics registry warning checks, dynamic policy/template rendering, and business-hours/holiday booking warnings. See `sql/2026-06-05_build192_editable_operations_completion_no_ddl_note.sql` for the release note.

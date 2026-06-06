@@ -62,7 +62,7 @@
       if(!res.ok||!out?.document){ qs('#docStatus').className='notice bad'; qs('#docStatus').textContent=out?.error||'Could not load booking confirmation.'; return; }
       const d=out.document;
       qs('#docStatus').hidden=true; qs('#docRoot').hidden=false;
-      qs('#docIntro').textContent=d.company?.templates?.confirmation_intro||'Thank you for booking Rosie Dazzlers.';
+      qs('#docIntro').textContent=d.rendered_templates?.appointment_confirmation?.body||d.company?.templates?.confirmation_intro||'Thank you for booking Rosie Dazzlers.';
       qs('#docNumber').textContent=`Booking ${d.booking?.id||'—'}`;
       qs('#docIssued').textContent=`Prepared ${d.booking?.created_at ? new Date(d.booking.created_at).toLocaleString('en-CA') : 'today'}`;
       qs('#invoiceLink').href=d.documents?.invoice_url||'#';

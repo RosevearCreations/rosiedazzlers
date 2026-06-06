@@ -1543,3 +1543,51 @@ Build 190 continues the editable-content migration by rendering public business 
 - Added analytics ingest validation against the editable analytics event registry.
 - Switched Media Health JSON fallback from build-specific image requirement files to stable `data/media_requirements.json`.
 - Added Build 191 release guard.
+
+## Build 192 — editable operations completion pass — 2026-06-05
+
+### Completed 20-step pass
+
+1. Expanded Editable Site Settings into structured editors for every editable domain: business profile, site policies, document templates, business hours/holidays, navigation/footer, option libraries, analytics event registry, media requirements, and landing-page content.
+2. Added direct restore-from-history controls inside the Editable Site Settings UI using the existing history and restore APIs.
+3. Added business-hours and holiday-closure conflict data to `/api/availability` so public slot selection can warn/block closed dates.
+4. Updated the booking wizard slot UI to respect `business_hours_conflict` and show clear AM/PM booked/closed messaging.
+5. Added admin booking-save business-hours warnings so manual/admin-created bookings surface holiday or closed-day conflicts without silently saving blind.
+6. Replaced booking wizard hard-coded requirement copy with dynamic `site_policies` bindings.
+7. Added dynamic deposit/refund policy notes to the quote-payment page.
+8. Enabled dynamic policy injection on the quote-response page.
+9. Reworked booking document template loading to support nested editable `document_templates.templates` payloads.
+10. Added rendered invoice template output to public invoice payloads/pages.
+11. Added rendered appointment-confirmation template output to public confirmation payloads/pages.
+12. Updated queued order-confirmation email text to render from editable appointment-confirmation templates instead of fixed strings.
+13. Added shared option-library loading to Admin App dropdowns, starting with communication-channel selectors.
+14. Expanded bundled option libraries with communication channels, payment methods, booking statuses, job statuses, finance entry types, reason codes, media privacy statuses, and template domains.
+15. Added `/api/admin/analytics_registry_warnings` to flag raw analytics event names missing from the editable registry.
+16. Added an Analytics dashboard card for unknown analytics event names and recommended registry/emitter fixes.
+17. Added Media Health controls to sync bundled `media_requirements` into DB-backed editable settings.
+18. Added Media Health restore-from-history controls for media requirement sets.
+19. Added an Admin dashboard diagnostics card showing DB-backed versus fallback-backed editable settings.
+20. Added a Build 192 release guard script and wired it into `scripts/release_check.py`.
+
+### Next 20 recommended steps
+
+1. Add field-level validation schemas for each structured editor so bad JSON is caught before save.
+2. Add per-domain preview panes that show exactly where each setting appears on public pages.
+3. Add forced sync confirmation for replacing a DB-backed setting with bundled fallback data.
+4. Add visual diffing between current JSON, bundled fallback, and selected history rows.
+5. Add role-aware permissions around each editable domain, not only the page as a whole.
+6. Add full option-library dropdown usage to booking, quote, inventory, finance, and media task editors.
+7. Add a template token reference drawer beside every document/email template editor.
+8. Add send-test controls for appointment confirmation, deposit receipt, refund notice, and invoice templates.
+9. Add invoice PDF/export packaging once the rendered invoice template is approved.
+10. Add customer-visible policy version stamping on bookings and quotes.
+11. Add business-hours slot granularity beyond AM/PM if future scheduling needs exact time windows.
+12. Add admin override reason logging when staff intentionally book a closed holiday/business-hours date.
+13. Add unknown-analytics-event quick actions to add the event to the registry from the warning card.
+14. Add weekly fallback-backed settings report to the dashboard diagnostics card.
+15. Add media requirement history diff/preview before restoring.
+16. Add SEO structured-data preview for business profile and service landing-page settings.
+17. Add copy-length warnings for title/meta/header fields in editable landing-page content.
+18. Add broken-link scans for editable navigation/footer links.
+19. Add local SEO proof gap reminders to the admin dashboard using the same diagnostics pattern.
+20. Add automated smoke tests for invoice, confirmation, quote payment, booking availability, and admin settings APIs.

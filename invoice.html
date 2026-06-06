@@ -42,7 +42,7 @@
       const res=await fetch(`/api/document_booking_public?token=${encodeURIComponent(token)}`,{cache:'no-store'}); const out=await res.json().catch(()=>null);
       if(!res.ok||!out?.document){ qs('#docStatus').className='notice bad'; qs('#docStatus').textContent=out?.error||'Could not load invoice.'; return; }
       const d=out.document; qs('#docStatus').hidden=true; qs('#docRoot').hidden=false;
-      qs('#docSubtitle').textContent=d.company?.templates?.invoice_footer||'Office summary for print or email.';
+      qs('#docSubtitle').textContent=d.rendered_templates?.invoice?.body||d.company?.templates?.invoice_footer||'Office summary for print or email.';
       qs('#invoiceNumber').textContent=`Invoice ${String(d.booking?.id||'').slice(0,8).toUpperCase()}`;
       qs('#invoiceDate').textContent=d.booking?.created_at ? new Date(d.booking.created_at).toLocaleString('en-CA') : '';
       qs('#confirmLink').href=d.documents?.confirmation_url||'#';
