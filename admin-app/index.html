@@ -389,7 +389,7 @@
             <div class="checkrow"><input id="recovery_enabled" type="checkbox"><label for="recovery_enabled">Enable abandoned-order recovery</label></div>
             <div class="field"><label for="recovery_min_events">Minimum tracked events</label><input id="recovery_min_events" type="number" min="0" value="2"></div>
             <div class="field"><label for="recovery_cooldown_hours">Cooldown hours</label><input id="recovery_cooldown_hours" type="number" min="0" value="24"></div>
-            <div class="field"><label for="recovery_default_channel">Default recovery channel</label><select id="recovery_default_channel"><option value="email">Email</option><option value="sms">SMS</option></select></div>
+            <div class="field"><label for="recovery_default_channel">Default recovery channel</label><select id="recovery_default_channel" data-option-library="communication_channels"><option value="email">Email</option><option value="sms">SMS</option></select></div>
           </div>
           <div>
             <div class="note">Tokens supported: <code>{{customer_name}}</code>, <code>{{recovery_url}}</code>, <code>{{service_date}}</code>, <code>{{package_name}}</code>, <code>{{gift_code}}</code></div>
@@ -419,7 +419,7 @@
         <p class="feature-note">Generate a preview before sending a live test so the office can verify subject lines, wording, and merge tokens.</p>
         <div class="subgrid">
           <div>
-            <div class="field"><label for="preview_channel">Channel</label><select id="preview_channel"><option value="email">Email</option><option value="sms">SMS</option></select></div>
+            <div class="field"><label for="preview_channel">Channel</label><select id="preview_channel" data-option-library="communication_channels"><option value="email">Email</option><option value="sms">SMS</option></select></div>
             <div class="field"><label for="preview_customer_name">Customer name</label><input id="preview_customer_name" value="Valued Customer"></div>
             <div class="field"><label for="preview_customer_email">Customer email</label><input id="preview_customer_email"></div>
             <div class="field"><label for="preview_recipient_phone">Recipient phone</label><input id="preview_recipient_phone"></div>
@@ -715,6 +715,33 @@
     };
   }
   var catalogDropdownOptionsState = catalogDropdownOptionsDefaults();
+  var optionLibrariesState = {};
+  async function loadSharedOptionLibraries(){
+    try {
+      const res = await fetch('/api/site_settings_public?key=option_libraries', { credentials:'include', cache:'no-store' });
+      const out = await res.json().catch(function(){ return null; });
+      const value = out && (out.value || out.setting || out.option_libraries || out);
+      optionLibrariesState = value && typeof value === 'object' ? normalizeCatalogDropdownOptions(value) : catalogDropdownOptionsDefaults();
+    } catch (err) {
+      optionLibrariesState = catalogDropdownOptionsDefaults();
+      console.warn('Could not load shared option libraries:', err);
+    }
+    applyOptionLibrarySelects();
+    return optionLibrariesState;
+  }
+  function optionLibraryValues(key, fallbackValues){
+    const rows = optionLibrariesState && Array.isArray(optionLibrariesState[key]) ? optionLibrariesState[key] : [];
+    return rows.length ? rows : (Array.isArray(fallbackValues) ? fallbackValues : []);
+  }
+  function applyOptionLibrarySelects(){
+    qsa('[data-option-library]').forEach(function(select){
+      const key = select.getAttribute('data-option-library');
+      const current = select.value || select.getAttribute('data-default-value') || '';
+      const values = optionLibraryValues(key, Array.from(select.options || []).map(function(option){ return option.value || option.textContent || ''; }));
+      select.innerHTML = values.map(function(value){ const clean = String(value || '').trim(); const label = clean.replace(/_/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();}); return `<option value="${esc(clean)}">${esc(label)}</option>`; }).join('');
+      if (current && Array.from(select.options).some(function(option){ return option.value === current; })) select.value = current;
+    });
+  }
   function optionLinesToArray(value){ return String(value || '').split(/\r?\n/).map(function(line){ return line.trim(); }).filter(Boolean); }
   function normalizeCatalogDropdownOptions(value){
     var defaults = catalogDropdownOptionsDefaults();
@@ -1492,6 +1519,7 @@
     setPricingCatalogState(source);
   }
   async function loadSettings(){
+    await loadSharedOptionLibraries().catch(function(){ return null; });
     const res = await fetch('/api/admin/app_settings_get', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:JSON.stringify({}) });
     const out = await res.json().catch(() => null);
     if (!res.ok) throw new Error(out?.error || 'Could not load settings.');
@@ -1566,6 +1594,7 @@
     byId('recovery_enabled').checked = recoveryRules.abandoned_recovery_enabled !== false;
     byId('recovery_min_events').value = recoveryRules.minimum_page_events ?? 2;
     byId('recovery_cooldown_hours').value = recoveryRules.cooldown_hours ?? 24;
+    applyOptionLibrarySelects();
     byId('recovery_default_channel').value = recoveryRules.default_recovery_channel || 'email';
 
     byId('provider_email_enabled').checked = providerRules?.email?.enabled !== false;

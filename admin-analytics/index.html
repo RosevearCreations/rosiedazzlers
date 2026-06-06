@@ -293,6 +293,12 @@
           <div id="top-actions" class="list"></div>
         </article>
 
+        <article class="card card--half" data-build192="analytics-registry-warnings">
+          <h2>Analytics registry warnings</h2>
+          <p class="muted">Shows raw event names that are not listed in the editable analytics registry yet.</p>
+          <div id="analytics-registry-warnings" class="list">Loading registry warnings…</div>
+        </article>
+
         <article class="card card--half">
           <h2>Top countries</h2>
           <div id="top-countries" class="list"></div>
@@ -371,6 +377,7 @@
         regions: document.getElementById("top-regions"),
         devices: document.getElementById("top-devices"),
         actions: document.getElementById("top-actions"),
+        registryWarnings: document.getElementById("analytics-registry-warnings"),
         serviceAreas: document.getElementById("top-service-areas"),
         funnel: document.getElementById("booking-funnel"),
         recentActions: document.getElementById("recent-actions"),
@@ -501,7 +508,7 @@
 
       async function load() {
         const days = Number(els.days.value || 30);
-        const [analyticsRes, abandonedRes, conversionRes, localSeoRes, proofTasksRes] = await Promise.all([
+        const [analyticsRes, abandonedRes, conversionRes, localSeoRes, proofTasksRes, registryWarningsRes] = await Promise.all([
           fetch("/api/admin/analytics_overview", {
             method: "POST",
             credentials: "include",
@@ -531,6 +538,12 @@
             credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ status: "all", limit: 12 })
+          }),
+          fetch("/api/admin/analytics_registry_warnings", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ days, limit: 1500 })
           })
         ]);
 
@@ -539,6 +552,7 @@
         const conversion = await conversionRes.json().catch(() => null);
         const localSeo = await localSeoRes.json().catch(() => null);
         const proofTasks = await proofTasksRes.json().catch(() => null);
+        const registryWarnings = await registryWarningsRes.json().catch(() => null);
 
         if (!analyticsRes.ok) throw new Error(analytics?.error || "Could not load analytics.");
         if (!abandonedRes.ok) throw new Error(abandoned?.error || "Could not load abandoned orders.");
@@ -591,6 +605,10 @@
         renderList(els.devices, analytics.top_devices || [], (row) => `<strong>${esc(row.label)}</strong><div class="muted">${Number(row.count || 0)} events</div>`, "No device mix yet.");
         renderList(els.referrers, analytics.top_referrers || [], (row) => `<strong>${esc(row.label)}</strong><div class="muted">${Number(row.count || 0)} referrals</div>`);
         renderList(els.actions, analytics.top_actions || [], (row) => `<strong>${esc(row.label)}</strong><div class="muted">${Number(row.count || 0)} tracked actions</div>`, "No action data yet.");
+        if (els.registryWarnings) {
+          const warningRows = Array.isArray(registryWarnings?.warnings) ? registryWarnings.warnings : [];
+          renderList(els.registryWarnings, warningRows, (row) => `<strong>${esc(row.event_type)}</strong><div class="muted">${Number(row.count || 0)} unknown event(s) · last seen ${esc(row.last_seen_at || 'unknown')}</div><div class="muted">${esc(row.recommendation || 'Add this event to the editable analytics registry or fix the emitter.')}</div>`, registryWarnings?.warning || "No unknown analytics event names found.");
+        }
         renderList(els.serviceAreas, analytics.top_service_areas || [], (row) => `<strong>${esc(row.label)}</strong><div class="muted">${Number(row.count || 0)} tracked events</div>`, "No service-area tracking yet.");
 
         const funnelRows = analytics.funnel
