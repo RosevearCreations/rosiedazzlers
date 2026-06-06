@@ -731,3 +731,53 @@ Latest build work added structured editors for every editable domain, restore-fr
 ## Build 193 handoff
 
 Latest pass fixed the Admin Social `api/admin/social_templates_list` 500, added social-template UI fallback handling, and added editable-setting validation schema support. Next strongest pass should add visual diffs, one-click unknown analytics event registry insertion, more option-library dropdowns across admin screens, and test-send controls for customer document/email templates.
+
+---
+
+## Build 194 — diff, preview, analytics quick-add, and option-library expansion — 2026-06-06
+
+### Completed 20-step pass
+
+1. Added `/api/admin/editable_site_settings_compare` for DB/editor versus bundled fallback JSON diffs.
+2. Added visual compare controls in Editable Site Settings before force-sync or restore actions.
+3. Added per-domain preview panes showing where each editable setting is used.
+4. Added domain permission guidance beside each structured editor.
+5. Added SEO copy-length checks for title, meta-description, H1/headline, and description-like fields.
+6. Added history/fallback comparison support in the settings workflow without new database tables.
+7. Added `/api/admin/analytics_registry_add_event` for one-click addition of unknown analytics events.
+8. Added Admin Analytics “Add to registry” buttons on unknown event warnings.
+9. Added `assets/admin-option-libraries.js` as a shared DB-first dropdown hydrator.
+10. Expanded option-library dropdown usage into Admin Booking finance/status/privacy controls.
+11. Expanded option-library dropdown usage into Admin Catalog stock and purchase-order controls.
+12. Expanded option-library dropdown usage into Admin Leads lead, quote, draft, and media privacy status controls.
+13. Fixed Admin App option-library loading to read the current `/api/site_settings_public?key=option_libraries` response shape.
+14. Added business-hours warning display support to Admin Booking status saves when warning payloads are returned.
+15. Added staff-auth capability aliases for `view_analytics` and `manage_settings` so analytics/settings utilities are not accidentally admin-password-only.
+16. Normalized `/admin-site-settings.html` and `/admin-site-settings/` so the routed copy no longer lags behind the root page.
+17. Normalized patched admin route copies for Analytics, Booking, Catalog, Leads, and App pages where route folders exist.
+18. Added `sql/2026-06-06_build194_diff_preview_option_libraries_no_ddl_note.sql` documenting that no DDL is required.
+19. Added `scripts/build194_diff_preview_option_libraries_check.py` and wired it into `scripts/release_check.py`.
+20. Re-ran release/H1/archive checks for the packaged build.
+
+### Next 20 recommended steps
+
+1. Add full JSON Schema validation with field-level UI markers, not only required-path checks.
+2. Add a side-by-side visual diff for selected history rows, not only current versus fallback.
+3. Add role-scoped enforcement on save per editable domain once the staff role model has dedicated capabilities for content, media, analytics, and settings.
+4. Add send-test controls for appointment confirmation, invoice, deposit receipt, refund notice, quote, and proposal templates.
+5. Add invoice PDF/export packaging once invoice wording is approved.
+6. Add customer-visible policy version stamping to bookings, quotes, invoices, and payment requests.
+7. Add admin override reason logging when staff intentionally create or keep bookings on closed/holiday dates.
+8. Add sub-day business-hours windows beyond AM/PM for exact arrival windows.
+9. Add richer option-library dropdown hydration to finance, media-health, payments, content, and tax-review screens.
+10. Add editable landing-page preview cards that render the actual hero, service, town, and FAQ copy.
+11. Add broken-link scans for editable navigation/footer links.
+12. Add local SEO proof gap reminders to the main dashboard diagnostics card.
+13. Add sitemap/robots preview checks when landing-page content changes.
+14. Add public structured-data preview for LocalBusiness and service landing pages.
+15. Add template token previews with sample customer/booking data.
+16. Add an audit export for editable-setting changes and restores.
+17. Add scheduled fallback-backed settings reports for the dashboard.
+18. Add media requirement diff/preview before restore-from-history.
+19. Add automated smoke tests for invoice, confirmation, quote payment, booking availability, and settings APIs.
+20. Continue migrating duplicated JSON/page content into DB-first editable settings where it reduces failure points.

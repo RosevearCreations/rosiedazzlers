@@ -737,3 +737,9 @@ New fallback/schema-support file:
 New release note:
 
 - `sql/2026-06-05_build193_social_templates_validation_no_ddl_note.sql` — no-DDL note for the social-template hotfix and validation pass.
+
+---
+
+## Build 194 schema note — 2026-06-06
+
+Build 194 adds no new DDL. It reuses `app_management_settings`, `app_management_setting_history`, and `site_activity_events` for editable-setting diff/preview tools and analytics registry quick-add. The no-DDL note is recorded at `sql/2026-06-06_build194_diff_preview_option_libraries_no_ddl_note.sql`.
