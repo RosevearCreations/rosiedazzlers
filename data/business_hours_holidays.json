@@ -1,7 +1,7 @@
 {
-  "version": "191.0.0",
+  "version": "192.0.0",
   "updated_at": "2026-06-05",
-  "source": "bundled_json_fallback",
+  "source": "bundled_json_fallback_build192_business_hours_conflict_checks",
   "timezone": "America/Toronto",
   "hours": {
     "monday": "By appointment",
@@ -13,5 +13,6 @@
     "sunday": "Limited / by appointment"
   },
   "holiday_closures": [],
-  "notes": "Mobile detailing availability depends on weather, driveway access, staff capacity, municipal restrictions, and service scope."
+  "notes": "Mobile detailing availability depends on weather, driveway access, staff capacity, municipal restrictions, and service scope.",
+  "slot_conflict_policy": "Booking slot selection and admin booking creation should warn or block when a selected service date is closed by holiday_closures or daily hours."
 }

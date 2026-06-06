@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-14",
+  "updated_at": "2026-06-05",
   "purpose": "Shared fallback option libraries for Admin App and Admin Catalog dropdowns. Supabase app_management_settings.catalog_dropdown_options should override these when available.",
   "addon_categories": [
     "Interior",
@@ -242,5 +242,95 @@
       "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
     }
   ],
-  "service_area_fallback_note": "If a specific town has no override, use the county default water rule. If a customer types a town not in the list, resolve to Other Oxford County location or Other Norfolk County location when the typed text contains that county; otherwise ask staff to confirm."
+  "service_area_fallback_note": "If a specific town has no override, use the county default water rule. If a customer types a town not in the list, resolve to Other Oxford County location or Other Norfolk County location when the typed text contains that county; otherwise ask staff to confirm.",
+  "version": "192.0.0",
+  "source": "bundled_json_fallback_build192_option_libraries",
+  "communication_channels": [
+    "email",
+    "sms",
+    "phone",
+    "internal_note"
+  ],
+  "payment_methods": [
+    "stripe",
+    "paypal",
+    "cash",
+    "e_transfer",
+    "card_on_site",
+    "manual_adjustment"
+  ],
+  "booking_statuses": [
+    "pending",
+    "confirmed",
+    "completed",
+    "cancelled",
+    "rescheduled",
+    "needs_review"
+  ],
+  "job_statuses": [
+    "scheduled",
+    "in_progress",
+    "customer_review",
+    "done",
+    "blocked",
+    "needs_followup"
+  ],
+  "photo_estimate_statuses": [
+    "new",
+    "needs_review",
+    "quote_drafted",
+    "quote_sent",
+    "accepted",
+    "declined",
+    "archived"
+  ],
+  "condition_review_statuses": [
+    "not_started",
+    "needs_review",
+    "approved",
+    "flagged",
+    "customer_visible"
+  ],
+  "media_privacy_statuses": [
+    "no_media",
+    "customer_approved",
+    "internal_only",
+    "sample",
+    "needs_consent"
+  ],
+  "finance_entry_types": [
+    "deposit",
+    "final_payment",
+    "tip",
+    "refund",
+    "discount",
+    "other"
+  ],
+  "finance_reason_codes": [
+    "customer_payment",
+    "promo_discount",
+    "weather_reschedule",
+    "scope_change",
+    "manual_adjustment",
+    "refund_partial",
+    "refund_full"
+  ],
+  "template_domains": [
+    "quote_proposal",
+    "deposit_receipt",
+    "refund_notice",
+    "invoice",
+    "appointment_confirmation"
+  ],
+  "setting_source_statuses": [
+    "db_backed",
+    "fallback_backed",
+    "synced_from_bundle",
+    "restored_from_history"
+  ],
+  "analytics_warning_actions": [
+    "add_to_registry",
+    "fix_emitter_typo",
+    "archive_legacy_event"
+  ]
 }

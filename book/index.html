@@ -482,11 +482,11 @@
       <div id="reviewVehicleBox" class="summary-box" style="margin-top:12px"></div>
 
       <div class="requirements-grid" style="margin-top:16px">
-        <label><input id="ack_driveway" type="checkbox" /><span><strong>Driveway required</strong><br>We need safe working space at the vehicle.</span></label>
-        <label><input id="ack_power_water" type="checkbox" /><span><strong>Customer provides power and water</strong><br>Extra fees can apply if either is unavailable.</span></label>
-        <label><input id="need_mobile_water_power" type="checkbox" /><span><strong>Quote bringing water/power</strong><br>Check this if the site may not have hose or power access; staff will confirm extra setup fees.</span></label>
-        <label><input id="ack_bylaw" type="checkbox" /><span><strong>Environmental / bylaw responsibility acknowledged</strong><br>Customer confirms any local bylaw requirements.</span></label>
-        <label><input id="ack_cancellation" type="checkbox" /><span><strong>Deposit and weather rescheduling policy acknowledged</strong><br>Unsafe weather or site conditions can require rescheduling.</span></label>
+        <label><input id="ack_driveway" type="checkbox" /><span><strong>Driveway and safe access required</strong><br><span data-policy-copy="driveway_access">We need safe working space at the vehicle.</span></span></label>
+        <label><input id="ack_power_water" type="checkbox" /><span><strong>Power / water access acknowledged</strong><br><span data-policy-copy="water_power">Extra fees can apply if either is unavailable.</span></span></label>
+        <label><input id="need_mobile_water_power" type="checkbox" /><span><strong>Quote bringing water/power</strong><br><span data-policy-copy="water_power">Check this if the site may not have hose or power access; staff will confirm extra setup fees.</span></span></label>
+        <label><input id="ack_bylaw" type="checkbox" /><span><strong>Environmental / bylaw responsibility acknowledged</strong><br><span data-policy-copy="driveway_access">Customer confirms safe access and any local bylaw requirements.</span></span></label>
+        <label><input id="ack_cancellation" type="checkbox" /><span><strong>Deposit and weather rescheduling policy acknowledged</strong><br><span data-policy-copy="cancellation">Unsafe weather or site conditions can require rescheduling.</span></span></label>
       </div>
 
       <div class="grid2" style="margin-top:12px">
@@ -497,7 +497,7 @@
         <div>
           <label for="veh_photo">Vehicle photo link (optional)</label>
           <input id="veh_photo" type="url" placeholder="https://..." />
-          <div class="mini muted" style="margin-top:6px">Helpful for size verification and planning, but not required.</div>
+          <div class="mini muted" style="margin-top:6px"><span data-policy-copy="media_privacy">Helpful for size verification and planning, but not required.</span></div>
           <div class="photo-estimate-guide">
             <strong>Photo estimate checklist</strong>
             <div class="mini muted" style="margin-top:6px">For quotes, attach or link 2–6 clear photos when possible:</div>
@@ -1755,11 +1755,13 @@
         const dt = new Date(`${item.iso}T12:00:00`);
         const label = dt.toLocaleDateString("en-CA", { weekday:"short", month:"short", day:"numeric" });
         const out = item.out || {};
-        const desc = item.status === "open"
-          ? "AM open · PM open"
-          : item.status === "partial"
-            ? `AM ${out.AM ? "open" : "booked"} · PM ${out.PM ? "open" : "booked"}`
-            : out.blocked ? `Unavailable · ${out.reason || "blocked"}` : "Unavailable · booked";
+        const desc = out.business_hours_conflict || out.business_hours?.is_closed
+          ? `Closed/limited · ${out.business_hours?.reason || out.business_hours?.hours_label || out.reason || "business hours"}`
+          : item.status === "open"
+            ? "AM open · PM open"
+            : item.status === "partial"
+              ? `AM ${out.AM ? "open" : "booked"} · PM ${out.PM ? "open" : "booked"}`
+              : out.blocked ? `Unavailable · ${out.reason || "blocked"}` : "Unavailable · booked";
         const disabled = item.status === "closed" ? "disabled" : "";
         const selected = item.iso === selectedDate() ? "is-selected" : "";
         return `<button class="date-pill is-${item.status} ${selected}" type="button" data-date-pill="${item.iso}" ${disabled}><strong>${label}</strong><span>${escapeHtml(desc)}</span></button>`;
@@ -1791,10 +1793,12 @@
         return;
       }
 
+      const businessHours = out.business_hours || {};
+      const hoursClosed = out.business_hours_conflict === true || businessHours.is_closed === true;
       const map = {
-        AM: !!out.AM,
-        PM: !!out.PM,
-        FULL: !!out.AM && !!out.PM
+        AM: !hoursClosed && !!out.AM,
+        PM: !hoursClosed && !!out.PM,
+        FULL: !hoursClosed && !!out.AM && !!out.PM
       };
 
       qsa("[data-slot]").forEach((btn) => {
@@ -1806,10 +1810,11 @@
         else btn.textContent = (activeBookingRules().slot_labels || {})[slot] || (slot === "FULL" ? "Full day" : `${slot} half day`);
       });
 
-      qs("#availabilityNote").textContent = `Availability for ${date}: AM ${out.AM ? "open" : "booked"}, PM ${out.PM ? "open" : "booked"}${out.blocked ? ` • ${out.reason || "blocked"}` : ""}.`;
+      const hoursNote = hoursClosed ? ` • Business hours/holiday warning: ${businessHours.reason || businessHours.hours_label || out.reason || "closed"}` : (businessHours.hours_label ? ` • Hours: ${businessHours.hours_label}` : "");
+      qs("#availabilityNote").textContent = `Availability for ${date}: AM ${map.AM ? "open" : "booked/closed"}, PM ${map.PM ? "open" : "booked/closed"}${out.blocked ? ` • ${out.reason || "blocked"}` : ""}${hoursNote}.`;
 
       if (!map[state.selectedSlotChoice]) {
-        state.selectedSlotChoice = out.AM ? "AM" : out.PM ? "PM" : "";
+        state.selectedSlotChoice = map.AM ? "AM" : map.PM ? "PM" : "";
       }
 
       qsa("[data-slot]").forEach((btn) => btn.classList.toggle("active", btn.getAttribute("data-slot") === state.selectedSlotChoice));
