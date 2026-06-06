@@ -810,3 +810,7 @@ Build 190 continues the editable-content migration by rendering public business 
 - Added analytics ingest validation against the editable analytics event registry.
 - Switched Media Health JSON fallback from build-specific image requirement files to stable `data/media_requirements.json`.
 - Added Build 191 release guard.
+
+## Build 192 sanity check — 2026-06-05
+
+Build 192 keeps the one-H1 rule intact, adds no new public page headings, and focuses on wiring existing editable-setting data into visible UI behavior. Release validation now includes `scripts/build192_editable_operations_completion_check.py`, the existing H1 guard, and the broader `scripts/release_check.py` chain.

@@ -613,3 +613,5 @@ Build 190 continues the editable-content migration by rendering public business 
 - Added analytics ingest validation against the editable analytics event registry.
 - Switched Media Health JSON fallback from build-specific image requirement files to stable `data/media_requirements.json`.
 - Added Build 191 release guard.
+
+<!-- Build 192 documentation sync: editable-domain editors, restore-from-history UI, business-hours booking warnings, dynamic policies/templates, analytics registry warnings, media requirement sync/restore, and fallback diagnostics were reviewed on 2026-06-05. -->

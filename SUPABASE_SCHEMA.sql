@@ -1616,3 +1616,10 @@ CREATE TABLE IF NOT EXISTS public.app_management_setting_history (
 
 
 -- Build 191 editable settings hardening: no new DDL. Uses Build 190 app_management_setting_history plus app_management_settings.
+
+-- Build 192 editable operations completion note (2026-06-05)
+-- No new Supabase DDL is required in this build.
+-- Existing app_management_settings and app_management_setting_history tables now back
+-- structured editable-domain editors, direct restore-from-history controls, media
+-- requirement sync/restore controls, analytics registry warning checks, dynamic
+-- policy/template rendering, and business-hours/holiday booking warnings.
