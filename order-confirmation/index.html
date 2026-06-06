@@ -74,7 +74,8 @@
         ['Time', d.booking?.slot_label||d.booking?.start_slot||'—'],
         ['Package', d.package?.name||'—'],
         ['Estimated total', money(d.summary?.effective_total_cents||0)],
-        ['Deposit due / paid', money(d.summary?.deposit_cents||0)]
+        ['Deposit due / paid', money(d.summary?.deposit_cents||0)],
+        ['Policy version', d.policy_stamp?.version||d.company?.policy_stamp?.version||'current']
       ].map(([l,v])=>`<div class="doc-row"><span>${esc(l)}</span><strong>${esc(v)}</strong></div>`).join('');
       qs('#vehicleRows').innerHTML=[
         ['Vehicle', d.vehicle?.label||'—'],

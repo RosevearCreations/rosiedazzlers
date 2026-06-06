@@ -51,8 +51,12 @@ else:
     try:
         data = json.loads(schema_path.read_text(encoding="utf-8"))
         schemas = data.get("schemas", {})
-        if data.get("version") != "193.0.0":
-            missing.append("data/editable_setting_validation_schemas.json: version should be 193.0.0")
+        try:
+            major = int(str(data.get("version", "0")).split(".")[0])
+        except Exception:
+            major = 0
+        if major < 193:
+            missing.append("data/editable_setting_validation_schemas.json: version should be 193.0.0 or newer")
         for key in [
             "business_profile", "site_policies", "document_templates", "business_hours_holidays",
             "navigation_footer", "option_libraries", "analytics_event_registry", "media_requirements",

@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 195 note:
+- Adds editable-setting field markers, selected-history diffs, template preview/test payloads, audit/fallback reports, sitemap/schema previews, policy stamping, and override logging.
+
 Build 194 note:
 - Adds editable-setting JSON diff/preview tools, analytics registry quick-add, option-library dropdown hydration, and route-copy parity guards.
 
@@ -97,6 +100,7 @@ CHECKS = [
         "scripts/build192_editable_operations_completion_check.py",
     "scripts/build193_social_templates_and_validation_check.py",
     "scripts/build194_diff_preview_option_libraries_check.py",
+    "scripts/build195_schema_history_template_export_check.py",
     "scripts/seo_h1_check.py",
 ]
 
