@@ -20,7 +20,7 @@
     .muted{color:#94a3b8}.warning-panel{border-radius:16px;border:1px solid rgba(251,191,36,.28);background:rgba(245,158,11,.10);padding:14px;margin-top:14px}.warning-panel[data-state="ok"]{border-color:rgba(74,222,128,.28);background:rgba(22,163,74,.10)}.warning-row{padding:10px;border-radius:12px;background:rgba(15,23,42,.35);border:1px solid rgba(255,255,255,.06);margin-top:8px}
   </style>
 </head>
-<body data-page="admin" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard">
+<body data-page="admin" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard" data-build192="editable-settings-diagnostics">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -95,6 +95,8 @@
           <div id="paymentWebhookWarnings" class="warning-panel" data-state="loading">Loading payment webhook warning summary…</div>
           <h2 style="margin-top:18px">Build 185 operations warnings</h2>
           <div id="build185OpsWarnings" class="warning-panel" data-state="loading">Loading media/payment operations warnings…</div>
+          <h2 style="margin-top:18px">Editable settings diagnostics</h2>
+          <div id="editableSettingsDiagnostics" class="warning-panel" data-state="loading">Loading DB/fallback setting coverage…</div>
         </div>
       </section>
 
@@ -292,7 +294,8 @@
         live: document.getElementById('dashboardLive'),
         daily: document.getElementById('dashboardDaily'),
         paymentWarnings: document.getElementById('paymentWebhookWarnings'),
-        opsWarnings: document.getElementById('build185OpsWarnings')
+        opsWarnings: document.getElementById('build185OpsWarnings'),
+        settingsDiagnostics: document.getElementById('editableSettingsDiagnostics')
       };
       function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
       function setShellStatus(message,type){document.querySelectorAll('[data-admin-shell-status]').forEach((node)=>{node.hidden=!message;node.textContent=message||'';node.dataset.state=type||'';});}
@@ -336,6 +339,21 @@
         els.opsWarnings.innerHTML = `<strong>${total?`${total} operations warning(s) need review`:'No Build 185 media/payment warnings found'}</strong><div class="muted">Missing images: ${missing} • Undersized images: ${small} • Payment variances: ${variances} • Receipt retries: ${receiptRetries}</div><div style="margin-top:10px"><a class="btn ghost small" href="/admin-media-health.html">Media Health</a> <a class="btn ghost small" href="/admin-payments.html">Payments</a> <a class="btn ghost small" href="/admin-close.html">Close Checklist</a></div>`;
       }
 
+
+      async function loadEditableSettingsDiagnostics(){
+        if(!els.settingsDiagnostics) return;
+        const res = await fetch('/api/admin/editable_site_settings_status', { credentials:'include', cache:'no-store' });
+        const data = await res.json().catch(()=>null);
+        if(!res.ok || !data?.ok) throw new Error(data?.error || 'Could not load editable settings diagnostics.');
+        const summary = data.summary || {};
+        const fallback = Number(summary.fallback_backed || 0);
+        const total = Number(summary.total || 0);
+        const dbBacked = Number(summary.db_backed || 0);
+        const rows = Object.entries(data.settings || {}).filter(([, row])=>String(row?.source_status || '').includes('fallback')).slice(0,6).map(([key,row])=>`<div class="warning-row"><strong>${esc(key.replaceAll('_',' '))}</strong><div class="muted">${esc(row.source_status || 'fallback')} · ${esc(row.updated_at || 'bundled JSON')}</div></div>`).join('');
+        els.settingsDiagnostics.dataset.state = fallback ? 'warn' : 'ok';
+        els.settingsDiagnostics.innerHTML = `<strong>${dbBacked}/${total} editable setting(s) DB-backed; ${fallback} using fallback</strong><div class="muted">Fallback is safe, but important public copy should be synced to the database before launch.</div>${rows}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-site-settings.html">Open Editable Settings</a></div>`;
+      }
+
       async function loadDashboardAnalytics(){
         const res = await fetch('/api/admin/analytics_overview', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ days: 14 })});
         const data = await res.json().catch(()=>null);
@@ -344,7 +362,7 @@
         renderList(els.live, (data.live_online_sessions||[]).slice(0,5), (r)=>`<strong>${esc(r.country || 'Unknown')}</strong><div class="muted">${esc((r.path||[]).join(' → '))}</div><div class="muted">Seen: ${esc(r.ended_at || '')}</div>`, 'No live visitors right now.');
         renderList(els.daily, (data.daily_traffic||[]).slice(-7).reverse(), (r)=>`<strong>${esc(r.day)}</strong><div class="muted">${Number(r.page_views||0)} page views • ${Number(r.unique_visitors||0)} visitors • ${Number(r.abandoned_sessions||0)} abandoned</div>`, 'No daily traffic summary yet.');
       }
-      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ try { await Promise.all([loadDashboardAnalytics(), loadPaymentWebhookWarnings(), loadBuild185OpsWarnings()]); } catch (err) { setShellStatus(err?.message || 'Could not load dashboard analytics.', 'error'); } } });
+      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ try { await Promise.all([loadDashboardAnalytics(), loadPaymentWebhookWarnings(), loadBuild185OpsWarnings(), loadEditableSettingsDiagnostics()]); } catch (err) { setShellStatus(err?.message || 'Could not load dashboard analytics.', 'error'); } } });
     })();
   </script>
 </body>

@@ -7,10 +7,10 @@
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
   <style>
-    .settings-grid{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(300px,2fr);gap:16px;align-items:start}.setting-list{display:grid;gap:8px}.setting-button{width:100%;text-align:left;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#e5e7eb;border-radius:12px;padding:10px;cursor:pointer}.setting-button[aria-current="true"]{border-color:#93c5fd;background:rgba(59,130,246,.18)}textarea.settings-json{width:100%;min-height:540px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9rem;border-radius:14px;padding:14px;background:#0f172a;color:#e5e7eb;border:1px solid rgba(255,255,255,.12)}.status{margin-top:10px;padding:10px;border-radius:12px;background:rgba(255,255,255,.06)}.status[data-state="error"]{background:rgba(220,38,38,.14);color:#fecaca}.status[data-state="ok"]{background:rgba(22,163,74,.14);color:#bbf7d0}@media(max-width:860px){.settings-grid{grid-template-columns:1fr}textarea.settings-json{min-height:420px}}
+    .settings-grid{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(300px,2fr);gap:16px;align-items:start}.setting-list{display:grid;gap:8px}.setting-button{width:100%;text-align:left;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#e5e7eb;border-radius:12px;padding:10px;cursor:pointer}.setting-button[aria-current="true"]{border-color:#93c5fd;background:rgba(59,130,246,.18)}textarea.settings-json{width:100%;min-height:540px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9rem;border-radius:14px;padding:14px;background:#0f172a;color:#e5e7eb;border:1px solid rgba(255,255,255,.12)}.status{margin-top:10px;padding:10px;border-radius:12px;background:rgba(255,255,255,.06)}.structured-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}.structured-grid label{display:grid;gap:4px}.structured-grid input,.structured-grid textarea{width:100%;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:#0f172a;color:#e5e7eb;padding:8px}.structured-grid textarea{min-height:90px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.history-row{margin-top:10px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(15,23,42,.45)}.history-row details{margin-top:8px}.history-row pre{max-height:220px;overflow:auto;white-space:pre-wrap;background:#020617;padding:10px;border-radius:10px}.status[data-state="error"]{background:rgba(220,38,38,.14);color:#fecaca}.status[data-state="ok"]{background:rgba(22,163,74,.14);color:#bbf7d0}@media(max-width:860px){.settings-grid{grid-template-columns:1fr}textarea.settings-json{min-height:420px}}
   </style>
 </head>
-<body data-page="admin-site-settings" data-build189="editable-site-settings" data-build190="editable-site-settings-live-rendering" data-build191="admin-auth-editable-settings-hardening">
+<body data-page="admin-site-settings" data-build189="editable-site-settings" data-build190="editable-site-settings-live-rendering" data-build191="admin-auth-editable-settings-hardening" data-build192="structured-editors-history-restore">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers Admin</strong></a>
@@ -27,9 +27,9 @@
   <main class="container">
     <section class="section">
       <div class="panel">
-        <div class="badge">Build 190</div>
+        <div class="badge">Build 192</div>
         <h1>Editable site settings</h1>
-        <p class="kicker">Business identity, policies, templates, hours, navigation, dropdowns, analytics labels, media requirements, and landing-page fallback content should be editable data instead of hard-coded JavaScript. This screen edits JSON payloads stored in <code>app_management_settings</code>; bundled JSON remains the fallback. Build 190 adds validation, DB/fallback diagnostics, sync-from-bundle controls, and public rendering for navigation, footer, business profile, schema, policies, analytics labels, and media requirements.</p>
+        <p class="kicker">Business identity, policies, templates, hours, navigation, dropdowns, analytics labels, media requirements, and landing-page fallback content should be editable data instead of hard-coded JavaScript. This screen edits JSON payloads stored in <code>app_management_settings</code>; bundled JSON remains the fallback. Build 190 compatibility remains active. Build 192 adds structured editors for every editable domain, direct restore-from-history controls, and clearer DB/fallback diagnostics while preserving bundled JSON fallbacks.</p>
         <div data-admin-menu-mount></div>
       </div>
     </section>
@@ -142,11 +142,8 @@
     });
 
     document.getElementById("historyBtn").addEventListener("click", async () => {
-      try {
-        const res = await adminFetch(`/api/admin/editable_site_settings_history?key=${encodeURIComponent(state.currentKey)}`);
-        const data = await res.json();
-        showStatus(JSON.stringify(data.history || [], null, 2), "ok");
-      } catch (error) { showStatus(error.message || "Could not load history.", "error"); }
+      try { await renderHistoryRestoreList(); }
+      catch (error) { showStatus(error.message || "Could not load history.", "error"); }
     });
 
     document.getElementById("saveBtn").addEventListener("click", async () => {
@@ -190,36 +187,161 @@
     function renderStructuredEditor(key, value) {
       const box = document.getElementById("structuredEditor");
       if (!box) return;
-      if (key === "business_profile") {
-        const business = value.business || value;
-        const contact = business.contact || {};
-        box.hidden = false; box.dataset.state = "";
-        box.innerHTML = `<strong>Structured helper: business profile</strong><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:8px">
-          <label>Name<input data-structured-field="business.name" value="${escapeHtml(business.name || "")}"></label>
-          <label>Public phone<input data-structured-field="business.contact.public_phone" value="${escapeHtml(contact.public_phone || "")}"></label>
-          <label>Public email<input data-structured-field="business.contact.public_email" value="${escapeHtml(contact.public_email || "")}"></label>
-          <label>Service area<input data-structured-field="business.service_area" value="${escapeHtml(business.service_area || "")}"></label>
-        </div><button class="btn ghost" type="button" data-apply-structured style="margin-top:8px">Apply structured fields to JSON</button>`;
-        box.querySelector("[data-apply-structured]").addEventListener("click", applyStructuredFields);
-        return;
+      const config = structuredEditorConfig(key, value || {});
+      if (!config) { box.hidden = true; box.textContent = ""; return; }
+      box.hidden = false;
+      box.dataset.state = "";
+      const fields = (config.fields || []).map(fieldMarkup).join("");
+      box.innerHTML = `<strong>Structured editor: ${escapeHtml(labelFor(key))}</strong><p class="muted">${escapeHtml(config.description || "Edit common fields here, then apply them back into the JSON before saving.")}</p><div class="structured-grid">${fields}</div><button class="btn ghost" type="button" data-apply-structured style="margin-top:10px">Apply structured fields to JSON</button>`;
+      box.querySelector("[data-apply-structured]").addEventListener("click", applyStructuredFields);
+    }
+
+    function structuredEditorConfig(key, value) {
+      const templates = (value && value.templates) || {};
+      const business = value.business || value;
+      const contact = business.contact || {};
+      const policies = value.policies || {};
+      const hours = value.hours || {};
+      const fallback = (path, fallbackValue = "") => valueAtPath(value, path, fallbackValue);
+      const jsonField = (label, path, val) => ({ label, path, type: "json", value: val });
+      const linesField = (label, path, val) => ({ label, path, type: "lines", value: Array.isArray(val) ? val.join("\n") : "" });
+      switch (key) {
+        case "business_profile":
+          return { description:"Business identity, contact, social links, service-area wording, and schema values used across the public site.", fields:[
+            { label:"Business name", path:"business.name", value:business.name || "" },
+            { label:"Legal name", path:"business.legal_name", value:business.legal_name || "" },
+            { label:"Public phone", path:"business.contact.public_phone", value:contact.public_phone || contact.phone || "" },
+            { label:"Public email", path:"business.contact.public_email", value:contact.public_email || contact.email || "" },
+            { label:"Service area", path:"business.service_area", value:business.service_area || "" },
+            { label:"Primary location", path:"business.primary_location", value:business.primary_location || "" },
+            { label:"Website", path:"business.website", value:business.website || "" },
+            jsonField("Social links JSON", "business.social_links", business.social_links || [])
+          ]};
+        case "site_policies":
+          return { description:"Policy copy shown on booking, quote-payment, customer, and confirmation pages. Keep it customer friendly and local.", fields:Object.keys(policies).length ? Object.keys(policies).map((name)=>({ label:labelFor(name), path:`policies.${name}`, value:policies[name] || "", type:"textarea" })) : [
+            { label:"Deposit", path:"policies.deposit", value:"", type:"textarea" },
+            { label:"Cancellation", path:"policies.cancellation", value:"", type:"textarea" },
+            { label:"Refund", path:"policies.refund", value:"", type:"textarea" },
+            { label:"Driveway access", path:"policies.driveway_access", value:"", type:"textarea" },
+            { label:"Water / power", path:"policies.water_power", value:"", type:"textarea" },
+            { label:"Media privacy", path:"policies.media_privacy", value:"", type:"textarea" }
+          ]};
+        case "document_templates": {
+          const keys = Array.from(new Set(["quote_proposal","deposit_receipt","refund_notice","invoice","appointment_confirmation"].concat(Object.keys(templates))));
+          return { description:"Email, invoice, and appointment-confirmation template subjects/bodies. Tokens like {{customer_name}}, {{service_date}}, {{package_name}}, {{invoice_url}}, and {{confirmation_url}} are supported.", fields:keys.flatMap((name)=>[
+            { label:`${labelFor(name)} subject`, path:`templates.${name}.subject`, value:(templates[name] && templates[name].subject) || "" },
+            { label:`${labelFor(name)} body`, path:`templates.${name}.body`, value:(templates[name] && templates[name].body) || "", type:"textarea" }
+          ])};
+        }
+        case "business_hours_holidays":
+          return { description:"Public and admin booking conflict checks use these hours and holiday closures before a slot can be selected.", fields:[
+            { label:"Timezone", path:"timezone", value:value.timezone || "America/Toronto" },
+            ...["monday","tuesday","wednesday","thursday","friday","saturday","sunday"].map(day => ({ label:labelFor(day), path:`hours.${day}`, value:hours[day] || "" })),
+            jsonField("Holiday closures JSON", "holiday_closures", value.holiday_closures || []),
+            { label:"Booking note", path:"notes", value:value.notes || "", type:"textarea" }
+          ]};
+        case "navigation_footer":
+          return { description:"Navigation and footer links used by public chrome rendering.", fields:[
+            jsonField("Navigation links", "navigation", value.navigation || []),
+            jsonField("Footer groups", "footer_groups", value.footer_groups || value.footer || []),
+            { label:"Footer note", path:"footer_note", value:value.footer_note || "", type:"textarea" }
+          ]};
+        case "option_libraries":
+          return { description:"Shared dropdown libraries used by Admin App editors, booking screens, and future DB-backed option pickers.", fields:[
+            linesField("Communication channels", "communication_channels", value.communication_channels || []),
+            linesField("Payment methods", "payment_methods", value.payment_methods || []),
+            linesField("Booking statuses", "booking_statuses", value.booking_statuses || []),
+            linesField("Job statuses", "job_statuses", value.job_statuses || []),
+            linesField("Add-on categories", "addon_categories", value.addon_categories || []),
+            linesField("Inventory categories", "inventory_categories", value.inventory_categories || []),
+            linesField("Service zones", "service_zones", value.service_zones || []),
+            linesField("Finance entry types", "finance_entry_types", value.finance_entry_types || [])
+          ]};
+        case "analytics_event_registry":
+          return { description:"Known analytics events. Unknown names now show warnings in Admin Analytics so typos do not silently pollute reports.", fields:[
+            jsonField("Known events JSON", "events", value.events || []),
+            jsonField("Event groups JSON", "groups", value.groups || {})
+          ]};
+        case "media_requirements":
+          return { description:"Required image/video assets, dimensions, R2 keys, and media health expectations. Media Health can sync/restore this DB setting directly.", fields:[
+            { label:"Version", path:"version", value:value.version || "" },
+            jsonField("Required assets JSON", "required_assets", value.required_assets || []),
+            jsonField("Fallback notes JSON", "fallback_notes", value.fallback_notes || {})
+          ]};
+        case "landing_pages_content":
+          return { description:"Landing-page hero, intro, trust, service-area, and SEO content blocks used by public pages.", fields:[
+            { label:"Version", path:"version", value:value.version || "" },
+            jsonField("Pages / landing content JSON", "pages", value.pages || value.landing_pages || value),
+            { label:"Updated at", path:"updated_at", value:value.updated_at || "" }
+          ]};
+        default:
+          return { description:"Generic top-level JSON helper for this editable domain.", fields:Object.keys(value || {}).slice(0, 12).map((name)=> (typeof value[name] === "object" ? jsonField(labelFor(name), name, value[name]) : { label:labelFor(name), path:name, value:value[name] || "" })) };
       }
-      if (key === "navigation_footer") {
-        const nav = Array.isArray(value.navigation) ? value.navigation : [];
-        box.hidden = false; box.dataset.state = "";
-        box.innerHTML = `<strong>Structured helper: navigation/footer</strong><p class="muted">Current public navigation items: ${nav.map((item) => escapeHtml(item.label || item.href || "link")).join(", ") || "none"}. Use JSON below for ordering and footer groups.</p>`;
-        return;
+    }
+
+    function fieldMarkup(field) {
+      const type = field.type || "text";
+      const value = type === "json" ? JSON.stringify(field.value ?? null, null, 2) : (field.value ?? "");
+      if (type === "textarea" || type === "json" || type === "lines") {
+        const attr = type === "json" ? ' data-structured-json="true"' : (type === "lines" ? ' data-structured-lines="true"' : "");
+        return `<label>${escapeHtml(field.label)}<textarea data-structured-field="${escapeHtml(field.path)}"${attr}>${escapeHtml(value)}</textarea></label>`;
       }
-      box.hidden = true; box.textContent = "";
+      return `<label>${escapeHtml(field.label)}<input data-structured-field="${escapeHtml(field.path)}" value="${escapeHtml(value)}"></label>`;
     }
 
     function applyStructuredFields() {
       const box = document.getElementById("structuredEditor");
       const payload = JSON.parse(jsonEl.value || "{}");
       box.querySelectorAll("[data-structured-field]").forEach((input) => {
-        setPath(payload, input.dataset.structuredField, input.value);
+        let value = input.value;
+        if (input.dataset.structuredJson === "true") {
+          value = JSON.parse(value || "null");
+        } else if (input.dataset.structuredLines === "true") {
+          value = String(value || "").split(/\r?\n/).map((line)=>line.trim()).filter(Boolean);
+        }
+        setPath(payload, input.dataset.structuredField, value);
       });
       jsonEl.value = JSON.stringify(payload, null, 2);
       showStatus("Structured fields applied to JSON. Review and save.", "ok");
+    }
+
+    async function renderHistoryRestoreList() {
+      if (!state.currentKey) throw new Error("Select an editable setting first.");
+      const res = await adminFetch(`/api/admin/editable_site_settings_history?key=${encodeURIComponent(state.currentKey)}`);
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "Could not load history.");
+      const rows = Array.isArray(data.history) ? data.history : [];
+      if (!rows.length) { showStatus("No history rows found for this editable setting yet.", "ok"); return; }
+      const html = rows.slice(0, 12).map((row, index) => {
+        const id = row.history_id || row.id || "";
+        const when = row.created_at || row.updated_at || row.restored_at || "unknown date";
+        const reason = row.reason || row.change_reason || row.source || "saved copy";
+        const value = row.value || row.setting_value || row.payload || {};
+        return `<div class="history-row"><strong>Version ${index + 1}</strong><div class="muted">${escapeHtml(when)} · ${escapeHtml(reason)}</div><button class="btn ghost small" type="button" data-restore-history="${escapeHtml(id)}">Restore this version</button><details><summary>Preview JSON</summary><pre>${escapeHtml(JSON.stringify(value, null, 2))}</pre></details></div>`;
+      }).join("");
+      showStatusHtml(`<strong>Restore from history: ${escapeHtml(labelFor(state.currentKey))}</strong>${html}`, "ok");
+      statusEl.querySelectorAll("[data-restore-history]").forEach((button) => button.addEventListener("click", async () => {
+        const historyId = button.getAttribute("data-restore-history");
+        if (!historyId) return;
+        if (!confirm(`Restore ${state.currentKey} from this history row? Current JSON should already be saved in history by the API.`)) return;
+        const restoreRes = await adminFetch("/api/admin/editable_site_settings_restore", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ key: state.currentKey, history_id: historyId }) });
+        const restoreData = await restoreRes.json().catch(() => null);
+        if (!restoreRes.ok || !restoreData?.ok) throw new Error(restoreData?.error || "Restore failed.");
+        showStatus(`Restored ${state.currentKey} from history.`, "ok");
+        await loadSettings();
+        selectSetting(state.currentKey);
+        loadDiagnostics();
+      }));
+    }
+
+    function valueAtPath(obj, path, fallbackValue = "") {
+      const parts = String(path || "").split(".").filter(Boolean);
+      let cursor = obj;
+      for (const part of parts) {
+        if (!cursor || typeof cursor !== "object" || !(part in cursor)) return fallbackValue;
+        cursor = cursor[part];
+      }
+      return cursor ?? fallbackValue;
     }
 
     function setPath(obj, path, value) {
@@ -227,15 +349,16 @@
       let cursor = obj;
       for (let i = 0; i < parts.length - 1; i += 1) {
         const part = parts[i];
-        if (!cursor[part] || typeof cursor[part] !== "object") cursor[part] = {};
+        if (!cursor[part] || typeof cursor[part] !== "object" || Array.isArray(cursor[part])) cursor[part] = {};
         cursor = cursor[part];
       }
       cursor[parts[parts.length - 1]] = value;
     }
 
     function showStatus(message, stateName) { statusEl.hidden = false; statusEl.dataset.state = stateName || ""; statusEl.textContent = message; }
+    function showStatusHtml(html, stateName) { statusEl.hidden = false; statusEl.dataset.state = stateName || ""; statusEl.innerHTML = html; }
     function labelFor(key) { return String(key || "").replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()); }
-    function escapeHtml(value) { return String(value || "").replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+    function escapeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
   </script>
 </body>
 </html>
