@@ -9,7 +9,7 @@ const FALLBACK_CAPTION_TEMPLATES = [
     service_area: "Southern Ontario",
     template_text: "Another Rosie Dazzlers progress update: {summary}\n\nServing Tillsonburg, Oxford County, Norfolk County, and nearby Southern Ontario communities.",
     default_hashtags: ["RosieDazzlers", "AutoDetailing", "SouthernOntario"],
-    notes: "Built-in fallback until the Build 158/159 template tables are available."
+    notes: "Built-in fallback until the Build 158/159 template tables are available. Build 193 also keeps this endpoint stable when optional filters are omitted."
   },
   {
     template_key: "before_after_oxford_norfolk",
@@ -70,8 +70,8 @@ export async function onRequestGet(context) {
     if (!access.ok) return withSocialCors(access.response);
 
     const url = new URL(request.url);
-    const platform = cleanText(url.searchParams.get("platform")).toLowerCase();
-    const serviceArea = cleanText(url.searchParams.get("service_area")).toLowerCase();
+    const platform = String(cleanText(url.searchParams.get("platform")) || "").toLowerCase();
+    const serviceArea = String(cleanText(url.searchParams.get("service_area")) || "").toLowerCase();
     const warnings = [];
 
     const [captionResult, hashtagResult] = await Promise.all([
@@ -135,8 +135,8 @@ async function loadRows(env, table, select) {
 
 function filterRows(rows, platform, serviceArea) {
   return rows.filter((row) => {
-    const rowPlatform = cleanText(row.platform).toLowerCase();
-    const rowArea = cleanText(row.service_area).toLowerCase();
+    const rowPlatform = String(cleanText(row.platform) || "").toLowerCase();
+    const rowArea = String(cleanText(row.service_area) || "").toLowerCase();
     const platformOk = !platform || !rowPlatform || rowPlatform === platform;
     const areaOk = !serviceArea || !rowArea || rowArea.includes(serviceArea) || serviceArea.includes(rowArea);
     return platformOk && areaOk;
