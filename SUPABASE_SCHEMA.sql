@@ -1629,3 +1629,9 @@ CREATE TABLE IF NOT EXISTS public.app_management_setting_history (
 -- app_management_setting_history for editable settings, and keeps optional
 -- social_caption_templates/social_hashtag_presets as DB-first sources with
 -- built-in fallback templates when those optional tables are not ready.
+
+---
+
+## Build 194 schema note — 2026-06-06
+
+Build 194 adds no new DDL. It reuses `app_management_settings`, `app_management_setting_history`, and `site_activity_events` for editable-setting diff/preview tools and analytics registry quick-add. The no-DDL note is recorded at `sql/2026-06-06_build194_diff_preview_option_libraries_no_ddl_note.sql`.

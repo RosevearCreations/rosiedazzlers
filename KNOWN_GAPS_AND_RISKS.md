@@ -1050,3 +1050,24 @@ Build 190 continues the editable-content migration by rendering public business 
 - Admin Analytics can warn about unknown events, but it still needs one-click registry insertion.
 - Template rendering is available, but test-send controls and invoice PDF/export packaging are still future work.
 - Business-hours checks still focus on closed-day/holiday conflicts; exact partial-day scheduling windows remain a future enhancement.
+
+---
+
+## Build 194 gap update — 2026-06-06
+
+### Resolved or reduced
+
+- Editable Site Settings now has a compare button so staff can review DB/editor JSON against bundled fallbacks before force-syncing.
+- Editable settings now show usage previews, permission guidance, and SEO copy-length warnings in the UI.
+- Admin Analytics can now add unknown event names to the editable analytics registry directly from the warning card.
+- Option-library dropdown hydration has expanded beyond Admin App into Booking, Catalog, and Leads screens.
+- The route copy for `/admin-site-settings/` has been brought back into parity with `/admin-site-settings.html`.
+- Admin App option-library loading now understands the current public settings API response shape.
+
+### Still open
+
+- Diffing is current-versus-fallback first; side-by-side selected-history visual diffing is still future work.
+- Permission guidance is visible in the UI, but dedicated per-domain save enforcement still needs a richer staff capability model.
+- Template test-send controls and invoice PDF/export packaging remain future steps.
+- Business-hours conflict handling still focuses on closed-day/holiday warnings, not exact sub-day windows.
+- Option-library dropdown hydration still needs to be expanded into every remaining manually typed admin screen.
