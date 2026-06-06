@@ -20,7 +20,7 @@
     .muted{color:#94a3b8}.warning-panel{border-radius:16px;border:1px solid rgba(251,191,36,.28);background:rgba(245,158,11,.10);padding:14px;margin-top:14px}.warning-panel[data-state="ok"]{border-color:rgba(74,222,128,.28);background:rgba(22,163,74,.10)}.warning-row{padding:10px;border-radius:12px;background:rgba(15,23,42,.35);border:1px solid rgba(255,255,255,.06);margin-top:8px}
   </style>
 </head>
-<body data-page="admin" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard" data-build192="editable-settings-diagnostics">
+<body data-page="admin" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard" data-build192="editable-settings-diagnostics" data-build195="seo-proof-fallback-report-dashboard">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -97,6 +97,10 @@
           <div id="build185OpsWarnings" class="warning-panel" data-state="loading">Loading media/payment operations warnings…</div>
           <h2 style="margin-top:18px">Editable settings diagnostics</h2>
           <div id="editableSettingsDiagnostics" class="warning-panel" data-state="loading">Loading DB/fallback setting coverage…</div>
+          <h2 style="margin-top:18px">Fallback settings report</h2>
+          <div id="fallbackSettingsReport" class="warning-panel" data-state="loading">Loading fallback-backed settings report…</div>
+          <h2 style="margin-top:18px">Local SEO proof gaps</h2>
+          <div id="localSeoProofDiagnostics" class="warning-panel" data-state="loading">Loading town/service proof reminders…</div>
         </div>
       </section>
 
@@ -295,7 +299,9 @@
         daily: document.getElementById('dashboardDaily'),
         paymentWarnings: document.getElementById('paymentWebhookWarnings'),
         opsWarnings: document.getElementById('build185OpsWarnings'),
-        settingsDiagnostics: document.getElementById('editableSettingsDiagnostics')
+        settingsDiagnostics: document.getElementById('editableSettingsDiagnostics'),
+        fallbackReport: document.getElementById('fallbackSettingsReport'),
+        seoProof: document.getElementById('localSeoProofDiagnostics')
       };
       function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
       function setShellStatus(message,type){document.querySelectorAll('[data-admin-shell-status]').forEach((node)=>{node.hidden=!message;node.textContent=message||'';node.dataset.state=type||'';});}
@@ -354,6 +360,31 @@
         els.settingsDiagnostics.innerHTML = `<strong>${dbBacked}/${total} editable setting(s) DB-backed; ${fallback} using fallback</strong><div class="muted">Fallback is safe, but important public copy should be synced to the database before launch.</div>${rows}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-site-settings.html">Open Editable Settings</a></div>`;
       }
 
+
+
+      async function loadFallbackSettingsReport(){
+        if(!els.fallbackReport) return;
+        const res = await fetch('/api/admin/editable_settings_fallback_report', { credentials:'include', cache:'no-store' });
+        const data = await res.json().catch(()=>null);
+        if(!res.ok || !data?.ok) throw new Error(data?.error || 'Could not load fallback settings report.');
+        const summary = data.summary || {};
+        const rows = (data.rows||[]).filter((row)=>row.fallback_backed).slice(0,5).map((row)=>`<div class="warning-row"><strong>${esc(String(row.key||'').replaceAll('_',' '))}</strong><div class="muted">${esc(row.source_status||'fallback')}</div></div>`).join('');
+        els.fallbackReport.dataset.state = Number(summary.fallback_backed||0) ? 'warn' : 'ok';
+        els.fallbackReport.innerHTML = `<strong>${Number(summary.fallback_backed||0)} fallback-backed setting(s)</strong><div class="muted">${esc(data.dashboard_message||'')}</div>${rows}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-site-settings.html">Review Settings</a></div>`;
+      }
+
+      async function loadLocalSeoProofDiagnostics(){
+        if(!els.seoProof) return;
+        const res = await fetch('/api/admin/local_seo_proof_report', { credentials:'include', cache:'no-store' });
+        const data = await res.json().catch(()=>null);
+        if(!res.ok || !data?.ok) throw new Error(data?.error || 'Could not load local SEO proof report.');
+        const rows = (data.recommendations || data.next_proof_recommendations || data.gaps || []).slice(0,5);
+        els.seoProof.dataset.state = rows.length ? 'warn' : 'ok';
+        els.seoProof.innerHTML = rows.length
+          ? `<strong>${rows.length} local proof reminder(s)</strong>${rows.map((row)=>`<div class="warning-row"><strong>${esc(row.town || row.service_area || row.service || row.label || 'Proof gap')}</strong><div class="muted">${esc(row.next_step || row.reason || row.recommendation || JSON.stringify(row))}</div></div>`).join('')}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-seo-tasks.html">Open SEO Tasks</a> <a class="btn ghost small" href="/admin-analytics.html">Open Analytics</a></div>`
+          : `<strong>No local SEO proof gaps returned</strong><div class="muted">Keep adding town/service before-and-after proof as jobs are approved for public use.</div>`;
+      }
+
       async function loadDashboardAnalytics(){
         const res = await fetch('/api/admin/analytics_overview', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ days: 14 })});
         const data = await res.json().catch(()=>null);
@@ -362,7 +393,7 @@
         renderList(els.live, (data.live_online_sessions||[]).slice(0,5), (r)=>`<strong>${esc(r.country || 'Unknown')}</strong><div class="muted">${esc((r.path||[]).join(' → '))}</div><div class="muted">Seen: ${esc(r.ended_at || '')}</div>`, 'No live visitors right now.');
         renderList(els.daily, (data.daily_traffic||[]).slice(-7).reverse(), (r)=>`<strong>${esc(r.day)}</strong><div class="muted">${Number(r.page_views||0)} page views • ${Number(r.unique_visitors||0)} visitors • ${Number(r.abandoned_sessions||0)} abandoned</div>`, 'No daily traffic summary yet.');
       }
-      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ try { await Promise.all([loadDashboardAnalytics(), loadPaymentWebhookWarnings(), loadBuild185OpsWarnings(), loadEditableSettingsDiagnostics()]); } catch (err) { setShellStatus(err?.message || 'Could not load dashboard analytics.', 'error'); } } });
+      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ try { await Promise.all([loadDashboardAnalytics(), loadPaymentWebhookWarnings(), loadBuild185OpsWarnings(), loadEditableSettingsDiagnostics(), loadFallbackSettingsReport(), loadLocalSeoProofDiagnostics()]); } catch (err) { setShellStatus(err?.message || 'Could not load dashboard analytics.', 'error'); } } });
     })();
   </script>
 </body>
