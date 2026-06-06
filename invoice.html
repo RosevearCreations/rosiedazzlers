@@ -68,6 +68,7 @@
         ['Service area', d.booking?.service_area_label||'—'],
         ['Address', [d.booking?.address_line1,d.booking?.address_line2,d.booking?.city,d.booking?.postal_code].filter(Boolean).join(', ')||'—'],
         ['Payment provider', d.booking?.payment_provider||'—'],
+        ['Policy version', d.policy_stamp?.version||d.company?.policy_stamp?.version||'current'],
         ['Notes', d.booking?.notes||'None recorded']
       ].map(([l,v])=>`<div class="total-row"><span>${esc(l)}</span><strong>${esc(v)}</strong></div>`).join('');
     }

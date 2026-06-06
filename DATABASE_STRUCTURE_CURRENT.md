@@ -743,3 +743,10 @@ New release note:
 ## Build 194 schema note — 2026-06-06
 
 Build 194 adds no new DDL. It reuses `app_management_settings`, `app_management_setting_history`, and `site_activity_events` for editable-setting diff/preview tools and analytics registry quick-add. The no-DDL note is recorded at `sql/2026-06-06_build194_diff_preview_option_libraries_no_ddl_note.sql`.
+
+---
+
+## Build 195 schema status — 2026-06-06
+
+Build 195 adds no new database tables or columns. It reuses `app_management_settings` and `app_management_setting_history` for field-level validation markers, selected-history diffs, audit exports, fallback-backed setting reports, and media-requirement compare previews. It also reuses `booking_events` for business-hours/holiday override reason logging and the existing booking/document helpers for policy version stamps and template preview/export payloads. The no-DDL note is recorded at `sql/2026-06-06_build195_schema_history_template_export_no_ddl_note.sql`.
+

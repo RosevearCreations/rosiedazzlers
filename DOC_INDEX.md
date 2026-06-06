@@ -611,3 +611,14 @@ Primary references updated for Build 192: `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_
 18. Add media requirement diff/preview before restore-from-history.
 19. Add automated smoke tests for invoice, confirmation, quote payment, booking availability, and settings APIs.
 20. Continue migrating duplicated JSON/page content into DB-first editable settings where it reduces failure points.
+
+---
+
+## Build 195 — schema markers, history diffs, template previews, and diagnostics
+
+Build 195 continues the DB-first editable-settings migration. The editor now shows field-level validation markers, selected-history diffs before restore, dry-run document-template previews/tests, navigation link scans, sitemap/robots previews, structured-data previews, audit export, fallback-backed settings reporting, and media-requirement diffs. Customer-facing booking documents now include a policy version stamp, and admin booking saves can log override reasons when staff keep a closed/holiday booking.
+
+### Next 20 recommended steps
+
+Use the Build 195 section in `DEVELOPMENT_ROADMAP.md` as the current working list. The strongest next pass is per-domain staff enforcement, real template send logging, proper invoice PDF/export packaging, live route crawling, and deeper local SEO proof-task creation.
+
