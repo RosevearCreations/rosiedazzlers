@@ -95,6 +95,7 @@ export function validateEditableSetting(key, value) {
   const normalized = normalizeSettingKey(key);
   const errors = [];
   const warnings = [];
+  const field_results = [];
   const payload = value && typeof value === "object" ? value : {};
   if (!ADMIN_SETTING_KEYS.has(normalized)) errors.push(`Unknown or blocked setting key: ${normalized}`);
   if (!payload || typeof payload !== "object" || Array.isArray(payload)) errors.push("Setting payload must be a JSON object.");
@@ -103,17 +104,20 @@ export function validateEditableSetting(key, value) {
   if (schema) {
     for (const rule of schema.required_paths || []) {
       const found = valueAtPath(payload, rule.path);
-      if (!fieldMatchesType(found, rule.type, { required: true })) {
-        errors.push(`${normalized} requires ${rule.label || rule.path} at ${rule.path} as ${rule.type || "a value"}.`);
-      }
+      const ok = fieldMatchesType(found, rule.type, { required: true });
+      field_results.push({ path: rule.path, label: rule.label || rule.path, type: rule.type || "value", required: true, ok, severity: ok ? "ok" : "error", value_preview: previewValue(found) });
+      if (!ok) errors.push(`${normalized} requires ${rule.label || rule.path} at ${rule.path} as ${rule.type || "a value"}.`);
     }
     for (const rule of schema.optional_paths || []) {
       const found = valueAtPath(payload, rule.path);
-      if (found !== undefined && found !== null && !fieldMatchesType(found, rule.type, { required: false })) {
-        warnings.push(`${normalized} optional ${rule.label || rule.path} at ${rule.path} should be ${rule.type || "valid"}.`);
-      }
+      const checked = found !== undefined && found !== null && found !== "";
+      const ok = !checked || fieldMatchesType(found, rule.type, { required: false });
+      field_results.push({ path: rule.path, label: rule.label || rule.path, type: rule.type || "value", required: false, ok, severity: ok ? "ok" : "warning", value_preview: previewValue(found) });
+      if (!ok) warnings.push(`${normalized} optional ${rule.label || rule.path} at ${rule.path} should be ${rule.type || "valid"}.`);
     }
   }
+
+  addSeoLengthFieldResults(normalized, payload, field_results, warnings);
 
   if (normalized === "business_profile") {
     const business = payload.business || payload;
@@ -138,7 +142,41 @@ export function validateEditableSetting(key, value) {
   if (normalized === "media_requirements") {
     if (!Array.isArray(payload.required_assets)) errors.push("media_requirements should include a required_assets array.");
   }
-  return { ok: errors.length === 0, key: normalized, errors, warnings, schema_version: editableSettingValidationSchemas?.version || null };
+  return { ok: errors.length === 0, key: normalized, errors, warnings, field_results, schema_version: editableSettingValidationSchemas?.version || null, build: "195" };
+}
+
+
+function previewValue(value) {
+  if (value === undefined) return "missing";
+  if (value === null) return "null";
+  if (typeof value === "string") return value.length > 90 ? `${value.slice(0, 87)}...` : value;
+  if (typeof value === "number" || typeof value === "boolean") return String(value);
+  if (Array.isArray(value)) return `array(${value.length})`;
+  if (typeof value === "object") return `object(${Object.keys(value).length})`;
+  return String(value);
+}
+
+function addSeoLengthFieldResults(key, payload, fieldResults, warnings) {
+  const rows = [];
+  collectTextPaths(payload, key || "setting", rows);
+  for (const row of rows) {
+    const lower = row.path.toLowerCase();
+    let max = null;
+    if (/(seo_)?title|page_title|meta_title/.test(lower)) max = 70;
+    else if (/meta_description|description/.test(lower)) max = 160;
+    else if (/h1|headline|main_heading/.test(lower)) max = 90;
+    if (!max) continue;
+    const len = String(row.value || "").length;
+    const ok = len <= max;
+    fieldResults.push({ path: row.path, label: row.path, type: "seo_text", required: false, ok, severity: ok ? "ok" : "warning", value_preview: `${len}/${max} characters` });
+    if (!ok) warnings.push(`${row.path} is ${len} characters; suggested maximum is ${max}.`);
+  }
+}
+
+function collectTextPaths(value, path, rows) {
+  if (Array.isArray(value)) return value.forEach((item, index) => collectTextPaths(item, `${path}[${index}]`, rows));
+  if (value && typeof value === "object") return Object.entries(value).forEach(([key, child]) => collectTextPaths(child, `${path}.${key}`, rows));
+  if (typeof value === "string") rows.push({ path, value });
 }
 
 function valueAtPath(obj, path) {

@@ -174,9 +174,11 @@ async function buildPayload(env, booking) {
     "—";
   const slotLabel = slotLabelForBooking(booking);
   const templates = await loadDocumentTemplates(env);
+  const policyStamp = await loadPolicyStamp(env);
 
   const payload = {
-    company: { ...COMPANY, templates, document_templates: templates.templates || {} },
+    company: { ...COMPANY, templates, document_templates: templates.templates || {}, policy_stamp: policyStamp },
+    policy_stamp: policyStamp,
     booking: {
       id: booking.id,
       status: booking.status || null,
@@ -276,6 +278,26 @@ async function loadDocumentTemplates(env) {
   }
 }
 
+
+async function loadPolicyStamp(env) {
+  const fallback = { version: "bundled-policy", updated_at: null, source_status: "bundled_json_fallback" };
+  try {
+    if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY) return fallback;
+    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/app_management_settings?select=value,updated_at&key=eq.site_policies&limit=1`, { headers: serviceHeaders(env) });
+    if (!res.ok) return fallback;
+    const rows = await res.json().catch(() => []);
+    const row = Array.isArray(rows) ? rows[0] || null : null;
+    const value = row?.value && typeof row.value === "object" ? row.value : {};
+    return {
+      version: String(value.version || value.policy_version || value.updated_at || row?.updated_at || "current"),
+      updated_at: value.updated_at || row?.updated_at || null,
+      source_status: row ? "app_management_settings" : "bundled_json_fallback"
+    };
+  } catch {
+    return fallback;
+  }
+}
+
 function normalizeDocumentTemplates(value) {
   const source = value && typeof value === "object" ? value : {};
   const nested = source.templates && typeof source.templates === "object" ? source.templates : {};
@@ -337,7 +359,9 @@ function documentTemplateVariables(payload) {
     estimated_total: formatMoney(payload.summary?.effective_total_cents || 0),
     balance_due: formatMoney(payload.summary?.balance_due_cents || 0),
     confirmation_url: payload.documents?.confirmation_url || "",
-    invoice_url: payload.documents?.invoice_url || ""
+    invoice_url: payload.documents?.invoice_url || "",
+    policy_version: payload.policy_stamp?.version || payload.company?.policy_stamp?.version || "current",
+    policy_updated_at: payload.policy_stamp?.updated_at || payload.company?.policy_stamp?.updated_at || ""
   };
 }
 
