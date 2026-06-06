@@ -719,3 +719,12 @@ Build 190 continues the editable-content migration by rendering public business 
 ## Build 192 current state — 2026-06-05
 
 The latest pass completes the editable-operations wiring layer: structured editable-domain editors, UI restore-from-history controls, dynamic policy/template rendering, business-hours/holiday booking warnings, analytics registry warnings, media requirement DB sync/restore controls, and dashboard diagnostics for fallback-backed settings. No new DDL is required; Build 192 relies on the existing editable settings/history schema.
+
+---
+
+## Build 193 current implementation state
+
+- Admin Social template options now load through a null-safe `/api/admin/social_templates_list` endpoint. Missing optional filters and fallback rows with blank platform/service-area fields no longer create a 500.
+- Admin Social keeps manual social draft creation usable when template tables or template options are unavailable.
+- Editable setting validation now uses `data/editable_setting_validation_schemas.json` and returns warnings for unsupported template tokens and navigation/footer link issues.
+- Admin Site Settings now exposes a document-template token drawer and force-sync fallback confirmation control.

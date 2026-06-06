@@ -1591,3 +1591,51 @@ Build 190 continues the editable-content migration by rendering public business 
 18. Add broken-link scans for editable navigation/footer links.
 19. Add local SEO proof gap reminders to the admin dashboard using the same diagnostics pattern.
 20. Add automated smoke tests for invoice, confirmation, quote payment, booking availability, and admin settings APIs.
+
+---
+
+## Build 193 — social-template endpoint hotfix and validation guard pass — 2026-06-05
+
+### Completed pass
+
+1. Fixed `/api/admin/social_templates_list` so a plain request with no `platform` or `service_area` query parameter no longer throws a null `.toLowerCase()` error.
+2. Fixed fallback caption/template filtering so fallback rows with `platform: null` or blank service-area fields no longer throw while filtering.
+3. Kept the endpoint DB-first when `social_caption_templates` and `social_hashtag_presets` exist, while preserving built-in social caption and hashtag fallbacks when those optional tables are missing.
+4. Added Admin Social UI fallback handling so a temporary template-list problem no longer prevents the rest of the Social Queue from loading.
+5. Added a visible Admin Social template-options notice when the endpoint is using fallback templates or when manual drafting must continue without saved templates.
+6. Added bundled field-level validation schema data at `data/editable_setting_validation_schemas.json`.
+7. Expanded editable-setting validation to use required/optional path rules for business profile, policies, document templates, business hours/holidays, navigation/footer, option libraries, analytics registry, media requirements, and landing-page content.
+8. Added warning-level validation for editable navigation/footer links with missing or unsupported href values.
+9. Added warning-level validation for document/email template tokens that are not in the supported token reference list.
+10. Exposed validation schema details through `GET /api/admin/editable_site_settings_validate` for the selected editable domain.
+11. Updated the Admin Site Settings validation result display so non-blocking warnings are visible instead of being lost.
+12. Added a document-template token reference drawer directly in the structured editor.
+13. Added a navigation/footer validation helper note in the structured editor.
+14. Added a force-sync bundled fallback button with explicit confirmation for cases where a reviewed DB value needs to be replaced by the bundled fallback.
+15. Added `sql/2026-06-05_build193_social_templates_validation_no_ddl_note.sql` documenting that no new DDL is required.
+16. Updated schema documentation and release guards for the Build 193 pass.
+17. Added `scripts/build193_social_templates_and_validation_check.py` and wired it into `scripts/release_check.py`.
+18. Re-ran release, SEO/H1, and archive integrity checks for the new package.
+
+### Next 20 recommended steps
+
+1. Add visual JSON diffs between current DB setting, bundled fallback, and selected history rows.
+2. Add per-domain preview panes that show exactly where each setting appears on public pages.
+3. Add role-aware permissions for each editable domain instead of one broad settings permission.
+4. Add quick actions to Admin Analytics so unknown events can be added to `analytics_event_registry` from the warning card.
+5. Expand option-library dropdowns into booking, quote, inventory, finance, media, lead, and content editors.
+6. Add test-send controls for appointment confirmation, invoice, deposit receipt, refund notice, quote, and proposal templates.
+7. Add invoice PDF/export packaging once invoice template wording is approved.
+8. Add customer-visible policy version stamping to bookings, quotes, invoices, and payment requests.
+9. Add admin override reason logging when staff intentionally create or keep a booking on a closed/holiday date.
+10. Add sub-day business-hours windows beyond AM/PM when future scheduling needs exact time slots.
+11. Add local SEO title/meta length warnings to editable landing-page content.
+12. Add internal broken-link checks for all editable navigation/footer links and landing-page CTA links.
+13. Add local proof gap reminders to the Admin Dashboard for towns/services still missing real before/after photos.
+14. Add weekly fallback-backed settings report cards to Admin Dashboard diagnostics.
+15. Add media requirement history diff/preview before restoring a prior media setting.
+16. Add structured-data preview for `business_profile` and service landing-page settings.
+17. Add saved template-token presets and example payloads beside every document/email template editor.
+18. Add stronger release checks for remaining hard-coded policy/email copy.
+19. Add smoke tests for social templates, invoice rendering, confirmation rendering, quote payment, booking availability, and admin settings APIs.
+20. Continue replacing duplicate JSON/DB authorities with one DB-first source plus stable bundled fallback per domain.

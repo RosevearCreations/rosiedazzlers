@@ -723,3 +723,17 @@ Build 190 continues the editable-content migration by rendering public business 
 ## Build 192 schema status — 2026-06-05
 
 No new database tables or columns are required for Build 192. The pass deliberately reuses the existing `app_management_settings` and `app_management_setting_history` schema for structured editable-domain editors, direct restore-from-history controls, media requirement sync/restore controls, analytics registry warning checks, dynamic policy/template rendering, and business-hours/holiday booking warnings. See `sql/2026-06-05_build192_editable_operations_completion_no_ddl_note.sql` for the release note.
+
+---
+
+## Build 193 schema status — 2026-06-05
+
+No new database tables or columns are required for Build 193. The pass reuses the existing `app_management_settings` and `app_management_setting_history` tables for editable-setting validation, history, restore, sync, and force-sync workflows. The optional social template tables from earlier builds, `social_caption_templates` and `social_hashtag_presets`, remain DB-first sources when present; built-in fallbacks remain available when those tables are not applied yet.
+
+New fallback/schema-support file:
+
+- `data/editable_setting_validation_schemas.json` — bundled field-level validation rules for editable settings.
+
+New release note:
+
+- `sql/2026-06-05_build193_social_templates_validation_no_ddl_note.sql` — no-DDL note for the social-template hotfix and validation pass.

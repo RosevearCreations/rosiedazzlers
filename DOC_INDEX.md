@@ -552,3 +552,12 @@ Build 190 continues the editable-content migration by rendering public business 
 ## Build 192 documentation sync — 2026-06-05
 
 Primary references updated for Build 192: `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `CURRENT_IMPLEMENTATION_STATE.md`, `DATABASE_STRUCTURE_CURRENT.md`, `SUPABASE_SCHEMA.sql`, `EDITABLE_CONTENT_SANITY_CHECK.md`, `SANITY_CHECK.md`, `HANDOFF_NEXT_CHAT.md`, and `NEW_CHAT_STATUS.md`. The SQL note is `sql/2026-06-05_build192_editable_operations_completion_no_ddl_note.sql`.
+
+---
+
+## Build 193 documentation additions
+
+- `sql/2026-06-05_build193_social_templates_validation_no_ddl_note.sql`
+- `data/editable_setting_validation_schemas.json`
+- `scripts/build193_social_templates_and_validation_check.py`
+- Updated roadmap, known gaps, schema status, README, sanity, handoff, project brain, and AI context notes.

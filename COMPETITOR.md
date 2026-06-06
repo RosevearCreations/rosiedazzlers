@@ -1091,3 +1091,10 @@ Build 190 continues the editable-content migration by rendering public business 
 - Added Build 191 release guard.
 
 <!-- Build 192 documentation sync: editable-domain editors, restore-from-history UI, business-hours booking warnings, dynamic policies/templates, analytics registry warnings, media requirement sync/restore, and fallback diagnostics were reviewed on 2026-06-05. -->
+
+---
+
+## Build 193 documentation sync — 2026-06-05
+
+This Markdown file was included in the Build 193 documentation sync. Build 193 fixes the Admin Social template-list 500, adds social-template fallback UI handling, strengthens editable-setting validation schemas, preserves the one-H1 SEO guard, and records that no new Supabase DDL is required for this pass.
+
