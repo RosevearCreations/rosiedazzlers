@@ -622,3 +622,9 @@ Build 190 continues the editable-content migration by rendering public business 
 - Added Build 191 release guard.
 
 <!-- Build 192 documentation sync: editable-domain editors, restore-from-history UI, business-hours booking warnings, dynamic policies/templates, analytics registry warnings, media requirement sync/restore, and fallback diagnostics were reviewed on 2026-06-05. -->
+
+---
+
+## Build 193 AI context
+
+When continuing Rosie Dazzlers build work, treat Build 193 as the latest baseline. The social template endpoint hotfix and editable-setting validation schema are active. Continue documenting every code/schema change in Markdown and keep one clear H1 per public HTML page.
