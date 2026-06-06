@@ -873,3 +873,27 @@ Build 192 keeps the one-H1 rule intact, adds no new public page headings, and fo
 18. Add media requirement diff/preview before restore-from-history.
 19. Add automated smoke tests for invoice, confirmation, quote payment, booking availability, and settings APIs.
 20. Continue migrating duplicated JSON/page content into DB-first editable settings where it reduces failure points.
+
+---
+
+## Build 195 gap update — 2026-06-06
+
+### Resolved or reduced
+
+- Editable-setting validation now returns field-level results and the editor can display schema markers instead of only plain text errors.
+- Restore-from-history workflows now have selected-history diffs so staff can compare a saved row against the current editor JSON before restoring.
+- Document templates now have sample preview and dry-run test-send payload controls for invoice, appointment confirmation, deposit receipt, refund notice, quote, and proposal wording.
+- Navigation/footer links, sitemap/robots previews, and structured-data previews now have admin-side checks before public copy is treated as ready.
+- Dashboard diagnostics now include a fallback-backed settings report and local SEO proof-gap reminders.
+- Booking documents now carry a policy version stamp so customer-facing documents can identify which editable policy set was in use.
+- Admin booking saves now return and attempt to log override reasons when staff keep a booking on a closed/holiday date.
+- Media requirements can be diffed before restore/force-sync, reducing the risk of overwriting required image lists blindly.
+
+### Still open
+
+- Editable-setting save enforcement is still mostly capability-level plus guidance; per-domain role scopes remain a future staff-role-model enhancement.
+- Template test-send is intentionally dry-run only until the final provider, recipient confirmation, and notification logging rules are approved.
+- Invoice PDF/export packaging is still simple HTML/JSON; a true PDF generator or final export bundle remains future work.
+- Business-hours protection still warns/logs rather than hard-blocking closed/holiday overrides without a reason.
+- Link and sitemap checks are static previews; live route-response crawling should be added after deployment.
+

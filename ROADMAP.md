@@ -630,3 +630,54 @@ This Markdown file was included in the Build 193 documentation sync. Build 193 f
 18. Add media requirement diff/preview before restore-from-history.
 19. Add automated smoke tests for invoice, confirmation, quote payment, booking availability, and settings APIs.
 20. Continue migrating duplicated JSON/page content into DB-first editable settings where it reduces failure points.
+
+---
+
+## Build 195 — schema markers, history diffs, template previews, export diagnostics, and SEO proof reminders — 2026-06-06
+
+### Completed 20-step pass
+
+1. Added field-level validation results from the editable-setting validation API.
+2. Added UI field-marker rendering in Editable Site Settings.
+3. Updated editable-setting validation schema metadata to Build 195.
+4. Added selected-history side-by-side diff API for settings history rows.
+5. Added selected-history diff buttons beside restore-from-history controls.
+6. Added document-template sample preview API for invoice, confirmation, receipt, refund, quote, and proposal templates.
+7. Added dry-run template test-send API that returns queue-ready payloads without external sending.
+8. Added template preview and test controls to Editable Site Settings.
+9. Added editable navigation/footer broken-link scan API and UI control.
+10. Added sitemap/robots preview API and UI control for editable navigation and landing-page paths.
+11. Added LocalBusiness/service structured-data preview API and UI control.
+12. Added editable-setting audit export API with JSON and CSV modes.
+13. Added fallback-backed settings report API and dashboard card.
+14. Added media-requirement diff API and UI control before restore/force-sync decisions.
+15. Added richer editable landing-page preview cards for town/service content.
+16. Added customer-visible policy version stamping to booking document payloads and document pages.
+17. Added admin booking business-hours/holiday override reason logging into booking events when warnings are present.
+18. Expanded option-library hydration into Payments, Content, Tax Review, Accounting, and Media Health surfaces where useful.
+19. Added dashboard local SEO proof-gap reminders and fallback report diagnostics.
+20. Added Build 195 no-DDL schema note and release guard coverage.
+
+### Next 20 recommended steps
+
+1. Add real per-domain staff capability enforcement on editable-setting saves, beyond visible guidance.
+2. Store template test-send attempts in notification_events once final sender/provider rules are approved.
+3. Add real PDF generation or browser-print packaging for invoices and appointment confirmations.
+4. Add customer-facing policy version snapshots directly onto booking/payment rows when new records are created.
+5. Make admin booking save block closed/holiday dates unless an override reason is supplied.
+6. Add exact arrival-window/sub-day business-hours support beyond AM/PM.
+7. Expand the link scanner into a deploy-time crawler that checks actual route responses after Cloudflare publish.
+8. Add live sitemap.xml and robots.txt generation from the approved editable navigation/landing registry.
+9. Add schema.org validation warnings for every service/town landing page before publish.
+10. Add a side-by-side visual page preview for landing pages, not just preview cards.
+11. Add assignable local SEO proof tasks directly from dashboard proof gaps.
+12. Add audit filters by date, setting key, actor, and restore action once actor history is stored consistently.
+13. Add media requirement restore preview comparing DB/current/history/fallback in one screen.
+14. Add smoke tests that call live deployed APIs after each Cloudflare deployment.
+15. Add full invoice export packaging into the accountant export bundle.
+16. Add approved customer email/SMS test-send controls with clear recipient confirmation.
+17. Continue moving duplicated public copy from page JavaScript into editable DB-backed settings.
+18. Add mobile quick actions for media health, payment warnings, and SEO proof tasks.
+19. Add better fallback messaging on every public page that uses editable settings.
+20. Review all option-library dropdowns and retire any remaining hard-coded status/payment/category lists.
+

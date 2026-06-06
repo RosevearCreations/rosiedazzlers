@@ -622,3 +622,9 @@ Build 190 continues the editable-content migration by rendering public business 
 
 This Markdown file was included in the Build 193 documentation sync. Build 193 fixes the Admin Social template-list 500, adds social-template fallback UI handling, strengthens editable-setting validation schemas, preserves the one-H1 SEO guard, and records that no new Supabase DDL is required for this pass.
 
+---
+
+## Build 195 documentation sync — 2026-06-06
+
+Reviewed for Build 195. Current source of truth is the Build 195 section in `DEVELOPMENT_ROADMAP.md`, the gap update in `KNOWN_GAPS_AND_RISKS.md`, and the no-DDL schema note in `sql/2026-06-06_build195_schema_history_template_export_no_ddl_note.sql`.
+

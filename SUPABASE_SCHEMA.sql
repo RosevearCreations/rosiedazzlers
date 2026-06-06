@@ -1635,3 +1635,11 @@ CREATE TABLE IF NOT EXISTS public.app_management_setting_history (
 ## Build 194 schema note — 2026-06-06
 
 Build 194 adds no new DDL. It reuses `app_management_settings`, `app_management_setting_history`, and `site_activity_events` for editable-setting diff/preview tools and analytics registry quick-add. The no-DDL note is recorded at `sql/2026-06-06_build194_diff_preview_option_libraries_no_ddl_note.sql`.
+
+-- Build 195 schema/history/template/export preview pass — 2026-06-06
+-- No DDL changes. Build 195 reuses app_management_settings, app_management_setting_history,
+-- booking_events, and existing booking/document helpers for field-level validation markers,
+-- selected-history diffs, template preview/test payloads, policy version stamping,
+-- override reason logging, audit export, fallback reports, sitemap/robots previews,
+-- structured-data previews, and media-requirement diffs.
+-- See sql/2026-06-06_build195_schema_history_template_export_no_ddl_note.sql.

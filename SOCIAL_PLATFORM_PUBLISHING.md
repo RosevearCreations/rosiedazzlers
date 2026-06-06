@@ -508,3 +508,10 @@ This Markdown file was included in the Build 193 documentation sync. Build 193 f
 18. Add media requirement diff/preview before restore-from-history.
 19. Add automated smoke tests for invoice, confirmation, quote payment, booking availability, and settings APIs.
 20. Continue migrating duplicated JSON/page content into DB-first editable settings where it reduces failure points.
+
+---
+
+## Build 195 documentation sync — 2026-06-06
+
+Reviewed for Build 195. Current source of truth is the Build 195 section in `DEVELOPMENT_ROADMAP.md`, the gap update in `KNOWN_GAPS_AND_RISKS.md`, and the no-DDL schema note in `sql/2026-06-06_build195_schema_history_template_export_no_ddl_note.sql`.
+
