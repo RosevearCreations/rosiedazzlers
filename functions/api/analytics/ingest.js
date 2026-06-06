@@ -2,6 +2,7 @@
 // Public analytics ingestion. This endpoint fails open so public pages never show console 500s when analytics storage is unavailable.
 
 import { loadFeatureFlags } from "../_lib/app-settings.js";
+import { loadEditableSetting } from "../_lib/editable-settings.js";
 
 export async function onRequestOptions() {
   return new Response("", { status: 204, headers: corsHeaders() });
@@ -37,7 +38,16 @@ export async function onRequestPost(context) {
     const source = clean(body.source, 80);
     const campaign = clean(body.campaign, 120);
     const checkout_state = clean(body.checkout_state, 40);
-    const basePayload = sanitizePayload(body.payload || {});
+    const registry = await loadAnalyticsEventMeta(env, event_type).catch(() => ({ known: false, active: true }));
+    if (registry.active === false) {
+      return withCors(json({ ok: true, skipped: true, reason: "analytics_event_inactive", event_type }));
+    }
+    const basePayload = sanitizePayload({
+      ...(body.payload || {}),
+      event_label: registry.label || body.payload?.event_label || event_type,
+      event_category: registry.category || body.payload?.event_category || "",
+      event_registry_known: registry.known === true
+    });
     const cf = request.cf || {};
     const payload = sanitizePayload({
       ...basePayload,
@@ -96,6 +106,14 @@ export async function onRequestPost(context) {
 
 export async function onRequestGet() {
   return withCors(json({ ok: true, skipped: true, reason: "analytics_post_only" }));
+}
+
+async function loadAnalyticsEventMeta(env, eventType) {
+  const loaded = await loadEditableSetting(env, "analytics_event_registry", { headers: serviceHeaders(env) });
+  const events = Array.isArray(loaded?.value?.events) ? loaded.value.events : [];
+  const match = events.find((event) => String(event.key || "").trim() === String(eventType || "").trim());
+  if (!match) return { known: false, active: true, label: eventType, category: "" };
+  return { known: true, active: match.is_active !== false, label: match.label || eventType, category: match.category || "" };
 }
 
 function normalizeEnv(env) {
