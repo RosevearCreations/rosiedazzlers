@@ -57,8 +57,8 @@ async function loadAssetsFromDb(env, limit) {
 }
 async function loadAssetsFromPublicJson(request, limit) {
   const origin = new URL(request.url).origin;
-  const res = await fetch(`${origin}/data/image_requirements_build184.json`, { cf: { cacheTtl: 0 } });
-  if (!res.ok) throw new Error("image requirements JSON unavailable");
+  const res = await fetch(`${origin}/data/media_requirements.json`, { cf: { cacheTtl: 0 } });
+  if (!res.ok) throw new Error("media requirements JSON unavailable");
   const data = await res.json();
   const out = [];
   for (const item of data.required_assets || []) out.push(normalizeAsset(item));
