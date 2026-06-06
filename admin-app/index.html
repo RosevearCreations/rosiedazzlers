@@ -720,7 +720,7 @@
     try {
       const res = await fetch('/api/site_settings_public?key=option_libraries', { credentials:'include', cache:'no-store' });
       const out = await res.json().catch(function(){ return null; });
-      const value = out && (out.value || out.setting || out.option_libraries || out);
+      const value = out && (out.settings?.option_libraries?.value || out.value || out.setting || out.option_libraries || out);
       optionLibrariesState = value && typeof value === 'object' ? normalizeCatalogDropdownOptions(value) : catalogDropdownOptionsDefaults();
     } catch (err) {
       optionLibrariesState = catalogDropdownOptionsDefaults();
