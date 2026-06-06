@@ -141,13 +141,16 @@ export async function onRequestPost(context) {
       }
 
       const rows = await res.json().catch(() => []);
+      const savedBooking = Array.isArray(rows) ? rows[0] || null : null;
+      const overrideLog = await recordBusinessHoursOverrideIfNeeded(env, headers, savedBooking?.id || payload.id, payload, businessHoursWarning, access.actor);
       return withCors(
         json({
           ok: true,
           mode: "update",
           message: "Booking updated.",
           business_hours_warning: businessHoursWarning,
-          booking: Array.isArray(rows) ? rows[0] || null : null
+          override_log: overrideLog,
+          booking: savedBooking
         })
       );
     }
@@ -192,13 +195,16 @@ export async function onRequestPost(context) {
     }
 
     const rows = await res.json().catch(() => []);
+    const savedBooking = Array.isArray(rows) ? rows[0] || null : null;
+    const overrideLog = await recordBusinessHoursOverrideIfNeeded(env, headers, savedBooking?.id, payload, businessHoursWarning, access.actor);
     return withCors(
       json({
         ok: true,
         mode: "create",
         message: "Booking created.",
         business_hours_warning: businessHoursWarning,
-        booking: Array.isArray(rows) ? rows[0] || null : null
+        override_log: overrideLog,
+        booking: savedBooking
       })
     );
   } catch (err) {
@@ -234,6 +240,7 @@ function normalizeBookingPayload(body) {
   const progress_enabled =
     body.progress_enabled === undefined ? false : toBoolean(body.progress_enabled);
   const notes = cleanText(body.notes);
+  const override_reason = cleanText(body.override_reason || body.business_hours_override_reason || body.admin_override_reason);
   const total_price = cleanMoney(body.total_price);
   const deposit_amount = cleanMoney(body.deposit_amount);
 
@@ -303,6 +310,7 @@ function normalizeBookingPayload(body) {
       assigned_to,
       progress_enabled,
       notes,
+      override_reason,
       total_price,
       deposit_amount
     }
@@ -339,6 +347,40 @@ async function findBookingById(env, headers, id) {
   return { ok: true, row };
 }
 
+
+
+async function recordBusinessHoursOverrideIfNeeded(env, headers, bookingId, payload, warning, actor) {
+  if (!bookingId || !warning || warning.ok !== false) return { required: false };
+  const reason = cleanText(payload.override_reason);
+  if (!reason) return { required: true, logged: false, warning: "A closed-day/holiday override reason should be recorded before keeping this booking." };
+  if (!env?.SUPABASE_URL) return { required: true, logged: false, warning: "Supabase unavailable; override reason returned but not logged." };
+  try {
+    const eventPayload = {
+      booking_id: bookingId,
+      event_type: "booking_business_hours_override",
+      event_note: reason,
+      payload: {
+        service_date: payload.service_date,
+        start_slot: payload.start_slot,
+        warning_code: warning.code || null,
+        warning: warning.warning || null,
+        override_reason: reason,
+        actor_id: actor?.id || null,
+        actor_email: actor?.email || null,
+        actor_name: actor?.full_name || null,
+        recorded_at: new Date().toISOString()
+      }
+    };
+    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/booking_events`, {
+      method: "POST",
+      headers: { ...headers, Prefer: "return=minimal" },
+      body: JSON.stringify([eventPayload])
+    });
+    return { required: true, logged: res.ok, status: res.status, reason };
+  } catch (error) {
+    return { required: true, logged: false, warning: String(error?.message || error), reason };
+  }
+}
 
 async function buildBusinessHoursWarning(env, headers, serviceDate, startSlot) {
   if (!serviceDate) return null;
