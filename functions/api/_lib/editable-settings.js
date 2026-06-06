@@ -10,6 +10,7 @@ import optionLibraries from "../../../data/admin_option_libraries.json";
 import analyticsEventRegistry from "../../../data/analytics_event_registry.json";
 import mediaRequirements from "../../../data/media_requirements.json";
 import landingPagesContent from "../data/landing_pages_content.json";
+import editableSettingValidationSchemas from "../../../data/editable_setting_validation_schemas.json";
 
 export const EDITABLE_SETTING_FALLBACKS = {
   business_profile: businessProfile,
@@ -32,6 +33,8 @@ export const PUBLIC_SETTING_KEYS = new Set([
   "analytics_event_registry",
   "media_requirements"
 ]);
+
+export const EDITABLE_SETTING_VALIDATION_SCHEMAS = editableSettingValidationSchemas?.schemas || {};
 
 export const ADMIN_SETTING_KEYS = new Set([
   ...Object.keys(EDITABLE_SETTING_FALLBACKS),
@@ -91,9 +94,27 @@ export function listEditableFallbackKeys() {
 export function validateEditableSetting(key, value) {
   const normalized = normalizeSettingKey(key);
   const errors = [];
+  const warnings = [];
   const payload = value && typeof value === "object" ? value : {};
   if (!ADMIN_SETTING_KEYS.has(normalized)) errors.push(`Unknown or blocked setting key: ${normalized}`);
   if (!payload || typeof payload !== "object" || Array.isArray(payload)) errors.push("Setting payload must be a JSON object.");
+
+  const schema = EDITABLE_SETTING_VALIDATION_SCHEMAS[normalized] || null;
+  if (schema) {
+    for (const rule of schema.required_paths || []) {
+      const found = valueAtPath(payload, rule.path);
+      if (!fieldMatchesType(found, rule.type, { required: true })) {
+        errors.push(`${normalized} requires ${rule.label || rule.path} at ${rule.path} as ${rule.type || "a value"}.`);
+      }
+    }
+    for (const rule of schema.optional_paths || []) {
+      const found = valueAtPath(payload, rule.path);
+      if (found !== undefined && found !== null && !fieldMatchesType(found, rule.type, { required: false })) {
+        warnings.push(`${normalized} optional ${rule.label || rule.path} at ${rule.path} should be ${rule.type || "valid"}.`);
+      }
+    }
+  }
+
   if (normalized === "business_profile") {
     const business = payload.business || payload;
     if (!business.name && !business.short_name) errors.push("business_profile should include business.name or business.short_name.");
@@ -101,9 +122,15 @@ export function validateEditableSetting(key, value) {
   }
   if (normalized === "navigation_footer") {
     if (!Array.isArray(payload.navigation)) errors.push("navigation_footer should include a navigation array.");
+    const linkWarnings = validateLinkRows([...(payload.navigation || []), ...(payload.footer_links || [])]);
+    warnings.push(...linkWarnings.map((message) => `navigation_footer ${message}`));
   }
   if (normalized === "site_policies") {
     if (!payload.policies || typeof payload.policies !== "object") errors.push("site_policies should include a policies object.");
+  }
+  if (normalized === "document_templates") {
+    const tokenWarnings = validateTemplateTokens(payload.templates || {});
+    warnings.push(...tokenWarnings.map((message) => `document_templates ${message}`));
   }
   if (normalized === "analytics_event_registry") {
     if (!Array.isArray(payload.events)) errors.push("analytics_event_registry should include an events array.");
@@ -111,7 +138,60 @@ export function validateEditableSetting(key, value) {
   if (normalized === "media_requirements") {
     if (!Array.isArray(payload.required_assets)) errors.push("media_requirements should include a required_assets array.");
   }
-  return { ok: errors.length === 0, key: normalized, errors };
+  return { ok: errors.length === 0, key: normalized, errors, warnings, schema_version: editableSettingValidationSchemas?.version || null };
+}
+
+function valueAtPath(obj, path) {
+  const parts = String(path || "").split(".").filter(Boolean);
+  let cursor = obj;
+  for (const part of parts) {
+    if (!cursor || typeof cursor !== "object" || !(part in cursor)) return undefined;
+    cursor = cursor[part];
+  }
+  return cursor;
+}
+
+function fieldMatchesType(value, type, { required = false } = {}) {
+  if (value === undefined || value === null || value === "") return !required;
+  switch (String(type || "").toLowerCase()) {
+    case "array": return Array.isArray(value);
+    case "object": return !!value && typeof value === "object" && !Array.isArray(value);
+    case "string": return typeof value === "string" && value.trim().length > 0;
+    case "email": return typeof value === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+    case "url":
+      try { const parsed = new URL(String(value || "")); return /^https?:$/.test(parsed.protocol); }
+      catch { return false; }
+    default: return true;
+  }
+}
+
+function validateLinkRows(rows) {
+  if (!Array.isArray(rows)) return [];
+  const warnings = [];
+  rows.forEach((row, index) => {
+    if (!row || typeof row !== "object") return;
+    const href = String(row.href || row.url || "").trim();
+    const label = String(row.label || row.title || `link ${index + 1}`).trim();
+    if (!href) warnings.push(`${label} is missing an href.`);
+    else if (!href.startsWith("/") && !/^https?:\/\//i.test(href) && !/^mailto:/i.test(href) && !/^tel:/i.test(href)) warnings.push(`${label} href should be an internal path, https URL, mailto, or tel link.`);
+  });
+  return warnings;
+}
+
+function validateTemplateTokens(templates) {
+  if (!templates || typeof templates !== "object") return ["should include a templates object."];
+  const warnings = [];
+  const allowed = new Set(["customer_name", "service_date", "slot_label", "package_name", "estimated_total", "balance_due", "invoice_url", "confirmation_url", "quote_url", "refund_amount", "business_name"]);
+  for (const [key, template] of Object.entries(templates)) {
+    const text = `${template?.subject || ""}
+${template?.body || ""}`;
+    const matches = text.match(/{{\s*([a-zA-Z0-9_]+)\s*}}/g) || [];
+    for (const match of matches) {
+      const token = match.replace(/[{}\s]/g, "");
+      if (token && !allowed.has(token)) warnings.push(`${key} uses unknown token {{${token}}}.`);
+    }
+  }
+  return warnings;
 }
 
 async function recordSettingHistory(env, key, value, headers = {}) {
