@@ -2,7 +2,16 @@
 // Build 190: field-level JSON validation for editable settings.
 
 import { requireStaffAccess, json } from "../_lib/staff-auth.js";
-import { normalizeSettingKey, validateEditableSetting } from "../_lib/editable-settings.js";
+import { EDITABLE_SETTING_VALIDATION_SCHEMAS, normalizeSettingKey, validateEditableSetting } from "../_lib/editable-settings.js";
+
+export async function onRequestGet({ request, env }) {
+  const auth = await requireStaffAccess({ request, env, capability: "manage_staff", allowLegacyAdminFallback: true });
+  if (!auth.ok) return auth.response;
+  const url = new URL(request.url);
+  const key = normalizeSettingKey(url.searchParams.get("key") || "");
+  const schemas = key ? { [key]: EDITABLE_SETTING_VALIDATION_SCHEMAS[key] || null } : EDITABLE_SETTING_VALIDATION_SCHEMAS;
+  return json({ ok: true, build: "193", schemas });
+}
 
 export async function onRequestPost({ request, env }) {
   const body = await request.json().catch(() => ({}));
