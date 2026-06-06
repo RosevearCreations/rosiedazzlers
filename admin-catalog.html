@@ -133,7 +133,7 @@
         <strong>Mobile quick stock adjustment</strong>
         <div class="grid3" style="margin-top:8px">
           <label>Item<select id="quickStockItem"><option value="">Select item</option></select></label>
-          <label>Action<select id="quickStockAction"><option value="adjust_up">Add stock</option><option value="adjust_down">Reduce stock</option><option value="finished">Finished/consumed</option><option value="defective">Defective</option><option value="write_off">Write-off</option></select></label>
+          <label>Action<select id="quickStockAction" data-option-library="stock_actions"><option value="adjust_up">Add stock</option><option value="adjust_down">Reduce stock</option><option value="finished">Finished/consumed</option><option value="defective">Defective</option><option value="write_off">Write-off</option></select></label>
           <label>Qty<input id="quickStockQty" type="number" min="0.01" step="0.01" value="1" /></label>
         </div>
         <label style="display:grid;gap:5px;margin-top:8px">Note<input id="quickStockNote" placeholder="Reason or receipt note" /></label>
@@ -288,7 +288,7 @@
   </section>
 
   <section class="section panel stack">
-    <div class="row toolbar"><h2 style="margin:0">Purchase orders & reminders</h2><button class="btn ghost" id="reloadOrdersBtn" type="button">Reload orders</button><select id="orderStatus"><option value="">All orders</option><option value="requested">Requested</option><option value="ordered">Ordered</option><option value="received">Received</option><option value="cancelled">Cancelled</option></select></div>
+    <div class="row toolbar"><h2 style="margin:0">Purchase orders & reminders</h2><button class="btn ghost" id="reloadOrdersBtn" type="button">Reload orders</button><select id="orderStatus" data-option-library="purchase_order_statuses"><option value="">All orders</option><option value="requested">Requested</option><option value="ordered">Ordered</option><option value="received">Received</option><option value="cancelled">Cancelled</option></select></div>
     <div class="mini" id="orderSummary"></div>
     <div class="table-wrap"><table><thead><tr><th>Order</th><th>Status</th><th>Reminder</th><th>Actions</th></tr></thead><tbody id="orderBody"><tr><td colspan="4">Loading…</td></tr></tbody></table></div>
   </section>
@@ -296,6 +296,7 @@
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
 <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/admin-option-libraries.js"></script>
 <script>
 (function(){
   const qs=(s)=>document.querySelector(s);
