@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 193 note:
+- Fixes /api/admin/social_templates_list null-filter 500s, adds social-template UI fallback handling, and adds editable-setting validation schemas/token/link warnings.
+
 Build 191 note:
 - Hardens AdminAuth helpers, Admin Site Settings, policy/template rendering, analytics validation, and stable media requirements.
 
@@ -89,6 +92,7 @@ CHECKS = [
     "scripts/build190_editable_settings_live_rendering_check.py",
     "scripts/build191_editable_settings_hardening_check.py",
         "scripts/build192_editable_operations_completion_check.py",
+    "scripts/build193_social_templates_and_validation_check.py",
     "scripts/seo_h1_check.py",
 ]
 
