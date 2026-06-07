@@ -556,3 +556,9 @@ Build 189 adds the DB-first / JSON-fallback editable-settings foundation for lan
 ## Build 190 - Editable settings live rendering and diagnostics
 
 Build 190 continues the editable-content migration by rendering public business profile, contact details, social links, navigation/footer links, policy notes, LocalBusiness structured data, analytics labels, and media requirements from DB-first editable settings with bundled JSON fallback. It adds validation, sync-from-bundle controls, DB/fallback diagnostics, and setting history support through `/admin-site-settings.html` and the Build 190 SQL migration.
+
+---
+
+## Build 197 documentation sync
+
+This Markdown file was checked during the Build 197 self-healing admin diagnostics pass. No schema DDL is required for the pricing diagnostics, route-copy parity, independent dashboard fallback handling, or landing SEO/readiness warning work.
