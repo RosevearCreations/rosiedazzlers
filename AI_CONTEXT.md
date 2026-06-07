@@ -690,3 +690,9 @@ Build 195 continues the DB-first editable-settings migration. The editor now sho
 Use the Build 195 section in `DEVELOPMENT_ROADMAP.md` as the current working list. The strongest next pass is per-domain staff enforcement, real template send logging, proper invoice PDF/export packaging, live route crawling, and deeper local SEO proof-task creation.
 
 > Build 196 documentation sync (2026-06-06): repaired the live Admin Dashboard local SEO proof 405, Admin App `esc` helper crash, and Landing Page Builder add-on fallback hydration. Schema status remains no-DDL; see `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `DATABASE_STRUCTURE_CURRENT.md`, `SUPABASE_SCHEMA.sql`, and `sql/2026-06-06_build196_admin_live_error_repairs_no_ddl_note.sql`.
+
+---
+
+## Build 197 documentation sync
+
+Build 197 was reviewed during the self-healing admin diagnostics pass. Relevant implementation notes now point toward pricing catalog source/repair diagnostics, route-copy parity, independent dashboard fallback handling, landing-page SEO/readiness warnings, and continued one-H1/local-search discipline. No database DDL is required for this pass.
