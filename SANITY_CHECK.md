@@ -897,3 +897,4 @@ Build 192 keeps the one-H1 rule intact, adds no new public page headings, and fo
 - Business-hours protection still warns/logs rather than hard-blocking closed/holiday overrides without a reason.
 - Link and sitemap checks are static previews; live route-response crawling should be added after deployment.
 
+> Build 196 documentation sync (2026-06-06): repaired the live Admin Dashboard local SEO proof 405, Admin App `esc` helper crash, and Landing Page Builder add-on fallback hydration. Schema status remains no-DDL; see `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `DATABASE_STRUCTURE_CURRENT.md`, `SUPABASE_SCHEMA.sql`, and `sql/2026-06-06_build196_admin_live_error_repairs_no_ddl_note.sql`.

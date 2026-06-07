@@ -681,3 +681,4 @@ This Markdown file was included in the Build 193 documentation sync. Build 193 f
 19. Add better fallback messaging on every public page that uses editable settings.
 20. Review all option-library dropdowns and retire any remaining hard-coded status/payment/category lists.
 
+> Build 196 documentation sync (2026-06-06): repaired the live Admin Dashboard local SEO proof 405, Admin App `esc` helper crash, and Landing Page Builder add-on fallback hydration. Schema status remains no-DDL; see `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `DATABASE_STRUCTURE_CURRENT.md`, `SUPABASE_SCHEMA.sql`, and `sql/2026-06-06_build196_admin_live_error_repairs_no_ddl_note.sql`.

@@ -1643,3 +1643,9 @@ Build 194 adds no new DDL. It reuses `app_management_settings`, `app_management_
 -- override reason logging, audit export, fallback reports, sitemap/robots previews,
 -- structured-data previews, and media-requirement diffs.
 -- See sql/2026-06-06_build195_schema_history_template_export_no_ddl_note.sql.
+
+-- Build 196 admin live-error repair pass — 2026-06-06
+-- No DDL changes. Reuses app_management_settings, bundled pricing JSON, and existing
+-- local SEO proof/gallery settings. Fixes API method compatibility and Admin App
+-- runtime fallback hydration without schema changes. See
+-- sql/2026-06-06_build196_admin_live_error_repairs_no_ddl_note.sql.

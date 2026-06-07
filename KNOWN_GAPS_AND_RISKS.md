@@ -1,3 +1,28 @@
+# Build 196 known gaps and risks — Live admin error repairs
+
+**Updated:** 2026-06-06  
+**Build:** 196
+
+## Closed or reduced in Build 196
+
+- `/api/admin/local_seo_proof_report` no longer fails with 405 when the Admin Dashboard calls it with GET.
+- Local SEO proof output now includes compatibility aliases for older/newer dashboard readers.
+- Admin App no longer depends on an undefined `esc()` helper during option-library dropdown hydration.
+- The Landing Page Builder can recover add-ons from bundled pricing JSON when a saved editable pricing row is partial.
+- Pricing catalog loading now falls back to bundled JSON when the public pricing API is unavailable.
+
+## Still outstanding after Build 196
+
+1. Live browser testing is still needed after deploy for `/admin`, `/admin-app`, and landing builder save/reload.
+2. Partial DB settings should eventually have a one-click repair/sync flow instead of relying only on runtime fallback hydration.
+3. Landing-page SEO fields need live character counters and one-H1 preview warnings in Admin App.
+4. Landing-page media fields still need stronger consent/privacy readiness badges.
+5. Admin route/API method compatibility needs a broader automated guard across every admin screen.
+6. The dashboard should show whether key editable settings are coming from DB, API fallback, or bundled JSON.
+7. Local SEO proof recommendations should become assignable tasks directly from the dashboard card.
+
+---
+
 
 # Build 184 update — 20-step operations, media, and payment hardening
 
