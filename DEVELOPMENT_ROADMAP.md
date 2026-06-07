@@ -1,3 +1,58 @@
+# Build 196 update — Admin live-error repairs and fallback hardening
+
+**Updated:** 2026-06-06  
+**Build:** 196
+
+Build 196 responds to the latest live checks on `dev.rosiedazzlers.pages.dev`: the Admin Dashboard local SEO proof card was calling `/api/admin/local_seo_proof_report` with GET and receiving a 405, the Landing Page Builder could show **No add-ons loaded**, and Admin App could stop with `esc is not defined`. This pass is no-DDL and focuses on safer route/API compatibility, fallback-backed pricing data, and keeping public/local SEO editing tools usable even when a DB setting is partial.
+
+## Build 196 — 20 completed items
+
+1. Fixed `/api/admin/local_seo_proof_report` so both GET and POST callers work.
+2. Updated the proof-report CORS allow-list to include GET, POST, and OPTIONS.
+3. Kept staff access checks on the proof report for both supported request methods.
+4. Added compatibility aliases on the proof report: `proof_recommendations`, `recommendations`, `next_proof_recommendations`, and `gaps`.
+5. Kept the existing privacy rule that only sample or approved-public/customer-approved-public media counts as local proof.
+6. Fixed Admin Dashboard local proof loading by making the endpoint compatible with its existing GET request.
+7. Fixed Admin App `esc is not defined` by adding a local `esc()` alias beside the page’s existing `escapeHtml()` helper.
+8. Updated both `/admin-app.html` and `/admin-app/` so the route copy cannot keep the broken helper.
+9. Hardened Admin App pricing loading so the bundled pricing catalog is used if the live pricing API is unavailable.
+10. Hardened editable pricing loading so partial DB rows are hydrated with bundled charts.
+11. Hardened editable pricing loading so partial DB rows are hydrated with bundled packages.
+12. Hardened editable pricing loading so partial DB rows are hydrated with bundled service matrix data.
+13. Hardened editable pricing loading so partial DB rows are hydrated with bundled add-ons.
+14. Kept saved DB values preferred while filling only missing pricing/media/category/type fields from fallback data.
+15. Added an explicit Landing Page Builder warning if add-ons are missing after hydration.
+16. Kept add-on landing-page image hydration preferring real PNG/photo media over SVG placeholders.
+17. Kept location/service landing pages merge-safe so saved pages and fallback-generated add-on pages can coexist.
+18. Added Build 196 no-DDL SQL/schema note.
+19. Added a Build 196 release guard covering the reported live errors.
+20. Re-ran release, syntax-oriented guard, one-H1, and zip integrity checks before packaging.
+
+## Next 20 steps after Build 196
+
+1. Browser-test `/admin` and confirm the Local SEO proof card no longer returns 405.
+2. Browser-test `/admin-app` and confirm the console no longer reports `esc is not defined`.
+3. Open the Landing Page Builder and confirm all pricing add-ons appear.
+4. Save one test add-on landing page and confirm `/api/landing_pages_public` still merges fallback-generated pages.
+5. Add an Admin Dashboard mini-card that displays the pricing catalog source: DB, API, or bundled fallback.
+6. Add a one-click **Repair partial pricing catalog** action that safely writes missing fallback rows into the editable DB setting.
+7. Add a pricing-catalog diff preview that shows DB rows missing compared with bundled fallback rows.
+8. Add a landing-page proof-gap assignment button from each local SEO recommendation.
+9. Add public landing-page preview links directly beside each add-on/location editor.
+10. Add SEO title/meta counters directly inside the Admin App landing editor.
+11. Add a one-H1 live preview warning for landing pages before save.
+12. Add an image-readiness badge beside every landing page hero/gallery image field.
+13. Add media consent and privacy badges beside related products/proof media used in landing pages.
+14. Add versioned document templates for invoice, confirmation, receipt, quote, and reminder copy.
+15. Add preview/send-test controls for every customer-facing document template in Admin App.
+16. Add option-library repair controls for missing dropdown libraries.
+17. Add an admin-visible route-copy parity diagnostic card for pages that exist as both root HTML and folder `index.html`.
+18. Add a release guard that checks all admin GET/POST fetches match their endpoint method exports.
+19. Add local SEO proof trend history so gaps can show whether coverage is improving.
+20. Continue replacing remaining hard-coded public/payment/booking copy with DB-backed editable settings.
+
+---
+
 
 # Build 184 update — 20-step operations, media, and payment hardening
 

@@ -750,3 +750,7 @@ Build 194 adds no new DDL. It reuses `app_management_settings`, `app_management_
 
 Build 195 adds no new database tables or columns. It reuses `app_management_settings` and `app_management_setting_history` for field-level validation markers, selected-history diffs, audit exports, fallback-backed setting reports, and media-requirement compare previews. It also reuses `booking_events` for business-hours/holiday override reason logging and the existing booking/document helpers for policy version stamps and template preview/export payloads. The no-DDL note is recorded at `sql/2026-06-06_build195_schema_history_template_export_no_ddl_note.sql`.
 
+
+## Build 196 schema status — 2026-06-06
+
+Build 196 adds no new tables or columns. It reuses `app_management_settings` and bundled JSON fallbacks for pricing/landing-page recovery, and updates `/api/admin/local_seo_proof_report` method compatibility without schema changes. The no-DDL note is recorded at `sql/2026-06-06_build196_admin_live_error_repairs_no_ddl_note.sql`.
