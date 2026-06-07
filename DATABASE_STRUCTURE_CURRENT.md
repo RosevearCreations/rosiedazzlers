@@ -1,3 +1,14 @@
+# Build 197 schema status — no-DDL self-healing admin pass
+
+**Updated:** 2026-06-06  
+**Build:** 197
+
+Build 197 does not require new tables or columns. The new pricing diagnostics and repair endpoints read and update the existing `app_management_settings` row with `key = 'pricing_catalog'`. Route-copy parity, dashboard guarded loading, and landing SEO/readiness checks are code/UI features only.
+
+Operational note: if `/api/admin/pricing_catalog_diagnostics` reports missing groups or rows, staff can use `/api/admin/pricing_catalog_repair` through the Admin Dashboard. The repair action preserves existing DB values and adds only missing bundled fallback groups/rows.
+
+---
+
 
 # Build 184 update — 20-step operations, media, and payment hardening
 

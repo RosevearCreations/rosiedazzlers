@@ -1,3 +1,58 @@
+# Build 197 update — Self-healing admin diagnostics and landing SEO readiness
+
+**Updated:** 2026-06-06  
+**Build:** 197
+
+Build 197 continues the roadmap after the live-error repair pass by adding admin-facing diagnostics that make drift easier to find before it becomes a customer-facing problem. This pass is no-DDL: it uses existing `app_management_settings` rows, existing root/folder route copies, and bundled JSON fallbacks. The biggest additions are pricing-catalog source/repair diagnostics, route-copy parity reporting, independent dashboard card loading, and landing-page SEO/readiness checks in Admin App.
+
+## Build 197 — 20 completed items
+
+1. Added `/api/admin/pricing_catalog_diagnostics` for pricing catalog source, row-count, and missing fallback-row reporting.
+2. Added `/api/admin/pricing_catalog_repair` so staff can repair partial DB pricing catalogs by adding only missing fallback groups/rows.
+3. Preserved existing DB pricing values during repair and only filled missing charts, packages, add-ons, service matrix, service areas, public requirements, and booking-rule defaults.
+4. Added `/api/admin/route_copy_parity_report` for root `.html` versus folder `index.html` drift checks.
+5. Added Admin Dashboard pricing catalog diagnostics card.
+6. Added Admin Dashboard one-click **Repair partial pricing catalog** control.
+7. Added Admin Dashboard route-copy parity diagnostics card.
+8. Changed the Admin Dashboard loader to use independent guarded card loads so one failing diagnostics endpoint does not blank the whole dashboard.
+9. Fixed the editable-setting diagnostics display so array responses from `/api/admin/editable_site_settings_status` show real setting keys instead of numeric array indexes.
+10. Added landing-page SEO/readiness preview panels inside Admin App.
+11. Added landing meta-title length warning guidance using the 70-character working limit.
+12. Added landing meta-description length warning guidance using the 160-character working limit.
+13. Added hero-title/H1 readiness checks so landing pages continue using one clear main heading.
+14. Added clean-slug readiness checks for landing pages.
+15. Added image/proof readiness checks for landing pages.
+16. Added public preview links beside add-on and town landing editors.
+17. Added save-time warning summaries for add-on landing pages.
+18. Added save-time warning summaries for location landing pages.
+19. Synced `/admin.html` with `/admin/` and `/admin-app.html` with `/admin-app/` after the edits.
+20. Added Build 197 release guards, schema notes, and the no-DDL SQL note.
+
+## Next 20 steps after Build 197
+
+1. Browser-test `/admin` and confirm pricing diagnostics, route-copy diagnostics, fallback settings, and local proof cards can fail independently without blocking the dashboard.
+2. Click **Repair partial pricing catalog** on staging if diagnostics reports missing rows, then re-open Landing Page Builder and confirm add-ons remain loaded.
+3. Add a staff confirmation preview modal for pricing repair before the write action runs.
+4. Add route-copy parity results into the release ZIP summary so drift is visible before upload.
+5. Add a deploy-time script that copies every root admin HTML file into its matching folder `index.html` route copy automatically.
+6. Add live keyup refresh for landing-page SEO/readiness warnings instead of requiring section reload/save.
+7. Add structured-data validation hints directly beside each landing editor.
+8. Add media consent/privacy badges beside landing hero/gallery image fields.
+9. Add an **Assign proof task** button directly from each dashboard local SEO recommendation.
+10. Add local SEO proof trend history so town/service proof coverage can show improvement over time.
+11. Add Search Console query/manual keyword fields to each landing page row.
+12. Add town/service internal-link recommendations from the landing editor.
+13. Add dashboard warning totals for missing hero images on enabled landing pages.
+14. Add document-template preview/send-test controls directly inside Admin App for invoice, confirmation, receipt, quote, and reminder copy.
+15. Add option-library repair controls for missing dropdown libraries.
+16. Add GET/POST endpoint-method compatibility checks to the release guard for all admin fetches.
+17. Add public page content-drift detection for service/town landing pages generated from fallback versus DB settings.
+18. Add a visible **DB / fallback / repaired** source badge beside every editable Admin App section.
+19. Add a one-click export of pricing diagnostics for accountant/owner review.
+20. Continue replacing remaining hard-coded public/payment/booking copy with DB-backed editable settings.
+
+---
+
 # Build 196 update — Admin live-error repairs and fallback hardening
 
 **Updated:** 2026-06-06  
