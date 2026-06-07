@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 196 note:
+- Fixes live Admin Dashboard local SEO proof 405s, Admin App esc helper crash, and Landing Page Builder add-on fallback hydration.
+
 Build 195 note:
 - Adds editable-setting field markers, selected-history diffs, template preview/test payloads, audit/fallback reports, sitemap/schema previews, policy stamping, and override logging.
 
@@ -101,6 +104,7 @@ CHECKS = [
     "scripts/build193_social_templates_and_validation_check.py",
     "scripts/build194_diff_preview_option_libraries_check.py",
     "scripts/build195_schema_history_template_export_check.py",
+    "scripts/build196_admin_live_error_repairs_check.py",
     "scripts/seo_h1_check.py",
 ]
 
