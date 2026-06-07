@@ -480,6 +480,8 @@
 
   function qsa(selector, root){ return Array.from((root || document).querySelectorAll(selector)); }
   function escapeHtml(value){ return String(value == null ? '' : value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  // Build 196: shared option-library hydration used esc() from another module; keep a local alias so Admin App never crashes on dropdown refresh.
+  function esc(value){ return escapeHtml(value); }
   function documentTemplatesDefaults(){
     return {
       confirmation_intro: 'Thank you for booking Rosie Dazzlers. Your booking details are below.',
@@ -845,6 +847,15 @@
     var shaped = ensurePricingCatalogShape(catalog);
     if (!fallbackCatalog || typeof fallbackCatalog !== 'object') return shaped;
     var fallback = ensurePricingCatalogShape(fallbackCatalog);
+
+    // Build 196: if the editable DB row only contains partial pricing data, keep the DB values
+    // but backfill missing arrays from the bundled pricing catalog so the landing-page builder
+    // never shows "No add-ons loaded" just because a saved setting omitted add-ons.
+    if ((!Array.isArray(shaped.charts) || !shaped.charts.length) && Array.isArray(fallback.charts) && fallback.charts.length) shaped.charts = fallback.charts.slice();
+    if ((!Array.isArray(shaped.packages) || !shaped.packages.length) && Array.isArray(fallback.packages) && fallback.packages.length) shaped.packages = fallback.packages.slice();
+    if ((!Array.isArray(shaped.service_matrix) || !shaped.service_matrix.length) && Array.isArray(fallback.service_matrix) && fallback.service_matrix.length) shaped.service_matrix = fallback.service_matrix.slice();
+    if ((!Array.isArray(shaped.addons) || !shaped.addons.length) && Array.isArray(fallback.addons) && fallback.addons.length) shaped.addons = fallback.addons.map(function(row){ return Object.assign({}, row); });
+
     var fallbackAddons = new Map((fallback.addons || []).map(function(row){ return [String(row && row.code || ''), row]; }));
     shaped.addons = (shaped.addons || []).map(function(addon){
       var fallbackAddon = fallbackAddons.get(String(addon && addon.code || '')) || null;
@@ -1078,6 +1089,7 @@
     var previousAddon = preferredAddonCode || (addonSelect && addonSelect.value) || byId('landing_addon_editor')?.dataset?.currentCode || '';
     var addonOptions = (pricingCatalogState.addons || []).map(function(addon){ var page = addonLandingEntry(addon.code); return '<option value="' + escapeHtml(addon.code) + '">' + escapeHtml(addon.name || addon.code) + (page ? ' — landing ready' : '') + '</option>'; }).join('');
     addonSelect.innerHTML = addonOptions || '<option value="">No add-ons loaded</option>';
+    if (!addonOptions) setShellStatus('Landing page builder could not find add-ons. Build 196 will backfill from bundled pricing data; reload or save pricing catalog if this repeats.', 'warning');
     if (previousAddon && Array.prototype.some.call(addonSelect.options, function(opt){ return opt.value === previousAddon; })) addonSelect.value = previousAddon;
     if (!addonSelect.value && addonSelect.options.length) addonSelect.value = addonSelect.options[0].value;
     var addonCode = addonSelect.value || '';
@@ -1507,12 +1519,21 @@
     if (savedSetting && typeof savedSetting === 'object') {
       source = hydratePricingCatalogFromDefaultMedia(savedSetting, bundledFallback);
     } else {
-      const res = await fetch('/api/pricing_catalog_public', { credentials:'include', cache:'no-store' });
-      const out = await res.json().catch(() => null);
-      if (!res.ok || !out) throw new Error(out?.error || 'Could not load pricing catalog.');
-      source = hydratePricingCatalogFromDefaultMedia(out, bundledFallback);
+      const res = await fetch('/api/pricing_catalog_public', { credentials:'include', cache:'no-store' }).catch(function(){ return null; });
+      const out = res ? await res.json().catch(() => null) : null;
+      if (!res || !res.ok || !out) {
+        if (!bundledFallback) throw new Error(out?.error || 'Could not load pricing catalog.');
+        source = hydratePricingCatalogFromDefaultMedia(bundledFallback, bundledFallback);
+        setShellStatus('Live pricing catalog API was unavailable, so bundled fallback pricing/add-ons were loaded.', 'warning');
+      } else {
+        source = hydratePricingCatalogFromDefaultMedia(out, bundledFallback);
+      }
     }
 
+    if ((!Array.isArray(source.addons) || !source.addons.length) && bundledFallback && Array.isArray(bundledFallback.addons) && bundledFallback.addons.length) {
+      source = hydratePricingCatalogFromDefaultMedia(bundledFallback, bundledFallback);
+      setShellStatus('Pricing catalog add-ons were missing from the editable/API row, so the bundled fallback add-ons were loaded for the landing-page builder.', 'warning');
+    }
     if (editableServiceAreas.length) {
       source.service_areas = mergeServiceAreaRows(editableServiceAreas, source.service_areas || []);
     }
