@@ -629,3 +629,9 @@ This Markdown file was included in the Build 193 documentation sync. Build 193 f
 Reviewed for Build 195. Current source of truth is the Build 195 section in `DEVELOPMENT_ROADMAP.md`, the gap update in `KNOWN_GAPS_AND_RISKS.md`, and the no-DDL schema note in `sql/2026-06-06_build195_schema_history_template_export_no_ddl_note.sql`.
 
 > Build 196 documentation sync (2026-06-06): repaired the live Admin Dashboard local SEO proof 405, Admin App `esc` helper crash, and Landing Page Builder add-on fallback hydration. Schema status remains no-DDL; see `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `DATABASE_STRUCTURE_CURRENT.md`, `SUPABASE_SCHEMA.sql`, and `sql/2026-06-06_build196_admin_live_error_repairs_no_ddl_note.sql`.
+
+---
+
+## Build 197 documentation sync
+
+Build 197 was reviewed during the self-healing admin diagnostics pass. Relevant implementation notes now point toward pricing catalog source/repair diagnostics, route-copy parity, independent dashboard fallback handling, landing-page SEO/readiness warnings, and continued one-H1/local-search discipline. No database DDL is required for this pass.

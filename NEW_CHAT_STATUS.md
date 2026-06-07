@@ -749,3 +749,8 @@ Build 193 is the current handoff build. It addresses the reported Admin Social t
 - Link and sitemap checks are static previews; live route-response crawling should be added after deployment.
 
 > Build 196 documentation sync (2026-06-06): repaired the live Admin Dashboard local SEO proof 405, Admin App `esc` helper crash, and Landing Page Builder add-on fallback hydration. Schema status remains no-DDL; see `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `DATABASE_STRUCTURE_CURRENT.md`, `SUPABASE_SCHEMA.sql`, and `sql/2026-06-06_build196_admin_live_error_repairs_no_ddl_note.sql`.
+
+
+## Build 197 status
+
+Packaged changes target self-healing admin diagnostics, pricing fallback repair, route-copy parity, and landing page SEO readiness.

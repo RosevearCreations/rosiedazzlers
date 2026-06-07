@@ -1,3 +1,31 @@
+# Build 197 known gaps and risks — Self-healing admin diagnostics
+
+**Updated:** 2026-06-06  
+**Build:** 197
+
+Build 197 reduces the risk of hidden admin drift by adding pricing-catalog diagnostics/repair, route-copy parity checks, and landing-page SEO readiness warnings. No new database tables are required.
+
+## Reduced in Build 197
+
+- A partial DB pricing catalog can now be diagnosed from the dashboard instead of only showing symptoms such as missing Landing Page Builder add-ons.
+- Staff can repair missing pricing catalog groups/rows from bundled fallback data while preserving existing DB edits.
+- Root HTML versus folder route-copy drift can now be reported from an admin endpoint and dashboard card.
+- Dashboard cards now load independently, so one failed diagnostics endpoint should not hide unrelated warnings.
+- Landing pages now warn about overlong titles/meta descriptions, missing hero/H1 text, missing images, and messy slugs before save.
+
+## Still outstanding after Build 197
+
+1. Pricing repair has an inline confirm prompt, but it does not yet show a full visual diff modal before writing.
+2. Route-copy parity is visible in admin, but route-copy synchronization is not yet automatic during packaging.
+3. Landing-page SEO/readiness warnings render on section load/save; they do not yet update live while typing.
+4. Landing images still need consent/privacy badges directly beside each hero/gallery field.
+5. Local SEO proof recommendations still need one-click task assignment from the dashboard card.
+6. Public landing-page structured-data validation should be shown beside the editor before publish.
+7. GET/POST compatibility for every admin fetch should be guarded by an automated release check.
+8. More hard-coded payment/booking/public copy still needs to move into DB-backed editable settings.
+
+---
+
 # Build 196 known gaps and risks — Live admin error repairs
 
 **Updated:** 2026-06-06  

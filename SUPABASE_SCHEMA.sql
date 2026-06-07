@@ -1649,3 +1649,9 @@ Build 194 adds no new DDL. It reuses `app_management_settings`, `app_management_
 -- local SEO proof/gallery settings. Fixes API method compatibility and Admin App
 -- runtime fallback hydration without schema changes. See
 -- sql/2026-06-06_build196_admin_live_error_repairs_no_ddl_note.sql.
+
+
+-- Build 197 self-healing admin diagnostics pass
+-- No DDL required. Pricing catalog diagnostics and repair continue using public.app_management_settings.
+-- Repair writes only to key='pricing_catalog' and preserves existing DB values while filling missing bundled fallback groups/rows.
+-- Route-copy parity and landing SEO readiness are UI/code checks only.
