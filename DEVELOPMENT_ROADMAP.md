@@ -1,3 +1,58 @@
+# Build 199 update — Friendly Site Settings domain editors
+
+**Updated:** 2026-06-07  
+**Build:** 199
+
+Build 199 continues the direct-JSON replacement work. The biggest change is that Admin Site Settings now treats raw JSON as an Advanced/emergency fallback, while routine owner/admin edits use row/card editors for navigation links, footer groups, analytics events, media requirements, holiday closures, and landing-page SEO/hero content. Admin Recovery delivery rules also now have normal fields instead of requiring Rules JSON edits.
+
+## Build 199 — 20 completed items
+
+1. Collapsed the Admin Site Settings raw JSON textarea into an **Advanced JSON fallback / emergency repair** panel.
+2. Renamed the settings workflow to a friendly editor so staff are guided toward forms first.
+3. Added friendly holiday-closure rows for date, label, reason, note, and closed/blocking status.
+4. Preserved business-hours day fields while removing the routine holiday-closure JSON textarea.
+5. Added friendly main-navigation link rows for label, URL/path, and group/note.
+6. Added friendly footer quick-link rows for label, URL/path, and group/note.
+7. Added friendly footer-group rows using simple `Label | /path` lines instead of nested JSON.
+8. Removed routine navigation/footer JSON helper fields from the structured editor.
+9. Added friendly analytics event rows for event key, label, group/category, status, and active state.
+10. Removed routine analytics event JSON helper fields from the structured editor.
+11. Added friendly media requirement rows for label, category, R2 key, width, height, size guidance, and upload method.
+12. Removed routine required-assets JSON helper fields from the structured editor.
+13. Added friendly landing-page cards for slug, name, type, nav group, meta title, meta description, hero title, hero intro, and enabled state.
+14. Preserved deeper landing-page arrays/objects while exposing the highest-risk SEO fields as owner-friendly controls.
+15. Updated landing-page preview cards so object-based `default_pages.pages` content previews correctly.
+16. Added add/remove controls for all new friendly Site Settings row groups.
+17. Added apply-to-JSON conversion so friendly rows update the underlying DB/fallback payload safely before save.
+18. Synced `/admin-site-settings.html` and `/admin-site-settings/` after the editor conversion.
+19. Converted Admin Recovery delivery rules from direct Rules JSON to friendly fields for send window, quiet hours, delay, max attempts, and opt-in requirement.
+20. Updated roadmap, known gaps, database/schema notes, SQL no-DDL note, and release guards for this pass.
+
+## Next 20 steps after Build 199
+
+1. Build a shared reusable row-editor component instead of one-off row code per admin screen.
+2. Add field-level validation messages directly beside every friendly Site Settings row input.
+3. Add media-library picker buttons beside landing-page hero/gallery image URL fields.
+4. Add image consent/privacy badges beside landing and gallery media fields.
+5. Convert pricing catalog charts, included services, and rich package notes out of the remaining advanced JSON area.
+6. Convert recovery-template conditional/provider rules into a fuller visual rule builder.
+7. Add owner-safe visual diff modals before saving navigation, landing, media, and analytics registry changes.
+8. Add per-row restore-from-history controls, not just whole-domain restore.
+9. Add official-source URL validation for water rules and footer/navigation external links.
+10. Add live SEO counters while typing in landing meta title, meta description, hero/H1, and slug fields.
+11. Add LocalBusiness/service schema preview beside each landing-page card.
+12. Add a dashboard card listing all remaining advanced JSON panels and why each still exists.
+13. Add a release script that automatically syncs root `.html` and folder `index.html` route copies.
+14. Add automated browser-level smoke tests for Admin Site Settings row add/remove/apply/save flows.
+15. Add DB-backed option dropdowns to friendly rows where values are controlled, such as analytics groups and media categories.
+16. Add staff-role enforcement per editable domain and row-level warning labels in the UI.
+17. Add audit reason prompts before publishing major public-navigation or policy wording changes.
+18. Add fallback-repair previews that show exactly what DB rows would be updated before force sync.
+19. Add public crawl validation for generated landing, navigation, footer, sitemap, and robots output.
+20. Continue migrating duplicated JSON/page content into DB-first, owner-friendly screens where it reduces failure points.
+
+---
+
 # Build 198 update — Friendly editors replacing direct JSON editing
 
 **Updated:** 2026-06-07  

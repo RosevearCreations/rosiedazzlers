@@ -1,3 +1,12 @@
+# Build 199 schema status — friendly Site Settings editor pass
+
+**Updated:** 2026-06-07  
+**Build:** 199
+
+Build 199 adds no new tables or columns. It reuses the existing `app_management_settings` and `app_management_setting_history` rows for the newly friendly Admin Site Settings editors. The UI converts row/card edits back into the same JSON payload before saving, so bundled JSON fallbacks and DB-first rendering continue to work without a migration. Admin Recovery delivery rules also reuse the existing recovery-template `rules` payload.
+
+---
+
 # Build 197 schema status — no-DDL self-healing admin pass
 
 **Updated:** 2026-06-06  
