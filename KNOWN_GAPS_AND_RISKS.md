@@ -1,3 +1,33 @@
+# Build 199 known gaps and risks — Site Settings JSON replacement
+
+**Updated:** 2026-06-07  
+**Build:** 199
+
+Build 199 reduces the biggest remaining direct-JSON editing risk inside Admin Site Settings. Routine edits for navigation/footer, analytics registry, media requirements, holiday closures, and landing-page SEO/hero fields now use row/card editors. Raw JSON is still present, but it is collapsed and labelled as an emergency repair/fallback tool.
+
+## Reduced in Build 199
+
+- Admin Site Settings no longer presents navigation/footer, analytics events, media requirements, holiday closures, or landing-page content as primary JSON textareas.
+- Landing-page content previews now understand object-based fallback content, not just arrays.
+- Admin Recovery delivery rules no longer require direct Rules JSON edits for common send-window/quiet-hour/retry settings.
+- Route-copy drift was avoided for the converted Admin Site Settings and Recovery screens.
+- Staff have clearer boundaries between normal owner-safe editing and advanced developer/fallback repair.
+
+## Still outstanding after Build 199
+
+1. Pricing catalog still has an Advanced raw JSON panel for charts, included-service details, and deep package notes.
+2. Some recovery provider/conditional rule structures still need a fuller visual rule-builder.
+3. Friendly Site Settings rows need inline validation beside the field, not only domain-level validation buttons.
+4. Friendly rows need visual diff modals before save/restore.
+5. Per-row history restore is not available yet; history restore is still domain-level.
+6. Media URL fields should connect to the media library instead of requiring manual URL copying.
+7. Landing-page media and gallery fields need stronger consent/privacy badges before publish.
+8. Route-copy synchronization is still done manually during the build pass rather than by a dedicated packaging script.
+9. A dashboard card should list all remaining advanced JSON panels so they can be retired intentionally.
+10. Browser-level tests are still needed for add/remove/apply/save flows in the new friendly Site Settings editor.
+
+---
+
 # Build 198 known gaps and risks — Friendly editor conversion
 
 **Updated:** 2026-06-07  

@@ -21,7 +21,7 @@
 --   1. sql/2026-05-24_build172_public_faq_content_foundation.sql
 --   2. sql/2026-05-24_build173_admin_content_faq_editor_no_ddl_note.sql
 
----
+-- ---
 -- Build 170 customer dashboard signed-out fallback sync — 2026-05-24
 -- Build 169 auth/API fallback sync — 2026-05-23
 -- No destructive schema change. Runtime auth_me and analytics now fail open instead of returning browser-visible 500s when Supabase config or tables are temporarily unavailable.
@@ -1067,13 +1067,15 @@ create index if not exists accounting_period_closes_status_idx on public.account
 
 -- 2026-04-29 pass: landing page content, add-on image merge safety, and admin add-on dependency/editor refinements.
 
-## Build 132 — Admin add-on image hydration repair (May 8, 2026)
-- Admin App add-on selection now hydrates blank saved `image_url` and `image_fallback_url` fields from the bundled default pricing catalog by matching add-on `code`.
-- The selected add-on editor now shows a Current image loaded preview so the existing picture can be kept or replaced deliberately.
-- Public pricing catalog merge logic now prevents blank saved media fields from masking fallback/default add-on images.
-- No database DDL is required; schema tracking note added at `sql/2026-05-08_build132_admin_addon_media_hydration_note.sql`.
-- Continue the local SEO discipline: one clear H1 per exposed public page, locally relevant wording, visible proof/review media, and no broken asset paths.
-- Restored missing `assets/landing-page.js` because landing pages were still referencing it during the static link check.
+-- Build 132 — Admin add-on image hydration repair (May 8, 2026)
+-- Admin App add-on selection now hydrates blank saved image_url and image_fallback_url fields
+-- from the bundled default pricing catalog by matching add-on code.
+-- The selected add-on editor shows a Current image loaded preview.
+-- Public pricing catalog merge logic prevents blank saved media fields from masking fallback images.
+-- No database DDL is required; see sql/2026-05-08_build132_admin_addon_media_hydration_note.sql.
+-- Continue local SEO discipline: one clear H1 per exposed public page, locally relevant wording,
+-- visible proof/review media, and no broken asset paths.
+-- Restored missing assets/landing-page.js because landing pages still referenced it during static link checks.
 
 -- Build 133 note: admin add-on PNG/R2 image hydration and landingLinksToText repair are frontend/data fallback changes only; no database DDL required. See sql/2026-05-08_build133_admin_addon_png_hydration_no_ddl_note.sql.
 
@@ -1630,11 +1632,12 @@ CREATE TABLE IF NOT EXISTS public.app_management_setting_history (
 -- social_caption_templates/social_hashtag_presets as DB-first sources with
 -- built-in fallback templates when those optional tables are not ready.
 
----
-
-## Build 194 schema note — 2026-06-06
-
-Build 194 adds no new DDL. It reuses `app_management_settings`, `app_management_setting_history`, and `site_activity_events` for editable-setting diff/preview tools and analytics registry quick-add. The no-DDL note is recorded at `sql/2026-06-06_build194_diff_preview_option_libraries_no_ddl_note.sql`.
+-- ---
+-- Build 194 schema note — 2026-06-06
+-- Build 194 adds no new DDL. It reuses app_management_settings,
+-- app_management_setting_history, and site_activity_events for editable-setting
+-- diff/preview tools and analytics registry quick-add. The no-DDL note is recorded at
+-- sql/2026-06-06_build194_diff_preview_option_libraries_no_ddl_note.sql.
 
 -- Build 195 schema/history/template/export preview pass — 2026-06-06
 -- No DDL changes. Build 195 reuses app_management_settings, app_management_setting_history,
@@ -1657,8 +1660,15 @@ Build 194 adds no new DDL. It reuses `app_management_settings`, `app_management_
 -- Route-copy parity and landing SEO readiness are UI/code checks only.
 
 
----
+-- Build 198 friendly JSON editor conversion pass
+-- No DDL required. Social feed, before/after gallery, and water-rule friendly editors
+-- continue using existing app_management_settings and water-rule fallback payloads.
+-- Raw JSON remains available only as an Advanced/emergency repair view.
 
-## Build 198 documentation sync — Friendly editors for formerly raw JSON areas
 
-Build 198 converts routine owner/admin updates for social feeds, before/after gallery rows, and water-use rules into friendly row-based screens. The underlying JSON remains available only as an Advanced/emergency repair and fallback-sync view. No database schema changes are required for this pass; the existing `app_management_settings` and water-rule settings flow remain the source of truth with bundled JSON fallback support.
+-- Build 199 friendly Site Settings editor pass — 2026-06-07
+-- No DDL required. Navigation/footer, analytics registry, media requirements,
+-- holiday closures, landing-page content, and recovery-template rules continue
+-- using existing JSON payload columns/settings rows. The UI now provides friendly
+-- row/card editors and applies those rows back to the same DB/fallback payloads.
+-- See sql/2026-06-07_build199_friendly_site_settings_editors_no_ddl_note.sql.

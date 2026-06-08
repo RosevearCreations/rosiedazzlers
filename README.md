@@ -800,3 +800,8 @@ Build 197 adds self-healing admin diagnostics for pricing catalog source/repair,
 ## Build 198 documentation sync — Friendly editors for formerly raw JSON areas
 
 Build 198 converts routine owner/admin updates for social feeds, before/after gallery rows, and water-use rules into friendly row-based screens. The underlying JSON remains available only as an Advanced/emergency repair and fallback-sync view. No database schema changes are required for this pass; the existing `app_management_settings` and water-rule settings flow remain the source of truth with bundled JSON fallback support.
+
+## Build 199 documentation sync — Friendly Site Settings domain editors
+
+Build 199 converts the remaining high-risk Admin Site Settings JSON helper areas into friendly row/card editors for navigation/footer links, analytics events, media requirements, holiday closures, and landing-page SEO/hero content. Admin Recovery delivery rules now use fields for common rule settings. No database schema changes are required; existing JSON payload storage remains the fallback/advanced repair layer.
+
