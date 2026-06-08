@@ -1,3 +1,31 @@
+# Build 198 known gaps and risks — Friendly editor conversion
+
+**Updated:** 2026-06-07  
+**Build:** 198
+
+Build 198 reduces the risk of staff breaking JSON while making routine updates. Social feeds, before/after gallery rows, and water-use rules now have friendly row-based editors while retaining advanced JSON recovery panels.
+
+## Reduced in Build 198
+
+- Social feed updates no longer require direct JSON editing for normal post/platform updates.
+- Before/after gallery proof can be maintained with clear fields for consent, media type, URLs, and notes.
+- Water restriction rules can be maintained as rows with source/review fields instead of one large JSON textarea.
+- The raw JSON payloads remain available as emergency repair/fallback views rather than the primary editing surface.
+- Route-copy drift was avoided for the two changed admin screens.
+
+## Still outstanding after Build 198
+
+1. Admin Site Settings still contains some generic JSON helper fields for complex domains such as navigation/footer groups, analytics registry, media requirements, and landing-page content.
+2. Pricing catalog still has an Advanced raw JSON panel for charts/included services/richer notes, although the main package/add-on/service-area workflow is structured.
+3. The new friendly editors still need visual diff modals before saving major changes.
+4. Gallery rows should block or warn more strongly when consent is missing but publishing is attempted.
+5. Water-rule source URLs should be validated and reviewed on a schedule.
+6. A reusable row-editor component should replace the current page-specific JavaScript patterns.
+7. A release-time route-copy sync script is still needed so copied routes cannot drift.
+8. DB-to-bundled-fallback synchronization is still manual/documented rather than fully automated.
+
+---
+
 # Build 197 known gaps and risks — Self-healing admin diagnostics
 
 **Updated:** 2026-06-06  

@@ -1655,3 +1655,10 @@ Build 194 adds no new DDL. It reuses `app_management_settings`, `app_management_
 -- No DDL required. Pricing catalog diagnostics and repair continue using public.app_management_settings.
 -- Repair writes only to key='pricing_catalog' and preserves existing DB values while filling missing bundled fallback groups/rows.
 -- Route-copy parity and landing SEO readiness are UI/code checks only.
+
+
+---
+
+## Build 198 documentation sync — Friendly editors for formerly raw JSON areas
+
+Build 198 converts routine owner/admin updates for social feeds, before/after gallery rows, and water-use rules into friendly row-based screens. The underlying JSON remains available only as an Advanced/emergency repair and fallback-sync view. No database schema changes are required for this pass; the existing `app_management_settings` and water-rule settings flow remain the source of truth with bundled JSON fallback support.

@@ -754,3 +754,10 @@ Build 193 is the current handoff build. It addresses the reported Admin Social t
 ## Build 197 status
 
 Packaged changes target self-healing admin diagnostics, pricing fallback repair, route-copy parity, and landing page SEO readiness.
+
+
+---
+
+## Build 198 documentation sync — Friendly editors for formerly raw JSON areas
+
+Build 198 converts routine owner/admin updates for social feeds, before/after gallery rows, and water-use rules into friendly row-based screens. The underlying JSON remains available only as an Advanced/emergency repair and fallback-sync view. No database schema changes are required for this pass; the existing `app_management_settings` and water-rule settings flow remain the source of truth with bundled JSON fallback support.
