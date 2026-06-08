@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 198 note:
+- Converts routine social feed, before/after gallery, and water-rule updates from direct JSON textareas into friendly admin row editors while preserving advanced JSON fallback recovery.
+
 Build 197 note:
 - Adds self-healing Admin Dashboard diagnostics for pricing catalog source/repair, route-copy parity, independent card failures, and landing-page SEO readiness warnings.
 
@@ -109,6 +112,7 @@ CHECKS = [
     "scripts/build195_schema_history_template_export_check.py",
     "scripts/build196_admin_live_error_repairs_check.py",
     "scripts/build197_self_healing_admin_checks.py",
+    "scripts/build198_friendly_json_editors_check.py",
     "scripts/seo_h1_check.py",
 ]
 
