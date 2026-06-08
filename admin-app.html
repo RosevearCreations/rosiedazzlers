@@ -39,16 +39,21 @@
     .feature-note{margin:0 0 14px;color:#9fb0c8;font-size:.95rem;line-height:1.5}
     .feature-list{margin:0;padding-left:18px;color:#c3d2e6;display:grid;gap:6px}
     .admin-menu-slot:empty{display:none}.chart-helper-preview{padding:10px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);overflow:auto}.chart-helper-preview img{display:block;max-width:100%;height:auto;border-radius:12px}
+    .friendly-json-row{display:grid;gap:10px;padding:12px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
+    .friendly-json-row__head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.friendly-json-row__head strong{font-size:1rem}
+    .friendly-json-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.friendly-json-grid .wide{grid-column:1/-1}
+    .friendly-json-item{display:grid;gap:8px;padding:10px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07)}
+    .friendly-json-item h4{margin:0;font-size:.9rem;color:#c3d2e6}.friendly-json-row img{max-width:100%;max-height:120px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05)}
     @media(max-width:1200px){.catalog-row.package,.catalog-row.addon,.catalog-row.service-area,.pricing-grid-4,.pricing-grid-5{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:980px){.span-6,.span-4,.span-8{grid-column:span 12}.app-layout{grid-template-columns:1fr}.menu-col{position:static}}
-    @media(max-width:720px){.catalog-row.package,.catalog-row.addon,.catalog-row.service-area,.catalog-row.requirement,.pricing-grid-4,.pricing-grid-5{grid-template-columns:1fr}}
+    @media(max-width:720px){.catalog-row.package,.catalog-row.addon,.catalog-row.service-area,.catalog-row.requirement,.pricing-grid-4,.pricing-grid-5,.friendly-json-grid{grid-template-columns:1fr}}
     @media(max-width:900px){.subgrid{grid-template-columns:1fr}}
     .catalog-option-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
   @media(max-width:1100px){.catalog-option-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media(max-width:720px){.catalog-option-grid{grid-template-columns:1fr}}
 </style>
 </head>
-<body data-build176="media-privacy-review-warnings" data-build178="admin-publish-privacy-badges" data-build197="landing-seo-readiness">
+<body data-build176="media-privacy-review-warnings" data-build178="admin-publish-privacy-badges" data-build197="landing-seo-readiness" data-build198="friendly-json-editors">
 <main class="shell">
   <div class="loading" data-admin-shell-loading>Loading app management...</div>
   <div data-admin-shell-ready hidden>
@@ -338,26 +343,38 @@
 
       <article class="card span-6">
         <h2>Social feed manager</h2>
-        <p class="feature-note">Paste the newest public links here. The site trims each platform to the latest five items automatically.</p>
+        <p class="feature-note">Build 198 replaces the old paste-a-JSON box with a row editor for each platform and post. The raw JSON is still available under Advanced for emergency repair only.</p>
         <p class="muted">Store the latest 5 links for each social platform here. The home page and video page can then show the newest five items per platform without hard-coding every post into the page.</p>
-        <div class="field"><label for="social_feeds_json">Social feed JSON</label><textarea id="social_feeds_json" spellcheck="false" placeholder='{"platforms":[{"platform":"youtube","items":[]}]}'></textarea></div>
+        <div id="socialFeedStructuredEditor" class="stack-sm" data-build198="social-feed-structured-editor"></div>
         <div class="actions">
-          <button class="btn" type="button" id="reloadSocialFeedsBtn">Reload social feed JSON</button>
+          <button class="btn" type="button" id="addSocialPlatformBtn">Add platform</button>
+          <button class="btn" type="button" id="reloadSocialFeedsBtn">Reload feeds</button>
           <button class="btn" type="button" id="resetSocialFeedsBtn">Reset to template</button>
           <button class="btn primary" type="button" id="saveSocialFeedsBtn">Save social feeds</button>
         </div>
+        <details class="panel-lite" style="margin-top:12px">
+          <summary><strong>Advanced social feed JSON</strong> <span class="note">Generated from the friendly editor. Use only for emergency repair.</span></summary>
+          <div class="field" style="margin-top:10px"><label for="social_feeds_json">Social feed JSON</label><textarea id="social_feeds_json" spellcheck="false" placeholder='{"platforms":[{"platform":"youtube","items":[]}]}'></textarea></div>
+          <div class="actions"><button class="btn" type="button" id="applySocialFeedsJsonBtn">Apply JSON to friendly editor</button></div>
+        </details>
       </article>
 
       <article class="card span-6">
         <h2>Before / after gallery manager</h2>
-        <p class="feature-note">Maintain the public before/after slider gallery here instead of editing a sample JSON file.</p>
+        <p class="feature-note">Build 198 replaces direct gallery JSON editing with customer-safe rows for title, location, consent, media type, and before/after URLs.</p>
         <p class="muted">Each row can use paired images or paired videos. Only customer-approved media should be published here.</p>
-        <div class="field"><label for="before_after_gallery_json">Gallery JSON</label><textarea id="before_after_gallery_json" spellcheck="false" placeholder='{"items":[{"title":"Interior refresh","before_url":"","after_url":""}]}'></textarea></div>
+        <div id="beforeAfterGalleryStructuredEditor" class="stack-sm" data-build198="before-after-gallery-structured-editor"></div>
         <div class="actions">
-          <button class="btn" type="button" id="reloadBeforeAfterGalleryBtn">Reload gallery JSON</button>
+          <button class="btn" type="button" id="addBeforeAfterItemBtn">Add gallery row</button>
+          <button class="btn" type="button" id="reloadBeforeAfterGalleryBtn">Reload gallery</button>
           <button class="btn" type="button" id="resetBeforeAfterGalleryBtn">Reset to template</button>
           <button class="btn primary" type="button" id="saveBeforeAfterGalleryBtn">Save gallery</button>
         </div>
+        <details class="panel-lite" style="margin-top:12px">
+          <summary><strong>Advanced gallery JSON</strong> <span class="note">Generated from the friendly rows. Use only for emergency repair.</span></summary>
+          <div class="field" style="margin-top:10px"><label for="before_after_gallery_json">Gallery JSON</label><textarea id="before_after_gallery_json" spellcheck="false" placeholder='{"items":[{"title":"Interior refresh","before_url":"","after_url":""}]}'></textarea></div>
+          <div class="actions"><button class="btn" type="button" id="applyBeforeAfterGalleryJsonBtn">Apply JSON to friendly editor</button></div>
+        </details>
         <div class="panel-lite stack-sm" id="mediaPrivacyReviewSummary" style="margin-top:14px">
           <strong>Media privacy readiness</strong>
           <p class="muted">Run this before publishing gallery/social proof. It warns when gallery rows or photo-estimate uploads are missing approved-public privacy status.</p>
@@ -531,16 +548,6 @@
     });
     return src;
   }
-  function setSocialFeedsEditor(value){
-    byId('social_feeds_json').value = JSON.stringify(normalizeSocialFeeds(value), null, 2);
-  }
-  function readSocialFeedsEditor(){
-    var raw = byId('social_feeds_json').value || '{}';
-    var parsed;
-    try { parsed = JSON.parse(raw); } catch { throw new Error('Social feed JSON is invalid.'); }
-    if (!parsed || typeof parsed !== 'object') throw new Error('Social feed JSON must be a JSON object.');
-    return normalizeSocialFeeds(parsed);
-  }
   function beforeAfterGalleryDefaults(){
     return {
       items: [
@@ -577,15 +584,183 @@
     if (!src.items.length) src.items = cloneValue(beforeAfterGalleryDefaults().items);
     return src;
   }
+  var socialFeedEditorState = socialFeedsDefaults();
+  var beforeAfterGalleryEditorState = beforeAfterGalleryDefaults();
+
+  function syncSocialFeedsJsonFromState(){
+    var node = byId('social_feeds_json');
+    if (node) node.value = JSON.stringify(normalizeSocialFeeds(socialFeedEditorState), null, 2);
+  }
+  function socialFeedPlatformLabel(platform, index){
+    return String(platform && (platform.title || platform.platform) || ('Platform ' + (index + 1))).trim();
+  }
+  function renderSocialFeedsStructuredEditor(){
+    var host = byId('socialFeedStructuredEditor');
+    if (!host) return;
+    var platforms = Array.isArray(socialFeedEditorState.platforms) ? socialFeedEditorState.platforms : [];
+    if (!platforms.length) {
+      host.innerHTML = '<div class="catalog-empty">No social platforms yet. Use Add platform or Reset to template.</div>';
+      return;
+    }
+    host.innerHTML = platforms.map(function(platform, platformIndex){
+      var items = Array.isArray(platform.items) ? platform.items : [];
+      var itemHtml = items.length ? items.map(function(item, itemIndex){
+        return '<div class="friendly-json-item">' +
+          '<div class="friendly-json-row__head"><h4>Post ' + (itemIndex + 1) + '</h4><button class="btn" type="button" data-delete-social-item="' + platformIndex + ':' + itemIndex + '">Delete post</button></div>' +
+          '<div class="friendly-json-grid">' +
+            '<label class="field"><span>Post title</span><input data-social-item-field="title" data-social-platform-index="' + platformIndex + '" data-social-item-index="' + itemIndex + '" value="' + escapeHtml(item.title || '') + '"></label>' +
+            '<label class="field"><span>Public URL</span><input data-social-item-field="url" data-social-platform-index="' + platformIndex + '" data-social-item-index="' + itemIndex + '" value="' + escapeHtml(item.url || '') + '" placeholder="https://..."></label>' +
+            '<label class="field"><span>Published date</span><input data-social-item-field="published_at" data-social-platform-index="' + platformIndex + '" data-social-item-index="' + itemIndex + '" value="' + escapeHtml(item.published_at || '') + '" placeholder="2026-06-07"></label>' +
+            '<label class="field"><span>Short note</span><input data-social-item-field="note" data-social-platform-index="' + platformIndex + '" data-social-item-index="' + itemIndex + '" value="' + escapeHtml(item.note || '') + '"></label>' +
+          '</div>' +
+        '</div>';
+      }).join('') : '<div class="catalog-empty">No posts yet for this platform.</div>';
+      return '<section class="friendly-json-row">' +
+        '<div class="friendly-json-row__head"><strong>' + escapeHtml(socialFeedPlatformLabel(platform, platformIndex)) + '</strong><div class="actions"><button class="btn" type="button" data-add-social-item="' + platformIndex + '">Add post</button><button class="btn" type="button" data-delete-social-platform="' + platformIndex + '">Delete platform</button></div></div>' +
+        '<div class="friendly-json-grid">' +
+          '<label class="field"><span>Platform key</span><input data-social-platform-field="platform" data-social-platform-index="' + platformIndex + '" value="' + escapeHtml(platform.platform || '') + '" placeholder="youtube"></label>' +
+          '<label class="field"><span>Public title</span><input data-social-platform-field="title" data-social-platform-index="' + platformIndex + '" value="' + escapeHtml(platform.title || '') + '" placeholder="YouTube"></label>' +
+          '<label class="field wide"><span>Intro text</span><textarea data-social-platform-field="intro" data-social-platform-index="' + platformIndex + '">' + escapeHtml(platform.intro || '') + '</textarea></label>' +
+        '</div>' + itemHtml +
+      '</section>';
+    }).join('');
+    bindSocialFeedsStructuredEditor();
+  }
+  function bindSocialFeedsStructuredEditor(){
+    qsa('[data-social-platform-field]').forEach(function(input){
+      input.addEventListener('input', function(){
+        var index = Number(input.getAttribute('data-social-platform-index'));
+        var field = input.getAttribute('data-social-platform-field');
+        if (!socialFeedEditorState.platforms[index]) return;
+        socialFeedEditorState.platforms[index][field] = input.value;
+        syncSocialFeedsJsonFromState();
+      });
+    });
+    qsa('[data-social-item-field]').forEach(function(input){
+      input.addEventListener('input', function(){
+        var platformIndex = Number(input.getAttribute('data-social-platform-index'));
+        var itemIndex = Number(input.getAttribute('data-social-item-index'));
+        var field = input.getAttribute('data-social-item-field');
+        var platform = socialFeedEditorState.platforms[platformIndex];
+        if (!platform || !platform.items || !platform.items[itemIndex]) return;
+        platform.items[itemIndex][field] = input.value;
+        syncSocialFeedsJsonFromState();
+      });
+    });
+    qsa('[data-add-social-item]').forEach(function(button){
+      button.addEventListener('click', function(){
+        var index = Number(button.getAttribute('data-add-social-item'));
+        if (!socialFeedEditorState.platforms[index]) return;
+        socialFeedEditorState.platforms[index].items = Array.isArray(socialFeedEditorState.platforms[index].items) ? socialFeedEditorState.platforms[index].items : [];
+        socialFeedEditorState.platforms[index].items.push({ title: '', url: '', published_at: '', note: '' });
+        syncSocialFeedsJsonFromState();
+        renderSocialFeedsStructuredEditor();
+      });
+    });
+    qsa('[data-delete-social-item]').forEach(function(button){
+      button.addEventListener('click', function(){
+        var parts = String(button.getAttribute('data-delete-social-item') || '').split(':').map(Number);
+        var platform = socialFeedEditorState.platforms[parts[0]];
+        if (!platform || !Array.isArray(platform.items)) return;
+        platform.items.splice(parts[1], 1);
+        syncSocialFeedsJsonFromState();
+        renderSocialFeedsStructuredEditor();
+      });
+    });
+    qsa('[data-delete-social-platform]').forEach(function(button){
+      button.addEventListener('click', function(){
+        var index = Number(button.getAttribute('data-delete-social-platform'));
+        socialFeedEditorState.platforms.splice(index, 1);
+        syncSocialFeedsJsonFromState();
+        renderSocialFeedsStructuredEditor();
+      });
+    });
+  }
+  function setSocialFeedsEditor(value){
+    socialFeedEditorState = normalizeSocialFeeds(value);
+    syncSocialFeedsJsonFromState();
+    renderSocialFeedsStructuredEditor();
+  }
+  function readSocialFeedsEditor(){
+    return normalizeSocialFeeds(socialFeedEditorState);
+  }
+  function applySocialFeedsJsonToStructuredEditor(){
+    var raw = byId('social_feeds_json').value || '{}';
+    var parsed;
+    try { parsed = JSON.parse(raw); } catch { throw new Error('Social feed JSON is invalid.'); }
+    if (!parsed || typeof parsed !== 'object') throw new Error('Social feed JSON must be a JSON object.');
+    setSocialFeedsEditor(parsed);
+    setShellStatus('Advanced social JSON was applied to the friendly editor.', 'success');
+  }
+
+  function syncBeforeAfterGalleryJsonFromState(){
+    var node = byId('before_after_gallery_json');
+    if (node) node.value = JSON.stringify(normalizeBeforeAfterGallery(beforeAfterGalleryEditorState), null, 2);
+  }
+  function renderBeforeAfterGalleryStructuredEditor(){
+    var host = byId('beforeAfterGalleryStructuredEditor');
+    if (!host) return;
+    var items = Array.isArray(beforeAfterGalleryEditorState.items) ? beforeAfterGalleryEditorState.items : [];
+    if (!items.length) {
+      host.innerHTML = '<div class="catalog-empty">No gallery rows yet. Use Add gallery row or Reset to template.</div>';
+      return;
+    }
+    host.innerHTML = items.map(function(item, index){
+      var previewUrl = item.after_url || item.before_url || '';
+      return '<section class="friendly-json-row">' +
+        '<div class="friendly-json-row__head"><strong>' + escapeHtml(item.title || ('Gallery row ' + (index + 1))) + '</strong><button class="btn" type="button" data-delete-gallery-item="' + index + '">Delete row</button></div>' +
+        (previewUrl ? '<img src="' + escapeHtml(previewUrl) + '" alt="Preview for ' + escapeHtml(item.title || 'gallery row') + '" loading="lazy">' : '') +
+        '<div class="friendly-json-grid">' +
+          '<label class="field"><span>Title</span><input data-gallery-field="title" data-gallery-index="' + index + '" value="' + escapeHtml(item.title || '') + '"></label>' +
+          '<label class="field"><span>Location</span><input data-gallery-field="location" data-gallery-index="' + index + '" value="' + escapeHtml(item.location || '') + '"></label>' +
+          '<label class="field"><span>Before media type</span><select data-gallery-field="before_kind" data-gallery-index="' + index + '"><option value="image"' + (item.before_kind !== 'video' ? ' selected' : '') + '>Image</option><option value="video"' + (item.before_kind === 'video' ? ' selected' : '') + '>Video</option></select></label>' +
+          '<label class="field"><span>Before URL</span><input data-gallery-field="before_url" data-gallery-index="' + index + '" value="' + escapeHtml(item.before_url || '') + '" placeholder="https://..."></label>' +
+          '<label class="field"><span>After media type</span><select data-gallery-field="after_kind" data-gallery-index="' + index + '"><option value="image"' + (item.after_kind !== 'video' ? ' selected' : '') + '>Image</option><option value="video"' + (item.after_kind === 'video' ? ' selected' : '') + '>Video</option></select></label>' +
+          '<label class="field"><span>After URL</span><input data-gallery-field="after_url" data-gallery-index="' + index + '" value="' + escapeHtml(item.after_url || '') + '" placeholder="https://..."></label>' +
+          '<label class="field"><span>Consent status</span><select data-gallery-field="consent_status" data-gallery-index="' + index + '"><option value="sample"' + (item.consent_status === 'sample' ? ' selected' : '') + '>Sample / placeholder</option><option value="approved_public"' + (item.consent_status === 'approved_public' ? ' selected' : '') + '>Approved public</option><option value="needs_review"' + (item.consent_status === 'needs_review' ? ' selected' : '') + '>Needs review</option><option value="private"' + (item.consent_status === 'private' ? ' selected' : '') + '>Private / do not publish</option></select></label>' +
+          '<label class="field"><span>Vehicle label</span><input data-gallery-field="vehicle_label" data-gallery-index="' + index + '" value="' + escapeHtml(item.vehicle_label || '') + '"></label>' +
+          '<label class="field"><span>Customer name / initials</span><input data-gallery-field="customer_name" data-gallery-index="' + index + '" value="' + escapeHtml(item.customer_name || '') + '"></label>' +
+          '<label class="field wide"><span>Public note</span><textarea data-gallery-field="note" data-gallery-index="' + index + '">' + escapeHtml(item.note || '') + '</textarea></label>' +
+        '</div>' +
+      '</section>';
+    }).join('');
+    bindBeforeAfterGalleryStructuredEditor();
+  }
+  function bindBeforeAfterGalleryStructuredEditor(){
+    qsa('[data-gallery-field]').forEach(function(input){
+      var eventName = input.tagName === 'SELECT' ? 'change' : 'input';
+      input.addEventListener(eventName, function(){
+        var index = Number(input.getAttribute('data-gallery-index'));
+        var field = input.getAttribute('data-gallery-field');
+        if (!beforeAfterGalleryEditorState.items[index]) return;
+        beforeAfterGalleryEditorState.items[index][field] = input.value;
+        syncBeforeAfterGalleryJsonFromState();
+      });
+      input.addEventListener('change', function(){ syncBeforeAfterGalleryJsonFromState(); renderBeforeAfterGalleryStructuredEditor(); });
+    });
+    qsa('[data-delete-gallery-item]').forEach(function(button){
+      button.addEventListener('click', function(){
+        beforeAfterGalleryEditorState.items.splice(Number(button.getAttribute('data-delete-gallery-item')), 1);
+        syncBeforeAfterGalleryJsonFromState();
+        renderBeforeAfterGalleryStructuredEditor();
+      });
+    });
+  }
   function setBeforeAfterGalleryEditor(value){
-    byId('before_after_gallery_json').value = JSON.stringify(normalizeBeforeAfterGallery(value), null, 2);
+    beforeAfterGalleryEditorState = normalizeBeforeAfterGallery(value);
+    syncBeforeAfterGalleryJsonFromState();
+    renderBeforeAfterGalleryStructuredEditor();
   }
   function readBeforeAfterGalleryEditor(){
+    return normalizeBeforeAfterGallery(beforeAfterGalleryEditorState);
+  }
+  function applyBeforeAfterGalleryJsonToStructuredEditor(){
     var raw = byId('before_after_gallery_json').value || '{}';
     var parsed;
     try { parsed = JSON.parse(raw); } catch { throw new Error('Before / after gallery JSON is invalid.'); }
     if (!parsed || typeof parsed !== 'object') throw new Error('Before / after gallery JSON must be a JSON object.');
-    return normalizeBeforeAfterGallery(parsed);
+    setBeforeAfterGalleryEditor(parsed);
+    setShellStatus('Advanced gallery JSON was applied to the friendly editor.', 'success');
   }
   function renderMediaPrivacySummary(summary){
     var body = byId('mediaPrivacyReviewSummaryBody');
@@ -1048,7 +1223,7 @@
     var rows = landingReadinessRows(page);
     var warnings = rows.filter(function(row){ return !row.ok; }).length;
     var chips = rows.map(function(row){ return '<span class="pill-note" data-state="' + (row.ok ? 'ok' : 'warn') + '">' + escapeHtml(row.label) + ': ' + escapeHtml(row.detail) + '</span>'; }).join(' ');
-    return '<div class="panel-lite" data-build197="landing-seo-readiness"><div class="section-label">SEO/readiness preview</div><p class="note">Before saving, keep one clear hero title/H1, a title under 70 characters, a meta description under 160 characters, a clean slug, and at least one image/proof cue.</p><div class="stack-sm">' + chips + '</div><div class="toolbar" style="margin-top:10px">' + (url ? '<a class="btn ghost" target="_blank" rel="noopener" href="' + escapeHtml(url) + '">Open public preview</a>' : '') + '<span class="note">' + (warnings ? warnings + ' warning(s) to review before publishing.' : 'Looks ready for local search preview.') + '</span></div></div>';
+    return '<div class="panel-lite" data-build197="landing-seo-readiness" data-build198="friendly-json-editors"><div class="section-label">SEO/readiness preview</div><p class="note">Before saving, keep one clear hero title/H1, a title under 70 characters, a meta description under 160 characters, a clean slug, and at least one image/proof cue.</p><div class="stack-sm">' + chips + '</div><div class="toolbar" style="margin-top:10px">' + (url ? '<a class="btn ghost" target="_blank" rel="noopener" href="' + escapeHtml(url) + '">Open public preview</a>' : '') + '<span class="note">' + (warnings ? warnings + ' warning(s) to review before publishing.' : 'Looks ready for local search preview.') + '</span></div></div>';
   }
   function validateLandingPageBeforeSave(page, label){
     var warnings = landingReadinessRows(page).filter(function(row){ return !row.ok; });
@@ -1731,12 +1906,16 @@
   bindById('saveRecoveryBtn', 'click', async ()=>{ try{ await saveSetting('recovery_templates', readRecoveryTemplates(), 'Recovery templates saved.'); await saveSetting('recovery_rules', readRecoveryRules(), 'Recovery rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save recovery settings.', 'error'); } });
   bindById('saveProviderRulesBtn', 'click', async ()=>{ try{ await saveSetting('recovery_provider_rules', readProviderRules(), 'Recovery provider rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save provider rules.', 'error'); } });
   bindById('saveDocumentTemplatesBtn', 'click', async ()=>{ try{ await saveSetting('document_templates', readDocumentTemplates(), 'Document templates saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save document templates.', 'error'); } });
-  bindById('reloadSocialFeedsBtn', 'click', async ()=>{ try{ const res = await fetch('/api/social_feed_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load social feed JSON.'); setSocialFeedsEditor(out?.social_feeds || socialFeedsDefaults()); setShellStatus(out?.warning ? `Social feed JSON reloaded with fallback defaults. ${out.warning}` : 'Social feed JSON reloaded.', out?.warning ? 'warning' : 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload social feed JSON.', 'error'); } });
+  bindById('addSocialPlatformBtn', 'click', ()=>{ socialFeedEditorState.platforms.push({ platform:'new_platform', title:'New platform', intro:'', items:[] }); syncSocialFeedsJsonFromState(); renderSocialFeedsStructuredEditor(); setShellStatus('New social platform row added. Fill in the platform key and public links before saving.', 'success'); });
+  bindById('applySocialFeedsJsonBtn', 'click', ()=>{ try{ applySocialFeedsJsonToStructuredEditor(); } catch(err){ setShellStatus(err?.message || 'Could not apply social feed JSON.', 'error'); } });
+  bindById('reloadSocialFeedsBtn', 'click', async ()=>{ try{ const res = await fetch('/api/social_feed_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load social feeds.'); setSocialFeedsEditor(out?.social_feeds || socialFeedsDefaults()); setShellStatus(out?.warning ? `Social feeds reloaded with fallback defaults. ${out.warning}` : 'Social feeds reloaded into the friendly editor.', out?.warning ? 'warning' : 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload social feeds.', 'error'); } });
   bindById('resetSocialFeedsBtn', 'click', ()=>{ setSocialFeedsEditor(socialFeedsDefaults()); setShellStatus('Social feed editor reset to the template structure.', 'success'); });
-  bindById('saveSocialFeedsBtn', 'click', async ()=>{ try{ await saveSetting('social_feeds', readSocialFeedsEditor(), 'Social feeds saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save social feeds.', 'error'); } });
-  bindById('reloadBeforeAfterGalleryBtn', 'click', async ()=>{ try{ const res = await fetch('/api/before_after_gallery_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load before / after gallery JSON.'); setBeforeAfterGalleryEditor(out || beforeAfterGalleryDefaults()); setShellStatus(out?.warning ? `Before / after gallery reloaded with fallback defaults. ${out.warning}` : 'Before / after gallery reloaded.', out?.warning ? 'warning' : 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload before / after gallery JSON.', 'error'); } });
+  bindById('saveSocialFeedsBtn', 'click', async ()=>{ try{ await saveSetting('social_feeds', readSocialFeedsEditor(), 'Social feeds saved from the friendly editor.'); } catch(err){ setShellStatus(err?.message || 'Could not save social feeds.', 'error'); } });
+  bindById('addBeforeAfterItemBtn', 'click', ()=>{ beforeAfterGalleryEditorState.items.push({ title:'New before / after result', location:'Oxford / Norfolk Counties', before_kind:'image', before_url:'', after_kind:'image', after_url:'', note:'', consent_status:'needs_review', customer_name:'', vehicle_label:'' }); syncBeforeAfterGalleryJsonFromState(); renderBeforeAfterGalleryStructuredEditor(); setShellStatus('New before / after gallery row added. Keep consent as needs review until approved.', 'success'); });
+  bindById('applyBeforeAfterGalleryJsonBtn', 'click', ()=>{ try{ applyBeforeAfterGalleryJsonToStructuredEditor(); } catch(err){ setShellStatus(err?.message || 'Could not apply gallery JSON.', 'error'); } });
+  bindById('reloadBeforeAfterGalleryBtn', 'click', async ()=>{ try{ const res = await fetch('/api/before_after_gallery_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load before / after gallery.'); setBeforeAfterGalleryEditor(out || beforeAfterGalleryDefaults()); setShellStatus(out?.warning ? `Before / after gallery reloaded with fallback defaults. ${out.warning}` : 'Before / after gallery reloaded into the friendly editor.', out?.warning ? 'warning' : 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload before / after gallery.', 'error'); } });
   bindById('resetBeforeAfterGalleryBtn', 'click', ()=>{ setBeforeAfterGalleryEditor(beforeAfterGalleryDefaults()); setShellStatus('Before / after gallery editor reset to the template structure.', 'success'); });
-  bindById('saveBeforeAfterGalleryBtn', 'click', async ()=>{ try{ await saveSetting('before_after_gallery', readBeforeAfterGalleryEditor(), 'Before / after gallery saved.'); await loadMediaPrivacySummary().catch(function(){}); } catch(err){ setShellStatus(err?.message || 'Could not save before / after gallery.', 'error'); } });
+  bindById('saveBeforeAfterGalleryBtn', 'click', async ()=>{ try{ await saveSetting('before_after_gallery', readBeforeAfterGalleryEditor(), 'Before / after gallery saved from the friendly editor.'); await loadMediaPrivacySummary().catch(function(){}); } catch(err){ setShellStatus(err?.message || 'Could not save before / after gallery.', 'error'); } });
   bindById('reloadMediaPrivacySummaryBtn', 'click', async ()=>{ try{ await loadMediaPrivacySummary(); } catch(err){ setShellStatus(err?.message || 'Could not load media privacy readiness summary.', 'error'); } });
   bindById('saveCatalogDropdownOptionsBtn', 'click', async ()=>{ try{ const value = readCatalogDropdownOptionsEditor(); setCatalogDropdownOptionsEditor(value); await saveSetting('catalog_dropdown_options', value, 'Dropdown option library saved. Admin App and Admin Catalog can now use these suggestions.'); renderPricingDashboard(); } catch(err){ setShellStatus(err?.message || 'Could not save dropdown option library.', 'error'); } });
   bindById('reloadPricingCatalogBtn', 'click', async ()=>{ try{ await loadPricingCatalogEditor(null); setShellStatus('Pricing catalog reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload pricing catalog.', 'error'); } });

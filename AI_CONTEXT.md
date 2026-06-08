@@ -696,3 +696,10 @@ Use the Build 195 section in `DEVELOPMENT_ROADMAP.md` as the current working lis
 ## Build 197 documentation sync
 
 Build 197 was reviewed during the self-healing admin diagnostics pass. Relevant implementation notes now point toward pricing catalog source/repair diagnostics, route-copy parity, independent dashboard fallback handling, landing-page SEO/readiness warnings, and continued one-H1/local-search discipline. No database DDL is required for this pass.
+
+
+---
+
+## Build 198 documentation sync — Friendly editors for formerly raw JSON areas
+
+Build 198 converts routine owner/admin updates for social feeds, before/after gallery rows, and water-use rules into friendly row-based screens. The underlying JSON remains available only as an Advanced/emergency repair and fallback-sync view. No database schema changes are required for this pass; the existing `app_management_settings` and water-rule settings flow remain the source of truth with bundled JSON fallback support.
