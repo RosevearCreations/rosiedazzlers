@@ -1,3 +1,58 @@
+# Build 198 update — Friendly editors replacing direct JSON editing
+
+**Updated:** 2026-06-07  
+**Build:** 198
+
+Build 198 responds to the request to stop making staff directly edit JSON where a normal update screen is possible. This pass keeps the JSON/API fallback layer intact for safety, but moves the day-to-day admin workflow to friendly row editors for social feeds, before/after gallery rows, and municipal water-use rules. The raw JSON boxes are now marked as Advanced/emergency repair areas instead of the primary editing method.
+
+## Build 198 — 20 completed items
+
+1. Converted the Admin App Social Feed Manager from a raw JSON textarea to a platform/post row editor.
+2. Added **Add platform** controls for social feed management.
+3. Added **Add post** and **Delete post** controls inside each social platform row.
+4. Kept generated social-feed JSON under an Advanced panel for emergency repair and fallback review.
+5. Added **Apply JSON to friendly editor** for social feeds so old JSON payloads can still be recovered safely.
+6. Converted the Admin App Before/After Gallery Manager from a raw JSON textarea to customer-safe row editing.
+7. Added **Add gallery row** and **Delete row** controls for public before/after proof items.
+8. Added friendly gallery fields for title, location, media kind, before URL, after URL, consent status, vehicle label, customer label, and public note.
+9. Kept generated gallery JSON under an Advanced panel for emergency repair and fallback review.
+10. Added **Apply JSON to friendly editor** for gallery data so existing payloads can be imported without hand-editing code.
+11. Added image preview support inside the friendly before/after gallery rows.
+12. Preserved the media privacy readiness summary below the gallery editor.
+13. Converted Admin Water Rules from a raw JSON-first screen to a friendly water-rule row editor.
+14. Added **Add water rule** and **Delete** controls for municipal/county water-use rules.
+15. Added friendly water-rule fields for rule key, label, county, municipality, public reminder, source label, source URL, verified date, next-review date, status, and internal notes.
+16. Kept generated water-rule JSON under an Advanced panel for emergency repair and fallback synchronization.
+17. Added advanced JSON apply/format back into the friendly water-rule editor.
+18. Synced `/admin-app.html` with `/admin-app/` and `/admin-water-rules.html` with `/admin-water-rules/`.
+19. Added Build 198 release guards to prevent the friendly editor markup from being removed accidentally.
+20. Updated roadmap, known gaps, database/schema notes, and the no-DDL SQL note for this pass.
+
+## Next 20 steps after Build 198
+
+1. Convert remaining Admin Site Settings JSON helper fields into purpose-built row editors for social links, holiday closures, navigation links, footer groups, analytics event rows, media requirements, and landing content.
+2. Add reusable row-editor components so future editable domains do not need one-off JavaScript.
+3. Add import/export buttons that label JSON as owner/developer backup data, not the normal editing flow.
+4. Add DB-backed validation summaries beside every friendly editor before save.
+5. Add save-time warnings when a gallery row is missing consent or before/after pairing.
+6. Add a media-library picker beside gallery and landing image URL fields.
+7. Add official-source link validation for water-rule URLs.
+8. Add calendar reminders for water-rule next-review dates.
+9. Add a route-copy sync script so root admin HTML and folder `index.html` copies are updated automatically during packaging.
+10. Add dashboard cards that list remaining direct-JSON editor fields by page and domain.
+11. Add live character counters to landing-page SEO fields while typing.
+12. Add public preview/diff modals for social feeds, gallery rows, and water rules before save.
+13. Add structured editors for sitemap/robots, schema preview settings, and LocalBusiness fields.
+14. Add template-specific editors for invoice, receipt, appointment confirmation, refund, and abandoned-cart emails.
+15. Add option-library dropdowns inside the new friendly gallery/water editors where controlled values are useful.
+16. Add a repair flow that can copy DB-friendly editor rows back into bundled fallback JSON during release prep.
+17. Add an owner-safe “restore previous version” button directly on each friendly editor section.
+18. Add per-field audit notes for who changed a row and why.
+19. Add mobile layout tuning for long admin row editors on small screens.
+20. Continue replacing hard-coded copy and remaining file-edited JSON with DB-backed, owner-friendly screens.
+
+---
+
 # Build 197 update — Self-healing admin diagnostics and landing SEO readiness
 
 **Updated:** 2026-06-06  

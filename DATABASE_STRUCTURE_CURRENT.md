@@ -765,3 +765,10 @@ Build 195 adds no new database tables or columns. It reuses `app_management_sett
 ## Build 196 schema status — 2026-06-06
 
 Build 196 adds no new tables or columns. It reuses `app_management_settings` and bundled JSON fallbacks for pricing/landing-page recovery, and updates `/api/admin/local_seo_proof_report` method compatibility without schema changes. The no-DDL note is recorded at `sql/2026-06-06_build196_admin_live_error_repairs_no_ddl_note.sql`.
+
+
+---
+
+## Build 198 documentation sync — Friendly editors for formerly raw JSON areas
+
+Build 198 converts routine owner/admin updates for social feeds, before/after gallery rows, and water-use rules into friendly row-based screens. The underlying JSON remains available only as an Advanced/emergency repair and fallback-sync view. No database schema changes are required for this pass; the existing `app_management_settings` and water-rule settings flow remain the source of truth with bundled JSON fallback support.

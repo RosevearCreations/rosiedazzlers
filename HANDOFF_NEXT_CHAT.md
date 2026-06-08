@@ -811,3 +811,10 @@ Latest pass fixed the Admin Social `api/admin/social_templates_list` 500, added 
 ## Build 197 handoff
 
 Next chat should browser-test `/admin` pricing/route-copy cards, test pricing repair on staging if missing rows are reported, then continue with live landing SEO warning refresh, proof task assignment buttons, and media consent badges beside landing images.
+
+
+---
+
+## Build 198 documentation sync — Friendly editors for formerly raw JSON areas
+
+Build 198 converts routine owner/admin updates for social feeds, before/after gallery rows, and water-use rules into friendly row-based screens. The underlying JSON remains available only as an Advanced/emergency repair and fallback-sync view. No database schema changes are required for this pass; the existing `app_management_settings` and water-rule settings flow remain the source of truth with bundled JSON fallback support.
