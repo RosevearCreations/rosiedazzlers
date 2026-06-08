@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 199 note:
+- Converts remaining high-risk Admin Site Settings JSON helper areas into friendly row/card editors while keeping advanced JSON as emergency fallback.
+
 Build 198 note:
 - Converts routine social feed, before/after gallery, and water-rule updates from direct JSON textareas into friendly admin row editors while preserving advanced JSON fallback recovery.
 
@@ -113,6 +116,7 @@ CHECKS = [
     "scripts/build196_admin_live_error_repairs_check.py",
     "scripts/build197_self_healing_admin_checks.py",
     "scripts/build198_friendly_json_editors_check.py",
+    "scripts/build199_friendly_site_settings_editors_check.py",
     "scripts/seo_h1_check.py",
 ]
 
