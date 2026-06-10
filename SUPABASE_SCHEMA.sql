@@ -1672,3 +1672,11 @@ CREATE TABLE IF NOT EXISTS public.app_management_setting_history (
 -- using existing JSON payload columns/settings rows. The UI now provides friendly
 -- row/card editors and applies those rows back to the same DB/fallback payloads.
 -- See sql/2026-06-07_build199_friendly_site_settings_editors_no_ddl_note.sql.
+
+-- Build 200 friendly pricing editor completion pass — 2026-06-09
+-- No DDL required. The selected-package detail editor and live chart helper
+-- continue using the existing app_management_settings pricing_catalog payload.
+-- Raw pricing JSON remains an emergency repair surface only; routine package
+-- details and chart previews now use friendly editor state.
+-- See sql/2026-06-09_build200_friendly_pricing_editors_no_ddl_note.sql.
+

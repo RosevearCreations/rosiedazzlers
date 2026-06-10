@@ -1,3 +1,33 @@
+# Build 200 known gaps and risks — Pricing JSON retirement pass
+
+**Updated:** 2026-06-09  
+**Build:** 200
+
+Build 200 reduces the remaining Admin App pricing JSON risk. Routine chart work and richer package details now use friendly editor state and selected-package fields. The raw pricing catalog JSON remains available, but it is explicitly an emergency repair/developer recovery panel.
+
+## Reduced in Build 200
+
+- Pricing chart previews/downloads no longer require staff to refresh or edit raw JSON.
+- Package included services, chart details, notes, best-for copy, image URL, duration label, and SEO focus phrase can be edited through normal fields.
+- Admin Dashboard now lists remaining Advanced JSON panels so future builds can retire them intentionally.
+- `/admin-app.html` and `/admin-app/` were synchronized after the pricing editor work.
+- `/admin.html` and `/admin/` were synchronized after the dashboard diagnostics card was added.
+
+## Still outstanding after Build 200
+
+1. The raw pricing catalog JSON panel still exists for emergency repair and should stay collapsed unless a developer-level recovery is needed.
+2. Recovery provider/conditional rules still need a visual rule builder beyond the common delivery-rule fields.
+3. Friendly pricing and Site Settings rows still need inline validation beside each field.
+4. Media-library picker buttons are still needed beside image URL fields.
+5. Consent/privacy badges are not yet shown beside every package/add-on/landing/gallery media field.
+6. Per-row restore-from-history is not available yet; most restore controls remain whole-domain.
+7. Visual diff modals should be added before saving pricing, navigation, landing, media, analytics, and policy changes.
+8. Route-copy synchronization is still performed during the build pass rather than by an automatic packaging script.
+9. Browser-level smoke tests are still needed for Admin App and Site Settings add/remove/save flows.
+10. Public crawl validation after Cloudflare deployment is still outstanding.
+
+---
+
 # Build 199 known gaps and risks — Site Settings JSON replacement
 
 **Updated:** 2026-06-07  

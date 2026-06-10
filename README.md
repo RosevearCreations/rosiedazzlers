@@ -1,3 +1,58 @@
+# Build 200 update — Friendly pricing editor completion and JSON retirement dashboard
+
+**Updated:** 2026-06-09  
+**Build:** 200
+
+Build 200 continues the owner-friendly editing work by reducing the last major Admin App pricing-catalog reason to open raw JSON. Package included services, chart/service-detail bullets, best-for notes, duration labels, images, SEO focus phrases, and customer-facing descriptions now have a friendly selected-package editor. Live chart previews/downloads now read from the friendly pricing editor state instead of requiring staff to refresh or repair the raw JSON first. The Admin Dashboard also now lists remaining Advanced JSON panels so they can be retired intentionally instead of being forgotten.
+
+## Build 200 — 20 completed items
+
+1. Added a selected-package detail editor inside Admin App pricing catalog management.
+2. Added friendly package fields for public package description, duration label, image URL, and SEO focus phrase.
+3. Added friendly line editors for included services, chart detail bullets, best-for/selling points, and package notes.
+4. Added save controls for the selected package details without requiring a raw JSON edit.
+5. Added duplicate-package controls for safe package-family creation from an existing package.
+6. Kept package family price rows for quick small/mid/oversize price editing.
+7. Moved the live chart helper out of the raw JSON emergency panel.
+8. Updated live chart preview/download logic to read the current friendly pricing editor state.
+9. Removed the requirement to refresh raw JSON before previewing or downloading pricing charts.
+10. Relabelled pricing catalog raw JSON as **Advanced raw catalog JSON / emergency repair**.
+11. Updated pricing help copy so staff know raw JSON is no longer the normal workflow for package details or chart work.
+12. Preserved emergency JSON apply/refresh controls for developer-level recovery.
+13. Added a dashboard diagnostics card listing the remaining advanced JSON panels and why they still exist.
+14. Synced `/admin-app.html` and `/admin-app/` after the pricing editor update.
+15. Synced `/admin.html` and `/admin/` after the dashboard diagnostics update.
+16. Updated schema documentation to confirm this pass is no-DDL and continues using existing `app_management_settings` payloads.
+17. Updated known gaps to reflect that pricing chart/package detail work no longer depends on raw JSON.
+18. Added a Build 200 SQL no-DDL note.
+19. Added a Build 200 release guard for friendly pricing editor and dashboard diagnostics coverage.
+20. Re-ran release, H1, JavaScript syntax, route-copy parity, and zip checks before packaging.
+
+## Next 20 steps after Build 200
+
+1. Add a reusable row/card editor component so Admin App, Site Settings, Gallery, Social, Water Rules, and Recovery stop duplicating custom row code.
+2. Add inline field-level validation beside every friendly pricing, Site Settings, gallery, social, and water-rule input.
+3. Add media-library picker buttons beside package, add-on, landing, gallery, and before/after image URL fields.
+4. Add consent/privacy badges beside every package/add-on/landing/gallery media field before publish.
+5. Convert the remaining recovery provider/conditional rules into a fuller visual rule builder.
+6. Add owner-safe diff modals before saving pricing, navigation, landing, media, analytics, and policy changes.
+7. Add per-row restore-from-history controls for package rows, landing cards, navigation links, media requirements, and social/gallery rows.
+8. Add official-source URL validation for water rules and external navigation/footer links.
+9. Add live SEO counters while typing landing meta title, meta description, slug, and hero/H1 fields.
+10. Add LocalBusiness/service schema preview beside each landing-page editor card.
+11. Add automatic route-copy sync during packaging so folder `index.html` copies cannot drift.
+12. Add browser-level smoke tests for row add/remove/apply/save flows in Admin App and Site Settings.
+13. Add DB-backed option dropdowns to pricing package categories, analytics groups, media categories, gallery consent states, and water-rule statuses.
+14. Add per-domain staff-role enforcement for editable settings and public-content publish actions.
+15. Add audit reason prompts before publishing navigation, policy wording, pricing, or public proof changes.
+16. Add fallback-repair previews that show exact DB rows/keys before force sync.
+17. Add public crawl validation for generated landing, navigation, footer, sitemap, and robots output after deploy.
+18. Add invoice/confirmation PDF packaging to accountant/customer export workflows.
+19. Add mobile quick-action cards for media health, pricing warnings, payment warnings, and SEO proof tasks.
+20. Continue migrating duplicated JSON/page content into DB-first, owner-friendly screens wherever it lowers failure risk.
+
+---
+
 
 # Build 184 update — 20-step operations, media, and payment hardening
 
