@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 200 note:
+- Completes the main Admin App pricing JSON retirement by adding friendly package detail fields and chart helpers that use editor state.
+
 Build 199 note:
 - Converts remaining high-risk Admin Site Settings JSON helper areas into friendly row/card editors while keeping advanced JSON as emergency fallback.
 
@@ -117,6 +120,7 @@ CHECKS = [
     "scripts/build197_self_healing_admin_checks.py",
     "scripts/build198_friendly_json_editors_check.py",
     "scripts/build199_friendly_site_settings_editors_check.py",
+    "scripts/build200_friendly_pricing_editors_check.py",
     "scripts/seo_h1_check.py",
 ]
 
