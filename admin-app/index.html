@@ -53,7 +53,7 @@
   @media(max-width:720px){.catalog-option-grid{grid-template-columns:1fr}}
 </style>
 </head>
-<body data-build176="media-privacy-review-warnings" data-build178="admin-publish-privacy-badges" data-build197="landing-seo-readiness" data-build198="friendly-json-editors">
+<body data-build176="media-privacy-review-warnings" data-build178="admin-publish-privacy-badges" data-build197="landing-seo-readiness" data-build198="friendly-json-editors" data-build200="friendly-pricing-editors">
 <main class="shell">
   <div class="loading" data-admin-shell-loading>Loading app management...</div>
   <div data-admin-shell-ready hidden>
@@ -242,6 +242,12 @@
         <div class="catalog-section" style="margin-top:16px">
           <div class="section-head"><h3>Packages and size pricing</h3><div class="actions"><button class="btn" type="button" id="addPackageBtn">Add package</button></div></div>
           <p class="feature-note" id="packageSectionNote">Packages are stored as package families with separate size-price columns so one catalog controls booking, services, pricing, and checkout.</p>
+          <div class="panel-lite stack-sm" data-build200="package-rich-details-editor">
+            <div class="section-label">Package details without JSON</div>
+            <p class="note">Use this panel for included services, richer package notes, chart detail bullets, and customer-facing package copy. These used to be the reason the raw catalog JSON stayed open during normal updates.</p>
+            <div class="actions"><select id="packageEditorSelect" aria-label="Choose package detail row"></select></div>
+            <div id="packageDetailsEditorPanel" class="addon-editor"></div>
+          </div>
           <div class="catalog-table-wrap"><div id="packageTable" class="catalog-table"></div></div>
         </div>
 
@@ -270,26 +276,27 @@
           <div id="requirementList" class="stack-sm"></div>
         </div>
 
-        <details class="catalog-section">
-          <summary><strong>Advanced raw catalog JSON</strong> <span class="note">Use this for charts, included services, richer notes, and deep edits that are not yet surfaced above.</span></summary>
+        <section class="panel-lite stack-sm catalog-section" data-build200="friendly-chart-helper">
+          <div class="section-label">Live chart helper</div>
+          <p class="note">Preview or download live SVG chart files from the current friendly pricing editor state. No raw JSON refresh is required for normal chart work.</p>
+          <div class="actions">
+            <select id="liveChartType" aria-label="Live chart type">
+              <option value="prices">Vehicle price chart</option>
+              <option value="details">Package service details chart</option>
+              <option value="sizes">Vehicle size guide</option>
+            </select>
+            <button class="btn" type="button" id="liveChartPreviewBtn">Preview chart</button>
+            <button class="btn" type="button" id="liveChartDownloadBtn">Download SVG</button>
+          </div>
+          <div id="liveChartPreviewWrap" class="chart-helper-preview" hidden><img id="liveChartPreviewImg" alt="Live chart preview" /></div>
+        </section>
+
+        <details class="catalog-section" data-build200="advanced-pricing-json-emergency-only">
+          <summary><strong>Advanced raw catalog JSON / emergency repair</strong> <span class="note">Routine package, add-on, service-area, requirement, and chart work now uses the friendly screens above.</span></summary>
           <div class="field" style="margin-top:12px"><label for="pricing_catalog_json">Pricing catalog JSON</label><textarea id="pricing_catalog_json" spellcheck="false" placeholder='{"packages":[],"addons":[],"service_areas":[]}'></textarea></div>
           <div class="actions">
-            <button class="btn" type="button" id="applyPricingJsonBtn">Apply JSON to editor</button>
-            <button class="btn" type="button" id="syncPricingJsonBtn">Refresh JSON from editor</button>
-          </div>
-          <div class="panel-lite stack-sm" style="margin-top:12px">
-            <div class="section-label">Live chart helper</div>
-            <p class="note">Preview or download live SVG chart files from the catalog currently shown in this editor. Use Refresh JSON from editor first when you have changed form fields but have not saved yet.</p>
-            <div class="actions">
-              <select id="liveChartType" aria-label="Live chart type">
-                <option value="prices">Vehicle price chart</option>
-                <option value="details">Package service details chart</option>
-                <option value="sizes">Vehicle size guide</option>
-              </select>
-              <button class="btn" type="button" id="liveChartPreviewBtn">Preview chart</button>
-              <button class="btn" type="button" id="liveChartDownloadBtn">Download SVG</button>
-            </div>
-            <div id="liveChartPreviewWrap" class="chart-helper-preview" hidden><img id="liveChartPreviewImg" alt="Live chart preview" /></div>
+            <button class="btn" type="button" id="applyPricingJsonBtn">Apply emergency JSON to editor</button>
+            <button class="btn" type="button" id="syncPricingJsonBtn">Refresh emergency JSON from editor</button>
           </div>
         </details>
 
@@ -297,7 +304,7 @@
           <button class="btn" type="button" id="reloadPricingCatalogBtn">Reload catalog</button>
           <button class="btn primary" type="button" id="savePricingCatalogBtn">Save pricing catalog</button>
         </div>
-        <div class="note">The structured editor above is the preferred entry point. The raw JSON area remains available for chart links, included-service detail, and advanced maintenance until every pricing field has its own dedicated form.</div>
+        <div class="note">The friendly editor above is now the normal entry point for package details, chart previews, add-ons, service areas, requirements, and pricing controls. Raw JSON remains only for emergency repair or developer-level recovery.</div>
       </article>
 
       
@@ -1153,6 +1160,7 @@
   function cloneJson(value){ return JSON.parse(JSON.stringify(value)); }
   var landingPagesState = landingPagesDefaults();
   var selectedAddonCode = '';
+  var selectedPackageCode = '';
   var selectedServiceAreaIndex = 0;
   function normalizeLandingFaq(value){ return (Array.isArray(value) ? value : []).map(function(item){ return { q: String(item && item.q || '').trim(), a: String(item && item.a || '').trim() }; }).filter(function(item){ return item.q && item.a; }); }
   function normalizeLandingArray(value){ return (Array.isArray(value) ? value : []).map(function(item){ return String(item || '').trim(); }).filter(Boolean); }
@@ -1223,7 +1231,7 @@
     var rows = landingReadinessRows(page);
     var warnings = rows.filter(function(row){ return !row.ok; }).length;
     var chips = rows.map(function(row){ return '<span class="pill-note" data-state="' + (row.ok ? 'ok' : 'warn') + '">' + escapeHtml(row.label) + ': ' + escapeHtml(row.detail) + '</span>'; }).join(' ');
-    return '<div class="panel-lite" data-build197="landing-seo-readiness" data-build198="friendly-json-editors"><div class="section-label">SEO/readiness preview</div><p class="note">Before saving, keep one clear hero title/H1, a title under 70 characters, a meta description under 160 characters, a clean slug, and at least one image/proof cue.</p><div class="stack-sm">' + chips + '</div><div class="toolbar" style="margin-top:10px">' + (url ? '<a class="btn ghost" target="_blank" rel="noopener" href="' + escapeHtml(url) + '">Open public preview</a>' : '') + '<span class="note">' + (warnings ? warnings + ' warning(s) to review before publishing.' : 'Looks ready for local search preview.') + '</span></div></div>';
+    return '<div class="panel-lite" data-build197="landing-seo-readiness" data-build198="friendly-json-editors" data-build200="friendly-pricing-editors"><div class="section-label">SEO/readiness preview</div><p class="note">Before saving, keep one clear hero title/H1, a title under 70 characters, a meta description under 160 characters, a clean slug, and at least one image/proof cue.</p><div class="stack-sm">' + chips + '</div><div class="toolbar" style="margin-top:10px">' + (url ? '<a class="btn ghost" target="_blank" rel="noopener" href="' + escapeHtml(url) + '">Open public preview</a>' : '') + '<span class="note">' + (warnings ? warnings + ' warning(s) to review before publishing.' : 'Looks ready for local search preview.') + '</span></div></div>';
   }
   function validateLandingPageBeforeSave(page, label){
     var warnings = landingReadinessRows(page).filter(function(row){ return !row.ok; });
@@ -1337,8 +1345,12 @@
     setLandingPagesState(fallback);
   }
   var pricingCatalogState = pricingCatalogDefaults();
-  function setPricingCatalogEditor(value){ byId('pricing_catalog_json').value = JSON.stringify(ensurePricingCatalogShape(value), null, 2); }
-  function setPricingCatalogState(value){ pricingCatalogState = ensurePricingCatalogShape(value); setPricingCatalogEditor(pricingCatalogState); renderPricingDashboard(); }
+  function setPricingCatalogEditor(value){
+    var shaped = ensurePricingCatalogShape(value);
+    byId('pricing_catalog_json').value = JSON.stringify(shaped, null, 2);
+    window.__rosiePricingCatalogState = shaped;
+  }
+  function setPricingCatalogState(value){ pricingCatalogState = ensurePricingCatalogShape(value); window.__rosiePricingCatalogState = pricingCatalogState; setPricingCatalogEditor(pricingCatalogState); renderPricingDashboard(); }
   function readPricingCatalog(){
     const raw = byId('pricing_catalog_json').value || '{}';
     let parsed = null;
@@ -1389,6 +1401,7 @@
     byId('price_control_minimum').value = Number(catalog.booking_rules.price_controls.minimum_callout_cad || 0).toFixed(2);
     byId('price_control_tax').value = Number(catalog.booking_rules.price_controls.tax_rate_percent || 0).toFixed(2);
 
+    renderPackageDetailsEditor(catalog.packages);
     byId('packageTable').innerHTML = renderPackageRows(catalog.packages);
     renderAddonEditor(catalog.addons, catalog.packages);
     byId('serviceAreaTable').innerHTML = renderServiceAreaRows(catalog.service_areas);
@@ -1417,6 +1430,45 @@
       '</div>';
     }).join('');
   }
+  function packageLineText(value){
+    return Array.isArray(value) ? value.map(function(row){ return String(row || '').trim(); }).filter(Boolean).join('\n') : '';
+  }
+  function packageLinesFromText(value){
+    return String(value || '').split(/\r?\n/).map(function(row){ return row.trim(); }).filter(Boolean);
+  }
+  function renderPackageDetailsEditor(rows){
+    rows = Array.isArray(rows) ? rows : [];
+    var select = byId('packageEditorSelect');
+    if (!select) return;
+    var options = rows.map(function(pkg){ return '<option value="' + escapeHtml(pkg.code || '') + '">' + escapeHtml(pkg.name || pkg.code || 'Package') + '</option>'; }).join('');
+    select.innerHTML = options || '<option value="">No packages loaded</option>';
+    if (!selectedPackageCode && rows.length) selectedPackageCode = rows[0].code || '';
+    if (selectedPackageCode && rows.some(function(pkg){ return pkg.code === selectedPackageCode; })) select.value = selectedPackageCode;
+    if (!select.value && rows.length) select.value = rows[0].code || '';
+    selectedPackageCode = select.value || '';
+    var index = rows.findIndex(function(pkg){ return pkg.code === selectedPackageCode; });
+    if (index < 0) {
+      byId('packageDetailsEditorPanel').innerHTML = '<div class="catalog-empty">No package selected.</div>';
+      return;
+    }
+    var pkg = rows[index] || {};
+    byId('packageDetailsEditorPanel').innerHTML =
+      '<div class="addon-editor-grid">' +
+        '<label class="field"><span>Package code</span><input data-pkg-detail-field="code" value="' + escapeHtml(pkg.code || '') + '"></label>' +
+        '<label class="field"><span>Public package name</span><input data-pkg-detail-field="name" value="' + escapeHtml(pkg.name || '') + '"></label>' +
+        '<label class="field"><span>Subtitle / short promise</span><input data-pkg-detail-field="subtitle" value="' + escapeHtml(pkg.subtitle || '') + '"></label>' +
+        '<label class="field"><span>Estimated duration label</span><input data-pkg-detail-field="duration_label" value="' + escapeHtml(pkg.duration_label || pkg.estimated_duration || '') + '" placeholder="Example: 3–5 hours"></label>' +
+        '<label class="field"><span>Primary public image URL</span><input data-pkg-detail-field="image_url" value="' + escapeHtml(pkg.image_url || '') + '"></label>' +
+        '<label class="field"><span>Landing/SEO focus phrase</span><input data-pkg-detail-field="seo_focus" value="' + escapeHtml(pkg.seo_focus || '') + '" placeholder="Example: mobile interior detailing Oxford County"></label>' +
+      '</div>' +
+      '<div class="field"><label>Customer-facing description<textarea data-pkg-detail-field="description" placeholder="Explain who this package is for and what result to expect.">' + escapeHtml(pkg.description || '') + '</textarea></label></div>' +
+      '<div class="field"><label>Included services (one line per item)<textarea data-pkg-detail-lines="included_services" placeholder="Vacuum carpets\nClean plastics and console\nExterior wash">' + escapeHtml(packageLineText(pkg.included_services || pkg.includes)) + '</textarea></label></div>' +
+      '<div class="field"><label>Chart detail bullets (one line per bullet)<textarea data-pkg-detail-lines="chart_details" placeholder="Shown in package-service chart helpers.">' + escapeHtml(packageLineText(pkg.chart_details || pkg.service_details)) + '</textarea></label></div>' +
+      '<div class="field"><label>Best for / selling points (one line per point)<textarea data-pkg-detail-lines="best_for" placeholder="Daily drivers\nPre-sale cleanup\nWinter salt reset">' + escapeHtml(packageLineText(pkg.best_for)) + '</textarea></label></div>' +
+      '<div class="field"><label>Internal/package notes (one line per note)<textarea data-pkg-detail-lines="notes" placeholder="Staff notes, quoting reminders, or future chart notes.">' + escapeHtml(packageLineText(pkg.notes)) + '</textarea></label></div>' +
+      '<div class="actions"><button class="btn primary" type="button" data-save-package-detail="' + index + '">Save selected package</button><button class="btn" type="button" data-duplicate-package-detail="' + index + '">Duplicate package</button></div>';
+  }
+
   function renderAddonRows(rows){
     if (!rows.length) return '<div class="catalog-empty">No add-ons yet.</div>';
     return rows.map(function (addon, index) {
@@ -1558,6 +1610,58 @@
     target[parts[0]] = value;
   }
   function bindPricingCatalogRowInputs(){
+    var packageSelect = byId('packageEditorSelect');
+    if (packageSelect) {
+      packageSelect.addEventListener('change', function () {
+        selectedPackageCode = packageSelect.value || '';
+        renderPricingDashboard();
+      });
+    }
+    qsa('[data-pkg-detail-field]').forEach(function (input) {
+      var eventName = input.tagName === 'TEXTAREA' ? 'input' : 'input';
+      input.addEventListener(eventName, function () {
+        var index = pricingCatalogState.packages.findIndex(function (row) { return row.code === selectedPackageCode; });
+        if (index < 0) return;
+        var field = input.getAttribute('data-pkg-detail-field');
+        setNestedValue(pricingCatalogState.packages[index], field, input.value);
+        if (field === 'code') selectedPackageCode = input.value;
+        syncPricingEditorToJson();
+      });
+    });
+    qsa('[data-pkg-detail-lines]').forEach(function (input) {
+      input.addEventListener('input', function () {
+        var index = pricingCatalogState.packages.findIndex(function (row) { return row.code === selectedPackageCode; });
+        if (index < 0) return;
+        pricingCatalogState.packages[index][input.getAttribute('data-pkg-detail-lines')] = packageLinesFromText(input.value);
+        syncPricingEditorToJson();
+      });
+    });
+    qsa('[data-save-package-detail]').forEach(function (button) {
+      button.addEventListener('click', async function () {
+        var index = Number(button.getAttribute('data-save-package-detail'));
+        var pkg = pricingCatalogState.packages[index] || null;
+        if (!pkg) { setShellStatus('No package is selected to save.', 'error'); return; }
+        try {
+          syncPricingEditorToJson();
+          await saveSetting('pricing_catalog', pricingCatalogState, 'Package details saved: ' + (pkg.name || pkg.code || 'selected package') + '.');
+          renderPricingDashboard();
+        } catch (err) {
+          setShellStatus(err && err.message ? err.message : 'Could not save the selected package.', 'error');
+        }
+      });
+    });
+    qsa('[data-duplicate-package-detail]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var index = Number(button.getAttribute('data-duplicate-package-detail'));
+        var clone = JSON.parse(JSON.stringify(pricingCatalogState.packages[index] || {}));
+        clone.code = (clone.code || 'package') + '_copy';
+        clone.name = (clone.name || 'Package') + ' copy';
+        pricingCatalogState.packages.splice(index + 1, 0, clone);
+        selectedPackageCode = clone.code;
+        syncPricingEditorToJson();
+        renderPricingDashboard();
+      });
+    });
     qsa('[data-pkg-index]').forEach(function (input) {
       input.addEventListener('input', function () {
         var index = Number(input.getAttribute('data-pkg-index'));
@@ -1892,7 +1996,7 @@
     syncPricingEditorToJson(); renderPricingDashboard();
   });
   bindById('applyPricingJsonBtn', 'click', function () { try { setPricingCatalogState(readPricingCatalog()); setShellStatus('Pricing JSON applied to the structured editor.', 'success'); } catch (err) { setShellStatus(err?.message || 'Could not apply pricing JSON.', 'error'); } });
-  bindById('syncPricingJsonBtn', 'click', function () { syncPricingEditorToJson(); setShellStatus('Raw pricing JSON refreshed from the structured editor.', 'success'); });
+  bindById('syncPricingJsonBtn', 'click', function () { syncPricingEditorToJson(); setShellStatus('Emergency pricing JSON refreshed from the friendly editor state.', 'success'); });
   bindById('saveVisibilityBtn', 'click', async ()=>{ try{ await saveSetting('visibility_matrix', readVisibility(), 'Visibility settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save visibility settings.', 'error'); } });
   bindById('saveSchedulingBtn', 'click', async ()=>{ try{ await saveSetting('manual_scheduling_rules', readScheduling(), 'Scheduling policy saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save scheduling policy.', 'error'); } });
   bindById('saveFlagsBtn', 'click', async ()=>{ try{ await saveSetting('feature_flags', readFlags(), 'Feature flags saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save feature flags.', 'error'); } });
@@ -1947,9 +2051,12 @@
   };
 
   function currentCatalogForChart(){
+    if (window.__rosiePricingCatalogState && typeof window.__rosiePricingCatalogState === 'object') {
+      return window.__rosiePricingCatalogState;
+    }
     const raw = document.getElementById('pricing_catalog_json')?.value || '{}';
     try { return JSON.parse(raw); }
-    catch (err) { throw new Error('Pricing catalog JSON is not valid yet. Refresh JSON from editor or fix the raw JSON before generating charts.'); }
+    catch (err) { throw new Error('Pricing catalog editor state is not available yet. Reload the pricing catalog, then preview the chart again.'); }
   }
 
   function chartSelection(){
@@ -1980,7 +2087,7 @@
       img.dataset.objectUrl = url;
       img.src = url;
       wrap.hidden = false;
-      setLocalChartStatus('Live chart preview generated from the current editor JSON.', 'success');
+      setLocalChartStatus('Live chart preview generated from the friendly pricing editor state.', 'success');
     } catch (err) {
       setLocalChartStatus(err?.message || 'Could not generate live chart preview.', 'error');
     }
@@ -1998,7 +2105,7 @@
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
-      setLocalChartStatus('Live SVG chart downloaded from the current editor JSON.', 'success');
+      setLocalChartStatus('Live SVG chart downloaded from the friendly pricing editor state.', 'success');
     } catch (err) {
       setLocalChartStatus(err?.message || 'Could not download live chart.', 'error');
     }

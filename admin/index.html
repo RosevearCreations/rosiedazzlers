@@ -20,7 +20,7 @@
     .muted{color:#94a3b8}.warning-panel{border-radius:16px;border:1px solid rgba(251,191,36,.28);background:rgba(245,158,11,.10);padding:14px;margin-top:14px}.warning-panel[data-state="ok"]{border-color:rgba(74,222,128,.28);background:rgba(22,163,74,.10)}.warning-row{padding:10px;border-radius:12px;background:rgba(15,23,42,.35);border:1px solid rgba(255,255,255,.06);margin-top:8px}
   </style>
 </head>
-<body data-page="admin" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard" data-build192="editable-settings-diagnostics" data-build195="seo-proof-fallback-report-dashboard" data-build197="dashboard-self-healing-diagnostics">
+<body data-page="admin" data-build200="advanced-json-panel-dashboard" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard" data-build192="editable-settings-diagnostics" data-build195="seo-proof-fallback-report-dashboard" data-build197="dashboard-self-healing-diagnostics">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -105,6 +105,14 @@
           <div id="pricingCatalogDiagnostics" class="warning-panel" data-state="loading">Loading pricing catalog source and repair status…</div>
           <h2 style="margin-top:18px">Route-copy parity</h2>
           <div id="routeCopyDiagnostics" class="warning-panel" data-state="loading">Checking root HTML and folder route copies…</div>
+          <h2 style="margin-top:18px">Remaining advanced JSON panels</h2>
+          <div id="advancedJsonPanelDiagnostics" class="warning-panel" data-state="warn" data-build200="remaining-json-panel-dashboard">
+            <strong>Advanced JSON should be emergency-only</strong>
+            <div class="muted">Build 200 keeps raw JSON collapsed for developer recovery while moving pricing charts, package details, navigation, gallery, social feeds, water rules, and recovery rules to friendly screens.</div>
+            <div class="warning-row"><strong>Pricing catalog emergency JSON</strong><div class="muted">Only for copy/paste repair. Normal package details, chart previews, add-ons, service areas, and requirements now use Admin App fields.</div></div>
+            <div class="warning-row"><strong>Site Settings emergency JSON</strong><div class="muted">Only for full-domain recovery or fallback sync after using the friendly row/card editors.</div></div>
+            <div style="margin-top:10px"><a class="btn ghost small" href="/admin-app.html">Open App Management</a> <a class="btn ghost small" href="/admin-site-settings.html">Open Site Settings</a></div>
+          </div>
         </div>
       </section>
 
