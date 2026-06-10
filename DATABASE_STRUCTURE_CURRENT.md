@@ -1,3 +1,12 @@
+# Build 200 schema status — friendly pricing editor completion
+
+**Updated:** 2026-06-09  
+**Build:** 200
+
+Build 200 adds no new tables or columns. The package detail editor, chart helper state bridge, and remaining-advanced-JSON dashboard card reuse the existing `app_management_settings` row for `pricing_catalog` and the existing bundled JSON fallback. Friendly package rows are applied back into the same pricing catalog payload before save, so the public booking/pricing/landing/chart code continues using one DB-first source with bundled fallback.
+
+---
+
 # Build 199 schema status — friendly Site Settings editor pass
 
 **Updated:** 2026-06-07  
