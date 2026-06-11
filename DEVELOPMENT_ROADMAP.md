@@ -1,3 +1,58 @@
+# Build 201 update — Friendly editor validation, media pickers, and route-copy sync
+
+**Updated:** 2026-06-09  
+**Build:** 201
+
+Build 201 continues the move away from direct JSON editing by making the friendly editors safer to use. Admin App now adds inline validation hints beside routine fields, live SEO counters for landing-page titles/meta/slug/hero text, media URL picker controls for image fields, consent/source badges beside media fields, and owner-safe save review summaries before major DB-backed content saves. The build also adds a route-copy synchronization script so edited root admin pages and their folder `index.html` routes stay identical during packaging instead of relying on manual copy checks.
+
+## Build 201 — 20 completed items
+
+1. Added Build 201 markers to Admin App and Admin Dashboard.
+2. Added reusable inline field-hint styling for friendly editor inputs.
+3. Added live title/meta/H1 character counters for landing-page editor fields.
+4. Added slug format validation for landing slugs and package codes.
+5. Added URL format warnings for public links and media/image URL fields.
+6. Added media-picker controls beside image-oriented URL fields.
+7. Built the media picker from saved package, add-on, landing-page, and gallery URLs.
+8. Added owned/R2-media badges for Rosie-controlled asset URLs.
+9. Added consent/source warning badges for external or review-needed media.
+10. Added gallery consent-status hints beside before/after media rows.
+11. Added LocalBusiness/service schema previews inside each landing-page editor panel.
+12. Added friendly save-review summaries before pricing catalog saves.
+13. Added friendly save-review summaries before landing-page content saves.
+14. Added friendly save-review summaries before social feed saves.
+15. Added friendly save-review summaries before before/after gallery saves.
+16. Added `scripts/sync_route_copies.py` to synchronize edited root admin pages with matching folder routes.
+17. Added route-copy sync checking to the release process.
+18. Synced `/admin-app.html` with `/admin-app/` and `/admin.html` with `/admin/` after the patch.
+19. Updated Markdown and schema notes for the Build 201 owner-friendly validation pass.
+20. Added a Build 201 release guard for inline validation, media pickers, schema preview, and route-copy sync coverage.
+
+## Next 20 steps after Build 201
+
+1. Add the same inline validation/media picker helper to Admin Site Settings friendly rows.
+2. Replace remaining prompt-based create flows with inline modal/card forms.
+3. Add per-row restore-from-history for pricing packages, add-ons, landing pages, gallery rows, and navigation links.
+4. Add true visual diff modals showing before/after rows before DB saves.
+5. Connect image pickers to the uploaded media library and R2 records instead of cycling known URLs only.
+6. Add staff-role enforcement directly to publish/save buttons for public-facing domains.
+7. Add audit-reason prompts before changing prices, policies, public navigation, or public media proof.
+8. Add browser smoke tests for add/edit/delete/save flows in Admin App.
+9. Add browser smoke tests for Admin Site Settings friendly row editors.
+10. Add public crawl validation after deploy for sitemap, robots, nav/footer, and all generated landing routes.
+11. Add invoice/confirmation PDF export packaging for accountant/customer workflows.
+12. Add media consent record lookup directly beside each media URL picker result.
+13. Add warning badges when landing pages use stock/external images without source notes.
+14. Add automatic schema validation for every landing page before publish.
+15. Add option-library dropdowns to remaining free-text category/status fields.
+16. Add mobile quick-action cards for pricing warnings, media readiness, SEO proof, and payment warnings.
+17. Add dashboard counts for friendly-field validation warnings by domain.
+18. Add repair buttons for partial landing-page and document-template DB rows.
+19. Add admin-visible fallback/source labels on every public-content preview.
+20. Continue migrating duplicated JSON/page content into DB-first, owner-safe screens wherever it lowers failure risk.
+
+---
+
 # Build 200 update — Friendly pricing editor completion and JSON retirement dashboard
 
 **Updated:** 2026-06-09  

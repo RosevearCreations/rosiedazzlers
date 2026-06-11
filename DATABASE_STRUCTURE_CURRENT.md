@@ -1,3 +1,20 @@
+# Build 201 schema status — Friendly validation and route-copy sync
+
+**Updated:** 2026-06-09  
+**Build:** 201
+
+No database schema migration is required for Build 201. The work remains UI/release-guard focused and continues to use the existing DB-backed editable settings model:
+
+- `app_management_settings.pricing_catalog`
+- `app_management_settings.landing_pages`
+- `app_management_settings.social_feeds`
+- `app_management_settings.before_after_gallery`
+- existing bundled JSON fallbacks for emergency recovery
+
+The new inline validation, media picker, schema preview, and save-review helpers operate on the existing editor state before saving back to the same editable-setting rows. `scripts/sync_route_copies.py` is a repository packaging helper and does not require a table or column change.
+
+---
+
 # Build 200 schema status — friendly pricing editor completion
 
 **Updated:** 2026-06-09  
