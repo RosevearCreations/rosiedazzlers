@@ -1,3 +1,9 @@
+# Build 201 update
+
+Build 201 adds inline friendly-editor validation, media URL picker helpers, consent/source badges, landing-page schema previews, save-review summaries, and `scripts/sync_route_copies.py` for route-copy synchronization. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `DATABASE_STRUCTURE_CURRENT.md` for the full Build 201 update.
+
+---
+
 # Build 200 update — Friendly pricing editor completion and JSON retirement dashboard
 
 **Updated:** 2026-06-09  

@@ -1,3 +1,34 @@
+# Build 201 known gaps and risks — Friendly validation and media picker pass
+
+**Updated:** 2026-06-09  
+**Build:** 201
+
+Build 201 reduces owner-facing editing risk by adding inline validation, media URL picker helpers, consent/source badges, landing schema previews, save-review summaries, and an automatic route-copy synchronization script. Raw JSON remains available only for emergency repair, but routine Admin App editing now gives clearer feedback before staff save public-facing content.
+
+## Reduced in Build 201
+
+- Friendly Admin App fields now show inline warnings instead of relying only on whole-page validation.
+- Landing-page SEO fields show live title/meta/slug/H1 style guidance near the field being edited.
+- Image URL fields can reuse saved media URLs from packages, add-ons, landing pages, and gallery rows.
+- Media fields now show simple owned/R2, external-source, or consent-review badges.
+- Landing-page editors include a schema preview so local/service structured-data issues are easier to spot.
+- Route-copy drift can be checked or repaired with `scripts/sync_route_copies.py`.
+
+## Still outstanding after Build 201
+
+1. Admin Site Settings friendly rows still need the same inline helper coverage added to Admin App.
+2. The media picker currently cycles known editor URLs; it is not yet connected to a full DB/R2 media library picker.
+3. Save-review summaries are not full visual diff modals yet.
+4. Per-row restore-from-history is still outstanding.
+5. Prompt-based new-location creation should be replaced with an owner-safe inline card/modal.
+6. Staff-role enforcement still needs to be wired directly to save/publish buttons.
+7. Public crawl validation after deploy is still outstanding.
+8. Browser smoke tests for the friendly editor workflows are still needed.
+9. Media consent badges are advisory; final publish blocking should be enforced server-side too.
+10. Remaining advanced JSON panels still exist for emergency repair and should stay collapsed.
+
+---
+
 # Build 200 known gaps and risks — Pricing JSON retirement pass
 
 **Updated:** 2026-06-09  

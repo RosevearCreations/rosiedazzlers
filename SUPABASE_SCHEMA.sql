@@ -1,3 +1,10 @@
+-- Build 201 friendly editor validation and route-copy sync pass.
+-- No database schema changes are required.
+-- Existing app_management_settings rows continue to store pricing_catalog,
+-- landing_pages, social_feeds, and before_after_gallery payloads.
+-- Inline validation, media picker hints, schema previews, and save-review summaries
+-- run in the admin UI before saving to existing editable-setting rows.
+
 -- Build 179 note — hard social publish blocking, local proof tasks, and quote acceptance tracking (2026-05-26)
 -- New migration: sql/2026-05-26_build179_publish_block_tasks_quote_acceptance.sql
 -- Adds public.local_seo_proof_tasks and optional quote_proposal_drafts delivery/acceptance fields.
