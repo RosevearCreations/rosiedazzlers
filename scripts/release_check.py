@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 201 note:
+- Adds inline friendly-editor validation, media URL picker helpers, landing schema previews, save-review summaries, and route-copy synchronization.
+
 Build 200 note:
 - Completes the main Admin App pricing JSON retirement by adding friendly package detail fields and chart helpers that use editor state.
 
@@ -121,6 +124,7 @@ CHECKS = [
     "scripts/build198_friendly_json_editors_check.py",
     "scripts/build199_friendly_site_settings_editors_check.py",
     "scripts/build200_friendly_pricing_editors_check.py",
+    "scripts/build201_friendly_validation_media_route_sync_check.py",
     "scripts/seo_h1_check.py",
 ]
 
