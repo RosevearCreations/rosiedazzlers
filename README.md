@@ -1,3 +1,7 @@
+## Build 202 — Incident reports and marketing tracker
+
+Build 202 adds a private DB-backed incident-report workflow for vehicle damage, faulty equipment, pre-existing damage, customer dispute, safety, and other job-site issues. Staff can attach required photo evidence, keep private detailer/admin discussion internal, and publish only the approved customer summary and selected photos to the customer progress page. It also adds a practical `/admin-marketing.html` tracker based on the attached detailer notes for Meta ad math, quote value, close rate, CPL, CAC, and projected revenue.
+
 # Build 201 update
 
 Build 201 adds inline friendly-editor validation, media URL picker helpers, consent/source badges, landing-page schema previews, save-review summaries, and `scripts/sync_route_copies.py` for route-copy synchronization. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `DATABASE_STRUCTURE_CURRENT.md` for the full Build 201 update.

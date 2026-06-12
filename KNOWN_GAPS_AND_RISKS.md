@@ -1,3 +1,34 @@
+# Build 202 known gaps and risks — Incident reporting and marketing tracker
+
+**Updated:** 2026-06-12  
+**Build:** 202
+
+Build 202 adds the first DB-backed incident-report workflow and a practical marketing tracker based on the attached detailer notes. The incident workflow separates private staff/admin discussion from customer-visible wording and evidence, but several follow-up controls should still be added before this becomes a complete claims/dispute-management system.
+
+## Reduced in Build 202
+
+- Damage/faulty-equipment reports no longer need to live in generic notes.
+- New incident reports require a booking ID and at least one evidence photo.
+- Private report/admin discussion is stored separately from customer-facing summary/discussion.
+- Customer visibility is off by default and requires admin-published approved wording plus selected public evidence.
+- Customer progress pages can now show approved incident reports without exposing private staff discussion.
+- The attached detailer marketing ideas were converted into a practical marketing tracker instead of remaining only as notes.
+
+## Still outstanding after Build 202
+
+1. Incident-report email/customer notification templates are not yet wired.
+2. Incident-report PDF/export packaging is still outstanding.
+3. Incident reports do not yet create automatic follow-up tasks.
+4. Incident evidence upload works through R2, but the screen is not yet connected to the full media-library picker.
+5. Faulty-equipment incidents are not yet connected to equipment maintenance/vendor warranty records.
+6. Customer acknowledgement/signoff for published incident outcomes is still needed.
+7. Detailer job pages still need a mobile quick-create incident button.
+8. Public customer rendering depends on the Build 202 SQL migration being applied.
+9. The marketing tracker is a calculator; it does not yet persist campaign/quote metrics to DB.
+10. Real CRM quote analytics, lead-source attribution, and Meta campaign reporting are still outstanding.
+
+---
+
 # Build 201 known gaps and risks — Friendly validation and media picker pass
 
 **Updated:** 2026-06-09  

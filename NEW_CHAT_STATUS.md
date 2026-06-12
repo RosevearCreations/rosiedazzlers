@@ -1,3 +1,7 @@
+## Build 202 status
+
+Latest build adds incident reports with private/admin-only discussion, required photo evidence, admin-approved customer-visible summaries/photos, and a marketing calculator from the attached detailer notes.
+
 
 # Build 184 update — 20-step operations, media, and payment hardening
 

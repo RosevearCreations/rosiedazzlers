@@ -1687,3 +1687,51 @@ CREATE TABLE IF NOT EXISTS public.app_management_setting_history (
 -- details and chart previews now use friendly editor state.
 -- See sql/2026-06-09_build200_friendly_pricing_editors_no_ddl_note.sql.
 
+
+-- Build 201 friendly validation/media/route sync pass — 2026-06-09
+-- No DDL required. The release guard now syncs route copies and checks friendly
+-- validation/media picker coverage.
+-- See sql/2026-06-09_build201_friendly_validation_media_route_sync_no_ddl_note.sql.
+
+-- Build 202 incident reports and marketing tracker pass — 2026-06-12
+-- Adds DB-backed incident reports for private detailer/admin damage, faulty equipment,
+-- pre-existing damage, customer dispute, safety, and other service incidents.
+-- Customer-visible data is separated into approved_customer_summary,
+-- approved_customer_discussion, public_evidence_items, public_visible, and
+-- customer_visible_at so private staff/admin discussion does not leak to customers.
+-- See sql/2026-06-12_build202_incident_reports_and_marketing.sql.
+
+CREATE TABLE IF NOT EXISTS public.incident_reports (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  booking_id uuid NOT NULL REFERENCES public.bookings(id) ON DELETE CASCADE,
+  incident_type text NOT NULL DEFAULT 'damage',
+  severity text NOT NULL DEFAULT 'medium',
+  status text NOT NULL DEFAULT 'open',
+  decision_status text NOT NULL DEFAULT 'needs_review',
+  vehicle_area text,
+  equipment_name text,
+  title text NOT NULL,
+  private_report text NOT NULL,
+  private_admin_discussion text,
+  evidence_items jsonb NOT NULL DEFAULT '[]'::jsonb,
+  decision_summary_private text,
+  decision_made_by_staff_user_id uuid REFERENCES public.staff_users(id) ON DELETE SET NULL,
+  decision_made_by_name text,
+  decision_made_at timestamptz,
+  approved_customer_summary text,
+  approved_customer_discussion text,
+  public_evidence_items jsonb NOT NULL DEFAULT '[]'::jsonb,
+  public_visible boolean NOT NULL DEFAULT false,
+  customer_visible_at timestamptz,
+  reported_by_staff_user_id uuid REFERENCES public.staff_users(id) ON DELETE SET NULL,
+  reported_by_staff_name text,
+  reported_by_staff_email text,
+  created_by_staff_user_id uuid REFERENCES public.staff_users(id) ON DELETE SET NULL,
+  created_by_staff_name text,
+  created_by_staff_email text,
+  updated_by_staff_user_id uuid REFERENCES public.staff_users(id) ON DELETE SET NULL,
+  updated_by_staff_name text,
+  updated_by_staff_email text
+);
