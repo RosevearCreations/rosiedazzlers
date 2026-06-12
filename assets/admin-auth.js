@@ -230,6 +230,7 @@
         );
 
       case "admin-live":
+      case "admin-incident-reports":
         return (
           hasCapability("can_manage_bookings") ||
           hasCapability("can_manage_progress") ||
@@ -251,7 +252,8 @@
         return actor.is_admin === true || hasCapability("can_manage_staff");
 
       case "admin-content":
-        return actor.is_admin === true || hasCapability("can_manage_promos") || hasCapability("can_manage_staff");
+      case "admin-marketing":
+        return actor.is_admin === true || hasCapability("can_manage_promos") || hasCapability("can_manage_staff") || hasCapability("can_manage_bookings");
 
       case "admin-customers":
         return hasCapability("can_manage_bookings");
