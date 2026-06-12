@@ -44,7 +44,7 @@ export async function onRequestGet(context) {
 
     const bookingId = booking.id;
 
-    const [updatesRes, mediaRes, signoffsRes, checklistRes, usageRes, eventsRes] = await Promise.all([
+    const [updatesRes, mediaRes, signoffsRes, checklistRes, usageRes, eventsRes, incidentsRes] = await Promise.all([
       fetch(
         `${env.SUPABASE_URL}/rest/v1/job_updates?select=id,created_at,created_by,note,visibility&booking_id=eq.${bookingId}&visibility=eq.customer&order=created_at.desc`,
         { headers }
@@ -67,6 +67,10 @@ export async function onRequestGet(context) {
       ),
       fetch(
         `${env.SUPABASE_URL}/rest/v1/booking_events?select=id,created_at,event_type,event_note,actor_name,payload&booking_id=eq.${bookingId}&order=created_at.asc`,
+        { headers }
+      ),
+      fetch(
+        `${env.SUPABASE_URL}/rest/v1/incident_reports?select=id,created_at,updated_at,incident_type,severity,title,vehicle_area,equipment_name,decision_status,approved_customer_summary,approved_customer_discussion,public_evidence_items,customer_visible_at&booking_id=eq.${bookingId}&public_visible=eq.true&order=customer_visible_at.desc,updated_at.desc`,
         { headers }
       )
     ]);
@@ -99,6 +103,11 @@ export async function onRequestGet(context) {
     if (!eventsRes.ok) {
       const text = await eventsRes.text();
       return json({ error: `Could not load booking events. ${text}` }, 500);
+    }
+
+    let incidentReports = [];
+    if (incidentsRes.ok) {
+      incidentReports = await incidentsRes.json().catch(() => []);
     }
 
     const [updatesRaw, media, signoffs, checklistRows, productsUsed, bookingEvents] = await Promise.all([
@@ -147,7 +156,9 @@ export async function onRequestGet(context) {
       signoffs: Array.isArray(signoffs) ? signoffs : [],
       checklist: Array.isArray(checklistRows) ? checklistRows[0] || null : null,
       products_used: Array.isArray(productsUsed) ? productsUsed : [],
-      workflow_events: Array.isArray(bookingEvents) ? bookingEvents : []
+      workflow_events: Array.isArray(bookingEvents) ? bookingEvents : [],
+      incident_reports: Array.isArray(incidentReports) ? incidentReports : [],
+      incident_report_notice: incidentsRes.ok ? null : "Incident report sharing is not available yet."
     });
   } catch (err) {
     return json(
