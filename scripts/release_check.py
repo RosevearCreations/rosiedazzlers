@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 202 note:
+- Adds private incident reports with required evidence, admin-approved customer-visible summaries/photos, and a marketing tracker based on attached detailer notes.
+
 Build 201 note:
 - Adds inline friendly-editor validation, media URL picker helpers, landing schema previews, save-review summaries, and route-copy synchronization.
 
@@ -125,6 +128,7 @@ CHECKS = [
     "scripts/build199_friendly_site_settings_editors_check.py",
     "scripts/build200_friendly_pricing_editors_check.py",
     "scripts/build201_friendly_validation_media_route_sync_check.py",
+    "scripts/build202_incident_reports_marketing_check.py",
     "scripts/seo_h1_check.py",
 ]
 

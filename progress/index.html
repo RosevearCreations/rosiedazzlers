@@ -152,6 +152,14 @@
 
     <section class="section">
       <div class="panel">
+        <h2>Approved incident reports</h2>
+        <p class="kicker">Only admin-approved customer-facing incident summaries and selected evidence photos appear here. Private staff/admin discussion is never shown.</p>
+        <div id="incidentReportsBox" class="grid cards" style="margin-top:12px"><div class="notice">No approved incident reports have been shared.</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="panel">
         <h2>Photos and media</h2>
         <div id="mediaGrid" class="grid cards" style="margin-top:12px">
           <div class="notice">No media yet.</div>
@@ -327,6 +335,27 @@
       `).join("");
     }
 
+    function renderIncidentReports(data) {
+      const wrap = document.querySelector("#incidentReportsBox");
+      if (!wrap) return;
+      const rows = Array.isArray(data.incident_reports) ? data.incident_reports : [];
+      if (!rows.length) {
+        wrap.innerHTML = `<div class="notice">No approved incident reports have been shared.</div>`;
+        return;
+      }
+      wrap.innerHTML = rows.map((item) => {
+        const evidence = Array.isArray(item.public_evidence_items) ? item.public_evidence_items : [];
+        return `<article class="card">
+          <div class="kicker">${escapeHtml(formatDateTime(item.customer_visible_at || item.updated_at || item.created_at))}</div>
+          <h3>${escapeHtml(item.title || "Incident report")}</h3>
+          <p>${escapeHtml(item.approved_customer_summary || "Approved report shared by Rosie Dazzlers.")}</p>
+          ${item.approved_customer_discussion ? `<p>${escapeHtml(item.approved_customer_discussion)}</p>` : ""}
+          <div class="badges"><span class="badge">${escapeHtml(item.incident_type || "incident")}</span>${item.vehicle_area ? `<span class="badge">${escapeHtml(item.vehicle_area)}</span>` : ""}</div>
+          <div class="grid cards" style="margin-top:10px">${evidence.map((ev)=>`<div><img class="img" loading="lazy" src="${escapeHtml(ev.url)}" alt="${escapeHtml(ev.caption || 'Incident evidence')}" onerror="this.style.display='none'"><div class="kicker">${escapeHtml(ev.caption || 'Approved evidence')}</div></div>`).join('')}</div>
+        </article>`;
+      }).join("");
+    }
+
     function renderMedia(data) {
       const wrap = document.querySelector("#mediaGrid");
       if (!wrap) return;
@@ -440,6 +469,7 @@
         renderSummary(data);
       if (document.querySelector('#commentName') && data.booking?.customer_name && !document.querySelector('#commentName').value) document.querySelector('#commentName').value = data.booking.customer_name;
         renderUpdates(data);
+        renderIncidentReports(data);
         renderMedia(data);
         renderSignoff(data);
         setNotice("Progress information loaded.", "ok");
