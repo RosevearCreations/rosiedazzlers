@@ -1,3 +1,7 @@
+## Build 202 AI context
+
+When continuing Rosie Dazzlers work, remember that incident reports are now a first-class workflow: private detailer/admin report + required evidence, then optional customer-visible approved summary and selected evidence. Also remember the attached detailer notes were turned into a marketing tracker and roadmap direction: SEO long term, Meta ads short/mid-term, and CRM quote tracking for close-rate and bundle insights.
+
 
 # Build 184 update — 20-step operations, media, and payment hardening
 
