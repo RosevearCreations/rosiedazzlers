@@ -1,3 +1,12 @@
+# Build 202 database update — Incident reports
+
+**Updated:** 2026-06-12  
+**Build:** 202
+
+Build 202 adds `public.incident_reports` through `sql/2026-06-12_build202_incident_reports_and_marketing.sql`. The table stores private detailer/admin incident reports separately from customer-visible approved summaries and selected public evidence. Required routine fields include `booking_id`, `incident_type`, `severity`, `status`, `decision_status`, `title`, `private_report`, and `evidence_items`. Customer-facing output uses only `approved_customer_summary`, `approved_customer_discussion`, `public_evidence_items`, `public_visible`, and `customer_visible_at`.
+
+---
+
 # Build 201 schema status — Friendly validation and route-copy sync
 
 **Updated:** 2026-06-09  

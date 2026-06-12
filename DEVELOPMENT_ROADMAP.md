@@ -1,3 +1,58 @@
+# Build 202 update — Incident reports and detailer marketing tracker
+
+**Updated:** 2026-06-12  
+**Build:** 202
+
+Build 202 adds a private incident-report workflow for vehicle damage, pre-existing damage, faulty equipment/tool contact, customer disputes, safety issues, and other job-site concerns. Reports require photo evidence, keep detailer/admin discussion private, and only show customers the admin-approved summary and selected evidence photos after the report is intentionally published. This build also applies the attached detailer marketing notes by adding a simple marketing tracker for Meta ad math, quote value, close rate, and cost-per-lead/customer-acquisition-cost thinking while SEO continues to build over time.
+
+## Build 202 — 20 completed items
+
+1. Added a DB-backed `incident_reports` table schema for private incident reports.
+2. Added `/admin-incident-reports.html` and `/admin-incident-reports/` route copies.
+3. Added private incident creation for assigned detailers, senior detailers, and booking managers.
+4. Required a valid booking ID before incident creation.
+5. Required a private report title and detailer report body.
+6. Required at least one photo evidence URL/upload before creating a new incident report.
+7. Added R2 evidence upload endpoint scoped to `incident-reports/` keys.
+8. Added incident types for damage, faulty equipment, pre-existing damage, customer dispute, safety, and other.
+9. Added severity/status/decision-status fields for admin triage.
+10. Added private admin/detailer discussion fields that are never returned to the customer progress page.
+11. Added admin-only customer-publish controls.
+12. Required approved customer summary before customer visibility can be enabled.
+13. Required at least one selected public evidence photo before customer visibility can be enabled.
+14. Added customer-visible incident report rendering on the customer progress page.
+15. Added `/api/progress/incident_reports` and integrated public incident reports into `/api/progress/view`.
+16. Added dashboard and navigation links for Incident Reports.
+17. Added `/admin-marketing.html` and `/admin-marketing/` using the attached detailer marketing notes.
+18. Added Meta ad/quote-pipeline calculator fields for CPL, CAC, projected revenue, quote close rate, and open quote value.
+19. Added `DETAILER_MARKETING_NOTES_APPLIED.md` to summarize which source ideas fit Rosie Dazzlers.
+20. Updated Markdown, schema notes, SQL migration, and release guards for this incident/marketing pass.
+
+## Next 20 steps after Build 202
+
+1. Add real CRM quote records connected to leads, bookings, and marketing source.
+2. Add quote sent value, approved value, lost value, and close-rate dashboard cards.
+3. Add lead-source fields to every public form and admin lead conversion flow.
+4. Add Meta campaign records with spend, objective, creative URL, offer, service area, and run dates.
+5. Add automatic campaign CPL/CAC/ROAS calculations from real lead and booking records.
+6. Add branded-search/source-assisted attribution notes when a lead says they saw an ad then searched Google.
+7. Add seasonal close-rate charts for summer/winter detailing demand.
+8. Add package/add-on bundle analytics from accepted quotes.
+9. Add customer-safe incident report notification email/template after admin publication.
+10. Add incident-report PDF export for internal records and insurance/vendor follow-up.
+11. Add incident report follow-up task reminders for repair, customer credit, vendor warranty, or no-action decisions.
+12. Add media-library selection for incident evidence instead of upload/paste only.
+13. Add mobile quick-create incident button inside detailer job pages.
+14. Add pre-existing-damage checklist prompts during jobsite intake to reduce disputes.
+15. Add incident counts and unresolved urgent incident warnings to the Admin Dashboard.
+16. Add staff-role audit reasons before publishing customer-visible incident summaries.
+17. Add customer acknowledgement/signoff for published incident outcomes.
+18. Add equipment-maintenance linkage when an incident type is faulty equipment.
+19. Add browser smoke tests for incident create/upload/decision/publish flows.
+20. Continue replacing any remaining raw JSON repair surfaces with owner-friendly update screens.
+
+---
+
 # Build 201 update — Friendly editor validation, media pickers, and route-copy sync
 
 **Updated:** 2026-06-09  

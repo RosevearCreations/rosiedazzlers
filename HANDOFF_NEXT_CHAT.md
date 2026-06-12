@@ -1,3 +1,7 @@
+## Build 202 handoff
+
+After applying Build 202, run the SQL migration `sql/2026-06-12_build202_incident_reports_and_marketing.sql` before testing incident reports. Then test `/admin-incident-reports.html`, R2 evidence upload, customer visibility publishing, `/progress?token=...`, and `/admin-marketing.html`.
+
 
 # Build 184 update — 20-step operations, media, and payment hardening
 

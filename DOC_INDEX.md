@@ -1,3 +1,10 @@
+## Build 202 documentation additions
+
+- `DETAILER_MARKETING_NOTES_APPLIED.md` — summarizes which attached detailer marketing ideas fit Rosie Dazzlers and how they were applied.
+- `sql/2026-06-12_build202_incident_reports_and_marketing.sql` — adds the DB-backed `incident_reports` table.
+- `/admin-incident-reports.html` — private incident report creation/decision/publish workflow.
+- `/admin-marketing.html` — simple Meta ad/quote-pipeline calculator inspired by the attached detailer notes.
+
 # Build 201 documentation index note
 
 Build 201 adds inline friendly-editor validation, media URL picker helpers, consent/source badges, landing-page schema previews, save-review summaries, and `scripts/sync_route_copies.py` for route-copy synchronization. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `DATABASE_STRUCTURE_CURRENT.md` for the full Build 201 update.

@@ -1,3 +1,7 @@
+## Build 202 current implementation state
+
+Incident reports now have a first DB-backed workflow. The admin screen requires booking ID, private report details, and photo evidence; admin approval controls decide what is published to the customer progress page. Marketing now has an owner-friendly calculator screen for Meta spend, leads, booked jobs, quote value, close rate, CPL, CAC, and projected revenue.
+
 
 # Build 184 update — 20-step operations, media, and payment hardening
 
