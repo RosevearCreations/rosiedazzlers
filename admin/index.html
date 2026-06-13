@@ -20,7 +20,7 @@
     .muted{color:#94a3b8}.warning-panel{border-radius:16px;border:1px solid rgba(251,191,36,.28);background:rgba(245,158,11,.10);padding:14px;margin-top:14px}.warning-panel[data-state="ok"]{border-color:rgba(74,222,128,.28);background:rgba(22,163,74,.10)}.warning-row{padding:10px;border-radius:12px;background:rgba(15,23,42,.35);border:1px solid rgba(255,255,255,.06);margin-top:8px}
   </style>
 </head>
-<body data-page="admin" data-build202="incident-marketing-dashboard" data-build200="advanced-json-panel-dashboard" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard" data-build192="editable-settings-diagnostics" data-build195="seo-proof-fallback-report-dashboard" data-build197="dashboard-self-healing-diagnostics" data-build201="friendly-editor-validation-dashboard">
+<body data-page="admin" data-build203="desktop-mobile-visual-polish-dashboard" data-build202="incident-marketing-dashboard" data-build200="advanced-json-panel-dashboard" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard" data-build192="editable-settings-diagnostics" data-build195="seo-proof-fallback-report-dashboard" data-build197="dashboard-self-healing-diagnostics" data-build201="friendly-editor-validation-dashboard">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -107,6 +107,8 @@
           <div id="pricingCatalogDiagnostics" class="warning-panel" data-state="loading">Loading pricing catalog source and repair status…</div>
           <h2 style="margin-top:18px">Route-copy parity</h2>
           <div id="routeCopyDiagnostics" class="warning-panel" data-state="loading">Checking root HTML and folder route copies…</div>
+          <h2 style="margin-top:18px">Desktop / mobile &amp; visual polish</h2>
+          <div id="responsiveVisualDiagnostics" class="warning-panel" data-state="loading">Checking sampled public/admin pages for viewport, H1, image, and shared-CSS readiness…</div>
           <h2 style="margin-top:18px">Remaining advanced JSON panels</h2>
           <div id="advancedJsonPanelDiagnostics" class="warning-panel" data-state="warn" data-build200="remaining-json-panel-dashboard">
             <strong>Advanced JSON should be emergency-only</strong>
@@ -334,7 +336,8 @@
         fallbackReport: document.getElementById('fallbackSettingsReport'),
         seoProof: document.getElementById('localSeoProofDiagnostics'),
         pricingCatalog: document.getElementById('pricingCatalogDiagnostics'),
-        routeCopy: document.getElementById('routeCopyDiagnostics')
+        routeCopy: document.getElementById('routeCopyDiagnostics'),
+        responsiveVisual: document.getElementById('responsiveVisualDiagnostics')
       };
       function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
       function setShellStatus(message,type){document.querySelectorAll('[data-admin-shell-status]').forEach((node)=>{node.hidden=!message;node.textContent=message||'';node.dataset.state=type||'';});}
@@ -457,6 +460,19 @@
         catch (err) { console.warn('Dashboard card failed:', name, err); setShellStatus(`${name}: ${err?.message || 'Could not load card.'}`, 'error'); }
       }
 
+
+      async function loadResponsiveVisualDiagnostics(){
+        if(!els.responsiveVisual) return;
+        const res = await fetch('/api/admin/responsive_visual_report', { credentials:'include', cache:'no-store' });
+        const data = await res.json().catch(()=>null);
+        if(!res.ok || !data?.ok) throw new Error(data?.error || 'Could not load desktop/mobile visual report.');
+        const summary = data.summary || {};
+        const warningCount = (data.warnings || []).length;
+        const rows = (data.page_checks || []).slice(0,6).map((row)=>`<div class="warning-row"><strong>${esc(row.label || row.path)} · ${row.warnings?.length ? 'review' : 'ok'}</strong><div class="muted">${esc(row.path)} · H1: ${Number(row.h1Count||0)} · images: ${Number(row.imageCount||0)} · viewport: ${row.hasViewportMeta ? 'yes' : 'no'}</div>${(row.warnings||[]).slice(0,2).map((w)=>`<div class="muted">• ${esc(w)}</div>`).join('')}</div>`).join('');
+        els.responsiveVisual.dataset.state = warningCount ? 'warn' : 'ok';
+        els.responsiveVisual.innerHTML = `<strong>${warningCount ? `${warningCount} responsive/visual warning(s)` : 'Desktop/mobile visual checks look healthy'}</strong><div class="muted">Checked ${Number(summary.checked_pages||0)} pages, ${Number(summary.total_visual_slots||0)} visual slots, and ${Number(summary.device_targets||0)} device targets. ${esc(data.recommendation || '')}</div>${rows}<div style="margin-top:10px"><a class="btn ghost small" href="/">Open public homepage</a> <a class="btn ghost small" href="/book">Open mobile booking path</a></div>`;
+      }
+
       async function loadDashboardAnalytics(){
         const res = await fetch('/api/admin/analytics_overview', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ days: 14 })});
         const data = await res.json().catch(()=>null);
@@ -465,7 +481,7 @@
         renderList(els.live, (data.live_online_sessions||[]).slice(0,5), (r)=>`<strong>${esc(r.country || 'Unknown')}</strong><div class="muted">${esc((r.path||[]).join(' → '))}</div><div class="muted">Seen: ${esc(r.ended_at || '')}</div>`, 'No live visitors right now.');
         renderList(els.daily, (data.daily_traffic||[]).slice(-7).reverse(), (r)=>`<strong>${esc(r.day)}</strong><div class="muted">${Number(r.page_views||0)} page views • ${Number(r.unique_visitors||0)} visitors • ${Number(r.abandoned_sessions||0)} abandoned</div>`, 'No daily traffic summary yet.');
       }
-      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ await Promise.allSettled([guardedLoad('Dashboard analytics', loadDashboardAnalytics), guardedLoad('Payment webhook warnings', loadPaymentWebhookWarnings), guardedLoad('Operations warnings', loadBuild185OpsWarnings), guardedLoad('Editable settings diagnostics', loadEditableSettingsDiagnostics), guardedLoad('Fallback settings report', loadFallbackSettingsReport), guardedLoad('Local SEO proof diagnostics', loadLocalSeoProofDiagnostics), guardedLoad('Pricing catalog diagnostics', loadPricingCatalogDiagnostics), guardedLoad('Route-copy parity diagnostics', loadRouteCopyDiagnostics)]); } });
+      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ await Promise.allSettled([guardedLoad('Dashboard analytics', loadDashboardAnalytics), guardedLoad('Payment webhook warnings', loadPaymentWebhookWarnings), guardedLoad('Operations warnings', loadBuild185OpsWarnings), guardedLoad('Editable settings diagnostics', loadEditableSettingsDiagnostics), guardedLoad('Fallback settings report', loadFallbackSettingsReport), guardedLoad('Local SEO proof diagnostics', loadLocalSeoProofDiagnostics), guardedLoad('Pricing catalog diagnostics', loadPricingCatalogDiagnostics), guardedLoad('Route-copy parity diagnostics', loadRouteCopyDiagnostics), guardedLoad('Desktop/mobile visual diagnostics', loadResponsiveVisualDiagnostics)]); } });
     })();
   </script>
 </body>
