@@ -783,6 +783,23 @@ function initInstallPrompt(){
 }
 
 
+
+function setViewportTier() {
+  const width = window.innerWidth || document.documentElement.clientWidth || 0;
+  const tier = width < 768 ? "mobile" : (width < 1100 ? "tablet" : "desktop");
+  document.documentElement.dataset.viewportTier = tier;
+  document.querySelectorAll("[data-viewport-tier-label]").forEach((node) => {
+    node.textContent = tier === "mobile" ? "Mobile app view" : (tier === "tablet" ? "Tablet view" : "Desktop website view");
+  });
+}
+
+function enhanceProfessionalImages() {
+  document.querySelectorAll("img").forEach((img) => {
+    if (!img.getAttribute("decoding")) img.setAttribute("decoding", "async");
+    if (!img.getAttribute("loading") && !img.closest(".hero")) img.setAttribute("loading", "lazy");
+  });
+}
+
 function ensureManifest(){
   const head=document.head||document.querySelector('head');
   if(!head) return;
@@ -861,6 +878,8 @@ function ensureStickyConversionCta() {
 
 
 async function initChrome() {
+  setViewportTier();
+  window.addEventListener("resize", setViewportTier, { passive: true });
   ensureManifest();
   await loadPublicSiteSettings();
   ensureNavLinks();
@@ -875,6 +894,7 @@ async function initChrome() {
   initInstallPrompt();
   ensurePublicAnalytics();
   ensureStickyConversionCta();
+  enhanceProfessionalImages();
 
   attachRotators("#homePackages");
   attachRotators("#packageCards");
