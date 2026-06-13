@@ -17,11 +17,27 @@ async function loadGallery() {
 function renderMedia(item) {
   const afterKind = String(item?.after_kind || 'image').toLowerCase() === 'video' ? 'video' : 'image';
   const afterUrl = String(item?.after_url || '').trim();
-  if (!afterUrl) return '<div class="recent-work-media"></div>';
+  const fallback = String(item?.fallback_after_url || '').trim();
+  if (!afterUrl) return '<div class="recent-work-media media-unavailable">Add approved gallery media</div>';
   if (afterKind === 'video') {
     return `<video class="recent-work-media" src="${esc(afterUrl)}" muted playsinline controls preload="metadata"></video>`;
   }
-  return `<img class="recent-work-media" src="${esc(afterUrl)}" alt="${esc(item?.title || 'Recent detailing result')}">`;
+  return `<img class="recent-work-media" src="${esc(afterUrl)}" alt="${esc(item?.title || 'Recent detailing result')}" data-fallback-src="${esc(fallback)}" onerror="window.RDRecentWorkImageFallback&&window.RDRecentWorkImageFallback(this)">`;
+}
+
+if (typeof window !== 'undefined') {
+  window.RDRecentWorkImageFallback = function(img) {
+    const fallback = img.getAttribute('data-fallback-src') || '';
+    if (fallback && img.src.indexOf(fallback) === -1) {
+      img.src = fallback;
+      img.removeAttribute('data-fallback-src');
+      return;
+    }
+    const node = document.createElement('div');
+    node.className = 'recent-work-media media-unavailable';
+    node.textContent = 'Gallery image unavailable — repair media URL in App Management.';
+    img.replaceWith(node);
+  };
 }
 
 export async function renderRecentWorkMounts(limit = 3) {
