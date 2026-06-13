@@ -13,6 +13,8 @@
     .compare-handle{position:absolute;top:0;bottom:0;left:var(--split,50%);width:2px;background:#fff;box-shadow:0 0 0 999px rgba(255,255,255,.03)}
     .compare-range{width:100%;margin-top:12px}.gallery-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:16px}.gallery-filters select{width:100%;border-radius:12px;padding:10px;background:rgba(15,23,42,.92);color:#f8fafc;border:1px solid rgba(255,255,255,.16)}
     .privacy-note{margin-top:10px;color:#94a3b8;font-size:.95rem}
+    .compare-media-fallback{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:18px;color:#cbd5e1;background:linear-gradient(135deg,rgba(15,23,42,.82),rgba(30,41,59,.74));border:1px dashed rgba(255,255,255,.18)}
+    .compare-media-fallback strong{display:block;color:#f8fafc;margin-bottom:4px}
   </style>
 </head><body data-build175="gallery-proof-filter-privacy" data-build177="privacy-proof-badges">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a><button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false">Menu</button><div id="navLinks" class="nav-links"></div><a class="btn primary" href="/book">Book now</a></div></header>
@@ -26,6 +28,23 @@
   const privacyNote=document.querySelector('#privacyNote');
   function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function optionHtml(row){return `<option value="${esc(row.value)}">${esc(row.label)}</option>`;}
+  function mediaFallback(label){return `<div class="compare-media-fallback"><div><strong>${esc(label)} image unavailable</strong><span>Check the media URL or re-upload the approved photo in App Management.</span></div></div>`;}
+  function mediaTag(item, kindKey, urlKey, fallbackKey, cssClass, label){
+    const kind=String(item[kindKey]||'image').toLowerCase()==='video'?'video':'image';
+    const url=String(item[urlKey]||'').trim();
+    const fallback=String(item[fallbackKey]||'').trim();
+    if(!url) return mediaFallback(label);
+    if(kind==='video') return `<video class="${cssClass}" src="${esc(url)}" controls preload="metadata"></video>`;
+    return `<img class="${cssClass}" src="${esc(url)}" alt="${esc(label)} ${esc(item.service||'detailing')}" data-fallback-src="${esc(fallback)}" onerror="window.RDGalleryImageFallback&&window.RDGalleryImageFallback(this,'${esc(label)}')">`;
+  }
+  window.RDGalleryImageFallback=function(img,label){
+    const fallback=img.getAttribute('data-fallback-src')||'';
+    if(fallback && img.src.indexOf(fallback)===-1){ img.src=fallback; img.removeAttribute('data-fallback-src'); return; }
+    const wrap=document.createElement('div');
+    wrap.className='compare-media-fallback '+(img.className||'');
+    wrap.innerHTML='<div><strong>'+esc(label||'Gallery')+' image unavailable</strong><span>Media URL could not load. Use App Management to repair the approved before/after photo.</span></div>';
+    img.replaceWith(wrap);
+  };
   async function loadGallery(){
     const params=new URLSearchParams();
     if(serviceFilter.value && serviceFilter.value!=='all') params.set('service',serviceFilter.value);
@@ -39,7 +58,7 @@
     privacyNote.textContent=(data.privacy_rule||'Only approved public media is shown.')+(data.blocked_count?` ${data.blocked_count} private/pending item(s) blocked from public reuse.`:'');
     const items=Array.isArray(data.items)?data.items:[];
     if(!items.length){ host.innerHTML='<div class="panel">No approved gallery comparisons match this filter yet.</div>'; return; }
-    host.innerHTML=items.map((item,idx)=>`<article class="compare-card"><div class="section-head"><div><h2 style="margin:0">${esc(item.title||'Detail result')}</h2><p class="muted" style="margin:6px 0 0">${esc(item.location||'Oxford / Norfolk Counties')} • ${esc(item.service||'Mobile detailing')}</p></div><span class="badge">${esc(item.consent_status || 'Approved public')}</span><span class="badge">${esc(item.media_privacy_status || 'privacy checked')}</span></div><div class="compare-stage" data-stage="${idx}" style="--split:50%">${(item.after_kind||'image')==='video'?`<video class="compare-after" src="${esc(item.after_url||'')}" controls preload="metadata"></video>`:`<img class="compare-after" src="${esc(item.after_url||'')}" alt="After ${esc(item.service||'detailing')}">`}${(item.before_kind||'image')==='video'?`<video class="compare-before" src="${esc(item.before_url||'')}" controls preload="metadata"></video>`:`<img class="compare-before" src="${esc(item.before_url||'')}" alt="Before ${esc(item.service||'detailing')}">`}<div class="compare-handle"></div></div><input class="compare-range" type="range" min="0" max="100" value="50" data-range="${idx}" /><p class="muted">${esc(item.note||'')}</p></article>`).join('');
+    host.innerHTML=items.map((item,idx)=>`<article class="compare-card"><div class="section-head"><div><h2 style="margin:0">${esc(item.title||'Detail result')}</h2><p class="muted" style="margin:6px 0 0">${esc(item.location||'Oxford / Norfolk Counties')} • ${esc(item.service||'Mobile detailing')}</p></div><span class="badge">${esc(item.consent_status || 'Approved public')}</span><span class="badge">${esc(item.media_privacy_status || 'privacy checked')}</span></div><div class="compare-stage" data-stage="${idx}" style="--split:50%">${mediaTag(item,'after_kind','after_url','fallback_after_url','compare-after','After')}${mediaTag(item,'before_kind','before_url','fallback_before_url','compare-before','Before')}<div class="compare-handle"></div></div><input class="compare-range" type="range" min="0" max="100" value="50" data-range="${idx}" /><p class="muted">${esc(item.note||'')}</p></article>`).join('');
     document.querySelectorAll('[data-range]').forEach(r=>r.addEventListener('input',()=>{ const stage=document.querySelector(`[data-stage="${r.dataset.range}"]`); if(stage) stage.style.setProperty('--split', `${r.value}%`); }));
   }
   serviceFilter.addEventListener('change',()=>loadGallery().catch(()=>{host.innerHTML='<div class="panel">Could not load the gallery right now.</div>';}));
