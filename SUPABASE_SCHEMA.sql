@@ -1735,3 +1735,6 @@ CREATE TABLE IF NOT EXISTS public.incident_reports (
   updated_by_staff_name text,
   updated_by_staff_email text
 );
+
+
+-- Build 203 desktop/mobile visual polish note: no DDL required. Responsive visual targets are bundled in data/responsive_visual_registry.json and surfaced through /api/admin/responsive_visual_report until they are moved into app_management_settings with a friendly editor.

@@ -1,3 +1,17 @@
+## Build 203 — Desktop/mobile polish and visual enrichment
+
+Build 203 adds shared desktop/mobile visual polish for the public website and mobile app-style experience. It adds responsive CSS utilities, a homepage desktop/mobile showcase, viewport-tier detection, professional image framing, reduced-motion-safe effects, a responsive visual registry, and an Admin Dashboard diagnostics card backed by `/api/admin/responsive_visual_report`.
+
+Run the normal release checks before upload:
+
+```bash
+python3 scripts/release_check.py
+python3 scripts/seo_h1_check.py
+python3 scripts/build203_desktop_mobile_visual_polish_check.py
+```
+
+---
+
 ## Build 202 — Incident reports and marketing tracker
 
 Build 202 adds a private DB-backed incident-report workflow for vehicle damage, faulty equipment, pre-existing damage, customer dispute, safety, and other job-site issues. Staff can attach required photo evidence, keep private detailer/admin discussion internal, and publish only the approved customer summary and selected photos to the customer progress page. It also adds a practical `/admin-marketing.html` tracker based on the attached detailer notes for Meta ad math, quote value, close rate, CPL, CAC, and projected revenue.

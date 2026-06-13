@@ -1,3 +1,28 @@
+# Build 203 known gaps and risks — Desktop/mobile and visual polish
+
+Build 203 improves the shared responsive CSS, homepage visual presentation, and admin diagnostics for desktop/mobile readiness. It does not replace hands-on browser testing; it makes the most likely issues easier to find before deployment.
+
+## Reduced in Build 203
+
+- Desktop and mobile layout expectations are now documented in `data/responsive_visual_registry.json`.
+- The homepage now shows a professional desktop/mobile section without adding extra H1 tags.
+- Shared CSS now includes visual frame, hover, reduced-motion, and mobile touch-target improvements.
+- Admin Dashboard now reports sampled viewport/H1/image/shared-CSS health.
+- The service worker cache name was bumped so visitors receive the newer CSS/chrome files.
+
+## Still outstanding after Build 203
+
+1. The responsive visual registry is still bundled JSON; it should become a friendly Admin Site Settings editor later.
+2. The dashboard report samples key pages but does not run real screenshots or visual diffing.
+3. Mobile admin tables still need more card-view conversions on the widest accounting/catalog screens.
+4. Some public pages still depend on fallback or sample imagery until enough approved local proof photos are uploaded.
+5. Professional visual effects should be checked on older phones to ensure they remain smooth.
+6. Incident evidence still needs customer-safe crop/blur tools before publishing sensitive vehicle photos.
+7. Landing-page visual slots should eventually be scored per town/service.
+8. The visual polish should be reviewed after each CSS-heavy pass because site styles have drifted before.
+
+---
+
 # Build 202 known gaps and risks — Incident reporting and marketing tracker
 
 **Updated:** 2026-06-12  
