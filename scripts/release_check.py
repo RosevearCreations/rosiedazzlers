@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 204 note:
+- Repairs before/after Gallery image loading with field-alias normalization, static fallback data, local asset fallback handling, and dashboard diagnostics.
+
 Build 203 note:
 - Adds desktop/mobile visual polish, responsive diagnostics, and professional image/card treatment.
 
@@ -133,6 +136,7 @@ CHECKS = [
     "scripts/build201_friendly_validation_media_route_sync_check.py",
     "scripts/build202_incident_reports_marketing_check.py",
     "scripts/build203_desktop_mobile_visual_polish_check.py",
+    "scripts/build204_gallery_media_resilience_check.py",
     "scripts/seo_h1_check.py",
 ]
 
