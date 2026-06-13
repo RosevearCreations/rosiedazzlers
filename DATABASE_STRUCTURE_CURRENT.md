@@ -1,3 +1,9 @@
+# Build 203 database update — No new DDL
+
+Build 203 does not add database tables or columns. It adds a bundled responsive/visual registry at `data/responsive_visual_registry.json` and a dashboard diagnostic API that reads the registry and sampled pages. Future work may move this registry into `app_management_settings` once a friendly editor is added.
+
+---
+
 # Build 202 database update — Incident reports
 
 **Updated:** 2026-06-12  

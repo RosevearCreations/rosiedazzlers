@@ -1,3 +1,12 @@
+## Build 203 documentation additions
+
+- `data/responsive_visual_registry.json` — bundled responsive/visual target registry.
+- `functions/api/admin/responsive_visual_report.js` — dashboard diagnostic API for desktop/mobile visual readiness.
+- `scripts/build203_desktop_mobile_visual_polish_check.py` — release guard for this pass.
+- `sql/2026-06-12_build203_desktop_mobile_visual_polish_no_ddl_note.sql` — no-DDL schema note.
+
+---
+
 ## Build 202 documentation additions
 
 - `DETAILER_MARKETING_NOTES_APPLIED.md` — summarizes which attached detailer marketing ideas fit Rosie Dazzlers and how they were applied.

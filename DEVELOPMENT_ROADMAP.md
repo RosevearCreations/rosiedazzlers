@@ -1,3 +1,53 @@
+# Build 203 update — Desktop/mobile polish and professional visual enrichment
+
+Build 203 continues the roadmap by making the site feel more like a finished desktop website and a usable mobile app-style experience at the same time. This pass adds shared visual polish, responsive utilities, a homepage desktop/mobile showcase, a dashboard diagnostics card, and an admin API that checks sampled pages for viewport, H1, image, and shared-CSS readiness. No new database tables were required; the responsive visual registry is a bundled JSON fallback that can later be moved into the friendly settings editor.
+
+## Build 203 — 20 completed items
+1. Added a shared responsive visual registry for desktop, tablet, and mobile targets.
+2. Added professional visual-polish CSS utilities for glass panels, image frames, proof stats, desktop preview cards, and mobile frame previews.
+3. Added a viewport-tier marker so pages know whether they are in mobile, tablet, or desktop view.
+4. Added lazy/async image defaults for non-hero images through the shared chrome script.
+5. Added a homepage desktop/mobile showcase without adding another H1.
+6. Added public-facing desktop website and mobile app-style proof cards on the homepage.
+7. Added mobile touch-target improvements for action rows and CTAs.
+8. Added reduced-motion protection for professional visual effects.
+9. Added a dashboard desktop/mobile and visual polish diagnostics card.
+10. Added `/api/admin/responsive_visual_report` for sampled viewport/H1/image/shared-CSS checks.
+11. Added visual-slot reporting for hero, reviews, service cards, before/after proof, and incident evidence.
+12. Added checks for viewport meta tags on sampled public/admin pages.
+13. Added checks for public pages with no detected imagery so bland pages are easier to find.
+14. Added service-worker cache refresh for updated CSS, chrome, and the responsive visual registry.
+15. Kept the one-H1 rule intact while adding richer visual sections.
+16. Synced the admin dashboard route copy after dashboard diagnostics changes.
+17. Added Build 203 release guard for responsive visual registry, CSS, dashboard card, API, and route copy.
+18. Updated schema documentation and SQL notes with no new database tables for this pass.
+19. Updated root Markdown files with Build 203 status and next-step guidance.
+20. Kept SEO wording aligned to local Oxford/Norfolk service and town intent while improving presentation.
+
+## Next 20 steps after Build 203
+1. Add a full admin desktop/mobile preview mode with iframe toggles for homepage, booking, pricing, and service pages.
+2. Add per-page visual scorecards for missing hero image, missing proof image, weak alt text, and low image count.
+3. Connect the responsive visual registry to Admin App so visual-slot requirements can be edited without JSON.
+4. Add a gallery image picker directly inside landing-page hero/proof editors.
+5. Add a public before/after comparison slider component for approved gallery pairs.
+6. Add customer-safe visual proof rotation by town and service on local landing pages.
+7. Add admin warnings when a town/service page lacks approved public media.
+8. Add mobile screenshot checklist fields to release QA.
+9. Add desktop screenshot checklist fields to release QA.
+10. Add image aspect-ratio warnings before publishing service cards or landing pages.
+11. Add a professional testimonial/proof block editor that can choose review, photo, and town/service pairing.
+12. Add performance hints for oversized hero images and non-optimized gallery images.
+13. Add WebP/AVIF preferred-image guidance in Media Health.
+14. Add visual theme presets for seasonal promos without editing CSS.
+15. Add compact mobile admin tables that can switch between table and card view.
+16. Add incident evidence thumbnail review and customer-public crop/blur prep.
+17. Add marketing campaign landing-page templates for Meta ad offers.
+18. Add lead-source attribution fields to booking/customer records for Meta, Google, referral, and direct traffic.
+19. Add quote pipeline dashboards from marketing tracker data.
+20. Continue retiring emergency JSON panels by adding owner-friendly editors wherever routine updates still require structured data.
+
+---
+
 # Build 202 update — Incident reports and detailer marketing tracker
 
 **Updated:** 2026-06-12  
