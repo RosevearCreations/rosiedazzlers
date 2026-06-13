@@ -1,3 +1,11 @@
+# Build 204 database update — No new DDL
+
+Build 204 does not add database tables or columns. The gallery repair uses the existing `app_management_settings.before_after_gallery` editable-setting row, the bundled `data/before_after_gallery.json` fallback, and new application-level media URL normalization/fallback logic.
+
+The new admin Gallery image health diagnostic endpoint reads the public gallery response and does not require a migration. Future work may move gallery rows into a dedicated DB table with first-class booking/customer-consent links, but that is not part of this pass.
+
+---
+
 # Build 203 database update — No new DDL
 
 Build 203 does not add database tables or columns. It adds a bundled responsive/visual registry at `data/responsive_visual_registry.json` and a dashboard diagnostic API that reads the registry and sampled pages. Future work may move this registry into `app_management_settings` once a friendly editor is added.

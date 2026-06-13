@@ -1,3 +1,56 @@
+# Build 204 update — Before/after gallery image resilience and fallback repair
+
+**Updated:** 2026-06-12  
+**Build:** 204
+
+Build 204 repairs the reported public Gallery regression where before/after media could disappear or render as broken images. The public gallery API now understands legacy/friendly-editor media field aliases, uses the bundled static gallery fallback when saved content has no usable media URLs, rewrites known Rosie brand assets to local packaged paths, and returns fallback metadata for the public Gallery and homepage recent-work cards. The public UI now shows a clear repair placeholder instead of a blank/broken image, and the Admin Dashboard adds a Gallery image health diagnostic card.
+
+## Build 204 — 20 completed items
+1. Fixed the public before/after Gallery media regression reported after Build 203.
+2. Changed default gallery sample media from remote `assets.rosiedazzlers.ca/brand/...` URLs to packaged `/assets/brand/...` URLs.
+3. Updated `data/before_after_gallery.json` to use packaged local brand asset paths.
+4. Added static JSON fallback loading from `/data/before_after_gallery.json` before emergency defaults.
+5. Added fallback use reporting through `/api/before_after_gallery_public`.
+6. Added `source_status` and `fallback_used` to the public gallery response.
+7. Added legacy/friendly field aliases for before media URLs.
+8. Added legacy/friendly field aliases for after media URLs.
+9. Added consent/privacy status alias normalization for older approved-public wording.
+10. Preserved strict privacy blocking for pending, private, rejected, or needs-review gallery rows.
+11. Rewrote known Rosie brand asset-domain URLs to local packaged assets when safe.
+12. Added fallback metadata for before and after gallery images.
+13. Added public Gallery `img.onerror` handling so broken images try local fallback first.
+14. Added a customer-safe placeholder message when an image still cannot load.
+15. Added the same image-fallback behavior to homepage recent-work cards.
+16. Added visual placeholder styling for unavailable media.
+17. Added `/api/admin/gallery_image_health_report` for admin diagnostics.
+18. Added an Admin Dashboard Gallery image health card.
+19. Synced `/gallery.html` with `/gallery/` and `/admin.html` with `/admin/`.
+20. Updated Markdown, schema notes, SQL no-DDL note, release guard, and H1 checks.
+
+## Next 20 steps after Build 204
+1. Add a media-library picker directly inside each before/after gallery row.
+2. Add real image existence checks for R2/object URLs instead of URL-shape checks only.
+3. Add a gallery repair button that copies known local fallback URLs into broken sample rows.
+4. Add a public proof rotation block on town/service landing pages using approved gallery pairs.
+5. Add visual crop/blur preparation for public gallery photos before publishing.
+6. Add image dimension/aspect-ratio validation before gallery save.
+7. Add customer consent record linking to each gallery row.
+8. Add job/booking link fields to gallery rows so proof is tied back to the completed service.
+9. Add per-row history restore for gallery items.
+10. Add gallery category tags for interior, exterior, pet hair, odor, headlight, ceramic, and maintenance work.
+11. Add mobile card/table switcher for long admin gallery lists.
+12. Add before/after proof requirements to local SEO task creation.
+13. Add a screenshot QA checklist for `/gallery`, `/`, and landing proof sections.
+14. Add WebP/AVIF optimization guidance for approved gallery images.
+15. Add customer-safe captions generated from package, town, and service fields.
+16. Add gallery empty-state recommendations in Admin App when no approved public rows exist.
+17. Add broken-image warnings to Media Health with one-click R2 upload guidance.
+18. Add Meta ad proof-card templates using approved before/after rows.
+19. Add quote/lead source attribution into gallery proof analytics.
+20. Continue retiring emergency JSON panels and moving routine media management into owner-friendly screens.
+
+---
+
 # Build 203 update — Desktop/mobile polish and professional visual enrichment
 
 Build 203 continues the roadmap by making the site feel more like a finished desktop website and a usable mobile app-style experience at the same time. This pass adds shared visual polish, responsive utilities, a homepage desktop/mobile showcase, a dashboard diagnostics card, and an admin API that checks sampled pages for viewport, H1, image, and shared-CSS readiness. No new database tables were required; the responsive visual registry is a bundled JSON fallback that can later be moved into the friendly settings editor.

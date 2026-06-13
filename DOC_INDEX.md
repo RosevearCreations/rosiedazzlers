@@ -1,3 +1,13 @@
+## Build 204 documentation additions
+
+- `functions/api/before_after_gallery_public.js` — resilient public gallery API with static fallback, field aliases, and local packaged asset repair.
+- `functions/api/admin/gallery_image_health_report.js` — dashboard diagnostic API for gallery image fallback/source health.
+- `gallery.html` and `assets/recent-work.js` — public image fallback handling for before/after and recent-work media.
+- `scripts/build204_gallery_media_resilience_check.py` — release guard for this pass.
+- `sql/2026-06-12_build204_gallery_media_resilience_no_ddl_note.sql` — no-DDL schema note.
+
+---
+
 ## Build 203 documentation additions
 
 - `data/responsive_visual_registry.json` — bundled responsive/visual target registry.
