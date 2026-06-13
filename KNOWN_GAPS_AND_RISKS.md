@@ -1,3 +1,33 @@
+# Build 204 known gaps and risks — Gallery image resilience
+
+**Updated:** 2026-06-12  
+**Build:** 204
+
+Build 204 fixes the visible Gallery/media regression by making public before/after media more tolerant of older saved field names, missing DB rows, local sample assets, and broken image loads. Broken media no longer leaves a blank gallery; the page tries packaged fallbacks and then shows a clear repair message.
+
+## Reduced in Build 204
+
+- Public before/after gallery no longer depends only on one exact `before_url` / `after_url` field shape.
+- Saved gallery content with no usable media URLs falls back to bundled static samples instead of returning an empty broken gallery.
+- Known Rosie brand assets now resolve through packaged `/assets/brand/...` paths.
+- Homepage recent-work cards now use the same image fallback behavior as the Gallery page.
+- Admin Dashboard now has a Gallery image health card to reveal fallback use and obvious media-source issues.
+
+## Still outstanding after Build 204
+
+1. The gallery still needs a true media-library picker instead of copy/paste URLs.
+2. The new health report checks URL/source shape but does not yet perform full R2 image HEAD/existence checks.
+3. Gallery rows still need stronger job/booking/customer-consent linking.
+4. Per-row restore-from-history is still not available for gallery items.
+5. Image crop/blur prep is still manual before customer-safe publishing.
+6. Gallery proof rotation on town/service landing pages is still outstanding.
+7. Browser smoke testing on the live Cloudflare dev URL is still required after deployment.
+8. External media sources should be migrated to owned Rosie/R2 assets where possible.
+9. Media Health should eventually include the same gallery fallback warnings.
+10. Advanced JSON repair remains available for emergency gallery recovery and should continue to shrink over time.
+
+---
+
 # Build 203 known gaps and risks — Desktop/mobile and visual polish
 
 Build 203 improves the shared responsive CSS, homepage visual presentation, and admin diagnostics for desktop/mobile readiness. It does not replace hands-on browser testing; it makes the most likely issues easier to find before deployment.

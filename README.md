@@ -1,3 +1,9 @@
+# Build 204 note — Gallery image fallback repair
+
+Build 204 repairs the before/after Gallery media regression by adding public API alias normalization, static gallery fallback loading, local packaged brand-asset URLs, Gallery/recent-work image fallback handlers, and an Admin Dashboard Gallery image health card. No new database migration is required for this pass.
+
+---
+
 ## Build 203 — Desktop/mobile polish and visual enrichment
 
 Build 203 adds shared desktop/mobile visual polish for the public website and mobile app-style experience. It adds responsive CSS utilities, a homepage desktop/mobile showcase, viewport-tier detection, professional image framing, reduced-motion-safe effects, a responsive visual registry, and an Admin Dashboard diagnostics card backed by `/api/admin/responsive_visual_report`.

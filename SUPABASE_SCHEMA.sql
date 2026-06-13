@@ -1,3 +1,9 @@
+-- Build 204 gallery media resilience pass.
+-- No database schema changes are required.
+-- Existing app_management_settings.before_after_gallery rows continue to be used.
+-- Public gallery rendering now adds application-level field alias normalization,
+-- packaged static fallback loading, and local image fallback metadata.
+
 -- Build 201 friendly editor validation and route-copy sync pass.
 -- No database schema changes are required.
 -- Existing app_management_settings rows continue to store pricing_catalog,
