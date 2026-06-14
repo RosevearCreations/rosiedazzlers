@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 205 note:
+- Adds a sanity-check/value-added roadmap screen, dashboard card, structured backlog, and competitor-inspired next-step documentation.
+
 Build 204 note:
 - Repairs before/after Gallery image loading with field-alias normalization, static fallback data, local asset fallback handling, and dashboard diagnostics.
 
@@ -137,6 +140,7 @@ CHECKS = [
     "scripts/build202_incident_reports_marketing_check.py",
     "scripts/build203_desktop_mobile_visual_polish_check.py",
     "scripts/build204_gallery_media_resilience_check.py",
+    "scripts/build205_sanity_value_roadmap_check.py",
     "scripts/seo_h1_check.py",
 ]
 
