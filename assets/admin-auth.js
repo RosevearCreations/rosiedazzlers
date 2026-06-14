@@ -247,6 +247,7 @@
       case "admin-account":
         return state.authenticated === true;
       case "admin-app":
+      case "admin-docs":
       case "admin-water-rules":
       case "admin-site-settings":
         return actor.is_admin === true || hasCapability("can_manage_staff");

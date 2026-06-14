@@ -158,6 +158,14 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-staff")
     },
 
+
+    {
+      key: "admin-docs",
+      label: "Docs & Sanity",
+      href: "/admin-docs.html",
+      description: "Canonical docs, Markdown sanity, and visual placeholder readiness",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-docs")
+    },
     {
       key: "admin-app",
       label: "App Management",
