@@ -1,0 +1,105 @@
+{
+  "build": 205,
+  "updated_at": "2026-06-13",
+  "summary": {
+    "status": "strong operations foundation with remaining opportunity in customer conversion, owner dashboards, CRM revenue tracking, memberships, and proof-driven marketing",
+    "desktop_mobile": "desktop website and mobile app-style flows exist; next value is guided cards, sharper visuals, and fewer admin decision points per screen",
+    "seo_direction": "keep one clear H1 per page, unique title/meta copy, town/service wording, local proof, reviews, and sharp images near relevant text"
+  },
+  "already_strong": [
+    "Public booking flow with packages/add-ons and payment/deposit path",
+    "Admin dashboard with independent diagnostic cards",
+    "Gallery/media fallback and image health diagnostics",
+    "Private incident reports with evidence and customer-approved publishing",
+    "Editable settings, history restore, validation, and raw JSON emergency fallback",
+    "Pricing catalog and landing-page friendly editors",
+    "Water restriction rules and business-hours warnings",
+    "Accounting, HST/GST, payment webhook, refund, and month-end close foundations",
+    "Marketing tracker for SEO, Meta ads, quotes, and close-rate thinking",
+    "Desktop/mobile visual registry and shared responsive polish"
+  ],
+  "highest_value_next": [
+    {
+      "priority": 1,
+      "feature": "Dedicated Gallery Approvals screen",
+      "why": "The gallery now works, but approval is still buried in Admin App. A focused screen would make before/after approval, consent, and image repair easier.",
+      "suggested_route": "/admin-gallery.html"
+    },
+    {
+      "priority": 2,
+      "feature": "Quote pipeline dashboard",
+      "why": "The attached detailer notes emphasize revenue sitting in quotes and close-rate tracking. Rosie Dazzlers needs a visible pipeline dollar value, quote age, follow-up stage, and close-rate card.",
+      "suggested_route": "/admin-quotes.html"
+    },
+    {
+      "priority": 3,
+      "feature": "Meta ad campaign tracker",
+      "why": "SEO is long-term, while Meta ads can create demand faster. Track spend, leads, CPL, booked jobs, CAC, revenue, and average ticket.",
+      "suggested_route": "/admin-marketing.html"
+    },
+    {
+      "priority": 4,
+      "feature": "Membership and maintenance-plan engine",
+      "why": "Recurring service, credits, and reminders increase predictable revenue and customer retention.",
+      "suggested_route": "/maintenance-plan.html"
+    },
+    {
+      "priority": 5,
+      "feature": "Vehicle history timeline for customers",
+      "why": "Competitor apps highlight managing vehicle history and appointments. A timeline adds professionalism and repeat-booking value.",
+      "suggested_route": "/my-account.html"
+    },
+    {
+      "priority": 6,
+      "feature": "Jobsite pre-check and proof-of-work checklist",
+      "why": "Photo evidence, signatures, checklists, and proof-of-work reduce disputes and support quality consistency.",
+      "suggested_route": "/detailer-jobs.html"
+    },
+    {
+      "priority": 7,
+      "feature": "Fleet contract mini-CRM",
+      "why": "Fleet service pages are common among mobile detailers and can support higher-ticket repeat accounts.",
+      "suggested_route": "/fleet.html"
+    },
+    {
+      "priority": 8,
+      "feature": "Review request automation",
+      "why": "Google says reviews and responses can help local prominence. Automating review requests after completed jobs builds trust and local proof.",
+      "suggested_route": "/admin-notifications.html"
+    },
+    {
+      "priority": 9,
+      "feature": "Visual offer blocks for seasonal campaigns",
+      "why": "Professional seasonal offer images, countdowns, and town/service landing cards improve sharpness and conversion.",
+      "suggested_route": "/admin-content.html"
+    },
+    {
+      "priority": 10,
+      "feature": "Route optimization and job clustering hints",
+      "why": "Mobile operators benefit from efficient routes and fewer travel gaps. Even simple town/day clustering would save time.",
+      "suggested_route": "/admin-booking.html"
+    }
+  ],
+  "competitor_inspired_ideas": [
+    "Mobile app-style booking and account management",
+    "Subscription credits or maintenance memberships",
+    "Fleet detailing and corporate accounts",
+    "CRM quote pipeline and close-rate reporting",
+    "Cost-per-lead / customer acquisition cost tracker for Meta ads",
+    "Vehicle history, appointment management, and customer portal",
+    "Before/after proof photos and service documentation",
+    "Proof-of-work checklist, customer approvals, and sign-off",
+    "Gift cards and seasonal campaigns",
+    "Review request automation and local proof tasks"
+  ],
+  "visual_enrichment_next": [
+    "Dedicated hero image per service/town landing page",
+    "Before/after slider treatment for approved gallery rows",
+    "Trust badge strip for insured, mobile, brings power/water, Oxford/Norfolk service area",
+    "Subtle animated progress stepper for booking and customer progress pages",
+    "Image cards with alt-text/status badges inside admin media screens",
+    "Seasonal campaign graphics with one-click landing-page pairing",
+    "Mobile bottom action bar for Book Now, Call, Text, and Gift Card",
+    "Reduced-motion safe micro-interactions on package and add-on cards"
+  ]
+}
