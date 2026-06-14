@@ -1,3 +1,6 @@
+-- Build 205 note: sanity report and value-added roadmap only. No new DDL is required in this pass.
+-- Future DDL candidates: quote pipeline metrics, Meta campaign ROI, memberships, vehicle history, proof-of-work checklists, and fleet account CRM.
+
 -- Build 204 gallery media resilience pass.
 -- No database schema changes are required.
 -- Existing app_management_settings.before_after_gallery rows continue to be used.

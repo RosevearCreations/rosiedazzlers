@@ -1,3 +1,7 @@
+# Build 205 note — Sanity check and value-added roadmap
+
+Build 205 adds a sanity-check/admin value-roadmap pass. It includes `APP_SANITY_CHECK_BUILD205.md`, `data/value_added_feature_backlog.json`, `/api/admin/value_added_sanity_report`, `/admin-sanity.html`, and a new Admin Dashboard diagnostic card. No database DDL is required. The strongest next work is a dedicated Gallery Approvals screen, quote pipeline revenue dashboard, Meta ads ROI tracker, maintenance memberships, vehicle history, proof-of-work checklists, fleet mini-CRM, review automation, and stronger visual conversion blocks.
+
 # Build 204 note — Gallery image fallback repair
 
 Build 204 repairs the before/after Gallery media regression by adding public API alias normalization, static gallery fallback loading, local packaged brand-asset URLs, Gallery/recent-work image fallback handlers, and an Admin Dashboard Gallery image health card. No new database migration is required for this pass.
