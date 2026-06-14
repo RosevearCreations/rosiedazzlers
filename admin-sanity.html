@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sanity Check & Value Roadmap | Rosie Dazzlers Admin</title>
+  <meta name="description" content="Admin sanity check for Rosie Dazzlers mobile detailing app, competitor-inspired value additions, visual polish, and next roadmap priorities." />
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body data-page="admin-sanity" data-build205="sanity-check-value-roadmap">
+  <header class="header" data-header></header>
+  <main class="container page-shell">
+    <section class="hero compact-hero">
+      <div class="eyebrow">Build 205</div>
+      <h1>Sanity Check & Value Roadmap</h1>
+      <p class="lead">A plain-English health check for where the Rosie Dazzlers app is now, what competitors are doing, and which value-added features should come next.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="/admin.html">Back to Dashboard</a>
+        <a class="btn ghost" href="/admin-marketing.html">Open Marketing Tracker</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div id="sanityStatus" class="warning-panel" data-state="loading">Loading sanity report…</div>
+    </section>
+
+    <section class="section grid cards">
+      <article class="card">
+        <h2>Where the app is strong</h2>
+        <div id="sanityStrong" class="summary-list"><div class="summary-item muted">Loading foundations…</div></div>
+      </article>
+      <article class="card">
+        <h2>Competitor patterns to borrow</h2>
+        <div id="sanityCompetitors" class="summary-list"><div class="summary-item muted">Loading patterns…</div></div>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="panel">
+        <h2 style="margin-top:0">Highest-value next additions</h2>
+        <div id="sanityPriorities" class="summary-list"><div class="summary-item muted">Loading priority list…</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="panel">
+        <h2 style="margin-top:0">Visual and professional polish</h2>
+        <div id="sanityVisuals" class="summary-list"><div class="summary-item muted">Loading visual ideas…</div></div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer container" data-footer></footer>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/chrome.js"></script>
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+      const esc = (v)=>String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      function rows(values){
+        if(!values || !values.length) return '<div class="summary-item muted">Nothing to show yet.</div>';
+        return values.map((v)=>`<div class="summary-item">${esc(v)}</div>`).join('');
+      }
+      async function load(){
+        const res = await fetch('/api/admin/value_added_sanity_report', { credentials:'include', cache:'no-store' });
+        const data = await res.json().catch(()=>null);
+        if(!res.ok || !data?.ok) throw new Error(data?.error || 'Could not load sanity report.');
+        $('sanityStatus').dataset.state = 'ok';
+        $('sanityStatus').innerHTML = `<strong>${esc(data.title || 'Sanity report')}</strong><div class="muted">${esc(data.current_position?.summary || '')}</div><div class="warning-row"><strong>Main risk</strong><div class="muted">${esc(data.current_position?.risk || '')}</div></div><div class="warning-row"><strong>SEO guardrail</strong><div class="muted">${esc(data.current_position?.seo || '')}</div></div>`;
+        $('sanityStrong').innerHTML = rows(data.strongest_foundations || []);
+        $('sanityCompetitors').innerHTML = rows(data.competitor_patterns_reviewed || []);
+        $('sanityPriorities').innerHTML = (data.priority_additions || []).map((item)=>`<div class="summary-item"><strong>${Number(item.rank || 0)}. ${esc(item.feature)}</strong><div class="muted">${esc(item.value || '')}</div><div style="margin-top:8px"><a class="btn ghost small" href="${esc(item.route || '/admin.html')}">${esc(item.route || 'Open')}</a></div></div>`).join('') || '<div class="summary-item muted">No priorities loaded.</div>';
+        $('sanityVisuals').innerHTML = rows(data.visual_enrichment || []);
+      }
+      window.AdminShell.boot({ pageKey:'admin', onReady: async()=>{ try{ await load(); } catch(err){ $('sanityStatus').dataset.state='error'; $('sanityStatus').innerHTML = `<strong>Could not load sanity report</strong><div class="muted">${esc(err?.message || 'Unknown error')}</div>`; } } });
+    })();
+  </script>
+</body>
+</html>

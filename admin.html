@@ -20,7 +20,7 @@
     .muted{color:#94a3b8}.warning-panel{border-radius:16px;border:1px solid rgba(251,191,36,.28);background:rgba(245,158,11,.10);padding:14px;margin-top:14px}.warning-panel[data-state="ok"]{border-color:rgba(74,222,128,.28);background:rgba(22,163,74,.10)}.warning-row{padding:10px;border-radius:12px;background:rgba(15,23,42,.35);border:1px solid rgba(255,255,255,.06);margin-top:8px}
   </style>
 </head>
-<body data-page="admin" data-build204="gallery-media-resilience" data-build203="desktop-mobile-visual-polish-dashboard" data-build202="incident-marketing-dashboard" data-build200="advanced-json-panel-dashboard" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard" data-build192="editable-settings-diagnostics" data-build195="seo-proof-fallback-report-dashboard" data-build197="dashboard-self-healing-diagnostics" data-build201="friendly-editor-validation-dashboard">
+<body data-page="admin" data-build205="sanity-check-value-roadmap" data-build204="gallery-media-resilience" data-build203="desktop-mobile-visual-polish-dashboard" data-build202="incident-marketing-dashboard" data-build200="advanced-json-panel-dashboard" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard" data-build192="editable-settings-diagnostics" data-build195="seo-proof-fallback-report-dashboard" data-build197="dashboard-self-healing-diagnostics" data-build201="friendly-editor-validation-dashboard">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -111,6 +111,8 @@
           <div id="responsiveVisualDiagnostics" class="warning-panel" data-state="loading">Checking sampled public/admin pages for viewport, H1, image, and shared-CSS readiness…</div>
           <h2 style="margin-top:18px">Gallery image health</h2>
           <div id="galleryImageHealthDiagnostics" class="warning-panel" data-state="loading">Checking before/after gallery image source and fallback readiness…</div>
+          <h2 style="margin-top:18px">Build 205 sanity / value roadmap</h2>
+          <div id="valueAddedSanityDiagnostics" class="warning-panel" data-state="loading">Loading competitor-inspired value-add priorities…</div>
           <h2 style="margin-top:18px">Remaining advanced JSON panels</h2>
           <div id="advancedJsonPanelDiagnostics" class="warning-panel" data-state="warn" data-build200="remaining-json-panel-dashboard">
             <strong>Advanced JSON should be emergency-only</strong>
@@ -166,6 +168,13 @@
             <p>Edit the municipal/county water-use reminders used by town pages, booking guidance, and service-area dispatch checks.</p>
             <div class="hr"></div>
             <a class="btn primary" href="/admin-water-rules.html">Open Water Rules</a>
+          </article>
+
+          <article class="card" data-build205="sanity-value-roadmap-card">
+            <h3>Sanity Check &amp; Value Roadmap</h3>
+            <p>Review the current app position, competitor-inspired opportunities, SEO guardrails, and the highest-value next modifications.</p>
+            <div class="hr"></div>
+            <a class="btn primary" href="/admin-sanity.html">Open Sanity Check</a>
           </article>
 
           <article class="card" data-build185="hst-gst-review-card">
@@ -340,7 +349,8 @@
         pricingCatalog: document.getElementById('pricingCatalogDiagnostics'),
         routeCopy: document.getElementById('routeCopyDiagnostics'),
         responsiveVisual: document.getElementById('responsiveVisualDiagnostics'),
-        galleryImageHealth: document.getElementById('galleryImageHealthDiagnostics')
+        galleryImageHealth: document.getElementById('galleryImageHealthDiagnostics'),
+        valueAddedSanity: document.getElementById('valueAddedSanityDiagnostics')
       };
       function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
       function setShellStatus(message,type){document.querySelectorAll('[data-admin-shell-status]').forEach((node)=>{node.hidden=!message;node.textContent=message||'';node.dataset.state=type||'';});}
@@ -487,6 +497,18 @@
         els.galleryImageHealth.innerHTML = `<strong>${needs ? 'Gallery media needs review' : 'Gallery image source fallbacks look ready'}</strong><div class="muted">Source: ${esc(data.source_status||'unknown')} · Items checked ${Number(data.items_checked||0)} · Local fallbacks ${Number(data.fallback_ready_count||0)}${data.fallback_used ? ' · fallback active' : ''}</div>${data.warning ? `<div class="warning-row"><strong>Gallery fallback note</strong><div class="muted">${esc(data.warning)}</div></div>` : ''}${rows}<div style="margin-top:10px"><a class="btn ghost small" href="/gallery">Open Gallery</a> <a class="btn ghost small" href="/admin-app.html">Repair in App Management</a></div>`;
       }
 
+
+
+      async function loadValueAddedSanityDiagnostics(){
+        if(!els.valueAddedSanity) return;
+        const res = await fetch('/api/admin/value_added_sanity_report', { credentials:'include', cache:'no-store' });
+        const data = await res.json().catch(()=>null);
+        if(!res.ok || !data?.ok) throw new Error(data?.error || 'Could not load value-added sanity report.');
+        const priorities = (data.priority_additions || []).slice(0,5).map((item)=>`<div class="warning-row"><strong>${Number(item.rank||0)}. ${esc(item.feature||'Value add')}</strong><div class="muted">${esc(item.value||'')}</div></div>`).join('');
+        els.valueAddedSanity.dataset.state = 'ok';
+        els.valueAddedSanity.innerHTML = `<strong>${esc(data.title || 'Build 205 sanity check')}</strong><div class="muted">${esc(data.current_position?.risk || '')}</div>${priorities}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-sanity.html">Open full sanity check</a> <a class="btn ghost small" href="/admin-marketing.html">Open Marketing Tracker</a></div>`;
+      }
+
       async function loadDashboardAnalytics(){
         const res = await fetch('/api/admin/analytics_overview', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ days: 14 })});
         const data = await res.json().catch(()=>null);
@@ -495,7 +517,7 @@
         renderList(els.live, (data.live_online_sessions||[]).slice(0,5), (r)=>`<strong>${esc(r.country || 'Unknown')}</strong><div class="muted">${esc((r.path||[]).join(' → '))}</div><div class="muted">Seen: ${esc(r.ended_at || '')}</div>`, 'No live visitors right now.');
         renderList(els.daily, (data.daily_traffic||[]).slice(-7).reverse(), (r)=>`<strong>${esc(r.day)}</strong><div class="muted">${Number(r.page_views||0)} page views • ${Number(r.unique_visitors||0)} visitors • ${Number(r.abandoned_sessions||0)} abandoned</div>`, 'No daily traffic summary yet.');
       }
-      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ await Promise.allSettled([guardedLoad('Dashboard analytics', loadDashboardAnalytics), guardedLoad('Payment webhook warnings', loadPaymentWebhookWarnings), guardedLoad('Operations warnings', loadBuild185OpsWarnings), guardedLoad('Editable settings diagnostics', loadEditableSettingsDiagnostics), guardedLoad('Fallback settings report', loadFallbackSettingsReport), guardedLoad('Local SEO proof diagnostics', loadLocalSeoProofDiagnostics), guardedLoad('Pricing catalog diagnostics', loadPricingCatalogDiagnostics), guardedLoad('Route-copy parity diagnostics', loadRouteCopyDiagnostics), guardedLoad('Desktop/mobile visual diagnostics', loadResponsiveVisualDiagnostics), guardedLoad('Gallery image health diagnostics', loadGalleryImageHealthDiagnostics)]); } });
+      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ await Promise.allSettled([guardedLoad('Dashboard analytics', loadDashboardAnalytics), guardedLoad('Payment webhook warnings', loadPaymentWebhookWarnings), guardedLoad('Operations warnings', loadBuild185OpsWarnings), guardedLoad('Editable settings diagnostics', loadEditableSettingsDiagnostics), guardedLoad('Fallback settings report', loadFallbackSettingsReport), guardedLoad('Local SEO proof diagnostics', loadLocalSeoProofDiagnostics), guardedLoad('Pricing catalog diagnostics', loadPricingCatalogDiagnostics), guardedLoad('Route-copy parity diagnostics', loadRouteCopyDiagnostics), guardedLoad('Desktop/mobile visual diagnostics', loadResponsiveVisualDiagnostics), guardedLoad('Gallery image health diagnostics', loadGalleryImageHealthDiagnostics), guardedLoad('Build 205 sanity diagnostics', loadValueAddedSanityDiagnostics)]); } });
     })();
   </script>
 </body>
