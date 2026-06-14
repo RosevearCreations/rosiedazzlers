@@ -1,3 +1,9 @@
+# Build 207 pointer
+
+Current planning now lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This historical file is retained for context and release history.
+
+---
+
 ## Build 202 current implementation state
 
 Incident reports now have a first DB-backed workflow. The admin screen requires booking ID, private report details, and photo evidence; admin approval controls decide what is published to the customer progress page. Marketing now has an owner-friendly calculator screen for Meta spend, leads, booked jobs, quote value, close rate, CPL, CAC, and projected revenue.

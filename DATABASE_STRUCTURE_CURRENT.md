@@ -1,3 +1,9 @@
+# Build 207 Markdown consolidation and visual placeholder note
+
+Build 207 adds no new database tables. Documentation sanity and visual placeholder reporting use bundled JSON files: `data/markdown_sanity_build207.json`, `data/build207_enhancement_sweep.json`, and `data/visual_placeholder_registry.json`. The admin report APIs use existing staff authentication and do not require Supabase schema changes.
+
+---
+
 # Build 205 schema note — sanity report/backlog only
 
 Build 205 does not add database tables. It adds a static/admin value-added sanity report, a JSON backlog file, documentation, and dashboard/page UI for current-state review. Future database work should focus on quote pipeline metrics, Meta campaign ROI records, membership recurring plan records, vehicle history timeline records, proof-of-work checklist records, and fleet account records.

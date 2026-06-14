@@ -1,3 +1,32 @@
+# Build 207 known gaps and risks — Markdown consolidation and visual placeholders
+
+**Updated:** 2026-06-14  
+**Build:** 207
+
+Build 207 reduces documentation drift and missing-image visual risk, but it does not complete every historical enhancement. The project now has two canonical strategy docs and a visual placeholder system so the app looks more professional while approved images are gathered.
+
+## Reduced in Build 207
+
+- Future AI/chat handoff is clearer through `AI_PROJECT_HANDOFF.md`.
+- Future roadmap planning is clearer through `MASTER_VALUE_ROADMAP.md`.
+- Historical Markdown files are explicitly retained but no longer the main place for new strategy.
+- Admin can review documentation sanity from `/admin-docs.html`.
+- Public/admin cards with missing or broken images now have professional SVG placeholders instead of blank visual gaps.
+- Visual placeholder slots are documented by purpose, replacement target, and privacy rule.
+- Dashboard now surfaces Markdown and visual-placeholder readiness.
+
+## Still outstanding after Build 207
+
+1. Historical Markdown files are still physically present because older release guards reference them.
+2. Quote Pipeline, Meta ROI, memberships, proof-of-work, fleet, reviews, campaigns, and routing still need deeper real CRUD screens after the Build 206 foundations.
+3. Visual placeholders should be replaced by approved Rosie-owned/R2 media as soon as possible.
+4. Placeholder automation cannot judge image quality; Media Health and human review are still needed.
+5. Mobile admin tables still need more card-view conversions.
+6. Live browser testing is still required after deployment.
+7. The owner “Today needs attention” dashboard is still the next major simplification goal.
+
+---
+
 # Build 205 known gaps and risks — Sanity check and value-added roadmap
 
 Build 205 confirms that the biggest project risk has shifted from missing foundations to business-owner complexity. The app has many strong modules, but the next work should reduce friction by grouping approvals, quote revenue, lead follow-up, gallery consent, review requests, and local proof into simpler screens.

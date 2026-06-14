@@ -1,3 +1,18 @@
+# Build 207 documentation index note — canonical docs and retained history
+
+**Canonical going forward:**
+
+1. `AI_PROJECT_HANDOFF.md` — first-read context for new AI/chat sessions.
+2. `MASTER_VALUE_ROADMAP.md` — main roadmap and next-step planning file.
+
+**Still maintained for release/history:** `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `DATABASE_STRUCTURE_CURRENT.md`, `SUPABASE_SCHEMA.sql`, `README.md`, and this `DOC_INDEX.md`.
+
+**Retired-for-editing but retained:** older competitor, roadmap, sanity, and notes files should stay available for context until release guards are modernized. Do not delete them yet.
+
+**New admin screen:** `/admin-docs.html` shows canonical docs, retained files, retirement guidance, current app position, and visual placeholder slots.
+
+---
+
 # Build 205 documentation index note
 
 New/updated files for the Build 205 sanity-check pass:

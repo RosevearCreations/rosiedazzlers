@@ -1,3 +1,58 @@
+# Build 207 update — Markdown consolidation, visual placeholders, and sanity sweep
+
+**Updated:** 2026-06-14  
+**Build:** 207
+
+Build 207 responds to the sanity-check request by creating two canonical living Markdown files, adding an Admin Docs/Sanity Center, adding visual graphic placeholders for missing/enrichment image slots, refreshing desktop/mobile CSS safeguards, and documenting the next clean step after the Build 206 value-added foundations. This pass is intentionally no-DDL: it uses bundled JSON registries, admin report APIs, shared CSS/JS, and existing staff authentication.
+
+## Build 207 — 20 completed items
+
+1. Added `AI_PROJECT_HANDOFF.md` as the first-read handoff file for new chats/AI sessions.
+2. Added `MASTER_VALUE_ROADMAP.md` as the primary roadmap going forward.
+3. Added `MARKDOWN_SANITY_BUILD207.md` to explain which Markdown files are canonical, retained, or retired-for-editing.
+4. Added `data/markdown_sanity_build207.json` for app-readable documentation sanity status.
+5. Added `data/build207_enhancement_sweep.json` to convert scattered Markdown recommendations into a current priority stack.
+6. Added `data/visual_placeholder_registry.json` for service, town, gallery, seasonal, fleet, incident, and review placeholder slots.
+7. Added `/api/admin/markdown_sanity_report` for admin documentation diagnostics.
+8. Added `/api/admin/visual_placeholder_report` for admin visual-placeholder diagnostics.
+9. Added `/admin-docs.html` as a dedicated Docs & Sanity Center.
+10. Added `/admin-docs/` route copy for clean Cloudflare routing.
+11. Added `assets/visual-placeholders.js` to provide safe SVG placeholders and broken-image fallbacks.
+12. Updated `assets/chrome.js` so placeholder enrichment auto-loads with the shared site chrome.
+13. Updated `assets/site.css` with responsive placeholder cards, reduced-motion-safe hover, and mobile-safe grids.
+14. Added Admin Dashboard diagnostics for Markdown consolidation and visual placeholder readiness.
+15. Added an Admin Dashboard card linking to the new Docs & Sanity Center.
+16. Added Admin Menu/auth access for the Docs & Sanity Center.
+17. Bumped the service worker cache and added placeholder assets/data to the cache list.
+18. Updated route-copy sync to include `/admin-docs.html`.
+19. Added the Build 207 no-DDL SQL note and schema documentation.
+20. Added `scripts/build207_markdown_visual_sanity_check.py` and wired it into `scripts/release_check.py`.
+
+## Next 20 steps after Build 207
+
+1. Connect Quote Pipeline to real quote proposal, lead conversion, deposit request, and accepted/declined DB rows.
+2. Add quote create/edit/save controls directly inside `/admin-quotes.html`.
+3. Add follow-up due dates, stale quote warnings, and owner reminders.
+4. Add Meta campaign create/edit rows with spend, leads, booked jobs, revenue, and UTM/source mapping.
+5. Add proof-of-work checklist templates for interior, exterior, complete detail, ceramic/wax, pet hair, and fleet.
+6. Add the proof-of-work checklist to `/detailer-jobs.html` as a mobile-first workflow.
+7. Add customer sign-off and proof summary publishing after job completion.
+8. Add customer/admin vehicle history timelines from bookings, invoices, photos, incidents, and recommendations.
+9. Add maintenance-plan reminders generated from completed bookings and vehicle history.
+10. Add fleet account CRUD with company contacts, vehicle lists, service intervals, and quote terms.
+11. Add route clustering from real bookings by town/date/time slot.
+12. Add review request queue after completed jobs with Google Business Profile link/template support.
+13. Add approved testimonial/public proof workflow from review responses.
+14. Add seasonal campaign builder with placeholder graphics and approved-image picker.
+15. Add before/after slider component to Gallery and selected service/town pages.
+16. Add visual placeholder replacement tasks into Media Health and Gallery Approvals.
+17. Add owner “Today needs attention” dashboard combining quotes, gallery approvals, payments, incidents, media, reviews, and SEO proof.
+18. Add live screenshot/mobile smoke checklist for `/`, `/book`, `/gallery`, `/admin`, and `/detailer-jobs`.
+19. Modernize release guards so duplicate historical Markdown can move into `docs/archive/` safely.
+20. Continue CSS drift checks, one-H1 checks, title/meta clarity, local wording, and responsive layout review on every build.
+
+---
+
 # Build 205 update — Sanity check, competitor research, and value-added roadmap
 
 Build 205 is a sanity-check pass rather than a heavy database migration. It adds a dedicated Admin Sanity Check page, a dashboard value-roadmap diagnostic, a value-added backlog data file, and a detailed Markdown review of where the app stands. The research confirms that the app has strong foundations; the next best work is owner-facing simplification, quote/CRM revenue visibility, gallery approvals, memberships, proof-of-work, fleet mini-CRM, review automation, and sharper visual conversion blocks.
