@@ -1,0 +1,61 @@
+{
+  "build": 207,
+  "updated_at": "2026-06-14",
+  "summary": "Build 207 consolidates the documentation strategy into two canonical living docs while keeping historical Markdown files in place for release-guard continuity and future AI context.",
+  "canonical_docs": [
+    {
+      "file": "AI_PROJECT_HANDOFF.md",
+      "purpose": "One-stop current state for a new AI/chat: where the app is, what is live, how to deploy/test, and the next best business priorities.",
+      "owner_use": "Read first before any new build pass."
+    },
+    {
+      "file": "MASTER_VALUE_ROADMAP.md",
+      "purpose": "Single high-level roadmap for customer value, admin simplification, SEO/local proof, desktop/mobile polish, and future DB migrations.",
+      "owner_use": "Use as the main next-step planning document."
+    },
+    {
+      "file": "DEVELOPMENT_ROADMAP.md",
+      "purpose": "Historical build log plus current build update. Keep because many release guards reference it.",
+      "owner_use": "Append each build, do not use as the only planning brain."
+    },
+    {
+      "file": "KNOWN_GAPS_AND_RISKS.md",
+      "purpose": "Risk register and unresolved items. Keep as the audit trail.",
+      "owner_use": "Append each build's reduced/outstanding risks."
+    }
+  ],
+  "retain_but_do_not_expand": [
+    "APP_SANITY_CHECK_BUILD205.md",
+    "COMPETITOR.md",
+    "COMPETITOR_SANITY_CHECK.md",
+    "COMPETETIVE_COMPLETION_MATRIX.md",
+    "CURRENT_IMPLEMENTATION_STATE.md",
+    "PROJECT_BRAIN.md",
+    "ROADMAP.md",
+    "SANITY_CHECK.md",
+    "NEW_CHAT_STATUS.md",
+    "NEXT_STEPS_INTERNAL.md",
+    "IMAGES.md",
+    "DETAILER_MARKETING_NOTES_APPLIED.md",
+    "ADMIN_ROLE_MODEL.md",
+    "APP_MANAGEMENT_SCREEN_PLAN.md",
+    "REPO_GUIDE.md",
+    "REPO_RULES.md",
+    "BRANCH_WORKFLOW_NOTE.md",
+    "SOCIAL_PLATFORM_PUBLISHING.md"
+  ],
+  "retirement_guidance": [
+    "Do not delete historical Markdown yet because older release guards still verify phrases in root docs.",
+    "Stop adding new strategy to duplicate legacy docs; add future strategy to AI_PROJECT_HANDOFF.md and MASTER_VALUE_ROADMAP.md first.",
+    "When the release-check chain is modernized, move duplicate competitor/old roadmap files into docs/archive/ with a manifest instead of hard deleting.",
+    "Keep DOC_INDEX.md as the navigation map for humans and future AI sessions."
+  ],
+  "current_app_position": [
+    "Strong public booking, service, pricing, gallery, gift card, fleet, and maintenance-plan website foundation.",
+    "Admin has diagnostics, gallery approvals, quote pipeline, value-added operations, incident reports, marketing, payments, accounting, media health, SEO tasks, and editable settings.",
+    "Most routine JSON editing has been converted to friendly screens; emergency JSON panels remain for recovery only.",
+    "Desktop and mobile responsive foundations exist; future work should continue card/table conversions and mobile owner shortcuts.",
+    "The app now needs fewer new silos and more connective workflows: quote -> booking -> proof -> invoice -> review -> repeat service."
+  ],
+  "remaining_doc_risk": "Documentation is still historically large. Build 207 reduces future drift by declaring canonical docs and adding an admin documentation sanity screen, but old files are intentionally retained."
+}

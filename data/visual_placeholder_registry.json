@@ -1,0 +1,67 @@
+{
+  "build": 207,
+  "updated_at": "2026-06-14",
+  "summary": "Visual graphic placeholders prevent blank sections while real Rosie-owned photos are gathered. They are CSS/JS safe, reduced-motion friendly, and should be replaced by approved R2 media as soon as available.",
+  "placeholder_slots": [
+    {
+      "key": "service_card",
+      "label": "Service image placeholder",
+      "where": "service cards, package cards, add-on cards",
+      "visual": "sparkle/wash icon card",
+      "replace_with": "service-specific vehicle/detailing photo or approved before/after crop"
+    },
+    {
+      "key": "town_card",
+      "label": "Town/local proof placeholder",
+      "where": "town landing cards and local SEO proof sections",
+      "visual": "map-pin and road card",
+      "replace_with": "customer-approved local proof image for the town/service"
+    },
+    {
+      "key": "gallery_pair",
+      "label": "Before/after placeholder",
+      "where": "gallery rows with missing before or after image",
+      "visual": "split before/after frame",
+      "replace_with": "two approved customer-safe before/after images"
+    },
+    {
+      "key": "seasonal_campaign",
+      "label": "Seasonal campaign graphic placeholder",
+      "where": "campaign, specials, and marketing cards",
+      "visual": "offer badge with seasonal sweep",
+      "replace_with": "campaign-specific graphic: spring salt, summer road trip, winter protection"
+    },
+    {
+      "key": "fleet",
+      "label": "Fleet/commercial placeholder",
+      "where": "fleet mini-CRM and fleet public cards",
+      "visual": "van/truck outline",
+      "replace_with": "approved fleet or work-vehicle photo"
+    },
+    {
+      "key": "incident_evidence",
+      "label": "Incident/evidence placeholder",
+      "where": "incident reports and customer progress when evidence is pending or private",
+      "visual": "locked photo/evidence card",
+      "replace_with": "admin-approved customer-safe evidence only"
+    },
+    {
+      "key": "review_proof",
+      "label": "Review/testimonial placeholder",
+      "where": "review proof cards and local trust blocks",
+      "visual": "star quote card",
+      "replace_with": "approved public review screenshot or typed testimonial"
+    }
+  ],
+  "rules": [
+    "Never expose private incident/report photos as placeholders or fallback images.",
+    "Public gallery placeholders must clearly say image is pending/repair needed so customers are not misled.",
+    "Every real image should have descriptive local alt text when used on public pages.",
+    "Use placeholders as temporary polish only; the Media Health and Gallery Approval screens should keep pushing toward real owned images."
+  ],
+  "desktop_mobile_notes": [
+    "Placeholders use fluid aspect ratios and single-column mobile behavior.",
+    "Hover lift is disabled for reduced-motion users.",
+    "Cards remain visible without relying on a successful remote image load."
+  ]
+}
