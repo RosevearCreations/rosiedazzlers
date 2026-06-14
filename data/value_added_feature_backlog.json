@@ -1,6 +1,6 @@
 {
-  "build": 205,
-  "updated_at": "2026-06-13",
+  "build": 206,
+  "updated_at": "2026-06-14",
   "summary": {
     "status": "strong operations foundation with remaining opportunity in customer conversion, owner dashboards, CRM revenue tracking, memberships, and proof-driven marketing",
     "desktop_mobile": "desktop website and mobile app-style flows exist; next value is guided cards, sharper visuals, and fewer admin decision points per screen",
@@ -101,5 +101,17 @@
     "Seasonal campaign graphics with one-click landing-page pairing",
     "Mobile bottom action bar for Book Now, Call, Text, and Gift Card",
     "Reduced-motion safe micro-interactions on package and add-on cards"
+  ],
+  "build206_completed": [
+    "Dedicated Gallery Approvals screen",
+    "Quote Pipeline dashboard foundation",
+    "Meta Ads ROI tracker foundation",
+    "Membership/Maintenance plan foundation",
+    "Vehicle history timeline foundation",
+    "Proof-of-work checklist foundation",
+    "Fleet mini-CRM foundation",
+    "Review request automation foundation",
+    "Seasonal campaign builder foundation",
+    "Route clustering hints foundation"
   ]
 }

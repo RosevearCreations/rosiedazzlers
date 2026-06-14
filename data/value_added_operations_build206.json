@@ -1,0 +1,235 @@
+{
+  "build": 206,
+  "updated_at": "2026-06-14",
+  "summary": "Build 206 turns the top value-added ideas into an owner-friendly operations foundation: gallery approvals, quote pipeline, Meta ROI, memberships, vehicle history, proof-of-work, fleet CRM, review requests, seasonal campaigns, and route clustering.",
+  "quote_pipeline": [
+    {
+      "id": "Q-206-001",
+      "customer": "Sample Lead - Tillsonburg SUV",
+      "town": "Tillsonburg",
+      "service": "Complete Detail",
+      "status": "sent",
+      "quote_value": 369,
+      "created_at": "2026-06-10",
+      "follow_up_stage": "needs follow-up",
+      "source": "website quote form",
+      "probability": 0.55
+    },
+    {
+      "id": "Q-206-002",
+      "customer": "Sample Lead - Woodstock sedan",
+      "town": "Woodstock",
+      "service": "Interior + Pet Hair",
+      "status": "accepted",
+      "quote_value": 315,
+      "created_at": "2026-06-08",
+      "follow_up_stage": "deposit requested",
+      "source": "Meta ad",
+      "probability": 0.9
+    },
+    {
+      "id": "Q-206-003",
+      "customer": "Sample Fleet - 3 vans",
+      "town": "Ingersoll",
+      "service": "Fleet maintenance",
+      "status": "draft",
+      "quote_value": 870,
+      "created_at": "2026-06-13",
+      "follow_up_stage": "needs pricing review",
+      "source": "phone",
+      "probability": 0.35
+    },
+    {
+      "id": "Q-206-004",
+      "customer": "Sample Lead - Simcoe truck",
+      "town": "Simcoe",
+      "service": "Exterior + Wax",
+      "status": "sent",
+      "quote_value": 245,
+      "created_at": "2026-06-05",
+      "follow_up_stage": "second follow-up due",
+      "source": "Google Business Profile",
+      "probability": 0.5
+    },
+    {
+      "id": "Q-206-005",
+      "customer": "Sample Lead - Port Dover coupe",
+      "town": "Port Dover",
+      "service": "Ceramic coating consult",
+      "status": "declined",
+      "quote_value": 799,
+      "created_at": "2026-06-01",
+      "follow_up_stage": "lost price objection",
+      "source": "organic search",
+      "probability": 0.0
+    }
+  ],
+  "meta_campaigns": [
+    {
+      "id": "META-206-001",
+      "name": "June interior reset",
+      "daily_budget": 20,
+      "spend": 280,
+      "leads": 19,
+      "booked_jobs": 7,
+      "revenue": 1883,
+      "average_ticket": 269,
+      "status": "test"
+    },
+    {
+      "id": "META-206-002",
+      "name": "Pet hair before/after proof",
+      "daily_budget": 15,
+      "spend": 105,
+      "leads": 8,
+      "booked_jobs": 3,
+      "revenue": 825,
+      "average_ticket": 275,
+      "status": "creative test"
+    }
+  ],
+  "memberships": [
+    {
+      "plan": "Monthly Shine Reminder",
+      "cycle": "Every 4 weeks",
+      "starting_after": "Complete Detail baseline",
+      "credits": "Reminder-first, no subscription charge yet",
+      "status": "planning"
+    },
+    {
+      "plan": "Quarterly Reset Reminder",
+      "cycle": "Every 12 weeks",
+      "starting_after": "Interior or Complete Detail",
+      "credits": "Seasonal reminder and preferred rebooking",
+      "status": "planning"
+    }
+  ],
+  "vehicle_history_events": [
+    {
+      "vehicle": "2018 SUV sample",
+      "customer": "Sample customer",
+      "event": "Complete Detail completed",
+      "date": "2026-05-28",
+      "next_suggested": "Maintenance wash in 6-8 weeks",
+      "photos": "start and finish photo set"
+    },
+    {
+      "vehicle": "2021 pickup sample",
+      "customer": "Sample customer",
+      "event": "Pet hair removal quote sent",
+      "date": "2026-06-11",
+      "next_suggested": "Interior reset before summer travel",
+      "photos": "needs approval"
+    }
+  ],
+  "proof_of_work_checklists": [
+    {
+      "checklist": "Interior Detail Proof",
+      "required_steps": [
+        "arrival photo",
+        "pre-existing damage photos",
+        "floor/mat before photo",
+        "dash/console after photo",
+        "final walkaround",
+        "customer-safe notes"
+      ],
+      "status": "draft"
+    },
+    {
+      "checklist": "Exterior Detail Proof",
+      "required_steps": [
+        "arrival photo",
+        "paint/trim before photo",
+        "wheel before photo",
+        "after gloss photo",
+        "water/access note",
+        "final sign-off"
+      ],
+      "status": "draft"
+    }
+  ],
+  "fleet_accounts": [
+    {
+      "company": "Sample Local Contractor",
+      "vehicles": 3,
+      "interval": "monthly",
+      "town": "Ingersoll",
+      "status": "prospect",
+      "next_step": "send fleet package quote"
+    },
+    {
+      "company": "Sample Property Service",
+      "vehicles": 5,
+      "interval": "quarterly",
+      "town": "Woodstock",
+      "status": "prospect",
+      "next_step": "request vehicle list"
+    }
+  ],
+  "review_requests": [
+    {
+      "trigger": "completed booking",
+      "delay_hours": 24,
+      "channel": "email/text template",
+      "status": "planned",
+      "public_proof_rule": "only reuse after customer consent"
+    },
+    {
+      "trigger": "five-star private feedback",
+      "delay_hours": 1,
+      "channel": "Google Business Profile link",
+      "status": "planned",
+      "public_proof_rule": "ask before reposting"
+    }
+  ],
+  "seasonal_campaigns": [
+    {
+      "campaign": "Spring salt reset",
+      "season": "spring",
+      "offer_focus": "salt, mats, carpets, under-door grime",
+      "visual": "before/after salt proof",
+      "status": "ready to draft"
+    },
+    {
+      "campaign": "Summer road-trip clean",
+      "season": "summer",
+      "offer_focus": "interior refresh, windows, pet hair, odor",
+      "visual": "bright hero card",
+      "status": "ready to draft"
+    },
+    {
+      "campaign": "Winter protection reminder",
+      "season": "winter",
+      "offer_focus": "wax/sealant, rubber mats, salt protection",
+      "visual": "weather-safe trust block",
+      "status": "planned"
+    }
+  ],
+  "route_clusters": [
+    {
+      "town": "Tillsonburg",
+      "preferred_days": [
+        "Tuesday",
+        "Thursday"
+      ],
+      "reason": "home-base proximity and lower travel time",
+      "status": "suggested"
+    },
+    {
+      "town": "Woodstock/Ingersoll",
+      "preferred_days": [
+        "Wednesday"
+      ],
+      "reason": "cluster Oxford County jobs together",
+      "status": "suggested"
+    },
+    {
+      "town": "Simcoe/Delhi/Port Dover",
+      "preferred_days": [
+        "Friday"
+      ],
+      "reason": "cluster Norfolk County trips together",
+      "status": "suggested"
+    }
+  ]
+}
