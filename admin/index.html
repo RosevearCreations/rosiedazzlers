@@ -116,6 +116,10 @@
           <div id="galleryImageHealthDiagnostics" class="warning-panel" data-state="loading">Checking before/after gallery image source and fallback readiness…</div>
           <h2 style="margin-top:18px">Build 205 sanity / value roadmap</h2>
           <div id="valueAddedSanityDiagnostics" class="warning-panel" data-state="loading">Loading competitor-inspired value-add priorities…</div>
+          <h2 style="margin-top:18px">Markdown docs consolidation</h2>
+          <div id="markdownDocsDiagnostics" class="warning-panel" data-state="loading">Loading canonical documentation and retirement guidance…</div>
+          <h2 style="margin-top:18px">Visual placeholder readiness</h2>
+          <div id="visualPlaceholderDiagnostics" class="warning-panel" data-state="loading">Loading missing-image placeholder registry…</div>
           <h2 style="margin-top:18px">Remaining advanced JSON panels</h2>
           <div id="advancedJsonPanelDiagnostics" class="warning-panel" data-state="warn" data-build200="remaining-json-panel-dashboard">
             <strong>Advanced JSON should be emergency-only</strong>
@@ -193,6 +197,14 @@
             <p>Track the first-pass foundations for memberships, vehicle history, proof-of-work, fleet, reviews, campaigns, and route clustering.</p>
             <div class="hr"></div>
             <a class="btn primary" href="/admin-growth.html">Open Value Additions</a>
+          </article>
+
+
+          <article class="card" data-build207="docs-sanity-card">
+            <h3>Docs &amp; Sanity Center</h3>
+            <p>Review the two canonical Markdown files, retained historical docs, visual placeholders, and next-step context for new AI/chat handoff.</p>
+            <div class="hr"></div>
+            <a class="btn primary" href="/admin-docs.html">Open Docs Center</a>
           </article>
 
           <article class="card" data-build205="sanity-value-roadmap-card">
@@ -534,6 +546,31 @@
         els.valueAddedSanity.innerHTML = `<strong>${esc(data.title || 'Build 205 sanity check')}</strong><div class="muted">${esc(data.current_position?.risk || '')}</div>${priorities}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-sanity.html">Open full sanity check</a> <a class="btn ghost small" href="/admin-marketing.html">Open Marketing Tracker</a></div>`;
       }
 
+
+      async function loadMarkdownDocsDiagnostics(){
+        const box = document.getElementById('markdownDocsDiagnostics');
+        if(!box) return;
+        try{
+          const res = await fetch('/api/admin/markdown_sanity_report',{credentials:'include',cache:'no-store'});
+          const data = await res.json().catch(()=>({}));
+          if(!res.ok || !data.ok) throw new Error(data.error || 'Could not load Markdown sanity report.');
+          box.dataset.state = 'ok';
+          const docs = (data.canonical_docs || []).map((d)=>`<div class="warning-row"><strong>${esc(d.file)}</strong><div class="muted">${esc(d.purpose)}</div></div>`).join('');
+          box.innerHTML = `<strong>Canonical docs declared</strong><div class="muted">${esc(data.summary || '')}</div>${docs}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-docs.html">Open Docs Center</a></div>`;
+        }catch(err){ box.dataset.state='warn'; box.innerHTML = `<strong>Markdown sanity report unavailable</strong><div class="muted">${esc(err.message || 'Unknown error')}</div>`; }
+      }
+      async function loadVisualPlaceholderDiagnostics(){
+        const box = document.getElementById('visualPlaceholderDiagnostics');
+        if(!box) return;
+        try{
+          const res = await fetch('/api/admin/visual_placeholder_report',{credentials:'include',cache:'no-store'});
+          const data = await res.json().catch(()=>({}));
+          if(!res.ok || !data.ok) throw new Error(data.error || 'Could not load visual placeholder report.');
+          const slots = data.placeholder_slots || [];
+          box.dataset.state = slots.length ? 'ok' : 'warn';
+          box.innerHTML = `<strong>${slots.length} visual placeholder slots available</strong><div class="muted">${esc(data.summary || '')}</div>${slots.slice(0,5).map((s)=>`<div class="warning-row"><strong>${esc(s.label)}</strong><div class="muted">${esc(s.where)} → ${esc(s.replace_with)}</div></div>`).join('')}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-docs.html">Review visual slots</a></div>`;
+        }catch(err){ box.dataset.state='warn'; box.innerHTML = `<strong>Visual placeholder report unavailable</strong><div class="muted">${esc(err.message || 'Unknown error')}</div>`; }
+      }
       async function loadDashboardAnalytics(){
         const res = await fetch('/api/admin/analytics_overview', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ days: 14 })});
         const data = await res.json().catch(()=>null);
@@ -542,7 +579,7 @@
         renderList(els.live, (data.live_online_sessions||[]).slice(0,5), (r)=>`<strong>${esc(r.country || 'Unknown')}</strong><div class="muted">${esc((r.path||[]).join(' → '))}</div><div class="muted">Seen: ${esc(r.ended_at || '')}</div>`, 'No live visitors right now.');
         renderList(els.daily, (data.daily_traffic||[]).slice(-7).reverse(), (r)=>`<strong>${esc(r.day)}</strong><div class="muted">${Number(r.page_views||0)} page views • ${Number(r.unique_visitors||0)} visitors • ${Number(r.abandoned_sessions||0)} abandoned</div>`, 'No daily traffic summary yet.');
       }
-      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ await Promise.allSettled([guardedLoad('Dashboard analytics', loadDashboardAnalytics), guardedLoad('Payment webhook warnings', loadPaymentWebhookWarnings), guardedLoad('Operations warnings', loadBuild185OpsWarnings), guardedLoad('Editable settings diagnostics', loadEditableSettingsDiagnostics), guardedLoad('Fallback settings report', loadFallbackSettingsReport), guardedLoad('Local SEO proof diagnostics', loadLocalSeoProofDiagnostics), guardedLoad('Pricing catalog diagnostics', loadPricingCatalogDiagnostics), guardedLoad('Route-copy parity diagnostics', loadRouteCopyDiagnostics), guardedLoad('Desktop/mobile visual diagnostics', loadResponsiveVisualDiagnostics), guardedLoad('Gallery image health diagnostics', loadGalleryImageHealthDiagnostics), guardedLoad('Build 205 sanity diagnostics', loadValueAddedSanityDiagnostics)]); } });
+      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ await Promise.allSettled([guardedLoad('Dashboard analytics', loadDashboardAnalytics), guardedLoad('Payment webhook warnings', loadPaymentWebhookWarnings), guardedLoad('Operations warnings', loadBuild185OpsWarnings), guardedLoad('Editable settings diagnostics', loadEditableSettingsDiagnostics), guardedLoad('Fallback settings report', loadFallbackSettingsReport), guardedLoad('Local SEO proof diagnostics', loadLocalSeoProofDiagnostics), guardedLoad('Pricing catalog diagnostics', loadPricingCatalogDiagnostics), guardedLoad('Route-copy parity diagnostics', loadRouteCopyDiagnostics), guardedLoad('Desktop/mobile visual diagnostics', loadResponsiveVisualDiagnostics), guardedLoad('Gallery image health diagnostics', loadGalleryImageHealthDiagnostics), guardedLoad('Build 205 sanity diagnostics', loadValueAddedSanityDiagnostics), guardedLoad('Markdown docs diagnostics', loadMarkdownDocsDiagnostics), guardedLoad('Visual placeholder diagnostics', loadVisualPlaceholderDiagnostics)]); } });
     })();
   </script>
 </body>
