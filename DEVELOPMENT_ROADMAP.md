@@ -1,3 +1,53 @@
+# Build 205 update — Sanity check, competitor research, and value-added roadmap
+
+Build 205 is a sanity-check pass rather than a heavy database migration. It adds a dedicated Admin Sanity Check page, a dashboard value-roadmap diagnostic, a value-added backlog data file, and a detailed Markdown review of where the app stands. The research confirms that the app has strong foundations; the next best work is owner-facing simplification, quote/CRM revenue visibility, gallery approvals, memberships, proof-of-work, fleet mini-CRM, review automation, and sharper visual conversion blocks.
+
+## Build 205 — 20 completed items
+
+1. Reviewed the latest Build 204 zip structure and confirmed the current app footprint.
+2. Added `APP_SANITY_CHECK_BUILD205.md` with a detailed current-state breakdown.
+3. Added `data/value_added_feature_backlog.json` for priority value-added ideas.
+4. Added `/api/admin/value_added_sanity_report` with staff/admin access protection.
+5. Added `/admin-sanity.html` as a focused sanity/value-roadmap screen.
+6. Added `/admin-sanity/` route-copy page for Cloudflare-style routing.
+7. Added an Admin Dashboard Build 205 sanity/value-roadmap diagnostic card.
+8. Added an Admin Dashboard card link to the sanity-check page.
+9. Documented competitor-inspired patterns from mobile detailing sites and detailing CRM/software providers.
+10. Documented the attached detailer-note takeaways: SEO long-term, Meta ads short/mid-term, and CRM quote tracking.
+11. Reconfirmed that desktop website and mobile app-style foundations exist.
+12. Identified admin complexity as the biggest current risk.
+13. Ranked the dedicated Gallery Approvals screen as the strongest next workflow simplification.
+14. Ranked quote pipeline revenue tracking as the strongest next revenue visibility improvement.
+15. Ranked Meta ads ROI tracking as the strongest short-term lead-generation improvement.
+16. Ranked memberships/maintenance plans as the strongest recurring-revenue improvement.
+17. Added visual-enrichment recommendations for sliders, trust badges, hero images, and mobile action bars.
+18. Added the Build 205 no-DDL SQL note.
+19. Added the Build 205 release guard.
+20. Synced root Markdown, schema notes, route-copy checks, and release checks.
+
+## Next 20 steps after Build 205
+
+1. Build `/admin-gallery.html` with direct approve/hide/needs-consent/image-repair actions.
+2. Add before/after upload buttons directly to the gallery approval workflow.
+3. Add gallery consent status filters: needs review, approved public, private, rejected, sample.
+4. Add a quote pipeline dashboard showing total open quote dollars and follow-up age.
+5. Add close-rate reporting by month, service package, add-on, and source.
+6. Add Meta ads campaign tracker fields: spend, leads, CPL, booked jobs, CAC, revenue, and average ticket.
+7. Add landing-page source/UTM reporting into lead and quote records.
+8. Add maintenance-plan membership statuses and recurring reminders.
+9. Add customer vehicle history timeline with past services, photos, invoices, and recommended next service.
+10. Add proof-of-work job checklist with required start/finish photos and customer sign-off.
+11. Add jobsite route-clustering hints by town, travel zone, and time slot.
+12. Add fleet mini-CRM for companies, contacts, vehicle lists, service intervals, and contract notes.
+13. Add review-request automation after job completion.
+14. Add review reply tracking and reusable testimonial approval workflow.
+15. Add seasonal campaign visual builder for salt removal, spring reset, pet hair, ceramic, gift cards, and fleet cleanup.
+16. Add before/after slider component to public gallery and service landing pages.
+17. Add trust badge strip to service pages and booking: mobile, brings power/water, Oxford/Norfolk, customer-approved photos.
+18. Add mobile bottom action bar for Book, Call/Text, Gift Card, and Packages.
+19. Add print/PDF quote, proof-of-work, invoice, and incident report exports.
+20. Add a simplified “Today needs attention” owner dashboard that groups approvals, payments, quotes, reviews, and media issues.
+
 # Build 204 update — Before/after gallery image resilience and fallback repair
 
 **Updated:** 2026-06-12  

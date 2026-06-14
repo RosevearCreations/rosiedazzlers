@@ -1,3 +1,14 @@
+# Build 205 documentation index note
+
+New/updated files for the Build 205 sanity-check pass:
+
+- `APP_SANITY_CHECK_BUILD205.md` — detailed current-state sanity check, competitor takeaways, and value-added roadmap.
+- `data/value_added_feature_backlog.json` — structured priority backlog for dashboard/API use.
+- `functions/api/admin/value_added_sanity_report.js` — staff-protected admin sanity/value roadmap report.
+- `admin-sanity.html` and `admin-sanity/index.html` — admin sanity-check screen.
+- `sql/2026-06-13_build205_sanity_check_value_roadmap_no_ddl_note.sql` — no-DDL note for this pass.
+- `scripts/build205_sanity_value_roadmap_check.py` — release guard.
+
 ## Build 204 documentation additions
 
 - `functions/api/before_after_gallery_public.js` — resilient public gallery API with static fallback, field aliases, and local packaged asset repair.

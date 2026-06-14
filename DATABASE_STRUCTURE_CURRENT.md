@@ -1,3 +1,7 @@
+# Build 205 schema note — sanity report/backlog only
+
+Build 205 does not add database tables. It adds a static/admin value-added sanity report, a JSON backlog file, documentation, and dashboard/page UI for current-state review. Future database work should focus on quote pipeline metrics, Meta campaign ROI records, membership recurring plan records, vehicle history timeline records, proof-of-work checklist records, and fleet account records.
+
 # Build 204 database update — No new DDL
 
 Build 204 does not add database tables or columns. The gallery repair uses the existing `app_management_settings.before_after_gallery` editable-setting row, the bundled `data/before_after_gallery.json` fallback, and new application-level media URL normalization/fallback logic.

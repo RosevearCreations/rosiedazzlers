@@ -1,3 +1,30 @@
+# Build 205 known gaps and risks — Sanity check and value-added roadmap
+
+Build 205 confirms that the biggest project risk has shifted from missing foundations to business-owner complexity. The app has many strong modules, but the next work should reduce friction by grouping approvals, quote revenue, lead follow-up, gallery consent, review requests, and local proof into simpler screens.
+
+## Reduced in Build 205
+
+- A dedicated sanity-check document now summarizes the current application state.
+- Admin Dashboard now has a Build 205 sanity/value-roadmap diagnostic card.
+- A staff-protected API now exposes value-added priorities for the admin UI.
+- Competitor-inspired feature ideas are captured in a structured backlog file.
+- SEO, mobile/desktop, visual polish, CRM, membership, gallery approval, proof-of-work, and fleet opportunities are documented together.
+
+## Still outstanding after Build 205
+
+- Gallery approval still needs its own dedicated screen; it is still mostly handled through Admin App and diagnostics.
+- Quote revenue pipeline needs a clearer dashboard with open dollars, close rate, and follow-up age.
+- Meta ads tracking needs actual spend/lead/revenue tables rather than only marketing notes.
+- Memberships/maintenance plans need real recurring billing/reminder workflow.
+- Customer vehicle history needs a polished mobile customer timeline.
+- Proof-of-work checklists and sign-off are still not complete.
+- Fleet CRM features are present as public/lead ideas but not yet a full account-management workflow.
+- Visual enrichment should continue with before/after sliders, trust badges, seasonal graphics, and mobile action bars.
+
+## Highest-value next risk reduction
+
+Build the Gallery Approvals screen and Quote Pipeline dashboard next. These two additions reduce admin confusion and increase revenue visibility immediately.
+
 # Build 204 known gaps and risks — Gallery image resilience
 
 **Updated:** 2026-06-12  
