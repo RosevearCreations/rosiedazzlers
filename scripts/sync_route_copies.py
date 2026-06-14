@@ -28,6 +28,7 @@ ROUTE_COPY_PAGES = [
     "admin-quotes.html",
     "admin-growth.html",
     "admin-gallery.html",
+    "admin-docs.html",
     "progress.html",
 ]
 

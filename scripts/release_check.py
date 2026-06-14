@@ -86,6 +86,9 @@ Build 173 note:
 - Run Python checks in-process with runpy instead of spawning a new Python
   interpreter for every guard. This avoids intermittent sandbox/CI startup
   hangs while preserving each guard's existing SystemExit return code.
+
+Build 207 note:
+- Consolidates Markdown into canonical handoff/roadmap files, adds admin docs sanity reporting, and installs visual placeholder enrichment/reporting.
 """
 from __future__ import annotations
 
@@ -145,6 +148,7 @@ CHECKS = [
     "scripts/build204_gallery_media_resilience_check.py",
     "scripts/build205_sanity_value_roadmap_check.py",
     "scripts/build206_value_added_operations_check.py",
+    "scripts/build207_markdown_visual_sanity_check.py",
     "scripts/seo_h1_check.py",
 ]
 
