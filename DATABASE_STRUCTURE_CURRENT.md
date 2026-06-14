@@ -834,3 +834,7 @@ Build 196 adds no new tables or columns. It reuses `app_management_settings` and
 ## Build 198 documentation sync — Friendly editors for formerly raw JSON areas
 
 Build 198 converts routine owner/admin updates for social feeds, before/after gallery rows, and water-use rules into friendly row-based screens. The underlying JSON remains available only as an Advanced/emergency repair and fallback-sync view. No database schema changes are required for this pass; the existing `app_management_settings` and water-rule settings flow remain the source of truth with bundled JSON fallback support.
+
+## Build 206 schema update — value-added operations foundations
+
+Added additive schema destinations in `sql/2026-06-14_build206_value_added_operations_foundations.sql` for gallery approval queue, quote pipeline, Meta ads ROI reports, customer maintenance plans, vehicle history events, proof-of-work checklists, fleet accounts, review request queue, seasonal campaigns, and route cluster hints. The current UI reads seeded JSON/API report data for first-pass dashboards while these DB tables provide the migration target for persistent CRUD workflows.

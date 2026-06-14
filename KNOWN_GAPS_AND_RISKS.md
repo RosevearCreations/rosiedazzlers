@@ -1380,3 +1380,50 @@ Build 190 continues the editable-content migration by rendering public business 
 - Business-hours protection still warns/logs rather than hard-blocking closed/holiday overrides without a reason.
 - Link and sitemap checks are static previews; live route-response crawling should be added after deployment.
 
+## Build 206 — value-added operations foundations
+
+Completed the next high-value bundle from the sanity check list:
+
+1. Added dedicated `/admin-gallery.html` Gallery Approvals screen.
+2. Added gallery approval list/save APIs with DB-first editable-setting storage and bundled fallback.
+3. Added approve, hide/private, reject, delete, and add-gallery-row controls.
+4. Added customer-safe consent/status guidance on the dedicated gallery screen.
+5. Added `/admin-quotes.html` Quote Pipeline dashboard foundation.
+6. Added `/admin-growth.html` Value-Added Operations workbench.
+7. Added a shared value-added operations report API.
+8. Added sample/seed foundation for quote pipeline metrics.
+9. Added sample/seed foundation for Meta ads ROI metrics.
+10. Added sample/seed foundation for membership/maintenance plans.
+11. Added sample/seed foundation for vehicle history events.
+12. Added sample/seed foundation for proof-of-work checklists.
+13. Added sample/seed foundation for fleet mini-CRM prospects.
+14. Added sample/seed foundation for review request automation.
+15. Added sample/seed foundation for seasonal campaign planning.
+16. Added sample/seed foundation for route clustering hints.
+17. Added database migration destinations so these modules can move beyond JSON-only records.
+18. Added Admin Dashboard cards for Gallery Approvals, Quote Pipeline, and Value-Added Operations.
+19. Synced route copies and extended route-copy automation for the new admin pages.
+20. Added Build 206 release guard and updated schema/documentation notes.
+
+### Next 20 recommended steps after Build 206
+
+1. Connect Quote Pipeline dashboard to real quote proposal drafts and lead conversion rows.
+2. Add quote follow-up reminders with overdue badges.
+3. Add quote accepted/declined reason tracking.
+4. Add Meta campaign create/edit/save screens instead of seed rows.
+5. Add Meta campaign UTM/source attribution into lead records.
+6. Convert membership interest rows into real customer plan records.
+7. Add automatic next-service reminder suggestions after completed jobs.
+8. Add customer-facing vehicle history timeline on `/my-account`.
+9. Add detailer proof-of-work checklist completion directly inside `/detailer-jobs`.
+10. Add required start/finish photo checks before job completion.
+11. Add fleet account create/edit screen with vehicle roster.
+12. Add fleet quote-to-contract conversion.
+13. Add review request queue with preview/send controls.
+14. Add Google Business Profile review-link setting.
+15. Add seasonal campaign builder with hero image and service/town pairing.
+16. Add campaign-to-landing-page publishing workflow.
+17. Add route clustering hints inside Admin Booking calendar.
+18. Add travel-time warnings between same-day bookings.
+19. Add mobile bottom action bar for Book/Call/Text/Gift Card.
+20. Add before/after slider visual treatment for approved Gallery rows.
