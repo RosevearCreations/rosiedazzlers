@@ -37,8 +37,8 @@ def main() -> int:
         data = json.loads((ROOT / "data/value_added_feature_backlog.json").read_text())
     except Exception as exc:
         return fail(f"value_added_feature_backlog.json is invalid JSON: {exc}")
-    if data.get("build") != 205:
-        return fail("value_added_feature_backlog.json build is not 205")
+    if int(data.get("build") or 0) < 205:
+        return fail("value_added_feature_backlog.json build is older than 205")
     if len(data.get("highest_value_next", [])) < 10:
         return fail("value backlog should include at least 10 high-value priorities")
     for rel, needles in TOKENS.items():

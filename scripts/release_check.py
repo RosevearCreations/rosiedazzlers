@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 206 note:
+- Adds dedicated Gallery Approvals, Quote Pipeline, and Value-Added Operations dashboards with DB migration destinations for the top sanity-check additions.
+
 Build 205 note:
 - Adds a sanity-check/value-added roadmap screen, dashboard card, structured backlog, and competitor-inspired next-step documentation.
 
@@ -141,6 +144,7 @@ CHECKS = [
     "scripts/build203_desktop_mobile_visual_polish_check.py",
     "scripts/build204_gallery_media_resilience_check.py",
     "scripts/build205_sanity_value_roadmap_check.py",
+    "scripts/build206_value_added_operations_check.py",
     "scripts/seo_h1_check.py",
 ]
 
