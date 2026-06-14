@@ -1,3 +1,9 @@
+# Build 207 pointer
+
+Current planning now lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This historical file is retained for context and release history.
+
+---
+
 
 # Build 184 update — 20-step operations, media, and payment hardening
 

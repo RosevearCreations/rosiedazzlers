@@ -1749,3 +1749,8 @@ CREATE TABLE IF NOT EXISTS public.incident_reports (
 -- Build 203 desktop/mobile visual polish note: no DDL required. Responsive visual targets are bundled in data/responsive_visual_registry.json and surfaced through /api/admin/responsive_visual_report until they are moved into app_management_settings with a friendly editor.
 
 -- Build 206 value-added operations foundations: see sql/2026-06-14_build206_value_added_operations_foundations.sql for additive tables supporting gallery approvals, quote pipeline, Meta ROI, memberships, vehicle history, proof-of-work, fleet CRM, review requests, seasonal campaigns, and route clustering.
+
+
+-- Build 207 Markdown consolidation and visual placeholder sanity pass
+-- No DDL required. Admin documentation sanity and visual placeholder reporting use bundled JSON files and existing staff authentication.
+-- See sql/2026-06-14_build207_markdown_visual_sanity_no_ddl_note.sql.
