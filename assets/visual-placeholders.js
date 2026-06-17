@@ -1,14 +1,14 @@
 // Build 207 — professional visual placeholders for missing/enrichment image slots.
 (function attachRosieVisualPlaceholders(globalScope){
   const PALETTE = {
-    service_card: ["#4d77ff", "#22c55e"], town_card: ["#f97316", "#facc15"], gallery_pair: ["#8b5cf6", "#ec4899"], seasonal_campaign: ["#14b8a6", "#f59e0b"], fleet: ["#38bdf8", "#1d4ed8"], incident_evidence: ["#64748b", "#334155"], review_proof: ["#facc15", "#f97316"], default: ["#4d77ff", "#0f172a"]
+    service_card: ["#4d77ff", "#22c55e"], town_card: ["#f97316", "#facc15"], gallery_pair: ["#8b5cf6", "#ec4899"], seasonal_campaign: ["#14b8a6", "#f59e0b"], fleet: ["#38bdf8", "#1d4ed8"], incident_evidence: ["#64748b", "#334155"], review_proof: ["#facc15", "#f97316"], quote_pipeline: ["#22c55e", "#4d77ff"], booking_conversion: ["#4d77ff", "#14b8a6"], proof_of_work: ["#8b5cf6", "#38bdf8"], invoice_payment: ["#16a34a", "#facc15"], review_public_proof: ["#facc15", "#ec4899"], repeat_maintenance: ["#14b8a6", "#f59e0b"], default: ["#4d77ff", "#0f172a"]
   };
   function esc(v){ return String(v ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function titleFor(type){
-    return ({service_card:'Service photo coming soon',town_card:'Local proof image coming soon',gallery_pair:'Before/after image pending',seasonal_campaign:'Campaign graphic coming soon',fleet:'Fleet photo coming soon',incident_evidence:'Evidence photo private or pending',review_proof:'Review proof coming soon'}[type] || 'Image coming soon');
+    return ({service_card:'Service photo coming soon',town_card:'Local proof image coming soon',gallery_pair:'Before/after image pending',seasonal_campaign:'Campaign graphic coming soon',fleet:'Fleet photo coming soon',incident_evidence:'Evidence photo private or pending',review_proof:'Review proof coming soon', quote_pipeline:'Quote pipeline graphic coming soon', booking_conversion:'Booking flow graphic coming soon', proof_of_work:'Proof-of-work visual coming soon', invoice_payment:'Invoice/payment graphic coming soon', review_public_proof:'Review proof visual coming soon', repeat_maintenance:'Maintenance visual coming soon'}[type] || 'Image coming soon');
   }
   function detailFor(type){
-    return ({service_card:'Replace with an approved Rosie-owned service image.',town_card:'Add a local, customer-approved Oxford/Norfolk proof photo.',gallery_pair:'Publish only after consent and image review.',seasonal_campaign:'Use a seasonal offer image or before/after card.',fleet:'Use an approved work vehicle or fleet service photo.',incident_evidence:'Only admin-approved customer-safe evidence is public.',review_proof:'Use an approved review screenshot or testimonial.'}[type] || 'Replace this placeholder with an approved image.');
+    return ({service_card:'Replace with an approved Rosie-owned service image.',town_card:'Add a local, customer-approved Oxford/Norfolk proof photo.',gallery_pair:'Publish only after consent and image review.',seasonal_campaign:'Use a seasonal offer image or before/after card.',fleet:'Use an approved work vehicle or fleet service photo.',incident_evidence:'Only admin-approved customer-safe evidence is public.',review_proof:'Use an approved review screenshot or testimonial.', quote_pipeline:'Use a lead-to-booking funnel graphic or safe quote screenshot.', booking_conversion:'Use a booking calendar or mobile booking screenshot.', proof_of_work:'Use an approved start/finish photo set.', invoice_payment:'Use a clean invoice or receipt mockup.', review_public_proof:'Use an approved public review or before/after image.', repeat_maintenance:'Use a seasonal calendar or vehicle history screenshot.'}[type] || 'Replace this placeholder with an approved image.');
   }
   function svgData(type, label){
     const [a,b] = PALETTE[type] || PALETTE.default; const safe = esc(label || titleFor(type));
@@ -24,6 +24,11 @@
     if (/fleet|commercial|van|truck/.test(txt)) return 'fleet';
     if (/incident|damage|evidence|fault/.test(txt)) return 'incident_evidence';
     if (/review|testimonial|stars/.test(txt)) return 'review_proof';
+    if (/quote|pipeline|lead|follow-up|followup/.test(txt)) return 'quote_pipeline';
+    if (/booking|calendar|appointment|deposit/.test(txt)) return 'booking_conversion';
+    if (/proof|checklist|sign-off|signoff|detailer/.test(txt)) return 'proof_of_work';
+    if (/invoice|payment|receipt|balance|hst|gst/.test(txt)) return 'invoice_payment';
+    if (/maintenance|repeat|vehicle history|seasonal reminder/.test(txt)) return 'repeat_maintenance';
     if (/season|spring|summer|winter|campaign|special/.test(txt)) return 'seasonal_campaign';
     return 'service_card';
   }
