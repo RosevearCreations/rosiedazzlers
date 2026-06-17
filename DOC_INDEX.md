@@ -800,3 +800,17 @@ Completed the next high-value bundle from the sanity check list:
 18. Add travel-time warnings between same-day bookings.
 19. Add mobile bottom action bar for Book/Call/Text/Gift Card.
 20. Add before/after slider visual treatment for approved Gallery rows.
+
+## Build 208 — connected workflow command center
+
+Build 208 moves the app from scattered feature foundations toward the main lifecycle: **lead / quote → booking → proof of work → invoice/payment → review → repeat maintenance**.
+
+Completed in this pass:
+- Added `/admin-workflow.html` and `/admin-workflow/` as the owner-facing workflow command center.
+- Added `/api/admin/workflow_command_center_report` with DB-first reads from Build 206 tables and safe JSON fallback data.
+- Added `data/workflow_connection_build208.json` as the structured workflow map, next 20 steps, visual enrichment slots, and competitor-aligned feature checklist.
+- Added Admin Dashboard workflow diagnostics so owners can see open quote value, likely revenue, follow-ups, review queue, maintenance reminders, and fallback status.
+- Expanded visual placeholders for quote, booking, proof-of-work, invoice/payment, review/public proof, and repeat-maintenance cards.
+- Kept old Markdown as retained history while continuing to make `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` the main living docs.
+
+Next build should connect `/admin-quotes.html` to real quote create/edit/save actions and add a one-click accepted-quote-to-booking conversion.

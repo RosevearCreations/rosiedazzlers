@@ -1754,3 +1754,5 @@ CREATE TABLE IF NOT EXISTS public.incident_reports (
 -- Build 207 Markdown consolidation and visual placeholder sanity pass
 -- No DDL required. Admin documentation sanity and visual placeholder reporting use bundled JSON files and existing staff authentication.
 -- See sql/2026-06-14_build207_markdown_visual_sanity_no_ddl_note.sql.
+
+-- Build 208 connected workflow command center: no new DDL. Uses Build 206 value-added operation tables and bundled workflow_connection_build208.json to connect lead/quote -> booking -> proof -> payment -> review -> repeat maintenance. See sql/2026-06-14_build208_connected_workflow_command_center_no_ddl_note.sql.
