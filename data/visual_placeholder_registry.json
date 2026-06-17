@@ -1,7 +1,7 @@
 {
-  "build": 207,
+  "build": 208,
   "updated_at": "2026-06-14",
-  "summary": "Visual graphic placeholders prevent blank sections while real Rosie-owned photos are gathered. They are CSS/JS safe, reduced-motion friendly, and should be replaced by approved R2 media as soon as available.",
+  "summary": "Visual graphic placeholders prevent blank sections while real Rosie-owned photos are gathered. They are CSS/JS safe, reduced-motion friendly, and should be replaced by approved R2 media as soon as available. Build 208 adds lifecycle workflow placeholder slots for the connected owner dashboard.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -51,6 +51,48 @@
       "where": "review proof cards and local trust blocks",
       "visual": "star quote card",
       "replace_with": "approved public review screenshot or typed testimonial"
+    },
+    {
+      "key": "quote_pipeline",
+      "label": "Quote pipeline graphic",
+      "where": "Admin Workflow / Quote dashboard",
+      "visual": "connected workflow placeholder card",
+      "replace_with": "simple lead-to-booking funnel graphic or real quote screenshot with private data removed"
+    },
+    {
+      "key": "booking_conversion",
+      "label": "Booking confirmation graphic",
+      "where": "Admin Workflow / booking cards",
+      "visual": "connected workflow placeholder card",
+      "replace_with": "vehicle/calendar visual or mobile booking screenshot"
+    },
+    {
+      "key": "proof_of_work",
+      "label": "Proof-of-work visual",
+      "where": "detailer jobs, workflow hub, service pages",
+      "visual": "connected workflow placeholder card",
+      "replace_with": "approved start/finish photo set"
+    },
+    {
+      "key": "invoice_payment",
+      "label": "Invoice/payment visual",
+      "where": "workflow hub and payment admin",
+      "visual": "connected workflow placeholder card",
+      "replace_with": "clean invoice/receipt mockup"
+    },
+    {
+      "key": "review_public_proof",
+      "label": "Review/public proof visual",
+      "where": "gallery, review cards, SEO proof blocks",
+      "visual": "connected workflow placeholder card",
+      "replace_with": "approved Google review or before/after photo"
+    },
+    {
+      "key": "repeat_maintenance",
+      "label": "Repeat-maintenance visual",
+      "where": "maintenance/fleet/workflow cards",
+      "visual": "connected workflow placeholder card",
+      "replace_with": "seasonal care calendar or vehicle history screenshot"
     }
   ],
   "rules": [
