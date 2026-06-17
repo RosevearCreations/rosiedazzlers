@@ -28,7 +28,7 @@ import {
   json,
   methodNotAllowed,
   isUuid
-} from "./_lib/staff-auth.js";
+} from "../_lib/staff-auth.js";
 
 export async function onRequestOptions() {
   return new Response("", {

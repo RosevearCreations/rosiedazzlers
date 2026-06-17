@@ -1,18 +1,27 @@
-// Build 154 stale-route compatibility shim.
-// Active implementation: functions/api/admin/accounting_statement_report.js.
-// This root file overwrites older flat routes left behind by GitHub web uploads.
+import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
+import { buildBalanceSheetReport, buildCashFlowReport, buildInventoryCostCompletenessReport, buildReceivablesAgingReport, buildOperationalProfitabilityReport } from "../_lib/accounting-gl.js";
 
-import * as adminRoute from "./admin/accounting_statement_report.js";
-
-function methodNotAvailable() {
-  return new Response(JSON.stringify({ ok: false, error: "Route method is not available here. Use the admin route." }), {
-    status: 405,
-    headers: { "Content-Type": "application/json", "Cache-Control": "no-store" }
-  });
+export async function onRequestOptions() { return new Response('', { status: 204, headers: corsHeaders() }); }
+export async function onRequestGet({ request, env }) {
+  try {
+    const access = await requireStaffAccess({ request, env, capability: 'manage_staff', allowLegacyAdminFallback: false });
+    if (!access.ok) return withCors(access.response);
+    const url = new URL(request.url);
+    const now = new Date();
+    const month = Math.max(1, Math.min(12, Number(url.searchParams.get('month') || (now.getMonth() + 1))));
+    const year = Math.max(2020, Math.min(2100, Number(url.searchParams.get('year') || now.getFullYear())));
+    const [balance_sheet, cash_flow, inventory_costs, receivables_aging, operational_profitability] = await Promise.all([
+      buildBalanceSheetReport(env, { month, year }),
+      buildCashFlowReport(env, { month, year }),
+      buildInventoryCostCompletenessReport(env),
+      buildReceivablesAgingReport(env, { month, year }),
+      buildOperationalProfitabilityReport(env, { month, year })
+    ]);
+    return withCors(json({ ok: true, balance_sheet, cash_flow, inventory_costs, receivables_aging, operational_profitability }));
+  } catch (err) {
+    return withCors(json({ error: err?.message || 'Unexpected server error.' }, 500));
+  }
 }
-
-export const onRequestOptions = adminRoute.onRequestOptions || methodNotAvailable;
-export const onRequestGet = adminRoute.onRequestGet || methodNotAvailable;
-export const onRequestPost = adminRoute.onRequestPost || methodNotAvailable;
-export const onRequestPut = adminRoute.onRequestPut || methodNotAvailable;
-export const onRequestDelete = adminRoute.onRequestDelete || methodNotAvailable;
+export async function onRequestPost() { return withCors(methodNotAllowed()); }
+function corsHeaders() { return { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type, x-admin-password, x-staff-email, x-staff-user-id', 'Cache-Control': 'no-store' }; }
+function withCors(response) { const headers = new Headers(response.headers || {}); for (const [k, v] of Object.entries(corsHeaders())) headers.set(k, v); return new Response(response.body, { status: response.status, statusText: response.statusText, headers }); }

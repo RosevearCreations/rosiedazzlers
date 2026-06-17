@@ -45,7 +45,8 @@ import {
   cleanText,
   isUuid,
   toBoolean
-} from "./_lib/staff-auth.js";
+} from "../_lib/staff-auth.js";
+import { loadEditableSetting } from "../_lib/editable-settings.js";
 
 export async function onRequestOptions() {
   return new Response("", {
@@ -80,6 +81,7 @@ export async function onRequestPost(context) {
     }
 
     const payload = normalized.payload;
+    const businessHoursWarning = await buildBusinessHoursWarning(env, headers, payload.service_date, payload.start_slot);
 
     const resolvedAssignment = await resolveAssignment(env, headers, {
       assigned_staff_user_id: payload.assigned_staff_user_id,
@@ -139,12 +141,16 @@ export async function onRequestPost(context) {
       }
 
       const rows = await res.json().catch(() => []);
+      const savedBooking = Array.isArray(rows) ? rows[0] || null : null;
+      const overrideLog = await recordBusinessHoursOverrideIfNeeded(env, headers, savedBooking?.id || payload.id, payload, businessHoursWarning, access.actor);
       return withCors(
         json({
           ok: true,
           mode: "update",
           message: "Booking updated.",
-          booking: Array.isArray(rows) ? rows[0] || null : null
+          business_hours_warning: businessHoursWarning,
+          override_log: overrideLog,
+          booking: savedBooking
         })
       );
     }
@@ -189,12 +195,16 @@ export async function onRequestPost(context) {
     }
 
     const rows = await res.json().catch(() => []);
+    const savedBooking = Array.isArray(rows) ? rows[0] || null : null;
+    const overrideLog = await recordBusinessHoursOverrideIfNeeded(env, headers, savedBooking?.id, payload, businessHoursWarning, access.actor);
     return withCors(
       json({
         ok: true,
         mode: "create",
         message: "Booking created.",
-        booking: Array.isArray(rows) ? rows[0] || null : null
+        business_hours_warning: businessHoursWarning,
+        override_log: overrideLog,
+        booking: savedBooking
       })
     );
   } catch (err) {
@@ -230,6 +240,7 @@ function normalizeBookingPayload(body) {
   const progress_enabled =
     body.progress_enabled === undefined ? false : toBoolean(body.progress_enabled);
   const notes = cleanText(body.notes);
+  const override_reason = cleanText(body.override_reason || body.business_hours_override_reason || body.admin_override_reason);
   const total_price = cleanMoney(body.total_price);
   const deposit_amount = cleanMoney(body.deposit_amount);
 
@@ -299,6 +310,7 @@ function normalizeBookingPayload(body) {
       assigned_to,
       progress_enabled,
       notes,
+      override_reason,
       total_price,
       deposit_amount
     }
@@ -333,6 +345,77 @@ async function findBookingById(env, headers, id) {
   }
 
   return { ok: true, row };
+}
+
+
+
+async function recordBusinessHoursOverrideIfNeeded(env, headers, bookingId, payload, warning, actor) {
+  if (!bookingId || !warning || warning.ok !== false) return { required: false };
+  const reason = cleanText(payload.override_reason);
+  if (!reason) return { required: true, logged: false, warning: "A closed-day/holiday override reason should be recorded before keeping this booking." };
+  if (!env?.SUPABASE_URL) return { required: true, logged: false, warning: "Supabase unavailable; override reason returned but not logged." };
+  try {
+    const eventPayload = {
+      booking_id: bookingId,
+      event_type: "booking_business_hours_override",
+      event_note: reason,
+      payload: {
+        service_date: payload.service_date,
+        start_slot: payload.start_slot,
+        warning_code: warning.code || null,
+        warning: warning.warning || null,
+        override_reason: reason,
+        actor_id: actor?.id || null,
+        actor_email: actor?.email || null,
+        actor_name: actor?.full_name || null,
+        recorded_at: new Date().toISOString()
+      }
+    };
+    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/booking_events`, {
+      method: "POST",
+      headers: { ...headers, Prefer: "return=minimal" },
+      body: JSON.stringify([eventPayload])
+    });
+    return { required: true, logged: res.ok, status: res.status, reason };
+  } catch (error) {
+    return { required: true, logged: false, warning: String(error?.message || error), reason };
+  }
+}
+
+async function buildBusinessHoursWarning(env, headers, serviceDate, startSlot) {
+  if (!serviceDate) return null;
+  try {
+    const loaded = await loadEditableSetting(env, "business_hours_holidays", { headers });
+    const value = loaded?.value && typeof loaded.value === "object" ? loaded.value : {};
+    const closures = Array.isArray(value.holiday_closures) ? value.holiday_closures : [];
+    const closure = closures.find((item) => {
+      const raw = String(item?.date || item?.day || item?.closure_date || "").slice(0, 10);
+      return raw === serviceDate;
+    }) || null;
+    const day = dayKeyForDate(serviceDate);
+    const hoursLabel = value.hours && typeof value.hours === "object" ? String(value.hours[day] || "By appointment") : "By appointment";
+    const closedByHours = /\bclosed\b/i.test(hoursLabel);
+    if (!closure && !closedByHours) {
+      return { ok: true, date: serviceDate, slot: startSlot || null, source_status: loaded?.source_status || loaded?.source || "fallback" };
+    }
+    return {
+      ok: false,
+      date: serviceDate,
+      slot: startSlot || null,
+      code: closure ? "holiday_closure" : "business_hours_closed",
+      warning: closure ? (closure.reason || closure.label || "This date is marked closed in holiday closures.") : `Business hours for ${day} are marked as ${hoursLabel}.`,
+      closure,
+      hours_label: closure ? (closure.label || closure.reason || "Closed") : hoursLabel,
+      source_status: loaded?.source_status || loaded?.source || "fallback"
+    };
+  } catch (error) {
+    return { ok: null, date: serviceDate, slot: startSlot || null, code: "business_hours_check_unavailable", warning: String(error?.message || error) };
+  }
+}
+
+function dayKeyForDate(dateText) {
+  try { return new Date(`${dateText}T12:00:00`).toLocaleDateString("en-CA", { weekday:"long" }).toLowerCase(); }
+  catch { return "unknown"; }
 }
 
 /* ---------------- assignment helpers ---------------- */

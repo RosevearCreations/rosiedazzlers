@@ -1,4 +1,4 @@
-import { requireStaffAccess, json, isUuid, serviceHeaders, cleanText } from "./_lib/staff-auth.js";
+import { requireStaffAccess, json, isUuid, serviceHeaders, cleanText } from "../_lib/staff-auth.js";
 
 export async function onRequestOptions() {
   return corsResponse("", 204);

@@ -1,4 +1,4 @@
-import { requireStaffAccess, json, methodNotAllowed } from "./_lib/staff-auth.js";
+import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
 
 const ALLOWED_TYPES = new Set(["tool", "consumable"]);
 
