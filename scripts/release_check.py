@@ -89,6 +89,8 @@ Build 173 note:
 
 Build 207 note:
 - Consolidates Markdown into canonical handoff/roadmap files, adds admin docs sanity reporting, and installs visual placeholder enrichment/reporting.
+Build 208 note:
+- Adds a connected Workflow Command Center that links lead/quote, booking, proof-of-work, invoice/payment, review/public proof, and repeat-maintenance modules.
 """
 from __future__ import annotations
 
@@ -149,6 +151,7 @@ CHECKS = [
     "scripts/build205_sanity_value_roadmap_check.py",
     "scripts/build206_value_added_operations_check.py",
     "scripts/build207_markdown_visual_sanity_check.py",
+    "scripts/build208_connected_workflow_command_center_check.py",
     "scripts/seo_h1_check.py",
 ]
 
