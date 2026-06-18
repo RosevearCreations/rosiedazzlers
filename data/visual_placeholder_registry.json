@@ -1,7 +1,7 @@
 {
-  "build": 209,
+  "build": 210,
   "updated_at": "2026-06-17",
-  "summary": "Visual placeholders prevent blank sections while real Rosie-owned media is gathered. Build 209 adds live-detail placeholders for customer updates, private staff notes, and video evidence while preserving visibility and consent rules.",
+  "summary": "Build 210 adds connected live-workflow placeholders for upload recovery, customer approvals, completed-job summaries, and the owner attention queue while preserving customer/privacy controls.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -114,6 +114,34 @@
       "where": "live detailing timeline when a video is pending/uploading",
       "visual": "video frame and play indicator",
       "replace_with": "short approved progress video stored in protected media storage"
+    },
+    {
+      "key": "live_upload_recovery",
+      "label": "Upload recovery placeholder",
+      "where": "detailer mobile upload panel and failed-upload queue",
+      "visual": "cloud upload with retry indicator",
+      "replace_with": "real upload-progress screenshot after field testing"
+    },
+    {
+      "key": "customer_approval",
+      "label": "Customer approval placeholder",
+      "where": "in-job recommendation and price-change cards",
+      "visual": "approval check and price card",
+      "replace_with": "approved recommendation workflow screenshot with private data removed"
+    },
+    {
+      "key": "completed_job_summary",
+      "label": "Completed-job summary placeholder",
+      "where": "customer closeout and workflow screens",
+      "visual": "proof, receipt, care and maintenance card",
+      "replace_with": "customer-safe completed job summary screenshot"
+    },
+    {
+      "key": "today_attention",
+      "label": "Today Needs Attention placeholder",
+      "where": "owner dashboard and priority queue",
+      "visual": "prioritized checklist card",
+      "replace_with": "real owner queue screenshot with customer data removed"
     }
   ],
   "rules": [
