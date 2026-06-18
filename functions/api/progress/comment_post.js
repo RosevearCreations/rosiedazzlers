@@ -1,4 +1,5 @@
 import { schemaLooksLegacy } from "../_lib/job-live-feed.js";
+import { queueStaffLiveAlert } from '../_lib/live-interaction-alerts.js';
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -50,6 +51,7 @@ export async function onRequestPost(context) {
       method:'PATCH', headers:{...headers, Prefer:'return=minimal'}, body:JSON.stringify({ progress_last_customer_message_at:now })
     }).catch(()=>null);
 
+    await queueStaffLiveAlert({ env, bookingId: booking.id, eventType: 'customer_live_reply', title: 'New customer progress reply', message: `${cleanName} replied during the detailing job.`, payload: { source: 'progress_page' } }).catch(()=>null);
     return json({ ok: true });
   } catch (err) {
     return json({ error: err?.message || 'Unexpected server error.' }, 500);
