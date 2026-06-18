@@ -37,6 +37,13 @@
       visible: () => true
     },
     {
+      key: "admin-today",
+      label: "Today Needs Attention",
+      href: "/admin-today.html",
+      description: "Prioritized owner action queue",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-today")
+    },
+    {
       key: "admin-booking",
       label: "Bookings",
       href: "/admin-booking.html",

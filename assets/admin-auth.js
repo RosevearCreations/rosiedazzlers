@@ -202,6 +202,7 @@
 
     switch (String(pageKey || "")) {
       case "admin":
+      case "admin-today":
       case "admin-booking":
       case "admin-leads":
       case "admin-conversions":
