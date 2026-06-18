@@ -8,6 +8,7 @@
   <meta name="robots" content="noindex,nofollow" />
   <link rel="canonical" href="https://rosiedazzlers.ca/progress" />
   <link rel="stylesheet" href="/assets/site.css" />
+  <style>.live-timeline-card{position:relative;overflow:hidden}.live-timeline-card[data-stage="arrival"]{border-left:4px solid #38bdf8}.live-timeline-card[data-stage="pre_existing"]{border-left:4px solid #f59e0b}.live-timeline-card[data-stage="during"]{border-left:4px solid #8b5cf6}.live-timeline-card[data-stage="final"]{border-left:4px solid #22c55e}.live-timeline-card[data-stage="issue"]{border-left:4px solid #ef4444}.live-timeline-card[data-stage="recommendation"]{border-left:4px solid #14b8a6}.live-media{width:100%;max-height:520px;object-fit:contain;border-radius:14px;background:rgba(255,255,255,.025)}</style>
 </head>
 <body data-page="progress">
   <header class="nav">
@@ -123,7 +124,10 @@
 
     <section class="section">
       <div class="panel">
-        <h2>Progress updates</h2>
+        <div class="toolbar-wrap" style="justify-content:space-between">
+          <div><h2 style="margin-bottom:4px">Live job timeline</h2><div id="lastRefreshText" class="kicker">Updates refresh automatically while the job is active.</div></div>
+          <button id="refreshProgressBtn" class="btn ghost" type="button">Refresh now</button>
+        </div>
         <div id="updatesList" class="grid" style="margin-top:12px">
           <div class="notice">No updates yet.</div>
         </div>
@@ -189,6 +193,8 @@
     let currentToken = "";
     let hasSignoff = false;
     let currentBooking = null;
+    let refreshTimer = null;
+    let refreshBusy = false;
 
     function formatDateTime(value) {
       if (!value) return "—";
@@ -318,21 +324,30 @@
     function renderUpdates(data) {
       const wrap = document.querySelector("#updatesList");
       if (!wrap) return;
-
-      const updates = Array.isArray(data.updates) ? data.updates : [];
-      if (!updates.length) {
-        wrap.innerHTML = `<div class="notice">No updates have been posted yet.</div>`;
+      const updates = (Array.isArray(data.updates) ? data.updates : []).map((item)=>({ ...item, feed_type:'note' }));
+      const media = (Array.isArray(data.media) ? data.media : []).map((item)=>({ ...item, feed_type:'media' }));
+      const rows = [...updates, ...media].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+      if (!rows.length) {
+        wrap.innerHTML = `<div class="notice">No customer-visible updates have been posted yet.</div>`;
         return;
       }
-
-      wrap.innerHTML = updates.map((item) => `
-        <article class="card">
+      wrap.innerHTML = rows.map((item) => {
+        const stage = String(item.stage || 'general');
+        const stageLabel = stage.replaceAll('_',' ');
+        let mediaMarkup = '';
+        if (item.feed_type === 'media' && item.media_url) {
+          mediaMarkup = item.kind === 'video'
+            ? `<video class="live-media" controls preload="metadata" src="${escapeHtml(item.media_url)}"></video>`
+            : `<img class="live-media" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || 'Progress photo')}" onerror="this.outerHTML='<div class=&quot;visual-placeholder&quot; data-visual-placeholder=&quot;proof_of_work&quot;><strong>Media temporarily unavailable</strong><span>Please refresh or contact Rosie Dazzlers.</span></div>'">`;
+        }
+        return `<article class="card live-timeline-card" data-stage="${escapeHtml(stage)}">
+          ${mediaMarkup}
+          <div class="badges" style="margin-top:${mediaMarkup?'10px':'0'}"><span class="badge">${escapeHtml(stageLabel)}</span><span class="badge">${escapeHtml(item.feed_type)}</span>${item.customer_action_required ? '<span class="badge">Your response requested</span>' : ''}</div>
           <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
-          <h3>${escapeHtml(item.created_by || "Rosie Dazzlers")}</h3>
-          <p>${escapeHtml(item.note || "Update posted.")}</p>
-          <div class="kicker">Visibility: ${escapeHtml(item.visibility || "customer")}</div>
-        </article>
-      `).join("");
+          <h3>${escapeHtml(item.feed_type === 'media' ? (item.caption || item.kind || 'Media update') : (item.created_by || 'Rosie Dazzlers'))}</h3>
+          ${item.feed_type === 'note' ? `<p>${escapeHtml(item.note || 'Update posted.')}</p>` : `<p>${escapeHtml(item.created_by || 'Rosie Dazzlers')}</p>`}
+        </article>`;
+      }).join("");
     }
 
     function renderIncidentReports(data) {
@@ -368,10 +383,10 @@
 
       wrap.innerHTML = media.map((item) => `
         <article class="card">
-          ${item.media_url ? `<img class="img" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || "Progress media")}" onerror="this.style.display='none'">` : ""}
+          ${item.media_url ? (item.kind === 'video' ? `<video class="img" controls preload="metadata" src="${escapeHtml(item.media_url)}"></video>` : `<img class="img" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || "Progress media")}" onerror="this.style.display='none'">`) : `<div class="visual-placeholder" data-visual-placeholder="proof_of_work"><strong>Media temporarily unavailable</strong><span>Please refresh this page.</span></div>`}
           <h3>${escapeHtml(item.caption || item.kind || "Progress media")}</h3>
           <p>${escapeHtml(item.created_by || "Rosie Dazzlers")}</p>
-          <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
+          <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}${item.stage ? ` · ${escapeHtml(String(item.stage).replaceAll('_',' '))}` : ''}</div>
         </article>
       `).join("");
     }
@@ -438,7 +453,9 @@
       }
     }
 
-    async function loadProgress() {
+    async function loadProgress({ quiet = false } = {}) {
+      if (refreshBusy) return;
+      refreshBusy = true;
       const token = getToken();
 
       setBrandImages();
@@ -446,6 +463,7 @@
 
       if (!token) {
         setNotice("Missing progress token. Add ?token=YOUR_TOKEN to the page URL.", "warn");
+        refreshBusy = false;
         return;
       }
 
@@ -467,14 +485,19 @@
 
         renderHeader(data);
         renderSummary(data);
-      if (document.querySelector('#commentName') && data.booking?.customer_name && !document.querySelector('#commentName').value) document.querySelector('#commentName').value = data.booking.customer_name;
+        renderWorkflow(Array.isArray(data.workflow_events) ? data.workflow_events : [], data.booking || {});
+        if (document.querySelector('#commentName') && data.booking?.customer_name && !document.querySelector('#commentName').value) document.querySelector('#commentName').value = data.booking.customer_name;
         renderUpdates(data);
         renderIncidentReports(data);
         renderMedia(data);
         renderSignoff(data);
+        const refreshed = document.querySelector('#lastRefreshText');
+        if (refreshed) refreshed.textContent = `Last refreshed ${formatDateTime(new Date().toISOString())} · automatic refresh every ${Number(data.refresh_after_seconds || 20)} seconds.`;
         setNotice("Progress information loaded.", "ok");
       } catch (err) {
-        setNotice(err.message || "Could not load progress information.", "bad");
+        if (!quiet) setNotice(err.message || "Could not load progress information.", "bad");
+      } finally {
+        refreshBusy = false;
       }
     }
 
@@ -541,6 +564,10 @@
     document.addEventListener("DOMContentLoaded", () => {
       loadProgress();
       document.querySelector("#signoffForm")?.addEventListener("submit", submitSignoff);
+      document.querySelector('#commentForm')?.addEventListener('submit', (event)=>{ event.preventDefault(); postCustomerComment(); });
+      document.querySelector('#refreshProgressBtn')?.addEventListener('click', ()=>loadProgress());
+      refreshTimer = window.setInterval(()=>{ if (!document.hidden) loadProgress({ quiet:true }); }, 20000);
+      document.addEventListener('visibilitychange', ()=>{ if (!document.hidden) loadProgress({ quiet:true }); });
     });
   </script>
 </body>

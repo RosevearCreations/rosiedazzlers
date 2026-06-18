@@ -91,6 +91,9 @@ Build 207 note:
 - Consolidates Markdown into canonical handoff/roadmap files, adds admin docs sanity reporting, and installs visual placeholder enrichment/reporting.
 Build 208 note:
 - Adds a connected Workflow Command Center that links lead/quote, booking, proof-of-work, invoice/payment, review/public proof, and repeat-maintenance modules.
+
+Build 209 note:
+- Adds the live detail interaction backbone: direct photo/video/note posting, explicit customer/review/private audiences, public-feed privacy filtering, protected media metadata, moderation, diagnostics, responsive polish, and Markdown retirement.
 """
 from __future__ import annotations
 
@@ -152,6 +155,7 @@ CHECKS = [
     "scripts/build206_value_added_operations_check.py",
     "scripts/build207_markdown_visual_sanity_check.py",
     "scripts/build208_connected_workflow_command_center_check.py",
+    "scripts/build209_live_interaction_documentation_check.py",
     "scripts/seo_h1_check.py",
 ]
 

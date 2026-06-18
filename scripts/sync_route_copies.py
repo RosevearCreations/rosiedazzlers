@@ -30,6 +30,8 @@ ROUTE_COPY_PAGES = [
     "admin-gallery.html",
     "admin-docs.html",
     "admin-workflow.html",
+    "admin-progress.html",
+    "detailer-jobs.html",
     "progress.html",
 ]
 
