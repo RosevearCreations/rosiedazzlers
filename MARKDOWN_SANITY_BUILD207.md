@@ -1,23 +1,20 @@
-# Build 207 Markdown Sanity Check
+# Markdown Sanity — Build 207 foundation, Build 209 retirement pass
 
-**Updated:** 2026-06-14
+Build 207 declared two canonical living documents. Build 209 completed the first meaningful retirement pass.
 
-## Decision
+## Active documents
 
-The project now has two primary planning files:
+- `AI_PROJECT_HANDOFF.md`
+- `MASTER_VALUE_ROADMAP.md`
 
-1. `AI_PROJECT_HANDOFF.md`
-2. `MASTER_VALUE_ROADMAP.md`
+## Retained root audit documents
 
-Older Markdown files are kept because they still provide release history and many release checks still verify that historical notes exist. They should not be deleted yet.
+Historical build logs, risks, schema, competitor matrices, image/content audits, and release-check dependencies remain at the root only where existing guards still require them.
 
-## What changes after this build
+## Archived
 
-- Future strategy goes into the two main files first.
-- `DEVELOPMENT_ROADMAP.md` and `KNOWN_GAPS_AND_RISKS.md` keep build-by-build summaries.
-- `DOC_INDEX.md` explains which files are canonical, retained, or historical.
-- Duplicate competitor/roadmap files are considered retired-for-editing but not removed.
+Twenty duplicate handoff, status, repository-guide, old roadmap, and follow-up documents were moved to `docs/archive/` on 2026-06-17. They remain available for historical context but must not be treated as current direction.
 
-## Retirement plan
+## Rule going forward
 
-When the release-check chain is modernized, move duplicate historical docs into `docs/archive/` with a manifest. Do not hard-delete them until all older checks and future-AI references are safe.
+New strategy and next steps belong in the two active documents. Required history files receive only a short build-sync note.

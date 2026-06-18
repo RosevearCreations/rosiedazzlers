@@ -273,7 +273,10 @@ create table if not exists public.bookings (
   detailing_started_at timestamptz null,
   detailing_paused_at timestamptz null,
   detailing_completed_at timestamptz null,
-  completed_at timestamptz null
+  completed_at timestamptz null,
+  progress_last_viewed_at timestamptz null,
+  progress_last_customer_message_at timestamptz null,
+  progress_last_staff_update_at timestamptz null
 );
 
 create table if not exists public.booking_staff_assignments (
@@ -328,8 +331,57 @@ create table if not exists public.staff_availability_blocks (
 create table if not exists public.promo_codes (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), code text not null unique, active boolean not null default true, is_active boolean not null default true, discount_type text null, discount_percent numeric(6,2) null, discount_cents integer null, percent_off numeric(6,2) null, amount_off_cents integer null, starts_at timestamptz null, ends_at timestamptz null, starts_on date null, ends_on date null, max_uses integer null, uses integer not null default 0, notes text null, amazon_asin text null, amazon_title text null, amazon_match_status text null, amazon_match_score numeric(6,3) null, amazon_seller_name text null, amazon_brand text null, amazon_category text null, amazon_quantity_total numeric(12,2) null, amazon_net_total_cents integer null);
 create table if not exists public.gift_products (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), sku text not null unique, type text not null check (type in ('service','open','fixed_amount')), package_code text null, vehicle_size text null, face_value_cents integer not null default 0, currency text not null default 'CAD', is_active boolean not null default true, title text null, description text null);
 create table if not exists public.gift_certificates (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), code text not null unique, type text not null check (type in ('service','open','fixed_amount')), status text not null default 'active', currency text not null default 'CAD', package_code text null, vehicle_size text null, original_value_cents integer not null default 0, remaining_cents integer not null default 0, purchaser_email text null, recipient_name text null, recipient_email text null, stripe_session_id text null, redeemed_at timestamptz null, expires_at timestamptz null, notes text null);
-create table if not exists public.job_updates (id uuid primary key default gen_random_uuid(), booking_id uuid not null references public.bookings(id) on delete cascade, created_at timestamptz not null default now(), updated_at timestamptz not null default now(), created_by text not null, note text not null, visibility text not null default 'customer' check (visibility in ('customer','internal')), parent_update_id uuid null references public.job_updates(id) on delete cascade, thread_status text not null default 'visible' check (thread_status in ('visible','hidden','internal_only','pinned')), moderated_at timestamptz null, moderated_by_name text null, moderation_reason text null, staff_user_id uuid null);
-create table if not exists public.job_media (id uuid primary key default gen_random_uuid(), booking_id uuid not null references public.bookings(id) on delete cascade, created_at timestamptz not null default now(), updated_at timestamptz not null default now(), created_by text not null, kind text not null check (kind in ('photo','video')), caption text null, media_url text not null, visibility text not null default 'customer' check (visibility in ('customer','internal')), thread_status text not null default 'visible' check (thread_status in ('visible','hidden','internal_only','pinned')), moderated_at timestamptz null, moderated_by_name text null, moderation_reason text null, staff_user_id uuid null);
+create table if not exists public.job_updates (
+  id uuid primary key default gen_random_uuid(),
+  booking_id uuid not null references public.bookings(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  created_by text not null,
+  note text not null,
+  visibility text not null default 'customer' check (visibility in ('customer','internal')),
+  stage text not null default 'general',
+  source_channel text not null default 'admin',
+  review_status text not null default 'not_required',
+  requires_admin_review boolean not null default false,
+  customer_action_required boolean not null default false,
+  customer_visible_at timestamptz null,
+  approved_by_staff_user_id uuid null,
+  approved_by_staff_name text null,
+  parent_update_id uuid null references public.job_updates(id) on delete cascade,
+  thread_status text not null default 'visible' check (thread_status in ('visible','hidden','internal_only','pinned')),
+  moderated_at timestamptz null,
+  moderated_by_name text null,
+  moderation_reason text null,
+  staff_user_id uuid null
+);
+create table if not exists public.job_media (
+  id uuid primary key default gen_random_uuid(),
+  booking_id uuid not null references public.bookings(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  created_by text not null,
+  kind text not null check (kind in ('photo','video')),
+  caption text null,
+  media_url text null,
+  storage_bucket text null,
+  storage_path text null,
+  content_type text null,
+  file_size_bytes bigint null,
+  visibility text not null default 'customer' check (visibility in ('customer','internal')),
+  stage text not null default 'general',
+  source_channel text not null default 'admin',
+  review_status text not null default 'not_required',
+  requires_admin_review boolean not null default false,
+  customer_action_required boolean not null default false,
+  customer_visible_at timestamptz null,
+  approved_by_staff_user_id uuid null,
+  approved_by_staff_name text null,
+  thread_status text not null default 'visible' check (thread_status in ('visible','hidden','internal_only','pinned')),
+  moderated_at timestamptz null,
+  moderated_by_name text null,
+  moderation_reason text null,
+  staff_user_id uuid null
+);
 create table if not exists public.job_signoffs (id uuid primary key default gen_random_uuid(), booking_id uuid not null references public.bookings(id) on delete cascade, created_at timestamptz not null default now(), signed_at timestamptz not null default now(), signer_type text not null check (signer_type in ('customer','staff')), signer_name text not null, signer_email text null, notes text null, user_agent text null, staff_user_id uuid null);
 create table if not exists public.recovery_message_templates (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), template_key text not null unique, channel text not null check (channel in ('email','sms')), provider text not null default 'manual', is_active boolean not null default true, subject_template text null, body_template text not null, variables jsonb not null default '[]'::jsonb, rules jsonb not null default '{}'::jsonb, notes text null);
 create table if not exists public.catalog_inventory_items (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), item_key text not null unique, item_type text not null check (item_type in ('tool','consumable')), name text not null, category text null, subcategory text null, description text null, image_url text null, amazon_url text null, is_public boolean not null default true, is_active boolean not null default true, qty_on_hand numeric(12,2) not null default 0, reorder_point numeric(12,2) not null default 0, reorder_qty numeric(12,2) not null default 0, unit_label text null, cost_cents integer null, preferred_vendor text null, vendor_sku text null, rating_value numeric(3,2) null, rating_count integer not null default 0, sort_key integer not null default 0, reuse_policy text not null default 'reorder' check (reuse_policy in ('reorder','single_use','never_reuse')), purchase_date date null, estimated_jobs_per_unit numeric(12,2) null, receipt_url text null, assigned_station text null, service_tags text[] null, last_counted_at timestamptz null, public_badge text null, amazon_asin text null, amazon_title text null, amazon_match_status text null, amazon_match_score numeric(6,3) null, amazon_seller_name text null, amazon_brand text null, amazon_category text null, amazon_quantity_total numeric(12,2) null, amazon_net_total_cents integer null, notes text null);
@@ -1756,3 +1808,37 @@ CREATE TABLE IF NOT EXISTS public.incident_reports (
 -- See sql/2026-06-14_build207_markdown_visual_sanity_no_ddl_note.sql.
 
 -- Build 208 connected workflow command center: no new DDL. Uses Build 206 value-added operation tables and bundled workflow_connection_build208.json to connect lead/quote -> booking -> proof -> payment -> review -> repeat maintenance. See sql/2026-06-14_build208_connected_workflow_command_center_no_ddl_note.sql.
+
+
+-- Build 209 live detail interaction — 2026-06-17
+-- Makes the original live-detailing promise explicit across job updates and media:
+-- customer-visible now, admin-review-pending, or staff-only. Private media may be
+-- stored by bucket/path and delivered with short-lived signed URLs. Public progress
+-- responses filter internal booking events and expose only approved customer-safe rows.
+-- See sql/2026-06-17_build209_live_detail_interaction.sql.
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS progress_last_viewed_at timestamptz null;
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS progress_last_customer_message_at timestamptz null;
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS progress_last_staff_update_at timestamptz null;
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS stage text NOT NULL DEFAULT 'general';
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS source_channel text NOT NULL DEFAULT 'admin';
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS review_status text NOT NULL DEFAULT 'not_required';
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS requires_admin_review boolean NOT NULL DEFAULT false;
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS customer_action_required boolean NOT NULL DEFAULT false;
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS customer_visible_at timestamptz null;
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS approved_by_staff_user_id uuid null;
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS approved_by_staff_name text null;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS storage_bucket text null;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS storage_path text null;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS content_type text null;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS file_size_bytes bigint null;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS stage text NOT NULL DEFAULT 'general';
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS source_channel text NOT NULL DEFAULT 'admin';
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS review_status text NOT NULL DEFAULT 'not_required';
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS requires_admin_review boolean NOT NULL DEFAULT false;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS customer_action_required boolean NOT NULL DEFAULT false;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS customer_visible_at timestamptz null;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS approved_by_staff_user_id uuid null;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS approved_by_staff_name text null;
+CREATE INDEX IF NOT EXISTS idx_job_updates_live_review ON public.job_updates (booking_id, review_status, visibility, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_job_media_live_review ON public.job_media (booking_id, review_status, visibility, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_job_media_storage_path ON public.job_media (storage_bucket, storage_path);

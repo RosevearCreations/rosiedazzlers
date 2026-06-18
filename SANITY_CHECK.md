@@ -910,3 +910,7 @@ Build 192 keeps the one-H1 rule intact, adds no new public page headings, and fo
 ## Build 197 documentation sync
 
 Build 197 was reviewed during the self-healing admin diagnostics pass. Relevant implementation notes now point toward pricing catalog source/repair diagnostics, route-copy parity, independent dashboard fallback handling, landing-page SEO/readiness warnings, and continued one-H1/local-search discipline. No database DDL is required for this pass.
+
+## Build 209 sanity sync — 2026-06-17
+
+The app now supports the intended during-detail interaction model with protected private discussion and customer-safe publication. The main risk has shifted from missing capability to operational hardening: migrations, mobile network recovery, video/storage controls, notifications, unread state, and live deployment testing.

@@ -1,120 +1,132 @@
-# Rosie Dazzlers Master Value Roadmap — Build 207
+# Rosie Dazzlers Master Value Roadmap — Build 209
 
-**Updated:** 2026-06-14  
-**Purpose:** This is the main roadmap file going forward. It replaces scattered planning across many historical Markdown files while keeping those files available for release history.
+**Updated:** 2026-06-17  
+**Purpose:** This is the one active business/product roadmap. Historical build detail remains in `DEVELOPMENT_ROADMAP.md`; active decisions belong here.
 
 ## North star
 
-Build a mobile detailing website/app that helps a small local business get found, quote faster, book easier, document work professionally, collect payment, earn reviews, and bring customers back for maintenance.
+Build a professional, mobile-first detailing platform that gets found locally and connects every customer relationship from first lead through repeat maintenance.
 
-## Business-value priorities
+`lead / quote → booking → live detail interaction → proof of work → invoice/payment → review/public proof → repeat maintenance`
 
-### 1. Revenue visibility
+## Build 209 completed priorities
 
-- Connect Quote Pipeline to real quote proposals, deposits, accepted/declined status, source, follow-up age, and projected revenue.
-- Add close-rate trends by source, service, month, and town.
-- Track Meta ads from spend → leads → quotes → booked jobs → revenue.
+1. Added a mobile-first live detailer workspace with direct photo/video upload.
+2. Added three explicit audiences: customer now, admin review first, and staff only.
+3. Added job-stage tagging for arrival, pre-existing condition, during work, final, recommendation, issue, and general updates.
+4. Added customer-action-required flags.
+5. Added enhanced DB metadata for review status, visibility, approval, stages, and source channel.
+6. Added private storage bucket/path support with signed staff/customer-safe media reads.
+7. Added adaptive legacy-schema fallback so older databases fail safely instead of losing the workflow.
+8. Added admin moderation actions for approve, reject/hide, staff-only, visible, and pinned updates.
+9. Added live-feed health statistics for customer-visible, review-pending, private, and action-needed items.
+10. Added a public customer timeline combining approved notes, photos, and videos.
+11. Added 20-second customer timeline refresh plus manual refresh and visibility-change refresh.
+12. Added customer comments with private-safe booking event logging.
+13. Filtered internal booking events and payloads from the public progress API.
+14. Removed private detailer response reasons from customer payloads.
+15. Added progress last-viewed, last-customer-message, and last-staff-update timestamps.
+16. Added live interaction diagnostics to the Admin Dashboard.
+17. Added responsive live-feed/media CSS and mobile sticky actions.
+18. Added visual placeholders for live customer updates, private staff notes, and progress video.
+19. Added route-copy synchronization for detailer jobs and admin progress.
+20. Retired twenty redundant planning/handoff Markdown files into `docs/archive/` while preserving required release-history files.
 
-### 2. Trust and proof
+## Next 20 value-added steps
 
-- Keep Gallery Approvals focused: approve/hide/repair photos, confirm consent, and publish customer-safe before/after images.
-- Add before/after sliders to Gallery, service pages, and town pages.
-- Add proof-of-work checklists with start/finish photos, condition notes, and customer sign-off.
-- Convert approved reviews and photos into local proof blocks.
+1. Add customer and admin notifications when a new live update or customer reply is posted.
+2. Add unread/read indicators per booking for customer messages and staff updates.
+3. Add video duration/file-size limits, pre-upload warnings, and optional client-side compression guidance.
+4. Add media retention/archive rules after job completion while preserving incident/legal evidence.
+5. Add upload progress, retry, cancellation, and offline queue recovery for weak mobile connections.
+6. Connect proof-of-work checklist steps directly to required arrival/during/final media.
+7. Add pre-existing-condition walkaround templates by vehicle area.
+8. Add one-click conversion of an issue-stage update into a private incident report with linked evidence.
+9. Add customer approval/decision buttons for recommended add-on work during a live job.
+10. Add price-change approval and payment-request handoff from a customer-approved recommendation.
+11. Add a completed-job customer summary that combines checklist, approved media, invoice, and care recommendations.
+12. Trigger review requests only after payment/completion and no unresolved incident.
+13. Offer approved final media for Gallery Approval without duplicating uploads.
+14. Add approved live media into the vehicle history timeline.
+15. Create repeat-maintenance suggestions from service type, season, vehicle condition, and completed date.
+16. Add owner “Today needs attention” grouping for unread customer replies, pending media approvals, incidents, quotes, and payments.
+17. Add storage usage, orphaned upload, broken signed-path, and retention diagnostics.
+18. Add audit exports showing who posted, approved, hid, or published every live item.
+19. Add accessibility testing for video controls, captions/transcripts, keyboard moderation, and screen-reader timeline labels.
+20. Run live Cloudflare/Supabase/R2 mobile testing and capture issues in the two canonical docs.
 
-### 3. Repeat revenue
+## Value sequencing after the next 20
 
-- Build maintenance memberships/reminders from completed vehicle history.
-- Add customer vehicle timelines with past service, invoices, photos, notes, and next suggested service.
-- Add seasonal campaigns for salt removal, spring reset, pet hair, ceramic/wax protection, gift cards, and fleet cleanup.
+### Revenue and conversion
 
-### 4. Mobile-detailer operations
+- Real quote CRUD connected to leads, deposits, booking conversion, follow-up age, and close rate.
+- Customer approval for in-job recommendations and price changes.
+- Meta ad attribution from campaign/UTM through quote, booking, revenue, and repeat work.
 
-- Turn the detailer job page into a mobile-first job workspace: route, checklist, incident quick-create, photos, notes, timer, customer sign-off, and final proof summary.
-- Add route clustering by town/area/day to reduce travel gaps.
-- Add fleet mini-CRM for company contacts, vehicles, intervals, quote terms, and recurring service history.
+### Trust and documentation
 
-### 5. Owner simplification
+- Required proof-of-work checklists with start/finish evidence and customer sign-off.
+- Vehicle history timeline with services, invoices, approved photos/videos, recommendations, and incidents.
+- Approved media reuse across gallery, review proof, town/service landing pages, and social drafts.
 
-- Create a “Today needs attention” dashboard that combines gallery approvals, quote follow-ups, payment warnings, incident decisions, review requests, media health, and SEO proof gaps.
-- Reduce raw JSON editing to emergency-only paths.
-- Keep dashboards independent so one broken API card does not blank the whole admin.
+### Repeat revenue
 
-## SEO and local visibility roadmap
+- Maintenance plan/reminder engine driven by completed work and season.
+- Fleet account vehicles, intervals, terms, recurring quotes, and proof packages.
+- Seasonal campaigns for salt removal, spring reset, pet hair, odor, protection, gift cards, and fleets.
 
-- Maintain one clear H1 per public page.
-- Use concise, helpful title/meta copy for town + service combinations.
-- Keep service pages for ceramic coating, pet hair removal, odor removal, headlight restoration, paint correction, waxing/sealant, interior detailing, exterior detailing, fleet, and maintenance plans.
-- Add local proof cards to Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, Port Dover, Norwich/Otterville, and Waterford/Vittoria pages.
-- Add descriptive alt text to every real image.
-- Use visual placeholders only until real customer-approved photos are available.
-- Keep Google Business Profile complete with hours, services, photos, posts, and review responses.
+### Owner simplicity
 
-## Competitive features to keep tracking
+- One “today needs attention” command center.
+- Fewer separate screens for routine work.
+- Friendly forms by default; raw JSON only for emergency recovery.
+- Independent diagnostics and safe fallback-backed reads.
 
-- App-style online booking and account management.
-- Quote/CRM pipeline with dollar value and close rate.
-- Mobile app job workspace for staff.
-- Route optimization / clustering.
-- Fleet and recurring contract support.
-- Membership credits or recurring maintenance reminders.
-- Before/after documentation and proof-of-work signatures.
-- Review request automation.
-- Payment, invoice, receipt, and accounting export workflows.
-- Fast follow-up through templates and reminders.
+## SEO and local visibility guardrails
 
-## Build 207 sanity-check outcome
+- One clear H1 per public page.
+- Unique, concise titles and useful descriptions aligned with visible content.
+- Real search language in titles, H1s, body copy, alt text, and internal links.
+- Complete, accurate, non-duplicated town/service content supported by actual service coverage and proof.
+- Descriptive image filenames/alt text, nearby captions, and customer consent.
+- Crawlable internal links, canonical URLs, sitemap/robots health, and complete structured data.
+- Mobile and desktop content parity; do not hide important SEO copy or media from the mobile version.
+- Strong page experience, touch targets, resilient layouts, and reduced-motion support.
+- Google Business Profile completeness, current hours, service details, photos, posts, reviews, and responses.
+- No first-page guarantee: relevance, distance, prominence/popularity, competition, reviews, and indexing are outside the codebase alone.
 
-- Documentation now has two primary living docs: this file and `AI_PROJECT_HANDOFF.md`.
-- Historical Markdown files are retained but should stop collecting new strategy except short build summaries.
-- Visual placeholder registry and automatic placeholder rendering are in place to keep missing-image areas professional.
-- Admin Docs/Sanity page exposes the documentation and visual-placeholder status inside the app.
+## Competitive research applied
 
+Official/current source themes reviewed for this direction:
 
-## Research sources checked in Build 207
+- Google Search Essentials: prominent, people-used wording in titles/main headings and descriptive locations.
+- Google title-link guidance: avoid multiple equally prominent page titles/headings.
+- Google image guidance: descriptive filenames, titles, alt text, relevant nearby copy, and structured data where appropriate.
+- Google Business Profile: local results mainly depend on relevance, distance, and prominence/popularity.
+- Jobber: scheduling, route optimization, progress tracking, on-my-way messaging, job photos/checklists, CRM/client portal, quotes, invoices, payments, and follow-up.
+- Urable: automotive-detailing CRM, mobile workflow, automated messaging, route optimization, project line items, and customer portal.
+- Mobile Tech RX: damage documentation, photos/notes, scheduling, CRM, and reminders.
+- OctopusPro: required photos, before/after, findings, approvals, signatures, and proof of work.
+- QuoteIQ: route-aware scheduling, photo documentation, quoting/invoicing, reviews, and recurring/fleet work.
 
-- Google SEO Starter Guide: https://developers.google.com/search/docs/fundamentals/seo-starter-guide
-- Google title-link guidance: https://developers.google.com/search/docs/appearance/title-link
-- Google Business Profile local ranking guidance: https://support.google.com/business/answer/7091
-- Jobber auto detailing software feature set: https://www.getjobber.com/industries/auto-detailing-software/
-- QuoteIQ mobile detailing CRM feature set: https://myquoteiq.com/crm-for-mobile-detailing/
-- OctopusPro car wash / auto detailing software feature set: https://octopuspro.com/field-service-management/car-wash-auto-detailing-software/
-- ALPHASHINE app/membership direction: https://www.alphashine.io/app
-- Detailing Knights mobile/fleet positioning: https://www.detailingknights.ca/
+Sources:
 
-## Next 20 steps after Build 207
+- https://developers.google.com/search/docs/essentials
+- https://developers.google.com/search/docs/appearance/title-link
+- https://developers.google.com/search/docs/appearance/google-images
+- https://developers.google.com/search/docs/crawling-indexing/mobile/mobile-sites-mobile-first-indexing
+- https://support.google.com/business/answer/7091
+- https://www.getjobber.com/industries/auto-detailing-software/
+- https://urable.com/
+- https://www.mobiletechrx.com/
+- https://octopuspro.com/field-service-management/car-wash-auto-detailing-software/
+- https://myquoteiq.com/crm-for-mobile-detailing/
 
-1. Connect Quote Pipeline to real quote proposal/draft/deposit tables.
-2. Add quote create/edit/save workflow from leads and admin quotes.
-3. Add quote follow-up reminders and overdue badges.
-4. Add Meta campaign CRUD rows with spend/leads/revenue by source/UTM.
-5. Add proof-of-work checklist editor and job-type checklist templates.
-6. Add mobile proof-of-work checklist to `/detailer-jobs.html`.
-7. Add customer signature/approval capture for completed work.
-8. Add vehicle history timeline to customer account and admin customer profile.
-9. Add membership reminder creation from completed bookings.
-10. Add recurring service reminders by plan, vehicle, and season.
-11. Add fleet account create/edit with company contacts and vehicle list.
-12. Add route clustering preview from real booked jobs by town/date.
-13. Add review request queue after completed bookings.
-14. Add approved testimonial/public proof workflow from review replies.
-15. Add seasonal campaign builder with placeholder/approved-image picker.
-16. Add before/after slider component to Gallery and landing pages.
-17. Add owner “Today needs attention” dashboard.
-18. Add visual placeholder replacement tasks into Media Health.
-19. Add Markdown archive process once old release guards are consolidated.
-20. Continue CSS overlap/mobile testing after every visual pass.
+## Documentation rule
 
-## Build 208 — connected workflow command center
+Active strategy goes only into:
 
-Build 208 moves the app from scattered feature foundations toward the main lifecycle: **lead / quote → booking → proof of work → invoice/payment → review → repeat maintenance**.
+- `AI_PROJECT_HANDOFF.md`
+- `MASTER_VALUE_ROADMAP.md`
 
-Completed in this pass:
-- Added `/admin-workflow.html` and `/admin-workflow/` as the owner-facing workflow command center.
-- Added `/api/admin/workflow_command_center_report` with DB-first reads from Build 206 tables and safe JSON fallback data.
-- Added `data/workflow_connection_build208.json` as the structured workflow map, next 20 steps, visual enrichment slots, and competitor-aligned feature checklist.
-- Added Admin Dashboard workflow diagnostics so owners can see open quote value, likely revenue, follow-ups, review queue, maintenance reminders, and fallback status.
-- Expanded visual placeholders for quote, booking, proof-of-work, invoice/payment, review/public proof, and repeat-maintenance cards.
-- Kept old Markdown as retained history while continuing to make `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` the main living docs.
-
-Next build should connect `/admin-quotes.html` to real quote create/edit/save actions and add a one-click accepted-quote-to-booking conversion.
+Append short build/audit summaries to required historical files. Put retired duplicate planning files in `docs/archive/`; do not delete history that may still explain an old migration or release guard.

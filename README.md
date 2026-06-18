@@ -961,3 +961,9 @@ Completed in this pass:
 - Kept old Markdown as retained history while continuing to make `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` the main living docs.
 
 Next build should connect `/admin-quotes.html` to real quote create/edit/save actions and add a one-click accepted-quote-to-booking conversion.
+
+## Build 209 note — live detail interaction
+
+Build 209 makes the original during-detail communication promise explicit. Staff can post notes, photos, and videos as customer-visible now, admin-review-first, or staff-only. The customer progress API returns only approved customer-safe content and filters internal booking-event notes. Run `sql/2026-06-17_build209_live_detail_interaction.sql`, then test `/detailer-jobs.html`, `/admin-progress.html`, and `/progress.html?token=...` on mobile and desktop.
+
+Active planning now lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; retired duplicate planning files are in `docs/archive/`.
