@@ -814,3 +814,28 @@ Completed in this pass:
 - Kept old Markdown as retained history while continuing to make `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` the main living docs.
 
 Next build should connect `/admin-quotes.html` to real quote create/edit/save actions and add a one-click accepted-quote-to-booking conversion.
+
+## Build 209 documentation index note — 2026-06-17
+
+### Read first
+
+1. `AI_PROJECT_HANDOFF.md`
+2. `MASTER_VALUE_ROADMAP.md`
+
+### Live interaction implementation
+
+- `detailer-jobs.html`
+- `admin-progress.html`
+- `progress.html`
+- `functions/api/_lib/job-live-feed.js`
+- `functions/api/admin/progress_list.js`
+- `functions/api/admin/progress_post.js`
+- `functions/api/admin/progress_media_post.js`
+- `functions/api/admin/progress_moderate.js`
+- `functions/api/progress/view.js`
+- `functions/api/progress/comment_post.js`
+- `sql/2026-06-17_build209_live_detail_interaction.sql`
+
+### Historical documentation
+
+Twenty redundant planning/handoff documents were moved to `docs/archive/`. The archive is historical context, not current direction. Required root audit documents remain because release checks still reference them.

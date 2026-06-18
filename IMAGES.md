@@ -368,3 +368,7 @@ Reviewed for Build 195. Current source of truth is the Build 195 section in `DEV
 ## Build 197 documentation sync
 
 Build 197 was reviewed during the self-healing admin diagnostics pass. Relevant implementation notes now point toward pricing catalog source/repair diagnostics, route-copy parity, independent dashboard fallback handling, landing-page SEO/readiness warnings, and continued one-H1/local-search discipline. No database DDL is required for this pass.
+
+## Build 209 live media note — 2026-06-17
+
+Live job media now supports photos and videos with an explicit audience and job stage. Customer-visible media may appear immediately; review-pending and staff-only media must remain protected. Prefer protected storage bucket/path metadata with short-lived signed URLs instead of public links for private evidence. Added placeholder types: `live_customer_update`, `private_staff_note`, and `video_update`. Placeholders must inherit visibility and must never expose private evidence.

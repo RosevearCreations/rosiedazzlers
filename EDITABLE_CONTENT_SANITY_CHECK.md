@@ -272,3 +272,7 @@ This Markdown file was included in the Build 193 documentation sync. Build 193 f
 ## Build 197 documentation sync
 
 Build 197 was reviewed during the self-healing admin diagnostics pass. Relevant implementation notes now point toward pricing catalog source/repair diagnostics, route-copy parity, independent dashboard fallback handling, landing-page SEO/readiness warnings, and continued one-H1/local-search discipline. No database DDL is required for this pass.
+
+## Build 209 editable-content sync note — 2026-06-17
+
+Live job notes/media are operational records, not general site-settings JSON. They are DB-backed through `job_updates` and `job_media`, with friendly mobile/admin screens and explicit moderation. No raw JSON editor is introduced for customer job content. Existing friendly site/content editors and emergency JSON recovery rules remain unchanged.

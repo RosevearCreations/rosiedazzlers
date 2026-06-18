@@ -2394,3 +2394,51 @@ Completed in this pass:
 - Kept old Markdown as retained history while continuing to make `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` the main living docs.
 
 Next build should connect `/admin-quotes.html` to real quote create/edit/save actions and add a one-click accepted-quote-to-booking conversion.
+
+## Build 209 update — live detail interaction, privacy hardening, and Markdown retirement (2026-06-17)
+
+### Completed 20 steps
+
+1. Rebuilt the detailer job screen as a mobile-first live interaction workspace.
+2. Added direct staff photo and video upload during a detail.
+3. Added customer-now, admin-review-first, and staff-only audiences.
+4. Added arrival, pre-existing, during, final, recommendation, issue, and general stages.
+5. Added customer-action-required flags.
+6. Added enhanced update/media review metadata with safe legacy fallback.
+7. Added protected storage bucket/path metadata and signed preview support.
+8. Added staff moderation for approve, hide/reject, staff-only, visible, and pinned items.
+9. Added live-feed health counts and migration warnings.
+10. Combined approved notes/photos/videos into the customer progress timeline.
+11. Added automatic/manual customer timeline refresh.
+12. Added customer comments with privacy-safe booking event logging.
+13. Filtered internal booking-event notes and payloads from public progress responses.
+14. Removed private detailer response reasons from customer payloads.
+15. Added progress last-viewed/customer-message/staff-update timestamps.
+16. Added Admin Dashboard live interaction diagnostics.
+17. Added responsive live-media CSS and mobile sticky actions.
+18. Added live-update/private-note/video visual placeholder types.
+19. Added route-copy sync coverage for detailer jobs and admin progress.
+20. Moved twenty redundant planning/handoff Markdown files into `docs/archive/` and refreshed the two canonical living docs.
+
+### Next 20 steps
+
+1. Notify customers and staff of new live updates/replies.
+2. Add unread counters per booking.
+3. Add media upload progress/retry/cancel/offline recovery.
+4. Add video size/duration guardrails and compression guidance.
+5. Add media retention/archive policies.
+6. Connect proof checklist steps to required live media.
+7. Add vehicle walkaround condition templates.
+8. Convert issue updates into linked incident reports.
+9. Add in-job customer approval for recommendations.
+10. Add price-change/deposit requests from approved recommendations.
+11. Generate completed-job customer summaries.
+12. Gate review requests on payment/completion/no unresolved incident.
+13. Send approved final media to Gallery Approvals without re-upload.
+14. Add approved media to vehicle history.
+15. Generate maintenance recommendations from completed work.
+16. Add owner Today-needs-attention grouping.
+17. Add storage usage/orphan/broken-path diagnostics.
+18. Add live-update audit export.
+19. Add video captions/transcript/accessibility support.
+20. Complete live Cloudflare/Supabase/R2 mobile and desktop acceptance testing.

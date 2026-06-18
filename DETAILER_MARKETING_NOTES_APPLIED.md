@@ -28,3 +28,7 @@ Build 202 treats the source notes as a combined SEO + Meta + CRM strategy: SEO c
 ## Important caution
 
 The examples in the source notes use large-market numbers and sample ad math. Rosie Dazzlers should start with small tests, local radius targeting, clear offers, and careful tracking before scaling any ad spend.
+
+## Build 209 marketing application note — 2026-06-17
+
+Live, customer-safe progress updates can improve trust and perceived professionalism during a mobile detail. Approved final photos/videos may later support review requests, gallery proof, local landing-page proof, and social drafts, but only after consent and admin approval. Private staff discussion and incident evidence must never be repurposed as marketing content.

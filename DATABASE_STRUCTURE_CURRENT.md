@@ -844,3 +844,28 @@ Build 198 converts routine owner/admin updates for social feeds, before/after ga
 ## Build 206 schema update — value-added operations foundations
 
 Added additive schema destinations in `sql/2026-06-14_build206_value_added_operations_foundations.sql` for gallery approval queue, quote pipeline, Meta ads ROI reports, customer maintenance plans, vehicle history events, proof-of-work checklists, fleet accounts, review request queue, seasonal campaigns, and route cluster hints. The current UI reads seeded JSON/API report data for first-pass dashboards while these DB tables provide the migration target for persistent CRUD workflows.
+
+## Build 209 live-detail interaction database update — 2026-06-17
+
+Migration: `sql/2026-06-17_build209_live_detail_interaction.sql`
+
+Authoritative additions:
+
+- `bookings.progress_last_viewed_at`
+- `bookings.progress_last_customer_message_at`
+- `bookings.progress_last_staff_update_at`
+- `job_updates.stage`
+- `job_updates.source_channel`
+- `job_updates.review_status`
+- `job_updates.requires_admin_review`
+- `job_updates.customer_action_required`
+- `job_updates.customer_visible_at`
+- `job_updates.approved_by_staff_user_id`
+- `job_updates.approved_by_staff_name`
+- equivalent review/stage/approval columns on `job_media`
+- `job_media.storage_bucket`
+- `job_media.storage_path`
+- `job_media.content_type`
+- `job_media.file_size_bytes`
+
+The database is the authority for live notes/media. Bundled files do not contain customer job content. Legacy-schema API fallback is intentionally conservative and must not be treated as a replacement for running the migration.

@@ -1470,3 +1470,27 @@ Completed in this pass:
 - Kept old Markdown as retained history while continuing to make `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` the main living docs.
 
 Next build should connect `/admin-quotes.html` to real quote create/edit/save actions and add a one-click accepted-quote-to-booking conversion.
+
+## Build 209 known gaps and risks — live interaction (2026-06-17)
+
+### Reduced
+
+- Live detailing updates are no longer limited to scattered URL/note fields.
+- Detailers can upload photos/videos from the job workspace and assign an explicit audience.
+- Review-pending and staff-only content are separated from immediate customer content.
+- Public progress responses filter internal booking-event notes/payloads.
+- Private media can use protected storage paths and signed URLs.
+- Customer timelines now support notes, photos, videos, refresh, comments, and sign-off.
+- Documentation strategy is reduced to two active files; twenty redundant planning files are archived.
+
+### Outstanding
+
+- The Build 209 SQL migration must be deployed for all enhanced fields and diagnostics.
+- Video limits, compression, retention, and storage-cost controls are not finished.
+- New-update notifications and unread counters are not finished.
+- Offline upload queue/retry behavior is not finished.
+- Proof-of-work checklist requirements are not yet enforced against live media stages.
+- In-job recommendation approval and price/payment change flow are not finished.
+- Gallery/vehicle-history reuse of approved live media is not yet automatic.
+- Browser/device testing with real R2/Supabase credentials remains required.
+- Archived Markdown may still contain stale internal links; it is historical only.

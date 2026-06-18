@@ -974,3 +974,7 @@ Reviewed for Build 195. Current source of truth is the Build 195 section in `DEV
 ## Build 197 documentation sync
 
 Build 197 was reviewed during the self-healing admin diagnostics pass. Relevant implementation notes now point toward pricing catalog source/repair diagnostics, route-copy parity, independent dashboard fallback handling, landing-page SEO/readiness warnings, and continued one-H1/local-search discipline. No database DDL is required for this pass.
+
+## Build 209 competitive sync — live-detail interaction (2026-06-17)
+
+Current field-service/detailing products commonly emphasize mobile job photos, required checklists, customer portals, progress messaging, damage documentation, approvals, signatures, and proof of work. Build 209 advances Rosie Dazzlers in that direction with customer-now/admin-review/staff-only notes, photos, videos, protected media paths, moderation, and a customer timeline. Next differentiation should come from simple owner workflows, not enterprise complexity.
