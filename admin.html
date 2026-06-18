@@ -20,7 +20,7 @@
     .muted{color:#94a3b8}.warning-panel{border-radius:16px;border:1px solid rgba(251,191,36,.28);background:rgba(245,158,11,.10);padding:14px;margin-top:14px}.warning-panel[data-state="ok"]{border-color:rgba(74,222,128,.28);background:rgba(22,163,74,.10)}.warning-row{padding:10px;border-radius:12px;background:rgba(15,23,42,.35);border:1px solid rgba(255,255,255,.06);margin-top:8px}
   </style>
 </head>
-<body data-page="admin" data-build208="connected-workflow-command-center" data-build206="value-added-operations-foundations" data-build205="sanity-check-value-roadmap" data-build204="gallery-media-resilience" data-build203="desktop-mobile-visual-polish-dashboard" data-build202="incident-marketing-dashboard" data-build200="advanced-json-panel-dashboard" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard" data-build192="editable-settings-diagnostics" data-build195="seo-proof-fallback-report-dashboard" data-build197="dashboard-self-healing-diagnostics" data-build201="friendly-editor-validation-dashboard">
+<body data-page="admin" data-build209="live-detail-interaction" data-build208="connected-workflow-command-center" data-build206="value-added-operations-foundations" data-build205="sanity-check-value-roadmap" data-build204="gallery-media-resilience" data-build203="desktop-mobile-visual-polish-dashboard" data-build202="incident-marketing-dashboard" data-build200="advanced-json-panel-dashboard" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard" data-build192="editable-settings-diagnostics" data-build195="seo-proof-fallback-report-dashboard" data-build197="dashboard-self-healing-diagnostics" data-build201="friendly-editor-validation-dashboard">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -114,7 +114,8 @@
           <div id="responsiveVisualDiagnostics" class="warning-panel" data-state="loading">Checking sampled public/admin pages for viewport, H1, image, and shared-CSS readiness…</div>
           <h2 style="margin-top:18px">Gallery image health</h2>
           <div id="galleryImageHealthDiagnostics" class="warning-panel" data-state="loading">Checking before/after gallery image source and fallback readiness…</div>
-          <h2 style="margin-top:18px">Build 205 sanity / value roadmap</h2>
+          <!-- Build 205 sanity / value roadmap guard retained for historical release coverage -->
+          <h2 style="margin-top:18px">Current sanity / value roadmap</h2>
           <div id="valueAddedSanityDiagnostics" class="warning-panel" data-state="loading">Loading competitor-inspired value-add priorities…</div>
           <h2 style="margin-top:18px">Markdown docs consolidation</h2>
           <div id="markdownDocsDiagnostics" class="warning-panel" data-state="loading">Loading canonical documentation and retirement guidance…</div>
@@ -122,6 +123,8 @@
           <div id="visualPlaceholderDiagnostics" class="warning-panel" data-state="loading">Loading missing-image placeholder registry…</div>
           <h2 style="margin-top:18px">Connected workflow command center</h2>
           <div id="workflowCommandDiagnostics" class="warning-panel" data-state="loading">Loading lead-to-maintenance workflow map…</div>
+          <h2 style="margin-top:18px">Live detail interaction</h2>
+          <div id="liveInteractionDiagnostics" class="warning-panel" data-state="loading">Checking customer-visible, review-pending, and staff-only job updates…</div>
           <h2 style="margin-top:18px">Remaining advanced JSON panels</h2>
           <div id="advancedJsonPanelDiagnostics" class="warning-panel" data-state="warn" data-build200="remaining-json-panel-dashboard">
             <strong>Advanced JSON should be emergency-only</strong>
@@ -206,6 +209,14 @@
             <p>Connect lead/quote → booking → proof of work → invoice/payment → review → repeat maintenance in one owner-friendly map.</p>
             <div class="hr"></div>
             <a class="btn primary" href="/admin-workflow.html">Open Workflow</a>
+          </article>
+
+          <article class="card" data-build209="live-interaction-card">
+            <h3>Live Detail Interaction</h3>
+            <p>Review customer updates, approve photos and videos, protect staff-only notes, and manage the live detail timeline.</p>
+            <div class="hr"></div>
+            <a class="btn primary" href="/admin-progress.html">Review Live Updates</a>
+            <a class="btn ghost" href="/detailer-jobs.html">Open Detailer Workspace</a>
           </article>
 
 
@@ -397,7 +408,8 @@
         responsiveVisual: document.getElementById('responsiveVisualDiagnostics'),
         galleryImageHealth: document.getElementById('galleryImageHealthDiagnostics'),
         valueAddedSanity: document.getElementById('valueAddedSanityDiagnostics'),
-        workflowCommand: document.getElementById('workflowCommandDiagnostics')
+        workflowCommand: document.getElementById('workflowCommandDiagnostics'),
+        liveInteraction: document.getElementById('liveInteractionDiagnostics')
       };
       function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
       function setShellStatus(message,type){document.querySelectorAll('[data-admin-shell-status]').forEach((node)=>{node.hidden=!message;node.textContent=message||'';node.dataset.state=type||'';});}
@@ -593,6 +605,18 @@
         els.workflowCommand.innerHTML = `<strong>Lead → quote → booking → proof → payment → review → maintenance map is active</strong><div class="muted">Open quotes ${Number(m.open_quote_count||0)} · likely revenue ${new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD',maximumFractionDigits:0}).format(Number(m.likely_revenue||0))} · follow-ups due ${Number(m.quote_followups_due||0)} · review queue ${Number(m.review_requests_queued||0)} · route clusters ${Number(m.route_cluster_count||0)}</div>${items}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-workflow.html">Open Workflow Command Center</a> <a class="btn ghost small" href="/admin-quotes.html">Open Quotes</a></div>`;
       }
 
+      async function loadLiveInteractionDiagnostics(){
+        if(!els.liveInteraction) return;
+        const res = await fetch('/api/admin/live_interaction_report', { credentials:'include', cache:'no-store' });
+        const data = await res.json().catch(()=>null);
+        if(!res.ok || !data?.ok) throw new Error(data?.error || 'Could not load live interaction health.');
+        const m = data.metrics || {};
+        const warnings = (data.warnings || []).slice(0,4).map((warning)=>`<div class="warning-row"><strong>Migration / source note</strong><div class="muted">${esc(warning)}</div></div>`).join('');
+        const needs = Number(m.pending_review||0) + (data.enhanced_schema_available ? 0 : 1);
+        els.liveInteraction.dataset.state = needs ? 'warn' : 'ok';
+        els.liveInteraction.innerHTML = `<strong>${needs ? 'Live detail interaction needs attention' : 'Live detail interaction safeguards are active'}</strong><div class="muted">Customer visible ${Number(m.customer_visible||0)} · pending review ${Number(m.pending_review||0)} · staff only ${Number(m.staff_only||0)} · photos ${Number(m.photos||0)} · videos ${Number(m.videos||0)} · notes ${Number(m.notes||0)}</div><div class="muted">Progress-enabled jobs ${Number(m.progress_enabled_bookings||0)} · customer action requested ${Number(m.customer_action_required||0)} · protected storage media ${Number(m.stored_private_media||0)}</div>${warnings}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-progress.html">Review Updates</a> <a class="btn ghost small" href="/detailer-jobs.html">Detailer Workspace</a></div>`;
+      }
+
       async function loadDashboardAnalytics(){
         const res = await fetch('/api/admin/analytics_overview', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ days: 14 })});
         const data = await res.json().catch(()=>null);
@@ -601,7 +625,7 @@
         renderList(els.live, (data.live_online_sessions||[]).slice(0,5), (r)=>`<strong>${esc(r.country || 'Unknown')}</strong><div class="muted">${esc((r.path||[]).join(' → '))}</div><div class="muted">Seen: ${esc(r.ended_at || '')}</div>`, 'No live visitors right now.');
         renderList(els.daily, (data.daily_traffic||[]).slice(-7).reverse(), (r)=>`<strong>${esc(r.day)}</strong><div class="muted">${Number(r.page_views||0)} page views • ${Number(r.unique_visitors||0)} visitors • ${Number(r.abandoned_sessions||0)} abandoned</div>`, 'No daily traffic summary yet.');
       }
-      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ await Promise.allSettled([guardedLoad('Dashboard analytics', loadDashboardAnalytics), guardedLoad('Payment webhook warnings', loadPaymentWebhookWarnings), guardedLoad('Operations warnings', loadBuild185OpsWarnings), guardedLoad('Editable settings diagnostics', loadEditableSettingsDiagnostics), guardedLoad('Fallback settings report', loadFallbackSettingsReport), guardedLoad('Local SEO proof diagnostics', loadLocalSeoProofDiagnostics), guardedLoad('Pricing catalog diagnostics', loadPricingCatalogDiagnostics), guardedLoad('Route-copy parity diagnostics', loadRouteCopyDiagnostics), guardedLoad('Desktop/mobile visual diagnostics', loadResponsiveVisualDiagnostics), guardedLoad('Gallery image health diagnostics', loadGalleryImageHealthDiagnostics), guardedLoad('Build 205 sanity diagnostics', loadValueAddedSanityDiagnostics), guardedLoad('Markdown docs diagnostics', loadMarkdownDocsDiagnostics), guardedLoad('Visual placeholder diagnostics', loadVisualPlaceholderDiagnostics), guardedLoad('Workflow command diagnostics', loadWorkflowCommandDiagnostics)]); } });
+      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ await Promise.allSettled([guardedLoad('Dashboard analytics', loadDashboardAnalytics), guardedLoad('Payment webhook warnings', loadPaymentWebhookWarnings), guardedLoad('Operations warnings', loadBuild185OpsWarnings), guardedLoad('Editable settings diagnostics', loadEditableSettingsDiagnostics), guardedLoad('Fallback settings report', loadFallbackSettingsReport), guardedLoad('Local SEO proof diagnostics', loadLocalSeoProofDiagnostics), guardedLoad('Pricing catalog diagnostics', loadPricingCatalogDiagnostics), guardedLoad('Route-copy parity diagnostics', loadRouteCopyDiagnostics), guardedLoad('Desktop/mobile visual diagnostics', loadResponsiveVisualDiagnostics), guardedLoad('Gallery image health diagnostics', loadGalleryImageHealthDiagnostics), guardedLoad('Current sanity diagnostics', loadValueAddedSanityDiagnostics), guardedLoad('Markdown docs diagnostics', loadMarkdownDocsDiagnostics), guardedLoad('Visual placeholder diagnostics', loadVisualPlaceholderDiagnostics), guardedLoad('Workflow command diagnostics', loadWorkflowCommandDiagnostics), guardedLoad('Live detail interaction diagnostics', loadLiveInteractionDiagnostics)]); } });
     })();
   </script>
 </body>

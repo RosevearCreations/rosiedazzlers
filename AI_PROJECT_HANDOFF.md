@@ -1,43 +1,104 @@
-# Rosie Dazzlers AI Project Handoff — Build 207
+# Rosie Dazzlers AI Project Handoff — Build 209
 
-**Updated:** 2026-06-14  
-**Use this first:** This is now the main handoff file for a new AI chat or future build pass.
+**Updated:** 2026-06-17  
+**Read first:** This is the primary technical/business handoff for a new AI chat or future build pass.
 
-## Current application position
+## Product north star
 
-Rosie Dazzlers is now more than a basic mobile detailing website. It has a desktop public website, mobile app-style booking/progress flows, admin operations, diagnostics, gallery approvals, quote/value dashboards, incident reports, marketing tracking, accounting/payment foundations, media health, editable settings, and responsive visual polish.
+Rosie Dazzlers is a mobile auto-detailing website and operations application for Oxford County and Norfolk County, Ontario. The app should help a small owner-operated business:
 
-The most important product direction is now **simplification and connection**. Avoid creating isolated admin pages unless they connect a real workflow. The highest-value workflow is:
+1. get found locally;
+2. turn leads into trackable quotes;
+3. convert quotes into bookings and deposits;
+4. interact with customers during the detail;
+5. document work and protect the business with private evidence;
+6. invoice, collect payment, request reviews, and bring customers back.
 
-`lead / quote → booking → proof of work → invoice/payment → review request → repeat maintenance reminder`.
+The connected lifecycle is:
 
-## Current strongest modules
+`lead / quote → booking → live detail interaction → proof of work → invoice/payment → review/public proof → repeat maintenance`
 
-- Public booking flow with packages, add-ons, service-area checks, and deposits.
-- Admin Dashboard with independent diagnostics instead of one fragile page load.
-- Dedicated Gallery Approvals foundation for approve/hide/repair before/after images.
-- Quote Pipeline and Value-Added Operations dashboards for open quote value, Meta ROI, memberships, vehicle history, proof-of-work, fleet, reviews, campaigns, and route clustering.
-- Incident Reports with required evidence photos, private staff/admin discussion, and separate customer-approved public publishing.
-- Editable Settings with history restore, validation, emergency JSON repair, and many friendly row/card editors.
-- Media Health, Gallery Image Health, visual placeholders, and desktop/mobile polish.
-- Accounting, HST/GST review, payment webhook, refund, and month-end close foundations.
+Avoid creating isolated admin pages unless they clearly advance this lifecycle.
 
-## Current risks
+## Build 209 central capability: live detail interaction
 
-1. **Admin complexity:** many modules exist, but owners need fewer screens and clearer “what needs attention today” paths.
-2. **Sample/fallback data:** Build 206 value-added dashboards are foundations; several need DB-backed create/edit/save workflows.
-3. **Documentation sprawl:** older Markdown files remain for release-guard continuity. Future planning should start here and in `MASTER_VALUE_ROADMAP.md`.
-4. **Visual proof:** placeholders now reduce blank pages, but real Rosie-owned and customer-approved images still matter most.
-5. **Live testing:** release checks validate files, syntax, H1 count, and route copies; they do not replace Cloudflare browser testing.
+The original product promise is now explicit throughout the app. During a job, a detailer can post:
 
-## Canonical Markdown plan
+- text notes;
+- photos;
+- short videos;
+- before, arrival, during, final, recommendation, and issue-stage updates;
+- customer action requests;
+- private evidence or discussion.
 
-Use these as the main working files:
+Every post must use one of three audiences:
 
-1. `AI_PROJECT_HANDOFF.md` — current state, architecture direction, and how to continue safely.
-2. `MASTER_VALUE_ROADMAP.md` — business-value roadmap, competitive direction, SEO/visual strategy, and next steps.
+1. **Customer now** — immediately customer-visible through the secure progress token.
+2. **Admin review first** — private until an administrator approves the customer-safe version.
+3. **Staff only** — detailer/administrator only and never returned by the public progress API.
 
-Keep these historical files updated only with build summaries because older release guards still check them:
+Primary screens:
+
+- `/detailer-jobs.html` — mobile-first live detailer workspace with direct photo/video upload.
+- `/admin-progress.html` — staff moderation, approval, hiding, pinning, and customer-safe publishing.
+- `/progress.html?token=…` — customer timeline, media, workflow status, comments, and sign-off.
+- `/admin.html` — live interaction diagnostics and pending-review warning.
+
+Primary APIs/tables:
+
+- `functions/api/detailer/job_note_post.js`
+- `functions/api/admin/progress_post.js`
+- `functions/api/admin/progress_media_post.js`
+- `functions/api/admin/progress_moderate.js`
+- `functions/api/admin/progress_list.js`
+- `functions/api/progress/view.js`
+- `functions/api/progress/comment_post.js`
+- `public.job_updates`
+- `public.job_media`
+- `public.job_signoffs`
+
+Privacy rules:
+
+- Public progress results include only approved customer-safe notes/media.
+- Internal booking-event notes and payloads are filtered from the customer response.
+- Private uploaded media may be stored by bucket/path and returned to staff using short-lived signed URLs.
+- Review-pending rows remain internal until approval.
+- Incident reports remain a separate protected workflow for damage, faulty equipment, or disputes.
+
+Run `sql/2026-06-17_build209_live_detail_interaction.sql` before expecting all enhanced visibility, stage, storage, and review fields to be available.
+
+## Current strong foundations
+
+### Public/customer
+
+- Responsive desktop website and mobile-first booking/progress experiences.
+- Service, pricing, add-on, service-area, town, fleet, gift, maintenance, and gallery pages.
+- Booking wizard, deposits, customer dashboard, progress token, comments, and sign-off.
+- Before/after gallery with image fallback and approval workflow.
+- Local service/town copy, structured-data previews, one-H1 release guard, sitemap/robots checks.
+
+### Admin/owner
+
+- Independent dashboard diagnostics so one failing card does not blank the dashboard.
+- Booking, lead, quote, payment, accounting, inventory, media, gallery, incident, marketing, SEO, and editable-setting foundations.
+- Workflow Command Center connecting quote through repeat maintenance.
+- Gallery Approvals, Quote Pipeline, Value-Added Operations, Docs/Sanity, and live interaction diagnostics.
+- Friendly editors for routine settings; raw JSON is emergency recovery only.
+
+### Detailer/staff
+
+- Assigned-job mobile workspace.
+- Workflow status actions, notes, photos, videos, visibility selection, customer-action requests, incidents, and progress links.
+- Proof-of-work and vehicle-history foundations from Build 206.
+
+## Documentation policy
+
+Only two Markdown files are active strategy documents:
+
+1. `AI_PROJECT_HANDOFF.md` — current system state, safety rules, architecture, deployment, and continuation instructions.
+2. `MASTER_VALUE_ROADMAP.md` — completed priorities, next 20 steps, SEO/competitive direction, and value sequencing.
+
+Required audit/history files remain in the repository because historical release guards depend on them:
 
 - `DEVELOPMENT_ROADMAP.md`
 - `KNOWN_GAPS_AND_RISKS.md`
@@ -45,47 +106,62 @@ Keep these historical files updated only with build summaries because older rele
 - `SUPABASE_SCHEMA.sql`
 - `README.md`
 - `DOC_INDEX.md`
+- competitor/release-check documents named in `scripts/release_check.py`
 
-## SEO guardrails
+Twenty redundant handoff/planning files were moved to `docs/archive/` in Build 209. Do not restart active planning inside archived files.
 
-- Keep exactly one visible H1 on each public page.
-- Use locally relevant title/meta wording for Oxford County, Norfolk County, Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi, Port Dover, and high-intent services.
-- Use descriptive image alt text near the matching content.
-- Add real proof photos and review/reputation blocks as they become approved.
-- Do not keyword-stuff; every SEO improvement should still help a real customer choose or book.
+## SEO/local visibility rules
 
-## Competitive direction to keep
+- Keep exactly one meaningful visible H1 on every public page.
+- Keep title, meta description, H1, canonical, and structured data aligned.
+- Use real customer language and town/service combinations without creating thin duplicate pages.
+- Prioritize Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi, Port Dover, Norwich/Otterville, and Waterford/Vittoria where service coverage and proof are legitimate.
+- Use descriptive image filenames, alt text, captions, and nearby relevant copy.
+- Add owned/customer-approved local proof; placeholders are temporary only.
+- Keep Google Business Profile information, hours, services, photos, and review responses current.
+- Never claim that a code change guarantees first-page placement. Search visibility also depends on distance, competition, prominence, reviews, crawl/index status, and ongoing proof.
 
-Current mobile-detailing competitors and CRM tools emphasize online booking, mobile app access, customer portals, route optimization, memberships, fleet accounts, quote tracking, before/after documentation, signatures, invoices, payments, and review/rebooking follow-up. Rosie Dazzlers should continue moving toward those features, but in a small-business-friendly order.
+## Competitive direction
 
-## Next best build pass
+Current detailing/field-service platforms emphasize the same direction this app is taking:
 
-The next highest-value build should turn the Build 206 foundations into real CRUD/workflow screens:
+- Jobber: scheduling, route optimization, progress tracking, on-my-way messages, job photos, checklists, client portal, quoting, invoices, payments, and automated follow-up.
+- Urable: automotive-detailing CRM, mobile workflow, route optimization, automated messaging, line-item projects, and customer portal.
+- Mobile Tech RX: damage documentation with photos/notes, scheduling, photo capture, CRM, and reminders.
+- OctopusPro: required photos, before/after evidence, findings, approvals, signatures, and proof of work.
+- QuoteIQ: route-aware operations, photo documentation, quoting/invoicing, reviews, and recurring/fleet workflows.
 
-1. Quote Pipeline connected to real lead/quote/deposit rows.
-2. Proof-of-work checklist on the mobile detailer job screen.
-3. Membership reminder engine from completed vehicle history.
-4. Meta ROI tracker with editable campaign rows and source attribution.
-5. Owner “Today needs attention” dashboard that groups quotes, gallery approvals, payments, reviews, media, incidents, and SEO proof.
+Rosie Dazzlers should match the useful workflow outcomes without copying competitor wording or adding enterprise complexity that does not help a one-vehicle-per-day business.
 
-## Deployment reminders
+## Current risks and constraints
 
-- Run SQL migrations before testing DB-backed features.
-- Run `python3 scripts/release_check.py`.
-- Run `python3 scripts/seo_h1_check.py`.
-- Run `python3 scripts/sync_route_copies.py --check`.
-- Browser-test `/`, `/book`, `/gallery`, `/admin`, `/admin-gallery`, `/admin-quotes`, `/admin-growth`, and `/admin-docs` after deployment.
+1. **Migration dependency:** enhanced live interaction safely falls back to legacy columns, but the Build 209 migration is required for full review/storage metadata.
+2. **Admin complexity:** many foundations exist; owner “today needs attention” grouping remains more valuable than more siloed pages.
+3. **Real media:** visual placeholders improve presentation, but real approved photos/videos create trust and local prominence.
+4. **Video cost/limits:** future work should add file-size/duration limits, compression guidance, retention controls, and storage diagnostics.
+5. **Browser testing:** static release checks do not replace testing Cloudflare Pages, Supabase, R2, Stripe, PayPal, email, and mobile devices.
+6. **Legacy release guards:** old build guards make documentation cleanup slower. Retire guards only after replacing their current coverage.
 
-## Build 208 — connected workflow command center
+## Deployment checklist
 
-Build 208 moves the app from scattered feature foundations toward the main lifecycle: **lead / quote → booking → proof of work → invoice/payment → review → repeat maintenance**.
+1. Run outstanding SQL migrations, especially Build 209.
+2. Set/verify Cloudflare and Supabase/R2 environment variables.
+3. Run `python3 scripts/release_check.py`.
+4. Run `python3 scripts/seo_h1_check.py`.
+5. Run `python3 scripts/sync_route_copies.py --check`.
+6. Deploy and browser-test:
+   - `/`
+   - `/book`
+   - `/gallery`
+   - `/detailer-jobs.html`
+   - `/admin-progress.html`
+   - `/progress.html?token=<real token>`
+   - `/admin`
+7. Test all three live-update audiences with a real staff session.
+8. Confirm a staff-only update never appears in the customer response.
+9. Confirm an admin-review update appears only after approval.
+10. Confirm photo/video upload, signed preview, customer comment, and sign-off on mobile and desktop.
 
-Completed in this pass:
-- Added `/admin-workflow.html` and `/admin-workflow/` as the owner-facing workflow command center.
-- Added `/api/admin/workflow_command_center_report` with DB-first reads from Build 206 tables and safe JSON fallback data.
-- Added `data/workflow_connection_build208.json` as the structured workflow map, next 20 steps, visual enrichment slots, and competitor-aligned feature checklist.
-- Added Admin Dashboard workflow diagnostics so owners can see open quote value, likely revenue, follow-ups, review queue, maintenance reminders, and fallback status.
-- Expanded visual placeholders for quote, booking, proof-of-work, invoice/payment, review/public proof, and repeat-maintenance cards.
-- Kept old Markdown as retained history while continuing to make `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` the main living docs.
+## Next best direction
 
-Next build should connect `/admin-quotes.html` to real quote create/edit/save actions and add a one-click accepted-quote-to-booking conversion.
+Continue with the next 20 steps in `MASTER_VALUE_ROADMAP.md`. The first priorities are live-update notifications, media retention/compression, customer unread indicators, proof-of-work checklist integration, and automatic handoff from completed work to invoice/review/maintenance.

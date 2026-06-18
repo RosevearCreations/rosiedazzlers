@@ -110,3 +110,7 @@ Keep doing these each pass:
 - Google title-link guidance: https://developers.google.com/search/docs/appearance/title-link
 - Google SEO Starter Guide: https://developers.google.com/search/docs/fundamentals/seo-starter-guide
 - Google Business Profile local ranking guidance: https://support.google.com/business/answer/7091
+
+## Build 209 sanity addendum — 2026-06-17
+
+The original live interaction requirement is now a central connected workflow rather than a scattered feature. Detailers can post notes/photos/videos with customer-now, review-first, or staff-only visibility; administrators can moderate; customers see only approved safe content. Highest next value: notifications/unread state, proof checklist integration, media retention/compression, completed-job summary, and handoff to review/maintenance.
