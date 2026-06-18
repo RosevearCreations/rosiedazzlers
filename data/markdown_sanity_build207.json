@@ -1,61 +1,71 @@
 {
-  "build": 207,
-  "updated_at": "2026-06-14",
-  "summary": "Build 207 consolidates the documentation strategy into two canonical living docs while keeping historical Markdown files in place for release-guard continuity and future AI context.",
+  "build": 209,
+  "updated_at": "2026-06-17",
+  "summary": "Build 209 keeps two canonical living Markdown files and moves redundant planning/handoff documents into docs/archive while preserving release-guard audit files at the repository root.",
   "canonical_docs": [
     {
       "file": "AI_PROJECT_HANDOFF.md",
-      "purpose": "One-stop current state for a new AI/chat: where the app is, what is live, how to deploy/test, and the next best business priorities.",
-      "owner_use": "Read first before any new build pass."
+      "purpose": "Current system state, privacy/safety model, architecture, deployment, and continuation instructions.",
+      "owner_use": "Read first before every new build pass."
     },
     {
       "file": "MASTER_VALUE_ROADMAP.md",
-      "purpose": "Single high-level roadmap for customer value, admin simplification, SEO/local proof, desktop/mobile polish, and future DB migrations.",
-      "owner_use": "Use as the main next-step planning document."
-    },
-    {
-      "file": "DEVELOPMENT_ROADMAP.md",
-      "purpose": "Historical build log plus current build update. Keep because many release guards reference it.",
-      "owner_use": "Append each build, do not use as the only planning brain."
-    },
-    {
-      "file": "KNOWN_GAPS_AND_RISKS.md",
-      "purpose": "Risk register and unresolved items. Keep as the audit trail.",
-      "owner_use": "Append each build's reduced/outstanding risks."
+      "purpose": "One active business-value roadmap with completed work, next 20 steps, SEO, competitive direction, and sequencing.",
+      "owner_use": "Use for prioritization and next-step planning."
     }
   ],
-  "retain_but_do_not_expand": [
+  "retain_for_release_history": [
+    "DEVELOPMENT_ROADMAP.md",
+    "KNOWN_GAPS_AND_RISKS.md",
+    "DATABASE_STRUCTURE_CURRENT.md",
+    "README.md",
+    "DOC_INDEX.md",
+    "SUPABASE_SCHEMA.sql",
     "APP_SANITY_CHECK_BUILD205.md",
+    "COMPETETIVE.md",
+    "COMPETETIVE_COMPLETION_MATRIX.md",
+    "COMPETETOR.md",
     "COMPETITOR.md",
     "COMPETITOR_SANITY_CHECK.md",
-    "COMPETETIVE_COMPLETION_MATRIX.md",
+    "DETAILER_MARKETING_NOTES_APPLIED.md",
+    "EDITABLE_CONTENT_SANITY_CHECK.md",
+    "IMAGES.md",
+    "SANITY_CHECK.md"
+  ],
+  "archived_docs": [
+    "ADMIN_ROLE_MODEL.md",
+    "AI_CONTEXT.md",
+    "APP_MANAGEMENT_SCREEN_PLAN.md",
+    "BRANCH_WORKFLOW_NOTE.md",
+    "CHANGELOG_ADMIN_DETAILER_REFRESH.md",
     "CURRENT_IMPLEMENTATION_STATE.md",
-    "PROJECT_BRAIN.md",
-    "ROADMAP.md",
-    "SANITY_CHECK.md",
+    "DOCS_UPDATE_NOTE.md",
+    "HANDOFF_NEXT_CHAT.md",
+    "LOCAL_VISIBILITY_REVIEW_2026-04-24.md",
     "NEW_CHAT_STATUS.md",
     "NEXT_STEPS_INTERNAL.md",
-    "IMAGES.md",
-    "DETAILER_MARKETING_NOTES_APPLIED.md",
-    "ADMIN_ROLE_MODEL.md",
-    "APP_MANAGEMENT_SCREEN_PLAN.md",
+    "PROJECT_BRAIN.md",
     "REPO_GUIDE.md",
     "REPO_RULES.md",
-    "BRANCH_WORKFLOW_NOTE.md",
-    "SOCIAL_PLATFORM_PUBLISHING.md"
+    "RM_This file is the short operational follow-up list after the March 2026 documentation refresh.NEXT_STEPS_INTERNAL.md",
+    "ROADMAP.md",
+    "SOCIAL_PLATFORM_PUBLISHING.md",
+    "This file is the short operational follow-up list after the March 2026 documentation refresh.NEXT_STEPS_INTERNAL.md",
+    "fixed.md",
+    "fixedOld.md"
   ],
   "retirement_guidance": [
-    "Do not delete historical Markdown yet because older release guards still verify phrases in root docs.",
-    "Stop adding new strategy to duplicate legacy docs; add future strategy to AI_PROJECT_HANDOFF.md and MASTER_VALUE_ROADMAP.md first.",
-    "When the release-check chain is modernized, move duplicate competitor/old roadmap files into docs/archive/ with a manifest instead of hard deleting.",
-    "Keep DOC_INDEX.md as the navigation map for humans and future AI sessions."
+    "Do not add new strategy to docs/archive.",
+    "Replace old release guards with current capability tests before moving their required audit files.",
+    "Keep DOC_INDEX.md as the human navigation map and this JSON as the Admin Docs report source.",
+    "Use short build-sync notes in retained audit files rather than copying the full roadmap into each file."
   ],
   "current_app_position": [
-    "Strong public booking, service, pricing, gallery, gift card, fleet, and maintenance-plan website foundation.",
-    "Admin has diagnostics, gallery approvals, quote pipeline, value-added operations, incident reports, marketing, payments, accounting, media health, SEO tasks, and editable settings.",
-    "Most routine JSON editing has been converted to friendly screens; emergency JSON panels remain for recovery only.",
-    "Desktop and mobile responsive foundations exist; future work should continue card/table conversions and mobile owner shortcuts.",
-    "The app now needs fewer new silos and more connective workflows: quote -> booking -> proof -> invoice -> review -> repeat service."
+    "Connected lead/quote to repeat-maintenance workflow foundation.",
+    "Live detailer/customer interaction now supports notes, photos, videos, stages, admin review, staff-only privacy, and customer-safe publication.",
+    "Routine content uses friendly editors; raw JSON remains emergency-only.",
+    "Desktop/mobile visual, gallery, incident, payment, accounting, SEO, and media diagnostics are present.",
+    "Highest next value is notifications, unread state, proof checklist integration, media retention/compression, and completed-job handoff."
   ],
-  "remaining_doc_risk": "Documentation is still historically large. Build 207 reduces future drift by declaring canonical docs and adding an admin documentation sanity screen, but old files are intentionally retained."
+  "remaining_doc_risk": "Historical audit files are still large because many release guards depend on them. Build 209 reduces active planning to two files and archives twenty redundant files without deleting context."
 }

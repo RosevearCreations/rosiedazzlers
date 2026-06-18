@@ -1,7 +1,7 @@
 {
-  "build": 208,
-  "updated_at": "2026-06-14",
-  "summary": "Visual graphic placeholders prevent blank sections while real Rosie-owned photos are gathered. They are CSS/JS safe, reduced-motion friendly, and should be replaced by approved R2 media as soon as available. Build 208 adds lifecycle workflow placeholder slots for the connected owner dashboard.",
+  "build": 209,
+  "updated_at": "2026-06-17",
+  "summary": "Visual placeholders prevent blank sections while real Rosie-owned media is gathered. Build 209 adds live-detail placeholders for customer updates, private staff notes, and video evidence while preserving visibility and consent rules.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -93,13 +93,36 @@
       "where": "maintenance/fleet/workflow cards",
       "visual": "connected workflow placeholder card",
       "replace_with": "seasonal care calendar or vehicle history screenshot"
+    },
+    {
+      "key": "live_customer_update",
+      "label": "Live customer update placeholder",
+      "where": "customer progress timeline and live detail workspace",
+      "visual": "phone/timeline update card",
+      "replace_with": "approved during-service photo with a short customer-safe note"
+    },
+    {
+      "key": "private_staff_note",
+      "label": "Private staff note placeholder",
+      "where": "detailer/admin-only timeline entries",
+      "visual": "locked staff discussion card",
+      "replace_with": "staff-only note or evidence that must never appear in the customer feed"
+    },
+    {
+      "key": "video_update",
+      "label": "Video update placeholder",
+      "where": "live detailing timeline when a video is pending/uploading",
+      "visual": "video frame and play indicator",
+      "replace_with": "short approved progress video stored in protected media storage"
     }
   ],
   "rules": [
     "Never expose private incident/report photos as placeholders or fallback images.",
     "Public gallery placeholders must clearly say image is pending/repair needed so customers are not misled.",
     "Every real image should have descriptive local alt text when used on public pages.",
-    "Use placeholders as temporary polish only; the Media Health and Gallery Approval screens should keep pushing toward real owned images."
+    "Use placeholders as temporary polish only; the Media Health and Gallery Approval screens should keep pushing toward real owned images.",
+    "Live-detail placeholders must inherit the selected audience: customer now, admin review first, or staff only.",
+    "A private or review-pending image/video must never fall back to a public image URL."
   ],
   "desktop_mobile_notes": [
     "Placeholders use fluid aspect ratios and single-column mobile behavior.",
