@@ -152,6 +152,17 @@
         </div>
       </section>
 
+      <section class="section">
+        <div class="panel">
+          <div class="toolbar-wrap" style="justify-content:space-between">
+            <div><div class="badge">Build 210 closeout controls</div><h2 style="margin:8px 0 0">Proof, summary, payment, review</h2></div>
+            <div class="toolbar-wrap"><button id="generateSummaryBtn" class="btn primary" type="button" disabled>Generate customer summary</button><button id="queueReviewBtn" class="btn ghost" type="button" disabled>Queue safe review request</button></div>
+          </div>
+          <div id="proofStatusAdmin" class="grid cards" style="margin-top:12px"><div class="notice">Load a booking to verify arrival, during, and final proof.</div></div>
+          <div id="summaryStatusAdmin" class="notice" style="margin-top:12px">No completed-job summary loaded.</div>
+        </div>
+      </section>
+
       <section class="section surface-grid-2">
         <div class="panel">
           <h2>Updates</h2>
@@ -321,6 +332,8 @@
           <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
           <h3>${escapeHtml(item.created_by || 'Rosie Dazzlers')}</h3>
           <p>${escapeHtml(item.note || 'Update posted.')}</p>
+          ${item.stage==='recommendation'?`<div class="notice"><strong>${escapeHtml(item.recommendation_title||'Recommendation')}</strong><div>${Number(item.recommendation_amount_cents||0)>0?new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(Number(item.recommendation_amount_cents)/100):'No price change'}</div><div class="badges"><span class="badge">${escapeHtml(item.customer_decision||item.recommendation_status||'awaiting customer')}</span></div></div>`:''}
+          ${item.stage==='issue'&&!item.linked_incident_report_id?`<button class="btn ghost small" type="button" data-convert-incident="${escapeHtml(item.id)}" data-source-entity="update">Create linked incident</button>`:item.linked_incident_report_id?'<span class="badge">Incident linked</span>':''}
           ${moderationBadges(item)}
           ${moderationReason(item)}
           ${moderationControls('update', item)}
@@ -339,6 +352,7 @@
           <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
           ${moderationBadges(item)}
           ${moderationReason(item)}
+          <div class="toolbar-wrap">${item.stage==='issue'&&!item.linked_incident_report_id?`<button class="btn ghost small" type="button" data-convert-incident="${escapeHtml(item.id)}" data-source-entity="media">Create linked incident</button>`:''}${item.stage==='final'?`<button class="btn ghost small" type="button" data-reuse-media="${escapeHtml(item.id)}" data-target="gallery">Queue for Gallery</button><button class="btn ghost small" type="button" data-reuse-media="${escapeHtml(item.id)}" data-target="vehicle_history">Add to Vehicle History</button>`:''}</div>
           ${moderationControls('media', item)}
         </article>`).join('');
     }
@@ -480,6 +494,20 @@
       return requestJson('/api/admin/progress_moderate', { method:'POST', body:{ entity, id: entryId, action, moderation_reason: reason, booking_id: currentBookingId } });
     }
 
+
+    function renderCloseout(data) {
+      const proof=data.proof_media_status||{};const counts=proof.stage_counts||proof.counts||{};
+      qs('#proofStatusAdmin').innerHTML=['arrival','during','final'].map(k=>`<article class="card"><div class="badge">${Number(counts[k]||0)>0?'Ready':'Required'}</div><h3>${k[0].toUpperCase()+k.slice(1)} proof</h3><p>${Number(counts[k]||0)>0?`${Number(counts[k])} approved/stored media item(s)`:'Add at least one usable media item before completing the job.'}</p></article>`).join('');
+      const summary=data.completed_job_summary;const box=qs('#summaryStatusAdmin');
+      box.className='notice '+(summary?'ok':'warn');box.textContent=summary?`Summary ${summary.status||'draft'} · payment ${summary.payment_status||'not recorded'}`:'Completed-job summary has not been generated.';
+      qs('#generateSummaryBtn').disabled=!currentBookingId;qs('#queueReviewBtn').disabled=!currentBookingId;
+    }
+    async function runConnectedAction(action, payload={}) {
+      if(!currentBookingId) return setNotice('Load a booking first.','bad');
+      const routes={summary:'/api/admin/job_summary_generate',review:'/api/admin/review_request_queue_safe',incident:'/api/admin/progress_convert_incident',reuse:'/api/admin/progress_media_reuse'};
+      const out=await requestJson(routes[action],{method:'POST',body:{booking_id:currentBookingId,...payload}});await reloadCurrent();return out;
+    }
+
     async function reloadCurrent() {
       if (!currentToken) throw new Error('Load a booking first.');
       const data = await loadProgressList(currentToken);
@@ -490,6 +518,7 @@
       renderSignoffs(data);
       renderSocialPosts(data);
       renderLiveFeedStats(data);
+      renderCloseout(data);
       await loadUsageHistory();
       authReady(true);
       if (data.crew_warning) setNotice(`Progress loaded. ${data.crew_warning}`, 'warn');
@@ -645,6 +674,14 @@
         }
       });
 
+      document.addEventListener('click', async (event)=>{
+        const incident=event.target.closest('[data-convert-incident]');
+        const reuse=event.target.closest('[data-reuse-media]');
+        if(incident){incident.disabled=true;try{setNotice('Creating private incident report…');await runConnectedAction('incident',{source_id:incident.dataset.convertIncident,source_entity:incident.dataset.sourceEntity});setNotice('Incident report created and linked.','ok');}catch(err){setNotice(err.message||'Could not create incident.','bad');}finally{incident.disabled=false;}}
+        if(reuse){reuse.disabled=true;try{setNotice('Reusing approved final media…');await runConnectedAction('reuse',{media_id:reuse.dataset.reuseMedia,target:reuse.dataset.target});setNotice(reuse.dataset.target==='gallery'?'Final media queued for Gallery Approvals.':'Final media added to vehicle history.','ok');}catch(err){setNotice(err.message||'Could not reuse media.','bad');}finally{reuse.disabled=false;}}
+      });
+      qs('#generateSummaryBtn').addEventListener('click',async()=>{try{setNotice('Generating completed-job summary…');await runConnectedAction('summary',{publish:true});setNotice('Customer-safe completed-job summary generated.','ok');}catch(err){setNotice(err.message||'Could not generate summary.','bad');}});
+      qs('#queueReviewBtn').addEventListener('click',async()=>{try{setNotice('Checking review safety…');const out=await runConnectedAction('review');setNotice(out.blocked?`Review request blocked: ${(out.blockers||[]).join(' ')}`:'Review request safely queued.',out.blocked?'warn':'ok');}catch(err){setNotice(err.message||'Could not queue review request.','bad');}});
       document.addEventListener('click', handleModerationClick);
       await loadInventoryItems();
       authReady(false);
