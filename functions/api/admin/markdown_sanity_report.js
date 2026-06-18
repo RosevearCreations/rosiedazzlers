@@ -1,4 +1,4 @@
-// Build 207 — admin diagnostics for Markdown sanity report.
+// Build 209 — admin diagnostics for canonical Markdown and archive status.
 import { requireStaffAccess, json } from "../_lib/staff-auth.js";
 import reportData from "../../../data/markdown_sanity_build207.json";
 
