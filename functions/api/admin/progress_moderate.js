@@ -1,5 +1,6 @@
 import { requireStaffAccess, json, methodNotAllowed } from '../_lib/staff-auth.js';
 import { schemaLooksLegacy } from '../_lib/job-live-feed.js';
+import { queueCustomerLiveAlert } from '../_lib/live-interaction-alerts.js';
 
 export async function onRequestOptions(){ return new Response('', { status:204, headers:corsHeaders() }); }
 export async function onRequestGet(){ return withCors(methodNotAllowed()); }
@@ -45,6 +46,9 @@ export async function onRequestPost({ request, env }) {
       }).catch(()=>null);
     }
 
+    if (action === 'approve_customer' && body.booking_id) {
+      await queueCustomerLiveAlert({ env, bookingId: String(body.booking_id), eventType: 'progress_item_approved', title: 'New Rosie Dazzlers job update', message: 'A new approved update is available on your secure progress page.', payload: { entity, id } }).catch(()=>null);
+    }
     return withCors(json({ ok: true, item, schema_fallback_used: legacyUsed }));
   } catch (err) {
     return withCors(json({ error: err?.message || 'Unexpected server error.' }, 500));

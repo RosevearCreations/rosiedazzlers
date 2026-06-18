@@ -18,6 +18,12 @@ export async function onRequestPost(context) {
     const file_size_bytes = Number(body.file_size_bytes || 0);
     const customer_visible = body.customer_visible === true || String(body.visibility || "").trim().toLowerCase() === "customer";
     const media_kind = normalizeMediaKind(body.media_kind, content_type);
+    const duration_seconds = Number(body.duration_seconds || 0);
+    const retention_policy = normalizeRetention(body.retention_policy);
+    const max_duration_seconds = Number(env.JOB_MEDIA_MAX_VIDEO_SECONDS || 120);
+    if (media_kind === 'video' && duration_seconds > 0 && duration_seconds > max_duration_seconds) {
+      return withCors(json({ error: `Video is longer than the ${max_duration_seconds}-second limit.`, max_duration_seconds }, 400));
+    }
 
     if (!isUuid(booking_id)) return withCors(json({ error: "booking_id must be a uuid." }, 400));
     if (!filename) return withCors(json({ error: "filename required." }, 400));
@@ -56,6 +62,9 @@ export async function onRequestPost(context) {
     if (!signedURL) return withCors(json({ error: "Supabase Storage sign returned no signedURL." }, 502));
 
     const upload_url = signedURL.startsWith("http") ? signedURL : `${env.SUPABASE_URL}/storage/v1${signedURL}`;
+    const upload_session_id = crypto.randomUUID();
+    await createUploadSession({ env, id: upload_session_id, booking_id, filename: safeName, content_type, file_size_bytes, media_kind, bucket, path, retention_policy, actor: access.actor }).catch(() => null);
+
     const public_url = customer_visible
       ? `${env.JOB_MEDIA_PUBLIC_BASE || `${env.SUPABASE_URL}/storage/v1/object/public`}/${encodeURIComponent(bucket)}/${encodePath(path)}`
       : null;
@@ -69,6 +78,10 @@ export async function onRequestPost(context) {
       public_url,
       customer_visible,
       media_kind,
+      upload_session_id,
+      retention_policy,
+      max_duration_seconds,
+      compression_guidance: media_kind === 'video' ? 'For faster mobile uploads, use MP4/H.264 at 1080p or lower. The browser will not silently alter the original evidence file.' : 'Use JPEG or WebP when practical for faster mobile uploads.',
       max_size_bytes: getUploadSizeLimit({ env, content_type, media_kind }),
       uploaded_by: access.actor.full_name || cleanText(body.staff_name) || "Staff"
     }));
@@ -112,4 +125,20 @@ function getUploadSizeLimit({ env, content_type, media_kind }) {
   const defaultVideo = Number(env.JOB_MEDIA_MAX_VIDEO_BYTES || 150 * 1024 * 1024);
   if (media_kind === "video" || String(content_type || "").startsWith("video/")) return defaultVideo;
   return defaultImage;
+}
+
+
+function normalizeRetention(value) {
+  const raw = String(value || 'standard_365_days').trim().toLowerCase();
+  const aliases={job_plus_90_days:'temporary_90_days',job_plus_365_days:'standard_365_days',permanent_evidence:'permanent_proof'};
+  const normalized=aliases[raw]||raw;
+  return ['temporary_90_days','standard_365_days','permanent_proof','legal_hold'].includes(normalized) ? normalized : 'standard_365_days';
+}
+
+async function createUploadSession({ env, id, booking_id, filename, content_type, file_size_bytes, media_kind, bucket, path, retention_policy, actor }) {
+  const headers = { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' };
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/live_upload_sessions`, {
+    method: 'POST', headers, body: JSON.stringify([{ id, booking_id, filename, content_type, file_size_bytes: file_size_bytes || null, media_kind, storage_bucket: bucket, storage_path: path, retention_policy, status: 'prepared', staff_user_id: actor?.id || null }])
+  });
+  if (!res.ok) throw new Error(await res.text());
 }
