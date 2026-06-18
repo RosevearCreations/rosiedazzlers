@@ -125,7 +125,7 @@
     <section class="section">
       <div class="panel">
         <div class="toolbar-wrap" style="justify-content:space-between">
-          <div><h2 style="margin-bottom:4px">Live job timeline</h2><div id="lastRefreshText" class="kicker">Updates refresh automatically while the job is active.</div></div>
+          <div><div class="badges"><h2 style="margin-bottom:4px">Live job timeline</h2><span id="unreadBadge" class="badge" style="display:none"></span></div><div id="lastRefreshText" class="kicker">Updates refresh automatically while the job is active.</div></div>
           <button id="refreshProgressBtn" class="btn ghost" type="button">Refresh now</button>
         </div>
         <div id="updatesList" class="grid" style="margin-top:12px">
@@ -153,6 +153,12 @@
       </div>
     </section>
 
+    <section class="section" id="completedSummarySection" style="display:none">
+      <div class="panel">
+        <div class="badge">Completed job summary</div><h2>Proof, payment, care advice, and what comes next</h2>
+        <div id="completedSummaryBox" class="grid cards" style="margin-top:12px"></div>
+      </div>
+    </section>
 
     <section class="section">
       <div class="panel">
@@ -340,14 +346,36 @@
             ? `<video class="live-media" controls preload="metadata" src="${escapeHtml(item.media_url)}"></video>`
             : `<img class="live-media" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || 'Progress photo')}" onerror="this.outerHTML='<div class=&quot;visual-placeholder&quot; data-visual-placeholder=&quot;proof_of_work&quot;><strong>Media temporarily unavailable</strong><span>Please refresh or contact Rosie Dazzlers.</span></div>'">`;
         }
+        const recommendation = stage === 'recommendation' ? `<div class="decision-panel"><strong>${escapeHtml(item.recommendation_title || 'Recommended additional work')}</strong>${Number(item.recommendation_amount_cents||0)>0?`<div>${formatMoney(Number(item.recommendation_amount_cents)/100)}</div>`:''}<div class="badges"><span class="badge">${escapeHtml(item.customer_decision || item.recommendation_status || 'awaiting decision')}</span></div>${!item.customer_decision||item.customer_decision==='pending'?`<div class="row"><button class="btn primary small" data-recommendation="${escapeHtml(item.id)}" data-decision="approved">Approve</button><button class="btn ghost small" data-recommendation="${escapeHtml(item.id)}" data-decision="declined">Decline</button><button class="btn ghost small" data-recommendation="${escapeHtml(item.id)}" data-decision="needs_discussion">Ask a question</button></div>`:''}</div>` : '';
         return `<article class="card live-timeline-card" data-stage="${escapeHtml(stage)}">
           ${mediaMarkup}
           <div class="badges" style="margin-top:${mediaMarkup?'10px':'0'}"><span class="badge">${escapeHtml(stageLabel)}</span><span class="badge">${escapeHtml(item.feed_type)}</span>${item.customer_action_required ? '<span class="badge">Your response requested</span>' : ''}</div>
           <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
           <h3>${escapeHtml(item.feed_type === 'media' ? (item.caption || item.kind || 'Media update') : (item.created_by || 'Rosie Dazzlers'))}</h3>
           ${item.feed_type === 'note' ? `<p>${escapeHtml(item.note || 'Update posted.')}</p>` : `<p>${escapeHtml(item.created_by || 'Rosie Dazzlers')}</p>`}
+          ${recommendation}
         </article>`;
       }).join("");
+    }
+
+    async function decideRecommendation(updateId, decision) {
+      const note = decision === 'needs_discussion' ? (window.prompt('What would you like to ask Rosie Dazzlers?') || '').trim() : '';
+      try {
+        setNotice('Saving your decision…');
+        const res = await fetch('/api/progress/recommendation_decide', { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify({ token:currentToken, update_id:updateId, decision, note }) });
+        const data = await res.json().catch(()=>({}));
+        if (!res.ok) throw new Error(data.error || 'Could not save recommendation decision.');
+        await loadProgress();
+        setNotice(decision === 'approved' ? 'Recommendation approved. Rosie Dazzlers has been notified.' : 'Your decision was sent to Rosie Dazzlers.', 'ok');
+      } catch (err) { setNotice(err.message || 'Could not save your decision.', 'bad'); }
+    }
+
+    function renderCompletedSummary(data) {
+      const section=document.querySelector('#completedSummarySection'); const box=document.querySelector('#completedSummaryBox'); const item=data.completed_job_summary;
+      if(!section||!box)return; if(!item){section.style.display='none';return;} section.style.display='block';
+      const proof=Array.isArray(item.proof_items)?item.proof_items:(item.proof_items?.media||item.proof_items?.items||[]);
+      const care=Array.isArray(item.care_advice)?item.care_advice:[]; const maintenance=Array.isArray(item.maintenance_recommendations)?item.maintenance_recommendations:[];
+      box.innerHTML=`<article class="card"><h3>Work completed</h3><p>${escapeHtml(item.service_summary||item.customer_summary||'Your detail is complete.')}</p><div class="badges"><span class="badge">${escapeHtml(item.payment_status||'payment status pending')}</span></div></article><article class="card"><h3>Care advice</h3>${care.length?`<ul>${care.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`:'<p>Care advice will appear here when approved.</p>'}</article><article class="card"><h3>Next maintenance</h3>${maintenance.length?`<ul>${maintenance.map(x=>`<li>${escapeHtml(typeof x==='string'?x:(x.label||x.title||'Recommended maintenance'))}</li>`).join('')}</ul>`:'<p>No maintenance recommendation has been added yet.</p>'}</article>${proof.length?`<article class="card"><h3>Final proof</h3><div class="grid cards">${proof.map(x=>x.media_url?`<img class="img" loading="lazy" src="${escapeHtml(x.media_url)}" alt="${escapeHtml(x.caption||'Completed detail proof')}">`:'').join('')}</div></article>`:''}`;
     }
 
     function renderIncidentReports(data) {
@@ -488,6 +516,8 @@
         renderWorkflow(Array.isArray(data.workflow_events) ? data.workflow_events : [], data.booking || {});
         if (document.querySelector('#commentName') && data.booking?.customer_name && !document.querySelector('#commentName').value) document.querySelector('#commentName').value = data.booking.customer_name;
         renderUpdates(data);
+        renderCompletedSummary(data);
+        const unread=document.querySelector('#unreadBadge');if(unread){unread.style.display=Number(data.unread_count||0)>0?'inline-flex':'none';unread.textContent=`${Number(data.unread_count||0)} new`; }
         renderIncidentReports(data);
         renderMedia(data);
         renderSignoff(data);
@@ -566,6 +596,7 @@
       document.querySelector("#signoffForm")?.addEventListener("submit", submitSignoff);
       document.querySelector('#commentForm')?.addEventListener('submit', (event)=>{ event.preventDefault(); postCustomerComment(); });
       document.querySelector('#refreshProgressBtn')?.addEventListener('click', ()=>loadProgress());
+      document.querySelector('#updatesList')?.addEventListener('click',(event)=>{const btn=event.target.closest('[data-recommendation]');if(btn)decideRecommendation(btn.dataset.recommendation,btn.dataset.decision);});
       refreshTimer = window.setInterval(()=>{ if (!document.hidden) loadProgress({ quiet:true }); }, 20000);
       document.addEventListener('visibilitychange', ()=>{ if (!document.hidden) loadProgress({ quiet:true }); });
     });
