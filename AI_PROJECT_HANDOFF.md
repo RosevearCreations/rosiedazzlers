@@ -1,4 +1,4 @@
-# Rosie Dazzlers AI Project Handoff — Build 209
+# Rosie Dazzlers AI Project Handoff — Build 210
 
 **Updated:** 2026-06-17  
 **Read first:** This is the primary technical/business handoff for a new AI chat or future build pass.
@@ -19,6 +19,28 @@ The connected lifecycle is:
 `lead / quote → booking → live detail interaction → proof of work → invoice/payment → review/public proof → repeat maintenance`
 
 Avoid creating isolated admin pages unless they clearly advance this lifecycle.
+
+
+
+## Build 210 central capability: connected live-job closeout
+
+Build 210 connects the original live-interaction promise to the rest of the business lifecycle instead of leaving updates as isolated timeline entries.
+
+- New live updates and customer replies create customer/staff notification events.
+- Customer and staff views expose unread counts using last-view timestamps.
+- Detailer media uploads show progress, can be cancelled/retried, and preserve a failed upload session for diagnostics.
+- Video uploads have duration/size limits, compression guidance, and retention metadata.
+- A booking cannot be marked complete until arrival, during-work, and final media exist, unless an authorized override reason is recorded.
+- Issue-stage updates/media can become linked private incident reports with evidence.
+- Customer-visible recommendations can include a price and customer approve/decline/discuss controls.
+- An approved priced recommendation creates a draft final-balance payment request.
+- Staff can generate a completed-job customer summary with proof, products, payment state, care advice, and maintenance recommendations.
+- Approved final photos can be queued for Gallery Approval and vehicle history without re-uploading.
+- Review requests are blocked when completion, payment, summary, or incident safety conditions are not met.
+- `/admin-today.html` provides one owner-friendly prioritized action queue.
+
+Primary Build 210 migration: `sql/2026-06-17_build210_connected_live_workflow.sql`.
+Primary structured build record: `data/build210_connected_live_workflow.json`.
 
 ## Build 209 central capability: live detail interaction
 
@@ -165,3 +187,10 @@ Rosie Dazzlers should match the useful workflow outcomes without copying competi
 ## Next best direction
 
 Continue with the next 20 steps in `MASTER_VALUE_ROADMAP.md`. The first priorities are live-update notifications, media retention/compression, customer unread indicators, proof-of-work checklist integration, and automatic handoff from completed work to invoice/review/maintenance.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.

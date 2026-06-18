@@ -818,3 +818,10 @@ The latest pass completes the editable-operations wiring layer: structured edita
 ## Build 197 implementation state
 
 Admin Dashboard now includes pricing catalog diagnostics/repair and route-copy parity checks. Admin App landing editors now show SEO/readiness previews and public preview links.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.

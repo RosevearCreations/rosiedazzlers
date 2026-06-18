@@ -32,3 +32,10 @@ The examples in the source notes use large-market numbers and sample ad math. Ro
 ## Build 209 marketing application note — 2026-06-17
 
 Live, customer-safe progress updates can improve trust and perceived professionalism during a mobile detail. Approved final photos/videos may later support review requests, gallery proof, local landing-page proof, and social drafts, but only after consent and admin approval. Private staff discussion and incident evidence must never be repurposed as marketing content.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.

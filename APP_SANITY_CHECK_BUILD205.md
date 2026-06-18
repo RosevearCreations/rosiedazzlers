@@ -114,3 +114,10 @@ Keep doing these each pass:
 ## Build 209 sanity addendum — 2026-06-17
 
 The original live interaction requirement is now a central connected workflow rather than a scattered feature. Detailers can post notes/photos/videos with customer-now, review-first, or staff-only visibility; administrators can moderate; customers see only approved safe content. Highest next value: notifications/unread state, proof checklist integration, media retention/compression, completed-job summary, and handoff to review/maintenance.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.

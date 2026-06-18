@@ -2442,3 +2442,15 @@ Next build should connect `/admin-quotes.html` to real quote create/edit/save ac
 18. Add live-update audit export.
 19. Add video captions/transcript/accessibility support.
 20. Complete live Cloudflare/Supabase/R2 mobile and desktop acceptance testing.
+
+
+## Build 210 update — connected live workflow (2026-06-17)
+
+Build 210 completed the first connected pass for the twelve highest-value live-workflow items: notifications, unread state, resilient uploads, video/retention guardrails, proof-media completion gates, issue-to-incident conversion, customer recommendation decisions, payment-request handoff, completed-job summaries, Gallery/vehicle-history reuse, safe review gating, and Today Needs Attention. The next 20 steps are maintained in `MASTER_VALUE_ROADMAP.md`.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.

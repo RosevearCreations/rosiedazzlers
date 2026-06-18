@@ -869,3 +869,27 @@ Authoritative additions:
 - `job_media.file_size_bytes`
 
 The database is the authority for live notes/media. Bundled files do not contain customer job content. Legacy-schema API fallback is intentionally conservative and must not be treated as a replacement for running the migration.
+
+## Build 210 — connected live workflow (2026-06-17)
+
+Build 210 connects live detail interaction to notifications, proof-of-work completion, customer recommendation decisions, payment requests, completed-job summaries, Gallery/vehicle-history reuse, safe review requests, and the owner attention queue.
+
+### New/extended records
+
+- `bookings`: staff/customer read timestamps, notification timestamps, completed-summary state, and review-request blocking reason.
+- `job_updates`: recommendation title/price, customer decision, linked incident, and linked payment-request identifiers.
+- `job_media`: duration, upload-session state, retention policy/expiry, and Gallery/vehicle-history reuse state.
+- `proof_of_work_checklists`: required stages, per-stage media counts, ready-to-complete state, and controlled override audit.
+- `live_upload_sessions`: prepared/uploading/failed/cancelled/completed upload attempts, retry count, errors, and storage destination.
+- `completed_job_summaries`: customer-safe proof, products used, care advice, maintenance recommendations, invoice reference, and payment state.
+- `gallery_media_candidates`: approved final media queued for before/after pairing without re-uploading.
+- `incident_reports`: source job update/media links for issue-to-incident conversion.
+
+Apply `sql/2026-06-17_build210_connected_live_workflow.sql` before testing these paths.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.

@@ -839,3 +839,20 @@ Next build should connect `/admin-quotes.html` to real quote create/edit/save ac
 ### Historical documentation
 
 Twenty redundant planning/handoff documents were moved to `docs/archive/`. The archive is historical context, not current direction. Required root audit documents remain because release checks still reference them.
+
+
+## Build 210 documentation entry
+
+- Primary handoff: `AI_PROJECT_HANDOFF.md`
+- Primary roadmap: `MASTER_VALUE_ROADMAP.md`
+- Migration: `sql/2026-06-17_build210_connected_live_workflow.sql`
+- Structured record: `data/build210_connected_live_workflow.json`
+- Owner attention screen: `/admin-today.html`
+- Historical Markdown remains retained for release/audit context; it is not the active plan.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.
