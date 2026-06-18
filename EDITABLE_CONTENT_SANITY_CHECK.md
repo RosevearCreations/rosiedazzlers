@@ -276,3 +276,10 @@ Build 197 was reviewed during the self-healing admin diagnostics pass. Relevant 
 ## Build 209 editable-content sync note — 2026-06-17
 
 Live job notes/media are operational records, not general site-settings JSON. They are DB-backed through `job_updates` and `job_media`, with friendly mobile/admin screens and explicit moderation. No raw JSON editor is introduced for customer job content. Existing friendly site/content editors and emergency JSON recovery rules remain unchanged.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.

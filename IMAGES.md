@@ -372,3 +372,10 @@ Build 197 was reviewed during the self-healing admin diagnostics pass. Relevant 
 ## Build 209 live media note — 2026-06-17
 
 Live job media now supports photos and videos with an explicit audience and job stage. Customer-visible media may appear immediately; review-pending and staff-only media must remain protected. Prefer protected storage bucket/path metadata with short-lived signed URLs instead of public links for private evidence. Added placeholder types: `live_customer_update`, `private_staff_note`, and `video_update`. Placeholders must inherit visibility and must never expose private evidence.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.

@@ -967,3 +967,15 @@ Next build should connect `/admin-quotes.html` to real quote create/edit/save ac
 Build 209 makes the original during-detail communication promise explicit. Staff can post notes, photos, and videos as customer-visible now, admin-review-first, or staff-only. The customer progress API returns only approved customer-safe content and filters internal booking-event notes. Run `sql/2026-06-17_build209_live_detail_interaction.sql`, then test `/detailer-jobs.html`, `/admin-progress.html`, and `/progress.html?token=...` on mobile and desktop.
 
 Active planning now lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; retired duplicate planning files are in `docs/archive/`.
+
+
+## Build 210 connected live workflow
+
+The original detailing interaction promise is now connected through proof, customer decisions, payment, closeout, Gallery/vehicle history, review safety, and repeat-maintenance follow-up. Start with `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; deploy `sql/2026-06-17_build210_connected_live_workflow.sql` before testing `/detailer-jobs.html`, `/admin-progress.html`, `/progress.html`, `/admin-gallery.html`, or `/admin-today.html`.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.

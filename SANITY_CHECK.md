@@ -914,3 +914,10 @@ Build 197 was reviewed during the self-healing admin diagnostics pass. Relevant 
 ## Build 209 sanity sync — 2026-06-17
 
 The app now supports the intended during-detail interaction model with protected private discussion and customer-safe publication. The main risk has shifted from missing capability to operational hardening: migrations, mobile network recovery, video/storage controls, notifications, unread state, and live deployment testing.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.

@@ -1494,3 +1494,28 @@ Next build should connect `/admin-quotes.html` to real quote create/edit/save ac
 - Gallery/vehicle-history reuse of approved live media is not yet automatic.
 - Browser/device testing with real R2/Supabase credentials remains required.
 - Archived Markdown may still contain stale internal links; it is historical only.
+
+
+## Build 210 known gaps and risks (2026-06-17)
+
+### Reduced
+- Live updates now trigger queued customer/staff notifications and unread counts.
+- Mobile uploads have progress, cancel, retry, connection feedback, duration/size checks, and upload-session records.
+- Arrival/during/final proof is enforced before completion.
+- Recommendations, price decisions, incidents, completed summaries, media reuse, review safety, and owner attention are connected.
+
+### Outstanding
+- `sql/2026-06-17_build210_connected_live_workflow.sql` must be deployed.
+- Notification events still require configured production delivery workers/providers.
+- Upload retry restarts the file; true chunked/resumable transfer is not implemented.
+- Browser compression/transcoding is guidance only; original evidence must not be silently changed.
+- Payment-request creation is a draft handoff until a hosted payment link is generated/sent.
+- Gallery candidates still require before/after pairing and consent review.
+- Live Cloudflare/Supabase/R2 mobile testing remains mandatory.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.

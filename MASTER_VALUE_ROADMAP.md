@@ -1,4 +1,4 @@
-# Rosie Dazzlers Master Value Roadmap — Build 209
+# Rosie Dazzlers Master Value Roadmap — Build 210
 
 **Updated:** 2026-06-17  
 **Purpose:** This is the one active business/product roadmap. Historical build detail remains in `DEVELOPMENT_ROADMAP.md`; active decisions belong here.
@@ -130,3 +130,59 @@ Active strategy goes only into:
 - `MASTER_VALUE_ROADMAP.md`
 
 Append short build/audit summaries to required historical files. Put retired duplicate planning files in `docs/archive/`; do not delete history that may still explain an old migration or release guard.
+
+
+## Build 210 — connected live workflow completed (2026-06-17)
+
+### Completed 20 steps
+
+1. Added customer notification events for customer-visible live updates, media, approvals, workflow changes, and completed-job summaries.
+2. Added staff notification events for customer replies, review-pending updates/media, private notes, and recommendation decisions.
+3. Added customer unread update counts based on the previous secure-progress view.
+4. Added staff unread customer-reply counts per booking.
+5. Added mobile upload progress with a visible progress bar.
+6. Added upload cancellation, retry, online/offline messaging, and persisted upload-session diagnostics.
+7. Added video duration and file-size enforcement plus compression guidance.
+8. Added media retention policy and expiry metadata.
+9. Connected arrival, during, and final media to proof-of-work readiness.
+10. Blocked job completion when required proof media is missing, with an audited admin override path.
+11. Added one-click conversion of issue updates/media into linked private incident reports.
+12. Added customer approval, decline, and discussion controls for live recommendations.
+13. Added draft payment-request creation when a priced recommendation is approved.
+14. Added customer-safe completed-job summaries with proof, payment state, care advice, and maintenance recommendations.
+15. Added final-media reuse into Gallery candidate and vehicle-history queues without re-uploading.
+16. Added review-request safety gates for completion, payment, summary, and unresolved incidents.
+17. Added `/admin-today.html` as a single prioritized owner action queue.
+18. Added Today Needs Attention diagnostics to the main Admin Dashboard.
+19. Added Gallery Approvals final-media candidate visibility and new connected-workflow visual placeholders.
+20. Updated schema, canonical docs, route copies, service worker cache, responsive CSS, and release checks for Build 210.
+
+### Next 20 value-added steps
+
+1. Connect notification events to production email/SMS delivery providers and delivery receipts.
+2. Add per-user/per-device read receipts rather than booking-level timestamps.
+3. Add true resumable/chunked uploads for weak LTE connections.
+4. Add optional client-side photo compression while retaining original incident evidence.
+5. Add server video transcoding, poster frames, captions, and accessibility transcripts.
+6. Add storage usage, orphan upload, broken signed-path, and retention cleanup diagnostics.
+7. Add vehicle-area walkaround templates and required pre-existing-condition capture.
+8. Add customer signature and terms acknowledgment to price-change approvals.
+9. Automatically create and send hosted payment links from approved in-job recommendations.
+10. Add invoice PDF generation/download to completed-job summaries.
+11. Add completed-summary revision history and customer acknowledgment.
+12. Pair before/final media directly in Gallery Approvals without copying URLs.
+13. Render approved vehicle-history photos/videos directly in My Account.
+14. Convert maintenance recommendations into scheduled customer plans/reminders.
+15. Add preview/send controls for notification and review queues.
+16. Add owner task assignment, snooze, due date, notes, and resolved state in Today Needs Attention.
+17. Add live-interaction and moderation audit export.
+18. Complete keyboard, screen-reader, caption, and reduced-motion acceptance testing.
+19. Run real Cloudflare/Supabase/R2 mobile tests on weak Wi-Fi/LTE and record evidence.
+20. Measure quote-to-booking, recommendation approval, payment, review, and repeat-maintenance conversion improvements.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.

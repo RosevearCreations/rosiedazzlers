@@ -18,3 +18,10 @@ Twenty duplicate handoff, status, repository-guide, old roadmap, and follow-up d
 ## Rule going forward
 
 New strategy and next steps belong in the two active documents. Required history files receive only a short build-sync note.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.
