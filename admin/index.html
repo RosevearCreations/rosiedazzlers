@@ -20,7 +20,7 @@
     .muted{color:#94a3b8}.warning-panel{border-radius:16px;border:1px solid rgba(251,191,36,.28);background:rgba(245,158,11,.10);padding:14px;margin-top:14px}.warning-panel[data-state="ok"]{border-color:rgba(74,222,128,.28);background:rgba(22,163,74,.10)}.warning-row{padding:10px;border-radius:12px;background:rgba(15,23,42,.35);border:1px solid rgba(255,255,255,.06);margin-top:8px}
   </style>
 </head>
-<body data-page="admin" data-build210="connected-live-workflow" data-build209="live-detail-interaction" data-build208="connected-workflow-command-center" data-build206="value-added-operations-foundations" data-build205="sanity-check-value-roadmap" data-build204="gallery-media-resilience" data-build203="desktop-mobile-visual-polish-dashboard" data-build202="incident-marketing-dashboard" data-build200="advanced-json-panel-dashboard" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard" data-build192="editable-settings-diagnostics" data-build195="seo-proof-fallback-report-dashboard" data-build197="dashboard-self-healing-diagnostics" data-build201="friendly-editor-validation-dashboard">
+<body data-page="admin" data-build211="production-reliability" data-build210="connected-live-workflow" data-build209="live-detail-interaction" data-build208="connected-workflow-command-center" data-build206="value-added-operations-foundations" data-build205="sanity-check-value-roadmap" data-build204="gallery-media-resilience" data-build203="desktop-mobile-visual-polish-dashboard" data-build202="incident-marketing-dashboard" data-build200="advanced-json-panel-dashboard" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard" data-build192="editable-settings-diagnostics" data-build195="seo-proof-fallback-report-dashboard" data-build197="dashboard-self-healing-diagnostics" data-build201="friendly-editor-validation-dashboard">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -125,6 +125,8 @@
           <div id="workflowCommandDiagnostics" class="warning-panel" data-state="loading">Loading lead-to-maintenance workflow map…</div>
           <h2 style="margin-top:18px">Today Needs Attention</h2>
           <div id="todayAttentionDiagnostics" class="warning-panel" data-state="loading">Building the owner action queue…</div>
+          <h2 style="margin-top:18px">Production reliability</h2>
+          <div id="productionReliabilityDiagnostics" class="warning-panel" data-state="loading">Checking notification providers, hosted payment links, uploads, retention, and end-to-end readiness…</div>
           <h2 style="margin-top:18px">Live detail interaction</h2>
           <div id="liveInteractionDiagnostics" class="warning-panel" data-state="loading">Checking customer-visible, review-pending, and staff-only job updates…</div>
           <h2 style="margin-top:18px">Remaining advanced JSON panels</h2>
@@ -213,6 +215,15 @@
             <a class="btn primary" href="/admin-workflow.html">Open Workflow</a>
           </article>
 
+
+          
+
+          <article class="card" data-build211="production-reliability-card">
+            <h3>Production Readiness</h3>
+            <p>Check provider setup, hosted payment links, weak-network upload risks, storage retention, and end-to-end workflow readiness from one screen.</p>
+            <div class="hr"></div>
+            <a class="btn primary" href="/admin-production.html">Open Production Readiness</a>
+          </article>
 
           <article class="card" data-build210="today-attention-card">
             <h3>Today Needs Attention</h3>
@@ -420,7 +431,8 @@
         valueAddedSanity: document.getElementById('valueAddedSanityDiagnostics'),
         workflowCommand: document.getElementById('workflowCommandDiagnostics'),
         liveInteraction: document.getElementById('liveInteractionDiagnostics'),
-        todayAttention: document.getElementById('todayAttentionDiagnostics')
+        todayAttention: document.getElementById('todayAttentionDiagnostics'),
+        productionReliability: document.getElementById('productionReliabilityDiagnostics')
       };
       function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
       function setShellStatus(message,type){document.querySelectorAll('[data-admin-shell-status]').forEach((node)=>{node.hidden=!message;node.textContent=message||'';node.dataset.state=type||'';});}
@@ -617,6 +629,19 @@
       }
 
 
+
+
+      async function loadProductionReliabilityDiagnostics(){
+        if(!els.productionReliability) return;
+        const res = await fetch('/api/admin/production_reliability_report', { credentials:'include', cache:'no-store' });
+        const data = await res.json().catch(()=>null);
+        if(!res.ok || !data?.ok) throw new Error(data?.error || 'Could not load production reliability report.');
+        const c = data.counts || {};
+        const risk = Number(c.notification_failed||0)+Number(c.payment_links_missing||0)+Number(c.upload_sessions_needing_review||0)+Number(c.retention_due||0)+Number(c.unresolved_incidents||0);
+        els.productionReliability.dataset.state = risk ? 'warn' : 'ok';
+        els.productionReliability.innerHTML = `<strong>${risk ? `${risk} production reliability item(s) need review` : 'Production reliability checks are clear'}</strong><div class="muted">Failed notifications ${Number(c.notification_failed||0)} · missing payment links ${Number(c.payment_links_missing||0)} · upload review ${Number(c.upload_sessions_needing_review||0)} · retention due ${Number(c.retention_due||0)} · unresolved incidents ${Number(c.unresolved_incidents||0)}</div>${(data.attention||[]).slice(0,4).map(x=>`<div class="warning-row"><strong>${esc(x.title)}</strong><div class="muted">${esc(x.detail)}</div></div>`).join('')}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-production.html">Open Production Readiness</a> <a class="btn ghost small" href="/admin-today.html">Open Today Queue</a></div>`;
+      }
+
       async function loadTodayAttentionDiagnostics(){
         if(!els.todayAttention) return;
         const res=await fetch('/api/admin/today_needs_attention_report',{credentials:'include',cache:'no-store'});
@@ -646,7 +671,7 @@
         renderList(els.live, (data.live_online_sessions||[]).slice(0,5), (r)=>`<strong>${esc(r.country || 'Unknown')}</strong><div class="muted">${esc((r.path||[]).join(' → '))}</div><div class="muted">Seen: ${esc(r.ended_at || '')}</div>`, 'No live visitors right now.');
         renderList(els.daily, (data.daily_traffic||[]).slice(-7).reverse(), (r)=>`<strong>${esc(r.day)}</strong><div class="muted">${Number(r.page_views||0)} page views • ${Number(r.unique_visitors||0)} visitors • ${Number(r.abandoned_sessions||0)} abandoned</div>`, 'No daily traffic summary yet.');
       }
-      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ await Promise.allSettled([guardedLoad('Dashboard analytics', loadDashboardAnalytics), guardedLoad('Payment webhook warnings', loadPaymentWebhookWarnings), guardedLoad('Operations warnings', loadBuild185OpsWarnings), guardedLoad('Editable settings diagnostics', loadEditableSettingsDiagnostics), guardedLoad('Fallback settings report', loadFallbackSettingsReport), guardedLoad('Local SEO proof diagnostics', loadLocalSeoProofDiagnostics), guardedLoad('Pricing catalog diagnostics', loadPricingCatalogDiagnostics), guardedLoad('Route-copy parity diagnostics', loadRouteCopyDiagnostics), guardedLoad('Desktop/mobile visual diagnostics', loadResponsiveVisualDiagnostics), guardedLoad('Gallery image health diagnostics', loadGalleryImageHealthDiagnostics), guardedLoad('Current sanity diagnostics', loadValueAddedSanityDiagnostics), guardedLoad('Markdown docs diagnostics', loadMarkdownDocsDiagnostics), guardedLoad('Visual placeholder diagnostics', loadVisualPlaceholderDiagnostics), guardedLoad('Workflow command diagnostics', loadWorkflowCommandDiagnostics), guardedLoad('Live detail interaction diagnostics', loadLiveInteractionDiagnostics), guardedLoad('Today Needs Attention diagnostics', loadTodayAttentionDiagnostics)]); } });
+      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ await Promise.allSettled([guardedLoad('Dashboard analytics', loadDashboardAnalytics), guardedLoad('Payment webhook warnings', loadPaymentWebhookWarnings), guardedLoad('Operations warnings', loadBuild185OpsWarnings), guardedLoad('Editable settings diagnostics', loadEditableSettingsDiagnostics), guardedLoad('Fallback settings report', loadFallbackSettingsReport), guardedLoad('Local SEO proof diagnostics', loadLocalSeoProofDiagnostics), guardedLoad('Pricing catalog diagnostics', loadPricingCatalogDiagnostics), guardedLoad('Route-copy parity diagnostics', loadRouteCopyDiagnostics), guardedLoad('Desktop/mobile visual diagnostics', loadResponsiveVisualDiagnostics), guardedLoad('Gallery image health diagnostics', loadGalleryImageHealthDiagnostics), guardedLoad('Current sanity diagnostics', loadValueAddedSanityDiagnostics), guardedLoad('Markdown docs diagnostics', loadMarkdownDocsDiagnostics), guardedLoad('Visual placeholder diagnostics', loadVisualPlaceholderDiagnostics), guardedLoad('Workflow command diagnostics', loadWorkflowCommandDiagnostics), guardedLoad('Live detail interaction diagnostics', loadLiveInteractionDiagnostics), guardedLoad('Today Needs Attention diagnostics', loadTodayAttentionDiagnostics), guardedLoad('Production reliability diagnostics', loadProductionReliabilityDiagnostics)]); } });
     })();
   </script>
 </body>
