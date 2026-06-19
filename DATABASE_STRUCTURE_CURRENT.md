@@ -893,3 +893,11 @@ Apply `sql/2026-06-17_build210_connected_live_workflow.sql` before testing these
 ### Build 210 documentation sync — 2026-06-17
 
 Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.
+
+## Build 211 — production reliability schema sync (2026-06-18)
+
+Apply `sql/2026-06-18_build211_production_reliability.sql` after Build 210. It adds provider/checkout metadata to `final_balance_payment_requests`, reliability fields to `live_upload_sessions`, retention status to `job_media`, and three audit tables: `notification_provider_test_logs`, `storage_retention_audit`, and `production_reliability_audits`.
+
+These changes support `/admin-production.html`, `/api/admin/production_reliability_report`, notification provider tests, hosted Stripe final-balance checkout creation, and safe dry-run storage retention review.
+
+Build 211 documentation sync: retained for historical context while the active project direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; production reliability, provider setup, hosted payment links, upload/retention diagnostics, and owner simplification were reviewed in this pass.

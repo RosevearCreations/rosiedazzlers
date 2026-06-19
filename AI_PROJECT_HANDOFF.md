@@ -194,3 +194,23 @@ Continue with the next 20 steps in `MASTER_VALUE_ROADMAP.md`. The first prioriti
 ### Build 210 documentation sync — 2026-06-17
 
 Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.
+
+## Build 211 central capability: production reliability hardening
+
+Build 211 focuses on making the connected live workflow production-ready rather than adding more scattered screens.
+
+Primary additions:
+
+- `/admin-production.html` — one owner/staff screen for notification providers, hosted payment links, upload reliability, retention cleanup, and end-to-end readiness.
+- `/api/admin/production_reliability_report` — safe diagnostics that check provider configuration, payment-link gaps, failed notifications, weak-network upload sessions, retention-due media, unresolved incidents, and environment readiness without exposing secrets.
+- `/api/admin/notification_provider_test` — configuration-only or safe test-send checks for email/SMS providers.
+- `/api/admin/final_balance_checkout_create` — creates Stripe-hosted final-balance checkout sessions when `STRIPE_SECRET_KEY` is configured; manual fallback remains available.
+- `/api/admin/storage_retention_sweep` — dry-run first retention review; permanent proof and legal-hold evidence are excluded and no physical object deletion happens.
+- `/admin-today.html` now includes production reliability work such as provider setup, payment-link creation, upload recovery, and retention review.
+
+Primary Build 211 migration: `sql/2026-06-18_build211_production_reliability.sql`.
+Primary structured build record: `data/build211_production_reliability.json`.
+
+Production reality check: email/SMS delivery still requires real provider webhook configuration; hosted final-balance links require Stripe test/live keys and webhook reconciliation; mobile upload reliability must still be tested on real devices and weak connections.
+
+Build 211 documentation sync: canonical handoff updated for production reliability, hosted payment-link automation, notification provider checks, upload/retention diagnostics, and owner action simplification.
