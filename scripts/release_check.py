@@ -157,6 +157,7 @@ CHECKS = [
     "scripts/build208_connected_workflow_command_center_check.py",
     "scripts/build209_live_interaction_documentation_check.py",
     "scripts/build210_connected_live_workflow_check.py",
+    "scripts/build211_production_reliability_check.py",
     "scripts/seo_h1_check.py",
 ]
 
