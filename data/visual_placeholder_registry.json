@@ -142,6 +142,13 @@
       "where": "owner dashboard and priority queue",
       "visual": "prioritized checklist card",
       "replace_with": "real owner queue screenshot with customer data removed"
+    },
+    {
+      "key": "production_reliability",
+      "label": "Production reliability image placeholder",
+      "where": "/admin-production.html and operations dashboards",
+      "replace_with": "Screenshot or diagram of provider/payment/upload checks after production deployment",
+      "alt": "Production readiness checklist for mobile detailing operations"
     }
   ],
   "rules": [
