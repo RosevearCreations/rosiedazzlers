@@ -1895,3 +1895,9 @@ create table if not exists public.gallery_media_candidates (
   status text not null default 'queued', queued_by_staff_user_id uuid null, queued_by_staff_name text null,
   created_at timestamptz not null default now(), updated_at timestamptz not null default now()
 );
+
+-- Build 211 production reliability schema sync (2026-06-18)
+-- Canonical deployable migration: sql/2026-06-18_build211_production_reliability.sql
+-- Adds final_balance_payment_requests provider/checkout metadata, job_media retention_status,
+-- live_upload_sessions reliability fields, notification_provider_test_logs,
+-- storage_retention_audit, and production_reliability_audits.

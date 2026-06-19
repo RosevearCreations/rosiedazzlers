@@ -186,3 +186,53 @@ Append short build/audit summaries to required historical files. Put retired dup
 ### Build 210 documentation sync — 2026-06-17
 
 Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.
+
+## Build 211 — production reliability completed (2026-06-18)
+
+### Completed 20 steps
+
+1. Added a production reliability registry for notifications, hosted payment links, mobile uploads, retention, Cloudflare/Supabase/R2 checks, and owner simplification.
+2. Added `/admin-production.html` as a single production-readiness screen.
+3. Added `/api/admin/production_reliability_report` for environment/table/workflow diagnostics without exposing secrets.
+4. Added notification provider readiness checks for email/SMS webhook configuration and queued/failed events.
+5. Added `/api/admin/notification_provider_test` for controlled provider test sends or configuration-only checks.
+6. Added hosted final-balance checkout creation through `/api/admin/final_balance_checkout_create`.
+7. Added Stripe Checkout Session support for final balance requests when `STRIPE_SECRET_KEY` is configured.
+8. Kept manual-payment fallback when hosted payment providers are not configured.
+9. Added final-balance payment-link readiness warnings to the production report.
+10. Added upload reliability reporting for failed/cancelled/uploading live upload sessions.
+11. Added storage retention reporting for due/expired job media that is not permanent proof or legal hold.
+12. Added `/api/admin/storage_retention_sweep` with dry-run default and review-before-archive behavior.
+13. Added migration support for provider test logs, retention audit rows, final balance checkout metadata, and production reliability audit snapshots.
+14. Added Admin Dashboard production reliability diagnostics card.
+15. Added Admin Dashboard shortcut card to the production readiness screen.
+16. Added production reliability tasks into Today Needs Attention when provider, payment, upload, or retention issues need owner action.
+17. Added visual placeholder category for production reliability / end-to-end testing.
+18. Updated the two canonical Markdown files with current production-risk status and the next 20 reliability steps.
+19. Updated historical root Markdown, schema docs, service worker cache, route-copy sync, and release guards.
+20. Added Build 211 release guard covering new screens, APIs, migration, docs, routes, and registry markers.
+
+### Next 20 value-added steps
+
+1. Configure the real email provider webhook and send one test notification from `/admin-production.html`.
+2. Configure SMS only if customer consent, quiet hours, and cost controls are ready.
+3. Configure Stripe final-balance checkout and test a low-value internal final-balance request in test mode.
+4. Add PayPal hosted final-balance checkout parity if PayPal will be used for final balances.
+5. Add Stripe webhook reconciliation from final-balance checkout back into `final_balance_payment_requests`.
+6. Add notification delivery templates for each live-workflow event type.
+7. Add customer/staff notification preference controls and quiet-hour rules.
+8. Add true multipart/resumable upload for large videos using R2 multipart or Supabase TUS where practical.
+9. Run live mobile upload testing on weak Wi-Fi and cellular and record pass/fail notes in production audits.
+10. Add a scheduled storage-retention worker that produces a review queue before deleting any customer/job media.
+11. Add a storage orphan detector for objects with no linked `job_media` or `live_upload_sessions` row.
+12. Add payment-link expiry and resend controls.
+13. Add customer-safe payment status updates to the secure progress page.
+14. Add one-click owner actions from Today Needs Attention for retry notification, create checkout, archive media, and generate summary.
+15. Add a full end-to-end smoke-test checklist screen for quote → booking → live proof → payment → summary → review.
+16. Add route/network diagnostics for Cloudflare Pages Functions, Supabase REST, Supabase Storage, and R2 bindings.
+17. Add production audit exports for evidence, approvals, provider test sends, and payment-link creation.
+18. Add alert thresholds for failed notifications, upload failures, open payment requests, and overdue retention review.
+19. Add accessibility checks for production-critical owner screens.
+20. Run a real deployment acceptance test and update the two canonical docs with confirmed production results.
+
+Build 211 documentation sync: active roadmap updated for production reliability rather than additional disconnected screens.
