@@ -28,7 +28,8 @@ async function handle({ request, env }) {
       upload_sessions: "live_upload_sessions?select=id,booking_id,filename,status,progress_percent,retry_count,last_error,file_size_bytes,content_type,media_kind,updated_at&order=updated_at.desc&limit=150",
       retention_media: `job_media?select=id,booking_id,kind,stage,retention_policy,retention_expires_at,retention_status,thread_status,storage_bucket,storage_path,media_url,created_at&or=(retention_expires_at.is.null,retention_expires_at.lte.${encodeURIComponent(now.toISOString())})&order=created_at.asc&limit=200`,
       summaries: "completed_job_summaries?select=id,booking_id,status,customer_visible,generated_at,payment_status&order=generated_at.desc&limit=100",
-      incidents: "incident_reports?select=id,booking_id,status,decision_status,severity,updated_at&order=updated_at.desc&limit=100"
+      incidents: "incident_reports?select=id,booking_id,status,decision_status,severity,updated_at&order=updated_at.desc&limit=100",
+      test_runs: "production_test_runs?select=id,test_key,status,performed_at,created_at,environment&order=performed_at.desc,created_at.desc&limit=500"
     };
     await Promise.all(Object.entries(tableQueries).map(async ([key, path]) => { const out = await readTable(env, path); tables[key] = out.rows; if (out.warning) warnings.push(`${key}: ${out.warning}`); }));
 
@@ -43,6 +44,7 @@ async function handle({ request, env }) {
     const paymentMissingCheckout = balanceRows.filter((row) => !isPaid(row.status) && !row.checkout_url && !row.payment_url);
     const paymentDrafts = balanceRows.filter((row) => ["draft","requested","open","sent"].includes(clean(row.status)) && !isPaid(row.status));
     const weakUploads = uploadRows.filter((row) => ["failed","cancelled","uploading","prepared"].includes(clean(row.status)));
+    const testing = summarizeTestRuns(tables.test_runs || []);
 
     const attention = [];
     if (failedNotifications.length) attention.push(att("urgent", "Notification failures", `${failedNotifications.length} notification event(s) need retry/provider repair.`, "/admin-production.html#notifications"));
@@ -51,6 +53,8 @@ async function handle({ request, env }) {
     if (weakUploads.length) attention.push(att("high", "Mobile upload recovery", `${weakUploads.length} upload session(s) need retry, cancellation, or review.`, "/admin-production.html#uploads"));
     if (retentionRows.length) attention.push(att("normal", "Retention cleanup review", `${retentionRows.length} job media item(s) are due for retention review.`, "/admin-production.html#retention"));
     if (unresolvedIncidents.length) attention.push(att("urgent", "Unresolved incidents", `${unresolvedIncidents.length} incident(s) still block clean closeout/reviews.`, "/admin-incident-reports.html"));
+    if (testing.failed || testing.blocked) attention.push(att("high", "Guided production tests need attention", `${testing.failed} failed and ${testing.blocked} blocked test result(s).`, "/admin-test-centre.html"));
+    if (!testing.last_run_at) attention.push(att("normal", "Run guided production tests", "No Build 212 test results are recorded yet. Use internal test data only.", "/admin-test-centre.html"));
 
     const counts = {
       notification_failed: failedNotifications.length,
@@ -60,16 +64,21 @@ async function handle({ request, env }) {
       upload_sessions_needing_review: weakUploads.length,
       retention_due: retentionRows.length,
       unresolved_incidents: unresolvedIncidents.length,
-      completed_summaries: (tables.summaries || []).length
+      completed_summaries: (tables.summaries || []).length,
+      production_tests_passed: testing.passed,
+      production_tests_failed: testing.failed,
+      production_tests_blocked: testing.blocked,
+      production_tests_not_started: testing.not_started
     };
 
     return withCors(json({
       ok:true,
-      build:211,
+      build:212,
       generated_at:now.toISOString(),
       checks,
       counts,
       attention,
+      testing,
       provider_readiness:{
         email_configured: !!(env.NOTIFICATIONS_EMAIL_WEBHOOK_URL || env.RECOVERY_EMAIL_WEBHOOK_URL),
         sms_configured: !!(env.NOTIFICATIONS_SMS_WEBHOOK_URL || env.RECOVERY_SMS_WEBHOOK_URL),
@@ -91,6 +100,9 @@ async function handle({ request, env }) {
     return withCors(json({ ok:false, error:err?.message || "Could not load production reliability report." }, 500));
   }
 }
+
+const TEST_KEYS_BUILD212 = ["environment_preflight","notification_delivery","hosted_final_balance_checkout","customer_visibility_privacy","mobile_upload_recovery","proof_completion_gate","incident_review_safety","retention_dry_run","end_to_end_smoke"];
+function summarizeTestRuns(rows){ const latest={}; for(const row of rows||[]){const key=String(row.test_key||"").trim();if(key&&!latest[key])latest[key]=row;} const values=Object.values(latest); return {total:TEST_KEYS_BUILD212.length,passed:values.filter(r=>clean(r.status)==="passed").length,failed:values.filter(r=>clean(r.status)==="failed").length,blocked:values.filter(r=>clean(r.status)==="blocked").length,not_started:TEST_KEYS_BUILD212.filter(key=>!latest[key]||clean(latest[key].status)==="not_started").length,last_run_at:values.map(r=>r.performed_at||r.created_at).filter(Boolean).sort().reverse()[0]||null}; }
 
 async function readTable(env, path) {
   if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return { rows:[], warning:"Supabase env vars are missing." };

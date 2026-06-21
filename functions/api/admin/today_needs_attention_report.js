@@ -19,11 +19,16 @@ async function handle({request,env}){
       reviews:`review_request_queue?select=id,booking_id,status,send_after,created_at&order=created_at.desc&limit=150`,
       maintenance:`customer_maintenance_plans?select=id,customer_id,vehicle_id,plan_name,status,next_reminder_at&order=next_reminder_at.asc&limit=150`,
       uploads:`live_upload_sessions?select=id,booking_id,filename,status,progress_percent,retry_count,last_error,updated_at&or=(status.eq.failed,status.eq.cancelled,status.eq.uploading)&order=updated_at.desc&limit=150`,
-      retention_media:`job_media?select=id,booking_id,kind,stage,retention_policy,retention_expires_at,retention_status&retention_expires_at=lte.${encodeURIComponent(now.toISOString())}&order=retention_expires_at.asc&limit=150`
+      retention_media:`job_media?select=id,booking_id,kind,stage,retention_policy,retention_expires_at,retention_status&retention_expires_at=lte.${encodeURIComponent(now.toISOString())}&order=retention_expires_at.asc&limit=150`,
+      production_tests:`production_test_runs?select=id,test_key,test_name,status,performed_at,created_at&order=performed_at.desc,created_at.desc&limit=500`
     };
     const loaded={}; const warnings=[];
     await Promise.all(Object.entries(queries).map(async([key,path])=>{const out=await read(env,path);loaded[key]=out.rows;if(out.warning)warnings.push(`${key}: ${out.warning}`);}));
     const items=[];
+    const latestTests={}; for(const row of loaded.production_tests||[]){const key=String(row.test_key||"").trim();if(key&&!latestTests[key])latestTests[key]=row;}
+    const failedTests=Object.values(latestTests).filter((row)=>["failed","blocked"].includes(clean(row.status)));
+    if(failedTests.length) items.push(item("high","Guided production test blocked",`${failedTests.length} test result(s) are failed/blocked. Resolve before relying on the workflow.`,`/admin-test-centre.html`,null));
+    if(Object.keys(latestTests).length===0 && !(warnings||[]).some((row)=>String(row).startsWith("production_tests:"))) items.push(item("normal","Run guided production tests","No recorded production acceptance results yet. Use an internal test booking.",`/admin-test-centre.html`,null));
     for(const row of loaded.updates||[]){
       if(row.review_status==="pending"||row.requires_admin_review===true)items.push(item("urgent","Approve live update",`A ${row.stage||"general"} update is waiting for review.`,`/admin-progress.html?booking_id=${row.booking_id}`,row.booking_id));
       if(row.source_channel==="customer")items.push(item("urgent","Customer reply",String(row.note||"Customer sent a progress message.").slice(0,160),`/admin-progress.html?booking_id=${row.booking_id}`,row.booking_id));
