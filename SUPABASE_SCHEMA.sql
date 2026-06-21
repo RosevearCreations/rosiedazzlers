@@ -1901,3 +1901,8 @@ create table if not exists public.gallery_media_candidates (
 -- Adds final_balance_payment_requests provider/checkout metadata, job_media retention_status,
 -- live_upload_sessions reliability fields, notification_provider_test_logs,
 -- storage_retention_audit, and production_reliability_audits.
+
+-- Build 212 guided production testing schema sync
+-- Canonical deployable migration: sql/2026-06-20_build212_guided_production_testing.sql
+-- Adds public.production_test_runs for protected acceptance outcomes (passed/failed/blocked/not_started).
+-- Keep test notes/evidence free of secrets, card data, customer addresses, VINs, and private incident media.
