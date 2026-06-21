@@ -236,3 +236,53 @@ Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADM
 20. Run a real deployment acceptance test and update the two canonical docs with confirmed production results.
 
 Build 211 documentation sync: active roadmap updated for production reliability rather than additional disconnected screens.
+
+## Build 212 — guided production testing completed (2026-06-20)
+
+### Completed 20 steps
+
+1. Added a protected Guided Production Test Centre with plain-language instructions.
+2. Added a strict internal-test-data warning and no-secret/no-private-evidence guidance.
+3. Added environment preflight test instructions.
+4. Added controlled email provider configuration/send-test instructions.
+5. Added Stripe test-mode hosted final-balance checkout instructions.
+6. Added customer-now/review-first/staff-only privacy acceptance instructions.
+7. Added mobile Wi-Fi/cellular upload and retry/cancel acceptance instructions.
+8. Added arrival/during/final proof-gate acceptance instructions.
+9. Added issue-to-private-incident and review-blocker acceptance instructions.
+10. Added retention dry-run protection instructions.
+11. Added full lifecycle smoke-test instructions.
+12. Added DB-backed production test result history.
+13. Added safe browser-only fallback when the migration is missing.
+14. Added protected list/save APIs for test history.
+15. Added production-readiness test status counts.
+16. Added Today Needs Attention coverage for failed/blocked or absent acceptance tests.
+17. Added detailed external guide in `docs/PRODUCTION_TEST_GUIDE.md`.
+18. Added mobile-responsive test cards and visual placeholder enrichment.
+19. Updated migration, schema documentation, canonical handoff, and Markdown governance.
+20. Added a Build 212 release guard and route/service-worker synchronization.
+
+### Next 20 value-added steps
+
+1. Configure and verify the real email notification provider with a controlled mailbox.
+2. Configure SMS only after consent, sender identity, quiet hours, and cost controls are approved.
+3. Verify Stripe test checkout and webhook settlement with actual Stripe test events.
+4. Decide whether PayPal final-balance parity is still required.
+5. Implement verified final-balance Stripe webhook reconciliation.
+6. Upgrade large videos to true resumable/multipart uploads after field testing proves the need.
+7. Consider client-side video compression only after real-device evidence supports it.
+8. Add thresholds/alerts for failed notifications, uploads, payment links, and retention reviews.
+9. Add scheduled retention review with archive approval before deletion.
+10. Add orphaned-storage object diagnostics.
+11. Add one-click audited recovery actions from Today Needs Attention.
+12. Add non-secret preview-deployment smoke checks.
+13. Capture keyboard, focus, caption, and screen-reader acceptance results.
+14. Add customer notification preferences and quiet hours.
+15. Add payment-link expiry and resend workflows.
+16. Add customer-safe payment status updates to the secure progress timeline.
+17. Add an optional closeout PDF after privacy/retention testing passes.
+18. Run a full internal mobile job simulation on Wi-Fi and cellular.
+19. Update canonical docs with only verified production results.
+20. Retire/simplify owner screens that do not feed the connected lifecycle or Today queue.
+
+Build 212 documentation sync: detailed testing instructions now live in the app and in `docs/PRODUCTION_TEST_GUIDE.md`; static checks remain necessary but are not a substitute for real provider, payment, storage, and mobile-network testing.

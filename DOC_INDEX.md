@@ -858,3 +858,9 @@ Twenty redundant planning/handoff documents were moved to `docs/archive/`. The a
 Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.
 
 Build 211 documentation sync: retained for historical context while the active project direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; production reliability, provider setup, hosted payment links, upload/retention diagnostics, and owner simplification were reviewed in this pass.
+
+## Build 212 documentation index note
+
+The two active planning documents remain `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. Detailed operational testing now lives in `docs/PRODUCTION_TEST_GUIDE.md`; `/admin-test-centre.html` is the in-app version with persistent audit results after the Build 212 migration. Historical files remain retained because release checks and future troubleshooting still reference them.
+
+> **Build 212 documentation sync:** Active direction is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. For real-world test instructions, use `docs/PRODUCTION_TEST_GUIDE.md` and `/admin-test-centre.html`; this file is retained for historical, audit, specialist, or release-check context.

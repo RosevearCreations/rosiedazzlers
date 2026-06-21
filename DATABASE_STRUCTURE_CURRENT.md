@@ -901,3 +901,9 @@ Apply `sql/2026-06-18_build211_production_reliability.sql` after Build 210. It a
 These changes support `/admin-production.html`, `/api/admin/production_reliability_report`, notification provider tests, hosted Stripe final-balance checkout creation, and safe dry-run storage retention review.
 
 Build 211 documentation sync: retained for historical context while the active project direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; production reliability, provider setup, hosted payment links, upload/retention diagnostics, and owner simplification were reviewed in this pass.
+
+## Build 212 schema sync
+
+`sql/2026-06-20_build212_guided_production_testing.sql` adds `public.production_test_runs` for protected acceptance-test outcomes. It stores test key/name, status, safe notes/evidence link, environment, build number, staff attribution, timestamps, and non-secret payload metadata. It must not store API keys, payment card data, customer addresses, VINs, or private evidence URLs.
+
+> **Build 212 documentation sync:** Active direction is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. For real-world test instructions, use `docs/PRODUCTION_TEST_GUIDE.md` and `/admin-test-centre.html`; this file is retained for historical, audit, specialist, or release-check context.

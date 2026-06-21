@@ -1521,3 +1521,9 @@ Next build should connect `/admin-quotes.html` to real quote create/edit/save ac
 Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.
 
 Build 211 documentation sync: retained for historical context while the active project direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; production reliability, provider setup, hosted payment links, upload/retention diagnostics, and owner simplification were reviewed in this pass.
+
+## Build 212 reliability risk update
+
+The test screen reduces operator uncertainty but cannot substitute for deployment testing. Remaining high risks are real provider setup, Stripe webhook settlement, real-device upload behavior, storage cleanup policy, and production environment routing. Do not declare these areas complete until an internal test run is recorded with a Pass result in Guided Production Test Centre.
+
+> **Build 212 documentation sync:** Active direction is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. For real-world test instructions, use `docs/PRODUCTION_TEST_GUIDE.md` and `/admin-test-centre.html`; this file is retained for historical, audit, specialist, or release-check context.

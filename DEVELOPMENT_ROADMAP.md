@@ -2456,3 +2456,7 @@ Build 210 completed the first connected pass for the twelve highest-value live-w
 Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.
 
 Build 211 documentation sync: retained for historical context while the active project direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; production reliability, provider setup, hosted payment links, upload/retention diagnostics, and owner simplification were reviewed in this pass.
+
+## Build 212 documentation sync
+
+Build 212 adds a guided production acceptance process at `/admin-test-centre.html`, a detailed written test guide at `docs/PRODUCTION_TEST_GUIDE.md`, DB-backed test-result history, production/readiness test counts, and owner queue escalation for failed/blocked tests. Run `sql/2026-06-20_build212_guided_production_testing.sql` before expecting persistent results. Use internal test records only.
