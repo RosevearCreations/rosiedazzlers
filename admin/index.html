@@ -222,7 +222,7 @@
             <h3>Production Readiness</h3>
             <p>Check provider setup, hosted payment links, weak-network upload risks, storage retention, and end-to-end workflow readiness from one screen.</p>
             <div class="hr"></div>
-            <a class="btn primary" href="/admin-production.html">Open Production Readiness</a>
+            <a class="btn primary" href="/admin-production.html">Open Production Readiness</a> <a class="btn ghost" href="/admin-test-centre.html">Open Guided Tests</a>
           </article>
 
           <article class="card" data-build210="today-attention-card">
@@ -639,7 +639,7 @@
         const c = data.counts || {};
         const risk = Number(c.notification_failed||0)+Number(c.payment_links_missing||0)+Number(c.upload_sessions_needing_review||0)+Number(c.retention_due||0)+Number(c.unresolved_incidents||0);
         els.productionReliability.dataset.state = risk ? 'warn' : 'ok';
-        els.productionReliability.innerHTML = `<strong>${risk ? `${risk} production reliability item(s) need review` : 'Production reliability checks are clear'}</strong><div class="muted">Failed notifications ${Number(c.notification_failed||0)} · missing payment links ${Number(c.payment_links_missing||0)} · upload review ${Number(c.upload_sessions_needing_review||0)} · retention due ${Number(c.retention_due||0)} · unresolved incidents ${Number(c.unresolved_incidents||0)}</div>${(data.attention||[]).slice(0,4).map(x=>`<div class="warning-row"><strong>${esc(x.title)}</strong><div class="muted">${esc(x.detail)}</div></div>`).join('')}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-production.html">Open Production Readiness</a> <a class="btn ghost small" href="/admin-today.html">Open Today Queue</a></div>`;
+        els.productionReliability.innerHTML = `<strong>${risk ? `${risk} production reliability item(s) need review` : 'Production reliability checks are clear'}</strong><div class="muted">Failed notifications ${Number(c.notification_failed||0)} · missing payment links ${Number(c.payment_links_missing||0)} · upload review ${Number(c.upload_sessions_needing_review||0)} · retention due ${Number(c.retention_due||0)} · unresolved incidents ${Number(c.unresolved_incidents||0)}</div>${(data.attention||[]).slice(0,4).map(x=>`<div class="warning-row"><strong>${esc(x.title)}</strong><div class="muted">${esc(x.detail)}</div></div>`).join('')}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-production.html">Open Production Readiness</a> <a class="btn ghost" href="/admin-test-centre.html">Open Guided Tests</a> <a class="btn ghost small" href="/admin-today.html">Open Today Queue</a></div>`;
       }
 
       async function loadTodayAttentionDiagnostics(){
