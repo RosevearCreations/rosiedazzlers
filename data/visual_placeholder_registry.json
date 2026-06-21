@@ -1,7 +1,7 @@
 {
-  "build": 210,
-  "updated_at": "2026-06-17",
-  "summary": "Build 210 adds connected live-workflow placeholders for upload recovery, customer approvals, completed-job summaries, and the owner attention queue while preserving customer/privacy controls.",
+  "build": 212,
+  "updated_at": "2026-06-20",
+  "summary": "Build 212 adds a guided production-test visual placeholder alongside the existing responsive/customer-safe visual library.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -149,6 +149,14 @@
       "where": "/admin-production.html and operations dashboards",
       "replace_with": "Screenshot or diagram of provider/payment/upload checks after production deployment",
       "alt": "Production readiness checklist for mobile detailing operations"
+    },
+    {
+      "key": "production_test_centre",
+      "label": "Guided production testing placeholder",
+      "where": "/admin-test-centre.html and deployment-test documentation",
+      "visual": "checklist, phone, and safe test-record card",
+      "replace_with": "safe internal screenshot after testing that contains no customer data, credentials, or private media",
+      "alt": "Guided production acceptance checklist for mobile detailing operations"
     }
   ],
   "rules": [
