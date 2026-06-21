@@ -214,3 +214,19 @@ Primary structured build record: `data/build211_production_reliability.json`.
 Production reality check: email/SMS delivery still requires real provider webhook configuration; hosted final-balance links require Stripe test/live keys and webhook reconciliation; mobile upload reliability must still be tested on real devices and weak connections.
 
 Build 211 documentation sync: canonical handoff updated for production reliability, hosted payment-link automation, notification provider checks, upload/retention diagnostics, and owner action simplification.
+
+## Build 212 central capability: guided production testing
+
+Build 212 converts the remaining reliability work into a plain-language, staff-facing acceptance process rather than leaving it as technical endpoint names.
+
+- `/admin-test-centre.html` is the protected Guided Production Test Centre.
+- It covers environment preflight, notification delivery, Stripe test checkout, customer privacy, mobile upload recovery, proof gates, incident/review safety, retention dry-run, and an end-to-end internal smoke test.
+- Each test includes prerequisites, safety notes, exact actions, expected result, failure-recording instructions, and pass/blocked/fail history.
+- Results are stored in `public.production_test_runs` after `sql/2026-06-20_build212_guided_production_testing.sql` is applied. Browser-only fallback is explicit when that table is not deployed.
+- `docs/PRODUCTION_TEST_GUIDE.md` provides the same detailed instructions outside the app.
+
+Build 212 does **not** prove the live Cloudflare/Supabase/R2/Stripe/provider environment from this build workspace. Production-readiness claims must be based on recorded internal tests, not static code checks.
+
+Primary Build 212 migration: `sql/2026-06-20_build212_guided_production_testing.sql`.
+
+> **Build 212 documentation sync:** Active direction is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. For real-world test instructions, use `docs/PRODUCTION_TEST_GUIDE.md` and `/admin-test-centre.html`; this file is retained for historical, audit, specialist, or release-check context.
