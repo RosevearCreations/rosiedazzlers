@@ -17,9 +17,9 @@ export async function onRequestGet(context) {
     if (booking.progress_enabled === false) return json({ error: "Progress viewing is not enabled for this booking." }, 403);
 
     const bookingId = booking.id;
-    const [updatesResult, mediaResult, signoffsRes, checklistRes, usageRes, eventsRes, incidentsRes, summaryRes] = await Promise.all([
+    const [updatesResult, mediaResult, signoffsRes, checklistRes, usageRes, eventsRes, incidentsRes, summaryRes, paymentLinksRes] = await Promise.all([
       fetchAdaptive(env, headers, "job_updates", bookingId,
-        "id,created_at,created_by,note,visibility,thread_status,stage,source_channel,review_status,customer_action_required,customer_visible_at,recommendation_title,recommendation_amount_cents,recommendation_status,customer_decision,customer_decision_note,customer_decision_at,linked_payment_request_id",
+        "id,created_at,created_by,note,visibility,thread_status,stage,source_channel,review_status,customer_action_required,customer_visible_at,recommendation_title,recommendation_amount_cents,recommendation_status,customer_decision,customer_decision_note,customer_decision_at,customer_acknowledgement_name,customer_acknowledged_at,customer_acknowledgement_version,linked_payment_request_id",
         "id,created_at,created_by,note,visibility"),
       fetchAdaptive(env, headers, "job_media", bookingId,
         "id,created_at,created_by,kind,caption,media_url,visibility,thread_status,stage,source_channel,review_status,customer_action_required,customer_visible_at,storage_bucket,storage_path,content_type,file_size_bytes,duration_seconds,retention_policy,retention_expires_at,gallery_reuse_status,vehicle_history_reuse_status",
@@ -29,7 +29,8 @@ export async function onRequestGet(context) {
       fetch(`${env.SUPABASE_URL}/rest/v1/catalog_inventory_movements?select=id,created_at,item_key,item_name,qty_delta,note,movement_type&booking_id=eq.${bookingId}&movement_type=eq.job_use&order=created_at.desc`, { headers }),
       fetch(`${env.SUPABASE_URL}/rest/v1/booking_events?select=id,created_at,event_type,event_note,actor_name,payload&booking_id=eq.${bookingId}&order=created_at.asc`, { headers }),
       fetch(`${env.SUPABASE_URL}/rest/v1/incident_reports?select=id,created_at,updated_at,incident_type,severity,title,vehicle_area,equipment_name,decision_status,approved_customer_summary,approved_customer_discussion,public_evidence_items,customer_visible_at&booking_id=eq.${bookingId}&public_visible=eq.true&order=customer_visible_at.desc,updated_at.desc`, { headers }),
-      fetch(`${env.SUPABASE_URL}/rest/v1/completed_job_summaries?select=*&booking_id=eq.${bookingId}&customer_visible=eq.true&limit=1`, { headers }).catch(()=>null)
+      fetch(`${env.SUPABASE_URL}/rest/v1/completed_job_summaries?select=*&booking_id=eq.${bookingId}&customer_visible=eq.true&limit=1`, { headers }).catch(()=>null),
+      fetch(`${env.SUPABASE_URL}/rest/v1/final_balance_payment_requests?select=id,booking_id,status,amount_cents,currency,checkout_url,payment_url,provider_status,notes,created_at&booking_id=eq.${bookingId}&order=created_at.desc`, { headers }).catch(()=>null)
     ]);
 
     if (!updatesResult.response.ok) return json({ error: `Could not load updates. ${await updatesResult.response.text()}` }, 500);
@@ -49,6 +50,8 @@ export async function onRequestGet(context) {
     const incidentReports = incidentsRes.ok ? await incidentsRes.json().catch(() => []) : [];
     const completedSummaryRows = summaryRes && summaryRes.ok ? await summaryRes.json().catch(()=>[]) : [];
     const completedJobSummary = Array.isArray(completedSummaryRows) ? completedSummaryRows[0] || null : null;
+    const paymentLinkRows = paymentLinksRes && paymentLinksRes.ok ? await paymentLinksRes.json().catch(()=>[]) : [];
+    const paymentLinks = (Array.isArray(paymentLinkRows) ? paymentLinkRows : []).filter((row)=>!/(paid|cancel)/i.test(String(row.status||'')) && (row.checkout_url || row.payment_url)).map((row)=>({ id:row.id, status:row.status, amount_cents:row.amount_cents, currency:row.currency||'CAD', url:row.checkout_url||row.payment_url, provider_status:row.provider_status||null, notes:row.notes||null, created_at:row.created_at }));
     const updates = customerRows(updatesRaw);
     const media = await hydrateMediaRows(env, customerRows(mediaRaw));
     const workflowEvents = publicWorkflowEvents(bookingEvents);
@@ -92,6 +95,7 @@ export async function onRequestGet(context) {
       workflow_events: workflowEvents,
       incident_reports: Array.isArray(incidentReports) ? incidentReports : [],
       completed_job_summary: completedJobSummary,
+      payment_links: paymentLinks,
       unread_count: unreadCount,
       incident_report_notice: incidentsRes.ok ? null : "Incident report sharing is not available yet.",
       enhanced_live_feed: !updatesResult.legacy && !mediaResult.legacy,
