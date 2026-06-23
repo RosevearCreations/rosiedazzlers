@@ -17,7 +17,7 @@ export async function onRequestPost({ request, env }) {
     const booking = (await bookingRes.json().catch(() => []))?.[0] || null;
     if (!booking) return withCors(json({ ok:false, error:"Booking not found." }, 404));
 
-    const [mediaRows, updateRows, checklistRows, usageRows, signoffRows, incidentRows, paymentRows, finalBalanceRows] = await Promise.all([
+    const [mediaRows, updateRows, checklistRows, usageRows, signoffRows, incidentRows, paymentRows, finalBalanceRows, existingSummaryRows] = await Promise.all([
       table(env, `job_media?select=*&booking_id=eq.${encodeURIComponent(bookingId)}&visibility=eq.customer&order=created_at.asc`),
       table(env, `job_updates?select=*&booking_id=eq.${encodeURIComponent(bookingId)}&visibility=eq.customer&order=created_at.asc`),
       table(env, `job_completion_checklists?select=*&booking_id=eq.${encodeURIComponent(bookingId)}&limit=1`),
@@ -25,7 +25,8 @@ export async function onRequestPost({ request, env }) {
       table(env, `job_signoffs?select=id,signer_name,signer_email,notes,signed_at&booking_id=eq.${encodeURIComponent(bookingId)}&order=signed_at.desc`),
       table(env, `incident_reports?select=id,status,decision_status,public_visible,approved_customer_summary,title&booking_id=eq.${encodeURIComponent(bookingId)}&order=created_at.desc`),
       table(env, `quote_deposit_payment_requests?select=id,payment_status,amount_cents,paid_amount_cents,payment_reference,paid_at&or=(booking_id.eq.${encodeURIComponent(bookingId)},confirmed_booking_id.eq.${encodeURIComponent(bookingId)})&order=created_at.desc`),
-      table(env, `final_balance_payment_requests?select=id,status,amount_cents,currency,payment_url,paid_at,notes&booking_id=eq.${encodeURIComponent(bookingId)}&order=created_at.desc`)
+      table(env, `final_balance_payment_requests?select=id,status,amount_cents,currency,payment_url,paid_at,notes&booking_id=eq.${encodeURIComponent(bookingId)}&order=created_at.desc`),
+      table(env, `completed_job_summaries?select=*&booking_id=eq.${encodeURIComponent(bookingId)}&limit=1`)
     ]);
 
     const media = await hydrateMediaRows(env, (mediaRows.rows || []).filter(customerSafe));
@@ -40,6 +41,8 @@ export async function onRequestPost({ request, env }) {
     const maintenanceRecommendations = buildMaintenance(checklist, recommendationUpdates);
     const actorName = access.actor?.full_name || access.actor?.email || "Staff";
     const now = new Date().toISOString();
+    const existingSummary = existingSummaryRows.rows?.[0] || null;
+    if (existingSummary?.id) await archiveSummaryRevision(env, existingSummary, actorName).catch(()=>null);
     const summary = {
       booking_id:bookingId,
       customer_profile_id:booking.customer_profile_id || null,
@@ -57,7 +60,11 @@ export async function onRequestPost({ request, env }) {
       generated_by_staff_user_id:access.actor?.id || null,
       generated_by_staff_name:actorName,
       generated_at:now,
-      updated_at:now
+      updated_at:now,
+      revision_number:Number(existingSummary?.revision_number || 0) + 1,
+      customer_acknowledged_at:null,
+      customer_acknowledged_name:null,
+      customer_acknowledgement_version:null
     };
     const saveRes = await fetch(`${env.SUPABASE_URL}/rest/v1/completed_job_summaries?on_conflict=booking_id`, { method:"POST", headers:{ ...headers, Prefer:"resolution=merge-duplicates,return=representation" }, body:JSON.stringify([summary]) });
     if (!saveRes.ok) return withCors(json({ ok:false, error:`Could not save completed-job summary. ${await saveRes.text()}`, migration:"sql/2026-06-17_build210_connected_live_workflow.sql" }, 500));
@@ -66,6 +73,12 @@ export async function onRequestPost({ request, env }) {
     if (summary.customer_visible) await queueCustomerLiveAlert({ env, bookingId, eventType:"completed_job_summary_ready", message:"Your completed-job summary, proof, care advice, and maintenance recommendations are ready.", payload:{ summary_id:saved.id || null } }).catch(() => null);
     return withCors(json({ ok:true, summary:saved, unresolved_incidents:unresolvedIncidents.length, proof_status:proof, payment_status:paymentStatus }));
   } catch (err) { return withCors(json({ ok:false, error:err?.message || "Could not generate completed-job summary." }, 500)); }
+}
+
+
+async function archiveSummaryRevision(env, existing, actorName){
+  const row={ summary_id:existing.id, booking_id:existing.booking_id, revision_number:Number(existing.revision_number||0), snapshot:existing, revised_by_staff_name:actorName, revised_at:new Date().toISOString() };
+  await fetch(`${env.SUPABASE_URL}/rest/v1/completed_job_summary_revisions`,{method:'POST',headers:serviceHeaders(env),body:JSON.stringify([row])});
 }
 
 async function table(env, path){
