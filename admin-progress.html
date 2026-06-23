@@ -6,9 +6,9 @@
   <title>Admin Progress | Rosie Dazzlers</title>
   <meta name="description" content="Admin progress update tools for Rosie Dazzlers." />
   <meta name="robots" content="noindex,nofollow" />
-  <link rel="stylesheet" href="/assets/site.css?v=20260410b" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260622build213" />
 </head>
-<body data-page="admin-progress">
+<body data-page="admin-progress" data-build213="customer-trust-audit-export">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -79,7 +79,7 @@
           <h2>Customer link</h2>
           <div id="customerLinkBox" class="kicker">No token loaded yet.</div>
           <div style="margin-top:12px">
-            <button id="enableProgressBtn" class="btn primary" type="button" disabled>Enable progress link</button>
+            <button id="enableProgressBtn" class="btn primary" type="button" disabled>Enable progress link</button><button id="exportAuditBtn" class="btn ghost" type="button" disabled style="margin-left:8px">Export interaction audit</button>
           </div>
         </div>
       </section>
@@ -490,6 +490,11 @@
       return requestJson('/api/admin/progress_enable', { method:'POST', body:{ booking_id: currentBookingId } });
     }
 
+    async function exportInteractionAudit(){
+      if(!currentBookingId) return setNotice('Load a booking first.','bad');
+      try{setNotice('Preparing interaction audit export…');const out=await requestJson(`/api/admin/live_interaction_audit_export?booking_id=${encodeURIComponent(currentBookingId)}`);const blob=new Blob([out.csv||''],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`rosie-dazzlers-interaction-audit-${currentBookingId}.csv`;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);setNotice(`Interaction audit exported (${Number(out.rows?.length||0)} rows).`,'ok');}catch(err){setNotice(err.message||'Could not export audit. Run the Build 213 migration if needed.','bad');}
+    }
+
     async function moderateEntry(entity, entryId, action, reason) {
       return requestJson('/api/admin/progress_moderate', { method:'POST', body:{ entity, id: entryId, action, moderation_reason: reason, booking_id: currentBookingId } });
     }
@@ -500,7 +505,7 @@
       qs('#proofStatusAdmin').innerHTML=['arrival','during','final'].map(k=>`<article class="card"><div class="badge">${Number(counts[k]||0)>0?'Ready':'Required'}</div><h3>${k[0].toUpperCase()+k.slice(1)} proof</h3><p>${Number(counts[k]||0)>0?`${Number(counts[k])} approved/stored media item(s)`:'Add at least one usable media item before completing the job.'}</p></article>`).join('');
       const summary=data.completed_job_summary;const box=qs('#summaryStatusAdmin');
       box.className='notice '+(summary?'ok':'warn');box.textContent=summary?`Summary ${summary.status||'draft'} · payment ${summary.payment_status||'not recorded'}`:'Completed-job summary has not been generated.';
-      qs('#generateSummaryBtn').disabled=!currentBookingId;qs('#queueReviewBtn').disabled=!currentBookingId;
+      qs('#generateSummaryBtn').disabled=!currentBookingId;qs('#queueReviewBtn').disabled=!currentBookingId;qs('#exportAuditBtn').disabled=!currentBookingId;
     }
     async function runConnectedAction(action, payload={}) {
       if(!currentBookingId) return setNotice('Load a booking first.','bad');
@@ -574,6 +579,7 @@
         }
       });
 
+      qs('#exportAuditBtn').addEventListener('click', exportInteractionAudit);
       qs('#enableProgressBtn').addEventListener('click', async () => {
         if (!currentBookingId) return setNotice('Load a booking first.', 'bad');
         try {
