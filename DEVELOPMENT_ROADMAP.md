@@ -2460,3 +2460,8 @@ Build 211 documentation sync: retained for historical context while the active p
 ## Build 212 documentation sync
 
 Build 212 adds a guided production acceptance process at `/admin-test-centre.html`, a detailed written test guide at `docs/PRODUCTION_TEST_GUIDE.md`, DB-backed test-result history, production/readiness test counts, and owner queue escalation for failed/blocked tests. Run `sql/2026-06-20_build212_guided_production_testing.sql` before expecting persistent results. Use internal test records only.
+
+## Build 213 documentation sync
+
+Build 213 adds owner action controls in Today Needs Attention, customer price/summary acknowledgements, secure payment-link handoff, summary revision history, and booking-scoped safe interaction audit export. Active direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; use `docs/PRODUCTION_TEST_GUIDE.md` for hands-on testing.
+

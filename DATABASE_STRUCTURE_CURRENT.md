@@ -907,3 +907,12 @@ Build 211 documentation sync: retained for historical context while the active p
 `sql/2026-06-20_build212_guided_production_testing.sql` adds `public.production_test_runs` for protected acceptance-test outcomes. It stores test key/name, status, safe notes/evidence link, environment, build number, staff attribution, timestamps, and non-secret payload metadata. It must not store API keys, payment card data, customer addresses, VINs, or private evidence URLs.
 
 > **Build 212 documentation sync:** Active direction is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. For real-world test instructions, use `docs/PRODUCTION_TEST_GUIDE.md` and `/admin-test-centre.html`; this file is retained for historical, audit, specialist, or release-check context.
+
+## Build 213 schema sync (2026-06-22)
+
+Apply `sql/2026-06-22_build213_owner_action_customer_trust.sql` after Build 212. It adds `owner_attention_tasks`, `live_interaction_audit_events`, `recommendation_price_acknowledgements`, and `completed_job_summary_revisions`; it also extends `job_updates`, `job_media`, and `completed_job_summaries` for acknowledgement, vehicle walkaround, media annotation, and revision state.
+
+These changes support `/admin-today.html` owner actions, `/api/admin/live_interaction_audit_export`, customer recommendation acknowledgement, secure payment-link display, and completed-job summary acknowledgement/versioning. Keep audit export free of secrets, signed private URLs, payment details, addresses, VINs, and private incident evidence.
+
+> **Build 213 documentation sync:** Canonical direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; detailed tests are in `docs/PRODUCTION_TEST_GUIDE.md`.
+

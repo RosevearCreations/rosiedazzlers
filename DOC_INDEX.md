@@ -864,3 +864,8 @@ Build 211 documentation sync: retained for historical context while the active p
 The two active planning documents remain `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. Detailed operational testing now lives in `docs/PRODUCTION_TEST_GUIDE.md`; `/admin-test-centre.html` is the in-app version with persistent audit results after the Build 212 migration. Historical files remain retained because release checks and future troubleshooting still reference them.
 
 > **Build 212 documentation sync:** Active direction is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. For real-world test instructions, use `docs/PRODUCTION_TEST_GUIDE.md` and `/admin-test-centre.html`; this file is retained for historical, audit, specialist, or release-check context.
+
+## Build 213 documentation sync
+
+Build 213 adds owner action controls in Today Needs Attention, customer price/summary acknowledgements, secure payment-link handoff, summary revision history, and booking-scoped safe interaction audit export. Active direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; use `docs/PRODUCTION_TEST_GUIDE.md` for hands-on testing.
+

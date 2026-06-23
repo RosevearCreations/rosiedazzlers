@@ -230,3 +230,25 @@ Build 212 does **not** prove the live Cloudflare/Supabase/R2/Stripe/provider env
 Primary Build 212 migration: `sql/2026-06-20_build212_guided_production_testing.sql`.
 
 > **Build 212 documentation sync:** Active direction is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. For real-world test instructions, use `docs/PRODUCTION_TEST_GUIDE.md` and `/admin-test-centre.html`; this file is retained for historical, audit, specialist, or release-check context.
+
+## Build 213 central capability: owner action control and customer trust records
+
+Build 213 reduces the last recurring owner friction in the connected workflow. Generated rows in **Today Needs Attention** are no longer only links: an authorized owner can assign a row to themselves, snooze it for one day or one week, resolve it with a recorded note, or reopen it. Each action is stored in `owner_attention_tasks`, avoids repeated noise for the configured suppression window, and writes a best-effort live-interaction audit event.
+
+Customer-facing price decisions now require a typed acknowledgement name and explicit confirmation before a priced recommendation is approved. When Stripe is configured, the approval tries to create a hosted final-balance Checkout Session automatically while preserving the draft payment request when Checkout creation cannot complete. The secure progress page now displays approved payment links only for that booking token.
+
+Completed-job summaries now support a customer acknowledgement, revision number, and revision archive. Staff can export a booking-scoped interaction audit CSV from `/admin-progress.html` without exposing signed private URLs or private storage paths.
+
+Primary Build 213 migration: `sql/2026-06-22_build213_owner_action_customer_trust.sql`.
+
+### Build 213 required acceptance tests
+
+1. On `/admin-today.html`, use a safe internal test row and select **Assign me**, **Snooze 1 day**, and **Resolve**. Refresh and confirm the recorded state is respected.
+2. On a test progress token, approve a paid recommendation only after typing an internal test name and checking the acknowledgement box. Confirm an open payment link is visible only on that test token.
+3. Generate a completed-job summary, acknowledge it through the customer token, regenerate it, and confirm the new revision resets the customer acknowledgement while the prior revision is archived.
+4. In `/admin-progress.html`, export the interaction audit and confirm the CSV does not contain a private media URL, R2 key, API key, address, or customer payment details.
+
+Build 213 does not claim a final payment is settled until the real Stripe/PayPal webhook reconciliation is configured and tested in the deployed environment.
+
+> **Build 213 documentation sync:** Active direction remains in this handoff and `MASTER_VALUE_ROADMAP.md`. Use `docs/PRODUCTION_TEST_GUIDE.md`, `/admin-test-centre.html`, and `/admin-production.html` for real-world acceptance evidence. Historical Markdown remains retained for audit and prior release guards.
+
