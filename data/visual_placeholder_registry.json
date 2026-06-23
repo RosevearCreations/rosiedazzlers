@@ -1,7 +1,7 @@
 {
-  "build": 212,
-  "updated_at": "2026-06-20",
-  "summary": "Build 212 adds a guided production-test visual placeholder alongside the existing responsive/customer-safe visual library.",
+  "build": 213,
+  "updated_at": "2026-06-22",
+  "summary": "Build 213 adds owner-action and customer-trust closeout placeholders alongside the responsive, customer-safe visual library.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -157,6 +157,20 @@
       "visual": "checklist, phone, and safe test-record card",
       "replace_with": "safe internal screenshot after testing that contains no customer data, credentials, or private media",
       "alt": "Guided production acceptance checklist for mobile detailing operations"
+    },
+    {
+      "key": "owner_attention",
+      "label": "Owner action placeholder",
+      "where": "Today Needs Attention and owner task cards",
+      "visual": "priority checkmark / action lane card",
+      "replace_with": "safe owner workflow screenshot with customer names removed"
+    },
+    {
+      "key": "customer_acknowledgement",
+      "label": "Customer acknowledgement placeholder",
+      "where": "approved in-job recommendation and completed-summary cards",
+      "visual": "signature / confirmation card",
+      "replace_with": "customer-safe approval or signed-summary proof with personal details removed"
     }
   ],
   "rules": [

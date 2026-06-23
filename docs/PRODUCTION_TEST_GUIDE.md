@@ -73,3 +73,39 @@ Do not call the system production-ready when any of the following are true:
 ## After testing
 
 Open `/admin-today.html` and `/admin-production.html`. Resolve the urgent and high issues before testing real jobs. Update `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` only with confirmed test results—not assumptions.
+
+## Build 213 owner-action and customer-trust tests
+
+### 10. Today Needs Attention owner actions
+
+1. Open `/admin-today.html` as an administrator.
+2. Use an internal-test task only; do not resolve an active customer issue for this test.
+3. Press **Assign me**, refresh the page, and confirm the task records your name.
+4. Press **Snooze 1 day**, refresh, and confirm the row is hidden until its snooze time.
+5. Repeat with a second safe row and press **Resolve**. Enter only a harmless internal note.
+6. Open `/admin-test-centre.html` and record the result.
+
+Expected: the action is retained after refresh. If the page says the task table is missing, run `sql/2026-06-22_build213_owner_action_customer_trust.sql`.
+
+### 11. Priced recommendation acknowledgement and payment link
+
+1. Create an internal test booking and post a customer-visible recommendation with a small test price.
+2. Open the secure progress token in a private/incognito browser.
+3. Press **Approve**. Confirm the page asks for a typed name and acknowledgement before saving.
+4. Enter an internal test name, check the acknowledgement control, then approve.
+5. If Stripe test keys are configured, confirm a payment-link card appears; otherwise confirm the app reports a draft request without claiming payment is complete.
+6. Verify that same link is not shown by a different booking token.
+
+Expected: no priced recommendation can be approved without an acknowledgement. Do not use a real customer or real card for this test.
+
+### 12. Completed-job summary acknowledgement and audit export
+
+1. Generate a customer-visible completed-job summary for the internal test booking in `/admin-progress.html`.
+2. Open the matching customer token and acknowledge the summary with an internal test name.
+3. Regenerate the summary in the admin view.
+4. Confirm the new revision is shown and acknowledgement is reset for the revised customer summary.
+5. In `/admin-progress.html`, choose **Export interaction audit**.
+6. Open the downloaded CSV and confirm it includes safe timeline metadata only.
+
+Expected: the CSV must not expose private signed URLs, R2 paths, secrets, card data, customer addresses, VINs, or private incident evidence. Any such value is a privacy blocker.
+
