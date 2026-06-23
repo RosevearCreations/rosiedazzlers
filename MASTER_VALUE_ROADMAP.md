@@ -286,3 +286,54 @@ Build 211 documentation sync: active roadmap updated for production reliability 
 20. Retire/simplify owner screens that do not feed the connected lifecycle or Today queue.
 
 Build 212 documentation sync: detailed testing instructions now live in the app and in `docs/PRODUCTION_TEST_GUIDE.md`; static checks remain necessary but are not a substitute for real provider, payment, storage, and mobile-network testing.
+
+## Build 213 — owner action control and customer-trust records completed (2026-06-22)
+
+### Completed 20-step reliability/conversion pass
+
+1. Added DB-backed owner task state for generated attention rows.
+2. Added owner assignment actions from Today Needs Attention.
+3. Added one-day and one-week task snooze actions.
+4. Added resolution notes and 24-hour generated-row suppression after resolution.
+5. Added reopen support for owner tasks.
+6. Added manual-task data support for future owner-created work.
+7. Added owner-task audit events.
+8. Added a booking-scoped live interaction audit export endpoint.
+9. Added CSV export from Admin Progress.
+10. Added customer typed-name acknowledgement for priced recommendation approval.
+11. Added explicit price acknowledgement confirmation before a priced approval is accepted.
+12. Added recommendation acknowledgement audit records.
+13. Added automatic Stripe Checkout attempt after an approved paid recommendation.
+14. Preserved draft payment requests when a hosted checkout cannot be created.
+15. Returned only booking-scoped unpaid payment links to the secure progress token.
+16. Added customer completed-summary acknowledgement capture.
+17. Added completed-summary revision number and revision archive support.
+18. Added customer acknowledgement status to the completed-summary card.
+19. Added new visual placeholder categories for owner attention and customer acknowledgement.
+20. Added migration, data record, production-test guidance, schema/documentation sync, and Build 213 release guard.
+
+### Next 20 value-added steps
+
+1. Add a form for owners to create manual Today Needs Attention tasks from the UI.
+2. Add task ownership filters and a “my assigned work” mode.
+3. Add due dates and escalation rules for owner tasks.
+4. Add notification delivery for assignment, resolution, and overdue task changes.
+5. Record verified Stripe webhook settlement against final-balance requests.
+6. Add PayPal hosted-link parity only if the business elects to support it.
+7. Add payment-link expiry, resend, and cancellation controls.
+8. Add customer-safe payment receipt/status timeline updates.
+9. Add a full vehicle walkaround template with area, condition, severity, and media anchors.
+10. Add vehicle area/condition badges to detailer media capture.
+11. Add final-media before/after pairing directly in Gallery Approvals.
+12. Add automatic vehicle-history cards for approved final proof.
+13. Add review-request scheduling after closeout acknowledgement and settled payment.
+14. Add customer communication preferences and quiet hours.
+15. Add notification delivery attempt timeline and provider-message IDs.
+16. Upgrade large-video uploads to resumable/multipart transfer after field evidence supports it.
+17. Add retention archive approval and orphaned-object reconciliation.
+18. Add one-click deep links from Today Needs Attention into the exact affected record.
+19. Add end-to-end role/permission tests for detailer, senior detailer, admin, and customer token views.
+20. Run the full acceptance guide on Wi-Fi and cellular, then update the handoff only with observed results.
+
+Build 213 documentation sync: owner task controls, acknowledgement records, payment-link handoff, summary revision history, and safe audit export now sit in the connected workflow. Static code checks are not proof of real provider/webhook/storage behavior.
+
