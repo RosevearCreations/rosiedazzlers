@@ -7,10 +7,10 @@
   <meta name="description" content="View your Rosie Dazzlers service progress updates." />
   <meta name="robots" content="noindex,nofollow" />
   <link rel="canonical" href="https://rosiedazzlers.ca/progress" />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260622build213" />
   <style>.live-timeline-card{position:relative;overflow:hidden}.live-timeline-card[data-stage="arrival"]{border-left:4px solid #38bdf8}.live-timeline-card[data-stage="pre_existing"]{border-left:4px solid #f59e0b}.live-timeline-card[data-stage="during"]{border-left:4px solid #8b5cf6}.live-timeline-card[data-stage="final"]{border-left:4px solid #22c55e}.live-timeline-card[data-stage="issue"]{border-left:4px solid #ef4444}.live-timeline-card[data-stage="recommendation"]{border-left:4px solid #14b8a6}.live-media{width:100%;max-height:520px;object-fit:contain;border-radius:14px;background:rgba(255,255,255,.025)}</style>
 </head>
-<body data-page="progress">
+<body data-page="progress" data-build213="customer-trust-closeout">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/">
@@ -72,7 +72,7 @@
         </div>
         <div class="panel">
           <h2>Service summary</h2>
-          <div id="summaryBox" class="kicker">No summary loaded yet.</div>
+          <div id="summaryBox" class="kicker">No summary loaded yet.</div><div id="paymentLinksBox" class="kicker" style="margin-top:10px"></div>
         </div>
 
         <div class="panel">
@@ -156,7 +156,7 @@
     <section class="section" id="completedSummarySection" style="display:none">
       <div class="panel">
         <div class="badge">Completed job summary</div><h2>Proof, payment, care advice, and what comes next</h2>
-        <div id="completedSummaryBox" class="grid cards" style="margin-top:12px"></div>
+        <div id="completedSummaryBox" class="grid cards" style="margin-top:12px"></div><div class="visual-placeholder" data-visual-placeholder="customer_acknowledgement" style="margin-top:12px"><strong>Approval record</strong><span>Customer acknowledgement is stored with the completed summary when available.</span></div>
       </div>
     </section>
 
@@ -346,7 +346,7 @@
             ? `<video class="live-media" controls preload="metadata" src="${escapeHtml(item.media_url)}"></video>`
             : `<img class="live-media" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || 'Progress photo')}" onerror="this.outerHTML='<div class=&quot;visual-placeholder&quot; data-visual-placeholder=&quot;proof_of_work&quot;><strong>Media temporarily unavailable</strong><span>Please refresh or contact Rosie Dazzlers.</span></div>'">`;
         }
-        const recommendation = stage === 'recommendation' ? `<div class="decision-panel"><strong>${escapeHtml(item.recommendation_title || 'Recommended additional work')}</strong>${Number(item.recommendation_amount_cents||0)>0?`<div>${formatMoney(Number(item.recommendation_amount_cents)/100)}</div>`:''}<div class="badges"><span class="badge">${escapeHtml(item.customer_decision || item.recommendation_status || 'awaiting decision')}</span></div>${!item.customer_decision||item.customer_decision==='pending'?`<div class="row"><button class="btn primary small" data-recommendation="${escapeHtml(item.id)}" data-decision="approved">Approve</button><button class="btn ghost small" data-recommendation="${escapeHtml(item.id)}" data-decision="declined">Decline</button><button class="btn ghost small" data-recommendation="${escapeHtml(item.id)}" data-decision="needs_discussion">Ask a question</button></div>`:''}</div>` : '';
+        const priced=Number(item.recommendation_amount_cents||0)>0; const acknowledgement=item.customer_acknowledged_at?`<div class="kicker">Approved by ${escapeHtml(item.customer_acknowledgement_name||'customer')} on ${escapeHtml(formatDateTime(item.customer_acknowledged_at))}</div>`:''; const recommendation = stage === 'recommendation' ? `<div class="decision-panel"><strong>${escapeHtml(item.recommendation_title || 'Recommended additional work')}</strong>${priced?`<div>${formatMoney(Number(item.recommendation_amount_cents)/100)}</div><p class="kicker">Approval confirms the added work and listed price before we continue.</p>`:''}<div class="badges"><span class="badge">${escapeHtml(item.customer_decision || item.recommendation_status || 'awaiting decision')}</span></div>${acknowledgement}${!item.customer_decision||item.customer_decision==='pending'?`<div class="row"><button class="btn primary small" data-recommendation="${escapeHtml(item.id)}" data-decision="approved" data-price-cents="${Number(item.recommendation_amount_cents||0)}" data-title="${escapeHtml(item.recommendation_title||'additional work')}">Approve</button><button class="btn ghost small" data-recommendation="${escapeHtml(item.id)}" data-decision="declined">Decline</button><button class="btn ghost small" data-recommendation="${escapeHtml(item.id)}" data-decision="needs_discussion">Ask a question</button></div>`:''}</div>` : '';
         return `<article class="card live-timeline-card" data-stage="${escapeHtml(stage)}">
           ${mediaMarkup}
           <div class="badges" style="margin-top:${mediaMarkup?'10px':'0'}"><span class="badge">${escapeHtml(stageLabel)}</span><span class="badge">${escapeHtml(item.feed_type)}</span>${item.customer_action_required ? '<span class="badge">Your response requested</span>' : ''}</div>
@@ -358,24 +358,28 @@
       }).join("");
     }
 
-    async function decideRecommendation(updateId, decision) {
+    async function decideRecommendation(updateId, decision, priceCents=0, title='additional work') {
       const note = decision === 'needs_discussion' ? (window.prompt('What would you like to ask Rosie Dazzlers?') || '').trim() : '';
+      let acknowledgement_name=''; let acknowledgement_confirmed=false;
+      if(decision==='approved' && Number(priceCents)>0){ acknowledgement_name=(window.prompt(`Type your full name to approve ${title} for ${formatMoney(Number(priceCents)/100)}:`)||'').trim(); if(!acknowledgement_name) return; acknowledgement_confirmed=window.confirm(`I acknowledge that ${title} adds ${formatMoney(Number(priceCents)/100)} before tax if applicable, and I authorize Rosie Dazzlers to proceed.`); if(!acknowledgement_confirmed)return; }
       try {
         setNotice('Saving your decision…');
-        const res = await fetch('/api/progress/recommendation_decide', { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify({ token:currentToken, update_id:updateId, decision, note }) });
+        const res = await fetch('/api/progress/recommendation_decide', { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify({ token:currentToken, update_id:updateId, decision, note, acknowledgement_name, acknowledgement_confirmed, acknowledgement_version:'in_job_add_on_terms_v1' }) });
         const data = await res.json().catch(()=>({}));
         if (!res.ok) throw new Error(data.error || 'Could not save recommendation decision.');
         await loadProgress();
-        setNotice(decision === 'approved' ? 'Recommendation approved. Rosie Dazzlers has been notified.' : 'Your decision was sent to Rosie Dazzlers.', 'ok');
+        setNotice(decision === 'approved' ? (data.payment_link_ready?'Recommendation approved. A secure payment link is ready below.':'Recommendation approved. Rosie Dazzlers has been notified.') : 'Your decision was sent to Rosie Dazzlers.', 'ok');
       } catch (err) { setNotice(err.message || 'Could not save your decision.', 'bad'); }
     }
+
+    function renderPaymentLinks(data) { const box=document.querySelector('#paymentLinksBox'); if(!box)return; const rows=Array.isArray(data.payment_links)?data.payment_links:[]; if(!rows.length){box.innerHTML='';return;} box.innerHTML=`<div class="notice warn"><strong>Secure payment link${rows.length>1?'s':''} ready</strong>${rows.map(row=>`<div style="margin-top:8px"><a class="btn primary small" href="${escapeHtml(row.url)}" target="_blank" rel="noopener">Pay ${formatMoney(Number(row.amount_cents||0)/100)} securely</a><span class="kicker"> ${escapeHtml(row.status||'open')}</span></div>`).join('')}</div>`; }
 
     function renderCompletedSummary(data) {
       const section=document.querySelector('#completedSummarySection'); const box=document.querySelector('#completedSummaryBox'); const item=data.completed_job_summary;
       if(!section||!box)return; if(!item){section.style.display='none';return;} section.style.display='block';
       const proof=Array.isArray(item.proof_items)?item.proof_items:(item.proof_items?.media||item.proof_items?.items||[]);
       const care=Array.isArray(item.care_advice)?item.care_advice:[]; const maintenance=Array.isArray(item.maintenance_recommendations)?item.maintenance_recommendations:[];
-      box.innerHTML=`<article class="card"><h3>Work completed</h3><p>${escapeHtml(item.service_summary||item.customer_summary||'Your detail is complete.')}</p><div class="badges"><span class="badge">${escapeHtml(item.payment_status||'payment status pending')}</span></div></article><article class="card"><h3>Care advice</h3>${care.length?`<ul>${care.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`:'<p>Care advice will appear here when approved.</p>'}</article><article class="card"><h3>Next maintenance</h3>${maintenance.length?`<ul>${maintenance.map(x=>`<li>${escapeHtml(typeof x==='string'?x:(x.label||x.title||'Recommended maintenance'))}</li>`).join('')}</ul>`:'<p>No maintenance recommendation has been added yet.</p>'}</article>${proof.length?`<article class="card"><h3>Final proof</h3><div class="grid cards">${proof.map(x=>x.media_url?`<img class="img" loading="lazy" src="${escapeHtml(x.media_url)}" alt="${escapeHtml(x.caption||'Completed detail proof')}">`:'').join('')}</div></article>`:''}`;
+      const ack=item.customer_acknowledged_at?`<div class="notice ok"><strong>Summary acknowledged</strong><div class="kicker">${escapeHtml(item.customer_acknowledged_name||'Customer')} · ${escapeHtml(formatDateTime(item.customer_acknowledged_at))}</div></div>`:`<div class="notice soft"><strong>Please review this summary</strong><div style="margin-top:8px"><button class="btn ghost small" type="button" data-ack-summary="${escapeHtml(item.id||'')}">Acknowledge summary</button></div></div>`; box.innerHTML=`<article class="card"><h3>Work completed</h3><p>${escapeHtml(item.service_summary||item.customer_summary||'Your detail is complete.')}</p><div class="badges"><span class="badge">${escapeHtml(item.payment_status||'payment status pending')}</span>${item.revision_number?`<span class="badge">Revision ${escapeHtml(item.revision_number)}</span>`:''}</div>${ack}</article><article class="card"><h3>Care advice</h3>${care.length?`<ul>${care.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`:'<p>Care advice will appear here when approved.</p>'}</article><article class="card"><h3>Next maintenance</h3>${maintenance.length?`<ul>${maintenance.map(x=>`<li>${escapeHtml(typeof x==='string'?x:(x.label||x.title||'Recommended maintenance'))}</li>`).join('')}</ul>`:'<p>No maintenance recommendation has been added yet.</p>'}</article>${proof.length?`<article class="card"><h3>Final proof</h3><div class="grid cards">${proof.map(x=>x.media_url?`<img class="img" loading="lazy" src="${escapeHtml(x.media_url)}" alt="${escapeHtml(x.caption||'Completed detail proof')}">`:'').join('')}</div></article>`:''}`;
     }
 
     function renderIncidentReports(data) {
@@ -516,6 +520,7 @@
         renderWorkflow(Array.isArray(data.workflow_events) ? data.workflow_events : [], data.booking || {});
         if (document.querySelector('#commentName') && data.booking?.customer_name && !document.querySelector('#commentName').value) document.querySelector('#commentName').value = data.booking.customer_name;
         renderUpdates(data);
+        renderPaymentLinks(data);
         renderCompletedSummary(data);
         const unread=document.querySelector('#unreadBadge');if(unread){unread.style.display=Number(data.unread_count||0)>0?'inline-flex':'none';unread.textContent=`${Number(data.unread_count||0)} new`; }
         renderIncidentReports(data);
@@ -596,7 +601,7 @@
       document.querySelector("#signoffForm")?.addEventListener("submit", submitSignoff);
       document.querySelector('#commentForm')?.addEventListener('submit', (event)=>{ event.preventDefault(); postCustomerComment(); });
       document.querySelector('#refreshProgressBtn')?.addEventListener('click', ()=>loadProgress());
-      document.querySelector('#updatesList')?.addEventListener('click',(event)=>{const btn=event.target.closest('[data-recommendation]');if(btn)decideRecommendation(btn.dataset.recommendation,btn.dataset.decision);});
+      document.querySelector('#updatesList')?.addEventListener('click',(event)=>{const btn=event.target.closest('[data-recommendation]');if(btn)decideRecommendation(btn.dataset.recommendation,btn.dataset.decision,Number(btn.dataset.priceCents||0),btn.dataset.title||'additional work');}); document.querySelector('#completedSummaryBox')?.addEventListener('click',async(event)=>{const btn=event.target.closest('[data-ack-summary]');if(!btn)return;const name=(window.prompt('Type your full name to acknowledge this completed-job summary:')||'').trim();if(!name)return;try{const res=await fetch('/api/progress/summary_acknowledge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:currentToken,name})});const out=await res.json().catch(()=>({}));if(!res.ok||!out.ok)throw new Error(out.error||'Could not record acknowledgement.');setNotice('Thank you — your acknowledgement was recorded.','ok');await loadProgress();}catch(err){setNotice(err.message||'Could not record acknowledgement.','bad');}});
       refreshTimer = window.setInterval(()=>{ if (!document.hidden) loadProgress({ quiet:true }); }, 20000);
       document.addEventListener('visibilitychange', ()=>{ if (!document.hidden) loadProgress({ quiet:true }); });
     });

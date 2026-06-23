@@ -159,6 +159,7 @@ CHECKS = [
     "scripts/build210_connected_live_workflow_check.py",
     "scripts/build211_production_reliability_check.py",
     "scripts/build212_guided_production_testing_check.py",
+    "scripts/build213_owner_action_customer_trust_check.py",
     "scripts/seo_h1_check.py",
 ]
 
