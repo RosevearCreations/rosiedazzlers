@@ -1,5 +1,5 @@
-// Build 177 / Build 178 — local SEO proof coverage report plus next proof recommendations from privacy-approved gallery evidence.
-import { requireStaffAccess, json, serviceHeaders, methodNotAllowed } from "../_lib/staff-auth.js";
+// Build 177 / Build 178 / Build 196 — local SEO proof coverage report plus next proof recommendations from privacy-approved gallery evidence.
+import { requireStaffAccess, json, serviceHeaders } from "../_lib/staff-auth.js";
 
 const TARGET_TOWNS = ["Tillsonburg", "Woodstock", "Ingersoll", "Simcoe", "Delhi", "Port Dover", "Norwich", "Aylmer"];
 const TARGET_SERVICES = ["Interior detailing", "Exterior detailing", "Complete detail", "Ceramic coating", "Paint correction", "Pet hair removal", "Odour removal", "Headlight restoration"];
@@ -8,9 +8,9 @@ const DEFAULT_GALLERY = { items: [
   { title: "Exterior wash and gloss", town: "Woodstock", service: "Exterior detailing", before_url: "sample-before", after_url: "sample-after", consent_status: "sample", media_privacy_status: "approved_public" }
 ] };
 
-export async function onRequestPost({ request, env }) {
+async function handleLocalSeoProofReport({ request, env }) {
   try {
-    const body = await request.json().catch(() => ({}));
+    const body = request?.method === "POST" ? await request.json().catch(() => ({})) : {};
     const access = await requireStaffAccess({ request, env, body, capability: "manage_bookings", allowLegacyAdminFallback: true });
     if (!access.ok) return withCors(access.response);
 
@@ -40,6 +40,9 @@ export async function onRequestPost({ request, env }) {
       strongest_towns,
       strongest_services,
       proof_recommendations,
+      recommendations: proof_recommendations,
+      next_proof_recommendations: proof_recommendations,
+      gaps: proof_recommendations,
       privacy_rule: "Only sample or approved-public/customer-approved-public media counts as local proof. Pending/private/needs-blur/rejected items are excluded.",
       recommendation: "Prioritize before/after proof for target town + service combinations that have zero approved public examples, then link those examples from service and town pages."
     }));
@@ -48,7 +51,8 @@ export async function onRequestPost({ request, env }) {
   }
 }
 
-export async function onRequestGet() { return withCors(methodNotAllowed()); }
+export async function onRequestPost(context) { return handleLocalSeoProofReport(context); }
+export async function onRequestGet(context) { return handleLocalSeoProofReport(context); }
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 
 async function loadGallery(env) {
@@ -111,5 +115,5 @@ function firstGap(towns, services) { const town = towns.find((row) => row.count 
 function titleCase(value) { return String(value || "").trim().replace(/\s+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()); }
 function slugify(value) { return String(value || "").trim().toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""); }
 function clone(value) { return JSON.parse(JSON.stringify(value)); }
-function corsHeaders() { return { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type, x-admin-password, x-staff-email, x-staff-user-id", "Cache-Control": "no-store" }; }
+function corsHeaders() { return { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "GET,POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type, x-admin-password, x-staff-email, x-staff-user-id", "Cache-Control": "no-store" }; }
 function withCors(response) { const headers = new Headers(response.headers || {}); for (const [k, v] of Object.entries(corsHeaders())) headers.set(k, v); return new Response(response.body, { status: response.status, statusText: response.statusText, headers }); }
