@@ -1,3 +1,82 @@
+# Build 207 Markdown consolidation and visual placeholder note
+
+Build 207 adds no new database tables. Documentation sanity and visual placeholder reporting use bundled JSON files: `data/markdown_sanity_build207.json`, `data/build207_enhancement_sweep.json`, and `data/visual_placeholder_registry.json`. The admin report APIs use existing staff authentication and do not require Supabase schema changes.
+
+---
+
+# Build 205 schema note — sanity report/backlog only
+
+Build 205 does not add database tables. It adds a static/admin value-added sanity report, a JSON backlog file, documentation, and dashboard/page UI for current-state review. Future database work should focus on quote pipeline metrics, Meta campaign ROI records, membership recurring plan records, vehicle history timeline records, proof-of-work checklist records, and fleet account records.
+
+# Build 204 database update — No new DDL
+
+Build 204 does not add database tables or columns. The gallery repair uses the existing `app_management_settings.before_after_gallery` editable-setting row, the bundled `data/before_after_gallery.json` fallback, and new application-level media URL normalization/fallback logic.
+
+The new admin Gallery image health diagnostic endpoint reads the public gallery response and does not require a migration. Future work may move gallery rows into a dedicated DB table with first-class booking/customer-consent links, but that is not part of this pass.
+
+---
+
+# Build 203 database update — No new DDL
+
+Build 203 does not add database tables or columns. It adds a bundled responsive/visual registry at `data/responsive_visual_registry.json` and a dashboard diagnostic API that reads the registry and sampled pages. Future work may move this registry into `app_management_settings` once a friendly editor is added.
+
+---
+
+# Build 202 database update — Incident reports
+
+**Updated:** 2026-06-12  
+**Build:** 202
+
+Build 202 adds `public.incident_reports` through `sql/2026-06-12_build202_incident_reports_and_marketing.sql`. The table stores private detailer/admin incident reports separately from customer-visible approved summaries and selected public evidence. Required routine fields include `booking_id`, `incident_type`, `severity`, `status`, `decision_status`, `title`, `private_report`, and `evidence_items`. Customer-facing output uses only `approved_customer_summary`, `approved_customer_discussion`, `public_evidence_items`, `public_visible`, and `customer_visible_at`.
+
+---
+
+# Build 201 schema status — Friendly validation and route-copy sync
+
+**Updated:** 2026-06-09  
+**Build:** 201
+
+No database schema migration is required for Build 201. The work remains UI/release-guard focused and continues to use the existing DB-backed editable settings model:
+
+- `app_management_settings.pricing_catalog`
+- `app_management_settings.landing_pages`
+- `app_management_settings.social_feeds`
+- `app_management_settings.before_after_gallery`
+- existing bundled JSON fallbacks for emergency recovery
+
+The new inline validation, media picker, schema preview, and save-review helpers operate on the existing editor state before saving back to the same editable-setting rows. `scripts/sync_route_copies.py` is a repository packaging helper and does not require a table or column change.
+
+---
+
+# Build 200 schema status — friendly pricing editor completion
+
+**Updated:** 2026-06-09  
+**Build:** 200
+
+Build 200 adds no new tables or columns. The package detail editor, chart helper state bridge, and remaining-advanced-JSON dashboard card reuse the existing `app_management_settings` row for `pricing_catalog` and the existing bundled JSON fallback. Friendly package rows are applied back into the same pricing catalog payload before save, so the public booking/pricing/landing/chart code continues using one DB-first source with bundled fallback.
+
+---
+
+# Build 199 schema status — friendly Site Settings editor pass
+
+**Updated:** 2026-06-07  
+**Build:** 199
+
+Build 199 adds no new tables or columns. It reuses the existing `app_management_settings` and `app_management_setting_history` rows for the newly friendly Admin Site Settings editors. The UI converts row/card edits back into the same JSON payload before saving, so bundled JSON fallbacks and DB-first rendering continue to work without a migration. Admin Recovery delivery rules also reuse the existing recovery-template `rules` payload.
+
+---
+
+# Build 197 schema status — no-DDL self-healing admin pass
+
+**Updated:** 2026-06-06  
+**Build:** 197
+
+Build 197 does not require new tables or columns. The new pricing diagnostics and repair endpoints read and update the existing `app_management_settings` row with `key = 'pricing_catalog'`. Route-copy parity, dashboard guarded loading, and landing SEO/readiness checks are code/UI features only.
+
+Operational note: if `/api/admin/pricing_catalog_diagnostics` reports missing groups or rows, staff can use `/api/admin/pricing_catalog_repair` through the Admin Dashboard. The repair action preserves existing DB values and adds only missing bundled fallback groups/rows.
+
+---
+
 
 # Build 184 update — 20-step operations, media, and payment hardening
 
@@ -701,3 +780,154 @@ Next 20 steps after Build 189:
 18. Add field-level validation for each editable setting.
 19. Add a public settings cache/version badge in Admin Diagnostics.
 20. Continue moving remaining large inline page/content objects into DB-managed content blocks.
+
+## Build 190 - Editable settings live rendering and diagnostics
+
+Build 190 continues the editable-content migration by rendering public business profile, contact details, social links, navigation/footer links, policy notes, LocalBusiness structured data, analytics labels, and media requirements from DB-first editable settings with bundled JSON fallback. It adds validation, sync-from-bundle controls, DB/fallback diagnostics, and setting history support through `/admin-site-settings.html` and the Build 190 SQL migration.
+
+---
+
+## Build 191 — Editable settings hardening and live-use pass
+
+- Fixed `/admin-site-settings.html` crash by adding `AdminAuth.guardPage()` and `AdminAuth.fetchWithAuth()` compatibility helpers and by making the page initialization defensive.
+- Added structured helper fields for business profile and navigation/footer settings while keeping raw JSON available.
+- Added editable setting dependency map and restore-from-history API foundations.
+- Wired editable policy copy into booking, FAQ, quote-response, and quote-payment customer pages with a static fallback.
+- Wired editable document templates into quote/proposal delivery plus deposit receipt/refund email queue helpers.
+- Added business-hours/holiday status API and booking-page helper.
+- Added analytics ingest validation against the editable analytics event registry.
+- Switched Media Health JSON fallback from build-specific image requirement files to stable `data/media_requirements.json`.
+- Added Build 191 release guard.
+
+## Build 192 schema status — 2026-06-05
+
+No new database tables or columns are required for Build 192. The pass deliberately reuses the existing `app_management_settings` and `app_management_setting_history` schema for structured editable-domain editors, direct restore-from-history controls, media requirement sync/restore controls, analytics registry warning checks, dynamic policy/template rendering, and business-hours/holiday booking warnings. See `sql/2026-06-05_build192_editable_operations_completion_no_ddl_note.sql` for the release note.
+
+---
+
+## Build 193 schema status — 2026-06-05
+
+No new database tables or columns are required for Build 193. The pass reuses the existing `app_management_settings` and `app_management_setting_history` tables for editable-setting validation, history, restore, sync, and force-sync workflows. The optional social template tables from earlier builds, `social_caption_templates` and `social_hashtag_presets`, remain DB-first sources when present; built-in fallbacks remain available when those tables are not applied yet.
+
+New fallback/schema-support file:
+
+- `data/editable_setting_validation_schemas.json` — bundled field-level validation rules for editable settings.
+
+New release note:
+
+- `sql/2026-06-05_build193_social_templates_validation_no_ddl_note.sql` — no-DDL note for the social-template hotfix and validation pass.
+
+---
+
+## Build 194 schema note — 2026-06-06
+
+Build 194 adds no new DDL. It reuses `app_management_settings`, `app_management_setting_history`, and `site_activity_events` for editable-setting diff/preview tools and analytics registry quick-add. The no-DDL note is recorded at `sql/2026-06-06_build194_diff_preview_option_libraries_no_ddl_note.sql`.
+
+---
+
+## Build 195 schema status — 2026-06-06
+
+Build 195 adds no new database tables or columns. It reuses `app_management_settings` and `app_management_setting_history` for field-level validation markers, selected-history diffs, audit exports, fallback-backed setting reports, and media-requirement compare previews. It also reuses `booking_events` for business-hours/holiday override reason logging and the existing booking/document helpers for policy version stamps and template preview/export payloads. The no-DDL note is recorded at `sql/2026-06-06_build195_schema_history_template_export_no_ddl_note.sql`.
+
+
+## Build 196 schema status — 2026-06-06
+
+Build 196 adds no new tables or columns. It reuses `app_management_settings` and bundled JSON fallbacks for pricing/landing-page recovery, and updates `/api/admin/local_seo_proof_report` method compatibility without schema changes. The no-DDL note is recorded at `sql/2026-06-06_build196_admin_live_error_repairs_no_ddl_note.sql`.
+
+
+---
+
+## Build 198 documentation sync — Friendly editors for formerly raw JSON areas
+
+Build 198 converts routine owner/admin updates for social feeds, before/after gallery rows, and water-use rules into friendly row-based screens. The underlying JSON remains available only as an Advanced/emergency repair and fallback-sync view. No database schema changes are required for this pass; the existing `app_management_settings` and water-rule settings flow remain the source of truth with bundled JSON fallback support.
+
+## Build 206 schema update — value-added operations foundations
+
+Added additive schema destinations in `sql/2026-06-14_build206_value_added_operations_foundations.sql` for gallery approval queue, quote pipeline, Meta ads ROI reports, customer maintenance plans, vehicle history events, proof-of-work checklists, fleet accounts, review request queue, seasonal campaigns, and route cluster hints. The current UI reads seeded JSON/API report data for first-pass dashboards while these DB tables provide the migration target for persistent CRUD workflows.
+
+## Build 209 live-detail interaction database update — 2026-06-17
+
+Migration: `sql/2026-06-17_build209_live_detail_interaction.sql`
+
+Authoritative additions:
+
+- `bookings.progress_last_viewed_at`
+- `bookings.progress_last_customer_message_at`
+- `bookings.progress_last_staff_update_at`
+- `job_updates.stage`
+- `job_updates.source_channel`
+- `job_updates.review_status`
+- `job_updates.requires_admin_review`
+- `job_updates.customer_action_required`
+- `job_updates.customer_visible_at`
+- `job_updates.approved_by_staff_user_id`
+- `job_updates.approved_by_staff_name`
+- equivalent review/stage/approval columns on `job_media`
+- `job_media.storage_bucket`
+- `job_media.storage_path`
+- `job_media.content_type`
+- `job_media.file_size_bytes`
+
+The database is the authority for live notes/media. Bundled files do not contain customer job content. Legacy-schema API fallback is intentionally conservative and must not be treated as a replacement for running the migration.
+
+## Build 210 — connected live workflow (2026-06-17)
+
+Build 210 connects live detail interaction to notifications, proof-of-work completion, customer recommendation decisions, payment requests, completed-job summaries, Gallery/vehicle-history reuse, safe review requests, and the owner attention queue.
+
+### New/extended records
+
+- `bookings`: staff/customer read timestamps, notification timestamps, completed-summary state, and review-request blocking reason.
+- `job_updates`: recommendation title/price, customer decision, linked incident, and linked payment-request identifiers.
+- `job_media`: duration, upload-session state, retention policy/expiry, and Gallery/vehicle-history reuse state.
+- `proof_of_work_checklists`: required stages, per-stage media counts, ready-to-complete state, and controlled override audit.
+- `live_upload_sessions`: prepared/uploading/failed/cancelled/completed upload attempts, retry count, errors, and storage destination.
+- `completed_job_summaries`: customer-safe proof, products used, care advice, maintenance recommendations, invoice reference, and payment state.
+- `gallery_media_candidates`: approved final media queued for before/after pairing without re-uploading.
+- `incident_reports`: source job update/media links for issue-to-incident conversion.
+
+Apply `sql/2026-06-17_build210_connected_live_workflow.sql` before testing these paths.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.
+
+## Build 211 — production reliability schema sync (2026-06-18)
+
+Apply `sql/2026-06-18_build211_production_reliability.sql` after Build 210. It adds provider/checkout metadata to `final_balance_payment_requests`, reliability fields to `live_upload_sessions`, retention status to `job_media`, and three audit tables: `notification_provider_test_logs`, `storage_retention_audit`, and `production_reliability_audits`.
+
+These changes support `/admin-production.html`, `/api/admin/production_reliability_report`, notification provider tests, hosted Stripe final-balance checkout creation, and safe dry-run storage retention review.
+
+Build 211 documentation sync: retained for historical context while the active project direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; production reliability, provider setup, hosted payment links, upload/retention diagnostics, and owner simplification were reviewed in this pass.
+
+## Build 212 schema sync
+
+`sql/2026-06-20_build212_guided_production_testing.sql` adds `public.production_test_runs` for protected acceptance-test outcomes. It stores test key/name, status, safe notes/evidence link, environment, build number, staff attribution, timestamps, and non-secret payload metadata. It must not store API keys, payment card data, customer addresses, VINs, or private evidence URLs.
+
+> **Build 212 documentation sync:** Active direction is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. For real-world test instructions, use `docs/PRODUCTION_TEST_GUIDE.md` and `/admin-test-centre.html`; this file is retained for historical, audit, specialist, or release-check context.
+
+## Build 213 schema sync (2026-06-22)
+
+Apply `sql/2026-06-22_build213_owner_action_customer_trust.sql` after Build 212. It adds `owner_attention_tasks`, `live_interaction_audit_events`, `recommendation_price_acknowledgements`, and `completed_job_summary_revisions`; it also extends `job_updates`, `job_media`, and `completed_job_summaries` for acknowledgement, vehicle walkaround, media annotation, and revision state.
+
+These changes support `/admin-today.html` owner actions, `/api/admin/live_interaction_audit_export`, customer recommendation acknowledgement, secure payment-link display, and completed-job summary acknowledgement/versioning. Keep audit export free of secrets, signed private URLs, payment details, addresses, VINs, and private incident evidence.
+
+> **Build 213 documentation sync:** Canonical direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; detailed tests are in `docs/PRODUCTION_TEST_GUIDE.md`.
+
+---
+
+### Build 214 documentation sync — 2026-06-23
+
+Build 214 prioritizes Supabase containment and owner-task reliability. The active security action is to run `sql/2026-06-23_build214_security_task_orchestration.sql`, refresh Supabase Security Advisor, and test the application through Cloudflare Functions rather than restoring direct browser access to tables. Canonical planning remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+
+## Build 214 schema sync — Supabase RLS and owner task orchestration
+
+Primary migration: `sql/2026-06-23_build214_security_task_orchestration.sql`.
+
+- `owner_attention_tasks` now supports `due_at`, `escalation_at`, `escalation_status`, and `last_notified_at`.
+- Public-schema tables are intended to be RLS-enabled with direct `anon`/`authenticated`/`PUBLIC` table grants removed.
+- `public.rosie_security_posture_report()` is a service-role-only SQL function used by `/api/admin/security_posture_report`.
+- No browser page should query public tables directly; Cloudflare Functions remain the server-side authorization boundary.
