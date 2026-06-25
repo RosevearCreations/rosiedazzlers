@@ -37,6 +37,13 @@
       visible: () => true
     },
     {
+      key: "admin-today",
+      label: "Today Needs Attention",
+      href: "/admin-today.html",
+      description: "Prioritized owner action queue",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-today")
+    },
+    {
       key: "admin-booking",
       label: "Bookings",
       href: "/admin-booking.html",
@@ -158,6 +165,14 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-staff")
     },
 
+
+    {
+      key: "admin-docs",
+      label: "Docs & Sanity",
+      href: "/admin-docs.html",
+      description: "Canonical docs, Markdown sanity, and visual placeholder readiness",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-docs")
+    },
     {
       key: "admin-app",
       label: "App Management",
