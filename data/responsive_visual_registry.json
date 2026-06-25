@@ -1,0 +1,115 @@
+{
+  "version": "203.0.0",
+  "updated_at": "2026-06-12",
+  "source": "bundled_json_fallback",
+  "purpose": "Shared desktop/mobile and visual-polish registry for public website and admin diagnostics.",
+  "device_targets": [
+    {
+      "key": "mobile",
+      "label": "Mobile app view",
+      "max_width": 767,
+      "priority": "high",
+      "checks": [
+        "single-column cards",
+        "sticky quick actions",
+        "touch targets >= 44px",
+        "no horizontal overflow",
+        "short headings and compact CTAs"
+      ]
+    },
+    {
+      "key": "tablet",
+      "label": "Tablet / small laptop view",
+      "min_width": 768,
+      "max_width": 1099,
+      "priority": "medium",
+      "checks": [
+        "two-column grids where useful",
+        "menu remains usable",
+        "forms stay readable"
+      ]
+    },
+    {
+      "key": "desktop",
+      "label": "Desktop website view",
+      "min_width": 1100,
+      "priority": "high",
+      "checks": [
+        "wider hero layout",
+        "proof imagery visible above the fold where possible",
+        "admin diagnostics readable in card grids",
+        "footer columns stay balanced"
+      ]
+    }
+  ],
+  "visual_slots": [
+    {
+      "key": "home_hero_banner",
+      "label": "Homepage hero banner",
+      "recommended_size": "1600x900",
+      "status": "active",
+      "fallback": "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png"
+    },
+    {
+      "key": "review_proof",
+      "label": "Review proof image",
+      "recommended_size": "1200x630",
+      "status": "active",
+      "fallback": "/assets/brand/rosie-reviews-fallback.svg"
+    },
+    {
+      "key": "service_cards",
+      "label": "Service and add-on cards",
+      "recommended_size": "1200x800",
+      "status": "active",
+      "fallback": "/assets/addons/generic_addon.svg"
+    },
+    {
+      "key": "before_after_proof",
+      "label": "Before/after proof photos",
+      "recommended_size": "1200x900 matched angle",
+      "status": "needs_fresh_public_examples",
+      "fallback": "data/before_after_gallery.json"
+    },
+    {
+      "key": "incident_evidence",
+      "label": "Incident report evidence",
+      "recommended_size": "1200x900 or higher",
+      "status": "private_until_approved",
+      "fallback": "R2 incident-reports/"
+    }
+  ],
+  "professional_effects": [
+    {
+      "key": "glass_cards",
+      "label": "Soft glass panels",
+      "enabled": true,
+      "reduced_motion_safe": true
+    },
+    {
+      "key": "hover_lift",
+      "label": "Subtle card lift on pointer devices",
+      "enabled": true,
+      "reduced_motion_safe": false
+    },
+    {
+      "key": "image_sheen",
+      "label": "Professional image frame shine",
+      "enabled": true,
+      "reduced_motion_safe": false
+    },
+    {
+      "key": "mobile_sticky_cta",
+      "label": "Mobile quick-action bar",
+      "enabled": true,
+      "reduced_motion_safe": true
+    },
+    {
+      "key": "responsive_nav",
+      "label": "Compact mobile navigation",
+      "enabled": true,
+      "reduced_motion_safe": true
+    }
+  ],
+  "admin_recommendation": "Use the dashboard Desktop/Mobile & Visual Polish card after each upload. If any page feels cramped on mobile, convert its widest table into cards or add horizontal scroll with a clear label."
+}

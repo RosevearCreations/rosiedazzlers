@@ -1,0 +1,198 @@
+{
+  "build": 214,
+  "updated_at": "2026-06-23",
+  "summary": "Build 214 extends the visual placeholder system with safe database-security posture guidance.",
+  "placeholder_slots": [
+    {
+      "key": "service_card",
+      "label": "Service image placeholder",
+      "where": "service cards, package cards, add-on cards",
+      "visual": "sparkle/wash icon card",
+      "replace_with": "service-specific vehicle/detailing photo or approved before/after crop"
+    },
+    {
+      "key": "town_card",
+      "label": "Town/local proof placeholder",
+      "where": "town landing cards and local SEO proof sections",
+      "visual": "map-pin and road card",
+      "replace_with": "customer-approved local proof image for the town/service"
+    },
+    {
+      "key": "gallery_pair",
+      "label": "Before/after placeholder",
+      "where": "gallery rows with missing before or after image",
+      "visual": "split before/after frame",
+      "replace_with": "two approved customer-safe before/after images"
+    },
+    {
+      "key": "seasonal_campaign",
+      "label": "Seasonal campaign graphic placeholder",
+      "where": "campaign, specials, and marketing cards",
+      "visual": "offer badge with seasonal sweep",
+      "replace_with": "campaign-specific graphic: spring salt, summer road trip, winter protection"
+    },
+    {
+      "key": "fleet",
+      "label": "Fleet/commercial placeholder",
+      "where": "fleet mini-CRM and fleet public cards",
+      "visual": "van/truck outline",
+      "replace_with": "approved fleet or work-vehicle photo"
+    },
+    {
+      "key": "incident_evidence",
+      "label": "Incident/evidence placeholder",
+      "where": "incident reports and customer progress when evidence is pending or private",
+      "visual": "locked photo/evidence card",
+      "replace_with": "admin-approved customer-safe evidence only"
+    },
+    {
+      "key": "review_proof",
+      "label": "Review/testimonial placeholder",
+      "where": "review proof cards and local trust blocks",
+      "visual": "star quote card",
+      "replace_with": "approved public review screenshot or typed testimonial"
+    },
+    {
+      "key": "quote_pipeline",
+      "label": "Quote pipeline graphic",
+      "where": "Admin Workflow / Quote dashboard",
+      "visual": "connected workflow placeholder card",
+      "replace_with": "simple lead-to-booking funnel graphic or real quote screenshot with private data removed"
+    },
+    {
+      "key": "booking_conversion",
+      "label": "Booking confirmation graphic",
+      "where": "Admin Workflow / booking cards",
+      "visual": "connected workflow placeholder card",
+      "replace_with": "vehicle/calendar visual or mobile booking screenshot"
+    },
+    {
+      "key": "proof_of_work",
+      "label": "Proof-of-work visual",
+      "where": "detailer jobs, workflow hub, service pages",
+      "visual": "connected workflow placeholder card",
+      "replace_with": "approved start/finish photo set"
+    },
+    {
+      "key": "invoice_payment",
+      "label": "Invoice/payment visual",
+      "where": "workflow hub and payment admin",
+      "visual": "connected workflow placeholder card",
+      "replace_with": "clean invoice/receipt mockup"
+    },
+    {
+      "key": "review_public_proof",
+      "label": "Review/public proof visual",
+      "where": "gallery, review cards, SEO proof blocks",
+      "visual": "connected workflow placeholder card",
+      "replace_with": "approved Google review or before/after photo"
+    },
+    {
+      "key": "repeat_maintenance",
+      "label": "Repeat-maintenance visual",
+      "where": "maintenance/fleet/workflow cards",
+      "visual": "connected workflow placeholder card",
+      "replace_with": "seasonal care calendar or vehicle history screenshot"
+    },
+    {
+      "key": "live_customer_update",
+      "label": "Live customer update placeholder",
+      "where": "customer progress timeline and live detail workspace",
+      "visual": "phone/timeline update card",
+      "replace_with": "approved during-service photo with a short customer-safe note"
+    },
+    {
+      "key": "private_staff_note",
+      "label": "Private staff note placeholder",
+      "where": "detailer/admin-only timeline entries",
+      "visual": "locked staff discussion card",
+      "replace_with": "staff-only note or evidence that must never appear in the customer feed"
+    },
+    {
+      "key": "video_update",
+      "label": "Video update placeholder",
+      "where": "live detailing timeline when a video is pending/uploading",
+      "visual": "video frame and play indicator",
+      "replace_with": "short approved progress video stored in protected media storage"
+    },
+    {
+      "key": "live_upload_recovery",
+      "label": "Upload recovery placeholder",
+      "where": "detailer mobile upload panel and failed-upload queue",
+      "visual": "cloud upload with retry indicator",
+      "replace_with": "real upload-progress screenshot after field testing"
+    },
+    {
+      "key": "customer_approval",
+      "label": "Customer approval placeholder",
+      "where": "in-job recommendation and price-change cards",
+      "visual": "approval check and price card",
+      "replace_with": "approved recommendation workflow screenshot with private data removed"
+    },
+    {
+      "key": "completed_job_summary",
+      "label": "Completed-job summary placeholder",
+      "where": "customer closeout and workflow screens",
+      "visual": "proof, receipt, care and maintenance card",
+      "replace_with": "customer-safe completed job summary screenshot"
+    },
+    {
+      "key": "today_attention",
+      "label": "Today Needs Attention placeholder",
+      "where": "owner dashboard and priority queue",
+      "visual": "prioritized checklist card",
+      "replace_with": "real owner queue screenshot with customer data removed"
+    },
+    {
+      "key": "production_reliability",
+      "label": "Production reliability image placeholder",
+      "where": "/admin-production.html and operations dashboards",
+      "replace_with": "Screenshot or diagram of provider/payment/upload checks after production deployment",
+      "alt": "Production readiness checklist for mobile detailing operations"
+    },
+    {
+      "key": "production_test_centre",
+      "label": "Guided production testing placeholder",
+      "where": "/admin-test-centre.html and deployment-test documentation",
+      "visual": "checklist, phone, and safe test-record card",
+      "replace_with": "safe internal screenshot after testing that contains no customer data, credentials, or private media",
+      "alt": "Guided production acceptance checklist for mobile detailing operations"
+    },
+    {
+      "key": "owner_attention",
+      "label": "Owner action placeholder",
+      "where": "Today Needs Attention and owner task cards",
+      "visual": "priority checkmark / action lane card",
+      "replace_with": "safe owner workflow screenshot with customer names removed"
+    },
+    {
+      "key": "customer_acknowledgement",
+      "label": "Customer acknowledgement placeholder",
+      "where": "approved in-job recommendation and completed-summary cards",
+      "visual": "signature / confirmation card",
+      "replace_with": "customer-safe approval or signed-summary proof with personal details removed"
+    },
+    {
+      "key": "security_posture",
+      "label": "Security posture placeholder",
+      "where": "/admin-security.html and production security readiness cards",
+      "visual": "shield/checklist card with no customer data",
+      "replace_with": "safe internal security remediation checklist screenshot",
+      "alt": "Database security posture checklist for Rosie Dazzlers administrators"
+    }
+  ],
+  "rules": [
+    "Never expose private incident/report photos as placeholders or fallback images.",
+    "Public gallery placeholders must clearly say image is pending/repair needed so customers are not misled.",
+    "Every real image should have descriptive local alt text when used on public pages.",
+    "Use placeholders as temporary polish only; the Media Health and Gallery Approval screens should keep pushing toward real owned images.",
+    "Live-detail placeholders must inherit the selected audience: customer now, admin review first, or staff only.",
+    "A private or review-pending image/video must never fall back to a public image URL.",
+    "Security posture placeholders and screenshots must never include secrets, customer records, direct table URLs, or provider credentials."
+  ],
+  "desktop_mobile_notes": [
+    "Placeholders use fluid aspect ratios and single-column mobile behavior.",
+    "Hover lift is disabled for reduced-motion users.",
+    "Cards remain visible without relying on a successful remote image load."
+  ]
+}

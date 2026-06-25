@@ -1,0 +1,70 @@
+{
+  "build": 211,
+  "areas": [
+    {
+      "key": "notification_delivery",
+      "label": "Notification delivery",
+      "owner_screen": "/admin-production.html",
+      "checks": [
+        "email webhook configured",
+        "SMS webhook optional",
+        "queued/failed events visible",
+        "test send available"
+      ]
+    },
+    {
+      "key": "hosted_payment_links",
+      "label": "Hosted payment-link automation",
+      "owner_screen": "/admin-production.html",
+      "checks": [
+        "Stripe secret configured",
+        "final balance checkout creation",
+        "manual fallback remains available",
+        "webhook reconciliation next"
+      ]
+    },
+    {
+      "key": "mobile_upload_reliability",
+      "label": "Mobile upload reliability",
+      "owner_screen": "/admin-production.html",
+      "checks": [
+        "failed/cancelled sessions visible",
+        "large video guidance",
+        "retry/cancel state",
+        "resumable upload future"
+      ]
+    },
+    {
+      "key": "storage_retention",
+      "label": "Storage retention cleanup",
+      "owner_screen": "/admin-production.html",
+      "checks": [
+        "expired non-legal media listed",
+        "dry-run first",
+        "archive before delete",
+        "permanent proof/legal hold protected"
+      ]
+    },
+    {
+      "key": "end_to_end_environment",
+      "label": "Cloudflare/Supabase/R2 end-to-end",
+      "owner_screen": "/admin-production.html",
+      "checks": [
+        "Pages Functions reach Supabase",
+        "Storage signing works",
+        "R2/public assets configured",
+        "route copies synchronized"
+      ]
+    },
+    {
+      "key": "owner_simplification",
+      "label": "Fewer owner actions",
+      "owner_screen": "/admin-today.html",
+      "checks": [
+        "production tasks roll into Today Needs Attention",
+        "single action links",
+        "warnings do not hide urgent customer work"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "build": 214,
+  "screen": "/admin-security.html",
+  "purpose": "Safe visibility into public-schema RLS and direct browser table access after a Supabase Security Advisor alert.",
+  "data_source": "public.rosie_security_posture_report via Cloudflare service role after staff authorization",
+  "safe_output": [
+    "table names",
+    "RLS status",
+    "anon/authenticated read/write capability flags",
+    "aggregate counts"
+  ],
+  "never_output": [
+    "API keys",
+    "service-role key",
+    "table records",
+    "customer contact data",
+    "payment data",
+    "private incident evidence"
+  ],
+  "operator_steps": [
+    "Run the Build 214 migration in Supabase SQL Editor.",
+    "Refresh Supabase Security Advisor.",
+    "Run the Guided Production Test Centre using an internal booking.",
+    "Repair unsafe direct dependencies through Cloudflare Functions rather than restoring browser grants."
+  ]
+}

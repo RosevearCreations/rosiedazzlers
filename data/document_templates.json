@@ -1,11 +1,11 @@
 {
-  "version": "189.0.0",
-  "updated_at": "2026-06-04",
-  "source": "bundled_json_fallback",
+  "version": "192.0.0",
+  "updated_at": "2026-06-05",
+  "source": "bundled_json_fallback_build192_template_rendering",
   "templates": {
     "quote_proposal": {
       "subject": "Your Rosie Dazzlers quote",
-      "body": "Thank you for asking Rosie Dazzlers to review your vehicle. Here is the quote/proposal for review."
+      "body": "Hi {{customer_name}}, here is your quote for {{package_name}}. Please review and reply with any changes."
     },
     "deposit_receipt": {
       "subject": "Rosie Dazzlers deposit receipt",
@@ -16,12 +16,12 @@
       "body": "This is an update about a refund or partial refund connected to your payment."
     },
     "invoice": {
-      "subject": "Rosie Dazzlers invoice",
-      "body": "Here is the final invoice/payment summary for your appointment."
+      "subject": "Rosie Dazzlers invoice — {{service_date}}",
+      "body": "Here is the invoice/payment summary for {{package_name}}. Estimated total: {{estimated_total}}. Balance due: {{balance_due}}. Invoice link: {{invoice_url}}"
     },
     "appointment_confirmation": {
-      "subject": "Rosie Dazzlers booking confirmation",
-      "body": "Your appointment details are confirmed. Please review access, weather, and water-use notes before the appointment."
+      "subject": "Rosie Dazzlers booking confirmation — {{service_date}}",
+      "body": "Thank you for booking Rosie Dazzlers. Your {{package_name}} appointment is confirmed for {{service_date}} at {{slot_label}}. Confirmation link: {{confirmation_url}}"
     }
   }
 }

@@ -1,0 +1,108 @@
+{
+  "version": "191.0.0",
+  "updated_at": "2026-06-05",
+  "purpose": "Maps editable settings to the pages, APIs, and assets that consume them.",
+  "settings": {
+    "business_profile": {
+      "public_pages": [
+        "all public pages via assets/chrome.js"
+      ],
+      "apis": [
+        "/api/site_settings_public"
+      ],
+      "uses": [
+        "footer contact details",
+        "social links",
+        "LocalBusiness structured data"
+      ]
+    },
+    "navigation_footer": {
+      "public_pages": [
+        "all public pages via assets/chrome.js"
+      ],
+      "apis": [
+        "/api/site_settings_public"
+      ],
+      "uses": [
+        "public navigation",
+        "footer links"
+      ]
+    },
+    "site_policies": {
+      "public_pages": [
+        "/book",
+        "/faq",
+        "/quote-payment",
+        "/quote-response"
+      ],
+      "assets": [
+        "assets/site-policies.js"
+      ],
+      "uses": [
+        "deposit/cancellation/refund/driveway/water-power/privacy copy"
+      ]
+    },
+    "document_templates": {
+      "apis": [
+        "/api/admin/quote_proposal_deliver",
+        "quote deposit receipt/refund helpers"
+      ],
+      "uses": [
+        "quote proposal email",
+        "deposit receipt email",
+        "refund notice email",
+        "invoice/appointment template placeholders"
+      ]
+    },
+    "business_hours_holidays": {
+      "apis": [
+        "/api/booking_hours_status"
+      ],
+      "uses": [
+        "appointment-hours notes",
+        "holiday closure checks"
+      ]
+    },
+    "option_libraries": {
+      "admin_pages": [
+        "future structured admin dropdowns"
+      ],
+      "uses": [
+        "shared dropdown labels and controlled vocabularies"
+      ]
+    },
+    "analytics_event_registry": {
+      "assets": [
+        "assets/public-analytics.js"
+      ],
+      "apis": [
+        "/api/analytics/ingest"
+      ],
+      "uses": [
+        "event labels/categories and active/inactive validation"
+      ]
+    },
+    "media_requirements": {
+      "admin_pages": [
+        "/admin-media-health"
+      ],
+      "apis": [
+        "/api/admin/media_asset_health_scan"
+      ],
+      "uses": [
+        "required image/video asset list and size rules"
+      ]
+    },
+    "landing_pages_content": {
+      "public_pages": [
+        "service and town landing pages"
+      ],
+      "apis": [
+        "/api/landing_pages_public"
+      ],
+      "uses": [
+        "landing-page content fallback before DB override"
+      ]
+    }
+  }
+}

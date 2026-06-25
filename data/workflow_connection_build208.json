@@ -1,0 +1,327 @@
+{
+  "build": 208,
+  "updated_at": "2026-06-14",
+  "summary": "Build 208 connects the value-added modules into one owner-facing lifecycle: lead/quote \u2192 booking \u2192 proof of work \u2192 invoice/payment \u2192 review \u2192 repeat maintenance.",
+  "north_star": "Every customer should have a clear next step, every staff/admin action should lead toward revenue, proof, payment, review, or repeat maintenance.",
+  "workflow_stages": [
+    {
+      "key": "lead_quote",
+      "label": "Lead / quote",
+      "owner_goal": "Turn every inquiry into a trackable quote with dollar value, source, age, follow-up stage, and likely revenue.",
+      "primary_screen": "/admin-quotes.html",
+      "public_touchpoints": [
+        "/book",
+        "/contact",
+        "/pricing"
+      ],
+      "data_sources": [
+        "quote_pipeline_items",
+        "quote_proposal_drafts",
+        "lead_conversion_drafts",
+        "data/value_added_operations_build206.json"
+      ],
+      "done_when": [
+        "quote value saved",
+        "source channel set",
+        "next follow-up date set",
+        "accepted/declined status captured"
+      ],
+      "attention_rules": [
+        "sent quote older than 2 days",
+        "draft quote without follow-up",
+        "high-value quote without deposit request"
+      ],
+      "visual_slot": "quote_pipeline",
+      "next_build_push": "Add quote create/edit/save from lead rows and deposit request actions directly on /admin-quotes.html."
+    },
+    {
+      "key": "booking",
+      "label": "Booking",
+      "owner_goal": "Move accepted quotes into confirmed bookings with service area, business-hours, holiday, add-on, and deposit checks.",
+      "primary_screen": "/admin-booking.html",
+      "public_touchpoints": [
+        "/book",
+        "/complete",
+        "/progress"
+      ],
+      "data_sources": [
+        "bookings",
+        "booking_status_history",
+        "payment_requests",
+        "business_hours_holidays"
+      ],
+      "done_when": [
+        "booking confirmed",
+        "deposit/payment request linked",
+        "customer progress token available",
+        "crew/detailer assignment clear"
+      ],
+      "attention_rules": [
+        "accepted quote not booked",
+        "booking missing customer progress link",
+        "holiday/business-hours override without reason"
+      ],
+      "visual_slot": "booking_conversion",
+      "next_build_push": "Add one-click Convert Accepted Quote to Booking from the quote pipeline."
+    },
+    {
+      "key": "proof_work",
+      "label": "Proof of work",
+      "owner_goal": "Give detailers a mobile job workspace with start photos, finish photos, condition notes, tasks, incident quick-create, and customer-safe proof.",
+      "primary_screen": "/detailer-jobs.html",
+      "public_touchpoints": [
+        "/progress",
+        "/gallery"
+      ],
+      "data_sources": [
+        "proof_of_work_checklists",
+        "job_completion",
+        "incident_reports",
+        "gallery_approval_queue"
+      ],
+      "done_when": [
+        "arrival photos captured",
+        "pre-existing damage noted",
+        "required checklist items completed",
+        "finish photos approved"
+      ],
+      "attention_rules": [
+        "completed booking missing finish photo",
+        "incident report awaiting decision",
+        "gallery candidate missing consent"
+      ],
+      "visual_slot": "proof_of_work",
+      "next_build_push": "Add mobile proof-of-work checklist controls to /detailer-jobs.html with required photo gates."
+    },
+    {
+      "key": "invoice_payment",
+      "label": "Invoice / payment",
+      "owner_goal": "Close the money loop with invoices, deposits, balances, webhook status, receipts, refunds, and HST/GST review.",
+      "primary_screen": "/admin-payments.html",
+      "public_touchpoints": [
+        "/invoice",
+        "/complete"
+      ],
+      "data_sources": [
+        "payment_requests",
+        "payment_webhook_events",
+        "accounting_entries",
+        "document_templates"
+      ],
+      "done_when": [
+        "invoice rendered",
+        "deposit/balance status reconciled",
+        "receipt queued/sent",
+        "tax review ready"
+      ],
+      "attention_rules": [
+        "paid webhook unverified",
+        "receipt retry due",
+        "payment variance warning",
+        "invoice missing policy/template version"
+      ],
+      "visual_slot": "invoice_payment",
+      "next_build_push": "Add one owner card showing balances due today, missing receipts, and tax review warnings."
+    },
+    {
+      "key": "review_proof",
+      "label": "Review / public proof",
+      "owner_goal": "Request reviews after completed work, then turn approved reviews and before/after images into local proof blocks.",
+      "primary_screen": "/admin-gallery.html",
+      "public_touchpoints": [
+        "/gallery",
+        "/services",
+        "/towns"
+      ],
+      "data_sources": [
+        "review_request_queue",
+        "gallery_approval_queue",
+        "local_seo_proof_tasks",
+        "sample_reviews"
+      ],
+      "done_when": [
+        "review request queued",
+        "consent captured",
+        "public proof approved",
+        "town/service proof gap updated"
+      ],
+      "attention_rules": [
+        "completed job without review request",
+        "approved review not reused as proof",
+        "public gallery item has broken image"
+      ],
+      "visual_slot": "review_public_proof",
+      "next_build_push": "Add review request queue actions and approval-to-proof buttons."
+    },
+    {
+      "key": "repeat_maintenance",
+      "label": "Repeat maintenance",
+      "owner_goal": "Bring good customers back through vehicle history, seasonal reminders, maintenance plans, and route clustering.",
+      "primary_screen": "/admin-growth.html",
+      "public_touchpoints": [
+        "/maintenance-plan",
+        "/my-account",
+        "/fleet"
+      ],
+      "data_sources": [
+        "customer_maintenance_plans",
+        "vehicle_history_events",
+        "seasonal_campaigns",
+        "route_cluster_hints",
+        "fleet_accounts"
+      ],
+      "done_when": [
+        "next suggested service set",
+        "reminder/plan status set",
+        "seasonal offer matched",
+        "route/town cluster noted"
+      ],
+      "attention_rules": [
+        "completed customer has no next service suggestion",
+        "maintenance reminder due",
+        "fleet prospect lacks follow-up",
+        "route cluster opportunity open"
+      ],
+      "visual_slot": "repeat_maintenance",
+      "next_build_push": "Create reminders from completed bookings and show them in customer vehicle history."
+    }
+  ],
+  "owner_today_groups": [
+    {
+      "key": "money",
+      "label": "Money first",
+      "includes": [
+        "quote follow-ups",
+        "accepted quotes not booked",
+        "balances due",
+        "payment warnings"
+      ],
+      "target_screen": "/admin-quotes.html"
+    },
+    {
+      "key": "trust",
+      "label": "Trust and proof",
+      "includes": [
+        "gallery approvals",
+        "review requests",
+        "local proof gaps",
+        "broken images"
+      ],
+      "target_screen": "/admin-gallery.html"
+    },
+    {
+      "key": "work",
+      "label": "Work quality",
+      "includes": [
+        "proof-of-work gaps",
+        "incident decisions",
+        "job completion notes",
+        "customer sign-off"
+      ],
+      "target_screen": "/detailer-jobs.html"
+    },
+    {
+      "key": "repeat",
+      "label": "Repeat revenue",
+      "includes": [
+        "maintenance reminders",
+        "seasonal campaigns",
+        "fleet follow-ups",
+        "route clusters"
+      ],
+      "target_screen": "/admin-growth.html"
+    }
+  ],
+  "competitor_feature_alignment": [
+    {
+      "feature": "Online booking/customer account",
+      "rosie_status": "strong foundation",
+      "next_value": "Make customer account show vehicle timeline and next recommended service."
+    },
+    {
+      "feature": "Quote pipeline and CRM",
+      "rosie_status": "dashboard foundation",
+      "next_value": "Connect dashboard to real quote create/edit rows and follow-up reminders."
+    },
+    {
+      "feature": "Mobile proof-of-work photos/signatures",
+      "rosie_status": "schema/foundation",
+      "next_value": "Add required checklist UI on detailer mobile screen."
+    },
+    {
+      "feature": "Invoicing/payments",
+      "rosie_status": "strong foundation",
+      "next_value": "Surface unpaid balances and receipt retries in Today dashboard."
+    },
+    {
+      "feature": "Recurring memberships/fleet",
+      "rosie_status": "foundation",
+      "next_value": "Add maintenance plan creation from completed booking and fleet vehicle list CRUD."
+    },
+    {
+      "feature": "Route optimization/clustering",
+      "rosie_status": "hint foundation",
+      "next_value": "Preview real booked jobs by town/date and suggested cluster day."
+    }
+  ],
+  "visual_enrichment_slots": [
+    {
+      "key": "quote_pipeline",
+      "label": "Quote pipeline graphic",
+      "where": "Admin Workflow / Quote dashboard",
+      "replace_with": "simple lead-to-booking funnel graphic or real quote screenshot with private data removed"
+    },
+    {
+      "key": "booking_conversion",
+      "label": "Booking confirmation graphic",
+      "where": "Admin Workflow / booking cards",
+      "replace_with": "vehicle/calendar visual or mobile booking screenshot"
+    },
+    {
+      "key": "proof_of_work",
+      "label": "Proof-of-work visual",
+      "where": "detailer jobs, workflow hub, service pages",
+      "replace_with": "approved start/finish photo set"
+    },
+    {
+      "key": "invoice_payment",
+      "label": "Invoice/payment visual",
+      "where": "workflow hub and payment admin",
+      "replace_with": "clean invoice/receipt mockup"
+    },
+    {
+      "key": "review_public_proof",
+      "label": "Review/public proof visual",
+      "where": "gallery, review cards, SEO proof blocks",
+      "replace_with": "approved Google review or before/after photo"
+    },
+    {
+      "key": "repeat_maintenance",
+      "label": "Repeat-maintenance visual",
+      "where": "maintenance/fleet/workflow cards",
+      "replace_with": "seasonal care calendar or vehicle history screenshot"
+    }
+  ],
+  "next_20_steps": [
+    "Create owner Today workflow dashboard at /admin-workflow.html.",
+    "Add dashboard card linking workflow stages to existing modules.",
+    "Connect quote pipeline metrics to quote_pipeline_items when SQL is installed, with JSON fallback until then.",
+    "Add real quote create/edit/save actions to /admin-quotes.html.",
+    "Add Convert Accepted Quote to Booking action.",
+    "Add quote follow-up due/overdue badges.",
+    "Add mobile proof-of-work checklist to /detailer-jobs.html.",
+    "Gate job completion on required photo/checklist evidence for selected package types.",
+    "Add customer sign-off capture for completed proof-of-work.",
+    "Add review request queue actions after completed bookings.",
+    "Add approved review-to-local-proof workflow.",
+    "Add before/after slider component using approved gallery rows.",
+    "Add vehicle history timeline to /my-account and admin customer profile.",
+    "Create maintenance reminders from completed bookings.",
+    "Add membership/maintenance plan edit screen with credits/status/reminder date.",
+    "Add Meta campaign CRUD rows with spend/leads/jobs/revenue fields.",
+    "Add fleet account and vehicle-list CRUD.",
+    "Add route cluster preview from actual bookings grouped by town/date.",
+    "Add visual replacement tasks for every placeholder slot in Media Health.",
+    "Archive old Markdown into retained-history status once release guards no longer depend on them."
+  ]
+}

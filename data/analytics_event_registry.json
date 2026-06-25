@@ -1,7 +1,7 @@
 {
-  "version": "189.0.0",
-  "updated_at": "2026-06-04",
-  "source": "bundled_json_fallback",
+  "version": "192.0.0",
+  "updated_at": "2026-06-05",
+  "source": "bundled_json_fallback_build192_registry_warnings",
   "events": [
     {
       "key": "page_view",
@@ -44,6 +44,102 @@
       "label": "Payment completed",
       "category": "payment",
       "is_active": true
+    },
+    {
+      "event_type": "booking_date_pick",
+      "group": "booking_admin",
+      "label": "Booking Date Pick",
+      "status": "active"
+    },
+    {
+      "event_type": "booking_slot_pick",
+      "group": "booking_admin",
+      "label": "Booking Slot Pick",
+      "status": "active"
+    },
+    {
+      "event_type": "booking_calendar_page",
+      "group": "booking_admin",
+      "label": "Booking Calendar Page",
+      "status": "active"
+    },
+    {
+      "event_type": "booking_vehicle_year",
+      "group": "booking_admin",
+      "label": "Booking Vehicle Year",
+      "status": "active"
+    },
+    {
+      "event_type": "booking_vehicle_make",
+      "group": "booking_admin",
+      "label": "Booking Vehicle Make",
+      "status": "active"
+    },
+    {
+      "event_type": "booking_vehicle_model",
+      "group": "booking_admin",
+      "label": "Booking Vehicle Model",
+      "status": "active"
+    },
+    {
+      "event_type": "booking_start",
+      "group": "booking_admin",
+      "label": "Booking Start",
+      "status": "active"
+    },
+    {
+      "event_type": "booking_step_view",
+      "group": "booking_admin",
+      "label": "Booking Step View",
+      "status": "active"
+    },
+    {
+      "event_type": "booking_step_complete",
+      "group": "booking_admin",
+      "label": "Booking Step Complete",
+      "status": "active"
+    },
+    {
+      "event_type": "booking_complete",
+      "group": "booking_admin",
+      "label": "Booking Complete",
+      "status": "active"
+    },
+    {
+      "event_type": "quote_payment_view",
+      "group": "booking_admin",
+      "label": "Quote Payment View",
+      "status": "active"
+    },
+    {
+      "event_type": "quote_payment_checkout_start",
+      "group": "booking_admin",
+      "label": "Quote Payment Checkout Start",
+      "status": "active"
+    },
+    {
+      "event_type": "customer_dashboard_view",
+      "group": "booking_admin",
+      "label": "Customer Dashboard View",
+      "status": "active"
+    },
+    {
+      "event_type": "admin_template_preview",
+      "group": "booking_admin",
+      "label": "Admin Template Preview",
+      "status": "active"
+    },
+    {
+      "event_type": "editable_setting_restore",
+      "group": "booking_admin",
+      "label": "Editable Setting Restore",
+      "status": "active"
+    },
+    {
+      "event_type": "media_requirement_restore",
+      "group": "booking_admin",
+      "label": "Media Requirement Restore",
+      "status": "active"
     }
   ]
 }

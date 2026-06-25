@@ -223,8 +223,9 @@
       "build": "185"
     }
   ],
-  "version": "189.0.0",
-  "updated_at": "2026-06-04",
-  "source": "stable_bundled_json_fallback",
-  "notes": "Stable fallback for DB-managed media requirements/tasks."
+  "version": "192.0.0",
+  "updated_at": "2026-06-05",
+  "source": "stable_bundled_json_fallback_build192_media_requirement_sync_restore",
+  "notes": "Stable fallback for DB-managed media requirements/tasks.",
+  "db_sync_restore_enabled": true
 }

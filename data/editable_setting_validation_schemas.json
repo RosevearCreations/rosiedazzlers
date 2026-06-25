@@ -1,0 +1,194 @@
+{
+  "version": "195.0.0",
+  "updated_at": "2026-06-06",
+  "purpose": "Field-level validation rules for DB-backed editable site settings. Build 195 adds API-returned field_results for UI markers plus SEO copy-length warnings.",
+  "schemas": {
+    "business_profile": {
+      "required_paths": [
+        {
+          "path": "business.name",
+          "type": "string",
+          "label": "business name"
+        },
+        {
+          "path": "business.contact.public_email",
+          "type": "email",
+          "label": "public email"
+        },
+        {
+          "path": "business.service_area",
+          "type": "string",
+          "label": "service area"
+        }
+      ],
+      "optional_paths": [
+        {
+          "path": "business.website",
+          "type": "url",
+          "label": "website"
+        },
+        {
+          "path": "business.social_links",
+          "type": "array",
+          "label": "social links"
+        }
+      ]
+    },
+    "site_policies": {
+      "required_paths": [
+        {
+          "path": "policies.deposit",
+          "type": "string",
+          "label": "deposit policy"
+        },
+        {
+          "path": "policies.cancellation",
+          "type": "string",
+          "label": "cancellation policy"
+        },
+        {
+          "path": "policies.refund",
+          "type": "string",
+          "label": "refund policy"
+        },
+        {
+          "path": "policies.driveway_access",
+          "type": "string",
+          "label": "driveway access policy"
+        },
+        {
+          "path": "policies.water_power",
+          "type": "string",
+          "label": "water/power policy"
+        }
+      ]
+    },
+    "document_templates": {
+      "required_paths": [
+        {
+          "path": "templates.invoice.subject",
+          "type": "string",
+          "label": "invoice subject"
+        },
+        {
+          "path": "templates.invoice.body",
+          "type": "string",
+          "label": "invoice body"
+        },
+        {
+          "path": "templates.appointment_confirmation.subject",
+          "type": "string",
+          "label": "appointment confirmation subject"
+        },
+        {
+          "path": "templates.appointment_confirmation.body",
+          "type": "string",
+          "label": "appointment confirmation body"
+        }
+      ]
+    },
+    "business_hours_holidays": {
+      "required_paths": [
+        {
+          "path": "timezone",
+          "type": "string",
+          "label": "timezone"
+        },
+        {
+          "path": "hours",
+          "type": "object",
+          "label": "hours"
+        },
+        {
+          "path": "holiday_closures",
+          "type": "array",
+          "label": "holiday closures"
+        }
+      ]
+    },
+    "navigation_footer": {
+      "required_paths": [
+        {
+          "path": "navigation",
+          "type": "array",
+          "label": "navigation links"
+        }
+      ],
+      "optional_paths": [
+        {
+          "path": "footer_links",
+          "type": "array",
+          "label": "footer links"
+        },
+        {
+          "path": "footer_groups",
+          "type": "array",
+          "label": "footer groups"
+        },
+        {
+          "path": "footer.links",
+          "type": "array",
+          "label": "footer links nested"
+        }
+      ]
+    },
+    "option_libraries": {
+      "required_paths": [
+        {
+          "path": "communication_channels",
+          "type": "array",
+          "label": "communication channels"
+        },
+        {
+          "path": "payment_methods",
+          "type": "array",
+          "label": "payment methods"
+        },
+        {
+          "path": "booking_statuses",
+          "type": "array",
+          "label": "booking statuses"
+        }
+      ]
+    },
+    "analytics_event_registry": {
+      "required_paths": [
+        {
+          "path": "events",
+          "type": "array",
+          "label": "events"
+        }
+      ]
+    },
+    "media_requirements": {
+      "required_paths": [
+        {
+          "path": "required_assets",
+          "type": "array",
+          "label": "required media assets"
+        }
+      ]
+    },
+    "landing_pages_content": {
+      "required_paths": [
+        {
+          "path": "default_pages",
+          "type": "object",
+          "label": "default landing pages"
+        }
+      ],
+      "optional_paths": [
+        {
+          "path": "pages",
+          "type": "array",
+          "label": "landing page rows"
+        },
+        {
+          "path": "landing_pages",
+          "type": "array",
+          "label": "landing page rows"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+# Archived Rosie Dazzlers Markdown
+
+Build 209 moved redundant handoff, status, planning, repository-guide, and duplicate next-step documents here on 2026-06-17.
+
+These files are retained for historical context only. They are not current instructions.
+
+Use these two living documents instead:
+
+1. `../../AI_PROJECT_HANDOFF.md`
+2. `../../MASTER_VALUE_ROADMAP.md`
+
+Required historical audit files remain at the repository root because existing release guards still validate them. Do not add new strategy to the archived files.

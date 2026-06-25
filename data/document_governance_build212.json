@@ -1,0 +1,11 @@
+{
+  "build": 212,
+  "canonical_documents": [
+    "AI_PROJECT_HANDOFF.md",
+    "MASTER_VALUE_ROADMAP.md"
+  ],
+  "operational_guide": "docs/PRODUCTION_TEST_GUIDE.md",
+  "in_app_test_centre": "/admin-test-centre.html",
+  "historical_policy": "Retain historical root Markdown until release guard modernisation permits safe archival; do not use it as the active roadmap.",
+  "root_markdown_sync_required": true
+}
