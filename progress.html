@@ -7,9 +7,10 @@
   <meta name="description" content="View your Rosie Dazzlers service progress updates." />
   <meta name="robots" content="noindex,nofollow" />
   <link rel="canonical" href="https://rosiedazzlers.ca/progress" />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260622build213" />
+  <style>.live-timeline-card{position:relative;overflow:hidden}.live-timeline-card[data-stage="arrival"]{border-left:4px solid #38bdf8}.live-timeline-card[data-stage="pre_existing"]{border-left:4px solid #f59e0b}.live-timeline-card[data-stage="during"]{border-left:4px solid #8b5cf6}.live-timeline-card[data-stage="final"]{border-left:4px solid #22c55e}.live-timeline-card[data-stage="issue"]{border-left:4px solid #ef4444}.live-timeline-card[data-stage="recommendation"]{border-left:4px solid #14b8a6}.live-media{width:100%;max-height:520px;object-fit:contain;border-radius:14px;background:rgba(255,255,255,.025)}</style>
 </head>
-<body data-page="progress">
+<body data-page="progress" data-build213="customer-trust-closeout">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/">
@@ -71,7 +72,7 @@
         </div>
         <div class="panel">
           <h2>Service summary</h2>
-          <div id="summaryBox" class="kicker">No summary loaded yet.</div>
+          <div id="summaryBox" class="kicker">No summary loaded yet.</div><div id="paymentLinksBox" class="kicker" style="margin-top:10px"></div>
         </div>
 
         <div class="panel">
@@ -123,7 +124,10 @@
 
     <section class="section">
       <div class="panel">
-        <h2>Progress updates</h2>
+        <div class="toolbar-wrap" style="justify-content:space-between">
+          <div><div class="badges"><h2 style="margin-bottom:4px">Live job timeline</h2><span id="unreadBadge" class="badge" style="display:none"></span></div><div id="lastRefreshText" class="kicker">Updates refresh automatically while the job is active.</div></div>
+          <button id="refreshProgressBtn" class="btn ghost" type="button">Refresh now</button>
+        </div>
         <div id="updatesList" class="grid" style="margin-top:12px">
           <div class="notice">No updates yet.</div>
         </div>
@@ -149,6 +153,20 @@
       </div>
     </section>
 
+    <section class="section" id="completedSummarySection" style="display:none">
+      <div class="panel">
+        <div class="badge">Completed job summary</div><h2>Proof, payment, care advice, and what comes next</h2>
+        <div id="completedSummaryBox" class="grid cards" style="margin-top:12px"></div><div class="visual-placeholder" data-visual-placeholder="customer_acknowledgement" style="margin-top:12px"><strong>Approval record</strong><span>Customer acknowledgement is stored with the completed summary when available.</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="panel">
+        <h2>Approved incident reports</h2>
+        <p class="kicker">Only admin-approved customer-facing incident summaries and selected evidence photos appear here. Private staff/admin discussion is never shown.</p>
+        <div id="incidentReportsBox" class="grid cards" style="margin-top:12px"><div class="notice">No approved incident reports have been shared.</div></div>
+      </div>
+    </section>
 
     <section class="section">
       <div class="panel">
@@ -181,6 +199,8 @@
     let currentToken = "";
     let hasSignoff = false;
     let currentBooking = null;
+    let refreshTimer = null;
+    let refreshBusy = false;
 
     function formatDateTime(value) {
       if (!value) return "—";
@@ -310,21 +330,77 @@
     function renderUpdates(data) {
       const wrap = document.querySelector("#updatesList");
       if (!wrap) return;
-
-      const updates = Array.isArray(data.updates) ? data.updates : [];
-      if (!updates.length) {
-        wrap.innerHTML = `<div class="notice">No updates have been posted yet.</div>`;
+      const updates = (Array.isArray(data.updates) ? data.updates : []).map((item)=>({ ...item, feed_type:'note' }));
+      const media = (Array.isArray(data.media) ? data.media : []).map((item)=>({ ...item, feed_type:'media' }));
+      const rows = [...updates, ...media].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+      if (!rows.length) {
+        wrap.innerHTML = `<div class="notice">No customer-visible updates have been posted yet.</div>`;
         return;
       }
-
-      wrap.innerHTML = updates.map((item) => `
-        <article class="card">
+      wrap.innerHTML = rows.map((item) => {
+        const stage = String(item.stage || 'general');
+        const stageLabel = stage.replaceAll('_',' ');
+        let mediaMarkup = '';
+        if (item.feed_type === 'media' && item.media_url) {
+          mediaMarkup = item.kind === 'video'
+            ? `<video class="live-media" controls preload="metadata" src="${escapeHtml(item.media_url)}"></video>`
+            : `<img class="live-media" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || 'Progress photo')}" onerror="this.outerHTML='<div class=&quot;visual-placeholder&quot; data-visual-placeholder=&quot;proof_of_work&quot;><strong>Media temporarily unavailable</strong><span>Please refresh or contact Rosie Dazzlers.</span></div>'">`;
+        }
+        const priced=Number(item.recommendation_amount_cents||0)>0; const acknowledgement=item.customer_acknowledged_at?`<div class="kicker">Approved by ${escapeHtml(item.customer_acknowledgement_name||'customer')} on ${escapeHtml(formatDateTime(item.customer_acknowledged_at))}</div>`:''; const recommendation = stage === 'recommendation' ? `<div class="decision-panel"><strong>${escapeHtml(item.recommendation_title || 'Recommended additional work')}</strong>${priced?`<div>${formatMoney(Number(item.recommendation_amount_cents)/100)}</div><p class="kicker">Approval confirms the added work and listed price before we continue.</p>`:''}<div class="badges"><span class="badge">${escapeHtml(item.customer_decision || item.recommendation_status || 'awaiting decision')}</span></div>${acknowledgement}${!item.customer_decision||item.customer_decision==='pending'?`<div class="row"><button class="btn primary small" data-recommendation="${escapeHtml(item.id)}" data-decision="approved" data-price-cents="${Number(item.recommendation_amount_cents||0)}" data-title="${escapeHtml(item.recommendation_title||'additional work')}">Approve</button><button class="btn ghost small" data-recommendation="${escapeHtml(item.id)}" data-decision="declined">Decline</button><button class="btn ghost small" data-recommendation="${escapeHtml(item.id)}" data-decision="needs_discussion">Ask a question</button></div>`:''}</div>` : '';
+        return `<article class="card live-timeline-card" data-stage="${escapeHtml(stage)}">
+          ${mediaMarkup}
+          <div class="badges" style="margin-top:${mediaMarkup?'10px':'0'}"><span class="badge">${escapeHtml(stageLabel)}</span><span class="badge">${escapeHtml(item.feed_type)}</span>${item.customer_action_required ? '<span class="badge">Your response requested</span>' : ''}</div>
           <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
-          <h3>${escapeHtml(item.created_by || "Rosie Dazzlers")}</h3>
-          <p>${escapeHtml(item.note || "Update posted.")}</p>
-          <div class="kicker">Visibility: ${escapeHtml(item.visibility || "customer")}</div>
-        </article>
-      `).join("");
+          <h3>${escapeHtml(item.feed_type === 'media' ? (item.caption || item.kind || 'Media update') : (item.created_by || 'Rosie Dazzlers'))}</h3>
+          ${item.feed_type === 'note' ? `<p>${escapeHtml(item.note || 'Update posted.')}</p>` : `<p>${escapeHtml(item.created_by || 'Rosie Dazzlers')}</p>`}
+          ${recommendation}
+        </article>`;
+      }).join("");
+    }
+
+    async function decideRecommendation(updateId, decision, priceCents=0, title='additional work') {
+      const note = decision === 'needs_discussion' ? (window.prompt('What would you like to ask Rosie Dazzlers?') || '').trim() : '';
+      let acknowledgement_name=''; let acknowledgement_confirmed=false;
+      if(decision==='approved' && Number(priceCents)>0){ acknowledgement_name=(window.prompt(`Type your full name to approve ${title} for ${formatMoney(Number(priceCents)/100)}:`)||'').trim(); if(!acknowledgement_name) return; acknowledgement_confirmed=window.confirm(`I acknowledge that ${title} adds ${formatMoney(Number(priceCents)/100)} before tax if applicable, and I authorize Rosie Dazzlers to proceed.`); if(!acknowledgement_confirmed)return; }
+      try {
+        setNotice('Saving your decision…');
+        const res = await fetch('/api/progress/recommendation_decide', { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify({ token:currentToken, update_id:updateId, decision, note, acknowledgement_name, acknowledgement_confirmed, acknowledgement_version:'in_job_add_on_terms_v1' }) });
+        const data = await res.json().catch(()=>({}));
+        if (!res.ok) throw new Error(data.error || 'Could not save recommendation decision.');
+        await loadProgress();
+        setNotice(decision === 'approved' ? (data.payment_link_ready?'Recommendation approved. A secure payment link is ready below.':'Recommendation approved. Rosie Dazzlers has been notified.') : 'Your decision was sent to Rosie Dazzlers.', 'ok');
+      } catch (err) { setNotice(err.message || 'Could not save your decision.', 'bad'); }
+    }
+
+    function renderPaymentLinks(data) { const box=document.querySelector('#paymentLinksBox'); if(!box)return; const rows=Array.isArray(data.payment_links)?data.payment_links:[]; if(!rows.length){box.innerHTML='';return;} box.innerHTML=`<div class="notice warn"><strong>Secure payment link${rows.length>1?'s':''} ready</strong>${rows.map(row=>`<div style="margin-top:8px"><a class="btn primary small" href="${escapeHtml(row.url)}" target="_blank" rel="noopener">Pay ${formatMoney(Number(row.amount_cents||0)/100)} securely</a><span class="kicker"> ${escapeHtml(row.status||'open')}</span></div>`).join('')}</div>`; }
+
+    function renderCompletedSummary(data) {
+      const section=document.querySelector('#completedSummarySection'); const box=document.querySelector('#completedSummaryBox'); const item=data.completed_job_summary;
+      if(!section||!box)return; if(!item){section.style.display='none';return;} section.style.display='block';
+      const proof=Array.isArray(item.proof_items)?item.proof_items:(item.proof_items?.media||item.proof_items?.items||[]);
+      const care=Array.isArray(item.care_advice)?item.care_advice:[]; const maintenance=Array.isArray(item.maintenance_recommendations)?item.maintenance_recommendations:[];
+      const ack=item.customer_acknowledged_at?`<div class="notice ok"><strong>Summary acknowledged</strong><div class="kicker">${escapeHtml(item.customer_acknowledged_name||'Customer')} · ${escapeHtml(formatDateTime(item.customer_acknowledged_at))}</div></div>`:`<div class="notice soft"><strong>Please review this summary</strong><div style="margin-top:8px"><button class="btn ghost small" type="button" data-ack-summary="${escapeHtml(item.id||'')}">Acknowledge summary</button></div></div>`; box.innerHTML=`<article class="card"><h3>Work completed</h3><p>${escapeHtml(item.service_summary||item.customer_summary||'Your detail is complete.')}</p><div class="badges"><span class="badge">${escapeHtml(item.payment_status||'payment status pending')}</span>${item.revision_number?`<span class="badge">Revision ${escapeHtml(item.revision_number)}</span>`:''}</div>${ack}</article><article class="card"><h3>Care advice</h3>${care.length?`<ul>${care.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`:'<p>Care advice will appear here when approved.</p>'}</article><article class="card"><h3>Next maintenance</h3>${maintenance.length?`<ul>${maintenance.map(x=>`<li>${escapeHtml(typeof x==='string'?x:(x.label||x.title||'Recommended maintenance'))}</li>`).join('')}</ul>`:'<p>No maintenance recommendation has been added yet.</p>'}</article>${proof.length?`<article class="card"><h3>Final proof</h3><div class="grid cards">${proof.map(x=>x.media_url?`<img class="img" loading="lazy" src="${escapeHtml(x.media_url)}" alt="${escapeHtml(x.caption||'Completed detail proof')}">`:'').join('')}</div></article>`:''}`;
+    }
+
+    function renderIncidentReports(data) {
+      const wrap = document.querySelector("#incidentReportsBox");
+      if (!wrap) return;
+      const rows = Array.isArray(data.incident_reports) ? data.incident_reports : [];
+      if (!rows.length) {
+        wrap.innerHTML = `<div class="notice">No approved incident reports have been shared.</div>`;
+        return;
+      }
+      wrap.innerHTML = rows.map((item) => {
+        const evidence = Array.isArray(item.public_evidence_items) ? item.public_evidence_items : [];
+        return `<article class="card">
+          <div class="kicker">${escapeHtml(formatDateTime(item.customer_visible_at || item.updated_at || item.created_at))}</div>
+          <h3>${escapeHtml(item.title || "Incident report")}</h3>
+          <p>${escapeHtml(item.approved_customer_summary || "Approved report shared by Rosie Dazzlers.")}</p>
+          ${item.approved_customer_discussion ? `<p>${escapeHtml(item.approved_customer_discussion)}</p>` : ""}
+          <div class="badges"><span class="badge">${escapeHtml(item.incident_type || "incident")}</span>${item.vehicle_area ? `<span class="badge">${escapeHtml(item.vehicle_area)}</span>` : ""}</div>
+          <div class="grid cards" style="margin-top:10px">${evidence.map((ev)=>`<div><img class="img" loading="lazy" src="${escapeHtml(ev.url)}" alt="${escapeHtml(ev.caption || 'Incident evidence')}" onerror="this.style.display='none'"><div class="kicker">${escapeHtml(ev.caption || 'Approved evidence')}</div></div>`).join('')}</div>
+        </article>`;
+      }).join("");
     }
 
     function renderMedia(data) {
@@ -339,10 +415,10 @@
 
       wrap.innerHTML = media.map((item) => `
         <article class="card">
-          ${item.media_url ? `<img class="img" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || "Progress media")}" onerror="this.style.display='none'">` : ""}
+          ${item.media_url ? (item.kind === 'video' ? `<video class="img" controls preload="metadata" src="${escapeHtml(item.media_url)}"></video>` : `<img class="img" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || "Progress media")}" onerror="this.style.display='none'">`) : `<div class="visual-placeholder" data-visual-placeholder="proof_of_work"><strong>Media temporarily unavailable</strong><span>Please refresh this page.</span></div>`}
           <h3>${escapeHtml(item.caption || item.kind || "Progress media")}</h3>
           <p>${escapeHtml(item.created_by || "Rosie Dazzlers")}</p>
-          <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
+          <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}${item.stage ? ` · ${escapeHtml(String(item.stage).replaceAll('_',' '))}` : ''}</div>
         </article>
       `).join("");
     }
@@ -409,7 +485,9 @@
       }
     }
 
-    async function loadProgress() {
+    async function loadProgress({ quiet = false } = {}) {
+      if (refreshBusy) return;
+      refreshBusy = true;
       const token = getToken();
 
       setBrandImages();
@@ -417,6 +495,7 @@
 
       if (!token) {
         setNotice("Missing progress token. Add ?token=YOUR_TOKEN to the page URL.", "warn");
+        refreshBusy = false;
         return;
       }
 
@@ -438,13 +517,22 @@
 
         renderHeader(data);
         renderSummary(data);
-      if (document.querySelector('#commentName') && data.booking?.customer_name && !document.querySelector('#commentName').value) document.querySelector('#commentName').value = data.booking.customer_name;
+        renderWorkflow(Array.isArray(data.workflow_events) ? data.workflow_events : [], data.booking || {});
+        if (document.querySelector('#commentName') && data.booking?.customer_name && !document.querySelector('#commentName').value) document.querySelector('#commentName').value = data.booking.customer_name;
         renderUpdates(data);
+        renderPaymentLinks(data);
+        renderCompletedSummary(data);
+        const unread=document.querySelector('#unreadBadge');if(unread){unread.style.display=Number(data.unread_count||0)>0?'inline-flex':'none';unread.textContent=`${Number(data.unread_count||0)} new`; }
+        renderIncidentReports(data);
         renderMedia(data);
         renderSignoff(data);
+        const refreshed = document.querySelector('#lastRefreshText');
+        if (refreshed) refreshed.textContent = `Last refreshed ${formatDateTime(new Date().toISOString())} · automatic refresh every ${Number(data.refresh_after_seconds || 20)} seconds.`;
         setNotice("Progress information loaded.", "ok");
       } catch (err) {
-        setNotice(err.message || "Could not load progress information.", "bad");
+        if (!quiet) setNotice(err.message || "Could not load progress information.", "bad");
+      } finally {
+        refreshBusy = false;
       }
     }
 
@@ -511,6 +599,11 @@
     document.addEventListener("DOMContentLoaded", () => {
       loadProgress();
       document.querySelector("#signoffForm")?.addEventListener("submit", submitSignoff);
+      document.querySelector('#commentForm')?.addEventListener('submit', (event)=>{ event.preventDefault(); postCustomerComment(); });
+      document.querySelector('#refreshProgressBtn')?.addEventListener('click', ()=>loadProgress());
+      document.querySelector('#updatesList')?.addEventListener('click',(event)=>{const btn=event.target.closest('[data-recommendation]');if(btn)decideRecommendation(btn.dataset.recommendation,btn.dataset.decision,Number(btn.dataset.priceCents||0),btn.dataset.title||'additional work');}); document.querySelector('#completedSummaryBox')?.addEventListener('click',async(event)=>{const btn=event.target.closest('[data-ack-summary]');if(!btn)return;const name=(window.prompt('Type your full name to acknowledge this completed-job summary:')||'').trim();if(!name)return;try{const res=await fetch('/api/progress/summary_acknowledge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:currentToken,name})});const out=await res.json().catch(()=>({}));if(!res.ok||!out.ok)throw new Error(out.error||'Could not record acknowledgement.');setNotice('Thank you — your acknowledgement was recorded.','ok');await loadProgress();}catch(err){setNotice(err.message||'Could not record acknowledgement.','bad');}});
+      refreshTimer = window.setInterval(()=>{ if (!document.hidden) loadProgress({ quiet:true }); }, 20000);
+      document.addEventListener('visibilitychange', ()=>{ if (!document.hidden) loadProgress({ quiet:true }); });
     });
   </script>
 </body>

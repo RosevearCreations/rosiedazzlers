@@ -1,3 +1,98 @@
+# Build 207 note — Canonical docs and visual placeholders
+
+Build 207 adds `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` as the two main living planning files, plus `/admin-docs.html` for in-app documentation sanity. It also adds a visual placeholder registry and automatic SVG placeholder/fallback behavior so missing service, town, gallery, fleet, seasonal, incident, or review images do not leave blank-looking sections while approved Rosie-owned media is gathered.
+
+---
+
+# Build 205 note — Sanity check and value-added roadmap
+
+Build 205 adds a sanity-check/admin value-roadmap pass. It includes `APP_SANITY_CHECK_BUILD205.md`, `data/value_added_feature_backlog.json`, `/api/admin/value_added_sanity_report`, `/admin-sanity.html`, and a new Admin Dashboard diagnostic card. No database DDL is required. The strongest next work is a dedicated Gallery Approvals screen, quote pipeline revenue dashboard, Meta ads ROI tracker, maintenance memberships, vehicle history, proof-of-work checklists, fleet mini-CRM, review automation, and stronger visual conversion blocks.
+
+# Build 204 note — Gallery image fallback repair
+
+Build 204 repairs the before/after Gallery media regression by adding public API alias normalization, static gallery fallback loading, local packaged brand-asset URLs, Gallery/recent-work image fallback handlers, and an Admin Dashboard Gallery image health card. No new database migration is required for this pass.
+
+---
+
+## Build 203 — Desktop/mobile polish and visual enrichment
+
+Build 203 adds shared desktop/mobile visual polish for the public website and mobile app-style experience. It adds responsive CSS utilities, a homepage desktop/mobile showcase, viewport-tier detection, professional image framing, reduced-motion-safe effects, a responsive visual registry, and an Admin Dashboard diagnostics card backed by `/api/admin/responsive_visual_report`.
+
+Run the normal release checks before upload:
+
+```bash
+python3 scripts/release_check.py
+python3 scripts/seo_h1_check.py
+python3 scripts/build203_desktop_mobile_visual_polish_check.py
+```
+
+---
+
+## Build 202 — Incident reports and marketing tracker
+
+Build 202 adds a private DB-backed incident-report workflow for vehicle damage, faulty equipment, pre-existing damage, customer dispute, safety, and other job-site issues. Staff can attach required photo evidence, keep private detailer/admin discussion internal, and publish only the approved customer summary and selected photos to the customer progress page. It also adds a practical `/admin-marketing.html` tracker based on the attached detailer notes for Meta ad math, quote value, close rate, CPL, CAC, and projected revenue.
+
+# Build 201 update
+
+Build 201 adds inline friendly-editor validation, media URL picker helpers, consent/source badges, landing-page schema previews, save-review summaries, and `scripts/sync_route_copies.py` for route-copy synchronization. See `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, and `DATABASE_STRUCTURE_CURRENT.md` for the full Build 201 update.
+
+---
+
+# Build 200 update — Friendly pricing editor completion and JSON retirement dashboard
+
+**Updated:** 2026-06-09  
+**Build:** 200
+
+Build 200 continues the owner-friendly editing work by reducing the last major Admin App pricing-catalog reason to open raw JSON. Package included services, chart/service-detail bullets, best-for notes, duration labels, images, SEO focus phrases, and customer-facing descriptions now have a friendly selected-package editor. Live chart previews/downloads now read from the friendly pricing editor state instead of requiring staff to refresh or repair the raw JSON first. The Admin Dashboard also now lists remaining Advanced JSON panels so they can be retired intentionally instead of being forgotten.
+
+## Build 200 — 20 completed items
+
+1. Added a selected-package detail editor inside Admin App pricing catalog management.
+2. Added friendly package fields for public package description, duration label, image URL, and SEO focus phrase.
+3. Added friendly line editors for included services, chart detail bullets, best-for/selling points, and package notes.
+4. Added save controls for the selected package details without requiring a raw JSON edit.
+5. Added duplicate-package controls for safe package-family creation from an existing package.
+6. Kept package family price rows for quick small/mid/oversize price editing.
+7. Moved the live chart helper out of the raw JSON emergency panel.
+8. Updated live chart preview/download logic to read the current friendly pricing editor state.
+9. Removed the requirement to refresh raw JSON before previewing or downloading pricing charts.
+10. Relabelled pricing catalog raw JSON as **Advanced raw catalog JSON / emergency repair**.
+11. Updated pricing help copy so staff know raw JSON is no longer the normal workflow for package details or chart work.
+12. Preserved emergency JSON apply/refresh controls for developer-level recovery.
+13. Added a dashboard diagnostics card listing the remaining advanced JSON panels and why they still exist.
+14. Synced `/admin-app.html` and `/admin-app/` after the pricing editor update.
+15. Synced `/admin.html` and `/admin/` after the dashboard diagnostics update.
+16. Updated schema documentation to confirm this pass is no-DDL and continues using existing `app_management_settings` payloads.
+17. Updated known gaps to reflect that pricing chart/package detail work no longer depends on raw JSON.
+18. Added a Build 200 SQL no-DDL note.
+19. Added a Build 200 release guard for friendly pricing editor and dashboard diagnostics coverage.
+20. Re-ran release, H1, JavaScript syntax, route-copy parity, and zip checks before packaging.
+
+## Next 20 steps after Build 200
+
+1. Add a reusable row/card editor component so Admin App, Site Settings, Gallery, Social, Water Rules, and Recovery stop duplicating custom row code.
+2. Add inline field-level validation beside every friendly pricing, Site Settings, gallery, social, and water-rule input.
+3. Add media-library picker buttons beside package, add-on, landing, gallery, and before/after image URL fields.
+4. Add consent/privacy badges beside every package/add-on/landing/gallery media field before publish.
+5. Convert the remaining recovery provider/conditional rules into a fuller visual rule builder.
+6. Add owner-safe diff modals before saving pricing, navigation, landing, media, analytics, and policy changes.
+7. Add per-row restore-from-history controls for package rows, landing cards, navigation links, media requirements, and social/gallery rows.
+8. Add official-source URL validation for water rules and external navigation/footer links.
+9. Add live SEO counters while typing landing meta title, meta description, slug, and hero/H1 fields.
+10. Add LocalBusiness/service schema preview beside each landing-page editor card.
+11. Add automatic route-copy sync during packaging so folder `index.html` copies cannot drift.
+12. Add browser-level smoke tests for row add/remove/apply/save flows in Admin App and Site Settings.
+13. Add DB-backed option dropdowns to pricing package categories, analytics groups, media categories, gallery consent states, and water-rule statuses.
+14. Add per-domain staff-role enforcement for editable settings and public-content publish actions.
+15. Add audit reason prompts before publishing navigation, policy wording, pricing, or public proof changes.
+16. Add fallback-repair previews that show exact DB rows/keys before force sync.
+17. Add public crawl validation for generated landing, navigation, footer, sitemap, and robots output after deploy.
+18. Add invoice/confirmation PDF packaging to accountant/customer export workflows.
+19. Add mobile quick-action cards for media health, pricing warnings, payment warnings, and SEO proof tasks.
+20. Continue migrating duplicated JSON/page content into DB-first, owner-friendly screens wherever it lowers failure risk.
+
+---
+
 
 # Build 184 update — 20-step operations, media, and payment hardening
 
@@ -698,3 +793,205 @@ Next 20 steps after Build 189:
 18. Add field-level validation for each editable setting.
 19. Add a public settings cache/version badge in Admin Diagnostics.
 20. Continue moving remaining large inline page/content objects into DB-managed content blocks.
+
+## Build 190 - Editable settings live rendering and diagnostics
+
+Build 190 continues the editable-content migration by rendering public business profile, contact details, social links, navigation/footer links, policy notes, LocalBusiness structured data, analytics labels, and media requirements from DB-first editable settings with bundled JSON fallback. It adds validation, sync-from-bundle controls, DB/fallback diagnostics, and setting history support through `/admin-site-settings.html` and the Build 190 SQL migration.
+
+---
+
+## Build 191 — Editable settings hardening and live-use pass
+
+- Fixed `/admin-site-settings.html` crash by adding `AdminAuth.guardPage()` and `AdminAuth.fetchWithAuth()` compatibility helpers and by making the page initialization defensive.
+- Added structured helper fields for business profile and navigation/footer settings while keeping raw JSON available.
+- Added editable setting dependency map and restore-from-history API foundations.
+- Wired editable policy copy into booking, FAQ, quote-response, and quote-payment customer pages with a static fallback.
+- Wired editable document templates into quote/proposal delivery plus deposit receipt/refund email queue helpers.
+- Added business-hours/holiday status API and booking-page helper.
+- Added analytics ingest validation against the editable analytics event registry.
+- Switched Media Health JSON fallback from build-specific image requirement files to stable `data/media_requirements.json`.
+- Added Build 191 release guard.
+
+<!-- Build 192 documentation sync: editable-domain editors, restore-from-history UI, business-hours booking warnings, dynamic policies/templates, analytics registry warnings, media requirement sync/restore, and fallback diagnostics were reviewed on 2026-06-05. -->
+
+---
+
+## Build 193 notes
+
+Build 193 fixes the Admin Social template-list 500 by safely handling omitted `platform` and `service_area` filters plus fallback rows with blank platform/service-area values. Admin Social now keeps manual social draft creation available even when template options are unavailable.
+
+This build also adds `data/editable_setting_validation_schemas.json`, expands editable-setting validation, adds document-template token warnings, adds navigation/footer link warnings, and adds a force-sync confirmation control for reviewed fallback restores.
+
+---
+
+## Build 194 — diff, preview, analytics quick-add, and option-library expansion — 2026-06-06
+
+### Completed 20-step pass
+
+1. Added `/api/admin/editable_site_settings_compare` for DB/editor versus bundled fallback JSON diffs.
+2. Added visual compare controls in Editable Site Settings before force-sync or restore actions.
+3. Added per-domain preview panes showing where each editable setting is used.
+4. Added domain permission guidance beside each structured editor.
+5. Added SEO copy-length checks for title, meta-description, H1/headline, and description-like fields.
+6. Added history/fallback comparison support in the settings workflow without new database tables.
+7. Added `/api/admin/analytics_registry_add_event` for one-click addition of unknown analytics events.
+8. Added Admin Analytics “Add to registry” buttons on unknown event warnings.
+9. Added `assets/admin-option-libraries.js` as a shared DB-first dropdown hydrator.
+10. Expanded option-library dropdown usage into Admin Booking finance/status/privacy controls.
+11. Expanded option-library dropdown usage into Admin Catalog stock and purchase-order controls.
+12. Expanded option-library dropdown usage into Admin Leads lead, quote, draft, and media privacy status controls.
+13. Fixed Admin App option-library loading to read the current `/api/site_settings_public?key=option_libraries` response shape.
+14. Added business-hours warning display support to Admin Booking status saves when warning payloads are returned.
+15. Added staff-auth capability aliases for `view_analytics` and `manage_settings` so analytics/settings utilities are not accidentally admin-password-only.
+16. Normalized `/admin-site-settings.html` and `/admin-site-settings/` so the routed copy no longer lags behind the root page.
+17. Normalized patched admin route copies for Analytics, Booking, Catalog, Leads, and App pages where route folders exist.
+18. Added `sql/2026-06-06_build194_diff_preview_option_libraries_no_ddl_note.sql` documenting that no DDL is required.
+19. Added `scripts/build194_diff_preview_option_libraries_check.py` and wired it into `scripts/release_check.py`.
+20. Re-ran release/H1/archive checks for the packaged build.
+
+### Next 20 recommended steps
+
+1. Add full JSON Schema validation with field-level UI markers, not only required-path checks.
+2. Add a side-by-side visual diff for selected history rows, not only current versus fallback.
+3. Add role-scoped enforcement on save per editable domain once the staff role model has dedicated capabilities for content, media, analytics, and settings.
+4. Add send-test controls for appointment confirmation, invoice, deposit receipt, refund notice, quote, and proposal templates.
+5. Add invoice PDF/export packaging once invoice wording is approved.
+6. Add customer-visible policy version stamping to bookings, quotes, invoices, and payment requests.
+7. Add admin override reason logging when staff intentionally create or keep bookings on closed/holiday dates.
+8. Add sub-day business-hours windows beyond AM/PM for exact arrival windows.
+9. Add richer option-library dropdown hydration to finance, media-health, payments, content, and tax-review screens.
+10. Add editable landing-page preview cards that render the actual hero, service, town, and FAQ copy.
+11. Add broken-link scans for editable navigation/footer links.
+12. Add local SEO proof gap reminders to the main dashboard diagnostics card.
+13. Add sitemap/robots preview checks when landing-page content changes.
+14. Add public structured-data preview for LocalBusiness and service landing pages.
+15. Add template token previews with sample customer/booking data.
+16. Add an audit export for editable-setting changes and restores.
+17. Add scheduled fallback-backed settings reports for the dashboard.
+18. Add media requirement diff/preview before restore-from-history.
+19. Add automated smoke tests for invoice, confirmation, quote payment, booking availability, and settings APIs.
+20. Continue migrating duplicated JSON/page content into DB-first editable settings where it reduces failure points.
+
+---
+
+## Build 195 — schema markers, history diffs, template previews, and diagnostics
+
+Build 195 continues the DB-first editable-settings migration. The editor now shows field-level validation markers, selected-history diffs before restore, dry-run document-template previews/tests, navigation link scans, sitemap/robots previews, structured-data previews, audit export, fallback-backed settings reporting, and media-requirement diffs. Customer-facing booking documents now include a policy version stamp, and admin booking saves can log override reasons when staff keep a closed/holiday booking.
+
+### Next 20 recommended steps
+
+Use the Build 195 section in `DEVELOPMENT_ROADMAP.md` as the current working list. The strongest next pass is per-domain staff enforcement, real template send logging, proper invoice PDF/export packaging, live route crawling, and deeper local SEO proof-task creation.
+
+> Build 196 documentation sync (2026-06-06): repaired the live Admin Dashboard local SEO proof 405, Admin App `esc` helper crash, and Landing Page Builder add-on fallback hydration. Schema status remains no-DDL; see `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `DATABASE_STRUCTURE_CURRENT.md`, `SUPABASE_SCHEMA.sql`, and `sql/2026-06-06_build196_admin_live_error_repairs_no_ddl_note.sql`.
+
+
+## Build 197 note
+
+Build 197 adds self-healing admin diagnostics for pricing catalog source/repair, route-copy parity, independent dashboard warning cards, and landing-page SEO/readiness checks. No database schema changes are required.
+
+
+---
+
+## Build 198 documentation sync — Friendly editors for formerly raw JSON areas
+
+Build 198 converts routine owner/admin updates for social feeds, before/after gallery rows, and water-use rules into friendly row-based screens. The underlying JSON remains available only as an Advanced/emergency repair and fallback-sync view. No database schema changes are required for this pass; the existing `app_management_settings` and water-rule settings flow remain the source of truth with bundled JSON fallback support.
+
+## Build 199 documentation sync — Friendly Site Settings domain editors
+
+Build 199 converts the remaining high-risk Admin Site Settings JSON helper areas into friendly row/card editors for navigation/footer links, analytics events, media requirements, holiday closures, and landing-page SEO/hero content. Admin Recovery delivery rules now use fields for common rule settings. No database schema changes are required; existing JSON payload storage remains the fallback/advanced repair layer.
+
+## Build 206 — value-added operations foundations
+
+Completed the next high-value bundle from the sanity check list:
+
+1. Added dedicated `/admin-gallery.html` Gallery Approvals screen.
+2. Added gallery approval list/save APIs with DB-first editable-setting storage and bundled fallback.
+3. Added approve, hide/private, reject, delete, and add-gallery-row controls.
+4. Added customer-safe consent/status guidance on the dedicated gallery screen.
+5. Added `/admin-quotes.html` Quote Pipeline dashboard foundation.
+6. Added `/admin-growth.html` Value-Added Operations workbench.
+7. Added a shared value-added operations report API.
+8. Added sample/seed foundation for quote pipeline metrics.
+9. Added sample/seed foundation for Meta ads ROI metrics.
+10. Added sample/seed foundation for membership/maintenance plans.
+11. Added sample/seed foundation for vehicle history events.
+12. Added sample/seed foundation for proof-of-work checklists.
+13. Added sample/seed foundation for fleet mini-CRM prospects.
+14. Added sample/seed foundation for review request automation.
+15. Added sample/seed foundation for seasonal campaign planning.
+16. Added sample/seed foundation for route clustering hints.
+17. Added database migration destinations so these modules can move beyond JSON-only records.
+18. Added Admin Dashboard cards for Gallery Approvals, Quote Pipeline, and Value-Added Operations.
+19. Synced route copies and extended route-copy automation for the new admin pages.
+20. Added Build 206 release guard and updated schema/documentation notes.
+
+### Next 20 recommended steps after Build 206
+
+1. Connect Quote Pipeline dashboard to real quote proposal drafts and lead conversion rows.
+2. Add quote follow-up reminders with overdue badges.
+3. Add quote accepted/declined reason tracking.
+4. Add Meta campaign create/edit/save screens instead of seed rows.
+5. Add Meta campaign UTM/source attribution into lead records.
+6. Convert membership interest rows into real customer plan records.
+7. Add automatic next-service reminder suggestions after completed jobs.
+8. Add customer-facing vehicle history timeline on `/my-account`.
+9. Add detailer proof-of-work checklist completion directly inside `/detailer-jobs`.
+10. Add required start/finish photo checks before job completion.
+11. Add fleet account create/edit screen with vehicle roster.
+12. Add fleet quote-to-contract conversion.
+13. Add review request queue with preview/send controls.
+14. Add Google Business Profile review-link setting.
+15. Add seasonal campaign builder with hero image and service/town pairing.
+16. Add campaign-to-landing-page publishing workflow.
+17. Add route clustering hints inside Admin Booking calendar.
+18. Add travel-time warnings between same-day bookings.
+19. Add mobile bottom action bar for Book/Call/Text/Gift Card.
+20. Add before/after slider visual treatment for approved Gallery rows.
+
+## Build 208 — connected workflow command center
+
+Build 208 moves the app from scattered feature foundations toward the main lifecycle: **lead / quote → booking → proof of work → invoice/payment → review → repeat maintenance**.
+
+Completed in this pass:
+- Added `/admin-workflow.html` and `/admin-workflow/` as the owner-facing workflow command center.
+- Added `/api/admin/workflow_command_center_report` with DB-first reads from Build 206 tables and safe JSON fallback data.
+- Added `data/workflow_connection_build208.json` as the structured workflow map, next 20 steps, visual enrichment slots, and competitor-aligned feature checklist.
+- Added Admin Dashboard workflow diagnostics so owners can see open quote value, likely revenue, follow-ups, review queue, maintenance reminders, and fallback status.
+- Expanded visual placeholders for quote, booking, proof-of-work, invoice/payment, review/public proof, and repeat-maintenance cards.
+- Kept old Markdown as retained history while continuing to make `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` the main living docs.
+
+Next build should connect `/admin-quotes.html` to real quote create/edit/save actions and add a one-click accepted-quote-to-booking conversion.
+
+## Build 209 note — live detail interaction
+
+Build 209 makes the original during-detail communication promise explicit. Staff can post notes, photos, and videos as customer-visible now, admin-review-first, or staff-only. The customer progress API returns only approved customer-safe content and filters internal booking-event notes. Run `sql/2026-06-17_build209_live_detail_interaction.sql`, then test `/detailer-jobs.html`, `/admin-progress.html`, and `/progress.html?token=...` on mobile and desktop.
+
+Active planning now lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; retired duplicate planning files are in `docs/archive/`.
+
+
+## Build 210 connected live workflow
+
+The original detailing interaction promise is now connected through proof, customer decisions, payment, closeout, Gallery/vehicle history, review safety, and repeat-maintenance follow-up. Start with `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; deploy `sql/2026-06-17_build210_connected_live_workflow.sql` before testing `/detailer-jobs.html`, `/admin-progress.html`, `/progress.html`, `/admin-gallery.html`, or `/admin-today.html`.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.
+
+Build 211 documentation sync: retained for historical context while the active project direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; production reliability, provider setup, hosted payment links, upload/retention diagnostics, and owner simplification were reviewed in this pass.
+
+## Build 212 documentation sync
+
+The active owner/testing instructions are in `AI_PROJECT_HANDOFF.md`, `MASTER_VALUE_ROADMAP.md`, and `docs/PRODUCTION_TEST_GUIDE.md`. Use `/admin-test-centre.html` for recorded internal acceptance testing before live production use.
+
+## Build 213 documentation sync
+
+Build 213 adds owner action controls in Today Needs Attention, customer price/summary acknowledgements, secure payment-link handoff, summary revision history, and booking-scoped safe interaction audit export. Active direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; use `docs/PRODUCTION_TEST_GUIDE.md` for hands-on testing.
+
+---
+
+### Build 214 documentation sync — 2026-06-23
+
+Build 214 prioritizes Supabase containment and owner-task reliability. The active security action is to run `sql/2026-06-23_build214_security_task_orchestration.sql`, refresh Supabase Security Advisor, and test the application through Cloudflare Functions rather than restoring direct browser access to tables. Canonical planning remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.

@@ -1,3 +1,19 @@
+-- Build 205 note: sanity report and value-added roadmap only. No new DDL is required in this pass.
+-- Future DDL candidates: quote pipeline metrics, Meta campaign ROI, memberships, vehicle history, proof-of-work checklists, and fleet account CRM.
+
+-- Build 204 gallery media resilience pass.
+-- No database schema changes are required.
+-- Existing app_management_settings.before_after_gallery rows continue to be used.
+-- Public gallery rendering now adds application-level field alias normalization,
+-- packaged static fallback loading, and local image fallback metadata.
+
+-- Build 201 friendly editor validation and route-copy sync pass.
+-- No database schema changes are required.
+-- Existing app_management_settings rows continue to store pricing_catalog,
+-- landing_pages, social_feeds, and before_after_gallery payloads.
+-- Inline validation, media picker hints, schema previews, and save-review summaries
+-- run in the admin UI before saving to existing editable-setting rows.
+
 -- Build 179 note — hard social publish blocking, local proof tasks, and quote acceptance tracking (2026-05-26)
 -- New migration: sql/2026-05-26_build179_publish_block_tasks_quote_acceptance.sql
 -- Adds public.local_seo_proof_tasks and optional quote_proposal_drafts delivery/acceptance fields.
@@ -21,7 +37,7 @@
 --   1. sql/2026-05-24_build172_public_faq_content_foundation.sql
 --   2. sql/2026-05-24_build173_admin_content_faq_editor_no_ddl_note.sql
 
----
+-- ---
 -- Build 170 customer dashboard signed-out fallback sync — 2026-05-24
 -- Build 169 auth/API fallback sync — 2026-05-23
 -- No destructive schema change. Runtime auth_me and analytics now fail open instead of returning browser-visible 500s when Supabase config or tables are temporarily unavailable.
@@ -257,7 +273,10 @@ create table if not exists public.bookings (
   detailing_started_at timestamptz null,
   detailing_paused_at timestamptz null,
   detailing_completed_at timestamptz null,
-  completed_at timestamptz null
+  completed_at timestamptz null,
+  progress_last_viewed_at timestamptz null,
+  progress_last_customer_message_at timestamptz null,
+  progress_last_staff_update_at timestamptz null
 );
 
 create table if not exists public.booking_staff_assignments (
@@ -312,8 +331,57 @@ create table if not exists public.staff_availability_blocks (
 create table if not exists public.promo_codes (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), code text not null unique, active boolean not null default true, is_active boolean not null default true, discount_type text null, discount_percent numeric(6,2) null, discount_cents integer null, percent_off numeric(6,2) null, amount_off_cents integer null, starts_at timestamptz null, ends_at timestamptz null, starts_on date null, ends_on date null, max_uses integer null, uses integer not null default 0, notes text null, amazon_asin text null, amazon_title text null, amazon_match_status text null, amazon_match_score numeric(6,3) null, amazon_seller_name text null, amazon_brand text null, amazon_category text null, amazon_quantity_total numeric(12,2) null, amazon_net_total_cents integer null);
 create table if not exists public.gift_products (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), sku text not null unique, type text not null check (type in ('service','open','fixed_amount')), package_code text null, vehicle_size text null, face_value_cents integer not null default 0, currency text not null default 'CAD', is_active boolean not null default true, title text null, description text null);
 create table if not exists public.gift_certificates (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), code text not null unique, type text not null check (type in ('service','open','fixed_amount')), status text not null default 'active', currency text not null default 'CAD', package_code text null, vehicle_size text null, original_value_cents integer not null default 0, remaining_cents integer not null default 0, purchaser_email text null, recipient_name text null, recipient_email text null, stripe_session_id text null, redeemed_at timestamptz null, expires_at timestamptz null, notes text null);
-create table if not exists public.job_updates (id uuid primary key default gen_random_uuid(), booking_id uuid not null references public.bookings(id) on delete cascade, created_at timestamptz not null default now(), updated_at timestamptz not null default now(), created_by text not null, note text not null, visibility text not null default 'customer' check (visibility in ('customer','internal')), parent_update_id uuid null references public.job_updates(id) on delete cascade, thread_status text not null default 'visible' check (thread_status in ('visible','hidden','internal_only','pinned')), moderated_at timestamptz null, moderated_by_name text null, moderation_reason text null, staff_user_id uuid null);
-create table if not exists public.job_media (id uuid primary key default gen_random_uuid(), booking_id uuid not null references public.bookings(id) on delete cascade, created_at timestamptz not null default now(), updated_at timestamptz not null default now(), created_by text not null, kind text not null check (kind in ('photo','video')), caption text null, media_url text not null, visibility text not null default 'customer' check (visibility in ('customer','internal')), thread_status text not null default 'visible' check (thread_status in ('visible','hidden','internal_only','pinned')), moderated_at timestamptz null, moderated_by_name text null, moderation_reason text null, staff_user_id uuid null);
+create table if not exists public.job_updates (
+  id uuid primary key default gen_random_uuid(),
+  booking_id uuid not null references public.bookings(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  created_by text not null,
+  note text not null,
+  visibility text not null default 'customer' check (visibility in ('customer','internal')),
+  stage text not null default 'general',
+  source_channel text not null default 'admin',
+  review_status text not null default 'not_required',
+  requires_admin_review boolean not null default false,
+  customer_action_required boolean not null default false,
+  customer_visible_at timestamptz null,
+  approved_by_staff_user_id uuid null,
+  approved_by_staff_name text null,
+  parent_update_id uuid null references public.job_updates(id) on delete cascade,
+  thread_status text not null default 'visible' check (thread_status in ('visible','hidden','internal_only','pinned')),
+  moderated_at timestamptz null,
+  moderated_by_name text null,
+  moderation_reason text null,
+  staff_user_id uuid null
+);
+create table if not exists public.job_media (
+  id uuid primary key default gen_random_uuid(),
+  booking_id uuid not null references public.bookings(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  created_by text not null,
+  kind text not null check (kind in ('photo','video')),
+  caption text null,
+  media_url text null,
+  storage_bucket text null,
+  storage_path text null,
+  content_type text null,
+  file_size_bytes bigint null,
+  visibility text not null default 'customer' check (visibility in ('customer','internal')),
+  stage text not null default 'general',
+  source_channel text not null default 'admin',
+  review_status text not null default 'not_required',
+  requires_admin_review boolean not null default false,
+  customer_action_required boolean not null default false,
+  customer_visible_at timestamptz null,
+  approved_by_staff_user_id uuid null,
+  approved_by_staff_name text null,
+  thread_status text not null default 'visible' check (thread_status in ('visible','hidden','internal_only','pinned')),
+  moderated_at timestamptz null,
+  moderated_by_name text null,
+  moderation_reason text null,
+  staff_user_id uuid null
+);
 create table if not exists public.job_signoffs (id uuid primary key default gen_random_uuid(), booking_id uuid not null references public.bookings(id) on delete cascade, created_at timestamptz not null default now(), signed_at timestamptz not null default now(), signer_type text not null check (signer_type in ('customer','staff')), signer_name text not null, signer_email text null, notes text null, user_agent text null, staff_user_id uuid null);
 create table if not exists public.recovery_message_templates (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), template_key text not null unique, channel text not null check (channel in ('email','sms')), provider text not null default 'manual', is_active boolean not null default true, subject_template text null, body_template text not null, variables jsonb not null default '[]'::jsonb, rules jsonb not null default '{}'::jsonb, notes text null);
 create table if not exists public.catalog_inventory_items (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), item_key text not null unique, item_type text not null check (item_type in ('tool','consumable')), name text not null, category text null, subcategory text null, description text null, image_url text null, amazon_url text null, is_public boolean not null default true, is_active boolean not null default true, qty_on_hand numeric(12,2) not null default 0, reorder_point numeric(12,2) not null default 0, reorder_qty numeric(12,2) not null default 0, unit_label text null, cost_cents integer null, preferred_vendor text null, vendor_sku text null, rating_value numeric(3,2) null, rating_count integer not null default 0, sort_key integer not null default 0, reuse_policy text not null default 'reorder' check (reuse_policy in ('reorder','single_use','never_reuse')), purchase_date date null, estimated_jobs_per_unit numeric(12,2) null, receipt_url text null, assigned_station text null, service_tags text[] null, last_counted_at timestamptz null, public_badge text null, amazon_asin text null, amazon_title text null, amazon_match_status text null, amazon_match_score numeric(6,3) null, amazon_seller_name text null, amazon_brand text null, amazon_category text null, amazon_quantity_total numeric(12,2) null, amazon_net_total_cents integer null, notes text null);
@@ -1067,13 +1135,15 @@ create index if not exists accounting_period_closes_status_idx on public.account
 
 -- 2026-04-29 pass: landing page content, add-on image merge safety, and admin add-on dependency/editor refinements.
 
-## Build 132 — Admin add-on image hydration repair (May 8, 2026)
-- Admin App add-on selection now hydrates blank saved `image_url` and `image_fallback_url` fields from the bundled default pricing catalog by matching add-on `code`.
-- The selected add-on editor now shows a Current image loaded preview so the existing picture can be kept or replaced deliberately.
-- Public pricing catalog merge logic now prevents blank saved media fields from masking fallback/default add-on images.
-- No database DDL is required; schema tracking note added at `sql/2026-05-08_build132_admin_addon_media_hydration_note.sql`.
-- Continue the local SEO discipline: one clear H1 per exposed public page, locally relevant wording, visible proof/review media, and no broken asset paths.
-- Restored missing `assets/landing-page.js` because landing pages were still referencing it during the static link check.
+-- Build 132 — Admin add-on image hydration repair (May 8, 2026)
+-- Admin App add-on selection now hydrates blank saved image_url and image_fallback_url fields
+-- from the bundled default pricing catalog by matching add-on code.
+-- The selected add-on editor shows a Current image loaded preview.
+-- Public pricing catalog merge logic prevents blank saved media fields from masking fallback images.
+-- No database DDL is required; see sql/2026-05-08_build132_admin_addon_media_hydration_note.sql.
+-- Continue local SEO discipline: one clear H1 per exposed public page, locally relevant wording,
+-- visible proof/review media, and no broken asset paths.
+-- Restored missing assets/landing-page.js because landing pages still referenced it during static link checks.
 
 -- Build 133 note: admin add-on PNG/R2 image hydration and landingLinksToText repair are frontend/data fallback changes only; no database DDL required. See sql/2026-05-08_build133_admin_addon_png_hydration_no_ddl_note.sql.
 
@@ -1604,3 +1674,342 @@ create index if not exists idx_service_area_rules_water_rule_key
 --   /admin-site-settings.html
 -- Large landing-page fallback objects were extracted from functions/api/landing_pages_public.js
 -- into data/landing_pages_content.json and functions/api/data/landing_pages_content.json.
+
+
+-- Build 190: app_management_setting_history supports editable-site-setting version history.
+CREATE TABLE IF NOT EXISTS public.app_management_setting_history (
+  history_id bigserial PRIMARY KEY,
+  key text NOT NULL,
+  value jsonb NOT NULL DEFAULT '{}'::jsonb,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+
+-- Build 191 editable settings hardening: no new DDL. Uses Build 190 app_management_setting_history plus app_management_settings.
+
+-- Build 192 editable operations completion note (2026-06-05)
+-- No new Supabase DDL is required in this build.
+-- Existing app_management_settings and app_management_setting_history tables now back
+-- structured editable-domain editors, direct restore-from-history controls, media
+-- requirement sync/restore controls, analytics registry warning checks, dynamic
+-- policy/template rendering, and business-hours/holiday booking warnings.
+
+-- Build 193 social templates and editable-setting validation note (2026-06-05)
+-- No new DDL is required. Build 193 reuses app_management_settings and
+-- app_management_setting_history for editable settings, and keeps optional
+-- social_caption_templates/social_hashtag_presets as DB-first sources with
+-- built-in fallback templates when those optional tables are not ready.
+
+-- ---
+-- Build 194 schema note — 2026-06-06
+-- Build 194 adds no new DDL. It reuses app_management_settings,
+-- app_management_setting_history, and site_activity_events for editable-setting
+-- diff/preview tools and analytics registry quick-add. The no-DDL note is recorded at
+-- sql/2026-06-06_build194_diff_preview_option_libraries_no_ddl_note.sql.
+
+-- Build 195 schema/history/template/export preview pass — 2026-06-06
+-- No DDL changes. Build 195 reuses app_management_settings, app_management_setting_history,
+-- booking_events, and existing booking/document helpers for field-level validation markers,
+-- selected-history diffs, template preview/test payloads, policy version stamping,
+-- override reason logging, audit export, fallback reports, sitemap/robots previews,
+-- structured-data previews, and media-requirement diffs.
+-- See sql/2026-06-06_build195_schema_history_template_export_no_ddl_note.sql.
+
+-- Build 196 admin live-error repair pass — 2026-06-06
+-- No DDL changes. Reuses app_management_settings, bundled pricing JSON, and existing
+-- local SEO proof/gallery settings. Fixes API method compatibility and Admin App
+-- runtime fallback hydration without schema changes. See
+-- sql/2026-06-06_build196_admin_live_error_repairs_no_ddl_note.sql.
+
+
+-- Build 197 self-healing admin diagnostics pass
+-- No DDL required. Pricing catalog diagnostics and repair continue using public.app_management_settings.
+-- Repair writes only to key='pricing_catalog' and preserves existing DB values while filling missing bundled fallback groups/rows.
+-- Route-copy parity and landing SEO readiness are UI/code checks only.
+
+
+-- Build 198 friendly JSON editor conversion pass
+-- No DDL required. Social feed, before/after gallery, and water-rule friendly editors
+-- continue using existing app_management_settings and water-rule fallback payloads.
+-- Raw JSON remains available only as an Advanced/emergency repair view.
+
+
+-- Build 199 friendly Site Settings editor pass — 2026-06-07
+-- No DDL required. Navigation/footer, analytics registry, media requirements,
+-- holiday closures, landing-page content, and recovery-template rules continue
+-- using existing JSON payload columns/settings rows. The UI now provides friendly
+-- row/card editors and applies those rows back to the same DB/fallback payloads.
+-- See sql/2026-06-07_build199_friendly_site_settings_editors_no_ddl_note.sql.
+
+-- Build 200 friendly pricing editor completion pass — 2026-06-09
+-- No DDL required. The selected-package detail editor and live chart helper
+-- continue using the existing app_management_settings pricing_catalog payload.
+-- Raw pricing JSON remains an emergency repair surface only; routine package
+-- details and chart previews now use friendly editor state.
+-- See sql/2026-06-09_build200_friendly_pricing_editors_no_ddl_note.sql.
+
+
+-- Build 201 friendly validation/media/route sync pass — 2026-06-09
+-- No DDL required. The release guard now syncs route copies and checks friendly
+-- validation/media picker coverage.
+-- See sql/2026-06-09_build201_friendly_validation_media_route_sync_no_ddl_note.sql.
+
+-- Build 202 incident reports and marketing tracker pass — 2026-06-12
+-- Adds DB-backed incident reports for private detailer/admin damage, faulty equipment,
+-- pre-existing damage, customer dispute, safety, and other service incidents.
+-- Customer-visible data is separated into approved_customer_summary,
+-- approved_customer_discussion, public_evidence_items, public_visible, and
+-- customer_visible_at so private staff/admin discussion does not leak to customers.
+-- See sql/2026-06-12_build202_incident_reports_and_marketing.sql.
+
+CREATE TABLE IF NOT EXISTS public.incident_reports (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  booking_id uuid NOT NULL REFERENCES public.bookings(id) ON DELETE CASCADE,
+  incident_type text NOT NULL DEFAULT 'damage',
+  severity text NOT NULL DEFAULT 'medium',
+  status text NOT NULL DEFAULT 'open',
+  decision_status text NOT NULL DEFAULT 'needs_review',
+  vehicle_area text,
+  equipment_name text,
+  title text NOT NULL,
+  private_report text NOT NULL,
+  private_admin_discussion text,
+  evidence_items jsonb NOT NULL DEFAULT '[]'::jsonb,
+  decision_summary_private text,
+  decision_made_by_staff_user_id uuid REFERENCES public.staff_users(id) ON DELETE SET NULL,
+  decision_made_by_name text,
+  decision_made_at timestamptz,
+  approved_customer_summary text,
+  approved_customer_discussion text,
+  public_evidence_items jsonb NOT NULL DEFAULT '[]'::jsonb,
+  public_visible boolean NOT NULL DEFAULT false,
+  customer_visible_at timestamptz,
+  reported_by_staff_user_id uuid REFERENCES public.staff_users(id) ON DELETE SET NULL,
+  reported_by_staff_name text,
+  reported_by_staff_email text,
+  created_by_staff_user_id uuid REFERENCES public.staff_users(id) ON DELETE SET NULL,
+  created_by_staff_name text,
+  created_by_staff_email text,
+  updated_by_staff_user_id uuid REFERENCES public.staff_users(id) ON DELETE SET NULL,
+  updated_by_staff_name text,
+  updated_by_staff_email text
+);
+
+
+-- Build 203 desktop/mobile visual polish note: no DDL required. Responsive visual targets are bundled in data/responsive_visual_registry.json and surfaced through /api/admin/responsive_visual_report until they are moved into app_management_settings with a friendly editor.
+
+-- Build 206 value-added operations foundations: see sql/2026-06-14_build206_value_added_operations_foundations.sql for additive tables supporting gallery approvals, quote pipeline, Meta ROI, memberships, vehicle history, proof-of-work, fleet CRM, review requests, seasonal campaigns, and route clustering.
+
+
+-- Build 207 Markdown consolidation and visual placeholder sanity pass
+-- No DDL required. Admin documentation sanity and visual placeholder reporting use bundled JSON files and existing staff authentication.
+-- See sql/2026-06-14_build207_markdown_visual_sanity_no_ddl_note.sql.
+
+-- Build 208 connected workflow command center: no new DDL. Uses Build 206 value-added operation tables and bundled workflow_connection_build208.json to connect lead/quote -> booking -> proof -> payment -> review -> repeat maintenance. See sql/2026-06-14_build208_connected_workflow_command_center_no_ddl_note.sql.
+
+
+-- Build 209 live detail interaction — 2026-06-17
+-- Makes the original live-detailing promise explicit across job updates and media:
+-- customer-visible now, admin-review-pending, or staff-only. Private media may be
+-- stored by bucket/path and delivered with short-lived signed URLs. Public progress
+-- responses filter internal booking events and expose only approved customer-safe rows.
+-- See sql/2026-06-17_build209_live_detail_interaction.sql.
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS progress_last_viewed_at timestamptz null;
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS progress_last_customer_message_at timestamptz null;
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS progress_last_staff_update_at timestamptz null;
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS stage text NOT NULL DEFAULT 'general';
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS source_channel text NOT NULL DEFAULT 'admin';
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS review_status text NOT NULL DEFAULT 'not_required';
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS requires_admin_review boolean NOT NULL DEFAULT false;
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS customer_action_required boolean NOT NULL DEFAULT false;
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS customer_visible_at timestamptz null;
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS approved_by_staff_user_id uuid null;
+ALTER TABLE public.job_updates ADD COLUMN IF NOT EXISTS approved_by_staff_name text null;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS storage_bucket text null;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS storage_path text null;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS content_type text null;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS file_size_bytes bigint null;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS stage text NOT NULL DEFAULT 'general';
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS source_channel text NOT NULL DEFAULT 'admin';
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS review_status text NOT NULL DEFAULT 'not_required';
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS requires_admin_review boolean NOT NULL DEFAULT false;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS customer_action_required boolean NOT NULL DEFAULT false;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS customer_visible_at timestamptz null;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS approved_by_staff_user_id uuid null;
+ALTER TABLE public.job_media ADD COLUMN IF NOT EXISTS approved_by_staff_name text null;
+CREATE INDEX IF NOT EXISTS idx_job_updates_live_review ON public.job_updates (booking_id, review_status, visibility, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_job_media_live_review ON public.job_media (booking_id, review_status, visibility, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_job_media_storage_path ON public.job_media (storage_bucket, storage_path);
+
+-- Build 210 connected live workflow schema synchronization (2026-06-17)
+-- Canonical deployable migration: sql/2026-06-17_build210_connected_live_workflow.sql
+alter table if exists public.bookings
+  add column if not exists progress_last_staff_viewed_at timestamptz null,
+  add column if not exists progress_last_customer_notified_at timestamptz null,
+  add column if not exists progress_last_staff_notified_at timestamptz null,
+  add column if not exists completed_summary_status text not null default 'not_generated',
+  add column if not exists completed_summary_generated_at timestamptz null,
+  add column if not exists review_request_blocked_reason text null;
+
+alter table if exists public.job_updates
+  add column if not exists recommendation_title text null,
+  add column if not exists recommendation_amount_cents integer null,
+  add column if not exists recommendation_status text null,
+  add column if not exists customer_decision text null,
+  add column if not exists customer_decision_at timestamptz null,
+  add column if not exists customer_decision_note text null,
+  add column if not exists linked_incident_report_id uuid null,
+  add column if not exists linked_payment_request_id uuid null;
+
+alter table if exists public.job_media
+  add column if not exists duration_seconds numeric(10,2) null,
+  add column if not exists upload_status text not null default 'complete',
+  add column if not exists upload_session_id uuid null,
+  add column if not exists retention_policy text not null default 'standard_365_days',
+  add column if not exists retention_expires_at timestamptz null,
+  add column if not exists gallery_reuse_status text not null default 'not_queued',
+  add column if not exists vehicle_history_reuse_status text not null default 'not_queued';
+
+create table if not exists public.live_upload_sessions (
+  id uuid primary key default gen_random_uuid(), booking_id uuid not null, staff_user_id uuid null,
+  filename text not null, content_type text null, file_size_bytes bigint null, duration_seconds numeric(10,2) null,
+  storage_bucket text null, storage_path text null, status text not null default 'prepared', progress_percent integer not null default 0,
+  retry_count integer not null default 0, last_error text null, retention_policy text not null default 'standard_365_days',
+  created_at timestamptz not null default now(), updated_at timestamptz not null default now(), completed_at timestamptz null, cancelled_at timestamptz null
+);
+
+create table if not exists public.completed_job_summaries (
+  id uuid primary key default gen_random_uuid(), booking_id uuid not null unique, customer_profile_id uuid null, vehicle_id uuid null,
+  status text not null default 'draft', summary_title text not null, service_summary text null, proof_items jsonb not null default '[]'::jsonb,
+  products_used jsonb not null default '[]'::jsonb, care_advice jsonb not null default '[]'::jsonb,
+  maintenance_recommendations jsonb not null default '[]'::jsonb, invoice_reference text null, payment_status text null,
+  customer_visible boolean not null default false, generated_by_staff_user_id uuid null, generated_by_staff_name text null,
+  generated_at timestamptz not null default now(), updated_at timestamptz not null default now()
+);
+
+create table if not exists public.gallery_media_candidates (
+  id uuid primary key default gen_random_uuid(), booking_id uuid not null, job_media_id uuid not null unique, media_url text null,
+  storage_bucket text null, storage_path text null, caption text null, stage text null, consent_status text not null default 'needs_pairing_review',
+  status text not null default 'queued', queued_by_staff_user_id uuid null, queued_by_staff_name text null,
+  created_at timestamptz not null default now(), updated_at timestamptz not null default now()
+);
+
+-- Build 211 production reliability schema sync (2026-06-18)
+-- Canonical deployable migration: sql/2026-06-18_build211_production_reliability.sql
+-- Adds final_balance_payment_requests provider/checkout metadata, job_media retention_status,
+-- live_upload_sessions reliability fields, notification_provider_test_logs,
+-- storage_retention_audit, and production_reliability_audits.
+
+-- Build 212 guided production testing schema sync
+-- Canonical deployable migration: sql/2026-06-20_build212_guided_production_testing.sql
+-- Adds public.production_test_runs for protected acceptance outcomes (passed/failed/blocked/not_started).
+-- Keep test notes/evidence free of secrets, card data, customer addresses, VINs, and private incident media.
+
+-- Build 213 owner action and customer trust schema sync (2026-06-22)
+-- Canonical deployable migration: sql/2026-06-22_build213_owner_action_customer_trust.sql
+-- Build 213 — owner-action controls and customer-trust closeout.
+-- Run after Builds 209–212. It adds task ownership/snoozing, customer acknowledgement
+-- for priced in-job recommendations, completed-summary revision/audit support, and
+-- optional walkaround/caption metadata. Do not store card data or private incident facts
+-- in these fields.
+
+create table if not exists public.owner_attention_tasks (
+  id uuid primary key default gen_random_uuid(),
+  source_type text not null default 'generated',
+  source_key text not null,
+  booking_id uuid null,
+  title text not null,
+  detail text null,
+  urgency text not null default 'normal' check (urgency in ('urgent','high','normal','low')),
+  status text not null default 'open' check (status in ('open','snoozed','resolved')),
+  assigned_to_staff_user_id uuid null,
+  assigned_to_staff_name text null,
+  snoozed_until timestamptz null,
+  suppress_source_until timestamptz null,
+  resolution_note text null,
+  resolved_at timestamptz null,
+  resolved_by_staff_user_id uuid null,
+  resolved_by_staff_name text null,
+  created_by_staff_user_id uuid null,
+  created_by_staff_name text null,
+  last_action_by_staff_user_id uuid null,
+  last_action_by_staff_name text null,
+  last_action_at timestamptz null,
+  target_url text null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index if not exists owner_attention_tasks_source_idx on public.owner_attention_tasks (source_type, source_key, updated_at desc);
+create index if not exists owner_attention_tasks_active_idx on public.owner_attention_tasks (status, snoozed_until, suppress_source_until, updated_at desc);
+
+create table if not exists public.live_interaction_audit_events (
+  id uuid primary key default gen_random_uuid(),
+  booking_id uuid null,
+  event_type text not null,
+  entity_type text null,
+  entity_id uuid null,
+  actor_name text null,
+  detail text null,
+  payload jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
+);
+create index if not exists live_interaction_audit_events_booking_idx on public.live_interaction_audit_events (booking_id, created_at asc);
+
+alter table if exists public.job_updates
+  add column if not exists customer_acknowledgement_name text null,
+  add column if not exists customer_acknowledged_at timestamptz null,
+  add column if not exists customer_acknowledgement_version text null,
+  add column if not exists vehicle_area text null,
+  add column if not exists condition_tag text null;
+
+alter table if exists public.job_media
+  add column if not exists vehicle_area text null,
+  add column if not exists condition_tag text null,
+  add column if not exists transcript_text text null,
+  add column if not exists poster_storage_bucket text null,
+  add column if not exists poster_storage_path text null;
+
+create table if not exists public.recommendation_price_acknowledgements (
+  id uuid primary key default gen_random_uuid(),
+  booking_id uuid not null,
+  job_update_id uuid not null,
+  payment_request_id uuid null,
+  recommendation_title text null,
+  amount_cents integer not null,
+  acknowledgement_name text not null,
+  acknowledgement_version text not null default 'in_job_add_on_terms_v1',
+  acknowledged_at timestamptz not null default now(),
+  created_at timestamptz not null default now()
+);
+create index if not exists recommendation_price_acknowledgements_booking_idx on public.recommendation_price_acknowledgements (booking_id, acknowledged_at desc);
+
+alter table if exists public.completed_job_summaries
+  add column if not exists revision_number integer not null default 1,
+  add column if not exists customer_acknowledged_at timestamptz null,
+  add column if not exists customer_acknowledged_name text null,
+  add column if not exists customer_acknowledgement_version text null;
+
+create table if not exists public.completed_job_summary_revisions (
+  id uuid primary key default gen_random_uuid(),
+  summary_id uuid not null,
+  booking_id uuid not null,
+  revision_number integer not null,
+  snapshot jsonb not null,
+  revised_by_staff_name text null,
+  revised_at timestamptz not null default now(),
+  created_at timestamptz not null default now()
+);
+create index if not exists completed_job_summary_revisions_booking_idx on public.completed_job_summary_revisions (booking_id, revised_at desc);
+
+comment on table public.owner_attention_tasks is 'Build 213 owner task controls: assignment, snooze and temporary resolution of generated operational attention items.';
+comment on table public.live_interaction_audit_events is 'Build 213 non-sensitive staff/audit event export stream for a booking. Never store secrets or private incident media.';
+comment on table public.recommendation_price_acknowledgements is 'Customer typed-name acknowledgement of a priced in-job recommendation; not a substitute for legal advice or a signed contract where one is required.';
+
+
+
+-- Build 214 Supabase RLS and owner task orchestration schema sync
+-- Primary migration: sql/2026-06-23_build214_security_task_orchestration.sql
+-- Adds owner_attention_tasks.due_at/escalation fields, locks public tables behind RLS,
+-- revokes direct browser-role table grants, and exposes protected rosie_security_posture_report().

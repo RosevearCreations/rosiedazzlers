@@ -595,3 +595,64 @@ Next 20 steps after Build 189:
 18. Add field-level validation for each editable setting.
 19. Add a public settings cache/version badge in Admin Diagnostics.
 20. Continue moving remaining large inline page/content objects into DB-managed content blocks.
+
+## Build 190 - Editable settings live rendering and diagnostics
+
+Build 190 continues the editable-content migration by rendering public business profile, contact details, social links, navigation/footer links, policy notes, LocalBusiness structured data, analytics labels, and media requirements from DB-first editable settings with bundled JSON fallback. It adds validation, sync-from-bundle controls, DB/fallback diagnostics, and setting history support through `/admin-site-settings.html` and the Build 190 SQL migration.
+
+---
+
+## Build 191 — Editable settings hardening and live-use pass
+
+- Fixed `/admin-site-settings.html` crash by adding `AdminAuth.guardPage()` and `AdminAuth.fetchWithAuth()` compatibility helpers and by making the page initialization defensive.
+- Added structured helper fields for business profile and navigation/footer settings while keeping raw JSON available.
+- Added editable setting dependency map and restore-from-history API foundations.
+- Wired editable policy copy into booking, FAQ, quote-response, and quote-payment customer pages with a static fallback.
+- Wired editable document templates into quote/proposal delivery plus deposit receipt/refund email queue helpers.
+- Added business-hours/holiday status API and booking-page helper.
+- Added analytics ingest validation against the editable analytics event registry.
+- Switched Media Health JSON fallback from build-specific image requirement files to stable `data/media_requirements.json`.
+- Added Build 191 release guard.
+
+<!-- Build 192 documentation sync: editable-domain editors, restore-from-history UI, business-hours booking warnings, dynamic policies/templates, analytics registry warnings, media requirement sync/restore, and fallback diagnostics were reviewed on 2026-06-05. -->
+
+---
+
+## Build 193 documentation sync — 2026-06-05
+
+This Markdown file was included in the Build 193 documentation sync. Build 193 fixes the Admin Social template-list 500, adds social-template fallback UI handling, strengthens editable-setting validation schemas, preserves the one-H1 SEO guard, and records that no new Supabase DDL is required for this pass.
+
+---
+
+## Build 195 documentation sync — 2026-06-06
+
+Reviewed for Build 195. Current source of truth is the Build 195 section in `DEVELOPMENT_ROADMAP.md`, the gap update in `KNOWN_GAPS_AND_RISKS.md`, and the no-DDL schema note in `sql/2026-06-06_build195_schema_history_template_export_no_ddl_note.sql`.
+
+> Build 196 documentation sync (2026-06-06): repaired the live Admin Dashboard local SEO proof 405, Admin App `esc` helper crash, and Landing Page Builder add-on fallback hydration. Schema status remains no-DDL; see `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `DATABASE_STRUCTURE_CURRENT.md`, `SUPABASE_SCHEMA.sql`, and `sql/2026-06-06_build196_admin_live_error_repairs_no_ddl_note.sql`.
+
+---
+
+## Build 197 documentation sync
+
+Build 197 was reviewed during the self-healing admin diagnostics pass. Relevant implementation notes now point toward pricing catalog source/repair diagnostics, route-copy parity, independent dashboard fallback handling, landing-page SEO/readiness warnings, and continued one-H1/local-search discipline. No database DDL is required for this pass.
+
+
+---
+
+### Build 210 documentation sync — 2026-06-17
+
+Active strategy is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This file is retained for historical, audit, specialist, or release-check context. Build 210 connects live job interaction to proof, customer decisions, payment handoff, closeout summaries, approved-media reuse, safe review requests, and the owner attention queue.
+
+Build 211 documentation sync: retained for historical context while the active project direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; production reliability, provider setup, hosted payment links, upload/retention diagnostics, and owner simplification were reviewed in this pass.
+
+> **Build 212 documentation sync:** Active direction is maintained in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. For real-world test instructions, use `docs/PRODUCTION_TEST_GUIDE.md` and `/admin-test-centre.html`; this file is retained for historical, audit, specialist, or release-check context.
+
+## Build 213 documentation sync
+
+Build 213 adds owner action controls in Today Needs Attention, customer price/summary acknowledgements, secure payment-link handoff, summary revision history, and booking-scoped safe interaction audit export. Active direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; use `docs/PRODUCTION_TEST_GUIDE.md` for hands-on testing.
+
+---
+
+### Build 214 documentation sync — 2026-06-23
+
+Build 214 prioritizes Supabase containment and owner-task reliability. The active security action is to run `sql/2026-06-23_build214_security_task_orchestration.sql`, refresh Supabase Security Advisor, and test the application through Cloudflare Functions rather than restoring direct browser access to tables. Canonical planning remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
