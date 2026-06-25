@@ -6,9 +6,9 @@
   <title>Admin Progress | Rosie Dazzlers</title>
   <meta name="description" content="Admin progress update tools for Rosie Dazzlers." />
   <meta name="robots" content="noindex,nofollow" />
-  <link rel="stylesheet" href="/assets/site.css?v=20260410b" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260622build213" />
 </head>
-<body data-page="admin-progress">
+<body data-page="admin-progress" data-build213="customer-trust-audit-export">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -79,31 +79,45 @@
           <h2>Customer link</h2>
           <div id="customerLinkBox" class="kicker">No token loaded yet.</div>
           <div style="margin-top:12px">
-            <button id="enableProgressBtn" class="btn primary" type="button" disabled>Enable progress link</button>
+            <button id="enableProgressBtn" class="btn primary" type="button" disabled>Enable progress link</button><button id="exportAuditBtn" class="btn ghost" type="button" disabled style="margin-left:8px">Export interaction audit</button>
           </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="panel">
+          <h2>Live feed status</h2>
+          <div id="liveFeedStats" class="badges"><span class="badge">No booking loaded</span></div>
+          <div id="schemaWarning" class="notice warn" style="display:none;margin-top:12px"></div>
         </div>
       </section>
 
       <section class="section surface-grid-2">
         <div class="panel">
-          <h2>Post new update</h2>
+          <h2>Post live update</h2>
           <form id="updateForm" class="form">
             <label>Posted by<input id="createdBy" name="createdBy" type="text" placeholder="Example: Laurie / Rosie Dazzlers" required /></label>
+            <label>Stage<select id="updateStage"><option value="general">General update</option><option value="arrival">Arrival / setup</option><option value="pre_existing">Pre-existing condition</option><option value="during">During the detail</option><option value="final">Final result</option><option value="recommendation">Recommendation</option><option value="issue">Issue / concern</option></select></label>
+            <label>Audience<select id="visibility" name="visibility"><option value="customer">Customer now</option><option value="review">Admin review first</option><option value="internal">Staff only</option></select></label>
             <label>Update note<textarea id="updateNote" name="updateNote" rows="5" placeholder="Write the update here..." required></textarea></label>
-            <label>Visibility<select id="visibility" name="visibility"><option value="customer">Customer</option><option value="internal">Internal</option></select></label>
+            <label class="check-row"><input id="updateActionRequired" type="checkbox" /> Customer response or decision requested</label>
             <div><button id="postBtn" class="btn primary" type="submit" disabled>Post update</button></div>
           </form>
         </div>
 
         <div class="panel">
-          <h2>Attach media by URL</h2>
+          <h2>Attach photo or video</h2>
           <form id="mediaForm" class="form">
             <label>Posted by<input id="mediaCreatedBy" name="mediaCreatedBy" type="text" placeholder="Example: Laurie / Rosie Dazzlers" required /></label>
-            <label>Media type<select id="mediaKind" name="mediaKind"><option value="photo">Photo</option><option value="video">Video</option></select></label>
+            <label>Stage<select id="mediaStage"><option value="general">General update</option><option value="arrival">Arrival / setup</option><option value="pre_existing">Pre-existing condition</option><option value="during">During the detail</option><option value="final">Final result</option><option value="recommendation">Recommendation</option><option value="issue">Issue / concern</option></select></label>
+            <label>Audience<select id="mediaVisibility" name="mediaVisibility"><option value="customer">Customer now</option><option value="review">Admin review first</option><option value="internal">Staff only</option></select></label>
             <label>Caption<input id="mediaCaption" name="mediaCaption" type="text" placeholder="Optional caption for the customer" /></label>
-            <label>Media URL<input id="mediaUrl" name="mediaUrl" type="url" placeholder="https://..." required /></label>
-            <label>Visibility<select id="mediaVisibility" name="mediaVisibility"><option value="customer">Customer</option><option value="internal">Internal</option></select></label>
+            <label>Upload file<input id="mediaFile" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,video/mp4,video/quicktime" /></label>
+            <div class="kicker">Or use an existing approved absolute URL:</div>
+            <label>Media URL<input id="mediaUrl" name="mediaUrl" type="url" placeholder="https://..." /></label>
+            <label class="check-row"><input id="mediaActionRequired" type="checkbox" /> Customer response or decision requested</label>
             <div><button id="mediaBtn" class="btn primary" type="submit" disabled>Attach media</button></div>
+            <div id="mediaUploadStatus" class="kicker">Private uploads remain staff-only until explicitly approved.</div>
           </form>
         </div>
       </section>
@@ -135,6 +149,17 @@
         <div class="panel">
           <h2>Social drafts for this booking</h2>
           <div id="socialPostsList" class="grid" style="margin-top:12px"><div class="notice">No booking loaded yet.</div></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="panel">
+          <div class="toolbar-wrap" style="justify-content:space-between">
+            <div><div class="badge">Build 210 closeout controls</div><h2 style="margin:8px 0 0">Proof, summary, payment, review</h2></div>
+            <div class="toolbar-wrap"><button id="generateSummaryBtn" class="btn primary" type="button" disabled>Generate customer summary</button><button id="queueReviewBtn" class="btn ghost" type="button" disabled>Queue safe review request</button></div>
+          </div>
+          <div id="proofStatusAdmin" class="grid cards" style="margin-top:12px"><div class="notice">Load a booking to verify arrival, during, and final proof.</div></div>
+          <div id="summaryStatusAdmin" class="notice" style="margin-top:12px">No completed-job summary loaded.</div>
         </div>
       </section>
 
@@ -238,7 +263,10 @@
     function moderationBadges(item) {
       const bits = [];
       if (item.visibility) bits.push(`Visibility: ${escapeHtml(item.visibility)}`);
+      if (item.stage) bits.push(`Stage: ${escapeHtml(String(item.stage).replaceAll('_',' '))}`);
+      if (item.review_status) bits.push(`Review: ${escapeHtml(item.review_status)}`);
       if (item.thread_status) bits.push(`Thread: ${escapeHtml(item.thread_status)}`);
+      if (item.customer_action_required) bits.push('Customer action requested');
       if (item.moderated_at) bits.push(`Moderated: ${escapeHtml(formatDateTime(item.moderated_at))}`);
       if (item.moderated_by_name) bits.push(`By: ${escapeHtml(item.moderated_by_name)}`);
       return bits.length ? `<div class="kicker">${bits.join(' · ')}</div>` : '';
@@ -255,9 +283,9 @@
         <div class="grid" style="gap:8px">
           <label>Moderation reason<input type="text" data-reason-for="${id}" placeholder="Optional reason" /></label>
           <div class="toolbar-wrap">
-            <button class="btn ghost" type="button" data-moderate-entity="${entity}" data-moderate-id="${id}" data-action="visible">Visible</button>
-            <button class="btn ghost" type="button" data-moderate-entity="${entity}" data-moderate-id="${id}" data-action="hidden">Hide</button>
-            <button class="btn ghost" type="button" data-moderate-entity="${entity}" data-moderate-id="${id}" data-action="internal_only">Internal Only</button>
+            <button class="btn primary" type="button" data-moderate-entity="${entity}" data-moderate-id="${id}" data-action="approve_customer">Approve for customer</button>
+            <button class="btn ghost" type="button" data-moderate-entity="${entity}" data-moderate-id="${id}" data-action="make_internal">Staff only</button>
+            <button class="btn ghost" type="button" data-moderate-entity="${entity}" data-moderate-id="${id}" data-action="reject_customer">Reject / hide</button>
             <button class="btn ghost" type="button" data-moderate-entity="${entity}" data-moderate-id="${id}" data-action="pinned">Pin</button>
           </div>
         </div>
@@ -304,6 +332,8 @@
           <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
           <h3>${escapeHtml(item.created_by || 'Rosie Dazzlers')}</h3>
           <p>${escapeHtml(item.note || 'Update posted.')}</p>
+          ${item.stage==='recommendation'?`<div class="notice"><strong>${escapeHtml(item.recommendation_title||'Recommendation')}</strong><div>${Number(item.recommendation_amount_cents||0)>0?new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(Number(item.recommendation_amount_cents)/100):'No price change'}</div><div class="badges"><span class="badge">${escapeHtml(item.customer_decision||item.recommendation_status||'awaiting customer')}</span></div></div>`:''}
+          ${item.stage==='issue'&&!item.linked_incident_report_id?`<button class="btn ghost small" type="button" data-convert-incident="${escapeHtml(item.id)}" data-source-entity="update">Create linked incident</button>`:item.linked_incident_report_id?'<span class="badge">Incident linked</span>':''}
           ${moderationBadges(item)}
           ${moderationReason(item)}
           ${moderationControls('update', item)}
@@ -316,12 +346,13 @@
       if (!media.length) { wrap.innerHTML = '<div class="notice">No media posted yet.</div>'; return; }
       wrap.innerHTML = media.map((item) => `
         <article class="card">
-          ${item.media_url ? `<img class="img" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || 'Progress media')}" onerror="this.style.display='none'">` : ''}
+          ${item.media_url ? (item.kind === 'video' ? `<video class="img" controls preload="metadata" src="${escapeHtml(item.media_url)}"></video>` : `<img class="img" loading="lazy" src="${escapeHtml(item.media_url)}" alt="${escapeHtml(item.caption || 'Progress media')}" onerror="this.style.display='none'">`) : '<div class="visual-placeholder" data-visual-placeholder="proof_of_work"><strong>Media stored privately</strong><span>Preview is unavailable until storage signing is configured.</span></div>'}
           <h3>${escapeHtml(item.caption || item.kind || 'Progress media')}</h3>
           <p>${escapeHtml(item.created_by || 'Rosie Dazzlers')}</p>
           <div class="kicker">${escapeHtml(formatDateTime(item.created_at))}</div>
           ${moderationBadges(item)}
           ${moderationReason(item)}
+          <div class="toolbar-wrap">${item.stage==='issue'&&!item.linked_incident_report_id?`<button class="btn ghost small" type="button" data-convert-incident="${escapeHtml(item.id)}" data-source-entity="media">Create linked incident</button>`:''}${item.stage==='final'?`<button class="btn ghost small" type="button" data-reuse-media="${escapeHtml(item.id)}" data-target="gallery">Queue for Gallery</button><button class="btn ghost small" type="button" data-reuse-media="${escapeHtml(item.id)}" data-target="vehicle_history">Add to Vehicle History</button>`:''}</div>
           ${moderationControls('media', item)}
         </article>`).join('');
     }
@@ -430,20 +461,56 @@
       return requestJson('/api/admin/progress_list', { method:'POST', body:{ token } });
     }
 
-    async function postUpdate(token, createdBy, note, visibility) {
-      return requestJson('/api/admin/progress_post', { method:'POST', body:{ token, created_by: createdBy, note, visibility } });
+    async function postUpdate(token, createdBy, note, audience, stage, customerActionRequired) {
+      return requestJson('/api/admin/progress_post', { method:'POST', body:{ token, created_by: createdBy, note, audience, stage, customer_action_required: customerActionRequired } });
     }
 
-    async function postMedia(token, createdBy, kind, caption, mediaUrl, visibility) {
-      return requestJson('/api/admin/progress_media_post', { method:'POST', body:{ token, created_by: createdBy, kind, caption, media_url: mediaUrl, visibility } });
+    async function postMedia(payload) {
+      return requestJson('/api/admin/progress_media_post', { method:'POST', body: payload });
+    }
+
+    async function uploadProgressFile(file, audience) {
+      if (!currentBookingId) throw new Error('Load a booking first.');
+      const kind = file.type.startsWith('video/') ? 'video' : 'photo';
+      const sign = await requestJson('/api/admin/progress_upload_url', { method:'POST', body:{ booking_id: currentBookingId, filename:file.name, content_type:file.type || 'application/octet-stream', file_size_bytes:file.size, media_kind:kind, visibility: audience === 'customer' ? 'customer' : 'internal' } });
+      const uploadRes = await fetch(sign.upload_url, { method:'PUT', headers:{ 'Content-Type': file.type || 'application/octet-stream' }, body:file });
+      if (!uploadRes.ok) throw new Error(`Upload failed (${uploadRes.status}).`);
+      return { ...sign, kind };
+    }
+
+    function renderLiveFeedStats(data) {
+      const stats = data.live_feed_stats || {};
+      qs('#liveFeedStats').innerHTML = `<span class="badge">${Number(stats.total||0)} total</span><span class="badge">${Number(stats.customer_visible||0)} customer</span><span class="badge">${Number(stats.pending_review||0)} review</span><span class="badge">${Number(stats.internal_only||0)} private</span>${Number(stats.action_required||0) ? `<span class="badge">${Number(stats.action_required)} action requested</span>` : ''}`;
+      const warning = qs('#schemaWarning');
+      warning.style.display = data.schema_warning ? 'block' : 'none';
+      warning.textContent = data.schema_warning || '';
     }
 
     async function enableProgress() {
       return requestJson('/api/admin/progress_enable', { method:'POST', body:{ booking_id: currentBookingId } });
     }
 
+    async function exportInteractionAudit(){
+      if(!currentBookingId) return setNotice('Load a booking first.','bad');
+      try{setNotice('Preparing interaction audit export…');const out=await requestJson(`/api/admin/live_interaction_audit_export?booking_id=${encodeURIComponent(currentBookingId)}`);const blob=new Blob([out.csv||''],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`rosie-dazzlers-interaction-audit-${currentBookingId}.csv`;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);setNotice(`Interaction audit exported (${Number(out.rows?.length||0)} rows).`,'ok');}catch(err){setNotice(err.message||'Could not export audit. Run the Build 213 migration if needed.','bad');}
+    }
+
     async function moderateEntry(entity, entryId, action, reason) {
       return requestJson('/api/admin/progress_moderate', { method:'POST', body:{ entity, id: entryId, action, moderation_reason: reason, booking_id: currentBookingId } });
+    }
+
+
+    function renderCloseout(data) {
+      const proof=data.proof_media_status||{};const counts=proof.stage_counts||proof.counts||{};
+      qs('#proofStatusAdmin').innerHTML=['arrival','during','final'].map(k=>`<article class="card"><div class="badge">${Number(counts[k]||0)>0?'Ready':'Required'}</div><h3>${k[0].toUpperCase()+k.slice(1)} proof</h3><p>${Number(counts[k]||0)>0?`${Number(counts[k])} approved/stored media item(s)`:'Add at least one usable media item before completing the job.'}</p></article>`).join('');
+      const summary=data.completed_job_summary;const box=qs('#summaryStatusAdmin');
+      box.className='notice '+(summary?'ok':'warn');box.textContent=summary?`Summary ${summary.status||'draft'} · payment ${summary.payment_status||'not recorded'}`:'Completed-job summary has not been generated.';
+      qs('#generateSummaryBtn').disabled=!currentBookingId;qs('#queueReviewBtn').disabled=!currentBookingId;qs('#exportAuditBtn').disabled=!currentBookingId;
+    }
+    async function runConnectedAction(action, payload={}) {
+      if(!currentBookingId) return setNotice('Load a booking first.','bad');
+      const routes={summary:'/api/admin/job_summary_generate',review:'/api/admin/review_request_queue_safe',incident:'/api/admin/progress_convert_incident',reuse:'/api/admin/progress_media_reuse'};
+      const out=await requestJson(routes[action],{method:'POST',body:{booking_id:currentBookingId,...payload}});await reloadCurrent();return out;
     }
 
     async function reloadCurrent() {
@@ -455,6 +522,8 @@
       renderMedia(data);
       renderSignoffs(data);
       renderSocialPosts(data);
+      renderLiveFeedStats(data);
+      renderCloseout(data);
       await loadUsageHistory();
       authReady(true);
       if (data.crew_warning) setNotice(`Progress loaded. ${data.crew_warning}`, 'warn');
@@ -510,6 +579,7 @@
         }
       });
 
+      qs('#exportAuditBtn').addEventListener('click', exportInteractionAudit);
       qs('#enableProgressBtn').addEventListener('click', async () => {
         if (!currentBookingId) return setNotice('Load a booking first.', 'bad');
         try {
@@ -528,12 +598,14 @@
         const token = qs('#progressToken').value.trim();
         const createdBy = qs('#createdBy').value.trim();
         const note = qs('#updateNote').value.trim();
-        const visibility = qs('#visibility').value;
+        const audience = qs('#visibility').value;
+        const stage = qs('#updateStage').value;
+        const customerActionRequired = qs('#updateActionRequired').checked;
         if (!token) return setNotice('Load a booking first.', 'bad');
         if (!createdBy || !note) return setNotice('Created by and update note are required.', 'bad');
         try {
           setNotice('Posting update…');
-          const result = await postUpdate(token, createdBy, note, visibility);
+          const result = await postUpdate(token, createdBy, note, audience, stage, customerActionRequired);
           const updateId = result && result.update ? result.update.id : null;
           const draftResult = await createSocialDraft({ sourceType: 'progress_update', sourceId: updateId, summary: note });
           const pushed = await dispatchSocialDrafts(draftResult);
@@ -554,20 +626,29 @@
         e.preventDefault();
         const token = qs('#progressToken').value.trim();
         const createdBy = qs('#mediaCreatedBy').value.trim();
-        const kind = qs('#mediaKind').value;
         const caption = qs('#mediaCaption').value.trim();
         const mediaUrl = qs('#mediaUrl').value.trim();
-        const visibility = qs('#mediaVisibility').value;
+        const file = qs('#mediaFile').files && qs('#mediaFile').files[0];
+        const audience = qs('#mediaVisibility').value;
+        const stage = qs('#mediaStage').value;
         if (!token) return setNotice('Load a booking first.', 'bad');
-        if (!createdBy || !mediaUrl) return setNotice('Posted by and media URL are required.', 'bad');
+        if (!createdBy || (!mediaUrl && !file)) return setNotice('Posted by and either a file or media URL are required.', 'bad');
         try {
-          setNotice('Attaching media…');
-          const result = await postMedia(token, createdBy, kind, caption, mediaUrl, visibility);
+          setNotice(file ? 'Uploading media…' : 'Attaching media…');
+          qs('#mediaUploadStatus').textContent = file ? 'Preparing secure upload…' : 'Saving media URL…';
+          let upload = null;
+          if (file) upload = await uploadProgressFile(file, audience);
+          const kind = upload?.kind || (mediaUrl && /\.(mp4|mov)(?:$|\?)/i.test(mediaUrl) ? 'video' : 'photo');
+          const result = await postMedia({ token, created_by:createdBy, kind, caption:caption || file?.name || '', media_url:mediaUrl || '', audience, stage, customer_action_required:qs('#mediaActionRequired').checked, storage_bucket:upload?.bucket || '', storage_path:upload?.path || '', content_type:file?.type || '', file_size_bytes:file?.size || 0 });
           const mediaId = result && result.media ? result.media.id : null;
-          const draftResult = await createSocialDraft({ sourceType: 'progress_media', sourceId: mediaId, summary: caption || 'Rosie Dazzlers job photo update.', mediaUrls: [mediaUrl] });
+          const socialMediaUrl = /^https?:\/\//i.test(String(mediaUrl || '')) ? mediaUrl : ''; // Signed private previews expire; social drafts need a stable approved URL.
+          const draftResult = audience === 'customer' ? await createSocialDraft({ sourceType: 'progress_media', sourceId: mediaId, summary: caption || 'Rosie Dazzlers job photo update.', mediaUrls: socialMediaUrl ? [socialMediaUrl] : [] }) : null;
           const pushed = await dispatchSocialDrafts(draftResult);
           qs('#mediaCaption').value = '';
           qs('#mediaUrl').value = '';
+          qs('#mediaFile').value = '';
+          qs('#mediaActionRequired').checked = false;
+          qs('#mediaUploadStatus').textContent = audience === 'review' ? 'Media uploaded and waiting for admin review.' : audience === 'internal' ? 'Private staff media uploaded.' : 'Customer media uploaded.';
           await reloadCurrent();
           if (pushed && pushed.length) {
             const okCount = pushed.filter((item) => item.ok).length;
@@ -599,6 +680,14 @@
         }
       });
 
+      document.addEventListener('click', async (event)=>{
+        const incident=event.target.closest('[data-convert-incident]');
+        const reuse=event.target.closest('[data-reuse-media]');
+        if(incident){incident.disabled=true;try{setNotice('Creating private incident report…');await runConnectedAction('incident',{source_id:incident.dataset.convertIncident,source_entity:incident.dataset.sourceEntity});setNotice('Incident report created and linked.','ok');}catch(err){setNotice(err.message||'Could not create incident.','bad');}finally{incident.disabled=false;}}
+        if(reuse){reuse.disabled=true;try{setNotice('Reusing approved final media…');await runConnectedAction('reuse',{media_id:reuse.dataset.reuseMedia,target:reuse.dataset.target});setNotice(reuse.dataset.target==='gallery'?'Final media queued for Gallery Approvals.':'Final media added to vehicle history.','ok');}catch(err){setNotice(err.message||'Could not reuse media.','bad');}finally{reuse.disabled=false;}}
+      });
+      qs('#generateSummaryBtn').addEventListener('click',async()=>{try{setNotice('Generating completed-job summary…');await runConnectedAction('summary',{publish:true});setNotice('Customer-safe completed-job summary generated.','ok');}catch(err){setNotice(err.message||'Could not generate summary.','bad');}});
+      qs('#queueReviewBtn').addEventListener('click',async()=>{try{setNotice('Checking review safety…');const out=await runConnectedAction('review');setNotice(out.blocked?`Review request blocked: ${(out.blockers||[]).join(' ')}`:'Review request safely queued.',out.blocked?'warn':'ok');}catch(err){setNotice(err.message||'Could not queue review request.','bad');}});
       document.addEventListener('click', handleModerationClick);
       await loadInventoryItems();
       authReady(false);

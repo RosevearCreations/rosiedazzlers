@@ -8,7 +8,7 @@
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css?v=20260410b" />
 </head>
-<body data-page="admin-recovery">
+<body data-page="admin-recovery" data-build199="friendly-recovery-rules-editor">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers Admin</strong></a>
@@ -63,7 +63,19 @@
             <label>Subject template<input id="templateSubject" type="text" placeholder="Complete your Rosie Dazzlers booking" /></label>
             <label>Body template<textarea id="templateBody" rows="8" placeholder="Hi {{customer_name}}, finish here: {{recovery_url}}" required></textarea></label>
             <label>Variables (comma separated)<input id="templateVariables" type="text" value="customer_name,recovery_url,service_date,package_name,gift_code" /></label>
-            <label>Rules JSON<textarea id="templateRules" rows="4" placeholder='{"send_window":"09:00-20:00"}'>{}</textarea></label>
+            <div class="panel-lite" data-build199="friendly-rules-editor">
+              <strong>Delivery rules</strong>
+              <p class="kicker">Routine rule edits now use fields instead of raw JSON.</p>
+              <label>Send window<input id="ruleSendWindow" type="text" placeholder="09:00-20:00" /></label>
+              <label>Quiet hours<input id="ruleQuietHours" type="text" placeholder="20:00-09:00" /></label>
+              <label>Minimum delay minutes<input id="ruleMinDelay" type="number" min="0" step="1" placeholder="0" /></label>
+              <label>Maximum attempts<input id="ruleMaxAttempts" type="number" min="1" step="1" placeholder="3" /></label>
+              <label><input id="ruleRequireOptIn" type="checkbox" /> Require opt-in before sending</label>
+              <details>
+                <summary><strong>Advanced rules JSON</strong> <span class="kicker">Emergency repair only</span></summary>
+                <textarea id="templateRules" rows="4" placeholder='{"send_window":"09:00-20:00"}'>{}</textarea>
+              </details>
+            </div>
             <label>Notes<textarea id="templateNotes" rows="3" placeholder="Optional notes for staff"></textarea></label>
             <label><input id="templateActive" type="checkbox" checked /> Template active</label>
             <div class="toolbar-wrap">
@@ -137,8 +149,34 @@
     function updateActorBox(){ byId('actorBox').textContent = runtime.bridgeLabel(actor, password()); }
 
     function readRulesJson() {
-      try { return JSON.parse(byId("templateRules").value || "{}"); }
-      catch { throw new Error("Rules JSON is invalid."); }
+      let rules = {};
+      try { rules = JSON.parse(byId("templateRules").value || "{}"); }
+      catch { throw new Error("Advanced rules JSON is invalid."); }
+      const sendWindow = byId("ruleSendWindow").value.trim();
+      const quietHours = byId("ruleQuietHours").value.trim();
+      const minDelay = Number(byId("ruleMinDelay").value || 0);
+      const maxAttempts = Number(byId("ruleMaxAttempts").value || 0);
+      if (sendWindow) rules.send_window = sendWindow;
+      else delete rules.send_window;
+      if (quietHours) rules.quiet_hours = quietHours;
+      else delete rules.quiet_hours;
+      if (Number.isFinite(minDelay) && minDelay > 0) rules.min_delay_minutes = minDelay;
+      else delete rules.min_delay_minutes;
+      if (Number.isFinite(maxAttempts) && maxAttempts > 0) rules.max_attempts = maxAttempts;
+      else delete rules.max_attempts;
+      if (byId("ruleRequireOptIn").checked) rules.require_opt_in = true;
+      else delete rules.require_opt_in;
+      byId("templateRules").value = JSON.stringify(rules, null, 2);
+      return rules;
+    }
+
+    function setRulesEditor(rules = {}) {
+      byId("ruleSendWindow").value = rules.send_window || "";
+      byId("ruleQuietHours").value = rules.quiet_hours || "";
+      byId("ruleMinDelay").value = rules.min_delay_minutes || "";
+      byId("ruleMaxAttempts").value = rules.max_attempts || "";
+      byId("ruleRequireOptIn").checked = !!rules.require_opt_in;
+      byId("templateRules").value = JSON.stringify(rules || {}, null, 2);
     }
 
     async function apiJson(url, options = {}) {
@@ -203,7 +241,7 @@
       byId("templateSubject").value = tpl.subject_template || "";
       byId("templateBody").value = tpl.body_template || "";
       byId("templateVariables").value = Array.isArray(tpl.variables) ? tpl.variables.join(",") : "";
-      byId("templateRules").value = JSON.stringify(tpl.rules || {}, null, 2);
+      setRulesEditor(tpl.rules || {});
       byId("templateNotes").value = tpl.notes || "";
       byId("templateActive").checked = tpl.is_active !== false;
       setNotice(`Loaded template ${key} into the editor.`, "ok");

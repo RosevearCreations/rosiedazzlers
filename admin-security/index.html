@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Security Posture | Rosie Dazzlers Admin</title>
+  <meta name="description" content="Protected Supabase Row-Level Security and browser-access posture for Rosie Dazzlers administrators." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260623build214" />
+  <style>
+    .security-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}.security-card{padding:16px;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04)}.security-card strong{display:block;font-size:1.7rem}.security-card[data-state="bad"]{border-color:rgba(248,113,113,.45);background:rgba(220,38,38,.13)}.security-card[data-state="ok"]{border-color:rgba(74,222,128,.35);background:rgba(22,163,74,.10)}.security-table{width:100%;border-collapse:collapse;font-size:.9rem}.security-table th,.security-table td{padding:10px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}.security-table tr[data-risk="true"]{background:rgba(220,38,38,.10)}.security-wrap{overflow:auto}.security-steps{display:grid;gap:9px}.security-step{padding:12px;border-left:3px solid #38bdf8;border-radius:10px;background:rgba(255,255,255,.04)}@media(max-width:700px){.security-table{min-width:710px}.security-card strong{font-size:1.4rem}}
+  </style>
+</head>
+<body data-page="admin-security" data-build214="security-task-orchestration">
+  <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
+  <main class="container">
+    <section class="section"><div class="hero"><div><div class="badge">Build 214 · Security first</div><h1>Database security posture</h1><p>Check whether public-schema tables have Row-Level Security enabled and whether browser roles can directly read or change data. This page never exposes secrets, keys, or table records.</p></div><div class="panel"><div id="securityStatus" class="notice">Loading protected security report…</div><button id="refreshBtn" class="btn primary" type="button" style="margin-top:12px">Refresh report</button></div></div></section>
+    <section class="section"><div id="securityCounts" class="security-grid"><div class="security-card"><span class="muted">Loading…</span></div></div></section>
+    <section class="section"><div class="panel"><h2 style="margin-top:0">Immediate response steps</h2><div class="security-steps"><div class="security-step"><strong>1. Run the Build 214 migration in Supabase SQL Editor.</strong><br><span class="muted">Use <code>sql/2026-06-23_build214_security_task_orchestration.sql</code>. It enables RLS on public tables and removes direct browser-role table grants while preserving server-side service-role access.</span></div><div class="security-step"><strong>2. Refresh Supabase Security Advisor.</strong><br><span class="muted">Confirm RLS-disabled and sensitive-public-access alerts clear. Do not create broad allow-all policies to silence an alert.</span></div><div class="security-step"><strong>3. Test through the website, not direct table URLs.</strong><br><span class="muted">Use the Guided Test Centre with an internal booking. If a screen breaks, repair its Cloudflare Function instead of restoring anonymous table access.</span></div></div></div></section>
+    <section class="section"><div class="panel"><h2 style="margin-top:0">Public-schema table review</h2><p class="muted">A risk row means RLS is disabled or a browser role still has table access. Names only are shown—no records or sensitive columns.</p><div class="security-wrap"><table class="security-table"><thead><tr><th>Table</th><th>RLS</th><th>Anon read/write</th><th>Authenticated read/write</th><th>Risk</th></tr></thead><tbody id="securityRows"><tr><td colspan="5" class="muted">Loading…</td></tr></tbody></table></div></div></section>
+    <section class="section"><div class="visual-placeholder" data-visual-placeholder="security_posture"><strong>Security posture visual</strong><span>Replace with a safe internal security checklist screenshot after remediation. Never include data, keys, tokens, or customer information.</span></div></section>
+  </main>
+  <footer class="footer container" data-footer></footer>
+  <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script><script src="/assets/admin-runtime.js"></script><script src="/assets/chrome.js"></script>
+  <script>
+  (function(){
+    const $=id=>document.getElementById(id); let report=null;
+    const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    async function requestJson(url,opts={}){const response=await fetch(url,{credentials:'include',cache:'no-store',...opts});const data=await response.json().catch(()=>({}));if(!response.ok||data.ok===false)throw new Error(data.error||`Request failed (${response.status})`);return data;}
+    function card(label,value,bad){return `<article class="security-card" data-state="${bad?'bad':'ok'}"><span class="muted">${esc(label)}</span><strong>${Number(value||0)}</strong></article>`;}
+    function yesNo(value){return value?'<span class="badge">Yes</span>':'<span class="badge">No</span>';}
+    function render(){const c=report.counts||{};const risky=Number(c.risk_rows||0);$('securityStatus').className='notice '+(risky?'bad':'ok');$('securityStatus').textContent=risky?`${risky} public-table security risk(s) need immediate remediation.`:'Public-schema RLS/browser-access posture is clear.';$('securityCounts').innerHTML=[card('Public tables',c.tables,false),card('RLS disabled',c.rls_disabled,Number(c.rls_disabled)>0),card('Browser grants',c.browser_grants,Number(c.browser_grants)>0),card('Risk rows',c.risk_rows,risky>0)].join('');$('securityRows').innerHTML=(report.tables||[]).map(row=>`<tr data-risk="${row.browser_access_risk===true}"><td><code>${esc(row.table_name)}</code></td><td>${yesNo(row.rls_enabled===true)}</td><td>${yesNo(row.anon_select)} / ${yesNo(row.anon_write)}</td><td>${yesNo(row.authenticated_select)} / ${yesNo(row.authenticated_write)}</td><td>${row.browser_access_risk?'<span class="badge">Fix</span>':'<span class="badge">Clear</span>'}</td></tr>`).join('')||'<tr><td colspan="5" class="muted">No rows returned.</td></tr>';}
+    async function load(){try{$('securityStatus').className='notice';$('securityStatus').textContent='Refreshing protected security posture…';report=await requestJson('/api/admin/security_posture_report');render();}catch(err){$('securityStatus').className='notice bad';$('securityStatus').textContent=err.message;$('securityRows').innerHTML='<tr><td colspan="5" class="muted">Run the Build 214 migration, then refresh this report.</td></tr>';}}
+    $('refreshBtn').addEventListener('click',load);window.AdminShell.boot({pageKey:'admin-security',onReady:load});
+  })();
+  </script>
+</body>
+</html>
