@@ -160,6 +160,7 @@ CHECKS = [
     "scripts/build211_production_reliability_check.py",
     "scripts/build212_guided_production_testing_check.py",
     "scripts/build213_owner_action_customer_trust_check.py",
+    "scripts/build214_security_task_orchestration_check.py",
     "scripts/seo_h1_check.py",
 ]
 
