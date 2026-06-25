@@ -1,6 +1,7 @@
 // Build 179 — prepare/send customer-facing quote/proposal delivery and acceptance link.
 import { requireStaffAccess, json, serviceHeaders, cleanText, isUuid, methodNotAllowed } from "../_lib/staff-auth.js";
 import { dispatchNotificationThroughProvider } from "./_lib/provider-dispatch.js";
+import { loadEditableSetting } from "../_lib/editable-settings.js";
 
 const DRAFT_SELECT = [
   "id", "lead_id", "booking_id", "title", "status", "body", "pricing_note", "internal_note",
@@ -24,11 +25,12 @@ export async function onRequestPost({ request, env }) {
     if (!recipient) return withCors(json({ ok: false, error: "A valid customer email is required before preparing quote delivery." }, 400));
 
     const origin = siteOrigin(request, env);
+    const template = await loadDocumentTemplate(env, "quote_proposal");
     const rawToken = makeToken();
     const tokenHash = await sha256Hex(rawToken);
     const acceptanceUrl = `${origin}/quote-response.html?draft_id=${encodeURIComponent(draft.id)}&token=${encodeURIComponent(rawToken)}`;
-    const subject = cleanText(body.subject || draft.title || "Your Rosie Dazzlers quote") || "Your Rosie Dazzlers quote";
-    const message = cleanText(body.message || "Please review the quote details below. Use the secure response link to accept or decline so we can keep your request moving.");
+    const subject = cleanText(body.subject || template.subject || draft.title || "Your Rosie Dazzlers quote") || "Your Rosie Dazzlers quote";
+    const message = cleanText(body.message || template.body || "Please review the quote details below. Use the secure response link to accept or decline so we can keep your request moving.");
     const bodyText = buildQuoteEmailText({ draft, message, acceptanceUrl });
     const bodyHtml = buildQuoteEmailHtml({ draft, message, acceptanceUrl });
 
@@ -114,6 +116,12 @@ function buildQuoteEmailText({ draft, message, acceptanceUrl }) {
 }
 function buildQuoteEmailHtml({ draft, message, acceptanceUrl }) {
   return `<p>Hi ${escapeHtml(draft.customer_name || "there")},</p><p>${escapeHtml(message)}</p><h2>Quote/proposal details</h2><pre style="white-space:pre-wrap;font-family:inherit">${escapeHtml(draft.body || "Quote details are attached in your Rosie Dazzlers request.")}</pre>${draft.pricing_note ? `<h3>Pricing note</h3><pre style="white-space:pre-wrap;font-family:inherit">${escapeHtml(draft.pricing_note)}</pre>` : ""}<p><a href="${escapeHtml(acceptanceUrl)}">Review, accept, or decline this quote</a></p><p>Thank you,<br>Rosie Dazzlers Mobile Auto Detailing</p>`;
+}
+async function loadDocumentTemplate(env, key) {
+  const loaded = await loadEditableSetting(env, "document_templates", { headers: serviceHeaders(env) }).catch(() => null);
+  const templates = loaded?.value?.templates || {};
+  const template = templates[key] || {};
+  return template && typeof template === "object" ? template : {};
 }
 function siteOrigin(request, env) { const configured = cleanText(env?.SITE_ORIGIN || env?.PUBLIC_SITE_ORIGIN); if (configured) return configured.replace(/\/+$/, ""); const url = new URL(request.url); return `${url.protocol}//${url.host}`; }
 function makeToken() { if (crypto.randomUUID) return `${crypto.randomUUID()}-${crypto.randomUUID()}`; const bytes = new Uint8Array(32); crypto.getRandomValues(bytes); return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join(""); }
