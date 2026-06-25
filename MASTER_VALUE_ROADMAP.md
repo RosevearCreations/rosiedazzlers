@@ -337,3 +337,57 @@ Build 212 documentation sync: detailed testing instructions now live in the app 
 
 Build 213 documentation sync: owner task controls, acknowledgement records, payment-link handoff, summary revision history, and safe audit export now sit in the connected workflow. Static code checks are not proof of real provider/webhook/storage behavior.
 
+---
+
+### Build 214 documentation sync — 2026-06-23
+
+Build 214 prioritizes Supabase containment and owner-task reliability. The active security action is to run `sql/2026-06-23_build214_security_task_orchestration.sql`, refresh Supabase Security Advisor, and test the application through Cloudflare Functions rather than restoring direct browser access to tables. Canonical planning remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+
+## Build 214 — security containment and owner-task orchestration completed (2026-06-23)
+
+### Completed 20 steps
+
+1. Added public-schema RLS containment migration.
+2. Removed direct `anon`, `authenticated`, and `PUBLIC` table privileges.
+3. Preserved server-side `service_role` table/sequence access.
+4. Added safe future-table default privileges.
+5. Added protected Supabase security posture RPC.
+6. Added protected Cloudflare security posture API.
+7. Added `/admin-security.html` with table-name-only risk indicators.
+8. Added Admin Dashboard Security Posture entry point.
+9. Added security placeholder guidance that excludes secrets and customer data.
+10. Added manual owner task creation.
+11. Added My assigned work filter.
+12. Added unassigned-work filter.
+13. Added overdue/today/no-due-date filters.
+14. Added due-date metadata to owner tasks.
+15. Added escalation metadata to owner tasks.
+16. Added Set Due Date owner action.
+17. Raised overdue manual tasks to urgent in Today Needs Attention.
+18. Added task-audit notification queue records without claiming provider delivery.
+19. Updated schema, canonical docs, route copies, service worker, and visual registry.
+20. Added Build 214 release guard and detailed security acceptance steps.
+
+### Next 20 value-added steps
+
+1. Run Build 214 migration and verify Security Advisor findings clear.
+2. Review any named sensitive table and invalidate exposed sessions/tokens as appropriate.
+3. Verify Stripe final-balance webhook settlement in test mode.
+4. Add payment-link expiry, resend, and cancellation controls.
+5. Add customer-safe payment receipt/status timeline updates.
+6. Add manual-task editing and specific-staff assignment.
+7. Add due-date reminder delivery once the provider is verified.
+8. Add approved final-media before/after pairing in Gallery Approvals.
+9. Add automatic vehicle-history cards for approved final proof.
+10. Add vehicle walkaround templates with media anchors.
+11. Add customer communication preferences and quiet hours.
+12. Add provider message IDs and delivery-attempt timeline.
+13. Add retention archive approval plus orphan-object reconciliation.
+14. Add payable/refund webhook settlement regression tests.
+15. Add role/permission regression tests for detailer, senior detailer, admin, and customer token views.
+16. Run real Wi-Fi/cellular upload tests and record actual evidence.
+17. Add payment request deep links from Today Needs Attention.
+18. Add application health checks for Cloudflare Function publish/binding readiness.
+19. Simplify or retire any owner screen that does not feed Today Needs Attention.
+20. Replace visual placeholders with approved local proof photos/video stills.

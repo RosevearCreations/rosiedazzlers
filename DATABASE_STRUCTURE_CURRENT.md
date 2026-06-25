@@ -916,3 +916,18 @@ These changes support `/admin-today.html` owner actions, `/api/admin/live_intera
 
 > **Build 213 documentation sync:** Canonical direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; detailed tests are in `docs/PRODUCTION_TEST_GUIDE.md`.
 
+---
+
+### Build 214 documentation sync — 2026-06-23
+
+Build 214 prioritizes Supabase containment and owner-task reliability. The active security action is to run `sql/2026-06-23_build214_security_task_orchestration.sql`, refresh Supabase Security Advisor, and test the application through Cloudflare Functions rather than restoring direct browser access to tables. Canonical planning remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+
+## Build 214 schema sync — Supabase RLS and owner task orchestration
+
+Primary migration: `sql/2026-06-23_build214_security_task_orchestration.sql`.
+
+- `owner_attention_tasks` now supports `due_at`, `escalation_at`, `escalation_status`, and `last_notified_at`.
+- Public-schema tables are intended to be RLS-enabled with direct `anon`/`authenticated`/`PUBLIC` table grants removed.
+- `public.rosie_security_posture_report()` is a service-role-only SQL function used by `/api/admin/security_posture_report`.
+- No browser page should query public tables directly; Cloudflare Functions remain the server-side authorization boundary.
