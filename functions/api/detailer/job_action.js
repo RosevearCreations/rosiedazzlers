@@ -1,5 +1,7 @@
 import { requireStaffAccess, json, methodNotAllowed, serviceHeaders, cleanText } from "../_lib/staff-auth.js";
 import { compareAgainstTrustedLocation } from "../_lib/booking-location.js";
+import { loadProofOfWorkStatus, saveProofOfWorkStatus } from "../_lib/proof-of-work.js";
+import { queueCustomerLiveAlert } from "../_lib/live-interaction-alerts.js";
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -114,13 +116,21 @@ export async function onRequestPost(context) {
       event.event_type='detailing_resumed';
       event.event_note='Detailing resumed.';
       break;
-    case 'complete':
+    case 'complete': {
+      const proofStatus = await loadProofOfWorkStatus({ env, bookingId });
+      const overrideRequested = body.override_proof === true;
+      const overrideAllowed = overrideRequested && (actor.is_admin || actor.can_manage_bookings) && reason;
+      if (!proofStatus.ready && !overrideAllowed) {
+        return json({ error:'Arrival, during-work, and final media are required before completion.', code:'proof_media_incomplete', proof_media_status:proofStatus },409);
+      }
+      await saveProofOfWorkStatus({ env, bookingId, status: proofStatus, actor, overrideReason: overrideAllowed ? reason : null }).catch(()=>null);
       patch.current_workflow_stage='awaiting_payment';
       patch.detailing_completed_at=now;
       patch.job_status='completed';
       event.event_type='detailing_completed';
-      event.event_note='Detailing marked complete and ready for final billing.';
+      event.event_note=overrideAllowed ? `Detailing completed with proof override: ${reason}` : 'Detailing marked complete with arrival, during, and final proof media.';
       break;
+    }
     default:
       return json({ error: 'Unsupported action.' }, 400);
   }
@@ -129,7 +139,11 @@ export async function onRequestPost(context) {
   if (!bookingRes.ok) return json({ error: `Could not update booking workflow. ${await bookingRes.text()}` }, 500);
   await fetch(`${env.SUPABASE_URL}/rest/v1/booking_events`, { method:'POST', headers:{...serviceHeaders(env), Prefer:'return=minimal'}, body: JSON.stringify(event) }).catch(()=>null);
   const rows = await bookingRes.json().catch(()=>[]);
-  return json({ ok:true, booking: Array.isArray(rows)?rows[0]||null:null, action });
+  if (['dispatch','arrive','start','complete'].includes(action)) {
+    const messages={dispatch:'Your detailer is on the way.',arrive:'Your detailer has arrived.',start:'Detailing work has started.',complete:'Your detailing work is complete. A summary and final payment information will follow.'};
+    await queueCustomerLiveAlert({env,bookingId,eventType:`job_${action}`,title:'Rosie Dazzlers job update',message:messages[action],payload:{action}}).catch(()=>null);
+  }
+  return json({ ok:true, booking: Array.isArray(rows)?rows[0]||null:null, action, next_step:action==='complete'?'generate_completed_job_summary':null });
 }
 
 export const onRequestGet = methodNotAllowed;
