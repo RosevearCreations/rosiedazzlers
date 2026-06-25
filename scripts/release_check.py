@@ -1,6 +1,54 @@
 #!/usr/bin/env python3
 """Rosie Dazzlers release smoke checks.
 
+Build 206 note:
+- Adds dedicated Gallery Approvals, Quote Pipeline, and Value-Added Operations dashboards with DB migration destinations for the top sanity-check additions.
+
+Build 205 note:
+- Adds a sanity-check/value-added roadmap screen, dashboard card, structured backlog, and competitor-inspired next-step documentation.
+
+Build 204 note:
+- Repairs before/after Gallery image loading with field-alias normalization, static fallback data, local asset fallback handling, and dashboard diagnostics.
+
+Build 203 note:
+- Adds desktop/mobile visual polish, responsive diagnostics, and professional image/card treatment.
+
+Build 202 note:
+- Adds private incident reports with required evidence, admin-approved customer-visible summaries/photos, and a marketing tracker based on attached detailer notes.
+
+Build 201 note:
+- Adds inline friendly-editor validation, media URL picker helpers, landing schema previews, save-review summaries, and route-copy synchronization.
+
+Build 200 note:
+- Completes the main Admin App pricing JSON retirement by adding friendly package detail fields and chart helpers that use editor state.
+
+Build 199 note:
+- Converts remaining high-risk Admin Site Settings JSON helper areas into friendly row/card editors while keeping advanced JSON as emergency fallback.
+
+Build 198 note:
+- Converts routine social feed, before/after gallery, and water-rule updates from direct JSON textareas into friendly admin row editors while preserving advanced JSON fallback recovery.
+
+Build 197 note:
+- Adds self-healing Admin Dashboard diagnostics for pricing catalog source/repair, route-copy parity, independent card failures, and landing-page SEO readiness warnings.
+
+Build 196 note:
+- Fixes live Admin Dashboard local SEO proof 405s, Admin App esc helper crash, and Landing Page Builder add-on fallback hydration.
+
+Build 195 note:
+- Adds editable-setting field markers, selected-history diffs, template preview/test payloads, audit/fallback reports, sitemap/schema previews, policy stamping, and override logging.
+
+Build 194 note:
+- Adds editable-setting JSON diff/preview tools, analytics registry quick-add, option-library dropdown hydration, and route-copy parity guards.
+
+Build 193 note:
+- Fixes /api/admin/social_templates_list null-filter 500s, adds social-template UI fallback handling, and adds editable-setting validation schemas/token/link warnings.
+
+Build 191 note:
+- Hardens AdminAuth helpers, Admin Site Settings, policy/template rendering, analytics validation, and stable media requirements.
+
+Build 190 note:
+- Adds live rendering for editable site settings, validation, sync controls, and setting history.
+
 Build 186 note:
 - Corrects Oxford/Tillsonburg and Norfolk water-restriction rules across data, booking/Admin App fallbacks, and local landing content.
 
@@ -38,6 +86,14 @@ Build 173 note:
 - Run Python checks in-process with runpy instead of spawning a new Python
   interpreter for every guard. This avoids intermittent sandbox/CI startup
   hangs while preserving each guard's existing SystemExit return code.
+
+Build 207 note:
+- Consolidates Markdown into canonical handoff/roadmap files, adds admin docs sanity reporting, and installs visual placeholder enrichment/reporting.
+Build 208 note:
+- Adds a connected Workflow Command Center that links lead/quote, booking, proof-of-work, invoice/payment, review/public proof, and repeat-maintenance modules.
+
+Build 209 note:
+- Adds the live detail interaction backbone: direct photo/video/note posting, explicit customer/review/private audiences, public-feed privacy filtering, protected media metadata, moderation, diagnostics, responsive polish, and Markdown retirement.
 """
 from __future__ import annotations
 
@@ -80,6 +136,31 @@ CHECKS = [
     "scripts/build187_local_page_water_rules_check.py",
     "scripts/build188_editable_water_rules_hardcoding_audit_check.py",
     "scripts/build189_editable_site_settings_check.py",
+    "scripts/build190_editable_settings_live_rendering_check.py",
+    "scripts/build191_editable_settings_hardening_check.py",
+        "scripts/build192_editable_operations_completion_check.py",
+    "scripts/build193_social_templates_and_validation_check.py",
+    "scripts/build194_diff_preview_option_libraries_check.py",
+    "scripts/build195_schema_history_template_export_check.py",
+    "scripts/build196_admin_live_error_repairs_check.py",
+    "scripts/build197_self_healing_admin_checks.py",
+    "scripts/build198_friendly_json_editors_check.py",
+    "scripts/build199_friendly_site_settings_editors_check.py",
+    "scripts/build200_friendly_pricing_editors_check.py",
+    "scripts/build201_friendly_validation_media_route_sync_check.py",
+    "scripts/build202_incident_reports_marketing_check.py",
+    "scripts/build203_desktop_mobile_visual_polish_check.py",
+    "scripts/build204_gallery_media_resilience_check.py",
+    "scripts/build205_sanity_value_roadmap_check.py",
+    "scripts/build206_value_added_operations_check.py",
+    "scripts/build207_markdown_visual_sanity_check.py",
+    "scripts/build208_connected_workflow_command_center_check.py",
+    "scripts/build209_live_interaction_documentation_check.py",
+    "scripts/build210_connected_live_workflow_check.py",
+    "scripts/build211_production_reliability_check.py",
+    "scripts/build212_guided_production_testing_check.py",
+    "scripts/build213_owner_action_customer_trust_check.py",
+    "scripts/build214_security_task_orchestration_check.py",
     "scripts/seo_h1_check.py",
 ]
 
