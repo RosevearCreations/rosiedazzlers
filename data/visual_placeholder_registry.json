@@ -1,7 +1,7 @@
 {
-  "build": 213,
-  "updated_at": "2026-06-22",
-  "summary": "Build 213 adds owner-action and customer-trust closeout placeholders alongside the responsive, customer-safe visual library.",
+  "build": 214,
+  "updated_at": "2026-06-23",
+  "summary": "Build 214 extends the visual placeholder system with safe database-security posture guidance.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -171,6 +171,14 @@
       "where": "approved in-job recommendation and completed-summary cards",
       "visual": "signature / confirmation card",
       "replace_with": "customer-safe approval or signed-summary proof with personal details removed"
+    },
+    {
+      "key": "security_posture",
+      "label": "Security posture placeholder",
+      "where": "/admin-security.html and production security readiness cards",
+      "visual": "shield/checklist card with no customer data",
+      "replace_with": "safe internal security remediation checklist screenshot",
+      "alt": "Database security posture checklist for Rosie Dazzlers administrators"
     }
   ],
   "rules": [
@@ -179,7 +187,8 @@
     "Every real image should have descriptive local alt text when used on public pages.",
     "Use placeholders as temporary polish only; the Media Health and Gallery Approval screens should keep pushing toward real owned images.",
     "Live-detail placeholders must inherit the selected audience: customer now, admin review first, or staff only.",
-    "A private or review-pending image/video must never fall back to a public image URL."
+    "A private or review-pending image/video must never fall back to a public image URL.",
+    "Security posture placeholders and screenshots must never include secrets, customer records, direct table URLs, or provider credentials."
   ],
   "desktop_mobile_notes": [
     "Placeholders use fluid aspect ratios and single-column mobile behavior.",

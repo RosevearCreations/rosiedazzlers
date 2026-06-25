@@ -109,3 +109,29 @@ Expected: no priced recommendation can be approved without an acknowledgement. D
 
 Expected: the CSV must not expose private signed URLs, R2 paths, secrets, card data, customer addresses, VINs, or private incident evidence. Any such value is a privacy blocker.
 
+
+
+# Build 214 security and owner-task tests
+
+## A. Supabase RLS containment
+
+1. Deploy Build 214.
+2. In Supabase SQL Editor, run `sql/2026-06-23_build214_security_task_orchestration.sql`.
+3. Open **Database → Advisors → Security** and refresh the checks.
+4. Open `/admin-security.html` while signed in as an administrator.
+5. Expected result: `RLS disabled`, `Browser grants`, and `Risk rows` are all `0`.
+6. Then use an internal booking to test `/book`, `/detailer-jobs.html`, `/admin-progress.html`, `/progress.html?token=...`, and `/admin-today.html`.
+7. If a normal application route shows a permission error, copy the exact route, time, and error text. Do not add broad anonymous policies or restore table grants.
+
+## B. Owner task due date and filters
+
+1. Open `/admin-today.html`.
+2. Create a harmless task titled `INTERNAL TEST — Security follow-up`.
+3. Set urgency to High and select a due date about five minutes in the future.
+4. Refresh the page.
+5. Use **My assigned work**, **Unassigned**, **Overdue**, and **Due today** filters.
+6. Press **Assign me**, then refresh and verify the task appears in My assigned work.
+7. Use **Due date** and set it to a time in the past only for this internal test. Refresh and verify the task becomes urgent/overdue.
+8. Press **Resolve**, add `Internal test resolved`, refresh, and confirm it is temporarily suppressed.
+
+Never use customer passwords, card data, service keys, raw booking tokens, or private incident details in a manual task note.
