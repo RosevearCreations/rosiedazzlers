@@ -1,0 +1,5 @@
+-- Build 204 — gallery media resilience and before/after image fallback repair.
+-- No DDL is required for this pass.
+-- Existing public.app_management_settings key = 'before_after_gallery' remains the DB source.
+-- Runtime now normalizes older/friendly field aliases, falls back to data/before_after_gallery.json,
+-- and exposes local fallback metadata for packaged Rosie brand assets.

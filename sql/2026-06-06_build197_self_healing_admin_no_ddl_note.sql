@@ -1,0 +1,5 @@
+-- Build 197 self-healing admin diagnostics note
+-- No database schema changes are required for this pass.
+-- New endpoints read existing app_management_settings rows and, only when staff explicitly clicks repair,
+-- write a safer pricing_catalog value back into the existing app_management_settings table.
+-- Existing route-copy parity, dashboard fallback, and landing-page SEO readiness features are code/UI only.

@@ -1,0 +1,4 @@
+-- Build 205 sanity check and value-added roadmap note.
+-- No database DDL is required for this pass.
+-- This build adds a static/admin sanity report, value-added backlog JSON, a dashboard card,
+-- and documentation updates for competitor-inspired mobile detailing opportunities.

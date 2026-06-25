@@ -1,0 +1,7 @@
+-- Build 208: Connected workflow command center.
+-- No new DDL required. This pass connects Build 206 tables/data into an owner-facing
+-- lifecycle dashboard: lead/quote -> booking -> proof of work -> invoice/payment ->
+-- review/public proof -> repeat maintenance. Existing Build 206 tables remain the
+-- DB destinations for CRUD work in later passes.
+-- Added files include /admin-workflow.html, /api/admin/workflow_command_center_report,
+-- data/workflow_connection_build208.json, and updated visual placeholder slots.
