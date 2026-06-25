@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Guided Production Tests | Rosie Dazzlers Admin</title>
+  <meta name="description" content="Step-by-step internal production acceptance tests for Rosie Dazzlers notifications, payments, privacy, mobile uploads, proof of work, retention, and the connected customer workflow." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260620build212" />
+  <style>
+    .test-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.test-summary .card{padding:14px}.test-summary strong{display:block;font-size:1.55rem}.test-grid{display:grid;gap:16px}.test-card{border:1px solid var(--border);border-radius:18px;padding:clamp(14px,2vw,20px);background:rgba(255,255,255,.035)}.test-card[data-status="passed"]{border-color:rgba(74,222,128,.4);background:rgba(22,163,74,.08)}.test-card[data-status="failed"],.test-card[data-status="blocked"]{border-color:rgba(248,113,113,.42);background:rgba(220,38,38,.1)}.test-meta{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}.test-columns{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr);gap:16px}.test-card ol,.test-card ul{padding-left:1.25rem;line-height:1.55}.test-card details{border-top:1px solid var(--border);padding-top:10px;margin-top:10px}.test-card summary{cursor:pointer;font-weight:800}.test-save{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}.test-save textarea{grid-column:1/-1;min-height:92px}.test-save input{grid-column:1/-1}.test-actions{display:flex;gap:8px;flex-wrap:wrap}.test-actions .btn[data-status="passed"]{border-color:rgba(74,222,128,.45)}.test-actions .btn[data-status="failed"],.test-actions .btn[data-status="blocked"]{border-color:rgba(248,113,113,.45)}.test-help{padding:14px;border-radius:16px;border:1px solid rgba(77,119,255,.28);background:rgba(77,119,255,.08)}.test-help h2{margin-top:0}@media(max-width:780px){.test-columns{grid-template-columns:1fr}.test-save{grid-template-columns:1fr}.test-actions .btn{flex:1 1 44%}}
+  </style>
+</head>
+<body data-page="admin-test-centre" data-build212="guided-production-testing">
+  <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
+  <main class="container">
+    <section class="section"><div class="hero"><div><div class="badge">Build 212</div><h1>Guided Production Test Centre</h1><p>Use this step-by-step checklist before real customer jobs. Each test explains exactly what to click, what safe result to expect, and what to record if it fails.</p></div><div class="panel"><div id="testStatus" class="notice">Loading guided tests…</div><div class="row" style="margin-top:12px"><button id="refreshTests" class="btn primary" type="button">Refresh tests</button><a class="btn ghost" href="/admin-production.html">Production readiness</a></div></div></div></section>
+    <section class="section"><div class="test-help"><h2>Before we start</h2><ol><li>Use an internal test booking, not a real customer booking.</li><li>Use no secrets, payment card details, VINs, addresses, or private incident media.</li><li>Start in dev/staging and Stripe test mode. Use live systems only after each safety test passes.</li><li>When a test fails, record the screen, test booking ID, device/browser, time, and visible error message.</li></ol><p class="muted">Results save to the database after the Build 212 migration. If that migration is not applied yet, this screen keeps a browser-only backup and tells us exactly what is missing.</p></div></section>
+    <section class="section"><div id="testSummary" class="test-summary"><div class="card"><span class="muted">Loading…</span></div></div></section>
+    <section class="section"><div id="testWarning" class="notice" hidden></div><div id="testList" class="test-grid"><div class="notice">Loading the test playbook…</div></div></section>
+    <section class="section"><div class="visual-placeholder" data-visual-placeholder="production_test_centre"><strong>Guided acceptance testing</strong><span>Replace this placeholder after field testing with a safe internal screenshot showing the checklists, not customer data.</span></div></section>
+  </main>
+  <footer class="footer container" data-footer></footer>
+  <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script><script src="/assets/admin-runtime.js"></script><script src="/assets/chrome.js"></script>
+  <script>
+  (function(){
+    const $=(id)=>document.getElementById(id); let state={tests:[],summary:{}};
+    const esc=(value)=>String(value??'').replace(/[&<>"']/g,(char)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    const localKey='rosie-build212-production-tests';
+    function localRuns(){try{return JSON.parse(localStorage.getItem(localKey)||'{}')}catch{return{}}}
+    function setLocalRun(key,run){const all=localRuns();all[key]=run;localStorage.setItem(localKey,JSON.stringify(all));}
+    async function requestJson(url,options={}){const response=await fetch(url,{credentials:'include',cache:'no-store',...options});const data=await response.json().catch(()=>({}));if(!response.ok||data.ok===false)throw new Error(data.error||`Request failed (${response.status})`);return data;}
+    function latestRun(test){return test.latest_run||localRuns()[test.key]||null;}
+    function badge(text){return `<span class="badge">${esc(text)}</span>`;}
+    function summaryCard(label,value,state=''){return `<article class="card" data-state="${esc(state)}"><span class="muted">${esc(label)}</span><strong>${Number(value||0)}</strong></article>`;}
+    function render(){
+      const s=state.summary||{}; $('testSummary').innerHTML=[summaryCard('Tests',s.total),summaryCard('Passed',s.passed,'ok'),summaryCard('Failed',s.failed,'bad'),summaryCard('Blocked',s.blocked,'bad'),summaryCard('Not started',s.not_started,'warn')].join('');
+      $('testList').innerHTML=(state.tests||[]).map((test)=>{
+        const run=latestRun(test); const status=run?.status||'not_started';
+        const steps=(test.steps||[]).map((step)=>`<li>${esc(step)}</li>`).join('');
+        const prereq=(test.prerequisites||[]).map((item)=>`<li>${esc(item)}</li>`).join('');
+        const safety=(test.safety||[]).map((item)=>`<li>${esc(item)}</li>`).join('');
+        const fails=(test.if_it_fails||[]).map((item)=>`<li>${esc(item)}</li>`).join('');
+        return `<article class="test-card" data-status="${esc(status)}" id="test-${esc(test.key)}"><div class="row" style="justify-content:space-between;align-items:flex-start"><div><div class="badge">${esc(test.category)}</div><h2 style="margin:8px 0 4px">${esc(test.name)}</h2><div class="test-meta">${badge(`${test.estimated_minutes||'?'} min`)}${badge(`Risk: ${test.risk||'normal'}`)}${badge(`Status: ${status.replaceAll('_',' ')}`)}</div></div><a class="btn ghost small" href="${esc((test.pages||[])[0]||'/admin-production.html')}">Open test page</a></div><div class="test-columns"><div><h3>Exact steps</h3><ol>${steps}</ol><div class="notice ok"><strong>Pass result:</strong> ${esc(test.expected||'Complete the expected result.')}</div><details><summary>What we need before testing</summary><ul>${prereq}</ul></details><details><summary>Safety reminders</summary><ul>${safety}</ul></details></div><div><h3>When it fails</h3><ul>${fails}</ul><div class="test-save"><label>Status<select data-run-status="${esc(test.key)}"><option value="not_started" ${status==='not_started'?'selected':''}>Not started</option><option value="passed" ${status==='passed'?'selected':''}>Passed</option><option value="blocked" ${status==='blocked'?'selected':''}>Blocked</option><option value="failed" ${status==='failed'?'selected':''}>Failed</option></select></label><label>Environment<select data-run-environment="${esc(test.key)}"><option value="dev">Dev / staging</option><option value="production">Production</option><option value="unknown">Not recorded</option></select></label><textarea data-run-notes="${esc(test.key)}" placeholder="What happened? Include test booking ID, device/browser, time, and visible error. Never include secrets or customer private data.">${esc(run?.notes||'')}</textarea><input data-run-evidence="${esc(test.key)}" value="${esc(run?.evidence_url||'')}" placeholder="Optional safe screenshot or issue link (https://...)" inputmode="url"/><div class="test-actions"><button class="btn primary" type="button" data-save-test="${esc(test.key)}">Save result</button><button class="btn ghost" type="button" data-copy-steps="${esc(test.key)}">Copy steps</button></div><div class="muted" data-run-meta="${esc(test.key)}">${run?`Last result: ${esc(run.status)} · ${esc(run.performed_at||run.created_at||'saved locally')}`:'No result saved yet.'}</div></div></div></div></article>`;
+      }).join('')||'<div class="notice warn">No production test instructions were returned.</div>';
+      document.querySelectorAll('[data-save-test]').forEach((button)=>button.addEventListener('click',()=>save(button.dataset.saveTest)));
+      document.querySelectorAll('[data-copy-steps]').forEach((button)=>button.addEventListener('click',()=>copySteps(button.dataset.copySteps)));
+    }
+    async function save(key){
+      const status=document.querySelector(`[data-run-status="${CSS.escape(key)}"]`)?.value||'not_started';
+      const environment=document.querySelector(`[data-run-environment="${CSS.escape(key)}"]`)?.value||'unknown';
+      const notes=document.querySelector(`[data-run-notes="${CSS.escape(key)}"]`)?.value||'';
+      const evidence_url=document.querySelector(`[data-run-evidence="${CSS.escape(key)}"]`)?.value||'';
+      const button=document.querySelector(`[data-save-test="${CSS.escape(key)}"]`); const original=button?.textContent;
+      if(button){button.disabled=true;button.textContent='Saving…';}
+      try{
+        const data=await requestJson('/api/admin/production_test_run_save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({test_key:key,status,environment,notes,evidence_url})});
+        const test=state.tests.find((row)=>row.key===key); if(test)test.latest_run=data.run; $('testStatus').className='notice ok';$('testStatus').textContent='Test result saved to the production audit history.';
+      }catch(error){
+        const fallback={test_key:key,status,environment,notes,evidence_url,performed_at:new Date().toISOString(),local_only:true}; setLocalRun(key,fallback); const test=state.tests.find((row)=>row.key===key);if(test)test.latest_run=fallback;
+        $('testStatus').className='notice warn';$('testStatus').textContent=`Saved only in this browser because the audit table is unavailable. Apply Build 212 migration. ${error.message}`;
+      }finally{if(button){button.disabled=false;button.textContent=original||'Save result';} render();}
+    }
+    async function copySteps(key){const test=state.tests.find((row)=>row.key===key);if(!test)return;const nl=String.fromCharCode(10);const lines=[test.name,'',...(test.steps||[]).map((x,i)=>`${i+1}. ${x}`),'',`Expected: ${test.expected}`,'','If it fails:',...(test.if_it_fails||[]).map(x=>`- ${x}`)];const text=lines.join(nl);try{await navigator.clipboard.writeText(text);$('testStatus').className='notice ok';$('testStatus').textContent='Test steps copied.';}catch{$('testStatus').className='notice warn';$('testStatus').textContent='Could not copy automatically. Select the steps from this page instead.';}}
+    async function load(){try{$('testStatus').className='notice';$('testStatus').textContent='Loading guided production tests…';const data=await requestJson('/api/admin/production_test_runs_list');state={tests:data.tests||[],summary:data.summary||{}};const warning=$('testWarning');if(data.warning){warning.hidden=false;warning.className='notice warn';warning.textContent=data.warning;}else warning.hidden=true;render();$('testStatus').className='notice ok';$('testStatus').textContent='Guided test playbook loaded. Record every result before calling the build production-ready.';}catch(error){$('testStatus').className='notice bad';$('testStatus').textContent=error.message;}}
+    $('refreshTests').addEventListener('click',load);
+    window.AdminShell.boot({pageKey:'admin-test-centre',onReady:load});
+  })();
+  </script>
+</body>
+</html>

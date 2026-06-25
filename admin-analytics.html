@@ -195,7 +195,7 @@
     }
   </style>
 </head>
-<body data-build176="conversion-funnel-dashboard" data-build177="local-seo-proof-report" data-build179="local-proof-tasking">
+<body data-build176="conversion-funnel-dashboard" data-build177="local-seo-proof-report" data-build179="local-proof-tasking" data-build194="analytics-registry-quick-add">
   <main class="shell">
     <div class="loading" data-admin-shell-loading>Loading analytics...</div>
     <div data-admin-shell-ready hidden>
@@ -293,6 +293,12 @@
           <div id="top-actions" class="list"></div>
         </article>
 
+        <article class="card card--half" data-build192="analytics-registry-warnings">
+          <h2>Analytics registry warnings</h2>
+          <p class="muted">Shows raw event names that are not listed in the editable analytics registry yet. Build 194 adds a one-click registry add action.</p>
+          <div id="analytics-registry-warnings" class="list">Loading registry warnings…</div>
+        </article>
+
         <article class="card card--half">
           <h2>Top countries</h2>
           <div id="top-countries" class="list"></div>
@@ -371,6 +377,7 @@
         regions: document.getElementById("top-regions"),
         devices: document.getElementById("top-devices"),
         actions: document.getElementById("top-actions"),
+        registryWarnings: document.getElementById("analytics-registry-warnings"),
         serviceAreas: document.getElementById("top-service-areas"),
         funnel: document.getElementById("booking-funnel"),
         recentActions: document.getElementById("recent-actions"),
@@ -463,6 +470,31 @@
       }
 
 
+      function bindRegistryWarningButtons() {
+        document.querySelectorAll('[data-add-registry-event]').forEach((button) => {
+          button.addEventListener('click', async () => {
+            const eventType = button.getAttribute('data-add-registry-event') || '';
+            if (!eventType) return;
+            try {
+              button.disabled = true;
+              const res = await fetch('/api/admin/analytics_registry_add_event', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ event_type: eventType })
+              });
+              const data = await res.json().catch(() => ({}));
+              if (!res.ok || data.ok === false) throw new Error(data.error || 'Could not add event to registry.');
+              setShellStatus(data.already_present ? 'Event was already in the analytics registry.' : 'Event added to the analytics registry.', 'success');
+              await load();
+            } catch (err) {
+              button.disabled = false;
+              setShellStatus(err.message || 'Could not add event to registry.', 'error');
+            }
+          });
+        });
+      }
+
       function bindProofTaskButtons() {
         document.querySelectorAll('[data-proof-task]').forEach((button) => {
           button.addEventListener('click', async () => {
@@ -501,7 +533,7 @@
 
       async function load() {
         const days = Number(els.days.value || 30);
-        const [analyticsRes, abandonedRes, conversionRes, localSeoRes, proofTasksRes] = await Promise.all([
+        const [analyticsRes, abandonedRes, conversionRes, localSeoRes, proofTasksRes, registryWarningsRes] = await Promise.all([
           fetch("/api/admin/analytics_overview", {
             method: "POST",
             credentials: "include",
@@ -531,6 +563,12 @@
             credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ status: "all", limit: 12 })
+          }),
+          fetch("/api/admin/analytics_registry_warnings", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ days, limit: 1500 })
           })
         ]);
 
@@ -539,6 +577,7 @@
         const conversion = await conversionRes.json().catch(() => null);
         const localSeo = await localSeoRes.json().catch(() => null);
         const proofTasks = await proofTasksRes.json().catch(() => null);
+        const registryWarnings = await registryWarningsRes.json().catch(() => null);
 
         if (!analyticsRes.ok) throw new Error(analytics?.error || "Could not load analytics.");
         if (!abandonedRes.ok) throw new Error(abandoned?.error || "Could not load abandoned orders.");
@@ -591,6 +630,11 @@
         renderList(els.devices, analytics.top_devices || [], (row) => `<strong>${esc(row.label)}</strong><div class="muted">${Number(row.count || 0)} events</div>`, "No device mix yet.");
         renderList(els.referrers, analytics.top_referrers || [], (row) => `<strong>${esc(row.label)}</strong><div class="muted">${Number(row.count || 0)} referrals</div>`);
         renderList(els.actions, analytics.top_actions || [], (row) => `<strong>${esc(row.label)}</strong><div class="muted">${Number(row.count || 0)} tracked actions</div>`, "No action data yet.");
+        if (els.registryWarnings) {
+          const warningRows = Array.isArray(registryWarnings?.warnings) ? registryWarnings.warnings : [];
+          renderList(els.registryWarnings, warningRows, (row) => `<strong>${esc(row.event_type)}</strong><div class="muted">${Number(row.count || 0)} unknown event(s) · last seen ${esc(row.last_seen_at || 'unknown')}</div><div class="muted">${esc(row.recommendation || 'Add this event to the editable analytics registry or fix the emitter.')}</div><button class="btn ghost" type="button" data-add-registry-event="${esc(row.event_type)}">Add to registry</button>`, registryWarnings?.warning || "No unknown analytics event names found.");
+          bindRegistryWarningButtons();
+        }
         renderList(els.serviceAreas, analytics.top_service_areas || [], (row) => `<strong>${esc(row.label)}</strong><div class="muted">${Number(row.count || 0)} tracked events</div>`, "No service-area tracking yet.");
 
         const funnelRows = analytics.funnel

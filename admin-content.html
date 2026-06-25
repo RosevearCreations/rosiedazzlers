@@ -122,7 +122,7 @@
                 <input data-field="source_key" placeholder="optional-stable-key" />
               </label>
               <label>Active
-                <select data-field="is_active">
+                <select data-field="is_active" data-option-library="publish_statuses">
                   <option value="true">Published / active</option>
                   <option value="false">Hidden / draft</option>
                 </select>
@@ -143,7 +143,7 @@
               <input data-faq-search type="search" placeholder="pet hair, pricing, fleet…" />
             </label>
             <label>Status
-              <select data-faq-status>
+              <select data-faq-status data-option-library="content_statuses">
                 <option value="all">All</option>
                 <option value="active">Active only</option>
                 <option value="hidden">Hidden only</option>
@@ -166,7 +166,7 @@
             <input type="hidden" data-block-field="id" />
             <div class="row">
               <label>Content type
-                <select data-block-field="content_type">
+                <select data-block-field="content_type" data-option-library="content_block_types">
                   <option value="special">Special</option>
                   <option value="service_blurb">Service blurb</option>
                   <option value="homepage_card">Homepage card</option>
@@ -193,7 +193,7 @@
             </div>
             <div class="row">
               <label>Sort order<input data-block-field="sort_order" type="number" value="100" /></label>
-              <label>Active<select data-block-field="is_active"><option value="true">Published / active</option><option value="false">Hidden / draft</option></select></label>
+              <label>Active<select data-block-field="is_active" data-option-library="publish_statuses"><option value="true">Published / active</option><option value="false">Hidden / draft</option></select></label>
             </div>
             <div class="button-row"><button class="btn primary" type="submit">Save content block</button><button class="btn ghost" type="button" data-new-block>New block</button><button class="btn ghost" type="button" data-refresh-blocks>Refresh blocks</button></div>
             <p class="small-note">Live saving needs `sql/2026-05-25_build175_lead_conversion_content_gallery_analytics.sql` applied. Public reads can use `/api/public_content_blocks` with static fallback until then.</p>
@@ -202,7 +202,7 @@
         <div class="panel">
           <div class="content-toolbar">
             <label>Search blocks<input data-block-search type="search" placeholder="special, salt, homepage…" /></label>
-            <label>Type<select data-block-type><option value="all">All</option><option value="special">Specials</option><option value="service_blurb">Service blurbs</option><option value="homepage_card">Homepage cards</option><option value="help_article">Help articles</option><option value="trust_proof">Trust proof</option><option value="fleet">Fleet</option><option value="maintenance">Maintenance</option></select></label>
+            <label>Type<select data-block-type data-option-library="content_block_types"><option value="all">All</option><option value="special">Specials</option><option value="service_blurb">Service blurbs</option><option value="homepage_card">Homepage cards</option><option value="help_article">Help articles</option><option value="trust_proof">Trust proof</option><option value="fleet">Fleet</option><option value="maintenance">Maintenance</option></select></label>
           </div>
           <div class="admin-status" data-block-message hidden></div>
           <div class="faq-list" data-block-list><div class="muted">Content blocks load after staff auth completes.</div></div>
@@ -213,6 +213,7 @@
 
   <div data-footer></div>
   <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-option-libraries.js"></script>
   <script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js?v=20260524build173" defer></script>
   <script>

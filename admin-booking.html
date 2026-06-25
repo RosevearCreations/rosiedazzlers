@@ -101,7 +101,7 @@
 
             <label>
               Media/privacy status
-              <select id="mediaPrivacyStatus" name="mediaPrivacyStatus">
+              <select id="mediaPrivacyStatus" name="mediaPrivacyStatus" data-option-library="media_privacy_statuses">
                 <option value="not_needed">not needed</option>
                 <option value="needs_review">needs review</option>
                 <option value="reviewing">reviewing</option>
@@ -156,7 +156,7 @@
           <form id="financeForm" class="form" style="margin-top:12px">
             <label>
               Entry type
-              <select id="financeEntryType" name="financeEntryType">
+              <select id="financeEntryType" name="financeEntryType" data-option-library="finance_entry_types">
                 <option value="discount">discount</option>
                 <option value="refund">refund</option>
                 <option value="deposit">deposit</option>
@@ -171,7 +171,7 @@
             </label>
             <label>
               Payment method
-              <select id="financePaymentMethod" name="financePaymentMethod">
+              <select id="financePaymentMethod" name="financePaymentMethod" data-option-library="payment_methods">
                 <option value="">-- optional --</option>
                 <option value="cash">cash</option>
                 <option value="card">card</option>
@@ -183,7 +183,7 @@
             </label>
             <label>
               Reason code
-              <select id="financeReasonCode" name="financeReasonCode">
+              <select id="financeReasonCode" name="financeReasonCode" data-option-library="reason_codes">
                 <option value="">-- optional --</option>
                 <option value="weather_adjustment">weather_adjustment</option>
                 <option value="scope_change">scope_change</option>
@@ -219,7 +219,7 @@
           <form id="statusForm" class="form">
             <label>
               Status
-              <select id="bookingStatus" name="bookingStatus">
+              <select id="bookingStatus" name="bookingStatus" data-option-library="booking_statuses">
                 <option value="pending">pending</option>
                 <option value="confirmed">confirmed</option>
                 <option value="cancelled">cancelled</option>
@@ -229,7 +229,7 @@
 
             <label>
               Job status
-              <select id="jobStatus" name="jobStatus">
+              <select id="jobStatus" name="jobStatus" data-option-library="job_statuses">
                 <option value="">-- none --</option>
                 <option value="scheduled">scheduled</option>
                 <option value="in_progress">in_progress</option>
@@ -275,6 +275,7 @@
 
   <script src="/assets/admin-auth.js"></script>
   <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/admin-option-libraries.js"></script>
   <script src="/assets/chrome.js"></script>
   <script type="module">
     import { setBrandImages, setFooter } from "/assets/site.js";
@@ -319,6 +320,17 @@
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Could not load bookings.");
       return data;
+    }
+
+    function formatBusinessHourWarnings(result) {
+      const warnings = [];
+      const raw = result && (result.business_hours_warnings || result.business_hours_warning || result.warnings || []);
+      const rows = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+      rows.forEach((row) => {
+        if (typeof row === "string") warnings.push(row);
+        else if (row && typeof row === "object") warnings.push(row.message || row.reason || row.warning || "Business-hours conflict warning.");
+      });
+      return warnings.filter(Boolean).join(" ");
     }
 
     async function updateBookingStatus(bookingId, status, jobStatus) {
@@ -855,13 +867,14 @@
 
         try {
           setNotice("Saving status…");
-          await updateBookingStatus(
+          const result = await updateBookingStatus(
             currentBooking.id,
             document.querySelector("#bookingStatus").value,
             document.querySelector("#jobStatus").value
           );
           await refreshBookings();
-          setNotice("Booking status updated.", "ok");
+          const conflictWarnings = formatBusinessHourWarnings(result);
+          setNotice(conflictWarnings ? `Booking status updated. ${conflictWarnings}` : "Booking status updated.", conflictWarnings ? "" : "ok");
         } catch (err) {
           setNotice(err.message || "Could not update booking status.", "bad");
         }

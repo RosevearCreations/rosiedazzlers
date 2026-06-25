@@ -7,10 +7,10 @@
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
   <style>
-    .settings-grid{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(300px,2fr);gap:16px;align-items:start}.setting-list{display:grid;gap:8px}.setting-button{width:100%;text-align:left;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#e5e7eb;border-radius:12px;padding:10px;cursor:pointer}.setting-button[aria-current="true"]{border-color:#93c5fd;background:rgba(59,130,246,.18)}textarea.settings-json{width:100%;min-height:540px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9rem;border-radius:14px;padding:14px;background:#0f172a;color:#e5e7eb;border:1px solid rgba(255,255,255,.12)}.status{margin-top:10px;padding:10px;border-radius:12px;background:rgba(255,255,255,.06)}.status[data-state="error"]{background:rgba(220,38,38,.14);color:#fecaca}.status[data-state="ok"]{background:rgba(22,163,74,.14);color:#bbf7d0}@media(max-width:860px){.settings-grid{grid-template-columns:1fr}textarea.settings-json{min-height:420px}}
+    .settings-grid{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(300px,2fr);gap:16px;align-items:start}.setting-list{display:grid;gap:8px}.setting-button{width:100%;text-align:left;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#e5e7eb;border-radius:12px;padding:10px;cursor:pointer}.setting-button[aria-current="true"]{border-color:#93c5fd;background:rgba(59,130,246,.18)}textarea.settings-json{width:100%;min-height:540px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9rem;border-radius:14px;padding:14px;background:#0f172a;color:#e5e7eb;border:1px solid rgba(255,255,255,.12)}.status{margin-top:10px;padding:10px;border-radius:12px;background:rgba(255,255,255,.06)}.structured-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}.structured-grid label{display:grid;gap:4px}.structured-grid input,.structured-grid textarea{width:100%;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:#0f172a;color:#e5e7eb;padding:8px}.structured-grid textarea{min-height:90px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.history-row{margin-top:10px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(15,23,42,.45)}.history-row details{margin-top:8px}.history-row pre{max-height:220px;overflow:auto;white-space:pre-wrap;background:#020617;padding:10px;border-radius:10px}.friendly-section{margin-top:12px;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(15,23,42,.35)}.friendly-row{margin-top:10px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04)}.friendly-row-header{display:flex;justify-content:space-between;gap:8px;align-items:center}.friendly-check{display:flex;align-items:center;gap:8px;margin-top:8px}.friendly-check input{width:auto}.friendly-section textarea{font-family:inherit}.status[data-state="error"]{background:rgba(220,38,38,.14);color:#fecaca}.status[data-state="ok"]{background:rgba(22,163,74,.14);color:#bbf7d0}@media(max-width:860px){.settings-grid{grid-template-columns:1fr}textarea.settings-json{min-height:420px}}
   </style>
 </head>
-<body data-page="admin-site-settings" data-build189="editable-site-settings">
+<body data-page="admin-site-settings" data-build189="editable-site-settings" data-build190="editable-site-settings-live-rendering" data-build191="admin-auth-editable-settings-hardening" data-build192="structured-editors-history-restore" data-build193="field-validation-template-token-drawer" data-build194="diff-preview-permissions" data-build195="schema-history-template-export-previews" data-build199="friendly-site-setting-domain-editors">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers Admin</strong></a>
@@ -27,9 +27,9 @@
   <main class="container">
     <section class="section">
       <div class="panel">
-        <div class="badge">Build 189</div>
+        <div class="badge">Build 199</div>
         <h1>Editable site settings</h1>
-        <p class="kicker">Business identity, policies, templates, hours, navigation, dropdowns, analytics labels, media requirements, and landing-page fallback content should be editable data instead of hard-coded JavaScript. This screen edits the JSON payloads stored in <code>app_management_settings</code>; bundled JSON remains the fallback.</p>
+        <p class="kicker">Business identity, policies, templates, hours, navigation, dropdowns, analytics labels, media requirements, and landing-page fallback content should be editable data instead of hard-coded JavaScript. This screen edits JSON payloads stored in <code>app_management_settings</code>; bundled JSON remains the fallback. Build 190 compatibility remains active. Build 194 adds visual DB-versus-fallback diffs, public-use previews, role/domain guidance, SEO copy-length warnings, and safer route-copy parity. Build 195 adds field-level schema markers, selected-history diffs, test template previews, link scans, sitemap/robots and structured-data previews, audit export, fallback reports, and media-requirement diffs while preserving bundled JSON fallbacks. Build 199 converts the remaining routine JSON-heavy domains into friendly row/card editors for navigation/footer links, analytics events, media requirements, holiday closures, and landing-page content while keeping raw JSON collapsed as an emergency recovery view. Build 199 converts the remaining routine JSON-heavy domains into friendly row/card editors for navigation/footer links, analytics events, media requirements, holiday closures, and landing-page content while keeping raw JSON collapsed as an emergency recovery view.</p>
         <div data-admin-menu-mount></div>
       </div>
     </section>
@@ -41,14 +41,33 @@
       <section class="panel">
         <h2 id="settingTitle" style="margin-top:0">Select a setting</h2>
         <p id="settingMeta" class="muted"></p>
-        <textarea id="settingJson" class="settings-json" spellcheck="false" placeholder="Select a setting to edit JSON."></textarea>
+        <details class="history-row" data-build199="advanced-json-fallback"><summary>Advanced JSON fallback / emergency repair</summary><p class="muted">Routine edits should use the friendly editor below. Open this only for careful repair, copy/paste recovery, or developer-level fallback sync.</p><textarea id="settingJson" class="settings-json" spellcheck="false" placeholder="Select a setting to view or repair JSON."></textarea></details>
+        <div id="structuredEditor" class="status" hidden></div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
           <button id="formatBtn" class="btn ghost" type="button">Format JSON</button>
+          <button id="validateBtn" class="btn ghost" type="button">Validate</button>
+          <button id="syncBtn" class="btn ghost" type="button">Sync bundled fallback</button>
+          <button id="forceSyncBtn" class="btn ghost" type="button" data-build193="force-sync-confirmation">Force sync fallback</button>
+          <button id="historyBtn" class="btn ghost" type="button">Load history</button>
+          <button id="dependencyBtn" class="btn ghost" type="button">Dependency map</button>
+          <button id="compareBtn" class="btn ghost" type="button" data-build194="settings-json-diff">Compare fallback</button>
+          <button id="previewBtn" class="btn ghost" type="button" data-build194="domain-preview-pane">Preview usage</button>
+          <button id="seoCheckBtn" class="btn ghost" type="button" data-build194="seo-length-warning">SEO length check</button>
+          <button id="fieldMarkersBtn" class="btn ghost" type="button" data-build195="field-schema-markers">Field markers</button>
+          <button id="templatePreviewBtn" class="btn ghost" type="button" data-build195="template-preview">Template preview</button>
+          <button id="templateTestBtn" class="btn ghost" type="button" data-build195="template-test-send">Test template</button>
+          <button id="linkScanBtn" class="btn ghost" type="button" data-build195="link-scan">Link scan</button>
+          <button id="sitemapPreviewBtn" class="btn ghost" type="button" data-build195="sitemap-robots-preview">Sitemap/robots</button>
+          <button id="schemaPreviewBtn" class="btn ghost" type="button" data-build195="structured-data-preview">Schema preview</button>
+          <button id="auditExportBtn" class="btn ghost" type="button" data-build195="audit-export">Audit export</button>
+          <button id="fallbackReportBtn" class="btn ghost" type="button" data-build195="fallback-report">Fallback report</button>
+          <button id="mediaDiffBtn" class="btn ghost" type="button" data-build195="media-requirement-diff">Media diff</button>
           <button id="saveBtn" class="btn primary" type="button">Save setting</button>
           <a class="btn ghost" href="/api/site_settings_public" target="_blank" rel="noopener">Public settings API</a>
           <a class="btn ghost" href="/api/admin/editable_content_audit" target="_blank" rel="noopener">Hard-coding audit</a>
         </div>
         <div id="status" class="status" hidden></div>
+        <div id="diagnostics" class="status" hidden></div>
       </section>
     </section>
   </main>
@@ -56,21 +75,30 @@
   <script src="/assets/admin-auth.js"></script>
   <script src="/assets/admin-menu.js"></script>
   <script>
-    const state = { settings: {}, currentKey: "" };
+    const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");
     const titleEl = document.getElementById("settingTitle");
     const metaEl = document.getElementById("settingMeta");
     const jsonEl = document.getElementById("settingJson");
     const statusEl = document.getElementById("status");
 
-    window.AdminAuth?.guardPage({ pageKey: "admin-site-settings" }).then(() => {
-      window.AdminMenu?.render({ currentPage: "admin-site-settings", mount: document.querySelector("[data-admin-menu-mount]") });
-      loadSettings();
-    });
+    (async function initAdminSiteSettings(){
+      try {
+        const guard = window.AdminAuth?.guardPage
+          ? await window.AdminAuth.guardPage({ pageKey: "admin-site-settings" })
+          : await window.AdminAuth.requireAuth({ pageKey: "admin-site-settings" });
+        if (!guard || guard.ok !== true) return;
+        window.AdminMenu?.render({ currentPage: "admin-site-settings", mount: document.querySelector("[data-admin-menu-mount]") });
+        await loadSettings();
+        await loadDiagnostics();
+      } catch (error) {
+        showStatus(error.message || "Could not initialize editable settings.", "error");
+      }
+    })();
 
     async function loadSettings() {
       try {
-        const res = await window.AdminAuth.fetchWithAuth("/api/admin/editable_site_settings");
+        const res = await adminFetch("/api/admin/editable_site_settings");
         const data = await res.json();
         if (!data.ok) throw new Error(data.error || "Could not load settings.");
         state.settings = data.settings || {};
@@ -91,9 +119,10 @@
       state.currentKey = key;
       const item = state.settings[key] || {};
       titleEl.textContent = labelFor(key);
-      metaEl.textContent = `Key: ${key} · Source: ${item.source_status || "unknown"}${item.updated_at ? ` · Updated: ${item.updated_at}` : ""}`;
+      metaEl.textContent = `Key: ${key} · Source: ${item.source_status || "unknown"}${item.updated_at ? ` · Updated: ${item.updated_at}` : ""} · Permission: ${permissionFor(key).label}`;
       jsonEl.value = JSON.stringify(item.value || {}, null, 2);
       listEl.querySelectorAll("button[data-key]").forEach((button) => button.setAttribute("aria-current", button.dataset.key === key ? "true" : "false"));
+      renderStructuredEditor(key, item.value || {});
     }
 
     document.getElementById("formatBtn").addEventListener("click", () => {
@@ -101,10 +130,55 @@
       catch (error) { showStatus(error.message || "Invalid JSON.", "error"); }
     });
 
+    document.getElementById("validateBtn").addEventListener("click", async () => {
+      try {
+        const value = JSON.parse(jsonEl.value || "{}");
+        const res = await adminFetch("/api/admin/editable_site_settings_validate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: state.currentKey, value }) });
+        const data = await res.json();
+        const validation = data.validation || {};
+        if (!validation.ok) throw new Error((validation.errors || []).join(" ") || "Validation failed.");
+        const warnings = Array.isArray(validation.warnings) ? validation.warnings : [];
+        state.fieldResults = Array.isArray(validation.field_results) ? validation.field_results : [];
+        renderFieldValidationMarkers(validation);
+        showStatus(warnings.length ? `Validation passed for ${state.currentKey} with warnings: ${warnings.join(" ")}` : `Validation passed for ${state.currentKey}.`, warnings.length ? "" : "ok");
+      } catch (error) { showStatus(error.message || "Validation failed.", "error"); }
+    });
+
+    document.getElementById("syncBtn").addEventListener("click", async () => {
+      if (!state.currentKey) return;
+      if (!confirm(`Sync bundled fallback for ${state.currentKey}? This will not overwrite an existing DB setting unless the API is called with force=true.`)) return;
+      try {
+        const res = await adminFetch("/api/admin/editable_site_settings_sync", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: state.currentKey, force: false }) });
+        const data = await res.json();
+        showStatus(JSON.stringify(data.results || data, null, 2), data.ok ? "ok" : "error");
+        await loadSettings();
+        selectSetting(state.currentKey);
+        loadDiagnostics();
+      } catch (error) { showStatus(error.message || "Sync failed.", "error"); }
+    });
+
+    document.getElementById("forceSyncBtn").addEventListener("click", async () => {
+      if (!state.currentKey) return;
+      if (!confirm(`Force sync bundled fallback for ${state.currentKey}? This overwrites the current DB-backed value after the API records history.`)) return;
+      try {
+        const res = await adminFetch("/api/admin/editable_site_settings_sync", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: state.currentKey, force: true }) });
+        const data = await res.json();
+        showStatus(JSON.stringify(data.results || data, null, 2), data.ok ? "ok" : "error");
+        await loadSettings();
+        selectSetting(state.currentKey);
+        loadDiagnostics();
+      } catch (error) { showStatus(error.message || "Force sync failed.", "error"); }
+    });
+
+    document.getElementById("historyBtn").addEventListener("click", async () => {
+      try { await renderHistoryRestoreList(); }
+      catch (error) { showStatus(error.message || "Could not load history.", "error"); }
+    });
+
     document.getElementById("saveBtn").addEventListener("click", async () => {
       try {
         const value = JSON.parse(jsonEl.value || "{}");
-        const res = await window.AdminAuth.fetchWithAuth("/api/admin/editable_site_settings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: state.currentKey, value }) });
+        const res = await adminFetch("/api/admin/editable_site_settings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: state.currentKey, value }) });
         const data = await res.json();
         if (!data.ok) throw new Error(data.error || "Save failed.");
         showStatus(`Saved ${state.currentKey}.`, "ok");
@@ -113,9 +187,689 @@
       } catch (error) { showStatus(error.message || "Could not save setting.", "error"); }
     });
 
+    async function loadDiagnostics() {
+      const box = document.getElementById("diagnostics");
+      if (!box) return;
+      try {
+        const res = await adminFetch("/api/admin/editable_site_settings_status");
+        const data = await res.json();
+        const summary = data.summary || {};
+        box.hidden = false;
+        box.dataset.state = "ok";
+        box.textContent = `Diagnostics: ${summary.db_backed || 0}/${summary.total || 0} settings DB-backed; ${summary.fallback_backed || 0} using bundled fallback.`;
+      } catch { box.hidden = true; }
+    }
+
+    document.getElementById("dependencyBtn").addEventListener("click", async () => {
+      try {
+        const res = await adminFetch(`/api/admin/editable_setting_dependency_map?key=${encodeURIComponent(state.currentKey)}`);
+        const data = await res.json();
+        showStatus(JSON.stringify(data.dependencies || data, null, 2), data.ok ? "ok" : "error");
+      } catch (error) { showStatus(error.message || "Could not load dependency map.", "error"); }
+    });
+
+
+    document.getElementById("compareBtn").addEventListener("click", async () => {
+      try { await renderFallbackDiff(); }
+      catch (error) { showStatus(error.message || "Could not compare setting.", "error"); }
+    });
+
+    document.getElementById("previewBtn").addEventListener("click", () => {
+      try { renderDomainPreview(); }
+      catch (error) { showStatus(error.message || "Could not render preview.", "error"); }
+    });
+
+    document.getElementById("seoCheckBtn").addEventListener("click", () => {
+      try { renderSeoLengthWarnings(); }
+      catch (error) { showStatus(error.message || "Could not run SEO length check.", "error"); }
+    });
+
+    document.getElementById("fieldMarkersBtn").addEventListener("click", async () => {
+      try { await runFieldMarkerValidation(); }
+      catch (error) { showStatus(error.message || "Could not render field markers.", "error"); }
+    });
+
+    document.getElementById("templatePreviewBtn").addEventListener("click", async () => {
+      try { await renderTemplatePreview(); }
+      catch (error) { showStatus(error.message || "Could not preview template.", "error"); }
+    });
+
+    document.getElementById("templateTestBtn").addEventListener("click", async () => {
+      try { await renderTemplateTestSend(); }
+      catch (error) { showStatus(error.message || "Could not test template.", "error"); }
+    });
+
+    document.getElementById("linkScanBtn").addEventListener("click", async () => {
+      try { await renderLinkScan(); }
+      catch (error) { showStatus(error.message || "Could not scan editable links.", "error"); }
+    });
+
+    document.getElementById("sitemapPreviewBtn").addEventListener("click", async () => {
+      try { await renderSitemapPreview(); }
+      catch (error) { showStatus(error.message || "Could not preview sitemap/robots.", "error"); }
+    });
+
+    document.getElementById("schemaPreviewBtn").addEventListener("click", async () => {
+      try { await renderStructuredDataPreview(); }
+      catch (error) { showStatus(error.message || "Could not preview structured data.", "error"); }
+    });
+
+    document.getElementById("auditExportBtn").addEventListener("click", async () => {
+      try { await renderAuditExport(); }
+      catch (error) { showStatus(error.message || "Could not export audit summary.", "error"); }
+    });
+
+    document.getElementById("fallbackReportBtn").addEventListener("click", async () => {
+      try { await renderFallbackReport(); }
+      catch (error) { showStatus(error.message || "Could not load fallback report.", "error"); }
+    });
+
+    document.getElementById("mediaDiffBtn").addEventListener("click", async () => {
+      try { await renderMediaRequirementsDiff(); }
+      catch (error) { showStatus(error.message || "Could not compare media requirements.", "error"); }
+    });
+
+    async function adminFetch(url, options = {}) {
+      if (window.AdminAuth?.fetchWithAuth) return window.AdminAuth.fetchWithAuth(url, options);
+      return fetch(url, { credentials: "include", cache: "no-store", ...options, headers: { "Content-Type": "application/json", ...(options.headers || {}) } });
+    }
+
+    function renderStructuredEditor(key, value) {
+      const box = document.getElementById("structuredEditor");
+      if (!box) return;
+      const config = structuredEditorConfig(key, value || {});
+      if (!config) { box.hidden = true; box.textContent = ""; return; }
+      box.hidden = false;
+      box.dataset.state = "";
+      const fields = (config.fields || []).map(fieldMarkup).join("");
+      const friendly = friendlyDomainEditor(key, value || {});
+      const helper = renderStructuredHelper(key);
+      const permission = permissionFor(key);
+      box.innerHTML = `<strong>Friendly editor: ${escapeHtml(labelFor(key))}</strong><p class="muted">${escapeHtml(config.description || "Edit common fields here, then apply them back into the advanced JSON before saving.")}</p><p class="muted"><strong>Save guidance:</strong> ${escapeHtml(permission.label)} — ${escapeHtml(permission.note)}</p>${helper}<div id="fieldMarkerList" class="history-row" hidden></div><div class="structured-grid">${fields}</div>${friendly}<button class="btn ghost" type="button" data-apply-structured style="margin-top:10px">Apply friendly editor changes to JSON</button>`;
+      box.querySelector("[data-apply-structured]").addEventListener("click", applyStructuredFields);
+      box.querySelectorAll("[data-add-friendly-row]").forEach((button) => button.addEventListener("click", () => addFriendlyRow(button.dataset.addFriendlyRow)));
+      box.querySelectorAll("[data-remove-friendly-row]").forEach((button) => button.addEventListener("click", () => button.closest(".friendly-row")?.remove()));
+    }
+
+    function structuredEditorConfig(key, value) {
+      const templates = (value && value.templates) || {};
+      const business = value.business || value;
+      const contact = business.contact || {};
+      const policies = value.policies || {};
+      const hours = value.hours || {};
+      const fallback = (path, fallbackValue = "") => valueAtPath(value, path, fallbackValue);
+      const jsonField = (label, path, val) => ({ label, path, type: "json", value: val });
+      const linesField = (label, path, val) => ({ label, path, type: "lines", value: Array.isArray(val) ? val.join("\n") : "" });
+      switch (key) {
+        case "business_profile":
+          return { description:"Business identity, contact, social links, service-area wording, and schema values used across the public site.", fields:[
+            { label:"Business name", path:"business.name", value:business.name || "" },
+            { label:"Legal name", path:"business.legal_name", value:business.legal_name || "" },
+            { label:"Public phone", path:"business.contact.public_phone", value:contact.public_phone || contact.phone || "" },
+            { label:"Public email", path:"business.contact.public_email", value:contact.public_email || contact.email || "" },
+            { label:"Service area", path:"business.service_area", value:business.service_area || "" },
+            { label:"Primary location", path:"business.primary_location", value:business.primary_location || "" },
+            { label:"Website", path:"business.website", value:business.website || "" },
+            jsonField("Social links JSON", "business.social_links", business.social_links || [])
+          ]};
+        case "site_policies":
+          return { description:"Policy copy shown on booking, quote-payment, customer, and confirmation pages. Keep it customer friendly and local.", fields:Object.keys(policies).length ? Object.keys(policies).map((name)=>({ label:labelFor(name), path:`policies.${name}`, value:policies[name] || "", type:"textarea" })) : [
+            { label:"Deposit", path:"policies.deposit", value:"", type:"textarea" },
+            { label:"Cancellation", path:"policies.cancellation", value:"", type:"textarea" },
+            { label:"Refund", path:"policies.refund", value:"", type:"textarea" },
+            { label:"Driveway access", path:"policies.driveway_access", value:"", type:"textarea" },
+            { label:"Water / power", path:"policies.water_power", value:"", type:"textarea" },
+            { label:"Media privacy", path:"policies.media_privacy", value:"", type:"textarea" }
+          ]};
+        case "document_templates": {
+          const keys = Array.from(new Set(["quote_proposal","deposit_receipt","refund_notice","invoice","appointment_confirmation"].concat(Object.keys(templates))));
+          return { description:"Email, invoice, and appointment-confirmation template subjects/bodies. Tokens like {{customer_name}}, {{service_date}}, {{package_name}}, {{invoice_url}}, and {{confirmation_url}} are supported.", fields:keys.flatMap((name)=>[
+            { label:`${labelFor(name)} subject`, path:`templates.${name}.subject`, value:(templates[name] && templates[name].subject) || "" },
+            { label:`${labelFor(name)} body`, path:`templates.${name}.body`, value:(templates[name] && templates[name].body) || "", type:"textarea" }
+          ])};
+        }
+        case "business_hours_holidays":
+          return { description:"Public and admin booking conflict checks use these hours and holiday closures before a slot can be selected. Holiday rows below replace the old raw JSON closure list.", fields:[
+            { label:"Timezone", path:"timezone", value:value.timezone || "America/Toronto" },
+            ...["monday","tuesday","wednesday","thursday","friday","saturday","sunday"].map(day => ({ label:labelFor(day), path:`hours.${day}`, value:hours[day] || "" })),
+            { label:"Booking note", path:"notes", value:value.notes || "", type:"textarea" },
+            { label:"Slot conflict policy", path:"slot_conflict_policy", value:value.slot_conflict_policy || "", type:"textarea" }
+          ]};
+        case "navigation_footer":
+          return { description:"Navigation and footer links used by public chrome rendering. Use the friendly link/group rows below instead of editing arrays by hand.", fields:[
+            { label:"Version", path:"version", value:value.version || "" },
+            { label:"Footer note", path:"footer_note", value:value.footer_note || "", type:"textarea" }
+          ]};
+        case "option_libraries":
+          return { description:"Shared dropdown libraries used by Admin App editors, booking screens, and future DB-backed option pickers.", fields:[
+            linesField("Communication channels", "communication_channels", value.communication_channels || []),
+            linesField("Payment methods", "payment_methods", value.payment_methods || []),
+            linesField("Booking statuses", "booking_statuses", value.booking_statuses || []),
+            linesField("Job statuses", "job_statuses", value.job_statuses || []),
+            linesField("Add-on categories", "addon_categories", value.addon_categories || []),
+            linesField("Inventory categories", "inventory_categories", value.inventory_categories || []),
+            linesField("Service zones", "service_zones", value.service_zones || []),
+            linesField("Finance entry types", "finance_entry_types", value.finance_entry_types || [])
+          ]};
+        case "analytics_event_registry":
+          return { description:"Known analytics events. Unknown names now show warnings in Admin Analytics so typos do not silently pollute reports. Use the event rows below for routine additions and cleanup.", fields:[
+            { label:"Version", path:"version", value:value.version || "" },
+            { label:"Updated at", path:"updated_at", value:value.updated_at || "" }
+          ]};
+        case "media_requirements":
+          return { description:"Required image/video assets, dimensions, R2 keys, and media health expectations. Media Health can sync/restore this DB setting directly; routine asset rows are now editable below.", fields:[
+            { label:"Version", path:"version", value:value.version || value.build || "" },
+            { label:"Purpose", path:"purpose", value:value.purpose || "", type:"textarea" }
+          ]};
+        case "landing_pages_content":
+          return { description:"Landing-page hero, intro, trust, service-area, and SEO content blocks used by public pages. The most important SEO and hero fields are editable as cards below; advanced arrays stay preserved in JSON.", fields:[
+            { label:"Version", path:"version", value:value.version || "" },
+            { label:"Updated at", path:"updated_at", value:value.updated_at || "" },
+            { label:"Notes", path:"notes", value:value.notes || "", type:"textarea" }
+          ]};
+        default:
+          return { description:"Generic top-level JSON helper for this editable domain.", fields:Object.keys(value || {}).slice(0, 12).map((name)=> (typeof value[name] === "object" ? jsonField(labelFor(name), name, value[name]) : { label:labelFor(name), path:name, value:value[name] || "" })) };
+      }
+    }
+
+    function renderStructuredHelper(key) {
+      const permission = permissionFor(key);
+      const permissionNote = `<details class="history-row" data-build194="domain-permission-note"><summary>Domain permission</summary><p class="muted">${escapeHtml(permission.label)} — ${escapeHtml(permission.note)}</p></details>`;
+      if (key === "document_templates") {
+        const tokens = ["customer_name", "service_date", "slot_label", "package_name", "estimated_total", "balance_due", "invoice_url", "confirmation_url", "quote_url", "refund_amount", "business_name"];
+        return permissionNote + `<details class="history-row" data-build193="template-token-reference"><summary>Template token reference</summary><p class="muted">Use double braces around these tokens in subjects/bodies. Unknown tokens now show validation warnings before save.</p><code>${tokens.map((token) => `{{${token}}}`).join("</code> <code>")}</code></details>`;
+      }
+      if (key === "navigation_footer") {
+        return permissionNote + `<details class="history-row" data-build193="navigation-link-validation"><summary>Navigation link validation</summary><p class="muted">Validation now warns when editable navigation/footer links are missing href values or use unsupported link formats.</p></details>`;
+      }
+      if (key === "landing_pages_content") {
+        return permissionNote + `<details class="history-row" data-build194="seo-copy-length-guidance"><summary>Local SEO copy checks</summary><p class="muted">Use the SEO length check before saving town/service landing copy so title, meta description, and one-H1 wording stay clean.</p></details>`;
+      }
+      return permissionNote;
+    }
+
+    function fieldMarkup(field) {
+      const type = field.type || "text";
+      const value = type === "json" ? JSON.stringify(field.value ?? null, null, 2) : (field.value ?? "");
+      if (type === "textarea" || type === "json" || type === "lines") {
+        const attr = type === "json" ? ' data-structured-json="true"' : (type === "lines" ? ' data-structured-lines="true"' : "");
+        return `<label>${escapeHtml(field.label)}<textarea data-structured-field="${escapeHtml(field.path)}"${attr}>${escapeHtml(value)}</textarea></label>`;
+      }
+      return `<label>${escapeHtml(field.label)}<input data-structured-field="${escapeHtml(field.path)}" value="${escapeHtml(value)}"></label>`;
+    }
+
+    function applyStructuredFields() {
+      const box = document.getElementById("structuredEditor");
+      const payload = JSON.parse(jsonEl.value || "{}");
+      box.querySelectorAll("[data-structured-field]").forEach((input) => {
+        let value = input.value;
+        if (input.dataset.structuredJson === "true") {
+          value = JSON.parse(value || "null");
+        } else if (input.dataset.structuredLines === "true") {
+          value = String(value || "").split(/\r?\n/).map((line)=>line.trim()).filter(Boolean);
+        }
+        setPath(payload, input.dataset.structuredField, value);
+      });
+      applyFriendlyDomainRows(state.currentKey, payload, box);
+      jsonEl.value = JSON.stringify(payload, null, 2);
+      showStatus("Friendly editor fields were applied to the advanced JSON. Review if needed, then Save setting.", "ok");
+    }
+
+    async function renderHistoryRestoreList() {
+      if (!state.currentKey) throw new Error("Select an editable setting first.");
+      const res = await adminFetch(`/api/admin/editable_site_settings_history?key=${encodeURIComponent(state.currentKey)}`);
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "Could not load history.");
+      const rows = Array.isArray(data.history) ? data.history : [];
+      if (!rows.length) { showStatus("No history rows found for this editable setting yet.", "ok"); return; }
+      const html = rows.slice(0, 12).map((row, index) => {
+        const id = row.history_id || row.id || "";
+        const when = row.created_at || row.updated_at || row.restored_at || "unknown date";
+        const reason = row.reason || row.change_reason || row.source || "saved copy";
+        const value = row.value || row.setting_value || row.payload || {};
+        return `<div class="history-row"><strong>Version ${index + 1}</strong><div class="muted">${escapeHtml(when)} · ${escapeHtml(reason)}</div><button class="btn ghost small" type="button" data-diff-history="${escapeHtml(id)}">Diff vs editor</button> <button class="btn ghost small" type="button" data-restore-history="${escapeHtml(id)}">Restore this version</button><details><summary>Preview JSON</summary><pre>${escapeHtml(JSON.stringify(value, null, 2))}</pre></details></div>`;
+      }).join("");
+      showStatusHtml(`<strong>Restore from history: ${escapeHtml(labelFor(state.currentKey))}</strong>${html}`, "ok");
+      statusEl.querySelectorAll("[data-diff-history]").forEach((button) => button.addEventListener("click", async () => {
+        const historyId = button.getAttribute("data-diff-history");
+        if (!historyId) return;
+        await renderSelectedHistoryDiff(historyId);
+      }));
+      statusEl.querySelectorAll("[data-restore-history]").forEach((button) => button.addEventListener("click", async () => {
+        const historyId = button.getAttribute("data-restore-history");
+        if (!historyId) return;
+        if (!confirm(`Restore ${state.currentKey} from this history row? Current JSON should already be saved in history by the API.`)) return;
+        const restoreRes = await adminFetch("/api/admin/editable_site_settings_restore", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ key: state.currentKey, history_id: historyId }) });
+        const restoreData = await restoreRes.json().catch(() => null);
+        if (!restoreRes.ok || !restoreData?.ok) throw new Error(restoreData?.error || "Restore failed.");
+        showStatus(`Restored ${state.currentKey} from history.`, "ok");
+        await loadSettings();
+        selectSetting(state.currentKey);
+        loadDiagnostics();
+      }));
+    }
+
+
+
+
+    async function runFieldMarkerValidation() {
+      const value = JSON.parse(jsonEl.value || "{}");
+      const res = await adminFetch("/api/admin/editable_site_settings_validate", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ key: state.currentKey, value }) });
+      const data = await res.json().catch(() => null);
+      const validation = data?.validation || {};
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "Validation failed.");
+      renderFieldValidationMarkers(validation);
+    }
+
+    function renderFieldValidationMarkers(validation) {
+      const rows = Array.isArray(validation?.field_results) ? validation.field_results : [];
+      state.fieldResults = rows;
+      const marker = document.getElementById("fieldMarkerList");
+      if (!marker) {
+        const html = renderFieldMarkerHtml(rows);
+        showStatusHtml(`<strong>Field-level validation markers</strong>${html}`, validation?.ok ? "ok" : "error");
+        return;
+      }
+      marker.hidden = false;
+      marker.innerHTML = `<strong>Field-level schema markers</strong>${renderFieldMarkerHtml(rows)}`;
+      if (!rows.length) showStatus("No field-level schema rules were returned for this domain.", "ok");
+    }
+
+    function renderFieldMarkerHtml(rows) {
+      if (!rows.length) return `<p class="muted">No field-level schema rules were returned for this domain.</p>`;
+      return rows.slice(0, 80).map((row) => {
+        const icon = row.ok ? "✓" : (row.severity === "error" ? "⚠️" : "•");
+        return `<div class="muted">${icon} <strong>${escapeHtml(row.path)}</strong> · ${escapeHtml(row.type || "value")} · ${row.required ? "required" : "optional"} · ${escapeHtml(row.value_preview || "")}</div>`;
+      }).join("");
+    }
+
+    async function renderSelectedHistoryDiff(historyId) {
+      const current = JSON.parse(jsonEl.value || "{}");
+      const res = await adminFetch("/api/admin/editable_site_settings_history_diff", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ key: state.currentKey, history_id: historyId, current }) });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "Could not diff history row.");
+      const diff = data.diff || {};
+      const rows = [`<div class="history-row"><strong>History diff summary</strong><div class="muted">${Number(diff.changed_count || 0)} changed · ${Number(diff.added_count || 0)} added in history · ${Number(diff.removed_count || 0)} missing from history · ${Number(diff.same_count || 0)} unchanged</div></div>`];
+      rows.push(...(diff.changed || []).slice(0, 40).map((row) => `<div class="history-row"><strong>${escapeHtml(row.path)}</strong><div class="muted">Current/editor: ${escapeHtml(compactValue(row.current))}</div><div class="muted">History: ${escapeHtml(compactValue(row.history))}</div></div>`));
+      showStatusHtml(`<strong>Selected history row versus current editor JSON</strong><p class="muted">Use this before restoring a saved setting version.</p>${rows.join("")}`, "ok");
+    }
+
+    async function renderTemplatePreview() {
+      const value = JSON.parse(jsonEl.value || "{}");
+      const res = await adminFetch("/api/admin/document_template_preview", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ key: state.currentKey, value }) });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "Template preview failed.");
+      const rendered = data.rendered || {};
+      const html = Object.entries(rendered).map(([key, item]) => `<div class="history-row"><strong>${escapeHtml(key)}</strong><div class="muted">Subject: ${escapeHtml(item.subject)}</div><p>${escapeHtml(item.body)}</p>${(item.unknown_tokens||[]).length ? `<div class="muted">Unknown tokens: ${escapeHtml(item.unknown_tokens.join(", "))}</div>` : ""}</div>`).join("") || `<p class="muted">No templates found in this domain.</p>`;
+      showStatusHtml(`<strong>Template token preview with sample data</strong>${html}`, "ok");
+    }
+
+    async function renderTemplateTestSend() {
+      const value = JSON.parse(jsonEl.value || "{}");
+      const templateKey = prompt("Template key to test", "appointment_confirmation") || "appointment_confirmation";
+      const res = await adminFetch("/api/admin/document_template_send_test", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ key: state.currentKey, value, template_key: templateKey }) });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "Template test failed.");
+      showStatusHtml(`<strong>Template test render (dry run)</strong><div class="history-row"><strong>${escapeHtml(data.template_key)}</strong><div class="muted">Mode: ${escapeHtml(data.mode)}</div><p><strong>${escapeHtml(data.rendered?.subject || "")}</strong></p><p>${escapeHtml(data.rendered?.body || "")}</p><details><summary>Queue-ready preview</summary><pre>${escapeHtml(JSON.stringify(data.queue_preview || {}, null, 2))}</pre></details></div>`, "ok");
+    }
+
+    async function renderLinkScan() {
+      const res = await adminFetch("/api/admin/editable_navigation_link_scan");
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "Link scan failed.");
+      const scan = data.scan || {};
+      const html = (scan.links || []).map((row) => `<div class="history-row"><strong>${row.ok ? "✓" : "⚠️"} ${escapeHtml(row.label || row.href || "link")}</strong><div class="muted">${escapeHtml(row.href || "missing href")}</div>${(row.issues||[]).length ? `<div>${escapeHtml(row.issues.join(", "))}</div>` : ""}</div>`).join("");
+      showStatusHtml(`<strong>Editable navigation/footer link scan</strong><p class="muted">${Number(scan.issue_count || 0)} issues across ${Number(scan.total_links || 0)} links.</p>${html}`, scan.issue_count ? "" : "ok");
+    }
+
+    async function renderSitemapPreview() {
+      const res = await adminFetch("/api/admin/sitemap_robots_preview");
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "Sitemap preview failed.");
+      showStatusHtml(`<strong>Sitemap/robots preview</strong><p class="muted">${Number(data.url_count || 0)} candidate public URLs.</p><details open><summary>Robots preview</summary><pre>${escapeHtml(data.robots_preview || "")}</pre></details><details><summary>Sitemap preview</summary><pre>${escapeHtml(data.sitemap_preview || "")}</pre></details>`, "ok");
+    }
+
+    async function renderStructuredDataPreview() {
+      const res = await adminFetch("/api/admin/structured_data_preview");
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "Structured-data preview failed.");
+      showStatusHtml(`<strong>Structured-data preview</strong>${(data.warnings||[]).map((w)=>`<div class="history-row">⚠️ ${escapeHtml(w)}</div>`).join("")}<details open><summary>LocalBusiness JSON-LD</summary><pre>${escapeHtml(JSON.stringify(data.local_business || {}, null, 2))}</pre></details><details><summary>Service JSON-LD previews</summary><pre>${escapeHtml(JSON.stringify(data.service_pages || [], null, 2))}</pre></details>`, (data.warnings||[]).length ? "" : "ok");
+    }
+
+    async function renderAuditExport() {
+      const res = await adminFetch("/api/admin/editable_settings_audit_export");
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "Audit export failed.");
+      showStatusHtml(`<strong>Editable-setting audit export</strong><p class="muted">${Number(data.row_count || 0)} recent history rows. CSV endpoint: <code>/api/admin/editable_settings_audit_export?format=csv</code></p><pre>${escapeHtml(JSON.stringify((data.rows || []).slice(0, 25), null, 2))}</pre>`, "ok");
+    }
+
+    async function renderFallbackReport() {
+      const res = await adminFetch("/api/admin/editable_settings_fallback_report");
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "Fallback report failed.");
+      const rows = data.rows || [];
+      showStatusHtml(`<strong>Fallback-backed settings report</strong><p class="muted">${data.dashboard_message || ""}</p>${rows.map((row)=>`<div class="history-row"><strong>${escapeHtml(labelFor(row.key))}</strong><div class="muted">${escapeHtml(row.source_status)}${row.warning ? ` · ${escapeHtml(row.warning)}` : ""}</div></div>`).join("")}`, data.summary?.fallback_backed ? "" : "ok");
+    }
+
+    async function renderMediaRequirementsDiff() {
+      const value = JSON.parse(jsonEl.value || "{}");
+      const res = await adminFetch("/api/admin/media_requirements_compare", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ value: state.currentKey === "media_requirements" ? value : null }) });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "Media compare failed.");
+      const c = data.compare || {};
+      showStatusHtml(`<strong>Media requirements diff</strong><p class="muted">Current ${Number(c.current_count || 0)} · fallback ${Number(c.fallback_count || 0)} · changed ${Number(c.changed_count || 0)} · added ${Number(c.added_count || 0)} · removed ${Number(c.removed_count || 0)}</p><pre>${escapeHtml(JSON.stringify(c, null, 2))}</pre>`, (c.changed_count || c.added_count || c.removed_count) ? "" : "ok");
+    }
+
+    async function renderFallbackDiff() {
+      if (!state.currentKey) throw new Error("Select an editable setting first.");
+      const current = JSON.parse(jsonEl.value || "{}");
+      const res = await adminFetch("/api/admin/editable_site_settings_compare", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ key: state.currentKey, current }) });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) throw new Error(data?.error || "Could not compare DB and fallback JSON.");
+      const diff = data.diff || {};
+      const rows = [];
+      rows.push(`<div class="history-row"><strong>Summary</strong><div class="muted">${Number(diff.changed_count || 0)} changed · ${Number(diff.added_count || 0)} added · ${Number(diff.removed_count || 0)} missing from editor · ${Number(diff.same_count || 0)} unchanged</div></div>`);
+      rows.push(...(diff.changed || []).slice(0, 25).map((row) => `<div class="history-row"><strong>${escapeHtml(row.path)}</strong><div class="muted">Editor: ${escapeHtml(compactValue(row.current))}</div><div class="muted">Bundled: ${escapeHtml(compactValue(row.fallback))}</div></div>`));
+      rows.push(...(diff.added || []).slice(0, 15).map((row) => `<div class="history-row"><strong>Editor-only: ${escapeHtml(row.path)}</strong><div class="muted">${escapeHtml(compactValue(row.current))}</div></div>`));
+      rows.push(...(diff.removed || []).slice(0, 15).map((row) => `<div class="history-row"><strong>Missing from editor: ${escapeHtml(row.path)}</strong><div class="muted">Bundled: ${escapeHtml(compactValue(row.fallback))}</div></div>`));
+      showStatusHtml(`<strong>DB/editor JSON versus bundled fallback</strong><p class="muted">Review this before force-syncing a fallback or restoring history.</p>${rows.join("")}`, "ok");
+    }
+
+    function renderDomainPreview() {
+      if (!state.currentKey) throw new Error("Select an editable setting first.");
+      const value = JSON.parse(jsonEl.value || "{}");
+      const preview = domainPreview(state.currentKey, value);
+      showStatusHtml(`<strong>Preview usage: ${escapeHtml(labelFor(state.currentKey))}</strong><p class="muted">${escapeHtml(preview.note)}</p>${preview.html}`, "ok");
+    }
+
+    function renderSeoLengthWarnings() {
+      const value = JSON.parse(jsonEl.value || "{}");
+      const rows = collectSeoTextRows(state.currentKey, value);
+      if (!rows.length) { showStatus("No title/meta/H1-like fields found in this setting.", "ok"); return; }
+      const html = rows.map((row) => {
+        const len = String(row.value || "").length;
+        const state = len > row.max ? "⚠️" : "✓";
+        return `<div class="history-row"><strong>${state} ${escapeHtml(row.path)}</strong><div class="muted">${len}/${row.max} characters</div><div>${escapeHtml(row.value)}</div></div>`;
+      }).join("");
+      showStatusHtml(`<strong>SEO copy-length warnings</strong><p class="muted">Titles should stay concise and every public page should keep one clear H1.</p>${html}`, rows.some((row) => String(row.value || "").length > row.max) ? "" : "ok");
+    }
+
+    function domainPreview(key, value) {
+      const pages = {
+        business_profile: ["Public header/footer", "LocalBusiness schema", "Contact page", "Booking footer notes"],
+        site_policies: ["Booking wizard", "Quote payment", "FAQ/customer pages", "Confirmation pages"],
+        document_templates: ["Invoice", "Appointment confirmation", "Deposit receipt", "Refund notice", "Quote/proposal emails"],
+        business_hours_holidays: ["Public availability", "Admin booking creation", "Holiday closure warnings"],
+        navigation_footer: ["Public navigation", "Footer groups", "Mobile menu"],
+        option_libraries: ["Admin App", "Booking admin", "Catalog admin", "Finance/admin dropdowns"],
+        analytics_event_registry: ["Analytics warnings", "Rollup labels", "Event sanity checks"],
+        media_requirements: ["Media Health", "Upload quality checks", "Fallback diagnostics"],
+        landing_pages_content: ["Town/service landing pages", "Sitemap/local SEO copy", "Structured content blocks", "Editable hero/service/town/FAQ preview cards"]
+      };
+      const list = pages[key] || ["Admin-managed setting", "DB-first rendering", "Bundled fallback"];
+      const sample = Object.keys(value || {}).slice(0, 8).map((name) => `<span class="badge">${escapeHtml(labelFor(name))}</span>`).join(" ");
+      const landingPreview = key === "landing_pages_content" ? renderLandingPreviewCards(value) : "";
+      return { note: "Where this editable setting is expected to appear or influence the live app.", html: `<div class="history-row"><strong>Used by</strong><ul>${list.map((item)=>`<li>${escapeHtml(item)}</li>`).join("")}</ul>${sample ? `<div class="muted">Top-level fields: ${sample}</div>` : ""}</div>${landingPreview}` };
+    }
+
+
+
+    function friendlyDomainEditor(key, value) {
+      if (key === "business_hours_holidays") return renderHolidayClosureEditor(value);
+      if (key === "navigation_footer") return renderNavigationFooterEditor(value);
+      if (key === "analytics_event_registry") return renderAnalyticsRegistryEditor(value);
+      if (key === "media_requirements") return renderMediaRequirementsEditor(value);
+      if (key === "landing_pages_content") return renderLandingContentEditor(value);
+      return "";
+    }
+
+    function renderFriendlySection(kind, title, intro, rowsHtml, addLabel) {
+      return `<section class="friendly-section" data-friendly-section="${escapeHtml(kind)}"><div class="friendly-row-header"><div><strong>${escapeHtml(title)}</strong><p class="muted">${escapeHtml(intro)}</p></div><button class="btn ghost small" type="button" data-add-friendly-row="${escapeHtml(kind)}">${escapeHtml(addLabel || "Add row")}</button></div><div data-friendly-rows>${rowsHtml || ""}</div></section>`;
+    }
+
+    function renderHolidayClosureEditor(value) {
+      const rows = Array.isArray(value?.holiday_closures) ? value.holiday_closures : [];
+      return renderFriendlySection("holiday_closures", "Holiday closure rows", "Add closed dates or warning-only service dates without writing JSON.", rows.map((row) => friendlyRowTemplate("holiday_closures", row)).join(""), "Add closure");
+    }
+
+    function renderNavigationFooterEditor(value) {
+      const nav = Array.isArray(value?.navigation) ? value.navigation : [];
+      const footer = Array.isArray(value?.footer_links) ? value.footer_links : [];
+      const groups = Array.isArray(value?.footer_groups) ? value.footer_groups : Array.isArray(value?.footer) ? value.footer : [];
+      return [
+        renderFriendlySection("navigation", "Main navigation links", "These appear in the public header and mobile menu.", nav.map((row) => friendlyRowTemplate("navigation", row)).join(""), "Add nav link"),
+        renderFriendlySection("footer_links", "Footer quick links", "Flat footer link list used as a fallback or compact footer.", footer.map((row) => friendlyRowTemplate("footer_links", row)).join(""), "Add footer link"),
+        renderFriendlySection("footer_groups", "Footer groups", "Use one link per line as Label | /path. This keeps grouped footer editing out of raw JSON.", groups.map((row) => friendlyRowTemplate("footer_groups", row)).join(""), "Add footer group")
+      ].join("");
+    }
+
+    function renderAnalyticsRegistryEditor(value) {
+      const rows = Array.isArray(value?.events) ? value.events : [];
+      return renderFriendlySection("analytics_events", "Analytics event registry rows", "Add or clean known event names so unknown-event warnings stay useful.", rows.map((row) => friendlyRowTemplate("analytics_events", row)).join(""), "Add event");
+    }
+
+    function renderMediaRequirementsEditor(value) {
+      const rows = Array.isArray(value?.required_assets) ? value.required_assets : [];
+      return renderFriendlySection("media_assets", "Required media assets", "Edit labels, categories, R2 keys, and minimum dimensions without hand-editing JSON arrays.", rows.map((row) => friendlyRowTemplate("media_assets", row)).join(""), "Add media requirement");
+    }
+
+    function renderLandingContentEditor(value) {
+      const rows = landingPageRows(value);
+      return renderFriendlySection("landing_pages", "Landing-page SEO and hero cards", "Edit the most important public landing-page fields. Deeper process/equipment/FAQ arrays are preserved in advanced JSON until they receive dedicated screens.", rows.map((row) => friendlyRowTemplate("landing_pages", row)).join(""), "Add landing page");
+    }
+
+    function friendlyRowTemplate(kind, row = {}) {
+      const rid = `${kind}-${Math.random().toString(36).slice(2, 9)}`;
+      const remove = `<button class="btn ghost small" type="button" data-remove-friendly-row>Remove</button>`;
+      if (kind === "navigation" || kind === "footer_links") {
+        return `<div class="friendly-row" data-friendly-row="${escapeHtml(kind)}"><div class="friendly-row-header"><strong>${escapeHtml(row.label || "Link")}</strong>${remove}</div><div class="structured-grid"><label>Label<input data-friendly-field="label" value="${escapeHtml(row.label || "")}"></label><label>URL / path<input data-friendly-field="href" value="${escapeHtml(row.href || row.url || "")}"></label><label>Group / note<input data-friendly-field="group" value="${escapeHtml(row.group || row.note || "")}"></label></div></div>`;
+      }
+      if (kind === "footer_groups") {
+        const linksText = Array.isArray(row.links) ? row.links.map((link) => `${link.label || ""} | ${link.href || link.url || ""}`).join("\n") : "";
+        return `<div class="friendly-row" data-friendly-row="footer_groups"><div class="friendly-row-header"><strong>${escapeHtml(row.title || "Footer group")}</strong>${remove}</div><div class="structured-grid"><label>Group title<input data-friendly-field="title" value="${escapeHtml(row.title || "")}"></label><label>Links, one per line: Label | /path<textarea data-friendly-field="links_text">${escapeHtml(linksText)}</textarea></label></div></div>`;
+      }
+      if (kind === "holiday_closures") {
+        const checked = row.is_closed === false ? "" : " checked";
+        return `<div class="friendly-row" data-friendly-row="holiday_closures"><div class="friendly-row-header"><strong>${escapeHtml(row.label || row.date || "Closure")}</strong>${remove}</div><div class="structured-grid"><label>Date<input data-friendly-field="date" placeholder="YYYY-MM-DD" value="${escapeHtml(row.date || "")}"></label><label>Label<input data-friendly-field="label" value="${escapeHtml(row.label || row.name || "")}"></label><label>Reason<input data-friendly-field="reason" value="${escapeHtml(row.reason || "")}"></label><label>Admin note<textarea data-friendly-field="note">${escapeHtml(row.note || row.warning || "")}</textarea></label></div><label class="friendly-check"><input type="checkbox" data-friendly-field="is_closed"${checked}> Closed / block booking slots</label></div>`;
+      }
+      if (kind === "analytics_events") {
+        const eventName = row.event_type || row.key || row.name || "";
+        const category = row.group || row.category || "";
+        const active = row.is_active === false || row.status === "inactive" ? "" : " checked";
+        return `<div class="friendly-row" data-friendly-row="analytics_events"><div class="friendly-row-header"><strong>${escapeHtml(eventName || "Analytics event")}</strong>${remove}</div><div class="structured-grid"><label>Event key<input data-friendly-field="event_type" value="${escapeHtml(eventName)}"></label><label>Label<input data-friendly-field="label" value="${escapeHtml(row.label || "")}"></label><label>Category / group<input data-friendly-field="group" value="${escapeHtml(category)}"></label><label>Status<input data-friendly-field="status" value="${escapeHtml(row.status || (row.is_active === false ? "inactive" : "active"))}"></label></div><label class="friendly-check"><input type="checkbox" data-friendly-field="is_active"${active}> Active event</label></div>`;
+      }
+      if (kind === "media_assets") {
+        return `<div class="friendly-row" data-friendly-row="media_assets"><div class="friendly-row-header"><strong>${escapeHtml(row.label || "Media asset")}</strong>${remove}</div><div class="structured-grid"><label>Label<input data-friendly-field="label" value="${escapeHtml(row.label || "")}"></label><label>Category<input data-friendly-field="category" value="${escapeHtml(row.category || "")}"></label><label>R2 key<input data-friendly-field="r2_key" value="${escapeHtml(row.r2_key || row.key || "")}"></label><label>Minimum width<input data-friendly-field="required_width" inputmode="numeric" value="${escapeHtml(row.required_width || "")}"></label><label>Minimum height<input data-friendly-field="required_height" inputmode="numeric" value="${escapeHtml(row.required_height || "")}"></label><label>Size guidance<input data-friendly-field="required_size" value="${escapeHtml(row.required_size || "")}"></label><label>Upload method<textarea data-friendly-field="upload_method">${escapeHtml(row.upload_method || "")}</textarea></label></div></div>`;
+      }
+      if (kind === "landing_pages") {
+        const page = row.page || row;
+        const slug = row.slug || page.slug || "";
+        const enabled = page.enabled === false ? "" : " checked";
+        return `<div class="friendly-row" data-friendly-row="landing_pages" data-original-slug="${escapeHtml(slug)}"><div class="friendly-row-header"><strong>${escapeHtml(page.name || page.title || page.hero_title || slug || "Landing page")}</strong>${remove}</div><div class="structured-grid"><label>Slug<input data-friendly-field="slug" value="${escapeHtml(slug)}"></label><label>Name<input data-friendly-field="name" value="${escapeHtml(page.name || page.title || "")}"></label><label>Type<input data-friendly-field="type" value="${escapeHtml(page.type || "")}"></label><label>Nav group<input data-friendly-field="nav_group" value="${escapeHtml(page.nav_group || "")}"></label><label>Meta title<input data-friendly-field="meta_title" value="${escapeHtml(page.meta_title || page.title || "")}"></label><label>Meta description<textarea data-friendly-field="meta_description">${escapeHtml(page.meta_description || page.description || "")}</textarea></label><label>Hero title<input data-friendly-field="hero_title" value="${escapeHtml(page.hero_title || page.headline || "")}"></label><label>Hero intro<textarea data-friendly-field="hero_intro">${escapeHtml(page.hero_intro || page.summary || page.intro || "")}</textarea></label></div><label class="friendly-check"><input type="checkbox" data-friendly-field="enabled"${enabled}> Enabled public page</label></div>`;
+      }
+      return `<div class="friendly-row" data-friendly-row="${escapeHtml(kind)}"><div class="friendly-row-header"><strong>Row</strong>${remove}</div></div>`;
+    }
+
+    function addFriendlyRow(kind) {
+      const wrapper = Array.from(document.querySelectorAll("[data-friendly-section]")).find((el) => el.dataset.friendlySection === kind);
+      const section = wrapper?.querySelector("[data-friendly-rows]");
+      if (!section) return;
+      section.insertAdjacentHTML("beforeend", friendlyRowTemplate(kind, {}));
+      const row = section.lastElementChild;
+      row?.querySelector("[data-remove-friendly-row]")?.addEventListener("click", () => row.remove());
+    }
+
+    function applyFriendlyDomainRows(key, payload, box) {
+      if (key === "business_hours_holidays") payload.holiday_closures = collectHolidayRows(box);
+      if (key === "navigation_footer") {
+        payload.navigation = collectLinkRows(box, "navigation");
+        payload.footer_links = collectLinkRows(box, "footer_links");
+        payload.footer_groups = collectFooterGroupRows(box);
+      }
+      if (key === "analytics_event_registry") payload.events = collectAnalyticsEventRows(box);
+      if (key === "media_requirements") payload.required_assets = collectMediaAssetRows(box);
+      if (key === "landing_pages_content") applyLandingPageRows(payload, box);
+    }
+
+    function friendlyValue(row, field) { return row.querySelector(`[data-friendly-field="${field}"]`)?.value?.trim() || ""; }
+    function friendlyChecked(row, field) { return !!row.querySelector(`[data-friendly-field="${field}"]`)?.checked; }
+    function friendlyNumber(row, field) { const value = Number(friendlyValue(row, field)); return Number.isFinite(value) && value > 0 ? value : undefined; }
+
+    function collectLinkRows(box, kind) {
+      return Array.from(box.querySelectorAll(`[data-friendly-row="${kind}"]`)).map((row) => {
+        const item = { label: friendlyValue(row, "label"), href: friendlyValue(row, "href") };
+        const group = friendlyValue(row, "group");
+        if (group) item.group = group;
+        return item;
+      }).filter((row) => row.label || row.href);
+    }
+
+    function collectFooterGroupRows(box) {
+      return Array.from(box.querySelectorAll('[data-friendly-row="footer_groups"]')).map((row) => ({
+        title: friendlyValue(row, "title"),
+        links: parseLinkLines(friendlyValue(row, "links_text"))
+      })).filter((row) => row.title || row.links.length);
+    }
+
+    function parseLinkLines(text) {
+      return String(text || "").split(/\r?\n/).map((line) => line.trim()).filter(Boolean).map((line) => {
+        const parts = line.split("|").map((part) => part.trim());
+        return { label: parts[0] || parts[1] || "Link", href: parts[1] || parts[0] || "#" };
+      });
+    }
+
+    function collectHolidayRows(box) {
+      return Array.from(box.querySelectorAll('[data-friendly-row="holiday_closures"]')).map((row) => ({
+        date: friendlyValue(row, "date"),
+        label: friendlyValue(row, "label"),
+        reason: friendlyValue(row, "reason"),
+        note: friendlyValue(row, "note"),
+        is_closed: friendlyChecked(row, "is_closed")
+      })).filter((row) => row.date || row.label || row.reason || row.note);
+    }
+
+    function collectAnalyticsEventRows(box) {
+      return Array.from(box.querySelectorAll('[data-friendly-row="analytics_events"]')).map((row) => {
+        const event = friendlyValue(row, "event_type");
+        const status = friendlyValue(row, "status") || (friendlyChecked(row, "is_active") ? "active" : "inactive");
+        return { event_type: event, key: event, label: friendlyValue(row, "label") || labelFor(event), group: friendlyValue(row, "group"), category: friendlyValue(row, "group"), status, is_active: friendlyChecked(row, "is_active") };
+      }).filter((row) => row.event_type || row.label);
+    }
+
+    function collectMediaAssetRows(box) {
+      return Array.from(box.querySelectorAll('[data-friendly-row="media_assets"]')).map((row) => {
+        const item = { label: friendlyValue(row, "label"), category: friendlyValue(row, "category"), r2_key: friendlyValue(row, "r2_key"), required_size: friendlyValue(row, "required_size"), upload_method: friendlyValue(row, "upload_method") };
+        const width = friendlyNumber(row, "required_width");
+        const height = friendlyNumber(row, "required_height");
+        if (width) item.required_width = width;
+        if (height) item.required_height = height;
+        return item;
+      }).filter((row) => row.label || row.r2_key);
+    }
+
+    function landingPageRows(value) {
+      if (value?.default_pages?.pages && typeof value.default_pages.pages === "object" && !Array.isArray(value.default_pages.pages)) {
+        return Object.entries(value.default_pages.pages).map(([slug, page]) => ({ slug, page }));
+      }
+      if (value?.pages && typeof value.pages === "object" && !Array.isArray(value.pages)) {
+        return Object.entries(value.pages).map(([slug, page]) => ({ slug, page }));
+      }
+      if (Array.isArray(value?.pages)) return value.pages.map((page) => ({ slug: page.slug || page.id || "", page }));
+      if (Array.isArray(value?.landing_pages)) return value.landing_pages.map((page) => ({ slug: page.slug || page.id || "", page }));
+      return [];
+    }
+
+    function applyLandingPageRows(payload, box) {
+      const rows = Array.from(box.querySelectorAll('[data-friendly-row="landing_pages"]'));
+      const existing = new Map(landingPageRows(payload).map((entry) => [entry.slug, entry.page || {}]));
+      const updated = {};
+      rows.forEach((row) => {
+        const originalSlug = row.dataset.originalSlug || "";
+        const slug = friendlyValue(row, "slug") || originalSlug || "new-landing-page";
+        const base = { ...(existing.get(originalSlug) || existing.get(slug) || {}) };
+        Object.assign(base, {
+          slug,
+          name: friendlyValue(row, "name"),
+          type: friendlyValue(row, "type"),
+          nav_group: friendlyValue(row, "nav_group"),
+          meta_title: friendlyValue(row, "meta_title"),
+          meta_description: friendlyValue(row, "meta_description"),
+          hero_title: friendlyValue(row, "hero_title"),
+          hero_intro: friendlyValue(row, "hero_intro"),
+          enabled: friendlyChecked(row, "enabled")
+        });
+        updated[slug] = base;
+      });
+      if (payload.default_pages?.pages && typeof payload.default_pages.pages === "object" && !Array.isArray(payload.default_pages.pages)) payload.default_pages.pages = updated;
+      else if (payload.pages && typeof payload.pages === "object" && !Array.isArray(payload.pages)) payload.pages = updated;
+      else if (Array.isArray(payload.pages)) payload.pages = Object.values(updated);
+      else if (Array.isArray(payload.landing_pages)) payload.landing_pages = Object.values(updated);
+      else payload.pages = updated;
+    }
+
+
+    function renderLandingPreviewCards(value) {
+      const pages = landingPageRows(value).map((entry) => ({ ...(entry.page || {}), slug: entry.slug || entry.page?.slug || "" }));
+      if (!pages.length) return `<div class="history-row"><strong>Landing preview</strong><div class="muted">No landing page rows were found in this JSON yet.</div></div>`;
+      return pages.slice(0, 8).map((page) => `<div class="history-row"><strong>${escapeHtml(page.title || page.name || page.hero_title || page.slug || "Landing page")}</strong><div class="muted">/${escapeHtml(page.slug || page.path || page.url || page.href || "no-path")}</div><p>${escapeHtml(page.meta_description || page.summary || page.description || page.hero_intro || "No preview copy found.")}</p></div>`).join("");
+    }
+
+    function collectSeoTextRows(key, value) {
+      const rows = [];
+      walkSeo(value, key || "setting", rows);
+      return rows;
+    }
+    function walkSeo(value, path, rows) {
+      if (Array.isArray(value)) return value.forEach((item, index) => walkSeo(item, `${path}[${index}]`, rows));
+      if (value && typeof value === "object") return Object.entries(value).forEach(([name, child]) => walkSeo(child, `${path}.${name}`, rows));
+      const lower = String(path || "").toLowerCase();
+      if (typeof value !== "string") return;
+      if (/(seo_)?title|page_title|meta_title/.test(lower)) rows.push({ path, value, max: 70 });
+      else if (/meta_description|description/.test(lower)) rows.push({ path, value, max: 160 });
+      else if (/h1|headline|main_heading/.test(lower)) rows.push({ path, value, max: 90 });
+    }
+
+    function domainPermissionMap() {
+      return {
+        business_profile: { label:"Owner/Admin only", note:"Changes affect schema, public contact details, and local search signals." },
+        site_policies: { label:"Owner/Admin only", note:"Changes affect customer-facing policy language and booking/payment expectations." },
+        document_templates: { label:"Owner/Admin only", note:"Changes affect invoice, confirmation, receipt, refund, quote, and proposal wording." },
+        business_hours_holidays: { label:"Booking manager/Admin", note:"Changes affect slot availability and holiday closure warnings." },
+        navigation_footer: { label:"Owner/Admin only", note:"Changes affect public navigation, footer links, and mobile menu clarity." },
+        option_libraries: { label:"Admin manager", note:"Changes affect dropdown choices across admin workflows." },
+        analytics_event_registry: { label:"Analytics/Admin", note:"Changes affect registry warnings and event reporting cleanup." },
+        media_requirements: { label:"Media/Admin", note:"Changes affect required images, upload health, and fallback checks." },
+        landing_pages_content: { label:"Content/Admin", note:"Changes affect local landing pages and SEO copy." }
+      };
+    }
+    function permissionFor(key) { return state.permissions[key] || { label:"Admin", note:"Use admin review before saving this domain." }; }
+    function compactValue(value) { return typeof value === "string" ? value : JSON.stringify(value); }
+
+    function valueAtPath(obj, path, fallbackValue = "") {
+      const parts = String(path || "").split(".").filter(Boolean);
+      let cursor = obj;
+      for (const part of parts) {
+        if (!cursor || typeof cursor !== "object" || !(part in cursor)) return fallbackValue;
+        cursor = cursor[part];
+      }
+      return cursor ?? fallbackValue;
+    }
+
+    function setPath(obj, path, value) {
+      const parts = String(path || "").split(".").filter(Boolean);
+      let cursor = obj;
+      for (let i = 0; i < parts.length - 1; i += 1) {
+        const part = parts[i];
+        if (!cursor[part] || typeof cursor[part] !== "object" || Array.isArray(cursor[part])) cursor[part] = {};
+        cursor = cursor[part];
+      }
+      cursor[parts[parts.length - 1]] = value;
+    }
+
     function showStatus(message, stateName) { statusEl.hidden = false; statusEl.dataset.state = stateName || ""; statusEl.textContent = message; }
+    function showStatusHtml(html, stateName) { statusEl.hidden = false; statusEl.dataset.state = stateName || ""; statusEl.innerHTML = html; }
     function labelFor(key) { return String(key || "").replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()); }
-    function escapeHtml(value) { return String(value || "").replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+    function escapeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
   </script>
 </body>
 </html>
