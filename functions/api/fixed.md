@@ -139,3 +139,13 @@ Build 188 replaces hard-coded municipal water-rule wording with a DB-first edita
 ## Build 189 — Editable site settings and hard-coding reduction (2026-06-04)
 
 Build 189 adds the DB-first / JSON-fallback editable-settings foundation for landing-page fallback content, business profile, policies, document templates, hours/holidays, navigation/footer, option libraries, analytics labels, and media requirements. See `/admin-site-settings.html`, `/api/admin/editable_site_settings`, `/api/site_settings_public`, and `sql/2026-06-04_build189_editable_site_settings_foundation.sql`.
+
+## Build 190 - Editable settings live rendering and diagnostics
+
+Build 190 continues the editable-content migration by rendering public business profile, contact details, social links, navigation/footer links, policy notes, LocalBusiness structured data, analytics labels, and media requirements from DB-first editable settings with bundled JSON fallback. It adds validation, sync-from-bundle controls, DB/fallback diagnostics, and setting history support through `/admin-site-settings.html` and the Build 190 SQL migration.
+
+---
+
+## Build 197 documentation sync
+
+This Markdown file was checked during the Build 197 self-healing admin diagnostics pass. No schema DDL is required for the pricing diagnostics, route-copy parity, independent dashboard fallback handling, or landing SEO/readiness warning work.
