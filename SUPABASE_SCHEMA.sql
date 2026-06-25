@@ -2007,3 +2007,9 @@ comment on table public.owner_attention_tasks is 'Build 213 owner task controls:
 comment on table public.live_interaction_audit_events is 'Build 213 non-sensitive staff/audit event export stream for a booking. Never store secrets or private incident media.';
 comment on table public.recommendation_price_acknowledgements is 'Customer typed-name acknowledgement of a priced in-job recommendation; not a substitute for legal advice or a signed contract where one is required.';
 
+
+
+-- Build 214 Supabase RLS and owner task orchestration schema sync
+-- Primary migration: sql/2026-06-23_build214_security_task_orchestration.sql
+-- Adds owner_attention_tasks.due_at/escalation fields, locks public tables behind RLS,
+-- revokes direct browser-role table grants, and exposes protected rosie_security_posture_report().
