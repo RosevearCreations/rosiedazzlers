@@ -252,3 +252,28 @@ Build 213 does not claim a final payment is settled until the real Stripe/PayPal
 
 > **Build 213 documentation sync:** Active direction remains in this handoff and `MASTER_VALUE_ROADMAP.md`. Use `docs/PRODUCTION_TEST_GUIDE.md`, `/admin-test-centre.html`, and `/admin-production.html` for real-world acceptance evidence. Historical Markdown remains retained for audit and prior release guards.
 
+---
+
+### Build 214 documentation sync — 2026-06-23
+
+Build 214 prioritizes Supabase containment and owner-task reliability. The active security action is to run `sql/2026-06-23_build214_security_task_orchestration.sql`, refresh Supabase Security Advisor, and test the application through Cloudflare Functions rather than restoring direct browser access to tables. Canonical planning remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+
+## Build 214 central capability: security containment and owner-task orchestration
+
+Build 214 responds to the Supabase Security Advisor RLS/public-table alert while reducing owner workflow friction.
+
+Primary changes:
+
+- `sql/2026-06-23_build214_security_task_orchestration.sql` enables RLS for public-schema tables, removes direct `anon`/`authenticated`/`PUBLIC` table grants, preserves service-role access for Cloudflare Functions, and adds the protected `rosie_security_posture_report()` RPC.
+- `/admin-security.html` shows only table names, RLS state, and browser access flags. It never exposes records, keys, tokens, or customer data.
+- `/admin-today.html` now supports manual tasks, My assigned work, due-date filters, due dates, and escalation metadata.
+
+Critical deployment order:
+
+1. Run the Build 214 SQL migration in Supabase SQL Editor.
+2. Refresh Security Advisor and confirm RLS/public-access findings clear.
+3. Use an internal booking to run the Guided Production Test Centre.
+4. If a normal site screen fails, repair its Cloudflare Function or create a narrow server endpoint—never reintroduce broad direct browser table grants.
+
+The browser must never contain `SUPABASE_SERVICE_ROLE_KEY`; Cloudflare Functions are the intended database boundary.
