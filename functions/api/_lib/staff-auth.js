@@ -302,6 +302,16 @@ function hasCapability(actor, capability) {
         actor.is_detailer === true
       );
 
+    case "view_analytics":
+      return (
+        actor.can_manage_staff === true ||
+        actor.can_manage_bookings === true ||
+        actor.can_manage_progress === true
+      );
+
+    case "manage_settings":
+      return actor.can_manage_staff === true;
+
     case "work_booking":
       return (
         actor.is_senior_detailer === true ||

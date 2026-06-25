@@ -8,6 +8,7 @@ import {
   moneyToCents,
   findQuoteDepositPaymentRequest
 } from "./quote-deposit-payments.js";
+import { loadEditableSetting } from "./editable-settings.js";
 
 const WEBHOOK_EVENT_SELECT = [
   "id", "provider", "provider_event_id", "provider_event_type", "quote_deposit_payment_request_id", "booking_id",
@@ -95,9 +96,10 @@ export async function queueQuoteDepositReceiptEmail(env, paymentRequest, details
     if (!paymentRequest?.id || !paymentRequest?.customer_email) return { ok: false, skipped: true, reason: "missing_customer_email" };
     const amountCents = moneyToCents(details.paidAmountCents || paymentRequest.paid_amount_cents || paymentRequest.amount_cents || 0);
     const paymentUrl = cleanText(paymentRequest.public_payment_url || paymentRequest.checkout_url || "");
-    const subject = `Rosie Dazzlers deposit receipt — ${formatMoney(amountCents)}`;
+    const template = await loadDocumentTemplate(env, "deposit_receipt");
+    const subject = cleanText(template.subject || `Rosie Dazzlers deposit receipt — ${formatMoney(amountCents)}`);
     const bodyText = [
-      "Thank you. We received your Rosie Dazzlers quote deposit.",
+      cleanText(template.body || "Thank you. We received your Rosie Dazzlers quote deposit."),
       `Amount paid: ${formatMoney(amountCents)}`,
       `Payment method: ${cleanText(details.provider || paymentRequest.provider || paymentRequest.payment_method || "payment")}`,
       `Reference: ${cleanText(details.paymentReference || paymentRequest.payment_reference || paymentRequest.external_checkout_id || paymentRequest.id)}`,
@@ -251,9 +253,10 @@ async function findPaymentRequestByProviderReference(env, input = {}) {
 
 async function queueQuoteDepositRefundEmail(env, paymentRequest, refund) {
   if (!paymentRequest?.customer_email) return { ok: false, skipped: true, reason: "missing_customer_email" };
-  const subject = `Rosie Dazzlers refund recorded — ${formatMoney(refund.refund_amount_cents)}`;
+  const template = await loadDocumentTemplate(env, "refund_notice");
+  const subject = cleanText(template.subject || `Rosie Dazzlers refund recorded — ${formatMoney(refund.refund_amount_cents)}`);
   const bodyText = [
-    "A refund or partial refund has been recorded for your Rosie Dazzlers quote deposit.",
+    cleanText(template.body || "A refund or partial refund has been recorded for your Rosie Dazzlers quote deposit."),
     `Refund amount: ${formatMoney(refund.refund_amount_cents)}`,
     `Refund status: ${refund.refund_status || "recorded"}`,
     `Reference: ${refund.provider_refund_id || refund.provider_event_id || "refund record"}`,
@@ -326,6 +329,12 @@ async function patchQuoteDraft(env, id, patch) {
   await fetch(`${env.SUPABASE_URL}/rest/v1/quote_proposal_drafts?id=eq.${encodeURIComponent(id)}`, { method: "PATCH", headers: serviceHeaders(env), body: JSON.stringify(patch) });
 }
 
+async function loadDocumentTemplate(env, key) {
+  const loaded = await loadEditableSetting(env, "document_templates", { headers: serviceHeaders(env) }).catch(() => null);
+  const templates = loaded?.value?.templates || {};
+  const template = templates[key] || {};
+  return template && typeof template === "object" ? template : {};
+}
 function cleanUuid(value) { const text = cleanText(value); return isUuid(text) ? text : null; }
 function cleanWebhookStatus(value) {
   const allowed = new Set(["received", "verified", "ignored", "settled", "failed", "refund_recorded", "unverified", "replayed", "replay_failed"]);
