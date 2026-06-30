@@ -15,10 +15,14 @@ const FALLBACK_ASSETS = [
   ["Bug and Tar Removal", "packages/bug_tar_removal.png", "addon", 1200, 800, "1200x800 minimum"],
   ["Truck Box Wash", "packages/truck_box_wash.png", "addon", 1200, 800, "1200x800 minimum"],
   ["Fleet Vehicle Add-on", "packages/fleet_vehicle_add_on.png", "addon", 1200, 800, "1200x800 minimum"],
-  ["Tillsonburg local hero", "landing-pages/tillsonburg-auto-detailing.webp", "regional", 1600, 900, "1600x900 preferred"],
-  ["Woodstock/Ingersoll local hero", "landing-pages/woodstock-ingersoll-auto-detailing.webp", "regional", 1600, 900, "1600x900 preferred"],
-  ["Simcoe/Delhi local hero", "landing-pages/simcoe-delhi-auto-detailing.webp", "regional", 1600, 900, "1600x900 preferred"],
-  ["Port Dover local hero", "landing-pages/port-dover-auto-detailing.webp", "regional", 1600, 900, "1600x900 preferred"]
+  ["Tillsonburg local hero", "landing-pages/tillsonburg-auto-detailing.jpg", "regional", 1600, 900, "1600x900 preferred JPG/WebP"],
+  ["Woodstock/Ingersoll local hero", "landing-pages/woodstock-ingersoll-auto-detailing.jpg", "regional", 1600, 900, "1600x900 preferred JPG/WebP"],
+  ["Simcoe/Delhi local hero", "landing-pages/simcoe-delhi-auto-detailing.jpg", "regional", 1600, 900, "1600x900 preferred JPG/WebP"],
+  ["Port Dover local hero", "landing-pages/port-dover-auto-detailing.jpg", "regional", 1600, 900, "1600x900 preferred JPG/WebP"],
+  ["Norwich/Otterville local hero", "landing-pages/norwich-otterville-auto-detailing.jpg", "regional", 1600, 900, "1600x900 preferred JPG/WebP"],
+  ["Zorra/Thamesford/Embro local hero", "landing-pages/zorra-thamesford-embro-auto-detailing.jpg", "regional", 1600, 900, "1600x900 preferred JPG/WebP"],
+  ["Waterford/Vittoria local hero", "landing-pages/waterford-vittoria-auto-detailing.jpg", "regional", 1600, 900, "1600x900 preferred JPG/WebP"],
+  ["Port Rowan/Turkey Point local hero", "landing-pages/port-rowan-turkey-point-auto-detailing.jpg", "regional", 1600, 900, "1600x900 preferred JPG/WebP"]
 ];
 
 export async function onRequestPost({ request, env }) { return handle({ request, env, body: await request.json().catch(() => ({})) }); }
@@ -34,7 +38,7 @@ async function handle({ request, env, body }) {
     for (const asset of assets.slice(0, limit)) rows.push(await checkAsset(asset));
     const missing = rows.filter((r) => !r.ok);
     const undersized = rows.filter((r) => r.ok && r.dimension_status === "too_small");
-    return json({ ok: true, build: "185", checked_count: rows.length, missing_count: missing.length, undersized_count: undersized.length, present_count: rows.length - missing.length, assets: rows, missing, undersized, upload_base: PUBLIC_BASE, dimension_validation: "png/jpeg/webp header parsing", next_step: missing.length ? "Upload missing files to the listed R2 keys, then run this scan again." : (undersized.length ? "Replace undersized files with the size listed in IMAGES.md." : "All checked public asset URLs responded and met known size rules.") });
+    return json({ ok: true, build: "215", checked_count: rows.length, missing_count: missing.length, undersized_count: undersized.length, present_count: rows.length - missing.length, assets: rows, missing, undersized, upload_base: PUBLIC_BASE, dimension_validation: "png/jpeg/webp header parsing with JPG/JPEG/WebP/PNG format-variant lookup", next_step: missing.length ? "Upload missing files to the listed R2 keys, then run this scan again." : (undersized.length ? "Replace undersized files with the size listed in IMAGES.md." : "All checked public asset URLs responded and met known size rules.") });
   } catch (err) {
     return json({ ok: false, error: err?.message || "Could not scan media asset health." }, 500);
   }
@@ -66,7 +70,46 @@ async function loadAssetsFromPublicJson(request, limit) {
 }
 function fallbackAssets(){return FALLBACK_ASSETS.map(([label,key,category,required_width,required_height,required_size])=>normalizeAsset({label,r2_key:key,category,required_width,required_height,required_size}));}
 function normalizeAsset(item){const key=String(item.r2_key || item.key || "").replace(/^\/+/,""); const url=String(item.public_url || item.url || `${PUBLIC_BASE}${key}`); return { label:String(item.label || key), category:String(item.category || "media"), r2_key:key, url, required_width:Number(item.required_width || item.min_width || 0) || null, required_height:Number(item.required_height || item.min_height || 0) || null, required_size:String(item.required_size || item.requirement || "See IMAGES.md"), upload_method:String(item.upload_method || `Cloudflare R2 → upload ${key}`) };}
-async function checkAsset(asset){let status=0, ok=false, contentType="", contentLength="", dimensions=null, dimension_status="unknown"; try{let res=await fetch(asset.url,{method:"GET",cf:{cacheTtl:0}}); status=res.status; ok=res.ok; contentType=res.headers.get("content-type")||""; contentLength=res.headers.get("content-length")||""; if(res.ok){const buf=await res.arrayBuffer(); dimensions=readImageDimensions(new Uint8Array(buf), contentType); if(dimensions && asset.required_width && asset.required_height){dimension_status = dimensions.width >= asset.required_width && dimensions.height >= asset.required_height ? "ok" : "too_small";} else if(dimensions){dimension_status="measured";} } }catch(err){return {...asset, ok:false, status:0, error:err?.message || "Fetch failed"};} return {...asset, ok, status, content_type:contentType, content_length:contentLength, dimensions, dimension_status, issue: ok?(dimension_status === "too_small" ? "undersized" : "") : "missing_or_not_public"};}
+function assetUrlCandidates(asset) {
+  const primary = String(asset?.url || '').trim();
+  const out = [];
+  const add = (url) => { if (url && !out.includes(url)) out.push(url); };
+  add(primary);
+  try {
+    const parsed = new URL(primary);
+    if (/\.(?:png|jpe?g|webp)$/i.test(parsed.pathname)) {
+      for (const ext of ['.jpg', '.jpeg', '.webp', '.png', '.JPG', '.JPEG', '.WEBP', '.PNG']) {
+        const candidate = new URL(parsed.href);
+        candidate.pathname = candidate.pathname.replace(/\.(?:png|jpe?g|webp)$/i, ext);
+        add(candidate.href);
+      }
+    }
+  } catch {}
+  return out;
+}
+
+async function checkAsset(asset) {
+  const candidates = assetUrlCandidates(asset);
+  let last = null;
+  for (const url of candidates) {
+    let status = 0, ok = false, contentType = '', contentLength = '', dimensions = null, dimensionStatus = 'unknown';
+    try {
+      const res = await fetch(url, { method: 'GET', cf: { cacheTtl: 0 } });
+      status = res.status; ok = res.ok; contentType = res.headers.get('content-type') || ''; contentLength = res.headers.get('content-length') || '';
+      if (res.ok) {
+        const buf = await res.arrayBuffer();
+        dimensions = readImageDimensions(new Uint8Array(buf), contentType);
+        if (dimensions && asset.required_width && asset.required_height) dimensionStatus = dimensions.width >= asset.required_width && dimensions.height >= asset.required_height ? 'ok' : 'too_small';
+        else if (dimensions) dimensionStatus = 'measured';
+        return { ...asset, ok, status, content_type: contentType, content_length: contentLength, dimensions, dimension_status: dimensionStatus, issue: dimensionStatus === 'too_small' ? 'undersized' : '', resolved_url: url, used_format_fallback: url !== asset.url };
+      }
+      last = { ...asset, ok, status, content_type: contentType, content_length: contentLength, dimensions, dimension_status: dimensionStatus, issue: 'missing_or_not_public', resolved_url: url };
+    } catch (err) {
+      last = { ...asset, ok: false, status: 0, error: err?.message || 'Fetch failed', issue: 'missing_or_not_public', resolved_url: url };
+    }
+  }
+  return { ...(last || asset), candidate_urls: candidates };
+}
 function readImageDimensions(bytes, contentType=""){
   if(!bytes || bytes.length < 12) return null;
   if(bytes[0]===0x89 && bytes[1]===0x50 && bytes[2]===0x4e && bytes[3]===0x47 && bytes.length>=24){return {type:"png", width:u32(bytes,16), height:u32(bytes,20)};}
