@@ -1,8 +1,8 @@
 {
-  "version": "189.0.0",
-  "updated_at": "2026-06-04",
+  "version": "215.0.0",
+  "updated_at": "2026-06-30",
   "source": "bundled_json_fallback",
-  "notes": "Editable landing-page content fallback. DB app_management_settings.landing_pages should override this when available.",
+  "notes": "Editable landing-page content fallback. DB app_management_settings.landing_pages should override this when available. Build 215 prefers Rosie-owned JPG Local Hero assets under assets.rosiedazzlers.ca/landing-pages before legacy remote placeholders.",
   "default_pages": {
     "pages": {
       "ceramic-coating": {
@@ -291,10 +291,10 @@
         "badge": "Town-focused detailing page",
         "hero_title": "Mobile auto detailing in Tillsonburg",
         "hero_intro": "This page exists so Tillsonburg-area customers can find local mobile-detailing guidance, seasonal municipal reminders, and current proof of work without digging through broader county pages first.",
-        "hero_image_url": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Tillsonburgskyline.jpg/800px-Tillsonburgskyline.jpg",
-        "region_photo_caption": "Tillsonburg regional photo used to help local visitors recognize the service-area page.",
-        "region_photo_source": "Wikimedia Commons / Tillsonburg page",
-        "region_photo_source_url": "https://en.wikipedia.org/wiki/Tillsonburg",
+        "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/tillsonburg-auto-detailing.jpg",
+        "region_photo_caption": "Rosie Dazzlers local service-area hero image for Tillsonburg auto detailing.",
+        "region_photo_source": "Rosie Dazzlers approved local media",
+        "region_photo_source_url": "",
         "reasons_page_exists": [
           "Town pages improve relevance when people search by place name first instead of brand name first.",
           "They answer practical local questions that matter to mobile service: driveway access, watering rules, parking restrictions, and timing considerations.",
@@ -350,7 +350,10 @@
             "q": "Why mention water and parking on a detailing page?",
             "a": "Because mobile service depends on practical setup. Water-use windows, access, and seasonal parking rules can change the best service timing on the day."
           }
-        ]
+        ],
+        "local_hero_r2_key": "landing-pages/tillsonburg-auto-detailing.jpg",
+        "local_hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/tillsonburg-auto-detailing.jpg",
+        "local_hero_format": "jpg"
       },
       "woodstock-ingersoll-auto-detailing": {
         "type": "location",
@@ -363,10 +366,10 @@
         "badge": "Town-focused detailing page",
         "hero_title": "Mobile auto detailing in Woodstock and Ingersoll",
         "hero_intro": "This page gives Woodstock and Ingersoll visitors a clearer local service entry point, with package guidance, recent proof, and practical town-level notes that matter for mobile work.",
-        "hero_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/City%20Hall%20Woodstock%20Ontario%201.jpg",
-        "region_photo_caption": "Woodstock City Hall photo representing the Woodstock and Ingersoll service corridor.",
-        "region_photo_source": "Wikimedia Commons / Woodstock, Ontario page",
-        "region_photo_source_url": "https://en.wikipedia.org/wiki/Woodstock,_Ontario",
+        "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/woodstock-ingersoll-auto-detailing.jpg",
+        "region_photo_caption": "Rosie Dazzlers local service-area hero image for Woodstock / Ingersoll auto detailing.",
+        "region_photo_source": "Rosie Dazzlers approved local media",
+        "region_photo_source_url": "",
         "reasons_page_exists": [
           "Woodstock and Ingersoll searchers often use town-plus-service queries rather than brand-first queries.",
           "A combined page helps keep local wording, booking guidance, and proof visible for one of the strongest Oxford County zones.",
@@ -418,7 +421,10 @@
             "q": "Why mention commercial watering windows?",
             "a": "Because some customers ask about office or shop locations rather than residential driveways, and Oxford’s commercial outdoor water windows are different from the residential ones."
           }
-        ]
+        ],
+        "local_hero_r2_key": "landing-pages/woodstock-ingersoll-auto-detailing.jpg",
+        "local_hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/woodstock-ingersoll-auto-detailing.jpg",
+        "local_hero_format": "jpg"
       },
       "simcoe-delhi-auto-detailing": {
         "type": "location",
@@ -431,10 +437,10 @@
         "badge": "Town-focused detailing page",
         "hero_title": "Mobile auto detailing in Simcoe and Delhi",
         "hero_intro": "This page is built for Norfolk County visitors who search by Simcoe or Delhi first and want stronger local service context, proof, and practical mobile-detailing guidance before they book.",
-        "hero_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Governor%20Simcoe%20Square%20Simcoe%20Ontario.jpg",
-        "region_photo_caption": "Governor Simcoe Square photo representing the Simcoe and Delhi Norfolk County service area.",
-        "region_photo_source": "Wikimedia Commons / Simcoe, Ontario page",
-        "region_photo_source_url": "https://en.wikipedia.org/wiki/Simcoe,_Ontario",
+        "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/simcoe-delhi-auto-detailing.jpg",
+        "region_photo_caption": "Rosie Dazzlers local service-area hero image for Simcoe / Delhi auto detailing.",
+        "region_photo_source": "Rosie Dazzlers approved local media",
+        "region_photo_source_url": "",
         "reasons_page_exists": [
           "Simcoe and Delhi are clear local search anchors within the Norfolk side of the service area.",
           "This page gives those customers a stronger local explanation instead of pushing them straight onto a broad county page.",
@@ -486,7 +492,10 @@
             "q": "Why mention watering windows?",
             "a": "Because outdoor water-use rules can matter for driveway-based exterior work during the warmer months in Norfolk."
           }
-        ]
+        ],
+        "local_hero_r2_key": "landing-pages/simcoe-delhi-auto-detailing.jpg",
+        "local_hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/simcoe-delhi-auto-detailing.jpg",
+        "local_hero_format": "jpg"
       },
       "port-dover-auto-detailing": {
         "type": "location",
@@ -499,10 +508,10 @@
         "badge": "Town-focused detailing page",
         "hero_title": "Mobile auto detailing in Port Dover",
         "hero_intro": "Port Dover deserves its own page because coastal and seasonal traffic patterns make local search intent and customer questions feel different from broader inland service pages.",
-        "hero_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Boats%20moored%20at%20Port%20Dover%2C%20Ontario.jpg",
-        "region_photo_caption": "Port Dover harbour photo representing the coastal Norfolk County service area.",
-        "region_photo_source": "Wikimedia Commons / Port Dover page",
-        "region_photo_source_url": "https://en.wikipedia.org/wiki/Port_Dover",
+        "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/port-dover-auto-detailing.jpg",
+        "region_photo_caption": "Rosie Dazzlers local service-area hero image for Port Dover auto detailing.",
+        "region_photo_source": "Rosie Dazzlers approved local media",
+        "region_photo_source_url": "",
         "reasons_page_exists": [
           "Port Dover searchers often want stronger location confirmation and trust signals before they book.",
           "This page lets you explain local fit, mobile expectations, and proof-of-work with more relevance for the area.",
@@ -554,7 +563,10 @@
             "q": "Why mention parking on a detailing page?",
             "a": "Because seasonal paid parking and waterfront traffic can affect how practical curbside or near-shore service access is on busy days."
           }
-        ]
+        ],
+        "local_hero_r2_key": "landing-pages/port-dover-auto-detailing.jpg",
+        "local_hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/port-dover-auto-detailing.jpg",
+        "local_hero_format": "jpg"
       },
       "norwich-otterville-auto-detailing": {
         "type": "location",
@@ -567,10 +579,10 @@
         "badge": "Town-focused detailing page",
         "hero_title": "Mobile auto detailing in Norwich and Otterville",
         "hero_intro": "Norwich and Otterville customers often need clear mobile-service expectations for rural driveways, water access, and travel timing before booking.",
-        "hero_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Norwich%20post%20office%20and%20clock%20tower.JPG",
-        "region_photo_caption": "Norwich clock tower photo representing Norwich, Otterville, and nearby Oxford County communities.",
-        "region_photo_source": "Wikimedia Commons / Norwich, Ontario page",
-        "region_photo_source_url": "https://en.wikipedia.org/wiki/Norwich,_Ontario",
+        "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/norwich-otterville-auto-detailing.jpg",
+        "region_photo_caption": "Rosie Dazzlers local service-area hero image for Norwich, Otterville auto detailing.",
+        "region_photo_source": "Rosie Dazzlers approved local media",
+        "region_photo_source_url": "",
         "reasons_page_exists": [
           "Customers often search by town first, not only by county.",
           "A dedicated page gives search engines and customers clearer local relevance for Norwich, Otterville.",
@@ -613,7 +625,10 @@
             "q": "Why do you mention water-use rules?",
             "a": "Mobile exterior detailing can involve outdoor water use, so county restrictions and customer-supplied water access should be checked before dispatch."
           }
-        ]
+        ],
+        "local_hero_r2_key": "landing-pages/norwich-otterville-auto-detailing.jpg",
+        "local_hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/norwich-otterville-auto-detailing.jpg",
+        "local_hero_format": "jpg"
       },
       "zorra-thamesford-embro-auto-detailing": {
         "type": "location",
@@ -626,10 +641,10 @@
         "badge": "Town-focused detailing page",
         "hero_title": "Mobile auto detailing in Zorra, Thamesford, and Embro",
         "hero_intro": "This page supports smaller Oxford County communities where customers still search by town and need to know mobile detailing can be routed to them.",
-        "hero_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Embro%20ON.JPG",
-        "region_photo_caption": "Embro photo representing the Zorra, Thamesford, and Embro rural service area.",
-        "region_photo_source": "Wikimedia Commons / Zorra page",
-        "region_photo_source_url": "https://en.wikipedia.org/wiki/Zorra",
+        "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/zorra-thamesford-embro-auto-detailing.jpg",
+        "region_photo_caption": "Rosie Dazzlers local service-area hero image for Zorra, Thamesford, Embro auto detailing.",
+        "region_photo_source": "Rosie Dazzlers approved local media",
+        "region_photo_source_url": "",
         "reasons_page_exists": [
           "Customers often search by town first, not only by county.",
           "A dedicated page gives search engines and customers clearer local relevance for Zorra, Thamesford, Embro.",
@@ -672,7 +687,10 @@
             "q": "Why do you mention water-use rules?",
             "a": "Mobile exterior detailing can involve outdoor water use, so county restrictions and customer-supplied water access should be checked before dispatch."
           }
-        ]
+        ],
+        "local_hero_r2_key": "landing-pages/zorra-thamesford-embro-auto-detailing.jpg",
+        "local_hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/zorra-thamesford-embro-auto-detailing.jpg",
+        "local_hero_format": "jpg"
       },
       "waterford-vittoria-auto-detailing": {
         "type": "location",
@@ -685,10 +703,10 @@
         "badge": "Town-focused detailing page",
         "hero_title": "Mobile auto detailing in Waterford and Vittoria",
         "hero_intro": "Waterford and Vittoria customers benefit from town-specific service pages because rural access, driveway setup, and summer water-use windows can affect scheduling.",
-        "hero_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Waterford%20Old%20Town%20Hall%20-%20Waterford%2C%20ON.jpg",
-        "region_photo_caption": "Waterford Old Town Hall photo representing Waterford, Vittoria, and nearby Norfolk County communities.",
-        "region_photo_source": "Wikimedia Commons / Waterford, Ontario page",
-        "region_photo_source_url": "https://en.wikipedia.org/wiki/Waterford,_Ontario",
+        "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/waterford-vittoria-auto-detailing.jpg",
+        "region_photo_caption": "Rosie Dazzlers local service-area hero image for Waterford, Vittoria auto detailing.",
+        "region_photo_source": "Rosie Dazzlers approved local media",
+        "region_photo_source_url": "",
         "reasons_page_exists": [
           "Customers often search by town first, not only by county.",
           "A dedicated page gives search engines and customers clearer local relevance for Waterford, Vittoria.",
@@ -726,7 +744,10 @@
             "q": "Why do you mention water-use rules?",
             "a": "Mobile exterior detailing can involve outdoor water use, so county restrictions and customer-supplied water access should be checked before dispatch."
           }
-        ]
+        ],
+        "local_hero_r2_key": "landing-pages/waterford-vittoria-auto-detailing.jpg",
+        "local_hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/waterford-vittoria-auto-detailing.jpg",
+        "local_hero_format": "jpg"
       },
       "port-rowan-turkey-point-auto-detailing": {
         "type": "location",
@@ -739,10 +760,10 @@
         "badge": "Town-focused detailing page",
         "hero_title": "Mobile auto detailing in Port Rowan and Turkey Point",
         "hero_intro": "This local page supports coastal Norfolk searches where seasonal traffic, access, and parking can change the best appointment plan.",
-        "hero_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Lighthouse%20and%20docks%2C%20Port%20Rowan%2C%20ON.jpg",
-        "region_photo_caption": "Port Rowan waterfront photo representing Port Rowan, Turkey Point, and nearby Long Point-area service calls.",
-        "region_photo_source": "Wikimedia Commons / Port Rowan page",
-        "region_photo_source_url": "https://en.wikipedia.org/wiki/Port_Rowan",
+        "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/port-rowan-turkey-point-auto-detailing.jpg",
+        "region_photo_caption": "Rosie Dazzlers local service-area hero image for Port Rowan, Turkey Point auto detailing.",
+        "region_photo_source": "Rosie Dazzlers approved local media",
+        "region_photo_source_url": "",
         "reasons_page_exists": [
           "Customers often search by town first, not only by county.",
           "A dedicated page gives search engines and customers clearer local relevance for Port Rowan, Turkey Point.",
@@ -785,7 +806,10 @@
             "q": "Why do you mention water-use rules?",
             "a": "Mobile exterior detailing can involve outdoor water use, so county restrictions and customer-supplied water access should be checked before dispatch."
           }
-        ]
+        ],
+        "local_hero_r2_key": "landing-pages/port-rowan-turkey-point-auto-detailing.jpg",
+        "local_hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/port-rowan-turkey-point-auto-detailing.jpg",
+        "local_hero_format": "jpg"
       }
     }
   },

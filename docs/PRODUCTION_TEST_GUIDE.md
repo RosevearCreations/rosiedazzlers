@@ -135,3 +135,110 @@ Expected: the CSV must not expose private signed URLs, R2 paths, secrets, card d
 8. Press **Resolve**, add `Internal test resolved`, refresh, and confirm it is temporarily suppressed.
 
 Never use customer passwords, card data, service keys, raw booking tokens, or private incident details in a manual task note.
+
+## Build 215 — Public image rendering and DAIP planning verification (2026-06-30)
+
+Use this test after Build 215 has deployed. It checks the public JPG/JPEG/WebP/PNG compatibility fix and records DAIP planning decisions without starting DAIP production work.
+
+### Before testing
+
+- Use a staff-controlled browser account for Admin Media Health.
+- Use a private/incognito browser window for public-page checks.
+- Do not upload or expose private incident media, customer progress media, original videos, addresses, VINs, or payment screenshots to the public assets bucket.
+- Confirm Build 214 RLS containment is already applied before running the Build 215 media task migration.
+
+### A. Apply the optional DB task alignment migration
+
+This migration aligns the **media task records** shown in Admin Media Health. It does not upload images, convert files, or change private media.
+
+1. In Supabase, open **SQL Editor**.
+2. Click **New query**.
+3. Open:
+
+```text
+sql/2026-06-30_build215_media_asset_format_alignment.sql
+```
+
+4. Copy the complete SQL file into the query editor.
+5. Click **Run** once.
+6. At the bottom result panel, confirm the Local Hero rows use `.jpg` keys and public `assets.rosiedazzlers.ca` URLs.
+7. If Supabase reports a permission/RLS error, stop and record the exact error. Do not relax RLS or add broad browser policies.
+
+### B. Verify the public R2 URL itself
+
+1. Open `/admin-media-health.html` while signed in as admin.
+2. Click **Run image health scan**.
+3. Find a Local Hero row, such as **Tillsonburg local hero**.
+4. Confirm the card says:
+   - `public`;
+   - a non-zero HTTP status in the successful range;
+   - dimensions at least `1600 × 900`;
+   - a **Resolved URL** ending in the object format that actually exists in R2.
+5. Copy only the resolved public URL and open it in a private/incognito window.
+6. Confirm the image itself loads without signing in.
+7. Repeat for all eight Local Hero rows and the service-hub/package images we uploaded.
+
+Expected result: a verified JPG can show as **canonical file format**. A verified same-name WebP/PNG/JPEG can show as **matched a compatible file format**. Either is acceptable. A missing/not-public result is not.
+
+### C. Verify public service and Local Hero pages
+
+1. In an incognito/private browser, open:
+
+```text
+/services
+```
+
+2. Refresh once using a hard refresh (`Ctrl+F5` on Windows) after deployment.
+3. Confirm Service Hub/package/add-on images appear rather than a blank/default card.
+4. Open the public Local Hero pages one by one:
+
+```text
+/tillsonburg-auto-detailing
+/woodstock-ingersoll-auto-detailing
+/simcoe-delhi-auto-detailing
+/port-dover-auto-detailing
+/norwich-otterville-auto-detailing
+/zorra-thamesford-embro-auto-detailing
+/waterford-vittoria-auto-detailing
+/port-rowan-turkey-point-auto-detailing
+```
+
+5. Confirm each hero uses the intended local image and not the generic fallback visual.
+6. Check the page title, main heading, town/service wording, and booking link still appear normally.
+
+If an image fails, record exactly:
+
+```text
+Public page URL:
+Expected R2 key:
+Resolved URL shown by Admin Media Health:
+HTTP status shown by Admin Media Health:
+Browser and approximate time:
+Whether the exact resolved URL loaded directly in incognito:
+```
+
+Do not rename a file repeatedly until the exact folder, filename, and letter case have been compared. R2 keys are case-sensitive.
+
+### D. Confirm cache refresh behavior
+
+1. On a browser that previously showed the blank fallback, close all Rosie Dazzlers tabs.
+2. Reopen the site.
+3. Hard-refresh the page once.
+4. If the old fallback persists, open browser DevTools → **Application** → **Service Workers**, then use **Unregister** only for the Rosie Dazzlers development site.
+5. Refresh and test again.
+
+Expected result: Build 215 uses a new service-worker cache version. It should not require clearing all browser data.
+
+### E. DAIP planning-only confirmation
+
+1. Open:
+
+```text
+docs/digital-asset-intelligence-platform/10_Rosie_Dazzlers_Integration_Plan.md
+```
+
+2. Review the **Required decisions before the first DAIP implementation pass** section.
+3. Record answers/unknowns for worker hosting, monthly cost ceiling, storage/Drive policy, consent, retention, privacy reviewer, legal holds, and internal test media.
+4. Do **not** create a DAIP bucket, table, worker, queue, or public export workflow during this test.
+
+Expected result: we have a documented decision plan, not unreviewed production DAIP infrastructure.

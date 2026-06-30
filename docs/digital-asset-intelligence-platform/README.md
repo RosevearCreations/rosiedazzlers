@@ -169,3 +169,9 @@ This supports multiple vehicles in one day without overwriting or confusing foot
 DAIP must be documentation-driven.
 
 Before adding code, update the related Markdown file and database/schema notes. This keeps future AI conversations, future developers, and future rebuilds aligned with the intended architecture.
+
+## Build 215 planning status
+
+Build 215 reviewed this DAIP documentation and added `10_Rosie_Dazzlers_Integration_Plan.md`. That plan maps DAIP to the existing Rosie Dazzlers booking, live-media, incident, gallery, vehicle-history, and RLS/privacy foundations. **No production DAIP code, database tables, worker, storage bucket, AI processing, or publishing automation was implemented in Build 215.**
+
+Read the integration plan before beginning any Phase 1 database or storage work.

@@ -1,6 +1,6 @@
 {
   "build": "183",
-  "updated_at": "2026-05-30",
+  "updated_at": "2026-06-30",
   "public_asset_base": "https://assets.rosiedazzlers.ca/",
   "requirements": {
     "addon_card": "1200x800 landscape PNG/WebP/JPG, under 500 KB preferred",
@@ -189,51 +189,51 @@
   ],
   "regional_images_to_replace": [
     {
-      "filename": "tillsonburg-auto-detailing-hero.webp",
+      "filename": "tillsonburg-auto-detailing-hero.jpg",
       "label": "Tillsonburg service-area hero",
-      "r2_key": "landing-pages/tillsonburg-auto-detailing-hero.webp",
+      "r2_key": "landing-pages/tillsonburg-auto-detailing-hero.jpg",
       "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
     },
     {
-      "filename": "woodstock-ingersoll-auto-detailing-hero.webp",
+      "filename": "woodstock-ingersoll-auto-detailing-hero.jpg",
       "label": "Woodstock/Ingersoll service-area hero",
-      "r2_key": "landing-pages/woodstock-ingersoll-auto-detailing-hero.webp",
+      "r2_key": "landing-pages/woodstock-ingersoll-auto-detailing-hero.jpg",
       "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
     },
     {
-      "filename": "simcoe-delhi-auto-detailing-hero.webp",
+      "filename": "simcoe-delhi-auto-detailing-hero.jpg",
       "label": "Simcoe/Delhi service-area hero",
-      "r2_key": "landing-pages/simcoe-delhi-auto-detailing-hero.webp",
+      "r2_key": "landing-pages/simcoe-delhi-auto-detailing-hero.jpg",
       "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
     },
     {
-      "filename": "port-dover-auto-detailing-hero.webp",
+      "filename": "port-dover-auto-detailing-hero.jpg",
       "label": "Port Dover service-area hero",
-      "r2_key": "landing-pages/port-dover-auto-detailing-hero.webp",
+      "r2_key": "landing-pages/port-dover-auto-detailing-hero.jpg",
       "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
     },
     {
-      "filename": "norwich-otterville-auto-detailing-hero.webp",
+      "filename": "norwich-otterville-auto-detailing-hero.jpg",
       "label": "Norwich/Otterville service-area hero",
-      "r2_key": "landing-pages/norwich-otterville-auto-detailing-hero.webp",
+      "r2_key": "landing-pages/norwich-otterville-auto-detailing-hero.jpg",
       "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
     },
     {
-      "filename": "zorra-thamesford-embro-auto-detailing-hero.webp",
+      "filename": "zorra-thamesford-embro-auto-detailing-hero.jpg",
       "label": "Zorra/Thamesford/Embro service-area hero",
-      "r2_key": "landing-pages/zorra-thamesford-embro-auto-detailing-hero.webp",
+      "r2_key": "landing-pages/zorra-thamesford-embro-auto-detailing-hero.jpg",
       "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
     },
     {
-      "filename": "waterford-vittoria-auto-detailing-hero.webp",
+      "filename": "waterford-vittoria-auto-detailing-hero.jpg",
       "label": "Waterford/Vittoria service-area hero",
-      "r2_key": "landing-pages/waterford-vittoria-auto-detailing-hero.webp",
+      "r2_key": "landing-pages/waterford-vittoria-auto-detailing-hero.jpg",
       "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
     },
     {
-      "filename": "port-rowan-turkey-point-auto-detailing-hero.webp",
+      "filename": "port-rowan-turkey-point-auto-detailing-hero.jpg",
       "label": "Port Rowan/Turkey Point service-area hero",
-      "r2_key": "landing-pages/port-rowan-turkey-point-auto-detailing-hero.webp",
+      "r2_key": "landing-pages/port-rowan-turkey-point-auto-detailing-hero.jpg",
       "status": "external Wikimedia placeholder should be replaced with Rosie-owned/local-approved photo"
     }
   ],
@@ -258,5 +258,6 @@
       "service": "Ceramic coating or exterior protection",
       "needed": "approved public proof pair"
     }
-  ]
+  ],
+  "notes": "Build 215: Regional Local Hero requirements now use canonical JPG keys; compatible JPG/JPEG/WebP/PNG format lookup is handled by the renderer and health scan."
 }

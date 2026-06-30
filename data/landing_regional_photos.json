@@ -1,55 +1,80 @@
 {
-  "updated_at": "2026-05-16",
+  "updated_at": "2026-06-30",
   "purpose": "Regional hero/photo source map for location landing pages. These are editable seeds; replace with Rosie-owned photos when available.",
   "license_note": "External photos are linked as remote source-credit placeholders. Replace with R2-hosted Rosie-owned or properly licensed local photos before heavy marketing use.",
   "pages": {
     "tillsonburg-auto-detailing": {
-      "hero_image_url": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Tillsonburgskyline.jpg/800px-Tillsonburgskyline.jpg",
-      "region_photo_caption": "Tillsonburg regional photo used to help local visitors recognize the service-area page.",
-      "region_photo_source": "Wikimedia Commons / Tillsonburg page",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Tillsonburg"
+      "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/tillsonburg-auto-detailing.jpg",
+      "region_photo_caption": "Rosie Dazzlers local service-area hero image for Tillsonburg.",
+      "region_photo_source": "Rosie Dazzlers approved local media",
+      "region_photo_source_url": "",
+      "legacy_remote_image_url": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Tillsonburgskyline.jpg/800px-Tillsonburgskyline.jpg",
+      "r2_key": "landing-pages/tillsonburg-auto-detailing.jpg",
+      "format": "jpg"
     },
     "woodstock-ingersoll-auto-detailing": {
-      "hero_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/City%20Hall%20Woodstock%20Ontario%201.jpg",
-      "region_photo_caption": "Woodstock City Hall photo representing the Woodstock and Ingersoll service corridor.",
-      "region_photo_source": "Wikimedia Commons / Woodstock, Ontario page",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Woodstock,_Ontario"
+      "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/woodstock-ingersoll-auto-detailing.jpg",
+      "region_photo_caption": "Rosie Dazzlers local service-area hero image for Woodstock Ingersoll.",
+      "region_photo_source": "Rosie Dazzlers approved local media",
+      "region_photo_source_url": "",
+      "legacy_remote_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/City%20Hall%20Woodstock%20Ontario%201.jpg",
+      "r2_key": "landing-pages/woodstock-ingersoll-auto-detailing.jpg",
+      "format": "jpg"
     },
     "simcoe-delhi-auto-detailing": {
-      "hero_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Governor%20Simcoe%20Square%20Simcoe%20Ontario.jpg",
-      "region_photo_caption": "Governor Simcoe Square photo representing the Simcoe and Delhi Norfolk County service area.",
-      "region_photo_source": "Wikimedia Commons / Simcoe, Ontario page",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Simcoe,_Ontario"
+      "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/simcoe-delhi-auto-detailing.jpg",
+      "region_photo_caption": "Rosie Dazzlers local service-area hero image for Simcoe Delhi.",
+      "region_photo_source": "Rosie Dazzlers approved local media",
+      "region_photo_source_url": "",
+      "legacy_remote_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Governor%20Simcoe%20Square%20Simcoe%20Ontario.jpg",
+      "r2_key": "landing-pages/simcoe-delhi-auto-detailing.jpg",
+      "format": "jpg"
     },
     "port-dover-auto-detailing": {
-      "hero_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Boats%20moored%20at%20Port%20Dover%2C%20Ontario.jpg",
-      "region_photo_caption": "Port Dover harbour photo representing the coastal Norfolk County service area.",
-      "region_photo_source": "Wikimedia Commons / Port Dover page",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Port_Dover"
+      "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/port-dover-auto-detailing.jpg",
+      "region_photo_caption": "Rosie Dazzlers local service-area hero image for Port Dover.",
+      "region_photo_source": "Rosie Dazzlers approved local media",
+      "region_photo_source_url": "",
+      "legacy_remote_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Boats%20moored%20at%20Port%20Dover%2C%20Ontario.jpg",
+      "r2_key": "landing-pages/port-dover-auto-detailing.jpg",
+      "format": "jpg"
     },
     "norwich-otterville-auto-detailing": {
-      "hero_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Norwich%20post%20office%20and%20clock%20tower.JPG",
-      "region_photo_caption": "Norwich clock tower photo representing Norwich, Otterville, and nearby Oxford County communities.",
-      "region_photo_source": "Wikimedia Commons / Norwich, Ontario page",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Norwich,_Ontario"
+      "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/norwich-otterville-auto-detailing.jpg",
+      "region_photo_caption": "Rosie Dazzlers local service-area hero image for Norwich Otterville.",
+      "region_photo_source": "Rosie Dazzlers approved local media",
+      "region_photo_source_url": "",
+      "legacy_remote_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Norwich%20post%20office%20and%20clock%20tower.JPG",
+      "r2_key": "landing-pages/norwich-otterville-auto-detailing.jpg",
+      "format": "jpg"
     },
     "zorra-thamesford-embro-auto-detailing": {
-      "hero_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Embro%20ON.JPG",
-      "region_photo_caption": "Embro photo representing the Zorra, Thamesford, and Embro rural service area.",
-      "region_photo_source": "Wikimedia Commons / Zorra page",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Zorra"
+      "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/zorra-thamesford-embro-auto-detailing.jpg",
+      "region_photo_caption": "Rosie Dazzlers local service-area hero image for Zorra Thamesford Embro.",
+      "region_photo_source": "Rosie Dazzlers approved local media",
+      "region_photo_source_url": "",
+      "legacy_remote_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Embro%20ON.JPG",
+      "r2_key": "landing-pages/zorra-thamesford-embro-auto-detailing.jpg",
+      "format": "jpg"
     },
     "waterford-vittoria-auto-detailing": {
-      "hero_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Waterford%20Old%20Town%20Hall%20-%20Waterford%2C%20ON.jpg",
-      "region_photo_caption": "Waterford Old Town Hall photo representing Waterford, Vittoria, and nearby Norfolk County communities.",
-      "region_photo_source": "Wikimedia Commons / Waterford, Ontario page",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Waterford,_Ontario"
+      "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/waterford-vittoria-auto-detailing.jpg",
+      "region_photo_caption": "Rosie Dazzlers local service-area hero image for Waterford Vittoria.",
+      "region_photo_source": "Rosie Dazzlers approved local media",
+      "region_photo_source_url": "",
+      "legacy_remote_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Waterford%20Old%20Town%20Hall%20-%20Waterford%2C%20ON.jpg",
+      "r2_key": "landing-pages/waterford-vittoria-auto-detailing.jpg",
+      "format": "jpg"
     },
     "port-rowan-turkey-point-auto-detailing": {
-      "hero_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Lighthouse%20and%20docks%2C%20Port%20Rowan%2C%20ON.jpg",
-      "region_photo_caption": "Port Rowan waterfront photo representing Port Rowan, Turkey Point, and nearby Long Point-area service calls.",
-      "region_photo_source": "Wikimedia Commons / Port Rowan page",
-      "region_photo_source_url": "https://en.wikipedia.org/wiki/Port_Rowan"
+      "hero_image_url": "https://assets.rosiedazzlers.ca/landing-pages/port-rowan-turkey-point-auto-detailing.jpg",
+      "region_photo_caption": "Rosie Dazzlers local service-area hero image for Port Rowan Turkey Point.",
+      "region_photo_source": "Rosie Dazzlers approved local media",
+      "region_photo_source_url": "",
+      "legacy_remote_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Lighthouse%20and%20docks%2C%20Port%20Rowan%2C%20ON.jpg",
+      "r2_key": "landing-pages/port-rowan-turkey-point-auto-detailing.jpg",
+      "format": "jpg"
     }
-  }
+  },
+  "notes": "Build 215: Local Hero assets are now JPG-compatible and expected in the Rosie-owned R2 landing-pages path. Legacy external sources are retained only as historical references."
 }

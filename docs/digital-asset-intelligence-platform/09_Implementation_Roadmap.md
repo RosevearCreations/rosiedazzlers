@@ -240,3 +240,9 @@ Every DAIP implementation pass must update:
 - testing checklist
 
 This keeps the subsystem understandable for future chats and future maintainers.
+
+## Build 215 planning checkpoint — 2026-06-30
+
+The DAIP documentation is now referenced by the active Rosie Dazzlers roadmap and known-gaps files. `10_Rosie_Dazzlers_Integration_Plan.md` defines the boundary with existing job media, incident privacy, gallery approvals, RLS, and future background workers.
+
+**Status:** Phase 0 planning remains open. No production DAIP tables, workers, R2 DAIP buckets, AI processing, exports, or automatic publishing were added in Build 215. Begin with DAIP-0 decisions and a reviewed Phase 1 migration draft, not implementation code.
