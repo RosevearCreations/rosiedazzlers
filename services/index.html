@@ -294,6 +294,7 @@
       applyJsonLdScript
     } from "/assets/pricing-catalog-client.js?v=20260423livecharts2";
     import { renderRecentWorkMounts } from "/assets/recent-work.js";
+    import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260630build215";
 
     const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
@@ -409,7 +410,8 @@
       const inc = Array.isArray(pkg.included_services) ? pkg.included_services : [];
       const incList = inc.slice(0, 9).map(s=>`<li>${escapeHtml(s.name || "")}</li>`).join("");
 
-      const getImages = ()=>[mainImg, ...HOVER_EXTRA_IMAGES].filter(Boolean);
+      let resolvedMainImg = mainImg;
+      const getImages = ()=>[resolvedMainImg, ...HOVER_EXTRA_IMAGES].filter(Boolean);
 
       el.innerHTML = `
         <img class="cardImg" alt="${escapeHtml(pkg.name)}" />
@@ -436,10 +438,13 @@
       `;
 
       const img = el.querySelector("img");
-      img.src = mainImg;
       img.loading = "lazy";
       img.decoding = "async";
-      img.onerror = ()=>{ img.style.display = "none"; };
+      bindImageWithCandidates(img, mainImg, {
+        fallback: "/assets/brand/rosie-reviews-fallback.svg",
+        onResolved: (_img, resolvedUrl) => { resolvedMainImg = resolvedUrl || mainImg; },
+        onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.svg"; node.classList.add("visual-placeholder-img"); }
+      });
 
       attachHoverCarousel(img, getImages);
 
@@ -477,10 +482,12 @@
 
       const imgEl = el.querySelector("img");
       if (imgEl){
-        imgEl.src = imageUrl;
         imgEl.loading = "lazy";
         imgEl.decoding = "async";
-        imgEl.onerror = ()=>{ if (fallbackUrl && imgEl.src !== new URL(fallbackUrl, window.location.origin).href) { imgEl.src = fallbackUrl; return; } imgEl.style.display = "none"; };
+        bindImageWithCandidates(imgEl, imageUrl, {
+          fallback: fallbackUrl || "/assets/brand/rosie-reviews-fallback.svg",
+          onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.svg"; node.classList.add("visual-placeholder-img"); }
+        });
       }
 
       return el;
@@ -536,7 +543,7 @@
     <div class="hero-actions" style="margin-top:12px"><a class="btn primary" href="/faq">Open FAQ</a><a class="btn ghost" href="/book?estimate=photos">Send photos for estimate</a><a class="btn ghost" href="/contact">Ask us</a></div>
   </section>
 
-  <script type="module" src="/assets/chrome.js?v=20260311j"></script>
+  <script type="module" src="/assets/chrome.js?v=20260630build215"></script>
   <script src="/assets/public-content-blocks.js?v=20260525build178" defer></script>
 </body>
 </html>
