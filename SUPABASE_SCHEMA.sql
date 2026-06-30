@@ -2013,3 +2013,8 @@ comment on table public.recommendation_price_acknowledgements is 'Customer typed
 -- Primary migration: sql/2026-06-23_build214_security_task_orchestration.sql
 -- Adds owner_attention_tasks.due_at/escalation fields, locks public tables behind RLS,
 -- revokes direct browser-role table grants, and exposes protected rosie_security_posture_report().
+
+-- Build 215 — media asset format alignment and DAIP planning note (2026-06-30)
+-- Apply sql/2026-06-30_build215_media_asset_format_alignment.sql to align legacy public.media_asset_tasks
+-- Local Hero .webp records with the canonical public JPG keys used by the verified R2 uploads.
+-- No DAIP production schema is added in Build 215. Future DAIP Phase 1 requires a separate reviewed migration.

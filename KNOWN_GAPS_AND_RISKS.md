@@ -1,9 +1,9 @@
-# Build 207 known gaps and risks — Markdown consolidation and visual placeholders
+# Rosie Dazzlers known gaps and risks — Build 215
 
-**Updated:** 2026-06-14  
-**Build:** 207
+**Updated:** 2026-06-30  
+**Build:** 215
 
-Build 207 reduces documentation drift and missing-image visual risk, but it does not complete every historical enhancement. The project now has two canonical strategy docs and a visual placeholder system so the app looks more professional while approved images are gathered.
+Build 215 retains the two canonical strategy documents, repairs public media format compatibility, and adds DAIP integration planning. It does not complete every historical enhancement and it does not make DAIP production-ready.
 
 ## Reduced in Build 207
 
@@ -1537,3 +1537,26 @@ Build 213 adds owner action controls in Today Needs Attention, customer price/su
 ### Build 214 documentation sync — 2026-06-23
 
 Build 214 prioritizes Supabase containment and owner-task reliability. The active security action is to run `sql/2026-06-23_build214_security_task_orchestration.sql`, refresh Supabase Security Advisor, and test the application through Cloudflare Functions rather than restoring direct browser access to tables. Canonical planning remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+## Build 215 — asset compatibility and DAIP planning gaps (2026-06-30)
+
+### Reduced
+
+- The public image renderer and verifier no longer assume `.webp` is the only valid format for the same approved Rosie R2 asset name.
+- Canonical Local Hero data now prefers JPG, matching the uploaded Local Hero format.
+- Admin Media Health can show a resolved compatible URL rather than only reporting the stale expected URL.
+- DAIP has a Rosie-specific planning boundary instead of being an unreferenced documentation folder.
+
+### Still open / must be tested after deploy
+
+1. **R2 exact-key confirmation:** client fallback tries compatible extensions only. It cannot correct an incorrect folder, base filename, access policy, custom-domain mapping, or letter case inside the filename. R2 object keys are case-sensitive.
+2. **Cloudflare cache propagation:** verified assets can still show stale fallback until the new client code and service-worker cache version are deployed and the browser is refreshed/cleared.
+3. **Media task alignment:** legacy DB task rows may retain `.webp` until `sql/2026-06-30_build215_media_asset_format_alignment.sql` is applied.
+4. **Public/private separation:** only intentionally public website assets should use `assets.rosiedazzlers.ca`; incident evidence, staff-only updates, originals, and DAIP future processing artifacts must stay private.
+5. **DAIP is planning only:** no DAIP table, RLS policy, worker, queue, R2 DAIP bucket, Google Drive synchronization, FFmpeg, vision/transcription model, export, or publication flow exists yet.
+6. **DAIP cost and privacy risk:** background media processing can create large storage/egress/compute costs and privacy exposure. DAIP-0 decisions are mandatory before any implementation.
+7. **DAIP marketing consent:** customer-visible job proof does not automatically create a marketing/public-export right.
+8. **DAIP worker reliability:** Pages Functions must not be used as the long-running processing engine; a separate background-worker architecture must be selected and tested.
+9. **Production verification required:** static checks cannot prove public R2 CORS/custom-domain behavior, image caching, actual dimensions, or deployed page rendering.
+
+> **Build 207 known gaps and risks — retained historical marker:** The Build 207 documentation and visual-placeholder baseline remains preserved for historical release checks. Current risks are updated through Build 215 above.

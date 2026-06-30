@@ -1,6 +1,6 @@
-# Rosie Dazzlers Master Value Roadmap — Build 210
+# Rosie Dazzlers Master Value Roadmap — Build 215
 
-**Updated:** 2026-06-17  
+**Updated:** 2026-06-30  
 **Purpose:** This is the one active business/product roadmap. Historical build detail remains in `DEVELOPMENT_ROADMAP.md`; active decisions belong here.
 
 ## North star
@@ -391,3 +391,57 @@ Build 214 prioritizes Supabase containment and owner-task reliability. The activ
 18. Add application health checks for Cloudflare Function publish/binding readiness.
 19. Simplify or retire any owner screen that does not feed Today Needs Attention.
 20. Replace visual placeholders with approved local proof photos/video stills.
+
+## Build 215 — verified media rendering and DAIP integration planning (2026-06-30)
+
+### Completed 20 steps
+
+1. Traced public service-hub/local-hero fallback behavior to extension-specific legacy media references.
+2. Added a shared client media-source resolver for known Rosie asset URLs.
+3. Preserved the original requested URL as the first image attempt.
+4. Added compatible same-key JPG lookup.
+5. Added compatible same-key JPEG lookup.
+6. Added compatible same-key WebP lookup.
+7. Added compatible same-key PNG lookup.
+8. Added uppercase extension candidates for case-sensitive R2 extension uploads.
+9. Updated landing-page hero rendering to prefer `local_hero_image_url`.
+10. Updated landing-page gallery/related-media rendering to use the resolver before fallback.
+11. Updated service hub package/add-on images to use the resolver before fallback.
+12. Updated booking add-on thumbnails to use the resolver before fallback.
+13. Prevented the visual-placeholder listener from interrupting a still-running format-resolution chain.
+14. Updated Admin Media Health scan to test compatible image extensions.
+15. Updated Admin Media Health cards to display the resolved URL and compatible-format result.
+16. Changed canonical Local Hero static data to JPG keys and URLs.
+17. Updated regional media requirement files to accept JPG/JPEG/WebP/PNG while documenting JPG as canonical.
+18. Added a safe legacy media-task JPG alignment migration.
+19. Reviewed all DAIP documentation and added a Rosie-specific integration-plan document.
+20. Added Build 215 schema, handoff, known-gap, image-guide, documentation-index, release-check, and cache-version synchronization.
+
+### DAIP status and value sequencing
+
+DAIP is valuable because one approved completed job could create reusable proof for the customer summary, vehicle history, before/after gallery, service/town pages, Google Business Profile, marketing drafts, and future social packages. It is also a high-cost/privacy-sensitive subsystem.
+
+**Build 215 status: planning only.** Do not begin a worker, AI model, processing queue, `daip_*` table, Drive sync, public export, or auto-publication until the DAIP-0 decisions in `docs/digital-asset-intelligence-platform/10_Rosie_Dazzlers_Integration_Plan.md` are accepted.
+
+### Next 20 value-added steps
+
+1. Deploy Build 215 and confirm Cloudflare Functions publish successfully.
+2. Run `sql/2026-06-30_build215_media_asset_format_alignment.sql` in Supabase after Build 214 security/RLS containment is confirmed.
+3. Open `/admin-media-health.html` while signed in and run the image-health scan.
+4. Confirm the eight Local Hero rows show a public JPG resolved URL and acceptable dimensions.
+5. Open each Local Hero page in a private/incognito browser and confirm no blank/default image appears.
+6. Open `/services` and confirm Service Hub images render before any placeholder fallback.
+7. Record any still-failing exact R2 key, resolved URL, HTTP status, and image dimensions; do not guess by replacing filenames.
+8. Ensure Cloudflare R2 custom-domain public access allows only intended approved public asset prefixes.
+9. Keep originals, private incidents, and staff-only job media out of the public `assets.rosiedazzlers.ca` namespace.
+10. Decide DAIP worker hosting and monthly cost ceiling.
+11. Decide DAIP original/proxy/public-derivative storage boundaries.
+12. Decide whether Google Drive is backup-only, operator-viewable, or deferred.
+13. Define DAIP consent wording and public-marketing approval rule.
+14. Define DAIP privacy-review roles and legal-hold behavior.
+15. Choose one controlled internal test detail for future DAIP acceptance testing.
+16. Draft, review, and approve a separate Phase 1 DAIP schema migration before executing it.
+17. Build only selected manual media-job intake after the migration is reviewed.
+18. Add real alerting for persistent missing public image URLs after verified R2 uploads.
+19. Replace any remaining generic visual placeholders with approved Rosie-owned media through Gallery/Media Health review.
+20. Re-run the Guided Production Test Centre after each deployed reliability/security/media change.

@@ -995,3 +995,7 @@ Build 213 adds owner action controls in Today Needs Attention, customer price/su
 ### Build 214 documentation sync — 2026-06-23
 
 Build 214 prioritizes Supabase containment and owner-task reliability. The active security action is to run `sql/2026-06-23_build214_security_task_orchestration.sql`, refresh Supabase Security Advisor, and test the application through Cloudflare Functions rather than restoring direct browser access to tables. Canonical planning remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+## Build 215 note — media assets and DAIP planning
+
+Local Hero JPG files are now supported directly by the public renderer and Admin Media Health scanner; see `IMAGES.md` and `sql/2026-06-30_build215_media_asset_format_alignment.sql`. The DAIP documentation in `docs/digital-asset-intelligence-platform/` is now actively referenced, but Build 215 is planning-only for DAIP; read `10_Rosie_Dazzlers_Integration_Plan.md` before any implementation.

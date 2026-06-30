@@ -393,3 +393,43 @@ Build 213 adds owner action controls in Today Needs Attention, customer price/su
 ### Build 214 documentation sync — 2026-06-23
 
 Build 214 prioritizes Supabase containment and owner-task reliability. The active security action is to run `sql/2026-06-23_build214_security_task_orchestration.sql`, refresh Supabase Security Advisor, and test the application through Cloudflare Functions rather than restoring direct browser access to tables. Canonical planning remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+## Build 215 — JPG Local Hero compatibility and verification (2026-06-30)
+
+The Local Hero images may remain JPG files. They do **not** need to be converted to WebP merely to render in Rosie Dazzlers.
+
+Canonical Local Hero key pattern:
+
+```text
+landing-pages/<town-or-area>-auto-detailing.jpg
+```
+
+The current public renderer and Admin Media Health verifier accept the same approved base key with:
+
+```text
+.jpg
+.jpeg
+.webp
+.png
+```
+
+The original URL is always tried first. A format variant is tried only before the page uses a fallback visual. This is a compatibility layer, not a filename repair tool: folder name, base filename, and case-sensitive R2 key must still be correct.
+
+### Required verification after Build 215 deployment
+
+1. Open `/admin-media-health.html` while signed in.
+2. Click **Run image health scan**.
+3. For each Local Hero, confirm:
+   - status is public;
+   - measured dimensions are at least 1600×900;
+   - **Resolved URL** points to the approved JPG/JPEG/WebP/PNG object;
+   - no missing/not-public badge appears.
+4. In an incognito/private browser, open the exact resolved URL from the card.
+5. Open the matching public Local Hero page and confirm the hero image appears instead of the default fallback.
+6. If an item still fails, record the exact expected key, resolved URL, HTTP status, and measured dimensions. Do not rename assets blindly.
+
+Build 215 migration for existing DB task rows:
+
+```text
+sql/2026-06-30_build215_media_asset_format_alignment.sql
+```
