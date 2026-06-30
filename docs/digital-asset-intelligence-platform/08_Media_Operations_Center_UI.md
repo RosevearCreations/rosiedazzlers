@@ -1,0 +1,248 @@
+# DAIP Media Operations Center UI
+
+**Version:** 1.0
+
+---
+
+## 1. Purpose
+
+The Media Operations Center is the admin interface for DAIP.
+
+It should allow Rosie Dazzlers to manage uploads, processing, privacy review, generated content, publishing, and archive without needing a separate video editing workflow for every job.
+
+---
+
+## 2. Main Navigation
+
+Suggested admin section:
+
+```text
+/admin/media
+```
+
+Subsections:
+
+- Dashboard
+- Today's Media Jobs
+- Uploads
+- Processing Queue
+- Privacy Review
+- Story Review
+- Generated Videos
+- Galleries
+- Captions & SEO
+- Publishing Queue
+- Archive
+- Storage Health
+- Analytics
+
+---
+
+## 3. Dashboard Widgets
+
+Dashboard should show:
+
+- media jobs today
+- uploads in progress
+- jobs waiting for processing
+- jobs needing privacy review
+- generated assets awaiting approval
+- failed processing tasks
+- storage used this month
+- published assets this month
+
+---
+
+## 4. Media Job Detail Screen
+
+Each job screen should show:
+
+- job code
+- customer/vehicle summary
+- package/add-ons
+- upload status
+- original files
+- proxy files
+- detected scenes
+- best clips
+- privacy detections
+- generated outputs
+- captions
+- publishing status
+- audit history
+
+---
+
+## 5. Upload Screen
+
+Features:
+
+- drag and drop
+- mobile upload
+- camera source label
+- before/process/after label
+- resumable upload progress
+- failed upload retry
+- duplicate detection
+
+---
+
+## 6. Processing Queue Screen
+
+Columns:
+
+- job code
+- task type
+- file
+- status
+- progress
+- attempts
+- error
+- retry button
+
+---
+
+## 7. Privacy Review Screen
+
+Must show:
+
+- video frame preview
+- detected bounding box
+- timestamp
+- confidence
+- chosen action
+- approve mask
+- reject false positive
+- apply stronger blur
+- mark manual review complete
+
+---
+
+## 8. Story Review Screen
+
+Should show a timeline:
+
+```text
+Hook → Before → Process → Reveal → After → CTA
+```
+
+Admin can:
+
+- reorder clips
+- remove clips
+- replace clips
+- trim start/end
+- choose music direction
+- choose title style
+- approve story
+
+---
+
+## 9. Generated Videos Screen
+
+Group outputs by platform:
+
+- YouTube
+- Facebook
+- Instagram
+- TikTok
+
+For each:
+
+- preview
+- duration
+- aspect ratio
+- caption
+- thumbnail
+- privacy status
+- approve/reject/regenerate
+
+---
+
+## 10. Gallery Review Screen
+
+Show:
+
+- before/after pairs
+- image quality score
+- alt text
+- captions
+- service tags
+- publish destination
+
+---
+
+## 11. Captions and SEO Screen
+
+Tabs:
+
+- SEO title/meta
+- blog draft
+- Facebook captions
+- Instagram captions
+- TikTok captions
+- YouTube description
+- GBP post
+- hashtags
+
+---
+
+## 12. Publishing Queue Screen
+
+Shows approved assets waiting for publishing/export.
+
+Columns:
+
+- platform
+- asset title
+- status
+- scheduled time
+- published URL
+- error message
+
+---
+
+## 13. Archive Screen
+
+Searchable archive by:
+
+- job code
+- vehicle
+- town
+- service
+- tag
+- date
+- platform
+- quality score
+
+Example searches:
+
+- black SUV ceramic water beading
+- pet hair removal before after
+- Tillsonburg interior shampoo
+
+---
+
+## 14. Accessibility and Mobile
+
+UI must be:
+
+- mobile-friendly
+- large tap targets
+- progress visible
+- easy retry buttons
+- colour contrast safe
+- usable in driveway/sunlight conditions
+
+---
+
+## 15. Safety Design
+
+Any public publishing action should clearly show:
+
+- privacy status
+- customer consent status
+- plate/face masking status
+- approval history
+
+No asset should be publishable if privacy review is incomplete.

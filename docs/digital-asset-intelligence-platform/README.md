@@ -1,0 +1,171 @@
+# Rosie Dazzlers Digital Asset Intelligence Platform (DAIP)
+
+**Version:** 1.0  
+**Status:** Architecture / Planning  
+**Subsystem Type:** Media operations, AI production studio, digital asset management, privacy processing, and marketing automation  
+**Primary Goal:** Turn one completed detailing job into a complete set of marketing, customer proof, SEO, gallery, and social media assets.
+
+---
+
+## 1. Purpose
+
+The Digital Asset Intelligence Platform (DAIP) is a planned Rosie Dazzlers subsystem that manages the complete lifecycle of detailing media.
+
+It exists because a normal detailing job can produce 10–15 large video files, many photos, short clips, before/after evidence, customer proof, and social media opportunities. Manually sorting, trimming, censoring, editing, captioning, publishing, and archiving all of that footage is too time consuming.
+
+DAIP solves this by creating a structured media pipeline that:
+
+1. Creates a unique media repository for every vehicle/job.
+2. Stores original media safely.
+3. Generates smaller proxy files automatically.
+4. Detects scenes, story moments, poor footage, good footage, privacy risks, and reusable marketing clips.
+5. Builds short-form and long-form content packages.
+6. Protects license plates and sensitive customer information.
+7. Creates a human review queue before publishing.
+8. Produces reusable media assets for the website, Google Business Profile, social media, blog posts, SEO, customer proof, and future campaigns.
+
+---
+
+## 2. Required End Result From One Detailing Job
+
+From one detailing job, DAIP should prepare the following assets automatically for review:
+
+- 1 YouTube video
+- 3 Facebook videos
+- 5 Instagram Reels
+- 5 TikTok videos
+- Before/after images
+- Website gallery
+- Google Business Profile photos
+- SEO metadata
+- Blog article
+- Thumbnail candidates
+- Platform-specific captions
+
+Nothing should publish automatically without admin approval.
+
+---
+
+## 3. Guiding Principles
+
+- **Original footage is never modified.**
+- **Every vehicle gets its own folder and database record.**
+- **Multiple vehicles per day must be supported.**
+- **Privacy protection is mandatory before public export.**
+- **Human review is required before publishing.**
+- **The system should support mobile-first capture in the field.**
+- **The system should help technicians capture the right story while on site.**
+- **The system should produce business value from every job.**
+- **The system should support future AI improvement based on engagement data.**
+
+---
+
+## 4. Recommended Documentation Files
+
+This v1.0 documentation suite starts with these files:
+
+1. `README.md` — Vision, navigation, high-level goals.
+2. `00_Project_Charter.md` — Business case, scope, outcomes, success criteria.
+3. `01_System_Architecture.md` — Subsystem architecture, applications, data flow, queues, components.
+4. `02_Database_Architecture.md` — Planned tables, relationships, audit fields, and indexing direction.
+5. `03_Storage_Architecture.md` — Google Drive, Cloudflare R2, Supabase, local backup, naming conventions.
+6. `04_Media_Ingestion_Pipeline.md` — Job folder creation, uploads, proxies, queues, validation.
+7. `05_AI_Storytelling_Engine.md` — How the system turns random clips into a beginning/middle/end story.
+8. `06_Computer_Vision_and_Privacy_Engine.md` — License plates, faces, house numbers, privacy review.
+9. `07_Content_Generation_and_Marketing.md` — YouTube, Facebook, Reels, TikTok, website, GBP, SEO, blog.
+10. `08_Media_Operations_Center_UI.md` — Admin screens and review workflows.
+11. `09_Implementation_Roadmap.md` — Practical phased build plan.
+
+---
+
+## 5. High-Level Flow
+
+```text
+Booking / Job Created
+        ↓
+Media Job Created
+        ↓
+Vehicle Folder Created
+        ↓
+Technician Captures Guided Before / Process / After Media
+        ↓
+Raw Media Uploaded
+        ↓
+Proxy + Thumbnail Generation
+        ↓
+Scene Detection + Quality Scoring
+        ↓
+Object Detection + Privacy Detection
+        ↓
+Story Assembly
+        ↓
+Shorts / Reels / YouTube / Galleries / SEO Drafts Generated
+        ↓
+Admin Review Queue
+        ↓
+Approved Assets Published or Exported
+        ↓
+Analytics Tracked Back to Original Job
+```
+
+---
+
+## 6. Primary Applications and Tools Envisioned
+
+### Existing Rosie Dazzlers Platform
+Used for job records, booking, customer records, admin workflows, approvals, publishing queues, and website/gallery integration.
+
+### Google Drive
+Used as a familiar human-facing repository for organized media folders and backups.
+
+### Cloudflare R2
+Used for scalable application media storage: originals, proxies, thumbnails, generated outputs, and public website assets.
+
+### Supabase / PostgreSQL
+Used for metadata, media records, scene indexes, tags, AI scores, publish status, audit history, and analytics.
+
+### FFmpeg
+Used for video conversion, proxy generation, clip export, audio extraction, thumbnails, watermarks, blurs, black boxes, and final render assembly.
+
+### OpenCV
+Used for frame analysis, blur detection, motion detection, sharpness scoring, object tracking, and image quality checks.
+
+### PySceneDetect
+Used for automatic scene boundary detection.
+
+### YOLO or Similar Object Detection Model
+Used to detect cars, people, license plates, tools, foam, vacuums, wheels, interiors, headlights, and other detailing-related objects.
+
+### Whisper or Similar Speech-to-Text
+Used to generate transcripts, identify spoken notes, and create subtitles when needed.
+
+### Queue Worker / Background Processor
+Used to process large jobs asynchronously without blocking the web app.
+
+---
+
+## 7. Key Concept: One Vehicle = One Media Job
+
+Every vehicle/detail receives a unique ID:
+
+```text
+RD-YYYYMMDD-###
+```
+
+Examples:
+
+```text
+RD-20260715-001
+RD-20260715-002
+RD-20260715-003
+```
+
+This supports multiple vehicles in one day without overwriting or confusing footage.
+
+---
+
+## 8. Development Rule
+
+DAIP must be documentation-driven.
+
+Before adding code, update the related Markdown file and database/schema notes. This keeps future AI conversations, future developers, and future rebuilds aligned with the intended architecture.
