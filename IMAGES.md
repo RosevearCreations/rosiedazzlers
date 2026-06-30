@@ -20,8 +20,8 @@ Build 185 clears the older image notes into an actionable media-health checklist
 |---|---:|---:|---:|---|
 | Add-on cards | `packages/<addon>.png` | 1200×800 | 1600×1067 | Landscape, bright, service-specific. |
 | Package cards | `packages/<package>.png` | 1200×800 | 1600×900 | Use consistent vehicle angle/background. |
-| Regional landing heroes | `landing-pages/<town>-auto-detailing.webp` | 1600×900 | 1920×1080 | Rosie-owned local proof only. |
-| Before/after gallery | `gallery/<town>-<service>-before.webp` and `...after.webp` | 1200×900 | 1600×1200 | Requires approved public consent/privacy status. |
+| Regional landing heroes | `landing-pages/<town>-auto-detailing.jpg` | 1600×900 | 1920×1080 | Rosie-owned local proof only. |
+| Before/after gallery | `gallery/<town>-<service>-before.jpg` and `...after.jpg` | 1200×900 | 1600×1200 | Requires approved public consent/privacy status. |
 | Public videos | `videos/<name>.mp4` or `.webm` | 720p | 1080p | Keep short, compressed, and owned by Rosie Dazzlers. |
 
 ## Critical missing add-on image keys
