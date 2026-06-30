@@ -107,6 +107,6 @@
     hardenTextInput(qs('#q'));
     try { const raw = await loadCatalog(); const list=raw.map(normalizeItem).filter(it=>it.name); fillSelect('#cat', list.map(x=>x.category), 'categories'); fillSelect('#typeFilter', list.map(x=>x.type), 'types'); render(list); ['q','cat','typeFilter','sort'].forEach(id=>qs('#'+id).addEventListener(id==='q'?'input':'change',()=>render(list))); qs('#clearBtn').addEventListener('click',()=>{qs('#q').value='';qs('#cat').value='';qs('#typeFilter').value='';qs('#sort').value='title_asc';render(list);}); } catch(e){ qs('#loadErr').style.display='block'; qs('#loadErr').textContent=`Failed to load gear catalog: ${e.message||e}`; }
   </script>
-  <script type="module" src="/assets/chrome.js?v=20260326d"></script>
+  <script type="module" src="/assets/chrome.js?v=20260630build215"></script>
 </body>
 </html>
