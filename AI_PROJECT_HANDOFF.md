@@ -1,6 +1,6 @@
-# Rosie Dazzlers AI Project Handoff — Build 210
+# Rosie Dazzlers AI Project Handoff — Build 215
 
-**Updated:** 2026-06-17  
+**Updated:** 2026-06-30  
 **Read first:** This is the primary technical/business handoff for a new AI chat or future build pass.
 
 ## Product north star
@@ -277,3 +277,28 @@ Critical deployment order:
 4. If a normal site screen fails, repair its Cloudflare Function or create a narrow server endpoint—never reintroduce broad direct browser table grants.
 
 The browser must never contain `SUPABASE_SERVICE_ROLE_KEY`; Cloudflare Functions are the intended database boundary.
+
+## Build 215 — public asset compatibility and DAIP planning (2026-06-30)
+
+Build 215 addresses two separate concerns without conflating them.
+
+### Public site asset compatibility
+
+Verified Rosie-owned Service Hub/Local Hero images may exist in R2 as JPG files even where older runtime records, media tasks, or client markup expected `.webp`. The public image path is now format-aware for known Rosie asset URLs:
+
+- canonical Local Hero keys use `landing-pages/<local-page-slug>.jpg`;
+- the client tries the original URL, then same-name JPG/JPEG/WebP/PNG variants before visual fallback;
+- the Admin Media Health scan reports the actual resolved URL and whether a compatible extension was used;
+- `sql/2026-06-30_build215_media_asset_format_alignment.sql` aligns legacy Local Hero `media_asset_tasks` records to canonical JPG keys.
+
+This does not hide a wrong filename, wrong folder, or wrong letter case. R2 keys are case-sensitive. The required first test is an incognito load of the exact `https://assets.rosiedazzlers.ca/<key>` URL and then the public page.
+
+### DAIP documentation-only planning
+
+The Digital Asset Intelligence Platform documentation under `docs/digital-asset-intelligence-platform/` is now part of the active planning context. Read `docs/digital-asset-intelligence-platform/10_Rosie_Dazzlers_Integration_Plan.md` before any DAIP implementation.
+
+**Build 215 deliberately adds no DAIP production code, `daip_*` tables, worker, R2 DAIP bucket, AI model, Google Drive integration, processing queue, public export, or automatic publishing.** The plan establishes safe boundaries with existing bookings, job media, incidents, gallery approvals, vehicle history, RLS, retention, and staff approvals.
+
+Primary future decision sequence:
+
+`DAIP-0 security/cost/retention/consent decisions → DAIP-1 reviewed schema/storage foundation → selected manual intake → proxy/thumbnail worker → privacy review → story/export review → approved gallery/content handoff.`

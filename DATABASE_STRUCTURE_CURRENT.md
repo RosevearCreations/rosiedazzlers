@@ -931,3 +931,9 @@ Primary migration: `sql/2026-06-23_build214_security_task_orchestration.sql`.
 - Public-schema tables are intended to be RLS-enabled with direct `anon`/`authenticated`/`PUBLIC` table grants removed.
 - `public.rosie_security_posture_report()` is a service-role-only SQL function used by `/api/admin/security_posture_report`.
 - No browser page should query public tables directly; Cloudflare Functions remain the server-side authorization boundary.
+
+## Build 215 — media asset format alignment and DAIP planning note (2026-06-30)
+
+Build 215 adds `sql/2026-06-30_build215_media_asset_format_alignment.sql` to align legacy `public.media_asset_tasks` Local Hero rows from stale `.webp` assumptions to canonical JPG keys/URLs where safe. It does not add new application tables.
+
+DAIP is documentation/planning only in Build 215. No `daip_*` tables, storage buckets, queue records, RLS policies, worker jobs, AI records, export records, or publication tables are created until a separate reviewed Phase 1 migration is approved.

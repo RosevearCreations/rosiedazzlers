@@ -1,9 +1,9 @@
-# Build 207 update — Markdown consolidation, visual placeholders, and sanity sweep
+# Rosie Dazzlers Development Roadmap — Build 215
 
-**Updated:** 2026-06-14  
-**Build:** 207
+**Updated:** 2026-06-30  
+**Build:** 215
 
-Build 207 responds to the sanity-check request by creating two canonical living Markdown files, adding an Admin Docs/Sanity Center, adding visual graphic placeholders for missing/enrichment image slots, refreshing desktop/mobile CSS safeguards, and documenting the next clean step after the Build 206 value-added foundations. This pass is intentionally no-DDL: it uses bundled JSON registries, admin report APIs, shared CSS/JS, and existing staff authentication.
+Build 215 keeps the canonical handoff/roadmap model, adds public asset format compatibility for verified JPG Local Heroes and Service Hub media, and records DAIP integration planning without implementing DAIP production infrastructure. The immediate operational priority is verifying deployed R2 URL rendering before starting any DAIP Phase 1 work.
 
 ## Build 207 — 20 completed items
 
@@ -2470,3 +2470,21 @@ Build 213 adds owner action controls in Today Needs Attention, customer price/su
 ### Build 214 documentation sync — 2026-06-23
 
 Build 214 prioritizes Supabase containment and owner-task reliability. The active security action is to run `sql/2026-06-23_build214_security_task_orchestration.sql`, refresh Supabase Security Advisor, and test the application through Cloudflare Functions rather than restoring direct browser access to tables. Canonical planning remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+## Build 215 — public asset compatibility and DAIP integration planning (2026-06-30)
+
+Build 215 resolves a public-media format mismatch without requiring image recreation: verified Rosie-owned service/local images can remain JPG files even when historic fallback data expected WebP. The public renderer, booking/service cards, and Admin Media Health scanner now try approved same-key JPG/JPEG/WebP/PNG variants before showing a fallback visual. Canonical Local Hero data uses `landing-pages/<slug>.jpg`; the matching migration is `sql/2026-06-30_build215_media_asset_format_alignment.sql`.
+
+The Digital Asset Intelligence Platform documentation under `docs/digital-asset-intelligence-platform/` is now connected to the active plan through `10_Rosie_Dazzlers_Integration_Plan.md`. This build is documentation-only for DAIP: no DAIP worker, table, bucket, AI pipeline, queue, export, or auto-publication code is included.
+
+### Immediate operational next steps
+
+1. Deploy Build 215.
+2. Confirm Cloudflare publishes both assets and Functions.
+3. Run the Build 215 media task alignment migration after RLS containment is confirmed.
+4. Scan `/admin-media-health.html` and verify the exact resolved public Local Hero URLs.
+5. Test `/services` and every Local Hero page in an incognito browser.
+6. Record exact failing R2 keys/HTTP statuses rather than guessing or re-uploading duplicates.
+7. Complete DAIP-0 cost, privacy, storage, consent, retention, and worker-hosting decisions before approving DAIP Phase 1.
+
+> **Build 207 update — retained historical marker:** Build 207 created the canonical-doc/visual-placeholder baseline. It remains retained for the historical release guard; Build 215 now carries the active asset and DAIP planning updates.

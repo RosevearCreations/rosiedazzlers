@@ -1,4 +1,4 @@
-# Build 207 documentation index note — canonical docs and retained history
+# Rosie Dazzlers Documentation Index — Build 215
 
 **Canonical going forward:**
 
@@ -874,3 +874,26 @@ Build 213 adds owner action controls in Today Needs Attention, customer price/su
 ### Build 214 documentation sync — 2026-06-23
 
 Build 214 prioritizes Supabase containment and owner-task reliability. The active security action is to run `sql/2026-06-23_build214_security_task_orchestration.sql`, refresh Supabase Security Advisor, and test the application through Cloudflare Functions rather than restoring direct browser access to tables. Canonical planning remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+## Build 215 documentation index note — 2026-06-30
+
+Read first for active direction:
+
+1. `AI_PROJECT_HANDOFF.md`
+2. `MASTER_VALUE_ROADMAP.md`
+
+Media asset compatibility and upload validation:
+
+- `IMAGES.md`
+- `sql/2026-06-30_build215_media_asset_format_alignment.sql`
+- `/admin-media-health.html`
+
+DAIP planning (no production implementation in Build 215):
+
+- `docs/digital-asset-intelligence-platform/README.md`
+- `docs/digital-asset-intelligence-platform/10_Rosie_Dazzlers_Integration_Plan.md`
+- `docs/digital-asset-intelligence-platform/09_Implementation_Roadmap.md`
+
+DAIP is a future private media operations subsystem. Do not infer that the current build includes a DAIP worker, tables, processing queue, AI processing, public exports, or automatic publishing.
+
+> **Build 207 documentation index note — retained historical marker:** This marker remains for historical release checks; current active documentation direction is Build 215.
