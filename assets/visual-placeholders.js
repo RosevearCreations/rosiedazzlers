@@ -49,7 +49,12 @@
       if (img.dataset.visualFallbackAttached === 'true') return; img.dataset.visualFallbackAttached='true';
       const type = inferType(img); const label = img.getAttribute('alt') || titleFor(type);
       if (!img.getAttribute('src')) img.setAttribute('src', svgData(type, label));
-      img.addEventListener('error', ()=>{ if(img.dataset.visualFallbackApplied==='true') return; img.dataset.visualFallbackApplied='true'; img.src=svgData(type,label); img.classList.add('visual-placeholder-img'); }, { once:false });
+      img.addEventListener('error', ()=>{
+        // Build 215: allow the media resolver to try JPG/JPEG/WebP/PNG variants before a placeholder replaces the image.
+        if (img.dataset.mediaResolverBound === 'true' && img.dataset.assetResolveStatus !== 'exhausted') return;
+        if(img.dataset.visualFallbackApplied==='true') return;
+        img.dataset.visualFallbackApplied='true'; img.src=svgData(type,label); img.classList.add('visual-placeholder-img');
+      }, { once:false });
     });
   }
   function installContextualCards(root=document){

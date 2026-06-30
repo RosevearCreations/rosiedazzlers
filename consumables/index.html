@@ -101,6 +101,6 @@
     hardenTextInput(qs('#q'));
     try{ const raw=await loadCatalog(); const list=raw.map(normalizeItem).filter(x=>x.title); fillSelect('#cat', list.map(x=>x.category), 'categories'); fillSelect('#typeFilter', list.map(x=>x.type), 'types'); render(list); ['q','cat','typeFilter','sort'].forEach(id=>qs('#'+id).addEventListener(id==='q'?'input':'change',()=>render(list))); qs('#clearBtn').addEventListener('click',()=>{qs('#q').value='';qs('#cat').value='';qs('#typeFilter').value='';qs('#sort').value='title_asc';render(list);}); }catch(e){ qs('#status').style.display='block'; qs('#status').className='notice bad'; qs('#status').textContent=`Consumables catalog failed to load: ${e.message||e}`; qs('#grid').innerHTML='<div class="notice bad">Upload a valid products catalog JSON or restore the public DB inventory feed.</div>'; }
   </script>
-  <script type="module" src="/assets/chrome.js?v=20260326d"></script>
+  <script type="module" src="/assets/chrome.js?v=20260630build215"></script>
 </body>
 </html>
