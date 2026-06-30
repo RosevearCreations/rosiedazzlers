@@ -1,4 +1,23 @@
-# Build 207 pointer
+## Digital Asset Intelligence Platform
+
+New planned subsystem documented in:
+
+`docs/digital-asset-intelligence-platform/`
+
+Purpose: automatically turn each completed detailing job into:
+- 1 YouTube video
+- 3 Facebook videos
+- 5 Instagram Reels
+- 5 TikToks
+- before/after images
+- website gallery
+- Google Business Profile photos
+- SEO assets
+- blog article
+- thumbnails
+- captions
+-
+  # Build 207 pointer
 
 Current planning now lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This historical file is retained for context and release history.
 
