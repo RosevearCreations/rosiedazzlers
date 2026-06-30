@@ -46,14 +46,14 @@ packages/fleet_vehicle_add_on.png
 ## Regional photos to replace
 
 ```text
-landing-pages/tillsonburg-auto-detailing.webp
-landing-pages/woodstock-ingersoll-auto-detailing.webp
-landing-pages/simcoe-delhi-auto-detailing.webp
-landing-pages/port-dover-auto-detailing.webp
-landing-pages/norwich-otterville-auto-detailing.webp
-landing-pages/zorra-thamesford-embro-auto-detailing.webp
-landing-pages/waterford-vittoria-auto-detailing.webp
-landing-pages/port-rowan-turkey-point-auto-detailing.webp
+landing-pages/tillsonburg-auto-detailing.jpg
+landing-pages/woodstock-ingersoll-auto-detailing.jpg
+landing-pages/simcoe-delhi-auto-detailing.jpg
+landing-pages/port-dover-auto-detailing.jpg
+landing-pages/norwich-otterville-auto-detailing.jpg
+landing-pages/zorra-thamesford-embro-auto-detailing.jpg
+landing-pages/waterford-vittoria-auto-detailing.jpg
+landing-pages/port-rowan-turkey-point-auto-detailing.jpg
 ```
 
 ## Upload methods
