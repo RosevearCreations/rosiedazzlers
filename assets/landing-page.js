@@ -1,5 +1,5 @@
 import { renderRecentWorkMounts } from "/assets/recent-work.js?v=20260501build127";
-import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260630build215";
+import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
 
 async function fetchJson(url) {
   const res = await fetch(url, { cache: "no-store" });

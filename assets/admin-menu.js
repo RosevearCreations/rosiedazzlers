@@ -76,7 +76,7 @@
       key: "admin-media-health",
       label: "Media Health",
       href: "/admin-media-health.html",
-      description: "Missing image/video checks and R2 upload review",
+      description: "Public image recovery, R2 checks, upload review, and persistent alerts",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-media-health")
     },
     {

@@ -1,5 +1,5 @@
 import { packageImageForSize as sharedPackageImageForSize } from "/assets/pricing-catalog-client.js";
-import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260630build215";
+import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
 
 const DATA_URL = "/api/pricing_catalog_public";
 
