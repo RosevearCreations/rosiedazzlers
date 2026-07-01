@@ -51,7 +51,17 @@ export async function onRequestGet(context) {
     const completedSummaryRows = summaryRes && summaryRes.ok ? await summaryRes.json().catch(()=>[]) : [];
     const completedJobSummary = Array.isArray(completedSummaryRows) ? completedSummaryRows[0] || null : null;
     const paymentLinkRows = paymentLinksRes && paymentLinksRes.ok ? await paymentLinksRes.json().catch(()=>[]) : [];
-    const paymentLinks = (Array.isArray(paymentLinkRows) ? paymentLinkRows : []).filter((row)=>!/(paid|cancel)/i.test(String(row.status||'')) && (row.checkout_url || row.payment_url)).map((row)=>({ id:row.id, status:row.status, amount_cents:row.amount_cents, currency:row.currency||'CAD', url:row.checkout_url||row.payment_url, provider_status:row.provider_status||null, notes:row.notes||null, created_at:row.created_at }));
+    const now = new Date();
+    const paymentLinks = (Array.isArray(paymentLinkRows) ? paymentLinkRows : []).map((row) => {
+      const rawStatus = String(row.status || 'open').toLowerCase();
+      const state = row.paid_at || /paid|succeeded|settled|complete/.test(rawStatus) ? 'paid' : (row.cancelled_at || /cancel/.test(rawStatus) ? 'cancelled' : (row.expires_at && new Date(row.expires_at) <= now ? 'expired' : 'open'));
+      return {
+        id:row.id, status:row.status || state, state, amount_cents:row.amount_cents, currency:row.currency || 'CAD',
+        url:state === 'open' ? (row.checkout_url || row.payment_url || null) : null,
+        provider_status:row.provider_status || null, notes:row.notes || null, created_at:row.created_at,
+        paid_at:row.paid_at || null, expires_at:row.expires_at || null
+      };
+    });
     const updates = customerRows(updatesRaw);
     const media = await hydrateMediaRows(env, customerRows(mediaRaw));
     const workflowEvents = publicWorkflowEvents(bookingEvents);
