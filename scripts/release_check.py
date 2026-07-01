@@ -94,6 +94,9 @@ Build 208 note:
 
 Build 209 note:
 - Adds the live detail interaction backbone: direct photo/video/note posting, explicit customer/review/private audiences, public-feed privacy filtering, protected media metadata, moderation, diagnostics, responsive polish, and Markdown retirement.
+
+Build 216 note:
+- Adds bounded public media recovery checks, persistent RLS-protected asset alert records, and DAIP decision/acceptance planning gates without DAIP production implementation.
 """
 from __future__ import annotations
 
@@ -162,6 +165,7 @@ CHECKS = [
     "scripts/build213_owner_action_customer_trust_check.py",
     "scripts/build214_security_task_orchestration_check.py",
     "scripts/build215_asset_resolver_daip_planning_check.py",
+    "scripts/build216_media_reliability_daip_governance_check.py",
     "scripts/seo_h1_check.py",
 ]
 
