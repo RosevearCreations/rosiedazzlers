@@ -1,4 +1,4 @@
-# Rosie Dazzlers Documentation Index — Build 215
+# Rosie Dazzlers Documentation Index — Build 217
 
 **Canonical going forward:**
 
@@ -10,6 +10,11 @@
 **Retired-for-editing but retained:** older competitor, roadmap, sanity, and notes files should stay available for context until release guards are modernized. Do not delete them yet.
 
 **New admin screen:** `/admin-docs.html` shows canonical docs, retained files, retirement guidance, current app position, and visual placeholder slots.
+
+
+**Build 217 current rule:** Treat the two canonical documents above as the only living strategy sources. Retained root Markdown files receive short synchronization notes only; archive/history files are context-only. They remain in the package because existing release guards and audit references still depend on them.
+
+**Build 217 addition:** `docs/PRODUCTION_TEST_GUIDE.md` now includes the secure final-balance release test. `data/build217_secure_final_balance_links.json` provides the implementation and manual-release boundary for in-app/AI handoff.
 
 ---
 

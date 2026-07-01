@@ -1,7 +1,7 @@
-# Rosie Dazzlers Development Roadmap — Build 215
+# Rosie Dazzlers Development Roadmap — Build 217
 
-**Updated:** 2026-06-30  
-**Build:** 215
+**Updated:** 2026-06-30
+**Build:** 217
 
 Build 215 keeps the canonical handoff/roadmap model, adds public asset format compatibility for verified JPG Local Heroes and Service Hub media, and records DAIP integration planning without implementing DAIP production infrastructure. The immediate operational priority is verifying deployed R2 URL rendering before starting any DAIP Phase 1 work.
 
@@ -2500,3 +2500,8 @@ Primary user-facing admin surface: `/admin-media-health.html`.
 ### Build 216 synchronization — 2026-07-01
 
 Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+## Build 217 synchronization — secure final-balance flow (2026-06-30)
+
+The active payment next step has moved from “customer page missing” to a controlled launch: apply the Build 217 migration, deploy Pages/Functions together, run one Stripe test-mode final-balance checkout and signed webhook, test invalid/expired/cancelled links, and test notification delivery with a controlled mailbox. Active strategy remains only in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+

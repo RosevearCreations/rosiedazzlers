@@ -1,6 +1,6 @@
-# Rosie Dazzlers AI Project Handoff — Build 215
+# Rosie Dazzlers AI Project Handoff — Build 217
 
-**Updated:** 2026-06-30  
+**Updated:** 2026-06-30
 **Read first:** This is the primary technical/business handoff for a new AI chat or future build pass.
 
 ## Product north star
@@ -342,3 +342,36 @@ Do not add another large standalone module. Verify the media/security production
 ### Build 216 synchronization — 2026-07-01
 
 Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+## Build 217 — secure final-balance links and customer-safe payment status (2026-06-30)
+
+Build 217 closes the previously incomplete final-balance path. Staff can now create a tracked final-balance request, issue a short-lived opaque link, create Stripe Checkout from that request, and let the Stripe webhook settle the record idempotently. The customer-facing payment page is token-gated, has one clear H1, is noindex/noarchive, returns no customer PII, and only exposes an open/paid/expired/cancelled state with amount and a provider checkout URL when appropriate.
+
+### What changed
+
+- Added `/final-balance-payment.html` and clean route copy as the customer-safe landing page for a final-balance link.
+- Added SHA-256 token-hash storage, 14-day default expiry, 90-day maximum expiry, replacement, cancellation, reopen, and explicit notification-queue controls.
+- Added `/api/final_balance_payment_view`, which requires both request UUID and opaque token and disables caching.
+- Added an Admin Payments final-balance work queue with copy, checkout, expiry, rotate, cancel/reopen, and notification actions.
+- Added Stripe `checkout.session.completed` final-balance settlement with idempotency and safe booking-event logging.
+- Removed token hashes and staff-entered notes from browser-facing final-balance responses.
+- Added a generic secure-payment visual placeholder slot; it must never use a real invoice, payment link, QR code, card data, or customer details.
+
+### Required deployment and controlled test
+
+1. Apply `sql/2026-06-30_build217_secure_final_balance_links.sql` after the existing payment migrations.
+2. Deploy Cloudflare Pages and Functions together.
+3. In Stripe **test mode**, create one final-balance request, create checkout, complete it once, then resend the same event to confirm idempotency.
+4. Verify invalid-token, expired, and cancelled URLs reveal no customer information.
+5. Test notification queuing with a controlled mailbox before treating it as delivery-confirmed.
+
+### Current next best direction
+
+Do not expand payments further until the migration, Stripe test-mode webhook, and controlled notification test pass. Then pair approved final media with consent into Gallery and vehicle history, complete the real mobile upload tests, and only schedule review requests after final payment, customer acknowledgement, and incident checks.
+
+### SEO and competitive recheck — 2026-06-30
+
+- Rechecked Google Search Central guidance: keep people-first service copy, use the words customers search in titles and the single main heading, make links crawlable, and keep descriptive image filenames/alt text near relevant content. Continue validating structured data against visible page content rather than using markup as a ranking shortcut.
+- Rechecked Jobber Client Hub and Urable’s detailing workflow positioning. The competitive baseline is a mobile-friendly self-service journey: request/quote approval, appointment information, payment/receipt, connected booking-to-billing status, customer communication, and vehicle/job history.
+- Build 217 directly improves the payment/receipt/status portion of that path. Do not chase broad feature parity before the controlled payment release, consent-aware proof reuse, and review/maintenance gates work reliably.
+

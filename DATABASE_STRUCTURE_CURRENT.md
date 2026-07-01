@@ -959,3 +959,8 @@ Build 216 adds no `daip_*` table. DAIP schema work is blocked until DAIP-0 decis
 ### Build 216 synchronization — 2026-07-01
 
 Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+# Build 217 schema note — secure final-balance links (2026-06-30)
+
+Apply `sql/2026-06-30_build217_secure_final_balance_links.sql` after the existing final-balance and security migrations. It adds lifecycle columns to `public.final_balance_payment_requests`: `expires_at`, `access_token_rotated_at`, notification audit fields, cancellation audit fields, `paid_amount_cents`, and provider payment-intent/event references. `token_hash` stores only SHA-256 hashes of opaque public tokens and must never be returned to a browser. No direct browser grants are added.
+
