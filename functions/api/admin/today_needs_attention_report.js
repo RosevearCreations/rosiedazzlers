@@ -21,7 +21,8 @@ async function handle({request,env}){
       uploads:`live_upload_sessions?select=id,booking_id,filename,status,progress_percent,retry_count,last_error,updated_at&or=(status.eq.failed,status.eq.cancelled,status.eq.uploading)&order=updated_at.desc&limit=150`,
       retention_media:`job_media?select=id,booking_id,kind,stage,retention_policy,retention_expires_at,retention_status&retention_expires_at=lte.${encodeURIComponent(now.toISOString())}&order=retention_expires_at.asc&limit=150`,
       production_tests:`production_test_runs?select=id,test_key,test_name,status,performed_at,created_at&order=performed_at.desc,created_at.desc&limit=500`,
-      attention_tasks:`owner_attention_tasks?select=*&order=updated_at.desc,created_at.desc&limit=500`
+      attention_tasks:`owner_attention_tasks?select=*&order=updated_at.desc,created_at.desc&limit=500`,
+      media_asset_alerts:`media_asset_alerts?select=id,asset_key,label,severity,alert_status,consecutive_failures,last_failure_kind,last_http_status,last_checked_at&alert_status=in.(active,acknowledged)&order=severity.desc,last_failed_at.desc&limit=150`
     };
     const loaded={},warnings=[];
     await Promise.all(Object.entries(queries).map(async([key,path])=>{const out=await read(env,path);loaded[key]=out.rows;if(out.warning)warnings.push(`${key}: ${out.warning}`);}));
@@ -48,6 +49,10 @@ async function handle({request,env}){
     for(const row of loaded.reviews||[])if(clean(row.status)==='blocked')items.push(item('normal','Review request blocked','Resolve payment/incident/summary blockers before requesting a review.','/admin-workflow.html',row.booking_id));
     for(const row of loaded.maintenance||[])if(row.next_reminder_at&&new Date(row.next_reminder_at)<=now&&!['paused','cancelled'].includes(clean(row.status)))items.push(item('normal','Maintenance reminder due',row.plan_name||'Maintenance plan follow-up.','/admin-growth.html',null));
     for(const row of loaded.uploads||[])items.push(item('high','Weak-network upload',`${row.filename||'Upload'} · ${row.status} · retry ${Number(row.retry_count||0)}`,'/detailer-jobs.html',row.booking_id));
+    for(const row of loaded.media_asset_alerts||[]){
+      const urgency=row.severity==='high'?'high':'normal';
+      items.push(itemWithSource(urgency,'Public media asset alert',`${row.label||row.asset_key||'Public asset'} · ${row.last_failure_kind||'unavailable'} · ${Number(row.consecutive_failures||0)} failed scan(s) · HTTP ${Number(row.last_http_status||0)}`,'/admin-media-health.html',null,'media_asset_alert',row.id));
+    }
     for(const row of loaded.bookings||[])if(row.job_status==='completed'&&row.completed_summary_status!=='published')items.push(item('high','Generate job summary',`${row.customer_name||'Customer'} needs a completed-job summary.`,`/admin-progress.html?booking_id=${row.id}`,row.id));
 
     const dedup=[];const seen=new Set();for(const row of items){const key=row.source_key;if(!seen.has(key)){seen.add(key);dedup.push(row);}}
@@ -68,7 +73,8 @@ function latestManualTasks(rows){const out=[];const seen=new Set();for(const row
 function shouldHideByTask(task,now){if(!task)return false;const state=clean(task.status);const when=task.snoozed_until||task.suppress_source_until;if(['snoozed','resolved'].includes(state)&&when&&new Date(when)>now)return true;return false;}
 function taskSummary(row){return {id:row.id,status:row.status,assigned_to_staff_user_id:row.assigned_to_staff_user_id||null,assigned_to_staff_name:row.assigned_to_staff_name||null,snoozed_until:row.snoozed_until||null,due_at:row.due_at||null,escalation_status:row.escalation_status||'none',resolution_note:row.resolution_note||null,updated_at:row.updated_at||null};}
 async function read(env,path){try{const res=await fetch(`${env.SUPABASE_URL}/rest/v1/${path}`,{headers:serviceHeaders(env)});if(!res.ok)return{rows:[],warning:(await res.text()).slice(0,220)};return{rows:await res.json().catch(()=>[]),warning:null};}catch(err){return{rows:[],warning:String(err)}}}
-function item(urgency,title,detail,target,booking_id){const source_type='generated';const source_key=[title,booking_id||'global',detail].join('|').slice(0,220);return{urgency,title,detail,target,booking_id:booking_id||null,source_type,source_key};}
+function item(urgency,title,detail,target,booking_id){return itemWithSource(urgency,title,detail,target,booking_id,'generated',[title,booking_id||'global',detail].join('|').slice(0,220));}
+function itemWithSource(urgency,title,detail,target,booking_id,source_type,source_key){return{urgency,title,detail,target,booking_id:booking_id||null,source_type:source_type||'generated',source_key:String(source_key||'').slice(0,220)};}
 function clean(v){return String(v||'').toLowerCase();}function money(c){return new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(Number(c||0)/100);}
 export async function onRequestOptions(){return new Response('',{status:204,headers:corsHeaders()});}
 function corsHeaders(){return{'Access-Control-Allow-Origin':'*','Access-Control-Allow-Methods':'GET,POST,OPTIONS','Access-Control-Allow-Headers':'Content-Type,x-admin-password,x-staff-email,x-staff-user-id','Cache-Control':'no-store'};}
