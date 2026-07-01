@@ -1,7 +1,7 @@
 {
-  "build": 216,
-  "updated_at": "2026-07-01",
-  "summary": "Build 216 adds safe public-media recovery and persistent alert guidance without using customer media as a fallback.",
+  "build": 217,
+  "updated_at": "2026-06-30",
+  "summary": "Build 217 retains public-media recovery and adds a customer-safe secure-payment placeholder for final-balance status pages without showing personal or payment-card data.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -186,6 +186,13 @@
       "where": "Admin Media Health and public asset recovery alerts",
       "visual": "image frame with repair/check indicator",
       "replace_with": "verified Rosie-owned public asset after the exact R2 key, URL, access policy, dimensions, and consent status are confirmed"
+    },
+    {
+      "key": "secure_payment",
+      "label": "Secure payment placeholder",
+      "where": "final-balance payment status, invoice/payment workflow, and payment-assistance cards",
+      "visual": "shield and receipt card",
+      "replace_with": "approved generic Rosie Dazzlers payment/receipt graphic only; never use a real customer invoice, card, payment link, QR code, or personal data"
     }
   ],
   "rules": [
