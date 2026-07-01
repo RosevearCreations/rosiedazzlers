@@ -43,3 +43,8 @@ Build 214 prioritizes Supabase containment and owner-task reliability. The activ
 ### Build 216 synchronization — 2026-07-01
 
 Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+### Build 217 documentation synchronization — 2026-06-30
+
+The two canonical living files remain `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. Build 217 adds secure final-balance implementation/release context to those documents and keeps this retained file as history only.
+

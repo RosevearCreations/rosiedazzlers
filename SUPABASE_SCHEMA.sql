@@ -2026,3 +2026,9 @@ comment on table public.recommendation_price_acknowledgements is 'Customer typed
 -- First failed scan is monitoring; second consecutive failure becomes active;
 -- a passing scan resolves. Do not add customer/job/incident/private URL data to these tables.
 -- DAIP remains planning-only in Build 216; no daip_* production table is included.
+
+-- Build 217 — secure final-balance payment-link schema note (2026-06-30)
+-- Apply sql/2026-06-30_build217_secure_final_balance_links.sql after the existing final-balance/Build 214 migration.
+-- Adds expiry, link-rotation/send, cancellation, paid-amount, Stripe payment-intent, and provider-event fields to public.final_balance_payment_requests.
+-- token_hash holds only a SHA-256 hash of a 32-byte opaque public link token; never return it to a browser or grant direct browser table access.
+

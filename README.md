@@ -1007,3 +1007,8 @@ Build 216 adds bounded Public Media Health scans, protected recurring public-ass
 ### Build 216 synchronization — 2026-07-01
 
 Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+# Build 217 note — secure final-balance payment path
+
+Build 217 adds a token-gated, noindex final-balance payment status page; controlled expiry/replacement/cancellation; an Admin Payments queue; Stripe Checkout metadata; and idempotent Stripe webhook settlement. Apply `sql/2026-06-30_build217_secure_final_balance_links.sql` and follow `docs/PRODUCTION_TEST_GUIDE.md` before using the workflow with customers.
+

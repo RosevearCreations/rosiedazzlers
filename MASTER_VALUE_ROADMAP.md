@@ -1,6 +1,6 @@
-# Rosie Dazzlers Master Value Roadmap — Build 216
+# Rosie Dazzlers Master Value Roadmap — Build 217
 
-**Updated:** 2026-07-01  
+**Updated:** 2026-06-30
 **Purpose:** This is the one active business/product roadmap. Historical build detail remains in `DEVELOPMENT_ROADMAP.md`; active decisions belong here.
 
 ## North star
@@ -501,3 +501,52 @@ DAIP remains planning only. Build 216 adds no DAIP worker, queue, AI model, `dai
 ### Build 216 synchronization — 2026-07-01
 
 Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+## Build 217 — secure final-balance collection path (2026-06-30)
+
+### Completed value steps
+
+1. Replaced predictable/public final-balance URLs with random opaque token links stored only as SHA-256 hashes.
+2. Added a secure, noindex, no-cache customer payment-status page with one H1 and no customer PII.
+3. Added default expiry, controlled maximum expiry, link rotation, cancellation, and reopen controls.
+4. Added an Admin Payments final-balance queue with customer-safe operational actions.
+5. Added hosted Stripe Checkout handoff that returns the customer to the token-gated payment page.
+6. Added Stripe webhook settlement and idempotent duplicate-event handling for final balances.
+7. Added progress-page payment states for open, paid, expired, and cancelled requests.
+8. Prevented final-balance token hashes and staff-entered notes from being sent to browser clients.
+9. Added a generic secure-payment visual placeholder rule that prohibits real invoices, payment links, QR codes, card data, or customer details.
+10. Added a Build 217 SQL migration, app-readable implementation record, route-copy sync, service-worker cache entries, and release guard.
+
+### Next 20 value steps
+
+1. Apply the Build 217 SQL migration and verify RLS/direct-browser containment remains intact.
+2. Use Stripe test mode to create, pay, return, and replay a final-balance checkout event.
+3. Confirm invalid, expired, rotated, and cancelled secure links reveal no customer information.
+4. Test the configured notification provider with a controlled inbox; record queued versus actually delivered outcomes.
+5. Add staff-visible final-balance status to the existing payment/reconciliation work queue only after a real test transaction passes.
+6. Verify tax/HST records and processor-fee handling with the accountant workflow before using live collection.
+7. Pair approved final media into Gallery candidates only with recorded media consent and provenance.
+8. Create a vehicle-history card only from approved final proof and never from private incident media.
+9. Schedule review requests only when final payment is settled, customer acknowledgement is present, and no unresolved incident remains.
+10. Complete real mobile Wi-Fi and cellular upload retry tests with harmless media.
+11. Verify public/private R2 prefixes and retention dry-run results.
+12. Replace only appropriate public placeholder slots with approved Rosie-owned local proof.
+13. Continue local page improvements using distinct people-first copy, verified service-area proof, and descriptive approved images.
+14. Review quote-to-booking conversion data before adding more marketing integrations.
+15. Validate payment/refund/receipt workflows with the accountant export in test records.
+16. Run the Guided Production Test Centre after deployment.
+17. Complete DAIP-0 decisions; keep DAIP planning-only until the security template is approved.
+18. Build a small consent-aware gallery pairing shortcut only after production media reliability passes.
+19. Review real Search Console and Google Business Profile evidence before altering SEO titles or town-page scope.
+20. Repeat the competitor/local SEO review quarterly using actual client feedback, visibility, and booked-job outcomes.
+
+### Build 217 boundary
+
+This build does **not** process card details, prove a live Stripe/Cloudflare/Supabase deployment, or assert notification delivery. Those require the controlled release tests above.
+
+### Current SEO and competitive recheck — 2026-06-30
+
+Google’s current guidance supports the existing safeguards: one clear page purpose, people-first content, search-language in the title/main heading, crawlable internal links, and descriptive approved image names/alt text. Structured data must describe visible, current page content and can improve eligibility, not guarantee appearance.
+
+Current service-software competitors reinforce the same customer experience target: Jobber’s client portal emphasizes self-serve work requests, approvals, appointment details, payments, and receipts; Urable’s detailing CRM emphasizes connected quoting, scheduling, job tracking, customer communication, payments, and vehicle history. Rosie Dazzlers should differentiate by keeping this journey simple for a one-car-per-day mobile detailer, with consent-aware proof and local Oxford/Norfolk trust—not by copying every enterprise feature.
+

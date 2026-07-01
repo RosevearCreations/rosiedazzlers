@@ -1,7 +1,7 @@
-# Rosie Dazzlers known gaps and risks — Build 215
+# Rosie Dazzlers known gaps and risks — Build 217
 
-**Updated:** 2026-06-30  
-**Build:** 215
+**Updated:** 2026-06-30
+**Build:** 217
 
 Build 215 retains the two canonical strategy documents, repairs public media format compatibility, and adds DAIP integration planning. It does not complete every historical enhancement and it does not make DAIP production-ready.
 
@@ -1585,3 +1585,13 @@ Build 214 prioritizes Supabase containment and owner-task reliability. The activ
 ### Build 216 synchronization — 2026-07-01
 
 Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+## Build 217 current gaps and risks — secure final-balance release
+
+- The SQL migration must be applied before expiry, lifecycle, and Stripe-settlement fields are available.
+- Source-level checks cannot verify a live Stripe test checkout, signed webhook, Cloudflare deployment, Supabase RLS state, or provider email/SMS delivery.
+- Public payment links remain sensitive bearer links; staff should use copy controls carefully, rotate a mistaken link immediately, and never place a link in public posts.
+- The public payment page intentionally omits customer names, email, vehicle, notes, invoice details, and payment-card data.
+- Do not mark final-balance notification delivery as successful until a controlled provider test confirms delivery.
+- DAIP remains planning-only; do not let final-balance work bypass consent/provenance gates for media reuse.
+
