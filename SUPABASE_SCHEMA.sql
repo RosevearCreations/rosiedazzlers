@@ -2018,3 +2018,11 @@ comment on table public.recommendation_price_acknowledgements is 'Customer typed
 -- Apply sql/2026-06-30_build215_media_asset_format_alignment.sql to align legacy public.media_asset_tasks
 -- Local Hero .webp records with the canonical public JPG keys used by the verified R2 uploads.
 -- No DAIP production schema is added in Build 215. Future DAIP Phase 1 requires a separate reviewed migration.
+
+-- Build 216 — public media reliability schema note (2026-07-01)
+-- Apply sql/2026-07-01_build216_media_reliability_daip_governance.sql after Build 214.
+-- Adds RLS-protected public.media_asset_health_observations and public.media_asset_alerts,
+-- plus service-role-only public.rosie_record_media_asset_observations(jsonb,text,text).
+-- First failed scan is monitoring; second consecutive failure becomes active;
+-- a passing scan resolves. Do not add customer/job/incident/private URL data to these tables.
+-- DAIP remains planning-only in Build 216; no daip_* production table is included.
