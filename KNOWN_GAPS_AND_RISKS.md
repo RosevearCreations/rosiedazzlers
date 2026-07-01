@@ -1560,3 +1560,28 @@ Build 214 prioritizes Supabase containment and owner-task reliability. The activ
 9. **Production verification required:** static checks cannot prove public R2 CORS/custom-domain behavior, image caching, actual dimensions, or deployed page rendering.
 
 > **Build 207 known gaps and risks — retained historical marker:** The Build 207 documentation and visual-placeholder baseline remains preserved for historical release checks. Current risks are updated through Build 215 above.
+
+## Build 216 — media reliability and DAIP governance gaps (2026-07-01)
+
+### Reduced
+
+- Public JPG Local Hero compatibility is now monitored with bounded server and browser fallback behavior rather than relying only on a single `.webp` assumption.
+- Media Health now distinguishes likely wrong key, access denial, timeout, origin failure, invalid content type, and undersized image conditions.
+- Repeated public-asset failures can become protected persistent alerts after the Build 216 migration and active alerts roll into Today Needs Attention.
+- DAIP now has explicit decision and acceptance gates rather than only high-level architecture documents.
+
+### Still open / must be tested
+
+1. The Build 216 SQL migration must be applied after Build 214 RLS containment.
+2. A failed scan can only prove what Cloudflare’s Function sees at that time; it cannot diagnose a browser extension, ISP cache, or unknown custom-domain routing issue by itself.
+3. Client-side resolver timeouts prevent indefinite blank states but do not fix a wrong R2 folder, basename, letter case, object policy, or custom-domain mapping.
+4. Public-asset alert records appear only after Media Health is run by staff; no scheduled worker/cron is installed in Build 216.
+5. Email/SMS alert delivery is deliberately not enabled until controlled provider tests pass.
+6. Persistent alert tables store public-asset metadata only; do not extend them with job media, private URLs, customer data, or incident content.
+7. DAIP-0 decisions remain open. No DAIP Phase 1 migration, worker, R2 DAIP prefix, Drive sync, processing queue, AI model, export, or publication can begin yet.
+8. DAIP processing remains a future cost/privacy risk and must stay outside the Cloudflare Pages request path.
+9. Production testing is required for Cloudflare Function publish, R2 public routing, service-worker refresh, mobile upload behavior, payment settlement, and notifications.
+
+### Build 216 synchronization — 2026-07-01
+
+Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.

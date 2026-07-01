@@ -2488,3 +2488,15 @@ The Digital Asset Intelligence Platform documentation under `docs/digital-asset-
 7. Complete DAIP-0 cost, privacy, storage, consent, retention, and worker-hosting decisions before approving DAIP Phase 1.
 
 > **Build 207 update — retained historical marker:** Build 207 created the canonical-doc/visual-placeholder baseline. It remains retained for the historical release guard; Build 215 now carries the active asset and DAIP planning updates.
+
+## Build 216 development sync — public media reliability and DAIP governance
+
+Completed Build 216 implementation: bounded compatible-format public asset checks, protected media-health observations and recurring alert state, staff acknowledgement UI, RLS/server-only persistence migration, updated public resolver timeouts, and DAIP decision/Phase 1 acceptance planning documents. DAIP remains planning only; no production DAIP code or schema was added.
+
+Primary migration: `sql/2026-07-01_build216_media_reliability_daip_governance.sql`.
+Primary data record: `data/build216_media_reliability_daip_governance.json`.
+Primary user-facing admin surface: `/admin-media-health.html`.
+
+### Build 216 synchronization — 2026-07-01
+
+Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.

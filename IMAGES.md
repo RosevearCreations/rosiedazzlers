@@ -433,3 +433,13 @@ Build 215 migration for existing DB task rows:
 ```text
 sql/2026-06-30_build215_media_asset_format_alignment.sql
 ```
+
+## Build 216 public-media recovery note
+
+Use `/admin-media-health.html` after a public asset upload. It now reports the expected R2 key, resolved public URL, HTTP status, compatible format result, dimensions, and failure type. Do not rename an uploaded asset by guesswork. Record the exact key and resolved URL first.
+
+After the Build 216 migration, the first failed scan is only monitoring. A second consecutive failure creates an active staff alert; one passing scan resolves it. These alerts are for public site assets only and must not be used for private job media or incident evidence.
+
+### Build 216 synchronization — 2026-07-01
+
+Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.

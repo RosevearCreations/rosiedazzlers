@@ -897,3 +897,25 @@ DAIP planning (no production implementation in Build 215):
 DAIP is a future private media operations subsystem. Do not infer that the current build includes a DAIP worker, tables, processing queue, AI processing, public exports, or automatic publishing.
 
 > **Build 207 documentation index note — retained historical marker:** This marker remains for historical release checks; current active documentation direction is Build 215.
+
+## Build 216 documentation index note — 2026-07-01
+
+Active direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+Public image reliability:
+
+- `/admin-media-health.html`
+- `sql/2026-07-01_build216_media_reliability_daip_governance.sql`
+- `data/build216_media_reliability_daip_governance.json`
+- `IMAGES.md`
+- `docs/PRODUCTION_TEST_GUIDE.md` (Build 216 public-media recovery test)
+
+DAIP governance only — no production DAIP implementation:
+
+- `docs/digital-asset-intelligence-platform/10_Rosie_Dazzlers_Integration_Plan.md`
+- `docs/digital-asset-intelligence-platform/11_DAIP_Decision_Register.md`
+- `docs/digital-asset-intelligence-platform/12_DAIP_Phase_1_Security_Acceptance.md`
+
+### Build 216 synchronization — 2026-07-01
+
+Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.

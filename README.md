@@ -999,3 +999,11 @@ Build 214 prioritizes Supabase containment and owner-task reliability. The activ
 ## Build 215 note — media assets and DAIP planning
 
 Local Hero JPG files are now supported directly by the public renderer and Admin Media Health scanner; see `IMAGES.md` and `sql/2026-06-30_build215_media_asset_format_alignment.sql`. The DAIP documentation in `docs/digital-asset-intelligence-platform/` is now actively referenced, but Build 215 is planning-only for DAIP; read `10_Rosie_Dazzlers_Integration_Plan.md` before any implementation.
+
+## Build 216 documentation sync — public media reliability and DAIP governance
+
+Build 216 adds bounded Public Media Health scans, protected recurring public-asset alerts, a server-only RLS-protected observation/alert migration, and DAIP decision/security acceptance planning files. Use `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` for active direction. DAIP remains planning-only.
+
+### Build 216 synchronization — 2026-07-01
+
+Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.

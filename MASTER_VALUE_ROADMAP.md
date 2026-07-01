@@ -1,6 +1,6 @@
-# Rosie Dazzlers Master Value Roadmap — Build 215
+# Rosie Dazzlers Master Value Roadmap — Build 216
 
-**Updated:** 2026-06-30  
+**Updated:** 2026-07-01  
 **Purpose:** This is the one active business/product roadmap. Historical build detail remains in `DEVELOPMENT_ROADMAP.md`; active decisions belong here.
 
 ## North star
@@ -445,3 +445,59 @@ DAIP is valuable because one approved completed job could create reusable proof 
 18. Add real alerting for persistent missing public image URLs after verified R2 uploads.
 19. Replace any remaining generic visual placeholders with approved Rosie-owned media through Gallery/Media Health review.
 20. Re-run the Guided Production Test Centre after each deployed reliability/security/media change.
+
+## Build 216 — public media reliability and DAIP governance (2026-07-01)
+
+### Completed 20 steps
+
+1. Reviewed the Build 215 Local Hero JPG compatibility work and retained JPG as the valid canonical format.
+2. Kept the original public image URL as the first candidate before any extension fallback.
+3. Added bounded candidate timeouts to the browser image resolver so a stalled public asset does not remain blank indefinitely.
+4. Preserved JPG, JPEG, WebP, PNG, and upper-case extension compatibility for the same approved R2 object key.
+5. Added explicit resolved/exhausted resolver events for safe UI fallback handling.
+6. Reworked the server-side Media Health scan to use bounded fetches instead of unbounded public-image loads.
+7. Added concurrent scan processing so a large asset list is less likely to time out a Pages Function.
+8. Added HTTP/failure classification for not found, not public, timeout, origin error, unreachable, wrong content type, and undersized assets.
+9. Kept exact expected R2 key, resolved URL, dimensions, and compatible-format information available to staff.
+10. Added optional persistent public-asset health observations after the Build 216 SQL migration is applied.
+11. Added recurring alert state that starts as monitoring on the first failed scan.
+12. Added activation after a second consecutive failed scan so a one-time transient response does not create a persistent owner alarm.
+13. Added automatic alert resolution after one verified passing scan.
+14. Added a staff-only persistent alert list with acknowledge/reopen controls and safe CSV export.
+15. Connected active/acknowledged public-media alerts to Today Needs Attention so they do not remain isolated in Media Health.
+16. Ensured public-media alert records never store customer media, signed URLs, private evidence, or customer-identifying content.
+17. Added RLS, revoked direct browser grants, and server-only alert recording through a protected Supabase function.
+18. Added a public-media recovery visual placeholder category without using customer media as fallback artwork.
+19. Added a DAIP-0 owner decision register with no assumed decisions and no production implementation.
+20. Added a DAIP Phase 1 security/acceptance template and synchronized canonical docs, schema notes, visual registry, media guide, tests, documentation index, and release checks.
+
+### Next 20 value-added steps
+
+1. Deploy Build 216 and confirm both Cloudflare assets and Functions publish successfully.
+2. Confirm the Build 214 RLS/security migration is applied and Supabase Security Advisor is clear before applying new tables.
+3. Run `sql/2026-07-01_build216_media_reliability_daip_governance.sql` in Supabase.
+4. Run Admin Media Health twice using a harmless intentionally missing internal test asset key and confirm the first scan is monitoring while the second becomes active.
+5. Restore the harmless test asset or use a known public image and confirm a passing scan resolves the alert automatically.
+6. Test the eight Local Hero pages and `/services` in an incognito browser after a cache refresh; record the exact expected key and resolved URL for any failure.
+7. Verify active public-media alerts appear correctly in Today Needs Attention without exposing a public URL to unauthenticated users.
+8. Add narrowly scoped notification delivery for persistent public-media alerts after provider test delivery passes.
+9. Replace remaining generic public visual placeholders with approved Rosie-owned local proof photos through Gallery/Media Health review.
+10. Complete every DAIP-0 decision in `11_DAIP_Decision_Register.md`; do not infer decisions from this roadmap.
+11. Choose one harmless internal job/media set for future DAIP acceptance tests.
+12. Review the DAIP Phase 1 security acceptance template with the chosen storage/worker model before writing a migration.
+13. Configure and test notification-provider webhooks with a controlled mailbox.
+14. Verify Stripe test-mode checkout, webhook settlement, receipt status, cancellation, and resend paths.
+15. Complete guided mobile upload testing on real Wi-Fi and cellular networks, including retry and failed video behavior.
+16. Confirm R2 private/public prefix separation and retention dry-run behavior with no customer media exposed.
+17. Pair approved final media into before/after Gallery candidates with consent and provenance review.
+18. Create automatic vehicle-history cards from approved final proof only after privacy/consent review.
+19. Schedule review requests only after settled payment, customer summary acknowledgement, and no unresolved incident.
+20. Conduct a quarterly competitor/local SEO review based on real quotes, reviews, service areas, customer proof, and Search Console/Business Profile evidence.
+
+### Build 216 planning boundary
+
+DAIP remains planning only. Build 216 adds no DAIP worker, queue, AI model, `daip_*` table, bucket, Drive synchronization, public export, or automatic publishing. The decision register is a required gate, not an invitation to start implementation.
+
+### Build 216 synchronization — 2026-07-01
+
+Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.

@@ -937,3 +937,25 @@ Primary migration: `sql/2026-06-23_build214_security_task_orchestration.sql`.
 Build 215 adds `sql/2026-06-30_build215_media_asset_format_alignment.sql` to align legacy `public.media_asset_tasks` Local Hero rows from stale `.webp` assumptions to canonical JPG keys/URLs where safe. It does not add new application tables.
 
 DAIP is documentation/planning only in Build 215. No `daip_*` tables, storage buckets, queue records, RLS policies, worker jobs, AI records, export records, or publication tables are created until a separate reviewed Phase 1 migration is approved.
+
+## Build 216 — public media reliability tables
+
+Apply `sql/2026-07-01_build216_media_reliability_daip_governance.sql` after Build 214 RLS containment.
+
+### `public.media_asset_health_observations`
+
+Staff-only audit history for public static/site asset checks. Stores the public R2 key, expected/resolved public URL, response status, public image dimensions/type, compatible-format outcome, failure category, scan time, and staff actor. It must never store customer media, signed URLs, incident evidence, customer identifiers, payment data, or secrets.
+
+### `public.media_asset_alerts`
+
+Staff-only recurring issue state keyed by public asset key. First failure is `monitoring`; a second consecutive failure becomes `active`; a passing scan changes it to `resolved`. `acknowledged` means a staff member reviewed the continuing issue, not that the asset is healthy.
+
+Both tables have RLS enabled and direct `anon`, `authenticated`, and `PUBLIC` privileges revoked. Cloudflare Functions use the service-role boundary to record and read them.
+
+### DAIP status
+
+Build 216 adds no `daip_*` table. DAIP schema work is blocked until DAIP-0 decisions and the Phase 1 security acceptance template are approved.
+
+### Build 216 synchronization — 2026-07-01
+
+Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
