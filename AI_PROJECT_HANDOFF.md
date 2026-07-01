@@ -302,3 +302,43 @@ The Digital Asset Intelligence Platform documentation under `docs/digital-asset-
 Primary future decision sequence:
 
 `DAIP-0 security/cost/retention/consent decisions → DAIP-1 reviewed schema/storage foundation → selected manual intake → proxy/thumbnail worker → privacy review → story/export review → approved gallery/content handoff.`
+
+## Build 216 — public media recovery and DAIP governance
+
+Build 216 strengthens the public-asset boundary without changing the DAIP implementation status.
+
+### Media reliability
+
+- `/admin-media-health.html` now performs bounded concurrent public-image checks and reports failure categories rather than only blank/missing status.
+- The client resolver still tries the approved original URL first, then compatible JPG/JPEG/WebP/PNG variants of the same known public asset key. It now has a bounded candidate timeout before it proceeds to the next safe fallback.
+- After `sql/2026-07-01_build216_media_reliability_daip_governance.sql` is applied, each Media Health scan records only public asset metadata in `media_asset_health_observations`.
+- A failure is **monitoring** after its first failed scan and becomes an active persistent alert after the second consecutive failed scan. One passing scan resolves it automatically.
+- `media_asset_alerts` is staff-only and must never hold signed URLs, customer media, incident evidence, customer names, addresses, VINs, payment data, or secrets.
+- Active/acknowledged public-media alerts also roll into Today Needs Attention as staff-only tasks.
+- Public asset alerts are not yet automatically sent by email/SMS; use the protected Media Health screen and Today Needs Attention until notification provider delivery has passed guided tests.
+
+### DAIP governance
+
+DAIP remains **planning only**. Build 216 adds:
+
+- `docs/digital-asset-intelligence-platform/11_DAIP_Decision_Register.md`
+- `docs/digital-asset-intelligence-platform/12_DAIP_Phase_1_Security_Acceptance.md`
+
+No DAIP worker, queue, schema, bucket, Drive sync, AI processing, export, or publishing flow was added. Do not create DAIP production code until all DAIP-0 decisions are owner-approved and a harmless internal test job is selected.
+
+### Required Build 216 deployment order
+
+1. Confirm Build 214 RLS containment is active and Supabase Security Advisor is clear.
+2. Deploy Build 216 and confirm Cloudflare publishes both assets and Functions.
+3. Run `sql/2026-07-01_build216_media_reliability_daip_governance.sql`.
+4. Run Media Health twice with a harmless missing internal key; confirm monitoring then active alert.
+5. Verify a passing scan resolves the alert.
+6. Test Local Hero and Service Hub pages in incognito before replacing any further filenames.
+
+### Current next best direction
+
+Do not add another large standalone module. Verify the media/security production path, wire active media alerts into Today Needs Attention only after live testing, complete DAIP-0 decisions, and continue connecting approved final proof to gallery, vehicle history, reviews, and repeat maintenance.
+
+### Build 216 synchronization — 2026-07-01
+
+Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
