@@ -75,6 +75,9 @@ This v1.0 documentation suite starts with these files:
 9. `07_Content_Generation_and_Marketing.md` — YouTube, Facebook, Reels, TikTok, website, GBP, SEO, blog.
 10. `08_Media_Operations_Center_UI.md` — Admin screens and review workflows.
 11. `09_Implementation_Roadmap.md` — Practical phased build plan.
+12. `10_Rosie_Dazzlers_Integration_Plan.md` — Current Rosie integration boundary and phased safety plan.
+13. `11_DAIP_Decision_Register.md` — Required owner decisions before any implementation.
+14. `12_DAIP_Phase_1_Security_Acceptance.md` — Future schema/storage/processing acceptance template.
 
 ---
 
@@ -175,3 +178,8 @@ Before adding code, update the related Markdown file and database/schema notes. 
 Build 215 reviewed this DAIP documentation and added `10_Rosie_Dazzlers_Integration_Plan.md`. That plan maps DAIP to the existing Rosie Dazzlers booking, live-media, incident, gallery, vehicle-history, and RLS/privacy foundations. **No production DAIP code, database tables, worker, storage bucket, AI processing, or publishing automation was implemented in Build 215.**
 
 Read the integration plan before beginning any Phase 1 database or storage work.
+
+
+## Build 216 governance note
+
+Build 216 adds decision and acceptance templates only. DAIP remains planning-only: no DAIP worker, storage bucket, queue, schema, AI processing, Drive synchronization, export, or publication system has been implemented.

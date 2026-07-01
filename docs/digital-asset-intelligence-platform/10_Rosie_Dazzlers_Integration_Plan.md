@@ -2,7 +2,7 @@
 
 **Status:** Build 215 planning only — no production DAIP code, database tables, workers, or publishing automation were added.  
 **Updated:** 2026-06-30  
-**Read with:** `README.md`, `00_Project_Charter.md`, `01_System_Architecture.md`, `02_Database_Architecture.md`, `03_Storage_Architecture.md`, and `09_Implementation_Roadmap.md`.
+**Read with:** `README.md`, `00_Project_Charter.md`, `01_System_Architecture.md`, `02_Database_Architecture.md`, `03_Storage_Architecture.md`, `09_Implementation_Roadmap.md`, `11_DAIP_Decision_Register.md`, and `12_DAIP_Phase_1_Security_Acceptance.md`.
 
 ## Purpose
 
@@ -162,3 +162,8 @@ Every eventual DAIP pass must update:
 - privacy/RLS and retention checks.
 
 No DAIP phase is complete because a worker runs. It is complete only when an owner can verify that selected media stays private, processing is auditable, privacy review blocks public outputs, and approved derivatives can be traced back to the original job without exposing sensitive information.
+
+
+## Build 216 governance update
+
+Build 216 adds the DAIP-0 decision register and the DAIP-1 future acceptance template. Both are planning controls only. A DAIP implementation pass remains blocked until all DAIP-0 rows are owner-approved and an internal test job is selected.

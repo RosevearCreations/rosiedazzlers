@@ -242,3 +242,17 @@ docs/digital-asset-intelligence-platform/10_Rosie_Dazzlers_Integration_Plan.md
 4. Do **not** create a DAIP bucket, table, worker, queue, or public export workflow during this test.
 
 Expected result: we have a documented decision plan, not unreviewed production DAIP infrastructure.
+
+## Build 216 — detailed public-media recovery test
+
+Run this test only after Build 214 security/RLS containment is confirmed and the Build 216 migration has been applied.
+
+1. Sign in and open `/admin-media-health.html`.
+2. Run **Run image health scan** once.
+3. Choose one harmless deliberately missing internal/public test key. Do not use a customer photo, private job media, incident image, or any real customer name in the key.
+4. Run the scan again. The first failure should be available under **Monitoring**; the second consecutive failure should appear under **Active**.
+5. Copy the expected R2 key from the alert card. Upload or point the same harmless test asset to that exact public key, using a supported JPG/JPEG/WebP/PNG file.
+6. Run the scan again. Confirm the health card reports a public resolved URL and the persistent alert moves to **Resolved** automatically.
+7. Open the resolved URL in an incognito browser. Confirm the image loads directly.
+8. Open `/services` and one Local Hero page in incognito. Confirm no blank/default image appears.
+9. If any item fails, record the page URL, expected key, resolved URL, HTTP status, measured dimensions, and approximate time. Do not paste signed URLs, secrets, customer media, incident evidence, addresses, or VINs into notes.

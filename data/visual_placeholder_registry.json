@@ -1,7 +1,7 @@
 {
-  "build": 214,
-  "updated_at": "2026-06-23",
-  "summary": "Build 214 extends the visual placeholder system with safe database-security posture guidance.",
+  "build": 216,
+  "updated_at": "2026-07-01",
+  "summary": "Build 216 adds safe public-media recovery and persistent alert guidance without using customer media as a fallback.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -179,6 +179,13 @@
       "visual": "shield/checklist card with no customer data",
       "replace_with": "safe internal security remediation checklist screenshot",
       "alt": "Database security posture checklist for Rosie Dazzlers administrators"
+    },
+    {
+      "key": "media_recovery_alert",
+      "label": "Public media recovery placeholder",
+      "where": "Admin Media Health and public asset recovery alerts",
+      "visual": "image frame with repair/check indicator",
+      "replace_with": "verified Rosie-owned public asset after the exact R2 key, URL, access policy, dimensions, and consent status are confirmed"
     }
   ],
   "rules": [
