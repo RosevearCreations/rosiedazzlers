@@ -166,6 +166,7 @@ CHECKS = [
     "scripts/build214_security_task_orchestration_check.py",
     "scripts/build215_asset_resolver_daip_planning_check.py",
     "scripts/build216_media_reliability_daip_governance_check.py",
+    "scripts/build217_secure_final_balance_links_check.py",
     "scripts/seo_h1_check.py",
 ]
 

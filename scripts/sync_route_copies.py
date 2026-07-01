@@ -38,6 +38,7 @@ ROUTE_COPY_PAGES = [
     "admin-progress.html",
     "detailer-jobs.html",
     "progress.html",
+    "final-balance-payment.html",
 ]
 
 
