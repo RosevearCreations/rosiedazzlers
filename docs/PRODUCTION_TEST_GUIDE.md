@@ -1,4 +1,4 @@
-# Rosie Dazzlers Production Test Guide — Build 212
+# Rosie Dazzlers Production Test Guide — Build 217
 
 **Use this guide only with an internal test booking.** Do not store passwords, API keys, card information, customer addresses, VINs, or private incident media in test notes or screenshots.
 
@@ -256,3 +256,17 @@ Run this test only after Build 214 security/RLS containment is confirmed and the
 7. Open the resolved URL in an incognito browser. Confirm the image loads directly.
 8. Open `/services` and one Local Hero page in incognito. Confirm no blank/default image appears.
 9. If any item fails, record the page URL, expected key, resolved URL, HTTP status, measured dimensions, and approximate time. Do not paste signed URLs, secrets, customer media, incident evidence, addresses, or VINs into notes.
+
+## Build 217 — secure final-balance release test (2026-06-30)
+
+Use Stripe **test mode** and a harmless internal booking. Do not use a real customer, card, customer name, or public payment link in screenshots.
+
+1. Apply `sql/2026-06-30_build217_secure_final_balance_links.sql`; confirm the migration completes without restoring direct table grants.
+2. In Admin Payments, create a final-balance request with a valid test booking and a small test amount. Confirm the copied link contains `request_id` and an opaque `token`, but Admin list responses do not expose `token_hash`.
+3. Open the exact link in a private browser. Confirm it has one H1, says Secure payment, is not indexed, has no customer name/email/vehicle/note, and only shows amount/status.
+4. Replace one character in the token. Confirm the response is unavailable and exposes no payment/customer data.
+5. Set expiry to a near-future allowed time in a controlled test; after expiry confirm the page reports expired and does not show checkout. Cancel/reopen once and confirm the old link no longer works after rotation.
+6. Create Stripe Checkout in test mode, complete it once, and confirm the webhook changes the request to paid. Replay the same signed event and confirm it remains paid without duplicate payment/notification effects.
+7. Test Queue customer notification with a controlled mailbox. Record whether the app queued the alert separately from whether the provider actually delivered it.
+8. Confirm the secure payment page is absent from the sitemap and no public analytics, screenshots, social captions, or logs include its token URL.
+
