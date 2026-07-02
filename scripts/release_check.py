@@ -97,6 +97,9 @@ Build 209 note:
 
 Build 216 note:
 - Adds bounded public media recovery checks, persistent RLS-protected asset alert records, and DAIP decision/acceptance planning gates without DAIP production implementation.
+
+Build 218 note:
+- Adds metadata-only, RLS-protected DAIP internal test mode with a Test Lab, audit trail, explicit public/export/worker hard stops, and guided acceptance checks. It does not add media storage or processing.
 """
 from __future__ import annotations
 
@@ -167,6 +170,7 @@ CHECKS = [
     "scripts/build215_asset_resolver_daip_planning_check.py",
     "scripts/build216_media_reliability_daip_governance_check.py",
     "scripts/build217_secure_final_balance_links_check.py",
+    "scripts/build218_daip_test_mode_foundation_check.py",
     "scripts/seo_h1_check.py",
 ]
 
