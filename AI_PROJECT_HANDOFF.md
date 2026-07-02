@@ -375,3 +375,36 @@ Do not expand payments further until the migration, Stripe test-mode webhook, an
 - Rechecked Jobber Client Hub and Urable’s detailing workflow positioning. The competitive baseline is a mobile-friendly self-service journey: request/quote approval, appointment information, payment/receipt, connected booking-to-billing status, customer communication, and vehicle/job history.
 - Build 217 directly improves the payment/receipt/status portion of that path. Do not chase broad feature parity before the controlled payment release, consent-aware proof reuse, and review/maintenance gates work reliably.
 
+
+
+## Build 218 — DAIP internal test foundation (2026-07-02)
+
+Build 218 turns the DAIP documentation into a narrow **internal-test-only** system without treating DAIP as production-ready. The protected **DAIP Test Lab** is the only Build 218 operating surface.
+
+### What is implemented
+
+- `sql/2026-07-02_build218_daip_test_mode_foundation.sql` creates service-role-only DAIP test control, `RD-TEST-YYYYMMDD-###` media-job records, metadata-only asset records, non-executing planning tasks, internal privacy reviews, and safe audit events.
+- Every control flag is constrained to internal test/no storage/no worker/no public export/no automatic publishing.
+- The asset table deliberately has no public URL, signed URL, storage bucket, storage key, object path, or Drive ID column.
+- `/admin-daip.html` is an administrator-only mobile/desktop Test Lab. It does not show customer details or receive media bytes.
+- `/admin-test-centre.html` now includes three Build 218 tests: DAIP safety preflight, internal registry, and internal privacy/export-block proof.
+- `docs/digital-asset-intelligence-platform/13_DAIP_Test_Mode_Process.md` describes exact test use; `14_DAIP_Production_Promotion_Gates.md` defines the next production gates.
+
+### What remains intentionally disabled
+
+No DAIP original upload, R2 DAIP bucket, signed URL, Google Drive mirror, worker, FFmpeg, proxy, contact sheet, AI/vision/transcription, export, gallery handoff, customer media access, social/GBP integration, or publishing is available in Build 218.
+
+### Required deployment/test order
+
+1. Confirm Build 214 RLS containment and Security Posture still pass.
+2. Deploy site and Functions together.
+3. Apply `sql/2026-07-02_build218_daip_test_mode_foundation.sql` in **development/staging only**.
+4. Open `/admin-daip.html` as admin and confirm `internal_test`, metadata-only, public blocked, and zero executable tasks.
+5. Use one opaque DAIP-only test reference and fictional test asset metadata only; never connect the Test Lab to a booking record.
+6. Record all three DAIP tests in `/admin-test-centre.html`.
+7. Confirm Gallery, customer progress, and Social Queue never show the DAIP test record.
+8. Do not consider real media/storage/worker work until DAIP-0 decisions and `14_DAIP_Production_Promotion_Gates.md` are complete.
+
+### Current strongest next direction
+
+First run the Build 218 internal tests. Then complete the 12 DAIP-0 owner decisions in the decision register, especially worker host, budget stop rule, storage/backup policy, consent language, retention, and privacy approvers. The next code pass should be a reviewed private upload/storage design only—not AI, public galleries, or automatic posting.
