@@ -550,3 +550,33 @@ Google’s current guidance supports the existing safeguards: one clear page pur
 
 Current service-software competitors reinforce the same customer experience target: Jobber’s client portal emphasizes self-serve work requests, approvals, appointment details, payments, and receipts; Urable’s detailing CRM emphasizes connected quoting, scheduling, job tracking, customer communication, payments, and vehicle history. Rosie Dazzlers should differentiate by keeping this journey simple for a one-car-per-day mobile detailer, with consent-aware proof and local Oxford/Norfolk trust—not by copying every enterprise feature.
 
+
+
+## Build 218 — next 20 DAIP and customer-proof steps (2026-07-02)
+
+This sequence starts the Digital Asset Intelligence Platform without risking customer media or turning a media system into a premature publishing system.
+
+1. Apply the Build 218 DAIP test-mode migration only in development/staging.
+2. Confirm Build 214 Security Posture has no browser access risk for the new DAIP tables.
+3. Open `/admin-daip.html` and verify internal-test/no-storage/no-worker/no-public-export/no-auto-publish controls.
+4. Choose one opaque `RD-TEST-BOOKING-...` reference for DAIP testing; it is not a booking record and never uses a customer job.
+5. Pass the DAIP Test Lab safety-preflight test.
+6. Create one `RD-TEST` job with the mandatory internal-test acknowledgement.
+7. Register one fictional photo metadata record and one fictional video metadata record without uploading files.
+8. Pass the metadata-registry test and verify no URL/bucket/key/path is saved or shown.
+9. Record one `internal_only_cleared` and one `blocked_private` privacy outcome.
+10. Pass the privacy/export-block test by verifying no DAIP record appears in gallery, social, customer progress, or public pages.
+11. Archive the harmless test job and confirm its audit history remains while new asset intake is blocked.
+12. Complete and owner-approve all DAIP-0 decision-register rows.
+13. Approve the customer media-consent wording that separates service proof, customer visibility, gallery reuse, marketing reuse, and publication.
+14. Set a hard monthly cost ceiling and automatic pause/alert threshold before buying or enabling processing infrastructure.
+15. Decide the single source of truth for originals and whether Google Drive is backup-only or deferred.
+16. Approve a retention/legal-hold/dispute policy for originals, proxies, rejected candidates, and approved derivatives.
+17. Choose a worker host capable of private FFmpeg/proxy work outside Cloudflare Pages requests and document the cost/recovery model.
+18. Review a private upload/storage migration that uses temporary server-issued authorization, checksums, resumable recovery, and immutable provenance; do not deploy it yet.
+19. Implement only the private technical processing MVP: metadata validation, proxy/thumbnail/contact sheet, retry/cancel, usage recording, and audit—no AI/public export.
+20. After private processing passes, build manual privacy masking/review and then a separate approved-only gallery/content handoff with no automatic publishing.
+
+### Why this sequencing is commercially useful
+
+The practical advantage is not “AI for its own sake.” It is a repeatable system that turns approved job proof into accurate gallery/service/town material while preserving privacy. That strengthens the existing lead → booking → proof → payment → review → repeat-maintenance workflow and keeps the customer self-service experience competitive without exposing work-in-progress media.

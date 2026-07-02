@@ -1595,3 +1595,12 @@ Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOF
 - Do not mark final-balance notification delivery as successful until a controlled provider test confirms delivery.
 - DAIP remains planning-only; do not let final-balance work bypass consent/provenance gates for media reuse.
 
+
+
+## Build 218 DAIP risk update — internal test boundary
+
+- **Current status:** DAIP test registry exists only in development/staging after the Build 218 migration. It is metadata-only and must not be called a media-processing or publishing system.
+- **Non-negotiable block:** no customer media, original upload, R2 DAIP bucket, signed URL, Drive sync, worker, AI, export, gallery/customer/social handoff, or automatic publishing is in Build 218.
+- **Before any next phase:** all DAIP-0 owner decisions, three Build 218 guided tests, RLS posture, consent language, cost ceiling/stop rule, storage/backup policy, retention/legal-hold policy, and worker design require evidence.
+- **Privacy risk:** `internal_only_cleared` is never public approval or marketing consent. Any public/customer leak is a release blocker.
+- **Cost/reliability risk:** video ingestion/processing remains unimplemented. Do not promise large-file or weak-network workflows until resumable private upload and worker recovery are separately tested.
