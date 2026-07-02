@@ -964,3 +964,18 @@ Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOF
 
 Apply `sql/2026-06-30_build217_secure_final_balance_links.sql` after the existing final-balance and security migrations. It adds lifecycle columns to `public.final_balance_payment_requests`: `expires_at`, `access_token_rotated_at`, notification audit fields, cancellation audit fields, `paid_amount_cents`, and provider payment-intent/event references. `token_hash` stores only SHA-256 hashes of opaque public tokens and must never be returned to a browser. No direct browser grants are added.
 
+
+
+## Build 218 DAIP internal-test tables
+
+Build 218 adds these internal-only, RLS-enabled and service-role-only tables after the Build 214 security model:
+
+- `daip_test_control` — singleton hard stop: internal test/no storage/no worker/no public export/no automatic publishing.
+- `daip_test_daily_sequences` — safe `RD-TEST-YYYYMMDD-###` sequence support.
+- `daip_media_jobs` — test-only job registry tied to an internal booking with no customer-data/public-export/processor permissions.
+- `daip_media_assets` — metadata-only harmless test assets. No public URL, signed URL, bucket, object key, path, or Drive ID columns exist.
+- `daip_processing_tasks` — non-executing test planning tasks; `execution_blocked` is hard true.
+- `daip_privacy_reviews` — internal-only review state; public export remains hard blocked.
+- `daip_audit_events` — safe actor/time/action metadata; do not store secrets, customer information, private media details, or signed URLs.
+
+Apply `sql/2026-07-02_build218_daip_test_mode_foundation.sql` only in development/staging for the first controlled DAIP tests.

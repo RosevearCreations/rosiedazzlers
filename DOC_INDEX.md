@@ -924,3 +924,17 @@ DAIP governance only — no production DAIP implementation:
 ### Build 216 synchronization — 2026-07-01
 
 Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+
+## Build 218 DAIP operational documents
+
+The two active top-level strategy files remain `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. DAIP implementation detail lives under `docs/digital-asset-intelligence-platform/` and is read in this order for the current phase:
+
+1. `README.md`
+2. `10_Rosie_Dazzlers_Integration_Plan.md`
+3. `11_DAIP_Decision_Register.md`
+4. `13_DAIP_Test_Mode_Process.md`
+5. `14_DAIP_Production_Promotion_Gates.md`
+6. `12_DAIP_Phase_1_Security_Acceptance.md`
+
+The remaining numbered DAIP documents are design reference for later stages. Do not use them to skip the current internal-test and owner-decision gates.
