@@ -84,3 +84,8 @@ Follow-up owner:
 ```
 
 Do not paste secrets, signed URLs, raw original paths, customer details, payment information, private incident evidence, or personal identifiers into this template.
+
+
+## Build 218 test-mode evidence before future Phase 1
+
+Before considering this Phase 1 template, complete the three Build 218 Test Centre records. Those results prove the test boundary only; they do not approve original file storage, upload URLs, worker execution, public release, or customer-media intake.

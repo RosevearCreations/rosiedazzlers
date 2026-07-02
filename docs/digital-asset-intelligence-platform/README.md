@@ -183,3 +183,13 @@ Read the integration plan before beginning any Phase 1 database or storage work.
 ## Build 216 governance note
 
 Build 216 adds decision and acceptance templates only. DAIP remains planning-only: no DAIP worker, storage bucket, queue, schema, AI processing, Drive synchronization, export, or publication system has been implemented.
+
+
+## Build 218 — DAIP internal-test foundation
+
+Build 218 is the first controlled implementation step. It creates **DAIP-1A internal test mode**, not live DAIP production:
+
+- `sql/2026-07-02_build218_daip_test_mode_foundation.sql` provides service-role-only test control, `RD-TEST` job codes, metadata-only asset records, non-executing planning tasks, internal privacy review, and audit events.
+- `/admin-daip.html` is an admin-only Test Lab for a harmless internal booking/test record.
+- No file upload/storage, signed URLs, worker, proxy, AI, Drive sync, public export, gallery handoff, customer access, or publication is available.
+- Read `13_DAIP_Test_Mode_Process.md` for exact test steps and `14_DAIP_Production_Promotion_Gates.md` before proposing the next phase.

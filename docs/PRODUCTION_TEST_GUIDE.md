@@ -270,3 +270,19 @@ Use Stripe **test mode** and a harmless internal booking. Do not use a real cust
 7. Test Queue customer notification with a controlled mailbox. Record whether the app queued the alert separately from whether the provider actually delivered it.
 8. Confirm the secure payment page is absent from the sitemap and no public analytics, screenshots, social captions, or logs include its token URL.
 
+
+
+## Build 218 — DAIP internal-test registry release test (2026-07-02)
+
+Build 218 is a **test-only registry**. It does not upload, store, process, display, or publish media. Run it in development/staging only after the Build 214 Security Posture/RLS check has passed.
+
+1. Apply `sql/2026-07-02_build218_daip_test_mode_foundation.sql` once in the development/staging Supabase project. Do not apply this as a production media system.
+2. Sign in as administrator and open `/admin-daip.html`. Confirm the control cards report `internal_test`, metadata-only, no storage, no worker, public blocked, and zero executable tasks.
+3. Enter an opaque DAIP-only reference such as `RD-TEST-BOOKING-DEMO-01`. It is not a booking UUID and must not be linked to a customer record.
+4. Create a safe job label and type `INTERNAL TEST ONLY`; check each safety acknowledgment. Confirm the app creates an `RD-TEST-YYYYMMDD-###` code.
+5. Register one fictional photo metadata record and one fictional video metadata record. Do not upload a file and do not paste a URL, storage key/path, bucket name, signed link, Google Drive ID, customer name, vehicle, address, VIN, or payment information.
+6. Save one `internal_only_cleared` result and one `blocked_private` result. Confirm both remain `public blocked` and `not uploaded`.
+7. Open Gallery, Social Queue, and a progress route in a private browser. Confirm neither `RD-TEST` asset appears. Archive the DAIP test job and confirm no further asset can be registered.
+8. Record **Pass**, **Fail**, or **Blocked** for the three Build 218 DAIP tests in `/admin-test-centre.html`. Record only the safe `RD-TEST` job code, device/browser, time, and visible error text.
+
+Stop immediately if any DAIP item reaches a public, customer, gallery, social, storage, worker, or export path. Do not advance to a storage/worker build until every DAIP-0 decision and the promotion gates are approved.

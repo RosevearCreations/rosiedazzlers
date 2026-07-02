@@ -56,3 +56,8 @@ Related policy / consent document:
 ## DAIP-0 exit criteria
 
 DAIP-0 is complete only when all twelve decisions above have a recorded owner-approved answer, the Phase 1 security acceptance template is reviewed, and an internal test job is selected. Until then, DAIP remains **documentation only**.
+
+
+## Build 218 note — implementation boundary preserved
+
+Build 218 does **not** close any DAIP-0 decision. It only permits a metadata-only internal test registry with fixed no-storage/no-worker/no-public-export controls. Every DAIP-0 row remains open until an owner enters and dates a decision completion record.

@@ -1,0 +1,59 @@
+# DAIP Test Mode Process — Rosie Dazzlers
+
+**Status:** Build 218 implemented in internal test mode only.  
+**Purpose:** Let us prove the DAIP safety and review process before handling real customer media or deploying storage/worker infrastructure.
+
+## What Build 218 proves
+
+Build 218 changes DAIP from planning papers into a controlled, database-backed test process. The registry deliberately has no foreign key or lookup into customer booking records:
+
+1. An authorized administrator creates one opaque DAIP-only test reference, such as `RD-TEST-BOOKING-DEMO-01`; it is not linked to the `bookings` table.
+2. The administrator creates a test-only media job with a unique `RD-TEST-YYYYMMDD-###` code.
+3. The job is hard-locked to `internal_test`, `metadata_only`, no storage, no worker, no public export, and no automatic publishing.
+4. A harmless sample photo/video **metadata record** is registered. No bytes are uploaded and no URL/path/key/Drive ID is accepted.
+5. An internal privacy result is recorded: review required, internal-only cleared, or blocked private.
+6. The record can be archived, while the safe audit history remains.
+7. Three guided acceptance tests record whether the safeguards worked.
+
+## What Build 218 does not do
+
+This build deliberately has **no** original upload, R2 DAIP bucket, signed URL, Google Drive synchronization, proxy/contact-sheet worker, FFmpeg, AI, vision, transcription, clip export, gallery import, customer access, social handoff, or publication action.
+
+“Internal-only cleared” means only that the harmless test record passed an internal test review. It is never marketing consent, public approval, gallery permission, or platform publishing permission.
+
+## Exact operating procedure
+
+### Before opening the Test Lab
+
+- Confirm Build 214 RLS containment and Security Posture pass.
+- Apply `sql/2026-07-02_build218_daip_test_mode_foundation.sql` in the development/staging Supabase project.
+- Deploy the Build 218 site and Functions together.
+- Choose one opaque DAIP-only reference such as `RD-TEST-BOOKING-DEMO-01`. Do not use a booking UUID or any customer job.
+- Prepare a fictional filename and optional harmless technical metadata. Do not upload a file.
+
+### In `/admin-daip.html`
+
+1. Confirm the summary says `internal_test` and `0` executable tasks.
+2. Enter only the opaque DAIP-only test reference; do not enter a booking UUID, customer name, address, vehicle, VIN, phone number, or note.
+3. Use a clearly safe label such as `Internal DAIP test — harmless sample set A`.
+4. Type `INTERNAL TEST ONLY` and check all three safety confirmations.
+5. Create the test job and confirm an `RD-TEST-...` code appears.
+6. Register a metadata-only test asset. It must have a safe filename such as `internal-test-before-01.jpg`; no URL, bucket, object key, path, signed link, or Drive reference is accepted.
+7. Save `internal_only_cleared` or `blocked_private` as an internal privacy result.
+8. Confirm the asset still says `not uploaded` and `public blocked`.
+9. Open Gallery, Social Queue, and a test progress route in a private browser. Confirm the DAIP record is not present.
+10. Archive the test job after the test. The audit remains but no further asset record can be added.
+
+## Test outcomes and stop rules
+
+Record outcomes in `/admin-test-centre.html` using:
+
+- **DAIP Test Lab safety preflight**
+- **DAIP internal test job and metadata registry**
+- **DAIP internal privacy review and export block**
+
+Stop the DAIP path immediately if any real/customer data is entered, any public/customer/gallery/social route shows a DAIP record, any worker/storage/export flag is enabled, or the RLS Security Posture shows browser access for a DAIP table.
+
+## Promotion boundary
+
+Build 218 is **DAIP-1A: internal test registry**, not DAIP production. The next phase requires every DAIP-0 owner decision, successful Build 218 guided results, a reviewed worker/storage design, fixed cost ceiling, retention rules, consent wording, and a separate migration that introduces only the smallest approved storage/worker capability.

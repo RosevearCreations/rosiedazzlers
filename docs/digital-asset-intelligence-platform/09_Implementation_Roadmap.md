@@ -246,3 +246,12 @@ This keeps the subsystem understandable for future chats and future maintainers.
 The DAIP documentation is now referenced by the active Rosie Dazzlers roadmap and known-gaps files. `10_Rosie_Dazzlers_Integration_Plan.md` defines the boundary with existing job media, incident privacy, gallery approvals, RLS, and future background workers.
 
 **Status:** Phase 0 planning remains open. No production DAIP tables, workers, R2 DAIP buckets, AI processing, exports, or automatic publishing were added in Build 215. Begin with DAIP-0 decisions and a reviewed Phase 1 migration draft, not implementation code.
+
+
+## Build 218 checkpoint — DAIP-1A internal test registry (2026-07-02)
+
+Build 218 starts the DAIP process in a narrow, non-production test mode. It implements a service-role-only registry for internal test jobs, metadata-only test assets, non-executing processing plans, internal privacy review, and audit events. It also adds `/admin-daip.html` and three guided test-centre checks.
+
+**Not implemented:** object storage, upload, signed URLs, Google Drive, worker execution, proxy/thumbnail/contact sheets, AI, public exports, gallery handoff, customer access, social/content flow, and automatic publishing.
+
+**Current phase label:** `DAIP-1A — internal test registry`. Do not mark Phase 1 complete merely because the test registry works. Phase 1 production storage/worker work remains blocked by DAIP-0 owner decisions and the promotion gates in `14_DAIP_Production_Promotion_Gates.md`.
