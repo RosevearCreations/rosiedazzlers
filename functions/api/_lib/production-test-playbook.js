@@ -300,5 +300,48 @@ export const PRODUCTION_TEST_PLAYBOOK_BUILD212 = [
       "Do not release as production-ready until urgent failure points are resolved."
     ]
   }
+  ,
+  {
+    "key": "daip_test_mode_preflight",
+    "name": "DAIP Test Lab safety preflight",
+    "category": "DAIP internal test mode",
+    "risk": "urgent",
+    "estimated_minutes": 8,
+    "build_number": 218,
+    "pages": ["/admin-daip.html", "/admin-security.html", "/admin-test-centre.html"],
+    "prerequisites": ["Build 214 RLS containment is confirmed.", "Build 218 is deployed.", "Use an administrator account and dev/staging first."],
+    "safety": ["Do not enter a customer booking, vehicle, address, VIN, photo, video, storage URL, signed URL, or payment data.", "Do not create a storage bucket or configure a worker as part of this test."],
+    "steps": ["Open /admin-daip.html while signed in as administrator.", "Confirm the control summary says internal test mode, metadata only, and zero executable tasks.", "Confirm the page says storage, workers, public export, and automatic publishing are disabled.", "Open /admin-security.html and confirm browser-table access remains clear for the new DAIP tables."],
+    "expected": "DAIP Test Lab is available only to authorized admin staff and remains locked to internal metadata-only testing.",
+    "if_it_fails": ["Stop before creating any DAIP record.", "Record only the visible status/error, browser/device, and time; never include sensitive setup information.", "Mark Failed if any public/export/worker flag shows enabled."]
+  },
+  {
+    "key": "daip_internal_test_registry",
+    "name": "DAIP internal test job and metadata registry",
+    "category": "DAIP internal test mode",
+    "risk": "high",
+    "estimated_minutes": 12,
+    "build_number": 218,
+    "pages": ["/admin-daip.html", "/admin-test-centre.html"],
+    "prerequisites": ["One opaque DAIP-only test reference such as RD-TEST-BOOKING-DEMO-01 is ready; it is not a booking UUID.", "A fictional filename and technical metadata are ready; no actual media upload is needed."],
+    "safety": ["Do not use a customer booking or real media.", "Do not paste a media URL, R2 path, signed URL, Google Drive reference, customer name, address, or VIN."],
+    "steps": ["Create a DAIP test job using the DAIP-only test reference, a safe test label, all three safety checks, and the exact phrase INTERNAL TEST ONLY.", "Confirm a RD-TEST date/sequence job code is created.", "Register one harmless metadata-only photo or short-video record.", "Confirm the asset shows storage status not uploaded and public blocked.", "Refresh the page and confirm the test job and audit-safe summary remain visible."],
+    "expected": "The registry saves an internal-only job and metadata record without uploading a file or exposing any storage/public URL.",
+    "if_it_fails": ["Mark Failed if an upload, URL, public asset, or customer information appears.", "Record the test job code, not the DAIP-only test reference or any private data.", "Mark Blocked if Build 218 migration has not been applied."]
+  },
+  {
+    "key": "daip_internal_privacy_export_block",
+    "name": "DAIP internal privacy review and export block",
+    "category": "DAIP internal test mode",
+    "risk": "urgent",
+    "estimated_minutes": 10,
+    "build_number": 218,
+    "pages": ["/admin-daip.html", "/gallery.html", "/admin-social.html", "/progress.html?token=...", "/admin-test-centre.html"],
+    "prerequisites": ["A harmless Build 218 test asset metadata record exists.", "Use a private/incognito window for public page checks."],
+    "safety": ["Use only the Test Lab metadata record; no customer media.", "A privacy result of internal-only cleared is not public consent and must not be used as one."],
+    "steps": ["Save Internal only cleared or Blocked private for the test asset.", "Refresh the DAIP Test Lab; confirm public blocked remains shown.", "Open Gallery, Social Queue, and a test progress page in a separate private window.", "Confirm the DAIP test record is not available in any customer/public/social/gallery view.", "Archive the test job and confirm no new asset can be registered afterward."],
+    "expected": "Privacy review is auditable but cannot make an asset public; the test record never reaches public, customer, social, gallery, or processing output paths.",
+    "if_it_fails": ["Treat any public/customer visibility as a privacy blocker and stop DAIP testing.", "Record the page URL, safe RD-TEST code, device/browser, and time only.", "Do not continue toward a storage or worker phase until fixed and re-tested."]
+  }
 ];
 export const PRODUCTION_TEST_KEYS_BUILD212 = new Set(PRODUCTION_TEST_PLAYBOOK_BUILD212.map((item) => item.key));
