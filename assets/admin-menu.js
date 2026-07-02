@@ -80,6 +80,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-media-health")
     },
     {
+      key: "admin-daip",
+      label: "DAIP Test Lab",
+      href: "/admin-daip.html",
+      description: "Internal-only media-process registry and privacy gate testing",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip")
+    },
+    {
       key: "admin-water-rules",
       label: "Water Rules",
       href: "/admin-water-rules.html",
