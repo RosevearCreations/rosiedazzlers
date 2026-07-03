@@ -87,6 +87,21 @@ export async function touchCustomerSession({ env, sessionId, request }) {
   }).catch(() => null);
 }
 
+
+export async function revokeAllCustomerSessions({ env, customerProfileId }) {
+  assertSessionEnv(env);
+  if (!customerProfileId) throw new Error('A customer profile id is required.');
+  const now = new Date().toISOString();
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/customer_auth_sessions?customer_profile_id=eq.${encodeURIComponent(customerProfileId)}&revoked_at=is.null`, {
+    method: 'PATCH',
+    headers: { ...serviceHeaders(env), Prefer: 'return=representation' },
+    body: JSON.stringify({ revoked_at: now, updated_at: now })
+  });
+  if (!res.ok) throw new Error(`Could not revoke customer sessions. ${await res.text()}`);
+  const rows = await res.json().catch(() => []);
+  return Array.isArray(rows) ? rows.length : 0;
+}
+
 export async function revokeCustomerSessionByToken({ env, token }) {
   assertSessionEnv(env);
   if (!token) return;
