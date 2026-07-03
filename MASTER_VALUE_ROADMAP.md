@@ -1,4 +1,4 @@
-# Rosie Dazzlers Master Value Roadmap — Build 217
+# Rosie Dazzlers Master Value Roadmap — Build 219
 
 **Updated:** 2026-06-30
 **Purpose:** This is the one active business/product roadmap. Historical build detail remains in `DEVELOPMENT_ROADMAP.md`; active decisions belong here.
@@ -580,3 +580,58 @@ This sequence starts the Digital Asset Intelligence Platform without risking cus
 ### Why this sequencing is commercially useful
 
 The practical advantage is not “AI for its own sake.” It is a repeatable system that turns approved job proof into accurate gallery/service/town material while preserving privacy. That strengthens the existing lead → booking → proof → payment → review → repeat-maintenance workflow and keeps the customer self-service experience competitive without exposing work-in-progress media.
+
+## Build 219 — DAIP governance workspace and held promotion gates (2026-07-02)
+
+Build 219 moves the DAIP decision register from static planning into an internal governance workflow. It is intentionally a **decision and evidence build**, not a media-storage or processing build.
+
+### Completed value steps
+
+1. Added `/admin-daip-governance.html` with responsive desktop/mobile decision and gate views.
+2. Added a safe visual placeholder for the DAIP decision-to-gates flow.
+3. Added DAIP-0 draft and owner-approval controls for all twelve required decisions.
+4. Required an accountable owner, decision summary, business/cost impact, privacy/safety impact, review date, and revision number for every saved decision.
+5. Required an exact per-decision approval phrase before a decision can be marked approved.
+6. Added a protected audit event for every draft, approval, or reopened decision.
+7. Added a decision status summary so owners can see approved, drafted, and open work at a glance.
+8. Added Gate A readiness logic driven only by all twelve approved DAIP-0 decisions.
+9. Added Gate B readiness logic driven only by the three existing Build 218 internal-test results plus safe test-control state.
+10. Kept Gates C–F visibly held and unable to be changed by this build.
+11. Added static anti-sensitive-input validation for URLs, keys, signed links, storage identifiers, and obvious credential patterns.
+12. Added RLS and direct-browser grant revocation for the governance tables.
+13. Kept Cloudflare Functions as the only browser-to-database boundary.
+14. Added three Guided Production Test Centre cases for draft boundary, owner approval, and held-gate verification.
+15. Added an app-readable Build 219 record and schema mirror.
+16. Added an admin-menu link and matching permission guard.
+17. Added root/folder route-copy synchronization for the Governance screen.
+18. Added service-worker cache coverage for the new page and Build 218/219 records.
+19. Updated the two active strategy documents and DAIP operational documents.
+20. Added a Build 219 release guard to prevent a later build from silently enabling a production DAIP path.
+
+### Next 20 value steps
+
+1. Apply Build 219 only to development/staging after Build 214 and Build 218 are applied.
+2. Run the three Build 218 DAIP Test Lab acceptance tests with fictional metadata only.
+3. Record the three Build 219 governance acceptance tests.
+4. Draft every DAIP-0 decision using the in-app prompt and no sensitive information.
+5. Review the decisions together against actual budget, workload, privacy, and recovery limits.
+6. Owner-approve DAIP-0-01 worker hosting only after choosing a private background-processing model.
+7. Owner-approve DAIP-0-02 and DAIP-0-12 with a hard dollar ceiling and automatic pause/alert rule.
+8. Owner-approve DAIP-0-03 and DAIP-0-04 with one source-of-truth and controlled backup policy.
+9. Owner-approve DAIP-0-05 with consent wording that separates service proof, customer view, gallery reuse, marketing reuse, and publication.
+10. Owner-approve DAIP-0-06 with named internal review/approval responsibilities.
+11. Owner-approve DAIP-0-07 and DAIP-0-08 with retention, legal-hold, incident, and dispute handling rules.
+12. Owner-approve DAIP-0-09 using only a harmless staff-owned test set.
+13. Owner-approve DAIP-0-10 with a realistic human review SLA and blocked-job escalation owner.
+14. Owner-approve DAIP-0-11 confirming that the first private technical phase has no public destination.
+15. Review Gate A and Gate B evidence, then freeze the decisions as a baseline for technical design.
+16. Draft a separate private-storage/upload architecture that adds no public bucket, no direct browser DB access, and no automatic publishing.
+17. Perform a cost and recovery review before writing the next migration.
+18. Build only a private upload authorization and immutable provenance MVP after its separate security acceptance is signed off.
+19. Then add non-public proxy/thumbnail/contact-sheet processing, retry/cancel controls, usage accounting, and audit trails outside Pages requests.
+20. Only after privacy/export proof passes, consider a separate explicit-approved gallery/content handoff; retain zero automatic publishing.
+
+### Build 219 boundary
+
+Build 219 does not create a bucket, storage prefix, upload endpoint, original-media intake, signed URL, worker, queue execution, AI/vision/transcription, customer media view, Gallery/Social/GBP handoff, public derivative, or automatic publishing. It makes the prerequisite owner decisions and test evidence visible so the future technical build can be deliberately small and reviewable.
+

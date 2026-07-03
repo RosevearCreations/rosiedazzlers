@@ -1,3 +1,9 @@
+# Build 219 note — DAIP governance before production media
+
+Build 219 makes the DAIP plan operational without adding uploads, storage, workers, AI, customer access, or public publishing. The two current strategy sources are `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. For DAIP work, begin with `docs/digital-asset-intelligence-platform/13_DAIP_Test_Mode_Process.md`, `11_DAIP_Decision_Register.md`, `15_DAIP_Governance_Workspace_Process.md`, and `14_DAIP_Production_Promotion_Gates.md`. The new protected `/admin-daip-governance.html` screen records owner decisions and shows Gates C–F as held until test and governance evidence are complete.
+
+---
+
 # Build 207 note — Canonical docs and visual placeholders
 
 Build 207 adds `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` as the two main living planning files, plus `/admin-docs.html` for in-app documentation sanity. It also adds a visual placeholder registry and automatic SVG placeholder/fallback behavior so missing service, town, gallery, fleet, seasonal, incident, or review images do not leave blank-looking sections while approved Rosie-owned media is gathered.
