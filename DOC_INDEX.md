@@ -12,6 +12,20 @@
 **New admin screen:** `/admin-docs.html` shows canonical docs, retained files, retirement guidance, current app position, and visual placeholder slots.
 
 
+
+
+## Build 220 current documentation rule
+
+Start every new chat/build pass with `AI_PROJECT_HANDOFF.md`, then `MASTER_VALUE_ROADMAP.md`. Build 220 adds:
+
+- `sql/2026-07-03_build220_customer_access_management_and_daip_readiness.sql` — RLS-protected customer access, recovery intake, audit, and archive-first support tables.
+- `data/build220_customer_access_management.json` — machine-readable scope, roles, safeguards, and DAIP non-goals.
+- `docs/PRODUCTION_TEST_GUIDE.md` — Build 220 controlled staging sequence.
+- `docs/digital-asset-intelligence-platform/16_DAIP_Phase_1_Readiness_Packet.md` — owner-ready evidence/design worksheet; not an authorization for DAIP infrastructure.
+- `scripts/build220_customer_access_management_check.py` — static regression guard.
+
+Retained Markdown files are history, release-audit, or guard support. Do not treat them as competing strategy sources. DAIP remains Test Lab/Governance/Readiness-Packet only until the documented gates and a separate private-MVP release are accepted.
+
 **Build 219 current rule:** Start every new chat with `AI_PROJECT_HANDOFF.md`, then `MASTER_VALUE_ROADMAP.md`. For DAIP, read `docs/digital-asset-intelligence-platform/13_DAIP_Test_Mode_Process.md`, the decision register, and `15_DAIP_Governance_Workspace_Process.md` before proposing storage, workers, customer access, or publishing. Build 219 is governance-only: all DAIP production capabilities remain disabled until the documented gates are passed.
 
 **Build 217 current rule:** Treat the two canonical documents above as the only living strategy sources. Retained root Markdown files receive short synchronization notes only; archive/history files are context-only. They remain in the package because existing release guards and audit references still depend on them.
