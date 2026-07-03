@@ -1,6 +1,6 @@
-# Rosie Dazzlers AI Project Handoff — Build 217
+# Rosie Dazzlers AI Project Handoff — Build 219
 
-**Updated:** 2026-06-30
+**Updated:** 2026-07-02
 **Read first:** This is the primary technical/business handoff for a new AI chat or future build pass.
 
 ## Product north star
@@ -21,6 +21,21 @@ The connected lifecycle is:
 Avoid creating isolated admin pages unless they clearly advance this lifecycle.
 
 
+
+## Build 219 central capability: DAIP governance and promotion gates
+
+Build 219 turns the DAIP-0 decision register into an admin-only, database-backed governance workspace without moving DAIP into media production.
+
+- `/admin-daip-governance.html` records a draft or owner-approved answer for each of the 12 DAIP-0 decisions.
+- Approval requires an exact decision-specific phrase, a recorded accountable owner, cost/operational impact, privacy/safety impact, review date, revision number, actor/time, and audit event.
+- The workspace reads the three Build 218 DAIP Test Lab results and exposes Gates A–F in plain language.
+- Gate A can only become ready when all twelve DAIP-0 rows are approved. Gate B can only become ready when Build 218 Test Lab evidence is passed and the test control remains safe.
+- Gates C–F remain hard-held. Build 219 cannot provision storage, accept upload bytes, issue a signed URL, create a background worker, process a file, expose a customer route, hand off to Gallery/Social, or publish anything.
+- New tables use RLS, revoke browser-role grants, and are accessed only through Cloudflare Functions using the service role.
+
+Primary migration: `sql/2026-07-02_build219_daip_governance_workspace.sql`.
+
+**Operational rule:** Complete decisions and Test Lab evidence in development/staging first. A DAIP-0 approval is a governance record, not a production switch. Before the next technical phase, read `docs/digital-asset-intelligence-platform/15_DAIP_Governance_Workspace_Process.md` and the promotion gates.
 
 ## Build 210 central capability: connected live-job closeout
 

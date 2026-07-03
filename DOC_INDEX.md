@@ -1,4 +1,4 @@
-# Rosie Dazzlers Documentation Index — Build 217
+# Rosie Dazzlers Documentation Index — Build 219
 
 **Canonical going forward:**
 
@@ -11,6 +11,8 @@
 
 **New admin screen:** `/admin-docs.html` shows canonical docs, retained files, retirement guidance, current app position, and visual placeholder slots.
 
+
+**Build 219 current rule:** Start every new chat with `AI_PROJECT_HANDOFF.md`, then `MASTER_VALUE_ROADMAP.md`. For DAIP, read `docs/digital-asset-intelligence-platform/13_DAIP_Test_Mode_Process.md`, the decision register, and `15_DAIP_Governance_Workspace_Process.md` before proposing storage, workers, customer access, or publishing. Build 219 is governance-only: all DAIP production capabilities remain disabled until the documented gates are passed.
 
 **Build 217 current rule:** Treat the two canonical documents above as the only living strategy sources. Retained root Markdown files receive short synchronization notes only; archive/history files are context-only. They remain in the package because existing release guards and audit references still depend on them.
 
@@ -938,3 +940,16 @@ The two active top-level strategy files remain `AI_PROJECT_HANDOFF.md` and `MAST
 6. `12_DAIP_Phase_1_Security_Acceptance.md`
 
 The remaining numbered DAIP documents are design reference for later stages. Do not use them to skip the current internal-test and owner-decision gates.
+
+## Build 219 DAIP governance workspace documents
+
+Current DAIP operating order:
+
+1. `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` — the two active strategy documents.
+2. `docs/digital-asset-intelligence-platform/13_DAIP_Test_Mode_Process.md` — Build 218 metadata-only test boundary.
+3. `docs/digital-asset-intelligence-platform/11_DAIP_Decision_Register.md` — the twelve required owner decisions.
+4. `docs/digital-asset-intelligence-platform/15_DAIP_Governance_Workspace_Process.md` — how to record and verify decisions in Build 219.
+5. `docs/digital-asset-intelligence-platform/14_DAIP_Production_Promotion_Gates.md` — what must happen before any future private media architecture.
+6. `docs/digital-asset-intelligence-platform/12_DAIP_Phase_1_Security_Acceptance.md` — future-only acceptance template.
+
+Build 219 remains governance-only. It does not add DAIP production storage, worker execution, AI, customer visibility, export, or publication.
