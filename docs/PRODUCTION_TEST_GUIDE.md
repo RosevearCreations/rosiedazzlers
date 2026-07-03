@@ -302,3 +302,55 @@ Build 219 records governance only. It does not create storage, upload media, iss
 9. Record Pass, Blocked, or Failed for **DAIP governance draft and hard-stop boundary**, **DAIP owner approval record and review date**, and **DAIP promotion-gate hold verification** in `/admin-test-centre.html`.
 
 Stop immediately if any decision action enables a bucket, upload, URL, worker, customer/public page, Gallery/Social handoff, or publication. A governance approval is not production authorization.
+
+## Build 220 — customer access management and DAIP readiness packet (2026-07-03)
+
+Run this release in development/staging before any live use. Use a harmless staff-created test client and a controlled email inbox. Do not use a real client, real payment data, customer media, addresses, VINs, passwords, raw reset links/tokens, or service credentials.
+
+### A. Apply the controlled customer-account migration
+
+1. Back up or snapshot the staging database.
+2. Apply:
+
+```text
+sql/2026-07-03_build220_customer_access_management_and_daip_readiness.sql
+```
+
+3. Confirm the migration does **not** create a DAIP bucket, upload URL, storage key/path, worker, public route, or publishing control.
+4. In Supabase, confirm RLS remains enabled and only the server-side service role has table access for `customer_admin_audit_events`, `customer_account_recovery_requests`, `customer_auth_sessions`, and `customer_auth_tokens`.
+
+### B. Customer profile and role boundary
+
+1. Sign in as an administrator or booking manager and open `/admin-customers.html`.
+2. Create one harmless internal client profile. Confirm the page says email is the sign-in identifier and no separate username exists.
+3. Update a safe operational field such as city, phone, or detailer-visible note; refresh and confirm it remains.
+4. Sign in as a detailer. Confirm the detailer sees only job-relevant fields, not private notes, client email edits, notification controls, reset/setup links, account-help queue, or account lifecycle controls.
+5. Confirm a safe audit row appears after the profile update.
+
+### C. Password reset and forgotten sign-in email
+
+1. At `/login`, submit the controlled test email under **Forgot your password**.
+2. Submit a deliberately non-existent email. Confirm the public response has the same generic wording and does not reveal account existence.
+3. From `/admin-customers.html`, request a password reset twice. Confirm staff sees delivery status only—never a raw link or token.
+4. Privately open the newest controlled test email, reset the test password, then try the same link again. It must fail as invalid/expired/used.
+5. Confirm an existing client session is revoked and the new password signs in successfully.
+6. Submit **Forgot which email you used?** with harmless information. Confirm a manager sees a queued request but the public form does not confirm an account exists.
+7. Resolve it using only a safe note; do not write a password, reset link, token, payment detail, or customer media reference.
+
+### D. Archive rather than permanent deletion
+
+1. As administrator, choose the harmless internal test client.
+2. Select **Archive client account**, enter a short safe reason, and type `ARCHIVE CLIENT` exactly.
+3. Confirm sign-in is blocked, active sessions are revoked, and the directory can filter the profile under **Archived only**.
+4. Confirm the audit and booking summary remain visible. Archive must preserve linked business history instead of deleting it.
+5. Restore the internal test client and confirm the audit still remains.
+
+### E. DAIP readiness packet hard stop
+
+1. Read `docs/digital-asset-intelligence-platform/16_DAIP_Phase_1_Readiness_Packet.md` with the owner(s).
+2. Confirm the twelve DAIP-0 decisions, Build 218/219 evidence, cost stop rule, consent separation, retention/legal-hold requirements, and private-MVP design questions are understood.
+3. Open `/admin-daip-governance.html`; confirm Gates C–F remain **Held**.
+4. Open `/admin-daip.html`; confirm it remains metadata-only, no storage, no worker, no export, and no public publishing.
+5. Record the four Build 220 cases in `/admin-test-centre.html`.
+
+Stop and mark Blocked/Failed if any password, raw reset link/token, session token, storage location, upload, signed URL, worker action, customer DAIP asset, gallery/social handoff, or public publishing route appears.

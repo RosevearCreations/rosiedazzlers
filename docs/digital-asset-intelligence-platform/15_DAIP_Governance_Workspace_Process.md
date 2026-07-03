@@ -51,3 +51,7 @@ Never place a secret, URL, signed link, storage path, bucket name, customer name
 ## Production promotion rule
 
 A completed decision register is necessary but not sufficient. The next technical phase must be independently designed, security-reviewed, costed, tested in staging, and approved. No DAIP artifact may publish automatically at any phase.
+
+## Build 220 readiness packet note
+
+Build 220 adds `16_DAIP_Phase_1_Readiness_Packet.md`. It is the owner meeting worksheet after the Build 218 test evidence and Build 219 governed decisions are available. It does not change Gate A/B calculation, unlock Gate C, or create infrastructure. Use it to decide whether we are ready to commission a separate *written* private-MVP design review; keep Gates C–F held until that later work is independently built and accepted.

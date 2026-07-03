@@ -1,0 +1,86 @@
+# DAIP Phase 1 Readiness Packet — Rosie Dazzlers
+
+**Status:** Build 220 planning and acceptance packet. It does **not** authorize a DAIP storage bucket, upload, signed URL, processor, worker, AI service, customer-media route, Gallery/Social handoff, or public publishing.
+
+**Read first:** `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+**Read with:**
+
+1. `11_DAIP_Decision_Register.md`
+2. `13_DAIP_Test_Mode_Process.md`
+3. `15_DAIP_Governance_Workspace_Process.md`
+4. `14_DAIP_Production_Promotion_Gates.md`
+5. `12_DAIP_Phase_1_Security_Acceptance.md`
+
+## Why this packet exists
+
+The DAIP Test Lab and Governance workspace now let us prove our process safely. This packet turns that work into a small, owner-readable readiness review before we build any handling of actual media. It is deliberately a checklist and design worksheet, not a technical switch.
+
+A completed page, saved decision, or passed test does not make DAIP production-ready. Gates C–F stay held until a separate private-MVP build, acceptance evidence, security review, cost review, and owner release decision exist.
+
+## Required evidence before a private-MVP design is considered
+
+All of the following must be true:
+
+- [ ] The three Build 218 DAIP Test Lab cases are recorded as **Pass** in staging, or every blocker is documented and accepted as a reason to pause.
+- [ ] The three Build 219 governance cases are recorded correctly.
+- [ ] All twelve DAIP-0 decisions are **owner-approved** in `/admin-daip-governance.html` with an owner, review date, cost impact, and privacy impact.
+- [ ] The Build 220 `daip_phase1_readiness_packet_hold` case is recorded.
+- [ ] There is a fixed monthly spend/storage/egress stop rule and a person responsible for watching it.
+- [ ] There is approved consent wording that separates service proof, client portal visibility, gallery use, marketing/social use, and platform publication.
+- [ ] There is a written retention and legal-hold rule with a named review owner.
+- [ ] Owners understand that a test-mode internal-only privacy result is not marketing consent.
+
+## DAIP-0 decision review sheet
+
+Each answer belongs in the governed DAIP-0 decision register. Do not put keys, vendors’ private credentials, customer names, booking IDs, VINs, addresses, media links, signed URLs, bucket names, storage paths, or payment information below.
+
+| Decision | Evidence to review | Minimum safe answer |
+|---|---|---|
+| DAIP-0-01 Worker hosting | Processing needs, expected processing length, support responsibility | Choose a provider category only; no account/credential details here. |
+| DAIP-0-02 Monthly cost ceiling | Expected storage, egress, processing, failed retries | State the monthly ceiling, warning threshold, and who pauses work. |
+| DAIP-0-03 Original storage | Original retention, encryption/access, recovery | Decide source-of-truth and who can download originals. |
+| DAIP-0-04 Google Drive role | Backup vs mirror vs deferred | Avoid uncontrolled duplicate source-of-truth copies. |
+| DAIP-0-05 Consent language | Customer wording and consent records | Separate service proof from every optional reuse/publication purpose. |
+| DAIP-0-06 Privacy-review roles | Who starts, reviews, exports, publishes | Name a primary and backup reviewer, not just a team title. |
+| DAIP-0-07 Retention | Originals, proxies, rejected/approved derivatives | State normal expiry, legal hold override, and deletion review. |
+| DAIP-0-08 Incident/legal hold | Exclusions and escalation | Default to exclusion; define a written exception route. |
+| DAIP-0-09 Internal test job | Staff-owned harmless test reference | Keep it opaque, non-customer, and unrelated to a booking UUID. |
+| DAIP-0-10 Human review SLA | Expected review time and failed-job owner | State who handles blocked/failed items and how quickly. |
+| DAIP-0-11 Public destination scope | Phase 1 destination decision | Confirm no public destination in the private-MVP stage. |
+| DAIP-0-12 Budget stop rule | Warning and hard stop | State what stops work automatically/manual review at the threshold. |
+
+## Minimum private-MVP design questions — for a later separate build
+
+These questions may be answered as design notes only after the required evidence is complete. They must not be implemented in Build 220.
+
+1. Which server-side service issues one-time, short-lived upload permission after a staff authorization check?
+2. How will the client resume a failed upload without exposing a public object URL or storage credential?
+3. Which immutable checksum, size, MIME, and capture metadata are recorded before processing begins?
+4. Which private bucket/path policy prevents list/public read access and separates originals from derived proxies?
+5. How will the system apply per-job consent and visibility blocks before any derivative is eligible for review?
+6. How will worker tasks be queued, retried, cancelled, cost-tagged, and made idempotent without a Pages Function acting as the long-running processor?
+7. How are thumbnail/contact-sheet/proxy outputs labelled as private/review-only and blocked from public destinations by default?
+8. How are retention, legal hold, incident flags, audit events, and secure deletion checked before cleanup?
+9. How will cost telemetry identify storage, egress, worker duration, and failed-retry spend before the budget stop rule is crossed?
+10. Which person approves the limited staging pilot and which person can stop it immediately?
+
+## Non-negotiable Phase 1 constraints
+
+- No direct browser write to DAIP database tables.
+- No public read/list policy for originals, proxies, metadata, or derived assets.
+- No actual customer asset begins as a public Gallery, website, social, GBP, or marketing candidate.
+- No automatic AI, transcription, rendering, export, or publishing.
+- No use of production customer media during acceptance testing.
+- No private incident, dispute, legal-hold, safety, payment, address, VIN, or credential information in DAIP testing or governance notes.
+- No approval action can bypass the documented consent/review/publishing policy.
+
+## Decision meeting outcome
+
+At the end of the readiness meeting choose one status:
+
+- **Not ready:** keep Gates C–F held. Record gaps as DAIP governance drafts or owner tasks.
+- **Ready for a written private-MVP design review:** still keep Gates C–F held; authorize a separate proposal/build only.
+- **Paused:** document the business reason, review date, and restart owner.
+
+Only a later release may add the first strictly private storage/upload design, and only after a separate acceptance plan says exactly what is enabled and what remains blocked.
