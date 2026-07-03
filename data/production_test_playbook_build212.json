@@ -1,6 +1,6 @@
 {
   "build": 212,
-  "updated_at": "2026-07-02",
+  "updated_at": "2026-07-03",
   "purpose": "Detailed production and governance test instructions for owner/staff. Use internal test records only; never add secrets or real customer evidence to notes. Build 218/219 DAIP tests remain metadata and governance only.",
   "tests": [
     {
@@ -30,7 +30,7 @@
       ],
       "expected": "The report loads without a 401/500 error and required services are either ready or clearly flagged for setup.",
       "if_it_fails": [
-        "Take a screenshot of the card error only\u2014do not capture secrets.",
+        "Take a screenshot of the card error only—do not capture secrets.",
         "Record the page URL, date/time, browser/device, and the visible error text.",
         "Mark Blocked and attach a safe screenshot link or note in the Test Centre."
       ]
@@ -79,7 +79,7 @@
         "/admin-test-centre.html"
       ],
       "prerequisites": [
-        "Stripe test-mode secret key is configured\u2014not live mode for this first test.",
+        "Stripe test-mode secret key is configured—not live mode for this first test.",
         "A draft/open internal final-balance request exists for a small test amount."
       ],
       "safety": [
@@ -297,7 +297,7 @@
       ],
       "expected": "Every handoff is visible, privacy-safe, and traceable without manually copying data between unrelated screens.",
       "if_it_fails": [
-        "Mark the failing link in the lifecycle, for example booking \u2192 proof or recommendation \u2192 payment.",
+        "Mark the failing link in the lifecycle, for example booking → proof or recommendation → payment.",
         "Record the screen, booking ID, device/browser, and visible message.",
         "Do not release as production-ready until urgent failure points are resolved."
       ]
@@ -500,10 +500,147 @@
         "Stop and mark Failed if any later gate becomes Ready/Enabled without a separate reviewed build and acceptance evidence.",
         "Record the gate letter, visible state, screen, browser/device, and time only."
       ]
+    },
+    {
+      "key": "customer_access_profile_edit_boundary",
+      "name": "Customer management profile edit and role boundary",
+      "category": "Customer account access",
+      "risk": "high",
+      "estimated_minutes": 12,
+      "build_number": 220,
+      "pages": [
+        "/admin-customers.html",
+        "/admin-login.html"
+      ],
+      "prerequisites": [
+        "Build 220 migration is applied in development/staging.",
+        "Use one harmless staff-created test customer.",
+        "Use one administrator/booking-manager and one detailer account if available."
+      ],
+      "safety": [
+        "Do not enter real passwords, payment data, reset links, session tokens, customer media, addresses, or VINs in test notes.",
+        "Test with a non-customer internal account only."
+      ],
+      "steps": [
+        "As administrator, open /admin-customers.html and create a harmless internal client profile with a controlled email inbox.",
+        "Confirm the screen states that email is the sign-in identifier and no separate username exists.",
+        "Save a phone/city/detailer-visible note, refresh, and confirm the safe fields persist.",
+        "Sign in as a detailer and confirm operational fields can be updated, while email, private notes, notification preferences, and lifecycle controls are not available.",
+        "Confirm a customer-access audit row is shown after the staff action."
+      ],
+      "expected": "Customer profile editing is role-aware, passwords are absent from the interface, and an audit-safe record is visible.",
+      "if_it_fails": [
+        "Stop if a password, reset URL/token, session token, payment detail, or private media appears.",
+        "Record the screen, role, safe internal test profile ID, device/browser, and visible error only."
+      ]
+    },
+    {
+      "key": "customer_access_secure_reset_and_recovery",
+      "name": "Secure password reset and forgotten sign-in email flow",
+      "category": "Customer account access",
+      "risk": "urgent",
+      "estimated_minutes": 15,
+      "build_number": 220,
+      "pages": [
+        "/login",
+        "/admin-customers.html",
+        "/admin-test-centre.html"
+      ],
+      "prerequisites": [
+        "A controlled inbox belongs to the harmless internal test customer.",
+        "A configured notification provider or a clear provider-queue observation is available in dev/staging."
+      ],
+      "safety": [
+        "Do not test with a real customer email or production password.",
+        "Do not copy a raw reset link or token into screenshots, audit notes, social tools, or documentation."
+      ],
+      "steps": [
+        "Use Forgot your password with the controlled test email; note that the same generic message appears for a deliberately non-existent email.",
+        "From Customer Management, request Send password reset once, then once again. Confirm staff only sees delivery confirmation/status and never sees the raw link.",
+        "Open the newest controlled reset email privately, choose a test password, then confirm the reset link cannot be reused.",
+        "Confirm prior sessions are revoked and the new password can sign in.",
+        "Submit a Forgot which email you used request. Confirm the public form does not reveal account existence and an administrator/booking manager sees a queued request in /admin-customers.html.",
+        "Resolve the request with a safe note that does not contain credentials, links, or tokens."
+      ],
+      "expected": "Recovery is privacy-neutral, password reset links are opaque/single-use, and staff never see or set a client password.",
+      "if_it_fails": [
+        "Stop if raw credentials, token values, reset URLs, or account-existence confirmation appears.",
+        "Mark Fail and record the route, role, safe test profile ID, device/browser, and observed response."
+      ]
+    },
+    {
+      "key": "customer_access_archive_audit",
+      "name": "Archive-first client lifecycle and safe audit",
+      "category": "Customer account access",
+      "risk": "high",
+      "estimated_minutes": 10,
+      "build_number": 220,
+      "pages": [
+        "/admin-customers.html",
+        "/login",
+        "/admin-test-centre.html"
+      ],
+      "prerequisites": [
+        "A harmless internal test client profile exists with no live payment or customer data.",
+        "Use an administrator account."
+      ],
+      "safety": [
+        "Archive an internal test profile only.",
+        "Do not permanently delete customer records, bookings, payments, tax records, media, or consent data."
+      ],
+      "steps": [
+        "As administrator, select the internal test client and choose Archive client account.",
+        "Enter a short safe internal reason and the exact confirmation phrase.",
+        "Confirm the account is archived, sessions are revoked, and the profile can be filtered under Archived only.",
+        "Confirm password/login access is blocked while the account is archived.",
+        "Restore the same client, confirm historical summary/audit remains, then request account setup only if the test requires it."
+      ],
+      "expected": "Archive blocks sign-in but preserves business history and a safe lifecycle audit rather than deleting linked records.",
+      "if_it_fails": [
+        "Stop if delete removes records or if archived sign-in succeeds.",
+        "Record only the safe test profile ID, route, device/browser, and visible error."
+      ]
+    },
+    {
+      "key": "daip_phase1_readiness_packet_hold",
+      "name": "DAIP Phase 1 readiness packet and held-gate verification",
+      "category": "DAIP governance",
+      "risk": "high",
+      "estimated_minutes": 8,
+      "build_number": 220,
+      "pages": [
+        "/admin-daip-governance.html",
+        "/admin-daip.html",
+        "/admin-test-centre.html"
+      ],
+      "prerequisites": [
+        "Build 218 test evidence is recorded or clearly marked Blocked.",
+        "Build 219 governance workspace is deployed in development/staging."
+      ],
+      "safety": [
+        "Do not add a storage bucket, upload, signed URL, worker, AI service, customer asset, gallery/social export, or public publishing action.",
+        "Do not place customer media, real booking data, keys, paths, URLs, or credentials in any DAIP decision."
+      ],
+      "steps": [
+        "Read docs/digital-asset-intelligence-platform/16_DAIP_Phase_1_Readiness_Packet.md with the owners.",
+        "Confirm the packet lists all twelve DAIP-0 decisions, the Build 218/219 evidence requirement, and the minimum private-MVP design questions.",
+        "Open DAIP Governance and confirm Gates C–F remain Held even where a design discussion is recorded.",
+        "Confirm the Test Lab remains metadata-only with no storage or worker control."
+      ],
+      "expected": "Build 220 advances DAIP planning/evidence only; it does not create technical media-production capability.",
+      "if_it_fails": [
+        "Treat any upload, storage, signed-link, worker, customer-access, gallery/social handoff, or public-publishing route as a hard privacy/cost blocker.",
+        "Record only the safe screen name, browser/device, time, and visible status."
+      ]
     }
   ],
   "supplemental_builds": [
     218,
-    219
+    219,
+    {
+      "build": 220,
+      "title": "Customer access management and DAIP readiness packet",
+      "note": "Adds controlled profile/access tests and a DAIP design-only gate check."
+    }
   ]
 }

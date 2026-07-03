@@ -1,7 +1,7 @@
 {
-  "build": 219,
-  "updated_at": "2026-07-02",
-  "summary": "Build 219 adds a safe DAIP governance-gate placeholder alongside the existing public-media, secure-payment, and workflow placeholders. It contains no customer media or infrastructure identifiers.",
+  "build": 220,
+  "updated_at": "2026-07-03",
+  "summary": "Build 220 adds a safe customer-account-access placeholder alongside DAIP governance and payment/media placeholders. It contains no client account data, credentials, raw reset links, or media infrastructure identifiers.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -201,6 +201,14 @@
       "visual": "private decision-to-gate flow diagram with locked boundaries",
       "replace_with": "safe internal diagram after staging validation; no customer records, media, keys, bucket names, paths, or signed links",
       "approval_required": "admin governance approval"
+    },
+    {
+      "key": "customer_access_control",
+      "label": "Customer account access placeholder",
+      "where": "/admin-customers.html and account-recovery guidance",
+      "visual": "safe account-support, secure-link, and lifecycle control card",
+      "replace_with": "approved generic account-support diagram with all customer names, emails, reset links, tokens, payments, and media removed",
+      "approval_required": "admin security review"
     }
   ],
   "rules": [
@@ -210,7 +218,8 @@
     "Use placeholders as temporary polish only; the Media Health and Gallery Approval screens should keep pushing toward real owned images.",
     "Live-detail placeholders must inherit the selected audience: customer now, admin review first, or staff only.",
     "A private or review-pending image/video must never fall back to a public image URL.",
-    "Security posture placeholders and screenshots must never include secrets, customer records, direct table URLs, or provider credentials."
+    "Security posture placeholders and screenshots must never include secrets, customer records, direct table URLs, or provider credentials.",
+    "Customer-account placeholders must never display a client name, email, password, password hint, reset URL/token, session data, payment information, address, or private media."
   ],
   "desktop_mobile_notes": [
     "Placeholders use fluid aspect ratios and single-column mobile behavior.",
