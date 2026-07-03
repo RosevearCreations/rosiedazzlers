@@ -444,3 +444,17 @@ No DAIP original upload, R2 DAIP bucket, signed URL, Google Drive mirror, worker
 ### Current strongest next direction
 
 First run the Build 218 internal tests. Then complete the 12 DAIP-0 owner decisions in the decision register, especially worker host, budget stop rule, storage/backup policy, consent language, retention, and privacy approvers. The next code pass should be a reviewed private upload/storage design only—not AI, public galleries, or automatic posting.
+
+## Build 221 hotfix — customer-admin route 405 repair
+
+Build 221 is a no-schema hotfix for the `/admin-customers.html` page after staging showed `api/admin/customer_admin_list` returning HTTP 405 while the page displayed the Customer account access visual placeholder.
+
+What changed:
+- Added generic Cloudflare Pages `onRequest` dispatchers to the Build 220 customer-admin endpoints so GET, POST, and OPTIONS are accepted through a single route entrypoint as well as the method-specific handlers.
+- Added a safe page-side fallback so list-style customer-admin requests retry with GET if a deployment returns 405 on POST.
+- Updated the service-worker cache to `rosie-app-v20260703build221` so old admin page code is less likely to stay cached.
+- Added `data/build221_customer_admin_route_hotfix.json` and a Build 221 guard script.
+
+No Supabase migration is required. Deploy the Pages site and Functions together, then hard-refresh `/admin-customers.html`. A correct result is a normal JSON response, authentication response, or permission response from `/api/admin/customer_admin_list`; it should not be 405.
+
+DAIP boundary remains unchanged: no production storage, uploads, workers, AI, customer media access, public gallery export, social publishing, Google Business Profile export, or automatic publishing was added.
