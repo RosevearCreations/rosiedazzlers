@@ -342,6 +342,48 @@ export const PRODUCTION_TEST_PLAYBOOK_BUILD212 = [
     "steps": ["Save Internal only cleared or Blocked private for the test asset.", "Refresh the DAIP Test Lab; confirm public blocked remains shown.", "Open Gallery, Social Queue, and a test progress page in a separate private window.", "Confirm the DAIP test record is not available in any customer/public/social/gallery view.", "Archive the test job and confirm no new asset can be registered afterward."],
     "expected": "Privacy review is auditable but cannot make an asset public; the test record never reaches public, customer, social, gallery, or processing output paths.",
     "if_it_fails": ["Treat any public/customer visibility as a privacy blocker and stop DAIP testing.", "Record the page URL, safe RD-TEST code, device/browser, and time only.", "Do not continue toward a storage or worker phase until fixed and re-tested."]
+  },
+  {
+    "key": "daip_governance_draft_boundary",
+    "name": "DAIP governance draft and hard-stop boundary",
+    "category": "DAIP governance",
+    "risk": "high",
+    "estimated_minutes": 10,
+    "build_number": 219,
+    "pages": ["/admin-daip-governance.html", "/admin-daip.html", "/admin-test-centre.html"],
+    "prerequisites": ["Build 219 migration is applied in dev/staging.", "Use an administrator account and safe policy text only."],
+    "safety": ["Do not record vendor credentials, URLs, customer names, VINs, addresses, payment details, storage paths, or media in the decision form.", "A saved draft must never enable storage, upload, worker, export, customer access, or publishing."],
+    "steps": ["Open /admin-daip-governance.html and confirm the hard-stop banner is visible.", "Choose one DAIP-0 decision and save a safe draft with an owner, summary, cost impact, privacy impact, and review date.", "Refresh the page and confirm the decision remains Draft and an audit entry exists.", "Confirm Gates C, D, E, and F still show Held.", "Open /admin-daip.html and confirm its control record still says internal test / metadata only."],
+    "expected": "A governance draft is auditable but cannot create any production DAIP capability or advance a held gate.",
+    "if_it_fails": ["Stop DAIP testing if any upload, storage, worker, export, public route, or customer visibility appears.", "Record only the decision key, screen, browser/device, time, and safe visible error."]
+  },
+  {
+    "key": "daip_governance_owner_approval",
+    "name": "DAIP owner approval record and review date",
+    "category": "DAIP governance",
+    "risk": "high",
+    "estimated_minutes": 10,
+    "build_number": 219,
+    "pages": ["/admin-daip-governance.html", "/admin-test-centre.html"],
+    "prerequisites": ["A reviewed safe draft exists for one DAIP-0 decision.", "The owner has agreed to the content before the approval phrase is entered."],
+    "safety": ["Approve only a real owner decision; do not use fictional approval as proof of production readiness.", "No approval phrase, policy text, or audit note may contain a key, URL, customer data, or private media reference."],
+    "steps": ["Load the reviewed draft from the DAIP-0 decision register.", "Choose Approved by owner.", "Type the exact requested approval phrase for that decision and save.", "Refresh the workspace and confirm it shows Approved, records an approver/time, revision, review date, and audit event.", "Confirm the dashboard still says Production features: 0."],
+    "expected": "The owner decision becomes a dated audit record while all DAIP media capabilities remain disabled.",
+    "if_it_fails": ["Mark Blocked if the decision needs further owner review.", "Mark Failed if approval works without the exact phrase or if an approval enables any technical capability."]
+  },
+  {
+    "key": "daip_promotion_gates_hold",
+    "name": "DAIP promotion-gate hold verification",
+    "category": "DAIP governance",
+    "risk": "urgent",
+    "estimated_minutes": 8,
+    "build_number": 219,
+    "pages": ["/admin-daip-governance.html", "/admin-test-centre.html"],
+    "prerequisites": ["Build 218 test results have been recorded or intentionally marked blocked.", "Use dev/staging only."],
+    "safety": ["Do not create a bucket, processor, worker, signed URL, upload endpoint, gallery handoff, customer route, or public export as part of this test."],
+    "steps": ["Review Gates A through F on /admin-daip-governance.html.", "Confirm Gate A depends on all 12 owner decisions and Gate B depends on the three Build 218 tests.", "Confirm Gates C, D, E, and F explicitly say Held, even when a draft or owner approval exists.", "Confirm the page says no production features are enabled.", "Record the outcome in the Test Centre."],
+    "expected": "The workspace makes the next required work visible without falsely implying that governance completion is production authorization.",
+    "if_it_fails": ["Stop and mark Failed if any later gate becomes Ready/Enabled without a separate reviewed build and acceptance evidence.", "Record the gate letter, visible state, screen, browser/device, and time only."]
   }
 ];
 export const PRODUCTION_TEST_KEYS_BUILD212 = new Set(PRODUCTION_TEST_PLAYBOOK_BUILD212.map((item) => item.key));
