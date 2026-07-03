@@ -12,8 +12,9 @@ export async function onRequestPost(context){
     const customer = await loadCustomerByEmail(env, email);
     if (!customer || customer.is_active !== true) return withCors(json({ ok:true, message:'If that email exists, a reset link has been sent.' }));
     const issued = await issueCustomerAuthToken({ env, customerProfileId: customer.id, purpose:'password_reset', expiresMinutes: 90, payload:{ email } });
-    const dispatch = await sendCustomerAuthEmail({ env, request, customer, purpose:'password_reset', rawToken: issued.rawToken }).catch((err) => ({ ok:false, error: err?.message || 'Dispatch failed.' }));
-    return withCors(json({ ok:true, message:'If that email exists, a reset link has been sent.', delivery: { ok: dispatch?.ok === true, provider: dispatch?.provider || null } }));
+    await sendCustomerAuthEmail({ env, request, customer, purpose:'password_reset', rawToken: issued.rawToken }).catch(() => null);
+    // Match the unknown-email response exactly so browser/network observers cannot enumerate accounts.
+    return withCors(json({ ok:true, message:'If that email exists, a reset link has been sent.' }));
   } catch (err) {
     return withCors(json({ error: err?.message || 'Unexpected server error.' }, 500));
   }
