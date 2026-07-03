@@ -175,6 +175,7 @@ CHECKS = [
     "scripts/build217_secure_final_balance_links_check.py",
     "scripts/build218_daip_test_mode_foundation_check.py",
     "scripts/build219_daip_governance_workspace_check.py",
+    "scripts/build220_customer_access_management_check.py",
     "scripts/seo_h1_check.py",
 ]
 
