@@ -1,6 +1,6 @@
-# Rosie Dazzlers Master Value Roadmap — Build 219
+# Rosie Dazzlers Master Value Roadmap — Build 220
 
-**Updated:** 2026-06-30
+**Updated:** 2026-07-03
 **Purpose:** This is the one active business/product roadmap. Historical build detail remains in `DEVELOPMENT_ROADMAP.md`; active decisions belong here.
 
 ## North star
@@ -8,6 +8,59 @@
 Build a professional, mobile-first detailing platform that gets found locally and connects every customer relationship from first lead through repeat maintenance.
 
 `lead / quote → booking → live detail interaction → proof of work → invoice/payment → review/public proof → repeat maintenance`
+
+
+## Build 220 — customer access management and DAIP readiness packet
+
+### Completed connected work
+
+1. Rebuilt `/admin-customers.html` as a responsive customer-management workspace instead of a read-only overview.
+2. Added a searchable/filtered customer directory with current, active, suspended, and archived states.
+3. Added role-aware profile editing for practical client/service information.
+4. Let operational detailers update job-relevant information while keeping email, private notes, notification settings, recovery tools, and lifecycle controls restricted.
+5. Added manager-only client profile creation.
+6. Added explicit client sign-in email-change confirmation with verification and old-session revocation.
+7. Added safe account-setup, password-reset, resend-verification, and revoke-session actions.
+8. Kept passwords, hashes, reset links/tokens, session tokens, payment details, and private media out of the staff interface and audit log.
+9. Added a privacy-neutral client password-reset request flow.
+10. Added a privacy-neutral forgotten-sign-in-email help request flow.
+11. Added an internal manager queue to review/resolve forgotten-email help without exposing account existence publicly.
+12. Added single-use atomic token consumption and retirement of prior same-purpose recovery links.
+13. Revoked prior sessions after a successful reset before issuing the fresh customer session.
+14. Added archive-first lifecycle controls rather than permanent deletion.
+15. Preserved booking/payment/tax/consent/audit relationships when an account is archived.
+16. Added safe customer account-action audit records.
+17. Added RLS/service-role boundaries for recovery, audit, session, and token tables.
+18. Added a customer-account visual placeholder that is safe for desktop/mobile internal UI and never displays account information.
+19. Added four Build 220 guided staging tests.
+20. Added the DAIP Phase 1 readiness packet while retaining the hard hold on DAIP technical media capability.
+
+### Next 20 highest-value steps
+
+1. Apply the Build 220 migration and complete all four controlled staging tests.
+2. Add customer identity/merge review guidance before staff merges duplicate profiles; do not auto-merge by name alone.
+3. Add an explicit customer contact-preference history and consent/change audit.
+4. Add secure staff notes categorization and expiry reminders for operational notes that should not live forever.
+5. Add customer account invitation delivery/retry state to the Notifications health view.
+6. Add a safe customer-profile duplicate warning using normalized email/phone, with no automatic merge.
+7. Add vehicle-to-customer profile linking/reassignment review with an audit trail.
+8. Add client self-service profile-change approval rules where changing service address/access needs staff review.
+9. Add a customer account activity timeline using safe events only.
+10. Add a two-person approval option before administrator-level archive/restore is used for non-test accounts.
+11. Add an exported audit package for a customer account without credentials, raw reset links, tokens, payment instrument data, or private media.
+12. Complete every DAIP-0 decision in Governance with true owner approval and review dates.
+13. Record the Build 218, 219, and 220 DAIP evidence in the Guided Test Centre.
+14. Decide DAIP source-of-truth, consent, retention/legal hold, budget ceiling, budget stop rule, and named reviewers.
+15. Write a separate private-MVP DAIP design proposal only after Gates A/B are genuinely ready.
+16. Require a data-protection, cost, and recovery review before the private-MVP proposal becomes a code build.
+17. Keep public DAIP destinations, Gallery, Social, GBP, and publishing explicitly out of the first private-MVP.
+18. Continue proof-of-work to customer history/gallery handoff only through existing consent and approval gates.
+19. Run real mobile field tests for weak-network booking, proof upload, client access recovery, and payment completion using test data.
+20. Before a production release, verify notification provider delivery, payment webhook handling, RLS posture, backup/recovery, and desktop/mobile route parity.
+
+### Build 220 boundary
+
+This build does not start DAIP production. It advances customer service and DAIP decision readiness only. No DAIP bucket, upload, signed URL, worker, processing, AI, public/costly export, customer asset route, Gallery/Social handoff, or publishing control exists because of Build 220.
 
 ## Build 209 completed priorities
 
