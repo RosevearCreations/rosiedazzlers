@@ -1,6 +1,6 @@
-# Rosie Dazzlers AI Project Handoff — Build 219
+# Rosie Dazzlers AI Project Handoff — Build 220
 
-**Updated:** 2026-07-02
+**Updated:** 2026-07-03
 **Read first:** This is the primary technical/business handoff for a new AI chat or future build pass.
 
 ## Product north star
@@ -21,6 +21,27 @@ The connected lifecycle is:
 Avoid creating isolated admin pages unless they clearly advance this lifecycle.
 
 
+
+
+## Build 220 central capability: controlled customer access management and DAIP readiness
+
+Build 220 closes the client-account support gap without turning passwords or personal data into staff-editable content.
+
+- `/admin-customers.html` is now the role-aware client workspace: directory, profile editing, booking/vehicle summary, safe audit history, secure access actions, archive-first lifecycle controls, and forgotten-sign-in-email help queue.
+- **Detailer / senior detailer:** may update job-relevant operational fields such as safe contact/access and detailer-visible notes.
+- **Administrator / booking manager:** may create client profiles, edit protected customer fields, send account-setup/reset/verification email, revoke sessions, and work the forgotten-email queue.
+- **Administrator / staff-management role:** may suspend, restore, and archive an account. There is no permanent customer-delete button because linked bookings, payments, tax, consent, and audit records must remain traceable.
+- Clients sign in with the email address on record; there is no separate username. `/login` now offers password reset, email verification, and a privacy-neutral forgotten-email support form.
+- Staff never see or set a client password. Recovery uses server-issued opaque links. New same-purpose messages retire earlier links, token consumption is single-use/atomic, and a successful password reset revokes old sessions before a new session is created.
+- New audit and recovery-intake tables remain RLS-protected and service-role-only.
+
+Primary migration: `sql/2026-07-03_build220_customer_access_management_and_daip_readiness.sql`.
+
+**Customer-auth deployment setting:** set `PUBLIC_SITE_ORIGIN` to the approved HTTPS site origin (as a Cloudflare Secret in this project) before production email-link testing. The code rejects unapproved origins rather than building account links from an arbitrary host.
+
+**DAIP boundary:** Build 220 adds only `docs/digital-asset-intelligence-platform/16_DAIP_Phase_1_Readiness_Packet.md`, an owner meeting/acceptance worksheet. It does not create DAIP storage, upload, signed-link, worker, AI, export, customer-media, gallery/social, or publication capability. Gates C–F remain held.
+
+**Deployment order:** apply the Build 220 migration in development/staging, deploy Pages and Functions together, run the four Build 220 Guided Test Centre cases, then record only verified outcomes in this handoff and `MASTER_VALUE_ROADMAP.md`.
 
 ## Build 219 central capability: DAIP governance and promotion gates
 
