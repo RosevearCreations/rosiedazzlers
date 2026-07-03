@@ -140,7 +140,9 @@ def main() -> int:
         "data-final-action=\"rotate\"",
         "Queue customer notification",
     )
-    contains("service-worker.js", "rosie-app-v20260630build217", "/final-balance-payment.html", "/data/build217_secure_final_balance_links.json")
+    contains("service-worker.js", "/final-balance-payment.html", "/data/build217_secure_final_balance_links.json")
+    if not re.search(r"const CACHE='rosie-app-v20\d{6}build\d+'", text("service-worker.js")):
+        errors.append("service-worker.js must retain a dated build cache key after the Build 217 payment page was added.")
     contains("assets/visual-placeholders.js", "secure_payment")
     for rel in [
         "AI_PROJECT_HANDOFF.md",

@@ -100,6 +100,9 @@ Build 216 note:
 
 Build 218 note:
 - Adds metadata-only, RLS-protected DAIP internal test mode with a Test Lab, audit trail, explicit public/export/worker hard stops, and guided acceptance checks. It does not add media storage or processing.
+
+Build 219 note:
+- Adds an RLS-protected DAIP owner-decision governance workspace, Gate A/B evidence checks, and explicitly held Gates C-F. It does not add DAIP storage, uploads, workers, processing, customer access, exports, or publishing.
 """
 from __future__ import annotations
 
@@ -171,6 +174,7 @@ CHECKS = [
     "scripts/build216_media_reliability_daip_governance_check.py",
     "scripts/build217_secure_final_balance_links_check.py",
     "scripts/build218_daip_test_mode_foundation_check.py",
+    "scripts/build219_daip_governance_workspace_check.py",
     "scripts/seo_h1_check.py",
 ]
 
