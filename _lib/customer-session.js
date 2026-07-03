@@ -10,10 +10,11 @@ export function getCustomerSessionCookieName() {
 }
 
 export function serviceHeaders(env) {
-  if (!env.SUPABASE_SERVICE_ROLE_KEY) throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY.");
+  const serviceKey = getSupabaseServiceRoleKey(env);
+  if (!serviceKey) throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY.");
   return {
-    apikey: env.SUPABASE_SERVICE_ROLE_KEY,
-    Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+    apikey: serviceKey,
+    Authorization: `Bearer ${serviceKey}`,
     "Content-Type": "application/json"
   };
 }
@@ -84,6 +85,21 @@ export async function touchCustomerSession({ env, sessionId, request }) {
     headers: { ...serviceHeaders(env), Prefer: "return=minimal" },
     body: JSON.stringify({ updated_at: new Date().toISOString(), last_seen_at: new Date().toISOString(), ip_address: getClientIp(request), user_agent: getUserAgent(request) })
   }).catch(() => null);
+}
+
+
+export async function revokeAllCustomerSessions({ env, customerProfileId }) {
+  assertSessionEnv(env);
+  if (!customerProfileId) throw new Error('A customer profile id is required.');
+  const now = new Date().toISOString();
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/customer_auth_sessions?customer_profile_id=eq.${encodeURIComponent(customerProfileId)}&revoked_at=is.null`, {
+    method: 'PATCH',
+    headers: { ...serviceHeaders(env), Prefer: 'return=representation' },
+    body: JSON.stringify({ revoked_at: now, updated_at: now })
+  });
+  if (!res.ok) throw new Error(`Could not revoke customer sessions. ${await res.text()}`);
+  const rows = await res.json().catch(() => []);
+  return Array.isArray(rows) ? rows.length : 0;
 }
 
 export async function revokeCustomerSessionByToken({ env, token }) {
@@ -181,5 +197,6 @@ function shouldRotateSession(session) {
 }
 function getClientIp(request) { return request.headers.get("cf-connecting-ip") || request.headers.get("x-forwarded-for") || null; }
 function getUserAgent(request) { return request.headers.get("user-agent") || null; }
-function getSessionSecret(env) { return env.CUSTOMER_SESSION_SECRET || env.ADMIN_PASSWORD || env.SUPABASE_SERVICE_ROLE_KEY || "rosiedazzlers-session-fallback"; }
-function assertSessionEnv(env) { if (!env?.SUPABASE_URL) throw new Error("Missing SUPABASE_URL."); if (!env?.SUPABASE_SERVICE_ROLE_KEY) throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY."); }
+function getSessionSecret(env) { return env.CUSTOMER_SESSION_SECRET || env.ADMIN_PASSWORD || getSupabaseServiceRoleKey(env) || "rosiedazzlers-session-fallback"; }
+function assertSessionEnv(env) { if (!env?.SUPABASE_URL) throw new Error("Missing SUPABASE_URL."); if (!getSupabaseServiceRoleKey(env)) throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY."); }
+function getSupabaseServiceRoleKey(env) { return env?.SUPABASE_SERVICE_ROLE_KEY || env?.SUPABASE_SERVICE_KEY || env?.SUPABASE_SERVICE_ROLE || env?.SUPABASE_SECRET_KEY || ""; }
