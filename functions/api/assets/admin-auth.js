@@ -208,7 +208,12 @@
         return actor.is_admin === true || hasCapability("can_manage_staff");
 
       case "admin-customers":
-        return hasCapability("can_manage_bookings");
+        return (
+          hasCapability("can_manage_bookings") ||
+          hasCapability("can_manage_progress") ||
+          actor.is_senior_detailer === true ||
+          actor.is_detailer === true
+        );
 
       case "admin-promos":
         return hasCapability("can_manage_promos");
