@@ -14,6 +14,7 @@ export async function onRequestPost({request,env}){
     if (!PRODUCTION_TEST_KEYS_BUILD212.has(testKey)) return withCors(json({ok:false,error:"Unknown production test."},400));
     if (!STATUSES.has(status)) return withCors(json({ok:false,error:"Choose passed, failed, blocked, or not started."},400));
     const test = PRODUCTION_TEST_PLAYBOOK_BUILD212.find((item) => item.key === testKey);
+    const buildNumber = Number(test?.build_number || 212);
     const notes = limit(cleanText(body.notes), 5000);
     const evidenceUrl = cleanUrl(body.evidence_url);
     if (body.evidence_url && !evidenceUrl) return withCors(json({ok:false,error:"Evidence link must begin with http:// or https://."},400));
@@ -25,12 +26,12 @@ export async function onRequestPost({request,env}){
       notes:notes || null,
       evidence_url:evidenceUrl || null,
       environment:limit(cleanText(body.environment) || "unknown", 80),
-      build_number:212,
+      build_number:buildNumber,
       performed_by_staff_user_id:isUuid(access.actor?.id) ? access.actor.id : null,
       performed_by_staff_email:limit(cleanText(access.actor?.email), 320) || null,
       performed_at:now,
       created_at:now,
-      payload:{source:"admin-test-centre",test_key:testKey,status,actor_role:access.actor?.role_code || null}
+      payload:{source:"admin-test-centre",test_key:testKey,status,build_number:buildNumber,actor_role:access.actor?.role_code || null}
     };
     const response = await fetch(`${env.SUPABASE_URL}/rest/v1/production_test_runs`, {method:"POST",headers:{...serviceHeaders(env),Prefer:"return=representation"},body:JSON.stringify([row])});
     const text = await response.text();

@@ -26,7 +26,7 @@ async function handle({ request, env }) {
       not_started: PRODUCTION_TEST_PLAYBOOK_BUILD212.filter((test) => !latestByKey[test.key] || latestByKey[test.key].status === "not_started").length,
       persistence_available: !loaded.warning
     };
-    return withCors(json({ ok:true, build:212, tests:rows, summary, warning:loaded.warning || null, generated_at:new Date().toISOString() }));
+    return withCors(json({ ok:true, build:218, tests:rows, summary, warning:loaded.warning || null, generated_at:new Date().toISOString() }));
   } catch (err) {
     return withCors(json({ ok:false, error:err?.message || "Could not load guided production tests." }, 500));
   }
