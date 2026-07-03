@@ -286,3 +286,19 @@ Build 218 is a **test-only registry**. It does not upload, store, process, displ
 8. Record **Pass**, **Fail**, or **Blocked** for the three Build 218 DAIP tests in `/admin-test-centre.html`. Record only the safe `RD-TEST` job code, device/browser, time, and visible error text.
 
 Stop immediately if any DAIP item reaches a public, customer, gallery, social, storage, worker, or export path. Do not advance to a storage/worker build until every DAIP-0 decision and the promotion gates are approved.
+
+## Build 219 — DAIP governance workspace release test (2026-07-02)
+
+Build 219 records governance only. It does not create storage, upload media, issue a signed link, run a worker, or enable public/costly processing.
+
+1. In development/staging, apply `sql/2026-07-02_build219_daip_governance_workspace.sql` after Build 214 and Build 218 are present.
+2. Sign in as an administrator and open `/admin-daip-governance.html`.
+3. Confirm the banner states that no storage, upload, worker, AI, customer route, export, or publishing capability is enabled.
+4. Save one safe DAIP-0 draft. Do not enter secrets, URLs, bucket names, paths, customer details, VINs, payment data, or media.
+5. Confirm a draft audit event appears and Gates C–F remain Held.
+6. Review the draft with the owner(s); only then select Approved by owner and type the exact displayed approval phrase.
+7. Confirm the decision shows Approved, revision number, review date, actor/time, and an approval audit event.
+8. Confirm the workspace still shows `Production features: 0`.
+9. Record Pass, Blocked, or Failed for **DAIP governance draft and hard-stop boundary**, **DAIP owner approval record and review date**, and **DAIP promotion-gate hold verification** in `/admin-test-centre.html`.
+
+Stop immediately if any decision action enables a bucket, upload, URL, worker, customer/public page, Gallery/Social handoff, or publication. A governance approval is not production authorization.

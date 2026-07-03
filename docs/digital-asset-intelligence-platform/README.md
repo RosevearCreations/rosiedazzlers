@@ -5,6 +5,11 @@
 **Subsystem Type:** Media operations, AI production studio, digital asset management, privacy processing, and marketing automation  
 **Primary Goal:** Turn one completed detailing job into a complete set of marketing, customer proof, SEO, gallery, and social media assets.
 
+
+> **Current operational status — read this first:** The document sections below describe the long-term DAIP vision. They are not a statement that storage, workers, AI, public assets, or publishing are enabled today. Current active DAIP work is Build 218 internal metadata testing and Build 219 owner-decision governance only.
+>
+> **Current operating order:** `AI_PROJECT_HANDOFF.md` → `MASTER_VALUE_ROADMAP.md` → `13_DAIP_Test_Mode_Process.md` → `11_DAIP_Decision_Register.md` → `15_DAIP_Governance_Workspace_Process.md` → `14_DAIP_Production_Promotion_Gates.md` → `12_DAIP_Phase_1_Security_Acceptance.md`.
+
 ---
 
 ## 1. Purpose
@@ -193,3 +198,8 @@ Build 218 is the first controlled implementation step. It creates **DAIP-1A inte
 - `/admin-daip.html` is an admin-only Test Lab for a harmless internal booking/test record.
 - No file upload/storage, signed URLs, worker, proxy, AI, Drive sync, public export, gallery handoff, customer access, or publication is available.
 - Read `13_DAIP_Test_Mode_Process.md` for exact test steps and `14_DAIP_Production_Promotion_Gates.md` before proposing the next phase.
+
+## Build 219 — DAIP governance workspace
+
+Build 219 adds `/admin-daip-governance.html` and `sql/2026-07-02_build219_daip_governance_workspace.sql`. It records draft or owner-approved DAIP-0 decisions, reads Build 218 test evidence, and displays Gates A–F. It creates no storage, upload, signed URL, worker, AI, customer access, export, or publishing path. Gates C–F remain held until a separately reviewed future private-media build passes its own acceptance criteria.
+

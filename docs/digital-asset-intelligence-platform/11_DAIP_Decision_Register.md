@@ -61,3 +61,7 @@ DAIP-0 is complete only when all twelve decisions above have a recorded owner-ap
 ## Build 218 note — implementation boundary preserved
 
 Build 218 does **not** close any DAIP-0 decision. It only permits a metadata-only internal test registry with fixed no-storage/no-worker/no-public-export controls. Every DAIP-0 row remains open until an owner enters and dates a decision completion record.
+
+## Build 219 operational note
+
+Build 219 adds `/admin-daip-governance.html` as the controlled place to save DAIP-0 drafts and owner approvals. The screen mirrors this register but does not close a decision automatically, enable production media capability, or replace the requirement for an owner-reviewed answer. The canonical decision questions remain the twelve rows above.

@@ -59,3 +59,7 @@ Only after Gates A–E pass may a limited internal-first production pilot be pro
 - Browser roles do not receive direct database access; Cloudflare Functions remain the application boundary and Supabase RLS/grants remain enforced.
 - No generated asset publishes automatically.
 - An asset is useful for local SEO only after it is truly approved for the relevant public page, has accurate descriptive filename/alt/caption context, and is placed near relevant local service content.
+
+## Build 219 governance evidence
+
+Build 219 makes Gate A and Gate B observable in `/admin-daip-governance.html`. Gate A is ready only when all twelve DAIP-0 decisions have recorded owner approval. Gate B is ready only when the Build 218 Test Lab control is safe and all three internal-test acceptance cases have latest recorded Pass results. Gates C–F remain held in Build 219 and cannot be advanced by decision entry alone.
