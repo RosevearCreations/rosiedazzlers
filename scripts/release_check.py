@@ -103,6 +103,9 @@ Build 218 note:
 
 Build 219 note:
 - Adds an RLS-protected DAIP owner-decision governance workspace, Gate A/B evidence checks, and explicitly held Gates C-F. It does not add DAIP storage, uploads, workers, processing, customer access, exports, or publishing.
+
+Build 221 note:
+- Repairs customer-admin route compatibility for /api/admin/customer_admin_list 405 responses by adding generic onRequest dispatchers, list GET fallback, and a cache bump without schema or DAIP production changes.
 """
 from __future__ import annotations
 
@@ -176,6 +179,7 @@ CHECKS = [
     "scripts/build218_daip_test_mode_foundation_check.py",
     "scripts/build219_daip_governance_workspace_check.py",
     "scripts/build220_customer_access_management_check.py",
+    "scripts/build221_customer_admin_route_hotfix_check.py",
     "scripts/seo_h1_check.py",
 ]
 
