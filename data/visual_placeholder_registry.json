@@ -1,7 +1,7 @@
 {
-  "build": 217,
-  "updated_at": "2026-06-30",
-  "summary": "Build 217 retains public-media recovery and adds a customer-safe secure-payment placeholder for final-balance status pages without showing personal or payment-card data.",
+  "build": 219,
+  "updated_at": "2026-07-02",
+  "summary": "Build 219 adds a safe DAIP governance-gate placeholder alongside the existing public-media, secure-payment, and workflow placeholders. It contains no customer media or infrastructure identifiers.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -193,6 +193,14 @@
       "where": "final-balance payment status, invoice/payment workflow, and payment-assistance cards",
       "visual": "shield and receipt card",
       "replace_with": "approved generic Rosie Dazzlers payment/receipt graphic only; never use a real customer invoice, card, payment link, QR code, or personal data"
+    },
+    {
+      "key": "daip_governance_gates",
+      "label": "DAIP governance gate visual",
+      "where": "/admin-daip-governance.html and DAIP promotion-gate documentation",
+      "visual": "private decision-to-gate flow diagram with locked boundaries",
+      "replace_with": "safe internal diagram after staging validation; no customer records, media, keys, bucket names, paths, or signed links",
+      "approval_required": "admin governance approval"
     }
   ],
   "rules": [
