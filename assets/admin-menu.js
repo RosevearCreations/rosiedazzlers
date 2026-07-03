@@ -87,6 +87,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-daip")
     },
     {
+      key: "admin-daip-governance",
+      label: "DAIP Governance",
+      href: "/admin-daip-governance.html",
+      description: "Owner decisions and promotion gates; no production media capability",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-governance")
+    },
+    {
       key: "admin-water-rules",
       label: "Water Rules",
       href: "/admin-water-rules.html",
