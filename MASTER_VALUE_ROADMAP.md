@@ -3,6 +3,39 @@
 **Updated:** 2026-07-03
 **Purpose:** This is the one active business/product roadmap. Historical build detail remains in `DEVELOPMENT_ROADMAP.md`; active decisions belong here.
 
+
+
+## Build 222 — DAIP Phase 1 readiness review (completed in source; staging acceptance required)
+
+Build 222 turns the DAIP readiness packet into a protected, auditable decision workspace at `/admin-daip-readiness.html`.
+
+- **Completed:** a server-validated Gate A/B readiness readout; draft, paused, and exact-phrase `ready_for_design_review` records; budget-stop, consent, retention/legal-hold, owner, review-date, and safe audit fields; RLS/service-role-only tables; mobile/desktop layout; service-worker and route-copy coverage; visual placeholder; guided test cases; schema mirror; and release guard.
+- **Meaning of “ready”:** only that the owners may request a **written private-MVP design review**. It is not an implementation or production authorization.
+- **Still hard-held:** Gate C storage/upload design; Gate D processing; Gate E privacy/export; Gate F pilot. No customer media, storage, signed links, worker, AI, social/gallery/public handoff, or automatic publishing exists in Build 222.
+
+### Next 20 connected steps after Build 222
+
+1. Apply the Build 222 migration in **staging only**.
+2. Confirm new readiness tables have RLS enabled and browser-role grants revoked.
+3. Run the Build 222 blocked-gate test with Gate A or Gate B incomplete.
+4. Run the harmless draft/paused readiness audit test.
+5. Complete all 12 DAIP-0 owner decisions in the Governance workspace.
+6. Record all three Build 218 internal safety tests as Pass in staging.
+7. Run the Build 222 written-design-review-only test with safe general text.
+8. Confirm Gate C remains Held after readiness authorization.
+9. Record the owner-approved monthly warning and hard-stop threshold.
+10. Record a primary and backup responsible person for pausing DAIP work.
+11. Finalize purpose-separated consent wording with no implied marketing permission.
+12. Finalize originals/proxies/rejected-output retention and legal-hold ownership.
+13. Decide the sole source of truth for originals and the role, if any, of Drive.
+14. Write a one-page private-MVP threat model: abuse, leakage, cost, recovery, and mistaken-publication risks.
+15. Write a one-page upload design: server authorization, checksum, MIME/size controls, resumable recovery, and no public object URLs.
+16. Write a one-page storage/derivative separation design with no public list/read policy.
+17. Write a worker/queue proposal that is not implemented in Pages Functions.
+18. Write the zero-public-destination acceptance criteria and rollback plan.
+19. Price the smallest technical pilot against the approved cost stop rule.
+20. Only then commission a separate Gate C build review; do not merge storage/upload code until that review is approved.
+
 ## North star
 
 Build a professional, mobile-first detailing platform that gets found locally and connects every customer relationship from first lead through repeat maintenance.
