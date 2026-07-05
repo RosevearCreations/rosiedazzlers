@@ -612,6 +612,50 @@ export const PRODUCTION_TEST_PLAYBOOK_BUILD212 = [
     "Record only the safe route, field label, browser/device, and visible result."
   ]
 }
+,
+{
+  "key": "daip_private_mvp_design_gate_block",
+  "name": "DAIP blueprint submission rejects missing or stale readiness",
+  "category": "DAIP private-MVP design review",
+  "risk": "urgent",
+  "estimated_minutes": 7,
+  "build_number": 223,
+  "pages": ["/admin-daip-design.html", "/admin-daip-readiness.html", "/admin-daip-governance.html", "/admin-test-centre.html"],
+  "prerequisites": ["Build 223 migration is applied in development/staging.", "Build 222 authorization is missing, stale, or Gate A/B is deliberately incomplete."],
+  "safety": ["Use only safe general text; no customer data, media, URLs, object paths, credentials, or vendor setup.", "Do not create storage, upload, signed-link, worker, processing, or public configuration as part of this test."],
+  "steps": ["Open /admin-daip-design.html and confirm the blueprint page shows the current authorization as not current.", "Attempt to submit a blueprint with the normal form and exact phrase; confirm the server rejects it.", "Save a Draft or Paused entry only if safe general text is required for evidence.", "Confirm Gate C remains Held in Governance."],
+  "expected": "A missing or stale readiness authorization blocks submission and cannot create a technical or public DAIP pathway.",
+  "if_it_fails": ["Stop if a blueprint submits without a current authorization or Gate C changes.", "Record only the safe screen state, browser/device, time, and visible response."]
+},
+{
+  "key": "daip_private_mvp_design_review_only",
+  "name": "DAIP private-MVP blueprint is review-only",
+  "category": "DAIP private-MVP design review",
+  "risk": "high",
+  "estimated_minutes": 10,
+  "build_number": 223,
+  "pages": ["/admin-daip-design.html", "/admin-daip-readiness.html", "/admin-daip-governance.html", "/admin-daip.html", "/admin-test-centre.html"],
+  "prerequisites": ["Build 222 current readiness authorization is valid in staging.", "All text is safe general design language."],
+  "safety": ["Do not write real customer details, media, URLs, paths, bucket/object names, credentials, or payment data.", "This is an independent-review queue only; it does not authorize implementation."],
+  "steps": ["Confirm the Build 222 authorization is Current.", "Complete all blueprint sections, hard-stop acknowledgements, and the exact displayed phrase.", "Save and refresh; confirm the latest entry says submitted for independent review.", "Open Governance and Test Lab; confirm Gate C remains Held and technical/public capability counts remain zero."],
+  "expected": "A blueprint becomes auditable design evidence only and cannot provision storage, uploads, workers, customer media, export, or publishing.",
+  "if_it_fails": ["Stop if a technical/public action appears or Gate C advances.", "Record only the safe status, screen, browser/device, and time."]
+},
+{
+  "key": "daip_private_mvp_design_audit_privacy",
+  "name": "DAIP design-blueprint audit remains privacy-safe",
+  "category": "DAIP private-MVP design review",
+  "risk": "high",
+  "estimated_minutes": 5,
+  "build_number": 223,
+  "pages": ["/admin-daip-design.html", "/admin-test-centre.html"],
+  "prerequisites": ["One harmless Build 223 draft, paused, or submitted blueprint exists in staging."],
+  "safety": ["Do not enter or inspect customer data, media, tokens, URLs, object paths, credentials, or payment information."],
+  "steps": ["Refresh the blueprint page and inspect the latest record/audit summary.", "Confirm only status, safe note, safe role/actor label, and time are visible.", "Confirm Gate C is held and no customer/public destination appears in the workspace."],
+  "expected": "Blueprint evidence is auditable without becoming storage configuration or a sensitive-data repository.",
+  "if_it_fails": ["Stop if sensitive data appears or a public/technical route is created.", "Record only safe UI labels, browser/device, time, and visible result."]
+}
+
 
 ];
 export const PRODUCTION_TEST_KEYS_BUILD212 = new Set(PRODUCTION_TEST_PLAYBOOK_BUILD212.map((item) => item.key));
