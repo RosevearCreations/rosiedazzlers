@@ -94,6 +94,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-governance")
     },
     {
+      key: "admin-daip-readiness",
+      label: "DAIP Readiness",
+      href: "/admin-daip-readiness.html",
+      description: "Evidence review for a written private-MVP design only",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-readiness")
+    },
+    {
       key: "admin-water-rules",
       label: "Water Rules",
       href: "/admin-water-rules.html",
