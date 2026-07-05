@@ -181,6 +181,7 @@ CHECKS = [
     "scripts/build220_customer_access_management_check.py",
     "scripts/build221_customer_admin_route_hotfix_check.py",
     "scripts/build222_daip_phase1_readiness_check.py",
+    "scripts/build223_daip_private_mvp_design_check.py",
     "scripts/seo_h1_check.py",
 ]
 

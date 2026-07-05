@@ -33,7 +33,7 @@ require('admin-daip-readiness.html', [
 require('assets/admin-auth.js', ['case "admin-daip-readiness":'])
 require('assets/admin-menu.js', ['key: "admin-daip-readiness"', 'label: "DAIP Readiness"'])
 require('scripts/sync_route_copies.py', ['"admin-daip-readiness.html"'])
-require('service-worker.js', ['rosie-app-v20260704build222', '/admin-daip-readiness.html', '/data/build222_daip_phase1_readiness_design_review.json'])
+require('service-worker.js', ['/admin-daip-readiness.html', '/data/build222_daip_phase1_readiness_design_review.json'])
 require('data/build222_daip_phase1_readiness_design_review.json', ['"build": 222', 'written private-MVP design review'])
 require('sql/2026-07-04_build222_daip_phase1_readiness_design_review.sql', [
     'daip_phase1_readiness_reviews', 'daip_phase1_readiness_audit_events',
