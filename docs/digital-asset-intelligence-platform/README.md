@@ -6,9 +6,9 @@
 **Primary Goal:** Turn one completed detailing job into a complete set of marketing, customer proof, SEO, gallery, and social media assets.
 
 
-> **Current operational status — read this first:** The document sections below describe the long-term DAIP vision. They are not a statement that storage, workers, AI, public assets, or publishing are enabled today. Current active DAIP work is Build 218 internal metadata testing and Build 219 owner-decision governance only.
+> **Current operational status — read this first:** The document sections below describe the long-term DAIP vision. They are not a statement that storage, uploads, workers, AI, public assets, customer media, export, or publishing are enabled today. Current active DAIP work is Build 218 metadata-only internal testing, Build 219 owner-decision governance, Build 220 readiness preparation, and Build 222 written-design-review readiness only.
 >
-> **Current operating order:** `AI_PROJECT_HANDOFF.md` → `MASTER_VALUE_ROADMAP.md` → `13_DAIP_Test_Mode_Process.md` → `11_DAIP_Decision_Register.md` → `15_DAIP_Governance_Workspace_Process.md` → `14_DAIP_Production_Promotion_Gates.md` → `12_DAIP_Phase_1_Security_Acceptance.md`.
+> **Current operating order:** `AI_PROJECT_HANDOFF.md` → `MASTER_VALUE_ROADMAP.md` → `13_DAIP_Test_Mode_Process.md` → `11_DAIP_Decision_Register.md` → `15_DAIP_Governance_Workspace_Process.md` → `16_DAIP_Phase_1_Readiness_Packet.md` → `17_DAIP_Phase_1_Readiness_and_Design_Review.md` → `14_DAIP_Production_Promotion_Gates.md` → `12_DAIP_Phase_1_Security_Acceptance.md`.
 
 ---
 
@@ -83,6 +83,11 @@ This v1.0 documentation suite starts with these files:
 12. `10_Rosie_Dazzlers_Integration_Plan.md` — Current Rosie integration boundary and phased safety plan.
 13. `11_DAIP_Decision_Register.md` — Required owner decisions before any implementation.
 14. `12_DAIP_Phase_1_Security_Acceptance.md` — Future schema/storage/processing acceptance template.
+15. `13_DAIP_Test_Mode_Process.md` — Harmless metadata-only Test Lab workflow.
+16. `14_DAIP_Production_Promotion_Gates.md` — Explicit promotion gates and hard stops.
+17. `15_DAIP_Governance_Workspace_Process.md` — DAIP-0 decision-register operating process.
+18. `16_DAIP_Phase_1_Readiness_Packet.md` — Owner readiness worksheet.
+19. `17_DAIP_Phase_1_Readiness_and_Design_Review.md` — Build 222 readiness decision for a written private-MVP design review only.
 
 ---
 
@@ -203,3 +208,10 @@ Build 218 is the first controlled implementation step. It creates **DAIP-1A inte
 
 Build 219 adds `/admin-daip-governance.html` and `sql/2026-07-02_build219_daip_governance_workspace.sql`. It records draft or owner-approved DAIP-0 decisions, reads Build 218 test evidence, and displays Gates A–F. It creates no storage, upload, signed URL, worker, AI, customer access, export, or publishing path. Gates C–F remain held until a separately reviewed future private-media build passes its own acceptance criteria.
 
+## Build 220 — DAIP readiness packet
+
+Build 220 adds `16_DAIP_Phase_1_Readiness_Packet.md`, an owner-facing meeting worksheet. It does not change the technical boundary or unlock Gate C.
+
+## Build 222 — DAIP Phase 1 readiness review
+
+Build 222 adds `/admin-daip-readiness.html`, `sql/2026-07-04_build222_daip_phase1_readiness_design_review.sql`, and `17_DAIP_Phase_1_Readiness_and_Design_Review.md`. The workspace can record drafts, pauses, and—only after Gate A and Gate B are ready—a decision to begin a **written private-MVP design review**. It cannot create storage, upload/download access, signed links, workers, processing, AI, customer media, exports, Gallery/Social/GBP handoff, or publishing. Gate C remains held.

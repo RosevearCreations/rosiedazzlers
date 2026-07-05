@@ -354,3 +354,15 @@ sql/2026-07-03_build220_customer_access_management_and_daip_readiness.sql
 5. Record the four Build 220 cases in `/admin-test-centre.html`.
 
 Stop and mark Blocked/Failed if any password, raw reset link/token, session token, storage location, upload, signed URL, worker action, customer DAIP asset, gallery/social handoff, or public publishing route appears.
+
+## Build 222 — DAIP Phase 1 readiness review (development/staging only)
+
+Apply `sql/2026-07-04_build222_daip_phase1_readiness_design_review.sql` after the Build 218 and Build 219 DAIP migrations. Deploy Pages and Functions together. Sign in as an administrator, then open `/admin-daip-readiness.html`.
+
+1. With Gate A or Gate B incomplete, confirm **Ready for written design review only** is unavailable and the server rejects a forged or stale request.
+2. Save one harmless draft or paused readiness review using only general governance text.
+3. After all 12 decisions and all three Build 218 tests are verified as ready in staging, save one authorization using the exact phrase displayed by the page.
+4. Refresh and confirm an audit event appears, the latest readiness record contains no sensitive details, and the technical/public feature counters remain zero.
+5. Open `/admin-daip-governance.html` and `/admin-daip.html`; confirm Gate C stays Held and no upload, storage, signed-link, worker, customer-media, export, or publication control appears.
+6. Record the three Build 222 Guided Production Test Centre cases. Do not use production customer media.
+
