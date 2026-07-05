@@ -366,3 +366,15 @@ Apply `sql/2026-07-04_build222_daip_phase1_readiness_design_review.sql` after th
 5. Open `/admin-daip-governance.html` and `/admin-daip.html`; confirm Gate C stays Held and no upload, storage, signed-link, worker, customer-media, export, or publication control appears.
 6. Record the three Build 222 Guided Production Test Centre cases. Do not use production customer media.
 
+
+
+## Build 223 — DAIP private-MVP design blueprint (development/staging only)
+
+Apply `sql/2026-07-05_build223_daip_private_mvp_design_blueprint.sql` after Builds 218, 219, and 222. Deploy Pages and Functions together, sign in as an administrator, then open `/admin-daip-design.html`.
+
+1. With a missing or stale Build 222 authorization, attempt **Submit for independent review only** and confirm the server rejects it.
+2. Save one harmless Draft or Paused blueprint with general design text only.
+3. Only when Build 222 authorization is Current, complete all blueprint sections, three acknowledgements, and the exact phrase displayed by the page.
+4. Refresh and confirm the audit entry appears while Gate C remains **Held** and technical/public capability counts remain zero.
+5. Open `/admin-daip-governance.html` and `/admin-daip.html`; confirm no storage, upload, signed-link, queue, worker, processing, customer-media, export, or publishing control exists.
+6. Record the three Build 223 Guided Production Test Centre cases. Never use real customer media or production configuration.

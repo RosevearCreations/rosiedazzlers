@@ -88,6 +88,7 @@ This v1.0 documentation suite starts with these files:
 17. `15_DAIP_Governance_Workspace_Process.md` — DAIP-0 decision-register operating process.
 18. `16_DAIP_Phase_1_Readiness_Packet.md` — Owner readiness worksheet.
 19. `17_DAIP_Phase_1_Readiness_and_Design_Review.md` — Build 222 readiness decision for a written private-MVP design review only.
+20. `18_DAIP_Private_MVP_Design_Blueprint_Review.md` — Build 223 independent-review blueprint; it keeps Gate C held and adds no DAIP technical capability.
 
 ---
 
@@ -215,3 +216,7 @@ Build 220 adds `16_DAIP_Phase_1_Readiness_Packet.md`, an owner-facing meeting wo
 ## Build 222 — DAIP Phase 1 readiness review
 
 Build 222 adds `/admin-daip-readiness.html`, `sql/2026-07-04_build222_daip_phase1_readiness_design_review.sql`, and `17_DAIP_Phase_1_Readiness_and_Design_Review.md`. The workspace can record drafts, pauses, and—only after Gate A and Gate B are ready—a decision to begin a **written private-MVP design review**. It cannot create storage, upload/download access, signed links, workers, processing, AI, customer media, exports, Gallery/Social/GBP handoff, or publishing. Gate C remains held.
+
+## Build 223 — DAIP private-MVP blueprint review
+
+Build 223 adds `/admin-daip-design.html`, `sql/2026-07-05_build223_daip_private_mvp_design_blueprint.sql`, and `18_DAIP_Private_MVP_Design_Blueprint_Review.md`. The page stores only a safe written blueprint for independent review after a current Build 222 authorization. It creates no storage, upload/download, signed-link, worker, processing, AI, customer-media, export, Gallery/Social/GBP handoff, or publishing path. Gate C remains held.
