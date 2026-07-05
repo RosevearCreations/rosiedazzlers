@@ -38,6 +38,7 @@ ROUTE_COPY_PAGES = [
     "admin-media-health.html",
     "admin-daip.html",
     "admin-daip-governance.html",
+    "admin-daip-readiness.html",
     "admin-progress.html",
     "detailer-jobs.html",
     "progress.html",
