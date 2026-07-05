@@ -981,3 +981,12 @@ What changed:
 No Supabase migration is required. Deploy the Pages site and Functions together, then hard-refresh `/admin-customers.html`. A correct result is a normal JSON response, authentication response, or permission response from `/api/admin/customer_admin_list`; it should not be 405.
 
 DAIP boundary remains unchanged: no production storage, uploads, workers, AI, customer media access, public gallery export, social publishing, Google Business Profile export, or automatic publishing was added.
+
+
+## Build 222 documentation note
+
+The two living strategy documents remain `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. The DAIP operating sequence for test-mode work is now:
+
+`13_DAIP_Test_Mode_Process.md` → `15_DAIP_Governance_Workspace_Process.md` → `16_DAIP_Phase_1_Readiness_Packet.md` → `17_DAIP_Phase_1_Readiness_and_Design_Review.md` → `14_DAIP_Production_Promotion_Gates.md`.
+
+Older Markdown remains retained for release checks, history, or design evidence; it is not a competing source of current strategy.
