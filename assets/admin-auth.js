@@ -252,6 +252,7 @@
       case "admin-daip":
       case "admin-daip-governance":
       case "admin-daip-readiness":
+      case "admin-daip-design":
       case "admin-water-rules":
       case "admin-site-settings":
         return actor.is_admin === true || hasCapability("can_manage_staff");

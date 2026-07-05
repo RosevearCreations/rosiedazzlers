@@ -101,6 +101,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-readiness")
     },
     {
+      key: "admin-daip-design",
+      label: "DAIP Blueprint",
+      href: "/admin-daip-design.html",
+      description: "Independent review of a written private-MVP proposal; Gate C remains held",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-design")
+    },
+    {
       key: "admin-water-rules",
       label: "Water Rules",
       href: "/admin-water-rules.html",
