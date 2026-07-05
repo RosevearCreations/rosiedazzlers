@@ -517,5 +517,101 @@ export const PRODUCTION_TEST_PLAYBOOK_BUILD212 = [
     "Record only the safe screen name, browser/device, time, and visible status."
   ]
 }
+,
+{
+  "key": "daip_phase1_readiness_gate_block",
+  "name": "DAIP Phase 1 readiness rejects incomplete Gate A or Gate B",
+  "category": "DAIP governance",
+  "risk": "high",
+  "estimated_minutes": 6,
+  "build_number": 222,
+  "pages": [
+    "/admin-daip-readiness.html",
+    "/admin-daip-governance.html",
+    "/admin-test-centre.html"
+  ],
+  "prerequisites": [
+    "Build 218 and Build 219 DAIP migrations are applied in development/staging.",
+    "At least one DAIP-0 decision or one Build 218 test is deliberately still incomplete."
+  ],
+  "safety": [
+    "Use only harmless internal DAIP test records.",
+    "Do not add storage, upload, signed-link, worker, processing, customer-media, or public actions."
+  ],
+  "steps": [
+    "Open DAIP Phase 1 Readiness and confirm the Ready for written design review option is unavailable while Gate A or Gate B is blocked.",
+    "Attempt to submit a readiness authorization through the normal form only after selecting an incomplete state; confirm the server refuses it.",
+    "Confirm Gate C remains Held in DAIP Governance."
+  ],
+  "expected": "Incomplete decisions or test evidence cannot be turned into design-review authorization, and no technical/public media capability appears.",
+  "if_it_fails": [
+    "Stop if readiness can be authorized with Gate A or Gate B blocked.",
+    "Record only the screen, safe test state, device/browser, and visible status."
+  ]
+},
+{
+  "key": "daip_phase1_written_design_review_only",
+  "name": "DAIP Phase 1 written-design-review authorization remains non-technical",
+  "category": "DAIP governance",
+  "risk": "high",
+  "estimated_minutes": 8,
+  "build_number": 222,
+  "pages": [
+    "/admin-daip-readiness.html",
+    "/admin-daip-governance.html",
+    "/admin-daip.html",
+    "/admin-test-centre.html"
+  ],
+  "prerequisites": [
+    "All twelve DAIP-0 decisions are owner-approved in staging.",
+    "All three Build 218 internal-test results are recorded as Pass in staging."
+  ],
+  "safety": [
+    "Use safe general text only; do not use customer data, media, URLs, paths, credentials, or payment information.",
+    "This authorizes only a written private-MVP design review, not an implementation."
+  ],
+  "steps": [
+    "Open DAIP Phase 1 Readiness and confirm Gate A and Gate B are Ready.",
+    "Enter a safe owner, readiness summary, budget stop rule, review date, and all three acknowledgements.",
+    "Select Ready for written design review only and type the exact displayed authorization phrase.",
+    "Save, refresh, and confirm the audit event and latest readiness record are visible.",
+    "Open DAIP Governance and Test Lab; confirm Gate C remains Held and no storage/upload/worker/public control exists."
+  ],
+  "expected": "The record authorizes a written private-MVP design review only; all technical and public capability counts remain zero.",
+  "if_it_fails": [
+    "Stop if Gate C advances or any upload, storage, signed-link, worker, customer-media, export, or publishing control appears.",
+    "Record only the safe review status, screen, browser/device, and time."
+  ]
+},
+{
+  "key": "daip_phase1_readiness_audit_privacy",
+  "name": "DAIP Phase 1 readiness audit stays governance-safe",
+  "category": "DAIP governance",
+  "risk": "high",
+  "estimated_minutes": 5,
+  "build_number": 222,
+  "pages": [
+    "/admin-daip-readiness.html",
+    "/admin-test-centre.html"
+  ],
+  "prerequisites": [
+    "A harmless Build 222 draft or paused readiness review has been saved in staging."
+  ],
+  "safety": [
+    "Do not enter or inspect customer data, media, credentials, URLs, tokens, paths, or payment information."
+  ],
+  "steps": [
+    "Save a harmless draft or paused review using general governance text only.",
+    "Refresh the page and inspect the latest record and audit summary.",
+    "Confirm the audit reports only status, safe note, staff actor, and time; it does not expose confidential operational detail.",
+    "Confirm the record does not create a customer, media, storage, worker, export, or publishing link."
+  ],
+  "expected": "The readiness trail is auditable without becoming a repository for customer or technical secrets.",
+  "if_it_fails": [
+    "Stop if sensitive data appears or a readiness record creates an operational media path.",
+    "Record only the safe route, field label, browser/device, and visible result."
+  ]
+}
+
 ];
 export const PRODUCTION_TEST_KEYS_BUILD212 = new Set(PRODUCTION_TEST_PLAYBOOK_BUILD212.map((item) => item.key));
