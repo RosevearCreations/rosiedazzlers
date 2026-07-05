@@ -24,6 +24,20 @@ Avoid creating isolated admin pages unless they clearly advance this lifecycle.
 
 
 
+## Build 223 central capability: DAIP private-MVP design blueprint for independent review only
+
+Build 223 creates `/admin-daip-design.html`, a protected, mobile-safe workspace that turns the written DAIP private-MVP proposal into a controlled independent-review record.
+
+- A blueprint can be Draft, Paused, or submitted for independent review only.
+- Submission requires a **currently valid** Build 222 written-design-review authorization, named design owner and independent reviewer, a safe design scope, threat model, upload-control outline, private-original/derived separation, cost/stop-rule outline, rollback/acceptance outline, all three hard-stop acknowledgements, and the exact phrase `SUBMIT DESIGN BLUEPRINT`.
+- The database stores only safe design evidence and audit notes behind RLS/service-role access. The server rejects submission if the readiness authorization is missing or stale.
+- **Hard boundary:** Build 223 creates no bucket, upload/download, signed URL, object key, worker, queue, processing, AI, customer-media route, public export, Gallery/Social/GBP handoff, or automatic publishing. Gate C remains Held.
+
+Primary migration: `sql/2026-07-05_build223_daip_private_mvp_design_blueprint.sql`.
+
+**Deployment order:** apply in development/staging after Builds 218, 219, and 222; deploy Pages and Functions together; run the three Build 223 Guided Production Test Centre cases; then record only verified outcomes in this handoff and `MASTER_VALUE_ROADMAP.md`.
+
+
 ## Build 222 central capability: DAIP Phase 1 readiness review for written private-MVP design only
 
 Build 222 creates `/admin-daip-readiness.html`, a protected test-mode workspace that joins the Build 218 internal-test evidence, Build 219 owner decisions, and Build 220 readiness packet into one explicit decision: whether the owners may begin a **written** private-MVP design review.
