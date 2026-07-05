@@ -990,3 +990,8 @@ The two living strategy documents remain `AI_PROJECT_HANDOFF.md` and `MASTER_VAL
 `13_DAIP_Test_Mode_Process.md` → `15_DAIP_Governance_Workspace_Process.md` → `16_DAIP_Phase_1_Readiness_Packet.md` → `17_DAIP_Phase_1_Readiness_and_Design_Review.md` → `14_DAIP_Production_Promotion_Gates.md`.
 
 Older Markdown remains retained for release checks, history, or design evidence; it is not a competing source of current strategy.
+
+
+## Build 223 DAIP continuation
+
+For DAIP, follow the controlled order: `13_DAIP_Test_Mode_Process.md` → `15_DAIP_Governance_Workspace_Process.md` → `16_DAIP_Phase_1_Readiness_Packet.md` → `17_DAIP_Phase_1_Readiness_and_Design_Review.md` → `18_DAIP_Private_MVP_Design_Blueprint_Review.md` → `14_DAIP_Production_Promotion_Gates.md`. The two living strategy files remain `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; the other Markdown files are retained as historical or release-audit support.

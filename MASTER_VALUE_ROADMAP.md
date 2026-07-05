@@ -5,6 +5,38 @@
 
 
 
+## Build 223 — DAIP private-MVP design blueprint (completed in source; staging acceptance required)
+
+Build 223 creates `/admin-daip-design.html`, an admin-only independent-review queue for a written private-MVP blueprint.
+
+- **Completed:** safe design-scope, threat-model, upload-control, storage-separation, cost-stop, rollback/acceptance, owner/reviewer, due-date, acknowledgement, current-authorization, audit, RLS/service-role, route-copy, responsive layout, visual placeholder, Guided Test Centre, schema mirror, service-worker, and release-guard coverage.
+- **Submission gate:** a blueprint can be submitted only when the Build 222 readiness authorization is currently valid; drafts and pauses remain available otherwise.
+- **Still hard-held:** Gate C and every technical/public DAIP capability. No storage, upload/download, signed URLs, queues, workers, processing, AI, customer media, Gallery/Social/GBP handoff, export, or publishing exists in Build 223.
+
+### Next 20 connected steps after Build 223
+
+1. Apply the Build 223 migration in **staging only** after Builds 218, 219, and 222.
+2. Confirm Build 223 tables have RLS enabled and browser-role grants revoked.
+3. Run the missing/stale-authorization block test.
+4. Save a harmless Draft and confirm no capability changes.
+5. Save a Paused blueprint and confirm Gate C remains Held.
+6. Complete/verify all twelve DAIP-0 owner decisions.
+7. Record all three Build 218 internal-safety tests as Pass in staging.
+8. Confirm the Build 222 readiness authorization remains Current.
+9. Complete the private-MVP blueprint using safe general text only.
+10. Name the independent design reviewer and a backup reviewer.
+11. Confirm the explicit zero-public-destination scope.
+12. Confirm the explicit no-customer-media/test-only scope.
+13. Review the threat model for accidental leakage, misuse, cost, recovery, and mistaken publication.
+14. Review server-issued authorization, checksum/MIME/size validation, resume, cancel, retry, and audit requirements.
+15. Review private-original versus derivative separation and no public list/read policy.
+16. Review retention, legal hold, secure deletion, recovery, and rollback.
+17. Price the smallest proposed pilot against the owner-approved warning/hard-stop rule.
+18. Accept or pause the written proposal through an independent review meeting—do not implement it yet.
+19. Write a narrow Gate C implementation acceptance plan and rollback test plan.
+20. Only then commission a separate, test-only Gate C technical review; do not merge storage/upload/worker code before that review.
+
+
 ## Build 222 — DAIP Phase 1 readiness review (completed in source; staging acceptance required)
 
 Build 222 turns the DAIP readiness packet into a protected, auditable decision workspace at `/admin-daip-readiness.html`.
