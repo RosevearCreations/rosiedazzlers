@@ -1018,3 +1018,8 @@ Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOF
 
 Build 217 adds a token-gated, noindex final-balance payment status page; controlled expiry/replacement/cancellation; an Admin Payments queue; Stripe Checkout metadata; and idempotent Stripe webhook settlement. Apply `sql/2026-06-30_build217_secure_final_balance_links.sql` and follow `docs/PRODUCTION_TEST_GUIDE.md` before using the workflow with customers.
 
+
+
+## Build 223 — DAIP private-MVP design blueprint
+
+Build 223 adds an admin-only written blueprint review at `/admin-daip-design.html`. It requires a current Build 222 authorization before a blueprint can be submitted for independent review. It remains design evidence only—no DAIP storage, upload/download, signed links, queues, workers, processing, AI, customer media, public export, or publishing capability is added, and Gate C remains held.
