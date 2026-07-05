@@ -1,7 +1,7 @@
 {
-  "build": 222,
-  "updated_at": "2026-07-04",
-  "summary": "Build 220 adds a safe customer-account-access placeholder alongside DAIP governance and payment/media placeholders. It contains no client account data, credentials, raw reset links, or media infrastructure identifiers.",
+  "build": 223,
+  "updated_at": "2026-07-05",
+  "summary": "Build 223 adds a safe DAIP private-MVP design-blueprint placeholder alongside existing customer account, governance, payment, and media placeholders. It contains no client account data, credentials, raw reset links, storage identifiers, or media infrastructure configuration.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -217,6 +217,13 @@
       "visual": "safe internal flow from governance evidence to written private-MVP design review",
       "replace_with": "internal decision diagram after staging acceptance; never customer media, credentials, bucket names, paths, or signed links",
       "status": "placeholder"
+    },
+    {
+      "key": "daip_private_mvp_blueprint",
+      "label": "DAIP private-MVP blueprint review illustration",
+      "where": "admin-only DAIP design review",
+      "visual": "protected governance-to-blueprint flow with all technical/public outputs locked",
+      "replace_with": "abstract internal review diagram only; never customer information, real media, storage names, credentials, or public destination logos"
     }
   ],
   "rules": [
