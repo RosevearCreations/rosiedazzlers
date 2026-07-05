@@ -1,6 +1,6 @@
-# Rosie Dazzlers AI Project Handoff — Build 220
+# Rosie Dazzlers AI Project Handoff — Build 222
 
-**Updated:** 2026-07-03
+**Updated:** 2026-07-04
 **Read first:** This is the primary technical/business handoff for a new AI chat or future build pass.
 
 ## Product north star
@@ -22,6 +22,21 @@ Avoid creating isolated admin pages unless they clearly advance this lifecycle.
 
 
 
+
+
+## Build 222 central capability: DAIP Phase 1 readiness review for written private-MVP design only
+
+Build 222 creates `/admin-daip-readiness.html`, a protected test-mode workspace that joins the Build 218 internal-test evidence, Build 219 owner decisions, and Build 220 readiness packet into one explicit decision: whether the owners may begin a **written** private-MVP design review.
+
+- The server only accepts `ready_for_design_review` when Gate A (all 12 DAIP-0 decisions) and Gate B (all three Build 218 internal tests plus safe test control) are Ready.
+- The exact phrase `AUTHORIZE DESIGN REVIEW`, consent separation, retention/legal-hold ownership, a budget stop rule, review date, and an accountable owner are required for that record.
+- Records are append-only snapshots with safe audit events and stored gate evidence. Reopening a DAIP decision or losing passing test evidence makes an old authorization invalid for current planning.
+- The system remains service-role-only behind Cloudflare Functions; browser roles are revoked from the new tables.
+- **Hard boundary:** Build 222 does not provision storage, upload/download permissions, signed links, queues, workers, FFmpeg, proxies, thumbnails, AI, customer media, exports, Gallery/Social/GBP handoff, or automatic publishing. Gate C remains held.
+
+Primary migration: `sql/2026-07-04_build222_daip_phase1_readiness_design_review.sql`.
+
+**Deployment order:** apply the Build 222 migration in development/staging after Builds 218 and 219; deploy Pages and Functions together; run the three Build 222 Guided Production Test Centre cases; then record only verified outcomes in this handoff and `MASTER_VALUE_ROADMAP.md`.
 
 ## Build 220 central capability: controlled customer access management and DAIP readiness
 
