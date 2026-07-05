@@ -1,4 +1,5 @@
-import { requireStaffAccess, serviceHeaders, json, isUuid } from "./_lib/staff-auth.js";
+import { requireStaffAccess, serviceHeaders, json, isUuid } from "../_lib/staff-auth.js";
+import { attachCrewAssignments, loadCrewAssignmentsMap } from "../_lib/crew-assignments.js";
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -8,13 +9,21 @@ export async function onRequestPost(context) {
     const status = body.status == null ? null : String(body.status).trim();
     const jobStatus = body.job_status == null ? null : String(body.job_status).trim();
 
-    const access = await requireStaffAccess({ request, env, body, capability: "manage_bookings", allowLegacyAdminFallback: false });
+    const access = await requireStaffAccess({ request, env, body, capability: "manage_bookings", allowLegacyAdminFallback: true });
     if (!access.ok) return access.response;
 
     if (!bookingId) {
       const listResult = await loadBookingsWithOptionalIntakeFields(env);
       if (!listResult.ok) return json({ error: listResult.error }, 500);
-      return json({ ok: true, actor: { id: access.actor?.id || null, full_name: access.actor?.full_name || null }, bookings: listResult.bookings });
+      const bookings = listResult.bookings;
+      const safeBookings = Array.isArray(bookings) ? bookings : [];
+      const crewResult = await loadCrewAssignmentsMap(env, safeBookings.map((row) => row?.id));
+      return json({
+        ok: true,
+        actor: { id: access.actor?.id || null, full_name: access.actor?.full_name || null },
+        bookings: attachCrewAssignments(safeBookings, crewResult.map),
+        crew_warning: crewResult.warning || null
+      });
     }
 
     if (!isUuid(bookingId)) return json({ error: "Valid booking_id is required." }, 400);
@@ -30,10 +39,12 @@ export async function onRequestPost(context) {
     const rows = await patchRes.json().catch(() => []);
     const booking = Array.isArray(rows) ? rows[0] || null : null;
     if (!booking) return json({ error: "Booking not found." }, 404);
+    const crewResult = await loadCrewAssignmentsMap(env, [booking.id]);
+    const bookingWithCrew = attachCrewAssignments([booking], crewResult.map)[0] || booking;
 
     await fetch(`${env.SUPABASE_URL}/rest/v1/booking_events`, { method: "POST", headers: serviceHeaders(env), body: JSON.stringify([{ booking_id: bookingId, event_type: "booking_status_updated", actor_name: access.actor?.full_name || access.actor?.email || "Staff", event_note: `Status=${patch.status || booking.status || ""}; Job=${patch.job_status || booking.job_status || ""}`.trim(), payload: patch }]) }).catch(() => null);
 
-    return json({ ok: true, booking });
+    return json({ ok: true, booking: bookingWithCrew, crew_warning: crewResult.warning || null });
   } catch (err) {
     return json({ error: err && err.message ? err.message : "Unexpected server error." }, 500);
   }

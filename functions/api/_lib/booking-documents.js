@@ -13,34 +13,10 @@ const COMPANY = {
   service_area: "Oxford County and Norfolk County, Ontario"
 };
 
-const DEFAULT_DOCUMENT_TEMPLATES = {
-  quote_proposal: {
-    subject: "Your Rosie Dazzlers quote",
-    body: "Hi {{customer_name}}, here is your quote for {{package_name}}. Please review the estimate and reply with any changes."
-  },
-  deposit_receipt: {
-    subject: "Rosie Dazzlers deposit receipt",
-    body: "Thank you {{customer_name}}. We received your deposit for {{service_date}}."
-  },
-  refund_notice: {
-    subject: "Rosie Dazzlers refund update",
-    body: "Hi {{customer_name}}, here is the latest refund/payment adjustment update for your appointment."
-  },
-  invoice: {
-    subject: "Rosie Dazzlers invoice — {{service_date}}",
-    body: "Here is the invoice/payment summary for {{package_name}}. Estimated total: {{estimated_total}}. Balance due: {{balance_due}}. Invoice link: {{invoice_url}}"
-  },
-  appointment_confirmation: {
-    subject: "Rosie Dazzlers booking confirmation — {{service_date}}",
-    body: "Thank you for booking Rosie Dazzlers. Your {{package_name}} appointment is confirmed for {{service_date}} at {{slot_label}}. Confirmation link: {{confirmation_url}}"
-  }
-};
-
 const DEFAULT_TEMPLATES = {
-  confirmation_intro: DEFAULT_DOCUMENT_TEMPLATES.appointment_confirmation.body,
-  invoice_footer: DEFAULT_DOCUMENT_TEMPLATES.invoice.body,
-  gift_footer: "Gift certificates are valid for one year from purchase and are non-refundable.",
-  templates: DEFAULT_DOCUMENT_TEMPLATES
+  confirmation_intro: "Thank you for booking Rosie Dazzlers. Your booking details are below.",
+  invoice_footer: "Please review your service summary before arrival. On-site discounts, weather adjustments, and refunds should be documented through the office workflow.",
+  gift_footer: "Gift certificates are valid for one year from purchase and are non-refundable."
 };
 
 const FINANCE_ENTRY_TYPES = ["deposit", "final_payment", "tip", "refund", "discount", "other"];
@@ -62,11 +38,9 @@ export async function queueOrderConfirmationNotification(env, bookingId, source 
       return { ok: false, skipped: true, reason: "no_customer_email" };
     }
 
-    const appointmentTemplate = payload.rendered_templates?.appointment_confirmation || {};
-    const subject = appointmentTemplate.subject || `Rosie Dazzlers booking confirmation — ${payload.package.name} on ${payload.booking.service_date || "scheduled date"}`;
-    const introText = appointmentTemplate.body || DEFAULT_TEMPLATES.confirmation_intro;
+    const subject = `Rosie Dazzlers booking confirmation — ${payload.package.name} on ${payload.booking.service_date || "scheduled date"}`;
     const bodyText = [
-      introText,
+      DEFAULT_TEMPLATES.confirmation_intro,
       `Customer: ${payload.booking.customer_name || "Customer"}`,
       `Service date: ${payload.booking.service_date || "TBD"}`,
       `Time: ${payload.booking.slot_label || payload.booking.start_slot || "TBD"}`,
@@ -81,7 +55,7 @@ export async function queueOrderConfirmationNotification(env, bookingId, source 
 
     const bodyHtml = `
       <h1>Booking confirmation</h1>
-      ${renderHtmlParagraphs(introText)}
+      <p>${escapeHtml(DEFAULT_TEMPLATES.confirmation_intro)}</p>
       <p><strong>Customer:</strong> ${escapeHtml(payload.booking.customer_name || "Customer")}</p>
       <p><strong>Service date:</strong> ${escapeHtml(payload.booking.service_date || "TBD")}</p>
       <p><strong>Time:</strong> ${escapeHtml(payload.booking.slot_label || payload.booking.start_slot || "TBD")}</p>
@@ -174,11 +148,9 @@ async function buildPayload(env, booking) {
     "—";
   const slotLabel = slotLabelForBooking(booking);
   const templates = await loadDocumentTemplates(env);
-  const policyStamp = await loadPolicyStamp(env);
 
-  const payload = {
-    company: { ...COMPANY, templates, document_templates: templates.templates || {}, policy_stamp: policyStamp },
-    policy_stamp: policyStamp,
+  return {
+    company: { ...COMPANY, templates },
     booking: {
       id: booking.id,
       status: booking.status || null,
@@ -243,22 +215,14 @@ async function buildPayload(env, booking) {
         ? `${origin}/invoice?token=${encodeURIComponent(progressToken)}`
         : null,
       gift_certificate_url: `${origin}/gift-certificate-print`
-    },
-    rendered_templates: {}
+    }
   };
-
-  payload.rendered_templates = {
-    invoice: renderDocumentTemplate(templates.templates?.invoice || templates.invoice, payload),
-    appointment_confirmation: renderDocumentTemplate(templates.templates?.appointment_confirmation || templates.appointment_confirmation, payload)
-  };
-
-  return payload;
 }
 
 async function loadDocumentTemplates(env) {
   try {
     if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY) {
-      return normalizeDocumentTemplates(DEFAULT_TEMPLATES);
+      return DEFAULT_TEMPLATES;
     }
 
     const res = await fetch(
@@ -267,111 +231,19 @@ async function loadDocumentTemplates(env) {
     );
 
     if (!res.ok) {
-      return normalizeDocumentTemplates(DEFAULT_TEMPLATES);
+      return DEFAULT_TEMPLATES;
     }
 
     const rows = await res.json().catch(() => []);
     const row = Array.isArray(rows) ? rows[0] || null : null;
-    return normalizeDocumentTemplates(row?.value && typeof row.value === "object" ? row.value : DEFAULT_TEMPLATES);
-  } catch {
-    return normalizeDocumentTemplates(DEFAULT_TEMPLATES);
-  }
-}
 
-
-async function loadPolicyStamp(env) {
-  const fallback = { version: "bundled-policy", updated_at: null, source_status: "bundled_json_fallback" };
-  try {
-    if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY) return fallback;
-    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/app_management_settings?select=value,updated_at&key=eq.site_policies&limit=1`, { headers: serviceHeaders(env) });
-    if (!res.ok) return fallback;
-    const rows = await res.json().catch(() => []);
-    const row = Array.isArray(rows) ? rows[0] || null : null;
-    const value = row?.value && typeof row.value === "object" ? row.value : {};
     return {
-      version: String(value.version || value.policy_version || value.updated_at || row?.updated_at || "current"),
-      updated_at: value.updated_at || row?.updated_at || null,
-      source_status: row ? "app_management_settings" : "bundled_json_fallback"
+      ...DEFAULT_TEMPLATES,
+      ...(row?.value && typeof row.value === "object" ? row.value : {})
     };
   } catch {
-    return fallback;
+    return DEFAULT_TEMPLATES;
   }
-}
-
-function normalizeDocumentTemplates(value) {
-  const source = value && typeof value === "object" ? value : {};
-  const nested = source.templates && typeof source.templates === "object" ? source.templates : {};
-  const templates = { ...DEFAULT_DOCUMENT_TEMPLATES };
-  for (const [key, template] of Object.entries(nested)) {
-    templates[key] = normalizeTemplate(template, templates[key]);
-  }
-
-  if (source.confirmation_intro && !nested.appointment_confirmation) {
-    templates.appointment_confirmation = normalizeTemplate({ body: source.confirmation_intro }, templates.appointment_confirmation);
-  }
-  if (source.invoice_footer && !nested.invoice) {
-    templates.invoice = normalizeTemplate({ body: source.invoice_footer }, templates.invoice);
-  }
-
-  return {
-    ...DEFAULT_TEMPLATES,
-    ...source,
-    templates,
-    confirmation_intro: templates.appointment_confirmation.body,
-    invoice_footer: templates.invoice.body
-  };
-}
-
-function normalizeTemplate(template, fallback) {
-  const src = template && typeof template === "object" ? template : {};
-  return {
-    subject: String(src.subject || fallback?.subject || "Rosie Dazzlers update"),
-    body: String(src.body || fallback?.body || "")
-  };
-}
-
-function renderDocumentTemplate(template, payload) {
-  const fallback = normalizeTemplate(template, { subject: "Rosie Dazzlers update", body: "" });
-  const variables = documentTemplateVariables(payload);
-  return {
-    subject: renderTemplateString(fallback.subject, variables),
-    body: renderTemplateString(fallback.body, variables)
-  };
-}
-
-function renderTemplateString(template, variables) {
-  return String(template || "").replace(/{{\s*([a-z0-9_]+)\s*}}/gi, (_match, key) => {
-    const value = variables[String(key || "").toLowerCase()];
-    return value == null ? "" : String(value);
-  });
-}
-
-function documentTemplateVariables(payload) {
-  return {
-    customer_name: payload.booking?.customer_name || "Customer",
-    customer_email: payload.booking?.customer_email || "",
-    service_date: payload.booking?.service_date || "TBD",
-    slot_label: payload.booking?.slot_label || payload.booking?.start_slot || "TBD",
-    package_name: payload.package?.name || "service package",
-    vehicle_label: payload.vehicle?.label || "Vehicle",
-    service_area: payload.booking?.service_area_label || payload.company?.service_area || "",
-    deposit_amount: formatMoney(payload.summary?.deposit_cents || 0),
-    estimated_total: formatMoney(payload.summary?.effective_total_cents || 0),
-    balance_due: formatMoney(payload.summary?.balance_due_cents || 0),
-    confirmation_url: payload.documents?.confirmation_url || "",
-    invoice_url: payload.documents?.invoice_url || "",
-    policy_version: payload.policy_stamp?.version || payload.company?.policy_stamp?.version || "current",
-    policy_updated_at: payload.policy_stamp?.updated_at || payload.company?.policy_stamp?.updated_at || ""
-  };
-}
-
-function renderHtmlParagraphs(text) {
-  return String(text || "")
-    .split(/\n{2,}|\r?\n/)
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => `<p>${escapeHtml(line)}</p>`)
-    .join("") || "<p></p>";
 }
 
 function resolveAddonLines(pricing, rawAddons, vehicleSize) {

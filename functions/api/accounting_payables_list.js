@@ -1,5 +1,5 @@
 import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
-import { buildMonthlyReport } from "../_lib/accounting-gl.js";
+import { listPayables } from "../_lib/accounting-gl.js";
 
 export async function onRequestOptions(){ return new Response('', {status:204, headers:corsHeaders()}); }
 export async function onRequestGet({request, env}){
@@ -7,11 +7,15 @@ export async function onRequestGet({request, env}){
     const access = await requireStaffAccess({ request, env, capability:'manage_staff', allowLegacyAdminFallback:false });
     if (!access.ok) return withCors(access.response);
     const url = new URL(request.url);
-    const now = new Date();
-    const month = Math.max(1, Math.min(12, Number(url.searchParams.get('month') || (now.getMonth()+1))));
-    const year = Math.max(2020, Math.min(2100, Number(url.searchParams.get('year') || now.getFullYear())));
-    const report = await buildMonthlyReport(env, { month, year });
-    return withCors(json({ ok:true, report }));
+    const status = String(url.searchParams.get('status') || 'open').trim();
+    const payables = await listPayables(env, { status });
+    const summary = {
+      open_count: payables.filter((x)=>x.payment_status === 'open').length,
+      partial_count: payables.filter((x)=>x.payment_status === 'partial').length,
+      paid_count: payables.filter((x)=>x.payment_status === 'paid').length,
+      outstanding_cad: payables.reduce((s,x)=>s + Number(x.balance_due_cad||0), 0)
+    };
+    return withCors(json({ ok:true, payables, summary }));
   } catch(err){ return withCors(json({ error: err?.message || 'Unexpected server error.' },500)); }
 }
 export async function onRequestPost(){ return withCors(methodNotAllowed()); }

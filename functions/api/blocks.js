@@ -1,4 +1,4 @@
-import { requireStaffAccess, serviceHeaders, json } from "./_lib/staff-auth.js";
+import { requireStaffAccess, serviceHeaders, json } from "../_lib/staff-auth.js";
 
 export async function onRequestPost(context) {
   const { request, env } = context;

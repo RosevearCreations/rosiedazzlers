@@ -1,17 +1,14 @@
-import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
-import { buildMonthlyReport } from "../_lib/accounting-gl.js";
+import { requireStaffAccess, json, methodNotAllowed, serviceHeaders } from "../_lib/staff-auth.js";
 
 export async function onRequestOptions(){ return new Response('', {status:204, headers:corsHeaders()}); }
 export async function onRequestGet({request, env}){
   try {
     const access = await requireStaffAccess({ request, env, capability:'manage_staff', allowLegacyAdminFallback:false });
     if (!access.ok) return withCors(access.response);
-    const url = new URL(request.url);
-    const now = new Date();
-    const month = Math.max(1, Math.min(12, Number(url.searchParams.get('month') || (now.getMonth()+1))));
-    const year = Math.max(2020, Math.min(2100, Number(url.searchParams.get('year') || now.getFullYear())));
-    const report = await buildMonthlyReport(env, { month, year });
-    return withCors(json({ ok:true, report }));
+    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/accounting_accounts?select=*&order=sort_order.asc,code.asc`, { headers: serviceHeaders(env) });
+    if (!res.ok) return withCors(json({ error:`Could not load accounting accounts. ${await res.text()}` },500));
+    const rows = await res.json().catch(()=>[]);
+    return withCors(json({ ok:true, accounts: rows }));
   } catch(err){ return withCors(json({ error: err?.message || 'Unexpected server error.' },500)); }
 }
 export async function onRequestPost(){ return withCors(methodNotAllowed()); }
