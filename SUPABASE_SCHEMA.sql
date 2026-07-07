@@ -2620,3 +2620,10 @@ grant all privileges on table public.daip_gate_c_technical_review_audit_events t
 comment on table public.daip_gate_c_technical_reviews is 'Build 224 DAIP Gate C technical-review and rollback acceptance record. It records test-only design evidence and cannot enable storage, uploads, processing, customer media, public destinations, or publishing.';
 comment on table public.daip_gate_c_technical_review_audit_events is 'Build 224 Gate C audit trail. Store plain-language review evidence only; never credentials, URLs, external service configuration, customer data, private media, payment data, or incident evidence.';
 commit;
+
+
+-- 2026-07-07_build225_social_analytics_connection_centre_no_ddl_note.sql
+-- Build 225 — Social & Analytics Connections Centre and DAIP external-service boundary.
+-- No database migration is required.
+-- Runtime connection values are intentionally Cloudflare Variables and Secrets, never Supabase app settings.
+-- This file exists as schema/release history evidence only.

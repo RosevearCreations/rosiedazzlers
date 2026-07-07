@@ -1,9 +1,56 @@
-// Previous caches: rosie-app-v20260706build224 and rosie-app-v20260706build224 (kept as release-audit evidence; not active).
-// Previous cache rosie-app-v20260706build224 retained as release-audit evidence; not active.
-const CACHE='rosie-app-v20260706build224';
-const URLS=['/','/book','/pricing','/services','/login','/assets/site.css','/assets/chrome.js','/assets/site.js','/data/responsive_visual_registry.json','/data/visual_placeholder_registry.json','/data/workflow_connection_build208.json','/data/build210_connected_live_workflow.json','/data/build211_production_reliability.json','/data/production_reliability_registry.json','/data/production_test_playbook_build212.json','/data/build212_guided_production_testing.json','/data/build213_owner_action_customer_trust.json','/data/build214_security_task_orchestration.json','/data/security_posture_registry.json','/detailer-jobs.html','/admin-progress.html','/progress.html','/final-balance-payment.html','/admin-workflow.html','/admin-today.html','/admin-gallery.html','/admin-customers.html','/admin-production.html','/admin-test-centre.html','/admin-security.html','/admin-daip.html','/admin-daip-governance.html','/admin-daip-readiness.html','/admin-daip-design.html','/assets/visual-placeholders.js','/assets/media-source-resolver.js','/data/build216_media_reliability_daip_governance.json','/data/build217_secure_final_balance_links.json','/data/build218_daip_test_mode_foundation.json','/data/build219_daip_governance_workspace.json','/data/build220_customer_access_management.json','/data/build221_customer_admin_route_hotfix.json','/data/build222_daip_phase1_readiness_design_review.json','/data/build223_daip_private_mvp_design_blueprint.json'  '/admin-daip-gate-c.html',
-  '/data/build224_daip_gate_c_technical_review_rollback.json',
+// Build 225 service-worker cache. Previous Build 224 cache is retained only as release-audit evidence.
+const CACHE='rosie-app-v20260707build225';
+const URLS=[
+  "/",
+  "/book",
+  "/pricing",
+  "/services",
+  "/login",
+  "/assets/site.css",
+  "/assets/chrome.js",
+  "/assets/site.js",
+  "/assets/marketing-consent.js",
+  "/assets/visual-placeholders.js",
+  "/assets/media-source-resolver.js",
+  "/data/responsive_visual_registry.json",
+  "/data/visual_placeholder_registry.json",
+  "/data/workflow_connection_build208.json",
+  "/data/build210_connected_live_workflow.json",
+  "/data/build211_production_reliability.json",
+  "/data/production_reliability_registry.json",
+  "/data/production_test_playbook_build212.json",
+  "/data/build212_guided_production_testing.json",
+  "/data/build213_owner_action_customer_trust.json",
+  "/data/build214_security_task_orchestration.json",
+  "/data/security_posture_registry.json",
+  "/detailer-jobs.html",
+  "/admin-progress.html",
+  "/progress.html",
+  "/final-balance-payment.html",
+  "/admin-workflow.html",
+  "/admin-today.html",
+  "/admin-gallery.html",
+  "/admin-customers.html",
+  "/admin-production.html",
+  "/admin-test-centre.html",
+  "/admin-security.html",
+  "/admin-daip.html",
+  "/admin-daip-governance.html",
+  "/admin-daip-readiness.html",
+  "/admin-daip-design.html",
+  "/admin-daip-gate-c.html",
+  "/admin-integrations.html",
+  "/data/build216_media_reliability_daip_governance.json",
+  "/data/build217_secure_final_balance_links.json",
+  "/data/build218_daip_test_mode_foundation.json",
+  "/data/build219_daip_governance_workspace.json",
+  "/data/build220_customer_access_management.json",
+  "/data/build221_customer_admin_route_hotfix.json",
+  "/data/build222_daip_phase1_readiness_design_review.json",
+  "/data/build223_daip_private_mvp_design_blueprint.json",
+  "/data/build224_daip_gate_c_technical_review_rollback.json",
+  "/data/build225_social_analytics_connection_centre.json"
 ];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(URLS)).then(()=>self.skipWaiting()));});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
-self.addEventListener('fetch',e=>{ if(e.request.method!=='GET') return; e.respondWith(fetch(e.request).catch(()=>caches.match(e.request).then(r=>r||caches.match('/'))));});
+self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(URLS)).then(()=>self.skipWaiting()));});
+self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
+self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;event.respondWith(fetch(event.request).catch(()=>caches.match(event.request).then(found=>found||caches.match('/'))));});

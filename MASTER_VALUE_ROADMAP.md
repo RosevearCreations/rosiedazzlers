@@ -1,3 +1,46 @@
+# Rosie Dazzlers Master Value Roadmap — Build 225
+
+**Updated:** 2026-07-07  
+**Purpose:** One active business/product roadmap. Read after `AI_PROJECT_HANDOFF.md`. Retained Markdown remains history/audit context.
+
+## Build 225 — Social & Analytics Connections Centre, consent-first tags, and DAIP external-service boundary
+
+**Completed in source; staging acceptance required:**
+- Administrator-only `/admin-integrations.html` with server-side status checks that return presence/format only—never values or secrets.
+- Cloudflare Secret variable map and detailed operational guide for Meta, GA4, Google Ads, TikTok, LinkedIn, Pinterest, Microsoft Advertising, Facebook/Instagram, X, YouTube, and Google Business Profile.
+- Consent-first optional public marketing-tag loader, with an explicit public-page opt-in and protected/private route exclusions.
+- Privacy notice update and mobile-safe Connections Centre layout.
+- DAIP external-service boundary document and preflight test framing: marketing/social integration is not DAIP implementation.
+- Baseline fixes for malformed Admin Menu and service-worker cache syntax so affected browser code can parse.
+
+**Still hard-held:**
+- No browser or database credential entry.
+- No server conversion APIs, contact uploads, customer hash sharing, event payloads containing personal information, or automated social publishing expansion.
+- DAIP Gate C and all DAIP technical/public capability remain held. No DAIP bucket, upload/download, signed link, worker, processing, AI, customer media, public export, Gallery/Social handoff, or publishing capability was introduced.
+
+### Next 20 connected steps after Build 225
+
+1. Deploy Build 225 to the **staging** Cloudflare Pages project.
+2. Open `/admin-integrations.html` as an administrator and confirm it reports no values.
+3. Add `MARKETING_TRACKING_ENABLED=true` and `MARKETING_TRACKING_MODE=test` to staging Secrets only.
+4. Add `MARKETING_TRACKING_CONSENT_VERSION=1`.
+5. Configure **one** first provider only—recommend GA4.
+6. Redeploy staging.
+7. Confirm GA4 shows Configured on the Connections Centre.
+8. In a private browser, open a normal public marketing page, not booking/payment/client/admin/progress.
+9. Confirm no third-party tag loads before the optional-measurement choice.
+10. Choose optional measurement and verify only the approved tag loads.
+11. Use the provider’s official diagnostic tool; record only Pass/Fail and safe notes.
+12. Decline consent in a fresh private session and confirm the normal public site still works.
+13. Check the privacy notice wording and consent-version behavior.
+14. Set `MARKETING_TRACKING_ENABLED=false` to validate the rollback path, then redeploy.
+15. Repeat only after the test result is understood; do not turn on all providers at once.
+16. Configure Facebook/Instagram Page credentials in staging only if the Social Queue readiness test is planned.
+17. Use reviewed Social Queue drafts; do not publish customer media without consent and privacy checks.
+18. Do not configure a server conversion API, customer match list, or contact upload until a separate consent/event-design review is accepted.
+19. Complete the DAIP Build 218–224 evidence chain and Gate C review; Build 225’s connections page is only boundary evidence.
+20. Only after Gate C and a separate implementation proposal are accepted should a minimal private DAIP technical test be considered.
+
 # Rosie Dazzlers Master Value Roadmap — Build 224
 
 **Updated:** 2026-07-06
