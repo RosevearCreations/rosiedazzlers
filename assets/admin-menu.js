@@ -236,7 +236,8 @@
       description: "My session and password",
       visible: () => globalScope.AdminAuth.isAuthenticated()
     }
-  ];
+      { key:"admin-daip-gate-c", label:"DAIP Gate C", href:"/admin-daip-gate-c.html", group:"Operations", visible:()=>globalScope.AdminAuth.canAccessPage("admin-daip-gate-c") },
+];
 
   function render(options = {}) {
     assertDependency();
