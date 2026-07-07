@@ -1,3 +1,18 @@
+# DAIP Documentation — Build 225 addition
+
+Read this sequence before proposing technical work:
+
+1. `13_DAIP_Test_Mode_Process.md`
+2. `11_DAIP_Decision_Register.md`
+3. `15_DAIP_Governance_Workspace_Process.md`
+4. `16_DAIP_Phase_1_Readiness_Packet.md`
+5. `17_DAIP_Phase_1_Readiness_and_Design_Review.md`
+6. `18_DAIP_Private_MVP_Design_Blueprint_Review.md`
+7. `19_DAIP_Gate_C_Technical_Review_and_Rollback_Acceptance.md`
+8. `20_DAIP_External_Service_Connection_Boundary.md`
+
+Build 225 has not enabled DAIP technical capability. It clarifies that social/analytics Cloudflare Secrets are not DAIP storage or provider configuration. Gate C remains held.
+
 # Rosie Dazzlers Digital Asset Intelligence Platform (DAIP)
 
 **Version:** 1.0  

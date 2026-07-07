@@ -1,3 +1,64 @@
+
+# Build 225 — Social & analytics Connections Centre test (staging only)
+
+## Before beginning
+
+- Use the staging/development Cloudflare Pages project, not the production project.
+- Use an administrator account and `/admin-integrations.html`.
+- Use one provider at a time; recommended first provider is GA4.
+- Do not use a real customer booking, customer email, progress link, payment, quote, vehicle, VIN, address, or media.
+- Do not paste any Cloudflare Secret, pixel/tag ID, OAuth token, or provider screenshot containing values into a test note.
+
+## 1. Configuration visibility and secret boundary
+
+1. Add only these staging Secrets:
+   - `MARKETING_TRACKING_ENABLED=true`
+   - `MARKETING_TRACKING_MODE=test`
+   - `MARKETING_TRACKING_CONSENT_VERSION=1`
+   - one provider ID, such as `GA4_MEASUREMENT_ID=G-...`
+2. Redeploy Pages.
+3. Sign in to `/admin-integrations.html`.
+4. Confirm the page shows **Configured** for GA4, but does not display the Measurement ID.
+5. Confirm no browser form accepts a credential.
+6. Confirm the DAIP panel states that Gate C is held and that no DAIP connection is created.
+
+**Pass:** status is visible without the actual value; no secret or DAIP capability appears.  
+**Fail/Blocked:** a value, token, password, provider account number, customer information, or DAIP technical control is shown.
+
+## 2. Consent before a marketing tag loads
+
+1. Use a private/incognito browser window.
+2. Visit a public marketing page such as `/`, `/services`, `/pricing`, `/gallery`, or `/contact`.
+3. Before touching the banner, confirm only the normal website loads. Use the browser’s developer tools only if you already know how; never screenshot/copy sensitive request data.
+4. Confirm the optional-measurement banner offers **Allow optional measurement** and **Use essential site only**.
+5. Choose **Use essential site only** and confirm the public site remains usable.
+6. Open another private window, visit the same type of public page, and choose **Allow optional measurement**.
+7. Verify the provider with its own official test/diagnostic tool, such as GA4 DebugView/Tag Assistant.
+8. Confirm the module did not run on `/book`, `/login`, `/progress`, `/final-balance-payment`, `/client`, `/detailer-jobs`, or `/admin`.
+
+**Pass:** no configured third-party tag starts until optional measurement is selected; protected routes remain excluded.  
+**Fail/Blocked:** the tag loads before consent, a protected route loads it, a booking/payment/customer detail is sent, or the public site breaks after a decline.
+
+## 3. Rollback
+
+1. In staging, set `MARKETING_TRACKING_ENABLED=false`.
+2. Redeploy.
+3. Open a new private browser session on a public marketing page.
+4. Confirm no optional-measurement banner appears and `/admin-integrations.html` says the tracking switch is off.
+5. Confirm the public website continues working.
+
+**Pass:** tag configuration has a reversible, non-disruptive off switch.
+
+## 4. DAIP external-service boundary
+
+1. Open `/admin-integrations.html` and review the DAIP boundary panel.
+2. Confirm social/analytics values are reported only as configured/missing.
+3. Confirm there is no bucket name, storage path, upload/download control, signed link, worker, AI, customer-media route, Gallery handoff, social export, or public publishing action.
+4. Record the `daip_external_service_boundary` test as Pass only when all checks are true.
+
+**Pass:** external service configuration stays separate from DAIP Gate C technical implementation.
+
+
 # Rosie Dazzlers Production Test Guide — Build 217
 
 **Use this guide only with an internal test booking.** Do not store passwords, API keys, card information, customer addresses, VINs, or private incident media in test notes or screenshots.
