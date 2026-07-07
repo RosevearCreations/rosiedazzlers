@@ -657,5 +657,77 @@ export const PRODUCTION_TEST_PLAYBOOK_BUILD212 = [
 }
 
 
+,
+{
+  "key": "daip_gate_c_prerequisite_block",
+  "name": "DAIP Gate C rejects missing or stale prerequisites",
+  "category": "DAIP technical review",
+  "risk": "urgent",
+  "estimated_minutes": 6,
+  "build_number": 224,
+  "pages": ["/admin-daip-gate-c.html", "/admin-daip-design.html", "/admin-test-centre.html"],
+  "prerequisites": ["Build 224 migration applied in staging.", "Build 223 blueprint missing or stale."],
+  "safety": ["Use safe general text only."],
+  "steps": ["Attempt accepted status from the Gate C page.", "Confirm the server refuses acceptance."],
+  "expected": "Gate C remains Held and no technical/public capability is enabled.",
+  "if_it_fails": ["Stop if acceptance succeeds or any technical/public path appears."]
+},
+{
+  "key": "daip_gate_c_review_only",
+  "name": "DAIP Gate C review remains review-only",
+  "category": "DAIP technical review",
+  "risk": "high",
+  "estimated_minutes": 8,
+  "build_number": 224,
+  "pages": ["/admin-daip-gate-c.html", "/admin-test-centre.html"],
+  "prerequisites": ["Current prior DAIP evidence in staging."],
+  "safety": ["No customer or external-service details."],
+  "steps": ["Save a Draft or Blocked record.", "Where prerequisites are current, accept a test-only review.", "Refresh the page."],
+  "expected": "Gate C remains Held and technical/public capability counters remain zero.",
+  "if_it_fails": ["Stop if a review becomes a deployment control."]
+},
+{
+  "key": "daip_gate_c_audit_boundary",
+  "name": "DAIP Gate C audit stays safe",
+  "category": "DAIP technical review",
+  "risk": "high",
+  "estimated_minutes": 5,
+  "build_number": 224,
+  "pages": ["/admin-daip-gate-c.html", "/admin-test-centre.html"],
+  "prerequisites": ["A harmless Gate C record exists in staging."],
+  "safety": ["Do not enter customer data, media, URLs, paths, keys, or external configuration."],
+  "steps": ["Inspect audit history.", "Try prohibited content in a controlled staging test."],
+  "expected": "Safe audit text remains visible and prohibited content is rejected.",
+  "if_it_fails": ["Stop if sensitive or technical configuration appears."]
+},
+{
+  "key": "customer_preference_history",
+  "name": "Customer preference history is safe and auditable",
+  "category": "Customer admin",
+  "risk": "medium",
+  "estimated_minutes": 4,
+  "build_number": 224,
+  "pages": ["/admin-customers.html", "/admin-test-centre.html"],
+  "prerequisites": ["A controlled staging customer profile."],
+  "safety": ["Do not use real private customer details."],
+  "steps": ["Change a notification or live-update preference.", "Reload the profile."],
+  "expected": "A safe manager-visible history row appears without credentials, payments, or media.",
+  "if_it_fails": ["Record only the safe visible result."]
+},
+{
+  "key": "customer_duplicate_review_only",
+  "name": "Duplicate candidate warning never auto-merges",
+  "category": "Customer admin",
+  "risk": "high",
+  "estimated_minutes": 5,
+  "build_number": 224,
+  "pages": ["/admin-customers.html", "/admin-test-centre.html"],
+  "prerequisites": ["Two controlled staging profiles with a matching contact field."],
+  "safety": ["Use controlled non-production records only."],
+  "steps": ["Open one profile.", "Inspect possible duplicate review."],
+  "expected": "A warning may appear; neither profile is merged or consent-changed.",
+  "if_it_fails": ["Stop if any record changes automatically."]
+}
+
 ];
 export const PRODUCTION_TEST_KEYS_BUILD212 = new Set(PRODUCTION_TEST_PLAYBOOK_BUILD212.map((item) => item.key));

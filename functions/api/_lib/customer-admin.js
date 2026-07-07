@@ -103,17 +103,38 @@ export async function loadCustomerProfile(env, customerProfileId) {
   return row ? publicCustomerProfile(row) : null;
 }
 
+function contactPreferenceSnapshot(profile = {}) {
+  return { notification_opt_in: profile.notification_opt_in === true, notification_channel: profile.notification_channel || 'email', live_updates_enabled: profile.live_updates_enabled !== false, detailer_chat_opt_in: profile.detailer_chat_opt_in !== false, notify_on_progress_post: profile.notify_on_progress_post === true, notify_on_media_upload: profile.notify_on_media_upload === true, notify_on_comment_reply: profile.notify_on_comment_reply === true };
+}
+
+export async function recordCustomerContactPreferenceChange(env, { customerProfileId, before = {}, after = {}, actor = {} } = {}) {
+  const prior=contactPreferenceSnapshot(before), next=contactPreferenceSnapshot(after);
+  if (JSON.stringify(prior)===JSON.stringify(next)) return { recorded:false };
+  const response=await fetch(`${env.SUPABASE_URL}/rest/v1/customer_contact_preference_events`,{method:'POST',headers:{...serviceHeaders(env),Prefer:'return=minimal'},body:JSON.stringify([{customer_profile_id:customerProfileId,event_type:'contact_preferences_changed',old_snapshot:prior,new_snapshot:next,actor_staff_user_id:isUuid(actor?.id)?actor.id:null,actor_staff_email:cleanEmail(actor?.email)||null,safe_summary:'Manager-updated customer contact or live-update preferences; review-only history recorded.',created_at:new Date().toISOString()}])});
+  if(!response.ok) throw new Error('Preference history could not be recorded.');
+  return { recorded:true };
+}
+
+async function collectDuplicateCandidates(env, profile) {
+  const fields=[['email',cleanEmail(profile.email)],['phone',cleanText(profile.phone,60)],['sms_phone',cleanText(profile.sms_phone,60)]].filter(([,value])=>Boolean(value));
+  if(!fields.length) return []; const headers=serviceHeaders(env), byId=new Map();
+  for(const[field,value]of fields){const res=await fetch(`${env.SUPABASE_URL}/rest/v1/customer_profiles?select=id,full_name,email,phone,sms_phone,city,is_active,archived_at,updated_at&${field}=eq.${encodeURIComponent(value)}&id=neq.${encodeURIComponent(profile.id)}&limit=20`,{headers}).catch(()=>null);if(!res?.ok)continue;const rows=await res.json().catch(()=>[]);for(const row of Array.isArray(rows)?rows:[]){const item=byId.get(row.id)||{...row,matched_fields:[]};item.matched_fields.push(field);byId.set(row.id,item);}}
+  return [...byId.values()].map(({sms_phone,...row})=>row);
+}
+
 export async function loadCustomerAdminDetail(env, customerProfileId) {
   const profile = await loadCustomerProfile(env, customerProfileId);
   if (!profile) return null;
   const headers = serviceHeaders(env);
   const now = new Date().toISOString();
-  const [sessionRes, tokenRes, vehicleRes, bookingRes, auditRes] = await Promise.all([
+  const [sessionRes, tokenRes, vehicleRes, bookingRes, auditRes, preferenceRes, duplicateCandidates] = await Promise.all([
     fetch(`${env.SUPABASE_URL}/rest/v1/customer_auth_sessions?select=id,created_at,last_seen_at,expires_at&customer_profile_id=eq.${encodeURIComponent(customerProfileId)}&revoked_at=is.null&expires_at=gt.${encodeURIComponent(now)}&order=last_seen_at.desc&limit=50`, { headers }).catch(() => null),
     fetch(`${env.SUPABASE_URL}/rest/v1/customer_auth_tokens?select=id,created_at,expires_at,purpose&customer_profile_id=eq.${encodeURIComponent(customerProfileId)}&used_at=is.null&expires_at=gt.${encodeURIComponent(now)}&order=created_at.desc&limit=20`, { headers }).catch(() => null),
     fetch(`${env.SUPABASE_URL}/rest/v1/customer_vehicles?select=id,vehicle_name,model_year,make,model,is_primary,updated_at&customer_profile_id=eq.${encodeURIComponent(customerProfileId)}&order=is_primary.desc,updated_at.desc&limit=25`, { headers }).catch(() => null),
     fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,service_date,created_at,price_total_cents,deposit_cents&customer_email=eq.${encodeURIComponent(profile.email || '__no_match__')}&order=service_date.desc,created_at.desc&limit=25`, { headers }).catch(() => null),
-    fetch(`${env.SUPABASE_URL}/rest/v1/customer_admin_audit_events?select=event_type,actor_staff_email,safe_summary,created_at&customer_profile_id=eq.${encodeURIComponent(customerProfileId)}&order=created_at.desc&limit=25`, { headers }).catch(() => null)
+    fetch(`${env.SUPABASE_URL}/rest/v1/customer_admin_audit_events?select=event_type,actor_staff_email,safe_summary,created_at&customer_profile_id=eq.${encodeURIComponent(customerProfileId)}&order=created_at.desc&limit=25`, { headers }).catch(() => null),
+    fetch(`${env.SUPABASE_URL}/rest/v1/customer_contact_preference_events?select=event_type,actor_staff_email,safe_summary,created_at&customer_profile_id=eq.${encodeURIComponent(customerProfileId)}&order=created_at.desc&limit=25`, { headers }).catch(() => null),
+    collectDuplicateCandidates(env, profile).catch(() => [])
   ]);
   const sessions = sessionRes?.ok ? await sessionRes.json().catch(() => []) : [];
   const tokens = tokenRes?.ok ? await tokenRes.json().catch(() => []) : [];
@@ -136,7 +157,9 @@ export async function loadCustomerAdminDetail(env, customerProfileId) {
       total_value_cents: bookingRows.reduce((sum, row) => sum + Number(row.price_total_cents || 0), 0),
       last_booking_at: bookingRows[0]?.service_date || bookingRows[0]?.created_at || null
     },
-    audit: Array.isArray(audit) ? audit : []
+    audit: Array.isArray(audit) ? audit : [],
+    preference_history: preferenceRes?.ok ? await preferenceRes.json().catch(() => []) : [],
+    duplicate_candidates: Array.isArray(duplicateCandidates) ? duplicateCandidates : []
   };
 }
 
