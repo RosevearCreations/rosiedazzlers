@@ -1,7 +1,7 @@
 {
-  "build": 224,
-  "updated_at": "2026-07-06",
-  "summary": "Build 223 adds a safe DAIP private-MVP design-blueprint placeholder alongside existing customer account, governance, payment, and media placeholders. It contains no client account data, credentials, raw reset links, storage identifiers, or media infrastructure configuration.",
+  "build": 225,
+  "updated_at": "2026-07-07",
+  "summary": "Visual placeholders are temporary, responsive, and safe. Build 225 adds secure social/analytics connection and DAIP-boundary visual slots without exposing provider or customer data.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -231,6 +231,22 @@
       "where": "/admin-daip-gate-c.html",
       "visual": "safe internal technical-review and rollback acceptance diagram",
       "replace_with": "abstract internal diagram only; never customer data, media, credentials, external service details, paths, or URLs",
+      "status": "placeholder"
+    },
+    {
+      "key": "social_analytics_connection_centre",
+      "label": "Social and analytics connections placeholder",
+      "where": "/admin-integrations.html and connection setup documentation",
+      "visual": "abstract secure connection map from provider console to Cloudflare Secrets to consent-first public pages",
+      "replace_with": "approved generic integration setup diagram; never use screenshots containing IDs, secrets, customer data, tokens, credentials, browser inspector output, or account numbers",
+      "status": "placeholder"
+    },
+    {
+      "key": "daip_integration_boundary",
+      "label": "DAIP integration boundary placeholder",
+      "where": "/admin-integrations.html and DAIP external-service planning",
+      "visual": "locked boundary between connection governance and DAIP technical/public capabilities",
+      "replace_with": "abstract internal decision diagram only; never show real providers, media, paths, bucket names, URLs, or credentials",
       "status": "placeholder"
     }
   ],
