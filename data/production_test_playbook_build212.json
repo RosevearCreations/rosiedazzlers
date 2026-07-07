@@ -30,7 +30,7 @@
       ],
       "expected": "The report loads without a 401/500 error and required services are either ready or clearly flagged for setup.",
       "if_it_fails": [
-        "Take a screenshot of the card error only—do not capture secrets.",
+        "Take a screenshot of the card error only\u2014do not capture secrets.",
         "Record the page URL, date/time, browser/device, and the visible error text.",
         "Mark Blocked and attach a safe screenshot link or note in the Test Centre."
       ]
@@ -79,7 +79,7 @@
         "/admin-test-centre.html"
       ],
       "prerequisites": [
-        "Stripe test-mode secret key is configured—not live mode for this first test.",
+        "Stripe test-mode secret key is configured\u2014not live mode for this first test.",
         "A draft/open internal final-balance request exists for a small test amount."
       ],
       "safety": [
@@ -297,7 +297,7 @@
       ],
       "expected": "Every handoff is visible, privacy-safe, and traceable without manually copying data between unrelated screens.",
       "if_it_fails": [
-        "Mark the failing link in the lifecycle, for example booking → proof or recommendation → payment.",
+        "Mark the failing link in the lifecycle, for example booking \u2192 proof or recommendation \u2192 payment.",
         "Record the screen, booking ID, device/browser, and visible message.",
         "Do not release as production-ready until urgent failure points are resolved."
       ]
@@ -624,7 +624,7 @@
       "steps": [
         "Read docs/digital-asset-intelligence-platform/16_DAIP_Phase_1_Readiness_Packet.md with the owners.",
         "Confirm the packet lists all twelve DAIP-0 decisions, the Build 218/219 evidence requirement, and the minimum private-MVP design questions.",
-        "Open DAIP Governance and confirm Gates C–F remain Held even where a design discussion is recorded.",
+        "Open DAIP Governance and confirm Gates C\u2013F remain Held even where a design discussion is recorded.",
         "Confirm the Test Lab remains metadata-only with no storage or worker control."
       ],
       "expected": "Build 220 advances DAIP planning/evidence only; it does not create technical media-production capability.",
@@ -632,6 +632,31 @@
         "Treat any upload, storage, signed-link, worker, customer-access, gallery/social handoff, or public-publishing route as a hard privacy/cost blocker.",
         "Record only the safe screen name, browser/device, time, and visible status."
       ]
+    },
+    {
+      "key": "daip_gate_c_prerequisite_block",
+      "title": "Build 224 Gate C prerequisite block",
+      "expected": "Acceptance blocks without current prior evidence."
+    },
+    {
+      "key": "daip_gate_c_review_only",
+      "title": "Build 224 Gate C review-only",
+      "expected": "Gate C held and counters stay zero."
+    },
+    {
+      "key": "daip_gate_c_audit_boundary",
+      "title": "Build 224 Gate C audit privacy",
+      "expected": "Safe audit and prohibited input rejection."
+    },
+    {
+      "key": "customer_preference_history",
+      "title": "Build 224 contact preference history",
+      "expected": "Safe history captured."
+    },
+    {
+      "key": "customer_duplicate_review_only",
+      "title": "Build 224 duplicate review-only",
+      "expected": "Warning no automatic merge."
     }
   ],
   "supplemental_builds": [
