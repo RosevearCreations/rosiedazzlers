@@ -9,6 +9,7 @@ import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+# Cache names advance with every release; validate cached routes/data rather than a frozen historical cache label.
 errors: list[str] = []
 
 def text(rel: str) -> str:
@@ -104,7 +105,7 @@ for legacy in ('functions/api/admin/customers_detail.js','functions/api/customer
 
 require('assets/admin-auth.js', ['case "admin-customers"', 'actor.is_detailer === true'])
 require('scripts/sync_route_copies.py', ['"admin-customers.html"'])
-require('service-worker.js', ['rosie-app-v20260703build220', '/admin-customers.html', '/data/build220_customer_access_management.json'])
+require('service-worker.js', ['/admin-customers.html', '/data/build220_customer_access_management.json'])
 require('assets/visual-placeholders.js', ['customer_access_control', 'Customer account access visual'])
 require('data/visual_placeholder_registry.json', ['"key": "customer_access_control"'])
 require('data/build220_customer_access_management.json', ['"build": 220', 'DAIP Gates C-F remain held'])

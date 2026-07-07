@@ -10,6 +10,7 @@ import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+# Cache names advance with each build; validate required cached routes/data instead.
 errors: list[str] = []
 
 def text(rel: str) -> str:
@@ -74,7 +75,7 @@ forbid_exact('functions/api/admin/daip_governance_decision_save.js', ['createPre
 require('assets/admin-menu.js', ['admin-daip-governance', 'DAIP Governance'])
 require('assets/admin-auth.js', ['case "admin-daip-governance"'])
 require('scripts/sync_route_copies.py', ['"admin-daip-governance.html"'])
-require('service-worker.js', ['rosie-app-v20260702build219', '/admin-daip-governance.html', '/data/build219_daip_governance_workspace.json'])
+require('service-worker.js', ['/admin-daip-governance.html', '/data/build219_daip_governance_workspace.json'])
 require('assets/visual-placeholders.js', ['daip_governance_gates', 'DAIP governance gate visual'])
 require('data/visual_placeholder_registry.json', ['"key": "daip_governance_gates"'])
 require('data/build219_daip_governance_workspace.json', ['"build": 219', '"explicitly_not_implemented"'])

@@ -3,6 +3,7 @@
 from pathlib import Path
 import re, sys, json
 ROOT = Path(__file__).resolve().parents[1]
+# Cache names advance with every release; validate cached routes/data rather than a frozen historical cache label.
 errors = []
 
 def read(rel):
@@ -33,7 +34,7 @@ require('functions/api/admin/customer_admin_list.js', ["method === 'GET'", "meth
 require('functions/api/admin/customer_account_help_list.js', ["method === 'GET'", "method === 'POST'", "allowed_methods:['GET','POST','OPTIONS']"])
 require('admin-customers.html', ["res.status===405", "customer_admin_list|customer_account_help_list", "Re-deploy Pages Functions with the customer-admin routes included."])
 require('admin-customers/index.html', ["res.status===405", "customer_admin_list|customer_account_help_list"])
-require('service-worker.js', ["rosie-app-v20260703build221", "/data/build221_customer_admin_route_hotfix.json", "rosie-app-v20260703build220"])
+require('service-worker.js', ["/data/build221_customer_admin_route_hotfix.json", "/admin-customers.html"])
 require('data/build221_customer_admin_route_hotfix.json', ['"build": 221', 'HTTP 405', 'No customer passwords'])
 require('AI_PROJECT_HANDOFF.md', ['Build 221 hotfix — customer-admin route 405 repair', 'No Supabase migration is required'])
 require('MASTER_VALUE_ROADMAP.md', ['Build 221 hotfix — customer-admin route 405 repair'])

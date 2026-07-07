@@ -17,7 +17,7 @@ require('admin-daip-design.html',['<h1>DAIP Private-MVP Design Blueprint</h1>','
 require('admin-daip-design/index.html',['<h1>DAIP Private-MVP Design Blueprint</h1>','data-build223'])
 require('assets/admin-auth.js',['case "admin-daip-design"'])
 require('assets/admin-menu.js',['key: "admin-daip-design"','/admin-daip-design.html'])
-require('service-worker.js',['rosie-app-v20260705build223','/admin-daip-design.html','/data/build223_daip_private_mvp_design_blueprint.json'])
+require('service-worker.js',['/admin-daip-design.html','/data/build223_daip_private_mvp_design_blueprint.json'])
 require('data/build223_daip_private_mvp_design_blueprint.json',['"build": 223','"gate_c": "held"'])
 require('sql/2026-07-05_build223_daip_private_mvp_design_blueprint.sql',['daip_private_mvp_design_reviews','daip_private_mvp_design_audit_events','gate_c_held','enable row level security','revoke all privileges','grant all privileges','submitted_for_independent_review'])
 require('SUPABASE_SCHEMA.sql',['2026-07-05_build223_daip_private_mvp_design_blueprint.sql','daip_private_mvp_design_reviews'])
