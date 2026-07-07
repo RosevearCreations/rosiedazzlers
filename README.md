@@ -20,6 +20,11 @@ Build 204 repairs the before/after Gallery media regression by adding public API
 
 ---
 
+
+
+### Build 224
+DAIP now has a protected Gate C technical-review and rollback record at `/admin-daip-gate-c.html`; it remains review-only, with no technical or public DAIP capability enabled. Customer management also records safe contact-preference history and shows management-only duplicate warnings without automatic merges.
+
 ## Build 203 — Desktop/mobile polish and visual enrichment
 
 Build 203 adds shared desktop/mobile visual polish for the public website and mobile app-style experience. It adds responsive CSS utilities, a homepage desktop/mobile showcase, viewport-tier detection, professional image framing, reduced-motion-safe effects, a responsive visual registry, and an Admin Dashboard diagnostics card backed by `/api/admin/responsive_visual_report`.

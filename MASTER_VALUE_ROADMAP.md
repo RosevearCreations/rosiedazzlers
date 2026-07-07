@@ -1,3 +1,38 @@
+# Rosie Dazzlers Master Value Roadmap — Build 224
+
+**Updated:** 2026-07-06
+**Purpose:** This is the one active business/product roadmap. Read this after `AI_PROJECT_HANDOFF.md`; retained Markdown is historical/audit context.
+
+## Build 224 — DAIP Gate C technical review and customer-profile quality (completed in source; staging acceptance required)
+
+- **Completed:** protected Gate C technical-review and rollback workspace, independent review acknowledgement, prerequisite validation, append-only audit, RLS/service-role database boundary, guided tests, mobile/desktop layout, visual placeholder, schema mirror, route-copy/cache coverage, and release guard.
+- **Customer controls:** safe history for contact/live-update preference changes and review-only duplicate candidate warnings for management. No automatic merge or consent change exists.
+- **Still hard-held:** Gate C and all DAIP technical/public capability. No storage, upload/download, external service configuration, worker, processing, customer media, Gallery/Social/GBP/public destination, export, or publishing exists.
+
+### Next 20 connected steps after Build 224
+
+1. Apply both Build 224 migrations in staging only.
+2. Verify RLS and browser-role revocations for both new tables.
+3. Run the Gate C prerequisite-block test.
+4. Save a harmless Gate C draft and confirm no capability changes.
+5. Save a blocked review and confirm Gate C remains Held.
+6. Complete the Build 218, 219, 222, and 223 evidence chain.
+7. Review the build 223 blueprint with an independent reviewer.
+8. Confirm the cost warning/hard-stop owner.
+9. Confirm the rollback pause authority.
+10. Confirm no customer media or public destination is in scope.
+11. Complete the Gate C accepted-review test only with safe general text.
+12. Confirm technical/public counters remain zero after acceptance.
+13. Test that contact-preference history records an approved manager edit.
+14. Test that matching profile contact details create a warning but never merge records.
+15. Decide whether any duplicate candidate requires manual investigation.
+16. Document manual-merge requirements before creating a merge tool.
+17. Refresh public service proof only with approved, consented local media.
+18. Continue quote-to-booking-to-proof-to-payment-to-review flow tests in staging.
+19. Create a separate Gate C implementation proposal only after all above evidence is accepted.
+20. Do not create storage/upload/processing code before that separate proposal is independently reviewed.
+
+
 # Rosie Dazzlers Master Value Roadmap — Build 220
 
 **Updated:** 2026-07-03
