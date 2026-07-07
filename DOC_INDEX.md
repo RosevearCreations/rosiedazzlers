@@ -1,3 +1,17 @@
+# Rosie Dazzlers Documentation Index — Build 225
+
+**Canonical strategy documents:**
+
+1. `AI_PROJECT_HANDOFF.md` — first-read current system, deployment, privacy, security, and continuity guide.
+2. `MASTER_VALUE_ROADMAP.md` — current business/product roadmap and connected next work.
+
+**Build 225 operational documentation:**
+- `docs/SOCIAL_ANALYTICS_CONNECTIONS.md` — Cloudflare Secret names, provider-by-provider setup, test/production separation, consent behavior, social-publishing limits, and rollback.
+- `docs/digital-asset-intelligence-platform/20_DAIP_External_Service_Connection_Boundary.md` — ensures social/analytics secrets never become DAIP implementation evidence.
+- `docs/PRODUCTION_TEST_GUIDE.md` — controlled staging acceptance tests.
+
+**Retained for release/history:** `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `DATABASE_STRUCTURE_CURRENT.md`, `SUPABASE_SCHEMA.sql`, `README.md`, and this index. Older Markdown is context/audit evidence, not another active strategy source.
+
 # Rosie Dazzlers Documentation Index — Build 219
 
 **Canonical going forward:**
