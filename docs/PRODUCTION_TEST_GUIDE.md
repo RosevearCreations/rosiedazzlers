@@ -2,6 +2,16 @@
 
 **Use this guide only with an internal test booking.** Do not store passwords, API keys, card information, customer addresses, VINs, or private incident media in test notes or screenshots.
 
+
+
+## Build 224 staging checks
+
+1. Apply `sql/2026-07-06_build224_customer_preference_history_duplicate_review.sql` and `sql/2026-07-06_build224_daip_gate_c_technical_review_rollback.sql` after the prior Build 220 and DAIP migrations.
+2. Open `/admin-daip-gate-c.html` as an administrator. Confirm a stale/missing Build 223 blueprint blocks acceptance, save a harmless Draft/Blocked record, and confirm Gate C remains Held with zero technical/public capabilities.
+3. Use only safe general text; do not enter customer, booking, media, storage, URL, account, key, token, or external-service details.
+4. In `/admin-customers.html`, make a manager-approved notification/live-update change and confirm safe history appears; use matching contact details only in controlled test profiles and confirm it warns but does not merge.
+5. Complete the Build 224 Guided Production Test Centre cases.
+
 ## Where to test
 
 1. Sign into the staff/admin account.
