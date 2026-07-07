@@ -183,6 +183,7 @@ CHECKS = [
     "scripts/build222_daip_phase1_readiness_check.py",
     "scripts/build223_daip_private_mvp_design_check.py",
     "scripts/build224_daip_gate_c_technical_review_check.py",
+    "scripts/build225_social_analytics_connections_check.py",
     "scripts/build224_customer_profile_quality_check.py",
     "scripts/seo_h1_check.py",
 ]
