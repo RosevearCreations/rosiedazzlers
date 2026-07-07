@@ -1,3 +1,17 @@
+# Rosie Dazzlers — AI Project Handoff (Build 224)
+
+**Updated:** 2026-07-06
+**Living source of truth:** Read this file first, then `MASTER_VALUE_ROADMAP.md`. Historical Markdown remains retained for audit and release checks.
+
+## Build 224 central capability: Gate C technical review and customer profile-quality safeguards
+
+Build 224 adds `/admin-daip-gate-c.html`, an admin-only, test-mode Gate C technical-review and rollback acceptance workspace. It can save Draft, Blocked, or `accepted_for_test_only_implementation_review` evidence only after the existing Build 222/223 evidence is current. **Gate C remains Held in every state**; technical/public capabilities remain zero.
+
+- **DAIP hard boundary:** Build 224 creates no storage, upload/download, signed authorization, external service configuration, processor, queue, AI, customer-media route, public destination, Gallery/Social/GBP handoff, export, or publishing capability.
+- **Customer quality:** managers see a review-only duplicate warning from matching email/phone/sms values and a safe preference-change history. The app never auto-merges accounts or changes consent by itself.
+- **Deployment order:** Apply the two Build 224 migrations in development/staging only, deploy Pages and Functions together, execute the five new Guided Production Test Centre cases, then record only verified outcomes.
+
+
 # Rosie Dazzlers AI Project Handoff — Build 222
 
 **Updated:** 2026-07-04
