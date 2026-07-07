@@ -21,6 +21,8 @@ export async function onRequestPost(context){
     const detail = await loadCustomerAdminDetail(env, id);
     if (!detail) return withCors(json({ error:'Customer profile not found.' },404));
     if (level === 'operational') {
+      delete detail.preference_history;
+      delete detail.duplicate_candidates;
       detail.profile.admin_private_notes = null;
       detail.profile.client_private_notes = null;
       detail.profile.billing_profile_enabled = false;

@@ -1,6 +1,6 @@
 // Build 220 — create/update customer profile without exposing password controls.
 import { requireStaffAccess, json, cleanText } from '../_lib/staff-auth.js';
-import {
+import { recordCustomerContactPreferenceChange,
   customerAccessLevel, normalizeCustomerProfileInput, loadCustomerProfile,
   createCustomerProfile, updateCustomerProfile, ensureAvailableCustomerEmail,
   verifyTier, revokeAllCustomerSessions, publicCustomerProfile
@@ -58,13 +58,18 @@ export async function onRequestPost(context){
       delete patch.email;
     }
     const profile = await updateCustomerProfile(env, id, patch, access.actor, emailChanged ? 'email_changed' : 'profile_updated', emailChanged ? 'Staff changed the client sign-in email and revoked active sessions.' : (level === 'manager' ? 'Staff updated customer profile information.' : 'Detailer updated job-relevant customer information.'));
+    let preferenceHistoryWarning = null;
+    if (level === 'manager') {
+      try { await recordCustomerContactPreferenceChange(env, { customerProfileId:id, before:existing, after:profile, actor:access.actor }); }
+      catch (historyError) { preferenceHistoryWarning = 'Profile saved, but preference history is unavailable until the Build 224 migration is applied.'; }
+    }
     let verificationDelivery = null;
     if (emailChanged) {
       await revokeAllCustomerSessions(env, id);
       const issued = await issueCustomerAuthToken({ env, customerProfileId:id, purpose:'email_verification', expiresMinutes:24*60, payload:{ reason:'staff_email_change' } });
       verificationDelivery = await sendCustomerAuthEmail({ env, request, customer:profile, purpose:'email_verification', rawToken:issued.rawToken }).catch((error) => ({ ok:false, error:error?.message || 'Email delivery failed.' }));
     }
-    return withCors(json({ ok:true, mode:'updated', customer_profile:publicCustomerProfile(profile), email_changed:emailChanged, verification_delivery:verificationDelivery ? { ok:verificationDelivery.ok === true, provider:verificationDelivery.provider || null } : null, message:emailChanged ? 'Profile updated. Existing sessions were revoked and a verification email was requested.' : 'Customer profile updated.' }));
+    return withCors(json({ ok:true, mode:'updated', customer_profile:publicCustomerProfile(profile), email_changed:emailChanged, verification_delivery:verificationDelivery ? { ok:verificationDelivery.ok === true, provider:verificationDelivery.provider || null } : null, preference_history_warning:preferenceHistoryWarning, message:emailChanged ? 'Profile updated. Existing sessions were revoked and a verification email was requested.' : 'Customer profile updated.' }));
   } catch (error) { return withCors(json({ error:error?.message || 'Could not save customer profile.' },500)); }
 }
 export async function onRequestGet(){ return withCors(json({ error:'Method not allowed.' },405)); }
