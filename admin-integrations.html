@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Social & Analytics Connections | Rosie Dazzlers Admin</title>
+  <meta name="description" content="Private administrator configuration status for social publishing and consent-first website measurement." />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .integrations-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px}
+    .integration-card{padding:15px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.045);border-radius:16px}
+    .integration-card h3{margin:0 0 5px}.integration-card p{margin:6px 0;color:#cbd5e1;line-height:1.45}
+    .status{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 9px;font-weight:800;font-size:.8rem;border:1px solid rgba(255,255,255,.15)}
+    .status.ready{background:rgba(34,197,94,.13);border-color:rgba(34,197,94,.35);color:#bbf7d0}
+    .status.missing,.status.invalid{background:rgba(251,191,36,.11);border-color:rgba(251,191,36,.35);color:#fde68a}
+    .status.off{background:rgba(148,163,184,.13);color:#cbd5e1}
+    .key-line{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;word-break:break-word;color:#bfdbfe;padding:7px 8px;border-radius:8px;background:rgba(15,23,42,.48);margin-top:8px}
+    .tip-list{margin:8px 0 0;padding-left:18px}.tip-list li{margin:6px 0;color:#cbd5e1}
+    .callout{border-left:4px solid #facc15;padding:12px 14px;border-radius:10px;background:rgba(250,204,21,.08)}
+    .action-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .workflow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+    .workflow > div{padding:12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
+    @media(max-width:620px){.action-row .btn{width:100%}}
+  </style>
+</head>
+<body data-page="admin-integrations" data-build225="social-analytics-connection-centre">
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers Admin</strong></a>
+      <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button>
+      <nav id="navLinks" class="nav-links">
+        <a href="/admin.html">Dashboard</a>
+        <a href="/admin-social.html">Social Queue</a>
+        <a href="/admin-integrations.html">Connections</a>
+        <a href="/book.html">Public Site</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container app-shell">
+    <aside class="app-shell__menu" data-admin-menu-mount></aside>
+    <div class="app-shell__content">
+      <section class="section">
+        <div class="hero">
+          <div>
+            <div class="badge">Administrator only</div>
+            <h1>Social &amp; analytics connections</h1>
+            <p>See configuration readiness, exact Cloudflare variable names, and the safe order for enabling website tags and Social Queue publishing. This page never displays, accepts, or stores a secret.</p>
+          </div>
+          <div class="panel">
+            <div class="kicker">Current environment</div>
+            <strong id="modeLabel">Loading…</strong>
+            <p id="modeHelp" class="muted">Checking configuration presence without exposing values.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div id="pageNotice" class="notice" data-admin-shell-status>Loading configuration status…</div>
+      </section>
+
+      <section class="section">
+        <div class="panel">
+          <h2>Where values belong</h2>
+          <div class="workflow">
+            <div><strong>1. Obtain it at the provider</strong><p class="muted">Create the Pixel, Tag, measurement ID, business connection, or OAuth credential in the provider’s official business console.</p></div>
+            <div><strong>2. Add it in Cloudflare</strong><p class="muted">Cloudflare Dashboard → Workers &amp; Pages → your Rosie Dazzlers project → Settings → Variables and Secrets → Add → Secret.</p></div>
+            <div><strong>3. Check readiness here</strong><p class="muted">This screen reports only configured/missing and format validity. It cannot show the actual value.</p></div>
+            <div><strong>4. Test before production</strong><p class="muted">Use staging/test mode, grant marketing consent on a public test page, then verify provider test tools before enabling production mode.</p></div>
+          </div>
+          <div class="callout" style="margin-top:14px"><strong>Do not paste any key into Admin Site Settings, Social Queue notes, a Markdown file, GitHub, browser code, or Supabase.</strong> Enter every connection value as a Cloudflare encrypted secret. Pixel/tag IDs become visible in the public page only after a visitor permits optional measurement; OAuth tokens and access tokens never leave the server.</div>
+          <div class="action-row">
+            <a class="btn primary" href="/docs/SOCIAL_ANALYTICS_CONNECTIONS.md" target="_blank" rel="noopener">Open detailed setup guide</a>
+            <a class="btn ghost" href="/admin-social.html">Open Social Queue</a>
+            <a class="btn ghost" href="/admin-daip-gate-c.html">Review DAIP Gate C</a>
+            <button id="refreshButton" class="btn ghost" type="button">Refresh status</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="panel">
+          <h2>Consent-first website measurement</h2>
+          <p class="muted">Marketing tags remain off unless <code>MARKETING_TRACKING_ENABLED=true</code> and the mode is <code>test</code> or <code>production</code>. On public marketing pages only, visitors must choose “Allow optional measurement” before a configured third-party tag loads. Internal, customer, booking, payment, and progress routes are excluded.</p>
+          <div id="trackingList" class="integrations-grid"><div class="notice">Loading website measurement status…</div></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="panel">
+          <h2>Social and local publishing connections</h2>
+          <p class="muted">The Social Queue stays approval-first. “Configured” means the server sees all required variable names; it is not proof that a provider permission, OAuth scope, page role, or live publishing request has passed.</p>
+          <div id="publishingList" class="integrations-grid"><div class="notice">Loading publishing connection status…</div></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="panel">
+          <h2>Safe test order</h2>
+          <ol class="tip-list">
+            <li>Set <code>MARKETING_TRACKING_MODE=test</code> and add only one provider’s ID/credential group.</li>
+            <li>Deploy to the staging Pages project, open a normal public marketing page in a private window, and choose optional measurement.</li>
+            <li>Use that provider’s official test/diagnostic tool. Do not use a real customer booking, payment, VIN, address, quote, progress link, or uploaded media.</li>
+            <li>Record only a pass/fail note in the Guided Production Test Centre. Never paste IDs, tokens, screenshots containing values, or URLs with customer information.</li>
+            <li>Keep production mode off until the privacy notice, consent behavior, and test evidence are accepted.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="panel">
+          <h2>DAIP boundary remains held</h2>
+          <p class="muted">This release improves social/analytics configuration visibility only. It does not add DAIP storage, uploads, object paths, signed links, workers, processing, AI, customer media, public exports, Gallery/Social handoff, or publishing. Gate C remains held until the existing independent technical review and rollback evidence are complete.</p>
+          <div data-visual-placeholder="daip_integration_boundary" data-visual-label="DAIP and third-party connection boundary visual"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer container" data-footer></footer>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/admin-menu.js"></script>
+  <script src="/assets/admin-page-init.js"></script>
+  <script src="/assets/admin-runtime.js"></script>
+  <script src="/assets/chrome.js"></script>
+  <script>
+    (function(){
+      const runtime = window.AdminRuntime;
+      const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+      const q = (selector) => document.querySelector(selector);
+      function statusClass(item) {
+        if (!item.configured) return 'missing';
+        if (item.valid_format === false) return 'invalid';
+        return 'ready';
+      }
+      function statusText(item) {
+        if (!item.configured) return 'Missing';
+        if (item.valid_format === false) return 'Check format';
+        return 'Configured';
+      }
+      function setNotice(message, type) {
+        const el = q('#pageNotice');
+        if (!el) return;
+        el.className = type ? `notice ${type}` : 'notice';
+        el.textContent = message;
+      }
+      function renderTracking(integrations) {
+        const host = q('#trackingList');
+        host.innerHTML = integrations.tracking.map((item) => `
+          <article class="integration-card">
+            <span class="status ${statusClass(item)}">${statusText(item)}</span>
+            <h3>${esc(item.label)}</h3>
+            <p>${esc(item.category)}</p>
+            <div class="key-line">${esc(item.variable)}</div>
+            <p><strong>Obtain it:</strong> ${esc(item.setup_path)}</p>
+            <p>${esc(item.status_note)}</p>
+          </article>`).join('') || '<div class="notice">No tracking providers are registered.</div>';
+      }
+      function variableRows(items) {
+        return (items || []).map((item) => `<div class="key-line">${esc(item.key)} <span class="status ${item.status === 'configured' ? 'ready' : 'missing'}">${esc(item.status)}</span></div>`).join('');
+      }
+      function renderPublishing(integrations) {
+        const host = q('#publishingList');
+        host.innerHTML = integrations.publishing.map((item) => `
+          <article class="integration-card">
+            <span class="status ${item.configured ? 'ready' : 'missing'}">${item.configured ? 'Configured' : 'Missing values'}</span>
+            <h3>${esc(item.label)}</h3>
+            <p>${esc(item.category)}</p>
+            ${variableRows(item.required_variables)}
+            ${(item.alternative_variable_sets || []).map((set) => `<p class="muted" style="margin-bottom:2px">Alternative set:</p>${variableRows(set)}`).join('')}
+            <p>${esc(item.current_mode)}</p>
+          </article>`).join('') || '<div class="notice">No social publishing providers are registered.</div>';
+      }
+      async function load() {
+        const result = await runtime.requestJson('/api/admin/integration_status', { method:'GET' });
+        if (!result.ok) throw new Error(runtime.normalizeError(result, 'Could not load integration status.'));
+        const integrations = result.data?.integrations || {};
+        q('#modeLabel').textContent = `Mode: ${integrations.mode || 'off'} · ${integrations.enabled ? 'tracking switch enabled' : 'tracking switch off'}`;
+        q('#modeHelp').textContent = integrations.release_boundary || 'Configuration presence only.';
+        renderTracking(integrations);
+        renderPublishing(integrations);
+        setNotice(`Loaded ${integrations.configured_tracking_count || 0} configured website tags and ${integrations.configured_publishing_count || 0} configured publishing connections.`, integrations.enabled ? 'success' : 'warn');
+      }
+      window.AdminShell.boot({
+        pageKey:'admin-integrations',
+        onReady: async () => {
+          window.AdminMenu.render({ currentPage:'admin-integrations' });
+          q('#refreshButton').addEventListener('click', () => load().catch((err) => setNotice(err.message, 'error')));
+          await load();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

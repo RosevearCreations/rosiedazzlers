@@ -1,3 +1,25 @@
+# Rosie Dazzlers — AI Project Handoff (Build 225)
+
+**Updated:** 2026-07-07  
+**Living source of truth:** Read this file first, then `MASTER_VALUE_ROADMAP.md`. Historical Markdown is retained for audit/release support, not as competing planning.
+
+## Build 225 central capability: social/analytics Connections Centre and DAIP external-service boundary
+
+Build 225 adds `/admin-integrations.html`, a protected administrator workspace that reports only configuration presence for consent-first website measurement and Social Queue publishing connections. It does **not** show, accept, write, or store a credential in the browser, Supabase, GitHub, or Markdown.
+
+- **Cloudflare only:** add every value at Cloudflare Dashboard → Workers & Pages → Rosie Dazzlers project → Settings → Variables and Secrets → **Secret (encrypted)**. The project may show only Secret; that is correct.
+- **Website tags:** `META_PIXEL_ID`, `GA4_MEASUREMENT_ID`, `GOOGLE_ADS_CONVERSION_ID`, `TIKTOK_PIXEL_ID`, `LINKEDIN_PARTNER_ID`, `PINTEREST_TAG_ID`, and `MICROSOFT_UET_TAG_ID` are public tag identifiers only. They are stored as Cloudflare Secrets for operations, then may be returned as public code identifiers only when a visitor opts into optional measurement.
+- **Server credentials:** Page access tokens, OAuth credentials, webhook secrets, and every other secret remain Cloudflare-only and never pass through `/api/tracking_config`, the admin page, page source, browser logs, app settings, or Supabase.
+- **Consent boundary:** `/assets/marketing-consent.js` does not load any third-party tag until a visitor explicitly chooses optional measurement. It excludes admin, client, detailer, login, booking, progress, payment, invoice, account, and completion routes.
+- **DAIP:** Build 225 adds `docs/digital-asset-intelligence-platform/20_DAIP_External_Service_Connection_Boundary.md`. Marketing/social credentials are not DAIP credentials. Gate C remains held: no DAIP storage, upload/download, signed link, worker, processing, AI, customer-media access, public export, or publishing exists.
+
+Primary docs:
+- `docs/SOCIAL_ANALYTICS_CONNECTIONS.md` — exact variable names, how to obtain IDs/credentials, Cloudflare entry point, staging/test order, current social-publishing limits, and rollback.
+- `docs/digital-asset-intelligence-platform/20_DAIP_External_Service_Connection_Boundary.md` — DAIP separation and preflight evidence.
+- `docs/PRODUCTION_TEST_GUIDE.md` — Build 225 staging test sequence.
+
+**Current first provider to test:** GA4 only, on staging, with `MARKETING_TRACKING_ENABLED=true`, `MARKETING_TRACKING_MODE=test`, and an administrator verification in `/admin-integrations.html`. Use a private browser on a non-sensitive public marketing page, opt in, and verify through Google’s diagnostic tools. Do not test on a booking/payment/progress/customer route.
+
 # Rosie Dazzlers — AI Project Handoff (Build 224)
 
 **Updated:** 2026-07-06
