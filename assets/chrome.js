@@ -822,6 +822,21 @@ function ensurePublicAnalytics(){
   head.appendChild(script);
 }
 
+// Build 225 — Third-party tags are consent-first and excluded from protected flows.
+// The loader requests only public tag IDs; it must never receive any API token or secret.
+function ensureMarketingConsent(){
+  const path = normalizePath(location.pathname);
+  if (path.startsWith('/admin') || path.startsWith('/client') || path.startsWith('/detailer')) return;
+  if (['/login','/my-account','/progress','/final-balance-payment','/quote-payment','/checkout','/complete','/invoice','/privacy','/terms','/book'].includes(path)) return;
+  const head=document.head||document.querySelector('head');
+  if(!head || head.querySelector('script[data-marketing-consent-bootstrap]')) return;
+  const script=document.createElement('script');
+  script.src='/assets/marketing-consent.js';
+  script.defer=true;
+  script.dataset.marketingConsentBootstrap='true';
+  head.appendChild(script);
+}
+
 function ensureStickyConversionCta() {
   if (document.querySelector("#rosieStickyCtaBar")) return;
   const path = normalizePath(location.pathname);
@@ -907,6 +922,7 @@ async function initChrome() {
   initAccountWidget();
   initInstallPrompt();
   ensurePublicAnalytics();
+  ensureMarketingConsent();
   ensureStickyConversionCta();
   enhanceProfessionalImages();
   ensureVisualPlaceholderSystem();

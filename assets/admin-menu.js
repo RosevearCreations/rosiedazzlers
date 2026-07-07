@@ -230,13 +230,26 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting") || globalScope.AdminAuth.canAccessPage("admin")
     },
     {
+      key: "admin-daip-gate-c",
+      label: "DAIP Gate C",
+      href: "/admin-daip-gate-c.html",
+      description: "Technical review and rollback evidence; Gate C remains held",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-gate-c")
+    },
+    {
+      key: "admin-integrations",
+      label: "Connections",
+      href: "/admin-integrations.html",
+      description: "Social publishing and consent-first analytics configuration status",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-integrations")
+    },
+    {
       key: "account",
       label: "My Account",
       href: "/admin-account.html",
       description: "My session and password",
       visible: () => globalScope.AdminAuth.isAuthenticated()
     }
-      { key:"admin-daip-gate-c", label:"DAIP Gate C", href:"/admin-daip-gate-c.html", group:"Operations", visible:()=>globalScope.AdminAuth.canAccessPage("admin-daip-gate-c") },
 ];
 
   function render(options = {}) {
