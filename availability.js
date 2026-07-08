@@ -1,16 +1,11 @@
 // /functions/api/availability.js
-// REPLACE ENTIRE FILE
+// Build 192: availability now includes editable business-hours / holiday-closure checks.
 //
 // GET /api/availability?date=YYYY-MM-DD
-//
-// Returns:
-// { ok:true, date:"YYYY-MM-DD", blocked:false|true, reason?, AM:true|false, PM:true|false }
-//
-// Logic:
-// 1) If date is in date_blocks => blocked=true
-// 2) Otherwise start with AM/PM open, then apply:
-//    - slot_blocks for that date (AM/PM blocks)
-//    - bookings (pending/confirmed) reserve AM/PM depending on duration_slots/start_slot
+// Returns: { ok:true, date, blocked, reason?, AM, PM, business_hours, business_hours_conflict }
+
+import { loadEditableSetting } from "./_lib/editable-settings.js";
+import { serviceHeaders } from "./_lib/staff-auth.js";
 
 export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: corsHeaders() });
@@ -47,6 +42,9 @@ export async function onRequestGet({ request, env }) {
       return { ok: true, status: res.status, data };
     };
 
+    const businessHours = await loadBusinessHoursStatus(env, date);
+    const holidayClosed = businessHours?.is_closed === true;
+
     // ---- 1) Full-day block? ----
     const dayBlock = await supaGet(
       `/rest/v1/date_blocks?select=blocked_date,reason&blocked_date=eq.${encodeURIComponent(date)}`
@@ -64,12 +62,14 @@ export async function onRequestGet({ request, env }) {
         reason: dayBlock.data[0]?.reason ?? "Blocked",
         AM: false,
         PM: false,
+        business_hours: businessHours,
+        business_hours_conflict: holidayClosed,
       });
     }
 
-    // Start as open
-    let AM = true;
-    let PM = true;
+    // Start as open unless editable hours/holiday settings say closed.
+    let AM = !holidayClosed;
+    let PM = !holidayClosed;
 
     // ---- 2) Slot blocks ----
     const slotBlocks = await supaGet(
@@ -105,10 +105,66 @@ export async function onRequestGet({ request, env }) {
       if (dur === 1 && start === "PM") PM = false;
     }
 
-    return json({ ok: true, date, blocked: false, AM, PM });
+    return json({
+      ok: true,
+      date,
+      blocked: holidayClosed,
+      reason: holidayClosed ? (businessHours?.reason || businessHours?.hours_label || "Closed by business-hours settings") : null,
+      AM,
+      PM,
+      business_hours: businessHours,
+      business_hours_conflict: holidayClosed,
+    });
 
   } catch (e) {
     return json({ ok: false, error: "Server error", details: String(e) }, 500);
+  }
+}
+
+async function loadBusinessHoursStatus(env, dateText) {
+  const fallback = {
+    date: dateText,
+    day: dayKeyForDate(dateText),
+    is_closed: false,
+    hours_label: "By appointment",
+    reason: null,
+    source_status: "unavailable",
+    warning: null,
+  };
+
+  try {
+    const loaded = await loadEditableSetting(env, "business_hours_holidays", { headers: serviceHeaders(env) });
+    const value = loaded?.value && typeof loaded.value === "object" ? loaded.value : {};
+    const closures = Array.isArray(value.holiday_closures) ? value.holiday_closures : [];
+    const closure = closures.find((item) => {
+      const raw = String(item?.date || item?.day || item?.closure_date || "").slice(0, 10);
+      return raw === dateText;
+    }) || null;
+    const day = dayKeyForDate(dateText);
+    const hoursLabel = value.hours && typeof value.hours === "object" ? String(value.hours[day] || "By appointment") : "By appointment";
+    const closedByHours = /\bclosed\b/i.test(hoursLabel);
+    const closed = !!closure || closedByHours;
+    return {
+      date: dateText,
+      day,
+      is_closed: closed,
+      hours_label: closure ? (closure.label || closure.reason || "Closed") : hoursLabel,
+      reason: closure ? (closure.reason || closure.label || "Holiday closure") : (closedByHours ? hoursLabel : null),
+      closure,
+      source_status: loaded?.source_status || loaded?.source || "fallback",
+      timezone: value.timezone || "America/Toronto",
+      notes: value.notes || null,
+    };
+  } catch (error) {
+    return { ...fallback, warning: String(error?.message || error) };
+  }
+}
+
+function dayKeyForDate(dateText) {
+  try {
+    return new Date(`${dateText}T12:00:00`).toLocaleDateString("en-CA", { weekday: "long" }).toLowerCase();
+  } catch {
+    return "unknown";
   }
 }
 
