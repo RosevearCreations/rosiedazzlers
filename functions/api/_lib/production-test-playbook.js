@@ -728,6 +728,102 @@ export const PRODUCTION_TEST_PLAYBOOK_BUILD212 = [
   "expected": "A warning may appear; neither profile is merged or consent-changed.",
   "if_it_fails": ["Stop if any record changes automatically."]
 }
+,
+{
+  "key": "social_analytics_secret_boundary",
+  "name": "Social and analytics connection status never reveals a value",
+  "category": "Provider reliability and privacy",
+  "risk": "high",
+  "estimated_minutes": 6,
+  "build_number": 225,
+  "pages": [
+    "/admin-integrations.html",
+    "/admin-test-centre.html"
+  ],
+  "prerequisites": [
+    "Staging deployment of Build 225.",
+    "Administrator account.",
+    "At least one harmless staging provider ID configured, or a missing-value state to review."
+  ],
+  "safety": [
+    "Never paste a value, token, secret, or account screenshot into a test note.",
+    "Do not use customer records or media."
+  ],
+  "steps": [
+    "Open Connections Centre.",
+    "Confirm each provider is marked configured/missing/check format only.",
+    "Confirm no page exposes a value or provides an input to save a secret.",
+    "Confirm the DAIP boundary panel says Gate C remains held."
+  ],
+  "expected": "Configuration presence is visible without revealing or accepting any credential, and no DAIP technical capability appears.",
+  "if_it_fails": [
+    "Stop and remove affected staging secrets from the deployed environment until repaired.",
+    "Record only the safe page, time, browser, and visible error."
+  ]
+},
+{
+  "key": "social_analytics_consent_gate",
+  "name": "Optional measurement waits for visitor consent",
+  "category": "Website privacy",
+  "risk": "urgent",
+  "estimated_minutes": 10,
+  "build_number": 225,
+  "pages": [
+    "/",
+    "/services",
+    "/admin-integrations.html",
+    "/admin-test-centre.html"
+  ],
+  "prerequisites": [
+    "Staging `MARKETING_TRACKING_ENABLED=true` and `MARKETING_TRACKING_MODE=test`.",
+    "One provider public tag ID configured."
+  ],
+  "safety": [
+    "Use a private browser session and a non-sensitive public page.",
+    "Do not test booking, payment, progress, account, client, detailer, or admin routes for marketing tracking."
+  ],
+  "steps": [
+    "Open a public marketing page in private browsing.",
+    "Confirm the optional measurement choice appears.",
+    "Decline and confirm normal site browsing continues.",
+    "Open a new private window, allow optional measurement, then use the provider's approved test tool.",
+    "Open a protected route and confirm it is excluded."
+  ],
+  "expected": "The tag waits for opt-in, a decline leaves the site usable, and protected routes are excluded.",
+  "if_it_fails": [
+    "Set `MARKETING_TRACKING_ENABLED=false`, redeploy, and treat the result as a privacy blocker."
+  ]
+},
+{
+  "key": "daip_external_service_boundary",
+  "name": "DAIP external-service boundary remains held",
+  "category": "DAIP governance",
+  "risk": "high",
+  "estimated_minutes": 5,
+  "build_number": 225,
+  "pages": [
+    "/admin-integrations.html",
+    "/admin-daip-gate-c.html",
+    "/admin-test-centre.html"
+  ],
+  "prerequisites": [
+    "Build 225 deployed to staging."
+  ],
+  "safety": [
+    "Use safe general text only.",
+    "Never enter DAIP media, bucket names, paths, links, credentials, or customer data."
+  ],
+  "steps": [
+    "Open Connections Centre and its DAIP boundary panel.",
+    "Confirm it reports no DAIP provider configuration.",
+    "Open Gate C and confirm it is held.",
+    "Confirm no upload, download, signed link, worker, processor, AI, Gallery, Social, or public-export control exists."
+  ],
+  "expected": "Social/analytics configuration remains separate from DAIP implementation and Gate C remains held.",
+  "if_it_fails": [
+    "Stop the test and record only safe visible labels; do not add any DAIP secret or storage value."
+  ]
+}
 
 ];
 export const PRODUCTION_TEST_KEYS_BUILD212 = new Set(PRODUCTION_TEST_PLAYBOOK_BUILD212.map((item) => item.key));
