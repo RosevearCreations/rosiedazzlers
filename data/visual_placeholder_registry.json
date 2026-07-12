@@ -1,6 +1,6 @@
 {
-  "build": 225,
-  "updated_at": "2026-07-07",
+  "build": 226,
+  "updated_at": "2026-07-08",
   "summary": "Visual placeholders are temporary, responsive, and safe. Build 225 adds secure social/analytics connection and DAIP-boundary visual slots without exposing provider or customer data.",
   "placeholder_slots": [
     {
@@ -248,6 +248,13 @@
       "visual": "locked boundary between connection governance and DAIP technical/public capabilities",
       "replace_with": "abstract internal decision diagram only; never show real providers, media, paths, bucket names, URLs, or credentials",
       "status": "placeholder"
+    },
+    {
+      "key": "daip_intake_dry_run",
+      "label": "DAIP intake validation placeholder",
+      "where": "admin DAIP intake dry-run workspace",
+      "visual": "fictional file cards flowing through validation, rejection, cost and rollback checks",
+      "replace_with": "an internal architecture diagram only; never customer media or credentials"
     }
   ],
   "rules": [
@@ -264,5 +271,15 @@
     "Placeholders use fluid aspect ratios and single-column mobile behavior.",
     "Hover lift is disabled for reduced-motion users.",
     "Cards remain visible without relying on a successful remote image load."
+  ],
+  "placeholders": [
+    {
+      "key": "roadmap_execution_centre",
+      "page": "/admin-roadmap-execution.html",
+      "purpose": "Internal roadmap execution and DAIP policy workflow illustration",
+      "status": "placeholder",
+      "privacy": "internal_only",
+      "recommended_asset": "Abstract checklist, evidence trail, and locked DAIP gate diagram; no customer data."
+    }
   ]
 }
