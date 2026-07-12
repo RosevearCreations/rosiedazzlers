@@ -41,7 +41,9 @@ require("assets/marketing-consent.js", [
 ])
 require("assets/chrome.js", ['function ensureMarketingConsent()', "script.src='/assets/marketing-consent.js'", 'ensureMarketingConsent();'])
 require("privacy.html", ['Optional website measurement', 'optional tags do not load until you choose'])
-require("service-worker.js", ['rosie-app-v20260707build225', '/admin-integrations.html', '/assets/marketing-consent.js', '/data/build225_social_analytics_connection_centre.json'])
+require("service-worker.js", ['/admin-integrations.html', '/assets/marketing-consent.js', '/data/build225_social_analytics_connection_centre.json'])
+if not re.search(r"const CACHE='rosie-app-v20\d{6}build(?:22[5-9]|2[3-9]\d|[3-9]\d{2,})'", read("service-worker.js")):
+    errors.append("service-worker.js: current cache version must be Build 225 or newer")
 require("data/build225_social_analytics_connection_centre.json", ['"build": 225', '"gate_c": "held"', '"cloudflare_secret_only": true'])
 require("docs/SOCIAL_ANALYTICS_CONNECTIONS.md", ['Cloudflare', 'Secret (encrypted)', 'META_PIXEL_ID', 'GA4_MEASUREMENT_ID', 'DAIP separation'])
 require("docs/digital-asset-intelligence-platform/20_DAIP_External_Service_Connection_Boundary.md", ['Gate C', 'does not permit', 'social/analytics'])

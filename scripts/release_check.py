@@ -184,6 +184,8 @@ CHECKS = [
     "scripts/build223_daip_private_mvp_design_check.py",
     "scripts/build224_daip_gate_c_technical_review_check.py",
     "scripts/build225_social_analytics_connections_check.py",
+    "scripts/build226_daip_intake_dry_run_check.py",
+    "scripts/build227_roadmap_execution_daip_policy_check.py",
     "scripts/build224_customer_profile_quality_check.py",
     "scripts/seo_h1_check.py",
 ]
@@ -226,3 +228,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
