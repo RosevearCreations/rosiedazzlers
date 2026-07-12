@@ -449,3 +449,17 @@ Apply `sql/2026-07-05_build223_daip_private_mvp_design_blueprint.sql` after Buil
 4. Refresh and confirm the audit entry appears while Gate C remains **Held** and technical/public capability counts remain zero.
 5. Open `/admin-daip-governance.html` and `/admin-daip.html`; confirm no storage, upload, signed-link, queue, worker, processing, customer-media, export, or publishing control exists.
 6. Record the three Build 223 Guided Production Test Centre cases. Never use real customer media or production configuration.
+
+
+## Build 226 DAIP intake dry run
+Apply the Build 226 migration in staging. Run one valid and one intentionally rejected fictional manifest at `/admin-daip-intake-dry-run.html`. Confirm zero media bytes, storage authorizations, worker executions, and public destinations.
+
+
+## Build 227 staging tests
+1. Apply `sql/2026-07-09_build227_roadmap_execution_daip_policy.sql`.
+2. Open `/admin-roadmap-execution.html` as an administrator.
+3. Change one item from planned to in progress, assign an owner, and add a harmless evidence note.
+4. Refresh and confirm the values persist.
+5. Change DAIP warning/hard-stop planning values and confirm hard stop cannot be lower than warning.
+6. Open `/admin-daip-intake-dry-run.html` and confirm its validation uses the saved policy.
+7. Confirm Gate C remains held and there is no file selector, upload, object path, worker, AI, customer media, or public destination.
