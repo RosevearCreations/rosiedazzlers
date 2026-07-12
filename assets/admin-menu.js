@@ -237,6 +237,20 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-gate-c")
     },
     {
+      key: "admin-daip-intake-dry-run",
+      label: "DAIP Intake Test",
+      href: "/admin-daip-intake-dry-run.html",
+      description: "Fictional metadata validation; no uploads or storage",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-intake-dry-run")
+    },
+    {
+      key: "admin-roadmap-execution",
+      label: "Roadmap Execution",
+      href: "/admin-roadmap-execution.html",
+      description: "DB-backed next-20 execution queue and DAIP planning policy",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-roadmap-execution")
+    },
+    {
       key: "admin-integrations",
       label: "Connections",
       href: "/admin-integrations.html",

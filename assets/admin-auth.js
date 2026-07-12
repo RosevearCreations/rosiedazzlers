@@ -254,6 +254,8 @@
       case "admin-daip-readiness":
       case "admin-daip-design":
       case "admin-daip-gate-c":
+      case "admin-daip-intake-dry-run":
+      case "admin-roadmap-execution":
       case "admin-integrations":
       case "admin-water-rules":
       case "admin-site-settings":
