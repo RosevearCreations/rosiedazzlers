@@ -186,6 +186,7 @@ CHECKS = [
     "scripts/build225_social_analytics_connections_check.py",
     "scripts/build226_daip_intake_dry_run_check.py",
     "scripts/build227_roadmap_execution_daip_policy_check.py",
+    "scripts/build228_creative_project_intelligence_check.py",
     "scripts/build224_customer_profile_quality_check.py",
     "scripts/seo_h1_check.py",
 ]
