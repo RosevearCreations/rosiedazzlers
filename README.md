@@ -1112,3 +1112,12 @@ Primary migration: `sql/2026-07-12_build228_creative_project_intelligence_founda
 
 ### Standard jobs and creative projects
 Most customer bookings continue through the existing straightforward workflow and never need a creative project. Use Creative Project Intelligence only when a job or maker activity should become a documented story with governed content, commerce, learning and archive outputs.
+
+
+## Build 230 — Creative project costs, templates, drafts and controls (2026-07-13)
+
+Build 230 extends only the opt-in Creative Project Intelligence path. Ordinary customer bookings remain standard jobs and retain their existing inventory, service, payment and completion workflow.
+
+Added: structured project-only material, labour and other-cost lines; optional project templates; before/after applicability; consent status and summary; story/platform/commerce/report drafts; unified batch output review; reversible booking unlink, archive and restore; and a project-to-DAIP metadata association that is denied until Gate C is accepted and technical capability is explicitly enabled. Nothing publishes automatically.
+
+Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_build230_project_costs_templates_outputs.sql`.

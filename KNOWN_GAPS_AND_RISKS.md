@@ -1689,3 +1689,12 @@ Primary migration: `sql/2026-07-12_build228_creative_project_intelligence_founda
 ## Build 229 status
 Resolved: Creative Project Intelligence no longer implies that every booking must become a project. Normal customer bookings stay lightweight and operational.
 Remaining: linked-project unlink/archive policy, structured materials, output generation, approval workflow and DAIP media storage remain future gated work.
+
+
+## Build 230 — Creative project costs, templates, drafts and controls (2026-07-13)
+
+Build 230 extends only the opt-in Creative Project Intelligence path. Ordinary customer bookings remain standard jobs and retain their existing inventory, service, payment and completion workflow.
+
+Added: structured project-only material, labour and other-cost lines; optional project templates; before/after applicability; consent status and summary; story/platform/commerce/report drafts; unified batch output review; reversible booking unlink, archive and restore; and a project-to-DAIP metadata association that is denied until Gate C is accepted and technical capability is explicitly enabled. Nothing publishes automatically.
+
+Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_build230_project_costs_templates_outputs.sql`.
