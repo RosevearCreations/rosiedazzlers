@@ -1,7 +1,7 @@
 {
-  "build": 226,
-  "updated_at": "2026-07-08",
-  "summary": "Visual placeholders are temporary, responsive, and safe. Build 225 adds secure social/analytics connection and DAIP-boundary visual slots without exposing provider or customer data.",
+  "build": 228,
+  "updated_at": "2026-07-12",
+  "summary": "Responsive visual placeholders remain temporary and safe. Build 228 adds a Creative Project Intelligence workflow slot for the process-first project system.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -255,6 +255,13 @@
       "where": "admin DAIP intake dry-run workspace",
       "visual": "fictional file cards flowing through validation, rejection, cost and rollback checks",
       "replace_with": "an internal architecture diagram only; never customer media or credentials"
+    },
+    {
+      "key": "creative_project_intelligence",
+      "label": "Creative project intelligence workflow",
+      "where": "admin creative-project workspace hero",
+      "visual": "idea-to-process-to-reviewed-output workflow card",
+      "replace_with": "an approved internal workflow diagram containing no customer or credential data"
     }
   ],
   "rules": [
