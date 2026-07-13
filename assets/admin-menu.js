@@ -244,6 +244,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-intake-dry-run")
     },
     {
+      key: "admin-creative-projects",
+      label: "Creative Projects",
+      href: "/admin-creative-projects.html",
+      description: "Document the full process and govern all content, commerce, archive, and learning outputs",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-creative-projects")
+    },
+    {
       key: "admin-roadmap-execution",
       label: "Roadmap Execution",
       href: "/admin-roadmap-execution.html",
