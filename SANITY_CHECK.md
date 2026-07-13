@@ -1019,3 +1019,7 @@ Primary migration: `sql/2026-07-12_build228_creative_project_intelligence_founda
 18. Add future-project recommendation ranking using completed project history.
 19. Add output approval dashboard and destination readiness checks.
 20. Keep one-H1, title/meta, local wording, responsive CSS, fallback, and privacy checks in every release.
+
+
+## Build 229 sanity result
+The standard booking path remains intact and is the default. A linked creative project is created only through an explicit staff confirmation. The booking remains the source for customer, scheduling, payment and completion data; the project owns documentary notes and governed content outputs.

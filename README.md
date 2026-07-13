@@ -1108,3 +1108,7 @@ Primary migration: `sql/2026-07-12_build228_creative_project_intelligence_founda
 18. Add future-project recommendation ranking using completed project history.
 19. Add output approval dashboard and destination readiness checks.
 20. Keep one-H1, title/meta, local wording, responsive CSS, fallback, and privacy checks in every release.
+
+
+### Standard jobs and creative projects
+Most customer bookings continue through the existing straightforward workflow and never need a creative project. Use Creative Project Intelligence only when a job or maker activity should become a documented story with governed content, commerce, learning and archive outputs.
