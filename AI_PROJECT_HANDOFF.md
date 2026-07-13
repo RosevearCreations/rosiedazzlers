@@ -610,3 +610,7 @@ Primary migration: `sql/2026-07-12_build228_creative_project_intelligence_founda
 18. Add future-project recommendation ranking using completed project history.
 19. Add output approval dashboard and destination readiness checks.
 20. Keep one-H1, title/meta, local wording, responsive CSS, fallback, and privacy checks in every release.
+
+
+## Build 229 — standard jobs remain first-class
+Rosie Dazzlers now has two explicit operating paths. The existing customer-led booking workflow remains the default **standard job** and does not require a creative project. Staff may deliberately opt a selected booking into Creative Project Intelligence from `/admin-booking.html`; that creates a separate project record while the booking remains the operational source of truth for scheduling, service, payment, progress and completion. No booking is automatically converted and no project output publishes automatically.

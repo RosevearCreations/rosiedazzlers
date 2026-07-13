@@ -72,6 +72,14 @@
         </div>
 
         <div class="panel">
+          <h2>Job documentation mode</h2>
+          <p class="kicker">Every customer booking remains a normal operational job by default. Create a creative project only when we want the full documentary and content-output workflow.</p>
+          <div id="projectModeStatus" class="notice mini">Choose a booking to check its mode.</div>
+          <button id="createProjectFromBookingBtn" class="btn" type="button" disabled>Create creative project from this booking</button>
+          <a id="openLinkedProjectBtn" class="btn ghost" href="/admin-creative-projects.html" hidden>Open linked creative project</a>
+        </div>
+
+        <div class="panel">
           <h2>Estimate intake & media consent</h2>
           <p class="kicker">Staff review panel for the public booking condition helper, photo-estimate request, and customer media-use preference.</p>
           <div id="bookingIntakeReview" class="notice mini">Choose a booking to review intake and consent details.</div>
@@ -712,6 +720,51 @@
       populateIntakeReviewForm(intake);
     }
 
+
+    async function loadBookingProjectMode() {
+      const status = document.querySelector('#projectModeStatus');
+      const createBtn = document.querySelector('#createProjectFromBookingBtn');
+      const openBtn = document.querySelector('#openLinkedProjectBtn');
+      if (!currentBooking?.id) {
+        status.textContent = 'Choose a booking to check its mode.';
+        createBtn.disabled = true;
+        openBtn.hidden = true;
+        return;
+      }
+      try {
+        const res = await fetch(`/api/admin/creative_project_booking_link?booking_id=${encodeURIComponent(currentBooking.id)}`, {credentials:'include'});
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.ok === false) throw new Error(data.error || 'Could not check project mode.');
+        if (data.project) {
+          status.innerHTML = `<strong>Creative project opted in.</strong><br>${escapeHtml(data.project.project_code || '')} · ${escapeHtml(data.project.lifecycle_status || '')}`;
+          createBtn.disabled = true;
+          createBtn.textContent = 'Creative project already linked';
+          openBtn.href = `/admin-creative-projects.html?project=${encodeURIComponent(data.project.id)}`;
+          openBtn.hidden = false;
+        } else {
+          status.innerHTML = '<strong>Standard job.</strong><br>The customer-led booking, detailing, payment and completion workflow remains unchanged.';
+          createBtn.disabled = false;
+          createBtn.textContent = 'Create creative project from this booking';
+          openBtn.hidden = true;
+        }
+      } catch (err) {
+        status.textContent = err.message || 'Project mode is temporarily unavailable. The booking remains a standard job.';
+        createBtn.disabled = true;
+        openBtn.hidden = true;
+      }
+    }
+
+    async function createProjectFromCurrentBooking() {
+      if (!currentBooking?.id) return;
+      const confirmed = window.confirm('Create a creative project for this booking? The original booking remains the operational source of truth and nothing will publish automatically.');
+      if (!confirmed) return;
+      const res = await fetch('/api/admin/creative_project_booking_link', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({booking_id:currentBooking.id})});
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.ok === false) throw new Error(data.error || 'Could not create project.');
+      await loadBookingProjectMode();
+      setNotice('Creative project created. The standard booking workflow is still active.', 'ok');
+    }
+
     function renderSelectedBooking() {
       const title = document.querySelector("#bookingTitle");
       const meta = document.querySelector("#bookingMeta");
@@ -728,6 +781,7 @@
         assignBtn.disabled = true;
         refreshSelectedBookingFinance();
         renderBookingIntakeReview();
+        loadBookingProjectMode();
         return;
       }
 
@@ -759,6 +813,7 @@
       assignBtn.disabled = false;
       renderBookingIntakeReview();
       refreshSelectedBookingFinance();
+      loadBookingProjectMode();
     }
 
     function renderBookingsList() {
@@ -846,6 +901,8 @@
 
       document.querySelector("#bookingServiceAreaFilter")?.addEventListener("change", applyBookingFilters);
       document.querySelector("#bookingSearch")?.addEventListener("input", applyBookingFilters);
+
+      document.querySelector('#createProjectFromBookingBtn')?.addEventListener('click', async () => { try { await createProjectFromCurrentBooking(); } catch (err) { setNotice(err.message || 'Could not create project.', 'bad'); } });
 
       document.querySelector("#loadBookingsBtn").addEventListener("click", async () => {
         try {
