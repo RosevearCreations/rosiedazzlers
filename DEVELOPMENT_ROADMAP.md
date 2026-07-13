@@ -2614,3 +2614,12 @@ Primary migration: `sql/2026-07-12_build228_creative_project_intelligence_founda
 18. Lessons approval.
 19. Future-project ranking.
 20. Unified output approval dashboard.
+
+
+## Build 230 — Creative project costs, templates, drafts and controls (2026-07-13)
+
+Build 230 extends only the opt-in Creative Project Intelligence path. Ordinary customer bookings remain standard jobs and retain their existing inventory, service, payment and completion workflow.
+
+Added: structured project-only material, labour and other-cost lines; optional project templates; before/after applicability; consent status and summary; story/platform/commerce/report drafts; unified batch output review; reversible booking unlink, archive and restore; and a project-to-DAIP metadata association that is denied until Gate C is accepted and technical capability is explicitly enabled. Nothing publishes automatically.
+
+Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_build230_project_costs_templates_outputs.sql`.

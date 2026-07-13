@@ -1102,3 +1102,12 @@ Primary migration: `sql/2026-07-12_build228_creative_project_intelligence_founda
 
 ## Build 229 continuation note
 Read `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` first. Preserve the dual-path rule: normal bookings are standard jobs by default; creative projects are explicit opt-in records.
+
+
+## Build 230 — Creative project costs, templates, drafts and controls (2026-07-13)
+
+Build 230 extends only the opt-in Creative Project Intelligence path. Ordinary customer bookings remain standard jobs and retain their existing inventory, service, payment and completion workflow.
+
+Added: structured project-only material, labour and other-cost lines; optional project templates; before/after applicability; consent status and summary; story/platform/commerce/report drafts; unified batch output review; reversible booking unlink, archive and restore; and a project-to-DAIP metadata association that is denied until Gate C is accepted and technical capability is explicitly enabled. Nothing publishes automatically.
+
+Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_build230_project_costs_templates_outputs.sql`.
