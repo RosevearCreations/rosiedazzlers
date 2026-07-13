@@ -495,3 +495,14 @@ Primary migration: `sql/2026-07-12_build228_creative_project_intelligence_founda
 18. Add future-project recommendation ranking using completed project history.
 19. Add output approval dashboard and destination readiness checks.
 20. Keep one-H1, title/meta, local wording, responsive CSS, fallback, and privacy checks in every release.
+
+
+## Build 229 — standard job/project choice
+1. Create or select a harmless staging booking.
+2. Confirm the Job documentation mode panel says **Standard job**.
+3. Complete ordinary status, assignment and finance actions without creating a project.
+4. Explicitly choose **Create creative project from this booking** and confirm the warning.
+5. Confirm one linked project is created with all outputs unpublished.
+6. Refresh and confirm a second project cannot be created for the same booking.
+7. Confirm the booking remains usable through its ordinary progress, payment and completion workflow.
+8. Confirm mobile controls stack without overlap.
