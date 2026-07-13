@@ -1,5 +1,5 @@
 // Build 225 service-worker cache. Previous Build 224 cache is retained only as release-audit evidence.
-const CACHE='rosie-app-v20260708build226';
+const CACHE='rosie-app-v20260712build228';
 const URLS=[
   "/",
   "/book",
@@ -42,6 +42,7 @@ const URLS=[
   "/admin-integrations.html",
   "/admin-daip-intake-dry-run.html",
   "/admin-roadmap-execution.html",
+  "/admin-creative-projects.html",
   "/data/build216_media_reliability_daip_governance.json",
   "/data/build217_secure_final_balance_links.json",
   "/data/build218_daip_test_mode_foundation.json",
@@ -52,7 +53,8 @@ const URLS=[
   "/data/build223_daip_private_mvp_design_blueprint.json",
   "/data/build224_daip_gate_c_technical_review_rollback.json",
   "/data/build225_social_analytics_connection_centre.json",
-  "/data/build226_daip_intake_dry_run.json"
+  "/data/build226_daip_intake_dry_run.json",
+  "/data/build228_creative_project_intelligence.json"
 ];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(URLS)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
