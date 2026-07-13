@@ -2585,3 +2585,32 @@ Primary migration: `sql/2026-07-12_build228_creative_project_intelligence_founda
 18. Add future-project recommendation ranking using completed project history.
 19. Add output approval dashboard and destination readiness checks.
 20. Keep one-H1, title/meta, local wording, responsive CSS, fallback, and privacy checks in every release.
+
+
+## Build 229 — completed
+- Added a dual-path workflow: standard jobs remain standard; creative projects are explicit opt-in.
+- Added optional booking-to-project linking and audit history.
+- Added mobile-safe booking controls explaining the difference.
+- Added a project source-mode field and canonical schema migration.
+
+## Next 20
+1. Structured project material rows.
+2. Inventory reservation preview.
+3. Session labour rollups.
+4. Overhead and waste costing.
+5. Therapeutic/non-commercial classification.
+6. Before/after applicability control.
+7. Consent gate summary.
+8. Project template library.
+9. Story-outline drafts.
+10. Long-form video outline.
+11. Short-form clip plans.
+12. Platform caption variants.
+13. Pinterest plans.
+14. Etsy draft.
+15. Website page draft.
+16. Blog and educational drafts.
+17. Archive export.
+18. Lessons approval.
+19. Future-project ranking.
+20. Unified output approval dashboard.

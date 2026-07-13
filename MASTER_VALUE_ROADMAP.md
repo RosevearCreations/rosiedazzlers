@@ -931,3 +931,17 @@ Primary migration: `sql/2026-07-12_build228_creative_project_intelligence_founda
 18. Add future-project recommendation ranking using completed project history.
 19. Add output approval dashboard and destination readiness checks.
 20. Keep one-H1, title/meta, local wording, responsive CSS, fallback, and privacy checks in every release.
+
+
+## Build 229 completed — dual-path operations
+- Preserved the normal client booking → detail → payment → completion path without project overhead.
+- Added explicit staff opt-in from a selected booking to a linked creative project.
+- Added source-mode and booking-link audit evidence.
+- Kept consent review and public publishing disabled by default.
+
+### Next priorities
+1. Add structured material lines to creative projects without changing normal booking inventory use.
+2. Add optional project templates for detailing, restoration, jewelry and education.
+3. Add a project-output approval command centre.
+4. Add manual unlink/archive controls with audit and no booking deletion.
+5. Continue DAIP Gate C evidence before real media storage.

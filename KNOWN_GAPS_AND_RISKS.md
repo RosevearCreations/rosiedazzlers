@@ -1684,3 +1684,8 @@ Primary migration: `sql/2026-07-12_build228_creative_project_intelligence_founda
 18. Add future-project recommendation ranking using completed project history.
 19. Add output approval dashboard and destination readiness checks.
 20. Keep one-H1, title/meta, local wording, responsive CSS, fallback, and privacy checks in every release.
+
+
+## Build 229 status
+Resolved: Creative Project Intelligence no longer implies that every booking must become a project. Normal customer bookings stay lightweight and operational.
+Remaining: linked-project unlink/archive policy, structured materials, output generation, approval workflow and DAIP media storage remain future gated work.

@@ -1098,3 +1098,7 @@ Primary migration: `sql/2026-07-12_build228_creative_project_intelligence_founda
 18. Add future-project recommendation ranking using completed project history.
 19. Add output approval dashboard and destination readiness checks.
 20. Keep one-H1, title/meta, local wording, responsive CSS, fallback, and privacy checks in every release.
+
+
+## Build 229 continuation note
+Read `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` first. Preserve the dual-path rule: normal bookings are standard jobs by default; creative projects are explicit opt-in records.
