@@ -1,4 +1,5 @@
 import { renderRecentWorkMounts } from "/assets/recent-work.js?v=20260501build127";
+import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
 
 async function fetchJson(url) {
   const res = await fetch(url, { cache: "no-store" });
@@ -194,6 +195,8 @@ function addonPriceSummary(addon) {
 }
 
 function heroMediaForPage(page, addon, relatedProducts) {
+  // Build 215: local Rosie-owned hero assets win over legacy remote placeholders.
+  if (page?.local_hero_image_url) return page.local_hero_image_url;
   if (page?.hero_image_url) return page.hero_image_url;
   if (addon?.image_url && !String(addon.image_url).toLowerCase().endsWith(".svg")) return addon.image_url;
 
@@ -203,6 +206,26 @@ function heroMediaForPage(page, addon, relatedProducts) {
   if (addon?.image_url) return addon.image_url;
   if (addon?.image_fallback_url) return addon.image_fallback_url;
   return "/assets/brand/rosie-reviews-fallback.svg";
+}
+
+function mediaImageMarkup(src, alt, className = "proof-media", extra = "") {
+  const source = cleanText(src);
+  if (!source) return "";
+  return `<img data-media-source="${escapeHtml(source)}" data-media-fallback="/assets/brand/rosie-reviews-fallback.svg" alt="${escapeHtml(alt)}" class="${escapeHtml(className)}" loading="lazy" decoding="async" ${extra}>`;
+}
+
+function bindLandingMedia(root) {
+  root.querySelectorAll("img[data-media-source]").forEach((img) => {
+    if (img.dataset.mediaResolverBound === "true") return;
+    img.dataset.mediaResolverBound = "true";
+    bindImageWithCandidates(img, img.dataset.mediaSource || "", {
+      fallback: img.dataset.mediaFallback || "/assets/brand/rosie-reviews-fallback.svg",
+      onExhausted: (node) => {
+        node.classList.add("visual-placeholder-img");
+        node.src = "/assets/brand/rosie-reviews-fallback.svg";
+      }
+    });
+  });
 }
 
 function galleryMarkup(page, relatedProducts) {
@@ -226,7 +249,7 @@ function galleryMarkup(page, relatedProducts) {
       <div class="service-link-grid" style="margin-top:12px">
         ${unique.slice(0, 8).map((src) => `
           <article class="service-link-card">
-            <img src="${escapeHtml(src)}" alt="Rosie Dazzlers service visual" class="proof-media" loading="lazy" onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.svg';" />
+            ${mediaImageMarkup(src, "Rosie Dazzlers service visual")}
           </article>
         `).join("")}
       </div>
@@ -295,7 +318,7 @@ function pageTemplate(page, pricing, slug, productCatalog) {
       </div>
       <aside class="panel hero-sidecard">
         <figure class="landing-region-photo">
-          <img src="${escapeHtml(heroImage)}" alt="${escapeHtml(page.name || page.hero_title || slug)}" class="proof-media" loading="lazy" onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.svg';" />
+          ${mediaImageMarkup(heroImage, page.name || page.hero_title || slug)}
           ${photoCaption || photoSource ? `<figcaption>${escapeHtml(photoCaption || "Regional/service photo")}${photoSourceUrl ? ` <a href="${escapeHtml(photoSourceUrl)}" target="_blank" rel="noopener">${escapeHtml(photoSource || "source")}</a>` : (photoSource ? ` ${escapeHtml(photoSource)}` : "")}</figcaption>` : ""}
         </figure>
         <h2 style="margin-top:0">What to expect</h2>
@@ -334,7 +357,7 @@ function pageTemplate(page, pricing, slug, productCatalog) {
         <div class="service-link-grid" style="margin-top:12px">
           ${relatedProducts.map((item) => `
             <article class="service-link-card">
-              ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}" class="proof-media" style="margin-bottom:10px" loading="lazy" onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.svg';" />` : ``}
+              ${item.image_url ? mediaImageMarkup(item.image_url, item.name, "proof-media", 'style="margin-bottom:10px"') : ``}
               <h3>${escapeHtml(item.name)}</h3>
               ${item.role ? `<div class="badge" style="margin-bottom:8px">${escapeHtml(item.role)}</div>` : ``}
               ${item.note ? `<p class="muted">${escapeHtml(item.note)}</p>` : `<p class="muted">Linked from your consumables catalog.</p>`}
@@ -537,7 +560,9 @@ async function renderLandingPage() {
     );
   }
 
-  document.getElementById("landingMount").innerHTML = pageTemplate(page, pricing || {}, slug, productCatalog || []);
+  const landingMount = document.getElementById("landingMount");
+  landingMount.innerHTML = pageTemplate(page, pricing || {}, slug, productCatalog || []);
+  bindLandingMedia(landingMount);
   const addon = page.related_code ? ((pricing?.addons || []).find((row) => row.code === page.related_code) || null) : null;
   updateLandingStructuredData(page, addon, slug);
   renderRecentWorkMounts(3);

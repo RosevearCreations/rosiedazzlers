@@ -249,6 +249,15 @@
         return state.authenticated === true;
       case "admin-app":
       case "admin-docs":
+      case "admin-daip":
+      case "admin-daip-governance":
+      case "admin-daip-readiness":
+      case "admin-daip-design":
+      case "admin-daip-gate-c":
+      case "admin-daip-intake-dry-run":
+      case "admin-roadmap-execution":
+      case "admin-creative-projects":
+      case "admin-integrations":
       case "admin-water-rules":
       case "admin-site-settings":
         return actor.is_admin === true || hasCapability("can_manage_staff");
@@ -258,7 +267,12 @@
         return actor.is_admin === true || hasCapability("can_manage_promos") || hasCapability("can_manage_staff") || hasCapability("can_manage_bookings");
 
       case "admin-customers":
-        return hasCapability("can_manage_bookings");
+        return (
+          hasCapability("can_manage_bookings") ||
+          hasCapability("can_manage_progress") ||
+          actor.is_senior_detailer === true ||
+          actor.is_detailer === true
+        );
 
       case "admin-promos":
         return hasCapability("can_manage_promos");

@@ -76,8 +76,36 @@
       key: "admin-media-health",
       label: "Media Health",
       href: "/admin-media-health.html",
-      description: "Missing image/video checks and R2 upload review",
+      description: "Public image recovery, R2 checks, upload review, and persistent alerts",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-media-health")
+    },
+    {
+      key: "admin-daip",
+      label: "DAIP Test Lab",
+      href: "/admin-daip.html",
+      description: "Internal-only media-process registry and privacy gate testing",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip")
+    },
+    {
+      key: "admin-daip-governance",
+      label: "DAIP Governance",
+      href: "/admin-daip-governance.html",
+      description: "Owner decisions and promotion gates; no production media capability",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-governance")
+    },
+    {
+      key: "admin-daip-readiness",
+      label: "DAIP Readiness",
+      href: "/admin-daip-readiness.html",
+      description: "Evidence review for a written private-MVP design only",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-readiness")
+    },
+    {
+      key: "admin-daip-design",
+      label: "DAIP Blueprint",
+      href: "/admin-daip-design.html",
+      description: "Independent review of a written private-MVP proposal; Gate C remains held",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-design")
     },
     {
       key: "admin-water-rules",
@@ -202,13 +230,48 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting") || globalScope.AdminAuth.canAccessPage("admin")
     },
     {
+      key: "admin-daip-gate-c",
+      label: "DAIP Gate C",
+      href: "/admin-daip-gate-c.html",
+      description: "Technical review and rollback evidence; Gate C remains held",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-gate-c")
+    },
+    {
+      key: "admin-daip-intake-dry-run",
+      label: "DAIP Intake Test",
+      href: "/admin-daip-intake-dry-run.html",
+      description: "Fictional metadata validation; no uploads or storage",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-intake-dry-run")
+    },
+    {
+      key: "admin-creative-projects",
+      label: "Creative Projects",
+      href: "/admin-creative-projects.html",
+      description: "Document the full process and govern all content, commerce, archive, and learning outputs",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-creative-projects")
+    },
+    {
+      key: "admin-roadmap-execution",
+      label: "Roadmap Execution",
+      href: "/admin-roadmap-execution.html",
+      description: "DB-backed next-20 execution queue and DAIP planning policy",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-roadmap-execution")
+    },
+    {
+      key: "admin-integrations",
+      label: "Connections",
+      href: "/admin-integrations.html",
+      description: "Social publishing and consent-first analytics configuration status",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-integrations")
+    },
+    {
       key: "account",
       label: "My Account",
       href: "/admin-account.html",
       description: "My session and password",
       visible: () => globalScope.AdminAuth.isAuthenticated()
     }
-  ];
+];
 
   function render(options = {}) {
     assertDependency();
