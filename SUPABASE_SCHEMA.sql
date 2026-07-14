@@ -2013,3 +2013,992 @@ comment on table public.recommendation_price_acknowledgements is 'Customer typed
 -- Primary migration: sql/2026-06-23_build214_security_task_orchestration.sql
 -- Adds owner_attention_tasks.due_at/escalation fields, locks public tables behind RLS,
 -- revokes direct browser-role table grants, and exposes protected rosie_security_posture_report().
+
+-- Build 215 — media asset format alignment and DAIP planning note (2026-06-30)
+-- Apply sql/2026-06-30_build215_media_asset_format_alignment.sql to align legacy public.media_asset_tasks
+-- Local Hero .webp records with the canonical public JPG keys used by the verified R2 uploads.
+-- No DAIP production schema is added in Build 215. Future DAIP Phase 1 requires a separate reviewed migration.
+
+-- Build 216 — public media reliability schema note (2026-07-01)
+-- Apply sql/2026-07-01_build216_media_reliability_daip_governance.sql after Build 214.
+-- Adds RLS-protected public.media_asset_health_observations and public.media_asset_alerts,
+-- plus service-role-only public.rosie_record_media_asset_observations(jsonb,text,text).
+-- First failed scan is monitoring; second consecutive failure becomes active;
+-- a passing scan resolves. Do not add customer/job/incident/private URL data to these tables.
+-- DAIP remains planning-only in Build 216; no daip_* production table is included.
+
+-- Build 217 — secure final-balance payment-link schema note (2026-06-30)
+-- Apply sql/2026-06-30_build217_secure_final_balance_links.sql after the existing final-balance/Build 214 migration.
+-- Adds expiry, link-rotation/send, cancellation, paid-amount, Stripe payment-intent, and provider-event fields to public.final_balance_payment_requests.
+-- token_hash holds only a SHA-256 hash of a 32-byte opaque public link token; never return it to a browser or grant direct browser table access.
+
+
+
+-- Build 218 DAIP internal-test foundation is appended as the canonical latest schema delta.
+-- Apply in development/staging only while DAIP remains metadata-only.
+-- Build 218 — DAIP internal-test foundation.
+--
+-- This migration deliberately does NOT create a public media route, storage bucket,
+-- signed URL issuer, upload endpoint, worker, proxy, AI service, export process, or
+-- publication integration. It gives Rosie Dazzlers a private, auditable test registry
+-- so owners can prove the DAIP safety process with harmless internal test media first.
+--
+-- Run only after Build 214 RLS containment is active. Browser clients continue to use
+-- protected Cloudflare Functions; service_role is the only database-facing application role.
+
+begin;
+
+create table if not exists public.daip_test_control (
+  singleton boolean primary key default true check (singleton is true),
+  mode text not null default 'internal_test' check (mode = 'internal_test'),
+  storage_provisioned boolean not null default false check (storage_provisioned is false),
+  worker_enabled boolean not null default false check (worker_enabled is false),
+  public_export_enabled boolean not null default false check (public_export_enabled is false),
+  automatic_publishing_enabled boolean not null default false check (automatic_publishing_enabled is false),
+  notes text not null default 'Build 218 internal test only. No customer media, public exports, worker execution, or automatic publishing.',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+insert into public.daip_test_control (singleton)
+values (true)
+on conflict (singleton) do nothing;
+
+create table if not exists public.daip_test_daily_sequences (
+  job_date date primary key,
+  next_number integer not null default 0 check (next_number >= 0),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.daip_media_jobs (
+  id uuid primary key default gen_random_uuid(),
+  job_code text not null unique check (job_code ~ '^RD-TEST-[0-9]{8}-[0-9]{3,}$'),
+  test_booking_reference text not null check (test_booking_reference ~ '^RD-TEST-BOOKING-[A-Z0-9-]{3,80}$'),
+  safe_label text not null check (char_length(safe_label) between 3 and 160),
+  job_date date not null default current_date,
+  status text not null default 'created' check (status in ('created','intake_ready','privacy_review_required','internal_review_complete','archived')),
+  test_mode boolean not null default true check (test_mode is true),
+  internal_test_only boolean not null default true check (internal_test_only is true),
+  contains_customer_data boolean not null default false check (contains_customer_data is false),
+  contains_incident_material boolean not null default false check (contains_incident_material is false),
+  public_export_blocked boolean not null default true check (public_export_blocked is true),
+  processor_execution_blocked boolean not null default true check (processor_execution_blocked is true),
+  storage_mode text not null default 'metadata_only' check (storage_mode = 'metadata_only'),
+  consent_scope text not null default 'internal_test_only' check (consent_scope = 'internal_test_only'),
+  created_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  archived_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  archived_at timestamptz null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.daip_media_assets (
+  id uuid primary key default gen_random_uuid(),
+  media_job_id uuid not null references public.daip_media_jobs(id) on delete cascade,
+  safe_filename text not null check (safe_filename !~ '[\\/]' and char_length(safe_filename) between 1 and 160),
+  asset_kind text not null check (asset_kind in ('test_photo','test_video')),
+  capture_stage text not null check (capture_stage in ('before','process','after','other')),
+  mime_type text not null check (mime_type in ('image/jpeg','image/png','image/webp','video/mp4','video/quicktime')),
+  file_size_bytes bigint not null default 0 check (file_size_bytes >= 0 and file_size_bytes <= 10737418240),
+  source_reference_label text not null check (char_length(source_reference_label) between 3 and 240),
+  source_mode text not null default 'metadata_only' check (source_mode = 'metadata_only'),
+  storage_status text not null default 'not_uploaded' check (storage_status = 'not_uploaded'),
+  checksum_sha256 text null check (checksum_sha256 is null or checksum_sha256 ~ '^[A-Fa-f0-9]{64}$'),
+  privacy_status text not null default 'not_reviewed' check (privacy_status in ('not_reviewed','manual_review_required','internal_only_cleared','blocked_private')),
+  public_export_blocked boolean not null default true check (public_export_blocked is true),
+  registered_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (media_job_id, safe_filename)
+);
+
+create table if not exists public.daip_processing_tasks (
+  id uuid primary key default gen_random_uuid(),
+  media_job_id uuid not null references public.daip_media_jobs(id) on delete cascade,
+  task_type text not null check (task_type in ('intake_validation','private_storage_plan','manual_privacy_review','worker_preflight')),
+  status text not null default 'not_scheduled' check (status in ('not_scheduled','blocked_pending_worker','ready_for_manual_review','cancelled')),
+  execution_blocked boolean not null default true check (execution_blocked is true),
+  attempts integer not null default 0 check (attempts = 0),
+  safe_note text null check (safe_note is null or char_length(safe_note) <= 1000),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (media_job_id, task_type)
+);
+
+create table if not exists public.daip_privacy_reviews (
+  id uuid primary key default gen_random_uuid(),
+  media_asset_id uuid not null unique references public.daip_media_assets(id) on delete cascade,
+  review_status text not null default 'not_started' check (review_status in ('not_started','manual_review_required','internal_only_cleared','blocked_private')),
+  reviewer_note text null check (reviewer_note is null or char_length(reviewer_note) <= 2000),
+  reviewer_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  public_export_blocked boolean not null default true check (public_export_blocked is true),
+  reviewed_at timestamptz null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.daip_audit_events (
+  id uuid primary key default gen_random_uuid(),
+  media_job_id uuid null references public.daip_media_jobs(id) on delete cascade,
+  media_asset_id uuid null references public.daip_media_assets(id) on delete cascade,
+  actor_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  event_type text not null check (event_type in ('test_job_created','test_asset_registered','privacy_review_saved','test_job_archived','test_task_seeded')),
+  reason text null check (reason is null or char_length(reason) <= 1000),
+  safe_metadata jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists daip_media_jobs_status_created_idx
+  on public.daip_media_jobs (status, created_at desc);
+create index if not exists daip_media_jobs_test_reference_idx
+  on public.daip_media_jobs (test_booking_reference, created_at desc);
+create index if not exists daip_media_assets_job_created_idx
+  on public.daip_media_assets (media_job_id, created_at asc);
+create index if not exists daip_processing_tasks_job_status_idx
+  on public.daip_processing_tasks (media_job_id, status, created_at asc);
+create index if not exists daip_privacy_reviews_status_idx
+  on public.daip_privacy_reviews (review_status, reviewed_at asc nulls first);
+create index if not exists daip_audit_events_job_created_idx
+  on public.daip_audit_events (media_job_id, created_at asc);
+
+create or replace function public.daip_next_test_job_code(p_job_date date default current_date)
+returns text
+language plpgsql
+security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  v_date date := coalesce(p_job_date, current_date);
+  v_number integer;
+begin
+  insert into public.daip_test_daily_sequences (job_date, next_number, updated_at)
+  values (v_date, 1, now())
+  on conflict (job_date) do update
+    set next_number = public.daip_test_daily_sequences.next_number + 1,
+        updated_at = now()
+  returning next_number into v_number;
+
+  return 'RD-TEST-' || to_char(v_date, 'YYYYMMDD') || '-' || lpad(v_number::text, 3, '0');
+end;
+$$;
+
+-- The test-control row is intentionally not editable through the app. Moving to a
+-- different mode requires a separately reviewed future migration and owner approval.
+update public.daip_test_control
+set mode = 'internal_test', storage_provisioned = false, worker_enabled = false,
+    public_export_enabled = false, automatic_publishing_enabled = false,
+    updated_at = now()
+where singleton = true;
+
+alter table public.daip_test_control enable row level security;
+alter table public.daip_test_daily_sequences enable row level security;
+alter table public.daip_media_jobs enable row level security;
+alter table public.daip_media_assets enable row level security;
+alter table public.daip_processing_tasks enable row level security;
+alter table public.daip_privacy_reviews enable row level security;
+alter table public.daip_audit_events enable row level security;
+
+revoke all privileges on table public.daip_test_control from public, anon, authenticated;
+revoke all privileges on table public.daip_test_daily_sequences from public, anon, authenticated;
+revoke all privileges on table public.daip_media_jobs from public, anon, authenticated;
+revoke all privileges on table public.daip_media_assets from public, anon, authenticated;
+revoke all privileges on table public.daip_processing_tasks from public, anon, authenticated;
+revoke all privileges on table public.daip_privacy_reviews from public, anon, authenticated;
+revoke all privileges on table public.daip_audit_events from public, anon, authenticated;
+
+grant all privileges on table public.daip_test_control to service_role;
+grant all privileges on table public.daip_test_daily_sequences to service_role;
+grant all privileges on table public.daip_media_jobs to service_role;
+grant all privileges on table public.daip_media_assets to service_role;
+grant all privileges on table public.daip_processing_tasks to service_role;
+grant all privileges on table public.daip_privacy_reviews to service_role;
+grant all privileges on table public.daip_audit_events to service_role;
+revoke all on function public.daip_next_test_job_code(date) from public, anon, authenticated;
+grant execute on function public.daip_next_test_job_code(date) to service_role;
+
+comment on table public.daip_test_control is
+  'Build 218 DAIP test-mode hard stop. All flags intentionally enforce internal-test/no-storage/no-worker/no-public-export/no-auto-publish.';
+comment on table public.daip_media_jobs is
+  'Build 218 internal DAIP test-job registry. No customer data, incident media, public export, storage path, or worker execution is allowed.';
+comment on table public.daip_media_assets is
+  'Build 218 DAIP metadata-only test asset registry. Deliberately has no public URL, signed URL, bucket, or storage key column.';
+comment on table public.daip_processing_tasks is
+  'Build 218 DAIP non-executing planning queue. All tasks remain execution_blocked until a future reviewed worker phase.';
+comment on table public.daip_privacy_reviews is
+  'Build 218 internal-only privacy review record. It cannot approve public export.';
+comment on table public.daip_audit_events is
+  'Build 218 DAIP audit trail. Store only safe metadata; never secrets, signed URLs, customer data, addresses, VINs, payment data, or incident evidence.';
+
+commit;
+
+
+-- Canonical mirror: 2026-07-02_build219_daip_governance_workspace.sql
+-- Build 219 — DAIP owner-decision governance and promotion-readiness workspace.
+--
+-- This migration records the DAIP-0 owner decisions that must be complete before
+-- any private storage, upload, worker, AI, public derivative, or publishing build
+-- can even be reviewed. It intentionally does NOT provision media storage, accept
+-- bytes, issue signed URLs, create a worker queue, or enable export/publishing.
+--
+-- Run only after Build 214 security containment and Build 218 internal-test mode.
+-- Browser clients remain behind protected Cloudflare Functions; service_role is
+-- the sole application database role for these records.
+
+begin;
+
+create table if not exists public.daip_governance_decisions (
+  id uuid primary key default gen_random_uuid(),
+  decision_key text not null unique check (decision_key in (
+    'DAIP-0-01','DAIP-0-02','DAIP-0-03','DAIP-0-04','DAIP-0-05','DAIP-0-06',
+    'DAIP-0-07','DAIP-0-08','DAIP-0-09','DAIP-0-10','DAIP-0-11','DAIP-0-12'
+  )),
+  decision_title text not null check (char_length(decision_title) between 3 and 160),
+  resolution_status text not null default 'draft' check (resolution_status in ('draft','approved')),
+  decision_owner_label text not null check (char_length(decision_owner_label) between 2 and 120),
+  decision_summary text not null check (char_length(decision_summary) between 12 and 2400),
+  business_cost_impact text not null check (char_length(business_cost_impact) between 6 and 1600),
+  privacy_safety_impact text not null check (char_length(privacy_safety_impact) between 6 and 1600),
+  review_due_on date not null,
+  approved_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  approved_by_staff_email text null check (approved_by_staff_email is null or char_length(approved_by_staff_email) <= 320),
+  approved_at timestamptz null,
+  recorded_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  recorded_by_staff_email text null check (recorded_by_staff_email is null or char_length(recorded_by_staff_email) <= 320),
+  revision_number integer not null default 1 check (revision_number >= 1),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  check (
+    (resolution_status = 'approved' and approved_at is not null)
+    or (resolution_status = 'draft' and approved_at is null)
+  )
+);
+
+create table if not exists public.daip_governance_audit_events (
+  id uuid primary key default gen_random_uuid(),
+  decision_key text not null check (decision_key in (
+    'DAIP-0-01','DAIP-0-02','DAIP-0-03','DAIP-0-04','DAIP-0-05','DAIP-0-06',
+    'DAIP-0-07','DAIP-0-08','DAIP-0-09','DAIP-0-10','DAIP-0-11','DAIP-0-12'
+  )),
+  event_type text not null check (event_type in ('decision_drafted','decision_approved','decision_reopened')),
+  actor_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  actor_staff_email text null check (actor_staff_email is null or char_length(actor_staff_email) <= 320),
+  revision_number integer not null check (revision_number >= 1),
+  safe_note text null check (safe_note is null or char_length(safe_note) <= 500),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists daip_governance_decisions_status_idx
+  on public.daip_governance_decisions (resolution_status, updated_at desc);
+create index if not exists daip_governance_audit_events_decision_created_idx
+  on public.daip_governance_audit_events (decision_key, created_at desc);
+
+alter table public.daip_governance_decisions enable row level security;
+alter table public.daip_governance_audit_events enable row level security;
+
+revoke all privileges on table public.daip_governance_decisions from public, anon, authenticated;
+revoke all privileges on table public.daip_governance_audit_events from public, anon, authenticated;
+grant all privileges on table public.daip_governance_decisions to service_role;
+grant all privileges on table public.daip_governance_audit_events to service_role;
+
+comment on table public.daip_governance_decisions is
+  'Build 219 owner-decision register for DAIP-0. This records governance only and cannot provision storage, uploads, workers, exports, or automatic publishing.';
+comment on table public.daip_governance_audit_events is
+  'Build 219 DAIP governance audit trail. Keep only safe decision metadata; never store secrets, keys, signed URLs, customer media, addresses, VINs, payment data, or incident evidence.';
+
+commit;
+
+
+-- ============================================================================
+-- Build 220 schema mirror (apply source migration in sql/ first)
+-- ============================================================================
+-- Build 220 — controlled customer access management, recovery intake, and DAIP readiness evidence.
+--
+-- This migration turns the customer directory into a role-aware management surface
+-- without allowing staff to see or set passwords. Customer deletion is archive-first
+-- so booking, payment, tax, incident, and consent records keep their audit links.
+-- DAIP remains governance/test-only: no bucket, storage key, upload URL, worker, processing task, customer asset route, export, or publishing capability is created.
+
+begin;
+
+alter table if exists public.customer_profiles
+  add column if not exists archived_at timestamptz null;
+alter table if exists public.customer_profiles
+  add column if not exists archived_by_staff_user_id uuid null references public.staff_users(id) on delete set null;
+alter table if exists public.customer_profiles
+  add column if not exists archived_by_staff_email text null;
+alter table if exists public.customer_profiles
+  add column if not exists archive_reason text null;
+
+create table if not exists public.customer_admin_audit_events (
+  id uuid primary key default gen_random_uuid(),
+  customer_profile_id uuid not null references public.customer_profiles(id) on delete restrict,
+  event_type text not null check (event_type in (
+    'profile_created','profile_updated','email_changed','password_reset_issued',
+    'account_setup_issued','verification_issued','sessions_revoked','account_suspended',
+    'account_reactivated','account_archived','account_restored'
+  )),
+  actor_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  actor_staff_email text null check (actor_staff_email is null or char_length(actor_staff_email) <= 320),
+  safe_summary text not null check (char_length(safe_summary) between 3 and 500),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists customer_admin_audit_events_profile_created_idx
+  on public.customer_admin_audit_events (customer_profile_id, created_at desc);
+
+create table if not exists public.customer_account_recovery_requests (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  full_name_hint text null check (full_name_hint is null or char_length(full_name_hint) <= 160),
+  phone_hint text null check (phone_hint is null or char_length(phone_hint) <= 60),
+  email_hint text null check (email_hint is null or char_length(email_hint) <= 320),
+  message text null check (message is null or char_length(message) <= 700),
+  request_fingerprint text not null check (char_length(request_fingerprint) between 32 and 128),
+  status text not null default 'queued' check (status in ('queued','reviewed','resolved','declined')),
+  reviewed_at timestamptz null,
+  reviewed_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  reviewed_by_staff_email text null check (reviewed_by_staff_email is null or char_length(reviewed_by_staff_email) <= 320),
+  safe_resolution_note text null check (safe_resolution_note is null or char_length(safe_resolution_note) <= 500)
+);
+
+create index if not exists customer_account_recovery_requests_status_created_idx
+  on public.customer_account_recovery_requests (status, created_at desc);
+create index if not exists customer_account_recovery_requests_fingerprint_created_idx
+  on public.customer_account_recovery_requests (request_fingerprint, created_at desc);
+
+alter table public.customer_admin_audit_events enable row level security;
+alter table public.customer_account_recovery_requests enable row level security;
+alter table if exists public.customer_auth_sessions enable row level security;
+alter table if exists public.customer_auth_tokens enable row level security;
+
+revoke all privileges on table public.customer_admin_audit_events from public, anon, authenticated;
+revoke all privileges on table public.customer_account_recovery_requests from public, anon, authenticated;
+revoke all privileges on table public.customer_auth_sessions from public, anon, authenticated;
+revoke all privileges on table public.customer_auth_tokens from public, anon, authenticated;
+
+grant all privileges on table public.customer_admin_audit_events to service_role;
+grant all privileges on table public.customer_account_recovery_requests to service_role;
+grant all privileges on table public.customer_auth_sessions to service_role;
+grant all privileges on table public.customer_auth_tokens to service_role;
+
+comment on column public.customer_profiles.archived_at is
+  'Build 220 archive-first account control. Archived customer profiles keep historical booking/payment/audit links and cannot sign in.';
+comment on table public.customer_admin_audit_events is
+  'Build 220 staff audit history for customer profile, access, and account lifecycle actions. Never store passwords, raw tokens, reset links, session tokens, payment data, or private media.';
+comment on table public.customer_account_recovery_requests is
+  'Build 220 customer sign-in-email assistance intake. This does not reveal whether an account exists and does not reset access automatically.';
+
+commit;
+
+
+-- BEGIN MIGRATION: 2026-07-04_build222_daip_phase1_readiness_design_review.sql
+-- Build 222 — DAIP Phase 1 readiness record for written private-MVP design review.
+--
+-- This migration stores governance evidence only. A ready_for_design_review record authorizes
+-- a written design review, not a storage bucket, file upload, signed link, worker, processing task,
+-- customer-media route, export, Gallery/Social handoff, or public publishing capability.
+--
+-- Run after Build 218 internal test mode and Build 219 governance workspace in development/staging.
+-- Browser roles are deliberately denied direct table access; Cloudflare Functions and the service role
+-- remain the only application boundary.
+
+begin;
+
+create table if not exists public.daip_phase1_readiness_reviews (
+  id uuid primary key default gen_random_uuid(),
+  review_status text not null default 'draft' check (review_status in ('draft','ready_for_design_review','paused')),
+  review_owner_label text not null check (char_length(review_owner_label) between 2 and 120),
+  review_summary text not null check (char_length(review_summary) between 12 and 2400),
+  budget_stop_rule_summary text not null check (char_length(budget_stop_rule_summary) between 12 and 1200),
+  review_due_on date not null,
+  consent_separation_confirmed boolean not null default false,
+  retention_legal_hold_confirmed boolean not null default false,
+  non_production_acknowledged boolean not null default false,
+  gate_a_ready boolean not null default false,
+  gate_b_ready boolean not null default false,
+  decision_count integer not null default 0 check (decision_count between 0 and 12),
+  test_passed_count integer not null default 0 check (test_passed_count between 0 and 3),
+  test_control_safe boolean not null default false,
+  approved_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  approved_by_staff_email text null check (approved_by_staff_email is null or char_length(approved_by_staff_email) <= 320),
+  approved_at timestamptz null,
+  recorded_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  recorded_by_staff_email text null check (recorded_by_staff_email is null or char_length(recorded_by_staff_email) <= 320),
+  created_at timestamptz not null default now(),
+  check (
+    (review_status = 'ready_for_design_review' and gate_a_ready is true and gate_b_ready is true and consent_separation_confirmed is true and retention_legal_hold_confirmed is true and non_production_acknowledged is true and approved_at is not null)
+    or (review_status in ('draft','paused') and approved_at is null)
+  )
+);
+
+create table if not exists public.daip_phase1_readiness_audit_events (
+  id uuid primary key default gen_random_uuid(),
+  review_id uuid not null references public.daip_phase1_readiness_reviews(id) on delete restrict,
+  event_type text not null check (event_type in ('readiness_drafted','readiness_paused','written_design_review_authorized')),
+  actor_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  actor_staff_email text null check (actor_staff_email is null or char_length(actor_staff_email) <= 320),
+  safe_note text not null check (char_length(safe_note) between 3 and 500),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists daip_phase1_readiness_reviews_created_idx
+  on public.daip_phase1_readiness_reviews (created_at desc);
+create index if not exists daip_phase1_readiness_reviews_status_created_idx
+  on public.daip_phase1_readiness_reviews (review_status, created_at desc);
+create index if not exists daip_phase1_readiness_audit_events_review_created_idx
+  on public.daip_phase1_readiness_audit_events (review_id, created_at desc);
+
+alter table public.daip_phase1_readiness_reviews enable row level security;
+alter table public.daip_phase1_readiness_audit_events enable row level security;
+
+revoke all privileges on table public.daip_phase1_readiness_reviews from public, anon, authenticated;
+revoke all privileges on table public.daip_phase1_readiness_audit_events from public, anon, authenticated;
+grant all privileges on table public.daip_phase1_readiness_reviews to service_role;
+grant all privileges on table public.daip_phase1_readiness_audit_events to service_role;
+
+comment on table public.daip_phase1_readiness_reviews is
+  'Build 222 DAIP Phase 1 readiness snapshots. A ready_for_design_review snapshot authorizes only a written private-MVP design review and cannot enable storage, uploads, signed links, workers, processing, customer media, exports, or publishing.';
+comment on table public.daip_phase1_readiness_audit_events is
+  'Build 222 DAIP readiness audit trail. Store governance-safe text only; never secrets, credentials, URLs, signed links, customer data, addresses, VINs, payment data, private media, or incident evidence.';
+
+commit;
+
+-- END MIGRATION: 2026-07-04_build222_daip_phase1_readiness_design_review.sql
+
+
+-- BEGIN MIGRATION: 2026-07-05_build223_daip_private_mvp_design_blueprint.sql
+-- Build 223 — DAIP private-MVP written design blueprint and independent-review queue.
+--
+-- This migration stores safe, design-level governance evidence only. It does not create a bucket,
+-- storage policy, upload/download endpoint, signed URL, object key, queue, Worker, processor,
+-- customer media route, public export, Gallery/Social/GBP handoff, or publishing control.
+--
+-- Run after Build 218, Build 219, and Build 222 in development/staging only. Browser roles are
+-- deliberately denied direct access. Cloudflare Functions using the service role remain the only boundary.
+
+begin;
+
+create table if not exists public.daip_private_mvp_design_reviews (
+  id uuid primary key default gen_random_uuid(),
+  review_status text not null default 'draft' check (review_status in ('draft','submitted_for_independent_review','paused')),
+  design_owner_label text not null check (char_length(design_owner_label) between 2 and 120),
+  independent_reviewer_label text not null check (char_length(independent_reviewer_label) between 2 and 120),
+  design_summary text not null check (char_length(design_summary) between 12 and 2400),
+  threat_model_summary text not null check (char_length(threat_model_summary) between 12 and 2400),
+  upload_control_summary text not null check (char_length(upload_control_summary) between 12 and 2400),
+  storage_separation_summary text not null check (char_length(storage_separation_summary) between 12 and 2400),
+  cost_telemetry_summary text not null check (char_length(cost_telemetry_summary) between 12 and 1600),
+  rollback_acceptance_summary text not null check (char_length(rollback_acceptance_summary) between 12 and 1600),
+  review_due_on date not null,
+  readiness_review_id uuid null references public.daip_phase1_readiness_reviews(id) on delete restrict,
+  readiness_authorization_valid boolean not null default false,
+  zero_public_destination_confirmed boolean not null default false,
+  no_customer_media_confirmed boolean not null default false,
+  non_production_acknowledged boolean not null default false,
+  gate_c_held boolean not null default true check (gate_c_held is true),
+  submitted_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  submitted_by_staff_email text null check (submitted_by_staff_email is null or char_length(submitted_by_staff_email) <= 320),
+  submitted_at timestamptz null,
+  recorded_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  recorded_by_staff_email text null check (recorded_by_staff_email is null or char_length(recorded_by_staff_email) <= 320),
+  created_at timestamptz not null default now(),
+  check (
+    (review_status = 'submitted_for_independent_review'
+      and readiness_review_id is not null
+      and readiness_authorization_valid is true
+      and zero_public_destination_confirmed is true
+      and no_customer_media_confirmed is true
+      and non_production_acknowledged is true
+      and submitted_at is not null)
+    or (review_status in ('draft','paused') and submitted_at is null)
+  )
+);
+
+create table if not exists public.daip_private_mvp_design_audit_events (
+  id uuid primary key default gen_random_uuid(),
+  design_review_id uuid not null references public.daip_private_mvp_design_reviews(id) on delete restrict,
+  event_type text not null check (event_type in ('blueprint_drafted','blueprint_paused','blueprint_submitted_for_independent_review')),
+  actor_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  actor_staff_email text null check (actor_staff_email is null or char_length(actor_staff_email) <= 320),
+  safe_note text not null check (char_length(safe_note) between 3 and 600),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists daip_private_mvp_design_reviews_created_idx
+  on public.daip_private_mvp_design_reviews (created_at desc);
+create index if not exists daip_private_mvp_design_reviews_status_created_idx
+  on public.daip_private_mvp_design_reviews (review_status, created_at desc);
+create index if not exists daip_private_mvp_design_audit_events_review_created_idx
+  on public.daip_private_mvp_design_audit_events (design_review_id, created_at desc);
+
+alter table public.daip_private_mvp_design_reviews enable row level security;
+alter table public.daip_private_mvp_design_audit_events enable row level security;
+
+revoke all privileges on table public.daip_private_mvp_design_reviews from public, anon, authenticated;
+revoke all privileges on table public.daip_private_mvp_design_audit_events from public, anon, authenticated;
+grant all privileges on table public.daip_private_mvp_design_reviews to service_role;
+grant all privileges on table public.daip_private_mvp_design_audit_events to service_role;
+
+comment on table public.daip_private_mvp_design_reviews is
+  'Build 223 DAIP private-MVP design blueprints. This is an independent-review queue only; Gate C stays held and the record cannot provision storage, upload/download, signed links, queues, workers, processing, customer media, exports, or publishing.';
+comment on table public.daip_private_mvp_design_audit_events is
+  'Build 223 DAIP design-blueprint audit trail. Store governance-safe text only; never credentials, URLs, bucket/object paths, customer data, addresses, VINs, payment data, private media, or incident evidence.';
+
+commit;
+
+-- END MIGRATION: 2026-07-05_build223_daip_private_mvp_design_blueprint.sql
+
+
+-- Canonical schema mirror: 2026-07-06_build224_customer_preference_history_duplicate_review.sql
+-- Build 224 — customer contact-preference history and duplicate-profile review safeguards.
+-- Review only: this migration never merges profiles, changes consent, changes customer access, or exposes data publicly.
+begin;
+create table if not exists public.customer_contact_preference_events (
+  id uuid primary key default gen_random_uuid(),
+  customer_profile_id uuid not null references public.customer_profiles(id) on delete restrict,
+  event_type text not null check (event_type in ('contact_preferences_changed')),
+  old_snapshot jsonb not null default '{}'::jsonb,
+  new_snapshot jsonb not null default '{}'::jsonb,
+  actor_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  actor_staff_email text null check (actor_staff_email is null or char_length(actor_staff_email) <= 320),
+  safe_summary text not null check (char_length(safe_summary) between 3 and 500),
+  created_at timestamptz not null default now()
+);
+create index if not exists customer_contact_preference_events_profile_idx on public.customer_contact_preference_events(customer_profile_id,created_at desc);
+alter table public.customer_contact_preference_events enable row level security;
+revoke all privileges on table public.customer_contact_preference_events from public, anon, authenticated;
+grant all privileges on table public.customer_contact_preference_events to service_role;
+comment on table public.customer_contact_preference_events is 'Build 224 safe staff audit history of operational notification and live-update preference changes. It is not a consent source and never changes customer records itself.';
+commit;
+
+
+-- Canonical schema mirror: 2026-07-06_build224_daip_gate_c_technical_review_rollback.sql
+-- Build 224 — DAIP Gate C technical-review and rollback acceptance evidence.
+-- Test-only review records; this migration creates no media storage, upload/download authorization,
+-- object path, worker, queue, processing, customer-media route, public destination, or publishing control.
+begin;
+create table if not exists public.daip_gate_c_technical_reviews (
+  id uuid primary key default gen_random_uuid(),
+  review_status text not null default 'draft' check (review_status in ('draft','blocked','accepted_for_test_only_implementation_review')),
+  technical_owner_label text not null check (char_length(technical_owner_label) between 2 and 120),
+  independent_reviewer_label text not null check (char_length(independent_reviewer_label) between 2 and 120),
+  acceptance_scope_summary text not null check (char_length(acceptance_scope_summary) between 12 and 2400),
+  rollback_plan_summary text not null check (char_length(rollback_plan_summary) between 12 and 2400),
+  failure_test_summary text not null check (char_length(failure_test_summary) between 12 and 2000),
+  cost_stop_validation_summary text not null check (char_length(cost_stop_validation_summary) between 12 and 1600),
+  review_due_on date not null,
+  design_review_id uuid null references public.daip_private_mvp_design_reviews(id) on delete restrict,
+  design_submission_valid boolean not null default false,
+  zero_public_destination_confirmed boolean not null default false,
+  no_customer_media_confirmed boolean not null default false,
+  technical_capabilities_still_disabled boolean not null default false,
+  gate_c_held boolean not null default true check (gate_c_held is true),
+  accepted_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  accepted_by_staff_email text null check (accepted_by_staff_email is null or char_length(accepted_by_staff_email) <= 320),
+  accepted_at timestamptz null,
+  recorded_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  recorded_by_staff_email text null check (recorded_by_staff_email is null or char_length(recorded_by_staff_email) <= 320),
+  created_at timestamptz not null default now(),
+  check ((review_status='accepted_for_test_only_implementation_review' and design_review_id is not null and design_submission_valid is true and zero_public_destination_confirmed is true and no_customer_media_confirmed is true and technical_capabilities_still_disabled is true and accepted_at is not null) or (review_status in ('draft','blocked') and accepted_at is null))
+);
+create table if not exists public.daip_gate_c_technical_review_audit_events (
+  id uuid primary key default gen_random_uuid(), technical_review_id uuid not null references public.daip_gate_c_technical_reviews(id) on delete restrict,
+  event_type text not null check (event_type in ('technical_review_drafted','technical_review_blocked','technical_review_accepted_for_test_only')),
+  actor_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  actor_staff_email text null check (actor_staff_email is null or char_length(actor_staff_email) <= 320),
+  safe_note text not null check (char_length(safe_note) between 3 and 600), created_at timestamptz not null default now()
+);
+create index if not exists daip_gate_c_technical_reviews_created_idx on public.daip_gate_c_technical_reviews(created_at desc);
+create index if not exists daip_gate_c_technical_review_audit_idx on public.daip_gate_c_technical_review_audit_events(technical_review_id,created_at desc);
+alter table public.daip_gate_c_technical_reviews enable row level security;
+alter table public.daip_gate_c_technical_review_audit_events enable row level security;
+revoke all privileges on table public.daip_gate_c_technical_reviews from public, anon, authenticated;
+revoke all privileges on table public.daip_gate_c_technical_review_audit_events from public, anon, authenticated;
+grant all privileges on table public.daip_gate_c_technical_reviews to service_role;
+grant all privileges on table public.daip_gate_c_technical_review_audit_events to service_role;
+comment on table public.daip_gate_c_technical_reviews is 'Build 224 DAIP Gate C technical-review and rollback acceptance record. It records test-only design evidence and cannot enable storage, uploads, processing, customer media, public destinations, or publishing.';
+comment on table public.daip_gate_c_technical_review_audit_events is 'Build 224 Gate C audit trail. Store plain-language review evidence only; never credentials, URLs, external service configuration, customer data, private media, payment data, or incident evidence.';
+commit;
+
+
+-- 2026-07-07_build225_social_analytics_connection_centre_no_ddl_note.sql
+-- Build 225 — Social & Analytics Connections Centre and DAIP external-service boundary.
+-- No database migration is required.
+-- Runtime connection values are intentionally Cloudflare Variables and Secrets, never Supabase app settings.
+-- This file exists as schema/release history evidence only.
+
+
+-- BEGIN BUILD 226 DAIP INTAKE DRY RUN
+-- Build 226 — DAIP metadata-only intake dry run.
+-- This migration stores fictional validation manifests only. It creates no storage, upload/download
+-- authorization, object path, worker, queue, customer-media route, public destination, or publishing control.
+begin;
+create table if not exists public.daip_intake_dry_runs (
+  id uuid primary key default gen_random_uuid(),
+  run_code text not null unique check (run_code ~ '^RD-DRYRUN-[0-9]{8}-[0-9]{3}$'),
+  run_status text not null default 'draft' check (run_status in ('draft','validated','rejected','archived')),
+  owner_label text not null check (char_length(owner_label) between 2 and 120),
+  scenario_summary text not null check (char_length(scenario_summary) between 12 and 1200),
+  item_count integer not null default 0 check (item_count between 0 and 100),
+  total_declared_bytes bigint not null default 0 check (total_declared_bytes between 0 and 107374182400),
+  accepted_item_count integer not null default 0 check (accepted_item_count between 0 and 100),
+  rejected_item_count integer not null default 0 check (rejected_item_count between 0 and 100),
+  estimated_monthly_storage_cad numeric(12,4) not null default 0 check (estimated_monthly_storage_cad >= 0),
+  gate_c_held boolean not null default true check (gate_c_held is true),
+  media_bytes_received boolean not null default false check (media_bytes_received is false),
+  storage_authorization_created boolean not null default false check (storage_authorization_created is false),
+  worker_execution_requested boolean not null default false check (worker_execution_requested is false),
+  public_destination_enabled boolean not null default false check (public_destination_enabled is false),
+  recorded_by_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  recorded_by_staff_email text null check (recorded_by_staff_email is null or char_length(recorded_by_staff_email) <= 320),
+  created_at timestamptz not null default now(),
+  archived_at timestamptz null
+);
+create table if not exists public.daip_intake_dry_run_items (
+  id uuid primary key default gen_random_uuid(),
+  dry_run_id uuid not null references public.daip_intake_dry_runs(id) on delete restrict,
+  fictional_filename text not null check (char_length(fictional_filename) between 5 and 180),
+  declared_mime_type text not null check (declared_mime_type in ('image/jpeg','image/png','image/webp','video/mp4','video/quicktime')),
+  declared_size_bytes bigint not null check (declared_size_bytes between 1 and 2147483648),
+  fictional_sha256 text not null check (fictional_sha256 ~ '^[a-f0-9]{64}$'),
+  validation_status text not null check (validation_status in ('accepted','rejected')),
+  validation_reasons text[] not null default '{}',
+  created_at timestamptz not null default now()
+);
+create table if not exists public.daip_intake_dry_run_audit_events (
+  id uuid primary key default gen_random_uuid(),
+  dry_run_id uuid not null references public.daip_intake_dry_runs(id) on delete restrict,
+  event_type text not null check (event_type in ('dry_run_created','dry_run_validated','dry_run_rejected','dry_run_archived')),
+  actor_staff_user_id uuid null references public.staff_users(id) on delete set null,
+  actor_staff_email text null check (actor_staff_email is null or char_length(actor_staff_email) <= 320),
+  safe_note text not null check (char_length(safe_note) between 3 and 600),
+  created_at timestamptz not null default now()
+);
+create index if not exists daip_intake_dry_runs_created_idx on public.daip_intake_dry_runs(created_at desc);
+create index if not exists daip_intake_dry_run_items_run_idx on public.daip_intake_dry_run_items(dry_run_id,created_at);
+create index if not exists daip_intake_dry_run_audit_idx on public.daip_intake_dry_run_audit_events(dry_run_id,created_at desc);
+alter table public.daip_intake_dry_runs enable row level security;
+alter table public.daip_intake_dry_run_items enable row level security;
+alter table public.daip_intake_dry_run_audit_events enable row level security;
+revoke all privileges on table public.daip_intake_dry_runs from public, anon, authenticated;
+revoke all privileges on table public.daip_intake_dry_run_items from public, anon, authenticated;
+revoke all privileges on table public.daip_intake_dry_run_audit_events from public, anon, authenticated;
+grant all privileges on table public.daip_intake_dry_runs to service_role;
+grant all privileges on table public.daip_intake_dry_run_items to service_role;
+grant all privileges on table public.daip_intake_dry_run_audit_events to service_role;
+comment on table public.daip_intake_dry_runs is 'Build 226 fictional metadata-only intake validation dry runs. No media bytes, storage authorization, worker execution, customer data, public destination, or publishing.';
+commit;
+-- END BUILD 226 DAIP INTAKE DRY RUN
+
+
+-- Build 227 canonical migration mirror
+-- Build 227 — DB-backed roadmap execution and DAIP dry-run policy controls.
+begin;
+create table if not exists public.app_roadmap_execution_items (
+ id uuid primary key default gen_random_uuid(),
+ item_key text not null unique check (item_key ~ '^[a-z0-9_:-]{4,120}$'),
+ title text not null check (char_length(title) between 5 and 220),
+ workstream text not null check (workstream in ('customer','booking','payments','seo','media','daip','operations','reliability','documentation')),
+ priority text not null default 'high' check (priority in ('critical','high','medium','low')),
+ status text not null default 'planned' check (status in ('planned','in_progress','blocked','done','deferred')),
+ owner_label text null check (owner_label is null or char_length(owner_label)<=120),
+ evidence_note text null check (evidence_note is null or char_length(evidence_note)<=1200),
+ target_build integer null check (target_build is null or target_build between 227 and 999),
+ sort_order integer not null default 100 check (sort_order between 1 and 10000),
+ source_document text not null default 'MASTER_VALUE_ROADMAP.md',
+ updated_by_staff_email text null,
+ created_at timestamptz not null default now(), updated_at timestamptz not null default now()
+);
+create table if not exists public.app_roadmap_execution_audit (
+ id uuid primary key default gen_random_uuid(), roadmap_item_id uuid not null references public.app_roadmap_execution_items(id) on delete restrict,
+ event_type text not null check (event_type in ('created','updated','status_changed','evidence_added')),
+ actor_staff_email text null, safe_note text not null check (char_length(safe_note) between 3 and 800), created_at timestamptz not null default now()
+);
+create table if not exists public.daip_intake_validation_policy (
+ id uuid primary key default gen_random_uuid(), policy_key text not null unique default 'active',
+ max_manifest_items integer not null default 25 check (max_manifest_items between 1 and 100),
+ max_image_bytes bigint not null default 52428800 check (max_image_bytes between 1048576 and 524288000),
+ max_video_bytes bigint not null default 2147483648 check (max_video_bytes between 10485760 and 10737418240),
+ storage_rate_cad_per_gb_month numeric(12,6) not null default 0.025 check (storage_rate_cad_per_gb_month between 0 and 100),
+ monthly_warning_cad numeric(12,2) not null default 25 check (monthly_warning_cad between 0 and 100000),
+ monthly_hard_stop_cad numeric(12,2) not null default 50 check (monthly_hard_stop_cad >= monthly_warning_cad and monthly_hard_stop_cad <= 100000),
+ gate_c_held boolean not null default true check (gate_c_held is true),
+ technical_capability_enabled boolean not null default false check (technical_capability_enabled is false),
+ updated_by_staff_email text null, updated_at timestamptz not null default now()
+);
+insert into public.daip_intake_validation_policy(policy_key) values('active') on conflict(policy_key) do nothing;
+insert into public.app_roadmap_execution_items(item_key,title,workstream,priority,status,target_build,sort_order,source_document) values
+('b227_01','Deploy and validate Build 226 metadata-only DAIP dry runs','daip','critical','planned',227,10,'MASTER_VALUE_ROADMAP.md'),
+('b227_02','Move DAIP validation limits and cost assumptions from code into protected DB policy','daip','critical','done',227,20,'DEVELOPMENT_ROADMAP.md'),
+('b227_03','Add protected roadmap execution queue and evidence tracking','operations','high','done',227,30,'DEVELOPMENT_ROADMAP.md'),
+('b227_04','Complete DAIP owner decisions and Gate A evidence','daip','critical','planned',228,40,'MASTER_VALUE_ROADMAP.md'),
+('b227_05','Complete DAIP internal safety tests and Gate B evidence','daip','critical','planned',228,50,'MASTER_VALUE_ROADMAP.md'),
+('b227_06','Perform independent Gate C rollback review','daip','critical','planned',229,60,'MASTER_VALUE_ROADMAP.md'),
+('b227_07','Run customer account recovery and archive/restore staging tests','customer','high','planned',228,70,'KNOWN_GAPS_AND_RISKS.md'),
+('b227_08','Add manual duplicate-customer merge dry-run workflow','customer','high','planned',229,80,'MASTER_VALUE_ROADMAP.md'),
+('b227_09','Verify final-balance Stripe test-mode settlement and replay','payments','critical','planned',228,90,'KNOWN_GAPS_AND_RISKS.md'),
+('b227_10','Verify notification provider delivery in controlled inbox','reliability','high','planned',228,100,'KNOWN_GAPS_AND_RISKS.md'),
+('b227_11','Run mobile weak-network upload retry tests','media','high','planned',229,110,'KNOWN_GAPS_AND_RISKS.md'),
+('b227_12','Pair approved final proof into gallery candidates with consent review','media','high','planned',230,120,'MASTER_VALUE_ROADMAP.md'),
+('b227_13','Create vehicle-history cards from approved final proof only','customer','high','planned',230,130,'MASTER_VALUE_ROADMAP.md'),
+('b227_14','Gate review requests on payment, acknowledgement, and incident status','customer','high','planned',230,140,'MASTER_VALUE_ROADMAP.md'),
+('b227_15','Add local SEO evidence review from Search Console and Business Profile','seo','high','planned',229,150,'MASTER_VALUE_ROADMAP.md'),
+('b227_16','Replace public placeholders only with approved Rosie-owned proof','seo','medium','planned',230,160,'IMAGES.md'),
+('b227_17','Add live screenshot/mobile smoke evidence for core routes','reliability','high','planned',228,170,'DEVELOPMENT_ROADMAP.md'),
+('b227_18','Archive redundant Markdown safely after guard dependency scan','documentation','medium','planned',229,180,'DEVELOPMENT_ROADMAP.md'),
+('b227_19','Continue one-H1, title/meta, local wording, and CSS drift checks','seo','high','in_progress',227,190,'DEVELOPMENT_ROADMAP.md'),
+('b227_20','Keep DAIP storage, workers, AI, and publishing disabled until Gate C approval','daip','critical','in_progress',227,200,'KNOWN_GAPS_AND_RISKS.md')
+on conflict(item_key) do nothing;
+create index if not exists app_roadmap_execution_status_idx on public.app_roadmap_execution_items(status,priority,sort_order);
+create index if not exists app_roadmap_execution_audit_idx on public.app_roadmap_execution_audit(roadmap_item_id,created_at desc);
+alter table public.app_roadmap_execution_items enable row level security;
+alter table public.app_roadmap_execution_audit enable row level security;
+alter table public.daip_intake_validation_policy enable row level security;
+revoke all privileges on table public.app_roadmap_execution_items, public.app_roadmap_execution_audit, public.daip_intake_validation_policy from public,anon,authenticated;
+grant all privileges on table public.app_roadmap_execution_items, public.app_roadmap_execution_audit, public.daip_intake_validation_policy to service_role;
+comment on table public.daip_intake_validation_policy is 'Build 227 planning-only DAIP metadata validation policy. Gate C is held and technical capability is forced false.';
+commit;
+-- Build 228 — Creative Project Intelligence foundation.
+begin;
+create table if not exists public.creative_projects (
+ id uuid primary key default gen_random_uuid(),
+ project_code text not null unique check (project_code ~ '^CP-[A-Z0-9-]{6,40}$'),
+ title text not null check (char_length(title) between 3 and 180),
+ project_type text not null default 'detailing' check (project_type in ('detailing','jewelry','restoration','maker','education','other')),
+ lifecycle_status text not null default 'idea' check (lifecycle_status in ('idea','planning','active','paused','complete','content_review','published','archived')),
+ purpose text null check (purpose is null or char_length(purpose)<=2000),
+ audience text null check (audience is null or char_length(audience)<=800),
+ outcome_summary text null check (outcome_summary is null or char_length(outcome_summary)<=4000),
+ lessons_learned text null check (lessons_learned is null or char_length(lessons_learned)<=6000),
+ future_recommendations text null check (future_recommendations is null or char_length(future_recommendations)<=4000),
+ estimated_cost_cad numeric(12,2) not null default 0 check (estimated_cost_cad>=0),
+ actual_cost_cad numeric(12,2) not null default 0 check (actual_cost_cad>=0),
+ labour_minutes integer not null default 0 check (labour_minutes>=0),
+ public_publish_allowed boolean not null default false,
+ consent_reviewed boolean not null default false,
+ created_by_staff_email text null,
+ updated_by_staff_email text null,
+ created_at timestamptz not null default now(),
+ updated_at timestamptz not null default now()
+);
+create table if not exists public.creative_project_sessions (
+ id uuid primary key default gen_random_uuid(),
+ project_id uuid not null references public.creative_projects(id) on delete cascade,
+ session_type text not null default 'work' check (session_type in ('planning','work','media','review','publishing')),
+ started_at timestamptz not null default now(),
+ ended_at timestamptz null,
+ minutes_spent integer not null default 0 check (minutes_spent>=0),
+ summary text not null check (char_length(summary) between 3 and 3000),
+ materials_used text null check (materials_used is null or char_length(materials_used)<=3000),
+ mistakes_and_fixes text null check (mistakes_and_fixes is null or char_length(mistakes_and_fixes)<=3000),
+ next_action text null check (next_action is null or char_length(next_action)<=1200),
+ created_by_staff_email text null,
+ created_at timestamptz not null default now()
+);
+create table if not exists public.creative_project_outputs (
+ id uuid primary key default gen_random_uuid(),
+ project_id uuid not null references public.creative_projects(id) on delete cascade,
+ output_type text not null check (output_type in ('youtube_video','youtube_shorts','instagram_reels','tiktok','facebook_video','pinterest_pins','etsy_draft','website_product_page','blog_article','photo_gallery','before_after','educational_article','project_archive','material_usage_report','cost_analysis','lessons_learned','future_recommendations')),
+ status text not null default 'planned' check (status in ('planned','drafting','review','approved','scheduled','published','not_applicable')),
+ draft_title text null check (draft_title is null or char_length(draft_title)<=220),
+ safe_notes text null check (safe_notes is null or char_length(safe_notes)<=3000),
+ destination_url text null check (destination_url is null or char_length(destination_url)<=1000),
+ generated_automatically boolean not null default false,
+ approved_by_staff_email text null,
+ updated_at timestamptz not null default now(),
+ unique(project_id,output_type)
+);
+create table if not exists public.creative_project_audit (
+ id uuid primary key default gen_random_uuid(),
+ project_id uuid not null references public.creative_projects(id) on delete restrict,
+ event_type text not null check (event_type in ('created','updated','session_added','output_updated','archived')),
+ actor_staff_email text null,
+ safe_note text not null check (char_length(safe_note) between 3 and 1000),
+ created_at timestamptz not null default now()
+);
+create index if not exists creative_projects_status_idx on public.creative_projects(lifecycle_status,updated_at desc);
+create index if not exists creative_project_sessions_idx on public.creative_project_sessions(project_id,started_at desc);
+create index if not exists creative_project_outputs_idx on public.creative_project_outputs(project_id,status,output_type);
+create index if not exists creative_project_audit_idx on public.creative_project_audit(project_id,created_at desc);
+alter table public.creative_projects enable row level security;
+alter table public.creative_project_sessions enable row level security;
+alter table public.creative_project_outputs enable row level security;
+alter table public.creative_project_audit enable row level security;
+revoke all privileges on table public.creative_projects, public.creative_project_sessions, public.creative_project_outputs, public.creative_project_audit from public,anon,authenticated;
+grant all privileges on table public.creative_projects, public.creative_project_sessions, public.creative_project_outputs, public.creative_project_audit to service_role;
+comment on table public.creative_projects is 'Build 228 project-centric source record. Projects document process first; products and content are optional governed outputs.';
+commit;
+
+
+-- BEGIN 2026-07-12_build229_standard_job_project_choice.sql
+-- Build 229 — Preserve the standard booking workflow while allowing an explicit opt-in creative project link.
+begin;
+
+alter table public.creative_projects
+  add column if not exists source_mode text not null default 'standalone_project'
+    check (source_mode in ('standalone_project','booking_opt_in')),
+  add column if not exists source_booking_id uuid null references public.bookings(id) on delete set null,
+  add column if not exists source_customer_initiated boolean not null default false;
+
+create unique index if not exists creative_projects_source_booking_unique
+  on public.creative_projects(source_booking_id)
+  where source_booking_id is not null;
+
+create table if not exists public.creative_project_booking_audit (
+  id uuid primary key default gen_random_uuid(),
+  booking_id uuid not null references public.bookings(id) on delete restrict,
+  project_id uuid not null references public.creative_projects(id) on delete restrict,
+  event_type text not null check (event_type in ('project_opted_in','project_opened','link_removed')),
+  actor_staff_email text null,
+  safe_note text not null check (char_length(safe_note) between 3 and 1000),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists creative_project_booking_audit_booking_idx
+  on public.creative_project_booking_audit(booking_id,created_at desc);
+
+alter table public.creative_project_booking_audit enable row level security;
+revoke all privileges on table public.creative_project_booking_audit from public,anon,authenticated;
+grant all privileges on table public.creative_project_booking_audit to service_role;
+
+comment on column public.creative_projects.source_mode is
+  'Build 229: standalone projects are created directly; booking_opt_in projects are explicitly promoted from a normal booking. A booking without a linked project remains a standard job.';
+comment on column public.creative_projects.source_booking_id is
+  'Optional booking link. Null means the project is independent. No booking is automatically converted into a project.';
+
+commit;
+
+-- END 2026-07-12_build229_standard_job_project_choice.sql
+-- Build 230 — structured creative-project costing, templates, output drafts, reversible links, and gated DAIP association.
+begin;
+
+alter table public.creative_projects
+  add column if not exists template_key text null check (template_key is null or char_length(template_key) <= 80),
+  add column if not exists before_after_applicability text not null default 'not_reviewed'
+    check (before_after_applicability in ('not_reviewed','applicable','not_applicable')),
+  add column if not exists consent_summary text null check (consent_summary is null or char_length(consent_summary) <= 3000),
+  add column if not exists consent_status text not null default 'not_reviewed'
+    check (consent_status in ('not_reviewed','internal_only','approved_public','declined','expired')),
+  add column if not exists archived_reason text null check (archived_reason is null or char_length(archived_reason) <= 1200),
+  add column if not exists archived_at timestamptz null;
+
+create table if not exists public.creative_project_templates (
+  id uuid primary key default gen_random_uuid(),
+  template_key text not null unique check (template_key ~ '^[a-z0-9_]{3,80}$'),
+  name text not null check (char_length(name) between 3 and 120),
+  project_type text not null check (project_type in ('detailing','jewelry','restoration','maker','education','other')),
+  purpose_prompt text null check (purpose_prompt is null or char_length(purpose_prompt) <= 2000),
+  audience_prompt text null check (audience_prompt is null or char_length(audience_prompt) <= 800),
+  default_before_after_applicability text not null default 'not_reviewed'
+    check (default_before_after_applicability in ('not_reviewed','applicable','not_applicable')),
+  active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+insert into public.creative_project_templates(template_key,name,project_type,purpose_prompt,audience_prompt,default_before_after_applicability)
+values
+ ('detailing_story','Detailing transformation story','detailing','Document the condition, process, decisions, results, and lessons from a selected detailing job.','Local vehicle owners and detailing learners','applicable'),
+ ('maker_process','Maker process documentary','maker','Document the complete creative process from idea and setup through mistakes, corrections, final result, and recommendations.','Makers, customers, and learners','not_reviewed'),
+ ('education_walkthrough','Educational walkthrough','education','Teach a repeatable process with safety notes, tools, materials, troubleshooting, and verified results.','Beginners and practical learners','not_applicable'),
+ ('restoration_story','Restoration before-and-after','restoration','Document assessment, preservation choices, restoration work, final condition, and care guidance.','Collectors, owners, and restoration learners','applicable')
+on conflict (template_key) do update set name=excluded.name,project_type=excluded.project_type,purpose_prompt=excluded.purpose_prompt,audience_prompt=excluded.audience_prompt,default_before_after_applicability=excluded.default_before_after_applicability,updated_at=now();
+
+create table if not exists public.creative_project_material_lines (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.creative_projects(id) on delete cascade,
+  material_name text not null check (char_length(material_name) between 2 and 180),
+  inventory_item_id uuid null,
+  quantity numeric(12,3) not null default 1 check (quantity > 0),
+  unit text not null default 'item' check (char_length(unit) between 1 and 40),
+  unit_cost_cad numeric(12,4) not null default 0 check (unit_cost_cad >= 0),
+  waste_quantity numeric(12,3) not null default 0 check (waste_quantity >= 0),
+  source_mode text not null default 'project_only' check (source_mode in ('project_only','inventory_reference')),
+  safe_note text null check (safe_note is null or char_length(safe_note) <= 1200),
+  created_by_staff_email text null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.creative_project_labour_lines (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.creative_projects(id) on delete cascade,
+  labour_type text not null default 'creative_work' check (labour_type in ('planning','creative_work','detailing','media','editing','review','administration','other')),
+  minutes integer not null check (minutes > 0),
+  hourly_rate_cad numeric(12,2) not null default 0 check (hourly_rate_cad >= 0),
+  safe_note text null check (safe_note is null or char_length(safe_note) <= 1200),
+  created_by_staff_email text null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.creative_project_cost_lines (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.creative_projects(id) on delete cascade,
+  cost_type text not null check (cost_type in ('overhead','equipment','travel','platform_fee','shipping','packaging','other')),
+  description text not null check (char_length(description) between 2 and 240),
+  amount_cad numeric(12,2) not null check (amount_cad >= 0),
+  safe_note text null check (safe_note is null or char_length(safe_note) <= 1200),
+  created_by_staff_email text null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.creative_project_output_drafts (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.creative_projects(id) on delete cascade,
+  output_type text not null check (output_type in ('youtube_video','youtube_shorts','instagram_reels','tiktok','facebook_video','pinterest_pins','etsy_draft','website_product_page','blog_article','photo_gallery','before_after','educational_article','project_archive','material_usage_report','cost_analysis','lessons_learned','future_recommendations')),
+  draft_kind text not null default 'platform_copy' check (draft_kind in ('story_outline','platform_copy','commerce_copy','report_outline')),
+  hook text null check (hook is null or char_length(hook) <= 500),
+  outline text null check (outline is null or char_length(outline) <= 12000),
+  caption text null check (caption is null or char_length(caption) <= 5000),
+  call_to_action text null check (call_to_action is null or char_length(call_to_action) <= 800),
+  seo_title text null check (seo_title is null or char_length(seo_title) <= 180),
+  seo_description text null check (seo_description is null or char_length(seo_description) <= 500),
+  aspect_ratio text null check (aspect_ratio is null or aspect_ratio in ('16:9','9:16','1:1','2:3','mixed','not_applicable')),
+  review_status text not null default 'draft' check (review_status in ('draft','review','approved','rejected')),
+  approved_by_staff_email text null,
+  updated_by_staff_email text null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique(project_id,output_type,draft_kind)
+);
+
+create table if not exists public.creative_project_daip_associations (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.creative_projects(id) on delete cascade,
+  daip_reference text not null check (daip_reference ~ '^DAIP-[A-Z0-9-]{6,80}$'),
+  association_status text not null default 'requested' check (association_status in ('requested','approved','revoked')),
+  gate_c_verified boolean not null default false check (gate_c_verified = true),
+  technical_capability_verified boolean not null default false check (technical_capability_verified = true),
+  contains_media_bytes boolean not null default false check (contains_media_bytes = false),
+  public_destination_enabled boolean not null default false check (public_destination_enabled = false),
+  safe_note text not null check (char_length(safe_note) between 3 and 1200),
+  created_by_staff_email text null,
+  created_at timestamptz not null default now(),
+  revoked_at timestamptz null,
+  unique(project_id,daip_reference)
+);
+
+alter table public.creative_project_audit drop constraint if exists creative_project_audit_event_type_check;
+alter table public.creative_project_audit add constraint creative_project_audit_event_type_check check (event_type in ('created','updated','session_added','output_updated','archived','restored','booking_unlinked','cost_line_added','material_line_added','labour_line_added','draft_updated','batch_approval','daip_associated'));
+
+create index if not exists creative_project_material_lines_idx on public.creative_project_material_lines(project_id,created_at desc);
+create index if not exists creative_project_labour_lines_idx on public.creative_project_labour_lines(project_id,created_at desc);
+create index if not exists creative_project_cost_lines_idx on public.creative_project_cost_lines(project_id,created_at desc);
+create index if not exists creative_project_output_drafts_idx on public.creative_project_output_drafts(project_id,output_type,review_status);
+create index if not exists creative_project_daip_associations_idx on public.creative_project_daip_associations(project_id,created_at desc);
+
+alter table public.creative_project_templates enable row level security;
+alter table public.creative_project_material_lines enable row level security;
+alter table public.creative_project_labour_lines enable row level security;
+alter table public.creative_project_cost_lines enable row level security;
+alter table public.creative_project_output_drafts enable row level security;
+alter table public.creative_project_daip_associations enable row level security;
+revoke all privileges on table public.creative_project_templates,public.creative_project_material_lines,public.creative_project_labour_lines,public.creative_project_cost_lines,public.creative_project_output_drafts,public.creative_project_daip_associations from public,anon,authenticated;
+grant all privileges on table public.creative_project_templates,public.creative_project_material_lines,public.creative_project_labour_lines,public.creative_project_cost_lines,public.creative_project_output_drafts,public.creative_project_daip_associations to service_role;
+
+comment on table public.creative_project_material_lines is 'Build 230 project-only material accounting. It does not mutate ordinary booking inventory or job costing.';
+comment on table public.creative_project_daip_associations is 'Build 230 gated project-to-DAIP metadata association. Database constraints prohibit media bytes and public destinations.';
+commit;

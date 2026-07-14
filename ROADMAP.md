@@ -1,4 +1,23 @@
-# Build 207 pointer
+## Digital Asset Intelligence Platform
+
+New planned subsystem documented in:
+
+`docs/digital-asset-intelligence-platform/`
+
+Purpose: automatically turn each completed detailing job into:
+- 1 YouTube video
+- 3 Facebook videos
+- 5 Instagram Reels
+- 5 TikToks
+- before/after images
+- website gallery
+- Google Business Profile photos
+- SEO assets
+- blog article
+- thumbnails
+- captions
+-
+  # Build 207 pointer
 
 Current planning now lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This historical file is retained for context and release history.
 
@@ -715,3 +734,7 @@ Build 213 adds owner action controls in Today Needs Attention, customer price/su
 ### Build 214 documentation sync — 2026-06-23
 
 Build 214 prioritizes Supabase containment and owner-task reliability. The active security action is to run `sql/2026-06-23_build214_security_task_orchestration.sql`, refresh Supabase Security Advisor, and test the application through Cloudflare Functions rather than restoring direct browser access to tables. Canonical planning remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+### Build 216 synchronization — 2026-07-01
+
+Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
