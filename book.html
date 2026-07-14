@@ -614,6 +614,7 @@
       packagePrice as sharedPackagePrice,
       chartUrl
     } from "/assets/pricing-catalog-client.js?v=20260412pass12";
+    import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
 
     const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const VEHICLE_MAKES_URL = "/api/vehicle_makes";
@@ -1929,7 +1930,7 @@
         if (Array.isArray(addon.notes) && addon.notes.length) noteParts.push((addon.notes || []).join(" • "));
         if (!allowed) noteParts.push(addonRequirementText(addon));
         return `<button class="addon-card ${state.addons.has(addon.code) ? "active" : ""} ${allowed ? "" : "disabled"}" type="button" data-addon="${escapeHtml(addon.code)}" ${allowed ? "" : "data-disabled=1"}>
-          <img class="addon-thumb" src="${escapeHtml(src)}" data-fallback="${escapeHtml(fallback)}" alt="${escapeHtml(addon.name)}" loading="lazy" />
+          <img class="addon-thumb" data-media-source="${escapeHtml(src)}" data-fallback="${escapeHtml(fallback)}" alt="${escapeHtml(addon.name)}" loading="lazy" />
           <strong>${escapeHtml(addon.name)}</strong>
           <span class="muted mini">${escapeHtml(addon.category || "")}${addon.type ? ` · ${escapeHtml(addon.type)}` : ""}</span>
           <span class="tag ${addon.quote_required ? "warn" : (allowed ? "ok" : "warn")}">${escapeHtml(addonDisplayPrice(addon))}</span>
@@ -1938,14 +1939,10 @@
       }).join("");
 
       qsa(".addon-thumb").forEach((img) => {
-        img.onerror = () => {
-          const fallback = img.dataset.fallback || "/assets/addons/generic_addon.svg";
-          if (img.src !== new URL(fallback, window.location.origin).href) {
-            img.src = fallback;
-            return;
-          }
-          img.style.display = "none";
-        };
+        bindImageWithCandidates(img, img.dataset.mediaSource || "", {
+          fallback: img.dataset.fallback || "/assets/addons/generic_addon.svg",
+          onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.svg"; node.classList.add("visual-placeholder-img"); }
+        });
       });
 
       qsa("[data-addon]").forEach((btn) => {
@@ -2246,7 +2243,7 @@
     }
   </script>
 
-  <script type="module" src="/assets/chrome.js?v=20260412bookfix1"></script>
+  <script type="module" src="/assets/chrome.js?v=20260701build216"></script>
   <script src="/assets/site-policies.js" defer></script>
   <script src="/assets/booking-hours.js" defer></script>
 </body>
