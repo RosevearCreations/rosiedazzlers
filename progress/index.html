@@ -372,7 +372,18 @@
       } catch (err) { setNotice(err.message || 'Could not save your decision.', 'bad'); }
     }
 
-    function renderPaymentLinks(data) { const box=document.querySelector('#paymentLinksBox'); if(!box)return; const rows=Array.isArray(data.payment_links)?data.payment_links:[]; if(!rows.length){box.innerHTML='';return;} box.innerHTML=`<div class="notice warn"><strong>Secure payment link${rows.length>1?'s':''} ready</strong>${rows.map(row=>`<div style="margin-top:8px"><a class="btn primary small" href="${escapeHtml(row.url)}" target="_blank" rel="noopener">Pay ${formatMoney(Number(row.amount_cents||0)/100)} securely</a><span class="kicker"> ${escapeHtml(row.status||'open')}</span></div>`).join('')}</div>`; }
+    function renderPaymentLinks(data) {
+      const box=document.querySelector('#paymentLinksBox'); if(!box)return;
+      const rows=Array.isArray(data.payment_links)?data.payment_links:[]; if(!rows.length){box.innerHTML='';return;}
+      const messages={paid:'Final balance received',expired:'Payment link expired',cancelled:'Payment request closed',open:'Secure final-balance payment'};
+      box.innerHTML=`<div class="notice warn"><strong>${rows.length>1?'Final-balance payment status':'Final-balance payment status'}</strong>${rows.map(row=>{
+        const state=String(row.state||row.status||'open').toLowerCase();
+        const amount=formatMoney(Number(row.amount_cents||0)/100);
+        if(state==='paid') return `<div style="margin-top:8px"><span class="badge">${escapeHtml(messages.paid)}</span><span class="kicker"> ${escapeHtml(amount)}${row.paid_at?` · ${escapeHtml(formatDateTime(row.paid_at))}`:''}</span></div>`;
+        if(state==='expired'||state==='cancelled') return `<div style="margin-top:8px"><span class="badge">${escapeHtml(messages[state])}</span><span class="kicker"> ${escapeHtml(amount)} · Please contact Rosie Dazzlers for help.</span></div>`;
+        return `<div style="margin-top:8px">${row.url?`<a class="btn primary small" href="${escapeHtml(row.url)}" target="_blank" rel="noopener">Pay ${escapeHtml(amount)} securely</a>`:'<span class="badge">Payment link being prepared</span>'}<span class="kicker"> ${escapeHtml(row.status||'open')}${row.expires_at?` · expires ${escapeHtml(formatDateTime(row.expires_at))}`:''}</span></div>`;
+      }).join('')}</div>`;
+    }
 
     function renderCompletedSummary(data) {
       const section=document.querySelector('#completedSummarySection'); const box=document.querySelector('#completedSummaryBox'); const item=data.completed_job_summary;

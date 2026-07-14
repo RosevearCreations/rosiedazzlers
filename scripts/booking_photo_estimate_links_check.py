@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Build 165 booking photo-estimate link capture checks."""
+"""Current architecture intentionally uses the protected admin bookings route; legacy public list route is not required.
+
+Build 165 booking photo-estimate link capture checks."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -29,9 +31,6 @@ REQUIRED = {
         '"photo_estimate_links"',
     ],
     "functions/api/admin/bookings.js": [
-        '"photo_estimate_links"',
-    ],
-    "functions/api/bookings.js": [
         '"photo_estimate_links"',
     ],
     "admin-booking.html": [

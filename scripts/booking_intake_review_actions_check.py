@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Build 164 booking intake review action checks."""
+"""Current architecture intentionally uses the protected admin bookings route; legacy public list route is not required.
+
+Build 164 booking intake review action checks."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -10,9 +12,7 @@ REQUIRED_FILES = [
     "admin-booking.html",
     "admin-booking/index.html",
     "functions/api/admin/booking_update.js",
-    "functions/api/booking_update.js",
     "functions/api/admin/bookings.js",
-    "functions/api/bookings.js",
     "sql/2026-05-22_build164_booking_intake_review_actions.sql",
 ]
 
@@ -37,11 +37,6 @@ REQUIRED_MARKERS = {
         "intake_reviewed_at",
         "appendIntakeReviewFallbackNote",
         "looksLikeMissingOptionalIntakeColumn",
-    ],
-    "functions/api/booking_update.js": [
-        'action === "set_intake_review"',
-        "intake_review_note",
-        "appendIntakeReviewFallbackNote",
     ],
     "functions/api/admin/bookings.js": [
         "intake_review_note",

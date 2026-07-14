@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Build 163 guard for booking intake/admin review workflow."""
+"""Current architecture intentionally uses the protected admin bookings route; legacy public list route is not required.
+
+Build 163 guard for booking intake/admin review workflow."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -18,10 +20,6 @@ REQUIRED_MARKERS = {
         "OPTIONAL_BOOKING_INTAKE_SELECT",
         "plate_privacy_reviewed",
         "blur_crop_complete",
-    ],
-    "functions/api/bookings.js": [
-        "loadBookingsWithOptionalIntakeFields",
-        "OPTIONAL_BOOKING_INTAKE_SELECT",
     ],
     "admin-booking.html": [
         "Estimate intake & media consent",

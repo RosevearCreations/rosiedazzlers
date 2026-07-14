@@ -94,6 +94,18 @@ Build 208 note:
 
 Build 209 note:
 - Adds the live detail interaction backbone: direct photo/video/note posting, explicit customer/review/private audiences, public-feed privacy filtering, protected media metadata, moderation, diagnostics, responsive polish, and Markdown retirement.
+
+Build 216 note:
+- Adds bounded public media recovery checks, persistent RLS-protected asset alert records, and DAIP decision/acceptance planning gates without DAIP production implementation.
+
+Build 218 note:
+- Adds metadata-only, RLS-protected DAIP internal test mode with a Test Lab, audit trail, explicit public/export/worker hard stops, and guided acceptance checks. It does not add media storage or processing.
+
+Build 219 note:
+- Adds an RLS-protected DAIP owner-decision governance workspace, Gate A/B evidence checks, and explicitly held Gates C-F. It does not add DAIP storage, uploads, workers, processing, customer access, exports, or publishing.
+
+Build 221 note:
+- Repairs customer-admin route compatibility for /api/admin/customer_admin_list 405 responses by adding generic onRequest dispatchers, list GET fallback, and a cache bump without schema or DAIP production changes.
 """
 from __future__ import annotations
 
@@ -161,6 +173,23 @@ CHECKS = [
     "scripts/build212_guided_production_testing_check.py",
     "scripts/build213_owner_action_customer_trust_check.py",
     "scripts/build214_security_task_orchestration_check.py",
+    "scripts/build215_asset_resolver_daip_planning_check.py",
+    "scripts/build216_media_reliability_daip_governance_check.py",
+    "scripts/build217_secure_final_balance_links_check.py",
+    "scripts/build218_daip_test_mode_foundation_check.py",
+    "scripts/build219_daip_governance_workspace_check.py",
+    "scripts/build220_customer_access_management_check.py",
+    "scripts/build221_customer_admin_route_hotfix_check.py",
+    "scripts/build222_daip_phase1_readiness_check.py",
+    "scripts/build223_daip_private_mvp_design_check.py",
+    "scripts/build224_daip_gate_c_technical_review_check.py",
+    "scripts/build225_social_analytics_connections_check.py",
+    "scripts/build226_daip_intake_dry_run_check.py",
+    "scripts/build227_roadmap_execution_daip_policy_check.py",
+    "scripts/build228_creative_project_intelligence_check.py",
+    "scripts/build229_standard_job_project_choice_check.py",
+    "scripts/build230_project_costs_templates_outputs_check.py",
+    "scripts/build224_customer_profile_quality_check.py",
     "scripts/seo_h1_check.py",
 ]
 
@@ -202,3 +231,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
