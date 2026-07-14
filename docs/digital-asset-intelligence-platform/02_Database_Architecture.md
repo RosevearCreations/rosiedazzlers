@@ -1,0 +1,358 @@
+# DAIP Database Architecture
+
+**Version:** 1.0
+
+---
+
+## 1. Purpose
+
+The DAIP database stores all metadata needed to track media from capture through publishing.
+
+Original video files may live in Google Drive or Cloudflare R2, but all searchable metadata, processing status, AI scores, privacy detections, outputs, approvals, and analytics belong in PostgreSQL/Supabase.
+
+---
+
+## 2. Naming Convention
+
+Suggested table prefix:
+
+```text
+daip_
+```
+
+Examples:
+
+```text
+daip_media_jobs
+daip_media_assets
+daip_scenes
+daip_privacy_detections
+daip_exports
+```
+
+---
+
+## 3. Core Tables
+
+### daip_media_jobs
+
+Represents one vehicle/detailing media project.
+
+Key fields:
+
+- id UUID primary key
+- job_code text unique, example `RD-20260715-001`
+- booking_id nullable FK
+- customer_id nullable FK
+- vehicle_year
+- vehicle_make
+- vehicle_model
+- vehicle_colour
+- package_name
+- add_ons jsonb
+- job_date date
+- sequence_number int
+- status text
+- created_by
+- assigned_technician_id
+- google_drive_folder_id
+- r2_prefix
+- created_at
+- updated_at
+
+---
+
+### daip_media_assets
+
+Represents each uploaded file or generated file.
+
+Fields:
+
+- id UUID
+- media_job_id FK
+- asset_type text: original_video, proxy_video, image, thumbnail, audio, export, document
+- source_type text: upload, generated, imported, google_drive, r2
+- original_filename
+- mime_type
+- file_size_bytes
+- duration_seconds
+- width
+- height
+- frame_rate
+- storage_provider
+- storage_key
+- google_drive_file_id
+- public_url nullable
+- privacy_status
+- processing_status
+- created_at
+- updated_at
+
+---
+
+### daip_processing_jobs
+
+Tracks background tasks.
+
+Fields:
+
+- id UUID
+- media_job_id FK
+- media_asset_id nullable FK
+- task_type text
+- status text
+- priority int
+- attempts int
+- max_attempts int
+- error_message text
+- started_at
+- completed_at
+- created_at
+
+Task types:
+
+- generate_proxy
+- extract_audio
+- extract_frames
+- detect_scenes
+- detect_objects
+- detect_privacy
+- apply_privacy_mask
+- generate_contact_sheet
+- score_scene
+- generate_reel
+- generate_youtube_video
+- generate_captions
+- generate_blog
+
+---
+
+### daip_scenes
+
+Represents detected video scenes.
+
+Fields:
+
+- id UUID
+- media_job_id FK
+- media_asset_id FK
+- scene_number int
+- start_time_seconds numeric
+- end_time_seconds numeric
+- duration_seconds numeric
+- thumbnail_asset_id nullable FK
+- quality_score numeric
+- story_score numeric
+- marketing_score numeric
+- privacy_score numeric
+- suggested_use text
+- reject_reason text nullable
+- created_at
+
+---
+
+### daip_scene_tags
+
+Stores tags for scenes.
+
+Fields:
+
+- id UUID
+- scene_id FK
+- tag text
+- confidence numeric
+- source text: ai, human, system
+
+Example tags:
+
+- exterior_before
+- interior_before
+- foam_cannon
+- vacuuming
+- extraction
+- wheel_cleaning
+- water_beading
+- beauty_shot
+- after_reveal
+
+---
+
+### daip_frame_samples
+
+Stores representative frame metadata.
+
+Fields:
+
+- id UUID
+- scene_id FK
+- media_asset_id FK
+- timestamp_seconds numeric
+- frame_asset_id FK
+- sharpness_score numeric
+- brightness_score numeric
+- composition_score numeric
+- contains_plate boolean
+- contains_face boolean
+- created_at
+
+---
+
+### daip_privacy_detections
+
+Stores detected privacy risks.
+
+Fields:
+
+- id UUID
+- media_job_id FK
+- media_asset_id FK
+- scene_id nullable FK
+- detection_type text: license_plate, face, child, house_number, document, vin, phone_screen
+- confidence numeric
+- start_time_seconds numeric nullable
+- end_time_seconds numeric nullable
+- bounding_box jsonb
+- action text: blur, black_box, pixelate, manual_review
+- status text: detected, masked, reviewed, approved, rejected
+- created_at
+
+---
+
+### daip_exports
+
+Represents generated deliverables.
+
+Fields:
+
+- id UUID
+- media_job_id FK
+- export_type text: youtube, facebook, instagram_reel, tiktok, website_gallery, gbp_photo_set, blog, thumbnail, caption_package
+- title
+- description
+- platform
+- aspect_ratio
+- duration_seconds
+- asset_id FK nullable
+- status text: draft, review, approved, rejected, published
+- publish_url nullable
+- created_at
+- approved_at
+- published_at
+
+---
+
+### daip_content_drafts
+
+Stores generated text content.
+
+Fields:
+
+- id UUID
+- media_job_id FK
+- content_type text: caption, blog, seo_title, meta_description, hashtags, youtube_description, gbp_post
+- platform nullable
+- title
+- body text
+- status text
+- approved_by
+- approved_at
+- created_at
+
+---
+
+### daip_publish_queue
+
+Tracks platform publishing.
+
+Fields:
+
+- id UUID
+- export_id FK
+- platform
+- status
+- scheduled_at nullable
+- published_at nullable
+- external_post_id nullable
+- error_message nullable
+- created_at
+
+---
+
+### daip_media_analytics
+
+Tracks performance after publishing.
+
+Fields:
+
+- id UUID
+- export_id FK
+- platform
+- views
+- likes
+- comments
+- shares
+- clicks
+- bookings_attributed
+- revenue_attributed
+- collected_at
+
+---
+
+## 4. Audit Requirements
+
+Every important action should be auditable:
+
+- upload
+- delete
+- approve
+- reject
+- publish
+- reprocess
+- privacy override
+- caption edit
+- export generation
+
+Suggested table:
+
+```text
+daip_audit_log
+```
+
+Fields:
+
+- id UUID
+- actor_user_id
+- media_job_id
+- entity_type
+- entity_id
+- action
+- before jsonb
+- after jsonb
+- created_at
+
+---
+
+## 5. Indexing Direction
+
+Recommended indexes:
+
+- media_job_id on all child tables
+- job_code unique
+- status indexes for queues
+- created_at indexes for dashboards
+- tag indexes on daip_scene_tags(tag)
+- export platform/status index
+- privacy detection status index
+
+---
+
+## 6. Security Direction
+
+Row-level security should follow existing Rosie Dazzlers roles.
+
+- Admin: full DAIP access.
+- Senior Detailer: assigned job media and review assistance.
+- Detailer: upload/capture for assigned jobs.
+- Customer: future private proof gallery only.
+
+Private fields like license plate, VIN, GPS, customer name, and raw private media should never be exposed publicly.
