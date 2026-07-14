@@ -1,9 +1,9 @@
-# Build 207 update — Markdown consolidation, visual placeholders, and sanity sweep
+# Rosie Dazzlers Development Roadmap — Build 217
 
-**Updated:** 2026-06-14  
-**Build:** 207
+**Updated:** 2026-06-30
+**Build:** 217
 
-Build 207 responds to the sanity-check request by creating two canonical living Markdown files, adding an Admin Docs/Sanity Center, adding visual graphic placeholders for missing/enrichment image slots, refreshing desktop/mobile CSS safeguards, and documenting the next clean step after the Build 206 value-added foundations. This pass is intentionally no-DDL: it uses bundled JSON registries, admin report APIs, shared CSS/JS, and existing staff authentication.
+Build 215 keeps the canonical handoff/roadmap model, adds public asset format compatibility for verified JPG Local Heroes and Service Hub media, and records DAIP integration planning without implementing DAIP production infrastructure. The immediate operational priority is verifying deployed R2 URL rendering before starting any DAIP Phase 1 work.
 
 ## Build 207 — 20 completed items
 
@@ -2470,3 +2470,156 @@ Build 213 adds owner action controls in Today Needs Attention, customer price/su
 ### Build 214 documentation sync — 2026-06-23
 
 Build 214 prioritizes Supabase containment and owner-task reliability. The active security action is to run `sql/2026-06-23_build214_security_task_orchestration.sql`, refresh Supabase Security Advisor, and test the application through Cloudflare Functions rather than restoring direct browser access to tables. Canonical planning remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+## Build 215 — public asset compatibility and DAIP integration planning (2026-06-30)
+
+Build 215 resolves a public-media format mismatch without requiring image recreation: verified Rosie-owned service/local images can remain JPG files even when historic fallback data expected WebP. The public renderer, booking/service cards, and Admin Media Health scanner now try approved same-key JPG/JPEG/WebP/PNG variants before showing a fallback visual. Canonical Local Hero data uses `landing-pages/<slug>.jpg`; the matching migration is `sql/2026-06-30_build215_media_asset_format_alignment.sql`.
+
+The Digital Asset Intelligence Platform documentation under `docs/digital-asset-intelligence-platform/` is now connected to the active plan through `10_Rosie_Dazzlers_Integration_Plan.md`. This build is documentation-only for DAIP: no DAIP worker, table, bucket, AI pipeline, queue, export, or auto-publication code is included.
+
+### Immediate operational next steps
+
+1. Deploy Build 215.
+2. Confirm Cloudflare publishes both assets and Functions.
+3. Run the Build 215 media task alignment migration after RLS containment is confirmed.
+4. Scan `/admin-media-health.html` and verify the exact resolved public Local Hero URLs.
+5. Test `/services` and every Local Hero page in an incognito browser.
+6. Record exact failing R2 keys/HTTP statuses rather than guessing or re-uploading duplicates.
+7. Complete DAIP-0 cost, privacy, storage, consent, retention, and worker-hosting decisions before approving DAIP Phase 1.
+
+> **Build 207 update — retained historical marker:** Build 207 created the canonical-doc/visual-placeholder baseline. It remains retained for the historical release guard; Build 215 now carries the active asset and DAIP planning updates.
+
+## Build 216 development sync — public media reliability and DAIP governance
+
+Completed Build 216 implementation: bounded compatible-format public asset checks, protected media-health observations and recurring alert state, staff acknowledgement UI, RLS/server-only persistence migration, updated public resolver timeouts, and DAIP decision/Phase 1 acceptance planning documents. DAIP remains planning only; no production DAIP code or schema was added.
+
+Primary migration: `sql/2026-07-01_build216_media_reliability_daip_governance.sql`.
+Primary data record: `data/build216_media_reliability_daip_governance.json`.
+Primary user-facing admin surface: `/admin-media-health.html`.
+
+### Build 216 synchronization — 2026-07-01
+
+Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+## Build 217 synchronization — secure final-balance flow (2026-06-30)
+
+The active payment next step has moved from “customer page missing” to a controlled launch: apply the Build 217 migration, deploy Pages/Functions together, run one Stripe test-mode final-balance checkout and signed webhook, test invalid/expired/cancelled links, and test notification delivery with a controlled mailbox. Active strategy remains only in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+
+## Build 227 — roadmap execution and DAIP validation policy (2026-07-09)
+
+### Completed next 20 steps
+
+1. Added a DB-backed active roadmap execution queue.
+2. Seeded the current next 20 cross-workstream priorities.
+3. Added roadmap status values: planned, in progress, blocked, done, and deferred.
+4. Added priority, workstream, owner, target build, source document, and sort order.
+5. Added safe evidence notes for deployment/test proof.
+6. Added an append-only roadmap audit table.
+7. Added protected admin dashboard and save APIs.
+8. Added `/admin-roadmap-execution.html` with responsive desktop/mobile controls.
+9. Added status KPI counts for the active next 20.
+10. Added a visual placeholder for the internal execution workflow.
+11. Moved DAIP manifest-count limits into a protected DB policy.
+12. Moved image/video declared-size limits into the protected DB policy.
+13. Moved storage-rate planning assumptions into the protected DB policy.
+14. Added monthly warning and hard-stop planning values.
+15. Forced Gate C to remain held at the database constraint level.
+16. Forced technical capability to remain disabled at the database constraint level.
+17. Updated Build 226 validation to read policy with safe code defaults.
+18. Updated admin navigation, route copies, service worker, and access rules.
+19. Updated canonical schema, active Markdown, test guidance, and release evidence.
+20. Re-ran one-H1, route parity, JavaScript, CSS/responsive, and release checks.
+
+### Next 20 steps after Build 227
+
+1. Apply the Build 227 migration in staging and verify RLS/service-role containment.
+2. Assign owners and statuses to all 20 seeded roadmap items.
+3. Record Build 226 accepted and rejected fictional-manifest evidence.
+4. Confirm warning and hard-stop amounts with the owners.
+5. Complete all DAIP Gate A owner decisions.
+6. Complete all DAIP Gate B safety-test evidence.
+7. Conduct the independent Gate C rollback review.
+8. Keep real uploads, storage, workers, AI, and publishing disabled until Gate C is separately approved.
+9. Run customer recovery, archive, and restore staging tests.
+10. Build a manual duplicate-customer merge dry run with no automatic transfer.
+11. Verify Stripe final-balance settlement, cancellation, and webhook replay in test mode.
+12. Verify notification delivery with a controlled inbox.
+13. Run mobile weak-network upload retry tests using harmless test media.
+14. Add approved final proof to gallery candidates only with consent/provenance.
+15. Add approved final proof to vehicle history only after privacy review.
+16. Gate review requests on settled payment, acknowledgement, and no unresolved incident.
+17. Review Search Console and Business Profile evidence before changing local titles.
+18. Replace public placeholders only with approved Rosie-owned local proof.
+19. Archive redundant Markdown only after release-guard dependency scanning.
+20. Continue one-H1, title/meta, local wording, error fallback, and CSS drift checks every pass.
+
+
+## Build 228 — Creative Project Intelligence foundation (2026-07-12)
+
+Build 228 changes the operational centre from product-first to **project/process-first**. `/admin-creative-projects.html` records a project idea, purpose, audience, lifecycle, work sessions, materials, mistakes/fixes, time, costs, outcomes, lessons, and future recommendations. Each new project receives governed output records for YouTube, Shorts, Reels, TikTok, Facebook video, Pinterest, Etsy draft, website page, blog, gallery, before/after, educational article, archive, material report, cost analysis, lessons learned, and future recommendations.
+
+Publishing is never automatic: public publishing defaults off, consent review is separate, and every output follows planned → drafting → review → approved → scheduled → published or not applicable. Product pages and Etsy drafts are optional outputs; they are not the primary project record.
+
+Primary migration: `sql/2026-07-12_build228_creative_project_intelligence_foundation.sql`. Primary UI: `/admin-creative-projects.html`. Canonical schema: `SUPABASE_SCHEMA.sql`.
+
+### Next 20 steps after Build 228
+
+1. Apply the Build 228 migration in staging and verify RLS/service-role containment.
+2. Create one fictional project and verify all seventeen output records are seeded.
+3. Test mobile project creation and session logging.
+4. Add controlled project-to-booking association without making bookings the project source of truth.
+5. Add media-manifest references after DAIP Gate C approval; keep file bytes disabled until then.
+6. Add structured material-line usage tied to inventory transactions.
+7. Add session time rollups and estimated-versus-actual labour.
+8. Add project cost breakdown with material, labour, overhead, fees, and waste.
+9. Add before/after applicability and consent gating.
+10. Add a project story outline generated from approved session notes.
+11. Add YouTube long-form outline drafts.
+12. Add short-form hook and clip-plan drafts for Shorts, Reels, TikTok, and Facebook.
+13. Add Pinterest title/description/image-plan drafts.
+14. Add Etsy and website listing drafts without automatic publication.
+15. Add blog and educational article drafts with source-note citations.
+16. Add project archive export and recovery package.
+17. Add lessons-learned extraction with human approval.
+18. Add future-project recommendation ranking using completed project history.
+19. Add output approval dashboard and destination readiness checks.
+20. Keep one-H1, title/meta, local wording, responsive CSS, fallback, and privacy checks in every release.
+
+
+## Build 229 — completed
+- Added a dual-path workflow: standard jobs remain standard; creative projects are explicit opt-in.
+- Added optional booking-to-project linking and audit history.
+- Added mobile-safe booking controls explaining the difference.
+- Added a project source-mode field and canonical schema migration.
+
+## Next 20
+1. Structured project material rows.
+2. Inventory reservation preview.
+3. Session labour rollups.
+4. Overhead and waste costing.
+5. Therapeutic/non-commercial classification.
+6. Before/after applicability control.
+7. Consent gate summary.
+8. Project template library.
+9. Story-outline drafts.
+10. Long-form video outline.
+11. Short-form clip plans.
+12. Platform caption variants.
+13. Pinterest plans.
+14. Etsy draft.
+15. Website page draft.
+16. Blog and educational drafts.
+17. Archive export.
+18. Lessons approval.
+19. Future-project ranking.
+20. Unified output approval dashboard.
+
+
+## Build 230 — Creative project costs, templates, drafts and controls (2026-07-13)
+
+Build 230 extends only the opt-in Creative Project Intelligence path. Ordinary customer bookings remain standard jobs and retain their existing inventory, service, payment and completion workflow.
+
+Added: structured project-only material, labour and other-cost lines; optional project templates; before/after applicability; consent status and summary; story/platform/commerce/report drafts; unified batch output review; reversible booking unlink, archive and restore; and a project-to-DAIP metadata association that is denied until Gate C is accepted and technical capability is explicitly enabled. Nothing publishes automatically.
+
+Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_build230_project_costs_templates_outputs.sql`.

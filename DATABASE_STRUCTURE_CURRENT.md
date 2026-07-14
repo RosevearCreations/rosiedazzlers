@@ -931,3 +931,51 @@ Primary migration: `sql/2026-06-23_build214_security_task_orchestration.sql`.
 - Public-schema tables are intended to be RLS-enabled with direct `anon`/`authenticated`/`PUBLIC` table grants removed.
 - `public.rosie_security_posture_report()` is a service-role-only SQL function used by `/api/admin/security_posture_report`.
 - No browser page should query public tables directly; Cloudflare Functions remain the server-side authorization boundary.
+
+## Build 215 — media asset format alignment and DAIP planning note (2026-06-30)
+
+Build 215 adds `sql/2026-06-30_build215_media_asset_format_alignment.sql` to align legacy `public.media_asset_tasks` Local Hero rows from stale `.webp` assumptions to canonical JPG keys/URLs where safe. It does not add new application tables.
+
+DAIP is documentation/planning only in Build 215. No `daip_*` tables, storage buckets, queue records, RLS policies, worker jobs, AI records, export records, or publication tables are created until a separate reviewed Phase 1 migration is approved.
+
+## Build 216 — public media reliability tables
+
+Apply `sql/2026-07-01_build216_media_reliability_daip_governance.sql` after Build 214 RLS containment.
+
+### `public.media_asset_health_observations`
+
+Staff-only audit history for public static/site asset checks. Stores the public R2 key, expected/resolved public URL, response status, public image dimensions/type, compatible-format outcome, failure category, scan time, and staff actor. It must never store customer media, signed URLs, incident evidence, customer identifiers, payment data, or secrets.
+
+### `public.media_asset_alerts`
+
+Staff-only recurring issue state keyed by public asset key. First failure is `monitoring`; a second consecutive failure becomes `active`; a passing scan changes it to `resolved`. `acknowledged` means a staff member reviewed the continuing issue, not that the asset is healthy.
+
+Both tables have RLS enabled and direct `anon`, `authenticated`, and `PUBLIC` privileges revoked. Cloudflare Functions use the service-role boundary to record and read them.
+
+### DAIP status
+
+Build 216 adds no `daip_*` table. DAIP schema work is blocked until DAIP-0 decisions and the Phase 1 security acceptance template are approved.
+
+### Build 216 synchronization — 2026-07-01
+
+Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+# Build 217 schema note — secure final-balance links (2026-06-30)
+
+Apply `sql/2026-06-30_build217_secure_final_balance_links.sql` after the existing final-balance and security migrations. It adds lifecycle columns to `public.final_balance_payment_requests`: `expires_at`, `access_token_rotated_at`, notification audit fields, cancellation audit fields, `paid_amount_cents`, and provider payment-intent/event references. `token_hash` stores only SHA-256 hashes of opaque public tokens and must never be returned to a browser. No direct browser grants are added.
+
+
+
+## Build 218 DAIP internal-test tables
+
+Build 218 adds these internal-only, RLS-enabled and service-role-only tables after the Build 214 security model:
+
+- `daip_test_control` — singleton hard stop: internal test/no storage/no worker/no public export/no automatic publishing.
+- `daip_test_daily_sequences` — safe `RD-TEST-YYYYMMDD-###` sequence support.
+- `daip_media_jobs` — test-only job registry tied to an internal booking with no customer-data/public-export/processor permissions.
+- `daip_media_assets` — metadata-only harmless test assets. No public URL, signed URL, bucket, object key, path, or Drive ID columns exist.
+- `daip_processing_tasks` — non-executing test planning tasks; `execution_blocked` is hard true.
+- `daip_privacy_reviews` — internal-only review state; public export remains hard blocked.
+- `daip_audit_events` — safe actor/time/action metadata; do not store secrets, customer information, private media details, or signed URLs.
+
+Apply `sql/2026-07-02_build218_daip_test_mode_foundation.sql` only in development/staging for the first controlled DAIP tests.

@@ -1,4 +1,18 @@
-# Build 207 documentation index note — canonical docs and retained history
+# Rosie Dazzlers Documentation Index — Build 225
+
+**Canonical strategy documents:**
+
+1. `AI_PROJECT_HANDOFF.md` — first-read current system, deployment, privacy, security, and continuity guide.
+2. `MASTER_VALUE_ROADMAP.md` — current business/product roadmap and connected next work.
+
+**Build 225 operational documentation:**
+- `docs/SOCIAL_ANALYTICS_CONNECTIONS.md` — Cloudflare Secret names, provider-by-provider setup, test/production separation, consent behavior, social-publishing limits, and rollback.
+- `docs/digital-asset-intelligence-platform/20_DAIP_External_Service_Connection_Boundary.md` — ensures social/analytics secrets never become DAIP implementation evidence.
+- `docs/PRODUCTION_TEST_GUIDE.md` — controlled staging acceptance tests.
+
+**Retained for release/history:** `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `DATABASE_STRUCTURE_CURRENT.md`, `SUPABASE_SCHEMA.sql`, `README.md`, and this index. Older Markdown is context/audit evidence, not another active strategy source.
+
+# Rosie Dazzlers Documentation Index — Build 219
 
 **Canonical going forward:**
 
@@ -10,6 +24,27 @@
 **Retired-for-editing but retained:** older competitor, roadmap, sanity, and notes files should stay available for context until release guards are modernized. Do not delete them yet.
 
 **New admin screen:** `/admin-docs.html` shows canonical docs, retained files, retirement guidance, current app position, and visual placeholder slots.
+
+
+
+
+## Build 220 current documentation rule
+
+Start every new chat/build pass with `AI_PROJECT_HANDOFF.md`, then `MASTER_VALUE_ROADMAP.md`. Build 220 adds:
+
+- `sql/2026-07-03_build220_customer_access_management_and_daip_readiness.sql` — RLS-protected customer access, recovery intake, audit, and archive-first support tables.
+- `data/build220_customer_access_management.json` — machine-readable scope, roles, safeguards, and DAIP non-goals.
+- `docs/PRODUCTION_TEST_GUIDE.md` — Build 220 controlled staging sequence.
+- `docs/digital-asset-intelligence-platform/16_DAIP_Phase_1_Readiness_Packet.md` — owner-ready evidence/design worksheet; not an authorization for DAIP infrastructure.
+- `scripts/build220_customer_access_management_check.py` — static regression guard.
+
+Retained Markdown files are history, release-audit, or guard support. Do not treat them as competing strategy sources. DAIP remains Test Lab/Governance/Readiness-Packet only until the documented gates and a separate private-MVP release are accepted.
+
+**Build 219 current rule:** Start every new chat with `AI_PROJECT_HANDOFF.md`, then `MASTER_VALUE_ROADMAP.md`. For DAIP, read `docs/digital-asset-intelligence-platform/13_DAIP_Test_Mode_Process.md`, the decision register, and `15_DAIP_Governance_Workspace_Process.md` before proposing storage, workers, customer access, or publishing. Build 219 is governance-only: all DAIP production capabilities remain disabled until the documented gates are passed.
+
+**Build 217 current rule:** Treat the two canonical documents above as the only living strategy sources. Retained root Markdown files receive short synchronization notes only; archive/history files are context-only. They remain in the package because existing release guards and audit references still depend on them.
+
+**Build 217 addition:** `docs/PRODUCTION_TEST_GUIDE.md` now includes the secure final-balance release test. `data/build217_secure_final_balance_links.json` provides the implementation and manual-release boundary for in-app/AI handoff.
 
 ---
 
@@ -874,3 +909,205 @@ Build 213 adds owner action controls in Today Needs Attention, customer price/su
 ### Build 214 documentation sync — 2026-06-23
 
 Build 214 prioritizes Supabase containment and owner-task reliability. The active security action is to run `sql/2026-06-23_build214_security_task_orchestration.sql`, refresh Supabase Security Advisor, and test the application through Cloudflare Functions rather than restoring direct browser access to tables. Canonical planning remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+## Build 215 documentation index note — 2026-06-30
+
+Read first for active direction:
+
+1. `AI_PROJECT_HANDOFF.md`
+2. `MASTER_VALUE_ROADMAP.md`
+
+Media asset compatibility and upload validation:
+
+- `IMAGES.md`
+- `sql/2026-06-30_build215_media_asset_format_alignment.sql`
+- `/admin-media-health.html`
+
+DAIP planning (no production implementation in Build 215):
+
+- `docs/digital-asset-intelligence-platform/README.md`
+- `docs/digital-asset-intelligence-platform/10_Rosie_Dazzlers_Integration_Plan.md`
+- `docs/digital-asset-intelligence-platform/09_Implementation_Roadmap.md`
+
+DAIP is a future private media operations subsystem. Do not infer that the current build includes a DAIP worker, tables, processing queue, AI processing, public exports, or automatic publishing.
+
+> **Build 207 documentation index note — retained historical marker:** This marker remains for historical release checks; current active documentation direction is Build 215.
+
+## Build 216 documentation index note — 2026-07-01
+
+Active direction remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+Public image reliability:
+
+- `/admin-media-health.html`
+- `sql/2026-07-01_build216_media_reliability_daip_governance.sql`
+- `data/build216_media_reliability_daip_governance.json`
+- `IMAGES.md`
+- `docs/PRODUCTION_TEST_GUIDE.md` (Build 216 public-media recovery test)
+
+DAIP governance only — no production DAIP implementation:
+
+- `docs/digital-asset-intelligence-platform/10_Rosie_Dazzlers_Integration_Plan.md`
+- `docs/digital-asset-intelligence-platform/11_DAIP_Decision_Register.md`
+- `docs/digital-asset-intelligence-platform/12_DAIP_Phase_1_Security_Acceptance.md`
+
+### Build 216 synchronization — 2026-07-01
+
+Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+
+## Build 218 DAIP operational documents
+
+The two active top-level strategy files remain `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. DAIP implementation detail lives under `docs/digital-asset-intelligence-platform/` and is read in this order for the current phase:
+
+1. `README.md`
+2. `10_Rosie_Dazzlers_Integration_Plan.md`
+3. `11_DAIP_Decision_Register.md`
+4. `13_DAIP_Test_Mode_Process.md`
+5. `14_DAIP_Production_Promotion_Gates.md`
+6. `12_DAIP_Phase_1_Security_Acceptance.md`
+
+The remaining numbered DAIP documents are design reference for later stages. Do not use them to skip the current internal-test and owner-decision gates.
+
+## Build 219 DAIP governance workspace documents
+
+Current DAIP operating order:
+
+1. `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` — the two active strategy documents.
+2. `docs/digital-asset-intelligence-platform/13_DAIP_Test_Mode_Process.md` — Build 218 metadata-only test boundary.
+3. `docs/digital-asset-intelligence-platform/11_DAIP_Decision_Register.md` — the twelve required owner decisions.
+4. `docs/digital-asset-intelligence-platform/15_DAIP_Governance_Workspace_Process.md` — how to record and verify decisions in Build 219.
+5. `docs/digital-asset-intelligence-platform/14_DAIP_Production_Promotion_Gates.md` — what must happen before any future private media architecture.
+6. `docs/digital-asset-intelligence-platform/12_DAIP_Phase_1_Security_Acceptance.md` — future-only acceptance template.
+
+Build 219 remains governance-only. It does not add DAIP production storage, worker execution, AI, customer visibility, export, or publication.
+
+## Build 221 hotfix — customer-admin route 405 repair
+
+Build 221 is a no-schema hotfix for the `/admin-customers.html` page after staging showed `api/admin/customer_admin_list` returning HTTP 405 while the page displayed the Customer account access visual placeholder.
+
+What changed:
+- Added generic Cloudflare Pages `onRequest` dispatchers to the Build 220 customer-admin endpoints so GET, POST, and OPTIONS are accepted through a single route entrypoint as well as the method-specific handlers.
+- Added a safe page-side fallback so list-style customer-admin requests retry with GET if a deployment returns 405 on POST.
+- Updated the service-worker cache to `rosie-app-v20260703build221` so old admin page code is less likely to stay cached.
+- Added `data/build221_customer_admin_route_hotfix.json` and a Build 221 guard script.
+
+No Supabase migration is required. Deploy the Pages site and Functions together, then hard-refresh `/admin-customers.html`. A correct result is a normal JSON response, authentication response, or permission response from `/api/admin/customer_admin_list`; it should not be 405.
+
+DAIP boundary remains unchanged: no production storage, uploads, workers, AI, customer media access, public gallery export, social publishing, Google Business Profile export, or automatic publishing was added.
+
+
+## Build 222 documentation note
+
+The two living strategy documents remain `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. The DAIP operating sequence for test-mode work is now:
+
+`13_DAIP_Test_Mode_Process.md` → `15_DAIP_Governance_Workspace_Process.md` → `16_DAIP_Phase_1_Readiness_Packet.md` → `17_DAIP_Phase_1_Readiness_and_Design_Review.md` → `14_DAIP_Production_Promotion_Gates.md`.
+
+Older Markdown remains retained for release checks, history, or design evidence; it is not a competing source of current strategy.
+
+
+## Build 223 DAIP continuation
+
+For DAIP, follow the controlled order: `13_DAIP_Test_Mode_Process.md` → `15_DAIP_Governance_Workspace_Process.md` → `16_DAIP_Phase_1_Readiness_Packet.md` → `17_DAIP_Phase_1_Readiness_and_Design_Review.md` → `18_DAIP_Private_MVP_Design_Blueprint_Review.md` → `14_DAIP_Production_Promotion_Gates.md`. The two living strategy files remain `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; the other Markdown files are retained as historical or release-audit support.
+
+## Build 224
+- **Active:** `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` remain the two living strategy documents.
+- **DAIP:** Read `docs/digital-asset-intelligence-platform/19_DAIP_Gate_C_Technical_Review_and_Rollback_Acceptance.md` after the Build 218–223 sequence.
+- **Historical:** retained Markdown remains audit/release support, not competing strategy.
+
+
+## Build 226 active addition
+- `docs/digital-asset-intelligence-platform/21_DAIP_Metadata_Only_Intake_Dry_Run.md` — fictional manifest validation before any file/storage implementation.
+
+## Build 227 — roadmap execution and DAIP validation policy (2026-07-09)
+
+### Completed next 20 steps
+
+1. Added a DB-backed active roadmap execution queue.
+2. Seeded the current next 20 cross-workstream priorities.
+3. Added roadmap status values: planned, in progress, blocked, done, and deferred.
+4. Added priority, workstream, owner, target build, source document, and sort order.
+5. Added safe evidence notes for deployment/test proof.
+6. Added an append-only roadmap audit table.
+7. Added protected admin dashboard and save APIs.
+8. Added `/admin-roadmap-execution.html` with responsive desktop/mobile controls.
+9. Added status KPI counts for the active next 20.
+10. Added a visual placeholder for the internal execution workflow.
+11. Moved DAIP manifest-count limits into a protected DB policy.
+12. Moved image/video declared-size limits into the protected DB policy.
+13. Moved storage-rate planning assumptions into the protected DB policy.
+14. Added monthly warning and hard-stop planning values.
+15. Forced Gate C to remain held at the database constraint level.
+16. Forced technical capability to remain disabled at the database constraint level.
+17. Updated Build 226 validation to read policy with safe code defaults.
+18. Updated admin navigation, route copies, service worker, and access rules.
+19. Updated canonical schema, active Markdown, test guidance, and release evidence.
+20. Re-ran one-H1, route parity, JavaScript, CSS/responsive, and release checks.
+
+### Next 20 steps after Build 227
+
+1. Apply the Build 227 migration in staging and verify RLS/service-role containment.
+2. Assign owners and statuses to all 20 seeded roadmap items.
+3. Record Build 226 accepted and rejected fictional-manifest evidence.
+4. Confirm warning and hard-stop amounts with the owners.
+5. Complete all DAIP Gate A owner decisions.
+6. Complete all DAIP Gate B safety-test evidence.
+7. Conduct the independent Gate C rollback review.
+8. Keep real uploads, storage, workers, AI, and publishing disabled until Gate C is separately approved.
+9. Run customer recovery, archive, and restore staging tests.
+10. Build a manual duplicate-customer merge dry run with no automatic transfer.
+11. Verify Stripe final-balance settlement, cancellation, and webhook replay in test mode.
+12. Verify notification delivery with a controlled inbox.
+13. Run mobile weak-network upload retry tests using harmless test media.
+14. Add approved final proof to gallery candidates only with consent/provenance.
+15. Add approved final proof to vehicle history only after privacy review.
+16. Gate review requests on settled payment, acknowledgement, and no unresolved incident.
+17. Review Search Console and Business Profile evidence before changing local titles.
+18. Replace public placeholders only with approved Rosie-owned local proof.
+19. Archive redundant Markdown only after release-guard dependency scanning.
+20. Continue one-H1, title/meta, local wording, error fallback, and CSS drift checks every pass.
+
+
+## Build 228 — Creative Project Intelligence foundation (2026-07-12)
+
+Build 228 changes the operational centre from product-first to **project/process-first**. `/admin-creative-projects.html` records a project idea, purpose, audience, lifecycle, work sessions, materials, mistakes/fixes, time, costs, outcomes, lessons, and future recommendations. Each new project receives governed output records for YouTube, Shorts, Reels, TikTok, Facebook video, Pinterest, Etsy draft, website page, blog, gallery, before/after, educational article, archive, material report, cost analysis, lessons learned, and future recommendations.
+
+Publishing is never automatic: public publishing defaults off, consent review is separate, and every output follows planned → drafting → review → approved → scheduled → published or not applicable. Product pages and Etsy drafts are optional outputs; they are not the primary project record.
+
+Primary migration: `sql/2026-07-12_build228_creative_project_intelligence_foundation.sql`. Primary UI: `/admin-creative-projects.html`. Canonical schema: `SUPABASE_SCHEMA.sql`.
+
+### Next 20 steps after Build 228
+
+1. Apply the Build 228 migration in staging and verify RLS/service-role containment.
+2. Create one fictional project and verify all seventeen output records are seeded.
+3. Test mobile project creation and session logging.
+4. Add controlled project-to-booking association without making bookings the project source of truth.
+5. Add media-manifest references after DAIP Gate C approval; keep file bytes disabled until then.
+6. Add structured material-line usage tied to inventory transactions.
+7. Add session time rollups and estimated-versus-actual labour.
+8. Add project cost breakdown with material, labour, overhead, fees, and waste.
+9. Add before/after applicability and consent gating.
+10. Add a project story outline generated from approved session notes.
+11. Add YouTube long-form outline drafts.
+12. Add short-form hook and clip-plan drafts for Shorts, Reels, TikTok, and Facebook.
+13. Add Pinterest title/description/image-plan drafts.
+14. Add Etsy and website listing drafts without automatic publication.
+15. Add blog and educational article drafts with source-note citations.
+16. Add project archive export and recovery package.
+17. Add lessons-learned extraction with human approval.
+18. Add future-project recommendation ranking using completed project history.
+19. Add output approval dashboard and destination readiness checks.
+20. Keep one-H1, title/meta, local wording, responsive CSS, fallback, and privacy checks in every release.
+
+
+## Build 229 continuation note
+Read `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` first. Preserve the dual-path rule: normal bookings are standard jobs by default; creative projects are explicit opt-in records.
+
+
+## Build 230 — Creative project costs, templates, drafts and controls (2026-07-13)
+
+Build 230 extends only the opt-in Creative Project Intelligence path. Ordinary customer bookings remain standard jobs and retain their existing inventory, service, payment and completion workflow.
+
+Added: structured project-only material, labour and other-cost lines; optional project templates; before/after applicability; consent status and summary; story/platform/commerce/report drafts; unified batch output review; reversible booking unlink, archive and restore; and a project-to-DAIP metadata association that is denied until Gate C is accepted and technical capability is explicitly enabled. Nothing publishes automatically.
+
+Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_build230_project_costs_templates_outputs.sql`.

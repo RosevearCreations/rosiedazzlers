@@ -1,13 +1,209 @@
-# Rosie Dazzlers Master Value Roadmap — Build 210
+# Rosie Dazzlers Master Value Roadmap — Build 225
 
-**Updated:** 2026-06-17  
+**Updated:** 2026-07-07  
+**Purpose:** One active business/product roadmap. Read after `AI_PROJECT_HANDOFF.md`. Retained Markdown remains history/audit context.
+
+## Build 225 — Social & Analytics Connections Centre, consent-first tags, and DAIP external-service boundary
+
+**Completed in source; staging acceptance required:**
+- Administrator-only `/admin-integrations.html` with server-side status checks that return presence/format only—never values or secrets.
+- Cloudflare Secret variable map and detailed operational guide for Meta, GA4, Google Ads, TikTok, LinkedIn, Pinterest, Microsoft Advertising, Facebook/Instagram, X, YouTube, and Google Business Profile.
+- Consent-first optional public marketing-tag loader, with an explicit public-page opt-in and protected/private route exclusions.
+- Privacy notice update and mobile-safe Connections Centre layout.
+- DAIP external-service boundary document and preflight test framing: marketing/social integration is not DAIP implementation.
+- Baseline fixes for malformed Admin Menu and service-worker cache syntax so affected browser code can parse.
+
+**Still hard-held:**
+- No browser or database credential entry.
+- No server conversion APIs, contact uploads, customer hash sharing, event payloads containing personal information, or automated social publishing expansion.
+- DAIP Gate C and all DAIP technical/public capability remain held. No DAIP bucket, upload/download, signed link, worker, processing, AI, customer media, public export, Gallery/Social handoff, or publishing capability was introduced.
+
+### Next 20 connected steps after Build 225
+
+1. Deploy Build 225 to the **staging** Cloudflare Pages project.
+2. Open `/admin-integrations.html` as an administrator and confirm it reports no values.
+3. Add `MARKETING_TRACKING_ENABLED=true` and `MARKETING_TRACKING_MODE=test` to staging Secrets only.
+4. Add `MARKETING_TRACKING_CONSENT_VERSION=1`.
+5. Configure **one** first provider only—recommend GA4.
+6. Redeploy staging.
+7. Confirm GA4 shows Configured on the Connections Centre.
+8. In a private browser, open a normal public marketing page, not booking/payment/client/admin/progress.
+9. Confirm no third-party tag loads before the optional-measurement choice.
+10. Choose optional measurement and verify only the approved tag loads.
+11. Use the provider’s official diagnostic tool; record only Pass/Fail and safe notes.
+12. Decline consent in a fresh private session and confirm the normal public site still works.
+13. Check the privacy notice wording and consent-version behavior.
+14. Set `MARKETING_TRACKING_ENABLED=false` to validate the rollback path, then redeploy.
+15. Repeat only after the test result is understood; do not turn on all providers at once.
+16. Configure Facebook/Instagram Page credentials in staging only if the Social Queue readiness test is planned.
+17. Use reviewed Social Queue drafts; do not publish customer media without consent and privacy checks.
+18. Do not configure a server conversion API, customer match list, or contact upload until a separate consent/event-design review is accepted.
+19. Complete the DAIP Build 218–224 evidence chain and Gate C review; Build 225’s connections page is only boundary evidence.
+20. Only after Gate C and a separate implementation proposal are accepted should a minimal private DAIP technical test be considered.
+
+# Rosie Dazzlers Master Value Roadmap — Build 224
+
+**Updated:** 2026-07-06
+**Purpose:** This is the one active business/product roadmap. Read this after `AI_PROJECT_HANDOFF.md`; retained Markdown is historical/audit context.
+
+## Build 224 — DAIP Gate C technical review and customer-profile quality (completed in source; staging acceptance required)
+
+- **Completed:** protected Gate C technical-review and rollback workspace, independent review acknowledgement, prerequisite validation, append-only audit, RLS/service-role database boundary, guided tests, mobile/desktop layout, visual placeholder, schema mirror, route-copy/cache coverage, and release guard.
+- **Customer controls:** safe history for contact/live-update preference changes and review-only duplicate candidate warnings for management. No automatic merge or consent change exists.
+- **Still hard-held:** Gate C and all DAIP technical/public capability. No storage, upload/download, external service configuration, worker, processing, customer media, Gallery/Social/GBP/public destination, export, or publishing exists.
+
+### Next 20 connected steps after Build 224
+
+1. Apply both Build 224 migrations in staging only.
+2. Verify RLS and browser-role revocations for both new tables.
+3. Run the Gate C prerequisite-block test.
+4. Save a harmless Gate C draft and confirm no capability changes.
+5. Save a blocked review and confirm Gate C remains Held.
+6. Complete the Build 218, 219, 222, and 223 evidence chain.
+7. Review the build 223 blueprint with an independent reviewer.
+8. Confirm the cost warning/hard-stop owner.
+9. Confirm the rollback pause authority.
+10. Confirm no customer media or public destination is in scope.
+11. Complete the Gate C accepted-review test only with safe general text.
+12. Confirm technical/public counters remain zero after acceptance.
+13. Test that contact-preference history records an approved manager edit.
+14. Test that matching profile contact details create a warning but never merge records.
+15. Decide whether any duplicate candidate requires manual investigation.
+16. Document manual-merge requirements before creating a merge tool.
+17. Refresh public service proof only with approved, consented local media.
+18. Continue quote-to-booking-to-proof-to-payment-to-review flow tests in staging.
+19. Create a separate Gate C implementation proposal only after all above evidence is accepted.
+20. Do not create storage/upload/processing code before that separate proposal is independently reviewed.
+
+
+# Rosie Dazzlers Master Value Roadmap — Build 220
+
+**Updated:** 2026-07-03
 **Purpose:** This is the one active business/product roadmap. Historical build detail remains in `DEVELOPMENT_ROADMAP.md`; active decisions belong here.
+
+
+
+## Build 223 — DAIP private-MVP design blueprint (completed in source; staging acceptance required)
+
+Build 223 creates `/admin-daip-design.html`, an admin-only independent-review queue for a written private-MVP blueprint.
+
+- **Completed:** safe design-scope, threat-model, upload-control, storage-separation, cost-stop, rollback/acceptance, owner/reviewer, due-date, acknowledgement, current-authorization, audit, RLS/service-role, route-copy, responsive layout, visual placeholder, Guided Test Centre, schema mirror, service-worker, and release-guard coverage.
+- **Submission gate:** a blueprint can be submitted only when the Build 222 readiness authorization is currently valid; drafts and pauses remain available otherwise.
+- **Still hard-held:** Gate C and every technical/public DAIP capability. No storage, upload/download, signed URLs, queues, workers, processing, AI, customer media, Gallery/Social/GBP handoff, export, or publishing exists in Build 223.
+
+### Next 20 connected steps after Build 223
+
+1. Apply the Build 223 migration in **staging only** after Builds 218, 219, and 222.
+2. Confirm Build 223 tables have RLS enabled and browser-role grants revoked.
+3. Run the missing/stale-authorization block test.
+4. Save a harmless Draft and confirm no capability changes.
+5. Save a Paused blueprint and confirm Gate C remains Held.
+6. Complete/verify all twelve DAIP-0 owner decisions.
+7. Record all three Build 218 internal-safety tests as Pass in staging.
+8. Confirm the Build 222 readiness authorization remains Current.
+9. Complete the private-MVP blueprint using safe general text only.
+10. Name the independent design reviewer and a backup reviewer.
+11. Confirm the explicit zero-public-destination scope.
+12. Confirm the explicit no-customer-media/test-only scope.
+13. Review the threat model for accidental leakage, misuse, cost, recovery, and mistaken publication.
+14. Review server-issued authorization, checksum/MIME/size validation, resume, cancel, retry, and audit requirements.
+15. Review private-original versus derivative separation and no public list/read policy.
+16. Review retention, legal hold, secure deletion, recovery, and rollback.
+17. Price the smallest proposed pilot against the owner-approved warning/hard-stop rule.
+18. Accept or pause the written proposal through an independent review meeting—do not implement it yet.
+19. Write a narrow Gate C implementation acceptance plan and rollback test plan.
+20. Only then commission a separate, test-only Gate C technical review; do not merge storage/upload/worker code before that review.
+
+
+## Build 222 — DAIP Phase 1 readiness review (completed in source; staging acceptance required)
+
+Build 222 turns the DAIP readiness packet into a protected, auditable decision workspace at `/admin-daip-readiness.html`.
+
+- **Completed:** a server-validated Gate A/B readiness readout; draft, paused, and exact-phrase `ready_for_design_review` records; budget-stop, consent, retention/legal-hold, owner, review-date, and safe audit fields; RLS/service-role-only tables; mobile/desktop layout; service-worker and route-copy coverage; visual placeholder; guided test cases; schema mirror; and release guard.
+- **Meaning of “ready”:** only that the owners may request a **written private-MVP design review**. It is not an implementation or production authorization.
+- **Still hard-held:** Gate C storage/upload design; Gate D processing; Gate E privacy/export; Gate F pilot. No customer media, storage, signed links, worker, AI, social/gallery/public handoff, or automatic publishing exists in Build 222.
+
+### Next 20 connected steps after Build 222
+
+1. Apply the Build 222 migration in **staging only**.
+2. Confirm new readiness tables have RLS enabled and browser-role grants revoked.
+3. Run the Build 222 blocked-gate test with Gate A or Gate B incomplete.
+4. Run the harmless draft/paused readiness audit test.
+5. Complete all 12 DAIP-0 owner decisions in the Governance workspace.
+6. Record all three Build 218 internal safety tests as Pass in staging.
+7. Run the Build 222 written-design-review-only test with safe general text.
+8. Confirm Gate C remains Held after readiness authorization.
+9. Record the owner-approved monthly warning and hard-stop threshold.
+10. Record a primary and backup responsible person for pausing DAIP work.
+11. Finalize purpose-separated consent wording with no implied marketing permission.
+12. Finalize originals/proxies/rejected-output retention and legal-hold ownership.
+13. Decide the sole source of truth for originals and the role, if any, of Drive.
+14. Write a one-page private-MVP threat model: abuse, leakage, cost, recovery, and mistaken-publication risks.
+15. Write a one-page upload design: server authorization, checksum, MIME/size controls, resumable recovery, and no public object URLs.
+16. Write a one-page storage/derivative separation design with no public list/read policy.
+17. Write a worker/queue proposal that is not implemented in Pages Functions.
+18. Write the zero-public-destination acceptance criteria and rollback plan.
+19. Price the smallest technical pilot against the approved cost stop rule.
+20. Only then commission a separate Gate C build review; do not merge storage/upload code until that review is approved.
 
 ## North star
 
 Build a professional, mobile-first detailing platform that gets found locally and connects every customer relationship from first lead through repeat maintenance.
 
 `lead / quote → booking → live detail interaction → proof of work → invoice/payment → review/public proof → repeat maintenance`
+
+
+## Build 220 — customer access management and DAIP readiness packet
+
+### Completed connected work
+
+1. Rebuilt `/admin-customers.html` as a responsive customer-management workspace instead of a read-only overview.
+2. Added a searchable/filtered customer directory with current, active, suspended, and archived states.
+3. Added role-aware profile editing for practical client/service information.
+4. Let operational detailers update job-relevant information while keeping email, private notes, notification settings, recovery tools, and lifecycle controls restricted.
+5. Added manager-only client profile creation.
+6. Added explicit client sign-in email-change confirmation with verification and old-session revocation.
+7. Added safe account-setup, password-reset, resend-verification, and revoke-session actions.
+8. Kept passwords, hashes, reset links/tokens, session tokens, payment details, and private media out of the staff interface and audit log.
+9. Added a privacy-neutral client password-reset request flow.
+10. Added a privacy-neutral forgotten-sign-in-email help request flow.
+11. Added an internal manager queue to review/resolve forgotten-email help without exposing account existence publicly.
+12. Added single-use atomic token consumption and retirement of prior same-purpose recovery links.
+13. Revoked prior sessions after a successful reset before issuing the fresh customer session.
+14. Added archive-first lifecycle controls rather than permanent deletion.
+15. Preserved booking/payment/tax/consent/audit relationships when an account is archived.
+16. Added safe customer account-action audit records.
+17. Added RLS/service-role boundaries for recovery, audit, session, and token tables.
+18. Added a customer-account visual placeholder that is safe for desktop/mobile internal UI and never displays account information.
+19. Added four Build 220 guided staging tests.
+20. Added the DAIP Phase 1 readiness packet while retaining the hard hold on DAIP technical media capability.
+
+### Next 20 highest-value steps
+
+1. Apply the Build 220 migration and complete all four controlled staging tests.
+2. Add customer identity/merge review guidance before staff merges duplicate profiles; do not auto-merge by name alone.
+3. Add an explicit customer contact-preference history and consent/change audit.
+4. Add secure staff notes categorization and expiry reminders for operational notes that should not live forever.
+5. Add customer account invitation delivery/retry state to the Notifications health view.
+6. Add a safe customer-profile duplicate warning using normalized email/phone, with no automatic merge.
+7. Add vehicle-to-customer profile linking/reassignment review with an audit trail.
+8. Add client self-service profile-change approval rules where changing service address/access needs staff review.
+9. Add a customer account activity timeline using safe events only.
+10. Add a two-person approval option before administrator-level archive/restore is used for non-test accounts.
+11. Add an exported audit package for a customer account without credentials, raw reset links, tokens, payment instrument data, or private media.
+12. Complete every DAIP-0 decision in Governance with true owner approval and review dates.
+13. Record the Build 218, 219, and 220 DAIP evidence in the Guided Test Centre.
+14. Decide DAIP source-of-truth, consent, retention/legal hold, budget ceiling, budget stop rule, and named reviewers.
+15. Write a separate private-MVP DAIP design proposal only after Gates A/B are genuinely ready.
+16. Require a data-protection, cost, and recovery review before the private-MVP proposal becomes a code build.
+17. Keep public DAIP destinations, Gallery, Social, GBP, and publishing explicitly out of the first private-MVP.
+18. Continue proof-of-work to customer history/gallery handoff only through existing consent and approval gates.
+19. Run real mobile field tests for weak-network booking, proof upload, client access recovery, and payment completion using test data.
+20. Before a production release, verify notification provider delivery, payment webhook handling, RLS posture, backup/recovery, and desktop/mobile route parity.
+
+### Build 220 boundary
+
+This build does not start DAIP production. It advances customer service and DAIP decision readiness only. No DAIP bucket, upload, signed URL, worker, processing, AI, public/costly export, customer asset route, Gallery/Social handoff, or publishing control exists because of Build 220.
 
 ## Build 209 completed priorities
 
@@ -391,3 +587,370 @@ Build 214 prioritizes Supabase containment and owner-task reliability. The activ
 18. Add application health checks for Cloudflare Function publish/binding readiness.
 19. Simplify or retire any owner screen that does not feed Today Needs Attention.
 20. Replace visual placeholders with approved local proof photos/video stills.
+
+## Build 215 — verified media rendering and DAIP integration planning (2026-06-30)
+
+### Completed 20 steps
+
+1. Traced public service-hub/local-hero fallback behavior to extension-specific legacy media references.
+2. Added a shared client media-source resolver for known Rosie asset URLs.
+3. Preserved the original requested URL as the first image attempt.
+4. Added compatible same-key JPG lookup.
+5. Added compatible same-key JPEG lookup.
+6. Added compatible same-key WebP lookup.
+7. Added compatible same-key PNG lookup.
+8. Added uppercase extension candidates for case-sensitive R2 extension uploads.
+9. Updated landing-page hero rendering to prefer `local_hero_image_url`.
+10. Updated landing-page gallery/related-media rendering to use the resolver before fallback.
+11. Updated service hub package/add-on images to use the resolver before fallback.
+12. Updated booking add-on thumbnails to use the resolver before fallback.
+13. Prevented the visual-placeholder listener from interrupting a still-running format-resolution chain.
+14. Updated Admin Media Health scan to test compatible image extensions.
+15. Updated Admin Media Health cards to display the resolved URL and compatible-format result.
+16. Changed canonical Local Hero static data to JPG keys and URLs.
+17. Updated regional media requirement files to accept JPG/JPEG/WebP/PNG while documenting JPG as canonical.
+18. Added a safe legacy media-task JPG alignment migration.
+19. Reviewed all DAIP documentation and added a Rosie-specific integration-plan document.
+20. Added Build 215 schema, handoff, known-gap, image-guide, documentation-index, release-check, and cache-version synchronization.
+
+### DAIP status and value sequencing
+
+DAIP is valuable because one approved completed job could create reusable proof for the customer summary, vehicle history, before/after gallery, service/town pages, Google Business Profile, marketing drafts, and future social packages. It is also a high-cost/privacy-sensitive subsystem.
+
+**Build 215 status: planning only.** Do not begin a worker, AI model, processing queue, `daip_*` table, Drive sync, public export, or auto-publication until the DAIP-0 decisions in `docs/digital-asset-intelligence-platform/10_Rosie_Dazzlers_Integration_Plan.md` are accepted.
+
+### Next 20 value-added steps
+
+1. Deploy Build 215 and confirm Cloudflare Functions publish successfully.
+2. Run `sql/2026-06-30_build215_media_asset_format_alignment.sql` in Supabase after Build 214 security/RLS containment is confirmed.
+3. Open `/admin-media-health.html` while signed in and run the image-health scan.
+4. Confirm the eight Local Hero rows show a public JPG resolved URL and acceptable dimensions.
+5. Open each Local Hero page in a private/incognito browser and confirm no blank/default image appears.
+6. Open `/services` and confirm Service Hub images render before any placeholder fallback.
+7. Record any still-failing exact R2 key, resolved URL, HTTP status, and image dimensions; do not guess by replacing filenames.
+8. Ensure Cloudflare R2 custom-domain public access allows only intended approved public asset prefixes.
+9. Keep originals, private incidents, and staff-only job media out of the public `assets.rosiedazzlers.ca` namespace.
+10. Decide DAIP worker hosting and monthly cost ceiling.
+11. Decide DAIP original/proxy/public-derivative storage boundaries.
+12. Decide whether Google Drive is backup-only, operator-viewable, or deferred.
+13. Define DAIP consent wording and public-marketing approval rule.
+14. Define DAIP privacy-review roles and legal-hold behavior.
+15. Choose one controlled internal test detail for future DAIP acceptance testing.
+16. Draft, review, and approve a separate Phase 1 DAIP schema migration before executing it.
+17. Build only selected manual media-job intake after the migration is reviewed.
+18. Add real alerting for persistent missing public image URLs after verified R2 uploads.
+19. Replace any remaining generic visual placeholders with approved Rosie-owned media through Gallery/Media Health review.
+20. Re-run the Guided Production Test Centre after each deployed reliability/security/media change.
+
+## Build 216 — public media reliability and DAIP governance (2026-07-01)
+
+### Completed 20 steps
+
+1. Reviewed the Build 215 Local Hero JPG compatibility work and retained JPG as the valid canonical format.
+2. Kept the original public image URL as the first candidate before any extension fallback.
+3. Added bounded candidate timeouts to the browser image resolver so a stalled public asset does not remain blank indefinitely.
+4. Preserved JPG, JPEG, WebP, PNG, and upper-case extension compatibility for the same approved R2 object key.
+5. Added explicit resolved/exhausted resolver events for safe UI fallback handling.
+6. Reworked the server-side Media Health scan to use bounded fetches instead of unbounded public-image loads.
+7. Added concurrent scan processing so a large asset list is less likely to time out a Pages Function.
+8. Added HTTP/failure classification for not found, not public, timeout, origin error, unreachable, wrong content type, and undersized assets.
+9. Kept exact expected R2 key, resolved URL, dimensions, and compatible-format information available to staff.
+10. Added optional persistent public-asset health observations after the Build 216 SQL migration is applied.
+11. Added recurring alert state that starts as monitoring on the first failed scan.
+12. Added activation after a second consecutive failed scan so a one-time transient response does not create a persistent owner alarm.
+13. Added automatic alert resolution after one verified passing scan.
+14. Added a staff-only persistent alert list with acknowledge/reopen controls and safe CSV export.
+15. Connected active/acknowledged public-media alerts to Today Needs Attention so they do not remain isolated in Media Health.
+16. Ensured public-media alert records never store customer media, signed URLs, private evidence, or customer-identifying content.
+17. Added RLS, revoked direct browser grants, and server-only alert recording through a protected Supabase function.
+18. Added a public-media recovery visual placeholder category without using customer media as fallback artwork.
+19. Added a DAIP-0 owner decision register with no assumed decisions and no production implementation.
+20. Added a DAIP Phase 1 security/acceptance template and synchronized canonical docs, schema notes, visual registry, media guide, tests, documentation index, and release checks.
+
+### Next 20 value-added steps
+
+1. Deploy Build 216 and confirm both Cloudflare assets and Functions publish successfully.
+2. Confirm the Build 214 RLS/security migration is applied and Supabase Security Advisor is clear before applying new tables.
+3. Run `sql/2026-07-01_build216_media_reliability_daip_governance.sql` in Supabase.
+4. Run Admin Media Health twice using a harmless intentionally missing internal test asset key and confirm the first scan is monitoring while the second becomes active.
+5. Restore the harmless test asset or use a known public image and confirm a passing scan resolves the alert automatically.
+6. Test the eight Local Hero pages and `/services` in an incognito browser after a cache refresh; record the exact expected key and resolved URL for any failure.
+7. Verify active public-media alerts appear correctly in Today Needs Attention without exposing a public URL to unauthenticated users.
+8. Add narrowly scoped notification delivery for persistent public-media alerts after provider test delivery passes.
+9. Replace remaining generic public visual placeholders with approved Rosie-owned local proof photos through Gallery/Media Health review.
+10. Complete every DAIP-0 decision in `11_DAIP_Decision_Register.md`; do not infer decisions from this roadmap.
+11. Choose one harmless internal job/media set for future DAIP acceptance tests.
+12. Review the DAIP Phase 1 security acceptance template with the chosen storage/worker model before writing a migration.
+13. Configure and test notification-provider webhooks with a controlled mailbox.
+14. Verify Stripe test-mode checkout, webhook settlement, receipt status, cancellation, and resend paths.
+15. Complete guided mobile upload testing on real Wi-Fi and cellular networks, including retry and failed video behavior.
+16. Confirm R2 private/public prefix separation and retention dry-run behavior with no customer media exposed.
+17. Pair approved final media into before/after Gallery candidates with consent and provenance review.
+18. Create automatic vehicle-history cards from approved final proof only after privacy/consent review.
+19. Schedule review requests only after settled payment, customer summary acknowledgement, and no unresolved incident.
+20. Conduct a quarterly competitor/local SEO review based on real quotes, reviews, service areas, customer proof, and Search Console/Business Profile evidence.
+
+### Build 216 planning boundary
+
+DAIP remains planning only. Build 216 adds no DAIP worker, queue, AI model, `daip_*` table, bucket, Drive synchronization, public export, or automatic publishing. The decision register is a required gate, not an invitation to start implementation.
+
+### Build 216 synchronization — 2026-07-01
+
+Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+## Build 217 — secure final-balance collection path (2026-06-30)
+
+### Completed value steps
+
+1. Replaced predictable/public final-balance URLs with random opaque token links stored only as SHA-256 hashes.
+2. Added a secure, noindex, no-cache customer payment-status page with one H1 and no customer PII.
+3. Added default expiry, controlled maximum expiry, link rotation, cancellation, and reopen controls.
+4. Added an Admin Payments final-balance queue with customer-safe operational actions.
+5. Added hosted Stripe Checkout handoff that returns the customer to the token-gated payment page.
+6. Added Stripe webhook settlement and idempotent duplicate-event handling for final balances.
+7. Added progress-page payment states for open, paid, expired, and cancelled requests.
+8. Prevented final-balance token hashes and staff-entered notes from being sent to browser clients.
+9. Added a generic secure-payment visual placeholder rule that prohibits real invoices, payment links, QR codes, card data, or customer details.
+10. Added a Build 217 SQL migration, app-readable implementation record, route-copy sync, service-worker cache entries, and release guard.
+
+### Next 20 value steps
+
+1. Apply the Build 217 SQL migration and verify RLS/direct-browser containment remains intact.
+2. Use Stripe test mode to create, pay, return, and replay a final-balance checkout event.
+3. Confirm invalid, expired, rotated, and cancelled secure links reveal no customer information.
+4. Test the configured notification provider with a controlled inbox; record queued versus actually delivered outcomes.
+5. Add staff-visible final-balance status to the existing payment/reconciliation work queue only after a real test transaction passes.
+6. Verify tax/HST records and processor-fee handling with the accountant workflow before using live collection.
+7. Pair approved final media into Gallery candidates only with recorded media consent and provenance.
+8. Create a vehicle-history card only from approved final proof and never from private incident media.
+9. Schedule review requests only when final payment is settled, customer acknowledgement is present, and no unresolved incident remains.
+10. Complete real mobile Wi-Fi and cellular upload retry tests with harmless media.
+11. Verify public/private R2 prefixes and retention dry-run results.
+12. Replace only appropriate public placeholder slots with approved Rosie-owned local proof.
+13. Continue local page improvements using distinct people-first copy, verified service-area proof, and descriptive approved images.
+14. Review quote-to-booking conversion data before adding more marketing integrations.
+15. Validate payment/refund/receipt workflows with the accountant export in test records.
+16. Run the Guided Production Test Centre after deployment.
+17. Complete DAIP-0 decisions; keep DAIP planning-only until the security template is approved.
+18. Build a small consent-aware gallery pairing shortcut only after production media reliability passes.
+19. Review real Search Console and Google Business Profile evidence before altering SEO titles or town-page scope.
+20. Repeat the competitor/local SEO review quarterly using actual client feedback, visibility, and booked-job outcomes.
+
+### Build 217 boundary
+
+This build does **not** process card details, prove a live Stripe/Cloudflare/Supabase deployment, or assert notification delivery. Those require the controlled release tests above.
+
+### Current SEO and competitive recheck — 2026-06-30
+
+Google’s current guidance supports the existing safeguards: one clear page purpose, people-first content, search-language in the title/main heading, crawlable internal links, and descriptive approved image names/alt text. Structured data must describe visible, current page content and can improve eligibility, not guarantee appearance.
+
+Current service-software competitors reinforce the same customer experience target: Jobber’s client portal emphasizes self-serve work requests, approvals, appointment details, payments, and receipts; Urable’s detailing CRM emphasizes connected quoting, scheduling, job tracking, customer communication, payments, and vehicle history. Rosie Dazzlers should differentiate by keeping this journey simple for a one-car-per-day mobile detailer, with consent-aware proof and local Oxford/Norfolk trust—not by copying every enterprise feature.
+
+
+
+## Build 218 — next 20 DAIP and customer-proof steps (2026-07-02)
+
+This sequence starts the Digital Asset Intelligence Platform without risking customer media or turning a media system into a premature publishing system.
+
+1. Apply the Build 218 DAIP test-mode migration only in development/staging.
+2. Confirm Build 214 Security Posture has no browser access risk for the new DAIP tables.
+3. Open `/admin-daip.html` and verify internal-test/no-storage/no-worker/no-public-export/no-auto-publish controls.
+4. Choose one opaque `RD-TEST-BOOKING-...` reference for DAIP testing; it is not a booking record and never uses a customer job.
+5. Pass the DAIP Test Lab safety-preflight test.
+6. Create one `RD-TEST` job with the mandatory internal-test acknowledgement.
+7. Register one fictional photo metadata record and one fictional video metadata record without uploading files.
+8. Pass the metadata-registry test and verify no URL/bucket/key/path is saved or shown.
+9. Record one `internal_only_cleared` and one `blocked_private` privacy outcome.
+10. Pass the privacy/export-block test by verifying no DAIP record appears in gallery, social, customer progress, or public pages.
+11. Archive the harmless test job and confirm its audit history remains while new asset intake is blocked.
+12. Complete and owner-approve all DAIP-0 decision-register rows.
+13. Approve the customer media-consent wording that separates service proof, customer visibility, gallery reuse, marketing reuse, and publication.
+14. Set a hard monthly cost ceiling and automatic pause/alert threshold before buying or enabling processing infrastructure.
+15. Decide the single source of truth for originals and whether Google Drive is backup-only or deferred.
+16. Approve a retention/legal-hold/dispute policy for originals, proxies, rejected candidates, and approved derivatives.
+17. Choose a worker host capable of private FFmpeg/proxy work outside Cloudflare Pages requests and document the cost/recovery model.
+18. Review a private upload/storage migration that uses temporary server-issued authorization, checksums, resumable recovery, and immutable provenance; do not deploy it yet.
+19. Implement only the private technical processing MVP: metadata validation, proxy/thumbnail/contact sheet, retry/cancel, usage recording, and audit—no AI/public export.
+20. After private processing passes, build manual privacy masking/review and then a separate approved-only gallery/content handoff with no automatic publishing.
+
+### Why this sequencing is commercially useful
+
+The practical advantage is not “AI for its own sake.” It is a repeatable system that turns approved job proof into accurate gallery/service/town material while preserving privacy. That strengthens the existing lead → booking → proof → payment → review → repeat-maintenance workflow and keeps the customer self-service experience competitive without exposing work-in-progress media.
+
+## Build 219 — DAIP governance workspace and held promotion gates (2026-07-02)
+
+Build 219 moves the DAIP decision register from static planning into an internal governance workflow. It is intentionally a **decision and evidence build**, not a media-storage or processing build.
+
+### Completed value steps
+
+1. Added `/admin-daip-governance.html` with responsive desktop/mobile decision and gate views.
+2. Added a safe visual placeholder for the DAIP decision-to-gates flow.
+3. Added DAIP-0 draft and owner-approval controls for all twelve required decisions.
+4. Required an accountable owner, decision summary, business/cost impact, privacy/safety impact, review date, and revision number for every saved decision.
+5. Required an exact per-decision approval phrase before a decision can be marked approved.
+6. Added a protected audit event for every draft, approval, or reopened decision.
+7. Added a decision status summary so owners can see approved, drafted, and open work at a glance.
+8. Added Gate A readiness logic driven only by all twelve approved DAIP-0 decisions.
+9. Added Gate B readiness logic driven only by the three existing Build 218 internal-test results plus safe test-control state.
+10. Kept Gates C–F visibly held and unable to be changed by this build.
+11. Added static anti-sensitive-input validation for URLs, keys, signed links, storage identifiers, and obvious credential patterns.
+12. Added RLS and direct-browser grant revocation for the governance tables.
+13. Kept Cloudflare Functions as the only browser-to-database boundary.
+14. Added three Guided Production Test Centre cases for draft boundary, owner approval, and held-gate verification.
+15. Added an app-readable Build 219 record and schema mirror.
+16. Added an admin-menu link and matching permission guard.
+17. Added root/folder route-copy synchronization for the Governance screen.
+18. Added service-worker cache coverage for the new page and Build 218/219 records.
+19. Updated the two active strategy documents and DAIP operational documents.
+20. Added a Build 219 release guard to prevent a later build from silently enabling a production DAIP path.
+
+### Next 20 value steps
+
+1. Apply Build 219 only to development/staging after Build 214 and Build 218 are applied.
+2. Run the three Build 218 DAIP Test Lab acceptance tests with fictional metadata only.
+3. Record the three Build 219 governance acceptance tests.
+4. Draft every DAIP-0 decision using the in-app prompt and no sensitive information.
+5. Review the decisions together against actual budget, workload, privacy, and recovery limits.
+6. Owner-approve DAIP-0-01 worker hosting only after choosing a private background-processing model.
+7. Owner-approve DAIP-0-02 and DAIP-0-12 with a hard dollar ceiling and automatic pause/alert rule.
+8. Owner-approve DAIP-0-03 and DAIP-0-04 with one source-of-truth and controlled backup policy.
+9. Owner-approve DAIP-0-05 with consent wording that separates service proof, customer view, gallery reuse, marketing reuse, and publication.
+10. Owner-approve DAIP-0-06 with named internal review/approval responsibilities.
+11. Owner-approve DAIP-0-07 and DAIP-0-08 with retention, legal-hold, incident, and dispute handling rules.
+12. Owner-approve DAIP-0-09 using only a harmless staff-owned test set.
+13. Owner-approve DAIP-0-10 with a realistic human review SLA and blocked-job escalation owner.
+14. Owner-approve DAIP-0-11 confirming that the first private technical phase has no public destination.
+15. Review Gate A and Gate B evidence, then freeze the decisions as a baseline for technical design.
+16. Draft a separate private-storage/upload architecture that adds no public bucket, no direct browser DB access, and no automatic publishing.
+17. Perform a cost and recovery review before writing the next migration.
+18. Build only a private upload authorization and immutable provenance MVP after its separate security acceptance is signed off.
+19. Then add non-public proxy/thumbnail/contact-sheet processing, retry/cancel controls, usage accounting, and audit trails outside Pages requests.
+20. Only after privacy/export proof passes, consider a separate explicit-approved gallery/content handoff; retain zero automatic publishing.
+
+### Build 219 boundary
+
+Build 219 does not create a bucket, storage prefix, upload endpoint, original-media intake, signed URL, worker, queue execution, AI/vision/transcription, customer media view, Gallery/Social/GBP handoff, public derivative, or automatic publishing. It makes the prerequisite owner decisions and test evidence visible so the future technical build can be deliberately small and reviewable.
+
+## Build 221 hotfix — customer-admin route 405 repair
+
+Build 221 is a no-schema hotfix for the `/admin-customers.html` page after staging showed `api/admin/customer_admin_list` returning HTTP 405 while the page displayed the Customer account access visual placeholder.
+
+What changed:
+- Added generic Cloudflare Pages `onRequest` dispatchers to the Build 220 customer-admin endpoints so GET, POST, and OPTIONS are accepted through a single route entrypoint as well as the method-specific handlers.
+- Added a safe page-side fallback so list-style customer-admin requests retry with GET if a deployment returns 405 on POST.
+- Updated the service-worker cache to `rosie-app-v20260703build221` so old admin page code is less likely to stay cached.
+- Added `data/build221_customer_admin_route_hotfix.json` and a Build 221 guard script.
+
+No Supabase migration is required. Deploy the Pages site and Functions together, then hard-refresh `/admin-customers.html`. A correct result is a normal JSON response, authentication response, or permission response from `/api/admin/customer_admin_list`; it should not be 405.
+
+DAIP boundary remains unchanged: no production storage, uploads, workers, AI, customer media access, public gallery export, social publishing, Google Business Profile export, or automatic publishing was added.
+
+
+## Build 226 — DAIP metadata-only intake dry run (2026-07-08)
+
+Build 226 adds a protected fictional-manifest validator at `/admin-daip-intake-dry-run.html`. It validates filename, MIME type, declared size, fictional SHA-256 shape, rejection reasons, aggregate size, and a planning-only cost estimate. It accepts no file bytes and creates no storage authorization, object path, worker execution, customer-media route, public destination, or publishing path. Gate C remains held.
+
+Apply `sql/2026-07-08_build226_daip_intake_dry_run.sql` in staging only, then run one accepted and one rejected fictional manifest. The two living strategy documents remain this file and `MASTER_VALUE_ROADMAP.md`; older Markdown remains retained audit and release evidence.
+
+## Build 227 — roadmap execution and DAIP validation policy (2026-07-09)
+
+### Completed next 20 steps
+
+1. Added a DB-backed active roadmap execution queue.
+2. Seeded the current next 20 cross-workstream priorities.
+3. Added roadmap status values: planned, in progress, blocked, done, and deferred.
+4. Added priority, workstream, owner, target build, source document, and sort order.
+5. Added safe evidence notes for deployment/test proof.
+6. Added an append-only roadmap audit table.
+7. Added protected admin dashboard and save APIs.
+8. Added `/admin-roadmap-execution.html` with responsive desktop/mobile controls.
+9. Added status KPI counts for the active next 20.
+10. Added a visual placeholder for the internal execution workflow.
+11. Moved DAIP manifest-count limits into a protected DB policy.
+12. Moved image/video declared-size limits into the protected DB policy.
+13. Moved storage-rate planning assumptions into the protected DB policy.
+14. Added monthly warning and hard-stop planning values.
+15. Forced Gate C to remain held at the database constraint level.
+16. Forced technical capability to remain disabled at the database constraint level.
+17. Updated Build 226 validation to read policy with safe code defaults.
+18. Updated admin navigation, route copies, service worker, and access rules.
+19. Updated canonical schema, active Markdown, test guidance, and release evidence.
+20. Re-ran one-H1, route parity, JavaScript, CSS/responsive, and release checks.
+
+### Next 20 steps after Build 227
+
+1. Apply the Build 227 migration in staging and verify RLS/service-role containment.
+2. Assign owners and statuses to all 20 seeded roadmap items.
+3. Record Build 226 accepted and rejected fictional-manifest evidence.
+4. Confirm warning and hard-stop amounts with the owners.
+5. Complete all DAIP Gate A owner decisions.
+6. Complete all DAIP Gate B safety-test evidence.
+7. Conduct the independent Gate C rollback review.
+8. Keep real uploads, storage, workers, AI, and publishing disabled until Gate C is separately approved.
+9. Run customer recovery, archive, and restore staging tests.
+10. Build a manual duplicate-customer merge dry run with no automatic transfer.
+11. Verify Stripe final-balance settlement, cancellation, and webhook replay in test mode.
+12. Verify notification delivery with a controlled inbox.
+13. Run mobile weak-network upload retry tests using harmless test media.
+14. Add approved final proof to gallery candidates only with consent/provenance.
+15. Add approved final proof to vehicle history only after privacy review.
+16. Gate review requests on settled payment, acknowledgement, and no unresolved incident.
+17. Review Search Console and Business Profile evidence before changing local titles.
+18. Replace public placeholders only with approved Rosie-owned local proof.
+19. Archive redundant Markdown only after release-guard dependency scanning.
+20. Continue one-H1, title/meta, local wording, error fallback, and CSS drift checks every pass.
+
+
+## Build 228 — Creative Project Intelligence foundation (2026-07-12)
+
+Build 228 changes the operational centre from product-first to **project/process-first**. `/admin-creative-projects.html` records a project idea, purpose, audience, lifecycle, work sessions, materials, mistakes/fixes, time, costs, outcomes, lessons, and future recommendations. Each new project receives governed output records for YouTube, Shorts, Reels, TikTok, Facebook video, Pinterest, Etsy draft, website page, blog, gallery, before/after, educational article, archive, material report, cost analysis, lessons learned, and future recommendations.
+
+Publishing is never automatic: public publishing defaults off, consent review is separate, and every output follows planned → drafting → review → approved → scheduled → published or not applicable. Product pages and Etsy drafts are optional outputs; they are not the primary project record.
+
+Primary migration: `sql/2026-07-12_build228_creative_project_intelligence_foundation.sql`. Primary UI: `/admin-creative-projects.html`. Canonical schema: `SUPABASE_SCHEMA.sql`.
+
+### Next 20 steps after Build 228
+
+1. Apply the Build 228 migration in staging and verify RLS/service-role containment.
+2. Create one fictional project and verify all seventeen output records are seeded.
+3. Test mobile project creation and session logging.
+4. Add controlled project-to-booking association without making bookings the project source of truth.
+5. Add media-manifest references after DAIP Gate C approval; keep file bytes disabled until then.
+6. Add structured material-line usage tied to inventory transactions.
+7. Add session time rollups and estimated-versus-actual labour.
+8. Add project cost breakdown with material, labour, overhead, fees, and waste.
+9. Add before/after applicability and consent gating.
+10. Add a project story outline generated from approved session notes.
+11. Add YouTube long-form outline drafts.
+12. Add short-form hook and clip-plan drafts for Shorts, Reels, TikTok, and Facebook.
+13. Add Pinterest title/description/image-plan drafts.
+14. Add Etsy and website listing drafts without automatic publication.
+15. Add blog and educational article drafts with source-note citations.
+16. Add project archive export and recovery package.
+17. Add lessons-learned extraction with human approval.
+18. Add future-project recommendation ranking using completed project history.
+19. Add output approval dashboard and destination readiness checks.
+20. Keep one-H1, title/meta, local wording, responsive CSS, fallback, and privacy checks in every release.
+
+
+## Build 229 completed — dual-path operations
+- Preserved the normal client booking → detail → payment → completion path without project overhead.
+- Added explicit staff opt-in from a selected booking to a linked creative project.
+- Added source-mode and booking-link audit evidence.
+- Kept consent review and public publishing disabled by default.
+
+### Next priorities
+1. Add structured material lines to creative projects without changing normal booking inventory use.
+2. Add optional project templates for detailing, restoration, jewelry and education.
+3. Add a project-output approval command centre.
+4. Add manual unlink/archive controls with audit and no booking deletion.
+5. Continue DAIP Gate C evidence before real media storage.
+
+
+## Build 230 — Creative project costs, templates, drafts and controls (2026-07-13)
+
+Build 230 extends only the opt-in Creative Project Intelligence path. Ordinary customer bookings remain standard jobs and retain their existing inventory, service, payment and completion workflow.
+
+Added: structured project-only material, labour and other-cost lines; optional project templates; before/after applicability; consent status and summary; story/platform/commerce/report drafts; unified batch output review; reversible booking unlink, archive and restore; and a project-to-DAIP metadata association that is denied until Gate C is accepted and technical capability is explicitly enabled. Nothing publishes automatically.
+
+Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_build230_project_costs_templates_outputs.sql`.

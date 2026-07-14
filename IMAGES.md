@@ -20,8 +20,8 @@ Build 185 clears the older image notes into an actionable media-health checklist
 |---|---:|---:|---:|---|
 | Add-on cards | `packages/<addon>.png` | 1200×800 | 1600×1067 | Landscape, bright, service-specific. |
 | Package cards | `packages/<package>.png` | 1200×800 | 1600×900 | Use consistent vehicle angle/background. |
-| Regional landing heroes | `landing-pages/<town>-auto-detailing.webp` | 1600×900 | 1920×1080 | Rosie-owned local proof only. |
-| Before/after gallery | `gallery/<town>-<service>-before.webp` and `...after.webp` | 1200×900 | 1600×1200 | Requires approved public consent/privacy status. |
+| Regional landing heroes | `landing-pages/<town>-auto-detailing.jpg` | 1600×900 | 1920×1080 | Rosie-owned local proof only. |
+| Before/after gallery | `gallery/<town>-<service>-before.jpg` and `...after.jpg` | 1200×900 | 1600×1200 | Requires approved public consent/privacy status. |
 | Public videos | `videos/<name>.mp4` or `.webm` | 720p | 1080p | Keep short, compressed, and owned by Rosie Dazzlers. |
 
 ## Critical missing add-on image keys
@@ -46,14 +46,14 @@ packages/fleet_vehicle_add_on.png
 ## Regional photos to replace
 
 ```text
-landing-pages/tillsonburg-auto-detailing.webp
-landing-pages/woodstock-ingersoll-auto-detailing.webp
-landing-pages/simcoe-delhi-auto-detailing.webp
-landing-pages/port-dover-auto-detailing.webp
-landing-pages/norwich-otterville-auto-detailing.webp
-landing-pages/zorra-thamesford-embro-auto-detailing.webp
-landing-pages/waterford-vittoria-auto-detailing.webp
-landing-pages/port-rowan-turkey-point-auto-detailing.webp
+landing-pages/tillsonburg-auto-detailing.jpg
+landing-pages/woodstock-ingersoll-auto-detailing.jpg
+landing-pages/simcoe-delhi-auto-detailing.jpg
+landing-pages/port-dover-auto-detailing.jpg
+landing-pages/norwich-otterville-auto-detailing.jpg
+landing-pages/zorra-thamesford-embro-auto-detailing.jpg
+landing-pages/waterford-vittoria-auto-detailing.jpg
+landing-pages/port-rowan-turkey-point-auto-detailing.jpg
 ```
 
 ## Upload methods
@@ -393,3 +393,53 @@ Build 213 adds owner action controls in Today Needs Attention, customer price/su
 ### Build 214 documentation sync — 2026-06-23
 
 Build 214 prioritizes Supabase containment and owner-task reliability. The active security action is to run `sql/2026-06-23_build214_security_task_orchestration.sql`, refresh Supabase Security Advisor, and test the application through Cloudflare Functions rather than restoring direct browser access to tables. Canonical planning remains in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+## Build 215 — JPG Local Hero compatibility and verification (2026-06-30)
+
+The Local Hero images may remain JPG files. They do **not** need to be converted to WebP merely to render in Rosie Dazzlers.
+
+Canonical Local Hero key pattern:
+
+```text
+landing-pages/<town-or-area>-auto-detailing.jpg
+```
+
+The current public renderer and Admin Media Health verifier accept the same approved base key with:
+
+```text
+.jpg
+.jpeg
+.webp
+.png
+```
+
+The original URL is always tried first. A format variant is tried only before the page uses a fallback visual. This is a compatibility layer, not a filename repair tool: folder name, base filename, and case-sensitive R2 key must still be correct.
+
+### Required verification after Build 215 deployment
+
+1. Open `/admin-media-health.html` while signed in.
+2. Click **Run image health scan**.
+3. For each Local Hero, confirm:
+   - status is public;
+   - measured dimensions are at least 1600×900;
+   - **Resolved URL** points to the approved JPG/JPEG/WebP/PNG object;
+   - no missing/not-public badge appears.
+4. In an incognito/private browser, open the exact resolved URL from the card.
+5. Open the matching public Local Hero page and confirm the hero image appears instead of the default fallback.
+6. If an item still fails, record the exact expected key, resolved URL, HTTP status, and measured dimensions. Do not rename assets blindly.
+
+Build 215 migration for existing DB task rows:
+
+```text
+sql/2026-06-30_build215_media_asset_format_alignment.sql
+```
+
+## Build 216 public-media recovery note
+
+Use `/admin-media-health.html` after a public asset upload. It now reports the expected R2 key, resolved public URL, HTTP status, compatible format result, dimensions, and failure type. Do not rename an uploaded asset by guesswork. Record the exact key and resolved URL first.
+
+After the Build 216 migration, the first failed scan is only monitoring. A second consecutive failure creates an active staff alert; one passing scan resolves it. These alerts are for public site assets only and must not be used for private job media or incident evidence.
+
+### Build 216 synchronization — 2026-07-01
+
+Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
