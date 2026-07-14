@@ -200,6 +200,10 @@ function normalizePage(page) {
     hero_title: String(page?.hero_title || page?.name || "Landing page").trim(),
     hero_intro: String(page?.hero_intro || "").trim(),
     hero_image_url: String(page?.hero_image_url || "").trim(),
+    // Build 215: local Rosie-owned hero asset is separate so old editable rows cannot keep a legacy remote placeholder in front of it.
+    local_hero_image_url: String(page?.local_hero_image_url || "").trim(),
+    local_hero_r2_key: String(page?.local_hero_r2_key || "").trim(),
+    local_hero_format: String(page?.local_hero_format || "").trim(),
     region_photo_caption: String(page?.region_photo_caption || "").trim(),
     region_photo_source: String(page?.region_photo_source || "").trim(),
     region_photo_source_url: String(page?.region_photo_source_url || "").trim(),
