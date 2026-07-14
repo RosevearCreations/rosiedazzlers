@@ -5,6 +5,7 @@
 import { queueOrderConfirmationNotification } from "../_lib/booking-documents.js";
 import { markQuoteDepositPaidFromProvider, getServiceKey, moneyToCents, cleanText } from "../_lib/quote-deposit-payments.js";
 import { recordPaymentWebhookEvent, updatePaymentWebhookEvent, queueQuoteDepositReceiptEmail, recordQuoteDepositRefund } from "../_lib/quote-payment-events.js";
+import { queueCustomerLiveAlert } from "../_lib/live-interaction-alerts.js";
 
 const SETTLEMENT_EVENTS = new Set(["checkout.session.completed"]);
 const REFUND_EVENTS = new Set(["charge.refunded", "refund.created", "refund.updated", "charge.refund.updated"]);
@@ -68,6 +69,40 @@ export async function onRequestPost({ request, env }) {
   const session = event?.data?.object || {};
   const metadata = session?.metadata || {};
   const quoteDepositPaymentRequestId = metadata.quote_deposit_payment_request_id || metadata.quoteDepositPaymentRequestId || null;
+  const finalBalancePaymentRequestId = metadata.final_balance_payment_request_id || metadata.finalBalancePaymentRequestId || null;
+
+  if (finalBalancePaymentRequestId) {
+    const settled = await settleFinalBalanceFromStripe({
+      env,
+      paymentRequestId: finalBalancePaymentRequestId,
+      session,
+      event
+    });
+    if (!settled.ok) {
+      await updatePaymentWebhookEvent(env, { provider: "stripe", provider_event_id: event.id }, { status:"failed", last_error:settled.error || "Final-balance settlement failed.", booking_id:settled.booking_id || null });
+      await logEvent(SUPABASE_URL, SERVICE_KEY, settled.booking_id || null, "stripe_final_balance_settle_failed", { final_balance_payment_request_id:finalBalancePaymentRequestId, error:settled.error || null });
+      return new Response(settled.error || "Final-balance settlement failed", { status:settled.status || 500 });
+    }
+    const notification = settled.idempotent
+      ? { ok:true, skipped:true, reason:"already_settled" }
+      : !settled.booking_id
+        ? { ok:true, skipped:true, reason:"payment_request_has_no_booking_link" }
+        : await queueCustomerLiveAlert({
+          env,
+          bookingId:settled.booking_id,
+          eventType:"final_balance_payment_settled",
+          message:"Your final-balance payment has been received.",
+          payload:{ payment_request_id:finalBalancePaymentRequestId, amount_cents:settled.payment_request?.paid_amount_cents || settled.payment_request?.amount_cents || null, currency:settled.payment_request?.currency || "CAD" }
+        }).catch((err) => ({ ok:false, error:err?.message || "Could not queue payment receipt notice." }));
+    await updatePaymentWebhookEvent(env, { provider:"stripe", provider_event_id:event.id }, {
+      status:settled.idempotent ? "replayed" : "settled",
+      booking_id:settled.booking_id || null,
+      payment_reference:session.payment_intent || session.id || null,
+      processed_payload:{ final_balance_payment_request_id:finalBalancePaymentRequestId, session_id:session.id, payment_intent:session.payment_intent || null, idempotent:!!settled.idempotent, customer_notification:notification }
+    });
+    await logEvent(SUPABASE_URL, SERVICE_KEY, settled.booking_id || null, "stripe_final_balance_settled", { final_balance_payment_request_id:finalBalancePaymentRequestId, session_id:session.id, payment_intent:session.payment_intent || null, idempotent:!!settled.idempotent });
+    return new Response("OK", { status:200 });
+  }
 
   if (quoteDepositPaymentRequestId) {
     const paid = await markQuoteDepositPaidFromProvider({
@@ -159,6 +194,29 @@ export async function onRequestPost({ request, env }) {
   });
 
   return new Response("OK", { status: 200 });
+}
+
+async function settleFinalBalanceFromStripe({ env, paymentRequestId, session, event }) {
+  const SUPABASE_URL = env.SUPABASE_URL;
+  const SERVICE_KEY = getServiceKey(env);
+  try {
+    const load = await fetch(`${SUPABASE_URL}/rest/v1/final_balance_payment_requests?select=id,booking_id,status,amount_cents,currency,paid_at,external_checkout_id&id=eq.${encodeURIComponent(paymentRequestId)}&limit=1`, { headers:{ apikey:SERVICE_KEY, Authorization:`Bearer ${SERVICE_KEY}` } });
+    const rows = load.ok ? await load.json().catch(() => []) : [];
+    const paymentRequest = Array.isArray(rows) ? rows[0] || null : null;
+    if (!paymentRequest) return { ok:false, status:404, error:"Final-balance payment request was not found." };
+    const alreadyPaid = !!paymentRequest.paid_at || /paid|succeeded|settled|complete/.test(String(paymentRequest.status || "").toLowerCase());
+    if (alreadyPaid) return { ok:true, idempotent:true, booking_id:paymentRequest.booking_id || null, payment_request:paymentRequest };
+    const patch = {
+      status:"paid", provider:"stripe", provider_status:"stripe_settled", paid_at:new Date().toISOString(),
+      paid_amount_cents:Number(session.amount_total || session.amount_subtotal || paymentRequest.amount_cents || 0),
+      provider_payment_intent_id:session.payment_intent || null, provider_event_id:event.id || null,
+      external_checkout_id:session.id || paymentRequest.external_checkout_id || null, updated_at:new Date().toISOString()
+    };
+    const update = await fetch(`${SUPABASE_URL}/rest/v1/final_balance_payment_requests?id=eq.${encodeURIComponent(paymentRequestId)}`, { method:"PATCH", headers:{ apikey:SERVICE_KEY, Authorization:`Bearer ${SERVICE_KEY}`, "Content-Type":"application/json", Prefer:"return=representation" }, body:JSON.stringify(patch) });
+    const updatedRows = update.ok ? await update.json().catch(() => []) : [];
+    if (!update.ok) return { ok:false, status:update.status, error:`Could not settle final-balance request. ${await update.text()}` };
+    return { ok:true, idempotent:false, booking_id:paymentRequest.booking_id || null, payment_request:(Array.isArray(updatedRows) ? updatedRows[0] : null) || { ...paymentRequest, ...patch } };
+  } catch (err) { return { ok:false, status:500, error:err?.message || "Could not settle final-balance request." }; }
 }
 
 async function handleStripeRefundEvent({ env, event }) {
