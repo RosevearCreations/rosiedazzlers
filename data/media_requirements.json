@@ -123,66 +123,6 @@
       "build": "185"
     },
     {
-      "label": "Tillsonburg local hero",
-      "category": "regional",
-      "r2_key": "landing-pages/tillsonburg-auto-detailing.webp",
-      "required_size": "1600x900 preferred landscape WebP/JPG",
-      "upload_method": "Cloudflare R2 → landing-pages → tillsonburg-auto-detailing.webp",
-      "required_width": 1600,
-      "required_height": 900,
-      "build": "185"
-    },
-    {
-      "label": "Woodstock/Ingersoll local hero",
-      "category": "regional",
-      "r2_key": "landing-pages/woodstock-ingersoll-auto-detailing.webp",
-      "required_size": "1600x900 preferred landscape WebP/JPG",
-      "upload_method": "Cloudflare R2 → landing-pages → woodstock-ingersoll-auto-detailing.webp",
-      "required_width": 1600,
-      "required_height": 900,
-      "build": "185"
-    },
-    {
-      "label": "Simcoe/Delhi local hero",
-      "category": "regional",
-      "r2_key": "landing-pages/simcoe-delhi-auto-detailing.webp",
-      "required_size": "1600x900 preferred landscape WebP/JPG",
-      "upload_method": "Cloudflare R2 → landing-pages → simcoe-delhi-auto-detailing.webp",
-      "required_width": 1600,
-      "required_height": 900,
-      "build": "185"
-    },
-    {
-      "label": "Port Dover local hero",
-      "category": "regional",
-      "r2_key": "landing-pages/port-dover-auto-detailing.webp",
-      "required_size": "1600x900 preferred landscape WebP/JPG",
-      "upload_method": "Cloudflare R2 → landing-pages → port-dover-auto-detailing.webp",
-      "required_width": 1600,
-      "required_height": 900,
-      "build": "185"
-    },
-    {
-      "label": "Norwich/Otterville local hero",
-      "category": "regional",
-      "r2_key": "landing-pages/norwich-otterville-auto-detailing.webp",
-      "required_size": "1600x900 preferred landscape WebP/JPG",
-      "upload_method": "Cloudflare R2 → landing-pages → norwich-otterville-auto-detailing.webp",
-      "required_width": 1600,
-      "required_height": 900,
-      "build": "185"
-    },
-    {
-      "label": "Waterford/Vittoria local hero",
-      "category": "regional",
-      "r2_key": "landing-pages/waterford-vittoria-auto-detailing.webp",
-      "required_size": "1600x900 preferred landscape WebP/JPG",
-      "upload_method": "Cloudflare R2 → landing-pages → waterford-vittoria-auto-detailing.webp",
-      "required_width": 1600,
-      "required_height": 900,
-      "build": "185"
-    },
-    {
       "label": "Tillsonburg interior before/after proof",
       "category": "gallery_proof",
       "r2_key": "CarPhotos/tillsonburg-interior-proof-before.webp",
@@ -221,11 +161,147 @@
       "required_width": 1200,
       "required_height": 800,
       "build": "185"
+    },
+    {
+      "label": "Tillsonburg local hero",
+      "category": "regional",
+      "r2_key": "landing-pages/tillsonburg-auto-detailing.jpg",
+      "required_size": "1600x900 preferred landscape JPG/WebP",
+      "upload_method": "Cloudflare R2 → landing-pages → tillsonburg-auto-detailing.jpg",
+      "required_width": 1600,
+      "required_height": 900,
+      "build": "215",
+      "accepted_extensions": [
+        ".jpg",
+        ".jpeg",
+        ".webp",
+        ".png"
+      ],
+      "notes": "Build 215 resolves approved R2 format variants; JPG is the current preferred uploaded format."
+    },
+    {
+      "label": "Woodstock/Ingersoll local hero",
+      "category": "regional",
+      "r2_key": "landing-pages/woodstock-ingersoll-auto-detailing.jpg",
+      "required_size": "1600x900 preferred landscape JPG/WebP",
+      "upload_method": "Cloudflare R2 → landing-pages → woodstock-ingersoll-auto-detailing.jpg",
+      "required_width": 1600,
+      "required_height": 900,
+      "build": "215",
+      "accepted_extensions": [
+        ".jpg",
+        ".jpeg",
+        ".webp",
+        ".png"
+      ],
+      "notes": "Build 215 resolves approved R2 format variants; JPG is the current preferred uploaded format."
+    },
+    {
+      "label": "Simcoe/Delhi local hero",
+      "category": "regional",
+      "r2_key": "landing-pages/simcoe-delhi-auto-detailing.jpg",
+      "required_size": "1600x900 preferred landscape JPG/WebP",
+      "upload_method": "Cloudflare R2 → landing-pages → simcoe-delhi-auto-detailing.jpg",
+      "required_width": 1600,
+      "required_height": 900,
+      "build": "215",
+      "accepted_extensions": [
+        ".jpg",
+        ".jpeg",
+        ".webp",
+        ".png"
+      ],
+      "notes": "Build 215 resolves approved R2 format variants; JPG is the current preferred uploaded format."
+    },
+    {
+      "label": "Port Dover local hero",
+      "category": "regional",
+      "r2_key": "landing-pages/port-dover-auto-detailing.jpg",
+      "required_size": "1600x900 preferred landscape JPG/WebP",
+      "upload_method": "Cloudflare R2 → landing-pages → port-dover-auto-detailing.jpg",
+      "required_width": 1600,
+      "required_height": 900,
+      "build": "215",
+      "accepted_extensions": [
+        ".jpg",
+        ".jpeg",
+        ".webp",
+        ".png"
+      ],
+      "notes": "Build 215 resolves approved R2 format variants; JPG is the current preferred uploaded format."
+    },
+    {
+      "label": "Norwich/Otterville local hero",
+      "category": "regional",
+      "r2_key": "landing-pages/norwich-otterville-auto-detailing.jpg",
+      "required_size": "1600x900 preferred landscape JPG/WebP",
+      "upload_method": "Cloudflare R2 → landing-pages → norwich-otterville-auto-detailing.jpg",
+      "required_width": 1600,
+      "required_height": 900,
+      "build": "215",
+      "accepted_extensions": [
+        ".jpg",
+        ".jpeg",
+        ".webp",
+        ".png"
+      ],
+      "notes": "Build 215 resolves approved R2 format variants; JPG is the current preferred uploaded format."
+    },
+    {
+      "label": "Zorra/Thamesford/Embro local hero",
+      "category": "regional",
+      "r2_key": "landing-pages/zorra-thamesford-embro-auto-detailing.jpg",
+      "required_size": "1600x900 preferred landscape JPG/WebP",
+      "upload_method": "Cloudflare R2 → landing-pages → zorra-thamesford-embro-auto-detailing.jpg",
+      "required_width": 1600,
+      "required_height": 900,
+      "build": "215",
+      "accepted_extensions": [
+        ".jpg",
+        ".jpeg",
+        ".webp",
+        ".png"
+      ],
+      "notes": "Build 215 resolves approved R2 format variants; JPG is the current preferred uploaded format."
+    },
+    {
+      "label": "Waterford/Vittoria local hero",
+      "category": "regional",
+      "r2_key": "landing-pages/waterford-vittoria-auto-detailing.jpg",
+      "required_size": "1600x900 preferred landscape JPG/WebP",
+      "upload_method": "Cloudflare R2 → landing-pages → waterford-vittoria-auto-detailing.jpg",
+      "required_width": 1600,
+      "required_height": 900,
+      "build": "215",
+      "accepted_extensions": [
+        ".jpg",
+        ".jpeg",
+        ".webp",
+        ".png"
+      ],
+      "notes": "Build 215 resolves approved R2 format variants; JPG is the current preferred uploaded format."
+    },
+    {
+      "label": "Port Rowan/Turkey Point local hero",
+      "category": "regional",
+      "r2_key": "landing-pages/port-rowan-turkey-point-auto-detailing.jpg",
+      "required_size": "1600x900 preferred landscape JPG/WebP",
+      "upload_method": "Cloudflare R2 → landing-pages → port-rowan-turkey-point-auto-detailing.jpg",
+      "required_width": 1600,
+      "required_height": 900,
+      "build": "215",
+      "accepted_extensions": [
+        ".jpg",
+        ".jpeg",
+        ".webp",
+        ".png"
+      ],
+      "notes": "Build 215 resolves approved R2 format variants; JPG is the current preferred uploaded format."
     }
   ],
-  "version": "192.0.0",
-  "updated_at": "2026-06-05",
+  "version": "215.0.0",
+  "updated_at": "2026-06-30",
   "source": "stable_bundled_json_fallback_build192_media_requirement_sync_restore",
-  "notes": "Stable fallback for DB-managed media requirements/tasks.",
+  "notes": "Stable fallback for DB-managed media requirements/tasks. Build 215 accepts JPG/JPEG/WEBP/PNG variants; Local Hero canonical references now use JPG.",
   "db_sync_restore_enabled": true
 }

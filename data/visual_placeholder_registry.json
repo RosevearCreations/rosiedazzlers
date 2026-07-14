@@ -1,7 +1,7 @@
 {
-  "build": 214,
-  "updated_at": "2026-06-23",
-  "summary": "Build 214 extends the visual placeholder system with safe database-security posture guidance.",
+  "build": 228,
+  "updated_at": "2026-07-12",
+  "summary": "Responsive visual placeholders remain temporary and safe. Build 228 adds a Creative Project Intelligence workflow slot for the process-first project system.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -179,6 +179,89 @@
       "visual": "shield/checklist card with no customer data",
       "replace_with": "safe internal security remediation checklist screenshot",
       "alt": "Database security posture checklist for Rosie Dazzlers administrators"
+    },
+    {
+      "key": "media_recovery_alert",
+      "label": "Public media recovery placeholder",
+      "where": "Admin Media Health and public asset recovery alerts",
+      "visual": "image frame with repair/check indicator",
+      "replace_with": "verified Rosie-owned public asset after the exact R2 key, URL, access policy, dimensions, and consent status are confirmed"
+    },
+    {
+      "key": "secure_payment",
+      "label": "Secure payment placeholder",
+      "where": "final-balance payment status, invoice/payment workflow, and payment-assistance cards",
+      "visual": "shield and receipt card",
+      "replace_with": "approved generic Rosie Dazzlers payment/receipt graphic only; never use a real customer invoice, card, payment link, QR code, or personal data"
+    },
+    {
+      "key": "daip_governance_gates",
+      "label": "DAIP governance gate visual",
+      "where": "/admin-daip-governance.html and DAIP promotion-gate documentation",
+      "visual": "private decision-to-gate flow diagram with locked boundaries",
+      "replace_with": "safe internal diagram after staging validation; no customer records, media, keys, bucket names, paths, or signed links",
+      "approval_required": "admin governance approval"
+    },
+    {
+      "key": "customer_access_control",
+      "label": "Customer account access placeholder",
+      "where": "/admin-customers.html and account-recovery guidance",
+      "visual": "safe account-support, secure-link, and lifecycle control card",
+      "replace_with": "approved generic account-support diagram with all customer names, emails, reset links, tokens, payments, and media removed",
+      "approval_required": "admin security review"
+    },
+    {
+      "key": "daip_phase1_readiness_review",
+      "label": "DAIP Phase 1 readiness visual",
+      "where": "/admin-daip-readiness.html and DAIP readiness documentation",
+      "visual": "safe internal flow from governance evidence to written private-MVP design review",
+      "replace_with": "internal decision diagram after staging acceptance; never customer media, credentials, bucket names, paths, or signed links",
+      "status": "placeholder"
+    },
+    {
+      "key": "daip_private_mvp_blueprint",
+      "label": "DAIP private-MVP blueprint review illustration",
+      "where": "admin-only DAIP design review",
+      "visual": "protected governance-to-blueprint flow with all technical/public outputs locked",
+      "replace_with": "abstract internal review diagram only; never customer information, real media, storage names, credentials, or public destination logos"
+    },
+    {
+      "key": "daip_gate_c_technical_review",
+      "label": "DAIP Gate C technical review placeholder",
+      "where": "/admin-daip-gate-c.html",
+      "visual": "safe internal technical-review and rollback acceptance diagram",
+      "replace_with": "abstract internal diagram only; never customer data, media, credentials, external service details, paths, or URLs",
+      "status": "placeholder"
+    },
+    {
+      "key": "social_analytics_connection_centre",
+      "label": "Social and analytics connections placeholder",
+      "where": "/admin-integrations.html and connection setup documentation",
+      "visual": "abstract secure connection map from provider console to Cloudflare Secrets to consent-first public pages",
+      "replace_with": "approved generic integration setup diagram; never use screenshots containing IDs, secrets, customer data, tokens, credentials, browser inspector output, or account numbers",
+      "status": "placeholder"
+    },
+    {
+      "key": "daip_integration_boundary",
+      "label": "DAIP integration boundary placeholder",
+      "where": "/admin-integrations.html and DAIP external-service planning",
+      "visual": "locked boundary between connection governance and DAIP technical/public capabilities",
+      "replace_with": "abstract internal decision diagram only; never show real providers, media, paths, bucket names, URLs, or credentials",
+      "status": "placeholder"
+    },
+    {
+      "key": "daip_intake_dry_run",
+      "label": "DAIP intake validation placeholder",
+      "where": "admin DAIP intake dry-run workspace",
+      "visual": "fictional file cards flowing through validation, rejection, cost and rollback checks",
+      "replace_with": "an internal architecture diagram only; never customer media or credentials"
+    },
+    {
+      "key": "creative_project_intelligence",
+      "label": "Creative project intelligence workflow",
+      "where": "admin creative-project workspace hero",
+      "visual": "idea-to-process-to-reviewed-output workflow card",
+      "replace_with": "an approved internal workflow diagram containing no customer or credential data"
     }
   ],
   "rules": [
@@ -188,11 +271,30 @@
     "Use placeholders as temporary polish only; the Media Health and Gallery Approval screens should keep pushing toward real owned images.",
     "Live-detail placeholders must inherit the selected audience: customer now, admin review first, or staff only.",
     "A private or review-pending image/video must never fall back to a public image URL.",
-    "Security posture placeholders and screenshots must never include secrets, customer records, direct table URLs, or provider credentials."
+    "Security posture placeholders and screenshots must never include secrets, customer records, direct table URLs, or provider credentials.",
+    "Customer-account placeholders must never display a client name, email, password, password hint, reset URL/token, session data, payment information, address, or private media."
   ],
   "desktop_mobile_notes": [
     "Placeholders use fluid aspect ratios and single-column mobile behavior.",
     "Hover lift is disabled for reduced-motion users.",
     "Cards remain visible without relying on a successful remote image load."
+  ],
+  "placeholders": [
+    {
+      "key": "roadmap_execution_centre",
+      "page": "/admin-roadmap-execution.html",
+      "purpose": "Internal roadmap execution and DAIP policy workflow illustration",
+      "status": "placeholder",
+      "privacy": "internal_only",
+      "recommended_asset": "Abstract checklist, evidence trail, and locked DAIP gate diagram; no customer data."
+    },
+    {
+      "key": "creative_project_cost_content_workflow",
+      "page": "/admin-creative-projects.html",
+      "purpose": "Internal project process, costing, drafting and approval workflow illustration",
+      "status": "placeholder",
+      "privacy": "internal_only",
+      "recommended_asset": "A project timeline flowing into materials, labour, costs, story drafts and reviewed outputs; no customer data."
+    }
   ]
 }

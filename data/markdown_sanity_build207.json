@@ -1,7 +1,7 @@
 {
   "build": 209,
-  "updated_at": "2026-06-17",
-  "summary": "Build 210 retains two canonical living Markdown files and keeps historical/audit documents read-only while the connected live workflow advances.",
+  "updated_at": "2026-06-30",
+  "summary": "Build 217 keeps exactly two canonical living Markdown documents, adds secure final-balance release instructions, and keeps historical files read-only for audit/release compatibility.",
   "canonical_docs": [
     {
       "file": "AI_PROJECT_HANDOFF.md",
@@ -61,12 +61,12 @@
     "Use short build-sync notes in retained audit files rather than copying the full roadmap into each file."
   ],
   "current_app_position": [
-    "Connected lead/quote \u2192 booking \u2192 live interaction \u2192 proof \u2192 payment \u2192 review \u2192 maintenance foundation.",
-    "Live updates now connect to queued notifications, unread state, resilient uploads, proof gates, customer recommendation decisions, and linked incidents.",
-    "Completed-job summaries, approved-media reuse, safe review gating, and Today Needs Attention are available after the Build 210 migration.",
+    "Connected lead/quote \u2192 booking \u2192 live interaction \u2192 consent-aware proof \u2192 payment \u2192 review \u2192 maintenance foundation.",
+    "Final-balance requests now use revocable token-gated public status pages, lifecycle controls, and Stripe webhook settlement.",
+    "Live customer updates, approved-media reuse, safe review gating, and Today Needs Attention remain protected by privacy and consent controls.",
     "Routine content uses friendly editors; raw JSON remains emergency-only.",
-    "Desktop/mobile visual, gallery, incident, payment, accounting, SEO, and media diagnostics are present."
+    "Desktop/mobile visual, gallery, incident, payment, accounting, SEO, media, and documentation diagnostics are present."
   ],
-  "remaining_doc_risk": "Historical audit files remain at the root because release guards still depend on them. New strategy must go only into AI_PROJECT_HANDOFF.md and MASTER_VALUE_ROADMAP.md.",
-  "current_build": 210
+  "remaining_doc_risk": "Historical audit files remain at the root because release guards still depend on them. New strategy belongs only in AI_PROJECT_HANDOFF.md and MASTER_VALUE_ROADMAP.md; retained files receive a brief synchronization note only.",
+  "current_build": 217
 }
