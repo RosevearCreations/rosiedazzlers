@@ -515,3 +515,21 @@ Build 230 extends only the opt-in Creative Project Intelligence path. Ordinary c
 Added: structured project-only material, labour and other-cost lines; optional project templates; before/after applicability; consent status and summary; story/platform/commerce/report drafts; unified batch output review; reversible booking unlink, archive and restore; and a project-to-DAIP metadata association that is denied until Gate C is accepted and technical capability is explicitly enabled. Nothing publishes automatically.
 
 Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_build230_project_costs_templates_outputs.sql`.
+
+## Build 231 staging tests
+
+1. Apply the Build 231 migration.
+2. Edit, soft-delete and restore one material, labour and cost line.
+3. Confirm deleted lines are excluded from project totals.
+4. Save expected/actual revenue and verify profit/margin.
+5. Test therapeutic and non-commercial classifications.
+6. Save a draft, reviewed and posted inventory reservation; verify `inventory_mutated` remains false and ordinary stock is unchanged.
+7. Confirm linked booking comparison is read-only.
+8. Save a project template and re-open the project.
+9. Record a consent expiry date and reminder interval.
+10. Add before, during and after shot-plan items.
+11. Approve one session for story use and generate content plans.
+12. Confirm drafts include planning metadata but nothing publishes.
+13. Save and approve a lesson and score a future recommendation.
+14. Prepare an archive manifest and confirm it contains no media bytes or public destination.
+15. Confirm DAIP association remains blocked unless Gate C is genuinely enabled.
