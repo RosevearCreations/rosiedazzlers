@@ -31,6 +31,7 @@ function normalize(b, customer_profile_id){ return {
   is_exotic: boolVal(b.is_exotic),
   color: text(b.color),
   mileage_km: intOrNull(b.mileage_km),
+  next_service_mileage_km: intOrNull(b.next_service_mileage_km),
   last_wash_at: text(b.last_wash_at),
   next_cleaning_due_at: text(b.next_cleaning_due_at),
   service_interval_days: intOrNull(b.service_interval_days),
