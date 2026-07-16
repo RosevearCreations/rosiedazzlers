@@ -954,3 +954,30 @@ Build 230 extends only the opt-in Creative Project Intelligence path. Ordinary c
 Added: structured project-only material, labour and other-cost lines; optional project templates; before/after applicability; consent status and summary; story/platform/commerce/report drafts; unified batch output review; reversible booking unlink, archive and restore; and a project-to-DAIP metadata association that is denied until Gate C is accepted and technical capability is explicitly enabled. Nothing publishes automatically.
 
 Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_build230_project_costs_templates_outputs.sql`.
+
+## Build 231 completed
+
+The project interface now supports editable/soft-deleted cost lines, profitability, non-commercial classifications, reviewed consumption records, booking comparison, templates, consent reminders, shot plans, approved-session story/platform planning, archive manifests, lessons approval and recommendation scoring. No normal booking inventory is mutated and no DAIP media capability is enabled.
+
+## Next 20 project priorities
+
+1. Replace JSON prompt editing for cost-line changes with dedicated accessible edit forms.
+2. Connect reviewed project consumption to a transactional inventory RPC after owner approval.
+3. Add reservation availability checks and conflict warnings.
+4. Add revenue sources and sales-channel fee breakdowns.
+5. Add break-even and target-margin guidance.
+6. Add project budget variance alerts.
+7. Add consent reminder delivery through the reviewed notification queue.
+8. Add shot-plan ordering, ownership and capture evidence.
+9. Add draft version history and comparisons.
+10. Add human-reviewed AI provider adapters behind explicit cost limits.
+11. Add YouTube chapter timecode editing.
+12. Add clip evidence selection after DAIP Gate C.
+13. Add Pinterest board administration.
+14. Add Etsy taxonomy and shipping-profile lookup.
+15. Add website schema validation and internal-link checks.
+16. Add educational safety reviewer assignment.
+17. Add downloadable project archive JSON/CSV packaging.
+18. Add lessons-to-knowledge-base promotion.
+19. Add recommendation scoring based on cost, audience and reusable skills.
+20. Keep social publishing and DAIP media actions approval-only.
