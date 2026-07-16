@@ -295,6 +295,13 @@
       "status": "placeholder",
       "privacy": "internal_only",
       "recommended_asset": "A project timeline flowing into materials, labour, costs, story drafts and reviewed outputs; no customer data."
+    },
+    {
+      "key": "creative_project_profit_learning_workflow",
+      "title": "Project profit, learning and content planning workflow",
+      "description": "Internal visual showing approved project evidence flowing into costs, learning, platform plans and archive manifests.",
+      "recommended_aspect_ratio": "16:9",
+      "status": "placeholder"
     }
   ]
 }
