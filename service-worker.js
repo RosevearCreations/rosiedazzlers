@@ -1,5 +1,5 @@
 // Build 225 service-worker cache. Previous Build 224 cache is retained only as release-audit evidence.
-const CACHE='rosie-app-v20260714build231';
+const CACHE='rosie-app-v20260715build232';
 const URLS=[
   "/",
   "/book",
