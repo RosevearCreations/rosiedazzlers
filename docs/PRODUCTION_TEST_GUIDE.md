@@ -533,3 +533,12 @@ Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_b
 13. Save and approve a lesson and score a future recommendation.
 14. Prepare an archive manifest and confirm it contains no media bytes or public destination.
 15. Confirm DAIP association remains blocked unless Gate C is genuinely enabled.
+
+## Build 232 staging tests
+1. Edit material, labour and cost rows using the dialog; confirm no JSON prompt appears.
+2. Save budget and target margin; verify variance, break-even and target revenue.
+3. Add shot owner, order and evidence note.
+4. Queue a consent reminder and verify no customer message is sent.
+5. Save a draft twice and verify a version-history row exists.
+6. Prepare and download a JSON archive; confirm media/public destinations are absent.
+7. Confirm standard bookings and inventory quantities do not change.
