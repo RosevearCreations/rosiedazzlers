@@ -1010,3 +1010,11 @@ Migration: `sql/2026-07-15_build232_project_controls_archive_history.sql`. Works
 18. Improve recommendation scoring with cost, audience and reusable-skill factors.
 19. Add destination-readiness checks before social or commerce handoff.
 20. Keep standard bookings, DAIP media and publishing approval-only.
+
+
+## Build 233 — Supplier-link inventory intake
+- Added a provider-neutral supplier-link preview contract, with Amazon.ca and Amazon.com enabled first.
+- Staff paste a product URL, review extracted public metadata and suggested tool/consumable classification, then save through the existing authoritative inventory endpoint.
+- Exact duplicate checks use normalized Amazon URL and ASIN. Imported images, prices and descriptions are drafts only and require human review.
+- Import attempts are audited in `catalog_supplier_import_audit`; no browser credentials, scraping tokens or automatic purchases are introduced.
+- Ordinary booking inventory, project reservation ledgers and DAIP Gate C remain unchanged.
