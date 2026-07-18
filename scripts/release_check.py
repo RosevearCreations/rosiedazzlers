@@ -190,6 +190,7 @@ CHECKS = [
     "scripts/build229_standard_job_project_choice_check.py",
     "scripts/build230_project_costs_templates_outputs_check.py",
     "scripts/build231_project_profitability_content_planning_check.py",
+    "scripts/build232_project_controls_archive_history_check.py",
     "scripts/build224_customer_profile_quality_check.py",
     "scripts/seo_h1_check.py",
 ]
