@@ -302,6 +302,13 @@
       "description": "Internal visual showing approved project evidence flowing into costs, learning, platform plans and archive manifests.",
       "recommended_aspect_ratio": "16:9",
       "status": "placeholder"
+    },
+    {
+      "key": "creative_project_budget_archive_history",
+      "page": "/admin-creative-projects.html",
+      "purpose": "Internal visual showing budget, consent, draft history and archive flow",
+      "recommended_size": "1600x900",
+      "status": "placeholder"
     }
   ]
 }
