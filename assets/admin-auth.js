@@ -178,6 +178,7 @@
     switch (String(pageKey || "")) {
       case "admin":
       case "admin-booking":
+      case "admin-leads":
         return hasCapability("can_manage_bookings");
 
       case "admin-blocks":
@@ -205,6 +206,10 @@
       case "admin-staff":
         return actor.is_admin === true || hasCapability("can_manage_staff");
       case "admin-app":
+        return actor.is_admin === true || hasCapability("can_manage_staff");
+      case "admin-social":
+      case "admin-creative-projects":
+      case "admin-roadmap-execution":
         return actor.is_admin === true || hasCapability("can_manage_staff");
 
       case "admin-customers":

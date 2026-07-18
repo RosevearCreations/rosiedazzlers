@@ -44,6 +44,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-booking")
     },
     {
+      key: "admin-leads",
+      label: "Leads & Estimates",
+      href: "/admin-leads.html",
+      description: "Public leads and photo estimate review",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-leads")
+    },
+    {
       key: "admin-blocks",
       label: "Blocks",
       href: "/admin-blocks.html",
@@ -106,6 +113,27 @@
       href: "/admin-accounting.html",
       description: "Ledger, expenses, payables, tax, exports",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting") || globalScope.AdminAuth.canAccessPage("admin")
+    },
+    {
+      key: "admin-creative-projects",
+      label: "Creative Projects",
+      href: "/admin-creative-projects.html",
+      description: "Project process, costs, outputs and learning",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-creative-projects") || globalScope.AdminAuth.canAccessPage("admin")
+    },
+    {
+      key: "admin-social",
+      label: "Social Queue",
+      href: "/admin-social.html",
+      description: "Review and approve social publishing drafts",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-social") || globalScope.AdminAuth.canAccessPage("admin")
+    },
+    {
+      key: "admin-roadmap-execution",
+      label: "Roadmap",
+      href: "/admin-roadmap-execution.html",
+      description: "Owners, evidence and next build priorities",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-roadmap-execution") || globalScope.AdminAuth.canAccessPage("admin")
     },
     {
       key: "account",

@@ -630,6 +630,18 @@ function ensureManifest(){
   theme.content='#0f172a';
 }
 
+function ensureStickyConversionCta(){
+  if (document.querySelector('[data-sticky-conversion-cta]')) return;
+  const path=normalizePath(location.pathname);
+  if (['/book','/login','/admin'].some(x=>path.startsWith(x))) return;
+  const wrap=document.createElement('aside');
+  wrap.setAttribute('data-sticky-conversion-cta','');
+  wrap.setAttribute('aria-label','Quick actions');
+  wrap.className='sticky-conversion-cta';
+  wrap.innerHTML='<a class="btn primary" href="/book">Book detailing</a><a class="btn ghost" href="/contact">Send photos for estimate</a><a class="btn ghost" href="/specials">Specials</a><a class="btn ghost" href="/gift-cards">Gift cards</a><a class="btn ghost" href="/fleet">Fleet</a><a class="btn ghost" href="/faq">FAQ</a><a class="btn ghost" href="/blog">Help articles</a>';
+  document.body.appendChild(wrap);
+}
+
 function initChrome() {
   ensureManifest();
   ensureNavLinks();
@@ -641,6 +653,7 @@ function initChrome() {
   setFooter();
   initAccountWidget();
   initInstallPrompt();
+  ensureStickyConversionCta();
 
   attachRotators("#homePackages");
   attachRotators("#packageCards");
