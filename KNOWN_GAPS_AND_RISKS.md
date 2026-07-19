@@ -1743,3 +1743,8 @@ Migration: `sql/2026-07-15_build232_project_controls_archive_history.sql`. Works
 - Exact duplicate checks use normalized Amazon URL and ASIN. Imported images, prices and descriptions are drafts only and require human review.
 - Import attempts are audited in `catalog_supplier_import_audit`; no browser credentials, scraping tokens or automatic purchases are introduced.
 - Ordinary booking inventory, project reservation ledgers and DAIP Gate C remain unchanged.
+
+
+## Build 234 — Separate Inventory Manager
+
+Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and adds `admin-inventory-manager.html` as an optional spreadsheet-style management surface. It supports row-level edits, suspicious-name review, filtering, sorting, soft archive, restore, desktop tables, and mobile cards. The authoritative save path remains `/api/admin/catalog_inventory_save`; no hard delete was added.
