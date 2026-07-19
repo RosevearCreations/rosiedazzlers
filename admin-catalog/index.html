@@ -62,7 +62,11 @@
     .image-health-list{display:grid;gap:4px;margin-top:6px}.image-health-bad{color:#fecaca}.image-health-good{color:#bbf7d0}
     @media(max-width:980px){.catalog-workbench{grid-template-columns:1fr}.bulk-tools{align-items:stretch}.bulk-tools .btn,.bulk-tools select,.bulk-tools input{width:100%}.image-picker-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:980px){.grid2,.grid3,.option-grid,#itemForm .grid3{grid-template-columns:1fr}.table-wrap table{table-layout:auto}}
-  </style>
+  
+.supplier-link-import{border:1px solid var(--line,#d5dde5);border-radius:16px;padding:16px;display:grid;gap:12px;background:var(--panel,#fff)}
+.supplier-link-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}.supplier-link-row label{display:grid;gap:5px}.supplier-link-visual{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;padding:14px;border-radius:12px;background:linear-gradient(135deg,rgba(23,86,118,.10),rgba(198,113,47,.10));font-weight:700}.supplier-link-visual span{padding:7px 10px;border:1px dashed currentColor;border-radius:999px}
+@media(max-width:700px){.supplier-link-row{grid-template-columns:1fr}.supplier-link-row .btn{width:100%}.supplier-link-import{padding:12px}.supplier-link-visual b{transform:rotate(90deg)}}
+</style>
 </head>
 <body>
 <div class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button><div class="nav-links" id="navLinks"></div></div></div>
@@ -76,6 +80,7 @@
       <div id="actorBox" class="notice" style="display:none"></div>
     </div>
     <div id="status" class="notice" style="display:none;margin-top:12px"></div>
+    <div class="row" style="margin-top:12px"><a class="btn primary" href="/admin-inventory-manager.html">Open Inventory Manager table</a></div>
   </section>
     <details class="notice option-panel" style="margin-top:12px">
       <summary><strong>Customize inventory dropdown suggestions</strong> <span class="mini">categories, colours, vendors, units, and sort helpers</span></summary>
@@ -202,6 +207,13 @@
 
     <article class="panel stack">
       <h2 style="margin:0">Edit inventory item</h2>
+      <section class="supplier-link-import" aria-labelledby="supplierLinkHeading">
+        <div class="supplier-link-visual" role="img" aria-label="Supplier product link flowing into a reviewable inventory draft"><span>Supplier link</span><b>→</b><span>Review draft</span><b>→</b><span>Inventory</span></div>
+        <h2 id="supplierLinkHeading" style="margin:0">Add inventory from a supplier link</h2>
+        <p class="mini">Paste an Amazon.ca or Amazon.com product page. The system extracts available public product details, suggests tool or consumable classification, checks ASIN/URL duplicates, and fills the editor below. Nothing saves until you review and press <strong>Save inventory item</strong>.</p>
+        <div class="supplier-link-row"><label>Product URL<input id="supplierLinkUrl" type="url" inputmode="url" placeholder="https://www.amazon.ca/dp/…" /></label><button class="btn primary" id="supplierLinkPreviewBtn" type="button">Import into review</button></div>
+        <div id="supplierLinkResult" class="notice" style="display:none" role="status" aria-live="polite"></div>
+      </section>
       <form id="itemForm" class="stack">
         <div class="grid3">
           <label>Type<select id="formItemType"><option value="tool">Tool</option><option value="consumable">Consumable</option></select></label>
@@ -874,6 +886,19 @@
   qs('#resetInventoryOptionsBtn')?.addEventListener('click', ()=>{ localStorage.removeItem(optionStorageKey); setInventoryOptionsEditor(inventoryOptionDefaults()); renderInventoryDatalists(); show('Inventory dropdown suggestions reset to detailing defaults.', 'ok'); });
   qs('#reloadBtn').addEventListener('click', loadInventory); qs('#reloadOrdersBtn').addEventListener('click', loadOrders); qs('#reloadMovesBtn').addEventListener('click', loadMovements); qs('#reloadLowBtn').addEventListener('click', loadLowStock); qs('#itemType').addEventListener('change', renderInventory); qs('#invSearch').addEventListener('input', renderInventory); qs('#invSort').addEventListener('change', renderInventory); qs('#moveSearch').addEventListener('input', renderMovements); qs('#moveType').addEventListener('change', renderMovements); qs('#orderStatus').addEventListener('change', loadOrders); qs('#newItemBtn').addEventListener('click', ()=>fillForm(null)); qs('#clearFormBtn').addEventListener('click', ()=>fillForm(null)); qs('#usageResetBtn').addEventListener('click', ()=>{ qs('#usageBookingId').value=''; qs('#usageItemKey').value=''; qs('#usageQty').value='1'; qs('#usageNote').value=''; });
   
+
+  async function importSupplierLinkPreview(){
+    const url=qs('#supplierLinkUrl')?.value.trim(); const out=qs('#supplierLinkResult');
+    if(!url){ show('Paste an Amazon product link first.','bad'); return; }
+    if(out){ out.style.display='block'; out.className='notice'; out.textContent='Reading supplier product details…'; }
+    const res=await postJson('/api/admin/catalog_supplier_link_preview',{url});
+    if(!res.ok||!res.out?.ok){ const msg=res.out?.error||'Could not read that supplier link.'; if(out){out.className='notice bad';out.textContent=msg;} return; }
+    const d=res.out.draft||{}; fillForm({item_key:d.item_key,item_type:d.item_type,name:d.name,category:d.category,subcategory:d.subcategory,preferred_vendor:d.preferred_vendor,vendor_sku:d.vendor_sku,unit_label:d.unit_label,qty_on_hand:d.qty_on_hand,reorder_point:d.reorder_point,reorder_qty:d.reorder_qty,cost_cents:d.cost_cad==null?null:Math.round(Number(d.cost_cad)*100),reuse_policy:d.reuse_policy,amazon_url:d.amazon_url,image_url:d.image_url,notes:d.notes,amazon_asin:d.amazon_asin,amazon_brand:d.amazon_brand,amazon_title:d.amazon_title,is_public:false,is_active:true});
+    if(d.amazon_asin) qs('#formVendorSku').value=d.amazon_asin;
+    const duplicate=res.out.duplicate; const bits=[`Draft loaded: ${d.name||'Amazon item'}.`,res.out.warning||'',duplicate?`Possible duplicate: ${duplicate.name} (${duplicate.item_key}). Review the existing item before saving.`:'No exact ASIN or normalized URL duplicate was found.','Review price, quantity, image, category and tax-inclusive purchase cost before saving.'].filter(Boolean);
+    if(out){out.className='notice '+(duplicate?'bad':'ok');out.textContent=bits.join(' ');}
+    document.querySelector('#itemForm')?.scrollIntoView({behavior:'smooth',block:'start'});
+  }
   qs('#loadAmazonMatchesBtn')?.addEventListener('click', loadAmazonMatches);
   qs('#amazonMatchStatusFilter')?.addEventListener('change', ()=>renderAmazonMatches());
   qs('#toggleAmazonChecks')?.addEventListener('change', (event)=>{ document.querySelectorAll('.amazon-row-check:not(:disabled)').forEach((box)=>{ box.checked=event.target.checked; }); });
@@ -895,6 +920,8 @@
   qs('#openImagePickerBtn')?.addEventListener('click', ()=>{ const box=qs('#inventoryImagePicker'); if(!box) return; box.style.display = box.style.display === 'block' ? 'none' : 'block'; renderImagePicker(); });
   qs('#useMatchingImageBtn')?.addEventListener('click', ()=>{ const match=findMatchingBundledImage(); if(!match) return show('No matching bundled image was found for this item key/name. Open the picker and search manually.', 'bad'); qs('#formImage').value=match.url; updateImagePreview(); show(`Loaded the bundled image for ${match.item?.name || match.item?.item_key || 'this item'}. Save to keep it on the DB row.`, 'ok'); });
   qs('#clearImageBtn')?.addEventListener('click', ()=>{ qs('#formImage').value=''; updateImagePreview(); show('Image cleared from the editor. Save only if this item should have no image.', 'bad'); });
+  qs('#supplierLinkPreviewBtn')?.addEventListener('click', importSupplierLinkPreview);
+  qs('#supplierLinkUrl')?.addEventListener('keydown',(e)=>{if(e.key==='Enter'){e.preventDefault();importSupplierLinkPreview();}});
   qs('#amazonParseBtn').addEventListener('click', ()=>{ const parsed=parseAmazonDraft(qs('#formAmazon').value); if(!parsed) return show('Paste a valid Amazon product link first.','bad'); if(!qs('#formName').value.trim()) qs('#formName').value=parsed.name; if(!qs('#formItemKey').value.trim()) qs('#formItemKey').value=parsed.key; if(!qs('#formVendor').value.trim()) qs('#formVendor').value='Amazon'; updateImagePreview(); renderImagePicker(); show('Draft name and item key filled from Amazon link. Review before saving.','ok'); });
   qs('#itemForm').addEventListener('submit', async(e)=>{ e.preventDefault(); const payload={ item_key: qs('#formItemKey').value.trim(), item_type: qs('#formItemType').value, name: qs('#formName').value.trim(), category: qs('#formCategory').value.trim(), subcategory: qs('#formSubcategory').value.trim(), preferred_vendor: qs('#formVendor').value.trim(), vendor_sku: qs('#formVendorSku').value.trim(), unit_label: qs('#formUnit').value.trim(), qty_on_hand: Number(qs('#formQty').value||0), reorder_point: Number(qs('#formReorderPoint').value||0), reorder_qty: Number(qs('#formReorderQty').value||0), cost_cad: qs('#formCostCad').value === '' ? null : Number(qs('#formCostCad').value||0), rating_value: qs('#formRating').value, rating_count: Number(qs('#formRatingCount').value||0), sort_key: Number(qs('#formSortKey').value||0), purchase_date: qs('#formPurchaseDate').value || null, estimated_jobs_per_unit: Number(qs('#formEstimatedJobs').value||0), reuse_policy: qs('#formReuse').value, amazon_url: qs('#formAmazon').value.trim(), image_url: qs('#formImage').value.trim() || (findMatchingBundledImage()?.url || ''), receipt_url: qs('#formReceiptUrl').value.trim(), assigned_station: qs('#formAssignedStation').value.trim(), service_tags: qs('#formServiceTags').value.trim(), is_public: qs('#formIsPublic').checked, is_active: qs('#formIsActive').checked, notes: qs('#formNotes').value.trim() }; const x=await postJson('/api/admin/catalog_inventory_save', payload); if(!x.ok||!x.out?.ok) return show((x.out&&x.out.error)||'Could not save inventory item.','bad'); show('Inventory item saved.','ok'); fillForm(x.out.item||null); loadInventory(); loadLowStock(); });
   qs('#usageForm').addEventListener('submit', async(e)=>{ e.preventDefault(); const payload={ booking_id: qs('#usageBookingId').value.trim(), item_key: qs('#usageItemKey').value, qty_used: Number(qs('#usageQty').value||0), note: qs('#usageNote').value.trim() }; const x=await postJson('/api/admin/catalog_usage_add', payload); if(!x.ok||!x.out?.ok) return show((x.out&&x.out.error)||'Could not record usage.','bad'); show('Inventory usage recorded.','ok'); qs('#usageQty').value='1'; qs('#usageNote').value=''; loadInventory(); loadLowStock(); loadMovements(); });
