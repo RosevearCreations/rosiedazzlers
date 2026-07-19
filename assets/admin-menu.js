@@ -115,6 +115,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting") || globalScope.AdminAuth.canAccessPage("admin")
     },
     {
+      key: "admin-inventory-manager",
+      label: "Inventory Manager",
+      href: "/admin-inventory-manager.html",
+      description: "Table editing, review, archive and restore",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-catalog") || globalScope.AdminAuth.canAccessPage("admin")
+    },
+    {
       key: "admin-creative-projects",
       label: "Creative Projects",
       href: "/admin-creative-projects.html",
