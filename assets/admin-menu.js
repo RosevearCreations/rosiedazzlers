@@ -116,10 +116,17 @@
     },
     {
       key: "admin-inventory-manager",
-      label: "Inventory Manager",
+      label: "Inventory Workbench",
       href: "/admin-inventory-manager.html",
-      description: "Table editing, review, archive and restore",
+      description: "Spreadsheet, JSON table, gallery and bulk editing",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-catalog") || globalScope.AdminAuth.canAccessPage("admin")
+    },
+    {
+      key: "admin-launch-readiness",
+      label: "Launch Readiness",
+      href: "/admin-launch-readiness.html",
+      description: "Preflight, blockers and controlled go-live checks",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-production") || globalScope.AdminAuth.canAccessPage("admin")
     },
     {
       key: "admin-creative-projects",
