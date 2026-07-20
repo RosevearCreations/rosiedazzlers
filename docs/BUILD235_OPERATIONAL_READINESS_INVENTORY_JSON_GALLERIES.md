@@ -1,0 +1,34 @@
+# Build 235 — Operational Readiness, JSON Table Editing, and Seven-Image Galleries
+
+## Purpose
+
+Build 235 preserves the existing Inventory Workflow and expands the separate Inventory Workbench. It is a launch-polish release focused on data correction speed, product media readiness, and honest preflight tracking.
+
+## Inventory Workbench
+
+- Spreadsheet row editing remains available.
+- Each row now opens a field/value **JSON table editor**.
+- Individual fields or the complete row can be updated without editing raw JSON syntax.
+- Bulk changes, archive/restore, CSV export, review filters, suspicious-name detection, and readiness scoring are included.
+- Archive remains a soft delete so movements, job usage, purchasing, accounting, and project history remain intact.
+
+## Product and inventory galleries
+
+- `image_url` remains the featured image.
+- `gallery_image_urls` stores an ordered JSON array of up to seven additional images.
+- The existing Inventory Workflow now includes seven visible gallery slots, image previews, clear controls, arrow ordering, and drag ordering.
+- The same field is added to both `catalog_inventory_items` and the compatibility `catalog_items` table.
+- Apply `sql/2026-07-19_build235_inventory_json_gallery_launch_readiness.sql` before expecting gallery values to persist.
+
+## Launch Readiness Command Center
+
+The new `/admin-launch-readiness.html` page separates:
+
+1. automatic checks based on current APIs/database data; and
+2. manual confirmations that require a real booking, live payment/refund, email delivery, backups, policy review, mobile testing, security review, and production operations preparation.
+
+The dashboard deliberately does not claim these items are complete until an administrator confirms them. Use the score as guidance, not as a replacement for real-world testing.
+
+## Safe launch approach
+
+Use an invite-only soft launch first. Keep incomplete products private or inactive, monitor every transaction, and expand public marketing only after the first live workflows are stable.
