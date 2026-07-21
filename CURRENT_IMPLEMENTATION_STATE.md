@@ -847,3 +847,7 @@ Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOF
 ## Build 219 state — DAIP governance workspace
 
 DAIP is still not a production media platform. Build 219 adds an internal owner-decision and promotion-gate workspace only. The decision register and Build 218 Test Lab evidence are now visible in the application, but no storage, upload, processing, AI, customer access, public derivative, or publishing capability is enabled.
+
+
+## Build 235 current implementation state
+The original Inventory Workflow remains the detailed editor. The separate Inventory Workbench now provides spreadsheet edits, a whitelisted field/value JSON table, individual-field saves, full-row saves, bulk operations, CSV export, soft archive/restore, suspicious-name review, and readiness scoring. `image_url` remains featured; `gallery_image_urls` supports up to seven ordered additional images after the Build 235 migration. The Launch Readiness Command Center provides automatic data/production checks and explicitly manual evidence confirmations for real-world launch tests.

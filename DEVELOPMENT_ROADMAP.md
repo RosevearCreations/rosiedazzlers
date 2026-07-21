@@ -2669,3 +2669,38 @@ Migration: `sql/2026-07-15_build232_project_controls_archive_history.sql`. Works
 ## Build 234 — Separate Inventory Manager
 
 Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and adds `admin-inventory-manager.html` as an optional spreadsheet-style management surface. It supports row-level edits, suspicious-name review, filtering, sorting, soft archive, restore, desktop tables, and mobile cards. The authoritative save path remains `/api/admin/catalog_inventory_save`; no hard delete was added.
+
+
+## Build 235 completed
+1. Inventory JSON field/value table editor.
+2. Individual-field and full-row updates.
+3. Bulk inventory edits and CSV export.
+4. Seven-image ordered product/inventory galleries.
+5. Featured image retained separately.
+6. Launch Readiness Command Center.
+7. Automatic inventory/name/image/cost/category/stock audits.
+8. Manual booking/payment/email/environment/backup/legal/mobile/accessibility/security confirmations.
+9. Controlled soft-launch guidance.
+10. Build 235 migration and route-copy synchronization.
+
+### Next 20 execution steps
+1. Apply and verify the Build 235 gallery migration.
+2. Correct suspicious inventory names.
+3. Add featured images to active sellable rows.
+4. Add ordered gallery images to priority products.
+5. Complete missing costs and categories.
+6. Confirm first-week low-stock and purchase-order needs.
+7. Run a production booking end to end.
+8. Run and refund a small live Stripe payment.
+9. Verify payment and booking webhooks.
+10. Verify customer and staff email delivery.
+11. Verify Cloudflare production variables, bindings and branch.
+12. Confirm database backups and test/document restore.
+13. Review privacy, terms, cancellation, refund and media-consent wording.
+14. Test customer and staff workflows on real mobile devices.
+15. Complete keyboard/focus/contrast/error accessibility checks.
+16. Verify analytics and conversion events.
+17. Verify sitemap, robots, canonicals and Search Console.
+18. Verify Google Business Profile service area, hours, categories and contact data.
+19. Verify permissions, protected endpoints, sessions and security headers.
+20. Begin an invite-only soft launch and monitor every first-week transaction.
