@@ -1167,3 +1167,9 @@ Migration: `sql/2026-07-15_build232_project_controls_archive_history.sql`. Works
 ## Build 234 — Separate Inventory Manager
 
 Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and adds `admin-inventory-manager.html` as an optional spreadsheet-style management surface. It supports row-level edits, suspicious-name review, filtering, sorting, soft archive, restore, desktop tables, and mobile cards. The authoritative save path remains `/api/admin/catalog_inventory_save`; no hard delete was added.
+
+
+### Build 235 additions
+- `/admin-inventory-manager.html`: spreadsheet, JSON field-table, bulk editing, readiness and gallery review.
+- `/admin-launch-readiness.html`: preflight and controlled go-live command center.
+- Up to seven ordered gallery images per inventory/product row after applying the Build 235 migration.
