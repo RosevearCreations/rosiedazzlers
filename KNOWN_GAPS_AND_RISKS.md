@@ -1748,3 +1748,13 @@ Migration: `sql/2026-07-15_build232_project_controls_archive_history.sql`. Works
 ## Build 234 — Separate Inventory Manager
 
 Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and adds `admin-inventory-manager.html` as an optional spreadsheet-style management surface. It supports row-level edits, suspicious-name review, filtering, sorting, soft archive, restore, desktop tables, and mobile cards. The authoritative save path remains `/api/admin/catalog_inventory_save`; no hard delete was added.
+
+
+## Build 235 remaining gaps and risks
+- The gallery migration must be deployed before seven-image values persist.
+- Gallery derivative generation, role metadata, captions, alt text, consent metadata, and cross-platform crop management remain future work.
+- JSON table editing is intentionally whitelisted and does not expose immutable IDs/audit timestamps for direct editing.
+- Bulk updates currently save rows sequentially; a future transactional bulk RPC would improve all-or-nothing behaviour.
+- Launch readiness manual confirmations are browser-local and should later be stored as shared audited production evidence.
+- A high dashboard score does not replace live booking/payment/refund/email/restore testing.
+- Duplicate merge remains a review workflow gap; do not hard-delete rows with operational history.

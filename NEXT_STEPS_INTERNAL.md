@@ -757,3 +757,12 @@ Build 214 prioritizes Supabase containment and owner-task reliability. The activ
 ### Build 216 synchronization — 2026-07-01
 
 Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+
+## Build 235 immediate sequence
+1. Deploy the included migration.
+2. Verify one featured image plus seven gallery images can be saved and reordered.
+3. Correct suspicious imported names in the Inventory Workbench.
+4. Run the Launch Readiness checks.
+5. Complete the required real booking, live payment/refund, email, environment, backup, policy and security confirmations.
+6. Begin invite-only soft launch before broader promotion.

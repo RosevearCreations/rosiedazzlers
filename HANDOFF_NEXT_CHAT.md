@@ -847,3 +847,7 @@ Build 214 prioritizes Supabase containment and owner-task reliability. The activ
 ### Build 216 synchronization — 2026-07-01
 
 Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+
+## Build 235 handoff
+Start with `docs/BUILD235_OPERATIONAL_READINESS_INVENTORY_JSON_GALLERIES.md` and `data/build235_operational_readiness.json`. Apply the Build 235 migration, test gallery persistence, then use `/admin-launch-readiness.html` to guide the next pass. Do not replace the existing `/admin-catalog.html` workflow; `/admin-inventory-manager.html` is the faster companion workbench.
