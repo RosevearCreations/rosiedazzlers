@@ -110,8 +110,8 @@ export async function onRequestPost(context) {
     const slotBlocks = Array.isArray(slotBlockRows) ? slotBlockRows : [];
     const bookings = Array.isArray(bookingRows) ? bookingRows : [];
 
-    const isDateClosed = dateBlocks.some((row) => row.is_closed === true);
-    const isSlotBlocked = slotBlocks.some((row) => row.is_blocked === true);
+    const isDateClosed = dateBlocks.length > 0;
+    const isSlotBlocked = slotBlocks.length > 0;
 
     const activeBookings = bookings.filter((row) => !isCancelled(row.status, row.job_status));
     const slotBookings = activeBookings.filter((row) => bookingUsesSlot(row.start_slot, start_slot));
@@ -171,17 +171,17 @@ export async function onRequestGet() {
 function buildDateBlockUrl(env, service_date) {
   return (
     `${env.SUPABASE_URL}/rest/v1/date_blocks` +
-    `?select=id,block_date,is_closed,reason` +
-    `&block_date=eq.${encodeURIComponent(service_date)}`
+    `?select=id,blocked_date,reason` +
+    `&blocked_date=eq.${encodeURIComponent(service_date)}`
   );
 }
 
 function buildSlotBlockUrl(env, service_date, start_slot) {
   return (
     `${env.SUPABASE_URL}/rest/v1/slot_blocks` +
-    `?select=id,block_date,slot_code,is_blocked,reason` +
-    `&block_date=eq.${encodeURIComponent(service_date)}` +
-    `&slot_code=eq.${encodeURIComponent(start_slot)}`
+    `?select=id,blocked_date,slot,reason` +
+    `&blocked_date=eq.${encodeURIComponent(service_date)}` +
+    `&slot=eq.${encodeURIComponent(start_slot)}`
   );
 }
 
