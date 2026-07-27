@@ -1,6 +1,6 @@
-// Build 225 service-worker cache. Previous Build 224 cache is retained only as release-audit evidence.
-const CACHE='rosie-app-v20260715build232';
-const URLS=[
+// Build 236 service-worker cache: calendar, restored shared CSS/admin/public shell, and launch readiness.
+const CACHE='rosie-app-v20260726build236';
+const URLS=['/admin-launch-readiness.html','/admin-blocks.html','/admin-inventory-manager.html','/admin-content.html',
   "/",
   "/book",
   "/pricing",
@@ -8,6 +8,10 @@ const URLS=[
   "/login",
   "/assets/site.css",
   "/assets/chrome.js",
+  "/assets/public-analytics.js",
+  "/assets/admin-auth.js",
+  "/assets/admin-menu.js",
+  "/assets/admin-shell.js",
   "/assets/site.js",
   "/assets/marketing-consent.js",
   "/assets/visual-placeholders.js",

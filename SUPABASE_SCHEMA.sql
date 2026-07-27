@@ -3150,3 +3150,9 @@ grant all on table public.catalog_supplier_import_audit to service_role;
 -- Build 235: ordered product/inventory gallery support (featured image remains image_url).
 alter table if exists public.catalog_inventory_items add column if not exists gallery_image_urls jsonb not null default '[]'::jsonb;
 alter table if exists public.catalog_items add column if not exists gallery_image_urls jsonb not null default '[]'::jsonb;
+
+-- Build 236: no-DDL schedule compatibility and UI stabilization note.
+-- The existing schedule source remains:
+--   public.date_blocks(blocked_date, reason, created_at)
+--   public.slot_blocks(blocked_date, slot, reason, created_at)
+-- Build 236 API readers/writers use those columns and expose legacy aliases only at response boundaries.
