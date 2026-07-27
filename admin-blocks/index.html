@@ -9,7 +9,7 @@
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
 </head>
-<body data-page="admin-blocks">
+<body data-page="admin-blocks" data-build236="calendar-restoration-schedule-compatibility">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -191,19 +191,42 @@
               <div class="kicker">Click a date to prefill the single-date block forms.</div>
             </div>
             <div class="cta-row">
-              <button id="calendarPrevBtn" class="btn small ghost" type="button">Previous month</button>
-              <strong id="calendarMonthLabel">Calendar</strong>
-              <button id="calendarNextBtn" class="btn small ghost" type="button">Next month</button>
+              <button id="calendarPrevBtn" class="btn small ghost" type="button" aria-label="Show previous month">Previous month</button>
+              <button id="calendarTodayBtn" class="btn small ghost" type="button">Today</button>
+              <strong id="calendarMonthLabel" aria-live="polite">Calendar</strong>
+              <button id="calendarNextBtn" class="btn small ghost" type="button" aria-label="Show next month">Next month</button>
+              <button id="calendarReloadBtn" class="btn small ghost" type="button">Reload</button>
             </div>
           </div>
           <div class="calendar-legend" style="margin-top:12px">
             <span class="calendar-legend-chip is-open">Available</span>
             <span class="calendar-legend-chip is-closed">Blocked date</span>
             <span class="calendar-legend-chip is-partial">AM / PM blocked</span>
+            <span id="blockApiHealth" class="block-api-health" data-state="loading">Schedule API loading</span>
           </div>
+          <div class="block-calendar-summary" aria-label="Current month block summary">
+            <div class="block-calendar-stat"><strong id="monthOpenCount">—</strong><span>available dates</span></div>
+            <div class="block-calendar-stat"><strong id="monthClosedCount">—</strong><span>full blocked dates</span></div>
+            <div class="block-calendar-stat"><strong id="monthPartialCount">—</strong><span>partial dates</span></div>
+            <div class="block-calendar-stat"><strong id="monthBlockCount">—</strong><span>block records</span></div>
+          </div>
+          <div class="block-calendar-shell" role="region" aria-label="Monthly booking availability calendar" tabindex="0">
           <div id="blockCalendarMount" class="block-calendar" style="margin-top:12px">
             <div class="notice">Load blocks to view the calendar.</div>
           </div>
+          </div>
+          <div id="selectedDatePanel" class="block-selected-panel" hidden>
+            <div class="block-selected-copy"><strong id="selectedDateLabel">Selected date</strong><span id="selectedDateState">Choose a date in the calendar.</span></div>
+            <div class="block-selected-actions" aria-label="Selected date actions">
+              <button class="btn small" type="button" data-selected-action="block_date">Block full date</button>
+              <button class="btn small ghost" type="button" data-selected-action="block_am">Block AM</button>
+              <button class="btn small ghost" type="button" data-selected-action="block_pm">Block PM</button>
+              <button class="btn small ghost" type="button" data-selected-action="unblock_date">Unblock date</button>
+              <button class="btn small ghost" type="button" data-selected-action="unblock_am">Unblock AM</button>
+              <button class="btn small ghost" type="button" data-selected-action="unblock_pm">Unblock PM</button>
+            </div>
+          </div>
+          <div class="visual-placeholder-card" data-needs-visual data-visual-placeholder="block_calendar" data-visual-placeholder-skip="true" hidden aria-hidden="true"></div>
         </div>
       </section>
 
@@ -240,6 +263,7 @@
   <script src="/assets/admin-shell.js"></script>
   <script src="/assets/admin-menu.js"></script>
   <script src="/assets/admin-page-init.js"></script>
+  <script src="/assets/visual-placeholders.js?v=20260726build236"></script>
   <script src="/assets/chrome.js"></script>
   <script type="module">
     import { setBrandImages, setFooter } from "/assets/site.js";
@@ -248,6 +272,8 @@
     let currentPassword = "";
     let currentData = { date_blocks: [], slot_blocks: [] };
     let calendarMonth = startOfMonth(new Date());
+    let selectedDate = "";
+    let refreshInFlight = false;
 
     function escapeHtml(value) {
       return String(value ?? "")
@@ -282,15 +308,51 @@
       return new Intl.DateTimeFormat('en-CA', { month: 'long', year: 'numeric' }).format(date);
     }
 
+    function toLocalIso(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function formatLongDate(iso) {
+      const date = new Date(`${iso}T12:00:00`);
+      return Number.isNaN(date.getTime()) ? iso : new Intl.DateTimeFormat('en-CA', { weekday:'long', month:'long', day:'numeric', year:'numeric' }).format(date);
+    }
+
+    function setApiHealth(state, text) {
+      const el = document.querySelector('#blockApiHealth');
+      if (!el) return;
+      el.dataset.state = state;
+      el.textContent = text;
+    }
+
+    async function withBusy(button, label, work) {
+      if (!button || button.getAttribute('aria-busy') === 'true') return;
+      const original = button.textContent;
+      button.disabled = true;
+      button.setAttribute('aria-busy','true');
+      if (label) button.textContent = label;
+      try {
+        return await work();
+      } finally {
+        button.removeAttribute('aria-busy');
+        button.textContent = original;
+        if (button.matches('[data-selected-action]')) renderSelectedDate();
+        else button.disabled = false;
+      }
+    }
+
     function buildBlockMaps(data) {
       const dateSet = new Set();
       const slotMap = new Map();
       (Array.isArray(data.date_blocks) ? data.date_blocks : []).forEach((item) => {
-        if (item?.blocked_date) dateSet.add(item.blocked_date);
+        const date = item?.blocked_date || item?.block_date;
+        if (date) dateSet.add(date);
       });
       (Array.isArray(data.slot_blocks) ? data.slot_blocks : []).forEach((item) => {
-        const date = item?.blocked_date;
-        const slot = String(item?.slot || '').toUpperCase();
+        const date = item?.blocked_date || item?.block_date;
+        const slot = String(item?.slot || item?.slot_code || '').toUpperCase();
         if (!date || !slot) return;
         const list = slotMap.get(date) || [];
         list.push(slot);
@@ -328,7 +390,7 @@
       for (let i = 0; i < 42; i += 1) {
         const current = new Date(gridStart);
         current.setDate(gridStart.getDate() + i);
-        const iso = current.toISOString().slice(0, 10);
+        const iso = toLocalIso(current);
         const inMonth = current.getMonth() === monthIndex;
         const isClosed = dateSet.has(iso);
         const slots = slotMap.get(iso) || [];
@@ -336,7 +398,7 @@
         const stateClass = isClosed ? 'is-closed' : partialText ? 'is-partial' : 'is-open';
         const helper = isClosed ? 'Blocked all day' : partialText ? `Blocked: ${partialText}` : 'Available';
         cells.push(`
-          <button class="block-day ${stateClass}${inMonth ? '' : ' is-other-month'}" type="button" data-calendar-date="${escapeHtml(iso)}">
+          <button class="block-day ${stateClass}${inMonth ? '' : ' is-other-month'}${iso === toLocalIso(new Date()) ? ' is-today' : ''}${iso === selectedDate ? ' is-selected' : ''}" type="button" data-calendar-date="${escapeHtml(iso)}" aria-label="${escapeHtml(formatLongDate(iso) + ': ' + helper)}" aria-pressed="${iso === selectedDate ? 'true' : 'false'}">
             <span class="block-day__num">${current.getDate()}</span>
             <span class="block-day__state">${escapeHtml(helper)}</span>
           </button>
@@ -351,10 +413,52 @@
       wrap.querySelectorAll('[data-calendar-date]').forEach((btn) => {
         btn.addEventListener('click', () => {
           const date = btn.getAttribute('data-calendar-date');
+          selectedDate = date;
           prefillDate(date);
-          setNotice(`Prefilled ${date} into the block forms.`, 'ok');
+          renderCalendar(currentData);
+          renderSelectedDate();
+          setNotice(`Selected ${formatLongDate(date)}.`, 'ok');
         });
       });
+    }
+
+
+    function renderMonthSummary(data) {
+      const { dateSet, slotMap } = buildBlockMaps(data);
+      const y = calendarMonth.getFullYear();
+      const m = calendarMonth.getMonth();
+      const days = new Date(y, m + 1, 0).getDate();
+      let closed = 0, partial = 0;
+      for (let day = 1; day <= days; day += 1) {
+        const iso = toLocalIso(new Date(y, m, day, 12));
+        if (dateSet.has(iso)) closed += 1;
+        else if ((slotMap.get(iso) || []).length) partial += 1;
+      }
+      const open = Math.max(0, days - closed - partial);
+      const records = Array.from(dateSet).filter((iso) => iso.startsWith(`${y}-${String(m+1).padStart(2,'0')}`)).length + Array.from(slotMap.entries()).filter(([iso]) => iso.startsWith(`${y}-${String(m+1).padStart(2,'0')}`)).reduce((sum,[,slots])=>sum+new Set(slots).size,0);
+      document.querySelector('#monthOpenCount').textContent = open;
+      document.querySelector('#monthClosedCount').textContent = closed;
+      document.querySelector('#monthPartialCount').textContent = partial;
+      document.querySelector('#monthBlockCount').textContent = records;
+    }
+
+    function renderSelectedDate() {
+      const panel = document.querySelector('#selectedDatePanel');
+      if (!panel) return;
+      if (!selectedDate) { panel.hidden = true; return; }
+      const { dateSet, slotMap } = buildBlockMaps(currentData);
+      const slots = Array.from(new Set(slotMap.get(selectedDate) || [])).sort();
+      const full = dateSet.has(selectedDate);
+      const state = full ? 'Blocked for the full date.' : slots.length ? `Blocked slots: ${slots.join(' / ')}.` : 'Currently available.';
+      document.querySelector('#selectedDateLabel').textContent = formatLongDate(selectedDate);
+      document.querySelector('#selectedDateState').textContent = state;
+      panel.hidden = false;
+      panel.querySelector('[data-selected-action="unblock_date"]').disabled = !full;
+      panel.querySelector('[data-selected-action="unblock_am"]').disabled = !slots.includes('AM');
+      panel.querySelector('[data-selected-action="unblock_pm"]').disabled = !slots.includes('PM');
+      panel.querySelector('[data-selected-action="block_date"]').disabled = full;
+      panel.querySelector('[data-selected-action="block_am"]').disabled = full || slots.includes('AM');
+      panel.querySelector('[data-selected-action="block_pm"]').disabled = full || slots.includes('PM');
     }
 
     function renderDateBlocks(data) {
@@ -444,17 +548,30 @@
     }
 
     async function refreshBlocks() {
+      if (refreshInFlight) return;
+      refreshInFlight = true;
       syncSessionMeta();
-      const data = await apiPost("/api/admin/blocks", currentPassword, {});
+      setApiHealth('loading','Loading schedule blocks');
+      try {
+      const data = await apiPost("/api/admin/blocks_list", currentPassword, {});
       currentData = data || { date_blocks: [], slot_blocks: [] };
       renderDateBlocks(currentData);
       renderSlotBlocks(currentData);
       renderCalendar(currentData);
+      renderMonthSummary(currentData);
+      renderSelectedDate();
       syncSessionMeta(data && data.actor ? data.actor : null);
 
       document.querySelector("#blockDateBtn").disabled = false;
       document.querySelector("#blockSlotBtn").disabled = false;
       document.querySelector("#blockRangeBtn").disabled = false;
+      setApiHealth('ready',`Schedule ready · ${(currentData.date_blocks||[]).length + (currentData.slot_blocks||[]).length} block records`);
+      } catch (error) {
+        setApiHealth('error','Schedule API error');
+        throw error;
+      } finally {
+        refreshInFlight = false;
+      }
     }
 
     async function boot() {
@@ -476,7 +593,9 @@
 
       document.querySelector("#blockDateForm").addEventListener("submit", async (event) => {
         event.preventDefault();
+        const submitter = event.submitter || document.querySelector('#blockDateBtn');
         try {
+          await withBusy(submitter, 'Blocking…', async () => {
           setNotice("Blocking date…");
           await apiPost("/api/admin/block_date", currentPassword, {
             blocked_date: document.querySelector("#blockDate").value,
@@ -485,6 +604,7 @@
           document.querySelector("#blockDateReason").value = "";
           await refreshBlocks();
           setNotice("Date blocked.", "ok");
+          });
         } catch (err) {
           setNotice(err.message || "Could not block date.", "bad");
         }
@@ -492,7 +612,9 @@
 
       document.querySelector("#blockSlotForm").addEventListener("submit", async (event) => {
         event.preventDefault();
+        const submitter = event.submitter || document.querySelector('#blockSlotBtn');
         try {
+          await withBusy(submitter, 'Blocking…', async () => {
           setNotice("Blocking slot…");
           await apiPost("/api/admin/block_slot", currentPassword, {
             blocked_date: document.querySelector("#blockSlotDate").value,
@@ -502,6 +624,7 @@
           document.querySelector("#blockSlotReason").value = "";
           await refreshBlocks();
           setNotice("Slot blocked.", "ok");
+          });
         } catch (err) {
           setNotice(err.message || "Could not block slot.", "bad");
         }
@@ -520,7 +643,9 @@
         const endDate = document.querySelector('#rangeEndDate').value;
         const slot = document.querySelector('#rangeSlotValue').value;
         const reason = document.querySelector('#rangeReason').value.trim();
+        const submitter = event.submitter || document.querySelector('#blockRangeBtn');
         try {
+          await withBusy(submitter, 'Blocking range…', async () => {
           setNotice('Blocking time frame…');
           const result = await apiPost('/api/admin/blocks_range_save', currentPassword, {
             mode,
@@ -533,18 +658,49 @@
           document.querySelector('#rangeReason').value = '';
           const count = Number(result?.count || 0);
           setNotice(`Time frame blocked. ${count} block item${count === 1 ? '' : 's'} saved.`, 'ok');
+          });
         } catch (err) {
           setNotice(err.message || 'Could not block time frame.', 'bad');
         }
       });
 
-      document.querySelector('#calendarPrevBtn').addEventListener('click', () => {
-        calendarMonth.setMonth(calendarMonth.getMonth() - 1);
-        renderCalendar(currentData);
-      });
       document.querySelector('#calendarNextBtn').addEventListener('click', () => {
-        calendarMonth.setMonth(calendarMonth.getMonth() + 1);
+        calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1, 12);
         renderCalendar(currentData);
+        renderMonthSummary(currentData);
+      });
+      document.querySelector('#calendarPrevBtn').addEventListener('click', () => {
+        calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1, 12);
+        renderCalendar(currentData);
+        renderMonthSummary(currentData);
+      });
+      document.querySelector('#calendarTodayBtn').addEventListener('click', () => {
+        const today = new Date();
+        calendarMonth = startOfMonth(today);
+        selectedDate = toLocalIso(today);
+        prefillDate(selectedDate);
+        renderCalendar(currentData);
+        renderMonthSummary(currentData);
+        renderSelectedDate();
+      });
+      document.querySelector('#calendarReloadBtn').addEventListener('click', async (event) => {
+        try { await withBusy(event.currentTarget,'Reloading…',refreshBlocks); setNotice('Schedule reloaded.','ok'); } catch(err) { setNotice(err.message || 'Could not reload schedule.','bad'); }
+      });
+      document.querySelectorAll('[data-selected-action]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          if (!selectedDate) return;
+          const action = button.dataset.selectedAction;
+          try {
+            await withBusy(button,'Saving…',async()=>{
+              if (action === 'block_date') await apiPost('/api/admin/block_date', currentPassword, { blocked_date:selectedDate, reason:document.querySelector('#blockDateReason').value.trim() });
+              if (action === 'block_am' || action === 'block_pm') await apiPost('/api/admin/block_slot', currentPassword, { blocked_date:selectedDate, slot:action.endsWith('am')?'AM':'PM', reason:document.querySelector('#blockSlotReason').value.trim() });
+              if (action === 'unblock_date') await apiPost('/api/admin/unblock_date', currentPassword, { blocked_date:selectedDate });
+              if (action === 'unblock_am' || action === 'unblock_pm') await apiPost('/api/admin/unblock_slot', currentPassword, { blocked_date:selectedDate, slot:action.endsWith('am')?'AM':'PM' });
+              await refreshBlocks();
+            });
+            setNotice(`Updated ${formatLongDate(selectedDate)}.`, 'ok');
+          } catch (err) { setNotice(err.message || 'Could not update selected date.','bad'); }
+        });
       });
     }
 
