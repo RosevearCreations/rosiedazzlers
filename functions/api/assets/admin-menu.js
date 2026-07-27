@@ -1,3 +1,4 @@
+// Build 236 restored complete admin navigation and retained current workbench/preflight routes.
 // assets/admin-menu.js
 //
 // Shared internal admin/detailer navigation.
@@ -37,11 +38,118 @@
       visible: () => true
     },
     {
+      key: "admin-today",
+      label: "Today Needs Attention",
+      href: "/admin-today.html",
+      description: "Prioritized owner action queue",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-today")
+    },
+    {
       key: "admin-booking",
       label: "Bookings",
       href: "/admin-booking.html",
       description: "Search and manage bookings",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-booking")
+    },
+    {
+      key: "admin-leads",
+      label: "Leads & Estimates",
+      href: "/admin-leads.html",
+      description: "Public leads and quote photo uploads",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-leads")
+    },
+    {
+      key: "admin-conversions",
+      label: "Conversion Queue",
+      href: "/admin-conversions.html",
+      description: "Review conversion drafts and create confirmed bookings",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-conversions")
+    },
+    {
+      key: "admin-payments",
+      label: "Payments",
+      href: "/admin-payments.html",
+      description: "Webhook history, receipt queueing, and refund tracking",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-payments")
+    },
+
+    {
+      key: "admin-media-health",
+      label: "Media Health",
+      href: "/admin-media-health.html",
+      description: "Public image recovery, R2 checks, upload review, and persistent alerts",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-media-health")
+    },
+    {
+      key: "admin-daip",
+      label: "DAIP Test Lab",
+      href: "/admin-daip.html",
+      description: "Internal-only media-process registry and privacy gate testing",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip")
+    },
+    {
+      key: "admin-daip-governance",
+      label: "DAIP Governance",
+      href: "/admin-daip-governance.html",
+      description: "Owner decisions and promotion gates; no production media capability",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-governance")
+    },
+    {
+      key: "admin-daip-readiness",
+      label: "DAIP Readiness",
+      href: "/admin-daip-readiness.html",
+      description: "Evidence review for a written private-MVP design only",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-readiness")
+    },
+    {
+      key: "admin-daip-design",
+      label: "DAIP Blueprint",
+      href: "/admin-daip-design.html",
+      description: "Independent review of a written private-MVP proposal; Gate C remains held",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-design")
+    },
+    {
+      key: "admin-water-rules",
+      label: "Water Rules",
+      href: "/admin-water-rules.html",
+      description: "Editable municipal water-use reminders",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-water-rules")
+    },
+
+    {
+      key: "admin-site-settings",
+      label: "Editable Settings",
+      href: "/admin-site-settings.html",
+      description: "Business profile, policies, templates, navigation, analytics labels, and media requirements",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-site-settings")
+    },
+    {
+      key: "admin-tax-review",
+      label: "Tax Review",
+      href: "/admin-tax-review.html",
+      description: "HST/GST payment review",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-tax-review")
+    },
+    {
+      key: "admin-close",
+      label: "Month-End Close",
+      href: "/admin-close.html",
+      description: "Payment close checklist",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-close")
+    },
+    {
+      key: "admin-seo-tasks",
+      label: "SEO Tasks",
+      href: "/admin-seo-tasks.html",
+      description: "Search Console and local proof tasks",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-seo-tasks")
+    },
+    {
+      key: "admin-content",
+      label: "Content Center",
+      href: "/admin-content.html",
+      description: "FAQ and public help content",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-content")
     },
     {
       key: "admin-blocks",
@@ -56,6 +164,13 @@
       href: "/admin-progress.html",
       description: "Customer progress updates",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-progress")
+    },
+    {
+      key: "admin-social",
+      label: "Social Queue",
+      href: "/admin-social.html",
+      description: "Review job photos for social posting",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-social")
     },
     {
       key: "admin-jobsite",
@@ -79,6 +194,14 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-staff")
     },
 
+
+    {
+      key: "admin-docs",
+      label: "Docs & Sanity",
+      href: "/admin-docs.html",
+      description: "Canonical docs, Markdown sanity, and visual placeholder readiness",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-docs")
+    },
     {
       key: "admin-app",
       label: "App Management",
@@ -108,13 +231,62 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-accounting") || globalScope.AdminAuth.canAccessPage("admin")
     },
     {
+      key: "admin-daip-gate-c",
+      label: "DAIP Gate C",
+      href: "/admin-daip-gate-c.html",
+      description: "Technical review and rollback evidence; Gate C remains held",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-gate-c")
+    },
+    {
+      key: "admin-daip-intake-dry-run",
+      label: "DAIP Intake Test",
+      href: "/admin-daip-intake-dry-run.html",
+      description: "Fictional metadata validation; no uploads or storage",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-intake-dry-run")
+    },
+    {
+      key: "admin-inventory-manager",
+      label: "Inventory Workbench",
+      href: "/admin-inventory-manager.html",
+      description: "Spreadsheet, JSON table, gallery and bulk inventory editing",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-inventory-manager") || globalScope.AdminAuth.canAccessPage("admin")
+    },
+    {
+      key: "admin-launch-readiness",
+      label: "Launch Readiness",
+      href: "/admin-launch-readiness.html",
+      description: "Preflight evidence, blockers and controlled go-live checks",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-launch-readiness") || globalScope.AdminAuth.canAccessPage("admin")
+    },
+    {
+      key: "admin-creative-projects",
+      label: "Creative Projects",
+      href: "/admin-creative-projects.html",
+      description: "Document the full process and govern all content, commerce, archive, and learning outputs",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-creative-projects")
+    },
+    {
+      key: "admin-roadmap-execution",
+      label: "Roadmap Execution",
+      href: "/admin-roadmap-execution.html",
+      description: "DB-backed next-20 execution queue and DAIP planning policy",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-roadmap-execution")
+    },
+    {
+      key: "admin-integrations",
+      label: "Connections",
+      href: "/admin-integrations.html",
+      description: "Social publishing and consent-first analytics configuration status",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-integrations")
+    },
+    {
       key: "account",
       label: "My Account",
       href: "/admin-account.html",
       description: "My session and password",
       visible: () => globalScope.AdminAuth.isAuthenticated()
     }
-  ];
+];
 
   function render(options = {}) {
     assertDependency();
