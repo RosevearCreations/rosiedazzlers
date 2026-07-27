@@ -1,3 +1,9 @@
+# Build 236 known gaps and launch risks
+
+Block Calendar layout and current-schema reads are repaired in code, but deployment must still be proven by saving/removing a full-date and AM/PM block and checking the public booking wizard. Launch blockers remain real booking/payment/email tests, environment and backup verification, policy review, security/accessibility/mobile testing, inventory cleanup, and approved local imagery. See `docs/BUILD236_CALENDAR_SEO_CSS_STABILIZATION.md`.
+
+---
+
 # Rosie Dazzlers known gaps and risks — Build 217
 
 **Updated:** 2026-06-30

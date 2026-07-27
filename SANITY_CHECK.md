@@ -1,3 +1,9 @@
+# Build 236 sanity check
+
+The root Block Calendar regression was a truncated shared stylesheet plus obsolete schedule-column reads. Build 236 restores the complete shared CSS/admin/public-shell baseline, repairs `blocked_date`/`slot` compatibility, adds calendar health/quick actions, expands preflight, and keeps one-H1/mobile/route-copy safeguards. No DDL is required. The complete static release suite passes through Build 236 before packaging; live schedule, booking, payment, email and recovery evidence remains required before public launch.
+
+---
+
 # Build 207 pointer
 
 Current planning now lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This historical file is retained for context and release history.

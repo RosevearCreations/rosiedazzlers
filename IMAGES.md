@@ -1,3 +1,9 @@
+# Build 236 visual-placeholder and launch-image note
+
+Build 236 adds placeholder types for Block Calendar, Inventory Workbench, Launch Readiness, product galleries, and local-service proof. Placeholders are temporary orientation aids, not publishable evidence. Replace the highest-visibility placeholders with approved Rosie-owned imagery, then complete filename, dimensions, alt text, caption, role, order, consent, and provenance. Product records support a featured image plus up to seven ordered gallery images after the Build 235 migration is applied.
+
+---
+
 # Rosie Dazzlers Image and Video Requirements — Build 183
 
 Critical missing local add-on fallback photos are still tracked below. Gallery proof still needed remains part of the public media checklist.

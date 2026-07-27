@@ -1,3 +1,9 @@
+# Build 236 release note
+
+Build 236 is a no-DDL calendar/CSS/schedule compatibility and launch-readiness stabilization pass. Start with `AI_PROJECT_HANDOFF.md`, then `MASTER_VALUE_ROADMAP.md`; implementation and test details are in `docs/BUILD236_CALENDAR_SEO_CSS_STABILIZATION.md`.
+
+---
+
 # Build 219 note — DAIP governance before production media
 
 Build 219 makes the DAIP plan operational without adding uploads, storage, workers, AI, customer access, or public publishing. The two current strategy sources are `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. For DAIP work, begin with `docs/digital-asset-intelligence-platform/13_DAIP_Test_Mode_Process.md`, `11_DAIP_Decision_Register.md`, `15_DAIP_Governance_Workspace_Process.md`, and `14_DAIP_Production_Promotion_Gates.md`. The new protected `/admin-daip-governance.html` screen records owner decisions and shows Gates C–F as held until test and governance evidence are complete.

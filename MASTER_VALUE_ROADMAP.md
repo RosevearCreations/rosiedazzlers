@@ -1,3 +1,11 @@
+# Build 236 active roadmap — prove the platform, then soft launch
+
+The immediate priority is operational proof rather than another large subsystem. Build 236 repairs the Block Calendar/CSS regression, restores shared admin/public shell capabilities, schedule-schema compatibility, mobile drift, launch-preflight evidence, Help/Content Center links, and visual-placeholder coverage. The active next sequence is the 30-step launch and reliability list in `docs/BUILD236_CALENDAR_SEO_CSS_STABILIZATION.md`, beginning with live schedule, booking, payment, email, environment, backup, policy, mobile, accessibility, search and inventory tests.
+
+Only this file and `AI_PROJECT_HANDOFF.md` are living strategy documents. Current SEO direction is summarized in `docs/SEO_COMPETITIVE_REVIEW_BUILD236.md`; the Markdown retirement decision is in `docs/MARKDOWN_RETIREMENT_PLAN_BUILD236.md`.
+
+---
+
 # Rosie Dazzlers Master Value Roadmap — Build 225
 
 **Updated:** 2026-07-07  
