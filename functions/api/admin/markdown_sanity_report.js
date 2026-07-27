@@ -1,6 +1,6 @@
 // Build 209 — admin diagnostics for canonical Markdown and archive status.
 import { requireStaffAccess, json } from "../_lib/staff-auth.js";
-import reportData from "../../../data/markdown_sanity_build207.json";
+import reportData from "../../../data/markdown_sanity_build236.json";
 
 export async function onRequestGet({ request, env }) {
   try {
