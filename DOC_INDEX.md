@@ -1,3 +1,23 @@
+# Rosie Dazzlers Documentation Index — Build 236
+
+## Read first
+
+1. `AI_PROJECT_HANDOFF.md` — current architecture, safeguards, deployment state and continuation.
+2. `MASTER_VALUE_ROADMAP.md` — active business priorities and sequencing.
+
+## Current build documents
+
+- `docs/BUILD236_CALENDAR_SEO_CSS_STABILIZATION.md`
+- `docs/SEO_COMPETITIVE_REVIEW_BUILD236.md`
+- `docs/MARKDOWN_RETIREMENT_PLAN_BUILD236.md`
+- `docs/PRODUCTION_TEST_GUIDE.md`
+
+## Documentation rule
+
+The two first-read files are the only living strategy sources. Operational files remain synchronized briefly; historical files remain read-only until release-guard dependencies are modernized.
+
+---
+
 # Rosie Dazzlers Documentation Index — Build 225
 
 **Canonical strategy documents:**

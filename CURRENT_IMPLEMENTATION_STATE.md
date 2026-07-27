@@ -1,3 +1,9 @@
+# Build 236 current implementation pointer
+
+Current state and continuation instructions live in `AI_PROJECT_HANDOFF.md`; active priorities live in `MASTER_VALUE_ROADMAP.md`. Build 236 restores Block Calendar and shared CSS behaviour, current schedule-schema compatibility, launch-preflight evidence, and visual-placeholder coverage. This file is retained for historical implementation context.
+
+---
+
 # Build 207 pointer
 
 Current planning now lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This historical file is retained for context and release history.

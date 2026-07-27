@@ -1,3 +1,11 @@
+# Build 236 current handoff — calendar and launch stabilization (2026-07-26)
+
+Build 236 restores the broken Block Calendar, the missing shared responsive/admin CSS, the complete admin authorization/menu/shell, editable public chrome, and analytics registry integration, aligns all schedule readers with the retained `blocked_date`/`slot` schema, preserves compatibility aliases, adds selected-date quick actions and schedule-health evidence, expands launch preflight, and refreshes visual-placeholder coverage. No DDL is required. See `docs/BUILD236_CALENDAR_SEO_CSS_STABILIZATION.md` for the completed work and 30 connected next steps.
+
+**First-read rule:** this file and `MASTER_VALUE_ROADMAP.md` are the only living strategy sources. Retained Markdown remains for operational reference and release/audit compatibility. Do not delete historical files until release-guard dependencies are modernized.
+
+---
+
 # Rosie Dazzlers — AI Project Handoff (Build 225)
 
 **Updated:** 2026-07-07  

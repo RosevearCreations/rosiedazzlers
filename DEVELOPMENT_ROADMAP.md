@@ -1,3 +1,9 @@
+# Build 236 synchronization note
+
+The active roadmap now lives in `MASTER_VALUE_ROADMAP.md`. Build 236 restores Block Calendar/CSS/schedule compatibility and records 30 next steps in `docs/BUILD236_CALENDAR_SEO_CSS_STABILIZATION.md`. This retained file remains release history, not a competing roadmap.
+
+---
+
 # Rosie Dazzlers Development Roadmap — Build 217
 
 **Updated:** 2026-06-30

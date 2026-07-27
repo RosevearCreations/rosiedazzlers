@@ -1,3 +1,9 @@
+# Build 236 schema compatibility note
+
+No DDL is added. Schedule reads and writes use the retained `date_blocks.blocked_date` and `slot_blocks.blocked_date/slot` columns while returning compatibility aliases to older consumers. See `sql/2026-07-26_build236_calendar_css_schedule_compatibility_no_ddl.sql`.
+
+---
+
 # Build 207 Markdown consolidation and visual placeholder note
 
 Build 207 adds no new database tables. Documentation sanity and visual placeholder reporting use bundled JSON files: `data/markdown_sanity_build207.json`, `data/build207_enhancement_sweep.json`, and `data/visual_placeholder_registry.json`. The admin report APIs use existing staff authentication and do not require Supabase schema changes.
