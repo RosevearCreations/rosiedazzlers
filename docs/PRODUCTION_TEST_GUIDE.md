@@ -1,3 +1,18 @@
+# Build 236 Block Calendar production acceptance
+
+1. Load `/admin-blocks.html` and confirm the schedule API indicator becomes ready.
+2. Select a future date and block the full date.
+3. Open the public booking flow in a private window and confirm the date is unavailable.
+4. Unblock the date and confirm availability returns.
+5. Block AM only and verify PM remains available.
+6. Remove AM, block PM, and verify AM remains available.
+7. Test Previous, Today, Next, Reload, keyboard focus, and a narrow mobile viewport.
+8. Confirm the admin dashboard's schedule counts match the Block Calendar lists.
+
+Do not mark the schedule preflight complete from a static code check alone; retain screenshots or notes from the deployed test.
+
+---
+
 
 # Build 225 — Social & analytics Connections Centre test (staging only)
 
