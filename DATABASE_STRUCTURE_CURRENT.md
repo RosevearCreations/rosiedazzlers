@@ -1,3 +1,9 @@
+# Build 237 database synchronization — shared launch evidence and current roadmap cycle
+
+Apply `sql/2026-07-28_build237_css_startup_evidence_roadmap.sql`. It adds `app_launch_readiness_evidence`, `app_launch_readiness_evidence_audit`, and `cycle_key` / `is_current_cycle` / `action_path` on `app_roadmap_execution_items`. Direct browser table access remains revoked; Cloudflare Functions use the service-role boundary. Browser localStorage is now a fallback only for launch evidence during migration/outage.
+
+---
+
 # Build 236 schema compatibility note
 
 No DDL is added. Schedule reads and writes use the retained `date_blocks.blocked_date` and `slot_blocks.blocked_date/slot` columns while returning compatibility aliases to older consumers. See `sql/2026-07-26_build236_calendar_css_schedule_compatibility_no_ddl.sql`.
@@ -985,3 +991,7 @@ Build 218 adds these internal-only, RLS-enabled and service-role-only tables aft
 - `daip_audit_events` — safe actor/time/action metadata; do not store secrets, customer information, private media details, or signed URLs.
 
 Apply `sql/2026-07-02_build218_daip_test_mode_foundation.sql` only in development/staging for the first controlled DAIP tests.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

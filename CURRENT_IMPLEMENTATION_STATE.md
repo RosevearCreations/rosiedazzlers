@@ -857,3 +857,7 @@ DAIP is still not a production media platform. Build 219 adds an internal owner-
 
 ## Build 235 current implementation state
 The original Inventory Workflow remains the detailed editor. The separate Inventory Workbench now provides spreadsheet edits, a whitelisted field/value JSON table, individual-field saves, full-row saves, bulk operations, CSV export, soft archive/restore, suspicious-name review, and readiness scoring. `image_url` remains featured; `gallery_image_urls` supports up to seven ordered additional images after the Build 235 migration. The Launch Readiness Command Center provides automatic data/production checks and explicitly manual evidence confirmations for real-world launch tests.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

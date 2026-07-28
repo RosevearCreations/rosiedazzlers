@@ -1,3 +1,14 @@
+# Build 237 current handoff — 2026-07-28
+
+- Fixes the missing CSS and AdminShell dependency on `/admin-roadmap-execution` and related historical admin pages.
+- Adds `/admin-startup-guide.html` plus `STARTUP_GO_LIVE_BLOCKERS.md` as the detailed ordered launch guide.
+- Adds DB-first shared launch evidence with browser fallback; apply `sql/2026-07-28_build237_css_startup_evidence_roadmap.sql`.
+- Seeds the current next-20 roadmap cycle and adds exact action paths.
+- Keeps `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` as the only living direction documents.
+- Next operational priority: deploy preview, apply migration, verify Block Calendar, booking, Stripe, email, environment, backup, policies and security before invite-only soft launch.
+
+---
+
 # Build 236 current handoff — calendar and launch stabilization (2026-07-26)
 
 Build 236 restores the broken Block Calendar, the missing shared responsive/admin CSS, the complete admin authorization/menu/shell, editable public chrome, and analytics registry integration, aligns all schedule readers with the retained `blocked_date`/`slot` schema, preserves compatibility aliases, adds selected-date quick actions and schedule-health evidence, expands launch preflight, and refreshes visual-placeholder coverage. No DDL is required. See `docs/BUILD236_CALENDAR_SEO_CSS_STABILIZATION.md` for the completed work and 30 connected next steps.
@@ -687,3 +698,7 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 - Added `/admin-launch-readiness.html` with automatic audits plus manual real-world preflight confirmations.
 - Migration: `sql/2026-07-19_build235_inventory_json_gallery_launch_readiness.sql`.
 - Next focus: deploy migration, perform real payment/email/booking tests, then address the highest-impact launch blockers shown by the dashboard.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

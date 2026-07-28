@@ -1,6 +1,6 @@
-# Build 236 synchronization note
+# Build 237 synchronization note
 
-The active roadmap now lives in `MASTER_VALUE_ROADMAP.md`. Build 236 restores Block Calendar/CSS/schedule compatibility and records 30 next steps in `docs/BUILD236_CALENDAR_SEO_CSS_STABILIZATION.md`. This retained file remains release history, not a competing roadmap.
+Build 237 repairs missing CSS/AdminShell dependencies, adds a current-cycle roadmap, shared launch evidence and a detailed Startup Guide. The living roadmap is `MASTER_VALUE_ROADMAP.md`; this file remains synchronized release history.
 
 ---
 
@@ -2710,3 +2710,7 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 18. Verify Google Business Profile service area, hours, categories and contact data.
 19. Verify permissions, protected endpoints, sessions and security headers.
 20. Begin an invite-only soft launch and monitor every first-week transaction.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

@@ -1,3 +1,9 @@
+# Build 237 document index update
+
+Start here: `AI_PROJECT_HANDOFF.md` → `MASTER_VALUE_ROADMAP.md` → `STARTUP_GO_LIVE_BLOCKERS.md`. Use `KNOWN_GAPS_AND_RISKS.md`, `SANITY_CHECK.md`, `IMAGES.md`, `SUPABASE_SCHEMA.sql` and `DATABASE_STRUCTURE_CURRENT.md` as operational references. Other Markdown is retained history until release-guard modernization permits archival.
+
+---
+
 # Rosie Dazzlers Documentation Index — Build 236
 
 ## Read first
@@ -1178,3 +1184,7 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 
 
 - `docs/BUILD235_OPERATIONAL_READINESS_INVENTORY_JSON_GALLERIES.md` — authoritative Build 235 implementation and deployment notes.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
