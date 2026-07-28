@@ -252,6 +252,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-inventory-manager") || globalScope.AdminAuth.canAccessPage("admin")
     },
     {
+      key: "admin-startup-guide",
+      label: "Startup Go-Live Guide",
+      href: "/admin-startup-guide.html",
+      description: "Detailed blocker-by-blocker launch instructions and exact page locations",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-startup-guide") || globalScope.AdminAuth.canAccessPage("admin")
+    },
+    {
       key: "admin-launch-readiness",
       label: "Launch Readiness",
       href: "/admin-launch-readiness.html",

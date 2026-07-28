@@ -221,6 +221,7 @@
       case "admin-catalog":
       case "admin-inventory-manager":
       case "admin-launch-readiness":
+      case "admin-startup-guide":
       case "admin-production":
       case "admin-test-centre":
         return hasCapability("can_manage_bookings");
