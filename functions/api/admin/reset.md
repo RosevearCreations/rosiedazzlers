@@ -158,3 +158,7 @@ Build 190 continues the editable-content migration by rendering public business 
 ## Build 197 documentation sync
 
 This Markdown file was checked during the Build 197 self-healing admin diagnostics pass. No schema DDL is required for the pricing diagnostics, route-copy parity, independent dashboard fallback handling, or landing SEO/readiness warning work.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
