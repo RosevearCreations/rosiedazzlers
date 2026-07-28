@@ -766,3 +766,7 @@ Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOF
 4. Run the Launch Readiness checks.
 5. Complete the required real booking, live payment/refund, email, environment, backup, policy and security confirmations.
 6. Begin invite-only soft launch before broader promotion.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

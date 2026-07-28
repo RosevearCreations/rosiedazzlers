@@ -851,3 +851,7 @@ Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOF
 
 ## Build 235 handoff
 Start with `docs/BUILD235_OPERATIONAL_READINESS_INVENTORY_JSON_GALLERIES.md` and `data/build235_operational_readiness.json`. Apply the Build 235 migration, test gallery persistence, then use `/admin-launch-readiness.html` to guide the next pass. Do not replace the existing `/admin-catalog.html` workflow; `/admin-inventory-manager.html` is the faster companion workbench.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

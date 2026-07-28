@@ -1,3 +1,32 @@
+# Build 237 active roadmap — 2026-07-28
+
+The immediate strategy is launch confidence and daily-operating reliability, not another broad module. Work the current next 20 in `/admin-roadmap-execution.html`; use `STARTUP_GO_LIVE_BLOCKERS.md` for detailed instructions.
+
+## Current next 20
+
+1. **Deploy Build 237 CSS and admin-page dependency repair to preview** — Deploy the preview branch, hard-refresh /admin-roadmap-execution, and confirm site.css plus AdminShell load with no 404 or ReferenceError.
+2. **Apply Build 237 roadmap-cycle and launch-evidence migration in staging** — Run sql/2026-07-28_build237_css_startup_evidence_roadmap.sql in Supabase SQL Editor, then refresh the schema cache and open both Roadmap Execution and Launch Readiness.
+3. **Verify Block Calendar full-date, AM and PM save/remove behaviour** — Create and remove one future full-date block, one AM block and one PM block; verify the public booking wizard reflects each change immediately.
+4. **Complete a production-like end-to-end booking and admin verification** — Use a test customer, select date/vehicle/package/add-ons, finish the booking, then verify booking, calendar, customer and staff records.
+5. **Complete and refund a small live Stripe transaction** — Confirm live key mode, complete a small payment, verify webhook and receipt evidence, issue a refund, and reconcile the result.
+6. **Verify booking, payment, staff and consent email delivery** — Send each notification type to an external inbox, inspect spam and mobile rendering, and record provider/message evidence without storing secrets.
+7. **Audit Cloudflare production variables, bindings, domains and branch settings** — Compare production and preview environment names, verify Supabase/Stripe/R2 bindings, and document the exact location of each required variable.
+8. **Conduct and document a Supabase backup-and-restore rehearsal** — Confirm backup coverage, restore a safe staging copy or selected records, validate row counts and permissions, and record the recovery steps.
+9. **Review and publish customer policies and consent wording** — Review privacy, terms, cancellation, refund, media consent, cookie and service-condition wording; link them from booking, checkout and footer.
+10. **Complete real-device mobile workflow testing** — Test home, services, booking, payment, customer progress, Block Calendar, inventory and uploads on at least one iPhone-size and one Android-size viewport/device.
+11. **Complete accessibility keyboard, focus, contrast and form-error review** — Keyboard-test public and critical admin flows, verify visible focus, labels, error announcements, touch targets, heading order and contrast.
+12. **Submit sitemap and validate canonical URLs and structured data** — Verify Search Console ownership, submit sitemap.xml, inspect index coverage, test home/local/service structured data, and correct canonical inconsistencies.
+13. **Verify Google Business Profile service-area information and local proof** — Confirm business name, category, service area, hours, phone, website, services, photos and review link match the live site and real-world business.
+14. **Clean suspicious inventory names, categories, costs and inactive duplicates** — Use Inventory Workbench filters, correct customer-facing names, complete costs/categories, archive true duplicates and preserve rows with operational history.
+15. **Complete featured and gallery image metadata for sellable products** — For each sellable product set one featured image and up to seven ordered gallery images, then complete descriptive alt text, captions, role and consent/provenance notes.
+16. **Replace high-value public visual placeholders with approved local proof** — Prioritize homepage, ceramic coating, paint correction, interior, local town pages, gallery and booking trust areas using Rosie-owned approved images.
+17. **Add reviewed duplicate inventory merge and transfer workflow** — Design a preview-only merge that transfers references and stock history, records audit evidence and never hard-deletes an item with operational links.
+18. **Replace sequential bulk inventory saves with a transactional RPC** — Create a validated all-or-nothing Supabase RPC with per-row errors, actor audit, rollback behaviour and a dry-run preview.
+19. **Run invite-only soft launch and inspect every early transaction** — Accept a small known-customer group, watch bookings/payments/messages/media/inventory/logs daily, and stop expansion if any critical workflow fails.
+20. **Modernize historical release guards and archive redundant Markdown safely** — Map every release-guard dependency, replace historical text-marker checks with current feature checks, then move obsolete docs to docs/archive without deleting evidence.
+
+---
+
 # Build 236 active roadmap — prove the platform, then soft launch
 
 The immediate priority is operational proof rather than another large subsystem. Build 236 repairs the Block Calendar/CSS regression, restores shared admin/public shell capabilities, schedule-schema compatibility, mobile drift, launch-preflight evidence, Help/Content Center links, and visual-placeholder coverage. The active next sequence is the 30-step launch and reliability list in `docs/BUILD236_CALENDAR_SEO_CSS_STABILIZATION.md`, beginning with live schedule, booking, payment, email, environment, backup, policy, mobile, accessibility, search and inventory tests.
@@ -1035,3 +1064,7 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 
 ## Build 235 launch-polish milestone
 Build 235 shifts effort toward operating the business safely: faster inventory data correction, seven-image product storytelling, readiness scoring, and a controlled go-live command center. Major new modules should remain secondary to payment, notification, backup, mobile, accessibility, security, and first-week operational proof.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

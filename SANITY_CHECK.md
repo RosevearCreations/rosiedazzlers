@@ -1,3 +1,16 @@
+# Build 237 sanity check
+
+- Roadmap page CSS root cause identified: missing stylesheet files and missing AdminShell dependency.
+- All HTML stylesheet references now resolve; compatibility shims and emergency admin fallback are included.
+- Roadmap, Startup Guide and Launch Readiness have desktop/mobile layouts and safe outage/migration fallbacks.
+- Internal admin pages remain one-H1 and are noindex.
+- Homepage now includes WebSite structured data alongside the existing local business schema.
+- Shared launch evidence is DB-first after the included migration.
+- No claim of first-page ranking is made; local SEO work remains evidence-led.
+- Unrestricted public launch is not recommended until the critical items in `STARTUP_GO_LIVE_BLOCKERS.md` are verified.
+
+---
+
 # Build 236 sanity check
 
 The root Block Calendar regression was a truncated shared stylesheet plus obsolete schedule-column reads. Build 236 restores the complete shared CSS/admin/public-shell baseline, repairs `blocked_date`/`slot` compatibility, adds calendar health/quick actions, expands preflight, and keeps one-H1/mobile/route-copy safeguards. No DDL is required. The complete static release suite passes through Build 236 before packaging; live schedule, booking, payment, email and recovery evidence remains required before public launch.
@@ -1094,3 +1107,7 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 - Archive/restore remains history-safe.
 - Launch dashboard distinguishes automatic evidence from manual confirmation.
 - Public launch should remain controlled until booking, live payment/refund, email, environment, backup, legal, mobile and security confirmations are complete.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

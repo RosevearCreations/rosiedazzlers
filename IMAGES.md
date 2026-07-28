@@ -1,3 +1,9 @@
+# Build 237 image synchronization
+
+New internal placeholder: `startup_go_live_command_path` for `/admin-startup-guide.html`. Public priority remains replacing homepage, high-intent service, local town, gallery and booking placeholders with approved Rosie-owned proof. Product media should use one featured image plus up to seven ordered gallery images with descriptive alt text, role, caption and provenance/consent notes.
+
+---
+
 # Build 236 visual-placeholder and launch-image note
 
 Build 236 adds placeholder types for Block Calendar, Inventory Workbench, Launch Readiness, product galleries, and local-service proof. Placeholders are temporary orientation aids, not publishable evidence. Replace the highest-visibility placeholders with approved Rosie-owned imagery, then complete filename, dimensions, alt text, caption, role, order, consent, and provenance. Product records support a featured image plus up to seven ordered gallery images after the Build 235 migration is applied.
@@ -449,3 +455,7 @@ After the Build 216 migration, the first failed scan is only monitoring. A secon
 ### Build 216 synchronization — 2026-07-01
 
 Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

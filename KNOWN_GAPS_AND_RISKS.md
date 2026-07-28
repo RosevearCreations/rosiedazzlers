@@ -1,3 +1,31 @@
+# Build 237 current gaps and risks
+
+## Critical before unrestricted public launch
+
+- Deploy and verify the Roadmap Execution CSS/dependency repair.
+- Apply the Build 237 shared evidence/current-roadmap migration.
+- Re-test Block Calendar full-date/AM/PM behaviour against public booking.
+- Complete end-to-end booking, live Stripe/refund, external email, environment, backup/restore, legal/policy, pricing/tax and security tests.
+- Use an invite-only soft launch before unrestricted promotion.
+
+## High priority while preparing
+
+- Real-device mobile and accessibility testing.
+- Search Console/sitemap/canonical/schema and Google Business Profile alignment.
+- Inventory name/cost/category cleanup and product gallery metadata.
+- Replace high-value placeholders with approved Rosie-owned local proof.
+
+## Engineering gaps retained
+
+- Duplicate inventory merge remains review-only/not implemented.
+- Bulk inventory updates remain sequential rather than transactional.
+- Responsive media derivative generation remains outstanding.
+- Historical Markdown cannot be archived until release guards are modernized.
+
+Use `STARTUP_GO_LIVE_BLOCKERS.md` for exact routes, detailed instructions and completion evidence.
+
+---
+
 # Build 236 known gaps and launch risks
 
 Block Calendar layout and current-schema reads are repaired in code, but deployment must still be proven by saving/removing a full-date and AM/PM block and checking the public booking wizard. Launch blockers remain real booking/payment/email tests, environment and backup verification, policy review, security/accessibility/mobile testing, inventory cleanup, and approved local imagery. See `docs/BUILD236_CALENDAR_SEO_CSS_STABILIZATION.md`.
@@ -1764,3 +1792,7 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 - Launch readiness manual confirmations are browser-local and should later be stored as shared audited production evidence.
 - A high dashboard score does not replace live booking/payment/refund/email/restore testing.
 - Duplicate merge remains a review workflow gap; do not hard-delete rows with operational history.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

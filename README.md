@@ -1,3 +1,9 @@
+# Build 237 startup stabilization
+
+Deploy the package, apply `sql/2026-07-28_build237_css_startup_evidence_roadmap.sql`, then use `/admin-startup-guide.html`, `/admin-launch-readiness.html`, and `/admin-roadmap-execution.html` in that order.
+
+---
+
 # Build 236 release note
 
 Build 236 is a no-DDL calendar/CSS/schedule compatibility and launch-readiness stabilization pass. Start with `AI_PROJECT_HANDOFF.md`, then `MASTER_VALUE_ROADMAP.md`; implementation and test details are in `docs/BUILD236_CALENDAR_SEO_CSS_STABILIZATION.md`.
@@ -1179,3 +1185,7 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 - `/admin-inventory-manager.html`: spreadsheet, JSON field-table, bulk editing, readiness and gallery review.
 - `/admin-launch-readiness.html`: preflight and controlled go-live command center.
 - Up to seven ordered gallery images per inventory/product row after applying the Build 235 migration.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
