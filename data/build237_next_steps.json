@@ -1,0 +1,227 @@
+{
+  "build": 237,
+  "updated_at": "2026-07-28",
+  "source_of_truth": "Database app_roadmap_execution_items after migration; this file is a read-only fallback.",
+  "items": [
+    {
+      "key": "b237_01",
+      "title": "Deploy Build 237 CSS and admin-page dependency repair to preview",
+      "workstream": "reliability",
+      "priority": "critical",
+      "status": "in_progress",
+      "target_build": 237,
+      "sort_order": 1,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "Deploy the preview branch, hard-refresh /admin-roadmap-execution, and confirm site.css plus AdminShell load with no 404 or ReferenceError."
+    },
+    {
+      "key": "b237_02",
+      "title": "Apply Build 237 roadmap-cycle and launch-evidence migration in staging",
+      "workstream": "reliability",
+      "priority": "critical",
+      "status": "planned",
+      "target_build": 237,
+      "sort_order": 2,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "Run sql/2026-07-28_build237_css_startup_evidence_roadmap.sql in Supabase SQL Editor, then refresh the schema cache and open both Roadmap Execution and Launch Readiness."
+    },
+    {
+      "key": "b237_03",
+      "title": "Verify Block Calendar full-date, AM and PM save/remove behaviour",
+      "workstream": "booking",
+      "priority": "critical",
+      "status": "planned",
+      "target_build": 237,
+      "sort_order": 3,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "Create and remove one future full-date block, one AM block and one PM block; verify the public booking wizard reflects each change immediately."
+    },
+    {
+      "key": "b237_04",
+      "title": "Complete a production-like end-to-end booking and admin verification",
+      "workstream": "booking",
+      "priority": "critical",
+      "status": "planned",
+      "target_build": 237,
+      "sort_order": 4,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "Use a test customer, select date/vehicle/package/add-ons, finish the booking, then verify booking, calendar, customer and staff records."
+    },
+    {
+      "key": "b237_05",
+      "title": "Complete and refund a small live Stripe transaction",
+      "workstream": "payments",
+      "priority": "critical",
+      "status": "planned",
+      "target_build": 237,
+      "sort_order": 5,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "Confirm live key mode, complete a small payment, verify webhook and receipt evidence, issue a refund, and reconcile the result."
+    },
+    {
+      "key": "b237_06",
+      "title": "Verify booking, payment, staff and consent email delivery",
+      "workstream": "reliability",
+      "priority": "critical",
+      "status": "planned",
+      "target_build": 237,
+      "sort_order": 6,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "Send each notification type to an external inbox, inspect spam and mobile rendering, and record provider/message evidence without storing secrets."
+    },
+    {
+      "key": "b237_07",
+      "title": "Audit Cloudflare production variables, bindings, domains and branch settings",
+      "workstream": "reliability",
+      "priority": "critical",
+      "status": "planned",
+      "target_build": 237,
+      "sort_order": 7,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "Compare production and preview environment names, verify Supabase/Stripe/R2 bindings, and document the exact location of each required variable."
+    },
+    {
+      "key": "b237_08",
+      "title": "Conduct and document a Supabase backup-and-restore rehearsal",
+      "workstream": "reliability",
+      "priority": "critical",
+      "status": "planned",
+      "target_build": 237,
+      "sort_order": 8,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "Confirm backup coverage, restore a safe staging copy or selected records, validate row counts and permissions, and record the recovery steps."
+    },
+    {
+      "key": "b237_09",
+      "title": "Review and publish customer policies and consent wording",
+      "workstream": "customer",
+      "priority": "critical",
+      "status": "planned",
+      "target_build": 237,
+      "sort_order": 9,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "Review privacy, terms, cancellation, refund, media consent, cookie and service-condition wording; link them from booking, checkout and footer."
+    },
+    {
+      "key": "b237_10",
+      "title": "Complete real-device mobile workflow testing",
+      "workstream": "reliability",
+      "priority": "high",
+      "status": "planned",
+      "target_build": 237,
+      "sort_order": 10,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "Test home, services, booking, payment, customer progress, Block Calendar, inventory and uploads on at least one iPhone-size and one Android-size viewport/device."
+    },
+    {
+      "key": "b237_11",
+      "title": "Complete accessibility keyboard, focus, contrast and form-error review",
+      "workstream": "reliability",
+      "priority": "high",
+      "status": "planned",
+      "target_build": 237,
+      "sort_order": 11,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "Keyboard-test public and critical admin flows, verify visible focus, labels, error announcements, touch targets, heading order and contrast."
+    },
+    {
+      "key": "b237_12",
+      "title": "Submit sitemap and validate canonical URLs and structured data",
+      "workstream": "seo",
+      "priority": "high",
+      "status": "planned",
+      "target_build": 237,
+      "sort_order": 12,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "Verify Search Console ownership, submit sitemap.xml, inspect index coverage, test home/local/service structured data, and correct canonical inconsistencies."
+    },
+    {
+      "key": "b237_13",
+      "title": "Verify Google Business Profile service-area information and local proof",
+      "workstream": "seo",
+      "priority": "high",
+      "status": "planned",
+      "target_build": 237,
+      "sort_order": 13,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "Confirm business name, category, service area, hours, phone, website, services, photos and review link match the live site and real-world business."
+    },
+    {
+      "key": "b237_14",
+      "title": "Clean suspicious inventory names, categories, costs and inactive duplicates",
+      "workstream": "operations",
+      "priority": "high",
+      "status": "planned",
+      "target_build": 237,
+      "sort_order": 14,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "Use Inventory Workbench filters, correct customer-facing names, complete costs/categories, archive true duplicates and preserve rows with operational history."
+    },
+    {
+      "key": "b237_15",
+      "title": "Complete featured and gallery image metadata for sellable products",
+      "workstream": "media",
+      "priority": "high",
+      "status": "planned",
+      "target_build": 237,
+      "sort_order": 15,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "For each sellable product set one featured image and up to seven ordered gallery images, then complete descriptive alt text, captions, role and consent/provenance notes."
+    },
+    {
+      "key": "b237_16",
+      "title": "Replace high-value public visual placeholders with approved local proof",
+      "workstream": "seo",
+      "priority": "high",
+      "status": "planned",
+      "target_build": 238,
+      "sort_order": 16,
+      "source_document": "IMAGES.md",
+      "action_path": "Prioritize homepage, ceramic coating, paint correction, interior, local town pages, gallery and booking trust areas using Rosie-owned approved images."
+    },
+    {
+      "key": "b237_17",
+      "title": "Add reviewed duplicate inventory merge and transfer workflow",
+      "workstream": "operations",
+      "priority": "high",
+      "status": "planned",
+      "target_build": 238,
+      "sort_order": 17,
+      "source_document": "MASTER_VALUE_ROADMAP.md",
+      "action_path": "Design a preview-only merge that transfers references and stock history, records audit evidence and never hard-deletes an item with operational links."
+    },
+    {
+      "key": "b237_18",
+      "title": "Replace sequential bulk inventory saves with a transactional RPC",
+      "workstream": "operations",
+      "priority": "high",
+      "status": "planned",
+      "target_build": 238,
+      "sort_order": 18,
+      "source_document": "MASTER_VALUE_ROADMAP.md",
+      "action_path": "Create a validated all-or-nothing Supabase RPC with per-row errors, actor audit, rollback behaviour and a dry-run preview."
+    },
+    {
+      "key": "b237_19",
+      "title": "Run invite-only soft launch and inspect every early transaction",
+      "workstream": "operations",
+      "priority": "critical",
+      "status": "planned",
+      "target_build": 238,
+      "sort_order": 19,
+      "source_document": "STARTUP_GO_LIVE_BLOCKERS.md",
+      "action_path": "Accept a small known-customer group, watch bookings/payments/messages/media/inventory/logs daily, and stop expansion if any critical workflow fails."
+    },
+    {
+      "key": "b237_20",
+      "title": "Modernize historical release guards and archive redundant Markdown safely",
+      "workstream": "documentation",
+      "priority": "medium",
+      "status": "planned",
+      "target_build": 238,
+      "sort_order": 20,
+      "source_document": "MASTER_VALUE_ROADMAP.md",
+      "action_path": "Map every release-guard dependency, replace historical text-marker checks with current feature checks, then move obsolete docs to docs/archive without deleting evidence."
+    }
+  ]
+}
