@@ -1,6 +1,6 @@
-// Build 236 service-worker cache: calendar, restored shared CSS/admin/public shell, and launch readiness.
-const CACHE='rosie-app-v20260726build236';
-const URLS=['/admin-launch-readiness.html','/admin-blocks.html','/admin-inventory-manager.html','/admin-content.html',
+// Build 237 service-worker cache: CSS recovery, Startup Guide, current roadmap, launch evidence, calendar and operational readiness.
+const CACHE='rosie-app-v20260728build237';
+const URLS=['/admin-launch-readiness.html','/admin-startup-guide.html','/admin-roadmap-execution.html','/data/build237_go_live_blockers.json','/data/build237_next_steps.json','/assets/styles.css','/assets/admin.css','/assets/style.css','/admin-blocks.html','/admin-inventory-manager.html','/admin-content.html',
   "/",
   "/book",
   "/pricing",

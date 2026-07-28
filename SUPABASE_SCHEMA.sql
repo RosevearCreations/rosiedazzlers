@@ -3156,3 +3156,20 @@ alter table if exists public.catalog_items add column if not exists gallery_imag
 --   public.date_blocks(blocked_date, reason, created_at)
 --   public.slot_blocks(blocked_date, slot, reason, created_at)
 -- Build 236 API readers/writers use those columns and expose legacy aliases only at response boundaries.
+
+
+-- Build 237 canonical schema synchronization (2026-07-28).
+-- Apply sql/2026-07-28_build237_css_startup_evidence_roadmap.sql after Build 227.
+create table if not exists public.app_launch_readiness_evidence (
+  id uuid primary key default gen_random_uuid(), evidence_key text not null unique, title text not null, detail text not null,
+  severity text not null check (severity in ('block','warn')), status text not null default 'pending' check (status in ('pending','verified','failed','waived')),
+  sort_order integer not null default 100, evidence_note text null, verified_at timestamptz null, verified_by_staff_email text null,
+  updated_by_staff_email text null, created_at timestamptz not null default now(), updated_at timestamptz not null default now()
+);
+create table if not exists public.app_launch_readiness_evidence_audit (
+  id uuid primary key default gen_random_uuid(), evidence_key text not null, event_type text not null, status text not null,
+  actor_staff_email text null, safe_note text not null, created_at timestamptz not null default now()
+);
+alter table public.app_roadmap_execution_items add column if not exists cycle_key text not null default 'build227';
+alter table public.app_roadmap_execution_items add column if not exists is_current_cycle boolean not null default false;
+alter table public.app_roadmap_execution_items add column if not exists action_path text null;
