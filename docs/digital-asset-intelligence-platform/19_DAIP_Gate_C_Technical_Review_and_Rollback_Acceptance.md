@@ -25,3 +25,7 @@ A record can be accepted for test-only implementation planning only when a curre
 ## Future promotion
 
 A later separate review must decide whether to commission a narrow test-only implementation build. That build must include its own technical boundary, staging, rollback, privacy, cost, and acceptance evidence. It cannot be inferred from a Build 224 record.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

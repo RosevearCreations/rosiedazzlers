@@ -11,3 +11,7 @@ Creates a separate project linked to the booking. The booking remains the operat
 
 ## Safety
 No automatic conversion, no duplicate project per booking, no automatic publication, and no bypass of consent or DAIP gates.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

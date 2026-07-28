@@ -178,3 +178,7 @@ Review statuses:
 If the system is uncertain, it should protect privacy first.
 
 Better to over-blur than accidentally expose a customer plate or private information.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

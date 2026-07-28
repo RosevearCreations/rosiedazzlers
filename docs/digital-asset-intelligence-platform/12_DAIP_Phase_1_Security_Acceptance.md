@@ -89,3 +89,7 @@ Do not paste secrets, signed URLs, raw original paths, customer details, payment
 ## Build 218 test-mode evidence before future Phase 1
 
 Before considering this Phase 1 template, complete the three Build 218 Test Centre records. Those results prove the test boundary only; they do not approve original file storage, upload URLs, worker execution, public release, or customer-media intake.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

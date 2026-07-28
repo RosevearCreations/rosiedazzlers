@@ -28,3 +28,7 @@ Migration: `sql/2026-07-15_build232_project_controls_archive_history.sql`. Works
 18. Improve recommendation scoring with cost, audience and reusable-skill factors.
 19. Add destination-readiness checks before social or commerce handoff.
 20. Keep standard bookings, DAIP media and publishing approval-only.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

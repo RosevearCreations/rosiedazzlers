@@ -10,3 +10,7 @@ Use these two living documents instead:
 2. `../../MASTER_VALUE_ROADMAP.md`
 
 Required historical audit files remain at the repository root because existing release guards still validate them. Do not add new strategy to the archived files.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

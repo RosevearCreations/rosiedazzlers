@@ -55,3 +55,7 @@ A completed decision register is necessary but not sufficient. The next technica
 ## Build 220 readiness packet note
 
 Build 220 adds `16_DAIP_Phase_1_Readiness_Packet.md`. It is the owner meeting worksheet after the Build 218 test evidence and Build 219 governed decisions are available. It does not change Gate A/B calculation, unlock Gate C, or create infrastructure. Use it to decide whether we are ready to commission a separate *written* private-MVP design review; keep Gates C–F held until that later work is independently built and accepted.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

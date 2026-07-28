@@ -18,3 +18,7 @@ Build 226 adds `/admin-daip-intake-dry-run.html` for fictional manifest validati
 4. Save one deliberately rejected manifest using an oversized image or invalid fictional checksum.
 5. Confirm the screen reports zero media bytes, zero storage authorizations, zero worker executions, and zero public destinations.
 6. Confirm anon/authenticated database roles cannot read the three Build 226 tables.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

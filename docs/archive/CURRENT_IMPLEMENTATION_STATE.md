@@ -818,3 +818,7 @@ The latest pass completes the editable-operations wiring layer: structured edita
 ## Build 197 implementation state
 
 Admin Dashboard now includes pricing catalog diagnostics/repair and route-copy parity checks. Admin App landing editors now show SEO/readiness previews and public preview links.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

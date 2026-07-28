@@ -35,3 +35,7 @@ All other root Markdown and older build documents remain read-only evidence unti
 Until those five conditions are met, deleting or moving old Markdown creates more risk than value.
 
 Historical moves require release-guard dependencies to be mapped and modernized first.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

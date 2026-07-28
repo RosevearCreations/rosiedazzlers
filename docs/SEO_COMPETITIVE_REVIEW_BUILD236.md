@@ -27,3 +27,7 @@ Current detailer sites continue to make service descriptions, pricing/context, b
 - No schema content that is absent from the visible page.
 - No automatic publication of unapproved customer media.
 - No multiple competing H1 headings on public pages.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

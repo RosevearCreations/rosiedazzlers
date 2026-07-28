@@ -65,3 +65,7 @@ Build 218 does **not** close any DAIP-0 decision. It only permits a metadata-onl
 ## Build 219 operational note
 
 Build 219 adds `/admin-daip-governance.html` as the controlled place to save DAIP-0 drafts and owner approvals. The screen mirrors this register but does not close a decision automatically, enable production media capability, or replace the requirement for an owner-reviewed answer. The canonical decision questions remain the twelve rows above.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

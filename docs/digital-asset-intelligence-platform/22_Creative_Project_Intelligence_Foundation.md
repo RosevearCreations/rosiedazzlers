@@ -13,3 +13,7 @@ A new project seeds review records for YouTube video, YouTube Shorts, Instagram 
 ## Safety boundary
 
 No output publishes automatically. Public publishing defaults off. Consent review remains separate. Build 228 stores no DAIP file bytes and does not bypass DAIP Gate C.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

@@ -167,3 +167,7 @@ No DAIP phase is complete because a worker runs. It is complete only when an own
 ## Build 216 governance update
 
 Build 216 adds the DAIP-0 decision register and the DAIP-1 future acceptance template. Both are planning controls only. A DAIP implementation pass remains blocked until all DAIP-0 rows are owner-approved and an internal test job is selected.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

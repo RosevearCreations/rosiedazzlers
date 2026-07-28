@@ -63,3 +63,7 @@ Only after Gates A–E pass may a limited internal-first production pilot be pro
 ## Build 219 governance evidence
 
 Build 219 makes Gate A and Gate B observable in `/admin-daip-governance.html`. Gate A is ready only when all twelve DAIP-0 decisions have recorded owner approval. Gate B is ready only when the Build 218 Test Lab control is safe and all three internal-test acceptance cases have latest recorded Pass results. Gates C–F remain held in Build 219 and cannot be advanced by decision entry alone.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

@@ -20,3 +20,7 @@ Project-to-DAIP association remains dependent on the existing Gate C acceptance 
 ## Standard jobs
 
 Normal customer bookings remain unchanged. All Build 231 costing, learning and content-planning records exist only when staff explicitly use a Creative Project.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

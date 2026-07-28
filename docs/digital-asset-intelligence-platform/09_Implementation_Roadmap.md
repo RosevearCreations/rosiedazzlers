@@ -255,3 +255,7 @@ Build 218 starts the DAIP process in a narrow, non-production test mode. It impl
 **Not implemented:** object storage, upload, signed URLs, Google Drive, worker execution, proxy/thumbnail/contact sheets, AI, public exports, gallery handoff, customer access, social/content flow, and automatic publishing.
 
 **Current phase label:** `DAIP-1A — internal test registry`. Do not mark Phase 1 complete merely because the test registry works. Phase 1 production storage/worker work remains blocked by DAIP-0 owner decisions and the promotion gates in `14_DAIP_Production_Promotion_Gates.md`.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

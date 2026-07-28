@@ -62,3 +62,7 @@ Never include credentials, real account IDs, URLs, signed links, bucket names, o
 ## Production boundary
 
 A Build 222 readiness record can become stale if a DAIP-0 decision is reopened or the latest internal safety evidence is no longer passing. In either case, return to Governance, correct the evidence, and create a new readiness review. There is no automatic advance to Gate C.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

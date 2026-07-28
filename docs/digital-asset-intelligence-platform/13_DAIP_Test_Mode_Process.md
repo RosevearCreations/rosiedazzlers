@@ -57,3 +57,7 @@ Stop the DAIP path immediately if any real/customer data is entered, any public/
 ## Promotion boundary
 
 Build 218 is **DAIP-1A: internal test registry**, not DAIP production. The next phase requires every DAIP-0 owner decision, successful Build 218 guided results, a reviewed worker/storage design, fixed cost ceiling, retention rules, consent wording, and a separate migration that introduces only the smallest approved storage/worker capability.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

@@ -196,3 +196,7 @@ Use the provider’s current official documentation because menus, API permissio
 - Cloudflare Pages documentation for Variables and Secrets
 
 This guide is an operational implementation guide, not legal advice. Before enabling production marketing measurement or audience use, review the privacy notice and consent approach for the jurisdictions where Rosie Dazzlers operates and markets.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

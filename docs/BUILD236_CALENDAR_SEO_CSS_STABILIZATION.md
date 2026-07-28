@@ -126,3 +126,7 @@ Static validation cannot replace the deployed schedule, booking, payment, email,
 ## Sanity conclusion
 
 The application is broad enough to begin a controlled soft launch after the real booking, payment, email, backup, legal, mobile, security, and schedule tests are completed. The highest-value work is no longer another large subsystem. It is proving the existing customer journey end to end, replacing the most visible placeholders with approved local evidence, cleaning inventory/product data, and watching the first transactions closely while development continues in the background.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

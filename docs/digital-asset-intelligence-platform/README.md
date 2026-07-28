@@ -237,3 +237,7 @@ Build 222 adds `/admin-daip-readiness.html`, `sql/2026-07-04_build222_daip_phase
 Build 223 adds `/admin-daip-design.html`, `sql/2026-07-05_build223_daip_private_mvp_design_blueprint.sql`, and `18_DAIP_Private_MVP_Design_Blueprint_Review.md`. The page stores only a safe written blueprint for independent review after a current Build 222 authorization. It creates no storage, upload/download, signed-link, worker, processing, AI, customer-media, export, Gallery/Social/GBP handoff, or publishing path. Gate C remains held.
 
 - `21_DAIP_Metadata_Only_Intake_Dry_Run.md` — Build 226 fictional manifest validation; Gate C remains held.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

@@ -557,3 +557,7 @@ Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_b
 5. Save a draft twice and verify a version-history row exists.
 6. Prepare and download a JSON archive; confirm media/public destinations are absent.
 7. Confirm standard bookings and inventory quantities do not change.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

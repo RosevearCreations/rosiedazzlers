@@ -140,3 +140,7 @@ Review screens must allow:
 DAIP can become a major Rosie Dazzlers competitive advantage.
 
 Most local detailing businesses post occasional before/after photos manually. DAIP would allow Rosie Dazzlers to turn every job into a structured, polished, privacy-safe content package for multiple platforms.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

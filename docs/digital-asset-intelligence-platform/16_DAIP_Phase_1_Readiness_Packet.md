@@ -84,3 +84,7 @@ At the end of the readiness meeting choose one status:
 - **Paused:** document the business reason, review date, and restart owner.
 
 Only a later release may add the first strictly private storage/upload design, and only after a separate acceptance plan says exactly what is enabled and what remains blocked.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

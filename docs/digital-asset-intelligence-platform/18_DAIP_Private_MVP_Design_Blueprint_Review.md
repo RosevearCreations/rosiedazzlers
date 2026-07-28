@@ -68,3 +68,7 @@ The reviewer should determine whether the future Gate C technical proposal can b
 ## What comes next
 
 After an independent written review accepts the *proposal*, commission a separate Gate C implementation review. That review must be narrow: no real customer media, no public destination, no automatic publish, a private storage boundary, server-controlled access, validation, retention/legal hold, cost telemetry, rollback, and a test-only acceptance plan. Do not merge any storage or upload code into the application until the separate Gate C review is completed and recorded.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

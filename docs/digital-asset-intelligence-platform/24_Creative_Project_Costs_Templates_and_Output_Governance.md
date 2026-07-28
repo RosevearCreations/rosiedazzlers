@@ -21,3 +21,7 @@ Booking unlink preserves both records. Archive preserves all sessions, cost line
 ## DAIP boundary
 
 Project-to-DAIP association is server blocked until the latest Gate C review is accepted and the protected DAIP policy has both `gate_c_held=false` and `technical_capability_enabled=true`. The association itself is metadata-only and database constraints prohibit media bytes and public destinations.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.

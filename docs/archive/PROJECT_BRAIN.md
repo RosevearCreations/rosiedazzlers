@@ -711,3 +711,7 @@ Build 197 was reviewed during the self-healing admin diagnostics pass. Relevant 
 ## Build 198 documentation sync — Friendly editors for formerly raw JSON areas
 
 Build 198 converts routine owner/admin updates for social feeds, before/after gallery rows, and water-use rules into friendly row-based screens. The underlying JSON remains available only as an Advanced/emergency repair and fallback-sync view. No database schema changes are required for this pass; the existing `app_management_settings` and water-rule settings flow remain the source of truth with bundled JSON fallback support.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
