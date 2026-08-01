@@ -1,56 +1,66 @@
-# Rosie Dazzlers Startup and Go-Live Blocker Guide — Build 238
+# Rosie Dazzlers Startup and Go-Live Blocker Guide — Build 239
 
-**Updated:** July 30, 2026  
-**Purpose:** One detailed, ordered checklist of every known item that can delay a confident launch. Work through launch blockers first, record evidence, and do not skip to the next item until the stated completion condition is met.
+**Updated:** August 1, 2026  
+**Primary interface:** `/admin-startup-guide.html`  
+**Purpose:** The single detailed authority for every known item holding back a confident launch. Build 239 preserves every Build 238 item and incorporates Launch Readiness, Production Readiness, guided production testing, current roadmap execution, SEO/local proof, and recovery work into one interface.
 
-## How to use this document
+## How to use the single Startup Command Center
 
-1. Open the exact page or outside service named under **Where to find it**.
-2. Follow the instructions in order. Do not store passwords, API keys, card details or private customer content in evidence notes.
-3. Record the result in `/admin-launch-readiness.html` and update the matching row in `/admin-roadmap-execution.html`.
-4. Move forward only when the **Move to the next item when** condition is true.
+1. Open `/admin-startup-guide.html`. Do not maintain a separate preflight checklist elsewhere.
+2. Start on **Overview**, then use **Blockers & instructions**, **Evidence**, **Production readiness**, **Guided tests**, **Next 20 roadmap**, and **SEO & local proof**.
+3. Open the exact route or outside service listed for the current item.
+4. Follow the numbered instructions in order. Never put passwords, API keys, card details, private customer content, or sensitive media in evidence notes.
+5. Record safe evidence in the same Startup Command Center and move on only when the stated completion condition is true.
+6. The old `/admin-launch-readiness`, `/admin-production`, `/admin-test-centre`, and `/admin-roadmap-execution` routes remain only as compatibility redirects to the appropriate Startup section.
+7. Guided production acceptance tests are incorporated into the **Guided tests** section; they are no longer a separate current prelaunch checklist.
 
 ## Current launch position
 
-- Build 238 source includes transactional inventory bulk updates, reviewed duplicate merge, readable audit history/CSV export, audit evidence, cached read-only inventory fallback, SEO title/description tightening and new release guards.
-- Source completion is not production proof. Database migrations, Cloudflare deployment, real payment/email tests, backup restore, policies, accessibility, mobile, Search Console and controlled soft-launch evidence remain required.
-- Google local ranking cannot be guaranteed. The practical direction remains accurate service/location content, complete Business Profile information, approved local photos, reviews, internal links, clear titles and one primary H1.
+- Source code includes a unified command centre, database-backed process catalog, packaged read-only fallback, shared evidence, production health, guided tests, current roadmap editing, transactional inventory tools, reviewed duplicate merge, and detailed recovery instructions.
+- Source completion is not production proof. Migrations, deployment, payment/refund, notification delivery, backup/restore, rollback, legal review, real-device testing, accessibility, Search Console, Business Profile, inventory/product completion, and a controlled soft launch still require real evidence.
+- Google does not provide a legitimate first-page guarantee. The durable direction remains accurate relevance, real service-area information, approved local proof, legitimate reviews, useful content, concise titles, one primary H1, strong mobile performance, and consistent business information.
 
-## 1. Deploy Build 238 and verify shared CSS, scripts and clean routes
+## Ordered startup and go-live items
+
+## 1. Deploy Build 239 and verify the unified Startup Command Center
 
 **Priority:** Launch blocker  
-**Category:** Deployment and CSS
+**Category:** Deployment and CSS  
+**Evidence key:** `deploy_239`
 
 ### Why this matters
 
-Build 238 depends on the shared site stylesheet, AdminShell, Inventory Workbench scripts and clean-route copies loading together. Cached or partial deployments can make pages appear unstyled or leave new controls unavailable.
+Build 239 consolidates Startup, Launch Readiness, Production Readiness, guided testing, and roadmap execution into one protected interface. A partial or cached deployment could leave old standalone pages or mismatched assets active.
 
 ### Where to find it
 
 - Cloudflare Pages → Deployments → preview branch
-- /admin-roadmap-execution
-- /admin-inventory-manager
+- /admin-startup-guide
+- /admin-launch-readiness
+- /admin-production
+- /admin-test-centre
 - Browser DevTools → Network and Console
 
 ### Detailed instructions
 
-1. Deploy Build 238 to the preview/development branch.
-2. Open /admin-roadmap-execution and /admin-inventory-manager in a private browser window.
-3. Press Ctrl+Shift+R to bypass browser and service-worker caches.
-4. In DevTools Network, confirm /assets/site.css and required admin scripts return HTTP 200.
-5. Confirm both .html and clean routes have the same layout and controls.
-6. Confirm there are no stylesheet 404, AdminShell, syntax or uncaught fetch errors.
+1. Deploy Build 239 to the preview/development branch.
+2. Open /admin-startup-guide in a private browser window and press Ctrl+Shift+R.
+3. Confirm the Overview, Blockers, Evidence, Production, Guided Tests, and Roadmap sections all load.
+4. Open /admin-launch-readiness, /admin-production, and /admin-test-centre and confirm each forwards to the matching Startup Command Center section.
+5. In DevTools Network, confirm /assets/site.css, AdminShell, AdminMenu, the startup catalog API, and readiness APIs return HTTP 200 or show a clearly labelled fallback.
+6. Repeat the check at phone width and confirm the section navigation, cards, tables, dialogs, and action buttons remain usable.
 
 ### Move to the next item when
 
-Roadmap Execution and Inventory Workbench use the Rosie admin theme on desktop and mobile, clean routes match, and no required CSS or script request fails.
+The unified Startup Command Center is the only normal prelaunch workspace, legacy readiness routes forward safely, all sections work on desktop and mobile, and no required CSS/script/API request fails.
 
 ---
 
 ## 2. Apply the Build 237 database migration
 
 **Priority:** Launch blocker  
-**Category:** Database migrations
+**Category:** Database migrations  
+**Evidence key:** `migration_237`
 
 ### Why this matters
 
@@ -80,7 +90,8 @@ The two pages report shared/database evidence rather than browser-only fallback 
 ## 3. Apply the Build 238 inventory transaction and merge migration
 
 **Priority:** Launch blocker  
-**Category:** Database migrations
+**Category:** Database migrations  
+**Evidence key:** `migration_238`
 
 ### Why this matters
 
@@ -110,10 +121,44 @@ Both new RPC functions can complete dry-run previews, the three audit tables exi
 
 ---
 
-## 4. Retest the repaired Block Calendar against public booking
+## 4. Apply the Build 239 unified Startup Command Center migration
 
 **Priority:** Launch blocker  
-**Category:** Booking and scheduling
+**Category:** Database migrations  
+**Evidence key:** `migration_239`
+
+### Why this matters
+
+The detailed startup catalog should have one database source of truth instead of being duplicated across JSON, Markdown, launch-readiness cards, production checks, and roadmap notes. The static catalog remains only as a safe read-only fallback.
+
+### Where to find it
+
+- Supabase Dashboard → SQL Editor
+- sql/2026-08-01_build239_unified_startup_command_center.sql
+- Supabase Dashboard → Table Editor → app_startup_process_items
+- /admin-startup-guide.html
+
+### Detailed instructions
+
+1. Confirm the Build 237 and Build 238 migrations have been applied.
+2. Open sql/2026-08-01_build239_unified_startup_command_center.sql from the build package.
+3. Run the complete migration in staging/preview first.
+4. Confirm app_startup_process_items and app_startup_process_audit exist.
+5. Confirm the table contains every current blocker and no Build 238 blocker was removed.
+6. Reload /admin-startup-guide.html and confirm the source badge says Shared database catalog instead of Packaged fallback.
+7. Change one evidence status, one guided test result, and one roadmap row; refresh on another browser/device and confirm the shared state remains.
+
+### Move to the next item when
+
+The Startup Command Center loads every detailed process from the database, all existing items remain present, shared evidence/tests/roadmap persist across devices, and the static JSON is used only during migration or outage.
+
+---
+
+## 5. Retest the repaired Block Calendar against public booking
+
+**Priority:** Launch blocker  
+**Category:** Booking and scheduling  
+**Evidence key:** `block_calendar`
 
 ### Why this matters
 
@@ -141,10 +186,11 @@ Full-date, AM and PM changes persist after refresh and the public booking wizard
 
 ---
 
-## 5. Complete one end-to-end booking test
+## 6. Complete one end-to-end booking test
 
 **Priority:** Launch blocker  
-**Category:** Booking and scheduling
+**Category:** Booking and scheduling  
+**Evidence key:** `booking_e2e`
 
 ### Why this matters
 
@@ -171,10 +217,11 @@ The customer and admin views agree and no manual database correction is needed.
 
 ---
 
-## 6. Complete and refund a small live Stripe payment
+## 7. Complete and refund a small live Stripe payment
 
 **Priority:** Launch blocker  
-**Category:** Payments
+**Category:** Payments  
+**Evidence key:** `stripe_live`
 
 ### Why this matters
 
@@ -203,10 +250,11 @@ Payment, webhook, receipt, refund and accounting views agree on the final state.
 
 ---
 
-## 7. Verify every required email reaches an external inbox
+## 8. Verify every required email reaches an external inbox
 
 **Priority:** Launch blocker  
-**Category:** Notifications
+**Category:** Notifications  
+**Evidence key:** `email_delivery`
 
 ### Why this matters
 
@@ -233,10 +281,11 @@ All required messages arrive, render clearly and contain working links.
 
 ---
 
-## 8. Audit Cloudflare production variables and bindings
+## 9. Audit Cloudflare production variables and bindings
 
 **Priority:** Launch blocker  
-**Category:** Deployment and security
+**Category:** Deployment and security  
+**Evidence key:** `environment`
 
 ### Why this matters
 
@@ -263,10 +312,11 @@ Every required integration has an intentional production value/binding and no se
 
 ---
 
-## 9. Test backup and restore, not just backup availability
+## 10. Test backup and restore, not just backup availability
 
 **Priority:** Launch blocker  
-**Category:** Recovery
+**Category:** Recovery  
+**Evidence key:** `backups`
 
 ### Why this matters
 
@@ -293,10 +343,11 @@ A documented rehearsal proves data can be recovered and accessed through the app
 
 ---
 
-## 10. Review all policies before accepting unrestricted orders
+## 11. Review all policies before accepting unrestricted orders
 
 **Priority:** Launch blocker  
-**Category:** Policies and customer trust
+**Category:** Policies and customer trust  
+**Evidence key:** `legal`
 
 ### Why this matters
 
@@ -326,10 +377,11 @@ Published policy wording matches real operations and every checkout/booking link
 
 ---
 
-## 11. Verify staff permissions, sessions and protected APIs
+## 12. Verify staff permissions, sessions and protected APIs
 
 **Priority:** Launch blocker  
-**Category:** Deployment and security
+**Category:** Deployment and security  
+**Evidence key:** `security`
 
 ### Why this matters
 
@@ -358,10 +410,11 @@ Server-side authorization, session expiry/logout and database containment are pr
 
 ---
 
-## 12. Complete real-device mobile testing
+## 13. Complete real-device mobile testing
 
 **Priority:** High priority  
-**Category:** Mobile and accessibility
+**Category:** Mobile and accessibility  
+**Evidence key:** `mobile`
 
 ### Why this matters
 
@@ -391,10 +444,11 @@ All primary customer and staff tasks can be completed without zooming, clipped c
 
 ---
 
-## 13. Complete keyboard, focus, labels and contrast review
+## 14. Complete keyboard, focus, labels and contrast review
 
 **Priority:** High priority  
-**Category:** Mobile and accessibility
+**Category:** Mobile and accessibility  
+**Evidence key:** `accessibility`
 
 ### Why this matters
 
@@ -422,10 +476,11 @@ Critical flows are usable by keyboard and at high zoom with clear labels, focus 
 
 ---
 
-## 14. Complete Search Console, sitemap, canonical and schema preflight
+## 15. Complete Search Console, sitemap, canonical and schema preflight
 
 **Priority:** High priority  
-**Category:** SEO and local visibility
+**Category:** SEO and local visibility  
+**Evidence key:** `search`
 
 ### Why this matters
 
@@ -454,10 +509,11 @@ The sitemap is accepted, important pages are inspectable/indexable, admin pages 
 
 ---
 
-## 15. Complete and align Google Business Profile
+## 16. Complete and align Google Business Profile
 
 **Priority:** High priority  
-**Category:** SEO and local visibility
+**Category:** SEO and local visibility  
+**Evidence key:** `business_profile`
 
 ### Why this matters
 
@@ -486,10 +542,11 @@ The profile is verified, complete, accurate and consistent with the production w
 
 ---
 
-## 16. Clean inventory records before relying on product sales and job costing
+## 17. Clean inventory records before relying on product sales and job costing
 
 **Priority:** High priority  
-**Category:** Inventory and products
+**Category:** Inventory and products  
+**Evidence key:** `inventory_cleanup`
 
 ### Why this matters
 
@@ -517,10 +574,11 @@ Every active/sellable row has a clear name, classification, category, cost and i
 
 ---
 
-## 17. Complete product image sets and metadata
+## 18. Complete product image sets and metadata
 
 **Priority:** High priority  
-**Category:** Inventory and products
+**Category:** Inventory and products  
+**Evidence key:** `product_images`
 
 ### Why this matters
 
@@ -548,10 +606,11 @@ Every sellable product has a reliable featured image, useful gallery and accurat
 
 ---
 
-## 18. Verify pricing, deposits, HST and final totals
+## 19. Verify pricing, deposits, HST and final totals
 
 **Priority:** Launch blocker  
-**Category:** Payments
+**Category:** Payments  
+**Evidence key:** `pricing_tax`
 
 ### Why this matters
 
@@ -581,10 +640,11 @@ The same selected service produces the same subtotal, tax, deposit and total eve
 
 ---
 
-## 19. Verify analytics and conversion events in production
+## 20. Verify analytics and conversion events in production
 
 **Priority:** High priority  
-**Category:** SEO and local visibility
+**Category:** SEO and local visibility  
+**Evidence key:** `analytics`
 
 ### Why this matters
 
@@ -611,10 +671,11 @@ Core conversion events arrive once, contain no sensitive customer data and can b
 
 ---
 
-## 20. Prepare production monitoring and incident response
+## 21. Prepare production monitoring and incident response
 
 **Priority:** High priority  
-**Category:** Recovery
+**Category:** Recovery  
+**Evidence key:** `monitoring`
 
 ### Why this matters
 
@@ -644,10 +705,11 @@ A named owner can detect, classify, communicate and roll back a critical failure
 
 ---
 
-## 21. Use an invite-only soft launch before unrestricted public promotion
+## 22. Use an invite-only soft launch before unrestricted public promotion
 
 **Priority:** Launch blocker  
-**Category:** Go-live decision
+**Category:** Go-live decision  
+**Evidence key:** `operations`
 
 ### Why this matters
 
@@ -676,10 +738,11 @@ Several real transactions complete without critical manual correction and monito
 
 ---
 
-## 22. Test the reviewed duplicate inventory merge workflow
+## 23. Test the reviewed duplicate inventory merge workflow
 
 **Priority:** High priority  
-**Category:** Inventory and products
+**Category:** Inventory and products  
+**Evidence key:** `inventory_merge_238`
 
 ### Why this matters
 
@@ -711,10 +774,11 @@ A staging merge preserves history, transfers known references, records compensat
 
 ---
 
-## 23. Test transactional bulk inventory updates and rollback behaviour
+## 24. Test transactional bulk inventory updates and rollback behaviour
 
 **Priority:** High priority  
-**Category:** Inventory and products
+**Category:** Inventory and products  
+**Evidence key:** `inventory_bulk_rpc_238`
 
 ### Why this matters
 
@@ -745,10 +809,11 @@ Valid batches update every selected row together, invalid batches change none, b
 
 ---
 
-## 24. Generate responsive product/gallery image derivatives
+## 25. Generate responsive product/gallery image derivatives
 
 **Priority:** Planned next work  
-**Category:** Media and performance
+**Category:** Media and performance  
+**Evidence key:** `Roadmap status only`
 
 ### Why this matters
 
@@ -776,10 +841,11 @@ Public product/gallery pages load appropriately sized images with stable layout 
 
 ---
 
-## 25. Retire redundant Markdown only after release guards are modernized
+## 26. Retire redundant Markdown only after release guards are modernized
 
 **Priority:** Planned next work  
-**Category:** Documentation
+**Category:** Documentation  
+**Evidence key:** `Roadmap status only`
 
 ### Why this matters
 
@@ -809,14 +875,267 @@ A new developer can find current direction in two files and historical evidence 
 
 ---
 
-> Build 238 synchronization (2026-07-30): current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This Startup Guide is the detailed go-live authority. Historical Markdown remains audit/reference material until release guards are modernized.
+## 27. Verify notification provider and delivery-queue health
 
-> **Build 210 documentation sync:** Retained and synchronized under current Build 238 documentation authority.
+**Priority:** Launch blocker  
+**Category:** Production communications  
+**Evidence key:** `notification_health`
 
-> **Build 211 documentation sync:** Retained and synchronized under current Build 238 documentation authority.
+### Why this matters
 
-> **Build 212 documentation sync:** Retained and synchronized under current Build 238 documentation authority.
+A configured email webhook is not enough. Queued or failed customer and staff messages can cause missed bookings, payment confusion, and consent failures.
 
-> **Build 213 documentation sync:** Retained and synchronized under current Build 238 documentation authority.
+### Where to find it
 
-> **Build 214 documentation sync:** Retained and synchronized under current Build 238 documentation authority.
+- /admin-startup-guide.html#production
+- Cloudflare → Workers & Pages → Settings → Variables
+- Notification provider dashboard
+
+### Detailed instructions
+
+1. Open the Startup Command Center Production section and refresh the report.
+2. Confirm the email provider is configured before using Send test.
+3. Use Check config only first, then send exactly one message to a Rosie-controlled external inbox.
+4. Confirm the message arrives on desktop and mobile and inspect spam/junk.
+5. Review failed and queued notification counts; repair the provider or retry path before launch.
+6. Record the receive time and safe provider result in evidence without storing addresses, secrets, or message content.
+
+### Move to the next item when
+
+The provider test succeeds, the controlled inbox receives the message, and failed/queued notification counts are zero or have a documented accepted reason.
+
+---
+
+## 28. Verify hosted final-balance links, webhook evidence, and reconciliation
+
+**Priority:** Launch blocker  
+**Category:** Payments  
+**Evidence key:** `payment_links`
+
+### Why this matters
+
+Customers need a dependable way to pay the remaining balance. A checkout URL alone is not proof that payment status, webhook processing, receipt, refund, and accounting records agree.
+
+### Where to find it
+
+- /admin-startup-guide.html#production
+- Stripe Dashboard → Developers → Webhooks
+- /admin-accounting.html
+
+### Detailed instructions
+
+1. Create a small internal final-balance request.
+2. From the Production section, create a hosted checkout link and confirm the amount, currency, branding, and customer reference.
+3. Complete the test in Stripe test mode first, then perform the separately approved small live-payment test.
+4. Confirm webhook receipt, payment-request status, receipt, ledger/journal evidence, and customer/admin history agree.
+5. Issue the planned test refund and confirm the refund appears in Stripe and the application records.
+6. Record only safe IDs, timestamps, and outcomes in Startup evidence.
+
+### Move to the next item when
+
+A hosted link works, payment and refund webhooks are recorded, receipt and accounting evidence agree, and the manual fallback remains available.
+
+---
+
+## 29. Prove mobile photo/video upload interruption and recovery
+
+**Priority:** High priority  
+**Category:** Field reliability  
+**Evidence key:** `upload_recovery`
+
+### Why this matters
+
+Detailing proof and customer updates are captured in the field, where connections can be weak. Silent loss or duplicate media would damage trust and job records.
+
+### Where to find it
+
+- /admin-startup-guide.html#tests
+- /detailer-jobs.html
+- /admin-startup-guide.html#production
+
+### Detailed instructions
+
+1. Use a test booking and non-sensitive photo/video on a real phone.
+2. Upload a small photo and confirm visible progress and completion.
+3. Begin a short video upload, switch networks or briefly interrupt connectivity, and confirm a useful retry/cancel state appears.
+4. Restore connectivity and retry once.
+5. Confirm the final media exists once, has the correct visibility, and any failed session appears in Production readiness for review.
+6. Record device, browser, connection type, approximate file size, and outcome.
+
+### Move to the next item when
+
+Photo and video uploads show progress, interruption produces a recoverable state, retry does not duplicate media, and failed sessions are visible to staff.
+
+---
+
+## 30. Complete media retention, legal-hold, and cleanup review
+
+**Priority:** High priority  
+**Category:** Privacy and storage  
+**Evidence key:** `retention_review`
+
+### Why this matters
+
+Unlimited storage increases cost and privacy exposure, while aggressive deletion could remove proof needed for disputes, taxes, or consent records.
+
+### Where to find it
+
+- /admin-startup-guide.html#production
+- /admin-media.html
+- Supabase/R2 storage dashboards
+
+### Detailed instructions
+
+1. Open the Production section and run retention in dry-run mode only.
+2. Review every candidate by booking, media type, stage, consent, incident/legal-hold status, and retention policy.
+3. Confirm permanent proof and legal-hold items are excluded.
+4. Correct any missing policy or expiry date before marking records for review.
+5. Approve deletion only through the documented storage-cleanup process; do not manually delete referenced objects.
+6. Record candidate counts, exclusions, reviewer, and date.
+
+### Move to the next item when
+
+Dry-run candidates are explainable, protected evidence is excluded, referenced objects are not orphaned, and an approved cleanup/restore procedure is documented.
+
+---
+
+## 31. Verify incident closeout, privacy, and review-request safety
+
+**Priority:** Launch blocker  
+**Category:** Customer protection  
+**Evidence key:** `incident_closeout`
+
+### Why this matters
+
+An unresolved issue or private incident note must never be exposed to a customer or followed immediately by an automated review request.
+
+### Where to find it
+
+- /admin-startup-guide.html#tests
+- /admin-incident-reports.html
+- /admin-workflow.html
+- Customer progress link in a private browser
+
+### Detailed instructions
+
+1. Create a harmless internal test incident on a test booking.
+2. Confirm staff-only notes and evidence remain hidden from the signed-out customer progress view.
+3. Publish only specifically approved customer-safe wording.
+4. Confirm booking closeout or review-request automation is blocked while the incident is unresolved.
+5. Resolve the test incident with an auditable decision and verify the review workflow follows the documented policy.
+6. Remove or archive test data according to the test-data policy.
+
+### Move to the next item when
+
+Private material never appears to the customer, unresolved incidents block unsafe closeout/review automation, and resolution creates complete audit evidence.
+
+---
+
+## 32. Complete a deployment rollback and incident-response drill
+
+**Priority:** Launch blocker  
+**Category:** Deployment and recovery  
+**Evidence key:** `rollback_drill`
+
+### Why this matters
+
+Backups protect data, but a bad frontend/function deployment also needs a fast, rehearsed rollback path with owners and verification steps.
+
+### Where to find it
+
+- Cloudflare Pages → Deployments
+- /admin-startup-guide.html#production
+- STARTUP_GO_LIVE_BLOCKERS.md
+- docs/PRODUCTION_TEST_GUIDE.md
+
+### Detailed instructions
+
+1. Choose a safe preview deployment and identify the previous known-good deployment.
+2. Document who can trigger rollback and where the control is located.
+3. Roll preview back or promote a known-good preview in a controlled rehearsal.
+4. Verify home, booking, login, Block Calendar, Startup Command Center, payment endpoint health, and database connectivity after rollback.
+5. Restore the latest build and repeat the smoke check.
+6. Record timestamps, owner, deployment IDs, observed downtime, and any missing permissions.
+
+### Move to the next item when
+
+A named owner can restore a known-good deployment, critical smoke tests pass after rollback, and the written incident path is usable without guessing.
+
+---
+
+## 33. Establish an approved local-photo, review, and Business Profile cadence
+
+**Priority:** High priority  
+**Category:** Local SEO and trust  
+**Evidence key:** `local_proof_cadence`
+
+### Why this matters
+
+Local visibility depends on accurate relevance signals and real prominence. Fresh approved work, complete profile information, and legitimate reviews are more valuable than duplicated keyword pages.
+
+### Where to find it
+
+- /admin-startup-guide.html#blockers
+- Google Business Profile → Photos, Services, Reviews, Performance
+- /gallery.html
+- /admin-gallery.html
+- Search Console
+
+### Detailed instructions
+
+1. Confirm the Business Profile name, primary category, service areas, phone, hours, website, and services match the live site and real-world operation.
+2. Replace the highest-value public placeholders with Rosie-owned, consent-approved before/after work.
+3. Add descriptive alt text and connect proof to the relevant service/town page without duplicating thin pages.
+4. Create a repeatable post-job review request that follows Google policy and pauses for unresolved incidents.
+5. Schedule a weekly profile/photo/review-response check and a monthly Search Console/local landing-page review.
+6. Record the first completed cycle and the next review date.
+
+### Move to the next item when
+
+The profile and website agree, priority pages show authentic approved proof, review requests are policy-safe, and a repeatable local visibility cadence has an owner.
+
+---
+
+## 34. Retire duplicate preflight navigation and train staff on one Startup Command Center
+
+**Priority:** High priority  
+**Category:** Documentation and operations  
+**Evidence key:** `startup_single_interface`
+
+### Why this matters
+
+Even correct checks become unreliable when staff must guess between Startup Guide, Launch Readiness, Production, Guided Tests, and Roadmap pages.
+
+### Where to find it
+
+- /admin-startup-guide.html
+- Admin Menu
+- AI_PROJECT_HANDOFF.md
+- STARTUP_GO_LIVE_BLOCKERS.md
+
+### Detailed instructions
+
+1. Confirm the Admin Menu has one Startup Command Center entry.
+2. Confirm old readiness URLs forward to the appropriate Startup section and remain available only for compatibility.
+3. Update internal instructions, bookmarks, and screenshots to use /admin-startup-guide.html.
+4. Train each staff role on Overview, Blockers, Evidence, Production, Tests, and Roadmap tabs.
+5. Confirm permissions allow required staff to view or update only the sections they are authorized to use.
+6. After one complete test cycle, remove duplicate wording from living documentation while retaining historical release evidence.
+
+### Move to the next item when
+
+Staff use one interface for launch work, legacy links forward safely, permissions are correct, and no current document instructs staff to maintain a separate preflight checklist.
+
+---
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- Historical release guard marker: Startup and Go-Live Blocker Guide — Build 238 -->
+
+<!-- Historical release synchronization markers retained for automated guards. -->
+Build 210 documentation sync
+Build 211 documentation sync
+Build 212 documentation sync
+Build 213 documentation sync
+Build 214 documentation sync
+> **Build 238 synchronization (2026-07-30):** Historical release evidence retained; current launch authority is Build 239.

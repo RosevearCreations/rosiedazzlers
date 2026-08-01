@@ -1141,3 +1141,8 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 ---
 
 > **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+## Build 239 sanity check
+
+The application now has one clear launch operating interface and three current authority documents. CSS, one-H1, route-copy, API syntax, schema, fallback, and historical release guards must pass before packaging. Go-live confidence still depends on real environment and business evidence listed in the Startup Command Center.
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
