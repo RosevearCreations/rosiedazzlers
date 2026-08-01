@@ -1,3 +1,36 @@
+# Development Roadmap — Build 238 Current Execution
+
+**Build 238 operational release:** source implementation is complete for the first two previously open inventory reliability items: transactional bulk updates and reviewed duplicate merge. They remain open for staging acceptance until the migration and exact tests below pass.
+
+## Completed in source
+
+- All-or-nothing inventory bulk RPC with dry-run preview and audit rows.
+- Duplicate merge RPC with preview, reference counts, compensating movements, gallery/tag consolidation, same-type/unit safeguards and duplicate soft archive.
+- Inventory Workbench controls for batch reasons, preview/commit, merge selection, cached read-only fallback and readable transaction/merge history with CSV export.
+- Build 238 Startup Guide, Roadmap Execution fallback, SEO metadata cleanup and release guard coverage.
+
+## Acceptance work now required
+
+1. Apply `sql/2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql` in staging.
+2. Use two deliberately created test duplicates of the same item type and compatible unit.
+3. Preview the merge; compare every reference count with Supabase rows.
+4. Execute; confirm survivor quantity, archived duplicate, transferred references, movement evidence and merge audit.
+5. Preview a valid multi-row bulk update, then execute and inspect batch/row audits.
+6. Submit one invalid row in a test batch and confirm no selected row changed.
+7. Repeat on mobile and verify write controls remain disabled during cached/offline fallback.
+
+## Next engineering queue after acceptance
+
+- Add merge-audit viewer and export from the Inventory Workbench.
+- Add conflict-aware merge handling for future tables as they are introduced.
+- Add an authorized compensating reversal workflow rather than automatic unmerge.
+- Move real job inventory consumption and reservation posting into transactional RPCs.
+- Add resumable media uploads and responsive derivatives.
+- Add publish-readiness gates for price, inventory, image roles, alt text, consent and shipping/pickup settings.
+- Continue preflight, accessibility, performance, security and first-week monitoring work from the Startup Guide.
+
+---
+
 # Build 237 synchronization note
 
 Build 237 repairs missing CSS/AdminShell dependencies, adds a current-cycle roadmap, shared launch evidence and a detailed Startup Guide. The living roadmap is `MASTER_VALUE_ROADMAP.md`; this file remains synchronized release history.
@@ -2714,3 +2747,7 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 ---
 
 > **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.

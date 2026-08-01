@@ -1,3 +1,57 @@
+# Rosie Dazzlers — AI Project Handoff (Build 238)
+
+**Updated:** 2026-07-30  
+**Build 238 operational release:** transactional inventory changes, reviewed duplicate merge, stronger API/UI fallbacks, current-cycle startup guidance, SEO metadata tightening, CSS/route regression protection and synchronized schema/documentation.
+
+## Read order and authority
+
+1. `AI_PROJECT_HANDOFF.md` — current architecture, deployment state and engineering handoff.
+2. `MASTER_VALUE_ROADMAP.md` — current business/product direction and ordered next work.
+3. `STARTUP_GO_LIVE_BLOCKERS.md` — exact go-live blockers, where to find them, detailed instructions and completion evidence.
+4. `DEVELOPMENT_ROADMAP.md` and `KNOWN_GAPS_AND_RISKS.md` — operational detail and retained gap history; they do not override the first three files.
+
+## Build 238 source changes
+
+- Preserved the existing manual inventory editor, JSON tools, row editor, archive/restore, supplier importer and seven-image gallery.
+- Replaced browser-sequential bulk inventory writes with a **preview-first, all-or-nothing database RPC**. The complete batch is validated before any write; an error rolls back the batch. Header and row audit tables preserve actor, reason, before/after values and changed fields.
+- Added a **reviewed two-row duplicate merge**. It previews reference counts, proposed quantity and gallery results; requires an explicit reason and confirmation; transfers known references; records compensating inventory movements; keeps a merge audit; and archives the duplicate rather than hard deleting it.
+- Added same-type and compatible-unit merge protections to reduce accidental tool/supply or unit mismatches.
+- Added a cached **read-only Inventory Workbench fallback**. If the live list API is unavailable, the last successful inventory snapshot can still be searched while all write controls remain blocked.
+- Added protected endpoints: `/api/admin/catalog_inventory_bulk_update`, `/api/admin/catalog_inventory_merge` and read-only `/api/admin/catalog_inventory_audit_list`.
+- Added a readable **Transaction & merge history** dialog with recent batch/merge evidence and CSV export, so operators do not need to search Supabase tables for routine review.
+- Added migration: `sql/2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql`.
+- Updated the Roadmap Execution Centre to Build 238 and added a packaged `data/build238_next_steps.json` fallback.
+- Expanded the Startup Guide to 25 ordered items and added detailed migration, merge and rollback acceptance steps.
+- Tightened titles/descriptions on 19 public pages while retaining one clear H1, local service wording and distinct customer intent.
+- Bumped service-worker and compatibility stylesheet cache identifiers so older CSS does not mask the new release.
+
+## Deployment order
+
+1. Deploy the ZIP to the preview/development branch.
+2. Hard-refresh `/admin-roadmap-execution`, `/admin-startup-guide`, `/admin-inventory-manager`, `/admin-blocks` and representative public pages.
+3. Apply the Build 237 migration if shared launch evidence/current-cycle columns are not already present.
+4. Apply the Build 235 gallery migration if `gallery_image_urls` is not already present.
+5. Apply the Build 238 migration in staging.
+6. Preview a harmless bulk edit, execute it, verify all selected rows changed and inspect the batch audit.
+7. Deliberately preview an invalid mixed batch and confirm no row changes.
+8. Preview a known same-type/same-unit duplicate merge, verify reference counts, execute it, and confirm the survivor/archived duplicate/audit/movements.
+9. Continue through `STARTUP_GO_LIVE_BLOCKERS.md`; do not treat source completion as production acceptance.
+
+## Current launch position
+
+The application is feature-rich enough for an invite-only soft launch after the critical evidence is complete. Remaining launch risk is predominantly operational proof: booking/calendar consistency, live payment/refund/webhook evidence, notification delivery, Cloudflare production settings, backup/restore, policies/consent, real-device accessibility, Search Console/Business Profile verification, inventory cleanup, approved local media and controlled first-week monitoring.
+
+## Guardrails
+
+- Never guarantee first-page placement; improve relevance, accurate local information, prominence signals and technical quality.
+- Keep one H1 per exposed HTML page.
+- Do not hard-delete inventory rows with history.
+- Do not restore browser-by-browser JSON as the authoritative source for multi-user operational data.
+- Do not expose service-role credentials, payment secrets or private customer/media evidence in browser responses or Markdown.
+- Continue to preserve old Markdown and migrations until release guards are modernized and an archive manifest is approved.
+
+---
+
 # Build 237 current handoff — 2026-07-28
 
 - Fixes the missing CSS and AdminShell dependency on `/admin-roadmap-execution` and related historical admin pages.
@@ -702,3 +756,7 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 ---
 
 > **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.

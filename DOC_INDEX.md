@@ -1,3 +1,27 @@
+# Documentation Index — Build 238
+
+## Living authority
+
+1. `AI_PROJECT_HANDOFF.md`
+2. `MASTER_VALUE_ROADMAP.md`
+3. `STARTUP_GO_LIVE_BLOCKERS.md` (detailed operational launch authority)
+
+## Current operational references
+
+- `DEVELOPMENT_ROADMAP.md`
+- `KNOWN_GAPS_AND_RISKS.md`
+- `CURRENT_IMPLEMENTATION_STATE.md`
+- `SANITY_CHECK.md`
+- `DATABASE_STRUCTURE_CURRENT.md`
+- `SUPABASE_SCHEMA.sql`
+- `docs/BUILD238_INVENTORY_TRANSACTIONS_SEO_STARTUP_POLISH.md` (includes audit-history operation and testing)
+- `docs/SEO_COMPETITIVE_REVIEW_BUILD238.md`
+- `docs/MARKDOWN_GOVERNANCE_BUILD238.md`
+
+All other Markdown remains retained specialist detail, migration/release evidence or history until release-guard modernization permits manifest-based archiving.
+
+---
+
 # Build 237 document index update
 
 Start here: `AI_PROJECT_HANDOFF.md` → `MASTER_VALUE_ROADMAP.md` → `STARTUP_GO_LIVE_BLOCKERS.md`. Use `KNOWN_GAPS_AND_RISKS.md`, `SANITY_CHECK.md`, `IMAGES.md`, `SUPABASE_SCHEMA.sql` and `DATABASE_STRUCTURE_CURRENT.md` as operational references. Other Markdown is retained history until release-guard modernization permits archival.
@@ -1188,3 +1212,7 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 ---
 
 > **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.

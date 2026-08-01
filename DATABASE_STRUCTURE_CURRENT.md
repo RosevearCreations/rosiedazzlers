@@ -1,3 +1,22 @@
+# Database Structure — Build 238 Current Additions
+
+Apply `sql/2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql` after prerequisite migrations.
+
+## New tables
+
+- `catalog_inventory_change_batches` — transactional bulk operation header, reason, actor and row count.
+- `catalog_inventory_change_batch_rows` — immutable per-row before/after evidence and changed fields.
+- `catalog_inventory_merge_audit` — survivor/duplicate snapshots, transferred-reference counts, reason and actor.
+
+## New security-definer RPCs
+
+- `admin_catalog_inventory_bulk_update(jsonb,text,text,text,boolean)` — complete-batch validation, dry-run preview, all-or-nothing commit and audits.
+- `admin_catalog_inventory_merge(text,text,text,text,boolean)` — reviewed preview/commit, known-reference transfer, compensating movements, survivor consolidation and duplicate soft archive.
+
+Tables and functions are revoked from public/anon/authenticated and granted only to `service_role`; protected Cloudflare Functions are the browser boundary. `SUPABASE_SCHEMA.sql` contains the complete Build 238 executable mirror.
+
+---
+
 # Build 237 database synchronization — shared launch evidence and current roadmap cycle
 
 Apply `sql/2026-07-28_build237_css_startup_evidence_roadmap.sql`. It adds `app_launch_readiness_evidence`, `app_launch_readiness_evidence_audit`, and `cycle_key` / `is_current_cycle` / `action_path` on `app_roadmap_execution_items`. Direct browser table access remains revoked; Cloudflare Functions use the service-role boundary. Browser localStorage is now a fallback only for launch evidence during migration/outage.
@@ -995,3 +1014,7 @@ Apply `sql/2026-07-02_build218_daip_test_mode_foundation.sql` only in developmen
 ---
 
 > **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.

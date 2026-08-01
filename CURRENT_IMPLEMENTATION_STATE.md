@@ -1,3 +1,11 @@
+# Current Implementation State — Build 238
+
+Build 238 keeps all existing inventory/catalog workflows and adds database-first safety around high-volume cleanup. Source code now includes transactional bulk changes, reviewed duplicate merging, shared audit evidence and an admin history/CSV view, read-only cached fallback, Build 238 roadmap/startup data, tightened public metadata and cache/CSS continuity. Production state remains dependent on applying the migrations and completing the Startup Guide evidence.
+
+**Migration order when not already applied:** Build 235 gallery → Build 237 launch evidence/roadmap → Build 238 transactions/merge. Always run in staging first.
+
+---
+
 # Build 236 current implementation pointer
 
 Current state and continuation instructions live in `AI_PROJECT_HANDOFF.md`; active priorities live in `MASTER_VALUE_ROADMAP.md`. Build 236 restores Block Calendar and shared CSS behaviour, current schedule-schema compatibility, launch-preflight evidence, and visual-placeholder coverage. This file is retained for historical implementation context.
@@ -861,3 +869,7 @@ The original Inventory Workflow remains the detailed editor. The separate Invent
 ---
 
 > **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
