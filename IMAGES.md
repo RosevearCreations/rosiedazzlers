@@ -471,3 +471,8 @@ Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOF
 ---
 
 > **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+## Build 239 visual priorities
+
+New placeholder roles: `startup_command_center_unified_path` and `local_seo_proof_review_cadence`. Replace them only with approved Rosie-owned visuals. Public priority remains real before/after proof for the homepage, booking trust areas, specialty services, town pages, gallery, and Google Business Profile.
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->

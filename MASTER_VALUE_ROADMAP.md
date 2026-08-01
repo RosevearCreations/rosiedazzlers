@@ -1130,3 +1130,10 @@ Build 235 shifts effort toward operating the business safely: faster inventory d
 ---
 
 > **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+## Build 239 value direction — one launch operating system
+
+The highest-value simplification is now implemented: one Startup Command Center connects instructions, evidence, live production health, guided tests, and the current execution queue. Next value should come from completing evidence and controlled soft-launch work, not creating more standalone readiness dashboards.
+
+The current next-20 cycle prioritizes deployment/migrations, scheduling, booking, payments, notifications, recovery, legal, mobile/accessibility, field uploads, incidents, retention, inventory/products, Search Console/Business Profile, soft launch, and documentation retirement.
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->

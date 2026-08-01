@@ -1832,3 +1832,13 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 ---
 
 > **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+## Build 239 remaining gaps and risks
+
+- The unified Startup Command Center is implemented in source but requires preview deployment and the Build 239 migration before the database catalog becomes authoritative.
+- Build 237 and Build 238 migrations may still be outstanding and must be verified first.
+- Real payment/refund, notification delivery, backup/restore, rollback, mobile, accessibility, Search Console, Business Profile, incident/privacy, retention, and invite-only soft-launch evidence cannot be completed by static code checks.
+- Cached catalog/production/test/roadmap data is intentionally read-only; local evidence fallback must be re-saved after shared service returns.
+- Approved Rosie-owned photos, complete product galleries, inventory cleanup, and local review/photo cadence remain operational work.
+- Historical readiness pages and Markdown remain for redirects, emergency fallback, and release guards; they are no longer current operating surfaces.
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
