@@ -253,9 +253,9 @@
     },
     {
       key: "admin-startup-guide",
-      label: "Startup Go-Live Guide",
+      label: "Startup Command Center",
       href: "/admin-startup-guide.html",
-      description: "Detailed blocker-by-blocker launch instructions and exact page locations",
+      description: "All blockers, evidence, production checks, guided tests, and next-20 roadmap in one interface",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-startup-guide") || globalScope.AdminAuth.canAccessPage("admin")
     },
     {
@@ -263,7 +263,7 @@
       label: "Launch Readiness",
       href: "/admin-launch-readiness.html",
       description: "Preflight evidence, blockers and controlled go-live checks",
-      visible: () => globalScope.AdminAuth.canAccessPage("admin-launch-readiness") || globalScope.AdminAuth.canAccessPage("admin")
+      visible: () => false // Build 239 compatibility route now forwards into Startup Command Center
     },
     {
       key: "admin-creative-projects",
@@ -277,7 +277,7 @@
       label: "Roadmap Execution",
       href: "/admin-roadmap-execution.html",
       description: "DB-backed next-20 execution queue and DAIP planning policy",
-      visible: () => globalScope.AdminAuth.canAccessPage("admin-roadmap-execution")
+      visible: () => false // Build 239 roadmap is embedded in Startup Command Center
     },
     {
       key: "admin-integrations",
