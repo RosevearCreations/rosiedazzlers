@@ -2751,3 +2751,8 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 ---
 
 > **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+## Build 239 current development cycle
+
+Use `/admin-startup-guide.html#roadmap` as the active next-20 queue. The Build 239 migration seeds the database cycle. Development should now close launch evidence and reliability gaps before adding unrelated modules. Key code follow-ups include live browser acceptance, migration execution, transaction rollback tests, notification retry visibility, upload recovery, retention/incident safety, image derivatives, monitoring, and guarded Markdown retirement.
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->

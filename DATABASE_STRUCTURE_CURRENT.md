@@ -1018,3 +1018,13 @@ Apply `sql/2026-07-02_build218_daip_test_mode_foundation.sql` only in developmen
 ---
 
 > **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+## Build 239 startup-process catalog
+
+- `app_startup_process_items`: canonical ordered blocker/instruction catalog used by the Startup Command Center.
+- `app_startup_process_audit`: protected audit history for controlled catalog changes.
+- `app_launch_readiness_evidence`: expanded shared completion evidence linked by `evidence_key`.
+- `app_roadmap_execution_items`: Build 239 current-cycle next-20 execution queue.
+
+The database is primary after migration; packaged JSON/JavaScript remains a complete read-only fallback.
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
