@@ -1,3 +1,35 @@
+# Known Issues and Gaps — Build 238
+
+## Critical production evidence still missing
+
+- Build 237 and Build 238 migrations must be confirmed in staging/production in order.
+- Block Calendar full-day/AM/PM behaviour must be proven against the public booking wizard.
+- A complete booking, live Stripe charge/refund/webhook, external email delivery and backup/restore rehearsal remain launch blockers.
+- Policies, media consent, real-device mobile, accessibility, Search Console, structured data and Google Business Profile evidence remain incomplete until manually verified.
+- The invite-only soft launch has not yet supplied first-week operational evidence.
+
+## Build 238 source complete but awaiting acceptance
+
+- Transactional bulk inventory updates are implemented; do not call them accepted until valid and invalid-batch rollback tests pass.
+- Reviewed duplicate merge and its audit-history viewer are implemented; do not use on valuable production rows before a controlled test verifies every reference type and the displayed evidence.
+- The merge is intentionally irreversible in the UI. Recovery is a reviewed compensating operation using audit evidence, not an automatic rollback button.
+- Cached inventory fallback is read-only by design; stale cached rows must never be edited or treated as authoritative.
+
+## Remaining product/operations gaps
+
+- Inventory cleanup still contains suspicious imported names, incomplete categories/costs and potential duplicates.
+- Sellable products still need approved featured/gallery images, alt text, captions, roles and provenance/consent.
+- High-value public placeholders still need authentic Rosie-owned local proof.
+- Transactional posting for real job consumption, payment application, HST/GST review, month-end close/lock/reopen and accountant export remain open.
+- Product publish readiness does not yet enforce every missing image role, consent/provenance, price, pickup/shipping and SEO condition.
+- Production monitoring, incident ownership and soft-launch stop conditions still require live evidence.
+
+## Documentation risk
+
+Historical Markdown is intentionally retained because old release guards still depend on content markers. The authoritative order is `AI_PROJECT_HANDOFF.md`, `MASTER_VALUE_ROADMAP.md`, then `STARTUP_GO_LIVE_BLOCKERS.md`. Do not delete historical files until guards are converted to current capability checks and an archive manifest passes the complete release suite.
+
+---
+
 # Build 237 current gaps and risks
 
 ## Critical before unrestricted public launch
@@ -1796,3 +1828,7 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 ---
 
 > **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.

@@ -1,3 +1,29 @@
+# Sanity Check — Build 238
+
+## Healthy in source
+
+- Existing manual and detailed inventory editors remain available.
+- Bulk inventory changes no longer rely on a browser loop for authoritative writes.
+- Duplicate rows are previewed, transferred and archived—not hard deleted.
+- Known inventory references, quantity movements and before/after evidence are retained and available through a read-only history dialog/CSV export.
+- Cached API failure mode is read-only.
+- Public pages retain one H1 and improved title/description lengths.
+- Roadmap/Startup fallback data and clean routes are synchronized.
+- Canonical schema contains the complete Build 238 function/table definitions.
+
+## Not yet proven by source inspection
+
+- Supabase migration execution and PostgREST schema refresh.
+- Real data reference-transfer acceptance.
+- Live booking/payment/refund/email/backup/mobile/accessibility/search/GBP behaviour.
+- Real Core Web Vitals and deployed CSS/cache behaviour.
+
+## Release decision
+
+Do not announce a broad public launch solely because the source checks pass. Proceed to an invite-only soft launch only after every launch-blocker item in `STARTUP_GO_LIVE_BLOCKERS.md` has evidence or an explicitly reviewed waiver.
+
+---
+
 # Build 237 sanity check
 
 - Roadmap page CSS root cause identified: missing stylesheet files and missing AdminShell dependency.
@@ -1111,3 +1137,7 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 ---
 
 > **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.

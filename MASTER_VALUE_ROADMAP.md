@@ -1,3 +1,61 @@
+# Rosie Dazzlers Master Value Roadmap — Build 238
+
+**Updated:** 2026-07-30  
+**Build 238 — Inventory transactions, reviewed duplicate merge, SEO/startup polish**
+
+## Strategic direction
+
+Rosie Dazzlers should now prioritize launch confidence and operator speed over adding another broad subsystem. The strongest business model remains mobile detailing with clear packages and specialty-service pages, direct booking, approved before/after proof, repeat-maintenance workflows, customer trust, job profitability and content reuse. Creative Projects and Content Automation remain differentiators, but must not destabilize ordinary bookings, payments or daily operations.
+
+## Completed in source; staging acceptance required
+
+1. Transactional bulk inventory preview/commit RPC and audit ledger.
+2. Reviewed duplicate merge preview/commit RPC with reference transfer and soft archive.
+3. Inventory Workbench merge controls, batch reason, preview, confirmation and read-only cached fallback.
+4. Protected Cloudflare endpoints for both database workflows plus a read-only audit-history endpoint.
+5. Inventory transaction/merge history dialog with CSV export for operator review.
+5. Build 238 migration and full canonical schema mirror.
+6. Startup Guide expansion to 25 ordered blockers.
+7. Build 238 current-cycle Roadmap Execution fallback and migration seed.
+8. Public title/description tightening on 19 pages.
+9. One-H1, route-copy, CSS dependency and service-worker cache continuity.
+10. New visual-placeholder types for safe merge, transactional batches and SEO preflight.
+
+## Current next 20
+
+1. Apply the Build 238 migration in staging.
+2. Preview and execute one harmless same-type/same-unit duplicate merge.
+3. Preview and execute one transactional bulk update, then prove rollback with an invalid row.
+4. Verify Build 238 public titles/descriptions/canonicals/H1s in preview.
+5. Complete Block Calendar full-day, AM and PM save/remove testing.
+6. Complete an end-to-end booking and verify every admin/customer/calendar record.
+7. Complete and refund a small authorized live Stripe transaction; verify webhook and accounting evidence.
+8. Verify booking, payment, staff and consent messages in external inboxes.
+9. Audit Cloudflare production variables, bindings, domains and branch settings.
+10. Perform a documented Supabase backup-and-restore rehearsal.
+11. Review and publish privacy, terms, cancellation, refund, media-consent and cookie wording.
+12. Complete real-device iPhone-size and Android-size testing.
+13. Complete keyboard, focus, contrast, labels and form-error accessibility testing.
+14. Submit the sitemap and validate canonical URLs and structured data in Google tools.
+15. Verify Google Business Profile categories, service area, services, hours, phone and approved photos.
+16. Finish suspicious inventory-name, category, cost, vendor and duplicate cleanup.
+17. Complete featured image and up-to-seven gallery image metadata for sellable items.
+18. Replace high-value placeholders with approved Rosie-owned local proof.
+19. Run an invite-only soft launch with daily incident and transaction review.
+20. Modernize historical release guards, then archive redundant Markdown using a manifest instead of deletion.
+
+## Work after the current 20
+
+- Add a reviewed merge-reversal/compensation design; never attempt destructive automatic unmerge.
+- Add transactional inventory reservation/consumption posting for real jobs with reversal authorization.
+- Add image derivative generation and mobile-resumable uploads.
+- Add product publish-readiness gates tied to role-aware gallery and consent/provenance.
+- Finish payment application, tax review, month-end lock/reopen and accountant export.
+- Finish consent-aware testimonial/trust blocks, custom-request intake and social analytics rollups.
+- Promote Content Automation outputs through review queues only; keep publishing explicit until provider acceptance is proven.
+
+---
+
 # Build 237 active roadmap — 2026-07-28
 
 The immediate strategy is launch confidence and daily-operating reliability, not another broad module. Work the current next 20 in `/admin-roadmap-execution.html`; use `STARTUP_GO_LIVE_BLOCKERS.md` for detailed instructions.
@@ -1068,3 +1126,7 @@ Build 235 shifts effort toward operating the business safely: faster inventory d
 ---
 
 > **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.

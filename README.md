@@ -1,3 +1,11 @@
+# Rosie Dazzlers Build 238
+
+Start with `AI_PROJECT_HANDOFF.md`, then `MASTER_VALUE_ROADMAP.md`. For the exact go-live sequence use `STARTUP_GO_LIVE_BLOCKERS.md` or `/admin-startup-guide.html`.
+
+Build 238 adds transactional inventory bulk updates, reviewed duplicate merge, readable audit history/CSV export and audit evidence while preserving the original inventory editor and seven-image galleries. Apply `sql/2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql` in staging before using execute actions.
+
+---
+
 # Build 237 startup stabilization
 
 Deploy the package, apply `sql/2026-07-28_build237_css_startup_evidence_roadmap.sql`, then use `/admin-startup-guide.html`, `/admin-launch-readiness.html`, and `/admin-roadmap-execution.html` in that order.
@@ -1189,3 +1197,7 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 ---
 
 > **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.

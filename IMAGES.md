@@ -1,3 +1,11 @@
+# Images and Visual Placeholders — Build 238 Update
+
+New operational placeholder types support `inventory_merge`, `inventory_audit`, `transactional_batch` and `seo_preflight`. They explain workflows only and do not replace real public proof.
+
+Priority real-image replacement order remains: homepage hero/local proof, ceramic coating, paint correction, interior transformation, town/service-area pages, gallery, booking trust areas, sellable product featured images and up to seven gallery images. Use Rosie-owned or explicitly licensed/consented media; complete descriptive alt text, caption, role and provenance/consent notes before publishing.
+
+---
+
 # Build 237 image synchronization
 
 New internal placeholder: `startup_go_live_command_path` for `/admin-startup-guide.html`. Public priority remains replacing homepage, high-intent service, local town, gallery and booking placeholders with approved Rosie-owned proof. Product media should use one featured image plus up to seven ordered gallery images with descriptive alt text, role, caption and provenance/consent notes.
@@ -459,3 +467,7 @@ Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOF
 ---
 
 > **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
