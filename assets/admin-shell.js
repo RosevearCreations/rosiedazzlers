@@ -1,4 +1,4 @@
-// Build 237 shared admin shell with startup navigation and emergency CSS fallback.
+// Build 238 shared admin shell with startup navigation and emergency CSS fallback.
 // assets/admin-shell.js
 //
 // Shared admin/detailer page bootstrap.

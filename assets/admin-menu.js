@@ -1,4 +1,4 @@
-// Build 236 restored complete admin navigation and retained current workbench/preflight routes.
+// Build 238 retained complete admin navigation and retained current workbench/preflight routes.
 // assets/admin-menu.js
 //
 // Shared internal admin/detailer navigation.
