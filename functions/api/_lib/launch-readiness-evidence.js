@@ -1,5 +1,5 @@
 import {serviceHeaders} from './staff-auth.js';
-export const LAUNCH_EVIDENCE_KEYS=new Set(['booking_e2e','stripe_live','email_delivery','environment','backups','legal','mobile','accessibility','analytics','search','business_profile','security','monitoring','operations','css_roadmap','migration_237','block_calendar','inventory_cleanup','product_images','pricing_tax']);
+export const LAUNCH_EVIDENCE_KEYS=new Set(['booking_e2e','stripe_live','email_delivery','environment','backups','legal','mobile','accessibility','analytics','search','business_profile','security','monitoring','operations','css_roadmap','migration_237','migration_238','migration_239','deploy_239','block_calendar','inventory_cleanup','product_images','pricing_tax','notification_health','payment_links','upload_recovery','retention_review','incident_closeout','rollback_drill','local_proof_cadence','startup_single_interface']);
 export const LAUNCH_STATUSES=new Set(['pending','verified','failed','waived']);
 export function clean(v,max=2000){return String(v??'').trim().slice(0,max)}
 export function ready(env){return Boolean(env?.SUPABASE_URL&&env?.SUPABASE_SERVICE_ROLE_KEY)}
