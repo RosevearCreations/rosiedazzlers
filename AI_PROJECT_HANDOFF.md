@@ -760,3 +760,10 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 ---
 
 > **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+## Build 239 — Unified Startup Command Center
+
+The normal launch workflow now begins at `/admin-startup-guide.html`. It incorporates every detailed startup blocker, shared launch evidence, production readiness, guided tests, and the current next-20 roadmap. The database catalog `app_startup_process_items` is authoritative after the Build 239 migration; `data/build239_go_live_blockers.json` is the complete read-only fallback. Legacy readiness routes forward to Startup sections and should not be used as separate checklists.
+
+Apply migrations in order: Build 235 gallery if outstanding, Build 237 evidence/roadmap, Build 238 inventory transaction/merge, then Build 239 unified startup catalog.
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
