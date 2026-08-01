@@ -9,16 +9,19 @@ def need(path,needle):
  elif needle not in p.read_text(encoding='utf-8',errors='ignore'): errors.append(f"{path} missing {needle}")
 for path in ['admin-roadmap-execution.html','admin-startup-guide.html','STARTUP_GO_LIVE_BLOCKERS.md','data/build237_next_steps.json','data/build237_go_live_blockers.json','sql/2026-07-28_build237_css_startup_evidence_roadmap.sql','functions/api/admin/launch_readiness_evidence_list.js','functions/api/admin/launch_readiness_evidence_save.js']:
  if not (ROOT/path).exists(): errors.append(f"missing {path}")
-need('admin-roadmap-execution.html','/assets/site.css?v=20260728build237')
-need('admin-roadmap-execution.html','/assets/admin-shell.js?v=20260728build237')
-need('admin-roadmap-execution.html','build237_next_steps.json')
-need('admin-startup-guide.html','build237_go_live_blockers.json')
+need('admin-roadmap-execution.html','/assets/site.css?v=202607')
+need('admin-roadmap-execution.html','/assets/admin-shell.js?v=202607')
+
+if not any(x in (ROOT/'admin-roadmap-execution.html').read_text(encoding='utf-8',errors='ignore') for x in ('build237_next_steps.json','build238_next_steps.json')): errors.append('admin-roadmap-execution.html missing packaged current-cycle fallback')
+
+if not any(x in (ROOT/'admin-startup-guide.html').read_text(encoding='utf-8',errors='ignore') for x in ('build237_go_live_blockers.json','build238_go_live_blockers.json')): errors.append('admin-startup-guide.html missing packaged blocker fallback')
 need('admin-launch-readiness.html','launch_readiness_evidence_save')
 need('assets/admin-shell.js','ensureAdminCssFallback')
 need('SUPABASE_SCHEMA.sql','app_launch_readiness_evidence')
 need('DATABASE_STRUCTURE_CURRENT.md','Build 237 database synchronization')
 need('service-worker.js','/admin-startup-guide.html')
-need('service-worker.js','/data/build237_go_live_blockers.json')
+
+if not any(x in (ROOT/'service-worker.js').read_text(encoding='utf-8',errors='ignore') for x in ('/data/build237_go_live_blockers.json','/data/build238_go_live_blockers.json')): errors.append('service-worker missing Startup Guide data fallback')
 # No stylesheet href may point to a missing local file.
 for p in ROOT.rglob('*.html'):
  t=p.read_text(encoding='utf-8',errors='ignore')
@@ -36,7 +39,7 @@ for p in ROOT.rglob('*.html'):
  if count>1: errors.append(f"{p.relative_to(ROOT)} has {count} H1 elements")
 # Every Markdown file carries Build 237 sync marker.
 for p in ROOT.rglob('*.md'):
- if 'Build 237 synchronization (2026-07-28)' not in p.read_text(encoding='utf-8',errors='ignore'): errors.append(f"Markdown not synchronized: {p.relative_to(ROOT)}")
+ if not any(marker in p.read_text(encoding='utf-8',errors='ignore') for marker in ('Build 237 synchronization (2026-07-28)','Build 238 synchronization (2026-07-30)')): errors.append(f"Markdown not synchronized: {p.relative_to(ROOT)}")
 # Fallback JSON shapes.
 for name in ['data/build237_next_steps.json','data/build237_go_live_blockers.json']:
  try:

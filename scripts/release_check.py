@@ -193,6 +193,7 @@ CHECKS = [
     "scripts/build232_project_controls_archive_history_check.py",
     "scripts/build236_calendar_css_schedule_stabilization_check.py",
     "scripts/build237_css_startup_evidence_check.py",
+    "scripts/build238_inventory_transactions_seo_startup_check.py",
     "scripts/build224_customer_profile_quality_check.py",
     "scripts/seo_h1_check.py",
 ]
