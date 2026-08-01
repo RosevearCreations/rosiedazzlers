@@ -47,14 +47,14 @@ async function handle({ request, env }) {
     const testing = summarizeTestRuns(tables.test_runs || []);
 
     const attention = [];
-    if (failedNotifications.length) attention.push(att("urgent", "Notification failures", `${failedNotifications.length} notification event(s) need retry/provider repair.`, "/admin-production.html#notifications"));
-    if (queuedNotifications.length && !(env.NOTIFICATIONS_EMAIL_WEBHOOK_URL || env.RECOVERY_EMAIL_WEBHOOK_URL)) attention.push(att("high", "Queued notifications cannot send", "Email provider webhook is not configured.", "/admin-production.html#notifications"));
-    if (paymentMissingCheckout.length) attention.push(att("high", "Payment links missing", `${paymentMissingCheckout.length} open final-balance request(s) need hosted/manual payment links.`, "/admin-production.html#payments"));
-    if (weakUploads.length) attention.push(att("high", "Mobile upload recovery", `${weakUploads.length} upload session(s) need retry, cancellation, or review.`, "/admin-production.html#uploads"));
-    if (retentionRows.length) attention.push(att("normal", "Retention cleanup review", `${retentionRows.length} job media item(s) are due for retention review.`, "/admin-production.html#retention"));
+    if (failedNotifications.length) attention.push(att("urgent", "Notification failures", `${failedNotifications.length} notification event(s) need retry/provider repair.`, "/admin-startup-guide.html#production"));
+    if (queuedNotifications.length && !(env.NOTIFICATIONS_EMAIL_WEBHOOK_URL || env.RECOVERY_EMAIL_WEBHOOK_URL)) attention.push(att("high", "Queued notifications cannot send", "Email provider webhook is not configured.", "/admin-startup-guide.html#production"));
+    if (paymentMissingCheckout.length) attention.push(att("high", "Payment links missing", `${paymentMissingCheckout.length} open final-balance request(s) need hosted/manual payment links.`, "/admin-startup-guide.html#production"));
+    if (weakUploads.length) attention.push(att("high", "Mobile upload recovery", `${weakUploads.length} upload session(s) need retry, cancellation, or review.`, "/admin-startup-guide.html#production"));
+    if (retentionRows.length) attention.push(att("normal", "Retention cleanup review", `${retentionRows.length} job media item(s) are due for retention review.`, "/admin-startup-guide.html#production"));
     if (unresolvedIncidents.length) attention.push(att("urgent", "Unresolved incidents", `${unresolvedIncidents.length} incident(s) still block clean closeout/reviews.`, "/admin-incident-reports.html"));
-    if (testing.failed || testing.blocked) attention.push(att("high", "Guided production tests need attention", `${testing.failed} failed and ${testing.blocked} blocked test result(s).`, "/admin-test-centre.html"));
-    if (!testing.last_run_at) attention.push(att("normal", "Run guided production tests", "No Build 212 test results are recorded yet. Use internal test data only.", "/admin-test-centre.html"));
+    if (testing.failed || testing.blocked) attention.push(att("high", "Guided production tests need attention", `${testing.failed} failed and ${testing.blocked} blocked test result(s).`, "/admin-startup-guide.html#tests"));
+    if (!testing.last_run_at) attention.push(att("normal", "Run guided production tests", "No Build 212 test results are recorded yet. Use internal test data only.", "/admin-startup-guide.html#tests"));
 
     const counts = {
       notification_failed: failedNotifications.length,
