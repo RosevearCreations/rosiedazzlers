@@ -1,64 +1,68 @@
-# Rosie Dazzlers Startup and Go-Live Blockers
+# Rosie Dazzlers Startup and Go-Live Blocker Guide — Build 238
 
-**Build:** 237  
-**Updated:** 2026-07-28  
-**Purpose:** Work through every known launch blocker in a clear order. This document is intentionally detailed because settings and controls can be difficult to locate.
-
-> This is the canonical startup document. Use `/admin-startup-guide.html` for the searchable in-app version and `/admin-launch-readiness.html` to record shared evidence after applying the Build 237 migration.
+**Updated:** July 30, 2026  
+**Purpose:** One detailed, ordered checklist of every known item that can delay a confident launch. Work through launch blockers first, record evidence, and do not skip to the next item until the stated completion condition is met.
 
 ## How to use this document
 
-1. Work through items marked **Launch blocker** first.
-2. Open the exact route or dashboard named under **Where to find it**.
-3. Complete every numbered instruction.
-4. Record a safe evidence note in Launch Readiness.
-5. Update the matching Roadmap Execution row.
-6. Do not store secrets, payment card data, private customer media or signed/private URLs in evidence notes.
+1. Open the exact page or outside service named under **Where to find it**.
+2. Follow the instructions in order. Do not store passwords, API keys, card details or private customer content in evidence notes.
+3. Record the result in `/admin-launch-readiness.html` and update the matching row in `/admin-roadmap-execution.html`.
+4. Move forward only when the **Move to the next item when** condition is true.
 
-## 1. Deploy the Roadmap Execution CSS and dependency repair
+## Current launch position
+
+- Build 238 source includes transactional inventory bulk updates, reviewed duplicate merge, readable audit history/CSV export, audit evidence, cached read-only inventory fallback, SEO title/description tightening and new release guards.
+- Source completion is not production proof. Database migrations, Cloudflare deployment, real payment/email tests, backup restore, policies, accessibility, mobile, Search Console and controlled soft-launch evidence remain required.
+- Google local ranking cannot be guaranteed. The practical direction remains accurate service/location content, complete Business Profile information, approved local photos, reviews, internal links, clear titles and one primary H1.
+
+## 1. Deploy Build 238 and verify shared CSS, scripts and clean routes
 
 **Priority:** Launch blocker  
 **Category:** Deployment and CSS
 
-**Why this matters**
+### Why this matters
 
-The deployed page references CSS files that do not exist and calls AdminShell without loading admin-shell.js. The page can appear completely unstyled and its data-loading code can stop before authentication finishes.
+Build 238 depends on the shared site stylesheet, AdminShell, Inventory Workbench scripts and clean-route copies loading together. Cached or partial deployments can make pages appear unstyled or leave new controls unavailable.
 
-**Where to find it**
+### Where to find it
 
-- `/admin-roadmap-execution`
-- `Cloudflare Pages → Deployments → preview branch`
-- `Browser DevTools → Network and Console`
+- Cloudflare Pages → Deployments → preview branch
+- /admin-roadmap-execution
+- /admin-inventory-manager
+- Browser DevTools → Network and Console
 
-**Detailed instructions**
+### Detailed instructions
 
-1. Deploy Build 237 to the preview/development branch.
-2. Open /admin-roadmap-execution in a private browser window and sign in.
-3. Press Ctrl+Shift+R to bypass the old service-worker/browser cache.
-4. In DevTools Network, filter for CSS and confirm /assets/site.css returns HTTP 200.
-5. In Console, confirm there is no 'AdminShell is not defined' or stylesheet 404 error.
-6. Repeat at /admin-roadmap-execution.html and confirm both routes look identical.
+1. Deploy Build 238 to the preview/development branch.
+2. Open /admin-roadmap-execution and /admin-inventory-manager in a private browser window.
+3. Press Ctrl+Shift+R to bypass browser and service-worker caches.
+4. In DevTools Network, confirm /assets/site.css and required admin scripts return HTTP 200.
+5. Confirm both .html and clean routes have the same layout and controls.
+6. Confirm there are no stylesheet 404, AdminShell, syntax or uncaught fetch errors.
 
-**Move to the next item when**
+### Move to the next item when
 
-The page has the dark Rosie admin theme, the menu renders, roadmap cards are readable on desktop/mobile, and no required CSS/script request fails.
+Roadmap Execution and Inventory Workbench use the Rosie admin theme on desktop and mobile, clean routes match, and no required CSS or script request fails.
+
+---
 
 ## 2. Apply the Build 237 database migration
 
 **Priority:** Launch blocker  
 **Category:** Database migrations
 
-**Why this matters**
+### Why this matters
 
 Shared launch evidence and the current roadmap cycle cannot persist until the new tables/columns exist. The UI has a safe local/static fallback, but shared evidence is the intended source of truth.
 
-**Where to find it**
+### Where to find it
 
-- `Supabase Dashboard → SQL Editor`
-- `sql/2026-07-28_build237_css_startup_evidence_roadmap.sql`
-- `Supabase Dashboard → Table Editor`
+- Supabase Dashboard → SQL Editor
+- sql/2026-07-28_build237_css_startup_evidence_roadmap.sql
+- Supabase Dashboard → Table Editor
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Open the SQL file from the build package.
 2. Copy the complete file into Supabase SQL Editor.
@@ -67,26 +71,61 @@ Shared launch evidence and the current roadmap cycle cannot persist until the ne
 5. Confirm app_roadmap_execution_items includes cycle_key, is_current_cycle and action_path.
 6. Open /admin-launch-readiness and /admin-roadmap-execution and confirm database-backed results load.
 
-**Move to the next item when**
+### Move to the next item when
 
 The two pages report shared/database evidence rather than browser-only fallback and the current Build 237 roadmap cycle appears.
 
-## 3. Retest the repaired Block Calendar against public booking
+---
+
+## 3. Apply the Build 238 inventory transaction and merge migration
+
+**Priority:** Launch blocker  
+**Category:** Database migrations
+
+### Why this matters
+
+The new Inventory Workbench deliberately refuses to execute bulk changes or duplicate merges without database functions that validate the whole operation and record audit evidence. This prevents a browser/network failure from leaving half a batch changed.
+
+### Where to find it
+
+- Supabase Dashboard → SQL Editor
+- sql/2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql
+- Supabase Dashboard → Database → Functions
+- /admin-inventory-manager.html
+
+### Detailed instructions
+
+1. Confirm the Build 237 migration has already been applied.
+2. Open sql/2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql from the build package.
+3. Copy the complete migration into Supabase SQL Editor and run it in staging/preview first.
+4. Confirm catalog_inventory_change_batches, catalog_inventory_change_batch_rows and catalog_inventory_merge_audit exist.
+5. Confirm admin_catalog_inventory_bulk_update and admin_catalog_inventory_merge appear under database functions.
+6. Reload /admin-inventory-manager.html and preview a harmless batch without executing it.
+7. Open Transaction & merge history and confirm it loads an empty or current shared audit view without a migration-required error.
+8. Record the migration date and staging result in Launch Readiness evidence.
+
+### Move to the next item when
+
+Both new RPC functions can complete dry-run previews, the three audit tables exist, Transaction & merge history loads, and no browser sequential partial-save fallback is used.
+
+---
+
+## 4. Retest the repaired Block Calendar against public booking
 
 **Priority:** Launch blocker  
 **Category:** Booking and scheduling
 
-**Why this matters**
+### Why this matters
 
 Availability mistakes can cause double-booking or hide valid dates. A visual repair alone is not enough; save/remove behaviour must be proven against the public booking wizard.
 
-**Where to find it**
+### Where to find it
 
-- `/admin-blocks.html`
-- `/book`
-- `Supabase schedule block tables`
+- /admin-blocks.html
+- /book
+- Supabase schedule block tables
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Choose a future date with no customer booking.
 2. Create a full-day block and refresh the calendar.
@@ -96,26 +135,28 @@ Availability mistakes can cause double-booking or hide valid dates. A visual rep
 6. Remove AM, create PM-only, and confirm AM remains available.
 7. Remove the test block and record the tested date in Launch Readiness evidence.
 
-**Move to the next item when**
+### Move to the next item when
 
 Full-date, AM and PM changes persist after refresh and the public booking wizard matches every admin change.
 
-## 4. Complete one end-to-end booking test
+---
+
+## 5. Complete one end-to-end booking test
 
 **Priority:** Launch blocker  
 **Category:** Booking and scheduling
 
-**Why this matters**
+### Why this matters
 
 The complete path must work as one system: availability, vehicle, package, add-ons, customer details, deposit, confirmation and admin record.
 
-**Where to find it**
+### Where to find it
 
-- `/book`
-- `/admin-booking.html`
-- `Customer confirmation email/inbox`
+- /book
+- /admin-booking.html
+- Customer confirmation email/inbox
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Use a clearly labelled test customer and a future test date.
 2. Complete every booking step on a phone-sized screen.
@@ -124,27 +165,29 @@ The complete path must work as one system: availability, vehicle, package, add-o
 5. Open Admin Booking and verify date, slot, vehicle, package, add-ons, customer and payment state.
 6. Cancel or mark the test record according to your test-data policy.
 
-**Move to the next item when**
+### Move to the next item when
 
 The customer and admin views agree and no manual database correction is needed.
 
-## 5. Complete and refund a small live Stripe payment
+---
+
+## 6. Complete and refund a small live Stripe payment
 
 **Priority:** Launch blocker  
 **Category:** Payments
 
-**Why this matters**
+### Why this matters
 
 Test-mode success does not prove live keys, webhook secrets, receipts, refunds or accounting evidence are configured correctly.
 
-**Where to find it**
+### Where to find it
 
-- `/admin-payments.html`
-- `Stripe Dashboard → Payments`
-- `Stripe Dashboard → Developers → Webhooks`
-- `/admin-accounting.html`
+- /admin-payments.html
+- Stripe Dashboard → Payments
+- Stripe Dashboard → Developers → Webhooks
+- /admin-accounting.html
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Confirm the deployment intentionally reports Stripe live mode.
 2. Create a small real payment tied to a labelled test booking/quote.
@@ -154,26 +197,28 @@ Test-mode success does not prove live keys, webhook secrets, receipts, refunds o
 6. Issue a full refund and confirm the refund event and final status.
 7. Record only safe payment identifiers; never put card details in evidence notes.
 
-**Move to the next item when**
+### Move to the next item when
 
 Payment, webhook, receipt, refund and accounting views agree on the final state.
 
-## 6. Verify every required email reaches an external inbox
+---
+
+## 7. Verify every required email reaches an external inbox
 
 **Priority:** Launch blocker  
 **Category:** Notifications
 
-**Why this matters**
+### Why this matters
 
 A successful API response does not prove customers or staff receive messages, and spam/mobile formatting failures can block operations.
 
-**Where to find it**
+### Where to find it
 
-- `/admin-notifications.html`
-- `Notification provider dashboard`
-- `External Gmail/Outlook inboxes`
+- /admin-notifications.html
+- Notification provider dashboard
+- External Gmail/Outlook inboxes
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Send a booking confirmation to an external test inbox.
 2. Send payment/deposit, staff assignment and consent/review messages where applicable.
@@ -182,26 +227,28 @@ A successful API response does not prove customers or staff receive messages, an
 5. Verify links go to the correct deployed domain and are not expired.
 6. Record provider message IDs or timestamps without including private content.
 
-**Move to the next item when**
+### Move to the next item when
 
 All required messages arrive, render clearly and contain working links.
 
-## 7. Audit Cloudflare production variables and bindings
+---
+
+## 8. Audit Cloudflare production variables and bindings
 
 **Priority:** Launch blocker  
 **Category:** Deployment and security
 
-**Why this matters**
+### Why this matters
 
 Missing or preview-only variables are a common cause of login, payment, notification, storage and API failures after launch.
 
-**Where to find it**
+### Where to find it
 
-- `Cloudflare Dashboard → Workers & Pages → rosiedazzlers → Settings`
-- `docs/CLOUDFLARE_ENVIRONMENT_CHECKLIST.md`
-- `/api/health`
+- Cloudflare Dashboard → Workers & Pages → rosiedazzlers → Settings
+- docs/CLOUDFLARE_ENVIRONMENT_CHECKLIST.md
+- /api/health
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Open Variables and Secrets for both Preview and Production.
 2. Verify Supabase URL/service key, Stripe keys/webhook secret, notification credentials, R2 bindings and public asset settings.
@@ -210,26 +257,28 @@ Missing or preview-only variables are a common cause of login, payment, notifica
 5. Open /api/health and record the non-secret environment/mode result.
 6. Update the environment checklist with the exact Cloudflare screen where each setting lives.
 
-**Move to the next item when**
+### Move to the next item when
 
 Every required integration has an intentional production value/binding and no secret is stored in the repository.
 
-## 8. Test backup and restore, not just backup availability
+---
+
+## 9. Test backup and restore, not just backup availability
 
 **Priority:** Launch blocker  
 **Category:** Recovery
 
-**Why this matters**
+### Why this matters
 
 A backup is useful only when you know how to restore it and confirm permissions/data integrity afterward.
 
-**Where to find it**
+### Where to find it
 
-- `Supabase Dashboard → Database → Backups`
-- `/admin-recovery.html`
-- `docs/PRODUCTION_TEST_GUIDE.md`
+- Supabase Dashboard → Database → Backups
+- /admin-recovery.html
+- docs/PRODUCTION_TEST_GUIDE.md
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Confirm the Supabase plan and backup retention available to the project.
 2. Choose a safe staging restore method or export a small representative data set.
@@ -238,28 +287,30 @@ A backup is useful only when you know how to restore it and confirm permissions/
 5. Test staff access and RLS through Cloudflare Functions after restore.
 6. Write the exact recovery sequence, owner and expected maximum data-loss window.
 
-**Move to the next item when**
+### Move to the next item when
 
 A documented rehearsal proves data can be recovered and accessed through the application boundary.
 
-## 9. Review all policies before accepting unrestricted orders
+---
+
+## 10. Review all policies before accepting unrestricted orders
 
 **Priority:** Launch blocker  
 **Category:** Policies and customer trust
 
-**Why this matters**
+### Why this matters
 
 Booking, deposits, cancellations, driveway requirements, runoff/bylaw responsibility, media use and privacy must be clear before a customer commits.
 
-**Where to find it**
+### Where to find it
 
-- `/privacy.html`
-- `/terms.html`
-- `/refund-policy.html`
-- `/book`
-- `Footer policy links`
+- /privacy.html
+- /terms.html
+- /refund-policy.html
+- /book
+- Footer policy links
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Read each policy as a customer, not as a developer.
 2. Confirm business name, contact method, province and effective date.
@@ -269,27 +320,29 @@ Booking, deposits, cancellations, driveway requirements, runoff/bylaw responsibi
 6. Have a qualified Ontario professional review any wording that carries legal or tax risk.
 7. Verify all policy links are visible from booking, checkout and footer.
 
-**Move to the next item when**
+### Move to the next item when
 
 Published policy wording matches real operations and every checkout/booking link is easy to find.
 
-## 10. Verify staff permissions, sessions and protected APIs
+---
+
+## 11. Verify staff permissions, sessions and protected APIs
 
 **Priority:** Launch blocker  
 **Category:** Deployment and security
 
-**Why this matters**
+### Why this matters
 
 Admin pages and APIs contain customer, payment and operational data. Visual hiding is not authorization.
 
-**Where to find it**
+### Where to find it
 
-- `/admin-security.html`
-- `/admin-app.html`
-- `Browser DevTools`
-- `Supabase Security Advisor`
+- /admin-security.html
+- /admin-app.html
+- Browser DevTools
+- Supabase Security Advisor
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Test Admin, Senior Detailer and Detailer accounts separately.
 2. Confirm each role can access only intended pages/actions.
@@ -299,28 +352,30 @@ Admin pages and APIs contain customer, payment and operational data. Visual hidi
 6. Verify security headers on public and admin responses.
 7. Record failures as blockers, not accepted warnings.
 
-**Move to the next item when**
+### Move to the next item when
 
 Server-side authorization, session expiry/logout and database containment are proven for each role.
 
-## 11. Complete real-device mobile testing
+---
+
+## 12. Complete real-device mobile testing
 
 **Priority:** High priority  
 **Category:** Mobile and accessibility
 
-**Why this matters**
+### Why this matters
 
 Responsive browser resizing does not fully test touch, on-screen keyboards, camera uploads, slow connections or mobile payment handoff.
 
-**Where to find it**
+### Where to find it
 
-- `Real phone browsers`
-- `/book`
-- `/admin-blocks.html`
-- `/admin-inventory-manager.html`
-- `/detailer-jobs.html`
+- Real phone browsers
+- /book
+- /admin-blocks.html
+- /admin-inventory-manager.html
+- /detailer-jobs.html
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Test portrait and landscape on a real phone.
 2. Open/close the mobile dropdown menu on every core page.
@@ -330,26 +385,28 @@ Responsive browser resizing does not fully test touch, on-screen keyboards, came
 6. Test a slower network profile and retry behaviour.
 7. Capture screenshots of any overlap or unreadable control.
 
-**Move to the next item when**
+### Move to the next item when
 
 All primary customer and staff tasks can be completed without zooming, clipped controls or lost input.
 
-## 12. Complete keyboard, focus, labels and contrast review
+---
+
+## 13. Complete keyboard, focus, labels and contrast review
 
 **Priority:** High priority  
 **Category:** Mobile and accessibility
 
-**Why this matters**
+### Why this matters
 
 Accessible forms reduce customer abandonment and also expose hidden UI/JavaScript problems before launch.
 
-**Where to find it**
+### Where to find it
 
-- `Public home/services/booking/payment pages`
-- `Critical admin pages`
-- `Browser accessibility tree`
+- Public home/services/booking/payment pages
+- Critical admin pages
+- Browser accessibility tree
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Navigate every interactive control using Tab/Shift+Tab only.
 2. Confirm visible focus never disappears behind sticky elements.
@@ -359,27 +416,29 @@ Accessible forms reduce customer abandonment and also expose hidden UI/JavaScrip
 6. Test at 200% browser zoom.
 7. Document exceptions with route, control and screenshot.
 
-**Move to the next item when**
+### Move to the next item when
 
 Critical flows are usable by keyboard and at high zoom with clear labels, focus and errors.
 
-## 13. Complete Search Console, sitemap, canonical and schema preflight
+---
+
+## 14. Complete Search Console, sitemap, canonical and schema preflight
 
 **Priority:** High priority  
 **Category:** SEO and local visibility
 
-**Why this matters**
+### Why this matters
 
 The site already has strong local/service architecture, but indexing and structured-data evidence must be checked on the deployed canonical domain.
 
-**Where to find it**
+### Where to find it
 
-- `Google Search Console`
-- `/sitemap.xml`
-- `Google Rich Results Test`
-- `Public page source`
+- Google Search Console
+- /sitemap.xml
+- Google Rich Results Test
+- Public page source
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Verify the rosiedazzlers.ca Search Console property.
 2. Submit https://rosiedazzlers.ca/sitemap.xml.
@@ -389,27 +448,29 @@ The site already has strong local/service architecture, but indexing and structu
 6. Review indexed pages for accidental admin/dev URLs.
 7. Record real search queries monthly before rewriting titles.
 
-**Move to the next item when**
+### Move to the next item when
 
 The sitemap is accepted, important pages are inspectable/indexable, admin pages are noindex and schema has no critical errors.
 
-## 14. Complete and align Google Business Profile
+---
+
+## 15. Complete and align Google Business Profile
 
 **Priority:** High priority  
 **Category:** SEO and local visibility
 
-**Why this matters**
+### Why this matters
 
 Local visibility depends heavily on accurate relevance, distance/service-area and prominence signals; the profile must match the website and real business.
 
-**Where to find it**
+### Where to find it
 
-- `Google Business Profile Manager`
-- `/contact.html`
-- `/services.html`
-- `Town/service landing pages`
+- Google Business Profile Manager
+- /contact.html
+- /services.html
+- Town/service landing pages
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Confirm the real-world business name without keyword stuffing.
 2. Choose the most specific accurate primary category and relevant secondary categories.
@@ -419,26 +480,28 @@ Local visibility depends heavily on accurate relevance, distance/service-area an
 6. Create a review-request link and respond to reviews.
 7. Compare profile information with footer/contact/schema data for consistency.
 
-**Move to the next item when**
+### Move to the next item when
 
 The profile is verified, complete, accurate and consistent with the production website.
 
-## 15. Clean inventory records before relying on product sales and job costing
+---
+
+## 16. Clean inventory records before relying on product sales and job costing
 
 **Priority:** High priority  
 **Category:** Inventory and products
 
-**Why this matters**
+### Why this matters
 
 Suspicious imported names, missing costs/categories and duplicates reduce customer trust and make pricing/profitability unreliable.
 
-**Where to find it**
+### Where to find it
 
-- `/admin-inventory-manager.html`
-- `/admin-catalog.html`
-- `Inventory Workbench filters`
+- /admin-inventory-manager.html
+- /admin-catalog.html
+- Inventory Workbench filters
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Filter Suspicious names and replace ASIN/alphanumeric titles with clear product names.
 2. Complete category, vendor, unit, cost and reorder point.
@@ -448,26 +511,28 @@ Suspicious imported names, missing costs/categories and duplicates reduce custom
 6. Export a CSV snapshot before large bulk changes.
 7. Spot-check calculations after updates.
 
-**Move to the next item when**
+### Move to the next item when
 
 Every active/sellable row has a clear name, classification, category, cost and intentional active/public state.
 
-## 16. Complete product image sets and metadata
+---
+
+## 17. Complete product image sets and metadata
 
 **Priority:** High priority  
 **Category:** Inventory and products
 
-**Why this matters**
+### Why this matters
 
 Products need strong visual proof, but multiple images must remain ordered, descriptive, consent-safe and performant.
 
-**Where to find it**
+### Where to find it
 
-- `/admin-inventory-manager.html`
-- `/admin-catalog.html`
-- `Product public page/gallery`
+- /admin-inventory-manager.html
+- /admin-catalog.html
+- Product public page/gallery
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Set one featured image that clearly shows the complete item.
 2. Add up to seven gallery images covering detail, scale, packaging, use and variations.
@@ -477,28 +542,30 @@ Products need strong visual proof, but multiple images must remain ordered, desc
 6. Verify images load on mobile and do not cause layout shift.
 7. Keep products private until the image set and customer-facing copy are ready.
 
-**Move to the next item when**
+### Move to the next item when
 
 Every sellable product has a reliable featured image, useful gallery and accurate accessible metadata.
 
-## 17. Verify pricing, deposits, HST and final totals
+---
+
+## 18. Verify pricing, deposits, HST and final totals
 
 **Priority:** Launch blocker  
 **Category:** Payments
 
-**Why this matters**
+### Why this matters
 
 Customer-visible totals must match booking, checkout, receipts and accounting. Price drift is a launch blocker.
 
-**Where to find it**
+### Where to find it
 
-- `/pricing.html`
-- `/book`
-- `/admin-site-settings.html`
-- `/admin-tax-review.html`
-- `Stripe checkout`
+- /pricing.html
+- /book
+- /admin-site-settings.html
+- /admin-tax-review.html
+- Stripe checkout
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Compare every package and add-on price in public pricing, booking and admin catalog.
 2. Verify vehicle-size price differences.
@@ -508,26 +575,28 @@ Customer-visible totals must match booking, checkout, receipts and accounting. P
 6. Verify receipt and accounting entries use the same amounts.
 7. Document who can change prices and how changes are reviewed.
 
-**Move to the next item when**
+### Move to the next item when
 
 The same selected service produces the same subtotal, tax, deposit and total everywhere.
 
-## 18. Verify analytics and conversion events in production
+---
+
+## 19. Verify analytics and conversion events in production
 
 **Priority:** High priority  
 **Category:** SEO and local visibility
 
-**Why this matters**
+### Why this matters
 
 You need trustworthy evidence before changing SEO, ads or booking UX, and consent settings must be respected.
 
-**Where to find it**
+### Where to find it
 
-- `/admin-analytics.html`
-- `Browser DevTools`
-- `Analytics provider real-time/debug view`
+- /admin-analytics.html
+- Browser DevTools
+- Analytics provider real-time/debug view
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Accept and reject analytics consent and confirm expected script behaviour.
 2. Trigger page view, package view, booking start, quote start, booking complete and payment events.
@@ -536,28 +605,30 @@ You need trustworthy evidence before changing SEO, ads or booking UX, and consen
 5. Exclude internal/admin traffic where practical.
 6. Record a baseline before launch marketing changes.
 
-**Move to the next item when**
+### Move to the next item when
 
 Core conversion events arrive once, contain no sensitive customer data and can be tied to real acquisition sources.
 
-## 19. Prepare production monitoring and incident response
+---
+
+## 20. Prepare production monitoring and incident response
 
 **Priority:** High priority  
 **Category:** Recovery
 
-**Why this matters**
+### Why this matters
 
 During the first live bookings, failures must be noticed quickly and have a clear owner and rollback path.
 
-**Where to find it**
+### Where to find it
 
-- `/admin-production.html`
-- `Cloudflare logs`
-- `Supabase logs`
-- `Stripe webhook logs`
-- `KNOWN_GAPS_AND_RISKS.md`
+- /admin-production.html
+- Cloudflare logs
+- Supabase logs
+- Stripe webhook logs
+- KNOWN_GAPS_AND_RISKS.md
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Confirm where Cloudflare Function errors are viewed.
 2. Confirm Supabase database/auth logs and Stripe webhook logs.
@@ -567,27 +638,29 @@ During the first live bookings, failures must be noticed quickly and have a clea
 6. Create an incident record for any payment, booking, privacy or data-loss failure.
 7. Review logs daily during soft launch.
 
-**Move to the next item when**
+### Move to the next item when
 
 A named owner can detect, classify, communicate and roll back a critical failure without searching for instructions.
 
-## 20. Use an invite-only soft launch before unrestricted public promotion
+---
+
+## 21. Use an invite-only soft launch before unrestricted public promotion
 
 **Priority:** Launch blocker  
 **Category:** Go-live decision
 
-**Why this matters**
+### Why this matters
 
 A controlled first group gives real evidence without exposing the business to a large volume of simultaneous failures.
 
-**Where to find it**
+### Where to find it
 
-- `/admin-launch-readiness.html`
-- `/admin-today.html`
-- `/admin-production.html`
-- `Business operations calendar`
+- /admin-launch-readiness.html
+- /admin-today.html
+- /admin-production.html
+- Business operations calendar
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Resolve all critical blockers or explicitly document why a controlled exception is safe.
 2. Invite only a small number of known customers.
@@ -597,83 +670,97 @@ A controlled first group gives real evidence without exposing the business to a 
 6. Record incidents and fixes immediately.
 7. Expand gradually after a defined stable period.
 
-**Move to the next item when**
+### Move to the next item when
 
 Several real transactions complete without critical manual correction and monitoring evidence supports broader launch.
 
-## 21. Build a reviewed duplicate inventory merge workflow
+---
 
-**Priority:** Planned next work  
+## 22. Test the reviewed duplicate inventory merge workflow
+
+**Priority:** High priority  
 **Category:** Inventory and products
 
-**Why this matters**
+### Why this matters
 
-Soft archive prevents data loss, but duplicates still fragment stock, costs and history. A safe merge must transfer references rather than delete blindly.
+Build 238 now provides a preview-first merge that transfers known operational references, records compensating quantity movements and archives the duplicate. It still requires migration and staging proof before use on important rows.
 
-**Where to find it**
+### Where to find it
 
-- `Future Inventory Workbench merge assistant`
-- `MASTER_VALUE_ROADMAP.md`
+- /admin-inventory-manager.html
+- Supabase → catalog_inventory_merge_audit
+- Supabase → catalog_inventory_movements
+- STARTUP_GO_LIVE_BLOCKERS.md
 
-**Detailed instructions**
+### Detailed instructions
 
-1. Choose a survivor and duplicate in preview mode.
-2. List every booking/project/stock/purchase/image reference attached to each row.
-3. Show proposed quantity/cost/image decisions.
-4. Require an administrator reason and confirmation.
-5. Transfer references transactionally and create an audit record.
-6. Archive the duplicate only after verification.
-7. Provide reversal/compensating action where possible.
+1. Apply the Build 238 migration in staging.
+2. Choose two harmless test rows that truly represent the same item and have no irreplaceable history.
+3. Select exactly those two rows in Inventory Workbench and choose Review two-row merge.
+4. Choose the survivor row and enter a clear reason.
+5. Select Preview merge and inspect quantity, gallery count and every reference-count card.
+6. Confirm the survivor should keep its current values when present and inherit only missing values.
+7. Execute the merge, reload the page and verify the duplicate is inactive, private and zero quantity.
+8. Verify purchase orders, movements, assignments, service links and project references point to the survivor where applicable.
+9. Verify catalog_inventory_merge_audit contains before/after rows and the reason.
+10. Open Transaction & merge history, confirm the merge appears with the correct survivor, archived duplicate, reason, actor, timestamp and transferred-reference counts, then export the audit CSV.
 
-**Move to the next item when**
+### Move to the next item when
 
-Duplicate rows can be consolidated without losing operational history or silently changing totals.
+A staging merge preserves history, transfers known references, records compensating quantity movements, archives rather than deletes the duplicate, and appears correctly in the read-only audit history/CSV.
 
-## 22. Replace sequential bulk saves with a transactional inventory RPC
+---
 
-**Priority:** Planned next work  
+## 23. Test transactional bulk inventory updates and rollback behaviour
+
+**Priority:** High priority  
 **Category:** Inventory and products
 
-**Why this matters**
+### Why this matters
 
-Sequential browser saves can partially succeed, leaving a batch in an uncertain state after network or validation failure.
+Build 238 replaces sequential browser saves with an all-or-nothing database function. The complete batch is validated before any write and records a batch header plus row-level before/after evidence.
 
-**Where to find it**
+### Where to find it
 
-- `Supabase RPC`
-- `/admin-inventory-manager.html`
-- `Inventory audit tables`
+- /admin-inventory-manager.html
+- Supabase → catalog_inventory_change_batches
+- Supabase → catalog_inventory_change_batch_rows
+- Cloudflare Function logs
 
-**Detailed instructions**
+### Detailed instructions
 
-1. Define a whitelist of bulk-editable fields.
-2. Validate every row before changing any row.
-3. Return row-specific validation errors in dry-run mode.
-4. Apply all valid changes in one transaction.
-5. Record actor, before/after values and batch identifier.
-6. Roll back the entire batch on an unexpected failure.
-7. Keep CSV export as pre-change evidence.
+1. Apply the Build 238 migration in staging.
+2. Select two harmless inventory test rows.
+3. Choose a bulk field and value and enter a specific audit reason.
+4. Select Preview batch and verify the message says no rows were changed.
+5. Choose Apply transaction and confirm both rows change together.
+6. Verify one batch header and two row evidence records exist.
+7. Repeat with one deliberately invalid test value and confirm the entire transaction fails with neither row changed.
+8. Open Transaction & merge history and confirm the successful batch shows the correct operation, row count, reason, actor and timestamp; export the audit CSV.
+9. Restore the test values through another audited transaction.
 
-**Move to the next item when**
+### Move to the next item when
 
-Bulk changes are all-or-nothing, auditable and previewable.
+Valid batches update every selected row together, invalid batches change none, before/after evidence exists for every row, and the committed batch appears correctly in audit history/CSV.
 
-## 23. Generate responsive product/gallery image derivatives
+---
+
+## 24. Generate responsive product/gallery image derivatives
 
 **Priority:** Planned next work  
 **Category:** Media and performance
 
-**Why this matters**
+### Why this matters
 
 Seven original images can create slow mobile pages and layout instability without standardized dimensions and modern formats.
 
-**Where to find it**
+### Where to find it
 
-- `R2 derivative worker`
-- `Media Health`
-- `Product/gallery rendering`
+- R2 derivative worker
+- Media Health
+- Product/gallery rendering
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Define canonical source-image rules and maximum upload size.
 2. Generate thumbnail, card, medium and large dimensions.
@@ -683,28 +770,30 @@ Seven original images can create slow mobile pages and layout instability withou
 6. Keep the original source private or archival according to policy.
 7. Monitor failed derivative jobs and provide retry.
 
-**Move to the next item when**
+### Move to the next item when
 
 Public product/gallery pages load appropriately sized images with stable layout and fallback formats.
 
-## 24. Retire redundant Markdown only after release guards are modernized
+---
+
+## 25. Retire redundant Markdown only after release guards are modernized
 
 **Priority:** Planned next work  
 **Category:** Documentation
 
-**Why this matters**
+### Why this matters
 
 The project has many historical documents. Deleting them now can break release checks or erase evidence, but treating all of them as current creates confusion.
 
-**Where to find it**
+### Where to find it
 
-- `AI_PROJECT_HANDOFF.md`
-- `MASTER_VALUE_ROADMAP.md`
-- `DOC_INDEX.md`
-- `scripts/release_check.py`
-- `docs/archive`
+- AI_PROJECT_HANDOFF.md
+- MASTER_VALUE_ROADMAP.md
+- DOC_INDEX.md
+- scripts/release_check.py
+- docs/archive
 
-**Detailed instructions**
+### Detailed instructions
 
 1. Treat AI_PROJECT_HANDOFF.md and MASTER_VALUE_ROADMAP.md as the only living direction documents.
 2. Mark operational/reference documents clearly.
@@ -714,16 +803,20 @@ The project has many historical documents. Deleting them now can break release c
 6. Update DOC_INDEX.md with canonical, operational and archive sections.
 7. Run the complete release suite after each archive batch.
 
-**Move to the next item when**
+### Move to the next item when
 
 A new developer can find current direction in two files and historical evidence remains available without controlling the roadmap.
 
 ---
 
-> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+> Build 238 synchronization (2026-07-30): current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This Startup Guide is the detailed go-live authority. Historical Markdown remains audit/reference material until release guards are modernized.
 
-> Build 210 documentation sync: retained in the synchronized documentation set; Build 237 remains the current authority.
-> Build 211 documentation sync: retained in the synchronized documentation set; Build 237 remains the current authority.
-> Build 212 documentation sync: retained in the synchronized documentation set; Build 237 remains the current authority.
-> Build 213 documentation sync: retained in the synchronized documentation set; Build 237 remains the current authority.
-> Build 214 documentation sync: retained in the synchronized documentation set; Build 237 remains the current authority.
+> **Build 210 documentation sync:** Retained and synchronized under current Build 238 documentation authority.
+
+> **Build 211 documentation sync:** Retained and synchronized under current Build 238 documentation authority.
+
+> **Build 212 documentation sync:** Retained and synchronized under current Build 238 documentation authority.
+
+> **Build 213 documentation sync:** Retained and synchronized under current Build 238 documentation authority.
+
+> **Build 214 documentation sync:** Retained and synchronized under current Build 238 documentation authority.
