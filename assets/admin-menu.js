@@ -252,6 +252,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-inventory-manager") || globalScope.AdminAuth.canAccessPage("admin")
     },
     {
+      key: "admin-inventory-posting",
+      label: "Inventory Posting",
+      href: "/admin-inventory-posting.html",
+      description: "Preview, post and reverse booking or project inventory as one audited transaction",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-inventory-posting") || globalScope.AdminAuth.canAccessPage("admin")
+    },
+    {
       key: "admin-startup-guide",
       label: "Startup Command Center",
       href: "/admin-startup-guide.html",

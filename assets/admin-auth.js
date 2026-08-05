@@ -220,6 +220,7 @@
       case "admin-gallery":
       case "admin-catalog":
       case "admin-inventory-manager":
+      case "admin-inventory-posting":
       case "admin-launch-readiness":
       case "admin-startup-guide":
       case "admin-production":
