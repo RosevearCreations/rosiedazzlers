@@ -28,3 +28,5 @@ The pass preserves one H1 per exposed page and keeps admin surfaces noindex. It 
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
 
 > **Build 238 synchronization (2026-07-30):** Historical release evidence retained; current launch authority is Build 239.
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->

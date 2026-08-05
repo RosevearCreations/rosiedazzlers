@@ -1,0 +1,52 @@
+# Build 240 — Transactional Inventory Posting and Reversal
+
+**Updated:** 2026-08-05
+
+## Purpose
+
+Build 240 replaces split browser stock deductions with one database transaction and a preview-first workflow for ordinary bookings and reviewed Creative Project reservations. The original Inventory Workflow, Inventory Workbench, row editor, JSON tools, gallery editor, archive/restore, and transaction/merge history remain available.
+
+## Operator route
+
+Open `/admin-inventory-posting.html` from the Admin Menu, Inventory Workflow, Inventory Workbench, or Creative Projects.
+
+## Safe workflow
+
+1. Choose **Booking** or **Creative Project**.
+2. Enter the source UUID. For projects, load reviewed reservations rather than retyping them.
+3. Add a reason that explains the business event without private customer details.
+4. Select **Preview transaction**.
+5. Resolve every shortage, inactive item, unit conflict, duplicate key, missing reservation, or source mismatch.
+6. Confirm the preview and select **Post transaction**.
+7. Review the batch and row evidence in Transaction History.
+8. Reverse only with authorization and a specific reason. Reversal creates compensating movements; it never deletes the original movement.
+9. For booking reversals, review the associated cost-of-goods journal in Accounting.
+
+## Database migration
+
+Apply `sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql` after Builds 235, 237, 238, and 239. Run it in staging first.
+
+## New database objects
+
+- `catalog_inventory_posting_batches`
+- `catalog_inventory_posting_rows`
+- `admin_catalog_inventory_post(...)`
+- `admin_catalog_inventory_post_reverse(...)`
+
+## Failure and fallback behaviour
+
+- Preview and commit fail closed when the migration or service-role configuration is missing.
+- The UI may display recent transaction history from a labelled read-only cache during an API outage.
+- Cached data can never be used to post, reverse, archive, or mutate stock.
+- Idempotency keys prevent the same committed request from deducting stock twice.
+- Stock shortages reject the complete batch; no partial row writes are allowed.
+
+## Acceptance required before production
+
+Complete the detailed `migration-240` and `inventory-post-reversal-acceptance` items in `STARTUP_GO_LIVE_BLOCKERS.md` and `/admin-startup-guide.html`.
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+Build 238 synchronization (2026-07-30)
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
