@@ -1,7 +1,7 @@
 {
-  "build": 237,
-  "updated_at": "2026-07-28",
-  "summary": "Build 237 adds a Startup Go-Live command-path placeholder and continues approved Rosie-owned replacement planning while preserving internal-only privacy boundaries.",
+  "build": 240,
+  "updated_at": "2026-08-05",
+  "summary": "Build 240 adds transactional inventory posting and reversal workflow guidance while preserving approved Rosie-owned replacement planning and internal privacy boundaries.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -269,6 +269,13 @@
       "where": "Startup Go-Live Guide and launch readiness navigation",
       "visual": "connected preflight path with calendar, payment, email, backup, SEO and soft-launch checkpoints",
       "replace_with": "A clean internal process diagram or privacy-safe screenshots of the actual Rosie admin pages"
+    },
+    {
+      "key": "inventory_transactional_posting_reversal",
+      "label": "Inventory transaction workflow graphic",
+      "where": "Inventory Posting & Reversal admin page and operator training",
+      "visual": "review \u2192 validate stock \u2192 post transaction \u2192 audited reversal workflow",
+      "replace_with": "A Rosie-branded workflow diagram or privacy-safe screenshot after live acceptance testing"
     }
   ],
   "rules": [
