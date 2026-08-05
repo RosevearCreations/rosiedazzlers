@@ -36,6 +36,7 @@ ROUTE_COPY_PAGES = [
     "admin-startup-guide.html",
     "admin-launch-readiness.html",
     "admin-inventory-manager.html",
+    "admin-inventory-posting.html",
     "admin-roadmap-execution.html",
     "admin-workflow.html",
     "admin-today.html",

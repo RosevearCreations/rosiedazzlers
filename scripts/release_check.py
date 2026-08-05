@@ -195,6 +195,7 @@ CHECKS = [
     "scripts/build237_css_startup_evidence_check.py",
     "scripts/build238_inventory_transactions_seo_startup_check.py",
     "scripts/build239_unified_startup_command_center_check.py",
+    "scripts/build240_transactional_inventory_posting_check.py",
     "scripts/build224_customer_profile_quality_check.py",
     "scripts/seo_h1_check.py",
 ]
