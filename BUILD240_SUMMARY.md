@@ -83,3 +83,5 @@ Build 211 documentation sync
 Build 212 documentation sync
 Build 213 documentation sync
 Build 214 documentation sync
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->

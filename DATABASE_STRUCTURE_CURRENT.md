@@ -1,3 +1,9 @@
+# Database Structure — Build 241 Status
+
+Build 241 requires no DDL. The latest functional database migration remains `sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql`. The hotfix record is `sql/2026-08-05_build241_startup_command_center_initialization_hotfix_no_ddl.sql`.
+
+---
+
 # Database Structure — Build 240 Current Additions
 
 Apply `sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql` after prerequisite migrations.
@@ -1053,3 +1059,5 @@ The database is primary after migration; packaged JSON/JavaScript remains a comp
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
 
 <!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->

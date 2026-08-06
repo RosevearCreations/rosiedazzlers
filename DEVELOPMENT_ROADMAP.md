@@ -1,3 +1,21 @@
+# Development Roadmap — Build 241 Hotfix
+
+**Updated:** 2026-08-05
+
+## Completed
+
+- Repaired Startup Command Center summary initialization.
+- Added `Promise.allSettled()` refresh isolation and visible fallback reporting.
+- Advanced asset/service-worker cache tokens.
+- Added an automated Build 241 regression guard.
+- Preserved every Build 240 roadmap action and launch blocker.
+
+## Resume next
+
+Continue the Build 240 current execution cycle after preview acceptance of `/admin-startup-guide.html`.
+
+---
+
 # Development Roadmap — Build 240 Current Execution
 
 **Updated:** 2026-08-05
@@ -2781,3 +2799,5 @@ Use `/admin-startup-guide.html#roadmap` as the active next-20 queue. The Build 2
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
 
 <!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->

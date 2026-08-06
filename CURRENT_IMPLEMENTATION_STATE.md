@@ -1,3 +1,9 @@
+# Current Implementation State — Build 241
+
+Build 241 is a no-DDL reliability hotfix for the unified Startup Command Center. The summary, evidence, production, guided-test, roadmap and automatic-check panels can initialize independently, and a single panel failure no longer prevents the rest of the interface from loading. Build 240 remains the latest functional schema release.
+
+---
+
 # Current Implementation State — Build 240
 
 Build 240 preserves all existing inventory and launch workflows and adds database-first booking/project inventory posting, compensating reversal, transaction history, project reservation validation and safe read-only outage history. Production readiness depends on applying migrations and completing the Startup acceptance evidence.
@@ -888,3 +894,5 @@ Implemented in source: unified Startup Command Center, 34-item detailed catalog,
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
 
 <!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->

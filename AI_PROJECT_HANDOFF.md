@@ -1,3 +1,19 @@
+# Rosie Dazzlers — AI Project Handoff (Build 241)
+
+**Updated:** 2026-08-05  
+**Build 241 hotfix:** repairs the unified Startup Command Center summary crash caused by a JavaScript temporal-dead-zone name collision, adds all-settled refresh fallback handling, and advances browser/service-worker cache tokens. No database change is required.
+
+## Build 241 continuation pointer
+
+- Primary repaired route: `/admin-startup-guide.html`.
+- Corrected asset: `/assets/startup-command-center.js?v=20260805build241`.
+- No-DDL record: `sql/2026-08-05_build241_startup_command_center_initialization_hotfix_no_ddl.sql`.
+- The Build 240 inventory posting/reversal migration remains the latest functional database migration.
+- Do not reintroduce a local variable named `evidenceRows` inside `updateSummary`; the row factory is now `getEvidenceRows()`.
+- `refreshAll()` uses `Promise.allSettled()` so one failed panel loads a labelled fallback rather than producing an uncaught promise rejection.
+
+---
+
 # Rosie Dazzlers — AI Project Handoff (Build 240)
 
 **Updated:** 2026-08-05  
@@ -786,3 +802,5 @@ Apply migrations in order: Build 235 gallery if outstanding, Build 237 evidence/
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
 
 <!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->
