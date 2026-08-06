@@ -1,0 +1,2425 @@
+{
+  "charts": [
+    {
+      "filename": "CarPrice2025.PNG",
+      "title": "Vehicle Price Chart 2025",
+      "r2_url": "/assets/brand/CarPrice2025.PNG"
+    },
+    {
+      "filename": "CarPriceDetails2025.PNG",
+      "title": "Package Service Details Chart",
+      "r2_url": "/assets/brand/CarPriceDetails2025.PNG"
+    },
+    {
+      "filename": "CarSizeChart.PNG",
+      "title": "Vehicle Size Chart",
+      "r2_url": "https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG"
+    }
+  ],
+  "packages": [
+    {
+      "code": "premium_wash",
+      "name": "Premium Wash",
+      "subtitle": "Quick exterior clean",
+      "prices_cad": {
+        "small": 85,
+        "mid": 105,
+        "oversize": 125
+      },
+      "deposit_cad": 50,
+      "images_by_size": {
+        "small": "https://assets.rosiedazzlers.ca/packages/PremiumExternalWash.png",
+        "mid": "https://assets.rosiedazzlers.ca/packages/PremiumExternalWashMidSize.png",
+        "oversize": "https://assets.rosiedazzlers.ca/packages/PremiumExternalWashLargeSizeExotic.png"
+      },
+      "included_services": [
+        {
+          "name": "Hand Wash & Dry"
+        },
+        {
+          "name": "Clean Dash & Centre Console"
+        },
+        {
+          "name": "Clean Windows (In/Out)"
+        },
+        {
+          "name": "Door Jambs"
+        },
+        {
+          "name": "Wash Tires & Wheel Wells"
+        }
+      ],
+      "notes": [
+        "Quick exterior-focused clean",
+        "Main image changes with vehicle size"
+      ],
+      "display_alias": "Exterior Wash & Protect",
+      "customer_goal": "Quick exterior refresh",
+      "service_level": "maintenance",
+      "best_for": "A maintained vehicle that mainly needs a clean exterior, glass, wheels, and a tidy dash reset.",
+      "recommendation_tags": [
+        "quick refresh",
+        "exterior",
+        "maintenance",
+        "budget friendly"
+      ],
+      "photo_estimate_recommended": false,
+      "chooser_prompt": "Choose this when the outside needs a tidy reset but the interior is already in decent shape."
+    },
+    {
+      "code": "basic_detail",
+      "name": "Basic Detail",
+      "subtitle": "Quick interior clean",
+      "prices_cad": {
+        "small": 115,
+        "mid": 135,
+        "oversize": 170
+      },
+      "deposit_cad": 50,
+      "images_by_size": {
+        "small": "https://assets.rosiedazzlers.ca/packages/BasicInteriorDetailSmallSize.png",
+        "mid": "https://assets.rosiedazzlers.ca/packages/BasicInteriorDetailMidSize.png",
+        "oversize": "https://assets.rosiedazzlers.ca/packages/BasicInteriorDetailExotics.png"
+      },
+      "included_services": [
+        {
+          "name": "Full Vacuum (Seats, Carpets, Mats, Trunk)"
+        },
+        {
+          "name": "Clean Dash & Centre Console"
+        },
+        {
+          "name": "Clean Windows (In/Out)"
+        },
+        {
+          "name": "Clean Leather / Vinyl Seats",
+          "optional_condition_note": "Where equipped"
+        },
+        {
+          "name": "Door Jambs"
+        },
+        {
+          "name": "Wash Tires & Wheel Wells"
+        }
+      ],
+      "notes": [
+        "Quick interior-focused package",
+        "Main image changes with vehicle size"
+      ],
+      "display_alias": "Express Interior Refresh",
+      "customer_goal": "Quick interior reset",
+      "service_level": "refresh",
+      "best_for": "Light daily-use interior dust, crumbs, glass, seats, and mats when deep shampoo is not the main goal.",
+      "recommendation_tags": [
+        "interior",
+        "quick clean",
+        "daily driver",
+        "maintenance"
+      ],
+      "photo_estimate_recommended": false,
+      "chooser_prompt": "Choose this when the cabin needs a tidy reset, not a full stain or odour recovery."
+    },
+    {
+      "code": "complete_detail",
+      "name": "Complete Detail",
+      "subtitle": "Our #1 choice",
+      "prices_cad": {
+        "small": 319,
+        "mid": 369,
+        "oversize": 419
+      },
+      "deposit_cad": 100,
+      "images_by_size": {
+        "small": "https://assets.rosiedazzlers.ca/packages/CompleteDetailSmallCars.png",
+        "mid": "https://assets.rosiedazzlers.ca/packages/CompleteDetailMidSizelCars.png",
+        "oversize": "https://assets.rosiedazzlers.ca/packages/CompleteDetailOverSizeExoticCars.png"
+      },
+      "included_services": [
+        {
+          "name": "Hand Wash & Dry"
+        },
+        {
+          "name": "Full Vacuum (Seats, Carpets, Mats, Trunk)"
+        },
+        {
+          "name": "Clean Dash & Centre Console"
+        },
+        {
+          "name": "Clean Windows (In/Out)"
+        },
+        {
+          "name": "Door Jambs"
+        },
+        {
+          "name": "Wash Tires & Wheel Wells"
+        },
+        {
+          "name": "Clean Leather / Vinyl Seats",
+          "optional_condition_note": "Where equipped"
+        },
+        {
+          "name": "Shampoo Carpets & Mats"
+        },
+        {
+          "name": "Shampoo Cloth Seats",
+          "optional_condition_note": "Where equipped"
+        }
+      ],
+      "notes": [
+        "Best all-around package",
+        "Main image changes with vehicle size"
+      ],
+      "display_alias": "Full Detail",
+      "customer_goal": "Interior and exterior reset",
+      "service_level": "full detail",
+      "best_for": "The safest all-around choice when both the inside and outside need attention or the customer is unsure.",
+      "recommendation_tags": [
+        "best all around",
+        "inside and outside",
+        "family vehicle",
+        "pre-sale"
+      ],
+      "photo_estimate_recommended": true,
+      "chooser_prompt": "Choose this when you want the best all-around detail or the vehicle has mixed interior and exterior needs."
+    },
+    {
+      "code": "interior_detail",
+      "name": "Interior Detail",
+      "subtitle": "Full interior detailing",
+      "prices_cad": {
+        "small": 195,
+        "mid": 220,
+        "oversize": 245
+      },
+      "deposit_cad": 100,
+      "images_by_size": {
+        "small": "https://assets.rosiedazzlers.ca/packages/FullInteriorDetailSmallCars.png",
+        "mid": "https://assets.rosiedazzlers.ca/packages/FullInteriorDetailMidSuvCars.png",
+        "oversize": "https://assets.rosiedazzlers.ca/packages/FullInteriorDetailLargeExoticCars.png"
+      },
+      "included_services": [
+        {
+          "name": "Full Vacuum (Seats, Carpets, Mats, Trunk)"
+        },
+        {
+          "name": "Clean Dash & Centre Console"
+        },
+        {
+          "name": "Clean Windows (In/Out)"
+        },
+        {
+          "name": "Clean Leather / Vinyl Seats",
+          "optional_condition_note": "Where equipped"
+        },
+        {
+          "name": "Shampoo Carpets & Mats"
+        },
+        {
+          "name": "Shampoo Cloth Seats",
+          "optional_condition_note": "Where equipped"
+        }
+      ],
+      "notes": [
+        "Interior-only full detailing package",
+        "Main image changes with vehicle size"
+      ],
+      "display_alias": "Full Interior Detail",
+      "customer_goal": "Deep interior clean",
+      "service_level": "deep interior",
+      "best_for": "Seats, carpets, mats, cargo areas, salt, kid messes, pet hair, odours, or interior-only recovery.",
+      "recommendation_tags": [
+        "interior",
+        "deep clean",
+        "pet hair",
+        "salt",
+        "odour"
+      ],
+      "photo_estimate_recommended": true,
+      "chooser_prompt": "Choose this when the inside is the problem area and shampoo or deeper interior work may be needed."
+    },
+    {
+      "code": "exterior_detail",
+      "name": "Exterior Detail",
+      "subtitle": "Full exterior detailing",
+      "prices_cad": {
+        "small": 195,
+        "mid": 220,
+        "oversize": 245
+      },
+      "deposit_cad": 100,
+      "images_by_size": {
+        "small": "https://assets.rosiedazzlers.ca/packages/FullExteriorDetailSmallSizeCars.png",
+        "mid": "https://assets.rosiedazzlers.ca/packages/FullExteriorDetailMidSizeCars.png",
+        "oversize": "https://assets.rosiedazzlers.ca/packages/FullExteriorDetailLargeExoticCars.png"
+      },
+      "included_services": [
+        {
+          "name": "Hand Wash & Dry"
+        },
+        {
+          "name": "Clean Windows (In/Out)"
+        },
+        {
+          "name": "Door Jambs"
+        },
+        {
+          "name": "Wash Tires & Wheel Wells"
+        }
+      ],
+      "notes": [
+        "Exterior-only full detailing package",
+        "Main image changes with vehicle size"
+      ],
+      "display_alias": "Exterior Detail & Protection Prep",
+      "customer_goal": "Exterior gloss and prep",
+      "service_level": "exterior detail",
+      "best_for": "Paint, trim, wheels, glass, road film, surface prep, gloss, wax/sealant, clay, or coating-prep discussions.",
+      "recommendation_tags": [
+        "exterior",
+        "paint prep",
+        "gloss",
+        "sealant",
+        "clay"
+      ],
+      "photo_estimate_recommended": true,
+      "chooser_prompt": "Choose this when the outside finish, protection, or paint prep is the main goal."
+    }
+  ],
+  "service_matrix": [
+    {
+      "service": "Hand Wash & Dry",
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "Full Vacuum (Seats, Carpets, Mats, Trunk)",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "Clean Dash & Centre Console",
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "Clean Windows (In/Out)",
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "Door Jambs",
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "Wash Tires & Wheel Wells",
+      "included_in": {
+        "premium_wash": true,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": false,
+        "exterior_detail": true
+      }
+    },
+    {
+      "service": "Clean Leather / Vinyl Seats",
+      "conditional_note": "Where equipped",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": true,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "Shampoo Carpets & Mats",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    },
+    {
+      "service": "Shampoo Cloth Seats",
+      "conditional_note": "Where equipped",
+      "included_in": {
+        "premium_wash": false,
+        "basic_detail": false,
+        "complete_detail": true,
+        "interior_detail": true,
+        "exterior_detail": false
+      }
+    }
+  ],
+  "addons": [
+    {
+      "code": "full_clay_treatment",
+      "name": "Full Clay Treatment",
+      "prices_cad": {
+        "small": 79,
+        "mid": 99,
+        "oversize": 129
+      },
+      "quote_required": false,
+      "source": "interpreted_pricing",
+      "notes": [
+        "Add-on service not included in any package"
+      ],
+      "category": "paint correction",
+      "type": "surface prep",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/full_clay_treatment.png",
+      "image_fallback_url": "/assets/addons/full_clay_treatment.png"
+    },
+    {
+      "code": "two_stage_polish",
+      "name": "Two Stage Polish",
+      "prices_cad": {
+        "small": 199,
+        "mid": 279,
+        "oversize": 359
+      },
+      "quote_required": true,
+      "source": "interpreted_pricing",
+      "notes": [
+        "Quote required because paint condition varies"
+      ],
+      "category": "paint correction",
+      "type": "machine polishing",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/two_stage_polish.png",
+      "image_fallback_url": "/assets/addons/two_stage_polish.png"
+    },
+    {
+      "code": "high_grade_paint_sealant",
+      "name": "High Grade Paint Sealant",
+      "prices_cad": {
+        "small": 59,
+        "mid": 79,
+        "oversize": 99
+      },
+      "quote_required": false,
+      "source": "interpreted_pricing",
+      "category": "paint protection",
+      "type": "sealant",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/high_grade_paint_sealant.png",
+      "notes": [
+        "Longer-lasting gloss"
+      ],
+      "image_fallback_url": "/assets/addons/high_grade_paint_sealant.png"
+    },
+    {
+      "code": "uv_protectant_applied_on_interior_panels",
+      "name": "UV Protectant Applied on Interior Panels",
+      "prices_cad": {
+        "small": 25,
+        "mid": 35,
+        "oversize": 45
+      },
+      "quote_required": false,
+      "source": "interpreted_pricing",
+      "category": "interior protection",
+      "type": "uv protectant",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/uv_protectant_applied_on_interior_panels.png",
+      "notes": [
+        "Interior panel dressing"
+      ],
+      "image_fallback_url": "/assets/addons/uv_protectant_applied_on_interior_panels.png"
+    },
+    {
+      "code": "de_ionizing_treatment",
+      "name": "De-Ionizing Treatment",
+      "prices_cad": {
+        "small": 59,
+        "mid": 79,
+        "oversize": 99
+      },
+      "quote_required": true,
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png",
+      "category": "odor treatment",
+      "type": "de-ionizing",
+      "image_fallback_url": "/assets/addons/de_ionizing_treatment.svg"
+    },
+    {
+      "code": "de_badging",
+      "name": "De-Badging",
+      "quote_required": true,
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
+      "category": "appearance modifications",
+      "type": "badge removal",
+      "image_fallback_url": "/assets/addons/de_badging.svg"
+    },
+    {
+      "code": "engine_cleaning",
+      "name": "Engine Cleaning",
+      "price_cad": 59,
+      "quote_required": false,
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
+      "category": "engine bay",
+      "type": "cleaning",
+      "image_fallback_url": "/assets/addons/engine_cleaning.svg"
+    },
+    {
+      "code": "external_ceramic_coating",
+      "name": "External Ceramic Coating",
+      "price_cad": 299,
+      "quote_required": true,
+      "source": "package_asset",
+      "notes": [
+        "Starting price only"
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
+      "category": "paint protection",
+      "type": "ceramic coating",
+      "image_fallback_url": "/assets/addons/external_ceramic_coating.svg"
+    },
+    {
+      "code": "external_graphene_fine_finish",
+      "name": "External Graphene Fine Finish",
+      "price_cad": 249,
+      "quote_required": true,
+      "source": "package_asset",
+      "notes": [
+        "Starting price only"
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png",
+      "category": "paint protection",
+      "type": "graphene finish",
+      "image_fallback_url": "/assets/addons/external_graphene_fine_finish.svg"
+    },
+    {
+      "code": "external_wax",
+      "name": "External Wax",
+      "prices_cad": {
+        "small": 49,
+        "mid": 59,
+        "oversize": 69
+      },
+      "quote_required": false,
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png",
+      "category": "paint protection",
+      "type": "wax",
+      "image_fallback_url": "/assets/addons/external_wax.svg"
+    },
+    {
+      "code": "vinyl_wrapping",
+      "name": "Vinyl Wrapping",
+      "quote_required": true,
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
+      "category": "appearance modifications",
+      "type": "vinyl wrapping",
+      "image_fallback_url": "/assets/addons/vinyl_wrapping.svg"
+    },
+    {
+      "code": "window_tinting",
+      "name": "Window Tinting",
+      "quote_required": true,
+      "source": "package_asset",
+      "image_url": "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png",
+      "category": "glass services",
+      "type": "window tinting",
+      "image_fallback_url": "/assets/addons/window_tinting.svg"
+    },
+    {
+      "code": "pet_hair_removal",
+      "name": "Pet Hair Removal",
+      "prices_cad": {
+        "small": 49,
+        "mid": 69,
+        "oversize": 89
+      },
+      "quote_required": false,
+      "category": "interior",
+      "type": "deep cleaning",
+      "notes": [
+        "Recommended when pet hair is embedded in carpets, seats, cargo areas, or mats.",
+        "Final price may change for severe buildup."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/pet_hair_removal.png",
+      "image_fallback_url": "/assets/addons/pet_hair_removal.png",
+      "service_compatibility": [
+        "interior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 45,
+      "customer_goal": "Remove embedded pet hair"
+    },
+    {
+      "code": "odor_treatment",
+      "name": "Odor Treatment",
+      "prices_cad": {
+        "small": 59,
+        "mid": 79,
+        "oversize": 99
+      },
+      "quote_required": false,
+      "category": "interior",
+      "type": "odor help",
+      "notes": [
+        "Best for smoke, food, pet, musty, or unknown odour concerns after source cleaning.",
+        "Severe or biohazard odours may require inspection or referral."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/odor_treatment.png",
+      "image_fallback_url": "/assets/addons/odor_treatment.png",
+      "service_compatibility": [
+        "interior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 45,
+      "customer_goal": "Reduce or remove stubborn odours"
+    },
+    {
+      "code": "seat_shampoo",
+      "name": "Seat Shampoo",
+      "prices_cad": {
+        "small": 49,
+        "mid": 69,
+        "oversize": 89
+      },
+      "quote_required": false,
+      "category": "interior",
+      "type": "fabric extraction",
+      "notes": [
+        "Greatly improves many fabric stains and spills, but some permanent staining may remain."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/seat_shampoo.png",
+      "image_fallback_url": "/assets/addons/seat_shampoo.png",
+      "service_compatibility": [
+        "interior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 45,
+      "customer_goal": "Clean fabric seats and spills"
+    },
+    {
+      "code": "carpet_shampoo",
+      "name": "Carpet Shampoo",
+      "prices_cad": {
+        "small": 49,
+        "mid": 69,
+        "oversize": 89
+      },
+      "quote_required": false,
+      "category": "interior",
+      "type": "carpet extraction",
+      "notes": [
+        "Recommended for salt, coffee, kids, pets, cargo dirt, and winter buildup.",
+        "Heavy salt may require multiple passes."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/carpet_shampoo.png",
+      "image_fallback_url": "/assets/addons/carpet_shampoo.png",
+      "service_compatibility": [
+        "interior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 45,
+      "customer_goal": "Clean carpets, mats, and cargo areas"
+    },
+    {
+      "code": "salt_stain_treatment",
+      "name": "Salt Stain Treatment",
+      "prices_cad": {
+        "small": 39,
+        "mid": 59,
+        "oversize": 79
+      },
+      "quote_required": false,
+      "category": "interior",
+      "type": "seasonal cleanup",
+      "notes": [
+        "Local Ontario winter add-on for white salt staining on mats, carpets, and lower panels.",
+        "Some older salt staining may only improve, not fully disappear."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/salt_stain_treatment.png",
+      "image_fallback_url": "/assets/addons/salt_stain_treatment.png",
+      "service_compatibility": [
+        "interior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 35,
+      "customer_goal": "Clean Ontario winter salt stains"
+    },
+    {
+      "code": "headlight_restoration_addon",
+      "name": "Headlight Restoration",
+      "prices_cad": {
+        "small": 89,
+        "mid": 99,
+        "oversize": 119
+      },
+      "quote_required": false,
+      "category": "exterior",
+      "type": "safety and clarity",
+      "notes": [
+        "Improves cloudy, yellowed, or oxidized headlight lenses where the lens is restorable.",
+        "Cracked, wet, or failing lenses may need replacement."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/headlight_restoration.png",
+      "image_fallback_url": "/assets/addons/headlight_restoration.png",
+      "service_compatibility": [
+        "premium_wash",
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 60,
+      "customer_goal": "Improve headlight clarity"
+    },
+    {
+      "code": "windshield_ceramic_coating",
+      "name": "Windshield Ceramic Coating",
+      "prices_cad": {
+        "small": 49,
+        "mid": 59,
+        "oversize": 69
+      },
+      "quote_required": false,
+      "category": "exterior",
+      "type": "glass coating",
+      "notes": [
+        "Adds hydrophobic protection to exterior glass after cleaning and prep.",
+        "Best after exterior detail or glass polishing when needed."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/windshield_ceramic_coating.png",
+      "image_fallback_url": "/assets/addons/windshield_ceramic_coating.png",
+      "service_compatibility": [
+        "premium_wash",
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 30,
+      "customer_goal": "Make windshield cleaning easier"
+    },
+    {
+      "code": "ceramic_spray_wax",
+      "name": "Ceramic Spray Protection",
+      "prices_cad": {
+        "small": 49,
+        "mid": 69,
+        "oversize": 89
+      },
+      "quote_required": false,
+      "category": "exterior",
+      "type": "paint protection",
+      "notes": [
+        "Entry-level gloss and water-beading protection after an exterior wash/detail.",
+        "Not the same as a multi-year ceramic coating."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/ceramic_spray_wax.png",
+      "image_fallback_url": "/assets/addons/ceramic_spray_wax.png",
+      "service_compatibility": [
+        "premium_wash",
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 30,
+      "customer_goal": "Add quick gloss and protection"
+    },
+    {
+      "code": "trim_restoration",
+      "name": "Trim Restoration",
+      "prices_cad": {
+        "small": 49,
+        "mid": 69,
+        "oversize": 89
+      },
+      "quote_required": false,
+      "category": "exterior",
+      "type": "plastic trim",
+      "notes": [
+        "Improves faded exterior plastic trim where the material is still restorable."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/trim_restoration.png",
+      "image_fallback_url": "/assets/addons/trim_restoration.png",
+      "service_compatibility": [
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 45,
+      "customer_goal": "Improve faded exterior trim"
+    },
+    {
+      "code": "bug_tar_removal",
+      "name": "Bug and Tar Removal",
+      "prices_cad": {
+        "small": 39,
+        "mid": 59,
+        "oversize": 79
+      },
+      "quote_required": false,
+      "category": "exterior",
+      "type": "contamination removal",
+      "notes": [
+        "Helps remove bug residue, tar spotting, sap-like contamination, and stuck-on road grime before protection."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/bug_tar_removal.png",
+      "image_fallback_url": "/assets/addons/bug_tar_removal.png",
+      "service_compatibility": [
+        "premium_wash",
+        "exterior_detail",
+        "complete_detail"
+      ],
+      "time_added_minutes": 35,
+      "customer_goal": "Remove stuck-on road grime"
+    },
+    {
+      "code": "truck_box_wash",
+      "name": "Truck Box Wash",
+      "prices_cad": {
+        "small": 0,
+        "mid": 0,
+        "oversize": 49
+      },
+      "quote_required": true,
+      "category": "fleet",
+      "type": "truck utility cleanup",
+      "notes": [
+        "Quote path for pickup beds, work trucks, contractor vehicles, farm trucks, and cargo use.",
+        "Loose debris and hazardous materials must be removed before service."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/truck_box_wash.png",
+      "image_fallback_url": "/assets/addons/truck_box_wash.png",
+      "service_compatibility": [
+        "fleet",
+        "complete_detail",
+        "exterior_detail"
+      ],
+      "time_added_minutes": 45,
+      "customer_goal": "Clean pickup/work truck cargo area"
+    },
+    {
+      "code": "fleet_vehicle_add_on",
+      "name": "Fleet Vehicle Add-On",
+      "prices_cad": {
+        "small": 0,
+        "mid": 0,
+        "oversize": 0
+      },
+      "quote_required": true,
+      "category": "fleet",
+      "type": "commercial scheduling",
+      "notes": [
+        "For multiple vehicles at one location, work trucks, company cars, and recurring business cleanup."
+      ],
+      "image_url": "https://assets.rosiedazzlers.ca/packages/fleet_vehicle_add_on.png",
+      "image_fallback_url": "/assets/addons/fleet_vehicle_add_on.png",
+      "service_compatibility": [
+        "fleet"
+      ],
+      "time_added_minutes": 0,
+      "customer_goal": "Quote multiple vehicles at one location"
+    }
+  ],
+  "service_areas": [
+    {
+      "county": "Oxford County",
+      "label": "Other Oxford County location",
+      "value": "Other Oxford County location",
+      "municipality": "Oxford County",
+      "zone": "Oxford County",
+      "travel_tier": "quote_required",
+      "area_type": "county",
+      "aliases": [
+        "Oxford County",
+        "Other Oxford",
+        "Oxford rural",
+        "Oxford",
+        "Other Oxford County location"
+      ],
+      "bylaw_note": "Oxford County fallback for typed towns or rural addresses not yet listed by name.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Other Norfolk County location",
+      "value": "Other Norfolk County location",
+      "municipality": "Norfolk County",
+      "zone": "Norfolk County",
+      "travel_tier": "quote_required",
+      "area_type": "county",
+      "aliases": [
+        "Norfolk County",
+        "Other Norfolk",
+        "Norfolk rural",
+        "Norfolk",
+        "Other Norfolk County location"
+      ],
+      "bylaw_note": "Norfolk County fallback for typed towns or rural addresses not yet listed by name.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Tillsonburg, ON",
+      "value": "Tillsonburg, ON",
+      "municipality": "Tillsonburg",
+      "zone": "Tillsonburg",
+      "travel_tier": "urban",
+      "area_type": "town",
+      "aliases": [
+        "Tillsonburg",
+        "Tillsonburg"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Woodstock, ON",
+      "value": "Woodstock, ON",
+      "municipality": "Woodstock",
+      "zone": "Woodstock",
+      "travel_tier": "urban",
+      "area_type": "town",
+      "aliases": [
+        "Woodstock",
+        "Woodstock"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Ingersoll, ON",
+      "value": "Ingersoll, ON",
+      "municipality": "Ingersoll",
+      "zone": "Ingersoll",
+      "travel_tier": "urban",
+      "area_type": "town",
+      "aliases": [
+        "Ingersoll",
+        "Ingersoll"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Beachville, ON",
+      "value": "Beachville, ON",
+      "municipality": "Beachville",
+      "zone": "Beachville",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Beachville",
+        "Beachville"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Bright, ON",
+      "value": "Bright, ON",
+      "municipality": "Bright",
+      "zone": "Bright",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Bright",
+        "Bright"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Brownsville, ON",
+      "value": "Brownsville, ON",
+      "municipality": "Brownsville",
+      "zone": "Brownsville",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Brownsville",
+        "Brownsville"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Dereham Centre, ON",
+      "value": "Dereham Centre, ON",
+      "municipality": "Dereham Centre",
+      "zone": "Dereham Centre",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Dereham Centre",
+        "Dereham Centre"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Drumbo, ON",
+      "value": "Drumbo, ON",
+      "municipality": "Drumbo",
+      "zone": "Drumbo",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Drumbo",
+        "Drumbo"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Princeton, ON",
+      "value": "Princeton, ON",
+      "municipality": "Princeton",
+      "zone": "Princeton",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Princeton",
+        "Princeton"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Embro, ON",
+      "value": "Embro, ON",
+      "municipality": "Embro",
+      "zone": "Embro",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Embro",
+        "Embro"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Hickson, ON",
+      "value": "Hickson, ON",
+      "municipality": "Hickson",
+      "zone": "Hickson",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Hickson",
+        "Hickson"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Innerkip, ON",
+      "value": "Innerkip, ON",
+      "municipality": "Innerkip",
+      "zone": "Innerkip",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Innerkip",
+        "Innerkip"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Lakeside, ON",
+      "value": "Lakeside, ON",
+      "municipality": "Lakeside",
+      "zone": "Lakeside",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Lakeside",
+        "Lakeside"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Mount Elgin, ON",
+      "value": "Mount Elgin, ON",
+      "municipality": "Mount Elgin",
+      "zone": "Mount Elgin",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Mount Elgin",
+        "Mount Elgin"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Norwich, ON",
+      "value": "Norwich, ON",
+      "municipality": "Norwich",
+      "zone": "Norwich",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Norwich",
+        "Norwich"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Otterville, ON",
+      "value": "Otterville, ON",
+      "municipality": "Otterville",
+      "zone": "Otterville",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Otterville",
+        "Otterville"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Springford, ON",
+      "value": "Springford, ON",
+      "municipality": "Springford",
+      "zone": "Springford",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Springford",
+        "Springford"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Sweaburg, ON",
+      "value": "Sweaburg, ON",
+      "municipality": "Sweaburg",
+      "zone": "Sweaburg",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Sweaburg",
+        "Sweaburg"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Plattsville, ON",
+      "value": "Plattsville, ON",
+      "municipality": "Plattsville",
+      "zone": "Plattsville",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Plattsville",
+        "Plattsville"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Tavistock, ON",
+      "value": "Tavistock, ON",
+      "municipality": "Tavistock",
+      "zone": "Tavistock",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Tavistock",
+        "Tavistock"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Thamesford, ON",
+      "value": "Thamesford, ON",
+      "municipality": "Thamesford",
+      "zone": "Thamesford",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Thamesford",
+        "Thamesford"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Salford, ON",
+      "value": "Salford, ON",
+      "municipality": "Salford",
+      "zone": "Salford",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Salford",
+        "Salford"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Foldens, ON",
+      "value": "Foldens, ON",
+      "municipality": "Foldens",
+      "zone": "Foldens",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Foldens",
+        "Foldens"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Ostrander, ON",
+      "value": "Ostrander, ON",
+      "municipality": "Ostrander",
+      "zone": "Ostrander",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Ostrander",
+        "Ostrander"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Simcoe, ON",
+      "value": "Simcoe, ON",
+      "municipality": "Simcoe",
+      "zone": "Simcoe",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Simcoe",
+        "Simcoe"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Delhi, ON",
+      "value": "Delhi, ON",
+      "municipality": "Delhi",
+      "zone": "Delhi",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Delhi",
+        "Delhi"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Port Dover, ON",
+      "value": "Port Dover, ON",
+      "municipality": "Port Dover",
+      "zone": "Port Dover",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Port Dover",
+        "Port Dover"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Waterford, ON",
+      "value": "Waterford, ON",
+      "municipality": "Waterford",
+      "zone": "Waterford",
+      "travel_tier": "town",
+      "area_type": "town",
+      "aliases": [
+        "Waterford",
+        "Waterford"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Port Rowan, ON",
+      "value": "Port Rowan, ON",
+      "municipality": "Port Rowan",
+      "zone": "Port Rowan",
+      "travel_tier": "coastal",
+      "area_type": "coastal",
+      "aliases": [
+        "Port Rowan",
+        "Port Rowan"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Langton, ON",
+      "value": "Langton, ON",
+      "municipality": "Langton",
+      "zone": "Langton",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Langton",
+        "Langton"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Courtland, ON",
+      "value": "Courtland, ON",
+      "municipality": "Courtland",
+      "zone": "Courtland",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Courtland",
+        "Courtland"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Vittoria, ON",
+      "value": "Vittoria, ON",
+      "municipality": "Vittoria",
+      "zone": "Vittoria",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Vittoria",
+        "Vittoria"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Walsh, ON",
+      "value": "Walsh, ON",
+      "municipality": "Walsh",
+      "zone": "Walsh",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Walsh",
+        "Walsh"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "St. Williams, ON",
+      "value": "St. Williams, ON",
+      "municipality": "St. Williams",
+      "zone": "St. Williams",
+      "travel_tier": "coastal",
+      "area_type": "coastal",
+      "aliases": [
+        "St. Williams",
+        "St. Williams"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Turkey Point, ON",
+      "value": "Turkey Point, ON",
+      "municipality": "Turkey Point",
+      "zone": "Turkey Point",
+      "travel_tier": "coastal",
+      "area_type": "coastal",
+      "aliases": [
+        "Turkey Point",
+        "Turkey Point"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Boston, ON",
+      "value": "Boston, ON",
+      "municipality": "Boston",
+      "zone": "Boston",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Boston",
+        "Boston"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Teeterville, ON",
+      "value": "Teeterville, ON",
+      "municipality": "Teeterville",
+      "zone": "Teeterville",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Teeterville",
+        "Teeterville"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Vanessa, ON",
+      "value": "Vanessa, ON",
+      "municipality": "Vanessa",
+      "zone": "Vanessa",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Vanessa",
+        "Vanessa"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Lynedoch, ON",
+      "value": "Lynedoch, ON",
+      "municipality": "Lynedoch",
+      "zone": "Lynedoch",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Lynedoch",
+        "Lynedoch"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Bill's Corners, ON",
+      "value": "Bill's Corners, ON",
+      "municipality": "Bill's Corners",
+      "zone": "Bill's Corners",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Bill's Corners",
+        "Bill's Corners"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Renton, ON",
+      "value": "Renton, ON",
+      "municipality": "Renton",
+      "zone": "Renton",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Renton",
+        "Renton"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Nixon, ON",
+      "value": "Nixon, ON",
+      "municipality": "Nixon",
+      "zone": "Nixon",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Nixon",
+        "Nixon"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Bloomsburg, ON",
+      "value": "Bloomsburg, ON",
+      "municipality": "Bloomsburg",
+      "zone": "Bloomsburg",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Bloomsburg",
+        "Bloomsburg"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Townsend, ON",
+      "value": "Townsend, ON",
+      "municipality": "Townsend",
+      "zone": "Townsend",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Townsend",
+        "Townsend"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Port Ryerse, ON",
+      "value": "Port Ryerse, ON",
+      "municipality": "Port Ryerse",
+      "zone": "Port Ryerse",
+      "travel_tier": "coastal",
+      "area_type": "coastal",
+      "aliases": [
+        "Port Ryerse",
+        "Port Ryerse"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "La Salette, ON",
+      "value": "La Salette, ON",
+      "municipality": "La Salette",
+      "zone": "La Salette",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "La Salette",
+        "La Salette"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Windham Centre, ON",
+      "value": "Windham Centre, ON",
+      "municipality": "Windham Centre",
+      "zone": "Windham Centre",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Windham Centre",
+        "Windham Centre"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Walsingham, ON",
+      "value": "Walsingham, ON",
+      "municipality": "Walsingham",
+      "zone": "Walsingham",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Walsingham",
+        "Walsingham"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Fairground, ON",
+      "value": "Fairground, ON",
+      "municipality": "Fairground",
+      "zone": "Fairground",
+      "travel_tier": "rural",
+      "area_type": "hamlet",
+      "aliases": [
+        "Fairground",
+        "Fairground"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Woodstock / Ingersoll, ON",
+      "value": "Woodstock / Ingersoll, ON",
+      "municipality": "Woodstock / Ingersoll",
+      "zone": "Woodstock / Ingersoll",
+      "travel_tier": "township",
+      "area_type": "township",
+      "aliases": [
+        "Woodstock / Ingersoll",
+        "Ingersoll / Woodstock"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Oxford County",
+      "label": "Norwich / Otterville, ON",
+      "value": "Norwich / Otterville, ON",
+      "municipality": "Norwich / Otterville",
+      "zone": "Norwich / Otterville",
+      "travel_tier": "hamlet",
+      "area_type": "hamlet",
+      "aliases": [
+        "Norwich / Otterville",
+        "Norwich / Otterville"
+      ],
+      "bylaw_note": "Oxford County service area. If this town has no special local override, use the Oxford County water-conservation rule as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Oxford County water conservation",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/drinking-water/water-conservation/"
+        },
+        {
+          "label": "Oxford County water and wastewater",
+          "url": "https://www.oxfordcounty.ca/services-for-you/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "oxford-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Simcoe / Delhi, ON",
+      "value": "Simcoe / Delhi, ON",
+      "municipality": "Simcoe / Delhi",
+      "zone": "Simcoe / Delhi",
+      "travel_tier": "township",
+      "area_type": "township",
+      "aliases": [
+        "Simcoe / Delhi",
+        "Simcoe / Delhi"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    },
+    {
+      "county": "Norfolk County",
+      "label": "Courtland / Langton, ON",
+      "value": "Courtland / Langton, ON",
+      "municipality": "Courtland / Langton",
+      "zone": "Courtland / Langton",
+      "travel_tier": "remote",
+      "area_type": "rural",
+      "aliases": [
+        "Courtland / Langton",
+        "Courtland / Langton"
+      ],
+      "bylaw_note": "Norfolk County service area. If this town has no special local override, use Norfolk County watering restrictions as the operational default.",
+      "parking_rule": "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+      "noise_rule": "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+      "access_rule": "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+      "official_links": [
+        {
+          "label": "Norfolk County watering restrictions",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/water-conservation/watering-restrictions/"
+        },
+        {
+          "label": "Norfolk County water and wastewater",
+          "url": "https://www.norfolkcounty.ca/home-property-and-neighbourhood/water-and-wastewater/"
+        }
+      ],
+      "water_rule_key": "norfolk-county-seasonal"
+    }
+  ],
+  "booking_rules": {
+    "availability_window_days": 21,
+    "default_service_area": "Tillsonburg, ON",
+    "hold_minutes": 30,
+    "slot_labels": {
+      "AM": "AM half day",
+      "PM": "PM half day",
+      "FULL": "Full day"
+    },
+    "public_requirements": [
+      "Driveway/private work area preferred",
+      "Customer provides power and water unless arranged",
+      "Staff verify county water-use reminders before dispatch"
+    ],
+    "travel_pricing": {
+      "urban": 0,
+      "town": 0,
+      "township": 0,
+      "hamlet": 10,
+      "coastal": 20,
+      "rural": 20,
+      "remote": 35,
+      "out_of_zone": 50,
+      "quote_required": 0,
+      "notes": "Quote rural or out-of-zone addresses before confirming."
+    },
+    "price_controls": {
+      "fuel_surcharge_cad": 0,
+      "material_surcharge_cad": 0,
+      "minimum_callout_cad": 0,
+      "tax_rate_percent": 13
+    }
+  },
+  "water_rule_authority": "/data/water_restriction_rules.json"
+}
