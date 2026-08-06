@@ -1,3 +1,26 @@
+# Database Structure — Build 240 Current Additions
+
+Apply `sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql` after prerequisite migrations.
+
+## New tables
+
+- `catalog_inventory_posting_batches` — source, status, reason, idempotency, row totals, accounting state and reversal evidence.
+- `catalog_inventory_posting_rows` — immutable item-level before/after quantities, source movement and reversal movement links.
+
+## Extended records
+
+- `catalog_inventory_movements` gains source, batch, reversal and reversed-status evidence.
+- `creative_project_inventory_reservations` gains posting/reversal linkage and may now move from reviewed/reserved to posted, then back to reviewed after reversal.
+
+## Security-definer RPCs
+
+- `admin_catalog_inventory_post(...)`
+- `admin_catalog_inventory_post_reverse(...)`
+
+Both are service-role only and are called through protected Cloudflare Functions.
+
+---
+
 # Database Structure — Build 238 Current Additions
 
 Apply `sql/2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql` after prerequisite migrations.
@@ -1028,3 +1051,5 @@ Apply `sql/2026-07-02_build218_daip_test_mode_foundation.sql` only in developmen
 The database is primary after migration; packaged JSON/JavaScript remains a complete read-only fallback.
 
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->

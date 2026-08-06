@@ -1,3 +1,24 @@
+# Documentation Index — Build 240
+
+## Living authority
+
+1. `AI_PROJECT_HANDOFF.md`
+2. `MASTER_VALUE_ROADMAP.md`
+3. `STARTUP_GO_LIVE_BLOCKERS.md`
+
+## Build 240 implementation references
+
+- `docs/BUILD240_TRANSACTIONAL_INVENTORY_POSTING.md`
+- `docs/SEO_COMPETITIVE_REVIEW_BUILD240.md`
+- `data/build240_go_live_blockers.json`
+- `data/build240_next_steps.json`
+- `data/build240_inventory_posting_reversal.json`
+- `sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql`
+
+Historical Markdown remains retained for release evidence but does not override the three living authorities.
+
+---
+
 # Documentation Index — Build 238
 
 ## Living authority
@@ -1225,3 +1246,5 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 `DEVELOPMENT_ROADMAP.md`, `KNOWN_GAPS_AND_RISKS.md`, `SANITY_CHECK.md`, and build notes remain synchronized operational references. Historical files remain audit evidence and should not create a separate current checklist.
 
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->

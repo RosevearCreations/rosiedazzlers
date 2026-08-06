@@ -1,3 +1,11 @@
+# Current Implementation State — Build 240
+
+Build 240 preserves all existing inventory and launch workflows and adds database-first booking/project inventory posting, compensating reversal, transaction history, project reservation validation and safe read-only outage history. Production readiness depends on applying migrations and completing the Startup acceptance evidence.
+
+**Migration order when outstanding:** Build 235 gallery → Build 237 evidence/roadmap → Build 238 bulk/merge → Build 239 unified Startup catalog → Build 240 posting/reversal.
+
+---
+
 # Current Implementation State — Build 238
 
 Build 238 keeps all existing inventory/catalog workflows and adds database-first safety around high-volume cleanup. Source code now includes transactional bulk changes, reviewed duplicate merging, shared audit evidence and an admin history/CSV view, read-only cached fallback, Build 238 roadmap/startup data, tightened public metadata and cache/CSS continuity. Production state remains dependent on applying the migrations and completing the Startup Guide evidence.
@@ -878,3 +886,5 @@ The original Inventory Workflow remains the detailed editor. The separate Invent
 Implemented in source: unified Startup Command Center, 34-item detailed catalog, database-primary catalog API, shared evidence editing, production controls/reporting, guided test result editing, current roadmap editing, mobile cards, compatibility redirects, and packaged/cache fallbacks. Pending outside source: migration execution and every real-world evidence item.
 
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->

@@ -1,3 +1,26 @@
+# Development Roadmap — Build 240 Current Execution
+
+**Updated:** 2026-08-05
+
+## Completed in source
+
+- Atomic booking and Creative Project inventory posting RPC with preview, locking, shortage checks, idempotency and audit rows.
+- Authorized reversal RPC using compensating return movements and preserved source evidence.
+- Project-reservation availability/conflict API and operator loader.
+- Responsive Inventory Posting & Reversal page with cached read-only history fallback and CSV export.
+- Existing job-progress and catalog usage routes moved off direct stock PATCH writes.
+- Startup catalog expanded to 36 processes; Build 240 next-20 cycle added.
+
+## Acceptance required
+
+Apply the Build 240 migration in staging and complete the exact migration, posting, idempotency, shortage, reversal and accounting tests in `STARTUP_GO_LIVE_BLOCKERS.md`. Source completion is not production evidence.
+
+## Next implementation wave
+
+Resumable uploads and derivatives; automatic product publishing gates; payment application and HST review; month-end close/lock/reopen; accountant export; local-proof replacement; Search Console/GBP alignment; controlled soft launch.
+
+---
+
 # Development Roadmap — Build 238 Current Execution
 
 **Build 238 operational release:** source implementation is complete for the first two previously open inventory reliability items: transactional bulk updates and reviewed duplicate merge. They remain open for staging acceptance until the migration and exact tests below pass.
@@ -2756,3 +2779,5 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 Use `/admin-startup-guide.html#roadmap` as the active next-20 queue. The Build 239 migration seeds the database cycle. Development should now close launch evidence and reliability gaps before adding unrelated modules. Key code follow-ups include live browser acceptance, migration execution, transaction rollback tests, notification retry visibility, upload recovery, retention/incident safety, image derivatives, monitoring, and guarded Markdown retirement.
 
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
