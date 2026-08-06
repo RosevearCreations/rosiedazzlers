@@ -1,6 +1,0 @@
-import {serviceHeaders} from './staff-auth.js';
-export const LAUNCH_EVIDENCE_KEYS=new Set(['booking_e2e','stripe_live','email_delivery','environment','backups','legal','mobile','accessibility','analytics','search','business_profile','security','monitoring','operations','css_roadmap','migration_237','migration_238','migration_239','deploy_239','block_calendar','inventory_cleanup','product_images','pricing_tax','notification_health','payment_links','upload_recovery','retention_review','incident_closeout','rollback_drill','local_proof_cadence','startup_single_interface']);
-export const LAUNCH_STATUSES=new Set(['pending','verified','failed','waived']);
-export function clean(v,max=2000){return String(v??'').trim().slice(0,max)}
-export function ready(env){return Boolean(env?.SUPABASE_URL&&env?.SUPABASE_SERVICE_ROLE_KEY)}
-export async function listLaunchEvidence(env){if(!ready(env))return {ready:false,warning:'Supabase service configuration is missing.',items:[]};const r=await fetch(`${env.SUPABASE_URL}/rest/v1/app_launch_readiness_evidence?select=*&order=sort_order.asc`,{headers:serviceHeaders(env)});const text=await r.text();if(!r.ok)return {ready:false,warning:'Apply the Build 237 launch-evidence migration.',items:[]};let items=[];try{items=JSON.parse(text||'[]')}catch{}return {ready:true,items:Array.isArray(items)?items:[]}}
