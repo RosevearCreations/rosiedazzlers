@@ -1,5 +1,5 @@
 import { requireStaffAccess, serviceHeaders, json } from '../_lib/staff-auth.js';
-import { STARTUP_PROCESS_CATALOG_BUILD239, STARTUP_PROCESS_BUILD } from '../_lib/startup-process-catalog.js';
+import { STARTUP_PROCESS_CATALOG_BUILD239, STARTUP_PROCESS_CATALOG_BUILD240, STARTUP_PROCESS_BUILD } from '../_lib/startup-process-catalog.js';
 
 export async function onRequestGet(context){ return handle(context); }
 export async function onRequestPost(context){ return handle(context); }
@@ -11,7 +11,7 @@ async function handle({request,env}){
     const access=await requireStaffAccess({request,env,body,capability:'manage_bookings',allowLegacyAdminFallback:true});
     if(!access.ok)return withCors(access.response);
     const db=await readDatabaseCatalog(env);
-    const items=db.ready&&db.items.length?db.items:STARTUP_PROCESS_CATALOG_BUILD239;
+    const items=db.ready&&db.items.length?db.items:STARTUP_PROCESS_CATALOG_BUILD240;
     return withCors(json({
       ok:true,
       build:STARTUP_PROCESS_BUILD,
@@ -22,7 +22,7 @@ async function handle({request,env}){
       generated_at:new Date().toISOString()
     }));
   }catch(error){
-    return withCors(json({ok:false,error:error?.message||'Could not load the Startup Command Center catalog.',build:STARTUP_PROCESS_BUILD,source:'packaged_fallback',items:STARTUP_PROCESS_CATALOG_BUILD239.map(normalizeItem)},500));
+    return withCors(json({ok:false,error:error?.message||'Could not load the Startup Command Center catalog.',build:STARTUP_PROCESS_BUILD,source:'packaged_fallback',items:STARTUP_PROCESS_CATALOG_BUILD240.map(normalizeItem)},500));
   }
 }
 
@@ -31,7 +31,7 @@ async function readDatabaseCatalog(env){
   try{
     const response=await fetch(`${env.SUPABASE_URL}/rest/v1/app_startup_process_items?select=*&is_active=eq.true&order=sort_order.asc`,{headers:serviceHeaders(env)});
     const text=await response.text();
-    if(!response.ok)return {ready:false,items:[],warning:'Apply the Build 239 unified Startup Command Center migration; using packaged read-only instructions.'};
+    if(!response.ok)return {ready:false,items:[],warning:'Apply the Build 239 and Build 240 Startup/inventory migrations; using packaged read-only instructions.'};
     const rows=JSON.parse(text||'[]');
     return {ready:true,items:Array.isArray(rows)?rows:[],warning:null};
   }catch(error){return {ready:false,items:[],warning:`Shared startup catalog is unavailable (${String(error).slice(0,180)}); using packaged read-only instructions.`};}
