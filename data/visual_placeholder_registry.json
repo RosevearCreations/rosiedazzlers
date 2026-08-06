@@ -1,7 +1,7 @@
 {
-  "build": 240,
-  "updated_at": "2026-08-05",
-  "summary": "Build 240 adds transactional inventory posting and reversal workflow guidance while preserving approved Rosie-owned replacement planning and internal privacy boundaries.",
+  "build": 242,
+  "updated_at": "2026-08-06",
+  "summary": "Build 242 replaces generic SVG placeholder cards with reusable raster photo-style placeholders, adds a DAIP intake photo slot, and restores readable DAIP intake dry-run styling.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -332,5 +332,13 @@
       "privacy": "internal_only",
       "recommended_asset": "Simple labelled launch path using Rosie brand visuals; no customer, payment or private deployment data."
     }
+  ],
+  "raster_placeholder_assets": [
+    "/assets/placeholders/service-photo.jpg",
+    "/assets/placeholders/local-proof-photo.jpg",
+    "/assets/placeholders/product-gallery-photo.jpg",
+    "/assets/placeholders/inventory-tools-photo.jpg",
+    "/assets/placeholders/workflow-photo.jpg",
+    "/assets/placeholders/launch-readiness-photo.jpg"
   ]
 }
