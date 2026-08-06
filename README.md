@@ -1,3 +1,11 @@
+# Rosie Dazzlers Build 240
+
+Start with `AI_PROJECT_HANDOFF.md`, then `MASTER_VALUE_ROADMAP.md`. Use `STARTUP_GO_LIVE_BLOCKERS.md` or `/admin-startup-guide.html` for the exact launch sequence.
+
+Build 240 adds transactional Inventory Posting & Reversal at `/admin-inventory-posting.html` while preserving the original Inventory Workflow and Workbench. Apply `sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql` in staging after prerequisite migrations.
+
+---
+
 # Rosie Dazzlers Build 238
 
 Start with `AI_PROJECT_HANDOFF.md`, then `MASTER_VALUE_ROADMAP.md`. For the exact go-live sequence use `STARTUP_GO_LIVE_BLOCKERS.md` or `/admin-startup-guide.html`.
@@ -1206,3 +1214,5 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 After administrator sign-in, use `/admin-startup-guide.html` for all go-live preparation. Apply `sql/2026-08-01_build239_unified_startup_command_center.sql` after the Build 237 and Build 238 migrations.
 
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->

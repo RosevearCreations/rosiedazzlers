@@ -1,3 +1,22 @@
+# Sanity Check — Build 240
+
+## Healthy in source
+
+- Existing inventory editor, Workbench, JSON tools and seven-image galleries remain intact.
+- Booking and project usage are previewed and committed atomically rather than through split browser writes.
+- Shortages and invalid reservations fail the complete transaction.
+- Idempotency prevents the same request from deducting stock twice.
+- Reversal adds compensating movements and never deletes original history.
+- History fallback is clearly labelled read-only.
+- New admin route is responsive, protected, noindex and has one H1.
+- Startup instructions, roadmap, canonical schema, migration and all Markdown markers are synchronized.
+
+## Not yet proven
+
+Connected-database migration, live acceptance, accounting reversal handling and the broader go-live blockers still require operator evidence.
+
+---
+
 # Sanity Check — Build 238
 
 ## Healthy in source
@@ -1146,3 +1165,5 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 The application now has one clear launch operating interface and three current authority documents. CSS, one-H1, route-copy, API syntax, schema, fallback, and historical release guards must pass before packaging. Go-live confidence still depends on real environment and business evidence listed in the Startup Command Center.
 
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->

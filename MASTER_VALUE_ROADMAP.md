@@ -1,3 +1,24 @@
+# Rosie Dazzlers Master Value Roadmap — Build 240
+
+**Updated:** 2026-08-05  
+**Build 240:** transactional booking/project inventory posting, authorized reversal, operational evidence and continued launch polish.
+
+## Completed in source; staging acceptance required
+
+1. Preview-first all-or-nothing inventory posting for bookings and reviewed Creative Project reservations.
+2. Database stock locks, shortage/conflict validation, idempotent commits and per-row audit evidence.
+3. Authorized compensating reversal that preserves original movements and restores project reservations for review.
+4. Shared transaction history plus labelled read-only cached history fallback.
+5. Admin/Menu/route integration across Inventory Workflow, Workbench, job progress and Creative Projects.
+6. Startup Command Center expanded without removing prior blockers.
+7. Build 240 schema, visual placeholder, CSS/mobile, one-H1 and documentation safeguards.
+
+## Current highest-value direction
+
+Complete Build 240 acceptance, then finish resumable media uploads/derivatives, product publishing gates, payment application/HST review, month-end close/accountant export, approved local visual proof and invite-only soft launch evidence. The complete current 20-step queue is in `data/build240_next_steps.json` and the Startup Command Center.
+
+---
+
 # Rosie Dazzlers Master Value Roadmap — Build 238
 
 **Updated:** 2026-07-30  
@@ -1137,3 +1158,5 @@ The highest-value simplification is now implemented: one Startup Command Center 
 The current next-20 cycle prioritizes deployment/migrations, scheduling, booking, payments, notifications, recovery, legal, mobile/accessibility, field uploads, incidents, retention, inventory/products, Search Console/Business Profile, soft launch, and documentation retirement.
 
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->

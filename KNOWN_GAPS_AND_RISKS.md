@@ -1,3 +1,24 @@
+# Known Issues and Gaps — Build 240
+
+**Updated:** 2026-08-05
+
+## Critical acceptance gaps
+
+- Build 240 migration is source-complete but not proven against the connected staging/production Supabase project.
+- One booking posting, one project reservation posting, an over-stock rejection, idempotent replay and compensating reversal must be observed end to end.
+- Booking inventory reversal restores stock but intentionally leaves accounting evidence for reviewed journal reversal/adjustment.
+- Builds 235, 237, 238 and 239 migrations must be verified before Build 240.
+- Existing launch blockers remain: calendar, booking/payment/email, recovery, legal, mobile/accessibility, Search Console/GBP, product readiness and soft launch evidence.
+
+## Remaining engineering gaps
+
+- Resumable weak-network media upload and responsive derivative worker.
+- Enforced product publish readiness gates.
+- Payment application, HST review, month-end close/lock/reopen and accountant export.
+- Approved local image/review proof cadence and replacement of high-value public placeholders.
+
+---
+
 # Known Issues and Gaps — Build 238
 
 ## Critical production evidence still missing
@@ -1842,3 +1863,5 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 - Historical readiness pages and Markdown remain for redirects, emergency fallback, and release guards; they are no longer current operating surfaces.
 
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
