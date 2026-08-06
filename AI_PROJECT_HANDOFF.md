@@ -1,3 +1,20 @@
+# Rosie Dazzlers — AI Project Handoff (Build 240)
+
+**Updated:** 2026-08-05  
+**Build 240 operational release:** preview-first transactional inventory posting and authorized compensating reversal for bookings and reviewed Creative Project reservations; database row locking, shortage validation, idempotency, posting history, read-only fallback, mobile/desktop admin workflow, Startup catalog expansion, SEO/CSS/schema/document synchronization.
+
+## Build 240 continuation pointer
+
+- Operator route: `/admin-inventory-posting.html`.
+- Migration: `sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql`.
+- Apply after Builds 235, 237, 238 and 239, staging first.
+- The original Inventory Workflow and Inventory Workbench remain supported.
+- Booking and project stock deductions now use one database transaction; never restore the removed browser PATCH loop.
+- Reversal is compensating history, not deletion. Booking reversals require accounting review.
+- Current go-live authorities remain this file, `MASTER_VALUE_ROADMAP.md`, and `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
 # Rosie Dazzlers — AI Project Handoff (Build 238)
 
 **Updated:** 2026-07-30  
@@ -767,3 +784,5 @@ The normal launch workflow now begins at `/admin-startup-guide.html`. It incorpo
 Apply migrations in order: Build 235 gallery if outstanding, Build 237 evidence/roadmap, Build 238 inventory transaction/merge, then Build 239 unified startup catalog.
 
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
