@@ -1,3 +1,7 @@
+-- Build 241 Startup Command Center initialization/cache hotfix.
+-- No schema change is required. Build 240 remains the latest functional DDL.
+-- See sql/2026-08-05_build241_startup_command_center_initialization_hotfix_no_ddl.sql.
+
 -- Build 205 note: sanity report and value-added roadmap only. No new DDL is required in this pass.
 -- Future DDL candidates: quote pipeline metrics, Meta campaign ROI, memberships, vehicle history, proof-of-work checklists, and fleet account CRM.
 

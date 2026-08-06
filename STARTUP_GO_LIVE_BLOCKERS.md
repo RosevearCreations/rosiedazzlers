@@ -1,3 +1,24 @@
+# Rosie Dazzlers Startup and Go-Live Blocker Guide — Build 241
+
+**Updated:** August 5, 2026  
+**Primary interface:** `/admin-startup-guide.html`  
+**Hotfix status:** Build 241 restores the unified interface after the summary renderer failed with `Cannot access evidenceRows before initialization`. No blocker or instruction was removed.
+
+## Build 241 deployment acceptance
+
+1. Deploy the Build 241 package to the preview branch.
+2. Open `/admin-startup-guide.html` in a private/incognito window.
+3. Open browser developer tools, choose **Console**, and reload the page.
+4. Confirm there is no `evidenceRows before initialization` error.
+5. Select **Refresh all** and confirm Overview, Blockers, Evidence, Production, Tests, Roadmap, and automatic checks continue loading even if one API is unavailable.
+6. Confirm the page references `startup-command-center.js?v=20260805build241` in the Network panel.
+7. Where an API is unavailable, confirm a clearly labelled packaged, browser-cache, or read-only fallback appears instead of a blank page.
+8. Record the deployment URL, date, browser, and visible outcome in the Startup evidence note.
+
+**Move to the next item when:** the Startup Command Center loads and refreshes without an uncaught promise error, its summary cards render, and unavailable services produce labelled fallbacks.
+
+---
+
 # Rosie Dazzlers Startup and Go-Live Blocker Guide — Build 239
 
 **Updated:** August 1, 2026  
@@ -1204,3 +1225,5 @@ Build 214 documentation sync
 **Move to the next item when:** All acceptance cases pass, duplicate submission cannot double-deduct stock, shortages leave every row unchanged, reversals preserve original and compensating history, and booking accounting evidence is reviewed.
 
 <!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->
