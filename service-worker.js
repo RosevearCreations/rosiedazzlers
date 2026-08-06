@@ -2,8 +2,8 @@
 // Build 241 service-worker cache hotfix refreshes the unified Startup Command Center script and preserves Build 240 inventory posting/reversal.
 // Build 238 service-worker cache: CSS recovery, Startup Guide, transactional inventory, current roadmap, launch evidence and operational readiness.
 // Historical Build 238 guard: rosie-app-v20260730build238 /data/build238_go_live_blockers.json /data/build238_next_steps.json
-const CACHE='rosie-app-v20260805build241';
-const URLS=['/assets/startup-command-center.js?v=20260805build241','/admin-inventory-posting.html','/data/build240_go_live_blockers.json','/data/build240_next_steps.json','/admin-startup-guide.html','/assets/startup-command-center.js','/data/build239_go_live_blockers.json','/admin-launch-readiness.html','/admin-production.html','/admin-test-centre.html','/admin-roadmap-execution.html','/data/build238_go_live_blockers.json','/data/build238_next_steps.json','/assets/styles.css','/assets/admin.css','/assets/style.css','/admin-blocks.html','/admin-inventory-manager.html','/admin-content.html',
+const CACHE='rosie-app-v20260806build242';
+const URLS=['/assets/startup-command-center.js?v=20260806build242','/admin-inventory-posting.html','/data/build240_go_live_blockers.json','/data/build240_next_steps.json','/admin-startup-guide.html','/assets/startup-command-center.js','/data/build239_go_live_blockers.json','/admin-launch-readiness.html','/admin-production.html','/admin-test-centre.html','/admin-roadmap-execution.html','/data/build238_go_live_blockers.json','/data/build238_next_steps.json','/assets/styles.css','/assets/admin.css','/assets/style.css','/admin-blocks.html','/admin-inventory-manager.html','/admin-content.html',
   "/",
   "/book",
   "/pricing",
@@ -21,6 +21,12 @@ const URLS=['/assets/startup-command-center.js?v=20260805build241','/admin-inven
   "/assets/media-source-resolver.js",
   "/data/responsive_visual_registry.json",
   "/data/visual_placeholder_registry.json",
+  "/assets/placeholders/service-photo.jpg",
+  "/assets/placeholders/local-proof-photo.jpg",
+  "/assets/placeholders/product-gallery-photo.jpg",
+  "/assets/placeholders/inventory-tools-photo.jpg",
+  "/assets/placeholders/workflow-photo.jpg",
+  "/assets/placeholders/launch-readiness-photo.jpg",
   "/data/workflow_connection_build208.json",
   "/data/build210_connected_live_workflow.json",
   "/data/build211_production_reliability.json",
