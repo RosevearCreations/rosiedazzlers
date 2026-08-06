@@ -1,3 +1,20 @@
+# Known Issues and Gaps — Build 241
+
+**Updated:** 2026-08-05
+
+## Resolved in source
+
+- The Startup Command Center no longer shadows the `evidenceRows()` function with a same-named local constant.
+- Refresh failures are isolated and reported rather than escaping as an uncaught promise rejection.
+- Cache tokens force retrieval of the corrected script after deployment.
+
+## Acceptance risk still open
+
+- The fix must be deployed and verified in an incognito browser because an already-open tab or old service worker may retain the faulty Build 239 asset until refresh/reload.
+- All Build 240 migration and production-acceptance gaps remain open until proven through the Startup Guide.
+
+---
+
 # Known Issues and Gaps — Build 240
 
 **Updated:** 2026-08-05
@@ -1865,3 +1882,5 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
 
 <!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->

@@ -1,3 +1,9 @@
+# Rosie Dazzlers Build 241
+
+Build 241 is a hotfix for `/admin-startup-guide.html`. It resolves `ReferenceError: Cannot access 'evidenceRows' before initialization`, adds partial-load fallback handling, and advances the browser/service-worker cache token. No database DDL is required. Start with `AI_PROJECT_HANDOFF.md`, then use `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
 # Rosie Dazzlers Build 240
 
 Start with `AI_PROJECT_HANDOFF.md`, then `MASTER_VALUE_ROADMAP.md`. Use `STARTUP_GO_LIVE_BLOCKERS.md` or `/admin-startup-guide.html` for the exact launch sequence.
@@ -1216,3 +1222,5 @@ After administrator sign-in, use `/admin-startup-guide.html` for all go-live pre
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
 
 <!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->

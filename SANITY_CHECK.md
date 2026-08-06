@@ -1,3 +1,20 @@
+# Sanity Check — Build 241
+
+## Healthy in source
+
+- `updateSummary()` uses `const rows = getEvidenceRows()` and contains no temporal-dead-zone collision.
+- Startup clean routes use the Build 241 asset token.
+- Service-worker cache version is Build 241.
+- Refresh uses all-settled isolation and visible fallback status.
+- No database migration is required.
+- Historical release evidence, one-H1 rules, CSS references, and Build 240 functions remain intact.
+
+## Required preview confirmation
+
+Open `/admin-startup-guide.html`, reload with developer tools open, select **Refresh all**, and confirm no uncaught promise error appears.
+
+---
+
 # Sanity Check — Build 240
 
 ## Healthy in source
@@ -1167,3 +1184,5 @@ The application now has one clear launch operating interface and three current a
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
 
 <!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->

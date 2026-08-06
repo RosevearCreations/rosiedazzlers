@@ -1,3 +1,19 @@
+# Rosie Dazzlers Master Value Roadmap — Build 241
+
+**Updated:** 2026-08-05  
+**Build 241:** Startup Command Center initialization and cache hotfix; no roadmap item was removed and no database DDL is required.
+
+## Completed in this hotfix
+
+1. Removed the `evidenceRows` function/local-variable collision that stopped the Startup summary from rendering.
+2. Added partial-load protection so catalog, evidence, production, test, roadmap, or automatic-check failures do not crash the complete interface.
+3. Advanced the script and service-worker cache versions to force browsers off the faulty Build 239/240 asset.
+4. Added a release regression guard for the exact error pattern.
+
+The Build 240 next-20 cycle remains current. Resume launch evidence and production acceptance after deploying this hotfix and confirming the Startup Command Center refreshes without console errors.
+
+---
+
 # Rosie Dazzlers Master Value Roadmap — Build 240
 
 **Updated:** 2026-08-05  
@@ -1160,3 +1176,5 @@ The current next-20 cycle prioritizes deployment/migrations, scheduling, booking
 <!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
 
 <!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->
