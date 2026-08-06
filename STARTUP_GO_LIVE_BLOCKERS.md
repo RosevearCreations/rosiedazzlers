@@ -1139,3 +1139,68 @@ Build 212 documentation sync
 Build 213 documentation sync
 Build 214 documentation sync
 > **Build 238 synchronization (2026-07-30):** Historical release evidence retained; current launch authority is Build 239.
+
+
+## Build 240 additions — preserved items 35 and 36
+
+### 35. Apply and verify the Build 240 transactional inventory posting migration
+
+**Priority:** blocker  
+**Category:** Inventory and operations  
+**Open:** `/admin-inventory-posting.html`
+
+**Why this holds launch:** Booking and Creative Project material usage must no longer depend on separate browser writes. Build 240 moves preview, shortage validation, stock mutation, movement evidence, reservation status, idempotency and reversal links into one database transaction.
+
+**Where to find it**
+
+- Supabase Dashboard → SQL Editor
+- sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql
+- Supabase Dashboard → Database → Functions
+- /admin-inventory-posting.html
+
+**Detailed instructions**
+
+1. Confirm Builds 235, 237, 238 and 239 migrations have been applied in order.
+2. Open the complete Build 240 SQL migration from the ZIP.
+3. Run it in staging/preview first and do not edit individual statements.
+4. Confirm catalog_inventory_posting_batches and catalog_inventory_posting_rows exist.
+5. Confirm admin_catalog_inventory_post and admin_catalog_inventory_post_reverse appear under Database Functions.
+6. Refresh the Supabase schema cache if the admin page reports that the RPC is missing.
+7. Open /admin-inventory-posting.html and preview one harmless booking posting without committing.
+8. Load one reviewed Creative Project reservation and confirm shortages or conflicts are explained before posting.
+9. Record the migration date and staging result in the Startup evidence editor.
+
+**Move to the next item when:** The two tables and two RPC functions exist, previews load from the shared database, a reviewed project reservation can be validated without changing stock, and the interface no longer reports migration required.
+
+### 36. Complete transactional inventory posting and authorized reversal acceptance testing
+
+**Priority:** blocker  
+**Category:** Inventory and accounting  
+**Open:** `/admin-inventory-posting.html`
+
+**Why this holds launch:** The feature is not production-ready until one committed booking posting, one reviewed project posting, one shortage rejection, one idempotent replay and one compensating reversal have been observed with correct quantities and audit evidence. Booking reversals also require accounting review because stock restoration does not automatically erase journal history.
+
+**Where to find it**
+
+- /admin-inventory-posting.html
+- /admin-progress.html
+- /admin-creative-projects.html
+- /admin-accounting.html
+- Supabase Dashboard → Table Editor → catalog_inventory_posting_batches
+
+**Detailed instructions**
+
+1. Choose a low-risk staging inventory item and record its starting quantity.
+2. Preview a booking posting and confirm the before/after quantity and total lines are correct.
+3. Commit once, refresh history, and confirm the quantity decreased exactly once.
+4. Repeat the same request with the same idempotency key and confirm stock does not decrease again.
+5. Preview a quantity greater than stock and confirm the whole transaction is rejected with no row changed.
+6. Create or use a reviewed Creative Project reservation, preview it, commit it, and confirm the reservation becomes posted/inventory_mutated.
+7. Open Transaction History, choose the test batch, enter a specific reversal reason, and preview the compensating return.
+8. Commit the reversal and confirm quantity returns, the original movement is marked reversed, a return movement exists, and the project reservation returns to reviewed where applicable.
+9. For a booking reversal, open Accounting and review or reverse the related COGS journal evidence rather than deleting it.
+10. Save screenshots or record IDs without customer secrets in Startup evidence.
+
+**Move to the next item when:** All acceptance cases pass, duplicate submission cannot double-deduct stock, shortages leave every row unchanged, reversals preserve original and compensating history, and booking accounting evidence is reviewed.
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
