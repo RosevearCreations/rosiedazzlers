@@ -250,7 +250,7 @@
       <div class="proof-grid">
         <article class="proof-card">
           <h3>Review proof</h3>
-          <img data-reviews src="/assets/brand/rosie-reviews-fallback.svg" alt="Rosie Dazzlers reviews" class="proof-media" />
+          <img data-reviews src="/assets/brand/rosie-reviews-fallback.png" alt="Rosie Dazzlers reviews" class="proof-media" />
         </article>
         <article class="proof-card">
           <h3>Strongest service-area wording</h3>
@@ -441,9 +441,9 @@
       img.loading = "lazy";
       img.decoding = "async";
       bindImageWithCandidates(img, mainImg, {
-        fallback: "/assets/brand/rosie-reviews-fallback.svg",
+        fallback: "/assets/brand/rosie-reviews-fallback.png",
         onResolved: (_img, resolvedUrl) => { resolvedMainImg = resolvedUrl || mainImg; },
-        onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.svg"; node.classList.add("visual-placeholder-img"); }
+        onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.png"; node.classList.add("visual-placeholder-img"); }
       });
 
       attachHoverCarousel(img, getImages);
@@ -485,8 +485,8 @@
         imgEl.loading = "lazy";
         imgEl.decoding = "async";
         bindImageWithCandidates(imgEl, imageUrl, {
-          fallback: fallbackUrl || "/assets/brand/rosie-reviews-fallback.svg",
-          onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.svg"; node.classList.add("visual-placeholder-img"); }
+          fallback: fallbackUrl || "/assets/brand/rosie-reviews-fallback.png",
+          onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.png"; node.classList.add("visual-placeholder-img"); }
         });
       }
 

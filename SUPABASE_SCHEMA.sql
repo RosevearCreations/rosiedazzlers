@@ -4129,3 +4129,5 @@ on conflict(item_key) do update set title=excluded.title,workstream=excluded.wor
 
 commit;
 -- END BUILD 240 TRANSACTIONAL INVENTORY POSTING AND REVERSAL
+-- Build 245 (2026-08-06): no DDL. UI/SEO/cache acceptance scanner, service-worker hardening, static landing-page H1/metadata fallbacks, admin noindex corrections, and synchronized documentation only. Build 240 remains the latest functional schema migration.
+

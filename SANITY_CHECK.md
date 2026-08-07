@@ -1,3 +1,21 @@
+# Sanity Check — Build 245
+
+## Healthy in source
+
+- All exposed HTML files have one H1.
+- Indexable public pages have title, description and canonical coverage within project guardrails.
+- Protected admin pages include noindex.
+- Deprecated SVG photo fallbacks are not referenced by runtime content.
+- UI Health root and clean routes match.
+- Startup cache controls and Build 245 asset versions are wired.
+- Service-worker cache installation is isolated and offline failures are type-safe.
+
+## Not proven by source
+
+Live deployment, service-worker activation, connected APIs, payment/email providers, mobile devices, accessibility, database migrations and recovery still require Startup evidence.
+
+---
+
 # Sanity Check — Build 241
 
 ## Healthy in source
@@ -1194,3 +1212,14 @@ The application now has one clear launch operating interface and three current a
 - Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
 - Advanced Startup Command Center cache-busting and service-worker references to Build 242.
 - No new database migration was introduced in this build.
+
+## Build 244 update
+
+- Bundled the new AI-generated raster placeholder images directly into the application zip so the site no longer depends on missing SVG photo fallbacks for common empty-image states.
+- Replaced review, add-on, catalog, booking, workflow, and admin placeholder-photo references from SVG files to real PNG/JPG files.
+- Preserved instructional SVG graphics, such as framing guides and charts, where SVG is still the correct format.
+- Sanity check: the remaining strongest live-readiness work is acceptance testing, content completion, operational policy confirmation, and production credential/provider validation rather than placeholder-media cleanup.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->

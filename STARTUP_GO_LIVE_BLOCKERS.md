@@ -1,3 +1,36 @@
+# Rosie Dazzlers Startup and Go-Live Blocker Guide — Build 245
+
+**Updated:** 2026-08-06
+
+## Build 245 deployment and UI acceptance
+
+**Priority:** Launch blocker
+
+### Where to find it
+
+- `/admin-startup-guide.html#ui-health`
+- `/admin-ui-health.html`
+- Browser Developer Tools → Console, Network, Application → Service Workers and Cache Storage
+
+### Detailed instructions
+
+1. Deploy Build 245 to the preview branch.
+2. Open the Startup Command Center in a private window.
+3. In **UI & cache health**, confirm the fetched Startup script reports Build 245.
+4. If an older build appears, select **Check for app update**. If it remains stale, use **Clear app cache & reload**.
+5. Open **UI & SEO Health** and run the complete route scan.
+6. Confirm every critical route returns successfully, has one H1, and has no missing local CSS, script or image.
+7. Confirm public routes have descriptive titles, descriptions and canonical links.
+8. Confirm protected admin routes include `noindex`.
+9. Export the scan JSON and record its date, host, pass/fail counts and filename as safe Startup evidence.
+10. Test representative routes at phone, tablet and desktop widths; the browser scan does not replace real responsive acceptance.
+
+### Move to the next item when
+
+The deployed scanner shows no unresolved error, the browser is loading Build 245 assets, and real-device review finds no blocking overflow, unreadable contrast or unusable controls.
+
+---
+
 # Rosie Dazzlers Startup and Go-Live Blocker Guide — Build 241
 
 **Updated:** August 5, 2026  
@@ -1235,3 +1268,7 @@ Build 214 documentation sync
 - Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
 - Advanced Startup Command Center cache-busting and service-worker references to Build 242.
 - No new database migration was introduced in this build.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->

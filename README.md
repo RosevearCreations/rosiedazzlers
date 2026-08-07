@@ -1,3 +1,9 @@
+# Build 245 Current Release Pointer
+
+Start with `AI_PROJECT_HANDOFF.md`, `MASTER_VALUE_ROADMAP.md`, and `STARTUP_GO_LIVE_BLOCKERS.md`. The new protected deployment acceptance route is `/admin-ui-health.html`. Build 245 requires no database migration.
+
+---
+
 # Rosie Dazzlers Build 241
 
 Build 241 is a hotfix for `/admin-startup-guide.html`. It resolves `ReferenceError: Cannot access 'evidenceRows' before initialization`, adds partial-load fallback handling, and advances the browser/service-worker cache token. No database DDL is required. Start with `AI_PROJECT_HANDOFF.md`, then use `STARTUP_GO_LIVE_BLOCKERS.md`.
@@ -1232,3 +1238,7 @@ After administrator sign-in, use `/admin-startup-guide.html` for all go-live pre
 - Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
 - Advanced Startup Command Center cache-busting and service-worker references to Build 242.
 - No new database migration was introduced in this build.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
