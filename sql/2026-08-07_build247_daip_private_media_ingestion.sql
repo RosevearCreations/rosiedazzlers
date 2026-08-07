@@ -112,6 +112,32 @@ insert into public.app_launch_readiness_evidence(evidence_key,title,detail,sever
 ('daip_large_media_acceptance','DAIP large-media acceptance','Verify >300 MB multipart upload, interruption/resume, immutable raw storage, and processing job creation.','block','pending',44)
 on conflict (evidence_key) do update set title=excluded.title,detail=excluded.detail,severity=excluded.severity,sort_order=excluded.sort_order,updated_at=now();
 
+-- Build 247 expands the roadmap workstream taxonomy for the DAIP/content pipeline.
+-- Build 227 originally allowed only customer, booking, payments, seo, media,
+-- daip, operations, reliability and documentation. Build 247 adds content and
+-- security as first-class roadmap workstreams, so expand the existing CHECK
+-- constraint before seeding the Build 247 roadmap cycle.
+alter table public.app_roadmap_execution_items
+  drop constraint if exists app_roadmap_execution_items_workstream_check;
+
+alter table public.app_roadmap_execution_items
+  add constraint app_roadmap_execution_items_workstream_check
+  check (
+    workstream in (
+      'customer',
+      'booking',
+      'payments',
+      'seo',
+      'media',
+      'daip',
+      'operations',
+      'reliability',
+      'documentation',
+      'content',
+      'security'
+    )
+  );
+
 update public.app_roadmap_execution_items set is_current_cycle=false where coalesce(is_current_cycle,false)=true;
 insert into public.app_roadmap_execution_items(item_key,title,workstream,priority,status,target_build,sort_order,source_document,cycle_key,is_current_cycle,action_path) values
 ('b247_01','Create and bind private DAIP R2 bucket','media','critical','planned',247,10,'STARTUP_GO_LIVE_BLOCKERS.md','build247',true,'/admin-daip-media.html#setup'),
