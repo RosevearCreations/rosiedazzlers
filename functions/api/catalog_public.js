@@ -1,3 +1,4 @@
+import { attachCatalogReadiness } from "./_lib/catalog-readiness.js";
 export async function onRequestGet({ request, env }) {
   try {
     if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return json({ ok: true, items: [], source: "unconfigured" });
@@ -7,7 +8,9 @@ export async function onRequestGet({ request, env }) {
     let result = await loadCatalog(env, kind, base);
     if (!result.ok && /gallery_image_urls|schema cache|PGRST204/i.test(result.error || "")) result = await loadCatalog(env, kind, fallback);
     if (!result.ok) return json({ ok: false, items: [], error: result.error }, 500);
-    return json({ ok: true, source: "database", items: result.items });
+    const reviewed = attachCatalogReadiness(result.items);
+    const items = reviewed.filter((item) => item.publish_readiness?.ready).map(({ publish_readiness, ...item }) => item);
+    return json({ ok: true, source: "database", items, excluded_unready: reviewed.length - items.length });
   } catch (err) {
     return json({ ok: false, items: [], error: String(err) }, 500);
   }
