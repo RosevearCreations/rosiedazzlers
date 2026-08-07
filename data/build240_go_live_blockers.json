@@ -1,6 +1,6 @@
 {
   "build": 240,
-  "updated_at": "2026-08-05",
+  "updated_at": "2026-08-07",
   "purpose": "Build 240 preserves every Build 239 startup process and adds transactional inventory posting and reversal launch acceptance. Database remains primary after migration; this file is a read-only fallback.",
   "items": [
     {
@@ -11,12 +11,12 @@
       "title": "Deploy Build 239 and verify the unified Startup Command Center",
       "why": "Build 239 consolidates Startup, Launch Readiness, Production Readiness, guided testing, and roadmap execution into one protected interface. A partial or cached deployment could leave old standalone pages or mismatched assets active.",
       "where": [
-        "Cloudflare Pages → Deployments → preview branch",
+        "Cloudflare Pages \u2192 Deployments \u2192 preview branch",
         "/admin-startup-guide",
         "/admin-launch-readiness",
         "/admin-production",
         "/admin-test-centre",
-        "Browser DevTools → Network and Console"
+        "Browser DevTools \u2192 Network and Console"
       ],
       "steps": [
         "Deploy Build 239 to the preview/development branch.",
@@ -38,9 +38,9 @@
       "title": "Apply the Build 237 database migration",
       "why": "Shared launch evidence and the current roadmap cycle cannot persist until the new tables/columns exist. The UI has a safe local/static fallback, but shared evidence is the intended source of truth.",
       "where": [
-        "Supabase Dashboard → SQL Editor",
+        "Supabase Dashboard \u2192 SQL Editor",
         "sql/2026-07-28_build237_css_startup_evidence_roadmap.sql",
-        "Supabase Dashboard → Table Editor"
+        "Supabase Dashboard \u2192 Table Editor"
       ],
       "steps": [
         "Open the SQL file from the build package.",
@@ -62,9 +62,9 @@
       "title": "Apply the Build 238 inventory transaction and merge migration",
       "why": "The new Inventory Workbench deliberately refuses to execute bulk changes or duplicate merges without database functions that validate the whole operation and record audit evidence. This prevents a browser/network failure from leaving half a batch changed.",
       "where": [
-        "Supabase Dashboard → SQL Editor",
+        "Supabase Dashboard \u2192 SQL Editor",
         "sql/2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql",
-        "Supabase Dashboard → Database → Functions",
+        "Supabase Dashboard \u2192 Database \u2192 Functions",
         "/admin-inventory-manager.html"
       ],
       "steps": [
@@ -89,9 +89,9 @@
       "title": "Apply the Build 239 unified Startup Command Center migration",
       "why": "The detailed startup catalog should have one database source of truth instead of being duplicated across JSON, Markdown, launch-readiness cards, production checks, and roadmap notes. The static catalog remains only as a safe read-only fallback.",
       "where": [
-        "Supabase Dashboard → SQL Editor",
+        "Supabase Dashboard \u2192 SQL Editor",
         "sql/2026-08-01_build239_unified_startup_command_center.sql",
-        "Supabase Dashboard → Table Editor → app_startup_process_items",
+        "Supabase Dashboard \u2192 Table Editor \u2192 app_startup_process_items",
         "/admin-startup-guide.html"
       ],
       "steps": [
@@ -165,8 +165,8 @@
       "why": "Test-mode success does not prove live keys, webhook secrets, receipts, refunds or accounting evidence are configured correctly.",
       "where": [
         "/admin-payments.html",
-        "Stripe Dashboard → Payments",
-        "Stripe Dashboard → Developers → Webhooks",
+        "Stripe Dashboard \u2192 Payments",
+        "Stripe Dashboard \u2192 Developers \u2192 Webhooks",
         "/admin-accounting.html"
       ],
       "steps": [
@@ -214,7 +214,7 @@
       "title": "Audit Cloudflare production variables and bindings",
       "why": "Missing or preview-only variables are a common cause of login, payment, notification, storage and API failures after launch.",
       "where": [
-        "Cloudflare Dashboard → Workers & Pages → rosiedazzlers → Settings",
+        "Cloudflare Dashboard \u2192 Workers & Pages \u2192 rosiedazzlers \u2192 Settings",
         "docs/CLOUDFLARE_ENVIRONMENT_CHECKLIST.md",
         "/api/health"
       ],
@@ -238,7 +238,7 @@
       "title": "Test backup and restore, not just backup availability",
       "why": "A backup is useful only when you know how to restore it and confirm permissions/data integrity afterward.",
       "where": [
-        "Supabase Dashboard → Database → Backups",
+        "Supabase Dashboard \u2192 Database \u2192 Backups",
         "/admin-recovery.html",
         "docs/PRODUCTION_TEST_GUIDE.md"
       ],
@@ -574,8 +574,8 @@
       "why": "Build 238 now provides a preview-first merge that transfers known operational references, records compensating quantity movements and archives the duplicate. It still requires migration and staging proof before use on important rows.",
       "where": [
         "/admin-inventory-manager.html",
-        "Supabase → catalog_inventory_merge_audit",
-        "Supabase → catalog_inventory_movements",
+        "Supabase \u2192 catalog_inventory_merge_audit",
+        "Supabase \u2192 catalog_inventory_movements",
         "STARTUP_GO_LIVE_BLOCKERS.md"
       ],
       "steps": [
@@ -603,8 +603,8 @@
       "why": "Build 238 replaces sequential browser saves with an all-or-nothing database function. The complete batch is validated before any write and records a batch header plus row-level before/after evidence.",
       "where": [
         "/admin-inventory-manager.html",
-        "Supabase → catalog_inventory_change_batches",
-        "Supabase → catalog_inventory_change_batch_rows",
+        "Supabase \u2192 catalog_inventory_change_batches",
+        "Supabase \u2192 catalog_inventory_change_batch_rows",
         "Cloudflare Function logs"
       ],
       "steps": [
@@ -683,7 +683,7 @@
       "why": "A configured email webhook is not enough. Queued or failed customer and staff messages can cause missed bookings, payment confusion, and consent failures.",
       "where": [
         "/admin-startup-guide.html#production",
-        "Cloudflare → Workers & Pages → Settings → Variables",
+        "Cloudflare \u2192 Workers & Pages \u2192 Settings \u2192 Variables",
         "Notification provider dashboard"
       ],
       "steps": [
@@ -707,7 +707,7 @@
       "why": "Customers need a dependable way to pay the remaining balance. A checkout URL alone is not proof that payment status, webhook processing, receipt, refund, and accounting records agree.",
       "where": [
         "/admin-startup-guide.html#production",
-        "Stripe Dashboard → Developers → Webhooks",
+        "Stripe Dashboard \u2192 Developers \u2192 Webhooks",
         "/admin-accounting.html"
       ],
       "steps": [
@@ -803,7 +803,7 @@
       "title": "Complete a deployment rollback and incident-response drill",
       "why": "Backups protect data, but a bad frontend/function deployment also needs a fast, rehearsed rollback path with owners and verification steps.",
       "where": [
-        "Cloudflare Pages → Deployments",
+        "Cloudflare Pages \u2192 Deployments",
         "/admin-startup-guide.html#production",
         "STARTUP_GO_LIVE_BLOCKERS.md",
         "docs/PRODUCTION_TEST_GUIDE.md"
@@ -829,7 +829,7 @@
       "why": "Local visibility depends on accurate relevance signals and real prominence. Fresh approved work, complete profile information, and legitimate reviews are more valuable than duplicated keyword pages.",
       "where": [
         "/admin-startup-guide.html#blockers",
-        "Google Business Profile → Photos, Services, Reviews, Performance",
+        "Google Business Profile \u2192 Photos, Services, Reviews, Performance",
         "/gallery.html",
         "/admin-gallery.html",
         "Search Console"
@@ -879,9 +879,9 @@
       "title": "Apply and verify the Build 240 transactional inventory posting migration",
       "why": "Booking and Creative Project material usage must no longer depend on separate browser writes. Build 240 moves preview, shortage validation, stock mutation, movement evidence, reservation status, idempotency and reversal links into one database transaction.",
       "where": [
-        "Supabase Dashboard → SQL Editor",
+        "Supabase Dashboard \u2192 SQL Editor",
         "sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql",
-        "Supabase Dashboard → Database → Functions",
+        "Supabase Dashboard \u2192 Database \u2192 Functions",
         "/admin-inventory-posting.html"
       ],
       "steps": [
@@ -911,7 +911,7 @@
         "/admin-progress.html",
         "/admin-creative-projects.html",
         "/admin-accounting.html",
-        "Supabase Dashboard → Table Editor → catalog_inventory_posting_batches"
+        "Supabase Dashboard \u2192 Table Editor \u2192 catalog_inventory_posting_batches"
       ],
       "steps": [
         "Choose a low-risk staging inventory item and record its starting quantity.",
@@ -928,6 +928,33 @@
       "done_when": "All acceptance cases pass, duplicate submission cannot double-deduct stock, shortages leave every row unchanged, reversals preserve original and compensating history, and booking accounting evidence is reviewed.",
       "route": "/admin-inventory-posting.html",
       "evidence_key": "inventory_posting_reversal_acceptance"
+    },
+    {
+      "id": "catalog-publish-readiness",
+      "order": 37,
+      "category": "Catalog and inventory",
+      "severity": "blocker",
+      "title": "Complete catalog publishing-readiness acceptance",
+      "why": "Public inventory rows should never expose placeholder names, missing categories, empty images, inactive records, or zero-stock consumables. Build 246 adds one reviewed publish gate and audit trail.",
+      "where": [
+        "/admin-catalog.html",
+        "/admin-inventory-manager.html",
+        "/api/admin/catalog_readiness_report",
+        "Supabase Dashboard \u2192 catalog_publish_readiness_audit"
+      ],
+      "steps": [
+        "Apply the Build 246 migration in staging.",
+        "Open Admin Inventory and filter to Blocked publishing rows.",
+        "Correct one harmless test item until its readiness score has no blockers.",
+        "Select the item and choose Preview public readiness.",
+        "Confirm the preview lists warnings but no blockers.",
+        "Publish the selection and confirm it appears in the public catalog.",
+        "Select an intentionally incomplete test row and confirm publishing is blocked without changing any selected row.",
+        "Review catalog_publish_readiness_audit and record safe IDs in Startup evidence."
+      ],
+      "done_when": "Ready rows publish together, blocked rows remain private, incomplete batch publishing changes nothing, and every preview/publish attempt has audit evidence.",
+      "route": "/admin-catalog.html",
+      "evidence_key": "catalog_publish_readiness"
     }
   ]
 }
