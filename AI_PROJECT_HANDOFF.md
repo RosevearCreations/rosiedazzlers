@@ -1,3 +1,19 @@
+# Rosie Dazzlers — AI Project Handoff (Build 245)
+
+**Updated:** 2026-08-06  
+**Build 245:** protected UI/SEO route scanner, Startup cache diagnostics and recovery controls, safer service-worker installation/fallbacks, service-specific static landing-page H1/metadata fallbacks, admin noindex corrections, gift-certificate one-H1 repair, and synchronized no-DDL documentation.
+
+## Continue from here
+
+- Deploy and open `/admin-ui-health.html`.
+- Confirm `/assets/startup-command-center.js?v=20260807build245` reports Build 245.
+- Export the deployed UI/SEO scan JSON and attach the safe result to Startup evidence.
+- Build 240 remains the latest functional schema migration; Build 245 requires no DDL.
+- Do not remove the standard booking path while Creative Projects and DAIP continue to expand.
+- Current authority order: this file → `MASTER_VALUE_ROADMAP.md` → `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
 # Rosie Dazzlers — AI Project Handoff (Build 241)
 
 **Updated:** 2026-08-05  
@@ -812,3 +828,7 @@ Apply migrations in order: Build 235 gallery if outstanding, Build 237 evidence/
 - Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
 - Advanced Startup Command Center cache-busting and service-worker references to Build 242.
 - No new database migration was introduced in this build.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
