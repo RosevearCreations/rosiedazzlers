@@ -928,4 +928,36 @@ export const STARTUP_PROCESS_CATALOG_BUILD239 = [
 ];
 
 export const STARTUP_PROCESS_CATALOG_BUILD240 = STARTUP_PROCESS_CATALOG_BUILD239;
-export const STARTUP_PROCESS_BUILD = 240;
+
+export const STARTUP_PROCESS_CATALOG_BUILD246 = [
+  ...STARTUP_PROCESS_CATALOG_BUILD240,
+  {
+    id: "catalog-publish-readiness",
+    order: 37,
+    category: "Catalog and inventory",
+    severity: "blocker",
+    title: "Complete catalog publishing-readiness acceptance",
+    why: "Public inventory rows should never expose placeholder names, missing categories, empty images, inactive records, or zero-stock consumables. Build 246 adds one reviewed publish gate and audit trail.",
+    where: [
+      "/admin-catalog.html",
+      "/admin-inventory-manager.html",
+      "/api/admin/catalog_readiness_report",
+      "Supabase Dashboard → catalog_publish_readiness_audit"
+    ],
+    steps: [
+      "Apply the Build 246 migration in staging.",
+      "Open Admin Inventory and filter to Blocked publishing rows.",
+      "Correct one harmless test item until its readiness score has no blockers.",
+      "Select the item and choose Preview public readiness.",
+      "Confirm the preview lists warnings but no blockers.",
+      "Publish the selection and confirm it appears in the public catalog.",
+      "Select an intentionally incomplete test row and confirm publishing is blocked without changing any selected row.",
+      "Review catalog_publish_readiness_audit and record safe IDs in Startup evidence."
+    ],
+    done_when: "Ready rows publish together, blocked rows remain private, incomplete batch publishing changes nothing, and every preview/publish attempt has audit evidence.",
+    route: "/admin-catalog.html",
+    evidence_key: "catalog_publish_readiness"
+  }
+];
+
+export const STARTUP_PROCESS_BUILD = 246;
