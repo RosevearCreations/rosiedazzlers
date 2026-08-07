@@ -1179,7 +1179,7 @@
 
     function addonPrimaryImage(code) {
       const addon = (state.pricing?.addons || []).find((row) => row?.code === String(code || "").trim()) || { code };
-      return sharedAddonPrimaryImage(addon) || "/assets/addons/generic_addon.svg";
+      return sharedAddonPrimaryImage(addon) || "/assets/addons/generic_addon.png";
     }
 
     function addonFallbackImage(code) {
@@ -1940,8 +1940,8 @@
 
       qsa(".addon-thumb").forEach((img) => {
         bindImageWithCandidates(img, img.dataset.mediaSource || "", {
-          fallback: img.dataset.fallback || "/assets/addons/generic_addon.svg",
-          onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.svg"; node.classList.add("visual-placeholder-img"); }
+          fallback: img.dataset.fallback || "/assets/addons/generic_addon.png",
+          onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.png"; node.classList.add("visual-placeholder-img"); }
         });
       });
 
