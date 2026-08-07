@@ -34,6 +34,7 @@ ROUTE_COPY_PAGES = [
     "admin-docs.html",
     "admin-ui-health.html",
     "admin-daip-intake-dry-run.html",
+    "admin-daip-media.html",
     "admin-creative-projects.html",
     "admin-startup-guide.html",
     "admin-launch-readiness.html",
