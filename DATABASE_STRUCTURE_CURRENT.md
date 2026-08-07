@@ -1079,3 +1079,14 @@ The database is primary after migration; packaged JSON/JavaScript remains a comp
 <!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
 
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+## Build 247 database synchronization
+
+Production Creative Project raw-media ingestion uses `daip_project_media_assets`, `daip_media_upload_sessions`, `daip_media_upload_parts`, and `daip_media_processing_jobs`. This intentionally does not repurpose Build 218 `daip_media_assets`, which remains the metadata-only Test Lab table. Raw bytes stay in private R2; only metadata/recovery/audit state is stored in Postgres. Migration: `sql/2026-08-07_build247_daip_private_media_ingestion.sql`.
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+
+## Build 246 catalog-readiness synchronization
+Historical Build 246 catalog readiness tables/RPCs remain part of the current schema and are preserved under Build 247.

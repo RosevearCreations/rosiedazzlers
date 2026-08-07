@@ -921,3 +921,11 @@ Implemented in source: unified Startup Command Center, 34-item detailed catalog,
 <!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
 
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+## Build 247 current state
+
+DAIP now has a real private raw-media ingestion path for Creative Projects. Large files are split into resumable multipart uploads; R2 stores bytes while Supabase stores metadata, upload recovery state and processing jobs. The actual processing/render worker is the next major implementation boundary. Standard booking operations are unchanged.
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->

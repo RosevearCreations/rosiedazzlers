@@ -2837,3 +2837,60 @@ Use `/admin-startup-guide.html#roadmap` as the active next-20 queue. The Build 2
 <!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
 
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+# Development Roadmap — Build 247
+
+## Completed in source
+- Private R2-bound DAIP Creative Project media intake with 32 MiB multipart upload, resumable parts, duplicate protection, safe abort and immutable completed masters.
+- Shared Supabase metadata for project assets, sessions, parts and downstream processing jobs.
+- Optional `DAIP_PROCESSING_QUEUE` dispatch, while preserving queued DB work if queue delivery fails.
+- `/admin-daip-media.html` linked from Creative Projects, Admin Menu, Startup Command Center and production-readiness reporting.
+- Build 218 metadata-only Test Lab table preserved; real project masters use `daip_project_media_assets`.
+
+## Current next 20
+1. Create and bind the private DAIP R2 bucket as DAIP_MEDIA_BUCKET.
+2. Apply the Build 247 DAIP media migration in staging.
+3. Upload and verify one private DAIP photo.
+4. Prove a video larger than 300 MB uploads through multipart chunks.
+5. Interrupt and resume a large video without restarting from zero.
+6. Create/import the first historical detailing Creative Project and its raw media.
+7. Create/import the second historical detailing Creative Project and its raw media.
+8. Create/import the third historical detailing Creative Project and its raw media.
+9. Configure the optional DAIP_PROCESSING_QUEUE binding.
+10. Implement the processing consumer for proxy video, frames, audio and transcript.
+11. Implement scene analysis and before/after candidate scoring.
+12. Implement reviewed story assembly from selected evidence.
+13. Implement a rendering adapter for long-form and short-form MP4 outputs.
+14. Keep every generated derivative private until human consent/privacy review.
+15. Add reviewed copy-to-public workflow for approved gallery/social derivatives.
+16. Complete real-device DAIP uploader acceptance on desktop and mobile.
+17. Continue catalog publish-readiness cleanup and product-image completion.
+18. Complete booking, payment, refund and notification production acceptance.
+19. Complete Search Console and Google Business Profile alignment.
+20. Run an invite-only soft launch with daily evidence review.
+
+## Following 20
+1. Add automatic proxy generation presets for 1080p and 720p editing copies.
+2. Add key-frame extraction at scene boundaries and configurable intervals.
+3. Add audio waveform and silence detection for narration/edit decisions.
+4. Add speech-to-text transcript storage with timestamp segments.
+5. Add privacy detection for license plates, faces and sensitive documents.
+6. Add reviewed blur/redaction derivatives rather than modifying raw originals.
+7. Add before/during/after auto-classification suggestions with manual override.
+8. Add duplicate and near-duplicate visual detection across each project.
+9. Add best-shot scoring for sharpness, exposure, framing and transformation evidence.
+10. Add timeline storyboard editor with drag-and-drop selected evidence.
+11. Add soundtrack/narration planning without embedding unlicensed music.
+12. Add long-form YouTube edit recipe generation from the approved storyboard.
+13. Add Shorts/Reels/TikTok vertical crop and hook recipe generation.
+14. Add thumbnail candidate generation and review.
+15. Add website-gallery and Google Business Profile derivative presets.
+16. Add per-platform caption, title, description, hashtag and CTA drafts.
+17. Add rendering cost/time estimates before starting expensive media jobs.
+18. Add retry/dead-letter handling for failed processing jobs.
+19. Add retention/storage-class policy for old proxies while preserving raw masters.
+20. Add project-level “Content package ready for review” gate and one-click review queue.
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->

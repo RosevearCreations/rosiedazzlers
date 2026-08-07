@@ -505,3 +505,11 @@ New placeholder roles: `startup_command_center_unified_path` and `local_seo_proo
 <!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
 
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+## Build 247 raw-media and image note
+
+Real customer/project source media belongs in the private `rosie-daip-media` bucket through `/admin-daip-media.html`, not in public placeholder folders. `rosie-assets/CarPhotos/` may continue to supply already-public/approved visual resources, but raw MOV/MP4/JPG masters should remain private. Existing raster fallback photos remain bundled so broken/missing public images do not fall back to SVG photo placeholders.
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->

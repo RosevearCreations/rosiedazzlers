@@ -1281,3 +1281,14 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 <!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
 
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+## Build 247 first-read additions
+
+- `DAIP_R2_MEDIA_SETUP_GUIDE.md` — exact Cloudflare/Supabase setup for private large-media ingestion.
+- `docs/digital-asset-intelligence-platform/27_DAIP_Large_Media_Ingestion_and_R2_Setup.md` — DAIP architecture copy of the same workflow.
+- `/admin-daip-media.html` — protected operational intake screen.
+- `sql/2026-08-07_build247_daip_private_media_ingestion.sql` — current DAIP media migration.
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->

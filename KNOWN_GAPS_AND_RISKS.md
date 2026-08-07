@@ -1923,3 +1923,17 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 <!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
 
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+## Build 247 open gaps and risks
+
+- **Cloudflare account setup remains external:** `rosie-daip-media` must be created and bound as `DAIP_MEDIA_BUCKET` before the new intake can store bytes.
+- **Processing runtime is not yet implemented:** Build 247 creates processing jobs but does not execute FFmpeg/transcoding/transcription/scene analysis or final long/short video rendering.
+- **Queue is optional in this build:** without `DAIP_PROCESSING_QUEUE`, DB jobs remain queued for the future processor.
+- **Raw masters are intentionally private:** no direct public URL or automatic copy to `rosie-assets` exists.
+- **Three historical projects need staged acceptance:** upload a harmless >300 MB test first, then import the real projects one at a time.
+- **Storage/retention cost policy still needs operational acceptance:** raw masters should be preserved; proxies/derivatives can later receive a lifecycle policy.
+- **Customer consent/privacy review remains mandatory before any derivative is promoted to public gallery/social use.**
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
