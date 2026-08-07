@@ -98,9 +98,9 @@
     block.innerHTML = `<img src="${photoAsset(type)}" alt="${esc(label||titleFor(type))}" loading="lazy" decoding="async"><div class="visual-placeholder-copy"><strong>${esc(titleFor(type))}</strong><span>${esc(detailFor(type))}</span></div>`;
     const img = block.querySelector('img');
     img.addEventListener('error', ()=>{
-      if (img.dataset.visualSvgFallbackApplied === 'true') return;
-      img.dataset.visualSvgFallbackApplied='true';
-      img.src=svgData(type,label);
+      if (img.dataset.visualRasterFallbackApplied === 'true') return;
+      img.dataset.visualRasterFallbackApplied='true';
+      img.src=PHOTO_ASSETS.default;
       img.classList.add('visual-placeholder-img');
     }, { once:false });
     return block;
@@ -114,7 +114,7 @@
         // Build 215: allow the media resolver to try JPG/JPEG/WebP/PNG variants before a placeholder replaces the image.
         if (img.dataset.mediaResolverBound === 'true' && img.dataset.assetResolveStatus !== 'exhausted') return;
         if (img.dataset.visualPhotoFallbackApplied !== 'true') { img.dataset.visualPhotoFallbackApplied='true'; img.src=photoAsset(type); return; }
-        if (img.dataset.visualSvgFallbackApplied !== 'true') { img.dataset.visualSvgFallbackApplied='true'; img.src=svgData(type,label); img.classList.add('visual-placeholder-img'); return; }
+        if (img.dataset.visualRasterFallbackApplied !== 'true') { img.dataset.visualRasterFallbackApplied='true'; img.src=PHOTO_ASSETS.default; img.classList.add('visual-placeholder-img'); return; }
       }, { once:false });
     });
   }

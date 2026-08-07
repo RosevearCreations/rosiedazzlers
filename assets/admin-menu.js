@@ -88,6 +88,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-daip")
     },
     {
+      key: "admin-daip-media",
+      label: "DAIP Media Intake",
+      href: "/admin-daip-media.html",
+      description: "Private resumable raw photo/video ingestion for Creative Projects",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-media")
+    },
+    {
       key: "admin-daip-governance",
       label: "DAIP Governance",
       href: "/admin-daip-governance.html",

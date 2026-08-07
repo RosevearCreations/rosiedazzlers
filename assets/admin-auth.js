@@ -273,6 +273,7 @@
       case "admin-daip-design":
       case "admin-daip-gate-c":
       case "admin-daip-intake-dry-run":
+      case "admin-daip-media":
       case "admin-roadmap-execution":
       case "admin-creative-projects":
       case "admin-integrations":
