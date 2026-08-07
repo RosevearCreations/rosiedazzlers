@@ -1,3 +1,9 @@
+# Images and Visual Health — Build 245 Update
+
+The bundled raster fallback set remains in place. `/admin-ui-health.html` now confirms whether critical pages reference missing local images or deprecated SVG photo fallbacks after deployment. Generic AI-generated images remain temporary professional fallbacks; replace high-visibility public areas with approved Rosie-owned local work as it becomes available.
+
+---
+
 # Images and Visual Placeholders — Build 240 Update
 
 New internal placeholder: `inventory_transactional_posting_reversal`, showing review → validation → posting → audited reversal. It is operator guidance and must not be mistaken for public proof.
@@ -488,3 +494,14 @@ New placeholder roles: `startup_command_center_unified_path` and `local_seo_proo
 <!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
 
 <!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->
+
+## Build 244 update
+
+- Bundled the new AI-generated raster placeholder images directly into the application zip so the site no longer depends on missing SVG photo fallbacks for common empty-image states.
+- Replaced review, add-on, catalog, booking, workflow, and admin placeholder-photo references from SVG files to real PNG/JPG files.
+- Preserved instructional SVG graphics, such as framing guides and charts, where SVG is still the correct format.
+- Sanity check: the remaining strongest live-readiness work is acceptance testing, content completion, operational policy confirmation, and production credential/provider validation rather than placeholder-media cleanup.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->

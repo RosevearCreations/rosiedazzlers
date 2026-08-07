@@ -1,3 +1,9 @@
+# Database Structure — Build 245 Status
+
+Build 245 requires no DDL. It adds browser/static acceptance tooling and content hardening only. Build 240 remains the latest functional database migration.
+
+---
+
 # Database Structure — Build 241 Status
 
 Build 241 requires no DDL. The latest functional database migration remains `sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql`. The hotfix record is `sql/2026-08-05_build241_startup_command_center_initialization_hotfix_no_ddl.sql`.
@@ -1069,3 +1075,7 @@ The database is primary after migration; packaged JSON/JavaScript remains a comp
 - Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
 - Advanced Startup Command Center cache-busting and service-worker references to Build 242.
 - No new database migration was introduced in this build.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->

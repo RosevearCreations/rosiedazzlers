@@ -1,3 +1,20 @@
+# Development Roadmap — Build 245 Current Execution
+
+**Updated:** 2026-08-06
+
+## Completed in source
+
+- UI/SEO Health scanner, cache diagnostics, safe service-worker recovery and exported scan evidence.
+- Service-worker malformed-cache-list and all-or-nothing installation repair.
+- Add-on landing-page static H1, title, description and image fallbacks.
+- Admin noindex and gift-certificate one-H1 corrections.
+
+## Acceptance required
+
+Deploy to preview, run `/admin-ui-health.html`, clear any stale Build 244 cache, export the scan, then continue the current Startup acceptance sequence. Source checks do not replace payment, email, database, mobile, accessibility or recovery proof.
+
+---
+
 # Development Roadmap — Build 241 Hotfix
 
 **Updated:** 2026-08-05
@@ -2809,3 +2826,14 @@ Use `/admin-startup-guide.html#roadmap` as the active next-20 queue. The Build 2
 - Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
 - Advanced Startup Command Center cache-busting and service-worker references to Build 242.
 - No new database migration was introduced in this build.
+
+## Build 244 update
+
+- Bundled the new AI-generated raster placeholder images directly into the application zip so the site no longer depends on missing SVG photo fallbacks for common empty-image states.
+- Replaced review, add-on, catalog, booking, workflow, and admin placeholder-photo references from SVG files to real PNG/JPG files.
+- Preserved instructional SVG graphics, such as framing guides and charts, where SVG is still the correct format.
+- Sanity check: the remaining strongest live-readiness work is acceptance testing, content completion, operational policy confirmation, and production credential/provider validation rather than placeholder-media cleanup.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->

@@ -1,3 +1,23 @@
+# Known Gaps and Risks — Build 245 Update
+
+## Closed or reduced
+
+- Critical-route CSS/script/image/H1/metadata drift now has a browser-based acceptance scanner.
+- Stale Startup assets now have visible build diagnostics and a safe app-cache recovery control.
+- Service-worker installation no longer fails completely because one optional cached URL is missing.
+- Non-navigation offline failures no longer receive homepage HTML in place of JavaScript or images.
+- Twelve add-on pages no longer depend entirely on JavaScript for a main heading and useful metadata.
+
+## Still open
+
+- Connected booking, payment, refund, webhook, external email, backup/restore and production-variable acceptance.
+- Real-device mobile and accessibility testing.
+- Final Rosie-owned local proof and sellable-product media completion.
+- Inventory cleanup, product readiness, payment application, HST review, month-end close and accountant export.
+- Controlled soft launch and first-week monitoring.
+
+---
+
 # Known Issues and Gaps — Build 241
 
 **Updated:** 2026-08-05
@@ -1892,3 +1912,14 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 - Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
 - Advanced Startup Command Center cache-busting and service-worker references to Build 242.
 - No new database migration was introduced in this build.
+
+## Build 244 update
+
+- Bundled the new AI-generated raster placeholder images directly into the application zip so the site no longer depends on missing SVG photo fallbacks for common empty-image states.
+- Replaced review, add-on, catalog, booking, workflow, and admin placeholder-photo references from SVG files to real PNG/JPG files.
+- Preserved instructional SVG graphics, such as framing guides and charts, where SVG is still the correct format.
+- Sanity check: the remaining strongest live-readiness work is acceptance testing, content completion, operational policy confirmation, and production credential/provider validation rather than placeholder-media cleanup.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->

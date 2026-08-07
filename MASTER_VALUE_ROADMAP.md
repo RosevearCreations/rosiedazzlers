@@ -1,3 +1,21 @@
+# Rosie Dazzlers Master Value Roadmap — Build 245
+
+**Updated:** 2026-08-06
+
+## Completed in source
+
+- Protected UI/SEO/CSS/asset/cache acceptance scanner and exported evidence.
+- Startup Command Center cache/build diagnostics and safe cache recovery.
+- Service-worker install and offline fallback hardening.
+- Static one-H1 and service-specific metadata fallbacks for JavaScript add-on pages.
+- Admin noindex and printable gift-certificate heading corrections.
+
+## Current next 20
+
+The current ordered queue is stored in `data/build245_next_steps.json`. The immediate sequence is preview deployment, cache/build confirmation, full UI scan, CSS/mobile acceptance, booking/calendar proof, payment/refund/webhook proof, notifications, infrastructure/recovery, policy/accessibility, inventory/catalog cleanup, Search Console/GBP alignment, local proof replacement and controlled soft launch.
+
+---
+
 # Rosie Dazzlers Master Value Roadmap — Build 241
 
 **Updated:** 2026-08-05  
@@ -1186,3 +1204,7 @@ The current next-20 cycle prioritizes deployment/migrations, scheduling, booking
 - Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
 - Advanced Startup Command Center cache-busting and service-worker references to Build 242.
 - No new database migration was introduced in this build.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->

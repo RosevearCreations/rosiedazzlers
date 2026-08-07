@@ -1,3 +1,15 @@
+# Documentation Index — Build 245
+
+## Current authorities
+
+1. `AI_PROJECT_HANDOFF.md`
+2. `MASTER_VALUE_ROADMAP.md`
+3. `STARTUP_GO_LIVE_BLOCKERS.md` (operational go-live authority)
+
+Build 245 details: `BUILD245_SUMMARY.md`, `docs/BUILD245_UI_SEO_CACHE_ACCEPTANCE.md`, `docs/SEO_COMPETITIVE_REVIEW_BUILD245.md`, `data/markdown_sanity_build245.json`.
+
+---
+
 # Documentation Index — Build 240
 
 ## Living authority
@@ -1258,3 +1270,14 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 - Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
 - Advanced Startup Command Center cache-busting and service-worker references to Build 242.
 - No new database migration was introduced in this build.
+
+## Build 244 update
+
+- Bundled the new AI-generated raster placeholder images directly into the application zip so the site no longer depends on missing SVG photo fallbacks for common empty-image states.
+- Replaced review, add-on, catalog, booking, workflow, and admin placeholder-photo references from SVG files to real PNG/JPG files.
+- Preserved instructional SVG graphics, such as framing guides and charts, where SVG is still the correct format.
+- Sanity check: the remaining strongest live-readiness work is acceptance testing, content completion, operational policy confirmation, and production credential/provider validation rather than placeholder-media cleanup.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
