@@ -1,3 +1,165 @@
+# Development Roadmap — Build 246 Catalog Publishing Readiness
+
+**Updated:** 2026-08-07  
+**Current engineering cycle:** Build 246
+
+## Source work completed in this build
+
+1. Added one shared server-side catalog-readiness evaluator.
+2. Added suspicious imported-name detection to public publishing gates.
+3. Blocked SVG photo placeholders from public catalog publishing.
+4. Added readiness blockers, warnings, scores and gallery counts.
+5. Added a protected catalog readiness report endpoint.
+6. Attached readiness data to the Admin Inventory list API.
+7. Filtered incomplete public catalog rows at the server boundary.
+8. Blocked direct public saves for incomplete inventory rows.
+9. Blocked Workbench bulk public changes for incomplete rows.
+10. Replaced sequential visibility writes with transactional RPC-backed changes.
+11. Added a reviewed publish preview/commit API.
+12. Added catalog publishing audit evidence and protected permissions.
+13. Added an all-or-nothing database publish-review function.
+14. Added Admin Inventory preview and publish controls.
+15. Added readiness filters and badges to Admin Inventory.
+16. Added readiness filters to the Inventory Workbench.
+17. Added readiness fields to Inventory Workbench CSV exports.
+18. Added catalog readiness to the UI and SEO Health route matrix.
+19. Added Startup process 37 and launch evidence for publishing acceptance.
+20. Added Build 246 schema, documentation, cache and release-guard synchronization.
+
+## Acceptance required before these controls are considered production-ready
+
+Build 246 changes source code and database migration files, but it does not prove production configuration. Apply `sql/2026-08-07_build246_catalog_publish_readiness.sql` in staging first, refresh the Supabase schema cache, and complete the exact readiness, all-or-nothing, audit, mobile and public-catalog tests in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+## Next 20 connected steps
+
+1. Apply the Build 246 migration in staging and refresh the Supabase schema cache.
+2. Preview one ready inventory row and compare browser results with the readiness endpoint.
+3. Publish one ready row and confirm the public catalog includes it.
+4. Attempt a mixed ready/blocked publish and confirm the full batch remains unchanged.
+5. Review the catalog publish-readiness audit row and preserve safe evidence.
+6. Correct suspicious names, missing categories, units and featured images.
+7. Complete cost, description, gallery and service-tag warnings for priority inventory.
+8. Retest Block Calendar full-day, AM and PM behaviour against public booking.
+9. Complete one full booking and admin reconciliation test.
+10. Complete and refund a controlled Stripe payment and verify webhook evidence.
+11. Verify booking, payment, consent and staff emails in external inboxes.
+12. Audit Cloudflare variables, bindings, domains and rollback access.
+13. Perform Supabase restore and Cloudflare rollback rehearsals.
+14. Complete legal, media-consent, staff-permission and accessibility review.
+15. Test booking, catalog, Startup and Inventory Workbench on real mobile devices.
+16. Complete Search Console sitemap, canonical and structured-data inspection.
+17. Align Google Business Profile categories, services, areas, hours and photo cadence.
+18. Complete upload interruption/retry and duplicate-media acceptance.
+19. Complete payment application, HST, month-end close and accountant-package review.
+20. Run an invite-only soft launch and review every early transaction daily.
+
+## Current engineering direction after acceptance
+
+- Finish resumable media-upload recovery and responsive derivatives.
+- Complete payment application, HST review, month-end close/lock/reopen and accountant export.
+- Replace remaining generic imagery with approved Rosie-owned local proof.
+- Complete Search Console and Google Business Profile evidence cycles.
+- Run a controlled soft launch and prioritize failures observed in real operation.
+
+---
+
+# Development Roadmap — Build 245 Current Execution
+
+**Updated:** 2026-08-06
+
+## Completed in source
+
+- UI/SEO Health scanner, cache diagnostics, safe service-worker recovery and exported scan evidence.
+- Service-worker malformed-cache-list and all-or-nothing installation repair.
+- Add-on landing-page static H1, title, description and image fallbacks.
+- Admin noindex and gift-certificate one-H1 corrections.
+
+## Acceptance required
+
+Deploy to preview, run `/admin-ui-health.html`, clear any stale Build 244 cache, export the scan, then continue the current Startup acceptance sequence. Source checks do not replace payment, email, database, mobile, accessibility or recovery proof.
+
+---
+
+# Development Roadmap — Build 241 Hotfix
+
+**Updated:** 2026-08-05
+
+## Completed
+
+- Repaired Startup Command Center summary initialization.
+- Added `Promise.allSettled()` refresh isolation and visible fallback reporting.
+- Advanced asset/service-worker cache tokens.
+- Added an automated Build 241 regression guard.
+- Preserved every Build 240 roadmap action and launch blocker.
+
+## Resume next
+
+Continue the Build 240 current execution cycle after preview acceptance of `/admin-startup-guide.html`.
+
+---
+
+# Development Roadmap — Build 240 Current Execution
+
+**Updated:** 2026-08-05
+
+## Completed in source
+
+- Atomic booking and Creative Project inventory posting RPC with preview, locking, shortage checks, idempotency and audit rows.
+- Authorized reversal RPC using compensating return movements and preserved source evidence.
+- Project-reservation availability/conflict API and operator loader.
+- Responsive Inventory Posting & Reversal page with cached read-only history fallback and CSV export.
+- Existing job-progress and catalog usage routes moved off direct stock PATCH writes.
+- Startup catalog expanded to 36 processes; Build 240 next-20 cycle added.
+
+## Acceptance required
+
+Apply the Build 240 migration in staging and complete the exact migration, posting, idempotency, shortage, reversal and accounting tests in `STARTUP_GO_LIVE_BLOCKERS.md`. Source completion is not production evidence.
+
+## Next implementation wave
+
+Resumable uploads and derivatives; automatic product publishing gates; payment application and HST review; month-end close/lock/reopen; accountant export; local-proof replacement; Search Console/GBP alignment; controlled soft launch.
+
+---
+
+# Development Roadmap — Build 238 Current Execution
+
+**Build 238 operational release:** source implementation is complete for the first two previously open inventory reliability items: transactional bulk updates and reviewed duplicate merge. They remain open for staging acceptance until the migration and exact tests below pass.
+
+## Completed in source
+
+- All-or-nothing inventory bulk RPC with dry-run preview and audit rows.
+- Duplicate merge RPC with preview, reference counts, compensating movements, gallery/tag consolidation, same-type/unit safeguards and duplicate soft archive.
+- Inventory Workbench controls for batch reasons, preview/commit, merge selection, cached read-only fallback and readable transaction/merge history with CSV export.
+- Build 238 Startup Guide, Roadmap Execution fallback, SEO metadata cleanup and release guard coverage.
+
+## Acceptance work now required
+
+1. Apply `sql/2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql` in staging.
+2. Use two deliberately created test duplicates of the same item type and compatible unit.
+3. Preview the merge; compare every reference count with Supabase rows.
+4. Execute; confirm survivor quantity, archived duplicate, transferred references, movement evidence and merge audit.
+5. Preview a valid multi-row bulk update, then execute and inspect batch/row audits.
+6. Submit one invalid row in a test batch and confirm no selected row changed.
+7. Repeat on mobile and verify write controls remain disabled during cached/offline fallback.
+
+## Next engineering queue after acceptance
+
+- Add merge-audit viewer and export from the Inventory Workbench.
+- Add conflict-aware merge handling for future tables as they are introduced.
+- Add an authorized compensating reversal workflow rather than automatic unmerge.
+- Move real job inventory consumption and reservation posting into transactional RPCs.
+- Add resumable media uploads and responsive derivatives.
+- Add publish-readiness gates for price, inventory, image roles, alt text, consent and shipping/pickup settings.
+- Continue preflight, accessibility, performance, security and first-week monitoring work from the Startup Guide.
+
+---
+
+# Build 237 synchronization note
+
+Build 237 repairs missing CSS/AdminShell dependencies, adds a current-cycle roadmap, shared launch evidence and a detailed Startup Guide. The living roadmap is `MASTER_VALUE_ROADMAP.md`; this file remains synchronized release history.
+
+---
+
 # Rosie Dazzlers Development Roadmap — Build 217
 
 **Updated:** 2026-06-30
@@ -2623,3 +2785,122 @@ Build 230 extends only the opt-in Creative Project Intelligence path. Ordinary c
 Added: structured project-only material, labour and other-cost lines; optional project templates; before/after applicability; consent status and summary; story/platform/commerce/report drafts; unified batch output review; reversible booking unlink, archive and restore; and a project-to-DAIP metadata association that is denied until Gate C is accepted and technical capability is explicitly enabled. Nothing publishes automatically.
 
 Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_build230_project_costs_templates_outputs.sql`.
+
+## Build 231 implementation
+
+Completed the next project-interface pass: reversible line controls, profitability/classification, reviewed consumption ledger, read-only booking comparison, template management, consent reminders, shot plans, approved-session draft planning, platform metadata, archive manifests, lessons and recommendation scoring. See the master roadmap for the next 20.
+
+
+## Build 232 — accessible project controls and archive history (2026-07-15)
+
+Build 232 replaces the remaining JSON prompt used to edit project material, labour and cost rows with an accessible dialog form. It adds project budget and target-margin guidance, budget variance and break-even calculations, assignable/evidence-aware shot plans, reviewed consent-reminder queue records, draft revision history, and authenticated metadata-only archive downloads. Ordinary bookings remain unchanged; inventory posting still does not mutate stock; DAIP Gate C and all media/publication controls remain held.
+
+Migration: `sql/2026-07-15_build232_project_controls_archive_history.sql`. Workspace: `/admin-creative-projects.html`.
+
+### Next 20 connected steps
+1. Apply and test Build 232 in staging.
+2. Add reservation availability checks against live inventory.
+3. Define the transactional stock-posting and reversal RPC.
+4. Add sales-channel revenue-source and fee lines.
+5. Add budget-warning tasks to Today Needs Attention.
+6. Connect approved consent reminders to the notification review queue.
+7. Add shot-plan drag ordering and mobile capture evidence selection after Gate C.
+8. Display draft version comparisons and restore controls.
+9. Add provider-neutral AI draft adapter contracts with hard cost limits, disabled by default.
+10. Add editable YouTube chapter timecodes.
+11. Add clip evidence selection after Gate C.
+12. Add Pinterest board administration.
+13. Add Etsy taxonomy and shipping-profile lookup.
+14. Add website schema validation and internal-link checks.
+15. Add educational safety reviewer assignment.
+16. Add CSV archive exports alongside JSON.
+17. Add lessons-to-knowledge-base promotion with human approval.
+18. Improve recommendation scoring with cost, audience and reusable-skill factors.
+19. Add destination-readiness checks before social or commerce handoff.
+20. Keep standard bookings, DAIP media and publishing approval-only.
+
+
+## Build 233 — Supplier-link inventory intake
+- Added a provider-neutral supplier-link preview contract, with Amazon.ca and Amazon.com enabled first.
+- Staff paste a product URL, review extracted public metadata and suggested tool/consumable classification, then save through the existing authoritative inventory endpoint.
+- Exact duplicate checks use normalized Amazon URL and ASIN. Imported images, prices and descriptions are drafts only and require human review.
+- Import attempts are audited in `catalog_supplier_import_audit`; no browser credentials, scraping tokens or automatic purchases are introduced.
+- Ordinary booking inventory, project reservation ledgers and DAIP Gate C remain unchanged.
+
+
+## Build 234 — Separate Inventory Manager
+
+Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and adds `admin-inventory-manager.html` as an optional spreadsheet-style management surface. It supports row-level edits, suspicious-name review, filtering, sorting, soft archive, restore, desktop tables, and mobile cards. The authoritative save path remains `/api/admin/catalog_inventory_save`; no hard delete was added.
+
+
+## Build 235 completed
+1. Inventory JSON field/value table editor.
+2. Individual-field and full-row updates.
+3. Bulk inventory edits and CSV export.
+4. Seven-image ordered product/inventory galleries.
+5. Featured image retained separately.
+6. Launch Readiness Command Center.
+7. Automatic inventory/name/image/cost/category/stock audits.
+8. Manual booking/payment/email/environment/backup/legal/mobile/accessibility/security confirmations.
+9. Controlled soft-launch guidance.
+10. Build 235 migration and route-copy synchronization.
+
+### Next 20 execution steps
+1. Apply and verify the Build 235 gallery migration.
+2. Correct suspicious inventory names.
+3. Add featured images to active sellable rows.
+4. Add ordered gallery images to priority products.
+5. Complete missing costs and categories.
+6. Confirm first-week low-stock and purchase-order needs.
+7. Run a production booking end to end.
+8. Run and refund a small live Stripe payment.
+9. Verify payment and booking webhooks.
+10. Verify customer and staff email delivery.
+11. Verify Cloudflare production variables, bindings and branch.
+12. Confirm database backups and test/document restore.
+13. Review privacy, terms, cancellation, refund and media-consent wording.
+14. Test customer and staff workflows on real mobile devices.
+15. Complete keyboard/focus/contrast/error accessibility checks.
+16. Verify analytics and conversion events.
+17. Verify sitemap, robots, canonicals and Search Console.
+18. Verify Google Business Profile service area, hours, categories and contact data.
+19. Verify permissions, protected endpoints, sessions and security headers.
+20. Begin an invite-only soft launch and monitor every first-week transaction.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+## Build 239 current development cycle
+
+Use `/admin-startup-guide.html#roadmap` as the active next-20 queue. The Build 239 migration seeds the database cycle. Development should now close launch evidence and reliability gaps before adding unrelated modules. Key code follow-ups include live browser acceptance, migration execution, transaction rollback tests, notification retry visibility, upload recovery, retention/incident safety, image derivatives, monitoring, and guarded Markdown retirement.
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->
+
+
+## Build 242 update
+
+- Repaired `/admin-daip-intake-dry-run` contrast and card styling.
+- Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
+- Advanced Startup Command Center cache-busting and service-worker references to Build 242.
+- No new database migration was introduced in this build.
+
+## Build 244 update
+
+- Bundled the new AI-generated raster placeholder images directly into the application zip so the site no longer depends on missing SVG photo fallbacks for common empty-image states.
+- Replaced review, add-on, catalog, booking, workflow, and admin placeholder-photo references from SVG files to real PNG/JPG files.
+- Preserved instructional SVG graphics, such as framing guides and charts, where SVG is still the correct format.
+- Sanity check: the remaining strongest live-readiness work is acceptance testing, content completion, operational policy confirmation, and production credential/provider validation rather than placeholder-media cleanup.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->

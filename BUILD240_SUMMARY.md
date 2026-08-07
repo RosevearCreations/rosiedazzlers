@@ -1,0 +1,93 @@
+# Rosie Dazzlers Build 240 Summary
+
+**Updated:** 2026-08-05
+
+## Primary advancement
+
+Build 240 adds preview-first, transactional inventory posting and authorized compensating reversal for ordinary bookings and reviewed Creative Projects while preserving all existing inventory editors, JSON tools, galleries, archive/restore, merge, bulk-update, booking and project workflows.
+
+## New operator route
+
+`/admin-inventory-posting.html`
+
+## New migration
+
+`sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql`
+
+Apply after Builds 235, 237, 238 and 239, staging first.
+
+## Safety properties
+
+- Complete batch succeeds or fails as one inventory database transaction.
+- Inventory rows are locked and checked for shortages before mutation.
+- Stable idempotency keys prevent retry/double-click duplicate deductions.
+- Creative Project quantity must exactly match a reviewed reservation.
+- Original movements are retained; reversal creates compensating return movements.
+- Booking reversal flags accounting for review rather than deleting journal history.
+- API outage history fallback is labelled read-only and cannot mutate stock.
+- Inventory and movement quantities are aligned to thousandth-level precision.
+
+## Startup Guide
+
+Every prior Build 239 process remains. Build 240 adds process 35 for migration verification and process 36 for posting/reversal/accounting acceptance.
+
+## Current next 20 steps
+
+1. **Deploy Build 240 and verify the Inventory Posting page** — Deploy preview, hard-refresh /admin-inventory-posting, verify CSS/scripts/menu/route copy and confirm no console error.
+2. **Apply the Build 240 transaction migration in staging** — Run the complete Build 240 migration after prior migrations, refresh schema cache, and confirm tables/RPCs.
+3. **Complete booking inventory posting acceptance** — Preview and commit a small booking usage batch; verify stock, movement, batch, row and job history evidence.
+4. **Complete Creative Project reservation posting acceptance** — Post reviewed project reservations and verify project ownership, shortage checks, status and inventory_mutated evidence.
+5. **Complete idempotency, shortage and rollback tests** — Replay the same key, submit an over-stock request, and confirm no duplicate or partial mutations.
+6. **Complete authorized reversal and accounting review** — Preview/commit a compensating reversal and reconcile booking COGS journal evidence without deleting history.
+7. **Retest Block Calendar full-day, AM and PM behaviour** — Create/remove each block type and confirm public booking availability matches after refresh.
+8. **Complete end-to-end booking, payment and notification test** — Run phone-sized booking, deposit, webhook, email and admin reconciliation with safe evidence.
+9. **Complete Cloudflare and Supabase recovery rehearsal** — Audit variables/bindings then perform staging restore and deployment rollback with smoke tests.
+10. **Complete legal, consent and staff permission review** — Publish policies, verify links, roles, session expiry and private media/incident boundaries.
+11. **Complete real-device mobile and accessibility acceptance** — Test customer/admin paths, keyboard, focus, labels, contrast, wrapping, tables and touch targets.
+12. **Finish resumable media upload and derivative worker** — Implement resumable weak-network upload recovery, deduplication and WebP/AVIF responsive derivatives.
+13. **Add automatic product publish-readiness gates** — Block public publishing when required image roles, price, tax, category, stock, SEO or consent are incomplete.
+14. **Complete inventory name/category/cost/duplicate cleanup** — Use suspicious-name, transactional bulk update, merge preview and audit history tools.
+15. **Complete sellable product galleries and pricing review** — Finish featured plus seven images, alt/captions/roles, costs, HST, margins and public display.
+16. **Complete payment application and tax workflow** — Post approved receipts against AR, add HST review, exceptions and traceable journal links.
+17. **Add month-end close, lock/reopen and accountant export** — Implement controlled period close, authorized reopen and evidence-complete export packaging.
+18. **Complete Search Console, schema and GBP alignment** — Submit sitemap, validate canonicals/schema/indexing and align GBP services, areas, hours, photos and reviews.
+19. **Replace high-value placeholders with approved local proof** — Prioritize homepage, town/service pages, booking, galleries and trust blocks using customer-approved Rosie-owned images.
+20. **Run invite-only soft launch and prioritize observed failures** — Accept a small known-customer cohort and review every booking, payment, notification, upload, inventory and incident event daily.
+
+## Documentation authority
+
+1. `AI_PROJECT_HANDOFF.md`
+2. `MASTER_VALUE_ROADMAP.md`
+3. `STARTUP_GO_LIVE_BLOCKERS.md`
+
+Supporting Development Roadmap, Known Gaps, implementation state, sanity, schema and image documents remain synchronized for future AI/developer handoff.
+
+## Validation
+
+- Complete historical release suite passed.
+- Build 240 guard passed.
+- Cloudflare Pages Functions static/syntax checks passed.
+- One-H1 validation passed.
+- Route-copy and local asset checks passed.
+- Canonical schema and migration markers passed.
+- All Markdown files carry Build 238, Build 239 and Build 240 synchronization evidence.
+
+Build 238 synchronization (2026-07-30)
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+Build 210 documentation sync
+Build 211 documentation sync
+Build 212 documentation sync
+Build 213 documentation sync
+Build 214 documentation sync
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->

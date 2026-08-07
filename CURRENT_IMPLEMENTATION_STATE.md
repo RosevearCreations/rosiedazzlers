@@ -1,3 +1,37 @@
+# Current Implementation State — Build 245
+
+Build 245 is a no-DDL launch-acceptance and SEO hardening release. It adds deployed UI/CSS/asset/metadata scanning, cache recovery, safer offline behaviour and static landing-page content while preserving booking, inventory, Creative Projects, DAIP boundaries and Build 240 transactional inventory workflows.
+
+---
+
+# Current Implementation State — Build 241
+
+Build 241 is a no-DDL reliability hotfix for the unified Startup Command Center. The summary, evidence, production, guided-test, roadmap and automatic-check panels can initialize independently, and a single panel failure no longer prevents the rest of the interface from loading. Build 240 remains the latest functional schema release.
+
+---
+
+# Current Implementation State — Build 240
+
+Build 240 preserves all existing inventory and launch workflows and adds database-first booking/project inventory posting, compensating reversal, transaction history, project reservation validation and safe read-only outage history. Production readiness depends on applying migrations and completing the Startup acceptance evidence.
+
+**Migration order when outstanding:** Build 235 gallery → Build 237 evidence/roadmap → Build 238 bulk/merge → Build 239 unified Startup catalog → Build 240 posting/reversal.
+
+---
+
+# Current Implementation State — Build 238
+
+Build 238 keeps all existing inventory/catalog workflows and adds database-first safety around high-volume cleanup. Source code now includes transactional bulk changes, reviewed duplicate merging, shared audit evidence and an admin history/CSV view, read-only cached fallback, Build 238 roadmap/startup data, tightened public metadata and cache/CSS continuity. Production state remains dependent on applying the migrations and completing the Startup Guide evidence.
+
+**Migration order when not already applied:** Build 235 gallery → Build 237 launch evidence/roadmap → Build 238 transactions/merge. Always run in staging first.
+
+---
+
+# Build 236 current implementation pointer
+
+Current state and continuation instructions live in `AI_PROJECT_HANDOFF.md`; active priorities live in `MASTER_VALUE_ROADMAP.md`. Build 236 restores Block Calendar and shared CSS behaviour, current schedule-schema compatibility, launch-preflight evidence, and visual-placeholder coverage. This file is retained for historical implementation context.
+
+---
+
 # Build 207 pointer
 
 Current planning now lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This historical file is retained for context and release history.
@@ -847,3 +881,52 @@ Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOF
 ## Build 219 state — DAIP governance workspace
 
 DAIP is still not a production media platform. Build 219 adds an internal owner-decision and promotion-gate workspace only. The decision register and Build 218 Test Lab evidence are now visible in the application, but no storage, upload, processing, AI, customer access, public derivative, or publishing capability is enabled.
+
+
+## Build 235 current implementation state
+The original Inventory Workflow remains the detailed editor. The separate Inventory Workbench now provides spreadsheet edits, a whitelisted field/value JSON table, individual-field saves, full-row saves, bulk operations, CSV export, soft archive/restore, suspicious-name review, and readiness scoring. `image_url` remains featured; `gallery_image_urls` supports up to seven ordered additional images after the Build 235 migration. The Launch Readiness Command Center provides automatic data/production checks and explicitly manual evidence confirmations for real-world launch tests.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+## Build 239 implementation state
+
+Implemented in source: unified Startup Command Center, 34-item detailed catalog, database-primary catalog API, shared evidence editing, production controls/reporting, guided test result editing, current roadmap editing, mobile cards, compatibility redirects, and packaged/cache fallbacks. Pending outside source: migration execution and every real-world evidence item.
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->
+
+
+## Build 242 update
+
+- Repaired `/admin-daip-intake-dry-run` contrast and card styling.
+- Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
+- Advanced Startup Command Center cache-busting and service-worker references to Build 242.
+- No new database migration was introduced in this build.
+
+## Build 244 update
+
+- Bundled the new AI-generated raster placeholder images directly into the application zip so the site no longer depends on missing SVG photo fallbacks for common empty-image states.
+- Replaced review, add-on, catalog, booking, workflow, and admin placeholder-photo references from SVG files to real PNG/JPG files.
+- Preserved instructional SVG graphics, such as framing guides and charts, where SVG is still the correct format.
+- Sanity check: the remaining strongest live-readiness work is acceptance testing, content completion, operational policy confirmation, and production credential/provider validation rather than placeholder-media cleanup.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+## Build 246 catalog-readiness synchronization
+
+- Shared product/inventory publishing readiness now blocks placeholder names, missing required classification/image fields, inactive rows and zero-stock consumables.
+- Public catalog results are filtered at the server boundary.
+- The Build 246 migration adds protected audit evidence, an all-or-nothing publish RPC, Startup process 37 and the current 20-step cycle.
+- Staging acceptance remains required.
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->

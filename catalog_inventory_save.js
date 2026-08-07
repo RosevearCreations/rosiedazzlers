@@ -12,7 +12,9 @@ export async function onRequestPost(context) {
       name: String(body?.name || '').trim(),
       category: String(body?.category || '').trim() || null,
       subcategory: String(body?.subcategory || '').trim() || null,
+      description: String(body?.description || '').trim() || null,
       image_url: String(body?.image_url || '').trim() || null,
+      gallery_image_urls: normalizeGalleryImages(body?.gallery_image_urls || body?.gallery_images),
       amazon_url: String(body?.amazon_url || '').trim() || null,
       qty_on_hand: Number(body?.qty_on_hand || 0),
       reorder_point: Number(body?.reorder_point || 0),
@@ -36,6 +38,18 @@ export async function onRequestPost(context) {
   } catch (err) { return withCors(json({ error: String(err) }, 500)); }
 }
 export async function onRequestGet(){ return withCors(methodNotAllowed()); }
+
+function normalizeGalleryImages(value) {
+  let list = [];
+  if (Array.isArray(value)) list = value;
+  else if (typeof value === "string" && value.trim()) {
+    try { const parsed = JSON.parse(value); list = Array.isArray(parsed) ? parsed : value.split(/[\n,]/); }
+    catch { list = value.split(/[\n,]/); }
+  }
+  const seen = new Set();
+  return list.map((v) => String(v || "").trim()).filter((v) => { const key = v.toLowerCase(); if (!v || seen.has(key)) return false; seen.add(key); return true; }).slice(0, 7);
+}
+
 function corsHeaders(){return {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"POST,OPTIONS","Access-Control-Allow-Headers":"Content-Type, x-admin-password, x-staff-email, x-staff-user-id","Cache-Control":"no-store"};}
 function withCors(response){ const headers=new Headers(response.headers||{}); for (const [k,v] of Object.entries(corsHeaders())) headers.set(k,v); return new Response(response.body,{status:response.status,statusText:response.statusText,headers}); }
 

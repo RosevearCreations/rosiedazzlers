@@ -1,3 +1,37 @@
+# Images and Visual Health — Build 245 Update
+
+The bundled raster fallback set remains in place. `/admin-ui-health.html` now confirms whether critical pages reference missing local images or deprecated SVG photo fallbacks after deployment. Generic AI-generated images remain temporary professional fallbacks; replace high-visibility public areas with approved Rosie-owned local work as it becomes available.
+
+---
+
+# Images and Visual Placeholders — Build 240 Update
+
+New internal placeholder: `inventory_transactional_posting_reversal`, showing review → validation → posting → audited reversal. It is operator guidance and must not be mistaken for public proof.
+
+Public replacement priority remains homepage/local proof, high-intent service pages, town pages, gallery/booking trust areas and sellable-product galleries. Use Rosie-owned or explicitly licensed/consented media with alt text, role, caption and provenance.
+
+---
+
+# Images and Visual Placeholders — Build 238 Update
+
+New operational placeholder types support `inventory_merge`, `inventory_audit`, `transactional_batch` and `seo_preflight`. They explain workflows only and do not replace real public proof.
+
+Priority real-image replacement order remains: homepage hero/local proof, ceramic coating, paint correction, interior transformation, town/service-area pages, gallery, booking trust areas, sellable product featured images and up to seven gallery images. Use Rosie-owned or explicitly licensed/consented media; complete descriptive alt text, caption, role and provenance/consent notes before publishing.
+
+---
+
+# Build 237 image synchronization
+
+New internal placeholder: `startup_go_live_command_path` for `/admin-startup-guide.html`. Public priority remains replacing homepage, high-intent service, local town, gallery and booking placeholders with approved Rosie-owned proof. Product media should use one featured image plus up to seven ordered gallery images with descriptive alt text, role, caption and provenance/consent notes.
+
+---
+
+# Build 236 visual-placeholder and launch-image note
+
+Build 236 adds placeholder types for Block Calendar, Inventory Workbench, Launch Readiness, product galleries, and local-service proof. Placeholders are temporary orientation aids, not publishable evidence. Replace the highest-visibility placeholders with approved Rosie-owned imagery, then complete filename, dimensions, alt text, caption, role, order, consent, and provenance. Product records support a featured image plus up to seven ordered gallery images after the Build 235 migration is applied.
+
+---
+
 # Rosie Dazzlers Image and Video Requirements — Build 183
 
 Critical missing local add-on fallback photos are still tracked below. Gallery proof still needed remains part of the public media checklist.
@@ -443,3 +477,40 @@ After the Build 216 migration, the first failed scan is only monitoring. A secon
 ### Build 216 synchronization — 2026-07-01
 
 Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`: public media recovery now uses bounded JPG/JPEG/WebP/PNG health checks and protected recurring alerts after its migration; DAIP remains planning-only behind the documented decision/security gates.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+## Build 239 visual priorities
+
+New placeholder roles: `startup_command_center_unified_path` and `local_seo_proof_review_cadence`. Replace them only with approved Rosie-owned visuals. Public priority remains real before/after proof for the homepage, booking trust areas, specialty services, town pages, gallery, and Google Business Profile.
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->
+
+## Build 244 update
+
+- Bundled the new AI-generated raster placeholder images directly into the application zip so the site no longer depends on missing SVG photo fallbacks for common empty-image states.
+- Replaced review, add-on, catalog, booking, workflow, and admin placeholder-photo references from SVG files to real PNG/JPG files.
+- Preserved instructional SVG graphics, such as framing guides and charts, where SVG is still the correct format.
+- Sanity check: the remaining strongest live-readiness work is acceptance testing, content completion, operational policy confirmation, and production credential/provider validation rather than placeholder-media cleanup.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+## Build 246 catalog-readiness synchronization
+
+- Shared product/inventory publishing readiness now blocks placeholder names, missing required classification/image fields, inactive rows and zero-stock consumables.
+- Public catalog results are filtered at the server boundary.
+- The Build 246 migration adds protected audit evidence, an all-or-nothing publish RPC, Startup process 37 and the current 20-step cycle.
+- Staging acceptance remains required.
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->

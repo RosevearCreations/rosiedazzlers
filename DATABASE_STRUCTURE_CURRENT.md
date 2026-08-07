@@ -1,3 +1,69 @@
+# Database Structure — Build 245 Status
+
+Build 245 requires no DDL. It adds browser/static acceptance tooling and content hardening only. Build 240 remains the latest functional database migration.
+
+---
+
+# Database Structure — Build 241 Status
+
+Build 241 requires no DDL. The latest functional database migration remains `sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql`. The hotfix record is `sql/2026-08-05_build241_startup_command_center_initialization_hotfix_no_ddl.sql`.
+
+---
+
+# Database Structure — Build 240 Current Additions
+
+Apply `sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql` after prerequisite migrations.
+
+## New tables
+
+- `catalog_inventory_posting_batches` — source, status, reason, idempotency, row totals, accounting state and reversal evidence.
+- `catalog_inventory_posting_rows` — immutable item-level before/after quantities, source movement and reversal movement links.
+
+## Extended records
+
+- `catalog_inventory_movements` gains source, batch, reversal and reversed-status evidence.
+- `creative_project_inventory_reservations` gains posting/reversal linkage and may now move from reviewed/reserved to posted, then back to reviewed after reversal.
+
+## Security-definer RPCs
+
+- `admin_catalog_inventory_post(...)`
+- `admin_catalog_inventory_post_reverse(...)`
+
+Both are service-role only and are called through protected Cloudflare Functions.
+
+---
+
+# Database Structure — Build 238 Current Additions
+
+Apply `sql/2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql` after prerequisite migrations.
+
+## New tables
+
+- `catalog_inventory_change_batches` — transactional bulk operation header, reason, actor and row count.
+- `catalog_inventory_change_batch_rows` — immutable per-row before/after evidence and changed fields.
+- `catalog_inventory_merge_audit` — survivor/duplicate snapshots, transferred-reference counts, reason and actor.
+
+## New security-definer RPCs
+
+- `admin_catalog_inventory_bulk_update(jsonb,text,text,text,boolean)` — complete-batch validation, dry-run preview, all-or-nothing commit and audits.
+- `admin_catalog_inventory_merge(text,text,text,text,boolean)` — reviewed preview/commit, known-reference transfer, compensating movements, survivor consolidation and duplicate soft archive.
+
+Tables and functions are revoked from public/anon/authenticated and granted only to `service_role`; protected Cloudflare Functions are the browser boundary. `SUPABASE_SCHEMA.sql` contains the complete Build 238 executable mirror.
+
+---
+
+# Build 237 database synchronization — shared launch evidence and current roadmap cycle
+
+Apply `sql/2026-07-28_build237_css_startup_evidence_roadmap.sql`. It adds `app_launch_readiness_evidence`, `app_launch_readiness_evidence_audit`, and `cycle_key` / `is_current_cycle` / `action_path` on `app_roadmap_execution_items`. Direct browser table access remains revoked; Cloudflare Functions use the service-role boundary. Browser localStorage is now a fallback only for launch evidence during migration/outage.
+
+---
+
+# Build 236 schema compatibility note
+
+No DDL is added. Schedule reads and writes use the retained `date_blocks.blocked_date` and `slot_blocks.blocked_date/slot` columns while returning compatibility aliases to older consumers. See `sql/2026-07-26_build236_calendar_css_schedule_compatibility_no_ddl.sql`.
+
+---
+
 # Build 207 Markdown consolidation and visual placeholder note
 
 Build 207 adds no new database tables. Documentation sanity and visual placeholder reporting use bundled JSON files: `data/markdown_sanity_build207.json`, `data/build207_enhancement_sweep.json`, and `data/visual_placeholder_registry.json`. The admin report APIs use existing staff authentication and do not require Supabase schema changes.
@@ -979,3 +1045,50 @@ Build 218 adds these internal-only, RLS-enabled and service-role-only tables aft
 - `daip_audit_events` — safe actor/time/action metadata; do not store secrets, customer information, private media details, or signed URLs.
 
 Apply `sql/2026-07-02_build218_daip_test_mode_foundation.sql` only in development/staging for the first controlled DAIP tests.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+## Build 239 startup-process catalog
+
+- `app_startup_process_items`: canonical ordered blocker/instruction catalog used by the Startup Command Center.
+- `app_startup_process_audit`: protected audit history for controlled catalog changes.
+- `app_launch_readiness_evidence`: expanded shared completion evidence linked by `evidence_key`.
+- `app_roadmap_execution_items`: Build 239 current-cycle next-20 execution queue.
+
+The database is primary after migration; packaged JSON/JavaScript remains a complete read-only fallback.
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->
+
+
+## Build 242 update
+
+- Repaired `/admin-daip-intake-dry-run` contrast and card styling.
+- Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
+- Advanced Startup Command Center cache-busting and service-worker references to Build 242.
+- No new database migration was introduced in this build.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+## Build 246 catalog publish-readiness schema update
+
+Apply `sql/2026-08-07_build246_catalog_publish_readiness.sql` after the Build 238 and Build 239 migrations. It adds `catalog_publish_readiness_audit`, the protected `admin_catalog_inventory_publish_review(...)` RPC, one new Startup process/evidence row, and the current Build 246 roadmap cycle. Public catalog reads and all inventory publishing paths now share the same readiness criteria; incomplete rows remain private and reviewed publish attempts create audit evidence.
+
+## Build 246 catalog-readiness synchronization
+
+- Shared product/inventory publishing readiness now blocks placeholder names, missing required classification/image fields, inactive rows and zero-stock consumables.
+- Public catalog results are filtered at the server boundary.
+- The Build 246 migration adds protected audit evidence, an all-or-nothing publish RPC, Startup process 37 and the current 20-step cycle.
+- Staging acceptance remains required.
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
