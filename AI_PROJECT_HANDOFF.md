@@ -1,3 +1,21 @@
+# AI Project Handoff — Build 246 Current State
+
+## Read first
+
+Build 246 adds protected catalog publishing readiness. The latest functional migration is `sql/2026-08-07_build246_catalog_publish_readiness.sql`. Source implementation is complete; staging/production acceptance is not.
+
+## Current authorities
+
+1. `AI_PROJECT_HANDOFF.md`
+2. `MASTER_VALUE_ROADMAP.md`
+3. `STARTUP_GO_LIVE_BLOCKERS.md`
+
+## Immediate next action
+
+Apply the Build 246 migration in staging and complete process 37 before treating public catalog readiness as production-proven.
+
+---
+
 # Rosie Dazzlers — AI Project Handoff (Build 245)
 
 **Updated:** 2026-08-06  
@@ -832,3 +850,5 @@ Apply migrations in order: Build 235 gallery if outstanding, Build 237 evidence/
 <!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
 
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
