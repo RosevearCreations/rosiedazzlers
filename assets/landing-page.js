@@ -205,13 +205,13 @@ function heroMediaForPage(page, addon, relatedProducts) {
 
   if (addon?.image_url) return addon.image_url;
   if (addon?.image_fallback_url) return addon.image_fallback_url;
-  return "/assets/brand/rosie-reviews-fallback.svg";
+  return "/assets/brand/rosie-reviews-fallback.png";
 }
 
 function mediaImageMarkup(src, alt, className = "proof-media", extra = "") {
   const source = cleanText(src);
   if (!source) return "";
-  return `<img data-media-source="${escapeHtml(source)}" data-media-fallback="/assets/brand/rosie-reviews-fallback.svg" alt="${escapeHtml(alt)}" class="${escapeHtml(className)}" loading="lazy" decoding="async" ${extra}>`;
+  return `<img data-media-source="${escapeHtml(source)}" data-media-fallback="/assets/brand/rosie-reviews-fallback.png" alt="${escapeHtml(alt)}" class="${escapeHtml(className)}" loading="lazy" decoding="async" ${extra}>`;
 }
 
 function bindLandingMedia(root) {
@@ -219,10 +219,10 @@ function bindLandingMedia(root) {
     if (img.dataset.mediaResolverBound === "true") return;
     img.dataset.mediaResolverBound = "true";
     bindImageWithCandidates(img, img.dataset.mediaSource || "", {
-      fallback: img.dataset.mediaFallback || "/assets/brand/rosie-reviews-fallback.svg",
+      fallback: img.dataset.mediaFallback || "/assets/brand/rosie-reviews-fallback.png",
       onExhausted: (node) => {
         node.classList.add("visual-placeholder-img");
-        node.src = "/assets/brand/rosie-reviews-fallback.svg";
+        node.src = "/assets/brand/rosie-reviews-fallback.png";
       }
     });
   });
@@ -408,7 +408,7 @@ function pageTemplate(page, pricing, slug, productCatalog) {
       <div class="proof-grid">
         <article class="proof-card">
           <h3>Review proof</h3>
-          <img data-reviews src="/assets/brand/rosie-reviews-fallback.svg" alt="Rosie Dazzlers reviews" class="proof-media" />
+          <img data-reviews src="/assets/brand/rosie-reviews-fallback.png" alt="Rosie Dazzlers reviews" class="proof-media" />
         </article>
         <article class="proof-card">
           <h3>Booking fit</h3>

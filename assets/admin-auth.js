@@ -266,6 +266,7 @@
         return state.authenticated === true;
       case "admin-app":
       case "admin-docs":
+      case "admin-ui-health":
       case "admin-daip":
       case "admin-daip-governance":
       case "admin-daip-readiness":

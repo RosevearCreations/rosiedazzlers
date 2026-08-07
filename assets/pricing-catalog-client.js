@@ -305,7 +305,7 @@ export function addonPrimaryImage(addon) {
 }
 
 export function addonFallbackImage(addon) {
-  return String(addon?.image_fallback_url || "").trim() || "/assets/addons/generic_addon.svg";
+  return String(addon?.image_fallback_url || "").trim() || "/assets/addons/generic_addon.png";
 }
 
 

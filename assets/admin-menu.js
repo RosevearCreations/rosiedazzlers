@@ -203,6 +203,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-docs")
     },
     {
+      key: "admin-ui-health",
+      label: "UI & SEO Health",
+      href: "/admin-ui-health.html",
+      description: "Critical route, CSS, asset, H1, metadata, clean-route, and cache acceptance scanner",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-ui-health")
+    },
+    {
       key: "admin-app",
       label: "App Management",
       href: "/admin-app.html",

@@ -47,14 +47,14 @@ const LOCAL_ADDON_FALLBACKS = {
   two_stage_polish: '/assets/addons/two_stage_polish.png',
   high_grade_paint_sealant: '/assets/addons/high_grade_paint_sealant.png',
   uv_protectant_applied_on_interior_panels: '/assets/addons/uv_protectant_applied_on_interior_panels.png',
-  de_ionizing_treatment: '/assets/addons/de_ionizing_treatment.svg',
-  de_badging: '/assets/addons/de_badging.svg',
-  engine_cleaning: '/assets/addons/engine_cleaning.svg',
-  external_ceramic_coating: '/assets/addons/external_ceramic_coating.svg',
-  external_graphene_fine_finish: '/assets/addons/external_graphene_fine_finish.svg',
-  external_wax: '/assets/addons/external_wax.svg',
-  vinyl_wrapping: '/assets/addons/vinyl_wrapping.svg',
-  window_tinting: '/assets/addons/window_tinting.svg'
+  de_ionizing_treatment: '/assets/addons/de_ionizing_treatment.png',
+  de_badging: '/assets/addons/de_badging.png',
+  engine_cleaning: '/assets/addons/engine_cleaning.png',
+  external_ceramic_coating: '/assets/addons/external_ceramic_coating.png',
+  external_graphene_fine_finish: '/assets/addons/external_graphene_fine_finish.png',
+  external_wax: '/assets/addons/external_wax.png',
+  vinyl_wrapping: '/assets/addons/vinyl_wrapping.png',
+  window_tinting: '/assets/addons/window_tinting.png'
 };
 
 let _servicesData = null;
@@ -87,11 +87,11 @@ function packageImageForSize(pkg, size) {
 }
 
 function addonImageForCode(code) {
-  return ADDON_MEDIA[code] || LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.svg';
+  return ADDON_MEDIA[code] || LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.png';
 }
 
 function addonFallbackForCode(code) {
-  return LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.svg';
+  return LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.png';
 }
 
 function addonDisplay(addon, size) {
