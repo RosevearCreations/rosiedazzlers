@@ -1232,3 +1232,9 @@ The application now has one clear launch operating interface and three current a
 - Staging acceptance remains required.
 
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+
+## Build 247 sanity check
+
+The raw-media storage architecture is now correct for large historical project footage: private R2 for masters, Supabase for metadata, optional queue for downstream work and reviewed promotion only. The strongest remaining DAIP risk is execution of the queued processing pipeline, not ingestion. Operational launch risks remain migrations, real payment/email/calendar testing, recovery rehearsals, accessibility/mobile acceptance and soft-launch evidence.
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->

@@ -1336,3 +1336,66 @@ Build 214 documentation sync
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
 
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+## 38. Create and bind the private DAIP R2 bucket
+
+**Priority:** blocker  
+**Category:** DAIP and media  
+**Open:** `/admin-daip-media.html#setup`
+
+**Why this holds DAIP launch:** Raw customer/project masters must not be uploaded into the publicly served `rosie-assets` bucket. The Build 247 intake APIs intentionally fail closed until a private R2 bucket is bound to the Pages project as `DAIP_MEDIA_BUCKET`.
+
+**Where to find it**
+- Cloudflare Dashboard → R2 Object Storage
+- Cloudflare Dashboard → Workers & Pages → Rosie Dazzlers Pages project → Settings → Bindings
+- `/admin-daip-media.html#setup`
+- `DAIP_R2_MEDIA_SETUP_GUIDE.md`
+
+**Detailed instructions**
+1. Sign in to the Cloudflare account that owns the Rosie Dazzlers Pages project.
+2. Open **R2 Object Storage**.
+3. Select **Create bucket**.
+4. Use `rosie-daip-media` as the recommended bucket name.
+5. Create the bucket and leave public `r2.dev` access disabled.
+6. Do not attach a public custom domain to this bucket.
+7. Open **Workers & Pages** and select the Rosie Dazzlers Pages project.
+8. Open **Settings → Bindings**.
+9. Select **Add binding → R2 bucket**.
+10. Enter `DAIP_MEDIA_BUCKET` as the variable/binding name.
+11. Select `rosie-daip-media` and save.
+12. Repeat for Preview and Production environments if Cloudflare presents them separately.
+13. Redeploy the Pages project; bindings are not retroactively added to an already-running deployment.
+14. Open `/admin-daip-media.html`.
+15. Confirm **Private R2 binding** reports Ready.
+16. Do not paste R2 credentials, secrets, signed links or private object URLs into Startup evidence.
+
+**Move to the next item when:** The bucket exists, has no public endpoint, the Pages deployment contains the `DAIP_MEDIA_BUCKET` binding, and DAIP Media Intake reports that the private R2 binding is ready.
+
+## 39. Complete DAIP large-media multipart and recovery acceptance
+
+**Priority:** blocker  
+**Category:** DAIP and media  
+**Open:** `/admin-daip-media.html`
+
+**Why this holds DAIP launch:** The three historical projects should not be imported until one harmless test confirms that large raw files can survive interruption, remain private, complete exactly once and create the expected downstream processing records.
+
+**Detailed instructions**
+1. Apply `sql/2026-08-07_build247_daip_private_media_ingestion.sql` in **staging first**.
+2. In Supabase Table Editor confirm these tables exist: `daip_project_media_assets`, `daip_media_upload_sessions`, `daip_media_upload_parts`, `daip_media_processing_jobs`.
+3. Create or select a harmless Creative Project for acceptance testing.
+4. Upload one non-sensitive JPG. Confirm the progress reaches 100% and the asset status becomes `uploaded`.
+5. In Supabase confirm its object key starts `projects/<project_uuid>/raw/photos/` and `public_destination_enabled=false`.
+6. Select a harmless video larger than 300 MB.
+7. Start upload and allow several 32 MiB parts to complete.
+8. Interrupt the connection or close the page.
+9. Return to DAIP Media Intake, select the same project and reselect the exact same local file.
+10. Resume. Confirm recorded parts are skipped rather than uploaded again.
+11. Finish the upload and verify the raw object is stored under `projects/<project_uuid>/raw/video/`.
+12. Confirm rows exist for `proxy_video`, `frame_extract`, `audio_extract`, `transcript`, `scene_analysis`, `metadata_extract`, `privacy_review`, and `content_candidate_index`.
+13. Re-select the same completed file and confirm the UI reports it is already present instead of creating a duplicate raw master.
+14. Start a second harmless incomplete upload and test **Abort**. Confirm only that incomplete multipart session is aborted.
+15. Confirm a completed raw master cannot be deleted or aborted from the intake screen.
+16. Record safe test date/project code/outcome in Startup evidence. Do not record private filenames if they identify a customer.
+
+**Move to the next item when:** A >300 MB test video resumes from completed parts, completes privately exactly once, processing jobs are created, duplicate import is blocked, incomplete abort works, and a completed raw original remains protected.
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->

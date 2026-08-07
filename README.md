@@ -1251,3 +1251,9 @@ After administrator sign-in, use `/admin-startup-guide.html` for all go-live pre
 - Staging acceptance remains required.
 
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+
+## Build 247 — DAIP private large-media intake
+
+The application can now ingest large Creative Project MOV/MP4/JPG batches through resumable multipart uploads to a private R2 binding named `DAIP_MEDIA_BUCKET`. Follow `DAIP_R2_MEDIA_SETUP_GUIDE.md` before testing. Build 247 queues downstream work but does not yet execute the final video-processing/render pipeline.
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->

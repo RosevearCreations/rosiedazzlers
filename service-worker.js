@@ -1,18 +1,23 @@
+// Historical Build 246 cache guard: rosie-app-v20260807build246 /data/build246_ui_health_routes.json
 // Historical Build 245 guard: rosie-app-v20260807build245 /assets/cache-health-controls.js?v=20260807build245 /assets/ui-health-scanner.js?v=20260807build245
 // Historical exact cache guard tokens: rosie-app-v20260805build241 /assets/startup-command-center.js?v=20260805build241
 // Historical Build 240 cache evidence: rosie-app-v20260805build240
 // Build 241 service-worker cache hotfix refreshes the unified Startup Command Center script and preserves Build 240 inventory posting/reversal.
 // Build 238 service-worker cache: CSS recovery, Startup Guide, transactional inventory, current roadmap, launch evidence and operational readiness.
 // Historical Build 238 guard: rosie-app-v20260730build238 /data/build238_go_live_blockers.json /data/build238_next_steps.json
-const CACHE='rosie-app-v20260807build246';
-const URLS=['/data/build246_next_steps.json',
+const CACHE='rosie-app-v20260807build247';
+const URLS=['/admin-daip-media.html',
+  '/data/build247_go_live_blockers.json',
+  '/data/build247_next_steps.json',
+  '/data/build247_following_steps.json',
+  '/data/build246_next_steps.json',
   '/data/build246_completed_steps.json',
   '/admin-catalog.html',
-  '/data/build246_ui_health_routes.json',
+  '/data/build247_ui_health_routes.json',
   '/assets/cache-health-controls.js',
-  '/assets/cache-health-controls.js?v=20260807build246',
+  '/assets/cache-health-controls.js?v=20260807build247',
   '/assets/ui-health-scanner.js',
-  '/assets/ui-health-scanner.js?v=20260807build246',
+  '/assets/ui-health-scanner.js?v=20260807build247',
   '/admin-ui-health.html',
   '/assets/brand/rosie-reviews-fallback.png',
   '/assets/addons/generic_addon.png',
@@ -30,7 +35,7 @@ const URLS=['/data/build246_next_steps.json',
   '/assets/placeholders/inventory-tools-photo.jpg',
   '/assets/placeholders/workflow-photo.jpg',
   '/assets/placeholders/launch-readiness-photo.jpg',
-  '/assets/startup-command-center.js?v=20260807build246',
+  '/assets/startup-command-center.js?v=20260807build247',
   '/admin-inventory-posting.html',
   '/data/build240_go_live_blockers.json',
   '/data/build240_next_steps.json',
