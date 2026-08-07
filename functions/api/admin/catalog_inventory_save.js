@@ -1,4 +1,5 @@
 import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
+import { evaluateCatalogReadiness } from "../_lib/catalog-readiness.js";
 
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 
@@ -54,9 +55,12 @@ export async function onRequestPost(context) {
     if (!payload.item_key || !payload.name || !["tool", "consumable"].includes(payload.item_type)) return withCors(json({ error: "Missing required fields." }, 400));
     if (!["reorder", "single_use", "never_reuse"].includes(payload.reuse_policy)) return withCors(json({ error: "Invalid reuse policy." }, 400));
 
+    const readiness = evaluateCatalogReadiness(payload);
+    if (payload.is_public && !readiness.ready) return withCors(json({ error: "This item cannot be public until its publishing blockers are corrected.", publish_readiness: readiness }, 409));
+
     const result = await safeUpsertInventory(env, payload);
     if (!result.ok) return withCors(json({ error: result.error, stripped_columns: result.strippedColumns || [] }, 500));
-    return withCors(json({ ok: true, item: result.item, stripped_columns: result.strippedColumns || [] }));
+    return withCors(json({ ok: true, item: result.item, publish_readiness: evaluateCatalogReadiness(result.item || payload), stripped_columns: result.strippedColumns || [] }));
   } catch (err) {
     return withCors(json({ error: String(err) }, 500));
   }

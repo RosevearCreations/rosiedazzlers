@@ -1,4 +1,5 @@
 import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
+import { evaluateCatalogReadiness } from "../_lib/catalog-readiness.js";
 
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 export async function onRequestGet() { return withCors(methodNotAllowed()); }
@@ -16,6 +17,12 @@ export async function onRequestPost(context) {
     if (!changes.length) return withCors(json({ error: "Select at least one inventory row and one change." }, 400));
     if (changes.length > 500) return withCors(json({ error: "A maximum of 500 rows can be changed in one batch." }, 400));
     if (reason.length < 8) return withCors(json({ error: "Enter a reason with at least 8 characters." }, 400));
+
+    const publishRows = changes.filter((row) => row.changes?.is_public === true);
+    if (publishRows.length) {
+      const readiness = await validatePublishChanges(env, publishRows);
+      if (!readiness.ok) return withCors(json({ error: "One or more selected rows are not ready for public publishing.", blocked_items: readiness.blocked }, 409));
+    }
 
     const payload = {
       p_changes: changes,
@@ -67,6 +74,23 @@ function normalizeField(key, value) {
   return value == null ? null : String(value).trim();
 }
 function normalizeOperation(value) { return ["archive","restore"].includes(String(value || "")) ? String(value) : "bulk_update"; }
+
+async function validatePublishChanges(env, rows) {
+  const keys = rows.map((row) => row.item_key);
+  if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return { ok: false, blocked: keys.map((item_key) => ({ item_key, blockers: ["Supabase service configuration is unavailable."] })) };
+  const encoded = keys.map((key) => `"${String(key).replaceAll('"','\"')}"`).join(',');
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/catalog_inventory_items?select=*&item_key=in.(${encodeURIComponent(encoded)})`, { headers: serviceHeaders(env) });
+  if (!res.ok) return { ok: false, blocked: keys.map((item_key) => ({ item_key, blockers: ["Could not load the current inventory row for publishing review."] })) };
+  const current = await res.json().catch(() => []);
+  const byKey = new Map((Array.isArray(current) ? current : []).map((item) => [String(item.item_key), item]));
+  const blocked = [];
+  for (const row of rows) {
+    const merged = { ...(byKey.get(row.item_key) || {}), ...(row.changes || {}) };
+    const readiness = evaluateCatalogReadiness(merged);
+    if (!readiness.ready) blocked.push({ item_key: row.item_key, ...readiness });
+  }
+  return { ok: blocked.length === 0, blocked };
+}
 
 async function callRpc(env, name, payload) {
   if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return { ok: false, error: "Supabase service configuration is unavailable." };

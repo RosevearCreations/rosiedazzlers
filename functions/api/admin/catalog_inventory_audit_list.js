@@ -13,9 +13,10 @@ export async function onRequestGet(context) {
     }
     const url = new URL(request.url);
     const limit = clampInt(url.searchParams.get("limit"), 1, 100, 50);
-    const [batches, merges] = await Promise.all([
+    const [batches, merges, publishAttempts] = await Promise.all([
       selectRows(env, "catalog_inventory_change_batches", "id,operation_type,reason,row_count,actor_staff_email,created_at", limit),
-      selectRows(env, "catalog_inventory_merge_audit", "id,survivor_item_key,duplicate_item_key,reason,reference_counts,actor_staff_email,created_at", limit)
+      selectRows(env, "catalog_inventory_merge_audit", "id,survivor_item_key,duplicate_item_key,reason,reference_counts,actor_staff_email,created_at", limit),
+      selectRows(env, "catalog_publish_readiness_audit", "id,action,reason,item_keys,result,blocked_count,published_count,actor_email,created_at", limit)
     ]);
     const failed = [batches, merges].find((result) => !result.ok);
     if (failed) {
@@ -27,7 +28,14 @@ export async function onRequestGet(context) {
       }, 409));
       return withCors(json({ error: failed.error || "Could not load inventory audit history." }, 500));
     }
-    return withCors(json({ ok: true, batches: batches.rows, merges: merges.rows, limit }));
+    return withCors(json({
+      ok: true,
+      batches: batches.rows,
+      merges: merges.rows,
+      publish_attempts: publishAttempts.ok ? publishAttempts.rows : [],
+      publish_warning: publishAttempts.ok ? null : "Apply the Build 246 catalog publishing migration to include publish-readiness history.",
+      limit
+    }));
   } catch (err) {
     return withCors(json({ error: safeError(err) }, 500));
   }
