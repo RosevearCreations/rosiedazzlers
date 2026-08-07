@@ -1,7 +1,7 @@
 {
-  "build": 242,
-  "updated_at": "2026-08-06",
-  "summary": "Build 242 replaces generic SVG placeholder cards with reusable raster photo-style placeholders, adds a DAIP intake photo slot, and restores readable DAIP intake dry-run styling.",
+  "build": 244,
+  "updated_at": "2026-08-07",
+  "summary": "Build 244 bundles the AI-generated photo placeholders directly into the application zip, replaces SVG photo fallbacks with raster image assets, and re-points add-on, review, catalog, booking, and admin placeholder references to real images.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -339,6 +339,8 @@
     "/assets/placeholders/product-gallery-photo.jpg",
     "/assets/placeholders/inventory-tools-photo.jpg",
     "/assets/placeholders/workflow-photo.jpg",
-    "/assets/placeholders/launch-readiness-photo.jpg"
+    "/assets/placeholders/launch-readiness-photo.jpg",
+    "/assets/brand/rosie-reviews-fallback.png",
+    "/assets/addons/generic_addon.png"
   ]
 }

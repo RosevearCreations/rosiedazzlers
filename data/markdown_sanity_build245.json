@@ -1,0 +1,11 @@
+{
+  "build": 245,
+  "updated_at": "2026-08-06",
+  "primary_living_documents": [
+    {"file":"AI_PROJECT_HANDOFF.md","purpose":"current architecture, deployment state and engineering continuation"},
+    {"file":"MASTER_VALUE_ROADMAP.md","purpose":"business direction, priorities and next connected work"}
+  ],
+  "operational_authority": {"file":"STARTUP_GO_LIVE_BLOCKERS.md","purpose":"detailed ordered launch blockers and acceptance evidence"},
+  "supporting_current_documents": ["DEVELOPMENT_ROADMAP.md","KNOWN_GAPS_AND_RISKS.md","CURRENT_IMPLEMENTATION_STATE.md","SANITY_CHECK.md","IMAGES.md","DATABASE_STRUCTURE_CURRENT.md","DOC_INDEX.md"],
+  "retirement_rule":"Historical Markdown remains read-only until release guards are modernized. New strategy belongs in the two primary living documents; go-live instructions belong in the Startup Guide."
+}
