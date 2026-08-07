@@ -852,3 +852,85 @@ Apply migrations in order: Build 235 gallery if outstanding, Build 237 evidence/
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
 
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+# Build 247 — DAIP private raw-media ingestion
+
+**Current build:** 247  
+**Updated:** 2026-08-07
+
+Build 247 moves DAIP from metadata-only intake planning to a deliberately private, Creative-Project-linked raw-media ingestion layer. It does **not** weaken the historical Build 218 metadata-only Test Lab: that older subsystem continues using `daip_media_assets`. Production project masters use a separate table, `daip_project_media_assets`.
+
+## Architecture now implemented in source
+
+- Private R2 binding expected as `DAIP_MEDIA_BUCKET`; aliases are accepted only for backward/operator flexibility.
+- Raw object keys are project scoped: `projects/{project_uuid}/raw/photos|video|files/{asset_uuid}/{safe_filename}`.
+- The browser sends 32 MiB multipart chunks through authenticated Pages Functions rather than uploading a >300 MB body in one request.
+- Multipart state and ETags are stored in Supabase so a staff member can reselect the same file and continue from completed parts.
+- Completed masters are treated as immutable from the intake interface. Abort is available only while a multipart upload is incomplete.
+- Duplicate completed imports are blocked by Creative Project + normalized filename + file size.
+- Raw media remains `private_internal`; `public_destination_enabled` is structurally false.
+- Completion creates downstream job rows for metadata, privacy review and content candidate indexing; video additionally queues proxy, frame, audio, transcript and scene-analysis jobs.
+- If `DAIP_PROCESSING_QUEUE` is configured, completion dispatches job IDs to the queue. If dispatch fails, the DB jobs remain queued and retain the error for recovery.
+- No raw media is copied into the public `rosie-assets` bucket automatically.
+- Standard detailing bookings remain unchanged unless staff explicitly opt the booking into a Creative Project.
+
+## Primary interface
+
+`/admin-daip-media.html`
+
+Use it to select a Creative Project, choose raw capture stage/consent state, upload multiple JPG/JPEG/PNG/WebP/HEIC/HEIF/MP4/MOV/M4V/WebM files, pause/resume, inspect raw-media records and inspect downstream processing jobs.
+
+## Cloudflare account work still required
+
+The application source is ready, but the actual private bucket must exist in the user's Cloudflare account and be bound to the Pages project. Follow `DAIP_R2_MEDIA_SETUP_GUIDE.md`. The required binding name is `DAIP_MEDIA_BUCKET`. The bucket should remain private with no public `r2.dev` or custom-domain exposure.
+
+## Important processing boundary
+
+Build 247 creates the ingestion and processing-job pipeline, but it does **not yet render edited long-form/short-form videos**. The next engineering wave needs a processing consumer/runtime capable of FFmpeg-class work for proxies, frame/audio extraction and final video assembly. The database/queue contracts added here are the handoff point for that processor.
+
+## Current next 20
+
+1. Create and bind the private DAIP R2 bucket as DAIP_MEDIA_BUCKET.
+2. Apply the Build 247 DAIP media migration in staging.
+3. Upload and verify one private DAIP photo.
+4. Prove a video larger than 300 MB uploads through multipart chunks.
+5. Interrupt and resume a large video without restarting from zero.
+6. Create/import the first historical detailing Creative Project and its raw media.
+7. Create/import the second historical detailing Creative Project and its raw media.
+8. Create/import the third historical detailing Creative Project and its raw media.
+9. Configure the optional DAIP_PROCESSING_QUEUE binding.
+10. Implement the processing consumer for proxy video, frames, audio and transcript.
+11. Implement scene analysis and before/after candidate scoring.
+12. Implement reviewed story assembly from selected evidence.
+13. Implement a rendering adapter for long-form and short-form MP4 outputs.
+14. Keep every generated derivative private until human consent/privacy review.
+15. Add reviewed copy-to-public workflow for approved gallery/social derivatives.
+16. Complete real-device DAIP uploader acceptance on desktop and mobile.
+17. Continue catalog publish-readiness cleanup and product-image completion.
+18. Complete booking, payment, refund and notification production acceptance.
+19. Complete Search Console and Google Business Profile alignment.
+20. Run an invite-only soft launch with daily evidence review.
+
+## Following 20
+
+1. Add automatic proxy generation presets for 1080p and 720p editing copies.
+2. Add key-frame extraction at scene boundaries and configurable intervals.
+3. Add audio waveform and silence detection for narration/edit decisions.
+4. Add speech-to-text transcript storage with timestamp segments.
+5. Add privacy detection for license plates, faces and sensitive documents.
+6. Add reviewed blur/redaction derivatives rather than modifying raw originals.
+7. Add before/during/after auto-classification suggestions with manual override.
+8. Add duplicate and near-duplicate visual detection across each project.
+9. Add best-shot scoring for sharpness, exposure, framing and transformation evidence.
+10. Add timeline storyboard editor with drag-and-drop selected evidence.
+11. Add soundtrack/narration planning without embedding unlicensed music.
+12. Add long-form YouTube edit recipe generation from the approved storyboard.
+13. Add Shorts/Reels/TikTok vertical crop and hook recipe generation.
+14. Add thumbnail candidate generation and review.
+15. Add website-gallery and Google Business Profile derivative presets.
+16. Add per-platform caption, title, description, hashtag and CTA drafts.
+17. Add rendering cost/time estimates before starting expensive media jobs.
+18. Add retry/dead-letter handling for failed processing jobs.
+19. Add retention/storage-class policy for old proxies while preserving raw masters.
+20. Add project-level “Content package ready for review” gate and one-click review queue.
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
