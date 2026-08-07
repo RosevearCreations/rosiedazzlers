@@ -1,3 +1,32 @@
+# Master Value Roadmap — Build 246 Current Direction
+
+Build 246 closes a major product-data-quality gap by adding preview-first public publishing gates. The next value wave remains production acceptance, resumable media recovery, accounting close/export depth, local proof, Search Console/Business Profile alignment and a controlled soft launch.
+
+## Next 20
+
+1. Apply the Build 246 migration in staging and refresh the Supabase schema cache.
+2. Preview one ready inventory row and compare browser results with the readiness endpoint.
+3. Publish one ready row and confirm the public catalog includes it.
+4. Attempt a mixed ready/blocked publish and confirm the full batch remains unchanged.
+5. Review the catalog publish-readiness audit row and preserve safe evidence.
+6. Correct suspicious names, missing categories, units and featured images.
+7. Complete cost, description, gallery and service-tag warnings for priority inventory.
+8. Retest Block Calendar full-day, AM and PM behaviour against public booking.
+9. Complete one full booking and admin reconciliation test.
+10. Complete and refund a controlled Stripe payment and verify webhook evidence.
+11. Verify booking, payment, consent and staff emails in external inboxes.
+12. Audit Cloudflare variables, bindings, domains and rollback access.
+13. Perform Supabase restore and Cloudflare rollback rehearsals.
+14. Complete legal, media-consent, staff-permission and accessibility review.
+15. Test booking, catalog, Startup and Inventory Workbench on real mobile devices.
+16. Complete Search Console sitemap, canonical and structured-data inspection.
+17. Align Google Business Profile categories, services, areas, hours and photo cadence.
+18. Complete upload interruption/retry and duplicate-media acceptance.
+19. Complete payment application, HST, month-end close and accountant-package review.
+20. Run an invite-only soft launch and review every early transaction daily.
+
+---
+
 # Rosie Dazzlers Master Value Roadmap — Build 245
 
 **Updated:** 2026-08-06
@@ -1208,3 +1237,5 @@ The current next-20 cycle prioritizes deployment/migrations, scheduling, booking
 <!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
 
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->

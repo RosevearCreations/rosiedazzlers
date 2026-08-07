@@ -1223,3 +1223,12 @@ The application now has one clear launch operating interface and three current a
 <!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
 
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+## Build 246 catalog-readiness synchronization
+
+- Shared product/inventory publishing readiness now blocks placeholder names, missing required classification/image fields, inactive rows and zero-stock consumables.
+- Public catalog results are filtered at the server boundary.
+- The Build 246 migration adds protected audit evidence, an all-or-nothing publish RPC, Startup process 37 and the current 20-step cycle.
+- Staging acceptance remains required.
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->

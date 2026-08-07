@@ -452,3 +452,5 @@ Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOF
 <!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
 
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->

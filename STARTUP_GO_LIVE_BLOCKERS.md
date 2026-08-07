@@ -1,3 +1,65 @@
+# Startup and Go-Live Blocker Guide — Build 246 Addition
+
+## 37. Complete catalog publishing-readiness acceptance
+
+**Priority:** Blocker  
+**Category:** Catalog and inventory  
+**Where to find it:** `/admin-catalog.html`, `/admin-inventory-manager.html`, `/api/admin/catalog_readiness_report`, Supabase Table Editor → `catalog_publish_readiness_audit`
+
+### Why this blocks launch
+
+A product or inventory row should not appear publicly with an imported identifier as its name, no category or unit, no featured image, an SVG placeholder, inactive status, or no available consumable stock. Build 246 adds a shared readiness evaluator, server boundary filtering, a preview-first all-or-nothing publishing RPC, and audit history.
+
+### Detailed instructions
+
+1. Open Supabase Dashboard → SQL Editor.
+2. Apply every outstanding migration in order, ending with `sql/2026-08-07_build246_catalog_publish_readiness.sql`.
+3. Refresh the Supabase schema cache if the admin page still reports the RPC as missing.
+4. Open `/admin-catalog.html`.
+5. Choose **Blocked publishing** in the readiness filter.
+6. Select one harmless staging row and correct its name, type, category, unit, featured image, active status and stock requirement.
+7. Enter a specific audit reason of at least eight characters.
+8. Select **Preview public readiness**.
+9. Compare the listed blockers/warnings with `/api/admin/catalog_readiness_report`.
+10. Confirm the selected row has no blockers; warnings may remain but should be reviewed.
+11. Select **Publish ready selection**.
+12. Open the public catalog in a private window and confirm only the intended ready row is visible.
+13. Select a second incomplete test row together with a ready row.
+14. Preview and then attempt the mixed publish.
+15. Confirm the entire batch remains unchanged and the incomplete row stays private.
+16. Open Supabase Table Editor → `catalog_publish_readiness_audit`.
+17. Confirm preview, successful publish and blocked attempt records include safe reasons, counts and item keys.
+18. Record only safe row IDs and results in the Startup evidence editor; do not paste credentials, customer data or private supplier receipts.
+
+### Move to the next item when
+
+Ready rows publish together, blocked rows remain private, a mixed batch changes nothing, public catalog filtering agrees with the readiness endpoint, and every attempt has shared audit evidence.
+
+## Build 246 next 20
+
+1. Apply the Build 246 migration in staging and refresh the Supabase schema cache.
+2. Preview one ready inventory row and compare browser results with the readiness endpoint.
+3. Publish one ready row and confirm the public catalog includes it.
+4. Attempt a mixed ready/blocked publish and confirm the full batch remains unchanged.
+5. Review the catalog publish-readiness audit row and preserve safe evidence.
+6. Correct suspicious names, missing categories, units and featured images.
+7. Complete cost, description, gallery and service-tag warnings for priority inventory.
+8. Retest Block Calendar full-day, AM and PM behaviour against public booking.
+9. Complete one full booking and admin reconciliation test.
+10. Complete and refund a controlled Stripe payment and verify webhook evidence.
+11. Verify booking, payment, consent and staff emails in external inboxes.
+12. Audit Cloudflare variables, bindings, domains and rollback access.
+13. Perform Supabase restore and Cloudflare rollback rehearsals.
+14. Complete legal, media-consent, staff-permission and accessibility review.
+15. Test booking, catalog, Startup and Inventory Workbench on real mobile devices.
+16. Complete Search Console sitemap, canonical and structured-data inspection.
+17. Align Google Business Profile categories, services, areas, hours and photo cadence.
+18. Complete upload interruption/retry and duplicate-media acceptance.
+19. Complete payment application, HST, month-end close and accountant-package review.
+20. Run an invite-only soft launch and review every early transaction daily.
+
+---
+
 # Rosie Dazzlers Startup and Go-Live Blocker Guide — Build 245
 
 **Updated:** 2026-08-06
@@ -1272,3 +1334,5 @@ Build 214 documentation sync
 <!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
 
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
