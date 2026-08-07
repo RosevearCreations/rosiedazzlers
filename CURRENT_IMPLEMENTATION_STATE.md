@@ -1,3 +1,9 @@
+# Current Implementation State — Build 245
+
+Build 245 is a no-DDL launch-acceptance and SEO hardening release. It adds deployed UI/CSS/asset/metadata scanning, cache recovery, safer offline behaviour and static landing-page content while preserving booking, inventory, Creative Projects, DAIP boundaries and Build 240 transactional inventory workflows.
+
+---
+
 # Current Implementation State — Build 241
 
 Build 241 is a no-DDL reliability hotfix for the unified Startup Command Center. The summary, evidence, production, guided-test, roadmap and automatic-check panels can initialize independently, and a single panel failure no longer prevents the rest of the interface from loading. Build 240 remains the latest functional schema release.
@@ -904,3 +910,14 @@ Implemented in source: unified Startup Command Center, 34-item detailed catalog,
 - Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
 - Advanced Startup Command Center cache-busting and service-worker references to Build 242.
 - No new database migration was introduced in this build.
+
+## Build 244 update
+
+- Bundled the new AI-generated raster placeholder images directly into the application zip so the site no longer depends on missing SVG photo fallbacks for common empty-image states.
+- Replaced review, add-on, catalog, booking, workflow, and admin placeholder-photo references from SVG files to real PNG/JPG files.
+- Preserved instructional SVG graphics, such as framing guides and charts, where SVG is still the correct format.
+- Sanity check: the remaining strongest live-readiness work is acceptance testing, content completion, operational policy confirmation, and production credential/provider validation rather than placeholder-media cleanup.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
