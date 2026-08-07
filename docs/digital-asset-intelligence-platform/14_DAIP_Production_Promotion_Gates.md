@@ -64,6 +64,11 @@ Only after Gates A–E pass may a limited internal-first production pilot be pro
 
 Build 219 makes Gate A and Gate B observable in `/admin-daip-governance.html`. Gate A is ready only when all twelve DAIP-0 decisions have recorded owner approval. Gate B is ready only when the Build 218 Test Lab control is safe and all three internal-test acceptance cases have latest recorded Pass results. Gates C–F remain held in Build 219 and cannot be advanced by decision entry alone.
 
+
+## Build 247 current gate interpretation
+
+The owner has now commissioned the narrow private-ingestion implementation described by Gate C. Build 247 provides private R2 original storage, resumable multipart recovery, project/source provenance, private-by-default metadata and a downstream processing-job ledger. **Gate C is not considered operationally passed until Startup processes 38 and 39 are completed in staging/preview with safe evidence.** Gate D (actual non-public processing execution), Gate E (privacy/export proof), and Gate F (controlled production promotion) remain held. No Build 247 upload automatically creates a public destination.
+
 ---
 
 > **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
@@ -88,3 +93,5 @@ Build 214 documentation sync
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
 
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
