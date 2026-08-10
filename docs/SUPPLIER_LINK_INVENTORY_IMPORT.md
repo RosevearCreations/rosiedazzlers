@@ -1,3 +1,13 @@
+# Build 248 repair — Amazon supplier-link resilience
+
+Build 248 fixes the `TypeError: patterns is not iterable` failure in `/api/admin/catalog_supplier_link_preview`. The parser now accepts both regular-expression arrays and individual patterns, resolves common `a.co`/`amzn.to` share links, validates the final Amazon host, limits the amount of remote HTML read into Worker memory, and keeps imports review-only.
+
+Price handling is deliberately conservative: an observed Amazon.com/non-CAD price is returned as `source_price` + `source_currency`; it is not silently written into `cost_cad`. Staff must enter/confirm CAD cost after conversion or invoice review. A partial Amazon response may still create a reviewable draft instead of failing the entire workflow.
+
+Supported review inputs: Amazon.ca, Amazon.com, `a.co`, `amzn.to`, or pasted share text containing one of those HTTPS URLs.
+
+---
+
 # Supplier Link Inventory Import — Build 233
 
 The admin catalog accepts Amazon.ca and Amazon.com product links and creates a reviewable inventory draft. The endpoint normalizes the URL, extracts the ASIN and available public metadata, checks exact duplicates, suggests classification, and writes an audit event.
@@ -41,3 +51,5 @@ Build 214 documentation sync
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
 
 <!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
