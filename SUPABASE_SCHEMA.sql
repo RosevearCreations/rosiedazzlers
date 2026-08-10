@@ -2703,7 +2703,7 @@ create table if not exists public.app_roadmap_execution_items (
  id uuid primary key default gen_random_uuid(),
  item_key text not null unique check (item_key ~ '^[a-z0-9_:-]{4,120}$'),
  title text not null check (char_length(title) between 5 and 220),
- workstream text not null check (workstream in ('customer','booking','payments','seo','media','daip','operations','reliability','documentation')),
+ workstream text not null check (workstream in ('customer','booking','payments','seo','media','daip','operations','reliability','documentation','content','security')),
  priority text not null default 'high' check (priority in ('critical','high','medium','low')),
  status text not null default 'planned' check (status in ('planned','in_progress','blocked','done','deferred')),
  owner_label text null check (owner_label is null or char_length(owner_label)<=120),
@@ -4330,6 +4330,11 @@ create table if not exists public.daip_project_media_assets (
   sha256_hex text null check (sha256_hex is null or sha256_hex ~ '^[a-fA-F0-9]{64}$'),
   is_raw_original boolean not null default true check (is_raw_original = true),
   public_destination_enabled boolean not null default false check (public_destination_enabled = false),
+  story_review_status text not null default 'not_reviewed' check (story_review_status in ('not_reviewed','selected','excluded')),
+  story_sort_order integer null check (story_sort_order is null or story_sort_order between 1 and 9999),
+  story_note text null check (story_note is null or char_length(story_note) <= 1200),
+  story_reviewed_by_staff_email text null,
+  story_reviewed_at timestamptz null,
   created_by_staff_email text null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
@@ -4375,6 +4380,10 @@ create table if not exists public.daip_media_processing_jobs (
   status text not null default 'queued' check (status in ('queued','dispatched','processing','review','completed','blocked','failed','cancelled')),
   priority integer not null default 100 check (priority between 1 and 999),
   attempt_count integer not null default 0 check (attempt_count >= 0),
+  max_attempts integer not null default 3 check (max_attempts between 1 and 20),
+  next_retry_at timestamptz null,
+  dead_lettered_at timestamptz null,
+  review_note text null check (review_note is null or char_length(review_note) <= 1200),
   output_manifest jsonb not null default '{}'::jsonb,
   last_error text null check (last_error is null or char_length(last_error)<=1000),
   created_by_staff_email text null,
@@ -4448,3 +4457,92 @@ on conflict (item_key) do update set title=excluded.title,workstream=excluded.wo
 
 commit;
 -- END 2026-08-07_build247_daip_private_media_ingestion.sql
+
+-- BEGIN 2026-08-09_build248_supplier_daip_story_review.sql
+-- Build 248 — supplier-link resilience, reviewed DAIP story evidence, and processing retry controls.
+-- Apply after Build 247. This migration never makes raw media public and does not render/publish content.
+
+begin;
+
+alter table public.daip_project_media_assets
+  add column if not exists story_review_status text not null default 'not_reviewed',
+  add column if not exists story_sort_order integer null,
+  add column if not exists story_note text null,
+  add column if not exists story_reviewed_by_staff_email text null,
+  add column if not exists story_reviewed_at timestamptz null;
+
+alter table public.daip_project_media_assets
+  drop constraint if exists daip_project_media_assets_story_review_status_check;
+alter table public.daip_project_media_assets
+  add constraint daip_project_media_assets_story_review_status_check
+  check (story_review_status in ('not_reviewed','selected','excluded'));
+
+alter table public.daip_project_media_assets
+  drop constraint if exists daip_project_media_assets_story_sort_order_check;
+alter table public.daip_project_media_assets
+  add constraint daip_project_media_assets_story_sort_order_check
+  check (story_sort_order is null or story_sort_order between 1 and 9999);
+
+alter table public.daip_project_media_assets
+  drop constraint if exists daip_project_media_assets_story_note_check;
+alter table public.daip_project_media_assets
+  add constraint daip_project_media_assets_story_note_check
+  check (story_note is null or char_length(story_note) <= 1200);
+
+create index if not exists daip_project_media_assets_story_idx
+  on public.daip_project_media_assets(project_id, story_review_status, story_sort_order nulls last, created_at);
+
+alter table public.daip_media_processing_jobs
+  add column if not exists max_attempts integer not null default 3,
+  add column if not exists next_retry_at timestamptz null,
+  add column if not exists dead_lettered_at timestamptz null,
+  add column if not exists review_note text null;
+
+alter table public.daip_media_processing_jobs
+  drop constraint if exists daip_media_processing_jobs_max_attempts_check;
+alter table public.daip_media_processing_jobs
+  add constraint daip_media_processing_jobs_max_attempts_check
+  check (max_attempts between 1 and 20);
+
+alter table public.daip_media_processing_jobs
+  drop constraint if exists daip_media_processing_jobs_review_note_check;
+alter table public.daip_media_processing_jobs
+  add constraint daip_media_processing_jobs_review_note_check
+  check (review_note is null or char_length(review_note) <= 1200);
+
+create index if not exists daip_media_processing_jobs_retry_idx
+  on public.daip_media_processing_jobs(status, next_retry_at, priority, created_at);
+
+alter table public.creative_projects
+  add column if not exists content_package_status text not null default 'not_ready',
+  add column if not exists content_package_review_note text null,
+  add column if not exists content_package_reviewed_by_staff_email text null,
+  add column if not exists content_package_reviewed_at timestamptz null;
+
+alter table public.creative_projects
+  drop constraint if exists creative_projects_content_package_status_check;
+alter table public.creative_projects
+  add constraint creative_projects_content_package_status_check
+  check (content_package_status in ('not_ready','ready_for_review','in_review','approved','changes_requested'));
+
+alter table public.creative_projects
+  drop constraint if exists creative_projects_content_package_review_note_check;
+alter table public.creative_projects
+  add constraint creative_projects_content_package_review_note_check
+  check (content_package_review_note is null or char_length(content_package_review_note) <= 1600);
+
+create index if not exists creative_projects_content_package_idx
+  on public.creative_projects(content_package_status, updated_at desc);
+
+alter table public.creative_project_audit drop constraint if exists creative_project_audit_event_type_check;
+alter table public.creative_project_audit add constraint creative_project_audit_event_type_check check (event_type in (
+  'created','updated','session_added','output_updated','archived','restored','booking_unlinked','cost_line_added','material_line_added','labour_line_added','draft_updated','batch_approval','daip_associated','line_updated','line_soft_deleted','inventory_reservation_updated','session_story_approval','shot_plan_updated','learning_updated','archive_export_prepared','template_updated','content_plan_generated','media_upload_started','media_upload_completed','media_upload_aborted','media_processing_updated','media_story_reviewed','media_job_retried','content_package_reviewed'
+));
+
+comment on column public.daip_project_media_assets.story_review_status is 'Build 248 human review state controlling whether private media metadata may be referenced by story/content planning. It never grants public access.';
+comment on column public.daip_media_processing_jobs.dead_lettered_at is 'Build 248 operator-visible terminal retry state. It does not delete raw media.';
+comment on column public.creative_projects.content_package_status is 'Build 248 human content-package review gate. Approval does not publish content.';
+
+commit;
+
+-- END 2026-08-09_build248_supplier_daip_story_review.sql

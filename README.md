@@ -1,3 +1,9 @@
+# Rosie Dazzlers — Build 248 current pointer
+
+New chat / new AI: read only `AI_PROJECT_HANDOFF.md` first and `MASTER_VALUE_ROADMAP.md` second. Use `STARTUP_GO_LIVE_BLOCKERS.md` only when executing acceptance steps. Older roadmap/handoff files are retained history, not current authority.
+
+---
+
 # Build 245 Current Release Pointer
 
 Start with `AI_PROJECT_HANDOFF.md`, `MASTER_VALUE_ROADMAP.md`, and `STARTUP_GO_LIVE_BLOCKERS.md`. The new protected deployment acceptance route is `/admin-ui-health.html`. Build 245 requires no database migration.
@@ -1257,3 +1263,5 @@ After administrator sign-in, use `/admin-startup-guide.html` for all go-live pre
 The application can now ingest large Creative Project MOV/MP4/JPG batches through resumable multipart uploads to a private R2 binding named `DAIP_MEDIA_BUCKET`. Follow `DAIP_R2_MEDIA_SETUP_GUIDE.md` before testing. Build 247 queues downstream work but does not yet execute the final video-processing/render pipeline.
 
 <!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->

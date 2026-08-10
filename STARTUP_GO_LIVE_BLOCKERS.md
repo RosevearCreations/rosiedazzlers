@@ -1,3 +1,21 @@
+# Build 248 operational addition — specialist runbook
+
+**Authority note:** Use `AI_PROJECT_HANDOFF.md` + `MASTER_VALUE_ROADMAP.md` for current state/direction. This file provides detailed execution steps only.
+
+## 40. Apply and accept Build 248 supplier-link + DAIP story-evidence controls
+
+1. Apply `sql/2026-08-09_build248_supplier_daip_story_review.sql` after Build 247.
+2. Open `/admin-catalog.html` and preview a harmless Amazon.ca URL, Amazon.com URL, and a.co/amzn.to share URL. None should return `TypeError: patterns is not iterable`.
+3. Confirm source price/currency is shown separately and an observed non-CAD Amazon price is not silently stored as CAD cost.
+4. Open `/admin-daip-media.html`, select a harmless uploaded asset, set capture stage/consent/story use, and save. Confirm raw media remains private.
+5. Exercise retry/block/cancel/dead-letter on harmless processing jobs and confirm the raw asset remains intact.
+6. Open `/admin-creative-projects.html`, approve a session, select private story media, generate reviewed draft plans, inspect readiness, then move the content-package gate through review.
+7. Confirm the generated planning metadata contains private asset IDs/review state but no raw object URL and that no public publishing happens.
+
+**Move on when:** supplier preview no longer 500s, Build 248 columns are present, private evidence/retry controls persist, the content-package gate works, and privacy/public-destination constraints remain intact.
+
+---
+
 # Startup and Go-Live Blocker Guide — Build 246 Addition
 
 ## 37. Complete catalog publishing-readiness acceptance
@@ -1399,3 +1417,5 @@ Build 214 documentation sync
 **Move to the next item when:** A >300 MB test video resumes from completed parts, completes privately exactly once, processing jobs are created, duplicate import is blocked, incomplete abort works, and a completed raw original remains protected.
 
 <!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
