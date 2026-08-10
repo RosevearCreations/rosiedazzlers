@@ -200,8 +200,7 @@
         </div>
         <div class="row">
           <button class="btn ghost" id="openSizeChartBtn" type="button">Size chart</button>
-          <button class="btn ghost" id="openPriceChartBtn" type="button">Price chart</button>
-          <a class="btn ghost" href="/pricing">Pricing page</a>
+                    <a class="btn ghost" href="/pricing">Pricing page</a>
         </div>
       </div>
       <div id="bookingStatus" class="notice" style="display:none;margin-top:12px"></div>
@@ -2216,7 +2215,6 @@
       renderServiceAreas();
       syncBookingRuleLabels();
       qs("#openSizeChartBtn").addEventListener("click", () => openModal("Vehicle size chart", chartUrl(state.pricing || {}, "Vehicle Size Chart") || `${BRAND_BASE}/CarSizeChart.PNG`));
-      qs("#openPriceChartBtn").addEventListener("click", () => openModal("Vehicle price chart", chartUrl(state.pricing || {}, "Vehicle Price Chart 2025") || `/assets/brand/CarPrice2025.PNG`));
       await Promise.all([
         loadVehicleMakes(),
         loadGarageVehicles(),
