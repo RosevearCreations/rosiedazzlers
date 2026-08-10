@@ -1,3 +1,22 @@
+# Build 249 — Existing-row Amazon repair workflow
+
+Build 249 fixes the remaining usability/data-integrity gap after the Build 248 parser repair. The old lower **Fill from Amazon link** button only derived text from the URL slug, while the upper supplier panel called the real metadata endpoint. Both paths now use the same review-first supplier parser.
+
+## Repair an existing supply/tool
+
+1. Open Inventory Workbench and choose `Amazon repair candidates` or search for the row.
+2. Choose **Amazon refresh** (or Edit in Inventory Workflow). The existing `item_key` becomes the protected repair target and is locked in the editor.
+3. Paste the correct Amazon.ca, Amazon.com, a.co or amzn.to link.
+4. Choose the overwrite groups we actually trust: identity, classification, description, CAD price, featured image.
+5. Run **Review Amazon update** and inspect the before/after list.
+6. Save only after verifying the product/variation/package is correct.
+
+Always preserved during supplier refresh: item key, quantity, reorder settings, purchase date, receipt, assigned station, service tags, gallery, ratings, visibility, active state and existing operational references/history. Amazon metadata (`amazon_asin`, source title/brand/category) and description now persist through the normal save endpoint.
+
+A non-CAD observed Amazon price never overwrites `cost_cad`; staff must confirm the actual Canadian landed/invoice cost. Nothing saves merely because a supplier preview succeeded.
+
+---
+
 # Build 248 repair — Amazon supplier-link resilience
 
 Build 248 fixes the `TypeError: patterns is not iterable` failure in `/api/admin/catalog_supplier_link_preview`. The parser now accepts both regular-expression arrays and individual patterns, resolves common `a.co`/`amzn.to` share links, validates the final Amazon host, limits the amount of remote HTML read into Worker memory, and keeps imports review-only.
@@ -53,3 +72,5 @@ Build 214 documentation sync
 <!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
 
 <!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
+
+<!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
