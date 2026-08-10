@@ -47,7 +47,8 @@ need('scripts/sync_route_copies.py',['admin-daip-media.html'])
 need('admin-creative-projects.html',['Upload raw DAIP media',"'/admin-daip-media.html?project_id='+encodeURIComponent(p.id)"])
 need('admin-startup-guide.html',['DAIP raw-media readiness','/admin-daip-media.html','build247'])
 need('functions/api/admin/production_reliability_report.js',['Private DAIP media R2 binding','daip_project_media_assets','daip_media_processing_jobs'])
-need('service-worker.js',['rosie-app-v20260807build247','/admin-daip-media.html','/data/build247_go_live_blockers.json'])
+need('service-worker.js',['/admin-daip-media.html','/data/build247_go_live_blockers.json'])
+if not re.search(r"rosie-app-v202608(07build247|09build248)", read('service-worker.js')): errors.append('service-worker cache version is older than Build 247')
 # Machine-readable files.
 for rel in ['data/build247_go_live_blockers.json','data/build247_next_steps.json','data/build247_following_steps.json','data/build247_daip_media_ingestion.json','data/build247_ui_health_routes.json','data/markdown_sanity_build247.json']:
     try: json.loads(read(rel))
