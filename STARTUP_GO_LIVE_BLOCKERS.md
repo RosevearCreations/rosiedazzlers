@@ -1,3 +1,24 @@
+# Build 249 operational addition — specialist runbook
+
+**Authority note:** Use `AI_PROJECT_HANDOFF.md` + `MASTER_VALUE_ROADMAP.md` for current state/direction. This file provides detailed execution steps only.
+
+## 41. Recover inaccurate supplies/tools with reviewed Amazon refresh
+
+1. Deploy Build 249 Pages/Functions together. No new Build 249 database migration is required.
+2. Open `/admin-inventory-manager.html` and choose **Amazon repair candidates**.
+3. Pick one known inaccurate row and choose **Amazon refresh**. Confirm `/admin-catalog.html?item=<same key>` loads that row in repair mode.
+4. Confirm the item key is read-only/locked. Copy or paste the correct Amazon.ca/Amazon.com/a.co/amzn.to link into the supplier review box.
+5. Choose which supplier fields may overwrite the current row: identity, classification, description, CAD price when available, and/or featured image.
+6. Select **Review Amazon update**. Inspect every staged before/after field. Do not save if the Amazon page is the wrong variation/package.
+7. Verify quantity, reorder point/quantity, purchase date, receipt URL, station, service tags, gallery, ratings, public visibility and active state are unchanged.
+8. Save the inventory item and reload the Workbench. Confirm the original item key remains and the row leaves the repair queue when its data is complete.
+9. Repeat with one Amazon.com/non-CAD example and confirm the observed foreign price does not overwrite the current CAD unit cost.
+10. Only after rows are normalized, use the reviewed two-row merge workflow for genuine duplicates; do not hard-delete historical inventory rows.
+
+**Move on when:** an existing bad row can be repaired from an accurate Amazon link without changing its inventory key or operational history, source metadata persists after save, and desktop/mobile repair links both return to the intended row.
+
+---
+
 # Build 248 operational addition — specialist runbook
 
 **Authority note:** Use `AI_PROJECT_HANDOFF.md` + `MASTER_VALUE_ROADMAP.md` for current state/direction. This file provides detailed execution steps only.
@@ -1419,3 +1440,5 @@ Build 214 documentation sync
 <!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
 
 <!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
+
+<!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->

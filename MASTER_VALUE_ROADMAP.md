@@ -1,4 +1,43 @@
-# CURRENT LIVING AUTHORITY 2 OF 2 — Build 248
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 249
+
+**Updated:** 2026-08-10  
+**Purpose:** Current business/technical direction. For exact implemented state and handoff, read `AI_PROJECT_HANDOFF.md` first.
+
+## Build 249 value delivered
+
+- Bad tools/supplies can now be repaired in place from a reviewed Amazon link instead of creating another duplicate row.
+- Inventory identity/history is protected while supplier-derived descriptive fields are refreshed selectively.
+- Workbench cleanup queues expose Amazon repair candidates and missing supplier links, with direct desktop/mobile repair actions.
+- Supplier metadata and descriptions persist through the full editor rather than disappearing at save time.
+- Missing inventory imagery uses an intentional visual placeholder instead of pretending a generic add-on photo is the product.
+- Current SEO direction remains accurate service areas, concise titles, one clear H1, useful service/pricing/booking content and authentic local proof rather than thin keyword pages.
+
+## Current next work
+
+1. Deploy Build 249 and repair the highest-confidence existing supply/tool rows using accurate Amazon links.
+2. Use `Amazon repair candidates`, then `Missing Amazon / supplier link`, to progressively normalize the inventory without destroying history.
+3. Review duplicate rows only after supplier refresh; use the existing reviewed merge workflow instead of hard deletion.
+4. Complete catalog featured/gallery image coverage and publishing-readiness cleanup as inventory data becomes trustworthy.
+5. Apply/accept Build 247 and Build 248 migrations in staging where outstanding.
+6. Bind and verify the private `DAIP_MEDIA_BUCKET` R2 bucket with no public exposure.
+7. Prove one private project photo and one >300 MB interrupted/resumed video.
+8. Import the three historical detailing Creative Projects and their private raw media one project at a time.
+9. Acceptance-test `DAIP_PROCESSING_QUEUE` if used.
+10. Implement the private processing consumer for proxies, frames, audio and transcript outside the request path.
+11. Add scene analysis, before/during/after scoring and human override.
+12. Add privacy detection and reviewed blur/redaction derivatives without modifying raw originals.
+13. Add best-shot/near-duplicate scoring and storyboard editing from selected private evidence.
+14. Implement reviewed long-form/short-form render adapters.
+15. Add consent-approved reviewed copy-to-public workflows only after privacy acceptance.
+16. Complete real-device DAIP/Creative Project acceptance on desktop and mobile.
+17. Complete inventory/accounting close/export and product-image readiness.
+18. Complete booking, payment, refund, webhook, email and recovery acceptance.
+19. Complete Search Console and Google Business Profile alignment with real Rosie proof.
+20. Run an invite-only soft launch with daily evidence review.
+
+---
+
+# Historical Build 248 roadmap snapshot
 
 **Updated:** 2026-08-09  
 **Purpose:** Current business/technical direction. For exact implemented state and handoff, read `AI_PROJECT_HANDOFF.md` first.
@@ -1346,3 +1385,5 @@ Build 247 establishes the private source-of-truth media layer needed for the DAI
 <!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
 
 <!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
+
+<!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
