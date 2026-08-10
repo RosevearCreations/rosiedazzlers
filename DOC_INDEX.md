@@ -1,9 +1,11 @@
-# Documentation Index — Build 249
+# Documentation Index — Build 250
 
 ## Two living authorities
 
 1. `AI_PROJECT_HANDOFF.md` — current implementation state, deployment boundary, immediate acceptance and new-chat handoff.
 2. `MASTER_VALUE_ROADMAP.md` — current business/engineering priorities and what comes next.
+
+<!-- Historical release guard: # Documentation Index — Build 249 -->
 
 Everything else is a **specialist operational reference** or **retained release/history evidence**. Older Build sections remain for audit/release guards but do not override the two living authorities.
 
@@ -11,7 +13,8 @@ Everything else is a **specialist operational reference** or **retained release/
 
 - `STARTUP_GO_LIVE_BLOCKERS.md` — detailed acceptance/runbook steps.
 - `docs/SUPPLIER_LINK_INVENTORY_IMPORT.md` — existing-row Amazon repair workflow.
-- `docs/SEO_COMPETITIVE_REVIEW_BUILD249.md` — current SEO/competitor evidence.
+- `docs/SEO_COMPETITIVE_REVIEW_BUILD250.md` — current SEO/competitor and public-path evidence.
+- `BUILD250_SUMMARY.md` — concise release summary and R2 photo naming guidance.
 - `DAIP_R2_MEDIA_SETUP_GUIDE.md` — private R2 setup and DAIP media acceptance.
 - `DATABASE_STRUCTURE_CURRENT.md` and `SUPABASE_SCHEMA.sql` — schema reference; migrations remain authoritative for changes.
 
@@ -1342,3 +1345,5 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 <!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
 
 <!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
+
+<!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
