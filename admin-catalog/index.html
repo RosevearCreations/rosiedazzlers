@@ -215,8 +215,8 @@
       <section class="supplier-link-import" aria-labelledby="supplierLinkHeading">
         <div class="supplier-link-visual" role="img" aria-label="Supplier product link flowing into a reviewable inventory draft"><span>Supplier link</span><b>→</b><span>Review draft</span><b>→</b><span>Inventory</span></div>
         <h2 id="supplierLinkHeading" style="margin:0">Add inventory from a supplier link</h2>
-        <p class="mini">Paste an Amazon.ca or Amazon.com product page. The system extracts available public product details, suggests tool or consumable classification, checks ASIN/URL duplicates, and fills the editor below. Nothing saves until you review and press <strong>Save inventory item</strong>.</p>
-        <div class="supplier-link-row"><label>Product URL<input id="supplierLinkUrl" type="url" inputmode="url" placeholder="https://www.amazon.ca/dp/…" /></label><button class="btn primary" id="supplierLinkPreviewBtn" type="button">Import into review</button></div>
+        <p class="mini">Paste an Amazon.ca, Amazon.com, a.co or amzn.to product link. The system resolves share links, reads a bounded amount of public product metadata, suggests tool or consumable classification, checks ASIN/URL duplicates, and fills the editor below. Nothing saves until you review and press <strong>Save inventory item</strong>.</p>
+        <div class="supplier-link-row"><label>Product URL or Amazon share text<input id="supplierLinkUrl" type="text" inputmode="url" autocomplete="off" placeholder="https://www.amazon.ca/dp/… or https://a.co/…" /></label><button class="btn primary" id="supplierLinkPreviewBtn" type="button">Import into review</button></div>
         <div id="supplierLinkResult" class="notice" style="display:none" role="status" aria-live="polite"></div>
       </section>
       <form id="itemForm" class="stack">
@@ -949,16 +949,27 @@
   
 
   async function importSupplierLinkPreview(){
-    const url=qs('#supplierLinkUrl')?.value.trim(); const out=qs('#supplierLinkResult');
+    const url=qs('#supplierLinkUrl')?.value.trim(),out=qs('#supplierLinkResult'),button=qs('#supplierLinkPreviewBtn');
     if(!url){ show('Paste an Amazon product link first.','bad'); return; }
-    if(out){ out.style.display='block'; out.className='notice'; out.textContent='Reading supplier product details…'; }
-    const res=await postJson('/api/admin/catalog_supplier_link_preview',{url});
-    if(!res.ok||!res.out?.ok){ const msg=res.out?.error||'Could not read that supplier link.'; if(out){out.className='notice bad';out.textContent=msg;} return; }
-    const d=res.out.draft||{}; fillForm({item_key:d.item_key,item_type:d.item_type,name:d.name,category:d.category,subcategory:d.subcategory,preferred_vendor:d.preferred_vendor,vendor_sku:d.vendor_sku,unit_label:d.unit_label,qty_on_hand:d.qty_on_hand,reorder_point:d.reorder_point,reorder_qty:d.reorder_qty,cost_cents:d.cost_cad==null?null:Math.round(Number(d.cost_cad)*100),reuse_policy:d.reuse_policy,amazon_url:d.amazon_url,image_url:d.image_url,notes:d.notes,amazon_asin:d.amazon_asin,amazon_brand:d.amazon_brand,amazon_title:d.amazon_title,is_public:false,is_active:true});
-    if(d.amazon_asin) qs('#formVendorSku').value=d.amazon_asin;
-    const duplicate=res.out.duplicate; const bits=[`Draft loaded: ${d.name||'Amazon item'}.`,res.out.warning||'',duplicate?`Possible duplicate: ${duplicate.name} (${duplicate.item_key}). Review the existing item before saving.`:'No exact ASIN or normalized URL duplicate was found.','Review price, quantity, image, category and tax-inclusive purchase cost before saving.'].filter(Boolean);
-    if(out){out.className='notice '+(duplicate?'bad':'ok');out.textContent=bits.join(' ');}
-    document.querySelector('#itemForm')?.scrollIntoView({behavior:'smooth',block:'start'});
+    if(button){button.disabled=true;button.textContent='Reading…';}
+    if(out){ out.style.display='block'; out.className='notice'; out.textContent='Resolving the Amazon link and reading supplier product details…'; }
+    try{
+      const res=await postJson('/api/admin/catalog_supplier_link_preview',{url});
+      if(!res.ok||!res.out?.ok){
+        const msg=[res.out?.error||'Could not read that supplier link.',res.out?.detail||''].filter(Boolean).join(' ');
+        if(out){out.className='notice bad';out.textContent=msg;}
+        return;
+      }
+      const d=res.out.draft||{};
+      fillForm({item_key:d.item_key,item_type:d.item_type,name:d.name,category:d.category,subcategory:d.subcategory,preferred_vendor:d.preferred_vendor,vendor_sku:d.vendor_sku,unit_label:d.unit_label,qty_on_hand:d.qty_on_hand,reorder_point:d.reorder_point,reorder_qty:d.reorder_qty,cost_cents:d.cost_cad==null?null:Math.round(Number(d.cost_cad)*100),reuse_policy:d.reuse_policy,amazon_url:d.amazon_url,image_url:d.image_url,notes:d.notes,amazon_asin:d.amazon_asin,amazon_brand:d.amazon_brand,amazon_title:d.amazon_title,is_public:false,is_active:true});
+      if(d.amazon_asin) qs('#formVendorSku').value=d.amazon_asin;
+      const duplicate=res.out.duplicate,ex=res.out.extracted||{},observed=d.source_price==null?'Price not extracted':`${d.source_currency||'currency'} ${Number(d.source_price).toFixed(2)} observed`,quality=[ex.title?'title':'',ex.image?'image':'',ex.price?'price':'',ex.brand?'brand':''].filter(Boolean).join(', ')||'URL/ASIN only';
+      const bits=[`Draft loaded: ${d.name||'Amazon item'}.`,`Metadata: ${quality}.`,observed,res.out.warning||'',duplicate?`Possible duplicate: ${duplicate.name} (${duplicate.item_key}). Review the existing item before saving.`:'No exact ASIN or normalized URL duplicate was found.',d.source_currency&&d.source_currency!=='CAD'?'CAD unit cost was left blank intentionally because the observed supplier price is not CAD.':'Review quantity, image, category, tax, shipping, coupons and final paid cost before saving.'].filter(Boolean);
+      if(out){out.className='notice '+(duplicate?'bad':'ok');out.innerHTML=`<strong>${esc(bits[0])}</strong><div class="mini" style="margin-top:6px">${bits.slice(1).map(esc).join(' ')}</div>${d.image_url?`<div class="row" style="margin-top:8px;align-items:center"><img src="${esc(d.image_url)}" alt="Imported supplier product preview" style="width:72px;height:72px;object-fit:contain;border-radius:10px;background:#fff" loading="lazy" referrerpolicy="no-referrer"><span class="mini">Review image before keeping it as the inventory featured image.</span></div>`:''}`;}
+      document.querySelector('#itemForm')?.scrollIntoView({behavior:'smooth',block:'start'});
+    } finally {
+      if(button){button.disabled=false;button.textContent='Import into review';}
+    }
   }
   qs('#loadAmazonMatchesBtn')?.addEventListener('click', loadAmazonMatches);
   qs('#amazonMatchStatusFilter')?.addEventListener('change', ()=>renderAmazonMatches());
