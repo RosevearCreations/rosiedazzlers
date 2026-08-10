@@ -1,3 +1,5 @@
+> **Build 248 documentation status:** Historical/compatibility reference. Current state is `AI_PROJECT_HANDOFF.md`; current direction is `MASTER_VALUE_ROADMAP.md`. Retained to preserve audit/release history and old references.
+
 ## Build 202 AI context
 
 When continuing Rosie Dazzlers work, remember that incident reports are now a first-class workflow: private detailer/admin report + required evidence, then optional customer-visible approved summary and selected evidence. Also remember the attached detailer notes were turned into a marketing tracker and roadmap direction: SEO long term, Meta ads short/mid-term, and CRM quote tracking for close-rate and bundle insights.
@@ -754,3 +756,5 @@ Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOF
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
 
 <!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->

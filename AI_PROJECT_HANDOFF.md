@@ -1,3 +1,39 @@
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 248
+
+**Updated:** 2026-08-09  
+**Build:** 248  
+**Use this file first in a new chat or by another AI.** The only other living authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` remains a detailed operational runbook, not a third planning authority.
+
+## Build 248 current state
+
+Build 248 repairs Amazon supplier-link review imports and advances DAIP from private upload-only intake into reviewed private story evidence, operator retry/dead-letter controls, Creative Project content-package readiness, and an explicit human content-package review gate. Raw DAIP media remains private and no new workflow automatically publishes customer media.
+
+### Completed in source
+
+- Repaired `/api/admin/catalog_supplier_link_preview` `TypeError: patterns is not iterable` and hardened Amazon.ca/Amazon.com/a.co/amzn.to parsing, bounded response reads, currency handling, duplicate review, and error reporting.
+- Added `sql/2026-08-09_build248_supplier_daip_story_review.sql`.
+- Added private media `selected/excluded/not reviewed` story-evidence state, story ordering and review notes.
+- Added processing-job retry, block, cancel and dead-letter operator controls with retry limits.
+- Added Creative Project readiness reporting using approved sessions plus selected private media metadata.
+- Content-plan drafts now carry a private evidence manifest containing asset IDs/review metadata only; raw object URLs are excluded.
+- Added content-package gate: `not_ready`, `ready_for_review`, `in_review`, `approved`, `changes_requested`. Approval does not publish.
+- Corrected canonical roadmap workstreams to allow `content` and `security`, and synchronized Build 248 schema changes into `SUPABASE_SCHEMA.sql`.
+- Narrowed local landing-page structured-data `areaServed` to each actual town/county and retained the one-H1/title/meta guardrails.
+- Sanity review confirms public pages already have a visual or intentional visual placeholder; no new thin location pages were added.
+- Documentation is now governed by two living authorities: this file for current state/handoff and `MASTER_VALUE_ROADMAP.md` for current direction.
+
+### Required deployment/acceptance work
+
+1. If Build 247 is not applied yet, apply `sql/2026-08-07_build247_daip_private_media_ingestion.sql` first.
+2. Apply `sql/2026-08-09_build248_supplier_daip_story_review.sql` in staging.
+3. Test one Amazon.ca link, one Amazon.com link, and one Amazon short/share link; confirm imports stay review-only and non-CAD observed prices are not silently treated as CAD.
+4. Create/bind the private Cloudflare R2 bucket as `DAIP_MEDIA_BUCKET`, then complete photo and >300 MB interrupted/resumed video acceptance.
+5. Review/select private story evidence and exercise retry/dead-letter controls on harmless test jobs.
+6. The actual FFmpeg-class processing/render consumer is still outstanding; Build 248 supplies the durable queue/review contract but does not pretend Pages Functions can render final long/short videos.
+7. Continue real-device, booking/payment/refund/email, Search Console, Business Profile and controlled soft-launch acceptance.
+
+---
+
 # AI Project Handoff — Build 246 Current State
 
 ## Read first
@@ -934,3 +970,5 @@ Build 247 creates the ingestion and processing-job pipeline, but it does **not y
 20. Add project-level “Content package ready for review” gate and one-click review queue.
 
 <!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
