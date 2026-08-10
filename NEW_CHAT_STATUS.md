@@ -1,3 +1,5 @@
+> **Build 248 documentation status:** Historical/compatibility reference. Current state is `AI_PROJECT_HANDOFF.md`; current direction is `MASTER_VALUE_ROADMAP.md`. Retained to preserve audit/release history and old references.
+
 ## Build 202 status
 
 Latest build adds incident reports with private/admin-only discussion, required photo evidence, admin-approved customer-visible summaries/photos, and a marketing calculator from the attached detailer notes.
@@ -812,3 +814,5 @@ Build 216 synchronized this retained document with the active `AI_PROJECT_HANDOF
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
 
 <!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->

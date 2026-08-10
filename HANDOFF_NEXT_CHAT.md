@@ -1,3 +1,5 @@
+> **Build 248 documentation status:** Historical/compatibility reference. Current state is `AI_PROJECT_HANDOFF.md`; current direction is `MASTER_VALUE_ROADMAP.md`. Retained to preserve audit/release history and old references.
+
 ## Build 202 handoff
 
 After applying Build 202, run the SQL migration `sql/2026-06-12_build202_incident_reports_and_marketing.sql` before testing incident reports. Then test `/admin-incident-reports.html`, R2 evidence upload, customer visibility publishing, `/progress?token=...`, and `/admin-marketing.html`.
@@ -873,3 +875,5 @@ Start with `docs/BUILD235_OPERATIONAL_READINESS_INVENTORY_JSON_GALLERIES.md` and
 <!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
 
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->

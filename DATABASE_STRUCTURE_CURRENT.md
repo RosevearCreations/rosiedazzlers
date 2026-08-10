@@ -1090,3 +1090,5 @@ Production Creative Project raw-media ingestion uses `daip_project_media_assets`
 
 ## Build 246 catalog-readiness synchronization
 Historical Build 246 catalog readiness tables/RPCs remain part of the current schema and are preserved under Build 247.
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->

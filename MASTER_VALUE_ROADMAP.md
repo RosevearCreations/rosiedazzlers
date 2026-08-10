@@ -1,3 +1,51 @@
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 248
+
+**Updated:** 2026-08-09  
+**Purpose:** Current business/technical direction. For exact implemented state and handoff, read `AI_PROJECT_HANDOFF.md` first.
+
+## Build 248 value delivered
+
+- Supplier URLs can be imported into review without the `patterns is not iterable` crash, including common Amazon short/share URLs.
+- Private project media can now be deliberately selected or excluded as story evidence without changing its private storage boundary.
+- Processing failures have operator retry/dead-letter controls instead of becoming an opaque queue.
+- Creative Projects now show explainable content-package readiness and have a human review gate before future publishing workflows.
+- Local structured data is more geographically precise and the SEO strategy remains useful pages + real proof + accurate Business Profile data rather than keyword repetition.
+
+## Current next work
+
+1. Apply Build 247 then Build 248 migrations in staging where outstanding.
+2. Prove Amazon.ca, Amazon.com and Amazon short/share-link import review with harmless products.
+3. Bind the private `DAIP_MEDIA_BUCKET` R2 bucket and verify it has no public exposure.
+4. Upload one harmless project photo and verify private metadata + processing jobs.
+5. Prove a video larger than 300 MB can pause/interruption/resume without restarting from zero.
+6. Import the first historical detailing Creative Project and raw media.
+7. Import the second historical detailing Creative Project and raw media.
+8. Import the third historical detailing Creative Project and raw media.
+9. Configure and acceptance-test `DAIP_PROCESSING_QUEUE` if used.
+10. Implement the private processing consumer for proxies, frames, audio and transcript outside the request path.
+11. Add scene analysis and before/during/after candidate scoring with human override.
+12. Add privacy detection and reviewed blur/redaction derivatives without modifying raw originals.
+13. Add best-shot/near-duplicate scoring and a storyboard editor using selected evidence.
+14. Implement a render adapter for reviewed long-form and short-form outputs.
+15. Add reviewed copy-to-public workflow for consent-approved derivatives only.
+16. Complete real-device DAIP and Creative Project acceptance on desktop/mobile.
+17. Continue catalog readiness, inventory/accounting close/export and product-image completion.
+18. Complete booking, payment, refund, webhook, email and recovery acceptance.
+19. Complete Search Console and Google Business Profile alignment with real Rosie proof.
+20. Run an invite-only soft launch with daily evidence review.
+
+## Following value wave
+
+- 1080p/720p proxy presets, scene/key-frame extraction, timestamped transcript storage and audio/silence metadata.
+- License-plate/face/sensitive-document detection with reviewed derivative redaction.
+- Before/during/after classification, sharpness/exposure/transformation scoring and duplicate clustering.
+- Drag/drop storyboard, narration/soundtrack planning, YouTube chapter recipes and vertical hook/crop recipes.
+- Thumbnail, website gallery, Business Profile and platform-copy derivative presets.
+- Render cost/time estimates, queue observability, retry analytics, retention/storage-class policy and archive/recovery tests.
+- Only after privacy/consent proof: reviewed public-copy and publishing integrations.
+
+---
+
 # Master Value Roadmap — Build 246 Current Direction
 
 Build 246 closes a major product-data-quality gap by adding preview-first public publishing gates. The next value wave remains production acceptance, resumable media recovery, accounting close/export depth, local proof, Search Console/Business Profile alignment and a controlled soft launch.
@@ -1296,3 +1344,5 @@ Build 247 establishes the private source-of-truth media layer needed for the DAI
 20. Add project-level “Content package ready for review” gate and one-click review queue.
 
 <!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->

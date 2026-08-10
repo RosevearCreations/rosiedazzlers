@@ -1,3 +1,11 @@
+# Build 248 follow-up — reviewed story evidence and retry controls
+
+After the Build 247 private-ingestion migration, also apply `sql/2026-08-09_build248_supplier_daip_story_review.sql`. Build 248 does not change the R2 privacy boundary. It adds human story-evidence selection/order, processing retry/dead-letter metadata, Creative Project content-package readiness and a human review gate.
+
+Acceptance after upload: open `/admin-daip-media.html`, mark harmless uploaded media selected/excluded for story use, exercise a harmless failed-job retry/dead-letter flow, then open `/admin-creative-projects.html` to verify the private evidence/readiness summary. Raw object keys remain private and approval does not publish.
+
+---
+
 # DAIP Private R2 Media Setup Guide — Build 247
 
 **Purpose:** configure the private storage and application binding required for large raw Creative Project media such as MOV, MP4, JPG, JPEG, PNG, HEIC, HEIF, M4V and WebM files.
@@ -198,3 +206,5 @@ A separate processing runtime is still required to actually run FFmpeg/transcodi
 <!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->
 
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->

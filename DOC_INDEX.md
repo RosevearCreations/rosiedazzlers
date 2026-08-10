@@ -1,3 +1,26 @@
+# Documentation Index — Build 248
+
+## Two living authorities
+
+1. `AI_PROJECT_HANDOFF.md` — current implementation state, deployment boundary, immediate acceptance and new-chat handoff.
+2. `MASTER_VALUE_ROADMAP.md` — current business/engineering priorities and what comes next.
+
+Everything else is either a **specialist operational reference** or **retained release/history evidence**. Do not infer current direction from an older Build section when it conflicts with either living authority.
+
+### Active specialist references
+
+- `STARTUP_GO_LIVE_BLOCKERS.md` — detailed acceptance/runbook steps.
+- `DAIP_R2_MEDIA_SETUP_GUIDE.md` — private R2 setup and DAIP media acceptance.
+- `docs/SUPPLIER_LINK_INVENTORY_IMPORT.md` — supplier-link review workflow.
+- `docs/SEO_COMPETITIVE_REVIEW_BUILD248.md` — current SEO/competitor evidence.
+- `DATABASE_STRUCTURE_CURRENT.md` and `SUPABASE_SCHEMA.sql` — schema reference; migrations remain authoritative for changes.
+
+### Retirement policy
+
+Older `BUILD*`, `ROADMAP`, `NEW_CHAT_STATUS`, `HANDOFF_NEXT_CHAT`, `PROJECT_BRAIN`, duplicate competitor, sanity and historical implementation files are retained because release checks and audit history still reference many of them. They are not living planning authorities. This avoids risky mass deletion while reducing current context to two files.
+
+---
+
 # Documentation Index — Build 245
 
 ## Current authorities
@@ -1292,3 +1315,5 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 <!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
 
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
