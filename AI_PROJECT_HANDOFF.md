@@ -1,4 +1,51 @@
-# CURRENT LIVING AUTHORITY 1 OF 2 — Build 249
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 250
+
+**Updated:** 2026-08-10  
+**Build:** 250  
+**Use this file first in a new chat or by another AI.** The only other living planning authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` remains a specialist operational runbook.
+
+## Build 250 current state — simpler service choice + approved R2 website photos
+
+Build 250 concentrates the public service journey around three plain steps: choose vehicle size, choose one main package, then check availability/book. The principal package cards now sit above the broader service hub; the two duplicate price/details chart controls were removed from Services because those comparisons belong on Pricing. Vehicle size is deliberately larger and more prominent. The goal-based chooser was rebuilt with consistent responsive cards.
+
+### Public R2 photo integration
+
+- Added read-only `/api/public/car_photos` backed by the existing public R2 assets binding aliases. It lists only approved public image objects under `CarPhotos/`; private DAIP media is never queried.
+- Principal service cards try service-matched `CarPhotos/` assets first when filenames contain useful service terms, then retain the historical package artwork as fallback.
+- If no service-specific match exists, a stable approved Rosie `CarPhotos/` image may be used after the package asset fails; the final fallback is an intentional service-photo placeholder rather than an unrelated reviews image.
+- The endpoint is cached briefly and caps the public manifest to keep request/memory cost bounded.
+
+### Clarity / UX changes
+
+- Services: large Step 1 vehicle-size picker, Step 2 principal service cards, optional goal-based help, Step 3 booking/availability, then the Full Service Hub.
+- Removed `Open price chart` and `Open details chart` from Services; Pricing remains the comparison destination.
+- Rebuilt `Which service should we choose?` as five consistent goal cards tied directly to the five principal packages.
+- Complete Detail is visually marked as the broadest starting choice without hiding cheaper/simpler packages.
+- Home secondary CTA now says `Not sure? Compare services`.
+- Booking top controls are reduced so the wizard remains the main path; full price comparison remains on Pricing.
+- Build 250 CSS includes responsive decision-card, size-picker, package-card and CTA rules for desktop/tablet/phone widths.
+
+### SEO/business direction retained
+
+- One H1 per public page remains mandatory.
+- Service-page titles/descriptions remain descriptive rather than keyword-stuffed.
+- Local pages stay limited to real service areas; no thin location pages were added.
+- Approved local Rosie photos are preferred because authentic proof supports users and local-business credibility better than generic filler imagery.
+
+### Required acceptance after deployment
+
+1. Confirm the Pages project public R2 binding points to `rosie-assets` using one supported alias (`ROSIE_PUBLIC_ASSETS_BUCKET`, `PUBLIC_ASSETS_BUCKET`, `R2_PUBLIC_ASSETS_BUCKET`, or `ASSETS_BUCKET`).
+2. Open `/api/public/car_photos` and confirm the new `CarPhotos/` filenames appear.
+3. Open `/services` on desktop and phone; verify Vehicle size is prominent and selecting a size updates package prices and booking links.
+4. Confirm Premium Wash, Basic Detail, Complete Detail, Interior Detail and Exterior Detail show the intended R2 photos when their filenames match the service; rename ambiguous R2 filenames with clear service terms if needed.
+5. Verify the Full Service Hub is below the five principal package cards and the old price/details chart buttons are gone.
+6. Continue Build 249 inventory cleanup and outstanding Build 247/248 DAIP staging acceptance.
+
+---
+
+<!-- Historical release guard: # CURRENT LIVING AUTHORITY 1 OF 2 — Build 249 -->
+# Historical Build 249 handoff snapshot
+
 
 **Updated:** 2026-08-10  
 **Build:** 249  
@@ -1010,3 +1057,5 @@ Build 247 creates the ingestion and processing-job pipeline, but it does **not y
 <!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
 
 <!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
+
+<!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
