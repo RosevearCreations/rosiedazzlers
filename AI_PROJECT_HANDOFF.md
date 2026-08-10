@@ -1,4 +1,40 @@
-# CURRENT LIVING AUTHORITY 1 OF 2 — Build 248
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 249
+
+**Updated:** 2026-08-10  
+**Build:** 249  
+**Use this file first in a new chat or by another AI.** The only other living authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` remains a detailed operational runbook, not a third planning authority.
+
+## Build 249 current state — inventory recovery through reviewed supplier refresh
+
+Build 249 turns the Amazon supplier-link helper into an existing-row recovery workflow. Staff can select a bad supply/tool row, open the exact inventory key, paste an accurate Amazon link, choose which supplier fields may be refreshed, inspect staged before/after changes, and save back to the same row while preserving stock, reorder settings, receipts, gallery, station, service tags, ratings, visibility, active state and operational history.
+
+### Completed in source
+
+- Replaced the misleading URL-slug-only `Fill from Amazon link` behaviour with the real `/api/admin/catalog_supplier_link_preview` review workflow.
+- Existing inventory edits now lock `item_key`; supplier refresh cannot silently create a second key for the selected row.
+- Added explicit overwrite controls for identity, classification, description, CAD cost and featured image.
+- Added staged before/after supplier diffs and a clear repair/new-item mode indicator.
+- Added description editing plus visible Amazon ASIN/title/brand/category source metadata; those fields now persist through the inventory save payload.
+- Amazon.com/non-CAD observed prices continue to preserve the existing CAD unit cost rather than overwrite it.
+- Added `Amazon repair candidates` and `Missing Amazon / supplier link` Workbench filters plus direct `Amazon refresh` actions on desktop and mobile.
+- Added query-string handoff (`/admin-catalog.html?item=<item_key>`) so Workbench repair links load the intended existing item automatically.
+- Replaced misleading generic-addon image fallback in the inventory editor with the intentional inventory-tools visual placeholder.
+- Retained Build 248 DAIP story-review/content-package gates, Build 247 `content/security` workstream repair, catalog publish readiness, one-H1 SEO rules and local structured-data precision.
+- Documentation remains governed by exactly two living authorities: this file and `MASTER_VALUE_ROADMAP.md`.
+
+### Required deployment/acceptance work
+
+1. Deploy Build 249 Pages/Functions together; Build 249 itself adds no required database DDL.
+2. In staging, open Inventory Workbench → `Amazon repair candidates`, choose one known bad row and select `Amazon refresh`.
+3. Paste the correct Amazon link, verify the same item key remains locked, inspect the staged field changes, then save.
+4. Confirm quantity, reorder thresholds, receipt, station, service tags, gallery, ratings and inventory history did not change unexpectedly.
+5. Repeat with Amazon.ca and an Amazon short/share link; for Amazon.com verify a USD/non-CAD observation never overwrites the CAD cost automatically.
+6. Continue outstanding Build 247/248 staging migration and private DAIP/R2 acceptance where not already complete.
+7. Continue real-device booking/payment/refund/email, Search Console/Business Profile and controlled soft-launch acceptance.
+
+---
+
+# Historical Build 248 handoff snapshot
 
 **Updated:** 2026-08-09  
 **Build:** 248  
@@ -972,3 +1008,5 @@ Build 247 creates the ingestion and processing-job pipeline, but it does **not y
 <!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
 
 <!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
+
+<!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
