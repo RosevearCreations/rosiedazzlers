@@ -33,15 +33,59 @@ export async function onRequest(c){
    const due=new Date(project.consent_expires_at);due.setUTCDate(due.getUTCDate()-Math.max(1,Number(project.consent_reminder_days||30)));
    await rest(c.env,'creative_project_consent_reminders',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({project_id:projectId,due_at:due.toISOString(),status:'queued_for_review',recipient_scope:'project_owner_review',safe_message:`Review consent before ${project.consent_expires_at} for ${project.title}.`,created_by_staff_email:email})});event='consent_reminder_queued';safe='Consent reminder queued for staff review; no customer message was sent.';
   } else if(action==='generate_content_plan'){
-   const sessions=await rest(c.env,`creative_project_sessions?select=session_type,summary,mistakes_and_fixes,next_action,started_at&project_id=eq.${encodeURIComponent(projectId)}&approved_for_story=eq.true&order=started_at.asc`);
+   const sessions=await rest(c.env,`creative_project_sessions?select=id,session_type,summary,mistakes_and_fixes,next_action,started_at&project_id=eq.${encodeURIComponent(projectId)}&approved_for_story=eq.true&order=started_at.asc`);
    if(!sessions?.length)throw new Error('Approve at least one session for story generation first.');
-   const project=(await rest(c.env,`creative_projects?select=title,purpose,outcome_summary,lessons_learned,future_recommendations,consent_status,before_after_applicability&id=eq.${encodeURIComponent(projectId)}&limit=1`))?.[0];
+   const project=(await rest(c.env,`creative_projects?select=title,purpose,outcome_summary,lessons_learned,future_recommendations,consent_status,before_after_applicability,public_publish_allowed&id=eq.${encodeURIComponent(projectId)}&limit=1`))?.[0];
+   let selectedAssets=[],storyEvidenceMigrationReady=true;
+   try{
+    selectedAssets=await rest(c.env,`daip_project_media_assets?select=id,media_kind,capture_stage,consent_status,story_sort_order&project_id=eq.${encodeURIComponent(projectId)}&upload_status=eq.uploaded&story_review_status=eq.selected&order=story_sort_order.asc.nullslast,created_at.asc`);
+   }catch{storyEvidenceMigrationReady=false;selectedAssets=[];}
+   const evidenceManifest={
+    private_only:true,
+    public_destination_enabled:false,
+    build248_migration_ready:storyEvidenceMigrationReady,
+    selected_asset_count:selectedAssets.length,
+    stages:[...new Set(selectedAssets.map(x=>x.capture_stage))],
+    assets:selectedAssets.map((x,i)=>({asset_id:x.id,media_kind:x.media_kind,capture_stage:x.capture_stage,consent_status:x.consent_status,story_order:Number(x.story_sort_order||i+1)}))
+   };
    const outline=sessions.map((s,i)=>`${i+1}. ${s.session_type}: ${s.summary}${s.mistakes_and_fixes?`\n   Challenge/fix: ${s.mistakes_and_fixes}`:''}${s.next_action?`\n   Next: ${s.next_action}`:''}`).join('\n');
    const platforms=Array.isArray(b.output_types)?b.output_types.filter(x=>OUTPUT_TYPES.includes(x)):['youtube_video','youtube_shorts','instagram_reels','tiktok','facebook_video','pinterest_pins','etsy_draft','website_product_page','educational_article'];
-   for(const output_type of platforms){const vertical=['youtube_shorts','instagram_reels','tiktok','facebook_video'].includes(output_type);const planning={source:'approved_sessions',session_count:sessions.length,youtube_chapters:output_type==='youtube_video'?sessions.map((s,i)=>({order:i+1,title:s.summary.slice(0,80)})):[],clip_plan:vertical?sessions.slice(0,5).map((s,i)=>({order:i+1,hook:s.summary.slice(0,120),duration_seconds:15})):[],pinterest_plan:output_type==='pinterest_pins'?{board:'Rosie Dazzlers Projects',pin_angles:['process','result','lesson']}:null,etsy_fields:output_type==='etsy_draft'?{attributes_pending:true,shipping_profile_pending:true}:null,website_plan:output_type==='website_product_page'?{schema_type:'Product',internal_links:['services','gallery','booking']}:null};
-    const draftKind=output_type==='etsy_draft'||output_type==='website_product_page'?'commerce_copy':output_type==='educational_article'?'report_outline':'story_outline';const existing=(await rest(c.env,`creative_project_output_drafts?select=*&project_id=eq.${encodeURIComponent(projectId)}&output_type=eq.${encodeURIComponent(output_type)}&draft_kind=eq.${encodeURIComponent(draftKind)}&limit=1`))?.[0];if(existing)await rest(c.env,'creative_project_output_draft_versions',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({project_id:projectId,output_type,draft_kind:draftKind,version_payload:existing,created_by_staff_email:email})});
-    await rest(c.env,'creative_project_output_drafts',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({project_id:projectId,output_type,draft_kind:draftKind,hook:`${project?.title||'Project'}: ${sessions[0].summary.slice(0,180)}`,outline,caption:`Documented from ${sessions.length} approved project session${sessions.length===1?'':'s'}.`,call_to_action:'Review the full process and verified result.',seo_title:(project?.title||'Creative project').slice(0,180),seo_description:(project?.purpose||project?.outcome_summary||sessions[0].summary).slice(0,500),aspect_ratio:vertical?'9:16':output_type==='pinterest_pins'?'2:3':'16:9',review_status:'draft',planning_data:planning,safety_review_status:output_type==='educational_article'?'required':'not_reviewed',updated_by_staff_email:email,updated_at:new Date().toISOString()})});}
-   event='content_plan_generated';safe=`Rule-based draft plans generated from ${sessions.length} approved sessions for ${platforms.length} outputs.`;
+   for(const output_type of platforms){
+    const vertical=['youtube_shorts','instagram_reels','tiktok','facebook_video'].includes(output_type);
+    const planning={
+     source:selectedAssets.length?'approved_sessions_and_reviewed_private_media':'approved_sessions',
+     session_count:sessions.length,
+     evidence_manifest:evidenceManifest,
+     public_publish_gate:{project_consent_status:project?.consent_status||'not_reviewed',project_public_publish_allowed:Boolean(project?.public_publish_allowed),requires_human_review:true},
+     youtube_chapters:output_type==='youtube_video'?sessions.map((s,i)=>({order:i+1,title:s.summary.slice(0,80)})):[],
+     clip_plan:vertical?sessions.slice(0,5).map((s,i)=>({order:i+1,hook:s.summary.slice(0,120),duration_seconds:15,evidence_asset_id:selectedAssets[i%Math.max(1,selectedAssets.length)]?.id||null})):[],
+     pinterest_plan:output_type==='pinterest_pins'?{board:'Rosie Dazzlers Projects',pin_angles:['process','result','lesson']}:null,
+     etsy_fields:output_type==='etsy_draft'?{attributes_pending:true,shipping_profile_pending:true}:null,
+     website_plan:output_type==='website_product_page'?{schema_type:'Product',internal_links:['services','gallery','booking']}:null
+    };
+    const draftKind=output_type==='etsy_draft'||output_type==='website_product_page'?'commerce_copy':output_type==='educational_article'?'report_outline':'story_outline';
+    const existing=(await rest(c.env,`creative_project_output_drafts?select=*&project_id=eq.${encodeURIComponent(projectId)}&output_type=eq.${encodeURIComponent(output_type)}&draft_kind=eq.${encodeURIComponent(draftKind)}&limit=1`))?.[0];
+    if(existing)await rest(c.env,'creative_project_output_draft_versions',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({project_id:projectId,output_type,draft_kind:draftKind,version_payload:existing,created_by_staff_email:email})});
+    await rest(c.env,'creative_project_output_drafts',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({project_id:projectId,output_type,draft_kind:draftKind,hook:`${project?.title||'Project'}: ${sessions[0].summary.slice(0,180)}`,outline,caption:`Documented from ${sessions.length} approved project session${sessions.length===1?'':'s'}${selectedAssets.length?` and ${selectedAssets.length} reviewed private media item${selectedAssets.length===1?'':'s'}`:''}.`,call_to_action:'Review the full process and verified result.',seo_title:(project?.title||'Creative project').slice(0,180),seo_description:(project?.purpose||project?.outcome_summary||sessions[0].summary).slice(0,500),aspect_ratio:vertical?'9:16':output_type==='pinterest_pins'?'2:3':'16:9',review_status:'draft',planning_data:planning,safety_review_status:'required',updated_by_staff_email:email,updated_at:new Date().toISOString()})});
+   }
+   try{await rest(c.env,`creative_projects?id=eq.${encodeURIComponent(projectId)}`,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({content_package_status:selectedAssets.length?'ready_for_review':'not_ready',content_package_review_note:null,content_package_reviewed_by_staff_email:null,content_package_reviewed_at:null,updated_at:new Date().toISOString()})});}catch{}
+   event='content_plan_generated';safe=`Rule-based draft plans generated from ${sessions.length} approved sessions${selectedAssets.length?` and ${selectedAssets.length} reviewed private media items`:''} for ${platforms.length} outputs. No public media was created.`;
+  } else if(action==='content_package_review'){
+   const status=clean(b.status,30),allowed=new Set(['not_ready','ready_for_review','in_review','approved','changes_requested']);
+   if(!allowed.has(status))throw new Error('Invalid content-package review status.');
+   if(['ready_for_review','approved'].includes(status)){
+    const [approvedSessions,selectedAssets,problemJobs]=await Promise.all([
+     rest(c.env,`creative_project_sessions?select=id&project_id=eq.${encodeURIComponent(projectId)}&approved_for_story=eq.true&limit=1`),
+     rest(c.env,`daip_project_media_assets?select=id&project_id=eq.${encodeURIComponent(projectId)}&upload_status=eq.uploaded&story_review_status=eq.selected&limit=1`),
+     rest(c.env,`daip_media_processing_jobs?select=id,status,dead_lettered_at&project_id=eq.${encodeURIComponent(projectId)}&or=(status.in.(failed,blocked),dead_lettered_at.not.is.null)&limit=1`)
+    ]);
+    if(!approvedSessions?.length)throw new Error('Approve at least one timeline session before marking the content package ready.');
+    if(!selectedAssets?.length)throw new Error('Select at least one uploaded private DAIP media item before marking the content package ready.');
+    if(problemJobs?.length)throw new Error('Resolve failed, blocked, or dead-lettered DAIP processing jobs before approving the content package.');
+   }
+   const now=new Date().toISOString();
+   await rest(c.env,`creative_projects?id=eq.${encodeURIComponent(projectId)}`,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({content_package_status:status,content_package_review_note:clean(b.review_note,1600)||null,content_package_reviewed_by_staff_email:email,content_package_reviewed_at:now,updated_at:now})});
+   event='content_package_reviewed';safe=`Content package moved to ${status.replaceAll('_',' ')}. No content was published.`;
   } else if(action==='archive_export'){
    const [project,sessions,outputs,materials,labour,costs,learning]=await Promise.all([rest(c.env,`creative_projects?select=*&id=eq.${encodeURIComponent(projectId)}&limit=1`),rest(c.env,`creative_project_sessions?select=*&project_id=eq.${encodeURIComponent(projectId)}`),rest(c.env,`creative_project_outputs?select=*&project_id=eq.${encodeURIComponent(projectId)}`),rest(c.env,`creative_project_material_lines?select=*&project_id=eq.${encodeURIComponent(projectId)}&is_deleted=eq.false`),rest(c.env,`creative_project_labour_lines?select=*&project_id=eq.${encodeURIComponent(projectId)}&is_deleted=eq.false`),rest(c.env,`creative_project_cost_lines?select=*&project_id=eq.${encodeURIComponent(projectId)}&is_deleted=eq.false`),rest(c.env,`creative_project_learning_items?select=*&project_id=eq.${encodeURIComponent(projectId)}`)]);
    const manifest={version:'build231',generated_at:new Date().toISOString(),project:project?.[0]||null,sessions,outputs,materials,labour,costs,learning,media_bytes_included:false,public_destination_enabled:false};
