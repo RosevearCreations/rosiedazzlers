@@ -65,11 +65,11 @@
     @media(max-width:980px){.grid2,.grid3,.option-grid,#itemForm .grid3{grid-template-columns:1fr}.table-wrap table{table-layout:auto}}
   
 .supplier-link-import{border:1px solid var(--line,#d5dde5);border-radius:16px;padding:16px;display:grid;gap:12px;background:var(--panel,#fff)}
-.supplier-link-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}.supplier-link-row label{display:grid;gap:5px}.supplier-link-visual{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;padding:14px;border-radius:12px;background:linear-gradient(135deg,rgba(23,86,118,.10),rgba(198,113,47,.10));font-weight:700}.supplier-link-visual span{padding:7px 10px;border:1px dashed currentColor;border-radius:999px}
-@media(max-width:700px){.supplier-link-row{grid-template-columns:1fr}.supplier-link-row .btn{width:100%}.supplier-link-import{padding:12px}.supplier-link-visual b{transform:rotate(90deg)}}
+.supplier-link-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:end}.supplier-link-row label{display:grid;gap:5px}.supplier-link-visual{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;padding:14px;border-radius:12px;background:linear-gradient(135deg,rgba(23,86,118,.10),rgba(198,113,47,.10));font-weight:700}.supplier-link-visual span{padding:7px 10px;border:1px dashed currentColor;border-radius:999px}.supplier-target{border:1px solid rgba(147,197,253,.28);border-radius:12px;padding:10px;background:rgba(59,130,246,.06)}.supplier-overwrite-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.supplier-overwrite-grid label{display:flex;gap:8px;align-items:flex-start;padding:8px;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:rgba(255,255,255,.025)}.supplier-diff{display:grid;gap:5px;margin-top:8px}.supplier-diff-row{display:grid;grid-template-columns:minmax(120px,.7fr) minmax(0,1fr);gap:8px;padding:6px 0;border-top:1px solid rgba(255,255,255,.07)}.editor-mode{border-left:3px solid #60a5fa;padding:8px 10px;background:rgba(59,130,246,.07);border-radius:8px}.supplier-meta{grid-column:1/-1;border:1px dashed rgba(147,197,253,.25);border-radius:12px;padding:10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.supplier-meta code{overflow-wrap:anywhere}
+@media(max-width:700px){.supplier-link-row,.supplier-overwrite-grid,.supplier-meta{grid-template-columns:1fr}.supplier-link-row .btn{width:100%}.supplier-link-import{padding:12px}.supplier-link-visual b{transform:rotate(90deg)}.supplier-diff-row{grid-template-columns:1fr}}
 </style>
 </head>
-<body data-build246="catalog-publish-readiness">
+<body data-build249="supplier-refresh-inventory-recovery">
 <div class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button><div class="nav-links" id="navLinks"></div></div></div>
 <main class="container">
   <section class="panel">
@@ -212,11 +212,22 @@
 
     <article class="panel stack">
       <h2 style="margin:0">Edit inventory item</h2>
+      <div id="editorModeStatus" class="editor-mode mini">New-item mode. Select <strong>Edit</strong> on an existing row first if we want to repair that exact inventory record.</div>
+      <!-- Build 248 compatibility marker retained for release guard: Import into review -->
       <section class="supplier-link-import" aria-labelledby="supplierLinkHeading">
-        <div class="supplier-link-visual" role="img" aria-label="Supplier product link flowing into a reviewable inventory draft"><span>Supplier link</span><b>→</b><span>Review draft</span><b>→</b><span>Inventory</span></div>
-        <h2 id="supplierLinkHeading" style="margin:0">Add inventory from a supplier link</h2>
-        <p class="mini">Paste an Amazon.ca, Amazon.com, a.co or amzn.to product link. The system resolves share links, reads a bounded amount of public product metadata, suggests tool or consumable classification, checks ASIN/URL duplicates, and fills the editor below. Nothing saves until you review and press <strong>Save inventory item</strong>.</p>
-        <div class="supplier-link-row"><label>Product URL or Amazon share text<input id="supplierLinkUrl" type="text" inputmode="url" autocomplete="off" placeholder="https://www.amazon.ca/dp/… or https://a.co/…" /></label><button class="btn primary" id="supplierLinkPreviewBtn" type="button">Import into review</button></div>
+        <div class="supplier-link-visual" role="img" aria-label="Existing inventory item or new item flowing through supplier review before a deliberate save"><span id="supplierVisualTarget">Existing item / new item</span><b>→</b><span>Amazon review</span><b>→</b><span>Deliberate save</span></div>
+        <h2 id="supplierLinkHeading" style="margin:0">Repair or add inventory from an Amazon link</h2>
+        <p class="mini"><strong>To repair a bad row:</strong> click <em>Edit</em> beside that supply/tool first, then paste the accurate Amazon.ca, Amazon.com, a.co or amzn.to link here. The existing item key is locked and stock/history fields are protected. We preview Amazon metadata and stage selected corrections in this editor. Nothing changes in the database until we review and press <strong>Save inventory item</strong>.</p>
+        <div id="supplierTargetStatus" class="supplier-target mini">No existing repair target selected. Importing a link will create a new private review draft.</div>
+        <div class="supplier-overwrite-grid" aria-label="Supplier fields to refresh">
+          <label><input id="supplierOverwriteIdentity" type="checkbox" checked><span><strong>Name & supplier identity</strong><br><span class="mini">Name, vendor, ASIN/SKU and Amazon source metadata.</span></span></label>
+          <label><input id="supplierOverwriteClassification" type="checkbox" checked><span><strong>Classification</strong><br><span class="mini">Tool/consumable, category, subcategory, unit and reuse policy.</span></span></label>
+          <label><input id="supplierOverwriteDescription" type="checkbox" checked><span><strong>Description</strong><br><span class="mini">Replace an inaccurate or blank description with reviewed supplier text.</span></span></label>
+          <label><input id="supplierOverwritePrice" type="checkbox" checked><span><strong>CAD unit cost when available</strong><br><span class="mini">Only overwrites cost when the supplier result is confidently CAD.</span></span></label>
+          <label><input id="supplierOverwriteImage" type="checkbox" checked><span><strong>Featured image</strong><br><span class="mini">Use the supplier image as the featured image; existing gallery images remain untouched.</span></span></label>
+        </div>
+        <div class="supplier-link-row"><label>Product URL or Amazon share text<input id="supplierLinkUrl" type="text" inputmode="url" autocomplete="off" placeholder="https://www.amazon.ca/dp/… or https://a.co/…" /></label><button class="btn ghost" id="supplierUseEditorLinkBtn" type="button">Use editor link</button><button class="btn primary" id="supplierLinkPreviewBtn" type="button">Review Amazon update</button></div>
+        <div class="mini">Always preserved during a supplier refresh: inventory key, quantity on hand, reorder thresholds/quantity, purchase date, receipt, station, service tags, gallery, ratings, public/active state and operational history.</div>
         <div id="supplierLinkResult" class="notice" style="display:none" role="status" aria-live="polite"></div>
       </section>
       <form id="itemForm" class="stack">
@@ -242,7 +253,7 @@
           <label>Amazon / purchase URL<input id="formAmazon" list="inventoryPurchaseUrlOptions" placeholder="Paste the Amazon product link" /></label>
           <label>Image URL<input id="formImage" list="inventoryImageOptions" placeholder="Pick an existing consumables/tools image or paste a URL" /></label>
           <div class="image-picker-preview" id="imagePreviewBox">
-            <img id="formImagePreview" alt="Selected inventory image preview" loading="lazy" src="/assets/addons/generic_addon.png" />
+            <img id="formImagePreview" alt="Selected inventory image preview" loading="lazy" src="/assets/placeholders/inventory-tools-photo.jpg" />
             <div class="stack" style="gap:7px">
               <strong id="imagePreviewTitle">No product image selected yet</strong>
               <div class="mini" id="imagePreviewMeta">Use the matching bundled image or open the picker to select an uploaded product image.</div>
@@ -262,10 +273,17 @@
           <label>Receipt / bill URL<input id="formReceiptUrl" list="inventoryPurchaseUrlOptions" placeholder="Receipt, invoice, or statement URL" /></label>
           <label>Assigned station / vehicle<input id="formAssignedStation" placeholder="Van 1, garage shelf, trailer bin" /></label>
           <label>Linked services / tags<input id="formServiceTags" placeholder="engine cleaning, pet hair, ceramic coating" /></label>
+          <label style="grid-column:1/-1">Description<textarea id="formDescription" rows="4" placeholder="Accurate product description for internal/public review"></textarea></label>
+          <div class="supplier-meta" aria-label="Amazon source metadata">
+            <div><strong>Amazon ASIN</strong><div><code id="formAmazonAsinDisplay">—</code></div></div>
+            <div><strong>Amazon brand</strong><div id="formAmazonBrandDisplay">—</div></div>
+            <div><strong>Amazon source title</strong><div id="formAmazonTitleDisplay" class="mini">—</div></div>
+            <div><strong>Amazon source category</strong><div id="formAmazonCategoryDisplay" class="mini">—</div></div>
+          </div>
         </div>
         <div id="inventoryDatalists" hidden></div>
         <div class="mini">Text fields now learn from existing saved inventory plus common detailing terms, including categories, vendors, units, image URLs, and colour/finish words in the subcategory suggestions.</div>
-        <div class="row"><button class="btn ghost" id="amazonParseBtn" type="button">Fill from Amazon link</button><span class="mini">Parses the Amazon link slug into a draft name and item key so you can add a new item faster.</span></div>
+        <div class="row"><button class="btn ghost" id="amazonParseBtn" type="button">Read / refresh from Amazon link</button><span class="mini">Uses the same real Amazon review workflow above. When editing an existing row, it repairs that row instead of generating a second inventory key.</span></div>
         <div class="check-grid spread-checks">
           <label class="checkbox"><input id="formIsPublic" type="checkbox" checked /><span>Visible on public site</span></label>
           <label class="checkbox"><input id="formIsActive" type="checkbox" checked /><span>Active inventory item</span></label>
@@ -322,7 +340,7 @@
 <script>
 (function(){
   const qs=(s)=>document.querySelector(s);
-  let actor=null, inventory=[], movements=[], lowStock=[], savedInventoryItems=[], bundledFallbackItems=[], mediaLibraryRows=[], importPreviewRows=[], amazonMatchRows=[], imagePickerRows=[], imageHealthRows=[], usageActionId=crypto.randomUUID();
+  let actor=null, inventory=[], movements=[], lowStock=[], savedInventoryItems=[], bundledFallbackItems=[], mediaLibraryRows=[], importPreviewRows=[], amazonMatchRows=[], imagePickerRows=[], imageHealthRows=[], usageActionId=crypto.randomUUID(), editorTargetKey=null, editorSnapshot=null, supplierMetaState={};
   const optionStorageKey='rosie_inventory_dropdown_options_v2';
   function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g,(m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function show(msg,kind=''){ const el=qs('#status'); el.style.display='block'; el.className='notice '+(kind||''); el.textContent=msg; }
@@ -378,7 +396,7 @@
   function galleryValues(){ return galleryInputs().map((input)=>cleanImageUrl(input.value)).filter(Boolean).slice(0,7); }
   function renderGalleryEditor(values){
     const grid=qs('#galleryGrid'); if(!grid) return; const urls=normalizeGalleryImageUrls(values); while(urls.length<7) urls.push('');
-    grid.innerHTML=urls.map((url,index)=>`<div class="gallery-slot" draggable="true" data-gallery-slot="${index}"><img src="${esc(url || '/assets/addons/generic_addon.png')}" alt="Gallery image ${index+1} preview" loading="lazy" onerror="this.src='/assets/addons/generic_addon.png'"><label>Gallery ${index+1}<input data-gallery-input="${index}" list="inventoryImageOptions" type="url" value="${esc(url)}" placeholder="Paste or select image URL"></label><div class="gallery-slot-actions"><button class="btn ghost small" type="button" data-gallery-up="${index}" aria-label="Move gallery image ${index+1} up">↑</button><button class="btn ghost small" type="button" data-gallery-down="${index}" aria-label="Move gallery image ${index+1} down">↓</button><button class="btn ghost small" type="button" data-gallery-clear="${index}" aria-label="Clear gallery image ${index+1}">×</button></div></div>`).join('');
+    grid.innerHTML=urls.map((url,index)=>`<div class="gallery-slot" draggable="true" data-gallery-slot="${index}"><img src="${esc(url || '/assets/addons/generic_addon.png')}" alt="Gallery image ${index+1} preview" loading="lazy" onerror="this.src='/assets/placeholders/inventory-tools-photo.jpg'"><label>Gallery ${index+1}<input data-gallery-input="${index}" list="inventoryImageOptions" type="url" value="${esc(url)}" placeholder="Paste or select image URL"></label><div class="gallery-slot-actions"><button class="btn ghost small" type="button" data-gallery-up="${index}" aria-label="Move gallery image ${index+1} up">↑</button><button class="btn ghost small" type="button" data-gallery-down="${index}" aria-label="Move gallery image ${index+1} down">↓</button><button class="btn ghost small" type="button" data-gallery-clear="${index}" aria-label="Clear gallery image ${index+1}">×</button></div></div>`).join('');
     bindGalleryEditor(); updateGalleryCount();
   }
   function updateGalleryCount(){ const count=galleryValues().length; const el=qs('#galleryCount'); if(el) el.textContent=`${count} / 7 gallery images`; }
@@ -421,7 +439,7 @@
     const title=qs('#imagePreviewTitle');
     const meta=qs('#imagePreviewMeta');
     const match=findMatchingBundledImage();
-    if(img){ img.src=url || '/assets/addons/generic_addon.png'; img.onerror=()=>{ img.onerror=null; img.src='/assets/addons/generic_addon.png'; }; }
+    if(img){ img.src=url || '/assets/placeholders/inventory-tools-photo.jpg'; img.onerror=()=>{ img.onerror=null; img.src='/assets/placeholders/inventory-tools-photo.jpg'; }; }
     if(title) title.textContent = url ? 'Selected product image' : (match ? 'Matching bundled image found' : 'No product image selected yet');
     if(meta) meta.textContent = url ? url : (match ? `Available: ${match.item?.name || match.item?.item_key || 'bundled catalog image'}` : 'Use the matching bundled image or open the picker to select an uploaded product image.');
   }
@@ -431,7 +449,7 @@
     const rows=imagePickerRows.filter((row)=>!q || row.search.includes(q)).slice(0,80);
     const count=qs('#imagePickerCount'); if(count) count.textContent=`${rows.length} shown · ${imagePickerRows.length} available`;
     const grid=qs('#imagePickerGrid'); if(!grid) return;
-    grid.innerHTML=rows.map((row,idx)=>`<button class="image-choice" type="button" data-image-choice="${idx}" title="Use ${esc(row.name)}"><img src="${esc(row.url)}" alt="${esc(row.name)}" loading="lazy" onerror="this.src='/assets/addons/generic_addon.png'"><span>${esc(row.name)}</span><span class="image-source">${esc(row.source)} · ${esc(row.type || 'image')}</span></button>`).join('') || '<div class="mini">No matching images found. Try a shorter search term.</div>';
+    grid.innerHTML=rows.map((row,idx)=>`<button class="image-choice" type="button" data-image-choice="${idx}" title="Use ${esc(row.name)}"><img src="${esc(row.url)}" alt="${esc(row.name)}" loading="lazy" onerror="this.src='/assets/placeholders/inventory-tools-photo.jpg'"><span>${esc(row.name)}</span><span class="image-source">${esc(row.source)} · ${esc(row.type || 'image')}</span></button>`).join('') || '<div class="mini">No matching images found. Try a shorter search term.</div>';
     document.querySelectorAll('[data-image-choice]').forEach((btn)=>btn.addEventListener('click',()=>{ const row=rows[Number(btn.dataset.imageChoice)]; if(!row) return; qs('#formImage').value=row.url; updateImagePreview(); show(`Selected existing image for ${row.name}. Save the inventory item to keep it.`, 'ok'); }));
   }
   function renderInventoryDatalists(){
@@ -504,17 +522,59 @@
     return postJson('/api/admin/app_settings_save', { key:'catalog_dropdown_options', value:payload });
   }
   function hardenTextInput(el,name){ if(!el) return; const unlock=()=>{ el.readOnly=false; if(/@/.test(el.value||'')) el.value=''; }; el.value=''; el.setAttribute('autocomplete','off'); if(name) el.setAttribute('name',name); setTimeout(()=>{ if(/@/.test(el.value||'')) el.value=''; },50); el.addEventListener('focus',unlock,{once:true}); el.addEventListener('pointerdown',unlock,{once:true}); }
-  function parseAmazonDraft(url){ const raw=String(url||'').trim(); if(!raw) return null; try { const u=new URL(raw); const parts=u.pathname.split('/').filter(Boolean); let slug=''; const dp=parts.indexOf('dp'); if(dp>0) slug=parts[dp-1]; if(!slug){ const gp=parts.indexOf('gp'); if(gp>0) slug=parts[gp-1]; } if(!slug) slug=parts.find((p)=>p.includes('-')) || ''; const cleaned=decodeURIComponent(slug).replace(/\+/g,' ').replace(/-/g,' ').replace(/\s+/g,' ').trim(); const key=(cleaned||'amazon item').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,80); return { name: cleaned.replace(/\b\w/g,(m)=>m.toUpperCase()), key: key || 'amazon_item' }; } catch { return null; } }
-  function fillForm(item){
+  function setSupplierMeta(item={}){
+    supplierMetaState={
+      amazon_asin:cleanText(item?.amazon_asin), amazon_title:cleanText(item?.amazon_title), amazon_brand:cleanText(item?.amazon_brand), amazon_category:cleanText(item?.amazon_category),
+      amazon_match_status:cleanText(item?.amazon_match_status), amazon_match_score:item?.amazon_match_score ?? null, amazon_seller_name:cleanText(item?.amazon_seller_name),
+      amazon_quantity_total:item?.amazon_quantity_total ?? null, amazon_net_total_cents:item?.amazon_net_total_cents ?? null
+    };
+    const pairs=[['#formAmazonAsinDisplay',supplierMetaState.amazon_asin],['#formAmazonBrandDisplay',supplierMetaState.amazon_brand],['#formAmazonTitleDisplay',supplierMetaState.amazon_title],['#formAmazonCategoryDisplay',supplierMetaState.amazon_category]];
+    pairs.forEach(([selector,value])=>{const el=qs(selector);if(el)el.textContent=value||'—';});
+  }
+  function updateEditorMode(){
+    const mode=qs('#editorModeStatus'),target=qs('#supplierTargetStatus'),visual=qs('#supplierVisualTarget'),keyInput=qs('#formItemKey');
+    if(editorTargetKey){
+      if(mode)mode.innerHTML=`Repair mode: editing existing inventory key <strong>${esc(editorTargetKey)}</strong>. The key is locked so Amazon refresh cannot create an accidental duplicate.`;
+      if(target)target.innerHTML=`Repair target: <strong>${esc(editorSnapshot?.name||editorTargetKey)}</strong> (<code>${esc(editorTargetKey)}</code>). Amazon data will be staged against this row; stock/history fields remain protected.`;
+      if(visual)visual.textContent='Existing item';
+      if(keyInput){keyInput.readOnly=true;keyInput.title='Existing inventory keys are locked during editing to protect references and history.';}
+    }else{
+      if(mode)mode.innerHTML='New-item mode. Select <strong>Edit</strong> on an existing row first if we want to repair that exact inventory record.';
+      if(target)target.textContent='No existing repair target selected. Importing a link will create a new private review draft.';
+      if(visual)visual.textContent='New item';
+      if(keyInput){keyInput.readOnly=false;keyInput.removeAttribute('title');}
+    }
+  }
+  function fillForm(item,options={}){
+    const explicitTarget=Object.prototype.hasOwnProperty.call(options,'targetKey') ? options.targetKey : (item?._source==='saved' ? item?.item_key : null);
+    editorTargetKey=explicitTarget ? String(explicitTarget) : null;
+    editorSnapshot=editorTargetKey ? structuredClone(item||{}) : null;
     qs('#formItemType').value=item?.item_type||'tool'; qs('#formItemKey').value=item?.item_key||''; qs('#formName').value=item?.name||'';
     qs('#formCategory').value=item?.category||''; qs('#formSubcategory').value=item?.subcategory||''; qs('#formVendor').value=item?.preferred_vendor||'';
     qs('#formUnit').value=item?.unit_label||''; qs('#formQty').value=item?.qty_on_hand ?? 0; qs('#formReorderPoint').value=item?.reorder_point ?? 0;
     qs('#formReorderQty').value=item?.reorder_qty ?? 0; qs('#formCostCad').value=item?.cost_cents != null ? Number(item.cost_cents || 0) / 100 : ''; qs('#formVendorSku').value=item?.vendor_sku || ''; qs('#formRating').value=item?.rating_value ?? ''; qs('#formRatingCount').value=item?.rating_count ?? 0;
     qs('#formSortKey').value=item?.sort_key ?? 0; qs('#formPurchaseDate').value=(item?.purchase_date||'').slice(0,10); qs('#formEstimatedJobs').value=item?.estimated_jobs_per_unit ?? 0; qs('#formReuse').value=item?.reuse_policy||'reorder'; qs('#formAmazon').value=item?.amazon_url||'';
     qs('#formImage').value=item?.image_url||''; renderGalleryEditor(item?.gallery_image_urls || item?.gallery_images || []); qs('#formReceiptUrl').value=item?.receipt_url || item?.bill_url || ''; qs('#formAssignedStation').value=item?.assigned_station || item?.station_label || ''; qs('#formServiceTags').value=Array.isArray(item?.service_tags) ? item.service_tags.join(', ') : (item?.service_tags || item?.service_link_tags || '');
-    qs('#formIsPublic').checked=item?.is_public !== false; qs('#formIsActive').checked=item?.is_active !== false; qs('#formNotes').value=item?.notes||'';
-    updateImagePreview();
-    renderImagePicker();
+    qs('#formDescription').value=item?.description||''; qs('#formIsPublic').checked=item?.is_public !== false; qs('#formIsActive').checked=item?.is_active !== false; qs('#formNotes').value=item?.notes||'';
+    setSupplierMeta(item||{}); updateEditorMode(); updateImagePreview(); renderImagePicker();
+  }
+  function supplierRefreshOptions(){return {identity:qs('#supplierOverwriteIdentity')?.checked!==false,classification:qs('#supplierOverwriteClassification')?.checked!==false,description:qs('#supplierOverwriteDescription')?.checked!==false,price:qs('#supplierOverwritePrice')?.checked!==false,image:qs('#supplierOverwriteImage')?.checked!==false};}
+  function mergeSupplierDraft(target,draft){
+    const opts=supplierRefreshOptions(),base=target?structuredClone(target):{is_public:false,is_active:true,qty_on_hand:1,reorder_point:0,reorder_qty:1,rating_count:0,sort_key:0,gallery_image_urls:[]},next={...base};
+    if(!target) next.item_key=draft.item_key;
+    next.amazon_url=draft.amazon_url||next.amazon_url||'';
+    next.amazon_asin=draft.amazon_asin||next.amazon_asin||null; next.amazon_title=draft.amazon_title||next.amazon_title||null; next.amazon_brand=draft.amazon_brand||next.amazon_brand||null; next.amazon_category=draft.amazon_category||next.amazon_category||null;
+    if(opts.identity){next.name=draft.name||next.name;next.preferred_vendor=draft.preferred_vendor||next.preferred_vendor;next.vendor_sku=draft.vendor_sku||draft.amazon_asin||next.vendor_sku;}
+    if(opts.classification){next.item_type=draft.item_type||next.item_type;next.category=draft.category||next.category;next.subcategory=draft.subcategory||next.subcategory;next.unit_label=draft.unit_label||next.unit_label;next.reuse_policy=draft.reuse_policy||next.reuse_policy;}
+    if(opts.description && draft.description) next.description=draft.description;
+    if(opts.price && draft.cost_cad!=null && Number.isFinite(Number(draft.cost_cad))) next.cost_cents=Math.round(Number(draft.cost_cad)*100);
+    if(opts.image && draft.image_url) next.image_url=draft.image_url;
+    if(!target){next.reorder_point=draft.reorder_point??next.reorder_point;next.reorder_qty=draft.reorder_qty??next.reorder_qty;next.qty_on_hand=draft.qty_on_hand??next.qty_on_hand;}
+    return next;
+  }
+  function supplierDiff(before={},after={}){
+    const fields=[['name','Name'],['item_type','Type'],['category','Category'],['subcategory','Subcategory'],['preferred_vendor','Vendor'],['vendor_sku','SKU / ASIN'],['unit_label','Unit'],['reuse_policy','Reuse policy'],['cost_cents','Unit cost'],['description','Description'],['image_url','Featured image'],['amazon_url','Amazon URL'],['amazon_asin','Amazon ASIN'],['amazon_brand','Amazon brand'],['amazon_category','Amazon category']];
+    return fields.filter(([key])=>String(before?.[key]??'')!==String(after?.[key]??'')).map(([key,label])=>({key,label,before:key==='cost_cents'&&before?.[key]!=null?`${(Number(before[key])/100).toFixed(2)} CAD`:String(before?.[key]??''),after:key==='cost_cents'&&after?.[key]!=null?`${(Number(after[key])/100).toFixed(2)} CAD`:String(after?.[key]??'')}));
   }
   function fillUsageItems(){
     const options='<option value="">Select inventory item</option>'+inventory.map((item)=>`<option value="${esc(item.item_key)}">${esc(item.name)} (${esc(item.item_type||'')})</option>`).join('');
@@ -771,14 +831,14 @@
       const score=itemQualityScore(item);
       return `<tr><td class="catalog-select-col"><input class="inventory-row-check" type="checkbox" value="${esc(item.item_key)}" ${item._source==='fallback'?'title="Save/import fallback row before DB-only bulk updates"':''}></td><td><button class="inventory-name-edit" type="button" data-edit="${esc(item.item_key)}" title="Edit ${esc(item.name)}">${esc(item.name)}</button><div class="mini">${esc(item.item_key)} · ${esc(item.item_type||'')} · ${esc(item.category||'')}</div>${item.subcategory?`<div class="mini">Type: ${esc(item.subcategory)}</div>`:''}${item.preferred_vendor?`<div class="mini">Vendor: ${esc(item.preferred_vendor)}</div>`:''}${item.vendor_sku?`<div class="mini">SKU: ${esc(item.vendor_sku)}</div>`:''}<span class="source-pill ${item._source==='saved'?'saved':'fallback'}">${item._source==='saved'?'Saved DB item':'Bundled fallback — save/import to edit stock'}</span>${item.is_public===false?'<span class="source-pill fallback">Hidden from public</span>':'<span class="source-pill saved">Public</span>'}<div class="mini ${readinessClass(item)}">${esc(readinessLabel(item))}</div></td><td>${esc(item.qty_on_hand)} ${esc(item.unit_label||'')}<div class="mini">RP ${esc(item.reorder_point)} / RQ ${esc(item.reorder_qty)}</div>${item.cost_cents!=null&&Number(item.cost_cents)>0?`<div class="mini">Cost: ${esc((Number(item.cost_cents)/100).toFixed(2))} CAD</div>`:`<div class="mini danger-note">Missing unit cost</div>`}${item.purchase_date?`<div class="mini">Bought: ${esc(String(item.purchase_date).slice(0,10))}</div>`:''}${item.estimated_jobs_per_unit?`<div class="mini">Est. jobs/unit: ${esc(item.estimated_jobs_per_unit)}</div>`:''}</td><td><span class="${itemQualityClass(score)}">${score}%</span><div class="quality-meter"><span style="width:${score}%"></span></div>${item.image_url?`<div class="mini quality-good">Image set${item._image_from_fallback?' · fallback matched':''}</div>`:'<div class="mini quality-bad">Missing image</div>'}${imageDiagnosticsForItem(item)}</td><td>${esc(item.reuse_policy||'reorder')}</td><td><div class="row"><button class="btn ghost" data-edit="${esc(item.item_key)}">Edit</button>${String(item.reuse_policy||'reorder')!=='never_reuse' ? `<button class="btn ghost" data-reorder="${esc(item.item_key)}">Reorder</button>` : `<span class="pill">No reorder</span>`}</div></td></tr>`;
     }).join('') || '<tr><td colspan="6">No inventory items found.</td></tr>';
-    document.querySelectorAll('[data-edit]').forEach((btn)=>btn.addEventListener('click',()=>{ const item=inventory.find((x)=>String(x.item_key)===String(btn.dataset.edit)) || null; fillForm(item); qs('#formName')?.focus({preventScroll:true}); document.querySelector('#itemForm')?.scrollIntoView({behavior:'smooth', block:'start'}); }));
+    document.querySelectorAll('[data-edit]').forEach((btn)=>btn.addEventListener('click',()=>{ const item=inventory.find((x)=>String(x.item_key)===String(btn.dataset.edit)) || null; fillForm(item,{targetKey:item?.item_key||null}); qs('#formName')?.focus({preventScroll:true}); document.querySelector('#itemForm')?.scrollIntoView({behavior:'smooth', block:'start'}); }));
     document.querySelectorAll('[data-reorder]').forEach((btn)=>btn.addEventListener('click', ()=>createReorder(btn.dataset.reorder)));
     qs('#selectVisibleInventory')?.addEventListener('change', (event)=>{ document.querySelectorAll('.inventory-row-check').forEach((box)=>{ box.checked=event.target.checked; }); });
     refreshQualitySummary();
   }
   function renderMovements(){ const q=(qs('#moveSearch').value||'').trim().toLowerCase(); const type=qs('#moveType').value||''; const rows=movements.filter((m)=>!type || String(m.movement_type||'')===type).filter((m)=>!q || `${m.item_key||''} ${m.note||''} ${m.actor_name||''} ${m.booking_id||''}`.toLowerCase().includes(q)); qs('#moveSummary').textContent=`${rows.length} movements shown`; qs('#moveBody').innerHTML=rows.map((m)=>`<tr><td>${esc(new Date(m.created_at||Date.now()).toLocaleString())}<div class="mini">${esc(m.movement_type||'')}</div></td><td><strong>${esc(m.item_key||'')}</strong><div class="mini">${esc(m.item_name||'')}</div></td><td>${esc(m.qty_delta)}<div class="mini">${esc(m.previous_qty)} → ${esc(m.new_qty)}</div></td><td>${m.booking_id?`<div class="mini">Booking: ${esc(m.booking_id)}</div>`:''}<div class="mini">${esc(m.actor_name||'')}</div>${m.note?`<div class="mini">${esc(m.note)}</div>`:''}</td></tr>`).join('') || '<tr><td colspan="4">No movement history found.</td></tr>'; }
   function renderLowStock(){ qs('#lowSummary').textContent=`${lowStock.length} low-stock items`; qs('#lowBody').innerHTML=lowStock.map((item)=>`<tr><td><strong>${esc(item.name)}</strong><div class="mini">${esc(item.item_key)} · ${esc(item.item_type||'')} · ${esc(item.category||'')}</div>${item.subcategory?`<div class="mini">Type: ${esc(item.subcategory)}</div>`:''}</td><td>${esc(item.qty_on_hand)} ${esc(item.unit_label||'')}</td><td>${esc(item.reorder_point)}<div class="mini">Suggested reorder ${esc(item.reorder_qty||1)}</div></td><td><div class="row"><button class="btn ghost" data-edit-low="${esc(item.item_key)}">Edit</button>${String(item.reuse_policy||'reorder')!=='never_reuse'?`<button class="btn ghost" data-low-reorder="${esc(item.item_key)}">Create reorder</button>`:`<span class="pill">No reorder</span>`}</div></td></tr>`).join('') || '<tr><td colspan="4">No low-stock items right now.</td></tr>';
-    document.querySelectorAll('[data-edit-low]').forEach((btn)=>btn.addEventListener('click',()=>fillForm(inventory.find((x)=>String(x.item_key)===String(btn.dataset.editLow)) || null)));
+    document.querySelectorAll('[data-edit-low]').forEach((btn)=>btn.addEventListener('click',()=>(()=>{const item=inventory.find((x)=>String(x.item_key)===String(btn.dataset.editLow))||null;fillForm(item,{targetKey:item?.item_key||null});})()));
     document.querySelectorAll('[data-low-reorder]').forEach((btn)=>btn.addEventListener('click', ()=>createReorder(btn.dataset.lowReorder)));
   }
   function makeInventoryKey(value){ return String(value||'inventory_item').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,80) || 'inventory_item'; }
@@ -949,27 +1009,29 @@
   
 
   async function importSupplierLinkPreview(){
-    const url=qs('#supplierLinkUrl')?.value.trim(),out=qs('#supplierLinkResult'),button=qs('#supplierLinkPreviewBtn');
-    if(!url){ show('Paste an Amazon product link first.','bad'); return; }
+    const url=qs('#supplierLinkUrl')?.value.trim()||qs('#formAmazon')?.value.trim(),out=qs('#supplierLinkResult'),button=qs('#supplierLinkPreviewBtn');
+    if(!url){ show('Paste an Amazon product link in the supplier box or Amazon / purchase URL field first.','bad'); return; }
+    if(qs('#supplierLinkUrl')&&!qs('#supplierLinkUrl').value.trim())qs('#supplierLinkUrl').value=url;
     if(button){button.disabled=true;button.textContent='Reading…';}
-    if(out){ out.style.display='block'; out.className='notice'; out.textContent='Resolving the Amazon link and reading supplier product details…'; }
+    if(out){ out.style.display='block'; out.className='notice'; out.textContent='Resolving the Amazon link and reading supplier product details. Nothing is being saved yet…'; }
     try{
-      const res=await postJson('/api/admin/catalog_supplier_link_preview',{url});
-      if(!res.ok||!res.out?.ok){
-        const msg=[res.out?.error||'Could not read that supplier link.',res.out?.detail||''].filter(Boolean).join(' ');
-        if(out){out.className='notice bad';out.textContent=msg;}
-        return;
-      }
-      const d=res.out.draft||{};
-      fillForm({item_key:d.item_key,item_type:d.item_type,name:d.name,category:d.category,subcategory:d.subcategory,preferred_vendor:d.preferred_vendor,vendor_sku:d.vendor_sku,unit_label:d.unit_label,qty_on_hand:d.qty_on_hand,reorder_point:d.reorder_point,reorder_qty:d.reorder_qty,cost_cents:d.cost_cad==null?null:Math.round(Number(d.cost_cad)*100),reuse_policy:d.reuse_policy,amazon_url:d.amazon_url,image_url:d.image_url,notes:d.notes,amazon_asin:d.amazon_asin,amazon_brand:d.amazon_brand,amazon_title:d.amazon_title,is_public:false,is_active:true});
-      if(d.amazon_asin) qs('#formVendorSku').value=d.amazon_asin;
-      const duplicate=res.out.duplicate,ex=res.out.extracted||{},observed=d.source_price==null?'Price not extracted':`${d.source_currency||'currency'} ${Number(d.source_price).toFixed(2)} observed`,quality=[ex.title?'title':'',ex.image?'image':'',ex.price?'price':'',ex.brand?'brand':''].filter(Boolean).join(', ')||'URL/ASIN only';
-      const bits=[`Draft loaded: ${d.name||'Amazon item'}.`,`Metadata: ${quality}.`,observed,res.out.warning||'',duplicate?`Possible duplicate: ${duplicate.name} (${duplicate.item_key}). Review the existing item before saving.`:'No exact ASIN or normalized URL duplicate was found.',d.source_currency&&d.source_currency!=='CAD'?'CAD unit cost was left blank intentionally because the observed supplier price is not CAD.':'Review quantity, image, category, tax, shipping, coupons and final paid cost before saving.'].filter(Boolean);
-      if(out){out.className='notice '+(duplicate?'bad':'ok');out.innerHTML=`<strong>${esc(bits[0])}</strong><div class="mini" style="margin-top:6px">${bits.slice(1).map(esc).join(' ')}</div>${d.image_url?`<div class="row" style="margin-top:8px;align-items:center"><img src="${esc(d.image_url)}" alt="Imported supplier product preview" style="width:72px;height:72px;object-fit:contain;border-radius:10px;background:#fff" loading="lazy" referrerpolicy="no-referrer"><span class="mini">Review image before keeping it as the inventory featured image.</span></div>`:''}`;}
+      const res=await postJson('/api/admin/catalog_supplier_link_preview',{url,target_item_key:editorTargetKey||null});
+      if(!res.ok||!res.out?.ok){const msg=[res.out?.error||'Could not read that supplier link.',res.out?.detail||''].filter(Boolean).join(' ');if(out){out.className='notice bad';out.textContent=msg;}return;}
+      const d=res.out.draft||{},duplicate=res.out.duplicate||null;
+      let target=editorTargetKey ? inventory.find((x)=>String(x.item_key)===String(editorTargetKey)) || editorSnapshot : null;
+      if(!target && duplicate?.item_key){target=inventory.find((x)=>String(x.item_key)===String(duplicate.item_key))||duplicate;editorTargetKey=String(duplicate.item_key);editorSnapshot=structuredClone(target);}
+      const before=target?structuredClone(target):{},merged=mergeSupplierDraft(target,d),diff=supplierDiff(before,merged);
+      fillForm(merged,{targetKey:target?.item_key||null});
+      if(qs('#supplierLinkUrl'))qs('#supplierLinkUrl').value=d.amazon_url||url;
+      if(qs('#formAmazon'))qs('#formAmazon').value=d.amazon_url||url;
+      const ex=res.out.extracted||{},observed=d.source_price==null?'Price not extracted':`${d.source_currency||'currency'} ${Number(d.source_price).toFixed(2)} observed`,quality=[ex.title?'title':'',ex.image?'image':'',ex.price?'price':'',ex.brand?'brand':''].filter(Boolean).join(', ')||'URL/ASIN only';
+      const mode=target?`Repair staged for ${target.name||target.item_key} (${target.item_key}).`:`New private review draft staged as ${d.item_key}.`;
+      const protectedMsg=target?'Stock, reorder settings, purchase/receipt history, station, service tags, gallery, ratings, visibility and active state were preserved.':'This is a new item; verify stock and all operational fields before saving.';
+      const diffHtml=diff.length?`<div class="supplier-diff"><strong>Staged field changes (${diff.length})</strong>${diff.map(row=>`<div class="supplier-diff-row"><strong>${esc(row.label)}</strong><div><span class="mini">Before: ${esc(row.before||'—')}</span><br><span>After: ${esc(row.after||'—')}</span></div></div>`).join('')}</div>`:'<div class="mini" style="margin-top:8px">No selected supplier field differs from the current editor values.</div>';
+      const warning=[res.out.warning||'',d.source_currency&&d.source_currency!=='CAD'?'Observed non-CAD price did not overwrite the current CAD cost.':'',observed,`Metadata available: ${quality}.`].filter(Boolean).join(' ');
+      if(out){out.className='notice '+(warning?'':'ok');out.innerHTML=`<strong>${esc(mode)}</strong><div class="mini" style="margin-top:6px">${esc(protectedMsg)} ${esc(warning)} Review the staged values, then press Save inventory item to commit them.</div>${diffHtml}${d.image_url?`<div class="row" style="margin-top:8px;align-items:center"><img src="${esc(d.image_url)}" alt="Imported supplier product preview" style="width:72px;height:72px;object-fit:contain;border-radius:10px;background:#fff" loading="lazy" referrerpolicy="no-referrer"><span class="mini">Supplier image staged only if Featured image is selected above.</span></div>`:''}`;}
       document.querySelector('#itemForm')?.scrollIntoView({behavior:'smooth',block:'start'});
-    } finally {
-      if(button){button.disabled=false;button.textContent='Import into review';}
-    }
+    } finally {if(button){button.disabled=false;button.textContent='Review Amazon update';}}
   }
   qs('#loadAmazonMatchesBtn')?.addEventListener('click', loadAmazonMatches);
   qs('#amazonMatchStatusFilter')?.addEventListener('change', ()=>renderAmazonMatches());
@@ -994,13 +1056,20 @@
   qs('#useMatchingImageBtn')?.addEventListener('click', ()=>{ const match=findMatchingBundledImage(); if(!match) return show('No matching bundled image was found for this item key/name. Open the picker and search manually.', 'bad'); qs('#formImage').value=match.url; updateImagePreview(); show(`Loaded the bundled image for ${match.item?.name || match.item?.item_key || 'this item'}. Save to keep it on the DB row.`, 'ok'); });
   qs('#clearImageBtn')?.addEventListener('click', ()=>{ qs('#formImage').value=''; updateImagePreview(); show('Image cleared from the editor. Save only if this item should have no image.', 'bad'); });
   qs('#supplierLinkPreviewBtn')?.addEventListener('click', importSupplierLinkPreview);
+  qs('#supplierUseEditorLinkBtn')?.addEventListener('click',()=>{const url=qs('#formAmazon')?.value.trim();if(!url)return show('The editor Amazon / purchase URL field is blank. Paste a link there or in the supplier box.','bad');qs('#supplierLinkUrl').value=url;importSupplierLinkPreview();});
   qs('#supplierLinkUrl')?.addEventListener('keydown',(e)=>{if(e.key==='Enter'){e.preventDefault();importSupplierLinkPreview();}});
   qs('#copyFeaturedToGalleryBtn')?.addEventListener('click',()=>{ const url=cleanImageUrl(qs('#formImage')?.value); if(!url) return show('Choose a featured image first.', 'bad'); const values=galleryValues(); if(values.includes(url)) return show('The featured image is already in the gallery.', 'bad'); if(values.length>=7) return show('The gallery already has seven images.', 'bad'); values.push(url); renderGalleryEditor(values); show('Featured image copied into the gallery. Save the inventory item to keep it.', 'ok'); });
   qs('#clearGalleryBtn')?.addEventListener('click',()=>{ if(confirm('Clear all seven gallery image slots for this editor?')) renderGalleryEditor([]); });
-  qs('#amazonParseBtn').addEventListener('click', ()=>{ const parsed=parseAmazonDraft(qs('#formAmazon').value); if(!parsed) return show('Paste a valid Amazon product link first.','bad'); if(!qs('#formName').value.trim()) qs('#formName').value=parsed.name; if(!qs('#formItemKey').value.trim()) qs('#formItemKey').value=parsed.key; if(!qs('#formVendor').value.trim()) qs('#formVendor').value='Amazon'; updateImagePreview(); renderImagePicker(); show('Draft name and item key filled from Amazon link. Review before saving.','ok'); });
-  qs('#itemForm').addEventListener('submit', async(e)=>{ e.preventDefault(); const payload={ item_key: qs('#formItemKey').value.trim(), item_type: qs('#formItemType').value, name: qs('#formName').value.trim(), category: qs('#formCategory').value.trim(), subcategory: qs('#formSubcategory').value.trim(), preferred_vendor: qs('#formVendor').value.trim(), vendor_sku: qs('#formVendorSku').value.trim(), unit_label: qs('#formUnit').value.trim(), qty_on_hand: Number(qs('#formQty').value||0), reorder_point: Number(qs('#formReorderPoint').value||0), reorder_qty: Number(qs('#formReorderQty').value||0), cost_cad: qs('#formCostCad').value === '' ? null : Number(qs('#formCostCad').value||0), rating_value: qs('#formRating').value, rating_count: Number(qs('#formRatingCount').value||0), sort_key: Number(qs('#formSortKey').value||0), purchase_date: qs('#formPurchaseDate').value || null, estimated_jobs_per_unit: Number(qs('#formEstimatedJobs').value||0), reuse_policy: qs('#formReuse').value, amazon_url: qs('#formAmazon').value.trim(), image_url: qs('#formImage').value.trim() || (findMatchingBundledImage()?.url || ''), gallery_image_urls: galleryValues(), receipt_url: qs('#formReceiptUrl').value.trim(), assigned_station: qs('#formAssignedStation').value.trim(), service_tags: qs('#formServiceTags').value.trim(), is_public: qs('#formIsPublic').checked, is_active: qs('#formIsActive').checked, notes: qs('#formNotes').value.trim() }; const x=await postJson('/api/admin/catalog_inventory_save', payload); if(!x.ok||!x.out?.ok){ const r=x.out?.publish_readiness; const detail=r?.blockers?.length?` ${r.blockers.join(' ')}`:''; return show(((x.out&&x.out.error)||'Could not save inventory item.')+detail,'bad'); } show('Inventory item saved.','ok'); fillForm(x.out.item||null); loadInventory(); loadLowStock(); });
+  qs('#amazonParseBtn').addEventListener('click', ()=>{const url=qs('#formAmazon')?.value.trim();if(!url)return show('Paste the accurate Amazon link in the Amazon / purchase URL field first.','bad');qs('#supplierLinkUrl').value=url;importSupplierLinkPreview();});
+  qs('#itemForm').addEventListener('submit', async(e)=>{
+    e.preventDefault();
+    const payload={ item_key: editorTargetKey || qs('#formItemKey').value.trim(), item_type: qs('#formItemType').value, name: qs('#formName').value.trim(), category: qs('#formCategory').value.trim(), subcategory: qs('#formSubcategory').value.trim(), description:qs('#formDescription').value.trim(), preferred_vendor: qs('#formVendor').value.trim(), vendor_sku: qs('#formVendorSku').value.trim(), unit_label: qs('#formUnit').value.trim(), qty_on_hand: Number(qs('#formQty').value||0), reorder_point: Number(qs('#formReorderPoint').value||0), reorder_qty: Number(qs('#formReorderQty').value||0), cost_cad: qs('#formCostCad').value === '' ? null : Number(qs('#formCostCad').value||0), rating_value: qs('#formRating').value, rating_count: Number(qs('#formRatingCount').value||0), sort_key: Number(qs('#formSortKey').value||0), purchase_date: qs('#formPurchaseDate').value || null, estimated_jobs_per_unit: Number(qs('#formEstimatedJobs').value||0), reuse_policy: qs('#formReuse').value, amazon_url: qs('#formAmazon').value.trim(), image_url: qs('#formImage').value.trim() || (findMatchingBundledImage()?.url || ''), gallery_image_urls: galleryValues(), receipt_url: qs('#formReceiptUrl').value.trim(), assigned_station: qs('#formAssignedStation').value.trim(), service_tags: qs('#formServiceTags').value.trim(), is_public: qs('#formIsPublic').checked, is_active: qs('#formIsActive').checked, notes: qs('#formNotes').value.trim(), ...supplierMetaState };
+    const x=await postJson('/api/admin/catalog_inventory_save', payload);
+    if(!x.ok||!x.out?.ok){const r=x.out?.publish_readiness;const detail=r?.blockers?.length?` ${r.blockers.join(' ')}`:'';return show(((x.out&&x.out.error)||'Could not save inventory item.')+detail,'bad');}
+    const saved=x.out.item||payload;show(editorTargetKey?`Existing inventory item ${editorTargetKey} updated.`:'New inventory item saved.','ok');fillForm(saved,{targetKey:saved.item_key});await loadInventory();loadLowStock();
+  });
   qs('#usageForm').addEventListener('submit', async(e)=>{ e.preventDefault(); const button=e.submitter||qs('#usageForm button[type="submit"]'); if(button)button.disabled=true; const payload={ booking_id: qs('#usageBookingId').value.trim(), item_key: qs('#usageItemKey').value, qty_used: Number(qs('#usageQty').value||0), note: qs('#usageNote').value.trim(), client_action_id: usageActionId }; try{ const x=await postJson('/api/admin/catalog_usage_add', payload); if(!x.ok||!x.out?.ok) return show((x.out&&x.out.error)||'Could not record usage. Retry uses the same transaction key to prevent a duplicate deduction.','bad'); usageActionId=crypto.randomUUID(); show('Inventory usage recorded.','ok'); qs('#usageQty').value='1'; qs('#usageNote').value=''; loadInventory(); loadLowStock(); loadMovements(); } finally { if(button)button.disabled=false; } });
-  window.AdminShell.boot({ pageKey:'admin-catalog', onReady: async ({actor:current}) => { actor=current||null; const box=qs('#actorBox'); if(actor){ box.style.display='block'; box.textContent=`Signed in as ${actor.full_name || actor.email || 'staff'} (${actor.role_code || 'staff'})`; } await loadSharedInventoryOptions(); fillForm(null); loadInventory(); loadMovements(); loadLowStock(); loadOrders(); } });
+  window.AdminShell.boot({ pageKey:'admin-catalog', onReady: async ({actor:current}) => { actor=current||null; const box=qs('#actorBox'); if(actor){ box.style.display='block'; box.textContent=`Signed in as ${actor.full_name || actor.email || 'staff'} (${actor.role_code || 'staff'})`; } await loadSharedInventoryOptions(); fillForm(null); await loadInventory(); const requested=new URLSearchParams(location.search).get('item'); if(requested){const item=inventory.find((x)=>String(x.item_key)===String(requested)); if(item){fillForm(item,{targetKey:item.item_key});qs('#supplierLinkHeading')?.scrollIntoView({behavior:'smooth',block:'start'});show(`Loaded ${item.name||item.item_key} for supplier-link repair. Paste or review its Amazon link before saving changes.`,'ok');}else show(`Inventory item ${requested} was not found in the current live/fallback list.`,'bad');} loadMovements(); loadLowStock(); loadOrders(); } });
 })();
 </script>
 <script src="/assets/chrome.js"></script>
