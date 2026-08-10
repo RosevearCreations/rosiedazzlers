@@ -201,6 +201,7 @@ CHECKS = [
     "scripts/build246_catalog_publish_readiness_check.py",
     "scripts/build247_daip_private_media_ingestion_check.py",
     "scripts/build248_supplier_daip_story_review_check.py",
+    "scripts/build249_inventory_supplier_recovery_check.py",
     "scripts/build224_customer_profile_quality_check.py",
     "scripts/seo_h1_check.py",
 ]
