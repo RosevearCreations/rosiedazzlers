@@ -1,3 +1,4 @@
+// Historical Build 249 cache guard: rosie-app-v20260810build249 /data/build249_inventory_recovery.json
 // Historical Build 248 cache guard: rosie-app-v20260809build248
 // Historical Build 246 cache guard: rosie-app-v20260807build246 /data/build246_ui_health_routes.json
 // Historical Build 245 guard: rosie-app-v20260807build245 /assets/cache-health-controls.js?v=20260807build245 /assets/ui-health-scanner.js?v=20260807build245
@@ -6,7 +7,7 @@
 // Build 241 service-worker cache hotfix refreshes the unified Startup Command Center script and preserves Build 240 inventory posting/reversal.
 // Build 238 service-worker cache: CSS recovery, Startup Guide, transactional inventory, current roadmap, launch evidence and operational readiness.
 // Historical Build 238 guard: rosie-app-v20260730build238 /data/build238_go_live_blockers.json /data/build238_next_steps.json
-const CACHE='rosie-app-v20260810build249';
+const CACHE='rosie-app-v20260810build250';
 const URLS=['/data/build249_inventory_recovery.json',
   '/admin-daip-media.html',
   '/data/build247_go_live_blockers.json',

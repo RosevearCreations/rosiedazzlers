@@ -1442,3 +1442,29 @@ Build 214 documentation sync
 <!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
 
 <!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
+
+
+
+## 42. Validate simplified Services path and approved CarPhotos
+
+**Priority:** high  
+**Category:** Public UX, media and SEO  
+**Open:** `/services` and `/api/public/car_photos`
+
+**Why this matters:** Visitors who do not know detailing terminology should be able to choose a vehicle size, understand the five main packages and start booking without navigating duplicate charts or the broader service hub. Approved public Rosie photos should replace generic fallback imagery without ever reading private DAIP media.
+
+**Detailed instructions**
+1. Deploy Build 250 Pages and Functions together and hard-refresh `/services`.
+2. Open `/api/public/car_photos`; confirm `bucket_ready=true` and the expected `CarPhotos/` objects are listed.
+3. If the endpoint reports no binding, add the existing `rosie-assets` bucket to the Pages project using one supported public binding alias and redeploy.
+4. Confirm the vehicle-size selector is prominent at desktop and phone widths and that changing size updates the five package prices.
+5. Confirm Premium Wash, Basic Detail, Complete Detail, Interior Detail and Exterior Detail appear before Full Service Hub.
+6. Confirm `Open price chart` and `Open details chart` are absent from Services; detailed comparison remains available through Pricing.
+7. Confirm each main package shows the intended service-matched `CarPhotos/` image when a descriptive filename exists. If a filename is ambiguous, rename it to include the service phrase and redeploy/refresh.
+8. Temporarily test one missing package image and confirm fallback uses an approved Rosie car photo before the intentional `service-photo-needed.svg` placeholder.
+9. Check the goal-based chooser at 1440px, 1024px, 768px and ~390px widths; cards and buttons must not overlap or drift.
+10. Complete one Services → Book journey on phone width without opening Pricing and record whether any step is unclear.
+
+**Move to the next item when:** A first-time visitor can understand size → main package → booking, principal images are real approved Rosie assets where available, no private media is exposed, and mobile/desktop layouts remain stable.
+
+<!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->

@@ -1,4 +1,47 @@
-# CURRENT LIVING AUTHORITY 2 OF 2 — Build 249
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 250
+
+**Updated:** 2026-08-10  
+**Purpose:** Current business/technical direction. For exact implemented state and handoff, read `AI_PROJECT_HANDOFF.md` first.
+
+## Build 250 value delivered
+
+- The Services page now leads with vehicle size and the five principal packages instead of sending unfamiliar visitors through secondary charts/hubs first.
+- Vehicle size is larger, more obvious, and explains that final size can be confirmed before service.
+- `Open price chart` and `Open details chart` were removed from Services; Pricing owns detailed comparison.
+- The goal-based chooser is reduced to clear package outcomes with consistent CSS and direct booking links.
+- Full Service Hub moved below the principal package cards.
+- Public `rosie-assets/CarPhotos/` photos can now be discovered at runtime through a bounded read-only R2 manifest and used as real service-card imagery.
+- Generic review-image fallback was removed from principal service cards in favour of approved Rosie photos and an intentional service-photo placeholder.
+- No thin SEO pages were added; current one-H1, concise-title, accurate service-area and authentic-proof rules remain.
+
+## Current next work
+
+1. Deploy Build 250 and verify `/api/public/car_photos` sees the newly uploaded `CarPhotos/` objects.
+2. Standardize important R2 filenames with service terms (`premium-wash`, `basic-detail`, `complete-detail`, `interior-detail`, `exterior-detail`) so automatic matching is deterministic.
+3. Replace any remaining generic public fallbacks with approved Rosie project/service proof after consent/privacy review.
+4. Test the Services → Book flow with people unfamiliar with detailing; measure whether they can choose a main package without opening Pricing.
+5. Keep Pricing as the deep comparison page and Booking as the transaction path; avoid rebuilding duplicate comparison controls elsewhere.
+6. Continue Build 249 Amazon inventory cleanup and reviewed duplicate merges.
+7. Finish catalog image/publish-readiness cleanup as inventory becomes trustworthy.
+8. Apply/accept Build 247 and Build 248 migrations in staging where outstanding.
+9. Bind/verify private `DAIP_MEDIA_BUCKET` separately from public `rosie-assets`.
+10. Prove one private photo and one >300 MB interrupted/resumed project video.
+11. Import the three historical detailing Creative Projects and raw media one at a time.
+12. Acceptance-test `DAIP_PROCESSING_QUEUE` if used.
+13. Implement private proxy/frame/audio/transcript processing outside the request path.
+14. Add scene/before-after scoring with human override.
+15. Add privacy detection and reviewed redaction derivatives.
+16. Add best-shot/duplicate scoring and storyboard editing.
+17. Implement reviewed long/short render adapters.
+18. Complete real-device booking/payment/refund/email/recovery acceptance.
+19. Complete Search Console and Google Business Profile alignment using authentic Rosie proof.
+20. Run an invite-only soft launch and simplify any public step that repeatedly causes hesitation.
+
+---
+
+<!-- Historical release guard: # CURRENT LIVING AUTHORITY 2 OF 2 — Build 249 -->
+# Historical Build 249 roadmap snapshot
+
 
 **Updated:** 2026-08-10  
 **Purpose:** Current business/technical direction. For exact implemented state and handoff, read `AI_PROJECT_HANDOFF.md` first.
@@ -1387,3 +1430,5 @@ Build 247 establishes the private source-of-truth media layer needed for the DAI
 <!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
 
 <!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
+
+<!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
