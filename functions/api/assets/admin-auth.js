@@ -1,3 +1,4 @@
+// Build 236 restored full admin authorization map and current operational routes.
 // assets/admin-auth.js
 //
 // Shared frontend helper for staff auth/session.
@@ -130,6 +131,31 @@
     };
   }
 
+  async function fetchWithAuth(url, options = {}) {
+    const headers = new Headers(options.headers || {});
+    const hasBody = options.body !== undefined && options.body !== null;
+    const isFormData = typeof FormData !== "undefined" && options.body instanceof FormData;
+
+    if (hasBody && !isFormData && !headers.has("Content-Type")) {
+      headers.set("Content-Type", "application/json");
+    }
+
+    return fetch(url, {
+      credentials: "include",
+      cache: "no-store",
+      ...options,
+      headers
+    });
+  }
+
+  async function guardPage(options = {}) {
+    const result = await requireAuth(options);
+    if (!result || result.ok !== true) return result;
+    applyVisibility(document);
+    renderActorText(document);
+    return result;
+  }
+
   function getActor() {
     return state.actor;
   }
@@ -177,7 +203,27 @@
 
     switch (String(pageKey || "")) {
       case "admin":
+      case "admin-today":
       case "admin-booking":
+      case "admin-leads":
+      case "admin-conversions":
+      case "admin-payments":
+      case "admin-media-health":
+      case "admin-photo-studio":
+      case "admin-tax-review":
+      case "admin-close":
+      case "admin-seo-tasks":
+      case "admin-analytics":
+      case "admin-assign":
+      case "admin-notifications":
+      case "admin-recovery":
+      case "admin-upload":
+      case "admin-gallery":
+      case "admin-catalog":
+      case "admin-inventory-manager":
+      case "admin-launch-readiness":
+      case "admin-production":
+      case "admin-test-centre":
         return hasCapability("can_manage_bookings");
 
       case "admin-blocks":
@@ -185,6 +231,9 @@
 
       case "admin-progress":
         return hasCapability("can_manage_progress") || actor.is_senior_detailer === true || actor.is_detailer === true;
+
+      case "admin-social":
+        return hasCapability("can_manage_progress") || hasCapability("can_manage_bookings");
 
       case "admin-jobsite":
         return (
@@ -195,6 +244,7 @@
         );
 
       case "admin-live":
+      case "admin-incident-reports":
         return (
           hasCapability("can_manage_bookings") ||
           hasCapability("can_manage_progress") ||
@@ -203,9 +253,34 @@
         );
 
       case "admin-staff":
+      case "admin-payroll":
+      case "admin-security":
         return actor.is_admin === true || hasCapability("can_manage_staff");
+
+      case "admin-accounting":
+        return actor.is_admin === true || hasCapability("can_manage_staff") || hasCapability("can_manage_bookings");
+
+      case "admin-account":
+      case "account":
+        return state.authenticated === true;
       case "admin-app":
+      case "admin-docs":
+      case "admin-daip":
+      case "admin-daip-governance":
+      case "admin-daip-readiness":
+      case "admin-daip-design":
+      case "admin-daip-gate-c":
+      case "admin-daip-intake-dry-run":
+      case "admin-roadmap-execution":
+      case "admin-creative-projects":
+      case "admin-integrations":
+      case "admin-water-rules":
+      case "admin-site-settings":
         return actor.is_admin === true || hasCapability("can_manage_staff");
+
+      case "admin-content":
+      case "admin-marketing":
+        return actor.is_admin === true || hasCapability("can_manage_promos") || hasCapability("can_manage_staff") || hasCapability("can_manage_bookings");
 
       case "admin-customers":
         return (
@@ -359,6 +434,8 @@
     hasCapability,
     canAccessPage,
     requireAuth,
+    guardPage,
+    fetchWithAuth,
     applyVisibility,
     renderActorText,
     readNextUrl,

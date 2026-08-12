@@ -1,3 +1,4 @@
+// Build 236 restored complete shared admin shell shortcuts.
 // assets/admin-shell.js
 //
 // Shared admin/detailer page bootstrap.
@@ -107,7 +108,10 @@
       <a class="btn ghost small" href="/admin.html">← Admin Dashboard</a>
       <a class="btn ghost small" href="/admin-account.html">Account</a>
       <a class="btn ghost small" href="/admin-analytics.html">Analytics</a>
+      <a class="btn ghost small" href="/admin-conversions.html">Conversions</a>
       <a class="btn ghost small" href="/admin-catalog.html">Inventory</a>
+      <a class="btn ghost small" href="/admin-inventory-manager.html">Inventory Workbench</a>
+      <a class="btn ghost small" href="/admin-launch-readiness.html">Launch Readiness</a>
       <a class="btn ghost small" href="/admin-accounting.html">Accounting</a>
       <span class="crumb">${pageKey || "admin"}</span>
     `;
