@@ -203,6 +203,7 @@ CHECKS = [
     "scripts/build248_supplier_daip_story_review_check.py",
     "scripts/build249_inventory_supplier_recovery_check.py",
     "scripts/release_check_build250.py",
+    "scripts/release_check_build251.py",
     "scripts/build224_customer_profile_quality_check.py",
     "scripts/seo_h1_check.py",
 ]
