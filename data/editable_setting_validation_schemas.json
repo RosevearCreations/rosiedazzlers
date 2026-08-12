@@ -1,7 +1,7 @@
 {
   "version": "195.0.0",
-  "updated_at": "2026-06-06",
-  "purpose": "Field-level validation rules for DB-backed editable site settings. Build 195 adds API-returned field_results for UI markers plus SEO copy-length warnings.",
+  "updated_at": "2026-08-07",
+  "purpose": "Field-level validation rules for DB-backed editable site settings. Build 195 adds API-returned field_results for UI markers plus SEO copy-length warnings. Build 246 review confirms catalog readiness is enforced outside this editable-settings schema and adds no incompatible editable-setting fields. Build 247 review confirms DAIP private-media tables and R2 bindings are operational media infrastructure rather than editable public-site settings, so no incompatible editable-setting fields are introduced.",
   "schemas": {
     "business_profile": {
       "required_paths": [
@@ -190,5 +190,6 @@
         }
       ]
     }
-  }
+  },
+  "last_reviewed_build": 247
 }

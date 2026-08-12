@@ -465,7 +465,7 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png",
       "category": "odor treatment",
       "type": "de-ionizing",
-      "image_fallback_url": "/assets/addons/de_ionizing_treatment.svg"
+      "image_fallback_url": "/assets/addons/de_ionizing_treatment.png"
     },
     {
       "code": "de_badging",
@@ -475,7 +475,7 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
       "category": "appearance modifications",
       "type": "badge removal",
-      "image_fallback_url": "/assets/addons/de_badging.svg"
+      "image_fallback_url": "/assets/addons/de_badging.png"
     },
     {
       "code": "engine_cleaning",
@@ -486,7 +486,7 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
       "category": "engine bay",
       "type": "cleaning",
-      "image_fallback_url": "/assets/addons/engine_cleaning.svg"
+      "image_fallback_url": "/assets/addons/engine_cleaning.png"
     },
     {
       "code": "external_ceramic_coating",
@@ -500,7 +500,7 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
       "category": "paint protection",
       "type": "ceramic coating",
-      "image_fallback_url": "/assets/addons/external_ceramic_coating.svg"
+      "image_fallback_url": "/assets/addons/external_ceramic_coating.png"
     },
     {
       "code": "external_graphene_fine_finish",
@@ -514,7 +514,7 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png",
       "category": "paint protection",
       "type": "graphene finish",
-      "image_fallback_url": "/assets/addons/external_graphene_fine_finish.svg"
+      "image_fallback_url": "/assets/addons/external_graphene_fine_finish.png"
     },
     {
       "code": "external_wax",
@@ -529,7 +529,7 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png",
       "category": "paint protection",
       "type": "wax",
-      "image_fallback_url": "/assets/addons/external_wax.svg"
+      "image_fallback_url": "/assets/addons/external_wax.png"
     },
     {
       "code": "vinyl_wrapping",
@@ -539,7 +539,7 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
       "category": "appearance modifications",
       "type": "vinyl wrapping",
-      "image_fallback_url": "/assets/addons/vinyl_wrapping.svg"
+      "image_fallback_url": "/assets/addons/vinyl_wrapping.png"
     },
     {
       "code": "window_tinting",
@@ -549,7 +549,7 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png",
       "category": "glass services",
       "type": "window tinting",
-      "image_fallback_url": "/assets/addons/window_tinting.svg"
+      "image_fallback_url": "/assets/addons/window_tinting.png"
     },
     {
       "code": "pet_hair_removal",

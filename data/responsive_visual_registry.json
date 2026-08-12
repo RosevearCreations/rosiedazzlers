@@ -55,14 +55,14 @@
       "label": "Review proof image",
       "recommended_size": "1200x630",
       "status": "active",
-      "fallback": "/assets/brand/rosie-reviews-fallback.svg"
+      "fallback": "/assets/brand/rosie-reviews-fallback.png"
     },
     {
       "key": "service_cards",
       "label": "Service and add-on cards",
       "recommended_size": "1200x800",
       "status": "active",
-      "fallback": "/assets/addons/generic_addon.svg"
+      "fallback": "/assets/addons/generic_addon.png"
     },
     {
       "key": "before_after_proof",

@@ -1,0 +1,21 @@
+{
+  "build": 247,
+  "updated_at": "2026-08-07",
+  "markdown_file_count": 126,
+  "current_authorities": [
+    "AI_PROJECT_HANDOFF.md",
+    "MASTER_VALUE_ROADMAP.md",
+    "STARTUP_GO_LIVE_BLOCKERS.md"
+  ],
+  "canonical_support": [
+    "DEVELOPMENT_ROADMAP.md",
+    "KNOWN_GAPS_AND_RISKS.md",
+    "CURRENT_IMPLEMENTATION_STATE.md",
+    "SANITY_CHECK.md",
+    "IMAGES.md",
+    "DOC_INDEX.md",
+    "README.md",
+    "DATABASE_STRUCTURE_CURRENT.md"
+  ],
+  "retirement_policy": "Historical Markdown remains read-only release/audit context until legacy guards are modernized. New direction belongs only in the three current authorities."
+}

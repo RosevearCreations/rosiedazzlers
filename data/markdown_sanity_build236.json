@@ -1,0 +1,49 @@
+{
+  "build": 236,
+  "updated_at": "2026-07-26",
+  "summary": "Build 236 retains exactly two living strategy documents, restores Block Calendar/CSS/schedule compatibility, and keeps historical Markdown read-only until release guards are modernized.",
+  "canonical_docs": [
+    {
+      "file": "AI_PROJECT_HANDOFF.md",
+      "purpose": "Current architecture, safeguards, implementation state, deployment and continuation instructions.",
+      "owner_use": "Read first before every new build pass."
+    },
+    {
+      "file": "MASTER_VALUE_ROADMAP.md",
+      "purpose": "Active business-value roadmap, launch sequence, completed work and connected next steps.",
+      "owner_use": "Use for prioritization and sequencing."
+    }
+  ],
+  "retain_for_operations": [
+    "KNOWN_GAPS_AND_RISKS.md",
+    "SANITY_CHECK.md",
+    "DEVELOPMENT_ROADMAP.md",
+    "CURRENT_IMPLEMENTATION_STATE.md",
+    "DOC_INDEX.md",
+    "README.md",
+    "IMAGES.md",
+    "DATABASE_STRUCTURE_CURRENT.md",
+    "SUPABASE_SCHEMA.sql",
+    "docs/PRODUCTION_TEST_GUIDE.md"
+  ],
+  "current_build_docs": [
+    "docs/BUILD236_CALENDAR_SEO_CSS_STABILIZATION.md",
+    "docs/SEO_COMPETITIVE_REVIEW_BUILD236.md",
+    "docs/MARKDOWN_RETIREMENT_PLAN_BUILD236.md"
+  ],
+  "retirement_guidance": [
+    "Do not add new strategy outside the two canonical documents.",
+    "Keep operational files synchronized with short build notes only.",
+    "Map historical release-guard dependencies before moving old Markdown.",
+    "Move historical files into docs/archive only after a clean preview deployment and complete release suite pass.",
+    "Never delete audit/history merely to reduce file count."
+  ],
+  "current_app_position": [
+    "Project and standard-booking paths remain separate and intentional.",
+    "Inventory Workbench, seven-image galleries, launch preflight, live customer interaction, payments, content controls and operational diagnostics are present.",
+    "Build 236 restores Block Calendar presentation and current schedule-schema compatibility.",
+    "The next phase is controlled production proof, inventory/media cleanup and invite-only soft launch rather than another broad subsystem."
+  ],
+  "remaining_doc_risk": "Historical root Markdown remains because old release guards still use prose markers. New strategy belongs only in AI_PROJECT_HANDOFF.md and MASTER_VALUE_ROADMAP.md.",
+  "current_build": 236
+}
