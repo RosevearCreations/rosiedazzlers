@@ -1,3 +1,4 @@
+// Build 236 restored editable analytics event registry integration.
 (function attachRosieAnalytics(globalScope) {
   const API = '/api/analytics/ingest';
   const STORAGE = {

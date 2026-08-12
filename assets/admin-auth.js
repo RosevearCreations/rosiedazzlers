@@ -1,3 +1,4 @@
+// Build 236 restored full admin authorization map and current operational routes.
 // assets/admin-auth.js
 //
 // Shared frontend helper for staff auth/session.
@@ -208,9 +209,23 @@
       case "admin-conversions":
       case "admin-payments":
       case "admin-media-health":
+      case "admin-photo-studio":
       case "admin-tax-review":
       case "admin-close":
       case "admin-seo-tasks":
+      case "admin-analytics":
+      case "admin-assign":
+      case "admin-notifications":
+      case "admin-recovery":
+      case "admin-upload":
+      case "admin-gallery":
+      case "admin-catalog":
+      case "admin-inventory-manager":
+      case "admin-inventory-posting":
+      case "admin-launch-readiness":
+      case "admin-startup-guide":
+      case "admin-production":
+      case "admin-test-centre":
         return hasCapability("can_manage_bookings");
 
       case "admin-blocks":
@@ -240,21 +255,26 @@
         );
 
       case "admin-staff":
+      case "admin-payroll":
+      case "admin-security":
         return actor.is_admin === true || hasCapability("can_manage_staff");
 
       case "admin-accounting":
         return actor.is_admin === true || hasCapability("can_manage_staff") || hasCapability("can_manage_bookings");
 
       case "admin-account":
+      case "account":
         return state.authenticated === true;
       case "admin-app":
       case "admin-docs":
+      case "admin-ui-health":
       case "admin-daip":
       case "admin-daip-governance":
       case "admin-daip-readiness":
       case "admin-daip-design":
       case "admin-daip-gate-c":
       case "admin-daip-intake-dry-run":
+      case "admin-daip-media":
       case "admin-roadmap-execution":
       case "admin-creative-projects":
       case "admin-integrations":

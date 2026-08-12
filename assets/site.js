@@ -1,12 +1,9 @@
-import { packageImageForSize as sharedPackageImageForSize } from "/assets/pricing-catalog-client.js";
-import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
-
 const DATA_URL = "/api/pricing_catalog_public";
 
 const BRAND = {
   logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
   banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
-  reviews: "/assets/brand/rosie-reviews-fallback.svg"
+  reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png"
 };
 
 const CONTACT = {
@@ -50,30 +47,15 @@ const LOCAL_ADDON_FALLBACKS = {
   two_stage_polish: '/assets/addons/two_stage_polish.png',
   high_grade_paint_sealant: '/assets/addons/high_grade_paint_sealant.png',
   uv_protectant_applied_on_interior_panels: '/assets/addons/uv_protectant_applied_on_interior_panels.png',
-  de_ionizing_treatment: '/assets/addons/de_ionizing_treatment.svg',
-  de_badging: '/assets/addons/de_badging.svg',
-  engine_cleaning: '/assets/addons/engine_cleaning.svg',
-  external_ceramic_coating: '/assets/addons/external_ceramic_coating.svg',
-  external_graphene_fine_finish: '/assets/addons/external_graphene_fine_finish.svg',
-  external_wax: '/assets/addons/external_wax.svg',
-  vinyl_wrapping: '/assets/addons/vinyl_wrapping.svg',
-  window_tinting: '/assets/addons/window_tinting.svg'
+  de_ionizing_treatment: '/assets/addons/de_ionizing_treatment.png',
+  de_badging: '/assets/addons/de_badging.png',
+  engine_cleaning: '/assets/addons/engine_cleaning.png',
+  external_ceramic_coating: '/assets/addons/external_ceramic_coating.png',
+  external_graphene_fine_finish: '/assets/addons/external_graphene_fine_finish.png',
+  external_wax: '/assets/addons/external_wax.png',
+  vinyl_wrapping: '/assets/addons/vinyl_wrapping.png',
+  window_tinting: '/assets/addons/window_tinting.png'
 };
-
-function bindCardMedia(node) {
-  if (!node) return;
-  node.querySelectorAll('img[data-media-source]').forEach((img) => {
-    if (img.dataset.mediaResolverBound === 'true') return;
-    img.dataset.mediaResolverBound = 'true';
-    bindImageWithCandidates(img, img.dataset.mediaSource || '', {
-      fallback: img.dataset.mediaFallback || '/assets/brand/rosie-reviews-fallback.svg',
-      onExhausted: (target) => {
-        target.src = '/assets/brand/rosie-reviews-fallback.svg';
-        target.classList.add('visual-placeholder-img');
-      }
-    });
-  });
-}
 
 let _servicesData = null;
 
@@ -101,15 +83,15 @@ function packagePrice(pkg, size) {
 }
 
 function packageImageForSize(pkg, size) {
-  return sharedPackageImageForSize(pkg, size) || pkg?.images_by_size?.[size] || "";
+  return pkg?.images_by_size?.[size] || "";
 }
 
 function addonImageForCode(code) {
-  return ADDON_MEDIA[code] || LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.svg';
+  return ADDON_MEDIA[code] || LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.png';
 }
 
 function addonFallbackForCode(code) {
-  return LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.svg';
+  return LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.png';
 }
 
 function addonDisplay(addon, size) {
@@ -178,7 +160,7 @@ export function setBrandImages() {
   if (banner) banner.src = BRAND.banner;
 
   const reviews = document.querySelector("[data-reviews]");
-  if (reviews) { reviews.src = BRAND.reviews; reviews.onerror = () => { reviews.onerror = null; reviews.src = "/assets/brand/rosie-reviews-fallback.svg"; }; }
+  if (reviews) reviews.src = BRAND.reviews;
 }
 
 export function setFooter() {
@@ -300,7 +282,7 @@ function renderMainPackages(cardsEl, data, size) {
 
     const mediaHtml = `
       <div class="service-media" data-carousel>
-        ${gallery.map((src, i) => `<img loading="lazy" data-media-source="${src}" data-media-fallback="/assets/brand/rosie-reviews-fallback.svg" alt="${pkg.name}" class="${i === 0 ? "active" : ""}">`).join("")}
+        ${gallery.map((src, i) => `<img loading="lazy" src="${src}" alt="${pkg.name}" class="${i === 0 ? "active" : ""}" onerror="this.style.display='none'">`).join("")}
       </div>
     `;
 
@@ -320,7 +302,6 @@ function renderMainPackages(cardsEl, data, size) {
       <a class="btn primary" href="/book?package=${encodeURIComponent(pkg.code)}&size=${encodeURIComponent(size)}">Book this</a>
     `;
     cardsEl.appendChild(div);
-    bindCardMedia(div);
   }
 
   attachHoverCarousel(cardsEl);
@@ -343,14 +324,13 @@ function renderAddons(cardsEl, data, size) {
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `
-      ${img ? `<img class="img" loading="lazy" data-media-source="${img}" data-media-fallback="${addonFallbackForCode(addon.code)}" alt="${addon.name}">` : ""}
+      ${img ? `<img class="img" loading="lazy" src="${img}" alt="${addon.name}" data-fallback="${addonFallbackForCode(addon.code)}" onerror="if(this.dataset.fallback && this.src!==this.dataset.fallback){this.src=this.dataset.fallback}else{this.style.display='none'}">` : ""}
       <h3>${addon.name}</h3>
       <p class="kicker">${display}</p>
       ${tags.length ? `<div class="hr"></div><div>${tags.join(" ")}</div>` : ""}
       ${notes ? `<div class="hr"></div>${notes}` : ""}
     `;
     cardsEl.appendChild(div);
-    bindCardMedia(div);
   }
 }
 

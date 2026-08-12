@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Book Mobile Auto Detailing in Tillsonburg, Woodstock, Simcoe & More | Rosie Dazzlers</title>
-  <meta name="description" content="Book Rosie Dazzlers mobile auto detailing across Oxford County and Norfolk County, including Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi, Port Dover, and nearby communities. Choose an available day, match your vehicle, pick your package and add-ons, then pay your deposit online." />
+  <title>Book Mobile Auto Detailing | Rosie Dazzlers</title>
+  <meta name="description" content="Choose your vehicle, package, add-ons and available date for mobile auto detailing in Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi and nearby areas." />
   <link rel="canonical" href="https://rosiedazzlers.ca/book" />
   <meta property="og:title" content="Book Mobile Auto Detailing | Rosie Dazzlers" />
   <meta property="og:description" content="Choose your date, town, vehicle, package, add-ons, and deposit payment for mobile detailing across Oxford and Norfolk communities." />
@@ -200,8 +200,7 @@
         </div>
         <div class="row">
           <button class="btn ghost" id="openSizeChartBtn" type="button">Size chart</button>
-          <button class="btn ghost" id="openPriceChartBtn" type="button">Price chart</button>
-          <a class="btn ghost" href="/pricing">Pricing page</a>
+                    <a class="btn ghost" href="/pricing">Pricing page</a>
         </div>
       </div>
       <div id="bookingStatus" class="notice" style="display:none;margin-top:12px"></div>
@@ -1179,7 +1178,7 @@
 
     function addonPrimaryImage(code) {
       const addon = (state.pricing?.addons || []).find((row) => row?.code === String(code || "").trim()) || { code };
-      return sharedAddonPrimaryImage(addon) || "/assets/addons/generic_addon.svg";
+      return sharedAddonPrimaryImage(addon) || "/assets/addons/generic_addon.png";
     }
 
     function addonFallbackImage(code) {
@@ -1940,8 +1939,8 @@
 
       qsa(".addon-thumb").forEach((img) => {
         bindImageWithCandidates(img, img.dataset.mediaSource || "", {
-          fallback: img.dataset.fallback || "/assets/addons/generic_addon.svg",
-          onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.svg"; node.classList.add("visual-placeholder-img"); }
+          fallback: img.dataset.fallback || "/assets/addons/generic_addon.png",
+          onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.png"; node.classList.add("visual-placeholder-img"); }
         });
       });
 
@@ -2216,7 +2215,6 @@
       renderServiceAreas();
       syncBookingRuleLabels();
       qs("#openSizeChartBtn").addEventListener("click", () => openModal("Vehicle size chart", chartUrl(state.pricing || {}, "Vehicle Size Chart") || `${BRAND_BASE}/CarSizeChart.PNG`));
-      qs("#openPriceChartBtn").addEventListener("click", () => openModal("Vehicle price chart", chartUrl(state.pricing || {}, "Vehicle Price Chart 2025") || `/assets/brand/CarPrice2025.PNG`));
       await Promise.all([
         loadVehicleMakes(),
         loadGarageVehicles(),

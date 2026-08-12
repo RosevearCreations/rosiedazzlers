@@ -1,0 +1,2 @@
+/* Build 238 compatibility stylesheet. Historical pages should migrate to /assets/site.css. */
+@import url("/assets/site.css?v=20260730build238");

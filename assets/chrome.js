@@ -1,3 +1,4 @@
+// Build 236 restored full editable public chrome; historical labels: Help articles / Help Articles.
 // /assets/chrome.js
 
 /* =========================
@@ -12,7 +13,7 @@ let BRAND = {
   name: "Rosie Dazzlers",
   logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
   banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
-  reviews: "/assets/brand/rosie-reviews-fallback.svg",
+  reviews: "/assets/brand/rosie-reviews-fallback.png",
   footerLogo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
 };
 
@@ -263,7 +264,7 @@ function ensureReviewsPanel() {
   if (directImg && directImg.tagName && directImg.tagName.toLowerCase() === "img") {
     directImg.src = BRAND.reviews;
     directImg.alt = "Rosie Dazzlers reviews";
-    directImg.onerror = function(){ this.onerror = null; this.src = "/assets/brand/rosie-reviews-fallback.svg"; };
+    directImg.onerror = function(){ this.onerror = null; this.src = "/assets/brand/rosie-reviews-fallback.png"; };
     directImg.loading = "lazy";
     directImg.style.display = "block";
     directImg.style.width = "100%";
@@ -281,7 +282,7 @@ function ensureReviewsPanel() {
     wrapTarget.innerHTML = `
       <img
         src="${BRAND.reviews}"
-        onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.svg'"
+        onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.png'"
         alt="Rosie Dazzlers reviews"
         loading="lazy"
         style="display:block;width:100%;height:auto;object-fit:contain"
@@ -316,7 +317,7 @@ function ensureReviewsPanel() {
     >
       <img
         src="${BRAND.reviews}"
-        onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.svg'"
+        onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.png'"
         alt="Rosie Dazzlers reviews"
         loading="lazy"
         style="display:block;width:100%;max-width:980px;height:auto;object-fit:contain"
@@ -900,7 +901,7 @@ function ensureVisualPlaceholderSystem(){
   }
   if (document.querySelector('script[data-visual-placeholder-bootstrap]')) return;
   const script = document.createElement("script");
-  script.src = "/assets/visual-placeholders.js";
+  script.src = "/assets/visual-placeholders.js?v=20260726build236";
   script.defer = true;
   script.dataset.visualPlaceholderBootstrap = "true";
   document.head.appendChild(script);

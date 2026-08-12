@@ -1,5 +1,7 @@
+// Historical Build 252 image module marker: /assets/website-images.js?v=20260812build252
 import { renderRecentWorkMounts } from "/assets/recent-work.js?v=20260501build127";
 import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
+import { loadWebsiteImageManifest, landingImageMatches } from "/assets/website-images.js?v=20260812build253";
 
 async function fetchJson(url) {
   const res = await fetch(url, { cache: "no-store" });
@@ -194,8 +196,10 @@ function addonPriceSummary(addon) {
   return "";
 }
 
-function heroMediaForPage(page, addon, relatedProducts) {
-  // Build 215: local Rosie-owned hero assets win over legacy remote placeholders.
+function heroMediaForPage(page, addon, relatedProducts, r2Matches = []) {
+  // Build 252: filename-matched approved landing_pages/ imagery wins when present.
+  if (r2Matches[0]?.url) return r2Matches[0].url;
+  // Explicit local Rosie-owned page assets remain the next preference.
   if (page?.local_hero_image_url) return page.local_hero_image_url;
   if (page?.hero_image_url) return page.hero_image_url;
   if (addon?.image_url && !String(addon.image_url).toLowerCase().endsWith(".svg")) return addon.image_url;
@@ -205,13 +209,13 @@ function heroMediaForPage(page, addon, relatedProducts) {
 
   if (addon?.image_url) return addon.image_url;
   if (addon?.image_fallback_url) return addon.image_fallback_url;
-  return "/assets/brand/rosie-reviews-fallback.svg";
+  return "/assets/brand/rosie-reviews-fallback.png";
 }
 
 function mediaImageMarkup(src, alt, className = "proof-media", extra = "") {
   const source = cleanText(src);
   if (!source) return "";
-  return `<img data-media-source="${escapeHtml(source)}" data-media-fallback="/assets/brand/rosie-reviews-fallback.svg" alt="${escapeHtml(alt)}" class="${escapeHtml(className)}" loading="lazy" decoding="async" ${extra}>`;
+  return `<img data-media-source="${escapeHtml(source)}" data-media-fallback="/assets/brand/rosie-reviews-fallback.png" alt="${escapeHtml(alt)}" class="${escapeHtml(className)}" loading="lazy" decoding="async" ${extra}>`;
 }
 
 function bindLandingMedia(root) {
@@ -219,20 +223,23 @@ function bindLandingMedia(root) {
     if (img.dataset.mediaResolverBound === "true") return;
     img.dataset.mediaResolverBound = "true";
     bindImageWithCandidates(img, img.dataset.mediaSource || "", {
-      fallback: img.dataset.mediaFallback || "/assets/brand/rosie-reviews-fallback.svg",
+      fallback: img.dataset.mediaFallback || "/assets/brand/rosie-reviews-fallback.png",
       onExhausted: (node) => {
         node.classList.add("visual-placeholder-img");
-        node.src = "/assets/brand/rosie-reviews-fallback.svg";
+        node.src = "/assets/brand/rosie-reviews-fallback.png";
       }
     });
   });
 }
 
-function galleryMarkup(page, relatedProducts) {
+function galleryMarkup(page, relatedProducts, r2Matches = []) {
   const gallerySource = Array.isArray(page?.gallery_image_urls) ? page.gallery_image_urls : (Array.isArray(page?.gallery_images) ? page.gallery_images : []);
   const gallery = gallerySource.filter(Boolean);
   const productImages = (relatedProducts || []).map((item) => item.image_url).filter(Boolean);
-  const all = [...gallery, ...productImages].filter(Boolean);
+  const approvedR2Rows = (r2Matches || []).slice(1).filter((item) => item?.url);
+  const approvedR2Images = approvedR2Rows.map((item) => item.url);
+  const r2Meta = new Map(approvedR2Rows.map((item) => [item.url, item]));
+  const all = [...approvedR2Images, ...gallery, ...productImages].filter(Boolean);
   if (!all.length) return "";
 
   const unique = [];
@@ -249,7 +256,7 @@ function galleryMarkup(page, relatedProducts) {
       <div class="service-link-grid" style="margin-top:12px">
         ${unique.slice(0, 8).map((src) => `
           <article class="service-link-card">
-            ${mediaImageMarkup(src, "Rosie Dazzlers service visual")}
+            ${mediaImageMarkup(src, r2Meta.get(src)?.alt_text || "Rosie Dazzlers service visual", "proof-media", r2Meta.get(src)?.focal_point ? `style="object-position:${escapeHtml(r2Meta.get(src).focal_point)}"` : "")}
           </article>
         `).join("")}
       </div>
@@ -257,7 +264,7 @@ function galleryMarkup(page, relatedProducts) {
   `;
 }
 
-function pageTemplate(page, pricing, slug, productCatalog) {
+function pageTemplate(page, pricing, slug, productCatalog, websiteImageManifest) {
   const addon = page.related_code
     ? (pricing.addons || []).find((row) => row.code === page.related_code)
     : null;
@@ -292,10 +299,17 @@ function pageTemplate(page, pricing, slug, productCatalog) {
   const waterSources = waterSourcesForPage(page, officialLinks);
   const relatedProducts = resolveRelatedProducts(page, productCatalog);
   const priceSummary = addonPriceSummary(addon);
-  const heroImage = heroMediaForPage(page, addon, relatedProducts);
-  const photoCaption = cleanText(page.region_photo_caption || (page.type === "location" ? "Regional photo included so this local landing page feels tied to the area, not just copied from a generic service page." : ""));
-  const photoSource = cleanText(page.region_photo_source);
-  const photoSourceUrl = cleanText(page.region_photo_source_url);
+  const landingMatches = landingImageMatches(websiteImageManifest, page, slug, 10);
+  const heroImage = heroMediaForPage(page, addon, relatedProducts, landingMatches);
+  const matchedR2Hero = landingMatches[0]?.url === heroImage;
+  const matchedHeroMeta = matchedR2Hero ? landingMatches[0] : null;
+  const heroAlt = matchedHeroMeta?.alt_text || page.name || page.hero_title || slug;
+  const heroExtra = matchedHeroMeta?.focal_point ? `style="object-position:${escapeHtml(matchedHeroMeta.focal_point)}"` : '';
+  const photoCaption = matchedR2Hero
+    ? "Real Rosie Dazzlers imagery selected from the approved public R2 website library."
+    : cleanText(page.region_photo_caption || (page.type === "location" ? "Regional photo included so this local landing page feels tied to the area, not just copied from a generic service page." : ""));
+  const photoSource = matchedR2Hero ? '' : cleanText(page.region_photo_source);
+  const photoSourceUrl = matchedR2Hero ? '' : cleanText(page.region_photo_source_url);
   const whyHeading = page.type === "location" ? "Why this location has its own page" : "Why this service has its own page";
 
   return `
@@ -318,7 +332,7 @@ function pageTemplate(page, pricing, slug, productCatalog) {
       </div>
       <aside class="panel hero-sidecard">
         <figure class="landing-region-photo">
-          ${mediaImageMarkup(heroImage, page.name || page.hero_title || slug)}
+          ${mediaImageMarkup(heroImage, heroAlt, "proof-media", heroExtra)}
           ${photoCaption || photoSource ? `<figcaption>${escapeHtml(photoCaption || "Regional/service photo")}${photoSourceUrl ? ` <a href="${escapeHtml(photoSourceUrl)}" target="_blank" rel="noopener">${escapeHtml(photoSource || "source")}</a>` : (photoSource ? ` ${escapeHtml(photoSource)}` : "")}</figcaption>` : ""}
         </figure>
         <h2 style="margin-top:0">What to expect</h2>
@@ -377,7 +391,7 @@ function pageTemplate(page, pricing, slug, productCatalog) {
       </section>
     ` : ""}
 
-    ${galleryMarkup(page, relatedProducts)}
+    ${galleryMarkup(page, relatedProducts, landingMatches)}
 
     ${thingsToKnow.length ? `
       <section class="section panel">
@@ -408,7 +422,7 @@ function pageTemplate(page, pricing, slug, productCatalog) {
       <div class="proof-grid">
         <article class="proof-card">
           <h3>Review proof</h3>
-          <img data-reviews src="/assets/brand/rosie-reviews-fallback.svg" alt="Rosie Dazzlers reviews" class="proof-media" />
+          <img data-reviews src="/assets/brand/rosie-reviews-fallback.png" alt="Rosie Dazzlers reviews" class="proof-media" />
         </article>
         <article class="proof-card">
           <h3>Booking fit</h3>
@@ -467,6 +481,23 @@ function upsertJsonLd(id, data) {
   script.textContent = JSON.stringify(data, null, 2);
 }
 
+function landingAreaServed(page, slug) {
+  const key = cleanText(slug || page?.slug).toLowerCase();
+  const locationMap = {
+    'tillsonburg-auto-detailing':['Tillsonburg, Ontario','Oxford County, Ontario'],
+    'woodstock-ingersoll-auto-detailing':['Woodstock, Ontario','Ingersoll, Ontario','Oxford County, Ontario'],
+    'norwich-otterville-auto-detailing':['Norwich, Ontario','Otterville, Ontario','Oxford County, Ontario'],
+    'zorra-thamesford-embro-auto-detailing':['Zorra, Ontario','Thamesford, Ontario','Embro, Ontario','Oxford County, Ontario'],
+    'simcoe-delhi-auto-detailing':['Simcoe, Ontario','Delhi, Ontario','Norfolk County, Ontario'],
+    'port-dover-auto-detailing':['Port Dover, Ontario','Norfolk County, Ontario'],
+    'waterford-vittoria-auto-detailing':['Waterford, Ontario','Vittoria, Ontario','Norfolk County, Ontario'],
+    'port-rowan-turkey-point-auto-detailing':['Port Rowan, Ontario','Turkey Point, Ontario','Norfolk County, Ontario']
+  };
+  return page?.type === 'location' && locationMap[key]
+    ? locationMap[key]
+    : ['Oxford County, Ontario','Norfolk County, Ontario'];
+}
+
 function updateLandingStructuredData(page, addon, slug) {
   const title = page?.meta_title || page?.hero_title || page?.name || "Rosie Dazzlers landing page";
   const description = page?.meta_description || page?.hero_intro || "Rosie Dazzlers mobile auto detailing information page.";
@@ -484,9 +515,9 @@ function updateLandingStructuredData(page, addon, slug) {
       "@type": "LocalBusiness",
       "name": "Rosie Dazzlers Mobile Auto Detailing",
       "url": `${location.origin}/`,
-      "areaServed": ["Oxford County, Ontario", "Norfolk County, Ontario"]
+      "areaServed": landingAreaServed(page, slug)
     },
-    "areaServed": ["Tillsonburg, Ontario", "Woodstock, Ontario", "Ingersoll, Ontario", "Simcoe, Ontario", "Delhi, Ontario", "Port Dover, Ontario", "Oxford County, Ontario", "Norfolk County, Ontario"]
+    "areaServed": landingAreaServed(page, slug)
   });
 
   upsertJsonLd("landing-breadcrumb-jsonld", {
@@ -513,11 +544,12 @@ function updateLandingStructuredData(page, addon, slug) {
 
 async function renderLandingPage() {
   const slug = slugFromPath();
-  const [landingPages, pricing, productCatalog, waterRule] = await Promise.all([
+  const [landingPages, pricing, productCatalog, waterRule, websiteImageManifest] = await Promise.all([
     fetchJson("/api/landing_pages_public"),
     fetchJson("/api/pricing_catalog_public"),
     fetchJson("/data/rosie_products_catalog.json"),
-    loadWaterRuleForSlug(slug)
+    loadWaterRuleForSlug(slug),
+    loadWebsiteImageManifest()
   ]);
 
   window.__landingPages = landingPages || { pages: {} };
@@ -561,7 +593,7 @@ async function renderLandingPage() {
   }
 
   const landingMount = document.getElementById("landingMount");
-  landingMount.innerHTML = pageTemplate(page, pricing || {}, slug, productCatalog || []);
+  landingMount.innerHTML = pageTemplate(page, pricing || {}, slug, productCatalog || [], websiteImageManifest || {});
   bindLandingMedia(landingMount);
   const addon = page.related_code ? ((pricing?.addons || []).find((row) => row.code === page.related_code) || null) : null;
   updateLandingStructuredData(page, addon, slug);
