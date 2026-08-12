@@ -1,67 +1,4 @@
-# Development Roadmap — Build 246 Catalog Publishing Readiness
-
-**Updated:** 2026-08-07  
-**Current engineering cycle:** Build 246
-
-## Source work completed in this build
-
-1. Added one shared server-side catalog-readiness evaluator.
-2. Added suspicious imported-name detection to public publishing gates.
-3. Blocked SVG photo placeholders from public catalog publishing.
-4. Added readiness blockers, warnings, scores and gallery counts.
-5. Added a protected catalog readiness report endpoint.
-6. Attached readiness data to the Admin Inventory list API.
-7. Filtered incomplete public catalog rows at the server boundary.
-8. Blocked direct public saves for incomplete inventory rows.
-9. Blocked Workbench bulk public changes for incomplete rows.
-10. Replaced sequential visibility writes with transactional RPC-backed changes.
-11. Added a reviewed publish preview/commit API.
-12. Added catalog publishing audit evidence and protected permissions.
-13. Added an all-or-nothing database publish-review function.
-14. Added Admin Inventory preview and publish controls.
-15. Added readiness filters and badges to Admin Inventory.
-16. Added readiness filters to the Inventory Workbench.
-17. Added readiness fields to Inventory Workbench CSV exports.
-18. Added catalog readiness to the UI and SEO Health route matrix.
-19. Added Startup process 37 and launch evidence for publishing acceptance.
-20. Added Build 246 schema, documentation, cache and release-guard synchronization.
-
-## Acceptance required before these controls are considered production-ready
-
-Build 246 changes source code and database migration files, but it does not prove production configuration. Apply `sql/2026-08-07_build246_catalog_publish_readiness.sql` in staging first, refresh the Supabase schema cache, and complete the exact readiness, all-or-nothing, audit, mobile and public-catalog tests in `STARTUP_GO_LIVE_BLOCKERS.md`.
-
-## Next 20 connected steps
-
-1. Apply the Build 246 migration in staging and refresh the Supabase schema cache.
-2. Preview one ready inventory row and compare browser results with the readiness endpoint.
-3. Publish one ready row and confirm the public catalog includes it.
-4. Attempt a mixed ready/blocked publish and confirm the full batch remains unchanged.
-5. Review the catalog publish-readiness audit row and preserve safe evidence.
-6. Correct suspicious names, missing categories, units and featured images.
-7. Complete cost, description, gallery and service-tag warnings for priority inventory.
-8. Retest Block Calendar full-day, AM and PM behaviour against public booking.
-9. Complete one full booking and admin reconciliation test.
-10. Complete and refund a controlled Stripe payment and verify webhook evidence.
-11. Verify booking, payment, consent and staff emails in external inboxes.
-12. Audit Cloudflare variables, bindings, domains and rollback access.
-13. Perform Supabase restore and Cloudflare rollback rehearsals.
-14. Complete legal, media-consent, staff-permission and accessibility review.
-15. Test booking, catalog, Startup and Inventory Workbench on real mobile devices.
-16. Complete Search Console sitemap, canonical and structured-data inspection.
-17. Align Google Business Profile categories, services, areas, hours and photo cadence.
-18. Complete upload interruption/retry and duplicate-media acceptance.
-19. Complete payment application, HST, month-end close and accountant-package review.
-20. Run an invite-only soft launch and review every early transaction daily.
-
-## Current engineering direction after acceptance
-
-- Finish resumable media-upload recovery and responsive derivatives.
-- Complete payment application, HST review, month-end close/lock/reopen and accountant export.
-- Replace remaining generic imagery with approved Rosie-owned local proof.
-- Complete Search Console and Google Business Profile evidence cycles.
-- Run a controlled soft launch and prioritize failures observed in real operation.
-
----
+> **Build 248 documentation status:** Historical/compatibility reference. Current state is `AI_PROJECT_HANDOFF.md`; current direction is `MASTER_VALUE_ROADMAP.md`. Retained to preserve audit/release history and old references.
 
 # Development Roadmap — Build 245 Current Execution
 
@@ -2903,4 +2840,77 @@ Use `/admin-startup-guide.html#roadmap` as the active next-20 queue. The Build 2
 
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
 
+# Development Roadmap — Build 247
+
+## Completed in source
+- Private R2-bound DAIP Creative Project media intake with 32 MiB multipart upload, resumable parts, duplicate protection, safe abort and immutable completed masters.
+- Shared Supabase metadata for project assets, sessions, parts and downstream processing jobs.
+- Optional `DAIP_PROCESSING_QUEUE` dispatch, while preserving queued DB work if queue delivery fails.
+- `/admin-daip-media.html` linked from Creative Projects, Admin Menu, Startup Command Center and production-readiness reporting.
+- Build 218 metadata-only Test Lab table preserved; real project masters use `daip_project_media_assets`.
+
+## Current next 20
+1. Create and bind the private DAIP R2 bucket as DAIP_MEDIA_BUCKET.
+2. Apply the Build 247 DAIP media migration in staging.
+3. Upload and verify one private DAIP photo.
+4. Prove a video larger than 300 MB uploads through multipart chunks.
+5. Interrupt and resume a large video without restarting from zero.
+6. Create/import the first historical detailing Creative Project and its raw media.
+7. Create/import the second historical detailing Creative Project and its raw media.
+8. Create/import the third historical detailing Creative Project and its raw media.
+9. Configure the optional DAIP_PROCESSING_QUEUE binding.
+10. Implement the processing consumer for proxy video, frames, audio and transcript.
+11. Implement scene analysis and before/after candidate scoring.
+12. Implement reviewed story assembly from selected evidence.
+13. Implement a rendering adapter for long-form and short-form MP4 outputs.
+14. Keep every generated derivative private until human consent/privacy review.
+15. Add reviewed copy-to-public workflow for approved gallery/social derivatives.
+16. Complete real-device DAIP uploader acceptance on desktop and mobile.
+17. Continue catalog publish-readiness cleanup and product-image completion.
+18. Complete booking, payment, refund and notification production acceptance.
+19. Complete Search Console and Google Business Profile alignment.
+20. Run an invite-only soft launch with daily evidence review.
+
+## Following 20
+1. Add automatic proxy generation presets for 1080p and 720p editing copies.
+2. Add key-frame extraction at scene boundaries and configurable intervals.
+3. Add audio waveform and silence detection for narration/edit decisions.
+4. Add speech-to-text transcript storage with timestamp segments.
+5. Add privacy detection for license plates, faces and sensitive documents.
+6. Add reviewed blur/redaction derivatives rather than modifying raw originals.
+7. Add before/during/after auto-classification suggestions with manual override.
+8. Add duplicate and near-duplicate visual detection across each project.
+9. Add best-shot scoring for sharpness, exposure, framing and transformation evidence.
+10. Add timeline storyboard editor with drag-and-drop selected evidence.
+11. Add soundtrack/narration planning without embedding unlicensed music.
+12. Add long-form YouTube edit recipe generation from the approved storyboard.
+13. Add Shorts/Reels/TikTok vertical crop and hook recipe generation.
+14. Add thumbnail candidate generation and review.
+15. Add website-gallery and Google Business Profile derivative presets.
+16. Add per-platform caption, title, description, hashtag and CTA drafts.
+17. Add rendering cost/time estimates before starting expensive media jobs.
+18. Add retry/dead-letter handling for failed processing jobs.
+19. Add retention/storage-class policy for old proxies while preserving raw masters.
+20. Add project-level “Content package ready for review” gate and one-click review queue.
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
+
+<!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
+
+<!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
+
+<!-- BUILD251_SYNC: 2026-08-11 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Gate C dark-theme readability + approved rosie-assets/CarPhotos context -->
+
+<!-- Build 210 documentation sync -->
+<!-- Build 211 documentation sync -->
+<!-- Build 212 documentation sync -->
+<!-- Build 213 documentation sync -->
+<!-- Build 214 documentation sync -->
+
+<!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
+
+<!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->

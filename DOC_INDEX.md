@@ -1,3 +1,88 @@
+# Documentation Index — Build 253
+
+## Current references
+- `AI_PROJECT_HANDOFF.md` — living implementation/handoff authority.
+- `MASTER_VALUE_ROADMAP.md` — living business/engineering direction authority.
+- `STARTUP_GO_LIVE_BLOCKERS.md` — specialist acceptance/deployment runbook.
+- `BUILD253_SUMMARY.md` — Build 253 Photo Management Studio release summary.
+- `data/build253_photo_targets.json` — known explicit card/page assignment registry.
+- `data/build253_photo_management.json` — machine-readable Build 253 architecture/deployment summary.
+
+Only `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Older Markdown remains specialist or historical evidence.
+
+<!-- Historical release guard: # Documentation Index — Build 252 -->
+
+---
+
+# Documentation Index — Build 252
+
+## Current references
+- `AI_PROJECT_HANDOFF.md` — living implementation/handoff authority.
+- `MASTER_VALUE_ROADMAP.md` — living business/engineering direction authority.
+- `STARTUP_GO_LIVE_BLOCKERS.md` — specialist acceptance runbook.
+- `BUILD252_SUMMARY.md` — concise approved-R2 image integration release summary.
+- `data/build252_public_r2_image_mapping.json` — machine-readable target/folder matching policy.
+
+Only `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Older Markdown remains specialist or historical evidence.
+
+<!-- Historical release guard: # Documentation Index — Build 251 -->
+
+<!-- Historical release guard: # Documentation Index — Build 250 -->
+
+## Build 251 current references
+- `BUILD251_SUMMARY.md` — Gate C readability and approved public CarPhotos integration.
+- `AI_PROJECT_HANDOFF.md` — living implementation/handoff authority.
+- `MASTER_VALUE_ROADMAP.md` — living direction/priorities authority.
+- `STARTUP_GO_LIVE_BLOCKERS.md` — specialist acceptance runbook; item 43 covers Gate C readability and public-photo isolation.
+
+
+## Two living authorities
+
+1. `AI_PROJECT_HANDOFF.md` — current implementation state, deployment boundary, immediate acceptance and new-chat handoff.
+2. `MASTER_VALUE_ROADMAP.md` — current business/engineering priorities and what comes next.
+
+<!-- Historical release guard: # Documentation Index — Build 249 -->
+
+Everything else is a **specialist operational reference** or **retained release/history evidence**. Older Build sections remain for audit/release guards but do not override the two living authorities.
+
+### Active specialist references
+
+- `STARTUP_GO_LIVE_BLOCKERS.md` — detailed acceptance/runbook steps.
+- `docs/SUPPLIER_LINK_INVENTORY_IMPORT.md` — existing-row Amazon repair workflow.
+- `docs/SEO_COMPETITIVE_REVIEW_BUILD250.md` — current SEO/competitor and public-path evidence.
+- `BUILD250_SUMMARY.md` — concise release summary and R2 photo naming guidance.
+- `DAIP_R2_MEDIA_SETUP_GUIDE.md` — private R2 setup and DAIP media acceptance.
+- `DATABASE_STRUCTURE_CURRENT.md` and `SUPABASE_SCHEMA.sql` — schema reference; migrations remain authoritative for changes.
+
+### Retirement policy
+
+Older `BUILD*`, `ROADMAP`, `NEW_CHAT_STATUS`, `HANDOFF_NEXT_CHAT`, `PROJECT_BRAIN`, duplicate competitor, sanity and historical implementation files are retained because release checks and audit history still reference many of them. They are not living planning authorities. New work must update the two living authorities first.
+
+---
+
+# Historical Documentation Index — Build 248
+
+## Two living authorities
+
+1. `AI_PROJECT_HANDOFF.md` — current implementation state, deployment boundary, immediate acceptance and new-chat handoff.
+2. `MASTER_VALUE_ROADMAP.md` — current business/engineering priorities and what comes next.
+
+Everything else is either a **specialist operational reference** or **retained release/history evidence**. Do not infer current direction from an older Build section when it conflicts with either living authority.
+
+### Active specialist references
+
+- `STARTUP_GO_LIVE_BLOCKERS.md` — detailed acceptance/runbook steps.
+- `DAIP_R2_MEDIA_SETUP_GUIDE.md` — private R2 setup and DAIP media acceptance.
+- `docs/SUPPLIER_LINK_INVENTORY_IMPORT.md` — supplier-link review workflow.
+- `docs/SEO_COMPETITIVE_REVIEW_BUILD248.md` — current SEO/competitor evidence.
+- `DATABASE_STRUCTURE_CURRENT.md` and `SUPABASE_SCHEMA.sql` — schema reference; migrations remain authoritative for changes.
+
+### Retirement policy
+
+Older `BUILD*`, `ROADMAP`, `NEW_CHAT_STATUS`, `HANDOFF_NEXT_CHAT`, `PROJECT_BRAIN`, duplicate competitor, sanity and historical implementation files are retained because release checks and audit history still reference many of them. They are not living planning authorities. This avoids risky mass deletion while reducing current context to two files.
+
+---
+
 # Documentation Index — Build 245
 
 ## Current authorities
@@ -1282,11 +1367,31 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
 
-## Build 246 catalog-readiness synchronization
+## Build 247 first-read additions
 
-- Shared product/inventory publishing readiness now blocks placeholder names, missing required classification/image fields, inactive rows and zero-stock consumables.
-- Public catalog results are filtered at the server boundary.
-- The Build 246 migration adds protected audit evidence, an all-or-nothing publish RPC, Startup process 37 and the current 20-step cycle.
-- Staging acceptance remains required.
+- `DAIP_R2_MEDIA_SETUP_GUIDE.md` — exact Cloudflare/Supabase setup for private large-media ingestion.
+- `docs/digital-asset-intelligence-platform/27_DAIP_Large_Media_Ingestion_and_R2_Setup.md` — DAIP architecture copy of the same workflow.
+- `/admin-daip-media.html` — protected operational intake screen.
+- `sql/2026-08-07_build247_daip_private_media_ingestion.sql` — current DAIP media migration.
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
 
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
+
+<!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
+
+<!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
+
+<!-- BUILD251_SYNC: 2026-08-11 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Gate C dark-theme readability + approved rosie-assets/CarPhotos context -->
+
+<!-- Build 210 documentation sync -->
+<!-- Build 211 documentation sync -->
+<!-- Build 212 documentation sync -->
+<!-- Build 213 documentation sync -->
+<!-- Build 214 documentation sync -->
+
+<!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
+
+<!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->

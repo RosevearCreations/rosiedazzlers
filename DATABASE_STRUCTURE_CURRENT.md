@@ -1080,15 +1080,31 @@ The database is primary after migration; packaged JSON/JavaScript remains a comp
 
 <!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
 
-## Build 246 catalog publish-readiness schema update
+## Build 247 database synchronization
 
-Apply `sql/2026-08-07_build246_catalog_publish_readiness.sql` after the Build 238 and Build 239 migrations. It adds `catalog_publish_readiness_audit`, the protected `admin_catalog_inventory_publish_review(...)` RPC, one new Startup process/evidence row, and the current Build 246 roadmap cycle. Public catalog reads and all inventory publishing paths now share the same readiness criteria; incomplete rows remain private and reviewed publish attempts create audit evidence.
+Production Creative Project raw-media ingestion uses `daip_project_media_assets`, `daip_media_upload_sessions`, `daip_media_upload_parts`, and `daip_media_processing_jobs`. This intentionally does not repurpose Build 218 `daip_media_assets`, which remains the metadata-only Test Lab table. Raw bytes stay in private R2; only metadata/recovery/audit state is stored in Postgres. Migration: `sql/2026-08-07_build247_daip_private_media_ingestion.sql`.
 
-## Build 246 catalog-readiness synchronization
-
-- Shared product/inventory publishing readiness now blocks placeholder names, missing required classification/image fields, inactive rows and zero-stock consumables.
-- Public catalog results are filtered at the server boundary.
-- The Build 246 migration adds protected audit evidence, an all-or-nothing publish RPC, Startup process 37 and the current 20-step cycle.
-- Staging acceptance remains required.
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
 
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+
+## Build 246 catalog-readiness synchronization
+Historical Build 246 catalog readiness tables/RPCs remain part of the current schema and are preserved under Build 247.
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
+
+<!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
+
+<!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
+
+<!-- BUILD251_SYNC: 2026-08-11 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Gate C dark-theme readability + approved rosie-assets/CarPhotos context -->
+
+<!-- Build 210 documentation sync -->
+<!-- Build 211 documentation sync -->
+<!-- Build 212 documentation sync -->
+<!-- Build 213 documentation sync -->
+<!-- Build 214 documentation sync -->
+
+<!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
+
+<!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->
