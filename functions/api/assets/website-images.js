@@ -1,6 +1,6 @@
 // Build 252 — shared approved R2 website-image discovery and filename matching.
 // Canonical route: /api/public_website_images. The nested Build 252 route remains a compatibility fallback.
-// Build 253 adds explicit DB-backed card/page assignments; explicit assignments win over filename matching.
+// Build 253 adds explicit DB-backed card/page assignments. Build 254 protects established images: consumers may use explicit assignments as overrides, while automatic filename matches are fallback-only when an established image exists.
 
 let manifestPromise = null;
 
