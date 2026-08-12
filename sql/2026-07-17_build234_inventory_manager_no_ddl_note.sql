@@ -1,0 +1,2 @@
+-- Build 234 adds a separate inventory manager UI and uses existing catalog_inventory_items fields.
+-- No DDL is required. Soft deletion uses is_active=false and is_public=false.
