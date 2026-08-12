@@ -1,3 +1,52 @@
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 253
+
+**Updated:** 2026-08-12  
+**Purpose:** Current business/technical direction. Read `AI_PROJECT_HANDOFF.md` first for exact implemented/deployment state.
+
+## Build 253 value delivered — Photo Management Studio makes photos a managed business asset
+
+The website can now be refreshed visually without repeatedly changing source code. Each approved public photo can have a human-readable name, R2 location, accessibility/SEO metadata, focal point, provenance notes, and explicit placement. This supports regular seasonal refreshes, better local proof, easier non-technical administration, and safer future content automation.
+
+### Why this matters to the business model
+
+- Real detailing photos can replace generic artwork steadily instead of waiting for a developer pass.
+- A specific package/card/page can keep a deliberate image until the owners intentionally change it.
+- Alt text and captions are maintained beside the photo rather than being scattered across HTML templates.
+- R2 remains the file store, the existing media library becomes the metadata source of truth, and assignments explain where each image belongs.
+- Filename matching remains useful for newly uploaded photos but no longer decides the final public placement when an owner assignment exists.
+- Public proof and private DAIP customer media stay separate, preserving the consent/privacy boundary.
+
+## Highest-value next 20
+
+1. Apply Build 253 migration in staging and run an approved-photo sync.
+2. Assign deliberate images to Premium Wash, Basic Detail and Complete Detail default cards.
+3. Add vehicle-size package variants where the photo library has good small/mid/oversize examples.
+4. Assign deliberate Interior Detail and Exterior Detail card images.
+5. Review the highest-traffic add-on cards and replace weak/generic imagery.
+6. Assign a strong hero image to every current service landing page with suitable proof.
+7. Assign town-specific imagery only where it truthfully represents that service area.
+8. Complete alt text for all public non-decorative managed photos.
+9. Add image dimension/aspect-ratio health extraction and warnings.
+10. Add a “where is this photo used?” dependency report before archive/delete/move actions.
+11. Add replacement/version history with rollback for regular site refreshes.
+12. Add bulk metadata editing for a selected R2 folder or tag.
+13. Add duplicate/near-duplicate detection across public R2 imagery.
+14. Add optional crop/focal presets by placement while preserving the original R2 master.
+15. Feed approved DAIP derivatives into Photo Studio only after consent/privacy review.
+16. Continue the DAIP processing consumer/proxy/frame/transcript work.
+17. Finish large-video resume and retry/dead-letter acceptance using harmless media.
+18. Continue end-to-end booking/payment/refund/notification production acceptance.
+19. Review Search Console + Google Business Profile evidence before changing local SEO copy.
+20. Continue one-H1, concise titles, honest local relevance, mobile/CSS, accessibility and release regression checks every build.
+
+## Documentation policy
+
+`AI_PROJECT_HANDOFF.md` and this file remain the only living planning authorities. `STARTUP_GO_LIVE_BLOCKERS.md` is an operational acceptance runbook. Build summaries and specialist documents are retained for evidence/history and must not become competing roadmaps.
+
+<!-- Historical release guard: # CURRENT LIVING AUTHORITY 2 OF 2 — Build 252 -->
+
+---
+
 # CURRENT LIVING AUTHORITY 2 OF 2 — Build 252
 
 **Updated:** 2026-08-12  
@@ -1469,3 +1518,5 @@ Build 247 establishes the private source-of-truth media layer needed for the DAI
 
 
 <!-- Historical release guard: # CURRENT LIVING AUTHORITY 2 OF 2 — Build 251 -->
+
+<!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->

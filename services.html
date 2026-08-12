@@ -314,7 +314,8 @@
     } from "/assets/pricing-catalog-client.js?v=20260423livecharts2";
     import { renderRecentWorkMounts } from "/assets/recent-work.js";
     import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260812build252";
-    import { loadWebsiteImageManifest, packageImageMatches, addonImageMatches, hydrateR2CardImages } from "/assets/website-images.js?v=20260812build252";
+    // Historical Build 252 image module marker: /assets/website-images.js?v=20260812build252
+    import { loadWebsiteImageManifest, packageImageMatches, addonImageMatches, hydrateR2CardImages } from "/assets/website-images.js?v=20260812build253";
 
     const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
@@ -330,9 +331,7 @@
     const PACKAGE_ORDER = ['premium_wash','basic_detail','complete_detail','interior_detail','exterior_detail'];
 
     function packagePhotoCandidates(pkg){
-      return packageImageMatches(websiteImageManifest, pkg, sizeKey(), 6)
-        .map((photo) => photo.url)
-        .filter(Boolean);
+      return packageImageMatches(websiteImageManifest, pkg, sizeKey(), 6).filter((photo) => photo?.url);
     }
 
     function generalCarPhotoForPackage(pkg){
@@ -341,7 +340,7 @@
         : [];
       if (!photos.length) return '';
       const packageIndex = Math.max(0, PACKAGE_ORDER.indexOf(String(pkg?.code || '').toLowerCase()));
-      return photos[packageIndex % photos.length]?.url || '';
+      return photos[packageIndex % photos.length] || null;
     }
 
     function syncDecisionLinks(){
@@ -445,8 +444,10 @@
       const sz = sizeKey();
       const mainImg = pkg.images_by_size?.[sz] || "";
       const approvedPhotoCandidates = packagePhotoCandidates(pkg);
-      const preferredPhoto = approvedPhotoCandidates[0] || "";
-      const generalApprovedPhoto = generalCarPhotoForPackage(pkg);
+      const preferredPhotoRow = approvedPhotoCandidates[0] || null;
+      const preferredPhoto = preferredPhotoRow?.url || "";
+      const generalApprovedPhotoRow = generalCarPhotoForPackage(pkg);
+      const generalApprovedPhoto = generalApprovedPhotoRow?.url || "";
       const price = pkg.prices_cad?.[sz];
 
       const el = document.createElement("div");
@@ -457,11 +458,11 @@
       const incList = inc.slice(0, 9).map(s=>`<li>${escapeHtml(s.name || "")}</li>`).join("");
 
       let resolvedMainImg = preferredPhoto || mainImg || generalApprovedPhoto;
-      const getImages = ()=>[resolvedMainImg, ...approvedPhotoCandidates.slice(1), mainImg, generalApprovedPhoto, ...HOVER_EXTRA_IMAGES].filter(Boolean);
+      const getImages = ()=>[resolvedMainImg, ...approvedPhotoCandidates.slice(1).map((row)=>row.url), mainImg, generalApprovedPhoto, ...HOVER_EXTRA_IMAGES].filter(Boolean);
 
       el.innerHTML = `
         <div class="service-card-media">
-          <img class="cardImg" alt="${escapeHtml(pkg.name)} mobile detailing example" />
+          <img class="cardImg" alt="${escapeHtml(preferredPhotoRow?.alt_text || `${pkg.name} mobile detailing example`)}" style="object-position:${escapeHtml(preferredPhotoRow?.focal_point || "center")}" />
           ${pkg.code === 'complete_detail' ? '<span class="service-recommended-badge">Most complete choice</span>' : ''}
         </div>
         <div style="margin-top:10px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
@@ -491,7 +492,7 @@
       img.loading = "lazy";
       img.decoding = "async";
       bindImageWithCandidates(img, preferredPhoto || mainImg || generalApprovedPhoto, {
-        extra: [...approvedPhotoCandidates.slice(1), mainImg, generalApprovedPhoto].filter(Boolean),
+        extra: [...approvedPhotoCandidates.slice(1).map((row)=>row.url), mainImg, generalApprovedPhoto].filter(Boolean),
         fallback: "/assets/placeholders/service-photo-needed.svg",
         onResolved: (_img, resolvedUrl) => { resolvedMainImg = resolvedUrl || preferredPhoto || mainImg || generalApprovedPhoto; },
         onExhausted: (node) => { node.src = "/assets/placeholders/service-photo-needed.svg"; node.classList.add("visual-placeholder-img"); }
@@ -503,8 +504,10 @@
     }
 
     function buildAddonCard(addon){
-      const approvedAddonPhotos = addonImageMatches(websiteImageManifest, addon, 5).map((photo) => photo.url).filter(Boolean);
-      const imageUrl = approvedAddonPhotos[0] || addonPrimaryImage(addon) || ADDON_IMAGES[addon.code] || null;
+      const approvedAddonPhotoRows = addonImageMatches(websiteImageManifest, addon, 5).filter((photo)=>photo?.url);
+      const preferredAddonPhoto = approvedAddonPhotoRows[0] || null;
+      const approvedAddonPhotos = approvedAddonPhotoRows.map((photo)=>photo.url);
+      const imageUrl = preferredAddonPhoto?.url || addonPrimaryImage(addon) || ADDON_IMAGES[addon.code] || null;
       const fallbackUrl = addonFallback(addon.code);
 
       const el = document.createElement("div");
@@ -519,7 +522,7 @@
         : `<span class="tag ok">${price!=null ? money(price) : "$—"}</span>`;
 
       el.innerHTML = `
-        ${imageUrl ? `<img class="cardImg" alt="${escapeHtml(addon.name)}" />` : ``}
+        ${imageUrl ? `<img class="cardImg" alt="${escapeHtml(preferredAddonPhoto?.alt_text || addon.name)}" style="object-position:${escapeHtml(preferredAddonPhoto?.focal_point || "center")}" />` : ``}
         <div style="margin-top:${imageUrl ? "10px":"0"};display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
           <div>
             <h3 style="margin:0">${escapeHtml(addon.name)}</h3>
