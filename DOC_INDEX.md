@@ -1,4 +1,13 @@
-# Documentation Index — Build 250
+# Documentation Index — Build 251
+
+<!-- Historical release guard: # Documentation Index — Build 250 -->
+
+## Build 251 current references
+- `BUILD251_SUMMARY.md` — Gate C readability and approved public CarPhotos integration.
+- `AI_PROJECT_HANDOFF.md` — living implementation/handoff authority.
+- `MASTER_VALUE_ROADMAP.md` — living direction/priorities authority.
+- `STARTUP_GO_LIVE_BLOCKERS.md` — specialist acceptance runbook; item 43 covers Gate C readability and public-photo isolation.
+
 
 ## Two living authorities
 
@@ -1347,3 +1356,11 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 <!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
 
 <!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
+
+<!-- BUILD251_SYNC: 2026-08-11 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Gate C dark-theme readability + approved rosie-assets/CarPhotos context -->
+
+<!-- Build 210 documentation sync -->
+<!-- Build 211 documentation sync -->
+<!-- Build 212 documentation sync -->
+<!-- Build 213 documentation sync -->
+<!-- Build 214 documentation sync -->

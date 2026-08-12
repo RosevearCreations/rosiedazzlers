@@ -1,28 +1,27 @@
-# Rosie Dazzlers Build 249 — Inventory Supplier Recovery
+# Rosie Dazzlers Build 251 — Gate C Readability + Approved CarPhotos
 
-**Build date:** 2026-08-10
+Build 251 repairs the unreadable DAIP Gate C admin page and replaces its generic visual with approved real-world Rosie Dazzlers website photos.
 
-## Purpose
-Build 249 makes the existing supplies/tools inventory salvageable without throwing away stock/history. An accurate Amazon link can now repair the selected existing row through a staged, review-first merge.
+## Main changes
+- Fixed the `var(--surface,#fff)` white-card fallback that conflicted with the dark admin theme.
+- Improved contrast for cards, KPIs, muted copy, safety notes, badges, status messages, forms and audit history.
+- Corrected malformed nested form labels.
+- Added responsive desktop/tablet/phone layout rules.
+- Gate C now loads approved public imagery from `/api/public/car_photos` and `rosie-assets/CarPhotos/`.
+- Known approved CarPhotos keys are retained as visual fallbacks.
+- Private DAIP media remains excluded from the visual path.
+- Service-worker cache bumped to `rosie-app-v20260811build251`.
+- No new SQL migration is required.
 
-## Main implementation
-- Existing item key locked during editing.
-- One real Amazon review path replaces the misleading URL-slug helper.
-- Selective overwrite controls and staged field diff.
-- Operational fields preserved.
-- Description and Amazon source metadata persist on save.
-- Workbench Amazon repair/missing-link queues and direct repair actions.
-- Intentional inventory-image placeholder.
-- Desktop/mobile route handoff tested through shared route-copy generation.
+## Deployment acceptance
+1. Deploy Pages/assets together.
+2. Hard-refresh `/admin-daip-gate-c`.
+3. Verify readable dark-theme cards/forms at desktop and phone widths.
+4. Verify `/api/public/car_photos` and confirm current approved IRL photos appear.
+5. Save a harmless Draft review and verify readable status feedback.
+6. Confirm no private DAIP raw media/object path appears anywhere in the public-photo presentation.
 
-## Database
-No new Build 249 DDL is required. Build 249 uses columns already present in `catalog_inventory_items` and the existing supplier-preview audit table. Outstanding Build 247/248 migrations still need to be applied in order where not yet accepted.
-
-## SEO / competitive direction
-Current Google guidance continues to favour accurate, complete Business Profile information and local relevance/distance/prominence. Google title-link guidance continues to favour concise descriptive titles and clear prominent page titles/headings. Current Ontario detailing competitors prominently use clear packages/pricing, online booking, mobile convenience, real work imagery, service-specific pages and reviews. Rosie should keep improving authentic proof and conversion clarity rather than adding thin keyword pages.
-
-## Acceptance priority
-Repair one known inaccurate existing inventory row in staging, verify protected fields/history, then work through the Amazon repair candidate queue before merging true duplicates.
+<!-- BUILD251_SYNC: 2026-08-11 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Gate C dark-theme readability + approved rosie-assets/CarPhotos context -->
 
 <!-- Build 210 documentation sync -->
 <!-- Build 211 documentation sync -->
@@ -40,9 +39,5 @@ Repair one known inaccurate existing inventory row in staging, verify protected 
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
 <!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
 <!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
-
 <!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
-
 <!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
-
-<!-- BUILD251_SYNC: 2026-08-11 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Gate C dark-theme readability + approved rosie-assets/CarPhotos context -->
