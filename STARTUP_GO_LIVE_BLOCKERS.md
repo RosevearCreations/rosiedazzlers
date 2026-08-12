@@ -1,3 +1,24 @@
+# Build 252 operational addition — specialist runbook
+
+**Authority note:** Use `AI_PROJECT_HANDOFF.md` + `MASTER_VALUE_ROADMAP.md` for current state/direction. This file provides detailed acceptance steps only.
+
+## 44. Validate approved public R2 image assignment
+
+1. Deploy Build 252 Pages/Functions together. No Build 252 SQL migration is required.
+2. Open `/api/public/website_images` and confirm it lists only `packages/`, `landing_pages/`, and `CarPhotos/`.
+3. Confirm the response never contains a `DAIP_MEDIA_BUCKET` object, private raw project key, or private object URL.
+4. Open `/services` and change Small → Mid → Oversize. Confirm the five principal service cards prefer the intended service/size images from `packages/`.
+5. Verify add-on cards use descriptive package images where available.
+6. Open Ceramic Coating, Pet Hair Removal, Odor Removal, Headlight Restoration, Paint Correction and several additional service pages. Confirm matching `landing_pages/` files become hero/gallery imagery.
+7. Open Tillsonburg, Woodstock/Ingersoll, Simcoe/Delhi and Port Dover pages. Confirm local filename matches are used where uploaded.
+8. Open the home page and confirm high-intent service/town cards receive appropriate photos without layout overlap at desktop and ~390px phone width.
+9. If a wrong image wins, rename the R2 object with a clearer service/location phrase before creating a hard-coded override.
+10. Run the full release check and one-H1 check before production promotion.
+
+**Move on when:** approved R2 images appear in the intended service/package/location contexts, ambiguous files are identified for renaming, no private media is exposed, and no new mobile/CSS or SEO regression is introduced.
+
+---
+
 # Build 249 operational addition — specialist runbook
 
 **Authority note:** Use `AI_PROJECT_HANDOFF.md` + `MASTER_VALUE_ROADMAP.md` for current state/direction. This file provides detailed execution steps only.
@@ -1468,3 +1489,11 @@ Build 214 documentation sync
 **Move to the next item when:** A first-time visitor can understand size → main package → booking, principal images are real approved Rosie assets where available, no private media is exposed, and mobile/desktop layouts remain stable.
 
 <!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
+
+> **Build 237 synchronization (2026-07-28):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+<!-- BUILD251_SYNC: 2026-08-11 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Gate C dark-theme readability + approved rosie-assets/CarPhotos context -->
+<!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
+
+
+## 43. Validate Gate C readability
+Historical Build 251 compatibility marker; current acceptance is superseded by Build 252 item 44 while Gate C readability remains required.
