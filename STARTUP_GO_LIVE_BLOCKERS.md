@@ -1497,3 +1497,35 @@ Build 214 documentation sync
 
 ## 43. Validate Gate C readability
 Historical Build 251 compatibility marker; current acceptance is superseded by Build 252 item 44 while Gate C readability remains required.
+
+
+---
+
+## Validate Build 253 Photo Management Studio
+
+**Priority:** High-value staging acceptance  
+**Category:** Public media / admin tooling  
+**Evidence key:** `photo_studio_253`
+
+### Why this matters
+
+Build 253 makes public website imagery owner-manageable instead of source-code-dependent. The database migration, public R2 isolation, explicit assignment precedence, metadata persistence, rename/move safety, and public-page rendering all need one controlled staging proof before normal use.
+
+### Detailed instructions
+
+1. Apply `sql/2026-08-12_build253_photo_management_studio.sql` in staging.
+2. Deploy Pages and Functions together and hard-refresh `/admin-photo-studio`.
+3. Confirm `/api/public_website_images` returns JSON and lists only approved public website prefixes.
+4. Press **Sync approved R2 photos** and confirm known `packages/`, `landing_pages/`/`landing-pages/`, and `CarPhotos/` assets appear.
+5. Select one harmless image and save a label, useful alt text, title/caption, tags and focal point. Refresh and confirm persistence.
+6. Assign that image to one harmless package/card/page target. Confirm the exact public placement uses the assigned photo, alt text and focal point.
+7. Remove the assignment and confirm automatic filename matching resumes.
+8. Move/rename one harmless test image within approved public folders. Confirm the media record and assignment survive and the old R2 key is removed only after the database update succeeds.
+9. Verify no private DAIP object, key, customer filename or signed/raw URL appears in the public manifest.
+10. Record the test image/target and outcome without including private customer-identifying media.
+
+### Move to the next item when
+
+Photo Studio can sync, edit metadata, assign/unassign, rename/move and render one approved public image end-to-end; the canonical manifest works at `/api/public_website_images`; and public/private media isolation is proven.
+
+<!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->
