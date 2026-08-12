@@ -1,3 +1,400 @@
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 253
+
+**Updated:** 2026-08-12  
+**Build:** 253  
+**Use this file first in a new chat or by another AI.** The only other living planning authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` remains the specialist deployment/acceptance runbook.
+
+## Build 253 current state — application-wide Photo Management Studio
+
+Build 253 replaces filename-only website image maintenance with a reusable admin photo system while preserving automatic filename matching as the fallback. Rosie now has one managed public-image inventory built on the existing `app_media_library`, plus explicit placement records in `app_media_assignments` so a specific photo can be assigned to a specific package card, add-on, landing-page hero/gallery slot, home-page service/location card, or approved admin visual without editing source code.
+
+### Implemented in source
+
+- New protected `/admin-photo-studio.html` and clean `/admin-photo-studio/` route.
+- Approved public R2 folders can be synchronized into the existing media library: `packages/`, `landing_pages/`, legacy `landing-pages/`, `CarPhotos/`, `addons/`, `brand/`, `gallery/`, and `products/`.
+- Photo metadata editor: display name, filename/folder, alt text, SEO/title text, caption, tags, usage contexts, recommended size, focal point, decorative state, attribution, and license/consent notes.
+- Safe R2 rename/move uses copy-then-database-update-then-delete so existing assignments follow the media record instead of being recreated.
+- Explicit target assignments override filename matching; automatic matching remains the non-destructive fallback.
+- Known assignment registry lives in `data/build253_photo_targets.json`; free-form target keys remain available for future components.
+- Package card targets support default plus small/mid/oversize variants.
+- Add-ons, landing-page hero/gallery slots, selected home service/location cards, and Gate C visuals accept explicit assignments.
+- New canonical public manifest is `/api/public_website_images`; `/api/public/website_images` remains a compatibility alias after the Build 252 nested-route deployment 404.
+- Public manifests contain only sanitized metadata for approved public R2 assets. They never expose `DAIP_MEDIA_BUCKET` or private Creative Project masters.
+- Existing Media Health remains useful for technical health checks; Photo Studio becomes the normal human-facing assignment/metadata workflow.
+- Service-worker cache is Build 253 and includes the new admin route/target registry.
+
+## Database action required
+
+Apply `sql/2026-08-12_build253_photo_management_studio.sql` in staging before using sync, metadata save, rename/move, or explicit assignments. The migration extends the existing `app_media_library` and creates `app_media_assignments`; it does not create a competing media table.
+
+### Recommended staging order
+
+1. Apply any still-outstanding Build 247 and Build 248 migrations first.
+2. Apply `sql/2026-08-12_build253_photo_management_studio.sql`.
+3. Deploy Pages + Functions together.
+4. Hard-refresh `/admin-photo-studio`.
+5. Press **Sync approved R2 photos** and confirm `packages/`, `landing_pages/`, `CarPhotos/` and other approved public folders appear.
+6. Pick one harmless image, add descriptive alt text, save, refresh, and confirm the metadata persists.
+7. Assign that image to one non-critical package or landing target, open the public page, and confirm the exact image/alt/focal point appears.
+8. Rename or move one harmless test image inside approved public folders; confirm its assignment remains attached and the old R2 key disappears only after the database update succeeds.
+9. Remove the test assignment and confirm automatic matching resumes.
+10. Verify `/api/public_website_images` returns JSON while the nested compatibility URL may also continue to work.
+
+## Important operating boundary
+
+Photo Studio manages **public website assets only**. It is not a path around DAIP privacy review. Raw customer media remains in the private DAIP bucket and requires the separate consent/privacy/content-package process before any reviewed derivative can become a public website asset.
+
+## Current next engineering/operating priorities
+
+1. Apply and accept Build 253 in staging using real approved R2 photos.
+2. Review all principal package assignments and set deliberate default + vehicle-size imagery where enough photos exist.
+3. Review SEO landing-page hero/gallery assignments and remove weak/generic imagery.
+4. Fill missing alt text with short contextual descriptions; use decorative=true only for truly decorative images.
+5. Add image-dimension extraction/validation to the managed library so oversized or undersized assets can be flagged before publishing.
+6. Add optional image-usage reporting showing every page/card currently referencing a photo before archive/delete is allowed.
+7. Add image replacement/version history so seasonal refreshes can be rolled back without losing placement metadata.
+8. Continue DAIP private-processing acceptance and content-package review separately from the public photo library.
+9. Continue public booking/payment/refund/notification acceptance and local Search Console/Business Profile evidence review.
+10. Keep one-H1, concise-title, accurate local-area, mobile/CSS, public/private media isolation, and cumulative release checks on every pass.
+
+<!-- Historical release guard: # CURRENT LIVING AUTHORITY 1 OF 2 — Build 252 -->
+
+---
+
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 252
+
+**Updated:** 2026-08-12  
+**Build:** 252  
+**Use this file first in a new chat or by another AI.** The only other living planning authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` is a specialist operational runbook.
+
+## Build 252 current state — approved R2 website imagery is assigned by intent
+
+Build 252 expands the public-image system from the earlier `CarPhotos/` proof library to all three approved website prefixes in `rosie-assets`: `packages/`, `landing_pages/`, and `CarPhotos/`.
+
+### What is implemented
+
+- New read-only `/api/public/website_images` inventories image objects only from `packages/`, `landing_pages/`, and `CarPhotos/` in the configured public R2 asset bucket.
+- The endpoint never queries `DAIP_MEDIA_BUCKET` or any private raw-project prefix.
+- New `/assets/website-images.js` ranks approved images by descriptive filename, service/package code, page slug, service name, and vehicle-size hints.
+- Principal service cards prefer matching `packages/` imagery, then approved real-car proof, before an intentional placeholder.
+- Add-on cards now look for matching `packages/` images before older bundled fallbacks.
+- Dedicated service and town landing pages prefer matching `landing_pages/` images for the hero and use additional matches in the visual gallery.
+- Home-page special-service and town cards receive matching approved R2 imagery when a descriptive filename is available.
+- The hand-built Ceramic Coating page participates in the same approved R2 card-image system.
+- Dynamic LocalBusiness/Service areaServed output is narrowed for town pages to the actual town/county cluster instead of claiming every Rosie town on every location page.
+- Shared R2 card imagery has responsive crop/aspect-ratio CSS for desktop and mobile.
+
+### Runtime matching rules
+
+The application does not require a code deployment for every new approved image. Descriptive filenames are normalized across spaces, underscores, hyphens and common CamelCase names. For packages, include the package/service wording and optionally `small`, `mid`, `large`, `oversize`, `SUV`, `truck`, etc. For landing pages, include the service or location slug/name.
+
+Machine-readable mapping and folder priority are recorded in `data/build252_public_r2_image_mapping.json`.
+
+### Acceptance after deployment
+
+1. Open `/api/public/website_images` and confirm `counts.packages`, `counts.landing_pages`, and `counts.car_photos` reflect the approved R2 uploads.
+2. Open `/services` at desktop and phone width and confirm Premium Wash, Basic Detail, Complete Detail, Interior Detail and Exterior Detail use the intended package images for each size.
+3. Check several add-ons such as pet hair, odour, headlight, clay, wax/sealant and ceramic-related cards.
+4. Open the special-service and town landing pages and confirm descriptive `landing_pages/` files appear as the hero or gallery rather than generic fallbacks.
+5. Check the home-page special-service and town cards for the correct matched IRL/service photos.
+6. Rename only ambiguous R2 filenames; do not hard-code a wrong image just to eliminate a placeholder.
+7. Confirm no private DAIP object key or URL is ever returned by the public manifest.
+
+---
+
+<!-- Historical release guard: # CURRENT LIVING AUTHORITY 1 OF 2 — Build 251 -->
+
+**Updated:** 2026-08-11  
+**Build:** 251  
+**Use this file first in a new chat or by another AI.** The only other living planning authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` remains a specialist operational runbook.
+
+
+## Build 251 current state — readable Gate C + real approved Rosie work
+
+Build 251 repairs `/admin-daip-gate-c` after its page-local card CSS fell back to a white surface inside the shared dark admin theme. The Gate C workspace now uses dark, high-contrast cards, readable muted/status text, consistent form controls, responsive KPI/evidence layouts and corrected label markup.
+
+### Approved public photo use
+
+- Gate C now shows real approved website imagery from `rosie-assets/CarPhotos/` for visual context.
+- The page first asks `/api/public/car_photos` for the current approved public manifest and uses those returned URLs when available.
+- Known approved CarPhotos keys remain as safe fallbacks so the page still has real Rosie context if the manifest is temporarily unavailable.
+- This visual use is strictly separate from private DAIP raw media; no `DAIP_MEDIA_BUCKET` path or private object URL is read or rendered.
+- Images have alt text, lazy loading for the strip and failure fallbacks.
+
+### Gate C usability repairs
+
+- Removed the undefined `--surface` dependency that caused white cards with light text.
+- Corrected nested/malformed `<label>` markup for Technical owner and Independent reviewer.
+- Added visible success/error status treatment, dark safety-note treatment and stronger KPI/audit contrast.
+- Added responsive breakpoints for desktop, tablet and narrow-phone layouts.
+- Bumped the service-worker cache to Build 251 so the repaired page is not masked by a stale cached copy after deployment.
+
+### Required acceptance after deployment
+
+1. Hard-refresh `/admin-daip-gate-c` on desktop and phone width.
+2. Confirm every card, KPI, form field, note and audit entry is readable without light-on-light or dark-on-dark text.
+3. Confirm `/api/public/car_photos` returns approved `CarPhotos/` entries; Gate C should replace its fallback photo set with those current images automatically.
+4. Confirm the public photos are context only and no private DAIP media/object paths are displayed.
+5. Save a harmless Draft review and verify status feedback remains readable.
+
+---
+
+<!-- Historical release guard: # CURRENT LIVING AUTHORITY 1 OF 2 — Build 250 -->
+# Historical Build 250 handoff snapshot
+
+## Build 250 current state — simpler service choice + approved R2 website photos
+
+Build 250 concentrates the public service journey around three plain steps: choose vehicle size, choose one main package, then check availability/book. The principal package cards now sit above the broader service hub; the two duplicate price/details chart controls were removed from Services because those comparisons belong on Pricing. Vehicle size is deliberately larger and more prominent. The goal-based chooser was rebuilt with consistent responsive cards.
+
+### Public R2 photo integration
+
+- Added read-only `/api/public/car_photos` backed by the existing public R2 assets binding aliases. It lists only approved public image objects under `CarPhotos/`; private DAIP media is never queried.
+- Principal service cards try service-matched `CarPhotos/` assets first when filenames contain useful service terms, then retain the historical package artwork as fallback.
+- If no service-specific match exists, a stable approved Rosie `CarPhotos/` image may be used after the package asset fails; the final fallback is an intentional service-photo placeholder rather than an unrelated reviews image.
+- The endpoint is cached briefly and caps the public manifest to keep request/memory cost bounded.
+
+### Clarity / UX changes
+
+- Services: large Step 1 vehicle-size picker, Step 2 principal service cards, optional goal-based help, Step 3 booking/availability, then the Full Service Hub.
+- Removed `Open price chart` and `Open details chart` from Services; Pricing remains the comparison destination.
+- Rebuilt `Which service should we choose?` as five consistent goal cards tied directly to the five principal packages.
+- Complete Detail is visually marked as the broadest starting choice without hiding cheaper/simpler packages.
+- Home secondary CTA now says `Not sure? Compare services`.
+- Booking top controls are reduced so the wizard remains the main path; full price comparison remains on Pricing.
+- Build 250 CSS includes responsive decision-card, size-picker, package-card and CTA rules for desktop/tablet/phone widths.
+
+### SEO/business direction retained
+
+- One H1 per public page remains mandatory.
+- Service-page titles/descriptions remain descriptive rather than keyword-stuffed.
+- Local pages stay limited to real service areas; no thin location pages were added.
+- Approved local Rosie photos are preferred because authentic proof supports users and local-business credibility better than generic filler imagery.
+
+### Required acceptance after deployment
+
+1. Confirm the Pages project public R2 binding points to `rosie-assets` using one supported alias (`ROSIE_PUBLIC_ASSETS_BUCKET`, `PUBLIC_ASSETS_BUCKET`, `R2_PUBLIC_ASSETS_BUCKET`, or `ASSETS_BUCKET`).
+2. Open `/api/public/car_photos` and confirm the new `CarPhotos/` filenames appear.
+3. Open `/services` on desktop and phone; verify Vehicle size is prominent and selecting a size updates package prices and booking links.
+4. Confirm Premium Wash, Basic Detail, Complete Detail, Interior Detail and Exterior Detail show the intended R2 photos when their filenames match the service; rename ambiguous R2 filenames with clear service terms if needed.
+5. Verify the Full Service Hub is below the five principal package cards and the old price/details chart buttons are gone.
+6. Continue Build 249 inventory cleanup and outstanding Build 247/248 DAIP staging acceptance.
+
+---
+
+<!-- Historical release guard: # CURRENT LIVING AUTHORITY 1 OF 2 — Build 249 -->
+# Historical Build 249 handoff snapshot
+
+
+**Updated:** 2026-08-10  
+**Build:** 249  
+**Use this file first in a new chat or by another AI.** The only other living authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` remains a detailed operational runbook, not a third planning authority.
+
+## Build 249 current state — inventory recovery through reviewed supplier refresh
+
+Build 249 turns the Amazon supplier-link helper into an existing-row recovery workflow. Staff can select a bad supply/tool row, open the exact inventory key, paste an accurate Amazon link, choose which supplier fields may be refreshed, inspect staged before/after changes, and save back to the same row while preserving stock, reorder settings, receipts, gallery, station, service tags, ratings, visibility, active state and operational history.
+
+### Completed in source
+
+- Replaced the misleading URL-slug-only `Fill from Amazon link` behaviour with the real `/api/admin/catalog_supplier_link_preview` review workflow.
+- Existing inventory edits now lock `item_key`; supplier refresh cannot silently create a second key for the selected row.
+- Added explicit overwrite controls for identity, classification, description, CAD cost and featured image.
+- Added staged before/after supplier diffs and a clear repair/new-item mode indicator.
+- Added description editing plus visible Amazon ASIN/title/brand/category source metadata; those fields now persist through the inventory save payload.
+- Amazon.com/non-CAD observed prices continue to preserve the existing CAD unit cost rather than overwrite it.
+- Added `Amazon repair candidates` and `Missing Amazon / supplier link` Workbench filters plus direct `Amazon refresh` actions on desktop and mobile.
+- Added query-string handoff (`/admin-catalog.html?item=<item_key>`) so Workbench repair links load the intended existing item automatically.
+- Replaced misleading generic-addon image fallback in the inventory editor with the intentional inventory-tools visual placeholder.
+- Retained Build 248 DAIP story-review/content-package gates, Build 247 `content/security` workstream repair, catalog publish readiness, one-H1 SEO rules and local structured-data precision.
+- Documentation remains governed by exactly two living authorities: this file and `MASTER_VALUE_ROADMAP.md`.
+
+### Required deployment/acceptance work
+
+1. Deploy Build 249 Pages/Functions together; Build 249 itself adds no required database DDL.
+2. In staging, open Inventory Workbench → `Amazon repair candidates`, choose one known bad row and select `Amazon refresh`.
+3. Paste the correct Amazon link, verify the same item key remains locked, inspect the staged field changes, then save.
+4. Confirm quantity, reorder thresholds, receipt, station, service tags, gallery, ratings and inventory history did not change unexpectedly.
+5. Repeat with Amazon.ca and an Amazon short/share link; for Amazon.com verify a USD/non-CAD observation never overwrites the CAD cost automatically.
+6. Continue outstanding Build 247/248 staging migration and private DAIP/R2 acceptance where not already complete.
+7. Continue real-device booking/payment/refund/email, Search Console/Business Profile and controlled soft-launch acceptance.
+
+---
+
+# Historical Build 248 handoff snapshot
+
+**Updated:** 2026-08-09  
+**Build:** 248  
+**Use this file first in a new chat or by another AI.** The only other living authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` remains a detailed operational runbook, not a third planning authority.
+
+## Build 248 current state
+
+Build 248 repairs Amazon supplier-link review imports and advances DAIP from private upload-only intake into reviewed private story evidence, operator retry/dead-letter controls, Creative Project content-package readiness, and an explicit human content-package review gate. Raw DAIP media remains private and no new workflow automatically publishes customer media.
+
+### Completed in source
+
+- Repaired `/api/admin/catalog_supplier_link_preview` `TypeError: patterns is not iterable` and hardened Amazon.ca/Amazon.com/a.co/amzn.to parsing, bounded response reads, currency handling, duplicate review, and error reporting.
+- Added `sql/2026-08-09_build248_supplier_daip_story_review.sql`.
+- Added private media `selected/excluded/not reviewed` story-evidence state, story ordering and review notes.
+- Added processing-job retry, block, cancel and dead-letter operator controls with retry limits.
+- Added Creative Project readiness reporting using approved sessions plus selected private media metadata.
+- Content-plan drafts now carry a private evidence manifest containing asset IDs/review metadata only; raw object URLs are excluded.
+- Added content-package gate: `not_ready`, `ready_for_review`, `in_review`, `approved`, `changes_requested`. Approval does not publish.
+- Corrected canonical roadmap workstreams to allow `content` and `security`, and synchronized Build 248 schema changes into `SUPABASE_SCHEMA.sql`.
+- Narrowed local landing-page structured-data `areaServed` to each actual town/county and retained the one-H1/title/meta guardrails.
+- Sanity review confirms public pages already have a visual or intentional visual placeholder; no new thin location pages were added.
+- Documentation is now governed by two living authorities: this file for current state/handoff and `MASTER_VALUE_ROADMAP.md` for current direction.
+
+### Required deployment/acceptance work
+
+1. If Build 247 is not applied yet, apply `sql/2026-08-07_build247_daip_private_media_ingestion.sql` first.
+2. Apply `sql/2026-08-09_build248_supplier_daip_story_review.sql` in staging.
+3. Test one Amazon.ca link, one Amazon.com link, and one Amazon short/share link; confirm imports stay review-only and non-CAD observed prices are not silently treated as CAD.
+4. Create/bind the private Cloudflare R2 bucket as `DAIP_MEDIA_BUCKET`, then complete photo and >300 MB interrupted/resumed video acceptance.
+5. Review/select private story evidence and exercise retry/dead-letter controls on harmless test jobs.
+6. The actual FFmpeg-class processing/render consumer is still outstanding; Build 248 supplies the durable queue/review contract but does not pretend Pages Functions can render final long/short videos.
+7. Continue real-device, booking/payment/refund/email, Search Console, Business Profile and controlled soft-launch acceptance.
+
+---
+
+# AI Project Handoff — Build 246 Current State
+
+## Read first
+
+Build 246 adds protected catalog publishing readiness. The latest functional migration is `sql/2026-08-07_build246_catalog_publish_readiness.sql`. Source implementation is complete; staging/production acceptance is not.
+
+## Current authorities
+
+1. `AI_PROJECT_HANDOFF.md`
+2. `MASTER_VALUE_ROADMAP.md`
+3. `STARTUP_GO_LIVE_BLOCKERS.md`
+
+## Immediate next action
+
+Apply the Build 246 migration in staging and complete process 37 before treating public catalog readiness as production-proven.
+
+---
+
+# Rosie Dazzlers — AI Project Handoff (Build 245)
+
+**Updated:** 2026-08-06  
+**Build 245:** protected UI/SEO route scanner, Startup cache diagnostics and recovery controls, safer service-worker installation/fallbacks, service-specific static landing-page H1/metadata fallbacks, admin noindex corrections, gift-certificate one-H1 repair, and synchronized no-DDL documentation.
+
+## Continue from here
+
+- Deploy and open `/admin-ui-health.html`.
+- Confirm `/assets/startup-command-center.js?v=20260807build245` reports Build 245.
+- Export the deployed UI/SEO scan JSON and attach the safe result to Startup evidence.
+- Build 240 remains the latest functional schema migration; Build 245 requires no DDL.
+- Do not remove the standard booking path while Creative Projects and DAIP continue to expand.
+- Current authority order: this file → `MASTER_VALUE_ROADMAP.md` → `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+# Rosie Dazzlers — AI Project Handoff (Build 241)
+
+**Updated:** 2026-08-05  
+**Build 241 hotfix:** repairs the unified Startup Command Center summary crash caused by a JavaScript temporal-dead-zone name collision, adds all-settled refresh fallback handling, and advances browser/service-worker cache tokens. No database change is required.
+
+## Build 241 continuation pointer
+
+- Primary repaired route: `/admin-startup-guide.html`.
+- Corrected asset: `/assets/startup-command-center.js?v=20260805build241`.
+- No-DDL record: `sql/2026-08-05_build241_startup_command_center_initialization_hotfix_no_ddl.sql`.
+- The Build 240 inventory posting/reversal migration remains the latest functional database migration.
+- Do not reintroduce a local variable named `evidenceRows` inside `updateSummary`; the row factory is now `getEvidenceRows()`.
+- `refreshAll()` uses `Promise.allSettled()` so one failed panel loads a labelled fallback rather than producing an uncaught promise rejection.
+
+---
+
+# Rosie Dazzlers — AI Project Handoff (Build 240)
+
+**Updated:** 2026-08-05  
+**Build 240 operational release:** preview-first transactional inventory posting and authorized compensating reversal for bookings and reviewed Creative Project reservations; database row locking, shortage validation, idempotency, posting history, read-only fallback, mobile/desktop admin workflow, Startup catalog expansion, SEO/CSS/schema/document synchronization.
+
+## Build 240 continuation pointer
+
+- Operator route: `/admin-inventory-posting.html`.
+- Migration: `sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql`.
+- Apply after Builds 235, 237, 238 and 239, staging first.
+- The original Inventory Workflow and Inventory Workbench remain supported.
+- Booking and project stock deductions now use one database transaction; never restore the removed browser PATCH loop.
+- Reversal is compensating history, not deletion. Booking reversals require accounting review.
+- Current go-live authorities remain this file, `MASTER_VALUE_ROADMAP.md`, and `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+# Rosie Dazzlers — AI Project Handoff (Build 238)
+
+**Updated:** 2026-07-30  
+**Build 238 operational release:** transactional inventory changes, reviewed duplicate merge, stronger API/UI fallbacks, current-cycle startup guidance, SEO metadata tightening, CSS/route regression protection and synchronized schema/documentation.
+
+## Read order and authority
+
+1. `AI_PROJECT_HANDOFF.md` — current architecture, deployment state and engineering handoff.
+2. `MASTER_VALUE_ROADMAP.md` — current business/product direction and ordered next work.
+3. `STARTUP_GO_LIVE_BLOCKERS.md` — exact go-live blockers, where to find them, detailed instructions and completion evidence.
+4. `DEVELOPMENT_ROADMAP.md` and `KNOWN_GAPS_AND_RISKS.md` — operational detail and retained gap history; they do not override the first three files.
+
+## Build 238 source changes
+
+- Preserved the existing manual inventory editor, JSON tools, row editor, archive/restore, supplier importer and seven-image gallery.
+- Replaced browser-sequential bulk inventory writes with a **preview-first, all-or-nothing database RPC**. The complete batch is validated before any write; an error rolls back the batch. Header and row audit tables preserve actor, reason, before/after values and changed fields.
+- Added a **reviewed two-row duplicate merge**. It previews reference counts, proposed quantity and gallery results; requires an explicit reason and confirmation; transfers known references; records compensating inventory movements; keeps a merge audit; and archives the duplicate rather than hard deleting it.
+- Added same-type and compatible-unit merge protections to reduce accidental tool/supply or unit mismatches.
+- Added a cached **read-only Inventory Workbench fallback**. If the live list API is unavailable, the last successful inventory snapshot can still be searched while all write controls remain blocked.
+- Added protected endpoints: `/api/admin/catalog_inventory_bulk_update`, `/api/admin/catalog_inventory_merge` and read-only `/api/admin/catalog_inventory_audit_list`.
+- Added a readable **Transaction & merge history** dialog with recent batch/merge evidence and CSV export, so operators do not need to search Supabase tables for routine review.
+- Added migration: `sql/2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql`.
+- Updated the Roadmap Execution Centre to Build 238 and added a packaged `data/build238_next_steps.json` fallback.
+- Expanded the Startup Guide to 25 ordered items and added detailed migration, merge and rollback acceptance steps.
+- Tightened titles/descriptions on 19 public pages while retaining one clear H1, local service wording and distinct customer intent.
+- Bumped service-worker and compatibility stylesheet cache identifiers so older CSS does not mask the new release.
+
+## Deployment order
+
+1. Deploy the ZIP to the preview/development branch.
+2. Hard-refresh `/admin-roadmap-execution`, `/admin-startup-guide`, `/admin-inventory-manager`, `/admin-blocks` and representative public pages.
+3. Apply the Build 237 migration if shared launch evidence/current-cycle columns are not already present.
+4. Apply the Build 235 gallery migration if `gallery_image_urls` is not already present.
+5. Apply the Build 238 migration in staging.
+6. Preview a harmless bulk edit, execute it, verify all selected rows changed and inspect the batch audit.
+7. Deliberately preview an invalid mixed batch and confirm no row changes.
+8. Preview a known same-type/same-unit duplicate merge, verify reference counts, execute it, and confirm the survivor/archived duplicate/audit/movements.
+9. Continue through `STARTUP_GO_LIVE_BLOCKERS.md`; do not treat source completion as production acceptance.
+
+## Current launch position
+
+The application is feature-rich enough for an invite-only soft launch after the critical evidence is complete. Remaining launch risk is predominantly operational proof: booking/calendar consistency, live payment/refund/webhook evidence, notification delivery, Cloudflare production settings, backup/restore, policies/consent, real-device accessibility, Search Console/Business Profile verification, inventory cleanup, approved local media and controlled first-week monitoring.
+
+## Guardrails
+
+- Never guarantee first-page placement; improve relevance, accurate local information, prominence signals and technical quality.
+- Keep one H1 per exposed HTML page.
+- Do not hard-delete inventory rows with history.
+- Do not restore browser-by-browser JSON as the authoritative source for multi-user operational data.
+- Do not expose service-role credentials, payment secrets or private customer/media evidence in browser responses or Markdown.
+- Continue to preserve old Markdown and migrations until release guards are modernized and an archive manifest is approved.
+
+---
+
+# Build 237 current handoff — 2026-07-28
+
+- Fixes the missing CSS and AdminShell dependency on `/admin-roadmap-execution` and related historical admin pages.
+- Adds `/admin-startup-guide.html` plus `STARTUP_GO_LIVE_BLOCKERS.md` as the detailed ordered launch guide.
+- Adds DB-first shared launch evidence with browser fallback; apply `sql/2026-07-28_build237_css_startup_evidence_roadmap.sql`.
+- Seeds the current next-20 roadmap cycle and adds exact action paths.
+- Keeps `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` as the only living direction documents.
+- Next operational priority: deploy preview, apply migration, verify Block Calendar, booking, Stripe, email, environment, backup, policies and security before invite-only soft launch.
+
+---
+
+# Build 236 current handoff — calendar and launch stabilization (2026-07-26)
+
+Build 236 restores the broken Block Calendar, the missing shared responsive/admin CSS, the complete admin authorization/menu/shell, editable public chrome, and analytics registry integration, aligns all schedule readers with the retained `blocked_date`/`slot` schema, preserves compatibility aliases, adds selected-date quick actions and schedule-health evidence, expands launch preflight, and refreshes visual-placeholder coverage. No DDL is required. See `docs/BUILD236_CALENDAR_SEO_CSS_STABILIZATION.md` for the completed work and 30 connected next steps.
+
+**First-read rule:** this file and `MASTER_VALUE_ROADMAP.md` are the only living strategy sources. Retained Markdown remains for operational reference and release/audit compatibility. Do not delete historical files until release-guard dependencies are modernized.
+
+---
+
 # Rosie Dazzlers — AI Project Handoff (Build 225)
 
 **Updated:** 2026-07-07  
@@ -623,3 +1020,192 @@ Build 230 extends only the opt-in Creative Project Intelligence path. Ordinary c
 Added: structured project-only material, labour and other-cost lines; optional project templates; before/after applicability; consent status and summary; story/platform/commerce/report drafts; unified batch output review; reversible booking unlink, archive and restore; and a project-to-DAIP metadata association that is denied until Gate C is accepted and technical capability is explicitly enabled. Nothing publishes automatically.
 
 Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_build230_project_costs_templates_outputs.sql`.
+
+## Build 231 — project profitability and content planning
+
+Build 231 adds reversible project cost lines, revenue/profitability, therapeutic and non-commercial classifications, a reviewed project-consumption ledger, read-only booking comparison, template administration, consent-expiry reminders, shot plans, approved-session content plans, metadata-only archive manifests, lessons approval and future recommendation scoring. Ordinary bookings remain unchanged and DAIP Gate C remains required.
+
+
+## Build 232 — accessible project controls and archive history (2026-07-15)
+
+Build 232 replaces the remaining JSON prompt used to edit project material, labour and cost rows with an accessible dialog form. It adds project budget and target-margin guidance, budget variance and break-even calculations, assignable/evidence-aware shot plans, reviewed consent-reminder queue records, draft revision history, and authenticated metadata-only archive downloads. Ordinary bookings remain unchanged; inventory posting still does not mutate stock; DAIP Gate C and all media/publication controls remain held.
+
+Migration: `sql/2026-07-15_build232_project_controls_archive_history.sql`. Workspace: `/admin-creative-projects.html`.
+
+### Next 20 connected steps
+1. Apply and test Build 232 in staging.
+2. Add reservation availability checks against live inventory.
+3. Define the transactional stock-posting and reversal RPC.
+4. Add sales-channel revenue-source and fee lines.
+5. Add budget-warning tasks to Today Needs Attention.
+6. Connect approved consent reminders to the notification review queue.
+7. Add shot-plan drag ordering and mobile capture evidence selection after Gate C.
+8. Display draft version comparisons and restore controls.
+9. Add provider-neutral AI draft adapter contracts with hard cost limits, disabled by default.
+10. Add editable YouTube chapter timecodes.
+11. Add clip evidence selection after Gate C.
+12. Add Pinterest board administration.
+13. Add Etsy taxonomy and shipping-profile lookup.
+14. Add website schema validation and internal-link checks.
+15. Add educational safety reviewer assignment.
+16. Add CSV archive exports alongside JSON.
+17. Add lessons-to-knowledge-base promotion with human approval.
+18. Improve recommendation scoring with cost, audience and reusable-skill factors.
+19. Add destination-readiness checks before social or commerce handoff.
+20. Keep standard bookings, DAIP media and publishing approval-only.
+
+
+## Build 233 — Supplier-link inventory intake
+- Added a provider-neutral supplier-link preview contract, with Amazon.ca and Amazon.com enabled first.
+- Staff paste a product URL, review extracted public metadata and suggested tool/consumable classification, then save through the existing authoritative inventory endpoint.
+- Exact duplicate checks use normalized Amazon URL and ASIN. Imported images, prices and descriptions are drafts only and require human review.
+- Import attempts are audited in `catalog_supplier_import_audit`; no browser credentials, scraping tokens or automatic purchases are introduced.
+- Ordinary booking inventory, project reservation ledgers and DAIP Gate C remain unchanged.
+
+
+## Build 234 — Separate Inventory Manager
+
+Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and adds `admin-inventory-manager.html` as an optional spreadsheet-style management surface. It supports row-level edits, suspicious-name review, filtering, sorting, soft archive, restore, desktop tables, and mobile cards. The authoritative save path remains `/api/admin/catalog_inventory_save`; no hard delete was added.
+
+
+## Build 235 — operational readiness, JSON table editing, galleries
+- Preserved the original Inventory Workflow and expanded the separate Inventory Workbench.
+- Added field/value JSON table editing with individual-field and complete-row save actions.
+- Added bulk changes, CSV export, readiness scoring, and ordered gallery previews.
+- Added up to seven gallery images through `gallery_image_urls` while retaining `image_url` as featured.
+- Added `/admin-launch-readiness.html` with automatic audits plus manual real-world preflight confirmations.
+- Migration: `sql/2026-07-19_build235_inventory_json_gallery_launch_readiness.sql`.
+- Next focus: deploy migration, perform real payment/email/booking tests, then address the highest-impact launch blockers shown by the dashboard.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+## Build 239 — Unified Startup Command Center
+
+The normal launch workflow now begins at `/admin-startup-guide.html`. It incorporates every detailed startup blocker, shared launch evidence, production readiness, guided tests, and the current next-20 roadmap. The database catalog `app_startup_process_items` is authoritative after the Build 239 migration; `data/build239_go_live_blockers.json` is the complete read-only fallback. Legacy readiness routes forward to Startup sections and should not be used as separate checklists.
+
+Apply migrations in order: Build 235 gallery if outstanding, Build 237 evidence/roadmap, Build 238 inventory transaction/merge, then Build 239 unified startup catalog.
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->
+
+
+## Build 242 update
+
+- Repaired `/admin-daip-intake-dry-run` contrast and card styling.
+- Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
+- Advanced Startup Command Center cache-busting and service-worker references to Build 242.
+- No new database migration was introduced in this build.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+# Build 247 — DAIP private raw-media ingestion
+
+**Current build:** 247  
+**Updated:** 2026-08-07
+
+Build 247 moves DAIP from metadata-only intake planning to a deliberately private, Creative-Project-linked raw-media ingestion layer. It does **not** weaken the historical Build 218 metadata-only Test Lab: that older subsystem continues using `daip_media_assets`. Production project masters use a separate table, `daip_project_media_assets`.
+
+## Architecture now implemented in source
+
+- Private R2 binding expected as `DAIP_MEDIA_BUCKET`; aliases are accepted only for backward/operator flexibility.
+- Raw object keys are project scoped: `projects/{project_uuid}/raw/photos|video|files/{asset_uuid}/{safe_filename}`.
+- The browser sends 32 MiB multipart chunks through authenticated Pages Functions rather than uploading a >300 MB body in one request.
+- Multipart state and ETags are stored in Supabase so a staff member can reselect the same file and continue from completed parts.
+- Completed masters are treated as immutable from the intake interface. Abort is available only while a multipart upload is incomplete.
+- Duplicate completed imports are blocked by Creative Project + normalized filename + file size.
+- Raw media remains `private_internal`; `public_destination_enabled` is structurally false.
+- Completion creates downstream job rows for metadata, privacy review and content candidate indexing; video additionally queues proxy, frame, audio, transcript and scene-analysis jobs.
+- If `DAIP_PROCESSING_QUEUE` is configured, completion dispatches job IDs to the queue. If dispatch fails, the DB jobs remain queued and retain the error for recovery.
+- No raw media is copied into the public `rosie-assets` bucket automatically.
+- Standard detailing bookings remain unchanged unless staff explicitly opt the booking into a Creative Project.
+
+## Primary interface
+
+`/admin-daip-media.html`
+
+Use it to select a Creative Project, choose raw capture stage/consent state, upload multiple JPG/JPEG/PNG/WebP/HEIC/HEIF/MP4/MOV/M4V/WebM files, pause/resume, inspect raw-media records and inspect downstream processing jobs.
+
+## Cloudflare account work still required
+
+The application source is ready, but the actual private bucket must exist in the user's Cloudflare account and be bound to the Pages project. Follow `DAIP_R2_MEDIA_SETUP_GUIDE.md`. The required binding name is `DAIP_MEDIA_BUCKET`. The bucket should remain private with no public `r2.dev` or custom-domain exposure.
+
+## Important processing boundary
+
+Build 247 creates the ingestion and processing-job pipeline, but it does **not yet render edited long-form/short-form videos**. The next engineering wave needs a processing consumer/runtime capable of FFmpeg-class work for proxies, frame/audio extraction and final video assembly. The database/queue contracts added here are the handoff point for that processor.
+
+## Current next 20
+
+1. Create and bind the private DAIP R2 bucket as DAIP_MEDIA_BUCKET.
+2. Apply the Build 247 DAIP media migration in staging.
+3. Upload and verify one private DAIP photo.
+4. Prove a video larger than 300 MB uploads through multipart chunks.
+5. Interrupt and resume a large video without restarting from zero.
+6. Create/import the first historical detailing Creative Project and its raw media.
+7. Create/import the second historical detailing Creative Project and its raw media.
+8. Create/import the third historical detailing Creative Project and its raw media.
+9. Configure the optional DAIP_PROCESSING_QUEUE binding.
+10. Implement the processing consumer for proxy video, frames, audio and transcript.
+11. Implement scene analysis and before/after candidate scoring.
+12. Implement reviewed story assembly from selected evidence.
+13. Implement a rendering adapter for long-form and short-form MP4 outputs.
+14. Keep every generated derivative private until human consent/privacy review.
+15. Add reviewed copy-to-public workflow for approved gallery/social derivatives.
+16. Complete real-device DAIP uploader acceptance on desktop and mobile.
+17. Continue catalog publish-readiness cleanup and product-image completion.
+18. Complete booking, payment, refund and notification production acceptance.
+19. Complete Search Console and Google Business Profile alignment.
+20. Run an invite-only soft launch with daily evidence review.
+
+## Following 20
+
+1. Add automatic proxy generation presets for 1080p and 720p editing copies.
+2. Add key-frame extraction at scene boundaries and configurable intervals.
+3. Add audio waveform and silence detection for narration/edit decisions.
+4. Add speech-to-text transcript storage with timestamp segments.
+5. Add privacy detection for license plates, faces and sensitive documents.
+6. Add reviewed blur/redaction derivatives rather than modifying raw originals.
+7. Add before/during/after auto-classification suggestions with manual override.
+8. Add duplicate and near-duplicate visual detection across each project.
+9. Add best-shot scoring for sharpness, exposure, framing and transformation evidence.
+10. Add timeline storyboard editor with drag-and-drop selected evidence.
+11. Add soundtrack/narration planning without embedding unlicensed music.
+12. Add long-form YouTube edit recipe generation from the approved storyboard.
+13. Add Shorts/Reels/TikTok vertical crop and hook recipe generation.
+14. Add thumbnail candidate generation and review.
+15. Add website-gallery and Google Business Profile derivative presets.
+16. Add per-platform caption, title, description, hashtag and CTA drafts.
+17. Add rendering cost/time estimates before starting expensive media jobs.
+18. Add retry/dead-letter handling for failed processing jobs.
+19. Add retention/storage-class policy for old proxies while preserving raw masters.
+20. Add project-level “Content package ready for review” gate and one-click review queue.
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
+
+<!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
+
+<!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
+
+<!-- BUILD251_SYNC: 2026-08-11 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Gate C dark-theme readability + approved rosie-assets/CarPhotos context -->
+
+<!-- Build 210 documentation sync -->
+<!-- Build 211 documentation sync -->
+<!-- Build 212 documentation sync -->
+<!-- Build 213 documentation sync -->
+<!-- Build 214 documentation sync -->
+
+<!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
+
+<!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->

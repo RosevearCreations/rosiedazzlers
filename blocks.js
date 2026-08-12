@@ -4,7 +4,7 @@ export async function onRequestPost(context) {
   const { request, env } = context;
   try {
     const body = await request.json().catch(() => ({}));
-    const access = await requireStaffAccess({ request, env, body, capability: "manage_blocks", allowLegacyAdminFallback: false });
+    const access = await requireStaffAccess({ request, env, body, capability: "manage_blocks", allowLegacyAdminFallback: true });
     if (!access.ok) return access.response;
 
     const [dateRes, slotRes] = await Promise.all([

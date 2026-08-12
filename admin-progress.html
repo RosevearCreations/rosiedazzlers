@@ -215,6 +215,7 @@
     let currentBookingId = '';
     let progressEnabled = false;
     let inventoryItems = [];
+    let usageActionId = crypto.randomUUID();
 
     function qs(s){ return document.querySelector(s); }
     function password(){ return qs('#adminPassword').value.trim(); }
@@ -257,7 +258,7 @@
     }
 
     async function addUsage(itemKey, qtyUsed, note) {
-      return requestJson('/api/admin/catalog_usage_add', { method:'POST', body:{ booking_id: currentBookingId, item_key: itemKey, qty_used: qtyUsed, note } });
+      return requestJson('/api/admin/catalog_usage_add', { method:'POST', body:{ booking_id: currentBookingId, item_key: itemKey, qty_used: qtyUsed, note, client_action_id: usageActionId } });
     }
 
     function moderationBadges(item) {
@@ -668,15 +669,20 @@
         const qtyUsed = Number(qs('#usageQty').value || 0);
         const note = qs('#usageNote').value.trim();
         if (!itemKey || !(qtyUsed > 0)) return setNotice('Inventory item and quantity are required.', 'bad');
+        const usageButton = qs('#usageBtn');
+        if (usageButton) usageButton.disabled = true;
         try {
           setNotice('Recording products used…');
           await addUsage(itemKey, qtyUsed, note);
+          usageActionId = crypto.randomUUID();
           qs('#usageQty').value = '1';
           qs('#usageNote').value = '';
           await loadUsageHistory();
           setNotice('Products used recorded.', 'ok');
         } catch (err) {
-          setNotice(err.message || 'Could not record products used.', 'bad');
+          setNotice(err.message || 'Could not record products used. Retry will reuse the same transaction key so stock cannot be deducted twice.', 'bad');
+        } finally {
+          if (usageButton) usageButton.disabled = !progressEnabled;
         }
       });
 

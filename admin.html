@@ -180,12 +180,19 @@
             <a class="btn primary" href="/admin-media-health.html">Open Media Health</a>
           </article>
 
+          <article class="card" data-build253="photo-studio-dashboard-card">
+            <h3>Photo Management Studio</h3>
+            <p>Refresh public website photos, edit filenames/locations and accessibility metadata, then assign exact images to service cards and landing pages.</p>
+            <div class="hr"></div>
+            <a class="btn primary" href="/admin-photo-studio.html">Open Photo Studio</a>
+          </article>
+
           <article class="card" data-build218="daip-test-lab-dashboard-card">
             <h3>DAIP Test Lab</h3>
             <p>Safely test the future Digital Asset Intelligence Platform using an internal booking, metadata-only test assets, internal privacy review, audit records, and no public export.</p>
             <div class="hr"></div>
             <a class="btn primary" href="/admin-daip.html">Open DAIP Test Lab</a>
-            <a class="btn ghost" href="/admin-test-centre.html">Record DAIP Tests</a>
+            <a class="btn ghost" href="/admin-startup-guide.html#tests">Record DAIP Tests</a>
           </article>
 
           <article class="card" data-build223="daip-private-mvp-blueprint-card">
@@ -243,11 +250,19 @@
 
           
 
+          <article class="card" data-build245="ui-seo-health-card">
+            <h3>UI &amp; SEO Health</h3>
+            <p>Scan critical public and admin routes for CSS, scripts, images, H1 headings, metadata, clean-route drift, and stale app caches.</p>
+            <div class="hr"></div>
+            <a class="btn primary" href="/admin-ui-health.html">Run UI &amp; SEO Health</a>
+            <a class="btn ghost" href="/admin-startup-guide.html#ui-health">Open Startup cache controls</a>
+          </article>
+
           <article class="card" data-build211="production-reliability-card">
             <h3>Production Readiness</h3>
             <p>Check provider setup, hosted payment links, weak-network upload risks, storage retention, and end-to-end workflow readiness from one screen.</p>
             <div class="hr"></div>
-            <a class="btn primary" href="/admin-production.html">Open Production Readiness</a> <a class="btn ghost" href="/admin-test-centre.html">Open Guided Tests</a>
+            <a class="btn primary" href="/admin-startup-guide.html#production">Open Production Readiness</a> <a class="btn ghost" href="/admin-startup-guide.html#tests">Open Guided Tests</a>
           </article>
 
           <article class="card" data-build210="today-attention-card">
@@ -386,6 +401,13 @@
             <p>Add products, reorder stock, review low-stock items, and manage tools and consumables.</p>
             <div class="hr"></div>
             <a class="btn primary" href="/admin-catalog.html">Open Inventory</a>
+          </article>
+
+          <article class="card">
+            <h3>Launch Readiness</h3>
+            <p>Run production preflight, review inventory readiness, and track required real-world launch confirmations.</p>
+            <div class="hr"></div>
+            <a class="btn primary" href="/admin-startup-guide.html#evidence">Open Launch Readiness</a>
           </article>
 
           <article class="card">
@@ -664,7 +686,7 @@
         const c = data.counts || {};
         const risk = Number(c.notification_failed||0)+Number(c.payment_links_missing||0)+Number(c.upload_sessions_needing_review||0)+Number(c.retention_due||0)+Number(c.unresolved_incidents||0);
         els.productionReliability.dataset.state = risk ? 'warn' : 'ok';
-        els.productionReliability.innerHTML = `<strong>${risk ? `${risk} production reliability item(s) need review` : 'Production reliability checks are clear'}</strong><div class="muted">Failed notifications ${Number(c.notification_failed||0)} · missing payment links ${Number(c.payment_links_missing||0)} · upload review ${Number(c.upload_sessions_needing_review||0)} · retention due ${Number(c.retention_due||0)} · unresolved incidents ${Number(c.unresolved_incidents||0)}</div>${(data.attention||[]).slice(0,4).map(x=>`<div class="warning-row"><strong>${esc(x.title)}</strong><div class="muted">${esc(x.detail)}</div></div>`).join('')}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-production.html">Open Production Readiness</a> <a class="btn ghost" href="/admin-test-centre.html">Open Guided Tests</a> <a class="btn ghost small" href="/admin-today.html">Open Today Queue</a></div>`;
+        els.productionReliability.innerHTML = `<strong>${risk ? `${risk} production reliability item(s) need review` : 'Production reliability checks are clear'}</strong><div class="muted">Failed notifications ${Number(c.notification_failed||0)} · missing payment links ${Number(c.payment_links_missing||0)} · upload review ${Number(c.upload_sessions_needing_review||0)} · retention due ${Number(c.retention_due||0)} · unresolved incidents ${Number(c.unresolved_incidents||0)}</div>${(data.attention||[]).slice(0,4).map(x=>`<div class="warning-row"><strong>${esc(x.title)}</strong><div class="muted">${esc(x.detail)}</div></div>`).join('')}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-startup-guide.html#production">Open Production Readiness</a> <a class="btn ghost" href="/admin-startup-guide.html#tests">Open Guided Tests</a> <a class="btn ghost small" href="/admin-today.html">Open Today Queue</a></div>`;
       }
 
       async function loadTodayAttentionDiagnostics(){

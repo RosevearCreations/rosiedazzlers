@@ -1,18 +1,230 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<meta name="robots" content="noindex,nofollow,noarchive"/><title>DAIP Gate C Technical Review | Rosie Dazzlers Admin</title>
-<link rel="stylesheet" href="/assets/styles.css"/><link rel="stylesheet" href="/assets/admin.css"/>
-<style>
-.gc-wrap{max-width:1200px;margin:0 auto;padding:18px}.gc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.gc-card{background:var(--surface,#fff);border:1px solid var(--border,#d8dee9);border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(15,23,42,.05)}.gc-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.gc-kpi{border:1px solid var(--border,#d8dee9);border-radius:12px;padding:12px}.gc-kpi strong{display:block;font-size:1.05rem;margin-top:4px}.gc-muted{color:#607084;font-size:.92rem}.gc-form label{display:block;font-weight:650;margin-top:12px}.gc-form input,.gc-form select,.gc-form textarea{width:100%;margin-top:5px;box-sizing:border-box}.gc-form textarea{min-height:94px;resize:vertical}.gc-check{display:flex!important;gap:8px;align-items:flex-start;font-weight:500!important}.gc-check input{width:auto!important;margin-top:3px!important}.gc-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.gc-list p{border-bottom:1px solid var(--border,#d8dee9);padding:10px 0;margin:0}.gc-status{margin:12px 0}.gc-badge{display:inline-block;border-radius:999px;background:#eef4ff;padding:3px 9px;margin:3px;font-size:.83rem}.gc-note{border-left:4px solid #f59e0b;padding:10px 12px;background:#fffbeb;border-radius:8px}.gc-visual{min-height:118px;display:flex;align-items:center;justify-content:center}
-@media(max-width:760px){.gc-wrap{padding:12px}.gc-grid{grid-template-columns:1fr}.gc-kpis{grid-template-columns:1fr 1fr}.gc-actions .btn{width:100%}.gc-form textarea{min-height:112px}}
-</style></head><body>
-<script src="/assets/admin-auth.js?v=20260706build224"></script><script src="/assets/admin-menu.js?v=20260706build224"></script><script src="/assets/visual-placeholders.js?v=20260706build224"></script>
-<header class="site-header"><a class="brand" href="/admin.html">Rosie Dazzlers Admin</a><nav id="adminMenu"></nav></header>
-<main class="gc-wrap"><section class="hero"><div><span class="badge">Build 224 · technical review only</span><h1>DAIP Gate C Technical Review</h1><p>Record the smallest test-only implementation acceptance and rollback plan. This page never authorizes storage, uploads, processing, customer media, public destinations, or publishing.</p></div><div class="gc-card gc-visual" data-needs-visual data-visual-placeholder="daip_gate_c_technical_review"></div></section>
-<div id="status" class="notice soft gc-status">Loading Gate C safeguards…</div>
-<section class="gc-card"><div id="kpis" class="gc-kpis"></div><div id="gateSummary" class="gc-note" style="margin-top:14px"></div></section>
-<section class="gc-grid" style="margin-top:16px"><section class="gc-card"><h2>Technical review and rollback record</h2><p class="gc-muted">Use safe general terms. Do not enter media, customer, storage, external service, URL, secret, key, object-path, address, or account details.</p><form id="reviewForm" class="gc-form"><label>Review status<select id="reviewStatus"><option value="draft">Draft</option><option value="blocked">Blocked / pause</option><option value="accepted_for_test_only_implementation_review">Accept for test-only implementation planning</option></select></label><label>Technical owner<label><input id="technicalOwner" maxlength="120" placeholder="Role or owner label" required/></label></label><label>Independent reviewer<label><input id="independentReviewer" maxlength="120" placeholder="Reviewer role or label" required/></label></label><label>Review due date<input id="reviewDate" type="date" required/></label><label>Acceptance scope<textarea id="acceptanceScope" maxlength="2400" required placeholder="What the future test-only implementation must prove, in general terms."></textarea></label><label>Rollback plan<textarea id="rollbackPlan" maxlength="2400" required placeholder="How we pause and return to the prior safe state if testing fails."></textarea></label><label>Failure-test plan<textarea id="failureTests" maxlength="2000" required placeholder="How access, validation, interruption, cost-stop, and no-public-destination failures will be tested."></textarea></label><label>Cost-stop validation<textarea id="costStop" maxlength="1600" required placeholder="How the approved warning/hard stop is checked and who pauses work."></textarea></label><label class="gc-check"><input id="zeroPublic" type="checkbox"/>No public destination is in scope.</label><label class="gc-check"><input id="noCustomer" type="checkbox"/>No customer media or customer records are in scope.</label><label class="gc-check"><input id="stillDisabled" type="checkbox"/>I confirm technical capabilities remain disabled in this build.</label><label id="confirmWrap">Acceptance phrase<input id="acceptanceConfirmation" maxlength="80" placeholder="Required only for acceptance"/></label><div class="gc-actions"><button id="saveReview" class="btn primary" type="submit">Save technical review</button><button id="resetReview" class="btn ghost" type="button">Clear form</button></div></form></section>
-<section class="gc-card"><h2>Current review evidence</h2><div id="latestReview"></div><h2 style="margin-top:20px">Safe audit history</h2><div id="auditList" class="gc-list"></div><p class="gc-muted">A saved record does not change Gate C. A later reviewed build must still prove the technical boundary in staging.</p></section></section><p><a class="btn ghost" href="/admin-daip-intake-dry-run.html">DAIP intake dry run →</a></p></main>
-<script>(function(){'use strict';const $=id=>document.getElementById(id),esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));let data=null;function fmt(v){return v?new Date(v).toLocaleString():'—';}function note(t,k='soft'){$('status').className='notice '+k+' gc-status';$('status').textContent=t;}function setDate(){if(!$('reviewDate').value){const d=new Date();d.setDate(d.getDate()+7);$('reviewDate').value=d.toISOString().slice(0,10);}}function api(url,o={}){return window.AdminAuth.fetchWithAuth(url,{method:o.method||'GET',headers:{'Content-Type':'application/json'},body:o.body?JSON.stringify(o.body):undefined}).then(async r=>{let j={};try{j=await r.json();}catch{}if(!r.ok||j.ok===false)throw new Error(j.error||`Request failed (${r.status}).`);return j;});}function sync(){const accept=$('reviewStatus').value==='accepted_for_test_only_implementation_review';$('confirmWrap').style.display=accept?'block':'none';$('saveReview').textContent=accept?'Accept technical review':'Save technical review';}function render(d){const valid=d.design_submission_valid===true,g=d.gate_c||{};$('kpis').innerHTML=[['Build 223 design',valid?'Current':'Not current'],['Gate C',g.state||'held'],['Technical enabled',String(d.technical_capabilities_enabled||0)],['Public enabled',String(d.public_capabilities_enabled||0)]].map(([a,b])=>`<div class="gc-kpi"><span class="gc-muted">${esc(a)}</span><strong>${esc(b)}</strong></div>`).join('');$('gateSummary').innerHTML=`<strong>Gate C remains ${esc(g.state||'held')}.</strong><br>${esc(g.detail||'No capability is enabled.')}`;const r=d.review;$('latestReview').innerHTML=r?`<p><strong>${esc(String(r.review_status).replaceAll('_',' '))}</strong><br><span class="gc-muted">Owner: ${esc(r.technical_owner_label)} · reviewer: ${esc(r.independent_reviewer_label)}<br>Due: ${esc(r.review_due_on||'—')} · recorded: ${esc(fmt(r.created_at))}</span><br><span class="gc-badge">Gate C held: ${r.gate_c_held===true?'yes':'no'}</span><span class="gc-badge">technical: disabled</span><span class="gc-badge">public: disabled</span></p>`:'<p class="gc-muted">No Gate C technical review saved yet.</p>';$('auditList').innerHTML=(d.audit||[]).length?d.audit.map(a=>`<p><strong>${esc(String(a.event_type||'event').replaceAll('_',' '))}</strong><br><span class="gc-muted">${esc(a.safe_note||'')} · ${esc(a.actor_staff_email||'staff')} · ${esc(fmt(a.created_at))}</span></p>`).join(''):'<p class="gc-muted">No audit entries yet.</p>';}async function load(){note('Refreshing Gate C safeguards…');try{data=await api('/api/admin/daip_gate_c_technical_review_dashboard');render(data);note(data.warning||'Gate C review workspace is ready. Gate C remains held.',data.warning?'warn':'success');}catch(e){note(e.message||'Could not load Gate C review.','error');}}function reset(){['technicalOwner','independentReviewer','acceptanceScope','rollbackPlan','failureTests','costStop','acceptanceConfirmation'].forEach(id=>$(id).value='');$('zeroPublic').checked=$('noCustomer').checked=$('stillDisabled').checked=false;setDate();sync();}async function save(e){e.preventDefault();try{const body={review_status:$('reviewStatus').value,technical_owner_label:$('technicalOwner').value.trim(),independent_reviewer_label:$('independentReviewer').value.trim(),review_due_on:$('reviewDate').value,acceptance_scope_summary:$('acceptanceScope').value.trim(),rollback_plan_summary:$('rollbackPlan').value.trim(),failure_test_summary:$('failureTests').value.trim(),cost_stop_validation_summary:$('costStop').value.trim(),zero_public_destination_confirmed:$('zeroPublic').checked,no_customer_media_confirmed:$('noCustomer').checked,technical_capabilities_still_disabled:$('stillDisabled').checked,acceptance_confirmation:$('acceptanceConfirmation').value.trim()};const result=await api('/api/admin/daip_gate_c_technical_review_save',{method:'POST',body});note(result.message||'Gate C review saved.','success');$('acceptanceConfirmation').value='';await load();}catch(err){note(err.message||'Could not save Gate C review.','error');}}$('reviewStatus').addEventListener('change',sync);$('reviewForm').addEventListener('submit',save);$('resetReview').addEventListener('click',reset);setDate();sync();window.AdminShell.boot({pageKey:'admin-daip-gate-c',onReady:async()=>{window.AdminMenu.render({currentPage:'admin-daip-gate-c'});await load();}});})();</script>
-</body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="robots" content="noindex,nofollow,noarchive"/>
+  <title>DAIP Gate C Technical Review | Rosie Dazzlers Admin</title>
+  <link rel="stylesheet" href="/assets/site.css?v=20260812build251"/>
+  <style>
+    .gc-wrap{max-width:1200px;margin:0 auto;padding:20px 18px 34px}
+    .gc-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:16px}
+    .gc-card{min-width:0;background:rgba(12,18,31,.94);color:var(--text);border:1px solid rgba(148,163,184,.22);border-radius:18px;padding:18px;box-shadow:0 14px 36px rgba(0,0,0,.28)}
+    .gc-card h2{margin:0 0 10px;color:rgba(248,250,252,.98);font-size:clamp(1.25rem,2vw,1.55rem);line-height:1.2}
+    .gc-card p{line-height:1.6}
+    .gc-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .gc-kpi{min-width:0;border:1px solid rgba(148,163,184,.2);border-radius:14px;padding:13px;background:rgba(255,255,255,.035)}
+    .gc-kpi strong{display:block;margin-top:5px;color:rgba(248,250,252,.98);font-size:1.08rem;overflow-wrap:anywhere}
+    .gc-muted{color:rgba(226,232,240,.72);font-size:.93rem}
+    .gc-form{display:grid;gap:12px;margin-top:14px}
+    .gc-form label{display:grid;gap:6px;margin:0;color:rgba(241,245,249,.9);font-size:.9rem;font-weight:760;line-height:1.35}
+    .gc-form input,.gc-form select,.gc-form textarea{width:100%;margin:0;box-sizing:border-box;background:rgba(5,10,20,.92);border-color:rgba(148,163,184,.3);color:rgba(248,250,252,.96)}
+    .gc-form input::placeholder,.gc-form textarea::placeholder{color:rgba(203,213,225,.52)}
+    .gc-form textarea{min-height:106px;resize:vertical;line-height:1.5}
+    .gc-form input:focus,.gc-form select:focus,.gc-form textarea:focus{border-color:rgba(96,165,250,.8);box-shadow:0 0 0 3px rgba(59,130,246,.14)}
+    .gc-check{display:grid!important;grid-template-columns:20px minmax(0,1fr);gap:10px!important;align-items:start;font-weight:600!important;padding:9px 0;border-top:1px solid rgba(148,163,184,.1)}
+    .gc-check input{width:18px!important;height:18px;margin:1px 0 0!important;padding:0}
+    .gc-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+    .gc-list p{border-bottom:1px solid rgba(148,163,184,.15);padding:11px 0;margin:0;overflow-wrap:anywhere}
+    .gc-status{margin:14px 0;color:rgba(241,245,249,.92)}
+    .gc-status.success{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.35);color:rgba(220,252,231,.95)}
+    .gc-status.error{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.38);color:rgba(254,226,226,.96)}
+    .gc-badge{display:inline-flex;align-items:center;border-radius:999px;background:rgba(59,130,246,.13);border:1px solid rgba(96,165,250,.25);color:rgba(219,234,254,.96);padding:4px 9px;margin:5px 5px 0 0;font-size:.82rem;font-weight:750}
+    .gc-note{border-left:4px solid #f59e0b;padding:12px 14px;background:rgba(245,158,11,.1);color:rgba(254,243,199,.95);border-radius:10px;line-height:1.55;overflow-wrap:anywhere}
+    .gc-note strong{color:#fde68a}
+    .gc-visual{padding:0;overflow:hidden;background:rgba(3,8,18,.94)}
+    .gc-photo-feature{position:relative;min-height:260px;height:100%;overflow:hidden}
+    .gc-photo-feature>img{width:100%;height:100%;min-height:260px;object-fit:cover;display:block}
+    .gc-photo-feature::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,8,18,.06) 20%,rgba(3,8,18,.84) 100%);pointer-events:none}
+    .gc-photo-caption{position:absolute;z-index:1;left:14px;right:14px;bottom:13px;display:grid;gap:3px;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.55)}
+    .gc-photo-caption strong{font-size:1rem}.gc-photo-caption span{font-size:.82rem;color:rgba(241,245,249,.82)}
+    .gc-photo-section{margin-top:16px}
+    .gc-photo-heading{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+    .gc-photo-heading h2{margin:0}.gc-photo-heading p{margin:0;color:var(--muted);max-width:760px}
+    .gc-photo-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .gc-photo-tile{position:relative;min-height:150px;border:1px solid rgba(148,163,184,.18);border-radius:15px;overflow:hidden;background:rgba(255,255,255,.035)}
+    .gc-photo-tile img{width:100%;height:100%;min-height:150px;max-height:210px;object-fit:cover;display:block}
+    .gc-photo-tile span{position:absolute;left:9px;right:9px;bottom:9px;padding:6px 8px;border-radius:9px;background:rgba(3,8,18,.76);color:rgba(248,250,252,.94);font-size:.78rem;backdrop-filter:blur(4px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .gc-photo-source{font-size:.8rem;color:rgba(203,213,225,.66)}
+    .gc-evidence{min-height:100%}
+    .gc-evidence #latestReview>p:first-child{margin-top:0}
+    .gc-footer-action{margin:16px 0 0}
+    @media(max-width:900px){.gc-grid{grid-template-columns:1fr}.gc-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.gc-photo-feature{min-height:220px}.gc-photo-feature>img{min-height:220px}}
+    @media(max-width:760px){.gc-wrap{padding:12px 12px 28px}.gc-card{padding:14px}.gc-photo-strip{grid-template-columns:1fr 1fr}.gc-actions{display:grid;grid-template-columns:1fr}.gc-actions .btn{width:100%}.gc-form textarea{min-height:118px}}
+    @media(max-width:520px){.gc-kpis{grid-template-columns:1fr}.gc-photo-strip{grid-template-columns:1fr}.gc-photo-tile,.gc-photo-tile img{min-height:180px}.gc-photo-heading{align-items:flex-start}}
+  </style>
+</head>
+<body data-page="admin-daip-gate-c">
+  <script src="/assets/admin-auth.js?v=20260706build224"></script>
+  <script src="/assets/admin-shell.js?v=20260728build237"></script>
+  <script src="/assets/admin-menu.js?v=20260706build224"></script>
+  <script src="/assets/visual-placeholders.js?v=20260812build251"></script>
+
+  <header class="site-header"><a class="brand" href="/admin.html">Rosie Dazzlers Admin</a><nav id="adminMenu"></nav></header>
+
+  <main class="gc-wrap">
+    <section class="section" data-build247-private-ingestion-notice>
+      <div class="notice warn"><strong>Build 247 private-ingestion update:</strong> the owner has commissioned the private R2/multipart ingestion implementation. Gate C remains pending operational acceptance until Startup processes 38–39 pass. Processing/public-export gates remain held. <a href="/admin-daip-media.html">Open DAIP Media Intake</a>.</div>
+    </section>
+
+    <section class="hero">
+      <div>
+        <span class="badge">Build 224 · technical review only</span>
+        <h1>DAIP Gate C Technical Review</h1>
+        <p>Record the smallest test-only implementation acceptance and rollback plan. This page never authorizes storage, uploads, processing, customer media, public destinations, or publishing.</p>
+      </div>
+      <div class="gc-card gc-visual" data-visual-placeholder="daip_gate_c_technical_review" aria-label="Approved Rosie Dazzlers website photo">
+        <div class="gc-photo-feature">
+          <img id="gateHeroPhoto" src="https://assets.rosiedazzlers.ca/CarPhotos/tillsonburg-interior-proof-before.webp" alt="Real Rosie Dazzlers detailing work from the approved website photo library" decoding="async"/>
+          <div class="gc-photo-caption"><strong>Real detailing work</strong><span>Approved public website media only · never private DAIP raw media</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div id="status" class="notice soft gc-status">Loading Gate C safeguards…</div>
+
+    <section class="gc-card">
+      <div id="kpis" class="gc-kpis"></div>
+      <div id="gateSummary" class="gc-note" style="margin-top:14px"></div>
+    </section>
+
+    <section class="gc-photo-section gc-card" aria-labelledby="gcPhotoTitle">
+      <div class="gc-photo-heading">
+        <div><h2 id="gcPhotoTitle">Approved Rosie work in the public photo library</h2><p>These are ordinary website photos from <code>rosie-assets/CarPhotos/</code>. They are shown here for context only and are completely separate from private DAIP ingestion.</p></div>
+        <span id="gcPhotoSource" class="gc-photo-source">Loading approved public photos…</span>
+      </div>
+      <div id="gcPhotoStrip" class="gc-photo-strip">
+        <div class="gc-photo-tile"><img src="https://assets.rosiedazzlers.ca/CarPhotos/woodstock-exterior-proof-before.webp" alt="Rosie Dazzlers real exterior detailing photo" loading="lazy" decoding="async"><span>Woodstock exterior proof</span></div>
+        <div class="gc-photo-tile"><img src="https://assets.rosiedazzlers.ca/CarPhotos/simcoe-pet-hair-proof-before.webp" alt="Rosie Dazzlers real pet hair detailing photo" loading="lazy" decoding="async"><span>Simcoe interior proof</span></div>
+        <div class="gc-photo-tile"><img src="https://assets.rosiedazzlers.ca/CarPhotos/port-dover-ceramic-proof-before.webp" alt="Rosie Dazzlers real ceramic detailing photo" loading="lazy" decoding="async"><span>Port Dover exterior proof</span></div>
+      </div>
+    </section>
+
+    <section class="gc-grid" style="margin-top:16px">
+      <section class="gc-card">
+        <h2>Technical review and rollback record</h2>
+        <p class="gc-muted">Use safe general terms. Do not enter media, customer, storage, external service, URL, secret, key, object-path, address, or account details.</p>
+        <form id="reviewForm" class="gc-form">
+          <label for="reviewStatus">Review status<select id="reviewStatus"><option value="draft">Draft</option><option value="blocked">Blocked / pause</option><option value="accepted_for_test_only_implementation_review">Accept for test-only implementation planning</option></select></label>
+          <label for="technicalOwner">Technical owner<input id="technicalOwner" maxlength="120" placeholder="Role or owner label" required/></label>
+          <label for="independentReviewer">Independent reviewer<input id="independentReviewer" maxlength="120" placeholder="Reviewer role or label" required/></label>
+          <label for="reviewDate">Review due date<input id="reviewDate" type="date" required/></label>
+          <label for="acceptanceScope">Acceptance scope<textarea id="acceptanceScope" maxlength="2400" required placeholder="What the future test-only implementation must prove, in general terms."></textarea></label>
+          <label for="rollbackPlan">Rollback plan<textarea id="rollbackPlan" maxlength="2400" required placeholder="How we pause and return to the prior safe state if testing fails."></textarea></label>
+          <label for="failureTests">Failure-test plan<textarea id="failureTests" maxlength="2000" required placeholder="How access, validation, interruption, cost-stop, and no-public-destination failures will be tested."></textarea></label>
+          <label for="costStop">Cost-stop validation<textarea id="costStop" maxlength="1600" required placeholder="How the approved warning/hard stop is checked and who pauses work."></textarea></label>
+          <label class="gc-check" for="zeroPublic"><input id="zeroPublic" type="checkbox"/><span>No public destination is in scope.</span></label>
+          <label class="gc-check" for="noCustomer"><input id="noCustomer" type="checkbox"/><span>No customer media or customer records are in scope.</span></label>
+          <label class="gc-check" for="stillDisabled"><input id="stillDisabled" type="checkbox"/><span>I confirm technical capabilities remain disabled in this build.</span></label>
+          <label id="confirmWrap" for="acceptanceConfirmation">Acceptance phrase<input id="acceptanceConfirmation" maxlength="80" placeholder="Required only for acceptance"/></label>
+          <div class="gc-actions"><button id="saveReview" class="btn primary" type="submit">Save technical review</button><button id="resetReview" class="btn ghost" type="button">Clear form</button></div>
+        </form>
+      </section>
+
+      <section class="gc-card gc-evidence">
+        <h2>Current review evidence</h2>
+        <div id="latestReview"></div>
+        <h2 style="margin-top:20px">Safe audit history</h2>
+        <div id="auditList" class="gc-list"></div>
+        <p class="gc-muted">A saved record does not change Gate C. A later reviewed build must still prove the technical boundary in staging.</p>
+      </section>
+    </section>
+
+    <p class="gc-footer-action"><a class="btn ghost" href="/admin-daip-intake-dry-run.html">DAIP intake dry run →</a></p>
+  </main>
+
+  <script>
+  (function(){
+    'use strict';
+    const $=id=>document.getElementById(id);
+    const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    const knownPhotos=[
+      {url:'https://assets.rosiedazzlers.ca/CarPhotos/tillsonburg-interior-proof-before.webp',filename:'tillsonburg-interior-proof-before.webp'},
+      {url:'https://assets.rosiedazzlers.ca/CarPhotos/woodstock-exterior-proof-before.webp',filename:'woodstock-exterior-proof-before.webp'},
+      {url:'https://assets.rosiedazzlers.ca/CarPhotos/simcoe-pet-hair-proof-before.webp',filename:'simcoe-pet-hair-proof-before.webp'},
+      {url:'https://assets.rosiedazzlers.ca/CarPhotos/port-dover-ceramic-proof-before.webp',filename:'port-dover-ceramic-proof-before.webp'}
+    ];
+    let data=null;
+
+    function fmt(v){return v?new Date(v).toLocaleString():'—';}
+    function note(t,k='soft'){$('status').className='notice '+k+' gc-status';$('status').textContent=t;}
+    function setDate(){if(!$('reviewDate').value){const d=new Date();d.setDate(d.getDate()+7);$('reviewDate').value=d.toISOString().slice(0,10);}}
+    function api(url,o={}){return window.AdminAuth.fetchWithAuth(url,{method:o.method||'GET',headers:{'Content-Type':'application/json'},body:o.body?JSON.stringify(o.body):undefined}).then(async r=>{let j={};try{j=await r.json();}catch{}if(!r.ok||j.ok===false)throw new Error(j.error||`Request failed (${r.status}).`);return j;});}
+    function sync(){const accept=$('reviewStatus').value==='accepted_for_test_only_implementation_review';$('confirmWrap').style.display=accept?'grid':'none';$('saveReview').textContent=accept?'Accept technical review':'Save technical review';}
+
+    function render(d){
+      const valid=d.design_submission_valid===true,g=d.gate_c||{};
+      $('kpis').innerHTML=[['Build 223 design',valid?'Current':'Not current'],['Gate C',g.state||'held'],['Technical enabled',String(d.technical_capabilities_enabled||0)],['Public enabled',String(d.public_capabilities_enabled||0)]].map(([a,b])=>`<div class="gc-kpi"><span class="gc-muted">${esc(a)}</span><strong>${esc(b)}</strong></div>`).join('');
+      $('gateSummary').innerHTML=`<strong>Gate C remains ${esc(g.state||'held')}.</strong><br>${esc(g.detail||'No capability is enabled.')}`;
+      const r=d.review;
+      $('latestReview').innerHTML=r?`<p><strong>${esc(String(r.review_status).replaceAll('_',' '))}</strong><br><span class="gc-muted">Owner: ${esc(r.technical_owner_label)} · reviewer: ${esc(r.independent_reviewer_label)}<br>Due: ${esc(r.review_due_on||'—')} · recorded: ${esc(fmt(r.created_at))}</span><br><span class="gc-badge">Gate C held: ${r.gate_c_held===true?'yes':'no'}</span><span class="gc-badge">technical: disabled</span><span class="gc-badge">public: disabled</span></p>`:'<p class="gc-muted">No Gate C technical review saved yet.</p>';
+      $('auditList').innerHTML=(d.audit||[]).length?d.audit.map(a=>`<p><strong>${esc(String(a.event_type||'event').replaceAll('_',' '))}</strong><br><span class="gc-muted">${esc(a.safe_note||'')} · ${esc(a.actor_staff_email||'staff')} · ${esc(fmt(a.created_at))}</span></p>`).join(''):'<p class="gc-muted">No audit entries yet.</p>';
+    }
+
+    function nicePhotoLabel(filename){
+      return String(filename||'Rosie Dazzlers detailing work').replace(/\.(?:avif|gif|jpe?g|png|webp)$/i,'').replace(/[-_]+/g,' ').replace(/\b\w/g,m=>m.toUpperCase());
+    }
+    function safePhotos(input){
+      const seen=new Set();
+      return (Array.isArray(input)?input:[]).filter(p=>p&&/^https:\/\//i.test(String(p.url||''))).filter(p=>{const key=String(p.url);if(seen.has(key))return false;seen.add(key);return true;});
+    }
+    function applyPublicPhotos(photos,sourceText){
+      const usable=safePhotos(photos);
+      if(!usable.length)return;
+      const hero=usable[0];
+      const heroImg=$('gateHeroPhoto');
+      heroImg.src=hero.url;
+      heroImg.alt=hero.alt_text||`Rosie Dazzlers real detailing photo: ${nicePhotoLabel(hero.filename)}`;
+      heroImg.style.objectPosition=hero.focal_point||'center';
+      const stripPool=(usable.length>1?usable.slice(1):usable).slice(0,3);
+      $('gcPhotoStrip').innerHTML=stripPool.map(photo=>`<div class="gc-photo-tile"><img src="${esc(photo.url)}" alt="${esc(photo.alt_text||`Rosie Dazzlers real detailing photo: ${nicePhotoLabel(photo.filename)}`)}" style="object-position:${esc(photo.focal_point||'center')}" loading="lazy" decoding="async"><span>${esc(photo.title||nicePhotoLabel(photo.filename))}</span></div>`).join('');
+      $('gcPhotoSource').textContent=sourceText;
+      bindPhotoFallbacks();
+    }
+    function bindPhotoFallbacks(){
+      document.querySelectorAll('.gc-photo-feature img,.gc-photo-tile img').forEach((img,index)=>{
+        if(img.dataset.gcFallbackBound==='true')return;
+        img.dataset.gcFallbackBound='true';
+        img.addEventListener('error',()=>{
+          if(img.dataset.gcFallbackApplied==='true')return;
+          img.dataset.gcFallbackApplied='true';
+          const fallback=knownPhotos[index%knownPhotos.length]?.url||'/assets/placeholders/service-photo.jpg';
+          if(img.src!==fallback){img.src=fallback;return;}
+          img.src='/assets/placeholders/service-photo.jpg';
+        });
+      });
+    }
+    async function loadPublicPhotos(){
+      bindPhotoFallbacks();
+      try{
+        const response=await fetch('/api/public_website_images',{headers:{Accept:'application/json'},cache:'no-store'});
+        const payload=await response.json().catch(()=>({}));
+        const assignmentOrder=['admin:gate-c:feature','admin:gate-c:strip:1','admin:gate-c:strip:2','admin:gate-c:strip:3'];
+        const assignmentMap=new Map((payload.assignments||[]).map(row=>[row.target_key,row]));
+        const explicit=assignmentOrder.map(key=>assignmentMap.get(key)).filter(Boolean);
+        const carPhotos=(payload.prefixes?.car_photos||[]).map(photo=>({url:photo.url,filename:photo.filename,alt_text:photo.alt_text,title:photo.title,focal_point:photo.focal_point}));
+        const photos=safePhotos([...explicit,...carPhotos]);
+        if(response.ok&&photos.length){applyPublicPhotos(photos,`${explicit.length?'Photo Studio assignments + ':''}${carPhotos.length} approved public CarPhotos image${carPhotos.length===1?'':'s'} available`);return;}
+      }catch{}
+      try{
+        const response=await fetch('/api/public/car_photos',{headers:{Accept:'application/json'},cache:'no-store'});
+        const payload=await response.json().catch(()=>({}));
+        const photos=safePhotos(payload.photos);
+        if(response.ok&&photos.length){applyPublicPhotos(photos,`${photos.length} approved public CarPhotos image${photos.length===1?'':'s'} available`);return;}
+      }catch{}
+      $('gcPhotoSource').textContent='Using known approved CarPhotos while the live manifest is unavailable.';
+    }
+
+    async function load(){note('Refreshing Gate C safeguards…');try{data=await api('/api/admin/daip_gate_c_technical_review_dashboard');render(data);note(data.warning||'Gate C review workspace is ready. Gate C remains held.',data.warning?'warn':'success');}catch(e){note(e.message||'Could not load Gate C review.','error');}}
+    function reset(){['technicalOwner','independentReviewer','acceptanceScope','rollbackPlan','failureTests','costStop','acceptanceConfirmation'].forEach(id=>$(id).value='');$('zeroPublic').checked=$('noCustomer').checked=$('stillDisabled').checked=false;setDate();sync();}
+    async function save(e){e.preventDefault();try{const body={review_status:$('reviewStatus').value,technical_owner_label:$('technicalOwner').value.trim(),independent_reviewer_label:$('independentReviewer').value.trim(),review_due_on:$('reviewDate').value,acceptance_scope_summary:$('acceptanceScope').value.trim(),rollback_plan_summary:$('rollbackPlan').value.trim(),failure_test_summary:$('failureTests').value.trim(),cost_stop_validation_summary:$('costStop').value.trim(),zero_public_destination_confirmed:$('zeroPublic').checked,no_customer_media_confirmed:$('noCustomer').checked,technical_capabilities_still_disabled:$('stillDisabled').checked,acceptance_confirmation:$('acceptanceConfirmation').value.trim()};const result=await api('/api/admin/daip_gate_c_technical_review_save',{method:'POST',body});note(result.message||'Gate C review saved.','success');$('acceptanceConfirmation').value='';await load();}catch(err){note(err.message||'Could not save Gate C review.','error');}}
+
+    $('reviewStatus').addEventListener('change',sync);
+    $('reviewForm').addEventListener('submit',save);
+    $('resetReview').addEventListener('click',reset);
+    setDate();sync();loadPublicPhotos();
+    window.AdminShell.boot({pageKey:'admin-daip-gate-c',onReady:async()=>{window.AdminMenu.render({currentPage:'admin-daip-gate-c'});await load();}});
+  })();
+  </script>
+</body>
+</html>
