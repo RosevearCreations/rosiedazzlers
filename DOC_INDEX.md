@@ -1,4 +1,15 @@
-# Documentation Index — Build 251
+# Documentation Index — Build 252
+
+## Current references
+- `AI_PROJECT_HANDOFF.md` — living implementation/handoff authority.
+- `MASTER_VALUE_ROADMAP.md` — living business/engineering direction authority.
+- `STARTUP_GO_LIVE_BLOCKERS.md` — specialist acceptance runbook.
+- `BUILD252_SUMMARY.md` — concise approved-R2 image integration release summary.
+- `data/build252_public_r2_image_mapping.json` — machine-readable target/folder matching policy.
+
+Only `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Older Markdown remains specialist or historical evidence.
+
+<!-- Historical release guard: # Documentation Index — Build 251 -->
 
 <!-- Historical release guard: # Documentation Index — Build 250 -->
 
@@ -1364,3 +1375,5 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 <!-- Build 212 documentation sync -->
 <!-- Build 213 documentation sync -->
 <!-- Build 214 documentation sync -->
+
+<!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->

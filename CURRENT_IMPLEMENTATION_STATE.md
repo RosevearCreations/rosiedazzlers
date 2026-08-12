@@ -945,3 +945,5 @@ DAIP now has a real private raw-media ingestion path for Creative Projects. Larg
 <!-- Build 212 documentation sync -->
 <!-- Build 213 documentation sync -->
 <!-- Build 214 documentation sync -->
+
+<!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
