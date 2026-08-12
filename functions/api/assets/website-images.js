@@ -1,0 +1,216 @@
+// Build 252 — shared approved R2 website-image discovery and filename matching.
+// Canonical route: /api/public_website_images. The nested Build 252 route remains a compatibility fallback.
+// Build 253 adds explicit DB-backed card/page assignments; explicit assignments win over filename matching.
+
+let manifestPromise = null;
+
+function clean(value){
+  return String(value || '').trim();
+}
+
+function normalize(value){
+  return clean(value)
+    .toLowerCase()
+    .replace(/\.[a-z0-9]{2,5}$/i,'')
+    .replace(/&/g,' and ')
+    .replace(/[^a-z0-9]+/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+function tokens(value){
+  return normalize(value).split(' ').filter((token) => token.length > 1);
+}
+
+const SIZE_HINTS = {
+  small:['small','compact','car','sedan'],
+  mid:['mid','midsize','mid size','suv','crossover'],
+  oversize:['oversize','over size','large','truck','van','exotic']
+};
+
+export async function loadWebsiteImageManifest({ force=false } = {}){
+  if (!force && manifestPromise) return manifestPromise;
+  manifestPromise = (async () => {
+    try {
+      const endpoints=['/api/public_website_images','/api/public/website_images'];
+      for (const endpoint of endpoints) {
+        try {
+          const response = await fetch(endpoint, { headers:{ 'Accept':'application/json' }, cache:'no-store' });
+          const contentType=String(response.headers.get('content-type')||'');
+          if (!response.ok || !contentType.includes('application/json')) continue;
+          const payload = await response.json().catch(() => ({}));
+          if (payload && Array.isArray(payload.images)) return payload;
+        } catch {}
+      }
+      return { ok:false, bucket_ready:false, images:[], assignments:[], prefixes:{ packages:[], landing_pages:[], car_photos:[] } };
+    } catch {
+      return { ok:false, bucket_ready:false, images:[], prefixes:{ packages:[], landing_pages:[], car_photos:[] } };
+    }
+  })();
+  return manifestPromise;
+}
+
+
+function assignedImages(manifest, targetKeys=[]){
+  const keys=(Array.isArray(targetKeys)?targetKeys:[targetKeys]).map(clean).filter(Boolean);
+  if(!keys.length) return [];
+  const assignments=Array.isArray(manifest?.assignments)?manifest.assignments:[];
+  const rank=new Map(keys.map((key,index)=>[key,index]));
+  return assignments
+    .filter((row)=>rank.has(clean(row?.target_key)) && row?.url)
+    .sort((a,b)=>rank.get(clean(a.target_key))-rank.get(clean(b.target_key)))
+    .map((row)=>({
+      key:row.r2_key||row.filename||row.url, r2_key:row.r2_key||'', filename:row.filename||'',
+      prefix:prefixName(row), url:row.url, alt_text:row.alt_text||'', title:row.title||'', caption:row.caption||'',
+      focal_point:row.focal_point||'center', explicit_assignment:true, target_key:row.target_key, match_score:10000
+    }));
+}
+
+function dedupeImages(rows=[]){
+  const seen=new Set();
+  return rows.filter((row)=>{const key=clean(row?.r2_key||row?.key||row?.url);if(!key||seen.has(key))return false;seen.add(key);return true;});
+}
+
+function imageText(image){
+  return normalize(`${image?.key || ''} ${image?.filename || ''}`);
+}
+
+function prefixName(image){
+  const raw = clean(image?.prefix || image?.key || '');
+  if (/^packages\//i.test(raw)) return 'packages';
+  if (/^(landing_pages|landing-pages)\//i.test(raw)) return 'landing_pages';
+  if (/^CarPhotos\//i.test(raw)) return 'car_photos';
+  return '';
+}
+
+function scoreImage(image, {
+  phrases=[],
+  hints=[],
+  size='',
+  preferredPrefixes=[],
+  exclude=[]
+} = {}){
+  const hay = imageText(image);
+  if (!hay) return -9999;
+  const excluded = (Array.isArray(exclude) ? exclude : [exclude]).map(normalize).filter(Boolean);
+  if (excluded.some((term) => hay.includes(term))) return -9999;
+
+  let score = 0;
+  const phraseList = (Array.isArray(phrases) ? phrases : [phrases]).map(normalize).filter(Boolean);
+  const hintList = (Array.isArray(hints) ? hints : [hints]).map(normalize).filter(Boolean);
+  const pref = prefixName(image);
+  const prefixIndex = preferredPrefixes.indexOf(pref);
+  if (prefixIndex >= 0) score += Math.max(4, 20 - prefixIndex * 6);
+
+  for (const phrase of phraseList) {
+    if (hay === phrase) score += 80;
+    if (hay.includes(phrase)) score += 36;
+    const ts = tokens(phrase);
+    const hits = ts.filter((token) => hay.includes(token)).length;
+    if (ts.length && hits === ts.length) score += 24;
+    else score += hits * 5;
+  }
+
+  for (const hint of hintList) {
+    if (hay.includes(hint)) score += 6;
+  }
+
+  if (size && SIZE_HINTS[size]) {
+    const sizeHits = SIZE_HINTS[size].filter((hint) => hay.includes(normalize(hint))).length;
+    if (sizeHits) score += 12 + sizeHits * 2;
+  }
+
+  if (hay.includes('placeholder') || hay.includes('generic') || hay.includes('fallback')) score -= 30;
+  if (hay.includes('before') || hay.includes('after')) score += 2;
+  return score;
+}
+
+export function rankedWebsiteImages(manifest, options={}, limit=8){
+  const images = Array.isArray(manifest?.images) ? manifest.images : [];
+  return images
+    .map((image,index) => ({ image, index, score:scoreImage(image,options) }))
+    .filter((row) => row.score > 0 && row.image?.url)
+    .sort((a,b) => b.score - a.score || a.index - b.index)
+    .slice(0,Math.max(1,limit))
+    .map((row) => ({ ...row.image, match_score:row.score }));
+}
+
+export function packageImageMatches(manifest, pkg, size='', limit=8){
+  const rawCode=clean(pkg?.code);
+  const code = rawCode.replace(/_/g,' ');
+  const name = clean(pkg?.name);
+  const aliases = [pkg?.display_alias,pkg?.customer_goal,pkg?.subtitle].filter(Boolean);
+  const explicit=assignedImages(manifest,[size?`package:${rawCode}:${size}`:'',`package:${rawCode}:default`]);
+  const automatic=rankedWebsiteImages(manifest,{phrases:[code,name,...aliases],hints:[code,name,...(pkg?.recommendation_tags || [])],size,preferredPrefixes:['packages','car_photos','landing_pages']},limit);
+  return dedupeImages([...explicit,...automatic]).slice(0,limit);
+}
+
+export function addonImageMatches(manifest, addon, limit=6){
+  const rawCode=clean(addon?.code);
+  const code = rawCode.replace(/_/g,' ');
+  const name = clean(addon?.name);
+  const explicit=assignedImages(manifest,`addon:${rawCode}`);
+  const automatic=rankedWebsiteImages(manifest,{phrases:[code,name,addon?.category,addon?.type],hints:[code,name,addon?.category,addon?.type],preferredPrefixes:['packages','landing_pages','car_photos']},limit);
+  return dedupeImages([...explicit,...automatic]).slice(0,limit);
+}
+
+export function landingImageMatches(manifest, page, slug='', limit=10){
+  const rawSlug=clean(slug || page?.slug);
+  const pageSlug = rawSlug.replace(/-/g,' ');
+  const code = clean(page?.related_code).replace(/_/g,' ');
+  const name = clean(page?.name || page?.hero_title);
+  const locationAliases = page?.type === 'location' ? pageSlug.replace(/auto detailing/g,'').split(/\s+/).filter(Boolean) : [];
+  const hero=assignedImages(manifest,`landing:${rawSlug}:hero`);
+  const galleries=assignedImages(manifest,[`landing:${rawSlug}:gallery:1`,`landing:${rawSlug}:gallery:2`,`landing:${rawSlug}:gallery:3`]);
+  const automatic=rankedWebsiteImages(manifest,{phrases:[pageSlug,code,name,page?.hero_title],hints:[...locationAliases, ...(page?.highlights || []).slice(0,4)],preferredPrefixes:['landing_pages','car_photos','packages']},limit);
+  return dedupeImages([...hero,...automatic,...galleries]).slice(0,limit);
+}
+
+export function cardImageMatches(manifest, keywords='', href='', limit=3, targetKey=''){
+  const hrefPhrase = clean(href).replace(/^\/+|\/+$/g,'').replace(/[-_/]+/g,' ');
+  const explicit=assignedImages(manifest,targetKey);
+  const automatic=rankedWebsiteImages(manifest,{phrases:[keywords,hrefPhrase],hints:[keywords,hrefPhrase],preferredPrefixes:['landing_pages','packages','car_photos']},limit);
+  return dedupeImages([...explicit,...automatic]).slice(0,limit);
+}
+
+export async function hydrateR2CardImages(root=document){
+  const nodes = [...root.querySelectorAll('[data-r2-image-keywords]')];
+  if (!nodes.length) return;
+  const manifest = await loadWebsiteImageManifest();
+  for (const node of nodes) {
+    if (node.dataset.r2ImageHydrated === 'true') continue;
+    node.dataset.r2ImageHydrated = 'true';
+    const link = node.querySelector('a[href]');
+    const matches = cardImageMatches(
+      manifest,
+      node.dataset.r2ImageKeywords || node.textContent || '',
+      node.dataset.r2ImageHref || link?.getAttribute('href') || '',
+      3,
+      node.dataset.photoTarget || ''
+    );
+    if (!matches.length) continue;
+    let img = node.querySelector(':scope > img.r2-card-photo');
+    if (!img) {
+      img = document.createElement('img');
+      img.className = 'r2-card-photo';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.alt = matches[0]?.alt_text || `${clean(node.querySelector('h2,h3')?.textContent || 'Rosie Dazzlers')} detailing example`;
+      node.insertBefore(img,node.firstChild);
+    }
+    let index = 0;
+    const tryNext = () => {
+      const next = matches[index++]?.url;
+      if (!next) {
+        img.remove();
+        return;
+      }
+      const picked=matches[index-1] || {};
+      img.alt=picked.alt_text || img.alt;
+      img.style.objectPosition=picked.focal_point || 'center';
+      img.src = next;
+    };
+    img.addEventListener('error',tryNext);
+    tryNext();
+  }
+}

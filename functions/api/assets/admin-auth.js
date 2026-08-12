@@ -209,6 +209,7 @@
       case "admin-conversions":
       case "admin-payments":
       case "admin-media-health":
+      case "admin-photo-studio":
       case "admin-tax-review":
       case "admin-close":
       case "admin-seo-tasks":
