@@ -200,3 +200,10 @@ A separate processing runtime is still required to actually run FFmpeg/transcodi
 <!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
 
 <!-- BUILD251_SYNC: 2026-08-11 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Gate C dark-theme readability + approved rosie-assets/CarPhotos context -->
+
+<!-- Build 210 documentation sync -->
+<!-- Build 211 documentation sync -->
+<!-- Build 212 documentation sync -->
+<!-- Build 213 documentation sync -->
+<!-- Build 214 documentation sync -->
+<!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
