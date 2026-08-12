@@ -1,4 +1,5 @@
 import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
+import { evaluateCatalogReadiness } from "../_lib/catalog-readiness.js";
 
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 
@@ -16,7 +17,9 @@ export async function onRequestPost(context) {
       name: String(body?.name || "").trim(),
       category: String(body?.category || "").trim() || null,
       subcategory: String(body?.subcategory || "").trim() || null,
+      description: String(body?.description || "").trim() || null,
       image_url: String(body?.image_url || "").trim() || null,
+      gallery_image_urls: normalizeGalleryImages(body?.gallery_image_urls || body?.gallery_images),
       amazon_url: String(body?.amazon_url || "").trim() || null,
       qty_on_hand: Number(body?.qty_on_hand || 0),
       reorder_point: Number(body?.reorder_point || 0),
@@ -52,9 +55,12 @@ export async function onRequestPost(context) {
     if (!payload.item_key || !payload.name || !["tool", "consumable"].includes(payload.item_type)) return withCors(json({ error: "Missing required fields." }, 400));
     if (!["reorder", "single_use", "never_reuse"].includes(payload.reuse_policy)) return withCors(json({ error: "Invalid reuse policy." }, 400));
 
+    const readiness = evaluateCatalogReadiness(payload);
+    if (payload.is_public && !readiness.ready) return withCors(json({ error: "This item cannot be public until its publishing blockers are corrected.", publish_readiness: readiness }, 409));
+
     const result = await safeUpsertInventory(env, payload);
     if (!result.ok) return withCors(json({ error: result.error, stripped_columns: result.strippedColumns || [] }, 500));
-    return withCors(json({ ok: true, item: result.item, stripped_columns: result.strippedColumns || [] }));
+    return withCors(json({ ok: true, item: result.item, publish_readiness: evaluateCatalogReadiness(result.item || payload), stripped_columns: result.strippedColumns || [] }));
   } catch (err) {
     return withCors(json({ error: String(err) }, 500));
   }
@@ -101,10 +107,22 @@ function detectMissingColumn(text) {
     const match = value.match(pattern);
     if (match?.[1]) return match[1];
   }
-  for (const key of ["amazon_asin", "amazon_title", "amazon_match_status", "amazon_match_score", "amazon_seller_name", "amazon_brand", "amazon_category", "amazon_quantity_total", "amazon_net_total_cents", "receipt_url", "assigned_station", "service_tags", "estimated_jobs_per_unit", "purchase_date", "vendor_sku", "sort_key", "reuse_policy", "is_public", "is_active"]) {
+  for (const key of ["gallery_image_urls", "description", "amazon_asin", "amazon_title", "amazon_match_status", "amazon_match_score", "amazon_seller_name", "amazon_brand", "amazon_category", "amazon_quantity_total", "amazon_net_total_cents", "receipt_url", "assigned_station", "service_tags", "estimated_jobs_per_unit", "purchase_date", "vendor_sku", "sort_key", "reuse_policy", "is_public", "is_active"]) {
     if (value.includes(key)) return key;
   }
   return null;
+}
+
+
+function normalizeGalleryImages(value) {
+  let list = [];
+  if (Array.isArray(value)) list = value;
+  else if (typeof value === "string" && value.trim()) {
+    try { const parsed = JSON.parse(value); list = Array.isArray(parsed) ? parsed : value.split(/[\n,]/); }
+    catch { list = value.split(/[\n,]/); }
+  }
+  const seen = new Set();
+  return list.map((v) => String(v || "").trim()).filter((v) => { const key = v.toLowerCase(); if (!v || seen.has(key)) return false; seen.add(key); return true; }).slice(0, 7);
 }
 
 function normalizeTags(value) {

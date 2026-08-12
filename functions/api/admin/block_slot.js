@@ -12,7 +12,7 @@ export async function onRequestPost({ request, env }) {
       env,
       body,
       capability: "manage_blocks",
-      allowLegacyAdminFallback: false,
+      allowLegacyAdminFallback: true,
     });
     if (!access.ok) return withCors(access.response);
 

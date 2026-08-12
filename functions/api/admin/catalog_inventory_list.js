@@ -1,4 +1,5 @@
 import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
+import { attachCatalogReadiness } from "../_lib/catalog-readiness.js";
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 export async function onRequestGet(context) {
   const { request, env } = context;
@@ -11,8 +12,9 @@ export async function onRequestGet(context) {
     const res = await fetch(path, { headers: { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, Accept: "application/json" } });
     if (!res.ok) return withCors(json({ error: await res.text() }, 500));
     const items = await res.json().catch(() => []);
-    const arr = Array.isArray(items) ? items : [];
-    return withCors(json({ ok: true, items: arr, low_stock: arr.filter((item) => String(item.reuse_policy || 'reorder') !== 'never_reuse' && Number(item.qty_on_hand || 0) <= Number(item.reorder_point || 0)) }));
+    const arr = attachCatalogReadiness(Array.isArray(items) ? items : []);
+    const ready = arr.filter((item) => item.publish_readiness?.ready).length;
+    return withCors(json({ ok: true, items: arr, readiness_summary: { total: arr.length, ready, blocked: arr.length - ready }, low_stock: arr.filter((item) => String(item.reuse_policy || 'reorder') !== 'never_reuse' && Number(item.qty_on_hand || 0) <= Number(item.reorder_point || 0)) }));
   } catch (err) { return withCors(json({ error: String(err) }, 500)); }
 }
 export async function onRequestPost() { return withCors(methodNotAllowed()); }
