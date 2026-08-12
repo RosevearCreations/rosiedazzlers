@@ -1,7 +1,7 @@
 {
-  "build": 228,
-  "updated_at": "2026-07-12",
-  "summary": "Responsive visual placeholders remain temporary and safe. Build 228 adds a Creative Project Intelligence workflow slot for the process-first project system.",
+  "build": 244,
+  "updated_at": "2026-08-07",
+  "summary": "Build 244 bundles the AI-generated photo placeholders directly into the application zip, replaces SVG photo fallbacks with raster image assets, and re-points add-on, review, catalog, booking, and admin placeholder references to real images.",
   "placeholder_slots": [
     {
       "key": "service_card",
@@ -262,6 +262,20 @@
       "where": "admin creative-project workspace hero",
       "visual": "idea-to-process-to-reviewed-output workflow card",
       "replace_with": "an approved internal workflow diagram containing no customer or credential data"
+    },
+    {
+      "key": "startup_go_live_command_path",
+      "label": "Startup go-live command path",
+      "where": "Startup Go-Live Guide and launch readiness navigation",
+      "visual": "connected preflight path with calendar, payment, email, backup, SEO and soft-launch checkpoints",
+      "replace_with": "A clean internal process diagram or privacy-safe screenshots of the actual Rosie admin pages"
+    },
+    {
+      "key": "inventory_transactional_posting_reversal",
+      "label": "Inventory transaction workflow graphic",
+      "where": "Inventory Posting & Reversal admin page and operator training",
+      "visual": "review \u2192 validate stock \u2192 post transaction \u2192 audited reversal workflow",
+      "replace_with": "A Rosie-branded workflow diagram or privacy-safe screenshot after live acceptance testing"
     }
   ],
   "rules": [
@@ -295,6 +309,38 @@
       "status": "placeholder",
       "privacy": "internal_only",
       "recommended_asset": "A project timeline flowing into materials, labour, costs, story drafts and reviewed outputs; no customer data."
+    },
+    {
+      "key": "creative_project_profit_learning_workflow",
+      "title": "Project profit, learning and content planning workflow",
+      "description": "Internal visual showing approved project evidence flowing into costs, learning, platform plans and archive manifests.",
+      "recommended_aspect_ratio": "16:9",
+      "status": "placeholder"
+    },
+    {
+      "key": "creative_project_budget_archive_history",
+      "page": "/admin-creative-projects.html",
+      "purpose": "Internal visual showing budget, consent, draft history and archive flow",
+      "recommended_size": "1600x900",
+      "status": "placeholder"
+    },
+    {
+      "key": "startup_go_live_command_path",
+      "page": "/admin-startup-guide.html",
+      "purpose": "Internal visual showing the ordered path from technical preflight through controlled soft launch",
+      "status": "placeholder",
+      "privacy": "internal_only",
+      "recommended_asset": "Simple labelled launch path using Rosie brand visuals; no customer, payment or private deployment data."
     }
+  ],
+  "raster_placeholder_assets": [
+    "/assets/placeholders/service-photo.jpg",
+    "/assets/placeholders/local-proof-photo.jpg",
+    "/assets/placeholders/product-gallery-photo.jpg",
+    "/assets/placeholders/inventory-tools-photo.jpg",
+    "/assets/placeholders/workflow-photo.jpg",
+    "/assets/placeholders/launch-readiness-photo.jpg",
+    "/assets/brand/rosie-reviews-fallback.png",
+    "/assets/addons/generic_addon.png"
   ]
 }
