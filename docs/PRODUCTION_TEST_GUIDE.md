@@ -1,3 +1,18 @@
+# Build 236 Block Calendar production acceptance
+
+1. Load `/admin-blocks.html` and confirm the schedule API indicator becomes ready.
+2. Select a future date and block the full date.
+3. Open the public booking flow in a private window and confirm the date is unavailable.
+4. Unblock the date and confirm availability returns.
+5. Block AM only and verify PM remains available.
+6. Remove AM, block PM, and verify AM remains available.
+7. Test Previous, Today, Next, Reload, keyboard focus, and a narrow mobile viewport.
+8. Confirm the admin dashboard's schedule counts match the Block Calendar lists.
+
+Do not mark the schedule preflight complete from a static code check alone; retain screenshots or notes from the deployed test.
+
+---
+
 
 # Build 225 — Social & analytics Connections Centre test (staging only)
 
@@ -515,3 +530,69 @@ Build 230 extends only the opt-in Creative Project Intelligence path. Ordinary c
 Added: structured project-only material, labour and other-cost lines; optional project templates; before/after applicability; consent status and summary; story/platform/commerce/report drafts; unified batch output review; reversible booking unlink, archive and restore; and a project-to-DAIP metadata association that is denied until Gate C is accepted and technical capability is explicitly enabled. Nothing publishes automatically.
 
 Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_build230_project_costs_templates_outputs.sql`.
+
+## Build 231 staging tests
+
+1. Apply the Build 231 migration.
+2. Edit, soft-delete and restore one material, labour and cost line.
+3. Confirm deleted lines are excluded from project totals.
+4. Save expected/actual revenue and verify profit/margin.
+5. Test therapeutic and non-commercial classifications.
+6. Save a draft, reviewed and posted inventory reservation; verify `inventory_mutated` remains false and ordinary stock is unchanged.
+7. Confirm linked booking comparison is read-only.
+8. Save a project template and re-open the project.
+9. Record a consent expiry date and reminder interval.
+10. Add before, during and after shot-plan items.
+11. Approve one session for story use and generate content plans.
+12. Confirm drafts include planning metadata but nothing publishes.
+13. Save and approve a lesson and score a future recommendation.
+14. Prepare an archive manifest and confirm it contains no media bytes or public destination.
+15. Confirm DAIP association remains blocked unless Gate C is genuinely enabled.
+
+## Build 232 staging tests
+1. Edit material, labour and cost rows using the dialog; confirm no JSON prompt appears.
+2. Save budget and target margin; verify variance, break-even and target revenue.
+3. Add shot owner, order and evidence note.
+4. Queue a consent reminder and verify no customer message is sent.
+5. Save a draft twice and verify a version-history row exists.
+6. Prepare and download a JSON archive; confirm media/public destinations are absent.
+7. Confirm standard bookings and inventory quantities do not change.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+Build 210 documentation sync
+Build 211 documentation sync
+Build 212 documentation sync
+Build 213 documentation sync
+Build 214 documentation sync
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
+
+<!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
+
+<!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
+
+<!-- BUILD251_SYNC: 2026-08-11 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Gate C dark-theme readability + approved rosie-assets/CarPhotos context -->
+
+<!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
+
+<!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->
