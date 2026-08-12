@@ -42,7 +42,7 @@
     .quality-meter{height:8px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:6px}
     .quality-meter span{display:block;height:100%;background:linear-gradient(90deg,#f59e0b,#34d399);width:0%}
     .quality-warn{color:#fde68a}
-    .quality-bad{color:#fecaca}
+    .quality-bad{color:#fecaca}.readiness-ready{color:#bbf7d0}.readiness-blocked{color:#fecaca}.readiness-review{color:#fde68a}.publish-review-list{display:grid;gap:8px;margin-top:8px}.publish-review-item{padding:9px;border:1px solid rgba(255,255,255,.09);border-radius:10px;background:rgba(0,0,0,.12)}
     .quality-good{color:#bbf7d0}
     .catalog-review{max-height:360px;overflow:auto;border:1px solid rgba(255,255,255,.08);border-radius:14px}
     .catalog-review table{margin:0}
@@ -60,11 +60,16 @@
     .image-choice span{display:block;font-size:11px;line-height:1.2;overflow-wrap:anywhere}
     .image-choice .image-source{color:rgba(234,242,255,.62)}
     .image-health-list{display:grid;gap:4px;margin-top:6px}.image-health-bad{color:#fecaca}.image-health-good{color:#bbf7d0}
+    .gallery-panel{grid-column:1/-1;border:1px solid rgba(147,197,253,.25);border-radius:16px;padding:12px;background:rgba(59,130,246,.055);display:grid;gap:9px}.gallery-grid{display:grid;gap:8px}.gallery-slot{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:8px;align-items:center;padding:7px;border:1px solid rgba(255,255,255,.08);border-radius:12px}.gallery-slot img{width:68px;height:54px;object-fit:cover;border-radius:9px;background:rgba(255,255,255,.08)}.gallery-slot-actions{display:flex;gap:5px}.gallery-summary{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.gallery-slot.dragging{opacity:.55}.gallery-slot.drag-over{border-color:#93c5fd;background:rgba(59,130,246,.12)}
     @media(max-width:980px){.catalog-workbench{grid-template-columns:1fr}.bulk-tools{align-items:stretch}.bulk-tools .btn,.bulk-tools select,.bulk-tools input{width:100%}.image-picker-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:980px){.grid2,.grid3,.option-grid,#itemForm .grid3{grid-template-columns:1fr}.table-wrap table{table-layout:auto}}
-  </style>
+  
+.supplier-link-import{border:1px solid var(--line,#d5dde5);border-radius:16px;padding:16px;display:grid;gap:12px;background:var(--panel,#fff)}
+.supplier-link-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:end}.supplier-link-row label{display:grid;gap:5px}.supplier-link-visual{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;padding:14px;border-radius:12px;background:linear-gradient(135deg,rgba(23,86,118,.10),rgba(198,113,47,.10));font-weight:700}.supplier-link-visual span{padding:7px 10px;border:1px dashed currentColor;border-radius:999px}.supplier-target{border:1px solid rgba(147,197,253,.28);border-radius:12px;padding:10px;background:rgba(59,130,246,.06)}.supplier-overwrite-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.supplier-overwrite-grid label{display:flex;gap:8px;align-items:flex-start;padding:8px;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:rgba(255,255,255,.025)}.supplier-diff{display:grid;gap:5px;margin-top:8px}.supplier-diff-row{display:grid;grid-template-columns:minmax(120px,.7fr) minmax(0,1fr);gap:8px;padding:6px 0;border-top:1px solid rgba(255,255,255,.07)}.editor-mode{border-left:3px solid #60a5fa;padding:8px 10px;background:rgba(59,130,246,.07);border-radius:8px}.supplier-meta{grid-column:1/-1;border:1px dashed rgba(147,197,253,.25);border-radius:12px;padding:10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.supplier-meta code{overflow-wrap:anywhere}
+@media(max-width:700px){.supplier-link-row,.supplier-overwrite-grid,.supplier-meta{grid-template-columns:1fr}.supplier-link-row .btn{width:100%}.supplier-link-import{padding:12px}.supplier-link-visual b{transform:rotate(90deg)}.supplier-diff-row{grid-template-columns:1fr}}
+</style>
 </head>
-<body>
+<body data-build249="supplier-refresh-inventory-recovery">
 <div class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button><div class="nav-links" id="navLinks"></div></div></div>
 <main class="container">
   <section class="panel">
@@ -76,6 +81,7 @@
       <div id="actorBox" class="notice" style="display:none"></div>
     </div>
     <div id="status" class="notice" style="display:none;margin-top:12px"></div>
+    <div class="row" style="margin-top:12px"><a class="btn primary" href="/admin-inventory-manager.html">Open Inventory Workbench</a><a class="btn ghost" href="/admin-inventory-posting.html">Inventory Posting</a><a class="btn ghost" href="/admin-startup-guide.html#evidence">Open Launch Readiness</a></div>
   </section>
     <details class="notice option-panel" style="margin-top:12px">
       <summary><strong>Customize inventory dropdown suggestions</strong> <span class="mini">categories, colours, vendors, units, and sort helpers</span></summary>
@@ -110,14 +116,17 @@
         </div>
       </div>
       <div class="catalog-card">
-        <strong>Bulk visibility</strong>
-        <div class="mini">Select rows in the table, then publish/hide or activate/deactivate them in batches.</div>
+        <strong>Reviewed public publishing</strong>
+        <div class="mini">Public publishing is blocked when required names, categories, units, images, active status, or consumable stock are incomplete.</div>
+        <label style="display:grid;gap:5px;margin-top:8px">Reason<input id="publishReason" value="Reviewed catalog publishing readiness" maxlength="300" /></label>
         <div class="bulk-tools" style="margin-top:8px">
-          <button class="btn ghost" id="bulkPublicBtn" type="button">Make public</button>
+          <button class="btn ghost" id="bulkPublicPreviewBtn" type="button">Preview public readiness</button>
+          <button class="btn primary" id="bulkPublicBtn" type="button">Publish ready selection</button>
           <button class="btn ghost" id="bulkPrivateBtn" type="button">Hide public</button>
           <button class="btn ghost" id="bulkActiveBtn" type="button">Activate</button>
           <button class="btn ghost" id="bulkInactiveBtn" type="button">Deactivate</button>
         </div>
+        <div id="publishReviewResult" class="publish-review-list"><div class="mini">Select rows and preview before publishing.</div></div>
       </div>
       <div class="catalog-card">
         <strong>Image completeness</strong>
@@ -194,6 +203,7 @@
         <button class="btn" id="newItemBtn" type="button">New item</button>
         <input id="invSearch" class="search-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" inputmode="text" placeholder="Search name, key, category, vendor" readonly />
         <select id="itemType"><option value="">All types</option><option value="tool">Tools</option><option value="consumable">Consumables</option></select>
+        <select id="publishReadinessFilter"><option value="">All readiness</option><option value="ready">Ready to publish</option><option value="blocked">Blocked publishing</option><option value="warning">Ready with warnings</option></select>
         <select id="invSort"><option value="updated_desc">Sort: Updated</option><option value="name_asc">Sort: Name</option><option value="stock_asc">Sort: Stock low→high</option><option value="rating_desc">Sort: Rating</option><option value="sort_key_asc">Sort: Saved order</option></select>
       </div>
       <div class="mini" id="invSummary"></div>
@@ -202,6 +212,24 @@
 
     <article class="panel stack">
       <h2 style="margin:0">Edit inventory item</h2>
+      <div id="editorModeStatus" class="editor-mode mini">New-item mode. Select <strong>Edit</strong> on an existing row first if we want to repair that exact inventory record.</div>
+      <!-- Build 248 compatibility marker retained for release guard: Import into review -->
+      <section class="supplier-link-import" aria-labelledby="supplierLinkHeading">
+        <div class="supplier-link-visual" role="img" aria-label="Existing inventory item or new item flowing through supplier review before a deliberate save"><span id="supplierVisualTarget">Existing item / new item</span><b>→</b><span>Amazon review</span><b>→</b><span>Deliberate save</span></div>
+        <h2 id="supplierLinkHeading" style="margin:0">Repair or add inventory from an Amazon link</h2>
+        <p class="mini"><strong>To repair a bad row:</strong> click <em>Edit</em> beside that supply/tool first, then paste the accurate Amazon.ca, Amazon.com, a.co or amzn.to link here. The existing item key is locked and stock/history fields are protected. We preview Amazon metadata and stage selected corrections in this editor. Nothing changes in the database until we review and press <strong>Save inventory item</strong>.</p>
+        <div id="supplierTargetStatus" class="supplier-target mini">No existing repair target selected. Importing a link will create a new private review draft.</div>
+        <div class="supplier-overwrite-grid" aria-label="Supplier fields to refresh">
+          <label><input id="supplierOverwriteIdentity" type="checkbox" checked><span><strong>Name & supplier identity</strong><br><span class="mini">Name, vendor, ASIN/SKU and Amazon source metadata.</span></span></label>
+          <label><input id="supplierOverwriteClassification" type="checkbox" checked><span><strong>Classification</strong><br><span class="mini">Tool/consumable, category, subcategory, unit and reuse policy.</span></span></label>
+          <label><input id="supplierOverwriteDescription" type="checkbox" checked><span><strong>Description</strong><br><span class="mini">Replace an inaccurate or blank description with reviewed supplier text.</span></span></label>
+          <label><input id="supplierOverwritePrice" type="checkbox" checked><span><strong>CAD unit cost when available</strong><br><span class="mini">Only overwrites cost when the supplier result is confidently CAD.</span></span></label>
+          <label><input id="supplierOverwriteImage" type="checkbox" checked><span><strong>Featured image</strong><br><span class="mini">Use the supplier image as the featured image; existing gallery images remain untouched.</span></span></label>
+        </div>
+        <div class="supplier-link-row"><label>Product URL or Amazon share text<input id="supplierLinkUrl" type="text" inputmode="url" autocomplete="off" placeholder="https://www.amazon.ca/dp/… or https://a.co/…" /></label><button class="btn ghost" id="supplierUseEditorLinkBtn" type="button">Use editor link</button><button class="btn primary" id="supplierLinkPreviewBtn" type="button">Review Amazon update</button></div>
+        <div class="mini">Always preserved during a supplier refresh: inventory key, quantity on hand, reorder thresholds/quantity, purchase date, receipt, station, service tags, gallery, ratings, public/active state and operational history.</div>
+        <div id="supplierLinkResult" class="notice" style="display:none" role="status" aria-live="polite"></div>
+      </section>
       <form id="itemForm" class="stack">
         <div class="grid3">
           <label>Type<select id="formItemType"><option value="tool">Tool</option><option value="consumable">Consumable</option></select></label>
@@ -225,13 +253,18 @@
           <label>Amazon / purchase URL<input id="formAmazon" list="inventoryPurchaseUrlOptions" placeholder="Paste the Amazon product link" /></label>
           <label>Image URL<input id="formImage" list="inventoryImageOptions" placeholder="Pick an existing consumables/tools image or paste a URL" /></label>
           <div class="image-picker-preview" id="imagePreviewBox">
-            <img id="formImagePreview" alt="Selected inventory image preview" loading="lazy" src="/assets/addons/generic_addon.svg" />
+            <img id="formImagePreview" alt="Selected inventory image preview" loading="lazy" src="/assets/placeholders/inventory-tools-photo.jpg" />
             <div class="stack" style="gap:7px">
               <strong id="imagePreviewTitle">No product image selected yet</strong>
               <div class="mini" id="imagePreviewMeta">Use the matching bundled image or open the picker to select an uploaded product image.</div>
               <div class="row"><button class="btn ghost" id="useMatchingImageBtn" type="button">Use matching bundled image</button><button class="btn ghost" id="openImagePickerBtn" type="button">Pick existing image</button><button class="btn ghost" id="clearImageBtn" type="button">Clear image</button></div>
             </div>
           </div>
+          <section class="gallery-panel" aria-labelledby="galleryHeading">
+            <div class="gallery-summary"><div><strong id="galleryHeading">Product gallery — up to 7 images</strong><div class="mini">The featured image above stays first. Add detail, packaging, dimensions, process, before/after or lifestyle images here. Drag rows or use the arrow buttons to change order.</div></div><span class="pill" id="galleryCount">0 / 7 gallery images</span></div>
+            <div class="gallery-grid" id="galleryGrid"></div>
+            <div class="row"><button class="btn ghost" id="copyFeaturedToGalleryBtn" type="button">Copy featured image into first empty gallery slot</button><button class="btn ghost" id="clearGalleryBtn" type="button">Clear gallery</button></div>
+          </section>
           <div class="inventory-image-picker" id="inventoryImagePicker">
             <div class="row" style="justify-content:space-between"><strong>Existing consumables/tools/media images</strong><span class="mini" id="imagePickerCount">Loading images…</span></div>
             <input id="imagePickerSearch" class="search-input" type="text" placeholder="Search images by product name, key, media group, source, or URL" autocomplete="off" />
@@ -240,10 +273,17 @@
           <label>Receipt / bill URL<input id="formReceiptUrl" list="inventoryPurchaseUrlOptions" placeholder="Receipt, invoice, or statement URL" /></label>
           <label>Assigned station / vehicle<input id="formAssignedStation" placeholder="Van 1, garage shelf, trailer bin" /></label>
           <label>Linked services / tags<input id="formServiceTags" placeholder="engine cleaning, pet hair, ceramic coating" /></label>
+          <label style="grid-column:1/-1">Description<textarea id="formDescription" rows="4" placeholder="Accurate product description for internal/public review"></textarea></label>
+          <div class="supplier-meta" aria-label="Amazon source metadata">
+            <div><strong>Amazon ASIN</strong><div><code id="formAmazonAsinDisplay">—</code></div></div>
+            <div><strong>Amazon brand</strong><div id="formAmazonBrandDisplay">—</div></div>
+            <div><strong>Amazon source title</strong><div id="formAmazonTitleDisplay" class="mini">—</div></div>
+            <div><strong>Amazon source category</strong><div id="formAmazonCategoryDisplay" class="mini">—</div></div>
+          </div>
         </div>
         <div id="inventoryDatalists" hidden></div>
         <div class="mini">Text fields now learn from existing saved inventory plus common detailing terms, including categories, vendors, units, image URLs, and colour/finish words in the subcategory suggestions.</div>
-        <div class="row"><button class="btn ghost" id="amazonParseBtn" type="button">Fill from Amazon link</button><span class="mini">Parses the Amazon link slug into a draft name and item key so you can add a new item faster.</span></div>
+        <div class="row"><button class="btn ghost" id="amazonParseBtn" type="button">Read / refresh from Amazon link</button><span class="mini">Uses the same real Amazon review workflow above. When editing an existing row, it repairs that row instead of generating a second inventory key.</span></div>
         <div class="check-grid spread-checks">
           <label class="checkbox"><input id="formIsPublic" type="checkbox" checked /><span>Visible on public site</span></label>
           <label class="checkbox"><input id="formIsActive" type="checkbox" checked /><span>Active inventory item</span></label>
@@ -300,7 +340,7 @@
 <script>
 (function(){
   const qs=(s)=>document.querySelector(s);
-  let actor=null, inventory=[], movements=[], lowStock=[], savedInventoryItems=[], bundledFallbackItems=[], mediaLibraryRows=[], importPreviewRows=[], amazonMatchRows=[], imagePickerRows=[], imageHealthRows=[];
+  let actor=null, inventory=[], movements=[], lowStock=[], savedInventoryItems=[], bundledFallbackItems=[], mediaLibraryRows=[], importPreviewRows=[], amazonMatchRows=[], imagePickerRows=[], imageHealthRows=[], usageActionId=crypto.randomUUID(), editorTargetKey=null, editorSnapshot=null, supplierMetaState={};
   const optionStorageKey='rosie_inventory_dropdown_options_v2';
   function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g,(m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function show(msg,kind=''){ const el=qs('#status'); el.style.display='block'; el.className='notice '+(kind||''); el.textContent=msg; }
@@ -342,8 +382,31 @@
   function collectImageCandidates(item){
     const out=[];
     [item?.image_url, item?.r2_url, item?.media_url, item?.fallback_url, item?.public_url, item?.url].forEach((url)=>{ if(cleanImageUrl(url)) out.push(cleanImageUrl(url)); });
+    normalizeGalleryImageUrls(item?.gallery_image_urls || item?.gallery_images).forEach((url)=>{ if(cleanImageUrl(url)) out.push(cleanImageUrl(url)); });
     if(Array.isArray(item?.img_candidates)) item.img_candidates.forEach((url)=>{ if(cleanImageUrl(url)) out.push(cleanImageUrl(url)); });
     return [...new Set(out)];
+  }
+  function normalizeGalleryImageUrls(value){
+    let list=[];
+    if(Array.isArray(value)) list=value;
+    else if(typeof value==='string' && value.trim()){ try { const parsed=JSON.parse(value); list=Array.isArray(parsed)?parsed:value.split(/[\n,]/); } catch { list=value.split(/[\n,]/); } }
+    const seen=new Set(); return list.map(cleanImageUrl).filter((url)=>{ const key=url.toLowerCase(); if(!url||seen.has(key)) return false; seen.add(key); return true; }).slice(0,7);
+  }
+  function galleryInputs(){ return [...document.querySelectorAll('[data-gallery-input]')]; }
+  function galleryValues(){ return galleryInputs().map((input)=>cleanImageUrl(input.value)).filter(Boolean).slice(0,7); }
+  function renderGalleryEditor(values){
+    const grid=qs('#galleryGrid'); if(!grid) return; const urls=normalizeGalleryImageUrls(values); while(urls.length<7) urls.push('');
+    grid.innerHTML=urls.map((url,index)=>`<div class="gallery-slot" draggable="true" data-gallery-slot="${index}"><img src="${esc(url || '/assets/addons/generic_addon.png')}" alt="Gallery image ${index+1} preview" loading="lazy" onerror="this.src='/assets/placeholders/inventory-tools-photo.jpg'"><label>Gallery ${index+1}<input data-gallery-input="${index}" list="inventoryImageOptions" type="url" value="${esc(url)}" placeholder="Paste or select image URL"></label><div class="gallery-slot-actions"><button class="btn ghost small" type="button" data-gallery-up="${index}" aria-label="Move gallery image ${index+1} up">↑</button><button class="btn ghost small" type="button" data-gallery-down="${index}" aria-label="Move gallery image ${index+1} down">↓</button><button class="btn ghost small" type="button" data-gallery-clear="${index}" aria-label="Clear gallery image ${index+1}">×</button></div></div>`).join('');
+    bindGalleryEditor(); updateGalleryCount();
+  }
+  function updateGalleryCount(){ const count=galleryValues().length; const el=qs('#galleryCount'); if(el) el.textContent=`${count} / 7 gallery images`; }
+  function moveGallerySlot(index,delta){ const inputs=galleryInputs(),target=index+delta; if(target<0||target>=inputs.length) return; const a=inputs[index].value,b=inputs[target].value; inputs[index].value=b; inputs[target].value=a; renderGalleryEditor(galleryValues()); }
+  function bindGalleryEditor(){
+    galleryInputs().forEach((input)=>input.addEventListener('input',()=>{ const slot=input.closest('.gallery-slot'),img=slot?.querySelector('img'); if(img) img.src=cleanImageUrl(input.value)||'/assets/addons/generic_addon.png'; updateGalleryCount(); }));
+    document.querySelectorAll('[data-gallery-up]').forEach((btn)=>btn.addEventListener('click',()=>moveGallerySlot(Number(btn.dataset.galleryUp),-1)));
+    document.querySelectorAll('[data-gallery-down]').forEach((btn)=>btn.addEventListener('click',()=>moveGallerySlot(Number(btn.dataset.galleryDown),1)));
+    document.querySelectorAll('[data-gallery-clear]').forEach((btn)=>btn.addEventListener('click',()=>{ const input=qs(`[data-gallery-input="${btn.dataset.galleryClear}"]`); if(input){ input.value=''; input.dispatchEvent(new Event('input')); } }));
+    let dragIndex=null; document.querySelectorAll('[data-gallery-slot]').forEach((slot)=>{ slot.addEventListener('dragstart',()=>{dragIndex=Number(slot.dataset.gallerySlot);slot.classList.add('dragging')}); slot.addEventListener('dragend',()=>{dragIndex=null;slot.classList.remove('dragging');document.querySelectorAll('.gallery-slot').forEach(x=>x.classList.remove('drag-over'))}); slot.addEventListener('dragover',(e)=>{e.preventDefault();slot.classList.add('drag-over')}); slot.addEventListener('dragleave',()=>slot.classList.remove('drag-over')); slot.addEventListener('drop',(e)=>{e.preventDefault();const target=Number(slot.dataset.gallerySlot);slot.classList.remove('drag-over');if(dragIndex==null||dragIndex===target)return;const inputs=galleryInputs(),a=inputs[dragIndex].value,b=inputs[target].value;inputs[dragIndex].value=b;inputs[target].value=a;renderGalleryEditor(galleryValues())}) });
   }
   function rebuildImagePickerRows(){
     const rows=[]; const seen=new Set();
@@ -376,7 +439,7 @@
     const title=qs('#imagePreviewTitle');
     const meta=qs('#imagePreviewMeta');
     const match=findMatchingBundledImage();
-    if(img){ img.src=url || '/assets/addons/generic_addon.svg'; img.onerror=()=>{ img.onerror=null; img.src='/assets/addons/generic_addon.svg'; }; }
+    if(img){ img.src=url || '/assets/placeholders/inventory-tools-photo.jpg'; img.onerror=()=>{ img.onerror=null; img.src='/assets/placeholders/inventory-tools-photo.jpg'; }; }
     if(title) title.textContent = url ? 'Selected product image' : (match ? 'Matching bundled image found' : 'No product image selected yet');
     if(meta) meta.textContent = url ? url : (match ? `Available: ${match.item?.name || match.item?.item_key || 'bundled catalog image'}` : 'Use the matching bundled image or open the picker to select an uploaded product image.');
   }
@@ -386,7 +449,7 @@
     const rows=imagePickerRows.filter((row)=>!q || row.search.includes(q)).slice(0,80);
     const count=qs('#imagePickerCount'); if(count) count.textContent=`${rows.length} shown · ${imagePickerRows.length} available`;
     const grid=qs('#imagePickerGrid'); if(!grid) return;
-    grid.innerHTML=rows.map((row,idx)=>`<button class="image-choice" type="button" data-image-choice="${idx}" title="Use ${esc(row.name)}"><img src="${esc(row.url)}" alt="${esc(row.name)}" loading="lazy" onerror="this.src='/assets/addons/generic_addon.svg'"><span>${esc(row.name)}</span><span class="image-source">${esc(row.source)} · ${esc(row.type || 'image')}</span></button>`).join('') || '<div class="mini">No matching images found. Try a shorter search term.</div>';
+    grid.innerHTML=rows.map((row,idx)=>`<button class="image-choice" type="button" data-image-choice="${idx}" title="Use ${esc(row.name)}"><img src="${esc(row.url)}" alt="${esc(row.name)}" loading="lazy" onerror="this.src='/assets/placeholders/inventory-tools-photo.jpg'"><span>${esc(row.name)}</span><span class="image-source">${esc(row.source)} · ${esc(row.type || 'image')}</span></button>`).join('') || '<div class="mini">No matching images found. Try a shorter search term.</div>';
     document.querySelectorAll('[data-image-choice]').forEach((btn)=>btn.addEventListener('click',()=>{ const row=rows[Number(btn.dataset.imageChoice)]; if(!row) return; qs('#formImage').value=row.url; updateImagePreview(); show(`Selected existing image for ${row.name}. Save the inventory item to keep it.`, 'ok'); }));
   }
   function renderInventoryDatalists(){
@@ -459,17 +522,59 @@
     return postJson('/api/admin/app_settings_save', { key:'catalog_dropdown_options', value:payload });
   }
   function hardenTextInput(el,name){ if(!el) return; const unlock=()=>{ el.readOnly=false; if(/@/.test(el.value||'')) el.value=''; }; el.value=''; el.setAttribute('autocomplete','off'); if(name) el.setAttribute('name',name); setTimeout(()=>{ if(/@/.test(el.value||'')) el.value=''; },50); el.addEventListener('focus',unlock,{once:true}); el.addEventListener('pointerdown',unlock,{once:true}); }
-  function parseAmazonDraft(url){ const raw=String(url||'').trim(); if(!raw) return null; try { const u=new URL(raw); const parts=u.pathname.split('/').filter(Boolean); let slug=''; const dp=parts.indexOf('dp'); if(dp>0) slug=parts[dp-1]; if(!slug){ const gp=parts.indexOf('gp'); if(gp>0) slug=parts[gp-1]; } if(!slug) slug=parts.find((p)=>p.includes('-')) || ''; const cleaned=decodeURIComponent(slug).replace(/\+/g,' ').replace(/-/g,' ').replace(/\s+/g,' ').trim(); const key=(cleaned||'amazon item').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,80); return { name: cleaned.replace(/\b\w/g,(m)=>m.toUpperCase()), key: key || 'amazon_item' }; } catch { return null; } }
-  function fillForm(item){
+  function setSupplierMeta(item={}){
+    supplierMetaState={
+      amazon_asin:cleanText(item?.amazon_asin), amazon_title:cleanText(item?.amazon_title), amazon_brand:cleanText(item?.amazon_brand), amazon_category:cleanText(item?.amazon_category),
+      amazon_match_status:cleanText(item?.amazon_match_status), amazon_match_score:item?.amazon_match_score ?? null, amazon_seller_name:cleanText(item?.amazon_seller_name),
+      amazon_quantity_total:item?.amazon_quantity_total ?? null, amazon_net_total_cents:item?.amazon_net_total_cents ?? null
+    };
+    const pairs=[['#formAmazonAsinDisplay',supplierMetaState.amazon_asin],['#formAmazonBrandDisplay',supplierMetaState.amazon_brand],['#formAmazonTitleDisplay',supplierMetaState.amazon_title],['#formAmazonCategoryDisplay',supplierMetaState.amazon_category]];
+    pairs.forEach(([selector,value])=>{const el=qs(selector);if(el)el.textContent=value||'—';});
+  }
+  function updateEditorMode(){
+    const mode=qs('#editorModeStatus'),target=qs('#supplierTargetStatus'),visual=qs('#supplierVisualTarget'),keyInput=qs('#formItemKey');
+    if(editorTargetKey){
+      if(mode)mode.innerHTML=`Repair mode: editing existing inventory key <strong>${esc(editorTargetKey)}</strong>. The key is locked so Amazon refresh cannot create an accidental duplicate.`;
+      if(target)target.innerHTML=`Repair target: <strong>${esc(editorSnapshot?.name||editorTargetKey)}</strong> (<code>${esc(editorTargetKey)}</code>). Amazon data will be staged against this row; stock/history fields remain protected.`;
+      if(visual)visual.textContent='Existing item';
+      if(keyInput){keyInput.readOnly=true;keyInput.title='Existing inventory keys are locked during editing to protect references and history.';}
+    }else{
+      if(mode)mode.innerHTML='New-item mode. Select <strong>Edit</strong> on an existing row first if we want to repair that exact inventory record.';
+      if(target)target.textContent='No existing repair target selected. Importing a link will create a new private review draft.';
+      if(visual)visual.textContent='New item';
+      if(keyInput){keyInput.readOnly=false;keyInput.removeAttribute('title');}
+    }
+  }
+  function fillForm(item,options={}){
+    const explicitTarget=Object.prototype.hasOwnProperty.call(options,'targetKey') ? options.targetKey : (item?._source==='saved' ? item?.item_key : null);
+    editorTargetKey=explicitTarget ? String(explicitTarget) : null;
+    editorSnapshot=editorTargetKey ? structuredClone(item||{}) : null;
     qs('#formItemType').value=item?.item_type||'tool'; qs('#formItemKey').value=item?.item_key||''; qs('#formName').value=item?.name||'';
     qs('#formCategory').value=item?.category||''; qs('#formSubcategory').value=item?.subcategory||''; qs('#formVendor').value=item?.preferred_vendor||'';
     qs('#formUnit').value=item?.unit_label||''; qs('#formQty').value=item?.qty_on_hand ?? 0; qs('#formReorderPoint').value=item?.reorder_point ?? 0;
     qs('#formReorderQty').value=item?.reorder_qty ?? 0; qs('#formCostCad').value=item?.cost_cents != null ? Number(item.cost_cents || 0) / 100 : ''; qs('#formVendorSku').value=item?.vendor_sku || ''; qs('#formRating').value=item?.rating_value ?? ''; qs('#formRatingCount').value=item?.rating_count ?? 0;
     qs('#formSortKey').value=item?.sort_key ?? 0; qs('#formPurchaseDate').value=(item?.purchase_date||'').slice(0,10); qs('#formEstimatedJobs').value=item?.estimated_jobs_per_unit ?? 0; qs('#formReuse').value=item?.reuse_policy||'reorder'; qs('#formAmazon').value=item?.amazon_url||'';
-    qs('#formImage').value=item?.image_url||''; qs('#formReceiptUrl').value=item?.receipt_url || item?.bill_url || ''; qs('#formAssignedStation').value=item?.assigned_station || item?.station_label || ''; qs('#formServiceTags').value=Array.isArray(item?.service_tags) ? item.service_tags.join(', ') : (item?.service_tags || item?.service_link_tags || '');
-    qs('#formIsPublic').checked=item?.is_public !== false; qs('#formIsActive').checked=item?.is_active !== false; qs('#formNotes').value=item?.notes||'';
-    updateImagePreview();
-    renderImagePicker();
+    qs('#formImage').value=item?.image_url||''; renderGalleryEditor(item?.gallery_image_urls || item?.gallery_images || []); qs('#formReceiptUrl').value=item?.receipt_url || item?.bill_url || ''; qs('#formAssignedStation').value=item?.assigned_station || item?.station_label || ''; qs('#formServiceTags').value=Array.isArray(item?.service_tags) ? item.service_tags.join(', ') : (item?.service_tags || item?.service_link_tags || '');
+    qs('#formDescription').value=item?.description||''; qs('#formIsPublic').checked=item?.is_public !== false; qs('#formIsActive').checked=item?.is_active !== false; qs('#formNotes').value=item?.notes||'';
+    setSupplierMeta(item||{}); updateEditorMode(); updateImagePreview(); renderImagePicker();
+  }
+  function supplierRefreshOptions(){return {identity:qs('#supplierOverwriteIdentity')?.checked!==false,classification:qs('#supplierOverwriteClassification')?.checked!==false,description:qs('#supplierOverwriteDescription')?.checked!==false,price:qs('#supplierOverwritePrice')?.checked!==false,image:qs('#supplierOverwriteImage')?.checked!==false};}
+  function mergeSupplierDraft(target,draft){
+    const opts=supplierRefreshOptions(),base=target?structuredClone(target):{is_public:false,is_active:true,qty_on_hand:1,reorder_point:0,reorder_qty:1,rating_count:0,sort_key:0,gallery_image_urls:[]},next={...base};
+    if(!target) next.item_key=draft.item_key;
+    next.amazon_url=draft.amazon_url||next.amazon_url||'';
+    next.amazon_asin=draft.amazon_asin||next.amazon_asin||null; next.amazon_title=draft.amazon_title||next.amazon_title||null; next.amazon_brand=draft.amazon_brand||next.amazon_brand||null; next.amazon_category=draft.amazon_category||next.amazon_category||null;
+    if(opts.identity){next.name=draft.name||next.name;next.preferred_vendor=draft.preferred_vendor||next.preferred_vendor;next.vendor_sku=draft.vendor_sku||draft.amazon_asin||next.vendor_sku;}
+    if(opts.classification){next.item_type=draft.item_type||next.item_type;next.category=draft.category||next.category;next.subcategory=draft.subcategory||next.subcategory;next.unit_label=draft.unit_label||next.unit_label;next.reuse_policy=draft.reuse_policy||next.reuse_policy;}
+    if(opts.description && draft.description) next.description=draft.description;
+    if(opts.price && draft.cost_cad!=null && Number.isFinite(Number(draft.cost_cad))) next.cost_cents=Math.round(Number(draft.cost_cad)*100);
+    if(opts.image && draft.image_url) next.image_url=draft.image_url;
+    if(!target){next.reorder_point=draft.reorder_point??next.reorder_point;next.reorder_qty=draft.reorder_qty??next.reorder_qty;next.qty_on_hand=draft.qty_on_hand??next.qty_on_hand;}
+    return next;
+  }
+  function supplierDiff(before={},after={}){
+    const fields=[['name','Name'],['item_type','Type'],['category','Category'],['subcategory','Subcategory'],['preferred_vendor','Vendor'],['vendor_sku','SKU / ASIN'],['unit_label','Unit'],['reuse_policy','Reuse policy'],['cost_cents','Unit cost'],['description','Description'],['image_url','Featured image'],['amazon_url','Amazon URL'],['amazon_asin','Amazon ASIN'],['amazon_brand','Amazon brand'],['amazon_category','Amazon category']];
+    return fields.filter(([key])=>String(before?.[key]??'')!==String(after?.[key]??'')).map(([key,label])=>({key,label,before:key==='cost_cents'&&before?.[key]!=null?`${(Number(before[key])/100).toFixed(2)} CAD`:String(before?.[key]??''),after:key==='cost_cents'&&after?.[key]!=null?`${(Number(after[key])/100).toFixed(2)} CAD`:String(after?.[key]??'')}));
   }
   function fillUsageItems(){
     const options='<option value="">Select inventory item</option>'+inventory.map((item)=>`<option value="${esc(item.item_key)}">${esc(item.name)} (${esc(item.item_type||'')})</option>`).join('');
@@ -479,7 +584,8 @@
 
   function itemQualityScore(item){
     let score=0;
-    if(item?.image_url) score+=25;
+    if(item?.image_url) score+=20;
+    score+=Math.min(10, normalizeGalleryImageUrls(item?.gallery_image_urls).length * 2);
     if(item?.name && String(item.name).length>=6) score+=10;
     if(item?.category) score+=10;
     if(item?.subcategory) score+=8;
@@ -492,6 +598,26 @@
     return Math.max(0, Math.min(100, score));
   }
   function itemQualityClass(score){ return score >= 75 ? 'quality-good' : score >= 45 ? 'quality-warn' : 'quality-bad'; }
+  function clientReadiness(item){
+    if(item?.publish_readiness) return item.publish_readiness;
+    const blockers=[],warnings=[],name=String(item?.name||'').trim(),image=String(item?.image_url||'').trim(),gallery=normalizeGalleryImageUrls(item?.gallery_image_urls);
+    if(!item?.item_key) blockers.push('Item key is missing.');
+    if(!name) blockers.push('Name is missing.'); else if(/^(unknown product|untitled|item\s*\d*|product\s*\d*|amazon item|B0[A-Z0-9]{8}|[A-Z0-9_-]{8,})$/i.test(name)) blockers.push('Name needs review.');
+    if(!['tool','consumable'].includes(String(item?.item_type||''))) blockers.push('Item type is invalid.');
+    if(!String(item?.category||'').trim()) blockers.push('Category is missing.');
+    if(!String(item?.unit_label||'').trim()) blockers.push('Unit label is missing.');
+    if(!image) blockers.push('Featured image is missing.'); else if(/\.svg(?:[?#]|$)/i.test(image)) blockers.push('Featured image is still an SVG placeholder.');
+    if(item?.is_active===false) blockers.push('Item is inactive.');
+    if(item?.item_type==='consumable' && !(Number(item?.qty_on_hand||0)>0)) blockers.push('Consumable stock is zero.');
+    if(!(Number(item?.cost_cents||0)>0)) warnings.push('Unit cost is missing.');
+    if(!String(item?.description||'').trim()) warnings.push('Description is missing.');
+    if(!gallery.length) warnings.push('Gallery is empty.');
+    const score=Math.max(0,Math.min(100,100-blockers.length*20-warnings.length*6));
+    return {ready:!blockers.length,score,blockers,warnings,gallery_count:gallery.length};
+  }
+  function readinessLabel(item){const r=clientReadiness(item);return r.ready?(r.warnings?.length?'Ready · review warnings':'Ready to publish'):`Blocked · ${r.blockers?.length||0}`;}
+  function readinessClass(item){const r=clientReadiness(item);return r.ready?(r.warnings?.length?'readiness-review':'readiness-ready'):'readiness-blocked';}
+
   function duplicateSignature(item){
     const name=String(item?.name||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
     const image=String(item?.image_url||'').toLowerCase().split('?')[0];
@@ -667,13 +793,20 @@
     await loadInventory();
     renderImportPreview();
   }
-  async function bulkSetVisibility(values){
+  function renderPublishReview(out){
+    const box=qs('#publishReviewResult'); if(!box)return;
+    const rows=Array.isArray(out?.items)?out.items:[];
+    box.innerHTML=rows.length?rows.map((row)=>`<div class="publish-review-item"><strong>${esc(row.item_key)}</strong> · <span class="${row.ready?'readiness-ready':'readiness-blocked'}">${row.ready?'Ready':'Blocked'} (${esc(row.score)}%)</span>${(row.blockers||[]).length?`<div class="mini readiness-blocked">${row.blockers.map(esc).join(' · ')}</div>`:''}${(row.warnings||[]).length?`<div class="mini readiness-review">${row.warnings.map(esc).join(' · ')}</div>`:''}</div>`).join(''):`<div class="mini">${esc(out?.message||'No readiness rows returned.')}</div>`;
+  }
+  async function bulkSetVisibility(values,{dryRun=false}={}){
     const keys=selectedInventoryKeys();
     if(!keys.length) return show('Select at least one visible row first.', 'bad');
-    const x=await postJson('/api/admin/catalog_bulk_visibility', { item_keys: keys, ...values });
+    const reason=qs('#publishReason')?.value.trim()||'Reviewed inventory visibility update';
+    const x=await postJson('/api/admin/catalog_bulk_visibility', { item_keys: keys, reason, dry_run:dryRun, ...values });
+    if(values.is_public===true && x.out) renderPublishReview(x.out);
     if(!x.ok || !x.out?.ok) return show((x.out&&x.out.error)||'Bulk update failed. Save fallback rows first, then try again.', 'bad');
-    show(`Bulk update complete: ${x.out.updated || 0} rows changed.`, 'ok');
-    await loadInventory();
+    show(values.is_public===true?(dryRun?x.out.message||'Readiness preview complete.':x.out.message||'Ready selection published.'):`Bulk update complete: ${x.out.updated || 0} rows changed.`, 'ok');
+    if(!dryRun) await loadInventory();
   }
   async function applyQuickStock(){
     const item_key=qs('#quickStockItem')?.value || '';
@@ -687,25 +820,25 @@
     qs('#quickStockNote').value='';
     await loadInventory(); await loadMovements(); await loadLowStock();
   }
-  function applyInventoryFilters(items){ const q=(qs('#invSearch').value||'').trim().toLowerCase(); const type=qs('#itemType').value||''; const mode=qs('#invSort').value; let out=items.filter((item)=>!type || item.item_type===type).filter((item)=>!q || `${item.name} ${item.item_key} ${item.category||''} ${item.subcategory||''} ${item.preferred_vendor||''}`.toLowerCase().includes(q)); out=[...out]; if(mode==='name_asc') out.sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''))); if(mode==='stock_asc') out.sort((a,b)=>Number(a.qty_on_hand||0)-Number(b.qty_on_hand||0)); if(mode==='rating_desc') out.sort((a,b)=>Number(b.rating_value||0)-Number(a.rating_value||0)); if(mode==='sort_key_asc') out.sort((a,b)=>Number(a.sort_key||0)-Number(b.sort_key||0)||String(a.name||'').localeCompare(String(b.name||''))); return out; }
+  function applyInventoryFilters(items){ const q=(qs('#invSearch').value||'').trim().toLowerCase(); const type=qs('#itemType').value||''; const readiness=qs('#publishReadinessFilter')?.value||''; const mode=qs('#invSort').value; let out=items.filter((item)=>!type || item.item_type===type).filter((item)=>{const r=clientReadiness(item);return !readiness||(readiness==='ready'&&r.ready&&!r.warnings?.length)||(readiness==='warning'&&r.ready&&r.warnings?.length)||(readiness==='blocked'&&!r.ready);}).filter((item)=>!q || `${item.name} ${item.item_key} ${item.category||''} ${item.subcategory||''} ${item.preferred_vendor||''}`.toLowerCase().includes(q)); out=[...out]; if(mode==='name_asc') out.sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''))); if(mode==='stock_asc') out.sort((a,b)=>Number(a.qty_on_hand||0)-Number(b.qty_on_hand||0)); if(mode==='rating_desc') out.sort((a,b)=>Number(b.rating_value||0)-Number(a.rating_value||0)); if(mode==='sort_key_asc') out.sort((a,b)=>Number(a.sort_key||0)-Number(b.sort_key||0)||String(a.name||'').localeCompare(String(b.name||''))); return out; }
   async function createReorder(itemKey){ const item=inventory.find((x)=>String(x.item_key)===String(itemKey)); const reminderAt=new Date(Date.now()+3*24*60*60*1000).toISOString(); const x=await postJson('/api/admin/catalog_reorder_request',{ item_key: itemKey, status:'requested', reminder_at: reminderAt, qty_ordered: item?.reorder_qty || 1, vendor_name: item?.preferred_vendor || '', purchase_url: item?.amazon_url || '' }); if(!x.ok||!x.out?.ok) return show((x.out&&x.out.error)||'Could not create reorder.','bad'); show('Reorder request created.','ok'); loadInventory(); loadLowStock(); loadOrders(); }
   function renderInventory(){
     const items=applyInventoryFilters(inventory);
     const savedCount=items.filter((item)=>item._source==='saved').length;
     const fallbackCount=items.filter((item)=>item._source==='fallback').length;
-    qs('#invSummary').textContent=`${items.length} items shown · ${savedCount} saved · ${fallbackCount} bundled gear/consumable fallback`;
+    const readyCount=items.filter((item)=>clientReadiness(item).ready).length; qs('#invSummary').textContent=`${items.length} items shown · ${savedCount} saved · ${fallbackCount} fallback · ${readyCount} ready · ${items.length-readyCount} blocked`;
     qs('#invBody').innerHTML=items.map((item)=>{
       const score=itemQualityScore(item);
-      return `<tr><td class="catalog-select-col"><input class="inventory-row-check" type="checkbox" value="${esc(item.item_key)}" ${item._source==='fallback'?'title="Save/import fallback row before DB-only bulk updates"':''}></td><td><button class="inventory-name-edit" type="button" data-edit="${esc(item.item_key)}" title="Edit ${esc(item.name)}">${esc(item.name)}</button><div class="mini">${esc(item.item_key)} · ${esc(item.item_type||'')} · ${esc(item.category||'')}</div>${item.subcategory?`<div class="mini">Type: ${esc(item.subcategory)}</div>`:''}${item.preferred_vendor?`<div class="mini">Vendor: ${esc(item.preferred_vendor)}</div>`:''}${item.vendor_sku?`<div class="mini">SKU: ${esc(item.vendor_sku)}</div>`:''}<span class="source-pill ${item._source==='saved'?'saved':'fallback'}">${item._source==='saved'?'Saved DB item':'Bundled fallback — save/import to edit stock'}</span>${item.is_public===false?'<span class="source-pill fallback">Hidden from public</span>':'<span class="source-pill saved">Public</span>'}</td><td>${esc(item.qty_on_hand)} ${esc(item.unit_label||'')}<div class="mini">RP ${esc(item.reorder_point)} / RQ ${esc(item.reorder_qty)}</div>${item.cost_cents!=null&&Number(item.cost_cents)>0?`<div class="mini">Cost: ${esc((Number(item.cost_cents)/100).toFixed(2))} CAD</div>`:`<div class="mini danger-note">Missing unit cost</div>`}${item.purchase_date?`<div class="mini">Bought: ${esc(String(item.purchase_date).slice(0,10))}</div>`:''}${item.estimated_jobs_per_unit?`<div class="mini">Est. jobs/unit: ${esc(item.estimated_jobs_per_unit)}</div>`:''}</td><td><span class="${itemQualityClass(score)}">${score}%</span><div class="quality-meter"><span style="width:${score}%"></span></div>${item.image_url?`<div class="mini quality-good">Image set${item._image_from_fallback?' · fallback matched':''}</div>`:'<div class="mini quality-bad">Missing image</div>'}${imageDiagnosticsForItem(item)}</td><td>${esc(item.reuse_policy||'reorder')}</td><td><div class="row"><button class="btn ghost" data-edit="${esc(item.item_key)}">Edit</button>${String(item.reuse_policy||'reorder')!=='never_reuse' ? `<button class="btn ghost" data-reorder="${esc(item.item_key)}">Reorder</button>` : `<span class="pill">No reorder</span>`}</div></td></tr>`;
+      return `<tr><td class="catalog-select-col"><input class="inventory-row-check" type="checkbox" value="${esc(item.item_key)}" ${item._source==='fallback'?'title="Save/import fallback row before DB-only bulk updates"':''}></td><td><button class="inventory-name-edit" type="button" data-edit="${esc(item.item_key)}" title="Edit ${esc(item.name)}">${esc(item.name)}</button><div class="mini">${esc(item.item_key)} · ${esc(item.item_type||'')} · ${esc(item.category||'')}</div>${item.subcategory?`<div class="mini">Type: ${esc(item.subcategory)}</div>`:''}${item.preferred_vendor?`<div class="mini">Vendor: ${esc(item.preferred_vendor)}</div>`:''}${item.vendor_sku?`<div class="mini">SKU: ${esc(item.vendor_sku)}</div>`:''}<span class="source-pill ${item._source==='saved'?'saved':'fallback'}">${item._source==='saved'?'Saved DB item':'Bundled fallback — save/import to edit stock'}</span>${item.is_public===false?'<span class="source-pill fallback">Hidden from public</span>':'<span class="source-pill saved">Public</span>'}<div class="mini ${readinessClass(item)}">${esc(readinessLabel(item))}</div></td><td>${esc(item.qty_on_hand)} ${esc(item.unit_label||'')}<div class="mini">RP ${esc(item.reorder_point)} / RQ ${esc(item.reorder_qty)}</div>${item.cost_cents!=null&&Number(item.cost_cents)>0?`<div class="mini">Cost: ${esc((Number(item.cost_cents)/100).toFixed(2))} CAD</div>`:`<div class="mini danger-note">Missing unit cost</div>`}${item.purchase_date?`<div class="mini">Bought: ${esc(String(item.purchase_date).slice(0,10))}</div>`:''}${item.estimated_jobs_per_unit?`<div class="mini">Est. jobs/unit: ${esc(item.estimated_jobs_per_unit)}</div>`:''}</td><td><span class="${itemQualityClass(score)}">${score}%</span><div class="quality-meter"><span style="width:${score}%"></span></div>${item.image_url?`<div class="mini quality-good">Image set${item._image_from_fallback?' · fallback matched':''}</div>`:'<div class="mini quality-bad">Missing image</div>'}${imageDiagnosticsForItem(item)}</td><td>${esc(item.reuse_policy||'reorder')}</td><td><div class="row"><button class="btn ghost" data-edit="${esc(item.item_key)}">Edit</button>${String(item.reuse_policy||'reorder')!=='never_reuse' ? `<button class="btn ghost" data-reorder="${esc(item.item_key)}">Reorder</button>` : `<span class="pill">No reorder</span>`}</div></td></tr>`;
     }).join('') || '<tr><td colspan="6">No inventory items found.</td></tr>';
-    document.querySelectorAll('[data-edit]').forEach((btn)=>btn.addEventListener('click',()=>{ const item=inventory.find((x)=>String(x.item_key)===String(btn.dataset.edit)) || null; fillForm(item); qs('#formName')?.focus({preventScroll:true}); document.querySelector('#itemForm')?.scrollIntoView({behavior:'smooth', block:'start'}); }));
+    document.querySelectorAll('[data-edit]').forEach((btn)=>btn.addEventListener('click',()=>{ const item=inventory.find((x)=>String(x.item_key)===String(btn.dataset.edit)) || null; fillForm(item,{targetKey:item?.item_key||null}); qs('#formName')?.focus({preventScroll:true}); document.querySelector('#itemForm')?.scrollIntoView({behavior:'smooth', block:'start'}); }));
     document.querySelectorAll('[data-reorder]').forEach((btn)=>btn.addEventListener('click', ()=>createReorder(btn.dataset.reorder)));
     qs('#selectVisibleInventory')?.addEventListener('change', (event)=>{ document.querySelectorAll('.inventory-row-check').forEach((box)=>{ box.checked=event.target.checked; }); });
     refreshQualitySummary();
   }
   function renderMovements(){ const q=(qs('#moveSearch').value||'').trim().toLowerCase(); const type=qs('#moveType').value||''; const rows=movements.filter((m)=>!type || String(m.movement_type||'')===type).filter((m)=>!q || `${m.item_key||''} ${m.note||''} ${m.actor_name||''} ${m.booking_id||''}`.toLowerCase().includes(q)); qs('#moveSummary').textContent=`${rows.length} movements shown`; qs('#moveBody').innerHTML=rows.map((m)=>`<tr><td>${esc(new Date(m.created_at||Date.now()).toLocaleString())}<div class="mini">${esc(m.movement_type||'')}</div></td><td><strong>${esc(m.item_key||'')}</strong><div class="mini">${esc(m.item_name||'')}</div></td><td>${esc(m.qty_delta)}<div class="mini">${esc(m.previous_qty)} → ${esc(m.new_qty)}</div></td><td>${m.booking_id?`<div class="mini">Booking: ${esc(m.booking_id)}</div>`:''}<div class="mini">${esc(m.actor_name||'')}</div>${m.note?`<div class="mini">${esc(m.note)}</div>`:''}</td></tr>`).join('') || '<tr><td colspan="4">No movement history found.</td></tr>'; }
   function renderLowStock(){ qs('#lowSummary').textContent=`${lowStock.length} low-stock items`; qs('#lowBody').innerHTML=lowStock.map((item)=>`<tr><td><strong>${esc(item.name)}</strong><div class="mini">${esc(item.item_key)} · ${esc(item.item_type||'')} · ${esc(item.category||'')}</div>${item.subcategory?`<div class="mini">Type: ${esc(item.subcategory)}</div>`:''}</td><td>${esc(item.qty_on_hand)} ${esc(item.unit_label||'')}</td><td>${esc(item.reorder_point)}<div class="mini">Suggested reorder ${esc(item.reorder_qty||1)}</div></td><td><div class="row"><button class="btn ghost" data-edit-low="${esc(item.item_key)}">Edit</button>${String(item.reuse_policy||'reorder')!=='never_reuse'?`<button class="btn ghost" data-low-reorder="${esc(item.item_key)}">Create reorder</button>`:`<span class="pill">No reorder</span>`}</div></td></tr>`).join('') || '<tr><td colspan="4">No low-stock items right now.</td></tr>';
-    document.querySelectorAll('[data-edit-low]').forEach((btn)=>btn.addEventListener('click',()=>fillForm(inventory.find((x)=>String(x.item_key)===String(btn.dataset.editLow)) || null)));
+    document.querySelectorAll('[data-edit-low]').forEach((btn)=>btn.addEventListener('click',()=>(()=>{const item=inventory.find((x)=>String(x.item_key)===String(btn.dataset.editLow))||null;fillForm(item,{targetKey:item?.item_key||null});})()));
     document.querySelectorAll('[data-low-reorder]').forEach((btn)=>btn.addEventListener('click', ()=>createReorder(btn.dataset.lowReorder)));
   }
   function makeInventoryKey(value){ return String(value||'inventory_item').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,80) || 'inventory_item'; }
@@ -872,8 +1005,34 @@
   setInventoryOptionsEditor(currentInventoryOptions());
   qs('#saveInventoryOptionsBtn')?.addEventListener('click', async ()=>{ const value=readInventoryOptionsEditor(); localStorage.setItem(optionStorageKey, JSON.stringify(value)); setInventoryOptionsEditor(value); renderInventoryDatalists(); const saved=await saveSharedInventoryOptions(value).catch(()=>null); show(saved?.ok && saved?.out?.ok ? 'Inventory dropdown suggestions saved to shared app settings and this browser.' : 'Inventory dropdown suggestions saved in this browser. Shared save was not available.', saved?.ok && saved?.out?.ok ? 'ok' : 'bad'); });
   qs('#resetInventoryOptionsBtn')?.addEventListener('click', ()=>{ localStorage.removeItem(optionStorageKey); setInventoryOptionsEditor(inventoryOptionDefaults()); renderInventoryDatalists(); show('Inventory dropdown suggestions reset to detailing defaults.', 'ok'); });
-  qs('#reloadBtn').addEventListener('click', loadInventory); qs('#reloadOrdersBtn').addEventListener('click', loadOrders); qs('#reloadMovesBtn').addEventListener('click', loadMovements); qs('#reloadLowBtn').addEventListener('click', loadLowStock); qs('#itemType').addEventListener('change', renderInventory); qs('#invSearch').addEventListener('input', renderInventory); qs('#invSort').addEventListener('change', renderInventory); qs('#moveSearch').addEventListener('input', renderMovements); qs('#moveType').addEventListener('change', renderMovements); qs('#orderStatus').addEventListener('change', loadOrders); qs('#newItemBtn').addEventListener('click', ()=>fillForm(null)); qs('#clearFormBtn').addEventListener('click', ()=>fillForm(null)); qs('#usageResetBtn').addEventListener('click', ()=>{ qs('#usageBookingId').value=''; qs('#usageItemKey').value=''; qs('#usageQty').value='1'; qs('#usageNote').value=''; });
+  qs('#reloadBtn').addEventListener('click', loadInventory); qs('#publishReadinessFilter')?.addEventListener('change', renderInventory); qs('#reloadOrdersBtn').addEventListener('click', loadOrders); qs('#reloadMovesBtn').addEventListener('click', loadMovements); qs('#reloadLowBtn').addEventListener('click', loadLowStock); qs('#itemType').addEventListener('change', renderInventory); qs('#invSearch').addEventListener('input', renderInventory); qs('#invSort').addEventListener('change', renderInventory); qs('#moveSearch').addEventListener('input', renderMovements); qs('#moveType').addEventListener('change', renderMovements); qs('#orderStatus').addEventListener('change', loadOrders); qs('#newItemBtn').addEventListener('click', ()=>fillForm(null)); qs('#clearFormBtn').addEventListener('click', ()=>fillForm(null)); qs('#usageResetBtn').addEventListener('click', ()=>{ qs('#usageBookingId').value=''; qs('#usageItemKey').value=''; qs('#usageQty').value='1'; qs('#usageNote').value=''; });
   
+
+  async function importSupplierLinkPreview(){
+    const url=qs('#supplierLinkUrl')?.value.trim()||qs('#formAmazon')?.value.trim(),out=qs('#supplierLinkResult'),button=qs('#supplierLinkPreviewBtn');
+    if(!url){ show('Paste an Amazon product link in the supplier box or Amazon / purchase URL field first.','bad'); return; }
+    if(qs('#supplierLinkUrl')&&!qs('#supplierLinkUrl').value.trim())qs('#supplierLinkUrl').value=url;
+    if(button){button.disabled=true;button.textContent='Reading…';}
+    if(out){ out.style.display='block'; out.className='notice'; out.textContent='Resolving the Amazon link and reading supplier product details. Nothing is being saved yet…'; }
+    try{
+      const res=await postJson('/api/admin/catalog_supplier_link_preview',{url,target_item_key:editorTargetKey||null});
+      if(!res.ok||!res.out?.ok){const msg=[res.out?.error||'Could not read that supplier link.',res.out?.detail||''].filter(Boolean).join(' ');if(out){out.className='notice bad';out.textContent=msg;}return;}
+      const d=res.out.draft||{},duplicate=res.out.duplicate||null;
+      let target=editorTargetKey ? inventory.find((x)=>String(x.item_key)===String(editorTargetKey)) || editorSnapshot : null;
+      if(!target && duplicate?.item_key){target=inventory.find((x)=>String(x.item_key)===String(duplicate.item_key))||duplicate;editorTargetKey=String(duplicate.item_key);editorSnapshot=structuredClone(target);}
+      const before=target?structuredClone(target):{},merged=mergeSupplierDraft(target,d),diff=supplierDiff(before,merged);
+      fillForm(merged,{targetKey:target?.item_key||null});
+      if(qs('#supplierLinkUrl'))qs('#supplierLinkUrl').value=d.amazon_url||url;
+      if(qs('#formAmazon'))qs('#formAmazon').value=d.amazon_url||url;
+      const ex=res.out.extracted||{},observed=d.source_price==null?'Price not extracted':`${d.source_currency||'currency'} ${Number(d.source_price).toFixed(2)} observed`,quality=[ex.title?'title':'',ex.image?'image':'',ex.price?'price':'',ex.brand?'brand':''].filter(Boolean).join(', ')||'URL/ASIN only';
+      const mode=target?`Repair staged for ${target.name||target.item_key} (${target.item_key}).`:`New private review draft staged as ${d.item_key}.`;
+      const protectedMsg=target?'Stock, reorder settings, purchase/receipt history, station, service tags, gallery, ratings, visibility and active state were preserved.':'This is a new item; verify stock and all operational fields before saving.';
+      const diffHtml=diff.length?`<div class="supplier-diff"><strong>Staged field changes (${diff.length})</strong>${diff.map(row=>`<div class="supplier-diff-row"><strong>${esc(row.label)}</strong><div><span class="mini">Before: ${esc(row.before||'—')}</span><br><span>After: ${esc(row.after||'—')}</span></div></div>`).join('')}</div>`:'<div class="mini" style="margin-top:8px">No selected supplier field differs from the current editor values.</div>';
+      const warning=[res.out.warning||'',d.source_currency&&d.source_currency!=='CAD'?'Observed non-CAD price did not overwrite the current CAD cost.':'',observed,`Metadata available: ${quality}.`].filter(Boolean).join(' ');
+      if(out){out.className='notice '+(warning?'':'ok');out.innerHTML=`<strong>${esc(mode)}</strong><div class="mini" style="margin-top:6px">${esc(protectedMsg)} ${esc(warning)} Review the staged values, then press Save inventory item to commit them.</div>${diffHtml}${d.image_url?`<div class="row" style="margin-top:8px;align-items:center"><img src="${esc(d.image_url)}" alt="Imported supplier product preview" style="width:72px;height:72px;object-fit:contain;border-radius:10px;background:#fff" loading="lazy" referrerpolicy="no-referrer"><span class="mini">Supplier image staged only if Featured image is selected above.</span></div>`:''}`;}
+      document.querySelector('#itemForm')?.scrollIntoView({behavior:'smooth',block:'start'});
+    } finally {if(button){button.disabled=false;button.textContent='Review Amazon update';}}
+  }
   qs('#loadAmazonMatchesBtn')?.addEventListener('click', loadAmazonMatches);
   qs('#amazonMatchStatusFilter')?.addEventListener('change', ()=>renderAmazonMatches());
   qs('#toggleAmazonChecks')?.addEventListener('change', (event)=>{ document.querySelectorAll('.amazon-row-check:not(:disabled)').forEach((box)=>{ box.checked=event.target.checked; }); });
@@ -881,7 +1040,8 @@
   qs('#previewCatalogImportBtn')?.addEventListener('click', renderImportPreview);
   qs('#runCatalogImportBtn')?.addEventListener('click', importSelectedCatalogRows);
   qs('#toggleImportChecks')?.addEventListener('change', (event)=>{ document.querySelectorAll('.import-row-check').forEach((box)=>{ box.checked=event.target.checked; }); });
-  qs('#bulkPublicBtn')?.addEventListener('click', ()=>bulkSetVisibility({ is_public:true }));
+  qs('#bulkPublicPreviewBtn')?.addEventListener('click', ()=>bulkSetVisibility({ is_public:true },{dryRun:true}));
+  qs('#bulkPublicBtn')?.addEventListener('click', ()=>{ if(confirm('Publish the selected rows only if every row passes readiness?')) bulkSetVisibility({ is_public:true },{dryRun:false}); });
   qs('#bulkPrivateBtn')?.addEventListener('click', ()=>bulkSetVisibility({ is_public:false }));
   qs('#bulkActiveBtn')?.addEventListener('click', ()=>bulkSetVisibility({ is_active:true }));
   qs('#bulkInactiveBtn')?.addEventListener('click', ()=>bulkSetVisibility({ is_active:false }));
@@ -895,10 +1055,21 @@
   qs('#openImagePickerBtn')?.addEventListener('click', ()=>{ const box=qs('#inventoryImagePicker'); if(!box) return; box.style.display = box.style.display === 'block' ? 'none' : 'block'; renderImagePicker(); });
   qs('#useMatchingImageBtn')?.addEventListener('click', ()=>{ const match=findMatchingBundledImage(); if(!match) return show('No matching bundled image was found for this item key/name. Open the picker and search manually.', 'bad'); qs('#formImage').value=match.url; updateImagePreview(); show(`Loaded the bundled image for ${match.item?.name || match.item?.item_key || 'this item'}. Save to keep it on the DB row.`, 'ok'); });
   qs('#clearImageBtn')?.addEventListener('click', ()=>{ qs('#formImage').value=''; updateImagePreview(); show('Image cleared from the editor. Save only if this item should have no image.', 'bad'); });
-  qs('#amazonParseBtn').addEventListener('click', ()=>{ const parsed=parseAmazonDraft(qs('#formAmazon').value); if(!parsed) return show('Paste a valid Amazon product link first.','bad'); if(!qs('#formName').value.trim()) qs('#formName').value=parsed.name; if(!qs('#formItemKey').value.trim()) qs('#formItemKey').value=parsed.key; if(!qs('#formVendor').value.trim()) qs('#formVendor').value='Amazon'; updateImagePreview(); renderImagePicker(); show('Draft name and item key filled from Amazon link. Review before saving.','ok'); });
-  qs('#itemForm').addEventListener('submit', async(e)=>{ e.preventDefault(); const payload={ item_key: qs('#formItemKey').value.trim(), item_type: qs('#formItemType').value, name: qs('#formName').value.trim(), category: qs('#formCategory').value.trim(), subcategory: qs('#formSubcategory').value.trim(), preferred_vendor: qs('#formVendor').value.trim(), vendor_sku: qs('#formVendorSku').value.trim(), unit_label: qs('#formUnit').value.trim(), qty_on_hand: Number(qs('#formQty').value||0), reorder_point: Number(qs('#formReorderPoint').value||0), reorder_qty: Number(qs('#formReorderQty').value||0), cost_cad: qs('#formCostCad').value === '' ? null : Number(qs('#formCostCad').value||0), rating_value: qs('#formRating').value, rating_count: Number(qs('#formRatingCount').value||0), sort_key: Number(qs('#formSortKey').value||0), purchase_date: qs('#formPurchaseDate').value || null, estimated_jobs_per_unit: Number(qs('#formEstimatedJobs').value||0), reuse_policy: qs('#formReuse').value, amazon_url: qs('#formAmazon').value.trim(), image_url: qs('#formImage').value.trim() || (findMatchingBundledImage()?.url || ''), receipt_url: qs('#formReceiptUrl').value.trim(), assigned_station: qs('#formAssignedStation').value.trim(), service_tags: qs('#formServiceTags').value.trim(), is_public: qs('#formIsPublic').checked, is_active: qs('#formIsActive').checked, notes: qs('#formNotes').value.trim() }; const x=await postJson('/api/admin/catalog_inventory_save', payload); if(!x.ok||!x.out?.ok) return show((x.out&&x.out.error)||'Could not save inventory item.','bad'); show('Inventory item saved.','ok'); fillForm(x.out.item||null); loadInventory(); loadLowStock(); });
-  qs('#usageForm').addEventListener('submit', async(e)=>{ e.preventDefault(); const payload={ booking_id: qs('#usageBookingId').value.trim(), item_key: qs('#usageItemKey').value, qty_used: Number(qs('#usageQty').value||0), note: qs('#usageNote').value.trim() }; const x=await postJson('/api/admin/catalog_usage_add', payload); if(!x.ok||!x.out?.ok) return show((x.out&&x.out.error)||'Could not record usage.','bad'); show('Inventory usage recorded.','ok'); qs('#usageQty').value='1'; qs('#usageNote').value=''; loadInventory(); loadLowStock(); loadMovements(); });
-  window.AdminShell.boot({ pageKey:'admin-catalog', onReady: async ({actor:current}) => { actor=current||null; const box=qs('#actorBox'); if(actor){ box.style.display='block'; box.textContent=`Signed in as ${actor.full_name || actor.email || 'staff'} (${actor.role_code || 'staff'})`; } await loadSharedInventoryOptions(); fillForm(null); loadInventory(); loadMovements(); loadLowStock(); loadOrders(); } });
+  qs('#supplierLinkPreviewBtn')?.addEventListener('click', importSupplierLinkPreview);
+  qs('#supplierUseEditorLinkBtn')?.addEventListener('click',()=>{const url=qs('#formAmazon')?.value.trim();if(!url)return show('The editor Amazon / purchase URL field is blank. Paste a link there or in the supplier box.','bad');qs('#supplierLinkUrl').value=url;importSupplierLinkPreview();});
+  qs('#supplierLinkUrl')?.addEventListener('keydown',(e)=>{if(e.key==='Enter'){e.preventDefault();importSupplierLinkPreview();}});
+  qs('#copyFeaturedToGalleryBtn')?.addEventListener('click',()=>{ const url=cleanImageUrl(qs('#formImage')?.value); if(!url) return show('Choose a featured image first.', 'bad'); const values=galleryValues(); if(values.includes(url)) return show('The featured image is already in the gallery.', 'bad'); if(values.length>=7) return show('The gallery already has seven images.', 'bad'); values.push(url); renderGalleryEditor(values); show('Featured image copied into the gallery. Save the inventory item to keep it.', 'ok'); });
+  qs('#clearGalleryBtn')?.addEventListener('click',()=>{ if(confirm('Clear all seven gallery image slots for this editor?')) renderGalleryEditor([]); });
+  qs('#amazonParseBtn').addEventListener('click', ()=>{const url=qs('#formAmazon')?.value.trim();if(!url)return show('Paste the accurate Amazon link in the Amazon / purchase URL field first.','bad');qs('#supplierLinkUrl').value=url;importSupplierLinkPreview();});
+  qs('#itemForm').addEventListener('submit', async(e)=>{
+    e.preventDefault();
+    const payload={ item_key: editorTargetKey || qs('#formItemKey').value.trim(), item_type: qs('#formItemType').value, name: qs('#formName').value.trim(), category: qs('#formCategory').value.trim(), subcategory: qs('#formSubcategory').value.trim(), description:qs('#formDescription').value.trim(), preferred_vendor: qs('#formVendor').value.trim(), vendor_sku: qs('#formVendorSku').value.trim(), unit_label: qs('#formUnit').value.trim(), qty_on_hand: Number(qs('#formQty').value||0), reorder_point: Number(qs('#formReorderPoint').value||0), reorder_qty: Number(qs('#formReorderQty').value||0), cost_cad: qs('#formCostCad').value === '' ? null : Number(qs('#formCostCad').value||0), rating_value: qs('#formRating').value, rating_count: Number(qs('#formRatingCount').value||0), sort_key: Number(qs('#formSortKey').value||0), purchase_date: qs('#formPurchaseDate').value || null, estimated_jobs_per_unit: Number(qs('#formEstimatedJobs').value||0), reuse_policy: qs('#formReuse').value, amazon_url: qs('#formAmazon').value.trim(), image_url: qs('#formImage').value.trim() || (findMatchingBundledImage()?.url || ''), gallery_image_urls: galleryValues(), receipt_url: qs('#formReceiptUrl').value.trim(), assigned_station: qs('#formAssignedStation').value.trim(), service_tags: qs('#formServiceTags').value.trim(), is_public: qs('#formIsPublic').checked, is_active: qs('#formIsActive').checked, notes: qs('#formNotes').value.trim(), ...supplierMetaState };
+    const x=await postJson('/api/admin/catalog_inventory_save', payload);
+    if(!x.ok||!x.out?.ok){const r=x.out?.publish_readiness;const detail=r?.blockers?.length?` ${r.blockers.join(' ')}`:'';return show(((x.out&&x.out.error)||'Could not save inventory item.')+detail,'bad');}
+    const saved=x.out.item||payload;show(editorTargetKey?`Existing inventory item ${editorTargetKey} updated.`:'New inventory item saved.','ok');fillForm(saved,{targetKey:saved.item_key});await loadInventory();loadLowStock();
+  });
+  qs('#usageForm').addEventListener('submit', async(e)=>{ e.preventDefault(); const button=e.submitter||qs('#usageForm button[type="submit"]'); if(button)button.disabled=true; const payload={ booking_id: qs('#usageBookingId').value.trim(), item_key: qs('#usageItemKey').value, qty_used: Number(qs('#usageQty').value||0), note: qs('#usageNote').value.trim(), client_action_id: usageActionId }; try{ const x=await postJson('/api/admin/catalog_usage_add', payload); if(!x.ok||!x.out?.ok) return show((x.out&&x.out.error)||'Could not record usage. Retry uses the same transaction key to prevent a duplicate deduction.','bad'); usageActionId=crypto.randomUUID(); show('Inventory usage recorded.','ok'); qs('#usageQty').value='1'; qs('#usageNote').value=''; loadInventory(); loadLowStock(); loadMovements(); } finally { if(button)button.disabled=false; } });
+  window.AdminShell.boot({ pageKey:'admin-catalog', onReady: async ({actor:current}) => { actor=current||null; const box=qs('#actorBox'); if(actor){ box.style.display='block'; box.textContent=`Signed in as ${actor.full_name || actor.email || 'staff'} (${actor.role_code || 'staff'})`; } await loadSharedInventoryOptions(); fillForm(null); await loadInventory(); const requested=new URLSearchParams(location.search).get('item'); if(requested){const item=inventory.find((x)=>String(x.item_key)===String(requested)); if(item){fillForm(item,{targetKey:item.item_key});qs('#supplierLinkHeading')?.scrollIntoView({behavior:'smooth',block:'start'});show(`Loaded ${item.name||item.item_key} for supplier-link repair. Paste or review its Amazon link before saving changes.`,'ok');}else show(`Inventory item ${requested} was not found in the current live/fallback list.`,'bad');} loadMovements(); loadLowStock(); loadOrders(); } });
 })();
 </script>
 <script src="/assets/chrome.js"></script>
