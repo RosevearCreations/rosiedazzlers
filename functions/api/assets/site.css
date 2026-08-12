@@ -1209,3 +1209,23 @@ body::before {
 @media(max-width:1180px){.decision-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:900px){.vehicle-size-picker{grid-template-columns:1fr}.decision-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.section-heading-row{align-items:flex-start}}
 @media(max-width:620px){.vehicle-size-picker{padding:14px}.vehicle-size-actions,.vehicle-size-actions .btn,.vehicle-size-actions a{width:100%}.decision-grid{grid-template-columns:1fr}.decision-card{grid-template-columns:auto minmax(0,1fr)}.decision-card .btn{width:100%;justify-content:center}.clarity-availability .row,.clarity-availability .btn{width:100%}.clarity-availability .btn{justify-content:center}.section-heading-row>.btn{width:100%;justify-content:center}}
+
+
+/* Build 252 — approved R2 imagery on public service/location cards */
+.r2-card-photo{
+  display:block;
+  width:100%;
+  aspect-ratio:16/10;
+  object-fit:cover;
+  border-radius:14px;
+  margin:0 0 12px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.035);
+}
+.service-link-card .r2-card-photo,
+.local-town-card .r2-card-photo{
+  max-height:220px;
+}
+@media (max-width:720px){
+  .r2-card-photo{aspect-ratio:4/3;max-height:210px}
+}
