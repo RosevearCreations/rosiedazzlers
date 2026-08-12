@@ -10,7 +10,9 @@
 // Build 238 service-worker cache: CSS recovery, Startup Guide, transactional inventory, current roadmap, launch evidence and operational readiness.
 // Historical Build 238 guard: rosie-app-v20260730build238 /data/build238_go_live_blockers.json /data/build238_next_steps.json
 // Historical Build 252 cache guard: rosie-app-v20260812build252
-const CACHE='rosie-app-v20260812build253';
+// Historical Build 253 cache guard: rosie-app-v20260812build253
+// Build 254 image-preservation/performance hotfix
+const CACHE='rosie-app-v20260812build254';
 const URLS=['/admin-photo-studio.html','/data/build253_photo_targets.json','/data/build249_inventory_recovery.json',
   '/admin-daip-media.html',
   '/data/build247_go_live_blockers.json',

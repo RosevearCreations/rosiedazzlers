@@ -315,7 +315,8 @@
     import { renderRecentWorkMounts } from "/assets/recent-work.js";
     import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260812build252";
     // Historical Build 252 image module marker: /assets/website-images.js?v=20260812build252
-    import { loadWebsiteImageManifest, packageImageMatches, addonImageMatches, hydrateR2CardImages } from "/assets/website-images.js?v=20260812build253";
+    // Historical Build 253 guard tokens: /assets/website-images.js?v=20260812build253 preferredPhotoRow?.alt_text preferredAddonPhoto?.alt_text
+    import { loadWebsiteImageManifest, packageImageMatches, addonImageMatches, hydrateR2CardImages } from "/assets/website-images.js?v=20260812build254";
 
     const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
@@ -331,7 +332,11 @@
     const PACKAGE_ORDER = ['premium_wash','basic_detail','complete_detail','interior_detail','exterior_detail'];
 
     function packagePhotoCandidates(pkg){
-      return packageImageMatches(websiteImageManifest, pkg, sizeKey(), 6).filter((photo) => photo?.url);
+      const rows = packageImageMatches(websiteImageManifest, pkg, sizeKey(), 8).filter((photo) => photo?.url);
+      return {
+        explicit: rows.filter((photo) => photo.explicit_assignment === true),
+        automatic: rows.filter((photo) => photo.explicit_assignment !== true)
+      };
     }
 
     function generalCarPhotoForPackage(pkg){
@@ -443,9 +448,12 @@
     function buildPackageCard(pkg){
       const sz = sizeKey();
       const mainImg = pkg.images_by_size?.[sz] || "";
-      const approvedPhotoCandidates = packagePhotoCandidates(pkg);
-      const preferredPhotoRow = approvedPhotoCandidates[0] || null;
-      const preferredPhoto = preferredPhotoRow?.url || "";
+      const packagePhotos = packagePhotoCandidates(pkg);
+      const explicitPhotoRow = packagePhotos.explicit[0] || null;
+      const automaticPhotoRows = packagePhotos.automatic;
+      const explicitPhoto = explicitPhotoRow?.url || "";
+      const automaticFallbackRow = automaticPhotoRows[0] || null;
+      const automaticFallback = automaticFallbackRow?.url || "";
       const generalApprovedPhotoRow = generalCarPhotoForPackage(pkg);
       const generalApprovedPhoto = generalApprovedPhotoRow?.url || "";
       const price = pkg.prices_cad?.[sz];
@@ -457,19 +465,28 @@
       const inc = Array.isArray(pkg.included_services) ? pkg.included_services : [];
       const incList = inc.slice(0, 9).map(s=>`<li>${escapeHtml(s.name || "")}</li>`).join("");
 
-      let resolvedMainImg = preferredPhoto || mainImg || generalApprovedPhoto;
-      const getImages = ()=>[resolvedMainImg, ...approvedPhotoCandidates.slice(1).map((row)=>row.url), mainImg, generalApprovedPhoto, ...HOVER_EXTRA_IMAGES].filter(Boolean);
+      // Build 254 safety rule: never displace a configured package image through filename matching.
+      // Only an explicit Photo Studio assignment may intentionally override it.
+      let resolvedMainImg = explicitPhoto || mainImg || automaticFallback || generalApprovedPhoto;
+      const getImages = ()=>[
+        resolvedMainImg,
+        mainImg,
+        ...packagePhotos.explicit.slice(1).map((row)=>row.url),
+        ...automaticPhotoRows.map((row)=>row.url),
+        generalApprovedPhoto,
+        ...HOVER_EXTRA_IMAGES
+      ].filter(Boolean);
 
       el.innerHTML = `
         <div class="service-card-media">
-          <img class="cardImg" alt="${escapeHtml(preferredPhotoRow?.alt_text || `${pkg.name} mobile detailing example`)}" style="object-position:${escapeHtml(preferredPhotoRow?.focal_point || "center")}" />
+          <img class="cardImg" alt="${escapeHtml(explicitPhotoRow?.alt_text || `${pkg.name} mobile detailing example`)}" style="object-position:${escapeHtml(explicitPhotoRow?.focal_point || "center")}" />
           ${pkg.code === 'complete_detail' ? '<span class="service-recommended-badge">Most complete choice</span>' : ''}
         </div>
         <div style="margin-top:10px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
           <div>
             <h3 style="margin:0">${escapeHtml(pkg.name)}</h3>
             <div class="muted mini">${escapeHtml(pkg.subtitle || "")}</div>
-            ${preferredPhoto ? '<div class="mini service-photo-source">Approved Rosie photo</div>' : ''}
+            ${explicitPhoto ? '<div class="mini service-photo-source">Photo Studio override</div>' : ''}
           </div>
           <div style="text-align:right">
             <div class="tag ok">${price!=null ? money(price) : "$—"}</div>
@@ -491,10 +508,15 @@
       const img = el.querySelector("img");
       img.loading = "lazy";
       img.decoding = "async";
-      bindImageWithCandidates(img, preferredPhoto || mainImg || generalApprovedPhoto, {
-        extra: [...approvedPhotoCandidates.slice(1).map((row)=>row.url), mainImg, generalApprovedPhoto].filter(Boolean),
+      bindImageWithCandidates(img, explicitPhoto || mainImg || automaticFallback || generalApprovedPhoto, {
+        extra: [
+          mainImg,
+          ...packagePhotos.explicit.slice(1).map((row)=>row.url),
+          ...automaticPhotoRows.map((row)=>row.url),
+          generalApprovedPhoto
+        ].filter(Boolean),
         fallback: "/assets/placeholders/service-photo-needed.svg",
-        onResolved: (_img, resolvedUrl) => { resolvedMainImg = resolvedUrl || preferredPhoto || mainImg || generalApprovedPhoto; },
+        onResolved: (_img, resolvedUrl) => { resolvedMainImg = resolvedUrl || explicitPhoto || mainImg || automaticFallback || generalApprovedPhoto; },
         onExhausted: (node) => { node.src = "/assets/placeholders/service-photo-needed.svg"; node.classList.add("visual-placeholder-img"); }
       });
 
@@ -504,10 +526,12 @@
     }
 
     function buildAddonCard(addon){
-      const approvedAddonPhotoRows = addonImageMatches(websiteImageManifest, addon, 5).filter((photo)=>photo?.url);
-      const preferredAddonPhoto = approvedAddonPhotoRows[0] || null;
-      const approvedAddonPhotos = approvedAddonPhotoRows.map((photo)=>photo.url);
-      const imageUrl = preferredAddonPhoto?.url || addonPrimaryImage(addon) || ADDON_IMAGES[addon.code] || null;
+      const approvedAddonPhotoRows = addonImageMatches(websiteImageManifest, addon, 6).filter((photo)=>photo?.url);
+      const explicitAddonPhoto = approvedAddonPhotoRows.find((photo)=>photo.explicit_assignment === true) || null;
+      const automaticAddonPhotos = approvedAddonPhotoRows.filter((photo)=>photo.explicit_assignment !== true);
+      const configuredAddonPhoto = addonPrimaryImage(addon) || ADDON_IMAGES[addon.code] || null;
+      // Build 254: preserve the existing configured add-on image unless an admin explicitly overrides it.
+      const imageUrl = explicitAddonPhoto?.url || configuredAddonPhoto || automaticAddonPhotos[0]?.url || null;
       const fallbackUrl = addonFallback(addon.code);
 
       const el = document.createElement("div");
@@ -522,7 +546,7 @@
         : `<span class="tag ok">${price!=null ? money(price) : "$—"}</span>`;
 
       el.innerHTML = `
-        ${imageUrl ? `<img class="cardImg" alt="${escapeHtml(preferredAddonPhoto?.alt_text || addon.name)}" style="object-position:${escapeHtml(preferredAddonPhoto?.focal_point || "center")}" />` : ``}
+        ${imageUrl ? `<img class="cardImg" alt="${escapeHtml(explicitAddonPhoto?.alt_text || addon.name)}" style="object-position:${escapeHtml(explicitAddonPhoto?.focal_point || "center")}" />` : ``}
         <div style="margin-top:${imageUrl ? "10px":"0"};display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
           <div>
             <h3 style="margin:0">${escapeHtml(addon.name)}</h3>
@@ -540,7 +564,7 @@
         imgEl.loading = "lazy";
         imgEl.decoding = "async";
         bindImageWithCandidates(imgEl, imageUrl, {
-          extra: [...approvedAddonPhotos.slice(1), addonPrimaryImage(addon), ADDON_IMAGES[addon.code]].filter(Boolean),
+          extra: [configuredAddonPhoto, ...automaticAddonPhotos.map((photo)=>photo.url)].filter(Boolean),
           fallback: fallbackUrl || "/assets/brand/rosie-reviews-fallback.png",
           onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.png"; node.classList.add("visual-placeholder-img"); }
         });

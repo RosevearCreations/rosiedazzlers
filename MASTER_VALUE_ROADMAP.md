@@ -1,3 +1,7 @@
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 254
+
+> **Build 254 hotfix (2026-08-12):** Existing configured product/package/add-on/landing imagery is protected again. Photo Studio explicit assignments are deliberate overrides; automatic R2 filename matching is fallback-only. Photo Studio selection/filter rendering was also hardened to reduce forced-reflow warnings. No new SQL migration is required. See `BUILD254_SUMMARY.md`.
+
 # CURRENT LIVING AUTHORITY 2 OF 2 — Build 253
 
 **Updated:** 2026-08-12  
@@ -1520,3 +1524,4 @@ Build 247 establishes the private source-of-truth media layer needed for the DAI
 <!-- Historical release guard: # CURRENT LIVING AUTHORITY 2 OF 2 — Build 251 -->
 
 <!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->
+<!-- BUILD254_SYNC: 2026-08-12 | Existing authored images protected; explicit Photo Studio override only; automatic R2 matching fallback-only; Photo Studio reflow hotfix. -->
