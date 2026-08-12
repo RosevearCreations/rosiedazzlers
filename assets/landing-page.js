@@ -1,7 +1,8 @@
 // Historical Build 252 image module marker: /assets/website-images.js?v=20260812build252
+// Historical Build 253 guard token: /assets/website-images.js?v=20260812build253
 import { renderRecentWorkMounts } from "/assets/recent-work.js?v=20260501build127";
 import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
-import { loadWebsiteImageManifest, landingImageMatches } from "/assets/website-images.js?v=20260812build253";
+import { loadWebsiteImageManifest, landingImageMatches } from "/assets/website-images.js?v=20260812build254";
 
 async function fetchJson(url) {
   const res = await fetch(url, { cache: "no-store" });
@@ -196,10 +197,12 @@ function addonPriceSummary(addon) {
   return "";
 }
 
-function heroMediaForPage(page, addon, relatedProducts, r2Matches = []) {
-  // Build 252: filename-matched approved landing_pages/ imagery wins when present.
-  if (r2Matches[0]?.url) return r2Matches[0].url;
-  // Explicit local Rosie-owned page assets remain the next preference.
+function heroMediaForPage(page, addon, relatedProducts, r2Matches = [], slug = "") {
+  // Build 254 safety rule: existing authored imagery remains authoritative.
+  // An explicit Photo Studio hero assignment is the only R2 image allowed to replace it deliberately.
+  const heroTarget = `landing:${cleanText(slug || page?.slug)}:hero`;
+  const explicitHero = (r2Matches || []).find((row) => row?.explicit_assignment === true && row?.target_key === heroTarget);
+  if (explicitHero?.url) return explicitHero.url;
   if (page?.local_hero_image_url) return page.local_hero_image_url;
   if (page?.hero_image_url) return page.hero_image_url;
   if (addon?.image_url && !String(addon.image_url).toLowerCase().endsWith(".svg")) return addon.image_url;
@@ -207,6 +210,9 @@ function heroMediaForPage(page, addon, relatedProducts, r2Matches = []) {
   const firstProduct = (relatedProducts || []).find((item) => item.image_url);
   if (firstProduct?.image_url) return firstProduct.image_url;
 
+  // Filename matching is fallback-only when the page has no established usable image.
+  const automaticR2 = (r2Matches || []).find((row) => row?.explicit_assignment !== true && row?.url);
+  if (automaticR2?.url) return automaticR2.url;
   if (addon?.image_url) return addon.image_url;
   if (addon?.image_fallback_url) return addon.image_fallback_url;
   return "/assets/brand/rosie-reviews-fallback.png";
@@ -236,10 +242,12 @@ function galleryMarkup(page, relatedProducts, r2Matches = []) {
   const gallerySource = Array.isArray(page?.gallery_image_urls) ? page.gallery_image_urls : (Array.isArray(page?.gallery_images) ? page.gallery_images : []);
   const gallery = gallerySource.filter(Boolean);
   const productImages = (relatedProducts || []).map((item) => item.image_url).filter(Boolean);
-  const approvedR2Rows = (r2Matches || []).slice(1).filter((item) => item?.url);
-  const approvedR2Images = approvedR2Rows.map((item) => item.url);
+  const explicitR2Rows = (r2Matches || []).filter((item) => item?.url && item?.explicit_assignment === true && String(item?.target_key || '').includes(':gallery:'));
+  const automaticR2Rows = (r2Matches || []).filter((item) => item?.url && item?.explicit_assignment !== true);
+  const approvedR2Rows = [...explicitR2Rows, ...automaticR2Rows];
   const r2Meta = new Map(approvedR2Rows.map((item) => [item.url, item]));
-  const all = [...approvedR2Images, ...gallery, ...productImages].filter(Boolean);
+  // Explicit gallery choices are intentional additions; otherwise authored gallery/product images stay first.
+  const all = [...explicitR2Rows.map((item)=>item.url), ...gallery, ...productImages, ...automaticR2Rows.map((item)=>item.url)].filter(Boolean);
   if (!all.length) return "";
 
   const unique = [];
@@ -300,9 +308,9 @@ function pageTemplate(page, pricing, slug, productCatalog, websiteImageManifest)
   const relatedProducts = resolveRelatedProducts(page, productCatalog);
   const priceSummary = addonPriceSummary(addon);
   const landingMatches = landingImageMatches(websiteImageManifest, page, slug, 10);
-  const heroImage = heroMediaForPage(page, addon, relatedProducts, landingMatches);
-  const matchedR2Hero = landingMatches[0]?.url === heroImage;
-  const matchedHeroMeta = matchedR2Hero ? landingMatches[0] : null;
+  const heroImage = heroMediaForPage(page, addon, relatedProducts, landingMatches, slug);
+  const matchedHeroMeta = landingMatches.find((row)=>row?.url === heroImage) || null;
+  const matchedR2Hero = Boolean(matchedHeroMeta);
   const heroAlt = matchedHeroMeta?.alt_text || page.name || page.hero_title || slug;
   const heroExtra = matchedHeroMeta?.focal_point ? `style="object-position:${escapeHtml(matchedHeroMeta.focal_point)}"` : '';
   const photoCaption = matchedR2Hero
