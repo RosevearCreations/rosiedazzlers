@@ -149,7 +149,7 @@
         <a class="btn ghost" href="/pricing">Compare every price</a>
       </div>
       <div class="grid3 package-grid" id="pkgGrid" style="margin-top:14px"></div>
-      <div class="r2-photo-note mini muted" id="r2PhotoNote" hidden>Using approved Rosie Dazzlers website photos from our public R2 library where a service match is available.</div>
+      <div class="r2-photo-note mini muted" id="r2PhotoNote" hidden>Using approved Rosie Dazzlers images from the public packages, landing-pages, and real-car R2 libraries where the filename matches the service.</div>
     </section>
 
     <section class="section panel" id="service-decision-guide">
@@ -207,13 +207,13 @@
       <h2 style="margin-top:0">Full service hub</h2>
       <p class="muted">After choosing a main package, use this hub only when you need specialty work, gifts, fleet service, maintenance, or extra guidance.</p>
       <div class="service-link-grid" style="margin-top:12px">
-        <article class="service-link-card"><h3>Interior and deep cleaning</h3><p class="muted">Interior detail, pet hair, odour, salt, shampoo, stains, and daily-use reset.</p><a class="btn ghost small" href="/book?condition=interior">Get interior guidance</a></article>
-        <article class="service-link-card"><h3>Exterior and paint care</h3><p class="muted">Wash, clay, sealant, ceramic spray, paint correction, coating prep, and glass protection.</p><a class="btn ghost small" href="/paint-correction">Paint correction</a></article>
-        <article class="service-link-card"><h3>Specials</h3><p class="muted">Spring salt cleanup, same-address multi-vehicle service, senior-friendly help, and headlight refresh offers.</p><a class="btn ghost small" href="/specials">View specials</a></article>
-        <article class="service-link-card"><h3>Gift cards</h3><p class="muted">Interior detail, full detail, and custom amount gift-card paths.</p><a class="btn ghost small" href="/gift-cards">Gift card guide</a></article>
-        <article class="service-link-card"><h3>Fleet and work trucks</h3><p class="muted">Small business fleets, contractor vehicles, truck boxes, and recurring same-location work.</p><a class="btn ghost small" href="/fleet">Fleet quote</a></article>
-        <article class="service-link-card"><h3>Maintenance plans</h3><p class="muted">Monthly maintenance, seasonal reset, and recurring cleanup interest.</p><a class="btn ghost small" href="/maintenance">Maintenance guide</a></article>
-        <article class="service-link-card"><h3>Helpful guides</h3><p class="muted">Road salt, ceramic coating, paint correction, pet hair, and prep education.</p><a class="btn ghost small" href="/blog">Read guides</a></article>
+        <article class="service-link-card" data-r2-image-keywords="interior detail deep cleaning pet hair seat shampoo" data-r2-image-href="/book?condition=interior"><h3>Interior and deep cleaning</h3><p class="muted">Interior detail, pet hair, odour, salt, shampoo, stains, and daily-use reset.</p><a class="btn ghost small" href="/book?condition=interior">Get interior guidance</a></article>
+        <article class="service-link-card" data-r2-image-keywords="paint correction exterior paint care" data-r2-image-href="/paint-correction"><h3>Exterior and paint care</h3><p class="muted">Wash, clay, sealant, ceramic spray, paint correction, coating prep, and glass protection.</p><a class="btn ghost small" href="/paint-correction">Paint correction</a></article>
+        <article class="service-link-card" data-r2-image-keywords="detailing specials before after" data-r2-image-href="/specials"><h3>Specials</h3><p class="muted">Spring salt cleanup, same-address multi-vehicle service, senior-friendly help, and headlight refresh offers.</p><a class="btn ghost small" href="/specials">View specials</a></article>
+        <article class="service-link-card" data-r2-image-keywords="gift cards detailing" data-r2-image-href="/gift-cards"><h3>Gift cards</h3><p class="muted">Interior detail, full detail, and custom amount gift-card paths.</p><a class="btn ghost small" href="/gift-cards">Gift card guide</a></article>
+        <article class="service-link-card" data-r2-image-keywords="fleet work truck detailing" data-r2-image-href="/fleet"><h3>Fleet and work trucks</h3><p class="muted">Small business fleets, contractor vehicles, truck boxes, and recurring same-location work.</p><a class="btn ghost small" href="/fleet">Fleet quote</a></article>
+        <article class="service-link-card" data-r2-image-keywords="maintenance wash detail" data-r2-image-href="/maintenance"><h3>Maintenance plans</h3><p class="muted">Monthly maintenance, seasonal reset, and recurring cleanup interest.</p><a class="btn ghost small" href="/maintenance">Maintenance guide</a></article>
+        <article class="service-link-card" data-r2-image-keywords="detailing guides car care" data-r2-image-href="/blog"><h3>Helpful guides</h3><p class="muted">Road salt, ceramic coating, paint correction, pet hair, and prep education.</p><a class="btn ghost small" href="/blog">Read guides</a></article>
       </div>
     </section>
 
@@ -313,7 +313,8 @@
       applyJsonLdScript
     } from "/assets/pricing-catalog-client.js?v=20260423livecharts2";
     import { renderRecentWorkMounts } from "/assets/recent-work.js";
-    import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260810build250";
+    import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260812build252";
+    import { loadWebsiteImageManifest, packageImageMatches, addonImageMatches, hydrateR2CardImages } from "/assets/website-images.js?v=20260812build252";
 
     const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
@@ -321,56 +322,26 @@
 
     const qs = (s)=>document.querySelector(s);
 
+    // Historical Build 250 compatibility marker: /api/public/car_photos
     async function loadCatalog(){
       return await loadPricingCatalogClient({ fallbackUrl: DATA_FALLBACK_URL });
     }
-    async function loadApprovedCarPhotos(){
-      try {
-        const response = await fetch('/api/public/car_photos', { headers: { 'Accept': 'application/json' } });
-        const payload = await response.json().catch(() => ({}));
-        return response.ok && Array.isArray(payload.photos) ? payload.photos : [];
-      } catch {
-        return [];
-      }
-    }
-
-    let approvedCarPhotos = [];
-    const PACKAGE_PHOTO_HINTS = {
-      premium_wash: ['premium','wash','exterior','outside','wheel'],
-      basic_detail: ['basic','interior','inside','vacuum','cabin'],
-      complete_detail: ['complete','full','detail','inside','outside'],
-      interior_detail: ['interior','inside','seat','carpet','cabin'],
-      exterior_detail: ['exterior','outside','paint','shine','wheel']
-    };
+    let websiteImageManifest = { images:[], prefixes:{ packages:[], landing_pages:[], car_photos:[] } };
     const PACKAGE_ORDER = ['premium_wash','basic_detail','complete_detail','interior_detail','exterior_detail'];
 
-    function photoSearchText(photo){
-      return `${photo?.key || ''} ${photo?.filename || ''}`.toLowerCase().replace(/[^a-z0-9]+/g,' ');
-    }
-
     function packagePhotoCandidates(pkg){
-      if (!approvedCarPhotos.length) return [];
-      const code = String(pkg?.code || '').toLowerCase();
-      const name = String(pkg?.name || '').toLowerCase();
-      const exactCode = code.replace(/_/g,' ');
-      const exactName = name.replace(/[^a-z0-9]+/g,' ').trim();
-      const hints = PACKAGE_PHOTO_HINTS[code] || exactName.split(/\s+/).filter(Boolean);
-      const ranked = approvedCarPhotos.map((photo, index) => {
-        const hay = photoSearchText(photo);
-        let score = 0;
-        if (exactCode && hay.includes(exactCode)) score += 18;
-        if (exactName && hay.includes(exactName)) score += 18;
-        for (const hint of hints) if (hay.includes(hint)) score += 4;
-        if (hay.includes('before') || hay.includes('after')) score += 1;
-        return { photo, score, index };
-      }).sort((a,b) => b.score - a.score || a.index - b.index);
-      return ranked.filter((row) => row.score >= 8).map((row) => row.photo.url).filter(Boolean).slice(0,4);
+      return packageImageMatches(websiteImageManifest, pkg, sizeKey(), 6)
+        .map((photo) => photo.url)
+        .filter(Boolean);
     }
 
     function generalCarPhotoForPackage(pkg){
-      if (!approvedCarPhotos.length) return '';
+      const photos = Array.isArray(websiteImageManifest?.prefixes?.car_photos)
+        ? websiteImageManifest.prefixes.car_photos
+        : [];
+      if (!photos.length) return '';
       const packageIndex = Math.max(0, PACKAGE_ORDER.indexOf(String(pkg?.code || '').toLowerCase()));
-      return approvedCarPhotos[packageIndex % approvedCarPhotos.length]?.url || '';
+      return photos[packageIndex % photos.length]?.url || '';
     }
 
     function syncDecisionLinks(){
@@ -532,7 +503,8 @@
     }
 
     function buildAddonCard(addon){
-      const imageUrl = addonPrimaryImage(addon) || ADDON_IMAGES[addon.code] || null;
+      const approvedAddonPhotos = addonImageMatches(websiteImageManifest, addon, 5).map((photo) => photo.url).filter(Boolean);
+      const imageUrl = approvedAddonPhotos[0] || addonPrimaryImage(addon) || ADDON_IMAGES[addon.code] || null;
       const fallbackUrl = addonFallback(addon.code);
 
       const el = document.createElement("div");
@@ -565,6 +537,7 @@
         imgEl.loading = "lazy";
         imgEl.decoding = "async";
         bindImageWithCandidates(imgEl, imageUrl, {
+          extra: [...approvedAddonPhotos.slice(1), addonPrimaryImage(addon), ADDON_IMAGES[addon.code]].filter(Boolean),
           fallback: fallbackUrl || "/assets/brand/rosie-reviews-fallback.png",
           onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.png"; node.classList.add("visual-placeholder-img"); }
         });
@@ -591,10 +564,11 @@
     let data = null;
 
     try {
-      [data, approvedCarPhotos] = await Promise.all([loadCatalog(), loadApprovedCarPhotos()]);
+      [data, websiteImageManifest] = await Promise.all([loadCatalog(), loadWebsiteImageManifest()]);
       renderAll(data);
       syncDecisionLinks();
-      if (approvedCarPhotos.length) qs('#r2PhotoNote').hidden = false;
+      if ((websiteImageManifest?.images || []).length) qs('#r2PhotoNote').hidden = false;
+      hydrateR2CardImages(document);
       applyJsonLdScript('servicesSchema', buildServicesCatalogSchema(data, 'https://rosiedazzlers.ca/services'));
       qs("#sizeSel").addEventListener("change", ()=> { renderAll(data); syncDecisionLinks(); });
       if (data._source && data._source !== "api") {
@@ -625,7 +599,7 @@
     <div class="hero-actions" style="margin-top:12px"><a class="btn primary" href="/faq">Open FAQ</a><a class="btn ghost" href="/book?estimate=photos">Send photos for estimate</a><a class="btn ghost" href="/contact">Ask us</a></div>
   </section>
 
-  <script type="module" src="/assets/chrome.js?v=20260810build250"></script>
+  <script type="module" src="/assets/chrome.js?v=20260812build252"></script>
   <script src="/assets/public-content-blocks.js?v=20260525build178" defer></script>
 </body>
 </html>
