@@ -1529,3 +1529,16 @@ Build 253 makes public website imagery owner-manageable instead of source-code-d
 Photo Studio can sync, edit metadata, assign/unassign, rename/move and render one approved public image end-to-end; the canonical manifest works at `/api/public_website_images`; and public/private media isolation is proven.
 
 <!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->
+
+
+## Build 254 — Verify existing imagery preservation and Photo Studio performance
+
+1. Deploy Build 254 and hard-refresh `/services` and one existing service/location landing page.
+2. Confirm principal package cards display their established configured images unless an explicit Photo Studio override exists.
+3. Confirm add-on cards retain their established images.
+4. Open `/admin-photo-studio`, press **Sync approved R2 photos**, and confirm merely syncing does not change any public card.
+5. Select several thumbnails and type in Search. Confirm the editor updates without rebuilding/jumping the whole page; occasional browser layout diagnostics may occur, but the repeated forced-reflow warnings from selection should no longer reproduce.
+6. Save one harmless explicit override, verify only that exact target changes, then remove the override and verify the original configured image returns.
+
+**Move on when:** existing site images stay stable during R2 sync/metadata edits, explicit overrides affect only their selected target, and Photo Studio remains responsive on desktop/mobile.
+<!-- BUILD254_SYNC: 2026-08-12 | Existing authored images protected; explicit Photo Studio override only; automatic R2 matching fallback-only; Photo Studio reflow hotfix. -->
